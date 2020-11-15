@@ -10,6 +10,9 @@ use Config;
  * buils of October CMS. This allows us to compare the October CMS installation against the expected file checksums and
  * determine the installed build and whether it has been modified.
  *
+ * Since October 1.1.1, a forks manifest is also used to determine at which point we forked a branch off to a new
+ * major release. This allows us to track concurrent histories - ie. the 1.0.x history vs. the 1.1.x history.
+ *
  * @package october\system
  * @author Ben Thomson
  */
@@ -21,6 +24,16 @@ class SourceManifest
     protected $source;
 
     /**
+     * @var string The version map where forks occurred.
+     */
+    protected $forks;
+
+    /**
+     * @var string The URL to the forked version manifest
+     */
+    protected $forksUrl;
+
+    /**
      * @var array Array of builds, keyed by build number, with files for keys and hashes for values.
      */
     protected $builds = [];
@@ -29,9 +42,10 @@ class SourceManifest
      * Constructor
      *
      * @param string $manifest Manifest file to load
+     * @param string $branches Branches manifest file to load
      * @param bool $autoload Loads the manifest on construct
      */
-    public function __construct($source = null, $autoload = true)
+    public function __construct($source = null, $forks = null, $autoload = true)
     {
         if (isset($source)) {
             $this->setSource($source);
@@ -44,8 +58,20 @@ class SourceManifest
             );
         }
 
+        if (isset($forks)) {
+            $this->setForksSource($forks);
+        } else {
+            $this->setForksSource(
+                Config::get(
+                    'cms.forkManifestUrl',
+                    'https://raw.githubusercontent.com/octoberrain/meta/master/manifest/forks.json'
+                )
+            );
+        }
+
         if ($autoload) {
-            $this->load();
+            $this->loadSource();
+            $this->loadForks();
         }
     }
 
@@ -63,11 +89,24 @@ class SourceManifest
     }
 
     /**
+     * Sets the forked version manifest URL.
+     *
+     * @param string $forks
+     * @return void
+     */
+    public function setForksSource($forks)
+    {
+        if (is_string($forks)) {
+            $this->forksUrl = $forks;
+        }
+    }
+
+    /**
      * Loads the manifest file.
      *
      * @throws ApplicationException If the manifest is invalid, or cannot be parsed.
      */
-    public function load()
+    public function loadSource()
     {
         $source = file_get_contents($this->source);
         if (empty($source)) {
@@ -100,21 +139,57 @@ class SourceManifest
     }
 
     /**
+     * Loads the forked version manifest file.
+     *
+     * @throws ApplicationException If the manifest is invalid, or cannot be parsed.
+     */
+    public function loadForks()
+    {
+        $forks = file_get_contents($this->forksUrl);
+        if (empty($forks)) {
+            throw new ApplicationException(
+                'Forked version manifest not found'
+            );
+        }
+
+        $data = json_decode($forks, true);
+
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new ApplicationException(
+                'Unable to decode forked version manifest JSON data. JSON Error: ' . json_last_error_msg()
+            );
+        }
+        if (!isset($data['forks']) || !is_array($data['forks'])) {
+            throw new ApplicationException(
+                'The forked version manifest at "' . $this->forksUrl . '" does not appear to be a valid forked version
+                manifest file.'
+            );
+        }
+
+        $this->forks = $data['forks'];
+
+        return $this;
+    }
+
+    /**
      * Adds a FileManifest instance as a build to this source manifest.
      *
-     * Changes between builds are calculated and stored with the build. Builds are stored numerically, in ascending
-     * order.
+     * Changes between builds are calculated and stored with the build. Builds are stored in order of semantic
+     * versioning: ie. 1.1.1 > 1.1.0 > 1.0.468
      *
      * @param integer $build Build number.
      * @param FileManifest $manifest The file manifest to add as a build.
-     * @param integer $previous The previous build number, used to determine changes with this build.
      * @return void
      */
-    public function addBuild($build, FileManifest $manifest, $previous = null)
+    public function addBuild($build, FileManifest $manifest)
     {
-        $this->builds[(int) $build] = [
+        $parent = $this->determineParent($build);
+
+        $this->builds[$this->getVersionInt($build)] = [
+            'version' => $build,
             'modules' => $manifest->getModuleChecksums(),
-            'files' => $this->processChanges($manifest, $previous),
+            'parent' => $parent,
+            'files' => $this->processChanges($manifest, $parent),
         ];
 
         // Sort builds numerically in ascending order.
@@ -160,12 +235,16 @@ class SourceManifest
         }
 
         $json = [
+            '_description' => 'This is the source manifest of changes to October CMS for each version. This is used to'
+                . ' determine which version of October CMS is in use, via the "october:version" Artisan command.',
+            '_created' => date('c'),
             'manifest' => [],
         ];
 
         foreach ($this->builds as $build => $details) {
             $json['manifest'][] = [
                 'build' => $build,
+                'parent' => $details['parent'] ?? null,
                 'modules' => $details['modules'],
                 'files' => $details['files'],
             ];
