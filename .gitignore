@@ -1,7 +1,6 @@
 # Composer ignores
 /vendor
 composer.phar
-composer.lock
 
 # Framework ignores
 .env
