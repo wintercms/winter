@@ -2,6 +2,7 @@
 
 use ApplicationException;
 use Config;
+use October\Rain\Argon\Argon;
 
 /**
  * Reads and stores the October CMS source manifest information.
@@ -24,7 +25,12 @@ class SourceManifest
     protected $source;
 
     /**
-     * @var string The version map where forks occurred.
+     * @var array Array of builds, keyed by build number, with files for keys and hashes for values.
+     */
+    protected $builds = [];
+
+    /**
+     * @var array The version map where forks occurred.
      */
     protected $forks;
 
@@ -32,11 +38,6 @@ class SourceManifest
      * @var string The URL to the forked version manifest
      */
     protected $forksUrl;
-
-    /**
-     * @var array Array of builds, keyed by build number, with files for keys and hashes for values.
-     */
-    protected $builds = [];
 
     /**
      * Constructor
@@ -185,6 +186,10 @@ class SourceManifest
     {
         $parent = $this->determineParent($build);
 
+        if (!is_null($parent)) {
+            $parent = $parent['version'];
+        }
+
         $this->builds[$this->getVersionInt($build)] = [
             'version' => $build,
             'modules' => $manifest->getModuleChecksums(),
@@ -193,7 +198,7 @@ class SourceManifest
         ];
 
         // Sort builds numerically in ascending order.
-        ksort($this->builds[$build], SORT_NUMERIC);
+        ksort($this->builds, SORT_NUMERIC);
     }
 
     /**
@@ -203,21 +208,9 @@ class SourceManifest
      */
     public function getBuilds()
     {
-        return $this->builds;
-    }
-
-    /**
-     * Gets the maximum build number in the manifest.
-     *
-     * @return int
-     */
-    public function getMaxBuild()
-    {
-        if (!count($this->builds)) {
-            return null;
-        }
-
-        return max(array_keys($this->builds));
+        return array_values(array_map(function ($build) {
+            return $build['version'];
+        }, $this->builds));
     }
 
     /**
@@ -237,13 +230,13 @@ class SourceManifest
         $json = [
             '_description' => 'This is the source manifest of changes to October CMS for each version. This is used to'
                 . ' determine which version of October CMS is in use, via the "october:version" Artisan command.',
-            '_created' => date('c'),
+            '_created' => Argon::now()->toIso8601String(),
             'manifest' => [],
         ];
 
         foreach ($this->builds as $build => $details) {
             $json['manifest'][] = [
-                'build' => $build,
+                'build' => $details['version'],
                 'parent' => $details['parent'] ?? null,
                 'modules' => $details['modules'],
                 'files' => $details['files'],
@@ -258,12 +251,16 @@ class SourceManifest
      *
      * This method will list all expected files and hashsums at the specified build number.
      *
-     * @param integer $build Build number to get the filelist state for.
+     * @param string|integer $build Build version to get the filelist state for.
      * @throws ApplicationException If the specified build has not been added to the source manifest.
      * @return array
      */
     public function getState($build)
     {
+        if (is_string($build)) {
+            $build = $this->getVersionInt($build);
+        }
+
         if (!isset($this->builds[$build])) {
             throw new \Exception('The specified build has not been added.');
         }
@@ -404,8 +401,8 @@ class SourceManifest
      * Will return an array of added, modified and removed files.
      *
      * @param FileManifest $manifest The current build's file manifest.
-     * @param FileManifest|integer $previous Either a previous manifest, or the previous build number as an int,
-     *  used to determine changes with this build.
+     * @param FileManifest|string|integer $previous Either a previous manifest, or the previous build number as an int
+     *  or string, used to determine changes with this build.
      * @return array
      */
     protected function processChanges(FileManifest $manifest, $previous = null)
@@ -418,7 +415,7 @@ class SourceManifest
         }
 
         // Only save files if they are changing the "state" of the manifest (ie. the file is modified, added or removed)
-        if (is_int($previous)) {
+        if (is_int($previous) || is_string($previous)) {
             $state = $this->getState($previous);
         } else {
             $state = $previous->getFiles();
@@ -453,5 +450,47 @@ class SourceManifest
         }
 
         return $changes;
+    }
+
+    protected function determineParent(string $build)
+    {
+        // First, we'll check for a fork - if so, the source version for the fork is a parent
+        if (isset($this->forks) && array_key_exists($build, $this->forks)) {
+            return $this->forks[$build];
+        }
+
+        // If not a fork, then determine the parent by finding the nearest minor version to the build
+        $buildInt = $this->getVersionInt($build);
+        $parent = null;
+
+        for ($i = 1; $i <= 999; ++$i) {
+            if (array_key_exists($buildInt - $i, $this->builds)) {
+                $parent = $this->builds[$buildInt - $i];
+                break;
+            }
+        }
+
+        return $parent;
+    }
+
+    /**
+     * Converts a version string into an integer for comparison.
+     *
+     * @param string $version
+     * @throws ApplicationException if a version string does not match the format "major.minor.path"
+     * @return int
+     */
+    protected function getVersionInt(string $version)
+    {
+        // Get major.minor.patch versions
+        if (!preg_match('/^([0-9]+)\.([0-9]+)\.([0-9]+)/', $version, $versionParts)) {
+            throw new ApplicationException('Invalid version string - must be of the format "major.minor.path"');
+        }
+
+        $int = $versionParts[1] * 1000000;
+        $int += $versionParts[2] * 1000;
+        $int += $versionParts[3];
+
+        return $int;
     }
 }
