@@ -73,6 +73,10 @@ class OctoberInstall extends Command
 
         $chosenToInstall = [];
 
+        if ($this->confirm('Would you like to change the backend options? (URL, default locale, default timezone)')) {
+            $this->setupBackendValues();
+        }
+
         if ($this->confirm('Configure advanced options?', false)) {
             $this->setupEncryptionKey();
             $this->setupAdvancedValues();
@@ -112,29 +116,72 @@ class OctoberInstall extends Command
     protected function setupCommonValues()
     {
         $url = $this->ask('Application URL', Config::get('app.url'));
+        $this->writeToConfig('app', ['url' => $url]);
+    }
 
+    protected function setupBackendValues()
+    {
+        // cms.backendUri
+        $backendUri = $this->ask('Backend URL', Config::get('cms.backendUri'));
+        $this->writeToConfig('cms', ['backendUri' => $backendUri]);
+
+        // app.locale
+        $defaultLocale = Config::get('app.locale');
         try {
             $availableLocales = (new \Backend\Models\Preference)->getLocaleOptions();
             $localesByName = [];
+            $i = $defaultLocaleIndex = 0;
             foreach ($availableLocales as $locale => $name) {
                 $localesByName[$name[0]] = $locale;
+                if ($locale === $defaultLocale) {
+                    $defaultLocaleIndex = $i;
+                }
+                $i++;
             }
 
-            $localeName = $this->choice('Default Backend Locale', array_keys($localesByName));
+            $localeName = $this->choice('Default Backend Locale', array_keys($localesByName), $defaultLocaleIndex);
 
             $locale = $localesByName[$localeName];
         } catch (\Exception $e) {
             // Installation failed halfway through, recover gracefully
-            $locale = $this->ask('Default Backend Locale', 'en');
+            $locale = $this->ask('Default Backend Locale', $defaultLocale);
         }
+        $this->writeToConfig('app', ['locale' => $locale]);
 
-        $this->writeToConfig('app', ['url' => $url, 'locale' => $locale]);
+        // cms.backendTimezone
+        $defaultTimezone = Config::get('cms.backendTimezone');
+        try {
+            $availableTimezones = (new \Backend\Models\Preference)->getTimezoneOptions();
+            $longestTimezone = max(array_map('strlen', $availableTimezones));
+            $padTo = $longestTimezone - 13 + 1; // (UTC +10:00)
+            $timezonesByName = [];
+            $i = $defaultTimezoneIndex = 0;
+            foreach ($availableTimezones as $timezone => $name) {
+                $nameParts = explode(') ', $name);
+                $nameParts[0] .= ')';
+
+                $name = str_pad($nameParts[1], $padTo) . $nameParts[0];
+
+                $timezonesByName[$name] = $timezone;
+                if ($timezone === $defaultTimezone) {
+                    $defaultTimezoneIndex = $i;
+                }
+                $i++;
+            }
+
+            $timezoneName = $this->choice('Default Backend Timezone', array_keys($timezonesByName), $defaultTimezoneIndex);
+
+            $timezone = $timezonesByName[$timezoneName];
+        } catch (\Exception $e) {
+            // Installation failed halfway through, recover gracefully
+            $timezone = $this->ask('Default Backend Timezone', $defaultTimezone);
+        }
+        $this->writeToConfig('cms', ['backendTimezone' => $timezone]);
     }
 
     protected function setupAdvancedValues()
     {
-        $backendUri = $this->ask('Backend URL', Config::get('cms.backendUri'));
-        $this->writeToConfig('cms', ['backendUri' => $backendUri]);
+
 
         $defaultMask = $this->ask('File Permission Mask', Config::get('cms.defaultMask.file') ?: '777');
         $this->writeToConfig('cms', ['defaultMask.file' => $defaultMask]);
