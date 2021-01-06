@@ -1,4 +1,4 @@
-"use strict";
+/* globals window, console */
 
 /**
  * October CMS JavaScript framework.
@@ -10,7 +10,9 @@
  * @author Ben Thomson <git@alfreido.com>
  * @link https://octobercms.com
  */
-+function (window) {
+(function (window) {
+    'use strict';
+
     // Do not double-instatiate
     if (window.october) {
         return
@@ -58,6 +60,14 @@
                 extensionMethods = extension
             }
 
+            // Allow for once-off boot functionality
+            if (
+                extensionMethods.hasOwnProperty('boot')
+                && typeof extensionMethods.boot === 'function'
+            ) {
+                extensionMethods.boot()
+            }
+
             for (var method in extensionMethods) {
                 // Allow extensions or attachments only to methods allowed by the module. Discard all others.
                 if (extendableMethods.indexOf(method) === -1 && attachableMethods.indexOf(method) === -1) {
@@ -77,7 +87,7 @@
 
             extensionObj = {
                 methods: extendedMethods,
-                events: attachedMethods
+                events: attachedMethods,
             }
 
             this._modules[module].extensions.push(extensionObj)
@@ -102,17 +112,25 @@
                 instance: null,
                 singleton: false,
                 source: extension,
-                extensions: []
+                extensions: [],
+            }
+
+            // Allow for once-off boot functionality
+            if (
+                extension.prototype.hasOwnProperty('boot')
+                && typeof extension.prototype.boot === 'function'
+            ) {
+                extension.boot()
             }
 
             if (extension.prototype.singleton === true) {
-                this._modules[module].instance = new extension
+                this._modules[module].instance = new extension()
                 this._modules[module].singleton = true
                 this[module] = this[module.toLowerCase()] = this._modules[module].instance
             } else {
                 this[module] = this[module.toLowerCase()] = function () {
                     var instance = this.getModule(module)
-                    var args = [null].concat(Array.prototype.slice.call(arguments));
+                    var args = [null,].concat(Array.prototype.slice.call(arguments))
                     var factory = instance.bind.apply(instance, args)
 
                     return new factory()
@@ -182,12 +200,14 @@
 
         for (var ext in extensions) {
             if (extensions[ext].methods.hasOwnProperty(method)) {
-                var returned = extensions[ext].methods[method].apply(instance, params);
+                var returned = extensions[ext].methods[method].apply(instance, params)
                 if (returned !== false) {
                     return returned
                 }
             }
         }
+
+        return undefined
     }
 
     var callAttachable = function (instance, module, args) {
@@ -197,7 +217,7 @@
 
         for (var ext in extensions) {
             if (extensions[ext].events.hasOwnProperty(method)) {
-                var returned = extensions[ext].events[method].apply(instance, params);
+                var returned = extensions[ext].events[method].apply(instance, params)
                 if (returned === false) {
                     break
                 }
@@ -207,7 +227,7 @@
 
     // Define OctoberJs in global namespace
     window.october = new OctoberJsFramework()
-}(window);
+}(window));
 
 /**
  * October CMS JavaScript Request module.
@@ -216,80 +236,240 @@
  * @author Ben Thomson <git@alfreido.com>
  * @link https://octobercms.com
  */
-+function (window) {
+(function (window) {
+    'use strict';
+
     var Request = function () {
         var args = Array.prototype.slice.call(arguments)
 
-        this.initialize(args);
+        this.initialize(args)
 
-        this.element = this.processElement(this.element)
-        this.handler = this.processHandler(this.handler)
-        this.options = this.processOptions(this.options)
+        // Allow properties to be processed
+        var element = this.processElement(),
+            handler = this.processHandler(),
+            options = this.processOptions(),
+            headers = this.processHeaders(),
+            data = this.processData()
 
-        console.log(this.element)
-        console.log(this.handler)
-        console.log(this.options)
-
-        // Validate handler
-        if (handler === undefined) {
-            throw new Error('The request handler name is not specified.')
-        }
-
-        if (!handler.match(/^(?:\w+\:{2})?on*/)) {
-            throw new Error('Invalid handler name. The correct handler name format is: "onEvent".')
-        }
+        this.request = this.createRequest(element, handler, options, headers, data)
     }
 
     Request.prototype.extendable = [
         'initialize',
         'processElement',
+        'getForm',
+    ]
+
+    Request.prototype.attachable = [
         'processHandler',
         'processOptions',
-        'getForm',
+        'processHeaders',
+        'processData',
     ]
 
     Request.prototype.initialize = function (args) {
         this.callExtendable('initialize', args)
     }
 
-    Request.prototype.processElement = function (element) {
-        return this.callExtendable('processElement', element)
+    Request.prototype.processElement = function () {
+        this.element = undefined
+
+        return this.callExtendable('processElement')
     }
 
-    Request.prototype.processHandler = function (handler) {
-        console.log(handler)
-        var handlerName = this.callExtendable('processHandler', handler)
-        console.log(handlerName)
+    Request.prototype.getForm = function (element) {
+        return this.callExtendable('getForm', element)
+    }
 
-        if (handlerName === undefined) {
+    Request.prototype.processHandler = function () {
+        this.handler = undefined
+
+        this.callAttachable('processHandler')
+
+        if (this.handler === undefined) {
             throw new Error('The request handler name is not specified.')
         }
 
-        if (!handlerName.match(/^(?:\w+\:{2})?on*/)) {
-            throw new Error('Invalid handler name. The correct handler name format is: "onEvent".')
+        if (typeof this.handler !== 'string') {
+            throw new Error('The request handler must be specified as a string.')
         }
 
-        return handlerName
+        if (!this.handler.match(/^(?:\w+\:{2})?on*/)) {
+            throw new Error('Invalid handler name. The correct handler name format is: "on[Handler]" - eg. "onEvent".')
+        }
+
+        return this.handler
     }
 
-    Request.prototype.processOptions = function (options) {
-        var opts = this.callExtendable('processOptions', options)
+    Request.prototype.processOptions = function () {
+        this.options = {
+            ajaxGlobal: false,
+            beforeUpdate: null,
+            browserValidate: false,
+            confirm: false,
+            files: false,
+            flash: false,
+            form: this.getForm(this.element),
+            loading: false,
+            redirect: [],
+            url: window.location.href,
+        }
 
-        return opts
+        this.callAttachable('processOptions')
+
+        if (this.options.files !== undefined && typeof FormData === 'undefined') {
+            console.warn('This browser does not support file uploads via FormData')
+            this.options.files = false
+        }
+
+        return this.options
+    }
+
+    Request.prototype.processHeaders = function () {
+        this.headers = {
+            'X-OCTOBER-REQUEST-HANDLER': this.handler,
+            'X-OCTOBER-REQUEST-PARTIALS': this.extractPartials(this.options.update),
+        }
+
+        if (this.options.flash !== false && this.options.flash !== undefined) {
+            this.headers['X-OCTOBER-REQUEST-FLASH'] = 1
+        }
+
+        var csrfToken = getXSRFToken()
+        if (csrfToken) {
+            this.headers['X-XSRF-TOKEN'] = csrfToken
+        }
+
+        this.callAttachable('processHeaders')
+
+        return this.headers
+    }
+
+    Request.prototype.processData = function () {
+        this.data = {}
+
+        this.callAttachable('processData')
+
+        return this.data
+    }
+
+    function getXSRFToken() {
+        var cookieValue = null
+
+        if (window.document.cookie && window.document.cookie != '') {
+            var cookies = window.document.cookie.split(';')
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim()
+
+                if (cookie.substring(0, 11) == ('XSRF-TOKEN' + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(11))
+                    break
+                }
+            }
+        }
+
+        return cookieValue
     }
 
     window.october.extend('Request', Request)
-}(window);
+}(window));
 
-// Test extension
-+function (window) {
-    window.october.extend('Request', {
+// jQuery AJAX framework extension
+(function (october, document, $) {
+    'use strict';
+
+    october.extend('Request', {
+        boot: function () {
+            // Create request function in jQuery
+            $.fn.request = function(handler, option) {
+                var $this = $(this).first()
+                var data  = {
+                    evalBeforeUpdate: $this.data('request-before-update'),
+                    evalSuccess: $this.data('request-success'),
+                    evalError: $this.data('request-error'),
+                    evalComplete: $this.data('request-complete'),
+                    ajaxGlobal: $this.data('request-ajax-global'),
+                    confirm: $this.data('request-confirm'),
+                    redirect: $this.data('request-redirect'),
+                    loading: $this.data('request-loading'),
+                    flash: $this.data('request-flash'),
+                    files: $this.data('request-files'),
+                    browserValidate: $this.data('browser-validate'),
+                    form: $this.data('request-form'),
+                    url: $this.data('request-url'),
+                    // update: paramToObj('data-request-update', $this.data('request-update')),
+                    // data: paramToObj('data-request-data', $this.data('request-data'))
+                }
+                if (!handler) {
+                    handler = $this.data('request')
+                }
+
+                var options = $.extend(true, {}, october.request.DEFAULTS, data, typeof option == 'object' && option)
+
+                return october.request($this, handler, options)
+            }
+
+            $.request = function(handler, option) {
+                return $(document).request(handler, option)
+            }
+
+            /*
+            * Invent our own event that unifies document.ready with window.ajaxUpdateComplete
+            *
+            * $(document).render(function() { })
+            * $(document).on('render', function() { })
+            */
+            $(function triggerRenderOnReady() {
+                $(document).trigger('render')
+            })
+
+            $(window).on('ajaxUpdateComplete', function triggerRenderOnAjaxUpdateComplete() {
+                $(document).trigger('render')
+            })
+
+            $.fn.render = function(callback) {
+                $(document).on('render', callback)
+            }
+        },
         initialize: function (args) {
             this.element = null
             this.handler = args[0]
             this.options = args[1] || {}
-        }
+        },
     })
-}(window);
 
-window.october.request('onTest')
+    function paramToObj (name, value) {
+        if (value === undefined) {
+            value = ''
+        }
+        if (typeof value == 'object') {
+            return value
+        }
+
+        try {
+            return ocJSON('{' + value + '}')
+        } catch (e) {
+            throw new Error('Error parsing the ' + name + ' attribute value. ' + e)
+        }
+    }
+
+    function ocJSON (json) {
+        var jsonString = parse(json);
+        return JSON.parse(jsonString);
+    }
+}(window.october, window.document, jQuery));
+
+// Data Request API extension
+(function (october, document, $) {
+    'use strict';
+
+    october.extend('Request', {
+        boot: function () {
+            // Attach to elements for data requests
+            $(document).on('submit', '[data-request]', function documentOnSubmit() {
+                $(this).request()
+                return false
+            })
+        },
+    })
+}(window.october, window.document, jQuery));
