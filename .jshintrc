@@ -1,5 +1,13 @@
 {
-    "esversion": 6,
+    "asi": true,
     "curly": true,
-    "asi": true
+    "esversion": 5,
+    "indent": 4,
+    "laxbreak": true,
+    "leanswitch": true,
+    "quotmark": "single",
+    "strict": true,
+    "trailingcomma": true,
+    "undef": true,
+    "unused": "strict"
 }
