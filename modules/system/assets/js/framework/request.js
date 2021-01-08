@@ -18,6 +18,12 @@ if (!window.october) {
     var Request = function () {
         var args = Array.prototype.slice.call(arguments)
 
+        // Set defaults
+        this.element = null
+        this.form = null
+        this.handler = null
+        this.options = {}
+
         // Allow properties to be processed
         var element = this.processElement(args),
             handler = this.processHandler(args),
@@ -48,11 +54,13 @@ if (!window.october) {
     }
 
     Request.prototype.getForm = function (args, element) {
-        return this.callExtendable('getForm', args, element)
+        this.form = this.callExtendable('getForm', args, element)
+
+        return this.form
     }
 
     Request.prototype.processHandler = function (args) {
-        this.handler = this.callAttachable('processHandler', args)
+        this.handler = this.callAttachable('processHandler', null, args)
 
         if (this.handler === undefined) {
             throw new Error('The request handler name is not specified.')
@@ -83,7 +91,7 @@ if (!window.october) {
             url: window.location.href,
         }
 
-        this.callAttachable('processOptions', args)
+        this.options = this.callAttachable('processOptions', this.options, args)
 
         if (this.options.files !== undefined && typeof FormData === 'undefined') {
             console.warn('This browser does not support file uploads via FormData')
