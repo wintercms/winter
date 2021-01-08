@@ -96,16 +96,23 @@
 
             // Add extension and attached method calls
             extension.prototype.callExtendable = function () {
+                var args = Array.prototype.slice.call(arguments),
+                    method = args.shift()
+
                 if (window.october.isSingleton(module)) {
-                    return callExtendable(window.october.getModuleInstance(module), module, arguments)
+                    return callExtendable(window.october.getModuleInstance(module), module, method, args)
                 }
-                return callExtendable(this, module, arguments)
+                return callExtendable(this, module, method, args)
             }
             extension.prototype.callAttachable = function () {
+                var args = Array.prototype.slice.call(arguments),
+                    method = args.shift(),
+                    passThrough = args.shift()
+
                 if (window.october.isSingleton(module)) {
-                    return callAttachable(window.october.getModuleInstance(module), module, arguments)
+                    return callAttachable(window.october.getModuleInstance(module), module, method, passThrough, args)
                 }
-                return callAttachable(this, module, arguments)
+                return callAttachable(this, module, method, passThrough, args)
             }
 
             this._modules[module] = {
@@ -193,14 +200,12 @@
         )
     }
 
-    var callExtendable = function (instance, module, args) {
-        var extensions = window.october.getModuleExtensions(module),
-            params = Array.prototype.slice.call(args),
-            method = params.shift()
+    var callExtendable = function (instance, module, method, args) {
+        var extensions = window.october.getModuleExtensions(module)
 
         for (var ext in extensions) {
             if (extensions[ext].methods.hasOwnProperty(method)) {
-                var returned = extensions[ext].methods[method].apply(instance, params)
+                var returned = extensions[ext].methods[method].apply(instance, args)
                 if (returned !== false) {
                     return returned
                 }
@@ -210,20 +215,60 @@
         return undefined
     }
 
-    var callAttachable = function (instance, module, args) {
+    var callAttachable = function (instance, module, method, passThrough, args) {
         var extensions = window.october.getModuleExtensions(module),
-            params = Array.prototype.slice.call(args),
-            method = params.shift()
+            extParams,
+            extReturned
 
         for (var ext in extensions) {
             if (extensions[ext].events.hasOwnProperty(method)) {
-                var returned = extensions[ext].events[method].apply(instance, params)
-                if (returned === false) {
+                // Ensure that the first parameter is always the currently returned value
+                extParams = args
+                extParams.unshift(passThrough)
+
+                extReturned = extensions[ext].events[method].apply(instance, extParams)
+                if (extReturned === null) {
                     break
+                }
+                if (extReturned !== null) {
+                    passThrough = extReturned
                 }
             }
         }
+
+        return passThrough
     }
+
+    // Polyfill for missing Object.assign method in Internet Explorer
+    if (typeof Object.assign !== 'function') {
+        // Must be writable: true, enumerable: false, configurable: true
+        Object.defineProperty(Object, 'assign', {
+          value: function assign(target, varArgs) { // .length of function is 2
+            if (target === null || target === undefined) {
+              throw new TypeError('Cannot convert undefined or null to object');
+            }
+
+            var to = Object(target);
+
+            for (var index = 1; index < arguments.length; index++) {
+              var nextSource = arguments[index];
+
+              if (nextSource !== null && nextSource !== undefined) {
+                for (var nextKey in nextSource) {
+                  // Avoid bugs when hasOwnProperty is shadowed
+                  if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+                    to[nextKey] = nextSource[nextKey];
+                  }
+                }
+              }
+            }
+            return to;
+          },
+          writable: true,
+          configurable: true,
+        });
+      }
+
 
     // Define OctoberJs in global namespace
     window.october = new OctoberJsFramework()
