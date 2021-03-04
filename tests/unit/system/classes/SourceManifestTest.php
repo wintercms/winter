@@ -252,19 +252,38 @@ class SourceManifestTest extends TestCase
     {
         $this->createManifest();
 
-        // Hot-swap "tests/fixtures/manifest/3/modules/test/file3.php"
-        $old = file_get_contents(base_path('tests/fixtures/manifest/3/modules/test/file3.php'));
-        file_put_contents(base_path('tests/fixtures/manifest/3/modules/test/file3.php'), '<?php // Changed');
+        // Hot-swap "tests/fixtures/manifest/1_1_1/modules/test/file3.php"
+        $old = file_get_contents(base_path('tests/fixtures/manifest/1_1_1/modules/test/file3.php'));
+        file_put_contents(base_path('tests/fixtures/manifest/1_1_1/modules/test/file3.php'), '<?php // Changed');
 
-        $modifiedManifest = new FileManifest(base_path('tests/fixtures/manifest/3'), ['test', 'test2']);
+        $modifiedManifest = new FileManifest(base_path('tests/fixtures/manifest/1_1_1'), ['test', 'test2']);
         $modifiedManifest->getFiles();
 
-        file_put_contents(base_path('tests/fixtures/manifest/3/modules/test/file3.php'), $old);
+        file_put_contents(base_path('tests/fixtures/manifest/1_1_1/modules/test/file3.php'), $old);
 
         $this->assertEquals([
-            'build' => 3,
+            'build' => '1.1.1',
             'modified' => true,
             'confident' => true,
+        ], $this->sourceManifest->compare($modifiedManifest));
+    }
+
+    public function testCompareModifiedSecondBranch()
+    {
+        $this->createManifest();
+
+        // Add "tests/fixtures/manifest/1_0_3/modules/test/file3.php"
+        file_put_contents(base_path('tests/fixtures/manifest/1_0_3/modules/test/file3.php'), '<?php // Changed');
+
+        $modifiedManifest = new FileManifest(base_path('tests/fixtures/manifest/1_0_3'), ['test', 'test2']);
+        $modifiedManifest->getFiles();
+
+        unlink(base_path('tests/fixtures/manifest/1_0_3/modules/test/file3.php'));
+
+        $this->assertEquals([
+            'build' => '1.0.3',
+            'modified' => true,
+            'confident' => false, // 50% match, not confident
         ], $this->sourceManifest->compare($modifiedManifest));
     }
 
@@ -279,6 +298,8 @@ class SourceManifestTest extends TestCase
         if ($write) {
             file_put_contents($this->manifestPath(), $this->sourceManifest->generate());
         }
+
+        $this->sourceManifest->loadForks();
     }
 
     protected function deleteManifest()

@@ -1,6 +1,7 @@
 <?php namespace System\Console;
 
 use ApplicationException;
+use Http;
 use ZipArchive;
 use System\Classes\FileManifest;
 use System\Classes\SourceManifest;
@@ -38,8 +39,8 @@ class OctoberManifest extends \Illuminate\Console\Command
      */
     public function handle()
     {
-        $minBuild = $this->option('minBuild') ?? 420;
-        $maxBuild = $this->option('maxBuild') ?? 9999;
+        $minBuild = $this->getVersionInt($this->option('minBuild') ?? '1.0.420');
+        $maxBuild = $this->getVersionInt($this->option('maxBuild') ?? '1.999.999');
 
         $targetFile = (substr($this->argument('target'), 0, 1) === '/')
             ? $this->argument('target')
@@ -59,25 +60,52 @@ class OctoberManifest extends \Illuminate\Console\Command
 
         if (file_exists($targetFile)) {
             $manifest = new SourceManifest($targetFile);
-            $manifestMaxBuild = $manifest->getMaxBuild();
-
-            if ($manifestMaxBuild > $minBuild) {
-                $minBuild = $manifestMaxBuild + 1;
-
-                if ($minBuild > $maxBuild) {
-                    throw new ApplicationException(
-                        'This manifest already contains all requested builds.'
-                    );
-                }
-            }
         } else {
-            $manifest = new SourceManifest('', false);
+            $manifest = new SourceManifest('', null, false);
         }
 
         // Create temporary directory to hold builds
         $buildDir = storage_path('temp/builds/');
         if (!is_dir($buildDir)) {
             mkdir($buildDir, 0775, true);
+        }
+
+        // Find all released builds
+        $page = 0;
+        $sourceBuilds = [];
+
+        while (true) {
+            ++$page;
+
+            $builds = Http::get(
+                'https://api.github.com/repos/octobercms/october/tags?per_page=100&page=' . $page,
+                function ($http) {
+                    $http->header('User-Agent', 'October CMS');
+                    $http->header('Accept', 'application/vnd.github.v3+json');
+                }
+            );
+
+            if ($builds->code !== 200) {
+                break;
+            }
+
+            $builds = json_decode($builds->body);
+
+            if (empty($builds)) {
+                break;
+            }
+
+            foreach ($builds as $build) {
+                $version = preg_replace('/[^0-9\.]+/', '', $build->name);
+                $versionInt = $this->getVersionInt($version);
+
+                if ($versionInt >= $minBuild && $versionInt <= $maxBuild) {
+                    $sourceBuilds[] = [
+                        'version' => $version,
+                        'download' => $build->zipball_url
+                    ];
+                }
+            }
         }
 
         for ($build = $minBuild; $build <= $maxBuild; ++$build) {
@@ -166,5 +194,26 @@ class OctoberManifest extends \Illuminate\Console\Command
         file_put_contents($targetFile, $manifest->generate());
 
         $this->comment('Completed.');
+    }
+
+    /**
+     * Converts a version string into an integer for comparison.
+     *
+     * @param string $version
+     * @throws ApplicationException if a version string does not match the format "major.minor.path"
+     * @return int
+     */
+    protected function getVersionInt(string $version)
+    {
+        // Get major.minor.patch versions
+        if (!preg_match('/^([0-9]+)\.([0-9]+)\.([0-9]+)/', $version, $versionParts)) {
+            throw new ApplicationException('Invalid version string - must be of the format "major.minor.path"');
+        }
+
+        $int = $versionParts[1] * 1000000;
+        $int += $versionParts[2] * 1000;
+        $int += $versionParts[3];
+
+        return $int;
     }
 }

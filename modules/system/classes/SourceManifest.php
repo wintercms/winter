@@ -54,7 +54,7 @@ class SourceManifest
             $this->setSource(
                 Config::get(
                     'cms.sourceManifestUrl',
-                    'https://raw.githubusercontent.com/octoberrain/meta/master/manifest/builds.json'
+                    'https://raw.githubusercontent.com/octoberrain/meta/master/manifest/builds-branched.json'
                 )
             );
         }
@@ -167,7 +167,10 @@ class SourceManifest
             );
         }
 
-        $this->forks = $data['forks'];
+        // Map forks to int values
+        foreach ($data['forks'] as $child => $parent) {
+            $this->forks[$this->getVersionInt($child)] = $this->getVersionInt($parent);
+        }
 
         return $this;
     }
@@ -234,7 +237,7 @@ class SourceManifest
             'manifest' => [],
         ];
 
-        foreach ($this->builds as $build => $details) {
+        foreach (array_values($this->builds) as $details) {
             $json['manifest'][] = [
                 'build' => $details['version'],
                 'parent' => $details['parent'] ?? null,
@@ -249,7 +252,8 @@ class SourceManifest
     /**
      * Gets the filelist state at a selected build.
      *
-     * This method will list all expected files and hashsums at the specified build number.
+     * This method will list all expected files and hashsums at the specified build number. It does this by following
+     * the history, switching branches as necessary.
      *
      * @param string|integer $build Build version to get the filelist state for.
      * @throws ApplicationException If the specified build has not been added to the source manifest.
@@ -268,6 +272,11 @@ class SourceManifest
         $state = [];
 
         foreach ($this->builds as $number => $details) {
+            // Follow fork if necessary
+            if (isset($this->forks) && array_key_exists($build, $this->forks)) {
+                $state = $this->getState($this->forks[$build]);
+            }
+
             if (isset($details['files']['added'])) {
                 foreach ($details['files']['added'] as $filename => $sum) {
                     $state[$filename] = $sum;
@@ -313,12 +322,14 @@ class SourceManifest
         $modules = $manifest->getModuleChecksums();
 
         // Look for an unmodified version
-        foreach ($this->getBuilds() as $build => $details) {
-            $matched = array_intersect_assoc($details['modules'], $modules);
+        foreach ($this->getBuilds() as $buildString) {
+            $build = $this->builds[$this->getVersionInt($buildString)];
 
-            if (count($matched) === count($modules)) {
+            $matched = array_intersect_assoc($build['modules'], $modules);
+
+            if (count($matched) === count($build['modules'])) {
                 $details = [
-                    'build' => $build,
+                    'build' => $buildString,
                     'modified' => false,
                     'confident' => true,
                 ];
@@ -335,8 +346,10 @@ class SourceManifest
         // install.
         $buildMatch = [];
 
-        foreach ($this->getBuilds() as $build => $details) {
-            $state = $this->getState($build);
+        foreach ($this->getBuilds() as $buildString) {
+            $build = $this->builds[$this->getVersionInt($buildString)];
+
+            $state = $this->getState($buildString);
 
             // Include only the files that match the modules being loaded in this file manifest
             $availableModules = array_keys($modules);
@@ -376,7 +389,7 @@ class SourceManifest
             $changedPercent = count($filesChanged) / $filesExpected;
 
             $score = ((1 * $foundPercent) - $changedPercent);
-            $buildMatch[$build] = round($score * 100, 2);
+            $buildMatch[$buildString] = round($score * 100, 2);
         }
 
         // Find likely version
@@ -454,13 +467,14 @@ class SourceManifest
 
     protected function determineParent(string $build)
     {
+        $buildInt = $this->getVersionInt($build);
+
         // First, we'll check for a fork - if so, the source version for the fork is a parent
-        if (isset($this->forks) && array_key_exists($build, $this->forks)) {
-            return $this->forks[$build];
+        if (isset($this->forks) && array_key_exists($buildInt, $this->forks)) {
+            return $this->forks[$buildInt];
         }
 
         // If not a fork, then determine the parent by finding the nearest minor version to the build
-        $buildInt = $this->getVersionInt($build);
         $parent = null;
 
         for ($i = 1; $i <= 999; ++$i) {
