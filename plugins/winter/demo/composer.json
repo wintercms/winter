@@ -1,5 +1,5 @@
 {
-    "name": "october/demo-plugin",
+    "name": "winter/demo-plugin",
     "type": "october-plugin",
     "description": "Demo WinterCMS plugin",
     "keywords": ["october", "cms", "demo", "plugin"],
