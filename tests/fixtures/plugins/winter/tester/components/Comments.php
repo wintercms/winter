@@ -1,8 +1,8 @@
-<?php namespace October\Tester\Components;
+<?php namespace Winter\Tester\Components;
 
 use Cms\Classes\ComponentBase;
 use Cms\Classes\CodeBase;
-use October\Tester\Classes\Users;
+use Winter\Tester\Classes\Users;
 
 class Comments extends ComponentBase
 {

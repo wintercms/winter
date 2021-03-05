@@ -1,4 +1,4 @@
-<?php namespace October\Tester;
+<?php namespace Winter\Tester;
 
 use System\Classes\PluginBase;
 
@@ -7,7 +7,7 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name' => 'October Test Plugin',
+            'name' => 'Winter Test Plugin',
             'description' => 'Test plugin used by unit tests.',
             'author' => 'Alexey Bobkov, Samuel Georges'
         ];
@@ -16,18 +16,18 @@ class Plugin extends PluginBase
     public function registerComponents()
     {
         return [
-            'October\Tester\Components\Archive' => 'testArchive',
-            'October\Tester\Components\Post' => 'testPost',
-            'October\Tester\Components\MainMenu' => 'testMainMenu',
-            'October\Tester\Components\ContentBlock' => 'testContentBlock',
-            'October\Tester\Components\Comments' => 'testComments',
+            'Winter\Tester\Components\Archive' => 'testArchive',
+            'Winter\Tester\Components\Post' => 'testPost',
+            'Winter\Tester\Components\MainMenu' => 'testMainMenu',
+            'Winter\Tester\Components\ContentBlock' => 'testContentBlock',
+            'Winter\Tester\Components\Comments' => 'testComments',
         ];
     }
 
     public function registerFormWidgets()
     {
         return [
-            'October\Tester\FormWidgets\Preview' => [
+            'Winter\Tester\FormWidgets\Preview' => [
                 'label' => 'Preview',
                 'code'  => 'preview'
             ]

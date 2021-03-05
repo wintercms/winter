@@ -1,4 +1,4 @@
-<?php namespace October\Sample;
+<?php namespace Winter\NoUpdates;
 
 use System\Classes\PluginBase;
 
@@ -7,8 +7,8 @@ class Plugin extends PluginBase
     public function pluginDetails()
     {
         return [
-            'name' => 'October Sample Plugin',
-            'description' => 'Sample plugin used by unit tests.',
+            'name' => 'Winter Empty Plugin',
+            'description' => 'Empty plugin used by unit tests.',
             'author' => 'Alexey Bobkov, Samuel Georges'
         ];
     }
