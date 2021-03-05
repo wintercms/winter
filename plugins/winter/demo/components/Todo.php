@@ -1,4 +1,4 @@
-<?php namespace October\Demo\Components;
+<?php namespace Winter\Demo\Components;
 
 use Cms\Classes\ComponentBase;
 use ApplicationException;

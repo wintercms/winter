@@ -1,7 +1,7 @@
 {
     "name": "october/demo-plugin",
     "type": "october-plugin",
-    "description": "Demo OctoberCMS plugin",
+    "description": "Demo WinterCMS plugin",
     "keywords": ["october", "cms", "demo", "plugin"],
     "license": "MIT",
 
@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "October\\Demo\\": ""
+            "Winter\\Demo\\": ""
         }
     },
     "extra": {
