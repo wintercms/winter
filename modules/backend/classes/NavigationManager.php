@@ -11,7 +11,7 @@ use Config;
 /**
  * Manages the backend navigation.
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  */
 class NavigationManager

@@ -31,7 +31,7 @@ use Cms\Classes\Asset;
 /**
  * CMS index
  *
- * @package october\cms
+ * @package winter\cms
  * @author Alexey Bobkov, Samuel Georges
  */
 class Index extends Controller

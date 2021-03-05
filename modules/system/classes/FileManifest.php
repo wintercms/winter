@@ -11,7 +11,7 @@ use October\Rain\Halcyon\Datasource\FileDatasource;
  * This manifest is a file checksum of all files within this October CMS installation. When compared to the source
  * manifest, this allows us to determine the current installation's build number.
  *
- * @package october\system
+ * @package winter\system
  * @author Ben Thomson
  */
 class FileManifest

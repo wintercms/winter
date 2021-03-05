@@ -10,7 +10,7 @@ use System\Models\RequestLog;
 /**
  * Request Logs controller
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
 class RequestLogs extends Controller

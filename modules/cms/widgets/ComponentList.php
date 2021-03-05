@@ -11,7 +11,7 @@ use Backend\Classes\WidgetBase;
 /**
  * Component list widget.
  *
- * @package october\cms
+ * @package winter\cms
  * @author Alexey Bobkov, Samuel Georges
  */
 class ComponentList extends WidgetBase

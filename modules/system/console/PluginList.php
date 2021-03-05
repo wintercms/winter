@@ -8,7 +8,7 @@ use Symfony\Component\Console\Helper\TableSeparator;
 /**
  * Console command to list existing plugins.
  *
- * @package october\system
+ * @package winter\system
  * @author Lucas Zamora
  */
 class PluginList extends Command

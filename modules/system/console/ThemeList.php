@@ -11,7 +11,7 @@ use System\Classes\UpdateManager;
  *
  * This lists all the available themes in the system. It also shows the active theme.
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeList extends Command

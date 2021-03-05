@@ -7,7 +7,7 @@ use System\Classes\SettingsManager;
 /**
  * Mail partials controller
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailPartials extends Controller

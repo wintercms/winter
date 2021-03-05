@@ -7,7 +7,7 @@ use Config;
 /**
  * CMS Helper
  *
- * @package october\cms
+ * @package winter\cms
  * @see \Cms\Facades\Cms
  * @author Alexey Bobkov, Samuel Georges
  */

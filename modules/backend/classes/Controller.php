@@ -27,7 +27,7 @@ use Illuminate\Routing\Controller as ControllerBase;
  * The Backend base controller class, used by Backend controllers.
  * The base controller services back end pages.
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  */
 class Controller extends ControllerBase

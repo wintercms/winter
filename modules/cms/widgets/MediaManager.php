@@ -5,7 +5,7 @@ use Backend\Widgets\MediaManager as BackendMediaManager;
 /**
  * Media Manager widget.
  *
- * @package october\cms
+ * @package winter\cms
  * @author Alexey Bobkov, Samuel Georges
  * @deprecated Use Backend\Widgets\MediaManager. Remove if year >= 2020.
  */

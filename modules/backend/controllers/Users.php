@@ -14,7 +14,7 @@ use System\Classes\SettingsManager;
 /**
  * Backend user controller
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  *
  */

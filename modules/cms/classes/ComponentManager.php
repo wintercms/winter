@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\App;
 /**
  * Component manager
  *
- * @package october\cms
+ * @package winter\cms
  * @author Alexey Bobkov, Samuel Georges
  */
 class ComponentManager

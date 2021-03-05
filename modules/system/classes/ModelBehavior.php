@@ -7,7 +7,7 @@ use October\Rain\Database\ModelBehavior as ModelBehaviorBase;
 /**
  * Base class for model behaviors.
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
 class ModelBehavior extends ModelBehaviorBase

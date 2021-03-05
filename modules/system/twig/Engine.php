@@ -7,7 +7,7 @@ use Illuminate\Contracts\View\Engine as EngineInterface;
 /**
  * View engine used by the system, used for converting .htm files to twig.
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
 class Engine implements EngineInterface

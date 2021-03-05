@@ -8,7 +8,7 @@ use System\Classes\SettingsManager;
 /**
  * Access Logs controller
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
 class AccessLogs extends Controller

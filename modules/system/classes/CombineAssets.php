@@ -40,7 +40,7 @@ use DateTime;
  *
  * @see System\Classes\SystemController System controller
  * @see https://octobercms.com/docs/services/session Session service
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
 class CombineAssets

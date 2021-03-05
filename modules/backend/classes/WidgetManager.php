@@ -9,7 +9,7 @@ use Event;
 /**
  * Widget manager
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  */
 class WidgetManager

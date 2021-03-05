@@ -9,7 +9,7 @@ use Twig\Sandbox\SecurityNotAllowedPropertyError;
 /**
  * SecurityPolicy globally blocks accessibility of certain methods and properties.
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges, Luke Towers
  */
 final class SecurityPolicy implements SecurityPolicyInterface

@@ -9,7 +9,7 @@ use October\Rain\Router\Helper as RouterHelper;
  *
  * This skin uses the default paths always, there is no lookup required.
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  */
 

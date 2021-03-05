@@ -4,7 +4,7 @@
  * Report Widget base class
  * Report widgets are used inside the ReportContainer.
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  */
 class ReportWidgetBase extends WidgetBase

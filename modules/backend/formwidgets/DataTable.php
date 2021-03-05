@@ -10,7 +10,7 @@ use ApplicationException;
  * Data Table
  * Renders a table field.
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  */
 class DataTable extends FormWidgetBase

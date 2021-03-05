@@ -29,6 +29,7 @@ return [
     'Url'       => Illuminate\Support\Facades\URL::class, // Preferred
     'URL'       => Illuminate\Support\Facades\URL::class,
     'View'      => Illuminate\Support\Facades\View::class,
+    'Mail'      => Illuminate\Support\Facades\Mail::class,
 
     /*
      * October aliases
@@ -49,7 +50,6 @@ return [
     'Http'                 => October\Rain\Support\Facades\Http::class,
     'Ini'                  => October\Rain\Support\Facades\Ini::class,
     'Input'                => October\Rain\Support\Facades\Input::class,
-    'Mail'                 => October\Rain\Support\Facades\Mail::class,
     'Markdown'             => October\Rain\Support\Facades\Markdown::class,
     'Model'                => October\Rain\Database\Model::class,
     'Schema'               => October\Rain\Support\Facades\Schema::class,

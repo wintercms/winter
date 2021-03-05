@@ -11,7 +11,7 @@ use Backend\Models\Preference as PreferenceModel;
 /**
  * Editor Settings controller
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  *
  */

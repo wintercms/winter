@@ -7,7 +7,7 @@ use Backend\Widgets\MediaManager;
 /**
  * Backend Media Manager
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  */
 class Media extends Controller

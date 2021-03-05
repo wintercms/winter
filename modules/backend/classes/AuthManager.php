@@ -8,7 +8,7 @@ use October\Rain\Exception\SystemException;
 /**
  * Back-end authentication manager.
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  */
 class AuthManager extends RainAuthManager

@@ -37,7 +37,7 @@ use October\Rain\Database\Attach\Resizer as DefaultResizer;
  *
  * @see System\Classes\SystemController System controller
  * @see System\Twig\Extension Twig filters for this class defined
- * @package october\system
+ * @package winter\system
  * @author Luke Towers
  */
 class ImageResizer

@@ -10,7 +10,7 @@ use Config;
  * buils of October CMS. This allows us to compare the October CMS installation against the expected file checksums and
  * determine the installed build and whether it has been modified.
  *
- * @package october\system
+ * @package winter\system
  * @author Ben Thomson
  */
 class SourceManifest

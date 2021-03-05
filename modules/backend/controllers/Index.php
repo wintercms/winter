@@ -8,7 +8,7 @@ use Backend\Widgets\ReportContainer;
 /**
  * Dashboard controller
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  *
  */

@@ -8,7 +8,7 @@ use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
  *
  *     {% styles %}
  *
- * @package october\cms
+ * @package winter\cms
  * @author Alexey Bobkov, Samuel Georges
  */
 class StylesTokenParser extends TwigTokenParser

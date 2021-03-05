@@ -8,7 +8,7 @@ use SystemException;
 /**
  * Manages the system settings.
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
 class SettingsManager
@@ -375,7 +375,7 @@ class SettingsManager
         if (!$user) {
             return $items;
         }
-        
+
         $items = array_filter($items, function ($item) use ($user) {
             if (!$item->permissions || !count($item->permissions)) {
                 return true;

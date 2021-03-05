@@ -8,7 +8,7 @@ use October\Rain\Router\Helper as RouterHelper;
  * Skin Base class
  * Used for defining skins.
  *
- * @package october\backend
+ * @package winter\backend
  * @author Alexey Bobkov, Samuel Georges
  */
 abstract class Skin

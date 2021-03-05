@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 /**
  * Console command to enable a plugin.
  *
- * @package october\system
+ * @package winter\system
  * @author Lucas Zamora
  */
 class PluginEnable extends Command

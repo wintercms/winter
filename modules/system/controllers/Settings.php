@@ -14,7 +14,7 @@ use Exception;
 /**
  * Settings controller
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  *
  */
