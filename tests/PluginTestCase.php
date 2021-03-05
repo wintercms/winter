@@ -4,7 +4,7 @@ use Backend\Classes\AuthManager;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
 use October\Rain\Database\Model as ActiveRecord;
-use October\Tests\Concerns\InteractsWithAuthentication;
+use Winter\Tests\Concerns\InteractsWithAuthentication;
 
 abstract class PluginTestCase extends TestCase
 {
@@ -86,7 +86,7 @@ abstract class PluginTestCase extends TestCase
         /*
          * Ensure system is up to date
          */
-        $this->runOctoberUpCommand();
+        $this->runWinterUpCommand();
 
         /*
          * Detect plugin from test and autoload it
@@ -119,9 +119,9 @@ abstract class PluginTestCase extends TestCase
      * Migrate database using october:up command.
      * @return void
      */
-    protected function runOctoberUpCommand()
+    protected function runWinterUpCommand()
     {
-        Artisan::call('october:up');
+        Artisan::call('winter:up');
     }
 
     /**
