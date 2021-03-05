@@ -3,9 +3,9 @@
 use October\Rain\Foundation\Bootstrap\LoadConfiguration;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
-use System\Console\OctoberEnv;
+use System\Console\WinterEnv;
 
-class OctoberEnvTest extends TestCase
+class WinterEnvTest extends TestCase
 {
     /** @var bool If the config fixtures have been copied */
     public static $fixturesCopied = false;
@@ -23,7 +23,7 @@ class OctoberEnvTest extends TestCase
 
     public function testCommand()
     {
-        $command = new OctoberEnv();
+        $command = new WinterEnv();
         $command->setLaravel($this->app);
         $command->run(new ArrayInput([]), new NullOutput);
 

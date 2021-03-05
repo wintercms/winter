@@ -86,7 +86,7 @@ class MediaLibraryTest extends TestCase // @codingStandardsIgnoreLine
         $this->assertCount(3, $contents);
 
         $this->assertEquals('file', $contents[1]->type, 'Media library item does not have the right type');
-        $this->assertEquals('/october.png', $contents[1]->path, 'Media library item does not have the right path');
+        $this->assertEquals('/winter.png', $contents[1]->path, 'Media library item does not have the right path');
         $this->assertNotEmpty($contents[1]->lastModified, 'Media library item last modified is empty');
         $this->assertNotEmpty($contents[1]->size, 'Media library item size is empty');
 

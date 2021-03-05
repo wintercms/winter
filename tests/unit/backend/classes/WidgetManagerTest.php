@@ -11,7 +11,7 @@ class WidgetManagerTest extends TestCase
         $widgets = $manager->listFormWidgets();
 
         $this->assertArrayHasKey('TestVendor\Test\FormWidgets\Sample', $widgets);
-        $this->assertArrayHasKey('October\Tester\FormWidgets\Preview', $widgets);
+        $this->assertArrayHasKey('Winter\Tester\FormWidgets\Preview', $widgets);
     }
 
     public function testIfWidgetsCanBeExtended()
