@@ -13,16 +13,16 @@ use Symfony\Component\Console\Input\InputArgument;
  * This command will create symbolic links to files and directories
  * that are commonly required to be publicly available.
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
-class OctoberMirror extends Command
+class WinterMirror extends Command
 {
 
     /**
      * The console command name.
      */
-    protected $name = 'october:mirror';
+    protected $name = 'winter:mirror';
 
     /**
      * The console command description.
@@ -88,7 +88,7 @@ class OctoberMirror extends Command
 
         /**
          * @event system.console.mirror.extendPaths
-         * Enables extending the `php artisan october:mirror` command
+         * Enables extending the `php artisan winter:mirror` command
          *
          * You will have access to a $paths stdClass with `files`, `directories`, `wildcards` properties available for modifying.
          *

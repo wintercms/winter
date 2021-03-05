@@ -26,12 +26,12 @@ use System\Models\File as FileModel;
  * - compile less: Compile registered LESS files only.
  * - compile scss: Compile registered SCSS files only.
  * - compile lang: Compile registered Language files only.
- * - set project --projectId=<id>: Set the projectId for this october instance.
+ * - set project --projectId=<id>: Set the projectId for this winter instance.
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
-class OctoberUtil extends Command
+class WinterUtil extends Command
 {
 
     use \Illuminate\Console\ConfirmableTrait;
@@ -39,12 +39,12 @@ class OctoberUtil extends Command
     /**
      * The console command name.
      */
-    protected $name = 'october:util';
+    protected $name = 'winter:util';
 
     /**
      * The console command description.
      */
-    protected $description = 'Utility commands for October';
+    protected $description = 'Utility commands for Winter';
 
     /**
      * Execute the console command.
@@ -56,7 +56,7 @@ class OctoberUtil extends Command
 
         $methods = preg_grep('/^util/', get_class_methods(get_called_class()));
         $list = array_map(function ($item) {
-            return "october:".snake_case($item, " ");
+            return "winter:".snake_case($item, " ");
         }, $methods);
 
         if (!$this->argument('name')) {
@@ -86,7 +86,7 @@ class OctoberUtil extends Command
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info "http://octobercms.com/docs/console/commands#october-util-command".'],
+            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info "http://wintercms.com/docs/console/commands#winter-util-command".'],
         ];
     }
 
@@ -108,10 +108,10 @@ class OctoberUtil extends Command
 
     protected function utilSetBuild()
     {
-        $this->comment('NOTE: This command is now deprecated. Please use "php artisan october:version" instead.');
+        $this->comment('NOTE: This command is now deprecated. Please use "php artisan winter:version" instead.');
         $this->comment('');
 
-        return $this->call('october:version');
+        return $this->call('winter:version');
     }
 
     protected function utilCompileJs()

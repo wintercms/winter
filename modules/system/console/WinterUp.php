@@ -6,22 +6,22 @@ use System\Classes\UpdateManager;
 /**
  * Console command to migrate the database.
  *
- * This builds up all database tables that are registered for October and all plugins.
+ * This builds up all database tables that are registered for Winter and all plugins.
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
-class OctoberUp extends Command
+class WinterUp extends Command
 {
     /**
      * The console command name.
      */
-    protected $name = 'october:up';
+    protected $name = 'winter:up';
 
     /**
      * The console command description.
      */
-    protected $description = 'Builds database tables for October and all plugins.';
+    protected $description = 'Builds database tables for Winter and all plugins.';
 
     /**
      * Execute the console command.

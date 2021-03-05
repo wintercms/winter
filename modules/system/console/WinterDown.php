@@ -7,24 +7,24 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * Console command to tear down the database.
  *
- * This destroys all database tables that are registered for October and all plugins.
+ * This destroys all database tables that are registered for Winter and all plugins.
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
-class OctoberDown extends Command
+class WinterDown extends Command
 {
     use \Illuminate\Console\ConfirmableTrait;
 
     /**
      * The console command name.
      */
-    protected $name = 'october:down';
+    protected $name = 'winter:down';
 
     /**
      * The console command description.
      */
-    protected $description = 'Destroys all database tables for October and all plugins.';
+    protected $description = 'Destroys all database tables for Winter and all plugins.';
 
     /**
      * Execute the console command.

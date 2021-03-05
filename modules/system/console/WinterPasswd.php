@@ -10,14 +10,14 @@ use Symfony\Component\Console\Question\Question;
 /**
  * Console command to change the password of a Backend user via CLI.
  *
- * @package october\system
+ * @package winter\system
  */
-class OctoberPasswd extends Command
+class WinterPasswd extends Command
 {
     /**
      * @var string The console command name.
      */
-    protected $name = 'october:passwd';
+    protected $name = 'winter:passwd';
 
     /**
      * @var string The console command description.

@@ -5,17 +5,17 @@ use ZipArchive;
 use System\Classes\FileManifest;
 use System\Classes\SourceManifest;
 
-class OctoberManifest extends \Illuminate\Console\Command
+class WinterManifest extends \Illuminate\Console\Command
 {
     /**
      * @var string The console command description.
      */
-    protected $description = 'Generates a build manifest of October CMS builds.';
+    protected $description = 'Generates a build manifest of Winter CMS builds.';
 
     /**
      * @var string The name and signature of the console command.
      */
-    protected $signature = 'october:manifest
+    protected $signature = 'winter:manifest
                             {target : Specifies the target file for the build manifest.}
                             {--minBuild= : Specifies the minimum build number to retrieve from the source.}
                             {--maxBuild= : Specifies the maximum build number to retreive from the source.}';
@@ -28,7 +28,7 @@ class OctoberManifest extends \Illuminate\Console\Command
     /**
      * @var string Source repository download file.
      */
-    protected $sourceBuildFile = 'https://github.com/octobercms/october/archive/v1.0.%d.zip';
+    protected $sourceBuildFile = 'https://github.com/wintercms/winter/archive/v1.0.%d.zip';
 
 
     /**
@@ -110,9 +110,9 @@ class OctoberManifest extends \Illuminate\Console\Command
                 if ($zip->open($buildDir . 'build-' . $build . '.zip')) {
                     $toExtract = [];
                     $paths = [
-                        'october-1.0.' . $build . '/modules/backend/',
-                        'october-1.0.' . $build . '/modules/cms/',
-                        'october-1.0.' . $build . '/modules/system/',
+                        'winter-1.0.' . $build . '/modules/backend/',
+                        'winter-1.0.' . $build . '/modules/cms/',
+                        'winter-1.0.' . $build . '/modules/system/',
                     ];
 
                     // Only get necessary files from the modules directory
@@ -156,7 +156,7 @@ class OctoberManifest extends \Illuminate\Console\Command
 
             // Add build to manifest
             $this->line('  - Adding to manifest...');
-            $buildManifest = new FileManifest($buildDir . $build . '/october-1.0.' . $build);
+            $buildManifest = new FileManifest($buildDir . $build . '/winter-1.0.' . $build);
             $manifest->addBuild($build, $buildManifest, $previous);
             $this->info('  - Added.');
         }

@@ -9,16 +9,16 @@ use Illuminate\Console\Command;
  * This creates an .env file with some default configuration values, it also converts
  * the existing PHP-based configuration files to use the `env` function for values.
  *
- * @package october\system
+ * @package winter\system
  * @author Alexey Bobkov, Samuel Georges
  */
-class OctoberEnv extends Command
+class WinterEnv extends Command
 {
 
     /**
      * The console command name.
      */
-    protected $name = 'october:env';
+    protected $name = 'winter:env';
 
     /**
      * The console command description.

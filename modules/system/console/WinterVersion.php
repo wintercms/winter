@@ -3,17 +3,17 @@
 use App;
 use System\Classes\UpdateManager;
 
-class OctoberVersion extends \Illuminate\Console\Command
+class WinterVersion extends \Illuminate\Console\Command
 {
     /**
      * @var string The console command description.
      */
-    protected $description = 'Detects the build number (version) of this October CMS instance.';
+    protected $description = 'Detects the build number (version) of this Winter CMS instance.';
 
     /**
      * @var string The name and signature of the console command.
      */
-    protected $signature = 'october:version
+    protected $signature = 'winter:version
                             {--changes : Include the list of changes between this install and the expected files for the detected build.}';
 
     /**
@@ -23,7 +23,7 @@ class OctoberVersion extends \Illuminate\Console\Command
      */
     public function handle()
     {
-        $this->comment('*** Detecting October CMS build...');
+        $this->comment('*** Detecting Winter CMS build...');
 
         if (!App::hasDatabase()) {
             $build = UpdateManager::instance()->getBuildNumberManually($this->option('changes'));
@@ -35,11 +35,11 @@ class OctoberVersion extends \Illuminate\Console\Command
         }
 
         if (!$build['confident']) {
-            $this->warn('*** We could not accurately determine your October CMS build due to the number of modifications. The closest detected build is October CMS build ' . $build['build'] . '.');
+            $this->warn('*** We could not accurately determine your Winter CMS build due to the number of modifications. The closest detected build is Winter CMS build ' . $build['build'] . '.');
         } else if ($build['modified']) {
-            $this->info('*** Detected a modified version of October CMS build ' . $build['build'] . '.');
+            $this->info('*** Detected a modified version of Winter CMS build ' . $build['build'] . '.');
         } else {
-            $this->info('*** Detected October CMS build ' . $build['build'] . '.');
+            $this->info('*** Detected Winter CMS build ' . $build['build'] . '.');
         }
 
         if ($this->option('changes')) {
