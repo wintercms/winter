@@ -38,7 +38,7 @@ jobs:
     runs-on: ${{ matrix.operatingSystem }}
     name: ${{ matrix.operatingSystem }} / PHP ${{ matrix.phpVersion }}
     env:
-      extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml
+      extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
       key: october-cms-cache-v1
     steps:
       - name: Checkout changes
