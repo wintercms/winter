@@ -24,6 +24,11 @@ class NavigationManager
     protected $callbacks = [];
 
     /**
+     * @var array List of owner aliases.
+     */
+    protected $aliases = [];
+
+    /**
      * @var MainMenuItem[] List of registered items.
      */
     protected $items;
@@ -221,6 +226,11 @@ class NavigationManager
         }
 
         $this->addMainMenuItems($owner, $definitions);
+    }
+
+    public function registerOwnerAlias(string $owner, string $alias)
+    {
+        $this->aliases[$alias] = $owner;
     }
 
     /**
@@ -603,7 +613,7 @@ class NavigationManager
      */
     public function setContext($owner, $mainMenuItemCode, $sideMenuItemCode = null)
     {
-        $this->setContextOwner($owner);
+        $this->setContextOwner($this->aliases[$owner] ?? $owner);
         $this->setContextMainMenu($mainMenuItemCode);
         $this->setContextSideMenu($sideMenuItemCode);
     }
@@ -752,6 +762,6 @@ class NavigationManager
      */
     protected function makeItemKey($owner, $code)
     {
-        return strtoupper($owner).'.'.strtoupper($code);
+        return strtoupper($this->aliases[$owner] ?? $owner).'.'.strtoupper($code);
     }
 }
