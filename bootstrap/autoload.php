@@ -13,7 +13,7 @@ define('LARAVEL_START', microtime(true));
 |
 */
 
-$helperPath = __DIR__.'/../vendor/october/rain/src/Support/helpers.php';
+$helperPath = __DIR__.'/../vendor/wintercms/storm/src/Support/helpers.php';
 
 if (!file_exists($helperPath)) {
     echo 'Missing vendor files, try running "composer install" or use the Wizard installer.'.PHP_EOL;

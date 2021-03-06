@@ -1,7 +1,7 @@
 <?php namespace Backend\Classes;
 
-use October\Rain\Database\Model;
-use October\Rain\Html\Helper as HtmlHelper;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Html\Helper as HtmlHelper;
 
 /**
  * List Columns definition

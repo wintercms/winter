@@ -4,7 +4,7 @@ use Url;
 use Config;
 use File as FileHelper;
 use Storage;
-use October\Rain\Database\Attach\File as FileBase;
+use Winter\Storm\Database\Attach\File as FileBase;
 use Backend\Controllers\Files;
 
 /**

@@ -160,7 +160,7 @@ class TemplateList extends WidgetBase
          */
         $items = call_user_func($this->dataSource);
 
-        if ($items instanceof \October\Rain\Support\Collection) {
+        if ($items instanceof \Winter\Storm\Support\Collection) {
             $items = $items->all();
         }
 

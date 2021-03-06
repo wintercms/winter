@@ -20,7 +20,7 @@ use Exception;
 class BrandSetting extends Model
 {
     use \System\Traits\ViewMaker;
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var array Behaviors implemented by this model.

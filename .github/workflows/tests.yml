@@ -26,17 +26,17 @@ jobs:
           tools: composer:v1
       - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-suggest --no-scripts
-      - name: Reset October modules and library
+      - name: Reset Winter modules and library
         run: |
           git reset --hard HEAD
-          rm -rf ./vendor/october/rain
-          wget https://github.com/octobercms/library/archive/1.0.zip -O ./vendor/october/1.0.zip
-          unzip ./vendor/october/1.0.zip -d ./vendor/october
-          mv ./vendor/october/library-1.0 ./vendor/october/rain
+          rm -rf ./vendor/wintercms/storm
+          wget https://github.com/wintercms/library/archive/1.0.zip -O ./vendor/winter/1.0.zip
+          unzip ./vendor/winter/1.0.zip -d ./vendor/winter
+          mv ./vendor/winter/library-1.0 ./vendor/wintercms/storm
           composer dump-autoload
       - name: Run post-update Composer scripts
         run: |
-          php artisan october:util set build
+          php artisan winter:util set build
           php artisan package:discover
       - name: Run Linting and Tests
         run: |

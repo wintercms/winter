@@ -18,11 +18,11 @@ final class SecurityPolicy implements SecurityPolicyInterface
      * @var array List of forbidden methods.
      */
     protected $blockedMethods = [
-        // \October\Rain\Extension\ExtendableTrait
+        // \Winter\Storm\Extension\ExtendableTrait
         'addDynamicMethod',
         'addDynamicProperty',
 
-        // \October\Rain\Support\Traits\Emitter
+        // \Winter\Storm\Support\Traits\Emitter
         'bindEvent',
         'bindEventOnce',
 

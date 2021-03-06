@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 /**
  * Console command to perform a system update.
  *
- * This updates October CMS and all plugins, database and files. It uses the
+ * This updates Winter CMS and all plugins, database and files. It uses the
  * October gateway to receive the files via a package manager, then saves
  * the latest build number to the system.
  *
@@ -26,7 +26,7 @@ class OctoberUpdate extends Command
     /**
      * The console command description.
      */
-    protected $description = 'Updates October CMS and all plugins, database and files.';
+    protected $description = 'Updates Winter CMS and all plugins, database and files.';
 
     /**
      * Execute the console command.

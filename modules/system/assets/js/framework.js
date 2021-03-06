@@ -1,15 +1,15 @@
 /* ========================================================================
- * OctoberCMS: front-end JavaScript framework
- * http://octobercms.com
+ * Winter CMS: front-end JavaScript framework
+ * http://wintercms.com
  * ========================================================================
  * Copyright 2016-2020 Alexey Bobkov, Samuel Georges
  * ======================================================================== */
 
 if (window.jQuery === undefined) {
-    throw new Error('The jQuery library is not loaded. The OctoberCMS framework cannot be initialized.');
+    throw new Error('The jQuery library is not loaded. The Winter CMS framework cannot be initialized.');
 }
 if (window.jQuery.request !== undefined) {
-    throw new Error('The OctoberCMS framework is already loaded.');
+    throw new Error('The Winter CMS framework is already loaded.');
 }
 
 +function ($) { "use strict";
@@ -584,7 +584,7 @@ if (window.jQuery.request !== undefined) {
 }(window.jQuery);
 
 /*
- * October CMS JSON Parser
+ * Winter CMS JSON Parser
  */
 +function(window) { "use strict";
     function parseKey(str, pos, quote) {
@@ -909,7 +909,7 @@ if (window.jQuery.request !== undefined) {
 }(window);
 
 /*
- * October CMS jQuery HTML Sanitizer
+ * Winter CMS jQuery HTML Sanitizer
  * @see https://gist.github.com/ufologist/5a0da51b2b9ef1b861c30254172ac3c9
  */
 +function(window) { "use strict";

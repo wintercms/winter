@@ -1,7 +1,7 @@
 <?php namespace Backend\Classes;
 
-use October\Rain\Html\Helper as HtmlHelper;
-use October\Rain\Extension\Extendable;
+use Winter\Storm\Html\Helper as HtmlHelper;
+use Winter\Storm\Extension\Extendable;
 use stdClass;
 
 /**

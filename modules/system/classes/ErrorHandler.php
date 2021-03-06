@@ -6,8 +6,8 @@ use Config;
 use Cms\Classes\Theme;
 use Cms\Classes\Router;
 use Cms\Classes\Controller as CmsController;
-use October\Rain\Exception\ErrorHandler as ErrorHandlerBase;
-use October\Rain\Exception\SystemException;
+use Winter\Storm\Exception\ErrorHandler as ErrorHandlerBase;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * System Error Handler, this class handles application exception events.

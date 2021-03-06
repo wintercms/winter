@@ -31,7 +31,7 @@ class UiTestCase extends PHPUnit_Extensions_SeleniumTestCase
     }
 
     //
-    // OctoberCMS Helpers
+    // Winter CMS Helpers
     //
 
     protected function signInToBackend()

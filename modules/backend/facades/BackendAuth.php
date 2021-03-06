@@ -1,6 +1,6 @@
 <?php namespace Backend\Facades;
 
-use October\Rain\Support\Facade;
+use Winter\Storm\Support\Facade;
 
 class BackendAuth extends Facade
 {

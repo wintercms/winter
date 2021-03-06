@@ -2,8 +2,8 @@
 
 use File;
 use Twig\Error\Error as TwigError;
-use October\Rain\Exception\ApplicationException;
-use October\Rain\Halcyon\Processors\SectionParser;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Halcyon\Processors\SectionParser;
 use Exception;
 
 /**

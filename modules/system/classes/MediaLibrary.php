@@ -7,7 +7,7 @@ use Config;
 use Storage;
 use Request;
 use Url;
-use October\Rain\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use ApplicationException;
 use SystemException;
 
@@ -20,7 +20,7 @@ use SystemException;
  */
 class MediaLibrary
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     const SORT_BY_TITLE = 'title';
     const SORT_BY_SIZE = 'size';

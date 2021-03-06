@@ -4,7 +4,7 @@ use Mail;
 use Event;
 use Backend;
 use BackendAuth;
-use October\Rain\Auth\Models\User as UserBase;
+use Winter\Storm\Auth\Models\User as UserBase;
 
 /**
  * Administrator user model
@@ -14,7 +14,7 @@ use October\Rain\Auth\Models\User as UserBase;
  */
 class User extends UserBase
 {
-    use \October\Rain\Database\Traits\SoftDelete;
+    use \Winter\Storm\Database\Traits\SoftDelete;
 
     /**
      * @var string The database table used by the model.

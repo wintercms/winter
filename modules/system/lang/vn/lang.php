@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Getting back to basics'
     ],
     'locale' => [
@@ -86,7 +86,7 @@ return [
         'unnamed' => 'Theme chưa được đặt tên',
         'name' => [
             'label' => 'Tên theme',
-            'help' => 'Tên của theme không được trùng lặp. Ví dụ RainLab.Vanilla'
+            'help' => 'Tên của theme không được trùng lặp. Ví dụ Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -102,7 +102,7 @@ return [
         'unnamed' => 'Plugin chưa được đặt tên',
         'name' => [
             'label' => 'Tên plugin',
-            'help' => 'Tên của plugin không được trùng lặp. For example, RainLab.Blog'
+            'help' => 'Tên của plugin không được trùng lặp. For example, Winter.Blog'
         ],
         'by_author' => 'Tạo bởi :name'
     ],

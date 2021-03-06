@@ -2,7 +2,7 @@
 
 use Lang;
 use ApplicationException;
-use October\Rain\Database\ModelBehavior as ModelBehaviorBase;
+use Winter\Storm\Database\ModelBehavior as ModelBehaviorBase;
 
 /**
  * Base class for model behaviors.
@@ -19,7 +19,7 @@ class ModelBehavior extends ModelBehaviorBase
 
     /**
      * Constructor
-     * @param October\Rain\Database\Model $model The extended model.
+     * @param Winter\Storm\Database\Model $model The extended model.
      */
     public function __construct($model)
     {

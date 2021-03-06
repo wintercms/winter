@@ -1,7 +1,7 @@
 {
     "name": "october/demo-plugin",
     "type": "october-plugin",
-    "description": "Demo OctoberCMS plugin",
+    "description": "Demo Winter CMS plugin",
     "keywords": ["october", "cms", "demo", "plugin"],
     "license": "MIT",
 

@@ -26,8 +26,8 @@ use System\Models\EventLog;
 use System\Models\MailSetting;
 use System\Classes\CombineAssets;
 use Backend\Classes\WidgetManager;
-use October\Rain\Support\ModuleServiceProvider;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Support\ModuleServiceProvider;
+use Winter\Storm\Router\Helper as RouterHelper;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 

@@ -54,5 +54,5 @@ class Author extends Model
 
 class SoftDeleteAuthor extends Author
 {
-    use \October\Rain\Database\Traits\SoftDelete;
+    use \Winter\Storm\Database\Traits\SoftDelete;
 }

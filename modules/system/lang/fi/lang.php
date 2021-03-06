@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Takaisin perusteisiin'
     ],
     'locale' => [
@@ -85,7 +85,7 @@ return [
         'unnamed' => 'Nimetön teema',
         'name' => [
             'label' => 'Teeman nimi',
-            'help' => 'Nimeä teema uniikilla tunnuksella. Esimerkiksi RainLab.Vanilla'
+            'help' => 'Nimeä teema uniikilla tunnuksella. Esimerkiksi Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -101,7 +101,7 @@ return [
         'unnamed' => 'Nimetön lisäosa',
         'name' => [
             'label' => 'Lisäosan nimi',
-            'help' => 'Anna lisäosalle uniikkikoodi. Esimerkiksi: RainLab.Blog'
+            'help' => 'Anna lisäosalle uniikkikoodi. Esimerkiksi: Winter.Blog'
         ],
         'by_author' => 'Tekijä: :name'
     ],

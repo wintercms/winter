@@ -1,7 +1,7 @@
 <?php namespace Backend\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
-use October\Rain\Database\Relations\Relation as RelationBase;
+use Winter\Storm\Database\Relations\Relation as RelationBase;
 
 /**
  * Tag List Form Widget

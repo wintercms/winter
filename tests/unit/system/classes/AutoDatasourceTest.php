@@ -1,9 +1,9 @@
 <?php
 
 use Cms\Classes\AutoDatasource;
-use October\Rain\Database\Model;
-use October\Rain\Halcyon\Datasource\DbDatasource;
-use October\Rain\Halcyon\Datasource\FileDatasource;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Halcyon\Datasource\DbDatasource;
+use Winter\Storm\Halcyon\Datasource\FileDatasource;
 
 class CmsThemeTemplateFixture extends Model
 {

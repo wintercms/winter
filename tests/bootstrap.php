@@ -8,8 +8,8 @@ require __DIR__ . '/../bootstrap/autoload.php';
 /*
  * Fallback autoloader
  */
-$loader = new October\Rain\Support\ClassLoader(
-    new October\Rain\Filesystem\Filesystem,
+$loader = new Winter\Storm\Support\ClassLoader(
+    new Winter\Storm\Filesystem\Filesystem,
     __DIR__ . '/../',
     __DIR__ . '/../storage/framework/classes.php'
 );

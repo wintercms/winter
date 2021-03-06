@@ -395,7 +395,7 @@ class Updates extends Controller
                     continue;
                 }
 
-                $detailsUrl = '//octobercms.com/support/articles/release-notes';
+                $detailsUrl = '//wintercms.com/support/articles/release-notes';
                 $description = str_replace('!!!', '', $description);
                 $result['core']['updates'][$build] = [$description, $detailsUrl];
                 $coreImportant = $hasImportantUpdates = true;

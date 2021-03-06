@@ -1,6 +1,6 @@
 <?php namespace Cms\Facades;
 
-use October\Rain\Support\Facade;
+use Winter\Storm\Support\Facade;
 
 class Cms extends Facade
 {

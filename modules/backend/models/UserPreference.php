@@ -2,7 +2,7 @@
 
 use BackendAuth;
 use SystemException;
-use October\Rain\Auth\Models\Preferences as PreferencesBase;
+use Winter\Storm\Auth\Models\Preferences as PreferencesBase;
 
 /**
  * All preferences for the backend user

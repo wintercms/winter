@@ -1,6 +1,6 @@
 <?php namespace System\Models;
 
-use October\Rain\Database\Models\Revision as RevisionBase;
+use Winter\Storm\Database\Models\Revision as RevisionBase;
 
 /**
  * Revision history model

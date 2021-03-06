@@ -3,7 +3,7 @@
 use Cms\Classes\Theme;
 use Cms\Classes\CmsObject;
 use Cms\Classes\CmsCompoundObject;
-use October\Rain\Halcyon\Model;
+use Winter\Storm\Halcyon\Model;
 
 class TestCmsCompoundObject extends CmsCompoundObject
 {

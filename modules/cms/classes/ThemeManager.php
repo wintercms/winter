@@ -13,7 +13,7 @@ use Cms\Classes\Theme as CmsTheme;
  */
 class ThemeManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     //
     // Gateway spawned

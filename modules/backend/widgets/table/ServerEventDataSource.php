@@ -5,7 +5,7 @@
  */
 class ServerEventDataSource extends DataSourceBase
 {
-    use \October\Rain\Support\Traits\Emitter;
+    use \Winter\Storm\Support\Traits\Emitter;
 
     /**
      * Return records from the data source.

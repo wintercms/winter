@@ -2,7 +2,7 @@
 
 return [
     'app'            => [
-        'name'    => 'OctoberCMS',
+        'name'    => 'Winter CMS',
         'tagline' => 'Nazaj k osnovam',
     ],
     'locale'         => [
@@ -84,7 +84,7 @@ return [
         'unnamed' => 'Neimenovana tema',
         'name'    => [
             'label' => 'Ime teme',
-            'help'  => 'Poimenujte temo po njeni unikatni kodi, npr.: RainLab.Vanilla',
+            'help'  => 'Poimenujte temo po njeni unikatni kodi, npr.: Winter.Vanilla',
         ],
     ],
     'themes'         => [
@@ -100,7 +100,7 @@ return [
         'unnamed'   => 'Neimenovan vtičnik',
         'name'      => [
             'label' => 'Ime vtičnika',
-            'help'  => 'Poimenujte vtičnik po njegovi unikatni kodi, npr.: RainLab.Blog',
+            'help'  => 'Poimenujte vtičnik po njegovi unikatni kodi, npr.: Winter.Blog',
         ],
         'by_author' => 'Od :name',
     ],

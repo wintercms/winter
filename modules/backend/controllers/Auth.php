@@ -13,7 +13,7 @@ use ApplicationException;
 use ValidationException;
 use Exception;
 use Config;
-use October\Rain\Foundation\Http\Middleware\CheckForTrustedHost;
+use Winter\Storm\Foundation\Http\Middleware\CheckForTrustedHost;
 
 /**
  * Authentication controller

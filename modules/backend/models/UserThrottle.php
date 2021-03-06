@@ -1,7 +1,7 @@
 <?php namespace Backend\Models;
 
 use Config;
-use October\Rain\Auth\Models\Throttle as ThrottleBase;
+use Winter\Storm\Auth\Models\Throttle as ThrottleBase;
 
 /**
  * Administrator throttling model

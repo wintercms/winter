@@ -2,7 +2,7 @@
 
 use File;
 use Backend\Classes\Skin;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Router\Helper as RouterHelper;
 
 /**
  * Standard skin information file.

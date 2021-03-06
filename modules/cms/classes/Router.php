@@ -5,8 +5,8 @@ use File;
 use Cache;
 use Config;
 use Event;
-use October\Rain\Router\Router as RainRouter;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Router\Router as StormRouter;
+use Winter\Storm\Router\Helper as RouterHelper;
 
 /**
  * The router parses page URL patterns and finds pages by URLs.
@@ -56,7 +56,7 @@ class Router
     protected $urlMap = [];
 
     /**
-     * October\Rain\Router\Router Router object with routes preloaded.
+     * Winter\Storm\Router\Router Router object with routes preloaded.
      */
     protected $routerObj;
 
@@ -190,7 +190,7 @@ class Router
         /*
          * Load up each route rule
          */
-        $router = new RainRouter();
+        $router = new StormRouter();
         foreach ($this->getUrlMap() as $pageInfo) {
             $router->route($pageInfo['file'], $pageInfo['pattern']);
         }

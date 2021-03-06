@@ -46,7 +46,7 @@ class ReportContainer extends WidgetBase
      *
      * defaultWidgets:
      *     trafficOverview:
-     *         class: RainLab\GoogleAnalytics\ReportWidgets\TrafficOverview
+     *         class: Winter\GoogleAnalytics\ReportWidgets\TrafficOverview
      *         sortOrder: 1
      *         configuration:
      *             title: 'Traffic overview'

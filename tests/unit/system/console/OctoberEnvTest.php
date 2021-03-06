@@ -1,6 +1,6 @@
 <?php
 
-use October\Rain\Foundation\Bootstrap\LoadConfiguration;
+use Winter\Storm\Foundation\Bootstrap\LoadConfiguration;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use System\Console\OctoberEnv;

@@ -2,7 +2,7 @@
 
 use File;
 use Config;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Router\Helper as RouterHelper;
 
 /**
  * Skin Base class

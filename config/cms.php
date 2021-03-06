@@ -18,7 +18,7 @@ return [
     | Bleeding edge updates
     |--------------------------------------------------------------------------
     |
-    | If you are developing with October, it is important to have the latest
+    | If you are developing with Winter, it is important to have the latest
     | code base. Set this value to 'true' to tell the platform to download
     | and use the development copies of core files and plugins.
     |
@@ -299,14 +299,14 @@ return [
     | temporaryUrlTTL to a value in seconds to define a validity period. This
     | is only used for the 'uploads' config when using a supported cloud disk
     |
-    | NOTE: If you have installed October in a subfolder, are using local
+    | NOTE: If you have installed Winter in a subfolder, are using local
     | storage and are not using a linkPolicy of 'force' you should include
     | the path to the subfolder in the `path` option for these storage
     | configurations.
     |
-    | Example: October is installed under https://localhost/projects/october.
-    | You should then specify `/projects/october/storage/app/uploads` as the
-    | path for the uploads disk and `/projects/october/storage/app/media` as
+    | Example: Winter is installed under https://localhost/projects/winter.
+    | You should then specify `/projects/winter/storage/app/uploads` as the
+    | path for the uploads disk and `/projects/winter/storage/app/media` as
     | the path for the media disk.
     */
 
@@ -332,7 +332,7 @@ return [
     | Convert Line Endings
     |--------------------------------------------------------------------------
     |
-    | Determines if October should convert line endings from the windows style
+    | Determines if Winter should convert line endings from the windows style
     | \r\n to the unix style \n.
     |
     */

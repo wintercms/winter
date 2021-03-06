@@ -1,6 +1,6 @@
 <?php namespace Backend\Classes;
 
-use October\Rain\Html\Helper as HtmlHelper;
+use Winter\Storm\Html\Helper as HtmlHelper;
 
 /**
  * Filter scope definition

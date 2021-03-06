@@ -2,8 +2,8 @@
 
 use Config;
 use System\Classes\PluginManager;
-use October\Rain\Auth\Manager as RainAuthManager;
-use October\Rain\Exception\SystemException;
+use Winter\Storm\Auth\Manager as StormAuthManager;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Back-end authentication manager.
@@ -11,7 +11,7 @@ use October\Rain\Exception\SystemException;
  * @package october\backend
  * @author Alexey Bobkov, Samuel Georges
  */
-class AuthManager extends RainAuthManager
+class AuthManager extends StormAuthManager
 {
     protected static $instance;
 

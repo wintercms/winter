@@ -3,7 +3,7 @@
 use Backend\Classes\AuthManager;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
-use October\Rain\Database\Model as ActiveRecord;
+use Winter\Storm\Database\Model as ActiveRecord;
 use October\Tests\Concerns\InteractsWithAuthentication;
 
 abstract class PluginTestCase extends TestCase
@@ -201,15 +201,15 @@ abstract class PluginTestCase extends TestCase
     protected function flushModelEventListeners()
     {
         foreach (get_declared_classes() as $class) {
-            if ($class == 'October\Rain\Database\Pivot') {
+            if ($class == 'Winter\Storm\Database\Pivot') {
                 continue;
             }
 
             $reflectClass = new ReflectionClass($class);
             if (
                 !$reflectClass->isInstantiable() ||
-                !$reflectClass->isSubclassOf('October\Rain\Database\Model') ||
-                $reflectClass->isSubclassOf('October\Rain\Database\Pivot')
+                !$reflectClass->isSubclassOf('Winter\Storm\Database\Model') ||
+                $reflectClass->isSubclassOf('Winter\Storm\Database\Pivot')
             ) {
                 continue;
             }

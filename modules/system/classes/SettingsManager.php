@@ -13,7 +13,7 @@ use SystemException;
  */
 class SettingsManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * Allocated category types
@@ -375,7 +375,7 @@ class SettingsManager
         if (!$user) {
             return $items;
         }
-        
+
         $items = array_filter($items, function ($item) use ($user) {
             if (!$item->permissions || !count($item->permissions)) {
                 return true;

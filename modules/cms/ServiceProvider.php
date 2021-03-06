@@ -7,7 +7,7 @@ use BackendMenu;
 use BackendAuth;
 use Backend\Models\UserRole;
 use Backend\Classes\WidgetManager;
-use October\Rain\Support\ModuleServiceProvider;
+use Winter\Storm\Support\ModuleServiceProvider;
 use System\Classes\SettingsManager;
 use Cms\Classes\ComponentManager;
 use Cms\Classes\Page as CmsPage;

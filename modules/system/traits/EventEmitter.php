@@ -11,7 +11,7 @@ use Event;
 
 trait EventEmitter
 {
-    use \October\Rain\Support\Traits\Emitter;
+    use \Winter\Storm\Support\Traits\Emitter;
 
     /**
      * Fires a combination of local and global events. The first segment is removed

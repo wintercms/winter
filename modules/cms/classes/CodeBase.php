@@ -1,7 +1,7 @@
 <?php namespace Cms\Classes;
 
 use ArrayAccess;
-use October\Rain\Extension\Extendable;
+use Winter\Storm\Extension\Extendable;
 
 /**
  * Parent class for PHP classes created for layout and page code sections.

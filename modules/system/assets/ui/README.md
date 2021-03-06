@@ -1,6 +1,6 @@
 # October Storm
 
-Welcome to the client-side framework designed exclusively for the OctoberCMS back-end area, referred to as *October Storm*. The library is quite large as it has many features and it is not really itended to be used outside of October.
+Welcome to the client-side framework designed exclusively for the Winter CMS back-end area, referred to as *October Storm*. The library is quite large as it has many features and it is not really itended to be used outside of October.
 
 ## Design consideration
 

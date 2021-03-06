@@ -24,7 +24,7 @@ use Cms\Classes\ComponentPartial;
 use Cms\Helpers\Cms as CmsHelpers;
 use Backend\Classes\Controller;
 use System\Helpers\DateTime;
-use October\Rain\Router\Router as RainRouter;
+use Winter\Storm\Router\Router as StormRouter;
 use ApplicationException;
 use Cms\Classes\Asset;
 
@@ -159,7 +159,7 @@ class Index extends Controller
         $this->vars['canReset'] = $this->canResetTemplate($template);
 
         if ($type === 'page') {
-            $router = new RainRouter;
+            $router = new StormRouter;
             $this->vars['pageUrl'] = $router->urlFromPattern($template->url);
         }
 
@@ -494,7 +494,7 @@ class Index extends Controller
     /**
      * Get the active theme's datasource
      *
-     * @return \October\Rain\Halcyon\Datasource\DatasourceInterface
+     * @return \Winter\Storm\Halcyon\Datasource\DatasourceInterface
      */
     protected function getThemeDatasource()
     {

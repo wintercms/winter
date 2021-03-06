@@ -1,6 +1,6 @@
 /* ========================================================================
- * OctoberCMS: front-end JavaScript extras
- * http://octobercms.com
+ * Winter CMS: front-end JavaScript extras
+ * http://wintercms.com
  * ========================================================================
  * Copyright 2016-2020 Alexey Bobkov, Samuel Georges
  * ======================================================================== */

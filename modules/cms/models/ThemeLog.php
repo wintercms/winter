@@ -5,7 +5,7 @@ use Model;
 use BackendAuth;
 use Cms\Classes\Theme;
 use System\Models\LogSetting;
-use October\Rain\Halcyon\Model as HalcyonModel;
+use Winter\Storm\Halcyon\Model as HalcyonModel;
 use Exception;
 
 /**

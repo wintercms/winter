@@ -16,7 +16,7 @@ use Config;
  */
 class NavigationManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * @var array Cache of registration callbacks.

@@ -18,7 +18,7 @@ use DateTimeZone;
  */
 class Preference extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     const DEFAULT_THEME = 'twilight';
 

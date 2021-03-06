@@ -3,7 +3,7 @@
 use View;
 use Model;
 use System\Classes\MailManager;
-use October\Rain\Mail\MailParser;
+use Winter\Storm\Mail\MailParser;
 use File as FileHelper;
 
 /**
@@ -14,7 +14,7 @@ use File as FileHelper;
  */
 class MailTemplate extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var string The database table used by the model.

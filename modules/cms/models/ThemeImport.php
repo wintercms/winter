@@ -3,7 +3,7 @@
 use File;
 use Model;
 use ApplicationException;
-use October\Rain\Filesystem\Zip;
+use Winter\Storm\Filesystem\Zip;
 use Cms\Classes\Theme as CmsTheme;
 use FilesystemIterator;
 use Exception;
@@ -16,7 +16,7 @@ use Exception;
  */
 class ThemeImport extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var string The database table used by the model.

@@ -175,7 +175,7 @@
         var $object = $(file.previewElement).data('dzFileObject', file),
             filesize = this.getFilesize(file)
 
-        // Change filesize format to match October\Rain\Filesystem\Filesystem::sizeToString() format
+        // Change filesize format to match Winter\Storm\Filesystem\Filesystem::sizeToString() format
         $(file.previewElement).find('[data-dz-size]').html('<strong>' + filesize.size + '</strong> ' + filesize.units)
 
         // Remove any exisiting objects for single variety
@@ -388,7 +388,7 @@
     }
 
     /*
-     * Replicates the formatting of October\Rain\Filesystem\Filesystem::sizeToString(). This method will return
+     * Replicates the formatting of Winter\Storm\Filesystem\Filesystem::sizeToString(). This method will return
      * an object with the file size amount and the unit used as `size` and `units` respectively.
      */
     FileUpload.prototype.getFilesize = function (file) {

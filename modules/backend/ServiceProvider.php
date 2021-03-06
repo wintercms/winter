@@ -9,7 +9,7 @@ use Backend\Classes\WidgetManager;
 use System\Classes\MailManager;
 use System\Classes\CombineAssets;
 use System\Classes\SettingsManager;
-use October\Rain\Support\ModuleServiceProvider;
+use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
 {

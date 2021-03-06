@@ -3,7 +3,7 @@
 use Str;
 use Lang;
 use Config;
-use October\Rain\Extension\Extendable;
+use Winter\Storm\Extension\Extendable;
 use BadMethodCallException;
 
 /**

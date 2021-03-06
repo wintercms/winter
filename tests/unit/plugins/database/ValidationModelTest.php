@@ -14,7 +14,7 @@ class ValidationModelTest extends PluginTestCase
     }
 
     /**
-     * @expectedException October\Rain\Database\ModelException
+     * @expectedException Winter\Storm\Database\ModelException
      */
     public function testUniqueTableValidation()
     {

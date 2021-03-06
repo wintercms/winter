@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Sadeliğe dönüş...',
     ],
     'locale' => [
@@ -88,7 +88,7 @@ return [
         'unnamed' => 'İsimsiz tema',
         'name' => [
             'label' => 'Tema Adı',
-            'help' => 'Temaya benzersiz bir isim verin. Örn: RainLab.Vanilla',
+            'help' => 'Temaya benzersiz bir isim verin. Örn: Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -104,7 +104,7 @@ return [
         'unnamed' => 'İsimsiz eklenti',
         'name' => [
             'label' => 'Eklenti Adı',
-            'help' => 'Eklenti adı eşsiz olmalıdır. Örneğin, RainLab.Blog',
+            'help' => 'Eklenti adı eşsiz olmalıdır. Örneğin, Winter.Blog',
         ],
         'by_author' => ':name ile filtrele'
     ],

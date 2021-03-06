@@ -15,7 +15,7 @@ use Closure;
  */
 class CmsController extends ControllerBase
 {
-    use \October\Rain\Extension\ExtendableTrait;
+    use \Winter\Storm\Extension\ExtendableTrait;
 
     /**
      * @var array Behaviors implemented by this controller.

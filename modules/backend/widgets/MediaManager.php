@@ -15,8 +15,8 @@ use ApplicationException;
 use Backend\Classes\WidgetBase;
 use System\Classes\MediaLibrary;
 use System\Classes\MediaLibraryItem;
-use October\Rain\Database\Attach\Resizer;
-use October\Rain\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Database\Attach\Resizer;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use Form as FormHelper;
 
 /**

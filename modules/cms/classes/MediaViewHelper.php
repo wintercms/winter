@@ -10,7 +10,7 @@ use ApplicationException;
  */
 class MediaViewHelper
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     protected $playerPartialFlags = [];
 

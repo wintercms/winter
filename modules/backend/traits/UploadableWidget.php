@@ -7,7 +7,7 @@ use Request;
 use Response;
 use ApplicationException;
 use System\Classes\MediaLibrary;
-use October\Rain\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
  * Uploadable Widget Trait

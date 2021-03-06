@@ -11,7 +11,7 @@ use Backend\Behaviors\ImportExportController\TranscodeFilter;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use League\Csv\Reader as CsvReader;
 use League\Csv\Writer as CsvWriter;
-use October\Rain\Parse\League\EscapeFormula as CsvEscapeFormula;
+use Winter\Storm\Parse\League\EscapeFormula as CsvEscapeFormula;
 use ApplicationException;
 use SplTempFileObject;
 use Exception;

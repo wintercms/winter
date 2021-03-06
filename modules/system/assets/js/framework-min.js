@@ -1,6 +1,6 @@
 
-if(window.jQuery===undefined){throw new Error('The jQuery library is not loaded. The OctoberCMS framework cannot be initialized.');}
-if(window.jQuery.request!==undefined){throw new Error('The OctoberCMS framework is already loaded.');}
+if(window.jQuery===undefined){throw new Error('The jQuery library is not loaded. The Winter CMS framework cannot be initialized.');}
+if(window.jQuery.request!==undefined){throw new Error('The Winter CMS framework is already loaded.');}
 +function($){"use strict";var Request=function(element,handler,options){var $el=this.$el=$(element);this.options=options||{};if(handler===undefined){throw new Error('The request handler name is not specified.')}
 if(!handler.match(/^(?:\w+\:{2})?on*/)){throw new Error('Invalid handler name. The correct handler name format is: "onEvent".')}
 var $form=options.form?$(options.form):$el.closest('form'),$triggerEl=!!$form.length?$form:$el,context={handler:handler,options:options}

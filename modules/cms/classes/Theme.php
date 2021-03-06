@@ -14,9 +14,9 @@ use DirectoryIterator;
 use ApplicationException;
 use Cms\Models\ThemeData;
 use System\Models\Parameter;
-use October\Rain\Halcyon\Datasource\DbDatasource;
-use October\Rain\Halcyon\Datasource\FileDatasource;
-use October\Rain\Halcyon\Datasource\DatasourceInterface;
+use Winter\Storm\Halcyon\Datasource\DbDatasource;
+use Winter\Storm\Halcyon\Datasource\FileDatasource;
+use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 
 /**
  * This class represents the CMS theme.
@@ -357,7 +357,7 @@ class Theme
          *
          *     Event::listen('cms.theme.extendConfig', function ($themeCode, &$config) {
          *          $config['name'] = 'October Theme';
-         *          $config['description'] = 'Another great theme from October CMS';
+         *          $config['description'] = 'Another great theme from Winter CMS';
          *     });
          *
          */

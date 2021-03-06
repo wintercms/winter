@@ -13,7 +13,7 @@ use Cms\Classes\ThemeManager;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
 use System\Helpers\Cache as CacheHelper;
-use October\Rain\Filesystem\Zip;
+use Winter\Storm\Filesystem\Zip;
 use Carbon\Carbon;
 use Exception;
 
@@ -27,7 +27,7 @@ use Exception;
  */
 class UpdateManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * @var array The notes for the current operation.
@@ -766,7 +766,7 @@ class UpdateManager
      */
     public function requestChangelog()
     {
-        $result = Http::get('https://octobercms.com/changelog?json');
+        $result = Http::get('https://wintercms.com/changelog?json');
 
         if ($result->code == 404) {
             throw new ApplicationException(Lang::get('system::lang.server.response_empty'));

@@ -2,7 +2,7 @@
 
 use Backend\Models\User;
 use Backend\Widgets\Lists;
-use October\Rain\Exception\ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use October\Tests\Fixtures\Backend\Models\UserFixture;
 
 class ListsTest extends PluginTestCase

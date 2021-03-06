@@ -1,24 +1,24 @@
 <p align="center">
-    <img src="https://github.com/octobercms/october/blob/master/themes/demo/assets/images/october.png?raw=true" alt="October" width="25%" height="25%" />
+    <img src="https://github.com/wintercms/winter/blob/master/themes/demo/assets/images/october.png?raw=true" alt="October" width="25%" height="25%" />
 </p>
 
-[October](https://octobercms.com) is a Content Management System (CMS) and web platform whose sole purpose is to make your development workflow simple again. It was born out of frustration with existing systems. We feel building websites has become a convoluted and confusing process that leaves developers unsatisfied. We want to turn you around to the simpler side and get back to basics.
+[October](https://wintercms.com) is a Content Management System (CMS) and web platform whose sole purpose is to make your development workflow simple again. It was born out of frustration with existing systems. We feel building websites has become a convoluted and confusing process that leaves developers unsatisfied. We want to turn you around to the simpler side and get back to basics.
 
 October's mission is to show the world that web development is not rocket science.
 
-![Stable Build](https://github.com/octobercms/october/workflows/Tests/badge.svg?branch=master)
+![Stable Build](https://github.com/wintercms/winter/workflows/Tests/badge.svg?branch=master)
 [![License](https://poser.pugx.org/october/october/license.svg)](https://packagist.org/packages/october/october)
 
 ## Installing October
 
-Instructions on how to install October can be found at the [installation guide](https://octobercms.com/docs/setup/installation).
+Instructions on how to install October can be found at the [installation guide](https://wintercms.com/docs/setup/installation).
 
 ### Quick start installation
 
 For advanced users, run this in your terminal to install October from command line:
 
 ```shell
-php -r "eval('?>'.file_get_contents('https://octobercms.com/api/installer'));"
+php -r "eval('?>'.file_get_contents('https://wintercms.com/api/installer'));"
 ```
 
 If you plan on using a database, run this command:
@@ -29,7 +29,7 @@ php artisan october:install
 
 ## Learning October
 
-The best place to learn October is by [reading the documentation](https://octobercms.com/docs), [watching some screencasts](https://octobercms.com/support/topic/screencast) or [following some tutorials](https://octobercms.com/support/articles/tutorials).
+The best place to learn October is by [reading the documentation](https://wintercms.com/docs), [watching some screencasts](https://wintercms.com/support/topic/screencast) or [following some tutorials](https://wintercms.com/support/articles/tutorials).
 
 You may also watch these introductory videos for [beginners](https://vimeo.com/79963873) and [advanced users](https://vimeo.com/172202661).
 
@@ -58,12 +58,12 @@ You can communicate with us using the following mediums:
 
 * [Follow us on Twitter](https://twitter.com/octobercms) for announcements and updates.
 * [Follow us on Facebook](https://facebook.com/octobercms) for announcements and updates.
-* [Join the Official Forum](https://octobercms.com/forum) to engage with the community.
-* [Join us on Discord](https://octobercms.com/chat) to chat with us.
+* [Join the Official Forum](https://wintercms.com/forum) to engage with the community.
+* [Join us on Discord](https://wintercms.com/chat) to chat with us.
 
 ### Premium Support
 
-October CMS can provide premium support for a monthly fee. Find out more via the [Premium Support Program](https://octobercms.com/premium-support).
+Winter CMS can provide premium support for a monthly fee. Find out more via the [Premium Support Program](https://wintercms.com/premium-support).
 
 ## Contributing
 
@@ -79,12 +79,12 @@ Please follow the following guides and code standards:
 
 ### Code of Conduct
 
-In order to ensure that the October CMS community is welcoming to all, please review and abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
+In order to ensure that the Winter CMS community is welcoming to all, please review and abide by the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
-The October CMS platform is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+The Winter CMS platform is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
 ## Security Vulnerabilities
 
-Please review [our security policy](https://github.com/octobercms/october/security/policy) on how to report security vulnerabilities.
+Please review [our security policy](https://github.com/wintercms/winter/security/policy) on how to report security vulnerabilities.

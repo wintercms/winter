@@ -7,8 +7,8 @@ use Backend\Classes\FormField;
 use Backend\Classes\WidgetBase;
 use Backend\Classes\WidgetManager;
 use Backend\Classes\FormWidgetBase;
-use October\Rain\Database\Model;
-use October\Rain\Html\Helper as HtmlHelper;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Html\Helper as HtmlHelper;
 use ApplicationException;
 use Exception;
 use BackendAuth;
@@ -579,12 +579,12 @@ class Form extends WidgetBase
          *
          *     Event::listen('backend.form.extendFields', function ((\Backend\Widgets\Form) $formWidget) {
          *         // Only for the User controller
-         *         if (!$formWidget->getController() instanceof \RainLab\User\Controllers\Users) {
+         *         if (!$formWidget->getController() instanceof \Winter\User\Controllers\Users) {
          *             return;
          *         }
          *
          *         // Only for the User model
-         *         if (!$formWidget->model instanceof \RainLab\User\Models\User) {
+         *         if (!$formWidget->model instanceof \Winter\User\Models\User) {
          *             return;
          *         }
          *
@@ -605,12 +605,12 @@ class Form extends WidgetBase
          *
          *     $formWidget->bindEvent('form.extendFields', function () use ((\Backend\Widgets\Form $formWidget)) {
          *         // Only for the User controller
-         *         if (!$formWidget->getController() instanceof \RainLab\User\Controllers\Users) {
+         *         if (!$formWidget->getController() instanceof \Winter\User\Controllers\Users) {
          *             return;
          *         }
          *
          *         // Only for the User model
-         *         if (!$formWidget->model instanceof \RainLab\User\Models\User) {
+         *         if (!$formWidget->model instanceof \Winter\User\Models\User) {
          *             return;
          *         }
          *
@@ -1254,7 +1254,7 @@ class Form extends WidgetBase
              *
              * Example usage:
              *
-             *     $model->bindEvent('model.form.filterFields', function ((\Backend\Widgets\Form) $formWidget, (stdClass) $fields, (string) $context) use (\October\Rain\Database\Model $model) {
+             *     $model->bindEvent('model.form.filterFields', function ((\Backend\Widgets\Form) $formWidget, (stdClass) $fields, (string) $context) use (\Winter\Storm\Database\Model $model) {
              *         if ($model->source_type == 'http') {
              *             $fields->source_url->hidden = false;
              *             $fields->git_branch->hidden = true;

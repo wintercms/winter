@@ -5,7 +5,7 @@ use Lang;
 use Request;
 use Form as FormHelper;
 use Backend\Classes\ControllerBehavior;
-use October\Rain\Database\Model;
+use Winter\Storm\Database\Model;
 use ApplicationException;
 
 /**
@@ -1388,7 +1388,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the field configuration.
      * @param object $config
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendConfig($config, $field, $model)
     {
@@ -1398,7 +1398,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the view widget.
      * @param Backend\Classes\WidgetBase $widget
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendViewWidget($widget, $field, $model)
     {
@@ -1408,7 +1408,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the manage widget.
      * @param Backend\Classes\WidgetBase $widget
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendManageWidget($widget, $field, $model)
     {
@@ -1418,7 +1418,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the pivot widget.
      * @param Backend\Classes\WidgetBase $widget
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendPivotWidget($widget, $field, $model)
     {
@@ -1428,7 +1428,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the manage filter widget.
      * @param \Backend\Widgets\Filter $widget
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendManageFilterWidget($widget, $field, $model)
     {
@@ -1438,7 +1438,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the view filter widget.
      * @param \Backend\Widgets\Filter $widget
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendViewFilterWidget($widget, $field, $model)
     {

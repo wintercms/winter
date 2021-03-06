@@ -4,7 +4,7 @@ use File;
 use Lang;
 use Cms\Contracts\CmsObject as CmsObjectContract;
 use Cms\Helpers\File as FileHelper;
-use October\Rain\Extension\Extendable;
+use Winter\Storm\Extension\Extendable;
 use ApplicationException;
 
 /**

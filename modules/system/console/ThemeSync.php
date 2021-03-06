@@ -39,7 +39,7 @@ class ThemeSync extends Command
     protected $description = 'Sync an existing theme between the DB and Filesystem layers';
 
     /**
-     * @var \October\Rain\Datasource\DatasourceInterface The theme's AutoDatasource instance
+     * @var \Winter\Storm\Datasource\DatasourceInterface The theme's AutoDatasource instance
      */
     protected $datasource;
 
@@ -145,7 +145,7 @@ class ThemeSync extends Command
             foreach ($result as $modelClass) {
                 $modelObj = new $modelClass;
 
-                if ($modelObj instanceof \October\Rain\Halcyon\Model) {
+                if ($modelObj instanceof \Winter\Storm\Halcyon\Model) {
                     $validModels[] = $modelObj;
                 }
             }
@@ -207,7 +207,7 @@ class ThemeSync extends Command
      * @param string $path
      * @param string $model
      * @param \Cms\Classes\Theme $theme
-     * @return \October\Rain\Halcyon\Model
+     * @return \Winter\Storm\Halcyon\Model
      */
     protected function getModelForPath($path, $modelClass, $theme)
     {

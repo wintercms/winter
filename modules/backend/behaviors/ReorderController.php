@@ -57,8 +57,8 @@ class ReorderController extends ControllerBehavior
 
     /**
      * @var string Reordering mode:
-     * - simple: October\Rain\Database\Traits\Sortable
-     * - nested: October\Rain\Database\Traits\NestedTree
+     * - simple: Winter\Storm\Database\Traits\Sortable
+     * - nested: Winter\Storm\Database\Traits\NestedTree
      */
     protected $sortMode;
 
@@ -214,10 +214,10 @@ class ReorderController extends ControllerBehavior
         $model = $this->controller->reorderGetModel();
         $modelTraits = class_uses($model);
 
-        if (isset($modelTraits[\October\Rain\Database\Traits\Sortable::class])) {
+        if (isset($modelTraits[\Winter\Storm\Database\Traits\Sortable::class])) {
             $this->sortMode = 'simple';
         }
-        elseif (isset($modelTraits[\October\Rain\Database\Traits\NestedTree::class])) {
+        elseif (isset($modelTraits[\Winter\Storm\Database\Traits\NestedTree::class])) {
             $this->sortMode = 'nested';
             $this->showTree = true;
         }
@@ -256,7 +256,7 @@ class ReorderController extends ControllerBehavior
     /**
      * Extend the query used for finding reorder records. Extra conditions
      * can be applied to the query, for example, $query->withTrashed();
-     * @param October\Rain\Database\Builder $query
+     * @param Winter\Storm\Database\Builder $query
      * @return void
      */
     public function reorderExtendQuery($query)

@@ -2,7 +2,7 @@
 
 use Cms\Classes\Theme;
 use Cms\Classes\Controller;
-use October\Rain\Halcyon\Model;
+use Winter\Storm\Halcyon\Model;
 
 class ControllerTest extends TestCase
 {
@@ -371,7 +371,7 @@ ESC;
     }
 
     /**
-     * @expectedException        October\Rain\Exception\SystemException
+     * @expectedException        Winter\Storm\Exception\SystemException
      * @expectedExceptionMessage is not registered for the component
      */
     public function testComponentClassNotFound()

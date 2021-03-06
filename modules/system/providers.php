@@ -22,19 +22,19 @@ return [
     Laravel\Tinker\TinkerServiceProvider::class,
 
     /*
-     * October Rain providers
+     * Winter Storm providers
      */
-    October\Rain\Foundation\Providers\ConsoleSupportServiceProvider::class,
-    October\Rain\Database\DatabaseServiceProvider::class,
-    October\Rain\Halcyon\HalcyonServiceProvider::class,
-    October\Rain\Filesystem\FilesystemServiceProvider::class,
-    October\Rain\Parse\ParseServiceProvider::class,
-    October\Rain\Html\HtmlServiceProvider::class,
-    October\Rain\Html\UrlServiceProvider::class,
-    October\Rain\Network\NetworkServiceProvider::class,
-    October\Rain\Scaffold\ScaffoldServiceProvider::class,
-    October\Rain\Flash\FlashServiceProvider::class,
-    October\Rain\Mail\MailServiceProvider::class,
-    October\Rain\Argon\ArgonServiceProvider::class,
+    Winter\Storm\Foundation\Providers\ConsoleSupportServiceProvider::class,
+    Winter\Storm\Database\DatabaseServiceProvider::class,
+    Winter\Storm\Halcyon\HalcyonServiceProvider::class,
+    Winter\Storm\Filesystem\FilesystemServiceProvider::class,
+    Winter\Storm\Parse\ParseServiceProvider::class,
+    Winter\Storm\Html\HtmlServiceProvider::class,
+    Winter\Storm\Html\UrlServiceProvider::class,
+    Winter\Storm\Network\NetworkServiceProvider::class,
+    Winter\Storm\Scaffold\ScaffoldServiceProvider::class,
+    Winter\Storm\Flash\FlashServiceProvider::class,
+    Winter\Storm\Mail\MailServiceProvider::class,
+    Winter\Storm\Argon\ArgonServiceProvider::class,
 
 ];

@@ -1,7 +1,7 @@
 <?php namespace System\Models;
 
 use Cache;
-use October\Rain\Database\Model;
+use Winter\Storm\Database\Model;
 
 /**
  * Parameters model
@@ -12,7 +12,7 @@ use October\Rain\Database\Model;
  */
 class Parameter extends Model
 {
-    use \October\Rain\Support\Traits\KeyParser;
+    use \Winter\Storm\Support\Traits\KeyParser;
 
     /**
      * @var string The database table used by the model.

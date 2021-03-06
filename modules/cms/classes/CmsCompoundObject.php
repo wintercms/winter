@@ -9,7 +9,7 @@ use Cms\Twig\Extension as CmsTwigExtension;
 use Cms\Components\ViewBag;
 use Cms\Helpers\Cms as CmsHelpers;
 use System\Twig\Extension as SystemTwigExtension;
-use October\Rain\Halcyon\Processors\SectionParser;
+use Winter\Storm\Halcyon\Processors\SectionParser;
 use Twig\Source as TwigSource;
 use Twig\Environment as TwigEnvironment;
 use ApplicationException;
@@ -105,7 +105,7 @@ class CmsCompoundObject extends CmsObject
      * Create a new Collection instance.
      *
      * @param  array  $models
-     * @return \October\Rain\Halcyon\Collection
+     * @return \Winter\Storm\Halcyon\Collection
      */
     public function newCollection(array $models = [])
     {

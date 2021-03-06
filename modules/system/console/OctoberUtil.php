@@ -88,7 +88,7 @@ class OctoberUtil extends Command
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info "http://octobercms.com/docs/console/commands#october-util-command".'],
+            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info "http://wintercms.com/docs/console/commands#october-util-command".'],
         ];
     }
 

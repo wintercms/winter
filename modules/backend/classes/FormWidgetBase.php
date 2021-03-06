@@ -1,6 +1,6 @@
 <?php namespace Backend\Classes;
 
-use October\Rain\Html\Helper as HtmlHelper;
+use Winter\Storm\Html\Helper as HtmlHelper;
 
 /**
  * Form Widget base class
@@ -17,7 +17,7 @@ abstract class FormWidgetBase extends WidgetBase
     //
 
     /**
-     * @var \October\Rain\Database\Model Form model object.
+     * @var \Winter\Storm\Database\Model Form model object.
      */
     public $model;
 

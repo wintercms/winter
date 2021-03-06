@@ -8,7 +8,7 @@ use File;
 use Config;
 use Backend\Database\Seeds\SeedSetupAdmin;
 use System\Classes\UpdateManager;
-use October\Rain\Config\ConfigWriter;
+use Winter\Storm\Config\ConfigWriter;
 use Illuminate\Console\Command;
 use Illuminate\Encryption\Encrypter;
 use Symfony\Component\Console\Input\InputOption;
@@ -39,7 +39,7 @@ class OctoberInstall extends Command
     protected $description = 'Set up October for the first time.';
 
     /**
-     * @var October\Rain\Config\ConfigWriter
+     * @var Winter\Storm\Config\ConfigWriter
      */
     protected $configWriter;
 
@@ -133,11 +133,11 @@ class OctoberInstall extends Command
     protected function askToInstallPlugins()
     {
         $chosenToInstall = [];
-        if ($this->confirm('Install the October.Drivers plugin?', false)) {
-            $chosenToInstall[] = 'October.Drivers';
+        if ($this->confirm('Install the Winter.Drivers plugin?', false)) {
+            $chosenToInstall[] = 'Winter.Drivers';
         }
-        if ($this->confirm('Install the Rainlab.Builder plugin?', false)) {
-            $chosenToInstall[] = 'Rainlab.Builder';
+        if ($this->confirm('Install the Winter.Builder plugin?', false)) {
+            $chosenToInstall[] = 'Winter.Builder';
         }
         return $chosenToInstall;
     }

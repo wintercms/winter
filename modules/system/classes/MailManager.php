@@ -17,7 +17,7 @@ use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
  */
 class MailManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * @var array Cache of registration callbacks.
@@ -71,7 +71,7 @@ class MailManager
     }
 
     /**
-     * This function hijacks the `addContent` method of the `October\Rain\Mail\Mailer`
+     * This function hijacks the `addContent` method of the `Winter\Storm\Mail\Mailer`
      * class, using the `mailer.beforeAddContent` event.
      *
      * @param \Illuminate\Mail\Message $message

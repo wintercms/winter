@@ -21,7 +21,7 @@ use RecursiveDirectoryIterator;
  */
 class PluginManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * The application instance, since Plugins are an extension of a Service Provider

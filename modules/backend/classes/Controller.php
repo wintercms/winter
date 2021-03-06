@@ -15,10 +15,10 @@ use BackendAuth;
 use Backend\Models\UserPreference;
 use Backend\Models\Preference as BackendPreference;
 use Backend\Widgets\MediaManager;
-use October\Rain\Exception\AjaxException;
-use October\Rain\Exception\SystemException;
-use October\Rain\Exception\ValidationException;
-use October\Rain\Exception\ApplicationException;
+use Winter\Storm\Exception\AjaxException;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Exception\ValidationException;
+use Winter\Storm\Exception\ApplicationException;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller as ControllerBase;
@@ -40,7 +40,7 @@ class Controller extends ControllerBase
     use \System\Traits\SecurityController;
     use \Backend\Traits\ErrorMaker;
     use \Backend\Traits\WidgetMaker;
-    use \October\Rain\Extension\ExtendableTrait;
+    use \Winter\Storm\Extension\ExtendableTrait;
 
     /**
      * @var array Behaviors implemented by this controller.

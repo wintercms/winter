@@ -15,7 +15,7 @@ class NavigationManagerTest extends TestCase
             'dashboard' => [
                 'label'       => 'Dashboard',
                 'icon'        => 'icon-dashboard',
-                'url'         => 'http://dashboard.tld',
+                'url'         => 'http://example.com',
                 'order'       => 100
             ]
         ]);
@@ -36,7 +36,7 @@ class NavigationManagerTest extends TestCase
         $this->assertEquals('dashboard', $item->code);
         $this->assertEquals('Dashboard', $item->label);
         $this->assertEquals('icon-dashboard', $item->icon);
-        $this->assertEquals('http://dashboard.tld', $item->url);
+        $this->assertEquals('http://example.com', $item->url);
         $this->assertEquals(100, $item->order);
         $this->assertEquals('October.Test', $item->owner);
     }

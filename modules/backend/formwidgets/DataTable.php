@@ -3,7 +3,7 @@
 use Lang;
 use Backend\Widgets\Table;
 use Backend\Classes\FormWidgetBase;
-use October\Rain\Html\Helper as HtmlHelper;
+use Winter\Storm\Html\Helper as HtmlHelper;
 use ApplicationException;
 
 /**

@@ -1,6 +1,6 @@
 <?php namespace Cms\Classes;
 
-use October\Rain\Support\Collection as CollectionBase;
+use Winter\Storm\Support\Collection as CollectionBase;
 
 /**
  * This class represents a collection of Cms Objects.

@@ -1,6 +1,6 @@
 <?php
 use Backend\Classes\AuthManager;
-use October\Rain\Exception\SystemException;
+use Winter\Storm\Exception\SystemException;
 
 class AuthManagerTest extends TestCase
 {

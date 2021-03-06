@@ -1,6 +1,6 @@
 <?php namespace Backend\Models;
 
-use October\Rain\Auth\Models\Group as GroupBase;
+use Winter\Storm\Auth\Models\Group as GroupBase;
 
 /**
  * Administrator group

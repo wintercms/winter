@@ -12,7 +12,7 @@ use Cms\Classes\Asset;
 use Backend\Classes\WidgetBase;
 use ApplicationException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use October\Rain\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use DirectoryIterator;

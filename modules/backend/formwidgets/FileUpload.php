@@ -8,7 +8,7 @@ use Validator;
 use Backend\Widgets\Form;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
-use October\Rain\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use ApplicationException;
 use ValidationException;
 use Exception;

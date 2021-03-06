@@ -14,7 +14,7 @@ use League\Csv\Reader as CsvReader;
  */
 abstract class ImportModel extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * The attributes that aren't mass assignable.

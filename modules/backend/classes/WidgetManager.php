@@ -14,7 +14,7 @@ use Event;
  */
 class WidgetManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * @var array An array of form widgets. Stored in the form of ['FormWidgetClass' => $formWidgetInfo].
@@ -240,7 +240,7 @@ class WidgetManager
      * Manually registers report widget for consideration. Usage:
      *
      *     WidgetManager::registerReportWidgets(function ($manager) {
-     *         $manager->registerReportWidget('RainLab\GoogleAnalytics\ReportWidgets\TrafficOverview', [
+     *         $manager->registerReportWidget('Winter\GoogleAnalytics\ReportWidgets\TrafficOverview', [
      *             'name' => 'Google Analytics traffic overview',
      *             'context' => 'dashboard'
      *         ]);

@@ -2,7 +2,7 @@
 
 use File;
 use Config;
-use October\Rain\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use Carbon\Carbon;
 
 /**

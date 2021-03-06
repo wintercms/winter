@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Voltando ao básico',
     ],
     'directory' => [
@@ -38,7 +38,7 @@ return [
         'unnamed' => 'Tema sem nome',
         'name' => [
             'label' => 'Nome do Tema',
-            'help' => 'Nome do tema deve ser único. Por exemplo, RainLab.Vanilla'
+            'help' => 'Nome do tema deve ser único. Por exemplo, Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -54,7 +54,7 @@ return [
         'unnamed' => 'Plugin sem nome',
         'name' => [
             'label' => 'Nome do Plugin',
-            'help' => 'Nomeie o plugin pelo seu código exclusivo. Por exemplo, RainLab.Blog',
+            'help' => 'Nomeie o plugin pelo seu código exclusivo. Por exemplo, Winter.Blog',
         ],
         'by_author' => 'Por :name'
     ],
