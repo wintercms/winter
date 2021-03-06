@@ -218,7 +218,7 @@ class BackendController extends ControllerBase
          * Look for a Plugin controller
          */
         if (count($params) >= 2) {
-            [$author, $plugin] = $params;
+            list($author, $plugin) = $params;
 
             $pluginCode = ucfirst($author) . '.' . ucfirst($plugin);
             if (PluginManager::instance()->isDisabled($pluginCode)) {
