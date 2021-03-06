@@ -104,6 +104,29 @@ class NavigationManagerTest extends TestCase
         $this->assertEquals('October.Tester', $item->owner);
     }
 
+    public function testAddMainMenuItemsWithAlias()
+    {
+        $manager = NavigationManager::instance();
+        $manager->addMainMenuItems('October.Tester', [
+            'print' => [
+                'label' => 'Print',
+                'icon' => 'icon-print',
+                'url' => 'javascript:window.print()'
+            ]
+        ]);
+
+        $manager->registerOwnerAlias('October.Tester', 'Alias.Tester');
+
+        $item = $manager->getMainMenuItem('Alias.Tester', 'print');
+
+        $this->assertEquals('print', $item->code);
+        $this->assertEquals('Print', $item->label);
+        $this->assertEquals('icon-print', $item->icon);
+        $this->assertEquals('javascript:window.print()', $item->url);
+        $this->assertEquals(500, $item->order);
+        $this->assertEquals('October.Tester', $item->owner);
+    }
+
     public function testRemoveMainMenuItem()
     {
         $manager = NavigationManager::instance();
@@ -119,6 +142,28 @@ class NavigationManagerTest extends TestCase
         $this->assertArrayHasKey('OCTOBER.TESTER.CLOSE', $items);
 
         $manager->removeMainMenuItem('October.Tester', 'close');
+
+        $items = $manager->listMainMenuItems();
+        $this->assertArrayNotHasKey('OCTOBER.TESTER.CLOSE', $items);
+    }
+
+    public function testRemoveMainMenuItemByAlias()
+    {
+        $manager = NavigationManager::instance();
+        $manager->addMainMenuItems('October.Tester', [
+            'close' => [
+                'label' => 'Close',
+                'icon' => 'icon-times',
+                'url' => 'javascript:window.close()'
+            ]
+        ]);
+
+        $manager->registerOwnerAlias('October.Tester', 'Alias.Tester');
+
+        $items = $manager->listMainMenuItems();
+        $this->assertArrayHasKey('OCTOBER.TESTER.CLOSE', $items);
+
+        $manager->removeMainMenuItem('Alias.Tester', 'close');
 
         $items = $manager->listMainMenuItems();
         $this->assertArrayNotHasKey('OCTOBER.TESTER.CLOSE', $items);
@@ -162,6 +207,46 @@ class NavigationManagerTest extends TestCase
         $this->assertContains('october.tester.access_bar', $items['foo']->permissions);
     }
 
+    public function testAddSideMenuItemsWithAlias()
+    {
+        $manager = NavigationManager::instance();
+
+        $manager->addSideMenuItems('October.Tester', 'blog', [
+            'foo' => [
+                'label'       => 'Bar',
+                'icon'        => 'icon-derp',
+                'url'         => 'http://google.com',
+                'permissions' => [
+                    'october.tester.access_foo',
+                    'october.tester.access_bar'
+                ]
+            ]
+        ]);
+
+        $manager->registerOwnerAlias('October.Tester', 'Alias.Tester');
+        $manager->setContext('Alias.Tester', 'blog');
+
+        $items = $manager->listSideMenuItems();
+
+        $this->assertIsArray($items);
+        $this->assertArrayHasKey('foo', $items);
+
+        $this->assertIsObject($items['foo']);
+        $this->assertObjectHasAttribute('code', $items['foo']);
+        $this->assertObjectHasAttribute('owner', $items['foo']);
+        $this->assertObjectHasAttribute('order', $items['foo']);
+
+        $this->assertEquals(-1, $items['foo']->order);
+        $this->assertEquals('foo', $items['foo']->code);
+        $this->assertEquals('October.Tester', $items['foo']->owner);
+
+        $this->assertObjectHasAttribute('permissions', $items['foo']);
+        $this->assertIsArray($items['foo']->permissions);
+        $this->assertCount(2, $items['foo']->permissions);
+        $this->assertContains('october.tester.access_foo', $items['foo']->permissions);
+        $this->assertContains('october.tester.access_bar', $items['foo']->permissions);
+    }
+
     public function testRemoveSideMenuItem()
     {
         $manager = NavigationManager::instance();
@@ -179,6 +264,29 @@ class NavigationManagerTest extends TestCase
         $this->assertArrayHasKey('bar', $items);
 
         $manager->removeSideMenuItem('October.Tester', 'blog', 'bar');
+
+        $items = $manager->listSideMenuItems();
+        $this->assertArrayNotHasKey('bar', $items);
+    }
+
+    public function testRemoveSideMenuItemByAlias()
+    {
+        $manager = NavigationManager::instance();
+        $manager->addSideMenuItems('October.Tester', 'blog', [
+            'bar' => [
+                'label' => 'Bar',
+                'icon' => 'icon-bars',
+                'url' => 'http://yahoo.com'
+            ]
+        ]);
+
+        $manager->registerOwnerAlias('October.Tester', 'Alias.Tester');
+        $manager->setContext('Alias.Tester', 'blog');
+
+        $items = $manager->listSideMenuItems();
+        $this->assertArrayHasKey('bar', $items);
+
+        $manager->removeSideMenuItem('Alias.Tester', 'blog', 'bar');
 
         $items = $manager->listSideMenuItems();
         $this->assertArrayNotHasKey('bar', $items);
