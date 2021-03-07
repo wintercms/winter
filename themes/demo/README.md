@@ -33,7 +33,7 @@ Combined stylesheets:
         'assets/less/theme.less'
     ]|theme }}" rel="stylesheet">
 
-> **Note**: October also includes an SCSS compiler, if you prefer.
+> **Note**: Winter also includes an SCSS compiler, if you prefer.
 
 Uncombined JavaScript:
 

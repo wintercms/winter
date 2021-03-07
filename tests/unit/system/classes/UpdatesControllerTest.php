@@ -40,7 +40,7 @@ class UpdatesControllerTest extends TestCase
             $controller,
             'getPluginVersionFile',
             [
-                base_path().'/tests/fixtures/plugins/october/tester/',
+                base_path().'/tests/fixtures/plugins/winter/tester/',
                 'updates/version.yaml'
             ]
         );

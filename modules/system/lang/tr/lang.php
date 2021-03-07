@@ -271,7 +271,7 @@ return [
             ],
             'panel' => 'Bu panel ne kadar harika..',
             'more' => 'Biraz daha metin',
-            'promotion' => 'Kupon Kodu: OCTOBER',
+            'promotion' => 'Kupon Kodu: WINTER',
             'subcopy' => 'Bu e-postanın alt yazısıdır',
             'thanks' => 'Teşekkürler',
         ],

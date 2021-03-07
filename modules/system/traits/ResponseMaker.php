@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response as BaseResponse;
  * Response Maker Trait
  * Stores attributes the can be used to prepare a response from the server.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait ResponseMaker

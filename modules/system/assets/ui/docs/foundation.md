@@ -30,7 +30,7 @@ Clean all references to DOM elements. Usually it's done by assigning NULL to cor
 1. Watch for any references caught by closures (or - better do not use closures, see below).
 1. Unbind event handlers.
 
-October Storm provides everything we need to meet the goals. Please read on to learn more!
+Winter Storm UI provides everything we need to meet the goals. Please read on to learn more!
 
 ## How to write quality code
 
@@ -124,7 +124,7 @@ When binding events, use this.proxy() to make references to event handlers. Alwa
 
 ## Making disposable controls
 
-UI controls should support two ways of disposing - with calling their `dispose()` method and with invoking the dispose-control handler. Also, disposable controls should mark their corresponding DOM elements as disposable, with October foundation API. Example:
+UI controls should support two ways of disposing - with calling their `dispose()` method and with invoking the dispose-control handler. Also, disposable controls should mark their corresponding DOM elements as disposable, with Winter foundation API. Example:
 
 ```js
 +function ($) { "use strict";
@@ -188,7 +188,7 @@ We already have a boilerplate code for jQuery code. Disposable controls approach
 
         this.$el = null
 
-        // In some cases options could contain callbacks, 
+        // In some cases options could contain callbacks,
         // so it's better to clean them up too.
         this.options = null
 

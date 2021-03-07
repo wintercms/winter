@@ -7,7 +7,7 @@ use Backend\Widgets\MediaManager;
 /**
  * Backend Media Manager
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Media extends Controller

@@ -8,9 +8,9 @@ use System\Classes\PluginManager;
 /**
  * Console command to install a new plugin.
  *
- * This adds a new plugin by requesting it from the October marketplace.
+ * This adds a new plugin by requesting it from the Winter marketplace.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PluginInstall extends Command
@@ -26,7 +26,7 @@ class PluginInstall extends Command
      * The console command description.
      * @var string
      */
-    protected $description = 'Install a plugin from the October marketplace.';
+    protected $description = 'Install a plugin from the Winter marketplace.';
 
     /**
      * Execute the console command.

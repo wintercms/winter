@@ -10,7 +10,7 @@ use Cms\Classes\Controller;
 /**
  * The CMS Twig extension class implements the basic CMS Twig functions and filters.
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Extension extends TwigExtension
@@ -144,7 +144,7 @@ class Extension extends TwigExtension
             return null;
         }
 
-        $result = str_replace('<!-- X_OCTOBER_DEFAULT_BLOCK_CONTENT -->', trim($default), $result);
+        $result = str_replace('<!-- X_WINTER_DEFAULT_BLOCK_CONTENT -->', trim($default), $result);
         return $result;
     }
 
@@ -210,7 +210,7 @@ class Extension extends TwigExtension
             $result = $event;
         }
 
-        $result = str_replace('<!-- X_OCTOBER_DEFAULT_BLOCK_CONTENT -->', trim($default), $result);
+        $result = str_replace('<!-- X_WINTER_DEFAULT_BLOCK_CONTENT -->', trim($default), $result);
         return $result;
     }
 

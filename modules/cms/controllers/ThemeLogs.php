@@ -10,7 +10,7 @@ use Cms\Models\ThemeLog;
 /**
  * Request Logs controller
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeLogs extends Controller

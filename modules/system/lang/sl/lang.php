@@ -270,7 +270,7 @@ return [
             ],
             'panel'     => 'Kako dobro izgleda ta barvni okvir?',
             'more'      => 'Še nekaj besedila za konec.',
-            'promotion' => 'Koda kupona: OCTOBER',
+            'promotion' => 'Koda kupona: WINTER',
             'subcopy'   => 'Noga sporočila na koncu e-poštne predloge.',
             'thanks'    => 'Hvala',
         ],

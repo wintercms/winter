@@ -7,7 +7,7 @@ use System\Classes\SettingsManager;
 /**
  * Backend user groups controller
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */

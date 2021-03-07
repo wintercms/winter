@@ -4,7 +4,7 @@ use Backend\Classes\AuthManager;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
 use Winter\Storm\Database\Model as ActiveRecord;
-use October\Tests\Concerns\InteractsWithAuthentication;
+use Winter\Tests\Concerns\InteractsWithAuthentication;
 
 abstract class PluginTestCase extends TestCase
 {
@@ -70,7 +70,7 @@ abstract class PluginTestCase extends TestCase
     public function setUp()
     {
         /*
-         * Force reload of October singletons
+         * Force reload of Winter singletons
          */
         PluginManager::forgetInstance();
         UpdateManager::forgetInstance();
@@ -83,7 +83,7 @@ abstract class PluginTestCase extends TestCase
         /*
          * Ensure system is up to date
          */
-        $this->runOctoberUpCommand();
+        $this->runWinterUpCommand();
 
         /*
          * Detect plugin from test and autoload it
@@ -113,12 +113,12 @@ abstract class PluginTestCase extends TestCase
     }
 
     /**
-     * Migrate database using october:up command.
+     * Migrate database using winter:up command.
      * @return void
      */
-    protected function runOctoberUpCommand()
+    protected function runWinterUpCommand()
     {
-        Artisan::call('october:up');
+        Artisan::call('winter:up');
     }
 
     /**
@@ -193,7 +193,7 @@ abstract class PluginTestCase extends TestCase
     }
 
     /**
-     * The models in October use a static property to store their events, these
+     * The models in Winter use a static property to store their events, these
      * will need to be targeted and reset ready for a new test cycle.
      * Pivot models are an exception since they are internally managed.
      * @return void

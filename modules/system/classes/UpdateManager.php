@@ -22,7 +22,7 @@ use Exception;
  *
  * Handles the CMS install and update process.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class UpdateManager

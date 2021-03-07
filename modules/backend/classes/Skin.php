@@ -8,7 +8,7 @@ use Winter\Storm\Router\Helper as RouterHelper;
  * Skin Base class
  * Used for defining skins.
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 abstract class Skin

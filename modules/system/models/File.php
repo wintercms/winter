@@ -10,7 +10,7 @@ use Backend\Controllers\Files;
 /**
  * File attachment model
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class File extends FileBase

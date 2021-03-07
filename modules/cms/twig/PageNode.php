@@ -6,7 +6,7 @@ use Twig\Compiler as TwigCompiler;
 /**
  * Represents a page node
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PageNode extends TwigNode

@@ -18,7 +18,7 @@ use Winter\Storm\Foundation\Http\Middleware\CheckForTrustedHost;
 /**
  * Authentication controller
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */

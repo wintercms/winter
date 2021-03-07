@@ -9,7 +9,7 @@ use Event;
 /**
  * Widget manager
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class WidgetManager

@@ -225,7 +225,7 @@ return [
             ],
             'panel' => 'Kiemelt szöveg',
             'more' => 'Még több szöveg',
-            'promotion' => 'Kupon kód: OCTOBER',
+            'promotion' => 'Kupon kód: WINTER',
             'subcopy' => 'Utóirat helye',
             'thanks' => 'Üdvözlettel'
         ],

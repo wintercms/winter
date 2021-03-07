@@ -270,7 +270,7 @@ return [
             ],
             'panel' => 'How awesome is this panel?',
             'more' => 'Some more text',
-            'promotion' => 'Coupon code: OCTOBER',
+            'promotion' => 'Coupon code: WINTER',
             'subcopy' => 'This is the subcopy of the email',
             'thanks' => 'Thanks',
         ],

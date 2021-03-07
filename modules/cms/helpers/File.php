@@ -6,7 +6,7 @@ use File as Filesystem;
 /**
  * Defines some file-system helpers for the CMS system.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class File

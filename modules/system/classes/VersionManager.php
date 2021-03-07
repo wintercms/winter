@@ -11,7 +11,7 @@ use Winter\Storm\Database\Updater;
  *
  * Manages the versions and database updates for plugins.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class VersionManager

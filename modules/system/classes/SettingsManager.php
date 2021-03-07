@@ -8,7 +8,7 @@ use SystemException;
 /**
  * Manages the system settings.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class SettingsManager

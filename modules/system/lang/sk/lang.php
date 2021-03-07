@@ -266,7 +266,7 @@ return [
             ],
             'panel' => 'Aký skvalý je tento panel?',
             'more' => 'Nejaký ďalší text',
-            'promotion' => 'Kód kupónu: OCTOBER',
+            'promotion' => 'Kód kupónu: WINTER',
             'subcopy' => 'Toto je subkópia e-mailu',
             'thanks' => 'Ďakujeme'
         ],

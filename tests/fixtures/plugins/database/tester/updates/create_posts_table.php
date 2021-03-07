@@ -18,7 +18,7 @@ class CreatePostsTable extends Migration
             $table->boolean('is_published')->default(false);
             $table->timestamp('published_at')->nullable();
             $table->integer('author_id')->unsigned()->index()->nullable();
-            $table->string('author_nickname')->default('October')->nullable();
+            $table->string('author_nickname')->default('Winter')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

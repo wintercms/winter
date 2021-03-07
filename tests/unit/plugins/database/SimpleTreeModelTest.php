@@ -215,10 +215,10 @@ class SimpleTreeModelTest extends PluginTestCase
         $webdev->children()->create(['name' => 'jQuery']);
         $webdev->children()->create(['name' => 'Bootstrap']);
         $webdev->children()->create(['name' => 'Laravel']);
-        $october = $webdev->children()->create(['name' => 'Winter CMS']);
-        $october->children()->create(['name' => 'September']);
-        $october->children()->create(['name' => 'October']);
-        $october->children()->create(['name' => 'November']);
+        $winter = $webdev->children()->create(['name' => 'Winter CMS']);
+        $winter->children()->create(['name' => 'September']);
+        $winter->children()->create(['name' => 'October']);
+        $winter->children()->create(['name' => 'November']);
 
         $mobdev = CategorySimple::create([
             'name' => 'Mobile development'

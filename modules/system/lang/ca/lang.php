@@ -219,7 +219,7 @@ return [
             ],
             'panel' => 'No és fantàstic aquest panell?',
             'more' => 'Una mica més de text',
-            'promotion' => 'Codi de cupó: OCTOBER',
+            'promotion' => 'Codi de cupó: WINTER',
             'subcopy' => "Això és un subcopy de l'email",
             'thanks' => 'Gràcies'
         ],

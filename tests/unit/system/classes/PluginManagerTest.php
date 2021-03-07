@@ -38,9 +38,9 @@ class PluginManagerTest extends TestCase
 
         $this->assertArrayNotHasKey('TestVendor.Goto', $result);
 
-        $this->assertInstanceOf('October\NoUpdates\Plugin', $result['October.NoUpdates']);
-        $this->assertInstanceOf('October\Sample\Plugin', $result['October.Sample']);
-        $this->assertInstanceOf('October\Tester\Plugin', $result['October.Tester']);
+        $this->assertInstanceOf('Winter\NoUpdates\Plugin', $result['October.NoUpdates']);
+        $this->assertInstanceOf('Winter\Sample\Plugin', $result['October.Sample']);
+        $this->assertInstanceOf('Winter\Tester\Plugin', $result['October.Tester']);
         $this->assertInstanceOf('Database\Tester\Plugin', $result['Database.Tester']);
         $this->assertInstanceOf('TestVendor\Test\Plugin', $result['TestVendor.Test']);
         $this->assertInstanceOf('DependencyTest\Found\Plugin', $result['DependencyTest.Found']);
@@ -58,9 +58,9 @@ class PluginManagerTest extends TestCase
 
     public function testGetPluginPath()
     {
-        $result = $this->manager->getPluginPath('October\Tester');
+        $result = $this->manager->getPluginPath('Winter\Tester');
         $basePath = str_replace('\\', '/', base_path());
-        $this->assertEquals($basePath . '/tests/fixtures/plugins/october/tester', $result);
+        $this->assertEquals($basePath . '/tests/fixtures/plugins/winter/tester', $result);
     }
 
     public function testGetPlugins()
@@ -80,9 +80,9 @@ class PluginManagerTest extends TestCase
         $this->assertArrayNotHasKey('DependencyTest.NotFound', $result);
         $this->assertArrayNotHasKey('TestVendor.Goto', $result);
 
-        $this->assertInstanceOf('October\NoUpdates\Plugin', $result['October.NoUpdates']);
-        $this->assertInstanceOf('October\Sample\Plugin', $result['October.Sample']);
-        $this->assertInstanceOf('October\Tester\Plugin', $result['October.Tester']);
+        $this->assertInstanceOf('Winter\NoUpdates\Plugin', $result['October.NoUpdates']);
+        $this->assertInstanceOf('Winter\Sample\Plugin', $result['October.Sample']);
+        $this->assertInstanceOf('Winter\Tester\Plugin', $result['October.Tester']);
         $this->assertInstanceOf('Database\Tester\Plugin', $result['Database.Tester']);
         $this->assertInstanceOf('TestVendor\Test\Plugin', $result['TestVendor.Test']);
         $this->assertInstanceOf('DependencyTest\Found\Plugin', $result['DependencyTest.Found']);
@@ -92,13 +92,13 @@ class PluginManagerTest extends TestCase
 
     public function testFindByNamespace()
     {
-        $result = $this->manager->findByNamespace('October\Tester');
-        $this->assertInstanceOf('October\Tester\Plugin', $result);
+        $result = $this->manager->findByNamespace('Winter\Tester');
+        $this->assertInstanceOf('Winter\Tester\Plugin', $result);
     }
 
     public function testHasPlugin()
     {
-        $result = $this->manager->hasPlugin('October\Tester');
+        $result = $this->manager->hasPlugin('Winter\Tester');
         $this->assertTrue($result);
 
         $result = $this->manager->hasPlugin('DependencyTest.Found');
@@ -110,7 +110,7 @@ class PluginManagerTest extends TestCase
         $result = $this->manager->hasPlugin('DependencyTest\NotFound');
         $this->assertTrue($result);
 
-        $result = $this->manager->hasPlugin('October\XXXXX');
+        $result = $this->manager->hasPlugin('Winter\XXXXX');
         $this->assertFalse($result);
 
         /**
@@ -166,10 +166,10 @@ class PluginManagerTest extends TestCase
 
     public function testPluginDetails()
     {
-        $testPlugin = $this->manager->findByNamespace('October\XXXXX');
+        $testPlugin = $this->manager->findByNamespace('Winter\XXXXX');
         $this->assertNull($testPlugin);
 
-        $testPlugin = $this->manager->findByNamespace('October\Tester');
+        $testPlugin = $this->manager->findByNamespace('Winter\Tester');
         $this->assertNotNull($testPlugin);
         $pluginDetails = $testPlugin->pluginDetails();
 

@@ -20,7 +20,7 @@ use BackendAuth;
  * List Widget
  * Used for building back end lists, renders a list of model objects
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Lists extends WidgetBase

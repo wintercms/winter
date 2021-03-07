@@ -12,7 +12,7 @@ use Winter\Storm\Exception\SystemException;
 /**
  * System Error Handler, this class handles application exception events.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ErrorHandler extends ErrorHandlerBase

@@ -6,7 +6,7 @@ use Input;
  * Selectable Widget Trait
  * Adds item selection features to back-end widgets
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 

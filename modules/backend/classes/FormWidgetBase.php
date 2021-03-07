@@ -6,7 +6,7 @@ use Winter\Storm\Html\Helper as HtmlHelper;
  * Form Widget base class
  * Widgets used specifically for forms
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 abstract class FormWidgetBase extends WidgetBase

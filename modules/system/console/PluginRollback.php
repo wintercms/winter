@@ -10,7 +10,7 @@ use System\Classes\VersionManager;
 /**
  * Console command to rollback a plugin.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PluginRollback extends Command

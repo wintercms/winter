@@ -255,7 +255,7 @@ return [
             ],
             'panel' => 'Kuinka hieno tämä paneeli onkaan?',
             'more' => 'Lisää tekstiä',
-            'promotion' => 'Kuponkikoodi: OCTOBER',
+            'promotion' => 'Kuponkikoodi: WINTER',
             'subcopy' => 'Tämä on sähköpostin alateksti',
             'thanks' => 'Kiitos'
         ],

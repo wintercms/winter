@@ -3,7 +3,7 @@
 /**
  * The CMS partial class.
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Partial extends CmsCompoundObject

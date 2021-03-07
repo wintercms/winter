@@ -9,7 +9,7 @@ use Winter\Storm\Halcyon\Model as HalcyonModel;
  * filling the model attributes and attributes of any related models. This is a
  * customized, safer and simplified version of `$model->push()`.
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait FormModelSaver

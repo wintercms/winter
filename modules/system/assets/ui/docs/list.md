@@ -13,7 +13,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Welcome to October</td>
+                    <td>Welcome to Winter</td>
                     <td>Oct 01, 2013</td>
                     <td>News</td>
                     <td>Oct 01, 2013</td>
@@ -52,7 +52,7 @@
                             <label for="checkbox_1">Check</label>
                         </div>
                     </td>
-                    <td><a href="/">Welcome to October</a></td>
+                    <td><a href="/">Welcome to Winter</a></td>
                     <td>Oct 01, 2013</td>
                     <td>Adam Person</td>
                     <td>News</td>
@@ -200,7 +200,7 @@ It might be fun to include a status column!
                             Draft
                         </span>
                     </td>
-                    <td>Welcome to October</td>
+                    <td>Welcome to Winter</td>
                 </tr>
                 <tr>
                     <td>
@@ -251,7 +251,7 @@ You can also include an icon badge inside a column.
                         </span>
                         Draft
                     </td>
-                    <td>Welcome to October</td>
+                    <td>Welcome to Winter</td>
                 </tr>
                 <tr>
                     <td>

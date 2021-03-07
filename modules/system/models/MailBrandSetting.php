@@ -11,7 +11,7 @@ use File as FileHelper;
 /**
  * Mail brand settings
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailBrandSetting extends Model

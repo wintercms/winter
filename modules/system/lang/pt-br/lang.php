@@ -224,7 +224,7 @@ return [
             ],
             'panel' => 'Esse painel não é incrível?',
             'more' => 'Mais alguns textos',
-            'promotion' => 'Código do cupom: OCTOBER',
+            'promotion' => 'Código do cupom: WINTER',
             'subcopy' => 'Esta é a subcópia do email',
             'thanks' => 'Obrigado'
         ],

@@ -14,7 +14,7 @@ use Exception;
  * This is a base class for all CMS objects - content files, pages, partials and layouts.
  * The class implements basic operations with file-based templates.
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CmsObject extends HalcyonModel implements CmsObjectContract
@@ -158,7 +158,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
          *         \Event::listen('cms.object.listInTheme', function ($cmsObject, $objectList) {
          *             // Get the current context of the Settings Manager to ensure we only affect what we need to affect
          *             $context = \System\Classes\SettingsManager::instance()->getContext();
-         *             if ($context->owner === 'october.cms' && $context->itemCode === 'maintenance_settings') {
+         *             if ($context->owner === 'winter.cms' && $context->itemCode === 'maintenance_settings') {
          *                 // Double check that this is a Page List that we're modifying
          *                 if ($cmsObject instanceof \Cms\Classes\Page) {
          *                     // Perform filtering with an original-object modifying method as $objectList is passed by reference (being that it's an object)

@@ -5,7 +5,7 @@ use Winter\Storm\Auth\Models\Group as GroupBase;
 /**
  * Administrator group
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class UserGroup extends GroupBase

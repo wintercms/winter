@@ -12,7 +12,7 @@ use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 /**
  * This class manages Mail sending functions
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailManager

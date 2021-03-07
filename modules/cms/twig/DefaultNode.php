@@ -6,7 +6,7 @@ use Twig\Compiler as TwigCompiler;
 /**
  * Represents a "default" node
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class DefaultNode extends TwigNode
@@ -25,7 +25,7 @@ class DefaultNode extends TwigNode
     {
         $compiler
             ->addDebugInfo($this)
-            ->write("echo '<!-- X_OCTOBER_DEFAULT_BLOCK_CONTENT -->';\n")
+            ->write("echo '<!-- X_WINTER_DEFAULT_BLOCK_CONTENT -->';\n")
         ;
     }
 }

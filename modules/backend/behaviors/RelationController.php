@@ -23,7 +23,7 @@ use ApplicationException;
  * values as either a YAML file, located in the controller view directory,
  * or directly as a PHP array.
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class RelationController extends ControllerBehavior

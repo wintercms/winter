@@ -1,7 +1,7 @@
 <?php
 
 /*
- * October autoloader
+ * Winter autoloader
  */
 require __DIR__ . '/../bootstrap/autoload.php';
 

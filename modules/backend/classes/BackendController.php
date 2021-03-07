@@ -23,7 +23,7 @@ use Closure;
  * for the `Posts` controller inside the `Acme.Blog` plugin.
  *
  * @see Backend\Classes\Controller Base class for back-end controllers
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class BackendController extends ControllerBase

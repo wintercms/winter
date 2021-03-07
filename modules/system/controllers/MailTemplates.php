@@ -11,7 +11,7 @@ use Exception;
 /**
  * Mail templates controller
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailTemplates extends Controller

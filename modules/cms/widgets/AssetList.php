@@ -21,7 +21,7 @@ use Exception;
 /**
  * CMS asset list widget.
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class AssetList extends WidgetBase

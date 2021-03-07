@@ -13,7 +13,7 @@ use DateTimeZone;
 /**
  * Backend preferences for the backend user
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Preference extends Model

@@ -9,7 +9,7 @@ use Session;
  * Adds session management based methods to a controller class, or a class
  * that contains a `$controller` property referencing a controller.
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait SessionMaker

@@ -9,7 +9,7 @@ use BadMethodCallException;
 /**
  * Component base class
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 abstract class ComponentBase extends Extendable

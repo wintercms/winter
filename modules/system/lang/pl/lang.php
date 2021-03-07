@@ -229,7 +229,7 @@ return [
             ],
             'panel'     => 'Czyż ten panel nie jest wspaniały?',
             'more'      => 'Trochę dodatkowego tekstu',
-            'promotion' => 'Kod kuponu: OCTOBER',
+            'promotion' => 'Kod kuponu: WINTER',
             'subcopy'   => 'To jest dopisek do wiadomości',
             'thanks'    => 'Dziękujemy',
         ],

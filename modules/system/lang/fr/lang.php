@@ -228,7 +228,7 @@ return [
             ],
             'panel' => 'A quel point ce panneau est-il génial ?',
             'more' => 'Un peu plus de texte',
-            'promotion' => 'Code de réduction: OCTOBER',
+            'promotion' => 'Code de réduction: WINTER',
             'subcopy' => 'Ceci est le pré copyright de votre courriel',
             'thanks' => 'Merci'
         ],

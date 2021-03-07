@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\App;
 /**
  * Component manager
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ComponentManager
@@ -75,7 +75,7 @@ class ComponentManager
      * Manually registers a component for consideration. Usage:
      *
      *     ComponentManager::registerComponents(function ($manager) {
-     *         $manager->registerComponent('October\Demo\Components\Test', 'testComponent');
+     *         $manager->registerComponent('Winter\Demo\Components\Test', 'testComponent');
      *     });
      *
      * @param callable $definitions

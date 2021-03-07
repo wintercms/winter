@@ -5,7 +5,7 @@ use Event;
 /**
  * Adds system event related features to any class.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 

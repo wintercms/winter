@@ -15,7 +15,7 @@ use Backend\Classes\FormWidgetBase;
  * Rich Editor
  * Renders a rich content editor field.
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class RichEditor extends FormWidgetBase

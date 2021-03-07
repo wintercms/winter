@@ -13,7 +13,7 @@ use Config;
  * View Maker Trait
  * Adds view based methods to a class
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait ViewMaker

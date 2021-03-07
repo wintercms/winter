@@ -19,7 +19,7 @@ use Backend\Widgets\Form;
 /**
  * Theme selector controller
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */

@@ -16,7 +16,7 @@ use Twig\Error\SyntaxError as TwigErrorSyntax;
  *         <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"/>
  *     {% endshowblock %}
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PlaceholderTokenParser extends TwigTokenParser

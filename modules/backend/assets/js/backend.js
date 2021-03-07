@@ -1,5 +1,5 @@
 /*
- * October General Utilities
+ * Winter General Utilities
  */
 
 /*
@@ -186,7 +186,7 @@ $.oc.escapeHtmlString = function(string) {
 /*
  * Inverse Click Event (not used)
  *
- * Calls the handler function if the user has clicked outside the object 
+ * Calls the handler function if the user has clicked outside the object
  * and not on any of the elements in the exception list.
  */
 /*

@@ -23,7 +23,7 @@ use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
  * CMS theme is a directory that contains all CMS objects - pages, layouts, partials and asset files..
  * The theme parameters are specified in the theme.ini file in the theme root directory.
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Theme
@@ -356,7 +356,7 @@ class Theme
          * Example usage:
          *
          *     Event::listen('cms.theme.extendConfig', function ($themeCode, &$config) {
-         *          $config['name'] = 'October Theme';
+         *          $config['name'] = 'Winter Theme';
          *          $config['description'] = 'Another great theme from Winter CMS';
          *     });
          *

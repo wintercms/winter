@@ -5,7 +5,7 @@ use ApplicationException;
 /**
  * Helper class for processing video and audio tags inserted by the Media Manager.
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MediaViewHelper

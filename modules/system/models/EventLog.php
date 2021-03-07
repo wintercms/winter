@@ -8,7 +8,7 @@ use Exception;
 /**
  * Model for logging system errors and debug trace messages
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class EventLog extends Model
@@ -33,7 +33,7 @@ class EventLog extends Model
             class_exists('Model') &&
             Model::getConnectionResolver() &&
             App::hasDatabase() &&
-            !defined('OCTOBER_NO_EVENT_LOGGING') &&
+            !defined('WINTER_NO_EVENT_LOGGING') &&
             LogSetting::get('log_events')
         );
     }

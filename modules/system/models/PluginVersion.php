@@ -8,7 +8,7 @@ use System\Classes\PluginManager;
 /**
  * Stores information about current plugin versions.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PluginVersion extends Model

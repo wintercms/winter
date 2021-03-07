@@ -7,7 +7,7 @@ use Winter\Storm\Database\Model;
  * Parameters model
  * Used for storing internal application parameters.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Parameter extends Model

@@ -6,7 +6,7 @@ use Twig\Compiler as TwigCompiler;
 /**
  * Represents a "scripts" node
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ScriptsNode extends TwigNode

@@ -270,7 +270,7 @@ return [
             ],
             'panel' => 'Hoe geweldig is dit panel?',
             'more' => 'Wat meer tekst',
-            'promotion' => 'Coupon code: OCTOBER',
+            'promotion' => 'Coupon code: WINTER',
             'subcopy' => 'Voettekst',
             'thanks' => 'Bedankt',
         ],

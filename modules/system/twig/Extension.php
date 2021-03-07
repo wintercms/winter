@@ -9,7 +9,7 @@ use System\Classes\MarkupManager;
 /**
  * The System Twig extension class implements common Twig functions and filters.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Extension extends TwigExtension

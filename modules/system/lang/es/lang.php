@@ -210,7 +210,7 @@ return [
             ],
             'panel' => '¿Este panel es increíble o qué?',
             'more' => 'Algo más de texto',
-            'promotion' => 'Código de cupón: OCTOBER',
+            'promotion' => 'Código de cupón: WINTER',
             'subcopy' => 'Este es el subcopy del correo',
             'thanks' => 'Gracias'
         ],

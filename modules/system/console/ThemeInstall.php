@@ -11,9 +11,9 @@ use Exception;
 /**
  * Console command to install a new theme.
  *
- * This adds a new theme by requesting it from the October marketplace.
+ * This adds a new theme by requesting it from the Winter marketplace.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeInstall extends Command
@@ -28,7 +28,7 @@ class ThemeInstall extends Command
      * The console command description.
      * @var string
      */
-    protected $description = 'Install a theme from the October marketplace.';
+    protected $description = 'Install a theme from the Winter marketplace.';
 
     /**
      * Execute the console command.

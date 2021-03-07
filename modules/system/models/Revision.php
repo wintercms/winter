@@ -5,7 +5,7 @@ use Winter\Storm\Database\Models\Revision as RevisionBase;
 /**
  * Revision history model
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Revision extends RevisionBase

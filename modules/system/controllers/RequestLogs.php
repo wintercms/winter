@@ -10,7 +10,7 @@ use System\Models\RequestLog;
 /**
  * Request Logs controller
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class RequestLogs extends Controller

@@ -12,7 +12,7 @@ use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 /**
  * Datasource that loads from other data sources automatically
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Luke Towers
  */
 class AutoDatasource extends Datasource implements DatasourceInterface

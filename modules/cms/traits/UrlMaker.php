@@ -34,7 +34,7 @@ use ApplicationException;
  *        ];
  *    }
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait UrlMaker

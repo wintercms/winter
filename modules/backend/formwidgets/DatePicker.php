@@ -10,7 +10,7 @@ use System\Helpers\DateTime as DateTimeHelper;
  * Date picker
  * Renders a date picker field.
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class DatePicker extends FormWidgetBase

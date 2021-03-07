@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 /**
  * Console command to disable a plugin.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Lucas Zamora
  */
 class PluginDisable extends Command

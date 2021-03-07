@@ -10,7 +10,7 @@ use System\Classes\SettingsManager;
 /**
  * Mail layouts controller
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailLayouts extends Controller

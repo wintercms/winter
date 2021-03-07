@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputArgument;
  * - --target defaults to "filesystem", the source will whichever of filesystem vs database is not the target
  * - --force bypasses the confirmation request
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Luke Towers
  */
 class ThemeSync extends Command

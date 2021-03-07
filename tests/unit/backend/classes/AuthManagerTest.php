@@ -9,7 +9,7 @@ class AuthManagerTest extends TestCase
         $this->createApplication();
 
         $this->instance = AuthManager::instance();
-        $this->instance->registerPermissions('October.TestCase', [
+        $this->instance->registerPermissions('Winter.TestCase', [
             'test.permission_one' => [
                 'label' => 'Test Permission 1',
                 'tab' => 'Test',
@@ -40,7 +40,7 @@ class AuthManagerTest extends TestCase
 
     public function testRegisterPermissions()
     {
-        $this->instance->registerPermissions('October.TestCase', [
+        $this->instance->registerPermissions('Winter.TestCase', [
             'test.permission_three' => [
                 'label' => 'Test Permission 3',
                 'tab' => 'Test',
@@ -61,7 +61,7 @@ class AuthManagerTest extends TestCase
     {
         // Callback one
         $this->instance->registerCallback(function ($manager) {
-            $manager->registerPermissions('October.TestCase', [
+            $manager->registerPermissions('Winter.TestCase', [
                 'test.permission_three' => [
                     'label' => 'Test Permission 3',
                     'tab' => 'Test',
@@ -72,7 +72,7 @@ class AuthManagerTest extends TestCase
 
         // Callback two
         $this->instance->registerCallback(function ($manager) {
-            $manager->registerPermissions('October.TestCase', [
+            $manager->registerPermissions('Winter.TestCase', [
                 'test.permission_four' => [
                     'label' => 'Test Permission 4',
                     'tab' => 'Test',
@@ -93,7 +93,7 @@ class AuthManagerTest extends TestCase
 
     public function testRegisterAdditionalTab()
     {
-        $this->instance->registerPermissions('October.TestCase', [
+        $this->instance->registerPermissions('Winter.TestCase', [
             'test.permission_three' => [
                 'label' => 'Test Permission 3',
                 'tab' => 'Test 2',
@@ -102,7 +102,7 @@ class AuthManagerTest extends TestCase
         ]);
 
         $this->instance->registerCallback(function ($manager) {
-            $manager->registerPermissions('October.TestCase', [
+            $manager->registerPermissions('Winter.TestCase', [
                 'test.permission_four' => [
                     'label' => 'Test Permission 4',
                     'tab' => 'Test 2',
@@ -129,7 +129,7 @@ class AuthManagerTest extends TestCase
 
     public function testRemovePermission()
     {
-        $this->instance->removePermission('October.TestCase', 'test.permission_one');
+        $this->instance->removePermission('Winter.TestCase', 'test.permission_one');
 
         $permissions = $this->instance->listPermissions();
         $this->assertCount(1, $permissions);
@@ -145,6 +145,6 @@ class AuthManagerTest extends TestCase
 
         AuthManager::forgetInstance();
         $this->instance = AuthManager::instance();
-        $this->instance->removePermission('October.TestCase', 'test.permission_one');
+        $this->instance->removePermission('Winter.TestCase', 'test.permission_one');
     }
 }

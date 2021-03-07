@@ -11,7 +11,7 @@ use Exception;
 /**
  * Theme export model
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeExport extends Model

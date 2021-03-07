@@ -40,7 +40,7 @@ use DateTime;
  *
  * @see System\Classes\SystemController System controller
  * @see https://wintercms.com/docs/services/session Session service
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CombineAssets
@@ -552,7 +552,7 @@ class CombineAssets
      * function as an argument. Usage:
      *
      *     CombineAssets::registerCallback(function ($combiner) {
-     *         $combiner->registerBundle('~/modules/backend/assets/less/october.less');
+     *         $combiner->registerBundle('~/modules/backend/assets/less/winter.less');
      *     });
      *
      * @param callable $callback A callable function.

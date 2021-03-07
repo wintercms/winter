@@ -2,7 +2,7 @@
 
 A scrollable set of buttons aligned to the left with a fixed right section.
 
-All toolbar items (`toolbar-item`) should have a fixed width, except for the primary item (`toolbar-primary`) which will stretch. In the October backend you can use the `data-calculate-width` attribute to have these widths calculated dynamically for you.
+All toolbar items (`toolbar-item`) should have a fixed width, except for the primary item (`toolbar-primary`) which will stretch. In the Winter backend you can use the `data-calculate-width` attribute to have these widths calculated dynamically for you.
 
 ## Basic toolbar
 

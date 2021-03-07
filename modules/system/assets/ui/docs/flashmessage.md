@@ -28,7 +28,7 @@ Displays a floating flash message on the screen.
             Show Error
         </a>
 
-        <a href="javascript:;" class="btn btn-warning" onclick="$.oc.flashMsg({text: 'Warning! October is too good for this world!', 'class': 'warning'}); return false;">
+        <a href="javascript:;" class="btn btn-warning" onclick="$.oc.flashMsg({text: 'Warning! Winter is too good for this world!', 'class': 'warning'}); return false;">
             Show Warning
         </a>
     </p>

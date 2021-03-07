@@ -1,8 +1,8 @@
 # Inspector control
 
-Inspector is a visual configuration tool that is used in several places of October back-end. The most known usage of Inspector is the CMS components configuration feature, but Inspector is not limited with the CMS. In fact, it's a universal tool that can be used with any element on a back-end page. 
+Inspector is a visual configuration tool that is used in several places of Winter back-end. The most known usage of Inspector is the CMS components configuration feature, but Inspector is not limited with the CMS. In fact, it's a universal tool that can be used with any element on a back-end page.
 
-The Inspector loads the configuration schema from an inspectable element, builds the user interface, and writes values entered by users back to the inspectable element. The first version of Inspector was supporting only a few scalar value types - strings and Booleans, without an option to edit any complex data. 
+The Inspector loads the configuration schema from an inspectable element, builds the user interface, and writes values entered by users back to the inspectable element. The first version of Inspector was supporting only a few scalar value types - strings and Booleans, without an option to edit any complex data.
 
 The current version of Inspector allows to edit any imaginable data structures, including cases where users create enumerable data elements right in the Inspector interface.
 
@@ -21,13 +21,13 @@ Inspectable elements should also contain a hidden input element used by Inspecto
 Example inspectable element markup:
 
 ```html
-<div 
-    data-inspectable 
-    data-inspector-title="Some inspectable element" 
+<div
+    data-inspectable
+    data-inspector-title="Some inspectable element"
     data-inspector-description="Some description">
-        <input 
+        <input
             data-inspector-values
-            type="hidden" 
+            type="hidden"
             value="JSON"/>
 </div>
 ```
@@ -40,24 +40,24 @@ There are several optional data attributes and features that could be defined in
 * `data-inspector-offset-x` - sets horizontal offset, in pixels, for the Inspector popup.
 * `data-inspector-offset-y` - sets vertical offset, in pixels, for the Inspector popup.
 * `data-inspector-placement` - sets defines placement for the Inspector popup, optional. If omitted, Inspector evaluates a placement automatically. Supported values: top, bottom, left, top.
-* `data-inspector-fallback-placement` - sets less preferable placement for the Inspector popup, optional. This value is used if Inspector can't use the placement specified in data-inspector-placement. Supported values: top, bottom, left, top. 
+* `data-inspector-fallback-placement` - sets less preferable placement for the Inspector popup, optional. This value is used if Inspector can't use the placement specified in data-inspector-placement. Supported values: top, bottom, left, top.
 * `data-inspector-external-parameters` - if this attribute exists in any parent element of the inspectable element, the external parameters editors will be enabled in Inspector (unless property-specific rules cancel the external editor).
 
 ### Dynamic configuration and dynamic items
 
-In case if the `data-inspector-config` attribute is missing in the inspectable element Inspector tries to load its configuration from the server. An important note - there should be a FORM element wrapping inspectable elements in order to use any dynamic features of Inspector. 
+In case if the `data-inspector-config` attribute is missing in the inspectable element Inspector tries to load its configuration from the server. An important note - there should be a FORM element wrapping inspectable elements in order to use any dynamic features of Inspector.
 
 The AJAX request used for loading the configuration from the server is named `onGetInspectorConfiguration`. The handler should be defined in the back-end controller and should return an array containing the Inspector configuration (in the PHP equivalent of the JSON configuration structure described later in this section), inspector title and description. Example of a server-side AJAX dynamic configuration request handler:
 
 ```php
 public function onGetInspectorConfiguration()
 {
-    // Load and use some values from the posted form 
+    // Load and use some values from the posted form
     //
     $someValue = Request::input('someValue');
-    
+
     ... do some processing ...
-    
+
     return [
         'configuration' => [
             'properties'  => [list of properties],
@@ -68,7 +68,7 @@ public function onGetInspectorConfiguration()
 }
 ```
 
-Some Inspector editors - (drop-down, set, autocomplete) support static and dynamic options. Dynamic options are requested from the server, rather than being defined in the configuration JSON string. For using this feature, the inspectable element must have the `data-inspector-class` attribute defined. The attribute value should contain a name of a PHP class corresponding to the inspectable element. 
+Some Inspector editors - (drop-down, set, autocomplete) support static and dynamic options. Dynamic options are requested from the server, rather than being defined in the configuration JSON string. For using this feature, the inspectable element must have the `data-inspector-class` attribute defined. The attribute value should contain a name of a PHP class corresponding to the inspectable element.
 
 The server-side controller should use the `Backend\Traits\InspectableContainer` trait in order to provide the dynamic options loading. The inspectable PHP class (specified with `data-inspector-class`) must either have a method `get[Property]Options()`, where the [Property] part corresponds the name of the dynamic property, or `getPropertyOptions($propertyName)` method that is more universal and accepts the property name as a parameter. The methods should return the `options` array containing associative arrays with keys `option` and `value`. Example:
 
@@ -192,7 +192,7 @@ Allows users to enter lists of strings. The editor opens in a popup window and d
 }
 ```
 
-A value generated by the editor is an array of strings, for example: 
+A value generated by the editor is an array of strings, for example:
 
 ```json
 {"items":["String 1","String 2","String 3"]}
@@ -261,7 +261,7 @@ Displays a drop-down list. Options for the drop-down list can be specified stati
 
 The `options` attribute should be a key-value object. If the attribute is not specified, Inspector will try to load options from the server - see [Dynamic configuration and dynamic items](#dynamic-configuration-and-dynamic-items) section above.
 
-The editor generates a string value corresponding to the selected option, for example: 
+The editor generates a string value corresponding to the selected option, for example:
 
 ```json
 {"action":"hide"}
@@ -280,7 +280,7 @@ Dictionary editor allows to create key-value pairs with a simple user interface 
 }
 ```
 
-The editor generates an object value, for example: 
+The editor generates an object value, for example:
 
 ```json
 {"options":{"option1":"Option 1","option2":"Option 2"}}
@@ -312,7 +312,7 @@ The dictionary editor supports validation for the entire set (`required` and `le
     },
     "validationValue": {
         "regex": {
-            "pattern": "^[a-zA-Z0-9]+$", 
+            "pattern": "^[a-zA-Z0-9]+$",
             "message": "Values can contain only Latin letters and digits"
         }
     }
@@ -321,7 +321,7 @@ The dictionary editor supports validation for the entire set (`required` and `le
 
 ### Object editor
 
-Allows to define an object with specific properties editable by users. Object properties are specified with the `properties` attribute. The value of the attribute is an array, which has exactly the same structure as the Inspector properties array. 
+Allows to define an object with specific properties editable by users. Object properties are specified with the `properties` attribute. The value of the attribute is an array, which has exactly the same structure as the Inspector properties array.
 
 ```json
 {
@@ -349,7 +349,7 @@ Allows to define an object with specific properties editable by users. Object pr
 }
 ```
 
-The example above creates an object with three properties. Two of them are displayed as text fields, and the third as a drop-down. 
+The example above creates an object with three properties. Two of them are displayed as text fields, and the third as a drop-down.
 
 Object editor values are objects. Example:
 
@@ -396,7 +396,7 @@ Object editors do not support the external property editor feature.
 
 ### Object list editor
 
-The object list editor allows users to create multiple objects with a pre-defined structure. For example, it could be used for creating a list of person, where each person has a name and address. 
+The object list editor allows users to create multiple objects with a pre-defined structure. For example, it could be used for creating a list of person, where each person has a name and address.
 
 The properties of objects that can be created with the editor are defined with `itemProperties` parameter. The parameter should contain an array of properties, similar to Inspector configuration array. Another required parameter is `titleProperty`, which identifies a property that should be used as a title in Inspector UI. Example configuration:
 
@@ -478,7 +478,7 @@ The `login` property in the example above will be used as a key in the result va
 
 ### Set editor
 
-The set editor allows users to select multiple predefined options with checkboxes. Set items can be specified statically with the configuration, using the `items` parameter, or loaded dynamically. Example with static items definition: 
+The set editor allows users to select multiple predefined options with checkboxes. Set items can be specified statically with the configuration, using the `items` parameter, or loaded dynamically. Example with static items definition:
 
 ```json
 {
@@ -502,7 +502,7 @@ Set editors do not support the external property editor feature.
 
 ## Defining the validation rules
 
-Inspector support several validation rules that can be applied to properties. Validation rules can be applied to top-level properties as well as to internal property definitions of object and object list editors. There are two ways to define validation rules - the legacy syntax and the new syntax. 
+Inspector support several validation rules that can be applied to properties. Validation rules can be applied to top-level properties as well as to internal property definitions of object and object list editors. There are two ways to define validation rules - the legacy syntax and the new syntax.
 
 The legacy syntax is supported for the backwards compatibility with existing CMS components definitions. This syntax will always be supported, but it's limited, and cannot be mixed with the new syntax. Example of the legacy syntax:
 
@@ -614,7 +614,7 @@ Supported parameters:
 
 ### float validator
 
-Checks if the value is a floating point number. The parameters for this validator match the parameters of the **integer** validator described above. Example: 
+Checks if the value is a floating point number. The parameters for this validator match the parameters of the **integer** validator described above. Example:
 
 ```json
 {
@@ -635,7 +635,7 @@ Valid floating point number formats:
 * 10.302
 * -10 (if `allowNegative` is `true`)
 * -10.84 (if `allowNegative` is `true`)
- 
+
 ### length validator
 
 Checks if a string, array or object is not shorter or longer than specified values. This validator can work with the string, text, set, string list, dictionary and object list editors. In multiple-value editors (set, string list, dictionary and object list) it validates the number of items created in the editor.

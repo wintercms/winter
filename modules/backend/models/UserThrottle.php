@@ -6,7 +6,7 @@ use Winter\Storm\Auth\Models\Throttle as ThrottleBase;
 /**
  * Administrator throttling model
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class UserThrottle extends ThrottleBase

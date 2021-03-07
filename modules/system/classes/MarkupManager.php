@@ -9,7 +9,7 @@ use ApplicationException;
 /**
  * This class manages Twig functions, token parsers and filters.
  *
- * @package october\system
+ * @package wintercms\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MarkupManager

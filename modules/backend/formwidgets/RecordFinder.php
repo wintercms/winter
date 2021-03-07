@@ -25,7 +25,7 @@ use Backend\Classes\FormWidgetBase;
  *        useRelation: false
  *        modelClass: Winter\User\Models\User
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class RecordFinder extends FormWidgetBase

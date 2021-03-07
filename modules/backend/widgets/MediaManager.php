@@ -22,7 +22,7 @@ use Form as FormHelper;
 /**
  * Media Manager widget.
  *
- * @package october\backend
+ * @package wintercms\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MediaManager extends WidgetBase

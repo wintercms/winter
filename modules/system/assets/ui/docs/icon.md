@@ -1,6 +1,6 @@
 # Icon library
 
-October provides an icon library with icons of various descriptions, based on the popular [Font Awesome collection](http://fortawesome.github.io/Font-Awesome/).
+Winter provides an icon library with icons of various descriptions, based on the popular [Font Awesome collection](http://fortawesome.github.io/Font-Awesome/).
 
 ### Inline icons
 

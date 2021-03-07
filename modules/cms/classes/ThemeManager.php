@@ -8,7 +8,7 @@ use Cms\Classes\Theme as CmsTheme;
 /**
  * Theme manager
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeManager

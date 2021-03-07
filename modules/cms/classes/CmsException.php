@@ -11,7 +11,7 @@ use Exception;
  * The exception class handles CMS related errors. Allows the masking of other exception types which
  * uses actual source CMS files -- instead of cached files -- for their error content.
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CmsException extends ApplicationException

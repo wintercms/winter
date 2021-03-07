@@ -41,7 +41,7 @@ class CmsObjectQueryTest extends TestCase
 
     public function testWithComponentCallback()
     {
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Archive.php';
 
         $pages = Page::withComponent('testArchive', function ($component) {
             return $component->property('posts-per-page') == '69';

@@ -256,7 +256,7 @@ return [
             ],
             'panel' => 'Mẫu giao diện này thật tuyện vời!',
             'more' => 'Mô tả thêm',
-            'promotion' => 'Mã ưu đãi: OCTOBER',
+            'promotion' => 'Mã ưu đãi: WINTER',
             'subcopy' => 'Thông tin thêm',
             'thanks' => 'Lời cám ơn'
         ],

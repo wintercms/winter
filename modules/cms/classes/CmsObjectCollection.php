@@ -5,7 +5,7 @@ use Winter\Storm\Support\Collection as CollectionBase;
 /**
  * This class represents a collection of Cms Objects.
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CmsObjectCollection extends CollectionBase

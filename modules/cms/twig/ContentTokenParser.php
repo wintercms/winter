@@ -14,7 +14,7 @@ use Twig\Error\SyntaxError as TwigErrorSyntax;
  *
  *     {% content "intro/txt" name='John', year=2013 %}
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ContentTokenParser extends TwigTokenParser

@@ -1,12 +1,12 @@
-# October Storm
+# Winter Storm UI
 
-Welcome to the client-side framework designed exclusively for the Winter CMS back-end area, referred to as *October Storm*. The library is quite large as it has many features and it is not really itended to be used outside of October.
+Welcome to the client-side framework designed exclusively for the Winter CMS back-end area, referred to as *Winter Storm UI*. The library is quite large as it has many features and it is not really intended to be used outside of Winter.
 
 ## Design consideration
 
 Each LESS library should always include the `global.less` to ensure all mixins and variables are available.
 
-Compiling JavaScript depends on October's asset combiner as the `=require` directive was invented here to emulate the LESS `@import` functionality.
+Compiling JavaScript depends on Winter's asset combiner as the `=require` directive was invented here to emulate the LESS `@import` functionality.
 
 ## UI Components
 

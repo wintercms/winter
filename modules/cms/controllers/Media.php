@@ -5,7 +5,7 @@ use Backend\Controllers\Media as MediaController;
 /**
  * CMS Media Manager
  *
- * @package october\cms
+ * @package wintercms\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  * @deprecated Use Backend\Controllers\Media. Remove if year >= 2020.
  */
