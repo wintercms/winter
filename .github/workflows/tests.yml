@@ -16,9 +16,14 @@ jobs:
       fail-fast: false
     name: Linux / PHP ${{ matrix.phpVersions }}
     env:
-      extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml
+      extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
       key: october-cms-1-0-cache-v1
     steps:
+      - name: Cancel previous incomplete runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
       - name: Checkout changes
         uses: actions/checkout@v2
 
@@ -41,7 +46,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.phpVersion }}
-          tools: composer:v2
+          tools: composer:v1
           extensions: ${{ env.extensions }}
 
       - name: Setup dependency cache
