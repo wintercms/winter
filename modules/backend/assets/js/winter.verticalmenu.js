@@ -1,11 +1,11 @@
 /*
- * Creates a vertical responsive menu. 
+ * Creates a vertical responsive menu.
  *
  * JavaScript API:
  * $('#menu').verticalMenu()
  *
- * Dependences: 
- * - Drag Scroll (october.dragscroll.js)
+ * Dependences:
+ * - Drag Scroll (winter.dragscroll.js)
  */
 +function ($) { "use strict";
 

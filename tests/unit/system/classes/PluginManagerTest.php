@@ -26,9 +26,9 @@ class PluginManagerTest extends TestCase
         $result = $this->manager->loadPlugins();
 
         $this->assertCount(9, $result);
-        $this->assertArrayHasKey('October.NoUpdates', $result);
-        $this->assertArrayHasKey('October.Sample', $result);
-        $this->assertArrayHasKey('October.Tester', $result);
+        $this->assertArrayHasKey('Winter.NoUpdates', $result);
+        $this->assertArrayHasKey('Winter.Sample', $result);
+        $this->assertArrayHasKey('Winter.Tester', $result);
         $this->assertArrayHasKey('Database.Tester', $result);
         $this->assertArrayHasKey('TestVendor.Test', $result);
         $this->assertArrayHasKey('DependencyTest.Found', $result);
@@ -38,9 +38,9 @@ class PluginManagerTest extends TestCase
 
         $this->assertArrayNotHasKey('TestVendor.Goto', $result);
 
-        $this->assertInstanceOf('Winter\NoUpdates\Plugin', $result['October.NoUpdates']);
-        $this->assertInstanceOf('Winter\Sample\Plugin', $result['October.Sample']);
-        $this->assertInstanceOf('Winter\Tester\Plugin', $result['October.Tester']);
+        $this->assertInstanceOf('Winter\NoUpdates\Plugin', $result['Winter.NoUpdates']);
+        $this->assertInstanceOf('Winter\Sample\Plugin', $result['Winter.Sample']);
+        $this->assertInstanceOf('Winter\Tester\Plugin', $result['Winter.Tester']);
         $this->assertInstanceOf('Database\Tester\Plugin', $result['Database.Tester']);
         $this->assertInstanceOf('TestVendor\Test\Plugin', $result['TestVendor.Test']);
         $this->assertInstanceOf('DependencyTest\Found\Plugin', $result['DependencyTest.Found']);
@@ -68,9 +68,9 @@ class PluginManagerTest extends TestCase
         $result = $this->manager->getPlugins();
 
         $this->assertCount(8, $result);
-        $this->assertArrayHasKey('October.NoUpdates', $result);
-        $this->assertArrayHasKey('October.Sample', $result);
-        $this->assertArrayHasKey('October.Tester', $result);
+        $this->assertArrayHasKey('Winter.NoUpdates', $result);
+        $this->assertArrayHasKey('Winter.Sample', $result);
+        $this->assertArrayHasKey('Winter.Tester', $result);
         $this->assertArrayHasKey('Database.Tester', $result);
         $this->assertArrayHasKey('TestVendor.Test', $result);
         $this->assertArrayHasKey('DependencyTest.Found', $result);
@@ -80,9 +80,9 @@ class PluginManagerTest extends TestCase
         $this->assertArrayNotHasKey('DependencyTest.NotFound', $result);
         $this->assertArrayNotHasKey('TestVendor.Goto', $result);
 
-        $this->assertInstanceOf('Winter\NoUpdates\Plugin', $result['October.NoUpdates']);
-        $this->assertInstanceOf('Winter\Sample\Plugin', $result['October.Sample']);
-        $this->assertInstanceOf('Winter\Tester\Plugin', $result['October.Tester']);
+        $this->assertInstanceOf('Winter\NoUpdates\Plugin', $result['Winter.NoUpdates']);
+        $this->assertInstanceOf('Winter\Sample\Plugin', $result['Winter.Sample']);
+        $this->assertInstanceOf('Winter\Tester\Plugin', $result['Winter.Tester']);
         $this->assertInstanceOf('Database\Tester\Plugin', $result['Database.Tester']);
         $this->assertInstanceOf('TestVendor\Test\Plugin', $result['TestVendor.Test']);
         $this->assertInstanceOf('DependencyTest\Found\Plugin', $result['DependencyTest.Found']);
@@ -128,9 +128,9 @@ class PluginManagerTest extends TestCase
         $result = $this->manager->getPluginNamespaces();
 
         $this->assertCount(10, $result);
-        $this->assertArrayHasKey('\october\noupdates', $result);
-        $this->assertArrayHasKey('\october\sample', $result);
-        $this->assertArrayHasKey('\october\tester', $result);
+        $this->assertArrayHasKey('\winter\noupdates', $result);
+        $this->assertArrayHasKey('\winter\sample', $result);
+        $this->assertArrayHasKey('\winter\tester', $result);
         $this->assertArrayHasKey('\database\tester', $result);
         $this->assertArrayHasKey('\testvendor\test', $result);
         $this->assertArrayHasKey('\testvendor\goto', $result);
@@ -145,10 +145,10 @@ class PluginManagerTest extends TestCase
         $vendors = $this->manager->getVendorAndPluginNames();
 
         $this->assertCount(4, $vendors);
-        $this->assertArrayHasKey('october', $vendors);
-        $this->assertArrayHasKey('noupdates', $vendors['october']);
-        $this->assertArrayHasKey('sample', $vendors['october']);
-        $this->assertArrayHasKey('tester', $vendors['october']);
+        $this->assertArrayHasKey('winter', $vendors);
+        $this->assertArrayHasKey('noupdates', $vendors['winter']);
+        $this->assertArrayHasKey('sample', $vendors['winter']);
+        $this->assertArrayHasKey('tester', $vendors['winter']);
 
         $this->assertArrayHasKey('database', $vendors);
         $this->assertArrayHasKey('tester', $vendors['database']);
@@ -173,7 +173,7 @@ class PluginManagerTest extends TestCase
         $this->assertNotNull($testPlugin);
         $pluginDetails = $testPlugin->pluginDetails();
 
-        $this->assertEquals('October Test Plugin', $pluginDetails['name']);
+        $this->assertEquals('Winter Test Plugin', $pluginDetails['name']);
         $this->assertEquals('Test plugin used by unit tests.', $pluginDetails['description']);
         $this->assertEquals('Alexey Bobkov, Samuel Georges', $pluginDetails['author']);
     }

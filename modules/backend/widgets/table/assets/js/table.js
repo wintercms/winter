@@ -2,7 +2,7 @@
  * Table control class
  *
  * Dependences:
- * - Scrollbar (october.scrollbar.js)
+ * - Scrollbar (winter.scrollbar.js)
  */
 +function ($) { "use strict";
 
@@ -86,7 +86,7 @@
         // Number of records added or deleted during the session
         this.recordsAddedOrDeleted = 0
 
-        // Bound reference to dispose() - ideally the class should use the October foundation library base class
+        // Bound reference to dispose() - ideally the class should use the Winter foundation library base class
         this.disposeBound = this.dispose.bind(this)
 
         //

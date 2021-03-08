@@ -9,7 +9,7 @@
  *
  * Dependences:
  * - Sweet Alert
- * - Translations (october.lang.js)
+ * - Translations (winter.lang.js)
  */
 (function($){
 

@@ -2,7 +2,7 @@
  * Media manager control class
  *
  * Dependences:
- * - Scrollpad (october.scrollpad.js)
+ * - Scrollpad (winter.scrollpad.js)
  */
 +function ($) { "use strict";
 
@@ -796,7 +796,7 @@
 
     MediaManager.prototype.uploadSending = function(file, xhr, formData) {
         formData.append('path', this.$el.find('[data-type="current-folder"]').val())
-        xhr.setRequestHeader('X-OCTOBER-REQUEST-HANDLER', this.options.uploadHandler)
+        xhr.setRequestHeader('X-WINTER-REQUEST-HANDLER', this.options.uploadHandler)
     }
 
     MediaManager.prototype.uploadCancelAll = function() {

@@ -178,7 +178,7 @@
 
         froalaOptions.shortcutsEnabled = ['show', 'bold', 'italic', 'underline', 'indent', 'outdent', 'undo', 'redo']
 
-        // Ensure that October recognizes AJAX requests from Froala
+        // Ensure that Winter recognizes AJAX requests from Froala
         froalaOptions.requestHeaders = {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             'X-Requested-With': 'XMLHttpRequest'

@@ -1,6 +1,6 @@
 /*
- * October JavaScript foundation library.
- * 
+ * Winter JavaScript foundation library.
+ *
  * Light-weight utility functions for working with native DOM events. The functions
  * work with events directly, without jQuery, using the native JavaScript and DOM
  * features.

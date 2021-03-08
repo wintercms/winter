@@ -173,7 +173,7 @@
             $.each(self.$form.serializeArray(), function (index, field) {
                 formData.append(field.name, field.value)
             })
-            xhr.setRequestHeader('X-OCTOBER-REQUEST-HANDLER', self.alias + '::onUpload')
+            xhr.setRequestHeader('X-WINTER-REQUEST-HANDLER', self.alias + '::onUpload')
             self.onUploadStart()
         })
     }

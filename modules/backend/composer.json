@@ -1,5 +1,5 @@
 {
-    "name": "wintercms/wn-backend-module",
+    "name": "winter/wn-backend-module",
     "type": "winter-module",
     "description": "Backend module for Winter CMS",
     "homepage": "https://wintercms.com",

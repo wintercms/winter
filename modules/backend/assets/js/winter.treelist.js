@@ -5,12 +5,12 @@
  *  - handle - class name to use as a handle
  *  - nested - set to false if sorting should be kept within each OL container, if using
  *             a handle it should be focused enough to exclude nested handles.
- * 
+ *
  * Events:
  * - move.oc.treelist - triggered when a node on the tree is moved.
- * 
+ *
  * Dependences:
- * - Sortable Plugin (october.sortable.js)
+ * - Sortable Plugin (winter.sortable.js)
  */
 +function ($) { "use strict";
     var Base = $.oc.foundation.base,
@@ -125,7 +125,7 @@
 
     // TREELIST WIDGET DATA-API
     // ==============
-    
+
     $(document).render(function(){
         $('[data-control="treelist"]').treeListWidget();
     })

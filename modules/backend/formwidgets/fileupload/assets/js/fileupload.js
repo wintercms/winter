@@ -188,7 +188,7 @@
 
     FileUpload.prototype.onUploadSending = function(file, xhr, formData) {
         this.addExtraFormData(formData)
-        xhr.setRequestHeader('X-OCTOBER-REQUEST-HANDLER', this.options.uploadHandler)
+        xhr.setRequestHeader('X-WINTER-REQUEST-HANDLER', this.options.uploadHandler)
     }
 
     FileUpload.prototype.onUploadSuccess = function(file, response) {
@@ -213,7 +213,7 @@
     }
 
     /*
-     * Trigger change event (Compatibility with october.form.js)
+     * Trigger change event (Compatibility with winter.form.js)
      */
     FileUpload.prototype.triggerChange = function() {
         this.$el.closest('[data-field-name]').trigger('change.oc.formwidget')

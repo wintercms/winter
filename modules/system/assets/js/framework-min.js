@@ -13,8 +13,8 @@ var loading=options.loading!==undefined?options.loading:null,url=options.url!==u
 if(useFiles&&typeof FormData==='undefined'){console.warn('This browser does not support file uploads via FormData')
 useFiles=false}
 if($.type(loading)=='string'){loading=$(loading)}
-var requestHeaders={'X-OCTOBER-REQUEST-HANDLER':handler,'X-OCTOBER-REQUEST-PARTIALS':this.extractPartials(options.update)}
-if(useFlash){requestHeaders['X-OCTOBER-REQUEST-FLASH']=1}
+var requestHeaders={'X-WINTER-REQUEST-HANDLER':handler,'X-WINTER-REQUEST-PARTIALS':this.extractPartials(options.update)}
+if(useFlash){requestHeaders['X-WINTER-REQUEST-FLASH']=1}
 var csrfToken=getXSRFToken()
 if(csrfToken){requestHeaders['X-XSRF-TOKEN']=csrfToken}
 var requestData,inputName,data={}
@@ -32,7 +32,7 @@ if(options.evalBeforeUpdate&&eval('(function($el, context, data, textStatus, jqX
 var _event=jQuery.Event('ajaxBeforeUpdate')
 $triggerEl.trigger(_event,[context,data,textStatus,jqXHR])
 if(_event.isDefaultPrevented())return
-if(useFlash&&data['X_OCTOBER_FLASH_MESSAGES']){$.each(data['X_OCTOBER_FLASH_MESSAGES'],function(type,message){requestOptions.handleFlashMessage(message,type)})}
+if(useFlash&&data['X_WINTER_FLASH_MESSAGES']){$.each(data['X_WINTER_FLASH_MESSAGES'],function(type,message){requestOptions.handleFlashMessage(message,type)})}
 var updatePromise=requestOptions.handleUpdateResponse(data,textStatus,jqXHR)
 updatePromise.done(function(){$triggerEl.trigger('ajaxSuccess',[context,data,textStatus,jqXHR])
 options.evalSuccess&&eval('(function($el, context, data, textStatus, jqXHR) {'+options.evalSuccess+'}.call($el.get(0), $el, context, data, textStatus, jqXHR))')})
@@ -41,7 +41,7 @@ if((window.ocUnloading!==undefined&&window.ocUnloading)||errorThrown=='abort')
 return
 isRedirect=false
 options.redirect=null
-if(jqXHR.status==406&&jqXHR.responseJSON){errorMsg=jqXHR.responseJSON['X_OCTOBER_ERROR_MESSAGE']
+if(jqXHR.status==406&&jqXHR.responseJSON){errorMsg=jqXHR.responseJSON['X_WINTER_ERROR_MESSAGE']
 updatePromise=requestOptions.handleUpdateResponse(jqXHR.responseJSON,textStatus,jqXHR)}
 else{errorMsg=jqXHR.responseText?jqXHR.responseText:jqXHR.statusText
 updatePromise.resolve()}
@@ -75,11 +75,11 @@ else if($.type(selector)=='string'&&selector.charAt(0)=='^'){$(selector.substrin
 else{$(selector).trigger('ajaxBeforeReplace')
 $(selector).html(data[partial]).trigger('ajaxUpdate',[context,data,textStatus,jqXHR])}}
 setTimeout(function(){$(window).trigger('ajaxUpdateComplete',[context,data,textStatus,jqXHR]).trigger('resize')},0)})
-if(data['X_OCTOBER_REDIRECT']){options.redirect=data['X_OCTOBER_REDIRECT']
+if(data['X_WINTER_REDIRECT']){options.redirect=data['X_WINTER_REDIRECT']
 isRedirect=true}
 if(isRedirect){requestOptions.handleRedirectResponse(options.redirect)}
-if(data['X_OCTOBER_ERROR_FIELDS']){requestOptions.handleValidationMessage(data['X_OCTOBER_ERROR_MESSAGE'],data['X_OCTOBER_ERROR_FIELDS'])}
-if(data['X_OCTOBER_ASSETS']){assetManager.load(data['X_OCTOBER_ASSETS'],$.proxy(updatePromise.resolve,updatePromise))}
+if(data['X_WINTER_ERROR_FIELDS']){requestOptions.handleValidationMessage(data['X_WINTER_ERROR_MESSAGE'],data['X_WINTER_ERROR_FIELDS'])}
+if(data['X_WINTER_ASSETS']){assetManager.load(data['X_WINTER_ASSETS'],$.proxy(updatePromise.resolve,updatePromise))}
 else{updatePromise.resolve()}
 return updatePromise}}
 if(useFiles){requestOptions.processData=requestOptions.contentType=false}

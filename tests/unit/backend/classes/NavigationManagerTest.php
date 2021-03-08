@@ -134,8 +134,8 @@ class NavigationManagerTest extends TestCase
                 'icon'        => 'icon-derp',
                 'url'         => 'http://google.com',
                 'permissions' => [
-                    'october.tester.access_foo',
-                    'october.tester.access_bar'
+                    'winter.tester.access_foo',
+                    'winter.tester.access_bar'
                 ]
             ]
         ]);
@@ -158,8 +158,8 @@ class NavigationManagerTest extends TestCase
         $this->assertObjectHasAttribute('permissions', $items['foo']);
         $this->assertInternalType('array', $items['foo']->permissions);
         $this->assertCount(2, $items['foo']->permissions);
-        $this->assertContains('october.tester.access_foo', $items['foo']->permissions);
-        $this->assertContains('october.tester.access_bar', $items['foo']->permissions);
+        $this->assertContains('winter.tester.access_foo', $items['foo']->permissions);
+        $this->assertContains('winter.tester.access_bar', $items['foo']->permissions);
     }
 
     public function testRemoveSideMenuItem()

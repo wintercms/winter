@@ -1,5 +1,5 @@
 /*
- * October charting utilities.
+ * Winter charting utilities.
  */
 
 +function ($) { "use strict";

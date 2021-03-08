@@ -123,10 +123,10 @@ class Index extends Controller
      */
     public function index()
     {
-        $this->addJs('/modules/cms/assets/js/october.cmspage.js', 'core');
-        $this->addJs('/modules/cms/assets/js/october.dragcomponents.js', 'core');
-        $this->addJs('/modules/cms/assets/js/october.tokenexpander.js', 'core');
-        $this->addCss('/modules/cms/assets/css/october.components.css', 'core');
+        $this->addJs('/modules/cms/assets/js/winter.cmspage.js', 'core');
+        $this->addJs('/modules/cms/assets/js/winter.dragcomponents.js', 'core');
+        $this->addJs('/modules/cms/assets/js/winter.tokenexpander.js', 'core');
+        $this->addCss('/modules/cms/assets/css/winter.components.css', 'core');
 
         // Preload the code editor class as it could be needed
         // before it loads dynamically.

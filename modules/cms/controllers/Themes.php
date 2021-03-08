@@ -40,7 +40,7 @@ class Themes extends Controller
     {
         parent::__construct();
 
-        $this->addCss('/modules/cms/assets/css/october.theme-selector.css', 'core');
+        $this->addCss('/modules/cms/assets/css/winter.theme-selector.css', 'core');
 
         $this->pageTitle = 'cms::lang.theme.settings_menu';
         BackendMenu::setContext('October.System', 'system', 'settings');

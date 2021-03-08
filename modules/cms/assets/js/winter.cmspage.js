@@ -315,7 +315,7 @@
 
         this.updateFormEditorMode($(element).closest('.tab-pane'), false)
 
-        if (context.handler == 'onSave' && (!data['X_OCTOBER_ERROR_FIELDS'] && !data['X_OCTOBER_ERROR_MESSAGE'])) {
+        if (context.handler == 'onSave' && (!data['X_WINTER_ERROR_FIELDS'] && !data['X_WINTER_ERROR_MESSAGE'])) {
             $(element).trigger('unchange.oc.changeMonitor')
         }
 

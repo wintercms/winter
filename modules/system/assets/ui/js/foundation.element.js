@@ -1,6 +1,6 @@
 /*
- * October JavaScript foundation library.
- * 
+ * Winter JavaScript foundation library.
+ *
  * Light-weight utility functions for working with DOM elements. The functions
  * work with elements directly, without jQuery, using the native JavaScript and DOM
  * features.
@@ -21,7 +21,7 @@
         hasClass: function(el, className) {
             if (el.classList)
                 return el.classList.contains(className);
-            
+
             return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
         },
 
@@ -95,7 +95,7 @@
         },
 
         getCaretPosition: function(input) {
-            if (document.selection) { 
+            if (document.selection) {
                var selection = document.selection.createRange()
 
                selection.moveStart('character', -input.value.length)
@@ -109,7 +109,7 @@
         },
 
         setCaretPosition: function(input, position) {
-            if (document.selection) { 
+            if (document.selection) {
                 var range = input.createTextRange()
 
                 setTimeout(function() {
@@ -138,7 +138,7 @@
                 elementRight = elementPosition.left + element.offsetWidth,
                 elementBottom = elementPosition.top + element.offsetHeight
 
-            return point.x >= elementPosition.left && point.x <= elementRight 
+            return point.x >= elementPosition.left && point.x <= elementRight
                     && point.y >= elementPosition.top && point.y <= elementBottom
         }
     }

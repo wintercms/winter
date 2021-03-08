@@ -37,7 +37,7 @@ You may also watch these introductory videos for [beginners](https://vimeo.com/7
 
 Winter was forked from October CMS in March 2021 due to a difference in open source management philosophies between the core maintainer team and the two founders of October.
 
-The maintenance of Winter is lead by [Luke Towers](https://luketowers.ca/), along with many wonderful people that dedicate their time to help support and grow the community.
+The development of Winter is lead by [Luke Towers](https://luketowers.ca/), along with many wonderful people that dedicate their time to help support and grow the community.
 
 <table>
   <tr>

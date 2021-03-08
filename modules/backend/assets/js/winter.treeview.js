@@ -9,7 +9,7 @@
  * - open.oc.treeview - this event is triggered on the list element when an item is clicked.
  *
  * Dependences:
- * - Tree list (october.treelist.js)
+ * - Tree list (winter.treelist.js)
  *
  */
 +function ($) { "use strict";

@@ -1,9 +1,9 @@
 (function($){
-    var OctoberLayout = function() {
+    var WinterLayout = function() {
         this.$accountMenuOverlay = null
     }
 
-    OctoberLayout.prototype.setPageTitle = function(title) {
+    WinterLayout.prototype.setPageTitle = function(title) {
         var $title = $('title')
 
         if (this.pageTitleTemplate === undefined)
@@ -12,7 +12,7 @@
         $title.text(this.pageTitleTemplate.replace('%s', title))
     }
 
-    OctoberLayout.prototype.updateLayout = function(title) {
+    WinterLayout.prototype.updateLayout = function(title) {
         var $children, $el, fixedWidth, margin
 
         $('[data-calculate-width]').each(function(){
@@ -38,7 +38,7 @@
         })
     }
 
-    OctoberLayout.prototype.toggleAccountMenu = function(el) {
+    WinterLayout.prototype.toggleAccountMenu = function(el) {
         var self = this,
             $el = $(el),
             $parent = $(el).parent(),
@@ -68,7 +68,7 @@
     if ($.oc === undefined)
         $.oc = {}
 
-    $.oc.layout = new OctoberLayout()
+    $.oc.layout = new WinterLayout()
 
     $(document).ready(function(){
         $.oc.layout.updateLayout()

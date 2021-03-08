@@ -3974,9 +3974,9 @@ ChartLine.prototype.clearZoom=function(){this.rebuildChart()
 this.resetZoomLink.hide()}
 var old=$.fn.chartLine
 $.fn.chartLine=function(option){return this.each(function(){var $this=$(this)
-var data=$this.data('october.chartLine')
+var data=$this.data('winter.chartLine')
 var options=$.extend({},ChartLine.DEFAULTS,$this.data(),typeof option=='object'&&option)
-if(!data)$this.data('october.chartLine',(data=new ChartLine(this,options)))
+if(!data)$this.data('winter.chartLine',(data=new ChartLine(this,options)))
 if(typeof option=='string')data[option].call($this)})}
 $.fn.chartLine.Constructor=ChartLine
 $.fn.chartLine.noConflict=function(){$.fn.chartLine=old

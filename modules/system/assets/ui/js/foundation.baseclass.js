@@ -1,5 +1,5 @@
 /*
- * October JavaScript foundation library.
+ * Winter JavaScript foundation library.
  *
  * Base class for Winter CMS back-end classes.
  *

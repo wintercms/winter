@@ -231,7 +231,7 @@ class Lists extends WidgetBase
      */
     protected function loadAssets()
     {
-        $this->addJs('js/october.list.js', 'core');
+        $this->addJs('js/winter.list.js', 'core');
     }
 
     /**

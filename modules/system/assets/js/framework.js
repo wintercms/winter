@@ -71,12 +71,12 @@ if (window.jQuery.request !== undefined) {
          * Request headers
          */
         var requestHeaders = {
-            'X-OCTOBER-REQUEST-HANDLER': handler,
-            'X-OCTOBER-REQUEST-PARTIALS': this.extractPartials(options.update)
+            'X-WINTER-REQUEST-HANDLER': handler,
+            'X-WINTER-REQUEST-PARTIALS': this.extractPartials(options.update)
         }
 
         if (useFlash) {
-            requestHeaders['X-OCTOBER-REQUEST-FLASH'] = 1
+            requestHeaders['X-WINTER-REQUEST-FLASH'] = 1
         }
 
         var csrfToken = getXSRFToken()
@@ -152,8 +152,8 @@ if (window.jQuery.request !== undefined) {
                 $triggerEl.trigger(_event, [context, data, textStatus, jqXHR])
                 if (_event.isDefaultPrevented()) return
 
-                if (useFlash && data['X_OCTOBER_FLASH_MESSAGES']) {
-                    $.each(data['X_OCTOBER_FLASH_MESSAGES'], function(type, message) {
+                if (useFlash && data['X_WINTER_FLASH_MESSAGES']) {
+                    $.each(data['X_WINTER_FLASH_MESSAGES'], function(type, message) {
                         requestOptions.handleFlashMessage(message, type)
                     })
                 }
@@ -188,7 +188,7 @@ if (window.jQuery.request !== undefined) {
                  * processed in the same fashion as a successful response.
                  */
                 if (jqXHR.status == 406 && jqXHR.responseJSON) {
-                    errorMsg = jqXHR.responseJSON['X_OCTOBER_ERROR_MESSAGE']
+                    errorMsg = jqXHR.responseJSON['X_WINTER_ERROR_MESSAGE']
                     updatePromise = requestOptions.handleUpdateResponse(jqXHR.responseJSON, textStatus, jqXHR)
                 }
                 /*
@@ -331,8 +331,8 @@ if (window.jQuery.request !== undefined) {
                 /*
                  * Handle redirect
                  */
-                if (data['X_OCTOBER_REDIRECT']) {
-                    options.redirect = data['X_OCTOBER_REDIRECT']
+                if (data['X_WINTER_REDIRECT']) {
+                    options.redirect = data['X_WINTER_REDIRECT']
                     isRedirect = true
                 }
 
@@ -343,15 +343,15 @@ if (window.jQuery.request !== undefined) {
                 /*
                  * Handle validation
                  */
-                if (data['X_OCTOBER_ERROR_FIELDS']) {
-                    requestOptions.handleValidationMessage(data['X_OCTOBER_ERROR_MESSAGE'], data['X_OCTOBER_ERROR_FIELDS'])
+                if (data['X_WINTER_ERROR_FIELDS']) {
+                    requestOptions.handleValidationMessage(data['X_WINTER_ERROR_MESSAGE'], data['X_WINTER_ERROR_FIELDS'])
                 }
 
                 /*
                  * Handle asset injection
                  */
-                 if (data['X_OCTOBER_ASSETS']) {
-                    assetManager.load(data['X_OCTOBER_ASSETS'], $.proxy(updatePromise.resolve, updatePromise))
+                 if (data['X_WINTER_ASSETS']) {
+                    assetManager.load(data['X_WINTER_ASSETS'], $.proxy(updatePromise.resolve, updatePromise))
                  }
                  else {
                     updatePromise.resolve()

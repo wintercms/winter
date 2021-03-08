@@ -149,7 +149,7 @@ class ImportExportController extends ControllerBehavior
             return $response;
         }
 
-        $this->addJs('js/october.import.js', 'core');
+        $this->addJs('js/winter.import.js', 'core');
         $this->addCss('css/import.css', 'core');
 
         $this->controller->pageTitle = $this->controller->pageTitle
@@ -168,7 +168,7 @@ class ImportExportController extends ControllerBehavior
             return $response;
         }
 
-        $this->addJs('js/october.export.js', 'core');
+        $this->addJs('js/winter.export.js', 'core');
         $this->addCss('css/export.css', 'core');
 
         $this->controller->pageTitle = $this->controller->pageTitle

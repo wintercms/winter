@@ -70,7 +70,7 @@
         }
 
         /*
-         * October AJAX
+         * Winter AJAX
          */
         if (this.options.handler) {
 

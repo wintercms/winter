@@ -307,7 +307,7 @@ MediaManager.prototype.uploadQueueComplete=function(){this.$el.find('[data-comma
 this.$el.find('[data-command="close-uploader"]').removeClass('hide')
 this.refresh()}
 MediaManager.prototype.uploadSending=function(file,xhr,formData){formData.append('path',this.$el.find('[data-type="current-folder"]').val())
-xhr.setRequestHeader('X-OCTOBER-REQUEST-HANDLER',this.options.uploadHandler)}
+xhr.setRequestHeader('X-WINTER-REQUEST-HANDLER',this.options.uploadHandler)}
 MediaManager.prototype.uploadCancelAll=function(){this.dropzone.removeAllFiles(true)
 this.hideUploadUi()}
 MediaManager.prototype.updateUploadBar=function(templateName,classNames){var fileNumberLabel=this.$el.get(0).querySelector('[data-label="file-number-and-progress"]'),successTemplate=fileNumberLabel.getAttribute('data-'+templateName+'-template'),progressBar=this.$el.get(0).querySelector('[data-control="upload-progress-bar"]')

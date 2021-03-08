@@ -160,7 +160,7 @@ class Form extends WidgetBase
      */
     protected function loadAssets()
     {
-        $this->addJs('js/october.form.js', 'core');
+        $this->addJs('js/winter.form.js', 'core');
     }
 
     /**

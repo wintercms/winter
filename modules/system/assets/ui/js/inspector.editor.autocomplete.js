@@ -1,7 +1,7 @@
 /*
  * Inspector autocomplete editor class.
  *
- * Depends on october.autocomplete.js
+ * Depends on winter.autocomplete.js
  */
 +function ($) { "use strict";
 

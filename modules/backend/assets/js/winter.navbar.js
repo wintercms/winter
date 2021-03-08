@@ -5,8 +5,8 @@
  * - If the content doesn't fit the navbar, it can be dragged left and right.
  *
  * Dependences:
- * - DragScroll (october.dragscroll.js)
- * - VerticalMenu (october.verticalmenu.js)
+ * - DragScroll (winter.dragscroll.js)
+ * - VerticalMenu (winter.verticalmenu.js)
  */
 
 (function($){

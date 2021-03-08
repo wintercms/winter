@@ -1,6 +1,6 @@
 /*
  * Side Navigation
- * 
+ *
  * Data attributes:
  * - data-control="sidenav" - enables the side navigation plugin
  *
@@ -10,8 +10,8 @@
  * $.oc.sideNav.increaseCounter('cms/partials', 5); - increases the counter value for a particular menu item
  * $.oc.sideNav.dropCounter('cms/partials'); - drops the counter value for a particular menu item
  *
- * Dependences: 
- * - Drag Scroll (october.dragscroll.js)
+ * Dependences:
+ * - Drag Scroll (winter.dragscroll.js)
  */
 
 +function ($) { "use strict";
