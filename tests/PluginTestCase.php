@@ -201,7 +201,7 @@ abstract class PluginTestCase extends TestCase
     protected function flushModelEventListeners()
     {
         foreach (get_declared_classes() as $class) {
-            if ($class === 'Winter\Storm\Database\Pivot' || strtolower($class) === 'october\rain\database\pivot')) {
+            if ($class === 'Winter\Storm\Database\Pivot' || strtolower($class) === 'october\rain\database\pivot') {
                 continue;
             }
 
