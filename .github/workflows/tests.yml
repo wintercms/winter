@@ -12,7 +12,7 @@ jobs:
     strategy:
       max-parallel: 6
       matrix:
-        phpVersions: ['7.1', '7.2', '7.3', '7.4']
+        phpVersion: ['7.1', '7.2', '7.3', '7.4']
       fail-fast: false
     name: Linux / PHP ${{ matrix.phpVersions }}
     env:
