@@ -23,10 +23,10 @@ jobs:
       - name: Reset Winter modules and library
         run: |
           git reset --hard HEAD
-          rm -rf ./vendor/wintercms/storm
+          rm -rf ./vendor/winter/storm
           wget https://github.com/wintercms/storm/archive/develop.zip -O ./vendor/wintercms/develop.zip
           unzip ./vendor/wintercms/develop.zip -d ./vendor/winter
-          mv ./vendor/wintercms/storm-develop ./vendor/wintercms/storm
+          mv ./vendor/winter/storm-develop ./vendor/winter/storm
           composer dump-autoload
       - name: Run code quality checks
         run: ./vendor/bin/phpcs --colors -nq --report="full" --extensions="php" $(git show --name-only --pretty="" --diff-filter=ACMR ${{ github.sha }})
