@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var CmsPage = function() {
@@ -92,17 +92,17 @@
         /*
          * Open a new tab
          */
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
 
         $form.request('onOpenTemplate', {
             data: data
         }).done(function(data) {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
             $('#cms-master-tabs').ocTab('addTab', data.tabTitle, data.tab, tabId, $form.data('type-icon'))
         }).always(function() {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         }).fail(function(jqXHR, textStatus, errorThrown) {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         })
 
         return false
@@ -147,7 +147,7 @@
         if ($.fn.table !== undefined)
             $('[data-control=table]', ev.relatedTarget).table('dispose')
 
-        $.oc.foundation.controlUtils.disposeControls(ev.relatedTarget.get(0))
+        $.wn.foundation.controlUtils.disposeControls(ev.relatedTarget.get(0))
     }
 
     CmsPage.prototype.onBeforeRequest = function(ev) {
@@ -307,7 +307,7 @@
 
         var templateType = $('input[name=templateType]', element).val()
         if (templateType.length > 0) {
-            $.oc.cmsPage.updateTemplateList(templateType)
+            $.wn.cmsPage.updateTemplateList(templateType)
 
             if (templateType == 'layout')
                 this.updateLayouts(element)
@@ -340,7 +340,7 @@
             tabId = type + Math.random(),
             self = this
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
 
         $form.request('onCreateTemplate', {
            data: {type: type}
@@ -349,7 +349,7 @@
             $('#layout-side-panel').trigger('close.oc.sidePanel')
             self.setPageTitle(data.tabTitle)
         }).always(function(){
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         })
     }
 
@@ -362,7 +362,7 @@
         if (!confirm($el.data('confirmation')))
             return
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
 
         $form.request('onDeleteTemplates', {
             data: {type: templateType}
@@ -377,10 +377,10 @@
             })
 
             if (data.error !== undefined && $.type(data.error) === 'string' && data.error.length)
-                $.oc.flashMsg({text: data.error, 'class': 'error'})
+                $.wn.flashMsg({text: data.error, 'class': 'error'})
         }).always(function(){
             self.updateTemplateList(templateType)
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         })
     }
 
@@ -543,7 +543,7 @@
             parts = fileName.split('.'),
             extension = 'txt',
             mode = 'plain_text',
-            modes = $.oc.codeEditorExtensionModes,
+            modes = $.wn.codeEditorExtensionModes,
             editor = $('[data-control=codeeditor]', pane)
 
         if (parts.length >= 2)
@@ -579,7 +579,7 @@
         })
 
         $.each(counters, function(type, data){
-            $.oc.sideNav.setCounter('cms/' + data.menu, data.count);
+            $.wn.sideNav.setCounter('cms/' + data.menu, data.count);
         })
     }
 
@@ -671,7 +671,7 @@
          * Update tab
          */
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
 
         $form.request('onOpenTemplate', {
             data: data
@@ -680,7 +680,7 @@
             $('#cms-master-tabs').ocTab('unmodifyTab', tab)
             self.updateModifiedCounter()
         }).always(function() {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         }).fail(function(jqXHR, textStatus, errorThrown) {
             alert(jqXHR.responseText.length ? jqXHR.responseText : jqXHR.statusText)
         })
@@ -688,9 +688,9 @@
 
     CmsPage.prototype.setPageTitle = function(title) {
         if (title.length)
-            $.oc.layout.setPageTitle(title + ' | ')
+            $.wn.layout.setPageTitle(title + ' | ')
         else
-            $.oc.layout.setPageTitle(title)
+            $.wn.layout.setPageTitle(title)
     }
 
     CmsPage.prototype.updateLayouts = function(form) {
@@ -714,5 +714,5 @@
         })
     }
 
-    $.oc.cmsPage = new CmsPage();
+    $.wn.cmsPage = new CmsPage();
 }(window.jQuery);

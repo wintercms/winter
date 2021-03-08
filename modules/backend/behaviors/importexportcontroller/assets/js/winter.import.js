@@ -145,5 +145,5 @@
         }
     }
 
-    $.oc.importBehavior = new ImportBehavior;
+    $.wn.importBehavior = new ImportBehavior;
 }(window.jQuery);

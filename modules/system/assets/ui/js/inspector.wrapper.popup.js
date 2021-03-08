@@ -6,7 +6,7 @@
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.inspector.wrappers.base,
+    var Base = $.wn.inspector.wrappers.base,
         BaseProto = Base.prototype
 
     var InspectorPopup = function($element, surface, options) {
@@ -77,7 +77,7 @@
             offsetX = this.$element.data('inspector-offset-x'),
             offsetY = this.$element.data('inspector-offset-y'),
             placement = this.$element.data('inspector-placement'),
-            fallbackPlacement = this.$element.data('inspector-fallback-placement') 
+            fallbackPlacement = this.$element.data('inspector-fallback-placement')
 
         if (offset === undefined) {
             offset = 15
@@ -210,8 +210,8 @@
     }
 
     InspectorPopup.prototype.onMoveToContainer = function() {
-        $.oc.inspector.manager.switchToContainer(this)
+        $.wn.inspector.manager.switchToContainer(this)
     }
 
-    $.oc.inspector.wrappers.popup = InspectorPopup
+    $.wn.inspector.wrappers.popup = InspectorPopup
 }(window.jQuery);

@@ -4529,7 +4529,7 @@ var endRow=row;if(endRow>startRow){return new Range(startRow,startColumn,endRow,
 if(state=="start"||state=="no_regex"){var match=line.match(/^.*(?:\bcase\b.*:|[\{\(\[])\s*$/);if(match){indent+=tab;}}else if(state=="doc-start"){if(endState=="start"||endState=="no_regex"){return"";}
 var match=line.match(/^\s*(\/?)\*/);if(match){if(match[1]){indent+=" ";}
 indent+="* ";}}
-return indent;};this.checkOutdent=function(state,line,input){return this.$outdent.checkOutdent(line,input);};this.autoOutdent=function(state,doc,row){this.$outdent.autoOutdent(doc,row);};this.createWorker=function(session){var worker=new WorkerClient(["ace"],"ace/mode/javascript_worker","JavaScriptWorker");worker.attachToDocument(session.getDocument());worker.on("annotate",function(results){session.setAnnotations(results.data);});worker.on("terminate",function(){session.clearAnnotations();});return worker;};this.$id="ace/mode/javascript";}).call(Mode.prototype);exports.Mode=Mode;});+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype
+return indent;};this.checkOutdent=function(state,line,input){return this.$outdent.checkOutdent(line,input);};this.autoOutdent=function(state,doc,row){this.$outdent.autoOutdent(doc,row);};this.createWorker=function(session){var worker=new WorkerClient(["ace"],"ace/mode/javascript_worker","JavaScriptWorker");worker.attachToDocument(session.getDocument());worker.on("annotate",function(results){session.setAnnotations(results.data);});worker.on("terminate",function(){session.clearAnnotations();});return worker;};this.$id="ace/mode/javascript";}).call(Mode.prototype);exports.Mode=Mode;});+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var CodeEditor=function(element,options){Base.call(this)
 this.options=options
 this.$el=$(element)
@@ -4547,7 +4547,7 @@ this.$searchboxDisable=this.$toolbar.find('li.searchbox-disable')
 this.isReplacebox=false
 this.$replaceboxEnable=this.$toolbar.find('li.replacebox-enable')
 this.$replaceboxDisable=this.$toolbar.find('li.replacebox-disable')
-$.oc.foundation.controlUtils.markDisposable(element)
+$.wn.foundation.controlUtils.markDisposable(element)
 this.init();this.$el.trigger('oc.codeEditorReady')}
 CodeEditor.prototype=Object.create(BaseProto)
 CodeEditor.prototype.constructor=CodeEditor
@@ -4693,7 +4693,7 @@ return result?result:this}
 $.fn.codeEditor.Constructor=CodeEditor
 if($.oc===undefined)
 $.oc={}
-$.oc.codeEditorExtensionModes={'htm':'html','html':'html','md':'markdown','txt':'plain_text','js':'javascript','less':'less','scss':'scss','sass':'sass','css':'css'}
+$.wn.codeEditorExtensionModes={'htm':'html','html':'html','md':'markdown','txt':'plain_text','js':'javascript','less':'less','scss':'scss','sass':'sass','css':'css'}
 $.fn.codeEditor.noConflict=function(){$.fn.codeEditor=old
 return this}
 $(document).render(function(){$('[data-control="codeeditor"]').codeEditor()});+function(exports){if(exports.ace&&typeof exports.ace.require=='function'){var emmetExt=exports.ace.require('ace/ext/emmet')

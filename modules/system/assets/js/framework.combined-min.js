@@ -189,8 +189,8 @@ window.ocJSON=function(json){var jsonString=parse(json);return JSON.parse(jsonSt
 function sanitize(html){var output=$($.parseHTML('<div>'+html+'</div>',null,false));output.find('*').each(function(){trimAttributes(this);});return output.html();}
 window.ocSanitize=function(html){return sanitize(html)};}(window);+function($){"use strict";if($.oc===undefined)
 $.oc={}
-var LOADER_CLASS='oc-loading';$(document).on('ajaxSetup','[data-request][data-request-flash]',function(event,context){context.options.handleErrorMessage=function(message){$.oc.flashMsg({text:message,class:'error'})}
-context.options.handleFlashMessage=function(message,type){$.oc.flashMsg({text:message,class:type})}})
+var LOADER_CLASS='oc-loading';$(document).on('ajaxSetup','[data-request][data-request-flash]',function(event,context){context.options.handleErrorMessage=function(message){$.wn.flashMsg({text:message,class:'error'})}
+context.options.handleFlashMessage=function(message,type){$.wn.flashMsg({text:message,class:type})}})
 $(document).on('ajaxValidation','[data-request][data-request-validate]',function(event,context,errorMsg,fields){var $this=$(this).closest('form'),$container=$('[data-validate-error]',$this),messages=[],$field
 $.each(fields,function(fieldName,fieldMessages){$field=$('[data-validate-for="'+fieldName+'"]',$this)
 messages=$.merge(messages,fieldMessages)
@@ -226,13 +226,13 @@ StripeLoadIndicator.prototype.hide=function(force){this.counter--
 if(force!==undefined&&force){this.counter=0}
 if(this.counter<=0){this.indicator.addClass('loaded')
 $(document.body).removeClass('oc-loading')}}
-$.oc.stripeLoadIndicator=new StripeLoadIndicator()
+$.wn.stripeLoadIndicator=new StripeLoadIndicator()
 $(document).on('ajaxPromise','[data-request]',function(event){event.stopPropagation()
-$.oc.stripeLoadIndicator.show()
+$.wn.stripeLoadIndicator.show()
 var $el=$(this)
 $(window).one('ajaxUpdateComplete',function(){if($el.closest('html').length===0)
-$.oc.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone','[data-request]',function(event){event.stopPropagation()
-$.oc.stripeLoadIndicator.hide()})
+$.wn.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone','[data-request]',function(event){event.stopPropagation()
+$.wn.stripeLoadIndicator.hide()})
 var FlashMessage=function(options,el){var
 options=$.extend({},FlashMessage.DEFAULTS,options),$element=$(el)
 $('body > p.flash-message').remove()
@@ -248,5 +248,5 @@ $.support.transition&&$element.hasClass('fade')?$element.one($.support.transitio
 FlashMessage.DEFAULTS={class:'success',text:'Default text',interval:5}
 if($.oc===undefined)
 $.oc={}
-$.oc.flashMsg=FlashMessage
-$(document).render(function(){$('[data-control=flash-message]').each(function(){$.oc.flashMsg($(this).data(),this)})})}(window.jQuery);
+$.wn.flashMsg=FlashMessage
+$(document).render(function(){$('[data-control=flash-message]').each(function(){$.wn.flashMsg($(this).data(),this)})})}(window.jQuery);

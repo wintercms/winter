@@ -1,7 +1,7 @@
 /*
  * External parameter editor for Inspector.
  *
- * The external parameter editor allows to use URL and 
+ * The external parameter editor allows to use URL and
  * other external parameters as values for the inspectable
  * properties.
  *
@@ -11,16 +11,18 @@
     // NAMESPACES
     // ============================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    if ($.oc.inspector === undefined)
-        $.oc.inspector = {}
+    if ($.wn.inspector === undefined)
+        $.wn.inspector = {}
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var ExternalParameterEditor = function(inspector, propertyDefinition, containerCell, initialValue) {
@@ -62,13 +64,13 @@
      *
      * <div class="external-param-editor-container">
      *     <input> <-- original property editing input/markup
-     *     <div class="external-editor">               
-     *         <div class="controls">                  
-     *             <input type="text" tabindex="-1"/>  
-     *             <a href="#" tabindex="-1">          
+     *     <div class="external-editor">
+     *         <div class="controls">
+     *             <input type="text" tabindex="-1"/>
+     *             <a href="#" tabindex="-1">
      *                 <i class="oc-icon-terminal"></i>
-     *             </a>                                
-     *         </div>                                  
+     *             </a>
+     *         </div>
      *     </div>
      * </div>
      */
@@ -148,7 +150,7 @@
 
         setTimeout(this.proxy(this.repositionEditor), 0)
 
-        $.oc.foundation.element.addClass(container, 'editor-visible')
+        $.wn.foundation.element.addClass(container, 'editor-visible')
         link.setAttribute('data-original-title', 'Click to enter the property value')
 
         this.toggleEditorVisibility(false)
@@ -171,8 +173,8 @@
         editor.style.left = 'auto'
         editor.style.right = '30px'
 
-        $.oc.foundation.element.removeClass(container, 'editor-visible')
-        $.oc.foundation.element.removeClass(this.containerCell, 'active')
+        $.wn.foundation.element.removeClass(container, 'editor-visible')
+        $.wn.foundation.element.removeClass(this.containerCell, 'active')
 
         var propertyEditor = this.inspector.findPropertyEditor(this.propertyDefinition.property)
 
@@ -182,7 +184,7 @@
     }
 
     ExternalParameterEditor.prototype.toggleEditor = function(ev) {
-        $.oc.foundation.event.stop(ev)
+        $.wn.foundation.event.stop(ev)
 
         var link = this.getLink(),
             container = this.getContainer(),
@@ -229,16 +231,16 @@
         for (var i = 0, len = children.length; i < len; i++) {
             var element = children[i]
 
-            if ($.oc.foundation.element.hasClass(element, 'external-editor')) {
+            if ($.wn.foundation.element.hasClass(element, 'external-editor')) {
                 continue
             }
 
             if (show) {
-                $.oc.foundation.element.removeClass(element, 'hide')
+                $.wn.foundation.element.removeClass(element, 'hide')
             }
             else {
                 container.style.height = height + 'px'
-                $.oc.foundation.element.addClass(element, 'hide')
+                $.wn.foundation.element.addClass(element, 'hide')
             }
         }
     }
@@ -252,7 +254,7 @@
 
         if (value.length === 0) {
             if (!silentMode) {
-                $.oc.flashMsg({text: 'Please enter the external parameter name.', 'class': 'error', 'interval': 5})
+                $.wn.flashMsg({text: 'Please enter the external parameter name.', 'class': 'error', 'interval': 5})
                 this.focus()
             }
 
@@ -327,8 +329,8 @@
     }
 
     ExternalParameterEditor.prototype.isEditorVisible = function() {
-        return $.oc.foundation.element.hasClass(this.getContainer(), 'editor-visible')
+        return $.wn.foundation.element.hasClass(this.getContainer(), 'editor-visible')
     }
 
-    $.oc.inspector.externalParameterEditor = ExternalParameterEditor
+    $.wn.inspector.externalParameterEditor = ExternalParameterEditor
 }(window.jQuery);

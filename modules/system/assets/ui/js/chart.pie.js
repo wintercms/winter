@@ -23,9 +23,9 @@
             size = this.size = (this.options.size !== undefined ? this.options.size : $el.height()),
             outerRadius = size/2 - 1,
             innerRadius = outerRadius - outerRadius/3.5,
-            values = $.oc.chartUtils.loadListValues($('ul', $el)),
-            $legend = $.oc.chartUtils.createLegend($('ul', $el)),
-            indicators = $.oc.chartUtils.initLegendColorIndicators($legend),
+            values = $.wn.chartUtils.loadListValues($('ul', $el)),
+            $legend = $.wn.chartUtils.createLegend($('ul', $el)),
+            indicators = $.wn.chartUtils.initLegendColorIndicators($legend),
             self = this
 
         var $canvas = $('<div/>').addClass('canvas').width(size).height(size)
@@ -56,21 +56,21 @@
             // Draw the background
             self.paper.circle(size/2, size/2, innerRadius + (outerRadius - innerRadius)/2)
                 .attr({"stroke-width": outerRadius - innerRadius - 0.5})
-                .attr({stroke: $.oc.chartUtils.defaultValueColor})
+                .attr({stroke: $.wn.chartUtils.defaultValueColor})
 
             // Add segments
             $.each(values.values, function(index, valueInfo) {
-                var color = valueInfo.color !== undefined ? valueInfo.color : $.oc.chartUtils.getColor(index),
+                var color = valueInfo.color !== undefined ? valueInfo.color : $.wn.chartUtils.getColor(index),
                     path = self.paper.path().attr({"stroke-width": 0}).attr({segment: [0, 0]}).attr({fill: color})
 
                 self.segments.push(path)
                 indicators[index].css('background-color', color)
 
                 path.hover(function(ev){
-                    $.oc.chartUtils.showTooltip(ev.pageX, ev.pageY,
-                        $.trim($.oc.chartUtils.getLegendLabel($legend, index)) + ': <strong>'+valueInfo.value+'</stong>')
+                    $.wn.chartUtils.showTooltip(ev.pageX, ev.pageY,
+                        $.trim($.wn.chartUtils.getLegendLabel($legend, index)) + ': <strong>'+valueInfo.value+'</stong>')
                 }, function() {
-                    $.oc.chartUtils.hideTooltip()
+                    $.wn.chartUtils.hideTooltip()
                 })
             })
 

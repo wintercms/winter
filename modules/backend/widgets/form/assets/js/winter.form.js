@@ -5,7 +5,7 @@
  * - Nil
  */
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var FormWidget = function (element, options) {
@@ -19,7 +19,7 @@
         this.dependantUpdateInterval = 300
         this.dependantUpdateTimers = {}
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }

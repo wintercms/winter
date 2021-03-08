@@ -1,5 +1,5 @@
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var MarkdownEditor = function (element, options) {
@@ -18,7 +18,7 @@
         this.editorPadding = 15
         this.updatesPaused = false
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }
@@ -181,7 +181,7 @@
             $buttons = $('<div class="toolbar-item toolbar-primary" />'),
             $fixedButtons = $('<div class="toolbar-item" data-calculate-width />')
 
-        $.each($.oc.markdownEditorButtons, function(code, button) {
+        $.each($.wn.markdownEditorButtons, function(code, button) {
             $button = self.makeToolbarButton(code, button)
 
             if (button.fixed) {
@@ -213,7 +213,7 @@
         var $dropdown = $('<ul class="dropdown-menu" />'),
             $childButton
 
-        $dropdown.attr('data-dropdown-title', $.oc.lang.get(button.label))
+        $dropdown.attr('data-dropdown-title', $.wn.lang.get(button.label))
         $.each(button.dropdown, function(code, childButton) {
             $childButton = $('<a />').attr({
                 'href': 'javascript:;',
@@ -231,7 +231,7 @@
                 $childButton.addClass(childButton.cssClass)
             }
 
-            $childButton.text($.oc.lang.get(childButton.label))
+            $childButton.text($.wn.lang.get(childButton.label))
 
             $dropdown.append($childButton)
             $childButton.wrap('<li />')
@@ -253,7 +253,7 @@
 
         if (!this.options.disabled) {
             $button.attr({
-                'title': $.oc.lang.get(button.label),
+                'title': $.wn.lang.get(button.label),
                 'data-control': "tooltip",
                 'data-placement': "bottom",
                 'data-container': "body",
@@ -533,7 +533,7 @@
     MarkdownEditor.prototype.launchMediaManager = function(onSuccess) {
         var self = this
 
-        new $.oc.mediaManager.popup({
+        new $.wn.mediaManager.popup({
             alias: 'ocmediamanager',
             cropAndInsertButton: true,
             onInsert: function(items) {
@@ -737,10 +737,12 @@
     // BUTTON DEFINITIONS
     // =================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.markdownEditorButtons = {
+    $.wn.markdownEditorButtons = {
 
         formatting: {
             label: 'markdowneditor.formatting',

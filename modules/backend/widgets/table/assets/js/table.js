@@ -9,11 +9,13 @@
     // TABLE CONTROL NAMESPACES
     // ============================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    if ($.oc.table === undefined)
-        $.oc.table = {}
+    if ($.wn.table === undefined)
+        $.wn.table = {}
 
     // TABLE CLASS DEFINITION
     // ============================
@@ -95,7 +97,7 @@
 
         this.init()
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
     }
 
     // INTERNAL METHODS
@@ -109,8 +111,8 @@
         this.initCellProcessors()
 
         // Initialize helpers
-        this.navigation = new $.oc.table.helper.navigation(this)
-        this.search = new $.oc.table.helper.search(this)
+        this.navigation = new $.wn.table.helper.navigation(this)
+        this.search = new $.wn.table.helper.search(this)
 
         // Create the UI
         this.buildUi()
@@ -141,11 +143,11 @@
     Table.prototype.createDataSource = function() {
         var dataSourceClass = this.options.clientDataSourceClass
 
-        if ($.oc.table.datasource === undefined || $.oc.table.datasource[dataSourceClass] == undefined)
+        if ($.wn.table.datasource === undefined || $.wn.table.datasource[dataSourceClass] == undefined)
             throw new Error('The table client-side data source class "'+dataSourceClass+'" is not ' +
-                'found in the $.oc.table.datasource namespace.')
+                'found in the $.wn.table.datasource namespace.')
 
-        this.dataSource = new $.oc.table.datasource[dataSourceClass](this)
+        this.dataSource = new $.wn.table.datasource[dataSourceClass](this)
     }
 
     Table.prototype.registerHandlers = function() {
@@ -196,11 +198,11 @@
                 this.options.columns[i].type = columnType
             }
 
-            if ($.oc.table.processor === undefined || $.oc.table.processor[columnType] == undefined)
+            if ($.wn.table.processor === undefined || $.wn.table.processor[columnType] == undefined)
                 throw new Error('The table cell processor for the column type "'+columnType+'" is not ' +
-                    'found in the $.oc.table.processor namespace.')
+                    'found in the $.wn.table.processor namespace.')
 
-            this.cellProcessors[column] = new $.oc.table.processor[columnType](this, column, columnConfiguration)
+            this.cellProcessors[column] = new $.wn.table.processor[columnType](this, column, columnConfiguration)
         }
     }
 
@@ -711,7 +713,7 @@
                     this.elementAddClass(row, 'error')
                     this.elementAddClass(cell, 'error')
 
-                    $.oc.flashMsg({text: message, 'class': 'error'})
+                    $.wn.flashMsg({text: message, 'class': 'error'})
 
                     window.setTimeout(function(){
                         self.focusCell(cell, false)
@@ -865,7 +867,7 @@
     Table.prototype.dispose = function() {
         if (this.disposed) {
             // Prevent errors when legacy code executes the dispose() method
-            // directly, bypassing $.oc.foundation.controlUtils.disposeControls(container)
+            // directly, bypassing $.wn.foundation.controlUtils.disposeControls(container)
             return
         }
 
@@ -1150,7 +1152,7 @@
 
     $.fn.table.Constructor = Table
 
-    $.oc.table.table = Table
+    $.wn.table.table = Table
 
     // TABLE NO CONFLICT
     // =================

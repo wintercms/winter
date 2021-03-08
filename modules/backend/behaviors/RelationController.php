@@ -673,7 +673,7 @@ class RelationController extends ControllerBehavior
             $config->customViewPath = $this->getConfig('view[customViewPath]', null);
 
             $defaultOnClick = sprintf(
-                "$.oc.relationBehavior.clickViewListRecord(':%s', '%s', '%s')",
+                "$.wn.relationBehavior.clickViewListRecord(':%s', '%s', '%s')",
                 $this->relationModel->getKeyName(),
                 $this->relationGetId(),
                 $this->relationGetSessionKey()
@@ -822,18 +822,18 @@ class RelationController extends ControllerBehavior
             if ($this->viewMode == 'single') {
                 $config->showCheckboxes = false;
                 $config->recordOnClick = sprintf(
-                    "$.oc.relationBehavior.clickManageListRecord(':%s', '%s', '%s')",
+                    "$.wn.relationBehavior.clickManageListRecord(':%s', '%s', '%s')",
                     $this->relationModel->getKeyName(),
                     $this->relationGetId(),
                     $this->relationGetSessionKey()
                 );
             }
             elseif ($config->showCheckboxes) {
-                $config->recordOnClick = "$.oc.relationBehavior.toggleListCheckbox(this)";
+                $config->recordOnClick = "$.wn.relationBehavior.toggleListCheckbox(this)";
             }
             elseif ($isPivot) {
                 $config->recordOnClick = sprintf(
-                    "$.oc.relationBehavior.clickManagePivotListRecord(':%s', '%s', '%s')",
+                    "$.wn.relationBehavior.clickManagePivotListRecord(':%s', '%s', '%s')",
                     $this->relationModel->getKeyName(),
                     $this->relationGetId(),
                     $this->relationGetSessionKey()

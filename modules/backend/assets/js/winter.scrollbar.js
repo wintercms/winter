@@ -1,20 +1,20 @@
 /*
- * Creates a scrollbar in a container. 
- * 
+ * Creates a scrollbar in a container.
+ *
  * Note the element must have a height set for vertical,
  * and a width set for horizontal.
- * 
+ *
  * Data attributes:
  * - data-control="scrollbar" - enables the scrollbar plugin
  *
  * JavaScript API:
  * $('#area').scrollbar()
  *
- * Dependences: 
+ * Dependences:
  * - Mouse Wheel plugin (mousewheel.js)
  */
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var Scrollbar = function (element, options) {
@@ -33,7 +33,7 @@
             dragStart = 0,
             startOffset = 0;
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
 
         Base.call(this)
 
@@ -199,7 +199,7 @@
                     self.endScrollTimeout = undefined
                 }
 
-                self.endScrollTimeout = setTimeout(function() { 
+                self.endScrollTimeout = setTimeout(function() {
                     $el.trigger('oc.scrollEnd')
                     self.endScrollTimeout = undefined
                 }, 50)
@@ -315,8 +315,8 @@
             offset = 0,
             animated = false,
             params = {
-                duration: 300, 
-                queue: false, 
+                duration: 300,
+                queue: false,
                 complete: function(){
                     if (callback !== undefined)
                         callback()

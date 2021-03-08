@@ -105,8 +105,10 @@
        $('#chart-tooltip').remove()
     }
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.chartUtils = new ChartUtils();
+    $.wn.chartUtils = new ChartUtils();
 }(window.jQuery);

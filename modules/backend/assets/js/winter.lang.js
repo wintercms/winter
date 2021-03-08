@@ -2,13 +2,15 @@
  * Client side translations
  */
 
+if ($.wn === undefined)
+    $.wn = {}
 if ($.oc === undefined)
-    $.oc = {}
+    $.oc = $.wn
 
-if ($.oc.langMessages === undefined)
-    $.oc.langMessages = {}
+if ($.wn.langMessages === undefined)
+    $.wn.langMessages = {}
 
-$.oc.lang = (function(lang, messages) {
+$.wn.lang = (function(lang, messages) {
 
     lang.load = function(locale) {
         if (messages[locale] === undefined) {
@@ -47,4 +49,4 @@ $.oc.lang = (function(lang, messages) {
 
     return lang
 
-})($.oc.lang || {}, $.oc.langMessages);
+})($.wn.lang || {}, $.wn.langMessages);

@@ -50,9 +50,9 @@ function ($) { "use strict";
 
 ## Basics of writing disposable classes
 
-If a class should be disposable (all UI controls should be disposable), the class should extend `$.oc.foundation.base` class. That class has two useful methods: `proxy(method)` and `dispose()`.
+If a class should be disposable (all UI controls should be disposable), the class should extend `$.wn.foundation.base` class. That class has two useful methods: `proxy(method)` and `dispose()`.
 
-`proxy()` method is an alternative to jQuery's `$.proxy`, but as `$.oc.foundation.base` implements OOP approach, passing this parameter to the method is not required. This method is good for three reasons.
+`proxy()` method is an alternative to jQuery's `$.proxy`, but as `$.wn.foundation.base` implements OOP approach, passing this parameter to the method is not required. This method is good for three reasons.
 
 1. It's code is very simple and easily controllable and debuggable.
 1. It caches bound functions and doesn't create new function as `$.proxy` does.
@@ -64,7 +64,7 @@ Example of a disposable class:
 
 ```js
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var SomeDisposableClass = function(element) {
@@ -98,7 +98,7 @@ When binding events, use this.proxy() to make references to event handlers. Alwa
 
 ```js
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var SomeDisposableClass = function(element) {
@@ -128,13 +128,13 @@ UI controls should support two ways of disposing - with calling their `dispose()
 
 ```js
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var SomeDisposableControl = function(element) {
         this.$el = $(element)
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }
@@ -153,7 +153,7 @@ UI controls should support two ways of disposing - with calling their `dispose()
 }
 ```
 
-`$.oc.foundation.controlUtils.markDisposable(element)` call in the constructor adds `data-disposable` attribute to the DOM element, allowing the framework to find all disposable elements in a container and dispose them by calling their dispose-control handler when it's required.
+`$.wn.foundation.controlUtils.markDisposable(element)` call in the constructor adds `data-disposable` attribute to the DOM element, allowing the framework to find all disposable elements in a container and dispose them by calling their dispose-control handler when it's required.
 
 ## Full example of a jQuery plugin that creates a disposable control
 
@@ -161,14 +161,14 @@ We already have a boilerplate code for jQuery code. Disposable controls approach
 
 ```js
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var SomeDisposableControl = function (element, options) {
         this.$el = $(element)
         this.options = options || {}
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }

@@ -7,11 +7,11 @@
     // NAMESPACE CHECK
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.helper === undefined)
-        $.oc.table.helper = {}
+    if ($.wn.table.helper === undefined)
+        $.wn.table.helper = {}
 
     // SEARCH CLASS DEFINITION
     // ============================
@@ -111,6 +111,6 @@
         this.isActive = target && $(target).hasClass('table-search-input')
     }
 
-    $.oc.table.helper.search = Search;
+    $.wn.table.helper.search = Search;
 
 }(window.jQuery);

@@ -6,17 +6,19 @@
  *
  * JavaScript API:
  * $('#nav').sideNav()
- * $.oc.sideNav.setCounter('cms/partials', 5); - sets the counter value for a particular menu item
- * $.oc.sideNav.increaseCounter('cms/partials', 5); - increases the counter value for a particular menu item
- * $.oc.sideNav.dropCounter('cms/partials'); - drops the counter value for a particular menu item
+ * $.wn.sideNav.setCounter('cms/partials', 5); - sets the counter value for a particular menu item
+ * $.wn.sideNav.increaseCounter('cms/partials', 5); - increases the counter value for a particular menu item
+ * $.wn.sideNav.dropCounter('cms/partials'); - drops the counter value for a particular menu item
  *
  * Dependences:
  * - Drag Scroll (winter.dragscroll.js)
  */
 
 +function ($) { "use strict";
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
     // SIDENAV CLASS DEFINITION
     // ============================
@@ -113,8 +115,8 @@
             if (typeof option == 'string') result = data[option].apply(data, args)
             if (typeof result != 'undefined') return false
 
-            if ($.oc.sideNav === undefined)
-                $.oc.sideNav = data
+            if ($.wn.sideNav === undefined)
+                $.wn.sideNav = data
         })
 
         return result ? result : this

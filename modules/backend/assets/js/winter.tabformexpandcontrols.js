@@ -1,11 +1,11 @@
 /*
- * Extends the fancy tabs layout with expand controls in the tab 
- * form sections. See main Builder page for example. 
+ * Extends the fancy tabs layout with expand controls in the tab
+ * form sections. See main Builder page for example.
  * TODO: A similar layout is used in the CMS, Pages and Builder areas,
  * but only Builder uses this class.
  */
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var TabFormExpandControls = function ($tabsControlElement, options) {
@@ -159,5 +159,5 @@
         onInitTab: null
     }
 
-    $.oc.tabFormExpandControls = TabFormExpandControls
+    $.wn.tabFormExpandControls = TabFormExpandControls
 }(window.jQuery);

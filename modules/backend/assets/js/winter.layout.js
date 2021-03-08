@@ -65,20 +65,22 @@
         }
     }
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.layout = new WinterLayout()
+    $.wn.layout = new WinterLayout()
 
     $(document).ready(function(){
-        $.oc.layout.updateLayout()
+        $.wn.layout.updateLayout()
 
-        window.setTimeout($.oc.layout.updateLayout, 100)
+        window.setTimeout($.wn.layout.updateLayout, 100)
     })
     $(window).on('resize', function() {
-        $.oc.layout.updateLayout()
+        $.wn.layout.updateLayout()
     })
     $(window).on('oc.updateUi', function() {
-        $.oc.layout.updateLayout()
+        $.wn.layout.updateLayout()
     })
 })(jQuery);

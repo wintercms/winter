@@ -12,7 +12,7 @@
  *
  * Use the simple parasitic combination inheritance pattern to create child classes:
  *
- * var Base = $.oc.foundation.base,
+ * var Base = $.wn.foundation.base,
  *     BaseProto = Base.prototype
  *
  * var SubClass = function(params) {
@@ -39,13 +39,15 @@
  *
  */
 +function ($) { "use strict";
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    if ($.oc.foundation === undefined)
-        $.oc.foundation = {}
+    if ($.wn.foundation === undefined)
+        $.wn.foundation = {}
 
-    $.oc.foundation._proxyCounter = 0
+    $.wn.foundation._proxyCounter = 0
 
     var Base = function() {
         this.proxiedMethods = {}
@@ -64,8 +66,8 @@
      */
     Base.prototype.proxy = function(method) {
         if (method.ocProxyId === undefined) {
-            $.oc.foundation._proxyCounter++
-            method.ocProxyId = $.oc.foundation._proxyCounter
+            $.wn.foundation._proxyCounter++
+            method.ocProxyId = $.wn.foundation._proxyCounter
         }
 
         if (this.proxiedMethods[method.ocProxyId] !== undefined)
@@ -75,5 +77,5 @@
         return this.proxiedMethods[method.ocProxyId]
     }
 
-    $.oc.foundation.base = Base;
+    $.wn.foundation.base = Base;
 }(window.jQuery);

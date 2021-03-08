@@ -30,12 +30,12 @@
 
     ExceptionBeautifier.prototype.initEditorPopup = function () {
         if (!ExceptionBeautifier.LINKER_POPUP_CONTENT) {
-            var title = $.oc.lang.get('eventlog.editor.title'),
-                description = $.oc.lang.get('eventlog.editor.description'),
-                openWith = $.oc.lang.get('eventlog.editor.openWith'),
-                rememberChoice = $.oc.lang.get('eventlog.editor.remember_choice'),
-                open = $.oc.lang.get('eventlog.editor.open'),
-                cancel = $.oc.lang.get('eventlog.editor.cancel'),
+            var title = $.wn.lang.get('eventlog.editor.title'),
+                description = $.wn.lang.get('eventlog.editor.description'),
+                openWith = $.wn.lang.get('eventlog.editor.openWith'),
+                rememberChoice = $.wn.lang.get('eventlog.editor.remember_choice'),
+                open = $.wn.lang.get('eventlog.editor.open'),
+                cancel = $.wn.lang.get('eventlog.editor.cancel'),
                 popup = $('                                                                                            \
 <div>                                                                                                                  \
     <div class="modal-header">                                                                                         \
@@ -63,7 +63,7 @@
 
             for (var key in ExceptionBeautifier.EDITORS) {
                 if (ExceptionBeautifier.EDITORS.hasOwnProperty(key)) {
-                    select.append('<option value="' + key + '">' + $.oc.escapeHtmlString(ExceptionBeautifier.EDITORS[key].name) + '</option>')
+                    select.append('<option value="' + key + '">' + $.wn.escapeHtmlString(ExceptionBeautifier.EDITORS[key].name) + '</option>')
                 }
             }
 

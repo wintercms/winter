@@ -36,7 +36,7 @@
 
     Popover.prototype.disposeControls = function() {
         if (this.$container) {
-            $.oc.foundation.controlUtils.disposeControls(this.$container.get(0))
+            $.wn.foundation.controlUtils.disposeControls(this.$container.get(0))
         }
     }
 
@@ -233,7 +233,7 @@
     }
 
     Popover.prototype.calcPlacement = function() {
-        var 
+        var
             placement = this.options.placement,
             dimensions = this.calcDimensions();
 

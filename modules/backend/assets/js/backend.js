@@ -19,10 +19,12 @@ $.ajaxPrefilter(function(options) {
  * Path helpers
  */
 
+if ($.wn === undefined)
+    $.wn = {}
 if ($.oc === undefined)
-    $.oc = {}
+    $.oc = $.wn
 
-$.oc.backendUrl = function(url) {
+$.wn.backendUrl = function(url) {
     var backendBasePath = $('meta[name="backend-base-path"]').attr('content')
 
     if (!backendBasePath)
@@ -164,10 +166,12 @@ assetManager = new AssetManager();
 /*
  * String escape
  */
+if ($.wn === undefined)
+    $.wn = {}
 if ($.oc === undefined)
-    $.oc = {}
+    $.oc = $.wn
 
-$.oc.escapeHtmlString = function(string) {
+$.wn.escapeHtmlString = function(string) {
     var htmlEscapes = {
             '&': '&amp;',
             '<': '&lt;',

@@ -119,16 +119,18 @@
     // LIST WIDGET HELPERS
     // =================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.listToggleChecked = function(el) {
+    $.wn.listToggleChecked = function(el) {
         $(el)
             .closest('[data-control="listwidget"]')
             .listWidget('toggleChecked', el)
     }
 
-    $.oc.listGetChecked = function(el) {
+    $.wn.listGetChecked = function(el) {
         return $(el)
             .closest('[data-control="listwidget"]')
             .listWidget('getChecked')

@@ -13,14 +13,14 @@
 
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var DatePicker = function (element, options) {
         this.$el = $(element)
         this.options = options || {}
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }
@@ -308,11 +308,11 @@
     }
 
     DatePicker.prototype.getLang = function(name, defaultValue) {
-        if ($.oc === undefined || $.oc.lang === undefined) {
+        if ($.oc === undefined || $.wn.lang === undefined) {
             return defaultValue
         }
 
-        return $.oc.lang.get(name, defaultValue)
+        return $.wn.lang.get(name, defaultValue)
     }
 
     DatePicker.DEFAULTS = {

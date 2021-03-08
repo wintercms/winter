@@ -7,15 +7,17 @@
  *
  * Usage examples:
  *
- * $.oc.foundation.element.addClass(myElement, myClass)
+ * $.wn.foundation.element.addClass(myElement, myClass)
  *
  */
 +function ($) { "use strict";
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    if ($.oc.foundation === undefined)
-        $.oc.foundation = {}
+    if ($.wn.foundation === undefined)
+        $.wn.foundation = {}
 
     var Element = {
         hasClass: function(el, className) {
@@ -134,7 +136,7 @@
         },
 
         elementContainsPoint: function(element, point) {
-            var elementPosition = $.oc.foundation.element.absolutePosition(element),
+            var elementPosition = $.wn.foundation.element.absolutePosition(element),
                 elementRight = elementPosition.left + element.offsetWidth,
                 elementBottom = elementPosition.top + element.offsetHeight
 
@@ -143,5 +145,5 @@
         }
     }
 
-    $.oc.foundation.element = Element;
+    $.wn.foundation.element = Element;
 }(window.jQuery);

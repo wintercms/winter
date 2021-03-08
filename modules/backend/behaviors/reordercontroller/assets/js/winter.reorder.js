@@ -78,5 +78,5 @@
 
     }
 
-    $.oc.reorderBehavior = new ReorderBehavior;
+    $.wn.reorderBehavior = new ReorderBehavior;
 }(window.jQuery);

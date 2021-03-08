@@ -115,8 +115,8 @@
 
         this.visibleItemId = menuItemId
 
-        if ($.oc.sideNav !== undefined) {
-            $.oc.sideNav.setActiveItem(menuItemId)
+        if ($.wn.sideNav !== undefined) {
+            $.wn.sideNav.setActiveItem(menuItemId)
         }
 
         this.$sidePanelItems.each(function() {
@@ -166,15 +166,15 @@
     }
 
     SidePanelTab.prototype.updateActiveTab = function() {
-        if ($.oc.sideNav === undefined) {
+        if ($.wn.sideNav === undefined) {
             return
         }
 
         if (!this.panelVisible && ($(window).width() < this.options.breakpoint || !this.panelFixed())) {
-            $.oc.sideNav.unsetActiveItem()
+            $.wn.sideNav.unsetActiveItem()
         }
         else {
-            $.oc.sideNav.setActiveItem(this.visibleItemId)
+            $.wn.sideNav.setActiveItem(this.visibleItemId)
         }
     }
 

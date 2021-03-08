@@ -5,7 +5,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.string,
+    var Base = $.wn.inspector.propertyEditors.string,
         BaseProto = Base.prototype
 
     var AutocompleteEditor = function(inspector, propertyDefinition, containerCell, group) {
@@ -46,7 +46,7 @@
 
         editor.value = value
 
-        $.oc.foundation.element.addClass(this.containerCell, 'text autocomplete')
+        $.wn.foundation.element.addClass(this.containerCell, 'text autocomplete')
 
         container.appendChild(editor)
         this.containerCell.appendChild(container)
@@ -193,7 +193,7 @@
             data = this.getRootSurface().getValues(),
             $form = $(container).closest('form')
 
-        $.oc.foundation.element.addClass(container, 'loading-indicator-container size-small')
+        $.wn.foundation.element.addClass(container, 'loading-indicator-container size-small')
         this.showLoadingIndicator()
 
         if (this.triggerGetItems(data) === false) {
@@ -252,5 +252,5 @@
         this.buildAutoComplete(loadedItems)
     }
 
-    $.oc.inspector.propertyEditors.autocomplete = AutocompleteEditor
+    $.wn.inspector.propertyEditors.autocomplete = AutocompleteEditor
 }(window.jQuery);

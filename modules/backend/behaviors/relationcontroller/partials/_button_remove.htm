@@ -2,7 +2,7 @@
     <button
         class="btn btn-sm btn-secondary oc-icon-minus"
         data-request="onRelationButtonRemove"
-        data-request-success="$.oc.relationBehavior.changed('<?= e($this->vars['relationField']) ?>', 'removed')"
+        data-request-success="$.wn.relationBehavior.changed('<?= e($this->vars['relationField']) ?>', 'removed')"
         data-stripe-load-indicator>
         <?= e(trans($text)) ?>
     </button>
@@ -14,7 +14,7 @@
         })"
         disabled="disabled"
         data-request="onRelationButtonRemove"
-        data-request-success="$.oc.relationBehavior.changed('<?= e($this->vars['relationField']) ?>', 'removed')"
+        data-request-success="$.wn.relationBehavior.changed('<?= e($this->vars['relationField']) ?>', 'removed')"
         data-trigger-action="enable"
         data-trigger="#<?= $this->relationGetId('view') ?> .control-list input[type=checkbox]"
         data-trigger-condition="checked"

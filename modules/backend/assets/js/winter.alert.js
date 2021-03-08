@@ -4,8 +4,8 @@
  * Displays alert and confirmation dialogs
  *
  * JavaScript API:
- * $.oc.alert()
- * $.oc.confirm()
+ * $.wn.alert()
+ * $.wn.confirm()
  *
  * Dependences:
  * - Sweet Alert
@@ -13,17 +13,19 @@
  */
 (function($){
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.alert = function alert(message) {
+    $.wn.alert = function alert(message) {
         swal({
             title: message,
             confirmButtonClass: 'btn-primary'
         })
     }
 
-    $.oc.confirm = function confirm(message, callback) {
+    $.wn.confirm = function confirm(message, callback) {
 
         swal({
             title: message,
@@ -42,7 +44,7 @@
 $(window).on('ajaxErrorMessage', function(event, message){
     if (!message) return
 
-    $.oc.alert(message)
+    $.wn.alert(message)
 
     // Prevent the default alert() message
     event.preventDefault()
@@ -51,7 +53,7 @@ $(window).on('ajaxErrorMessage', function(event, message){
 $(window).on('ajaxConfirmMessage', function(event, message){
     if (!message) return
 
-    $.oc.confirm(message, function(isConfirm){
+    $.wn.confirm(message, function(isConfirm){
         isConfirm
             ? event.promise.resolve()
             : event.promise.reject()
@@ -74,14 +76,14 @@ $(document).ready(function(){
     window.sweetAlert = window.swal = function(message, callback) {
         if (typeof message === 'object') {
             // Do not override if texts are provided
-            message.confirmButtonText = message.confirmButtonText || $.oc.lang.get('alert.confirm_button_text')
-            message.cancelButtonText = message.cancelButtonText || $.oc.lang.get('alert.cancel_button_text')
+            message.confirmButtonText = message.confirmButtonText || $.wn.lang.get('alert.confirm_button_text')
+            message.cancelButtonText = message.cancelButtonText || $.wn.lang.get('alert.cancel_button_text')
         }
         else {
             message = {
                 title: message,
-                confirmButtonText: $.oc.lang.get('alert.confirm_button_text'),
-                cancelButtonText: $.oc.lang.get('alert.cancel_button_text')
+                confirmButtonText: $.wn.lang.get('alert.confirm_button_text'),
+                cancelButtonText: $.wn.lang.get('alert.cancel_button_text')
             }
         }
 

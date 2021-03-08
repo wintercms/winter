@@ -11,16 +11,18 @@
     // NAMESPACES
     // ============================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    if ($.oc.inspector === undefined)
-        $.oc.inspector = {}
+    if ($.wn.inspector === undefined)
+        $.wn.inspector = {}
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     /**
@@ -30,8 +32,8 @@
      * - values - property values, an object
      * - inspectorUniqueId - a string containing the unique inspector identifier.
      *   The identifier should be a constant for an inspectable element. Use
-     *   $.oc.inspector.helpers.generateElementUniqueId(element) to generate a persistent ID
-     *   for an element. Use $.oc.inspector.helpers.generateUniqueId() to generate an ID
+     *   $.wn.inspector.helpers.generateElementUniqueId(element) to generate a persistent ID
+     *   for an element. Use $.wn.inspector.helpers.generateUniqueId() to generate an ID
      *   not associated with an element. Inspector uses the ID for storing configuration
      *   related to an element in the document DOM.
      */
@@ -42,7 +44,7 @@
 
         this.options = $.extend({}, Surface.DEFAULTS, typeof options == 'object' && options)
         this.rawProperties = properties
-        this.parsedProperties = $.oc.inspector.engine.processPropertyGroups(properties)
+        this.parsedProperties = $.wn.inspector.engine.processPropertyGroups(properties)
         this.container = containerElement
         this.inspectorUniqueId = inspectorUniqueId
         this.values = values !== null ? values : {}
@@ -63,7 +65,7 @@
         }
 
         if (!this.parentSurface) {
-            this.groupManager = new $.oc.inspector.groupManager(this.inspectorUniqueId)
+            this.groupManager = new $.wn.inspector.groupManager(this.inspectorUniqueId)
         }
 
         Base.call(this)
@@ -111,7 +113,7 @@
         this.build()
 
         if (!this.parentSurface) {
-            $.oc.foundation.controlUtils.markDisposable(this.tableContainer)
+            $.wn.foundation.controlUtils.markDisposable(this.tableContainer)
         }
 
         this.registerHandlers()
@@ -169,9 +171,9 @@
         var dataTable = document.createElement('table'),
             tbody = document.createElement('tbody')
 
-        $.oc.foundation.element.addClass(dataTable, 'inspector-fields')
+        $.wn.foundation.element.addClass(dataTable, 'inspector-fields')
         if (this.parsedProperties.hasGroups) {
-            $.oc.foundation.element.addClass(dataTable, 'has-groups')
+            $.wn.foundation.element.addClass(dataTable, 'has-groups')
         }
 
         var currentGroup = this.group
@@ -238,7 +240,7 @@
         }
 
         this.applyGroupIndexAttribute(property, row, group)
-        $.oc.foundation.element.addClass(row, this.getRowCssClass(property, group))
+        $.wn.foundation.element.addClass(row, this.getRowCssClass(property, group))
 
         // Property head
         //
@@ -353,7 +355,7 @@
             var row = rows[i],
                 property = row.getAttribute('data-property')
 
-            if ($.oc.foundation.element.hasClass(row, 'no-external-parameter') || !property) {
+            if ($.wn.foundation.element.hasClass(row, 'no-external-parameter') || !property) {
                 continue
             }
 
@@ -370,7 +372,7 @@
                 initialValue = propertyEditor.getUndefinedValue()
             }
 
-            var editor = new $.oc.inspector.externalParameterEditor(this, propertyDefinition, cell, initialValue)
+            var editor = new $.wn.inspector.externalParameterEditor(this, propertyDefinition, cell, initialValue)
 
             this.externalParameterEditors.push(editor)
         }
@@ -416,11 +418,11 @@
             groupManager = this.getGroupManager(),
             collapse = true
 
-        if ($.oc.foundation.element.hasClass(link, 'expanded') && !forceExpand) {
-            $.oc.foundation.element.removeClass(link, 'expanded')
+        if ($.wn.foundation.element.hasClass(link, 'expanded') && !forceExpand) {
+            $.wn.foundation.element.removeClass(link, 'expanded')
         }
         else {
-            $.oc.foundation.element.addClass(link, 'expanded')
+            $.wn.foundation.element.addClass(link, 'expanded')
             collapse = false
         }
 
@@ -451,15 +453,15 @@
         if (row) {
             if (!noAnimation) {
                 setTimeout(function toggleRow() {
-                    $.oc.foundation.element.toggleClass(row, 'collapsed', collapse)
-                    $.oc.foundation.element.toggleClass(row, 'expanded', !collapse)
+                    $.wn.foundation.element.toggleClass(row, 'collapsed', collapse)
+                    $.wn.foundation.element.toggleClass(row, 'expanded', !collapse)
 
                     self.expandOrCollapseRows(rows, collapse, duration, noAnimation)
                 }, duration)
             }
             else {
-                $.oc.foundation.element.toggleClass(row, 'collapsed', collapse)
-                $.oc.foundation.element.toggleClass(row, 'expanded', !collapse)
+                $.wn.foundation.element.toggleClass(row, 'collapsed', collapse)
+                $.wn.foundation.element.toggleClass(row, 'expanded', !collapse)
 
                 self.expandOrCollapseRows(rows, collapse, duration, noAnimation)
             }
@@ -490,11 +492,11 @@
             type = 'string'
         }
 
-        var editor = new $.oc.inspector.propertyEditors[type](this, property, cell, group)
+        var editor = new $.wn.inspector.propertyEditors[type](this, property, cell, group)
 
         if (editor.isGroupedEditor()) {
-            $.oc.foundation.element.addClass(dataTable, 'has-groups')
-            $.oc.foundation.element.addClass(row, 'control-group')
+            $.wn.foundation.element.addClass(dataTable, 'has-groups')
+            $.wn.foundation.element.addClass(row, 'control-group')
 
             this.applyGroupIndexAttribute(property, row, editor.group, true)
             this.buildGroupExpandControl(row.querySelector('span.title-element'), property, true, editor.hasChildSurface(), editor.group)
@@ -582,10 +584,10 @@
             cells = tbody.querySelectorAll('tr td')
 
         for (var i = 0, len = cells.length; i < len; i++) {
-            $.oc.foundation.element.removeClass(cells[i], 'active')
+            $.wn.foundation.element.removeClass(cells[i], 'active')
         }
 
-        $.oc.foundation.element.addClass(cell, 'active')
+        $.wn.foundation.element.addClass(cell, 'active')
     }
 
     Surface.prototype.markPropertyChanged = function(property, changed) {
@@ -593,10 +595,10 @@
             row = this.tableContainer.querySelector('tr[data-property-path="'+propertyPath+'"]')
 
         if (changed) {
-            $.oc.foundation.element.addClass(row, 'changed')
+            $.wn.foundation.element.addClass(row, 'changed')
         }
         else {
-            $.oc.foundation.element.removeClass(row, 'changed')
+            $.wn.foundation.element.removeClass(row, 'changed')
         }
     }
 
@@ -637,9 +639,9 @@
             type = 'string'
         }
 
-        if ($.oc.inspector.propertyEditors[type] === undefined) {
+        if ($.wn.inspector.propertyEditors[type] === undefined) {
             throw new Error('The Inspector editor class "' + type +
-                '" is not defined in the $.oc.inspector.propertyEditors namespace.')
+                '" is not defined in the $.wn.inspector.propertyEditors namespace.')
         }
     }
 
@@ -846,7 +848,7 @@
                     }
                 }
 
-                if (value === $.oc.inspector.removedProperty) {
+                if (value === $.wn.inspector.removedProperty) {
                     continue
                 }
 
@@ -890,12 +892,12 @@
 
             var externalEditor = this.findExternalParameterEditor(property)
             if (externalEditor && externalEditor.isEditorVisible() && !externalEditor.validate(true)) {
-                result[property] = $.oc.inspector.invalidProperty
+                result[property] = $.wn.inspector.invalidProperty
                 continue
             }
 
             if (!editor.validate(true)) {
-                result[property] = $.oc.inspector.invalidProperty
+                result[property] = $.wn.inspector.invalidProperty
                 continue
             }
 
@@ -949,7 +951,7 @@
 
         this.toggleGroup(row)
 
-        $.oc.foundation.event.stop(ev)
+        $.wn.foundation.event.stop(ev)
         return false
     }
 
@@ -967,7 +969,7 @@
     // REGISTRATION
     // ============================
 
-    $.oc.inspector.surface = Surface
-    $.oc.inspector.removedProperty = {removed: true}
-    $.oc.inspector.invalidProperty = {invalid: true}
+    $.wn.inspector.surface = Surface
+    $.wn.inspector.removedProperty = {removed: true}
+    $.wn.inspector.invalidProperty = {invalid: true}
 }(window.jQuery);

@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // SCROLLPAD CLASS DEFINITION
@@ -188,7 +188,7 @@
     var old = $.fn.flyout
 
     $.fn.flyout = function (option) {
-        var args = Array.prototype.slice.call(arguments, 1), 
+        var args = Array.prototype.slice.call(arguments, 1),
             result = undefined
 
         this.each(function () {
@@ -199,7 +199,7 @@
             if (typeof option == 'string') result = data[option].apply(data, args)
             if (typeof result != 'undefined') return false
         })
-        
+
         return result ? result : this
     }
 

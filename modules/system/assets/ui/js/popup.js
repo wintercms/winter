@@ -9,7 +9,7 @@
 
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // POPUP CLASS DEFINITION
@@ -31,7 +31,7 @@
         this.$dialog = this.$container.find('.modal-dialog:first')
         this.$modal = this.$container.modal({ show: false, backdrop: false, keyboard: this.options.keyboard })
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
 
         this.initEvents()

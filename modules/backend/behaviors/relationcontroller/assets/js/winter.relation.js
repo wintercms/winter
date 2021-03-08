@@ -96,5 +96,5 @@
 
     }
 
-    $.oc.relationBehavior = new RelationBehavior;
+    $.wn.relationBehavior = new RelationBehavior;
 }(window.jQuery);

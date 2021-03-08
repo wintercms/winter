@@ -18,5 +18,5 @@
 
     }
 
-    $.oc.exportBehavior = new ExportBehavior;
+    $.wn.exportBehavior = new ExportBehavior;
 }(window.jQuery);

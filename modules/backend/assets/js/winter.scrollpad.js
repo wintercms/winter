@@ -38,7 +38,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // SCROLLPAD CLASS DEFINITION
@@ -63,7 +63,7 @@
 
         this.init()
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
     }
 
     Scrollpad.prototype = Object.create(BaseProto)
@@ -225,11 +225,11 @@
     }
 
     Scrollpad.prototype.onStartDrag = function(ev) {
-        $.oc.foundation.event.stop(ev)
+        $.wn.foundation.event.stop(ev)
 
-        var pageCoords = $.oc.foundation.event.pageCoordinates(ev),
+        var pageCoords = $.wn.foundation.event.pageCoordinates(ev),
             eventOffset = this.options.direction == 'vertical' ? pageCoords.y : pageCoords.x,
-            handleCoords = $.oc.foundation.element.absolutePosition(this.dragHandleElement),
+            handleCoords = $.wn.foundation.element.absolutePosition(this.dragHandleElement),
             handleOffset = this.options.direction == 'vertical' ? handleCoords.top : handleCoords.left
 
         this.dragOffset = eventOffset - handleOffset
@@ -239,15 +239,15 @@
     }
 
     Scrollpad.prototype.onMouseMove = function(ev) {
-        $.oc.foundation.event.stop(ev)
+        $.wn.foundation.event.stop(ev)
 
         var eventCoordsAttr = this.options.direction == 'vertical' ? 'y' : 'x',
             elementCoordsAttr = this.options.direction == 'vertical' ? 'top' : 'left',
             offsetAttr = this.options.direction == 'vertical' ? 'offsetHeight' : 'offsetWidth',
             scrollAttr = this.options.direction == 'vertical' ? 'scrollTop' : 'scrollLeft'
 
-        var eventOffset = $.oc.foundation.event.pageCoordinates(ev)[eventCoordsAttr],
-            scrollbarOffset = $.oc.foundation.element.absolutePosition(this.scrollbarElement)[elementCoordsAttr],
+        var eventOffset = $.wn.foundation.event.pageCoordinates(ev)[eventCoordsAttr],
+            scrollbarOffset = $.wn.foundation.element.absolutePosition(this.scrollbarElement)[elementCoordsAttr],
             dragPos = eventOffset - scrollbarOffset - this.dragOffset,
             scrollbarSize = this.scrollbarElement[offsetAttr],
             contentSize = this.contentElement[offsetAttr],

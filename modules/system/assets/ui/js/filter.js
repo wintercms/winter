@@ -486,12 +486,12 @@
                 options: JSON.stringify(this.scopeValues[scopeName])
             }
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
 
         this.$el.request(this.options.updateHandler, {
             data: data
         }).always(function () {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         }).done(function () {
             // Trigger dependsOn updates on successful requests
             self.$el.find('[data-scope-name="'+scopeName+'"]').trigger('change.oc.filterScope')
@@ -511,11 +511,11 @@
                     value: isChecked
                 }
 
-            $.oc.stripeLoadIndicator.show()
+            $.wn.stripeLoadIndicator.show()
             this.$el.request(this.options.updateHandler, {
                 data: data
             }).always(function(){
-                $.oc.stripeLoadIndicator.hide()
+                $.wn.stripeLoadIndicator.hide()
             })
         }
 
@@ -535,11 +535,11 @@
                     value: switchValue
                 }
 
-            $.oc.stripeLoadIndicator.show()
+            $.wn.stripeLoadIndicator.show()
             this.$el.request(this.options.updateHandler, {
                 data: data
             }).always(function(){
-                $.oc.stripeLoadIndicator.hide()
+                $.wn.stripeLoadIndicator.hide()
             })
         }
 
@@ -561,11 +561,11 @@
     }
 
     FilterWidget.prototype.getLang = function(name, defaultValue) {
-        if ($.oc === undefined || $.oc.lang === undefined) {
+        if ($.oc === undefined || $.wn.lang === undefined) {
             return defaultValue
         }
 
-        return $.oc.lang.get(name, defaultValue)
+        return $.wn.lang.get(name, defaultValue)
     }
 
     FilterWidget.prototype.searchQuery = function ($el) {
@@ -595,14 +595,14 @@
                 search: thisValue
             }
 
-            $.oc.stripeLoadIndicator.show()
+            $.wn.stripeLoadIndicator.show()
             self.lastDataTrackInputRequest = self.$el.request(self.options.optionsHandler, {
                 data: data
             }).success(function(data){
                 self.filterAvailable(self.activeScopeName, data.options.available)
                 self.toggleFilterButtons()
             }).always(function(){
-                $.oc.stripeLoadIndicator.hide()
+                $.wn.stripeLoadIndicator.hide()
             })
         }, 300)
     }

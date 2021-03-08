@@ -3,10 +3,10 @@
  */
 +function ($) { "use strict";
 
-    if ($.oc.mediaManager === undefined)
-        $.oc.mediaManager = {}
+    if ($.wn.mediaManager === undefined)
+        $.wn.mediaManager = {}
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var MediaManagerImageCropPopup = function(path, options) {
@@ -235,7 +235,7 @@
             selection: this.jCrop.tellSelect()
         }
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
 
         this.$popupElement
             .find('form')
@@ -243,7 +243,7 @@
                 data: data
             })
             .always(function() {
-                $.oc.stripeLoadIndicator.hide()
+                $.wn.stripeLoadIndicator.hide()
             })
             .done(this.proxy(this.onImageCropped))
     }
@@ -316,11 +316,11 @@
                 path: this.$popupElement.find('input[name=path]').val()
             }
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
         $(ev.target).request(this.options.alias+'::onResizeImage', {
             data: data
         }).always(function() {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         }).done(this.proxy(this.imageResized))
 
         ev.preventDefault()
@@ -381,7 +381,7 @@
         this.$popupElement.find('form').request(this.options.alias+'::onEndCroppingSession')
 
         // Release clickedElement reference inside redactor.js
-        // If we don't do it, the image editor popup DOM elements 
+        // If we don't do it, the image editor popup DOM elements
         // won't be removed from the memory.
         $(document).trigger('mousedown')
 
@@ -476,5 +476,5 @@
         onDone: undefined
     }
 
-    $.oc.mediaManager.imageCropPopup = MediaManagerImageCropPopup
+    $.wn.mediaManager.imageCropPopup = MediaManagerImageCropPopup
 }(window.jQuery);

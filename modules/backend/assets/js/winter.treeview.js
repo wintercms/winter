@@ -13,7 +13,7 @@
  *
  */
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var TreeView = function (element, options) {
@@ -24,7 +24,7 @@
 
         Base.call(this)
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         this.init()
     }
 
