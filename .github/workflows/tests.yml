@@ -30,9 +30,9 @@ jobs:
         run: |
           git reset --hard HEAD
           rm -rf ./vendor/wintercms/storm
-          wget https://github.com/wintercms/library/archive/1.0.zip -O ./vendor/winter/1.0.zip
+          wget https://github.com/wintercms/storm/archive/1.0.zip -O ./vendor/winter/1.0.zip
           unzip ./vendor/winter/1.0.zip -d ./vendor/winter
-          mv ./vendor/winter/library-1.0 ./vendor/wintercms/storm
+          mv ./vendor/winter/storm-1.0 ./vendor/wintercms/storm
           composer dump-autoload
       - name: Run post-update Composer scripts
         run: |

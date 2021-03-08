@@ -50,7 +50,7 @@ The development of Winter is lead by [Luke Towers](https://luketowers.ca/), alon
 
 ## Foundation library
 
-The CMS is built on top of the wildly-popular [Laravel](https://laravel.com) PHP framework, with the in-house [Storm](https://github.com/wintercms/library) Library as a buffer between the Laravel Framework and the CMS project to minimize breaking changes and improve stability.
+The CMS is built on top of the wildly-popular [Laravel](https://laravel.com) PHP framework, with the in-house [Storm](https://github.com/wintercms/storm) Library as a buffer between the Laravel Framework and the CMS project to minimize breaking changes and improve stability.
 
 ## Contact
 

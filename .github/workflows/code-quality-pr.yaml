@@ -21,9 +21,9 @@ jobs:
         run: |
           git reset --hard HEAD
           rm -rf ./vendor/wintercms/storm
-          wget https://github.com/wintercms/library/archive/develop.zip -O ./vendor/wintercms/develop.zip
+          wget https://github.com/wintercms/storm/archive/develop.zip -O ./vendor/wintercms/develop.zip
           unzip ./vendor/wintercms/develop.zip -d ./vendor/wintercms
-          mv ./vendor/wintercms/library-develop ./vendor/wintercms/storm
+          mv ./vendor/wintercms/storm-develop ./vendor/wintercms/storm
           composer dump-autoload
       - name: Run code quality checks
         run: |
