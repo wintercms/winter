@@ -8,7 +8,7 @@ use System\Classes\SettingsManager;
 /**
  * Access Logs controller
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class AccessLogs extends Controller

@@ -8,7 +8,7 @@ use ArrayAccess;
  * Form Tabs definition
  * A translation of the form field tab configuration
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class FormTabs implements IteratorAggregate, ArrayAccess

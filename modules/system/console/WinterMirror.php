@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
  * This command will create symbolic links to files and directories
  * that are commonly required to be publicly available.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class WinterMirror extends Command

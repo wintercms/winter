@@ -14,7 +14,7 @@ use Twig\Error\SyntaxError as TwigErrorSyntax;
  *
  *     {% partial "sidebar" name='John', year=2013 %}
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailPartialTokenParser extends TwigTokenParser

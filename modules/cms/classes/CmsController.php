@@ -10,7 +10,7 @@ use Closure;
  * then the URL is passed to the front-end controller for processing.
  *
  * @see Cms\Classes\Controller Front-end controller class
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CmsController extends ControllerBase

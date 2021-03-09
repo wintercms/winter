@@ -7,7 +7,7 @@ use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 /**
  * The CMS page class.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Page extends CmsCompoundObject

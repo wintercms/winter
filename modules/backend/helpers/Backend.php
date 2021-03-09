@@ -14,7 +14,7 @@ use Backend\Helpers\Exception\DecompileException;
 /**
  * Backend Helper
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @see \Backend\Facades\Backend
  * @author Alexey Bobkov, Samuel Georges
  */

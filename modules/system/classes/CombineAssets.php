@@ -40,7 +40,7 @@ use DateTime;
  *
  * @see System\Classes\SystemController System controller
  * @see https://wintercms.com/docs/services/session Session service
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CombineAssets

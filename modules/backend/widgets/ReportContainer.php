@@ -15,7 +15,7 @@ use ApplicationException;
  * Report Container Widget
  * Creates an area hosting report widgets.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ReportContainer extends WidgetBase

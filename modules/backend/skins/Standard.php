@@ -9,7 +9,7 @@ use Winter\Storm\Router\Helper as RouterHelper;
  *
  * This skin uses the default paths always, there is no lookup required.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 

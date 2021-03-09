@@ -9,7 +9,7 @@ use Winter\Storm\Database\Relations\Relation as RelationBase;
  * Form Relationship
  * Renders a field prepopulated with a belongsTo and belongsToHasMany relation.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Relation extends FormWidgetBase

@@ -5,7 +5,7 @@
  * of their components. Partial "objects" store the components
  * used by that partial for deferred retrieval.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PartialStack

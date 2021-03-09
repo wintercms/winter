@@ -14,7 +14,7 @@ use SystemException;
  *
  * Represents an editable tabular control.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Table extends WidgetBase

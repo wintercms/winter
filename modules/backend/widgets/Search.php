@@ -7,7 +7,7 @@ use Backend\Classes\WidgetBase;
  * Search Widget
  * Used for building a toolbar, Renders a search container.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Search extends WidgetBase

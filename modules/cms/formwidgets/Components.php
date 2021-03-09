@@ -11,7 +11,7 @@ use Exception;
  * Component Builder
  * Builds a collection of Cms components and configures them.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Components extends FormWidgetBase

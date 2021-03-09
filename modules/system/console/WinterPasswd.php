@@ -10,7 +10,7 @@ use Symfony\Component\Console\Question\Question;
 /**
  * Console command to change the password of a Backend user via CLI.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  */
 class WinterPasswd extends Command
 {

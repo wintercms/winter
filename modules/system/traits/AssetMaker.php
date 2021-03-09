@@ -12,7 +12,7 @@ use System\Classes\CombineAssets;
  * Asset Maker Trait
  * Adds asset based methods to a class
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait AssetMaker

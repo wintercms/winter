@@ -8,7 +8,7 @@
  * twice by the composer instance introduced by a plugin. This class
  * is used as a substitute for the vendor/autoload.php file.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ComposerManager

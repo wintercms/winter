@@ -34,7 +34,7 @@ use Exception;
  * or directly as a PHP array.
  *
  * @see http://wintercms.com/docs/backend/forms Back-end form documentation
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class FormController extends ControllerBehavior

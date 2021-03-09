@@ -8,7 +8,7 @@ use ApplicationException;
  * Inspectable Container Trait
  * Extension for controllers that can host inspectable widgets (Components, etc.)
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 

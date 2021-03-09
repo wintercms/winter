@@ -22,7 +22,7 @@ use Exception;
  * - upload-label: Add file
  * - empty-label: No file uploaded
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class FileUpload extends FormWidgetBase

@@ -34,7 +34,7 @@ use Illuminate\Http\RedirectResponse;
  * The CMS controller class.
  * The controller finds and serves requested pages.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Controller

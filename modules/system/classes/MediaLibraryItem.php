@@ -8,7 +8,7 @@ use Carbon\Carbon;
 /**
  * Represents a file or folder in the Media Library.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MediaLibraryItem

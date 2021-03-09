@@ -7,7 +7,7 @@ use stdClass;
 /**
  * Widget base class.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 abstract class WidgetBase extends Extendable

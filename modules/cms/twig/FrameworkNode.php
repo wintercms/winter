@@ -7,7 +7,7 @@ use Twig\Compiler as TwigCompiler;
 /**
  * Represents a "framework" node
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class FrameworkNode extends TwigNode

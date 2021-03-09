@@ -27,7 +27,7 @@ use BackendAuth;
  * NOTE: Users are still not allowed to modify permissions that they themselves do not have access to
  *     availablePermissions: ['some.author.permission', 'some.other.permission', 'etc.some.system.permission']
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PermissionEditor extends FormWidgetBase

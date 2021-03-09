@@ -6,7 +6,7 @@ use Winter\Storm\Extension\Extendable;
 /**
  * Parent class for PHP classes created for layout and page code sections.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CodeBase extends Extendable implements ArrayAccess

@@ -11,7 +11,7 @@ use Exception;
 /**
  * Model for changes made to the theme
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeLog extends Model

@@ -10,7 +10,7 @@ use Twig\Error\SyntaxError as TwigErrorSyntax;
  *
  *     {% component "pluginComponent" %}
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ComponentTokenParser extends TwigTokenParser

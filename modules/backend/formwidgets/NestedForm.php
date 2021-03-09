@@ -7,7 +7,7 @@ use Backend\Widgets\Form;
  * Nested Form
  * Renders a nested form bound to a jsonable field of a model.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Sascha Aeppli
  */
 class NestedForm extends FormWidgetBase

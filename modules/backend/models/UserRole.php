@@ -6,7 +6,7 @@ use Winter\Storm\Auth\Models\Role as RoleBase;
 /**
  * Administrator role
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class UserRole extends RoleBase

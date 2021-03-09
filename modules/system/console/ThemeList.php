@@ -11,7 +11,7 @@ use System\Classes\UpdateManager;
  *
  * This lists all the available themes in the system. It also shows the active theme.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeList extends Command

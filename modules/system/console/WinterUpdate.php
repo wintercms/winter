@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputOption;
  * Winter gateway to receive the files via a package manager, then saves
  * the latest build number to the system.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class WinterUpdate extends Command

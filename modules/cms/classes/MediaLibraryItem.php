@@ -5,7 +5,7 @@ use System\Classes\MediaLibraryItem as SystemMediaLibraryItem;
 /**
  * Represents a file or folder in the Media Library.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  * @deprecated Use System\Classes\MediaLibraryItem. Remove if year >= 2020.
  */

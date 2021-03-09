@@ -12,7 +12,7 @@ use Config;
  * Config Maker Trait
  * Adds configuration based methods to a class
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait ConfigMaker

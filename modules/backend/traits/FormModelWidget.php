@@ -9,7 +9,7 @@ use Exception;
  *
  * Special logic for for form widgets that use a database stored model.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 

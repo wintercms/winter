@@ -7,7 +7,7 @@ use Winter\Storm\Database\ModelBehavior as ModelBehaviorBase;
 /**
  * Base class for model behaviors.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ModelBehavior extends ModelBehaviorBase

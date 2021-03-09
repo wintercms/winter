@@ -5,7 +5,7 @@ use Lang;
 /**
  * Defines some component helpers for the CMS UI.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ComponentHelpers

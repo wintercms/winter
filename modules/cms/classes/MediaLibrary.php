@@ -6,7 +6,7 @@ use System\Classes\MediaLibrary as SystemMediaLibrary;
  * Provides abstraction level for the Media Library operations.
  * Implements the library caching features and security checks.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  * @deprecated Use System\Classes\MediaLibrary. Remove if year >= 2020.
  */

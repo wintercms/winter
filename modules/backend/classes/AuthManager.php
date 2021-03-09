@@ -8,7 +8,7 @@ use Winter\Storm\Exception\SystemException;
 /**
  * Back-end authentication manager.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class AuthManager extends StormAuthManager

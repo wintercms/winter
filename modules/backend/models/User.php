@@ -9,7 +9,7 @@ use Winter\Storm\Auth\Models\User as UserBase;
 /**
  * Administrator user model
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class User extends UserBase

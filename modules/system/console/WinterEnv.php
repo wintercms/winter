@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
  * This creates an .env file with some default configuration values, it also converts
  * the existing PHP-based configuration files to use the `env` function for values.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class WinterEnv extends Command

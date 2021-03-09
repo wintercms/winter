@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
  *
  * This switches the active theme to another one, saved to the database.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeUse extends Command

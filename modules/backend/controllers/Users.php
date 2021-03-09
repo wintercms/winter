@@ -14,7 +14,7 @@ use System\Classes\SettingsManager;
 /**
  * Backend user controller
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */

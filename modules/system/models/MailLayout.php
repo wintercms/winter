@@ -10,7 +10,7 @@ use File as FileHelper;
 /**
  * Mail layout
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailLayout extends Model

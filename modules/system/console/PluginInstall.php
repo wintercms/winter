@@ -10,7 +10,7 @@ use System\Classes\PluginManager;
  *
  * This adds a new plugin by requesting it from the Winter marketplace.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PluginInstall extends Command

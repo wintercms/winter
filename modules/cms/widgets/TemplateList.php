@@ -11,7 +11,7 @@ use Backend\Classes\WidgetBase;
  * Template list widget.
  * This widget displays templates of different types.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class TemplateList extends WidgetBase

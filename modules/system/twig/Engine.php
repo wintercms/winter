@@ -6,7 +6,7 @@ use Illuminate\Contracts\View\Engine as EngineInterface;
 /**
  * View engine used by the system, used for converting .htm files to twig.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Engine implements EngineInterface

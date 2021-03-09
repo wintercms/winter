@@ -7,7 +7,7 @@ use Backend\Classes\FormWidgetBase;
  * Code Editor
  * Renders a code editor field.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CodeEditor extends FormWidgetBase

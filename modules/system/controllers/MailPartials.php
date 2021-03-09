@@ -7,7 +7,7 @@ use System\Classes\SettingsManager;
 /**
  * Mail partials controller
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailPartials extends Controller

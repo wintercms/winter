@@ -10,7 +10,7 @@ use SystemException;
  * Adds widget based methods to a controller class, or a class that
  * contains a `$controller` property referencing a controller.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait WidgetMaker

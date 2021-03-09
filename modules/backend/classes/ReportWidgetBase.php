@@ -4,7 +4,7 @@
  * Report Widget base class
  * Report widgets are used inside the ReportContainer.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ReportWidgetBase extends WidgetBase

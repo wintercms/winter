@@ -17,7 +17,7 @@ use BackendAuth;
  * Form Widget
  * Used for building back end forms and renders a form.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Form extends WidgetBase

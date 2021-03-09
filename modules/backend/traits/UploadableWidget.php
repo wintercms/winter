@@ -13,7 +13,7 @@ use Winter\Storm\Filesystem\Definitions as FileDefinitions;
  * Uploadable Widget Trait
  * Adds media library upload features to back-end widgets
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait UploadableWidget

@@ -9,7 +9,7 @@ use Winter\Storm\Html\Helper as HtmlHelper;
  * Form Field definition
  * A translation of the form field configuration
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class FormField

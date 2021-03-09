@@ -21,7 +21,7 @@ use Exception;
  * configuration items, including application URL and database config, and then
  * perform a database migration.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class WinterInstall extends Command

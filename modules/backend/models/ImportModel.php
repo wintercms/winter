@@ -9,7 +9,7 @@ use League\Csv\Reader as CsvReader;
 /**
  * Model used for importing data
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 abstract class ImportModel extends Model

@@ -10,7 +10,7 @@ use ApplicationException;
 /**
  * The CMS component partial class. These objects are read-only.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ComponentPartial extends Extendable implements CmsObjectContract

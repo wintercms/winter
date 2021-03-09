@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
  *
  * This removes the demo theme and plugin. A great way to start a fresh project!
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class WinterFresh extends Command

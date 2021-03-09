@@ -8,7 +8,7 @@ use ApplicationException;
 /**
  * Maintenance mode settings
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MaintenanceSetting extends Model

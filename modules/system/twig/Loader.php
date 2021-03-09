@@ -9,7 +9,7 @@ use Exception;
 /**
  * This class implements a Twig template loader for the core system and backend.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Loader implements TwigLoaderInterface

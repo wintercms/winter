@@ -27,7 +27,7 @@ use Illuminate\Routing\Controller as ControllerBase;
  * The Backend base controller class, used by Backend controllers.
  * The base controller services back end pages.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Controller extends ControllerBase

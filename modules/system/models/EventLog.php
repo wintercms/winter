@@ -8,7 +8,7 @@ use Exception;
 /**
  * Model for logging system errors and debug trace messages
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class EventLog extends Model

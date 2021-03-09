@@ -10,7 +10,7 @@ use ApplicationException;
  * Data Table
  * Renders a table field.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class DataTable extends FormWidgetBase

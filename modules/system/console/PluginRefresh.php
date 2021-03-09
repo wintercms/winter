@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputArgument;
  * This destroys all database tables for a specific plugin, then builds them up again.
  * It is a great way for developers to debug and develop new plugins.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PluginRefresh extends Command

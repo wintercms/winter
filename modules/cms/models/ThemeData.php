@@ -10,7 +10,7 @@ use System\Models\File;
 /**
  * Customization data used by a theme
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeData extends Model

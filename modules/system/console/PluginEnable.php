@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputArgument;
 /**
  * Console command to enable a plugin.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Lucas Zamora
  */
 class PluginEnable extends Command

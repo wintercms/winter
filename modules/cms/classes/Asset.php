@@ -12,7 +12,7 @@ use ValidationException;
 /**
  * The CMS theme asset file class.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Asset extends Extendable

@@ -30,7 +30,7 @@ use System\Models\Parameter;
  * - set build: Pull the latest stable build number from the update gateway and set it as the current build number.
  * - set project --projectId=<id>: Set the projectId for this winter instance.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class WinterUtil extends Command

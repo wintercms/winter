@@ -9,7 +9,7 @@ use Exception;
 /**
  * User welcome report widget.
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Welcome extends ReportWidgetBase

@@ -9,7 +9,7 @@ use Exception;
 /**
  * Editor settings that affect all users
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class EditorSetting extends Model

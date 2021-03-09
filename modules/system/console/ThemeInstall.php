@@ -13,7 +13,7 @@ use Exception;
  *
  * This adds a new theme by requesting it from the Winter marketplace.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeInstall extends Command

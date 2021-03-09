@@ -7,7 +7,7 @@ use Winter\Storm\Html\Helper as HtmlHelper;
  * List Columns definition
  * A translation of the list column configuration
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ListColumn

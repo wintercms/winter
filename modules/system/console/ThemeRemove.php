@@ -12,7 +12,7 @@ use Exception;
  *
  * This completely deletes an existing theme, including all files and directories.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeRemove extends Command

@@ -9,7 +9,7 @@ use File as FileHelper;
 /**
  * Mail template
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailTemplate extends Model

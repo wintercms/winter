@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputOption;
  *
  * This destroys all database tables that are registered for Winter and all plugins.
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class WinterDown extends Command

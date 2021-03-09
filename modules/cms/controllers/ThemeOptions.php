@@ -12,7 +12,7 @@ use Exception;
 /**
  * Theme customization controller
  *
- * @package wintercms\wn-backend-module
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */

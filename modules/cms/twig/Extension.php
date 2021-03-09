@@ -10,7 +10,7 @@ use Cms\Classes\Controller;
 /**
  * The CMS Twig extension class implements the basic CMS Twig functions and filters.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Extension extends TwigExtension

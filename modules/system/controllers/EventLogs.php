@@ -11,7 +11,7 @@ use System\Models\EventLog;
 /**
  * Event Logs controller
  *
- * @package wintercms\wn-system-module
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class EventLogs extends Controller

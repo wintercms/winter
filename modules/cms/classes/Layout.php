@@ -3,7 +3,7 @@
 /**
  * The CMS layout class.
  *
- * @package wintercms\wn-cms-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Layout extends CmsCompoundObject
