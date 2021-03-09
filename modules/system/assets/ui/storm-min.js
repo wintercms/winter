@@ -2596,8 +2596,10 @@ var cx=Math.sin(radian)*radius,cy=-Math.cos(radian)*radius;this.hand.setAttribut
 this.input.prop('value',value);if(value!==last){this.input.triggerHandler('change');if(!this.isInput){this.element.trigger('change');}}
 if(this.options.autoclose){this.input.trigger('blur');}
 raiseCallback(this.options.afterDone);};ClockPicker.prototype.remove=function(){this.element.removeData('clockpicker');this.input.off('focus.clockpicker click.clockpicker');this.addon.off('click.clockpicker');if(this.isShown){this.hide();}
-if(this.isAppended){$win.off('resize.clockpicker'+this.id);this.popover.remove();}};$.fn.clockpicker=function(option){var args=Array.prototype.slice.call(arguments,1);return this.each(function(){var $this=$(this),data=$this.data('clockpicker');if(!data){var options=$.extend({},ClockPicker.DEFAULTS,$this.data(),typeof option=='object'&&option);$this.data('clockpicker',new ClockPicker($this,options));}else{if(typeof data[option]==='function'){data[option].apply(data,args);}}});};}());+function($){"use strict";if($.oc===undefined)
-$.oc={}
+if(this.isAppended){$win.off('resize.clockpicker'+this.id);this.popover.remove();}};$.fn.clockpicker=function(option){var args=Array.prototype.slice.call(arguments,1);return this.each(function(){var $this=$(this),data=$this.data('clockpicker');if(!data){var options=$.extend({},ClockPicker.DEFAULTS,$this.data(),typeof option=='object'&&option);$this.data('clockpicker',new ClockPicker($this,options));}else{if(typeof data[option]==='function'){data[option].apply(data,args);}}});};}());+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 if($.wn.foundation===undefined)
 $.wn.foundation={}
 $.wn.foundation._proxyCounter=0
@@ -2610,8 +2612,10 @@ if(this.proxiedMethods[method.ocProxyId]!==undefined)
 return this.proxiedMethods[method.ocProxyId]
 this.proxiedMethods[method.ocProxyId]=method.bind(this)
 return this.proxiedMethods[method.ocProxyId]}
-$.wn.foundation.base=Base;}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+$.wn.foundation.base=Base;}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 if($.wn.foundation===undefined)
 $.wn.foundation={}
 var Element={hasClass:function(el,className){if(el.classList)
@@ -2649,8 +2653,10 @@ if(input.selectionStart!==undefined){setTimeout(function(){input.selectionStart=
 input.selectionEnd=position
 input=null},0)}},elementContainsPoint:function(element,point){var elementPosition=$.wn.foundation.element.absolutePosition(element),elementRight=elementPosition.left+element.offsetWidth,elementBottom=elementPosition.top+element.offsetHeight
 return point.x>=elementPosition.left&&point.x<=elementRight&&point.y>=elementPosition.top&&point.y<=elementBottom}}
-$.wn.foundation.element=Element;}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+$.wn.foundation.element=Element;}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 if($.wn.foundation===undefined)
 $.wn.foundation={}
 var Event={getTarget:function(ev,tag){var target=ev.target?ev.target:ev.srcElement
@@ -2671,8 +2677,10 @@ else
 ev.returnValue=false},pageCoordinates:function(ev){if(ev.pageX||ev.pageY){return{x:ev.pageX,y:ev.pageY}}
 else if(ev.clientX||ev.clientY){return{x:(ev.clientX+document.body.scrollLeft+document.documentElement.scrollLeft),y:(ev.clientY+document.body.scrollTop+document.documentElement.scrollTop)}}
 return{x:0,y:0}}}
-$.wn.foundation.event=Event;}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+$.wn.foundation.event=Event;}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 if($.wn.foundation===undefined)
 $.wn.foundation={}
 var ControlUtils={markDisposable:function(el){el.setAttribute('data-disposable','')},disposeControls:function(container){var controls=container.querySelectorAll('[data-disposable]')
@@ -2697,8 +2705,10 @@ function remove(){window.clearInterval(timer)
 $element.removeClass('in')
 $.support.transition&&$element.hasClass('fade')?$element.one($.support.transition.end,removeElement).emulateTransitionEnd(500):removeElement()}}
 FlashMessage.DEFAULTS={class:'success',text:'Default text',interval:5}
+if($.wn===undefined)
+$.wn={}
 if($.oc===undefined)
-$.oc={}
+$.oc=$.wn
 $.wn.flashMsg=FlashMessage
 $(document).render(function(){$('[data-control=flash-message]').each(function(){$.wn.flashMsg($(this).data(),this)})})}(window.jQuery);!function($){"use strict";var Autocomplete=function(element,options){this.$element=$(element)
 this.options=$.extend({},$.fn.autocomplete.defaults,options)
@@ -3583,8 +3593,10 @@ $(document).on('ajaxPromise','[data-load-indicator]',function(){var
 indicatorContainer=$(this).closest('.loading-indicator-container'),loadingText=$(this).data('load-indicator'),options={opaque:$(this).data('load-indicator-opaque'),centered:$(this).data('load-indicator-centered'),size:$(this).data('load-indicator-size')}
 if(loadingText)
 options.text=loadingText
-indicatorContainer.loadIndicator(options)}).on('ajaxFail ajaxDone','[data-load-indicator]',function(){$(this).closest('.loading-indicator-container').loadIndicator('hide')})}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+indicatorContainer.loadIndicator(options)}).on('ajaxFail ajaxDone','[data-load-indicator]',function(){$(this).closest('.loading-indicator-container').loadIndicator('hide')})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 var CursorLoadIndicator=function(){if(Modernizr.touchevents)
 return
 this.counter=0
@@ -3606,8 +3618,10 @@ this.counter=0
 if(this.counter<=0){this.indicator.addClass('hide')
 $(window).off('.cursorLoadIndicator');}}
 $(document).ready(function(){$.wn.cursorLoadIndicator=new CursorLoadIndicator();})
-$(document).on('ajaxPromise','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.show()}).on('ajaxFail ajaxDone','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+$(document).on('ajaxPromise','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.show()}).on('ajaxFail ajaxDone','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 var StripeLoadIndicator=function(){var self=this
 this.counter=0
 this.indicator=this.makeIndicator()
@@ -3932,8 +3946,10 @@ var tooltipWidth=$tooltip.outerWidth()
 if((x+tooltipWidth)>$(window).width())
 x=$(window).width()-tooltipWidth-10;$tooltip.css({top:y,left:x,visibility:'visible'});}
 ChartUtils.prototype.hideTooltip=function(){$('#chart-tooltip').remove()}
+if($.wn===undefined)
+$.wn={}
 if($.oc===undefined)
-$.oc={}
+$.oc=$.wn
 $.wn.chartUtils=new ChartUtils();}(window.jQuery);+function($){"use strict";var ChartLine=function(element,options){var self=this
 this.chartOptions={xaxis:{mode:"time",tickLength:5},selection:{mode:"x"},grid:{markingsColor:"rgba(0,0,0, 0.02)",backgroundColor:{colors:["#fff","#fff"]},borderColor:"#7bafcc",borderWidth:0,color:"#ddd",hoverable:true,clickable:true,labelMargin:10},series:{lines:{show:true,fill:true},points:{show:true}},tooltip:true,tooltipOpts:{defaultTheme:false,content:"%x: <strong>%y</strong>",dateFormat:"%y-%0m-%0d",shifts:{x:10,y:20}},legend:{show:true,noColumns:2}}
 this.defaultDataSetOptions={shadowSize:0}
@@ -4747,8 +4763,10 @@ $(window).on('ajaxInvalidField',function(event,element,name,messages,isFirst){if
 event.preventDefault()
 var $el=$(element)
 $el.closest('[data-control=tab]').ocTab('goToElement',$el)
-$el.focus()})}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+$el.focus()})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 if($.wn.inspector===undefined)
 $.wn.inspector={}
 var Base=$.wn.foundation.base,BaseProto=Base.prototype
@@ -5442,8 +5460,10 @@ var subgroupRows=subgroup.findGroupRows(table,ignoreCollapsedSubgroups,groupMana
 for(var j=0,subgroupLen=subgroupRows.length;j<subgroupLen;j++){result.push(subgroupRows[j])}}
 return result}
 Group.prototype.findGroupRow=function(table){return table.querySelector('tr[data-group-index="'+this.groupIndex+'"]')}
-$.wn.inspector.groupManager=GroupManager}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+$.wn.inspector.groupManager=GroupManager}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 if($.wn.inspector===undefined)
 $.wn.inspector={}
 $.wn.inspector.engine={}
@@ -5468,8 +5488,10 @@ result.properties.push(property)
 if(property.itemType=='group'){result.hasGroups=true
 for(var j=0,propertiesLen=property.properties.length;j<propertiesLen;j++){result.properties.push(property.properties[j])}
 delete property.properties}}
-return result}}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+return result}}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 if($.wn.inspector===undefined)
 $.wn.inspector={}
 if($.wn.inspector.propertyEditors===undefined)
@@ -6668,8 +6690,10 @@ this.hideLoadingIndicator()
 var loadedItems={}
 if(data.options){for(var i=data.options.length-1;i>=0;i--){loadedItems[data.options[i].value]=data.options[i].title}}
 this.buildAutoComplete(loadedItems)}
-$.wn.inspector.propertyEditors.autocomplete=AutocompleteEditor}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+$.wn.inspector.propertyEditors.autocomplete=AutocompleteEditor}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 if($.wn.inspector===undefined)
 $.wn.inspector={}
 $.wn.inspector.helpers={}
@@ -6789,8 +6813,10 @@ if(length>this.options.max.value){return this.options.max.message!==undefined?th
 LengthValidator.prototype.getObjectLength=function(value){var result=0
 for(var key in value){result++}
 return result}
-$.wn.inspector.validators.length=LengthValidator}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+$.wn.inspector.validators.length=LengthValidator}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 if($.wn.inspector===undefined)
 $.wn.inspector={}
 var Base=$.wn.foundation.base,BaseProto=Base.prototype

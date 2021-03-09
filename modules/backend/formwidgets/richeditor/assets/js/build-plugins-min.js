@@ -273,6 +273,8 @@ $.fn.richEditor.Constructor=RichEditor
 $.fn.richEditor.noConflict=function(){$.fn.richEditor=old
 return this}
 $(document).render(function(){$('[data-control="richeditor"]').richEditor()})
+if($.wn===undefined)
+$.wn={}
 if($.oc===undefined)
-$.oc={}
+$.oc=$.wn
 $.wn.richEditorButtons=['paragraphFormat','paragraphStyle','quote','bold','italic','align','formatOL','formatUL','insertTable','insertLink','insertImage','insertVideo','insertAudio','insertFile','insertHR','fullscreen','html']}(window.jQuery);

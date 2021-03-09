@@ -187,8 +187,10 @@ var body=getBody(str,i);i=i+body.originLength-1;result+=parse(body.body);type="a
 throw new Error("Broken JSON array near "+result);}}
 window.ocJSON=function(json){var jsonString=parse(json);return JSON.parse(jsonString);};}(window);+function(window){"use strict";function trimAttributes(node){$.each(node.attributes,function(){var attrName=this.name;var attrValue=this.value;if(attrName.indexOf('on')==0||attrValue.indexOf('javascript:')==0){$(node).removeAttr(attrName);}});}
 function sanitize(html){var output=$($.parseHTML('<div>'+html+'</div>',null,false));output.find('*').each(function(){trimAttributes(this);});return output.html();}
-window.ocSanitize=function(html){return sanitize(html)};}(window);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+window.ocSanitize=function(html){return sanitize(html)};}(window);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 var LOADER_CLASS='oc-loading';$(document).on('ajaxSetup','[data-request][data-request-flash]',function(event,context){context.options.handleErrorMessage=function(message){$.wn.flashMsg({text:message,class:'error'})}
 context.options.handleFlashMessage=function(message,type){$.wn.flashMsg({text:message,class:type})}})
 $(document).on('ajaxValidation','[data-request][data-request-validate]',function(event,context,errorMsg,fields){var $this=$(this).closest('form'),$container=$('[data-validate-error]',$this),messages=[],$field
@@ -246,7 +248,9 @@ function remove(){window.clearInterval(timer)
 $element.removeClass('in')
 $.support.transition&&$element.hasClass('fade')?$element.one($.support.transition.end,removeElement).emulateTransitionEnd(500):removeElement()}}
 FlashMessage.DEFAULTS={class:'success',text:'Default text',interval:5}
+if($.wn===undefined)
+$.wn={}
 if($.oc===undefined)
-$.oc={}
+$.oc=$.wn
 $.wn.flashMsg=FlashMessage
 $(document).render(function(){$('[data-control=flash-message]').each(function(){$.wn.flashMsg($(this).data(),this)})})}(window.jQuery);

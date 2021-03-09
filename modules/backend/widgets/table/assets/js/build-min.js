@@ -1,6 +1,8 @@
 
-+function($){"use strict";if($.oc===undefined)
-$.oc={}
++function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 if($.wn.table===undefined)
 $.wn.table={}
 var Table=function(element,options){this.el=element

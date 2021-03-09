@@ -1,7 +1,8 @@
 /*
  * This file has been compiled from: /modules/system/lang/ar/client.php
  */
-if ($.oc === undefined) $.oc = {}
+if ($.wn === undefined) $.wn = {}
+if ($.oc === undefined) $.oc = $.wn
 if ($.wn.langMessages === undefined) $.wn.langMessages = {}
 $.wn.langMessages['ar'] = $.extend(
     $.wn.langMessages['ar'] || {},

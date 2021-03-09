@@ -4691,8 +4691,10 @@ if(typeof option=='string')result=data[option].apply(data,args)
 if(typeof result!='undefined')return false})
 return result?result:this}
 $.fn.codeEditor.Constructor=CodeEditor
+if($.wn===undefined)
+$.wn={}
 if($.oc===undefined)
-$.oc={}
+$.oc=$.wn
 $.wn.codeEditorExtensionModes={'htm':'html','html':'html','md':'markdown','txt':'plain_text','js':'javascript','less':'less','scss':'scss','sass':'sass','css':'css'}
 $.fn.codeEditor.noConflict=function(){$.fn.codeEditor=old
 return this}
