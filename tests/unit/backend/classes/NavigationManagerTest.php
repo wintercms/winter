@@ -211,40 +211,40 @@ class NavigationManagerTest extends TestCase
     {
         $manager = NavigationManager::instance();
 
-        $manager->addSideMenuItems('October.Tester', 'blog', [
+        $manager->addSideMenuItems('Winter.Tester', 'blog', [
             'foo' => [
                 'label'       => 'Bar',
                 'icon'        => 'icon-derp',
                 'url'         => 'http://google.com',
                 'permissions' => [
-                    'october.tester.access_foo',
-                    'october.tester.access_bar'
+                    'winter.tester.access_foo',
+                    'winter.tester.access_bar'
                 ]
             ]
         ]);
 
-        $manager->registerOwnerAlias('October.Tester', 'Alias.Tester');
+        $manager->registerOwnerAlias('Winter.Tester', 'Alias.Tester');
         $manager->setContext('Alias.Tester', 'blog');
 
         $items = $manager->listSideMenuItems();
 
-        $this->assertIsArray($items);
+        $this->assertTrue(is_array($items));
         $this->assertArrayHasKey('foo', $items);
 
-        $this->assertIsObject($items['foo']);
+        $this->assertTrue(is_object($items['foo']));
         $this->assertObjectHasAttribute('code', $items['foo']);
         $this->assertObjectHasAttribute('owner', $items['foo']);
         $this->assertObjectHasAttribute('order', $items['foo']);
 
         $this->assertEquals(-1, $items['foo']->order);
         $this->assertEquals('foo', $items['foo']->code);
-        $this->assertEquals('October.Tester', $items['foo']->owner);
+        $this->assertEquals('Winter.Tester', $items['foo']->owner);
 
         $this->assertObjectHasAttribute('permissions', $items['foo']);
-        $this->assertIsArray($items['foo']->permissions);
+        $this->assertTrue(is_array($items['foo']->permissions));
         $this->assertCount(2, $items['foo']->permissions);
-        $this->assertContains('october.tester.access_foo', $items['foo']->permissions);
-        $this->assertContains('october.tester.access_bar', $items['foo']->permissions);
+        $this->assertContains('winter.tester.access_foo', $items['foo']->permissions);
+        $this->assertContains('winter.tester.access_bar', $items['foo']->permissions);
     }
 
     public function testRemoveSideMenuItem()
@@ -272,7 +272,7 @@ class NavigationManagerTest extends TestCase
     public function testRemoveSideMenuItemByAlias()
     {
         $manager = NavigationManager::instance();
-        $manager->addSideMenuItems('October.Tester', 'blog', [
+        $manager->addSideMenuItems('Winter.Tester', 'blog', [
             'bar' => [
                 'label' => 'Bar',
                 'icon' => 'icon-bars',
@@ -280,7 +280,7 @@ class NavigationManagerTest extends TestCase
             ]
         ]);
 
-        $manager->registerOwnerAlias('October.Tester', 'Alias.Tester');
+        $manager->registerOwnerAlias('Winter.Tester', 'Alias.Tester');
         $manager->setContext('Alias.Tester', 'blog');
 
         $items = $manager->listSideMenuItems();
