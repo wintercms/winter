@@ -5,15 +5,17 @@ use Event;
 use Backend;
 use BackendMenu;
 use BackendAuth;
-use Backend\Models\UserRole;
-use Backend\Classes\WidgetManager;
-use Winter\Storm\Support\ModuleServiceProvider;
-use System\Classes\SettingsManager;
-use Cms\Classes\ComponentManager;
-use Cms\Classes\Page as CmsPage;
-use Cms\Classes\CmsObject;
-use Cms\Models\ThemeData;
 use Cms\Models\ThemeLog;
+use Cms\Models\ThemeData;
+use Cms\Classes\CmsObject;
+use Backend\Models\UserRole;
+use Cms\Classes\Page as CmsPage;
+use Cms\Classes\ComponentManager;
+use System\Classes\CombineAssets;
+use Backend\Classes\WidgetManager;
+use System\Classes\SettingsManager;
+
+use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
 {
@@ -26,6 +28,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         parent::register('cms');
 
+        $this->registerAssetBundles();
         $this->registerComponents();
         $this->registerThemeLogging();
         $this->registerCombinerEvents();
@@ -54,6 +57,17 @@ class ServiceProvider extends ModuleServiceProvider
 
         $this->bootMenuItemEvents();
         $this->bootRichEditorEvents();
+    }
+
+    /**
+     * Register asset bundles
+     */
+    protected function registerAssetBundles()
+    {
+        CombineAssets::registerCallback(function ($combiner) {
+            $combiner->registerBundle('~/modules/cms/assets/less/winter.components.less');
+            $combiner->registerBundle('~/modules/cms/assets/less/winter.theme-selector.less');
+        });
     }
 
     /**
