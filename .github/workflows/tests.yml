@@ -17,7 +17,7 @@ jobs:
     name: Linux / PHP ${{ matrix.phpVersion }}
     env:
       extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
-      key: october-cms-1-0-cache-v1
+      key: winter-cms-1-0-cache-v1
     steps:
       - name: Cancel previous incomplete runs
         uses: styfle/cancel-workflow-action@0.8.0

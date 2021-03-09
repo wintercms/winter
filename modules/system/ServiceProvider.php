@@ -362,7 +362,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendNavigation()
     {
         BackendMenu::registerCallback(function ($manager) {
-            $manager->registerMenuItems('October.System', [
+            $manager->registerMenuItems('Winter.System', [
                 'system' => [
                     'label'       => 'system::lang.settings.menu_label',
                     'icon'        => 'icon-cog',
@@ -372,6 +372,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'order'       => 1000
                 ]
             ]);
+            $manager->registerOwnerAlias('Winter.System', 'October.System');
         });
 
         /*

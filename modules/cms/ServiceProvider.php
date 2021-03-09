@@ -102,7 +102,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendNavigation()
     {
         BackendMenu::registerCallback(function ($manager) {
-            $manager->registerMenuItems('October.Cms', [
+            $manager->registerMenuItems('Winter.Cms', [
                 'cms' => [
                     'label'       => 'cms::lang.cms.menu_label',
                     'icon'        => 'icon-magic',
@@ -167,6 +167,7 @@ class ServiceProvider extends ModuleServiceProvider
                     ]
                 ]
             ]);
+            $manager->registerOwnerAlias('Winter.Cms', 'October.Cms');
         });
     }
 
