@@ -71,6 +71,12 @@ class MediaViewHelper
             return Controller::getController()->renderPartial($partialName, ['src' => $src]);
         }
 
+        $partialName = $type == 'audio' ? 'wn-audio-player' : 'wn-video-player';
+
+        if ($this->playerPartialExists($partialName)) {
+            return Controller::getController()->renderPartial($partialName, ['src' => $src]);
+        }
+
         return $this->getDefaultPlayerMarkup($type, $src);
     }
 

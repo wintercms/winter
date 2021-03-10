@@ -81,10 +81,10 @@
                         <div class="toolbar-item">                                                      \
                             <div class="btn-group">                                                     \
                                 <button type="button" class="btn btn-primary                            \
-                                    oc-icon-plus"                                                       \
+                                    wn-icon-plus"                                                       \
                                     data-cmd="create-item">Add</button>                                 \
                                 <button type="button" class="btn btn-default                            \
-                                    empty oc-icon-trash-o"                                              \
+                                    empty wn-icon-trash-o"                                              \
                                     data-cmd="delete-item"></button>                                    \
                             </div>                                                                      \
                         </div>                                                                          \

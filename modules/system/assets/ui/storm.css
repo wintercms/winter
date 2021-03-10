@@ -879,14 +879,24 @@ input[type="button"].btn-block {width:100%}
 .btn:hover i[class*=" icon-"],
 .btn:focus i[class*=" icon-"],
 .btn.focus i[class*=" icon-"] {opacity:1}
+.btn[class^="wn-icon-"]:before,
+.btn[class*=" wn-icon-"]:before,
 .btn[class^="oc-icon-"]:before,
 .btn[class*=" oc-icon-"]:before {font-size:14px;line-height:14px;position:relative;opacity:.6}
+.btn[class^="wn-icon-"].on:before,
+.btn[class*=" wn-icon-"].on:before,
 .btn[class^="oc-icon-"].on:before,
 .btn[class*=" oc-icon-"].on:before,
+.btn[class^="wn-icon-"]:hover:before,
+.btn[class*=" wn-icon-"]:hover:before,
 .btn[class^="oc-icon-"]:hover:before,
 .btn[class*=" oc-icon-"]:hover:before,
+.btn[class^="wn-icon-"]:focus:before,
+.btn[class*=" wn-icon-"]:focus:before,
 .btn[class^="oc-icon-"]:focus:before,
 .btn[class*=" oc-icon-"]:focus:before,
+.btn[class^="wn-icon-"].focus:before,
+.btn[class*=" wn-icon-"].focus:before,
 .btn[class^="oc-icon-"].focus:before,
 .btn[class*=" oc-icon-"].focus:before {opacity:1}
 .btn-secondary {-webkit-box-shadow:inset 0 -2px 0 rgba(0,0,0,.1);box-shadow:inset 0 -2px 0 rgba(0,0,0,.1)}
@@ -931,6 +941,1578 @@ input[type="button"].btn-block {width:100%}
 .tooltip.bottom .tooltip-arrow {top:0;left:50%;margin-left:-5px;border-width:0 5px 5px;border-bottom-color:#34495e}
 .tooltip.bottom-left .tooltip-arrow {top:0;left:5px;border-width:0 5px 5px;border-bottom-color:#34495e}
 .tooltip.bottom-right .tooltip-arrow {top:0;right:5px;border-width:0 5px 5px;border-bottom-color:#34495e}
+.wn-icon-glass:before,
+.icon-glass:before {content:"\f000"}
+.wn-icon-music:before,
+.icon-music:before {content:"\f001"}
+.wn-icon-search:before,
+.icon-search:before {content:"\f002"}
+.wn-icon-envelope-o:before,
+.icon-envelope-o:before {content:"\f003"}
+.wn-icon-heart:before,
+.icon-heart:before {content:"\f004"}
+.wn-icon-star:before,
+.icon-star:before {content:"\f005"}
+.wn-icon-star-o:before,
+.icon-star-o:before {content:"\f006"}
+.wn-icon-user:before,
+.icon-user:before {content:"\f007"}
+.wn-icon-film:before,
+.icon-film:before {content:"\f008"}
+.wn-icon-th-large:before,
+.icon-th-large:before {content:"\f009"}
+.wn-icon-th:before,
+.icon-th:before {content:"\f00a"}
+.wn-icon-th-list:before,
+.icon-th-list:before {content:"\f00b"}
+.wn-icon-check:before,
+.icon-check:before {content:"\f00c"}
+.wn-icon-remove:before,
+.icon-remove:before,
+.wn-icon-close:before,
+.icon-close:before,
+.wn-icon-times:before,
+.icon-times:before {content:"\f00d"}
+.wn-icon-search-plus:before,
+.icon-search-plus:before {content:"\f00e"}
+.wn-icon-search-minus:before,
+.icon-search-minus:before {content:"\f010"}
+.wn-icon-power-off:before,
+.icon-power-off:before {content:"\f011"}
+.wn-icon-signal:before,
+.icon-signal:before {content:"\f012"}
+.wn-icon-gear:before,
+.icon-gear:before,
+.wn-icon-cog:before,
+.icon-cog:before {content:"\f013"}
+.wn-icon-trash-o:before,
+.icon-trash-o:before {content:"\f014"}
+.wn-icon-home:before,
+.icon-home:before {content:"\f015"}
+.wn-icon-file-o:before,
+.icon-file-o:before {content:"\f016"}
+.wn-icon-clock-o:before,
+.icon-clock-o:before {content:"\f017"}
+.wn-icon-road:before,
+.icon-road:before {content:"\f018"}
+.wn-icon-download:before,
+.icon-download:before {content:"\f019"}
+.wn-icon-arrow-circle-o-down:before,
+.icon-arrow-circle-o-down:before {content:"\f01a"}
+.wn-icon-arrow-circle-o-up:before,
+.icon-arrow-circle-o-up:before {content:"\f01b"}
+.wn-icon-inbox:before,
+.icon-inbox:before {content:"\f01c"}
+.wn-icon-play-circle-o:before,
+.icon-play-circle-o:before {content:"\f01d"}
+.wn-icon-rotate-right:before,
+.icon-rotate-right:before,
+.wn-icon-repeat:before,
+.icon-repeat:before {content:"\f01e"}
+.wn-icon-refresh:before,
+.icon-refresh:before {content:"\f021"}
+.wn-icon-list-alt:before,
+.icon-list-alt:before {content:"\f022"}
+.wn-icon-lock:before,
+.icon-lock:before {content:"\f023"}
+.wn-icon-flag:before,
+.icon-flag:before {content:"\f024"}
+.wn-icon-headphones:before,
+.icon-headphones:before {content:"\f025"}
+.wn-icon-volume-off:before,
+.icon-volume-off:before {content:"\f026"}
+.wn-icon-volume-down:before,
+.icon-volume-down:before {content:"\f027"}
+.wn-icon-volume-up:before,
+.icon-volume-up:before {content:"\f028"}
+.wn-icon-qrcode:before,
+.icon-qrcode:before {content:"\f029"}
+.wn-icon-barcode:before,
+.icon-barcode:before {content:"\f02a"}
+.wn-icon-tag:before,
+.icon-tag:before {content:"\f02b"}
+.wn-icon-tags:before,
+.icon-tags:before {content:"\f02c"}
+.wn-icon-book:before,
+.icon-book:before {content:"\f02d"}
+.wn-icon-bookmark:before,
+.icon-bookmark:before {content:"\f02e"}
+.wn-icon-print:before,
+.icon-print:before {content:"\f02f"}
+.wn-icon-camera:before,
+.icon-camera:before {content:"\f030"}
+.wn-icon-font:before,
+.icon-font:before {content:"\f031"}
+.wn-icon-bold:before,
+.icon-bold:before {content:"\f032"}
+.wn-icon-italic:before,
+.icon-italic:before {content:"\f033"}
+.wn-icon-text-height:before,
+.icon-text-height:before {content:"\f034"}
+.wn-icon-text-width:before,
+.icon-text-width:before {content:"\f035"}
+.wn-icon-align-left:before,
+.icon-align-left:before {content:"\f036"}
+.wn-icon-align-center:before,
+.icon-align-center:before {content:"\f037"}
+.wn-icon-align-right:before,
+.icon-align-right:before {content:"\f038"}
+.wn-icon-align-justify:before,
+.icon-align-justify:before {content:"\f039"}
+.wn-icon-list:before,
+.icon-list:before {content:"\f03a"}
+.wn-icon-dedent:before,
+.icon-dedent:before,
+.wn-icon-outdent:before,
+.icon-outdent:before {content:"\f03b"}
+.wn-icon-indent:before,
+.icon-indent:before {content:"\f03c"}
+.wn-icon-video-camera:before,
+.icon-video-camera:before {content:"\f03d"}
+.wn-icon-photo:before,
+.icon-photo:before,
+.wn-icon-image:before,
+.icon-image:before,
+.wn-icon-picture-o:before,
+.icon-picture-o:before {content:"\f03e"}
+.wn-icon-pencil:before,
+.icon-pencil:before {content:"\f040"}
+.wn-icon-map-marker:before,
+.icon-map-marker:before {content:"\f041"}
+.wn-icon-adjust:before,
+.icon-adjust:before {content:"\f042"}
+.wn-icon-tint:before,
+.icon-tint:before {content:"\f043"}
+.wn-icon-edit:before,
+.icon-edit:before,
+.wn-icon-pencil-square-o:before,
+.icon-pencil-square-o:before {content:"\f044"}
+.wn-icon-share-square-o:before,
+.icon-share-square-o:before {content:"\f045"}
+.wn-icon-check-square-o:before,
+.icon-check-square-o:before {content:"\f046"}
+.wn-icon-arrows:before,
+.icon-arrows:before {content:"\f047"}
+.wn-icon-step-backward:before,
+.icon-step-backward:before {content:"\f048"}
+.wn-icon-fast-backward:before,
+.icon-fast-backward:before {content:"\f049"}
+.wn-icon-backward:before,
+.icon-backward:before {content:"\f04a"}
+.wn-icon-play:before,
+.icon-play:before {content:"\f04b"}
+.wn-icon-pause:before,
+.icon-pause:before {content:"\f04c"}
+.wn-icon-stop:before,
+.icon-stop:before {content:"\f04d"}
+.wn-icon-forward:before,
+.icon-forward:before {content:"\f04e"}
+.wn-icon-fast-forward:before,
+.icon-fast-forward:before {content:"\f050"}
+.wn-icon-step-forward:before,
+.icon-step-forward:before {content:"\f051"}
+.wn-icon-eject:before,
+.icon-eject:before {content:"\f052"}
+.wn-icon-chevron-left:before,
+.icon-chevron-left:before {content:"\f053"}
+.wn-icon-chevron-right:before,
+.icon-chevron-right:before {content:"\f054"}
+.wn-icon-plus-circle:before,
+.icon-plus-circle:before {content:"\f055"}
+.wn-icon-minus-circle:before,
+.icon-minus-circle:before {content:"\f056"}
+.wn-icon-times-circle:before,
+.icon-times-circle:before {content:"\f057"}
+.wn-icon-check-circle:before,
+.icon-check-circle:before {content:"\f058"}
+.wn-icon-question-circle:before,
+.icon-question-circle:before {content:"\f059"}
+.wn-icon-info-circle:before,
+.icon-info-circle:before {content:"\f05a"}
+.wn-icon-crosshairs:before,
+.icon-crosshairs:before {content:"\f05b"}
+.wn-icon-times-circle-o:before,
+.icon-times-circle-o:before {content:"\f05c"}
+.wn-icon-check-circle-o:before,
+.icon-check-circle-o:before {content:"\f05d"}
+.wn-icon-ban:before,
+.icon-ban:before {content:"\f05e"}
+.wn-icon-arrow-left:before,
+.icon-arrow-left:before {content:"\f060"}
+.wn-icon-arrow-right:before,
+.icon-arrow-right:before {content:"\f061"}
+.wn-icon-arrow-up:before,
+.icon-arrow-up:before {content:"\f062"}
+.wn-icon-arrow-down:before,
+.icon-arrow-down:before {content:"\f063"}
+.wn-icon-mail-forward:before,
+.icon-mail-forward:before,
+.wn-icon-share:before,
+.icon-share:before {content:"\f064"}
+.wn-icon-expand:before,
+.icon-expand:before {content:"\f065"}
+.wn-icon-compress:before,
+.icon-compress:before {content:"\f066"}
+.wn-icon-plus:before,
+.icon-plus:before {content:"\f067"}
+.wn-icon-minus:before,
+.icon-minus:before {content:"\f068"}
+.wn-icon-asterisk:before,
+.icon-asterisk:before {content:"\f069"}
+.wn-icon-exclamation-circle:before,
+.icon-exclamation-circle:before {content:"\f06a"}
+.wn-icon-gift:before,
+.icon-gift:before {content:"\f06b"}
+.wn-icon-leaf:before,
+.icon-leaf:before {content:"\f06c"}
+.wn-icon-fire:before,
+.icon-fire:before {content:"\f06d"}
+.wn-icon-eye:before,
+.icon-eye:before {content:"\f06e"}
+.wn-icon-eye-slash:before,
+.icon-eye-slash:before {content:"\f070"}
+.wn-icon-warning:before,
+.icon-warning:before,
+.wn-icon-exclamation-triangle:before,
+.icon-exclamation-triangle:before {content:"\f071"}
+.wn-icon-plane:before,
+.icon-plane:before {content:"\f072"}
+.wn-icon-calendar:before,
+.icon-calendar:before {content:"\f073"}
+.wn-icon-random:before,
+.icon-random:before {content:"\f074"}
+.wn-icon-comment:before,
+.icon-comment:before {content:"\f075"}
+.wn-icon-magnet:before,
+.icon-magnet:before {content:"\f076"}
+.wn-icon-chevron-up:before,
+.icon-chevron-up:before {content:"\f077"}
+.wn-icon-chevron-down:before,
+.icon-chevron-down:before {content:"\f078"}
+.wn-icon-retweet:before,
+.icon-retweet:before {content:"\f079"}
+.wn-icon-shopping-cart:before,
+.icon-shopping-cart:before {content:"\f07a"}
+.wn-icon-folder:before,
+.icon-folder:before {content:"\f07b"}
+.wn-icon-folder-open:before,
+.icon-folder-open:before {content:"\f07c"}
+.wn-icon-arrows-v:before,
+.icon-arrows-v:before {content:"\f07d"}
+.wn-icon-arrows-h:before,
+.icon-arrows-h:before {content:"\f07e"}
+.wn-icon-bar-chart-o:before,
+.icon-bar-chart-o:before,
+.wn-icon-bar-chart:before,
+.icon-bar-chart:before {content:"\f080"}
+.wn-icon-twitter-square:before,
+.icon-twitter-square:before {content:"\f081"}
+.wn-icon-facebook-square:before,
+.icon-facebook-square:before {content:"\f082"}
+.wn-icon-camera-retro:before,
+.icon-camera-retro:before {content:"\f083"}
+.wn-icon-key:before,
+.icon-key:before {content:"\f084"}
+.wn-icon-gears:before,
+.icon-gears:before,
+.wn-icon-cogs:before,
+.icon-cogs:before {content:"\f085"}
+.wn-icon-comments:before,
+.icon-comments:before {content:"\f086"}
+.wn-icon-thumbs-o-up:before,
+.icon-thumbs-o-up:before {content:"\f087"}
+.wn-icon-thumbs-o-down:before,
+.icon-thumbs-o-down:before {content:"\f088"}
+.wn-icon-star-half:before,
+.icon-star-half:before {content:"\f089"}
+.wn-icon-heart-o:before,
+.icon-heart-o:before {content:"\f08a"}
+.wn-icon-sign-out:before,
+.icon-sign-out:before {content:"\f08b"}
+.wn-icon-linkedin-square:before,
+.icon-linkedin-square:before {content:"\f08c"}
+.wn-icon-thumb-tack:before,
+.icon-thumb-tack:before {content:"\f08d"}
+.wn-icon-external-link:before,
+.icon-external-link:before {content:"\f08e"}
+.wn-icon-sign-in:before,
+.icon-sign-in:before {content:"\f090"}
+.wn-icon-trophy:before,
+.icon-trophy:before {content:"\f091"}
+.wn-icon-github-square:before,
+.icon-github-square:before {content:"\f092"}
+.wn-icon-upload:before,
+.icon-upload:before {content:"\f093"}
+.wn-icon-lemon-o:before,
+.icon-lemon-o:before {content:"\f094"}
+.wn-icon-phone:before,
+.icon-phone:before {content:"\f095"}
+.wn-icon-square-o:before,
+.icon-square-o:before {content:"\f096"}
+.wn-icon-bookmark-o:before,
+.icon-bookmark-o:before {content:"\f097"}
+.wn-icon-phone-square:before,
+.icon-phone-square:before {content:"\f098"}
+.wn-icon-twitter:before,
+.icon-twitter:before {content:"\f099"}
+.wn-icon-facebook-f:before,
+.icon-facebook-f:before,
+.wn-icon-facebook:before,
+.icon-facebook:before {content:"\f09a"}
+.wn-icon-github:before,
+.icon-github:before {content:"\f09b"}
+.wn-icon-unlock:before,
+.icon-unlock:before {content:"\f09c"}
+.wn-icon-credit-card:before,
+.icon-credit-card:before {content:"\f09d"}
+.wn-icon-feed:before,
+.icon-feed:before,
+.wn-icon-rss:before,
+.icon-rss:before {content:"\f09e"}
+.wn-icon-hdd-o:before,
+.icon-hdd-o:before {content:"\f0a0"}
+.wn-icon-bullhorn:before,
+.icon-bullhorn:before {content:"\f0a1"}
+.wn-icon-bell:before,
+.icon-bell:before {content:"\f0f3"}
+.wn-icon-certificate:before,
+.icon-certificate:before {content:"\f0a3"}
+.wn-icon-hand-o-right:before,
+.icon-hand-o-right:before {content:"\f0a4"}
+.wn-icon-hand-o-left:before,
+.icon-hand-o-left:before {content:"\f0a5"}
+.wn-icon-hand-o-up:before,
+.icon-hand-o-up:before {content:"\f0a6"}
+.wn-icon-hand-o-down:before,
+.icon-hand-o-down:before {content:"\f0a7"}
+.wn-icon-arrow-circle-left:before,
+.icon-arrow-circle-left:before {content:"\f0a8"}
+.wn-icon-arrow-circle-right:before,
+.icon-arrow-circle-right:before {content:"\f0a9"}
+.wn-icon-arrow-circle-up:before,
+.icon-arrow-circle-up:before {content:"\f0aa"}
+.wn-icon-arrow-circle-down:before,
+.icon-arrow-circle-down:before {content:"\f0ab"}
+.wn-icon-globe:before,
+.icon-globe:before {content:"\f0ac"}
+.wn-icon-wrench:before,
+.icon-wrench:before {content:"\f0ad"}
+.wn-icon-tasks:before,
+.icon-tasks:before {content:"\f0ae"}
+.wn-icon-filter:before,
+.icon-filter:before {content:"\f0b0"}
+.wn-icon-briefcase:before,
+.icon-briefcase:before {content:"\f0b1"}
+.wn-icon-arrows-alt:before,
+.icon-arrows-alt:before {content:"\f0b2"}
+.wn-icon-group:before,
+.icon-group:before,
+.wn-icon-users:before,
+.icon-users:before {content:"\f0c0"}
+.wn-icon-chain:before,
+.icon-chain:before,
+.wn-icon-link:before,
+.icon-link:before {content:"\f0c1"}
+.wn-icon-cloud:before,
+.icon-cloud:before {content:"\f0c2"}
+.wn-icon-flask:before,
+.icon-flask:before {content:"\f0c3"}
+.wn-icon-cut:before,
+.icon-cut:before,
+.wn-icon-scissors:before,
+.icon-scissors:before {content:"\f0c4"}
+.wn-icon-copy:before,
+.icon-copy:before,
+.wn-icon-files-o:before,
+.icon-files-o:before {content:"\f0c5"}
+.wn-icon-paperclip:before,
+.icon-paperclip:before {content:"\f0c6"}
+.wn-icon-save:before,
+.icon-save:before,
+.wn-icon-floppy-o:before,
+.icon-floppy-o:before {content:"\f0c7"}
+.wn-icon-square:before,
+.icon-square:before {content:"\f0c8"}
+.wn-icon-navicon:before,
+.icon-navicon:before,
+.wn-icon-reorder:before,
+.icon-reorder:before,
+.wn-icon-bars:before,
+.icon-bars:before {content:"\f0c9"}
+.wn-icon-list-ul:before,
+.icon-list-ul:before {content:"\f0ca"}
+.wn-icon-list-ol:before,
+.icon-list-ol:before {content:"\f0cb"}
+.wn-icon-strikethrough:before,
+.icon-strikethrough:before {content:"\f0cc"}
+.wn-icon-underline:before,
+.icon-underline:before {content:"\f0cd"}
+.wn-icon-table:before,
+.icon-table:before {content:"\f0ce"}
+.wn-icon-magic:before,
+.icon-magic:before {content:"\f0d0"}
+.wn-icon-truck:before,
+.icon-truck:before {content:"\f0d1"}
+.wn-icon-pinterest:before,
+.icon-pinterest:before {content:"\f0d2"}
+.wn-icon-pinterest-square:before,
+.icon-pinterest-square:before {content:"\f0d3"}
+.wn-icon-google-plus-square:before,
+.icon-google-plus-square:before {content:"\f0d4"}
+.wn-icon-google-plus:before,
+.icon-google-plus:before {content:"\f0d5"}
+.wn-icon-money:before,
+.icon-money:before {content:"\f0d6"}
+.wn-icon-caret-down:before,
+.icon-caret-down:before {content:"\f0d7"}
+.wn-icon-caret-up:before,
+.icon-caret-up:before {content:"\f0d8"}
+.wn-icon-caret-left:before,
+.icon-caret-left:before {content:"\f0d9"}
+.wn-icon-caret-right:before,
+.icon-caret-right:before {content:"\f0da"}
+.wn-icon-columns:before,
+.icon-columns:before {content:"\f0db"}
+.wn-icon-unsorted:before,
+.icon-unsorted:before,
+.wn-icon-sort:before,
+.icon-sort:before {content:"\f0dc"}
+.wn-icon-sort-down:before,
+.icon-sort-down:before,
+.wn-icon-sort-desc:before,
+.icon-sort-desc:before {content:"\f0dd"}
+.wn-icon-sort-up:before,
+.icon-sort-up:before,
+.wn-icon-sort-asc:before,
+.icon-sort-asc:before {content:"\f0de"}
+.wn-icon-envelope:before,
+.icon-envelope:before {content:"\f0e0"}
+.wn-icon-linkedin:before,
+.icon-linkedin:before {content:"\f0e1"}
+.wn-icon-rotate-left:before,
+.icon-rotate-left:before,
+.wn-icon-undo:before,
+.icon-undo:before {content:"\f0e2"}
+.wn-icon-legal:before,
+.icon-legal:before,
+.wn-icon-gavel:before,
+.icon-gavel:before {content:"\f0e3"}
+.wn-icon-dashboard:before,
+.icon-dashboard:before,
+.wn-icon-tachometer:before,
+.icon-tachometer:before {content:"\f0e4"}
+.wn-icon-comment-o:before,
+.icon-comment-o:before {content:"\f0e5"}
+.wn-icon-comments-o:before,
+.icon-comments-o:before {content:"\f0e6"}
+.wn-icon-flash:before,
+.icon-flash:before,
+.wn-icon-bolt:before,
+.icon-bolt:before {content:"\f0e7"}
+.wn-icon-sitemap:before,
+.icon-sitemap:before {content:"\f0e8"}
+.wn-icon-umbrella:before,
+.icon-umbrella:before {content:"\f0e9"}
+.wn-icon-paste:before,
+.icon-paste:before,
+.wn-icon-clipboard:before,
+.icon-clipboard:before {content:"\f0ea"}
+.wn-icon-lightbulb-o:before,
+.icon-lightbulb-o:before {content:"\f0eb"}
+.wn-icon-exchange:before,
+.icon-exchange:before {content:"\f0ec"}
+.wn-icon-cloud-download:before,
+.icon-cloud-download:before {content:"\f0ed"}
+.wn-icon-cloud-upload:before,
+.icon-cloud-upload:before {content:"\f0ee"}
+.wn-icon-user-md:before,
+.icon-user-md:before {content:"\f0f0"}
+.wn-icon-stethoscope:before,
+.icon-stethoscope:before {content:"\f0f1"}
+.wn-icon-suitcase:before,
+.icon-suitcase:before {content:"\f0f2"}
+.wn-icon-bell-o:before,
+.icon-bell-o:before {content:"\f0a2"}
+.wn-icon-coffee:before,
+.icon-coffee:before {content:"\f0f4"}
+.wn-icon-cutlery:before,
+.icon-cutlery:before {content:"\f0f5"}
+.wn-icon-file-text-o:before,
+.icon-file-text-o:before {content:"\f0f6"}
+.wn-icon-building-o:before,
+.icon-building-o:before {content:"\f0f7"}
+.wn-icon-hospital-o:before,
+.icon-hospital-o:before {content:"\f0f8"}
+.wn-icon-ambulance:before,
+.icon-ambulance:before {content:"\f0f9"}
+.wn-icon-medkit:before,
+.icon-medkit:before {content:"\f0fa"}
+.wn-icon-fighter-jet:before,
+.icon-fighter-jet:before {content:"\f0fb"}
+.wn-icon-beer:before,
+.icon-beer:before {content:"\f0fc"}
+.wn-icon-h-square:before,
+.icon-h-square:before {content:"\f0fd"}
+.wn-icon-plus-square:before,
+.icon-plus-square:before {content:"\f0fe"}
+.wn-icon-angle-double-left:before,
+.icon-angle-double-left:before {content:"\f100"}
+.wn-icon-angle-double-right:before,
+.icon-angle-double-right:before {content:"\f101"}
+.wn-icon-angle-double-up:before,
+.icon-angle-double-up:before {content:"\f102"}
+.wn-icon-angle-double-down:before,
+.icon-angle-double-down:before {content:"\f103"}
+.wn-icon-angle-left:before,
+.icon-angle-left:before {content:"\f104"}
+.wn-icon-angle-right:before,
+.icon-angle-right:before {content:"\f105"}
+.wn-icon-angle-up:before,
+.icon-angle-up:before {content:"\f106"}
+.wn-icon-angle-down:before,
+.icon-angle-down:before {content:"\f107"}
+.wn-icon-desktop:before,
+.icon-desktop:before {content:"\f108"}
+.wn-icon-laptop:before,
+.icon-laptop:before {content:"\f109"}
+.wn-icon-tablet:before,
+.icon-tablet:before {content:"\f10a"}
+.wn-icon-mobile-phone:before,
+.icon-mobile-phone:before,
+.wn-icon-mobile:before,
+.icon-mobile:before {content:"\f10b"}
+.wn-icon-circle-o:before,
+.icon-circle-o:before {content:"\f10c"}
+.wn-icon-quote-left:before,
+.icon-quote-left:before {content:"\f10d"}
+.wn-icon-quote-right:before,
+.icon-quote-right:before {content:"\f10e"}
+.wn-icon-spinner:before,
+.icon-spinner:before {content:"\f110"}
+.wn-icon-circle:before,
+.icon-circle:before {content:"\f111"}
+.wn-icon-mail-reply:before,
+.icon-mail-reply:before,
+.wn-icon-reply:before,
+.icon-reply:before {content:"\f112"}
+.wn-icon-github-alt:before,
+.icon-github-alt:before {content:"\f113"}
+.wn-icon-folder-o:before,
+.icon-folder-o:before {content:"\f114"}
+.wn-icon-folder-open-o:before,
+.icon-folder-open-o:before {content:"\f115"}
+.wn-icon-smile-o:before,
+.icon-smile-o:before {content:"\f118"}
+.wn-icon-frown-o:before,
+.icon-frown-o:before {content:"\f119"}
+.wn-icon-meh-o:before,
+.icon-meh-o:before {content:"\f11a"}
+.wn-icon-gamepad:before,
+.icon-gamepad:before {content:"\f11b"}
+.wn-icon-keyboard-o:before,
+.icon-keyboard-o:before {content:"\f11c"}
+.wn-icon-flag-o:before,
+.icon-flag-o:before {content:"\f11d"}
+.wn-icon-flag-checkered:before,
+.icon-flag-checkered:before {content:"\f11e"}
+.wn-icon-terminal:before,
+.icon-terminal:before {content:"\f120"}
+.wn-icon-code:before,
+.icon-code:before {content:"\f121"}
+.wn-icon-mail-reply-all:before,
+.icon-mail-reply-all:before,
+.wn-icon-reply-all:before,
+.icon-reply-all:before {content:"\f122"}
+.wn-icon-star-half-empty:before,
+.icon-star-half-empty:before,
+.wn-icon-star-half-full:before,
+.icon-star-half-full:before,
+.wn-icon-star-half-o:before,
+.icon-star-half-o:before {content:"\f123"}
+.wn-icon-location-arrow:before,
+.icon-location-arrow:before {content:"\f124"}
+.wn-icon-crop:before,
+.icon-crop:before {content:"\f125"}
+.wn-icon-code-fork:before,
+.icon-code-fork:before {content:"\f126"}
+.wn-icon-unlink:before,
+.icon-unlink:before,
+.wn-icon-chain-broken:before,
+.icon-chain-broken:before {content:"\f127"}
+.wn-icon-question:before,
+.icon-question:before {content:"\f128"}
+.wn-icon-info:before,
+.icon-info:before {content:"\f129"}
+.wn-icon-exclamation:before,
+.icon-exclamation:before {content:"\f12a"}
+.wn-icon-superscript:before,
+.icon-superscript:before {content:"\f12b"}
+.wn-icon-subscript:before,
+.icon-subscript:before {content:"\f12c"}
+.wn-icon-eraser:before,
+.icon-eraser:before {content:"\f12d"}
+.wn-icon-puzzle-piece:before,
+.icon-puzzle-piece:before {content:"\f12e"}
+.wn-icon-microphone:before,
+.icon-microphone:before {content:"\f130"}
+.wn-icon-microphone-slash:before,
+.icon-microphone-slash:before {content:"\f131"}
+.wn-icon-shield:before,
+.icon-shield:before {content:"\f132"}
+.wn-icon-calendar-o:before,
+.icon-calendar-o:before {content:"\f133"}
+.wn-icon-fire-extinguisher:before,
+.icon-fire-extinguisher:before {content:"\f134"}
+.wn-icon-rocket:before,
+.icon-rocket:before {content:"\f135"}
+.wn-icon-maxcdn:before,
+.icon-maxcdn:before {content:"\f136"}
+.wn-icon-chevron-circle-left:before,
+.icon-chevron-circle-left:before {content:"\f137"}
+.wn-icon-chevron-circle-right:before,
+.icon-chevron-circle-right:before {content:"\f138"}
+.wn-icon-chevron-circle-up:before,
+.icon-chevron-circle-up:before {content:"\f139"}
+.wn-icon-chevron-circle-down:before,
+.icon-chevron-circle-down:before {content:"\f13a"}
+.wn-icon-html5:before,
+.icon-html5:before {content:"\f13b"}
+.wn-icon-css3:before,
+.icon-css3:before {content:"\f13c"}
+.wn-icon-anchor:before,
+.icon-anchor:before {content:"\f13d"}
+.wn-icon-unlock-alt:before,
+.icon-unlock-alt:before {content:"\f13e"}
+.wn-icon-bullseye:before,
+.icon-bullseye:before {content:"\f140"}
+.wn-icon-ellipsis-h:before,
+.icon-ellipsis-h:before {content:"\f141"}
+.wn-icon-ellipsis-v:before,
+.icon-ellipsis-v:before {content:"\f142"}
+.wn-icon-rss-square:before,
+.icon-rss-square:before {content:"\f143"}
+.wn-icon-play-circle:before,
+.icon-play-circle:before {content:"\f144"}
+.wn-icon-ticket:before,
+.icon-ticket:before {content:"\f145"}
+.wn-icon-minus-square:before,
+.icon-minus-square:before {content:"\f146"}
+.wn-icon-minus-square-o:before,
+.icon-minus-square-o:before {content:"\f147"}
+.wn-icon-level-up:before,
+.icon-level-up:before {content:"\f148"}
+.wn-icon-level-down:before,
+.icon-level-down:before {content:"\f149"}
+.wn-icon-check-square:before,
+.icon-check-square:before {content:"\f14a"}
+.wn-icon-pencil-square:before,
+.icon-pencil-square:before {content:"\f14b"}
+.wn-icon-external-link-square:before,
+.icon-external-link-square:before {content:"\f14c"}
+.wn-icon-share-square:before,
+.icon-share-square:before {content:"\f14d"}
+.wn-icon-compass:before,
+.icon-compass:before {content:"\f14e"}
+.wn-icon-toggle-down:before,
+.icon-toggle-down:before,
+.wn-icon-caret-square-o-down:before,
+.icon-caret-square-o-down:before {content:"\f150"}
+.wn-icon-toggle-up:before,
+.icon-toggle-up:before,
+.wn-icon-caret-square-o-up:before,
+.icon-caret-square-o-up:before {content:"\f151"}
+.wn-icon-toggle-right:before,
+.icon-toggle-right:before,
+.wn-icon-caret-square-o-right:before,
+.icon-caret-square-o-right:before {content:"\f152"}
+.wn-icon-euro:before,
+.icon-euro:before,
+.wn-icon-eur:before,
+.icon-eur:before {content:"\f153"}
+.wn-icon-gbp:before,
+.icon-gbp:before {content:"\f154"}
+.wn-icon-dollar:before,
+.icon-dollar:before,
+.wn-icon-usd:before,
+.icon-usd:before {content:"\f155"}
+.wn-icon-rupee:before,
+.icon-rupee:before,
+.wn-icon-inr:before,
+.icon-inr:before {content:"\f156"}
+.wn-icon-cny:before,
+.icon-cny:before,
+.wn-icon-rmb:before,
+.icon-rmb:before,
+.wn-icon-yen:before,
+.icon-yen:before,
+.wn-icon-jpy:before,
+.icon-jpy:before {content:"\f157"}
+.wn-icon-ruble:before,
+.icon-ruble:before,
+.wn-icon-rouble:before,
+.icon-rouble:before,
+.wn-icon-rub:before,
+.icon-rub:before {content:"\f158"}
+.wn-icon-won:before,
+.icon-won:before,
+.wn-icon-krw:before,
+.icon-krw:before {content:"\f159"}
+.wn-icon-bitcoin:before,
+.icon-bitcoin:before,
+.wn-icon-btc:before,
+.icon-btc:before {content:"\f15a"}
+.wn-icon-file:before,
+.icon-file:before {content:"\f15b"}
+.wn-icon-file-text:before,
+.icon-file-text:before {content:"\f15c"}
+.wn-icon-sort-alpha-asc:before,
+.icon-sort-alpha-asc:before {content:"\f15d"}
+.wn-icon-sort-alpha-desc:before,
+.icon-sort-alpha-desc:before {content:"\f15e"}
+.wn-icon-sort-amount-asc:before,
+.icon-sort-amount-asc:before {content:"\f160"}
+.wn-icon-sort-amount-desc:before,
+.icon-sort-amount-desc:before {content:"\f161"}
+.wn-icon-sort-numeric-asc:before,
+.icon-sort-numeric-asc:before {content:"\f162"}
+.wn-icon-sort-numeric-desc:before,
+.icon-sort-numeric-desc:before {content:"\f163"}
+.wn-icon-thumbs-up:before,
+.icon-thumbs-up:before {content:"\f164"}
+.wn-icon-thumbs-down:before,
+.icon-thumbs-down:before {content:"\f165"}
+.wn-icon-youtube-square:before,
+.icon-youtube-square:before {content:"\f166"}
+.wn-icon-youtube:before,
+.icon-youtube:before {content:"\f167"}
+.wn-icon-xing:before,
+.icon-xing:before {content:"\f168"}
+.wn-icon-xing-square:before,
+.icon-xing-square:before {content:"\f169"}
+.wn-icon-youtube-play:before,
+.icon-youtube-play:before {content:"\f16a"}
+.wn-icon-dropbox:before,
+.icon-dropbox:before {content:"\f16b"}
+.wn-icon-stack-overflow:before,
+.icon-stack-overflow:before {content:"\f16c"}
+.wn-icon-instagram:before,
+.icon-instagram:before {content:"\f16d"}
+.wn-icon-flickr:before,
+.icon-flickr:before {content:"\f16e"}
+.wn-icon-adn:before,
+.icon-adn:before {content:"\f170"}
+.wn-icon-bitbucket:before,
+.icon-bitbucket:before {content:"\f171"}
+.wn-icon-bitbucket-square:before,
+.icon-bitbucket-square:before {content:"\f172"}
+.wn-icon-tumblr:before,
+.icon-tumblr:before {content:"\f173"}
+.wn-icon-tumblr-square:before,
+.icon-tumblr-square:before {content:"\f174"}
+.wn-icon-long-arrow-down:before,
+.icon-long-arrow-down:before {content:"\f175"}
+.wn-icon-long-arrow-up:before,
+.icon-long-arrow-up:before {content:"\f176"}
+.wn-icon-long-arrow-left:before,
+.icon-long-arrow-left:before {content:"\f177"}
+.wn-icon-long-arrow-right:before,
+.icon-long-arrow-right:before {content:"\f178"}
+.wn-icon-apple:before,
+.icon-apple:before {content:"\f179"}
+.wn-icon-windows:before,
+.icon-windows:before {content:"\f17a"}
+.wn-icon-android:before,
+.icon-android:before {content:"\f17b"}
+.wn-icon-linux:before,
+.icon-linux:before {content:"\f17c"}
+.wn-icon-dribbble:before,
+.icon-dribbble:before {content:"\f17d"}
+.wn-icon-skype:before,
+.icon-skype:before {content:"\f17e"}
+.wn-icon-foursquare:before,
+.icon-foursquare:before {content:"\f180"}
+.wn-icon-trello:before,
+.icon-trello:before {content:"\f181"}
+.wn-icon-female:before,
+.icon-female:before {content:"\f182"}
+.wn-icon-male:before,
+.icon-male:before {content:"\f183"}
+.wn-icon-gittip:before,
+.icon-gittip:before,
+.wn-icon-gratipay:before,
+.icon-gratipay:before {content:"\f184"}
+.wn-icon-sun-o:before,
+.icon-sun-o:before {content:"\f185"}
+.wn-icon-moon-o:before,
+.icon-moon-o:before {content:"\f186"}
+.wn-icon-archive:before,
+.icon-archive:before {content:"\f187"}
+.wn-icon-bug:before,
+.icon-bug:before {content:"\f188"}
+.wn-icon-vk:before,
+.icon-vk:before {content:"\f189"}
+.wn-icon-weibo:before,
+.icon-weibo:before {content:"\f18a"}
+.wn-icon-renren:before,
+.icon-renren:before {content:"\f18b"}
+.wn-icon-pagelines:before,
+.icon-pagelines:before {content:"\f18c"}
+.wn-icon-stack-exchange:before,
+.icon-stack-exchange:before {content:"\f18d"}
+.wn-icon-arrow-circle-o-right:before,
+.icon-arrow-circle-o-right:before {content:"\f18e"}
+.wn-icon-arrow-circle-o-left:before,
+.icon-arrow-circle-o-left:before {content:"\f190"}
+.wn-icon-toggle-left:before,
+.icon-toggle-left:before,
+.wn-icon-caret-square-o-left:before,
+.icon-caret-square-o-left:before {content:"\f191"}
+.wn-icon-dot-circle-o:before,
+.icon-dot-circle-o:before {content:"\f192"}
+.wn-icon-wheelchair:before,
+.icon-wheelchair:before {content:"\f193"}
+.wn-icon-vimeo-square:before,
+.icon-vimeo-square:before {content:"\f194"}
+.wn-icon-turkish-lira:before,
+.icon-turkish-lira:before,
+.wn-icon-try:before,
+.icon-try:before {content:"\f195"}
+.wn-icon-plus-square-o:before,
+.icon-plus-square-o:before {content:"\f196"}
+.wn-icon-space-shuttle:before,
+.icon-space-shuttle:before {content:"\f197"}
+.wn-icon-slack:before,
+.icon-slack:before {content:"\f198"}
+.wn-icon-envelope-square:before,
+.icon-envelope-square:before {content:"\f199"}
+.wn-icon-wordpress:before,
+.icon-wordpress:before {content:"\f19a"}
+.wn-icon-openid:before,
+.icon-openid:before {content:"\f19b"}
+.wn-icon-institution:before,
+.icon-institution:before,
+.wn-icon-bank:before,
+.icon-bank:before,
+.wn-icon-university:before,
+.icon-university:before {content:"\f19c"}
+.wn-icon-mortar-board:before,
+.icon-mortar-board:before,
+.wn-icon-graduation-cap:before,
+.icon-graduation-cap:before {content:"\f19d"}
+.wn-icon-yahoo:before,
+.icon-yahoo:before {content:"\f19e"}
+.wn-icon-google:before,
+.icon-google:before {content:"\f1a0"}
+.wn-icon-reddit:before,
+.icon-reddit:before {content:"\f1a1"}
+.wn-icon-reddit-square:before,
+.icon-reddit-square:before {content:"\f1a2"}
+.wn-icon-stumbleupon-circle:before,
+.icon-stumbleupon-circle:before {content:"\f1a3"}
+.wn-icon-stumbleupon:before,
+.icon-stumbleupon:before {content:"\f1a4"}
+.wn-icon-delicious:before,
+.icon-delicious:before {content:"\f1a5"}
+.wn-icon-digg:before,
+.icon-digg:before {content:"\f1a6"}
+.wn-icon-pied-piper-pp:before,
+.icon-pied-piper-pp:before {content:"\f1a7"}
+.wn-icon-pied-piper-alt:before,
+.icon-pied-piper-alt:before {content:"\f1a8"}
+.wn-icon-drupal:before,
+.icon-drupal:before {content:"\f1a9"}
+.wn-icon-joomla:before,
+.icon-joomla:before {content:"\f1aa"}
+.wn-icon-language:before,
+.icon-language:before {content:"\f1ab"}
+.wn-icon-fax:before,
+.icon-fax:before {content:"\f1ac"}
+.wn-icon-building:before,
+.icon-building:before {content:"\f1ad"}
+.wn-icon-child:before,
+.icon-child:before {content:"\f1ae"}
+.wn-icon-paw:before,
+.icon-paw:before {content:"\f1b0"}
+.wn-icon-spoon:before,
+.icon-spoon:before {content:"\f1b1"}
+.wn-icon-cube:before,
+.icon-cube:before {content:"\f1b2"}
+.wn-icon-cubes:before,
+.icon-cubes:before {content:"\f1b3"}
+.wn-icon-behance:before,
+.icon-behance:before {content:"\f1b4"}
+.wn-icon-behance-square:before,
+.icon-behance-square:before {content:"\f1b5"}
+.wn-icon-steam:before,
+.icon-steam:before {content:"\f1b6"}
+.wn-icon-steam-square:before,
+.icon-steam-square:before {content:"\f1b7"}
+.wn-icon-recycle:before,
+.icon-recycle:before {content:"\f1b8"}
+.wn-icon-automobile:before,
+.icon-automobile:before,
+.wn-icon-car:before,
+.icon-car:before {content:"\f1b9"}
+.wn-icon-cab:before,
+.icon-cab:before,
+.wn-icon-taxi:before,
+.icon-taxi:before {content:"\f1ba"}
+.wn-icon-tree:before,
+.icon-tree:before {content:"\f1bb"}
+.wn-icon-spotify:before,
+.icon-spotify:before {content:"\f1bc"}
+.wn-icon-deviantart:before,
+.icon-deviantart:before {content:"\f1bd"}
+.wn-icon-soundcloud:before,
+.icon-soundcloud:before {content:"\f1be"}
+.wn-icon-database:before,
+.icon-database:before {content:"\f1c0"}
+.wn-icon-file-pdf-o:before,
+.icon-file-pdf-o:before {content:"\f1c1"}
+.wn-icon-file-word-o:before,
+.icon-file-word-o:before {content:"\f1c2"}
+.wn-icon-file-excel-o:before,
+.icon-file-excel-o:before {content:"\f1c3"}
+.wn-icon-file-powerpoint-o:before,
+.icon-file-powerpoint-o:before {content:"\f1c4"}
+.wn-icon-file-photo-o:before,
+.icon-file-photo-o:before,
+.wn-icon-file-picture-o:before,
+.icon-file-picture-o:before,
+.wn-icon-file-image-o:before,
+.icon-file-image-o:before {content:"\f1c5"}
+.wn-icon-file-zip-o:before,
+.icon-file-zip-o:before,
+.wn-icon-file-archive-o:before,
+.icon-file-archive-o:before {content:"\f1c6"}
+.wn-icon-file-sound-o:before,
+.icon-file-sound-o:before,
+.wn-icon-file-audio-o:before,
+.icon-file-audio-o:before {content:"\f1c7"}
+.wn-icon-file-movie-o:before,
+.icon-file-movie-o:before,
+.wn-icon-file-video-o:before,
+.icon-file-video-o:before {content:"\f1c8"}
+.wn-icon-file-code-o:before,
+.icon-file-code-o:before {content:"\f1c9"}
+.wn-icon-vine:before,
+.icon-vine:before {content:"\f1ca"}
+.wn-icon-codepen:before,
+.icon-codepen:before {content:"\f1cb"}
+.wn-icon-jsfiddle:before,
+.icon-jsfiddle:before {content:"\f1cc"}
+.wn-icon-life-bouy:before,
+.icon-life-bouy:before,
+.wn-icon-life-buoy:before,
+.icon-life-buoy:before,
+.wn-icon-life-saver:before,
+.icon-life-saver:before,
+.wn-icon-support:before,
+.icon-support:before,
+.wn-icon-life-ring:before,
+.icon-life-ring:before {content:"\f1cd"}
+.wn-icon-circle-o-notch:before,
+.icon-circle-o-notch:before {content:"\f1ce"}
+.wn-icon-ra:before,
+.icon-ra:before,
+.wn-icon-resistance:before,
+.icon-resistance:before,
+.wn-icon-rebel:before,
+.icon-rebel:before {content:"\f1d0"}
+.wn-icon-ge:before,
+.icon-ge:before,
+.wn-icon-empire:before,
+.icon-empire:before {content:"\f1d1"}
+.wn-icon-git-square:before,
+.icon-git-square:before {content:"\f1d2"}
+.wn-icon-git:before,
+.icon-git:before {content:"\f1d3"}
+.wn-icon-y-combinator-square:before,
+.icon-y-combinator-square:before,
+.wn-icon-yc-square:before,
+.icon-yc-square:before,
+.wn-icon-hacker-news:before,
+.icon-hacker-news:before {content:"\f1d4"}
+.wn-icon-tencent-weibo:before,
+.icon-tencent-weibo:before {content:"\f1d5"}
+.wn-icon-qq:before,
+.icon-qq:before {content:"\f1d6"}
+.wn-icon-wechat:before,
+.icon-wechat:before,
+.wn-icon-weixin:before,
+.icon-weixin:before {content:"\f1d7"}
+.wn-icon-send:before,
+.icon-send:before,
+.wn-icon-paper-plane:before,
+.icon-paper-plane:before {content:"\f1d8"}
+.wn-icon-send-o:before,
+.icon-send-o:before,
+.wn-icon-paper-plane-o:before,
+.icon-paper-plane-o:before {content:"\f1d9"}
+.wn-icon-history:before,
+.icon-history:before {content:"\f1da"}
+.wn-icon-circle-thin:before,
+.icon-circle-thin:before {content:"\f1db"}
+.wn-icon-header:before,
+.icon-header:before {content:"\f1dc"}
+.wn-icon-paragraph:before,
+.icon-paragraph:before {content:"\f1dd"}
+.wn-icon-sliders:before,
+.icon-sliders:before {content:"\f1de"}
+.wn-icon-share-alt:before,
+.icon-share-alt:before {content:"\f1e0"}
+.wn-icon-share-alt-square:before,
+.icon-share-alt-square:before {content:"\f1e1"}
+.wn-icon-bomb:before,
+.icon-bomb:before {content:"\f1e2"}
+.wn-icon-soccer-ball-o:before,
+.icon-soccer-ball-o:before,
+.wn-icon-futbol-o:before,
+.icon-futbol-o:before {content:"\f1e3"}
+.wn-icon-tty:before,
+.icon-tty:before {content:"\f1e4"}
+.wn-icon-binoculars:before,
+.icon-binoculars:before {content:"\f1e5"}
+.wn-icon-plug:before,
+.icon-plug:before {content:"\f1e6"}
+.wn-icon-slideshare:before,
+.icon-slideshare:before {content:"\f1e7"}
+.wn-icon-twitch:before,
+.icon-twitch:before {content:"\f1e8"}
+.wn-icon-yelp:before,
+.icon-yelp:before {content:"\f1e9"}
+.wn-icon-newspaper-o:before,
+.icon-newspaper-o:before {content:"\f1ea"}
+.wn-icon-wifi:before,
+.icon-wifi:before {content:"\f1eb"}
+.wn-icon-calculator:before,
+.icon-calculator:before {content:"\f1ec"}
+.wn-icon-paypal:before,
+.icon-paypal:before {content:"\f1ed"}
+.wn-icon-google-wallet:before,
+.icon-google-wallet:before {content:"\f1ee"}
+.wn-icon-cc-visa:before,
+.icon-cc-visa:before {content:"\f1f0"}
+.wn-icon-cc-mastercard:before,
+.icon-cc-mastercard:before {content:"\f1f1"}
+.wn-icon-cc-discover:before,
+.icon-cc-discover:before {content:"\f1f2"}
+.wn-icon-cc-amex:before,
+.icon-cc-amex:before {content:"\f1f3"}
+.wn-icon-cc-paypal:before,
+.icon-cc-paypal:before {content:"\f1f4"}
+.wn-icon-cc-stripe:before,
+.icon-cc-stripe:before {content:"\f1f5"}
+.wn-icon-bell-slash:before,
+.icon-bell-slash:before {content:"\f1f6"}
+.wn-icon-bell-slash-o:before,
+.icon-bell-slash-o:before {content:"\f1f7"}
+.wn-icon-trash:before,
+.icon-trash:before {content:"\f1f8"}
+.wn-icon-copyright:before,
+.icon-copyright:before {content:"\f1f9"}
+.wn-icon-at:before,
+.icon-at:before {content:"\f1fa"}
+.wn-icon-eyedropper:before,
+.icon-eyedropper:before {content:"\f1fb"}
+.wn-icon-paint-brush:before,
+.icon-paint-brush:before {content:"\f1fc"}
+.wn-icon-birthday-cake:before,
+.icon-birthday-cake:before {content:"\f1fd"}
+.wn-icon-area-chart:before,
+.icon-area-chart:before {content:"\f1fe"}
+.wn-icon-pie-chart:before,
+.icon-pie-chart:before {content:"\f200"}
+.wn-icon-line-chart:before,
+.icon-line-chart:before {content:"\f201"}
+.wn-icon-lastfm:before,
+.icon-lastfm:before {content:"\f202"}
+.wn-icon-lastfm-square:before,
+.icon-lastfm-square:before {content:"\f203"}
+.wn-icon-toggle-off:before,
+.icon-toggle-off:before {content:"\f204"}
+.wn-icon-toggle-on:before,
+.icon-toggle-on:before {content:"\f205"}
+.wn-icon-bicycle:before,
+.icon-bicycle:before {content:"\f206"}
+.wn-icon-bus:before,
+.icon-bus:before {content:"\f207"}
+.wn-icon-ioxhost:before,
+.icon-ioxhost:before {content:"\f208"}
+.wn-icon-angellist:before,
+.icon-angellist:before {content:"\f209"}
+.wn-icon-cc:before,
+.icon-cc:before {content:"\f20a"}
+.wn-icon-shekel:before,
+.icon-shekel:before,
+.wn-icon-sheqel:before,
+.icon-sheqel:before,
+.wn-icon-ils:before,
+.icon-ils:before {content:"\f20b"}
+.wn-icon-meanpath:before,
+.icon-meanpath:before {content:"\f20c"}
+.wn-icon-buysellads:before,
+.icon-buysellads:before {content:"\f20d"}
+.wn-icon-connectdevelop:before,
+.icon-connectdevelop:before {content:"\f20e"}
+.wn-icon-dashcube:before,
+.icon-dashcube:before {content:"\f210"}
+.wn-icon-forumbee:before,
+.icon-forumbee:before {content:"\f211"}
+.wn-icon-leanpub:before,
+.icon-leanpub:before {content:"\f212"}
+.wn-icon-sellsy:before,
+.icon-sellsy:before {content:"\f213"}
+.wn-icon-shirtsinbulk:before,
+.icon-shirtsinbulk:before {content:"\f214"}
+.wn-icon-simplybuilt:before,
+.icon-simplybuilt:before {content:"\f215"}
+.wn-icon-skyatlas:before,
+.icon-skyatlas:before {content:"\f216"}
+.wn-icon-cart-plus:before,
+.icon-cart-plus:before {content:"\f217"}
+.wn-icon-cart-arrow-down:before,
+.icon-cart-arrow-down:before {content:"\f218"}
+.wn-icon-diamond:before,
+.icon-diamond:before {content:"\f219"}
+.wn-icon-ship:before,
+.icon-ship:before {content:"\f21a"}
+.wn-icon-user-secret:before,
+.icon-user-secret:before {content:"\f21b"}
+.wn-icon-motorcycle:before,
+.icon-motorcycle:before {content:"\f21c"}
+.wn-icon-street-view:before,
+.icon-street-view:before {content:"\f21d"}
+.wn-icon-heartbeat:before,
+.icon-heartbeat:before {content:"\f21e"}
+.wn-icon-venus:before,
+.icon-venus:before {content:"\f221"}
+.wn-icon-mars:before,
+.icon-mars:before {content:"\f222"}
+.wn-icon-mercury:before,
+.icon-mercury:before {content:"\f223"}
+.wn-icon-intersex:before,
+.icon-intersex:before,
+.wn-icon-transgender:before,
+.icon-transgender:before {content:"\f224"}
+.wn-icon-transgender-alt:before,
+.icon-transgender-alt:before {content:"\f225"}
+.wn-icon-venus-double:before,
+.icon-venus-double:before {content:"\f226"}
+.wn-icon-mars-double:before,
+.icon-mars-double:before {content:"\f227"}
+.wn-icon-venus-mars:before,
+.icon-venus-mars:before {content:"\f228"}
+.wn-icon-mars-stroke:before,
+.icon-mars-stroke:before {content:"\f229"}
+.wn-icon-mars-stroke-v:before,
+.icon-mars-stroke-v:before {content:"\f22a"}
+.wn-icon-mars-stroke-h:before,
+.icon-mars-stroke-h:before {content:"\f22b"}
+.wn-icon-neuter:before,
+.icon-neuter:before {content:"\f22c"}
+.wn-icon-genderless:before,
+.icon-genderless:before {content:"\f22d"}
+.wn-icon-facebook-official:before,
+.icon-facebook-official:before {content:"\f230"}
+.wn-icon-pinterest-p:before,
+.icon-pinterest-p:before {content:"\f231"}
+.wn-icon-whatsapp:before,
+.icon-whatsapp:before {content:"\f232"}
+.wn-icon-server:before,
+.icon-server:before {content:"\f233"}
+.wn-icon-user-plus:before,
+.icon-user-plus:before {content:"\f234"}
+.wn-icon-user-times:before,
+.icon-user-times:before {content:"\f235"}
+.wn-icon-hotel:before,
+.icon-hotel:before,
+.wn-icon-bed:before,
+.icon-bed:before {content:"\f236"}
+.wn-icon-viacoin:before,
+.icon-viacoin:before {content:"\f237"}
+.wn-icon-train:before,
+.icon-train:before {content:"\f238"}
+.wn-icon-subway:before,
+.icon-subway:before {content:"\f239"}
+.wn-icon-medium:before,
+.icon-medium:before {content:"\f23a"}
+.wn-icon-yc:before,
+.icon-yc:before,
+.wn-icon-y-combinator:before,
+.icon-y-combinator:before {content:"\f23b"}
+.wn-icon-optin-monster:before,
+.icon-optin-monster:before {content:"\f23c"}
+.wn-icon-opencart:before,
+.icon-opencart:before {content:"\f23d"}
+.wn-icon-expeditedssl:before,
+.icon-expeditedssl:before {content:"\f23e"}
+.wn-icon-battery-4:before,
+.icon-battery-4:before,
+.wn-icon-battery:before,
+.icon-battery:before,
+.wn-icon-battery-full:before,
+.icon-battery-full:before {content:"\f240"}
+.wn-icon-battery-3:before,
+.icon-battery-3:before,
+.wn-icon-battery-three-quarters:before,
+.icon-battery-three-quarters:before {content:"\f241"}
+.wn-icon-battery-2:before,
+.icon-battery-2:before,
+.wn-icon-battery-half:before,
+.icon-battery-half:before {content:"\f242"}
+.wn-icon-battery-1:before,
+.icon-battery-1:before,
+.wn-icon-battery-quarter:before,
+.icon-battery-quarter:before {content:"\f243"}
+.wn-icon-battery-0:before,
+.icon-battery-0:before,
+.wn-icon-battery-empty:before,
+.icon-battery-empty:before {content:"\f244"}
+.wn-icon-mouse-pointer:before,
+.icon-mouse-pointer:before {content:"\f245"}
+.wn-icon-i-cursor:before,
+.icon-i-cursor:before {content:"\f246"}
+.wn-icon-object-group:before,
+.icon-object-group:before {content:"\f247"}
+.wn-icon-object-ungroup:before,
+.icon-object-ungroup:before {content:"\f248"}
+.wn-icon-sticky-note:before,
+.icon-sticky-note:before {content:"\f249"}
+.wn-icon-sticky-note-o:before,
+.icon-sticky-note-o:before {content:"\f24a"}
+.wn-icon-cc-jcb:before,
+.icon-cc-jcb:before {content:"\f24b"}
+.wn-icon-cc-diners-club:before,
+.icon-cc-diners-club:before {content:"\f24c"}
+.wn-icon-clone:before,
+.icon-clone:before {content:"\f24d"}
+.wn-icon-balance-scale:before,
+.icon-balance-scale:before {content:"\f24e"}
+.wn-icon-hourglass-o:before,
+.icon-hourglass-o:before {content:"\f250"}
+.wn-icon-hourglass-1:before,
+.icon-hourglass-1:before,
+.wn-icon-hourglass-start:before,
+.icon-hourglass-start:before {content:"\f251"}
+.wn-icon-hourglass-2:before,
+.icon-hourglass-2:before,
+.wn-icon-hourglass-half:before,
+.icon-hourglass-half:before {content:"\f252"}
+.wn-icon-hourglass-3:before,
+.icon-hourglass-3:before,
+.wn-icon-hourglass-end:before,
+.icon-hourglass-end:before {content:"\f253"}
+.wn-icon-hourglass:before,
+.icon-hourglass:before {content:"\f254"}
+.wn-icon-hand-grab-o:before,
+.icon-hand-grab-o:before,
+.wn-icon-hand-rock-o:before,
+.icon-hand-rock-o:before {content:"\f255"}
+.wn-icon-hand-stop-o:before,
+.icon-hand-stop-o:before,
+.wn-icon-hand-paper-o:before,
+.icon-hand-paper-o:before {content:"\f256"}
+.wn-icon-hand-scissors-o:before,
+.icon-hand-scissors-o:before {content:"\f257"}
+.wn-icon-hand-lizard-o:before,
+.icon-hand-lizard-o:before {content:"\f258"}
+.wn-icon-hand-spock-o:before,
+.icon-hand-spock-o:before {content:"\f259"}
+.wn-icon-hand-pointer-o:before,
+.icon-hand-pointer-o:before {content:"\f25a"}
+.wn-icon-hand-peace-o:before,
+.icon-hand-peace-o:before {content:"\f25b"}
+.wn-icon-trademark:before,
+.icon-trademark:before {content:"\f25c"}
+.wn-icon-registered:before,
+.icon-registered:before {content:"\f25d"}
+.wn-icon-creative-commons:before,
+.icon-creative-commons:before {content:"\f25e"}
+.wn-icon-gg:before,
+.icon-gg:before {content:"\f260"}
+.wn-icon-gg-circle:before,
+.icon-gg-circle:before {content:"\f261"}
+.wn-icon-tripadvisor:before,
+.icon-tripadvisor:before {content:"\f262"}
+.wn-icon-odnoklassniki:before,
+.icon-odnoklassniki:before {content:"\f263"}
+.wn-icon-odnoklassniki-square:before,
+.icon-odnoklassniki-square:before {content:"\f264"}
+.wn-icon-get-pocket:before,
+.icon-get-pocket:before {content:"\f265"}
+.wn-icon-wikipedia-w:before,
+.icon-wikipedia-w:before {content:"\f266"}
+.wn-icon-safari:before,
+.icon-safari:before {content:"\f267"}
+.wn-icon-chrome:before,
+.icon-chrome:before {content:"\f268"}
+.wn-icon-firefox:before,
+.icon-firefox:before {content:"\f269"}
+.wn-icon-opera:before,
+.icon-opera:before {content:"\f26a"}
+.wn-icon-internet-explorer:before,
+.icon-internet-explorer:before {content:"\f26b"}
+.wn-icon-tv:before,
+.icon-tv:before,
+.wn-icon-television:before,
+.icon-television:before {content:"\f26c"}
+.wn-icon-contao:before,
+.icon-contao:before {content:"\f26d"}
+.wn-icon-500px:before,
+.icon-500px:before {content:"\f26e"}
+.wn-icon-amazon:before,
+.icon-amazon:before {content:"\f270"}
+.wn-icon-calendar-plus-o:before,
+.icon-calendar-plus-o:before {content:"\f271"}
+.wn-icon-calendar-minus-o:before,
+.icon-calendar-minus-o:before {content:"\f272"}
+.wn-icon-calendar-times-o:before,
+.icon-calendar-times-o:before {content:"\f273"}
+.wn-icon-calendar-check-o:before,
+.icon-calendar-check-o:before {content:"\f274"}
+.wn-icon-industry:before,
+.icon-industry:before {content:"\f275"}
+.wn-icon-map-pin:before,
+.icon-map-pin:before {content:"\f276"}
+.wn-icon-map-signs:before,
+.icon-map-signs:before {content:"\f277"}
+.wn-icon-map-o:before,
+.icon-map-o:before {content:"\f278"}
+.wn-icon-map:before,
+.icon-map:before {content:"\f279"}
+.wn-icon-commenting:before,
+.icon-commenting:before {content:"\f27a"}
+.wn-icon-commenting-o:before,
+.icon-commenting-o:before {content:"\f27b"}
+.wn-icon-houzz:before,
+.icon-houzz:before {content:"\f27c"}
+.wn-icon-vimeo:before,
+.icon-vimeo:before {content:"\f27d"}
+.wn-icon-black-tie:before,
+.icon-black-tie:before {content:"\f27e"}
+.wn-icon-fonticons:before,
+.icon-fonticons:before {content:"\f280"}
+.wn-icon-reddit-alien:before,
+.icon-reddit-alien:before {content:"\f281"}
+.wn-icon-edge:before,
+.icon-edge:before {content:"\f282"}
+.wn-icon-credit-card-alt:before,
+.icon-credit-card-alt:before {content:"\f283"}
+.wn-icon-codiepie:before,
+.icon-codiepie:before {content:"\f284"}
+.wn-icon-modx:before,
+.icon-modx:before {content:"\f285"}
+.wn-icon-fort-awesome:before,
+.icon-fort-awesome:before {content:"\f286"}
+.wn-icon-usb:before,
+.icon-usb:before {content:"\f287"}
+.wn-icon-product-hunt:before,
+.icon-product-hunt:before {content:"\f288"}
+.wn-icon-mixcloud:before,
+.icon-mixcloud:before {content:"\f289"}
+.wn-icon-scribd:before,
+.icon-scribd:before {content:"\f28a"}
+.wn-icon-pause-circle:before,
+.icon-pause-circle:before {content:"\f28b"}
+.wn-icon-pause-circle-o:before,
+.icon-pause-circle-o:before {content:"\f28c"}
+.wn-icon-stop-circle:before,
+.icon-stop-circle:before {content:"\f28d"}
+.wn-icon-stop-circle-o:before,
+.icon-stop-circle-o:before {content:"\f28e"}
+.wn-icon-shopping-bag:before,
+.icon-shopping-bag:before {content:"\f290"}
+.wn-icon-shopping-basket:before,
+.icon-shopping-basket:before {content:"\f291"}
+.wn-icon-hashtag:before,
+.icon-hashtag:before {content:"\f292"}
+.wn-icon-bluetooth:before,
+.icon-bluetooth:before {content:"\f293"}
+.wn-icon-bluetooth-b:before,
+.icon-bluetooth-b:before {content:"\f294"}
+.wn-icon-percent:before,
+.icon-percent:before {content:"\f295"}
+.wn-icon-gitlab:before,
+.icon-gitlab:before {content:"\f296"}
+.wn-icon-wpbeginner:before,
+.icon-wpbeginner:before {content:"\f297"}
+.wn-icon-wpforms:before,
+.icon-wpforms:before {content:"\f298"}
+.wn-icon-envira:before,
+.icon-envira:before {content:"\f299"}
+.wn-icon-universal-access:before,
+.icon-universal-access:before {content:"\f29a"}
+.wn-icon-wheelchair-alt:before,
+.icon-wheelchair-alt:before {content:"\f29b"}
+.wn-icon-question-circle-o:before,
+.icon-question-circle-o:before {content:"\f29c"}
+.wn-icon-blind:before,
+.icon-blind:before {content:"\f29d"}
+.wn-icon-audio-description:before,
+.icon-audio-description:before {content:"\f29e"}
+.wn-icon-volume-control-phone:before,
+.icon-volume-control-phone:before {content:"\f2a0"}
+.wn-icon-braille:before,
+.icon-braille:before {content:"\f2a1"}
+.wn-icon-assistive-listening-systems:before,
+.icon-assistive-listening-systems:before {content:"\f2a2"}
+.wn-icon-asl-interpreting:before,
+.icon-asl-interpreting:before,
+.wn-icon-american-sign-language-interpreting:before,
+.icon-american-sign-language-interpreting:before {content:"\f2a3"}
+.wn-icon-deafness:before,
+.icon-deafness:before,
+.wn-icon-hard-of-hearing:before,
+.icon-hard-of-hearing:before,
+.wn-icon-deaf:before,
+.icon-deaf:before {content:"\f2a4"}
+.wn-icon-glide:before,
+.icon-glide:before {content:"\f2a5"}
+.wn-icon-glide-g:before,
+.icon-glide-g:before {content:"\f2a6"}
+.wn-icon-signing:before,
+.icon-signing:before,
+.wn-icon-sign-language:before,
+.icon-sign-language:before {content:"\f2a7"}
+.wn-icon-low-vision:before,
+.icon-low-vision:before {content:"\f2a8"}
+.wn-icon-viadeo:before,
+.icon-viadeo:before {content:"\f2a9"}
+.wn-icon-viadeo-square:before,
+.icon-viadeo-square:before {content:"\f2aa"}
+.wn-icon-snapchat:before,
+.icon-snapchat:before {content:"\f2ab"}
+.wn-icon-snapchat-ghost:before,
+.icon-snapchat-ghost:before {content:"\f2ac"}
+.wn-icon-snapchat-square:before,
+.icon-snapchat-square:before {content:"\f2ad"}
+.wn-icon-pied-piper:before,
+.icon-pied-piper:before {content:"\f2ae"}
+.wn-icon-first-order:before,
+.icon-first-order:before {content:"\f2b0"}
+.wn-icon-yoast:before,
+.icon-yoast:before {content:"\f2b1"}
+.wn-icon-themeisle:before,
+.icon-themeisle:before {content:"\f2b2"}
+.wn-icon-google-plus-circle:before,
+.icon-google-plus-circle:before,
+.wn-icon-google-plus-official:before,
+.icon-google-plus-official:before {content:"\f2b3"}
+.wn-icon-fa:before,
+.icon-fa:before,
+.wn-icon-font-awesome:before,
+.icon-font-awesome:before {content:"\f2b4"}
+.wn-icon-handshake-o:before,
+.icon-handshake-o:before {content:"\f2b5"}
+.wn-icon-envelope-open:before,
+.icon-envelope-open:before {content:"\f2b6"}
+.wn-icon-envelope-open-o:before,
+.icon-envelope-open-o:before {content:"\f2b7"}
+.wn-icon-linode:before,
+.icon-linode:before {content:"\f2b8"}
+.wn-icon-address-book:before,
+.icon-address-book:before {content:"\f2b9"}
+.wn-icon-address-book-o:before,
+.icon-address-book-o:before {content:"\f2ba"}
+.wn-icon-vcard:before,
+.icon-vcard:before,
+.wn-icon-address-card:before,
+.icon-address-card:before {content:"\f2bb"}
+.wn-icon-vcard-o:before,
+.icon-vcard-o:before,
+.wn-icon-address-card-o:before,
+.icon-address-card-o:before {content:"\f2bc"}
+.wn-icon-user-circle:before,
+.icon-user-circle:before {content:"\f2bd"}
+.wn-icon-user-circle-o:before,
+.icon-user-circle-o:before {content:"\f2be"}
+.wn-icon-user-o:before,
+.icon-user-o:before {content:"\f2c0"}
+.wn-icon-id-badge:before,
+.icon-id-badge:before {content:"\f2c1"}
+.wn-icon-drivers-license:before,
+.icon-drivers-license:before,
+.wn-icon-id-card:before,
+.icon-id-card:before {content:"\f2c2"}
+.wn-icon-drivers-license-o:before,
+.icon-drivers-license-o:before,
+.wn-icon-id-card-o:before,
+.icon-id-card-o:before {content:"\f2c3"}
+.wn-icon-quora:before,
+.icon-quora:before {content:"\f2c4"}
+.wn-icon-free-code-camp:before,
+.icon-free-code-camp:before {content:"\f2c5"}
+.wn-icon-telegram:before,
+.icon-telegram:before {content:"\f2c6"}
+.wn-icon-thermometer-4:before,
+.icon-thermometer-4:before,
+.wn-icon-thermometer:before,
+.icon-thermometer:before,
+.wn-icon-thermometer-full:before,
+.icon-thermometer-full:before {content:"\f2c7"}
+.wn-icon-thermometer-3:before,
+.icon-thermometer-3:before,
+.wn-icon-thermometer-three-quarters:before,
+.icon-thermometer-three-quarters:before {content:"\f2c8"}
+.wn-icon-thermometer-2:before,
+.icon-thermometer-2:before,
+.wn-icon-thermometer-half:before,
+.icon-thermometer-half:before {content:"\f2c9"}
+.wn-icon-thermometer-1:before,
+.icon-thermometer-1:before,
+.wn-icon-thermometer-quarter:before,
+.icon-thermometer-quarter:before {content:"\f2ca"}
+.wn-icon-thermometer-0:before,
+.icon-thermometer-0:before,
+.wn-icon-thermometer-empty:before,
+.icon-thermometer-empty:before {content:"\f2cb"}
+.wn-icon-shower:before,
+.icon-shower:before {content:"\f2cc"}
+.wn-icon-bathtub:before,
+.icon-bathtub:before,
+.wn-icon-s15:before,
+.icon-s15:before,
+.wn-icon-bath:before,
+.icon-bath:before {content:"\f2cd"}
+.wn-icon-podcast:before,
+.icon-podcast:before {content:"\f2ce"}
+.wn-icon-window-maximize:before,
+.icon-window-maximize:before {content:"\f2d0"}
+.wn-icon-window-minimize:before,
+.icon-window-minimize:before {content:"\f2d1"}
+.wn-icon-window-restore:before,
+.icon-window-restore:before {content:"\f2d2"}
+.wn-icon-times-rectangle:before,
+.icon-times-rectangle:before,
+.wn-icon-window-close:before,
+.icon-window-close:before {content:"\f2d3"}
+.wn-icon-times-rectangle-o:before,
+.icon-times-rectangle-o:before,
+.wn-icon-window-close-o:before,
+.icon-window-close-o:before {content:"\f2d4"}
+.wn-icon-bandcamp:before,
+.icon-bandcamp:before {content:"\f2d5"}
+.wn-icon-grav:before,
+.icon-grav:before {content:"\f2d6"}
+.wn-icon-etsy:before,
+.icon-etsy:before {content:"\f2d7"}
+.wn-icon-imdb:before,
+.icon-imdb:before {content:"\f2d8"}
+.wn-icon-ravelry:before,
+.icon-ravelry:before {content:"\f2d9"}
+.wn-icon-eercast:before,
+.icon-eercast:before {content:"\f2da"}
+.wn-icon-microchip:before,
+.icon-microchip:before {content:"\f2db"}
+.wn-icon-snowflake-o:before,
+.icon-snowflake-o:before {content:"\f2dc"}
+.wn-icon-superpowers:before,
+.icon-superpowers:before {content:"\f2dd"}
+.wn-icon-wpexplorer:before,
+.icon-wpexplorer:before {content:"\f2de"}
+.wn-icon-meetup:before,
+.icon-meetup:before {content:"\f2e0"}
 .oc-icon-glass:before,
 .icon-glass:before {content:"\f000"}
 .oc-icon-music:before,
@@ -2516,8 +4098,12 @@ button.close {padding:0;cursor:pointer;background:transparent;border:0;-webkit-a
 [class*=" icon-"].pull-left {margin-right:.3em}
 [class^="icon-"].pull-right,
 [class*=" icon-"].pull-right {margin-left:.3em}
+[class^="wn-icon-"]:before,
+[class*=" wn-icon-"]:before,
 [class^="oc-icon-"]:before,
 [class*=" oc-icon-"]:before {display:inline-block;margin-right:8px;font-family:FontAwesome;font-weight:normal;font-style:normal;text-decoration:inherit;-webkit-font-smoothing:antialiased;vertical-align:baseline}
+[class^="wn-icon-"].empty:before,
+[class*=" wn-icon-"].empty:before,
 [class^="oc-icon-"].empty:before,
 [class*=" oc-icon-"].empty:before {margin-right:0}
 .icon-lg {font-size:1.33333333em;line-height:0.75em;vertical-align:-15%}
@@ -2559,15 +4145,25 @@ button.close {padding:0;cursor:pointer;background:transparent;border:0;-webkit-a
 .dropdown-menu .dropdown-container >ul li a {outline:none;padding:10px 15px;font-size:13px;display:block;color:#39454a;position:relative;text-decoration:none}
 .dropdown-menu .dropdown-container >ul li a:hover,
 .dropdown-menu .dropdown-container >ul li a:focus {color:#fff;background-color:#4ea5e0}
+.dropdown-menu .dropdown-container >ul li a:hover[class^="wn-icon-"]:before,
+.dropdown-menu .dropdown-container >ul li a:focus[class^="wn-icon-"]:before,
+.dropdown-menu .dropdown-container >ul li a:hover[class*=" wn-icon-"]:before,
+.dropdown-menu .dropdown-container >ul li a:focus[class*=" wn-icon-"]:before,
 .dropdown-menu .dropdown-container >ul li a:hover[class^="oc-icon-"]:before,
 .dropdown-menu .dropdown-container >ul li a:focus[class^="oc-icon-"]:before,
 .dropdown-menu .dropdown-container >ul li a:hover[class*=" oc-icon-"]:before,
 .dropdown-menu .dropdown-container >ul li a:focus[class*=" oc-icon-"]:before {color:#fff}
 .dropdown-menu .dropdown-container >ul li a:active {color:#fff;background-color:#3498db}
+.dropdown-menu .dropdown-container >ul li a:active[class^="wn-icon-"]:before,
+.dropdown-menu .dropdown-container >ul li a:active[class*=" wn-icon-"]:before,
 .dropdown-menu .dropdown-container >ul li a:active[class^="oc-icon-"]:before,
 .dropdown-menu .dropdown-container >ul li a:active[class*=" oc-icon-"]:before {color:#fff}
+.dropdown-menu .dropdown-container >ul li a[class^="wn-icon-"],
+.dropdown-menu .dropdown-container >ul li a[class*=" wn-icon-"],
 .dropdown-menu .dropdown-container >ul li a[class^="oc-icon-"],
 .dropdown-menu .dropdown-container >ul li a[class*=" oc-icon-"] {padding-left:30px}
+.dropdown-menu .dropdown-container >ul li a[class^="wn-icon-"]:before,
+.dropdown-menu .dropdown-container >ul li a[class*=" wn-icon-"]:before,
 .dropdown-menu .dropdown-container >ul li a[class^="oc-icon-"]:before,
 .dropdown-menu .dropdown-container >ul li a[class*=" oc-icon-"]:before {position:absolute;font-size:14px;left:9px;top:8px;color:rgba(57,69,74,0.6)}
 .dropdown-menu .dropdown-container >ul li.first-item a:hover:after,
@@ -2810,6 +4406,9 @@ body.compact-container .control-breadcrumb {margin-top:0;margin-left:0;margin-ri
 .control-tabs >ul.nav-tabs >li a >span.title >span,
 .control-tabs >div >ul.nav-tabs >li a >span.title >span,
 .control-tabs >div >div >ul.nav-tabs >li a >span.title >span {max-width:150px;overflow:hidden;text-overflow:ellipsis;display:inline-block;border-top:2px solid #e0e0e0;margin-top:-4px;padding-top:7px}
+.control-tabs >ul.nav-tabs >li a >span.title >span >span:not([class*="wn-icon"]),
+.control-tabs >div >ul.nav-tabs >li a >span.title >span >span:not([class*="wn-icon"]),
+.control-tabs >div >div >ul.nav-tabs >li a >span.title >span >span:not([class*="wn-icon"]),
 .control-tabs >ul.nav-tabs >li a >span.title >span >span:not([class*="oc-icon"]),
 .control-tabs >div >ul.nav-tabs >li a >span.title >span >span:not([class*="oc-icon"]),
 .control-tabs >div >div >ul.nav-tabs >li a >span.title >span >span:not([class*="oc-icon"]) {margin-right:8px}
@@ -3108,6 +4707,8 @@ html.mobile [data-control=toolbar].is-native-drag {overflow:auto;-webkit-overflo
 .control-toolbar.editor-toolbar .toolbar-item .btn.disabled,
 .control-toolbar.editor-toolbar .toolbar-item .btn[disabled] {opacity:1;color:#bdbdbd;cursor:default;background:transparent}
 .control-toolbar.editor-toolbar .toolbar-item .dropdown.open .btn {background-color:#d6d6d6;color:#000}
+.control-toolbar.editor-toolbar .toolbar-item .btn[class^="wn-icon-"]:before,
+.control-toolbar.editor-toolbar .toolbar-item .btn[class*=" wn-icon-"]:before,
 .control-toolbar.editor-toolbar .toolbar-item .btn[class^="oc-icon-"]:before,
 .control-toolbar.editor-toolbar .toolbar-item .btn[class*=" oc-icon-"]:before {opacity:1;margin:0}
 .control-toolbar.editor-toolbar .toolbar-item .btn.oc-autumn-button {color:#c03f31}
@@ -3140,10 +4741,11 @@ div.scoreboard:before {left:7px}
 div.scoreboard:after {right:10px}
 div.scoreboard div.scoreboard-item {display:inline-block;margin-right:40px;margin-bottom:20px;vertical-align:top}
 div.scoreboard div.scoreboard-item:last-child {margin-right:0}
-div.scoreboard .control-chart {height:67px}
+div.scoreboard .control-chart {min-height:67px}
 div.scoreboard .control-chart ul {margin-left:77px;top:-2px}
 div.scoreboard .control-chart ul li {padding-left:18px}
 div.scoreboard .control-chart ul li >i {margin-left:-18px}
+div.scoreboard .control-chart div.canvas {margin-bottom:0;height:67px}
 div.scoreboard .control-chart .canvas + ul {margin-left:0}
 div.scoreboard .scoreboard-offset {padding-left:20px}
 body.slim-container div.scoreboard {padding:0 20px}
@@ -3164,518 +4766,776 @@ body.slim-container div.scoreboard {padding:0 20px}
 [class^="flag-"]:before,
 [class*=" flag-"]:before {content:"\00a0"}
 [class^="flag-"].oc-flag-squared,
-[class*=" flag-"].oc-flag-squared {width:1em}
+[class*=" flag-"].oc-flag-squared,
+[class^="flag-"].wn-flag-squared,
+[class*=" flag-"].wn-flag-squared {width:1em}
 .flag-ad {background-image:url(vendor/flag-icon/flags/4x3/ad.svg)}
+.flag-ad.wn-flag-squared,
 .flag-ad.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ad.svg)}
 .flag-ae {background-image:url(vendor/flag-icon/flags/4x3/ae.svg)}
+.flag-ae.wn-flag-squared,
 .flag-ae.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ae.svg)}
 .flag-af {background-image:url(vendor/flag-icon/flags/4x3/af.svg)}
+.flag-af.wn-flag-squared,
 .flag-af.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/af.svg)}
 .flag-ag {background-image:url(vendor/flag-icon/flags/4x3/ag.svg)}
+.flag-ag.wn-flag-squared,
 .flag-ag.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ag.svg)}
 .flag-ai {background-image:url(vendor/flag-icon/flags/4x3/ai.svg)}
+.flag-ai.wn-flag-squared,
 .flag-ai.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ai.svg)}
 .flag-al {background-image:url(vendor/flag-icon/flags/4x3/al.svg)}
+.flag-al.wn-flag-squared,
 .flag-al.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/al.svg)}
 .flag-am {background-image:url(vendor/flag-icon/flags/4x3/am.svg)}
+.flag-am.wn-flag-squared,
 .flag-am.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/am.svg)}
 .flag-ao {background-image:url(vendor/flag-icon/flags/4x3/ao.svg)}
+.flag-ao.wn-flag-squared,
 .flag-ao.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ao.svg)}
 .flag-aq {background-image:url(vendor/flag-icon/flags/4x3/aq.svg)}
+.flag-aq.wn-flag-squared,
 .flag-aq.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/aq.svg)}
 .flag-ar {background-image:url(vendor/flag-icon/flags/4x3/ar.svg)}
+.flag-ar.wn-flag-squared,
 .flag-ar.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ar.svg)}
 .flag-as {background-image:url(vendor/flag-icon/flags/4x3/as.svg)}
+.flag-as.wn-flag-squared,
 .flag-as.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/as.svg)}
 .flag-at {background-image:url(vendor/flag-icon/flags/4x3/at.svg)}
+.flag-at.wn-flag-squared,
 .flag-at.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/at.svg)}
 .flag-au {background-image:url(vendor/flag-icon/flags/4x3/au.svg)}
+.flag-au.wn-flag-squared,
 .flag-au.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/au.svg)}
 .flag-aw {background-image:url(vendor/flag-icon/flags/4x3/aw.svg)}
+.flag-aw.wn-flag-squared,
 .flag-aw.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/aw.svg)}
 .flag-ax {background-image:url(vendor/flag-icon/flags/4x3/ax.svg)}
+.flag-ax.wn-flag-squared,
 .flag-ax.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ax.svg)}
 .flag-az {background-image:url(vendor/flag-icon/flags/4x3/az.svg)}
+.flag-az.wn-flag-squared,
 .flag-az.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/az.svg)}
 .flag-ba {background-image:url(vendor/flag-icon/flags/4x3/ba.svg)}
+.flag-ba.wn-flag-squared,
 .flag-ba.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ba.svg)}
 .flag-bb {background-image:url(vendor/flag-icon/flags/4x3/bb.svg)}
+.flag-bb.wn-flag-squared,
 .flag-bb.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bb.svg)}
 .flag-bd {background-image:url(vendor/flag-icon/flags/4x3/bd.svg)}
+.flag-bd.wn-flag-squared,
 .flag-bd.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bd.svg)}
 .flag-be {background-image:url(vendor/flag-icon/flags/4x3/be.svg)}
+.flag-be.wn-flag-squared,
 .flag-be.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/be.svg)}
 .flag-bf {background-image:url(vendor/flag-icon/flags/4x3/bf.svg)}
+.flag-bf.wn-flag-squared,
 .flag-bf.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bf.svg)}
 .flag-bg {background-image:url(vendor/flag-icon/flags/4x3/bg.svg)}
+.flag-bg.wn-flag-squared,
 .flag-bg.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bg.svg)}
 .flag-bh {background-image:url(vendor/flag-icon/flags/4x3/bh.svg)}
+.flag-bh.wn-flag-squared,
 .flag-bh.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bh.svg)}
 .flag-bi {background-image:url(vendor/flag-icon/flags/4x3/bi.svg)}
+.flag-bi.wn-flag-squared,
 .flag-bi.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bi.svg)}
 .flag-bj {background-image:url(vendor/flag-icon/flags/4x3/bj.svg)}
+.flag-bj.wn-flag-squared,
 .flag-bj.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bj.svg)}
 .flag-bl {background-image:url(vendor/flag-icon/flags/4x3/bl.svg)}
+.flag-bl.wn-flag-squared,
 .flag-bl.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bl.svg)}
 .flag-bm {background-image:url(vendor/flag-icon/flags/4x3/bm.svg)}
+.flag-bm.wn-flag-squared,
 .flag-bm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bm.svg)}
 .flag-bn {background-image:url(vendor/flag-icon/flags/4x3/bn.svg)}
+.flag-bn.wn-flag-squared,
 .flag-bn.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bn.svg)}
 .flag-bo {background-image:url(vendor/flag-icon/flags/4x3/bo.svg)}
+.flag-bo.wn-flag-squared,
 .flag-bo.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bo.svg)}
 .flag-bq {background-image:url(vendor/flag-icon/flags/4x3/bq.svg)}
+.flag-bq.wn-flag-squared,
 .flag-bq.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bq.svg)}
 .flag-br {background-image:url(vendor/flag-icon/flags/4x3/br.svg)}
+.flag-br.wn-flag-squared,
 .flag-br.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/br.svg)}
 .flag-bs {background-image:url(vendor/flag-icon/flags/4x3/bs.svg)}
+.flag-bs.wn-flag-squared,
 .flag-bs.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bs.svg)}
 .flag-bt {background-image:url(vendor/flag-icon/flags/4x3/bt.svg)}
+.flag-bt.wn-flag-squared,
 .flag-bt.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bt.svg)}
 .flag-bv {background-image:url(vendor/flag-icon/flags/4x3/bv.svg)}
+.flag-bv.wn-flag-squared,
 .flag-bv.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bv.svg)}
 .flag-bw {background-image:url(vendor/flag-icon/flags/4x3/bw.svg)}
+.flag-bw.wn-flag-squared,
 .flag-bw.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bw.svg)}
 .flag-by {background-image:url(vendor/flag-icon/flags/4x3/by.svg)}
+.flag-by.wn-flag-squared,
 .flag-by.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/by.svg)}
 .flag-bz {background-image:url(vendor/flag-icon/flags/4x3/bz.svg)}
+.flag-bz.wn-flag-squared,
 .flag-bz.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/bz.svg)}
 .flag-ca {background-image:url(vendor/flag-icon/flags/4x3/ca.svg)}
+.flag-ca.wn-flag-squared,
 .flag-ca.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ca.svg)}
 .flag-cc {background-image:url(vendor/flag-icon/flags/4x3/cc.svg)}
+.flag-cc.wn-flag-squared,
 .flag-cc.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cc.svg)}
 .flag-cd {background-image:url(vendor/flag-icon/flags/4x3/cd.svg)}
+.flag-cd.wn-flag-squared,
 .flag-cd.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cd.svg)}
 .flag-cf {background-image:url(vendor/flag-icon/flags/4x3/cf.svg)}
+.flag-cf.wn-flag-squared,
 .flag-cf.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cf.svg)}
 .flag-cg {background-image:url(vendor/flag-icon/flags/4x3/cg.svg)}
+.flag-cg.wn-flag-squared,
 .flag-cg.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cg.svg)}
 .flag-ch {background-image:url(vendor/flag-icon/flags/4x3/ch.svg)}
+.flag-ch.wn-flag-squared,
 .flag-ch.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ch.svg)}
 .flag-ci {background-image:url(vendor/flag-icon/flags/4x3/ci.svg)}
+.flag-ci.wn-flag-squared,
 .flag-ci.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ci.svg)}
 .flag-ck {background-image:url(vendor/flag-icon/flags/4x3/ck.svg)}
+.flag-ck.wn-flag-squared,
 .flag-ck.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ck.svg)}
 .flag-cl {background-image:url(vendor/flag-icon/flags/4x3/cl.svg)}
+.flag-cl.wn-flag-squared,
 .flag-cl.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cl.svg)}
 .flag-cm {background-image:url(vendor/flag-icon/flags/4x3/cm.svg)}
+.flag-cm.wn-flag-squared,
 .flag-cm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cm.svg)}
 .flag-cn {background-image:url(vendor/flag-icon/flags/4x3/cn.svg)}
+.flag-cn.wn-flag-squared,
 .flag-cn.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cn.svg)}
 .flag-co {background-image:url(vendor/flag-icon/flags/4x3/co.svg)}
+.flag-co.wn-flag-squared,
 .flag-co.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/co.svg)}
 .flag-cr {background-image:url(vendor/flag-icon/flags/4x3/cr.svg)}
+.flag-cr.wn-flag-squared,
 .flag-cr.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cr.svg)}
 .flag-cu {background-image:url(vendor/flag-icon/flags/4x3/cu.svg)}
+.flag-cu.wn-flag-squared,
 .flag-cu.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cu.svg)}
 .flag-cv {background-image:url(vendor/flag-icon/flags/4x3/cv.svg)}
+.flag-cv.wn-flag-squared,
 .flag-cv.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cv.svg)}
 .flag-cw {background-image:url(vendor/flag-icon/flags/4x3/cw.svg)}
+.flag-cw.wn-flag-squared,
 .flag-cw.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cw.svg)}
 .flag-cx {background-image:url(vendor/flag-icon/flags/4x3/cx.svg)}
+.flag-cx.wn-flag-squared,
 .flag-cx.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cx.svg)}
 .flag-cy {background-image:url(vendor/flag-icon/flags/4x3/cy.svg)}
+.flag-cy.wn-flag-squared,
 .flag-cy.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cy.svg)}
 .flag-cz {background-image:url(vendor/flag-icon/flags/4x3/cz.svg)}
+.flag-cz.wn-flag-squared,
 .flag-cz.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/cz.svg)}
 .flag-de {background-image:url(vendor/flag-icon/flags/4x3/de.svg)}
+.flag-de.wn-flag-squared,
 .flag-de.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/de.svg)}
 .flag-dj {background-image:url(vendor/flag-icon/flags/4x3/dj.svg)}
+.flag-dj.wn-flag-squared,
 .flag-dj.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/dj.svg)}
 .flag-dk {background-image:url(vendor/flag-icon/flags/4x3/dk.svg)}
+.flag-dk.wn-flag-squared,
 .flag-dk.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/dk.svg)}
 .flag-dm {background-image:url(vendor/flag-icon/flags/4x3/dm.svg)}
+.flag-dm.wn-flag-squared,
 .flag-dm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/dm.svg)}
 .flag-do {background-image:url(vendor/flag-icon/flags/4x3/do.svg)}
+.flag-do.wn-flag-squared,
 .flag-do.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/do.svg)}
 .flag-dz {background-image:url(vendor/flag-icon/flags/4x3/dz.svg)}
+.flag-dz.wn-flag-squared,
 .flag-dz.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/dz.svg)}
 .flag-ec {background-image:url(vendor/flag-icon/flags/4x3/ec.svg)}
+.flag-ec.wn-flag-squared,
 .flag-ec.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ec.svg)}
 .flag-ee {background-image:url(vendor/flag-icon/flags/4x3/ee.svg)}
+.flag-ee.wn-flag-squared,
 .flag-ee.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ee.svg)}
 .flag-eg {background-image:url(vendor/flag-icon/flags/4x3/eg.svg)}
+.flag-eg.wn-flag-squared,
 .flag-eg.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/eg.svg)}
 .flag-eh {background-image:url(vendor/flag-icon/flags/4x3/eh.svg)}
+.flag-eh.wn-flag-squared,
 .flag-eh.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/eh.svg)}
 .flag-er {background-image:url(vendor/flag-icon/flags/4x3/er.svg)}
+.flag-er.wn-flag-squared,
 .flag-er.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/er.svg)}
 .flag-es {background-image:url(vendor/flag-icon/flags/4x3/es.svg)}
+.flag-es.wn-flag-squared,
 .flag-es.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/es.svg)}
 .flag-et {background-image:url(vendor/flag-icon/flags/4x3/et.svg)}
+.flag-et.wn-flag-squared,
 .flag-et.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/et.svg)}
 .flag-fi {background-image:url(vendor/flag-icon/flags/4x3/fi.svg)}
+.flag-fi.wn-flag-squared,
 .flag-fi.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/fi.svg)}
 .flag-fj {background-image:url(vendor/flag-icon/flags/4x3/fj.svg)}
+.flag-fj.wn-flag-squared,
 .flag-fj.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/fj.svg)}
 .flag-fk {background-image:url(vendor/flag-icon/flags/4x3/fk.svg)}
+.flag-fk.wn-flag-squared,
 .flag-fk.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/fk.svg)}
 .flag-fm {background-image:url(vendor/flag-icon/flags/4x3/fm.svg)}
+.flag-fm.wn-flag-squared,
 .flag-fm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/fm.svg)}
 .flag-fo {background-image:url(vendor/flag-icon/flags/4x3/fo.svg)}
+.flag-fo.wn-flag-squared,
 .flag-fo.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/fo.svg)}
 .flag-fr {background-image:url(vendor/flag-icon/flags/4x3/fr.svg)}
+.flag-fr.wn-flag-squared,
 .flag-fr.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/fr.svg)}
 .flag-ga {background-image:url(vendor/flag-icon/flags/4x3/ga.svg)}
+.flag-ga.wn-flag-squared,
 .flag-ga.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ga.svg)}
 .flag-gb {background-image:url(vendor/flag-icon/flags/4x3/gb.svg)}
+.flag-gb.wn-flag-squared,
 .flag-gb.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gb.svg)}
 .flag-gd {background-image:url(vendor/flag-icon/flags/4x3/gd.svg)}
+.flag-gd.wn-flag-squared,
 .flag-gd.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gd.svg)}
 .flag-ge {background-image:url(vendor/flag-icon/flags/4x3/ge.svg)}
+.flag-ge.wn-flag-squared,
 .flag-ge.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ge.svg)}
 .flag-gf {background-image:url(vendor/flag-icon/flags/4x3/gf.svg)}
+.flag-gf.wn-flag-squared,
 .flag-gf.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gf.svg)}
 .flag-gg {background-image:url(vendor/flag-icon/flags/4x3/gg.svg)}
+.flag-gg.wn-flag-squared,
 .flag-gg.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gg.svg)}
 .flag-gh {background-image:url(vendor/flag-icon/flags/4x3/gh.svg)}
+.flag-gh.wn-flag-squared,
 .flag-gh.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gh.svg)}
 .flag-gi {background-image:url(vendor/flag-icon/flags/4x3/gi.svg)}
+.flag-gi.wn-flag-squared,
 .flag-gi.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gi.svg)}
 .flag-gl {background-image:url(vendor/flag-icon/flags/4x3/gl.svg)}
+.flag-gl.wn-flag-squared,
 .flag-gl.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gl.svg)}
 .flag-gm {background-image:url(vendor/flag-icon/flags/4x3/gm.svg)}
+.flag-gm.wn-flag-squared,
 .flag-gm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gm.svg)}
 .flag-gn {background-image:url(vendor/flag-icon/flags/4x3/gn.svg)}
+.flag-gn.wn-flag-squared,
 .flag-gn.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gn.svg)}
 .flag-gp {background-image:url(vendor/flag-icon/flags/4x3/gp.svg)}
+.flag-gp.wn-flag-squared,
 .flag-gp.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gp.svg)}
 .flag-gq {background-image:url(vendor/flag-icon/flags/4x3/gq.svg)}
+.flag-gq.wn-flag-squared,
 .flag-gq.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gq.svg)}
 .flag-gr {background-image:url(vendor/flag-icon/flags/4x3/gr.svg)}
+.flag-gr.wn-flag-squared,
 .flag-gr.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gr.svg)}
 .flag-gs {background-image:url(vendor/flag-icon/flags/4x3/gs.svg)}
+.flag-gs.wn-flag-squared,
 .flag-gs.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gs.svg)}
 .flag-gt {background-image:url(vendor/flag-icon/flags/4x3/gt.svg)}
+.flag-gt.wn-flag-squared,
 .flag-gt.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gt.svg)}
 .flag-gu {background-image:url(vendor/flag-icon/flags/4x3/gu.svg)}
+.flag-gu.wn-flag-squared,
 .flag-gu.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gu.svg)}
 .flag-gw {background-image:url(vendor/flag-icon/flags/4x3/gw.svg)}
+.flag-gw.wn-flag-squared,
 .flag-gw.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gw.svg)}
 .flag-gy {background-image:url(vendor/flag-icon/flags/4x3/gy.svg)}
+.flag-gy.wn-flag-squared,
 .flag-gy.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gy.svg)}
 .flag-hk {background-image:url(vendor/flag-icon/flags/4x3/hk.svg)}
+.flag-hk.wn-flag-squared,
 .flag-hk.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/hk.svg)}
 .flag-hm {background-image:url(vendor/flag-icon/flags/4x3/hm.svg)}
+.flag-hm.wn-flag-squared,
 .flag-hm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/hm.svg)}
 .flag-hn {background-image:url(vendor/flag-icon/flags/4x3/hn.svg)}
+.flag-hn.wn-flag-squared,
 .flag-hn.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/hn.svg)}
 .flag-hr {background-image:url(vendor/flag-icon/flags/4x3/hr.svg)}
+.flag-hr.wn-flag-squared,
 .flag-hr.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/hr.svg)}
 .flag-ht {background-image:url(vendor/flag-icon/flags/4x3/ht.svg)}
+.flag-ht.wn-flag-squared,
 .flag-ht.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ht.svg)}
 .flag-hu {background-image:url(vendor/flag-icon/flags/4x3/hu.svg)}
+.flag-hu.wn-flag-squared,
 .flag-hu.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/hu.svg)}
 .flag-id {background-image:url(vendor/flag-icon/flags/4x3/id.svg)}
+.flag-id.wn-flag-squared,
 .flag-id.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/id.svg)}
 .flag-ie {background-image:url(vendor/flag-icon/flags/4x3/ie.svg)}
+.flag-ie.wn-flag-squared,
 .flag-ie.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ie.svg)}
 .flag-il {background-image:url(vendor/flag-icon/flags/4x3/il.svg)}
+.flag-il.wn-flag-squared,
 .flag-il.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/il.svg)}
 .flag-im {background-image:url(vendor/flag-icon/flags/4x3/im.svg)}
+.flag-im.wn-flag-squared,
 .flag-im.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/im.svg)}
 .flag-in {background-image:url(vendor/flag-icon/flags/4x3/in.svg)}
+.flag-in.wn-flag-squared,
 .flag-in.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/in.svg)}
 .flag-io {background-image:url(vendor/flag-icon/flags/4x3/io.svg)}
+.flag-io.wn-flag-squared,
 .flag-io.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/io.svg)}
 .flag-iq {background-image:url(vendor/flag-icon/flags/4x3/iq.svg)}
+.flag-iq.wn-flag-squared,
 .flag-iq.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/iq.svg)}
 .flag-ir {background-image:url(vendor/flag-icon/flags/4x3/ir.svg)}
+.flag-ir.wn-flag-squared,
 .flag-ir.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ir.svg)}
 .flag-is {background-image:url(vendor/flag-icon/flags/4x3/is.svg)}
+.flag-is.wn-flag-squared,
 .flag-is.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/is.svg)}
 .flag-it {background-image:url(vendor/flag-icon/flags/4x3/it.svg)}
+.flag-it.wn-flag-squared,
 .flag-it.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/it.svg)}
 .flag-je {background-image:url(vendor/flag-icon/flags/4x3/je.svg)}
+.flag-je.wn-flag-squared,
 .flag-je.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/je.svg)}
 .flag-jm {background-image:url(vendor/flag-icon/flags/4x3/jm.svg)}
+.flag-jm.wn-flag-squared,
 .flag-jm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/jm.svg)}
 .flag-jo {background-image:url(vendor/flag-icon/flags/4x3/jo.svg)}
+.flag-jo.wn-flag-squared,
 .flag-jo.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/jo.svg)}
 .flag-jp {background-image:url(vendor/flag-icon/flags/4x3/jp.svg)}
+.flag-jp.wn-flag-squared,
 .flag-jp.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/jp.svg)}
 .flag-ke {background-image:url(vendor/flag-icon/flags/4x3/ke.svg)}
+.flag-ke.wn-flag-squared,
 .flag-ke.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ke.svg)}
 .flag-kg {background-image:url(vendor/flag-icon/flags/4x3/kg.svg)}
+.flag-kg.wn-flag-squared,
 .flag-kg.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/kg.svg)}
 .flag-kh {background-image:url(vendor/flag-icon/flags/4x3/kh.svg)}
+.flag-kh.wn-flag-squared,
 .flag-kh.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/kh.svg)}
 .flag-ki {background-image:url(vendor/flag-icon/flags/4x3/ki.svg)}
+.flag-ki.wn-flag-squared,
 .flag-ki.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ki.svg)}
 .flag-km {background-image:url(vendor/flag-icon/flags/4x3/km.svg)}
+.flag-km.wn-flag-squared,
 .flag-km.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/km.svg)}
 .flag-kn {background-image:url(vendor/flag-icon/flags/4x3/kn.svg)}
+.flag-kn.wn-flag-squared,
 .flag-kn.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/kn.svg)}
 .flag-kp {background-image:url(vendor/flag-icon/flags/4x3/kp.svg)}
+.flag-kp.wn-flag-squared,
 .flag-kp.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/kp.svg)}
 .flag-kr {background-image:url(vendor/flag-icon/flags/4x3/kr.svg)}
+.flag-kr.wn-flag-squared,
 .flag-kr.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/kr.svg)}
 .flag-kw {background-image:url(vendor/flag-icon/flags/4x3/kw.svg)}
+.flag-kw.wn-flag-squared,
 .flag-kw.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/kw.svg)}
 .flag-ky {background-image:url(vendor/flag-icon/flags/4x3/ky.svg)}
+.flag-ky.wn-flag-squared,
 .flag-ky.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ky.svg)}
 .flag-kz {background-image:url(vendor/flag-icon/flags/4x3/kz.svg)}
+.flag-kz.wn-flag-squared,
 .flag-kz.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/kz.svg)}
 .flag-la {background-image:url(vendor/flag-icon/flags/4x3/la.svg)}
+.flag-la.wn-flag-squared,
 .flag-la.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/la.svg)}
 .flag-lb {background-image:url(vendor/flag-icon/flags/4x3/lb.svg)}
+.flag-lb.wn-flag-squared,
 .flag-lb.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/lb.svg)}
 .flag-lc {background-image:url(vendor/flag-icon/flags/4x3/lc.svg)}
+.flag-lc.wn-flag-squared,
 .flag-lc.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/lc.svg)}
 .flag-li {background-image:url(vendor/flag-icon/flags/4x3/li.svg)}
+.flag-li.wn-flag-squared,
 .flag-li.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/li.svg)}
 .flag-lk {background-image:url(vendor/flag-icon/flags/4x3/lk.svg)}
+.flag-lk.wn-flag-squared,
 .flag-lk.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/lk.svg)}
 .flag-lr {background-image:url(vendor/flag-icon/flags/4x3/lr.svg)}
+.flag-lr.wn-flag-squared,
 .flag-lr.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/lr.svg)}
 .flag-ls {background-image:url(vendor/flag-icon/flags/4x3/ls.svg)}
+.flag-ls.wn-flag-squared,
 .flag-ls.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ls.svg)}
 .flag-lt {background-image:url(vendor/flag-icon/flags/4x3/lt.svg)}
+.flag-lt.wn-flag-squared,
 .flag-lt.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/lt.svg)}
 .flag-lu {background-image:url(vendor/flag-icon/flags/4x3/lu.svg)}
+.flag-lu.wn-flag-squared,
 .flag-lu.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/lu.svg)}
 .flag-lv {background-image:url(vendor/flag-icon/flags/4x3/lv.svg)}
+.flag-lv.wn-flag-squared,
 .flag-lv.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/lv.svg)}
 .flag-ly {background-image:url(vendor/flag-icon/flags/4x3/ly.svg)}
+.flag-ly.wn-flag-squared,
 .flag-ly.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ly.svg)}
 .flag-ma {background-image:url(vendor/flag-icon/flags/4x3/ma.svg)}
+.flag-ma.wn-flag-squared,
 .flag-ma.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ma.svg)}
 .flag-mc {background-image:url(vendor/flag-icon/flags/4x3/mc.svg)}
+.flag-mc.wn-flag-squared,
 .flag-mc.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mc.svg)}
 .flag-md {background-image:url(vendor/flag-icon/flags/4x3/md.svg)}
+.flag-md.wn-flag-squared,
 .flag-md.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/md.svg)}
 .flag-me {background-image:url(vendor/flag-icon/flags/4x3/me.svg)}
+.flag-me.wn-flag-squared,
 .flag-me.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/me.svg)}
 .flag-mf {background-image:url(vendor/flag-icon/flags/4x3/mf.svg)}
+.flag-mf.wn-flag-squared,
 .flag-mf.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mf.svg)}
 .flag-mg {background-image:url(vendor/flag-icon/flags/4x3/mg.svg)}
+.flag-mg.wn-flag-squared,
 .flag-mg.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mg.svg)}
 .flag-mh {background-image:url(vendor/flag-icon/flags/4x3/mh.svg)}
+.flag-mh.wn-flag-squared,
 .flag-mh.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mh.svg)}
 .flag-mk {background-image:url(vendor/flag-icon/flags/4x3/mk.svg)}
+.flag-mk.wn-flag-squared,
 .flag-mk.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mk.svg)}
 .flag-ml {background-image:url(vendor/flag-icon/flags/4x3/ml.svg)}
+.flag-ml.wn-flag-squared,
 .flag-ml.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ml.svg)}
 .flag-mm {background-image:url(vendor/flag-icon/flags/4x3/mm.svg)}
+.flag-mm.wn-flag-squared,
 .flag-mm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mm.svg)}
 .flag-mn {background-image:url(vendor/flag-icon/flags/4x3/mn.svg)}
+.flag-mn.wn-flag-squared,
 .flag-mn.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mn.svg)}
 .flag-mo {background-image:url(vendor/flag-icon/flags/4x3/mo.svg)}
+.flag-mo.wn-flag-squared,
 .flag-mo.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mo.svg)}
 .flag-mp {background-image:url(vendor/flag-icon/flags/4x3/mp.svg)}
+.flag-mp.wn-flag-squared,
 .flag-mp.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mp.svg)}
 .flag-mq {background-image:url(vendor/flag-icon/flags/4x3/mq.svg)}
+.flag-mq.wn-flag-squared,
 .flag-mq.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mq.svg)}
 .flag-mr {background-image:url(vendor/flag-icon/flags/4x3/mr.svg)}
+.flag-mr.wn-flag-squared,
 .flag-mr.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mr.svg)}
 .flag-ms {background-image:url(vendor/flag-icon/flags/4x3/ms.svg)}
+.flag-ms.wn-flag-squared,
 .flag-ms.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ms.svg)}
 .flag-mt {background-image:url(vendor/flag-icon/flags/4x3/mt.svg)}
+.flag-mt.wn-flag-squared,
 .flag-mt.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mt.svg)}
 .flag-mu {background-image:url(vendor/flag-icon/flags/4x3/mu.svg)}
+.flag-mu.wn-flag-squared,
 .flag-mu.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mu.svg)}
 .flag-mv {background-image:url(vendor/flag-icon/flags/4x3/mv.svg)}
+.flag-mv.wn-flag-squared,
 .flag-mv.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mv.svg)}
 .flag-mw {background-image:url(vendor/flag-icon/flags/4x3/mw.svg)}
+.flag-mw.wn-flag-squared,
 .flag-mw.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mw.svg)}
 .flag-mx {background-image:url(vendor/flag-icon/flags/4x3/mx.svg)}
+.flag-mx.wn-flag-squared,
 .flag-mx.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mx.svg)}
 .flag-my {background-image:url(vendor/flag-icon/flags/4x3/my.svg)}
+.flag-my.wn-flag-squared,
 .flag-my.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/my.svg)}
 .flag-mz {background-image:url(vendor/flag-icon/flags/4x3/mz.svg)}
+.flag-mz.wn-flag-squared,
 .flag-mz.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/mz.svg)}
 .flag-na {background-image:url(vendor/flag-icon/flags/4x3/na.svg)}
+.flag-na.wn-flag-squared,
 .flag-na.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/na.svg)}
 .flag-nc {background-image:url(vendor/flag-icon/flags/4x3/nc.svg)}
+.flag-nc.wn-flag-squared,
 .flag-nc.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/nc.svg)}
 .flag-ne {background-image:url(vendor/flag-icon/flags/4x3/ne.svg)}
+.flag-ne.wn-flag-squared,
 .flag-ne.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ne.svg)}
 .flag-nf {background-image:url(vendor/flag-icon/flags/4x3/nf.svg)}
+.flag-nf.wn-flag-squared,
 .flag-nf.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/nf.svg)}
 .flag-ng {background-image:url(vendor/flag-icon/flags/4x3/ng.svg)}
+.flag-ng.wn-flag-squared,
 .flag-ng.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ng.svg)}
 .flag-ni {background-image:url(vendor/flag-icon/flags/4x3/ni.svg)}
+.flag-ni.wn-flag-squared,
 .flag-ni.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ni.svg)}
 .flag-nl {background-image:url(vendor/flag-icon/flags/4x3/nl.svg)}
+.flag-nl.wn-flag-squared,
 .flag-nl.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/nl.svg)}
 .flag-no {background-image:url(vendor/flag-icon/flags/4x3/no.svg)}
+.flag-no.wn-flag-squared,
 .flag-no.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/no.svg)}
 .flag-np {background-image:url(vendor/flag-icon/flags/4x3/np.svg)}
+.flag-np.wn-flag-squared,
 .flag-np.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/np.svg)}
 .flag-nr {background-image:url(vendor/flag-icon/flags/4x3/nr.svg)}
+.flag-nr.wn-flag-squared,
 .flag-nr.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/nr.svg)}
 .flag-nu {background-image:url(vendor/flag-icon/flags/4x3/nu.svg)}
+.flag-nu.wn-flag-squared,
 .flag-nu.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/nu.svg)}
 .flag-nz {background-image:url(vendor/flag-icon/flags/4x3/nz.svg)}
+.flag-nz.wn-flag-squared,
 .flag-nz.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/nz.svg)}
 .flag-om {background-image:url(vendor/flag-icon/flags/4x3/om.svg)}
+.flag-om.wn-flag-squared,
 .flag-om.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/om.svg)}
 .flag-pa {background-image:url(vendor/flag-icon/flags/4x3/pa.svg)}
+.flag-pa.wn-flag-squared,
 .flag-pa.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/pa.svg)}
 .flag-pe {background-image:url(vendor/flag-icon/flags/4x3/pe.svg)}
+.flag-pe.wn-flag-squared,
 .flag-pe.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/pe.svg)}
 .flag-pf {background-image:url(vendor/flag-icon/flags/4x3/pf.svg)}
+.flag-pf.wn-flag-squared,
 .flag-pf.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/pf.svg)}
 .flag-pg {background-image:url(vendor/flag-icon/flags/4x3/pg.svg)}
+.flag-pg.wn-flag-squared,
 .flag-pg.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/pg.svg)}
 .flag-ph {background-image:url(vendor/flag-icon/flags/4x3/ph.svg)}
+.flag-ph.wn-flag-squared,
 .flag-ph.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ph.svg)}
 .flag-pk {background-image:url(vendor/flag-icon/flags/4x3/pk.svg)}
+.flag-pk.wn-flag-squared,
 .flag-pk.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/pk.svg)}
 .flag-pl {background-image:url(vendor/flag-icon/flags/4x3/pl.svg)}
+.flag-pl.wn-flag-squared,
 .flag-pl.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/pl.svg)}
 .flag-pm {background-image:url(vendor/flag-icon/flags/4x3/pm.svg)}
+.flag-pm.wn-flag-squared,
 .flag-pm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/pm.svg)}
 .flag-pn {background-image:url(vendor/flag-icon/flags/4x3/pn.svg)}
+.flag-pn.wn-flag-squared,
 .flag-pn.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/pn.svg)}
 .flag-pr {background-image:url(vendor/flag-icon/flags/4x3/pr.svg)}
+.flag-pr.wn-flag-squared,
 .flag-pr.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/pr.svg)}
 .flag-ps {background-image:url(vendor/flag-icon/flags/4x3/ps.svg)}
+.flag-ps.wn-flag-squared,
 .flag-ps.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ps.svg)}
 .flag-pt {background-image:url(vendor/flag-icon/flags/4x3/pt.svg)}
+.flag-pt.wn-flag-squared,
 .flag-pt.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/pt.svg)}
 .flag-pw {background-image:url(vendor/flag-icon/flags/4x3/pw.svg)}
+.flag-pw.wn-flag-squared,
 .flag-pw.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/pw.svg)}
 .flag-py {background-image:url(vendor/flag-icon/flags/4x3/py.svg)}
+.flag-py.wn-flag-squared,
 .flag-py.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/py.svg)}
 .flag-qa {background-image:url(vendor/flag-icon/flags/4x3/qa.svg)}
+.flag-qa.wn-flag-squared,
 .flag-qa.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/qa.svg)}
 .flag-re {background-image:url(vendor/flag-icon/flags/4x3/re.svg)}
+.flag-re.wn-flag-squared,
 .flag-re.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/re.svg)}
 .flag-ro {background-image:url(vendor/flag-icon/flags/4x3/ro.svg)}
+.flag-ro.wn-flag-squared,
 .flag-ro.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ro.svg)}
 .flag-rs {background-image:url(vendor/flag-icon/flags/4x3/rs.svg)}
+.flag-rs.wn-flag-squared,
 .flag-rs.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/rs.svg)}
 .flag-ru {background-image:url(vendor/flag-icon/flags/4x3/ru.svg)}
+.flag-ru.wn-flag-squared,
 .flag-ru.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ru.svg)}
 .flag-rw {background-image:url(vendor/flag-icon/flags/4x3/rw.svg)}
+.flag-rw.wn-flag-squared,
 .flag-rw.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/rw.svg)}
 .flag-sa {background-image:url(vendor/flag-icon/flags/4x3/sa.svg)}
+.flag-sa.wn-flag-squared,
 .flag-sa.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sa.svg)}
 .flag-sb {background-image:url(vendor/flag-icon/flags/4x3/sb.svg)}
+.flag-sb.wn-flag-squared,
 .flag-sb.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sb.svg)}
 .flag-sc {background-image:url(vendor/flag-icon/flags/4x3/sc.svg)}
+.flag-sc.wn-flag-squared,
 .flag-sc.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sc.svg)}
 .flag-sd {background-image:url(vendor/flag-icon/flags/4x3/sd.svg)}
+.flag-sd.wn-flag-squared,
 .flag-sd.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sd.svg)}
 .flag-se {background-image:url(vendor/flag-icon/flags/4x3/se.svg)}
+.flag-se.wn-flag-squared,
 .flag-se.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/se.svg)}
 .flag-sg {background-image:url(vendor/flag-icon/flags/4x3/sg.svg)}
+.flag-sg.wn-flag-squared,
 .flag-sg.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sg.svg)}
 .flag-sh {background-image:url(vendor/flag-icon/flags/4x3/sh.svg)}
+.flag-sh.wn-flag-squared,
 .flag-sh.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sh.svg)}
 .flag-si {background-image:url(vendor/flag-icon/flags/4x3/si.svg)}
+.flag-si.wn-flag-squared,
 .flag-si.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/si.svg)}
 .flag-sj {background-image:url(vendor/flag-icon/flags/4x3/sj.svg)}
+.flag-sj.wn-flag-squared,
 .flag-sj.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sj.svg)}
 .flag-sk {background-image:url(vendor/flag-icon/flags/4x3/sk.svg)}
+.flag-sk.wn-flag-squared,
 .flag-sk.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sk.svg)}
 .flag-sl {background-image:url(vendor/flag-icon/flags/4x3/sl.svg)}
+.flag-sl.wn-flag-squared,
 .flag-sl.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sl.svg)}
 .flag-sm {background-image:url(vendor/flag-icon/flags/4x3/sm.svg)}
+.flag-sm.wn-flag-squared,
 .flag-sm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sm.svg)}
 .flag-sn {background-image:url(vendor/flag-icon/flags/4x3/sn.svg)}
+.flag-sn.wn-flag-squared,
 .flag-sn.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sn.svg)}
 .flag-so {background-image:url(vendor/flag-icon/flags/4x3/so.svg)}
+.flag-so.wn-flag-squared,
 .flag-so.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/so.svg)}
 .flag-sr {background-image:url(vendor/flag-icon/flags/4x3/sr.svg)}
+.flag-sr.wn-flag-squared,
 .flag-sr.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sr.svg)}
 .flag-ss {background-image:url(vendor/flag-icon/flags/4x3/ss.svg)}
+.flag-ss.wn-flag-squared,
 .flag-ss.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ss.svg)}
 .flag-st {background-image:url(vendor/flag-icon/flags/4x3/st.svg)}
+.flag-st.wn-flag-squared,
 .flag-st.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/st.svg)}
 .flag-sv {background-image:url(vendor/flag-icon/flags/4x3/sv.svg)}
+.flag-sv.wn-flag-squared,
 .flag-sv.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sv.svg)}
 .flag-sx {background-image:url(vendor/flag-icon/flags/4x3/sx.svg)}
+.flag-sx.wn-flag-squared,
 .flag-sx.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sx.svg)}
 .flag-sy {background-image:url(vendor/flag-icon/flags/4x3/sy.svg)}
+.flag-sy.wn-flag-squared,
 .flag-sy.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sy.svg)}
 .flag-sz {background-image:url(vendor/flag-icon/flags/4x3/sz.svg)}
+.flag-sz.wn-flag-squared,
 .flag-sz.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/sz.svg)}
 .flag-tc {background-image:url(vendor/flag-icon/flags/4x3/tc.svg)}
+.flag-tc.wn-flag-squared,
 .flag-tc.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tc.svg)}
 .flag-td {background-image:url(vendor/flag-icon/flags/4x3/td.svg)}
+.flag-td.wn-flag-squared,
 .flag-td.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/td.svg)}
 .flag-tf {background-image:url(vendor/flag-icon/flags/4x3/tf.svg)}
+.flag-tf.wn-flag-squared,
 .flag-tf.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tf.svg)}
 .flag-tg {background-image:url(vendor/flag-icon/flags/4x3/tg.svg)}
+.flag-tg.wn-flag-squared,
 .flag-tg.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tg.svg)}
 .flag-th {background-image:url(vendor/flag-icon/flags/4x3/th.svg)}
+.flag-th.wn-flag-squared,
 .flag-th.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/th.svg)}
 .flag-tj {background-image:url(vendor/flag-icon/flags/4x3/tj.svg)}
+.flag-tj.wn-flag-squared,
 .flag-tj.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tj.svg)}
 .flag-tk {background-image:url(vendor/flag-icon/flags/4x3/tk.svg)}
+.flag-tk.wn-flag-squared,
 .flag-tk.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tk.svg)}
 .flag-tl {background-image:url(vendor/flag-icon/flags/4x3/tl.svg)}
+.flag-tl.wn-flag-squared,
 .flag-tl.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tl.svg)}
 .flag-tm {background-image:url(vendor/flag-icon/flags/4x3/tm.svg)}
+.flag-tm.wn-flag-squared,
 .flag-tm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tm.svg)}
 .flag-tn {background-image:url(vendor/flag-icon/flags/4x3/tn.svg)}
+.flag-tn.wn-flag-squared,
 .flag-tn.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tn.svg)}
 .flag-to {background-image:url(vendor/flag-icon/flags/4x3/to.svg)}
+.flag-to.wn-flag-squared,
 .flag-to.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/to.svg)}
 .flag-tr {background-image:url(vendor/flag-icon/flags/4x3/tr.svg)}
+.flag-tr.wn-flag-squared,
 .flag-tr.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tr.svg)}
 .flag-tt {background-image:url(vendor/flag-icon/flags/4x3/tt.svg)}
+.flag-tt.wn-flag-squared,
 .flag-tt.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tt.svg)}
 .flag-tv {background-image:url(vendor/flag-icon/flags/4x3/tv.svg)}
+.flag-tv.wn-flag-squared,
 .flag-tv.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tv.svg)}
 .flag-tw {background-image:url(vendor/flag-icon/flags/4x3/tw.svg)}
+.flag-tw.wn-flag-squared,
 .flag-tw.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tw.svg)}
 .flag-tz {background-image:url(vendor/flag-icon/flags/4x3/tz.svg)}
+.flag-tz.wn-flag-squared,
 .flag-tz.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/tz.svg)}
 .flag-ua {background-image:url(vendor/flag-icon/flags/4x3/ua.svg)}
+.flag-ua.wn-flag-squared,
 .flag-ua.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ua.svg)}
 .flag-ug {background-image:url(vendor/flag-icon/flags/4x3/ug.svg)}
+.flag-ug.wn-flag-squared,
 .flag-ug.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ug.svg)}
 .flag-um {background-image:url(vendor/flag-icon/flags/4x3/um.svg)}
+.flag-um.wn-flag-squared,
 .flag-um.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/um.svg)}
 .flag-us {background-image:url(vendor/flag-icon/flags/4x3/us.svg)}
+.flag-us.wn-flag-squared,
 .flag-us.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/us.svg)}
 .flag-uy {background-image:url(vendor/flag-icon/flags/4x3/uy.svg)}
+.flag-uy.wn-flag-squared,
 .flag-uy.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/uy.svg)}
 .flag-uz {background-image:url(vendor/flag-icon/flags/4x3/uz.svg)}
+.flag-uz.wn-flag-squared,
 .flag-uz.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/uz.svg)}
 .flag-va {background-image:url(vendor/flag-icon/flags/4x3/va.svg)}
+.flag-va.wn-flag-squared,
 .flag-va.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/va.svg)}
 .flag-vc {background-image:url(vendor/flag-icon/flags/4x3/vc.svg)}
+.flag-vc.wn-flag-squared,
 .flag-vc.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/vc.svg)}
 .flag-ve {background-image:url(vendor/flag-icon/flags/4x3/ve.svg)}
+.flag-ve.wn-flag-squared,
 .flag-ve.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ve.svg)}
 .flag-vg {background-image:url(vendor/flag-icon/flags/4x3/vg.svg)}
+.flag-vg.wn-flag-squared,
 .flag-vg.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/vg.svg)}
 .flag-vi {background-image:url(vendor/flag-icon/flags/4x3/vi.svg)}
+.flag-vi.wn-flag-squared,
 .flag-vi.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/vi.svg)}
 .flag-vn {background-image:url(vendor/flag-icon/flags/4x3/vn.svg)}
+.flag-vn.wn-flag-squared,
 .flag-vn.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/vn.svg)}
 .flag-vu {background-image:url(vendor/flag-icon/flags/4x3/vu.svg)}
+.flag-vu.wn-flag-squared,
 .flag-vu.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/vu.svg)}
 .flag-wf {background-image:url(vendor/flag-icon/flags/4x3/wf.svg)}
+.flag-wf.wn-flag-squared,
 .flag-wf.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/wf.svg)}
 .flag-ws {background-image:url(vendor/flag-icon/flags/4x3/ws.svg)}
+.flag-ws.wn-flag-squared,
 .flag-ws.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ws.svg)}
 .flag-ye {background-image:url(vendor/flag-icon/flags/4x3/ye.svg)}
+.flag-ye.wn-flag-squared,
 .flag-ye.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/ye.svg)}
 .flag-yt {background-image:url(vendor/flag-icon/flags/4x3/yt.svg)}
+.flag-yt.wn-flag-squared,
 .flag-yt.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/yt.svg)}
 .flag-za {background-image:url(vendor/flag-icon/flags/4x3/za.svg)}
+.flag-za.wn-flag-squared,
 .flag-za.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/za.svg)}
 .flag-zm {background-image:url(vendor/flag-icon/flags/4x3/zm.svg)}
+.flag-zm.wn-flag-squared,
 .flag-zm.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/zm.svg)}
 .flag-zw {background-image:url(vendor/flag-icon/flags/4x3/zw.svg)}
+.flag-zw.wn-flag-squared,
 .flag-zw.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/zw.svg)}
 .flag-es-ct {background-image:url(vendor/flag-icon/flags/4x3/es-ct.svg)}
+.flag-es-ct.wn-flag-squared,
 .flag-es-ct.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/es-ct.svg)}
 .flag-eu {background-image:url(vendor/flag-icon/flags/4x3/eu.svg)}
+.flag-eu.wn-flag-squared,
 .flag-eu.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/eu.svg)}
 .flag-gb-eng {background-image:url(vendor/flag-icon/flags/4x3/gb-eng.svg)}
+.flag-gb-eng.wn-flag-squared,
 .flag-gb-eng.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gb-eng.svg)}
 .flag-gb-nir {background-image:url(vendor/flag-icon/flags/4x3/gb-nir.svg)}
+.flag-gb-nir.wn-flag-squared,
 .flag-gb-nir.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gb-nir.svg)}
 .flag-gb-sct {background-image:url(vendor/flag-icon/flags/4x3/gb-sct.svg)}
+.flag-gb-sct.wn-flag-squared,
 .flag-gb-sct.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gb-sct.svg)}
 .flag-gb-wls {background-image:url(vendor/flag-icon/flags/4x3/gb-wls.svg)}
+.flag-gb-wls.wn-flag-squared,
 .flag-gb-wls.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/gb-wls.svg)}
 .flag-un {background-image:url(vendor/flag-icon/flags/4x3/un.svg)}
+.flag-un.wn-flag-squared,
 .flag-un.oc-flag-squared {background-image:url(vendor/flag-icon/flags/1x1/un.svg)}
 fieldset {padding:0;margin:0;border:0;min-width:0}
 legend {display:block;width:100%;padding:0;margin-bottom:20px;font-size:21px;line-height:inherit;color:#333;border:0;border-bottom:1px solid #e5e5e5}

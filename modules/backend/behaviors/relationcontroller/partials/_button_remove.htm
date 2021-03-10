@@ -1,6 +1,6 @@
 <?php if ($relationViewMode == 'single'): ?>
     <button
-        class="btn btn-sm btn-secondary oc-icon-minus"
+        class="btn btn-sm btn-secondary wn-icon-minus"
         data-request="onRelationButtonRemove"
         data-request-success="$.wn.relationBehavior.changed('<?= e($this->vars['relationField']) ?>', 'removed')"
         data-stripe-load-indicator>
@@ -8,7 +8,7 @@
     </button>
 <?php else: ?>
     <button
-        class="btn btn-sm btn-secondary oc-icon-minus"
+        class="btn btn-sm btn-secondary wn-icon-minus"
         onclick="$(this).data('request-data', {
             checked: $('#<?= $this->relationGetId('view') ?> .control-list').listWidget('getChecked')
         })"

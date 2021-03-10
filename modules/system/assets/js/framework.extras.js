@@ -16,7 +16,7 @@
     // - Custom stripe loader color
     // - Flash message interval
 
-    var LOADER_CLASS = 'oc-loading';
+    var LOADER_CLASS = 'wn-loading';
 
     // FLASH HANDLING
     // ============================
@@ -148,7 +148,7 @@
         }
 
         this.indicator.removeClass('loaded')
-        $(document.body).addClass('oc-loading')
+        $(document.body).addClass('wn-loading')
     }
 
     StripeLoadIndicator.prototype.hide = function(force) {
@@ -160,7 +160,7 @@
 
         if (this.counter <= 0) {
             this.indicator.addClass('loaded')
-            $(document.body).removeClass('oc-loading')
+            $(document.body).removeClass('wn-loading')
         }
     }
 

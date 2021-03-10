@@ -191,7 +191,7 @@ window.ocSanitize=function(html){return sanitize(html)};}(window);+function($){"
 $.wn={}
 if($.oc===undefined)
 $.oc=$.wn
-var LOADER_CLASS='oc-loading';$(document).on('ajaxSetup','[data-request][data-request-flash]',function(event,context){context.options.handleErrorMessage=function(message){$.wn.flashMsg({text:message,class:'error'})}
+var LOADER_CLASS='wn-loading';$(document).on('ajaxSetup','[data-request][data-request-flash]',function(event,context){context.options.handleErrorMessage=function(message){$.wn.flashMsg({text:message,class:'error'})}
 context.options.handleFlashMessage=function(message,type){$.wn.flashMsg({text:message,class:type})}})
 $(document).on('ajaxValidation','[data-request][data-request-validate]',function(event,context,errorMsg,fields){var $this=$(this).closest('form'),$container=$('[data-validate-error]',$this),messages=[],$field
 $.each(fields,function(fieldName,fieldMessages){$field=$('[data-validate-for="'+fieldName+'"]',$this)
@@ -223,11 +223,11 @@ StripeLoadIndicator.prototype.show=function(){this.counter++
 this.stripe.after(this.stripe=this.stripe.clone()).remove()
 if(this.counter>1){return}
 this.indicator.removeClass('loaded')
-$(document.body).addClass('oc-loading')}
+$(document.body).addClass('wn-loading')}
 StripeLoadIndicator.prototype.hide=function(force){this.counter--
 if(force!==undefined&&force){this.counter=0}
 if(this.counter<=0){this.indicator.addClass('loaded')
-$(document.body).removeClass('oc-loading')}}
+$(document.body).removeClass('wn-loading')}}
 $.wn.stripeLoadIndicator=new StripeLoadIndicator()
 $(document).on('ajaxPromise','[data-request]',function(event){event.stopPropagation()
 $.wn.stripeLoadIndicator.show()

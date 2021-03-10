@@ -750,49 +750,49 @@
             dropdown: {
                 quote: {
                     label: 'markdowneditor.quote',
-                    cssClass: 'oc-button oc-icon-quote-right',
+                    cssClass: 'wn-button wn-icon-quote-right',
                     action: 'formatBlockMulti',
                     template: '> $1'
                 },
                 code: {
                     label: 'markdowneditor.code',
-                    cssClass: 'oc-button oc-icon-code',
+                    cssClass: 'wn-button wn-icon-code',
                     action: 'formatBlock',
                     template: '\n```\n$1\n```\n'
                 },
                 header1: {
                     label: 'markdowneditor.header1',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '# $1'
                 },
                 header2: {
                     label: 'markdowneditor.header2',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '## $1'
                 },
                 header3: {
                     label: 'markdowneditor.header3',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '### $1'
                 },
                 header4: {
                     label: 'markdowneditor.header4',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '#### $1'
                 },
                 header5: {
                     label: 'markdowneditor.header5',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '##### $1'
                 },
                 header6: {
                     label: 'markdowneditor.header6',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '###### $1'
                 }
@@ -842,13 +842,13 @@
         },
         medialink: {
             label: 'mediamanager.insert_link',
-            cssClass: 'oc-autumn-button oc-icon-link',
+            cssClass: 'wn-autumn-button wn-icon-link',
             action: 'formatMediaManager',
             template: '[$1]($2)'
         },
         mediaimage: {
             label: 'mediamanager.insert_image',
-            cssClass: 'oc-autumn-button oc-icon-image',
+            cssClass: 'wn-autumn-button wn-icon-image',
             action: 'formatMediaManager',
             template: '![$1]($2)'
         },

@@ -115,7 +115,7 @@ The partial for your rendered popup should follow this structure:
     <!-- Popup action buttons go here -->
     <button
         type="submit"
-        class="btn btn-primary oc-icon-send"
+        class="btn btn-primary wn-icon-send"
         data-load-indicator="Sending">
         Send
     </button>

@@ -84,8 +84,8 @@
             }
 
         if (matches = link.match(ExceptionBeautifier.REGEX.editor)) {
-            if (window.sessionStorage && window.sessionStorage['oc-exception-beautifier-editor']) {
-                open(window.sessionStorage['oc-exception-beautifier-editor'])
+            if (window.sessionStorage && window.sessionStorage['wn-exception-beautifier-editor']) {
+                open(window.sessionStorage['wn-exception-beautifier-editor'])
             } else {
                 $.popup({content: ExceptionBeautifier.LINKER_POPUP_CONTENT})
                     .on('shown.oc.popup', function (event, source, popup) {
@@ -95,7 +95,7 @@
 
                         $('[data-action="submit"]', popup).on('click', function () {
                             if ($('#editor-remember-choice').prop('checked') && window.sessionStorage) {
-                                window.sessionStorage['oc-exception-beautifier-editor'] = select.val()
+                                window.sessionStorage['wn-exception-beautifier-editor'] = select.val()
                             }
 
                             open(select.val())

@@ -9,21 +9,21 @@ All toolbar items (`toolbar-item`) should have a fixed width, except for the pri
     <div class="control-toolbar">
         <div class="toolbar-item toolbar-primary">
             <div data-control="toolbar">
-                <button type="button" class="btn btn-primary oc-icon-plus">Create post</button>
+                <button type="button" class="btn btn-primary wn-icon-plus">Create post</button>
 
-                <button type="button" class="btn btn-default oc-icon-copy">Copy</button>
+                <button type="button" class="btn btn-default wn-icon-copy">Copy</button>
 
-                <button type="button" class="btn btn-default oc-icon-trash">Delete</button>
+                <button type="button" class="btn btn-default wn-icon-trash">Delete</button>
 
-                <button type="button" class="btn btn-default oc-icon-magic">Publish</button>
+                <button type="button" class="btn btn-default wn-icon-magic">Publish</button>
 
-                <button type="button" class="btn btn-default oc-icon-power-off">Unpublish</button>
+                <button type="button" class="btn btn-default wn-icon-power-off">Unpublish</button>
 
-                <button type="button" class="btn btn-default oc-icon-clock-o">Timer</button>
+                <button type="button" class="btn btn-default wn-icon-clock-o">Timer</button>
 
-                <button type="button" class="btn btn-default oc-icon-mail-reply-all">Send by email</button>
+                <button type="button" class="btn btn-default wn-icon-mail-reply-all">Send by email</button>
 
-                <button type="button" class="btn btn-default oc-icon-hdd-o">Archive</button>
+                <button type="button" class="btn btn-default wn-icon-hdd-o">Archive</button>
             </div>
         </div>
         <div class="toolbar-item" style="width: 110px">
@@ -37,8 +37,8 @@ All toolbar items (`toolbar-item`) should have a fixed width, except for the pri
         <div class="toolbar-item toolbar-primary">
             <div data-control="toolbar">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default oc-icon-mail-reply-all">Send by email</button>
-                    <button type="button" class="btn btn-default oc-icon-hdd-o">Archive</button>
+                    <button type="button" class="btn btn-default wn-icon-mail-reply-all">Send by email</button>
+                    <button type="button" class="btn btn-default wn-icon-hdd-o">Archive</button>
                 </div>
             </div>
         </div>
@@ -54,7 +54,7 @@ All toolbar items (`toolbar-item`) should have a fixed width, except for the pri
             <div data-control="toolbar">
                 <button
                     type="button"
-                    class="btn btn-default oc-icon-download"
+                    class="btn btn-default wn-icon-download"
                     title="Hold down shift for more options"
                     data-control="tooltip"
                     data-placement="bottom"
@@ -77,14 +77,14 @@ All toolbar items (`toolbar-item`) should have a fixed width, except for the pri
                 <div class="dropdown dropdown-fixed">
                     <button
                         type="button"
-                        class="btn btn-default oc-icon-users"
+                        class="btn btn-default wn-icon-users"
                         data-toggle="dropdown">
                         Assign selected to...
                     </button>
                     <ul class="dropdown-menu" data-dropdown-title="Assign selected to...">
-                        <li><a href="#" tabindex="-1" class="oc-icon-user">Sally</a></li>
-                        <li><a href="#" tabindex="-1" class="oc-icon-user">Steve</a></li>
-                        <li><a href="#" tabindex="-1" class="oc-icon-user">Justin</a></li>
+                        <li><a href="#" tabindex="-1" class="wn-icon-user">Sally</a></li>
+                        <li><a href="#" tabindex="-1" class="wn-icon-user">Steve</a></li>
+                        <li><a href="#" tabindex="-1" class="wn-icon-user">Justin</a></li>
                     </ul>
                 </div>
 
@@ -114,14 +114,14 @@ All toolbar items (`toolbar-item`) should have a fixed width, except for the pri
                         <i class="icon-paragraph"></i>
                     </button>
                     <ul class="dropdown-menu" data-dropdown-title="Formatting">
-                        <li><a href="#" tabindex="-1" class="oc-icon-quote-right">Quote</a></li>
-                        <li><a href="#" tabindex="-1" class="oc-icon-code">Code</a></li>
-                        <li><a href="#" tabindex="-1" class="oc-icon-header">Header 1</a></li>
-                        <li><a href="#" tabindex="-1" class="oc-icon-header">Header 2</a></li>
-                        <li><a href="#" tabindex="-1" class="oc-icon-header">Header 3</a></li>
-                        <li><a href="#" tabindex="-1" class="oc-icon-header">Header 4</a></li>
-                        <li><a href="#" tabindex="-1" class="oc-icon-header">Header 5</a></li>
-                        <li><a href="#" tabindex="-1" class="oc-icon-header">Header 6</a></li>
+                        <li><a href="#" tabindex="-1" class="wn-icon-quote-right">Quote</a></li>
+                        <li><a href="#" tabindex="-1" class="wn-icon-code">Code</a></li>
+                        <li><a href="#" tabindex="-1" class="wn-icon-header">Header 1</a></li>
+                        <li><a href="#" tabindex="-1" class="wn-icon-header">Header 2</a></li>
+                        <li><a href="#" tabindex="-1" class="wn-icon-header">Header 3</a></li>
+                        <li><a href="#" tabindex="-1" class="wn-icon-header">Header 4</a></li>
+                        <li><a href="#" tabindex="-1" class="wn-icon-header">Header 5</a></li>
+                        <li><a href="#" tabindex="-1" class="wn-icon-header">Header 6</a></li>
                     </ul>
                 </div>
 
@@ -156,7 +156,7 @@ All toolbar items (`toolbar-item`) should have a fixed width, except for the pri
             </div>
         </div>
         <div class="toolbar-item" style="width: 80px">
-            <button type="button" class="btn oc-icon-eye"></button>
-            <button type="button" class="btn oc-icon-expand"></button>
+            <button type="button" class="btn wn-icon-eye"></button>
+            <button type="button" class="btn wn-icon-expand"></button>
         </div>
     </div>

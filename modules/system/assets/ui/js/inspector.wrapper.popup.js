@@ -117,7 +117,7 @@
         }
 
         if (this.options.containerSupported) {
-            var moveToContainerButton = $('<span class="inspector-move-to-container oc-icon-download">')
+            var moveToContainerButton = $('<span class="inspector-move-to-container wn-icon-download">')
 
             this.$popoverContainer.find('.popover-head').append(moveToContainerButton)
         }

@@ -68,7 +68,7 @@
      *         <div class="controls">
      *             <input type="text" tabindex="-1"/>
      *             <a href="#" tabindex="-1">
-     *                 <i class="oc-icon-terminal"></i>
+     *                 <i class="wn-icon-terminal"></i>
      *             </a>
      *         </div>
      *     </div>
@@ -94,7 +94,7 @@
         link.setAttribute('title', this.tooltipText)
         $(link).tooltip({'container': 'body', delay: 500})
 
-        icon.setAttribute('class', 'oc-icon-terminal')
+        icon.setAttribute('class', 'wn-icon-terminal')
 
         link.appendChild(icon)
         controls.appendChild(input)

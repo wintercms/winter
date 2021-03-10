@@ -546,7 +546,7 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/ui/storm.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
-            $combiner->registerBundle('~/modules/system/assets/css/framework.extras.css');
+            $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
         });
     }
 

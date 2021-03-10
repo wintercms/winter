@@ -2817,10 +2817,10 @@ if($this.data('autocomplete'))return
 var opts=$this.data()
 if(opts.source){opts.source=paramToObj('data-source',opts.source)}
 $this.autocomplete(opts)})}(window.jQuery);(function($){$(document).on('keypress','div.custom-checkbox',function(e){if(e.key==='(Space character)'||e.key==='Spacebar'||e.key===' '){var $cb=$('input[type=checkbox]',this)
-if($cb.data('oc-space-timestamp')==e.timeStamp)
+if($cb.data('wn-space-timestamp')==e.timeStamp)
 return
 $cb.get(0).checked=!$cb.get(0).checked
-$cb.data('oc-space-timestamp',e.timeStamp)
+$cb.data('wn-space-timestamp',e.timeStamp)
 $cb.trigger('change')
 return false}})
 $(document).render(function(){$('div.custom-checkbox.is-indeterminate > input').each(function(){var $el=$(this),checked=$el.data('checked')
@@ -3092,10 +3092,10 @@ FilterWidget.prototype.getPopoverTemplate=function(){return'                    
                                 </ul>                                                                                  \
                             </div>                                                                                     \
                             <div class="filter-buttons">                                                               \
-                                <button class="btn btn-block btn-primary oc-icon-filter" data-filter-action="apply">   \
+                                <button class="btn btn-block btn-primary wn-icon-filter" data-filter-action="apply">   \
                                     {{ apply_button_text }}                                                            \
                                 </button>                                                                              \
-                                <button class="btn btn-block btn-secondary oc-icon-eraser" data-filter-action="clear"> \
+                                <button class="btn btn-block btn-secondary wn-icon-eraser" data-filter-action="clear"> \
                                     {{ clear_button_text }}                                                            \
                                 </button>                                                                              \
                             </div>                                                                                     \
@@ -4884,7 +4884,7 @@ titleSpan.appendChild(anchor)}
 Surface.prototype.buildPropertyDescription=function(property){if(property.description===undefined||property.description===null){return null}
 var span=document.createElement('span')
 span.setAttribute('title',this.escapeJavascriptString(property.description))
-span.setAttribute('class','info oc-icon-info with-tooltip')
+span.setAttribute('class','info wn-icon-info with-tooltip')
 $(span).tooltip({placement:'auto right',container:'body',delay:500})
 return span}
 Surface.prototype.buildExternalParameterEditor=function(tbody){var rows=tbody.children
@@ -5258,7 +5258,7 @@ this.popoverObj=this.$element.data('oc.popover')
 this.$popoverContainer=this.popoverObj.$container
 this.$popoverContainer.addClass('inspector-temporary-placement')
 if(this.options.inspectorCssClass!==undefined){this.$popoverContainer.addClass(this.options.inspectorCssClass)}
-if(this.options.containerSupported){var moveToContainerButton=$('<span class="inspector-move-to-container oc-icon-download">')
+if(this.options.containerSupported){var moveToContainerButton=$('<span class="inspector-move-to-container wn-icon-download">')
 this.$popoverContainer.find('.popover-head').append(moveToContainerButton)}
 this.$popoverContainer.find('[data-inspector-title]').text(this.title)
 this.$popoverContainer.find('[data-inspector-description]').text(this.description)}
@@ -5323,7 +5323,7 @@ else{this.surfaceContainer=layoutElements.bodyContainer}
 this.setInspectorVisibleFlag(true)}
 InspectorContainer.prototype.buildHead=function(){var container=document.createElement('div'),header=document.createElement('h3'),paragraph=document.createElement('p'),detachButton=document.createElement('span'),closeButton=document.createElement('span')
 container.setAttribute('class','inspector-header')
-detachButton.setAttribute('class','oc-icon-external-link-square detach')
+detachButton.setAttribute('class','wn-icon-external-link-square detach')
 closeButton.setAttribute('class','close')
 header.textContent=this.title
 paragraph.textContent=this.description
@@ -5994,10 +5994,10 @@ ObjectListEditor.prototype.getPopupContent=function(){return'<form>             
                                                 <div class="toolbar-item">                              \
                                                     <div class="btn-group">                             \
                                                         <button type="button" class="btn btn-primary    \
-                                                            oc-icon-plus"                               \
+                                                            wn-icon-plus"                               \
                                                             data-cmd="create-item">Add</button>         \
                                                         <button type="button" class="btn btn-default    \
-                                                            empty oc-icon-trash-o"                      \
+                                                            empty wn-icon-trash-o"                      \
                                                             data-cmd="delete-item"></button>            \
                                                     </div>                                              \
                                                 </div>                                                  \
@@ -6284,10 +6284,10 @@ StringListAutocomplete.prototype.getPopupContent=function(){return'<form>       
                         <div class="toolbar-item">                                                      \
                             <div class="btn-group">                                                     \
                                 <button type="button" class="btn btn-primary                            \
-                                    oc-icon-plus"                                                       \
+                                    wn-icon-plus"                                                       \
                                     data-cmd="create-item">Add</button>                                 \
                                 <button type="button" class="btn btn-default                            \
-                                    empty oc-icon-trash-o"                                              \
+                                    empty wn-icon-trash-o"                                              \
                                     data-cmd="delete-item"></button>                                    \
                             </div>                                                                      \
                         </div>                                                                          \
@@ -6474,10 +6474,10 @@ DictionaryEditor.prototype.getPopupContent=function(){return'<form>             
                         <div class="toolbar-item">                                                      \
                             <div class="btn-group">                                                     \
                                 <button type="button" class="btn btn-primary                            \
-                                    oc-icon-plus"                                                       \
+                                    wn-icon-plus"                                                       \
                                     data-cmd="create-item">Add</button>                                 \
                                 <button type="button" class="btn btn-default                            \
-                                    empty oc-icon-trash-o"                                              \
+                                    empty wn-icon-trash-o"                                              \
                                     data-cmd="delete-item"></button>                                    \
                             </div>                                                                      \
                         </div>                                                                          \
@@ -6850,7 +6850,7 @@ link.setAttribute('class','external-editor-link')
 link.setAttribute('tabindex','-1')
 link.setAttribute('title',this.tooltipText)
 $(link).tooltip({'container':'body',delay:500})
-icon.setAttribute('class','oc-icon-terminal')
+icon.setAttribute('class','wn-icon-terminal')
 link.appendChild(icon)
 controls.appendChild(input)
 controls.appendChild(link)

@@ -341,7 +341,7 @@
 
         var span = document.createElement('span')
         span.setAttribute('title', this.escapeJavascriptString(property.description))
-        span.setAttribute('class', 'info oc-icon-info with-tooltip')
+        span.setAttribute('class', 'info wn-icon-info with-tooltip')
 
         $(span).tooltip({ placement: 'auto right', container: 'body', delay: 500 })
 

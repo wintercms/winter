@@ -89,7 +89,7 @@
             closeButton = document.createElement('span')
 
         container.setAttribute('class', 'inspector-header')
-        detachButton.setAttribute('class', 'oc-icon-external-link-square detach')
+        detachButton.setAttribute('class', 'wn-icon-external-link-square detach')
         closeButton.setAttribute('class', 'close')
 
         header.textContent = this.title

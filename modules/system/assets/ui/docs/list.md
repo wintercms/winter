@@ -196,7 +196,7 @@ It might be fun to include a status column!
             <tbody>
                 <tr>
                     <td>
-                        <span class="oc-icon-circle text-muted">
+                        <span class="wn-icon-circle text-muted">
                             Draft
                         </span>
                     </td>
@@ -204,7 +204,7 @@ It might be fun to include a status column!
                 </tr>
                 <tr>
                     <td>
-                        <span class="oc-icon-circle text-info">
+                        <span class="wn-icon-circle text-info">
                             Pending
                         </span>
                     </td>
@@ -212,7 +212,7 @@ It might be fun to include a status column!
                 </tr>
                 <tr>
                     <td>
-                        <span class="oc-icon-circle text-success">
+                        <span class="wn-icon-circle text-success">
                             Approved
                         </span>
                     </td>
@@ -220,7 +220,7 @@ It might be fun to include a status column!
                 </tr>
                 <tr>
                     <td>
-                        <span class="oc-icon-circle text-danger">
+                        <span class="wn-icon-circle text-danger">
                             Cancelled
                         </span>
                     </td>
