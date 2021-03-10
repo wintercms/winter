@@ -44,8 +44,8 @@ class RequestLogs extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('October.System', 'system', 'settings');
-        SettingsManager::setContext('October.System', 'request_logs');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
+        SettingsManager::setContext('Winter.System', 'request_logs');
     }
 
     public function index_onRefresh()

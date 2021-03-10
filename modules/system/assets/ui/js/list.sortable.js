@@ -4,7 +4,7 @@
  * Status: experimental. The behavior is not perfect, but it's OK in terms of memory
  * usage and disposing.
  *
- * This is a lightweight, October-style implementation of the drag & drop sorting
+ * This is a lightweight, Winter-style implementation of the drag & drop sorting
  * functionality. The plugin uses only HTML5 Drag&Drop feature and completely
  * disposable.
  *

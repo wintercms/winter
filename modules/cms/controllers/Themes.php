@@ -43,8 +43,8 @@ class Themes extends Controller
         $this->addCss('/modules/cms/assets/css/winter.theme-selector.css', 'core');
 
         $this->pageTitle = 'cms::lang.theme.settings_menu';
-        BackendMenu::setContext('October.System', 'system', 'settings');
-        SettingsManager::setContext('October.Cms', 'theme');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
+        SettingsManager::setContext('Winter.Cms', 'theme');
 
         /*
          * Custom redirect for unauthorized request

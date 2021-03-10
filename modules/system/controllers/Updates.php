@@ -59,8 +59,8 @@ class Updates extends Controller
         $this->addJs('/modules/system/assets/js/updates/updates.js', 'core');
         $this->addCss('/modules/system/assets/css/updates/updates.css', 'core');
 
-        BackendMenu::setContext('October.System', 'system', 'updates');
-        SettingsManager::setContext('October.System', 'updates');
+        BackendMenu::setContext('Winter.System', 'system', 'updates');
+        SettingsManager::setContext('Winter.System', 'updates');
 
         if ($this->getAjaxHandler() == 'onExecuteStep') {
             $this->useSecurityToken = false;

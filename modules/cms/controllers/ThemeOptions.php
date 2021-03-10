@@ -44,8 +44,8 @@ class ThemeOptions extends Controller
 
         $this->pageTitle = 'cms::lang.theme.settings_menu';
 
-        BackendMenu::setContext('October.System', 'system', 'settings');
-        SettingsManager::setContext('October.Cms', 'theme');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
+        SettingsManager::setContext('Winter.Cms', 'theme');
     }
 
     public function update($dirName = null)

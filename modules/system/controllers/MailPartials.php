@@ -36,8 +36,8 @@ class MailPartials extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('October.System', 'system', 'settings');
-        SettingsManager::setContext('October.System', 'mail_templates');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
+        SettingsManager::setContext('Winter.System', 'mail_templates');
     }
 
     public function formBeforeSave($model)

@@ -29,7 +29,7 @@ class Index extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContextOwner('October.Backend');
+        BackendMenu::setContextOwner('Winter.Backend');
 
         $this->addCss('/modules/backend/assets/css/dashboard/dashboard.css', 'core');
     }

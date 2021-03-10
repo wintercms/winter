@@ -41,7 +41,7 @@ class Settings extends Controller
 
         $this->addCss('/modules/system/assets/css/settings/settings.css', 'core');
 
-        BackendMenu::setContext('October.System', 'system', 'settings');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
     }
 
     public function index()

@@ -79,7 +79,7 @@ class Index extends Controller
             };
         });
 
-        BackendMenu::setContext('October.Cms', 'cms', true);
+        BackendMenu::setContext('Winter.Cms', 'cms', true);
 
         try {
             if (!($theme = Theme::getEditTheme())) {

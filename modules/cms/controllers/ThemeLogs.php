@@ -45,8 +45,8 @@ class ThemeLogs extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('October.System', 'system', 'settings');
-        SettingsManager::setContext('October.Cms', 'theme_logs');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
+        SettingsManager::setContext('Winter.Cms', 'theme_logs');
     }
 
     public function index_onRefresh()

@@ -37,21 +37,21 @@ class LogSetting extends Model
     public static function filterSettingItems($manager)
     {
         if (!self::isConfigured()) {
-            $manager->removeSettingItem('October.System', 'request_logs');
-            $manager->removeSettingItem('October.Cms', 'theme_logs');
+            $manager->removeSettingItem('Winter.System', 'request_logs');
+            $manager->removeSettingItem('Winter.Cms', 'theme_logs');
             return;
         }
 
         if (!self::get('log_events')) {
-            $manager->removeSettingItem('October.System', 'event_logs');
+            $manager->removeSettingItem('Winter.System', 'event_logs');
         }
 
         if (!self::get('log_requests')) {
-            $manager->removeSettingItem('October.System', 'request_logs');
+            $manager->removeSettingItem('Winter.System', 'request_logs');
         }
 
         if (!self::get('log_theme')) {
-            $manager->removeSettingItem('October.Cms', 'theme_logs');
+            $manager->removeSettingItem('Winter.Cms', 'theme_logs');
         }
     }
 
