@@ -48,6 +48,11 @@ class AuthManager extends StormAuthManager
     protected $permissions = [];
 
     /**
+     * @var array List of owner aliases. ['Aliased.Owner' => 'Real.Owner']
+     */
+    protected $aliases = [];
+
+    /**
      * @var array List of registered permission roles.
      */
     protected $permissionRoles = false;
@@ -94,14 +99,29 @@ class AuthManager extends StormAuthManager
      */
     public function registerPermissions($owner, array $definitions)
     {
+        // Resolve alias
+        $owner = $this->aliases[$owner] ?? $owner;
+
         foreach ($definitions as $code => $definition) {
-            $permission = (object)array_merge(self::$permissionDefaults, array_merge($definition, [
+            $permission = (object) array_merge(self::$permissionDefaults, array_merge($definition, [
                 'code' => $code,
                 'owner' => $owner
             ]));
 
             $this->permissions[] = $permission;
         }
+    }
+
+    /**
+     * Register a permission owner alias
+     *
+     * @param string $owner The owner to register an alias for. Example: Real.Owner
+     * @param string $alias The alias to register. Example: Aliased.Owner
+     * @return void
+     */
+    public function registerPermissionOwnerAlias(string $owner, string $alias)
+    {
+        $this->aliases[$alias] = $owner;
     }
 
     /**
@@ -116,6 +136,9 @@ class AuthManager extends StormAuthManager
             throw new SystemException('Unable to remove permissions before they are loaded.');
         }
 
+        // Resolve alias
+        $owner = $this->aliases[$owner] ?? $owner;
+
         $ownerPermissions = array_filter($this->permissions, function ($permission) use ($owner) {
             return $permission->owner === $owner;
         });
@@ -125,6 +148,9 @@ class AuthManager extends StormAuthManager
                 unset($this->permissions[$key]);
             }
         }
+
+        // Clear the permission cache
+        $this->permissionCache = false;
     }
 
     /**

@@ -57,6 +57,22 @@ class AuthManagerTest extends TestCase
         ], collect($permissions)->pluck('code')->toArray());
     }
 
+    public function testAliasesPermissions()
+    {
+        $this->instance->registerPermissionOwnerAlias('Winter.TestCase', 'Aliased.TestCase');
+
+        $permissions = $this->instance->listPermissions();
+        $this->assertCount(2, $permissions);
+
+        $this->instance->removePermission('Aliased.TestCase', 'test.permission_one');
+
+        $permissions = $this->instance->listPermissions();
+        $this->assertCount(1, $permissions);
+        $this->assertEquals([
+            'test.permission_two'
+        ], collect($permissions)->pluck('code')->toArray());
+    }
+
     public function testRegisterPermissionsThroughCallbacks()
     {
         // Callback one
