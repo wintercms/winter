@@ -649,7 +649,7 @@ class FormController extends ControllerBehavior
      *     <?= $this->formRenderSecondaryTabs() ?>
      *
      * @return string HTML markup
-     * @throws \October\Rain\Exception\ApplicationException if the Form Widget isn't set
+     * @throws \Winter\Storm\Exception\ApplicationException if the Form Widget isn't set
      */
     public function formRenderSecondaryTabs()
     {

@@ -15,7 +15,7 @@ class UpdatesControllerTest extends TestCase
 
         $expectedVersions = [
             '1.2.0' => [
-                '!!! Security update - see: https://octobercms.com',
+                '!!! Security update - see: https://wintercms.com',
             ],
             '1.1.0' => [
                 '!!! Drop support for blog settings',

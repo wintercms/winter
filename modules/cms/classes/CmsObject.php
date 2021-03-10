@@ -8,8 +8,8 @@ use Exception;
 use ValidationException;
 use ApplicationException;
 use Cms\Contracts\CmsObject as CmsObjectContract;
-use October\Rain\Filesystem\PathResolver;
-use October\Rain\Halcyon\Model as HalcyonModel;
+use Winter\Storm\Filesystem\PathResolver;
+use Winter\Storm\Halcyon\Model as HalcyonModel;
 
 /**
  * This is a base class for all CMS objects - content files, pages, partials and layouts.

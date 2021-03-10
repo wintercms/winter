@@ -27,7 +27,7 @@ use Exception;
  */
 class UpdateManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * @var \Illuminate\Console\OutputStyle

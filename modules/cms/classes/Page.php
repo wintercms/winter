@@ -3,7 +3,7 @@
 use Lang;
 use BackendAuth;
 use ApplicationException;
-use October\Rain\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
  * The CMS page class.

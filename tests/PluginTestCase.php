@@ -73,7 +73,7 @@ abstract class PluginTestCase extends TestCase
     public function setUp() : void
     {
         /*
-         * Force reload of October singletons
+         * Force reload of Winter singletons
          */
         PluginManager::forgetInstance();
         UpdateManager::forgetInstance();

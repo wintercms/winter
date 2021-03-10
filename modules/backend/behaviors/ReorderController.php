@@ -215,12 +215,12 @@ class ReorderController extends ControllerBehavior
         $modelTraits = class_uses($model);
 
         if (
-            isset($modelTraits[\October\Rain\Database\Traits\Sortable::class]) ||
-            $model->isClassExtendedWith(\October\Rain\Database\Behaviors\Sortable::class)
+            isset($modelTraits[\Winter\Storm\Database\Traits\Sortable::class]) ||
+            $model->isClassExtendedWith(\Winter\Storm\Database\Behaviors\Sortable::class)
         ) {
             $this->sortMode = 'simple';
         }
-        elseif (isset($modelTraits[\October\Rain\Database\Traits\NestedTree::class])) {
+        elseif (isset($modelTraits[\Winter\Storm\Database\Traits\NestedTree::class])) {
             $this->sortMode = 'nested';
             $this->showTree = true;
         }

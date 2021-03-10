@@ -366,7 +366,7 @@ ESC;
 
     public function testComponentClassNotFound()
     {
-        $this->expectException(\October\Rain\Exception\SystemException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessageMatches('/is\snot\sregistered\sfor\sthe\scomponent/');
 
         $theme = Theme::load('test');

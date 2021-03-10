@@ -152,8 +152,8 @@ class WinterInstall extends Command
         if ($this->confirm('Install the Winter.Drivers plugin?', false)) {
             $chosenToInstall[] = 'Winter.Drivers';
         }
-        if ($this->confirm('Install the Rainlab.Builder plugin?', false)) {
-            $chosenToInstall[] = 'Rainlab.Builder';
+        if ($this->confirm('Install the Winter.Builder plugin?', false)) {
+            $chosenToInstall[] = 'Winter.Builder';
         }
         return $chosenToInstall;
     }

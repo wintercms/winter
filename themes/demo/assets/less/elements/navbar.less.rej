@@ -1,9 +1,0 @@
-diff a/themes/demo/assets/less/elements/navbar.less b/themes/demo/assets/less/elements/navbar.less	(rejected hunks)
-@@ -1,6 +1,6 @@
- .navbar-header .navbar-brand {
-     padding-left: 55px;
--    background-image: url('../images/october.png');
-+    background-image: url('../images/winter.png');
-     background-size: auto 60%;
-     background-repeat: no-repeat;
-     background-position: 7px 50%;

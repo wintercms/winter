@@ -20,13 +20,13 @@ return [
     */
 
     'decompileBackendAssets' => false,
-    
+
     /*
     |--------------------------------------------------------------------------
     | Allow deep-level symlinks
     |--------------------------------------------------------------------------
     |
-    | October CMS, by default, will allow symlinks within the first level of
+    | Winter CMS, by default, will allow symlinks within the first level of
     | subdirectories. When this feature is enabled, the system will allow
     | symlinks to be used at any directory level. This can be useful for
     | symlinking individual plugins or themes.

@@ -164,7 +164,7 @@ return [
     | Load automatically discovered packages
     |--------------------------------------------------------------------------
     |
-    | By default, October CMS disables the loading of discovered packages
+    | By default, Winter CMS disables the loading of discovered packages
     | through Laravel's package discovery service, in order to allow packages
     | used by plugins to be disabled if the plugin itself is disabled.
     |

@@ -96,10 +96,10 @@ To perform unit testing on the core Winter files, you should download a developm
 
 ### Unit tests
 
-Unit tests can be performed by running `vendor/bin/phpunit` in the root directory of your October CMS installation.
+Unit tests can be performed by running `vendor/bin/phpunit` in the root directory of your Winter CMS installation.
 
 ### Functional tests
 
-Functional tests can be performed by installing the [RainLab Dusk](https://octobercms.com/plugin/rainlab-dusk) in your October CMS installation. The RainLab Dusk plugin is powered by Laravel Dusk, a comprehensive testing suite for the Laravel framework that is designed to test interactions with a fully operational October CMS instance through a virtual browser.
+Functional tests can be performed by installing the [Winter.Dusk](https://wintercms.com/plugin/winter-dusk) in your Winter CMS installation. The Winter.Dusk plugin is powered by Laravel Dusk, a comprehensive testing suite for the Laravel framework that is designed to test interactions with a fully operational Winter CMS instance through a virtual browser.
 
-For information on installing and setting up your October CMS install to run functional tests, please review the [README](https://github.com/rainlab/dusk-plugin/blob/master/README.md) for the plugin.
+For information on installing and setting up your Winter CMS install to run functional tests, please review the [README](https://github.com/wintercms/wn-dusk-plugin/blob/master/README.md) for the plugin.

@@ -10,11 +10,11 @@ use Route;
 use Config;
 use Request;
 use Response;
-use October\Rain\Assetic\Asset\FileAsset;
-use October\Rain\Assetic\Asset\AssetCache;
-use October\Rain\Assetic\Asset\AssetCollection;
-use October\Rain\Assetic\Cache\FilesystemCache;
-use October\Rain\Assetic\Factory\AssetFactory;
+use Winter\Storm\Assetic\Asset\FileAsset;
+use Winter\Storm\Assetic\Asset\AssetCache;
+use Winter\Storm\Assetic\Asset\AssetCollection;
+use Winter\Storm\Assetic\Cache\FilesystemCache;
+use Winter\Storm\Assetic\Factory\AssetFactory;
 use System\Helpers\Cache as CacheHelper;
 use ApplicationException;
 use DateTime;
@@ -126,22 +126,22 @@ class CombineAssets
         /*
          * Register JavaScript filters
          */
-        $this->registerFilter('js', new \October\Rain\Assetic\Filter\JavascriptImporter);
+        $this->registerFilter('js', new \Winter\Storm\Assetic\Filter\JavascriptImporter);
 
         /*
          * Register CSS filters
          */
-        $this->registerFilter('css', new \October\Rain\Assetic\Filter\CssImportFilter);
-        $this->registerFilter(['css', 'less', 'scss'], new \October\Rain\Assetic\Filter\CssRewriteFilter);
-        $this->registerFilter('less', new \October\Rain\Assetic\Filter\LessCompiler);
-        $this->registerFilter('scss', new \October\Rain\Assetic\Filter\ScssCompiler);
+        $this->registerFilter('css', new \Winter\Storm\Assetic\Filter\CssImportFilter);
+        $this->registerFilter(['css', 'less', 'scss'], new \Winter\Storm\Assetic\Filter\CssRewriteFilter);
+        $this->registerFilter('less', new \Winter\Storm\Assetic\Filter\LessCompiler);
+        $this->registerFilter('scss', new \Winter\Storm\Assetic\Filter\ScssCompiler);
 
         /*
          * Minification filters
          */
         if ($this->useMinify) {
-            $this->registerFilter('js', new \October\Rain\Assetic\Filter\JSMinFilter);
-            $this->registerFilter(['css', 'less', 'scss'], new \October\Rain\Assetic\Filter\StylesheetMinify);
+            $this->registerFilter('js', new \Winter\Storm\Assetic\Filter\JSMinFilter);
+            $this->registerFilter(['css', 'less', 'scss'], new \Winter\Storm\Assetic\Filter\StylesheetMinify);
         }
 
         /*

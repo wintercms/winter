@@ -26,12 +26,12 @@ use System\Models\File as FileModel;
  * - compile less: Compile registered LESS files only.
  * - compile scss: Compile registered SCSS files only.
  * - compile lang: Compile registered Language files only.
- * - set project --projectId=<id>: Set the projectId for this october instance.
+ * - set project --projectId=<id>: Set the projectId for this winter instance.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
-class OctoberUtil extends Command
+class WinterUtil extends Command
 {
 
     use \Illuminate\Console\ConfirmableTrait;
@@ -86,7 +86,7 @@ class OctoberUtil extends Command
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info "http://octobercms.com/docs/console/commands#october-util-command".'],
+            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info "http://wintercms.com/docs/console/commands#winter-util-command".'],
         ];
     }
 
@@ -108,10 +108,10 @@ class OctoberUtil extends Command
 
     protected function utilSetBuild()
     {
-        $this->comment('NOTE: This command is now deprecated. Please use "php artisan october:version" instead.');
+        $this->comment('NOTE: This command is now deprecated. Please use "php artisan winter:version" instead.');
         $this->comment('');
 
-        return $this->call('october:version');
+        return $this->call('winter:version');
     }
 
     protected function utilCompileJs()

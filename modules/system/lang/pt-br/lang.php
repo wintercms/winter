@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Voltando ao básico',
     ],
     'locale' => [

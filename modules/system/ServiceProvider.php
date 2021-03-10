@@ -143,7 +143,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerPrivilegedActions()
     {
         $requests = ['/combine/', '@/system/updates', '@/system/install', '@/backend/auth'];
-        $commands = ['october:up', 'october:update', 'october:env', 'october:version'];
+        $commands = ['winter:up', 'winter:update', 'winter:env', 'winter:version'];
 
         /*
          * Requests
@@ -249,17 +249,17 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register console commands
          */
-        $this->registerConsoleCommand('october.up', 'System\Console\OctoberUp');
-        $this->registerConsoleCommand('october.down', 'System\Console\OctoberDown');
-        $this->registerConsoleCommand('october.update', 'System\Console\OctoberUpdate');
-        $this->registerConsoleCommand('october.util', 'System\Console\OctoberUtil');
-        $this->registerConsoleCommand('october.mirror', 'System\Console\OctoberMirror');
-        $this->registerConsoleCommand('october.fresh', 'System\Console\OctoberFresh');
-        $this->registerConsoleCommand('october.env', 'System\Console\OctoberEnv');
-        $this->registerConsoleCommand('october.install', 'System\Console\OctoberInstall');
-        $this->registerConsoleCommand('october.passwd', 'System\Console\OctoberPasswd');
-        $this->registerConsoleCommand('october.version', 'System\Console\OctoberVersion');
-        $this->registerConsoleCommand('october.manifest', 'System\Console\OctoberManifest');
+        $this->registerConsoleCommand('winter.up', 'System\Console\WinterUp');
+        $this->registerConsoleCommand('winter.down', 'System\Console\WinterDown');
+        $this->registerConsoleCommand('winter.update', 'System\Console\WinterUpdate');
+        $this->registerConsoleCommand('winter.util', 'System\Console\WinterUtil');
+        $this->registerConsoleCommand('winter.mirror', 'System\Console\WinterMirror');
+        $this->registerConsoleCommand('winter.fresh', 'System\Console\WinterFresh');
+        $this->registerConsoleCommand('winter.env', 'System\Console\WinterEnv');
+        $this->registerConsoleCommand('winter.install', 'System\Console\WinterInstall');
+        $this->registerConsoleCommand('winter.passwd', 'System\Console\WinterPasswd');
+        $this->registerConsoleCommand('winter.version', 'System\Console\WinterVersion');
+        $this->registerConsoleCommand('winter.manifest', 'System\Console\WinterManifest');
 
         $this->registerConsoleCommand('plugin.install', 'System\Console\PluginInstall');
         $this->registerConsoleCommand('plugin.remove', 'System\Console\PluginRemove');

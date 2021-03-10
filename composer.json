@@ -1,41 +1,39 @@
 {
-    "name": "october/october",
-    "description": "October CMS",
-    "homepage": "https://octobercms.com",
+    "name": "wintercms/winter",
+    "description": "Free, open-source, self-hosted CMS platform based on the Laravel PHP Framework. Originally known as October CMS.",
+    "homepage": "https://wintercms.com",
     "type": "project",
-    "keywords": ["october", "cms", "octobercms", "laravel"],
+    "keywords": ["winter", "cms", "wintercms", "laravel", "cmf"],
     "license": "MIT",
     "authors": [
         {
             "name": "Alexey Bobkov",
             "email": "aleksey.bobkov@gmail.com",
-            "role": "Co-founder"
+            "role": "Original Author"
         },
         {
             "name": "Samuel Georges",
             "email": "daftspunky@gmail.com",
-            "role": "Co-founder"
+            "role": "Original Author"
         },
         {
             "name": "Luke Towers",
-            "email": "octobercms@luketowers.ca",
-            "homepage": "https://luketowers.ca",
-            "role": "Maintainer"
+            "email": "wintercms@luketowers.ca",
+            "role": "Lead Maintainer"
         }
     ],
     "support": {
-        "paid": "https://octobercms.com/premium-support",
-        "issues": "https://github.com/octobercms/october/issues",
-        "forum": "https://octobercms.com/forum/",
-        "docs": "https://octobercms.com/docs/",
-        "source": "https://github.com/octobercms/october"
+        "issues": "https://github.com/wintercms/winter/issues",
+        "docs": "https://wintercms.github.io/docs/",
+        "discord": "https://discord.gg/D5MFSPH6Ux",
+        "source": "https://github.com/wintercms/winter"
     },
     "require": {
         "php": ">=7.2.9",
-        "october/rain": "1.1.*",
-        "october/system": "1.1.*",
-        "october/backend": "1.1.*",
-        "october/cms": "1.1.*",
+        "winter/storm": "1.1.*",
+        "winter/wn-system-module": "1.1.*",
+        "winter/wn-backend-module": "1.1.*",
+        "winter/wn-cms-module": "1.1.*",
         "laravel/framework": "~6.0",
         "wikimedia/composer-merge-plugin": "~2.0.1"
     },
@@ -61,7 +59,7 @@
             "php artisan package:discover"
         ],
         "post-update-cmd": [
-            "php artisan october:version",
+            "php artisan winter:version",
             "php artisan package:discover"
         ],
         "test": [

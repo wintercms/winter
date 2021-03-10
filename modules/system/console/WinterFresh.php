@@ -35,7 +35,7 @@ class WinterFresh extends Command
         if (!$this->confirmToProceed('Are you sure?')) {
             return;
         }
-        
+
         $themeRemoved = false;
         $pluginRemoved = false;
 
@@ -45,9 +45,9 @@ class WinterFresh extends Command
             $themeRemoved = true;
         }
 
-        $demoPluginPath = plugins_path().'/october/demo';
+        $demoPluginPath = plugins_path().'/winter/demo';
         if (File::exists($demoPluginPath)) {
-            Artisan::call('plugin:remove', ['name' => 'October.Demo', '--force' => true]);
+            Artisan::call('plugin:remove', ['name' => 'Winter.Demo', '--force' => true]);
             $pluginRemoved = true;
         }
 

@@ -10,7 +10,7 @@
          stopOnFailure="false"
 >
     <testsuites>
-        <testsuite name="October CMS Test Suite">
+        <testsuite name="Winter CMS Test Suite">
             <directory>./tests/unit</directory>
         </testsuite>
     </testsuites>
