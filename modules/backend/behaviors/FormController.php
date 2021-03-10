@@ -8,7 +8,7 @@ use Event;
 use Redirect;
 use Backend;
 use Backend\Classes\ControllerBehavior;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Router\Helper as RouterHelper;
 use ApplicationException;
 use Exception;
 
@@ -33,8 +33,8 @@ use Exception;
  * values as either a YAML file, located in the controller view directory,
  * or directly as a PHP array.
  *
- * @see http://octobercms.com/docs/backend/forms Back-end form documentation
- * @package october\backend
+ * @see http://wintercms.com/docs/backend/forms Back-end form documentation
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class FormController extends ControllerBehavior
@@ -89,7 +89,7 @@ class FormController extends ControllerBehavior
     protected $context;
 
     /**
-     * @var \October\Rain\Database\Model|\October\Rain\Halcyon\Model The initialized model used by the form.
+     * @var \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model The initialized model used by the form.
      */
     protected $model;
 
@@ -116,7 +116,7 @@ class FormController extends ControllerBehavior
      * to this behavior via this method as the first argument.
      *
      * @see \Backend\Widgets\Form
-     * @param \October\Rain\Database\Model|\October\Rain\Halcyon\Model $model
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model $model
      * @param string $context Form context
      * @return void
      */
@@ -186,7 +186,7 @@ class FormController extends ControllerBehavior
 
     /**
      * Prepares commonly used view data.
-     * @param \October\Rain\Database\Model|\October\Rain\Halcyon\Model $model
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model $model
      */
     protected function prepareVars($model)
     {
@@ -303,7 +303,7 @@ class FormController extends ControllerBehavior
      * @param int $recordId Record identifier
      * @param string $context Form context
      * @return \Illuminate\Http\RedirectResponse|void
-     * @throws \October\Rain\Exception\ApplicationException if the provided recordId is not found
+     * @throws \Winter\Storm\Exception\ApplicationException if the provided recordId is not found
      */
     public function update_onSave($recordId = null, $context = null)
     {
@@ -340,7 +340,7 @@ class FormController extends ControllerBehavior
      *
      * @param int $recordId Record identifier
      * @return \Illuminate\Http\RedirectResponse|void
-     * @throws \October\Rain\Exception\ApplicationException if the provided recordId is not found
+     * @throws \Winter\Storm\Exception\ApplicationException if the provided recordId is not found
      * @throws Exception if there is no primary key on the model
      */
     public function update_onDelete($recordId = null)
@@ -408,7 +408,7 @@ class FormController extends ControllerBehavior
      * @see \Backend\Widgets\Form
      * @param array $options Render options
      * @return string Rendered HTML for the form.
-     * @throws \October\Rain\Exception\ApplicationException if the Form Widget isn't set
+     * @throws \Winter\Storm\Exception\ApplicationException if the Form Widget isn't set
      */
     public function formRender($options = [])
     {
@@ -424,7 +424,7 @@ class FormController extends ControllerBehavior
      * The model will be provided by one of the page actions or AJAX
      * handlers via the `initForm` method.
      *
-     * @return \October\Rain\Database\Model|\October\Rain\Halcyon\Model
+     * @return \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
     public function formGetModel()
     {
@@ -446,7 +446,7 @@ class FormController extends ControllerBehavior
     /**
      * Internal method used to prepare the form model object.
      *
-     * @return \October\Rain\Database\Model|\October\Rain\Halcyon\Model
+     * @return \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
     protected function createModel()
     {
@@ -459,7 +459,7 @@ class FormController extends ControllerBehavior
      * the model primary key.
      *
      * @param string $context Redirect context, eg: create, update, delete
-     * @param \October\Rain\Database\Model|\October\Rain\Halcyon\Model $model The active model to parse in it's ID and attributes.
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model $model The active model to parse in it's ID and attributes.
      * @return \Illuminate\Http\RedirectResponse
      */
     public function makeRedirect($context = null, $model = null)
@@ -562,7 +562,7 @@ class FormController extends ControllerBehavior
      *     <?= $this->formRenderPreview() ?>
      *
      * @return string The form HTML markup.
-     * @throws \October\Rain\Exception\ApplicationException if the Form Widget isn't set
+     * @throws \Winter\Storm\Exception\ApplicationException if the Form Widget isn't set
      */
     public function formRenderPreview()
     {
@@ -591,7 +591,7 @@ class FormController extends ControllerBehavior
      *     <?= $this->formRenderOutsideFields() ?>
      *
      * @return string HTML markup
-     * @throws \October\Rain\Exception\ApplicationException if the Form Widget isn't set
+     * @throws \Winter\Storm\Exception\ApplicationException if the Form Widget isn't set
      */
     public function formRenderOutsideFields()
     {
@@ -620,7 +620,7 @@ class FormController extends ControllerBehavior
      *     <?= $this->formRenderPrimaryTabs() ?>
      *
      * @return string HTML markup
-     * @throws \October\Rain\Exception\ApplicationException if the Form Widget isn't set
+     * @throws \Winter\Storm\Exception\ApplicationException if the Form Widget isn't set
      */
     public function formRenderPrimaryTabs()
     {
@@ -701,7 +701,7 @@ class FormController extends ControllerBehavior
 
     /**
      * Called before the creation or updating form is saved.
-     * @param \October\Rain\Database\Model|\October\Rain\Halcyon\Model
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
     public function formBeforeSave($model)
     {
@@ -709,7 +709,7 @@ class FormController extends ControllerBehavior
 
     /**
      * Called after the creation or updating form is saved.
-     * @param \October\Rain\Database\Model|\October\Rain\Halcyon\Model
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
     public function formAfterSave($model)
     {
@@ -717,7 +717,7 @@ class FormController extends ControllerBehavior
 
     /**
      * Called before the creation form is saved.
-     * @param \October\Rain\Database\Model|\October\Rain\Halcyon\Model
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
     public function formBeforeCreate($model)
     {
@@ -725,7 +725,7 @@ class FormController extends ControllerBehavior
 
     /**
      * Called after the creation form is saved.
-     * @param \October\Rain\Database\Model|\October\Rain\Halcyon\Model
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
     public function formAfterCreate($model)
     {
@@ -733,7 +733,7 @@ class FormController extends ControllerBehavior
 
     /**
      * Called before the updating form is saved.
-     * @param \October\Rain\Database\Model|\October\Rain\Halcyon\Model
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
     public function formBeforeUpdate($model)
     {
@@ -741,7 +741,7 @@ class FormController extends ControllerBehavior
 
     /**
      * Called after the updating form is saved.
-     * @param \October\Rain\Database\Model|\October\Rain\Halcyon\Model
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
     public function formAfterUpdate($model)
     {
@@ -749,7 +749,7 @@ class FormController extends ControllerBehavior
 
     /**
      * Called after the form model is deleted.
-     * @param \October\Rain\Database\Model|\October\Rain\Halcyon\Model
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
     public function formAfterDelete($model)
     {
@@ -759,8 +759,8 @@ class FormController extends ControllerBehavior
      * Finds a Model record by its primary identifier, used by update actions. This logic
      * can be changed by overriding it in the controller.
      * @param string $recordId
-     * @return \October\Rain\Database\Model|\October\Rain\Halcyon\Model
-     * @throws \October\Rain\Exception\ApplicationException if the provided recordId is not found
+     * @return \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
+     * @throws \Winter\Storm\Exception\ApplicationException if the provided recordId is not found
      */
     public function formFindModelObject($recordId)
     {
@@ -791,7 +791,7 @@ class FormController extends ControllerBehavior
     /**
      * Creates a new instance of a form model. This logic can be changed
      * by overriding it in the controller.
-     * @return \October\Rain\Database\Model|\October\Rain\Halcyon\Model
+     * @return \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
     public function formCreateModelObject()
     {
@@ -850,8 +850,8 @@ class FormController extends ControllerBehavior
     /**
      * Extend supplied model used by create and update actions, the model can
      * be altered by overriding it in the controller.
-     * @param \October\Rain\Database\Model|\October\Rain\Halcyon\Model $model
-     * @return \October\Rain\Database\Model|\October\Rain\Halcyon\Model|void
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model $model
+     * @return \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model|void
      */
     public function formExtendModel($model)
     {
@@ -860,7 +860,7 @@ class FormController extends ControllerBehavior
     /**
      * Extend the query used for finding the form model. Extra conditions
      * can be applied to the query, for example, $query->withTrashed();
-     * @param \October\Rain\Database\Builder|\October\Rain\Halcyon\Builder $query
+     * @param \Winter\Storm\Database\Builder|\Winter\Storm\Halcyon\Builder $query
      * @return void
      */
     public function formExtendQuery($query)

@@ -9,9 +9,9 @@ class VersionManagerTest extends TestCase
     {
         parent::setUp();
 
-        include_once base_path().'/tests/fixtures/plugins/october/tester/Plugin.php';
-        include_once base_path().'/tests/fixtures/plugins/october/sample/Plugin.php';
-        include_once base_path().'/tests/fixtures/plugins/october/noupdates/Plugin.php';
+        include_once base_path().'/tests/fixtures/plugins/winter/tester/Plugin.php';
+        include_once base_path().'/tests/fixtures/plugins/winter/sample/Plugin.php';
+        include_once base_path().'/tests/fixtures/plugins/winter/noupdates/Plugin.php';
     }
 
     //
@@ -54,7 +54,7 @@ class VersionManagerTest extends TestCase
         /*
          * Test junk file
          */
-        $result = self::callProtectedMethod($manager, 'getFileVersions', ['\October\\Sample']);
+        $result = self::callProtectedMethod($manager, 'getFileVersions', ['\Winter\\Sample']);
         $this->assertCount(5, $result);
         $this->assertArrayHasKey('junk', $result);
         $this->assertArrayHasKey('1', $result);

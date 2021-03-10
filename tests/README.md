@@ -46,9 +46,9 @@ Then a **tests/** directory can be created to contain the test classes. The file
         }
     }
 
-The test class should extend the base class `PluginTestCase` and this is a special class that will set up the October database stored in memory, as part of the `setUp` method. It will also refresh the plugin being tested, along with any of the defined dependencies in the plugin registration file. This is the equivalent of running the following before each test:
+The test class should extend the base class `PluginTestCase` and this is a special class that will set up the Winter database stored in memory, as part of the `setUp` method. It will also refresh the plugin being tested, along with any of the defined dependencies in the plugin registration file. This is the equivalent of running the following before each test:
 
-    php artisan october:up
+    php artisan winter:up
     php artisan plugin:refresh Acme.Blog
     [php artisan plugin:refresh <dependency>, ...]
 
@@ -86,13 +86,13 @@ The test class should extend the base class `PluginTestCase` and this is a speci
 
 #### Changing database engine for plugins tests
 
-By default OctoberCMS uses SQLite stored in memory for the plugin testing environment. If you want to override the default behavior set the `useConfigForTesting` config to `true` in your `/config/database.php` file. When the `APP_ENV` is `testing` and the `useConfigForTesting` is `true` database parameters will be taken from `/config/database.php`.
+By default Winter CMS uses SQLite stored in memory for the plugin testing environment. If you want to override the default behavior set the `useConfigForTesting` config to `true` in your `/config/database.php` file. When the `APP_ENV` is `testing` and the `useConfigForTesting` is `true` database parameters will be taken from `/config/database.php`.
 
 You can override the `/config/database.php` file by creating `/config/testing/database.php`. In this case variables from the latter file will be taken.
 
 ## System testing
 
-To perform unit testing on the core October files, you should download a development copy using composer or cloning the git repo. This will ensure you have the `tests/` directory.
+To perform unit testing on the core Winter files, you should download a development copy using composer or cloning the git repo. This will ensure you have the `tests/` directory.
 
 ### Unit tests
 

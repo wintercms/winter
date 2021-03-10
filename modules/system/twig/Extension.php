@@ -10,7 +10,7 @@ use Twig\Extension\AbstractExtension as TwigExtension;
 /**
  * The System Twig extension class implements common Twig functions and filters.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Extension extends TwigExtension

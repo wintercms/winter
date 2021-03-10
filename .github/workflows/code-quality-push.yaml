@@ -3,23 +3,41 @@ name: Code Quality
 on:
   push:
     branches:
-      - 1.0
-      - 1.1
-      - develop
+      - '1.1'
+      - 'develop'
 
 jobs:
   codeQuality:
     runs-on: ubuntu-latest
     name: PHP
     steps:
+      - name: Cancel previous incomplete runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
       - name: Checkout changes
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      - name: Install PHP and PHP Code Sniffer
+
+      - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.3'
-          tools: phpcs
+          php-version: 7.2
+          extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --no-suggest
+
+      - name: Reset Winter modules and library
+        run: |
+          git reset --hard HEAD
+          rm -rf ./vendor/winter/storm
+          wget https://github.com/wintercms/storm/archive/develop.zip -O ./vendor/winter/develop.zip
+          unzip ./vendor/winter/develop.zip -d ./vendor/winter
+          mv ./vendor/winter/storm-develop ./vendor/winter/storm
+          composer dump-autoload
+
       - name: Run code quality checks
-        run: ./.github/workflows/utilities/phpcs-push ${{ github.sha }}
+        run: |
+          git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch
+          ./vendor/bin/phpcs --colors -nq --report="full" --extensions="php" $(git diff --name-only --diff-filter=ACMR origin/${{ github.base_ref }} HEAD)

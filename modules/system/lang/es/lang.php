@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Volviendo a lo básico'
     ],
     'directory' => [
@@ -43,7 +43,7 @@ return [
         'unnamed' => 'Tema sin nombre',
         'name' => [
             'label' => 'Nombre Tema',
-            'help' => 'Nombre del tema por su código único. Por ejemplo, RainLab.Vanilla'
+            'help' => 'Nombre del tema por su código único. Por ejemplo, Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -59,7 +59,7 @@ return [
         'unnamed' => 'Plugin sin nombre',
         'name' => [
             'label' => 'Nombre del Plugin',
-            'help' => 'Nombra el plugin por su código único. por ejemplo, RainLab.Blog',
+            'help' => 'Nombra el plugin por su código único. por ejemplo, Winter.Blog',
         ]
     ],
     'plugins' => [
@@ -210,7 +210,7 @@ return [
             ],
             'panel' => '¿Este panel es increíble o qué?',
             'more' => 'Algo más de texto',
-            'promotion' => 'Código de cupón: OCTOBER',
+            'promotion' => 'Código de cupón: WINTER',
             'subcopy' => 'Este es el subcopy del correo',
             'thanks' => 'Gracias'
         ],

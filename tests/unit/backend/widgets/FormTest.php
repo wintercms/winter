@@ -2,7 +2,7 @@
 
 use Backend\Widgets\Form;
 use Illuminate\Database\Eloquent\Model;
-use October\Tests\Fixtures\Backend\Models\UserFixture;
+use Winter\Tests\Fixtures\Backend\Models\UserFixture;
 
 class FormTestModel extends Model
 {

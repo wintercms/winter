@@ -4,7 +4,7 @@
  * Collapsable Widget Trait
  * Adds collapse/expand item features to back-end widgets
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 

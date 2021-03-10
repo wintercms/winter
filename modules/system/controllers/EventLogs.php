@@ -11,7 +11,7 @@ use System\Models\EventLog;
 /**
  * Event Logs controller
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class EventLogs extends Controller
@@ -46,8 +46,8 @@ class EventLogs extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('October.System', 'system', 'settings');
-        SettingsManager::setContext('October.System', 'event_logs');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
+        SettingsManager::setContext('Winter.System', 'event_logs');
     }
 
     public function index_onRefresh()

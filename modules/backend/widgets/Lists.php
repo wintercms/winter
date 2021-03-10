@@ -22,7 +22,7 @@ use BackendAuth;
  * List Widget
  * Used for building back end lists, renders a list of model objects
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Lists extends WidgetBase
@@ -239,7 +239,7 @@ class Lists extends WidgetBase
      */
     protected function loadAssets()
     {
-        $this->addJs('js/october.list.js', 'core');
+        $this->addJs('js/winter.list.js', 'core');
     }
 
     /**

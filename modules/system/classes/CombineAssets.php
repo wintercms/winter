@@ -39,13 +39,13 @@ use DateTime;
  * - cms.enableAssetDeepHashing - Advanced caching of imports
  *
  * @see System\Classes\SystemController System controller
- * @see https://octobercms.com/docs/services/session Session service
- * @package october\system
+ * @see https://wintercms.com/docs/services/session Session service
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CombineAssets
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * @var array A list of known JavaScript extensions.
@@ -552,7 +552,7 @@ class CombineAssets
      * function as an argument. Usage:
      *
      *     CombineAssets::registerCallback(function ($combiner) {
-     *         $combiner->registerBundle('~/modules/backend/assets/less/october.less');
+     *         $combiner->registerBundle('~/modules/backend/assets/less/winter.less');
      *     });
      *
      * @param callable $callback A callable function.

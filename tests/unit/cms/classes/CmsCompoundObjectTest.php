@@ -3,7 +3,7 @@
 use Cms\Classes\Theme;
 use Cms\Classes\CmsObject;
 use Cms\Classes\CmsCompoundObject;
-use October\Rain\Halcyon\Model;
+use Winter\Storm\Halcyon\Model;
 
 class TestCmsCompoundObject extends CmsCompoundObject
 {
@@ -35,8 +35,8 @@ class CmsCompoundObjectTest extends TestCase
         parent::setUp();
         Model::clearBootedModels();
         Model::flushEventListeners();
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Post.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Archive.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Post.php';
     }
 
     public function testLoadFile()

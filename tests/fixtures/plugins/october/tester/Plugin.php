@@ -39,23 +39,23 @@ class Plugin extends PluginBase
         return [
             'blog' => [
                 'label'       => 'Blog',
-                'url'         => 'http://rainlab.tld/blog/posts',
+                'url'         => 'http://example.com/blog/posts',
                 'icon'        => 'icon-pencil',
-                'permissions' => ['rainlab.blog.*'],
+                'permissions' => ['winter.blog.*'],
                 'order'       => 500,
 
                 'sideMenu' => [
                     'posts' => [
                         'label'       => 'Posts',
                         'icon'        => 'icon-copy',
-                        'url'         => 'http://rainlab.tld/blog/posts',
-                        'permissions' => ['rainlab.blog.access_posts']
+                        'url'         => 'http://example.com/blog/posts',
+                        'permissions' => ['winter.blog.access_posts']
                     ],
                     'categories' => [
                         'label'       => 'Categories',
                         'icon'        => 'icon-list-ul',
-                        'url'         => 'http://rainlab.tld/blog/categories',
-                        'permissions' => ['rainlab.blog.access_categories']
+                        'url'         => 'http://example.com/blog/categories',
+                        'permissions' => ['winter.blog.access_categories']
                     ],
                 ]
             ]

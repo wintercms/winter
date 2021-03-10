@@ -2,7 +2,7 @@
 
 use Cms\Classes\Theme;
 use Cms\Classes\Controller;
-use October\Rain\Halcyon\Model;
+use Winter\Storm\Halcyon\Model;
 
 class ControllerTest extends TestCase
 {
@@ -13,12 +13,12 @@ class ControllerTest extends TestCase
         Model::clearBootedModels();
         Model::flushEventListeners();
 
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Post.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/MainMenu.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/ContentBlock.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Comments.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/classes/Users.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Archive.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Post.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/MainMenu.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/ContentBlock.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Comments.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/classes/Users.php';
     }
 
     public function testThemeUrl()
@@ -172,8 +172,8 @@ class ControllerTest extends TestCase
             ->getMock();
 
         $map = [
-            ['X_OCTOBER_REQUEST_HANDLER', null, $handler],
-            ['X_OCTOBER_REQUEST_PARTIALS', null, $partials],
+            ['X_WINTER_REQUEST_HANDLER', null, $handler],
+            ['X_WINTER_REQUEST_PARTIALS', null, $partials],
         ];
 
         $requestMock->expects($this->any())
@@ -320,7 +320,7 @@ ESC;
 
     public function testComponentAliases()
     {
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Archive.php';
 
         $theme = Theme::load('test');
         $controller = new Controller($theme);

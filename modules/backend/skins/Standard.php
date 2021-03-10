@@ -2,14 +2,14 @@
 
 use File;
 use Backend\Classes\Skin;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Router\Helper as RouterHelper;
 
 /**
  * Standard skin information file.
  *
  * This skin uses the default paths always, there is no lookup required.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 

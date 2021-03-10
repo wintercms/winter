@@ -7,16 +7,16 @@
     // NAMESPACE CHECK
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.processor === undefined)
-        throw new Error("The $.oc.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");
+    if ($.wn.table.processor === undefined)
+        throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.table.processor.string,
+    var Base = $.wn.table.processor.string,
         BaseProto = Base.prototype
 
     var AutocompleteProcessor = function(tableObj, columnName, columnConfiguration) {
@@ -100,7 +100,7 @@
             // The AJAX promises are cached here so that we have a single
             // request per caching key.
 
-            $.oc.foundation.element.addClass(viewContainer, 'loading')
+            $.wn.foundation.element.addClass(viewContainer, 'loading')
 
             if (!this.cachedOptionPromises[cachingKey]) {
                 var requestData = {
@@ -117,7 +117,7 @@
                     onSuccess(data.options)
                 }
             }).always(function onAutocompleteLoadOptionsAlways(){
-                $.oc.foundation.element.removeClass(viewContainer, 'loading')
+                $.wn.foundation.element.removeClass(viewContainer, 'loading')
             })
         }
     }
@@ -142,12 +142,12 @@
         if (!tableElement) {
             return
         }
-        
+
         var optionsEvent = $.Event('autocompleteitems.oc.table'),
             values = {} // TODO - implement loading values from the current row.
 
         $(tableElement).trigger(optionsEvent, [{
-            values: values, 
+            values: values,
             callback: callback,
             column: this.columnName,
             columnConfiguration: this.columnConfiguration
@@ -211,5 +211,5 @@
         $(input).autocomplete('destroy')
     }
 
-    $.oc.table.processor.autocomplete = AutocompleteProcessor;
+    $.wn.table.processor.autocomplete = AutocompleteProcessor;
 }(window.jQuery);

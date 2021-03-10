@@ -1,6 +1,6 @@
 {
-  "name": "octobercms",
-  "description": "Free, open-source, self-hosted CMS platform based on the Laravel PHP Framework.",
+  "name": "wintercms",
+  "description": "Free, open-source, self-hosted CMS platform based on the Laravel PHP Framework. Originally known as October CMS.",
   "directories": {
     "test": "tests/js/cases",
     "helpers": "tests/js/helpers"
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/octobercms/october.git"
+    "url": "git+https://github.com/wintercms/winter.git"
   },
   "contributors": [
     {
@@ -23,15 +23,14 @@
     },
     {
       "name": "Luke Towers",
-      "email": "octobercms@luketowers.ca",
-      "url": "https://luketowers.ca"
+      "email": "wintercms@luketowers.ca"
     }
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/octobercms/october/issues"
+    "url": "https://github.com/wintercms/winter/issues"
   },
-  "homepage": "https://octobercms.com/",
+  "homepage": "https://wintercms.com/",
   "devDependencies": {
     "@babel/cli": "^7.5.5",
     "@babel/core": "^7.5.5",

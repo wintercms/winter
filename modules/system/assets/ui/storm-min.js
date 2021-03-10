@@ -2610,24 +2610,28 @@ var cx=Math.sin(radian)*radius,cy=-Math.cos(radian)*radius;this.hand.setAttribut
 this.input.prop('value',value);if(value!==last){this.input.triggerHandler('change');if(!this.isInput){this.element.trigger('change');}}
 if(this.options.autoclose){this.input.trigger('blur');}
 raiseCallback(this.options.afterDone);};ClockPicker.prototype.remove=function(){this.element.removeData('clockpicker');this.input.off('focus.clockpicker click.clockpicker');this.addon.off('click.clockpicker');if(this.isShown){this.hide();}
-if(this.isAppended){$win.off('resize.clockpicker'+this.id);this.popover.remove();}};$.fn.clockpicker=function(option){var args=Array.prototype.slice.call(arguments,1);return this.each(function(){var $this=$(this),data=$this.data('clockpicker');if(!data){var options=$.extend({},ClockPicker.DEFAULTS,$this.data(),typeof option=='object'&&option);$this.data('clockpicker',new ClockPicker($this,options));}else{if(typeof data[option]==='function'){data[option].apply(data,args);}}});};}());+function($){"use strict";if($.oc===undefined)
-$.oc={}
-if($.oc.foundation===undefined)
-$.oc.foundation={}
-$.oc.foundation._proxyCounter=0
+if(this.isAppended){$win.off('resize.clockpicker'+this.id);this.popover.remove();}};$.fn.clockpicker=function(option){var args=Array.prototype.slice.call(arguments,1);return this.each(function(){var $this=$(this),data=$this.data('clockpicker');if(!data){var options=$.extend({},ClockPicker.DEFAULTS,$this.data(),typeof option=='object'&&option);$this.data('clockpicker',new ClockPicker($this,options));}else{if(typeof data[option]==='function'){data[option].apply(data,args);}}});};}());+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
+if($.wn.foundation===undefined)
+$.wn.foundation={}
+$.wn.foundation._proxyCounter=0
 var Base=function(){this.proxiedMethods={}}
 Base.prototype.dispose=function(){for(var key in this.proxiedMethods){this.proxiedMethods[key]=null}
 this.proxiedMethods=null}
-Base.prototype.proxy=function(method){if(method.ocProxyId===undefined){$.oc.foundation._proxyCounter++
-method.ocProxyId=$.oc.foundation._proxyCounter}
+Base.prototype.proxy=function(method){if(method.ocProxyId===undefined){$.wn.foundation._proxyCounter++
+method.ocProxyId=$.wn.foundation._proxyCounter}
 if(this.proxiedMethods[method.ocProxyId]!==undefined)
 return this.proxiedMethods[method.ocProxyId]
 this.proxiedMethods[method.ocProxyId]=method.bind(this)
 return this.proxiedMethods[method.ocProxyId]}
-$.oc.foundation.base=Base;}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
-if($.oc.foundation===undefined)
-$.oc.foundation={}
+$.wn.foundation.base=Base;}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
+if($.wn.foundation===undefined)
+$.wn.foundation={}
 var Element={hasClass:function(el,className){if(el.classList)
 return el.classList.contains(className);return new RegExp('(^| )'+className+'( |$)','gi').test(el.className);},addClass:function(el,className){var classes=className.split(' ')
 for(var i=0,len=classes.length;i<len;i++){var currentClass=classes[i].trim()
@@ -2661,12 +2665,14 @@ range=null
 input=null},0)}
 if(input.selectionStart!==undefined){setTimeout(function(){input.selectionStart=position
 input.selectionEnd=position
-input=null},0)}},elementContainsPoint:function(element,point){var elementPosition=$.oc.foundation.element.absolutePosition(element),elementRight=elementPosition.left+element.offsetWidth,elementBottom=elementPosition.top+element.offsetHeight
+input=null},0)}},elementContainsPoint:function(element,point){var elementPosition=$.wn.foundation.element.absolutePosition(element),elementRight=elementPosition.left+element.offsetWidth,elementBottom=elementPosition.top+element.offsetHeight
 return point.x>=elementPosition.left&&point.x<=elementRight&&point.y>=elementPosition.top&&point.y<=elementBottom}}
-$.oc.foundation.element=Element;}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
-if($.oc.foundation===undefined)
-$.oc.foundation={}
+$.wn.foundation.element=Element;}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
+if($.wn.foundation===undefined)
+$.wn.foundation={}
 var Event={getTarget:function(ev,tag){var target=ev.target?ev.target:ev.srcElement
 if(tag===undefined)
 return target
@@ -2685,16 +2691,18 @@ else
 ev.returnValue=false},pageCoordinates:function(ev){if(ev.pageX||ev.pageY){return{x:ev.pageX,y:ev.pageY}}
 else if(ev.clientX||ev.clientY){return{x:(ev.clientX+document.body.scrollLeft+document.documentElement.scrollLeft),y:(ev.clientY+document.body.scrollTop+document.documentElement.scrollTop)}}
 return{x:0,y:0}}}
-$.oc.foundation.event=Event;}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
-if($.oc.foundation===undefined)
-$.oc.foundation={}
+$.wn.foundation.event=Event;}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
+if($.wn.foundation===undefined)
+$.wn.foundation={}
 var ControlUtils={markDisposable:function(el){el.setAttribute('data-disposable','')},disposeControls:function(container){var controls=container.querySelectorAll('[data-disposable]')
 for(var i=0,len=controls.length;i<len;i++)
 $(controls[i]).triggerHandler('dispose-control')
 if(container.hasAttribute('data-disposable'))
 $(container).triggerHandler('dispose-control')}}
-$.oc.foundation.controlUtils=ControlUtils;$(document).on('ajaxBeforeReplace',function(ev){$.oc.foundation.controlUtils.disposeControls(ev.target)})}(window.jQuery);+function($){"use strict";var FlashMessage=function(options,el){var
+$.wn.foundation.controlUtils=ControlUtils;$(document).on('ajaxBeforeReplace',function(ev){$.wn.foundation.controlUtils.disposeControls(ev.target)})}(window.jQuery);+function($){"use strict";var FlashMessage=function(options,el){var
 options=$.extend({},FlashMessage.DEFAULTS,options),$element=$(el)
 $('body > p.flash-message').remove()
 if($element.length==0){$element=$('<p />').addClass(options.class).html(options.text)}
@@ -2711,10 +2719,12 @@ function remove(){window.clearInterval(timer)
 $element.removeClass('in')
 $.support.transition&&$element.hasClass('fade')?$element.one($.support.transition.end,removeElement).emulateTransitionEnd(500):removeElement()}}
 FlashMessage.DEFAULTS={class:'success',text:'Default text',interval:5}
+if($.wn===undefined)
+$.wn={}
 if($.oc===undefined)
-$.oc={}
-$.oc.flashMsg=FlashMessage
-$(document).render(function(){$('[data-control=flash-message]').each(function(){$.oc.flashMsg($(this).data(),this)})})}(window.jQuery);!function($){"use strict";var Autocomplete=function(element,options){this.$element=$(element)
+$.oc=$.wn
+$.wn.flashMsg=FlashMessage
+$(document).render(function(){$('[data-control=flash-message]').each(function(){$.wn.flashMsg($(this).data(),this)})})}(window.jQuery);!function($){"use strict";var Autocomplete=function(element,options){this.$element=$(element)
 this.options=$.extend({},$.fn.autocomplete.defaults,options)
 this.matcher=this.options.matcher||this.matcher
 this.sorter=this.options.sorter||this.sorter
@@ -2821,10 +2831,10 @@ if($this.data('autocomplete'))return
 var opts=$this.data()
 if(opts.source){opts.source=paramToObj('data-source',opts.source)}
 $this.autocomplete(opts)})}(window.jQuery);(function($){$(document).on('keypress','div.custom-checkbox',function(e){if(e.key==='(Space character)'||e.key==='Spacebar'||e.key===' '){var $cb=$('input[type=checkbox]',this)
-if($cb.data('oc-space-timestamp')==e.timeStamp)
+if($cb.data('wn-space-timestamp')==e.timeStamp)
 return
 $cb.get(0).checked=!$cb.get(0).checked
-$cb.data('oc-space-timestamp',e.timeStamp)
+$cb.data('wn-space-timestamp',e.timeStamp)
 $cb.trigger('change')
 return false}})
 $(document).render(function(){$('div.custom-checkbox.is-indeterminate > input').each(function(){var $el=$(this),checked=$el.data('checked')
@@ -2923,10 +2933,10 @@ if(typeof option=='string')data[option].call($this)})}
 $.fn.callout.Constructor=Callout
 $.fn.callout.noConflict=function(){$.fn.callout=old
 return this}
-$(document).on('click.oc.callout.data-api',dismiss,Callout.prototype.close)}(jQuery);+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$(document).on('click.oc.callout.data-api',dismiss,Callout.prototype.close)}(jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var DatePicker=function(element,options){this.$el=$(element)
 this.options=options||{}
-$.oc.foundation.controlUtils.markDisposable(element)
+$.wn.foundation.controlUtils.markDisposable(element)
 Base.call(this)
 this.init()}
 DatePicker.prototype=Object.create(BaseProto)
@@ -3008,8 +3018,8 @@ if(!this.appTimezone){this.appTimezone='UTC'}
 if(!this.timezone){this.timezone='UTC'}
 if(this.ignoreTimezone){this.appTimezone='UTC'
 this.timezone='UTC'}}
-DatePicker.prototype.getLang=function(name,defaultValue){if($.oc===undefined||$.oc.lang===undefined){return defaultValue}
-return $.oc.lang.get(name,defaultValue)}
+DatePicker.prototype.getLang=function(name,defaultValue){if($.oc===undefined||$.wn.lang===undefined){return defaultValue}
+return $.wn.lang.get(name,defaultValue)}
 DatePicker.DEFAULTS={minDate:null,maxDate:null,format:null,yearRange:10,firstDay:0,showWeekNumber:false,mode:'datetime'}
 var old=$.fn.datePicker
 $.fn.datePicker=function(option){var args=Array.prototype.slice.call(arguments,1),items,result
@@ -3023,10 +3033,10 @@ return result?result:items}
 $.fn.datePicker.Constructor=DatePicker
 $.fn.datePicker.noConflict=function(){$.fn.datePicker=old
 return this}
-$(document).on('render',function(){$('[data-control="datepicker"]').datePicker()});}(window.jQuery);(function($){$(document).render(function(){$('[data-control="tooltip"], [data-toggle="tooltip"]').tooltip()})})(jQuery);+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$(document).on('render',function(){$('[data-control="datepicker"]').datePicker()});}(window.jQuery);(function($){$(document).render(function(){$('[data-control="tooltip"], [data-toggle="tooltip"]').tooltip()})})(jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var Toolbar=function(element,options){var
 $el=this.$el=$(element),$toolbar=$el.closest('.control-toolbar')
-$.oc.foundation.controlUtils.markDisposable(element)
+$.wn.foundation.controlUtils.markDisposable(element)
 this.$toolbar=$toolbar
 this.options=options||{};var noDragSupport=options.noDragSupport!==undefined&&options.noDragSupport
 Base.call(this)
@@ -3096,10 +3106,10 @@ FilterWidget.prototype.getPopoverTemplate=function(){return'                    
                                 </ul>                                                                                  \
                             </div>                                                                                     \
                             <div class="filter-buttons">                                                               \
-                                <button class="btn btn-block btn-primary oc-icon-filter" data-filter-action="apply">   \
+                                <button class="btn btn-block btn-primary wn-icon-filter" data-filter-action="apply">   \
                                     {{ apply_button_text }}                                                            \
                                 </button>                                                                              \
-                                <button class="btn btn-block btn-secondary oc-icon-eraser" data-filter-action="clear"> \
+                                <button class="btn btn-block btn-secondary wn-icon-eraser" data-filter-action="clear"> \
                                     {{ clear_button_text }}                                                            \
                                 </button>                                                                              \
                             </div>                                                                                     \
@@ -3257,9 +3267,9 @@ if(lastValue!==undefined&&lastValue==thisValue){return}
 $el.data('oc.lastvalue',thisValue)
 if(self.lastDataTrackInputRequest){self.lastDataTrackInputRequest.abort()}
 var data={scopeName:self.activeScopeName,search:thisValue}
-$.oc.stripeLoadIndicator.show()
+$.wn.stripeLoadIndicator.show()
 self.lastDataTrackInputRequest=self.$el.request(self.options.optionsHandler,{data:data}).success(function(data){self.filterAvailable(self.activeScopeName,data.options.available)
-self.toggleFilterButtons()}).always(function(){$.oc.stripeLoadIndicator.hide()})},300)}
+self.toggleFilterButtons()}).always(function(){$.wn.stripeLoadIndicator.hide()})},300)}
 var old=$.fn.filterWidget
 $.fn.filterWidget=function(option){var args=arguments,result
 this.each(function(){var $this=$(this)
@@ -3602,8 +3612,10 @@ $(document).on('ajaxPromise','[data-load-indicator]',function(){var
 indicatorContainer=$(this).closest('.loading-indicator-container'),loadingText=$(this).data('load-indicator'),options={opaque:$(this).data('load-indicator-opaque'),centered:$(this).data('load-indicator-centered'),size:$(this).data('load-indicator-size')}
 if(loadingText)
 options.text=loadingText
-indicatorContainer.loadIndicator(options)}).on('ajaxFail ajaxDone','[data-load-indicator]',function(){$(this).closest('.loading-indicator-container').loadIndicator('hide')})}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+indicatorContainer.loadIndicator(options)}).on('ajaxFail ajaxDone','[data-load-indicator]',function(){$(this).closest('.loading-indicator-container').loadIndicator('hide')})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 var CursorLoadIndicator=function(){if(Modernizr.touchevents)
 return
 this.counter=0
@@ -3624,9 +3636,11 @@ if(force!==undefined&&force)
 this.counter=0
 if(this.counter<=0){this.indicator.addClass('hide')
 $(window).off('.cursorLoadIndicator');}}
-$(document).ready(function(){$.oc.cursorLoadIndicator=new CursorLoadIndicator();})
-$(document).on('ajaxPromise','[data-cursor-load-indicator]',function(){$.oc.cursorLoadIndicator.show()}).on('ajaxFail ajaxDone','[data-cursor-load-indicator]',function(){$.oc.cursorLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
+$(document).ready(function(){$.wn.cursorLoadIndicator=new CursorLoadIndicator();})
+$(document).on('ajaxPromise','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.show()}).on('ajaxFail ajaxDone','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
 var StripeLoadIndicator=function(){var self=this
 this.counter=0
 this.indicator=this.makeIndicator()
@@ -3647,13 +3661,13 @@ if(this.counter<=0){this.indicator.addClass('loaded')
 $(document.body).removeClass('loading')
 var self=this
 this.animationTimer=window.setTimeout(function(){self.indicator.hide()},1000)}}
-$.oc.stripeLoadIndicator=new StripeLoadIndicator()
+$.wn.stripeLoadIndicator=new StripeLoadIndicator()
 $(document).on('ajaxPromise','[data-stripe-load-indicator]',function(event){event.stopPropagation()
-$.oc.stripeLoadIndicator.show()
+$.wn.stripeLoadIndicator.show()
 var $el=$(this)
 $(window).one('ajaxUpdateComplete',function(){if($el.closest('html').length===0)
-$.oc.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone','[data-stripe-load-indicator]',function(event){event.stopPropagation()
-$.oc.stripeLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";var Popover=function(element,options){var $el=this.$el=$(element);this.options=options||{};this.arrowSize=15
+$.wn.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone','[data-stripe-load-indicator]',function(event){event.stopPropagation()
+$.wn.stripeLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";var Popover=function(element,options){var $el=this.$el=$(element);this.options=options||{};this.arrowSize=15
 this.docClickHandler=null
 this.show()}
 Popover.prototype.hide=function(){var e=$.Event('hiding.oc.popover',{relatedTarget:this.$el})
@@ -3664,7 +3678,7 @@ this.$container.removeClass('in')
 if(this.$overlay)this.$overlay.removeClass('in')
 this.disposeControls()
 $.support.transition&&this.$container.hasClass('fade')?this.$container.one($.support.transition.end,$.proxy(this.hidePopover,this)).emulateTransitionEnd(300):this.hidePopover()}
-Popover.prototype.disposeControls=function(){if(this.$container){$.oc.foundation.controlUtils.disposeControls(this.$container.get(0))}}
+Popover.prototype.disposeControls=function(){if(this.$container){$.wn.foundation.controlUtils.disposeControls(this.$container.get(0))}}
 Popover.prototype.hidePopover=function(){this.$container.remove();if(this.$overlay)this.$overlay.remove()
 this.$el.removeClass('popover-highlight')
 this.$el.trigger('hide.oc.popover')
@@ -3775,7 +3789,7 @@ $.fn.ocPopover.Constructor=Popover
 $.fn.ocPopover.noConflict=function(){$.fn.ocPopover=old
 return this}
 $(document).on('click','[data-control=popover]',function(e){$(this).ocPopover()
-return false;})}(window.jQuery);+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype
+return false;})}(window.jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var Popup=function(element,options){this.options=options
 this.$el=$(element)
 this.$container=null
@@ -3789,7 +3803,7 @@ this.$container=this.createPopupContainer()
 this.$content=this.$container.find('.modal-content:first')
 this.$dialog=this.$container.find('.modal-dialog:first')
 this.$modal=this.$container.modal({show:false,backdrop:false,keyboard:this.options.keyboard})
-$.oc.foundation.controlUtils.markDisposable(element)
+$.wn.foundation.controlUtils.markDisposable(element)
 Base.call(this)
 this.initEvents()
 this.init()}
@@ -3951,9 +3965,11 @@ var tooltipWidth=$tooltip.outerWidth()
 if((x+tooltipWidth)>$(window).width())
 x=$(window).width()-tooltipWidth-10;$tooltip.css({top:y,left:x,visibility:'visible'});}
 ChartUtils.prototype.hideTooltip=function(){$('#chart-tooltip').remove()}
+if($.wn===undefined)
+$.wn={}
 if($.oc===undefined)
-$.oc={}
-$.oc.chartUtils=new ChartUtils();}(window.jQuery);+function($){"use strict";var ChartLine=function(element,options){var self=this
+$.oc=$.wn
+$.wn.chartUtils=new ChartUtils();}(window.jQuery);+function($){"use strict";var ChartLine=function(element,options){var self=this
 this.chartOptions={xaxis:{mode:"time",tickLength:5},selection:{mode:"x"},grid:{markingsColor:"rgba(0,0,0, 0.02)",backgroundColor:{colors:["#fff","#fff"]},borderColor:"#7bafcc",borderWidth:0,color:"#ddd",hoverable:true,clickable:true,labelMargin:10},series:{lines:{show:true,fill:true},points:{show:true}},tooltip:true,tooltipOpts:{defaultTheme:false,content:"%x: <strong>%y</strong>",dateFormat:"%y-%0m-%0d",shifts:{x:10,y:20}},legend:{show:true,noColumns:2}}
 this.defaultDataSetOptions={shadowSize:0}
 var parsedOptions={}
@@ -3993,16 +4009,16 @@ ChartLine.prototype.clearZoom=function(){this.rebuildChart()
 this.resetZoomLink.hide()}
 var old=$.fn.chartLine
 $.fn.chartLine=function(option){return this.each(function(){var $this=$(this)
-var data=$this.data('october.chartLine')
+var data=$this.data('winter.chartLine')
 var options=$.extend({},ChartLine.DEFAULTS,$this.data(),typeof option=='object'&&option)
-if(!data)$this.data('october.chartLine',(data=new ChartLine(this,options)))
+if(!data)$this.data('winter.chartLine',(data=new ChartLine(this,options)))
 if(typeof option=='string')data[option].call($this)})}
 $.fn.chartLine.Constructor=ChartLine
 $.fn.chartLine.noConflict=function(){$.fn.chartLine=old
 return this}
 $(document).render(function(){$('[data-control="chart-line"]').chartLine()})}(window.jQuery);+function($){"use strict";var BarChart=function(element,options){this.options=options||{}
 var
-$el=this.$el=$(element),size=this.size=$el.height(),self=this,values=$.oc.chartUtils.loadListValues($('ul',$el)),$legend=$.oc.chartUtils.createLegend($('ul',$el)),indicators=$.oc.chartUtils.initLegendColorIndicators($legend),isFullWidth=this.isFullWidth(),chartHeight=this.options.height!==undefined?this.options.height:size,chartWidth=isFullWidth?this.$el.width():size,barWidth=(chartWidth-(values.values.length-1)*this.options.gap)/values.values.length
+$el=this.$el=$(element),size=this.size=$el.height(),self=this,values=$.wn.chartUtils.loadListValues($('ul',$el)),$legend=$.wn.chartUtils.createLegend($('ul',$el)),indicators=$.wn.chartUtils.initLegendColorIndicators($legend),isFullWidth=this.isFullWidth(),chartHeight=this.options.height!==undefined?this.options.height:size,chartWidth=isFullWidth?this.$el.width():size,barWidth=(chartWidth-(values.values.length-1)*this.options.gap)/values.values.length
 var $canvas=$('<div/>').addClass('canvas').height(chartHeight).width(isFullWidth?'100%':chartWidth)
 $el.prepend($canvas)
 $el.toggleClass('full-width',isFullWidth)
@@ -4010,11 +4026,11 @@ Raphael($canvas.get(0),isFullWidth?'100%':chartWidth,chartHeight,function(){self
 self.bars=this.set()
 self.paper.customAttributes.bar=function(start,height){return{path:[["M",start,chartHeight],["L",start,chartHeight-height],["L",start+barWidth,chartHeight-height],["L",start+barWidth,chartHeight],["Z"]]}}
 var start=0
-$.each(values.values,function(index,valueInfo){var color=valueInfo.color!==undefined?valueInfo.color:$.oc.chartUtils.getColor(index),path=self.paper.path().attr({"stroke-width":0}).attr({bar:[start,0]}).attr({fill:color})
+$.each(values.values,function(index,valueInfo){var color=valueInfo.color!==undefined?valueInfo.color:$.wn.chartUtils.getColor(index),path=self.paper.path().attr({"stroke-width":0}).attr({bar:[start,0]}).attr({fill:color})
 self.bars.push(path)
 indicators[index].css('background-color',color)
 start+=barWidth+self.options.gap
-path.hover(function(ev){$.oc.chartUtils.showTooltip(ev.pageX,ev.pageY,$.trim($.oc.chartUtils.getLegendLabel($legend,index))+': <strong>'+valueInfo.value+'</stong>')},function(){$.oc.chartUtils.hideTooltip()})})
+path.hover(function(ev){$.wn.chartUtils.showTooltip(ev.pageX,ev.pageY,$.trim($.wn.chartUtils.getLegendLabel($legend,index))+': <strong>'+valueInfo.value+'</stong>')},function(){$.wn.chartUtils.hideTooltip()})})
 start=0
 $.each(values.values,function(index,valueInfo){var height=(values.max&&valueInfo.value)?chartHeight/values.max*valueInfo.value:0
 self.bars[index].animate({bar:[start,height]},1000,"bounce")
@@ -4039,7 +4055,7 @@ return this}
 $(document).render(function(){$('[data-control=chart-bar]').barChart()})}(window.jQuery)
 +function($){"use strict";var PieChart=function(element,options){this.options=options||{}
 var
-$el=this.$el=$(element),size=this.size=(this.options.size!==undefined?this.options.size:$el.height()),outerRadius=size/2-1,innerRadius=outerRadius-outerRadius/3.5,values=$.oc.chartUtils.loadListValues($('ul',$el)),$legend=$.oc.chartUtils.createLegend($('ul',$el)),indicators=$.oc.chartUtils.initLegendColorIndicators($legend),self=this
+$el=this.$el=$(element),size=this.size=(this.options.size!==undefined?this.options.size:$el.height()),outerRadius=size/2-1,innerRadius=outerRadius-outerRadius/3.5,values=$.wn.chartUtils.loadListValues($('ul',$el)),$legend=$.wn.chartUtils.createLegend($('ul',$el)),indicators=$.wn.chartUtils.initLegendColorIndicators($legend),self=this
 var $canvas=$('<div/>').addClass('canvas').width(size).height(size)
 $el.prepend($canvas)
 Raphael($canvas.get(0),size,size,function(){self.paper=this
@@ -4047,11 +4063,11 @@ self.segments=this.set()
 self.paper.customAttributes.segment=function(startAngle,endAngle){var
 p1=self.arcCoords(outerRadius,startAngle),p2=self.arcCoords(outerRadius,endAngle),p3=self.arcCoords(innerRadius,endAngle),p4=self.arcCoords(innerRadius,startAngle),flag=(endAngle-startAngle)>180,path=[["M",p1.x,p1.y],["A",outerRadius,outerRadius,0,+flag,0,p2.x,p2.y],["L",p3.x,p3.y],["A",innerRadius,innerRadius,0,+flag,1,p4.x,p4.y],["Z"]]
 return{path:path}}
-self.paper.circle(size/2,size/2,innerRadius+(outerRadius-innerRadius)/2).attr({"stroke-width":outerRadius-innerRadius-0.5}).attr({stroke:$.oc.chartUtils.defaultValueColor})
-$.each(values.values,function(index,valueInfo){var color=valueInfo.color!==undefined?valueInfo.color:$.oc.chartUtils.getColor(index),path=self.paper.path().attr({"stroke-width":0}).attr({segment:[0,0]}).attr({fill:color})
+self.paper.circle(size/2,size/2,innerRadius+(outerRadius-innerRadius)/2).attr({"stroke-width":outerRadius-innerRadius-0.5}).attr({stroke:$.wn.chartUtils.defaultValueColor})
+$.each(values.values,function(index,valueInfo){var color=valueInfo.color!==undefined?valueInfo.color:$.wn.chartUtils.getColor(index),path=self.paper.path().attr({"stroke-width":0}).attr({segment:[0,0]}).attr({fill:color})
 self.segments.push(path)
 indicators[index].css('background-color',color)
-path.hover(function(ev){$.oc.chartUtils.showTooltip(ev.pageX,ev.pageY,$.trim($.oc.chartUtils.getLegendLabel($legend,index))+': <strong>'+valueInfo.value+'</stong>')},function(){$.oc.chartUtils.hideTooltip()})})
+path.hover(function(ev){$.wn.chartUtils.showTooltip(ev.pageX,ev.pageY,$.trim($.wn.chartUtils.getLegendLabel($legend,index))+': <strong>'+valueInfo.value+'</stong>')},function(){$.wn.chartUtils.hideTooltip()})})
 var start=self.options.startAngle
 $.each(values.values,function(index,valueInfo){var length=(values.total&&valueInfo.value)?360/values.total*valueInfo.value:0
 if(length==360)
@@ -4122,10 +4138,10 @@ else if(typeof option=='string')data[option].apply(data,args)})}
 $.fn.rowLink.Constructor=RowLink
 $.fn.rowLink.noConflict=function(){$.fn.rowLink=old
 return this}
-$(document).render(function(){$('[data-control="rowlink"]').rowLink()})}(window.jQuery);+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$(document).render(function(){$('[data-control="rowlink"]').rowLink()})}(window.jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var ChangeMonitor=function(element,options){this.$el=$(element);this.paused=false
 this.options=options||{}
-$.oc.foundation.controlUtils.markDisposable(element)
+$.wn.foundation.controlUtils.markDisposable(element)
 Base.call(this)
 this.init()}
 ChangeMonitor.prototype=Object.create(BaseProto)
@@ -4185,14 +4201,14 @@ if(!data)$this.data('oc.changeMonitor',(data=new ChangeMonitor(this,options)))})
 $.fn.changeMonitor.Constructor=ChangeMonitor
 $.fn.changeMonitor.noConflict=function(){$.fn.changeMonitor=old
 return this}
-$(document).render(function(){$('[data-change-monitor]').changeMonitor()})}(window.jQuery);+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$(document).render(function(){$('[data-change-monitor]').changeMonitor()})}(window.jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var HotKey=function(element,options){if(!options.hotkey){throw new Error('No hotkey has been defined.');}
 this.$el=$(element)
 this.$target=$(options.hotkeyTarget)
 this.options=options||{}
 this.keyConditions=[]
 this.keyMap=null
-$.oc.foundation.controlUtils.markDisposable(element)
+$.wn.foundation.controlUtils.markDisposable(element)
 Base.call(this)
 this.init()}
 HotKey.prototype=Object.create(BaseProto)
@@ -4418,11 +4434,11 @@ return result?result:this}
 $.fn.dragValue.Constructor=DragValue
 $.fn.dragValue.noConflict=function(){$.fn.dragValue=old
 return this}
-$(document).render(function(){$('[data-control="dragvalue"]').dragValue()});}(window.jQuery);+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$(document).render(function(){$('[data-control="dragvalue"]').dragValue()});}(window.jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var Sortable=function(element,options){this.$el=$(element)
 this.options=options||{}
 this.cursorAdjustment=null
-$.oc.foundation.controlUtils.markDisposable(element)
+$.wn.foundation.controlUtils.markDisposable(element)
 Base.call(this)
 this.init()}
 Sortable.prototype=Object.create(BaseProto)
@@ -4474,7 +4490,7 @@ if(!data)$this.data('oc.sortable',(data=new Sortable(this,options)))
 if(typeof option=='string')data[option].apply(data,args)})}
 $.fn.sortable.Constructor=Sortable
 $.fn.sortable.noConflict=function(){$.fn.sortable=old
-return this}}(window.jQuery);+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype
+return this}}(window.jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var DragScroll=function(element,options){this.options=$.extend({},DragScroll.DEFAULTS,options)
 var
 $el=$(element),el=$el.get(0),dragStart=0,startOffset=0,self=this,dragging=false,eventElementName=this.options.vertical?'pageY':'pageX',isNative=this.options.useNative&&$('html').hasClass('mobile');this.el=$el
@@ -4673,7 +4689,7 @@ var e=$.Event('beforeClose.oc.tab',{relatedTarget:$pane})
 this.$el.trigger(e)
 if(e.isDefaultPrevented())
 return
-$.oc.foundation.controlUtils.disposeControls($pane.get(0))
+$.wn.foundation.controlUtils.disposeControls($pane.get(0))
 $pane.remove()
 $tab.remove()
 if(isActive)
@@ -4766,15 +4782,17 @@ $(window).on('ajaxInvalidField',function(event,element,name,messages,isFirst){if
 event.preventDefault()
 var $el=$(element)
 $el.closest('[data-control=tab]').ocTab('goToElement',$el)
-$el.focus()})}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
-if($.oc.inspector===undefined)
-$.oc.inspector={}
-var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$el.focus()})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
+if($.wn.inspector===undefined)
+$.wn.inspector={}
+var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var Surface=function(containerElement,properties,values,inspectorUniqueId,options,parentSurface,group,propertyName){if(inspectorUniqueId===undefined){throw new Error('Inspector surface unique ID should be defined.')}
 this.options=$.extend({},Surface.DEFAULTS,typeof options=='object'&&options)
 this.rawProperties=properties
-this.parsedProperties=$.oc.inspector.engine.processPropertyGroups(properties)
+this.parsedProperties=$.wn.inspector.engine.processPropertyGroups(properties)
 this.container=containerElement
 this.inspectorUniqueId=inspectorUniqueId
 this.values=values!==null?values:{}
@@ -4789,7 +4807,7 @@ this.tableContainer=null
 this.groupManager=null
 this.group=null
 if(group!==undefined){this.group=group}
-if(!this.parentSurface){this.groupManager=new $.oc.inspector.groupManager(this.inspectorUniqueId)}
+if(!this.parentSurface){this.groupManager=new $.wn.inspector.groupManager(this.inspectorUniqueId)}
 Base.call(this)
 this.init()}
 Surface.prototype=Object.create(BaseProto)
@@ -4817,7 +4835,7 @@ this.group=null
 BaseProto.dispose.call(this)}
 Surface.prototype.init=function(){if(this.groupManager&&!this.group){this.group=this.groupManager.createGroup('root')}
 this.build()
-if(!this.parentSurface){$.oc.foundation.controlUtils.markDisposable(this.tableContainer)}
+if(!this.parentSurface){$.wn.foundation.controlUtils.markDisposable(this.tableContainer)}
 this.registerHandlers()}
 Surface.prototype.registerHandlers=function(){if(!this.parentSurface){$(this.tableContainer).one('dispose-control',this.proxy(this.dispose))
 $(this.tableContainer).on('click','tr.group, tr.control-group',this.proxy(this.onGroupClick))
@@ -4827,8 +4845,8 @@ $(this.tableContainer).off('click','tr.group, tr.control-group',this.proxy(this.
 $(this.tableContainer).off('focus-control',this.proxy(this.focusFirstEditor))}}
 Surface.prototype.build=function(){this.tableContainer=document.createElement('div')
 var dataTable=document.createElement('table'),tbody=document.createElement('tbody')
-$.oc.foundation.element.addClass(dataTable,'inspector-fields')
-if(this.parsedProperties.hasGroups){$.oc.foundation.element.addClass(dataTable,'has-groups')}
+$.wn.foundation.element.addClass(dataTable,'inspector-fields')
+if(this.parsedProperties.hasGroups){$.wn.foundation.element.addClass(dataTable,'has-groups')}
 var currentGroup=this.group
 for(var i=0,len=this.parsedProperties.properties.length;i<len;i++){var property=this.parsedProperties.properties[i]
 if(property.itemType=='group'){currentGroup=this.getGroupManager().createGroup(property.groupIndex,this.group)}
@@ -4849,7 +4867,7 @@ Surface.prototype.buildRow=function(property,group){var row=document.createEleme
 if(property.property){row.setAttribute('data-property',property.property)
 row.setAttribute('data-property-path',this.getPropertyPath(property.property))}
 this.applyGroupIndexAttribute(property,row,group)
-$.oc.foundation.element.addClass(row,this.getRowCssClass(property,group))
+$.wn.foundation.element.addClass(row,this.getRowCssClass(property,group))
 this.applyHeadColspan(th,property)
 titleSpan.setAttribute('class','title-element')
 titleSpan.setAttribute('title',this.escapeJavascriptString(property.title))
@@ -4885,17 +4903,17 @@ titleSpan.appendChild(anchor)}
 Surface.prototype.buildPropertyDescription=function(property){if(property.description===undefined||property.description===null){return null}
 var span=document.createElement('span')
 span.setAttribute('title',this.escapeJavascriptString(property.description))
-span.setAttribute('class','info oc-icon-info with-tooltip')
+span.setAttribute('class','info wn-icon-info with-tooltip')
 $(span).tooltip({placement:'auto right',container:'body',delay:500})
 return span}
 Surface.prototype.buildExternalParameterEditor=function(tbody){var rows=tbody.children
 for(var i=0,len=rows.length;i<len;i++){var row=rows[i],property=row.getAttribute('data-property')
-if($.oc.foundation.element.hasClass(row,'no-external-parameter')||!property){continue}
+if($.wn.foundation.element.hasClass(row,'no-external-parameter')||!property){continue}
 var propertyEditor=this.findPropertyEditor(property)
 if(propertyEditor&&!propertyEditor.supportsExternalParameterEditor()){continue}
 var cell=row.querySelector('td'),propertyDefinition=this.findPropertyDefinition(property),initialValue=this.getPropertyValue(property)
 if(initialValue===undefined){initialValue=propertyEditor.getUndefinedValue()}
-var editor=new $.oc.inspector.externalParameterEditor(this,propertyDefinition,cell,initialValue)
+var editor=new $.wn.inspector.externalParameterEditor(this,propertyDefinition,cell,initialValue)
 this.externalParameterEditors.push(editor)}}
 Surface.prototype.applyGroupIndexAttribute=function(property,row,group,isGroupedControl){if(property.itemType=='group'||isGroupedControl){row.setAttribute('data-group-index',this.getGroupManager().getGroupIndex(group))
 row.setAttribute('data-parent-group-index',this.getGroupManager().getGroupIndex(group.parentGroup))}
@@ -4907,8 +4925,8 @@ var groupLevel=group.getLevel()
 row.setAttribute('data-group-level',groupLevel)
 th.children[0].style.marginLeft=groupLevel*10+'px'}
 Surface.prototype.toggleGroup=function(row,forceExpand){var link=row.querySelector('a'),groupIndex=row.getAttribute('data-group-index'),table=this.getRootTable(),groupManager=this.getGroupManager(),collapse=true
-if($.oc.foundation.element.hasClass(link,'expanded')&&!forceExpand){$.oc.foundation.element.removeClass(link,'expanded')}
-else{$.oc.foundation.element.addClass(link,'expanded')
+if($.wn.foundation.element.hasClass(link,'expanded')&&!forceExpand){$.wn.foundation.element.removeClass(link,'expanded')}
+else{$.wn.foundation.element.addClass(link,'expanded')
 collapse=false}
 var propertyRows=groupManager.findGroupRows(table,groupIndex,!collapse),duration=Math.round(50/propertyRows.length)
 this.expandOrCollapseRows(propertyRows,collapse,duration,forceExpand)
@@ -4917,11 +4935,11 @@ Surface.prototype.expandGroupParents=function(group){var groups=group.getGroupAn
 for(var i=groups.length-1;i>=0;i--){var row=groups[i].findGroupRow(table)
 if(row){this.toggleGroup(row,true)}}}
 Surface.prototype.expandOrCollapseRows=function(rows,collapse,duration,noAnimation){var row=rows.pop(),self=this
-if(row){if(!noAnimation){setTimeout(function toggleRow(){$.oc.foundation.element.toggleClass(row,'collapsed',collapse)
-$.oc.foundation.element.toggleClass(row,'expanded',!collapse)
+if(row){if(!noAnimation){setTimeout(function toggleRow(){$.wn.foundation.element.toggleClass(row,'collapsed',collapse)
+$.wn.foundation.element.toggleClass(row,'expanded',!collapse)
 self.expandOrCollapseRows(rows,collapse,duration,noAnimation)},duration)}
-else{$.oc.foundation.element.toggleClass(row,'collapsed',collapse)
-$.oc.foundation.element.toggleClass(row,'expanded',!collapse)
+else{$.wn.foundation.element.toggleClass(row,'collapsed',collapse)
+$.wn.foundation.element.toggleClass(row,'expanded',!collapse)
 self.expandOrCollapseRows(rows,collapse,duration,noAnimation)}}}
 Surface.prototype.getGroupManager=function(){return this.getRootSurface().groupManager}
 Surface.prototype.buildEditor=function(row,property,dataTable,group){if(property.itemType!=='property'){return}
@@ -4929,9 +4947,9 @@ this.validateEditorType(property.type)
 var cell=document.createElement('td'),type=property.type
 row.appendChild(cell)
 if(type===undefined){type='string'}
-var editor=new $.oc.inspector.propertyEditors[type](this,property,cell,group)
-if(editor.isGroupedEditor()){$.oc.foundation.element.addClass(dataTable,'has-groups')
-$.oc.foundation.element.addClass(row,'control-group')
+var editor=new $.wn.inspector.propertyEditors[type](this,property,cell,group)
+if(editor.isGroupedEditor()){$.wn.foundation.element.addClass(dataTable,'has-groups')
+$.wn.foundation.element.addClass(row,'control-group')
 this.applyGroupIndexAttribute(property,row,editor.group,true)
 this.buildGroupExpandControl(row.querySelector('span.title-element'),property,true,editor.hasChildSurface(),editor.group)
 if(cell.children.length==0){row.querySelector('th').setAttribute('colspan',2)
@@ -4954,11 +4972,11 @@ Surface.prototype.notifyEditorsPropertyChanged=function(propertyPath,value){for(
 editor.onInspectorPropertyChanged(propertyPath,value)
 editor.notifyChildSurfacesPropertyChanged(propertyPath,value)}}
 Surface.prototype.makeCellActive=function(cell){var tbody=cell.parentNode.parentNode.parentNode,cells=tbody.querySelectorAll('tr td')
-for(var i=0,len=cells.length;i<len;i++){$.oc.foundation.element.removeClass(cells[i],'active')}
-$.oc.foundation.element.addClass(cell,'active')}
+for(var i=0,len=cells.length;i<len;i++){$.wn.foundation.element.removeClass(cells[i],'active')}
+$.wn.foundation.element.addClass(cell,'active')}
 Surface.prototype.markPropertyChanged=function(property,changed){var propertyPath=this.getPropertyPath(property),row=this.tableContainer.querySelector('tr[data-property-path="'+propertyPath+'"]')
-if(changed){$.oc.foundation.element.addClass(row,'changed')}
-else{$.oc.foundation.element.removeClass(row,'changed')}}
+if(changed){$.wn.foundation.element.addClass(row,'changed')}
+else{$.wn.foundation.element.removeClass(row,'changed')}}
 Surface.prototype.findPropertyEditor=function(property){for(var i=0,len=this.editors.length;i<len;i++){if(this.editors[i].getPropertyName()==property){return this.editors[i]}}
 return null}
 Surface.prototype.findExternalParameterEditor=function(property){for(var i=0,len=this.externalParameterEditors.length;i<len;i++){if(this.externalParameterEditors[i].getPropertyName()==property){return this.externalParameterEditors[i]}}
@@ -4967,7 +4985,7 @@ Surface.prototype.findPropertyDefinition=function(property){for(var i=0,len=this
 if(definition.property==property){return definition}}
 return null}
 Surface.prototype.validateEditorType=function(type){if(type===undefined){type='string'}
-if($.oc.inspector.propertyEditors[type]===undefined){throw new Error('The Inspector editor class "'+type+'" is not defined in the $.oc.inspector.propertyEditors namespace.')}}
+if($.wn.inspector.propertyEditors[type]===undefined){throw new Error('The Inspector editor class "'+type+'" is not defined in the $.wn.inspector.propertyEditors namespace.')}}
 Surface.prototype.popupDisplayed=function(){if(this.popupCounter===0&&this.options.onPopupDisplayed!==null){this.options.onPopupDisplayed()}
 this.popupCounter++}
 Surface.prototype.popupHidden=function(){this.popupCounter--
@@ -5020,7 +5038,7 @@ if(!externalParameterEditor||!externalParameterEditor.isEditorVisible()){value=t
 var editor=this.findPropertyEditor(property.property)
 if(value===undefined){if(editor){value=editor.getUndefinedValue()}
 else{value=property.default}}
-if(value===$.oc.inspector.removedProperty){continue}
+if(value===$.wn.inspector.removedProperty){continue}
 if(property.ignoreIfEmpty!==undefined&&(property.ignoreIfEmpty===true||property.ignoreIfEmpty==="true")&&editor){if(editor.isEmptyValue(value)){continue}}
 if(property.ignoreIfDefault!==undefined&&(property.ignoreIfDefault===true||property.ignoreIfDefault==="true")&&editor){if(property.default===undefined){throw new Error('The ignoreIfDefault feature cannot be used without the default property value.')}
 if(this.comparePropertyValues(value,property.default)){continue}}}
@@ -5032,9 +5050,9 @@ Surface.prototype.getValidValues=function(){var allValues=this.getValues(),resul
 for(var property in allValues){var editor=this.findPropertyEditor(property)
 if(!editor){throw new Error('Cannot find editor for property '+property)}
 var externalEditor=this.findExternalParameterEditor(property)
-if(externalEditor&&externalEditor.isEditorVisible()&&!externalEditor.validate(true)){result[property]=$.oc.inspector.invalidProperty
+if(externalEditor&&externalEditor.isEditorVisible()&&!externalEditor.validate(true)){result[property]=$.wn.inspector.invalidProperty
 continue}
-if(!editor.validate(true)){result[property]=$.oc.inspector.invalidProperty
+if(!editor.validate(true)){result[property]=$.wn.inspector.invalidProperty
 continue}
 result[property]=allValues[property]}
 return result}
@@ -5050,12 +5068,12 @@ Surface.prototype.hasChanges=function(originalValues){var values=originalValues!
 return!this.comparePropertyValues(values,this.getValues())}
 Surface.prototype.onGroupClick=function(ev){var row=ev.currentTarget
 this.toggleGroup(row)
-$.oc.foundation.event.stop(ev)
+$.wn.foundation.event.stop(ev)
 return false}
 Surface.DEFAULTS={enableExternalParameterEditor:false,onChange:null,onPopupDisplayed:null,onPopupHidden:null,onGetInspectableElement:null}
-$.oc.inspector.surface=Surface
-$.oc.inspector.removedProperty={removed:true}
-$.oc.inspector.invalidProperty={invalid:true}}(window.jQuery);+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$.wn.inspector.surface=Surface
+$.wn.inspector.removedProperty={removed:true}
+$.wn.inspector.invalidProperty={invalid:true}}(window.jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var InspectorManager=function(){Base.call(this)
 this.init()}
 InspectorManager.prototype=Object.create(BaseProto)
@@ -5070,16 +5088,16 @@ InspectorManager.prototype.loadElementOptions=function($element){var options={}
 if($element.data('inspector-css-class')){options.inspectorCssClass=$element.data('inspector-css-class')}
 return options}
 InspectorManager.prototype.createInspectorPopup=function($element,containerSupported){var options=$.extend(this.loadElementOptions($element),{containerSupported:containerSupported})
-new $.oc.inspector.wrappers.popup($element,null,options)}
+new $.wn.inspector.wrappers.popup($element,null,options)}
 InspectorManager.prototype.createInspectorContainer=function($element,$container){var options=$.extend(this.loadElementOptions($element),{containerSupported:true,container:$container})
-new $.oc.inspector.wrappers.container($element,null,options)}
+new $.wn.inspector.wrappers.container($element,null,options)}
 InspectorManager.prototype.switchToPopup=function(wrapper){var options=$.extend(this.loadElementOptions(wrapper.$element),{containerSupported:true})
-new $.oc.inspector.wrappers.popup(wrapper.$element,wrapper,options)
+new $.wn.inspector.wrappers.popup(wrapper.$element,wrapper,options)
 wrapper.cleanupAfterSwitch()
 this.setContainerPreference(false)}
 InspectorManager.prototype.switchToContainer=function(wrapper){var $container=this.getContainerElement(wrapper.$element),options=$.extend(this.loadElementOptions(wrapper.$element),{containerSupported:true,container:$container})
 if(!$container){throw new Error('Cannot switch to container: a container element is not found')}
-new $.oc.inspector.wrappers.container(wrapper.$element,wrapper,options)
+new $.wn.inspector.wrappers.container(wrapper.$element,wrapper,options)
 wrapper.cleanupAfterSwitch()
 this.setContainerPreference(true)}
 InspectorManager.prototype.createInspector=function(element){var $element=$(element)
@@ -5087,7 +5105,7 @@ if($element.data('oc.inspectorVisible')){return false}
 var $container=this.getContainerElement($element)
 if(!$container){this.createInspectorPopup($element,false)}
 else{if(!this.applyValuesFromContainer($container)||!this.containerHidingAllowed($container)){return}
-$.oc.foundation.controlUtils.disposeControls($container.get(0))
+$.wn.foundation.controlUtils.disposeControls($container.get(0))
 if(!this.getContainerPreference()){this.createInspectorPopup($element,true)}
 else{this.createInspectorContainer($element,$container)}}}
 InspectorManager.prototype.getContainerPreference=function(){if(!Modernizr.localstorage){return false}
@@ -5104,12 +5122,12 @@ InspectorManager.prototype.onInspectableClicked=function(ev){var $element=$(ev.c
 if(this.createInspector($element)===false){return false}
 ev.stopPropagation()
 return false}
-$.oc.inspector.manager=new InspectorManager()
-$.fn.inspector=function(){return this.each(function(){$.oc.inspector.manager.createInspector(this)})}}(window.jQuery);+function($){"use strict";if($.oc.inspector===undefined)
-$.oc.inspector={}
-if($.oc.inspector.wrappers===undefined)
-$.oc.inspector.wrappers={}
-var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$.wn.inspector.manager=new InspectorManager()
+$.fn.inspector=function(){return this.each(function(){$.wn.inspector.manager.createInspector(this)})}}(window.jQuery);+function($){"use strict";if($.wn.inspector===undefined)
+$.wn.inspector={}
+if($.wn.inspector.wrappers===undefined)
+$.wn.inspector.wrappers={}
+var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var BaseWrapper=function($element,sourceWrapper,options){this.$element=$element
 this.options=$.extend({},BaseWrapper.DEFAULTS,typeof options=='object'&&options)
 this.switched=false
@@ -5148,7 +5166,7 @@ BaseWrapper.prototype.isExternalParametersEditorEnabled=function(){return this.$
 BaseWrapper.prototype.initSurface=function(containerElement,properties,values){var options=this.$element.data()||{}
 options.enableExternalParameterEditor=this.isExternalParametersEditorEnabled()
 options.onGetInspectableElement=this.proxy(this.onGetInspectableElement)
-this.surface=new $.oc.inspector.surface(containerElement,properties,values,$.oc.inspector.helpers.generateElementUniqueId(this.$element.get(0)),options)}
+this.surface=new $.wn.inspector.surface(containerElement,properties,values,$.wn.inspector.helpers.generateElementUniqueId(this.$element.get(0)),options)}
 BaseWrapper.prototype.isLiveUpdateEnabled=function(){return false}
 BaseWrapper.prototype.createSurfaceAndUi=function(properties,values){}
 BaseWrapper.prototype.setInspectorVisibleFlag=function(value){this.$element.data('oc.inspectorVisible',value)}
@@ -5166,7 +5184,7 @@ values[normalizedPropertyName]=attribute.value}}
 return values}
 BaseWrapper.prototype.applyValues=function(liveUpdateMode){var $valuesField=this.getElementValuesInput(),values=liveUpdateMode?this.surface.getValidValues():this.surface.getValues()
 if(liveUpdateMode){var existingValues=this.loadValues(this.configuration)
-for(var property in values){if(values[property]!==$.oc.inspector.invalidProperty){existingValues[property]=values[property]}}
+for(var property in values){if(values[property]!==$.wn.inspector.invalidProperty){existingValues[property]=values[property]}}
 var filteredValues={}
 for(var property in existingValues){if(values.hasOwnProperty(property)){filteredValues[property]=existingValues[property]}}
 values=filteredValues}
@@ -5191,8 +5209,8 @@ if($configurationField.length>0){result.properties=this.parseConfiguration($conf
 this.configurationLoaded(result)
 return}
 var $form=this.$element.closest('form'),data=this.$element.data(),self=this
-$.oc.stripeLoadIndicator.show()
-$form.request('onGetInspectorConfiguration',{data:data}).done(function inspectorConfigurationRequestDoneClosure(data){self.onConfigurartionRequestDone(data,result)}).always(function(){$.oc.stripeLoadIndicator.hide()})}
+$.wn.stripeLoadIndicator.show()
+$form.request('onGetInspectorConfiguration',{data:data}).done(function inspectorConfigurationRequestDoneClosure(data){self.onConfigurartionRequestDone(data,result)}).always(function(){$.wn.stripeLoadIndicator.hide()})}
 BaseWrapper.prototype.parseConfiguration=function(configuration){if(!$.isArray(configuration)&&!$.isPlainObject(configuration)){if($.trim(configuration)===0){return{}}
 try{return JSON.parse(configuration)}
 catch(err){throw new Error('Error parsing Inspector configuration. '+err)}}
@@ -5216,7 +5234,7 @@ this.$element.trigger(hidingEvent,[{values:values}])
 return!hidingEvent.isDefaultPrevented();}
 BaseWrapper.prototype.onGetInspectableElement=function(){return this.$element}
 BaseWrapper.DEFAULTS={containerSupported:false}
-$.oc.inspector.wrappers.base=BaseWrapper}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.wrappers.base,BaseProto=Base.prototype
+$.wn.inspector.wrappers.base=BaseWrapper}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.wrappers.base,BaseProto=Base.prototype
 var InspectorPopup=function($element,surface,options){this.$popoverContainer=null
 this.popoverObj=null
 this.cleaningUp=false
@@ -5259,7 +5277,7 @@ this.popoverObj=this.$element.data('oc.popover')
 this.$popoverContainer=this.popoverObj.$container
 this.$popoverContainer.addClass('inspector-temporary-placement')
 if(this.options.inspectorCssClass!==undefined){this.$popoverContainer.addClass(this.options.inspectorCssClass)}
-if(this.options.containerSupported){var moveToContainerButton=$('<span class="inspector-move-to-container oc-icon-download">')
+if(this.options.containerSupported){var moveToContainerButton=$('<span class="inspector-move-to-container wn-icon-download">')
 this.$popoverContainer.find('.popover-head').append(moveToContainerButton)}
 this.$popoverContainer.find('[data-inspector-title]').text(this.title)
 this.$popoverContainer.find('[data-inspector-description]').text(this.description)}
@@ -5294,8 +5312,8 @@ this.popoverObj.options.closeOnEsc=false}
 InspectorPopup.prototype.onPopupEditorHidden=function(){this.popoverObj.options.closeOnPageClick=true
 this.popoverObj.options.closeOnEsc=true}
 InspectorPopup.prototype.onCheckDocumentClickTarget=function(element){if($.contains(this.$element,element)||this.$element.get(0)===element){return true}}
-InspectorPopup.prototype.onMoveToContainer=function(){$.oc.inspector.manager.switchToContainer(this)}
-$.oc.inspector.wrappers.popup=InspectorPopup}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.wrappers.base,BaseProto=Base.prototype
+InspectorPopup.prototype.onMoveToContainer=function(){$.wn.inspector.manager.switchToContainer(this)}
+$.wn.inspector.wrappers.popup=InspectorPopup}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.wrappers.base,BaseProto=Base.prototype
 var InspectorContainer=function($element,surface,options){if(!options.container){throw new Error('Cannot create Inspector container wrapper without a container element.')}
 this.surfaceContainer=null
 Base.call(this,$element,surface,options)}
@@ -5324,7 +5342,7 @@ else{this.surfaceContainer=layoutElements.bodyContainer}
 this.setInspectorVisibleFlag(true)}
 InspectorContainer.prototype.buildHead=function(){var container=document.createElement('div'),header=document.createElement('h3'),paragraph=document.createElement('p'),detachButton=document.createElement('span'),closeButton=document.createElement('span')
 container.setAttribute('class','inspector-header')
-detachButton.setAttribute('class','oc-icon-external-link-square detach')
+detachButton.setAttribute('class','wn-icon-external-link-square detach')
 closeButton.setAttribute('class','close')
 header.textContent=this.title
 paragraph.textContent=this.description
@@ -5347,7 +5365,7 @@ bodyRow.setAttribute('class','flex-layout-item stretch relative')
 layout.appendChild(headRow)
 layout.appendChild(bodyRow)
 this.options.container.get(0).appendChild(layout)
-$.oc.foundation.controlUtils.markDisposable(layout)
+$.wn.foundation.controlUtils.markDisposable(layout)
 this.registerLayoutHandlers(layout)
 return{headContainer:headRow,bodyContainer:bodyRow}}
 InspectorContainer.prototype.validateAndApply=function(){if(!this.surface.validate()){return false}
@@ -5383,8 +5401,8 @@ return false}
 this.surface.dispose()
 this.dispose()}
 InspectorContainer.prototype.onLiveUpdate=function(){this.applyValues(true)}
-InspectorContainer.prototype.onDetach=function(){$.oc.inspector.manager.switchToPopup(this)}
-$.oc.inspector.wrappers.container=InspectorContainer}(window.jQuery);+function($){"use strict";var GroupManager=function(controlId){this.controlId=controlId
+InspectorContainer.prototype.onDetach=function(){$.wn.inspector.manager.switchToPopup(this)}
+$.wn.inspector.wrappers.container=InspectorContainer}(window.jQuery);+function($){"use strict";var GroupManager=function(controlId){this.controlId=controlId
 this.rootGroup=null
 this.cachedGroupStatuses=null}
 GroupManager.prototype.createGroup=function(groupId,parentGroup){var group=new Group(groupId)
@@ -5417,10 +5435,10 @@ if(!group){throw new Error('Cannot find the requested row group.')}
 return group.findGroupRows(table,ignoreCollapsedSubgroups,this)}
 GroupManager.prototype.markGroupRowInvalid=function(group,table){var currentGroup=group
 while(currentGroup){var row=currentGroup.findGroupRow(table)
-if(row){$.oc.foundation.element.addClass(row,'invalid')}
+if(row){$.wn.foundation.element.addClass(row,'invalid')}
 currentGroup=currentGroup.parentGroup}}
 GroupManager.prototype.unmarkInvalidGroups=function(table){var rows=table.querySelectorAll('tr.invalid')
-for(var i=rows.length-1;i>=0;i--){$.oc.foundation.element.removeClass(rows[i],'invalid')}}
+for(var i=rows.length-1;i>=0;i--){$.wn.foundation.element.removeClass(rows[i],'invalid')}}
 GroupManager.prototype.isRowVisible=function(table,rowGroupIndex){var group=this.findGroupByIndex(index)
 if(!group){throw new Error('Cannot find the requested row group.')}
 var current=group
@@ -5461,15 +5479,17 @@ var subgroupRows=subgroup.findGroupRows(table,ignoreCollapsedSubgroups,groupMana
 for(var j=0,subgroupLen=subgroupRows.length;j<subgroupLen;j++){result.push(subgroupRows[j])}}
 return result}
 Group.prototype.findGroupRow=function(table){return table.querySelector('tr[data-group-index="'+this.groupIndex+'"]')}
-$.oc.inspector.groupManager=GroupManager}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
-if($.oc.inspector===undefined)
-$.oc.inspector={}
-$.oc.inspector.engine={}
+$.wn.inspector.groupManager=GroupManager}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
+if($.wn.inspector===undefined)
+$.wn.inspector={}
+$.wn.inspector.engine={}
 function findGroup(group,properties){for(var i=0,len=properties.length;i<len;i++){var property=properties[i]
 if(property.itemType!==undefined&&property.itemType=='group'&&property.title==group){return property}}
 return null}
-$.oc.inspector.engine.processPropertyGroups=function(properties){var fields=[],result={hasGroups:false,properties:[]},groupIndex=0
+$.wn.inspector.engine.processPropertyGroups=function(properties){var fields=[],result={hasGroups:false,properties:[]},groupIndex=0
 for(var i=0,len=properties.length;i<len;i++){var property=properties[i]
 if(property['sortOrder']===undefined){property['sortOrder']=(i+1)*20}}
 properties.sort(function(a,b){return a['sortOrder']-b['sortOrder']})
@@ -5487,13 +5507,15 @@ result.properties.push(property)
 if(property.itemType=='group'){result.hasGroups=true
 for(var j=0,propertiesLen=property.properties.length;j<propertiesLen;j++){result.properties.push(property.properties[j])}
 delete property.properties}}
-return result}}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
-if($.oc.inspector===undefined)
-$.oc.inspector={}
-if($.oc.inspector.propertyEditors===undefined)
-$.oc.inspector.propertyEditors={}
-var Base=$.oc.foundation.base,BaseProto=Base.prototype
+return result}}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
+if($.wn.inspector===undefined)
+$.wn.inspector={}
+if($.wn.inspector.propertyEditors===undefined)
+$.wn.inspector.propertyEditors={}
+var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var BaseEditor=function(inspector,propertyDefinition,containerCell,group){this.inspector=inspector
 this.propertyDefinition=propertyDefinition
 this.containerCell=containerCell
@@ -5538,16 +5560,16 @@ BaseEditor.prototype.getUndefinedValue=function(){return this.propertyDefinition
 BaseEditor.prototype.throwError=function(errorMessage){throw new Error(errorMessage+' Property: '+this.propertyDefinition.property)}
 BaseEditor.prototype.getInspectableElement=function(){return this.getRootSurface().getInspectableElement()}
 BaseEditor.prototype.isEmptyValue=function(value){return value===undefined||value===null||(typeof value=='object'&&$.isEmptyObject(value))||(typeof value=='string'&&$.trim(value).length===0)||(Object.prototype.toString.call(value)==='[object Array]'&&value.length===0)}
-BaseEditor.prototype.initValidation=function(){this.validationSet=new $.oc.inspector.validationSet(this.propertyDefinition,this.propertyDefinition.property)}
+BaseEditor.prototype.initValidation=function(){this.validationSet=new $.wn.inspector.validationSet(this.propertyDefinition,this.propertyDefinition.property)}
 BaseEditor.prototype.disposeValidation=function(){this.validationSet.dispose()}
 BaseEditor.prototype.getValueToValidate=function(){return this.inspector.getPropertyValue(this.propertyDefinition.property)}
 BaseEditor.prototype.validate=function(silentMode){var value=this.getValueToValidate()
 if(value===undefined){value=this.getUndefinedValue()}
 var validationResult=this.validationSet.validate(value)
-if(validationResult!==null){if(!silentMode){$.oc.flashMsg({text:validationResult,'class':'error','interval':5})}
+if(validationResult!==null){if(!silentMode){$.wn.flashMsg({text:validationResult,'class':'error','interval':5})}
 return false}
 return true}
-BaseEditor.prototype.markInvalid=function(){$.oc.foundation.element.addClass(this.containerRow,'invalid')
+BaseEditor.prototype.markInvalid=function(){$.wn.foundation.element.addClass(this.containerRow,'invalid')
 this.inspector.getGroupManager().markGroupRowInvalid(this.parentGroup,this.inspector.getRootTable())
 this.inspector.getRootSurface().expandGroupParents(this.parentGroup)
 this.focus()}
@@ -5557,10 +5579,10 @@ BaseEditor.prototype.isGroupedEditor=function(){return false}
 BaseEditor.prototype.initControlGroup=function(){this.group=this.inspector.getGroupManager().createGroup(this.propertyDefinition.property,this.parentGroup)}
 BaseEditor.prototype.createGroupedRow=function(property){var row=this.inspector.buildRow(property,this.group),groupedClass=this.inspector.getGroupManager().isGroupExpanded(this.group)?'expanded':'collapsed'
 this.inspector.applyGroupLevelToRow(row,this.group)
-$.oc.foundation.element.addClass(row,'property')
-$.oc.foundation.element.addClass(row,groupedClass)
+$.wn.foundation.element.addClass(row,'property')
+$.wn.foundation.element.addClass(row,groupedClass)
 return row}
-$.oc.inspector.propertyEditors.base=BaseEditor}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.base,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.base=BaseEditor}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.base,BaseProto=Base.prototype
 var StringEditor=function(inspector,propertyDefinition,containerCell,group){Base.call(this,inspector,propertyDefinition,containerCell,group)}
 StringEditor.prototype=Object.create(BaseProto)
 StringEditor.prototype.constructor=Base
@@ -5573,7 +5595,7 @@ editor.setAttribute('placeholder',placeholder)
 if(value===undefined){value=this.propertyDefinition.default}
 if(value===undefined){value=''}
 editor.value=value
-$.oc.foundation.element.addClass(this.containerCell,'text')
+$.wn.foundation.element.addClass(this.containerCell,'text')
 this.containerCell.appendChild(editor)}
 StringEditor.prototype.updateDisplayedValue=function(value){this.getInput().value=value}
 StringEditor.prototype.getInput=function(){return this.containerCell.querySelector('input')}
@@ -5589,7 +5611,7 @@ StringEditor.prototype.onInputFocus=function(ev){this.inspector.makeCellActive(t
 StringEditor.prototype.onInputKeyUp=function(){var value=$.trim(this.getInput().value)
 this.inspector.setPropertyValue(this.propertyDefinition.property,value)}
 StringEditor.prototype.onExternalPropertyEditorHidden=function(){this.focus()}
-$.oc.inspector.propertyEditors.string=StringEditor}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.base,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.string=StringEditor}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.base,BaseProto=Base.prototype
 var CheckboxEditor=function(inspector,propertyDefinition,containerCell,group){Base.call(this,inspector,propertyDefinition,containerCell,group)}
 CheckboxEditor.prototype=Object.create(BaseProto)
 CheckboxEditor.prototype.constructor=Base
@@ -5623,7 +5645,7 @@ CheckboxEditor.prototype.unregisterHandlers=function(){var input=this.getInput()
 input.removeEventListener('change',this.proxy(this.onInputChange))}
 CheckboxEditor.prototype.onInputChange=function(){var isChecked=this.getInput().checked
 this.inspector.setPropertyValue(this.propertyDefinition.property,isChecked?1:0)}
-$.oc.inspector.propertyEditors.checkbox=CheckboxEditor}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.base,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.checkbox=CheckboxEditor}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.base,BaseProto=Base.prototype
 var DropdownEditor=function(inspector,propertyDefinition,containerCell,group){this.indicatorContainer=null
 Base.call(this,inspector,propertyDefinition,containerCell,group)}
 DropdownEditor.prototype=Object.create(BaseProto)
@@ -5636,8 +5658,8 @@ this.destroyCustomSelect()
 this.indicatorContainer=null
 BaseProto.dispose.call(this)}
 DropdownEditor.prototype.build=function(){var select=document.createElement('select')
-$.oc.foundation.element.addClass(this.containerCell,'dropdown')
-$.oc.foundation.element.addClass(select,'custom-select')
+$.wn.foundation.element.addClass(this.containerCell,'dropdown')
+$.wn.foundation.element.addClass(select,'custom-select')
 if(!this.dynamicOptions){this.loadStaticOptions(select)}
 this.containerCell.appendChild(select)
 this.initCustomSelect()
@@ -5745,7 +5767,7 @@ else{select.selectedIndex=this.propertyDefinition.placeholder===undefined?0:-1}
 this.initialization=initialization
 $(select).trigger('change')
 this.initialization=false}
-$.oc.inspector.propertyEditors.dropdown=DropdownEditor}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.base,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.dropdown=DropdownEditor}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.base,BaseProto=Base.prototype
 var PopupBase=function(inspector,propertyDefinition,containerCell,group){this.popup=null
 Base.call(this,inspector,propertyDefinition,containerCell,group)}
 PopupBase.prototype=Object.create(BaseProto)
@@ -5754,10 +5776,10 @@ PopupBase.prototype.dispose=function(){this.unregisterHandlers()
 this.popup=null
 BaseProto.dispose.call(this)}
 PopupBase.prototype.build=function(){var link=document.createElement('a')
-$.oc.foundation.element.addClass(link,'trigger')
+$.wn.foundation.element.addClass(link,'trigger')
 link.setAttribute('href','#')
 this.setLinkText(link)
-$.oc.foundation.element.addClass(this.containerCell,'trigger-cell')
+$.wn.foundation.element.addClass(this.containerCell,'trigger-cell')
 this.containerCell.appendChild(link)}
 PopupBase.prototype.setLinkText=function(link,value){}
 PopupBase.prototype.getPopupContent=function(){return'<form>                                                                                  \
@@ -5787,7 +5809,7 @@ PopupBase.prototype.getLink=function(){return this.containerCell.querySelector('
 PopupBase.prototype.configurePopup=function(popup){}
 PopupBase.prototype.handleSubmit=function($form){}
 PopupBase.prototype.hidePopup=function(){$(this.getLink()).popup('hide')}
-PopupBase.prototype.onTriggerClick=function(ev){$.oc.foundation.event.stop(ev)
+PopupBase.prototype.onTriggerClick=function(ev){$.wn.foundation.event.stop(ev)
 var content=this.getPopupContent()
 content=content.replace('{{property}}',this.propertyDefinition.title)
 $(ev.target).popup({content:content})
@@ -5804,15 +5826,15 @@ if(this.handleSubmit($(ev.target))===false){return false}
 this.setLinkText(this.getLink())
 this.hidePopup()
 return false}
-$.oc.inspector.propertyEditors.popupBase=PopupBase}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.popupBase,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.popupBase=PopupBase}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.popupBase,BaseProto=Base.prototype
 var TextEditor=function(inspector,propertyDefinition,containerCell,group){Base.call(this,inspector,propertyDefinition,containerCell,group)}
 TextEditor.prototype=Object.create(BaseProto)
 TextEditor.prototype.constructor=Base
 TextEditor.prototype.setLinkText=function(link,value){var value=value!==undefined?value:this.inspector.getPropertyValue(this.propertyDefinition.property)
 if(value===undefined){value=this.propertyDefinition.default}
 if(!value){value=this.propertyDefinition.placeholder
-$.oc.foundation.element.addClass(link,'placeholder')}
-else{$.oc.foundation.element.removeClass(link,'placeholder')}
+$.wn.foundation.element.addClass(link,'placeholder')}
+else{$.wn.foundation.element.removeClass(link,'placeholder')}
 if(typeof value==='string'){value=value.replace(/(?:\r\n|\r|\n)/g,' ');value=$.trim(value)
 value=value.substring(0,300);}
 link.textContent=value}
@@ -5844,7 +5866,7 @@ $textarea.focus()
 this.configureComment(popup)}
 TextEditor.prototype.handleSubmit=function($form){var $textarea=$form.find('textarea'),link=this.getLink(),value=$.trim($textarea.val())
 this.inspector.setPropertyValue(this.propertyDefinition.property,value)}
-$.oc.inspector.propertyEditors.text=TextEditor}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.base,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.text=TextEditor}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.base,BaseProto=Base.prototype
 var SetEditor=function(inspector,propertyDefinition,containerCell,group){this.editors=[]
 this.loadedItems=null
 Base.call(this,inspector,propertyDefinition,containerCell,group)}
@@ -5857,10 +5879,10 @@ this.disposeControls()
 this.editors=null
 BaseProto.dispose.call(this)}
 SetEditor.prototype.build=function(){var link=document.createElement('a')
-$.oc.foundation.element.addClass(link,'trigger')
+$.wn.foundation.element.addClass(link,'trigger')
 link.setAttribute('href','#')
 this.setLinkText(link)
-$.oc.foundation.element.addClass(this.containerCell,'trigger-cell')
+$.wn.foundation.element.addClass(this.containerCell,'trigger-cell')
 this.containerCell.appendChild(link)
 if(this.propertyDefinition.items!==undefined){this.loadStaticItems()}
 else{this.loadDynamicItems()}}
@@ -5872,16 +5894,16 @@ if(value===undefined){value=this.propertyDefinition.default}
 if(value!==undefined&&value.length!==undefined&&value.length>0&&typeof value!=='string'){var textValues=[]
 for(var i=0,len=value.length;i<len;i++){textValues.push(this.valueToText(value[i]))}
 text='['+textValues.join(', ')+']'
-$.oc.foundation.element.removeClass(link,'placeholder')}
+$.wn.foundation.element.removeClass(link,'placeholder')}
 else{text=this.propertyDefinition.placeholder
 if((typeof text==='string'&&text.length==0)||text===undefined){text='[ ]'}
-$.oc.foundation.element.addClass(link,'placeholder')}
+$.wn.foundation.element.addClass(link,'placeholder')}
 link.textContent=text}
 SetEditor.prototype.buildItemEditor=function(value,text){var property={title:text,itemType:'property',groupIndex:this.group.getGroupIndex()},newRow=this.createGroupedRow(property),currentRow=this.containerCell.parentNode,tbody=this.containerCell.parentNode.parentNode,cell=document.createElement('td')
 this.buildCheckbox(cell,value,text)
 newRow.appendChild(cell)
 tbody.insertBefore(newRow,currentRow.nextSibling)}
-SetEditor.prototype.buildCheckbox=function(cell,value,title){var property={property:value,title:title,default:this.isCheckedByDefault(value)},editor=new $.oc.inspector.propertyEditors.checkbox(this,property,cell,this.group)
+SetEditor.prototype.buildCheckbox=function(cell,value,title){var property={property:value,title:title,default:this.isCheckedByDefault(value)},editor=new $.wn.inspector.propertyEditors.checkbox(this,property,cell,this.group)
 this.editors.push[editor]}
 SetEditor.prototype.isCheckedByDefault=function(value){if(!this.propertyDefinition.default){return false}
 return this.propertyDefinition.default.indexOf(value)>-1}
@@ -5891,7 +5913,7 @@ var $link=$(this.getLink())
 $link.loadIndicator('hide')
 $link.loadIndicator('destroy')}
 SetEditor.prototype.loadDynamicItems=function(){var link=this.getLink(),data=this.inspector.getValues(),$form=$(link).closest('form')
-$.oc.foundation.element.addClass(link,'loading-indicator-container size-small')
+$.wn.foundation.element.addClass(link,'loading-indicator-container size-small')
 this.showLoadingIndicator()
 data['inspectorProperty']=this.getPropertyPath()
 data['inspectorClassName']=this.inspector.options.inspectorClass
@@ -5938,7 +5960,7 @@ editor.dispose()}}
 SetEditor.prototype.disposeControls=function(){var link=this.getLink()
 if(this.propertyDefinition.items===undefined){$(link).loadIndicator('destroy')}
 link.parentNode.removeChild(link)}
-$.oc.inspector.propertyEditors.set=SetEditor}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.base,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.set=SetEditor}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.base,BaseProto=Base.prototype
 var ObjectListEditor=function(inspector,propertyDefinition,containerCell,group){this.currentRowInspector=null
 this.popup=null
 if(propertyDefinition.titleProperty===undefined){throw new Error('The titleProperty property should be specified in the objectList editor configuration. Property: '+propertyDefinition.property)}
@@ -5957,15 +5979,15 @@ this.popup=null
 BaseProto.dispose.call(this)}
 ObjectListEditor.prototype.supportsExternalParameterEditor=function(){return false}
 ObjectListEditor.prototype.build=function(){var link=document.createElement('a')
-$.oc.foundation.element.addClass(link,'trigger')
+$.wn.foundation.element.addClass(link,'trigger')
 link.setAttribute('href','#')
 this.setLinkText(link)
-$.oc.foundation.element.addClass(this.containerCell,'trigger-cell')
+$.wn.foundation.element.addClass(this.containerCell,'trigger-cell')
 this.containerCell.appendChild(link)}
 ObjectListEditor.prototype.setLinkText=function(link,value){var value=value!==undefined&&value!==null?value:this.inspector.getPropertyValue(this.propertyDefinition.property)
 if(value===null){value=undefined}
 if(value===undefined){var placeholder=this.propertyDefinition.placeholder
-if(placeholder!==undefined){$.oc.foundation.element.addClass(link,'placeholder')
+if(placeholder!==undefined){$.wn.foundation.element.addClass(link,'placeholder')
 link.textContent=placeholder}
 else{link.textContent='Items: 0'}}
 else{var itemCount=0
@@ -5973,7 +5995,7 @@ if(!this.isKeyValueMode()){if(value.length===undefined){throw new Error('Object 
 itemCount=value.length}
 else{if(typeof value!=='object'){throw new Error('Object list value should be an object. Property: '+this.propertyDefinition.property)}
 itemCount=this.getValueKeys(value).length}
-$.oc.foundation.element.removeClass(link,'placeholder')
+$.wn.foundation.element.removeClass(link,'placeholder')
 link.textContent='Items: '+itemCount}}
 ObjectListEditor.prototype.getPopupContent=function(){return'<form>                                                                                  \
                 <div class="modal-header">                                                              \
@@ -5991,10 +6013,10 @@ ObjectListEditor.prototype.getPopupContent=function(){return'<form>             
                                                 <div class="toolbar-item">                              \
                                                     <div class="btn-group">                             \
                                                         <button type="button" class="btn btn-primary    \
-                                                            oc-icon-plus"                               \
+                                                            wn-icon-plus"                               \
                                                             data-cmd="create-item">Add</button>         \
                                                         <button type="button" class="btn btn-default    \
-                                                            empty oc-icon-trash-o"                      \
+                                                            empty wn-icon-trash-o"                      \
                                                             data-cmd="delete-item"></button>            \
                                                     </div>                                              \
                                                 </div>                                                  \
@@ -6057,8 +6079,8 @@ ObjectListEditor.prototype.removeEmptyRow=function(){var tbody=this.getTableBody
 if(row){tbody.removeChild(row)}}
 ObjectListEditor.prototype.buildTableRow=function(text,rowClass,cellClass){var row=document.createElement('tr'),cell=document.createElement('td')
 cell.textContent=text
-if(rowClass!==undefined){$.oc.foundation.element.addClass(row,rowClass)}
-if(cellClass!==undefined){$.oc.foundation.element.addClass(cell,cellClass)}
+if(rowClass!==undefined){$.wn.foundation.element.addClass(row,rowClass)}
+if(cellClass!==undefined){$.wn.foundation.element.addClass(cell,cellClass)}
 row.appendChild(cell)
 return row}
 ObjectListEditor.prototype.updateScrollpads=function(){$('.control-scrollpad',this.popup).scrollpad('update')}
@@ -6067,15 +6089,15 @@ if(selectedRow===row&&!forceSelect){return}
 if(selectedRow){if(!this.validateKeyValue()){return}
 if(this.currentRowInspector){if(!this.currentRowInspector.validate()){return}}
 this.applyDataToRow(selectedRow)
-$.oc.foundation.element.removeClass(selectedRow,'active')}
+$.wn.foundation.element.removeClass(selectedRow,'active')}
 this.disposeInspector()
-$.oc.foundation.element.addClass(row,'active')
+$.wn.foundation.element.addClass(row,'active')
 this.createInspectorForRow(row,inspectorContainer)}
 ObjectListEditor.prototype.createInspectorForRow=function(row,inspectorContainer){var dataStr=row.getAttribute('data-inspector-values')
 if(dataStr===undefined||typeof dataStr!=='string'){throw new Error('Values not found for the selected row.')}
 var properties=this.propertyDefinition.itemProperties,values=JSON.parse(dataStr),options={enableExternalParameterEditor:false,onChange:this.proxy(this.onInspectorDataChange),inspectorClass:this.inspector.options.inspectorClass}
-this.currentRowInspector=new $.oc.inspector.surface(inspectorContainer,properties,values,$.oc.inspector.helpers.generateElementUniqueId(inspectorContainer),options)}
-ObjectListEditor.prototype.disposeInspector=function(){$.oc.foundation.controlUtils.disposeControls(this.popup.querySelector('[data-inspector-container]'))
+this.currentRowInspector=new $.wn.inspector.surface(inspectorContainer,properties,values,$.wn.inspector.helpers.generateElementUniqueId(inspectorContainer),options)}
+ObjectListEditor.prototype.disposeInspector=function(){$.wn.foundation.controlUtils.disposeControls(this.popup.querySelector('[data-inspector-container]'))
 this.currentRowInspector=null}
 ObjectListEditor.prototype.applyDataToRow=function(row){if(this.currentRowInspector===null){return}
 var data=this.currentRowInspector.getValues()
@@ -6085,18 +6107,18 @@ if(!selectedRow){throw new Exception('A row is not found for the updated data')}
 if(property!==this.propertyDefinition.titleProperty){return}
 value=$.trim(value)
 if(value.length===0){value='[No title]'
-$.oc.foundation.element.addClass(selectedRow,'disabled')}
-else{$.oc.foundation.element.removeClass(selectedRow,'disabled')}
+$.wn.foundation.element.addClass(selectedRow,'disabled')}
+else{$.wn.foundation.element.removeClass(selectedRow,'disabled')}
 selectedRow.firstChild.textContent=value}
 ObjectListEditor.prototype.getSelectedRow=function(){if(!this.popup){throw new Error('Trying to get selected row without a popup reference.')}
 var rows=this.getTableBody().children
-for(var i=0,len=rows.length;i<len;i++){if($.oc.foundation.element.hasClass(rows[i],'active')){return rows[i]}}
+for(var i=0,len=rows.length;i<len;i++){if($.wn.foundation.element.hasClass(rows[i],'active')){return rows[i]}}
 return null}
 ObjectListEditor.prototype.createItem=function(){var selectedRow=this.getSelectedRow()
 if(selectedRow){if(!this.validateKeyValue()){return}
 if(this.currentRowInspector){if(!this.currentRowInspector.validate()){return}}
 this.applyDataToRow(selectedRow)
-$.oc.foundation.element.removeClass(selectedRow,'active')}
+$.wn.foundation.element.removeClass(selectedRow,'active')}
 this.disposeInspector()
 var title='New item',row=this.buildTableRow(title,'rowlink active'),tbody=this.getTableBody(),data={}
 data[this.propertyDefinition.titleProperty]=title
@@ -6132,12 +6154,12 @@ var data=this.currentRowInspector.getValues(),keyProperty=this.propertyDefinitio
 if(data[keyProperty]===undefined){throw new Error('Key property '+keyProperty+' is not found in the Inspector data. Property: '+this.propertyDefinition.property)}
 var keyPropertyValue=data[keyProperty],keyPropertyTitle=this.getKeyProperty().title
 if(typeof keyPropertyValue!=='string'){throw new Error('Key property ('+keyProperty+') value should be a string. Property: '+this.propertyDefinition.property)}
-if($.trim(keyPropertyValue).length===0){$.oc.flashMsg({text:'The value of key property '+keyPropertyTitle+' cannot be empty.','class':'error','interval':3})
+if($.trim(keyPropertyValue).length===0){$.wn.flashMsg({text:'The value of key property '+keyPropertyTitle+' cannot be empty.','class':'error','interval':3})
 return false}
 var selectedRow=this.getSelectedRow(),tbody=this.getTableBody(),dataRows=tbody.querySelectorAll('tr[data-inspector-values]')
 for(var i=0,len=dataRows.length;i<len;i++){var dataRow=dataRows[i],rowData=JSON.parse(dataRow.getAttribute('data-inspector-values'))
 if(selectedRow==dataRow){continue}
-if(rowData[keyProperty]==keyPropertyValue){$.oc.flashMsg({text:'The value of key property '+keyPropertyTitle+' should be unique.','class':'error','interval':3})
+if(rowData[keyProperty]==keyPropertyValue){$.wn.flashMsg({text:'The value of key property '+keyPropertyTitle+' should be unique.','class':'error','interval':3})
 return false}}
 return true}
 ObjectListEditor.prototype.getLink=function(){return this.containerCell.querySelector('a.trigger')}
@@ -6169,7 +6191,7 @@ ObjectListEditor.prototype.unregisterHandlers=function(){var link=this.getLink()
 link.removeEventListener('click',this.proxy(this.onTriggerClick))
 $link.off('shown.oc.popup',this.proxy(this.onPopupShown))
 $link.off('hidden.oc.popup',this.proxy(this.onPopupHidden))}
-ObjectListEditor.prototype.onTriggerClick=function(ev){$.oc.foundation.event.stop(ev)
+ObjectListEditor.prototype.onTriggerClick=function(ev){$.wn.foundation.event.stop(ev)
 var content=this.getPopupContent()
 content=content.replace('{{property}}',this.propertyDefinition.title)
 $(ev.target).popup({content:content})
@@ -6184,7 +6206,7 @@ ObjectListEditor.prototype.onPopupHidden=function(ev,link,popup){$(popup).off('.
 $(popup).off('click','tr.rowlink',this.proxy(this.onRowClick))
 $(popup).off('click.inspector','[data-cmd]',this.proxy(this.onCommand))
 this.disposeInspector()
-$.oc.foundation.controlUtils.disposeControls(this.popup)
+$.wn.foundation.controlUtils.disposeControls(this.popup)
 this.popup=null
 this.getRootSurface().popupHidden()}
 ObjectListEditor.prototype.onSubmit=function(ev){this.applyDataToParentInspector()
@@ -6197,7 +6219,7 @@ switch(command){case'create-item':this.createItem()
 break;case'delete-item':this.deleteItem()
 break;}}
 ObjectListEditor.prototype.removeControls=function(){if(this.popup){this.disposeInspector(this.popup)}}
-$.oc.inspector.propertyEditors.objectList=ObjectListEditor}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.base,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.objectList=ObjectListEditor}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.base,BaseProto=Base.prototype
 var ObjectEditor=function(inspector,propertyDefinition,containerCell,group){if(propertyDefinition.properties===undefined){this.throwError('The properties property should be specified in the object editor configuration.')}
 Base.call(this,inspector,propertyDefinition,containerCell,group)}
 ObjectEditor.prototype=Object.create(BaseProto)
@@ -6206,14 +6228,14 @@ ObjectEditor.prototype.init=function(){this.initControlGroup()
 BaseProto.init.call(this)}
 ObjectEditor.prototype.build=function(){var currentRow=this.containerCell.parentNode,inspectorContainer=document.createElement('div'),options={enableExternalParameterEditor:false,onChange:this.proxy(this.onInspectorDataChange),inspectorClass:this.inspector.options.inspectorClass},values=this.inspector.getPropertyValue(this.propertyDefinition.property)
 if(values===undefined){values={}}
-this.childInspector=new $.oc.inspector.surface(inspectorContainer,this.propertyDefinition.properties,values,this.inspector.getInspectorUniqueId()+'-'+this.propertyDefinition.property,options,this.inspector,this.group,this.propertyDefinition.property)
+this.childInspector=new $.wn.inspector.surface(inspectorContainer,this.propertyDefinition.properties,values,this.inspector.getInspectorUniqueId()+'-'+this.propertyDefinition.property,options,this.inspector,this.group,this.propertyDefinition.property)
 this.inspector.mergeChildSurface(this.childInspector,currentRow)}
 ObjectEditor.prototype.cleanUpValue=function(value){if(value===undefined||typeof value!=='object'){return undefined}
 if(this.propertyDefinition.ignoreIfPropertyEmpty===undefined){return value}
 return this.getValueOrRemove(value)}
 ObjectEditor.prototype.getValueOrRemove=function(value){if(this.propertyDefinition.ignoreIfPropertyEmpty===undefined){return value}
 var targetProperty=this.propertyDefinition.ignoreIfPropertyEmpty,targetValue=value[targetProperty]
-if(this.isEmptyValue(targetValue)){return $.oc.inspector.removedProperty}
+if(this.isEmptyValue(targetValue)){return $.wn.inspector.removedProperty}
 return value}
 ObjectEditor.prototype.supportsExternalParameterEditor=function(){return false}
 ObjectEditor.prototype.isGroupedEditor=function(){return true}
@@ -6222,11 +6244,11 @@ for(var i=0,len=this.propertyDefinition.properties.length;i<len;i++){var propert
 if(editor){result[propertyName]=editor.getUndefinedValue()}}
 return this.getValueOrRemove(result)}
 ObjectEditor.prototype.validate=function(silentMode){var values=this.childInspector.getValues()
-if(this.cleanUpValue(values)===$.oc.inspector.removedProperty){return true}
+if(this.cleanUpValue(values)===$.wn.inspector.removedProperty){return true}
 return this.childInspector.validate(silentMode)}
 ObjectEditor.prototype.onInspectorDataChange=function(property,value){var values=this.childInspector.getValues()
 this.inspector.setPropertyValue(this.propertyDefinition.property,this.cleanUpValue(values))}
-$.oc.inspector.propertyEditors.object=ObjectEditor}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.text,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.object=ObjectEditor}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.text,BaseProto=Base.prototype
 var StringListEditor=function(inspector,propertyDefinition,containerCell,group){Base.call(this,inspector,propertyDefinition,containerCell,group)}
 StringListEditor.prototype=Object.create(BaseProto)
 StringListEditor.prototype.constructor=Base
@@ -6234,10 +6256,10 @@ StringListEditor.prototype.setLinkText=function(link,value){var value=value!==un
 if(value===undefined){value=this.propertyDefinition.default}
 this.checkValueType(value)
 if(!value){value=this.propertyDefinition.placeholder
-$.oc.foundation.element.addClass(link,'placeholder')
+$.wn.foundation.element.addClass(link,'placeholder')
 if(!value){value='[]'}
 link.textContent=value}
-else{$.oc.foundation.element.removeClass(link,'placeholder')
+else{$.wn.foundation.element.removeClass(link,'placeholder')
 link.textContent='['+value.join(', ')+']'}}
 StringListEditor.prototype.checkValueType=function(value){if(value&&Object.prototype.toString.call(value)!=='[object Array]'){this.throwError('The string list value should be an array.')}}
 StringListEditor.prototype.configurePopup=function(popup){var $textarea=$(popup).find('textarea'),value=this.inspector.getPropertyValue(this.propertyDefinition.property)
@@ -6253,7 +6275,7 @@ arrayValue=value.split('\n')
 for(var i=0,len=arrayValue.length;i<len;i++){var currentValue=$.trim(arrayValue[i])
 if(currentValue.length>0){resultValue.push(currentValue)}}}
 this.inspector.setPropertyValue(this.propertyDefinition.property,resultValue)}
-$.oc.inspector.propertyEditors.stringList=StringListEditor}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.popupBase,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.stringList=StringListEditor}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.popupBase,BaseProto=Base.prototype
 var StringListAutocomplete=function(inspector,propertyDefinition,containerCell,group){this.items=null
 Base.call(this,inspector,propertyDefinition,containerCell,group)}
 StringListAutocomplete.prototype=Object.create(BaseProto)
@@ -6265,10 +6287,10 @@ StringListAutocomplete.prototype.setLinkText=function(link,value){var value=valu
 if(value===undefined){value=this.propertyDefinition.default}
 this.checkValueType(value)
 if(!value){value=this.propertyDefinition.placeholder
-$.oc.foundation.element.addClass(link,'placeholder')
+$.wn.foundation.element.addClass(link,'placeholder')
 if(!value){value='[]'}
 link.textContent=value}
-else{$.oc.foundation.element.removeClass(link,'placeholder')
+else{$.wn.foundation.element.removeClass(link,'placeholder')
 link.textContent='['+value.join(', ')+']'}}
 StringListAutocomplete.prototype.checkValueType=function(value){if(value&&Object.prototype.toString.call(value)!=='[object Array]'){this.throwError('The string list value should be an array.')}}
 StringListAutocomplete.prototype.getPopupContent=function(){return'<form>                                                                                  \
@@ -6281,10 +6303,10 @@ StringListAutocomplete.prototype.getPopupContent=function(){return'<form>       
                         <div class="toolbar-item">                                                      \
                             <div class="btn-group">                                                     \
                                 <button type="button" class="btn btn-primary                            \
-                                    oc-icon-plus"                                                       \
+                                    wn-icon-plus"                                                       \
                                     data-cmd="create-item">Add</button>                                 \
                                 <button type="button" class="btn btn-default                            \
-                                    empty oc-icon-trash-o"                                              \
+                                    empty wn-icon-trash-o"                                              \
                                     data-cmd="delete-item"></button>                                    \
                             </div>                                                                      \
                         </div>                                                                          \
@@ -6334,9 +6356,9 @@ input.value=value
 controlContainer.appendChild(input)
 container.appendChild(controlContainer)}
 StringListAutocomplete.prototype.setActiveCell=function(input){var activeCells=this.popup.querySelectorAll('td.active')
-for(var i=activeCells.length-1;i>=0;i--){$.oc.foundation.element.removeClass(activeCells[i],'active')}
+for(var i=activeCells.length-1;i>=0;i--){$.wn.foundation.element.removeClass(activeCells[i],'active')}
 var activeCell=input.parentNode.parentNode
-$.oc.foundation.element.addClass(activeCell,'active')
+$.wn.foundation.element.addClass(activeCell,'active')
 this.buildAutoComplete(input)}
 StringListAutocomplete.prototype.createItem=function(){var activeRow=this.getActiveRow(),newRow=this.buildEmptyRow(),tbody=this.getTableBody(),nextSibling=activeRow?activeRow.nextElementSibling:null
 tbody.insertBefore(newRow,nextSibling)
@@ -6438,7 +6460,7 @@ break;case'delete-item':this.deleteItem()
 break;}}
 StringListAutocomplete.prototype.onKeyDown=function(ev){if(ev.key==='ArrowDown'){return this.navigateDown(ev)}
 else if(ev.key==='ArrowUp'){return this.navigateUp(ev)}}
-$.oc.inspector.propertyEditors.stringListAutocomplete=StringListAutocomplete}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.popupBase,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.stringListAutocomplete=StringListAutocomplete}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.popupBase,BaseProto=Base.prototype
 var DictionaryEditor=function(inspector,propertyDefinition,containerCell,group){this.keyValidationSet=null
 this.valueValidationSet=null
 Base.call(this,inspector,propertyDefinition,containerCell,group)}
@@ -6454,12 +6476,12 @@ DictionaryEditor.prototype.supportsExternalParameterEditor=function(){return fal
 DictionaryEditor.prototype.setLinkText=function(link,value){var value=value!==undefined?value:this.inspector.getPropertyValue(this.propertyDefinition.property)
 if(value===undefined){value=this.propertyDefinition.default}
 if(value===undefined||$.isEmptyObject(value)){var placeholder=this.propertyDefinition.placeholder
-if(placeholder!==undefined){$.oc.foundation.element.addClass(link,'placeholder')
+if(placeholder!==undefined){$.wn.foundation.element.addClass(link,'placeholder')
 link.textContent=placeholder}
 else{link.textContent='Items: 0'}}
 else{if(typeof value!=='object'){this.throwError('Object list value should be an object.')}
 var itemCount=this.getValueKeys(value).length
-$.oc.foundation.element.removeClass(link,'placeholder')
+$.wn.foundation.element.removeClass(link,'placeholder')
 link.textContent='Items: '+itemCount}}
 DictionaryEditor.prototype.getPopupContent=function(){return'<form>                                                                                  \
                 <div class="modal-header">                                                              \
@@ -6471,10 +6493,10 @@ DictionaryEditor.prototype.getPopupContent=function(){return'<form>             
                         <div class="toolbar-item">                                                      \
                             <div class="btn-group">                                                     \
                                 <button type="button" class="btn btn-primary                            \
-                                    oc-icon-plus"                                                       \
+                                    wn-icon-plus"                                                       \
                                     data-cmd="create-item">Add</button>                                 \
                                 <button type="button" class="btn btn-default                            \
-                                    empty oc-icon-trash-o"                                              \
+                                    empty wn-icon-trash-o"                                              \
                                     data-cmd="delete-item"></button>                                    \
                             </div>                                                                      \
                         </div>                                                                          \
@@ -6533,9 +6555,9 @@ input.value=value
 controlContainer.appendChild(input)
 container.appendChild(controlContainer)}
 DictionaryEditor.prototype.setActiveCell=function(input){var activeCells=this.popup.querySelectorAll('td.active')
-for(var i=activeCells.length-1;i>=0;i--){$.oc.foundation.element.removeClass(activeCells[i],'active')}
+for(var i=activeCells.length-1;i>=0;i--){$.wn.foundation.element.removeClass(activeCells[i],'active')}
 var activeCell=input.parentNode.parentNode
-$.oc.foundation.element.addClass(activeCell,'active')}
+$.wn.foundation.element.addClass(activeCell,'active')}
 DictionaryEditor.prototype.createItem=function(){var activeRow=this.getActiveRow(),newRow=this.buildEmptyRow(),tbody=this.getTableBody(),nextSibling=activeRow?activeRow.nextElementSibling:null
 tbody.insertBefore(newRow,nextSibling)
 this.focusAndMakeActive(newRow.querySelector('input'))
@@ -6552,20 +6574,20 @@ this.updateScrollpads()}
 DictionaryEditor.prototype.applyValues=function(){var tbody=this.getTableBody(),dataRows=tbody.querySelectorAll('tr'),link=this.getLink(),result={}
 for(var i=0,len=dataRows.length;i<len;i++){var dataRow=dataRows[i],keyInput=this.getRowInputByIndex(dataRow,0),valueInput=this.getRowInputByIndex(dataRow,1),key=$.trim(keyInput.value),value=$.trim(valueInput.value)
 if(key.length==0&&value.length==0){continue}
-if(key.length==0){$.oc.flashMsg({text:'The key cannot be empty.','class':'error','interval':3})
+if(key.length==0){$.wn.flashMsg({text:'The key cannot be empty.','class':'error','interval':3})
 this.focusAndMakeActive(keyInput)
 return false}
-if(value.length==0){$.oc.flashMsg({text:'The value cannot be empty.','class':'error','interval':3})
+if(value.length==0){$.wn.flashMsg({text:'The value cannot be empty.','class':'error','interval':3})
 this.focusAndMakeActive(valueInput)
 return false}
-if(result[key]!==undefined){$.oc.flashMsg({text:'Keys should be unique.','class':'error','interval':3})
+if(result[key]!==undefined){$.wn.flashMsg({text:'Keys should be unique.','class':'error','interval':3})
 this.focusAndMakeActive(keyInput)
 return false}
 var validationResult=this.keyValidationSet.validate(key)
-if(validationResult!==null){$.oc.flashMsg({text:validationResult,'class':'error','interval':5})
+if(validationResult!==null){$.wn.flashMsg({text:validationResult,'class':'error','interval':5})
 return false}
 validationResult=this.valueValidationSet.validate(value)
-if(validationResult!==null){$.oc.flashMsg({text:validationResult,'class':'error','interval':5})
+if(validationResult!==null){$.wn.flashMsg({text:validationResult,'class':'error','interval':5})
 return false}
 result[key]=value}
 this.inspector.setPropertyValue(this.propertyDefinition.property,result)
@@ -6594,8 +6616,8 @@ DictionaryEditor.prototype.navigateUp=function(ev){var cell=this.getEditorCell(e
 if(!prevRow){return}
 var newActiveEditor=prevRow.cells[cell.cellIndex].querySelector('input')
 this.focusAndMakeActive(newActiveEditor)}
-DictionaryEditor.prototype.initValidators=function(){this.keyValidationSet=new $.oc.inspector.validationSet({validation:this.propertyDefinition.validationKey},this.propertyDefinition.property+'.validationKey')
-this.valueValidationSet=new $.oc.inspector.validationSet({validation:this.propertyDefinition.validationValue},this.propertyDefinition.property+'.validationValue')}
+DictionaryEditor.prototype.initValidators=function(){this.keyValidationSet=new $.wn.inspector.validationSet({validation:this.propertyDefinition.validationKey},this.propertyDefinition.property+'.validationKey')
+this.valueValidationSet=new $.wn.inspector.validationSet({validation:this.propertyDefinition.validationValue},this.propertyDefinition.property+'.validationValue')}
 DictionaryEditor.prototype.disposeValidators=function(){this.keyValidationSet.dispose()
 this.valueValidationSet.dispose()}
 DictionaryEditor.prototype.onPopupShown=function(ev,link,popup){BaseProto.onPopupShown.call(this,ev,link,popup)
@@ -6612,7 +6634,7 @@ break;case'delete-item':this.deleteItem()
 break;}}
 DictionaryEditor.prototype.onKeyDown=function(ev){if(ev.key==='ArrowDown'){return this.navigateDown(ev)}
 else if(ev.key==='ArrowUp'){return this.navigateUp(ev)}}
-$.oc.inspector.propertyEditors.dictionary=DictionaryEditor}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.propertyEditors.string,BaseProto=Base.prototype
+$.wn.inspector.propertyEditors.dictionary=DictionaryEditor}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.propertyEditors.string,BaseProto=Base.prototype
 var AutocompleteEditor=function(inspector,propertyDefinition,containerCell,group){this.autoUpdateTimeout=null
 Base.call(this,inspector,propertyDefinition,containerCell,group)}
 AutocompleteEditor.prototype=Object.create(BaseProto)
@@ -6628,7 +6650,7 @@ container.setAttribute('class','autocomplete-container')
 if(value===undefined){value=this.propertyDefinition.default}
 if(value===undefined){value=''}
 editor.value=value
-$.oc.foundation.element.addClass(this.containerCell,'text autocomplete')
+$.wn.foundation.element.addClass(this.containerCell,'text autocomplete')
 container.appendChild(editor)
 this.containerCell.appendChild(container)
 if(this.propertyDefinition.items!==undefined){this.buildAutoComplete(this.propertyDefinition.items)}
@@ -6670,7 +6692,7 @@ $container.removeClass('loading-indicator-container')}
 AutocompleteEditor.prototype.loadDynamicItems=function(){if(this.isDisposed()){return}
 this.clearAutoUpdateTimeout()
 var container=this.getContainer(),data=this.getRootSurface().getValues(),$form=$(container).closest('form')
-$.oc.foundation.element.addClass(container,'loading-indicator-container size-small')
+$.wn.foundation.element.addClass(container,'loading-indicator-container size-small')
 this.showLoadingIndicator()
 if(this.triggerGetItems(data)===false){return}
 data['inspectorProperty']=this.getPropertyPath()
@@ -6687,19 +6709,21 @@ this.hideLoadingIndicator()
 var loadedItems={}
 if(data.options){for(var i=data.options.length-1;i>=0;i--){loadedItems[data.options[i].value]=data.options[i].title}}
 this.buildAutoComplete(loadedItems)}
-$.oc.inspector.propertyEditors.autocomplete=AutocompleteEditor}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
-if($.oc.inspector===undefined)
-$.oc.inspector={}
-$.oc.inspector.helpers={}
-$.oc.inspector.helpers.generateElementUniqueId=function(element){if(element.hasAttribute('data-inspector-id')){return element.getAttribute('data-inspector-id')}
-var id=$.oc.inspector.helpers.generateUniqueId()
+$.wn.inspector.propertyEditors.autocomplete=AutocompleteEditor}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
+if($.wn.inspector===undefined)
+$.wn.inspector={}
+$.wn.inspector.helpers={}
+$.wn.inspector.helpers.generateElementUniqueId=function(element){if(element.hasAttribute('data-inspector-id')){return element.getAttribute('data-inspector-id')}
+var id=$.wn.inspector.helpers.generateUniqueId()
 element.setAttribute('data-inspector-id',id)
 return id}
-$.oc.inspector.helpers.generateUniqueId=function(){return"inspectorid-"+Math.floor(Math.random()*new Date().getTime());}}(window.jQuery)
-+function($){"use strict";if($.oc.inspector.validators===undefined)
-$.oc.inspector.validators={}
-var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$.wn.inspector.helpers.generateUniqueId=function(){return"inspectorid-"+Math.floor(Math.random()*new Date().getTime());}}(window.jQuery)
++function($){"use strict";if($.wn.inspector.validators===undefined)
+$.wn.inspector.validators={}
+var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var ValidationSet=function(options,propertyName){this.validators=[]
 this.options=options
 this.propertyName=propertyName
@@ -6713,21 +6737,21 @@ BaseProto.dispose.call(this)}
 ValidationSet.prototype.disposeValidators=function(){for(var i=0,len=this.validators.length;i<len;i++){this.validators[i].dispose()}}
 ValidationSet.prototype.throwError=function(errorMessage){throw new Error(errorMessage+' Property: '+this.propertyName)}
 ValidationSet.prototype.createValidators=function(){if((this.options.required!==undefined||this.options.validationPattern!==undefined||this.options.validationMessage!==undefined)&&this.options.validation!==undefined){this.throwError('Legacy and new validation syntax should not be mixed.')}
-if(this.options.required!==undefined&&this.options.required){var validator=new $.oc.inspector.validators.required({message:this.options.validationMessage})
+if(this.options.required!==undefined&&this.options.required){var validator=new $.wn.inspector.validators.required({message:this.options.validationMessage})
 this.validators.push(validator)}
-if(this.options.validationPattern!==undefined){var validator=new $.oc.inspector.validators.regex({message:this.options.validationMessage,pattern:this.options.validationPattern})
+if(this.options.validationPattern!==undefined){var validator=new $.wn.inspector.validators.regex({message:this.options.validationMessage,pattern:this.options.validationPattern})
 this.validators.push(validator)}
 if(this.options.validation===undefined){return}
-for(var validatorName in this.options.validation){if($.oc.inspector.validators[validatorName]==undefined){this.throwError('Inspector validator "'+validatorName+'" is not found in the $.oc.inspector.validators namespace.')}
-var validator=new $.oc.inspector.validators[validatorName](this.options.validation[validatorName])
+for(var validatorName in this.options.validation){if($.wn.inspector.validators[validatorName]==undefined){this.throwError('Inspector validator "'+validatorName+'" is not found in the $.wn.inspector.validators namespace.')}
+var validator=new $.wn.inspector.validators[validatorName](this.options.validation[validatorName])
 this.validators.push(validator)}}
 ValidationSet.prototype.validate=function(value){try{for(var i=0,len=this.validators.length;i<len;i++){var validator=this.validators[i],errorMessage=validator.isValid(value)
 if(typeof errorMessage==='string'){return errorMessage}}
 return null}
 catch(err){this.throwError(err)}}
-$.oc.inspector.validationSet=ValidationSet}(window.jQuery);+function($){"use strict";if($.oc.inspector.validators===undefined)
-$.oc.inspector.validators={}
-var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$.wn.inspector.validationSet=ValidationSet}(window.jQuery);+function($){"use strict";if($.wn.inspector.validators===undefined)
+$.wn.inspector.validators={}
+var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var BaseValidator=function(options){this.options=options
 this.defaultMessage='Invalid property value.'
 Base.call(this)}
@@ -6741,7 +6765,7 @@ return this.defaultMessage}
 BaseValidator.prototype.isScalar=function(value){if(value===undefined||value===null){return true}
 return!!(typeof value==='string'||typeof value=='number'||typeof value=='boolean');}
 BaseValidator.prototype.isValid=function(value){return null}
-$.oc.inspector.validators.base=BaseValidator}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.validators.base,BaseProto=Base.prototype
+$.wn.inspector.validators.base=BaseValidator}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.validators.base,BaseProto=Base.prototype
 var BaseNumber=function(options){Base.call(this,options)}
 BaseNumber.prototype=Object.create(BaseProto)
 BaseNumber.prototype.constructor=Base
@@ -6749,7 +6773,7 @@ BaseNumber.prototype.doCommonChecks=function(value){if(this.options.min!==undefi
 if(value<this.options.min.value){return this.options.min.message!==undefined?this.options.min.message:"The value should not be less than "+this.options.min.value}}
 if(this.options.max!==undefined){if(this.options.max.value===undefined){throw new Error('The max.value parameter is not defined in the table Inspector validator configuration')}
 if(value>this.options.max.value){return this.options.max.message!==undefined?this.options.max.message:"The value should not be greater than "+this.options.max.value}}}}
-$.oc.inspector.validators.baseNumber=BaseNumber}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.validators.base,BaseProto=Base.prototype
+$.wn.inspector.validators.baseNumber=BaseNumber}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.validators.base,BaseProto=Base.prototype
 var RequiredValidator=function(options){Base.call(this,options)
 this.defaultMessage='The property is required.'}
 RequiredValidator.prototype=Object.create(BaseProto)
@@ -6758,7 +6782,7 @@ RequiredValidator.prototype.isValid=function(value){if(value===undefined||value=
 if(typeof value==='boolean'){return value?null:this.getMessage()}
 if(typeof value==='object'){return!$.isEmptyObject(value)?null:this.getMessage()}
 return $.trim(String(value)).length>0?null:this.getMessage()}
-$.oc.inspector.validators.required=RequiredValidator}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.validators.base,BaseProto=Base.prototype
+$.wn.inspector.validators.required=RequiredValidator}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.validators.base,BaseProto=Base.prototype
 var RegexValidator=function(options){Base.call(this,options)}
 RegexValidator.prototype=Object.create(BaseProto)
 RegexValidator.prototype.constructor=Base
@@ -6769,7 +6793,7 @@ var string=$.trim(String(value))
 if(string.length===0){return null}
 var regexObj=new RegExp(this.options.pattern,this.options.modifiers)
 return regexObj.test(string)?null:this.getMessage()}
-$.oc.inspector.validators.regex=RegexValidator}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.validators.baseNumber,BaseProto=Base.prototype
+$.wn.inspector.validators.regex=RegexValidator}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.validators.baseNumber,BaseProto=Base.prototype
 var IntegerValidator=function(options){Base.call(this,options)}
 IntegerValidator.prototype=Object.create(BaseProto)
 IntegerValidator.prototype.constructor=Base
@@ -6780,7 +6804,7 @@ if(string.length===0){return null}
 var testResult=this.options.allowNegative?/^\-?[0-9]*$/.test(string):/^[0-9]*$/.test(string)
 if(!testResult){var defaultMessage=this.options.allowNegative?'The value should be an integer.':'The value should be a positive integer.';return this.getMessage(defaultMessage)}
 return this.doCommonChecks(parseInt(string))}
-$.oc.inspector.validators.integer=IntegerValidator}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.validators.baseNumber,BaseProto=Base.prototype
+$.wn.inspector.validators.integer=IntegerValidator}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.validators.baseNumber,BaseProto=Base.prototype
 var FloatValidator=function(options){Base.call(this,options)}
 FloatValidator.prototype=Object.create(BaseProto)
 FloatValidator.prototype.constructor=Base
@@ -6791,7 +6815,7 @@ if(string.length===0){return null}
 var testResult=this.options.allowNegative?/^[-]?([0-9]+\.[0-9]+|[0-9]+)$/.test(string):/^([0-9]+\.[0-9]+|[0-9]+)$/.test(string)
 if(!testResult){var defaultMessage=this.options.allowNegative?'The value should be a floating point number.':'The value should be a positive floating point number.';return this.getMessage(defaultMessage)}
 return this.doCommonChecks(parseFloat(string))}
-$.oc.inspector.validators.float=FloatValidator}(window.jQuery);+function($){"use strict";var Base=$.oc.inspector.validators.base,BaseProto=Base.prototype
+$.wn.inspector.validators.float=FloatValidator}(window.jQuery);+function($){"use strict";var Base=$.wn.inspector.validators.base,BaseProto=Base.prototype
 var LengthValidator=function(options){Base.call(this,options)}
 LengthValidator.prototype=Object.create(BaseProto)
 LengthValidator.prototype.constructor=Base
@@ -6808,11 +6832,13 @@ if(length>this.options.max.value){return this.options.max.message!==undefined?th
 LengthValidator.prototype.getObjectLength=function(value){var result=0
 for(var key in value){result++}
 return result}
-$.oc.inspector.validators.length=LengthValidator}(window.jQuery);+function($){"use strict";if($.oc===undefined)
-$.oc={}
-if($.oc.inspector===undefined)
-$.oc.inspector={}
-var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$.wn.inspector.validators.length=LengthValidator}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
+if($.wn.inspector===undefined)
+$.wn.inspector={}
+var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var ExternalParameterEditor=function(inspector,propertyDefinition,containerCell,initialValue){this.inspector=inspector
 this.propertyDefinition=propertyDefinition
 this.containerCell=containerCell
@@ -6843,7 +6869,7 @@ link.setAttribute('class','external-editor-link')
 link.setAttribute('tabindex','-1')
 link.setAttribute('title',this.tooltipText)
 $(link).tooltip({'container':'body',delay:500})
-icon.setAttribute('class','oc-icon-terminal')
+icon.setAttribute('class','wn-icon-terminal')
 link.appendChild(icon)
 controls.appendChild(input)
 controls.appendChild(link)
@@ -6865,7 +6891,7 @@ if(!building){editor.style.right=0
 editor.style.left=position.left+'px'}
 else{editor.style.right=0}
 setTimeout(this.proxy(this.repositionEditor),0)
-$.oc.foundation.element.addClass(container,'editor-visible')
+$.wn.foundation.element.addClass(container,'editor-visible')
 link.setAttribute('data-original-title','Click to enter the property value')
 this.toggleEditorVisibility(false)
 input.setAttribute('tabindex',0)
@@ -6875,11 +6901,11 @@ this.containerCell.scrollTop=0}
 ExternalParameterEditor.prototype.hideEditor=function(){var editor=this.getEditor(),container=this.getContainer()
 editor.style.left='auto'
 editor.style.right='30px'
-$.oc.foundation.element.removeClass(container,'editor-visible')
-$.oc.foundation.element.removeClass(this.containerCell,'active')
+$.wn.foundation.element.removeClass(container,'editor-visible')
+$.wn.foundation.element.removeClass(this.containerCell,'active')
 var propertyEditor=this.inspector.findPropertyEditor(this.propertyDefinition.property)
 if(propertyEditor){propertyEditor.onExternalPropertyEditorHidden()}}
-ExternalParameterEditor.prototype.toggleEditor=function(ev){$.oc.foundation.event.stop(ev)
+ExternalParameterEditor.prototype.toggleEditor=function(ev){$.wn.foundation.event.stop(ev)
 var link=this.getLink(),container=this.getContainer(),editor=this.getEditor()
 $(link).tooltip('hide')
 if(!this.isEditorVisible()){this.showEditor()
@@ -6896,13 +6922,13 @@ if(!height){height=$(this.containerCell).height()
 this.containerCell.setAttribute('data-inspector-cell-height',height)}}
 height=Math.max(height,19)
 for(var i=0,len=children.length;i<len;i++){var element=children[i]
-if($.oc.foundation.element.hasClass(element,'external-editor')){continue}
-if(show){$.oc.foundation.element.removeClass(element,'hide')}
+if($.wn.foundation.element.hasClass(element,'external-editor')){continue}
+if(show){$.wn.foundation.element.removeClass(element,'hide')}
 else{container.style.height=height+'px'
-$.oc.foundation.element.addClass(element,'hide')}}}
+$.wn.foundation.element.addClass(element,'hide')}}}
 ExternalParameterEditor.prototype.focus=function(){this.getInput().focus()}
 ExternalParameterEditor.prototype.validate=function(silentMode){var value=$.trim(this.getValue())
-if(value.length===0){if(!silentMode){$.oc.flashMsg({text:'Please enter the external parameter name.','class':'error','interval':5})
+if(value.length===0){if(!silentMode){$.wn.flashMsg({text:'Please enter the external parameter name.','class':'error','interval':5})
 this.focus()}
 return false}
 return true}
@@ -6923,14 +6949,14 @@ ExternalParameterEditor.prototype.getLink=function(){return this.containerCell.q
 ExternalParameterEditor.prototype.getContainer=function(){return this.containerCell.querySelector('div.external-param-editor-container')}
 ExternalParameterEditor.prototype.getEditor=function(){return this.containerCell.querySelector('div.external-editor')}
 ExternalParameterEditor.prototype.getPropertyName=function(){return this.propertyDefinition.property}
-ExternalParameterEditor.prototype.isEditorVisible=function(){return $.oc.foundation.element.hasClass(this.getContainer(),'editor-visible')}
-$.oc.inspector.externalParameterEditor=ExternalParameterEditor}(window.jQuery);+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype,listSortableIdCounter=0,elementsIdCounter=0
+ExternalParameterEditor.prototype.isEditorVisible=function(){return $.wn.foundation.element.hasClass(this.getContainer(),'editor-visible')}
+$.wn.inspector.externalParameterEditor=ExternalParameterEditor}(window.jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype,listSortableIdCounter=0,elementsIdCounter=0
 var ListSortable=function(element,options){this.lists=[]
 this.options=options
 this.listSortableId=null
 this.lastMousePosition=null
 Base.call(this)
-$.oc.foundation.controlUtils.markDisposable(element)
+$.wn.foundation.controlUtils.markDisposable(element)
 this.init()
 this.addList(element)}
 ListSortable.prototype=Object.create(BaseProto)
@@ -6996,17 +7022,17 @@ $(item).trigger('dragged.list.sortable')}
 ListSortable.prototype.findDraggedItem=function(elementId){for(var i=this.lists.length-1;i>=0;i--){var list=this.lists[i],item=list.querySelector('[data-list-sortable-element-id="'+elementId+'"]')
 if(item){return item}}
 return null}
-ListSortable.prototype.getPlaceholderPlacement=function(hoverElement,ev){var mousePosition=$.oc.foundation.event.pageCoordinates(ev),elementPosition=$.oc.foundation.element.absolutePosition(hoverElement)
+ListSortable.prototype.getPlaceholderPlacement=function(hoverElement,ev){var mousePosition=$.wn.foundation.event.pageCoordinates(ev),elementPosition=$.wn.foundation.element.absolutePosition(hoverElement)
 if(this.options.direction=='vertical'){var elementCenter=elementPosition.top+hoverElement.offsetHeight/2
 return mousePosition.y<=elementCenter?'before':'after'}
 else{var elementCenter=elementPosition.left+hoverElement.offsetWidth/2
 return mousePosition.x<=elementCenter?'before':'after'}}
-ListSortable.prototype.lastMousePositionChanged=function(ev){var mousePosition=$.oc.foundation.event.pageCoordinates(ev.originalEvent)
+ListSortable.prototype.lastMousePositionChanged=function(ev){var mousePosition=$.wn.foundation.event.pageCoordinates(ev.originalEvent)
 if(this.lastMousePosition===null||this.lastMousePosition.x!=mousePosition.x||this.lastMousePosition.y!=mousePosition.y){this.lastMousePosition=mousePosition
 return true}
 return false}
-ListSortable.prototype.mouseOutsideLists=function(ev){var mousePosition=$.oc.foundation.event.pageCoordinates(ev)
-for(var i=this.lists.length-1;i>=0;i--){if($.oc.foundation.element.elementContainsPoint(this.lists[i],mousePosition)){return false}}
+ListSortable.prototype.mouseOutsideLists=function(ev){var mousePosition=$.wn.foundation.event.pageCoordinates(ev)
+for(var i=this.lists.length-1;i>=0;i--){if($.wn.foundation.element.elementContainsPoint(this.lists[i],mousePosition)){return false}}
 return true}
 ListSortable.prototype.getClosestDraggableParent=function(element){var current=element
 while(current){if(current.tagName==='LI'&&current.hasAttribute('draggable')){return current}

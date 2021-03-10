@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * System Error Handler, this class handles application exception events.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ErrorHandler extends ErrorHandlerBase

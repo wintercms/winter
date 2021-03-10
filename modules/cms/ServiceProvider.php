@@ -30,6 +30,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         parent::register('cms');
 
+        $this->registerAssetBundles();
         $this->registerComponents();
         $this->registerThemeLogging();
         $this->registerCombinerEvents();
@@ -110,7 +111,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendNavigation()
     {
         BackendMenu::registerCallback(function ($manager) {
-            $manager->registerMenuItems('October.Cms', [
+            $manager->registerMenuItems('Winter.Cms', [
                 'cms' => [
                     'label'       => 'cms::lang.cms.menu_label',
                     'icon'        => 'icon-magic',
@@ -210,7 +211,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendPermissions()
     {
         BackendAuth::registerCallback(function ($manager) {
-            $manager->registerPermissions('October.Cms', [
+            $manager->registerPermissions('Winter.Cms', [
                 'cms.manage_content' => [
                     'label' => 'cms::lang.permissions.manage_content',
                     'tab' => 'cms::lang.permissions.name',
@@ -253,6 +254,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'order' => 100
                 ],
             ]);
+            $manager->registerPermissionOwnerAlias('Winter.Cms', 'October.Cms');
         });
     }
 
@@ -272,7 +274,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendSettings()
     {
         SettingsManager::instance()->registerCallback(function ($manager) {
-            $manager->registerSettingItems('October.Cms', [
+            $manager->registerSettingItems('Winter.Cms', [
                 'theme' => [
                     'label'       => 'cms::lang.theme.settings_menu',
                     'description' => 'cms::lang.theme.settings_menu_description',
@@ -302,6 +304,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'keywords'    => 'theme change log'
                 ]
             ]);
+            $manager->registerOwnerAlias('Winter.Cms', 'October.Cms');
         });
     }
 

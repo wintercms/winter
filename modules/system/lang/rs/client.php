@@ -8,7 +8,7 @@ return [
     |--------------------------------------------------------------------------
     |
     | These are messages made available to the client browser via JavaScript.
-    | To compile this file run: php artisan october:util compile lang
+    | To compile this file run: php artisan winter:util compile lang
     |
     */
 
