@@ -110,6 +110,9 @@ class AuthManager extends StormAuthManager
 
             $this->permissions[] = $permission;
         }
+
+        // Clear the permission cache
+        $this->permissionCache = false;
     }
 
     /**
