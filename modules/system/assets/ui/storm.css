@@ -4745,7 +4745,7 @@ div.scoreboard .control-chart {min-height:67px}
 div.scoreboard .control-chart ul {margin-left:77px;top:-2px}
 div.scoreboard .control-chart ul li {padding-left:18px}
 div.scoreboard .control-chart ul li >i {margin-left:-18px}
-div.scoreboard .control-chart div.canvas {margin-bottom:0;height:67px}
+div.scoreboard .control-chart div.canvas {margin-bottom:0}
 div.scoreboard .control-chart .canvas + ul {margin-left:0}
 div.scoreboard .scoreboard-offset {padding-left:20px}
 body.slim-container div.scoreboard {padding:0 20px}
@@ -5948,7 +5948,7 @@ html.cssanimations .cursor-loading-indicator.hide {display:none}
 .custom-checkbox input[type=radio],
 .custom-radio input[type=radio],
 .custom-checkbox input[type=checkbox],
-.custom-radio input[type=checkbox] {display:none}
+.custom-radio input[type=checkbox] {display:block;opacity:0}
 .custom-checkbox label,
 .custom-radio label {display:inline-block;cursor:pointer;position:relative;padding-left:25px;margin-right:15px;margin-left:-20px;font-size:13px;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
 .custom-checkbox label:before,
