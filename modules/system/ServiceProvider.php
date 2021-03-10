@@ -416,7 +416,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendPermissions()
     {
         BackendAuth::registerCallback(function ($manager) {
-            $manager->registerPermissions('October.System', [
+            $manager->registerPermissions('Winter.System', [
                 'system.manage_updates' => [
                     'label' => 'system::lang.permissions.manage_software_updates',
                     'tab' => 'system::lang.permissions.name',
@@ -438,6 +438,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'roles' => UserRole::CODE_DEVELOPER,
                 ]
             ]);
+            $manager->registerPermissionOwnerAlias('Winter.System', 'October.System');
         });
     }
 
@@ -451,7 +452,7 @@ class ServiceProvider extends ModuleServiceProvider
         });
 
         SettingsManager::instance()->registerCallback(function ($manager) {
-            $manager->registerSettingItems('October.System', [
+            $manager->registerSettingItems('Winter.System', [
                 'updates' => [
                     'label'       => 'system::lang.updates.menu_label',
                     'description' => 'system::lang.updates.menu_description',
@@ -527,6 +528,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'order'       => 990
                 ],
             ]);
+            $manager->registerOwnerAlias('Winter.System', 'October.System');
         });
     }
 

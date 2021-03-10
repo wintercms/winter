@@ -44,6 +44,11 @@ class SettingsManager
     protected $items;
 
     /**
+     * @var array List of owner aliases. ['Aliased.Owner' => 'Real.Owner']
+     */
+    protected $aliases = [];
+
+    /**
      * @var array Grouped collection of all items, by category.
      */
     protected $groupedItems;
@@ -239,6 +244,18 @@ class SettingsManager
     }
 
     /**
+     * Register an owner alias
+     *
+     * @param string $owner The owner to register an alias for. Example: Real.Owner
+     * @param string $alias The alias to register. Example: Aliased.Owner
+     * @return void
+     */
+    public function registerOwnerAlias(string $owner, string $alias)
+    {
+        $this->aliases[$alias] = $owner;
+    }
+
+    /**
      * Dynamically add an array of setting items
      * @param string $owner
      * @param array  $definitions
@@ -322,7 +339,7 @@ class SettingsManager
     {
         $instance = self::instance();
 
-        $instance->contextOwner = strtolower($owner);
+        $instance->contextOwner = strtolower($this->aliases[$owner] ?? $owner);
         $instance->contextItemCode = strtolower($code);
     }
 
@@ -352,13 +369,10 @@ class SettingsManager
             $this->loadItems();
         }
 
-        $owner = strtolower($owner);
-        $code = strtolower($code);
+        $itemKey = $this->makeItemKey($owner, $code);
 
-        foreach ($this->items as $item) {
-            if (strtolower($item->owner) == $owner && strtolower($item->code) == $code) {
-                return $item;
-            }
+        if (isset($this->items[$itemKey])) {
+            return $this->items[$itemKey];
         }
 
         return false;
@@ -394,6 +408,6 @@ class SettingsManager
      */
     protected function makeItemKey($owner, $code)
     {
-        return strtoupper($owner).'.'.strtoupper($code);
+        return strtoupper($this->aliases[$owner] ?? $owner).'.'.strtoupper($code);
     }
 }
