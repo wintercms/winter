@@ -131,7 +131,7 @@ class SettingsManager
         /*
          * Sort settings items
          */
-        usort($this->items, function ($a, $b) {
+        uasort($this->items, function ($a, $b) {
             return $a->order - $b->order;
         });
 
@@ -252,7 +252,7 @@ class SettingsManager
      */
     public function registerOwnerAlias(string $owner, string $alias)
     {
-        $this->aliases[$alias] = $owner;
+        $this->aliases[strtolower($alias)] = $owner;
     }
 
     /**
@@ -339,7 +339,7 @@ class SettingsManager
     {
         $instance = self::instance();
 
-        $instance->contextOwner = strtolower($this->aliases[$owner] ?? $owner);
+        $instance->contextOwner = strtolower($owner);
         $instance->contextItemCode = strtolower($code);
     }
 
@@ -353,7 +353,7 @@ class SettingsManager
     {
         return (object) [
             'itemCode' => $this->contextItemCode,
-            'owner' => $this->contextOwner
+            'owner' => strtolower($this->aliases[$this->contextOwner] ?? $this->contextOwner),
         ];
     }
 
@@ -408,6 +408,6 @@ class SettingsManager
      */
     protected function makeItemKey($owner, $code)
     {
-        return strtoupper($this->aliases[$owner] ?? $owner).'.'.strtoupper($code);
+        return strtoupper($this->aliases[strtolower($owner)] ?? $owner).'.'.strtoupper($code);
     }
 }

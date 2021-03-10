@@ -455,19 +455,27 @@ class NavigationManager
      */
     public function setContext($owner, $mainMenuItemCode, $sideMenuItemCode = null)
     {
-        $this->setContextOwner($this->aliases[$owner] ?? $owner);
+        $this->setContextOwner($owner);
         $this->setContextMainMenu($mainMenuItemCode);
         $this->setContextSideMenu($sideMenuItemCode);
     }
 
     /**
-     * Sets the navigation context.
-     * The function sets the navigation owner.
+     * Sets the navigation context owner.
+     *
      * @param string $owner Specifies the navigation owner in the format Vendor/Module
      */
     public function setContextOwner($owner)
     {
         $this->contextOwner = $owner;
+    }
+
+    /**
+     * Gets the navigation context owner
+     */
+    public function getContextOwner()
+    {
+        return $this->aliases[$this->contextOwner] ?? $this->contextOwner;
     }
 
     /**
@@ -491,7 +499,7 @@ class NavigationManager
         return (object)[
             'mainMenuCode' => $this->contextMainMenuItemCode,
             'sideMenuCode' => $this->contextSideMenuItemCode,
-            'owner' => $this->contextOwner
+            'owner' => $this->getContextOwner(),
         ];
     }
 
@@ -512,7 +520,7 @@ class NavigationManager
      */
     public function isMainMenuItemActive($item)
     {
-        return $this->contextOwner === $item->owner && $this->contextMainMenuItemCode === $item->code;
+        return $this->getContextOwner() === $item->owner && $this->contextMainMenuItemCode === $item->code;
     }
 
     /**
@@ -543,7 +551,7 @@ class NavigationManager
             return true;
         }
 
-        return $this->contextOwner === $item->owner && $this->contextSideMenuItemCode === $item->code;
+        return $this->getContextOwner() === $item->owner && $this->contextSideMenuItemCode === $item->code;
     }
 
     /**
@@ -568,6 +576,7 @@ class NavigationManager
      */
     public function getContextSidenavPartial($owner, $mainMenuItemCode)
     {
+        $owner = $this->aliases[$owner] ?? $owner;
         $key = $owner.$mainMenuItemCode;
 
         return $this->contextSidenavPartials[$key] ?? null;
