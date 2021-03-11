@@ -10,8 +10,8 @@ use Exception;
 use SystemException;
 use File as FileHelper;
 use System\Models\File as SystemFileModel;
-use October\Rain\Database\Attach\File as FileModel;
-use October\Rain\Database\Attach\Resizer as DefaultResizer;
+use Winter\Storm\Database\Attach\File as FileModel;
+use Winter\Storm\Database\Attach\Resizer as DefaultResizer;
 
 /**
  * Image Resizing class used for resizing any image resources accessible
@@ -37,7 +37,7 @@ use October\Rain\Database\Attach\Resizer as DefaultResizer;
  *
  * @see System\Classes\SystemController System controller
  * @see System\Twig\Extension Twig filters for this class defined
- * @package october\system
+ * @package winter\wn-system-module
  * @author Luke Towers
  */
 class ImageResizer
@@ -87,7 +87,7 @@ class ImageResizer
      *
      * @param mixed $image Supported values below:
      *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
-     *              instance of October\Rain\Database\Attach\File,
+     *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @param integer|string|bool|null $width Desired width of the resized image
      * @param integer|string|bool|null $height Desired height of the resized image
@@ -543,7 +543,7 @@ class ImageResizer
      *
      * @param mixed $image Supported values below:
      *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
-     *              instance of October\Rain\Database\Attach\File,
+     *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @throws SystemException If the image was unable to be identified
      * @return array Array containing the disk, path, source, and fileModel if applicable
@@ -673,7 +673,7 @@ class ImageResizer
      * Normalize the provided path to Unix style directory seperators to ensure
      * that path manipulation operations succeed regardless of environment
      *
-     * NOTE: Can't use October\Rain\FileSystem\PathResolver because it prepends
+     * NOTE: Can't use Winter\Storm\FileSystem\PathResolver because it prepends
      * the current working directory to relative paths
      *
      * @param string $path
@@ -768,7 +768,7 @@ class ImageResizer
      *
      * @param mixed $image Supported values below:
      *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
-     *              instance of October\Rain\Database\Attach\File,
+     *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @param integer|string|bool|null $width Desired width of the resized image
      * @param integer|string|bool|null $height Desired height of the resized image
@@ -801,7 +801,7 @@ class ImageResizer
      *
      * @param mixed $image Supported values below:
      *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
-     *              instance of October\Rain\Database\Attach\File,
+     *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @throws SystemException If the provided input was unable to be processed
      * @return array ['width' => int, 'height' => int]

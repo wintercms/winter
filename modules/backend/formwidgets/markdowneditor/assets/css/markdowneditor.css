@@ -40,6 +40,7 @@
 .field-markdowneditor.disabled .ace_scroller {cursor:not-allowed}
 .field-markdowneditor.disabled .control-toolbar.editor-toolbar .toolbar-item .btn {cursor:not-allowed;color:#bdbdbd}
 .field-markdowneditor.disabled .control-toolbar.editor-toolbar .toolbar-item .btn:hover {background-color:transparent;color:#bdbdbd}
+.field-markdowneditor.disabled .control-toolbar.editor-toolbar .toolbar-item .btn.wn-autumn-button,
 .field-markdowneditor.disabled .control-toolbar.editor-toolbar .toolbar-item .btn.oc-autumn-button {color:#bdbdbd !important}
 .field-markdowneditor .editor-preview {color:#515c5d;font-family:"Helvetica",sans-serif;line-height:180%}
 .field-markdowneditor .editor-preview h1,

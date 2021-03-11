@@ -13,12 +13,12 @@ use ApplicationException;
 use ValidationException;
 use Exception;
 use Config;
-use October\Rain\Foundation\Http\Middleware\CheckForTrustedHost;
+use Winter\Storm\Foundation\Http\Middleware\CheckForTrustedHost;
 
 /**
  * Authentication controller
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */

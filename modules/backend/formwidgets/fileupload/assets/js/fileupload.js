@@ -16,7 +16,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // FILEUPLOAD CLASS DEFINITION
@@ -26,7 +26,7 @@
         this.$el = $(element)
         this.options = options || {}
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }
@@ -175,7 +175,7 @@
         var $object = $(file.previewElement).data('dzFileObject', file),
             filesize = this.getFilesize(file)
 
-        // Change filesize format to match October\Rain\Filesystem\Filesystem::sizeToString() format
+        // Change filesize format to match Winter\Storm\Filesystem\Filesystem::sizeToString() format
         $(file.previewElement).find('[data-dz-size]').html('<strong>' + filesize.size + '</strong> ' + filesize.units)
 
         // Remove any exisiting objects for single variety
@@ -188,7 +188,7 @@
 
     FileUpload.prototype.onUploadSending = function(file, xhr, formData) {
         this.addExtraFormData(formData)
-        xhr.setRequestHeader('X-OCTOBER-REQUEST-HANDLER', this.options.uploadHandler)
+        xhr.setRequestHeader('X-WINTER-REQUEST-HANDLER', this.options.uploadHandler)
     }
 
     FileUpload.prototype.onUploadSuccess = function(file, response) {
@@ -213,7 +213,7 @@
     }
 
     /*
-     * Trigger change event (Compatibility with october.form.js)
+     * Trigger change event (Compatibility with winter.form.js)
      */
     FileUpload.prototype.triggerChange = function() {
         this.$el.closest('[data-field-name]').trigger('change.oc.formwidget')
@@ -394,7 +394,7 @@
     }
 
     /*
-     * Replicates the formatting of October\Rain\Filesystem\Filesystem::sizeToString(). This method will return
+     * Replicates the formatting of Winter\Storm\Filesystem\Filesystem::sizeToString(). This method will return
      * an object with the file size amount and the unit used as `size` and `units` respectively.
      */
     FileUpload.prototype.getFilesize = function (file) {

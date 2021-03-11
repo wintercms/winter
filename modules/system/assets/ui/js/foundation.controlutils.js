@@ -1,20 +1,22 @@
 /*
- * October JavaScript foundation library.
- * 
+ * Winter JavaScript foundation library.
+ *
  * Utility functions for working back-end client-side UI controls.
  *
  * Usage examples:
  *
- * $.oc.foundation.controlUtils.markDisposable(el)
- * $.oc.foundation.controlUtils.disposeControls(container)
+ * $.wn.foundation.controlUtils.markDisposable(el)
+ * $.wn.foundation.controlUtils.disposeControls(container)
  *
  */
 +function ($) { "use strict";
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    if ($.oc.foundation === undefined)
-        $.oc.foundation = {}
+    if ($.wn.foundation === undefined)
+        $.wn.foundation = {}
 
     var ControlUtils = {
         markDisposable: function(el) {
@@ -23,7 +25,7 @@
 
         /*
          * Destroys all disposable controls in a container.
-         * The disposable controls should watch the dispose-control 
+         * The disposable controls should watch the dispose-control
          * event.
          */
         disposeControls: function(container) {
@@ -37,14 +39,14 @@
         }
     }
 
-    $.oc.foundation.controlUtils = ControlUtils;
+    $.wn.foundation.controlUtils = ControlUtils;
 
     $(document).on('ajaxBeforeReplace', function(ev){
         // Automatically dispose controls in an element
         // before the element contents is replaced.
-        // The ajaxBeforeReplace event is triggered in 
+        // The ajaxBeforeReplace event is triggered in
         // framework.js
 
-        $.oc.foundation.controlUtils.disposeControls(ev.target)
+        $.wn.foundation.controlUtils.disposeControls(ev.target)
     })
 }(window.jQuery);

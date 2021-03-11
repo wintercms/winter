@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Tornare alle origini',
     ],
     'directory' => [
@@ -42,7 +42,7 @@ return [
         'unnamed' => 'Tema senza nome',
         'name' => [
             'label' => 'Nome tema',
-            'help' => 'Cerca il tema tramite il suo codice univoco. Ad esempio, RainLab.Vanilla'
+            'help' => 'Cerca il tema tramite il suo codice univoco. Ad esempio, Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -58,7 +58,7 @@ return [
         'unnamed' => 'Plugin senza nome',
         'name' => [
             'label' => 'Nome del plugin',
-            'help' => 'Cerca il plugin tramite il suo codice univoco. Ad esempio, RainLab.Blog'
+            'help' => 'Cerca il plugin tramite il suo codice univoco. Ad esempio, Winter.Blog'
         ]
     ],
     'plugins' => [

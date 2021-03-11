@@ -5,7 +5,7 @@ use Yaml;
 /**
  * The CMS meta file class, used for interacting with YAML files within the Halcyon datasources
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Luke Towers
  */
 class Meta extends CmsObject

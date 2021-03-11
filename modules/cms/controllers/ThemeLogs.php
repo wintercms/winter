@@ -10,7 +10,7 @@ use Cms\Models\ThemeLog;
 /**
  * Request Logs controller
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeLogs extends Controller
@@ -45,8 +45,8 @@ class ThemeLogs extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('October.System', 'system', 'settings');
-        SettingsManager::setContext('October.Cms', 'theme_logs');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
+        SettingsManager::setContext('Winter.Cms', 'theme_logs');
     }
 
     public function index_onRefresh()

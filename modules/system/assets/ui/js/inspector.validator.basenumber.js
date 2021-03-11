@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.validators.base,
+    var Base = $.wn.inspector.validators.base,
         BaseProto = Base.prototype
 
     var BaseNumber = function(options) {
@@ -41,5 +41,5 @@
         }
     }
 
-    $.oc.inspector.validators.baseNumber = BaseNumber
+    $.wn.inspector.validators.baseNumber = BaseNumber
 }(window.jQuery);

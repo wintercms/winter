@@ -7,7 +7,7 @@ use Backend\Models\UserGroup;
 
 class SeedSetupAdmin extends Seeder
 {
-    public static $email = 'admin@domain.tld';
+    public static $email = 'admin@example.com';
     public static $login = 'admin';
     public static $password = 'admin';
     public static $firstName = 'Admin';

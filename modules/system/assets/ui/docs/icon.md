@@ -1,21 +1,21 @@
 # Icon library
 
-October provides an icon library with icons of various descriptions, based on the popular [Font Awesome collection](http://fortawesome.github.io/Font-Awesome/).
+Winter provides an icon library with icons of various descriptions, based on the popular [Font Awesome collection](http://fortawesome.github.io/Font-Awesome/).
 
 ### Inline icons
 
-Place icons just about anywhere with the `<i>` tag or to an existing element using the `oc-` prefix.
+Place icons just about anywhere with the `<i>` tag or to an existing element using the `wn-` prefix.
 
 ```html
 <i class="icon-camera-retro"></i> icon-camera-retro
 
-<span class="oc-icon-flag-checkered">oc-icon-flag-checkered</span>
+<span class="wn-icon-flag-checkered">wn-icon-flag-checkered</span>
 ```
 
 <div class="frame" style="font-size: 22px;">
     <i class="icon-camera-retro"></i> icon-camera-retro
     <br />
-    <span class="oc-icon-flag-checkered">oc-icon-flag-checkered</span>
+    <span class="wn-icon-flag-checkered">wn-icon-flag-checkered</span>
 </div>
 
 ### Icon sizes
@@ -32,22 +32,22 @@ To increase icon sizes relative to their container, use the `icon-lg` (33% incre
 
 Feel free to use them alongside your buttons.
 
-    <a class="btn btn-default oc-icon-refresh" href="#">
+    <a class="btn btn-default wn-icon-refresh" href="#">
         Refresh
     </a>
-    <a class="btn btn-success oc-icon-shopping" href="#">
+    <a class="btn btn-success wn-icon-shopping" href="#">
         Checkout
     </a>
-    <a class="btn btn-primary oc-icon-comment" href="#">
+    <a class="btn btn-primary wn-icon-comment" href="#">
         Comment
     </a>
-    <a class="btn btn-danger oc-icon-trash" href="#">
+    <a class="btn btn-danger wn-icon-trash" href="#">
         Delete
     </a>
-    <a class="btn btn-default oc-icon-cog" href="#">
+    <a class="btn btn-default wn-icon-cog" href="#">
         Settings
     </a>
-    <a class="btn btn-info oc-icon-info" href="#">
+    <a class="btn btn-info wn-icon-info" href="#">
         More Info
     </a>
 

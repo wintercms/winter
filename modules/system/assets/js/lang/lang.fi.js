@@ -1,10 +1,11 @@
 /*
  * This file has been compiled from: /modules/system/lang/fi/client.php
  */
-if ($.oc === undefined) $.oc = {}
-if ($.oc.langMessages === undefined) $.oc.langMessages = {}
-$.oc.langMessages['fi'] = $.extend(
-    $.oc.langMessages['fi'] || {},
+if ($.wn === undefined) $.wn = {}
+if ($.oc === undefined) $.oc = $.wn
+if ($.wn.langMessages === undefined) $.wn.langMessages = {}
+$.wn.langMessages['fi'] = $.extend(
+    $.wn.langMessages['fi'] || {},
     {"markdowneditor":{"formatting":"Muotoilu","quote":"Lainaus","code":"Koodi","header1":"Otsikko 1","header2":"Otsikko 2","header3":"Otsikko 3","header4":"Otsikko 4","header5":"Otsikko 5","header6":"Otsikko 6","bold":"Lihavointi","italic":"Kursivointi","unorderedlist":"J\u00e4rjest\u00e4m\u00e4t\u00f6n lista","orderedlist":"J\u00e4rjestetty lista","video":"Video","image":"Kuva","link":"Linkki","horizontalrule":"Lis\u00e4\u00e4 horisontaalinen jakaja","fullscreen":"Kokon\u00e4ytt\u00f6","preview":"Esikatsele"},"mediamanager":{"insert_link":"Lis\u00e4\u00e4 linkki Mediaan","insert_image":"Lis\u00e4\u00e4 kuva","insert_video":"Lis\u00e4\u00e4 video","insert_audio":"Lis\u00e4\u00e4 \u00e4\u00e4nitiedosto","invalid_file_empty_insert":"Valitse liitett\u00e4v\u00e4 tiedosto.","invalid_file_single_insert":"Valitse vain yksi tiedosto.","invalid_image_empty_insert":"Valitse linkitett\u00e4v\u00e4(t) kuva(t).","invalid_video_empty_insert":"Valitse linkitett\u00e4v\u00e4 videotiedosto.","invalid_audio_empty_insert":"Valitse linkitett\u00e4v\u00e4 \u00e4\u00e4nitiedosto."},"alert":{"confirm_button_text":"OK","cancel_button_text":"Peruuta","widget_remove_confirm":"Poista t\u00e4m\u00e4 vimpain?"},"datepicker":{"previousMonth":"Edellinen kuukausi","nextMonth":"Seuraava kuukausi","months":["tammikuu","helmikuu","maaliskuu","huhtikuu","toukokuu","kes\u00e4kuu","hein\u00e4kuu","elokuu","syyskuu","lokakuu","marraskuu","joulukuu"],"weekdays":["sunnutai","maanantai","tiistai","keskiviikko","torstai","perjantai","lauantai"],"weekdaysShort":["su","ma","ti","ke","to","pe","la"]},"colorpicker":{"choose":"Ok"},"filter":{"group":{"all":"kaikki"},"scopes":{"apply_button_text":"Ota k\u00e4ytt\u00f6\u00f6n","clear_button_text":"Tyhjenn\u00e4"},"dates":{"all":"kaikki","filter_button_text":"Suodata","reset_button_text":"Palauta","date_placeholder":"P\u00e4iv\u00e4","after_placeholder":"J\u00e4lkeen","before_placeholder":"Ennen"},"numbers":{"all":"kaikki","filter_button_text":"Suodata","reset_button_text":"Palauta","min_placeholder":"V\u00e4h.","max_placeholder":"Enint."}},"eventlog":{"show_stacktrace":"N\u00e4yt\u00e4 stacktrace","hide_stacktrace":"Piilota stacktrace","tabs":{"formatted":"Muotoiltu","raw":"Raaka"},"editor":{"title":"L\u00e4hdekoodieditori","description":"K\u00e4ytt\u00f6j\u00e4rjestelm\u00e4si pit\u00e4isi olla m\u00e4\u00e4ritetty kuuntelemaan jotain n\u00e4ist\u00e4 URL osoitteista.","openWith":"Avaa sovelluksessa","remember_choice":"Muista valittu vaihtoehto istunnon ajan","open":"Avaa","cancel":"Peruuta"}}}
 );
 

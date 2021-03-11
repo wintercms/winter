@@ -90,7 +90,7 @@ return [
         'new_directory_name_comment' => '提供复制主题的新闻目录名.',
         'dir_name_invalid' => '名称只能包含数字, 拉丁字母和以下字符: _-',
         'dir_name_taken' => '主题目录已存在.',
-        'find_more_themes' => '在 OctoberCMS 主题商店中查找更多主题',
+        'find_more_themes' => '在 Winter CMS 主题商店中查找更多主题',
         'saving' => '保存主题中...',
         'return' => '返回主题列表',
     ],

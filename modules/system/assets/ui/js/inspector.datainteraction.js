@@ -1,7 +1,7 @@
 /*
  * Inspector data interaction class.
  *
- * Provides methods for loading and writing Inspector configuration 
+ * Provides methods for loading and writing Inspector configuration
  * and values form and to inspectable elements.
  */
 +function ($) { "use strict";
@@ -9,7 +9,7 @@
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var DataInteraction = function(element) {
@@ -70,8 +70,8 @@
                 // Important - values contained in data-property-xxx attributes are
                 // considered strings and never parsed with JSON. The use of the
                 // data-property-xxx attributes is very limited - they're only
-                // used in Pages for creating snippets from partials, where properties 
-                // are created with a table UI widget, which doesn't allow creating 
+                // used in Pages for creating snippets from partials, where properties
+                // are created with a table UI widget, which doesn't allow creating
                 // properties of any complex types.
                 //
                 // There is no a technically reliable way to determine when a string
@@ -113,13 +113,13 @@
             data = $element.data(),
             self = this
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
         $form.request('onGetInspectorConfiguration', {
             data: data
         }).done(function inspectorConfigurationRequestDoneClosure(data) {
             self.configurartionRequestDone(data, onComplete, result)
         }).always(function() {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         })
     }
 
@@ -159,5 +159,5 @@
         onComplete(result, this)
     }
 
-    $.oc.inspector.dataInteraction = DataInteraction
+    $.wn.inspector.dataInteraction = DataInteraction
 }(window.jQuery);

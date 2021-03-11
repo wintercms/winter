@@ -7,13 +7,13 @@ use Request;
 use Response;
 use ApplicationException;
 use System\Classes\MediaLibrary;
-use October\Rain\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
  * Uploadable Widget Trait
  * Adds media library upload features to back-end widgets
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait UploadableWidget

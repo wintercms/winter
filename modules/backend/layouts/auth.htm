@@ -14,14 +14,14 @@
             $coreBuild = System\Models\Parameter::get('system::core.build', 1);
             $styles = [
                 Url::asset('modules/system/assets/ui/storm.css'),
-                Backend::skinAsset('assets/css/october.css'),
+                Backend::skinAsset('assets/css/winter.css'),
             ];
             $scripts = [
                 Backend::skinAsset('assets/js/vendor/jquery.min.js'),
                 Backend::skinAsset('assets/js/vendor/jquery-migrate.min.js'),
                 Url::asset('modules/system/assets/js/framework.js'),
                 Url::asset('modules/system/assets/ui/storm-min.js'),
-                Backend::skinAsset('assets/js/october-min.js'),
+                Backend::skinAsset('assets/js/winter-min.js'),
                 Url::to('modules/backend/assets/js/auth/auth.js'),
                 Url::asset('modules/system/assets/js/lang/lang.'.App::getLocale().'.js'),
             ];
@@ -67,7 +67,7 @@
 
                 <div class="layout-row min-size layout-head">
                     <div class="layout-cell">
-                        <h1 class="oc-logo"><?= e(Backend\Models\BrandSetting::get('app_name')) ?></h1>
+                        <h1 class="wn-logo"><?= e(Backend\Models\BrandSetting::get('app_name')) ?></h1>
                     </div>
                 </div>
                 <div class="layout-row">

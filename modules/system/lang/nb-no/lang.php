@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Getting back to basics'
     ],
     'directory' => [
@@ -42,7 +42,7 @@ return [
         'unnamed' => 'Tema uten navn',
         'name' => [
             'label' => 'Navn på tema',
-            'help' => 'Navngi temaet ved et unikt navn. For eksempel, RainLab.Vanilla'
+            'help' => 'Navngi temaet ved et unikt navn. For eksempel, Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -58,7 +58,7 @@ return [
         'unnamed' => 'Plugin uten navn',
         'name' => [
             'label' => 'Navn på plugin',
-            'help' => 'Navngi pluginen ved et unikt navn. For eksempel, RainLab.Blog'
+            'help' => 'Navngi pluginen ved et unikt navn. For eksempel, Winter.Blog'
         ]
     ],
     'plugins' => [

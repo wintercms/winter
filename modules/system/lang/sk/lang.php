@@ -1,7 +1,7 @@
 <?php
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Návrat k základom'
     ],
     'locale' => [
@@ -86,7 +86,7 @@ return [
         'unnamed' => 'Téma bez názvu',
         'name' => [
             'label' => 'Názov témy',
-            'help' => 'Názov témy podľa jej unikátneho kódu. Napríklad, RainLab.Vanilla'
+            'help' => 'Názov témy podľa jej unikátneho kódu. Napríklad, Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -102,7 +102,7 @@ return [
         'unnamed' => 'Plugin bez názvu',
         'name' => [
             'label' => 'Názov pluginu',
-            'help' => 'Názov pluginu podľa jeho unikátneho kódu. Napríklad, RainLab.Blog'
+            'help' => 'Názov pluginu podľa jeho unikátneho kódu. Napríklad, Winter.Blog'
         ],
         'by_author' => 'Vytvoril :name'
     ],
@@ -266,7 +266,7 @@ return [
             ],
             'panel' => 'Aký skvalý je tento panel?',
             'more' => 'Nejaký ďalší text',
-            'promotion' => 'Kód kupónu: OCTOBER',
+            'promotion' => 'Kód kupónu: WINTER',
             'subcopy' => 'Toto je subkópia e-mailu',
             'thanks' => 'Ďakujeme'
         ],

@@ -3,16 +3,16 @@
 use Cache;
 use Exception;
 use ApplicationException;
-use October\Rain\Halcyon\Model;
-use October\Rain\Halcyon\Processors\Processor;
-use October\Rain\Halcyon\Datasource\Datasource;
-use October\Rain\Halcyon\Exception\DeleteFileException;
-use October\Rain\Halcyon\Datasource\DatasourceInterface;
+use Winter\Storm\Halcyon\Model;
+use Winter\Storm\Halcyon\Processors\Processor;
+use Winter\Storm\Halcyon\Datasource\Datasource;
+use Winter\Storm\Halcyon\Exception\DeleteFileException;
+use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 
 /**
  * Datasource that loads from other data sources automatically
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Luke Towers
  */
 class AutoDatasource extends Datasource implements DatasourceInterface
