@@ -1,5 +1,5 @@
 {
-    "name": "wintercms/winter",
+    "name": "winter/winter",
     "description": "Free, open-source, self-hosted CMS platform based on the Laravel PHP Framework. Originally known as October CMS.",
     "homepage": "https://wintercms.com",
     "type": "project",
