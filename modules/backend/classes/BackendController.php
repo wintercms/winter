@@ -9,7 +9,7 @@ use Config;
 use Request;
 use Response;
 use Illuminate\Routing\Controller as ControllerBase;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Router\Helper as RouterHelper;
 use System\Classes\PluginManager;
 use Closure;
 
@@ -23,12 +23,12 @@ use Closure;
  * for the `Posts` controller inside the `Acme.Blog` plugin.
  *
  * @see Backend\Classes\Controller Base class for back-end controllers
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class BackendController extends ControllerBase
 {
-    use \October\Rain\Extension\ExtendableTrait;
+    use \Winter\Storm\Extension\ExtendableTrait;
 
     /**
      * @var array Behaviors implemented by this controller.

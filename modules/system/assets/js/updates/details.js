@@ -17,9 +17,11 @@
 
     }
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.updateDetails = new UpdateDetails;
+    $.wn.updateDetails = new UpdateDetails;
 
 }(window.jQuery);

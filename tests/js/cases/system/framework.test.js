@@ -29,7 +29,7 @@ describe('modules/system/assets/js/framework.js', function () {
                         // Allow window.location.assign() to be stubbed
                         delete window.location
                         window.location = {
-                            href: 'https://october.example.org/',
+                            href: 'https://winter.example.org/',
                             assign: sinon.stub()
                         }
                     }
@@ -63,8 +63,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -96,8 +96,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -135,8 +135,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -176,8 +176,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -219,8 +219,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -259,8 +259,8 @@ describe('modules/system/assets/js/framework.js', function () {
                         'Data incorrect or not included in request'
                     )
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -291,8 +291,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -384,7 +384,7 @@ describe('modules/system/assets/js/framework.js', function () {
                         // Allow window.location.assign() to be stubbed
                         delete window.location
                         window.location = {
-                            href: 'https://october.example.org/',
+                            href: 'https://winter.example.org/',
                             assign: sinon.stub()
                         }
                     }
@@ -416,8 +416,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -447,8 +447,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -487,8 +487,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -528,8 +528,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -569,8 +569,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -602,8 +602,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)
@@ -634,8 +634,8 @@ describe('modules/system/assets/js/framework.js', function () {
 
                 try {
                     assert(
-                        requests[1].requestHeaders['X-OCTOBER-REQUEST-HANDLER'] === 'test::onTest',
-                        'Incorrect October request handler'
+                        requests[1].requestHeaders['X-WINTER-REQUEST-HANDLER'] === 'test::onTest',
+                        'Incorrect Winter request handler'
                     )
                 } catch (e) {
                     done(e)

@@ -1,6 +1,6 @@
-Provides flags of various descriptions using [flag-icon-css](https://github.com/lipis/flag-icon-css). 
+Provides flags of various descriptions using [flag-icon-css](https://github.com/lipis/flag-icon-css).
 
-*Class 'flag-icon flag-icon-{@country}' was merged into flag-{@country}, to support OctoberCMS standards.*
+*Class 'flag-icon flag-icon-{@country}' was merged into flag-{@country}, to support Winter CMS standards.*
 
 ## Usage Example
 ```html
@@ -263,7 +263,7 @@ Provides flags of various descriptions using [flag-icon-css](https://github.com/
 <i class="flag-un"></i>
 
 <p>Squared</p>
-<i class="flag-us oc-flag-squared"></i>
+<i class="flag-us wn-flag-squared"></i>
 ```
 
 

@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Tagasi põhitõdede juurde'
     ],
     'locale' => [
@@ -80,7 +80,7 @@ return [
         'unnamed' => 'Nimeta teema',
         'name' => [
             'label' => 'Teema nimi',
-            'help' => 'Anna teemale nimi selle unikaalse koodi järgi, nt RainLab.Vanilla'
+            'help' => 'Anna teemale nimi selle unikaalse koodi järgi, nt Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -96,7 +96,7 @@ return [
         'unnamed' => 'Nimeta plugin',
         'name' => [
             'label' => 'Plugina nimi',
-            'help' => 'Anna pluginale nimi selle unikaalse koodi järgi. Nt RainLab.Blog'
+            'help' => 'Anna pluginale nimi selle unikaalse koodi järgi. Nt Winter.Blog'
         ],
         'by_author' => 'Autor: :name'
     ],

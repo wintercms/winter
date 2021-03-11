@@ -18,7 +18,7 @@
 
             <div class="scoreboard-item title-value">
                 <h4>Latest commenter</h4>
-                <p class="oc-icon-star">John Smith</p>
+                <p class="wn-icon-star">John Smith</p>
                 <p class="description">registered: yes</p>
             </div>
         </div>
@@ -64,7 +64,7 @@
 
             <div class="scoreboard-item title-value">
                 <h4>Latest commenter</h4>
-                <p class="oc-icon-star">John Smith</p>
+                <p class="wn-icon-star">John Smith</p>
                 <p class="description">registered: yes</p>
             </div>
 

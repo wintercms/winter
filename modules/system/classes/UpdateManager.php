@@ -13,7 +13,7 @@ use Cms\Classes\ThemeManager;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
 use System\Helpers\Cache as CacheHelper;
-use October\Rain\Filesystem\Zip;
+use Winter\Storm\Filesystem\Zip;
 use Carbon\Carbon;
 use Exception;
 
@@ -22,12 +22,12 @@ use Exception;
  *
  * Handles the CMS install and update process.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class UpdateManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * @var \Illuminate\Console\OutputStyle
@@ -790,7 +790,7 @@ class UpdateManager
      */
     public function requestChangelog()
     {
-        $result = Http::get('https://octobercms.com/changelog?json');
+        $result = Http::get('https://api.wintercms.com/marketplace/changelog');
 
         if ($result->code == 404) {
             throw new ApplicationException(Lang::get('system::lang.server.response_empty'));
@@ -942,7 +942,7 @@ class UpdateManager
      */
     protected function createServerUrl($uri)
     {
-        $gateway = Config::get('cms.updateServer', 'http://gateway.octobercms.com/api');
+        $gateway = Config::get('cms.updateServer', 'https://api.wintercms.com/marketplace');
         if (substr($gateway, -1) != '/') {
             $gateway .= '/';
         }

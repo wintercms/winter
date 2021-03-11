@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.validators.baseNumber,
+    var Base = $.wn.inspector.validators.baseNumber,
         BaseProto = Base.prototype
 
     var FloatValidator = function(options) {
@@ -28,8 +28,8 @@
             return null
         }
 
-        var testResult = this.options.allowNegative ? 
-            /^[-]?([0-9]+\.[0-9]+|[0-9]+)$/.test(string) : 
+        var testResult = this.options.allowNegative ?
+            /^[-]?([0-9]+\.[0-9]+|[0-9]+)$/.test(string) :
             /^([0-9]+\.[0-9]+|[0-9]+)$/.test(string)
 
         if (!testResult) {
@@ -43,5 +43,5 @@
         return this.doCommonChecks(parseFloat(string))
     }
 
-    $.oc.inspector.validators.float = FloatValidator
+    $.wn.inspector.validators.float = FloatValidator
 }(window.jQuery);

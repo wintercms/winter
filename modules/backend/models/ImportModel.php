@@ -10,12 +10,12 @@ use League\Csv\Statement as CsvStatement;
 /**
  * Model used for importing data
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 abstract class ImportModel extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * The attributes that aren't mass assignable.

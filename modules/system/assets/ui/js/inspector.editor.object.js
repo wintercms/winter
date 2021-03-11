@@ -5,7 +5,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.base,
+    var Base = $.wn.inspector.propertyEditors.base,
         BaseProto = Base.prototype
 
     var ObjectEditor = function(inspector, propertyDefinition, containerCell, group) {
@@ -43,10 +43,10 @@
             values = {}
         }
 
-        this.childInspector = new $.oc.inspector.surface(inspectorContainer, 
-            this.propertyDefinition.properties, 
-            values, 
-            this.inspector.getInspectorUniqueId() + '-' + this.propertyDefinition.property, 
+        this.childInspector = new $.wn.inspector.surface(inspectorContainer,
+            this.propertyDefinition.properties,
+            values,
+            this.inspector.getInspectorUniqueId() + '-' + this.propertyDefinition.property,
             options,
             this.inspector,
             this.group,
@@ -80,7 +80,7 @@
             targetValue = value[targetProperty]
 
         if (this.isEmptyValue(targetValue)) {
-            return $.oc.inspector.removedProperty
+            return $.wn.inspector.removedProperty
         }
 
         return value
@@ -116,8 +116,8 @@
     ObjectEditor.prototype.validate = function(silentMode) {
         var values = this.childInspector.getValues()
 
-        if (this.cleanUpValue(values) === $.oc.inspector.removedProperty) {
-            // Ignore any validation rules if the object's required 
+        if (this.cleanUpValue(values) === $.wn.inspector.removedProperty) {
+            // Ignore any validation rules if the object's required
             // property is empty (ignoreIfPropertyEmpty)
 
             return true
@@ -136,5 +136,5 @@
         this.inspector.setPropertyValue(this.propertyDefinition.property, this.cleanUpValue(values))
     }
 
-    $.oc.inspector.propertyEditors.object = ObjectEditor
+    $.wn.inspector.propertyEditors.object = ObjectEditor
 }(window.jQuery);

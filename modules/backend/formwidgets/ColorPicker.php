@@ -8,7 +8,7 @@ use ApplicationException;
  * Color picker
  * Renders a color picker field.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ColorPicker extends FormWidgetBase

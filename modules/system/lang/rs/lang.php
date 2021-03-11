@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Povratak osnovama',
     ],
     'locale' => [
@@ -84,7 +84,7 @@ return [
         'unnamed' => 'Tema bez naziva',
         'name' => [
             'label' => 'Naziv teme',
-            'help' => 'Imenuj temu po njenom jedinstvenom kodu. Na primer, RainLab.Vanilla',
+            'help' => 'Imenuj temu po njenom jedinstvenom kodu. Na primer, Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -100,7 +100,7 @@ return [
         'unnamed' => 'Neimenovani priključak',
         'name' => [
             'label' => 'Naziv priključka',
-            'help' => 'Imenuj priključak po njegovom jedinstvenom kodu. Na primer, RainLab.Blog',
+            'help' => 'Imenuj priključak po njegovom jedinstvenom kodu. Na primer, Winter.Blog',
         ],
         'by_author' => 'Od :name',
     ],
