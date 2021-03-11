@@ -7,7 +7,7 @@
 Winter's mission is to show the world that web development is not rocket science.
 
 ![Stable Build](https://github.com/wintercms/winter/workflows/Tests/badge.svg?branch=develop)
-[![License](https://poser.pugx.org/wintercms/winter/license.svg)](https://packagist.org/packages/wintercms/winter)
+[![License](https://poser.pugx.org/wintercms/winter/license.svg)](https://packagist.org/packages/winter/winter)
 
 ## Installing Winter
 
@@ -18,7 +18,7 @@ Instructions on how to install Winter can be found at the [installation guide](h
 For advanced users, run this in your terminal to install Winter from command line:
 
 ```shell
-composer create-project wintercms/winter
+composer create-project winter/winter
 ```
 
 If you plan on using a database, run this command:
@@ -61,7 +61,7 @@ You can communicate with us using the following mediums:
 
 ## Contributing
 
-Before sending or reviewing Pull Requests, be sure to review the [Contributing Guidelines](https://github.com/wintercms/.github/CONTRIBUTING.md) first.
+Before sending or reviewing Pull Requests, be sure to review the [Contributing Guidelines](https://github.com/wintercms/.github/blob/master/CONTRIBUTING.md) first.
 
 ### Coding standards
 
@@ -73,7 +73,7 @@ Please follow the following guides and code standards:
 
 ### Code of Conduct
 
-In order to ensure that the Winter CMS community is welcoming to all, please review and abide by the [Code of Conduct](https://github.com/wintercms/.github/CODE_OF_CONDUCT.md).
+In order to ensure that the Winter CMS community is welcoming to all, please review and abide by the [Code of Conduct](https://github.com/wintercms/.github/blob/master/CODE_OF_CONDUCT.md).
 
 ## License
 
