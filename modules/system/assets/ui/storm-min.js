@@ -3235,19 +3235,19 @@ if(data){data.length>0?buttonContainer.show():buttonContainer.hide()}else{items.
 FilterWidget.prototype.pushOptions=function(scopeName){if(!this.isActiveScopeDirty||!this.options.updateHandler)
 return
 var self=this,data={scopeName:scopeName,options:JSON.stringify(this.scopeValues[scopeName])}
-$.oc.stripeLoadIndicator.show()
-this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.oc.stripeLoadIndicator.hide()}).done(function(){self.$el.find('[data-scope-name="'+scopeName+'"]').trigger('change.oc.filterScope')})}
+$.wn.stripeLoadIndicator.show()
+this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(function(){self.$el.find('[data-scope-name="'+scopeName+'"]').trigger('change.oc.filterScope')})}
 FilterWidget.prototype.checkboxToggle=function($el){var isChecked=$el.is(':checked'),$scope=$el.closest('.filter-scope'),scopeName=$scope.data('scope-name')
 this.scopeValues[scopeName]=isChecked
 if(this.options.updateHandler){var data={scopeName:scopeName,value:isChecked}
-$.oc.stripeLoadIndicator.show()
-this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.oc.stripeLoadIndicator.hide()})}
+$.wn.stripeLoadIndicator.show()
+this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()})}
 $scope.toggleClass('active',isChecked)}
 FilterWidget.prototype.switchToggle=function($el){var switchValue=$el.data('checked'),$scope=$el.closest('.filter-scope'),scopeName=$scope.data('scope-name')
 this.scopeValues[scopeName]=switchValue
 if(this.options.updateHandler){var data={scopeName:scopeName,value:switchValue}
-$.oc.stripeLoadIndicator.show()
-this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.oc.stripeLoadIndicator.hide()})}
+$.wn.stripeLoadIndicator.show()
+this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()})}
 $scope.toggleClass('active',!!switchValue)}
 FilterWidget.prototype.filterScope=function(isReset){var scopeName=this.$activeScope.data('scope-name')
 if(isReset){this.scopeValues[scopeName]=null
@@ -3257,8 +3257,8 @@ this.updateScopeSetting(this.$activeScope,0)}
 this.pushOptions(scopeName)
 this.isActiveScopeDirty=false
 this.$activeScope.data('oc.popover').hide()}
-FilterWidget.prototype.getLang=function(name,defaultValue){if($.oc===undefined||$.oc.lang===undefined){return defaultValue}
-return $.oc.lang.get(name,defaultValue)}
+FilterWidget.prototype.getLang=function(name,defaultValue){if($.oc===undefined||$.wn.lang===undefined){return defaultValue}
+return $.wn.lang.get(name,defaultValue)}
 FilterWidget.prototype.searchQuery=function($el){if(this.dataTrackInputTimer!==undefined){window.clearTimeout(this.dataTrackInputTimer)}
 var self=this
 this.dataTrackInputTimer=window.setTimeout(function(){var

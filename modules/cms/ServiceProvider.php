@@ -14,6 +14,7 @@ use Cms\Classes\CmsObject;
 use Backend\Models\UserRole;
 use Cms\Classes\Page as CmsPage;
 use Cms\Classes\ComponentManager;
+use System\Classes\CombineAssets;
 use Cms\Classes\Theme as CmsTheme;
 use Backend\Classes\WidgetManager;
 use System\Classes\SettingsManager;
@@ -188,8 +189,7 @@ class ServiceProvider extends ModuleServiceProvider
                     ]
                 ]
             ]);
-
-            $manager->registerQuickActions('October.Cms', [
+            $manager->registerQuickActions('Winter.Cms', [
                 'preview' => [
                     'label'      => 'backend::lang.tooltips.preview_website',
                     'icon'       => 'icon-crosshairs',
@@ -201,6 +201,7 @@ class ServiceProvider extends ModuleServiceProvider
                     ],
                 ],
             ]);
+            $manager->registerOwnerAlias('Winter.Cms', 'October.Cms');
         });
     }
 

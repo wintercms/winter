@@ -92,6 +92,7 @@ jobs:
           unzip ./vendor/winter/winter.zip -d ./vendor/winter
           mv ./vendor/winter/storm-develop ./vendor/winter/storm
           composer dump-autoload
+
       - name: Run post-update Composer scripts
         run: php artisan package:discover
 

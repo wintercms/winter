@@ -85,15 +85,15 @@ class MediaLibraryTest extends TestCase // @codingStandardsIgnoreLine
         $this->assertNotEmpty($contents, 'Media library item is not discovered');
         $this->assertCount(3, $contents);
 
-        $this->assertEquals('file', $contents[1]->type, 'Media library item does not have the right type');
-        $this->assertEquals('/winter.png', $contents[1]->path, 'Media library item does not have the right path');
-        $this->assertNotEmpty($contents[1]->lastModified, 'Media library item last modified is empty');
-        $this->assertNotEmpty($contents[1]->size, 'Media library item size is empty');
-
         $this->assertEquals('file', $contents[2]->type, 'Media library item does not have the right type');
-        $this->assertEquals('/text.txt', $contents[2]->path, 'Media library item does not have the right path');
+        $this->assertEquals('/winter.png', $contents[2]->path, 'Media library item does not have the right path');
         $this->assertNotEmpty($contents[2]->lastModified, 'Media library item last modified is empty');
         $this->assertNotEmpty($contents[2]->size, 'Media library item size is empty');
+
+        $this->assertEquals('file', $contents[0]->type, 'Media library item does not have the right type');
+        $this->assertEquals('/text.txt', $contents[0]->path, 'Media library item does not have the right path');
+        $this->assertNotEmpty($contents[0]->lastModified, 'Media library item last modified is empty');
+        $this->assertNotEmpty($contents[0]->size, 'Media library item size is empty');
     }
 
     public function testListAllDirectories()
