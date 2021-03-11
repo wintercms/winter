@@ -24,7 +24,8 @@
     "require": {
         "php": ">=7.0",
         "composer/installers": "~1.0",
-        "wintercms/storm": "~1.0.472"
+        "winter/storm": "~1.0.472",
+        "laravel/framework": "~5.5.40"
     },
     "autoload": {
         "psr-4": {
