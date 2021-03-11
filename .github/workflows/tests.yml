@@ -96,15 +96,6 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-scripts
 
-      - name: Reset Winter modules and library
-        run: |
-          git reset --hard HEAD
-          rm -rf ./vendor/winter/storm
-          wget https://github.com/wintercms/storm/archive/develop.zip -O ./vendor/winter/develop.zip
-          unzip ./vendor/winter/develop.zip -d ./vendor/winter
-          mv ./vendor/winter/storm-develop ./vendor/winter/storm
-          composer dump-autoload
-
       - name: Run post-update Composer scripts
         run: php artisan package:discover
 
