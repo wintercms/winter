@@ -685,6 +685,42 @@ class Index extends Controller
         }
 
         $widgetConfig = $this->makeConfig($formConfigs[$type]);
+
+        $ext = pathinfo($template->fileName, PATHINFO_EXTENSION);
+        if ($type === 'content') {
+            switch ($ext) {
+                case 'htm':
+                    $type = 'richeditor';
+                    break;
+                case 'md':
+                    $type = 'markdown';
+                    break;
+                default:
+                    $type = 'codeeditor';
+                    break;
+            }
+            array_set($widgetConfig->secondaryTabs, 'fields.markup.type', $type);
+        }
+
+        $lang = 'php';
+        if (array_get($widgetConfig->secondaryTabs, 'fields.markup.type') === 'codeeditor') {
+            switch ($ext) {
+                case 'htm':
+                    $lang = 'twig';
+                    break;
+                case 'html':
+                    $lang = 'html';
+                    break;
+                case 'css':
+                    $lang = 'css';
+                    break;
+                case 'js':
+                case 'json':
+                    $lang = 'javascript';
+                    break;
+            }
+        }
+
         $widgetConfig->model = $template;
         $widgetConfig->alias = $alias ?: 'form'.studly_case($type).md5($template->exists ? $template->getFileName() : uniqid());
 
