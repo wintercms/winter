@@ -1,27 +1,29 @@
 /*
- * October JavaScript foundation library.
- * 
+ * Winter JavaScript foundation library.
+ *
  * Light-weight utility functions for working with DOM elements. The functions
  * work with elements directly, without jQuery, using the native JavaScript and DOM
  * features.
  *
  * Usage examples:
  *
- * $.oc.foundation.element.addClass(myElement, myClass)
+ * $.wn.foundation.element.addClass(myElement, myClass)
  *
  */
 +function ($) { "use strict";
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    if ($.oc.foundation === undefined)
-        $.oc.foundation = {}
+    if ($.wn.foundation === undefined)
+        $.wn.foundation = {}
 
     var Element = {
         hasClass: function(el, className) {
             if (el.classList)
                 return el.classList.contains(className);
-            
+
             return new RegExp('(^| )' + className + '( |$)', 'gi').test(el.className);
         },
 
@@ -95,7 +97,7 @@
         },
 
         getCaretPosition: function(input) {
-            if (document.selection) { 
+            if (document.selection) {
                var selection = document.selection.createRange()
 
                selection.moveStart('character', -input.value.length)
@@ -109,7 +111,7 @@
         },
 
         setCaretPosition: function(input, position) {
-            if (document.selection) { 
+            if (document.selection) {
                 var range = input.createTextRange()
 
                 setTimeout(function() {
@@ -134,14 +136,14 @@
         },
 
         elementContainsPoint: function(element, point) {
-            var elementPosition = $.oc.foundation.element.absolutePosition(element),
+            var elementPosition = $.wn.foundation.element.absolutePosition(element),
                 elementRight = elementPosition.left + element.offsetWidth,
                 elementBottom = elementPosition.top + element.offsetHeight
 
-            return point.x >= elementPosition.left && point.x <= elementRight 
+            return point.x >= elementPosition.left && point.x <= elementRight
                     && point.y >= elementPosition.top && point.y <= elementBottom
         }
     }
 
-    $.oc.foundation.element = Element;
+    $.wn.foundation.element = Element;
 }(window.jQuery);

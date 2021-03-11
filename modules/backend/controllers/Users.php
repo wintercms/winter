@@ -14,7 +14,7 @@ use System\Classes\SettingsManager;
 /**
  * Backend user controller
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */
@@ -59,8 +59,8 @@ class Users extends Controller
             $this->requiredPermissions = null;
         }
 
-        BackendMenu::setContext('October.System', 'system', 'users');
-        SettingsManager::setContext('October.System', 'administrators');
+        BackendMenu::setContext('Winter.System', 'system', 'users');
+        SettingsManager::setContext('Winter.System', 'administrators');
     }
 
     /**
@@ -168,7 +168,7 @@ class Users extends Controller
      */
     public function myaccount()
     {
-        SettingsManager::setContext('October.Backend', 'myaccount');
+        SettingsManager::setContext('Winter.Backend', 'myaccount');
 
         $this->pageTitle = 'backend::lang.myaccount.menu_label';
         return $this->update($this->user->id, 'myaccount');

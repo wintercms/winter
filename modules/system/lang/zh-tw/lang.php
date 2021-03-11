@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => '登入'
     ],
     'directory' => [
@@ -36,7 +36,7 @@ return [
         'unnamed' => '未命名主題',
         'name' => [
             'label' => '主題名稱',
-            'help' => '主題的唯一名稱，例如：RainLab.Vanilla'
+            'help' => '主題的唯一名稱，例如：Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -51,7 +51,7 @@ return [
         'unnamed' => '未命名的外掛',
         'name' => [
             'label' => '外掛名稱',
-            'help' => '外掛的唯一名稱，例如：RainLab.Blog'
+            'help' => '外掛的唯一名稱，例如：Winter.Blog'
         ]
     ],
     'plugins' => [

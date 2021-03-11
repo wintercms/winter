@@ -15,7 +15,7 @@ use ApplicationException;
  * Report Container Widget
  * Creates an area hosting report widgets.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ReportContainer extends WidgetBase
@@ -46,7 +46,7 @@ class ReportContainer extends WidgetBase
      *
      * defaultWidgets:
      *     trafficOverview:
-     *         class: RainLab\GoogleAnalytics\ReportWidgets\TrafficOverview
+     *         class: Winter\GoogleAnalytics\ReportWidgets\TrafficOverview
      *         sortOrder: 1
      *         configuration:
      *             title: 'Traffic overview'

@@ -1,6 +1,6 @@
 <?php
 
-use October\Rain\Exception\ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use System\Classes\SourceManifest;
 use System\Classes\FileManifest;
 

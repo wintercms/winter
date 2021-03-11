@@ -3,7 +3,7 @@
 /**
  * Parent class for PHP classes created for layout PHP sections.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class LayoutCode extends CodeBase

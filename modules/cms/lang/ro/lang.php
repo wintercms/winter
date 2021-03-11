@@ -24,7 +24,7 @@ return [
         ],
         'settings_menu' => 'Tema Front-end',
         'settings_menu_description' => 'Previzualizati lista de teme instalate si selectati o tema activa.',
-        'find_more_themes' => 'Gasiti mai multe teme in "Piata OctoberCMS".',
+        'find_more_themes' => 'Gasiti mai multe teme in "Piata Winter CMS".',
         'activate_button' => 'Activare',
         'active_button' => 'Activare',
     ],

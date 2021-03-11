@@ -307,7 +307,7 @@
         stacktrace = markup.find('.beautifier-stacktrace').addClass('hidden')
 
         if (!!stacktrace.length) {
-            $('<a class="beautifier-toggle-stacktrace" href="javascript:;"><span>' + $.oc.lang.get('eventlog.show_stacktrace') + '</span></a>')
+            $('<a class="beautifier-toggle-stacktrace" href="javascript:;"><span>' + $.wn.lang.get('eventlog.show_stacktrace') + '</span></a>')
                 .appendTo(messageContainer)
                 .on('click', function (event) {
                     event.preventDefault()
@@ -321,8 +321,8 @@
 
         tabs = $('<div class="control-tabs content-tabs tabs-inset">' +
             '<ul class="nav nav-tabs">' +
-            '<li class="active"><a href="#beautifier-tab-formatted">' + $.oc.lang.get('eventlog.tabs.formatted') + '</a></li>' +
-            '<li><a href="#beautifier-tab-raw">' + $.oc.lang.get('eventlog.tabs.raw') + '</a></li>' +
+            '<li class="active"><a href="#beautifier-tab-formatted">' + $.wn.lang.get('eventlog.tabs.formatted') + '</a></li>' +
+            '<li><a href="#beautifier-tab-raw">' + $.wn.lang.get('eventlog.tabs.raw') + '</a></li>' +
             '</ul><div class="tab-content">' +
             '<div class="tab-pane pane-inset active" id="beautifier-tab-formatted"></div>' +
             '<div class="tab-pane pane-inset" id="beautifier-tab-raw"></div>' +

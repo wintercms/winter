@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.text,
+    var Base = $.wn.inspector.propertyEditors.text,
         BaseProto = Base.prototype
 
     var StringListEditor = function(inspector, propertyDefinition, containerCell, group) {
@@ -14,7 +14,7 @@
     StringListEditor.prototype.constructor = Base
 
     StringListEditor.prototype.setLinkText = function(link, value) {
-        var value = value !== undefined ? value 
+        var value = value !== undefined ? value
                 : this.inspector.getPropertyValue(this.propertyDefinition.property)
 
         if (value === undefined) {
@@ -25,17 +25,17 @@
 
         if (!value) {
             value = this.propertyDefinition.placeholder
-            $.oc.foundation.element.addClass(link, 'placeholder')
+            $.wn.foundation.element.addClass(link, 'placeholder')
 
             if (!value) {
                 value = '[]'
             }
 
             link.textContent = value
-        } 
+        }
         else {
-            $.oc.foundation.element.removeClass(link, 'placeholder')
-    
+            $.wn.foundation.element.removeClass(link, 'placeholder')
+
             link.textContent = '[' + value.join(', ') + ']'
         }
     }
@@ -82,7 +82,7 @@
 
             for (var i = 0, len = arrayValue.length; i < len; i++) {
                 var currentValue = $.trim(arrayValue[i])
-                
+
                 if (currentValue.length > 0) {
                     resultValue.push(currentValue)
                 }
@@ -92,5 +92,5 @@
         this.inspector.setPropertyValue(this.propertyDefinition.property, resultValue)
     }
 
-    $.oc.inspector.propertyEditors.stringList = StringListEditor
+    $.wn.inspector.propertyEditors.stringList = StringListEditor
 }(window.jQuery);

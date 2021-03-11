@@ -9,11 +9,11 @@
         if (e.key === '(Space character)' || e.key === 'Spacebar' || e.key === ' ') {
             var $cb = $('input[type=checkbox]', this)
 
-            if ($cb.data('oc-space-timestamp') == e.timeStamp)
+            if ($cb.data('wn-space-timestamp') == e.timeStamp)
                 return
 
             $cb.get(0).checked = !$cb.get(0).checked
-            $cb.data('oc-space-timestamp', e.timeStamp)
+            $cb.data('wn-space-timestamp', e.timeStamp)
             $cb.trigger('change')
             return false
         }

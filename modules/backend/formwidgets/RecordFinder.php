@@ -11,7 +11,7 @@ use Backend\Classes\FormWidgetBase;
  *    user:
  *        label: User
  *        type: recordfinder
- *        list: ~/plugins/rainlab/user/models/user/columns.yaml
+ *        list: ~/plugins/winter/user/models/user/columns.yaml
  *        recordsPerPage: 10
  *        title: Find Record
  *        prompt: Click the Find button to find a user
@@ -23,9 +23,9 @@ use Backend\Classes\FormWidgetBase;
  *        searchMode: all
  *        searchScope: searchUsers
  *        useRelation: false
- *        modelClass: RainLab\User\Models\User
+ *        modelClass: Winter\User\Models\User
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class RecordFinder extends FormWidgetBase

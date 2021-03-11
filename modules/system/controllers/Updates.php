@@ -23,7 +23,7 @@ use Exception;
 /**
  * Updates controller
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */
@@ -59,8 +59,8 @@ class Updates extends Controller
         $this->addJs('/modules/system/assets/js/updates/updates.js', 'core');
         $this->addCss('/modules/system/assets/css/updates/updates.css', 'core');
 
-        BackendMenu::setContext('October.System', 'system', 'updates');
-        SettingsManager::setContext('October.System', 'updates');
+        BackendMenu::setContext('Winter.System', 'system', 'updates');
+        SettingsManager::setContext('Winter.System', 'updates');
 
         if ($this->getAjaxHandler() == 'onExecuteStep') {
             $this->useSecurityToken = false;
@@ -396,7 +396,7 @@ class Updates extends Controller
                     continue;
                 }
 
-                $detailsUrl = '//octobercms.com/support/articles/release-notes';
+                $detailsUrl = '//wintercms.com/support/articles/release-notes';
                 $description = str_replace('!!!', '', $description);
                 $result['core']['updates'][$build] = [$description, $detailsUrl];
                 $coreImportant = $hasImportantUpdates = true;

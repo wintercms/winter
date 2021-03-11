@@ -76,7 +76,7 @@ return [
     |
     */
 
-    'prefix' => 'october',
+    'prefix' => 'winter',
 
     /*
     |--------------------------------------------------------------------------
@@ -85,7 +85,7 @@ return [
     |
     | This option controls the cache key used by the CMS when storing generated
     | PHP from the theme PHP sections. Recommended to change this when multiple
-    | servers running OctoberCMS are connected to the same cache server to
+    | servers running Winter CMS are connected to the same cache server to
     | prevent conflicts.
     |
     */

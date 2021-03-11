@@ -8,11 +8,11 @@
     // NAMESPACE CHECK
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.helper === undefined)
-        $.oc.table.helper = {}
+    if ($.wn.table.helper === undefined)
+        $.wn.table.helper = {}
 
     // NAVIGATION CLASS DEFINITION
     // ============================
@@ -109,7 +109,7 @@
         var container = paginationContainer ? paginationContainer : this.tableObj.getElement().querySelector('.pagination')
 
         return parseInt(container.getAttribute('data-record-count'))
-    } 
+    }
 
     Navigation.prototype.buildPaginationLinkList = function(recordCount, recordsPerPage, pageIndex) {
         // This method could be refactored and moved to a pagination
@@ -420,6 +420,6 @@
         return false
     }
 
-    $.oc.table.helper.navigation = Navigation;
+    $.wn.table.helper.navigation = Navigation;
 
 }(window.jQuery);

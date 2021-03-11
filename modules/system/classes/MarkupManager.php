@@ -9,12 +9,12 @@ use ApplicationException;
 /**
  * This class manages Twig functions, token parsers and filters.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MarkupManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     const EXTENSION_FILTER = 'filters';
     const EXTENSION_FUNCTION = 'functions';

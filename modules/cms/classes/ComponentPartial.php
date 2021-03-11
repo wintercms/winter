@@ -4,13 +4,13 @@ use File;
 use Lang;
 use Cms\Contracts\CmsObject as CmsObjectContract;
 use Cms\Helpers\File as FileHelper;
-use October\Rain\Extension\Extendable;
+use Winter\Storm\Extension\Extendable;
 use ApplicationException;
 
 /**
  * The CMS component partial class. These objects are read-only.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ComponentPartial extends Extendable implements CmsObjectContract
@@ -90,7 +90,7 @@ class ComponentPartial extends Extendable implements CmsObjectContract
 
     /**
      * Checks if a partial override exists in the supplied theme and returns it.
-     * Since the beginning of time, October inconsistently checked for overrides
+     * Since the beginning of time, Winter inconsistently checked for overrides
      * using the component alias exactly, resulting in a folder with uppercase
      * characters, subsequently this method checks for both variants.
      *

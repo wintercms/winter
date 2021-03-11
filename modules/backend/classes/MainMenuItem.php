@@ -1,6 +1,6 @@
 <?php namespace Backend\Classes;
 
-use October\Rain\Exception\SystemException;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Class MainMenuItem

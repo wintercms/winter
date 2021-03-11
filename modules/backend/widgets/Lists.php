@@ -7,15 +7,15 @@ use Backend;
 use Request;
 use DbDongle;
 use Carbon\Carbon;
-use October\Rain\Html\Helper as HtmlHelper;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Html\Helper as HtmlHelper;
+use Winter\Storm\Router\Helper as RouterHelper;
 use System\Helpers\DateTime as DateTimeHelper;
 use System\Classes\PluginManager;
 use System\Classes\MediaLibrary;
 use System\Classes\ImageResizer;
 use Backend\Classes\ListColumn;
 use Backend\Classes\WidgetBase;
-use October\Rain\Database\Model;
+use Winter\Storm\Database\Model;
 use ApplicationException;
 use BackendAuth;
 
@@ -23,7 +23,7 @@ use BackendAuth;
  * List Widget
  * Used for building back end lists, renders a list of model objects
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Lists extends WidgetBase
@@ -244,7 +244,7 @@ class Lists extends WidgetBase
      */
     protected function loadAssets()
     {
-        $this->addJs('js/october.list.js', 'core');
+        $this->addJs('js/winter.list.js', 'core');
     }
 
     /**

@@ -2,14 +2,14 @@
 
 use Lang;
 use ApplicationException;
-use October\Rain\Extension\ExtensionBase;
+use Winter\Storm\Extension\ExtensionBase;
 use System\Traits\ViewMaker;
-use October\Rain\Html\Helper as HtmlHelper;
+use Winter\Storm\Html\Helper as HtmlHelper;
 
 /**
  * Controller Behavior base class
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ControllerBehavior extends ExtensionBase

@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.base,
+    var Base = $.wn.inspector.propertyEditors.base,
         BaseProto = Base.prototype
 
     var StringEditor = function(inspector, propertyDefinition, containerCell, group) {
@@ -38,7 +38,7 @@
 
         editor.value = value
 
-        $.oc.foundation.element.addClass(this.containerCell, 'text')
+        $.wn.foundation.element.addClass(this.containerCell, 'text')
 
         this.containerCell.appendChild(editor)
     }
@@ -84,5 +84,5 @@
         this.focus()
     }
 
-    $.oc.inspector.propertyEditors.string = StringEditor
+    $.wn.inspector.propertyEditors.string = StringEditor
 }(window.jQuery);

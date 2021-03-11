@@ -30,7 +30,7 @@ return [
         ],
         'settings_menu' => 'Tema front-end',
         'settings_menu_description' => 'Tinjau senarai tema terpasang dan pilih tema aktif.',
-        'find_more_themes' => 'Temukan lebih banyak tema pada Toko Tema OctoberCMS.',
+        'find_more_themes' => 'Temukan lebih banyak tema pada Toko Tema Winter CMS.',
         'activate_button' => 'Aktifkan',
         'active_button' => 'Aktif',
         'customize_button' => 'Ubah suai'

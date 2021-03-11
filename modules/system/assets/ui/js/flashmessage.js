@@ -58,17 +58,19 @@
     // FLASH MESSAGE PLUGIN DEFINITION
     // ============================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.flashMsg = FlashMessage
+    $.wn.flashMsg = FlashMessage
 
     // FLASH MESSAGE DATA-API
     // ===============
 
     $(document).render(function(){
         $('[data-control=flash-message]').each(function(){
-            $.oc.flashMsg($(this).data(), this)
+            $.wn.flashMsg($(this).data(), this)
         })
     })
 
