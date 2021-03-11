@@ -89,7 +89,7 @@ jobs:
           git reset --hard HEAD
           rm -rf ./vendor/winter/storm
           wget https://github.com/wintercms/storm/archive/develop.zip -O ./vendor/winter/develop.zip
-          unzip ./vendor/winter/winter.zip -d ./vendor/winter
+          unzip ./vendor/winter/develop.zip -d ./vendor/winter
           mv ./vendor/winter/storm-develop ./vendor/winter/storm
           composer dump-autoload
 
