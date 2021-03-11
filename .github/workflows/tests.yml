@@ -3,21 +3,43 @@ name: Tests
 on:
   push:
     branches:
-      - '1.0'
+      - 1.0
+      - 1.1
+      - develop
   pull_request:
 
 jobs:
-  phpUnitTests:
+  frontendTests:
     runs-on: ubuntu-latest
+    name: JavaScript
+    steps:
+      - name: Checkout changes
+        uses: actions/checkout@v2
+        with:
+            fetch-depth: 0
+
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+            node-version: 12
+
+      - name: Install Node dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm run test
+  phpUnitTests:
     strategy:
-      max-parallel: 6
+      max-parallel: 8
       matrix:
-        phpVersion: ['7.1', '7.2', '7.3', '7.4']
+        operatingSystem: [ubuntu-latest, windows-latest]
+        phpVersion: ['7.2', '7.3', '7.4']
       fail-fast: false
-    name: Linux / PHP ${{ matrix.phpVersion }}
+    runs-on: ${{ matrix.operatingSystem }}
+    name: ${{ matrix.operatingSystem }} / PHP ${{ matrix.phpVersion }}
     env:
       extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
-      key: winter-cms-1-0-cache-v1
+      key: winter-cms-1-0-cache-develop
     steps:
       - name: Cancel previous incomplete runs
         uses: styfle/cancel-workflow-action@0.8.0
@@ -46,8 +68,19 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.phpVersion }}
-          tools: composer:v1
           extensions: ${{ env.extensions }}
+
+      - name: Switch library dependency (develop)
+        if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
+        run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.1"
+
+      - name: Switch library dependency (1.0)
+        if: github.ref == 'refs/heads/1.0' || github.base_ref == '1.0'
+        run: php ./.github/workflows/utilities/library-switcher "1.0.x-dev as 1.0"
+
+      - name: Switch library dependency (1.1)
+        if: github.ref == 'refs/heads/1.1' || github.base_ref == '1.1'
+        run: php ./.github/workflows/utilities/library-switcher "1.1.x-dev as 1.1"
 
       - name: Setup dependency cache
         id: composercache
@@ -62,15 +95,6 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-scripts
-
-      - name: Reset Winter modules and library
-        run: |
-          git reset --hard HEAD
-          rm -rf ./vendor/winter/storm
-          wget https://github.com/wintercms/storm/archive/1.0.zip -O ./vendor/winter/1.0.zip
-          unzip ./vendor/winter/1.0.zip -d ./vendor/winter
-          mv ./vendor/winter/storm-1.0 ./vendor/winter/storm
-          composer dump-autoload
 
       - name: Run post-update Composer scripts
         run: php artisan package:discover
