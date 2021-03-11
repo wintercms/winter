@@ -112,6 +112,14 @@ class BackendController extends ControllerBase
     }
 
     /**
+     * @inheritDoc
+     */
+    public function callAction($method, $parameters)
+    {
+        return parent::callAction($method, array_values($parameters));
+    }
+
+    /**
      * Pass unhandled URLs to the CMS Controller, if it exists
      *
      * @param string $url

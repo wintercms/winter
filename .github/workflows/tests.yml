@@ -3,7 +3,8 @@ name: Tests
 on:
   push:
     branches:
-      - master
+      - 1.0
+      - 1.1
       - develop
   pull_request:
 
@@ -29,15 +30,15 @@ jobs:
         run: npm run test
   phpUnitTests:
     strategy:
-      max-parallel: 6
+      max-parallel: 8
       matrix:
         operatingSystem: [ubuntu-latest, windows-latest]
-        phpVersion: ['7.2', '7.3', '7.4']
+        phpVersion: ['7.2', '7.3', '7.4', '8.0']
       fail-fast: false
     runs-on: ${{ matrix.operatingSystem }}
     name: ${{ matrix.operatingSystem }} / PHP ${{ matrix.phpVersion }}
     env:
-      extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml
+      extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
       key: october-cms-cache-v1
     steps:
       - name: Checkout changes
@@ -62,8 +63,12 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.phpVersion }}
-          tools: composer
+          tools: composer:v1
           extensions: ${{ env.extensions }}
+
+      - name: Switch library dependency
+        if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
+        run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.1"
 
       - name: Setup dependency cache
         id: composercache

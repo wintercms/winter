@@ -1,9 +1,16 @@
 <?php
 
+use Illuminate\Filesystem\FilesystemAdapter;
 use System\Classes\MediaLibrary;
 
 class MediaLibraryTest extends TestCase // @codingStandardsIgnoreLine
 {
+    public function setUp(): void
+    {
+        MediaLibrary::forgetInstance();
+        parent::setUp();
+    }
+
     public function tearDown(): void
     {
         $this->removeMedia();
@@ -76,17 +83,44 @@ class MediaLibraryTest extends TestCase // @codingStandardsIgnoreLine
 
         $contents = MediaLibrary::instance()->listFolderContents();
         $this->assertNotEmpty($contents, 'Media library item is not discovered');
-        $this->assertCount(2, $contents);
-
-        $this->assertEquals('file', $contents[0]->type, 'Media library item does not have the right type');
-        $this->assertEquals('/october.png', $contents[0]->path, 'Media library item does not have the right path');
-        $this->assertNotEmpty($contents[0]->lastModified, 'Media library item last modified is empty');
-        $this->assertNotEmpty($contents[0]->size, 'Media library item size is empty');
+        $this->assertCount(3, $contents);
 
         $this->assertEquals('file', $contents[1]->type, 'Media library item does not have the right type');
-        $this->assertEquals('/text.txt', $contents[1]->path, 'Media library item does not have the right path');
+        $this->assertEquals('/october.png', $contents[1]->path, 'Media library item does not have the right path');
         $this->assertNotEmpty($contents[1]->lastModified, 'Media library item last modified is empty');
         $this->assertNotEmpty($contents[1]->size, 'Media library item size is empty');
+
+        $this->assertEquals('file', $contents[2]->type, 'Media library item does not have the right type');
+        $this->assertEquals('/text.txt', $contents[2]->path, 'Media library item does not have the right path');
+        $this->assertNotEmpty($contents[2]->lastModified, 'Media library item last modified is empty');
+        $this->assertNotEmpty($contents[2]->size, 'Media library item size is empty');
+    }
+
+    public function testListAllDirectories()
+    {
+        $disk = $this->createConfiguredMock(FilesystemAdapter::class, [
+            'allDirectories' => [
+                '/media/.ignore1',
+                '/media/.ignore2',
+                '/media/dir',
+                '/media/dir/sub',
+                '/media/exclude',
+                '/media/hidden',
+                '/media/hidden/sub1',
+                '/media/hidden/sub1/deep1',
+                '/media/hidden/sub2',
+                '/media/hidden but not really',
+                '/media/name'
+            ]
+        ]);
+
+        $this->app['config']->set('cms.storage.media.folder', 'media');
+        $this->app['config']->set('cms.storage.media.ignore', ['hidden']);
+        $this->app['config']->set('cms.storage.media.ignorePatterns', ['^\..*']);
+        $instance = MediaLibrary::instance();
+        $this->setProtectedProperty($instance, 'storageDisk', $disk);
+
+        $this->assertEquals(['/', '/dir', '/dir/sub', '/hidden but not really', '/name'], $instance->listAllDirectories(['/exclude']));
     }
 
     protected function setUpStorage()
