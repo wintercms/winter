@@ -30,7 +30,10 @@
     },
     "require": {
         "php": ">=7.2.9",
-        "winter/storm": "dev-develop as 1.1",
+        "winter/storm": "~1.1.2",
+        "winter/wn-system-module": "~1.1.2",
+        "winter/wn-backend-module": "~1.1.2",
+        "winter/wn-cms-module": "~1.1.2",
         "laravel/framework": "~6.0",
         "wikimedia/composer-merge-plugin": "~2.0.1"
     },
