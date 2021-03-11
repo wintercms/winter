@@ -31,7 +31,7 @@ use Exception;
  * values as either a YAML file, located in the controller view directory,
  * or directly as a PHP array.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ImportExportController extends ControllerBehavior
@@ -149,7 +149,7 @@ class ImportExportController extends ControllerBehavior
             return $response;
         }
 
-        $this->addJs('js/october.import.js', 'core');
+        $this->addJs('js/winter.import.js', 'core');
         $this->addCss('css/import.css', 'core');
 
         $this->controller->pageTitle = $this->controller->pageTitle
@@ -168,7 +168,7 @@ class ImportExportController extends ControllerBehavior
             return $response;
         }
 
-        $this->addJs('js/october.export.js', 'core');
+        $this->addJs('js/winter.export.js', 'core');
         $this->addCss('css/export.css', 'core');
 
         $this->controller->pageTitle = $this->controller->pageTitle

@@ -1,31 +1,33 @@
 /* ========================================================================
- * OctoberCMS: front-end JavaScript extras
- * http://octobercms.com
+ * Winter CMS: front-end JavaScript extras
+ * http://wintercms.com
  * ========================================================================
  * Copyright 2016-2020 Alexey Bobkov, Samuel Georges
  * ======================================================================== */
 
 +function ($) { "use strict";
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
     // @todo Provide an interface for configuration
     // - Custom loader CSS class
     // - Custom stripe loader color
     // - Flash message interval
 
-    var LOADER_CLASS = 'oc-loading';
+    var LOADER_CLASS = 'wn-loading';
 
     // FLASH HANDLING
     // ============================
 
     $(document).on('ajaxSetup', '[data-request][data-request-flash]', function(event, context) {
         context.options.handleErrorMessage = function(message) {
-            $.oc.flashMsg({ text: message, class: 'error' })
+            $.wn.flashMsg({ text: message, class: 'error' })
         }
 
         context.options.handleFlashMessage = function(message, type) {
-            $.oc.flashMsg({ text: message, class: type })
+            $.wn.flashMsg({ text: message, class: type })
         }
     })
 
@@ -146,7 +148,7 @@
         }
 
         this.indicator.removeClass('loaded')
-        $(document.body).addClass('oc-loading')
+        $(document.body).addClass('wn-loading')
     }
 
     StripeLoadIndicator.prototype.hide = function(force) {
@@ -158,11 +160,11 @@
 
         if (this.counter <= 0) {
             this.indicator.addClass('loaded')
-            $(document.body).removeClass('oc-loading')
+            $(document.body).removeClass('wn-loading')
         }
     }
 
-    $.oc.stripeLoadIndicator = new StripeLoadIndicator()
+    $.wn.stripeLoadIndicator = new StripeLoadIndicator()
 
     // STRIPE LOAD INDICATOR DATA-API
     // ============================
@@ -173,19 +175,19 @@
             // element, for example a <form> tag wrapping a <button> tag
             event.stopPropagation()
 
-            $.oc.stripeLoadIndicator.show()
+            $.wn.stripeLoadIndicator.show()
 
             // This code will cover instances where the element has been removed
             // from the DOM, making the resolution event below an orphan.
             var $el = $(this)
             $(window).one('ajaxUpdateComplete', function() {
                 if ($el.closest('html').length === 0)
-                    $.oc.stripeLoadIndicator.hide()
+                    $.wn.stripeLoadIndicator.hide()
              })
         })
         .on('ajaxFail ajaxDone', '[data-request]', function(event) {
             event.stopPropagation()
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         })
 
     // FLASH MESSAGE
@@ -239,17 +241,19 @@
         interval: 5
     }
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.flashMsg = FlashMessage
+    $.wn.flashMsg = FlashMessage
 
     // FLASH MESSAGE DATA-API
     // ===============
 
     $(document).render(function(){
         $('[data-control=flash-message]').each(function(){
-            $.oc.flashMsg($(this).data(), this)
+            $.wn.flashMsg($(this).data(), this)
         })
     })
 

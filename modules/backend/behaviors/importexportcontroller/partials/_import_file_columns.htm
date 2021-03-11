@@ -13,14 +13,14 @@
                                 data-delay="300"
                                 data-placement="right"
                                 title="<?= e(trans('backend::lang.import_export.ignore_this_column')) ?>"
-                                onclick="$.oc.importBehavior.ignoreFileColumn(this)"
+                                onclick="$.wn.importBehavior.ignoreFileColumn(this)"
                             >
                                 <i class="icon-close"></i>
                             </a>
                             <a
                                 href="javascript:;"
                                 class="column-label"
-                                onclick="$.oc.importBehavior.loadFileColumnSample(this)"
+                                onclick="$.wn.importBehavior.loadFileColumnSample(this)"
                             >
                                 <?= e($column) ?>
                             </a>
@@ -40,5 +40,5 @@
 </div>
 
 <script>
-    $.oc.importBehavior.bindColumnSorting()
+    $.wn.importBehavior.bindColumnSorting()
 </script>

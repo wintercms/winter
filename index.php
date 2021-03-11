@@ -1,8 +1,8 @@
 <?php
 /**
- * October - The PHP platform that gets back to basics.
+ * Winter CMS - The PHP platform that gets back to basics.
  *
- * @package  October
+ * @package  Winter
  * @author   Alexey Bobkov, Samuel Georges
  */
 

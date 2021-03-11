@@ -53,7 +53,7 @@ return [
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
-            'username' => 'October CMS Log',
+            'username' => 'Winter CMS Log',
             'emoji' => ':boom:',
             'level' => 'critical',
         ],

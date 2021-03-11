@@ -5,16 +5,16 @@ use Config;
 use October\Rain\Argon\Argon;
 
 /**
- * Reads and stores the October CMS source manifest information.
+ * Reads and stores the Winter CMS source manifest information.
  *
  * The source manifest is a meta JSON file, stored on GitHub, that contains the hashsums of all module files across all
- * buils of October CMS. This allows us to compare the October CMS installation against the expected file checksums and
+ * buils of Winter CMS. This allows us to compare the Winter CMS installation against the expected file checksums and
  * determine the installed build and whether it has been modified.
  *
  * Since October 1.1.1, a forks manifest is also used to determine at which point we forked a branch off to a new
  * major release. This allows us to track concurrent histories - ie. the 1.0.x history vs. the 1.1.x history.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Ben Thomson
  */
 class SourceManifest
@@ -304,7 +304,7 @@ class SourceManifest
     /**
      * Compares a file manifest with the source manifest.
      *
-     * This will determine the build of the October CMS installation.
+     * This will determine the build of the Winter CMS installation.
      *
      * This will return an array with the following information:
      *  - `build`: The build number we determined was most likely the build installed.

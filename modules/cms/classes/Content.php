@@ -6,7 +6,7 @@ use Markdown;
 /**
  * The CMS content file class.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Content extends CmsCompoundObject

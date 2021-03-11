@@ -58,7 +58,7 @@ These modifiers can be added in addition to the `control-tabs` class:
         </div>
     </div>
 
-> **Note**: Primary tabs in the October back-end are inset by default and you should use `.tabs-no-inset` to disable this.
+> **Note**: Primary tabs in the Winter back-end are inset by default and you should use `.tabs-no-inset` to disable this.
 
 ### Secondary tabs
 
@@ -134,7 +134,7 @@ Example with data attributes (data-control="tab"):
 ### Supported options:
 
  - closable - adds the "close" icon to the tab and lets users to close tabs. Corresponds the data-closable attribute.
- - closeConfirmation - a confirmation to show when a user tries to close a modified tab. Corresponds the data-close-confirmation 
+ - closeConfirmation - a confirmation to show when a user tries to close a modified tab. Corresponds the data-close-confirmation
    attribute. The confirmation is displayed only if the tab was modified.
  - slidable - allows the tabs to be switched with the swipe gesture on touch devices. Corresponds the data-slidable attribute.
  - paneClasses - a list of CSS classes to apply new pane elements. Corresponds to the data-pane-classes attribute.
@@ -144,6 +144,6 @@ Example with data attributes (data-control="tab"):
 
 ### Supported events:
 
-- beforeClose.oc.tab - triggered on a tab pane element before tab is closed by the user. Call the event's 
+- beforeClose.oc.tab - triggered on a tab pane element before tab is closed by the user. Call the event's
   preventDefault() method to cancel the action.
 - afterAllClosed.oc.tab - triggered after all tabs have been closed

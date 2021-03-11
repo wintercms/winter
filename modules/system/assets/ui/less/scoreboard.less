@@ -37,7 +37,7 @@ div.scoreboard {
         // and set offsets so that the elements do not
         // "jump" when the chart script loads and
         // adds the canvas and color indicator elements.
-        height: 67px;
+        min-height: 67px;
 
         ul {
             margin-left: 77px;
@@ -47,6 +47,10 @@ div.scoreboard {
                 padding-left: 18px;
                 & > i { margin-left: -18px; }
             }
+        }
+
+        div.canvas {
+            margin-bottom: 0;
         }
 
         .canvas + ul { margin-left: 0; }

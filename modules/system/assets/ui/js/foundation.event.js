@@ -1,21 +1,23 @@
 /*
- * October JavaScript foundation library.
- * 
+ * Winter JavaScript foundation library.
+ *
  * Light-weight utility functions for working with native DOM events. The functions
  * work with events directly, without jQuery, using the native JavaScript and DOM
  * features.
  *
  * Usage examples:
  *
- * $.oc.foundation.event.stop(ev)
+ * $.wn.foundation.event.stop(ev)
  *
  */
 +function ($) { "use strict";
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    if ($.oc.foundation === undefined)
-        $.oc.foundation = {}
+    if ($.wn.foundation === undefined)
+        $.wn.foundation = {}
 
     var Event = {
         /*
@@ -77,5 +79,5 @@
         }
     }
 
-    $.oc.foundation.event = Event;
+    $.wn.foundation.event = Event;
 }(window.jQuery);

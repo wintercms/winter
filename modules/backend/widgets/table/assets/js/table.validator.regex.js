@@ -6,16 +6,16 @@
     // NAMESPACE CHECK
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.validator === undefined)
-        throw new Error("The $.oc.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");
+    if ($.wn.table.validator === undefined)
+        throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.table.validator.base,
+    var Base = $.wn.table.validator.base,
         BaseProto = Base.prototype
 
     var Regex = function(options) {
@@ -48,5 +48,5 @@
         return
     }
 
-    $.oc.table.validator.regex = Regex
+    $.wn.table.validator.regex = Regex
 }(window.jQuery);

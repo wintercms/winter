@@ -6,12 +6,12 @@ use Model;
 /**
  * Mail settings
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailSetting extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     const MODE_LOG       = 'log';
     const MODE_MAIL      = 'mail';
@@ -57,7 +57,7 @@ class MailSetting extends Model
         $config = App::make('config');
         $this->send_mode = $config->get('mail.driver', static::MODE_MAIL);
         $this->sender_name = $config->get('mail.from.name', 'Your Site');
-        $this->sender_email = $config->get('mail.from.address', 'admin@domain.tld');
+        $this->sender_email = $config->get('mail.from.address', 'admin@example.com');
         $this->sendmail_path = $config->get('mail.sendmail', '/usr/sbin/sendmail');
         $this->smtp_address = $config->get('mail.host');
         $this->smtp_port = $config->get('mail.port', 587);

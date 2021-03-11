@@ -26,8 +26,8 @@ use System\Models\EventLog;
 use System\Models\MailSetting;
 use System\Classes\CombineAssets;
 use Backend\Classes\WidgetManager;
-use October\Rain\Support\ModuleServiceProvider;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Support\ModuleServiceProvider;
+use Winter\Storm\Router\Helper as RouterHelper;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 
@@ -143,7 +143,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerPrivilegedActions()
     {
         $requests = ['/combine/', '@/system/updates', '@/system/install', '@/backend/auth'];
-        $commands = ['october:up', 'october:update', 'october:env', 'october:version'];
+        $commands = ['winter:up', 'winter:update', 'winter:env', 'winter:version'];
 
         /*
          * Requests
@@ -249,17 +249,17 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register console commands
          */
-        $this->registerConsoleCommand('october.up', 'System\Console\OctoberUp');
-        $this->registerConsoleCommand('october.down', 'System\Console\OctoberDown');
-        $this->registerConsoleCommand('october.update', 'System\Console\OctoberUpdate');
-        $this->registerConsoleCommand('october.util', 'System\Console\OctoberUtil');
-        $this->registerConsoleCommand('october.mirror', 'System\Console\OctoberMirror');
-        $this->registerConsoleCommand('october.fresh', 'System\Console\OctoberFresh');
-        $this->registerConsoleCommand('october.env', 'System\Console\OctoberEnv');
-        $this->registerConsoleCommand('october.install', 'System\Console\OctoberInstall');
-        $this->registerConsoleCommand('october.passwd', 'System\Console\OctoberPasswd');
-        $this->registerConsoleCommand('october.version', 'System\Console\OctoberVersion');
-        $this->registerConsoleCommand('october.manifest', 'System\Console\OctoberManifest');
+        $this->registerConsoleCommand('winter.up', 'System\Console\WinterUp');
+        $this->registerConsoleCommand('winter.down', 'System\Console\WinterDown');
+        $this->registerConsoleCommand('winter.update', 'System\Console\WinterUpdate');
+        $this->registerConsoleCommand('winter.util', 'System\Console\WinterUtil');
+        $this->registerConsoleCommand('winter.mirror', 'System\Console\WinterMirror');
+        $this->registerConsoleCommand('winter.fresh', 'System\Console\WinterFresh');
+        $this->registerConsoleCommand('winter.env', 'System\Console\WinterEnv');
+        $this->registerConsoleCommand('winter.install', 'System\Console\WinterInstall');
+        $this->registerConsoleCommand('winter.passwd', 'System\Console\WinterPasswd');
+        $this->registerConsoleCommand('winter.version', 'System\Console\WinterVersion');
+        $this->registerConsoleCommand('winter.manifest', 'System\Console\WinterManifest');
 
         $this->registerConsoleCommand('plugin.install', 'System\Console\PluginInstall');
         $this->registerConsoleCommand('plugin.remove', 'System\Console\PluginRemove');
@@ -372,7 +372,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendNavigation()
     {
         BackendMenu::registerCallback(function ($manager) {
-            $manager->registerMenuItems('October.System', [
+            $manager->registerMenuItems('Winter.System', [
                 'system' => [
                     'label'       => 'system::lang.settings.menu_label',
                     'icon'        => 'icon-cog',
@@ -382,26 +382,27 @@ class ServiceProvider extends ModuleServiceProvider
                     'order'       => 1000
                 ]
             ]);
+            $manager->registerOwnerAlias('Winter.System', 'October.System');
         });
 
         /*
          * Register the sidebar for the System main menu
          */
         BackendMenu::registerContextSidenavPartial(
-            'October.System',
+            'Winter.System',
             'system',
             '~/modules/system/partials/_system_sidebar.htm'
         );
 
         /*
-         * Remove the October.System.system main menu item if there is no subpages to display
+         * Remove the Winter.System.system main menu item if there is no subpages to display
          */
         Event::listen('backend.menu.extendItems', function ($manager) {
             $systemSettingItems = SettingsManager::instance()->listItems('system');
-            $systemMenuItems = $manager->listSideMenuItems('October.System', 'system');
+            $systemMenuItems = $manager->listSideMenuItems('Winter.System', 'system');
 
             if (empty($systemSettingItems) && empty($systemMenuItems)) {
-                $manager->removeMainMenuItem('October.System', 'system');
+                $manager->removeMainMenuItem('Winter.System', 'system');
             }
         }, -9999);
     }
@@ -425,7 +426,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendPermissions()
     {
         BackendAuth::registerCallback(function ($manager) {
-            $manager->registerPermissions('October.System', [
+            $manager->registerPermissions('Winter.System', [
                 'system.manage_updates' => [
                     'label' => 'system::lang.permissions.manage_software_updates',
                     'tab' => 'system::lang.permissions.name',
@@ -447,6 +448,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'roles' => UserRole::CODE_DEVELOPER,
                 ]
             ]);
+            $manager->registerPermissionOwnerAlias('Winter.System', 'October.System');
         });
     }
 
@@ -460,7 +462,7 @@ class ServiceProvider extends ModuleServiceProvider
         });
 
         SettingsManager::instance()->registerCallback(function ($manager) {
-            $manager->registerSettingItems('October.System', [
+            $manager->registerSettingItems('Winter.System', [
                 'updates' => [
                     'label'       => 'system::lang.updates.menu_label',
                     'description' => 'system::lang.updates.menu_description',
@@ -536,6 +538,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'order'       => 990
                 ],
             ]);
+            $manager->registerOwnerAlias('Winter.System', 'October.System');
         });
     }
 
@@ -553,7 +556,7 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/ui/storm.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
-            $combiner->registerBundle('~/modules/system/assets/css/framework.extras.css');
+            $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
         });
     }
 

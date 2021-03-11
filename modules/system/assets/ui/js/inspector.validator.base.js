@@ -6,13 +6,13 @@
     // NAMESPACES
     // ============================
 
-    if ($.oc.inspector.validators === undefined)
-        $.oc.inspector.validators = {}
+    if ($.wn.inspector.validators === undefined)
+        $.wn.inspector.validators = {}
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var BaseValidator = function(options) {
@@ -55,5 +55,5 @@
         return null
     }
 
-    $.oc.inspector.validators.base = BaseValidator
+    $.wn.inspector.validators.base = BaseValidator
 }(window.jQuery);

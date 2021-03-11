@@ -8,12 +8,12 @@ use Cms\Classes\Theme as CmsTheme;
 /**
  * Theme manager
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     //
     // Gateway spawned
