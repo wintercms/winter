@@ -39,7 +39,7 @@ class SourceManifest
             $this->setSource(
                 Config::get(
                     'cms.sourceManifestUrl',
-                    'https://raw.githubusercontent.com/octoberrain/meta/master/manifest/builds.json'
+                    'https://raw.githubusercontent.com/wintercms/meta/master/manifest/builds.json'
                 )
             );
         }
