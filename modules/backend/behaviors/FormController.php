@@ -258,7 +258,7 @@ class FormController extends ControllerBehavior
 
         Flash::success($this->getLang("{$this->context}[flashSave]", 'backend::lang.form.create_success'));
 
-        if ($redirect = $this->makeRedirect('create', $model)) {
+        if ($redirect = $this->makeRedirect($this->context, $model)) {
             return $redirect;
         }
     }
@@ -326,7 +326,7 @@ class FormController extends ControllerBehavior
 
         Flash::success($this->getLang("{$this->context}[flashSave]", 'backend::lang.form.update_success'));
 
-        if ($redirect = $this->makeRedirect('update', $model)) {
+        if ($redirect = $this->makeRedirect($this->context, $model)) {
             return $redirect;
         }
     }
@@ -646,7 +646,7 @@ class FormController extends ControllerBehavior
      * View helper to render the form fields belonging to the
      * secondary tabs section.
      *
-     *     <?= $this->formRenderPrimaryTabs() ?>
+     *     <?= $this->formRenderSecondaryTabs() ?>
      *
      * @return string HTML markup
      * @throws \October\Rain\Exception\ApplicationException if the Form Widget isn't set

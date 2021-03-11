@@ -145,6 +145,7 @@ class ListController extends ControllerBehavior
             'recordUrl',
             'recordOnClick',
             'recordsPerPage',
+            'perPageOptions',
             'showPageNumbers',
             'noRecordsMessage',
             'defaultSort',
@@ -232,38 +233,41 @@ class ListController extends ControllerBehavior
          * Prepare the filter widget (optional)
          */
         if (isset($listConfig->filter)) {
-            $widget->cssClasses[] = 'list-flush';
-
             $filterConfig = $this->makeConfig($listConfig->filter);
-            $filterConfig->alias = $widget->alias . 'Filter';
-            $filterWidget = $this->makeWidget(\Backend\Widgets\Filter::class, $filterConfig);
-            $filterWidget->bindToController();
 
-            /*
-             * Filter the list when the scopes are changed
-             */
-            $filterWidget->bindEvent('filter.update', function () use ($widget, $filterWidget) {
-                return $widget->onFilter();
-            });
+            if (!empty($filterConfig->scopes)) {
+                $widget->cssClasses[] = 'list-flush';
 
-            /*
-             * Filter Widget with extensibility
-             */
-            $filterWidget->bindEvent('filter.extendScopes', function () use ($filterWidget) {
-                $this->controller->listFilterExtendScopes($filterWidget);
-            });
+                $filterConfig->alias = $widget->alias . 'Filter';
+                $filterWidget = $this->makeWidget(\Backend\Widgets\Filter::class, $filterConfig);
+                $filterWidget->bindToController();
 
-            /*
-             * Extend the query of the list of options
-             */
-            $filterWidget->bindEvent('filter.extendQuery', function ($query, $scope) {
-                $this->controller->listFilterExtendQuery($query, $scope);
-            });
+                /*
+                * Filter the list when the scopes are changed
+                */
+                $filterWidget->bindEvent('filter.update', function () use ($widget, $filterWidget) {
+                    return $widget->onFilter();
+                });
 
-            // Apply predefined filter values
-            $widget->addFilter([$filterWidget, 'applyAllScopesToQuery']);
+                /*
+                * Filter Widget with extensibility
+                */
+                $filterWidget->bindEvent('filter.extendScopes', function () use ($filterWidget) {
+                    $this->controller->listFilterExtendScopes($filterWidget);
+                });
 
-            $this->filterWidgets[$definition] = $filterWidget;
+                /*
+                * Extend the query of the list of options
+                */
+                $filterWidget->bindEvent('filter.extendQuery', function ($query, $scope) {
+                    $this->controller->listFilterExtendQuery($query, $scope);
+                });
+
+                // Apply predefined filter values
+                $widget->addFilter([$filterWidget, 'applyAllScopesToQuery']);
+
+                $this->filterWidgets[$definition] = $filterWidget;
+            }
         }
 
         return $widget;
@@ -295,16 +299,6 @@ class ListController extends ControllerBehavior
         }
 
         /*
-         * Validate checked identifiers
-         */
-        $checkedIds = post('checked');
-
-        if (!$checkedIds || !is_array($checkedIds) || !count($checkedIds)) {
-            Flash::error(Lang::get('backend::lang.list.delete_selected_empty'));
-            return $this->controller->listRefresh();
-        }
-
-        /*
          * Establish the list definition
          */
         $definition = post('definition', $this->primaryDefinition);
@@ -314,6 +308,20 @@ class ListController extends ControllerBehavior
         }
 
         $listConfig = $this->controller->listGetConfig($definition);
+
+        /*
+         * Validate checked identifiers
+         */
+        $checkedIds = post('checked');
+
+        if (!$checkedIds || !is_array($checkedIds) || !count($checkedIds)) {
+            Flash::error(Lang::get(
+                (!empty($listConfig->noRecordsDeletedMessage))
+                    ? $listConfig->noRecordsDeletedMessage
+                    : 'backend::lang.list.delete_selected_empty'
+            ));
+            return $this->controller->listRefresh();
+        }
 
         /*
          * Create the model
@@ -341,10 +349,18 @@ class ListController extends ControllerBehavior
                 $record->delete();
             }
 
-            Flash::success(Lang::get('backend::lang.list.delete_selected_success'));
+            Flash::success(Lang::get(
+                (!empty($listConfig->deleteMessage))
+                    ? $listConfig->deleteMessage
+                    : 'backend::lang.list.delete_selected_success'
+            ));
         }
         else {
-            Flash::error(Lang::get('backend::lang.list.delete_selected_empty'));
+            Flash::error(Lang::get(
+                (!empty($listConfig->noRecordsDeletedMessage))
+                    ? $listConfig->noRecordsDeletedMessage
+                    : 'backend::lang.list.delete_selected_empty'
+            ));
         }
 
         return $this->controller->listRefresh($definition);

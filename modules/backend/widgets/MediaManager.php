@@ -6,6 +6,7 @@ use Lang;
 use File;
 use Input;
 use Config;
+use Backend;
 use Request;
 use Response;
 use Backend;

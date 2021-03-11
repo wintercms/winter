@@ -43,6 +43,15 @@ Add the `select-no-search` CSS class to disable searching.
         </select>
     </div>
 
+### Dynamic option creation
+
+In addition to a pre-populated menu of options, Select widgets may dynamically create new options from textual input by the user in the search box. This feature is called "tagging". To enable tagging, set the `tags` option to `true`:
+
+    <select
+        class="form-control custom-select"
+        data-tags="true"
+    ></select>
+
 ## Option groups
 
 Use the `optgroup` element to create option groups.
@@ -66,7 +75,7 @@ Use the `data-handler` attribute to source the select options from an AJAX handl
     class="form-control custom-select"
     data-handler="onGetOptions"
     data-minimum-input-length="2"
-    data-ajax--delay="300"
+    data-ajax-delay="300"
     data-request-data="foo: 'bar'"
 ></select>
 ```

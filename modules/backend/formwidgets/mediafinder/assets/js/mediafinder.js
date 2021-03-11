@@ -6,7 +6,7 @@
  * - data-option="value" - an option with a value
  *
  * JavaScript API:
- * $('a#someElement').recordFinder({ option: 'value' })
+ * $('a#someElement').mediaFinder({ option: 'value' })
  *
  * Dependences:
  * - Some other plugin (filename.js)

@@ -339,10 +339,9 @@ xhr.setRequestHeader('X-OCTOBER-REQUEST-HANDLER',this.options.uploadHandler)}
 MediaManager.prototype.uploadCancelAll=function(){this.dropzone.removeAllFiles(true)
 this.hideUploadUi()}
 MediaManager.prototype.updateUploadBar=function(templateName,classNames){var fileNumberLabel=this.$el.get(0).querySelector('[data-label="file-number-and-progress"]'),successTemplate=fileNumberLabel.getAttribute('data-'+templateName+'-template'),progressBar=this.$el.get(0).querySelector('[data-control="upload-progress-bar"]')
-fileNumberLabel.innerHTML=successTemplate
-progressBar.setAttribute('class',classNames)}
-MediaManager.prototype.uploadSuccess=function(){this.updateUploadBar('success','progress-bar progress-bar-success')}
-MediaManager.prototype.uploadError=function(file,message){this.updateUploadBar('error','progress-bar progress-bar-danger')
+fileNumberLabel.innerHTML=successTemplate;progressBar.setAttribute('class',classNames)}
+MediaManager.prototype.uploadSuccess=function(){this.updateUploadBar('success','progress-bar progress-bar-success');}
+MediaManager.prototype.uploadError=function(file,message){this.updateUploadBar('error','progress-bar progress-bar-danger');if(file.xhr.status===413){message='Server rejected the file because it was too large, try increasing post_max_size';}
 if(!message){message='Error uploading file'}
 $.oc.alert(message)}
 MediaManager.prototype.cropSelectedImage=function(callback){var selectedItems=this.getSelectedItems(true)

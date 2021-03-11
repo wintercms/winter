@@ -63,6 +63,14 @@ input[type="checkbox"],
 input[type="radio"] {box-sizing:border-box;padding:0}
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {height:auto}
+input[type="number"]:focus::-webkit-input-placeholder {margin-right:20px}
+input[type="number"]:focus::-moz-placeholder {margin-right:20px}
+input[type="number"]:focus:-ms-input-placeholder {margin-right:20px}
+input[type="number"]:focus::placeholder {margin-right:20px}
+input[type="number"]:hover::-webkit-input-placeholder {margin-right:20px}
+input[type="number"]:hover::-moz-placeholder {margin-right:20px}
+input[type="number"]:hover:-ms-input-placeholder {margin-right:20px}
+input[type="number"]:hover::placeholder {margin-right:20px}
 input[type="search"] {-webkit-appearance:textfield;-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box}
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-decoration {-webkit-appearance:none}
@@ -4649,7 +4657,7 @@ table.table.data tr.list-tree-level-10 td.list-cell-index-1 {padding-left:115px}
 .inspector-fields td.text input[type=text]::-moz-placeholder {font-weight:normal !important;color:#b5babd}
 .inspector-fields td.text input[type=text]:-ms-input-placeholder {font-weight:normal !important;color:#b5babd}
 .inspector-fields td.text.active {background:#fff}
-.inspector-fields td.autocomplete {padding:0}
+.inspector-fields td.autocomplete {padding:0;overflow:visible;position:relative}
 .inspector-fields td.autocomplete .autocomplete-container input[type=text] {padding:5px 12px}
 .inspector-fields td.autocomplete .autocomplete-container ul.dropdown-menu {background:white;font-size:12px;z-index:10000}
 .inspector-fields td.autocomplete .autocomplete-container ul.dropdown-menu li a {padding:5px 12px;white-space:normal;word-wrap:break-word}

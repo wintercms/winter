@@ -1,30 +1,32 @@
 {
-    "name": "october/system",
-    "type": "october-module",
-    "description": "System module for October CMS",
-    "homepage": "https://octobercms.com",
-    "keywords": ["october cms", "october", "system"],
+    "name": "winter/wn-system-module",
+    "type": "winter-module",
+    "description": "System module for Winter CMS",
+    "homepage": "https://wintercms.com",
+    "keywords": ["winter cms", "winter", "system"],
     "license": "MIT",
     "authors": [
         {
             "name": "Alexey Bobkov",
-            "email": "aleksey.bobkov@gmail.com"
+            "email": "aleksey.bobkov@gmail.com",
+            "role": "Original Author"
         },
         {
             "name": "Samuel Georges",
-            "email": "daftspunky@gmail.com"
+            "email": "daftspunky@gmail.com",
+            "role": "Original Author"
         },
         {
             "name": "Luke Towers",
-            "email": "octobercms@luketowers.ca",
-            "homepage": "https://luketowers.ca",
-            "role": "Maintainer"
+            "email": "wintercms@luketowers.ca",
+            "role": "Lead Maintainer"
         }
     ],
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.2",
         "composer/installers": "~1.0",
-        "october/rain": "~1.0"
+        "winter/storm": "~1.1.0",
+        "laravel/framework": "~6.0"
     },
     "autoload": {
         "psr-4": {
