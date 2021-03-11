@@ -4,19 +4,19 @@ use File;
 use Model;
 use Response;
 use ApplicationException;
-use October\Rain\Filesystem\Zip;
+use Winter\Storm\Filesystem\Zip;
 use Cms\Classes\Theme as CmsTheme;
 use Exception;
 
 /**
  * Theme export model
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeExport extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var string The database table used by the model.

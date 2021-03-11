@@ -1,7 +1,7 @@
 import { JSDOM } from 'jsdom'
 
 const defaults = {
-    url: 'https://october.example.org/',
+    url: 'https://winter.example.org/',
     referer: null,
     contentType: 'text/html',
     head: '<!DOCTYPE html><html><head><title>Fake document</title></head>',

@@ -19,9 +19,9 @@ class BelongsToModelTest extends PluginTestCase
     {
         Model::unguard();
         $post = Post::create(['title' => "First post", 'description' => "Yay!!"]);
-        $author1 = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $author2 = Author::create(['name' => 'Louie', 'email' => 'louie@email.tld']);
-        $author3 = Author::make(['name' => 'Charlie', 'email' => 'charlie@email.tld']);
+        $author1 = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
+        $author2 = Author::create(['name' => 'Louie', 'email' => 'louie@example.com']);
+        $author3 = Author::make(['name' => 'Charlie', 'email' => 'charlie@example.com']);
         Model::reguard();
 
         // Set by Model object

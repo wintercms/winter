@@ -11,22 +11,32 @@ jobs:
     runs-on: ubuntu-latest
     name: PHP
     steps:
+      - name: Cancel previous incomplete runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
       - name: Checkout changes
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+
       - name: Install PHP
-        uses: shivammathur/setup-php@master
+        uses: shivammathur/setup-php@v2
         with:
           php-version: 7.2
           tools: composer:v1
+          extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
+
       - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-suggest
-      - name: Reset October modules and library
+
+      - name: Reset Winter modules and library
         run: |
           git reset --hard HEAD
-          rm -rf ./vendor/october/rain
-          wget https://github.com/octobercms/library/archive/develop.zip -O ./vendor/october/develop.zip
-          unzip ./vendor/october/develop.zip -d ./vendor/october
-          mv ./vendor/october/library-develop ./vendor/october/rain
+          rm -rf ./vendor/winter/storm
+          wget https://github.com/wintercms/storm/archive/1.0.zip -O ./vendor/winter/1.0.zip
+          unzip ./vendor/winter/1.0.zip -d ./vendor/winter
+          mv ./vendor/winter/storm-1.0 ./vendor/winter/storm
           composer dump-autoload
+
       - name: Run code quality checks
         run: ./vendor/bin/phpcs --colors -nq --report="full" --extensions="php" $(git show --name-only --pretty="" --diff-filter=ACMR ${{ github.sha }})

@@ -17,7 +17,7 @@ class AttachManyModelTest extends PluginTestCase
     public function testDeleteFlagDestroyRelationship()
     {
         Model::unguard();
-        $user = User::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $user = User::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         Model::reguard();
 
         $this->assertEmpty($user->photos);
@@ -35,7 +35,7 @@ class AttachManyModelTest extends PluginTestCase
     public function testDeleteFlagDeleteModel()
     {
         Model::unguard();
-        $user = User::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $user = User::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         Model::reguard();
 
         $this->assertEmpty($user->photos);

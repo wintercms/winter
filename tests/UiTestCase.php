@@ -1,6 +1,6 @@
 <?php
 
-class UiTestCase extends PHPUnit_Extensions_SeleniumTestCase
+class UiTestCase extends PHPUnit_Extensions_Selenium2TestCase
 {
     protected function setUp()
     {
@@ -31,7 +31,7 @@ class UiTestCase extends PHPUnit_Extensions_SeleniumTestCase
     }
 
     //
-    // OctoberCMS Helpers
+    // Winter CMS Helpers
     //
 
     protected function signInToBackend()

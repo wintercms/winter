@@ -2,12 +2,12 @@
 
 use Lang;
 use ApplicationException;
-use October\Rain\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
  * The CMS page class.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Page extends CmsCompoundObject
@@ -181,7 +181,7 @@ class Page extends CmsCompoundObject
      *   return all available records.
      * - items - an array of arrays with the same keys (url, isActive, items) + the title key.
      *   The items array should be added only if the $item's $nesting property value is TRUE.
-     * @param \RainLab\Pages\Classes\MenuItem $item Specifies the menu item.
+     * @param \Winter\Pages\Classes\MenuItem $item Specifies the menu item.
      * @param string $url Specifies the current page URL, normalized, in lower case
      * @param \Cms\Classes\Theme $theme Specifies the current theme.
      * The URL is specified relative to the website root, it includes the subdirectory name, if any.

@@ -25,16 +25,16 @@ use System\Helpers\View as ViewHelper;
 use System\Classes\CombineAssets;
 use System\Twig\Extension as SystemTwigExtension;
 use System\Twig\SecurityPolicy;
-use October\Rain\Exception\AjaxException;
-use October\Rain\Exception\ValidationException;
-use October\Rain\Parse\Bracket as TextParser;
+use Winter\Storm\Exception\AjaxException;
+use Winter\Storm\Exception\ValidationException;
+use Winter\Storm\Parse\Bracket as TextParser;
 use Illuminate\Http\RedirectResponse;
 
 /**
  * The CMS controller class.
  * The controller finds and serves requested pages.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Controller
@@ -696,7 +696,7 @@ class Controller
             return null;
         }
 
-        if ($handler = Request::header('X_OCTOBER_REQUEST_HANDLER')) {
+        if ($handler = Request::header('X_WINTER_REQUEST_HANDLER')) {
             return trim($handler);
         }
 
@@ -721,7 +721,7 @@ class Controller
                 /*
                  * Validate the handler partial list
                  */
-                if ($partialList = trim(Request::header('X_OCTOBER_REQUEST_PARTIALS'))) {
+                if ($partialList = trim(Request::header('X_WINTER_REQUEST_PARTIALS'))) {
                     $partialList = explode('&', $partialList);
 
                     foreach ($partialList as $partial) {
@@ -755,14 +755,14 @@ class Controller
                  * framework.js knows to redirect the browser and not the request!
                  */
                 if ($result instanceof RedirectResponse) {
-                    $responseContents['X_OCTOBER_REDIRECT'] = $result->getTargetUrl();
+                    $responseContents['X_WINTER_REDIRECT'] = $result->getTargetUrl();
                     $result = null;
                 }
                 /*
                  * No redirect is used, look for any flash messages
                  */
-                elseif (Request::header('X_OCTOBER_REQUEST_FLASH') && Flash::check()) {
-                    $responseContents['X_OCTOBER_FLASH_MESSAGES'] = Flash::all();
+                elseif (Request::header('X_WINTER_REQUEST_FLASH') && Flash::check()) {
+                    $responseContents['X_WINTER_FLASH_MESSAGES'] = Flash::all();
                 }
 
                 /*
@@ -786,8 +786,8 @@ class Controller
                 /*
                  * Handle validation errors
                  */
-                $responseContents['X_OCTOBER_ERROR_FIELDS'] = $ex->getFields();
-                $responseContents['X_OCTOBER_ERROR_MESSAGE'] = $ex->getMessage();
+                $responseContents['X_WINTER_ERROR_FIELDS'] = $ex->getFields();
+                $responseContents['X_WINTER_ERROR_MESSAGE'] = $ex->getMessage();
                 throw new AjaxException($responseContents);
             }
             catch (Exception $ex) {

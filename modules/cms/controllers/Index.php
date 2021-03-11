@@ -24,14 +24,14 @@ use Cms\Classes\ComponentPartial;
 use Cms\Helpers\Cms as CmsHelpers;
 use Backend\Classes\Controller;
 use System\Helpers\DateTime;
-use October\Rain\Router\Router as RainRouter;
+use Winter\Storm\Router\Router as StormRouter;
 use ApplicationException;
 use Cms\Classes\Asset;
 
 /**
  * CMS index
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Index extends Controller
@@ -79,7 +79,7 @@ class Index extends Controller
             };
         });
 
-        BackendMenu::setContext('October.Cms', 'cms', true);
+        BackendMenu::setContext('Winter.Cms', 'cms', true);
 
         try {
             if (!($theme = Theme::getEditTheme())) {
@@ -123,10 +123,10 @@ class Index extends Controller
      */
     public function index()
     {
-        $this->addJs('/modules/cms/assets/js/october.cmspage.js', 'core');
-        $this->addJs('/modules/cms/assets/js/october.dragcomponents.js', 'core');
-        $this->addJs('/modules/cms/assets/js/october.tokenexpander.js', 'core');
-        $this->addCss('/modules/cms/assets/css/october.components.css', 'core');
+        $this->addJs('/modules/cms/assets/js/winter.cmspage.js', 'core');
+        $this->addJs('/modules/cms/assets/js/winter.dragcomponents.js', 'core');
+        $this->addJs('/modules/cms/assets/js/winter.tokenexpander.js', 'core');
+        $this->addCss('/modules/cms/assets/css/winter.components.css', 'core');
 
         // Preload the code editor class as it could be needed
         // before it loads dynamically.
@@ -159,7 +159,7 @@ class Index extends Controller
         $this->vars['canReset'] = $this->canResetTemplate($template);
 
         if ($type === 'page') {
-            $router = new RainRouter;
+            $router = new StormRouter;
             $this->vars['pageUrl'] = $router->urlFromPattern($template->url);
         }
 
@@ -494,7 +494,7 @@ class Index extends Controller
     /**
      * Get the active theme's datasource
      *
-     * @return \October\Rain\Halcyon\Datasource\DatasourceInterface
+     * @return \Winter\Storm\Halcyon\Datasource\DatasourceInterface
      */
     protected function getThemeDatasource()
     {

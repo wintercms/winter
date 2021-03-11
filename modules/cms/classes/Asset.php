@@ -5,14 +5,14 @@ use Lang;
 use Config;
 use Request;
 use Cms\Helpers\File as FileHelper;
-use October\Rain\Extension\Extendable;
+use Winter\Storm\Extension\Extendable;
 use ApplicationException;
 use ValidationException;
 
 /**
  * The CMS theme asset file class.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Asset extends Extendable

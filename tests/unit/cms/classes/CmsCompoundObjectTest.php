@@ -3,7 +3,7 @@
 use Cms\Classes\Theme;
 use Cms\Classes\CmsObject;
 use Cms\Classes\CmsCompoundObject;
-use October\Rain\Halcyon\Model;
+use Winter\Storm\Halcyon\Model;
 
 class TestCmsCompoundObject extends CmsCompoundObject
 {
@@ -35,8 +35,8 @@ class CmsCompoundObjectTest extends TestCase
         parent::setUp();
         Model::clearBootedModels();
         Model::flushEventListeners();
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Post.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Archive.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Post.php';
     }
 
     public function testLoadFile()
@@ -84,19 +84,19 @@ class CmsCompoundObjectTest extends TestCase
 
         $this->assertInternalType('array', $obj->settings['components']);
         $this->assertArrayHasKey('testArchive firstAlias', $obj->settings['components']);
-        $this->assertArrayHasKey('October\Tester\Components\Post secondAlias', $obj->settings['components']);
+        $this->assertArrayHasKey('Winter\Tester\Components\Post secondAlias', $obj->settings['components']);
 
         // Explicit
         $this->assertEquals('testArchive firstAlias', $obj->hasComponent('testArchive'));
-        $this->assertEquals('October\Tester\Components\Post secondAlias', $obj->hasComponent('October\Tester\Components\Post'));
+        $this->assertEquals('Winter\Tester\Components\Post secondAlias', $obj->hasComponent('Winter\Tester\Components\Post'));
 
         // Resolved
-        $this->assertEquals('testArchive firstAlias', $obj->hasComponent('October\Tester\Components\Archive'));
-        $this->assertEquals('October\Tester\Components\Post secondAlias', $obj->hasComponent('testPost'));
+        $this->assertEquals('testArchive firstAlias', $obj->hasComponent('Winter\Tester\Components\Archive'));
+        $this->assertEquals('Winter\Tester\Components\Post secondAlias', $obj->hasComponent('testPost'));
 
         // Negative test
         $this->assertFalse($obj->hasComponent('yooHooBigSummerBlowOut'));
-        $this->assertFalse($obj->hasComponent('October\Tester\Components\BigSummer'));
+        $this->assertFalse($obj->hasComponent('Winter\Tester\Components\BigSummer'));
     }
 
     public function testGetComponentProperties()
@@ -105,8 +105,8 @@ class CmsCompoundObjectTest extends TestCase
 
         $obj = TestCmsCompoundObject::load($theme, 'components.htm');
 
-        $properties = $obj->getComponentProperties('October\Tester\Components\Post');
-        $emptyProperties = $obj->getComponentProperties('October\Tester\Components\Archive');
+        $properties = $obj->getComponentProperties('Winter\Tester\Components\Post');
+        $emptyProperties = $obj->getComponentProperties('Winter\Tester\Components\Archive');
         $notExistingProperties = $obj->getComponentProperties('This\Is\Not\Component');
         $this->assertInternalType('array', $properties);
         $this->assertArrayHasKey('show-featured', $properties);

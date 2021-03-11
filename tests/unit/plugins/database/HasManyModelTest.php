@@ -2,7 +2,7 @@
 
 use Database\Tester\Models\Author;
 use Database\Tester\Models\Post;
-use October\Rain\Database\Collection;
+use Winter\Storm\Database\Collection;
 
 class HasManyModelTest extends PluginTestCase
 {
@@ -19,7 +19,7 @@ class HasManyModelTest extends PluginTestCase
     public function testSetRelationValue()
     {
         Model::unguard();
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $post1 = Post::create(['title' => "First post", 'description' => "Yay!!"]);
         $post2 = Post::create(['title' => "Second post", 'description' => "Woohoo!!"]);
         $post3 = Post::create(['title' => "Third post", 'description' => "Yipiee!!"]);
@@ -63,8 +63,6 @@ class HasManyModelTest extends PluginTestCase
 
     public function testGetRelationValue()
     {
-        $this->markTestSkipped('Marked as \'skipped\' for further investigation');
-
         Model::unguard();
         $author = Author::create(['name' => 'Stevie']);
         $post1 = Post::create(['title' => "First post", 'author_id' => $author->id]);

@@ -3,7 +3,7 @@
         <div class="scoreboard-item title-value">
             <h4><?= e(trans('system::lang.project.name')) ?></h4>
             <?php if ($projectId): ?>
-                <p class="oc-icon-chain"><?= $projectName ?></p>
+                <p class="wn-icon-chain"><?= $projectName ?></p>
                 <p class="description">
                     <?= e(trans('system::lang.project.owner_label')) ?>: <?= $projectOwner ?>
                     (<a
@@ -13,7 +13,7 @@
                         data-stripe-load-indicator><?= e(trans('system::lang.project.detach')) ?></a>)
                 </p>
             <?php else: ?>
-                <p class="oc-icon-chain-broken"><?= e(trans('system::lang.project.none')) ?></p>
+                <p class="wn-icon-chain-broken"><?= e(trans('system::lang.project.none')) ?></p>
                 <p class="description">
                     <a
                         href="javascript:;"

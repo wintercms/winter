@@ -1,6 +1,6 @@
 <?php
 
-namespace October\Tests\Concerns;
+namespace Winter\Tests\Concerns;
 
 use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 

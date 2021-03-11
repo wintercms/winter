@@ -6,7 +6,7 @@ use Html;
 use Config;
 use Request;
 use Redirect;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Router\Helper as RouterHelper;
 use System\Helpers\DateTime as DateTimeHelper;
 use Backend\Classes\Skin;
 use Backend\Helpers\Exception\DecompileException;
@@ -14,7 +14,7 @@ use Backend\Helpers\Exception\DecompileException;
 /**
  * Backend Helper
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @see \Backend\Facades\Backend
  * @author Alexey Bobkov, Samuel Georges
  */

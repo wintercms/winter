@@ -6,6 +6,8 @@ use Cms\Classes\Theme;
 class TestCmsObject extends CmsObject
 {
     protected $dirName = 'testobjects';
+
+    protected $allowedExtensions = ['htm', 'html'];
 }
 
 class TestTemporaryCmsObject extends CmsObject
@@ -149,7 +151,7 @@ class CmsObjectTest extends TestCase
     }
 
     /**
-     * @expectedException        \October\Rain\Exception\ValidationException
+     * @expectedException        \Winter\Storm\Exception\ValidationException
      * @expectedExceptionMessage Invalid file name
      */
     public function testFillInvalidFileNameSymbol()
@@ -165,7 +167,7 @@ class CmsObjectTest extends TestCase
     }
 
     /**
-     * @expectedException        \October\Rain\Exception\ValidationException
+     * @expectedException        \Winter\Storm\Exception\ValidationException
      * @expectedExceptionMessage Invalid file name
      */
     public function testFillInvalidFileNamePath()
@@ -181,7 +183,7 @@ class CmsObjectTest extends TestCase
     }
 
     /**
-     * @expectedException        \October\Rain\Exception\ValidationException
+     * @expectedException        \Winter\Storm\Exception\ValidationException
      * @expectedExceptionMessage Invalid file name
      */
     public function testFillInvalidFileSlash()
@@ -197,7 +199,7 @@ class CmsObjectTest extends TestCase
     }
 
     /**
-     * @expectedException        \October\Rain\Exception\ValidationException
+     * @expectedException        \Winter\Storm\Exception\ValidationException
      * @expectedExceptionMessage The File Name field is required
      */
     public function testFillEmptyFileName()
@@ -266,7 +268,7 @@ class CmsObjectTest extends TestCase
 
     /**
      * @depends testRename
-     * @expectedException        \October\Rain\Exception\ApplicationException
+     * @expectedException        \Winter\Storm\Exception\ApplicationException
      * @expectedExceptionMessage already exists
      */
     public function testRenameToExistingFile()

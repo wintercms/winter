@@ -27,7 +27,7 @@ class AuthTest extends UiTestCase
         $this->waitForPageToLoad("30000");
 
         try {
-            $this->assertTitle('Dashboard | October CMS');
+            $this->assertTitle('Dashboard | Winter CMS');
             $this->assertTrue($this->isElementPresent('css='.$cssLogoutLink));
         }
         catch (PHPUnit_Framework_AssertionFailedError $e) {

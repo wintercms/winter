@@ -22,13 +22,4 @@ class PluginModelTest extends PluginTestCase
         $post->save();
         $this->assertEquals(1, $post->id);
     }
-
-    /**
-     * @expectedException        \Illuminate\Database\Eloquent\MassAssignmentException
-     * @expectedExceptionMessage title
-     */
-    public function testGuardedAttribute()
-    {
-        Post::create(['title' => 'Hi!', 'slug' => 'authenticity']);
-    }
 }

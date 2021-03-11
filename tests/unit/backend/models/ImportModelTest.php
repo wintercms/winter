@@ -3,7 +3,7 @@
 use Backend\Models\ImportModel;
 
 if (!class_exists('Model')) {
-    class_alias('October\Rain\Database\Model', 'Model');
+    class_alias('Winter\Storm\Database\Model', 'Model');
 }
 
 class ExampleImportModel extends ImportModel

@@ -1,11 +1,11 @@
 /*
  * Inspector set editor class.
  *
- * This class uses $.oc.inspector.propertyEditors.checkbox editor.
+ * This class uses $.wn.inspector.propertyEditors.checkbox editor.
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.base,
+    var Base = $.wn.inspector.propertyEditors.base,
         BaseProto = Base.prototype
 
     var SetEditor = function(inspector, propertyDefinition, containerCell, group) {
@@ -40,11 +40,11 @@
     SetEditor.prototype.build = function() {
         var link = document.createElement('a')
 
-        $.oc.foundation.element.addClass(link, 'trigger')
+        $.wn.foundation.element.addClass(link, 'trigger')
         link.setAttribute('href', '#')
         this.setLinkText(link)
 
-        $.oc.foundation.element.addClass(this.containerCell, 'trigger-cell')
+        $.wn.foundation.element.addClass(this.containerCell, 'trigger-cell')
 
         this.containerCell.appendChild(link)
 
@@ -72,7 +72,7 @@
     }
 
     SetEditor.prototype.setLinkText = function(link, value) {
-        var value = (value !== undefined && value !== null) ? value 
+        var value = (value !== undefined && value !== null) ? value
                 : this.getNormalizedValue(),
             text = '[ ]'
 
@@ -87,7 +87,7 @@
             }
 
             text = '[' + textValues.join(', ') + ']'
-            $.oc.foundation.element.removeClass(link, 'placeholder')
+            $.wn.foundation.element.removeClass(link, 'placeholder')
         }
         else {
             text = this.propertyDefinition.placeholder
@@ -95,7 +95,7 @@
             if ((typeof text === 'string' && text.length == 0) || text === undefined) {
                 text = '[ ]'
             }
-            $.oc.foundation.element.addClass(link, 'placeholder')
+            $.wn.foundation.element.addClass(link, 'placeholder')
         }
 
         link.textContent = text
@@ -124,7 +124,7 @@
                 title: title,
                 default: this.isCheckedByDefault(value)
             },
-            editor = new $.oc.inspector.propertyEditors.checkbox(this, property, cell, this.group)
+            editor = new $.wn.inspector.propertyEditors.checkbox(this, property, cell, this.group)
 
         this.editors.push[editor]
     }
@@ -161,7 +161,7 @@
             data = this.inspector.getValues(),
             $form = $(link).closest('form')
 
-        $.oc.foundation.element.addClass(link, 'loading-indicator-container size-small')
+        $.wn.foundation.element.addClass(link, 'loading-indicator-container size-small')
         this.showLoadingIndicator()
 
         data['inspectorProperty'] = this.getPropertyPath()
@@ -226,7 +226,7 @@
         return value
     }
 
-    /* 
+    /*
      * Removes items that don't exist in the defined items from
      * the value.
      */
@@ -291,7 +291,7 @@
         // When a checkbox requests the property value, we return
         // TRUE if the checkbox value is listed in the current values of
         // the set.
-        // For example, the available set items are [create, update], the 
+        // For example, the available set items are [create, update], the
         // current set value is [create] and checkboxValue is "create".
         // The result of the method will be TRUE.
 
@@ -325,13 +325,13 @@
 
         var resultValue = [],
             items = this.getItemsSource()
-            
+
         for (var itemValue in items) {
             if (itemValue !== checkboxValue) {
                 if (currentValue.indexOf(itemValue) !== -1) {
                     resultValue.push(itemValue)
                 }
-            } 
+            }
             else {
                 if (isChecked) {
                     resultValue.push(itemValue)
@@ -369,5 +369,5 @@
         link.parentNode.removeChild(link)
     }
 
-    $.oc.inspector.propertyEditors.set = SetEditor
+    $.wn.inspector.propertyEditors.set = SetEditor
 }(window.jQuery);

@@ -1,9 +1,9 @@
 {
-    "name": "october/cms",
-    "type": "october-module",
-    "description": "CMS module for October CMS",
-    "homepage": "https://octobercms.com",
-    "keywords": ["october cms", "october", "cms"],
+    "name": "winter/wn-cms-module",
+    "type": "winter-module",
+    "description": "CMS module for Winter CMS",
+    "homepage": "https://wintercms.com",
+    "keywords": ["winter cms", "winter", "cms"],
     "license": "MIT",
     "authors": [
         {
@@ -16,7 +16,7 @@
         },
         {
             "name": "Luke Towers",
-            "email": "octobercms@luketowers.ca",
+            "email": "wintercms@luketowers.ca",
             "homepage": "https://luketowers.ca",
             "role": "Maintainer"
         }
@@ -24,7 +24,8 @@
     "require": {
         "php": ">=7.0",
         "composer/installers": "~1.0",
-        "october/rain": "~1.0.469"
+        "winter/storm": "~1.0.472",
+        "laravel/framework": "~5.5.40"
     },
     "autoload": {
         "psr-4": {

@@ -15,10 +15,10 @@ use BackendAuth;
 use Backend\Models\UserPreference;
 use Backend\Models\Preference as BackendPreference;
 use Backend\Widgets\MediaManager;
-use October\Rain\Exception\AjaxException;
-use October\Rain\Exception\SystemException;
-use October\Rain\Exception\ValidationException;
-use October\Rain\Exception\ApplicationException;
+use Winter\Storm\Exception\AjaxException;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Exception\ValidationException;
+use Winter\Storm\Exception\ApplicationException;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller as ControllerBase;
@@ -27,7 +27,7 @@ use Illuminate\Routing\Controller as ControllerBase;
  * The Backend base controller class, used by Backend controllers.
  * The base controller services back end pages.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Controller extends ControllerBase
@@ -40,7 +40,7 @@ class Controller extends ControllerBase
     use \System\Traits\SecurityController;
     use \Backend\Traits\ErrorMaker;
     use \Backend\Traits\WidgetMaker;
-    use \October\Rain\Extension\ExtendableTrait;
+    use \Winter\Storm\Extension\ExtendableTrait;
 
     /**
      * @var array Behaviors implemented by this controller.
@@ -432,7 +432,7 @@ class Controller extends ControllerBase
             return null;
         }
 
-        if ($handler = Request::header('X_OCTOBER_REQUEST_HANDLER')) {
+        if ($handler = Request::header('X_WINTER_REQUEST_HANDLER')) {
             return trim($handler);
         }
 
@@ -457,7 +457,7 @@ class Controller extends ControllerBase
                 /*
                  * Validate the handler partial list
                  */
-                if ($partialList = trim(Request::header('X_OCTOBER_REQUEST_PARTIALS'))) {
+                if ($partialList = trim(Request::header('X_WINTER_REQUEST_PARTIALS'))) {
                     $partialList = explode('&', $partialList);
 
                     foreach ($partialList as $partial) {
@@ -491,7 +491,7 @@ class Controller extends ControllerBase
                  * framework.js knows to redirect the browser and not the request!
                  */
                 if ($result instanceof RedirectResponse) {
-                    $responseContents['X_OCTOBER_REDIRECT'] = $result->getTargetUrl();
+                    $responseContents['X_WINTER_REDIRECT'] = $result->getTargetUrl();
                     $result = null;
                 }
                 /*
@@ -505,7 +505,7 @@ class Controller extends ControllerBase
                  * Detect assets
                  */
                 if ($this->hasAssetsDefined()) {
-                    $responseContents['X_OCTOBER_ASSETS'] = $this->getAssetPaths();
+                    $responseContents['X_WINTER_ASSETS'] = $this->getAssetPaths();
                 }
 
                 /*
@@ -532,7 +532,7 @@ class Controller extends ControllerBase
                 Flash::error($ex->getMessage());
                 $responseContents = [];
                 $responseContents['#layout-flash-messages'] = $this->makeLayoutPartial('flash_messages');
-                $responseContents['X_OCTOBER_ERROR_FIELDS'] = $ex->getFields();
+                $responseContents['X_WINTER_ERROR_FIELDS'] = $ex->getFields();
                 throw new AjaxException($responseContents);
             }
             catch (MassAssignmentException $ex) {

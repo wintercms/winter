@@ -28,7 +28,7 @@ class User extends Model
 
 class SoftDeleteUser extends User
 {
-    use \October\Rain\Database\Traits\SoftDelete;
+    use \Winter\Storm\Database\Traits\SoftDelete;
 }
 
 class UserWithAuthor extends User
@@ -47,10 +47,10 @@ class UserWithSoftAuthor extends User
 
 class UserWithAuthorAndSoftDelete extends UserWithAuthor
 {
-    use \October\Rain\Database\Traits\SoftDelete;
+    use \Winter\Storm\Database\Traits\SoftDelete;
 }
 
 class UserWithSoftAuthorAndSoftDelete extends UserWithSoftAuthor
 {
-    use \October\Rain\Database\Traits\SoftDelete;
+    use \Winter\Storm\Database\Traits\SoftDelete;
 }

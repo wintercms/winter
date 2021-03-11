@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => '기본으로 돌아가기',
     ],
     'directory' => [
@@ -42,7 +42,7 @@ return [
         'unnamed' => '이름없는 테마',
         'name' => [
             'label' => '테마명',
-            'help' => '중복없는 테마명을 사용해주세요. (예:RainLab.Vanilla)'
+            'help' => '중복없는 테마명을 사용해주세요. (예:Winter.Vanilla)'
         ],
     ],
     'themes' => [
@@ -58,7 +58,7 @@ return [
         'unnamed' => '이름없는 플러그인',
         'name' => [
             'label' => '플러그인명',
-            'help' => '중복없는 플러그인명을 사용해주세요. (예:RainLab.Blog)',
+            'help' => '중복없는 플러그인명을 사용해주세요. (예:Winter.Blog)',
         ],
         'by_author' => 'By :name'
     ],

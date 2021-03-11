@@ -16,12 +16,12 @@ use RecursiveDirectoryIterator;
 /**
  * Plugin manager
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PluginManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * The application instance, since Plugins are an extension of a Service Provider

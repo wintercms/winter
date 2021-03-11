@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Atgriežamies pie pamatiem'
     ],
     'directory' => [
@@ -42,7 +42,7 @@ return [
         'unnamed' => 'Nenosaukta tēma',
         'name' => [
             'label' => 'Tēmas Nosaukums',
-            'help' => 'Norādiet tēmas unikālo kodu. Piemēram, RainLab.Vanilla'
+            'help' => 'Norādiet tēmas unikālo kodu. Piemēram, Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -58,7 +58,7 @@ return [
         'unnamed' => 'Nenosaukts spraudnis',
         'name' => [
             'label' => 'Spraudņa nosaukums',
-            'help' => 'Norādiet spraudņa unikālo kodu. Piemēram, RainLab.Blog'
+            'help' => 'Norādiet spraudņa unikālo kodu. Piemēram, Winter.Blog'
         ]
     ],
     'plugins' => [

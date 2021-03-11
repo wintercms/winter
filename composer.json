@@ -1,53 +1,52 @@
 {
-    "name": "october/october",
-    "description": "OctoberCMS",
-    "homepage": "https://octobercms.com",
+    "name": "wintercms/winter",
+    "description": "Free, open-source, self-hosted CMS platform based on the Laravel PHP Framework. Originally known as October CMS.",
+    "homepage": "https://wintercms.com",
     "type": "project",
-    "keywords": ["october", "cms", "octobercms", "laravel"],
+    "keywords": ["winter", "cms", "wintercms", "laravel", "cmf"],
     "license": "MIT",
     "authors": [
         {
             "name": "Alexey Bobkov",
             "email": "aleksey.bobkov@gmail.com",
-            "role": "Co-founder"
+            "role": "Original Author"
         },
         {
             "name": "Samuel Georges",
             "email": "daftspunky@gmail.com",
-            "role": "Co-founder"
+            "role": "Original Author"
         },
         {
             "name": "Luke Towers",
-            "email": "octobercms@luketowers.ca",
-            "homepage": "https://luketowers.ca",
-            "role": "Maintainer"
+            "email": "wintercms@luketowers.ca",
+            "role": "Lead Maintainer"
         }
     ],
     "support": {
-        "issues": "https://github.com/octobercms/october/issues",
-        "forum": "https://octobercms.com/forum/",
-        "docs": "https://octobercms.com/docs/",
-        "irc": "irc://irc.freenode.net/october",
-        "source": "https://github.com/octobercms/october"
+        "issues": "https://github.com/wintercms/winter/issues",
+        "docs": "https://wintercms.github.io/docs/",
+        "discord": "https://discord.gg/D5MFSPH6Ux",
+        "source": "https://github.com/wintercms/winter"
     },
     "require": {
         "php": ">=7.0.8",
         "ext-mbstring": "*",
         "ext-openssl": "*",
-        "october/rain": "~1.0",
-        "october/system": "~1.0",
-        "october/backend": "~1.0",
-        "october/cms": "~1.0",
+        "winter/storm": "~1.0",
+        "winter/wn-system-module": "~1.0",
+        "winter/wn-backend-module": "~1.0",
+        "winter/wn-cms-module": "~1.0",
         "laravel/framework": "~5.5.40",
-        "wikimedia/composer-merge-plugin": "1.4.1"
+        "wikimedia/composer-merge-plugin": "~2.0.1 || 1.4.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.7",
         "phpunit/phpunit": "~6.5",
-        "phpunit/phpunit-selenium": "~1.2",
+        "phpunit/phpunit-selenium": "~4.1.0",
         "meyfa/phpunit-assert-gd": "1.1.0",
         "squizlabs/php_codesniffer": "3.*",
-        "php-parallel-lint/php-parallel-lint": "^1.0"
+        "php-parallel-lint/php-parallel-lint": "^1.0",
+        "funkjedi/composer-include-files": "^1.0"
     },
     "autoload-dev": {
         "classmap": [
@@ -64,19 +63,17 @@
             "php artisan package:discover"
         ],
         "post-update-cmd": [
-            "php artisan october:util set build",
+            "php artisan winter:util set build",
             "php artisan package:discover"
         ]
-    },
-    "config": {
-        "preferred-install": "dist",
-        "platform": {
-            "php": "7.0.8"
-        }
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
+        "include_files": [
+            "vendor/winter/storm/src/Html/helpers.php",
+            "vendor/winter/storm/src/Support/helpers.php"
+        ],
         "merge-plugin": {
             "include": [
                 "plugins/*/*/composer.json"
