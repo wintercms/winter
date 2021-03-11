@@ -1,7 +1,7 @@
 <?php
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Връщане към основите'
     ],
     'directory' => [
@@ -41,7 +41,7 @@ return [
         'unnamed' => 'Тема без име',
         'name' => [
             'label' => 'Име на тема',
-            'help' => 'Именувайте темата с уникално име. Например: RainLab.Vanilla'
+            'help' => 'Именувайте темата с уникално име. Например: Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -57,7 +57,7 @@ return [
         'unnamed' => 'Без име добавка',
         'name' => [
             'label' => 'Име на добавка',
-            'help' => 'Именувайте добавката с уникално име. Например: RainLab.Blog'
+            'help' => 'Именувайте добавката с уникално име. Например: Winter.Blog'
         ]
     ],
     'plugins' => [

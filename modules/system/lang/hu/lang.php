@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Visszatérés az alapokhoz'
     ],
     'directory' => [
@@ -39,7 +39,7 @@ return [
         'unnamed' => 'Névtelen téma',
         'name' => [
             'label' => 'Téma neve',
-            'help' => 'A névnek egyedinek kell lennie. Például: RainLab.Vanilla'
+            'help' => 'A névnek egyedinek kell lennie. Például: Winter.Vanilla'
         ]
     ],
     'themes' => [
@@ -55,7 +55,7 @@ return [
         'unnamed' => 'Névtelen bővítmény',
         'name' => [
             'label' => 'Bővítmény neve',
-            'help' => 'Nevezze meg egyedi kódja alapján a bővítményt. Például: RainLab.Blog'
+            'help' => 'Nevezze meg egyedi kódja alapján a bővítményt. Például: Winter.Blog'
         ],
         'by_author' => 'Fejlesztő: :name'
     ],
@@ -225,7 +225,7 @@ return [
             ],
             'panel' => 'Kiemelt szöveg',
             'more' => 'Még több szöveg',
-            'promotion' => 'Kupon kód: OCTOBER',
+            'promotion' => 'Kupon kód: WINTER',
             'subcopy' => 'Utóirat helye',
             'thanks' => 'Üdvözlettel'
         ],

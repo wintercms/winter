@@ -8,7 +8,7 @@
  * $('div#someElement').sensitive({...})
  */
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var Sensitive = function(element, options) {
@@ -23,7 +23,7 @@
         this.$loader = this.$el.find('[data-loader]').first()
         this.$copy = this.$el.find('[data-copy]').first()
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }

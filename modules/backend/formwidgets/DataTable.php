@@ -3,14 +3,14 @@
 use Lang;
 use Backend\Widgets\Table;
 use Backend\Classes\FormWidgetBase;
-use October\Rain\Html\Helper as HtmlHelper;
+use Winter\Storm\Html\Helper as HtmlHelper;
 use ApplicationException;
 
 /**
  * Data Table
  * Renders a table field.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class DataTable extends FormWidgetBase

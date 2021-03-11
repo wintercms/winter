@@ -10,11 +10,11 @@ use Route;
 use Config;
 use Request;
 use Response;
-use October\Rain\Assetic\Asset\FileAsset;
-use October\Rain\Assetic\Asset\AssetCache;
-use October\Rain\Assetic\Asset\AssetCollection;
-use October\Rain\Assetic\Cache\FilesystemCache;
-use October\Rain\Assetic\Factory\AssetFactory;
+use Winter\Storm\Assetic\Asset\FileAsset;
+use Winter\Storm\Assetic\Asset\AssetCache;
+use Winter\Storm\Assetic\Asset\AssetCollection;
+use Winter\Storm\Assetic\Cache\FilesystemCache;
+use Winter\Storm\Assetic\Factory\AssetFactory;
 use System\Helpers\Cache as CacheHelper;
 use ApplicationException;
 use DateTime;
@@ -39,13 +39,13 @@ use DateTime;
  * - cms.enableAssetDeepHashing - Advanced caching of imports
  *
  * @see System\Classes\SystemController System controller
- * @see https://octobercms.com/docs/services/session Session service
- * @package october\system
+ * @see https://wintercms.com/docs/services/session Session service
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CombineAssets
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * @var array A list of known JavaScript extensions.
@@ -126,22 +126,22 @@ class CombineAssets
         /*
          * Register JavaScript filters
          */
-        $this->registerFilter('js', new \October\Rain\Assetic\Filter\JavascriptImporter);
+        $this->registerFilter('js', new \Winter\Storm\Assetic\Filter\JavascriptImporter);
 
         /*
          * Register CSS filters
          */
-        $this->registerFilter('css', new \October\Rain\Assetic\Filter\CssImportFilter);
-        $this->registerFilter(['css', 'less', 'scss'], new \October\Rain\Assetic\Filter\CssRewriteFilter);
-        $this->registerFilter('less', new \October\Rain\Assetic\Filter\LessCompiler);
-        $this->registerFilter('scss', new \October\Rain\Assetic\Filter\ScssCompiler);
+        $this->registerFilter('css', new \Winter\Storm\Assetic\Filter\CssImportFilter);
+        $this->registerFilter(['css', 'less', 'scss'], new \Winter\Storm\Assetic\Filter\CssRewriteFilter);
+        $this->registerFilter('less', new \Winter\Storm\Assetic\Filter\LessCompiler);
+        $this->registerFilter('scss', new \Winter\Storm\Assetic\Filter\ScssCompiler);
 
         /*
          * Minification filters
          */
         if ($this->useMinify) {
-            $this->registerFilter('js', new \October\Rain\Assetic\Filter\JSMinFilter);
-            $this->registerFilter(['css', 'less', 'scss'], new \October\Rain\Assetic\Filter\StylesheetMinify);
+            $this->registerFilter('js', new \Winter\Storm\Assetic\Filter\JSMinFilter);
+            $this->registerFilter(['css', 'less', 'scss'], new \Winter\Storm\Assetic\Filter\StylesheetMinify);
         }
 
         /*
@@ -552,7 +552,7 @@ class CombineAssets
      * function as an argument. Usage:
      *
      *     CombineAssets::registerCallback(function ($combiner) {
-     *         $combiner->registerBundle('~/modules/backend/assets/less/october.less');
+     *         $combiner->registerBundle('~/modules/backend/assets/less/winter.less');
      *     });
      *
      * @param callable $callback A callable function.

@@ -10,7 +10,7 @@ use Backend;
 /**
  * Plugin base class
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PluginBase extends ServiceProviderBase

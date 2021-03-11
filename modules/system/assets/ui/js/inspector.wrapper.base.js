@@ -6,16 +6,16 @@
     // NAMESPACES
     // ============================
 
-    if ($.oc.inspector === undefined)
-        $.oc.inspector = {}
+    if ($.wn.inspector === undefined)
+        $.wn.inspector = {}
 
-    if ($.oc.inspector.wrappers === undefined)
-        $.oc.inspector.wrappers = {}
+    if ($.wn.inspector.wrappers === undefined)
+        $.wn.inspector.wrappers = {}
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var BaseWrapper = function($element, sourceWrapper, options) {
@@ -37,7 +37,7 @@
             this.surface = null
             this.title = null
             this.description = null
-        } 
+        }
         else {
             this.surface = sourceWrapper.surface
             this.title = sourceWrapper.title
@@ -124,11 +124,11 @@
         options.enableExternalParameterEditor = this.isExternalParametersEditorEnabled()
         options.onGetInspectableElement = this.proxy(this.onGetInspectableElement)
 
-        this.surface = new $.oc.inspector.surface(
+        this.surface = new $.wn.inspector.surface(
             containerElement,
             properties,
             values,
-            $.oc.inspector.helpers.generateElementUniqueId(this.$element.get(0)),
+            $.wn.inspector.helpers.generateElementUniqueId(this.$element.get(0)),
             options)
     }
 
@@ -186,8 +186,8 @@
                 // Important - values contained in data-property-xxx attributes are
                 // considered strings and never parsed with JSON. The use of the
                 // data-property-xxx attributes is very limited - they're only
-                // used in Pages for creating snippets from partials, where properties 
-                // are created with a table UI widget, which doesn't allow creating 
+                // used in Pages for creating snippets from partials, where properties
+                // are created with a table UI widget, which doesn't allow creating
                 // properties of any complex types.
                 //
                 // There is no a technically reliable way to determine when a string
@@ -208,8 +208,8 @@
 
     BaseWrapper.prototype.applyValues = function(liveUpdateMode) {
         var $valuesField = this.getElementValuesInput(),
-            values = liveUpdateMode ? 
-                        this.surface.getValidValues() : 
+            values = liveUpdateMode ?
+                        this.surface.getValidValues() :
                         this.surface.getValues()
 
         if (liveUpdateMode) {
@@ -219,12 +219,12 @@
             var existingValues = this.loadValues(this.configuration)
 
             for (var property in values) {
-                if (values[property] !== $.oc.inspector.invalidProperty) {
+                if (values[property] !== $.wn.inspector.invalidProperty) {
                     existingValues[property] = values[property]
                 }
             }
 
-            // Properties that use settings like ignoreIfPropertyEmpty could 
+            // Properties that use settings like ignoreIfPropertyEmpty could
             // be removed from the list returned by getValidValues(). Removed
             // properties should be removed from the result list.
 
@@ -242,7 +242,7 @@
 
         if ($valuesField.length > 0) {
             $valuesField.val(JSON.stringify(values))
-        } 
+        }
         else {
             for (var property in values) {
                 var value = values[property]
@@ -255,7 +255,7 @@
             }
         }
 
-        // In the live update mode the livechange event is triggered 
+        // In the live update mode the livechange event is triggered
         // regardless of whether Surface properties match or don't match
         // the original properties of the inspectable element. Without it
         // there could be undesirable side effects.
@@ -321,13 +321,13 @@
             data = this.$element.data(),
             self = this
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
         $form.request('onGetInspectorConfiguration', {
             data: data
         }).done(function inspectorConfigurationRequestDoneClosure(data) {
             self.onConfigurartionRequestDone(data, result)
         }).always(function() {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         })
     }
 
@@ -408,5 +408,5 @@
         containerSupported: false
     }
 
-    $.oc.inspector.wrappers.base = BaseWrapper
+    $.wn.inspector.wrappers.base = BaseWrapper
 }(window.jQuery);

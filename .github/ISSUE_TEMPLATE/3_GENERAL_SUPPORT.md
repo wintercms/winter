@@ -1,12 +1,11 @@
 ---
 name: "⚠️ General Support"
-about: 'This repository is only for reporting bugs or problems. If you need help using OctoberCMS, see: https://octobercms.com/support'
+about: 'This repository is only for reporting bugs or problems. If you need help using Winter CMS, see: https://wintercms.com/support'
 ---
 
 This repository is only for reporting bugs or problems. If you need support, please use the following options:
 
-- Forum: https://octobercms.com/forum
-- Slack: https://octobercms.slack.com (Get an invite: https://octobercms-slack.herokuapp.com/)
-- Stack Overflow: https://stackoverflow.com/questions/tagged/octobercms
+- Discord: https://discord.gg/D5MFSPH6Ux
+- Stack Overflow: https://stackoverflow.com/questions/tagged/wintercms
 
 Thanks!

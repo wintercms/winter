@@ -32,12 +32,12 @@ The data source and cell processor JavaScript classes use the simple parasitic c
 
 ### Namespaces
 
-All classes for the table widget are be defined in the **$.oc.table** namespace. There are several namespaces in this namespace:
+All classes for the table widget are be defined in the **$.wn.table** namespace. There are several namespaces in this namespace:
 
-- **$.oc.table.processor** - cell processors
-- **$.oc.table.datasource** - data sources
-- **$.oc.table.helper** - helper classes
-- **$.oc.table.validator** - validation classes
+- **$.wn.table.processor** - cell processors
+- **$.wn.table.datasource** - data sources
+- **$.wn.table.helper** - helper classes
+- **$.wn.table.validator** - validation classes
 
 ### Client-side performance and memory usage considerations
 
@@ -67,14 +67,14 @@ Any `DIV` elements that have the `data-control="table"` attributes are automatic
 
 ### Options
 
-The options below are listed in the JavaScript notation. Corresponding data attributes would look like `data-client-data-source-class`. 
+The options below are listed in the JavaScript notation. Corresponding data attributes would look like `data-client-data-source-class`.
 
 - `clientDataSourceСlass` (default is **client**)- specifies the client-side data source class. There are two data source classes supported on the client side - **client** and **server**.
 - `data` - specifies the data in JSON format for the **client**.
 - `recordsPerPage` - specifies how many records per page to display. If the value is not defined or `false` or `null`, the pagination feature is disabled and all records are displayed. Pagination and `rowSorting` cannot be used in the same time.
 - `columns` - column definitions in JSON format, see the server-side column definition format below.
 - `rowSorting` - enables the drag & drop row sorting. The sorting cannot be used with the pagination (`recordsPerPage` is not `null` or `false`).
-- `keyColumn` - specifies the name of the key column. The default value is **id**. 
+- `keyColumn` - specifies the name of the key column. The default value is **id**.
 - `postback` - post the client-memory data source data to the server automatically when the parent form gets submitted. The default value is `true`. The option is used only with client-memory data sources. When enabled, the data source data  is available in the widget's server-side data source: `$table->getDataSource()->getRecords();` The data postback occurs only of the request handler name matches the `postbackHandlerName` option value.
 - `postbackHandlerName` - AJAX data handler name for the automatic data postback. The data will be posted only when the AJAX request posts data matching this handler name. The default value is **onSave**.
 - `adding` - determines whether users can add new records. Default value is **true**.
@@ -84,11 +84,11 @@ The options below are listed in the JavaScript notation. Corresponding data attr
 
 ## Client-side helper classes
 
-Some auxiliary code is factored out from the table class to helper classes. The helper classes are defined in the **$.oc.table.helper** namespace.
+Some auxiliary code is factored out from the table class to helper classes. The helper classes are defined in the **$.wn.table.helper** namespace.
 
 - **table.helper.navigation.js** - implements the keyboard navigation within the table and pagination.
 
-## Data sources ($.oc.table.datasource)
+## Data sources ($.wn.table.datasource)
 
 ### Adding and removing records
 
@@ -100,15 +100,15 @@ When user deletes a record, the table object calls the `deleteRecord(index, offs
 
 The `onSuccess` callback parameters are: data (records), count.
 
-### Client memory data source ($.oc.table.datasource.client)
+### Client memory data source ($.wn.table.datasource.client)
 
 The client memory data sources keeps the data in the client memory. The data is loaded from the control element's `data` property (`data-data` attribute) and posted back with the form data.
 
-### Server memory data source ($.oc.table.datasource.server)
+### Server memory data source ($.wn.table.datasource.server)
 
 **TODO:** document this
 
-## Cell processors ($.oc.table.processor)
+## Cell processors ($.wn.table.processor)
 
 Cell processors are responsible for rendering the cell content, creating the cell data editors and updating the cell value in the grid control. There is a single cell processor per the table column. All rows in a specific column are handled with a same cell processor.
 
@@ -148,7 +148,7 @@ The drop-down options could depend on other columns. This works only with AJAX-b
         type: dropdown
         dependsOn: country
 
-Multiple fields are allowed as well: 
+Multiple fields are allowed as well:
 
     state:
         title: State
@@ -169,7 +169,7 @@ The autocomplete column type can load options from the column configuration or w
             green: Green
             blue: Blue
 
-If the `options` element is not presented in the configuration, the options will be loaded with AJAX. 
+If the `options` element is not presented in the configuration, the options will be loaded with AJAX.
 
 **TODO:** Document the AJAX interface
 
@@ -208,7 +208,7 @@ Columns are defined as array with the `columns` property. The array keys corresp
 - `dependsOn` (from drop-down elements)
 - validation - defines the column client-side validation rules. See the **Client-side validation** section below.
 
-## Events 
+## Events
 
 ### table.getDropdownOptions
 
@@ -251,7 +251,7 @@ The `initRecords()` method can be called multiple times. Each call adds records 
 
 ## Emptying the data source
 
-The `purge` method removes all records from the data source. This method should always be used with server memory data sources. Nonetheless, server side data sources should take care about providing the automatic ways of cleaning data with using the time-to-live mechanisms. 
+The `purge` method removes all records from the data source. This method should always be used with server memory data sources. Nonetheless, server side data sources should take care about providing the automatic ways of cleaning data with using the time-to-live mechanisms.
 
 ```
 $table = new Table($this, $config);
@@ -273,7 +273,7 @@ In PHP reading data from a data source of any type looks like this (it should be
 ```
 public function onSave()
 {
-    // Assuming that the widget was initialized in the 
+    // Assuming that the widget was initialized in the
     // controller constructor with the "table" alias.
     $dataSource = $this->widget->table->getDataSource();
 
@@ -287,7 +287,7 @@ public function onSave()
 
 There are two ways to validate the table data - with the client-side and server-side validation.
 
-### Client-side validation ($.oc.table.validator)
+### Client-side validation ($.wn.table.validator)
 
 The client-side validation is performed before the data is sent to the server, or before the user navigates to another page (if the pagination is enabled). Client-side validation is a fast, but simple validation implementation. It can't be used for complex cases like finding duplicating records, or comparing data with records existing in the database.
 
@@ -319,13 +319,13 @@ Currently implemented client-side validation rules:
 - length
 - regex
 
-Validation rules can be configured with extra parameters, which depend on a specific validator. 
+Validation rules can be configured with extra parameters, which depend on a specific validator.
 
-#### required validator ($.oc.table.validator.required)
+#### required validator ($.wn.table.validator.required)
 
-Checks if the user has provided a value for the cell. 
+Checks if the user has provided a value for the cell.
 
-#### integer validator ($.oc.table.validator.integer)
+#### integer validator ($.wn.table.validator.integer)
 
 Checks if the value is integer. Parameters:
 
@@ -337,7 +337,7 @@ Checks if the value is integer. Parameters:
     * `value` - defines the maximum value.
     * `message` - optional, defines the error message.
 
-Example of defining the integer validator with the `min` parameter: 
+Example of defining the integer validator with the `min` parameter:
 
     length:
         title: Length
@@ -348,7 +348,7 @@ Example of defining the integer validator with the `min` parameter:
                     value: 3
                     message: "The length cannot be less than 3"
 
-#### float validator ($.oc.table.validator.float)
+#### float validator ($.wn.table.validator.float)
 
 Checks if the value is a floating point number. The parameters for this validator match the parameters of the **integer** validator.
 
@@ -359,7 +359,7 @@ Valid floating point number formats:
 * -10 (if `allowNegative` is `true`)
 * -10.84 (if `allowNegative` is `true`)
 
-#### length validator ($.oc.table.validator.length)
+#### length validator ($.wn.table.validator.length)
 
 Checks if a string is not shorter or longer than specified values.  Parameters:
 
@@ -381,12 +381,12 @@ Example column definition:
                     value: 3
                     message: "The name is too short."
 
-#### regex validator ($.oc.table.validator.regex)
+#### regex validator ($.wn.table.validator.regex)
 
 Checks a string against a provided regular expression:
 
 * `pattern` - specifies the regular expression pattern string. Example: **^[0-9a-z]+$**
-* `modifiers` - optional, a string containing regular expression modifiers (https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp), for example **i** for "case insensitive". 
+* `modifiers` - optional, a string containing regular expression modifiers (https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/RegExp), for example **i** for "case insensitive".
 
 Example:
 

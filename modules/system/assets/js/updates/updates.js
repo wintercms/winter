@@ -149,9 +149,11 @@
             messageDiv.text(message)
     }
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.updateProcess = new UpdateProcess;
+    $.wn.updateProcess = new UpdateProcess;
 
 }(window.jQuery);
