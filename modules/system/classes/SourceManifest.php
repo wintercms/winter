@@ -54,7 +54,7 @@ class SourceManifest
             $this->setSource(
                 Config::get(
                     'cms.sourceManifestUrl',
-                    'https://raw.githubusercontent.com/octoberrain/meta/master/manifest/builds-branched.json'
+                    'https://raw.githubusercontent.com/wintercms/meta/master/manifest/builds-branched.json'
                 )
             );
         }
@@ -65,7 +65,7 @@ class SourceManifest
             $this->setForksSource(
                 Config::get(
                     'cms.forkManifestUrl',
-                    'https://raw.githubusercontent.com/octoberrain/meta/master/manifest/forks.json'
+                    'https://raw.githubusercontent.com/wintercms/meta/master/manifest/forks.json'
                 )
             );
         }
