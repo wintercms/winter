@@ -1,12 +1,12 @@
 <?php namespace Backend\Models;
 
 use Backend\Classes\AuthManager;
-use October\Rain\Auth\Models\Role as RoleBase;
+use Winter\Storm\Auth\Models\Role as RoleBase;
 
 /**
  * Administrator role
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class UserRole extends RoleBase

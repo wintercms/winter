@@ -12,7 +12,7 @@ use SplTempFileObject;
 /**
  * Model used for exporting data
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 abstract class ExportModel extends Model

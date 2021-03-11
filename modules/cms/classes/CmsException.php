@@ -2,8 +2,8 @@
 
 use File;
 use Twig\Error\Error as TwigError;
-use October\Rain\Exception\ApplicationException;
-use October\Rain\Halcyon\Processors\SectionParser;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Halcyon\Processors\SectionParser;
 use Exception;
 
 /**
@@ -11,7 +11,7 @@ use Exception;
  * The exception class handles CMS related errors. Allows the masking of other exception types which
  * uses actual source CMS files -- instead of cached files -- for their error content.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CmsException extends ApplicationException

@@ -69,7 +69,7 @@ class ThemeTest extends TestCase
 
     public function testNoActiveTheme()
     {
-        $this->expectException(\October\Rain\Exception\SystemException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessage('The active theme is not set.');
 
         Config::set('cms.activeTheme', null);

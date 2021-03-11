@@ -7,7 +7,7 @@ use Backend\Classes\FormWidgetBase;
  *
  * Renders a password field that can be optionally made visible
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  */
 class Sensitive extends FormWidgetBase
 {
