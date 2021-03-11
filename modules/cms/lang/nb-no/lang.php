@@ -86,7 +86,7 @@ return [
         'new_directory_name_comment' => 'Oppgi en ny mappe for det dupliserte temaet.',
         'dir_name_invalid' => 'Navnet kan kun inneholde tall, latinske bokstaver og følgende symbol: _-',
         'dir_name_taken' => 'Temamappen eksiterer allerede.',
-        'find_more_themes' => 'Finn flere temaer på OctoberCMS Theme Marketplace',
+        'find_more_themes' => 'Finn flere temaer på Winter CMS Theme Marketplace',
         'saving' => 'Lagrer tema...',
         'return' => 'Tilbake til temaliste',
     ],

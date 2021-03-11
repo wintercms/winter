@@ -1,39 +1,39 @@
 
-(function($){$.FroalaEditor.PLUGINS.mediaManager=function(editor){function onInsertFile(){new $.oc.mediaManager.popup({alias:'ocmediamanager',cropAndInsertButton:false,onInsert:function(items){if(!items.length){$.oc.alert($.oc.lang.get('mediamanager.invalid_file_empty_insert'))
+(function($){$.FroalaEditor.PLUGINS.mediaManager=function(editor){function onInsertFile(){new $.wn.mediaManager.popup({alias:'ocmediamanager',cropAndInsertButton:false,onInsert:function(items){if(!items.length){$.wn.alert($.wn.lang.get('mediamanager.invalid_file_empty_insert'))
 return}
-if(items.length>1){$.oc.alert($.oc.lang.get('mediamanager.invalid_file_single_insert'))
+if(items.length>1){$.wn.alert($.wn.lang.get('mediamanager.invalid_file_single_insert'))
 return}
 var link,text=editor.selection.text(),textIsEmpty=$.trim(text)===''
 for(var i=0,len=items.length;i<len;i++){var text=textIsEmpty?items[i].title:text
 link=items[i].publicUrl}
 editor.events.focus(true);editor.selection.restore();editor.html.insert('<a href="'+link+'" id="fr-inserted-file" class="fr-file">'+text+'</a>');var $file=editor.$el.find('#fr-inserted-file');$file.removeAttr('id');editor.undo.saveStep()
 this.hide()}})}
-function onInsertImage(){var $currentImage=editor.image.get(),selection=editor.selection.get(),range=editor.selection.ranges(0);new $.oc.mediaManager.popup({alias:'ocmediamanager',cropAndInsertButton:true,onInsert:function(items){editor.selection.clear();selection.addRange(range);if(!items.length){$.oc.alert($.oc.lang.get('mediamanager.invalid_image_empty_insert'))
+function onInsertImage(){var $currentImage=editor.image.get(),selection=editor.selection.get(),range=editor.selection.ranges(0);new $.wn.mediaManager.popup({alias:'ocmediamanager',cropAndInsertButton:true,onInsert:function(items){editor.selection.clear();selection.addRange(range);if(!items.length){$.wn.alert($.wn.lang.get('mediamanager.invalid_image_empty_insert'))
 return}
 var imagesInserted=0
-for(var i=0,len=items.length;i<len;i++){if(items[i].documentType!=='image'){$.oc.alert($.oc.lang.get('mediamanager.invalid_image_invalid_insert','The file "'+items[i].title+'" is not an image.'))
+for(var i=0,len=items.length;i<len;i++){if(items[i].documentType!=='image'){$.wn.alert($.wn.lang.get('mediamanager.invalid_image_invalid_insert','The file "'+items[i].title+'" is not an image.'))
 continue}
 editor.image.insert(items[i].publicUrl,false,{},$currentImage)
 imagesInserted++
 if(imagesInserted==1){$currentImage=null}}
 if(imagesInserted!==0){this.hide()
 editor.undo.saveStep()}}})}
-function onInsertVideo(){new $.oc.mediaManager.popup({alias:'ocmediamanager',cropAndInsertButton:false,onInsert:function(items){if(!items.length){$.oc.alert($.oc.lang.get('mediamanager.invalid_video_empty_insert'))
+function onInsertVideo(){new $.wn.mediaManager.popup({alias:'ocmediamanager',cropAndInsertButton:false,onInsert:function(items){if(!items.length){$.wn.alert($.wn.lang.get('mediamanager.invalid_video_empty_insert'))
 return}
-if(items.length>1){$.oc.alert($.oc.lang.get('mediamanager.invalid_file_single_insert'))
+if(items.length>1){$.wn.alert($.wn.lang.get('mediamanager.invalid_file_single_insert'))
 return}
 var item=items[0]
-if(item.documentType!=='video'){$.oc.alert($.oc.lang.get('mediamanager.invalid_video_invalid_insert','The file "'+item.title+'" is not a video.'))
+if(item.documentType!=='video'){$.wn.alert($.wn.lang.get('mediamanager.invalid_video_invalid_insert','The file "'+item.title+'" is not a video.'))
 return}
 var $richEditorNode=editor.$el.closest('[data-control="richeditor"]')
 $richEditorNode.richEditor('insertVideo',item.publicUrl,item.title)
 this.hide()}})}
-function onInsertAudio(){new $.oc.mediaManager.popup({alias:'ocmediamanager',cropAndInsertButton:false,onInsert:function(items){if(!items.length){$.oc.alert($.oc.lang.get('mediamanager.invalid_audio_empty_insert'))
+function onInsertAudio(){new $.wn.mediaManager.popup({alias:'ocmediamanager',cropAndInsertButton:false,onInsert:function(items){if(!items.length){$.wn.alert($.wn.lang.get('mediamanager.invalid_audio_empty_insert'))
 return}
-if(items.length>1){$.oc.alert($.oc.lang.get('mediamanager.invalid_file_single_insert'))
+if(items.length>1){$.wn.alert($.wn.lang.get('mediamanager.invalid_file_single_insert'))
 return}
 var item=items[0]
-if(item.documentType!=='audio'){$.oc.alert($.oc.lang.get('mediamanager.invalid_audio_invalid_insert','The file "'+item.title+'" is not an audio file.'))
+if(item.documentType!=='audio'){$.wn.alert($.wn.lang.get('mediamanager.invalid_audio_invalid_insert','The file "'+item.title+'" is not an audio file.'))
 return}
 var $richEditorNode=editor.$el.closest('[data-control="richeditor"]')
 $richEditorNode.richEditor('insertAudio',item.publicUrl,item.title)
@@ -146,13 +146,13 @@ editor.events.on('keydown',_onKeydown)
 editor.events.on('destroy',_destroy,true)
 editor.$el.on('keydown','figure',_onFigureKeydown)}
 function _destroy(){editor.$el.off('keydown','figure',_onFigureKeydown)}
-return{_init:_init,insert:insertElement,insertVideo:insertVideo,insertAudio:insertAudio}}})(jQuery);+function($){"use strict";var Base=$.oc.foundation.base,BaseProto=Base.prototype
+return{_init:_init,insert:insertElement,insertVideo:insertVideo,insertAudio:insertAudio}}})(jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var RichEditor=function(element,options){this.options=options
 this.$el=$(element)
 this.$textarea=this.$el.find('>textarea:first')
 this.$form=this.$el.closest('form')
 this.editor=null
-$.oc.foundation.controlUtils.markDisposable(element)
+$.wn.foundation.controlUtils.markDisposable(element)
 Base.call(this)
 this.init()}
 RichEditor.prototype=Object.create(BaseProto)
@@ -163,7 +163,7 @@ if(!this.$textarea.attr('id')){this.$textarea.attr('id','element-'+Math.random()
 this.initFroala()}
 RichEditor.prototype.initFroala=function(){var froalaOptions={editorClass:'control-richeditor',language:this.options.editorLang,fullPage:this.options.fullpage,pageLinksHandler:this.options.linksHandler,uploadHandler:this.options.uploadHandler,aceEditorVendorPath:this.options.aceVendorPath,toolbarSticky:false}
 if(this.options.toolbarButtons){froalaOptions.toolbarButtons=this.options.toolbarButtons.split(',')}
-else{froalaOptions.toolbarButtons=$.oc.richEditorButtons}
+else{froalaOptions.toolbarButtons=$.wn.richEditorButtons}
 froalaOptions.imageStyles=this.options.imageStyles?this.options.imageStyles:{'oc-img-rounded':'Rounded','oc-img-bordered':'Bordered'}
 froalaOptions.linkStyles=this.options.linkStyles?this.options.linkStyles:{'oc-link-green':'Green','oc-link-strong':'Thick'}
 froalaOptions.paragraphStyles=this.options.paragraphStyles?this.options.paragraphStyles:{'oc-text-gray':'Gray','oc-text-bordered':'Bordered','oc-text-spaced':'Spaced','oc-text-uppercase':'Uppercase'}
@@ -273,6 +273,8 @@ $.fn.richEditor.Constructor=RichEditor
 $.fn.richEditor.noConflict=function(){$.fn.richEditor=old
 return this}
 $(document).render(function(){$('[data-control="richeditor"]').richEditor()})
+if($.wn===undefined)
+$.wn={}
 if($.oc===undefined)
-$.oc={}
-$.oc.richEditorButtons=['paragraphFormat','paragraphStyle','quote','bold','italic','align','formatOL','formatUL','insertTable','insertLink','insertImage','insertVideo','insertAudio','insertFile','insertHR','fullscreen','html']}(window.jQuery);
+$.oc=$.wn
+$.wn.richEditorButtons=['paragraphFormat','paragraphStyle','quote','bold','italic','align','formatOL','formatUL','insertTable','insertLink','insertImage','insertVideo','insertAudio','insertFile','insertHR','fullscreen','html']}(window.jQuery);

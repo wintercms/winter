@@ -39,8 +39,13 @@ jobs:
     name: ${{ matrix.operatingSystem }} / PHP ${{ matrix.phpVersion }}
     env:
       extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
-      key: october-cms-cache-v1
+      key: winter-cms-cache-develop
     steps:
+      - name: Cancel previous incomplete runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
       - name: Checkout changes
         uses: actions/checkout@v2
 
@@ -63,12 +68,19 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.phpVersion }}
-          tools: composer:v1
           extensions: ${{ env.extensions }}
 
-      - name: Switch library dependency
+      - name: Switch library dependency (develop)
         if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
         run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.1"
+
+      - name: Switch library dependency (1.0)
+        if: github.ref == 'refs/heads/1.0' || github.base_ref == '1.0'
+        run: php ./.github/workflows/utilities/library-switcher "1.0.x-dev as 1.0"
+
+      - name: Switch library dependency (1.1)
+        if: github.ref == 'refs/heads/1.1' || github.base_ref == '1.1'
+        run: php ./.github/workflows/utilities/library-switcher "1.1.x-dev as 1.1"
 
       - name: Setup dependency cache
         id: composercache
@@ -82,24 +94,16 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --no-progress --no-suggest --no-scripts
-
-      - name: Reset October modules
-        run: |
-            git reset --hard HEAD
-            composer dumpautoload
+        run: composer install --no-interaction --no-progress --no-scripts
 
       - name: Run post-update Composer scripts
         run: php artisan package:discover
-
-      - name: Reset October modules
-        run: |
-          git reset --hard HEAD
-          composer dumpautoload
 
       - name: Setup problem matchers for PHPUnit
         if: matrix.phpVersion == '7.4'
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-      - name: Run tests
-        run: ./vendor/bin/phpunit --prepend ./vendor/october/rain/src/Support/helpers.php
+      - name: Run Linting and Tests
+        run: |
+          ./vendor/bin/parallel-lint --exclude vendor --exclude storage --exclude tests/fixtures/plugins/testvendor/goto/Plugin.php .
+          ./vendor/bin/phpunit

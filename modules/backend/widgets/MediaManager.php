@@ -16,14 +16,14 @@ use ApplicationException;
 use Backend\Classes\WidgetBase;
 use System\Classes\MediaLibrary;
 use System\Classes\MediaLibraryItem;
-use October\Rain\Database\Attach\Resizer;
-use October\Rain\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Database\Attach\Resizer;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use Form as FormHelper;
 
 /**
  * Media Manager widget.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MediaManager extends WidgetBase

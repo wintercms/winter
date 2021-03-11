@@ -6,16 +6,16 @@
     // NAMESPACE CHECK
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.datasource === undefined)
-        throw new Error("The $.oc.table.datasource namespace is not defined. Make sure that the table.datasource.base.js script is loaded.");
+    if ($.wn.table.datasource === undefined)
+        throw new Error("The $.wn.table.datasource namespace is not defined. Make sure that the table.datasource.base.js script is loaded.");
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.table.datasource.base,
+    var Base = $.wn.table.datasource.base,
         BaseProto = Base.prototype
 
     var Client = function(tableObj) {
@@ -41,8 +41,8 @@
      * Fetches records from the underlying data source and
      * passes them to the onSuccess callback function.
      * The onSuccess callback parameters: records, totalCount.
-     * Each record contains the key field which uniquely identifies 
-     * the record. The name of the key field is defined with the table 
+     * Each record contains the key field which uniquely identifies
+     * the record. The name of the key field is defined with the table
      * widget options.
      */
     Client.prototype.getRecords = function(offset, count, onSuccess) {
@@ -59,7 +59,7 @@
     /*
      * Creates a record with the passed data and returns the updated page records
      * to the onSuccess callback function.
-     * 
+     *
      * - recordData - the record fields
      * - placement - "bottom" (the end of the data set), "above", "below"
      * - relativeToKey - a row key, required if the placement is not "bottom"
@@ -144,5 +144,5 @@
         return this.data
     }
 
-    $.oc.table.datasource.client = Client
+    $.wn.table.datasource.client = Client
 }(window.jQuery);

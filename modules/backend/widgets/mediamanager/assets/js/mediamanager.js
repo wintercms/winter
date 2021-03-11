@@ -2,14 +2,14 @@
  * Media manager control class
  *
  * Dependences:
- * - Scrollpad (october.scrollpad.js)
+ * - Scrollpad (winter.scrollpad.js)
  */
 +function ($) { "use strict";
 
-    if ($.oc.mediaManager === undefined)
-        $.oc.mediaManager = {}
+    if ($.wn.mediaManager === undefined)
+        $.wn.mediaManager = {}
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // MEDIA MANAGER CLASS DEFINITION
@@ -495,11 +495,11 @@
             this.releaseNavigationAjax()
         }
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
         this.navigationAjax = element.request(this.options.alias+'::' + handler, {
             data: data
         }).always(function() {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         })
             .done(this.proxy(this.afterNavigate))
             .always(this.proxy(this.releaseNavigationAjax))
@@ -789,7 +789,7 @@
     //
 
     MediaManager.prototype.getRelativePosition = function(element, pageX, pageY, startPosition) {
-        var absolutePosition = startPosition !== undefined ? startPosition : $.oc.foundation.element.absolutePosition(element, true)
+        var absolutePosition = startPosition !== undefined ? startPosition : $.wn.foundation.element.absolutePosition(element, true)
 
         return {
             x: (pageX - absolutePosition.left), // There is no horizontal scroll
@@ -909,7 +909,7 @@
 
     MediaManager.prototype.uploadSending = function(file, xhr, formData) {
         formData.append('path', this.$el.find('[data-type="current-folder"]').val())
-        xhr.setRequestHeader('X-OCTOBER-REQUEST-HANDLER', this.options.uploadHandler)
+        xhr.setRequestHeader('X-WINTER-REQUEST-HANDLER', this.options.uploadHandler)
     }
 
     MediaManager.prototype.uploadCancelAll = function() {
@@ -940,7 +940,7 @@
             message = 'Error uploading file'
         }
 
-        $.oc.alert(message)
+        $.wn.alert(message)
     }
 
     //
@@ -962,7 +962,7 @@
 
         var path = selectedItems[0].getAttribute('data-path')
 
-        new $.oc.mediaManager.imageCropPopup(path, {
+        new $.wn.mediaManager.imageCropPopup(path, {
                 alias: this.options.alias,
                 onDone: callback
             })
@@ -1018,11 +1018,11 @@
         var items = this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
 
         if (!items.length) {
-            $.oc.alert(this.options.deleteEmpty)
+            $.wn.alert(this.options.deleteEmpty)
             return
         }
 
-        $.oc.confirm(this.options.deleteConfirm, this.proxy(this.deleteConfirmation))
+        $.wn.confirm(this.options.deleteConfirm, this.proxy(this.deleteConfirmation))
     }
 
     MediaManager.prototype.deleteConfirmation = function(confirmed) {
@@ -1047,11 +1047,11 @@
                 paths: paths
             }
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
         this.$form.request(this.options.alias+'::onDeleteItem', {
             data: data
         }).always(function() {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         }).done(this.proxy(this.afterNavigate))
     }
 
@@ -1077,11 +1077,11 @@
                 path: this.$el.find('[data-type="current-folder"]').val()
             }
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
         this.$form.request(this.options.alias+'::onCreateFolder', {
             data: data
         }).always(function() {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         }).done(this.proxy(this.folderCreated))
 
         ev.preventDefault()
@@ -1098,7 +1098,7 @@
         var items = this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
 
         if (!items.length) {
-            $.oc.alert(this.options.moveEmpty)
+            $.wn.alert(this.options.moveEmpty)
             return
         }
 
@@ -1146,11 +1146,11 @@
                 data.files.push(path)
         }
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
         this.$form.request(this.options.alias+'::onMoveItems', {
             data: data
         }).always(function() {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         }).done(this.proxy(this.itemsMoved))
 
         ev.preventDefault()
@@ -1255,9 +1255,9 @@
         this.itemListElement.addEventListener('mousemove', this.proxy(this.onListMouseMove))
         document.addEventListener('mouseup', this.proxy(this.onListMouseUp))
 
-        this.itemListPosition = $.oc.foundation.element.absolutePosition(this.itemListElement, true)
+        this.itemListPosition = $.wn.foundation.element.absolutePosition(this.itemListElement, true)
 
-        var pagePosition = $.oc.foundation.event.pageCoordinates(ev),
+        var pagePosition = $.wn.foundation.event.pageCoordinates(ev),
             relativePosition = this.getRelativePosition(this.itemListElement, pagePosition.x, pagePosition.y, this.itemListPosition)
 
         this.selectionStartPoint = relativePosition
@@ -1273,11 +1273,11 @@
             this.unselectRoot()
 
             var items = this.itemListElement.querySelectorAll('[data-type="media-item"]:not([data-root])'),
-                selectionPosition = $.oc.foundation.element.absolutePosition(this.selectionMarker, true)
+                selectionPosition = $.wn.foundation.element.absolutePosition(this.selectionMarker, true)
 
             for (var index = 0, len = items.length; index < len; index++) {
                 var item = items[index],
-                    itemPosition = $.oc.foundation.element.absolutePosition(item, true)
+                    itemPosition = $.wn.foundation.element.absolutePosition(item, true)
 
                 if (this.doObjectsCollide(
                         selectionPosition.top,
@@ -1310,7 +1310,7 @@
     }
 
     MediaManager.prototype.onListMouseMove = function(ev) {
-        var pagePosition = $.oc.foundation.event.pageCoordinates(ev),
+        var pagePosition = $.wn.foundation.event.pageCoordinates(ev),
             relativePosition = this.getRelativePosition(this.itemListElement, pagePosition.x, pagePosition.y, this.itemListPosition)
 
         var deltaX = relativePosition.x - this.selectionStartPoint.x,

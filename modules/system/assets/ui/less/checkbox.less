@@ -41,9 +41,12 @@
     padding-left: 23px;
     margin-top: 0;
 
+    // Element needs to be present for browser based validation to work
+    // @see https://github.com/octobercms/october/pull/5520
     input[type=radio],
     input[type=checkbox] {
-        display: none;
+        display: block;
+        opacity: 0;
     }
 
     label {

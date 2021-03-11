@@ -1,5 +1,5 @@
 {
-    "name": "winter/winter",
+    "name": "wintercms/winter",
     "description": "Free, open-source, self-hosted CMS platform based on the Laravel PHP Framework. Originally known as October CMS.",
     "homepage": "https://wintercms.com",
     "type": "project",
@@ -30,7 +30,7 @@
     },
     "require": {
         "php": ">=7.2.9",
-        "winter/storm": "1.1.*",
+        "winter/storm": "dev-develop as 1.1",
         "laravel/framework": "~6.0",
         "wikimedia/composer-merge-plugin": "~2.0.1"
     },
@@ -68,9 +68,6 @@
         "sniff": [
             "phpcs --colors -nq --report=\"full\" --extensions=\"php\""
         ]
-    },
-    "config": {
-        "preferred-install": "dist"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,

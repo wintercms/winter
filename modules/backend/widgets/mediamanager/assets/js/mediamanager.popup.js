@@ -3,10 +3,10 @@
  */
 +function ($) { "use strict";
 
-    if ($.oc.mediaManager === undefined)
-        $.oc.mediaManager = {}
+    if ($.wn.mediaManager === undefined)
+        $.wn.mediaManager = {}
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var MediaManagerPopup = function(options) {
@@ -146,5 +146,5 @@
         onClose: undefined
     }
 
-    $.oc.mediaManager.popup = MediaManagerPopup
+    $.wn.mediaManager.popup = MediaManagerPopup
 }(window.jQuery);

@@ -1,5 +1,5 @@
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var MarkdownEditor = function (element, options) {
@@ -18,7 +18,7 @@
         this.editorPadding = 15
         this.updatesPaused = false
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }
@@ -181,7 +181,7 @@
             $buttons = $('<div class="toolbar-item toolbar-primary" />'),
             $fixedButtons = $('<div class="toolbar-item" data-calculate-width />')
 
-        $.each($.oc.markdownEditorButtons, function(code, button) {
+        $.each($.wn.markdownEditorButtons, function(code, button) {
             $button = self.makeToolbarButton(code, button)
 
             if (button.fixed) {
@@ -213,7 +213,7 @@
         var $dropdown = $('<ul class="dropdown-menu" />'),
             $childButton
 
-        $dropdown.attr('data-dropdown-title', $.oc.lang.get(button.label))
+        $dropdown.attr('data-dropdown-title', $.wn.lang.get(button.label))
         $.each(button.dropdown, function(code, childButton) {
             $childButton = $('<a />').attr({
                 'href': 'javascript:;',
@@ -231,7 +231,7 @@
                 $childButton.addClass(childButton.cssClass)
             }
 
-            $childButton.text($.oc.lang.get(childButton.label))
+            $childButton.text($.wn.lang.get(childButton.label))
 
             $dropdown.append($childButton)
             $childButton.wrap('<li />')
@@ -253,7 +253,7 @@
 
         if (!this.options.disabled) {
             $button.attr({
-                'title': $.oc.lang.get(button.label),
+                'title': $.wn.lang.get(button.label),
                 'data-control': "tooltip",
                 'data-placement': "bottom",
                 'data-container': "body",
@@ -533,7 +533,7 @@
     MarkdownEditor.prototype.launchMediaManager = function(onSuccess) {
         var self = this
 
-        new $.oc.mediaManager.popup({
+        new $.wn.mediaManager.popup({
             alias: 'ocmediamanager',
             cropAndInsertButton: true,
             onInsert: function(items) {
@@ -737,10 +737,12 @@
     // BUTTON DEFINITIONS
     // =================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.markdownEditorButtons = {
+    $.wn.markdownEditorButtons = {
 
         formatting: {
             label: 'markdowneditor.formatting',
@@ -748,49 +750,49 @@
             dropdown: {
                 quote: {
                     label: 'markdowneditor.quote',
-                    cssClass: 'oc-button oc-icon-quote-right',
+                    cssClass: 'wn-button wn-icon-quote-right',
                     action: 'formatBlockMulti',
                     template: '> $1'
                 },
                 code: {
                     label: 'markdowneditor.code',
-                    cssClass: 'oc-button oc-icon-code',
+                    cssClass: 'wn-button wn-icon-code',
                     action: 'formatBlock',
                     template: '\n```\n$1\n```\n'
                 },
                 header1: {
                     label: 'markdowneditor.header1',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '# $1'
                 },
                 header2: {
                     label: 'markdowneditor.header2',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '## $1'
                 },
                 header3: {
                     label: 'markdowneditor.header3',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '### $1'
                 },
                 header4: {
                     label: 'markdowneditor.header4',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '#### $1'
                 },
                 header5: {
                     label: 'markdowneditor.header5',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '##### $1'
                 },
                 header6: {
                     label: 'markdowneditor.header6',
-                    cssClass: 'oc-button oc-icon-header',
+                    cssClass: 'wn-button wn-icon-header',
                     action: 'formatBlock',
                     template: '###### $1'
                 }
@@ -840,13 +842,13 @@
         },
         medialink: {
             label: 'mediamanager.insert_link',
-            cssClass: 'oc-autumn-button oc-icon-link',
+            cssClass: 'wn-autumn-button wn-icon-link',
             action: 'formatMediaManager',
             template: '[$1]($2)'
         },
         mediaimage: {
             label: 'mediamanager.insert_image',
-            cssClass: 'oc-autumn-button oc-icon-image',
+            cssClass: 'wn-autumn-button wn-icon-image',
             action: 'formatMediaManager',
             template: '![$1]($2)'
         },

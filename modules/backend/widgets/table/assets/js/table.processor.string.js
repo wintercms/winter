@@ -8,16 +8,16 @@
     // NAMESPACE CHECK
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.processor === undefined)
-        throw new Error("The $.oc.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");
+    if ($.wn.table.processor === undefined)
+        throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.table.processor.base,
+    var Base = $.wn.table.processor.base,
         BaseProto = Base.prototype
 
     var StringProcessor = function(tableObj, columnName, columnConfiguration) {
@@ -81,12 +81,12 @@
         this.showViewContainer(this.activeCell)
         this.activeCell = null
     }
-    
+
     StringProcessor.prototype.buildEditor = function(cellElement, cellContentContainer) {
         // Hide the view container
         this.hideViewContainer(this.activeCell)
 
-        // Create the input control 
+        // Create the input control
         var input = document.createElement('input')
         input.setAttribute('type', 'text')
         input.setAttribute('class', 'string-input')
@@ -108,7 +108,7 @@
     /*
      * Determines if the keyboard navigation in the specified direction is allowed
      * by the cell processor. Some processors could reject the navigation, for example
-     * the string processor could cancel the left array navigation if the caret 
+     * the string processor could cancel the left array navigation if the caret
      * in the text input is not in the beginning of the text.
      */
     StringProcessor.prototype.keyNavigationAllowed = function(ev, direction) {
@@ -161,7 +161,7 @@
     StringProcessor.prototype.getCaretPosition = function(input) {
         // TODO: use the foundation library
 
-        if (document.selection) { 
+        if (document.selection) {
            var selection = document.selection.createRange()
 
            selection.moveStart('character', -input.value.length)
@@ -177,7 +177,7 @@
     StringProcessor.prototype.setCaretPosition = function(input, position) {
         // TODO: use the foundation library
 
-        if (document.selection) { 
+        if (document.selection) {
             var range = input.createTextRange()
 
             setTimeout(function() {
@@ -200,5 +200,5 @@
         return 0
     }
 
-    $.oc.table.processor.string = StringProcessor;
+    $.wn.table.processor.string = StringProcessor;
 }(window.jQuery);

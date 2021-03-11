@@ -1,12 +1,12 @@
 <?php namespace Backend\Models;
 
 use Config;
-use October\Rain\Auth\Models\Throttle as ThrottleBase;
+use Winter\Storm\Auth\Models\Throttle as ThrottleBase;
 
 /**
  * Administrator throttling model
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class UserThrottle extends ThrottleBase

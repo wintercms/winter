@@ -20,7 +20,7 @@ class MorphToModelTest extends PluginTestCase
     public function testSetRelationValue()
     {
         Model::unguard();
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $post1 = Post::create(['title' => "First post", 'description' => "Yay!!"]);
         $post2 = Post::make(['title' => "Second post", 'description' => "Woohoo!!"]);
         $event = EventLog::create(['action' => "user-created"]);

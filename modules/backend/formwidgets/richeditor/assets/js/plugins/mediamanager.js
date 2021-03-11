@@ -3,17 +3,17 @@
     $.FroalaEditor.PLUGINS.mediaManager = function (editor) {
 
         function onInsertFile() {
-            new $.oc.mediaManager.popup({
+            new $.wn.mediaManager.popup({
                 alias: 'ocmediamanager',
                 cropAndInsertButton: false,
                 onInsert: function(items) {
                     if (!items.length) {
-                        $.oc.alert($.oc.lang.get('mediamanager.invalid_file_empty_insert'))
+                        $.wn.alert($.wn.lang.get('mediamanager.invalid_file_empty_insert'))
                         return
                     }
 
                     if (items.length > 1) {
-                        $.oc.alert($.oc.lang.get('mediamanager.invalid_file_single_insert'))
+                        $.wn.alert($.wn.lang.get('mediamanager.invalid_file_single_insert'))
                         return
                     }
 
@@ -49,15 +49,15 @@
                 selection = editor.selection.get(),
                 range = editor.selection.ranges(0);
 
-            new $.oc.mediaManager.popup({
+            new $.wn.mediaManager.popup({
                 alias: 'ocmediamanager',
                 cropAndInsertButton: true,
                 onInsert: function(items) {
                     editor.selection.clear();
                     selection.addRange(range);
-                    
+
                     if (!items.length) {
-                        $.oc.alert($.oc.lang.get('mediamanager.invalid_image_empty_insert'))
+                        $.wn.alert($.wn.lang.get('mediamanager.invalid_image_empty_insert'))
                         return
                     }
 
@@ -65,7 +65,7 @@
 
                     for (var i=0, len=items.length; i<len; i++) {
                         if (items[i].documentType !== 'image') {
-                            $.oc.alert($.oc.lang.get('mediamanager.invalid_image_invalid_insert', 'The file "'+items[i].title+'" is not an image.'))
+                            $.wn.alert($.wn.lang.get('mediamanager.invalid_image_invalid_insert', 'The file "'+items[i].title+'" is not an image.'))
                             continue
                         }
 
@@ -86,24 +86,24 @@
         }
 
         function onInsertVideo() {
-            new $.oc.mediaManager.popup({
+            new $.wn.mediaManager.popup({
                 alias: 'ocmediamanager',
                 cropAndInsertButton: false,
                 onInsert: function(items) {
                     if (!items.length) {
-                        $.oc.alert($.oc.lang.get('mediamanager.invalid_video_empty_insert'))
+                        $.wn.alert($.wn.lang.get('mediamanager.invalid_video_empty_insert'))
                         return
                     }
 
                     if (items.length > 1) {
-                        $.oc.alert($.oc.lang.get('mediamanager.invalid_file_single_insert'))
+                        $.wn.alert($.wn.lang.get('mediamanager.invalid_file_single_insert'))
                         return
                     }
 
                     var item = items[0]
 
                     if (item.documentType !== 'video') {
-                        $.oc.alert($.oc.lang.get('mediamanager.invalid_video_invalid_insert', 'The file "'+item.title+'" is not a video.'))
+                        $.wn.alert($.wn.lang.get('mediamanager.invalid_video_invalid_insert', 'The file "'+item.title+'" is not a video.'))
                         return
                     }
 
@@ -117,24 +117,24 @@
         }
 
         function onInsertAudio() {
-            new $.oc.mediaManager.popup({
+            new $.wn.mediaManager.popup({
                 alias: 'ocmediamanager',
                 cropAndInsertButton: false,
                 onInsert: function(items) {
                     if (!items.length) {
-                        $.oc.alert($.oc.lang.get('mediamanager.invalid_audio_empty_insert'))
+                        $.wn.alert($.wn.lang.get('mediamanager.invalid_audio_empty_insert'))
                         return
                     }
 
                     if (items.length > 1) {
-                        $.oc.alert($.oc.lang.get('mediamanager.invalid_file_single_insert'))
+                        $.wn.alert($.wn.lang.get('mediamanager.invalid_file_single_insert'))
                         return
                     }
 
                     var item = items[0]
 
                     if (item.documentType !== 'audio') {
-                        $.oc.alert($.oc.lang.get('mediamanager.invalid_audio_invalid_insert', 'The file "'+item.title+'" is not an audio file.'))
+                        $.wn.alert($.wn.lang.get('mediamanager.invalid_audio_invalid_insert', 'The file "'+item.title+'" is not an audio file.'))
                         return
                     }
 

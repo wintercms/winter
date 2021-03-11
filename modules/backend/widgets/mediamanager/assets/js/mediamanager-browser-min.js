@@ -1,7 +1,7 @@
 
-+function($){"use strict";if($.oc.mediaManager===undefined)
-$.oc.mediaManager={}
-var Base=$.oc.foundation.base,BaseProto=Base.prototype
++function($){"use strict";if($.wn.mediaManager===undefined)
+$.wn.mediaManager={}
+var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var MediaManager=function(element,options){this.$el=$(element)
 this.$form=this.$el.closest('form')
 this.lastSelectedItem=null
@@ -186,8 +186,8 @@ element=this.$form
 if(this.navigationAjax!==null){try{this.navigationAjax.abort()}
 catch(e){}
 this.releaseNavigationAjax()}
-$.oc.stripeLoadIndicator.show()
-this.navigationAjax=element.request(this.options.alias+'::'+handler,{data:data}).always(function(){$.oc.stripeLoadIndicator.hide()}).done(this.proxy(this.afterNavigate)).always(this.proxy(this.releaseNavigationAjax))}
+$.wn.stripeLoadIndicator.show()
+this.navigationAjax=element.request(this.options.alias+'::'+handler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(this.proxy(this.afterNavigate)).always(this.proxy(this.releaseNavigationAjax))}
 MediaManager.prototype.releaseNavigationAjax=function(){this.navigationAjax=null}
 MediaManager.prototype.navigateToItem=function($item){if(!$item.length||!$item.data('path').length)
 return
@@ -294,7 +294,7 @@ if(placeholderContainer)
 placeholderContainer.innerHTML=thumbnailInfo.markup}}
 MediaManager.prototype.placeholdersUpdated=function(){this.activeThumbnailQueueLength--
 this.handleThumbnailQueue()}
-MediaManager.prototype.getRelativePosition=function(element,pageX,pageY,startPosition){var absolutePosition=startPosition!==undefined?startPosition:$.oc.foundation.element.absolutePosition(element,true)
+MediaManager.prototype.getRelativePosition=function(element,pageX,pageY,startPosition){var absolutePosition=startPosition!==undefined?startPosition:$.wn.foundation.element.absolutePosition(element,true)
 return{x:(pageX-absolutePosition.left),y:(pageY-absolutePosition.top+this.scrollContentElement.scrollTop)}}
 MediaManager.prototype.createSelectionMarker=function(){if(this.selectionMarker)
 return
@@ -335,7 +335,7 @@ MediaManager.prototype.uploadQueueComplete=function(){this.$el.find('[data-comma
 this.$el.find('[data-command="close-uploader"]').removeClass('hide')
 this.refresh()}
 MediaManager.prototype.uploadSending=function(file,xhr,formData){formData.append('path',this.$el.find('[data-type="current-folder"]').val())
-xhr.setRequestHeader('X-OCTOBER-REQUEST-HANDLER',this.options.uploadHandler)}
+xhr.setRequestHeader('X-WINTER-REQUEST-HANDLER',this.options.uploadHandler)}
 MediaManager.prototype.uploadCancelAll=function(){this.dropzone.removeAllFiles(true)
 this.hideUploadUi()}
 MediaManager.prototype.updateUploadBar=function(templateName,classNames){var fileNumberLabel=this.$el.get(0).querySelector('[data-label="file-number-and-progress"]'),successTemplate=fileNumberLabel.getAttribute('data-'+templateName+'-template'),progressBar=this.$el.get(0).querySelector('[data-control="upload-progress-bar"]')
@@ -343,14 +343,14 @@ fileNumberLabel.innerHTML=successTemplate;progressBar.setAttribute('class',class
 MediaManager.prototype.uploadSuccess=function(){this.updateUploadBar('success','progress-bar progress-bar-success');}
 MediaManager.prototype.uploadError=function(file,message){this.updateUploadBar('error','progress-bar progress-bar-danger');if(file.xhr.status===413){message='Server rejected the file because it was too large, try increasing post_max_size';}
 if(!message){message='Error uploading file'}
-$.oc.alert(message)}
+$.wn.alert(message)}
 MediaManager.prototype.cropSelectedImage=function(callback){var selectedItems=this.getSelectedItems(true)
 if(selectedItems.length!=1){alert(this.options.selectSingleImage)
 return}
 if(selectedItems[0].getAttribute('data-document-type')!=='image'){alert(this.options.selectionNotImage)
 return}
 var path=selectedItems[0].getAttribute('data-path')
-new $.oc.mediaManager.imageCropPopup(path,{alias:this.options.alias,onDone:callback})}
+new $.wn.mediaManager.imageCropPopup(path,{alias:this.options.alias,onDone:callback})}
 MediaManager.prototype.onImageCropped=function(result){this.$el.trigger('popupcommand',['insert-cropped',result])}
 MediaManager.prototype.clearSearchTrackInputTimer=function(){if(this.searchTrackInputTimer===null)
 return
@@ -366,30 +366,30 @@ this.lastSearchValue=value
 this.clearSearchTrackInputTimer()
 this.searchTrackInputTimer=window.setTimeout(this.proxy(this.updateSearchResults),300)}
 MediaManager.prototype.deleteItems=function(){var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
-if(!items.length){$.oc.alert(this.options.deleteEmpty)
+if(!items.length){$.wn.alert(this.options.deleteEmpty)
 return}
-$.oc.confirm(this.options.deleteConfirm,this.proxy(this.deleteConfirmation))}
+$.wn.confirm(this.options.deleteConfirm,this.proxy(this.deleteConfirmation))}
 MediaManager.prototype.deleteConfirmation=function(confirmed){if(!confirmed)
 return
 var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected'),paths=[]
 for(var i=0,len=items.length;i<len;i++){if(items[i].hasAttribute('data-root')){continue}
 paths.push({'path':items[i].getAttribute('data-path'),'type':items[i].getAttribute('data-item-type')})}
 var data={paths:paths}
-$.oc.stripeLoadIndicator.show()
-this.$form.request(this.options.alias+'::onDeleteItem',{data:data}).always(function(){$.oc.stripeLoadIndicator.hide()}).done(this.proxy(this.afterNavigate))}
+$.wn.stripeLoadIndicator.show()
+this.$form.request(this.options.alias+'::onDeleteItem',{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(this.proxy(this.afterNavigate))}
 MediaManager.prototype.createFolder=function(ev){$(ev.target).popup({content:this.$el.find('[data-control="new-folder-template"]').html(),zIndex:1200})}
 MediaManager.prototype.onFolderPopupShown=function(ev,button,popup){$(popup).find('input[name=name]').focus()
 $(popup).on('submit.media','form',this.proxy(this.onNewFolderSubmit))}
 MediaManager.prototype.onFolderPopupHidden=function(ev,button,popup){$(popup).off('.media','form')}
 MediaManager.prototype.onNewFolderSubmit=function(ev){var data={name:$(ev.target).find('input[name=name]').val(),path:this.$el.find('[data-type="current-folder"]').val()}
-$.oc.stripeLoadIndicator.show()
-this.$form.request(this.options.alias+'::onCreateFolder',{data:data}).always(function(){$.oc.stripeLoadIndicator.hide()}).done(this.proxy(this.folderCreated))
+$.wn.stripeLoadIndicator.show()
+this.$form.request(this.options.alias+'::onCreateFolder',{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(this.proxy(this.folderCreated))
 ev.preventDefault()
 return false}
 MediaManager.prototype.folderCreated=function(){this.$el.find('button[data-command="create-folder"]').popup('hide')
 this.afterNavigate()}
 MediaManager.prototype.moveItems=function(ev){var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
-if(!items.length){$.oc.alert(this.options.moveEmpty)
+if(!items.length){$.wn.alert(this.options.moveEmpty)
 return}
 var data={exclude:[],path:this.$el.find('[data-type="current-folder"]').val()}
 for(var i=0,len=items.length;i<len;i++){var item=items[i],path=item.getAttribute('data-path')
@@ -403,8 +403,8 @@ if(item.getAttribute('data-item-type')=='folder')
 data.folders.push(path)
 else
 data.files.push(path)}
-$.oc.stripeLoadIndicator.show()
-this.$form.request(this.options.alias+'::onMoveItems',{data:data}).always(function(){$.oc.stripeLoadIndicator.hide()}).done(this.proxy(this.itemsMoved))
+$.wn.stripeLoadIndicator.show()
+this.$form.request(this.options.alias+'::onMoveItems',{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(this.proxy(this.itemsMoved))
 ev.preventDefault()
 return false}
 MediaManager.prototype.onMovePopupHidden=function(ev,button,popup){$(popup).off('.media','form')}
@@ -453,16 +453,16 @@ this.clearDblTouchTimer()
 this.dblTouchTimer=setTimeout(this.proxy(this.clearDblTouchFlag),300)}
 MediaManager.prototype.onListMouseDown=function(ev){this.itemListElement.addEventListener('mousemove',this.proxy(this.onListMouseMove))
 document.addEventListener('mouseup',this.proxy(this.onListMouseUp))
-this.itemListPosition=$.oc.foundation.element.absolutePosition(this.itemListElement,true)
-var pagePosition=$.oc.foundation.event.pageCoordinates(ev),relativePosition=this.getRelativePosition(this.itemListElement,pagePosition.x,pagePosition.y,this.itemListPosition)
+this.itemListPosition=$.wn.foundation.element.absolutePosition(this.itemListElement,true)
+var pagePosition=$.wn.foundation.event.pageCoordinates(ev),relativePosition=this.getRelativePosition(this.itemListElement,pagePosition.x,pagePosition.y,this.itemListPosition)
 this.selectionStartPoint=relativePosition
 this.selectionStarted=false}
 MediaManager.prototype.onListMouseUp=function(ev){this.itemListElement.removeEventListener('mousemove',this.proxy(this.onListMouseMove))
 document.removeEventListener('mouseup',this.proxy(this.onListMouseUp))
 $(document.body).removeClass('no-select')
 if(this.selectionStarted){this.unselectRoot()
-var items=this.itemListElement.querySelectorAll('[data-type="media-item"]:not([data-root])'),selectionPosition=$.oc.foundation.element.absolutePosition(this.selectionMarker,true)
-for(var index=0,len=items.length;index<len;index++){var item=items[index],itemPosition=$.oc.foundation.element.absolutePosition(item,true)
+var items=this.itemListElement.querySelectorAll('[data-type="media-item"]:not([data-root])'),selectionPosition=$.wn.foundation.element.absolutePosition(this.selectionMarker,true)
+for(var index=0,len=items.length;index<len;index++){var item=items[index],itemPosition=$.wn.foundation.element.absolutePosition(item,true)
 if(this.doObjectsCollide(selectionPosition.top,selectionPosition.left,this.selectionMarker.offsetWidth,this.selectionMarker.offsetHeight,itemPosition.top,itemPosition.left,item.offsetWidth,item.offsetHeight)){if(!ev.shiftKey)
 item.setAttribute('class','selected')
 else{if(item.getAttribute('class')=='selected')
@@ -474,7 +474,7 @@ item.setAttribute('class','')}
 this.updateSidebarPreview()
 this.selectionMarker.setAttribute('class','hide')}
 this.selectionStarted=false}
-MediaManager.prototype.onListMouseMove=function(ev){var pagePosition=$.oc.foundation.event.pageCoordinates(ev),relativePosition=this.getRelativePosition(this.itemListElement,pagePosition.x,pagePosition.y,this.itemListPosition)
+MediaManager.prototype.onListMouseMove=function(ev){var pagePosition=$.wn.foundation.event.pageCoordinates(ev),relativePosition=this.getRelativePosition(this.itemListElement,pagePosition.x,pagePosition.y,this.itemListPosition)
 var deltaX=relativePosition.x-this.selectionStartPoint.x,deltaY=relativePosition.y-this.selectionStartPoint.y
 if(!this.selectionStarted&&(Math.abs(deltaX)>2||Math.abs(deltaY)>2)){this.createSelectionMarker()
 this.selectionMarker.setAttribute('class','')
@@ -518,9 +518,9 @@ return result?result:this}
 $.fn.mediaManager.Constructor=MediaManager
 $.fn.mediaManager.noConflict=function(){$.fn.mediaManager=old
 return this}
-$(document).on('render',function(){$('div[data-control=media-manager]').mediaManager()})}(window.jQuery);+function($){"use strict";if($.oc.mediaManager===undefined)
-$.oc.mediaManager={}
-var Base=$.oc.foundation.base,BaseProto=Base.prototype
+$(document).on('render',function(){$('div[data-control=media-manager]').mediaManager()})}(window.jQuery);+function($){"use strict";if($.wn.mediaManager===undefined)
+$.wn.mediaManager={}
+var Base=$.wn.foundation.base,BaseProto=Base.prototype
 var MediaManagerImageCropPopup=function(path,options){this.$popupRootElement=null
 this.$popupElement=null
 this.selectionSizeLabel=null
@@ -613,8 +613,8 @@ break
 case'normal':this.jCrop.setOptions({aspectRatio:0,minSize:[0,0],maxSize:[0,0],allowResize:true})
 break}}
 MediaManagerImageCropPopup.prototype.cropAndInsert=function(){var data={img:$(this.imageArea).find('img').attr('src'),selection:this.jCrop.tellSelect()}
-$.oc.stripeLoadIndicator.show()
-this.$popupElement.find('form').request(this.options.alias+'::onCropImage',{data:data}).always(function(){$.oc.stripeLoadIndicator.hide()}).done(this.proxy(this.onImageCropped))}
+$.wn.stripeLoadIndicator.show()
+this.$popupElement.find('form').request(this.options.alias+'::onCropImage',{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(this.proxy(this.onImageCropped))}
 MediaManagerImageCropPopup.prototype.onImageCropped=function(response){this.hide()
 if(this.options.onDone!==undefined){this.options.onDone(response)}}
 MediaManagerImageCropPopup.prototype.showResizePopup=function(){this.$popupElement.find('button[data-command=resize]').popup({content:this.$popupElement.find('[data-control="resize-template"]').html(),zIndex:1220})}
@@ -636,8 +636,8 @@ $otherInput.val(Math.round(value))}
 MediaManagerImageCropPopup.prototype.onResizeDimensionChanged=function(ev){var $target=$(ev.target)
 $target.val(this.fixDimensionValue($target.val()))}
 MediaManagerImageCropPopup.prototype.onResizeSubmit=function(ev){var data={cropSessionKey:this.$popupElement.find('input[name=cropSessionKey]').val(),path:this.$popupElement.find('input[name=path]').val()}
-$.oc.stripeLoadIndicator.show()
-$(ev.target).request(this.options.alias+'::onResizeImage',{data:data}).always(function(){$.oc.stripeLoadIndicator.hide()}).done(this.proxy(this.imageResized))
+$.wn.stripeLoadIndicator.show()
+$(ev.target).request(this.options.alias+'::onResizeImage',{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(this.proxy(this.imageResized))
 ev.preventDefault()
 return false}
 MediaManagerImageCropPopup.prototype.imageResized=function(response){this.$popupElement.find('button[data-command=resize]').popup('hide')
@@ -701,4 +701,4 @@ case'undo-resizing':this.undoResizing()
 break}}
 MediaManagerImageCropPopup.prototype.onSelectionChanged=function(c){this.updateSelectionSizeLabel(c.w,c.h)}
 MediaManagerImageCropPopup.DEFAULTS={alias:undefined,onDone:undefined}
-$.oc.mediaManager.imageCropPopup=MediaManagerImageCropPopup}(window.jQuery);
+$.wn.mediaManager.imageCropPopup=MediaManagerImageCropPopup}(window.jQuery);

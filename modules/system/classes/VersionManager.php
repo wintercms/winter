@@ -4,19 +4,19 @@ use File;
 use Yaml;
 use Db;
 use Carbon\Carbon;
-use October\Rain\Database\Updater;
+use Winter\Storm\Database\Updater;
 
 /**
  * Version manager
  *
  * Manages the versions and database updates for plugins.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class VersionManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * Value when no updates are found.
@@ -50,7 +50,7 @@ class VersionManager
     protected $databaseHistory;
 
     /**
-     * @var October\Rain\Database\Updater
+     * @var Winter\Storm\Database\Updater
      */
     protected $updater;
 

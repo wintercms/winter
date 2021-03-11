@@ -18,7 +18,7 @@ use Backend\Classes\FormWidgetBase;
  *        imageHeight: 200px
  *        prompt: Click the %s button to pick an image
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MediaFinder extends FormWidgetBase

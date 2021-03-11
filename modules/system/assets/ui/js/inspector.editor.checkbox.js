@@ -1,13 +1,13 @@
 /*
  * Inspector checkbox editor class.
  *
- * This editor is used in $.oc.inspector.propertyEditors.set class.
+ * This editor is used in $.wn.inspector.propertyEditors.set class.
  * If updates that affect references to this.inspector and propertyDefinition are done,
  * the propertyEditors.set class implementation should be reviewed.
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.base,
+    var Base = $.wn.inspector.propertyEditors.base,
         BaseProto = Base.prototype
 
     var CheckboxEditor = function(inspector, propertyDefinition, containerCell, group) {
@@ -49,11 +49,11 @@
             if (this.propertyDefinition.default !== undefined) {
                 isChecked = this.normalizeCheckedValue(this.propertyDefinition.default)
             }
-        } 
+        }
         else {
             isChecked = this.normalizeCheckedValue(value)
         }
-        
+
         editor.checked = isChecked
 
         this.containerCell.appendChild(container)
@@ -105,5 +105,5 @@
         this.inspector.setPropertyValue(this.propertyDefinition.property, isChecked ? 1 : 0)
     }
 
-    $.oc.inspector.propertyEditors.checkbox = CheckboxEditor
+    $.wn.inspector.propertyEditors.checkbox = CheckboxEditor
 }(window.jQuery);

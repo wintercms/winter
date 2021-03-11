@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Cookie;
  * Security Controller Trait
  * Adds cross-site scripting protection methods to a controller based class
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait SecurityController

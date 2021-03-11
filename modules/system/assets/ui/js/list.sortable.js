@@ -1,14 +1,14 @@
 /*
  * Sortable plugin.
- * 
+ *
  * Status: experimental. The behavior is not perfect, but it's OK in terms of memory
  * usage and disposing.
  *
- * This is a lightweight, October-style implementation of the drag & drop sorting
+ * This is a lightweight, Winter-style implementation of the drag & drop sorting
  * functionality. The plugin uses only HTML5 Drag&Drop feature and completely
  * disposable.
  *
- * During the dragging the plugin creates a placeholder element, which should be 
+ * During the dragging the plugin creates a placeholder element, which should be
  * styled separately.
  *
  * Draggable elements should be marked with "draggable" HTML5 attribute.
@@ -18,7 +18,7 @@
  * [x] Sorting a single list.
  * [ ] Dragging items between multiple lists.
  * [ ] Sorting nested lists.
- 
+
  * JAVASCRIPT API
  *
  * $('#list').listSortable({})
@@ -29,7 +29,7 @@
  * <ul data-control="list-sortable">
  *     <li draggable="true">...</li>
  *
- * Multiple lists will not support this option and the plugin should be created 
+ * Multiple lists will not support this option and the plugin should be created
  * and updated by a caller code.
  *
  * Options:
@@ -42,7 +42,7 @@
 
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype,
         listSortableIdCounter = 0,
         elementsIdCounter = 0
@@ -55,7 +55,7 @@
 
         Base.call(this)
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         this.init()
 
         this.addList(element)
@@ -152,7 +152,7 @@
     }
 
     ListSortable.prototype.isDragStartAllowed = function(element) {
-        // TODO: if handle selector is specified - test if 
+        // TODO: if handle selector is specified - test if
         // the element is a handle.
 
         return true
@@ -189,7 +189,7 @@
 
     ListSortable.prototype.removePlaceholders = function() {
         for (var i=this.lists.length-1; i >= 0; i--) {
-            var list = this.lists[i], 
+            var list = this.lists[i],
                 placeholders = list.querySelectorAll('.list-sortable-placeholder')
 
             for (var j=placeholders.length-1; j >= 0; j--) {
@@ -251,8 +251,8 @@
     }
 
     ListSortable.prototype.getPlaceholderPlacement = function(hoverElement, ev) {
-        var mousePosition = $.oc.foundation.event.pageCoordinates(ev),
-            elementPosition = $.oc.foundation.element.absolutePosition(hoverElement)
+        var mousePosition = $.wn.foundation.event.pageCoordinates(ev),
+            elementPosition = $.wn.foundation.element.absolutePosition(hoverElement)
 
         if (this.options.direction == 'vertical') {
             var elementCenter = elementPosition.top + hoverElement.offsetHeight/2
@@ -267,7 +267,7 @@
     }
 
     ListSortable.prototype.lastMousePositionChanged = function(ev) {
-        var mousePosition = $.oc.foundation.event.pageCoordinates(ev.originalEvent)
+        var mousePosition = $.wn.foundation.event.pageCoordinates(ev.originalEvent)
 
         if (this.lastMousePosition === null || this.lastMousePosition.x != mousePosition.x || this.lastMousePosition.y != mousePosition.y) {
             this.lastMousePosition = mousePosition
@@ -278,10 +278,10 @@
     }
 
     ListSortable.prototype.mouseOutsideLists = function(ev) {
-        var mousePosition = $.oc.foundation.event.pageCoordinates(ev)
+        var mousePosition = $.wn.foundation.event.pageCoordinates(ev)
 
         for (var i=this.lists.length-1; i >= 0; i--) {
-            if ($.oc.foundation.element.elementContainsPoint(this.lists[i], mousePosition)) {
+            if ($.wn.foundation.element.elementContainsPoint(this.lists[i], mousePosition)) {
                 return false
             }
         }
@@ -320,9 +320,9 @@
         // the dragend for removing the placeholders because dragend
         // is triggered before drop, but we need placeholder to exists
         // in the drop handler.
-        // 
+        //
         // Mouse events are suppressed during the drag and drop operations,
-        // so we only need to handle it once (but we still must the handler 
+        // so we only need to handle it once (but we still must the handler
         // explicitly).
         $(document).on('mousemove', this.proxy(this.onDocumentMouseMove))
 
@@ -436,7 +436,7 @@
                 $this.data('oc.listSortable', (data = new ListSortable(this, options)))
             }
 
-            if (typeof option == 'string' && data) { 
+            if (typeof option == 'string' && data) {
                 if (data[option]) {
                     var methodArguments = Array.prototype.slice.call(args) // Clone the arguments array
                     methodArguments.shift()

@@ -13,12 +13,12 @@ use DateTimeZone;
 /**
  * Backend preferences for the backend user
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Preference extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     const DEFAULT_THEME = 'twilight';
 

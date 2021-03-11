@@ -11,16 +11,16 @@
     // NAMESPACE CHECK
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.processor === undefined)
-        throw new Error("The $.oc.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");
+    if ($.wn.table.processor === undefined)
+        throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.table.processor.base,
+    var Base = $.wn.table.processor.base,
         BaseProto = Base.prototype
 
     var DropdownProcessor = function(tableObj, columnName, columnConfiguration) {
@@ -519,5 +519,5 @@
     }
 
 
-    $.oc.table.processor.dropdown = DropdownProcessor;
+    $.wn.table.processor.dropdown = DropdownProcessor;
 }(window.jQuery);
