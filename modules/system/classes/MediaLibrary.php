@@ -134,10 +134,11 @@ class MediaLibrary
             $folderContents = $this->scanFolderContents($fullFolderPath);
 
             $cached[$fullFolderPath] = $folderContents;
+            $expiresAt = now()->addMinutes(Config::get('cms.storage.media.ttl', 10));
             Cache::put(
                 $this->cacheKey,
                 base64_encode(serialize($cached)),
-                Config::get('cms.storage.media.ttl', 10)
+                $expiresAt
             );
         }
 
@@ -288,6 +289,10 @@ class MediaLibrary
             }
 
             if (Str::startsWith($folder, $exclude)) {
+                continue;
+            }
+            if (!$this->isVisible($folder)) {
+                $exclude[] = $folder . '/';
                 continue;
             }
 
@@ -535,7 +540,7 @@ class MediaLibrary
      */
     public function getPathUrl($path)
     {
-        $path = $this->validatePath($path);
+        $path = $this->validatePath($path, true);
 
         $fullPath = $this->storagePath . implode("/", array_map("rawurlencode", explode("/", $path)));
 
