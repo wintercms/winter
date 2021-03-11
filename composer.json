@@ -48,6 +48,20 @@
         "php-parallel-lint/php-parallel-lint": "^1.0",
         "funkjedi/composer-include-files": "^1.0"
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/wintercms/wn-system-module"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/wintercms/wn-backend-module"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/wintercms/wn-cms-module"
+        }
+    ],
     "autoload-dev": {
         "classmap": [
             "tests/concerns/InteractsWithAuthentication.php",
