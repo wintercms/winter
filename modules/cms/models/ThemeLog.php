@@ -5,13 +5,13 @@ use Model;
 use BackendAuth;
 use Cms\Classes\Theme;
 use System\Models\LogSetting;
-use October\Rain\Halcyon\Model as HalcyonModel;
+use Winter\Storm\Halcyon\Model as HalcyonModel;
 use Exception;
 
 /**
  * Model for changes made to the theme
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeLog extends Model

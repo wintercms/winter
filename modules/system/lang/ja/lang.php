@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => '基本に戻ろう！',
     ],
     'directory' => [
@@ -36,7 +36,7 @@ return [
         'unnamed' => '名前なしプラグイン',
         'name' => [
             'label' => 'プラグイン名',
-            'help' => '重複しないプラグイン名を付けてください。（例：RainLab.Blog）',
+            'help' => '重複しないプラグイン名を付けてください。（例：Winter.Blog）',
         ],
     ],
     'plugins' => [

@@ -6,11 +6,11 @@
     // PROCESSOR NAMESPACES
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.processor === undefined)
-        $.oc.table.processor = {}
+    if ($.wn.table.processor === undefined)
+        $.wn.table.processor = {}
 
     // CLASS DEFINITION
     // ============================
@@ -185,11 +185,11 @@
             return
 
         for (var validatorName in this.columnConfiguration.validation) {
-            if ($.oc.table.validator === undefined || $.oc.table.validator[validatorName] == undefined)
+            if ($.wn.table.validator === undefined || $.wn.table.validator[validatorName] == undefined)
                 throw new Error('The table cell validator "'+validatorName+'" for the column "'+this.columnName+'" is not ' +
-                    'found in the $.oc.table.validator namespace.')
+                    'found in the $.wn.table.validator namespace.')
 
-            var validator = new $.oc.table.validator[validatorName](
+            var validator = new $.wn.table.validator[validatorName](
                     this.columnConfiguration.validation[validatorName]
                 )
 
@@ -206,5 +206,5 @@
         }
     }
 
-    $.oc.table.processor.base = Base
+    $.wn.table.processor.base = Base
 }(window.jQuery);

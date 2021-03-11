@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Getting back to basics',
     ],
     'directory' => [
@@ -42,7 +42,7 @@ return [
         'unnamed' => 'Namnlöst tema',
         'name' => [
             'label' => 'Temanamn',
-            'help' => 'Namnge temat med en unik kod. Till exempel, RainLab.Vanilla'
+            'help' => 'Namnge temat med en unik kod. Till exempel, Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -58,7 +58,7 @@ return [
         'unnamed' => 'Namnlöst tillägg',
         'name' => [
             'label' => 'Tilläggsnamn',
-            'help' => 'Namnge tillägget efter dess unika kod. Exempelvis RainLab.Blog',
+            'help' => 'Namnge tillägget efter dess unika kod. Exempelvis Winter.Blog',
         ]
         ],
     'plugins' => [

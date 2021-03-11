@@ -7,7 +7,7 @@ use Cms\Classes\Layout;
 use Cms\Classes\Controller;
 use Cms\Classes\CmsException;
 use Cms\Classes\CodeParser;
-use October\Rain\Exception\SystemException;
+use Winter\Storm\Exception\SystemException;
 
 class CmsExceptionTest extends TestCase
 {

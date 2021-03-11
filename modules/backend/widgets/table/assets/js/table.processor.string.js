@@ -8,16 +8,16 @@
     // NAMESPACE CHECK
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.processor === undefined)
-        throw new Error("The $.oc.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");
+    if ($.wn.table.processor === undefined)
+        throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.table.processor.base,
+    var Base = $.wn.table.processor.base,
         BaseProto = Base.prototype
 
     var StringProcessor = function(tableObj, columnName, columnConfiguration) {
@@ -200,5 +200,5 @@
         return 0
     }
 
-    $.oc.table.processor.string = StringProcessor;
+    $.wn.table.processor.string = StringProcessor;
 }(window.jQuery);

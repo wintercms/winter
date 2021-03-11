@@ -9,7 +9,7 @@
 
  +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var Sortable = function (element, options) {
@@ -17,7 +17,7 @@
         this.options = options || {}
         this.cursorAdjustment = null
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }

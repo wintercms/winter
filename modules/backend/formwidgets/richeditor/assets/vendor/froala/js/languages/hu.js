@@ -330,7 +330,7 @@ $.FE.LANGUAGE['hu'] = {
     "Clean": "Tisztítás",
     "Word Paste Detected": "Word beillesztés észlelhető",
 
-    // October CMS
+    // Winter CMS
     "Insert Audio": "Audió beillesztése",
     "Insert File": "Fájl beillesztése"
   },

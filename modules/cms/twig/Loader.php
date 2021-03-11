@@ -10,7 +10,7 @@ use Cms\Classes\Partial as CmsPartial;
 /**
  * This class implements a Twig template loader for the CMS.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Loader extends LoaderBase implements TwigLoaderInterface

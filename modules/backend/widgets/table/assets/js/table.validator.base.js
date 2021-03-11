@@ -6,11 +6,11 @@
     // VALIDATOR NAMESPACES
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.validator === undefined)
-        $.oc.table.validator = {}
+    if ($.wn.table.validator === undefined)
+        $.wn.table.validator = {}
 
     // CLASS DEFINITION
     // ============================
@@ -44,7 +44,7 @@
      * target row.
      */
     Base.prototype.validateValue = function(value, rowData) {
-        
+
     }
 
     Base.prototype.trim = function(value) {
@@ -73,5 +73,5 @@
         return value.length > 0
     }
 
-    $.oc.table.validator.base = Base;
+    $.wn.table.validator.base = Base;
 }(window.jQuery);

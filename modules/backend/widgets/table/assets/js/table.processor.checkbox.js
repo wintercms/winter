@@ -6,16 +6,16 @@
     // NAMESPACE CHECK
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.processor === undefined)
-        throw new Error("The $.oc.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");
+    if ($.wn.table.processor === undefined)
+        throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.table.processor.base,
+    var Base = $.wn.table.processor.base,
         BaseProto = Base.prototype
 
     var CheckboxProcessor = function(tableObj, columnName, columnConfiguration) {
@@ -98,7 +98,7 @@
         if (divElement.getAttribute('class') == 'checked') {
             divElement.setAttribute('class', '')
             this.tableObj.setCellValue(cell, 0)
-        } 
+        }
         else {
             divElement.setAttribute('class', 'checked')
             this.tableObj.setCellValue(cell, 1)
@@ -107,7 +107,7 @@
 
     CheckboxProcessor.prototype.getCheckboxContainerNode = function(checkbox) {
         return checkbox.parentNode.parentNode
-    } 
+    }
 
     /*
      * This method is called when a cell value in the row changes.
@@ -128,5 +128,5 @@
         }
     }
 
-    $.oc.table.processor.checkbox = CheckboxProcessor;
+    $.wn.table.processor.checkbox = CheckboxProcessor;
 }(window.jQuery);

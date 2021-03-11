@@ -10,7 +10,7 @@ use System\Classes\SettingsManager;
 /**
  * Mail layouts controller
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailLayouts extends Controller
@@ -39,8 +39,8 @@ class MailLayouts extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('October.System', 'system', 'settings');
-        SettingsManager::setContext('October.System', 'mail_templates');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
+        SettingsManager::setContext('Winter.System', 'mail_templates');
     }
 
     public function update_onResetDefault($recordId)

@@ -90,7 +90,7 @@ return [
         'new_directory_name_comment' => 'Adjon meg egy új könyvtárat a duplikált témának.',
         'dir_name_invalid' => 'A név csak számokat, latin betűket, aláhúzásokat és kötőjeleket tartalmazhat.',
         'dir_name_taken' => 'A megadott könyvtár már létezik.',
-        'find_more_themes' => 'További témák az OctoberCMS piacterén',
+        'find_more_themes' => 'További témák az Winter CMS piacterén',
         'saving' => 'Téma mentése...',
         'return' => 'Vissza a témákhoz'
     ],

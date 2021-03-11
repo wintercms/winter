@@ -11,7 +11,7 @@ use System\Classes\UpdateManager;
  *
  * This lists all the available themes in the system. It also shows the active theme.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeList extends Command
@@ -62,7 +62,7 @@ class ThemeList extends Command
     protected function getOptions()
     {
         return [
-            ['include-marketplace', 'm', InputOption::VALUE_NONE, 'Include downloadable themes from the October marketplace.']
+            ['include-marketplace', 'm', InputOption::VALUE_NONE, 'Include downloadable themes from the Winter marketplace.']
         ];
     }
 }

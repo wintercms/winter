@@ -1,13 +1,13 @@
 <?php namespace Backend\Classes;
 
-use October\Rain\Database\Model;
-use October\Rain\Html\Helper as HtmlHelper;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Html\Helper as HtmlHelper;
 
 /**
  * List Columns definition
  * A translation of the list column configuration
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ListColumn

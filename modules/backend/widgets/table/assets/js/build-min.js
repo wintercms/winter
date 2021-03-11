@@ -1,8 +1,10 @@
 
-+function($){"use strict";if($.oc===undefined)
-$.oc={}
-if($.oc.table===undefined)
-$.oc.table={}
++function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
+if($.wn.table===undefined)
+$.wn.table={}
 var Table=function(element,options){this.el=element
 this.$el=$(element)
 this.options=options
@@ -29,11 +31,11 @@ this.search=null
 this.recordsAddedOrDeleted=0
 this.disposeBound=this.dispose.bind(this)
 this.init()
-$.oc.foundation.controlUtils.markDisposable(element)}
+$.wn.foundation.controlUtils.markDisposable(element)}
 Table.prototype.init=function(){this.createDataSource()
 this.initCellProcessors()
-this.navigation=new $.oc.table.helper.navigation(this)
-this.search=new $.oc.table.helper.search(this)
+this.navigation=new $.wn.table.helper.navigation(this)
+this.search=new $.wn.table.helper.search(this)
 this.buildUi()
 this.registerHandlers()}
 Table.prototype.disposeCellProcessors=function(){for(var i=0,len=this.options.columns.length;i<len;i++){var column=this.options.columns[i].key
@@ -42,9 +44,9 @@ this.cellProcessors[column]=null}
 this.cellProcessors=null
 this.activeCellProcessor=null}
 Table.prototype.createDataSource=function(){var dataSourceClass=this.options.clientDataSourceClass
-if($.oc.table.datasource===undefined||$.oc.table.datasource[dataSourceClass]==undefined)
-throw new Error('The table client-side data source class "'+dataSourceClass+'" is not '+'found in the $.oc.table.datasource namespace.')
-this.dataSource=new $.oc.table.datasource[dataSourceClass](this)}
+if($.wn.table.datasource===undefined||$.wn.table.datasource[dataSourceClass]==undefined)
+throw new Error('The table client-side data source class "'+dataSourceClass+'" is not '+'found in the $.wn.table.datasource namespace.')
+this.dataSource=new $.wn.table.datasource[dataSourceClass](this)}
 Table.prototype.registerHandlers=function(){this.el.addEventListener('click',this.clickHandler)
 this.el.addEventListener('keydown',this.keydownHandler)
 this.$el.one('dispose-control',this.disposeBound)
@@ -65,9 +67,9 @@ this.formSubmitHandler=null}}
 Table.prototype.initCellProcessors=function(){for(var i=0,len=this.options.columns.length;i<len;i++){var columnConfiguration=this.options.columns[i],column=columnConfiguration.key,columnType=columnConfiguration.type
 if(columnType===undefined){columnType='string'
 this.options.columns[i].type=columnType}
-if($.oc.table.processor===undefined||$.oc.table.processor[columnType]==undefined)
-throw new Error('The table cell processor for the column type "'+columnType+'" is not '+'found in the $.oc.table.processor namespace.')
-this.cellProcessors[column]=new $.oc.table.processor[columnType](this,column,columnConfiguration)}}
+if($.wn.table.processor===undefined||$.wn.table.processor[columnType]==undefined)
+throw new Error('The table cell processor for the column type "'+columnType+'" is not '+'found in the $.wn.table.processor namespace.')
+this.cellProcessors[column]=new $.wn.table.processor[columnType](this,column,columnConfiguration)}}
 Table.prototype.getCellProcessor=function(columnName){return this.cellProcessors[columnName]}
 Table.prototype.buildUi=function(){this.tableContainer=document.createElement('div')
 this.tableContainer.setAttribute('class','table-container')
@@ -251,7 +253,7 @@ for(var columnName in rowData){var cellProcessor=this.getCellProcessor(columnNam
 if(message!==undefined){var cell=row.querySelector('td[data-column="'+columnName+'"]'),self=this
 this.elementAddClass(row,'error')
 this.elementAddClass(cell,'error')
-$.oc.flashMsg({text:message,'class':'error'})
+$.wn.flashMsg({text:message,'class':'error'})
 window.setTimeout(function(){self.focusCell(cell,false)
 cell=null
 self=null
@@ -394,12 +396,12 @@ if(typeof option=='string')result=data[option].apply(data,args)
 if(typeof result!='undefined')return false})
 return result?result:this}
 $.fn.table.Constructor=Table
-$.oc.table.table=Table
+$.wn.table.table=Table
 $.fn.table.noConflict=function(){$.fn.table=old
 return this}
-$(document).on('render',function(){$('div[data-control=table]').table()})}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.helper===undefined)
-$.oc.table.helper={}
+$(document).on('render',function(){$('div[data-control=table]').table()})}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.helper===undefined)
+$.wn.table.helper={}
 var Navigation=function(tableObj){this.tableObj=tableObj
 this.pageIndex=0
 this.pageCount=0
@@ -546,9 +548,9 @@ return
 this.gotoPage(pageIndex)
 this.tableObj.stopEvent(ev)
 return false}
-$.oc.table.helper.navigation=Navigation;}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.helper===undefined)
-$.oc.table.helper={}
+$.wn.table.helper.navigation=Navigation;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.helper===undefined)
+$.wn.table.helper={}
 var Search=function(tableObj){this.tableObj=tableObj
 this.searchForm=null
 this.searchInput=null
@@ -577,9 +579,9 @@ var self=this
 this.inputTrackTimer=window.setTimeout(function(){self.performSearch(self.searchInput.value)},300)}
 Search.prototype.onClick=function(ev){var target=this.tableObj.getEventTarget(ev,'INPUT')
 this.isActive=target&&$(target).hasClass('table-search-input')}
-$.oc.table.helper.search=Search;}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.datasource===undefined)
-$.oc.table.datasource={}
+$.wn.table.helper.search=Search;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.datasource===undefined)
+$.wn.table.datasource={}
 var Base=function(tableObj){this.tableObj=tableObj}
 Base.prototype.dispose=function(){this.tableObj=null}
 Base.prototype.getRecords=function(offset,count,onSuccess){onSuccess([])}
@@ -587,9 +589,9 @@ Base.prototype.searchRecords=function(query,offset,count,onSuccess){onSuccess([]
 Base.prototype.createRecord=function(recordData,placement,relativeToKey,offset,count,onSuccess){onSuccess([],0)}
 Base.prototype.updateRecord=function(key,recordData){}
 Base.prototype.deleteRecord=function(key,newRecordData,offset,count,onSuccess){onSuccess([],0)}
-$.oc.table.datasource.base=Base;}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.datasource===undefined)
-throw new Error("The $.oc.table.datasource namespace is not defined. Make sure that the table.datasource.base.js script is loaded.");var Base=$.oc.table.datasource.base,BaseProto=Base.prototype
+$.wn.table.datasource.base=Base;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.datasource===undefined)
+throw new Error("The $.wn.table.datasource namespace is not defined. Make sure that the table.datasource.base.js script is loaded.");var Base=$.wn.table.datasource.base,BaseProto=Base.prototype
 var Client=function(tableObj){Base.call(this,tableObj)
 var dataString=tableObj.getElement().getAttribute('data-data')
 if(dataString===null||dataString===undefined)
@@ -619,9 +621,9 @@ else{throw new Error('Record with they key '+key+' is not found in the data set'
 Client.prototype.getIndexOfKey=function(key){var keyColumn=this.tableObj.options.keyColumn
 return this.data.map(function(record){return record[keyColumn]+""}).indexOf(key+"")}
 Client.prototype.getAllData=function(){return this.data}
-$.oc.table.datasource.client=Client}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.datasource===undefined)
-throw new Error("The $.oc.table.datasource namespace is not defined. Make sure that the table.datasource.base.js script is loaded.");var Base=$.oc.table.datasource.base,BaseProto=Base.prototype
+$.wn.table.datasource.client=Client}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.datasource===undefined)
+throw new Error("The $.wn.table.datasource namespace is not defined. Make sure that the table.datasource.base.js script is loaded.");var Base=$.wn.table.datasource.base,BaseProto=Base.prototype
 var Server=function(tableObj){Base.call(this,tableObj)
 var dataString=tableObj.getElement().getAttribute('data-data')
 if(dataString===null||dataString===undefined)
@@ -640,9 +642,9 @@ Server.prototype.updateRecord=function(key,recordData){var handlerName=this.tabl
 this.tableObj.$el.request(handlerName,{data:{key:key,recordData:recordData}})}
 Server.prototype.deleteRecord=function(key,newRecordData,offset,count,onSuccess){var handlerName=this.tableObj.getAlias()+'::onServerDeleteRecord'
 this.tableObj.$el.request(handlerName,{data:{key:key,offset:offset,count:count}}).done(function(data){onSuccess(data.records,data.count)})}
-$.oc.table.datasource.server=Server}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.processor===undefined)
-$.oc.table.processor={}
+$.wn.table.datasource.server=Server}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)
+$.wn.table.processor={}
 var Base=function(tableObj,columnName,columnConfiguration){this.tableObj=tableObj
 this.columnName=columnName
 this.columnConfiguration=columnConfiguration
@@ -676,16 +678,16 @@ Base.prototype.setViewContainerValue=function(cellElement,value){return this.get
 Base.prototype.elementBelongsToProcessor=function(element){return false}
 Base.prototype.initValidators=function(){if(this.columnConfiguration.validation===undefined)
 return
-for(var validatorName in this.columnConfiguration.validation){if($.oc.table.validator===undefined||$.oc.table.validator[validatorName]==undefined)
-throw new Error('The table cell validator "'+validatorName+'" for the column "'+this.columnName+'" is not '+'found in the $.oc.table.validator namespace.')
-var validator=new $.oc.table.validator[validatorName](this.columnConfiguration.validation[validatorName])
+for(var validatorName in this.columnConfiguration.validation){if($.wn.table.validator===undefined||$.wn.table.validator[validatorName]==undefined)
+throw new Error('The table cell validator "'+validatorName+'" for the column "'+this.columnName+'" is not '+'found in the $.wn.table.validator namespace.')
+var validator=new $.wn.table.validator[validatorName](this.columnConfiguration.validation[validatorName])
 this.validators.push(validator)}}
 Base.prototype.validate=function(value,rowData){for(var i=0,len=this.validators.length;i<len;i++){var message=this.validators[i].validate(value,rowData)
 if(message!==undefined)
 return message}}
-$.oc.table.processor.base=Base}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.processor===undefined)
-throw new Error("The $.oc.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.oc.table.processor.base,BaseProto=Base.prototype
+$.wn.table.processor.base=Base}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)
+throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.base,BaseProto=Base.prototype
 var StringProcessor=function(tableObj,columnName,columnConfiguration){this.focusTimeoutHandler=this.onFocusTimeout.bind(this)
 Base.call(this,tableObj,columnName,columnConfiguration)}
 StringProcessor.prototype=Object.create(BaseProto)
@@ -751,9 +753,9 @@ range.select()},0)}
 if(input.selectionStart!==undefined){setTimeout(function(){input.selectionStart=position
 input.selectionEnd=position},0)}
 return 0}
-$.oc.table.processor.string=StringProcessor;}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.processor===undefined)
-throw new Error("The $.oc.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.oc.table.processor.base,BaseProto=Base.prototype
+$.wn.table.processor.string=StringProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)
+throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.base,BaseProto=Base.prototype
 var CheckboxProcessor=function(tableObj,columnName,columnConfiguration){Base.call(this,tableObj,columnName,columnConfiguration)}
 CheckboxProcessor.prototype=Object.create(BaseProto)
 CheckboxProcessor.prototype.constructor=CheckboxProcessor
@@ -782,9 +784,9 @@ CheckboxProcessor.prototype.onRowValueChanged=function(columnName,cellElement){i
 var checkbox=cellElement.querySelector('div[data-checkbox-element]'),value=this.tableObj.getCellValue(cellElement)
 if(value&&value!=0&&value!="false"){checkbox.setAttribute('class','checked')}
 else{checkbox.setAttribute('class','')}}
-$.oc.table.processor.checkbox=CheckboxProcessor;}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.processor===undefined)
-throw new Error("The $.oc.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.oc.table.processor.base,BaseProto=Base.prototype
+$.wn.table.processor.checkbox=CheckboxProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)
+throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.base,BaseProto=Base.prototype
 var DropdownProcessor=function(tableObj,columnName,columnConfiguration){this.itemListElement=null
 this.cachedOptionPromises={}
 this.searching=false
@@ -937,9 +939,9 @@ this.searchQuery+=(character==='Space')?' ':character;var validItem=null;var que
 if(this.searchInterval){clearTimeout(this.searchInterval);}
 this.searchInterval=setTimeout(this.cancelTextSearch.bind(this),1000);}else{this.cancelTextSearch();}}}
 DropdownProcessor.prototype.cancelTextSearch=function(){this.searching=false;this.searchQuery=null;this.searchInterval=null;}
-$.oc.table.processor.dropdown=DropdownProcessor;}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.processor===undefined)
-throw new Error("The $.oc.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.oc.table.processor.string,BaseProto=Base.prototype
+$.wn.table.processor.dropdown=DropdownProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)
+throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.string,BaseProto=Base.prototype
 var AutocompleteProcessor=function(tableObj,columnName,columnConfiguration){this.cachedOptionPromises={}
 Base.call(this,tableObj,columnName,columnConfiguration)}
 AutocompleteProcessor.prototype=Object.create(BaseProto)
@@ -957,10 +959,10 @@ this.fetchOptions(cellElement,function autocompleteFetchOptions(options){self.bu
 self=null})}
 AutocompleteProcessor.prototype.fetchOptions=function(cellElement,onSuccess){if(this.columnConfiguration.options){if(onSuccess!==undefined){onSuccess(this.columnConfiguration.options)}}else{if(this.triggerGetOptions(onSuccess)===false){return}
 var row=cellElement.parentNode,cachingKey=this.createOptionsCachingKey(row),viewContainer=this.getViewContainer(cellElement)
-$.oc.foundation.element.addClass(viewContainer,'loading')
+$.wn.foundation.element.addClass(viewContainer,'loading')
 if(!this.cachedOptionPromises[cachingKey]){var requestData={column:this.columnName,rowData:this.tableObj.getRowData(row)},handlerName=this.tableObj.getAlias()+'::onGetAutocompleteOptions'
 this.cachedOptionPromises[cachingKey]=this.tableObj.$el.request(handlerName,{data:requestData})}
-this.cachedOptionPromises[cachingKey].done(function onAutocompleteLoadOptionsSuccess(data){if(onSuccess!==undefined){onSuccess(data.options)}}).always(function onAutocompleteLoadOptionsAlways(){$.oc.foundation.element.removeClass(viewContainer,'loading')})}}
+this.cachedOptionPromises[cachingKey].done(function onAutocompleteLoadOptionsSuccess(data){if(onSuccess!==undefined){onSuccess(data.options)}}).always(function onAutocompleteLoadOptionsAlways(){$.wn.foundation.element.removeClass(viewContainer,'loading')})}}
 AutocompleteProcessor.prototype.createOptionsCachingKey=function(row){var cachingKey='non-dependent',dependsOn=this.columnConfiguration.dependsOn
 if(dependsOn){if(typeof dependsOn=='object'){for(var i=0,len=dependsOn.length;i<len;i++)
 cachingKey+=dependsOn[i]+this.tableObj.getRowCellValueByColumnName(row,dependsOn[i])}else
@@ -985,7 +987,7 @@ else{result=items}
 return result}
 AutocompleteProcessor.prototype.removeAutocomplete=function(){var input=this.getInput()
 $(input).autocomplete('destroy')}
-$.oc.table.processor.autocomplete=AutocompleteProcessor;}(window.jQuery);+function($){"use strict";if($.oc.table===undefined){throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.")}
+$.wn.table.processor.autocomplete=AutocompleteProcessor;}(window.jQuery);+function($){"use strict";if($.oc.table===undefined){throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.")}
 if($.oc.table.processor===undefined){throw new Error("The $.oc.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.")}
 var Base=$.oc.table.processor.base,BaseProto=Base.prototype
 var ComputedProcessor=function(tableObj,columnName,columnConfiguration){this.cachedValues={};Base.call(this,tableObj,columnName,columnConfiguration)}
@@ -1019,9 +1021,9 @@ ComputedProcessor.prototype.setCachedValue=function(cellElement,value){this.cach
 ComputedProcessor.prototype.getHandlerName=function(){if(this.columnConfiguration.callback){return this.columnConfiguration.callback}
 var studlyCase=this.columnName.toLowerCase().split(/[\-_]+/).map(function(item){return item.substr(0,1).toUpperCase()+item.substr(1)}).join('')
 return'onGet'+studlyCase+'ComputedValue'}
-$.oc.table.processor.computed=ComputedProcessor}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.validator===undefined)
-$.oc.table.validator={}
+$.oc.table.processor.computed=ComputedProcessor}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
+$.wn.table.validator={}
 var Base=function(options){this.options=options}
 Base.prototype.validate=function(value,rowData){if(this.options.requiredWith!==undefined&&!this.rowHasValue(this.options.requiredWith,rowData))
 return
@@ -1039,18 +1041,18 @@ if(typeof rowData[columnName]=='boolean')
 return rowData[columnName]
 var value=this.trim(String(rowData[columnName]))
 return value.length>0}
-$.oc.table.validator.base=Base;}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.validator===undefined)
-throw new Error("The $.oc.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.oc.table.validator.base,BaseProto=Base.prototype
+$.wn.table.validator.base=Base;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
+throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
 var Required=function(options){Base.call(this,options)};Required.prototype=Object.create(BaseProto)
 Required.prototype.constructor=Required
 Required.prototype.validateValue=function(value,rowData){value=this.trim(value)
 if(value.length===0)
 return this.getMessage("The value should not be empty.")
 return}
-$.oc.table.validator.required=Required}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.validator===undefined)
-throw new Error("The $.oc.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.oc.table.validator.base,BaseProto=Base.prototype
+$.wn.table.validator.required=Required}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
+throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
 var BaseNumber=function(options){Base.call(this,options)};BaseNumber.prototype=Object.create(BaseProto)
 BaseNumber.prototype.constructor=BaseNumber
 BaseNumber.prototype.doCommonChecks=function(value){if(this.options.min!==undefined||this.options.max!==undefined){if(this.options.min!==undefined){if(this.options.min.value===undefined)
@@ -1060,10 +1062,10 @@ if(this.options.max!==undefined){if(this.options.max.value===undefined)
 throw new Error('The max.value parameter is not defined in the table validator configuration')
 if(value>this.options.max.value){return this.options.max.message!==undefined?this.options.max.message:"The value should not be more than "+this.options.max.value}}}
 return}
-$.oc.table.validator.baseNumber=BaseNumber}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.validator===undefined)
-throw new Error("The $.oc.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");if($.oc.table.validator.baseNumber===undefined)
-throw new Error("The $.oc.table.validator.baseNumber namespace is not defined. Make sure that the table.validator.baseNumber.js script is loaded.");var Base=$.oc.table.validator.baseNumber,BaseProto=Base.prototype
+$.wn.table.validator.baseNumber=BaseNumber}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
+throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");if($.wn.table.validator.baseNumber===undefined)
+throw new Error("The $.wn.table.validator.baseNumber namespace is not defined. Make sure that the table.validator.baseNumber.js script is loaded.");var Base=$.wn.table.validator.baseNumber,BaseProto=Base.prototype
 var Integer=function(options){Base.call(this,options)};Integer.prototype=Object.create(BaseProto)
 Integer.prototype.constructor=Integer
 Integer.prototype.validateValue=function(value,rowData){value=this.trim(value)
@@ -1072,10 +1074,10 @@ return
 var testResult=this.options.allowNegative?/^\-?[0-9]*$/.test(value):/^[0-9]*$/.test(value)
 if(!testResult){var defaultMessage=this.options.allowNegative?'The value should be an integer.':'The value should be a positive integer';return this.getMessage(defaultMessage)}
 return this.doCommonChecks(parseInt(value))}
-$.oc.table.validator.integer=Integer}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.validator===undefined)
-throw new Error("The $.oc.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");if($.oc.table.validator.baseNumber===undefined)
-throw new Error("The $.oc.table.validator.baseNumber namespace is not defined. Make sure that the table.validator.baseNumber.js script is loaded.");var Base=$.oc.table.validator.baseNumber,BaseProto=Base.prototype
+$.wn.table.validator.integer=Integer}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
+throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");if($.wn.table.validator.baseNumber===undefined)
+throw new Error("The $.wn.table.validator.baseNumber namespace is not defined. Make sure that the table.validator.baseNumber.js script is loaded.");var Base=$.wn.table.validator.baseNumber,BaseProto=Base.prototype
 var Float=function(options){Base.call(this,options)};Float.prototype=Object.create(BaseProto)
 Float.prototype.constructor=Float
 Float.prototype.validateValue=function(value,rowData){value=this.trim(value)
@@ -1084,9 +1086,9 @@ return
 var testResult=this.options.allowNegative?/^[-]?([0-9]+\.[0-9]+|[0-9]+)$/.test(value):/^([0-9]+\.[0-9]+|[0-9]+)$/.test(value)
 if(!testResult){var defaultMessage=this.options.allowNegative?'The value should be a floating point number.':'The value should be a positive floating point number';return this.getMessage(defaultMessage)}
 return this.doCommonChecks(parseFloat(value))}
-$.oc.table.validator.float=Float}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.validator===undefined)
-throw new Error("The $.oc.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.oc.table.validator.base,BaseProto=Base.prototype
+$.wn.table.validator.float=Float}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
+throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
 var Length=function(options){Base.call(this,options)};Length.prototype=Object.create(BaseProto)
 Length.prototype.constructor=Length
 Length.prototype.validateValue=function(value,rowData){value=this.trim(value)
@@ -1099,9 +1101,9 @@ if(this.options.max!==undefined){if(this.options.max.value===undefined)
 throw new Error('The max.value parameter is not defined in the Length table validator configuration')
 if(value.length>this.options.max.value){return this.options.max.message!==undefined?this.options.max.message:"The string should not be longer than "+this.options.max.value}}}
 return}
-$.oc.table.validator.length=Length}(window.jQuery);+function($){"use strict";if($.oc.table===undefined)
-throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");if($.oc.table.validator===undefined)
-throw new Error("The $.oc.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.oc.table.validator.base,BaseProto=Base.prototype
+$.wn.table.validator.length=Length}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
+throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
+throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
 var Regex=function(options){Base.call(this,options)};Regex.prototype=Object.create(BaseProto)
 Regex.prototype.constructor=Regex
 Regex.prototype.validateValue=function(value,rowData){value=this.trim(value)
@@ -1113,4 +1115,4 @@ var regexObj=new RegExp(this.options.pattern,this.options.modifiers)
 if(!regexObj.test(value))
 return this.getMessage("Invalid value format.")
 return}
-$.oc.table.validator.regex=Regex}(window.jQuery);
+$.wn.table.validator.regex=Regex}(window.jQuery);

@@ -11,7 +11,7 @@
  * - Froala Editor (froala_editor.js)
  */
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // RICHEDITOR CLASS DEFINITION
@@ -24,7 +24,7 @@
         this.$form       = this.$el.closest('form')
         this.editor      = null
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
 
         Base.call(this)
 
@@ -90,7 +90,7 @@
             froalaOptions.toolbarButtons = this.options.toolbarButtons.split(',')
         }
         else {
-            froalaOptions.toolbarButtons = $.oc.richEditorButtons
+            froalaOptions.toolbarButtons = $.wn.richEditorButtons
         }
 
         froalaOptions.imageStyles = this.options.imageStyles
@@ -178,7 +178,7 @@
 
         froalaOptions.shortcutsEnabled = ['show', 'bold', 'italic', 'underline', 'indent', 'outdent', 'undo', 'redo']
 
-        // Ensure that October recognizes AJAX requests from Froala
+        // Ensure that Winter recognizes AJAX requests from Froala
         froalaOptions.requestHeaders = {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             'X-Requested-With': 'XMLHttpRequest'
@@ -457,10 +457,12 @@
     // BUTTON DEFINITIONS
     // =================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.richEditorButtons = [
+    $.wn.richEditorButtons = [
         'paragraphFormat',
         'paragraphStyle',
         'quote',

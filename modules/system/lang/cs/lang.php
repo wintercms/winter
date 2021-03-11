@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Návrat ke kořenům'
     ],
     'directory' => [
@@ -44,7 +44,7 @@ return [
         'unnamed' => 'Téma bez názvu',
         'name' => [
             'label' => 'Název téma',
-            'help' => 'Název téma podle jeho unikátního názvu, například RainLab.Vanilla'
+            'help' => 'Název téma podle jeho unikátního názvu, například Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -60,7 +60,7 @@ return [
         'unnamed' => 'Plugin bez jména',
         'name' => [
             'label' => 'Název pluginu',
-            'help' => 'Pojmenujte plugin unikátním kódem, například RainLab.Blog'
+            'help' => 'Pojmenujte plugin unikátním kódem, například Winter.Blog'
         ],
         'by_author' => 'Vytvořil :name'
     ],

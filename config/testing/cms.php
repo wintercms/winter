@@ -80,7 +80,7 @@ return [
     | Convert Line Endings
     |--------------------------------------------------------------------------
     |
-    | Determines if October should convert line endings from the windows style
+    | Determines if Winter should convert line endings from the windows style
     | \r\n to the unix style \n.
     |
     */
