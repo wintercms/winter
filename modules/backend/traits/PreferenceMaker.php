@@ -130,7 +130,7 @@ trait PreferenceMaker
     /**
      * Specifies the model used for storing the user preferences.
      *
-     * @return October\Rain\Database\Model
+     * @return Winter\Storm\Database\Model
      */
     protected function getPreferenceStorage()
     {

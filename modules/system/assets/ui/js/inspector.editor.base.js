@@ -6,19 +6,21 @@
     // NAMESPACES
     // ============================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    if ($.oc.inspector === undefined)
-        $.oc.inspector = {}
+    if ($.wn.inspector === undefined)
+        $.wn.inspector = {}
 
-    if ($.oc.inspector.propertyEditors === undefined)
-        $.oc.inspector.propertyEditors = {}
+    if ($.wn.inspector.propertyEditors === undefined)
+        $.wn.inspector.propertyEditors = {}
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var BaseEditor = function(inspector, propertyDefinition, containerCell, group) {
@@ -105,7 +107,7 @@
     }
 
     /**
-     * Updates displayed value in the editor UI. The value is already set 
+     * Updates displayed value in the editor UI. The value is already set
      * in the Inspector and should be loaded from Inspector.
      */
     BaseEditor.prototype.updateDisplayedValue = function(value) {
@@ -140,7 +142,7 @@
     //
 
     BaseEditor.prototype.initValidation = function() {
-        this.validationSet = new $.oc.inspector.validationSet(this.propertyDefinition, this.propertyDefinition.property)
+        this.validationSet = new $.wn.inspector.validationSet(this.propertyDefinition, this.propertyDefinition.property)
     }
 
     BaseEditor.prototype.disposeValidation = function() {
@@ -161,7 +163,7 @@
         var validationResult = this.validationSet.validate(value)
         if (validationResult !== null) {
             if (!silentMode) {
-                $.oc.flashMsg({text: validationResult, 'class': 'error', 'interval': 5})
+                $.wn.flashMsg({text: validationResult, 'class': 'error', 'interval': 5})
             }
             return false
         }
@@ -170,7 +172,7 @@
     }
 
     BaseEditor.prototype.markInvalid = function() {
-        $.oc.foundation.element.addClass(this.containerRow, 'invalid')
+        $.wn.foundation.element.addClass(this.containerRow, 'invalid')
         this.inspector.getGroupManager().markGroupRowInvalid(this.parentGroup, this.inspector.getRootTable())
 
         this.inspector.getRootSurface().expandGroupParents(this.parentGroup)
@@ -206,10 +208,10 @@
 
         this.inspector.applyGroupLevelToRow(row, this.group)
 
-        $.oc.foundation.element.addClass(row, 'property')
-        $.oc.foundation.element.addClass(row, groupedClass)
+        $.wn.foundation.element.addClass(row, 'property')
+        $.wn.foundation.element.addClass(row, groupedClass)
         return row
     }
 
-    $.oc.inspector.propertyEditors.base = BaseEditor
+    $.wn.inspector.propertyEditors.base = BaseEditor
 }(window.jQuery);

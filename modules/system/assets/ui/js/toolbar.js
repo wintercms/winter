@@ -2,7 +2,7 @@
  * Toolbar control.
  *
  * Makes toolbars drag/scrollable.
- * 
+ *
  * Data attributes:
  * - data-control="toolbar" - enables the toolbar plugin
  * - data-no-drag-support="true" - disables the drag support for the toolbar, leaving only the mouse wheel support
@@ -16,7 +16,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var Toolbar = function (element, options) {
@@ -24,7 +24,7 @@
             $el = this.$el = $(element),
             $toolbar = $el.closest('.control-toolbar')
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         this.$toolbar = $toolbar
 
         this.options = options || {};

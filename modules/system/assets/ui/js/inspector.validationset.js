@@ -6,13 +6,13 @@
     // NAMESPACES
     // ============================
 
-      if ($.oc.inspector.validators === undefined)
-        $.oc.inspector.validators = {}
+      if ($.wn.inspector.validators === undefined)
+        $.wn.inspector.validators = {}
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var ValidationSet = function(options, propertyName) {
@@ -50,7 +50,7 @@
         //
         // - required
         // - validationPattern
-        // - validationMessage 
+        // - validationMessage
 
         if ((this.options.required !== undefined ||
             this.options.validationPattern !== undefined ||
@@ -60,7 +60,7 @@
         }
 
         if (this.options.required !== undefined && this.options.required) {
-            var validator = new $.oc.inspector.validators.required({
+            var validator = new $.wn.inspector.validators.required({
                 message: this.options.validationMessage
             })
 
@@ -68,7 +68,7 @@
         }
 
         if (this.options.validationPattern !== undefined) {
-            var validator = new $.oc.inspector.validators.regex({
+            var validator = new $.wn.inspector.validators.regex({
                 message: this.options.validationMessage,
                 pattern: this.options.validationPattern
             })
@@ -85,11 +85,11 @@
         }
 
         for (var validatorName in this.options.validation) {
-            if ($.oc.inspector.validators[validatorName] == undefined) {
-                this.throwError('Inspector validator "' + validatorName + '" is not found in the $.oc.inspector.validators namespace.')
+            if ($.wn.inspector.validators[validatorName] == undefined) {
+                this.throwError('Inspector validator "' + validatorName + '" is not found in the $.wn.inspector.validators namespace.')
             }
 
-            var validator = new $.oc.inspector.validators[validatorName](
+            var validator = new $.wn.inspector.validators[validatorName](
                     this.options.validation[validatorName]
                 )
 
@@ -115,5 +115,5 @@
         }
     }
 
-    $.oc.inspector.validationSet = ValidationSet
+    $.wn.inspector.validationSet = ValidationSet
 }(window.jQuery);

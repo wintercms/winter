@@ -1,6 +1,6 @@
 
-if(window.jQuery===undefined){throw new Error('The jQuery library is not loaded. The OctoberCMS framework cannot be initialized.');}
-if(window.jQuery.request!==undefined){throw new Error('The OctoberCMS framework is already loaded.');}
+if(window.jQuery===undefined){throw new Error('The jQuery library is not loaded. The Winter CMS framework cannot be initialized.');}
+if(window.jQuery.request!==undefined){throw new Error('The Winter CMS framework is already loaded.');}
 +function($){"use strict";var Request=function(element,handler,options){var $el=this.$el=$(element);this.options=options||{};if(handler===undefined){throw new Error('The request handler name is not specified.')}
 if(!handler.match(/^(?:\w+\:{2})?on*/)){throw new Error('Invalid handler name. The correct handler name format is: "onEvent".')}
 var $form=options.form?$(options.form):$el.closest('form'),$triggerEl=!!$form.length?$form:$el,context={handler:handler,options:options}
@@ -13,8 +13,8 @@ var loading=options.loading!==undefined?options.loading:null,url=options.url!==u
 if(useFiles&&typeof FormData==='undefined'){console.warn('This browser does not support file uploads via FormData')
 useFiles=false}
 if($.type(loading)=='string'){loading=$(loading)}
-var requestHeaders={'X-OCTOBER-REQUEST-HANDLER':handler,'X-OCTOBER-REQUEST-PARTIALS':this.extractPartials(options.update)}
-if(useFlash){requestHeaders['X-OCTOBER-REQUEST-FLASH']=1}
+var requestHeaders={'X-WINTER-REQUEST-HANDLER':handler,'X-WINTER-REQUEST-PARTIALS':this.extractPartials(options.update)}
+if(useFlash){requestHeaders['X-WINTER-REQUEST-FLASH']=1}
 var csrfToken=getXSRFToken()
 if(csrfToken){requestHeaders['X-XSRF-TOKEN']=csrfToken}
 var requestData,inputName,data={}
@@ -32,7 +32,7 @@ if(options.evalBeforeUpdate&&eval('(function($el, context, data, textStatus, jqX
 var _event=jQuery.Event('ajaxBeforeUpdate')
 $triggerEl.trigger(_event,[context,data,textStatus,jqXHR])
 if(_event.isDefaultPrevented())return
-if(useFlash&&data['X_OCTOBER_FLASH_MESSAGES']){$.each(data['X_OCTOBER_FLASH_MESSAGES'],function(type,message){requestOptions.handleFlashMessage(message,type)})}
+if(useFlash&&data['X_WINTER_FLASH_MESSAGES']){$.each(data['X_WINTER_FLASH_MESSAGES'],function(type,message){requestOptions.handleFlashMessage(message,type)})}
 var updatePromise=requestOptions.handleUpdateResponse(data,textStatus,jqXHR)
 updatePromise.done(function(){$triggerEl.trigger('ajaxSuccess',[context,data,textStatus,jqXHR])
 options.evalSuccess&&eval('(function($el, context, data, textStatus, jqXHR) {'+options.evalSuccess+'}.call($el.get(0), $el, context, data, textStatus, jqXHR))')})
@@ -41,7 +41,7 @@ if((window.ocUnloading!==undefined&&window.ocUnloading)||errorThrown=='abort')
 return
 isRedirect=false
 options.redirect=null
-if(jqXHR.status==406&&jqXHR.responseJSON){errorMsg=jqXHR.responseJSON['X_OCTOBER_ERROR_MESSAGE']
+if(jqXHR.status==406&&jqXHR.responseJSON){errorMsg=jqXHR.responseJSON['X_WINTER_ERROR_MESSAGE']
 updatePromise=requestOptions.handleUpdateResponse(jqXHR.responseJSON,textStatus,jqXHR)}
 else{errorMsg=jqXHR.responseText?jqXHR.responseText:jqXHR.statusText
 updatePromise.resolve()}
@@ -76,11 +76,11 @@ else if($.type(selector)=='string'&&selector.charAt(0)=='^'){$(selector.substrin
 else{$(selector).trigger('ajaxBeforeReplace')
 $(selector).html(data[partial]).trigger('ajaxUpdate',[context,data,textStatus,jqXHR])}}
 setTimeout(function(){$(window).trigger('ajaxUpdateComplete',[context,data,textStatus,jqXHR]).trigger('resize')},0)})
-if(data['X_OCTOBER_REDIRECT']){options.redirect=data['X_OCTOBER_REDIRECT']
+if(data['X_WINTER_REDIRECT']){options.redirect=data['X_WINTER_REDIRECT']
 isRedirect=true}
 if(isRedirect){requestOptions.handleRedirectResponse(options.redirect)}
-if(data['X_OCTOBER_ERROR_FIELDS']){requestOptions.handleValidationMessage(data['X_OCTOBER_ERROR_MESSAGE'],data['X_OCTOBER_ERROR_FIELDS'])}
-if(data['X_OCTOBER_ASSETS']){assetManager.load(data['X_OCTOBER_ASSETS'],$.proxy(updatePromise.resolve,updatePromise))}
+if(data['X_WINTER_ERROR_FIELDS']){requestOptions.handleValidationMessage(data['X_WINTER_ERROR_MESSAGE'],data['X_WINTER_ERROR_FIELDS'])}
+if(data['X_WINTER_ASSETS']){assetManager.load(data['X_WINTER_ASSETS'],$.proxy(updatePromise.resolve,updatePromise))}
 else{updatePromise.resolve()}
 return updatePromise}}
 if(useFiles){requestOptions.processData=requestOptions.contentType=false}
@@ -188,10 +188,12 @@ var body=getBody(str,i);i=i+body.originLength-1;result+=parse(body.body);type="a
 throw new Error("Broken JSON array near "+result);}}
 window.ocJSON=function(json){var jsonString=parse(json);return JSON.parse(jsonString);};}(window);+function(window){"use strict";function trimAttributes(node){$.each(node.attributes,function(){var attrName=this.name;var attrValue=this.value;if(attrName.indexOf('on')==0||attrValue.indexOf('javascript:')==0){$(node).removeAttr(attrName);}});}
 function sanitize(html){var output=$($.parseHTML('<div>'+html+'</div>',null,false));output.find('*').each(function(){trimAttributes(this);});return output.html();}
-window.ocSanitize=function(html){return sanitize(html)};}(window);+function($){"use strict";if($.oc===undefined)
-$.oc={}
-var LOADER_CLASS='oc-loading';$(document).on('ajaxSetup','[data-request][data-request-flash]',function(event,context){context.options.handleErrorMessage=function(message){$.oc.flashMsg({text:message,class:'error'})}
-context.options.handleFlashMessage=function(message,type){$.oc.flashMsg({text:message,class:type})}})
+window.ocSanitize=function(html){return sanitize(html)};}(window);+function($){"use strict";if($.wn===undefined)
+$.wn={}
+if($.oc===undefined)
+$.oc=$.wn
+var LOADER_CLASS='wn-loading';$(document).on('ajaxSetup','[data-request][data-request-flash]',function(event,context){context.options.handleErrorMessage=function(message){$.wn.flashMsg({text:message,class:'error'})}
+context.options.handleFlashMessage=function(message,type){$.wn.flashMsg({text:message,class:type})}})
 $(document).on('ajaxValidation','[data-request][data-request-validate]',function(event,context,errorMsg,fields){var $this=$(this).closest('form'),$container=$('[data-validate-error]',$this),messages=[],$field
 $.each(fields,function(fieldName,fieldMessages){$field=$('[data-validate-for="'+fieldName+'"]',$this)
 messages=$.merge(messages,fieldMessages)
@@ -222,18 +224,18 @@ StripeLoadIndicator.prototype.show=function(){this.counter++
 this.stripe.after(this.stripe=this.stripe.clone()).remove()
 if(this.counter>1){return}
 this.indicator.removeClass('loaded')
-$(document.body).addClass('oc-loading')}
+$(document.body).addClass('wn-loading')}
 StripeLoadIndicator.prototype.hide=function(force){this.counter--
 if(force!==undefined&&force){this.counter=0}
 if(this.counter<=0){this.indicator.addClass('loaded')
-$(document.body).removeClass('oc-loading')}}
-$.oc.stripeLoadIndicator=new StripeLoadIndicator()
+$(document.body).removeClass('wn-loading')}}
+$.wn.stripeLoadIndicator=new StripeLoadIndicator()
 $(document).on('ajaxPromise','[data-request]',function(event){event.stopPropagation()
-$.oc.stripeLoadIndicator.show()
+$.wn.stripeLoadIndicator.show()
 var $el=$(this)
 $(window).one('ajaxUpdateComplete',function(){if($el.closest('html').length===0)
-$.oc.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone','[data-request]',function(event){event.stopPropagation()
-$.oc.stripeLoadIndicator.hide()})
+$.wn.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone','[data-request]',function(event){event.stopPropagation()
+$.wn.stripeLoadIndicator.hide()})
 var FlashMessage=function(options,el){var
 options=$.extend({},FlashMessage.DEFAULTS,options),$element=$(el)
 $('body > p.flash-message').remove()
@@ -247,7 +249,9 @@ function remove(){window.clearInterval(timer)
 $element.removeClass('in')
 $.support.transition&&$element.hasClass('fade')?$element.one($.support.transition.end,removeElement).emulateTransitionEnd(500):removeElement()}}
 FlashMessage.DEFAULTS={class:'success',text:'Default text',interval:5}
+if($.wn===undefined)
+$.wn={}
 if($.oc===undefined)
-$.oc={}
-$.oc.flashMsg=FlashMessage
-$(document).render(function(){$('[data-control=flash-message]').each(function(){$.oc.flashMsg($(this).data(),this)})})}(window.jQuery);
+$.oc=$.wn
+$.wn.flashMsg=FlashMessage
+$(document).render(function(){$('[data-control=flash-message]').each(function(){$.wn.flashMsg($(this).data(),this)})})}(window.jQuery);

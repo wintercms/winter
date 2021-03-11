@@ -7,7 +7,7 @@ use Config;
 
 class Cache
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * Execute the console command.

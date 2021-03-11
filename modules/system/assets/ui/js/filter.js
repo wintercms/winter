@@ -5,7 +5,7 @@
  * - data-behavior="filter" - enables the filter plugin
  *
  * Dependences:
- * - October Popover (october.popover.js)
+ * - Winter Popover (winter.popover.js)
  *
  * Notes:
  *   Ideally this control would not depend on loader or the AJAX framework,
@@ -76,10 +76,10 @@
                                 </ul>                                                                                  \
                             </div>                                                                                     \
                             <div class="filter-buttons">                                                               \
-                                <button class="btn btn-block btn-primary oc-icon-filter" data-filter-action="apply">   \
+                                <button class="btn btn-block btn-primary wn-icon-filter" data-filter-action="apply">   \
                                     {{ apply_button_text }}                                                            \
                                 </button>                                                                              \
-                                <button class="btn btn-block btn-secondary oc-icon-eraser" data-filter-action="clear"> \
+                                <button class="btn btn-block btn-secondary wn-icon-eraser" data-filter-action="clear"> \
                                     {{ clear_button_text }}                                                            \
                                 </button>                                                                              \
                             </div>                                                                                     \
@@ -156,7 +156,7 @@
 
             $(event.relatedTarget).on('input', '#controlFilterPopover input[data-search]', function (e) {
                 self.searchQuery($(this))
-            });
+            })
         })
 
         // Setup event handler to apply selected options when closing the type: group scope popup
@@ -176,7 +176,7 @@
      */
     FilterWidget.prototype.bindDependants = function() {
         if (!$('[data-scope-depends]', this.$el).length) {
-            return;
+            return
         }
 
         var self = this,
@@ -399,8 +399,8 @@
         if (!data.active) data.active = []
         if (!data.available) data.available = []
 
-        this.scopeValues[scopeName] = data.active;
-        this.scopeAvailable[scopeName] = data.available;
+        this.scopeValues[scopeName] = data.active
+        this.scopeAvailable[scopeName] = data.available
 
         // Do not render if scope has changed
         if (scopeName != this.activeScopeName)
@@ -486,12 +486,12 @@
                 options: JSON.stringify(this.scopeValues[scopeName])
             }
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
 
         this.$el.request(this.options.updateHandler, {
             data: data
         }).always(function () {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         }).done(function () {
             // Trigger dependsOn updates on successful requests
             self.$el.find('[data-scope-name="'+scopeName+'"]').trigger('change.oc.filterScope')
@@ -511,11 +511,11 @@
                     value: isChecked
                 }
 
-            $.oc.stripeLoadIndicator.show()
+            $.wn.stripeLoadIndicator.show()
             this.$el.request(this.options.updateHandler, {
                 data: data
             }).always(function(){
-                $.oc.stripeLoadIndicator.hide()
+                $.wn.stripeLoadIndicator.hide()
             })
         }
 
@@ -535,11 +535,11 @@
                     value: switchValue
                 }
 
-            $.oc.stripeLoadIndicator.show()
+            $.wn.stripeLoadIndicator.show()
             this.$el.request(this.options.updateHandler, {
                 data: data
             }).always(function(){
-                $.oc.stripeLoadIndicator.hide()
+                $.wn.stripeLoadIndicator.hide()
             })
         }
 
@@ -552,20 +552,21 @@
         if (isReset) {
             this.scopeValues[scopeName] = null
             this.scopeAvailable[scopeName] = null
+            this.isActiveScopeDirty = true
             this.updateScopeSetting(this.$activeScope, 0)
         }
 
-        this.pushOptions(scopeName);
-        this.isActiveScopeDirty = true;
+        this.pushOptions(scopeName)
+        this.isActiveScopeDirty = false
         this.$activeScope.data('oc.popover').hide()
     }
 
     FilterWidget.prototype.getLang = function(name, defaultValue) {
-        if ($.oc === undefined || $.oc.lang === undefined) {
+        if ($.oc === undefined || $.wn.lang === undefined) {
             return defaultValue
         }
 
-        return $.oc.lang.get(name, defaultValue)
+        return $.wn.lang.get(name, defaultValue)
     }
 
     FilterWidget.prototype.searchQuery = function ($el) {
@@ -595,14 +596,14 @@
                 search: thisValue
             }
 
-            $.oc.stripeLoadIndicator.show()
+            $.wn.stripeLoadIndicator.show()
             self.lastDataTrackInputRequest = self.$el.request(self.options.optionsHandler, {
                 data: data
             }).success(function(data){
                 self.filterAvailable(self.activeScopeName, data.options.available)
                 self.toggleFilterButtons()
             }).always(function(){
-                $.oc.stripeLoadIndicator.hide()
+                $.wn.stripeLoadIndicator.hide()
             })
         }, 300)
     }

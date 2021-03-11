@@ -1,8 +1,8 @@
 {
-    "name": "october/demo-theme",
-    "type": "october-theme",
-    "description": "Demo OctoberCMS theme",
-    "keywords": ["october", "cms", "demo", "theme"],
+    "name": "winter/demo-theme",
+    "type": "winter-theme",
+    "description": "Demo Winter CMS theme",
+    "keywords": ["winter", "cms", "demo", "theme"],
     "license": "MIT",
     "authors": [
         {

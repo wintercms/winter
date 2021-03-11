@@ -110,7 +110,7 @@
         while (currentGroup) {
             var row = currentGroup.findGroupRow(table)
             if (row) {
-                $.oc.foundation.element.addClass(row, 'invalid')
+                $.wn.foundation.element.addClass(row, 'invalid')
             }
 
             currentGroup = currentGroup.parentGroup
@@ -121,7 +121,7 @@
         var rows = table.querySelectorAll('tr.invalid')
 
         for (var i = rows.length-1; i >= 0; i--) {
-            $.oc.foundation.element.removeClass(rows[i], 'invalid')
+            $.wn.foundation.element.removeClass(rows[i], 'invalid')
         }
     }
 
@@ -264,5 +264,5 @@
         return table.querySelector('tr[data-group-index="'+this.groupIndex+'"]')
     }
 
-    $.oc.inspector.groupManager = GroupManager
+    $.wn.inspector.groupManager = GroupManager
 }(window.jQuery);

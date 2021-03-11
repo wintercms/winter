@@ -5,12 +5,12 @@ use ApplicationException;
 /**
  * Helper class for processing video and audio tags inserted by the Media Manager.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MediaViewHelper
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     protected $playerPartialFlags = [];
 
@@ -66,6 +66,12 @@ class MediaViewHelper
     protected function generateMediaTagMarkup($type, $src)
     {
         $partialName = $type == 'audio' ? 'oc-audio-player' : 'oc-video-player';
+
+        if ($this->playerPartialExists($partialName)) {
+            return Controller::getController()->renderPartial($partialName, ['src' => $src]);
+        }
+
+        $partialName = $type == 'audio' ? 'wn-audio-player' : 'wn-video-player';
 
         if ($this->playerPartialExists($partialName)) {
             return Controller::getController()->renderPartial($partialName, ['src' => $src]);

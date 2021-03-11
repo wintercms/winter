@@ -1,10 +1,10 @@
 ---
 name: "🐛 Bug Report"
-about: 'Report a general OctoberCMS issue. See our policy below if reporting a security issue.'
+about: 'Report a general Winter CMS issue. See our policy below if reporting a security issue.'
 labels: 'Status: Review Needed, Type: Unconfirmed Bug'
 ---
 
-- OctoberCMS Build: ### <!-- Or Commit hash if using composer -->
+- Winter CMS Build: ### <!-- Or Commit hash if using composer -->
 - PHP Version:
 - Database Engine: <!-- Remove if not using a database -->
 - Plugins Installed: <!-- In the format of Author.Plugin-v1.2.0 -->

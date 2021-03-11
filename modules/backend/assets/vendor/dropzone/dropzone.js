@@ -1,5 +1,5 @@
 /**
- * DropZone V5.5.1 (non-minified) for testing on October CMS
+ * DropZone V5.5.1 (non-minified) for testing on Winter CMS
  */
 
 "use strict";

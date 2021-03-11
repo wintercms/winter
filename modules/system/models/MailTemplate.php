@@ -3,18 +3,18 @@
 use View;
 use Model;
 use System\Classes\MailManager;
-use October\Rain\Mail\MailParser;
+use Winter\Storm\Mail\MailParser;
 use File as FileHelper;
 
 /**
  * Mail template
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailTemplate extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var string The database table used by the model.

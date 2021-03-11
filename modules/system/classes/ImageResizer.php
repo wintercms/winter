@@ -10,8 +10,8 @@ use Exception;
 use SystemException;
 use File as FileHelper;
 use System\Models\File as SystemFileModel;
-use October\Rain\Database\Attach\File as FileModel;
-use October\Rain\Database\Attach\Resizer as DefaultResizer;
+use Winter\Storm\Database\Attach\File as FileModel;
+use Winter\Storm\Database\Attach\Resizer as DefaultResizer;
 
 /**
  * Image Resizing class used for resizing any image resources accessible
@@ -29,15 +29,15 @@ use October\Rain\Database\Attach\Resizer as DefaultResizer;
  *
  * The functionality of this class is controlled by these config items:
  *
- * - cms.resized.disk - The disk to store resized images on
- * - cms.resized.folder - The folder on the disk to store resized images in
- * - cms.resized.path - The public path to the resized images as returned
+ * - cms.storage.resized.disk - The disk to store resized images on
+ * - cms.storage.resized.folder - The folder on the disk to store resized images in
+ * - cms.storage.resized.path - The public path to the resized images as returned
  *                      by the storage disk's URL method, used to identify
  *                      already resized images
  *
  * @see System\Classes\SystemController System controller
  * @see System\Twig\Extension Twig filters for this class defined
- * @package october\system
+ * @package winter\wn-system-module
  * @author Luke Towers
  */
 class ImageResizer
@@ -87,7 +87,7 @@ class ImageResizer
      *
      * @param mixed $image Supported values below:
      *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
-     *              instance of October\Rain\Database\Attach\File,
+     *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @param integer|string|bool|null $width Desired width of the resized image
      * @param integer|string|bool|null $height Desired height of the resized image
@@ -427,7 +427,7 @@ class ImageResizer
             $disk = $fileModel->getDisk();
             $path = $fileModel->getDiskPath($fileModel->getThumbFilename($this->width, $this->height, $this->options));
         } else {
-            $disk = Storage::disk(Config::get('cms.resized.disk', 'local'));
+            $disk = Storage::disk(Config::get('cms.storage.resized.disk', 'local'));
             $path = $this->getPathToResizedImage();
         }
 
@@ -464,7 +464,7 @@ class ImageResizer
         $folder = implode('/', array_slice(str_split(str_limit($fileIdentifier, 9), 3), 0, 3));
 
         // Generate and return the full path
-        return Config::get('cms.resized.folder', 'resized') . '/' . $folder . '/' . $name;
+        return Config::get('cms.storage.resized.folder', 'resized') . '/' . $folder . '/' . $name;
     }
 
     /**
@@ -499,7 +499,13 @@ class ImageResizer
         // Store the current configuration
         $this->storeConfig();
 
-        return Url::to("/resizer/$identifier/$resizedUrl");
+        $url = "/resizer/$identifier/$resizedUrl";
+
+        if (Config::get('cms.linkPolicy', 'detect') === 'force') {
+            $url = Url::to($url);
+        }
+
+        return $url;
     }
 
     /**
@@ -516,14 +522,20 @@ class ImageResizer
             $thumbFile = $model->getThumbFilename($this->width, $this->height, $this->options);
             $url = $model->getPath($thumbFile);
         } else {
-            $resizedDisk = Storage::disk(Config::get('cms.resized.disk', 'local'));
+            $resizedDisk = Storage::disk(Config::get('cms.storage.resized.disk', 'local'));
             $url = $resizedDisk->url($this->getPathToResizedImage());
         }
 
         // Ensure that a properly encoded URL is returned
         $segments = explode('/', $url);
         $lastSegment = array_pop($segments);
-        return implode('/', $segments) . '/' . rawurlencode(rawurldecode($lastSegment));
+        $url = implode('/', $segments) . '/' . rawurlencode(rawurldecode($lastSegment));
+
+        if (Config::get('cms.linkPolicy', 'detect') === 'force') {
+            $url = Url::to($url);
+        }
+
+        return $url;
     }
 
     /**
@@ -531,7 +543,7 @@ class ImageResizer
      *
      * @param mixed $image Supported values below:
      *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
-     *              instance of October\Rain\Database\Attach\File,
+     *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @throws SystemException If the image was unable to be identified
      * @return array Array containing the disk, path, source, and fileModel if applicable
@@ -661,7 +673,7 @@ class ImageResizer
      * Normalize the provided path to Unix style directory seperators to ensure
      * that path manipulation operations succeed regardless of environment
      *
-     * NOTE: Can't use October\Rain\FileSystem\PathResolver because it prepends
+     * NOTE: Can't use Winter\Storm\FileSystem\PathResolver because it prepends
      * the current working directory to relative paths
      *
      * @param string $path
@@ -756,10 +768,10 @@ class ImageResizer
      *
      * @param mixed $image Supported values below:
      *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
-     *              instance of October\Rain\Database\Attach\File,
+     *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
-     * @param integer|bool|null $width Desired width of the resized image
-     * @param integer|bool|null $height Desired height of the resized image
+     * @param integer|string|bool|null $width Desired width of the resized image
+     * @param integer|string|bool|null $height Desired height of the resized image
      * @param array|null $options Array of options to pass to the resizer
      * @throws Exception If the provided image was unable to be processed
      * @return string
@@ -789,7 +801,7 @@ class ImageResizer
      *
      * @param mixed $image Supported values below:
      *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
-     *              instance of October\Rain\Database\Attach\File,
+     *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @throws SystemException If the provided input was unable to be processed
      * @return array ['width' => int, 'height' => int]

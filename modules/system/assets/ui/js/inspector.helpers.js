@@ -7,26 +7,28 @@
     // NAMESPACES
     // ============================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    if ($.oc.inspector === undefined)
-        $.oc.inspector = {}
+    if ($.wn.inspector === undefined)
+        $.wn.inspector = {}
 
-    $.oc.inspector.helpers = {}
+    $.wn.inspector.helpers = {}
 
-    $.oc.inspector.helpers.generateElementUniqueId = function(element) {
+    $.wn.inspector.helpers.generateElementUniqueId = function(element) {
         if (element.hasAttribute('data-inspector-id')) {
             return element.getAttribute('data-inspector-id')
         }
 
-        var id = $.oc.inspector.helpers.generateUniqueId()
+        var id = $.wn.inspector.helpers.generateUniqueId()
         element.setAttribute('data-inspector-id', id)
 
         return id
     }
 
-    $.oc.inspector.helpers.generateUniqueId = function() {
+    $.wn.inspector.helpers.generateUniqueId = function() {
         return "inspectorid-" + Math.floor(Math.random() * new Date().getTime());
     }
 
