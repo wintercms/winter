@@ -56,7 +56,8 @@ return [
         'name' => [
             'label' => 'Bővítmény neve',
             'help' => 'Nevezze meg egyedi kódja alapján a bővítményt. Például: RainLab.Blog'
-        ]
+        ],
+        'by_author' => 'Fejlesztő: :name'
     ],
     'plugins' => [
         'manage' => 'Bővítmények kezelése',
@@ -112,7 +113,7 @@ return [
     'settings' => [
         'menu_label' => 'Beállítások',
         'not_found' => 'Nem létezik a megadott beállítás oldal.',
-        'missing_model' => 'A beállítások lap egy modell definíciót hiányol.',
+        'missing_model' => 'A beállítások oldal egy modell definíciót hiányol.',
         'update_success' => 'A(z) :name beállításainak frissítése sikerült.',
         'return' => 'Vissza a beállításokhoz',
         'search' => 'Keresés...'
@@ -154,6 +155,9 @@ return [
         'ses_key_comment' => 'Adja meg az API kulcsot',
         'ses_secret' => 'SES kód',
         'ses_secret_comment' => 'Adja meg az API titkos kulcsot',
+        'sparkpost' => 'SparkPost',
+        'sparkpost_secret' => 'SparkPost kód',
+        'sparkpost_secret_comment' => 'Adja meg az API titkos kulcsot',
         'ses_region' => 'SES régió',
         'ses_region_comment' => 'Adja meg a régiót (pl. us-east-1)',
         'drivers_hint_header' => 'Hiányzó komponens',
@@ -274,6 +278,7 @@ return [
         'plugin_version' => 'Verzió',
         'plugin_author' => 'Fejlesztő',
         'plugin_not_found' => 'A bővítmény nem található',
+        'plugin_version_not_found' => 'Bővítmény verzió nem található',
         'core_current_build' => 'Verziószám',
         'core_view_changelog' => 'Részletek',
         'core_build' => 'Új verzió: :build',
@@ -281,6 +286,8 @@ return [
         'core_downloading' => 'Rendszer letöltése...',
         'core_extracting' => 'Rendszer kicsomagolása...',
         'core_set_build' => 'Rendszer beállítása...',
+        'update_warnings_title' => 'Néhány probléma, amelyek figyelmet igényelnek:',
+        'update_warnings_plugin_missing' => 'A(z) :parent_code bővítmény használatához szükséges a(z) :code bővítményt telepíteni.',
         'changelog' => 'Kiadott verziók',
         'changelog_view_details' => 'Részletek',
         'plugins' => 'Bővítmény',
@@ -387,8 +394,10 @@ return [
         'manage_mail_templates' => 'Levél sablonok kezelése',
         'manage_mail_settings' => 'Levelezési beállítások kezelése',
         'manage_other_administrators' => 'Adminisztrátorok kezelése',
+        'impersonate_users' => 'Átjelentkezés felhasználók fiókjába',
         'manage_preferences' => 'Saját beállítások kezelése',
         'manage_editor' => 'Kódszerkesztő testreszabása',
+        'manage_own_editor' => 'Saját kódszerkesztő testreszabása',
         'view_the_dashboard' => 'Vezérlőpult elérése',
         'manage_default_dashboard' => 'Vezérlőpult testreszabása',
         'manage_branding' => 'Kinézet testreszabása'
@@ -410,8 +419,17 @@ return [
     ],
     'page' => [
         'custom_error' => [
-            'label' => 'Laphiba',
+            'label' => 'Oldal hiba',
             'help' => 'Sajnáljuk, de hiba történt, ezért az oldal nem megjeleníthető.'
+        ],
+        'invalid_token' => [
+            'label' => 'Biztonsági kód érvényessége lejárt. Kérjük töltse be újra az oldalt.'
+        ],
+        'maintenance' => [
+            'label' => 'Hamarosan visszatérünk!',
+            'help' => 'A weboldal karbantartás alatt áll. Látogasson vissza később!',
+            'message' => 'Üzenet:',
+            'available_at' => 'Újrapróbálás:'
         ]
     ],
     'pagination' => [

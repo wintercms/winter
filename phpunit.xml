@@ -8,16 +8,29 @@
          convertWarningsToExceptions="true"
          processIsolation="false"
          stopOnFailure="false"
-         syntaxCheck="false"
 >
     <testsuites>
         <testsuite name="October CMS Test Suite">
             <directory>./tests/unit</directory>
         </testsuite>
-        <testsuite name="October Rain Test Suite">
-            <directory>./vendor/october/rain/tests</directory>
-        </testsuite>
     </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory suffix=".php">./modules/</directory>
+
+            <exclude>
+                <file>./modules/backend/routes.php</file>
+                <file>./modules/cms/routes.php</file>
+                <file>./modules/system/routes.php</file>
+
+                <directory suffix=".php">./modules/backend/database</directory>
+                <directory suffix=".php">./modules/cms/database</directory>
+                <directory suffix=".php">./modules/system/database</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
     <php>
         <env name="APP_ENV" value="testing" />
         <env name="CACHE_DRIVER" value="array" />

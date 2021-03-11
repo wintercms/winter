@@ -2,7 +2,9 @@
 
 use Backend\Models\ExportModel;
 
-if (!class_exists('Model')) class_alias('October\Rain\Database\Model', 'Model');
+if (!class_exists('Model')) {
+    class_alias('October\Rain\Database\Model', 'Model');
+}
 
 class ExampleExportModel extends ExportModel
 {
@@ -59,7 +61,11 @@ class ExportModelTest extends TestCase
         $response->prepare($request);
 
         $this->assertTrue($response->headers->has('Content-Type'), "Response is missing the Content-Type header!");
-        $this->assertTrue($response->headers->contains('Content-Type', 'text/plain'), "Content-Type is not \"text/plain\"!");
+        $this->assertTrue(
+            $response->headers->contains('Content-Type', 'application/csv')
+            || $response->headers->contains('Content-Type', 'text/plain'),
+            "Content-Type is not as expected!"
+        );
 
         ob_start();
         $response->send();

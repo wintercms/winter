@@ -3,6 +3,7 @@
 use Mail;
 use Flash;
 use Backend;
+use Request;
 use Validator;
 use BackendAuth;
 use Backend\Models\AccessLog;
@@ -11,6 +12,8 @@ use System\Classes\UpdateManager;
 use ApplicationException;
 use ValidationException;
 use Exception;
+use Config;
+use October\Rain\Foundation\Http\Middleware\CheckForTrustedHost;
 
 /**
  * Authentication controller
@@ -33,21 +36,6 @@ class Auth extends Controller
     {
         parent::__construct();
 
-        $this->middleware(function ($request, $response) {
-            // Clear Cache and any previous data to fix Invalid security token issue, see github: #3707
-            $response->headers->set('Cache-Control', 'no-cache, no-store, must-revalidate');
-        })->only('signin');
-
-        // Only run on HTTPS connections
-        if (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] === "on") {
-            $this->middleware(function ($request, $response) {
-                // Add HTTP Header 'Clear Site Data' to remove all Sensitive Data when signout, see github issue: #3707
-                $response->headers->set('Clear-Site-Data', 'cache, cookies, storage, executionContexts');
-            })->only('signout');
-        }
-
-        // Add JS File to un-install SW to avoid Cookie Cache Issues when Signin, see github issue: #3707
-        $this->addJs(url("/modules/backend/assets/js/auth/uninstall-sw.js"));
         $this->layout = 'auth';
     }
 
@@ -66,14 +54,16 @@ class Auth extends Controller
     {
         $this->bodyClass = 'signin';
 
+        // Clear Cache and any previous data to fix invalid security token issue
+        $this->setResponseHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+
         try {
             if (post('postback')) {
                 return $this->signin_onSubmit();
             }
 
             $this->bodyClass .= ' preload';
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             Flash::error($ex->getMessage());
         }
     }
@@ -90,7 +80,7 @@ class Auth extends Controller
             throw new ValidationException($validation);
         }
 
-        if (($remember = config('cms.backendForceRemember', true)) === null) {
+        if (is_null($remember = Config::get('cms.backendForceRemember', true))) {
             $remember = (bool) post('remember');
         }
 
@@ -100,12 +90,17 @@ class Auth extends Controller
             'password' => post('password')
         ], $remember);
 
-        try {
-            // Load version updates
-            UpdateManager::instance()->update();
+        if (is_null($runMigrationsOnLogin = Config::get('cms.runMigrationsOnLogin', null))) {
+            $runMigrationsOnLogin = Config::get('app.debug', false);
         }
-        catch (Exception $ex) {
-            Flash::error($ex->getMessage());
+
+        if ($runMigrationsOnLogin) {
+            try {
+                // Load version updates
+                UpdateManager::instance()->update();
+            } catch (Exception $ex) {
+                Flash::error($ex->getMessage());
+            }
         }
 
         // Log the sign in event
@@ -126,6 +121,11 @@ class Auth extends Controller
             BackendAuth::logout();
         }
 
+        // Add HTTP Header 'Clear Site Data' to purge all sensitive data upon signout
+        if (Request::secure()) {
+            $this->setResponseHeader('Clear-Site-Data', 'cache, cookies, storage, executionContexts');
+        }
+
         return Backend::redirect('backend');
     }
 
@@ -138,14 +138,30 @@ class Auth extends Controller
             if (post('postback')) {
                 return $this->restore_onSubmit();
             }
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             Flash::error($ex->getMessage());
         }
     }
 
+    /**
+     * Submits the restore form.
+     */
     public function restore_onSubmit()
     {
+        // Force Trusted Host verification on password reset link generation
+        // regardless of config to protect against host header poisoning
+        $trustedHosts = Config::get('app.trustedHosts', false);
+        if ($trustedHosts === false) {
+            $hosts = CheckForTrustedHost::processTrustedHosts(true);
+
+            if (count($hosts)) {
+                Request::setTrustedHosts($hosts);
+
+                // Trigger the host validation logic
+                Request::getHost();
+            }
+        }
+
         $rules = [
             'login' => 'required|between:2,255'
         ];
@@ -165,7 +181,7 @@ class Auth extends Controller
         Flash::success(trans('backend::lang.account.restore_success'));
 
         $code = $user->getResetPasswordCode();
-        $link = Backend::url('backend/auth/reset/'.$user->id.'/'.$code);
+        $link = Backend::url('backend/auth/reset/' . $user->id . '/' . $code);
 
         $data = [
             'name' => $user->full_name,
@@ -192,8 +208,7 @@ class Auth extends Controller
             if (!$userId || !$code) {
                 throw new ApplicationException(trans('backend::lang.account.reset_error'));
             }
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             Flash::error($ex->getMessage());
         }
 
@@ -201,6 +216,9 @@ class Auth extends Controller
         $this->vars['id'] = $userId;
     }
 
+    /**
+     * Submits the reset form.
+     */
     public function reset_onSubmit()
     {
         if (!post('id') || !post('code')) {

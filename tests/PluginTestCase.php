@@ -1,11 +1,15 @@
 <?php
 
+use Backend\Classes\AuthManager;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
 use October\Rain\Database\Model as ActiveRecord;
+use October\Tests\Concerns\InteractsWithAuthentication;
 
-abstract class PluginTestCase extends Illuminate\Foundation\Testing\TestCase
+abstract class PluginTestCase extends TestCase
 {
+    use InteractsWithAuthentication;
+
     /**
      * @var array Cache for storing which plugins have been loaded
      * and refreshed.
@@ -23,6 +27,12 @@ abstract class PluginTestCase extends Illuminate\Foundation\Testing\TestCase
 
         $app['cache']->setDefaultDriver('array');
         $app->setLocale('en');
+
+        $app->singleton('backend.auth', function ($app) {
+            $app['auth.loaded'] = true;
+
+            return AuthManager::instance();
+        });
 
         /*
          * Store database in memory by default, if not specified otherwise
@@ -45,6 +55,9 @@ abstract class PluginTestCase extends Illuminate\Foundation\Testing\TestCase
         $app['config']->set('database.default', $dbConnection);
         $app['config']->set('database.connections.' . $dbConnection, $dbConnections[$dbConnection]);
 
+        // Set random encryption key
+        $app['config']->set('app.key', bin2hex(random_bytes(16)));
+
         /*
          * Modify the plugin path away from the test context
          */
@@ -57,7 +70,7 @@ abstract class PluginTestCase extends Illuminate\Foundation\Testing\TestCase
      * Perform test case set up.
      * @return void
      */
-    public function setUp()
+    public function setUp() : void
     {
         /*
          * Force reload of October singletons
@@ -95,7 +108,7 @@ abstract class PluginTestCase extends Illuminate\Foundation\Testing\TestCase
      * Flush event listeners and collect garbage.
      * @return void
      */
-    public function tearDown()
+    public function tearDown() : void
     {
         $this->flushModelEventListeners();
         parent::tearDown();
