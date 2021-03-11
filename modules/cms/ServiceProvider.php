@@ -8,16 +8,17 @@ use Event;
 use Backend;
 use BackendMenu;
 use BackendAuth;
+use Cms\Models\ThemeLog;
+use Cms\Models\ThemeData;
+use Cms\Classes\CmsObject;
 use Backend\Models\UserRole;
+use Cms\Classes\Page as CmsPage;
+use Cms\Classes\ComponentManager;
 use Cms\Classes\Theme as CmsTheme;
 use Backend\Classes\WidgetManager;
-use Winter\Storm\Support\ModuleServiceProvider;
 use System\Classes\SettingsManager;
-use Cms\Classes\ComponentManager;
-use Cms\Classes\Page as CmsPage;
-use Cms\Classes\CmsObject;
-use Cms\Models\ThemeData;
-use Cms\Models\ThemeLog;
+
+use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
 {
@@ -63,6 +64,17 @@ class ServiceProvider extends ModuleServiceProvider
         if (App::runningInBackend()) {
             $this->bootBackendLocalization();
         }
+    }
+
+    /**
+     * Register asset bundles
+     */
+    protected function registerAssetBundles()
+    {
+        CombineAssets::registerCallback(function ($combiner) {
+            $combiner->registerBundle('~/modules/cms/assets/less/winter.components.less');
+            $combiner->registerBundle('~/modules/cms/assets/less/winter.theme-selector.less');
+        });
     }
 
     /**

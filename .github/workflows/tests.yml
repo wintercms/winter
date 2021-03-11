@@ -82,7 +82,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --no-progress --no-scripts --no-suggest
+        run: composer install --no-interaction --no-progress --no-scripts
 
       - name: Reset Winter modules and library
         run: |
