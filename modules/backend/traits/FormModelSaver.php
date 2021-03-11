@@ -2,14 +2,14 @@
 
 use Str;
 use Backend\Classes\FormField;
-use October\Rain\Halcyon\Model as HalcyonModel;
+use Winter\Storm\Halcyon\Model as HalcyonModel;
 
 /**
  * Implements special logic for processing form data, typically from from postback, and
  * filling the model attributes and attributes of any related models. This is a
  * customized, safer and simplified version of `$model->push()`.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait FormModelSaver
@@ -30,7 +30,7 @@ trait FormModelSaver
      *         $modelToSave->save();
      *     }
      *
-     * @param \October\Rain\Database\Model $model Model to fill.
+     * @param \Winter\Storm\Database\Model $model Model to fill.
      * @param array $saveData Attribute values to fill model.
      * @return array The collection of models to save.
      */
@@ -45,7 +45,7 @@ trait FormModelSaver
     /**
      * Sets a data collection to a model attributes, relations are also set.
      *
-     * @param \October\Rain\Database\Model $model Model to fill.
+     * @param \Winter\Storm\Database\Model $model Model to fill.
      * @param array $saveData Attribute values to fill model.
      * @return void
      */
@@ -91,7 +91,7 @@ trait FormModelSaver
      * Removes an array of attributes from the model. If the model implements
      * the Purgeable trait, this is preferred over the internal logic.
      *
-     * @param \October\Rain\Database\Model $model Model to adjust.
+     * @param \Winter\Storm\Database\Model $model Model to adjust.
      * @param array $attributesToPurge Attribute values to remove from the model.
      * @return void
      */

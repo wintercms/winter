@@ -9,7 +9,7 @@ Allows the dragging of elements that result in a custom value when dropped.
     <button
         class="btn btn-default"
         data-control="dragvalue"
-        data-text-value="October">
+        data-text-value="Winter">
         Drop "Foo"
     </button>
 

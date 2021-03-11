@@ -8,12 +8,12 @@ use Illuminate\Support\Facades\App;
 /**
  * Component manager
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ComponentManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * @var array Cache of registration callbacks.
@@ -75,7 +75,7 @@ class ComponentManager
      * Manually registers a component for consideration. Usage:
      *
      *     ComponentManager::registerComponents(function ($manager) {
-     *         $manager->registerComponent('October\Demo\Components\Test', 'testComponent');
+     *         $manager->registerComponent('Winter\Demo\Components\Test', 'testComponent');
      *     });
      *
      * @param callable $definitions

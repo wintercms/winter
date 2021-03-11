@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.base,
+    var Base = $.wn.inspector.propertyEditors.base,
         BaseProto = Base.prototype
 
     var DropdownEditor = function(inspector, propertyDefinition, containerCell, group) {
@@ -38,8 +38,8 @@
     DropdownEditor.prototype.build = function() {
         var select = document.createElement('select')
 
-        $.oc.foundation.element.addClass(this.containerCell, 'dropdown')
-        $.oc.foundation.element.addClass(select, 'custom-select')
+        $.wn.foundation.element.addClass(this.containerCell, 'dropdown')
+        $.wn.foundation.element.addClass(select, 'custom-select')
 
         if (!this.dynamicOptions) {
             this.loadStaticOptions(select)
@@ -446,5 +446,5 @@
         this.initialization = false
     }
 
-    $.oc.inspector.propertyEditors.dropdown = DropdownEditor
+    $.wn.inspector.propertyEditors.dropdown = DropdownEditor
 }(window.jQuery);

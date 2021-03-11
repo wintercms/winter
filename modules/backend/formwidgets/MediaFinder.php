@@ -14,7 +14,7 @@ use Backend\Classes\FormWidgetBase;
  *        type: media
  *        prompt: Click the %s button to find a user
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MediaFinder extends FormWidgetBase

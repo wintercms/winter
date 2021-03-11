@@ -7,13 +7,13 @@ use Request;
 use ApplicationException;
 use ValidationException;
 use Cms\Helpers\File as FileHelper;
-use October\Rain\Extension\Extendable;
-use October\Rain\Filesystem\PathResolver;
+use Winter\Storm\Extension\Extendable;
+use Winter\Storm\Filesystem\PathResolver;
 
 /**
  * The CMS theme asset file class.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Asset extends Extendable

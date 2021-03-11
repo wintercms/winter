@@ -10,12 +10,12 @@ use Closure;
  * then the URL is passed to the front-end controller for processing.
  *
  * @see Cms\Classes\Controller Front-end controller class
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CmsController extends ControllerBase
 {
-    use \October\Rain\Extension\ExtendableTrait;
+    use \Winter\Storm\Extension\ExtendableTrait;
 
     /**
      * @var array Behaviors implemented by this controller.

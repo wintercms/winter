@@ -37,7 +37,7 @@ class Post extends Model
 
 class NullablePost extends Post
 {
-    use \October\Rain\Database\Traits\Nullable;
+    use \Winter\Storm\Database\Traits\Nullable;
 
     /**
      * @var array Guarded fields
@@ -54,7 +54,7 @@ class NullablePost extends Post
 
 class SluggablePost extends Post
 {
-    use \October\Rain\Database\Traits\Sluggable;
+    use \Winter\Storm\Database\Traits\Sluggable;
 
     /**
      * @var array Guarded fields
@@ -72,8 +72,8 @@ class SluggablePost extends Post
 
 class RevisionablePost extends Post
 {
-    use \October\Rain\Database\Traits\Revisionable;
-    use \October\Rain\Database\Traits\SoftDelete;
+    use \Winter\Storm\Database\Traits\Revisionable;
+    use \Winter\Storm\Database\Traits\SoftDelete;
 
     /**
      * @var array Guarded fields
@@ -120,7 +120,7 @@ class RevisionablePost extends Post
 
 class ValidationPost extends Post
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var array Guarded fields
