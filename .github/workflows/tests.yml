@@ -3,8 +3,8 @@ name: Tests
 on:
   push:
     branches:
-      - '1.0'
-      - '1.1'
+      - 1.0
+      - 1.1
       - develop
   pull_request:
 
@@ -69,6 +69,18 @@ jobs:
         with:
           php-version: ${{ matrix.phpVersion }}
           extensions: ${{ env.extensions }}
+
+      - name: Switch library dependency (develop)
+        if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
+        run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.1"
+
+      - name: Switch library dependency (1.0)
+        if: github.ref == 'refs/heads/1.0' || github.base_ref == '1.0'
+        run: php ./.github/workflows/utilities/library-switcher "dev-1.0 as 1.0"
+
+      - name: Switch library dependency (1.1)
+        if: github.ref == 'refs/heads/1.1' || github.base_ref == '1.1'
+        run: php ./.github/workflows/utilities/library-switcher "dev-1.1 as 1.1"
 
       - name: Setup dependency cache
         id: composercache

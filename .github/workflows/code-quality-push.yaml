@@ -3,8 +3,9 @@ name: Code Quality
 on:
   push:
     branches:
-      - '1.1'
-      - 'develop'
+      - 1.0
+      - 1.1
+      - develop
 
 jobs:
   codeQuality:
@@ -18,26 +19,15 @@ jobs:
 
       - name: Checkout changes
         uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.2
+          php-version: 7.3
           extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
-
-      - name: Install Composer dependencies
-        run: composer install --no-interaction --no-progress
-
-      - name: Reset Winter modules and library
-        run: |
-          git reset --hard HEAD
-          rm -rf ./vendor/winter/storm
-          wget https://github.com/wintercms/storm/archive/develop.zip -O ./vendor/winter/develop.zip
-          unzip ./vendor/winter/develop.zip -d ./vendor/winter
-          mv ./vendor/winter/storm-develop ./vendor/winter/storm
-          composer dump-autoload
+          tools: phpcs
 
       - name: Run code quality checks
-        run: |
-          git config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*" && git fetch
-          ./vendor/bin/phpcs --colors -nq --report="full" --extensions="php" $(git diff --name-only --diff-filter=ACMR origin/${{ github.base_ref }} HEAD)
+        run: ./.github/workflows/utilities/phpcs-push ${{ github.sha }}
