@@ -7,7 +7,7 @@
 Winter's mission is to show the world that web development is not rocket science.
 
 ![Stable Build](https://github.com/wintercms/winter/workflows/Tests/badge.svg?branch=develop)
-[![License](https://poser.pugx.org/wintercms/winter/license.svg)](https://packagist.org/packages/winter/winter)
+[![License](https://poser.pugx.org/wintercms/winter/license.svg)](https://packagist.org/packages/wintercms/winter)
 
 ## Installing Winter
 
@@ -18,7 +18,7 @@ Instructions on how to install Winter can be found at the [installation guide](h
 For advanced users, run this in your terminal to install Winter from command line:
 
 ```shell
-composer create-project winter/winter
+composer create-project wintercms/winter example.com "dev-develop"
 ```
 
 If you plan on using a database, run this command:

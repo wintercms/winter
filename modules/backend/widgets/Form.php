@@ -1121,7 +1121,7 @@ class Form extends WidgetBase
 
     /**
      * Checks if default values should be taken from data.
-     * This should be done when model exists or when explicitly configured
+     * This should be done when the model does not exist or when explicitly configured
      */
     protected function shouldFetchDefaultValues()
     {
