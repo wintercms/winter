@@ -358,6 +358,7 @@ class WinterInstall extends Command
     protected function displayOutro()
     {
         $message = [
+            // Sourced from https://www.asciiart.eu/holiday-and-events/christmas/snowmen
             ".===========================================================.",
             " *    *           *.   *   .                      *     .    ",
             "         .   .               __   *    .     * .     *       ",
