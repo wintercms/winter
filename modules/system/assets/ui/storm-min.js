@@ -4125,7 +4125,7 @@ $(this).not('.'+options.excludeClass).find('td').not('.'+options.excludeClass).c
 $(this).not('.'+options.excludeClass).on('keypress',function(e){if(e.key==='(Space character)'||e.key==='Spacebar'||e.key===' '){handleClick(e)
 return false}})
 $(this).addClass(options.linkedClass)
-link.after(link.children()).hide()})
+link.hide().after(link.html())})
 $('tr.rowlink').attr('tabindex',0)}
 RowLink.DEFAULTS={target:'a',excludeClass:'nolink',linkedClass:'rowlink'}
 var old=$.fn.rowLink

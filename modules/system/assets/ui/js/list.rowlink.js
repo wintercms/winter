@@ -78,7 +78,7 @@
             })
 
             $(this).addClass(options.linkedClass)
-            link.after(link.children()).hide()
+            link.hide().after(link.html())
         })
 
         // Add Keyboard Navigation to list rows
