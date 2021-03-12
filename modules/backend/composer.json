@@ -25,7 +25,6 @@
     "require": {
         "php": ">=7.2",
         "composer/installers": "dev-main as 1.0",
-        "winter/storm": "~1.1.2",
         "laravel/framework": "~6.0"
     },
     "autoload": {
