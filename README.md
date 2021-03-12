@@ -18,7 +18,7 @@ Instructions on how to install Winter can be found at the [installation guide](h
 For advanced users, run this in your terminal to install Winter from command line:
 
 ```shell
-composer create-project winter/winter
+composer create-project wintercms/winter example.com "dev-develop"
 ```
 
 If you plan on using a database, run this command:
