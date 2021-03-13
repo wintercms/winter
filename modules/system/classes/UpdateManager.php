@@ -151,6 +151,10 @@ class UpdateManager
          */
         $plugins = $this->pluginManager->getPlugins();
         foreach ($plugins as $code => $plugin) {
+            if ($plugin->replaces()) {
+                $this->versionManager->replacePlugin($plugin, $code);
+            }
+
             $this->updatePlugin($code);
         }
 

@@ -101,6 +101,22 @@ class VersionManager
     }
 
     /**
+     * Update the current replaced plugin's version to reference the replacing plugin.
+     */
+    public function replacePlugin(PluginBase $plugin, string $code)
+    {
+        if ($this->getDatabaseVersion($plugin->replaces()) === self::NO_VERSION_VALUE) {
+            return;
+        }
+
+        Db::table('system_plugin_versions')
+            ->where('code', '=', $plugin->replaces())
+            ->update([
+                'code' => $code
+            ]);
+    }
+
+    /**
      * Returns a list of unapplied plugin versions.
      */
     public function listNewVersions($plugin)
