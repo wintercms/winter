@@ -173,10 +173,15 @@ class PluginManager
         $this->pathMap[$classId] = $path;
         $this->normalizedMap[strtolower($classId)] = $classId;
 
-        $details = $classObj->pluginDetails();
+        try {
+            $details = $classObj->pluginDetails();
 
-        if (isset($details['replaces'])) {
-            $this->replaces[$details['replaces']] = $classId;
+            if (isset($details['replaces'])) {
+                $this->replaces[$details['replaces']] = $classId;
+            }
+        } catch (\Throwable $e) {
+            // There is a bug where the Yaml facade has not been loaded
+            // If so, we must continue
         }
 
         return $classObj;
