@@ -44,6 +44,12 @@ class PluginManager
     protected $normalizedMap = [];
 
     /**
+     * @var array A plugin replace map.
+     */
+    protected $replaces = [];
+
+
+    /**
      * @var bool Flag to indicate that all plugins have had the register() method called by registerAll() being called on this class.
      */
     protected $registered = false;
@@ -82,6 +88,7 @@ class PluginManager
         $this->metaFile = storage_path('cms/disabled.json');
         $this->loadDisabled();
         $this->loadPlugins();
+        $this->disableReplacedPlugins();
 
         if ($this->app->runningInBackend()) {
             $this->loadDependencies();
@@ -165,6 +172,12 @@ class PluginManager
         $this->plugins[$classId] = $classObj;
         $this->pathMap[$classId] = $path;
         $this->normalizedMap[strtolower($classId)] = $classId;
+
+        $details = $classObj->pluginDetails();
+
+        if (isset($details['replaces'])) {
+            $this->replaces[$details['replaces']] = $classId;
+        }
 
         return $classObj;
     }
@@ -381,10 +394,15 @@ class PluginManager
      * Returns a plugin registration class based on its identifier (Author.Plugin).
      *
      * @param string|PluginBase $identifier
+     * @param bool $ignoreReplacements
      * @return PluginBase|null
      */
-    public function findByIdentifier($identifier)
+    public function findByIdentifier($identifier, bool $ignoreReplacements = false)
     {
+        if (!$ignoreReplacements && is_string($identifier) && isset($this->replaces[$identifier])) {
+            $identifier = $this->replaces[$identifier];
+        }
+
         if (!isset($this->plugins[$identifier])) {
             $code = $this->getIdentifier($identifier);
             $identifier = $this->normalizeIdentifier($code);
@@ -609,6 +627,20 @@ class PluginManager
             $this->disabledPlugins[$code] = true;
         }
     }
+
+    public function disableReplacedPlugins()
+    {
+        if (empty($this->replaces)) {
+            return;
+        }
+
+        foreach ($this->replaces as $target => $replacement) {
+            if (!$this->isDisabled($target)) {
+                $this->disablePlugin($target);
+            }
+        }
+    }
+
 
     /**
      * Disables a single plugin in the system.
