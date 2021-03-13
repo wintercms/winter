@@ -325,4 +325,14 @@ class PluginBase extends ServiceProviderBase
 
         return $this->loadedYamlConfiguration;
     }
+
+    /**
+     * Returns the id of the replaced plugin if present
+     *
+     * @return string|null
+     */
+    public function replaces()
+    {
+        return $this->pluginDetails()['replaces'] ?? null;
+    }
 }
