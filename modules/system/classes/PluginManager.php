@@ -427,6 +427,10 @@ class PluginManager
         $classId = $this->getIdentifier($namespace);
         $normalized = $this->normalizeIdentifier($classId);
 
+        if (isset($this->replaces[$normalized])) {
+            return true;
+        }
+
         return isset($this->plugins[$normalized]);
     }
 
