@@ -5,7 +5,6 @@ use Winter\Storm\Database\Updates\Migration;
 
 class DbAddPivotDataToDeferredBindings extends Migration
 {
-
     public function up()
     {
         Schema::table('deferred_bindings', function (Blueprint $table) {
