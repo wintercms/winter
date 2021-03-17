@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.base,
+    var Base = $.wn.inspector.propertyEditors.base,
         BaseProto = Base.prototype
 
     var ObjectListEditor = function(inspector, propertyDefinition, containerCell, group) {
@@ -29,7 +29,7 @@
             var keyProperty = this.getKeyProperty()
 
             if (!keyProperty) {
-                throw new Error('Object list key property ' + this.propertyDefinition.keyProperty 
+                throw new Error('Object list key property ' + this.propertyDefinition.keyProperty
                     + ' is not defined in itemProperties. Property: ' + this.propertyDefinition.property)
             }
         }
@@ -58,17 +58,17 @@
     ObjectListEditor.prototype.build = function() {
         var link = document.createElement('a')
 
-        $.oc.foundation.element.addClass(link, 'trigger')
+        $.wn.foundation.element.addClass(link, 'trigger')
         link.setAttribute('href', '#')
         this.setLinkText(link)
 
-        $.oc.foundation.element.addClass(this.containerCell, 'trigger-cell')
+        $.wn.foundation.element.addClass(this.containerCell, 'trigger-cell')
 
         this.containerCell.appendChild(link)
     }
 
     ObjectListEditor.prototype.setLinkText = function(link, value) {
-        var value = value !== undefined && value !== null ? value 
+        var value = value !== undefined && value !== null ? value
                 : this.inspector.getPropertyValue(this.propertyDefinition.property)
 
         if (value === null) {
@@ -79,7 +79,7 @@
             var placeholder = this.propertyDefinition.placeholder
 
             if (placeholder !== undefined) {
-                $.oc.foundation.element.addClass(link, 'placeholder')
+                $.wn.foundation.element.addClass(link, 'placeholder')
                 link.textContent = placeholder
             }
             else {
@@ -95,7 +95,7 @@
                 }
 
                 itemCount = value.length
-            } 
+            }
             else {
                 if (typeof value !== 'object') {
                     throw new Error('Object list value should be an object. Property: ' + this.propertyDefinition.property)
@@ -104,7 +104,7 @@
                 itemCount = this.getValueKeys(value).length
             }
 
-            $.oc.foundation.element.removeClass(link, 'placeholder')
+            $.wn.foundation.element.removeClass(link, 'placeholder')
             link.textContent = 'Items: ' + itemCount
         }
     }
@@ -126,10 +126,10 @@
                                                 <div class="toolbar-item">                              \
                                                     <div class="btn-group">                             \
                                                         <button type="button" class="btn btn-primary    \
-                                                            oc-icon-plus"                               \
+                                                            wn-icon-plus"                               \
                                                             data-cmd="create-item">Add</button>         \
                                                         <button type="button" class="btn btn-default    \
-                                                            empty oc-icon-trash-o"                      \
+                                                            empty wn-icon-trash-o"                      \
                                                             data-cmd="delete-item"></button>            \
                                                     </div>                                              \
                                                 </div>                                                  \
@@ -239,11 +239,11 @@
         cell.textContent = text
 
         if (rowClass !== undefined) {
-            $.oc.foundation.element.addClass(row, rowClass)
+            $.wn.foundation.element.addClass(row, rowClass)
         }
 
         if (cellClass !== undefined) {
-            $.oc.foundation.element.addClass(cell, cellClass)
+            $.wn.foundation.element.addClass(cell, cellClass)
         }
 
         row.appendChild(cell)
@@ -279,12 +279,12 @@
             }
 
             this.applyDataToRow(selectedRow)
-            $.oc.foundation.element.removeClass(selectedRow, 'active')
+            $.wn.foundation.element.removeClass(selectedRow, 'active')
         }
 
         this.disposeInspector()
 
-        $.oc.foundation.element.addClass(row, 'active')
+        $.wn.foundation.element.addClass(row, 'active')
 
         this.createInspectorForRow(row, inspectorContainer)
     }
@@ -304,12 +304,12 @@
                 inspectorClass: this.inspector.options.inspectorClass
             }
 
-        this.currentRowInspector = new $.oc.inspector.surface(inspectorContainer, properties, values, 
-            $.oc.inspector.helpers.generateElementUniqueId(inspectorContainer), options)
+        this.currentRowInspector = new $.wn.inspector.surface(inspectorContainer, properties, values,
+            $.wn.inspector.helpers.generateElementUniqueId(inspectorContainer), options)
     }
 
     ObjectListEditor.prototype.disposeInspector = function() {
-        $.oc.foundation.controlUtils.disposeControls(this.popup.querySelector('[data-inspector-container]'))
+        $.wn.foundation.controlUtils.disposeControls(this.popup.querySelector('[data-inspector-container]'))
         this.currentRowInspector = null
     }
 
@@ -324,7 +324,7 @@
 
     ObjectListEditor.prototype.updateRowText = function(property, value) {
         var selectedRow = this.getSelectedRow()
-        
+
         if (!selectedRow) {
             throw new Exception('A row is not found for the updated data')
         }
@@ -337,10 +337,10 @@
 
         if (value.length === 0) {
             value = '[No title]'
-            $.oc.foundation.element.addClass(selectedRow, 'disabled')
+            $.wn.foundation.element.addClass(selectedRow, 'disabled')
         }
         else {
-            $.oc.foundation.element.removeClass(selectedRow, 'disabled')
+            $.wn.foundation.element.removeClass(selectedRow, 'disabled')
         }
 
         selectedRow.firstChild.textContent = value
@@ -354,7 +354,7 @@
         var rows = this.getTableBody().children
 
         for (var i = 0, len = rows.length; i < len; i++) {
-            if ($.oc.foundation.element.hasClass(rows[i], 'active')) {
+            if ($.wn.foundation.element.hasClass(rows[i], 'active')) {
                 return rows[i]
             }
         }
@@ -377,7 +377,7 @@
             }
 
             this.applyDataToRow(selectedRow)
-            $.oc.foundation.element.removeClass(selectedRow, 'active')
+            $.wn.foundation.element.removeClass(selectedRow, 'active')
         }
 
         this.disposeInspector()
@@ -490,7 +490,7 @@
         }
 
         if ($.trim(keyPropertyValue).length === 0) {
-            $.oc.flashMsg({text: 'The value of key property ' + keyPropertyTitle + ' cannot be empty.', 'class': 'error', 'interval': 3})
+            $.wn.flashMsg({text: 'The value of key property ' + keyPropertyTitle + ' cannot be empty.', 'class': 'error', 'interval': 3})
             return false
         }
 
@@ -507,7 +507,7 @@
             }
 
             if (rowData[keyProperty] == keyPropertyValue) {
-                $.oc.flashMsg({text: 'The value of key property ' + keyPropertyTitle + ' should be unique.', 'class': 'error', 'interval': 3})
+                $.wn.flashMsg({text: 'The value of key property ' + keyPropertyTitle + ' should be unique.', 'class': 'error', 'interval': 3})
                 return false
             }
         }
@@ -621,7 +621,7 @@
     }
 
     ObjectListEditor.prototype.onTriggerClick = function(ev) {
-        $.oc.foundation.event.stop(ev)
+        $.wn.foundation.event.stop(ev)
 
         var content = this.getPopupContent()
 
@@ -638,7 +638,7 @@
         $(popup).on('submit.inspector', 'form', this.proxy(this.onSubmit))
         $(popup).on('click', 'tr.rowlink', this.proxy(this.onRowClick))
         $(popup).on('click.inspector', '[data-cmd]', this.proxy(this.onCommand))
-        
+
         this.popup = popup.get(0)
 
         this.buildPopupContents(this.popup)
@@ -651,7 +651,7 @@
         $(popup).off('click.inspector', '[data-cmd]', this.proxy(this.onCommand))
 
         this.disposeInspector()
-        $.oc.foundation.controlUtils.disposeControls(this.popup)
+        $.wn.foundation.controlUtils.disposeControls(this.popup)
 
         this.popup = null
         this.getRootSurface().popupHidden()
@@ -676,10 +676,10 @@
         var command = ev.currentTarget.getAttribute('data-cmd')
 
         switch (command) {
-            case 'create-item' : 
+            case 'create-item' :
                 this.createItem()
             break;
-            case 'delete-item' : 
+            case 'delete-item' :
                 this.deleteItem()
             break;
         }
@@ -695,5 +695,5 @@
         }
     }
 
-    $.oc.inspector.propertyEditors.objectList = ObjectListEditor
+    $.wn.inspector.propertyEditors.objectList = ObjectListEditor
 }(window.jQuery);

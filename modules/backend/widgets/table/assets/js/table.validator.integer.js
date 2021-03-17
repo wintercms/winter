@@ -6,19 +6,19 @@
     // NAMESPACE CHECK
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.validator === undefined)
-        throw new Error("The $.oc.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");
+    if ($.wn.table.validator === undefined)
+        throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");
 
-    if ($.oc.table.validator.baseNumber === undefined)
-        throw new Error("The $.oc.table.validator.baseNumber namespace is not defined. Make sure that the table.validator.baseNumber.js script is loaded.");
+    if ($.wn.table.validator.baseNumber === undefined)
+        throw new Error("The $.wn.table.validator.baseNumber namespace is not defined. Make sure that the table.validator.baseNumber.js script is loaded.");
 
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.table.validator.baseNumber,
+    var Base = $.wn.table.validator.baseNumber,
         BaseProto = Base.prototype
 
     var Integer = function(options) {
@@ -40,8 +40,8 @@
         if (value.length == 0)
             return
 
-        var testResult = this.options.allowNegative ? 
-            /^\-?[0-9]*$/.test(value) : 
+        var testResult = this.options.allowNegative ?
+            /^\-?[0-9]*$/.test(value) :
             /^[0-9]*$/.test(value)
 
         if (!testResult) {
@@ -55,5 +55,5 @@
         return this.doCommonChecks(parseInt(value))
     }
 
-    $.oc.table.validator.integer = Integer
+    $.wn.table.validator.integer = Integer
 }(window.jQuery);

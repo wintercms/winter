@@ -4,6 +4,7 @@
 // Stripe loading indicator
 // --------------------------------------------------
 
+body.wn-loading, body.wn-loading *,
 body.oc-loading, body.oc-loading * {
     cursor: wait !important;
 }
@@ -32,7 +33,7 @@ body.oc-loading, body.oc-loading * {
 
     .stripe {
         width: 100%;
-        .animation(oc-infinite-loader 60s linear);
+        .animation(wn-infinite-loader 60s linear);
     }
 
     .stripe-loaded {
@@ -155,6 +156,7 @@ body > p.flash-message {
 // Element Loader
 // --------------------------------------------------
 
+a.wn-loading, button.wn-loading, span.wn-loading,
 a.oc-loading, button.oc-loading, span.oc-loading {
     &:after {
         content: '';
@@ -163,7 +165,7 @@ a.oc-loading, button.oc-loading, span.oc-loading {
         margin-left: .4em;
         height: 1em;
         width: 1em;
-        animation: oc-rotate-loader 0.8s infinite linear;
+        animation: wn-rotate-loader 0.8s infinite linear;
         border: .2em solid currentColor;
         border-right-color: transparent;
         border-radius: 50%;
@@ -171,6 +173,26 @@ a.oc-loading, button.oc-loading, span.oc-loading {
     }
 }
 
+@-moz-keyframes wn-rotate-loader {
+    0%    { -moz-transform: rotate(0deg); }
+    100%  { -moz-transform: rotate(360deg); }
+}
+@-webkit-keyframes wn-rotate-loader {
+    0%    { -webkit-transform: rotate(0deg); }
+    100%  { -webkit-transform: rotate(360deg); }
+}
+@-o-keyframes wn-rotate-loader {
+    0%    { -o-transform: rotate(0deg); }
+    100%  { -o-transform: rotate(360deg); }
+}
+@-ms-keyframes wn-rotate-loader {
+    0%    { -ms-transform: rotate(0deg); }
+    100%  { -ms-transform: rotate(360deg); }
+}
+@keyframes wn-rotate-loader {
+    0%    { transform: rotate(0deg); }
+    100%  { transform: rotate(360deg); }
+}
 @-moz-keyframes oc-rotate-loader {
     0%    { -moz-transform: rotate(0deg); }
     100%  { -moz-transform: rotate(360deg); }
@@ -205,6 +227,21 @@ a.oc-loading, button.oc-loading, span.oc-loading {
     .infinite-class(@index + 10, @val - @val / 2);
 }
 
+@-moz-keyframes wn-infinite-loader {
+    .infinite-class(@start, @startVal);
+}
+@-webkit-keyframes wn-infinite-loader {
+    .infinite-class(@start, @startVal);
+}
+@-o-keyframes wn-infinite-loader {
+    .infinite-class(@start, @startVal);
+}
+@-ms-keyframes wn-infinite-loader {
+    .infinite-class(@start, @startVal);
+}
+@keyframes wn-infinite-loader {
+    .infinite-class(@start, @startVal);
+}
 @-moz-keyframes oc-infinite-loader {
     .infinite-class(@start, @startVal);
 }

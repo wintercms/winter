@@ -9,7 +9,7 @@ use Twig\Sandbox\SecurityNotAllowedPropertyError;
 /**
  * SecurityPolicy globally blocks accessibility of certain methods and properties.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges, Luke Towers
  */
 final class SecurityPolicy implements SecurityPolicyInterface
@@ -18,10 +18,18 @@ final class SecurityPolicy implements SecurityPolicyInterface
      * @var array List of forbidden methods.
      */
     protected $blockedMethods = [
+        // \Winter\Storm\Extension\ExtendableTrait
         'addDynamicMethod',
         'addDynamicProperty',
+
+        // \Winter\Storm\Support\Traits\Emitter
         'bindEvent',
         'bindEventOnce',
+
+        // Eloquent & Halcyon data modification
+        'insert',
+        'update',
+        'delete',
     ];
 
     /**

@@ -5,7 +5,7 @@ use Lang;
 use Request;
 use Form as FormHelper;
 use Backend\Classes\ControllerBehavior;
-use October\Rain\Database\Model;
+use Winter\Storm\Database\Model;
 use ApplicationException;
 
 /**
@@ -23,7 +23,7 @@ use ApplicationException;
  * values as either a YAML file, located in the controller view directory,
  * or directly as a PHP array.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class RelationController extends ControllerBehavior
@@ -223,7 +223,7 @@ class RelationController extends ControllerBehavior
     {
         parent::__construct($controller);
 
-        $this->addJs('js/october.relation.js', 'core');
+        $this->addJs('js/winter.relation.js', 'core');
         $this->addCss('css/relation.css', 'core');
 
         /*
@@ -674,7 +674,7 @@ class RelationController extends ControllerBehavior
             $config->noRecordsMessage = $this->getConfig('view[noRecordsMessage]');
 
             $defaultOnClick = sprintf(
-                "$.oc.relationBehavior.clickViewListRecord(':%s', '%s', '%s')",
+                "$.wn.relationBehavior.clickViewListRecord(':%s', '%s', '%s')",
                 $this->relationModel->getKeyName(),
                 $this->relationGetId(),
                 $this->relationGetSessionKey()
@@ -824,18 +824,18 @@ class RelationController extends ControllerBehavior
             if ($this->viewMode == 'single') {
                 $config->showCheckboxes = false;
                 $config->recordOnClick = sprintf(
-                    "$.oc.relationBehavior.clickManageListRecord(':%s', '%s', '%s')",
+                    "$.wn.relationBehavior.clickManageListRecord(':%s', '%s', '%s')",
                     $this->relationModel->getKeyName(),
                     $this->relationGetId(),
                     $this->relationGetSessionKey()
                 );
             }
             elseif ($config->showCheckboxes) {
-                $config->recordOnClick = "$.oc.relationBehavior.toggleListCheckbox(this)";
+                $config->recordOnClick = "$.wn.relationBehavior.toggleListCheckbox(this)";
             }
             elseif ($isPivot) {
                 $config->recordOnClick = sprintf(
-                    "$.oc.relationBehavior.clickManagePivotListRecord(':%s', '%s', '%s')",
+                    "$.wn.relationBehavior.clickManagePivotListRecord(':%s', '%s', '%s')",
                     $this->relationModel->getKeyName(),
                     $this->relationGetId(),
                     $this->relationGetSessionKey()
@@ -1416,7 +1416,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the field configuration.
      * @param object $config
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendConfig($config, $field, $model)
     {
@@ -1426,7 +1426,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the view widget.
      * @param Backend\Classes\WidgetBase $widget
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendViewWidget($widget, $field, $model)
     {
@@ -1436,7 +1436,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the manage widget.
      * @param Backend\Classes\WidgetBase $widget
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendManageWidget($widget, $field, $model)
     {
@@ -1446,7 +1446,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the pivot widget.
      * @param Backend\Classes\WidgetBase $widget
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendPivotWidget($widget, $field, $model)
     {
@@ -1456,7 +1456,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the manage filter widget.
      * @param \Backend\Widgets\Filter $widget
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendManageFilterWidget($widget, $field, $model)
     {
@@ -1466,7 +1466,7 @@ class RelationController extends ControllerBehavior
      * Provides an opportunity to manipulate the view filter widget.
      * @param \Backend\Widgets\Filter $widget
      * @param string $field
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      */
     public function relationExtendViewFilterWidget($widget, $field, $model)
     {

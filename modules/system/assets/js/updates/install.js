@@ -173,10 +173,12 @@
         else container.html(contents)
     }
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.installProcess = new InstallProcess;
+    $.wn.installProcess = new InstallProcess;
 
 }(window.jQuery);
 

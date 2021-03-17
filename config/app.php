@@ -28,7 +28,7 @@ return [
     | any other location as required by the application or its packages.
     */
 
-    'name' => 'October CMS',
+    'name' => 'Winter CMS',
 
     /*
     |--------------------------------------------------------------------------
@@ -42,6 +42,36 @@ return [
     */
 
     'url' => 'http://localhost',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Trusted hosts
+    |--------------------------------------------------------------------------
+    |
+    | You may specify valid hosts for your application as an array or boolean
+    | below. This helps prevent host header poisoning attacks.
+    |
+    | Possible values:
+    |  - `true`: Trust the host specified in app.url, as well as the "www"
+    |            subdomain, if applicable.
+    |  - `false`: Disable the trusted hosts feature.
+    |  - array: Defines the domains to be trusted hosts. Each item should be
+    |           a string defining a domain, IP address, or a regex pattern.
+    |
+    | Example of array values:
+    |
+    |    'trustedHosts' => [
+    |       'example.com',           // Matches just example.com
+    |       'www.example.com',       // Matches just www.example.com
+    |       '^(.+\.)?example\.com$', // Matches example.com and all subdomains
+    |       'https://example.com',   // Matches just example.com
+    |    ],
+    |
+    | NOTE: Even when set to `false`, this functionality is explicitly enabled
+    | on the Backend password reset flow for security reasons.
+    */
+
+    'trustedHosts' => false,
 
     /*
     |--------------------------------------------------------------------------
@@ -134,7 +164,7 @@ return [
     | Load automatically discovered packages
     |--------------------------------------------------------------------------
     |
-    | By default, October CMS disables the loading of discovered packages
+    | By default, Winter CMS disables the loading of discovered packages
     | through Laravel's package discovery service, in order to allow packages
     | used by plugins to be disabled if the plugin itself is disabled.
     |
@@ -148,7 +178,7 @@ return [
     */
 
     'loadDiscoveredPackages' => false,
-    
+
     /*
     |--------------------------------------------------------------------------
     | Class Aliases

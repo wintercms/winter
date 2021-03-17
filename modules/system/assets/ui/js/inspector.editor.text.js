@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.popupBase,
+    var Base = $.wn.inspector.propertyEditors.popupBase,
         BaseProto = Base.prototype
 
     var TextEditor = function(inspector, propertyDefinition, containerCell, group) {
@@ -23,10 +23,10 @@
 
         if (!value) {
             value = this.propertyDefinition.placeholder
-            $.oc.foundation.element.addClass(link, 'placeholder')
+            $.wn.foundation.element.addClass(link, 'placeholder')
         }
         else {
-            $.oc.foundation.element.removeClass(link, 'placeholder')
+            $.wn.foundation.element.removeClass(link, 'placeholder')
         }
 
         if (typeof value === 'string') {
@@ -93,5 +93,5 @@
         this.inspector.setPropertyValue(this.propertyDefinition.property, value)
     }
 
-    $.oc.inspector.propertyEditors.text = TextEditor
+    $.wn.inspector.propertyEditors.text = TextEditor
 }(window.jQuery);

@@ -18,12 +18,12 @@ class Category extends Model
 
 class CategorySimple extends Category
 {
-    use \October\Rain\Database\Traits\SimpleTree;
+    use \Winter\Storm\Database\Traits\SimpleTree;
 }
 
 class CategoryNested extends Category
 {
-    use \October\Rain\Database\Traits\NestedTree;
+    use \Winter\Storm\Database\Traits\NestedTree;
 
     /**
      * @var string The database table used by the model.

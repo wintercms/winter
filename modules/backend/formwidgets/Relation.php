@@ -3,13 +3,13 @@
 use Db;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
-use October\Rain\Database\Relations\Relation as RelationBase;
+use Winter\Storm\Database\Relations\Relation as RelationBase;
 
 /**
  * Form Relationship
  * Renders a field prepopulated with a belongsTo and belongsToHasMany relation.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Relation extends FormWidgetBase
@@ -136,7 +136,7 @@ class Relation extends FormWidgetBase
             }
 
             // Determine if the model uses a tree trait
-            $treeTraits = ['October\Rain\Database\Traits\NestedTree', 'October\Rain\Database\Traits\SimpleTree'];
+            $treeTraits = ['Winter\Storm\Database\Traits\NestedTree', 'Winter\Storm\Database\Traits\SimpleTree'];
             $usesTree = count(array_intersect($treeTraits, class_uses($relationModel))) > 0;
 
             // The "sqlSelect" config takes precedence over "nameFrom".

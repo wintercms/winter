@@ -11,13 +11,13 @@ use File as FileHelper;
 /**
  * Mail brand settings
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailBrandSetting extends Model
 {
     use \System\Traits\ViewMaker;
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var array Behaviors implemented by this model.
@@ -35,7 +35,7 @@ class MailBrandSetting extends Model
      * @var mixed Settings form field defitions
      */
     public $settingsFields = 'fields.yaml';
-    
+
     /**
      * @var string The key to store rendered CSS in the cache under
      */

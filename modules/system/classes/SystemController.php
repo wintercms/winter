@@ -13,7 +13,7 @@ use Illuminate\Routing\Controller as ControllerBase;
  * It is currently only responsible for serving up the asset combiner contents.
  *
  * @see System\Classes\CombineAssets Asset combiner class
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges, Luke Towers
  */
 class SystemController extends ControllerBase

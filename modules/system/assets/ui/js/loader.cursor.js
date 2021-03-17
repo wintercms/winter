@@ -4,11 +4,11 @@
  * Displays the animated loading indicator following the mouse cursor.
  *
  * JavaScript API:
- * $.oc.cursorLoadIndicator.show(event)
- * $.oc.cursorLoadIndicator.hide()
+ * $.wn.cursorLoadIndicator.show(event)
+ * $.wn.cursorLoadIndicator.hide()
  *
  * By default if the show() method has been called several times, the hide() method should be
- * called the same number of times in order to hide the cursor. Use hide(true) to hide the 
+ * called the same number of times in order to hide the cursor. Use hide(true) to hide the
  * indicator forcibly.
  *
  * The event parameter in the show() method is optional. If it is passed, the initial cursor position
@@ -18,8 +18,10 @@
  *  - modernizr/modernizr
  */
 +function ($) { "use strict";
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
     var CursorLoadIndicator = function () {
         if (Modernizr.touchevents)
@@ -72,17 +74,17 @@
     }
 
     $(document).ready(function() {
-        $.oc.cursorLoadIndicator = new CursorLoadIndicator();
+        $.wn.cursorLoadIndicator = new CursorLoadIndicator();
     })
 
     // CURSORLOADINDICATOR DATA-API
     // ==============
-    
+
     $(document)
         .on('ajaxPromise', '[data-cursor-load-indicator]', function() {
-            $.oc.cursorLoadIndicator.show()
+            $.wn.cursorLoadIndicator.show()
         }).on('ajaxFail ajaxDone', '[data-cursor-load-indicator]', function() {
-            $.oc.cursorLoadIndicator.hide()
+            $.wn.cursorLoadIndicator.hide()
         })
 
 }(window.jQuery);

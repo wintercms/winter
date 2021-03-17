@@ -152,7 +152,7 @@ class CmsObjectTest extends TestCase
 
     public function testFillInvalidFileNameSymbol()
     {
-        $this->expectException(\October\Rain\Exception\ValidationException::class);
+        $this->expectException(\Winter\Storm\Exception\ValidationException::class);
         $this->expectExceptionMessage('Invalid file name');
 
         $theme = Theme::load('apitest');
@@ -167,7 +167,7 @@ class CmsObjectTest extends TestCase
 
     public function testFillInvalidFileNamePath()
     {
-        $this->expectException(\October\Rain\Exception\ValidationException::class);
+        $this->expectException(\Winter\Storm\Exception\ValidationException::class);
         $this->expectExceptionMessage('Invalid file name');
 
         $theme = Theme::load('apitest');
@@ -182,7 +182,7 @@ class CmsObjectTest extends TestCase
 
     public function testFillInvalidFileSlash()
     {
-        $this->expectException(\October\Rain\Exception\ValidationException::class);
+        $this->expectException(\Winter\Storm\Exception\ValidationException::class);
         $this->expectExceptionMessage('Invalid file name');
 
         $theme = Theme::load('apitest');
@@ -197,7 +197,7 @@ class CmsObjectTest extends TestCase
 
     public function testFillEmptyFileName()
     {
-        $this->expectException(\October\Rain\Exception\ValidationException::class);
+        $this->expectException(\Winter\Storm\Exception\ValidationException::class);
         $this->expectExceptionMessage('The File Name field is required');
 
         $theme = Theme::load('apitest');
@@ -267,7 +267,7 @@ class CmsObjectTest extends TestCase
      */
     public function testRenameToExistingFile()
     {
-        $this->expectException(\October\Rain\Exception\ApplicationException::class);
+        $this->expectException(\Winter\Storm\Exception\ApplicationException::class);
         $this->expectExceptionMessageMatches('/already\sexists/');
 
         $theme = Theme::load('apitest');

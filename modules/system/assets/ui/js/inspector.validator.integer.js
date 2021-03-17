@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.validators.baseNumber,
+    var Base = $.wn.inspector.validators.baseNumber,
         BaseProto = Base.prototype
 
     var IntegerValidator = function(options) {
@@ -28,8 +28,8 @@
             return null
         }
 
-        var testResult = this.options.allowNegative ? 
-            /^\-?[0-9]*$/.test(string) : 
+        var testResult = this.options.allowNegative ?
+            /^\-?[0-9]*$/.test(string) :
             /^[0-9]*$/.test(string)
 
         if (!testResult) {
@@ -43,5 +43,5 @@
         return this.doCommonChecks(parseInt(string))
     }
 
-    $.oc.inspector.validators.integer = IntegerValidator
+    $.wn.inspector.validators.integer = IntegerValidator
 }(window.jQuery);

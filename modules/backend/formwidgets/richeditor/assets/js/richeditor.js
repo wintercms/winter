@@ -11,7 +11,7 @@
  * - Froala Editor (froala_editor.js)
  */
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // RICHEDITOR CLASS DEFINITION
@@ -24,7 +24,7 @@
         this.$form       = this.$el.closest('form')
         this.editor      = null
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
 
         Base.call(this)
 
@@ -44,6 +44,7 @@
         toolbarButtons: null,
         allowEmptyTags: null,
         allowTags: null,
+        allowAttributes: null,
         noWrapTags: null,
         removeTags: null,
         lineBreakerTags: null,
@@ -90,7 +91,7 @@
             froalaOptions.toolbarButtons = this.options.toolbarButtons.split(',')
         }
         else {
-            froalaOptions.toolbarButtons = $.oc.richEditorButtons
+            froalaOptions.toolbarButtons = $.wn.richEditorButtons
         }
 
         froalaOptions.imageStyles = this.options.imageStyles
@@ -164,6 +165,10 @@
             ? this.options.allowTags.split(/[\s,]+/)
             : ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'blockquote', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'menuitem', 'meter', 'nav', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'pre', 'progress', 'queue', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'style', 'section', 'select', 'small', 'source', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr']
 
+        froalaOptions.htmlAllowedAttrs = this.options.allowAttributes
+            ? this.options.allowAttributes.split(/[\s,]+/)
+            : ['accept', 'accept-charset', 'accesskey', 'action', 'align', 'allowfullscreen', 'allowtransparency', 'alt', 'aria-.*', 'async', 'autocomplete', 'autofocus', 'autoplay', 'autosave', 'background', 'bgcolor', 'border', 'charset', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'color', 'cols', 'colspan', 'content', 'contenteditable', 'contextmenu', 'controls', 'coords', 'data', 'data-.*', 'datetime', 'default', 'defer', 'dir', 'dirname', 'disabled', 'download', 'draggable', 'dropzone', 'enctype', 'for', 'form', 'formaction', 'frameborder', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'http-equiv', 'icon', 'id', 'ismap', 'itemprop', 'keytype', 'kind', 'label', 'lang', 'language', 'list', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'mozallowfullscreen', 'multiple', 'muted', 'name', 'novalidate', 'open', 'optimum', 'pattern', 'ping', 'placeholder', 'playsinline', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'reversed', 'rows', 'rowspan', 'sandbox', 'scope', 'scoped', 'scrolling', 'seamless', 'selected', 'shape', 'size', 'sizes', 'span', 'src', 'srcdoc', 'srclang', 'srcset', 'start', 'step', 'summary', 'spellcheck', 'style', 'tabindex', 'target', 'title', 'type', 'translate', 'usemap', 'value', 'valign', 'webkitallowfullscreen', 'width', 'wrap']
+
         froalaOptions.htmlDoNotWrapTags = this.options.noWrapTags
             ? this.options.noWrapTags.split(/[\s,]+/)
             : ['figure', 'script', 'style']
@@ -178,7 +183,7 @@
 
         froalaOptions.shortcutsEnabled = ['show', 'bold', 'italic', 'underline', 'indent', 'outdent', 'undo', 'redo']
 
-        // Ensure that October recognizes AJAX requests from Froala
+        // Ensure that Winter recognizes AJAX requests from Froala
         froalaOptions.requestHeaders = {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             'X-Requested-With': 'XMLHttpRequest'
@@ -457,10 +462,12 @@
     // BUTTON DEFINITIONS
     // =================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.richEditorButtons = [
+    $.wn.richEditorButtons = [
         'paragraphFormat',
         'paragraphStyle',
         'quote',
