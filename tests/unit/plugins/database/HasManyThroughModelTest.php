@@ -3,7 +3,7 @@
 use Database\Tester\Models\Author;
 use Database\Tester\Models\Country;
 use Database\Tester\Models\Post;
-use October\Rain\Database\Collection;
+use Winter\Storm\Database\Collection;
 
 class HasManyThroughModelTest extends PluginTestCase
 {

@@ -57,7 +57,7 @@
                 showAlpha: this.options.showAlpha,
                 allowEmpty: this.options.allowEmpty,
                 color: this.$customColor.data('hexColor'),
-                chooseText: $.oc.lang.get('colorpicker.choose', 'Ok'),
+                chooseText: $.wn.lang.get('colorpicker.choose', 'Ok'),
                 cancelText: '⨯',
                 appendTo: 'parent',
                 disabled: this.options.disabled,

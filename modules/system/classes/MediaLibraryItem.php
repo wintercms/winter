@@ -2,13 +2,13 @@
 
 use File;
 use Config;
-use October\Rain\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use Carbon\Carbon;
 
 /**
  * Represents a file or folder in the Media Library.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MediaLibraryItem

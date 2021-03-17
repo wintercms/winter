@@ -17,13 +17,13 @@
     var BarChart = function (element, options) {
         this.options = options || {}
 
-        var 
+        var
             $el = this.$el = $(element),
             size = this.size = $el.height(),
             self = this,
-            values = $.oc.chartUtils.loadListValues($('ul', $el)),
-            $legend = $.oc.chartUtils.createLegend($('ul', $el)),
-            indicators = $.oc.chartUtils.initLegendColorIndicators($legend),
+            values = $.wn.chartUtils.loadListValues($('ul', $el)),
+            $legend = $.wn.chartUtils.createLegend($('ul', $el)),
+            indicators = $.wn.chartUtils.initLegendColorIndicators($legend),
             isFullWidth = this.isFullWidth(),
             chartHeight = this.options.height !== undefined ? this.options.height : size,
             chartWidth = isFullWidth ? this.$el.width() : size,
@@ -52,7 +52,7 @@
             // Add bars
             var start = 0
             $.each(values.values, function(index, valueInfo) {
-                var color = valueInfo.color !== undefined ? valueInfo.color : $.oc.chartUtils.getColor(index),
+                var color = valueInfo.color !== undefined ? valueInfo.color : $.wn.chartUtils.getColor(index),
                     path = self.paper.path().attr({"stroke-width": 0}).attr({bar: [start, 0]}).attr({fill: color})
 
                 self.bars.push(path)
@@ -60,10 +60,10 @@
                 start += barWidth + self.options.gap
 
                 path.hover(function(ev){
-                    $.oc.chartUtils.showTooltip(ev.pageX, ev.pageY, 
-                        $.trim($.oc.chartUtils.getLegendLabel($legend, index)) + ': <strong>'+valueInfo.value+'</stong>')
+                    $.wn.chartUtils.showTooltip(ev.pageX, ev.pageY,
+                        $.trim($.wn.chartUtils.getLegendLabel($legend, index)) + ': <strong>'+valueInfo.value+'</stong>')
                 }, function() {
-                    $.oc.chartUtils.hideTooltip()
+                    $.wn.chartUtils.hideTooltip()
                 })
             })
 

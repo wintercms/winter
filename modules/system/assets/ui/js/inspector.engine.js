@@ -9,13 +9,15 @@
     // NAMESPACES
     // ============================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    if ($.oc.inspector === undefined)
-        $.oc.inspector = {}
+    if ($.wn.inspector === undefined)
+        $.wn.inspector = {}
 
-    $.oc.inspector.engine = {}
+    $.wn.inspector.engine = {}
 
     // CLASS DEFINITION
     // ============================
@@ -32,7 +34,7 @@
         return null
     }
 
-    $.oc.inspector.engine.processPropertyGroups = function(properties) {
+    $.wn.inspector.engine.processPropertyGroups = function(properties) {
         var fields = [],
             result = {
                 hasGroups: false,

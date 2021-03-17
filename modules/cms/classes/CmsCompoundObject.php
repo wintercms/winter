@@ -9,7 +9,7 @@ use Cms\Twig\Extension as CmsTwigExtension;
 use Cms\Components\ViewBag;
 use Cms\Helpers\Cms as CmsHelpers;
 use System\Twig\Extension as SystemTwigExtension;
-use October\Rain\Halcyon\Processors\SectionParser;
+use Winter\Storm\Halcyon\Processors\SectionParser;
 use Twig\Source as TwigSource;
 use Twig\Environment as TwigEnvironment;
 use ApplicationException;
@@ -19,7 +19,7 @@ use ApplicationException;
  * The class implements functionality for the compound object file parsing. It also provides a way
  * to access parameters defined in the INI settings section as the object properties.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CmsCompoundObject extends CmsObject
@@ -115,7 +115,7 @@ class CmsCompoundObject extends CmsObject
      * Create a new Collection instance.
      *
      * @param  array  $models
-     * @return \October\Rain\Halcyon\Collection
+     * @return \Winter\Storm\Halcyon\Collection
      */
     public function newCollection(array $models = [])
     {

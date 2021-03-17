@@ -5,7 +5,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.popupBase,
+    var Base = $.wn.inspector.propertyEditors.popupBase,
         BaseProto = Base.prototype
 
     var StringListAutocomplete = function(inspector, propertyDefinition, containerCell, group) {
@@ -30,7 +30,7 @@
     }
 
     StringListAutocomplete.prototype.setLinkText = function(link, value) {
-        var value = value !== undefined ? value 
+        var value = value !== undefined ? value
                 : this.inspector.getPropertyValue(this.propertyDefinition.property)
 
         if (value === undefined) {
@@ -41,17 +41,17 @@
 
         if (!value) {
             value = this.propertyDefinition.placeholder
-            $.oc.foundation.element.addClass(link, 'placeholder')
+            $.wn.foundation.element.addClass(link, 'placeholder')
 
             if (!value) {
                 value = '[]'
             }
 
             link.textContent = value
-        } 
+        }
         else {
-            $.oc.foundation.element.removeClass(link, 'placeholder')
-    
+            $.wn.foundation.element.removeClass(link, 'placeholder')
+
             link.textContent = '[' + value.join(', ') + ']'
         }
     }
@@ -77,10 +77,10 @@
                         <div class="toolbar-item">                                                      \
                             <div class="btn-group">                                                     \
                                 <button type="button" class="btn btn-primary                            \
-                                    oc-icon-plus"                                                       \
+                                    wn-icon-plus"                                                       \
                                     data-cmd="create-item">Add</button>                                 \
                                 <button type="button" class="btn btn-default                            \
-                                    empty oc-icon-trash-o"                                              \
+                                    empty wn-icon-trash-o"                                              \
                                     data-cmd="delete-item"></button>                                    \
                             </div>                                                                      \
                         </div>                                                                          \
@@ -181,11 +181,11 @@
         var activeCells = this.popup.querySelectorAll('td.active')
 
         for (var i = activeCells.length-1; i >= 0; i--) {
-            $.oc.foundation.element.removeClass(activeCells[i], 'active')
+            $.wn.foundation.element.removeClass(activeCells[i], 'active')
         }
 
         var activeCell = input.parentNode.parentNode // input / div / td
-        $.oc.foundation.element.addClass(activeCell, 'active')
+        $.wn.foundation.element.addClass(activeCell, 'active')
 
         this.buildAutoComplete(input)
     }
@@ -446,7 +446,7 @@
         var itemsEvent = $.Event('autocompleteitems.oc.inspector')
 
         $inspectable.trigger(itemsEvent, [{
-            values: values, 
+            values: values,
             callback: this.proxy(this.itemsRequestDone),
             property: this.inspector.getPropertyPath(this.propertyDefinition.property),
             propertyDefinition: this.propertyDefinition
@@ -527,10 +527,10 @@
         var command = ev.currentTarget.getAttribute('data-cmd')
 
         switch (command) {
-            case 'create-item' : 
+            case 'create-item' :
                 this.createItem()
             break;
-            case 'delete-item' : 
+            case 'delete-item' :
                 this.deleteItem()
             break;
         }
@@ -545,5 +545,5 @@
         }
     }
 
-    $.oc.inspector.propertyEditors.stringListAutocomplete = StringListAutocomplete
+    $.wn.inspector.propertyEditors.stringListAutocomplete = StringListAutocomplete
 }(window.jQuery);

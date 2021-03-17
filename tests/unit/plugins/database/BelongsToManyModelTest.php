@@ -22,7 +22,7 @@ class BelongsToManyModelTest extends PluginTestCase
     public function testSetRelationValue()
     {
         Model::unguard();
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $role1 = Role::create(['name' => "Designer", 'description' => "Quality"]);
         $role2 = Role::create(['name' => "Programmer", 'description' => "Speed"]);
         $role3 = Role::create(['name' => "Manager", 'description' => "Budget"]);
@@ -71,7 +71,7 @@ class BelongsToManyModelTest extends PluginTestCase
     public function testGetRelationValue()
     {
         Model::unguard();
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $role1 = Role::create(['name' => "Designer", 'description' => "Quality"]);
         $role2 = Role::create(['name' => "Programmer", 'description' => "Speed"]);
         Model::reguard();
@@ -87,7 +87,7 @@ class BelongsToManyModelTest extends PluginTestCase
         $sessionKey = uniqid('session_key', true);
 
         Model::unguard();
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $role1 = Role::create(['name' => "Designer", 'description' => "Quality"]);
         $role2 = Role::create(['name' => "Programmer", 'description' => "Speed"]);
 
@@ -178,7 +178,7 @@ class BelongsToManyModelTest extends PluginTestCase
         include_once base_path().'/tests/fixtures/plugins/database/tester/models/EventLog.php';
 
         Model::unguard();
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $role1 = Role::create(['name' => "Designer", 'description' => "Quality"]);
         $role2 = Role::create(['name' => "Programmer", 'description' => "Speed"]);
         $role3 = Role::create(['name' => "Manager", 'description' => "Budget"]);
@@ -196,7 +196,7 @@ class BelongsToManyModelTest extends PluginTestCase
     public function testConditionsWithPivotAttributes()
     {
         Model::unguard();
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $role1 = Role::create(['name' => "Designer", 'description' => "Quality"]);
         $role2 = Role::create(['name' => "Programmer", 'description' => "Speed"]);
         $role3 = Role::create(['name' => "Manager", 'description' => "Budget"]);

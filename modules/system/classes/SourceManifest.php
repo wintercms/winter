@@ -4,13 +4,13 @@ use ApplicationException;
 use Config;
 
 /**
- * Reads and stores the October CMS source manifest information.
+ * Reads and stores the Winter CMS source manifest information.
  *
  * The source manifest is a meta JSON file, stored on GitHub, that contains the hashsums of all module files across all
- * buils of October CMS. This allows us to compare the October CMS installation against the expected file checksums and
+ * buils of Winter CMS. This allows us to compare the Winter CMS installation against the expected file checksums and
  * determine the installed build and whether it has been modified.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Ben Thomson
  */
 class SourceManifest
@@ -39,7 +39,7 @@ class SourceManifest
             $this->setSource(
                 Config::get(
                     'cms.sourceManifestUrl',
-                    'https://raw.githubusercontent.com/octoberrain/meta/master/manifest/builds.json'
+                    'https://raw.githubusercontent.com/wintercms/meta/master/manifest/builds.json'
                 )
             );
         }
@@ -219,7 +219,7 @@ class SourceManifest
     /**
      * Compares a file manifest with the source manifest.
      *
-     * This will determine the build of the October CMS installation.
+     * This will determine the build of the Winter CMS installation.
      *
      * This will return an array with the following information:
      *  - `build`: The build number we determined was most likely the build installed.

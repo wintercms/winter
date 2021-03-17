@@ -11,7 +11,7 @@
 
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // FIELD REPEATER CLASS DEFINITION
@@ -22,7 +22,7 @@
         this.$el       = $(element)
         this.$sortable = $(options.sortableContainer, this.$el)
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }

@@ -413,6 +413,8 @@ return [
         'allowed_empty_tags_comment' => 'The list of tags that are not removed when they have no content inside.',
         'allowed_tags' => 'Allowed tags',
         'allowed_tags_comment' => 'The list of allowed tags.',
+        'allowed_attributes' => 'Allowed attributes',
+        'allowed_attributes_comment' => 'The list of allowed attributes.',
         'no_wrap' => 'Do not wrap tags',
         'no_wrap_comment' => 'The list of tags that should not be wrapped inside block tags.',
         'remove_tags' => 'Remove tags',

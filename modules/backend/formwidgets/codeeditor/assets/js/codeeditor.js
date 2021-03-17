@@ -16,7 +16,7 @@
 
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // CODEEDITOR CLASS DEFINITION
@@ -44,7 +44,7 @@
         this.$replaceboxEnable = this.$toolbar.find('li.replacebox-enable')
         this.$replaceboxDisable = this.$toolbar.find('li.replacebox-disable')
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
 
         this.init();
 
@@ -414,10 +414,12 @@
 
     $.fn.codeEditor.Constructor = CodeEditor
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.codeEditorExtensionModes = {
+    $.wn.codeEditorExtensionModes = {
         'htm': 'html',
         'html': 'html',
         'md': 'markdown',

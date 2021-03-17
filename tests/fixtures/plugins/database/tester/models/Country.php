@@ -31,5 +31,5 @@ class Country extends Model
 
 class SoftDeleteCountry extends Country
 {
-    use \October\Rain\Database\Traits\SoftDelete;
+    use \Winter\Storm\Database\Traits\SoftDelete;
 }
