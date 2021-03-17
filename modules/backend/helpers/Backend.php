@@ -86,6 +86,26 @@ class Backend
     }
 
     /**
+     * Convert mixed inputs to a Carbon object and sets the backend timezone on that object
+     *
+     * @return \Carbon\Carbon
+     */
+    public static function makeCarbon($value, $throwException = true)
+    {
+        $carbon = DateTimeHelper::makeCarbon($value, $throwException);
+
+        try {
+            // Find user preference
+            $carbon->setTimezone(\Backend\Models\Preference::get('timezone'));
+        } catch (Exception $ex) {
+            // Use system default
+            $carbon->setTimezone(Config::get('backend.timezone', Config::get('app.timezone')));
+        }
+
+        return $carbon;
+    }
+
+    /**
      * Proxy method for dateTime() using "date" format alias.
      * @return string
      */
