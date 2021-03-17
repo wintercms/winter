@@ -2,14 +2,14 @@
 
 use Str;
 use Html;
-use October\Rain\Database\Model;
-use October\Rain\Html\Helper as HtmlHelper;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Html\Helper as HtmlHelper;
 
 /**
  * Form Field definition
  * A translation of the form field configuration
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class FormField
@@ -124,7 +124,7 @@ class FormField
     /**
      * @var string Specifies a comment to accompany the field
      */
-    public $comment;
+    public $comment = '';
 
     /**
      * @var string Specifies the comment position.
@@ -139,7 +139,7 @@ class FormField
     /**
      * @var string Specifies a message to display when there is no value supplied (placeholder).
      */
-    public $placeholder;
+    public $placeholder = '';
 
     /**
      * @var array Contains a list of attributes specified in the field configuration.

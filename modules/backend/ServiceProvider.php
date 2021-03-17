@@ -9,7 +9,7 @@ use Backend\Classes\WidgetManager;
 use System\Classes\MailManager;
 use System\Classes\CombineAssets;
 use System\Classes\SettingsManager;
-use October\Rain\Support\ModuleServiceProvider;
+use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
 {
@@ -66,8 +66,8 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerAssetBundles()
     {
         CombineAssets::registerCallback(function ($combiner) {
-            $combiner->registerBundle('~/modules/backend/assets/less/october.less');
-            $combiner->registerBundle('~/modules/backend/assets/js/october.js');
+            $combiner->registerBundle('~/modules/backend/assets/less/winter.less');
+            $combiner->registerBundle('~/modules/backend/assets/js/winter.js');
             $combiner->registerBundle('~/modules/backend/widgets/table/assets/js/build.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/js/mediamanager-browser.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/less/mediamanager.less');
@@ -80,6 +80,7 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/backend/formwidgets/colorpicker/assets/less/colorpicker.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/permissioneditor/assets/less/permissioneditor.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/markdowneditor/assets/less/markdowneditor.less');
+            $combiner->registerBundle('~/modules/backend/formwidgets/sensitive/assets/less/sensitive.less');
 
             /*
              * Rich Editor is protected by DRM
@@ -97,7 +98,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendNavigation()
     {
         BackendMenu::registerCallback(function ($manager) {
-            $manager->registerMenuItems('October.Backend', [
+            $manager->registerMenuItems('Winter.Backend', [
                 'dashboard' => [
                     'label'       => 'backend::lang.dashboard.menu_label',
                     'icon'        => 'icon-dashboard',
@@ -115,6 +116,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'order'       => 200
                 ]
             ]);
+            $manager->registerOwnerAlias('Winter.Backend', 'October.Backend');
         });
     }
 
@@ -137,34 +139,43 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendPermissions()
     {
         BackendAuth::registerCallback(function ($manager) {
-            $manager->registerPermissions('October.Backend', [
+            $manager->registerPermissions('Winter.Backend', [
                 'backend.access_dashboard' => [
                     'label' => 'system::lang.permissions.view_the_dashboard',
-                    'tab'   => 'system::lang.permissions.name'
+                    'tab'   => 'system::lang.permissions.name',
                 ],
                 'backend.manage_default_dashboard' => [
                     'label' => 'system::lang.permissions.manage_default_dashboard',
                     'tab'   => 'system::lang.permissions.name',
+                    'roles' => UserRole::CODE_DEVELOPER,
                 ],
                 'backend.manage_users' => [
                     'label' => 'system::lang.permissions.manage_other_administrators',
-                    'tab'   => 'system::lang.permissions.name'
+                    'tab'   => 'system::lang.permissions.name',
+                    'roles' => UserRole::CODE_DEVELOPER,
                 ],
                 'backend.impersonate_users' => [
                     'label' => 'system::lang.permissions.impersonate_users',
                     'tab'   => 'system::lang.permissions.name',
+                    'roles' => UserRole::CODE_DEVELOPER,
                 ],
                 'backend.manage_preferences' => [
                     'label' => 'system::lang.permissions.manage_preferences',
-                    'tab'   => 'system::lang.permissions.name'
+                    'tab'   => 'system::lang.permissions.name',
                 ],
                 'backend.manage_editor' => [
                     'label' => 'system::lang.permissions.manage_editor',
-                    'tab'   => 'system::lang.permissions.name'
+                    'tab'   => 'system::lang.permissions.name',
+                    'roles' => UserRole::CODE_DEVELOPER,
+                ],
+                'backend.manage_own_editor' => [
+                    'label' => 'system::lang.permissions.manage_own_editor',
+                    'tab'   => 'system::lang.permissions.name',
                 ],
                 'backend.manage_branding' => [
                     'label' => 'system::lang.permissions.manage_branding',
-                    'tab'   => 'system::lang.permissions.name'
+                    'tab'   => 'system::lang.permissions.name',
+                    'roles' => UserRole::CODE_DEVELOPER,
                 ],
                 'media.manage_media' => [
                     'label' => 'backend::lang.permissions.manage_media',
@@ -176,6 +187,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'roles' => UserRole::CODE_DEVELOPER,
                 ],
             ]);
+            $manager->registerPermissionOwnerAlias('Winter.Backend', 'October.Backend');
         });
     }
 
@@ -199,6 +211,7 @@ class ServiceProvider extends ModuleServiceProvider
             $manager->registerFormWidget('Backend\FormWidgets\TagList', 'taglist');
             $manager->registerFormWidget('Backend\FormWidgets\MediaFinder', 'mediafinder');
             $manager->registerFormWidget('Backend\FormWidgets\NestedForm', 'nestedform');
+            $manager->registerFormWidget('Backend\FormWidgets\Sensitive', 'sensitive');
         });
     }
 
@@ -208,7 +221,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendSettings()
     {
         SettingsManager::instance()->registerCallback(function ($manager) {
-            $manager->registerSettingItems('October.Backend', [
+            $manager->registerSettingItems('Winter.Backend', [
                 'branding' => [
                     'label'       => 'backend::lang.branding.menu_label',
                     'description' => 'backend::lang.branding.menu_description',
@@ -259,6 +272,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'order'       => 920
                 ]
             ]);
+            $manager->registerOwnerAlias('Winter.Backend', 'October.Backend');
         });
     }
 }

@@ -14,16 +14,16 @@ use DirectoryIterator;
 use ApplicationException;
 use Cms\Models\ThemeData;
 use System\Models\Parameter;
-use October\Rain\Halcyon\Datasource\DbDatasource;
-use October\Rain\Halcyon\Datasource\FileDatasource;
-use October\Rain\Halcyon\Datasource\DatasourceInterface;
+use Winter\Storm\Halcyon\Datasource\DbDatasource;
+use Winter\Storm\Halcyon\Datasource\FileDatasource;
+use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 
 /**
  * This class represents the CMS theme.
  * CMS theme is a directory that contains all CMS objects - pages, layouts, partials and asset files..
  * The theme parameters are specified in the theme.ini file in the theme root directory.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Theme
@@ -158,7 +158,8 @@ class Theme
         if ($checkDatabase && App::hasDatabase()) {
             try {
                 try {
-                    $dbResult = Cache::remember(self::ACTIVE_KEY, 1440, function () {
+                    $expiresAt = now()->addMinutes(1440);
+                    $dbResult = Cache::remember(self::ACTIVE_KEY, $expiresAt, function () {
                         return Parameter::applyKey(self::ACTIVE_KEY)->value('value');
                     });
                 }
@@ -356,8 +357,8 @@ class Theme
          * Example usage:
          *
          *     Event::listen('cms.theme.extendConfig', function ($themeCode, &$config) {
-         *          $config['name'] = 'October Theme';
-         *          $config['description'] = 'Another great theme from October CMS';
+         *          $config['name'] = 'Winter Theme';
+         *          $config['description'] = 'Another great theme from Winter CMS';
          *     });
          *
          */

@@ -6,7 +6,7 @@ use Request;
 /**
  * Model for logging access to the back-end
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class AccessLog extends Model
@@ -48,8 +48,7 @@ class AccessLog extends Model
         $records = static::where('user_id', $user->id)
             ->orderBy('created_at', 'desc')
             ->limit(2)
-            ->get()
-        ;
+            ->get();
 
         if (!count($records)) {
             return null;

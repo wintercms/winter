@@ -4,13 +4,13 @@ use Url;
 use Config;
 use File as FileHelper;
 use Storage;
-use October\Rain\Database\Attach\File as FileBase;
+use Winter\Storm\Database\Attach\File as FileBase;
 use Backend\Controllers\Files;
 
 /**
  * File attachment model
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class File extends FileBase
@@ -26,6 +26,9 @@ class File extends FileBase
     public function getThumb($width, $height, $options = [])
     {
         $url = '';
+        $width = !empty($width) ? $width : 0;
+        $height = !empty($height) ? $height : 0;
+
         if (!$this->isPublic() && class_exists(Files::class)) {
             $options = $this->getDefaultThumbOptions($options);
             // Ensure that the thumb exists first
@@ -92,15 +95,6 @@ class File extends FileBase
         }
 
         return $uploadsFolder . '/protected/';
-    }
-
-    /**
-     * Returns true if storage.uploads.disk in config/cms.php is "local".
-     * @return bool
-     */
-    protected function isLocalStorage()
-    {
-        return Config::get('cms.storage.uploads.disk') == 'local';
     }
 
     /**

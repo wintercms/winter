@@ -1,13 +1,17 @@
 <?php namespace Cms\Facades;
 
-use October\Rain\Support\Facade;
+use Winter\Storm\Support\Facade;
 
+/**
+ * @method static string url(string $path = null)
+ *
+ * @see \Cms\Helpers\Cms
+ */
 class Cms extends Facade
 {
     /**
      * Get the registered name of the component.
      *
-     * @see \Cms\Helpers\Cms
      * @return string
      */
     protected static function getFacadeAccessor()

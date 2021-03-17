@@ -4,7 +4,7 @@ use Database\Tester\Models\NullablePost;
 
 class NullableModelTest extends PluginTestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -17,7 +17,7 @@ class NullableModelTest extends PluginTestCase
     {
         // Save as SQL default
         $post = NullablePost::create(['author_nickname' => ''])->reload();
-        $this->assertEquals('October', $post->author_nickname);
+        $this->assertEquals('Winter', $post->author_nickname);
 
         // Save as empty string
         $post->author_nickname = '';

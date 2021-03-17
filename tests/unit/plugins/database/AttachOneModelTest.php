@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class AttachOneModelTest extends PluginTestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -19,8 +19,8 @@ class AttachOneModelTest extends PluginTestCase
     public function testSetRelationValue()
     {
         Model::unguard();
-        $user = User::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $user2 = User::create(['name' => 'Joe', 'email' => 'joe@email.tld']);
+        $user = User::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
+        $user2 = User::create(['name' => 'Joe', 'email' => 'joe@example.com']);
         Model::reguard();
 
         // Set by string
@@ -62,7 +62,7 @@ class AttachOneModelTest extends PluginTestCase
     public function testDeleteFlagDestroyRelationship()
     {
         Model::unguard();
-        $user = User::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $user = User::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         Model::reguard();
 
         $this->assertNull($user->avatar);
@@ -80,7 +80,7 @@ class AttachOneModelTest extends PluginTestCase
     public function testDeleteFlagDeleteModel()
     {
         Model::unguard();
-        $user = User::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $user = User::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         Model::reguard();
 
         $this->assertNull($user->avatar);
@@ -96,7 +96,7 @@ class AttachOneModelTest extends PluginTestCase
     public function testDeleteFlagSoftDeleteModel()
     {
         Model::unguard();
-        $user = SoftDeleteUser::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $user = SoftDeleteUser::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         Model::reguard();
 
         $user->avatar()->create(['data' => base_path().'/tests/fixtures/plugins/database/tester/assets/images/avatar.png']);

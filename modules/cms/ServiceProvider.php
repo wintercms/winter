@@ -1,19 +1,25 @@
 <?php namespace Cms;
 
 use App;
+use Url;
+use Lang;
+use File;
 use Event;
 use Backend;
 use BackendMenu;
 use BackendAuth;
-use Backend\Models\UserRole;
-use Backend\Classes\WidgetManager;
-use October\Rain\Support\ModuleServiceProvider;
-use System\Classes\SettingsManager;
-use Cms\Classes\ComponentManager;
-use Cms\Classes\Page as CmsPage;
-use Cms\Classes\CmsObject;
-use Cms\Models\ThemeData;
 use Cms\Models\ThemeLog;
+use Cms\Models\ThemeData;
+use Cms\Classes\CmsObject;
+use Backend\Models\UserRole;
+use Cms\Classes\Page as CmsPage;
+use Cms\Classes\ComponentManager;
+use System\Classes\CombineAssets;
+use Cms\Classes\Theme as CmsTheme;
+use Backend\Classes\WidgetManager;
+use System\Classes\SettingsManager;
+
+use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
 {
@@ -26,6 +32,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         parent::register('cms');
 
+        $this->registerAssetBundles();
         $this->registerComponents();
         $this->registerThemeLogging();
         $this->registerCombinerEvents();
@@ -54,6 +61,21 @@ class ServiceProvider extends ModuleServiceProvider
 
         $this->bootMenuItemEvents();
         $this->bootRichEditorEvents();
+
+        if (App::runningInBackend()) {
+            $this->bootBackendLocalization();
+        }
+    }
+
+    /**
+     * Register asset bundles
+     */
+    protected function registerAssetBundles()
+    {
+        CombineAssets::registerCallback(function ($combiner) {
+            $combiner->registerBundle('~/modules/cms/assets/less/winter.components.less');
+            $combiner->registerBundle('~/modules/cms/assets/less/winter.theme-selector.less');
+        });
     }
 
     /**
@@ -102,7 +124,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendNavigation()
     {
         BackendMenu::registerCallback(function ($manager) {
-            $manager->registerMenuItems('October.Cms', [
+            $manager->registerMenuItems('Winter.Cms', [
                 'cms' => [
                     'label'       => 'cms::lang.cms.menu_label',
                     'icon'        => 'icon-magic',
@@ -167,6 +189,19 @@ class ServiceProvider extends ModuleServiceProvider
                     ]
                 ]
             ]);
+            $manager->registerQuickActions('Winter.Cms', [
+                'preview' => [
+                    'label'      => 'backend::lang.tooltips.preview_website',
+                    'icon'       => 'icon-crosshairs',
+                    'url'        => Url::to('/'),
+                    'order'      => 10,
+                    'attributes' => [
+                        'target' => '_blank',
+                        'rel'    => 'noopener noreferrer',
+                    ],
+                ],
+            ]);
+            $manager->registerOwnerAlias('Winter.Cms', 'October.Cms');
         });
     }
 
@@ -189,7 +224,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendPermissions()
     {
         BackendAuth::registerCallback(function ($manager) {
-            $manager->registerPermissions('October.Cms', [
+            $manager->registerPermissions('Winter.Cms', [
                 'cms.manage_content' => [
                     'label' => 'cms::lang.permissions.manage_content',
                     'tab' => 'cms::lang.permissions.name',
@@ -232,6 +267,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'order' => 100
                 ],
             ]);
+            $manager->registerPermissionOwnerAlias('Winter.Cms', 'October.Cms');
         });
     }
 
@@ -251,7 +287,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendSettings()
     {
         SettingsManager::instance()->registerCallback(function ($manager) {
-            $manager->registerSettingItems('October.Cms', [
+            $manager->registerSettingItems('Winter.Cms', [
                 'theme' => [
                     'label'       => 'cms::lang.theme.settings_menu',
                     'description' => 'cms::lang.theme.settings_menu_description',
@@ -281,7 +317,26 @@ class ServiceProvider extends ModuleServiceProvider
                     'keywords'    => 'theme change log'
                 ]
             ]);
+            $manager->registerOwnerAlias('Winter.Cms', 'October.Cms');
         });
+    }
+
+    /**
+     * Boots localization from an active theme for backend items.
+     */
+    protected function bootBackendLocalization()
+    {
+        $theme = CmsTheme::getActiveTheme();
+
+        if (is_null($theme)) {
+            return;
+        }
+
+        $langPath = $theme->getPath() . '/lang';
+
+        if (File::isDirectory($langPath)) {
+            Lang::addNamespace('themes.' . $theme->getId(), $langPath);
+        }
     }
 
     /**

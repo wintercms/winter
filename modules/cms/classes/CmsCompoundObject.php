@@ -9,7 +9,7 @@ use Cms\Twig\Extension as CmsTwigExtension;
 use Cms\Components\ViewBag;
 use Cms\Helpers\Cms as CmsHelpers;
 use System\Twig\Extension as SystemTwigExtension;
-use October\Rain\Halcyon\Processors\SectionParser;
+use Winter\Storm\Halcyon\Processors\SectionParser;
 use Twig\Source as TwigSource;
 use Twig\Environment as TwigEnvironment;
 use ApplicationException;
@@ -19,7 +19,7 @@ use ApplicationException;
  * The class implements functionality for the compound object file parsing. It also provides a way
  * to access parameters defined in the INI settings section as the object properties.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CmsCompoundObject extends CmsObject
@@ -98,6 +98,16 @@ class CmsCompoundObject extends CmsObject
      */
     public function beforeSave()
     {
+        // Ignore line-ending only changes to the code property to avoid triggering safe mode
+        // when no changes actually occurred, it was just the browser reformatting line endings
+        if ($this->isDirty('code')) {
+            $oldCode = str_replace("\n", "\r\n", str_replace("\r", '', $this->getOriginal('code')));
+            $newCode = str_replace("\n", "\r\n", str_replace("\r", '', $this->code));
+            if ($oldCode === $newCode) {
+                $this->code = $this->getOriginal('code');
+            }
+        }
+        
         $this->checkSafeMode();
     }
 
@@ -105,7 +115,7 @@ class CmsCompoundObject extends CmsObject
      * Create a new Collection instance.
      *
      * @param  array  $models
-     * @return \October\Rain\Halcyon\Collection
+     * @return \Winter\Storm\Halcyon\Collection
      */
     public function newCollection(array $models = [])
     {
@@ -316,7 +326,8 @@ class CmsCompoundObject extends CmsObject
 
         self::$objectComponentPropertyMap = $objectComponentMap;
 
-        Cache::put($key, base64_encode(serialize($objectComponentMap)), Config::get('cms.parsedPageCacheTTL', 10));
+        $expiresAt = now()->addMinutes(Config::get('cms.parsedPageCacheTTL', 10));
+        Cache::put($key, base64_encode(serialize($objectComponentMap)), $expiresAt);
 
         if (array_key_exists($componentName, $objectComponentMap[$objectCode])) {
             return $objectComponentMap[$objectCode][$componentName];

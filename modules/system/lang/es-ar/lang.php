@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Getting back to basics',
     ],
     'directory' => [
@@ -36,7 +36,7 @@ return [
         'unnamed' => 'Plugin sin nombre',
         'name' => [
             'label' => 'Nombre del plugin',
-            'help' => 'Buscar el plugin por su nombre de codigo unico. Por ejemplo: RainLab.Blog',
+            'help' => 'Buscar el plugin por su nombre de codigo unico. Por ejemplo: Winter.Blog',
         ],
     ],
     'plugins' => [

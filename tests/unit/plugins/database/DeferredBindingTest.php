@@ -2,11 +2,11 @@
 
 use Database\Tester\Models\Post;
 use Database\Tester\Models\Author;
-use October\Rain\Database\Models\DeferredBinding;
+use Winter\Storm\Database\Models\DeferredBinding;
 
 class DeferredBindingTest extends PluginTestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 

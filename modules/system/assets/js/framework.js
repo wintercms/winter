@@ -1,15 +1,15 @@
 /* ========================================================================
- * OctoberCMS: front-end JavaScript framework
- * http://octobercms.com
+ * Winter CMS: front-end JavaScript framework
+ * http://wintercms.com
  * ========================================================================
  * Copyright 2016-2020 Alexey Bobkov, Samuel Georges
  * ======================================================================== */
 
 if (window.jQuery === undefined) {
-    throw new Error('The jQuery library is not loaded. The OctoberCMS framework cannot be initialized.');
+    throw new Error('The jQuery library is not loaded. The Winter CMS framework cannot be initialized.');
 }
 if (window.jQuery.request !== undefined) {
-    throw new Error('The OctoberCMS framework is already loaded.');
+    throw new Error('The Winter CMS framework is already loaded.');
 }
 
 +function ($) { "use strict";
@@ -71,12 +71,12 @@ if (window.jQuery.request !== undefined) {
          * Request headers
          */
         var requestHeaders = {
-            'X-OCTOBER-REQUEST-HANDLER': handler,
-            'X-OCTOBER-REQUEST-PARTIALS': this.extractPartials(options.update)
+            'X-WINTER-REQUEST-HANDLER': handler,
+            'X-WINTER-REQUEST-PARTIALS': this.extractPartials(options.update)
         }
 
         if (useFlash) {
-            requestHeaders['X-OCTOBER-REQUEST-FLASH'] = 1
+            requestHeaders['X-WINTER-REQUEST-FLASH'] = 1
         }
 
         var csrfToken = getXSRFToken()
@@ -152,8 +152,8 @@ if (window.jQuery.request !== undefined) {
                 $triggerEl.trigger(_event, [context, data, textStatus, jqXHR])
                 if (_event.isDefaultPrevented()) return
 
-                if (useFlash && data['X_OCTOBER_FLASH_MESSAGES']) {
-                    $.each(data['X_OCTOBER_FLASH_MESSAGES'], function(type, message) {
+                if (useFlash && data['X_WINTER_FLASH_MESSAGES']) {
+                    $.each(data['X_WINTER_FLASH_MESSAGES'], function(type, message) {
                         requestOptions.handleFlashMessage(message, type)
                     })
                 }
@@ -188,7 +188,7 @@ if (window.jQuery.request !== undefined) {
                  * processed in the same fashion as a successful response.
                  */
                 if (jqXHR.status == 406 && jqXHR.responseJSON) {
-                    errorMsg = jqXHR.responseJSON['X_OCTOBER_ERROR_MESSAGE']
+                    errorMsg = jqXHR.responseJSON['X_WINTER_ERROR_MESSAGE']
                     updatePromise = requestOptions.handleUpdateResponse(jqXHR.responseJSON, textStatus, jqXHR)
                 }
                 /*
@@ -288,6 +288,11 @@ if (window.jQuery.request !== undefined) {
              */
             handleRedirectResponse: function(url) {
                 window.location.assign(url)
+                // Indicate that the AJAX request is finished if we're still on the current page
+                // so that the loading indicator for redirects that cause a browser to download 
+                // a file instead of leave the page will properly stop.
+                // @see https://github.com/octobercms/october/issues/5055
+                $el.trigger('ajaxDone')
             },
 
             /*
@@ -331,8 +336,8 @@ if (window.jQuery.request !== undefined) {
                 /*
                  * Handle redirect
                  */
-                if (data['X_OCTOBER_REDIRECT']) {
-                    options.redirect = data['X_OCTOBER_REDIRECT']
+                if (data['X_WINTER_REDIRECT']) {
+                    options.redirect = data['X_WINTER_REDIRECT']
                     isRedirect = true
                 }
 
@@ -343,15 +348,15 @@ if (window.jQuery.request !== undefined) {
                 /*
                  * Handle validation
                  */
-                if (data['X_OCTOBER_ERROR_FIELDS']) {
-                    requestOptions.handleValidationMessage(data['X_OCTOBER_ERROR_MESSAGE'], data['X_OCTOBER_ERROR_FIELDS'])
+                if (data['X_WINTER_ERROR_FIELDS']) {
+                    requestOptions.handleValidationMessage(data['X_WINTER_ERROR_MESSAGE'], data['X_WINTER_ERROR_FIELDS'])
                 }
 
                 /*
                  * Handle asset injection
                  */
-                 if (data['X_OCTOBER_ASSETS']) {
-                    assetManager.load(data['X_OCTOBER_ASSETS'], $.proxy(updatePromise.resolve, updatePromise))
+                 if (data['X_WINTER_ASSETS']) {
+                    assetManager.load(data['X_WINTER_ASSETS'], $.proxy(updatePromise.resolve, updatePromise))
                  }
                  else {
                     updatePromise.resolve()
@@ -584,7 +589,7 @@ if (window.jQuery.request !== undefined) {
 }(window.jQuery);
 
 /*
- * October CMS JSON Parser
+ * Winter CMS JSON Parser
  */
 +function(window) { "use strict";
     function parseKey(str, pos, quote) {
@@ -904,6 +909,74 @@ if (window.jQuery.request !== undefined) {
     window.ocJSON = function(json) {
         var jsonString = parse(json);
         return JSON.parse(jsonString);
+    };
+
+}(window);
+
+/*
+ * Winter CMS jQuery HTML Sanitizer
+ * @see https://gist.github.com/ufologist/5a0da51b2b9ef1b861c30254172ac3c9
+ */
++function(window) { "use strict";
+
+    function trimAttributes(node) {
+        $.each(node.attributes, function() {
+            var attrName = this.name;
+            var attrValue = this.value;
+
+            /*
+             * remove attributes where the names start with "on" (for example: onload, onerror...)
+             * remove attributes where the value starts with the "javascript:" pseudo protocol (for example href="javascript:alert(1)")
+             */
+            if (attrName.indexOf('on') == 0 || attrValue.indexOf('javascript:') == 0) {
+                $(node).removeAttr(attrName);
+            }
+        });
+    }
+
+    function sanitize(html) {
+        /*
+         * [jQuery.parseHTML(data [, context ] [, keepScripts ])](http://api.jquery.com/jQuery.parseHTML/) added: 1.8
+         * Parses a string into an array of DOM nodes.
+         *
+         * By default, the context is the current document if not specified or given as null or undefined. If the HTML was to be used
+         * in another document such as an iframe, that frame's document could be used.
+         *
+         * As of 3.0 the default behavior is changed.
+         *
+         * If the context is not specified or given as null or undefined, a new document is used.
+         * This can potentially improve security because inline events will not execute when the HTML is parsed. Once the parsed HTML
+         * is injected into a document it does execute, but this gives tools a chance to traverse the created DOM and remove anything
+         * deemed unsafe. This improvement does not apply to internal uses of jQuery.parseHTML as they usually pass in the current
+         * document. Therefore, a statement like $( "#log" ).append( $( htmlString ) ) is still subject to the injection of malicious code.
+         *
+         * without context do not execute script
+         * $.parseHTML('<div><img src=1 onerror=alert(1)></div>');
+         * $.parseHTML('<div><img src=1 onerror=alert(2)></div>', null);
+         *
+         * with context document execute script!
+         * $.parseHTML('<div><img src=1 onerror=alert(3)></div>', document);
+         *
+         * Most jQuery APIs that accept HTML strings will run scripts that are included in the HTML. jQuery.parseHTML does not run scripts
+         * in the parsed HTML unless keepScripts is explicitly true. However, it is still possible in most environments to execute scripts
+         * indirectly, for example via the <img onerror> attribute.
+         *
+         * will return []
+         * $.parseHTML('<script>alert(1)<\/script>', null, false);
+         *
+         * will return [script DOM element]
+         * $.parseHTML('<script>alert(1)<\/script>', null, true);
+         */
+        var output = $($.parseHTML('<div>' + html + '</div>', null, false));
+        output.find('*').each(function() {
+            trimAttributes(this);
+        });
+        return output.html();
+    }
+
+    // Global function
+    window.ocSanitize = function(html) {
+        return sanitize(html)
     };
 
 }(window);

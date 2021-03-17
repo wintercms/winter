@@ -5,7 +5,7 @@ use Database\Tester\Models\Phone;
 
 class HasOneModelTest extends PluginTestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -18,7 +18,7 @@ class HasOneModelTest extends PluginTestCase
     public function testSetRelationValue()
     {
         Model::unguard();
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $phone1 = Phone::create(['number' => '0404040404']);
         $phone2 = Phone::create(['number' => '0505050505']);
         $phone3 = Phone::make(['number' => '0606060606']);
@@ -62,7 +62,7 @@ class HasOneModelTest extends PluginTestCase
     public function testSetRelationValueTwice()
     {
         Model::unguard();
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $phone = Phone::create(['number' => '0505050505']);
         Model::reguard();
 

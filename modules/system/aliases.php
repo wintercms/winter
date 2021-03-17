@@ -16,10 +16,8 @@ return [
     'Eloquent'  => Illuminate\Database\Eloquent\Model::class,
     'Event'     => Illuminate\Support\Facades\Event::class,
     'Hash'      => Illuminate\Support\Facades\Hash::class,
-    'Input'     => Illuminate\Support\Facades\Input::class,
     'Lang'      => Illuminate\Support\Facades\Lang::class,
     'Log'       => Illuminate\Support\Facades\Log::class,
-    'Mail'      => Illuminate\Support\Facades\Mail::class,
     'Queue'     => Illuminate\Support\Facades\Queue::class,
     'Redirect'  => Illuminate\Support\Facades\Redirect::class,
     'Redis'     => Illuminate\Support\Facades\Redis::class,
@@ -30,34 +28,45 @@ return [
     'Storage'   => Illuminate\Support\Facades\Storage::class,
     'Url'       => Illuminate\Support\Facades\URL::class, // Preferred
     'URL'       => Illuminate\Support\Facades\URL::class,
-    'Validator' => Illuminate\Support\Facades\Validator::class,
     'View'      => Illuminate\Support\Facades\View::class,
 
     /*
-     * October aliases
+     * Winter aliases
      */
-    'Model'           => October\Rain\Database\Model::class,
-    'Block'           => October\Rain\Support\Facades\Block::class,
-    'File'            => October\Rain\Support\Facades\File::class,
-    'Config'          => October\Rain\Support\Facades\Config::class,
-    'Seeder'          => October\Rain\Database\Updates\Seeder::class,
-    'Flash'           => October\Rain\Support\Facades\Flash::class,
-    'Form'            => October\Rain\Support\Facades\Form::class,
-    'Html'            => October\Rain\Support\Facades\Html::class,
-    'Http'            => October\Rain\Support\Facades\Http::class,
-    'Str'             => October\Rain\Support\Facades\Str::class,
-    'Markdown'        => October\Rain\Support\Facades\Markdown::class,
-    'Yaml'            => October\Rain\Support\Facades\Yaml::class,
-    'Ini'             => October\Rain\Support\Facades\Ini::class,
-    'Twig'            => October\Rain\Support\Facades\Twig::class,
-    'DbDongle'        => October\Rain\Support\Facades\DbDongle::class,
-    'Schema'          => October\Rain\Support\Facades\Schema::class,
-    'Cms'             => Cms\Facades\Cms::class,
-    'Backend'         => Backend\Facades\Backend::class,
-    'BackendMenu'     => Backend\Facades\BackendMenu::class,
-    'BackendAuth'     => Backend\Facades\BackendAuth::class,
-    'AjaxException'        => October\Rain\Exception\AjaxException::class,
-    'SystemException'      => October\Rain\Exception\SystemException::class,
-    'ApplicationException' => October\Rain\Exception\ApplicationException::class,
-    'ValidationException'  => October\Rain\Exception\ValidationException::class,
+    'AjaxException'        => Winter\Storm\Exception\AjaxException::class,
+    'ApplicationException' => Winter\Storm\Exception\ApplicationException::class,
+    'BackendAuth'          => Backend\Facades\BackendAuth::class,
+    'Backend'              => Backend\Facades\Backend::class,
+    'BackendMenu'          => Backend\Facades\BackendMenu::class,
+    'Block'                => Winter\Storm\Support\Facades\Block::class,
+    'Cms'                  => Cms\Facades\Cms::class,
+    'Config'               => Winter\Storm\Support\Facades\Config::class,
+    'DbDongle'             => Winter\Storm\Support\Facades\DbDongle::class,
+    'File'                 => Winter\Storm\Support\Facades\File::class,
+    'Flash'                => Winter\Storm\Support\Facades\Flash::class,
+    'Form'                 => Winter\Storm\Support\Facades\Form::class,
+    'Html'                 => Winter\Storm\Support\Facades\Html::class,
+    'Http'                 => Winter\Storm\Support\Facades\Http::class,
+    'Ini'                  => Winter\Storm\Support\Facades\Ini::class,
+    'Input'                => Winter\Storm\Support\Facades\Input::class,
+    'Mail'                 => Winter\Storm\Support\Facades\Mail::class,
+    'Markdown'             => Winter\Storm\Support\Facades\Markdown::class,
+    'Model'                => Winter\Storm\Database\Model::class,
+    'Schema'               => Winter\Storm\Support\Facades\Schema::class,
+    'Seeder'               => Winter\Storm\Database\Updates\Seeder::class,
+    'Str'                  => Winter\Storm\Support\Facades\Str::class,
+    'SystemException'      => Winter\Storm\Exception\SystemException::class,
+    'Twig'                 => Winter\Storm\Support\Facades\Twig::class,
+    'ValidationException'  => Winter\Storm\Exception\ValidationException::class,
+    'Validator'            => Winter\Storm\Support\Facades\Validator::class,
+    'Yaml'                 => Winter\Storm\Support\Facades\Yaml::class,
+
+    /*
+     * Fallback aliases
+     */
+    // Input facade was removed in Laravel 6 - we are keeping it in the Storm library for backwards compatibility.
+    'Illuminate\Support\Facades\Input' => Winter\Storm\Support\Facades\Input::class,
+
+    // Illuminate's HtmlDumper was "dumped" in Laravel 6 - we'll route this to Symfony's HtmlDumper as Laravel have done.
+    'Illuminate\Support\Debug\HtmlDumper' => Symfony\Component\VarDumper\Dumper\HtmlDumper::class,
 ];

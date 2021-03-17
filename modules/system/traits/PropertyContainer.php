@@ -6,7 +6,7 @@
  * Adds properties and methods for classes that could define properties,
  * like components or report widgets.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 
@@ -86,7 +86,7 @@ trait PropertyContainer
      * Returns a defined property value or default if one is not set.
      * @param string $name The property name to look for.
      * @param string $default A default value to return if no name is found.
-     * @return string The property value or the default specified.
+     * @return mixed The property value or the default specified.
      */
     public function property($name, $default = null)
     {

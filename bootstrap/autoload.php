@@ -13,7 +13,7 @@ define('LARAVEL_START', microtime(true));
 |
 */
 
-$helperPath = __DIR__.'/../vendor/october/rain/src/Support/helpers.php';
+$helperPath = __DIR__.'/../vendor/winter/storm/src/Support/helpers.php';
 
 if (!file_exists($helperPath)) {
     echo 'Missing vendor files, try running "composer install" or use the Wizard installer.'.PHP_EOL;
@@ -35,20 +35,3 @@ require $helperPath;
 */
 
 require __DIR__.'/../vendor/autoload.php';
-
-/*
-|--------------------------------------------------------------------------
-| Include The Compiled Class File
-|--------------------------------------------------------------------------
-|
-| To dramatically increase your application's performance, you may use a
-| compiled class file which contains all of the classes commonly used
-| by a request. The Artisan "optimize" is used to create this file.
-|
-*/
-
-$compiledPath = __DIR__.'/../storage/framework/compiled.php';
-
-if (file_exists($compiledPath)) {
-    require $compiledPath;
-}

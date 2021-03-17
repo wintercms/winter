@@ -1,6 +1,6 @@
 <?php
 
-namespace October\Tests\Fixtures\Backend\Models;
+namespace Winter\Tests\Fixtures\Backend\Models;
 
 use Backend\Models\User;
 

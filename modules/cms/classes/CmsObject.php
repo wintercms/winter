@@ -4,22 +4,23 @@ use App;
 use Lang;
 use Event;
 use Config;
-use October\Rain\Halcyon\Model as HalcyonModel;
-use Cms\Contracts\CmsObject as CmsObjectContract;
-use ApplicationException;
-use ValidationException;
 use Exception;
+use ValidationException;
+use ApplicationException;
+use Cms\Contracts\CmsObject as CmsObjectContract;
+use Winter\Storm\Filesystem\PathResolver;
+use Winter\Storm\Halcyon\Model as HalcyonModel;
 
 /**
  * This is a base class for all CMS objects - content files, pages, partials and layouts.
  * The class implements basic operations with file-based templates.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CmsObject extends HalcyonModel implements CmsObjectContract
 {
-    use \October\Rain\Halcyon\Traits\Validation;
+    use \Winter\Storm\Halcyon\Traits\Validation;
 
     /**
      * @var array The rules to be applied to the data.
@@ -35,6 +36,13 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * @var array The array of custom error messages.
      */
     public $customMessages = [];
+
+    /**
+     * @var int The maximum allowed path nesting level. The default value is 2,
+     * meaning that files can only exist in the root directory, or in a
+     * subdirectory. Set to null if any level is allowed.
+     */
+    protected $maxNesting = null;
 
     /**
      * @var array The attributes that are mass assignable.
@@ -151,7 +159,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
          *         \Event::listen('cms.object.listInTheme', function ($cmsObject, $objectList) {
          *             // Get the current context of the Settings Manager to ensure we only affect what we need to affect
          *             $context = \System\Classes\SettingsManager::instance()->getContext();
-         *             if ($context->owner === 'october.cms' && $context->itemCode === 'maintenance_settings') {
+         *             if ($context->owner === 'winter.cms' && $context->itemCode === 'maintenance_settings') {
          *                 // Double check that this is a Page List that we're modifying
          *                 if ($cmsObject instanceof \Cms\Classes\Page) {
          *                     // Perform filtering with an original-object modifying method as $objectList is passed by reference (being that it's an object)
@@ -227,7 +235,15 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
             $fileName = $this->fileName;
         }
 
-        return $this->theme->getPath().'/'.$this->getObjectTypeDirName().'/'.$fileName;
+        $directory = $this->theme->getPath() . '/' . $this->getObjectTypeDirName() . '/';
+        $filePath = $directory . $fileName;
+
+        // Limit paths to those under the corresponding theme directory
+        if (!PathResolver::within($filePath, $directory)) {
+            return false;
+        }
+
+        return PathResolver::resolve($filePath);
     }
 
     /**
@@ -306,12 +322,12 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      */
     protected function throwHalcyonSaveException(Exception $ex)
     {
-        if ($ex instanceof \October\Rain\Halcyon\Exception\MissingFileNameException) {
+        if ($ex instanceof \Winter\Storm\Halcyon\Exception\MissingFileNameException) {
             throw new ValidationException([
                 'fileName' => Lang::get('cms::lang.cms_object.file_name_required')
             ]);
         }
-        elseif ($ex instanceof \October\Rain\Halcyon\Exception\InvalidExtensionException) {
+        elseif ($ex instanceof \Winter\Storm\Halcyon\Exception\InvalidExtensionException) {
             throw new ValidationException(['fileName' =>
                 Lang::get('cms::lang.cms_object.invalid_file_extension', [
                     'allowed' => implode(', ', $ex->getAllowedExtensions()),
@@ -319,22 +335,22 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
                 ])
             ]);
         }
-        elseif ($ex instanceof \October\Rain\Halcyon\Exception\InvalidFileNameException) {
+        elseif ($ex instanceof \Winter\Storm\Halcyon\Exception\InvalidFileNameException) {
             throw new ValidationException([
                'fileName' => Lang::get('cms::lang.cms_object.invalid_file', ['name'=>$ex->getInvalidFileName()])
             ]);
         }
-        elseif ($ex instanceof \October\Rain\Halcyon\Exception\FileExistsException) {
+        elseif ($ex instanceof \Winter\Storm\Halcyon\Exception\FileExistsException) {
             throw new ApplicationException(
                 Lang::get('cms::lang.cms_object.file_already_exists', ['name' => $ex->getInvalidPath()])
             );
         }
-        elseif ($ex instanceof \October\Rain\Halcyon\Exception\CreateDirectoryException) {
+        elseif ($ex instanceof \Winter\Storm\Halcyon\Exception\CreateDirectoryException) {
             throw new ApplicationException(
                 Lang::get('cms::lang.cms_object.error_creating_directory', ['name' => $ex->getInvalidPath()])
             );
         }
-        elseif ($ex instanceof \October\Rain\Halcyon\Exception\CreateFileException) {
+        elseif ($ex instanceof \Winter\Storm\Halcyon\Exception\CreateFileException) {
             throw new ApplicationException(
                 Lang::get('cms::lang.cms_object.error_saving', ['name' => $ex->getInvalidPath()])
             );

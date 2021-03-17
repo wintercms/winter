@@ -5,8 +5,8 @@ use File;
 use Cache;
 use Config;
 use Event;
-use October\Rain\Router\Router as RainRouter;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Router\Router as StormRouter;
+use Winter\Storm\Router\Helper as RouterHelper;
 
 /**
  * The router parses page URL patterns and finds pages by URLs.
@@ -30,7 +30,7 @@ use October\Rain\Router\Helper as RouterHelper;
  * /blog/:post_id|^[0-9]+$ - this will match /blog/post/3
  * /blog/:post_name?|^[a-z0-9\-]+$ - this will match /blog/my-blog-post</pre>
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Router
@@ -56,7 +56,7 @@ class Router
     protected $urlMap = [];
 
     /**
-     * October\Rain\Router\Router Router object with routes preloaded.
+     * Winter\Storm\Router\Router Router object with routes preloaded.
      */
     protected $routerObj;
 
@@ -127,10 +127,11 @@ class Router
                             : $fileName;
 
                         $key = $this->getUrlListCacheKey();
+                        $expiresAt = now()->addMinutes(Config::get('cms.urlCacheTtl', 1));
                         Cache::put(
                             $key,
                             base64_encode(serialize($urlList)),
-                            Config::get('cms.urlCacheTtl', 1)
+                            $expiresAt
                         );
                     }
                 }
@@ -190,7 +191,7 @@ class Router
         /*
          * Load up each route rule
          */
-        $router = new RainRouter();
+        $router = new StormRouter();
         foreach ($this->getUrlMap() as $pageInfo) {
             $router->route($pageInfo['file'], $pageInfo['pattern']);
         }
@@ -251,7 +252,8 @@ class Router
 
             $this->urlMap = $map;
             if ($cacheable) {
-                Cache::put($key, base64_encode(serialize($map)), Config::get('cms.urlCacheTtl', 1));
+                $expiresAt = now()->addMinutes(Config::get('cms.urlCacheTtl', 1));
+                Cache::put($key, base64_encode(serialize($map)), $expiresAt);
             }
 
             return false;
@@ -304,10 +306,13 @@ class Router
      * @param  string|null $default
      * @return string|null
      */
-    public function getParameter(string $name, string $default = null)
+    public function getParameter($name, $default = null)
     {
-        $value = $this->parameters[$name] ?? '';
-        return $value !== '' ? $value : $default;
+        if (isset($this->parameters[$name]) && ($this->parameters[$name] === '0' || !empty($this->parameters[$name]))) {
+            return $this->parameters[$name];
+        }
+
+        return $default;
     }
 
     /**

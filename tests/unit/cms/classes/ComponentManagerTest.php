@@ -9,16 +9,16 @@ use Cms\Classes\ComponentManager;
 
 class ComponentManagerTest extends TestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Post.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/MainMenu.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/ContentBlock.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Comments.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/classes/Users.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Archive.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Post.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/MainMenu.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/ContentBlock.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Comments.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/classes/Users.php';
     }
 
 
@@ -74,10 +74,10 @@ class ComponentManagerTest extends TestCase
         $manager = ComponentManager::instance();
 
         $component = $manager->resolve('testArchive');
-        $this->assertEquals('\October\Tester\Components\Archive', $component);
+        $this->assertEquals('\Winter\Tester\Components\Archive', $component);
 
         $component = $manager->resolve('testPost');
-        $this->assertEquals('\October\Tester\Components\Post', $component);
+        $this->assertEquals('\Winter\Tester\Components\Post', $component);
     }
 
     public function testHasComponent()
@@ -86,16 +86,16 @@ class ComponentManagerTest extends TestCase
         $result = $manager->hasComponent('testArchive');
         $this->assertTrue($result);
 
-        $result = $manager->hasComponent('October\Tester\Components\Archive');
+        $result = $manager->hasComponent('Winter\Tester\Components\Archive');
         $this->assertTrue($result);
 
-        $result = $manager->hasComponent('October\Tester\Components\Post');
+        $result = $manager->hasComponent('Winter\Tester\Components\Post');
         $this->assertTrue($result);
     }
 
     public function testMakeComponent()
     {
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Archive.php';
 
         $pageObj = $this->spoofPageCode();
 
@@ -114,7 +114,7 @@ class ComponentManagerTest extends TestCase
 
     public function testDefineProperties()
     {
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/components/Archive.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/components/Archive.php';
         $manager = ComponentManager::instance();
         $object = $manager->makeComponent('testArchive');
         $details = $object->componentDetails();

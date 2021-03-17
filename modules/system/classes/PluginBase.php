@@ -10,7 +10,7 @@ use Backend;
 /**
  * Plugin base class
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PluginBase extends ServiceProviderBase
@@ -117,6 +117,29 @@ class PluginBase extends ServiceProviderBase
             }
 
             return $navigation;
+        }
+    }
+
+    /**
+     * Registers back-end quick actions for this plugin.
+     *
+     * @return array
+     */
+    public function registerQuickActions()
+    {
+        $configuration = $this->getConfigurationFromYaml();
+        if (array_key_exists('quickActions', $configuration)) {
+            $quickActions = $configuration['quickActions'];
+
+            if (is_array($quickActions)) {
+                array_walk_recursive($quickActions, function (&$item, $key) {
+                    if ($key === 'url') {
+                        $item = Backend::url($item);
+                    }
+                });
+            }
+
+            return $quickActions;
         }
     }
 

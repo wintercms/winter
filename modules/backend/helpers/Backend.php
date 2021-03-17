@@ -6,7 +6,8 @@ use Html;
 use Config;
 use Request;
 use Redirect;
-use October\Rain\Router\Helper as RouterHelper;
+use Exception;
+use Winter\Storm\Router\Helper as RouterHelper;
 use System\Helpers\DateTime as DateTimeHelper;
 use Backend\Classes\Skin;
 use Backend\Helpers\Exception\DecompileException;
@@ -14,7 +15,7 @@ use Backend\Helpers\Exception\DecompileException;
 /**
  * Backend Helper
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @see \Backend\Facades\Backend
  * @author Alexey Bobkov, Samuel Georges
  */
@@ -83,6 +84,26 @@ class Backend
     public function redirectIntended($path, $status = 302, $headers = [], $secure = null)
     {
         return Redirect::intended($this->uri() . '/' . $path, $status, $headers, $secure);
+    }
+
+    /**
+     * Convert mixed inputs to a Carbon object and sets the backend timezone on that object
+     *
+     * @return \Carbon\Carbon
+     */
+    public static function makeCarbon($value, $throwException = true)
+    {
+        $carbon = DateTimeHelper::makeCarbon($value, $throwException);
+
+        try {
+            // Find user preference
+            $carbon->setTimezone(\Backend\Models\Preference::get('timezone'));
+        } catch (Exception $ex) {
+            // Use system default
+            $carbon->setTimezone(Config::get('backend.timezone', Config::get('app.timezone')));
+        }
+
+        return $carbon;
     }
 
     /**
@@ -214,14 +235,14 @@ class Backend
         $contents = file_get_contents($assetFile);
 
         // Find all assets that are compiled in this file
-        preg_match_all('/^=require\s+([A-z0-9-_+\.\/]+)$/m', $contents, $matches, PREG_SET_ORDER);
+        preg_match_all('/^=require\s+([A-z0-9-_+\.\/]+)[\n|\r\n|$]/m', $contents, $matches, PREG_SET_ORDER);
 
         // Determine correct asset path
         $directory = str_replace(basename($file), '', $file);
 
         if (count($matches)) {
             $results = array_map(function ($match) use ($directory) {
-                return $directory . $match[1];
+                return str_replace('/', DIRECTORY_SEPARATOR, $directory . $match[1]);
             }, $matches);
 
             foreach ($results as $i => $result) {

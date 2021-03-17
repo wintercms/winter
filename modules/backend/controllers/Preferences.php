@@ -11,7 +11,7 @@ use Backend\Models\Preference as PreferenceModel;
 /**
  * Editor Settings controller
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */
@@ -42,8 +42,8 @@ class Preferences extends Controller
         $this->addJs('/modules/backend/formwidgets/codeeditor/assets/js/build-min.js', 'core');
         $this->addJs('/modules/backend/assets/js/preferences/preferences.js', 'core');
 
-        BackendMenu::setContext('October.System', 'system', 'mysettings');
-        SettingsManager::setContext('October.Backend', 'preferences');
+        BackendMenu::setContext('Winter.System', 'system', 'mysettings');
+        SettingsManager::setContext('Winter.Backend', 'preferences');
     }
 
     public function index()
@@ -57,7 +57,7 @@ class Preferences extends Controller
      */
     public function formExtendFields($form)
     {
-        if (!$this->user->hasAccess('backend.manage_editor')) {
+        if (!$this->user->hasAccess('backend.manage_own_editor')) {
             $form->removeTab('backend::lang.backend_preferences.code_editor');
         }
     }

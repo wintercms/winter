@@ -7,8 +7,8 @@ use Backend\Classes\FormField;
 use Backend\Classes\WidgetBase;
 use Backend\Classes\WidgetManager;
 use Backend\Classes\FormWidgetBase;
-use October\Rain\Database\Model;
-use October\Rain\Html\Helper as HtmlHelper;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Html\Helper as HtmlHelper;
 use ApplicationException;
 use Exception;
 use BackendAuth;
@@ -17,7 +17,7 @@ use BackendAuth;
  * Form Widget
  * Used for building back end forms and renders a form.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Form extends WidgetBase
@@ -160,7 +160,7 @@ class Form extends WidgetBase
      */
     protected function loadAssets()
     {
-        $this->addJs('js/october.form.js', 'core');
+        $this->addJs('js/winter.form.js', 'core');
     }
 
     /**
@@ -579,12 +579,12 @@ class Form extends WidgetBase
          *
          *     Event::listen('backend.form.extendFields', function ((\Backend\Widgets\Form) $formWidget) {
          *         // Only for the User controller
-         *         if (!$formWidget->getController() instanceof \RainLab\User\Controllers\Users) {
+         *         if (!$formWidget->getController() instanceof \Winter\User\Controllers\Users) {
          *             return;
          *         }
          *
          *         // Only for the User model
-         *         if (!$formWidget->model instanceof \RainLab\User\Models\User) {
+         *         if (!$formWidget->model instanceof \Winter\User\Models\User) {
          *             return;
          *         }
          *
@@ -605,12 +605,12 @@ class Form extends WidgetBase
          *
          *     $formWidget->bindEvent('form.extendFields', function () use ((\Backend\Widgets\Form $formWidget)) {
          *         // Only for the User controller
-         *         if (!$formWidget->getController() instanceof \RainLab\User\Controllers\Users) {
+         *         if (!$formWidget->getController() instanceof \Winter\User\Controllers\Users) {
          *             return;
          *         }
          *
          *         // Only for the User model
-         *         if (!$formWidget->model instanceof \RainLab\User\Models\User) {
+         *         if (!$formWidget->model instanceof \Winter\User\Models\User) {
          *             return;
          *         }
          *
@@ -737,7 +737,7 @@ class Form extends WidgetBase
                 $this->model->setValidationAttributeName($attrName, $fieldObj->label);
             }
 
-            $this->allFields[$name] = $fieldObj;
+            $this->allFields[$fieldObj->fieldName] = $fieldObj;
 
             switch (strtolower($addToArea)) {
                 case FormTabs::SECTION_PRIMARY:
@@ -1121,7 +1121,7 @@ class Form extends WidgetBase
 
     /**
      * Checks if default values should be taken from data.
-     * This should be done when model exists or when explicitly configured
+     * This should be done when the model does not exist or when explicitly configured
      */
     protected function shouldFetchDefaultValues()
     {
@@ -1254,7 +1254,7 @@ class Form extends WidgetBase
              *
              * Example usage:
              *
-             *     $model->bindEvent('model.form.filterFields', function ((\Backend\Widgets\Form) $formWidget, (stdClass) $fields, (string) $context) use (\October\Rain\Database\Model $model) {
+             *     $model->bindEvent('model.form.filterFields', function ((\Backend\Widgets\Form) $formWidget, (stdClass) $fields, (string) $context) use (\Winter\Storm\Database\Model $model) {
              *         if ($model->source_type == 'http') {
              *             $fields->source_url->hidden = false;
              *             $fields->git_branch->hidden = true;
@@ -1283,6 +1283,7 @@ class Form extends WidgetBase
     {
         /*
          * Advanced usage, supplied options are callable
+         * [\Path\To\Class, methodName]
          */
         if (is_array($fieldOptions) && is_callable($fieldOptions)) {
             $fieldOptions = call_user_func($fieldOptions, $this, $field);
@@ -1328,6 +1329,22 @@ class Form extends WidgetBase
          * Field options are an explicit method reference
          */
         elseif (is_string($fieldOptions)) {
+            // \Path\To\Class::staticMethodOptions
+            if (str_contains($fieldOptions, '::')) {
+                $options = explode('::', $fieldOptions);
+                if (count($options) === 2 && class_exists($options[0]) && method_exists($options[0], $options[1])) {
+                    $result = $options[0]::{$options[1]}($this, $field);
+                    if (!is_array($result)) {
+                        throw new ApplicationException(Lang::get('backend::lang.field.options_static_method_invalid_value', [
+                            'class' => $options[0],
+                            'method' => $options[1]
+                        ]));
+                    }
+                    return $result;
+                }
+            }
+
+            // $model->{$fieldOptions}()
             if (!$this->objectMethodExists($this->model, $fieldOptions)) {
                 throw new ApplicationException(Lang::get('backend::lang.field.options_method_not_exists', [
                     'model'  => get_class($this->model),

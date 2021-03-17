@@ -1,12 +1,12 @@
 <?php namespace Cms\Classes;
 
 use ArrayAccess;
-use October\Rain\Extension\Extendable;
+use Winter\Storm\Extension\Extendable;
 
 /**
  * Parent class for PHP classes created for layout and page code sections.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class CodeBase extends Extendable implements ArrayAccess

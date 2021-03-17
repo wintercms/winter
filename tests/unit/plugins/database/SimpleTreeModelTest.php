@@ -5,7 +5,7 @@ use Database\Tester\Models\CategorySimple;
 
 class SimpleTreeModelTest extends PluginTestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -103,7 +103,7 @@ class SimpleTreeModelTest extends PluginTestCase
             4 => '&nbsp;&nbsp;&nbsp;jQuery',
             5 => '&nbsp;&nbsp;&nbsp;Bootstrap',
             6 => '&nbsp;&nbsp;&nbsp;Laravel',
-            7 => '&nbsp;&nbsp;&nbsp;OctoberCMS',
+            7 => '&nbsp;&nbsp;&nbsp;Winter CMS',
             8 => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;September',
             9 => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;October',
             10 => '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;November',
@@ -126,7 +126,7 @@ class SimpleTreeModelTest extends PluginTestCase
             4 => '--jQuery',
             5 => '--Bootstrap',
             6 => '--Laravel',
-            7 => '--OctoberCMS',
+            7 => '--Winter CMS',
             8 => '----September',
             9 => '----October',
             10 => '----November',
@@ -149,7 +149,7 @@ class SimpleTreeModelTest extends PluginTestCase
             'jQuery' => '**4',
             'Bootstrap' => '**5',
             'Laravel' => '**6',
-            'OctoberCMS' => '**7',
+            'Winter CMS' => '**7',
             'September' => '****8',
             'October' => '****9',
             'November' => '****10',
@@ -165,12 +165,11 @@ class SimpleTreeModelTest extends PluginTestCase
         ], $array);
     }
 
-    /**
-     * @expectedException        \Exception
-     * @expectedExceptionMessage Column mismatch in listsNested method
-     */
     public function testListsNestedUnknownColumn()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Column mismatch in listsNested method');
+
         CategorySimple::listsNested('custom_name', 'id');
     }
 
@@ -185,7 +184,7 @@ class SimpleTreeModelTest extends PluginTestCase
             4 => '...jQuery (#4)',
             5 => '...Bootstrap (#5)',
             6 => '...Laravel (#6)',
-            7 => '...OctoberCMS (#7)',
+            7 => '...Winter CMS (#7)',
             8 => '......September (#8)',
             9 => '......October (#9)',
             10 => '......November (#10)',
@@ -215,10 +214,10 @@ class SimpleTreeModelTest extends PluginTestCase
         $webdev->children()->create(['name' => 'jQuery']);
         $webdev->children()->create(['name' => 'Bootstrap']);
         $webdev->children()->create(['name' => 'Laravel']);
-        $october = $webdev->children()->create(['name' => 'OctoberCMS']);
-        $october->children()->create(['name' => 'September']);
-        $october->children()->create(['name' => 'October']);
-        $october->children()->create(['name' => 'November']);
+        $winter = $webdev->children()->create(['name' => 'Winter CMS']);
+        $winter->children()->create(['name' => 'September']);
+        $winter->children()->create(['name' => 'October']);
+        $winter->children()->create(['name' => 'November']);
 
         $mobdev = CategorySimple::create([
             'name' => 'Mobile development'

@@ -2,11 +2,11 @@
 
 use Database\Tester\Models\Author;
 use Database\Tester\Models\EventLog;
-use October\Rain\Database\Collection;
+use Winter\Storm\Database\Collection;
 
 class MorphManyModelTest extends PluginTestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -19,7 +19,7 @@ class MorphManyModelTest extends PluginTestCase
     public function testSetRelationValue()
     {
         Model::unguard();
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $event1 = EventLog::create(['action' => "user-created"]);
         $event2 = EventLog::create(['action' => "user-updated"]);
         $event3 = EventLog::create(['action' => "user-deleted"]);

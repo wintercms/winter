@@ -8,9 +8,9 @@ use Cms\Classes\Controller;
 use Cms\Classes\ComponentBase;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Debug\HtmlDumper;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
-use October\Rain\Database\Model;
+use Winter\Storm\Database\Model;
 
 class DebugExtension extends TwigExtension
 {

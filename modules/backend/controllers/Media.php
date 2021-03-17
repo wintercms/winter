@@ -7,7 +7,7 @@ use Backend\Widgets\MediaManager;
 /**
  * Backend Media Manager
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Media extends Controller
@@ -24,7 +24,7 @@ class Media extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('October.Backend', 'media', true);
+        BackendMenu::setContext('Winter.Backend', 'media', true);
         $this->pageTitle = 'backend::lang.media.menu_label';
 
         $manager = new MediaManager($this, 'manager');

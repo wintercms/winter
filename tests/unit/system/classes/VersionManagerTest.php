@@ -5,13 +5,13 @@ use System\Classes\VersionManager;
 class VersionManagerTest extends TestCase
 {
 
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
-        include_once base_path().'/tests/fixtures/plugins/october/tester/Plugin.php';
-        include_once base_path().'/tests/fixtures/plugins/october/sample/Plugin.php';
-        include_once base_path().'/tests/fixtures/plugins/october/noupdates/Plugin.php';
+        include_once base_path().'/tests/fixtures/plugins/winter/tester/Plugin.php';
+        include_once base_path().'/tests/fixtures/plugins/winter/sample/Plugin.php';
+        include_once base_path().'/tests/fixtures/plugins/winter/noupdates/Plugin.php';
     }
 
     //
@@ -21,32 +21,40 @@ class VersionManagerTest extends TestCase
     public function testGetLatestFileVersion()
     {
         $manager = VersionManager::instance();
-        $result = self::callProtectedMethod($manager, 'getLatestFileVersion', ['\October\\Tester']);
+        $result = self::callProtectedMethod($manager, 'getLatestFileVersion', ['\Winter\\Tester']);
 
         $this->assertNotNull($result);
-        $this->assertEquals('1.0.5', $result);
+        $this->assertEquals('1.2.0', $result);
     }
 
     public function testGetFileVersions()
     {
         $manager = VersionManager::instance();
-        $result = self::callProtectedMethod($manager, 'getFileVersions', ['\October\\Tester']);
+        $result = self::callProtectedMethod($manager, 'getFileVersions', ['\Winter\\Tester']);
 
-        $this->assertCount(5, $result);
+        $this->assertCount(7, $result);
         $this->assertArrayHasKey('1.0.1', $result);
         $this->assertArrayHasKey('1.0.2', $result);
         $this->assertArrayHasKey('1.0.3', $result);
         $this->assertArrayHasKey('1.0.4', $result);
         $this->assertArrayHasKey('1.0.5', $result);
+        $this->assertArrayHasKey('1.1.0', $result);
+        $this->assertArrayHasKey('1.2.0', $result);
 
         $sample = $result['1.0.1'];
-        $comment = array_shift($sample);
-        $this->assertEquals("Added some upgrade file and some seeding", $comment);
+        $this->assertEquals('Added some upgrade file and some seeding', $sample[0]);
+
+        $sample = $result['1.1.0'];
+        $this->assertEquals('!!! Drop support for blog settings', $sample[0]);
+        $this->assertEquals('drop_blog_settings_table.php', $sample[1]);
+
+        $sample = $result['1.2.0'];
+        $this->assertEquals('!!! Security update - see: https://wintercms.com', $sample[0]);
 
         /*
          * Test junk file
          */
-        $result = self::callProtectedMethod($manager, 'getFileVersions', ['\October\\Sample']);
+        $result = self::callProtectedMethod($manager, 'getFileVersions', ['\Winter\\Sample']);
         $this->assertCount(5, $result);
         $this->assertArrayHasKey('junk', $result);
         $this->assertArrayHasKey('1', $result);
@@ -61,31 +69,35 @@ class VersionManagerTest extends TestCase
         /*
          * Test empty file
          */
-        $result = self::callProtectedMethod($manager, 'getFileVersions', ['\October\\NoUpdates']);
+        $result = self::callProtectedMethod($manager, 'getFileVersions', ['\Winter\\NoUpdates']);
         $this->assertEmpty($result);
     }
 
     public function testGetNewFileVersions()
     {
         $manager = VersionManager::instance();
-        $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\October\\Tester', '1.0.3']);
+        $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester', '1.0.3']);
 
-        $this->assertCount(2, $result);
+        $this->assertCount(4, $result);
         $this->assertArrayHasKey('1.0.4', $result);
         $this->assertArrayHasKey('1.0.5', $result);
+        $this->assertArrayHasKey('1.1.0', $result);
+        $this->assertArrayHasKey('1.2.0', $result);
 
         /*
          * When at version 0, should return everything
          */
         $manager = VersionManager::instance();
-        $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\October\\Tester']);
+        $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester']);
 
-        $this->assertCount(5, $result);
+        $this->assertCount(7, $result);
         $this->assertArrayHasKey('1.0.1', $result);
         $this->assertArrayHasKey('1.0.2', $result);
         $this->assertArrayHasKey('1.0.3', $result);
         $this->assertArrayHasKey('1.0.4', $result);
         $this->assertArrayHasKey('1.0.5', $result);
+        $this->assertArrayHasKey('1.1.0', $result);
+        $this->assertArrayHasKey('1.2.0', $result);
     }
 
     /**
@@ -100,8 +112,8 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         list($comments, $scripts) = self::callProtectedMethod($manager, 'extractScriptsAndComments', [$versionInfo]);
 
-        $this->assertInternalType('array', $comments);
-        $this->assertInternalType('array', $scripts);
+        $this->assertIsArray($comments);
+        $this->assertIsArray($scripts);
 
         $this->assertEquals($expectedComments, $comments);
         $this->assertEquals($expectedScripts, $scripts);

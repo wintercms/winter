@@ -9,13 +9,13 @@ use Exception;
 /**
  * Editor settings that affect all users
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class EditorSetting extends Model
 {
     use \System\Traits\ViewMaker;
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var array Behaviors implemented by this model.
@@ -39,13 +39,15 @@ class EditorSetting extends Model
      */
     public $cacheKey = 'backend::editor.custom_css';
 
-    protected $defaultHtmlAllowEmptyTags = 'textarea, a, iframe, object, video, style, script';
+    protected $defaultHtmlAllowEmptyTags = 'textarea, a, iframe, object, video, style, script, .fa, .fr-emoticon, .fr-inner, path, line, hr, i';
 
-    protected $defaultHtmlAllowTags = 'a, abbr, address, area, article, aside, audio, b, base, bdi, bdo, blockquote, br, button, canvas, caption, cite, code, col, colgroup, datalist, dd, del, details, dfn, dialog, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, i, iframe, img, input, ins, kbd, keygen, label, legend, li, link, main, map, mark, menu, menuitem, meter, nav, noscript, object, ol, optgroup, option, output, p, param, pre, progress, queue, rp, rt, ruby, s, samp, script, style, section, select, small, source, span, strike, strong, sub, summary, sup, table, tbody, td, textarea, tfoot, th, thead, time, title, tr, track, u, ul, var, video, wbr';
+    protected $defaultHtmlAllowTags = 'a, abbr, address, area, article, aside, audio, b, bdi, bdo, blockquote, br, button, canvas, caption, cite, code, col, colgroup, datalist, dd, del, details, dfn, dialog, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, hr, i, iframe, img, input, ins, kbd, keygen, label, legend, li, link, main, map, mark, menu, menuitem, meter, nav, noscript, object, ol, optgroup, option, output, p, param, pre, progress, queue, rp, rt, ruby, s, samp, script, style, section, select, small, source, span, strike, strong, sub, summary, sup, table, tbody, td, textarea, tfoot, th, thead, time, title, tr, track, u, ul, var, video, wbr';
+
+    protected $defaultHtmlAllowAttributes = 'accept, accept-charset, accesskey, action, align, allowfullscreen, allowtransparency, alt, aria-.*, async, autocomplete, autofocus, autoplay, autosave, background, bgcolor, border, charset, cellpadding, cellspacing, checked, cite, class, color, cols, colspan, content, contenteditable, contextmenu, controls, coords, data, data-.*, datetime, default, defer, dir, dirname, disabled, download, draggable, dropzone, enctype, for, form, formaction, frameborder, headers, height, hidden, high, href, hreflang, http-equiv, icon, id, ismap, itemprop, keytype, kind, label, lang, language, list, loop, low, max, maxlength, media, method, min, mozallowfullscreen, multiple, muted, name, novalidate, open, optimum, pattern, ping, placeholder, playsinline, poster, preload, pubdate, radiogroup, readonly, rel, required, reversed, rows, rowspan, sandbox, scope, scoped, scrolling, seamless, selected, shape, size, sizes, span, src, srcdoc, srclang, srcset, start, step, summary, spellcheck, style, tabindex, target, title, type, translate, usemap, value, valign, webkitallowfullscreen, width, wrap';
 
     protected $defaultHtmlNoWrapTags = 'figure, script, style';
 
-    protected $defaultHtmlRemoveTags = 'script, style';
+    protected $defaultHtmlRemoveTags = 'script, style, base';
 
     protected $defaultHtmlLineBreakerTags = 'figure, table, hr, iframe, form, dl';
 
@@ -76,17 +78,26 @@ class EditorSetting extends Model
         'oc-cell-thick-border' => 'Thick Border',
     ];
 
+    protected $defaultHtmlParagraphFormats = [
+        'N' => 'Normal',
+        'H1' => 'Heading 1',
+        'H2' => 'Heading 2',
+        'H3' => 'Heading 3',
+        'H4' => 'Heading 4',
+        'PRE' => 'Code',
+    ];
+
     /**
      * Editor toolbar presets for Froala.
      */
     protected $editorToolbarPresets = [
-        'default' => 'paragraphFormat, paragraphStyle, quote, bold, italic, align, formatOL, formatUL, insertTable, 
+        'default' => 'paragraphFormat, paragraphStyle, quote, bold, italic, align, formatOL, formatUL, insertTable,
                       insertLink, insertImage, insertVideo, insertAudio, insertFile, insertHR, html',
         'minimal' => 'paragraphFormat, bold, italic, underline, |, insertLink, insertImage, |, html',
-        'full'    => 'undo, redo, |, bold, italic, underline, |, paragraphFormat, paragraphStyle, inlineStyle, |, 
-                      strikeThrough, subscript, superscript, clearFormatting, |, fontFamily, fontSize, |, color, 
-                      emoticons, -, selectAll, |, align, formatOL, formatUL, outdent, indent, quote, |, insertHR, 
-                      insertLink, insertImage, insertVideo, insertAudio, insertFile, insertTable, |, selectAll, 
+        'full'    => 'undo, redo, |, bold, italic, underline, |, paragraphFormat, paragraphStyle, inlineStyle, |,
+                      strikeThrough, subscript, superscript, clearFormatting, |, fontFamily, fontSize, |, color,
+                      emoticons, -, selectAll, |, align, formatOL, formatUL, outdent, indent, quote, |, insertHR,
+                      insertLink, insertImage, insertVideo, insertAudio, insertFile, insertTable, |, selectAll,
                       html, fullscreen',
     ];
 
@@ -104,6 +115,7 @@ class EditorSetting extends Model
     {
         $this->html_allow_empty_tags = $this->defaultHtmlAllowEmptyTags;
         $this->html_allow_tags = $this->defaultHtmlAllowTags;
+        $this->html_allow_attributes = $this->defaultHtmlAllowAttributes;
         $this->html_no_wrap_tags = $this->defaultHtmlNoWrapTags;
         $this->html_remove_tags = $this->defaultHtmlRemoveTags;
         $this->html_line_breaker_tags = $this->defaultHtmlLineBreakerTags;
@@ -113,6 +125,15 @@ class EditorSetting extends Model
         $this->html_style_paragraph = $this->makeStylesForTable($this->defaultHtmlStyleParagraph);
         $this->html_style_table = $this->makeStylesForTable($this->defaultHtmlStyleTable);
         $this->html_style_table_cell = $this->makeStylesForTable($this->defaultHtmlStyleTableCell);
+        $this->html_paragraph_formats = $this->makeFormatsForTable($this->defaultHtmlParagraphFormats);
+    }
+
+    public function afterFetch()
+    {
+        if (!isset($this->value['html_paragraph_formats'])) {
+            $this->html_paragraph_formats = $this->makeFormatsForTable($this->defaultHtmlParagraphFormats);
+            $this->save();
+        }
     }
 
     public function afterSave()
@@ -129,11 +150,48 @@ class EditorSetting extends Model
         });
     }
 
+    protected function makeFormatsForTable($arr)
+    {
+        $count = 0;
+
+        return array_build($arr, function ($key, $value) use (&$count) {
+            return [$count++, ['format_label' => $value, 'format_tag' => $key]];
+        });
+    }
+
     /**
-     * Same as getConfigured but uses special style structure.
+     * Same as getConfigured but uses a special structure for styles.
      * @return mixed
      */
     public static function getConfiguredStyles($key, $default = null)
+    {
+        return static::getConfiguredArray($key, $default, function ($key, $value) {
+            if (array_has($value, ['class_name', 'class_label'])) {
+                return [
+                    array_get($value, 'class_name'),
+                    array_get($value, 'class_label')
+                ];
+            }
+        });
+    }
+
+    /**
+     * Same as getConfigured but uses a special structure for paragraph formats.
+     * @return mixed
+     */
+    public static function getConfiguredFormats($key, $default = null)
+    {
+        return static::getConfiguredArray($key, $default, function ($key, $value) {
+            if (array_has($value, ['format_tag', 'format_label'])) {
+                return [
+                    array_get($value, 'format_tag'),
+                    array_get($value, 'format_label')
+                ];
+            }
+        });
+    }
+
+    protected static function getConfiguredArray($key, $default = null, $callback = null)
     {
         $instance = static::instance();
 
@@ -141,15 +199,8 @@ class EditorSetting extends Model
 
         $defaultValue = $instance->getDefaultValue($key);
 
-        if (is_array($value)) {
-            $value = array_filter(array_build($value, function ($key, $value) {
-                if (array_has($value, ['class_name', 'class_label'])) {
-                    return [
-                        array_get($value, 'class_name'),
-                        array_get($value, 'class_label')
-                    ];
-                }
-            }));
+        if (is_array($value) && is_callable($callback)) {
+            $value = array_filter(array_build($value, $callback));
         }
 
         return $value != $defaultValue ? $value : $default;

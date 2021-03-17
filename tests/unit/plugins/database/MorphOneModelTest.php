@@ -6,7 +6,7 @@ use Database\Tester\Models\Meta;
 
 class MorphOneModelTest extends PluginTestCase
 {
-    public function setUp()
+    public function setUp() : void
     {
         parent::setUp();
 
@@ -22,7 +22,7 @@ class MorphOneModelTest extends PluginTestCase
     {
         Model::unguard();
         $post = Post::create(['title' => "First post", 'description' => "Yay!!"]);
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $meta1 = Meta::create([
             'meta_title' => 'Question',
             'meta_description' => 'Industry',
@@ -90,7 +90,7 @@ class MorphOneModelTest extends PluginTestCase
     public function testSetRelationValueTwice()
     {
         Model::unguard();
-        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
+        $author = Author::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
         $meta = Meta::create([
             'meta_title' => 'Question',
             'meta_description' => 'Industry',

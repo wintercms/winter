@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Dapati kembali yang mendasar'
     ],
     'directory' => [
@@ -36,7 +36,7 @@ return [
         'unnamed' => 'Pengaya Tak Bernama',
         'name' => [
             'label' => 'Nama Pengaya',
-            'help' => 'Namai pengaya dengan kode uniknya. Contoh, RainLab.Blog'
+            'help' => 'Namai pengaya dengan kode uniknya. Contoh, Winter.Blog'
         ]
     ],
     'plugins' => [

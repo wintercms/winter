@@ -89,7 +89,7 @@
         this.updateClasses()
 
         if (location.hash && this.$tabsContainer.is('[data-linkable]')) {
-            $('li > a[href=' + location.hash + ']', this.$tabsContainer).tab('show')
+            $('li > a[href="' + location.hash + '"]', this.$tabsContainer).tab('show')
         }
     }
 
@@ -217,7 +217,7 @@
         if (e.isDefaultPrevented())
             return
 
-        $.oc.foundation.controlUtils.disposeControls($pane.get(0))
+        $.wn.foundation.controlUtils.disposeControls($pane.get(0))
 
         $pane.remove()
         $tab.remove()

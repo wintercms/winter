@@ -6,7 +6,7 @@ use System\Classes\ErrorHandler;
  * Error Maker Trait
  * Adds exception based methods to a class, goes well with `System\Traits\ViewMaker`.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait ErrorMaker

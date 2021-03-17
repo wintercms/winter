@@ -6,21 +6,21 @@
  * - data-option="value" - an option with a value
  *
  * JavaScript API:
- * $('a#someElement').recordFinder({ option: 'value' })
+ * $('a#someElement').mediaFinder({ option: 'value' })
  *
  * Dependences:
  * - Some other plugin (filename.js)
  */
 
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var MediaFinder = function (element, options) {
         this.$el = $(element)
         this.options = options || {}
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }
@@ -71,7 +71,7 @@
         this.$findValue = null
         this.$el = null
 
-        // In some cases options could contain callbacks, 
+        // In some cases options could contain callbacks,
         // so it's better to clean them up too.
         this.options = null
 
@@ -93,7 +93,7 @@
     MediaFinder.prototype.onClickFindButton = function() {
         var self = this
 
-        new $.oc.mediaManager.popup({
+        new $.wn.mediaManager.popup({
             alias: 'ocmediamanager',
             cropAndInsertButton: true,
             onInsert: function(items) {

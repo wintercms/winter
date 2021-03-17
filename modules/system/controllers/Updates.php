@@ -23,7 +23,7 @@ use Exception;
 /**
  * Updates controller
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */
@@ -59,8 +59,8 @@ class Updates extends Controller
         $this->addJs('/modules/system/assets/js/updates/updates.js', 'core');
         $this->addCss('/modules/system/assets/css/updates/updates.css', 'core');
 
-        BackendMenu::setContext('October.System', 'system', 'updates');
-        SettingsManager::setContext('October.System', 'updates');
+        BackendMenu::setContext('Winter.System', 'system', 'updates');
+        SettingsManager::setContext('Winter.System', 'updates');
 
         if ($this->getAjaxHandler() == 'onExecuteStep') {
             $this->useSecurityToken = false;
@@ -75,6 +75,7 @@ class Updates extends Controller
     public function index()
     {
         $this->vars['coreBuild'] = Parameter::get('system::core.build');
+        $this->vars['coreBuildModified'] = Parameter::get('system::core.modified', false);
         $this->vars['projectId'] = Parameter::get('system::project.id');
         $this->vars['projectName'] = Parameter::get('system::project.name');
         $this->vars['projectOwner'] = Parameter::get('system::project.owner');
@@ -395,7 +396,7 @@ class Updates extends Controller
                     continue;
                 }
 
-                $detailsUrl = '//octobercms.com/support/articles/release-notes';
+                $detailsUrl = '//wintercms.com/support/articles/release-notes';
                 $description = str_replace('!!!', '', $description);
                 $result['core']['updates'][$build] = [$description, $detailsUrl];
                 $coreImportant = $hasImportantUpdates = true;
@@ -449,12 +450,15 @@ class Updates extends Controller
 
     /**
      * Contacts the update server for a list of necessary updates.
+     *
+     * @param bool $force Whether or not to force the redownload of existing tools
+     * @return string The rendered "execute" partial
      */
-    public function onForceUpdate()
+    public function onForceUpdate($force = true)
     {
         try {
             $manager = UpdateManager::instance();
-            $result = $manager->requestUpdateList(true);
+            $result = $manager->requestUpdateList($force);
 
             $coreHash = array_get($result, 'core.hash', false);
             $coreBuild = array_get($result, 'core.build', false);
@@ -705,7 +709,7 @@ class Updates extends Controller
                 'system::project.owner' => $result['owner'],
             ]);
 
-            return $this->onForceUpdate();
+            return $this->onForceUpdate(false);
         }
         catch (Exception $ex) {
             $this->handleError($ex);
@@ -877,7 +881,7 @@ class Updates extends Controller
         }
 
         Flash::success(Lang::get("system::lang.plugins.{$bulkAction}_success"));
-        return $this->listRefresh('manage');
+        return redirect()->refresh();
     }
 
     //

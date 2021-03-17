@@ -1,13 +1,13 @@
 <?php
 
 use Cms\Classes\AutoDatasource;
-use October\Rain\Database\Model;
-use October\Rain\Halcyon\Datasource\DbDatasource;
-use October\Rain\Halcyon\Datasource\FileDatasource;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Halcyon\Datasource\DbDatasource;
+use Winter\Storm\Halcyon\Datasource\FileDatasource;
 
 class CmsThemeTemplateFixture extends Model
 {
-    protected $fillable = ['*'];
+    protected $guarded = [];
 
     public $timestamps = false;
 
@@ -30,7 +30,7 @@ class AutoDatasourceTest extends PluginTestCase
      */
     public $datasource;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -73,7 +73,7 @@ class AutoDatasourceTest extends PluginTestCase
         ]);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         foreach ($this->fixtures as $fixture) {
             $fixture->delete();

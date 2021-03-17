@@ -11,7 +11,7 @@
  * - Froala Editor (froala_editor.js)
  */
 +function ($) { "use strict";
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // RICHEDITOR CLASS DEFINITION
@@ -24,7 +24,7 @@
         this.$form       = this.$el.closest('form')
         this.editor      = null
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
 
         Base.call(this)
 
@@ -44,12 +44,14 @@
         toolbarButtons: null,
         allowEmptyTags: null,
         allowTags: null,
+        allowAttributes: null,
         noWrapTags: null,
         removeTags: null,
         lineBreakerTags: null,
         imageStyles: null,
         linkStyles: null,
         paragraphStyles: null,
+        paragraphFormat: null,
         tableStyles: null,
         tableCellStyles: null,
         aceVendorPath: '/',
@@ -89,65 +91,91 @@
             froalaOptions.toolbarButtons = this.options.toolbarButtons.split(',')
         }
         else {
-            froalaOptions.toolbarButtons = $.oc.richEditorButtons
+            froalaOptions.toolbarButtons = $.wn.richEditorButtons
         }
 
         froalaOptions.imageStyles = this.options.imageStyles
             ? this.options.imageStyles
             : {
-              'oc-img-rounded': 'Rounded',
-              'oc-img-bordered': 'Bordered'
+                'oc-img-rounded': 'Rounded',
+                'oc-img-bordered': 'Bordered'
             }
 
         froalaOptions.linkStyles = this.options.linkStyles
             ? this.options.linkStyles
             : {
-              'oc-link-green': 'Green',
-              'oc-link-strong': 'Thick'
+                'oc-link-green': 'Green',
+                'oc-link-strong': 'Thick'
             }
 
         froalaOptions.paragraphStyles = this.options.paragraphStyles
             ? this.options.paragraphStyles
             : {
-              'oc-text-gray': 'Gray',
-              'oc-text-bordered': 'Bordered',
-              'oc-text-spaced': 'Spaced',
-              'oc-text-uppercase': 'Uppercase'
+                'oc-text-gray': 'Gray',
+                'oc-text-bordered': 'Bordered',
+                'oc-text-spaced': 'Spaced',
+                'oc-text-uppercase': 'Uppercase'
+            }
+
+        froalaOptions.paragraphFormat = this.options.paragraphFormat
+            ? this.options.paragraphFormat
+            : {
+              'N': 'Normal',
+              'H1': 'Heading 1',
+              'H2': 'Heading 2',
+              'H3': 'Heading 3',
+              'H4': 'Heading 4',
+              'PRE': 'Code'
             }
 
         froalaOptions.tableStyles = this.options.tableStyles
             ? this.options.tableStyles
             : {
-              'oc-dashed-borders': 'Dashed Borders',
-              'oc-alternate-rows': 'Alternate Rows'
+                'oc-dashed-borders': 'Dashed Borders',
+                'oc-alternate-rows': 'Alternate Rows'
             }
 
         froalaOptions.tableCellStyles = this.options.tableCellStyles
             ? this.options.tableCellStyles
             : {
-              'oc-cell-highlighted': 'Highlighted',
-              'oc-cell-thick-border': 'Thick'
+                'oc-cell-highlighted': 'Highlighted',
+                'oc-cell-thick-border': 'Thick'
             }
 
         froalaOptions.toolbarButtonsMD = froalaOptions.toolbarButtons
         froalaOptions.toolbarButtonsSM = froalaOptions.toolbarButtons
         froalaOptions.toolbarButtonsXS = froalaOptions.toolbarButtons
 
-        if (this.options.htmlAllowedEmptyTags) {
-            froalaOptions.allowEmptyTags = this.options.htmlAllowedEmptyTags.split(/[\s,]+/)
+        if (this.options.allowEmptyTags) {
+            froalaOptions.htmlAllowedEmptyTags = [];
+
+            this.options.allowEmptyTags.split(/[\s,]+/).forEach(
+                function (selector) {
+                    var tag = selector.split('.', 2)
+                    if (froalaOptions.htmlAllowedEmptyTags.indexOf(tag[0]) === -1) {
+                        froalaOptions.htmlAllowedEmptyTags.push(selector)
+                    }
+                }
+            )
+        } else {
+            froalaOptions.htmlAllowedEmptyTags = ['textarea', 'a', 'iframe', 'object', 'video', 'style', 'script', '.fa', '.fr-emoticon', '.fr-inner', 'path', 'line', 'hr', 'i']
         }
 
-        if (this.options.allowTags) {
-            froalaOptions.htmlAllowedTags = this.options.allowTags.split(/[\s,]+/)
-        }
+        froalaOptions.htmlAllowedTags = this.options.allowTags
+            ? this.options.allowTags.split(/[\s,]+/)
+            : ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'blockquote', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'menuitem', 'meter', 'nav', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'pre', 'progress', 'queue', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'style', 'section', 'select', 'small', 'source', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr']
+
+        froalaOptions.htmlAllowedAttrs = this.options.allowAttributes
+            ? this.options.allowAttributes.split(/[\s,]+/)
+            : ['accept', 'accept-charset', 'accesskey', 'action', 'align', 'allowfullscreen', 'allowtransparency', 'alt', 'aria-.*', 'async', 'autocomplete', 'autofocus', 'autoplay', 'autosave', 'background', 'bgcolor', 'border', 'charset', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'color', 'cols', 'colspan', 'content', 'contenteditable', 'contextmenu', 'controls', 'coords', 'data', 'data-.*', 'datetime', 'default', 'defer', 'dir', 'dirname', 'disabled', 'download', 'draggable', 'dropzone', 'enctype', 'for', 'form', 'formaction', 'frameborder', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'http-equiv', 'icon', 'id', 'ismap', 'itemprop', 'keytype', 'kind', 'label', 'lang', 'language', 'list', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'mozallowfullscreen', 'multiple', 'muted', 'name', 'novalidate', 'open', 'optimum', 'pattern', 'ping', 'placeholder', 'playsinline', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'reversed', 'rows', 'rowspan', 'sandbox', 'scope', 'scoped', 'scrolling', 'seamless', 'selected', 'shape', 'size', 'sizes', 'span', 'src', 'srcdoc', 'srclang', 'srcset', 'start', 'step', 'summary', 'spellcheck', 'style', 'tabindex', 'target', 'title', 'type', 'translate', 'usemap', 'value', 'valign', 'webkitallowfullscreen', 'width', 'wrap']
 
         froalaOptions.htmlDoNotWrapTags = this.options.noWrapTags
             ? this.options.noWrapTags.split(/[\s,]+/)
             : ['figure', 'script', 'style']
 
-        if (this.options.removeTags) {
-            froalaOptions.htmlRemoveTags = this.options.removeTags.split(/[\s,]+/)
-        }
+        froalaOptions.htmlRemoveTags = this.options.removeTags
+            ? this.options.removeTags.split(/[\s,]+/)
+            : ['script', 'style', 'base']
 
         froalaOptions.lineBreakerTags = this.options.lineBreakerTags
             ? this.options.lineBreakerTags.split(/[\s,]+/)
@@ -155,7 +183,7 @@
 
         froalaOptions.shortcutsEnabled = ['show', 'bold', 'italic', 'underline', 'indent', 'outdent', 'undo', 'redo']
 
-        // Ensure that October recognizes AJAX requests from Froala
+        // Ensure that Winter recognizes AJAX requests from Froala
         froalaOptions.requestHeaders = {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             'X-Requested-With': 'XMLHttpRequest'
@@ -198,6 +226,7 @@
         this.$textarea.on('froalaEditor.contentChanged', this.proxy(this.onChange))
         this.$textarea.on('froalaEditor.html.get', this.proxy(this.onSyncContent))
         this.$textarea.on('froalaEditor.html.set', this.proxy(this.onSetContent))
+        this.$textarea.on('froalaEditor.paste.beforeCleanup', this.proxy(this.beforeCleanupPaste))
         this.$form.on('oc.beforeRequest', this.proxy(this.onFormBeforeRequest))
 
         this.$textarea.froalaEditor(froalaOptions)
@@ -234,6 +263,7 @@
         this.$textarea.off('froalaEditor.contentChanged', this.proxy(this.onChange))
         this.$textarea.off('froalaEditor.html.get', this.proxy(this.onSyncContent))
         this.$textarea.off('froalaEditor.html.set', this.proxy(this.onSetContent))
+        this.$textarea.off('froalaEditor.paste.beforeCleanup', this.proxy(this.beforeCleanupPaste))
         this.$form.off('oc.beforeRequest', this.proxy(this.onFormBeforeRequest))
 
         $(window).off('resize', this.proxy(this.updateLayout))
@@ -333,6 +363,10 @@
         this.$textarea.trigger('setContent.oc.richeditor', [this])
     }
 
+    RichEditor.prototype.beforeCleanupPaste = function (ev, editor, clipboard_html) {
+        return ocSanitize(clipboard_html)
+    }
+
     RichEditor.prototype.onSyncContent = function(ev, editor, html) {
         // Beautify HTML.
         if (editor.codeBeautifier) {
@@ -428,10 +462,12 @@
     // BUTTON DEFINITIONS
     // =================
 
+     if ($.wn === undefined)
+        $.wn = {}
     if ($.oc === undefined)
-        $.oc = {}
+        $.oc = $.wn
 
-    $.oc.richEditorButtons = [
+    $.wn.richEditorButtons = [
         'paragraphFormat',
         'paragraphStyle',
         'quote',

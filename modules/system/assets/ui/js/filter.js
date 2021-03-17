@@ -5,7 +5,7 @@
  * - data-behavior="filter" - enables the filter plugin
  *
  * Dependences:
- * - October Popover (october.popover.js)
+ * - Winter Popover (winter.popover.js)
  *
  * Notes:
  *   Ideally this control would not depend on loader or the AJAX framework,
@@ -23,6 +23,7 @@
 
         this.options = options || {}
         this.scopeValues = {}
+        this.scopeAvailable = {}
         this.$activeScope = null
         this.activeScopeName = null
         this.isActiveScopeDirty = false
@@ -75,10 +76,10 @@
                                 </ul>                                                                                  \
                             </div>                                                                                     \
                             <div class="filter-buttons">                                                               \
-                                <button class="btn btn-block btn-primary oc-icon-filter" data-filter-action="apply">   \
+                                <button class="btn btn-block btn-primary wn-icon-filter" data-filter-action="apply">   \
                                     {{ apply_button_text }}                                                            \
                                 </button>                                                                              \
-                                <button class="btn btn-block btn-secondary oc-icon-eraser" data-filter-action="clear"> \
+                                <button class="btn btn-block btn-secondary wn-icon-eraser" data-filter-action="clear"> \
                                     {{ clear_button_text }}                                                            \
                                 </button>                                                                              \
                             </div>                                                                                     \
@@ -155,7 +156,7 @@
 
             $(event.relatedTarget).on('input', '#controlFilterPopover input[data-search]', function (e) {
                 self.searchQuery($(this))
-            });
+            })
         })
 
         // Setup event handler to apply selected options when closing the type: group scope popup
@@ -175,7 +176,7 @@
      */
     FilterWidget.prototype.bindDependants = function() {
         if (!$('[data-scope-depends]', this.$el).length) {
-            return;
+            return
         }
 
         var self = this,
@@ -286,23 +287,24 @@
 
         var
             itemId = $item.data('item-id'),
-            items = this.scopeValues[this.activeScopeName],
-            fromItems = isDeselect ? items.active : items.available,
-            toItems = isDeselect ? items.available : items.active,
-            testFunc = function(item){ return item.id == itemId },
+            active = this.scopeValues[this.activeScopeName],
+            available = this.scopeAvailable[this.activeScopeName],
+            fromItems = isDeselect ? active : available,
+            toItems = isDeselect ? available : active,
+            testFunc = function(active){ return active.id == itemId },
             item = $.grep(fromItems, testFunc).pop(),
             filtered = $.grep(fromItems, testFunc, true)
 
         if (isDeselect)
-            this.scopeValues[this.activeScopeName].active = filtered
+            this.scopeValues[this.activeScopeName] = filtered
         else
-            this.scopeValues[this.activeScopeName].available = filtered
+            this.scopeAvailable[this.activeScopeName] = filtered
 
         if (item)
             toItems.push(item)
 
-        this.toggleFilterButtons(items)
-        this.updateScopeSetting(this.$activeScope, items.active.length)
+        this.toggleFilterButtons(active)
+        this.updateScopeSetting(this.$activeScope, isDeselect ? filtered.length : active.length)
         this.isActiveScopeDirty = true
         this.focusSearch()
     }
@@ -310,9 +312,16 @@
     FilterWidget.prototype.displayPopover = function($scope) {
         var self = this,
             scopeName = $scope.data('scope-name'),
-            data = this.scopeValues[scopeName],
+            data = null,
             isLoaded = true,
             container = false
+
+        if (typeof this.scopeAvailable[scopeName] !== "undefined" && this.scopeAvailable[scopeName]) {
+            data = $.extend({}, data, {
+                available: this.scopeAvailable[scopeName],
+                active: this.scopeValues[scopeName]
+            })
+        }
 
         // If the filter is running in a modal, popovers should be
         // attached to the modal container. This prevents z-index issues.
@@ -390,7 +399,8 @@
         if (!data.active) data.active = []
         if (!data.available) data.available = []
 
-        this.scopeValues[scopeName] = data
+        this.scopeValues[scopeName] = data.active
+        this.scopeAvailable[scopeName] = data.available
 
         // Do not render if scope has changed
         if (scopeName != this.activeScopeName)
@@ -424,9 +434,9 @@
         /*
          * Ensure any active items do not appear in the search results
          */
-        if (items.active.length) {
+        if (items.length) {
             var activeIds = []
-            $.each(items.active, function (key, obj) {
+            $.each(items, function (key, obj) {
                 activeIds.push(obj.id)
             })
 
@@ -457,7 +467,7 @@
             buttonContainer = $('#controlFilterPopover .filter-buttons')
 
         if (data) {
-            data.active.length > 0 ? buttonContainer.show() : buttonContainer.hide()
+            data.length > 0 ? buttonContainer.show() : buttonContainer.hide()
         } else {
             items.children().length > 0 ? buttonContainer.show() : buttonContainer.hide()
         }
@@ -473,15 +483,15 @@
         var self = this,
             data = {
                 scopeName: scopeName,
-                options: this.scopeValues[scopeName]
+                options: JSON.stringify(this.scopeValues[scopeName])
             }
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
 
         this.$el.request(this.options.updateHandler, {
             data: data
         }).always(function () {
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         }).done(function () {
             // Trigger dependsOn updates on successful requests
             self.$el.find('[data-scope-name="'+scopeName+'"]').trigger('change.oc.filterScope')
@@ -501,11 +511,11 @@
                     value: isChecked
                 }
 
-            $.oc.stripeLoadIndicator.show()
+            $.wn.stripeLoadIndicator.show()
             this.$el.request(this.options.updateHandler, {
                 data: data
             }).always(function(){
-                $.oc.stripeLoadIndicator.hide()
+                $.wn.stripeLoadIndicator.hide()
             })
         }
 
@@ -525,11 +535,11 @@
                     value: switchValue
                 }
 
-            $.oc.stripeLoadIndicator.show()
+            $.wn.stripeLoadIndicator.show()
             this.$el.request(this.options.updateHandler, {
                 data: data
             }).always(function(){
-                $.oc.stripeLoadIndicator.hide()
+                $.wn.stripeLoadIndicator.hide()
             })
         }
 
@@ -541,20 +551,22 @@
 
         if (isReset) {
             this.scopeValues[scopeName] = null
+            this.scopeAvailable[scopeName] = null
+            this.isActiveScopeDirty = true
             this.updateScopeSetting(this.$activeScope, 0)
         }
 
-        this.pushOptions(scopeName);
-        this.isActiveScopeDirty = true;
+        this.pushOptions(scopeName)
+        this.isActiveScopeDirty = false
         this.$activeScope.data('oc.popover').hide()
     }
 
     FilterWidget.prototype.getLang = function(name, defaultValue) {
-        if ($.oc === undefined || $.oc.lang === undefined) {
+        if ($.oc === undefined || $.wn.lang === undefined) {
             return defaultValue
         }
 
-        return $.oc.lang.get(name, defaultValue)
+        return $.wn.lang.get(name, defaultValue)
     }
 
     FilterWidget.prototype.searchQuery = function ($el) {
@@ -584,14 +596,14 @@
                 search: thisValue
             }
 
-            $.oc.stripeLoadIndicator.show()
+            $.wn.stripeLoadIndicator.show()
             self.lastDataTrackInputRequest = self.$el.request(self.options.optionsHandler, {
                 data: data
             }).success(function(data){
                 self.filterAvailable(self.activeScopeName, data.options.available)
                 self.toggleFilterButtons()
             }).always(function(){
-                $.oc.stripeLoadIndicator.hide()
+                $.wn.stripeLoadIndicator.hide()
             })
         }, 300)
     }

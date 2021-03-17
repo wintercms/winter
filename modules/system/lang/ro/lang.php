@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Intoarcerea la elementele de baza',
     ],
     'directory' => [
@@ -36,7 +36,7 @@ return [
         'unnamed' => 'Plugin fara nume',
         'name' => [
             'label' => 'Nume Plugin',
-            'help' => 'Denumiti plugin-ul dupa codul sau unic. De exemplu, RainLab.Blog',
+            'help' => 'Denumiti plugin-ul dupa codul sau unic. De exemplu, Winter.Blog',
         ],
     ],
     'plugins' => [

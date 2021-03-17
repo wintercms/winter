@@ -20,7 +20,7 @@ use Backend\Classes\ControllerBehavior;
  * values as either a YAML file, located in the controller view directory,
  * or directly as a PHP array.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ReorderController extends ControllerBehavior
@@ -57,8 +57,8 @@ class ReorderController extends ControllerBehavior
 
     /**
      * @var string Reordering mode:
-     * - simple: October\Rain\Database\Traits\Sortable
-     * - nested: October\Rain\Database\Traits\NestedTree
+     * - simple: Winter\Storm\Database\Traits\Sortable
+     * - nested: Winter\Storm\Database\Traits\NestedTree
      */
     protected $sortMode;
 
@@ -99,7 +99,7 @@ class ReorderController extends ControllerBehavior
 
     public function reorder()
     {
-        $this->addJs('js/october.reorder.js', 'core');
+        $this->addJs('js/winter.reorder.js', 'core');
 
         $this->controller->pageTitle = $this->controller->pageTitle
             ?: Lang::get($this->getConfig('title', 'backend::lang.reorder.default_title'));
@@ -214,15 +214,23 @@ class ReorderController extends ControllerBehavior
         $model = $this->controller->reorderGetModel();
         $modelTraits = class_uses($model);
 
-        if (isset($modelTraits[\October\Rain\Database\Traits\Sortable::class])) {
+        if (
+            isset($modelTraits[\Winter\Storm\Database\Traits\Sortable::class]) ||
+            $model->isClassExtendedWith(\Winter\Storm\Database\Behaviors\Sortable::class) ||
+            isset($modelTraits[\October\Rain\Database\Traits\Sortable::class]) ||
+            $model->isClassExtendedWith(\October\Rain\Database\Behaviors\Sortable::class)
+        ) {
             $this->sortMode = 'simple';
         }
-        elseif (isset($modelTraits[\October\Rain\Database\Traits\NestedTree::class])) {
+        elseif (
+            isset($modelTraits[\Winter\Storm\Database\Traits\NestedTree::class]) ||
+            isset($modelTraits[\October\Rain\Database\Traits\NestedTree::class])
+        ) {
             $this->sortMode = 'nested';
             $this->showTree = true;
         }
         else {
-            throw new ApplicationException('The model must implement the NestedTree or Sortable traits.');
+            throw new ApplicationException('The model must implement the Sortable trait/behavior or the NestedTree trait.');
         }
 
         return $model;
@@ -256,7 +264,7 @@ class ReorderController extends ControllerBehavior
     /**
      * Extend the query used for finding reorder records. Extra conditions
      * can be applied to the query, for example, $query->withTrashed();
-     * @param October\Rain\Database\Builder $query
+     * @param Winter\Storm\Database\Builder $query
      * @return void
      */
     public function reorderExtendQuery($query)

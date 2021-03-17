@@ -11,12 +11,12 @@ use Config;
 /**
  * Manages the backend navigation.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class NavigationManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     /**
      * @var array Cache of registration callbacks.
@@ -24,9 +24,19 @@ class NavigationManager
     protected $callbacks = [];
 
     /**
+     * @var array List of owner aliases. ['Aliased.Owner' => 'Real.Owner']
+     */
+    protected $aliases = [];
+
+    /**
      * @var MainMenuItem[] List of registered items.
      */
     protected $items;
+
+    /**
+     * @var QuickActionItem[] List of registered quick actions.
+     */
+    protected $quickActions;
 
     protected $contextSidenavPartials = [];
 
@@ -54,6 +64,9 @@ class NavigationManager
      */
     protected function loadItems()
     {
+        $this->items = [];
+        $this->quickActions = [];
+
         /*
          * Load module items
          */
@@ -68,11 +81,18 @@ class NavigationManager
 
         foreach ($plugins as $id => $plugin) {
             $items = $plugin->registerNavigation();
-            if (!is_array($items)) {
+            $quickActions = $plugin->registerQuickActions();
+
+            if (!is_array($items) && !is_array($quickActions)) {
                 continue;
             }
 
-            $this->registerMenuItems($id, $items);
+            if (is_array($items)) {
+                $this->registerMenuItems($id, $items);
+            }
+            if (is_array($quickActions)) {
+                $this->registerQuickActions($id, $quickActions);
+            }
         }
 
         /**
@@ -91,17 +111,21 @@ class NavigationManager
         Event::fire('backend.menu.extendItems', [$this]);
 
         /*
-         * Sort menu items
+         * Sort menu items and quick actions
          */
         uasort($this->items, static function ($a, $b) {
             return $a->order - $b->order;
         });
+        uasort($this->quickActions, static function ($a, $b) {
+            return $a->order - $b->order;
+        });
 
         /*
-         * Filter items user lacks permission for
+         * Filter items and quick actions that the user lacks permission for
          */
         $user = BackendAuth::getUser();
         $this->items = $this->filterItemPermissions($user, $this->items);
+        $this->quickActions = $this->filterItemPermissions($user, $this->quickActions);
 
         foreach ($this->items as $item) {
             if (!$item->sideMenu || !count($item->sideMenu)) {
@@ -183,10 +207,6 @@ class NavigationManager
      */
     public function registerMenuItems($owner, array $definitions)
     {
-        if (!$this->items) {
-            $this->items = [];
-        }
-
         $validator = Validator::make($definitions, [
             '*.label' => 'required',
             '*.icon' => 'required_without:*.iconSvg',
@@ -206,6 +226,18 @@ class NavigationManager
         }
 
         $this->addMainMenuItems($owner, $definitions);
+    }
+
+    /**
+     * Register an owner alias
+     *
+     * @param string $owner The owner to register an alias for. Example: Real.Owner
+     * @param string $alias The alias to register. Example: Aliased.Owner
+     * @return void
+     */
+    public function registerOwnerAlias(string $owner, string $alias)
+    {
+        $this->aliases[$alias] = $owner;
     }
 
     /**
@@ -321,6 +353,21 @@ class NavigationManager
     }
 
     /**
+     * Remove multiple side menu items
+     *
+     * @param string $owner
+     * @param string $code
+     * @param array  $sideCodes
+     * @return void
+     */
+    public function removeSideMenuItems($owner, $code, $sideCodes)
+    {
+        foreach ($sideCodes as $sideCode) {
+            $this->removeSideMenuItem($owner, $code, $sideCode);
+        }
+    }
+
+    /**
      * Removes a single main menu item
      * @param string $owner
      * @param string $code
@@ -346,8 +393,12 @@ class NavigationManager
      */
     public function listMainMenuItems()
     {
-        if ($this->items === null) {
+        if ($this->items === null && $this->quickActions === null) {
             $this->loadItems();
+        }
+
+        if ($this->items === null) {
+            return [];
         }
 
         foreach ($this->items as $item) {
@@ -373,7 +424,7 @@ class NavigationManager
                 }
             }
 
-            if (empty($item->counter)) {
+            if (empty($item->counter) || !is_numeric($item->counter)) {
                 $item->counter = null;
             }
         }
@@ -421,9 +472,143 @@ class NavigationManager
                     $item->counter = null;
                 }
             }
+            if (!is_null($item->counter) && !is_numeric($item->counter)) {
+                throw new SystemException("The menu item {$activeItem->code}.{$item->code}'s counter property is invalid. Check to make sure it's numeric or callable. Value: " . var_export($item->counter, true));
+            }
         }
 
         return $items;
+    }
+
+    /**
+     * Registers quick actions in the main navigation.
+     *
+     * Quick actions are single purpose links displayed to the left of the user menu in the
+     * backend main navigation.
+     *
+     * The argument is an array of the quick action items. The array keys represent the
+     * quick action item codes, specific for the plugin/module. Each element in the
+     * array should be an associative array with the following keys:
+     * - label - specifies the action label localization string key, used as a tooltip, required.
+     * - icon - an icon name from the Font Awesome icon collection, required if iconSvg is unspecified.
+     * - iconSvg - a custom SVG icon to use for the icon, required if icon is unspecified.
+     * - url - the back-end relative URL the quick action item should point to, required.
+     * - permissions - an array of permissions the back-end user should have, optional.
+     *   The item will be displayed if the user has any of the specified permissions.
+     * - order - a position of the item in the menu, optional.
+     *
+     * @param string $owner Specifies the quick action items owner plugin or module in the format Author.Plugin.
+     * @param array $definitions An array of the quick action item definitions.
+     * @return void
+     * @throws SystemException If the validation of the quick action configuration fails
+     */
+    public function registerQuickActions($owner, array $definitions)
+    {
+        $validator = Validator::make($definitions, [
+            '*.label' => 'required',
+            '*.icon' => 'required_without:*.iconSvg',
+            '*.url' => 'required'
+        ]);
+
+        if ($validator->fails()) {
+            $errorMessage = 'Invalid quick action item detected in ' . $owner . '. Contact the plugin author to fix (' . $validator->errors()->first() . ')';
+            if (Config::get('app.debug', false)) {
+                throw new SystemException($errorMessage);
+            }
+
+            Log::error($errorMessage);
+        }
+
+        $this->addQuickActionItems($owner, $definitions);
+    }
+
+    /**
+     * Dynamically add an array of quick action items
+     *
+     * @param string $owner
+     * @param array  $definitions
+     * @return void
+     */
+    public function addQuickActionItems($owner, array $definitions)
+    {
+        foreach ($definitions as $code => $definition) {
+            $this->addQuickActionItem($owner, $code, $definition);
+        }
+    }
+
+    /**
+     * Dynamically add a single quick action item
+     *
+     * @param string $owner
+     * @param string $code
+     * @param array  $definition
+     * @return void
+     */
+    public function addQuickActionItem($owner, $code, array $definition)
+    {
+        $itemKey = $this->makeItemKey($owner, $code);
+
+        if (isset($this->quickActions[$itemKey])) {
+            $definition = array_merge((array) $this->quickActions[$itemKey], $definition);
+        }
+
+        $item = array_merge($definition, [
+            'code'  => $code,
+            'owner' => $owner
+        ]);
+
+        $this->quickActions[$itemKey] = QuickActionItem::createFromArray($item);
+    }
+
+    /**
+     * Gets the instance of a specified quick action item.
+     *
+     * @param string $owner
+     * @param string $code
+     * @return QuickActionItem
+     * @throws SystemException
+     */
+    public function getQuickActionItem(string $owner, string $code)
+    {
+        $itemKey = $this->makeItemKey($owner, $code);
+
+        if (!array_key_exists($itemKey, $this->quickActions)) {
+            throw new SystemException('No quick action item found with key ' . $itemKey);
+        }
+
+        return $this->quickActions[$itemKey];
+    }
+
+    /**
+     * Removes a single quick action item
+     *
+     * @param $owner
+     * @param $code
+     * @return void
+     */
+    public function removeQuickActionItem($owner, $code)
+    {
+        $itemKey = $this->makeItemKey($owner, $code);
+        unset($this->quickActions[$itemKey]);
+    }
+
+    /**
+     * Returns a list of quick action items.
+     *
+     * @return array
+     * @throws SystemException
+     */
+    public function listQuickActionItems()
+    {
+        if ($this->items === null && $this->quickActions === null) {
+            $this->loadItems();
+        }
+
+        if ($this->quickActions === null) {
+            return [];
+        }
+
+        return $this->quickActions;
     }
 
     /**
@@ -441,13 +626,21 @@ class NavigationManager
     }
 
     /**
-     * Sets the navigation context.
-     * The function sets the navigation owner.
+     * Sets the navigation context owner.
+     *
      * @param string $owner Specifies the navigation owner in the format Vendor/Module
      */
     public function setContextOwner($owner)
     {
         $this->contextOwner = $owner;
+    }
+
+    /**
+     * Gets the navigation context owner
+     */
+    public function getContextOwner()
+    {
+        return $this->aliases[$this->contextOwner] ?? $this->contextOwner;
     }
 
     /**
@@ -471,7 +664,7 @@ class NavigationManager
         return (object)[
             'mainMenuCode' => $this->contextMainMenuItemCode,
             'sideMenuCode' => $this->contextSideMenuItemCode,
-            'owner' => $this->contextOwner
+            'owner' => $this->getContextOwner(),
         ];
     }
 
@@ -492,7 +685,7 @@ class NavigationManager
      */
     public function isMainMenuItemActive($item)
     {
-        return $this->contextOwner === $item->owner && $this->contextMainMenuItemCode === $item->code;
+        return $this->getContextOwner() === $item->owner && $this->contextMainMenuItemCode === $item->code;
     }
 
     /**
@@ -523,7 +716,7 @@ class NavigationManager
             return true;
         }
 
-        return $this->contextOwner === $item->owner && $this->contextSideMenuItemCode === $item->code;
+        return $this->getContextOwner() === $item->owner && $this->contextSideMenuItemCode === $item->code;
     }
 
     /**
@@ -548,6 +741,7 @@ class NavigationManager
      */
     public function getContextSidenavPartial($owner, $mainMenuItemCode)
     {
+        $owner = $this->aliases[$owner] ?? $owner;
         $key = $owner.$mainMenuItemCode;
 
         return $this->contextSidenavPartials[$key] ?? null;
@@ -584,6 +778,6 @@ class NavigationManager
      */
     protected function makeItemKey($owner, $code)
     {
-        return strtoupper($owner).'.'.strtoupper($code);
+        return strtoupper($this->aliases[$owner] ?? $owner).'.'.strtoupper($code);
     }
 }

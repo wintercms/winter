@@ -21,7 +21,7 @@ use Backend\Classes\ControllerBehavior;
  * values as either a YAML file, located in the controller view directory,
  * or directly as a PHP array.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ListController extends ControllerBehavior
@@ -145,6 +145,7 @@ class ListController extends ControllerBehavior
             'recordUrl',
             'recordOnClick',
             'recordsPerPage',
+            'perPageOptions',
             'showPageNumbers',
             'noRecordsMessage',
             'defaultSort',
@@ -233,7 +234,7 @@ class ListController extends ControllerBehavior
          */
         if (isset($listConfig->filter)) {
             $filterConfig = $this->makeConfig($listConfig->filter);
-            
+
             if (!empty($filterConfig->scopes)) {
                 $widget->cssClasses[] = 'list-flush';
 
@@ -289,22 +290,12 @@ class ListController extends ControllerBehavior
     /**
      * Bulk delete records.
      * @return void
-     * @throws \October\Rain\Exception\ApplicationException when the parent definition is missing.
+     * @throws \Winter\Storm\Exception\ApplicationException when the parent definition is missing.
      */
     public function index_onDelete()
     {
         if (method_exists($this->controller, 'onDelete')) {
             return call_user_func_array([$this->controller, 'onDelete'], func_get_args());
-        }
-
-        /*
-         * Validate checked identifiers
-         */
-        $checkedIds = post('checked');
-
-        if (!$checkedIds || !is_array($checkedIds) || !count($checkedIds)) {
-            Flash::error(Lang::get('backend::lang.list.delete_selected_empty'));
-            return $this->controller->listRefresh();
         }
 
         /*
@@ -317,6 +308,20 @@ class ListController extends ControllerBehavior
         }
 
         $listConfig = $this->controller->listGetConfig($definition);
+
+        /*
+         * Validate checked identifiers
+         */
+        $checkedIds = post('checked');
+
+        if (!$checkedIds || !is_array($checkedIds) || !count($checkedIds)) {
+            Flash::error(Lang::get(
+                (!empty($listConfig->noRecordsDeletedMessage))
+                    ? $listConfig->noRecordsDeletedMessage
+                    : 'backend::lang.list.delete_selected_empty'
+            ));
+            return $this->controller->listRefresh();
+        }
 
         /*
          * Create the model
@@ -344,10 +349,18 @@ class ListController extends ControllerBehavior
                 $record->delete();
             }
 
-            Flash::success(Lang::get('backend::lang.list.delete_selected_success'));
+            Flash::success(Lang::get(
+                (!empty($listConfig->deleteMessage))
+                    ? $listConfig->deleteMessage
+                    : 'backend::lang.list.delete_selected_success'
+            ));
         }
         else {
-            Flash::error(Lang::get('backend::lang.list.delete_selected_empty'));
+            Flash::error(Lang::get(
+                (!empty($listConfig->noRecordsDeletedMessage))
+                    ? $listConfig->noRecordsDeletedMessage
+                    : 'backend::lang.list.delete_selected_empty'
+            ));
         }
 
         return $this->controller->listRefresh($definition);
@@ -357,7 +370,7 @@ class ListController extends ControllerBehavior
      * Renders the widget collection.
      * @param  string $definition Optional list definition.
      * @return string Rendered HTML for the list.
-     * @throws \October\Rain\Exception\ApplicationException when there are no list widgets set.
+     * @throws \Winter\Storm\Exception\ApplicationException when there are no list widgets set.
      */
     public function listRender($definition = null)
     {
@@ -478,9 +491,9 @@ class ListController extends ControllerBehavior
 
     /**
      * Controller override: Extend supplied model
-     * @param \October\Rain\Database\Model $model
+     * @param \Winter\Storm\Database\Model $model
      * @param string|null $definition
-     * @return \October\Rain\Database\Model
+     * @return \Winter\Storm\Database\Model
      */
     public function listExtendModel($model, $definition = null)
     {
@@ -490,7 +503,7 @@ class ListController extends ControllerBehavior
     /**
      * Controller override: Extend the query used for populating the list
      * before the default query is processed.
-     * @param \October\Rain\Database\Builder $query
+     * @param \Winter\Storm\Database\Builder $query
      * @param string|null $definition
      */
     public function listExtendQueryBefore($query, $definition = null)
@@ -500,7 +513,7 @@ class ListController extends ControllerBehavior
     /**
      * Controller override: Extend the query used for populating the list
      * after the default query is processed.
-     * @param \October\Rain\Database\Builder $query
+     * @param \Winter\Storm\Database\Builder $query
      * @param string|null $definition
      */
     public function listExtendQuery($query, $definition = null)
@@ -520,7 +533,7 @@ class ListController extends ControllerBehavior
     /**
      * Controller override: Extend the query used for populating the filter
      * options before the default query is processed.
-     * @param \October\Rain\Database\Builder $query
+     * @param \Winter\Storm\Database\Builder $query
      * @param array $scope
      */
     public function listFilterExtendQuery($query, $scope)
@@ -529,7 +542,7 @@ class ListController extends ControllerBehavior
 
     /**
      * Returns a CSS class name for a list row (<tr class="...">).
-     * @param  \October\Rain\Database\Model $record The populated model used for the column
+     * @param  \Winter\Storm\Database\Model $record The populated model used for the column
      * @param  string|null $definition List definition (optional)
      * @return string|void CSS class name
      */
@@ -539,7 +552,7 @@ class ListController extends ControllerBehavior
 
     /**
      * Replace a table column value (<td>...</td>)
-     * @param  \October\Rain\Database\Model $record The populated model used for the column
+     * @param  \Winter\Storm\Database\Model $record The populated model used for the column
      * @param  string $columnName The column name to override
      * @param  string|null $definition List definition (optional)
      * @return string|void HTML view

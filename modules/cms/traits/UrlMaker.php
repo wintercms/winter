@@ -34,7 +34,7 @@ use ApplicationException;
  *        ];
  *    }
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait UrlMaker
@@ -190,7 +190,8 @@ trait UrlMaker
             'mtime'    => @File::lastModified($filePath)
         ];
 
-        Cache::put($key, serialize($cached), Config::get('cms.parsedPageCacheTTL', 1440));
+        $expiresAt = now()->addMinutes(Config::get('cms.parsedPageCacheTTL', 1440));
+        Cache::put($key, serialize($cached), $expiresAt);
 
         return static::$urlPageName = $baseFileName;
     }
