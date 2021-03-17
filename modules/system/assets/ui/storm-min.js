@@ -3829,6 +3829,7 @@ this.$modal.on('hide.bs.modal',function(){self.triggerEvent('hide.oc.popup')
 self.isOpen=false
 self.setBackdrop(false)})
 this.$modal.on('hidden.bs.modal',function(){self.triggerEvent('hidden.oc.popup')
+$.wn.foundation.controlUtils.disposeControls(self.$container.get(0))
 self.$container.remove()
 $(document.body).removeClass('modal-open')
 self.dispose()})
