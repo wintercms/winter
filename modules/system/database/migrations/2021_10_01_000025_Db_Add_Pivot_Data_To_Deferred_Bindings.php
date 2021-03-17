@@ -1,7 +1,7 @@
 <?php
 
-use October\Rain\Database\Schema\Blueprint;
-use Illuminate\Database\Migrations\Migration;
+use Winter\Storm\Database\Schema\Blueprint;
+use Winter\Storm\Database\Updates\Migration;
 
 class DbAddPivotDataToDeferredBindings extends Migration
 {
