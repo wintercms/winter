@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Puiki pradžia!'
     ],
     'locale' => [
@@ -79,7 +79,7 @@ return [
         'unnamed' => 'Neužvardintas dizainas',
         'name' => [
             'label' => 'Dizaino pavadinimas',
-            'help' => 'Užvardinkite dizainą unikaliu kodu. Pavyzdžiui, RainLab.Vanilla'
+            'help' => 'Užvardinkite dizainą unikaliu kodu. Pavyzdžiui, Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -95,7 +95,7 @@ return [
         'unnamed' => 'Neužvardintas įskiepis',
         'name' => [
             'label' => 'Įskiepio pavadinimas',
-            'help' => 'Užvardinkite įskiepį unikaliu kodu. Pavyzdžiui, RainLab.Blog'
+            'help' => 'Užvardinkite įskiepį unikaliu kodu. Pavyzdžiui, Winter.Blog'
         ]
     ],
     'plugins' => [

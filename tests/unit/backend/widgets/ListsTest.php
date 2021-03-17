@@ -2,8 +2,8 @@
 
 use Backend\Models\User;
 use Backend\Widgets\Lists;
-use October\Rain\Exception\ApplicationException;
-use October\Tests\Fixtures\Backend\Models\UserFixture;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Tests\Fixtures\Backend\Models\UserFixture;
 
 class ListsTest extends PluginTestCase
 {

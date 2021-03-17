@@ -3,7 +3,7 @@
 /**
  * Provides a simple request-level cache for CMS objects.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ObjectMemoryCache

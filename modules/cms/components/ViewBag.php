@@ -6,7 +6,7 @@ use Cms\Classes\ComponentBase;
  * The view bag stores custom template properties.
  * This is a hidden component ignored by the back-end UI.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ViewBag extends ComponentBase

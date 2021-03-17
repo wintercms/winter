@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.validators.base,
+    var Base = $.wn.inspector.validators.base,
         BaseProto = Base.prototype
 
     var LengthValidator = function(options) {
@@ -68,5 +68,5 @@
         return result
     }
 
-    $.oc.inspector.validators.length = LengthValidator
+    $.wn.inspector.validators.length = LengthValidator
 }(window.jQuery);

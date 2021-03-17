@@ -4,7 +4,7 @@ use Model;
 
 class EventLog extends Model
 {
-    use \October\Rain\Database\Traits\SoftDelete;
+    use \Winter\Storm\Database\Traits\SoftDelete;
 
     /**
      * @var string The database table used by the model.

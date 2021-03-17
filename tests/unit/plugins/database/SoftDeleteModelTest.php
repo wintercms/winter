@@ -23,8 +23,8 @@ class SoftDeleteModelTest extends PluginTestCase
     public function testDeleteOptionOnHardModel()
     {
         Model::unguard();
-        $user = UserWithAuthor::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $author = Author::create(['name' => 'Louie', 'email' => 'louie@email.tld', 'user_id' => $user->id]);
+        $user = UserWithAuthor::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
+        $author = Author::create(['name' => 'Louie', 'email' => 'louie@example.com', 'user_id' => $user->id]);
         Model::reguard();
 
         $authorId = $author->id;
@@ -35,8 +35,8 @@ class SoftDeleteModelTest extends PluginTestCase
     public function testSoftDeleteOptionOnHardModel()
     {
         Model::unguard();
-        $user = UserWithSoftAuthor::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $author = Author::create(['name' => 'Louie', 'email' => 'louie@email.tld', 'user_id' => $user->id]);
+        $user = UserWithSoftAuthor::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
+        $author = Author::create(['name' => 'Louie', 'email' => 'louie@example.com', 'user_id' => $user->id]);
         Model::reguard();
 
         $authorId = $author->id;
@@ -47,8 +47,8 @@ class SoftDeleteModelTest extends PluginTestCase
     public function testSoftDeleteOptionOnSoftModel()
     {
         Model::unguard();
-        $user = UserWithSoftAuthorAndSoftDelete::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $author = SoftDeleteAuthor::create(['name' => 'Louie', 'email' => 'louie@email.tld', 'user_id' => $user->id]);
+        $user = UserWithSoftAuthorAndSoftDelete::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
+        $author = SoftDeleteAuthor::create(['name' => 'Louie', 'email' => 'louie@example.com', 'user_id' => $user->id]);
         Model::reguard();
 
         $authorId = $author->id;
@@ -60,8 +60,8 @@ class SoftDeleteModelTest extends PluginTestCase
     public function testDeleteOptionOnSoftModel()
     {
         Model::unguard();
-        $user = UserWithAuthorAndSoftDelete::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $author = Author::create(['name' => 'Louie', 'email' => 'louie@email.tld', 'user_id' => $user->id]);
+        $user = UserWithAuthorAndSoftDelete::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
+        $author = Author::create(['name' => 'Louie', 'email' => 'louie@example.com', 'user_id' => $user->id]);
         Model::reguard();
 
         $authorId = $author->id;
@@ -79,8 +79,8 @@ class SoftDeleteModelTest extends PluginTestCase
     public function testRestoreSoftDeleteRelation()
     {
         Model::unguard();
-        $user = UserWithSoftAuthorAndSoftDelete::create(['name' => 'Stevie', 'email' => 'stevie@email.tld']);
-        $author = SoftDeleteAuthor::create(['name' => 'Louie', 'email' => 'louie@email.tld', 'user_id' => $user->id]);
+        $user = UserWithSoftAuthorAndSoftDelete::create(['name' => 'Stevie', 'email' => 'stevie@example.com']);
+        $author = SoftDeleteAuthor::create(['name' => 'Louie', 'email' => 'louie@example.com', 'user_id' => $user->id]);
         Model::reguard();
 
         $authorId = $author->id;

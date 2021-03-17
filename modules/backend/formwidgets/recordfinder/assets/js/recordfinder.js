@@ -14,7 +14,7 @@
 
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // RECORDFINDER CLASS DEFINITION
@@ -24,7 +24,7 @@
         this.$el       = $(element)
         this.options   = options || {}
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
         this.init()
     }
@@ -44,7 +44,7 @@
 
         this.$el = null
 
-        // In some cases options could contain callbacks, 
+        // In some cases options could contain callbacks,
         // so it's better to clean them up too.
         this.options = null
 

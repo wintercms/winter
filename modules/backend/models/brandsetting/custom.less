@@ -83,6 +83,14 @@ body.outer {
 // Logos
 //
 
+.wn-logo-transparent when not (@logo-image = '') {
+    background-image: url('@{logo-image}') !important;
+}
+
+.wn-logo when not (@logo-image = '') {
+    background-image: url('@{logo-image}');
+}
+
 .oc-logo-transparent when not (@logo-image = '') {
     background-image: url('@{logo-image}') !important;
 }

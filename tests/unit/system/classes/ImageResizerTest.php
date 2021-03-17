@@ -6,7 +6,7 @@ use System\Classes\MediaLibrary;
 use System\Models\File as FileModel;
 use Cms\Classes\Controller as CmsController;
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
-use October\Rain\Exception\SystemException;
+use Winter\Storm\Exception\SystemException;
 
 class ImageResizerTest extends PluginTestCase
 {
@@ -37,7 +37,7 @@ class ImageResizerTest extends PluginTestCase
     {
         // Resize with default options
         $imageResizer = new ImageResizer(
-            (new CmsController())->themeUrl('assets/images/october.png'),
+            (new CmsController())->themeUrl('assets/images/winter.png'),
             100,
             100
         );
@@ -56,7 +56,7 @@ class ImageResizerTest extends PluginTestCase
 
         // Resize with customised options
         $imageResizer = new ImageResizer(
-            (new CmsController())->themeUrl('assets/images/october.png'),
+            (new CmsController())->themeUrl('assets/images/winter.png'),
             150,
             120,
             [
@@ -93,7 +93,7 @@ class ImageResizerTest extends PluginTestCase
         });
 
         $imageResizer = new ImageResizer(
-            (new CmsController())->themeUrl('assets/images/october.png'),
+            (new CmsController())->themeUrl('assets/images/winter.png'),
             100,
             100,
             []
@@ -115,7 +115,7 @@ class ImageResizerTest extends PluginTestCase
 
         // Resize with a falsey height specified
         $imageResizer = new ImageResizer(
-            (new CmsController())->themeUrl('assets/images/october.png'),
+            (new CmsController())->themeUrl('assets/images/winter.png'),
             100,
             false
         );
@@ -125,7 +125,7 @@ class ImageResizerTest extends PluginTestCase
         ], $imageResizer->getConfig());
 
         $imageResizer = new ImageResizer(
-            (new CmsController())->themeUrl('assets/images/october.png'),
+            (new CmsController())->themeUrl('assets/images/winter.png'),
             100,
             null
         );
@@ -136,7 +136,7 @@ class ImageResizerTest extends PluginTestCase
 
         // Resize with a falsey width specified
         $imageResizer = new ImageResizer(
-            (new CmsController())->themeUrl('assets/images/october.png'),
+            (new CmsController())->themeUrl('assets/images/winter.png'),
             '',
             100
         );
@@ -146,7 +146,7 @@ class ImageResizerTest extends PluginTestCase
         ], $imageResizer->getConfig());
 
         $imageResizer = new ImageResizer(
-            (new CmsController())->themeUrl('assets/images/october.png'),
+            (new CmsController())->themeUrl('assets/images/winter.png'),
             "0",
             100
         );
@@ -168,7 +168,7 @@ class ImageResizerTest extends PluginTestCase
         $this->copyMedia();
 
         $imageResizer = new ImageResizer(
-            (new CmsController())->themeUrl('assets/images/october.png'),
+            (new CmsController())->themeUrl('assets/images/winter.png'),
             100,
             100
         );
@@ -179,7 +179,7 @@ class ImageResizerTest extends PluginTestCase
         $this->copyMedia();
 
         $imageResizer = new ImageResizer(
-            '/themes/test/assets/images/october.png',
+            '/themes/test/assets/images/winter.png',
             100,
             100
         );
@@ -190,7 +190,7 @@ class ImageResizerTest extends PluginTestCase
         $this->copyMedia();
 
         $imageResizer = new ImageResizer(
-            URL::to(MediaLibrary::url('october.png')),
+            URL::to(MediaLibrary::url('winter.png')),
             100,
             100
         );
@@ -201,7 +201,7 @@ class ImageResizerTest extends PluginTestCase
         $this->copyMedia();
 
         $imageResizer = new ImageResizer(
-            MediaLibrary::url('october.png'),
+            MediaLibrary::url('winter.png'),
             100,
             100
         );
@@ -212,7 +212,7 @@ class ImageResizerTest extends PluginTestCase
         $this->copyMedia();
 
         $imageResizer = new ImageResizer(
-            URL::to(MediaLibrary::url('october.png')),
+            URL::to(MediaLibrary::url('winter.png')),
             100,
             100
         );
@@ -327,12 +327,38 @@ class ImageResizerTest extends PluginTestCase
         $this->copyMedia();
 
         $imageResizer = new ImageResizer(
-            URL::to(MediaLibrary::url('october space.png')),
+            URL::to(MediaLibrary::url('winter space.png')),
             100,
             100
         );
 
-        $this->assertStringContainsString('october%20space', $imageResizer->getResizedUrl(), 'Resized URLs are not properly URL encoded');
+        $this->assertStringContainsString('winter%20space', $imageResizer->getResizedUrl(), 'Resized URLs are not properly URL encoded');
+    }
+
+    public function testGetResizedUrl()
+    {
+        $imageResizer = new ImageResizer((new CmsController())->themeUrl('assets/images/winter.png'));
+
+        Config::set('cms.linkPolicy', 'force');
+        $url = $imageResizer->getResizedUrl();
+        $this->assertTrue(starts_with($url, 'http'));
+
+        Config::set('cms.linkPolicy', 'detect');
+        $url = $imageResizer->getResizedUrl();
+        $this->assertTrue(starts_with($url, Config::get('cms.storage.resized.path', '/storage/app/resized')));
+    }
+
+    public function testGetResizerUrl()
+    {
+        $imageResizer = new ImageResizer((new CmsController())->themeUrl('assets/images/winter.png'));
+
+        Config::set('cms.linkPolicy', 'force');
+        $url = $imageResizer->getResizerUrl();
+        $this->assertTrue(starts_with($url, 'http'));
+
+        Config::set('cms.linkPolicy', 'detect');
+        $url = $imageResizer->getResizerUrl();
+        $this->assertTrue(starts_with($url, '/resizer/'));
     }
 
     protected function setUpStorage()

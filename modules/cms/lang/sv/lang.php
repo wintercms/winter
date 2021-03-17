@@ -83,7 +83,7 @@ return [
         'new_directory_name_comment' => 'Ange ett nytt katalognamn för det duplicerade temat.',
         'dir_name_invalid' => 'Namn kan bara innehålla siffror, latinska bokstäver och följande symboler: _-',
         'dir_name_taken' => 'Den önskade temakatalogen finns redan.',
-        'find_more_themes' => 'Hitta fler teman på OctoberCMS Theme Marketplace',
+        'find_more_themes' => 'Hitta fler teman på Winter CMS Theme Marketplace',
         'saving' => 'Sparar tema...',
         'return' => 'Återvänd till temalistan',
     ],
