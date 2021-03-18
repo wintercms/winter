@@ -358,4 +358,23 @@ class PluginBase extends ServiceProviderBase
 
         return Semvar::match($replaces['version'], $version);
     }
+
+    /**
+     * Resolves a plugin identifier (Author.Plugin)
+     *
+     * @return string Identifier in format of Author.Plugin
+     */
+    public function getIdentifier(): string
+    {
+        $namespace = Str::normalizeClassName(get_called_class());
+        if (strpos($namespace, '\\') === null) {
+            return $namespace;
+        }
+
+        $parts = explode('\\', $namespace);
+        $slice = array_slice($parts, 1, 2);
+        $namespace = implode('.', $slice);
+
+        return $namespace;
+    }
 }
