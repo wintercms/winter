@@ -4,8 +4,10 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider as ServiceProviderBase;
 use ReflectionClass;
 use SystemException;
+use Winter\Storm\Parse\Semvar;
 use Yaml;
 use Backend;
+use Str;
 
 /**
  * Plugin base class
@@ -331,8 +333,29 @@ class PluginBase extends ServiceProviderBase
      *
      * @return string|null
      */
-    public function replaces()
+    public function replaces(): ?string
     {
-        return $this->pluginDetails()['replaces'] ?? null;
+        $replaces = $this->pluginDetails()['replaces'] ?? null;
+
+        if (is_array($replaces) && isset($replaces['name'])) {
+            return $replaces['name'];
+        }
+
+        if (is_string($replaces)) {
+            return $replaces;
+        }
+
+        return null;
+    }
+
+    public function replacesVersion(string $version = null): bool
+    {
+        $replaces = $this->pluginDetails()['replaces'];
+
+        if (!$version || !is_array($replaces) || !isset($replaces['version'])) {
+            return true;
+        }
+
+        return Semvar::match($replaces['version'], $version);
     }
 }
