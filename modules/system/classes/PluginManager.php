@@ -88,11 +88,12 @@ class PluginManager
         $this->metaFile = storage_path('cms/disabled.json');
         $this->loadDisabled();
         $this->loadPlugins();
-        $this->disableReplacedPlugins();
 
         if ($this->app->runningInBackend()) {
             $this->loadDependencies();
         }
+
+        $this->registerReplacedPlugins();
     }
 
     /**
@@ -174,10 +175,9 @@ class PluginManager
         $this->normalizedMap[strtolower($classId)] = $classId;
 
         try {
-            $details = $classObj->pluginDetails();
-
-            if (isset($details['replaces'])) {
-                $this->replaces[$details['replaces']] = $classId;
+            $replaces = $classObj->replaces();
+            if ($replaces) {
+                $this->replaces[$replaces] = $classId;
             }
         } catch (\Throwable $e) {
             // There is a bug where the Yaml facade has not been loaded
@@ -637,17 +637,41 @@ class PluginManager
         }
     }
 
-    public function disableReplacedPlugins()
+    public function registerReplacedPlugins()
     {
         if (empty($this->replaces)) {
             return;
         }
 
         foreach ($this->replaces as $target => $replacement) {
-            if (!$this->isDisabled($target)) {
+            if (!isset($this->plugins[$target])) {
+                continue;
+            }
+
+            if ($this->plugins[$replacement]->replacesVersion($this->getLatestPluginFileVersion($target))) {
                 $this->disablePlugin($target);
+                $this->enablePlugin($replacement);
+            } else {
+                $this->disablePlugin($replacement);
+                $this->enablePlugin($target);
             }
         }
+    }
+
+    public function getLatestPluginFileVersion(string $code): ?string
+    {
+        $file = $this->getPluginPath($code) . '/updates/version.yaml';
+        if (!File::exists($file)) {
+            return null;
+        }
+        $versions = array_reverse(file($file));
+        foreach ($versions as $version) {
+            if (trim($version) && substr($version, 0, 1) !== ' ') {
+                return explode(':', $version)[0] ?? null;
+            }
+        }
+
+        return null;
     }
 
 
