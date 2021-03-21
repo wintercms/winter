@@ -67,7 +67,7 @@ return [
         'email_placeholder' => 'email',
         'enter_new_password' => 'Enter a new password',
         'password_reset' => 'Password Reset',
-        'restore_success' => 'If an account with that email address exists, an email with instructions on resetting your password has been sent.',
+        'restore_success' => 'If your account exists, an email has been sent to you with reset instructions.',
         'reset_success' => 'Password has been reset. You may now sign in.',
         'reset_error' => 'Invalid password reset data supplied. Please try again!',
         'reset_fail' => 'Unable to reset your password!',
