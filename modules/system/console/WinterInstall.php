@@ -155,7 +155,7 @@ class WinterInstall extends Command
             $longestTimezone = max(array_map('strlen', $availableTimezones));
             $padTo = $longestTimezone - 13 + 1; // (UTC +10:00)
             $timezonesByName = [];
-            $i = $defaultTimezoneIndex = 0;
+
             foreach ($availableTimezones as $timezone => $name) {
                 $nameParts = explode(') ', $name);
                 $nameParts[0] .= ')';
@@ -163,13 +163,23 @@ class WinterInstall extends Command
                 $name = str_pad($nameParts[1], $padTo) . $nameParts[0];
 
                 $timezonesByName[$name] = $timezone;
-                if ($timezone === $defaultTimezone) {
-                    $defaultTimezoneIndex = $i;
-                }
-                $i++;
             }
 
-            $timezoneName = $this->choice('Default Backend Timezone', array_keys($timezonesByName), $defaultTimezoneIndex);
+            $timezonesByContinent = [];
+            $defaultTimezoneIndex = 0;
+            $defaultTimezoneGroupIndex = 0;
+            foreach ($timezonesByName as $name => $zone) {
+                $zone = explode('/', $zone)[0];
+                $timezonesByContinent[$zone][$name] = $zone;
+                if ($zone === $defaultTimezone) {
+                    $defaultTimezoneGroupIndex = count(array_keys($timezonesByContinent)) - 1;
+                    $defaultTimezoneIndex = count(array_keys($timezonesByContinent[$zone])) - 1;
+                }
+            }
+
+            $timezoneGroup = $this->choice('Timezone Continent', array_keys($timezonesByContinent), $defaultTimezoneGroupIndex);
+
+            $timezoneName = $this->choice('Default Backend Timezone', array_keys($timezonesByContinent[$timezoneGroup]), $defaultTimezoneIndex);
 
             $timezone = $timezonesByName[$timezoneName];
         } catch (\Exception $e) {
