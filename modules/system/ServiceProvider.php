@@ -7,8 +7,10 @@ use Event;
 use Config;
 use Backend;
 use Request;
+use Validator;
 use BackendMenu;
 use BackendAuth;
+use SystemException;
 use Backend\Models\UserRole;
 use Twig\Extension\SandboxExtension;
 use Twig\Environment as TwigEnvironment;
@@ -578,6 +580,24 @@ class ServiceProvider extends ModuleServiceProvider
             $validator->replacer('extensions', function ($message, $attribute, $rule, $parameters) {
                 return strtr($message, [':values' => implode(', ', $parameters)]);
             });
+
+            $plugins = PluginManager::instance()->getRegistrationMethodValues('registerValidationRules');
+            foreach ($plugins as $validators) {
+                foreach ($validators as $name => $validator) {
+                    if (is_callable($validator)) {
+                        Validator::extend($name, $validator);
+                    } elseif (class_exists($validator)) {
+                        if (is_subclass_of($validator, 'Winter\Storm\Validation\Rule')) {
+                            Validator::extend($name, $validator);
+                        } else {
+                            throw new SystemException(sprintf(
+                                'Class "%s" must extend "Winter\Storm\Validation\Rule"',
+                                $validator
+                            ));
+                        }
+                    }
+                }
+            }
         });
     }
 
