@@ -12,7 +12,7 @@ use System\Classes\CombineAssets;
  * Asset Maker Trait
  * Adds asset based methods to a class
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 trait AssetMaker
@@ -113,6 +113,14 @@ trait AssetMaker
     {
         if (is_array($name)) {
             $name = $this->combineAssets($name, $this->getLocalPath($this->assetPath));
+        }
+
+        // Alias october.* assets to winter.*
+        if (str_contains($name, 'js/october.')) {
+            $winterPath = str_replace('js/october.', 'js/winter.', $name);
+            if (file_exists(base_path(ltrim(parse_url($winterPath, PHP_URL_PATH), '/')))) {
+                $name = $winterPath;
+            }
         }
 
         $jsPath = $this->getAssetPath($name);

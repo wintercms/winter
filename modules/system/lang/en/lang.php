@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Getting back to basics',
     ],
     'locale' => [
@@ -84,7 +84,7 @@ return [
         'unnamed' => 'Unnamed theme',
         'name' => [
             'label' => 'Theme Name',
-            'help' => 'Name the theme by its unique code. For example, RainLab.Vanilla',
+            'help' => 'Name the theme by its unique code. For example, Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -100,7 +100,7 @@ return [
         'unnamed' => 'Unnamed plugin',
         'name' => [
             'label' => 'Plugin Name',
-            'help' => 'Name the plugin by its unique code. For example, RainLab.Blog',
+            'help' => 'Name the plugin by its unique code. For example, Winter.Blog',
         ],
         'by_author' => 'By :name',
     ],
@@ -270,7 +270,7 @@ return [
             ],
             'panel' => 'How awesome is this panel?',
             'more' => 'Some more text',
-            'promotion' => 'Coupon code: OCTOBER',
+            'promotion' => 'Coupon code: WINTER',
             'subcopy' => 'This is the subcopy of the email',
             'thanks' => 'Thanks',
         ],

@@ -6,11 +6,11 @@
     // PROCESSOR NAMESPACES
     // ============================
 
-    if ($.oc.table === undefined)
-        throw new Error("The $.oc.table namespace is not defined. Make sure that the table.js script is loaded.");
+    if ($.wn.table === undefined)
+        throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");
 
-    if ($.oc.table.processor === undefined)
-        $.oc.table.processor = {}
+    if ($.wn.table.processor === undefined)
+        $.wn.table.processor = {}
 
     // CLASS DEFINITION
     // ============================
@@ -55,14 +55,14 @@
 
     /*
      * Registers event handlers required for the cell processor.
-     * Event handers should be bound to the container control element 
+     * Event handers should be bound to the container control element
      * (not to the table element).
      */
     Base.prototype.registerHandlers = function() {
     }
 
     /*
-     * Unregisters event handlers previously registered with 
+     * Unregisters event handlers previously registered with
      * registerHandlers().
      */
     Base.prototype.unregisterHandlers = function() {
@@ -107,7 +107,7 @@
     /*
      * Determines if the keyboard navigation in the specified direction is allowed
      * by the cell processor. Some processors could reject the navigation, for example
-     * the string processor could cancel the left array navigation if the caret 
+     * the string processor could cancel the left array navigation if the caret
      * in the text input is not in the beginning of the text.
      */
     Base.prototype.keyNavigationAllowed = function(ev, direction) {
@@ -129,7 +129,7 @@
     }
 
     /*
-     * Creates a cell view data container (a DIV element that contains 
+     * Creates a cell view data container (a DIV element that contains
      * the current cell value). This functionality is required for most
      * of the processors, perhaps except the checkbox cell processor.
      */
@@ -173,7 +173,7 @@
     }
 
     /*
-     * Determines whether the specified element is some element created by the 
+     * Determines whether the specified element is some element created by the
      * processor.
      */
     Base.prototype.elementBelongsToProcessor = function(element) {
@@ -185,11 +185,11 @@
             return
 
         for (var validatorName in this.columnConfiguration.validation) {
-            if ($.oc.table.validator === undefined || $.oc.table.validator[validatorName] == undefined)
+            if ($.wn.table.validator === undefined || $.wn.table.validator[validatorName] == undefined)
                 throw new Error('The table cell validator "'+validatorName+'" for the column "'+this.columnName+'" is not ' +
-                    'found in the $.oc.table.validator namespace.')
+                    'found in the $.wn.table.validator namespace.')
 
-            var validator = new $.oc.table.validator[validatorName](
+            var validator = new $.wn.table.validator[validatorName](
                     this.columnConfiguration.validation[validatorName]
                 )
 
@@ -206,5 +206,5 @@
         }
     }
 
-    $.oc.table.processor.base = Base
+    $.wn.table.processor.base = Base
 }(window.jQuery);

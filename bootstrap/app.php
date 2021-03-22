@@ -11,7 +11,7 @@
 |
 */
 
-$app = new October\Rain\Foundation\Application(
+$app = new Winter\Storm\Foundation\Application(
     realpath(__DIR__.'/../')
 );
 
@@ -28,17 +28,17 @@ $app = new October\Rain\Foundation\Application(
 
 $app->singleton(
     Illuminate\Contracts\Http\Kernel::class,
-    October\Rain\Foundation\Http\Kernel::class
+    Winter\Storm\Foundation\Http\Kernel::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Console\Kernel::class,
-    October\Rain\Foundation\Console\Kernel::class
+    Winter\Storm\Foundation\Console\Kernel::class
 );
 
 $app->singleton(
     Illuminate\Contracts\Debug\ExceptionHandler::class,
-    October\Rain\Foundation\Exception\Handler::class
+    Winter\Storm\Foundation\Exception\Handler::class
 );
 
 /*

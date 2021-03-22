@@ -90,7 +90,7 @@ return [
         'new_directory_name_comment' => 'Indiquer un nouveau nom de répertoire pour le thème en dupliqué.',
         'dir_name_invalid' => 'Le nom doit contenir uniquement des chiffres, des symboles latins et les symboles suivants : _-',
         'dir_name_taken' => 'Le nom du répertoire indiqué existe déjà.',
-        'find_more_themes' => 'Trouver davantage de thèmes sur le site du CMS October.',
+        'find_more_themes' => 'Trouver davantage de thèmes sur le site du CMS Winter.',
         'saving' => 'Enregistrement du thème en cours…',
         'return' => 'Retourner à la liste des thèmes',
     ],

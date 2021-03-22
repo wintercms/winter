@@ -5,13 +5,13 @@ use Event;
 /**
  * Adds system event related features to any class.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 
 trait EventEmitter
 {
-    use \October\Rain\Support\Traits\Emitter;
+    use \Winter\Storm\Support\Traits\Emitter;
 
     /**
      * Fires a combination of local and global events. The first segment is removed

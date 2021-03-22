@@ -6,7 +6,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var InspectorManager = function() {
@@ -53,7 +53,7 @@
                 containerSupported: containerSupported
             })
 
-        new $.oc.inspector.wrappers.popup($element, null, options)
+        new $.wn.inspector.wrappers.popup($element, null, options)
     }
 
     InspectorManager.prototype.createInspectorContainer = function($element, $container) {
@@ -62,7 +62,7 @@
                 container: $container
             })
 
-        new $.oc.inspector.wrappers.container($element, null, options)
+        new $.wn.inspector.wrappers.container($element, null, options)
     }
 
     InspectorManager.prototype.switchToPopup = function(wrapper) {
@@ -70,7 +70,7 @@
                 containerSupported: true
             })
 
-        new $.oc.inspector.wrappers.popup(wrapper.$element, wrapper, options)
+        new $.wn.inspector.wrappers.popup(wrapper.$element, wrapper, options)
 
         wrapper.cleanupAfterSwitch()
         this.setContainerPreference(false)
@@ -87,7 +87,7 @@
             throw new Error('Cannot switch to container: a container element is not found')
         }
 
-        new $.oc.inspector.wrappers.container(wrapper.$element, wrapper, options)
+        new $.wn.inspector.wrappers.container(wrapper.$element, wrapper, options)
 
         wrapper.cleanupAfterSwitch()
         this.setContainerPreference(true)
@@ -106,7 +106,7 @@
         //
         if (!$container) {
             this.createInspectorPopup($element, false)
-        } 
+        }
         else {
             // If the container is already in use, apply values to the inspectable elements
             if (!this.applyValuesFromContainer($container) || !this.containerHidingAllowed($container)) {
@@ -114,8 +114,8 @@
             }
 
             // Dispose existing container wrapper, if any
-            $.oc.foundation.controlUtils.disposeControls($container.get(0))
-            
+            $.wn.foundation.controlUtils.disposeControls($container.get(0))
+
             if (!this.getContainerPreference()) {
                 // If container is not a preferred option, create Inspector popoup
                 this.createInspectorPopup($element, true)
@@ -168,11 +168,11 @@
         return false
     }
 
-    $.oc.inspector.manager = new InspectorManager()
+    $.wn.inspector.manager = new InspectorManager()
 
     $.fn.inspector = function () {
         return this.each(function () {
-            $.oc.inspector.manager.createInspector(this)
+            $.wn.inspector.manager.createInspector(this)
         })
     }
 }(window.jQuery);

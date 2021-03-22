@@ -10,7 +10,7 @@ use Backend;
 /**
  * Plugin base class
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class PluginBase extends ServiceProviderBase
@@ -279,17 +279,13 @@ class PluginBase extends ServiceProviderBase
      * Registers a new console (artisan) command
      *
      * @param string $key The command name
-     * @param string $class The command class
+     * @param string|\Closure $command The command class or closure
      * @return void
      */
-    public function registerConsoleCommand($key, $class)
+    public function registerConsoleCommand($key, $command)
     {
         $key = 'command.'.$key;
-
-        $this->app->singleton($key, function ($app) use ($class) {
-            return new $class;
-        });
-
+        $this->app->singleton($key, $command);
         $this->commands($key);
     }
 

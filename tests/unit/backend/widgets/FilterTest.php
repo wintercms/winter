@@ -2,7 +2,7 @@
 
 use Backend\Widgets\Filter;
 use Backend\Models\User;
-use October\Tests\Fixtures\Backend\Models\UserFixture;
+use Winter\Tests\Fixtures\Backend\Models\UserFixture;
 
 class FilterTest extends PluginTestCase
 {

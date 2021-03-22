@@ -3,13 +3,13 @@
 return [
     'auth' => [
         'title' => 'Zone d’administration',
-        'invalid_login' => 'L\'utilisateur saisie ne correspond à aucun utilisateur enregistré. Merci de vérifier votre saisie et de réessayer.'
+        'invalid_login' => 'L\'utilisateur saisi ne correspond à aucun utilisateur enregistré. Merci de vérifier votre saisie et de réessayer.'
     ],
     'field' => [
         'invalid_type' => 'Type de champ invalide :type.',
         'options_method_invalid_model' => "L’attribut ':field' ne correspond à aucun modèle valide. Essayez de spécifier explicitement la méthode d’options pour la classe du modèle ':model'.",
         'options_method_not_exists' => 'La classe du modèle :model doit définir une méthode :method() renvoyant des options pour le champ ":field" du formulaire.',
-        'colors_method_not_exists' => "La classe du modèle :model doit définir une méthode :method() renvoyant le code html en héxadécimal de la couleur du champ ':field' du formulaire."
+        'colors_method_not_exists' => "La classe du modèle :model doit définir une méthode :method() renvoyant le code html en hexadécimal de la couleur du champ ':field' du formulaire."
     ],
     'widget' => [
         'not_registered' => 'Aucun widget au nom de classe ":name" n’a été enregistré',
@@ -24,7 +24,7 @@ return [
         ],
         'no_database' => [
             'label' => 'Base de données introuvable',
-            'help' => 'Une base de données est requise pour l’accès à l’interface d’administration. Veuillez vérifier que la base de données existe et que les migrations ont été effectuées avant de ré-essayer.',
+            'help' => 'Une base de données est requise pour l’accès à l’interface d’administration. Veuillez vérifier que la base de données existe et que les migrations ont été effectuées avant de réessayer.',
             'cms_link' => 'Retour à l’accueil'
         ],
     ],
@@ -47,7 +47,6 @@ return [
         'enter_new_password' => 'Saisir votre nouveau mot de passe',
         'password_reset' => 'Réinitialiser le mot de passe',
         'restore_success' => 'Un e-mail contenant les instructions a été envoyé à l’adresse e-mail de votre compte.',
-        'restore_error' => 'L’identifiant ":login" ne correspond à aucun utilisateur',
         'reset_success' => 'Mot de passe réinitialisé avec succès. Vous pouvez maintenant vous connecter.',
         'reset_error' => 'Données de réinitialisation du mot de passe invalides. Veuillez réessayer !',
         'reset_fail' => 'Réinitialisation du mot de passe impossible !',
@@ -117,9 +116,9 @@ return [
         'full_name' => 'Nom complet',
         'email' => 'Adresse e-mail',
         'role_field' => 'Rôle',
-        'role_comment' => 'Les rôles définissent les permissions de l\'utilisateur, elles peuvent être écrasés au niveau de l\'utilisateur dans l\'onglet "Permissions".',
+        'role_comment' => 'Les rôles définissent les permissions de l\'utilisateur, elles peuvent être écrasées au niveau de l\'utilisateur dans l\'onglet "Permissions".',
         'groups' => 'Groupes',
-        'groups_comment' => 'Préciser les groupes auxquels ce compte doit appartenir. Les groupes définissent les permissions des utilisateurs, qui peuvent être surchargées au niveau de l’utilisateur, dans l’onglet Permissions.',
+        'groups_comment' => 'Préciser les groupes auxquels ce compte doit appartenir.',
         'avatar' => 'Avatar',
         'password' => 'Mot de passe',
         'password_confirmation' => 'Confirmer le mot de passe',
@@ -151,7 +150,7 @@ return [
             'code_comment' => 'Saisir un code d’accès unique si vous souhaitez accéder à ce groupe via l’API.',
             'menu_label' => 'Groupes',
             'list_title' => 'Gérer les groupes',
-            'new' => 'Ajouter un groupe d’administrateur',
+            'new' => 'Ajouter un groupe d’administrateurs',
             'delete_confirm' => 'Supprimer ce groupe d’administrateurs ?',
             'return' => 'Retour à la liste des groupes',
             'users_count' => 'Utilisateurs'
@@ -220,8 +219,8 @@ return [
         'remove_file' => 'Supprimer le fichier',
     ],
     'repeater' => [
-        'min_items_failed' => ':name nécéssite un minimum de :min choix sélectionné, seulement :items sont sélectionné(s)',
-        'max_items_failed' => ':name accepte un maximum de :max choix sélectionné, :items sont sélectionés',
+        'min_items_failed' => ':name nécessite un minimum de :min choix sélectionné(s), seulement :items sont sélectionné(s)',
+        'max_items_failed' => ':name accepte un maximum de :max choix sélectionné(s), :items sont sélectionnés',
     ],
     'form' => [
         'create_title' => 'Créer un(e) :name',
@@ -235,7 +234,7 @@ return [
         'missing_id' => 'L’ID de l’enregistrement du formulaire n’est pas précisé.',
         'missing_model' => 'Le behavior formulaire utilisé dans la classe :class n’a pas de modèle défini.',
         'missing_definition' => 'Le behavior formulaire utilisé n’a pas de champ pour ":field".',
-        'not_found' => 'Aucun enregistrement de formulaire ne correspond a l’ID :id.',
+        'not_found' => 'Aucun enregistrement de formulaire ne correspond à l’ID :id.',
         'action_confirm' => 'Confirmer l’action ?',
         'create' => 'Créer',
         'create_and_close' => 'Créer et fermer',
@@ -247,7 +246,7 @@ return [
         'saving_name' => 'Enregistrement d\'un(e) :name en cours…',
         'delete' => 'Supprimer',
         'deleting' => 'Suppression en cours…',
-        'confirm_delete' => 'Supprimer cet enregistrement?',
+        'confirm_delete' => 'Supprimer cet enregistrement ?',
         'confirm_delete_multiple' => 'Supprimer les enregistrements sélectionnés ?',
         'deleting_name' => 'Suppression d\'un(e) :name en cours…',
         'restore' => 'Récupérer',
@@ -280,8 +279,8 @@ return [
         'insert_row' => 'Insérer une ligne',
         'insert_row_below' => 'Insérer une ligne dessous',
         'delete_row' => 'Supprimer une ligne',
-        'concurrency_file_changed_title' => 'Le fichier à été modifié',
-        'concurrency_file_changed_description' => 'Un autre utilisateur a modifié ce fichier sur le disque. Vous pouvez charger à nouveau le fichier depuis le disque et perdre vos modifications) ou écraser le fichier sur le disque.',
+        'concurrency_file_changed_title' => 'Le fichier a été modifié',
+        'concurrency_file_changed_description' => 'Un autre utilisateur a modifié ce fichier sur le disque. Vous pouvez ou recharger le fichier depuis le disque, mais vous perdrez vos modifications, ou écraser le fichier sur le disque.',
         'return_to_list' => 'Retourner à la liste'
     ],
     'recordfinder' => [
@@ -318,7 +317,7 @@ return [
         'remove_name' => 'Retirer un(e) :name',
         'delete' => 'Supprimer',
         'delete_name' => 'Suppression d’un(e) :name',
-        'delete_confirm' => 'Êtes vous sûr(e) ?',
+        'delete_confirm' => 'Êtes-vous sûr(e) ?',
         'link' => 'Lier',
         'link_name' => 'Lier un(e) :name',
         'unlink' => 'Détacher',
@@ -357,7 +356,7 @@ return [
         'autocompletion' => 'Auto-complétion',
         'word_wrap' => 'Retour à la ligne',
         'highlight_active_line' => 'Sélectionner la ligne active',
-        'auto_closing' => 'Fermer Automatiquement les tags',
+        'auto_closing' => 'Fermer automatiquement les tags',
         'show_invisibles' => 'Afficher les caractères invisibles',
         'show_gutter' => 'Afficher les numéros de ligne',
         'basic_autocompletion'=> 'Auto-complétion basique (Ctrl + Espace)',
@@ -387,13 +386,13 @@ return [
         'allowed_tags' => 'Balises autorisées',
         'allowed_tags_comment' => 'Liste des balises autorisées.',
         'no_wrap' => 'Balises non encadrées',
-        'no_wrap_comment' => 'Liste des balises qui ne doivent pas être encadrées dans par des balises de bloc.',
+        'no_wrap_comment' => 'Liste des balises qui ne doivent pas être encadrées par des balises de bloc.',
         'remove_tags' => 'Balises supprimées',
         'remove_tags_comment' => 'Liste des balises qui sont supprimées ainsi que leur contenu.',
         'line_breaker_tags' => 'Balise de saut de ligne',
-        'line_breaker_tags_comment' => 'La liste des balises qui sont utilisés pour mettre des sauts de ligne.',
+        'line_breaker_tags_comment' => 'La liste des balises qui sont utilisées pour mettre des sauts de ligne.',
         'toolbar_buttons' => 'Boutons de la barre d\'outils',
-        'toolbar_buttons_comment' => 'Les boutons de la barre d\'outils a afficher par défaut dans l\'éditeur de texte enrichi.',
+        'toolbar_buttons_comment' => 'Les boutons de la barre d\'outils à afficher par défaut dans l\'éditeur de texte enrichi.',
     ],
     'tooltips' => [
         'preview_website' => 'Aperçu du site'
@@ -405,7 +404,7 @@ return [
     'myaccount' => [
         'menu_label' => 'Mon compte',
         'menu_description' => 'Modifier les informations de votre compte comme le nom, l’adresse e-mail ou le mot de passe.',
-        'menu_keywords' => 'security login sécurité authentification identification'
+        'menu_keywords' => 'identification de sécurité'
     ],
     'branding' => [
         'menu_label' => 'Personnaliser l’interface d’administration',
@@ -431,7 +430,7 @@ return [
     ],
     'backend_preferences' => [
         'menu_label' => 'Préférences d’administration',
-        'menu_description' => 'Gérer les préférences de votre compte telles que la langue utilisée.',
+        'menu_description' => 'Gérer les préférences de votre compte tel que la langue utilisée.',
         'region' => 'Région',
         'code_editor' => 'Éditeur de code',
         'timezone' => 'Fuseau horaire',
@@ -456,7 +455,7 @@ return [
       'all' => 'tous',
       'options_method_not_exists' => "La classe du modèle :model doit définir une méthode :method() qui retourne les options pour le filtre ':filter'.",
       'date_all' => 'toute la période',
-      'number_all' => 'tout les nombres',
+      'number_all' => 'tous les nombres',
     ],
     'import_export' => [
         'upload_csv_file' => '1. Envoyer un fichier CSV',

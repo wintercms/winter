@@ -8,7 +8,7 @@ use System\Classes\SettingsManager;
 /**
  * Access Logs controller
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class AccessLogs extends Controller
@@ -37,8 +37,8 @@ class AccessLogs extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('October.System', 'system', 'settings');
-        SettingsManager::setContext('October.Backend', 'access_logs');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
+        SettingsManager::setContext('Winter.Backend', 'access_logs');
     }
 
     public function index_onRefresh()

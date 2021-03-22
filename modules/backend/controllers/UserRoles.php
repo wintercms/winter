@@ -9,7 +9,7 @@ use System\Classes\SettingsManager;
 /**
  * Backend user groups controller
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */
@@ -45,8 +45,8 @@ class UserRoles extends Controller
     {
         parent::__construct();
 
-        BackendMenu::setContext('October.System', 'system', 'users');
-        SettingsManager::setContext('October.System', 'administrators');
+        BackendMenu::setContext('Winter.System', 'system', 'users');
+        SettingsManager::setContext('Winter.System', 'administrators');
 
         /*
          * Only super users can access

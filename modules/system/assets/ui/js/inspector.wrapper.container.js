@@ -6,7 +6,7 @@
     // CLASS DEFINITION
     // ============================
 
-    var Base = $.oc.inspector.wrappers.base,
+    var Base = $.wn.inspector.wrappers.base,
         BaseProto = Base.prototype
 
     var InspectorContainer = function($element, surface, options) {
@@ -89,7 +89,7 @@
             closeButton = document.createElement('span')
 
         container.setAttribute('class', 'inspector-header')
-        detachButton.setAttribute('class', 'oc-icon-external-link-square detach')
+        detachButton.setAttribute('class', 'wn-icon-external-link-square detach')
         closeButton.setAttribute('class', 'close')
 
         header.textContent = this.title
@@ -136,9 +136,9 @@
 
         this.options.container.get(0).appendChild(layout)
 
-        $.oc.foundation.controlUtils.markDisposable(layout)
+        $.wn.foundation.controlUtils.markDisposable(layout)
         this.registerLayoutHandlers(layout)
-  
+
         return {
             headContainer: headRow,
             bodyContainer: bodyRow
@@ -238,8 +238,8 @@
     }
 
     InspectorContainer.prototype.onDetach = function() {
-        $.oc.inspector.manager.switchToPopup(this)
+        $.wn.inspector.manager.switchToPopup(this)
     }
 
-    $.oc.inspector.wrappers.container = InspectorContainer
+    $.wn.inspector.wrappers.container = InspectorContainer
 }(window.jQuery);

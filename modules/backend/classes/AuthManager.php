@@ -2,16 +2,16 @@
 
 use Config;
 use System\Classes\PluginManager;
-use October\Rain\Auth\Manager as RainAuthManager;
-use October\Rain\Exception\SystemException;
+use Winter\Storm\Auth\Manager as StormAuthManager;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Back-end authentication manager.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
-class AuthManager extends RainAuthManager
+class AuthManager extends StormAuthManager
 {
     protected static $instance;
 
@@ -46,6 +46,11 @@ class AuthManager extends RainAuthManager
      * @var array List of registered permissions.
      */
     protected $permissions = [];
+
+    /**
+     * @var array List of owner aliases. ['Aliased.Owner' => 'Real.Owner']
+     */
+    protected $aliases = [];
 
     /**
      * @var array List of registered permission roles.
@@ -94,14 +99,32 @@ class AuthManager extends RainAuthManager
      */
     public function registerPermissions($owner, array $definitions)
     {
+        // Resolve alias
+        $owner = $this->aliases[$owner] ?? $owner;
+
         foreach ($definitions as $code => $definition) {
-            $permission = (object)array_merge(self::$permissionDefaults, array_merge($definition, [
+            $permission = (object) array_merge(self::$permissionDefaults, array_merge($definition, [
                 'code' => $code,
                 'owner' => $owner
             ]));
 
             $this->permissions[] = $permission;
         }
+
+        // Clear the permission cache
+        $this->permissionCache = false;
+    }
+
+    /**
+     * Register a permission owner alias
+     *
+     * @param string $owner The owner to register an alias for. Example: Real.Owner
+     * @param string $alias The alias to register. Example: Aliased.Owner
+     * @return void
+     */
+    public function registerPermissionOwnerAlias(string $owner, string $alias)
+    {
+        $this->aliases[$alias] = $owner;
     }
 
     /**
@@ -116,6 +139,9 @@ class AuthManager extends RainAuthManager
             throw new SystemException('Unable to remove permissions before they are loaded.');
         }
 
+        // Resolve alias
+        $owner = $this->aliases[$owner] ?? $owner;
+
         $ownerPermissions = array_filter($this->permissions, function ($permission) use ($owner) {
             return $permission->owner === $owner;
         });
@@ -125,6 +151,9 @@ class AuthManager extends RainAuthManager
                 unset($this->permissions[$key]);
             }
         }
+
+        // Clear the permission cache
+        $this->permissionCache = false;
     }
 
     /**
