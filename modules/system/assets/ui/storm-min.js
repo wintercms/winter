@@ -3829,6 +3829,7 @@ this.$modal.on('hide.bs.modal',function(){self.triggerEvent('hide.oc.popup')
 self.isOpen=false
 self.setBackdrop(false)})
 this.$modal.on('hidden.bs.modal',function(){self.triggerEvent('hidden.oc.popup')
+$.wn.foundation.controlUtils.disposeControls(self.$container.get(0))
 self.$container.remove()
 $(document.body).removeClass('modal-open')
 self.dispose()})
@@ -4125,7 +4126,7 @@ $(this).not('.'+options.excludeClass).find('td').not('.'+options.excludeClass).c
 $(this).not('.'+options.excludeClass).on('keypress',function(e){if(e.key==='(Space character)'||e.key==='Spacebar'||e.key===' '){handleClick(e)
 return false}})
 $(this).addClass(options.linkedClass)
-link.hide().after(link.html())})
+link.after(link.contents()).hide()})
 $('tr.rowlink').attr('tabindex',0)}
 RowLink.DEFAULTS={target:'a',excludeClass:'nolink',linkedClass:'rowlink'}
 var old=$.fn.rowLink
