@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.validators.base,
+    var Base = $.wn.inspector.validators.base,
         BaseProto = Base.prototype
 
     var RegexValidator = function(options) {
@@ -37,5 +37,5 @@
         return regexObj.test(string) ? null : this.getMessage()
     }
 
-    $.oc.inspector.validators.regex = RegexValidator
+    $.wn.inspector.validators.regex = RegexValidator
 }(window.jQuery);

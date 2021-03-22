@@ -2,12 +2,12 @@
 
 use BackendAuth;
 use SystemException;
-use October\Rain\Auth\Models\Preferences as PreferencesBase;
+use Winter\Storm\Auth\Models\Preferences as PreferencesBase;
 
 /**
  * All preferences for the backend user
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class UserPreference extends PreferencesBase

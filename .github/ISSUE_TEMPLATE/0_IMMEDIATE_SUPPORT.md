@@ -1,15 +1,13 @@
 ---
 name: "🚨 Immediate Support"
-about: 'I use October and it just broke! Help me!'
+about: 'I use Winter and it just broke! Help me!'
 ---
 
 This repository is only for reporting reproducible bugs or problems. If you need support, please use the following options:
 
-- Slack: https://octobercms.slack.com (Get an invite: https://octobercms-slack.herokuapp.com/)
-- Live chat (IRC): https://octobercms.com/chat - **Note:** Not as active as Slack
-- Forum: https://octobercms.com/forum
-- Stack Overflow: https://stackoverflow.com/questions/tagged/octobercms
+- Slack: https://discord.gg/D5MFSPH6Ux
+- Stack Overflow: https://stackoverflow.com/questions/tagged/wintercms
 
-If you rely on OctoberCMS for your business consider purchasing a paid support plan! Send an email to octobercms@luketowers.ca to get started.
+If you rely on Winter CMS for your business consider purchasing a paid support plan! Send an email to wintercms@luketowers.ca to get started.
 
 Thanks!

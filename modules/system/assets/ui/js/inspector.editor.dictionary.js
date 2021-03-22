@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.popupBase,
+    var Base = $.wn.inspector.propertyEditors.popupBase,
         BaseProto = Base.prototype
 
     var DictionaryEditor = function(inspector, propertyDefinition, containerCell, group) {
@@ -18,7 +18,7 @@
 
     DictionaryEditor.prototype.dispose = function() {
         this.disposeValidators()
-        
+
         this.keyValidationSet = null
         this.valueValidationSet = null
 
@@ -40,7 +40,7 @@
     //
 
     DictionaryEditor.prototype.setLinkText = function(link, value) {
-        var value = value !== undefined ? value 
+        var value = value !== undefined ? value
                 : this.inspector.getPropertyValue(this.propertyDefinition.property)
 
         if (value === undefined) {
@@ -51,7 +51,7 @@
             var placeholder = this.propertyDefinition.placeholder
 
             if (placeholder !== undefined) {
-                $.oc.foundation.element.addClass(link, 'placeholder')
+                $.wn.foundation.element.addClass(link, 'placeholder')
                 link.textContent = placeholder
             }
             else {
@@ -65,7 +65,7 @@
 
             var itemCount = this.getValueKeys(value).length
 
-            $.oc.foundation.element.removeClass(link, 'placeholder')
+            $.wn.foundation.element.removeClass(link, 'placeholder')
             link.textContent = 'Items: ' + itemCount
         }
     }
@@ -81,10 +81,10 @@
                         <div class="toolbar-item">                                                      \
                             <div class="btn-group">                                                     \
                                 <button type="button" class="btn btn-primary                            \
-                                    oc-icon-plus"                                                       \
+                                    wn-icon-plus"                                                       \
                                     data-cmd="create-item">Add</button>                                 \
                                 <button type="button" class="btn btn-default                            \
-                                    empty oc-icon-trash-o"                                              \
+                                    empty wn-icon-trash-o"                                              \
                                     data-cmd="delete-item"></button>                                    \
                             </div>                                                                      \
                         </div>                                                                          \
@@ -195,11 +195,11 @@
         var activeCells = this.popup.querySelectorAll('td.active')
 
         for (var i = activeCells.length-1; i >= 0; i--) {
-            $.oc.foundation.element.removeClass(activeCells[i], 'active')
+            $.wn.foundation.element.removeClass(activeCells[i], 'active')
         }
 
         var activeCell = input.parentNode.parentNode // input / div / td
-        $.oc.foundation.element.addClass(activeCell, 'active')
+        $.wn.foundation.element.addClass(activeCell, 'active')
     }
 
     DictionaryEditor.prototype.createItem = function() {
@@ -256,32 +256,32 @@
             }
 
             if (key.length == 0) {
-                $.oc.flashMsg({text: 'The key cannot be empty.', 'class': 'error', 'interval': 3})
+                $.wn.flashMsg({text: 'The key cannot be empty.', 'class': 'error', 'interval': 3})
                 this.focusAndMakeActive(keyInput)
                 return false
             }
 
             if (value.length == 0) {
-                $.oc.flashMsg({text: 'The value cannot be empty.', 'class': 'error', 'interval': 3})
+                $.wn.flashMsg({text: 'The value cannot be empty.', 'class': 'error', 'interval': 3})
                 this.focusAndMakeActive(valueInput)
                 return false
             }
 
             if (result[key] !== undefined) {
-                $.oc.flashMsg({text: 'Keys should be unique.', 'class': 'error', 'interval': 3})
+                $.wn.flashMsg({text: 'Keys should be unique.', 'class': 'error', 'interval': 3})
                 this.focusAndMakeActive(keyInput)
                 return false
             }
-        
+
             var validationResult = this.keyValidationSet.validate(key)
             if (validationResult !== null) {
-                $.oc.flashMsg({text: validationResult, 'class': 'error', 'interval': 5})
+                $.wn.flashMsg({text: validationResult, 'class': 'error', 'interval': 5})
                 return false
             }
 
             validationResult = this.valueValidationSet.validate(value)
             if (validationResult !== null) {
-                $.oc.flashMsg({text: validationResult, 'class': 'error', 'interval': 5})
+                $.wn.flashMsg({text: validationResult, 'class': 'error', 'interval': 5})
                 return false
             }
 
@@ -387,11 +387,11 @@
     //
 
     DictionaryEditor.prototype.initValidators = function() {
-        this.keyValidationSet = new $.oc.inspector.validationSet({
+        this.keyValidationSet = new $.wn.inspector.validationSet({
             validation: this.propertyDefinition.validationKey
         }, this.propertyDefinition.property+'.validationKey')
 
-        this.valueValidationSet = new $.oc.inspector.validationSet({
+        this.valueValidationSet = new $.wn.inspector.validationSet({
             validation: this.propertyDefinition.validationValue
         }, this.propertyDefinition.property+'.validationValue')
     }
@@ -428,10 +428,10 @@
         var command = ev.currentTarget.getAttribute('data-cmd')
 
         switch (command) {
-            case 'create-item' : 
+            case 'create-item' :
                 this.createItem()
             break;
-            case 'delete-item' : 
+            case 'delete-item' :
                 this.deleteItem()
             break;
         }
@@ -446,5 +446,5 @@
         }
     }
 
-    $.oc.inspector.propertyEditors.dictionary = DictionaryEditor
+    $.wn.inspector.propertyEditors.dictionary = DictionaryEditor
 }(window.jQuery);

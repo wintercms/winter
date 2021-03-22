@@ -13,12 +13,12 @@ use ApplicationException;
 use ValidationException;
 use Exception;
 use Config;
-use October\Rain\Foundation\Http\Middleware\CheckForTrustedHost;
+use Winter\Storm\Foundation\Http\Middleware\CheckForTrustedHost;
 
 /**
  * Authentication controller
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */
@@ -172,25 +172,22 @@ class Auth extends Controller
         }
 
         $user = BackendAuth::findUserByLogin(post('login'));
-        if (!$user) {
-            throw new ValidationException([
-                'login' => trans('backend::lang.account.restore_error', ['login' => post('login')])
-            ]);
+
+        if ($user) {
+            $code = $user->getResetPasswordCode();
+            $link = Backend::url('backend/auth/reset/' . $user->id . '/' . $code);
+
+            $data = [
+                'name' => $user->full_name,
+                'link' => $link,
+            ];
+
+            Mail::send('backend::mail.restore', $data, function ($message) use ($user) {
+                $message->to($user->email, $user->full_name)->subject(trans('backend::lang.account.password_reset'));
+            });
         }
 
         Flash::success(trans('backend::lang.account.restore_success'));
-
-        $code = $user->getResetPasswordCode();
-        $link = Backend::url('backend/auth/reset/' . $user->id . '/' . $code);
-
-        $data = [
-            'name' => $user->full_name,
-            'link' => $link,
-        ];
-
-        Mail::send('backend::mail.restore', $data, function ($message) use ($user) {
-            $message->to($user->email, $user->full_name)->subject(trans('backend::lang.account.password_reset'));
-        });
 
         return Backend::redirect('backend/auth/signin');
     }

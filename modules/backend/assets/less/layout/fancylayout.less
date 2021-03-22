@@ -619,6 +619,8 @@ body.breadcrumb-fancy .control-breadcrumb,
                 margin-right: 0;
             }
 
+            &[class^="wn-icon-"],
+            &[class*=" wn-icon-"],
             &[class^="oc-icon-"],
             &[class*=" oc-icon-"] {
                 &:before {
@@ -628,7 +630,8 @@ body.breadcrumb-fancy .control-breadcrumb,
         }
     }
 
-    form.oc-data-changed {
+    form.oc-data-changed,
+    form.wn-data-changed {
         .btn.save {
             .opacity(1);
         }

@@ -26,6 +26,14 @@ class Post extends Model
         'author' => 'Database\Tester\Models\Author',
     ];
 
+    public $belongsToMany = [
+        'categories' => [
+            'Database\Tester\Models\Category',
+            'table' => 'database_tester_categories_posts',
+            'pivot' => ['category_name', 'post_name']
+        ]
+    ];
+
     public $morphMany = [
         'event_log' => ['Database\Tester\Models\EventLog', 'name' => 'related', 'delete' => true, 'softDelete' => true],
     ];
@@ -33,11 +41,20 @@ class Post extends Model
     public $morphOne = [
         'meta' => ['Database\Tester\Models\Meta', 'name' => 'taggable'],
     ];
+
+    public $morphToMany = [
+        'tags' => [
+            'Database\Tester\Models\Tag',
+            'name'  => 'taggable',
+            'table' => 'database_tester_taggables',
+            'pivot' => ['added_by']
+        ],
+    ];
 }
 
 class NullablePost extends Post
 {
-    use \October\Rain\Database\Traits\Nullable;
+    use \Winter\Storm\Database\Traits\Nullable;
 
     /**
      * @var array Guarded fields
@@ -54,7 +71,7 @@ class NullablePost extends Post
 
 class SluggablePost extends Post
 {
-    use \October\Rain\Database\Traits\Sluggable;
+    use \Winter\Storm\Database\Traits\Sluggable;
 
     /**
      * @var array Guarded fields
@@ -72,8 +89,8 @@ class SluggablePost extends Post
 
 class RevisionablePost extends Post
 {
-    use \October\Rain\Database\Traits\Revisionable;
-    use \October\Rain\Database\Traits\SoftDelete;
+    use \Winter\Storm\Database\Traits\Revisionable;
+    use \Winter\Storm\Database\Traits\SoftDelete;
 
     /**
      * @var array Guarded fields
@@ -120,7 +137,7 @@ class RevisionablePost extends Post
 
 class ValidationPost extends Post
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var array Guarded fields

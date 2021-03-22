@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Tornant als bàsics'
     ],
     'directory' => [
@@ -39,7 +39,7 @@ return [
         'unnamed' => 'Tema sense nom',
         'name' => [
             'label' => 'Nom del tema',
-            'help' => 'Anomena el tema amb el seu codi únic. Per exemple, RainLab.Vanilla'
+            'help' => 'Anomena el tema amb el seu codi únic. Per exemple, Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -55,7 +55,7 @@ return [
         'unnamed' => 'Plugin sense nom',
         'name' => [
             'label' => 'Nom del plugin',
-            'help' => 'Anomena el tema amb el seu codi únic. Per exemple, RainLab.Blog'
+            'help' => 'Anomena el tema amb el seu codi únic. Per exemple, Winter.Blog'
         ],
         'by_author' => 'Per :name',
     ],
@@ -219,7 +219,7 @@ return [
             ],
             'panel' => 'No és fantàstic aquest panell?',
             'more' => 'Una mica més de text',
-            'promotion' => 'Codi de cupó: OCTOBER',
+            'promotion' => 'Codi de cupó: WINTER',
             'subcopy' => "Això és un subcopy de l'email",
             'thanks' => 'Gràcies'
         ],

@@ -10,7 +10,7 @@ use Twig\Extension\AbstractExtension as TwigExtension;
 /**
  * The System Twig extension class implements common Twig functions and filters.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Extension extends TwigExtension
@@ -110,7 +110,7 @@ class Extension extends TwigExtension
      *
      * @param mixed $image Supported values below:
      *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
-     *              instance of October\Rain\Database\Attach\File,
+     *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @param integer|bool|null $width Desired width of the resized image
      * @param integer|bool|null $height Desired height of the resized image
@@ -128,7 +128,7 @@ class Extension extends TwigExtension
      *
      * @param mixed $image Supported values below:
      *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
-     *              instance of October\Rain\Database\Attach\File,
+     *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @return int
      */
@@ -142,7 +142,7 @@ class Extension extends TwigExtension
      *
      * @param mixed $image Supported values below:
      *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
-     *              instance of October\Rain\Database\Attach\File,
+     *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @return int
      */

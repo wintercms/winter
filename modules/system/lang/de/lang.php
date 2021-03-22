@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Zurück zum Wesentlichen',
     ],
     'directory' => [
@@ -41,7 +41,7 @@ return [
         'unnamed' => 'Unbenanntes Plugin',
         'name' => [
             'label' => 'Plugin-Name',
-            'help' => 'Benennen Sie das Plugin eindeutig, zum Beispiel RainLab.Blog',
+            'help' => 'Benennen Sie das Plugin eindeutig, zum Beispiel Winter.Blog',
         ],
     ],
     'project' => [

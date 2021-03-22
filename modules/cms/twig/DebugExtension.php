@@ -10,7 +10,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
-use October\Rain\Database\Model;
+use Winter\Storm\Database\Model;
 
 class DebugExtension extends TwigExtension
 {

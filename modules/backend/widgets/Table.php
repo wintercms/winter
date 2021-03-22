@@ -6,7 +6,7 @@ use Lang;
 use Input;
 use Request;
 use Backend\Classes\WidgetBase;
-use October\Rain\Html\Helper as HtmlHelper;
+use Winter\Storm\Html\Helper as HtmlHelper;
 use SystemException;
 
 /**
@@ -14,7 +14,7 @@ use SystemException;
  *
  * Represents an editable tabular control.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Table extends WidgetBase

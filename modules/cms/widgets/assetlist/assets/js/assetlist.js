@@ -39,7 +39,7 @@
         else
             $container.addClass('goForward')
 
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
         this.$form.request(this.alias+'::onOpenDirectory', {
             data: {
                 path: path,
@@ -54,7 +54,7 @@
                 alert(jqXHR.responseText.length ? jqXHR.responseText : jqXHR.statusText)
             }
         }).always(function(){
-            $.oc.stripeLoadIndicator.hide()
+            $.wn.stripeLoadIndicator.hide()
         })
     }
 
@@ -68,7 +68,7 @@
         this.$form.request(this.alias+'::onDeleteFiles', {
             success: function(data) {
                 if (data.error !== undefined && $.type(data.error) === 'string' && data.error.length)
-                    $.oc.flashMsg({text: data.error, 'class': 'error'})
+                    $.wn.flashMsg({text: data.error, 'class': 'error'})
             },
             complete: function() {
                 self.refresh()
@@ -90,24 +90,24 @@
             message = 'Error uploading file'
         }
 
-        $.oc.alert(message)
+        $.wn.alert(message)
 
         this.refresh()
     }
 
     AssetList.prototype.onUploadSuccess = function(file, data) {
         if (data !== 'success') {
-            $.oc.alert(data)
+            $.wn.alert(data)
         }
     }
 
     AssetList.prototype.onUploadComplete = function(file, data) {
-        $.oc.stripeLoadIndicator.hide()
+        $.wn.stripeLoadIndicator.hide()
         this.refresh()
     }
 
     AssetList.prototype.onUploadStart = function() {
-        $.oc.stripeLoadIndicator.show()
+        $.wn.stripeLoadIndicator.show()
     }
 
     AssetList.prototype.onFileClick = function(event) {
@@ -173,7 +173,7 @@
             $.each(self.$form.serializeArray(), function (index, field) {
                 formData.append(field.name, field.value)
             })
-            xhr.setRequestHeader('X-OCTOBER-REQUEST-HANDLER', self.alias + '::onUpload')
+            xhr.setRequestHeader('X-WINTER-REQUEST-HANDLER', self.alias + '::onUpload')
             self.onUploadStart()
         })
     }

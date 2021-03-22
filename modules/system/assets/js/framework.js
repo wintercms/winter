@@ -437,26 +437,6 @@
             this.options = args[1] || {}
         },
     })
-
-    function paramToObj (name, value) {
-        if (value === undefined) {
-            value = ''
-        }
-        if (typeof value == 'object') {
-            return value
-        }
-
-        try {
-            return ocJSON('{' + value + '}')
-        } catch (e) {
-            throw new Error('Error parsing the ' + name + ' attribute value. ' + e)
-        }
-    }
-
-    function ocJSON (json) {
-        var jsonString = parse(json);
-        return JSON.parse(jsonString);
-    }
 }(window.october, window.document, jQuery));
 
 // Data Request API extension

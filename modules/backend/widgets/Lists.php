@@ -6,15 +6,15 @@ use Lang;
 use Backend;
 use DbDongle;
 use Carbon\Carbon;
-use October\Rain\Html\Helper as HtmlHelper;
-use October\Rain\Router\Helper as RouterHelper;
+use Winter\Storm\Html\Helper as HtmlHelper;
+use Winter\Storm\Router\Helper as RouterHelper;
 use System\Helpers\DateTime as DateTimeHelper;
 use System\Classes\PluginManager;
 use System\Classes\MediaLibrary;
 use System\Classes\ImageResizer;
 use Backend\Classes\ListColumn;
 use Backend\Classes\WidgetBase;
-use October\Rain\Database\Model;
+use Winter\Storm\Database\Model;
 use ApplicationException;
 use BackendAuth;
 
@@ -22,7 +22,7 @@ use BackendAuth;
  * List Widget
  * Used for building back end lists, renders a list of model objects
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Lists extends WidgetBase
@@ -62,6 +62,11 @@ class Lists extends WidgetBase
      * @var int Maximum rows to display for each page.
      */
     public $recordsPerPage;
+
+    /**
+     * @var array Options for number of items per page.
+     */
+    public $perPageOptions;
 
     /**
      * @var bool Shows the sorting options for each column.
@@ -199,6 +204,7 @@ class Lists extends WidgetBase
             'noRecordsMessage',
             'showPageNumbers',
             'recordsPerPage',
+            'perPageOptions',
             'showSorting',
             'defaultSort',
             'showCheckboxes',
@@ -233,7 +239,7 @@ class Lists extends WidgetBase
      */
     protected function loadAssets()
     {
-        $this->addJs('js/october.list.js', 'core');
+        $this->addJs('js/winter.list.js', 'core');
     }
 
     /**
@@ -1689,7 +1695,7 @@ class Lists extends WidgetBase
      */
     protected function getSetupPerPageOptions()
     {
-        $perPageOptions = [20, 40, 80, 100, 120];
+        $perPageOptions = is_array($this->perPageOptions) ? $this->perPageOptions : [20, 40, 80, 100, 120];
         if (!in_array($this->recordsPerPage, $perPageOptions)) {
             $perPageOptions[] = $this->recordsPerPage;
         }

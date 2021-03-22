@@ -2,8 +2,8 @@
 
 return [
     'app' => [
-        'name' => 'October CMS',
-        'tagline' => '欢迎使用October CMS！'
+        'name' => 'Winter CMS',
+        'tagline' => '欢迎使用Winter CMS！'
     ],
     'directory' => [
         'create_fail' => '不能创建目录: :name'
@@ -39,7 +39,7 @@ return [
         'unnamed' => '未命名主题',
         'name' => [
             'label' => '主题名称',
-            'help' => '主题的唯一名称，例如：RainLab.Vanilla'
+            'help' => '主题的唯一名称，例如：Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -55,7 +55,7 @@ return [
         'unnamed' => '未命名的插件',
         'name' => [
             'label' => '插件名称',
-            'help' => '插件的唯一名称，例如：RainLab.Blog'
+            'help' => '插件的唯一名称，例如：Winter.Blog'
         ],
         'by_author' => '作者 :name'
     ],
@@ -183,7 +183,7 @@ return [
             ],
             'panel' => 'How awesome is this panel?',
             'more' => 'Some more text',
-            'promotion' => 'Coupon code: OCTOBER',
+            'promotion' => 'Coupon code: WINTER',
             'subcopy' => 'This is the subcopy of the email',
             'thanks' => 'Thanks'
         ],

@@ -3,13 +3,13 @@
 use Str;
 use Lang;
 use Config;
-use October\Rain\Extension\Extendable;
+use Winter\Storm\Extension\Extendable;
 use BadMethodCallException;
 
 /**
  * Component base class
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 abstract class ComponentBase extends Extendable
