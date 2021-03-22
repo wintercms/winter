@@ -30,7 +30,7 @@ return [
         ],
         'settings_menu' => 'フロントエンドのテーマ',
         'settings_menu_description' => 'インストール済みのテーマのプレビュー一覧とアクティブテーマの選択。',
-        'find_more_themes' => 'OctoberCMSマーケットプレースで、もっとテーマを探す。',
+        'find_more_themes' => 'Winter CMSマーケットプレースで、もっとテーマを探す。',
         'activate_button' => 'これをアクティブにする',
         'active_button' => '現在アクティブ中です',
         'customize_button' => 'カスタマイズ',

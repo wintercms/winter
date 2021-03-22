@@ -9,7 +9,7 @@
 
 +function ($) { "use strict";
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     // POPUP CLASS DEFINITION
@@ -31,7 +31,7 @@
         this.$dialog = this.$container.find('.modal-dialog:first')
         this.$modal = this.$container.modal({ show: false, backdrop: false, keyboard: this.options.keyboard })
 
-        $.oc.foundation.controlUtils.markDisposable(element)
+        $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
 
         this.initEvents()
@@ -70,7 +70,7 @@
         }
 
         /*
-         * October AJAX
+         * Winter AJAX
          */
         if (this.options.handler) {
 
@@ -145,6 +145,7 @@
 
         this.$modal.on('hidden.bs.modal', function(){
             self.triggerEvent('hidden.oc.popup')
+            $.wn.foundation.controlUtils.disposeControls(self.$container.get(0))
             self.$container.remove()
             $(document.body).removeClass('modal-open')
             self.dispose()

@@ -13,7 +13,7 @@
             </thead>
             <tbody>
                 <tr>
-                    <td>Welcome to October</td>
+                    <td>Welcome to Winter</td>
                     <td>Oct 01, 2013</td>
                     <td>News</td>
                     <td>Oct 01, 2013</td>
@@ -52,7 +52,7 @@
                             <label for="checkbox_1">Check</label>
                         </div>
                     </td>
-                    <td><a href="/">Welcome to October</a></td>
+                    <td><a href="/">Welcome to Winter</a></td>
                     <td>Oct 01, 2013</td>
                     <td>Adam Person</td>
                     <td>News</td>
@@ -196,15 +196,15 @@ It might be fun to include a status column!
             <tbody>
                 <tr>
                     <td>
-                        <span class="oc-icon-circle text-muted">
+                        <span class="wn-icon-circle text-muted">
                             Draft
                         </span>
                     </td>
-                    <td>Welcome to October</td>
+                    <td>Welcome to Winter</td>
                 </tr>
                 <tr>
                     <td>
-                        <span class="oc-icon-circle text-info">
+                        <span class="wn-icon-circle text-info">
                             Pending
                         </span>
                     </td>
@@ -212,7 +212,7 @@ It might be fun to include a status column!
                 </tr>
                 <tr>
                     <td>
-                        <span class="oc-icon-circle text-success">
+                        <span class="wn-icon-circle text-success">
                             Approved
                         </span>
                     </td>
@@ -220,7 +220,7 @@ It might be fun to include a status column!
                 </tr>
                 <tr>
                     <td>
-                        <span class="oc-icon-circle text-danger">
+                        <span class="wn-icon-circle text-danger">
                             Cancelled
                         </span>
                     </td>
@@ -251,7 +251,7 @@ You can also include an icon badge inside a column.
                         </span>
                         Draft
                     </td>
-                    <td>Welcome to October</td>
+                    <td>Welcome to Winter</td>
                 </tr>
                 <tr>
                     <td>
@@ -293,7 +293,7 @@ You may link an entire row by adding the `data-control="rowlink"` attribute to t
             <tbody>
                 <tr>
                     <td>
-                        <a href="http://octobercms.com">Link to this</a>
+                        <a href="http://wintercms.com">Link to this</a>
                     </td>
                     <td>Row will be linked</td>
                     <td>This will also be linked</td>

@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => "OctoberCMS",
+        'name' => "Winter CMS",
         'tagline' => "Вяртанне да вытокаў"
     ],
     'directory' => [
@@ -42,7 +42,7 @@ return [
         'unnamed' => "Тэма без назвы",
         'name' => [
             'label' => "Імя тэма",
-            'help' => "Назавіце тэму па яе ўнікальнаму коду. Напрыклад, RainLab.Vanilla"
+            'help' => "Назавіце тэму па яе ўнікальнаму коду. Напрыклад, Winter.Vanilla"
         ],
     ],
     'themes' => [
@@ -58,7 +58,7 @@ return [
         'unnamed' => "Плагін без назвы",
         'name' => [
             'label' => "Назва плагіну",
-            'help' => "Назавіце плагін па яго ўнікальнаму коду. Напрыклад, RainLab.Blog"
+            'help' => "Назавіце плагін па яго ўнікальнаму коду. Напрыклад, Winter.Blog"
         ]
     ],
     'plugins' => [

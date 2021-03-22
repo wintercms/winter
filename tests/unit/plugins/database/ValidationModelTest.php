@@ -15,7 +15,7 @@ class ValidationModelTest extends PluginTestCase
 
     public function testUniqueTableValidation()
     {
-        $this->expectException(\October\Rain\Database\ModelException::class);
+        $this->expectException(\Winter\Storm\Database\ModelException::class);
 
         $post = ValidationPost::create([
             'title' => 'This is a new post',

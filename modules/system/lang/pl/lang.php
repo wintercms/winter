@@ -2,7 +2,7 @@
 
 return [
     'app'            => [
-        'name'    => 'October CMS',
+        'name'    => 'Winter CMS',
         'tagline' => 'Getting back to basics',
     ],
     'directory'      => [
@@ -42,7 +42,7 @@ return [
         'unnamed' => 'Nienazwany motyw',
         'name'    => [
             'label' => 'Nazwa motywu',
-            'help'  => 'Nazwij motyw unikalnym kodem, na przykład: RainLab.Vanilla',
+            'help'  => 'Nazwij motyw unikalnym kodem, na przykład: Winter.Vanilla',
         ],
     ],
     'themes'         => [
@@ -58,7 +58,7 @@ return [
         'unnamed' => 'Wtyczka bez nazwy',
         'name'    => [
             'label' => 'Nazwa Wtyczki',
-            'help'  => 'Nazwij wtyczkę unikalny kodem, np. RainLab.Blog',
+            'help'  => 'Nazwij wtyczkę unikalny kodem, np. Winter.Blog',
         ],
     ],
     'plugins'        => [
@@ -229,7 +229,7 @@ return [
             ],
             'panel'     => 'Czyż ten panel nie jest wspaniały?',
             'more'      => 'Trochę dodatkowego tekstu',
-            'promotion' => 'Kod kuponu: OCTOBER',
+            'promotion' => 'Kod kuponu: WINTER',
             'subcopy'   => 'To jest dopisek do wiadomości',
             'thanks'    => 'Dziękujemy',
         ],

@@ -83,7 +83,7 @@ return [
         'new_directory_name_comment' => '提供複製主題的新聞目錄名.',
         'dir_name_invalid' => '名稱只能包含數字, 拉丁字母和以下字元: _-',
         'dir_name_taken' => '主題目錄已存在.',
-        'find_more_themes' => '在 OctoberCMS 主題商店中搜尋更多主題',
+        'find_more_themes' => '在 Winter CMS 主題商店中搜尋更多主題',
         'saving' => '保存主題...',
         'return' => '返回主題列表',
     ],

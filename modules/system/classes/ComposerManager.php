@@ -8,12 +8,12 @@
  * twice by the composer instance introduced by a plugin. This class
  * is used as a substitute for the vendor/autoload.php file.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ComposerManager
 {
-    use \October\Rain\Support\Traits\Singleton;
+    use \Winter\Storm\Support\Traits\Singleton;
 
     protected $namespacePool = [];
 

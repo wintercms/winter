@@ -14,7 +14,7 @@ use Exception;
 /**
  * Settings controller
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */
@@ -43,7 +43,7 @@ class Settings extends Controller
 
         $this->addCss('/modules/system/assets/css/settings/settings.css', 'core');
 
-        BackendMenu::setContext('October.System', 'system', 'settings');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
     }
 
     public function index()

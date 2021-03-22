@@ -7,7 +7,7 @@ use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
 /**
  * Parser for the {% flash %} Twig tag.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class FlashTokenParser extends TwigTokenParser

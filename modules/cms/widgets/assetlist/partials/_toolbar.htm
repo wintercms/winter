@@ -5,20 +5,20 @@
         <div class="toolbar-item" data-calculate-width>
             <div class="btn-group">
                 <div class="dropdown last">
-                    <button type="button" class="btn btn-default oc-icon-plus"
+                    <button type="button" class="btn btn-default wn-icon-plus"
                         data-control="create-asset"
                         data-toggle="dropdown"
                         ><?= e(trans('cms::lang.sidebar.add')) ?></button>
 
                     <ul class="dropdown-menu offset-left" role="menu" data-dropdown-title="<?= e(trans('cms::lang.asset.drop_down_add_title')) ?>">
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:;" data-control="create-template" class="oc-icon-file-text-o"><?= e(trans('cms::lang.asset.create_file')) ?></a></li>
-                        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:;" data-control="upload-assets" class="oc-icon-upload"><?= e(trans('cms::lang.asset.upload_files')) ?></a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:;" data-control="create-template" class="wn-icon-file-text-o"><?= e(trans('cms::lang.asset.create_file')) ?></a></li>
+                        <li role="presentation"><a role="menuitem" tabindex="-1" href="javascript:;" data-control="upload-assets" class="wn-icon-upload"><?= e(trans('cms::lang.asset.upload_files')) ?></a></li>
                         <li role="presentation" class="divider"></li>
                         <li role="presentation"><a
                             role="menuitem"
                             tabindex="-1"
                             href="javascript:;"
-                            class="oc-icon-folder-o"
+                            class="wn-icon-folder-o"
                             data-control="popup"
                             data-handler="<?= $this->getEventHandler('onLoadNewDirPopup') ?>"
                         ><?= e(trans('cms::lang.asset.create_directory')) ?></a></li>
@@ -30,7 +30,7 @@
                     data-trigger-action="show"
                     data-trigger="<?= '#'.$this->getId('asset-list') ?> input[type=checkbox]"
                     data-trigger-condition="checked">
-                    <button type="button" class="btn btn-default empty oc-icon-wrench last"
+                    <button type="button" class="btn btn-default empty wn-icon-wrench last"
                         data-toggle="dropdown"
                         data-control="asset-tools"
                         ></button>
@@ -42,14 +42,14 @@
                             href="javascript:;"
                             data-control="delete-asset"
                             data-confirmation="<?= e(trans($this->deleteConfirmation)) ?>"
-                            class="oc-icon-trash-o"
+                            class="wn-icon-trash-o"
                         ><?= e(trans('cms::lang.asset.delete')) ?></a></li>
 
                         <li role="presentation"><a
                             role="menuitem"
                             tabindex="-1"
                             href="javascript:;"
-                            class="oc-icon-angle-double-right"
+                            class="wn-icon-angle-double-right"
                             data-control="popup"
                             data-handler="<?= $this->getEventHandler('onLoadMovePopup') ?>"
                         ><?= e(trans('cms::lang.asset.move')) ?></a></li>
