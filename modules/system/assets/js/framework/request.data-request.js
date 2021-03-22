@@ -1,16 +1,21 @@
 /* globals window, jQuery */
 
 /**
- * October CMS HTML Data Attribute Request extension.
+ * Winter CMS HTML Data Attribute Request extension.
  *
- * @copyright 2016-2021 Alexey Bobkov, Samuel Georges, Luke Towers
+ * @copyright 2021 Winter CMS
  * @author Ben Thomson <git@alfreido.com>
- * @link https://octobercms.com
+ * @link https://wintercms.com
  */
-(function (october, document, $) {
+
+if (!window.winter) {
+    throw new Error('The Winter CMS JS framework base must be loaded before the Data Attribute Request module can be registered.')
+}
+
+(function (winter, document, $) {
     'use strict';
 
-    october.extend('Request', {
+    winter.extend('Request', {
         boot: function () {
             // Create request function in jQuery
             $.fn.request = function(handler, options) {
@@ -36,9 +41,9 @@
                     handler = $this.data('request')
                 }
 
-                options = $.extend(true, {}, october.request.DEFAULTS, data, typeof options == 'object' && options)
+                options = $.extend(true, {}, winter.request.DEFAULTS, data, typeof options == 'object' && options)
 
-                return october.request($this, handler, options)
+                return winter.request($this, handler, options)
             }
 
             // Attach to elements for data requests
@@ -58,9 +63,9 @@
         }
 
         try {
-            return october.json.parse('{' + value + '}')
+            return winter.json.parse('{' + value + '}')
         } catch (e) {
             throw new Error('Error parsing the ' + name + ' attribute value. ' + e)
         }
     }
-}(window.october, window.document, jQuery));
+}(window.winter, window.document, jQuery));

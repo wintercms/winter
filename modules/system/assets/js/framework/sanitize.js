@@ -1,20 +1,20 @@
 /* globals window, jQuery */
 
 /**
- * October CMS HTML sanitizer module.
+ * Winter CMS HTML sanitizer module.
  *
  * Based off https://gist.github.com/ufologist/5a0da51b2b9ef1b861c30254172ac3c9. Requires jQuery
  *
- * @copyright 2016-2021 Alexey Bobkov, Samuel Georges, Luke Towers
+ * @copyright 2021 Winter CMS
  * @author Ben Thomson <git@alfreido.com>
- * @link https://octobercms.com
+ * @link https://wintercms.com
  */
 
-if (!window.october) {
-    throw new Error('The OctoberCMS framework base must be loaded before the HTML Sanitizer module can be registered.')
+if (!window.winter) {
+    throw new Error('The Winter CMS JS framework base must be loaded before the HTML Sanitizer module can be registered.')
 }
 
-(function (october, $) {
+(function (winter, $) {
     'use strict';
 
     var Sanitizer = function () {
@@ -75,15 +75,15 @@ if (!window.october) {
         var output = $($.parseHTML('<div>' + html + '</div>', null, false))
         output.find('*').each(function() {
             self.trimAttributes(this)
-        });
+        })
         return output.html()
     }
 
-    // Extend the October JS framework
-    october.extend('Sanitizer', Sanitizer)
+    // Extend the Winter CMS JS framework
+    winter.extend('Sanitizer', Sanitizer)
 
     // Add to global function for backwards compatibility
-    window.ocSanitize = function (html) {
-        return october.sanitizer.sanitize(html)
+    window.wnSanitize = function (html) {
+        return winter.sanitizer.sanitize(html)
     }
-}(window.october, jQuery))
+}(window.winter, jQuery));

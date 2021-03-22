@@ -1,18 +1,18 @@
 /* globals window */
 
 /**
- * October CMS JSON parser module.
+ * Winter CMS JSON parser module.
  *
- * @copyright 2016-2021 Alexey Bobkov, Samuel Georges, Luke Towers
+ * @copyright 2021 Winter CMS
  * @author Ben Thomson <git@alfreido.com>
- * @link https://octobercms.com
+ * @link https://wintercms.com
  */
 
-if (!window.october) {
-    throw new Error('The OctoberCMS framework base must be loaded before the JsonParser module can be registered.')
+if (!window.winter) {
+    throw new Error('The Winter CMS JS framework base must be loaded before the JsonParser module can be registered.')
 }
 
-(function (october) {
+(function (winter) {
     'use strict';
 
     var JsonParser = function () {
@@ -382,11 +382,11 @@ if (!window.october) {
         return ch === ' ' || ch === '\n' || ch === '\t'
     }
 
-    // Extend the October JS framework
-    october.extend('JSON', JsonParser)
+    // Extend the Winter CMS JS framework
+    winter.extend('JSON', JsonParser)
 
     // Add to global function for backwards compatibility
-    window.ocJSON = function (json) {
-        return october.json.parse(json)
+    window.wnJSON = function (json) {
+        return winter.json.parse(json)
     }
-}(window.october))
+}(window.winter));

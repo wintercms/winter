@@ -3,21 +3,25 @@
 /**
  * October CMS jQuery Request extension.
  *
- * @copyright 2016-2021 Alexey Bobkov, Samuel Georges, Luke Towers
+ * @copyright 2021 Winter CMS
  * @author Ben Thomson <git@alfreido.com>
- * @link https://octobercms.com
+ * @link https://wintercms.com
  */
 
-(function (october, document, $) {
+ if (!window.winter) {
+    throw new Error('The Winter CMS JS framework base must be loaded before the jQuery Request module can be registered.')
+}
+
+(function (winter, document, $) {
     'use strict';
 
-    october.extend('Request', {
+    winter.extend('Request', {
         boot: function () {
             // Create request function in jQuery
             $.fn.request = function(handler, options) {
                 var $this = $(this).first()
 
-                return october.request($this, handler, options)
+                return winter.request($this, handler, options)
             }
 
             $.request = function(handler, options) {
@@ -57,4 +61,4 @@
             return Object.assign({}, options, args[2])
         },
     })
-}(window.october, window.document, jQuery));
+}(window.winter, window.document, jQuery));

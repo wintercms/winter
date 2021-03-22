@@ -1,18 +1,18 @@
 /* globals window, console */
 
 /**
- * October CMS JavaScript Request module.
+ * Winter CMS JavaScript Request module.
  *
- * @copyright 2016-2021 Alexey Bobkov, Samuel Georges, Luke Towers
+ * @copyright 2021 Winter CMS
  * @author Ben Thomson <git@alfreido.com>
- * @link https://octobercms.com
+ * @link https://wintercms.com
  */
 
 if (!window.october) {
-    throw new Error('The OctoberCMS framework base must be loaded before the Request module can be registered.')
+    throw new Error('The Winter CMS JS framework base must be loaded before the Request module can be registered.')
 }
 
-(function (october, window) {
+(function (winter, window) {
     'use strict';
 
     var Request = function () {
@@ -103,12 +103,12 @@ if (!window.october) {
 
     Request.prototype.processHeaders = function (args) {
         this.headers = {
-            'X-OCTOBER-REQUEST-HANDLER': this.handler,
-            'X-OCTOBER-REQUEST-PARTIALS': this.extractPartials(this.options.update),
+            'X-WINTER-REQUEST-HANDLER': this.handler,
+            'X-WINTER-REQUEST-PARTIALS': this.extractPartials(this.options.update),
         }
 
         if (this.options.flash !== false && this.options.flash !== undefined) {
-            this.headers['X-OCTOBER-REQUEST-FLASH'] = 1
+            this.headers['X-WINTER-REQUEST-FLASH'] = 1
         }
 
         var csrfToken = getXSRFToken()
@@ -161,6 +161,6 @@ if (!window.october) {
         return cookieValue
     }
 
-    // Extend the October JS framework
-    october.extend('Request', Request)
-}(window.october, window));
+    // Extend the Winter CMS JS framework
+    winter.extend('Request', Request)
+}(window.winter, window));

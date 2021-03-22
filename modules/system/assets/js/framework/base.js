@@ -1,29 +1,29 @@
 /* globals window */
 
 /**
- * October CMS JavaScript framework.
+ * Winter CMS JavaScript framework.
  *
- * This class represents a new take on the October CMS JS framework, being fully modular and removing the dependency
+ * This class represents a new take on the Winter CMS JS framework, being fully modular and removing the dependency
  * for jQuery.
  *
- * @copyright 2016-2021 Alexey Bobkov, Samuel Georges, Luke Towers
+ * @copyright 2021 Winter CMS
  * @author Ben Thomson <git@alfreido.com>
- * @link https://octobercms.com
+ * @link https://wintercms.com
  */
 (function (window) {
     'use strict';
 
     // Do not double-instatiate
-    if (window.october) {
+    if (window.winter) {
         return
     }
 
-    var OctoberJsFramework = function () {
+    var WinterJsFramework = function () {
         this._modules = {}
     }
 
     /**
-     * Extends the October CMS JavaScript framework, or any registered module that allows extensions.
+     * Extends the Winter CMS JavaScript framework, or any registered module that allows extensions.
      *
      * Extensions provide functionality for extendable methods and attachable methods. Extendable methods are
      * intended to be once-off implemented - ie. the first plugin that provides the method handles it. Attachable
@@ -32,7 +32,7 @@
      * @param {String} module
      * @param {(Object|Function)} extension
      */
-    OctoberJsFramework.prototype.extend = function (module, extension) {
+    WinterJsFramework.prototype.extend = function (module, extension) {
         if (typeof module !== 'string') {
             throw new Error('Module name must be specified as a string.')
         }
@@ -99,8 +99,8 @@
                 var args = Array.prototype.slice.call(arguments),
                     method = args.shift()
 
-                if (window.october.isSingleton(module)) {
-                    return callExtendable(window.october.getModuleInstance(module), module, method, args)
+                if (window.winter.isSingleton(module)) {
+                    return callExtendable(window.winter.getModuleInstance(module), module, method, args)
                 }
                 return callExtendable(this, module, method, args)
             }
@@ -109,8 +109,8 @@
                     method = args.shift(),
                     passThrough = args.shift()
 
-                if (window.october.isSingleton(module)) {
-                    return callAttachable(window.october.getModuleInstance(module), module, method, passThrough, args)
+                if (window.winter.isSingleton(module)) {
+                    return callAttachable(window.winter.getModuleInstance(module), module, method, passThrough, args)
                 }
                 return callAttachable(this, module, method, passThrough, args)
             }
@@ -146,43 +146,43 @@
         }
     }
 
-    OctoberJsFramework.prototype.hasModule = function (module) {
+    WinterJsFramework.prototype.hasModule = function (module) {
         return this._modules.hasOwnProperty(module)
     }
 
-    OctoberJsFramework.prototype.getModule = function (module) {
+    WinterJsFramework.prototype.getModule = function (module) {
         if (!this.hasModule(module)) {
-            throw new Error('Module "' + module + '" has not been defined in the October CMS JS framework')
+            throw new Error('Module "' + module + '" has not been defined in the Winter CMS JS framework')
         }
 
         return this._modules[module].source
     }
 
-    OctoberJsFramework.prototype.isSingleton = function (module) {
+    WinterJsFramework.prototype.isSingleton = function (module) {
         if (!this.hasModule(module)) {
-            throw new Error('Module "' + module + '" has not been defined in the October CMS JS framework')
+            throw new Error('Module "' + module + '" has not been defined in the Winter CMS JS framework')
         }
 
         return this._modules[module].singleton === true
     }
 
-    OctoberJsFramework.prototype.getModuleInstance = function (module) {
+    WinterJsFramework.prototype.getModuleInstance = function (module) {
         if (!this.hasModule(module)) {
-            throw new Error('Module "' + module + '" has not been defined in the October CMS JS framework')
+            throw new Error('Module "' + module + '" has not been defined in the Winter CMS JS framework')
         }
 
         return this._modules[module].instance
     }
 
-    OctoberJsFramework.prototype.getModuleExtensions = function (module) {
+    WinterJsFramework.prototype.getModuleExtensions = function (module) {
         if (!this.hasModule(module)) {
-            throw new Error('Module "' + module + '" has not been defined in the October CMS JS framework')
+            throw new Error('Module "' + module + '" has not been defined in the Winter CMS JS framework')
         }
 
         return this._modules[module].extensions
     }
 
-    OctoberJsFramework.prototype.moduleIsExtendable = function (module) {
+    WinterJsFramework.prototype.moduleIsExtendable = function (module) {
         var sourceModule = this.getModule(module)
 
         return (
@@ -191,7 +191,7 @@
         )
     }
 
-    OctoberJsFramework.prototype.moduleIsAttachable = function (module) {
+    WinterJsFramework.prototype.moduleIsAttachable = function (module) {
         var sourceModule = this.getModule(module)
 
         return (
@@ -201,7 +201,7 @@
     }
 
     var callExtendable = function (instance, module, method, args) {
-        var extensions = window.october.getModuleExtensions(module)
+        var extensions = window.winter.getModuleExtensions(module)
 
         for (var ext in extensions) {
             if (extensions[ext].methods.hasOwnProperty(method)) {
@@ -216,7 +216,7 @@
     }
 
     var callAttachable = function (instance, module, method, passThrough, args) {
-        var extensions = window.october.getModuleExtensions(module),
+        var extensions = window.winter.getModuleExtensions(module),
             extParams,
             extReturned
 
@@ -245,10 +245,10 @@
         Object.defineProperty(Object, 'assign', {
           value: function assign(target, varArgs) { // .length of function is 2
             if (target === null || target === undefined) {
-              throw new TypeError('Cannot convert undefined or null to object');
+              throw new TypeError('Cannot convert undefined or null to object')
             }
 
-            var to = Object(target);
+            var to = Object(target)
 
             for (var index = 1; index < arguments.length; index++) {
               var nextSource = arguments[index];
@@ -257,19 +257,19 @@
                 for (var nextKey in nextSource) {
                   // Avoid bugs when hasOwnProperty is shadowed
                   if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
-                    to[nextKey] = nextSource[nextKey];
+                    to[nextKey] = nextSource[nextKey]
                   }
                 }
               }
             }
-            return to;
+            return to
           },
           writable: true,
           configurable: true,
-        });
+        })
       }
 
 
-    // Define OctoberJs in global namespace
-    window.october = new OctoberJsFramework()
+    // Define Winter JS framework in global namespace
+    window.winter = new WinterJsFramework()
 }(window));
