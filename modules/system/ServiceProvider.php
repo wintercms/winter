@@ -587,11 +587,11 @@ class ServiceProvider extends ModuleServiceProvider
                     if (is_callable($validator)) {
                         Validator::extend($name, $validator);
                     } elseif (class_exists($validator)) {
-                        if (is_subclass_of($validator, 'October\Rain\Validation\Rule')) {
+                        if (is_subclass_of($validator, 'Winter\Storm\Validation\Rule')) {
                             Validator::extend($name, $validator);
                         } else {
                             throw new SystemException(sprintf(
-                                'Class "%s" must extend "October\Rain\Validation\Rule"',
+                                'Class "%s" must extend "Winter\Storm\Validation\Rule"',
                                 $validator
                             ));
                         }

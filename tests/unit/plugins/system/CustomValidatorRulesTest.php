@@ -6,10 +6,10 @@ class CustomValidatorRulesTest extends PluginTestCase
     {
         parent::setUp();
 
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/rules/BeLikeBobRule.php';
-        include_once base_path() . '/tests/fixtures/plugins/october/tester/Plugin.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/rules/BeLikeBobRule.php';
+        include_once base_path() . '/tests/fixtures/plugins/winter/tester/Plugin.php';
 
-        $this->runPluginRefreshCommand('October.Tester');
+        $this->runPluginRefreshCommand('Winter.Tester');
     }
 
     public function testValidationUsingClosure()
@@ -32,7 +32,7 @@ class CustomValidatorRulesTest extends PluginTestCase
         $this->assertFalse($validationWithValidData->fails());
         $this->assertTrue($validationWithInvalidData->fails());
     }
-    
+
     public function testValidationUsingRuleObject()
     {
         $validData = [
