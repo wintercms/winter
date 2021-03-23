@@ -221,7 +221,7 @@ class PluginBase extends ServiceProviderBase
      */
     public function registerFormWidgets()
     {
-        return [];
+        return [];modules/system/classes/PluginManager.php
     }
 
     /**
@@ -330,36 +330,74 @@ class PluginBase extends ServiceProviderBase
     }
 
     /**
-     * Returns the id of the replaced plugin if present
+     * Returns a list of plugins replaced by this plugin
      *
-     * @return string|null
+     * @return array|string[]
      */
-    public function replaces(): ?string
+    public function getReplaces(): array
     {
         $replaces = $this->pluginDetails()['replaces'] ?? null;
 
-        if (is_array($replaces) && isset($replaces['name'])) {
-            return $replaces['name'];
+        if (is_array($replaces)) {
+            return array_keys($replaces);
         }
 
-        if (is_string($replaces)) {
-            return $replaces;
-        }
-
-        return null;
+        return is_string($replaces) ? [$replaces] : [];
     }
 
-    public function replacesVersion(string $version = null): bool
+    /**
+     * Returns bool for if a plugin is replaced
+     * @param string $pluginIdentifier
+     * @param string $version
+     * @return bool
+     */
+    public function replaces(string $pluginIdentifier, string $version): bool
     {
-        $replaces = $this->pluginDetails()['replaces'];
+        $replaces = $this->pluginDetails()['replaces'] ?? null;
 
-        if (!$version || !is_array($replaces) || !isset($replaces['version'])) {
+        if (is_string($replaces) && $replaces === $pluginIdentifier) {
             return true;
         }
 
-        return Semver::satisfies($version, $replaces['version']);
+        if (is_array($replaces) && in_array($pluginIdentifier, array_keys($replaces))) {
+            return $this->replacesVersion($version, $replaces[$pluginIdentifier]);
+        }
+
+        return false;
     }
 
+    /**
+     * Passes the check through to composer/semver but allows Winter to perform
+     * checks / changes as required
+     *
+     * @return bool
+     */
+    protected function replacesVersion(string $version, string $constraints): bool
+    {
+        if ($constraints === 'self.version') {
+            $constraints = $this->getVersion();
+        }
+
+        return Semver::satisfies($version, $constraints);
+    }
+
+    /**
+     * This is duplication of code that allows us to fetch the latest version of this plugin
+     * without having to call PluginVersion or VersionManager which both create
+     * Infinite loops
+     *
+     * @return string
+     */
+    public function getVersion(): string
+    {
+        return \Db::table('system_plugin_versions')
+            ->lists('version', 'code')[$this->getIdentifier()] ?? (string) VersionManager::NO_VERSION_VALUE;
+    }
+
+    /**
+     * Returns path to plugins base dir
+     * @return string
+     */
     public function getPluginPath(): string
     {
         if ($this->path) {

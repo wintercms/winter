@@ -175,9 +175,11 @@ class PluginManager
         $this->normalizedMap[strtolower($classId)] = $classId;
 
         try {
-            $replaces = $classObj->replaces();
+            $replaces = $classObj->getReplaces();
             if ($replaces) {
-                $this->replaces[$replaces] = $classId;
+                foreach ($replaces as $replace) {
+                    $this->replaces[$replace] = $classId;
+                }
             }
         } catch (\Throwable $e) {
             // There is a bug where the Yaml facade has not been loaded
@@ -648,7 +650,7 @@ class PluginManager
                 continue;
             }
 
-            if ($this->plugins[$replacement]->replacesVersion($this->getLatestPluginFileVersion($target))) {
+            if ($this->plugins[$replacement]->replaces($target, $this->plugins[$target]->getVersion())) {
                 $this->disablePlugin($target);
                 $this->enablePlugin($replacement);
             } else {
@@ -657,23 +659,6 @@ class PluginManager
             }
         }
     }
-
-    public function getLatestPluginFileVersion(string $code): ?string
-    {
-        $file = $this->getPluginPath($code) . '/updates/version.yaml';
-        if (!File::exists($file)) {
-            return null;
-        }
-        $versions = array_reverse(file($file));
-        foreach ($versions as $version) {
-            if (trim($version) && substr($version, 0, 1) !== ' ') {
-                return explode(':', $version)[0] ?? null;
-            }
-        }
-
-        return null;
-    }
-
 
     /**
      * Disables a single plugin in the system.
