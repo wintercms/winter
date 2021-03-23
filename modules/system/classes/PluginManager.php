@@ -823,9 +823,19 @@ class PluginManager
 
             foreach ($checklist as $code => $plugin) {
                 /*
-                 * Get dependencies and remove any aliens
+                 * Get dependencies and remove any aliens, replacing any dependencies who have been replaced by another
+                 * plugin.
                  */
                 $depends = $this->getDependencies($plugin);
+
+                $depends = array_map(function ($depend) {
+                    if (isset($this->replaces[$depend])) {
+                        return $this->replaces[$depend];
+                    }
+
+                    return $depend;
+                }, $depends);
+
                 $depends = array_filter($depends, function ($pluginCode) {
                     return isset($this->plugins[$pluginCode]);
                 });
