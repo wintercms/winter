@@ -4,7 +4,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider as ServiceProviderBase;
 use ReflectionClass;
 use SystemException;
-use Winter\Storm\Parse\Semvar;
+use Composer\Semver\Semver;
 use Yaml;
 use Backend;
 use Str;
@@ -21,6 +21,11 @@ class PluginBase extends ServiceProviderBase
      * @var boolean
      */
     protected $loadedYamlConfiguration = false;
+
+    /**
+     * @var string
+     */
+    protected $path = null;
 
     /**
      * @var array Plugin dependencies
@@ -356,7 +361,19 @@ class PluginBase extends ServiceProviderBase
             return true;
         }
 
-        return Semvar::match($replaces['version'], $version);
+        return Semver::satisfies($version, $replaces['version']);
+    }
+
+    public function getPluginPath(): string
+    {
+        if ($this->path) {
+            return $this->path;
+        }
+
+        $reflection = new ReflectionClass($this);
+        $this->path = dirname($reflection->getFileName());
+
+        return $this->path;
     }
 
     /**
