@@ -823,8 +823,8 @@ class PluginManager
 
             foreach ($checklist as $code => $plugin) {
                 /*
-                 * Get dependencies and remove any aliens, replacing any dependencies who have been replaced by another
-                 * plugin.
+                 * Get dependencies and remove any aliens, replacing any dependencies which have been superceded
+                 * by another plugin.
                  */
                 $depends = $this->getDependencies($plugin);
 
