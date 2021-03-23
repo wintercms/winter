@@ -374,6 +374,10 @@ return [
         'selection_mode' => 'Urvalsläge',
         'resize_image' => 'Anpassa bildstorlek',
         'image_size' => 'Bildstorlek:',
-        'selected_size' => 'Vald:'
+        'selected_size' => 'Vald:',
+        'rename_popup_title' => 'Byt namn',
+        'rename_new_name' => 'Nytt namn',
+        'move_please_select' => 'Var god välj',
+        'move_button' => 'Flytta',
     ]
 ];
