@@ -221,7 +221,7 @@ class PluginBase extends ServiceProviderBase
      */
     public function registerFormWidgets()
     {
-        return [];modules/system/classes/PluginManager.php
+        return [];
     }
 
     /**
