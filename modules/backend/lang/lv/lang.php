@@ -453,6 +453,10 @@ return [
         'selection_mode' => 'Iezīmēšanas režīms',
         'resize_image' => 'Mērogot attēlu',
         'image_size' => 'Attēla izmērs:',
-        'selected_size' => 'Izvēlēts:'
+        'selected_size' => 'Izvēlēts:',
+        'rename_popup_title' => 'Pārsaukt',
+        'rename_new_name' => 'Jauns nosaukums',
+        'move_please_select' => 'lūdzu izvēlieties',
+        'move_button' => 'Pārvietot',
     ]
 ];

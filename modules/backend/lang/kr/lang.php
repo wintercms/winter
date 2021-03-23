@@ -554,6 +554,10 @@ return [
         'selection_mode' => '선택 모드',
         'resize_image' => '이미지 크기 변경',
         'image_size' => '이미지 크기:',
-        'selected_size' => '선택크기:'
+        'selected_size' => '선택크기:',
+        'rename_popup_title' => '이름변경',
+        'rename_new_name' => '새 이름',
+        'move_please_select' => '선택해 주세요',
+        'move_button' => '이동',
     ],
 ];

@@ -640,6 +640,10 @@ return [
         'selection_mode' => 'Kiválasztás módja',
         'resize_image' => 'Kép átméretezése',
         'image_size' => 'Kép mérete:',
-        'selected_size' => 'Kiválasztva:'
+        'selected_size' => 'Kiválasztva:',
+        'rename_popup_title' => 'Átnevezés',
+        'rename_new_name' => 'Új név',
+        'move_please_select' => 'válasszon',
+        'move_button' => 'Áthelyezés',
     ]
 ];

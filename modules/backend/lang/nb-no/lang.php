@@ -542,6 +542,10 @@ return [
         'selection_mode' => 'Valgmodus',
         'resize_image' => 'Endre bildestørrelse',
         'image_size' => 'Bildestørrelse:',
-        'selected_size' => 'Valgt:'
+        'selected_size' => 'Valgt:',
+        'rename_popup_title' => 'Nytt navn',
+        'rename_new_name' => 'Nytt navn',
+        'move_please_select' => 'velg',
+        'move_button' => 'Flytt',
     ]
 ];

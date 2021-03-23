@@ -552,6 +552,10 @@ return [
         'selection_mode' => 'Pasirinkimo būdas',
         'resize_image' => 'Keisti paveiksliuko išmatavimus',
         'image_size' => 'Paveiksliuko dydis:',
-        'selected_size' => 'Pasirinkta:'
+        'selected_size' => 'Pasirinkta:',
+        'rename_popup_title' => 'Pervadinti',
+        'rename_new_name' => 'Naujas pavadinimas',
+        'move_please_select' => 'prašome pasirinkti',
+        'move_button' => 'Perkelti',
     ]
 ];
