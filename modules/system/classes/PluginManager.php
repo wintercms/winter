@@ -541,7 +541,7 @@ class PluginManager
         $plugins = $this->getPlugins();
 
         foreach ($plugins as $id => $plugin) {
-            if (!method_exists($plugin, $methodName)) {
+            if (!is_callable([$plugin, $methodName])) {
                 continue;
             }
 
@@ -823,9 +823,19 @@ class PluginManager
 
             foreach ($checklist as $code => $plugin) {
                 /*
-                 * Get dependencies and remove any aliens
+                 * Get dependencies and remove any aliens, replacing any dependencies which have been superceded
+                 * by another plugin.
                  */
                 $depends = $this->getDependencies($plugin);
+
+                $depends = array_map(function ($depend) {
+                    if (isset($this->replaces[$depend])) {
+                        return $this->replaces[$depend];
+                    }
+
+                    return $depend;
+                }, $depends);
+
                 $depends = array_filter($depends, function ($pluginCode) {
                     return isset($this->plugins[$pluginCode]);
                 });
