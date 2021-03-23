@@ -541,7 +541,7 @@ class PluginManager
         $plugins = $this->getPlugins();
 
         foreach ($plugins as $id => $plugin) {
-            if (!method_exists($plugin, $methodName) || !is_callable([$plugin, $methodName])) {
+            if (!is_callable([$plugin, $methodName])) {
                 continue;
             }
 
