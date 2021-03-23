@@ -37,7 +37,6 @@ return [
         'enter_new_password' => 'Masukan sandi lewat baru',
         'password_reset' => 'Atur Ulang Sandi Lewat',
         'restore_success' => 'Sebuah surat berisi petunjuk pemulihan telah dikirim ke alamat surat elektronik Anda.',
-        'restore_error' => "Pengguna dengan nama pengguna ':login' tidak ditemukan",
         'reset_success' => 'Sandi lewat Anda telah diatur ulang. Anda dapat catat masuk sekarang.',
         'reset_error' => 'Data atur ulang sandi lewat yang diberikan tidak valid. Silakan ulangi lagi!',
         'reset_fail' => 'Tidak dapat mengatur ulang sandi lewat Anda!',
@@ -297,5 +296,11 @@ return [
     ],
     'filter' => [
       'all' => 'semua'
+    ],
+    'media' => [
+        'rename_popup_title' => 'Ganti nama',
+        'rename_new_name' => 'Nama baru',
+        'move_please_select' => 'silakan pilih',
+        'move_button' => 'Pindahkan',
     ]
 ];

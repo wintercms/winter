@@ -16,7 +16,7 @@ use System\Models\MailTemplate;
 /**
  * Mail brand customization controller
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  *
  */
@@ -53,8 +53,8 @@ class MailBrandSettings extends Controller
 
         $this->pageTitle = 'system::lang.mail_brand.page_title';
 
-        BackendMenu::setContext('October.System', 'system', 'settings');
-        SettingsManager::setContext('October.System', 'mail_brand_settings');
+        BackendMenu::setContext('Winter.System', 'system', 'settings');
+        SettingsManager::setContext('Winter.System', 'mail_brand_settings');
     }
 
     public function index()

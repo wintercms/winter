@@ -3,10 +3,10 @@
  */
 +function ($) { "use strict";
 
-    if ($.oc.mediaManager === undefined)
-        $.oc.mediaManager = {}
+    if ($.wn.mediaManager === undefined)
+        $.wn.mediaManager = {}
 
-    var Base = $.oc.foundation.base,
+    var Base = $.wn.foundation.base,
         BaseProto = Base.prototype
 
     var MediaManagerPopup = function(options) {
@@ -96,7 +96,7 @@
         mediaManager.remove()
 
         // Release clickedElement reference inside redactor.js
-        // If we don't do it, the Media Manager popup DOM elements 
+        // If we don't do it, the Media Manager popup DOM elements
         // won't be removed from the memory.
         $(document).trigger('mousedown')
 
@@ -117,10 +117,10 @@
 
     MediaManagerPopup.prototype.onPopupCommand = function(ev, command, param) {
         switch (command) {
-            case 'insert' : 
+            case 'insert' :
                 this.insertMedia()
             break;
-            case 'insert-cropped' : 
+            case 'insert-cropped' :
                 this.insertCroppedImage(param)
             break;
         }
@@ -136,5 +136,5 @@
         onClose: undefined
     }
 
-    $.oc.mediaManager.popup = MediaManagerPopup
+    $.wn.mediaManager.popup = MediaManagerPopup
 }(window.jQuery);

@@ -7,7 +7,7 @@ use Request;
 /**
  * Model for logging 404 errors
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class RequestLog extends Model

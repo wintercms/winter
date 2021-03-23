@@ -3,7 +3,7 @@
 use View;
 use Model;
 use System\Classes\MailManager;
-use October\Rain\Mail\MailParser;
+use Winter\Storm\Mail\MailParser;
 use ApplicationException;
 use Exception;
 use File as FileHelper;
@@ -11,12 +11,12 @@ use File as FileHelper;
 /**
  * Mail partial
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MailPartial extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var string The database table used by the model.

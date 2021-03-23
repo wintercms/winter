@@ -15,7 +15,7 @@ use BackendAuth;
  * Filter Widget
  * Renders a container used for filtering things.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class Filter extends WidgetBase

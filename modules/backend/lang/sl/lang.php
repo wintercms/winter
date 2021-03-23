@@ -68,7 +68,6 @@ return [
         'enter_new_password'   => 'Vnesite novo geslo',
         'password_reset'       => 'Ponastavitev gesla',
         'restore_success'      => 'Na vaš e-poštni naslov je bilo poslano sporočilo z navodili.',
-        'restore_error'        => "Uporabnika z uporabniškim imenom ':login' ni mogoče najti.",
         'reset_success'        => 'Geslo je bilo ponastavljeno. Sedaj se lahko prijavite.',
         'reset_error'          => 'Posredovani so bili neveljavni podatki za ponastavitev gesla. Prosimo, poskusite znova!',
         'reset_fail'           => 'Gesla ni bilo mogoče ponastaviti!',
@@ -641,5 +640,9 @@ return [
         'resize_image'               => 'Spremeni velikost slike',
         'image_size'                 => 'Velikost slike:',
         'selected_size'              => 'Izbrano:',
+        'rename_popup_title'         => 'Preimenuj',
+        'rename_new_name'            => 'Novo ime',
+        'move_please_select'         => 'izberite',
+        'move_button'                => 'Premakni',
     ],
 ];

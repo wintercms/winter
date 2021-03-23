@@ -2,7 +2,7 @@
 
 return [
     'app' => [
-        'name' => 'OctoberCMS',
+        'name' => 'Winter CMS',
         'tagline' => 'Terug naar de basis',
     ],
     'locale' => [
@@ -84,7 +84,7 @@ return [
         'unnamed' => 'Naamloos thema',
         'name' => [
             'label' => 'Thema naam',
-            'help' => 'Gebruik bij het invoeren van de naam de unieke code van het thema. Bijvoorbeeld: RainLab.Vanilla',
+            'help' => 'Gebruik bij het invoeren van de naam de unieke code van het thema. Bijvoorbeeld: Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -100,7 +100,7 @@ return [
         'unnamed' => 'Naamloze plugin',
         'name' => [
             'label' => 'Plugin naam',
-            'help' => 'Gebruik bij het invoeren van de naam de unieke code van de plugin. Bijvoorbeeld: RainLab.Blog',
+            'help' => 'Gebruik bij het invoeren van de naam de unieke code van de plugin. Bijvoorbeeld: Winter.Blog',
         ],
         'by_author' => 'Door :name',
     ],
@@ -252,7 +252,7 @@ return [
     'mail_brand' => [
         'menu_label' => 'E-mail branding',
         'menu_description' => 'Aanpassen van kleuren en weergave van e-mailsjablonen.',
-        'page_title' => 'Aanpaasen e-mailweergave',
+        'page_title' => 'Aanpassen e-mailweergave',
         'sample_template' => [
             'heading' => 'Kop',
             'paragraph' => 'Dit is een paragraaf gevuld met Lorem Ipsum en een link. Cumque dicta <a>doloremque eaque</a>, enim error laboriosam pariatur possimus tenetur veritatis voluptas.',
@@ -270,7 +270,7 @@ return [
             ],
             'panel' => 'Hoe geweldig is dit panel?',
             'more' => 'Wat meer tekst',
-            'promotion' => 'Coupon code: OCTOBER',
+            'promotion' => 'Coupon code: WINTER',
             'subcopy' => 'Voettekst',
             'thanks' => 'Bedankt',
         ],

@@ -5,7 +5,7 @@
  * - data-behavior="filter" - enables the filter plugin
  *
  * Dependences:
- * - October Popover (october.popover.js)
+ * - Winter Popover (winter.popover.js)
  *
  * Notes:
  *   Ideally this control would not depend on loader or the AJAX framework,

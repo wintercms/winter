@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.validators.base,
+    var Base = $.wn.inspector.validators.base,
         BaseProto = Base.prototype
 
     var RequiredValidator = function(options) {
@@ -31,5 +31,5 @@
         return $.trim(String(value)).length > 0 ? null : this.getMessage()
     }
 
-    $.oc.inspector.validators.required = RequiredValidator
+    $.wn.inspector.validators.required = RequiredValidator
 }(window.jQuery);

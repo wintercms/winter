@@ -51,9 +51,18 @@ class Author extends Model
     public $morphOne = [
         'meta' => ['Database\Tester\Models\Meta', 'name' => 'taggable'],
     ];
+
+    public $morphToMany = [
+        'tags' => [
+            'Database\Tester\Models\Tag',
+            'name'  => 'taggable',
+            'table' => 'database_tester_taggables',
+            'pivot' => ['added_by']
+        ],
+    ];
 }
 
 class SoftDeleteAuthor extends Author
 {
-    use \October\Rain\Database\Traits\SoftDelete;
+    use \Winter\Storm\Database\Traits\SoftDelete;
 }

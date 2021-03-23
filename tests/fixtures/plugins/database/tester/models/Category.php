@@ -9,6 +9,14 @@ class Category extends Model
      */
     public $table = 'database_tester_categories';
 
+    public $belongsToMany = [
+        'posts' => [
+            'Database\Tester\Models\Post',
+            'table' => 'database_tester_categories_posts',
+            'pivot' => ['category_name', 'post_name']
+        ]
+    ];
+
     public function getCustomNameAttribute()
     {
         return $this->name.' (#'.$this->id.')';
@@ -18,12 +26,12 @@ class Category extends Model
 
 class CategorySimple extends Category
 {
-    use \October\Rain\Database\Traits\SimpleTree;
+    use \Winter\Storm\Database\Traits\SimpleTree;
 }
 
 class CategoryNested extends Category
 {
-    use \October\Rain\Database\Traits\NestedTree;
+    use \Winter\Storm\Database\Traits\NestedTree;
 
     /**
      * @var string The database table used by the model.

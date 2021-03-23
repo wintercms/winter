@@ -8,7 +8,7 @@ use View as ViewFacade;
  *
  * You can register these global variables with `View::share`.
  *
- *     View::share('siteName', 'OctoberCMS');
+ *     View::share('siteName', 'Winter CMS');
  *
  * Then available globally for use in the front-end and mail templates.
  */

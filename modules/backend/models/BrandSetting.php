@@ -14,13 +14,13 @@ use Exception;
 /**
  * Brand settings that affect all users
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class BrandSetting extends Model
 {
     use \System\Traits\ViewMaker;
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var array Behaviors implemented by this model.

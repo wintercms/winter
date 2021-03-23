@@ -45,7 +45,6 @@ return [
         'enter_new_password' => 'Nhập mật khẩu mới',
         'password_reset' => 'Lấy lại mật khẩu',
         'restore_success' => 'Một tin nhắn đã được gửi vào email của bạn. Vui lòng làm theo hướng dẫn',
-        'restore_error' => "Không tìm thấy người dùng có tên ':login'",
         'reset_success' => 'Đã đặt lại mật khẩu. Bạn có thể đăng nhập ngay bây giờ',
         'reset_error' => 'Dữ liệu khôi phục mật khẩu không hợp lệ. Vui lòng thử lại!',
         'reset_fail' => 'Không thể đặt lại mật khẩu của bạn!',
@@ -580,6 +579,10 @@ return [
         'selection_mode' => 'Lựa chọn chế độ',
         'resize_image' => 'Đổi kích thước ảnh',
         'image_size' => 'Kích thước ảnh:',
-        'selected_size' => 'Đã chọn:'
+        'selected_size' => 'Đã chọn:',
+        'rename_popup_title' => 'Đổi tên',
+        'rename_new_name' => 'Tên mới',
+        'move_please_select' => 'Vui lòng chọn',
+        'move_button' => 'Di chuyển',
     ],
 ];

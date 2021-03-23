@@ -11,7 +11,7 @@ use Backend\Classes\WidgetBase;
 /**
  * Component list widget.
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ComponentList extends WidgetBase
@@ -88,7 +88,7 @@ class ComponentList extends WidgetBase
             foreach ($components as $componentInfo) {
                 $className = $componentInfo->className;
                 $alias = $componentInfo->alias;
-                $component = App::make($className);
+                $component = App::make($className, [null, []]);
 
                 if ($component->isHidden) {
                     continue;

@@ -3,7 +3,7 @@
  */
 +function ($) { "use strict";
 
-    var Base = $.oc.inspector.propertyEditors.base,
+    var Base = $.wn.inspector.propertyEditors.base,
         BaseProto = Base.prototype
 
     var PopupBase = function(inspector, propertyDefinition, containerCell, group) {
@@ -25,11 +25,11 @@
     PopupBase.prototype.build = function() {
         var link = document.createElement('a')
 
-        $.oc.foundation.element.addClass(link, 'trigger')
+        $.wn.foundation.element.addClass(link, 'trigger')
         link.setAttribute('href', '#')
         this.setLinkText(link)
 
-        $.oc.foundation.element.addClass(this.containerCell, 'trigger-cell')
+        $.wn.foundation.element.addClass(this.containerCell, 'trigger-cell')
 
         this.containerCell.appendChild(link)
     }
@@ -91,7 +91,7 @@
     }
 
     PopupBase.prototype.onTriggerClick = function(ev) {
-        $.oc.foundation.event.stop(ev)
+        $.wn.foundation.event.stop(ev)
 
         var content = this.getPopupContent()
 
@@ -133,5 +133,5 @@
         return false
     }
 
-    $.oc.inspector.propertyEditors.popupBase = PopupBase
+    $.wn.inspector.propertyEditors.popupBase = PopupBase
 }(window.jQuery);

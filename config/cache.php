@@ -11,6 +11,11 @@ return [
     | using this caching library. This connection is used when another is
     | not explicitly specified when executing a given caching function.
     |
+    | WARNING! Do not use anything that is used for other information in your
+    | application. Example: If you are using redis for managing queues and / or
+    | sessions, you should NOT be using the EXACT SAME redis connection for the
+    | Cache store, as calling Cache::flush() will flush the entire redis store.
+    |
     */
 
     'default' => 'file',
@@ -76,7 +81,7 @@ return [
     |
     */
 
-    'prefix' => 'october',
+    'prefix' => 'winter',
 
     /*
     |--------------------------------------------------------------------------
@@ -85,7 +90,7 @@ return [
     |
     | This option controls the cache key used by the CMS when storing generated
     | PHP from the theme PHP sections. Recommended to change this when multiple
-    | servers running OctoberCMS are connected to the same cache server to
+    | servers running Winter CMS are connected to the same cache server to
     | prevent conflicts.
     |
     */

@@ -8,12 +8,12 @@ use ApplicationException;
 /**
  * Maintenance mode settings
  *
- * @package october\cms
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class MaintenanceSetting extends Model
 {
-    use \October\Rain\Database\Traits\Validation;
+    use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var array Behaviors implemented by this model.

@@ -6,7 +6,7 @@ class AliasesTest extends PluginTestCase
     {
         $this->assertTrue(class_exists('Illuminate\Support\Facades\Input'));
         $this->assertInstanceOf(
-            \October\Rain\Support\Facades\Input::class,
+            \Winter\Storm\Support\Facades\Input::class,
             new \Illuminate\Support\Facades\Input()
         );
     }

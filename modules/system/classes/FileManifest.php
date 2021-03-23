@@ -2,16 +2,16 @@
 
 use ApplicationException;
 use Config;
-use October\Rain\Filesystem\Filesystem;
-use October\Rain\Halcyon\Datasource\FileDatasource;
+use Winter\Storm\Filesystem\Filesystem;
+use Winter\Storm\Halcyon\Datasource\FileDatasource;
 
 /**
- * Stores the file manifest for this October CMS installation.
+ * Stores the file manifest for this Winter CMS installation.
  *
- * This manifest is a file checksum of all files within this October CMS installation. When compared to the source
+ * This manifest is a file checksum of all files within this Winter CMS installation. When compared to the source
  * manifest, this allows us to determine the current installation's build number.
  *
- * @package october\system
+ * @package winter\wn-system-module
  * @author Ben Thomson
  */
 class FileManifest
