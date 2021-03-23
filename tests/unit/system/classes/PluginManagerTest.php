@@ -240,4 +240,13 @@ class PluginManagerTest extends TestCase
         $result = $this->manager->exists('Unknown.Plugin');
         $this->assertFalse($result);
     }
+
+    public function testReplacement()
+    {
+        $this->assertFalse($this->manager->isDisabled('Winter.Replacement'));
+        $this->assertTrue($this->manager->isDisabled('Winter.Original'));
+        $this->assertTrue($this->manager->isDisabled('Winter.InvalidReplacement'));
+
+        $this->assertEquals('Winter.Replacement', $this->manager->findByIdentifier('Winter.Original')->getIdentifier());
+    }
 }
