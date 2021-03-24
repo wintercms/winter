@@ -12,6 +12,7 @@ use Schema;
 use SystemException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use Winter\Storm\Support\ClassLoader;
 
 /**
  * Plugin manager
@@ -274,6 +275,17 @@ class PluginManager
             View::addNamespace($pluginNamespace, $viewsPath);
         }
 
+        /*
+         * Register replacement class map
+         */
+        if ($replaces = $plugin->replaces()) {
+            $replaceNamespace = $this->getNamespace($replaces);
+
+            App::make(ClassLoader::class)->addNamespaceAliases([
+                $replaceNamespace => $this->getNamespace($pluginId)
+            ]);
+        }
+
         /**
          * Disable plugin registration for restricted pages, unless elevated
          */
@@ -508,6 +520,28 @@ class PluginManager
         $namespace = implode('.', $slice);
 
         return $namespace;
+    }
+
+    /**
+     * Resolves a plugin namespace (Author\Plugin) from a plugin class name, identifier or object.
+     *
+     * @param mixed Plugin class name, identifier or object
+     * @return string Namespace in format of Author\Plugin
+     */
+    public function getNamespace($identifier)
+    {
+        if (
+            is_object($identifier)
+            || (is_string($identifier) && strpos($identifier, '.') === null))
+        {
+            return Str::normalizeClassName($identifier);
+        }
+
+        $parts = explode('.', $identifier);
+        $slice = array_slice($parts, 0, 2);
+        $namespace = implode('\\', $slice);
+
+        return Str::normalizeClassName($namespace);
     }
 
     /**
