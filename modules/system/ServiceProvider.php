@@ -583,6 +583,9 @@ class ServiceProvider extends ModuleServiceProvider
 
             $plugins = PluginManager::instance()->getRegistrationMethodValues('registerValidationRules');
             foreach ($plugins as $validators) {
+                if (!is_array($validators) || empty($validators)) {
+                    continue;
+                }
                 foreach ($validators as $name => $validator) {
                     if (is_callable($validator)) {
                         Validator::extend($name, $validator);
