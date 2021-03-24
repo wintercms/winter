@@ -532,8 +532,8 @@ class PluginManager
     {
         if (
             is_object($identifier)
-            || (is_string($identifier) && strpos($identifier, '.') === null))
-        {
+            || (is_string($identifier) && strpos($identifier, '.') === null)
+        ) {
             return Str::normalizeClassName($identifier);
         }
 
