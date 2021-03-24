@@ -278,14 +278,21 @@ class PluginManager
         /*
          * Register replacement class map
          */
-        if ($replaces = $plugin->getReplaces()) {
-            foreach ($replaces as $replace) {
-                $replaceNamespace = $this->getNamespace($replace);
+        try {
+            if ($replaces = $plugin->getReplaces()) {
+                foreach ($replaces as $replace) {
+                    $replaceNamespace = $this->getNamespace($replace);
 
-                App::make(ClassLoader::class)->addNamespaceAliases([
-                    $replaceNamespace => $this->getNamespace($pluginId)
-                ]);
+                    App::make(ClassLoader::class)->addNamespaceAliases([
+                        $replaceNamespace => $this->getNamespace($pluginId)
+                    ]);
+                }
             }
+        } catch (\Throwable $e) {
+            //TODO: this needs removing and a proper fix needs implementing.
+            // Plugins can offer their configuration via yaml, therefore
+            // we must change the load order to ensure the yaml parser is
+            // ready before plugin registration
         }
 
         /**
