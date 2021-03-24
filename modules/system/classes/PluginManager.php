@@ -175,16 +175,11 @@ class PluginManager
         $this->pathMap[$classId] = $path;
         $this->normalizedMap[strtolower($classId)] = $classId;
 
-        try {
-            $replaces = $classObj->getReplaces();
-            if ($replaces) {
-                foreach ($replaces as $replace) {
-                    $this->replaces[$replace] = $classId;
-                }
+        $replaces = $classObj->getReplaces();
+        if ($replaces) {
+            foreach ($replaces as $replace) {
+                $this->replaces[$replace] = $classId;
             }
-        } catch (\Throwable $e) {
-            // There is a bug where the Yaml facade has not been loaded
-            // If so, we must continue
         }
 
         return $classObj;
@@ -278,21 +273,14 @@ class PluginManager
         /*
          * Register replacement class map
          */
-        try {
-            if ($replaces = $plugin->getReplaces()) {
-                foreach ($replaces as $replace) {
-                    $replaceNamespace = $this->getNamespace($replace);
+        if ($replaces = $plugin->getReplaces()) {
+            foreach ($replaces as $replace) {
+                $replaceNamespace = $this->getNamespace($replace);
 
-                    App::make(ClassLoader::class)->addNamespaceAliases([
-                        $replaceNamespace => $this->getNamespace($pluginId)
-                    ]);
-                }
+                App::make(ClassLoader::class)->addNamespaceAliases([
+                    $replaceNamespace => $this->getNamespace($pluginId)
+                ]);
             }
-        } catch (\Throwable $e) {
-            //TODO: this needs removing and a proper fix needs implementing.
-            // Plugins can offer their configuration via yaml, therefore
-            // we must change the load order to ensure the yaml parser is
-            // ready before plugin registration
         }
 
         /**
