@@ -643,5 +643,9 @@ return [
         'resize_image' => 'Resize image',
         'image_size' => 'Image size:',
         'selected_size' => 'Selected:',
+        'rename_popup_title' => 'Rename',
+        'rename_new_name' => 'New name',
+        'move_please_select' => 'please select',
+        'move_button' => 'Move',
     ],
 ];

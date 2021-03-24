@@ -508,5 +508,9 @@ return [
         'resize_image' => 'เปลี่ยนขนาดรูปภาพ',
         'image_size' => 'ขนาดรูปภาพ:',
         'selected_size' => 'พื้นที่เลือก:',
+        'rename_popup_title' => 'เปลี่ยนชื่อ',
+        'rename_new_name' => 'ชื่อใหม่',
+        'move_please_select' => 'กรุณาเลือก',
+        'move_button' => 'ย้าย',
     ],
 ];

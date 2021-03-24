@@ -641,5 +641,9 @@ return [
         'resize_image' => 'Wijzig grootte van afbeelding',
         'image_size' => 'Grootte afbeelding:',
         'selected_size' => 'Geselecteerd:',
+        'rename_popup_title' => 'Hernoemen',
+        'rename_new_name' => 'Nieuwe naam',
+        'move_please_select' => 'selecteer',
+        'move_button' => 'Verplaats'
     ],
 ];

@@ -534,6 +534,10 @@ return [
         'selection_mode' => 'Metodo di selezione',
         'resize_image' => 'Ridimensiona immagine',
         'image_size' => 'Dimensione immagine:',
-        'selected_size' => 'Selezionati:'
+        'selected_size' => 'Selezionati:',
+        'rename_popup_title' => 'Rinomina',
+        'rename_new_name' => 'Nuovo nome',
+        'move_please_select' => 'seleziona',
+        'move_button' => 'Sposta',
     ]
 ];

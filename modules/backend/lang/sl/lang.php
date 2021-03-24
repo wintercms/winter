@@ -640,5 +640,9 @@ return [
         'resize_image'               => 'Spremeni velikost slike',
         'image_size'                 => 'Velikost slike:',
         'selected_size'              => 'Izbrano:',
+        'rename_popup_title'         => 'Preimenuj',
+        'rename_new_name'            => 'Novo ime',
+        'move_please_select'         => 'izberite',
+        'move_button'                => 'Premakni',
     ],
 ];
