@@ -85,6 +85,11 @@ class MailManager
      */
     public function addContentToMailer($message, $code, $data, $plainOnly = false)
     {
+        // We only handle mail template names as a string, let the caller handle the content if we receive anything else
+        if (!is_string($code)) {
+            return false;
+        }
+                ￼
         if (isset($this->templateCache[$code])) {
             $template = $this->templateCache[$code];
         }
@@ -121,6 +126,11 @@ class MailManager
     {
         $html = $text = null;
 
+        // We only handle mail template names as a string, let the caller handle the content if we receive anything else
+        if (!is_string($code)) {
+            return false;
+        }
+                ￼
         if (!is_null($view)) {
             if (isset($this->templateCache[$view])) {
                 $html = $this->templateCache[$view];
