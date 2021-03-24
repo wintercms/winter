@@ -37,7 +37,6 @@ return [
         'enter_new_password' => 'Ievadiet jauno paroli',
         'password_reset' => 'Paroles atiestatīšana',
         'restore_success' => 'Epasts tika nosūtīts uz norādīto adresi ar paroles atiestatīšanas norādēm.',
-        'restore_error' => "Lietotājs ar norādīto lietotājvārdu neeksistē ':login'",
         'reset_success' => 'Jūsu parole tika veiksmīgi atiestatīta. Varat pieslēgties.',
         'reset_error' => 'Nederīgi paroles atiestatīšanas dati. Mēģiniet vēlreiz!',
         'reset_fail' => 'Nebija iespējams atiestatīt paroli!',
@@ -454,6 +453,10 @@ return [
         'selection_mode' => 'Iezīmēšanas režīms',
         'resize_image' => 'Mērogot attēlu',
         'image_size' => 'Attēla izmērs:',
-        'selected_size' => 'Izvēlēts:'
+        'selected_size' => 'Izvēlēts:',
+        'rename_popup_title' => 'Pārsaukt',
+        'rename_new_name' => 'Jauns nosaukums',
+        'move_please_select' => 'lūdzu izvēlieties',
+        'move_button' => 'Pārvietot',
     ]
 ];

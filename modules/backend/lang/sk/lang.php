@@ -51,7 +51,6 @@ return [
         'enter_new_password' => 'Zadajte nové heslo',
         'password_reset' => 'Obnova hesla',
         'restore_success' => 'E-mail s inštrukciami bol zaslaný na vašu e-mailovú adresu.',
-        'restore_error' => "Užívateľ s prihlasovacím menom ':login' nebol nájdený",
         'reset_success' => 'Vaše heslo bolo úspešne obnovené. Teraz sa môžete prihlásiť.',
         'reset_error' => 'Dáta pre obnovu hesla nie sú správne. Prosím skúste to znova!',
         'reset_fail' => 'Obnova hesla zlyhala!',
@@ -587,6 +586,10 @@ return [
         'selection_mode' => 'Spôsob označovania',
         'resize_image' => 'Zmeniť veľkosť obrázku',
         'image_size' => 'Veľkosť obrázku:',
-        'selected_size' => 'Vybrané:'
+        'selected_size' => 'Vybrané:',
+        'rename_popup_title' => 'Premenovať',
+        'rename_new_name' => 'Nový názov',
+        'move_please_select' => 'prosím vyberte',
+        'move_button' => 'Presunúť',
     ],
 ];

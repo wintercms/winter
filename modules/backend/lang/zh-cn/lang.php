@@ -57,7 +57,6 @@ return [
         'enter_new_password' => '输入新密码',
         'password_reset' => '密码重置',
         'restore_success' => '密码重置邮件已发至您的邮箱。',
-        'restore_error' => "找不到用户 ':login'",
         'reset_success' => '密码已经重置成功。您现在可以登录了。',
         'reset_error' => '密码重置失败. 请重试!',
         'reset_fail' => '无法重置您的密码！',
@@ -611,6 +610,10 @@ return [
         'selection_mode' => '选择模式',
         'resize_image' => '调整图片',
         'image_size' => '图片大小:',
-        'selected_size' => '选中:'
+        'selected_size' => '选中:',
+        'rename_popup_title' => '重命名',
+        'rename_new_name' => '新名称',
+        'move_please_select' => '请选择',
+        'move_button' => '移动',
     ]
 ];

@@ -43,7 +43,6 @@ return [
         'enter_new_password' => 'Įveskite naują slaptažodį',
         'password_reset' => 'Slaptažodžio Keitimas',
         'restore_success' => 'Išsiuntėme Jums laišką el.paštu su tolimesnėmis instrukcijomis.',
-        'restore_error' => "Vartotojas prisijungimo vardu ':login' nerastas",
         'reset_success' => 'Slaptažodį pakeitėme. Dabar galite prisijungti.',
         'reset_error' => 'Peteikėte netinkamą slaptažodžio atstatymo informaciją. Bandykite dar kartą!',
         'reset_fail' => 'Slaptažodžio pakeisti nepavyko!',
@@ -553,6 +552,10 @@ return [
         'selection_mode' => 'Pasirinkimo būdas',
         'resize_image' => 'Keisti paveiksliuko išmatavimus',
         'image_size' => 'Paveiksliuko dydis:',
-        'selected_size' => 'Pasirinkta:'
+        'selected_size' => 'Pasirinkta:',
+        'rename_popup_title' => 'Pervadinti',
+        'rename_new_name' => 'Naujas pavadinimas',
+        'move_please_select' => 'prašome pasirinkti',
+        'move_button' => 'Perkelti',
     ]
 ];
