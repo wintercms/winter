@@ -9,7 +9,6 @@ use Lang;
 use View;
 use Config;
 use Schema;
-use Event;
 use SystemException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
@@ -692,8 +691,7 @@ class PluginManager
                 $this->enablePlugin($replacement);
 
                 if (File::isDirectory($this->plugins[$target]->getPluginPath() . '/lang')) {
-                    // lang fallback to allow replacing plugins to inherit lang values of their original plugins
-                    $this->registerPluginLangFallback($target, $replacement);
+                    Lang::registerNamespaceAlias($replacement, $target);
                 }
 
             } else {
@@ -701,29 +699,6 @@ class PluginManager
                 $this->enablePlugin($target);
             }
         }
-    }
-
-    /**
-     * Creates an event to redirect calls to missing lang entries for replaced plugins
-     *
-     * @param string $original Original plugin code
-     * @param string $replacement Replacing plugin code
-     * @return void
-     */
-    public function registerPluginLangFallback(string $original, string $replacement): void
-    {
-        Event::listen(
-            'translator.afterResolve',
-            function (string $key, array $replace, ?string $line, ?string $locale) use ($original, $replacement) {
-                if (is_null($line) && starts_with($key, strtolower($replacement))) {
-                    $fallbackKey = str_replace(strtolower($replacement), strtolower($original), $key);
-                    $fallback = Lang::get($fallbackKey, $replace, $locale);
-                    if ($fallback !== $fallbackKey) {
-                        return $fallback;
-                    }
-                }
-            }
-        );
     }
 
     /**
