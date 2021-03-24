@@ -579,6 +579,10 @@ return [
         'selection_mode' => 'حالت انتخابی',
         'resize_image' => 'تغییر اندازه تصویر',
         'image_size' => 'اندازه تصویر:',
-        'selected_size' => 'انتخاب شده:'
+        'selected_size' => 'انتخاب شده:',
+        'rename_popup_title' => 'تغییر نام',
+        'rename_new_name' => 'نام جدید',
+        'move_please_select' => 'لطفا انتخاب نمایید',
+        'move_button' => 'جابجایی',
     ]
 ];

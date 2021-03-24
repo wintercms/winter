@@ -293,4 +293,10 @@ return [
     'filter' => [
       'all' => 'すべて'
     ],
+    'media' => [
+        'rename_popup_title' => '名前変更',
+        'rename_new_name' => '新しい名前',
+        'move_please_select' => '選択してください',
+        'move_button' => '移動',
+    ]
 ];

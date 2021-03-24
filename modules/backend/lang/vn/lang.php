@@ -579,6 +579,10 @@ return [
         'selection_mode' => 'Lựa chọn chế độ',
         'resize_image' => 'Đổi kích thước ảnh',
         'image_size' => 'Kích thước ảnh:',
-        'selected_size' => 'Đã chọn:'
+        'selected_size' => 'Đã chọn:',
+        'rename_popup_title' => 'Đổi tên',
+        'rename_new_name' => 'Tên mới',
+        'move_please_select' => 'Vui lòng chọn',
+        'move_button' => 'Di chuyển',
     ],
 ];

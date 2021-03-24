@@ -374,5 +374,9 @@ return [
         'direction' => '順序',
         'direction_asc' => '升冪',
         'direction_desc' => '降冪',
+        'rename_popup_title' => '重新命名',
+        'rename_new_name' => '新名稱',
+        'move_please_select' => '請選擇',
+        'move_button' => '移動',
     ]
 ];

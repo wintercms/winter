@@ -610,6 +610,10 @@ return [
         'selection_mode' => '选择模式',
         'resize_image' => '调整图片',
         'image_size' => '图片大小:',
-        'selected_size' => '选中:'
+        'selected_size' => '选中:',
+        'rename_popup_title' => '重命名',
+        'rename_new_name' => '新名称',
+        'move_please_select' => '请选择',
+        'move_button' => '移动',
     ]
 ];

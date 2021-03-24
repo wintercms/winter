@@ -242,6 +242,16 @@
             }
 
             numberinput.value = '' !== defaultValue ? defaultValue : '';
+
+            if (scopeData.step) {
+                numberinput.step = scopeData.step
+            }
+            if (scopeData.minValue) {
+                numberinput.min = scopeData.minValue
+            }
+            if (scopeData.maxValue) {
+                numberinput.max = scopeData.maxValue
+            }
         })
     }
 
@@ -257,7 +267,7 @@
                 numbers[1] = numbers[1] && numbers[1].match(numberRegex) ? numbers[1] : null
 
                 if(numbers[0] || numbers[1]) {
-                    var min = numbers[0] ? numbers[0] : '∞',
+                    var min = numbers[0] ? numbers[0] : '-∞',
                         max = numbers[1] ? numbers[1] : '∞'
 
                     $setting.text(min + ' → ' + max)

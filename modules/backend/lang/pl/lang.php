@@ -622,5 +622,9 @@
         'resize_image' => 'Zmień rozmiar obrazka',
         'image_size' => 'Rozmiar obrazka:',
         'selected_size' => 'Wybrano:',
+        'rename_popup_title' => 'Zmień nazwę',
+        'rename_new_name' => 'Nowa nazwa',
+        'move_please_select' => 'proszę wybierz',
+        'move_button' => 'Przenieś',
     ],
 ];

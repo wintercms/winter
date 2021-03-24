@@ -641,5 +641,9 @@ return [
         'resize_image' => 'Изменение размера изображения',
         'image_size' => 'Размер изображения:',
         'selected_size' => 'Выбрано:',
+        'rename_popup_title' => 'Переименовать',
+        'rename_new_name' => 'Новое имя',
+        'move_please_select' => 'пожалуйста, выберите директорию',
+        'move_button' => 'Переместить',
     ],
 ];

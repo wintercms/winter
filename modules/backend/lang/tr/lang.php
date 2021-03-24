@@ -599,5 +599,9 @@ return [
         'resize_image' => 'Resimi yeniden boyutlandırs',
         'image_size' => 'Resim boyutu:',
         'selected_size' => 'Seçili:',
+        'rename_popup_title' => 'Yeniden isimlendir',
+        'rename_new_name' => 'Yeni isim',
+        'move_please_select' => 'lütfen seçiniz',
+        'move_button' => 'Taşı',
     ],
 ];
