@@ -278,12 +278,14 @@ class PluginManager
         /*
          * Register replacement class map
          */
-        if ($replaces = $plugin->replaces()) {
-            $replaceNamespace = $this->getNamespace($replaces);
+        if ($replaces = $plugin->getReplaces()) {
+            foreach ($replaces as $replace) {
+                $replaceNamespace = $this->getNamespace($replace);
 
-            App::make(ClassLoader::class)->addNamespaceAliases([
-                $replaceNamespace => $this->getNamespace($pluginId)
-            ]);
+                App::make(ClassLoader::class)->addNamespaceAliases([
+                    $replaceNamespace => $this->getNamespace($pluginId)
+                ]);
+            }
         }
 
         /**
