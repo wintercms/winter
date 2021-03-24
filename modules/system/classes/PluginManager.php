@@ -693,7 +693,6 @@ class PluginManager
                 if (File::isDirectory($this->plugins[$target]->getPluginPath() . '/lang')) {
                     Lang::registerNamespaceAlias($replacement, $target);
                 }
-
             } else {
                 $this->disablePlugin($replacement);
                 $this->enablePlugin($target);
