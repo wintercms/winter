@@ -151,11 +151,19 @@ class UpdateManager
          */
         $plugins = $this->pluginManager->getPlugins();
         foreach ($plugins as $code => $plugin) {
-            if ($plugin->replaces()) {
-                $this->versionManager->replacePlugin($plugin, $code);
-            }
-
             $this->updatePlugin($code);
+        }
+
+        /*
+         * Replace plugins
+         */
+        foreach ($plugins as $code => $plugin) {
+            if (!$plugin->getReplaces()) {
+                continue;
+            }
+            foreach ($plugin->getReplaces() as $replace) {
+                $this->versionManager->replacePlugin($plugin, $replace);
+            }
         }
 
         Parameter::set('system::update.count', 0);
