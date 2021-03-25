@@ -122,11 +122,8 @@ class MailManager
         $html = $text = null;
 
         // We only handle mail template names as a string, let the caller handle the content if we receive anything else
-        if (!is_string($view)) {
-            return false;
-        }
 
-        if (!is_null($view)) {
+        if (is_string($view)) {
             if (isset($this->templateCache[$view])) {
                 $html = $this->templateCache[$view];
             } else {
@@ -134,7 +131,7 @@ class MailManager
             }
         }
 
-        if (!is_null($plain)) {
+        if (is_string($plain)) {
             if (isset($this->templateCache[$plain])) {
                 $text = $this->templateCache[$plain];
             } else {
@@ -143,7 +140,7 @@ class MailManager
         }
 
         // raw content will overwrite plain view content, as done in laravel
-        if (!is_null($raw)) {
+        if (is_string($raw)) {
             $text = new MailTemplate;
             $text->fillFromContent($raw);
         }
