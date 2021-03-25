@@ -678,16 +678,16 @@ class PluginManager
 
         foreach ($this->replaces as $target => $replacement) {
             if (!isset($this->plugins[$target])) {
+                // register lang namespace alias for bc
+                Lang::registerNamespaceAlias($replacement, $target);
                 continue;
             }
 
             if ($this->plugins[$replacement]->replaces($target, $this->plugins[$target]->getVersion())) {
+                Lang::registerNamespaceAlias($replacement, $target);
+
                 $this->disablePlugin($target);
                 $this->enablePlugin($replacement);
-
-                if (File::isDirectory($this->plugins[$target]->getPluginPath() . '/lang')) {
-                    Lang::registerNamespaceAlias($replacement, $target);
-                }
             } else {
                 $this->disablePlugin($replacement);
                 $this->enablePlugin($target);
