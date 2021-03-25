@@ -37,7 +37,6 @@ return [
         'enter_new_password' => "新しいパスワードを入力してください",
         'password_reset' => "パスワードリセット",
         'restore_success' => "パスワードを元に戻すための手順を説明したメールを送信しました。",
-        'restore_error' => "':login'というユーザーは登録されていません。",
         'reset_success' => "パスワードがリセットされました。",
         'reset_error' => "間違ったパスワードリセットデータが送信されました。再実行してください。",
         'reset_fail' => "パスワードをリセットできませんでした。",
@@ -294,4 +293,10 @@ return [
     'filter' => [
       'all' => 'すべて'
     ],
+    'media' => [
+        'rename_popup_title' => '名前変更',
+        'rename_new_name' => '新しい名前',
+        'move_please_select' => '選択してください',
+        'move_button' => '移動',
+    ]
 ];

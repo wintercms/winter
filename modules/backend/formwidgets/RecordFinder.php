@@ -147,6 +147,11 @@ class RecordFinder extends FormWidgetBase
             throw new ApplicationException(Lang::get('backend::lang.recordfinder.invalid_model_class', ['modelClass' => $this->modelClass]));
         }
 
+        $modelKey = $this->getRecordModel()->getKeyName();
+        if ($this->keyFrom === 'id' && $modelKey !== 'id') {
+            $this->keyFrom = $modelKey;
+        }
+
         if (post('recordfinder_flag')) {
             $this->listWidget = $this->makeListWidget();
             $this->listWidget->bindToController();
@@ -302,16 +307,27 @@ class RecordFinder extends FormWidgetBase
         return $this->makePartial('recordfinder_form');
     }
 
+    /**
+     * Gets the base model instance used by this field
+     *
+     * @return \Winter\Storm\Database\Model
+     */
+    protected function getRecordModel()
+    {
+        $model = null;
+        if ($this->useRelation) {
+            $model = $this->getRelationModel();
+        } else {
+            $model = new $this->modelClass;
+        }
+        return $model;
+    }
+
     protected function makeListWidget()
     {
         $config = $this->makeConfig($this->getConfig('list'));
 
-        if ($this->useRelation) {
-            $config->model = $this->getRelationModel();
-        } else {
-            $config->model = new $this->modelClass;
-        }
-
+        $config->model = $this->getRecordModel();
         $config->alias = $this->alias . 'List';
         $config->showSetup = false;
         $config->showCheckboxes = false;

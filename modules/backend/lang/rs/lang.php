@@ -67,7 +67,6 @@ return [
         'enter_new_password' => 'Unesi novu lozinku',
         'password_reset' => 'Resetovanje lozinke',
         'restore_success' => 'Poruka sa instrukcijama je poslata na vašu adresu.',
-        'restore_error' => "Korisnik nije pronađen sa navedenom vrednošću: ':login'",
         'reset_success' => 'Lozinka je resetovana, možeš se ulogovati.',
         'reset_error' => 'Priloženi podaci za resetovanje lozinke nisu validni. Pokušaj ponovo!',
         'reset_fail' => 'Resetovanje lozinke nije moguće!',
@@ -635,5 +634,9 @@ return [
         'resize_image' => 'Promeni veličinu slike',
         'image_size' => 'Veličina slike:',
         'selected_size' => 'Izabrana veličina:',
+        'rename_popup_title' => 'Promeni naziv',
+        'rename_new_name' => 'Novi naziv',
+        'move_please_select' => 'Izaberi',
+        'move_button' => 'Pomeri',
     ],
 ];

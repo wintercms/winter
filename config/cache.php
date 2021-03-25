@@ -11,6 +11,11 @@ return [
     | using this caching library. This connection is used when another is
     | not explicitly specified when executing a given caching function.
     |
+    | WARNING! Do not use anything that is used for other information in your
+    | application. Example: If you are using redis for managing queues and / or
+    | sessions, you should NOT be using the EXACT SAME redis connection for the
+    | Cache store, as calling Cache::flush() will flush the entire redis store.
+    |
     */
 
     'default' => 'file',

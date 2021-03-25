@@ -6,6 +6,7 @@ use Html;
 use Config;
 use Request;
 use Redirect;
+use Exception;
 use Winter\Storm\Router\Helper as RouterHelper;
 use System\Helpers\DateTime as DateTimeHelper;
 use Backend\Classes\Skin;
@@ -83,6 +84,26 @@ class Backend
     public function redirectIntended($path, $status = 302, $headers = [], $secure = null)
     {
         return Redirect::intended($this->uri() . '/' . $path, $status, $headers, $secure);
+    }
+
+    /**
+     * Convert mixed inputs to a Carbon object and sets the backend timezone on that object
+     *
+     * @return \Carbon\Carbon
+     */
+    public static function makeCarbon($value, $throwException = true)
+    {
+        $carbon = DateTimeHelper::makeCarbon($value, $throwException);
+
+        try {
+            // Find user preference
+            $carbon->setTimezone(\Backend\Models\Preference::get('timezone'));
+        } catch (Exception $ex) {
+            // Use system default
+            $carbon->setTimezone(Config::get('backend.timezone', Config::get('app.timezone')));
+        }
+
+        return $carbon;
     }
 
     /**

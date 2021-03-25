@@ -96,6 +96,9 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-scripts
 
+      - name: Reset modules
+        run: git reset --hard
+
       - name: Run post-update Composer scripts
         run: php artisan package:discover
 

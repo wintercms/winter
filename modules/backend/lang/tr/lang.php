@@ -47,7 +47,6 @@ return [
         'enter_new_password' => "Yeni Şifrenizi girin",
         'password_reset' => "Şifre Sıfırla",
         'restore_success' => "Email adresinize şifrenizi nasıl sıfırlayacağınıza dair bilgiler gönderildi.",
-        'restore_error' => "':login' kullanıcı adı bulunamadı.",
         'reset_success' => "Şifreniz başarıyla sıfırlandı. Giriş yapabilirsiniz.",
         'reset_error' => "Hatalı giriş yaptınız. Lütfen tekrar deneyin!",
         'reset_fail' => "Şifre sıfırlanamadı!",
@@ -600,5 +599,9 @@ return [
         'resize_image' => 'Resimi yeniden boyutlandırs',
         'image_size' => 'Resim boyutu:',
         'selected_size' => 'Seçili:',
+        'rename_popup_title' => 'Yeniden isimlendir',
+        'rename_new_name' => 'Yeni isim',
+        'move_please_select' => 'lütfen seçiniz',
+        'move_button' => 'Taşı',
     ],
 ];

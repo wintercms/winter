@@ -37,7 +37,6 @@ return [
         'enter_new_password' => "Välj ett nytt lösenord",
         'password_reset' => "Återställ lösenord",
         'restore_success' => "Ett meddelande har skickats till din e-postadress med instruktioner om hur du återställer ditt lösenord",
-        'restore_error' => "En användare med användarnamnet ':login' kunde inte hittas",
         'reset_success' => "Ditt lösenord har blivit återställt. Du kan nu logga in",
         'reset_error' => "Felaktig data för lösenordsåterställning. Var vänlig försök igen",
         'reset_fail' => "Det gick tyvärr inte att nollställa ditt lösenord",
@@ -375,6 +374,10 @@ return [
         'selection_mode' => 'Urvalsläge',
         'resize_image' => 'Anpassa bildstorlek',
         'image_size' => 'Bildstorlek:',
-        'selected_size' => 'Vald:'
+        'selected_size' => 'Vald:',
+        'rename_popup_title' => 'Byt namn',
+        'rename_new_name' => 'Nytt namn',
+        'move_please_select' => 'Var god välj',
+        'move_button' => 'Flytta',
     ]
 ];

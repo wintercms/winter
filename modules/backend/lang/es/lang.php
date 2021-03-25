@@ -37,7 +37,6 @@ return [
         'enter_new_password' => 'Ingrese una nueva contraseña',
         'password_reset' => 'Restablecer la contraseña',
         'restore_success' => 'Correo electrónico enviado a su dirección con las instruciones.',
-        'restore_error' => "No se ha encontrado el usuario ':login'",
         'reset_success' => 'Contraseña ha sido restablecida. Ahora puede iniciar sesión',
         'reset_error' => 'La información para restablecer la contraseña no es valida. ¡Por favor, vuelva a intentarlo!',
         'reset_fail' => '¡No es posible restablecer la contraseña!',
@@ -536,6 +535,10 @@ return [
         'selection_mode' => 'Modo de selección',
         'resize_image' => 'Redimensionar imagen',
         'image_size' => 'Tamaño de la imagen:',
-        'selected_size' => 'Selección:'
+        'selected_size' => 'Selección:',
+        'rename_popup_title' => 'Renombrar',
+        'rename_new_name' => 'Nuevo nombre',
+        'move_please_select' => 'por favor seleccionar',
+        'move_button' => 'Mover',
     ],
 ];
