@@ -121,6 +121,11 @@ class MailManager
     {
         $html = $text = null;
 
+        // We only handle mail template names as a string, let the caller handle the content if we receive anything else
+        if (!is_string($view)) {
+            return false;
+        }
+
         if (!is_null($view)) {
             if (isset($this->templateCache[$view])) {
                 $html = $this->templateCache[$view];
