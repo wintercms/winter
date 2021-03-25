@@ -6,6 +6,7 @@ use ReflectionClass;
 use SystemException;
 use Composer\Semver\Semver;
 use Yaml;
+use File;
 use Backend;
 use Str;
 
@@ -26,6 +27,11 @@ class PluginBase extends ServiceProviderBase
      * @var string
      */
     protected $path = null;
+
+    /**
+     * @var string
+     */
+    protected $version;
 
     /**
      * @var array Plugin dependencies
@@ -390,8 +396,21 @@ class PluginBase extends ServiceProviderBase
      */
     public function getVersion(): string
     {
-        return \Db::table('system_plugin_versions')
-            ->lists('version', 'code')[$this->getIdentifier()] ?? (string) VersionManager::NO_VERSION_VALUE;
+        if (isset($this->version)) {
+            return $this->version;
+        }
+
+        $versionFile = $this->getPluginPath() . '/updates/version.yaml';
+
+        if (!File::isFile($versionFile) || !($versionInfo = Yaml::parseFile($versionFile)) || !is_array($versionInfo)) {
+            return $this->version = (string) VersionManager::NO_VERSION_VALUE;
+        }
+
+        uksort($versionInfo, function ($a, $b) {
+            return version_compare($a, $b);
+        });
+
+        return $this->version = trim(key(array_slice($versionInfo, -1, 1)));
     }
 
     /**
