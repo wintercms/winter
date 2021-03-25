@@ -516,7 +516,7 @@ class MediaLibrary
          * Validate invalid paths
          */
         $regex = '#'.implode('|', $regex).'#';
-        if (preg_match($regex, $path) !== 0 || strpos($path, '//') !== false) {
+        if (preg_match($regex, $path) !== 0 || strpos($path, '://') !== false) {
             throw new ApplicationException(Lang::get('system::lang.media.invalid_path', compact('path')));
         }
 
