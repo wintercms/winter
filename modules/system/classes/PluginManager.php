@@ -913,7 +913,9 @@ class PluginManager
             return [];
         }
 
-        return is_array($plugin->require) ? $plugin->require : [$plugin->require];
+        return array_map(function ($require) {
+            return $this->replaces[$require] ?? $require;
+        }, is_array($plugin->require) ? $plugin->require : [$plugin->require]);
     }
 
     /**
