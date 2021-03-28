@@ -26,7 +26,7 @@ class VersionYamlProcessor implements YamlProcessor
                 return '"' . trim($matches[1]) . '":';
             }, rtrim($line));
 
-            // Add quotes around any unquoted text proceeding an array key
+            // Add quotes around any unquoted text preceeding an array key
             $line = preg_replace('/^\s*([^\n\r\-:]+)\s*: +(?![\'"\s])(.*)/m', '$1: "$2"', $line);
 
             // If this line is the continuance of a multi-line string, remove the quote from the previous line and
