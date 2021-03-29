@@ -279,9 +279,7 @@ class VersionManager
         }
 
         $versionFile = $this->getVersionFile($code);
-        $versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
-            return $yaml->parseFile($versionFile);
-        });
+        $versionInfo = Yaml::parseFile($versionFile);
 
         if (!is_array($versionInfo)) {
             $versionInfo = [];
