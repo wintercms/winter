@@ -14,20 +14,12 @@ class UpdatesControllerTest extends TestCase
         $controller = $this->getMockBuilder(Updates::class)->disableOriginalConstructor()->getMock();
 
         $expectedVersions = [
-            '1.3.2' => [
-                'Added support for Translate plugin. Added some new languages.',
-            ],
-            '1.3.1' => [
-                'Minor bug fix Please see changelog',
-            ],
-            '1.3.0' => [
-                '!!! We\'ve refactored major parts of this plugin. Please see the website for more information.',
-            ],
             '1.2.0' => [
                 '!!! Security update - see: https://wintercms.com',
             ],
             '1.1.0' => [
                 '!!! Drop support for blog settings',
+                'drop_blog_settings_table.php',
             ],
             '1.0.5' => [
                 'Create blog settings table',
@@ -41,10 +33,12 @@ class UpdatesControllerTest extends TestCase
                 'Bug fix update that uses no scripts'
             ],
             '1.0.2' => [
-                'Added some stuff',
+                'Create blog post comments table',
+                'Multiple update messages are allowed',
             ],
             '1.0.1' => [
                 'Added some upgrade file and some seeding',
+                'some_upgrade_file.php', //does not exist
                 'some_seeding_file.php' //does not exist
             ],
         ];
