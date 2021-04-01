@@ -54,7 +54,7 @@ class SourceManifest
             $this->setSource(
                 Config::get(
                     'cms.sourceManifestUrl',
-                    'https://raw.githubusercontent.com/wintercms/meta/master/manifest/builds-branched.json'
+                    'https://raw.githubusercontent.com/wintercms/meta/master/manifest/builds.json'
                 )
             );
         }
@@ -130,7 +130,9 @@ class SourceManifest
         }
 
         foreach ($data['manifest'] as $build) {
-            $this->builds[$build['build']] = [
+            $this->builds[$this->getVersionInt($build['build'])] = [
+                'version' => $build['build'],
+                'parent' => $build['parent'],
                 'modules' => $build['modules'],
                 'files' => $build['files'],
             ];
@@ -471,7 +473,7 @@ class SourceManifest
 
         // First, we'll check for a fork - if so, the source version for the fork is a parent
         if (isset($this->forks) && array_key_exists($buildInt, $this->forks)) {
-            return $this->forks[$buildInt];
+            return $this->builds[$this->forks[$buildInt]];
         }
 
         // If not a fork, then determine the parent by finding the nearest minor version to the build
