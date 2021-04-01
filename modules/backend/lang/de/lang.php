@@ -60,7 +60,6 @@ return [
         'enter_new_password' => "Bitte ein neues Passwort eingeben",
         'password_reset' => "Passwort zurücksetzen",
         'restore_success' => "Eine E-Mail mit weiteren Anweisungen zum Zurücksetzen Ihres Passworts wurde an Sie versandt",
-        'restore_error' => "Ein Benutzer mit dem Namen ':login' wurde nicht gefunden",
         'reset_success' => "Ihr Passwort wurde erfolgreich zurückgesetzt. Sie können sich jetzt anmelden.",
         'reset_error' => "Konnte Passwort nicht zurücksetzen. Bitte erneut versuchen!",
         'reset_fail' => "Passwort-Zurücksetzung nicht möglich!",
@@ -617,6 +616,10 @@ return [
         'selection_mode' => 'Auswahlmodus',
         'resize_image' => 'Bildgröße anpassen',
         'image_size' => 'Dimensionen:',
-        'selected_size' => 'Ausgewählt:'
+        'selected_size' => 'Ausgewählt:',
+        'rename_popup_title' => 'Umbenennen',
+        'rename_new_name' => 'Neuer Name',
+        'move_please_select' => 'Bitte auswählen',
+        'move_button' => 'Verschieben',
     ]
 ];

@@ -73,6 +73,10 @@ class WinterInstall extends Command
 
         $chosenToInstall = [];
 
+        if ($this->confirm('Would you like to change the backend options? (URL, default locale, default timezone)')) {
+            $this->setupBackendValues();
+        }
+
         if ($this->confirm('Configure advanced options?', false)) {
             $this->setupEncryptionKey();
             $this->setupAdvancedValues();
@@ -112,29 +116,82 @@ class WinterInstall extends Command
     protected function setupCommonValues()
     {
         $url = $this->ask('Application URL', Config::get('app.url'));
+        $this->writeToConfig('app', ['url' => $url]);
+    }
 
+    protected function setupBackendValues()
+    {
+        // cms.backendUri
+        $backendUri = $this->ask('Backend URL', Config::get('cms.backendUri'));
+        $this->writeToConfig('cms', ['backendUri' => $backendUri]);
+
+        // app.locale
+        $defaultLocale = Config::get('app.locale');
         try {
             $availableLocales = (new \Backend\Models\Preference)->getLocaleOptions();
             $localesByName = [];
+            $i = $defaultLocaleIndex = 0;
             foreach ($availableLocales as $locale => $name) {
                 $localesByName[$name[0]] = $locale;
+                if ($locale === $defaultLocale) {
+                    $defaultLocaleIndex = $i;
+                }
+                $i++;
             }
 
-            $localeName = $this->choice('Default Backend Locale', array_keys($localesByName));
+            $localeName = $this->choice('Default Backend Locale', array_keys($localesByName), $defaultLocaleIndex);
 
             $locale = $localesByName[$localeName];
         } catch (\Exception $e) {
             // Installation failed halfway through, recover gracefully
-            $locale = $this->ask('Default Backend Locale', 'en');
+            $locale = $this->ask('Default Backend Locale', $defaultLocale);
         }
+        $this->writeToConfig('app', ['locale' => $locale]);
 
-        $this->writeToConfig('app', ['url' => $url, 'locale' => $locale]);
+        // cms.backendTimezone
+        $defaultTimezone = Config::get('cms.backendTimezone');
+        try {
+            $availableTimezones = (new \Backend\Models\Preference)->getTimezoneOptions();
+            $longestTimezone = max(array_map('strlen', $availableTimezones));
+            $padTo = $longestTimezone - 13 + 1; // (UTC +10:00)
+            $timezonesByName = [];
+
+            foreach ($availableTimezones as $timezone => $name) {
+                $nameParts = explode(') ', $name);
+                $nameParts[0] .= ')';
+
+                $name = str_pad($nameParts[1], $padTo) . $nameParts[0];
+
+                $timezonesByName[$name] = $timezone;
+            }
+
+            $timezonesByContinent = [];
+            $defaultTimezoneIndex = 0;
+            $defaultTimezoneGroupIndex = 0;
+            foreach ($timezonesByName as $name => $zone) {
+                $zone = explode('/', $zone)[0];
+                $timezonesByContinent[$zone][$name] = $zone;
+                if ($zone === $defaultTimezone) {
+                    $defaultTimezoneGroupIndex = count(array_keys($timezonesByContinent)) - 1;
+                    $defaultTimezoneIndex = count(array_keys($timezonesByContinent[$zone])) - 1;
+                }
+            }
+
+            $timezoneGroup = $this->choice('Timezone Continent', array_keys($timezonesByContinent), $defaultTimezoneGroupIndex);
+
+            $timezoneName = $this->choice('Default Backend Timezone', array_keys($timezonesByContinent[$timezoneGroup]), $defaultTimezoneIndex);
+
+            $timezone = $timezonesByName[$timezoneName];
+        } catch (\Exception $e) {
+            // Installation failed halfway through, recover gracefully
+            $timezone = $this->ask('Default Backend Timezone', $defaultTimezone);
+        }
+        $this->writeToConfig('cms', ['backendTimezone' => $timezone]);
     }
 
     protected function setupAdvancedValues()
     {
-        $backendUri = $this->ask('Backend URL', Config::get('cms.backendUri'));
-        $this->writeToConfig('cms', ['backendUri' => $backendUri]);
+
 
         $defaultMask = $this->ask('File Permission Mask', Config::get('cms.defaultMask.file') ?: '777');
         $this->writeToConfig('cms', ['defaultMask.file' => $defaultMask]);
@@ -339,16 +396,16 @@ class WinterInstall extends Command
     protected function displayIntro()
     {
         $message = [
-            ".====================================================================.",
-            "                                                                      ",
-            " .d8888b.   .o8888b.   db  .d8888b.  d8888b. d88888b d8888b.  .d888b. ",
-            ".8P    Y8. d8P    Y8   88 .8P    Y8. 88  `8D 88'     88  `8D .8P , Y8.",
-            "88      88 8P      oooo88 88      88 88oooY' 88oooo  88oobY' 88  |  88",
-            "88      88 8b      ~~~~88 88      88 88~~~b. 88~~~~  88`8b   88  |/ 88",
-            "`8b    d8' Y8b    d8   88 `8b    d8' 88   8D 88.     88 `88. `8b | d8'",
-            " `Y8888P'   `Y8888P'   YP  `Y8888P'  Y8888P' Y88888P 88   YD  `Y888P' ",
-            "                                                                      ",
-            "`=========================== INSTALLATION ==========================='",
+            ".========================================================================.",
+            "                                                                          ",
+            " db   d8b   db d888888b d8b   db d888888b d88888b d8888b.       \033[1;34m...\033[0m ",
+            " 88   I8I   88   `88'   888o  88 `~~88~~' 88'     88  `8D  \033[1;34m... ..... ...\033[0m ",
+            " 88   I8I   88    88    88V8o 88    88    88ooooo 88oobY'    \033[1;34m.. ... ..\033[0m ",
+            " Y8   I8I   88    88    88 V8o88    88    88~~~~~ 88`8b      \033[1;34m.. ... ..\033[0m ",
+            " `8b d8'8b d8'   .88.   88  V888    88    88.     88 `88.  \033[1;34m... ..... ...\033[0m ",
+            "  `8b8' `8d8'  Y888888P VP   V8P    YP    Y88888P 88   YD       \033[1;34m...\033[0m ",
+            "                                                                         ",
+            "`============================= INSTALLATION =============================",
             "",
         ];
 
@@ -358,17 +415,17 @@ class WinterInstall extends Command
     protected function displayOutro()
     {
         $message = [
-            ".=========================================.",
-            "                ,@@@@@@@,                  ",
-            "        ,,,.   ,@@@@@@/@@,  .oo8888o.      ",
-            "     ,&%%&%&&%,@@@@@/@@@@@@,8888\88/8o     ",
-            "    ,%&\%&&%&&%,@@@\@@@/@@@88\88888/88'    ",
-            "    %&&%&%&/%&&%@@\@@/ /@@@88888\88888'    ",
-            "    %&&%/ %&%%&&@@\ V /@@' `88\8 `/88'     ",
-            "    `&%\ ` /%&'    |.|        \ '|8'       ",
-            "        |o|        | |         | |         ",
-            "        |.|        | |         | |         ",
-            "`========= INSTALLATION COMPLETE ========='",
+            // Sourced from https://www.asciiart.eu/holiday-and-events/christmas/snowmen
+            ".===========================================================.",
+            " *    *           *.   *   .                      *     .    ",
+            "         .   .               __   *    .     * .     *       ",
+            "      *         *   . .    _|__|_        *    __   .       * ",
+            "  /\       /\               ('')    *       _|__|_     .     ",
+            " /  \   * /  \  *      .  <( . )> *  .       ('')   *   *    ",
+            " /  \     /  \   .       _(__.__)_  _   ,--<(  . )>  .    .  ",
+            "/    \   /    \      *   |       |  )),`   (   .  )     *    ",
+            " `||` ..  `||`   . *... ==========='`   ... '--`-` ... * jb .",
+            "`================== INSTALLATION COMPLETE =================='",
             "",
         ];
 

@@ -122,7 +122,7 @@ class Filter extends WidgetBase
                         $params['after']    = $after;
                     }
                     else {
-                        $params['afterStr'] = '∞';
+                        $params['afterStr'] = '-∞';
                         $params['after']    = null;
                     }
 
@@ -137,6 +137,22 @@ class Filter extends WidgetBase
                 }
 
                 break;
+
+            case 'number':
+            case 'numberrange':
+                if ($minInput = array_get($scope->config, 'min')) {
+                    $params['minValue'] = is_numeric($minInput) ? $minInput : null;
+                }
+
+                if ($maxInput = array_get($scope->config, 'max')) {
+                    $params['maxValue'] = is_numeric($maxInput) ? $maxInput : null;
+                }
+
+                if ($step = array_get($scope->config, 'step')) {
+                    $params['step'] = is_numeric($step) ? $step : null;
+                }
+                // no break, these paramaters apply to both of the following cases
+
             case 'number':
                 if (is_numeric($scope->value)) {
                     $params['number'] = $scope->value;

@@ -9,7 +9,7 @@
             <select
                 class="form-control custom-select"
                 name="dest"
-                data-placeholder="<?= e(trans('cms::lang.asset.move_please_select')) ?>">
+                data-placeholder="<?= e(trans('backend::lang.media.move_please_select')) ?>">
                 <option></option>
                 <?php foreach ($folders as $path=>$folder):?>
                     <option value="<?= e($path) ?>"><?= e($folder) ?></option>
@@ -23,7 +23,7 @@
         <button
             type="submit"
             class="btn btn-primary">
-            <?= e(trans('cms::lang.asset.move_button')) ?>
+            <?= e(trans('backend::lang.media.move_button')) ?>
         </button>
         <button
             type="button"
