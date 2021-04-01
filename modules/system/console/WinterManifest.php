@@ -18,6 +18,7 @@ class WinterManifest extends \Illuminate\Console\Command
      */
     protected $signature = 'winter:manifest
                             {target : Specifies the target file for the build manifest.}
+                            {--token= : Specifies a GitHub token, to get around rate limits.}
                             {--minBuild= : Specifies the minimum build number to retrieve from the source.}
                             {--maxBuild= : Specifies the maximum build number to retreive from the source.}';
 
@@ -77,13 +78,16 @@ class WinterManifest extends \Illuminate\Console\Command
         while (true) {
             ++$page;
 
-            $builds = Http::get(
-                'https://api.github.com/repos/wintercms/winter/tags?per_page=100&page=' . $page,
-                function ($http) {
-                    $http->header('User-Agent', 'Winter CMS');
-                    $http->header('Accept', 'application/vnd.github.v3+json');
-                }
-            );
+            if ($this->option('token')) {
+                $url = 'https://' . $this->option('token') . '@api.github.com/repos/wintercms/winter/tags?per_page=100&page=' . $page;
+            } else {
+                $url = 'https://api.github.com/repos/wintercms/winter/tags?per_page=100&page=' . $page;
+            }
+
+            $builds = Http::get($url, function ($http) {
+                $http->header('User-Agent', 'Winter CMS');
+                $http->header('Accept', 'application/vnd.github.v3+json');
+            });
 
             if ($builds->code !== 200) {
                 break;
@@ -108,7 +112,14 @@ class WinterManifest extends \Illuminate\Console\Command
             }
         }
 
-        for ($build = $minBuild; $build <= $maxBuild; ++$build) {
+        // Sort by version number
+        $sourceBuilds = array_sort($sourceBuilds, function ($item) {
+            return $this->getVersionInt($item['version']);
+        });
+
+        foreach ($sourceBuilds as $sourceBuild) {
+            $build = $sourceBuild['version'];
+
             // Download version from GitHub
             $this->comment('Processing build ' . $build);
             $this->line('  - Downloading...');
@@ -116,15 +127,17 @@ class WinterManifest extends \Illuminate\Console\Command
             if (file_exists($buildDir . 'build-' . $build . '.zip') || is_dir($buildDir . $build . '/')) {
                 $this->info('  - Already downloaded.');
             } else {
-                $zipUrl = sprintf($this->sourceBuildFile, $build);
-                $zipFile = @file_get_contents($zipUrl);
+                Http::get($sourceBuild['download'], function ($http) use ($buildDir, $build) {
+                    $http->header('User-Agent', 'Winter CMS');
+                    $http->toFile($buildDir . 'build-' . $build . '.zip');
+                });
+
+                $zipFile = @file_get_contents($buildDir . 'build-' . $build . '.zip');
 
                 if (empty($zipFile)) {
-                    $this->error('  - Not found.');
+                    $this->error('  - Not found (' . $sourceBuild['download'] . ').');
                     break;
                 }
-
-                file_put_contents($buildDir . 'build-' . $build . '.zip', $zipFile);
 
                 $this->info('  - Downloaded.');
             }
@@ -136,15 +149,17 @@ class WinterManifest extends \Illuminate\Console\Command
             } else {
                 $zip = new ZipArchive;
                 if ($zip->open($buildDir . 'build-' . $build . '.zip')) {
+                    $rootFolder = substr($zip->statIndex(0)['name'], 0, -1);
+
                     $toExtract = [];
                     $paths = [
-                        'winter-1.0.' . $build . '/modules/backend/',
-                        'winter-1.0.' . $build . '/modules/cms/',
-                        'winter-1.0.' . $build . '/modules/system/',
+                        $rootFolder . '/modules/backend/',
+                        $rootFolder . '/modules/cms/',
+                        $rootFolder . '/modules/system/',
                     ];
 
                     // Only get necessary files from the modules directory
-                    for ($i = 0; $i < $zip->numFiles; ++$i) {
+                    for ($i = 1; $i < $zip->numFiles; ++$i) {
                         $filename = $zip->statIndex($i)['name'];
 
                         foreach ($paths as $path) {
@@ -163,6 +178,9 @@ class WinterManifest extends \Illuminate\Console\Command
                     $zip->extractTo($buildDir . $build . '/', $toExtract);
                     $zip->close();
 
+                    // Rename root folder
+                    rename($buildDir . $build . '/' . $rootFolder, $buildDir . $build . '/winter-' . $build);
+
                     // Remove ZIP file
                     unlink($buildDir . 'build-' . $build . '.zip');
                 } else {
@@ -173,19 +191,10 @@ class WinterManifest extends \Illuminate\Console\Command
                 $this->info('  - Extracted.');
             }
 
-            // Determine previous build
-            $manifestBuilds = $manifest->getBuilds();
-            $previous = null;
-            if (count($manifestBuilds)) {
-                if (isset($manifestBuilds[$build - 1])) {
-                    $previous = $build - 1;
-                }
-            }
-
             // Add build to manifest
             $this->line('  - Adding to manifest...');
-            $buildManifest = new FileManifest($buildDir . $build . '/winter-1.0.' . $build);
-            $manifest->addBuild($build, $buildManifest, $previous);
+            $buildManifest = new FileManifest($buildDir . $build . '/winter-' . $build);
+            $manifest->addBuild($build, $buildManifest);
             $this->info('  - Added.');
         }
 
