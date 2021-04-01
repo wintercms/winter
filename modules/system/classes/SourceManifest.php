@@ -2,7 +2,7 @@
 
 use ApplicationException;
 use Config;
-use October\Rain\Argon\Argon;
+use Winter\Storm\Argon\Argon;
 
 /**
  * Reads and stores the Winter CMS source manifest information.
@@ -11,7 +11,7 @@ use October\Rain\Argon\Argon;
  * buils of Winter CMS. This allows us to compare the Winter CMS installation against the expected file checksums and
  * determine the installed build and whether it has been modified.
  *
- * Since October 1.1.1, a forks manifest is also used to determine at which point we forked a branch off to a new
+ * Since Winter CMS v1.1.1, a forks manifest is also used to determine at which point we forked a branch off to a new
  * major release. This allows us to track concurrent histories - ie. the 1.0.x history vs. the 1.1.x history.
  *
  * @package winter\wn-system-module
@@ -231,8 +231,8 @@ class SourceManifest
         }
 
         $json = [
-            '_description' => 'This is the source manifest of changes to October CMS for each version. This is used to'
-                . ' determine which version of October CMS is in use, via the "october:version" Artisan command.',
+            '_description' => 'This is the source manifest of changes to Winter CMS for each version. This is used to'
+                . ' determine which version of Winter CMS is in use, via the "winter:version" Artisan command.',
             '_created' => Argon::now()->toIso8601String(),
             'manifest' => [],
         ];

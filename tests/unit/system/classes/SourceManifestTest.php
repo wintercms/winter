@@ -1,7 +1,6 @@
 <?php
 
 use Winter\Storm\Argon\Argon;
-use Winter\Storm\Exception\ApplicationException;
 use System\Classes\SourceManifest;
 use System\Classes\FileManifest;
 
@@ -45,7 +44,7 @@ class SourceManifestTest extends TestCase
 
         $this->assertEquals(
             '{' . "\n" .
-            '    "_description": "This is the source manifest of changes to October CMS for each version. This is used to determine which version of October CMS is in use, via the \"october:version\" Artisan command.",' . "\n" .
+            '    "_description": "This is the source manifest of changes to Winter CMS for each version. This is used to determine which version of Winter CMS is in use, via the \"winter:version\" Artisan command.",' . "\n" .
             '    "_created": "2020-12-16T12:01:00+00:00",' . "\n" .
             '    "manifest": [' . "\n" .
             '        {' . "\n" .

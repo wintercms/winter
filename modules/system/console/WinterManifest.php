@@ -78,9 +78,9 @@ class WinterManifest extends \Illuminate\Console\Command
             ++$page;
 
             $builds = Http::get(
-                'https://api.github.com/repos/octobercms/october/tags?per_page=100&page=' . $page,
+                'https://api.github.com/repos/wintercms/winter/tags?per_page=100&page=' . $page,
                 function ($http) {
-                    $http->header('User-Agent', 'October CMS');
+                    $http->header('User-Agent', 'Winter CMS');
                     $http->header('Accept', 'application/vnd.github.v3+json');
                 }
             );
