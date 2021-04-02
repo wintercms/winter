@@ -3283,7 +3283,7 @@ $.fn.filterWidget.Constructor=FilterWidget
 $.fn.filterWidget.noConflict=function(){$.fn.filterWidget=old
 return this}
 $(document).render(function(){$('[data-control="filterwidget"]').filterWidget();})}(window.jQuery);+function($){"use strict";var FilterWidget=$.fn.filterWidget.Constructor;var overloaded_init=FilterWidget.prototype.init;FilterWidget.prototype.init=function(){overloaded_init.apply(this)
-this.ignoreTimezone=this.$el.children().get(0).hasAttribute('data-ignore-timezone');this.initRegion()
+var self=this;this.$el.children().each(function(key,$filter){if($filter.hasAttribute('data-ignore-timezone')){self.ignoreTimezone=true;}});this.initRegion()
 this.initFilterDate()}
 FilterWidget.prototype.initFilterDate=function(){var self=this
 this.$el.on('show.oc.popover','a.filter-scope-date',function(event){self.initDatePickers($(this).hasClass('range'))
@@ -3397,7 +3397,7 @@ $datepicker.data('pikaday').destroy()})}
 FilterWidget.prototype.updateScopeDateSetting=function($scope,dates){var $setting=$scope.find('.filter-setting'),dateFormat=this.getDateFormat(),dateRegex=/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/,reset=false
 if(dates&&dates.length){dates[0]=dates[0]&&dates[0].match(dateRegex)?dates[0]:null
 if(dates.length>1){dates[1]=dates[1]&&dates[1].match(dateRegex)?dates[1]:null
-if(dates[0]||dates[1]){var after=dates[0]?moment.tz(dates[0],this.appTimezone).tz(this.timezone).format(dateFormat):'∞',before=dates[1]?moment.tz(dates[1],this.appTimezone).tz(this.timezone).format(dateFormat):'∞'
+if(dates[0]||dates[1]){var after=dates[0]?moment.tz(dates[0],this.appTimezone).tz(this.timezone).format(dateFormat):'-∞',before=dates[1]?moment.tz(dates[1],this.appTimezone).tz(this.timezone).format(dateFormat):'∞'
 $setting.text(after+' → '+before)}else{reset=true}}
 else if(dates[0]){$setting.text(moment.tz(dates[0],this.appTimezone).tz(this.timezone).format(dateFormat))}else{reset=true}}
 else{reset=true}
@@ -3524,11 +3524,13 @@ FilterWidget.prototype.initNumberInputs=function(isRange){var self=this,scopeDat
 if(!data){data={numbers:isRange?(scopeData.numbers?scopeData.numbers:[]):(scopeData.number?[scopeData.number]:[])}}
 $inputs.each(function(index,numberinput){var defaultValue=''
 if(0<=index&&index<data.numbers.length){defaultValue=data.numbers[index]?data.numbers[index]:''}
-numberinput.value=''!==defaultValue?defaultValue:'';})}
+numberinput.value=''!==defaultValue?defaultValue:'';if(scopeData.step){numberinput.step=scopeData.step}
+if(scopeData.minValue){numberinput.min=scopeData.minValue}
+if(scopeData.maxValue){numberinput.max=scopeData.maxValue}})}
 FilterWidget.prototype.updateScopeNumberSetting=function($scope,numbers){var $setting=$scope.find('.filter-setting'),numberRegex=/\d*/,reset=false
 if(numbers&&numbers.length){numbers[0]=numbers[0]&&numbers[0].match(numberRegex)?numbers[0]:null
 if(numbers.length>1){numbers[1]=numbers[1]&&numbers[1].match(numberRegex)?numbers[1]:null
-if(numbers[0]||numbers[1]){var min=numbers[0]?numbers[0]:'∞',max=numbers[1]?numbers[1]:'∞'
+if(numbers[0]||numbers[1]){var min=numbers[0]?numbers[0]:'-∞',max=numbers[1]?numbers[1]:'∞'
 $setting.text(min+' → '+max)}else{reset=true}}
 else if(numbers[0]){$setting.text(numbers[0])}else{reset=true}}
 else{reset=true}
