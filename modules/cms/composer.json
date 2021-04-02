@@ -23,7 +23,7 @@
     ],
     "require": {
         "php": ">=7.0",
-        "composer/installers": "~1.0",
+        "composer/installers": "dev-main as 1.0",
         "winter/storm": "~1.0.472",
         "laravel/framework": "~5.5.40"
     },
