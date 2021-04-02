@@ -1,5 +1,11 @@
 #!/usr/bin/env php
 <?php
+/**
+ * Run PHPCS tests against a PR.
+ *
+ * The only argument is for the PR's base branch, which is then compared to the HEAD of the PR to retrieve the list
+ * of changed files. The PHPCS tests are only run against these changed files, to speed up the tests.
+ */
 if (empty($argv[1])) {
     echo 'You must provide a base branch to check this PR against.';
     echo "\n";
