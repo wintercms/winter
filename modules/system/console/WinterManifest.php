@@ -6,6 +6,13 @@ use ZipArchive;
 use System\Classes\FileManifest;
 use System\Classes\SourceManifest;
 
+/**
+ * Console command to generate a release/tag manifest for Winter CMS version checks.
+ *
+ * @package winter\wn-system-module
+ * @author Ben Thomson
+ * @author Winter CMS
+ */
 class WinterManifest extends \Illuminate\Console\Command
 {
     /**
