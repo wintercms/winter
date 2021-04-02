@@ -33,6 +33,7 @@
         }
     },
     "extra": {
+        "installer-name": "system",
         "branch-alias": {
             "dev-master": "1.0-dev"
         }
