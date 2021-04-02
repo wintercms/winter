@@ -35,12 +35,6 @@ class WinterManifest extends \Illuminate\Console\Command
     protected $hidden = true;
 
     /**
-     * @var string Source repository download file.
-     */
-    protected $sourceBuildFile = 'https://github.com/wintercms/winter/archive/v1.0.%d.zip';
-
-
-    /**
      * Execute the console command.
      *
      * @return mixed
