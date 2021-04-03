@@ -144,8 +144,20 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerPrivilegedActions()
     {
-        $requests = ['/combine/', '@/system/updates', '@/system/install', '@/backend/auth'];
-        $commands = ['winter:up', 'winter:update', 'winter:env', 'winter:version', 'winter:manifest'];
+        $requests = [
+            '/combine/',
+            '@/system/updates',
+            '@/system/install',
+            '@/backend/auth',
+        ];
+        $commands = [
+            'winter:up',
+            'winter:update',
+            'winter:env',
+            'winter:version',
+            'winter:manifest',
+            'winter:split',
+        ];
 
         /*
          * Requests
@@ -262,6 +274,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('winter.passwd', 'System\Console\WinterPasswd');
         $this->registerConsoleCommand('winter.version', 'System\Console\WinterVersion');
         $this->registerConsoleCommand('winter.manifest', 'System\Console\WinterManifest');
+        $this->registerConsoleCommand('winter.split', 'System\Console\WinterSplit');
 
         $this->registerConsoleCommand('plugin.install', 'System\Console\PluginInstall');
         $this->registerConsoleCommand('plugin.remove', 'System\Console\PluginRemove');
