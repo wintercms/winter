@@ -128,6 +128,9 @@ class WinterSplit extends \Illuminate\Console\Command
             case 'branch':
                 $this->doBranchSync();
                 break;
+            case 'remove-branch':
+                $this->doRemoveBranch();
+                break;
         }
 
         $this->comment('Complete');
@@ -135,15 +138,19 @@ class WinterSplit extends \Illuminate\Console\Command
     }
 
     /**
-     * Executes a full synchronisation (all branches and tags) of the subplit repositories.
+     * Executes a full synchronisation (all branches) of the subsplit repositories.
+     *
+     * This function will remove any branches on subsplits that no longer exist on origin.
      *
      * @return void
      */
     protected function doSync()
     {
-        $this->comment('Performing full sync of subsplits...');
+        $this->comment('Performing full branch sync of subsplits...');
 
         $this->line(' - Finding branches.');
+
+        $this->line(' - Synchronising branches.');
 
         $branches = $this->getBranches();
 
@@ -157,10 +164,34 @@ class WinterSplit extends \Illuminate\Console\Command
 
             $this->syncBranch($branch);
         }
+
+        $progress->clear();
+
+        $this->line(' - Cleaning orphaned branches.');
+
+        // Create progress bar
+        $progress = new ProgressBar($this->output);
+
+        foreach ($progress->iterate(array_keys($this->remotes)) as $remote) {
+            $remoteBranches = $this->getBranches($remote);
+            $removedBranches = array_diff($remoteBranches, $branches);
+
+            if (count($removedBranches)) {
+                foreach ($removedBranches as $removedBranch) {
+                    $progress->clear();
+                    $this->line('   - Removing branch "' . $branch . '" from remote "' . $remote . '".');
+                    $progress->display();
+
+                    $this->deleteBranch($remote, $removedBranch);
+                }
+            }
+        }
+
+        $progress->clear();
     }
 
     /**
-     * Executes a synchronisation of a branch to the subplit repositories.
+     * Executes a synchronisation of a branch to the subsplit repositories.
      *
      * @return void
      */
@@ -173,6 +204,40 @@ class WinterSplit extends \Illuminate\Console\Command
         $this->line(' - Syncing "' . $branch . '" branch.');
 
         $this->syncBranch($branch);
+    }
+
+    /**
+     * Executes a deletion of a branch from the subsplit repositories.
+     *
+     * @return void
+     */
+    protected function doRemoveBranch()
+    {
+        $branch = $this->option('remove-branch');
+
+        $this->comment('Deleting branch "' . $branch . '" from subsplits...');
+
+        // Create progress bar
+        $progress = new ProgressBar($this->output);
+
+        foreach ($progress->iterate(array_keys($this->remotes)) as $remote) {
+            $progress->clear();
+            $this->line(' - Removing branch "' . $branch . '" from "' . $remote . '".');
+            $progress->display();
+
+            if ($this->branchExists($remote, $branch)) {
+                $this->deleteBranch($remote, $branch);
+                $progress->clear();
+                $this->line(' - Removed from "' . $remote . '".');
+                $progress->display();
+            } else {
+                $progress->clear();
+                $this->line(' - Branch doesn\'t exist on "' . $remote . '". Skipping.');
+                $progress->display();
+            }
+        }
+
+        $progress->clear();
     }
 
     /**
@@ -230,7 +295,17 @@ class WinterSplit extends \Illuminate\Console\Command
         $process = $this->runGitCommand([
             'fetch',
             'origin',
-            '*:*'
+            'refs/heads/*:refs/heads/*'
+        ]);
+
+        if (!$process->isSuccessful()) {
+            $this->error('Unable to update work repository in path "' . $this->workRepoPath . '". ' . $process->getErrorOutput());
+        }
+
+        $process = $this->runGitCommand([
+            'fetch',
+            'origin',
+            'refs/tags/*:refs/tags/*'
         ]);
 
         if (!$process->isSuccessful()) {
@@ -295,8 +370,7 @@ class WinterSplit extends \Illuminate\Console\Command
         } elseif (in_array($remote, array_keys($this->remotes))) {
             $command = [
                 'branch',
-                '-lr',
-                '"' . $remote . '/*"'
+                '-la'
             ];
         } else {
             throw new ApplicationException('Invalid remote "' . $remote . '" specified.');
@@ -309,19 +383,73 @@ class WinterSplit extends \Illuminate\Console\Command
             return;
         }
 
-        $this->line(' - Synchronising branches.');
+        $branches = array_map(
+            function ($item) use ($remote) {
+                $branch = trim(str_replace('* ', '', $item));
 
-        $branches = array_map(function ($item) use ($remote) {
-            $branch = trim(str_replace('* ', '', $item));
+                if (!is_null($remote)) {
+                    $branch = str_ireplace('remotes/' . $remote . '/', '', $branch);
+                }
 
-            if (!is_null($remote)) {
-                $branch = str_ireplace($remote . '/', '', $branch);
-            }
+                return $branch;
+            },
+            array_filter(
+                preg_split('/[\n\r]+/', trim($process->getOutput()), -1, PREG_SPLIT_NO_EMPTY),
+                function ($item) use ($remote) {
+                    if (is_null($remote)) {
+                        return true;
+                    }
 
-            return $branch;
-        }, preg_split('/[\n\r]+/', trim($process->getOutput()), -1, PREG_SPLIT_NO_EMPTY));
+                    return preg_match('/^ +remotes\\/' . preg_quote($remote, '/') . '/i', $item);
+                }
+            )
+        );
 
         return $branches;
+    }
+
+    /**
+     * Determines if a branch exists on a given remote.
+     *
+     * @param string $remote
+     * @param string $branch
+     * @return bool
+     */
+    protected function branchExists($remote, $branch)
+    {
+        if (!in_array($remote, array_keys($this->remotes))) {
+            throw new ApplicationException('Invalid remote "' . $remote . '" specified.');
+        }
+
+        $branches = $this->getBranches($remote);
+
+        return in_array($branch, $branches);
+    }
+
+    /**
+     * Deletes a branch on a remote.
+     *
+     * @param string $remote
+     * @param string $branch
+     * @return void
+     */
+    protected function deleteBranch($remote, $branch)
+    {
+        if (!in_array($remote, array_keys($this->remotes))) {
+            throw new ApplicationException('Invalid remote "' . $remote . '" specified.');
+        }
+
+        $process = $this->runGitCommand([
+            'push',
+            '--delete',
+            $remote,
+            $branch
+        ]);
+
+        if (!$process->isSuccessful()) {
+            $this->error('Unable to delete branch "' . $branch . '" on remote "' . $remote . '"');
+            return;
+        }
     }
 
     /**
