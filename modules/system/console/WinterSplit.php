@@ -229,7 +229,8 @@ class WinterSplit extends \Illuminate\Console\Command
     {
         $process = $this->runGitCommand([
             'fetch',
-            'origin'
+            'origin',
+            '*:*'
         ]);
 
         if (!$process->isSuccessful()) {
@@ -266,7 +267,7 @@ class WinterSplit extends \Illuminate\Console\Command
 
             $process = $this->runGitCommand([
                 'fetch',
-                $remote,
+                $remote
             ]);
             if (!$process->isSuccessful()) {
                 $this->error(' - Unable to fetch repository for "' . $remote . '" module. ' . $process->getErrorOutput());
@@ -340,6 +341,7 @@ class WinterSplit extends \Illuminate\Console\Command
                 '--prefix=' . $split['prefix'],
                 '--path=' . $this->workRepoPath
             ]);
+            $this->line('Running command: ' . $process->getCommandLine(), null, OutputInterface::VERBOSITY_DEBUG);
             $process->run();
 
             if (!$process->isSuccessful()) {
