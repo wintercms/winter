@@ -62,15 +62,15 @@ class WinterSplit extends \Illuminate\Console\Command
     protected $remotes = [
         'system' => [
             'prefix' => 'modules/system',
-            'url' => 'https://%s@github.com/wintercms/wn-system-module-test.git',
+            'url' => 'https://%s@github.com/wintercms/wn-system-module.git',
         ],
         'backend' => [
             'prefix' => 'modules/backend',
-            'url' => 'https://%s@github.com/wintercms/wn-backend-module-test.git',
+            'url' => 'https://%s@github.com/wintercms/wn-backend-module.git',
         ],
         'cms' => [
             'prefix' => 'modules/cms',
-            'url' => 'https://%s@github.com/wintercms/wn-cms-module-test.git',
+            'url' => 'https://%s@github.com/wintercms/wn-cms-module.git',
         ],
     ];
 
