@@ -35,6 +35,17 @@ class WinterManifest extends \Illuminate\Console\Command
     protected $hidden = true;
 
     /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:manifest']);
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed

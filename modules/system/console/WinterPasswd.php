@@ -32,6 +32,17 @@ class WinterPasswd extends Command
     protected $generatedPassword = false;
 
     /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:passwd']);
+    }
+
+    /**
      * Execute the console command.
      */
     public function handle()

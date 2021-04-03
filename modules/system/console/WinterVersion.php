@@ -29,6 +29,17 @@ class WinterVersion extends \Illuminate\Console\Command
                             {--changes : Include the list of changes between this install and the expected files for the detected build.}';
 
     /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:version']);
+    }
+
+    /**
      * Execute the console command.
      *
      * @return mixed

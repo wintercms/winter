@@ -75,6 +75,17 @@ class WinterMirror extends Command
     protected $destinationPath;
 
     /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:mirror']);
+    }
+
+    /**
      * Execute the console command.
      */
     public function handle()
