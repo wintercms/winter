@@ -131,6 +131,12 @@ class WinterSplit extends \Illuminate\Console\Command
             case 'remove-branch':
                 $this->doRemoveBranch();
                 break;
+            case 'tag':
+                $this->doTagSync();
+                break;
+            case 'remove-tag':
+                $this->doRemoveTag();
+                break;
         }
 
         $this->comment('Complete');
@@ -207,6 +213,22 @@ class WinterSplit extends \Illuminate\Console\Command
     }
 
     /**
+     * Executes a synchronisation of a tag to the subsplit repositories.
+     *
+     * @return void
+     */
+    protected function doTagSync()
+    {
+        $tag = $this->option('tag');
+
+        $this->comment('Performing sync of "' . $tag . '" to subsplits...');
+
+        $this->line(' - Syncing "' . $tag . '" tag.');
+
+        $this->syncTag($tag);
+    }
+
+    /**
      * Executes a deletion of a branch from the subsplit repositories.
      *
      * @return void
@@ -233,6 +255,40 @@ class WinterSplit extends \Illuminate\Console\Command
             } else {
                 $progress->clear();
                 $this->line(' - Branch doesn\'t exist on "' . $remote . '". Skipping.');
+                $progress->display();
+            }
+        }
+
+        $progress->clear();
+    }
+
+    /**
+     * Executes a deletion of a tag from the subsplit repositories.
+     *
+     * @return void
+     */
+    protected function doRemoveTag()
+    {
+        $tag = $this->option('remove-tag');
+
+        $this->comment('Deleting tag "' . $tag . '" from subsplits...');
+
+        // Create progress bar
+        $progress = new ProgressBar($this->output);
+
+        foreach ($progress->iterate(array_keys($this->remotes)) as $remote) {
+            $progress->clear();
+            $this->line(' - Removing tag "' . $tag . '" from "' . $remote . '".');
+            $progress->display();
+
+            if ($this->tagExists($remote, $tag)) {
+                $this->deleteTag($remote, $tag);
+                $progress->clear();
+                $this->line(' - Removed from "' . $remote . '".');
+                $progress->display();
+            } else {
+                $progress->clear();
+                $this->line(' - Tag doesn\'t exist on "' . $remote . '". Skipping.');
                 $progress->display();
             }
         }
@@ -427,6 +483,35 @@ class WinterSplit extends \Illuminate\Console\Command
     }
 
     /**
+     * Determines if a tag exists on a given remote.
+     *
+     * @param string $remote
+     * @param string $tag
+     * @return bool
+     */
+    protected function tagExists($remote, $tag)
+    {
+        if (!in_array($remote, array_keys($this->remotes))) {
+            throw new ApplicationException('Invalid remote "' . $remote . '" specified.');
+        }
+
+        $process = $this->runGitCommand([
+            'ls-remote',
+            $remote,
+            'refs/tags/' . $tag
+        ]);
+
+        if (!$process->isSuccessful()) {
+            $this->error('Unable to determine available tags.');
+            return;
+        }
+
+        $output = trim($process->getOutput());
+
+        return !empty($output);
+    }
+
+    /**
      * Deletes a branch on a remote.
      *
      * @param string $remote
@@ -448,6 +533,32 @@ class WinterSplit extends \Illuminate\Console\Command
 
         if (!$process->isSuccessful()) {
             $this->error('Unable to delete branch "' . $branch . '" on remote "' . $remote . '"');
+            return;
+        }
+    }
+
+    /**
+     * Deletes a tag on a remote.
+     *
+     * @param string $remote
+     * @param string $branch
+     * @return void
+     */
+    protected function deleteTag($remote, $tag)
+    {
+        if (!in_array($remote, array_keys($this->remotes))) {
+            throw new ApplicationException('Invalid remote "' . $remote . '" specified.');
+        }
+
+        $process = $this->runGitCommand([
+            'push',
+            '--delete',
+            $remote,
+            $tag
+        ]);
+
+        if (!$process->isSuccessful()) {
+            $this->error('Unable to delete tag "' . $tag . '" on remote "' . $remote . '"');
             return;
         }
     }
@@ -491,6 +602,51 @@ class WinterSplit extends \Illuminate\Console\Command
             if (!$process->isSuccessful()) {
                 throw new ApplicationException(
                     'Unable to push a subsplit of the ' . $remote . ' module from "' . $split['prefix'] . '". '
+                    . $process->getErrorOutput()
+                );
+            }
+        }
+    }
+
+    /**
+     * Synchronises a tag with all subsplits.
+     *
+     * @param string $branch
+     * @return void
+     */
+    protected function syncTag($tag)
+    {
+        foreach ($this->remotes as $remote => $split) {
+            // Process subsplit through "splitsh" utility for given remote and module
+            $process = new Process([
+                $this->getSplitshPath(),
+                '--origin=tags/' . $tag,
+                '--target=tags/' . $remote . '-' . $tag,
+                '--prefix=' . $split['prefix'],
+                '--path=' . $this->workRepoPath
+            ]);
+            $this->line('Running command: ' . $process->getCommandLine(), null, OutputInterface::VERBOSITY_DEBUG);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new ApplicationException(
+                    'Unable to create a subsplit of the tag"' . $tag . '" to the "' . $remote . '" module from "' . $split['prefix'] . '". '
+                    . $process->getErrorOutput()
+                );
+            }
+
+            // Push to the remote
+            $process = $this->runGitCommand([
+                'push',
+                '-f',
+                $remote,
+                'tags/' . $remote . '-' . $tag . ':refs/tags/' . $tag
+            ]);
+            $process->run();
+
+            if (!$process->isSuccessful()) {
+                throw new ApplicationException(
+                    'Unable to push tag"' . $tag . '" to the "' . $remote . '" module from "' . $split['prefix'] . '". '
                     . $process->getErrorOutput()
                 );
             }
