@@ -36,6 +36,7 @@ class WinterMirror extends Command
         'robots.txt',
         'humans.txt',
         'sitemap.xml',
+        'storage/database.sqlite',
     ];
 
     protected $directories = [
@@ -112,16 +113,16 @@ class WinterMirror extends Command
          */
         Event::fire('system.console.mirror.extendPaths', [$paths]);
 
-        foreach ($paths->files as $file) {
-            $this->mirrorFile($file);
-        }
-
         foreach ($paths->directories as $directory) {
             $this->mirrorDirectory($directory);
         }
 
         foreach ($paths->wildcards as $wildcard) {
             $this->mirrorWildcard($wildcard);
+        }
+
+        foreach ($paths->files as $file) {
+            $this->mirrorFile($file);
         }
 
         $this->output->writeln('<info>Mirror complete!</info>');
