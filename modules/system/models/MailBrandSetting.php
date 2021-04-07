@@ -43,7 +43,7 @@ class MailBrandSetting extends Model
 
     const WHITE_COLOR = '#fff';
     const BODY_BG = '#f5f8fa';
-    const PRIMARY_BG = '#3498db';
+    const PRIMARY_BG = '#d66829';
     const POSITIVE_BG = '#31ac5f';
     const NEGATIVE_BG = '#ab2a1c';
     const HEADER_COLOR = '#bbbfc3';
