@@ -27,6 +27,17 @@ class WinterDown extends Command
     protected $description = 'Destroys all database tables for Winter and all plugins.';
 
     /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:down']);
+    }
+
+    /**
      * Execute the console command.
      */
     public function handle()

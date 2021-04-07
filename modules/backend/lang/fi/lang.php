@@ -45,7 +45,6 @@ return [
         'enter_new_password' => 'Anna uusi salasana',
         'password_reset' => 'Salasanan nollaus',
         'restore_success' => 'Viesti on lähetetty sähköpostiosoitteeseesi. Seuraa ohjeita.',
-        'restore_error' => "':login' nimistä käyttäjää ei löydy.",
         'reset_success' => 'Salasana nollattu. Voit kirjautua nyt sisään.',
         'reset_error' => 'Virheellinen salasanan nollausdata. Ole hyvä ja yritä uudelleen!',
         'reset_fail' => 'Salasanaasi ei voida nollata!',
@@ -579,6 +578,10 @@ return [
         'selection_mode' => 'Valintamoodi',
         'resize_image' => 'Muuta kuvakokoa',
         'image_size' => 'Kuvakoko:',
-        'selected_size' => 'Valittuna:'
+        'selected_size' => 'Valittuna:',
+        'rename_popup_title' => 'Nimeä uudelleen',
+        'rename_new_name' => 'Uusi nimi',
+        'move_please_select' => 'ole hyvä ja valitse',
+        'move_button' => 'Siirrä',
     ],
 ];

@@ -74,6 +74,12 @@ tabs:
             tab: backend::lang.editor.markup_tags
             type: textarea
 
+        html_allow_attributes:
+            label: backend::lang.editor.allowed_attributes
+            comment: backend::lang.editor.allowed_attributes_comment
+            tab: backend::lang.editor.markup_tags
+            type: textarea
+
         html_allow_empty_tags:
             label: backend::lang.editor.allowed_empty_tags
             comment: backend::lang.editor.allowed_empty_tags_comment

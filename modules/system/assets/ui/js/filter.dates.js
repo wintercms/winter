@@ -29,7 +29,12 @@
     FilterWidget.prototype.init = function () {
         overloaded_init.apply(this)
 
-        this.ignoreTimezone = this.$el.children().get(0).hasAttribute('data-ignore-timezone');
+        var self = this;
+        this.$el.children().each(function(key, $filter) {
+            if ($filter.hasAttribute('data-ignore-timezone')) {
+                self.ignoreTimezone = true;
+            }
+        });
 
         this.initRegion()
         this.initFilterDate()
@@ -301,7 +306,7 @@
                 dates[1] = dates[1] && dates[1].match(dateRegex) ? dates[1] : null
 
                 if(dates[0] || dates[1]) {
-                    var after = dates[0] ? moment.tz(dates[0], this.appTimezone).tz(this.timezone).format(dateFormat) : '∞',
+                    var after = dates[0] ? moment.tz(dates[0], this.appTimezone).tz(this.timezone).format(dateFormat) : '-∞',
                         before = dates[1] ? moment.tz(dates[1], this.appTimezone).tz(this.timezone).format(dateFormat) : '∞'
 
                     $setting.text(after + ' → ' + before)

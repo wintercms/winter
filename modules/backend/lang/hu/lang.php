@@ -68,7 +68,6 @@ return [
         'enter_new_password' => 'Adjon meg egy új jelszót',
         'password_reset' => 'Új jelszó kiadása',
         'restore_success' => 'A visszaállítással kapcsolatos utasításokat tartalmazó levél elküldésre került.',
-        'restore_error' => "Nem található a(z) ':login' nevű felhasználó.",
         'reset_success' => 'A jelszó átállítása sikerült. Most már bejelentkezhet.',
         'reset_error' => 'A megadott jelszó átállítási adatok érvénytelenek. Próbálja újra!',
         'reset_fail' => 'Nem állítható vissza a jelszava!',
@@ -641,6 +640,10 @@ return [
         'selection_mode' => 'Kiválasztás módja',
         'resize_image' => 'Kép átméretezése',
         'image_size' => 'Kép mérete:',
-        'selected_size' => 'Kiválasztva:'
+        'selected_size' => 'Kiválasztva:',
+        'rename_popup_title' => 'Átnevezés',
+        'rename_new_name' => 'Új név',
+        'move_please_select' => 'válasszon',
+        'move_button' => 'Áthelyezés',
     ]
 ];
