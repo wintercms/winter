@@ -632,7 +632,7 @@ class NavigationManager
      */
     public function setContextOwner($owner)
     {
-        $this->contextOwner = $owner;
+        $this->contextOwner = strtoupper($owner);
     }
 
     /**
@@ -640,7 +640,7 @@ class NavigationManager
      */
     public function getContextOwner()
     {
-        return $this->aliases[strtoupper($this->contextOwner)] ?? $this->contextOwner;
+        return $this->aliases[$this->contextOwner] ?? $this->contextOwner;
     }
 
     /**
@@ -685,7 +685,7 @@ class NavigationManager
      */
     public function isMainMenuItemActive($item)
     {
-        return $this->getContextOwner() === $item->owner && $this->contextMainMenuItemCode === $item->code;
+        return $this->getContextOwner() === strtoupper($item->owner) && $this->contextMainMenuItemCode === $item->code;
     }
 
     /**
@@ -716,7 +716,7 @@ class NavigationManager
             return true;
         }
 
-        return $this->getContextOwner() === $item->owner && $this->contextSideMenuItemCode === $item->code;
+        return $this->getContextOwner() === strtoupper($item->owner) && $this->contextSideMenuItemCode === $item->code;
     }
 
     /**
