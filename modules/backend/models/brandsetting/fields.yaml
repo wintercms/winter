@@ -1,8 +1,8 @@
 # ===================================
 #  Field Definitions
 # ===================================
-# Light palette: [#1abc9c, #2ecc71, #2da7c7, #9b59b6, #103141, #f1c40f, #de8754, #b33f32, #ecf0f1, #95a5a6]
-# Dark palette:  [#16a085, #27ae60, #227f96, #8e44ad, #081821, #f39c12, #d66829, #ab2a1c, #bdc3c7, #7f8c8d]
+# Light palette: [#1abc9c, #6cc551, #b1dbef, #2da7c7, #b281c5, #103141, #f8e095, #de8754, #b33f32, #95a5a6]
+# Dark palette:  [#16a085, #52a838, #88c9e7, #227f96, #7b4e8e, #081821, #dcb22d, #d66829, #ab2a1c, #7f8c8d]
 
 tabs:
     fields:
@@ -43,19 +43,19 @@ tabs:
             label: backend::lang.branding.primary_color
             type: colorpicker
             tab: backend::lang.branding.colors
-            availableColors: [#1abc9c, #2ecc71, #2da7c7, #9b59b6, #103141, #f1c40f, #de8754, #b33f32, #ecf0f1, #95a5a6]
+            availableColors: [#1abc9c, #6cc551, #b1dbef, #2da7c7, #b281c5, #103141, #f8e095, #de8754, #b33f32, #95a5a6]
 
         secondary_color:
             label: backend::lang.branding.secondary_color
             type: colorpicker
             tab: backend::lang.branding.colors
-            availableColors: [#16a085, #27ae60, #227f96, #8e44ad, #081821, #f39c12, #d66829, #ab2a1c, #bdc3c7, #7f8c8d]
+            availableColors: [#16a085, #52a838, #88c9e7, #227f96, #7b4e8e, #081821, #dcb22d, #d66829, #ab2a1c, #7f8c8d]
 
         accent_color:
             label: backend::lang.branding.accent_color
             type: colorpicker
             tab: backend::lang.branding.colors
-            availableColors: [#16a085, #2ecc71, #2da7c7, #9b59b6, #081821, #f39c12, #de8754, #ab2a1c, #bdc3c7, #7f8c8d]
+            availableColors: [#16a085, #6cc551, #88c9e7, #227f96, #7b4e8e, #081821, #dcb22d, #d66829, #ab2a1c, #7f8c8d]
 
         menu_mode:
             label: backend::lang.branding.menu_mode
