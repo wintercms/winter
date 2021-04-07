@@ -16,7 +16,7 @@ body >p.flash-message.fade {opacity:0;filter:alpha(opacity=0);-webkit-transition
 body >p.flash-message.fade.in {opacity:1;filter:alpha(opacity=100);-webkit-transform:scale(1);-ms-transform:scale(1);transform:scale(1)}
 body >p.flash-message.success {background:#8da85e}
 body >p.flash-message.error {background:#c30}
-body >p.flash-message.warning {background:#f0ad4e}
+body >p.flash-message.warning {background:#de8754}
 body >p.flash-message.info {background:#5fb6f5}
 body >p.flash-message button.close {float:none;position:absolute;right:10px;top:8px;color:white;font-size:21px;line-height:1;font-weight:bold;opacity:0.2;filter:alpha(opacity=20);padding:0;cursor:pointer;background:transparent;border:0;-webkit-appearance:none;outline:none}
 body >p.flash-message button.close:hover,
