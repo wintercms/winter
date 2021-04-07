@@ -48,6 +48,17 @@ class WinterEnv extends Command
     protected $connection;
 
     /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:env']);
+    }
+
+    /**
      * Execute the console command.
      */
     public function handle()

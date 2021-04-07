@@ -13,7 +13,7 @@ Winter's mission is to show the world that web development is not rocket science
 
 Instructions on how to install Winter can be found at the [installation guide](https://wintercms.com/docs/setup/installation).
 
-### Quick start installation
+### Quick Start Installation
 
 For advanced users, run this in your terminal to install Winter from command line:
 
@@ -21,7 +21,7 @@ For advanced users, run this in your terminal to install Winter from command lin
 composer create-project wintercms/winter example.com "dev-develop"
 ```
 
-If you plan on using a database, run this command:
+If you plan on using a database, run this command inside the application directory.
 
 ```shell
 php artisan winter:install

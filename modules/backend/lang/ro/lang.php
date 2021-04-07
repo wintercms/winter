@@ -224,4 +224,10 @@ return [
         'last_name' => 'Nume',
         'email' => 'Email',
     ],
+    'media' => [
+        'rename_popup_title' => 'Redenumire',
+        'rename_new_name' => 'Nume nou',
+        'move_please_select' => 'selectati',
+        'move_button' => 'Mutare',
+    ]
 ];

@@ -586,6 +586,10 @@ return [
         'selection_mode' => 'Spôsob označovania',
         'resize_image' => 'Zmeniť veľkosť obrázku',
         'image_size' => 'Veľkosť obrázku:',
-        'selected_size' => 'Vybrané:'
+        'selected_size' => 'Vybrané:',
+        'rename_popup_title' => 'Premenovať',
+        'rename_new_name' => 'Nový názov',
+        'move_please_select' => 'prosím vyberte',
+        'move_button' => 'Presunúť',
     ],
 ];

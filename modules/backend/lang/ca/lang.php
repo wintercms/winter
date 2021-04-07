@@ -590,6 +590,10 @@ return [
         'selection_mode' => 'Selecciona mode',
         'resize_image' => 'Redimensionar imatge',
         'image_size' => "Mida d'imatge:",
-        'selected_size' => 'Seleccionat:'
+        'selected_size' => 'Seleccionat:',
+        'rename_popup_title' => 'Reanomenar',
+        'rename_new_name' => 'Nou nom',
+        'move_please_select' => 'si us plau selecciona',
+        'move_button' => 'Moure',
     ],
 ];

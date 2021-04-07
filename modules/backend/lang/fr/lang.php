@@ -116,7 +116,7 @@ return [
         'full_name' => 'Nom complet',
         'email' => 'Adresse e-mail',
         'role_field' => 'Rôle',
-        'role_comment' => 'Les rôles définissent les permissions de l\'utilisateur, elles peuvent être écrasés au niveau de l\'utilisateur dans l\'onglet "Permissions".',
+        'role_comment' => 'Les rôles définissent les permissions de l\'utilisateur, elles peuvent être écrasées au niveau de l\'utilisateur dans l\'onglet "Permissions".',
         'groups' => 'Groupes',
         'groups_comment' => 'Préciser les groupes auxquels ce compte doit appartenir.',
         'avatar' => 'Avatar',
@@ -219,8 +219,8 @@ return [
         'remove_file' => 'Supprimer le fichier',
     ],
     'repeater' => [
-        'min_items_failed' => ':name nécessite un minimum de :min choix sélectionné, seulement :items sont sélectionné(s)',
-        'max_items_failed' => ':name accepte un maximum de :max choix sélectionné, :items sont sélectionnés',
+        'min_items_failed' => ':name nécessite un minimum de :min choix sélectionné(s), seulement :items sont sélectionné(s)',
+        'max_items_failed' => ':name accepte un maximum de :max choix sélectionné(s), :items sont sélectionnés',
     ],
     'form' => [
         'create_title' => 'Créer un(e) :name',
@@ -280,7 +280,7 @@ return [
         'insert_row_below' => 'Insérer une ligne dessous',
         'delete_row' => 'Supprimer une ligne',
         'concurrency_file_changed_title' => 'Le fichier a été modifié',
-        'concurrency_file_changed_description' => 'Un autre utilisateur a modifié ce fichier sur le disque. Vous pouvez soit charger à nouveau le fichier depuis le disque mais vous perdrez vos modifications ou écraser le fichier sur le disque.',
+        'concurrency_file_changed_description' => 'Un autre utilisateur a modifié ce fichier sur le disque. Vous pouvez ou recharger le fichier depuis le disque, mais vous perdrez vos modifications, ou écraser le fichier sur le disque.',
         'return_to_list' => 'Retourner à la liste'
     ],
     'recordfinder' => [
@@ -356,7 +356,7 @@ return [
         'autocompletion' => 'Auto-complétion',
         'word_wrap' => 'Retour à la ligne',
         'highlight_active_line' => 'Sélectionner la ligne active',
-        'auto_closing' => 'Fermer Automatiquement les tags',
+        'auto_closing' => 'Fermer automatiquement les tags',
         'show_invisibles' => 'Afficher les caractères invisibles',
         'show_gutter' => 'Afficher les numéros de ligne',
         'basic_autocompletion'=> 'Auto-complétion basique (Ctrl + Espace)',
@@ -386,11 +386,11 @@ return [
         'allowed_tags' => 'Balises autorisées',
         'allowed_tags_comment' => 'Liste des balises autorisées.',
         'no_wrap' => 'Balises non encadrées',
-        'no_wrap_comment' => 'Liste des balises qui ne doivent pas être encadrées dans par des balises de bloc.',
+        'no_wrap_comment' => 'Liste des balises qui ne doivent pas être encadrées par des balises de bloc.',
         'remove_tags' => 'Balises supprimées',
         'remove_tags_comment' => 'Liste des balises qui sont supprimées ainsi que leur contenu.',
         'line_breaker_tags' => 'Balise de saut de ligne',
-        'line_breaker_tags_comment' => 'La liste des balises qui sont utilisés pour mettre des sauts de ligne.',
+        'line_breaker_tags_comment' => 'La liste des balises qui sont utilisées pour mettre des sauts de ligne.',
         'toolbar_buttons' => 'Boutons de la barre d\'outils',
         'toolbar_buttons_comment' => 'Les boutons de la barre d\'outils à afficher par défaut dans l\'éditeur de texte enrichi.',
     ],
@@ -430,7 +430,7 @@ return [
     ],
     'backend_preferences' => [
         'menu_label' => 'Préférences d’administration',
-        'menu_description' => 'Gérer les préférences de votre compte telles que la langue utilisée.',
+        'menu_description' => 'Gérer les préférences de votre compte tel que la langue utilisée.',
         'region' => 'Région',
         'code_editor' => 'Éditeur de code',
         'timezone' => 'Fuseau horaire',
@@ -598,6 +598,10 @@ return [
         'selection_mode' => 'Mode de sélection',
         'resize_image' => 'Redimensionner l’image',
         'image_size' => 'Taille de l’image :',
-        'selected_size' => 'Sélectionnée :'
+        'selected_size' => 'Sélectionnée :',
+        'rename_popup_title' => 'Renommer',
+        'rename_new_name' => 'Nouveau nom',
+        'move_please_select' => 'Faire une sélection',
+        'move_button' => 'Déplacer',
     ]
 ];

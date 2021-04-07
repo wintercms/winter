@@ -237,7 +237,7 @@ class NavigationManager
      */
     public function registerOwnerAlias(string $owner, string $alias)
     {
-        $this->aliases[$alias] = $owner;
+        $this->aliases[strtoupper($alias)] = strtoupper($owner);
     }
 
     /**
@@ -632,7 +632,7 @@ class NavigationManager
      */
     public function setContextOwner($owner)
     {
-        $this->contextOwner = $owner;
+        $this->contextOwner = strtoupper($owner);
     }
 
     /**
@@ -685,7 +685,7 @@ class NavigationManager
      */
     public function isMainMenuItemActive($item)
     {
-        return $this->getContextOwner() === $item->owner && $this->contextMainMenuItemCode === $item->code;
+        return $this->getContextOwner() === strtoupper($item->owner) && $this->contextMainMenuItemCode === $item->code;
     }
 
     /**
@@ -716,7 +716,7 @@ class NavigationManager
             return true;
         }
 
-        return $this->getContextOwner() === $item->owner && $this->contextSideMenuItemCode === $item->code;
+        return $this->getContextOwner() === strtoupper($item->owner) && $this->contextSideMenuItemCode === $item->code;
     }
 
     /**
@@ -741,7 +741,7 @@ class NavigationManager
      */
     public function getContextSidenavPartial($owner, $mainMenuItemCode)
     {
-        $owner = $this->aliases[$owner] ?? $owner;
+        $owner = $this->aliases[strtoupper($owner)] ?? $owner;
         $key = $owner.$mainMenuItemCode;
 
         return $this->contextSidenavPartials[$key] ?? null;
@@ -778,6 +778,7 @@ class NavigationManager
      */
     protected function makeItemKey($owner, $code)
     {
-        return strtoupper($this->aliases[$owner] ?? $owner).'.'.strtoupper($code);
+        $owner = strtoupper($owner);
+        return ($this->aliases[$owner] ?? $owner) . '.' . strtoupper($code);
     }
 }
