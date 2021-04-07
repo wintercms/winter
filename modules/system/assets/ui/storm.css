@@ -503,7 +503,7 @@ fieldset[disabled] .btn {cursor:not-allowed;pointer-events:none;opacity:0.65;fil
 .btn-default.disabled.active,
 .btn-default[disabled].active {background:#656d79;border-color:#656d79}
 .btn-default .badge {color:#656d79;background:#fff}
-.btn-primary {color:#fff;border:none;background:#1991d1;font-weight:500}
+.btn-primary {color:#fff;border:none;background:#6cc551;font-weight:500}
 .btn-primary:hover,
 .btn-primary:focus,
 .btn-primary:active,
@@ -522,8 +522,8 @@ fieldset[disabled] .btn {cursor:not-allowed;pointer-events:none;opacity:0.65;fil
 .btn-primary.disabled:active,
 .btn-primary[disabled]:active,
 .btn-primary.disabled.active,
-.btn-primary[disabled].active {background:#1991d1;border-color:#1371a3}
-.btn-primary .badge {color:#1991d1;background:#fff}
+.btn-primary[disabled].active {background:#6cc551;border-color:#1371a3}
+.btn-primary .badge {color:#6cc551;background:#fff}
 .btn-secondary {color:#000;border:none;background:#eeeff0;color:#405261}
 .btn-secondary:hover,
 .btn-secondary:focus,
