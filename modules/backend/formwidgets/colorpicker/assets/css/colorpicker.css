@@ -56,7 +56,7 @@
 .sp-container button:active.active,
 .open .dropdown-toggle.sp-container button,
 .open .dropdown-toggle.sp-container button:hover,
-.open .dropdown-toggle.sp-container button:active {color:#fff;background:#1681ba;border-color:#1681ba}
+.open .dropdown-toggle.sp-container button:active {color:#fff;background:#2da7c7;border-color:#2da7c7}
 .sp-container button:active,
 .sp-container button:hover:active,
 .sp-container button:active:active,
@@ -65,7 +65,7 @@
 .sp-container button:active.active,
 .open .dropdown-toggle.sp-container button,
 .open .dropdown-toggle.sp-container button:hover,
-.open .dropdown-toggle.sp-container button:active {background:#126896;border-color:#105b83;background-image:none}
+.open .dropdown-toggle.sp-container button:active {background:#258ba6;border-color:#227d95;background-image:none}
 .sp-container button.on,
 .sp-container button:hover.on,
 .sp-container button:active.on {background:#494f58;border-color:#40454d;background-image:none}
