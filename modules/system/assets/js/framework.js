@@ -292,7 +292,7 @@ if (window.jQuery.request !== undefined) {
                 // so that the loading indicator for redirects that cause a browser to download 
                 // a file instead of leave the page will properly stop.
                 // @see https://github.com/octobercms/october/issues/5055
-                $el.trigger('ajaxDone')
+                $el.trigger('ajaxRedirect')
             },
 
             /*
