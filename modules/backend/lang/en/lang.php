@@ -152,7 +152,7 @@ return [
         'superuser' => 'Super User',
         'superuser_comment' => 'Grants this account unlimited access to all areas of the system. Super users can add and manage other users. ',
         'send_invite' => 'Send invitation by email',
-        'send_invite_comment' => 'Sends a welcome message containing login and password information.',
+        'send_invite_comment' => 'Sends a welcome message containing login and password information. If a password is not set, the message will include a password reset link.',
         'delete_confirm' => 'Delete this administrator?',
         'return' => 'Return to admin list',
         'allow' => 'Allow',

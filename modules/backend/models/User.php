@@ -27,7 +27,7 @@ class User extends UserBase
     public $rules = [
         'email' => 'required|between:6,255|email|unique:backend_users',
         'login' => 'required|between:2,255|unique:backend_users',
-        'password' => 'sometimes|required:create|min:4|confirmed',
+        'password' => 'sometimes|min:4|confirmed',
         'password_confirmation' => 'sometimes|required_with:password|min:4'
     ];
 
