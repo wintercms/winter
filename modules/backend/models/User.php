@@ -170,6 +170,27 @@ class User extends UserBase
         });
     }
 
+
+    /**
+     * Sends a password restore link to the user using template "backend::mail.restore".
+     * @return void
+     */
+    public function sendPasswordRestore()
+    {
+        $code = $this->getResetPasswordCode();
+        
+        $link = Backend::url('backend/auth/reset/' . $this->id . '/' . $code);
+
+        $data = [
+            'name' => $this->full_name,
+            'link' => $link,
+        ];
+
+        Mail::send('backend::mail.restore', $data, function ($message) {
+            $message->to($this->email, $this->full_name)->subject(trans('backend::lang.account.password_reset'));
+        });
+    }
+
     public function getGroupsOptions()
     {
         $result = [];
