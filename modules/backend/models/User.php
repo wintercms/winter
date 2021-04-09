@@ -154,9 +154,10 @@ class User extends UserBase
 
     /**
      * Generates a link to the backend, or a password reset link if no password was set on creation.
-     * @return void
+     * @return string
      */
-    public function getInvitationLink() {
+    public function getInvitationLink()
+    {
         if (!$this->password) {
             $code = $this->getResetPasswordCode();
         
