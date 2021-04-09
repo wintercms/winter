@@ -27,8 +27,8 @@ class User extends UserBase
     public $rules = [
         'email' => 'required|between:6,255|email|unique:backend_users',
         'login' => 'required|between:2,255|unique:backend_users',
-        'password' => 'required:create|min:4|confirmed',
-        'password_confirmation' => 'required_with:password|min:4'
+        'password' => 'sometimes|required:create|min:4|confirmed',
+        'password_confirmation' => 'sometimes|required_with:password|min:4'
     ];
 
     /**
@@ -153,6 +153,20 @@ class User extends UserBase
     }
 
     /**
+     * Generates a link to the backend, or a password reset link if no password was set on creation.
+     * @return void
+     */
+    public function getInvitationLink() {
+        if (!$this->password) {
+            $code = $this->getResetPasswordCode();
+        
+            return Backend::url('backend/auth/reset/' . $this->id . '/' . $code);
+        }
+
+        return Backend::url('backend');
+    }
+
+    /**
      * Sends an invitation to the user using template "backend::mail.invite".
      * @return void
      */
@@ -161,8 +175,7 @@ class User extends UserBase
         $data = [
             'name' => $this->full_name,
             'login' => $this->login,
-            'password' => $this->getOriginalHashValue('password'),
-            'link' => Backend::url('backend'),
+            'link' => $this->getInvitationLink(),
         ];
 
         Mail::send('backend::mail.invite', $data, function ($message) {
