@@ -3614,7 +3614,7 @@ $(document).on('ajaxPromise','[data-load-indicator]',function(){var
 indicatorContainer=$(this).closest('.loading-indicator-container'),loadingText=$(this).data('load-indicator'),options={opaque:$(this).data('load-indicator-opaque'),centered:$(this).data('load-indicator-centered'),size:$(this).data('load-indicator-size')}
 if(loadingText)
 options.text=loadingText
-indicatorContainer.loadIndicator(options)}).on('ajaxFail ajaxDone','[data-load-indicator]',function(){$(this).closest('.loading-indicator-container').loadIndicator('hide')})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+indicatorContainer.loadIndicator(options)}).on('ajaxFail ajaxDone ajaxRedirected','[data-load-indicator]',function(){$(this).closest('.loading-indicator-container').loadIndicator('hide')})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
 $.wn={}
 if($.oc===undefined)
 $.oc=$.wn
@@ -3639,7 +3639,7 @@ this.counter=0
 if(this.counter<=0){this.indicator.addClass('hide')
 $(window).off('.cursorLoadIndicator');}}
 $(document).ready(function(){$.wn.cursorLoadIndicator=new CursorLoadIndicator();})
-$(document).on('ajaxPromise','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.show()}).on('ajaxFail ajaxDone','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$(document).on('ajaxPromise','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.show()}).on('ajaxFail ajaxDone ajaxRedirected','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
 $.wn={}
 if($.oc===undefined)
 $.oc=$.wn
@@ -3668,7 +3668,7 @@ $(document).on('ajaxPromise','[data-stripe-load-indicator]',function(event){even
 $.wn.stripeLoadIndicator.show()
 var $el=$(this)
 $(window).one('ajaxUpdateComplete',function(){if($el.closest('html').length===0)
-$.wn.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone','[data-stripe-load-indicator]',function(event){event.stopPropagation()
+$.wn.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone ajaxRedirected','[data-stripe-load-indicator]',function(event){event.stopPropagation()
 $.wn.stripeLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";var Popover=function(element,options){var $el=this.$el=$(element);this.options=options||{};this.arrowSize=15
 this.docClickHandler=null
 this.show()}
