@@ -12,7 +12,7 @@ class FileManifestTest extends TestCase
     {
         parent::setUp();
 
-        $this->fileManifest = new FileManifest(base_path('tests/fixtures/manifest/2'), ['test', 'test2']);
+        $this->fileManifest = new FileManifest(base_path('tests/fixtures/manifest/1_0_1'), ['test', 'test2']);
     }
 
     public function testGetFiles()

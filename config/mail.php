@@ -55,7 +55,10 @@ return [
     |
     */
 
-    'from' => ['address' => 'noreply@example.com', 'name' => 'Winter CMS'],
+    'from' => [
+        'address' => 'noreply@domain.tld',
+        'name'    => 'Winter CMS',
+    ],
 
     /*
     |--------------------------------------------------------------------------

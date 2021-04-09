@@ -83,7 +83,7 @@
     $(document)
         .on('ajaxPromise', '[data-cursor-load-indicator]', function() {
             $.wn.cursorLoadIndicator.show()
-        }).on('ajaxFail ajaxDone', '[data-cursor-load-indicator]', function() {
+        }).on('ajaxFail ajaxDone ajaxRedirected', '[data-cursor-load-indicator]', function() {
             $.wn.cursorLoadIndicator.hide()
         })
 

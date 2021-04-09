@@ -1,5 +1,11 @@
 #!/usr/bin/env php
 <?php
+/**
+ * Storm library switch for CI
+ *
+ * Switches the version of the Storm library being required through Composer. The only argument is the branch or tag
+ * to switch to.
+ */
 if (empty($argv[1])) {
     echo 'You must provide a version to switch the library dependency to.';
     echo "\n";

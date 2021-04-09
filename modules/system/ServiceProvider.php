@@ -145,7 +145,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerPrivilegedActions()
     {
         $requests = ['/combine/', '@/system/updates', '@/system/install', '@/backend/auth'];
-        $commands = ['winter:up', 'winter:update', 'winter:env', 'winter:version'];
+        $commands = ['winter:up', 'winter:update', 'winter:env', 'winter:version', 'winter:manifest'];
 
         /*
          * Requests
