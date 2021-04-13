@@ -680,11 +680,13 @@ class PluginManager
             if (!isset($this->plugins[$target])) {
                 // register lang namespace alias for bc
                 Lang::registerNamespaceAlias($replacement, $target);
+                Config::getLoader()->registerNamespaceAlias($replacement, $target);
                 continue;
             }
 
             if ($this->plugins[$replacement]->replaces($target, $this->plugins[$target]->getVersion())) {
                 Lang::registerNamespaceAlias($replacement, $target);
+                Config::getLoader()->registerNamespaceAlias($replacement, $target);
 
                 $this->disablePlugin($target);
                 $this->enablePlugin($replacement);
