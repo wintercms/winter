@@ -728,7 +728,7 @@ class NavigationManager
      */
     public function registerContextSidenavPartial($owner, $mainMenuItemCode, $partial)
     {
-        $this->contextSidenavPartials[$owner.$mainMenuItemCode] = $partial;
+        $this->contextSidenavPartials[$this->makeItemKey($owner, $mainMenuItemCode)] = $partial;
     }
 
     /**
@@ -741,10 +741,7 @@ class NavigationManager
      */
     public function getContextSidenavPartial($owner, $mainMenuItemCode)
     {
-        $owner = $this->aliases[strtoupper($owner)] ?? $owner;
-        $key = $owner.$mainMenuItemCode;
-
-        return $this->contextSidenavPartials[$key] ?? null;
+        return $this->contextSidenavPartials[$this->makeItemKey($owner, $mainMenuItemCode)] ?? null;
     }
 
     /**
