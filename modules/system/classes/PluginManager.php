@@ -679,15 +679,12 @@ class PluginManager
         foreach ($this->replaces as $target => $replacement) {
             if (!isset($this->plugins[$target])) {
                 // register lang namespace alias for bc
-                Lang::registerNamespaceAlias($replacement, $target);
-                Config::getLoader()->registerNamespaceAlias($replacement, $target);
+                $this->registerNamespaceAliases($replacement, $target);
                 continue;
             }
 
             if ($this->plugins[$replacement]->replaces($target, $this->plugins[$target]->getVersion())) {
-                Lang::registerNamespaceAlias($replacement, $target);
-                Config::getLoader()->registerNamespaceAlias($replacement, $target);
-
+                $this->registerNamespaceAliases($replacement, $target);
                 $this->disablePlugin($target);
                 $this->enablePlugin($replacement);
             } else {
@@ -695,6 +692,19 @@ class PluginManager
                 $this->enablePlugin($target);
             }
         }
+    }
+
+    /**
+     * Registers namespace aliasing for multiple subsystems
+     *
+     * @param string $namespace Plugin code
+     * @param string $alias     Plugin alias code
+     * @return void
+     */
+    protected function registerNamespaceAliases(string $namespace, string $alias)
+    {
+        Lang::registerNamespaceAlias($namespace, $alias);
+        Config::getLoader()->registerNamespaceAlias($namespace, $alias);
     }
 
     /**
