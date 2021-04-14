@@ -13,6 +13,7 @@ use SystemException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Winter\Storm\Support\ClassLoader;
+use Backend\Classes\NavigationManager;
 
 /**
  * Plugin manager
@@ -705,6 +706,8 @@ class PluginManager
     {
         Lang::registerNamespaceAlias($namespace, $alias);
         Config::getLoader()->registerNamespaceAlias($namespace, $alias);
+        SettingsManager::lazyRegisterOwnerAlias($namespace, $alias);
+        NavigationManager::lazyRegisterOwnerAlias($namespace, $alias);
     }
 
     /**
