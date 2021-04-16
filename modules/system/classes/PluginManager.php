@@ -705,7 +705,8 @@ class PluginManager
     protected function registerNamespaceAliases(string $namespace, string $alias)
     {
         Lang::registerNamespaceAlias($namespace, $alias);
-        Config::registerPackageAlias($namespace, $alias);
+        Config::registerNamespaceAlias($namespace, $alias);
+        Config::registerPackageFallback($namespace, $alias);
         SettingsManager::lazyRegisterOwnerAlias($namespace, $alias);
         NavigationManager::lazyRegisterOwnerAlias($namespace, $alias);
     }
