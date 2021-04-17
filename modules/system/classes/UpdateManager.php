@@ -146,24 +146,25 @@ class UpdateManager
             $this->migrateModule($module);
         }
 
-        /*
-         * Update plugins
-         */
         $plugins = $this->pluginManager->getPlugins();
-        foreach ($plugins as $code => $plugin) {
-            $this->updatePlugin($code);
-        }
 
         /*
          * Replace plugins
          */
         foreach ($plugins as $code => $plugin) {
-            if (!$plugin->getReplaces()) {
+            if (!$replaces = $plugin->getReplaces()) {
                 continue;
             }
-            foreach ($plugin->getReplaces() as $replace) {
+            foreach ($replaces as $replace) {
                 $this->versionManager->replacePlugin($plugin, $replace);
             }
+        }
+
+        /*
+         * Update plugins
+         */
+        foreach ($plugins as $code => $plugin) {
+            $this->updatePlugin($code);
         }
 
         Parameter::set('system::update.count', 0);
