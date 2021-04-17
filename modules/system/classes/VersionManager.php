@@ -88,6 +88,7 @@ class VersionManager
         }
 
         $newUpdates = $this->getNewFileVersions($code, $databaseVersion);
+
         foreach ($newUpdates as $version => $details) {
             $this->applyPluginUpdate($code, $version, $details);
 
@@ -285,6 +286,7 @@ class VersionManager
 
         $versions = $this->getFileVersions($code);
         $position = array_search($version, array_keys($versions));
+
         return array_slice($versions, ++$position);
     }
 
