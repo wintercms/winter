@@ -11,7 +11,7 @@ class Plugin extends PluginBase
             'description' => 'Sample plugin used by unit tests.',
             'author' => 'Alexey Bobkov, Samuel Georges',
             'replaces' => [
-                'Winter.Tester' => '9.0'
+                'Winter.Tester' => '>=9.0'
             ]
         ];
     }
