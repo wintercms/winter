@@ -691,6 +691,8 @@ class PluginManager
             } else {
                 $this->disablePlugin($replacement);
                 $this->enablePlugin($target);
+                // unset alias to prevent redirection to disabled plugin
+                unset($this->replaces[$target]);
             }
         }
     }
