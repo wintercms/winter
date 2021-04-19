@@ -25,7 +25,7 @@ class PluginManagerTest extends TestCase
     {
         $result = $this->manager->loadPlugins();
 
-        $this->assertCount(9, $result);
+        $this->assertCount(12, $result);
         $this->assertArrayHasKey('Winter.NoUpdates', $result);
         $this->assertArrayHasKey('Winter.Sample', $result);
         $this->assertArrayHasKey('Winter.Tester', $result);
@@ -67,7 +67,7 @@ class PluginManagerTest extends TestCase
     {
         $result = $this->manager->getPlugins();
 
-        $this->assertCount(8, $result);
+        $this->assertCount(9, $result);
         $this->assertArrayHasKey('Winter.NoUpdates', $result);
         $this->assertArrayHasKey('Winter.Sample', $result);
         $this->assertArrayHasKey('Winter.Tester', $result);
@@ -127,7 +127,7 @@ class PluginManagerTest extends TestCase
     {
         $result = $this->manager->getPluginNamespaces();
 
-        $this->assertCount(10, $result);
+        $this->assertCount(13, $result);
         $this->assertArrayHasKey('\winter\noupdates', $result);
         $this->assertArrayHasKey('\winter\sample', $result);
         $this->assertArrayHasKey('\winter\tester', $result);
@@ -181,7 +181,7 @@ class PluginManagerTest extends TestCase
     public function testUnregisterall()
     {
         $result = $this->manager->getPlugins();
-        $this->assertCount(8, $result);
+        $this->assertCount(9, $result);
 
         $this->manager->unregisterAll();
         $this->assertEmpty($this->manager->getPlugins());
