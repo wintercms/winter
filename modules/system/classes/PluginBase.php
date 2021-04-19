@@ -340,7 +340,7 @@ class PluginBase extends ServiceProviderBase
      *
      * @return array|string[]
      */
-    public function getReplaces(): array
+    public function getReplacementFor(): array
     {
         $replaces = $this->pluginDetails()['replaces'] ?? null;
 
@@ -357,7 +357,7 @@ class PluginBase extends ServiceProviderBase
      * @param string $version
      * @return bool
      */
-    public function replaces(string $pluginIdentifier, string $version): bool
+    public function canReplacePlugin(string $pluginIdentifier, string $version): bool
     {
         $replaces = $this->pluginDetails()['replaces'] ?? null;
 

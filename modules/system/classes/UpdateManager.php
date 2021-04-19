@@ -152,7 +152,7 @@ class UpdateManager
          * Replace plugins
          */
         foreach ($plugins as $code => $plugin) {
-            if (!$replaces = $plugin->getReplaces()) {
+            if (!$replaces = $plugin->getReplacementFor()) {
                 continue;
             }
             foreach ($replaces as $replace) {

@@ -109,7 +109,7 @@ class VersionManager
             return;
         }
 
-        if (!$plugin->replaces($replace, $this->getLatestFileVersion($replace))) {
+        if (!$plugin->canReplacePlugin($replace, $this->getLatestFileVersion($replace))) {
             return;
         }
 
