@@ -26,7 +26,7 @@ class PluginBase extends ServiceProviderBase
     /**
      * @var string The absolute path to this plugin's directory, access with getPluginPath()
      */
-    protected $path = null;
+    protected $path;
 
     /**
      * @var string The version of this plugin as reported by updates/version.yaml, access with getPluginVersion()

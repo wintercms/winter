@@ -46,10 +46,9 @@ class PluginManager
     protected $normalizedMap = [];
 
     /**
-     * @var array A plugin replace map.
+     * @var array A map of plugin identifiers with their replacements [Original.Plugin => Replacement.Plugin]
      */
-    protected $replaces = [];
-
+    protected $replacementMap = [];
 
     /**
      * @var bool Flag to indicate that all plugins have had the register() method called by registerAll() being called on this class.
@@ -179,7 +178,7 @@ class PluginManager
         $replaces = $classObj->getReplaces();
         if ($replaces) {
             foreach ($replaces as $replace) {
-                $this->replaces[$replace] = $classId;
+                $this->replacementMap[$replace] = $classId;
             }
         }
 
@@ -416,8 +415,8 @@ class PluginManager
      */
     public function findByIdentifier($identifier, bool $ignoreReplacements = false)
     {
-        if (!$ignoreReplacements && is_string($identifier) && isset($this->replaces[$identifier])) {
-            $identifier = $this->replaces[$identifier];
+        if (!$ignoreReplacements && is_string($identifier) && isset($this->replacementMap[$identifier])) {
+            $identifier = $this->replacementMap[$identifier];
         }
 
         if (!isset($this->plugins[$identifier])) {
@@ -439,7 +438,7 @@ class PluginManager
         $classId = $this->getIdentifier($namespace);
         $normalized = $this->normalizeIdentifier($classId);
 
-        if (isset($this->replaces[$normalized])) {
+        if (isset($this->replacementMap[$normalized])) {
             return true;
         }
 
@@ -673,11 +672,11 @@ class PluginManager
 
     public function registerReplacedPlugins()
     {
-        if (empty($this->replaces)) {
+        if (empty($this->replacementMap)) {
             return;
         }
 
-        foreach ($this->replaces as $target => $replacement) {
+        foreach ($this->replacementMap as $target => $replacement) {
             if (!isset($this->plugins[$target])) {
                 // register lang namespace alias for bc
                 $this->registerNamespaceAliases($replacement, $target);
@@ -692,7 +691,7 @@ class PluginManager
                 $this->disablePlugin($replacement);
                 $this->enablePlugin($target);
                 // unset alias to prevent redirection to disabled plugin
-                unset($this->replaces[$target]);
+                unset($this->replacementMap[$target]);
             }
         }
     }
@@ -867,8 +866,8 @@ class PluginManager
                 $depends = $this->getDependencies($plugin);
 
                 $depends = array_map(function ($depend) {
-                    if (isset($this->replaces[$depend])) {
-                        return $this->replaces[$depend];
+                    if (isset($this->replacementMap[$depend])) {
+                        return $this->replacementMap[$depend];
                     }
 
                     return $depend;
@@ -932,7 +931,7 @@ class PluginManager
         }
 
         return array_map(function ($require) {
-            return $this->replaces[$require] ?? $require;
+            return $this->replacementMap[$require] ?? $require;
         }, is_array($plugin->require) ? $plugin->require : [$plugin->require]);
     }
 
