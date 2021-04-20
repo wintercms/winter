@@ -247,18 +247,18 @@ class PluginManagerTest extends TestCase
         $this->assertTrue($this->manager->isDisabled('Winter.Original'));
         $this->assertTrue($this->manager->isDisabled('Winter.InvalidReplacement'));
 
-        $this->assertEquals('Winter.Replacement', $this->manager->findByIdentifier('Winter.Original')->getIdentifier());
+        $this->assertEquals('Winter.Replacement', $this->manager->findByIdentifier('Winter.Original')->getPluginIdentifier());
     }
 
     public function testGetReplacements()
     {
-        $replacementPluginReplaces = $this->manager->findByIdentifier('Winter.Replacement')->getReplacementFor();
+        $replacementPluginReplaces = $this->manager->findByIdentifier('Winter.Replacement')->getReplaces();
 
         $this->assertIsArray($replacementPluginReplaces);
         $this->assertCount(1, $replacementPluginReplaces);
         $this->assertEquals('Winter.Original', $replacementPluginReplaces[0]);
 
-        $invalidPluginReplaces = $this->manager->findByIdentifier('Winter.InvalidReplacement')->getReplacementFor();
+        $invalidPluginReplaces = $this->manager->findByIdentifier('Winter.InvalidReplacement')->getReplaces();
 
         $this->assertIsArray($invalidPluginReplaces);
         $this->assertCount(1, $invalidPluginReplaces);
