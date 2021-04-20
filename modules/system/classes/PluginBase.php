@@ -1,14 +1,14 @@
 <?php namespace System\Classes;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\ServiceProvider as ServiceProviderBase;
+use Str;
+use File;
+use Yaml;
+use Backend;
 use ReflectionClass;
 use SystemException;
 use Composer\Semver\Semver;
-use Yaml;
-use File;
-use Backend;
-use Str;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\ServiceProvider as ServiceProviderBase;
 
 /**
  * Plugin base class
@@ -24,12 +24,12 @@ class PluginBase extends ServiceProviderBase
     protected $loadedYamlConfiguration = false;
 
     /**
-     * @var string
+     * @var string The absolute path to this plugin's directory, access with getPluginPath()
      */
     protected $path = null;
 
     /**
-     * @var string
+     * @var string The version of this plugin as reported by updates/version.yaml, access with getPluginVersion()
      */
     protected $version;
 
@@ -336,65 +336,95 @@ class PluginBase extends ServiceProviderBase
     }
 
     /**
-     * Returns a list of plugins replaced by this plugin
+     * Gets list of plugins replaced by this plugin
      *
-     * @return array|string[]
+     * @param bool $includeConstraints Include version constraints in the results as the array values
+     * @return array ['Author.Plugin'] or ['Author.Plugin' => 'self.version']
      */
-    public function getReplacementFor(): array
+    public function getReplaces($includeConstraints = false): array
     {
         $replaces = $this->pluginDetails()['replaces'] ?? null;
 
-        if (is_array($replaces)) {
-            return array_keys($replaces);
+        if ($includeConstraints) {
+            if (is_string($replaces)) {
+                $replaces = [$replaces => 'self.version'];
+            }
+        } else {
+            if (is_array($replaces)) {
+                $replaces = array_keys($replaces);
+            } elseif (is_string($replaces)) {
+                $replaces = [$replaces];
+            }
         }
 
-        return is_string($replaces) ? [$replaces] : [];
+        return is_array($replaces) ? $replaces : [];
     }
 
     /**
-     * Returns bool for if a plugin is replaced
+     * Check if the provided plugin & version can be replaced by this plugin
+     *
      * @param string $pluginIdentifier
      * @param string $version
      * @return bool
      */
     public function canReplacePlugin(string $pluginIdentifier, string $version): bool
     {
-        $replaces = $this->pluginDetails()['replaces'] ?? null;
-
-        if (is_string($replaces) && $replaces === $pluginIdentifier) {
-            return true;
-        }
+        $replaces = $this->getReplaces(true);
 
         if (is_array($replaces) && in_array($pluginIdentifier, array_keys($replaces))) {
-            return $this->replacesVersion($version, $replaces[$pluginIdentifier]);
+            $constraints = $replaces[$pluginIdentifier];
+            if ($constraints === 'self.version') {
+                $constraints = $this->getPluginVersion();
+            }
+
+            return Semver::satisfies($version, $constraints);
         }
 
         return false;
     }
 
     /**
-     * Passes the check through to composer/semver but allows Winter to perform
-     * checks / changes as required
+     * Gets the identifier for this plugin
      *
-     * @return bool
+     * @return string Identifier in format of Author.Plugin
      */
-    protected function replacesVersion(string $version, string $constraints): bool
+    public function getPluginIdentifier(): string
     {
-        if ($constraints === 'self.version') {
-            $constraints = $this->getVersion();
+        $namespace = Str::normalizeClassName(get_called_class());
+        if (strpos($namespace, '\\') === null) {
+            return $namespace;
         }
 
-        return Semver::satisfies($version, $constraints);
+        $parts = explode('\\', $namespace);
+        $slice = array_slice($parts, 1, 2);
+        $namespace = implode('.', $slice);
+
+        return $namespace;
     }
 
     /**
-     * This is duplication of code that allows us to fetch the latest version of this plugin
-     * without having to call PluginVersion or VersionManager which both create
-     * Infinite loops
+     * Returns the absolute path to this plugin's directory
      *
      * @return string
      */
-    public function getVersion(): string
+    public function getPluginPath(): string
+    {
+        if ($this->path) {
+            return $this->path;
+        }
+
+        $reflection = new ReflectionClass($this);
+        $this->path = dirname($reflection->getFileName());
+
+        return $this->path;
+    }
+
+    /**
+     * Gets the current version of the plugin as reported by updates/version.yaml
+     *
+     * @return string
+     */
+    public function getPluginVersion(): string
     {
         if (isset($this->version)) {
             return $this->version;
@@ -411,40 +441,5 @@ class PluginBase extends ServiceProviderBase
         });
 
         return $this->version = trim(key(array_slice($versionInfo, -1, 1)));
-    }
-
-    /**
-     * Returns path to plugins base dir
-     * @return string
-     */
-    public function getPluginPath(): string
-    {
-        if ($this->path) {
-            return $this->path;
-        }
-
-        $reflection = new ReflectionClass($this);
-        $this->path = dirname($reflection->getFileName());
-
-        return $this->path;
-    }
-
-    /**
-     * Resolves a plugin identifier (Author.Plugin)
-     *
-     * @return string Identifier in format of Author.Plugin
-     */
-    public function getIdentifier(): string
-    {
-        $namespace = Str::normalizeClassName(get_called_class());
-        if (strpos($namespace, '\\') === null) {
-            return $namespace;
-        }
-
-        $parts = explode('\\', $namespace);
-        $slice = array_slice($parts, 1, 2);
-        $namespace = implode('.', $slice);
-
-        return $namespace;
     }
 }

@@ -89,7 +89,9 @@ class SettingsManager
      */
     protected function init()
     {
-        $this->aliases = array_merge($this->aliases, static::$lazyAliases);
+        foreach (static::$lazyAliases as $alias => $owner) {
+            $this->registerOwnerAlias($owner, $alias);
+        }
         $this->pluginManager = PluginManager::instance();
     }
 

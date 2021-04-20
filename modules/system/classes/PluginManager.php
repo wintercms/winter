@@ -176,7 +176,7 @@ class PluginManager
         $this->pathMap[$classId] = $path;
         $this->normalizedMap[strtolower($classId)] = $classId;
 
-        $replaces = $classObj->getReplacementFor();
+        $replaces = $classObj->getReplaces();
         if ($replaces) {
             foreach ($replaces as $replace) {
                 $this->replaces[$replace] = $classId;
@@ -274,7 +274,7 @@ class PluginManager
         /*
          * Register replacement class map
          */
-        if ($replaces = $plugin->getReplacementFor()) {
+        if ($replaces = $plugin->getReplaces()) {
             foreach ($replaces as $replace) {
                 $replaceNamespace = $this->getNamespace($replace);
 
@@ -684,7 +684,7 @@ class PluginManager
                 continue;
             }
 
-            if ($this->plugins[$replacement]->canReplacePlugin($target, $this->plugins[$target]->getVersion())) {
+            if ($this->plugins[$replacement]->canReplacePlugin($target, $this->plugins[$target]->getPluginVersion())) {
                 $this->registerNamespaceAliases($replacement, $target);
                 $this->disablePlugin($target);
                 $this->enablePlugin($replacement);
