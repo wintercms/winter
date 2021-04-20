@@ -790,7 +790,7 @@ class UpdateManager
      */
     public function requestChangelog()
     {
-        $result = Http::get('https://api.wintercms.com/marketplace/changelog');
+        $result = Http::get($this->createServerUrl('changelog'));
 
         if ($result->code == 404) {
             throw new ApplicationException(Lang::get('system::lang.server.response_empty'));
