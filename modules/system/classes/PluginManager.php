@@ -213,6 +213,7 @@ class PluginManager
     {
         $this->registered = false;
         $this->plugins = [];
+        $this->replacementMap = [];
     }
 
     /**
