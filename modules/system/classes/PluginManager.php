@@ -271,7 +271,7 @@ class PluginManager
         }
 
         /*
-         * Register replacement class map
+         * Register namespace aliases for any replaced plugins
          */
         if ($replaces = $plugin->getReplaces()) {
             foreach ($replaces as $replace) {
@@ -438,11 +438,7 @@ class PluginManager
         $classId = $this->getIdentifier($namespace);
         $normalized = $this->normalizeIdentifier($classId);
 
-        if (isset($this->replacementMap[$normalized])) {
-            return true;
-        }
-
-        return isset($this->plugins[$normalized]);
+        return isset($this->plugins[$normalized]) || isset($this->replacementMap[$normalized]);
     }
 
     /**
@@ -677,20 +673,22 @@ class PluginManager
         }
 
         foreach ($this->replacementMap as $target => $replacement) {
+            // Alias the replaced plugin to the replacing plugin if the replaced plugin isn't present
             if (!isset($this->plugins[$target])) {
-                // register lang namespace alias for bc
-                $this->registerNamespaceAliases($replacement, $target);
+                $this->aliasPluginAs($replacement, $target);
                 continue;
             }
 
+            // Only allow one of the replaced plugin or the replacing plugin to exist
+            // at once depending on whether the version constraints are met or not
             if ($this->plugins[$replacement]->canReplacePlugin($target, $this->plugins[$target]->getPluginVersion())) {
-                $this->registerNamespaceAliases($replacement, $target);
+                $this->aliasPluginAs($replacement, $target);
                 $this->disablePlugin($target);
                 $this->enablePlugin($replacement);
             } else {
                 $this->disablePlugin($replacement);
                 $this->enablePlugin($target);
-                // unset alias to prevent redirection to disabled plugin
+                // Remove the replacement alias to prevent redirection to a disabled plugin
                 unset($this->replacementMap[$target]);
             }
         }
@@ -703,7 +701,7 @@ class PluginManager
      * @param string $alias     Plugin alias code
      * @return void
      */
-    protected function registerNamespaceAliases(string $namespace, string $alias)
+    protected function aliasPluginAs(string $namespace, string $alias)
     {
         Lang::registerNamespaceAlias($namespace, $alias);
         Config::registerNamespaceAlias($namespace, $alias);
