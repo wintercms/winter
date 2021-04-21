@@ -1,5 +1,6 @@
 <?php namespace Backend\Widgets;
 
+use App;
 use File;
 use Lang;
 use Flash;
@@ -9,6 +10,7 @@ use Backend\Classes\WidgetBase;
 use Backend\Classes\WidgetManager;
 use Backend\Models\UserPreference;
 use System\Models\Parameter as SystemParameters;
+use Winter\Storm\Support\ClassLoader;
 use ApplicationException;
 
 /**
@@ -340,8 +342,20 @@ class ReportContainer extends WidgetBase
 
         $className = $widgetInfo['class'];
         $availableReportWidgets = array_keys(WidgetManager::instance()->listReportWidgets());
-        if (!class_exists($className) || !in_array($className, $availableReportWidgets)) {
+
+        // Check to see if the class exists
+        if (!class_exists($className)) {
             return;
+        } else {
+            // Check to see if the class is registered as a valid report widget
+            if (!in_array($className, $availableReportWidgets)) {
+                // Check to see if the class is an alias of a different class that might be registered
+                $loader = App::make(ClassLoader::class);
+                $realClass = $loader->getAlias($className);
+                if (!class_exists($realClass) || !in_array($realClass, $availableReportWidgets)) {
+                    return;
+                }
+            }
         }
 
         $widget = new $className($this->controller, $configuration);
