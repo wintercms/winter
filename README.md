@@ -8,6 +8,7 @@ Winter's mission is to show the world that web development is not rocket science
 
 ![Stable Build](https://github.com/wintercms/winter/workflows/Tests/badge.svg?branch=develop)
 [![License](https://poser.pugx.org/wintercms/winter/license.svg)](https://packagist.org/packages/wintercms/winter)
+[![Discord](https://img.shields.io/discord/816852513684193281?label=discord&style=flat-square)](https://discord.gg/D5MFSPH6Ux)
 
 ## Installing Winter
 
