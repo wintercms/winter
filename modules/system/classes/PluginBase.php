@@ -390,7 +390,7 @@ class PluginBase extends ServiceProviderBase
      */
     public function getPluginIdentifier(): string
     {
-        $namespace = Str::normalizeClassName(get_called_class());
+        $namespace = Str::normalizeClassName(get_class($this));
         if (strpos($namespace, '\\') === null) {
             return $namespace;
         }

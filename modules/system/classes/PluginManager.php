@@ -667,6 +667,11 @@ class PluginManager
         }
     }
 
+    /**
+     * Evaluates and initializes the plugin replacements defined in $this->replacementMap
+     *
+     * @return void
+     */
     public function registerReplacedPlugins()
     {
         if (empty($this->replacementMap)) {
