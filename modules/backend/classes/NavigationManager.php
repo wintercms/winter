@@ -17,6 +17,7 @@ use Config;
 class NavigationManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
+    use \System\Traits\LazyOwnerAlias;
 
     /**
      * @var array Cache of registration callbacks.
@@ -54,6 +55,9 @@ class NavigationManager
      */
     protected function init()
     {
+        foreach (static::$lazyAliases as $alias => $owner) {
+            $this->registerOwnerAlias($owner, $alias);
+        }
         $this->pluginManager = PluginManager::instance();
     }
 

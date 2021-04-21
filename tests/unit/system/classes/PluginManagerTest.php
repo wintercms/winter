@@ -25,7 +25,7 @@ class PluginManagerTest extends TestCase
     {
         $result = $this->manager->loadPlugins();
 
-        $this->assertCount(9, $result);
+        $this->assertCount(12, $result);
         $this->assertArrayHasKey('Winter.NoUpdates', $result);
         $this->assertArrayHasKey('Winter.Sample', $result);
         $this->assertArrayHasKey('Winter.Tester', $result);
@@ -67,7 +67,7 @@ class PluginManagerTest extends TestCase
     {
         $result = $this->manager->getPlugins();
 
-        $this->assertCount(8, $result);
+        $this->assertCount(9, $result);
         $this->assertArrayHasKey('Winter.NoUpdates', $result);
         $this->assertArrayHasKey('Winter.Sample', $result);
         $this->assertArrayHasKey('Winter.Tester', $result);
@@ -127,7 +127,7 @@ class PluginManagerTest extends TestCase
     {
         $result = $this->manager->getPluginNamespaces();
 
-        $this->assertCount(10, $result);
+        $this->assertCount(13, $result);
         $this->assertArrayHasKey('\winter\noupdates', $result);
         $this->assertArrayHasKey('\winter\sample', $result);
         $this->assertArrayHasKey('\winter\tester', $result);
@@ -181,7 +181,7 @@ class PluginManagerTest extends TestCase
     public function testUnregisterall()
     {
         $result = $this->manager->getPlugins();
-        $this->assertCount(8, $result);
+        $this->assertCount(9, $result);
 
         $this->manager->unregisterAll();
         $this->assertEmpty($this->manager->getPlugins());
@@ -239,5 +239,45 @@ class PluginManagerTest extends TestCase
 
         $result = $this->manager->exists('Unknown.Plugin');
         $this->assertFalse($result);
+    }
+
+    public function testReplacement()
+    {
+        $this->assertFalse($this->manager->isDisabled('Winter.Replacement'));
+        $this->assertTrue($this->manager->isDisabled('Winter.Original'));
+        $this->assertTrue($this->manager->isDisabled('Winter.InvalidReplacement'));
+
+        $this->assertEquals('Winter.Replacement', $this->manager->findByIdentifier('Winter.Original')->getPluginIdentifier());
+    }
+
+    public function testGetReplacements()
+    {
+        $replacementPluginReplaces = $this->manager->findByIdentifier('Winter.Replacement')->getReplaces();
+
+        $this->assertIsArray($replacementPluginReplaces);
+        $this->assertCount(1, $replacementPluginReplaces);
+        $this->assertEquals('Winter.Original', $replacementPluginReplaces[0]);
+
+        $invalidPluginReplaces = $this->manager->findByIdentifier('Winter.InvalidReplacement')->getReplaces();
+
+        $this->assertIsArray($invalidPluginReplaces);
+        $this->assertCount(1, $invalidPluginReplaces);
+        $this->assertEquals('Winter.Tester', $invalidPluginReplaces[0]);
+    }
+
+    public function testReplaceVersion()
+    {
+        $invalidReplacementPlugin = $this->manager->findByIdentifier('Winter.InvalidReplacement');
+
+        $this->assertTrue($invalidReplacementPlugin->canReplacePlugin('Winter.Tester', '9'));
+        $this->assertTrue($invalidReplacementPlugin->canReplacePlugin('Winter.Tester', '9.0'));
+        $this->assertTrue($invalidReplacementPlugin->canReplacePlugin('Winter.Tester', '11.0.0'));
+        $this->assertFalse($invalidReplacementPlugin->canReplacePlugin('Winter.Tester', '8.0'));
+
+        $replacementPlugin = $this->manager->findByIdentifier('Winter.Replacement');
+
+        $this->assertTrue($replacementPlugin->canReplacePlugin('Winter.Original', '1.0.2'));
+        $this->assertTrue($replacementPlugin->canReplacePlugin('Winter.Original', '1.0'));
+        $this->assertFalse($replacementPlugin->canReplacePlugin('Winter.Original', '2.0.1'));
     }
 }

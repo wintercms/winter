@@ -140,6 +140,9 @@ return [
         'refresh_success' => 'Successfully reset the selected plugins.',
         'remove_confirm' => 'Are you sure you want to remove the selected plugins? This will remove all associated data as well.',
         'remove_success' => 'Successfully removed the selected plugins.',
+        'replace' => [
+            'multi_install_error' => 'Replacing multiple plugins is currently unsupported'
+        ]
     ],
     'project' => [
         'name' => 'Project',

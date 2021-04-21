@@ -146,10 +146,27 @@ class UpdateManager
             $this->migrateModule($module);
         }
 
+        $plugins = $this->pluginManager->getPlugins();
+
+        /*
+         * Replace plugins
+         */
+        foreach ($plugins as $code => $plugin) {
+            if (!$replaces = $plugin->getReplaces()) {
+                continue;
+            }
+            // TODO: add full support for plugins replacing multiple plugins
+            if (count($replaces) > 1) {
+                throw new ApplicationException(Lang::get('system::lang.plugins.replace.multi_install_error'));
+            }
+            foreach ($replaces as $replace) {
+                $this->versionManager->replacePlugin($plugin, $replace);
+            }
+        }
+
         /*
          * Update plugins
          */
-        $plugins = $this->pluginManager->getPlugins();
         foreach ($plugins as $code => $plugin) {
             $this->updatePlugin($code);
         }
