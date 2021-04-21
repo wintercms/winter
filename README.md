@@ -29,7 +29,7 @@ php artisan winter:install
 
 ## Learning Winter
 
-The best place to learn Winter is by [reading the documentation](https://wintercms.com/docs), [watching some screencasts](https://wintercms.com/support/topic/screencast) or [following some tutorials](https://wintercms.com/support/articles/tutorials).
+The best place to learn Winter is by [reading the documentation](https://wintercms.com/docs), [watching some screencasts](https://octobercms.com/support/topic/screencast) or [following some tutorials](https://octobercms.com/support/articles/tutorials).
 
 You may also watch these introductory videos for [beginners](https://vimeo.com/79963873) and [advanced users](https://vimeo.com/172202661).
 
