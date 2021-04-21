@@ -279,7 +279,8 @@ class PluginManager
                 $replaceNamespace = $this->getNamespace($replace);
 
                 App::make(ClassLoader::class)->addNamespaceAliases([
-                    $replaceNamespace => $this->getNamespace($pluginId)
+                    // class_alias() expects order to be $real, $alias
+                    $this->getNamespace($pluginId) => $replaceNamespace,
                 ]);
             }
         }
