@@ -105,11 +105,13 @@ class VersionManager
      */
     public function replacePlugin(PluginBase $plugin, string $replace)
     {
-        if ($this->getDatabaseVersion($replace) === self::NO_VERSION_VALUE) {
+        $currentVersion = $this->getDatabaseVersion($replace);
+        if ($currentVersion === self::NO_VERSION_VALUE) {
             return;
         }
 
-        if (!$plugin->canReplacePlugin($replace, $this->getLatestFileVersion($replace))) {
+        // We only care about the database version of the replaced plugin at this point
+        if (!$plugin->canReplacePlugin($replace, $currentVersion)) {
             return;
         }
 
