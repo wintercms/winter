@@ -39,6 +39,11 @@ class ColorPicker extends FormWidgetBase
     public $allowEmpty = false;
 
     /**
+     * @var string Preferred color format [rgb|prgb|hex|hsv|hsl]
+     */
+    public $format = 'hex';
+
+    /**
      * @var bool Show opacity slider
      */
     public $showAlpha = false;
@@ -68,6 +73,7 @@ class ColorPicker extends FormWidgetBase
     public function init()
     {
         $this->fillFromConfig([
+            'format',
             'availableColors',
             'allowEmpty',
             'showAlpha',
@@ -93,6 +99,7 @@ class ColorPicker extends FormWidgetBase
         $this->vars['name'] = $this->getFieldName();
         $this->vars['value'] = $value = $this->getLoadValue();
         $this->vars['availableColors'] = $availableColors = $this->getAvailableColors();
+        $this->vars['format'] = $this->format;
         $this->vars['allowEmpty'] = $this->allowEmpty;
         $this->vars['showAlpha'] = $this->showAlpha;
         $this->vars['readOnly'] = $this->readOnly;

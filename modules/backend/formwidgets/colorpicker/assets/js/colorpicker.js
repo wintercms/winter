@@ -26,6 +26,7 @@
     }
 
     ColorPicker.DEFAULTS = {
+        preferredFormat: 'hex',
         showAlpha: false,
         allowEmpty: false,
         dataLocker: null,
@@ -33,7 +34,49 @@
     }
 
     ColorPicker.prototype.init = function() {
+
         var self = this
+
+        var retriveColorFormat = function() {
+            var format = (
+                    (
+                        self.options.showAlpha &&
+                        self.options.preferredFormat != 'hex'
+                    ) ||
+                    (
+                        !self.options.showAlpha &&
+                        self.options.preferredFormat == 'hex'
+                    )
+            ) ? self.options.preferredFormat : 'rgb'
+            return format
+        }
+
+        var getColorStringFormat = function(color, format) {
+            var colorFormat = ''
+            if (color) {
+               switch(format) {
+                   case 'rgb':
+                     colorFormat = color.toRgbString()
+                     break;
+                   case 'prgb':
+                     colorFormat = color.toPercentageRgbString()
+                     break;
+                   case 'hsv':
+                     colorFormat = color.toHsvString()
+                     break;
+                   case 'hsl':
+                     colorFormat = color.toHslString()
+                     break;
+                   case 'hex':
+                   default:
+                     colorFormat = color.toHexString()
+                     break;
+               }
+            }
+            return colorFormat;
+       }
+
+        this.$preferredFormat = retriveColorFormat()
         this.$dataLocker  = $(this.options.dataLocker, this.$el)
         this.$colorList = $('>ul', this.$el)
         this.$customColor = $('[data-custom-color]', this.$el)
@@ -52,9 +95,9 @@
          */
         if (this.$customColor.length) {
             this.$customColor.spectrum({
-                preferredFormat: 'hex',
                 showInput: true,
                 showAlpha: this.options.showAlpha,
+                preferredFormat: this.$preferredFormat,
                 allowEmpty: this.options.allowEmpty,
                 color: this.$customColor.data('hexColor'),
                 chooseText: $.wn.lang.get('colorpicker.choose', 'Ok'),
@@ -62,19 +105,20 @@
                 appendTo: 'parent',
                 disabled: this.options.disabled,
                 hide: function(color) {
-                    var hex = color ? color.toHexString() : ''
-                    self.$customColorSpan.css('background', hex)
+                    var colorStringFormat = getColorStringFormat(color, self.$preferredFormat)
+                    self.$customColorSpan.css('background', colorStringFormat)
                 },
                 show: function(color) {
                     self.selectColor(self.$customColor)
                 },
                 move: function(color) {
-                    var hex = color ? color.toHexString() : ''
-                    self.$customColorSpan.css('background', hex)
+                    var colorStringFormat = getColorStringFormat(color, self.$preferredFormat)
+                    self.$customColorSpan.css('background', colorStringFormat)
                 },
                 change: function(color) {
-                    var hex = color ? color.toHexString() : ''
-                    self.setCustomColor(hex)
+                    var colorStringFormat = getColorStringFormat(color, self.$preferredFormat)
+                    self.$customColorSpan.css('background', colorStringFormat)
+                    self.setCustomColor(colorFormat)
                 }
             })
         }

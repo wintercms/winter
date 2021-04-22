@@ -5,6 +5,7 @@
         id="<?= $this->getId() ?>"
         class="field-colorpicker <?php if($readOnly || $disabled): ?>disabled<?php endif; ?>"
         data-control="colorpicker"
+        data-preferred-format="<?= $format ?>"
         <?php if ($showAlpha): ?>data-show-alpha="<?= $showAlpha ?>"<?php endif ?>
         <?php if ($allowEmpty): ?>data-allow-empty="<?= $allowEmpty ?>"<?php endif ?>
         data-data-locker="#<?= $this->getId('input') ?>"
