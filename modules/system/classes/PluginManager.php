@@ -669,6 +669,16 @@ class PluginManager
     }
 
     /**
+     * Returns the plugin replacements defined in $this->replacementMap
+     *
+     * @return array
+     */
+    public function getReplacementMap()
+    {
+        return $this->replacementMap;
+    }
+
+    /**
      * Evaluates and initializes the plugin replacements defined in $this->replacementMap
      *
      * @return void
