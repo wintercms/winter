@@ -244,6 +244,15 @@ class Updates extends Controller
             }
         }
 
+        $replacementMap = PluginManager::instance()->getReplacementMap();
+
+        foreach ($replacementMap as $alias => $plugin) {
+            $warnings[] = Lang::get('system::lang.updates.update_warnings_plugin_replace', [
+                'plugin' => '<strong>' . $plugin . '</strong>',
+                'alias' => '<strong>' . $alias . '</strong>'
+            ]);
+        }
+
         return $warnings;
     }
 
