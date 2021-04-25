@@ -146,7 +146,7 @@ class VersionManager
         Db::table('system_plugin_versions')
             ->where('code', '=', $replace)
             ->update([
-                'code' => $plugin->getPluginIdentifier()
+                'code' => $code
             ]);
     }
 
