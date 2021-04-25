@@ -115,6 +115,33 @@ class VersionManager
             return;
         }
 
+        $code = $plugin->getPluginIdentifier();
+
+        // add history up to $currentVersion
+        if ($versions = $this->getOldFileVersions($code, $currentVersion)) {
+            foreach ($versions as $version => $details) {
+                list($comments, $scripts) = $this->extractScriptsAndComments($details);
+
+                foreach ($scripts as $script) {
+                    Db::table('system_plugin_history')->insert([
+                        'code'       => $code,
+                        'type'       => self::HISTORY_TYPE_SCRIPT,
+                        'version'    => $version,
+                        'detail'     => $script,
+                        'created_at' => new Carbon
+                    ]);
+                }
+
+                foreach ($comments as $comment) {
+                    $this->applyDatabaseComment($code, $version, $comment);
+                }
+            }
+        }
+
+        // delete replaced plugin history
+        Db::table('system_plugin_history')->where('code', $replace)->delete();
+
+        // replace installed version
         Db::table('system_plugin_versions')
             ->where('code', '=', $replace)
             ->update([
@@ -275,6 +302,21 @@ class VersionManager
         }
 
         return trim(key(array_slice($versionInfo, -1, 1)));
+    }
+
+    /**
+     * Returns older versions up to a supplied version, ie. applied versions.
+     */
+    protected function getOldFileVersions($code, $version = null)
+    {
+        if ($version === null) {
+            $version = self::NO_VERSION_VALUE;
+        }
+
+        $versions = $this->getFileVersions($code);
+        $position = array_search($version, array_keys($versions));
+
+        return array_slice($versions, 0, ++$position);
     }
 
     /**
