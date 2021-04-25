@@ -121,6 +121,7 @@ class VersionManager
         if ($versions = $this->getOldFileVersions($code, $currentVersion)) {
             foreach ($versions as $version => $details) {
                 list($comments, $scripts) = $this->extractScriptsAndComments($details);
+                $now = now()->toDateTimeString();
 
                 foreach ($scripts as $script) {
                     Db::table('system_plugin_history')->insert([
@@ -128,7 +129,7 @@ class VersionManager
                         'type'       => self::HISTORY_TYPE_SCRIPT,
                         'version'    => $version,
                         'detail'     => $script,
-                        'created_at' => new Carbon
+                        'created_at' => $now,
                     ]);
                 }
 
