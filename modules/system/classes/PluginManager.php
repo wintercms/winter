@@ -204,8 +204,10 @@ class PluginManager
         // Ensure that route attributes are properly loaded
         // @see Illuminate\Foundation\Support\Providers\RouteServiceProvider->register()
         // @fixes wintercms/winter#106
-        $this->app['router']->getRoutes()->refreshNameLookups();
-        $this->app['router']->getRoutes()->refreshActionLookups();
+        $this->app->booting(function () {
+            $this->app['router']->getRoutes()->refreshNameLookups();
+            $this->app['router']->getRoutes()->refreshActionLookups();
+        });
 
         $this->registered = true;
     }
