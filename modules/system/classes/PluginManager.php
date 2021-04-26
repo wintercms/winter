@@ -51,6 +51,11 @@ class PluginManager
     protected $replacementMap = [];
 
     /**
+     * @var array A map of plugins that are currently replaced [Original.Plugin => Replacement.Plugin]
+     */
+    protected $activeReplacementMap = [];
+
+    /**
      * @var bool Flag to indicate that all plugins have had the register() method called by registerAll() being called on this class.
      */
     protected $registered = false;
@@ -687,6 +692,19 @@ class PluginManager
     }
 
     /**
+     * Returns the actively replaced plugins defined in $this->activeReplacementMap
+     * @param string $pluginIdentifier Plugin code/namespace
+     * @return array|null
+     */
+    public function getActiveReplacementMap(string $pluginIdentifier = null)
+    {
+        if (!$pluginIdentifier) {
+            return $this->activeReplacementMap;
+        }
+        return $this->activeReplacementMap[$pluginIdentifier] ?? null;
+    }
+
+    /**
      * Evaluates and initializes the plugin replacements defined in $this->replacementMap
      *
      * @return void
@@ -710,6 +728,8 @@ class PluginManager
                 $this->aliasPluginAs($replacement, $target);
                 $this->disablePlugin($target);
                 $this->enablePlugin($replacement);
+                // Register this plugin as actively replaced
+                $this->activeReplacementMap[$target] = $replacement;
             } else {
                 $this->disablePlugin($replacement);
                 $this->enablePlugin($target);
