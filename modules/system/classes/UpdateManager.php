@@ -186,9 +186,11 @@ class UpdateManager
 
         // Set replacement warning messages
         foreach ($this->pluginManager->getReplacementMap() as $alias => $plugin) {
-            $this->addMessage($plugin, Lang::get('system::lang.updates.update_warnings_plugin_replace_cli', [
+            if (File::exists(PluginManager::instance()->getPluginPath($alias))) {
+                $this->addMessage($plugin, Lang::get('system::lang.updates.update_warnings_plugin_replace_cli', [
                     'alias' => '<info>' . $alias . '</info>'
-            ]));
+                ]));
+            }
         }
 
         // Print messages returned by migrations / seeders
