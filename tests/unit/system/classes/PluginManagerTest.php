@@ -280,4 +280,14 @@ class PluginManagerTest extends TestCase
         $this->assertTrue($replacementPlugin->canReplacePlugin('Winter.Original', '1.0'));
         $this->assertFalse($replacementPlugin->canReplacePlugin('Winter.Original', '2.0.1'));
     }
+
+    public function testActiveReplacementMap()
+    {
+        $map = $this->manager->getActiveReplacementMap();
+        $this->assertArrayHasKey('Winter.Original', $map);
+        $this->assertEquals('Winter.Replacement', $map['Winter.Original']);
+
+        $this->assertEquals('Winter.Replacement', $this->manager->getActiveReplacementMap('Winter.Original'));
+        $this->assertNull($this->manager->getActiveReplacementMap('Winter.InvalidReplacement'));
+    }
 }
