@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://github.com/wintercms/winter/blob/develop/themes/demo/assets/images/winter.png?raw=true" alt="Winter CMS Logo" width="25%" height="25%" />
+    <img src="https://github.com/wintercms/winter/raw/develop/modules/backend/assets/images/wordmark.png?raw=true" alt="Winter CMS Logo" width="100%" />
 </p>
 
 [Winter](https://wintercms.com) is a Content Management System (CMS) and web platform whose sole purpose is to make your development workflow simple again. It was born out of frustration with existing systems. We feel building websites has become a convoluted and confusing process that leaves developers unsatisfied. We want to turn you around to the simpler side and get back to basics.
@@ -8,12 +8,13 @@ Winter's mission is to show the world that web development is not rocket science
 
 ![Stable Build](https://github.com/wintercms/winter/workflows/Tests/badge.svg?branch=develop)
 [![License](https://poser.pugx.org/wintercms/winter/license.svg)](https://packagist.org/packages/wintercms/winter)
+[![Discord](https://img.shields.io/discord/816852513684193281?label=discord&style=flat-square)](https://discord.gg/D5MFSPH6Ux)
 
 ## Installing Winter
 
 Instructions on how to install Winter can be found at the [installation guide](https://wintercms.com/docs/setup/installation).
 
-### Quick start installation
+### Quick Start Installation
 
 For advanced users, run this in your terminal to install Winter from command line:
 
@@ -21,7 +22,7 @@ For advanced users, run this in your terminal to install Winter from command lin
 composer create-project wintercms/winter example.com "dev-develop"
 ```
 
-If you plan on using a database, run this command:
+If you plan on using a database, run this command inside the application directory.
 
 ```shell
 php artisan winter:install
@@ -29,7 +30,7 @@ php artisan winter:install
 
 ## Learning Winter
 
-The best place to learn Winter is by [reading the documentation](https://wintercms.com/docs), [watching some screencasts](https://wintercms.com/support/topic/screencast) or [following some tutorials](https://wintercms.com/support/articles/tutorials).
+The best place to learn Winter is by [reading the documentation](https://wintercms.com/docs), [watching some screencasts](https://octobercms.com/support/topic/screencast) or [following some tutorials](https://octobercms.com/support/articles/tutorials).
 
 You may also watch these introductory videos for [beginners](https://vimeo.com/79963873) and [advanced users](https://vimeo.com/172202661).
 
@@ -44,7 +45,7 @@ The development of Winter is lead by [Luke Towers](https://luketowers.ca/), alon
     <td align="center"><a href="https://github.com/luketowers"><img src="https://avatars.githubusercontent.com/u/7253840?v=3" width="100px;" alt="Luke Towers"/><br /><sub><b>Luke Towers</b></sub></a></td>
     <td align="center"><a href="https://github.com/bennothommo"><img src="https://avatars.githubusercontent.com/u/15900351?v=3" width="100px;" alt="Ben Thomson"/><br /><sub><b>Ben Thomson</b></sub></a></td>
     <td align="center"><a href="https://github.com/mjauvin"><img src="https://avatars.githubusercontent.com/u/2013630?v=3" width="100px;" alt="Marc Jauvin"/><br /><sub><b>Marc Jauvin</b></sub></a></td>
-    <td align="center"><a href="https://github.com/jaxwilko"><img src="https://avatars.githubusercontent.com/u/31214002?v=4" width="100px;" alt="Jax Wilkinson"/><br /><sub><b>Jax Wilkinson</b></sub></a></td>
+    <td align="center"><a href="https://github.com/jaxwilko"><img src="https://avatars.githubusercontent.com/u/31214002?v=4" width="100px;" alt="Jack Wilkinson"/><br /><sub><b>Jack Wilkinson</b></sub></a></td>
   </tr>
 </table>
 

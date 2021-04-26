@@ -37,7 +37,6 @@ return [
         'enter_new_password' => '輸入新密碼',
         'password_reset' => '密碼重置',
         'restore_success' => '密碼重置的郵件已發送到您的電子信箱',
-        'restore_error' => "找不到使用者 ':login'",
         'reset_success' => '您的密碼已經重置成功. 您現在可以登入了',
         'reset_error' => '密碼重置失敗. 請重試!',
         'reset_fail' => '不能重置您的密碼!',
@@ -375,5 +374,9 @@ return [
         'direction' => '順序',
         'direction_asc' => '升冪',
         'direction_desc' => '降冪',
+        'rename_popup_title' => '重新命名',
+        'rename_new_name' => '新名稱',
+        'move_please_select' => '請選擇',
+        'move_button' => '移動',
     ]
 ];

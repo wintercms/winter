@@ -69,8 +69,8 @@ var fieldElement=$form.find('[name="'+fieldName+'"], [name="'+fieldName+'[]"], [
 if(fieldElement.length>0){var _event=jQuery.Event('ajaxInvalidField')
 $(window).trigger(_event,[fieldElement.get(0),fieldName,fieldMessages,isFirstInvalidField])
 if(isFirstInvalidField){if(!_event.isDefaultPrevented())fieldElement.focus()
-isFirstInvalidField=false}}})},handleFlashMessage:function(message,type){},handleRedirectResponse:function(url){window.location.assign(url)
-$el.trigger('ajaxDone')},handleUpdateResponse:function(data,textStatus,jqXHR){var updatePromise=$.Deferred().done(function(){for(var partial in data){var selector=(options.update[partial])?options.update[partial]:partial
+isFirstInvalidField=false}}})},handleFlashMessage:function(message,type){},handleRedirectResponse:function(url){$(window).one('popstate',function(){$el.trigger('ajaxRedirected')})
+window.location.assign(url)},handleUpdateResponse:function(data,textStatus,jqXHR){var updatePromise=$.Deferred().done(function(){for(var partial in data){var selector=(options.update[partial])?options.update[partial]:partial
 if($.type(selector)=='string'&&selector.charAt(0)=='@'){$(selector.substring(1)).append(data[partial]).trigger('ajaxUpdate',[context,data,textStatus,jqXHR])}
 else if($.type(selector)=='string'&&selector.charAt(0)=='^'){$(selector.substring(1)).prepend(data[partial]).trigger('ajaxUpdate',[context,data,textStatus,jqXHR])}
 else{$(selector).trigger('ajaxBeforeReplace')
@@ -212,7 +212,7 @@ $('[data-validate-for]',$this).removeClass('visible')
 $('[data-validate-error]',$this).removeClass('visible')})
 $(document).on('ajaxPromise','[data-request]',function(){var $target=$(this)
 if($target.data('attach-loading')!==undefined){$target.addClass(LOADER_CLASS).prop('disabled',true)}
-if($target.is('form')){$('[data-attach-loading]',$target).addClass(LOADER_CLASS).prop('disabled',true)}}).on('ajaxFail ajaxDone','[data-request]',function(){var $target=$(this)
+if($target.is('form')){$('[data-attach-loading]',$target).addClass(LOADER_CLASS).prop('disabled',true)}}).on('ajaxFail ajaxDone ajaxRedirected','[data-request]',function(){var $target=$(this)
 if($target.data('attach-loading')!==undefined){$target.removeClass(LOADER_CLASS).prop('disabled',false)}
 if($target.is('form')){$('[data-attach-loading]',$target).removeClass(LOADER_CLASS).prop('disabled',false)}})
 var StripeLoadIndicator=function(){var self=this
@@ -234,7 +234,7 @@ $(document).on('ajaxPromise','[data-request]',function(event){event.stopPropagat
 $.wn.stripeLoadIndicator.show()
 var $el=$(this)
 $(window).one('ajaxUpdateComplete',function(){if($el.closest('html').length===0)
-$.wn.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone','[data-request]',function(event){event.stopPropagation()
+$.wn.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone ajaxRedirected','[data-request]',function(event){event.stopPropagation()
 $.wn.stripeLoadIndicator.hide()})
 var FlashMessage=function(options,el){var
 options=$.extend({},FlashMessage.DEFAULTS,options),$element=$(el)

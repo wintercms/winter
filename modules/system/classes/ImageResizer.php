@@ -783,8 +783,8 @@ class ImageResizer
             $resizer = new static($image, $width, $height, $options);
         } catch (SystemException $ex) {
             // Ignore processing this URL if the resizer is unable to identify it
-            if (is_scalar($image)) {
-                return $image;
+            if (is_scalar($image) || empty($image)) {
+                return (string) $image;
             } elseif ($image instanceof FileModel) {
                 return $image->getPath();
             } else {

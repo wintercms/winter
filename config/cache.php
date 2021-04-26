@@ -11,6 +11,11 @@ return [
     | using this caching library. This connection is used when another is
     | not explicitly specified when executing a given caching function.
     |
+    | WARNING! Do not use anything that is used for other information in your
+    | application. Example: If you are using redis for managing queues and / or
+    | sessions, you should NOT be using the EXACT SAME redis connection for the
+    | Cache store, as calling Cache::flush() will flush the entire redis store.
+    |
     */
 
     'default' => 'file',
@@ -29,16 +34,16 @@ return [
     'stores' => [
 
         'apc' => [
-            'driver' => 'apc'
+            'driver' => 'apc',
         ],
 
         'array' => [
-            'driver' => 'array'
+            'driver' => 'array',
         ],
 
         'database' => [
-            'driver' => 'database',
-            'table'  => 'cache',
+            'driver'     => 'database',
+            'table'      => 'cache',
             'connection' => null,
         ],
 
@@ -59,7 +64,7 @@ return [
         ],
 
         'redis' => [
-            'driver' => 'redis',
+            'driver'     => 'redis',
             'connection' => 'default',
         ],
 
