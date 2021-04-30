@@ -7,8 +7,8 @@
         'options_method_not_exists' => 'La classe :model deve definire un metodo :method() che ritorni le opzioni per il campo ":field".',
     ],
     'widget' => [
-        'not_registered' => 'Nessun widget \':name\' è stato registrato',
-        'not_bound' => 'Nessun widget \':name\' è stato legato al controller',
+        'not_registered' => "Nessun widget ':name' è stato registrato",
+        'not_bound' => "Nessun widget ':name' è stato legato al controller",
     ],
     'page' => [
         'untitled' => 'Senza titolo',
