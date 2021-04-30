@@ -1,29 +1,42 @@
-<?php
-
-return [
+<?php return [
     'auth' => [
-        'title' => 'Area di Amministrazione'
+        'title' => 'Area di Amministrazione',
     ],
     'field' => [
         'invalid_type' => 'Il tipo di campo :type non è valido.',
-        'options_method_not_exists' => 'La classe :model deve definire un metodo :method() che ritorni le opzioni per il campo ":field".'
+        'options_method_not_exists' => 'La classe :model deve definire un metodo :method() che ritorni le opzioni per il campo ":field".',
     ],
     'widget' => [
-        'not_registered' => "Nessun widget ':name' è stato registrato",
-        'not_bound' => "Nessun widget ':name' è stato legato al controller",
+        'not_registered' => 'Nessun widget \':name\' è stato registrato',
+        'not_bound' => 'Nessun widget \':name\' è stato legato al controller',
     ],
     'page' => [
         'untitled' => 'Senza titolo',
         'access_denied' => [
             'label' => 'Accesso negato',
-            'help' => "Non hai le autorizzazioni necessarie per accedere a questa pagina.",
-            'cms_link' => 'Ritorna al pannello di controllo'
+            'help' => 'Non hai le autorizzazioni necessarie per accedere a questa pagina.',
+            'cms_link' => 'Ritorna al pannello di controllo',
         ],
     ],
     'partial' => [
-        'not_found_name' => "La vista parziale ':name' non è stata trovata."
+        'not_found_name' => 'La vista parziale \':name\' non è stata trovata.',
+    ],
+    'ajax_handler' => [
+        'invalid_name' => 'Invalid AJAX handler name: :name.',
+        'not_found' => 'AJAX handler \':name\' was not found.',
     ],
     'account' => [
+        'impersonate' => 'Impersona utente',
+        'impersonate_confirm' => 'Sei sicuro di voler impersonare questo utente? Puoi tornare al tuo status attuale effettuando il logout.',
+        'impersonate_success' => 'Stai testando l\'accesso dell\'utente selezionato',
+        'impersonate_working' => 'Impersonando...',
+        'impersonating' => 'Testando l\'accesso di :full_name',
+        'stop_impersonating' => 'Concludi il test utenza',
+        'unsuspend' => 'Annulla sospensione',
+        'unsuspend_confirm' => 'Sei sicuro di voler annullare la sospensione dell\'utente?',
+        'unsuspend_success' => 'L\'utente è stato sospeso.',
+        'unsuspend_working' => 'Annullamento sospensione...',
+        'signed_in_as' => 'Accesso come :full_name',
         'sign_out' => 'Esci',
         'login' => 'Accedi',
         'reset' => 'Reimposta',
@@ -43,7 +56,7 @@ return [
         'apply' => 'Applica',
         'cancel' => 'Annulla',
         'delete' => 'Elimina',
-        'ok' => 'OK'
+        'ok' => 'OK',
     ],
     'dashboard' => [
         'menu_label' => 'Dashboard',
@@ -90,7 +103,7 @@ return [
             'last_sign_in' => 'Il tuo ultimo accesso è stato ',
             'view_access_logs' => 'Visualizza log accessi',
             'nice_message' => 'Buona giornata!',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Amministratore',
@@ -121,7 +134,7 @@ return [
         'deny' => 'Nega',
         'group' => [
             'name' => 'Gruppo',
-            'name_comment' => 'Il nome viene visualizzato nell\'elenco dei gruppi del form di Creazione/Modifica Amministratore ',
+            'name_comment' => 'Il nome viene visualizzato nell\'elenco dei gruppi del form di Creazione/Modifica Amministratore',
             'name_field' => 'Nome',
             'description_field' => 'Descrizione',
             'is_new_user_default_field_label' => 'Gruppo predefinito',
@@ -133,11 +146,25 @@ return [
             'new' => 'Nuovo gruppo',
             'delete_confirm' => 'Vuoi davvero eliminare questo gruppo amministratore?',
             'return' => 'Ritorna alla lista dei gruppi',
-            'users_count' => 'Utenti'
+            'users_count' => 'Utenti',
+        ],
+        'role' => [
+            'name' => 'Ruolo',
+            'name_field' => 'Nome',
+            'name_comment' => 'Il nome viene visualizzato nell\'elenco dei ruoli del form di Creazione/Modifica Amministratore',
+            'description_field' => 'Descrizione',
+            'code_field' => 'Codice',
+            'code_comment' => 'Inserisci un codice univoco se vuoi accedere a questo ruolo tramite API.',
+            'menu_label' => 'Gestisci ruoli',
+            'list_title' => 'Gestisci ruoli',
+            'new' => 'Nuovo ruolo',
+            'delete_confirm' => 'Vuoi davvero eliminare questo ruolo amministratore?',
+            'return' => 'Ritorna alla lista dei ruoli',
+            'users_count' => 'Utenti',
         ],
         'preferences' => [
-            'not_authenticated' => 'Non c\'è nessun utente autenticato per cui caricare o salvare le preferenze.'
-        ]
+            'not_authenticated' => 'Non c\'è nessun utente autenticato per cui caricare o salvare le preferenze.',
+        ],
     ],
     'list' => [
         'default_title' => 'Elenco',
@@ -146,10 +173,10 @@ return [
         'missing_model' => 'L\'elenco utilizzato nella classe :class non ha un modello definito.',
         'missing_column' => 'Non ci sono colonne definite per :columns.',
         'missing_columns' => 'L\'elenco utilizzato nella classe :class non ha un elenco di colonne definito.',
-        'missing_definition' => "L'elenco non contiene una colonna per il campo ':field'.",
-        'missing_parent_definition' => "L\'elenco non contiene una definizione per ':definition'.",
+        'missing_definition' => 'L\'elenco non contiene una colonna per il campo \':field\'.',
+        'missing_parent_definition' => 'L\\\'elenco non contiene una definizione per \':definition\'.',
         'behavior_not_ready' => 'Il comportamento "elenco" non è stato inizializzato, controlla di aver chiamato il metodo makeLists() nel controller.',
-        'invalid_column_datetime' => "Il valore della colonna ':column' non è un oggetto di tipo DateTime, hai dimenticato un riferimento a \$dates nel modello?",
+        'invalid_column_datetime' => 'Il valore della colonna \':column\' non è un oggetto di tipo DateTime, hai dimenticato un riferimento a $dates nel modello?',
         'pagination' => 'Record visualizzati: :from-:to di :total',
         'prev_page' => 'Pagina precedente',
         'next_page' => 'Pagina successiva',
@@ -166,7 +193,7 @@ return [
         'delete_selected_confirm' => 'Elimina i record selezionati?',
         'delete_selected_success' => 'I record selezionati sono stati eliminati con successo.',
         'column_switch_true' => 'Sì',
-        'column_switch_false' => 'No'
+        'column_switch_false' => 'No',
     ],
     'fileupload' => [
         'attachment' => 'Allegato',
@@ -178,7 +205,12 @@ return [
         'upload_file' => 'Carica file',
         'upload_error' => 'Errore nel caricamento',
         'remove_confirm' => 'Sei sicuro?',
-        'remove_file' => 'Rimuovi file'
+        'remove_file' => 'Rimuovi file',
+    ],
+    'repeater' => [
+        'add_new_item' => 'Aggiungi elemento',
+        'min_items_failed' => ':name richiede un minimo di :min elementi, ne sono stati inseriti solo :items',
+        'max_items_failed' => ':name permette un massimo di :max elementi, ne sono stati inseriti :items',
     ],
     'form' => [
         'create_title' => 'Crea :name',
@@ -190,7 +222,7 @@ return [
         'reset_success' => 'Reimpostazione completata',
         'missing_id' => 'L\'ID del record non è stato specificato.',
         'missing_model' => 'Il form utilizzato nella classe :class non ha un modello definito.',
-        'missing_definition' => "Il form non contiene il campo ':field'.",
+        'missing_definition' => 'Il form non contiene il campo \':field\'.',
         'not_found' => 'Nessun record con ID :id è stato trovato.',
         'action_confirm' => 'Sei sicuro?',
         'create' => 'Crea',
@@ -233,15 +265,19 @@ return [
         'insert_row_below' => 'Inserisci riga sotto',
         'delete_row' => 'Elimina riga',
         'concurrency_file_changed_title' => 'Il file è stato cambiato',
-        'concurrency_file_changed_description' => "Il file che stavi modificando è stato cambiato da un altro utente. Puoi ricaricare il file e perdere le tue modifiche oppure sovrascrivere il file sul disco.",
-        'return_to_list' => 'Ritorna all\'elenco'
+        'concurrency_file_changed_description' => 'Il file che stavi modificando è stato cambiato da un altro utente. Puoi ricaricare il file e perdere le tue modifiche oppure sovrascrivere il file sul disco.',
+        'return_to_list' => 'Ritorna all\'elenco',
     ],
     'recordfinder' => [
-        'find_record' => 'Trova record'
+        'find_record' => 'Trova record',
+    ],
+    'pagelist' => [
+        'page_link' => 'Link pagina',
+        'select_page' => 'Seleziona una pagina...',
     ],
     'relation' => [
-        'missing_config' => "La relazione non ha nessuna configurazione per ':config'.",
-        'missing_definition' => "La relazione non contiene una definizione per il campo ':field'.",
+        'missing_config' => 'La relazione non ha nessuna configurazione per \':config\'.',
+        'missing_definition' => 'La relazione non contiene una definizione per il campo \':field\'.',
         'missing_model' => 'La relazione utilizzata nella classe :class non ha un modello definito.',
         'invalid_action_single' => 'L\'azione non può essere eseguita su una relazione singola.',
         'invalid_action_multi' => 'L\'azione non può essere eseguita su una relazione multipla.',
@@ -270,30 +306,31 @@ return [
         'link_name' => 'Collega :name',
         'unlink' => 'Scollega',
         'unlink_name' => 'Scollega :name',
-        'unlink_confirm' => 'Sei sicuro?'
+        'unlink_confirm' => 'Sei sicuro?',
     ],
     'reorder' => [
         'default_title' => 'Riordina record',
-        'no_records' => 'Non ci sono record disponibili per ordinare.'
+        'no_records' => 'Non ci sono record disponibili per ordinare.',
     ],
     'model' => [
         'name' => 'Modello',
-        'not_found' => "Nessun modello ':class' con ID :id trovato.",
+        'not_found' => 'Nessun modello \':class\' con ID :id trovato.',
         'missing_id' => 'Nessun ID specificato per la ricerca.',
-        'missing_relation' => "Il modello ':class' non contiene una definizione per la relazione ':relation'.",
-        'missing_method' => "Il modello ':class' non contiene un metodo ':method'.",
-        'invalid_class' => "Il modello :model utilizzato nella classe :class non è valido, deve ereditare la classe \Model.",
-        'mass_assignment_failed' => "Assegnazione massiva fallita per l'attributo ':attribute' del modello.",
+        'missing_relation' => 'Il modello \':class\' non contiene una definizione per la relazione \':relation\'.',
+        'missing_method' => 'Il modello \':class\' non contiene un metodo \':method\'.',
+        'invalid_class' => 'Il modello :model utilizzato nella classe :class non è valido, deve ereditare la classe \\Model.',
+        'mass_assignment_failed' => 'Assegnazione massiva fallita per l\'attributo \':attribute\' del modello.',
     ],
     'warnings' => [
         'tips' => 'Suggerimenti per la configurazione del sistema',
         'tips_description' => 'Ci sono elementi a cui è necessario prestare attenzione al fine di configurare il sistema in maniera corretta.',
-        'permissions'  => 'La cartella :name o le sue sottocartelle non sono scrivibili da PHP. Imposta le corrette autorizzazioni per il server web su questa cartella.',
-        'extension' => 'L\'estensione di PHP :name non è installata. Installa questa libreria ed attiva l\'estensione.'
+        'permissions' => 'La cartella :name o le sue sottocartelle non sono scrivibili da PHP. Imposta le corrette autorizzazioni per il server web su questa cartella.',
+        'extension' => 'L\'estensione di PHP :name non è installata. Installa questa libreria ed attiva l\'estensione.',
     ],
     'editor' => [
         'menu_label' => 'Preferenze editor di codice',
         'menu_description' => 'Personalizza le impostazioni dell\'editor, come la dimensione del carattere e lo schema di colori.',
+        'preview' => 'Anteprima',
         'font_size' => 'Dimensione carattere',
         'tab_size' => 'Dimensione Tab',
         'use_hard_tabs' => 'Indenta utilizzando i Tab',
@@ -306,11 +343,11 @@ return [
         'auto_closing' => 'Chiudi automaticamente i tag',
         'show_invisibles' => 'Mostra caratteri invisibili',
         'show_gutter' => 'Visualizza numeri di linea',
-        'basic_autocompletion'=> 'Completamento automatico di base (Ctrl + Spazio)',
-        'live_autocompletion'=> 'Completamento automatico in tempo reale',
-        'enable_snippets'=> 'Abilita frammenti di codice (Tab)',
-        'display_indent_guides'=> 'Visualizza guide di indentazione',
-        'show_print_margin'=> 'Visualizza margini di stampa',
+        'basic_autocompletion' => 'Completamento automatico di base (Ctrl + Spazio)',
+        'live_autocompletion' => 'Completamento automatico in tempo reale',
+        'enable_snippets' => 'Abilita frammenti di codice (Tab)',
+        'display_indent_guides' => 'Visualizza guide di indentazione',
+        'show_print_margin' => 'Visualizza margini di stampa',
         'mode_off' => 'No',
         'mode_fluid' => 'Fluido',
         '40_characters' => '40 Caratteri',
@@ -332,22 +369,37 @@ return [
         'allowed_empty_tags_comment' => 'L\'elenco dei tag che non sono rimossi quando non hanno nessun contenuto.',
         'allowed_tags' => 'Tag consentiti',
         'allowed_tags_comment' => 'L\'elenco dei tag consentiti.',
+        'allowed_attributes' => 'Attributi consentiti',
+        'allowed_attributes_comment' => 'L\'elenco di attributi consentiti.',
         'no_wrap' => 'Tag da non includere in blocchi',
         'no_wrap_comment' => 'L\'elenco dei tag che non devono essere contenuti all\'interno di blocchi di tag.',
         'remove_tags' => 'Tag da rimuovere',
-        'remove_tags_comment' => 'L\'elenco dei tag che sono rimossi insieme al loro contenuto.'
+        'remove_tags_comment' => 'L\'elenco dei tag che sono rimossi insieme al loro contenuto.',
+        'line_breaker_tags' => 'Line breaker tags',
+        'line_breaker_tags_comment' => 'The list of tags that are used to place a line breaker element between.',
+        'toolbar_options' => 'Barra degli strumenti - Opzioni',
+        'toolbar_buttons' => 'Barra degli strumenti - Tasti',
+        'toolbar_buttons_comment' => 'I tasti da mostrare in maniera predefinita sulla barra degli strumenti del Rich Editor',
+        'toolbar_buttons_preset' => 'Inserisci una delle configurazioni già pronte:',
+        'toolbar_buttons_presets' => [
+            'default' => 'Predefinita',
+            'minimal' => 'Minimal',
+            'full' => 'Completa',
+        ],
+        'paragraph_formats' => 'Formato paragrafi',
+        'paragraph_formats_comment' => 'Le opzioni che appariranno nel menu a tendina relativo alla formattazione dei paragrafi.',
     ],
     'tooltips' => [
-        'preview_website' => 'Anteprima del sito web'
+        'preview_website' => 'Anteprima del sito web',
     ],
     'mysettings' => [
         'menu_label' => 'Impostazioni personali',
-        'menu_description' => 'Impostazioni legate al tuo account amministratore'
+        'menu_description' => 'Impostazioni legate al tuo account amministratore',
     ],
     'myaccount' => [
         'menu_label' => 'Il mio account',
         'menu_description' => 'Aggiorna i dettagli del tuo account, come il nome, l\'indirizzo e-mail e la password.',
-        'menu_keywords' => 'sicurezza login'
+        'menu_keywords' => 'sicurezza login',
     ],
     'branding' => [
         'menu_label' => 'Personalizza pannello di controllo',
@@ -369,7 +421,7 @@ return [
         'menu_mode' => 'Stile menu',
         'menu_mode_inline' => 'In linea',
         'menu_mode_tile' => 'Piastrelle',
-        'menu_mode_collapsed' => 'Compresso'
+        'menu_mode_collapsed' => 'Compresso',
     ],
     'backend_preferences' => [
         'menu_label' => 'Preferenze pannello di controllo',
@@ -394,8 +446,8 @@ return [
     ],
     'filter' => [
         'all' => 'tutto',
-        'options_method_not_exists' => "Il modello :model deve definire un metodo :method() che ritorni le opzioni per il filtro ':filter'.",
-        'date_all' => 'tutte'
+        'options_method_not_exists' => 'Il modello :model deve definire un metodo :method() che ritorni le opzioni per il filtro \':filter\'.',
+        'date_all' => 'tutte',
     ],
     'import_export' => [
         'upload_csv_file' => '1. Carica un file CSV',
@@ -466,15 +518,15 @@ return [
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtico)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Revisione di Europa Occidentale con il simbolo dell\'euro)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
-        'manage_media' => 'Gestisci elementi multimediali'
+        'manage_media' => 'Gestisci elementi multimediali',
     ],
     'mediafinder' => [
         'label' => 'Media Finder',
-        'default_prompt' => 'Fai clic sul pulsante %s per trovare un elemento multimediale'
+        'default_prompt' => 'Fai clic sul pulsante %s per trovare un elemento multimediale',
     ],
     'media' => [
         'menu_label' => 'Elementi multimediali',
@@ -539,5 +591,5 @@ return [
         'rename_new_name' => 'Nuovo nome',
         'move_please_select' => 'seleziona',
         'move_button' => 'Sposta',
-    ]
+    ],
 ];

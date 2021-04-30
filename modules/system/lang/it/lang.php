@@ -1,9 +1,52 @@
-<?php
-
-return [
+<?php return [
     'app' => [
         'name' => 'Winter CMS',
         'tagline' => 'Tornare alle origini',
+    ],
+    'locale' => [
+        'ar' => 'العربية',
+        'be' => 'Беларуская',
+        'bg' => 'Български',
+        'ca' => 'Català',
+        'cs' => 'Čeština',
+        'da' => 'Dansk',
+        'en' => 'English (United States)',
+        'en-au' => 'English (Australia)',
+        'en-ca' => 'English (Canada)',
+        'en-gb' => 'English (United Kingdom)',
+        'et' => 'Eesti',
+        'de' => 'Deutsch',
+        'el' => 'Ελληνικά',
+        'es' => 'Español',
+        'es-ar' => 'Español (Argentina)',
+        'fa' => 'فارسی',
+        'fr' => 'Français',
+        'fr-ca' => 'Français (Canada)',
+        'hu' => 'Magyar',
+        'id' => 'Bahasa Indonesia',
+        'it' => 'Italiano',
+        'ja' => '日本語',
+        'kr' => '한국어',
+        'lt' => 'Lietuvių',
+        'lv' => 'Latviešu',
+        'nb-no' => 'Norsk (Bokmål)',
+        'nl' => 'Nederlands',
+        'pl' => 'Polski',
+        'pt-br' => 'Português (Brasil)',
+        'pt-pt' => 'Português (Portugal)',
+        'ro' => 'Română',
+        'rs' => 'Srpski',
+        'ru' => 'Русский',
+        'fi' => 'Suomi',
+        'sv' => 'Svenska',
+        'sk' => 'Slovenský',
+        'sl' => 'Slovenščina',
+        'th' => 'ไทย',
+        'tr' => 'Türkçe',
+        'uk' => 'Українська мова',
+        'zh-cn' => '简体中文',
+        'zh-tw' => '繁體中文',
+        'vn' => 'Tiếng việt',
     ],
     'directory' => [
         'create_fail' => 'Impossibile creare la cartella: :name',
@@ -11,13 +54,8 @@ return [
     'file' => [
         'create_fail' => 'Impossibile creare il file: :name',
     ],
-    'page' => [
-        'invalid_token' => [
-            'label' => 'Token di protezione non valido',
-        ],
-    ],
     'combiner' => [
-        'not_found' => "Il file combinatore ':name' non è stato trovato.",
+        'not_found' => 'Il file combinatore \':name\' non è stato trovato.',
     ],
     'system' => [
         'name' => 'Sistema',
@@ -35,14 +73,14 @@ return [
             'events' => 'Eventi',
             'customers' => 'Clienti',
             'my_settings' => 'Impostazioni personali',
-        ]
+        ],
     ],
     'theme' => [
         'label' => 'Tema',
         'unnamed' => 'Tema senza nome',
         'name' => [
             'label' => 'Nome tema',
-            'help' => 'Cerca il tema tramite il suo codice univoco. Ad esempio, Winter.Vanilla'
+            'help' => 'Cerca il tema tramite il suo codice univoco. Ad esempio, Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -51,15 +89,15 @@ return [
         'installed' => 'Temi installati',
         'no_themes' => 'Non ci sono temi installati dal marketplace.',
         'recommended' => 'Raccomandati',
-        'remove_confirm' => 'Sei sicuro di voler rimuovere questo tema?'
+        'remove_confirm' => 'Sei sicuro di voler rimuovere questo tema?',
     ],
     'plugin' => [
         'label' => 'Plugin',
         'unnamed' => 'Plugin senza nome',
         'name' => [
             'label' => 'Nome del plugin',
-            'help' => 'Cerca il plugin tramite il suo codice univoco. Ad esempio, Winter.Blog'
-        ]
+            'help' => 'Cerca il plugin tramite il suo codice univoco. Ad esempio, Winter.Blog',
+        ],
     ],
     'plugins' => [
         'manage' => 'Gestisci plugin',
@@ -107,7 +145,7 @@ return [
         'missing_model' => 'La pagine delle impostazioni non ha nessun modello associato.',
         'update_success' => 'Le impostazioni per :name sono state aggiornate con successo.',
         'return' => 'Ritorna alle impostazioni di sistema',
-        'search' => 'Cerca'
+        'search' => 'Cerca',
     ],
     'mail' => [
         'log_file' => 'File di log',
@@ -149,7 +187,7 @@ return [
         'ses_region' => 'Regione SES',
         'ses_region_comment' => 'Inserisci la tua regione SES (ad es. us-east-1)',
         'drivers_hint_header' => 'Driver non installati',
-        'drivers_hint_content' => 'Questa modalità di invio richiede che il plugin ":plugin" sia installato prima che tu possa inviare messaggi.'
+        'drivers_hint_content' => 'Questa modalità di invio richiede che il plugin ":plugin" sia installato prima che tu possa inviare messaggi.',
     ],
     'mail_templates' => [
         'menu_label' => 'Modelli di e-mail',
@@ -185,6 +223,57 @@ return [
         'deleting_layout' => 'Eliminazione layout...',
         'sending' => 'Invio del messaggio di prova...',
         'return' => 'Ritorna all\'elenco dei modelli',
+    ],
+    'mail_brand' => [
+        'menu_label' => 'Personalizzazione mail',
+        'menu_description' => 'Modifica i colori a l\'aspetto dei messaggi di posta',
+        'page_title' => 'Personalizza l\'aspetto dei messaggi email',
+        'sample_template' => [
+            'heading' => 'Intestazione',
+            'paragraph' => 'Questo è un paragrafo pieno di Lorem Ipsum e con un link. Cumque dicta <a>doloremque eaque</a>, enim error laboriosam pariatur possimus tenetur veritatis voluptas.',
+            'table' => [
+                'item' => 'Oggetto',
+                'description' => 'Descrizione',
+                'price' => 'Prezzo',
+                'centered' => 'Al centro',
+                'right_aligned' => 'A destra',
+            ],
+            'buttons' => [
+                'primary' => 'Bottone primario',
+                'positive' => 'Bottone positivo',
+                'negative' => 'Bottone negativo',
+            ],
+            'panel' => 'Quanto è bello questo pannello?',
+            'more' => 'Qualche altra parola',
+            'promotion' => 'Codice sconto: WINTER',
+            'subcopy' => 'Questo è il testo a pie di pagina',
+            'thanks' => 'Grazie',
+        ],
+        'fields' => [
+            '_section_background' => 'Background',
+            'body_bg' => 'Body background',
+            'content_bg' => 'Content background',
+            'content_inner_bg' => 'Inner content background',
+            '_section_buttons' => 'Buttons',
+            'button_text_color' => 'Button text color',
+            'button_primary_bg' => 'Primary button background',
+            'button_positive_bg' => 'Positive button background',
+            'button_negative_bg' => 'Negative button background',
+            '_section_type' => 'Typography',
+            'header_color' => 'Header color',
+            'heading_color' => 'Headings color',
+            'text_color' => 'Text color',
+            'link_color' => 'Link color',
+            'footer_color' => 'Footer color',
+            '_section_borders' => 'Borders',
+            'body_border_color' => 'Body border color',
+            'subcopy_border_color' => 'Subcopy border color',
+            'table_border_color' => 'Table border color',
+            '_section_components' => 'Components',
+            'panel_bg' => 'Panel background',
+            'promotion_bg' => 'Promotion background',
+            'promotion_border_color' => 'Promotion border color',
+        ],
     ],
     'install' => [
         'project_label' => 'Collega al progetto',
@@ -269,15 +358,15 @@ return [
     ],
     'config' => [
         'not_found' => 'Il file di configurazione :file definito per :location non è stato trovato.',
-        'required' => "La configurazione utilizzata in :location deve fornire un valore ':property'.",
+        'required' => 'La configurazione utilizzata in :location deve fornire un valore \':property\'.',
     ],
     'zip' => [
-        'extract_failed' => "Estrazione del file sistema ':file' non riuscita.",
+        'extract_failed' => 'Estrazione del file sistema \':file\' non riuscita.',
     ],
     'event_log' => [
         'hint' => 'Questo registro visualizza un elenco dei potenziali errori occorsi nell\'applicazione, come eccezioni e informazioni di debug.',
         'menu_label' => 'Registro eventi',
-        'menu_description' => 'VIsualizza i messaggi del registro di sistema con i relativi orari di registrazione e dettagli.',
+        'menu_description' => 'Visualizza i messaggi del registro di sistema con i relativi orari di registrazione e dettagli.',
         'empty_link' => 'Svuota il registro eventi',
         'empty_loading' => 'Svuotamento del registro eventi in corso...',
         'empty_success' => 'Il registro eventi è stato svuotato con successo.',
@@ -287,7 +376,7 @@ return [
         'created_at' => 'Data e ora',
         'message' => 'Messaggio',
         'level' => 'Livello',
-        'preview_title' => 'Evento'
+        'preview_title' => 'Evento',
     ],
     'request_log' => [
         'hint' => 'Questo registro visualizza un elenco delle richieste del browser che possono richiedere attenzione. Ad esempio, se un visitatore apre una pagina del CMS che non può essere trovata, viene creato un record con il codice di errore 404.',
@@ -303,7 +392,7 @@ return [
         'referer' => 'Provenienza',
         'url' => 'URL',
         'status_code' => 'Codice di stato',
-        'preview_title' => 'Richiesta'
+        'preview_title' => 'Richiesta',
     ],
     'permissions' => [
         'name' => 'Sistema',
@@ -313,13 +402,36 @@ return [
         'manage_mail_templates' => 'Gestisci i modelli e-mail',
         'manage_mail_settings' => 'Gestisci impostazioni e-mail',
         'manage_other_administrators' => 'Gestisci altri amministratori',
+        'impersonate_users' => 'Impersona utenti',
         'manage_preferences' => 'Gestisci preferenze pannello di controllo',
         'manage_editor' => 'Gestisci preferenze editor di codice',
+        'manage_own_editor' => 'Gestisci preferenze personali editor di codice',
         'view_the_dashboard' => 'Visualizza la dashboard',
-        'manage_branding' => 'Personalizza il pannello di controllo'
+        'manage_default_dashboard' => 'Gestisci la dashboard predefinita',
+        'manage_branding' => 'Personalizza il pannello di controllo',
+    ],
+    'log' => [
+        'menu_label' => 'Impostazioni registri',
+        'menu_description' => 'E\' possibile specificare quali azioni registrare',
+        'default_tab' => 'Registri',
+        'log_events' => 'Registra gli eventi di sistema',
+        'log_events_comment' => 'Registra gli eventi di sistema nel database in aggiunta al registro presente sul filesystem.',
+        'log_requests' => 'Registra le richieste problematiche',
+        'log_requests_comment' => 'Registra le richieste che potrebbero richiedere attenzioni particolari, come gli errori 404.',
+        'log_theme' => 'Registra le modifiche al tema',
+        'log_theme_comment' => 'Registra le modifiche effettuate al tema dall\'area di amministrazione.',
     ],
     'media' => [
-        'invalid_path' => "Percorso del file non valido: ':path'.",
+        'invalid_path' => 'Percorso del file non valido: \':path\'.',
         'folder_size_items' => 'elementi',
+    ],
+    'page' => [
+        'invalid_token' => [
+            'label' => 'Token di protezione non valido',
+        ],
+    ],
+    'pagination' => [
+        'previous' => 'Precedente',
+        'next' => 'Successiva',
     ],
 ];

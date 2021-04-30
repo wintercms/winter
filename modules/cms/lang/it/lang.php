@@ -3,12 +3,12 @@
 return [
     'cms_object' => [
         'invalid_file' => 'Nome file non valido: :name. I nomi dei file possono contenere solo caratteri alfanumerici, underscores, trattini e punti. Alcuni esempi di nome di file corretti: page.htm, page, subdirectory/page',
-        'invalid_property' => "La proprietà ':name' non può essere impostata",
-        'file_already_exists' => "File ':name' già esistente.",
-        'error_saving' => "Errore nel salvataggio del file ':name'. Verifica le autorizzazioni di scrittura.",
+        'invalid_property' => 'La proprietà \':name\' non può essere impostata',
+        'file_already_exists' => 'File \':name\' già esistente.',
+        'error_saving' => 'Errore nel salvataggio del file \':name\'. Verifica le autorizzazioni di scrittura.',
         'error_creating_directory' => 'Errore nella creazione della cartella :name. Verifica le autorizzazioni di scrittura.',
-        'invalid_file_extension'=>'Estensione del file non valida: :invalid. Le estensioni consentite sono: :allowed.',
-        'error_deleting' => "Errore nella cancellazione del file ':name'. Verifica le autorizzazioni di scrittura.",
+        'invalid_file_extension' => 'Estensione del file non valida: :invalid. Le estensioni consentite sono: :allowed.',
+        'error_deleting' => 'Errore nella cancellazione del file \':name\'. Verifica le autorizzazioni di scrittura.',
         'delete_success' => 'Template eliminati correttamente: :count.',
         'file_name_required' => 'Il campo Nome file è obbligatorio.',
         'safe_mode_enabled' => 'La modalità sicura è attualmente abilitata.',
@@ -19,10 +19,10 @@ return [
             'online' => 'Online',
             'maintenance' => 'In manutenzione',
             'manage_themes' => 'Gestione temi',
-        ]
+        ],
     ],
     'theme' => [
-        'not_found_name' => "Tema ':name' non trovato.",
+        'not_found_name' => 'Tema \':name\' non trovato.',
         'active' => [
             'not_set' => 'Il tema attivo non è impostato.',
             'not_found' => 'Il tema attivo non è stato trovato.',
@@ -30,7 +30,7 @@ return [
         'edit' => [
             'not_set' => 'Il tema modificato non è impostato.',
             'not_found' => 'Il tema modificato non è stato trovato.',
-            'not_match' => "L'oggetto a cui stai cercando di accedere non appartiene al tema che stai modificando. Si prega di ricaricare la pagina."
+            'not_match' => 'L\'oggetto a cui stai cercando di accedere non appartiene al tema che stai modificando. Si prega di ricaricare la pagina.',
         ],
         'settings_menu' => 'Tema del sito',
         'settings_menu_description' => 'Visualizza l\'anteprima dei temi installati e seleziona un tema attivo.',
@@ -94,17 +94,17 @@ return [
         'settings_menu' => 'Modalità di manutenzione',
         'settings_menu_description' => 'Configura la pagina da visualizzare in modalità di manutenzione e cambia l\'impostazione.',
         'is_enabled' => 'Abilita modalità di manutenzione',
-        'is_enabled_comment' => 'Se attivo i visitatori del sito vedranno la pagina selezionata sotto.'
+        'is_enabled_comment' => 'Se attivo i visitatori del sito vedranno la pagina selezionata sotto.',
     ],
     'page' => [
-        'not_found_name' => "Pagina ':name' non trovata",
+        'not_found_name' => 'Pagina \':name\' non trovata',
         'not_found' => [
             'label' => 'Pagina non trovata',
             'help' => 'La pagina richiesta non è stata trovata.',
         ],
         'custom_error' => [
             'label' => 'Errore nella pagina',
-            'help' => "Siamo spiacenti, ma qualcosa è andato storto e la pagina non può essere visualizzata.",
+            'help' => 'Siamo spiacenti, ma qualcosa è andato storto e la pagina non può essere visualizzata.',
         ],
         'menu_label' => 'Pagine',
         'unsaved_label' => 'Pagina/e non salvate',
@@ -113,46 +113,46 @@ return [
         'invalid_url' => 'Formato URL non valido. L\'URL deve iniziare con una barra e può contenere numeri, lettere latine e i seguenti simboli: ._-[]:?|/+*^$',
         'delete_confirm_multiple' => 'Sei sicuro di voler eliminare le pagine selezionate?',
         'delete_confirm_single' => 'Sei sicuro di voler eliminare questa pagina?',
-        'no_layout' => '-- nessun layout --'
+        'no_layout' => '-- nessun layout --',
     ],
     'layout' => [
-        'not_found_name' => "Il layout ':name' non è stato trovato",
+        'not_found_name' => 'Il layout \':name\' non è stato trovato',
         'menu_label' => 'Layout',
         'unsaved_label' => 'Layout non salvati',
         'no_list_records' => 'Nessun layout trovato',
         'new' => 'Nuovo layout',
         'delete_confirm_multiple' => 'Sei sicuro di voler eliminare i layouts selezionati?',
-        'delete_confirm_single' => 'Sei sicuro di voler eliminare questo layout?'
+        'delete_confirm_single' => 'Sei sicuro di voler eliminare questo layout?',
     ],
     'partial' => [
-        'not_found_name' => "La vista parziale ':name' non è stata trovata.",
+        'not_found_name' => 'La vista parziale \':name\' non è stata trovata.',
         'invalid_name' => 'Nome della vista parziale non valido: :name.',
         'menu_label' => 'Viste parziali',
         'unsaved_label' => 'Viste parziali non salvate',
         'no_list_records' => 'Nessuna vista parziale trovata',
         'delete_confirm_multiple' => 'Sei sicuro di voler eliminare le viste parziali selezionate?',
         'delete_confirm_single' => 'Sei sicuro di voler eliminare questa vista parziale?',
-        'new' => 'Nuova vista parziale'
+        'new' => 'Nuova vista parziale',
     ],
     'content' => [
-        'not_found_name' => "Il file di contenuti ':name' non è stato trovato.",
+        'not_found_name' => 'Il file di contenuti \':name\' non è stato trovato.',
         'menu_label' => 'Contenuti',
         'unsaved_label' => 'Contenuti non salvati',
         'no_list_records' => 'Nessun file di contenuto trovato',
         'delete_confirm_multiple' => 'Sei sicuro di voler eliminare i file o le cartelle di contenuti selezionate?',
         'delete_confirm_single' => 'Sei sicuro di voler eliminare questo file di contenuti?',
-        'new' => 'Nuovo file di contenuti'
+        'new' => 'Nuovo file di contenuti',
     ],
     'ajax_handler' => [
         'invalid_name' => 'Nome del gestore AJAX non valido: :name.',
-        'not_found' => "Il gestore AJAX ':name' non è stato trovato.",
+        'not_found' => 'Il gestore AJAX \':name\' non è stato trovato.',
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => 'Aggiungi',
-        'search' => 'Cerca...'
+        'search' => 'Cerca...',
     ],
     'editor' => [
         'settings' => 'Impostazioni',
@@ -174,9 +174,9 @@ return [
         'enter_fullscreen' => 'Visualizza a schermo intero',
         'exit_fullscreen' => 'Esci dalla visualizzazione a schermo intero',
         'open_searchbox' => 'Apri casella di ricerca',
-        'close_searchbox'  => 'Chiudi casella di ricerca',
+        'close_searchbox' => 'Chiudi casella di ricerca',
         'open_replacebox' => 'Apri casella di sostituzione',
-        'close_replacebox'  => 'Chiudi casella di sostituzione'
+        'close_replacebox' => 'Chiudi casella di sostituzione',
     ],
     'asset' => [
         'menu_label' => 'Assets',
@@ -205,7 +205,7 @@ return [
         'too_large' => 'Il file caricato è troppo grande. La dimensione massima consentita è :max_size',
         'type_not_allowed' => 'Solo i seguenti tipi di file sono consentiti: :allowed_types',
         'file_not_valid' => 'File non valido',
-        'error_uploading_file' => "Errore durante il caricamento del file ':name': :error",
+        'error_uploading_file' => 'Errore durante il caricamento del file \':name\': :error',
         'move_destination' => 'Cartella di destinazione',
         'move_popup_title' => 'Sposta assets',
         'selected_files_not_found' => 'Files selezionati non trovati.',
@@ -214,7 +214,7 @@ return [
         'error_moving_file' => 'Errore durante lo spostamento del file :file',
         'error_moving_directory' => 'Errore durante lo spostamento della cartella :dir',
         'error_deleting_directory' => 'Errore durante l\'eliminazione della cartella originale :dir',
-        'path' => 'Percorso'
+        'path' => 'Percorso',
     ],
     'component' => [
         'menu_label' => 'Componenti',
@@ -225,13 +225,13 @@ return [
         'validation_message' => 'L\'alias del componente è obbligatorio e può contenere solo lettere latine, numeri e underscores. L\'alias deve iniziare con una lettera.',
         'invalid_request' => 'Il template non può essere salvato a causa di dati dei componenti non validi.',
         'no_records' => 'Nessun componente trovato',
-        'not_found' => "Il componente ':name' non è stato trovato.",
-        'method_not_found' => "Il componente ':name' non contiene il metodo ':method'."
+        'not_found' => 'Il componente \':name\' non è stato trovato.',
+        'method_not_found' => 'Il componente \':name\' non contiene il metodo \':method\'.',
     ],
     'template' => [
         'invalid_type' => 'Tipo di template sconosciuto.',
         'not_found' => 'Il template richiesto non è stato trovato.',
-        'saved'=> 'Il template è stato salvato con successo'
+        'saved' => 'Il template è stato salvato con successo',
     ],
     'permissions' => [
         'name' => 'Cms',
@@ -241,5 +241,34 @@ return [
         'manage_layouts' => 'Gesstisci layouts',
         'manage_partials' => 'Gestisci viste parziali',
         'manage_themes' => 'Gestisci temi',
+    ],
+    'theme_log' => [
+        'hint' => 'Questo registro mostra lo storico delle modifiche effettuate al tema dagli amministratori nell\'area di backend.',
+        'menu_label' => 'Registro del tema',
+        'menu_description' => 'Visualizza le modifiche effettuate sul tema attivo.',
+        'empty_link' => 'Svuota il registro del tema',
+        'empty_loading' => 'Svuotando il registro del tema...',
+        'empty_success' => 'Registro del tema svuotato',
+        'return_link' => 'Torna al registro del tema',
+        'id' => 'ID',
+        'id_label' => 'ID log',
+        'created_at' => 'Data & Ora',
+        'user' => 'Utente',
+        'type' => 'Tipo',
+        'type_create' => 'Crea',
+        'type_update' => 'Aggiorna',
+        'type_delete' => 'Elimina',
+        'theme_name' => 'Tema',
+        'theme_code' => 'Codice tema',
+        'old_template' => 'Template (precedente)',
+        'new_template' => 'Template (nuovo)',
+        'template' => 'Template',
+        'diff' => 'Modifiche',
+        'old_value' => 'Valore precedente',
+        'new_value' => 'Nuovo valore',
+        'preview_title' => 'Modifiche al template',
+        'template_updated' => 'Il template è stato aggiornato',
+        'template_created' => 'Il template è stato creato',
+        'template_deleted' => 'Il template è stato cancellato',
     ],
 ];
