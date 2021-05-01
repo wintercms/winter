@@ -1,58 +1,20 @@
-<?php return [
+<?php
+
+return [
     'app' => [
         'name' => 'Winter CMS',
         'tagline' => 'Tornare alle origini',
-    ],
-    'locale' => [
-        'ar' => 'العربية',
-        'be' => 'Беларуская',
-        'bg' => 'Български',
-        'ca' => 'Català',
-        'cs' => 'Čeština',
-        'da' => 'Dansk',
-        'en' => 'English (United States)',
-        'en-au' => 'English (Australia)',
-        'en-ca' => 'English (Canada)',
-        'en-gb' => 'English (United Kingdom)',
-        'et' => 'Eesti',
-        'de' => 'Deutsch',
-        'el' => 'Ελληνικά',
-        'es' => 'Español',
-        'es-ar' => 'Español (Argentina)',
-        'fa' => 'فارسی',
-        'fr' => 'Français',
-        'fr-ca' => 'Français (Canada)',
-        'hu' => 'Magyar',
-        'id' => 'Bahasa Indonesia',
-        'it' => 'Italiano',
-        'ja' => '日本語',
-        'kr' => '한국어',
-        'lt' => 'Lietuvių',
-        'lv' => 'Latviešu',
-        'nb-no' => 'Norsk (Bokmål)',
-        'nl' => 'Nederlands',
-        'pl' => 'Polski',
-        'pt-br' => 'Português (Brasil)',
-        'pt-pt' => 'Português (Portugal)',
-        'ro' => 'Română',
-        'rs' => 'Srpski',
-        'ru' => 'Русский',
-        'fi' => 'Suomi',
-        'sv' => 'Svenska',
-        'sk' => 'Slovenský',
-        'sl' => 'Slovenščina',
-        'th' => 'ไทย',
-        'tr' => 'Türkçe',
-        'uk' => 'Українська мова',
-        'zh-cn' => '简体中文',
-        'zh-tw' => '繁體中文',
-        'vn' => 'Tiếng việt',
     ],
     'directory' => [
         'create_fail' => 'Impossibile creare la cartella: :name',
     ],
     'file' => [
         'create_fail' => 'Impossibile creare il file: :name',
+    ],
+    'page' => [
+        'invalid_token' => [
+            'label' => 'Token di protezione non valido',
+        ],
     ],
     'combiner' => [
         'not_found' => "Il file combinatore ':name' non è stato trovato.",
@@ -73,14 +35,14 @@
             'events' => 'Eventi',
             'customers' => 'Clienti',
             'my_settings' => 'Impostazioni personali',
-        ],
+        ]
     ],
     'theme' => [
         'label' => 'Tema',
         'unnamed' => 'Tema senza nome',
         'name' => [
             'label' => 'Nome tema',
-            'help' => 'Cerca il tema tramite il suo codice univoco. Ad esempio, Winter.Vanilla',
+            'help' => 'Cerca il tema tramite il suo codice univoco. Ad esempio, Winter.Vanilla'
         ],
     ],
     'themes' => [
@@ -89,14 +51,14 @@
         'installed' => 'Temi installati',
         'no_themes' => 'Non ci sono temi installati dal marketplace.',
         'recommended' => 'Raccomandati',
-        'remove_confirm' => 'Sei sicuro di voler rimuovere questo tema?',
+        'remove_confirm' => 'Sei sicuro di voler rimuovere questo tema?'
     ],
     'plugin' => [
         'label' => 'Plugin',
         'unnamed' => 'Plugin senza nome',
         'name' => [
             'label' => 'Nome del plugin',
-            'help' => 'Cerca il plugin tramite il suo codice univoco. Ad esempio, Winter.Blog',
+            'help' => 'Cerca il plugin tramite il suo codice univoco. Ad esempio, Winter.Blog'
         ]
     ],
     'plugins' => [
@@ -112,7 +74,7 @@
         'remove' => 'Rimuovi',
         'refresh' => 'Reinstalla',
         'disabled_label' => 'Disabilitato',
-        'disabled_help' => "I plugin disabilitati sono ignorati dall'applicazione.",
+        'disabled_help' => 'I plugin disabilitati sono ignorati dall\'applicazione.',
         'frozen_label' => 'Congela aggiornamenti',
         'frozen_help' => 'I plugin congelati verranno ignorati nel processo di aggiornamento.',
         'selected_amount' => 'Plugin selezionati: :amount',
@@ -133,7 +95,7 @@
         'none' => 'Nessuno',
         'id' => [
             'label' => 'ID del progetto',
-            'help' => "Come trovare l'ID del tuo progetto",
+            'help' => 'Come trovare l\'ID del tuo progetto',
             'missing' => 'Inserisci un ID di progetto da utilizzare.',
         ],
         'detach_confirm' => 'Sei sicuro di voler scollegare questo progetto?',
@@ -145,7 +107,7 @@
         'missing_model' => 'La pagine delle impostazioni non ha nessun modello associato.',
         'update_success' => 'Le impostazioni per :name sono state aggiornate con successo.',
         'return' => 'Ritorna alle impostazioni di sistema',
-        'search' => 'Cerca',
+        'search' => 'Cerca'
     ],
     'mail' => [
         'log_file' => 'File di log',
@@ -158,8 +120,8 @@
         'php_mail' => 'PHP mail',
         'smtp' => 'SMTP',
         'smtp_address' => 'Indirizzo SMTP',
-        'smtp_authorization' => "Il server SMTP richiede l'autenticazione",
-        'smtp_authorization_comment' => "Seleziona se il tuo server SMTP richieste l'autenticazione.",
+        'smtp_authorization' => 'Il server SMTP richiede l\'autenticazione',
+        'smtp_authorization_comment' => 'Seleziona se il tuo server SMTP richieste l\'autenticazione.',
         'smtp_username' => 'Username',
         'smtp_password' => 'Password',
         'smtp_port' => 'Porta SMTP',
@@ -175,19 +137,19 @@
         'mailgun_domain' => 'Dominio Mailgun',
         'mailgun_domain_comment' => 'Inserisci il nome dominio Mailgun.',
         'mailgun_secret' => 'Chiave Mailgun',
-        'mailgun_secret_comment' => "Inserisci la tua chiave per l'utilizzo delle API Mailgun.",
+        'mailgun_secret_comment' => 'Inserisci la tua chiave per l\'utilizzo delle API Mailgun.',
         'mandrill' => 'Mandrill',
         'mandrill_secret' => 'Chiave Mandrill',
-        'mandrill_secret_comment' => "Inserisci la tua chiave per l'utilizzo delle API Mandrill.",
+        'mandrill_secret_comment' => 'Inserisci la tua chiave per l\'utilizzo delle API Mandrill.',
         'ses' => 'SES',
         'ses_key' => 'Chiave SES',
-        'ses_key_comment' => "Inserisci la chiave per l'utilizzo delle API SES",
+        'ses_key_comment' => 'Inserisci la chiave per l\'utilizzo delle API SES',
         'ses_secret' => 'Chiave privata SES',
-        'ses_secret_comment' => "Inserisci la chiave privata per l'utilizzo delle API SES",
+        'ses_secret_comment' => 'Inserisci la chiave privata per l\'utilizzo delle API SES',
         'ses_region' => 'Regione SES',
         'ses_region_comment' => 'Inserisci la tua regione SES (ad es. us-east-1)',
         'drivers_hint_header' => 'Driver non installati',
-        'drivers_hint_content' => 'Questa modalità di invio richiede che il plugin ":plugin" sia installato prima che tu possa inviare messaggi.',
+        'drivers_hint_content' => 'Questa modalità di invio richiede che il plugin ":plugin" sia installato prima che tu possa inviare messaggi.'
     ],
     'mail_templates' => [
         'menu_label' => 'Modelli di e-mail',
@@ -222,7 +184,7 @@
         'deleting' => 'Eliminazione modello...',
         'deleting_layout' => 'Eliminazione layout...',
         'sending' => 'Invio del messaggio di prova...',
-        'return' => "Ritorna all'elenco dei modelli",
+        'return' => 'Ritorna all\'elenco dei modelli',
     ],
     'mail_brand' => [
         'menu_label' => 'Personalizzazione mail',
@@ -300,7 +262,7 @@
         'plugin_not_found' => 'Plugin not found',
         'core_current_build' => 'Build corrente',
         'core_build' => 'Build :build',
-        'core_build_help' => "Disponibile l'ultima build.",
+        'core_build_help' => 'Disponibile l\'ultima build.',
         'core_downloading' => 'Scaricamento dei file in corso',
         'core_extracting' => 'Estrazione dei file in corso',
         'plugins' => 'Plugin',
@@ -316,7 +278,7 @@
         'update_label' => 'Aggiorna il software',
         'update_completing' => 'Completamento del processo di aggiornamento',
         'update_loading' => 'Caricamento degli aggiornamenti disponibili...',
-        'update_success' => "L'aggiornamento è stato eseguito con successo.",
+        'update_success' => 'L\'aggiornamento è stato eseguito con successo.',
         'update_failed_label' => 'Aggiornamento fallito',
         'force_label' => 'Forza aggiornamento',
         'found' => [
@@ -334,14 +296,14 @@
             'ignore' => 'Salta questo plugin (sempre)',
         ],
         'important_action_required' => 'Azione richiesta',
-        'important_view_guide' => "Visualizza la guida per l'aggiornamento",
+        'important_view_guide' => 'Visualizza la guida per l\'aggiornamento',
         'important_alert_text' => 'Alcuni aggiornamenti necessitano della tua attenzione.',
         'details_title' => 'Dettagli plugin',
         'details_view_homepage' => 'Visualizza homepage',
         'details_readme' => 'Documentazione',
         'details_readme_missing' => 'Nessuna documentazione fornita.',
-        'details_upgrades' => "Guida all'aggiornamento",
-        'details_upgrades_missing' => "Nessuna guida all'aggiornamento fornita.",
+        'details_upgrades' => 'Guida all\'aggiornamento',
+        'details_upgrades_missing' => 'Nessuna guida all\'aggiornamento fornita.',
         'details_current_version' => 'Versione attuale',
         'details_author' => 'Autore',
     ],
@@ -364,9 +326,9 @@
         'extract_failed' => "Estrazione del file sistema ':file' non riuscita.",
     ],
     'event_log' => [
-        'hint' => "Questo registro visualizza un elenco dei potenziali errori occorsi nell'applicazione, come eccezioni e informazioni di debug.",
+        'hint' => 'Questo registro visualizza un elenco dei potenziali errori occorsi nell\'applicazione, come eccezioni e informazioni di debug.',
         'menu_label' => 'Registro eventi',
-        'menu_description' => 'Visualizza i messaggi del registro di sistema con i relativi orari di registrazione e dettagli.',
+        'menu_description' => 'VIsualizza i messaggi del registro di sistema con i relativi orari di registrazione e dettagli.',
         'empty_link' => 'Svuota il registro eventi',
         'empty_loading' => 'Svuotamento del registro eventi in corso...',
         'empty_success' => 'Il registro eventi è stato svuotato con successo.',
@@ -376,7 +338,7 @@
         'created_at' => 'Data e ora',
         'message' => 'Messaggio',
         'level' => 'Livello',
-        'preview_title' => 'Evento',
+        'preview_title' => 'Evento'
     ],
     'request_log' => [
         'hint' => 'Questo registro visualizza un elenco delle richieste del browser che possono richiedere attenzione. Ad esempio, se un visitatore apre una pagina del CMS che non può essere trovata, viene creato un record con il codice di errore 404.',
@@ -392,7 +354,7 @@
         'referer' => 'Provenienza',
         'url' => 'URL',
         'status_code' => 'Codice di stato',
-        'preview_title' => 'Richiesta',
+        'preview_title' => 'Richiesta'
     ],
     'permissions' => [
         'name' => 'Sistema',
@@ -407,8 +369,8 @@
         'manage_editor' => 'Gestisci preferenze editor di codice',
         'manage_own_editor' => 'Gestisci preferenze personali editor di codice',
         'view_the_dashboard' => 'Visualizza la dashboard',
-        'manage_default_dashboard' => 'Gestisci la dashboard predefinita',
         'manage_branding' => 'Personalizza il pannello di controllo',
+        'manage_default_dashboard' => 'Gestisci la dashboard predefinita',
     ],
     'log' => [
         'menu_label' => 'Impostazioni registri',
@@ -424,11 +386,6 @@
     'media' => [
         'invalid_path' => "Percorso del file non valido: ':path'.",
         'folder_size_items' => 'elementi',
-    ],
-    'page' => [
-        'invalid_token' => [
-            'label' => 'Token di protezione non valido',
-        ],
     ],
     'pagination' => [
         'previous' => 'Precedente',

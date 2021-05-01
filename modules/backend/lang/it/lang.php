@@ -6,7 +6,7 @@ return [
     ],
     'field' => [
         'invalid_type' => 'Il tipo di campo :type non è valido.',
-        'options_method_not_exists' => "La classe :model deve definire un metodo :method() che ritorni le opzioni per il campo ':field'.",
+        'options_method_not_exists' => 'La classe :model deve definire un metodo :method() che ritorni le opzioni per il campo ":field".'
     ],
     'widget' => [
         'not_registered' => "Nessun widget ':name' è stato registrato",
@@ -16,12 +16,12 @@ return [
         'untitled' => 'Senza titolo',
         'access_denied' => [
             'label' => 'Accesso negato',
-            'help' => 'Non hai le autorizzazioni necessarie per accedere a questa pagina.',
-            'cms_link' => 'Ritorna al pannello di controllo',
+            'help' => "Non hai le autorizzazioni necessarie per accedere a questa pagina.",
+            'cms_link' => 'Ritorna al pannello di controllo'
         ],
     ],
     'partial' => [
-        'not_found_name' => "La vista parziale ':name' non è stata trovata.",
+        'not_found_name' => "La vista parziale ':name' non è stata trovata."
     ],
     'ajax_handler' => [
         'invalid_name' => "Il nome dell'AJAX handler non è valido: :name.",
@@ -52,13 +52,13 @@ return [
         'enter_new_password' => 'Inserisci una nuova password',
         'password_reset' => 'Reimposta password',
         'restore_success' => 'Le istruzioni per reimpostare la password sono state inviate al tuo indirizzo e-mail.',
-        'reset_success' => "La tua password è stata reimpostata con successo. Ora puoi effettuare l'accesso.",
+        'reset_success' => 'La tua password è stata reimpostata con successo. Ora puoi effettuare l\'accesso.',
         'reset_error' => 'I dati forniti per la reimpostazione della password non sono validi. Riprova!',
         'reset_fail' => 'Impossibile ripristinare la password!',
         'apply' => 'Applica',
         'cancel' => 'Annulla',
         'delete' => 'Elimina',
-        'ok' => 'OK',
+        'ok' => 'OK'
     ],
     'dashboard' => [
         'menu_label' => 'Dashboard',
@@ -101,11 +101,11 @@ return [
             'widget_title_default' => 'Benvenuto',
             'welcome_back_name' => 'Bentornato su :app, :name.',
             'welcome_to_name' => 'Benvenuto su :app, :name.',
-            'first_sign_in' => "Questa è la prima volta che hai eseguito l'accesso.",
+            'first_sign_in' => 'Questa è la prima volta che hai eseguito l\'accesso.',
             'last_sign_in' => 'Il tuo ultimo accesso è stato ',
             'view_access_logs' => 'Visualizza log accessi',
             'nice_message' => 'Buona giornata!',
-        ],
+        ]
     ],
     'user' => [
         'name' => 'Amministratore',
@@ -119,16 +119,16 @@ return [
         'full_name' => 'Nome completo',
         'email' => 'Indirizzo e-mail',
         'groups' => 'Gruppi',
-        'groups_comment' => "Seleziona i gruppi a cui appartiene l'utente.",
+        'groups_comment' => 'Seleziona i gruppi a cui appartiene l\'utente.',
         'avatar' => 'Avatar',
         'password' => 'Password',
         'password_confirmation' => 'Conferma password',
         'permissions' => 'Autorizzazioni',
         'account' => 'Account',
         'superuser' => 'Super User',
-        'superuser_comment' => "Seleziona per consentire all'utente di accedere a tutte le aree.",
+        'superuser_comment' => 'Seleziona per consentire all\'utente di accedere a tutte le aree.',
         'send_invite' => 'Invia invito tramite e-mail',
-        'send_invite_comment' => "Invia un messaggio di benvenuto contenente le credenziali per l'accesso.",
+        'send_invite_comment' => 'Invia un messaggio di benvenuto contenente le credenziali per l\'accesso.',
         'delete_confirm' => 'Vuoi davvero eliminare questo amministratore?',
         'return' => 'Ritorna alla lista degli amministratori',
         'allow' => 'Consenti',
@@ -136,7 +136,7 @@ return [
         'deny' => 'Nega',
         'group' => [
             'name' => 'Gruppo',
-            'name_comment' => "Il nome viene visualizzato nell'elenco dei gruppi del form di Creazione/Modifica Amministratore",
+            'name_comment' => 'Il nome viene visualizzato nell\'elenco dei gruppi del form di Creazione/Modifica Amministratore ',
             'name_field' => 'Nome',
             'description_field' => 'Descrizione',
             'is_new_user_default_field_label' => 'Gruppo predefinito',
@@ -148,7 +148,7 @@ return [
             'new' => 'Nuovo gruppo',
             'delete_confirm' => 'Vuoi davvero eliminare questo gruppo amministratore?',
             'return' => 'Ritorna alla lista dei gruppi',
-            'users_count' => 'Utenti',
+            'users_count' => 'Utenti'
         ],
         'role' => [
             'name' => 'Ruolo',
@@ -165,18 +165,18 @@ return [
             'users_count' => 'Utenti',
         ],
         'preferences' => [
-            'not_authenticated' => "Non c'è nessun utente autenticato per cui caricare o salvare le preferenze.",
-        ],
+            'not_authenticated' => 'Non c\'è nessun utente autenticato per cui caricare o salvare le preferenze.'
+        ]
     ],
     'list' => [
         'default_title' => 'Elenco',
         'search_prompt' => 'Cerca...',
         'no_records' => 'Nessun risultato trovato.',
-        'missing_model' => "L'elenco utilizzato nella classe :class non ha un modello definito.",
+        'missing_model' => 'L\'elenco utilizzato nella classe :class non ha un modello definito.',
         'missing_column' => 'Non ci sono colonne definite per :columns.',
-        'missing_columns' => "L'elenco utilizzato nella classe :class non ha un elenco di colonne definito.",
+        'missing_columns' => 'L\'elenco utilizzato nella classe :class non ha un elenco di colonne definito.',
         'missing_definition' => "L'elenco non contiene una colonna per il campo ':field'.",
-        'missing_parent_definition' => "L'elenco non contiene una definizione per ':definition'.",
+        'missing_parent_definition' => "L\'elenco non contiene una definizione per ':definition'.",
         'behavior_not_ready' => 'Il comportamento "elenco" non è stato inizializzato, controlla di aver chiamato il metodo makeLists() nel controller.',
         'invalid_column_datetime' => "Il valore della colonna ':column' non è un oggetto di tipo DateTime, hai dimenticato un riferimento a \$dates nel modello?",
         'pagination' => 'Record visualizzati: :from-:to di :total',
@@ -186,7 +186,7 @@ return [
         'updating' => 'Aggiornamento in corso...',
         'loading' => 'Caricamento...',
         'setup_title' => 'Configura elenco',
-        'setup_help' => "Utilizza le checkbox per selezionare le colonne che vuoi visualizzare nell'elenco. Puoi cambiare la posizione delle colonne trascinandole verso l'alto o il basso.",
+        'setup_help' => 'Utilizza le checkbox per selezionare le colonne che vuoi visualizzare nell\'elenco. Puoi cambiare la posizione delle colonne trascinandole verso l\'alto o il basso.',
         'records_per_page' => 'Record per pagina',
         'records_per_page_help' => 'Seleziona il numero di record da visualizzare su ogni pagina. Ricorda che un numero elevato di record in una singola pagina può ridurre le prestazioni.',
         'check' => 'Spunta',
@@ -195,7 +195,7 @@ return [
         'delete_selected_confirm' => 'Elimina i record selezionati?',
         'delete_selected_success' => 'I record selezionati sono stati eliminati con successo.',
         'column_switch_true' => 'Sì',
-        'column_switch_false' => 'No',
+        'column_switch_false' => 'No'
     ],
     'fileupload' => [
         'attachment' => 'Allegato',
@@ -207,7 +207,7 @@ return [
         'upload_file' => 'Carica file',
         'upload_error' => 'Errore nel caricamento',
         'remove_confirm' => 'Sei sicuro?',
-        'remove_file' => 'Rimuovi file',
+        'remove_file' => 'Rimuovi file'
     ],
     'repeater' => [
         'add_new_item' => 'Aggiungi elemento',
@@ -222,7 +222,7 @@ return [
         'update_success' => ':name modificato con successo',
         'delete_success' => ':name eliminato con successo',
         'reset_success' => 'Reimpostazione completata',
-        'missing_id' => "L'ID del record non è stato specificato.",
+        'missing_id' => 'L\'ID del record non è stato specificato.',
         'missing_model' => 'Il form utilizzato nella classe :class non ha un modello definito.',
         'missing_definition' => "Il form non contiene il campo ':field'.",
         'not_found' => 'Nessun record con ID :id è stato trovato.',
@@ -267,11 +267,11 @@ return [
         'insert_row_below' => 'Inserisci riga sotto',
         'delete_row' => 'Elimina riga',
         'concurrency_file_changed_title' => 'Il file è stato cambiato',
-        'concurrency_file_changed_description' => 'Il file che stavi modificando è stato cambiato da un altro utente. Puoi ricaricare il file e perdere le tue modifiche oppure sovrascrivere il file sul disco.',
-        'return_to_list' => "Ritorna all'elenco",
+        'concurrency_file_changed_description' => "Il file che stavi modificando è stato cambiato da un altro utente. Puoi ricaricare il file e perdere le tue modifiche oppure sovrascrivere il file sul disco.",
+        'return_to_list' => 'Ritorna all\'elenco'
     ],
     'recordfinder' => [
-        'find_record' => 'Trova record',
+        'find_record' => 'Trova record'
     ],
     'pagelist' => [
         'page_link' => 'Link pagina',
@@ -281,8 +281,8 @@ return [
         'missing_config' => "La relazione non ha nessuna configurazione per ':config'.",
         'missing_definition' => "La relazione non contiene una definizione per il campo ':field'.",
         'missing_model' => 'La relazione utilizzata nella classe :class non ha un modello definito.',
-        'invalid_action_single' => "L'azione non può essere eseguita su una relazione singola.",
-        'invalid_action_multi' => "L'azione non può essere eseguita su una relazione multipla.",
+        'invalid_action_single' => 'L\'azione non può essere eseguita su una relazione singola.',
+        'invalid_action_multi' => 'L\'azione non può essere eseguita su una relazione multipla.',
         'help' => 'Fai clic su un elemento per aggiungere',
         'related_data' => 'Dati :name correlati',
         'add' => 'Aggiungi',
@@ -308,11 +308,11 @@ return [
         'link_name' => 'Collega :name',
         'unlink' => 'Scollega',
         'unlink_name' => 'Scollega :name',
-        'unlink_confirm' => 'Sei sicuro?',
+        'unlink_confirm' => 'Sei sicuro?'
     ],
     'reorder' => [
         'default_title' => 'Riordina record',
-        'no_records' => 'Non ci sono record disponibili per ordinare.',
+        'no_records' => 'Non ci sono record disponibili per ordinare.'
     ],
     'model' => [
         'name' => 'Modello',
@@ -320,18 +320,18 @@ return [
         'missing_id' => 'Nessun ID specificato per la ricerca.',
         'missing_relation' => "Il modello ':class' non contiene una definizione per la relazione ':relation'.",
         'missing_method' => "Il modello ':class' non contiene un metodo ':method'.",
-        'invalid_class' => 'Il modello :model utilizzato nella classe :class non è valido, deve ereditare la classe \Model.',
+        'invalid_class' => "Il modello :model utilizzato nella classe :class non è valido, deve ereditare la classe \Model.",
         'mass_assignment_failed' => "Assegnazione massiva fallita per l'attributo ':attribute' del modello.",
     ],
     'warnings' => [
         'tips' => 'Suggerimenti per la configurazione del sistema',
         'tips_description' => 'Ci sono elementi a cui è necessario prestare attenzione al fine di configurare il sistema in maniera corretta.',
-        'permissions' => 'La cartella :name o le sue sottocartelle non sono scrivibili da PHP. Imposta le corrette autorizzazioni per il server web su questa cartella.',
-        'extension' => "L'estensione di PHP :name non è installata. Installa questa libreria ed attiva l'estensione.",
+        'permissions'  => 'La cartella :name o le sue sottocartelle non sono scrivibili da PHP. Imposta le corrette autorizzazioni per il server web su questa cartella.',
+        'extension' => 'L\'estensione di PHP :name non è installata. Installa questa libreria ed attiva l\'estensione.'
     ],
     'editor' => [
         'menu_label' => 'Preferenze editor di codice',
-        'menu_description' => "Personalizza le impostazioni dell'editor, come la dimensione del carattere e lo schema di colori.",
+        'menu_description' => 'Personalizza le impostazioni dell\'editor, come la dimensione del carattere e lo schema di colori.',
         'preview' => 'Anteprima',
         'font_size' => 'Dimensione carattere',
         'tab_size' => 'Dimensione Tab',
@@ -345,11 +345,11 @@ return [
         'auto_closing' => 'Chiudi automaticamente i tag',
         'show_invisibles' => 'Mostra caratteri invisibili',
         'show_gutter' => 'Visualizza numeri di linea',
-        'basic_autocompletion' => 'Completamento automatico di base (Ctrl + Spazio)',
-        'live_autocompletion' => 'Completamento automatico in tempo reale',
-        'enable_snippets' => 'Abilita frammenti di codice (Tab)',
-        'display_indent_guides' => 'Visualizza guide di indentazione',
-        'show_print_margin' => 'Visualizza margini di stampa',
+        'basic_autocompletion'=> 'Completamento automatico di base (Ctrl + Spazio)',
+        'live_autocompletion'=> 'Completamento automatico in tempo reale',
+        'enable_snippets'=> 'Abilita frammenti di codice (Tab)',
+        'display_indent_guides'=> 'Visualizza guide di indentazione',
+        'show_print_margin'=> 'Visualizza margini di stampa',
         'mode_off' => 'No',
         'mode_fluid' => 'Fluido',
         '40_characters' => '40 Caratteri',
@@ -357,7 +357,7 @@ return [
         'theme' => 'Schema di colori',
         'markup_styles' => 'Stili di markup',
         'custom_styles' => 'Foglio di stile personalizzato',
-        'custom styles_comment' => "Stili personalizzati da includere nell'editor HTML.",
+        'custom styles_comment' => 'Stili personalizzati da includere nell\'editor HTML.',
         'markup_classes' => 'Classi di markup',
         'paragraph' => 'Paragrafo',
         'link' => 'Collegamento',
@@ -368,17 +368,17 @@ return [
         'class_name' => 'Nome della classe',
         'markup_tags' => 'Tag di markup',
         'allowed_empty_tags' => 'Tag vuoti consentiti',
-        'allowed_empty_tags_comment' => "L'elenco dei tag che non sono rimossi quando non hanno nessun contenuto.",
+        'allowed_empty_tags_comment' => 'L\'elenco dei tag che non sono rimossi quando non hanno nessun contenuto.',
         'allowed_tags' => 'Tag consentiti',
-        'allowed_tags_comment' => "L'elenco dei tag consentiti.",
+        'allowed_tags_comment' => 'L\'elenco dei tag consentiti.',
         'allowed_attributes' => 'Attributi consentiti',
         'allowed_attributes_comment' => "L'elenco di attributi consentiti.",
         'no_wrap' => 'Tag da non includere in blocchi',
-        'no_wrap_comment' => "L'elenco dei tag che non devono essere contenuti all'interno di blocchi di tag.",
+        'no_wrap_comment' => 'L\'elenco dei tag che non devono essere contenuti all\'interno di blocchi di tag.',
         'remove_tags' => 'Tag da rimuovere',
-        'remove_tags_comment' => "L'elenco dei tag che sono rimossi insieme al loro contenuto.",
-        'line_breaker_tags' => 'Line breaker tags',
-        'line_breaker_tags_comment' => 'The list of tags that are used to place a line breaker element between.',
+        'remove_tags_comment' => "L'elenco dei tag da rimuovere insieme al loro contenuto.",
+        'line_breaker_tags' => 'Tag interruzione di riga',
+        'line_breaker_tags_comment' => "L'elenco dei tag tra i quali posizionare un'interruzione di riga automatica.',
         'toolbar_options' => 'Barra degli strumenti - Opzioni',
         'toolbar_buttons' => 'Barra degli strumenti - Tasti',
         'toolbar_buttons_comment' => 'I tasti da mostrare in maniera predefinita sulla barra degli strumenti del Rich Editor',
@@ -392,26 +392,26 @@ return [
         'paragraph_formats_comment' => 'Le opzioni che appariranno nel menu a tendina relativo alla formattazione dei paragrafi.',
     ],
     'tooltips' => [
-        'preview_website' => 'Anteprima del sito web',
+        'preview_website' => 'Anteprima del sito web'
     ],
     'mysettings' => [
         'menu_label' => 'Impostazioni personali',
-        'menu_description' => 'Impostazioni legate al tuo account amministratore',
+        'menu_description' => 'Impostazioni legate al tuo account amministratore'
     ],
     'myaccount' => [
         'menu_label' => 'Il mio account',
-        'menu_description' => "Aggiorna i dettagli del tuo account, come il nome, l'indirizzo e-mail e la password.",
-        'menu_keywords' => 'sicurezza login',
+        'menu_description' => 'Aggiorna i dettagli del tuo account, come il nome, l\'indirizzo e-mail e la password.',
+        'menu_keywords' => 'sicurezza login'
     ],
     'branding' => [
         'menu_label' => 'Personalizza pannello di controllo',
-        'menu_description' => "Personalizza l'area di amministrazione, come il nome, i colori ed il logo.",
+        'menu_description' => 'Personalizza l\'area di amministrazione, come il nome, i colori ed il logo.',
         'brand' => 'Marchio',
         'logo' => 'Logo',
         'logo_description' => 'Carica un logo personalizzato da utilizzare nel pannello di controllo.',
-        'app_name' => "Nome dell'applicazione",
+        'app_name' => 'Nome dell\'applicazione',
         'app_name_description' => 'Questo campo verrà visualizzato nella barra del titolo del pannello di controllo.',
-        'app_tagline' => "Slogan dell'applicazione",
+        'app_tagline' => 'Slogan dell\'applicazione',
         'app_tagline_description' => 'Questo campo verrà visualizzato nella schermata di login del pannello di controllo.',
         'colors' => 'Colori',
         'primary_color' => 'Principale color',
@@ -423,7 +423,7 @@ return [
         'menu_mode' => 'Stile menu',
         'menu_mode_inline' => 'In linea',
         'menu_mode_tile' => 'Piastrelle',
-        'menu_mode_collapsed' => 'Compresso',
+        'menu_mode_collapsed' => 'Compresso'
     ],
     'backend_preferences' => [
         'menu_label' => 'Preferenze pannello di controllo',
@@ -449,7 +449,7 @@ return [
     'filter' => [
         'all' => 'tutto',
         'options_method_not_exists' => "Il modello :model deve definire un metodo :method() che ritorni le opzioni per il filtro ':filter'.",
-        'date_all' => 'tutte',
+        'date_all' => 'tutte'
     ],
     'import_export' => [
         'upload_csv_file' => '1. Carica un file CSV',
@@ -460,7 +460,7 @@ return [
         'file_columns' => 'Colonne del file',
         'database_fields' => 'Campi del database',
         'set_import_options' => '3. Imposta opzioni di importazione',
-        'export_output_format' => "1. Formato di output dell'esportazione",
+        'export_output_format' => '1. Formato di output dell\'esportazione',
         'file_format' => 'Formato del file',
         'standard_format' => 'Formato standard',
         'custom_format' => 'Formato personalizzato',
@@ -491,16 +491,16 @@ return [
         'export_error' => 'Errore di esportazione',
         'column_preview' => 'Anteprima colonna',
         'file_not_found_error' => 'File non trovato',
-        'empty_error' => "Nessun dato fornito per l'esportazione.",
+        'empty_error' => 'Nessun dato fornito per l\'esportazione.',
         'empty_import_columns_error' => 'Si prega di specificare alcune colonne da importare.',
         'match_some_column_error' => 'Si prega di abbinare alcune colonne prima di procedere.',
         'required_match_column_error' => 'Si prega di specificare un abbinamento per il campo obbligatorio :label.',
         'empty_export_columns_error' => 'Si prega di specificare alcune colonne da esportare.',
-        'behavior_missing_uselist_error' => "Devi implementare il comportamento del controller ListController con l'opzione di esportazione 'useList' abilitata.",
+        'behavior_missing_uselist_error' => 'Devi implementare il comportamento del controller ListController con l\'opzione di esportazione "useList" abilitata.',
         'missing_model_class_error' => 'Si prega di specificare la proprietà modelClass per :type',
         'missing_column_id_error' => 'Identificatore di colonna mancante',
         'unknown_column_error' => 'Colonna sconosciuta',
-        'encoding_not_supported_error' => "La codifica del file di origine non è stata riconosciuta. Si prega di selezionare l'opzione di formato personalizzato con la codifica corretta per importare il file.",
+        'encoding_not_supported_error' => 'La codifica del file di origine non è stata riconosciuta. Si prega di selezionare l\'opzione di formato personalizzato con la codifica corretta per importare il file.',
         'encoding_format' => 'Codifica del file',
         'encodings' => [
             'utf_8' => 'UTF-8',
@@ -518,17 +518,17 @@ return [
             'iso_8859_11' => 'ISO-8859-11 (Latino, Thai)',
             'iso_8859_13' => 'ISO-8859-13 (Latino-7, Baltico)',
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtico)',
-            'iso_8859_15' => "ISO-8859-15 (Latin-9, Revisione di Europa Occidentale con il simbolo dell'euro)",
+            'iso_8859_15' => 'ISO-8859-15 (Latin-9, Revisione di Europa Occidentale con il simbolo dell\'euro)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)',
-        ],
+            'windows_1252' => 'Windows-1252 (CP1252)'
+        ]
     ],
     'permissions' => [
-        'manage_media' => 'Gestisci elementi multimediali',
+        'manage_media' => 'Gestisci elementi multimediali'
     ],
     'mediafinder' => [
         'label' => 'Media Finder',
-        'default_prompt' => 'Fai clic sul pulsante %s per trovare un elemento multimediale',
+        'default_prompt' => 'Fai clic sul pulsante %s per trovare un elemento multimediale'
     ],
     'media' => [
         'menu_label' => 'Elementi multimediali',
@@ -549,7 +549,7 @@ return [
         'last_modified' => 'Ultima modifica',
         'public_url' => 'URL pubblico',
         'click_here' => 'Fai clic qui',
-        'thumbnail_error' => "Errore durante la generazione dell'anteprima.",
+        'thumbnail_error' => 'Errore durante la generazione dell\'anteprima.',
         'return_to_parent' => 'Ritorna alla cartella superiore',
         'return_to_parent_label' => 'Torna su ..',
         'nothing_selected' => 'Nessun elemento selezionato.',
@@ -563,7 +563,7 @@ return [
         'no_files_found' => 'Nessun file corrisponde alla tua richiesta.',
         'delete_empty' => 'Seleziona elementi da eliminare.',
         'delete_confirm' => 'Vuoi davvero eliminare gli elementi selezionati?',
-        'error_renaming_file' => "Errore durante la rinominazione dell'elemento",
+        'error_renaming_file' => 'Errore durante la rinominazione dell\'elemento',
         'new_folder_title' => 'Nuova cartella',
         'folder_name' => 'Nome della cartella',
         'error_creating_folder' => 'Errore durante la creazione della cartella',
@@ -572,12 +572,12 @@ return [
         'move_popup_title' => 'Sposta file o cartelle',
         'move_destination' => 'Cartella di destinazione',
         'please_select_move_dest' => 'Seleziona una cartella di destinazione.',
-        'move_dest_src_match' => "Seleziona un'altra cartella di destinazione.",
+        'move_dest_src_match' => 'Seleziona un\'altra cartella di destinazione.',
         'empty_library' => 'La libreria è vuota. Carica dei files o crea delle cartelle per iniziare.',
         'insert' => 'Inserisci',
         'crop_and_insert' => 'Ritaglia e inserisci',
         'select_single_image' => 'Seleziona una singola immagine.',
-        'selection_not_image' => "L'elemento selezionato non è un'immagine.",
+        'selection_not_image' => 'L\'elemento selezionato non è un\'immagine.',
         'restore' => 'Annulla tutte le modifiche',
         'resize' => 'Ridimensiona...',
         'selection_mode_normal' => 'Normale',
@@ -593,5 +593,5 @@ return [
         'rename_new_name' => 'Nuovo nome',
         'move_please_select' => 'seleziona',
         'move_button' => 'Sposta',
-    ],
+    ]
 ];
