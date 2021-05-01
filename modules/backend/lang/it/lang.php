@@ -378,7 +378,7 @@ return [
         'remove_tags' => 'Tag da rimuovere',
         'remove_tags_comment' => "L'elenco dei tag da rimuovere insieme al loro contenuto.",
         'line_breaker_tags' => 'Tag interruzione di riga',
-        'line_breaker_tags_comment' => "L'elenco dei tag tra i quali posizionare un'interruzione di riga automatica.',
+        'line_breaker_tags_comment' => "L'elenco dei tag tra i quali posizionare un'interruzione di riga automatica.",
         'toolbar_options' => 'Barra degli strumenti - Opzioni',
         'toolbar_buttons' => 'Barra degli strumenti - Tasti',
         'toolbar_buttons_comment' => 'I tasti da mostrare in maniera predefinita sulla barra degli strumenti del Rich Editor',
