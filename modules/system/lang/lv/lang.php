@@ -213,7 +213,7 @@ return [
         'page_title' => 'Pielāgot pasta izskatu',
         'sample_template' => [
             'heading' => 'Virsraksts',
-            'paragraph' => 'Šis ir paragrāfs, kas aizpildīts ar Lorem Ipsum tekstu un saiti. Cumque dicta <a>doloremque eaque</a>, enim error laboriosam pariatur possimus tenetur veritatis voluptas.',
+            'paragraph' => 'Šī ir rindkopa, kas aizpildīts ar Lorem Ipsum tekstu un saiti. Cumque dicta <a>doloremque eaque</a>, enim error laboriosam pariatur possimus tenetur veritatis voluptas.',
             'table' => [
                 'item' => 'Vienums',
                 'description' => 'Apraksts',
@@ -351,7 +351,7 @@ return [
         'file_corrupt' => 'Fails no servera ir bojāts.',
     ],
     'behavior' => [
-        'missing_property' => 'Klasei :class jābūt definētai īpašībai $:property, kas tiek lietota :behavior rīcībai.',
+        'missing_property' => 'Klasei :class jābūt definētai īpašībai $:property, kas tiek lietota :behavior uzvedībai.',
     ],
     'config' => [
         'not_found' => 'Neizdevās atrast konfigurācijas failu :file, kas definēts priekš :location.',
@@ -412,7 +412,7 @@ return [
         'menu_description' => 'Norādiet, kuras sistēmas daļas nepieciešams žurnalēt.',
         'default_tab' => 'Žurnalēšana',
         'log_events' => 'Žurnalēt sistēmas notikumus',
-        'log_events_comment' => 'Saglabā sistēmas notikumus datu bāzē papildus failu sistēmas žurnālam.',
+        'log_events_comment' => 'Saglabā sistēmas notikumus datubāzē papildus failu sistēmas žurnālam.',
         'log_requests' => 'Žurnalēt sliktus pieprasījumus',
         'log_requests_comment' => 'Pārlūkprogrammu pieprasījumi, kuriem iespējams jāpievērš uzmanība, kā, piemēram, 404 kļūdas.',
         'log_theme' => 'Žurnalēt tēmas izmaiņas',
