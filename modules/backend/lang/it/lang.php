@@ -23,7 +23,22 @@ return [
     'partial' => [
         'not_found_name' => "La vista parziale ':name' non è stata trovata."
     ],
+    'ajax_handler' => [
+        'invalid_name' => "Il nome dell'AJAX handler non è valido: :name.",
+        'not_found' => "Impossibile trovare l'AJAX handler ':name'.",
+    ],
     'account' => [
+        'impersonate' => 'Impersona utente',
+        'impersonate_confirm' => 'Sei sicuro di voler impersonare questo utente? Puoi tornare al tuo status attuale effettuando il logout.',
+        'impersonate_success' => "Stai testando l'accesso dell'utente selezionato",
+        'impersonate_working' => 'Impersonando...',
+        'impersonating' => "Testando l'accesso di :full_name",
+        'stop_impersonating' => 'Concludi il test utenza',
+        'unsuspend' => 'Annulla sospensione',
+        'unsuspend_confirm' => "Sei sicuro di voler annullare la sospensione dell'utente?'",
+        'unsuspend_success' => "L'utente è stato sospeso.",
+        'unsuspend_working' => 'Annullamento sospensione...',
+        'signed_in_as' => 'Accesso come :full_name',
         'sign_out' => 'Esci',
         'login' => 'Accedi',
         'reset' => 'Reimposta',
@@ -135,6 +150,20 @@ return [
             'return' => 'Ritorna alla lista dei gruppi',
             'users_count' => 'Utenti'
         ],
+        'role' => [
+            'name' => 'Ruolo',
+            'name_field' => 'Nome',
+            'name_comment' => "Il nome viene visualizzato nell'elenco dei ruoli del form di Creazione/Modifica Amministratore",
+            'description_field' => 'Descrizione',
+            'code_field' => 'Codice',
+            'code_comment' => 'Inserisci un codice univoco se vuoi accedere a questo ruolo tramite API.',
+            'menu_label' => 'Gestisci ruoli',
+            'list_title' => 'Gestisci ruoli',
+            'new' => 'Nuovo ruolo',
+            'delete_confirm' => 'Vuoi davvero eliminare questo ruolo amministratore?',
+            'return' => 'Ritorna alla lista dei ruoli',
+            'users_count' => 'Utenti',
+        ],
         'preferences' => [
             'not_authenticated' => 'Non c\'è nessun utente autenticato per cui caricare o salvare le preferenze.'
         ]
@@ -179,6 +208,11 @@ return [
         'upload_error' => 'Errore nel caricamento',
         'remove_confirm' => 'Sei sicuro?',
         'remove_file' => 'Rimuovi file'
+    ],
+    'repeater' => [
+        'add_new_item' => 'Aggiungi elemento',
+        'min_items_failed' => ':name richiede un minimo di :min elementi, ne sono stati inseriti solo :items',
+        'max_items_failed' => ':name permette un massimo di :max elementi, ne sono stati inseriti :items',
     ],
     'form' => [
         'create_title' => 'Crea :name',
@@ -239,6 +273,10 @@ return [
     'recordfinder' => [
         'find_record' => 'Trova record'
     ],
+    'pagelist' => [
+        'page_link' => 'Link pagina',
+        'select_page' => 'Seleziona una pagina...',
+    ],
     'relation' => [
         'missing_config' => "La relazione non ha nessuna configurazione per ':config'.",
         'missing_definition' => "La relazione non contiene una definizione per il campo ':field'.",
@@ -294,6 +332,7 @@ return [
     'editor' => [
         'menu_label' => 'Preferenze editor di codice',
         'menu_description' => 'Personalizza le impostazioni dell\'editor, come la dimensione del carattere e lo schema di colori.',
+        'preview' => 'Anteprima',
         'font_size' => 'Dimensione carattere',
         'tab_size' => 'Dimensione Tab',
         'use_hard_tabs' => 'Indenta utilizzando i Tab',
@@ -332,10 +371,25 @@ return [
         'allowed_empty_tags_comment' => 'L\'elenco dei tag che non sono rimossi quando non hanno nessun contenuto.',
         'allowed_tags' => 'Tag consentiti',
         'allowed_tags_comment' => 'L\'elenco dei tag consentiti.',
+        'allowed_attributes' => 'Attributi consentiti',
+        'allowed_attributes_comment' => "L'elenco di attributi consentiti.",
         'no_wrap' => 'Tag da non includere in blocchi',
         'no_wrap_comment' => 'L\'elenco dei tag che non devono essere contenuti all\'interno di blocchi di tag.',
         'remove_tags' => 'Tag da rimuovere',
-        'remove_tags_comment' => 'L\'elenco dei tag che sono rimossi insieme al loro contenuto.'
+        'remove_tags_comment' => "L'elenco dei tag da rimuovere insieme al loro contenuto.",
+        'line_breaker_tags' => 'Tag interruzione di riga',
+        'line_breaker_tags_comment' => "L'elenco dei tag tra i quali posizionare un'interruzione di riga automatica.",
+        'toolbar_options' => 'Barra degli strumenti - Opzioni',
+        'toolbar_buttons' => 'Barra degli strumenti - Tasti',
+        'toolbar_buttons_comment' => 'I tasti da mostrare in maniera predefinita sulla barra degli strumenti del Rich Editor',
+        'toolbar_buttons_preset' => 'Inserisci una delle configurazioni già pronte:',
+        'toolbar_buttons_presets' => [
+            'default' => 'Predefinita',
+            'minimal' => 'Minimal',
+            'full' => 'Completa',
+        ],
+        'paragraph_formats' => 'Formato paragrafi',
+        'paragraph_formats_comment' => 'Le opzioni che appariranno nel menu a tendina relativo alla formattazione dei paragrafi.',
     ],
     'tooltips' => [
         'preview_website' => 'Anteprima del sito web'
