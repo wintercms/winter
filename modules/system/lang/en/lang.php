@@ -3,7 +3,7 @@
 return [
     'app' => [
         'name' => 'Winter CMS',
-        'tagline' => 'Getting back to basics',
+        'tagline' => 'Brave the storm.',
     ],
     'locale' => [
         'ar' => 'العربية',
