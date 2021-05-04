@@ -98,8 +98,6 @@ class MaintenanceSetting extends Model
      */
     public static function inWhitelist(string $ip): bool
     {
-        return in_array($ip, array_map(function ($arr) {
-            return $arr['ip'];
-        }, static::get('ip_whitelist', [])));
+        return \Symfony\Component\HttpFoundation\IpUtils::checkIp($ip, static::get('ip_whitelist', []))
     }
 }
