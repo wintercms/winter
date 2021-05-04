@@ -3552,6 +3552,7 @@ if($element.data('select2')!=null){return true;}
 $element.attr('data-disposable','data-disposable')
 $element.one('dispose-control',function(){if($element.data('select2')){$element.select2('destroy')}})
 if($element.hasClass('select-no-search')){extraOptions.minimumResultsForSearch=Infinity}
+if($element.hasClass('select-modifiable')){extraOptions.tags=true}
 if($element.hasClass('select-no-dropdown')){extraOptions.dropdownCssClass+=' select-no-dropdown'
 extraOptions.containerCssClass+=' select-no-dropdown'}
 if($element.hasClass('select-hide-selected')){extraOptions.dropdownCssClass+=' select-hide-selected'}

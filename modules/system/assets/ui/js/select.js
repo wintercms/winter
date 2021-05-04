@@ -66,6 +66,9 @@
             if ($element.hasClass('select-no-search')) {
                 extraOptions.minimumResultsForSearch = Infinity
             }
+            if ($element.hasClass('select-modifiable')) {
+                extraOptions.tags = true
+            }
             if ($element.hasClass('select-no-dropdown')) {
                 extraOptions.dropdownCssClass += ' select-no-dropdown'
                 extraOptions.containerCssClass += ' select-no-dropdown'
