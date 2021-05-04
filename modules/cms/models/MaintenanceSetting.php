@@ -91,7 +91,9 @@ class MaintenanceSetting extends Model
     }
 
     /**
-     * Returns bool on if IP is in the whitelist
+     * Check if the provided IP is in the whitelist
+     *
+     * @param string $ip
      * @return bool
      */
     public static function inWhitelist(string $ip): bool
