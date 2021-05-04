@@ -3,6 +3,8 @@
 use Model;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
+use Illuminate\Support\Arr;
+use Symfony\Component\HttpFoundation\IpUtils;
 use ApplicationException;
 
 /**
@@ -98,6 +100,6 @@ class MaintenanceSetting extends Model
      */
     public static function inWhitelist(string $ip): bool
     {
-        return \Symfony\Component\HttpFoundation\IpUtils::checkIp($ip, static::get('ip_whitelist', []))
+        return IpUtils::checkIp($ip, Arr::pluck(static::get('ip_whitelist', []), 'ip'));
     }
 }
