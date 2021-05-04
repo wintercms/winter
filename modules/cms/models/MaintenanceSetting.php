@@ -89,4 +89,15 @@ class MaintenanceSetting extends Model
             $this->is_enabled = false;
         }
     }
+
+    /**
+     * Returns bool on if IP is in the whitelist
+     * @return bool
+     */
+    public static function inWhitelist(string $ip): bool
+    {
+        return in_array($ip, array_map(function ($arr) {
+            return $arr['ip'];
+        }, static::get('ip_whitelist', [])));
+    }
 }
