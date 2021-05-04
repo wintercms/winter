@@ -16,3 +16,20 @@ fields:
     cms_page:
         type: dropdown
         cssClass: checkbox-align
+
+    ip_whitelist:
+        label: cms::lang.maintenance.ip_whitelist.name
+        type: repeater
+        cssClass: checkbox-align
+        form:
+            fields:
+
+                ip:
+                    label: cms::lang.maintenance.ip_whitelist.ip
+                    type: text
+                    span: left
+
+                label:
+                    label: cms::lang.maintenance.ip_whitelist.ip
+                    type: text
+                    span: right

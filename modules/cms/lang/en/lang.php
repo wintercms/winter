@@ -100,6 +100,11 @@ return [
         'is_enabled' => 'Enable maintenance mode',
         'is_enabled_comment' => 'Select the page to show when maintenance mode is activated.',
         'hint' => 'Maintenance mode will display the maintenance page to visitors who are not signed in to the back-end area.',
+        'ip_whitelist' => [
+            'name' => 'IP Whitelist',
+            'ip' => 'IP Address',
+            'label' => 'Rule Label'
+        ]
     ],
     'page' => [
         'not_found_name' => "The page ':name' is not found",
