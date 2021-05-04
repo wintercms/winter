@@ -30,6 +30,6 @@ fields:
                     span: left
 
                 label:
-                    label: cms::lang.maintenance.ip_whitelist.ip
+                    label: cms::lang.maintenance.ip_whitelist.label
                     type: text
                     span: right
