@@ -3,7 +3,7 @@
 use Model;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
-use Illuminate\Support\Arr;
+use Winter\Storm\Support\Arr;
 use Symfony\Component\HttpFoundation\IpUtils;
 use ApplicationException;
 
