@@ -163,6 +163,7 @@ class Controller
         if (
             MaintenanceSetting::isConfigured() &&
             MaintenanceSetting::get('is_enabled', false) &&
+            !MaintenanceSetting::inWhitelist(Request::ip()) &&
             !BackendAuth::getUser()
         ) {
             if (!Request::ajax()) {
