@@ -101,6 +101,16 @@ class PluginBase extends ServiceProviderBase
     }
 
     /**
+     * Registers class aliases needed for this plugin.
+     *
+     * @return array
+     */
+    public function registerAliases()
+    {
+        return [];
+    }
+
+    /**
      * Registers any front-end components implemented in this plugin.
      *
      * @return array
