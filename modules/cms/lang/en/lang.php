@@ -103,7 +103,7 @@ return [
         'ip_whitelist' => [
             'name' => 'IP Whitelist',
             'ip' => 'IP Address',
-            'label' => 'Rule Label'
+            'label' => 'Description'
         ]
     ],
     'page' => [
