@@ -11,7 +11,7 @@ class PluginRegisterClassAliasesTest extends PluginTestCase
         $this->runPluginRefreshCommand('Winter.Tester');
     }
 
-    public function testValidationUsingClosure()
+    public function testClassAliases()
     {
         $this->assertFalse(class_exists('\My\NonExistent\Class'));
         $this->assertTrue(class_exists('\Winter\Tester\Plugin'));
