@@ -178,7 +178,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         $plugins = PluginManager::instance()->getRegistrationMethodValues('registerClassAliases');
         foreach ($plugins as $plugin => $aliases) {
-            if (!is_array($aliases)  || empty($aliases)) {
+            if (!is_array($aliases) || empty($aliases)) {
                 continue;
             }
             foreach ($aliases as $real => $alias) {
