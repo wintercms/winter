@@ -71,4 +71,11 @@ class Plugin extends PluginBase
             'be_like_bob' => \Winter\Tester\Rules\BeLikeBobRule::class,
         ];
     }
+
+    public function registerClassAliases()
+    {
+        return [
+            '\Winter\Tester\Plugin' => 'My\Aliased\Class',
+        ];
+    }
 }
