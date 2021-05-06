@@ -52,7 +52,7 @@ class ServiceProvider extends ModuleServiceProvider
          */
         PluginManager::instance()->registerAll();
 
-        $this->registerAliases();
+        $this->registerClassAliases();
         $this->registerConsole();
         $this->registerErrorHandler();
         $this->registerLogging();
@@ -174,9 +174,9 @@ class ServiceProvider extends ModuleServiceProvider
     /*
      * Register class aliases for the plugins.
      */
-    protected function registerAliases()
+    protected function registerClassAliases()
     {
-        $plugins = PluginManager::instance()->getRegistrationMethodValues('registerAliases');
+        $plugins = PluginManager::instance()->getRegistrationMethodValues('registerClassAliases');
         foreach ($plugins as $plugin => $aliases) {
             if (!is_array($aliases)  || empty($aliases)) {
                 continue;

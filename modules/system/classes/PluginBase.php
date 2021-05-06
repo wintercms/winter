@@ -105,7 +105,7 @@ class PluginBase extends ServiceProviderBase
      *
      * @return array
      */
-    public function registerAliases()
+    public function registerClassAliases()
     {
         return [];
     }
