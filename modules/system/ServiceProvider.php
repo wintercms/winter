@@ -182,7 +182,9 @@ class ServiceProvider extends ModuleServiceProvider
                 continue;
             }
             foreach ($aliases as $real => $alias) {
-                class_alias($real, $alias);
+                if (!class_exists($alias)) {
+                    class_alias($real, $alias);
+                }
             }
         }
     }
