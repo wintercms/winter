@@ -171,8 +171,10 @@ class ServiceProvider extends ModuleServiceProvider
         }
     }
 
-    /*
+    /**
      * Register class aliases for the plugins.
+     *
+     * @return void
      */
     protected function registerClassAliases()
     {
