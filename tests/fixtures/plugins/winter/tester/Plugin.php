@@ -75,7 +75,7 @@ class Plugin extends PluginBase
     public function registerClassAliases()
     {
         return [
-            '\Winter\Tester\Plugin' => 'My\Aliased\Class',
+            '\Winter\Tester\Plugin' => '\My\Aliased\Class',
         ];
     }
 }

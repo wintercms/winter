@@ -13,8 +13,8 @@ class PluginRegisterClassAliasesTest extends PluginTestCase
 
     public function testValidationUsingClosure()
     {
-        $this->assertFalse(class_exists('My\NonExistent\Class'));
-        $this->assertTrue(class_exists('Winter\Tester\Plugin'));
-        $this->assertTrue(class_exists('My\Aliased\Class'));
+        $this->assertFalse(class_exists('\My\NonExistent\Class'));
+        $this->assertTrue(class_exists('\Winter\Tester\Plugin'));
+        $this->assertTrue(class_exists('\My\Aliased\Class'));
     }
 }
