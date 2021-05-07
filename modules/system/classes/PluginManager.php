@@ -284,20 +284,6 @@ class PluginManager
             View::addNamespace($pluginNamespace, $viewsPath);
         }
 
-        /*
-         * Register namespace aliases for any replaced plugins
-         */
-        if ($replaces = $plugin->getReplaces()) {
-            foreach ($replaces as $replace) {
-                $replaceNamespace = $this->getNamespace($replace);
-
-                App::make(ClassLoader::class)->addNamespaceAliases([
-                    // class_alias() expects order to be $real, $alias
-                    $this->getNamespace($pluginId) => $replaceNamespace,
-                ]);
-            }
-        }
-
         /**
          * Disable plugin registration for restricted pages, unless elevated
          */
