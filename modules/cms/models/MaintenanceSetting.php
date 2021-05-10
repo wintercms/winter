@@ -98,7 +98,7 @@ class MaintenanceSetting extends Model
      * @param string $ip
      * @return bool
      */
-    public static function inAllowedIps(string $ip): bool
+    public static function isAllowedIp(string $ip): bool
     {
         return IpUtils::checkIp($ip, Arr::pluck(static::get('allowed_ips', []), 'ip'));
     }
