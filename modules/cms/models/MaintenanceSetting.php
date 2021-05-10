@@ -98,8 +98,8 @@ class MaintenanceSetting extends Model
      * @param string $ip
      * @return bool
      */
-    public static function inWhitelist(string $ip): bool
+    public static function inAllowedIps(string $ip): bool
     {
-        return IpUtils::checkIp($ip, Arr::pluck(static::get('ip_whitelist', []), 'ip'));
+        return IpUtils::checkIp($ip, Arr::pluck(static::get('allowed_ips', []), 'ip'));
     }
 }

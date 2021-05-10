@@ -17,19 +17,20 @@ fields:
         type: dropdown
         cssClass: checkbox-align
 
-    ip_whitelist:
-        label: cms::lang.maintenance.ip_whitelist.name
+    allowed_ips:
+        label: cms::lang.maintenance.allowed_ips.name
         type: repeater
+        commentAbove: cms::lang.maintenance.allowed_ips.description
         cssClass: checkbox-align
         form:
             fields:
 
                 ip:
-                    label: cms::lang.maintenance.ip_whitelist.ip
+                    label: cms::lang.maintenance.allowed_ips.ip
                     type: text
                     span: left
 
                 label:
-                    label: cms::lang.maintenance.ip_whitelist.label
+                    label: cms::lang.maintenance.allowed_ips.label
                     type: text
                     span: right
