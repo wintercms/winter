@@ -47,6 +47,17 @@ class WinterUtil extends Command
     protected $description = 'Utility commands for Winter';
 
     /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:util']);
+    }
+
+    /**
      * Execute the console command.
      */
     public function handle()

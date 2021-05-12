@@ -157,6 +157,7 @@ abstract class PluginTestCase extends TestCase
             }
 
             $plugin = $manager->loadPlugin($namespace, $path);
+            $manager->registerPlugin($plugin);
         }
 
         /*
