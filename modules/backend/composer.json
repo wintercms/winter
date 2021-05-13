@@ -23,9 +23,9 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
+        "php": ">=7.4",
         "composer/installers": "dev-main as 1.0",
-        "laravel/framework": "~6.0"
+        "laravel/framework": "~9.0"
     },
     "autoload": {
         "psr-4": {
