@@ -92,7 +92,7 @@
                 if ($el.closest('html').length === 0)
                     $.wn.stripeLoadIndicator.hide()
              })
-        }).on('ajaxFail ajaxDone', '[data-stripe-load-indicator]', function(event) {
+        }).on('ajaxFail ajaxDone ajaxRedirected', '[data-stripe-load-indicator]', function(event) {
             event.stopPropagation()
             $.wn.stripeLoadIndicator.hide()
         })

@@ -1,5 +1,11 @@
 #!/usr/bin/env php
 <?php
+/**
+ * Run PHPCS tests against a push.
+ *
+ * The only argument is for the commit, which a list of changed files is retrieved from. The PHPCS tests are only run
+ * against these changed files, to speed up the tests.
+ */
 if (empty($argv[1])) {
     echo 'You must provide a commit SHA to check.';
     echo "\n";

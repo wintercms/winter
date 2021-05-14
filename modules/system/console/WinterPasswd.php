@@ -11,6 +11,8 @@ use Symfony\Component\Console\Question\Question;
  * Console command to change the password of a Backend user via CLI.
  *
  * @package winter\wn-system-module
+ * @author Ben Thomson
+ * @author Winter CMS
  */
 class WinterPasswd extends Command
 {
@@ -28,6 +30,17 @@ class WinterPasswd extends Command
      * @var bool Was the password automatically generated?
      */
     protected $generatedPassword = false;
+
+    /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:passwd']);
+    }
 
     /**
      * Execute the console command.
