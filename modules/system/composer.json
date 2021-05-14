@@ -25,7 +25,7 @@
     "require": {
         "php": ">=7.4",
         "composer/installers": "dev-main as 1.0",
-        "laravel/framework": "~9.0",
+        "laravel/framework": "9.x-dev",
         "composer/semver": "^3.2"
     },
     "autoload": {
