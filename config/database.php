@@ -55,7 +55,7 @@ return [
         'mysql' => [
             'driver'     => 'mysql',
             'engine'     => 'InnoDB',
-            'host'       => 'localhost',
+            'host'       => '127.0.0.1',
             'port'       => 3306,
             'database'   => 'database',
             'username'   => 'root',
@@ -68,7 +68,7 @@ return [
 
         'pgsql' => [
             'driver'   => 'pgsql',
-            'host'     => 'localhost',
+            'host'     => '127.0.0.1',
             'port'     => 5432,
             'database' => 'database',
             'username' => 'root',
@@ -80,7 +80,7 @@ return [
 
         'sqlsrv' => [
             'driver'   => 'sqlsrv',
-            'host'     => 'localhost',
+            'host'     => '127.0.0.1',
             'port'     => 1433,
             'database' => 'database',
             'username' => 'root',
