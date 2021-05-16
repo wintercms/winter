@@ -8,10 +8,8 @@ return [
     |--------------------------------------------------------------------------
     |
     | Here you may specify the default filesystem disk that should be used
-    | by the framework. A "local" driver, as well as a variety of cloud
-    | based drivers are available for your choosing. Just store away!
-    |
-    | Supported: "local", "ftp", "sftp", "s3", "rackspace"
+    | by the framework. The "local" disk, as well as a variety of cloud
+    | based disks are available to your application. Just store away!
     |
     */
 
@@ -39,22 +37,26 @@ return [
     | may even configure multiple disks of the same driver. Defaults have
     | been setup for each driver as an example of the required options.
     |
+    | Supported Drivers: "local", "ftp", "sftp", "s3", "rackspace"
+    |
     */
 
     'disks' => [
 
         'local' => [
             'driver' => 'local',
-            'root'   => storage_path('app'),
-            'url'    => '/storage/app',
+            'root' => storage_path('app'),
+            'url' => '/storage/app',
         ],
 
         's3' => [
             'driver' => 's3',
-            'key'    => 'your-key',
-            'secret' => 'your-secret',
-            'region' => 'your-region',
-            'bucket' => 'your-bucket',
+            'key' => '',
+            'secret' => '',
+            'region' => '',
+            'bucket' => '',
+            // 'url' => env('AWS_URL'),
+            // 'endpoint' => env('AWS_ENDPOINT'),
         ],
 
         'rackspace' => [
@@ -65,7 +67,6 @@ return [
             'endpoint'  => 'https://identity.api.rackspacecloud.com/v2.0/',
             'region'    => 'IAD',
         ],
-
     ],
 
 ];

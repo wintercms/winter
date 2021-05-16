@@ -11,11 +11,6 @@ return [
     | using this caching library. This connection is used when another is
     | not explicitly specified when executing a given caching function.
     |
-    | WARNING! Do not use anything that is used for other information in your
-    | application. Example: If you are using redis for managing queues and / or
-    | sessions, you should NOT be using the EXACT SAME redis connection for the
-    | Cache store, as calling Cache::flush() will flush the entire redis store.
-    |
     */
 
     'default' => 'file',
@@ -28,6 +23,9 @@ return [
     | Here you may define all of the cache "stores" for your application as
     | well as their drivers. You may even define multiple stores for the
     | same cache driver to group types of items stored in your caches.
+    |
+    | Supported: "apc", "array", "database", "file",
+    |            "memcached", "redis", "dynamodb"
     |
     */
 
@@ -42,30 +40,47 @@ return [
         ],
 
         'database' => [
-            'driver'     => 'database',
-            'table'      => 'cache',
+            'driver' => 'database',
+            'table' => 'cache',
             'connection' => null,
         ],
 
         'file' => [
             'driver' => 'file',
-            'path'   => storage_path('framework/cache'),
+            'path' => storage_path('framework/cache'),
         ],
 
         'memcached' => [
-            'driver'  => 'memcached',
+            'driver' => 'memcached',
+            'persistent_id' => null,
+            'sasl' => [
+                // env('MEMCACHED_USERNAME'),
+                // env('MEMCACHED_PASSWORD'),
+            ],
+            'options' => [
+                // Memcached::OPT_CONNECT_TIMEOUT => 2000,
+            ],
             'servers' => [
                 [
-                    'host'   => '127.0.0.1',
-                    'port'   => 11211,
+                    'host' => '127.0.0.1',
+                    'port' => 11211,
                     'weight' => 100,
                 ],
             ],
         ],
 
         'redis' => [
-            'driver'     => 'redis',
+            'driver' => 'redis',
             'connection' => 'default',
+        ],
+
+        'dynamodb' => [
+            'driver' => 'dynamodb',
+            'key' => '',
+            'secret' => '',
+            'region' => 'us-east-1',
+            'table' => 'cache',
+            'endpoint' => '',
         ],
 
     ],
@@ -118,4 +133,5 @@ return [
     */
 
     'disableRequestCache' => null,
+
 ];
