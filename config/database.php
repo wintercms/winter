@@ -11,7 +11,7 @@ return [
     | stdClass object; however, you may desire to retrieve records in an
     | array format for simplicity. Here you can tweak the fetch style.
     |
-     */
+    */
 
     'fetch' => PDO::FETCH_CLASS,
 
@@ -24,7 +24,7 @@ return [
     | to use as your default connection for all database work. Of course
     | you may use many connections at once using the Database library.
     |
-     */
+    */
 
     'default' => 'mysql',
 
@@ -41,7 +41,7 @@ return [
     | so make sure you have the driver for your particular database of
     | choice installed on your machine before you begin development.
     |
-     */
+    */
 
     'connections' => [
 
@@ -109,7 +109,7 @@ return [
     | your application. Using this information, we can determine which of
     | the migrations on disk have not actually be run in the databases.
     |
-     */
+    */
 
     'migrations' => 'migrations',
 
@@ -122,7 +122,7 @@ return [
     | provides a richer set of commands than a typical key-value systems
     | such as APC or Memcached. Winter CMS makes it easy to dig right in.
     |
-     */
+    */
 
     'redis' => [
 
@@ -156,7 +156,7 @@ return [
     | but remember that when not specified it will use parameters specified in
     | `/config/database.php`.
     |
-     */
+    */
 
     'useConfigForTesting' => false,
 
