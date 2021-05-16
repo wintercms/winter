@@ -45,17 +45,17 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root' => storage_path('app'),
-            'url' => '/storage/app',
+            'root'   => storage_path('app'),
+            'url'    => '/storage/app',
         ],
 
         's3' => [
-            'driver' => 's3',
-            'key' => '',
-            'secret' => '',
-            'region' => '',
-            'bucket' => '',
-            // 'url' => env('AWS_URL'),
+            'driver'      => 's3',
+            'key'         => '',
+            'secret'      => '',
+            'region'      => '',
+            'bucket'      => '',
+            // 'url'      => env('AWS_URL'),
             // 'endpoint' => env('AWS_ENDPOINT'),
         ],
 

@@ -31,18 +31,18 @@ return [
     'connections' => [
 
         'pusher' => [
-            'driver' => 'pusher',
-            'key' => '',
-            'secret' => '',
-            'app_id' => '',
+            'driver'  => 'pusher',
+            'key'     => '',
+            'secret'  => '',
+            'app_id'  => '',
             'options' => [
                 'cluster' => '',
-                'useTLS' => true,
+                'useTLS'  => true,
             ],
         ],
 
         'redis' => [
-            'driver' => 'redis',
+            'driver'     => 'redis',
             'connection' => 'default',
         ],
 

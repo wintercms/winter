@@ -7,7 +7,7 @@ return [
     | Default Queue Connection Name
     |--------------------------------------------------------------------------
     |
-    | Winter CMS's queue API supports an assortment of back-ends via a single
+    | The Winter CMS queue API supports an assortment of back-ends via a single
     | API, giving you convenient access to each back-end using the same
     | syntax for every one. Here you may define a default connection.
     |
@@ -35,35 +35,35 @@ return [
         ],
 
         'database' => [
-            'driver' => 'database',
-            'table' => 'jobs',
-            'queue' => 'default',
+            'driver'      => 'database',
+            'table'       => 'jobs',
+            'queue'       => 'default',
             'retry_after' => 90,
         ],
 
         'beanstalkd' => [
-            'driver' => 'beanstalkd',
-            'host' => 'localhost',
-            'queue' => 'default',
+            'driver'      => 'beanstalkd',
+            'host'        => 'localhost',
+            'queue'       => 'default',
             'retry_after' => 90,
-            'block_for' => 0,
+            'block_for'   => 0,
         ],
 
         'sqs' => [
             'driver' => 'sqs',
-            'key' => '',
+            'key'    => '',
             'secret' => '',
             'prefix' => 'https://sqs.us-east-1.amazonaws.com/your-account-id',
-            'queue' => 'your-queue-name',
+            'queue'  => 'your-queue-name',
             'region' => 'us-east-1',
         ],
 
         'redis' => [
-            'driver' => 'redis',
-            'connection' => 'default',
-            'queue' => 'default',
+            'driver'      => 'redis',
+            'connection'  => 'default',
+            'queue'       => 'default',
             'retry_after' => 90,
-            'block_for' => null,
+            'block_for'   => null,
         ],
 
     ],
@@ -81,7 +81,7 @@ return [
 
     'failed' => [
         'database' => 'mysql',
-        'table' => 'failed_jobs',
+        'table'    => 'failed_jobs',
     ],
 
 ];
