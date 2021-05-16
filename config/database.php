@@ -50,7 +50,7 @@ return [
             // 'url' => env('DATABASE_URL'),
             'database' => base_path('storage/database.sqlite'),
             'prefix' => '',
-            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
+            'foreign_key_constraints' => true,
         ],
 
         'mysql' => [
