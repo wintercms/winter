@@ -35,10 +35,9 @@ return [
     |
     | Here are each of the database connections setup for your application.
     | Of course, examples of configuring each database platform that is
-    | supported by Laravel is shown below to make development simple.
+    | supported by Winter CMS is shown below to make development simple.
     |
-    |
-    | All database work in Laravel is done through the PHP PDO facilities
+    | All database work in Winter CMS is done through the PHP PDO facilities
     | so make sure you have the driver for your particular database of
     | choice installed on your machine before you begin development.
     |
@@ -47,45 +46,56 @@ return [
     'connections' => [
 
         'sqlite' => [
-            'driver'   => 'sqlite',
-            'database' => base_path('storage/database.sqlite'),
-            'prefix'   => '',
+            'driver'                  => 'sqlite',
+            // 'url'                  => env('DATABASE_URL'),
+            'database'                => base_path('storage/database.sqlite'),
+            'prefix'                  => '',
+            'foreign_key_constraints' => true,
         ],
 
         'mysql' => [
-            'driver'     => 'mysql',
-            'engine'     => 'InnoDB',
-            'host'       => '127.0.0.1',
-            'port'       => 3306,
-            'database'   => 'database',
-            'username'   => 'root',
-            'password'   => '',
-            'charset'    => 'utf8mb4',
-            'collation'  => 'utf8mb4_unicode_ci',
-            'prefix'     => '',
-            'varcharmax' => 191,
+            'driver'         => 'mysql',
+            // 'url'         => env('DATABASE_URL'),
+            'engine'         => 'InnoDB',
+            'host'           => '127.0.0.1',
+            'port'           => 3306,
+            'database'       => 'database',
+            'username'       => 'root',
+            'password'       => '',
+            'charset'        => 'utf8mb4',
+            'collation'      => 'utf8mb4_unicode_ci',
+            'prefix'         => '',
+            'prefix_indexes' => true,
+            'strict'         => true,
+            'varcharmax'     => 191,
         ],
 
         'pgsql' => [
-            'driver'   => 'pgsql',
-            'host'     => '127.0.0.1',
-            'port'     => 5432,
-            'database' => 'database',
-            'username' => 'root',
-            'password' => '',
-            'charset'  => 'utf8',
-            'prefix'   => '',
-            'schema'   => 'public',
+            'driver'         => 'pgsql',
+            // 'url'         => env('DATABASE_URL'),
+            'host'           => '127.0.0.1',
+            'port'           => 5432,
+            'database'       => 'database',
+            'username'       => 'root',
+            'password'       => '',
+            'charset'        => 'utf8',
+            'prefix'         => '',
+            'prefix_indexes' => true,
+            'schema'         => 'public',
+            'sslmode'        => 'prefer',
         ],
 
         'sqlsrv' => [
-            'driver'   => 'sqlsrv',
-            'host'     => '127.0.0.1',
-            'port'     => 1433,
-            'database' => 'database',
-            'username' => 'root',
-            'password' => '',
-            'prefix'   => '',
+            'driver'         => 'sqlsrv',
+            // 'url'         => env('DATABASE_URL'),
+            'host'           => '127.0.0.1',
+            'port'           => 1433,
+            'database'       => 'database',
+            'username'       => 'root',
+            'password'       => '',
+            'charset'        => 'utf8',
+            'prefix'         => '',
+            'prefix_indexes' => true,
         ],
 
     ],
@@ -110,16 +120,21 @@ return [
     |
     | Redis is an open source, fast, and advanced key-value store that also
     | provides a richer set of commands than a typical key-value systems
-    | such as APC or Memcached. Laravel makes it easy to dig right in.
+    | such as APC or Memcached. Winter CMS makes it easy to dig right in.
     |
     */
 
     'redis' => [
 
         'client' => 'predis',
-        'cluster' => false,
+
+        'options' => [
+            'cluster' => 'redis',
+            'prefix'  => '',
+        ],
 
         'default' => [
+            // 'url'   => env('REDIS_URL'),
             'host'     => '127.0.0.1',
             'password' => null,
             'port'     => 6379,
