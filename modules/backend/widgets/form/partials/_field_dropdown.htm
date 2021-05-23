@@ -1,7 +1,7 @@
 <?php
     $fieldOptions = $field->options();
     $useSearch = $field->getConfig('showSearch', true);
-    $acceptNewOptions = $field->getConfig('acceptNewOptions', false);
+    $allowCustom = $field->getConfig('allowCustom', false);
     $emptyOption = $field->getConfig('emptyOption', $field->placeholder);
 ?>
 <!-- Dropdown -->
@@ -19,7 +19,7 @@
     <select
         id="<?= $field->getId() ?>"
         name="<?= $field->getName() ?>"
-        class="form-control custom-select <?= $useSearch ? '' : 'select-no-search' ?> <?= $acceptNewOptions ? 'select-modifiable' : '' ?>"
+        class="form-control custom-select <?= $useSearch ? '' : 'select-no-search' ?> <?= $allowCustom ? 'select-modifiable' : '' ?>"
         <?= $field->getAttributes() ?>
         <?= $field->placeholder ? 'data-placeholder="'.e(trans($field->placeholder)).'"' : '' ?>
         >
