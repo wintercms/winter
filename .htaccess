@@ -31,7 +31,7 @@
     RewriteRule ^storage/app/uploads/protected/.* index.php [L,NC]
 
     ##
-    ## Allowed listed folders
+    ## Paths explicitly handled by the server
     ##
     RewriteCond %{REQUEST_FILENAME} -f
     RewriteCond %{REQUEST_FILENAME} !/.well-known/*
