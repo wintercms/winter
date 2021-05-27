@@ -10,6 +10,7 @@ use ApplicationException;
 use Cms\Contracts\CmsObject as CmsObjectContract;
 use Winter\Storm\Filesystem\PathResolver;
 use Winter\Storm\Halcyon\Model as HalcyonModel;
+use Winter\Storm\Halcyon\Processors\SectionParser;
 
 /**
  * This is a base class for all CMS objects - content files, pages, partials and layouts.
@@ -174,7 +175,61 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
          *     });
          */
         Event::fire('cms.object.listInTheme', [$instance, $result]);
+        return $result;
+    }
 
+    /**
+     * Returns the list of files and url patterns in the specified theme.
+     * This method is used internally by the system.
+     * @param \Cms\Classes\Theme $theme Specifies a parent theme.
+     * @return Collection Returns a collection of CMS objects.
+     */
+    public static function listInThemeFileUrls($theme)
+    {
+        $instance = static::inTheme($theme);
+        $items = $instance->newQuery()->lists('*');
+
+        $loadedItems = [];
+        foreach ($items as $item) {
+            $url = SectionParser::parse($item[1])['settings']['url'] ?? null;
+            if (!$url) {
+                continue;
+            }
+            $loadedItems[] = ['file' => $item[0], 'pattern' => $url];
+        }
+
+        $result = $instance->newCollection($loadedItems);
+
+        /**
+         * @event cms.object.listInThemeFileUrls
+         * Provides opportunity to filter the items returned by a call to CmsObject::listInTheme()
+         *
+         * Parameters provided are `$cmsObject` (the object being listed) and `$objectList` (a collection of the CmsObjects being returned).
+         * > Note: The `$objectList` provided is an object reference to a CmsObjectCollection, to make changes you must use object modifying methods.
+         *
+         * Example usage (filters all pages except for the 404 page on the CMS Maintenance mode settings page):
+         *
+         *     // Extend only the Settings Controller
+         *     \System\Controllers\Settings::extend(function ($controller) {
+         *         // Listen for the cms.object.listInTheme event
+         *         \Event::listen('cms.object.listInTheme', function ($cmsObject, $objectList) {
+         *             // Get the current context of the Settings Manager to ensure we only affect what we need to affect
+         *             $context = \System\Classes\SettingsManager::instance()->getContext();
+         *             if ($context->owner === 'winter.cms' && $context->itemCode === 'maintenance_settings') {
+         *                 // Double check that this is a Page List that we're modifying
+         *                 if ($cmsObject instanceof \Cms\Classes\Page) {
+         *                     // Perform filtering with an original-object modifying method as $objectList is passed by reference (being that it's an object)
+         *                     foreach ($objectList as $index => $page) {
+         *                         if ($page->url !== '/404') {
+         *                             $objectList->forget($index);
+         *                         }
+         *                     }
+         *                 }
+         *             }
+         *         });
+         *     });
+         */
+        Event::fire('cms.object.listInThemeFileUrls', [$instance, $result]);
         return $result;
     }
 

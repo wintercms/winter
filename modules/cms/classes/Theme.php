@@ -130,6 +130,11 @@ class Theme
         return Page::listInTheme($this, $skipCache);
     }
 
+    public function listFileUrls($skipCache = false)
+    {
+        return Page::listInThemeFileUrls($this, $skipCache);
+    }
+
     /**
      * Returns true if this theme is the chosen active theme.
      */
