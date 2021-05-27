@@ -182,23 +182,21 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * Returns the list of files and url patterns in the specified theme.
      * This method is used internally by the system.
      * @param \Cms\Classes\Theme $theme Specifies a parent theme.
-     * @return Collection Returns a collection of CMS objects.
+     * @return array Returns a array of fileName & url patterns.
      */
-    public static function listInThemeFileUrls($theme)
+    public static function listInThemeFileUrls($theme, $skipCache = false)
     {
         $instance = static::inTheme($theme);
         $items = $instance->newQuery()->lists('*');
 
-        $loadedItems = [];
+        $result = [];
         foreach ($items as $item) {
             $url = SectionParser::parse($item[1])['settings']['url'] ?? null;
             if (!$url) {
                 continue;
             }
-            $loadedItems[] = ['file' => $item[0], 'pattern' => $url];
+            $result[] = ['file' => $item[0], 'pattern' => $url];
         }
-
-        $result = $instance->newCollection($loadedItems);
 
         /**
          * @event cms.object.listInThemeFileUrls
