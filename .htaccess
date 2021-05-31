@@ -15,8 +15,18 @@
     ##
     ## Uncomment following lines to force HTTPS.
     ##
+    ## (1) If you're using cPanel AutoSSL or the Let's Encrypt webroot method it
+    ##     will fail to validate the certificate if validation requests are
+    ##     redirected to HTTPS. Turn on the condition(s) you need.
+    ##
+    ##     https://www.iana.org/assignments/well-known-uris/well-known-uris.xhtml
+    ##     https://tools.ietf.org/html/draft-ietf-acme-acme-12
     # RewriteCond %{HTTPS} off
-    # RewriteRule (.*) https://%{SERVER_NAME}/$1 [L,R=301]
+    #    # (1)
+    #    # RewriteCond %{REQUEST_URI} !^/\.well-known/acme-challenge/
+    #    # RewriteCond %{REQUEST_URI} !^/\.well-known/cpanel-dcv/[\w-]+$
+    #    # RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ Comodo\ DCV)?$
+    # RewriteRule (.*) https://%{SERVER_NAME}/$1 [L,R=301]   
 
     ##
     ## Paths explicitly blocked from being handled by the server
