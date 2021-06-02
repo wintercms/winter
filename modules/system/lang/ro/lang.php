@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 
 return [
     'app' => [
@@ -487,4 +487,3 @@ return [
         'next' => 'Următor',
     ],
 ];
-
