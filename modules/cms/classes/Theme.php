@@ -132,7 +132,7 @@ class Theme
 
     public function listFileUrls($skipCache = false)
     {
-        return Page::listInThemeFileUrls($this, $skipCache);
+        return Page::listInThemeArray($this, [], $skipCache);
     }
 
     /**
