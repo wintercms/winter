@@ -4,6 +4,7 @@ use App;
 use Lang;
 use Event;
 use Config;
+use Cache;
 use Exception;
 use ValidationException;
 use ApplicationException;
@@ -182,24 +183,51 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * Returns the list of files and url patterns in the specified theme.
      * This method is used internally by the system.
      * @param \Cms\Classes\Theme $theme Specifies a parent theme.
+     * @param boolean $skipCache Indicates if objects should be reloaded from the disk bypassing the cache.
+     * @param array $extras Request extra fields to be appended to the return
      * @return array Returns a array of fileName & url patterns.
      */
-    public static function listInThemeFileUrls($theme, $skipCache = false)
+    public static function listInThemeArray($theme, $extras = [], $skipCache = false)
     {
         $instance = static::inTheme($theme);
+        $cacheKey = sprintf(
+            'cms.listInThemeArray.%s-%s-%s',
+            $theme->getId(),
+            $instance->dirName,
+            md5(serialize($extras))
+        );
+
+        if (!$skipCache && Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
         $items = $instance->newQuery()->lists('*');
 
-        $result = [];
+        $results = [];
         foreach ($items as $item) {
-            $url = SectionParser::parse($item[1])['settings']['url'] ?? null;
+            $parsed = SectionParser::parse($item[1]);
+
+            $url = $parsed['settings']['url']
+                ?? $parsed['settings']['viewBag']['url']
+                ?? null;
+
             if (!$url) {
                 continue;
             }
-            $result[] = ['file' => $item[0], 'pattern' => $url];
+
+            $result = ['file' => $item[0], 'pattern' => $url];
+
+            foreach ($extras as $key => $name) {
+                if ($value = array_get($parsed, $key)) {
+                    $result[$name] = $value;
+                }
+            }
+
+            $results[] = $result;
         }
 
         /**
-         * @event cms.object.listInThemeFileUrls
+         * @event cms.object.listInThemeArray
          * Provides opportunity to filter the items returned by a call to CmsObject::listInTheme()
          *
          * Parameters provided are `$cmsObject` (the object being listed) and `$objectList` (a collection of the CmsObjects being returned).
@@ -227,8 +255,10 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
          *         });
          *     });
          */
-        Event::fire('cms.object.listInThemeFileUrls', [$instance, $result]);
-        return $result;
+        Event::fire('cms.object.listInThemeArray', [$instance, $results]);
+        Cache::put($cacheKey, $results);
+
+        return $results;
     }
 
     /**
