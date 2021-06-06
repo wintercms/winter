@@ -183,8 +183,8 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * Returns the list of files and url patterns in the specified theme.
      * This method is used internally by the system.
      * @param \Cms\Classes\Theme $theme Specifies a parent theme.
-     * @param boolean $skipCache Indicates if objects should be reloaded from the disk bypassing the cache.
      * @param array $extras Request extra fields to be appended to the return
+     * @param boolean $skipCache Indicates if objects should be reloaded from the disk, bypassing the cache.
      * @return array Returns a array of fileName & url patterns.
      */
     public static function listInThemeArray($theme, $extras = [], $skipCache = false)
