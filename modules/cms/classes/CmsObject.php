@@ -238,7 +238,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
          *     // Extend only the Settings Controller
          *     \System\Controllers\Settings::extend(function ($controller) {
          *         // Listen for the cms.object.listInTheme event
-         *         \Event::listen('cms.object.listInTheme', function ($cmsObject, $pageList) {
+         *         \Event::listen('cms.object.listInTheme', function ($cmsObject, &$pageList) {
          *             // Get the current context of the Settings Manager to ensure we only affect what we need to affect
          *             $context = \System\Classes\SettingsManager::instance()->getContext();
          *             if ($context->owner === 'winter.cms' && $context->itemCode === 'maintenance_settings') {
