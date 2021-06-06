@@ -238,16 +238,16 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
          *     // Extend only the Settings Controller
          *     \System\Controllers\Settings::extend(function ($controller) {
          *         // Listen for the cms.object.listInTheme event
-         *         \Event::listen('cms.object.listInTheme', function ($cmsObject, $objectList) {
+         *         \Event::listen('cms.object.listInTheme', function ($cmsObject, $pageList) {
          *             // Get the current context of the Settings Manager to ensure we only affect what we need to affect
          *             $context = \System\Classes\SettingsManager::instance()->getContext();
          *             if ($context->owner === 'winter.cms' && $context->itemCode === 'maintenance_settings') {
          *                 // Double check that this is a Page List that we're modifying
          *                 if ($cmsObject instanceof \Cms\Classes\Page) {
          *                     // Perform filtering with an original-object modifying method as $objectList is passed by reference (being that it's an object)
-         *                     foreach ($objectList as $index => $page) {
-         *                         if ($page->url !== '/404') {
-         *                             $objectList->forget($index);
+         *                     foreach ($pageList as $index => $page) {
+         *                         if ($page['pattern'] !== '/404') {
+         *                             unset($pageList[$index]);
          *                         }
          *                     }
          *                 }
