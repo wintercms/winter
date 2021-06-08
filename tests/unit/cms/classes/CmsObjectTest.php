@@ -394,4 +394,47 @@ class CmsObjectTest extends TestCase
         unlink($link);
         unlink($target);
     }
+
+    public function testListInThemeArray()
+    {
+        $theme = Theme::load('testpaths');
+
+        $array = TestPages::listInThemeArray($theme);
+
+        $this->assertIsArray($array);
+        $this->assertCount(2, $array);
+
+        $this->assertArrayHasKey('file', $array[0]);
+        $this->assertArrayHasKey('pattern', $array[0]);
+        $this->assertEquals('root-page.htm', $array[0]['file']);
+        $this->assertEquals('/root-page', $array[0]['pattern']);
+
+        $this->assertArrayHasKey('file', $array[1]);
+        $this->assertArrayHasKey('pattern', $array[1]);
+        $this->assertEquals('a/a-page.htm', $array[1]['file']);
+        $this->assertEquals('/apage', $array[1]['pattern']);
+    }
+
+    public function testListInThemeArrayExtra()
+    {
+        $theme = Theme::load('testpaths');
+
+        $array = TestPages::listInThemeArray($theme, [
+            'settings.layout' => 'layout',
+            'settings.section.test' => 'testKey'
+        ]);
+
+        $this->assertIsArray($array);
+        $this->assertCount(2, $array);
+
+        $this->assertArrayHasKey('layout', $array[0]);
+        $this->assertArrayHasKey('testKey', $array[0]);
+        $this->assertNull($array[0]['layout']);
+        $this->assertEquals('root page test', $array[0]['testKey']);
+
+        $this->assertArrayHasKey('layout', $array[1]);
+        $this->assertArrayHasKey('testKey', $array[1]);
+        $this->assertEquals('a/a-layout', $array[1]['layout']);
+        $this->assertEquals('a page test', $array[1]['testKey']);
+    }
 }
