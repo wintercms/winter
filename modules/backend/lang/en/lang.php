@@ -226,6 +226,7 @@ return [
         'delete_selected_success' => 'Deleted selected records.',
         'column_switch_true' => 'Yes',
         'column_switch_false' => 'No',
+        'new_name' => 'New :name'
     ],
     'fileupload' => [
         'attachment' => 'Attachment',
@@ -304,6 +305,9 @@ return [
         'concurrency_file_changed_title' => 'File was changed',
         'concurrency_file_changed_description' => "The file you're editing has been changed on disk by another user. You can either reload the file and lose your changes or override the file on the disk.",
         'return_to_list' => 'Return to the list',
+        'return_to_list_name' => 'Return to :name list',
+        'delete_this_name' => 'Delete this :name',
+        'confirm_delete_name' => 'Are you sure you want to delete this :name?',
     ],
     'recordfinder' => [
         'find_record' => 'Find Record',
