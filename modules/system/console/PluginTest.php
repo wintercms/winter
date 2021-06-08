@@ -11,7 +11,6 @@ use Symfony\Component\Console\Input\InputArgument;
  * This searches for a phpunit.xml file into the plugin's directory and run its tests
  *
  * @package winter\wn-system-module
- * @author Alexey Bobkov, Samuel Georges
  */
 class PluginTest extends Command
 {
