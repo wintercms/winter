@@ -15,6 +15,11 @@ class TestTemporaryCmsObject extends CmsObject
     protected $dirName = 'temporary';
 }
 
+class TestPages extends CmsObject
+{
+    protected $dirName = 'pages';
+}
+
 class CmsObjectTest extends TestCase
 {
     public function testLoad()
@@ -336,5 +341,57 @@ class CmsObjectTest extends TestCase
 
         $this->assertFileExists($destFilePath);
         $this->assertEquals($testContents, file_get_contents($destFilePath));
+    }
+
+    public function testPathResolveOutOfBounds()
+    {
+        $theme = Theme::load('testpaths');
+
+        $this->assertEquals(2, TestPages::listInTheme($theme, true)->count());
+
+        $link = $theme->getPath() . DIRECTORY_SEPARATOR . 'pages' . DIRECTORY_SEPARATOR . 'link.htm';
+        $target = $theme->getPath() . DIRECTORY_SEPARATOR . 'test.htm';
+
+        file_put_contents($target, implode(PHP_EOL, [
+            'url = "/test-page"',
+            '==',
+            '<h1>This page is test</h1>'
+        ]));
+
+        symlink($target, $link);
+
+        $this->expectException(Winter\Storm\Halcyon\Exception\InvalidFileNameException::class);
+
+        try {
+            TestPages::listInTheme($theme, true);
+        } finally {
+            unlink($link);
+            unlink($target);
+        }
+    }
+
+    public function testPathResolveInBounds()
+    {
+        $theme = Theme::load('testpaths');
+
+        $this->assertEquals(2, TestPages::listInTheme($theme, true)->count());
+
+        $link = $theme->getPath() .
+            DIRECTORY_SEPARATOR . 'pages' . DIRECTORY_SEPARATOR . 'a' . DIRECTORY_SEPARATOR . 'link.htm';
+
+        $target = $theme->getPath() . DIRECTORY_SEPARATOR . 'pages' . DIRECTORY_SEPARATOR . 'test.htm';
+
+        file_put_contents($target, implode(PHP_EOL, [
+            'url = "/test-page"',
+            '==',
+            '<h1>This page is test</h1>'
+        ]));
+
+        symlink($target, $link);
+
+        $this->assertEquals(4, TestPages::listInTheme($theme, true)->count());
+
+        unlink($link);
+        unlink($target);
     }
 }
