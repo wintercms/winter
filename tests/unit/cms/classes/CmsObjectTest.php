@@ -401,18 +401,22 @@ class CmsObjectTest extends TestCase
 
         $array = TestPages::listInThemeArray($theme);
 
+        usort($array, function ($a, $b) {
+            return $a['file'] <=> $b['file'];
+        });
+
         $this->assertIsArray($array);
         $this->assertCount(2, $array);
 
         $this->assertArrayHasKey('file', $array[0]);
         $this->assertArrayHasKey('pattern', $array[0]);
-        $this->assertEquals('root-page.htm', $array[0]['file']);
-        $this->assertEquals('/root-page', $array[0]['pattern']);
+        $this->assertEquals('a/a-page.htm', $array[0]['file']);
+        $this->assertEquals('/apage', $array[0]['pattern']);
 
         $this->assertArrayHasKey('file', $array[1]);
         $this->assertArrayHasKey('pattern', $array[1]);
-        $this->assertEquals('a/a-page.htm', $array[1]['file']);
-        $this->assertEquals('/apage', $array[1]['pattern']);
+        $this->assertEquals('root-page.htm', $array[1]['file']);
+        $this->assertEquals('/root-page', $array[1]['pattern']);
     }
 
     public function testListInThemeArrayExtra()
@@ -424,17 +428,21 @@ class CmsObjectTest extends TestCase
             'settings.section.test' => 'testKey'
         ]);
 
+        usort($array, function ($a, $b) {
+            return $a['file'] <=> $b['file'];
+        });
+
         $this->assertIsArray($array);
         $this->assertCount(2, $array);
 
         $this->assertArrayHasKey('layout', $array[0]);
         $this->assertArrayHasKey('testKey', $array[0]);
-        $this->assertNull($array[0]['layout']);
-        $this->assertEquals('root page test', $array[0]['testKey']);
+        $this->assertEquals('a/a-layout', $array[0]['layout']);
+        $this->assertEquals('a page test', $array[0]['testKey']);
 
         $this->assertArrayHasKey('layout', $array[1]);
         $this->assertArrayHasKey('testKey', $array[1]);
-        $this->assertEquals('a/a-layout', $array[1]['layout']);
-        $this->assertEquals('a page test', $array[1]['testKey']);
+        $this->assertNull($array[1]['layout']);
+        $this->assertEquals('root page test', $array[1]['testKey']);
     }
 }
