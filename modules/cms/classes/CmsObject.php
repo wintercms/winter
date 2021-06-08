@@ -218,9 +218,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
             $result = ['file' => $item[0], 'pattern' => $url];
 
             foreach ($extras as $key => $name) {
-                if ($value = array_get($parsed, $key)) {
-                    $result[$name] = $value;
-                }
+                $result[$name] = ($value = array_get($parsed, $key)) ? $value : null;
             }
 
             $results[] = $result;
