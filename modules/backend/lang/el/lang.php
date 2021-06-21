@@ -546,5 +546,9 @@ return [
         'resize_image' => 'Αλλαγή μεγέθους εικόνας',
         'image_size' => 'Μέγεθος εικόνας:',
         'selected_size' => 'Επιλεγμένο:',
+        'rename_popup_title' => 'Μετονομασία',
+        'rename_new_name' => 'Νέο όνομα',
+        'move_please_select' => 'παρακαλούμε επιλέξτε',
+        'move_button' => 'Μετακίνηση',
     ]
 ];

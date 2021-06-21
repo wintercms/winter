@@ -574,6 +574,10 @@ return [
         'selection_mode' => 'Режим виділення',
         'resize_image' => 'Зміна розміру зображення',
         'image_size' => 'Розмір зображення:',
-        'selected_size' => 'Обрано:'
+        'selected_size' => 'Обрано:',
+        'rename_popup_title' => 'Перейменувати',
+        'rename_new_name' => 'Нове ім\'я',
+        'move_please_select' => 'будь ласка, оберіть директорію',
+        'move_button' => 'Перемістити',
     ],
 ];

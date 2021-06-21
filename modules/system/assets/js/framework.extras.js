@@ -105,7 +105,7 @@
                     .prop('disabled', true)
             }
         })
-        .on('ajaxFail ajaxDone', '[data-request]', function() {
+        .on('ajaxFail ajaxDone ajaxRedirected', '[data-request]', function() {
             var $target = $(this)
 
             if ($target.data('attach-loading') !== undefined) {
@@ -185,7 +185,7 @@
                     $.wn.stripeLoadIndicator.hide()
              })
         })
-        .on('ajaxFail ajaxDone', '[data-request]', function(event) {
+        .on('ajaxFail ajaxDone ajaxRedirected', '[data-request]', function(event) {
             event.stopPropagation()
             $.wn.stripeLoadIndicator.hide()
         })

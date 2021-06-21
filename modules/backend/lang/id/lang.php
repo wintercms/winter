@@ -296,5 +296,11 @@ return [
     ],
     'filter' => [
       'all' => 'semua'
+    ],
+    'media' => [
+        'rename_popup_title' => 'Ganti nama',
+        'rename_new_name' => 'Nama baru',
+        'move_please_select' => 'silakan pilih',
+        'move_button' => 'Pindahkan',
     ]
 ];

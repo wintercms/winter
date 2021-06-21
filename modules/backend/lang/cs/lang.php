@@ -554,6 +554,10 @@ return [
         'selection_mode' => 'Způsob označování (selection mode)',
         'resize_image' => 'Změnit velikost obrázku',
         'image_size' => 'Velikost obrázku:',
-        'selected_size' => 'Vybráno:'
+        'selected_size' => 'Vybráno:',
+        'rename_popup_title' => 'Přejmenovat',
+        'rename_new_name' => 'Nový název',
+        'move_please_select' => 'prosím vyberte',
+        'move_button' => 'Přesunout',
     ],
 ];

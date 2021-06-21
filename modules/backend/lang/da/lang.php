@@ -539,6 +539,10 @@ return [
         'selection_mode' => 'Udvælgelsesmetode',
         'resize_image' => 'Skaler billede',
         'image_size' => 'Billedstørrelse:',
-        'selected_size' => 'Valgt:'
+        'selected_size' => 'Valgt:',
+        'rename_popup_title' => 'Omdøb',
+        'rename_new_name' => 'Nyt navn',
+        'move_please_select' => 'Vælg venligst',
+        'move_button' => 'Flyt',
     ]
 ];

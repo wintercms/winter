@@ -249,5 +249,12 @@ return [
     ],
     'filter' => [
       'all' => 'Todo'
+    ],
+    'media' => [
+        'rename_popup_title' => 'Renombrar',
+        'rename_new_name' => 'Nuevo nombre',
+        'move_please_select' => 'por favor seleccionar',
+        'move_button' => 'Mover',
+
     ]
 ];

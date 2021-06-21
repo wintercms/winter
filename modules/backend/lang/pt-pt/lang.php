@@ -622,5 +622,9 @@ return [
         'resize_image' => 'Redimensionar imagem',
         'image_size' => 'Tamanho da imagem:',
         'selected_size' => 'Selecionado:',
+        'rename_popup_title' => 'Renomear',
+        'rename_new_name' => 'Novo nome',
+        'move_please_select' => 'por favor selecione',
+        'move_button' => 'Mover',
     ],
 ];

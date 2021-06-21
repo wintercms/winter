@@ -140,6 +140,9 @@ return [
         'refresh_success' => 'Successfully reset the selected plugins.',
         'remove_confirm' => 'Are you sure you want to remove the selected plugins? This will remove all associated data as well.',
         'remove_success' => 'Successfully removed the selected plugins.',
+        'replace' => [
+            'multi_install_error' => 'Replacing multiple plugins is currently unsupported'
+        ]
     ],
     'project' => [
         'name' => 'Project',
@@ -333,6 +336,8 @@ return [
         'core_set_build' => 'Setting build number',
         'update_warnings_title' => 'Some issues have been detected and require attention:',
         'update_warnings_plugin_missing' => 'The :parent_code plugin requires :code to be installed before it will work',
+        'update_warnings_plugin_replace' => 'The :plugin plugin replaces :alias, please remove :alias to ensure there are no conflicts',
+        'update_warnings_plugin_replace_cli' => 'This plugin replaces :alias, please remove :alias to ensure there are no conflicts',
         'changelog' => 'Changelog',
         'changelog_view_details' => 'View details',
         'plugins' => 'Plugins',

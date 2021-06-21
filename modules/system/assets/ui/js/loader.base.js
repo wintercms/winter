@@ -132,7 +132,7 @@
 
             indicatorContainer.loadIndicator(options)
         })
-        .on('ajaxFail ajaxDone', '[data-load-indicator]', function() {
+        .on('ajaxFail ajaxDone ajaxRedirected', '[data-load-indicator]', function() {
             $(this).closest('.loading-indicator-container').loadIndicator('hide')
         })
 

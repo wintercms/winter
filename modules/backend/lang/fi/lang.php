@@ -578,6 +578,10 @@ return [
         'selection_mode' => 'Valintamoodi',
         'resize_image' => 'Muuta kuvakokoa',
         'image_size' => 'Kuvakoko:',
-        'selected_size' => 'Valittuna:'
+        'selected_size' => 'Valittuna:',
+        'rename_popup_title' => 'Nimeä uudelleen',
+        'rename_new_name' => 'Uusi nimi',
+        'move_please_select' => 'ole hyvä ja valitse',
+        'move_button' => 'Siirrä',
     ],
 ];

@@ -432,6 +432,10 @@ return [
         'selection_mode' => 'Режимът на избиране (селекция)',
         'resize_image' => 'Преоразмеряване изображение',
         'image_size' => 'Размер на изображение:',
-        'selected_size' => 'Избран:'
+        'selected_size' => 'Избран:',
+        'rename_popup_title' => 'Преименувай',
+        'rename_new_name' => 'Ново име',
+        'move_please_select' => 'Моля изберете',
+        'move_button' => 'Премести',
     ]
 ];

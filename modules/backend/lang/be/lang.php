@@ -528,6 +528,10 @@ return [
         'selection_mode' => "Рэжым выбару",
         'resize_image' => "Змяніць памер",
         'image_size' => "Памер выявы:",
-        'selected_size' => "Выбрана:"
+        'selected_size' => "Выбрана:",
+        'rename_popup_title' => "Пераіменаваць",
+        'rename_new_name' => "Новае імя",
+        'move_please_select' => "калі ласка, выберыце",
+        'move_button' => "Перамясціць",
     ]
 ];

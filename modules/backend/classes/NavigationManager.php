@@ -17,6 +17,7 @@ use Config;
 class NavigationManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
+    use \System\Traits\LazyOwnerAlias;
 
     /**
      * @var array Cache of registration callbacks.
@@ -54,6 +55,9 @@ class NavigationManager
      */
     protected function init()
     {
+        foreach (static::$lazyAliases as $alias => $owner) {
+            $this->registerOwnerAlias($owner, $alias);
+        }
         $this->pluginManager = PluginManager::instance();
     }
 
@@ -237,7 +241,7 @@ class NavigationManager
      */
     public function registerOwnerAlias(string $owner, string $alias)
     {
-        $this->aliases[$alias] = $owner;
+        $this->aliases[strtoupper($alias)] = strtoupper($owner);
     }
 
     /**
@@ -632,7 +636,7 @@ class NavigationManager
      */
     public function setContextOwner($owner)
     {
-        $this->contextOwner = $owner;
+        $this->contextOwner = strtoupper($owner);
     }
 
     /**
@@ -685,7 +689,7 @@ class NavigationManager
      */
     public function isMainMenuItemActive($item)
     {
-        return $this->getContextOwner() === $item->owner && $this->contextMainMenuItemCode === $item->code;
+        return $this->getContextOwner() === strtoupper($item->owner) && $this->contextMainMenuItemCode === $item->code;
     }
 
     /**
@@ -716,7 +720,7 @@ class NavigationManager
             return true;
         }
 
-        return $this->getContextOwner() === $item->owner && $this->contextSideMenuItemCode === $item->code;
+        return $this->getContextOwner() === strtoupper($item->owner) && $this->contextSideMenuItemCode === $item->code;
     }
 
     /**
@@ -728,7 +732,7 @@ class NavigationManager
      */
     public function registerContextSidenavPartial($owner, $mainMenuItemCode, $partial)
     {
-        $this->contextSidenavPartials[$owner.$mainMenuItemCode] = $partial;
+        $this->contextSidenavPartials[$this->makeItemKey($owner, $mainMenuItemCode)] = $partial;
     }
 
     /**
@@ -741,10 +745,7 @@ class NavigationManager
      */
     public function getContextSidenavPartial($owner, $mainMenuItemCode)
     {
-        $owner = $this->aliases[$owner] ?? $owner;
-        $key = $owner.$mainMenuItemCode;
-
-        return $this->contextSidenavPartials[$key] ?? null;
+        return $this->contextSidenavPartials[$this->makeItemKey($owner, $mainMenuItemCode)] ?? null;
     }
 
     /**
@@ -778,6 +779,7 @@ class NavigationManager
      */
     protected function makeItemKey($owner, $code)
     {
-        return strtoupper($this->aliases[$owner] ?? $owner).'.'.strtoupper($code);
+        $owner = strtoupper($owner);
+        return ($this->aliases[$owner] ?? $owner) . '.' . strtoupper($code);
     }
 }
