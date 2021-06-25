@@ -1685,6 +1685,7 @@ class Lists extends WidgetBase
      */
     public function onResetSetup()
     {
+        $this->putSession('order', null);
         $this->clearUserPreference('visible');
         $this->clearUserPreference('per_page');
         return $this->onRefresh();
