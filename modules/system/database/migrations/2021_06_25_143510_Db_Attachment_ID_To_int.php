@@ -56,6 +56,14 @@ class DbAttachmentIdToInt extends Migration
     public function down()
     {
         Schema::table('system_files', function (Blueprint $table) {
+            $table->string('attachment_id')->change();
+
+            $table->dropIndex([
+                'field',
+                'attachment_type',
+                'attachment_id',
+            ]);
+
             $table->index('attachment_id');
             $table->index('attachment_type');
             $table->index('field');
