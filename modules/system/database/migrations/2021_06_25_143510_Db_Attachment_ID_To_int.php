@@ -30,7 +30,7 @@ class DbAttachmentIdToInt extends Migration
         // Convert attachment_id to bigint if the attachment_id column only contains integer values.
         $convert = true;
         DB::table('system_files')
-            ->select(['attachment_id'])
+            ->select(['id', 'attachment_id'])
             ->chunkById(1000, function ($attachmentIds) use (&$convert) {
                 $files = $attachmentIds->filter(function ($file) {
                     return ! is_numeric($file->attachment_id);
