@@ -60,7 +60,7 @@
         this.editor.off('change', this.proxy(this.onEditorChange))
         $(window).off('resize', this.proxy(this.updateFullscreen))
 
-        this.$el.removeData('oc.markdownEditor')
+        this.$el.removeData('wn.markdownEditor')
 
         this.$el = null
         this.$textarea = null
@@ -150,7 +150,7 @@
 
         this.$form.trigger('change')
 
-        this.$textarea.trigger('changeContent.oc.markdowneditor', [this, html])
+        this.$textarea.trigger('changeContent.wn.markdowneditor', [this, html])
 
         this.handleChange()
     }
@@ -439,7 +439,7 @@
         $('pre', this.$preview).addClass('prettyprint')
         prettyPrint()
 
-        this.$el.trigger('initPreview.oc.markdowneditor')
+        this.$el.trigger('initPreview.wn.markdowneditor')
     }
 
     MarkdownEditor.prototype.pauseUpdates = function() {
@@ -713,9 +713,9 @@
 
         items = this.each(function () {
             var $this   = $(this)
-            var data    = $this.data('oc.markdownEditor')
+            var data    = $this.data('wn.markdownEditor')
             var options = $.extend({}, MarkdownEditor.DEFAULTS, $this.data(), typeof option == 'object' && option)
-            if (!data) $this.data('oc.markdownEditor', (data = new MarkdownEditor(this, options)))
+            if (!data) $this.data('wn.markdownEditor', (data = new MarkdownEditor(this, options)))
             if (typeof option == 'string') result = data[option].apply(data, args)
             if (typeof result != 'undefined') return false
         })
