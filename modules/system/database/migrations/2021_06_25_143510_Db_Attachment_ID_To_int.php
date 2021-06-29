@@ -33,7 +33,7 @@ class DbAttachmentIdToInt extends Migration
             ->select(['id', 'attachment_id'])
             ->chunkById(1000, function ($attachmentIds) use (&$convert) {
                 $files = $attachmentIds->filter(function ($file) {
-                    return ! is_numeric($file->attachment_id);
+                    return ((string) $file->attachment_id === (string) intval($file->attachment_id));
                 });
 
                 if ($files->isNotEmpty()) {
