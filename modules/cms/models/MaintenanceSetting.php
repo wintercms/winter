@@ -93,7 +93,7 @@ class MaintenanceSetting extends Model
     }
 
     /**
-     * Check if the provided IP is in the whitelist
+     * Check if the provided IP is in the allowed IP list.
      *
      * @param string $ip
      * @return bool

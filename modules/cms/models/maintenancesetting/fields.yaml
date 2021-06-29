@@ -24,12 +24,10 @@ fields:
         cssClass: checkbox-align
         form:
             fields:
-
                 ip:
                     label: cms::lang.maintenance.allowed_ips.ip
                     type: text
                     span: left
-
                 label:
                     label: cms::lang.maintenance.allowed_ips.label
                     type: text
