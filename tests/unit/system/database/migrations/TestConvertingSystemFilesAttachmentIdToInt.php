@@ -137,6 +137,38 @@ class TestConvertingSystemFilesAttachmentIdToInt extends TestCase
         $this->assertEquals('string', DB::getSchemaBuilder()->getColumnType('system_files', 'attachment_id'));
     }
 
+    public function test_it_will_not_convert_attachment_id_column_when_it_contains_a_float()
+    {
+        $faker = \Faker\Factory::create();
+
+        $data = [];
+
+        foreach (range(1, 100) as $i) {
+            $data[] = [
+                'disk_name' => str_random().'.jpg',
+                'file_name' => str_random().'.jpg',
+                'file_size' => mt_rand(),
+                'content_type' => 'image/jpeg',
+                'title' => $faker->title,
+                'description' => $faker->text,
+                'field' => 'files',
+                'attachment_id' => $faker->randomFloat(2, 1),
+                'attachment_type' => 'System\Models\File',
+                'sort_order' => mt_rand(0, 100),
+                'created_at' => now()->toDateTimeString(),
+                'updated_at' => now()->toDateTimeString(),
+            ];
+        }
+
+        DB::table('system_files')->insert($data);
+
+        $this->enableMigration();
+
+        $this->artisan('winter:up');
+
+        $this->assertEquals('string', DB::getSchemaBuilder()->getColumnType('system_files', 'attachment_id'));
+    }
+
     protected function setupTestFixtures()
     {
         static::$tempMigrationsPath = storage_path('temp/tests/database/migrations');
