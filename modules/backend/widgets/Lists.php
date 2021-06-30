@@ -841,7 +841,7 @@ class Lists extends WidgetBase
         /*
          * Use a supplied column order
          */
-        if ($columnOrder = $this->getSession('order', null)) {
+        if ($columnOrder = $this->getUserPreference('order', null)) {
             $orderedDefinitions = [];
             foreach ($columnOrder as $column) {
                 if (isset($this->allColumns[$column])) {
@@ -1675,7 +1675,7 @@ class Lists extends WidgetBase
         }
 
         $this->recordsPerPage = post('records_per_page', $this->recordsPerPage);
-        $this->putSession('order', post('column_order'));
+        $this->putUserPreference('order', post('column_order'));
         $this->putUserPreference('per_page', $this->recordsPerPage);
         return $this->onRefresh();
     }
@@ -1685,6 +1685,7 @@ class Lists extends WidgetBase
      */
     public function onResetSetup()
     {
+        $this->clearUserPreference('order');
         $this->clearUserPreference('visible');
         $this->clearUserPreference('per_page');
         return $this->onRefresh();
