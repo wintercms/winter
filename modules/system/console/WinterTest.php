@@ -32,6 +32,22 @@ class WinterTest extends Command
     protected $exec = ['./vendor/bin/phpunit'];
 
     /**
+     * Create a new command instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Because we need to proxy some options that are not defined
+        // We need to ignore validation errors
+        // Same is done in the native Laravel test commands
+        // @link https://github.com/nunomaduro/collision/blob/stable/src/Adapters/Laravel/Commands/TestCommand.php
+        $this->ignoreValidationErrors();
+    }
+
+    /**
      * Execute the console command.
      * @return int
      */
@@ -64,6 +80,11 @@ class WinterTest extends Command
         else {
             $this->output->writeln('<info>Running  Winter\'s core tests.</info>');
         }
+
+        // Add eventual PHPUnit native options
+        $options = array_slice($_SERVER['argv'], $this->argument('plugin') ? 3 : 2);
+
+        $this->exec = array_merge($this->exec, $options);
 
         $process = (new Process($this->exec))->setTimeout(null);
 
