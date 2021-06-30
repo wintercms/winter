@@ -262,6 +262,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('winter.passwd', 'System\Console\WinterPasswd');
         $this->registerConsoleCommand('winter.version', 'System\Console\WinterVersion');
         $this->registerConsoleCommand('winter.manifest', 'System\Console\WinterManifest');
+        $this->registerConsoleCommand('winter.test', 'System\Console\WinterTest');
 
         $this->registerConsoleCommand('plugin.install', 'System\Console\PluginInstall');
         $this->registerConsoleCommand('plugin.remove', 'System\Console\PluginRemove');
@@ -270,7 +271,6 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('plugin.refresh', 'System\Console\PluginRefresh');
         $this->registerConsoleCommand('plugin.rollback', 'System\Console\PluginRollback');
         $this->registerConsoleCommand('plugin.list', 'System\Console\PluginList');
-        $this->registerConsoleCommand('plugin.test', 'System\Console\PluginTest');
 
         $this->registerConsoleCommand('theme.install', 'System\Console\ThemeInstall');
         $this->registerConsoleCommand('theme.remove', 'System\Console\ThemeRemove');
