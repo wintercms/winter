@@ -35,7 +35,7 @@ class BrandSetting extends Model
     public $settingsCode = 'backend_brand_settings';
 
     /**
-     * @var mixed Settings form field defitions
+     * @var mixed Settings form field definitions
      */
     public $settingsFields = 'fields.yaml';
 
