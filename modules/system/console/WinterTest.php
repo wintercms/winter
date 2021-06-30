@@ -1,6 +1,8 @@
 <?php namespace System\Console;
 
 use Illuminate\Console\Command;
+use Symfony\Component\Process\Exception\ProcessSignaledException;
+use Symfony\Component\Process\Process;
 use System\Classes\PluginManager;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -25,16 +27,13 @@ class WinterTest extends Command
      * The console command description.
      * @var string
      */
-    protected $description = 'Run tests of Winter or an existing plugin.';
+    protected $description = "Run tests of Winter's core or an existing plugin.";
 
-    /**
-     * @var array Selected plugins, and the path to their browser tests.
-     */
-    protected $plugins = [];
+    protected $exec = ['./vendor/bin/phpunit'];
 
     /**
      * Execute the console command.
-     * @return void
+     * @return int
      */
     public function handle()
     {
@@ -49,25 +48,34 @@ class WinterTest extends Command
 
             $pluginDir = $pluginManager->getPluginPath($pluginName);
 
-            if (!file_exists($pluginDir . '/phpunit.xml')) {
+            $pluginPHPUnitXMLFile = $pluginDir . '/phpunit.xml';
+            if (!file_exists($pluginPHPUnitXMLFile)) {
                 throw new \InvalidArgumentException(sprintf('phpunit.xml file not found in "%s".', $pluginDir));
             }
 
             /*
              * Test plugin
              */
-            $exec = 'cd ' . $pluginDir . ' && ';
-            $exec .= '../../../vendor/bin/phpunit';
+            $this->exec[] = "--configuration=$pluginPHPUnitXMLFile";
             $this->output->writeln(sprintf('<info>Running  plugin\'s tests: %s.</info>', $pluginName));
         }
 
         // Else run winter's tests
         else {
-            $exec = './vendor/bin/phpunit';
-            $this->output->writeln('<info>Running  Winter\'s tests.</info>');
+            $this->output->writeln('<info>Running  Winter\'s core tests.</info>');
         }
 
-        echo shell_exec($exec);
+        $process = (new Process($this->exec))->setTimeout(null);
+
+        try {
+            return $process->run(function ($type, $line) {
+                $this->output->write($line);
+            });
+        } catch (ProcessSignaledException $e) {
+            if (extension_loaded('pcntl') && $e->getSignal() !== SIGINT) {
+                throw $e;
+            }
+        }
     }
 
     /**
