@@ -67,7 +67,7 @@
                 extraOptions.minimumResultsForSearch = Infinity
             }
             if ($element.hasClass('select-modifiable')) {
-                extraOptions.tags = true
+                extraOptions.tags = true;
 
                 extraOptions.createTag = function (params) {
                     var term = $.trim(params.term);
@@ -80,7 +80,7 @@
                         id: term,
                         text: term,
                         newTag: true
-                    }
+                    };
                 }
 
                 extraOptions.templateResult = function (state) {
