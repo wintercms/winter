@@ -40,10 +40,10 @@ class WinterTest extends Command
     {
         parent::__construct();
 
-        // Because we need to proxy some options that are not defined
-        // We need to ignore validation errors
-        // Same is done in the native Laravel test commands
-        // @link https://github.com/nunomaduro/collision/blob/stable/src/Adapters/Laravel/Commands/TestCommand.php
+        /**
+         * Ignore validation errors as option proxying is used by this command
+         * @see https://github.com/nunomaduro/collision/blob/stable/src/Adapters/Laravel/Commands/TestCommand.php
+         */
         $this->ignoreValidationErrors();
     }
 
