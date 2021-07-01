@@ -78,7 +78,7 @@ class WinterTest extends Command
 
         // Run the core Winter CMS tests
         else {
-            $this->output->writeln('<info>Running  Winter\'s core tests.</info>');
+            $this->info('Running  Winter\'s core tests.');
         }
 
         // Add eventual PHPUnit native options
