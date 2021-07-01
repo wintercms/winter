@@ -27,7 +27,7 @@ class WinterTest extends Command
      * The console command description.
      * @var string
      */
-    protected $description = "Run tests of Winter's core or an existing plugin.";
+    protected $description = "Run tests for the Winter CMS core or an existing plugin.";
 
     protected $exec = ['./vendor/bin/phpunit'];
 
