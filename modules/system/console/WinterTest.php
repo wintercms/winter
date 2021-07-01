@@ -76,7 +76,7 @@ class WinterTest extends Command
             $this->output->writeln(sprintf('<info>Running  plugin\'s tests: %s.</info>', $pluginName));
         }
 
-        // Else run winter's tests
+        // Run the core Winter CMS tests
         else {
             $this->output->writeln('<info>Running  Winter\'s core tests.</info>');
         }
