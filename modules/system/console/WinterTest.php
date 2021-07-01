@@ -93,7 +93,7 @@ class WinterTest extends Command
         try {
             $runningTestsMessage =
                 isset($pluginName) ? sprintf('Running  plugin\'s tests: %s.', $pluginName)
-                    : 'Running  Winter\'s core tests.';
+                                   : 'Running  Winter\'s core tests.';
 
             $this->info($runningTestsMessage);
             $this->info(sprintf('Configuration file used: %s.', $phpunitXMLFile));
