@@ -7,7 +7,7 @@ use System\Classes\PluginManager;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * Console command to test a plugin or winter's core.
+ * Console command to test a plugin or the Winter CMS core.
  *
  * If a plugin is provided, this command will search for a `phpunit.xml` file inside the plugin's directory and run its tests.
  *
