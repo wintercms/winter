@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 /**
  * Console command to test a plugin or winter's core.
  *
- * This searches for a phpunit.xml file into the plugin's directory and run its tests
+ * If a plugin is provided, this command will search for a `phpunit.xml` file inside the plugin's directory and run its tests.
  *
  * @package winter\wn-system-module
  */
