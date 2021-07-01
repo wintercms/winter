@@ -38,7 +38,7 @@ class SystemController extends ControllerBase
 
             return $combiner->getContents($cacheId);
         } catch (Exception $ex) {
-            return Response::make('/* '.e($ex->getMessage()).' */', 500);
+            return Response::make('/* '.e($ex->getMessage()).' */', 404);
         }
     }
 
