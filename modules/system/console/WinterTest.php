@@ -120,9 +120,8 @@ class WinterTest extends Command
     }
 
     /**
-     * Search for the config file to use
-     * and gives an opportunity to change it if not found,
-     * priority order is: --configuration option, phpunit.xml then phpunit.xml.dist
+     * Search for the config file to use.
+     * Priority order is: --configuration option, phpunit.xml then phpunit.xml.dist
      * @param string|bool $directory
      */
     protected function lookForPHPUnitXMLFile(string $directory)
