@@ -54,12 +54,13 @@ class WinterTest extends Command
     public function handle()
     {
         // If the plugin argument is set, search for it and run its tests
-        if ($pluginArgument = $this->argument('plugin')) {
+        $pluginName = $this->argument('plugin');
+        if (!is_null($pluginName)) {
             $pluginManager = PluginManager::instance();
             $pluginName = $pluginManager->normalizeIdentifier($pluginArgument);
 
             if (!$pluginManager->exists($pluginName)) {
-                throw new \InvalidArgumentException(sprintf('Plugin "%s" not found.', $pluginName));
+                $this->error(sprintf('Plugin "%s" not found.', $pluginName));
             }
 
             $pluginDir = $pluginManager->getPluginPath($pluginName);
@@ -73,7 +74,7 @@ class WinterTest extends Command
              * Test plugin
              */
             $this->exec[] = "--configuration=$pluginPHPUnitXMLFile";
-            $this->output->writeln(sprintf('<info>Running  plugin\'s tests: %s.</info>', $pluginName));
+            $this->info(sprintf('Running  plugin\'s tests: %s.', $pluginName));
         }
 
         // Run the core Winter CMS tests
