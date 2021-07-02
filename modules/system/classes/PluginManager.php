@@ -803,8 +803,8 @@ class PluginManager
         unset($this->disabledPlugins[$code]);
         $this->writeDisabled();
 
-        if ($pluginObj = $this->findByIdentifier($code)) {
-            $pluginObj->disabled = false;
+        if (isset($this->plugins[$code])) {
+            $this->plugins[$code]->disabled = false;
         }
 
         return true;
