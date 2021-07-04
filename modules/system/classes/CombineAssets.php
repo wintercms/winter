@@ -240,7 +240,7 @@ class CombineAssets
     {
         $cacheInfo = $this->getCache($cacheKey);
         if (!$cacheInfo) {
-            throw new ApplicationException(Lang::get('system::lang.combiner.not_found', ['name'=>$cacheKey]));
+            return Response::make('/* '.e(Lang::get('system::lang.combiner.not_found', ['name' => $cacheKey])).' */', 404);
         }
 
         $this->localPath = $cacheInfo['path'];

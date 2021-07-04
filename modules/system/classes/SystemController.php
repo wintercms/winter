@@ -27,7 +27,7 @@ class SystemController extends ControllerBase
     {
         try {
             if (!strpos($name, '-')) {
-                throw new ApplicationException(Lang::get('system::lang.combiner.not_found', ['name' => $name]));
+                return Response::make('/* '.e(Lang::get('system::lang.combiner.not_found', ['name' => $name])).' */', 404);
             }
 
             $parts = explode('-', $name);
@@ -38,7 +38,7 @@ class SystemController extends ControllerBase
 
             return $combiner->getContents($cacheId);
         } catch (Exception $ex) {
-            return Response::make('/* '.e($ex->getMessage()).' */', 404);
+            return Response::make('/* '.e($ex->getMessage()).' */', 500);
         }
     }
 
