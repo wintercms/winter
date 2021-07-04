@@ -118,10 +118,10 @@ class NavigationManager
          * Sort menu items and quick actions
          */
         uasort($this->items, static function ($a, $b) {
-            return $a->order - $b->order;
+            return (int) $a->order - (int) $b->order;
         });
         uasort($this->quickActions, static function ($a, $b) {
-            return $a->order - $b->order;
+            return (int) $a->order - (int) $b->order;
         });
 
         /*
@@ -151,7 +151,7 @@ class NavigationManager
              * Sort side menu items
              */
             uasort($item->sideMenu, static function ($a, $b) {
-                return $a->order - $b->order;
+                return (int) $a->order - (int) $b->order;
             });
 
             /*
