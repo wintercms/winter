@@ -21,7 +21,7 @@ class SystemController extends ControllerBase
     /**
      * Combines JavaScript and StyleSheet assets.
      * @param string $name Combined file code
-     * @return string Combined content.
+     * @return Response Combined content.
      */
     public function combine($name)
     {

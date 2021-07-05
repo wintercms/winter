@@ -234,7 +234,7 @@ class CombineAssets
     /**
      * Returns the combined contents from a prepared cache identifier.
      * @param string $cacheKey Cache identifier.
-     * @return string Combined file contents.
+     * @return Response Combined file contents.
      */
     public function getContents($cacheKey)
     {
