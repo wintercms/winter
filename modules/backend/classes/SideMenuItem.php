@@ -117,7 +117,7 @@ class SideMenuItem
         $instance->attributes = $data['attributes'] ?? $instance->attributes;
         $instance->badge = $data['badge'] ?? null;
         $instance->permissions = $data['permissions'] ?? $instance->permissions;
-        $instance->order = $data['order'] ?? $instance->order;
+        $instance->order = !empty($data['order']) ? (int) $data['order'] : $instance->order;
         return $instance;
     }
 }
