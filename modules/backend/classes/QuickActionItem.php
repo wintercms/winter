@@ -99,7 +99,7 @@ class QuickActionItem
         $instance->iconSvg = $data['iconSvg'] ?? null;
         $instance->attributes = $data['attributes'] ?? $instance->attributes;
         $instance->permissions = $data['permissions'] ?? $instance->permissions;
-        $instance->order = !empty($data['order']) ? (int) $data['order'] : $instance->order;
+        $instance->order = (!empty($data['order']) || @$data['order'] === 0) ? (int) $data['order'] : $instance->order;
         return $instance;
     }
 }

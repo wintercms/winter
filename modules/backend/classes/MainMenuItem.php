@@ -125,7 +125,7 @@ class MainMenuItem
         $instance->counterLabel = $data['counterLabel'] ?? null;
         $instance->badge = $data['badge'] ?? null;
         $instance->permissions = $data['permissions'] ?? $instance->permissions;
-        $instance->order = !empty($data['order']) ? (int) $data['order'] : $instance->order;
+        $instance->order = (!empty($data['order']) || @$data['order'] === 0) ? (int) $data['order'] : $instance->order;
         return $instance;
     }
 }
