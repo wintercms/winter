@@ -190,10 +190,21 @@ class WinterUtil extends Command
             /*
              * Generate messages
              */
-            $fallbackPath = base_path() . '/modules/system/lang/en/client.php';
+            $fallbackLocale = Config::get('app.fallback_locale', 'en');
+            $fallbackPath = base_path() . '/modules/system/lang/'.$fallbackLocale.'/client.php';
+
             $srcPath = base_path() . '/modules/system/lang/'.$locale.'/client.php';
 
+
+            if (!File::isFile($fallbackPath) && str_contains($fallbackLocale, '-')) {
+                $this->warn('Warning: fallback path not found for country-specific locale: reverting to parent locale');
+                list ($parentFallbackLocale, $country) = explode('-', $fallbackLocale);
+                $fallbackPath = base_path() . '/modules/system/lang/'.$parentFallbackLocale.'/client.php';
+            } else {
+                $fallbackPath = base_path() . '/modules/system/lang/en/client.php';
+            }
             $messages = require $fallbackPath;
+
             if (File::isFile($srcPath) && $fallbackPath != $srcPath) {
                 $messages = array_replace_recursive($messages, require $srcPath);
             }
@@ -204,6 +215,12 @@ class WinterUtil extends Command
             $overridePath = base_path() . '/lang/'.$locale.'/system/client.php';
             if (File::isFile($overridePath)) {
                 $messages = array_replace_recursive($messages, require $overridePath);
+            } else if (str_contains($locale, '-')) {
+                list ($parentLocale, $country) = explode('-', $locale);
+                $overridePath = base_path() . '/lang/'.$parentLocale.'/system/client.php';
+                if (File::isFile($overridePath)) {
+                    $messages = array_replace_recursive($messages, require $overridePath);
+                }
             }
 
             /*
