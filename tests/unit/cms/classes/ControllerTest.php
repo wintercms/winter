@@ -89,7 +89,7 @@ class ControllerTest extends TestCase
 
     public function testLayoutNotFound()
     {
-        $this->expectException(\System\Classes\SystemException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessageMatches('/is\snot\sfound/');
 
         $theme = Theme::load('test');
@@ -193,7 +193,7 @@ class ControllerTest extends TestCase
 
     public function testAjaxHandlerNotFound()
     {
-        $this->expectException(\System\Classes\SystemException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessage('AJAX handler \'onNoHandler\' was not found.');
 
         Request::swap($this->configAjaxRequestMock('onNoHandler', ''));
@@ -205,7 +205,7 @@ class ControllerTest extends TestCase
 
     public function testAjaxInvalidHandlerName()
     {
-        $this->expectException(\System\Classes\SystemException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessage('Invalid AJAX handler name: delete.');
 
         Request::swap($this->configAjaxRequestMock('delete'));
@@ -217,7 +217,7 @@ class ControllerTest extends TestCase
 
     public function testAjaxInvalidPartial()
     {
-        $this->expectException(\System\Classes\SystemException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessage('Invalid partial name: p:artial.');
 
         Request::swap($this->configAjaxRequestMock('onTest', 'p:artial'));
@@ -229,7 +229,7 @@ class ControllerTest extends TestCase
 
     public function testAjaxPartialNotFound()
     {
-        $this->expectException(\System\Classes\SystemException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessage('The partial \'partial\' is not found.');
 
         Request::swap($this->configAjaxRequestMock('onTest', 'partial'));
