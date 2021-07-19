@@ -1235,7 +1235,7 @@ class Form extends WidgetBase
     /*
      * Allow the model to filter fields.
      */
-    protected function applyFiltersFromModel()
+    public function applyFiltersFromModel()
     {
         /*
          * Standard usage

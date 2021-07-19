@@ -173,6 +173,8 @@ class FormController extends ControllerBehavior
 
         $this->formWidget->bindToController();
 
+        $this->formWidget->applyFiltersFromModel();
+
         /*
          * Detected Relation controller behavior
          */
