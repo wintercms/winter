@@ -204,7 +204,7 @@ class WinterUtil extends Command
             $overridePath = base_path() . '/lang/'.$locale.'/system/client.php';
             if (File::isFile($overridePath)) {
                 $messages = array_replace_recursive($messages, require $overridePath);
-            } else if (str_contains($locale, '-')) {
+            } elseif (str_contains($locale, '-')) {
                 list ($parentLocale, $country) = explode('-', $locale);
                 $overridePath = base_path() . '/lang/'.$parentLocale.'/system/client.php';
                 if (File::isFile($overridePath)) {
