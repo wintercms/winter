@@ -114,7 +114,7 @@ class Controller
      * @param \Cms\Classes\Theme $theme Specifies the CMS theme.
      * If the theme is not specified, the current active theme used.
      *
-     * @throws SystemException if the provided theme can't is not found
+     * @throws SystemException if the provided theme can't be found
      * @return void
      */
     public function __construct($theme = null)
@@ -271,19 +271,20 @@ class Controller
      * @param string $pageFile Specifies the CMS page file name to run.
      * @param array  $parameters  Routing parameters.
      * @param \Cms\Classes\Theme  $theme  Theme object
+     * @throws SystemException If the theme is unable to be found
      * @return mixed
      */
     public static function render($pageFile, $parameters = [], $theme = null)
     {
         if (!$theme && (!$theme = Theme::getActiveTheme())) {
-            throw new CmsException(Lang::get('cms::lang.theme.active.not_found'));
+            throw new SystemException(Lang::get('cms::lang.theme.active.not_found'));
         }
 
         $controller = new static($theme);
         $controller->getRouter()->setParameters($parameters);
 
         if (($page = Page::load($theme, $pageFile)) === null) {
-            throw new CmsException(Lang::get('cms::lang.page.not_found_name', ['name'=>$pageFile]));
+            throw new SystemException(Lang::get('cms::lang.page.not_found_name', ['name'=>$pageFile]));
         }
 
         return $controller->runPage($page, false);
@@ -307,7 +308,7 @@ class Controller
             $layout = Layout::initFallback($this->theme);
         }
         elseif (($layout = Layout::loadCached($this->theme, $page->layout)) === null) {
-            throw new CmsException(Lang::get('cms::lang.layout.not_found_name', ['name'=>$page->layout]));
+            throw new SystemException(Lang::get('cms::lang.layout.not_found_name', ['name'=>$page->layout]));
         }
 
         $this->layout = $layout;
@@ -712,7 +713,7 @@ class Controller
     /**
      * Executes the page, layout, component and plugin AJAX handlers.
      *
-     * @throws SystemException If the handler could not be found
+     * @throws SystemException If the handler is invalid or could not be found
      * @return mixed Returns the AJAX Response object or null.
      */
     protected function execAjaxHandlers()
@@ -723,7 +724,7 @@ class Controller
                  * Validate the handler name
                  */
                 if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
-                    throw new CmsException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name'=>$handler]));
+                    throw new SystemException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name'=>$handler]));
                 }
 
                 /*
@@ -734,7 +735,7 @@ class Controller
 
                     foreach ($partialList as $partial) {
                         if (!preg_match('/^(?:\w+\:{2}|@)?[a-z0-9\_\-\.\/]+$/i', $partial)) {
-                            throw new CmsException(Lang::get('cms::lang.partial.invalid_name', ['name'=>$partial]));
+                            throw new SystemException(Lang::get('cms::lang.partial.invalid_name', ['name'=>$partial]));
                         }
                     }
                 }
