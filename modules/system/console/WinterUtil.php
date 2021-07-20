@@ -190,19 +190,11 @@ class WinterUtil extends Command
             /*
              * Generate messages
              */
-            $fallbackLocale = Config::get('app.fallback_locale', 'en');
-            $fallbackPath = base_path() . '/modules/system/lang/'.$fallbackLocale.'/client.php';
+            $fallbackPath = base_path() . '/modules/system/lang/en/client.php';
 
             $srcPath = base_path() . '/modules/system/lang/'.$locale.'/client.php';
 
 
-            if (!File::isFile($fallbackPath) && str_contains($fallbackLocale, '-')) {
-                $this->warn('Warning: fallback path not found for country-specific locale: reverting to parent locale');
-                list ($parentFallbackLocale, $country) = explode('-', $fallbackLocale);
-                $fallbackPath = base_path() . '/modules/system/lang/'.$parentFallbackLocale.'/client.php';
-            } else {
-                $fallbackPath = base_path() . '/modules/system/lang/en/client.php';
-            }
             $messages = require $fallbackPath;
 
             if (File::isFile($srcPath) && $fallbackPath != $srcPath) {
