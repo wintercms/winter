@@ -191,9 +191,11 @@ class WinterUtil extends Command
              * Generate messages
              */
             $fallbackPath = base_path() . '/modules/system/lang/en/client.php';
+
             $srcPath = base_path() . '/modules/system/lang/'.$locale.'/client.php';
 
             $messages = require $fallbackPath;
+
             if (File::isFile($srcPath) && $fallbackPath != $srcPath) {
                 $messages = array_replace_recursive($messages, require $srcPath);
             }
@@ -201,16 +203,24 @@ class WinterUtil extends Command
             /*
              * Load possible replacements from /lang
              */
+            $overrides = [];
+            $parentOverrides = [];
+
             $overridePath = base_path() . '/lang/'.$locale.'/system/client.php';
             if (File::isFile($overridePath)) {
-                $messages = array_replace_recursive($messages, require $overridePath);
-            } elseif (str_contains($locale, '-')) {
+                $overrides = require $overridePath;
+            }
+
+            if (str_contains($locale, '-')) {
                 list($parentLocale, $country) = explode('-', $locale);
-                $overridePath = base_path() . '/lang/'.$parentLocale.'/system/client.php';
-                if (File::isFile($overridePath)) {
-                    $messages = array_replace_recursive($messages, require $overridePath);
+
+                $parentOverridePath = base_path() . '/lang/'.$parentLocale.'/system/client.php';
+                if (File::isFile($parentOverridePath)) {
+                    $parentOverrides = require $parentOverridePath;
                 }
             }
+
+            $messages = array_replace_recursive($messages, $parentOverrides, $overrides);
 
             /*
              * Compile from stub and save file
