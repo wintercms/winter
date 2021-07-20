@@ -191,7 +191,6 @@ class WinterUtil extends Command
              * Generate messages
              */
             $fallbackPath = base_path() . '/modules/system/lang/en/client.php';
-
             $srcPath = base_path() . '/modules/system/lang/'.$locale.'/client.php';
 
             $messages = require $fallbackPath;
