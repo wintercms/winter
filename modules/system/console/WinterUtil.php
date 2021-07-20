@@ -191,12 +191,9 @@ class WinterUtil extends Command
              * Generate messages
              */
             $fallbackPath = base_path() . '/modules/system/lang/en/client.php';
-
             $srcPath = base_path() . '/modules/system/lang/'.$locale.'/client.php';
 
-
             $messages = require $fallbackPath;
-
             if (File::isFile($srcPath) && $fallbackPath != $srcPath) {
                 $messages = array_replace_recursive($messages, require $srcPath);
             }
