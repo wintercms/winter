@@ -271,7 +271,7 @@ class Controller
      * @param string $pageFile Specifies the CMS page file name to run.
      * @param array  $parameters  Routing parameters.
      * @param \Cms\Classes\Theme  $theme  Theme object
-     * @throws SystemException If the theme is unable to be found
+     * @throws SystemException If the Page object or theme are unable to be found
      * @return mixed
      */
     public static function render($pageFile, $parameters = [], $theme = null)
@@ -294,6 +294,7 @@ class Controller
      * Runs a page directly from its object and supplied parameters.
      *
      * @param \Cms\Classes\Page $page Specifies the CMS page to run.
+     * @throws SystemException If the Layout object was unable to be found
      * @return mixed
      */
     public function runPage($page, $useAjax = true)
