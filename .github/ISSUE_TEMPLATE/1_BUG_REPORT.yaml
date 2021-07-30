@@ -1,22 +1,18 @@
-name: 🐛 Bug Report
+name: Bug Report
 description: Report a general Winter CMS or Storm library issue. See our policy below if reporting a security issue.
 labels: ["Status: Review Needed", "Type: Unconfirmed Bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting any issues with Winter CMS. Before raising a new issue, please ensure that no previous issues already cover the problem you
-        wish to report, to avoid creating duplicate issues. Otherwise, feel free to fill out the form below to submit an issue.
-        
-        **Please do not use this form to report a security issue. For security issues, review our
-        [Security Policy](https://github.com/wintercms/winter/security/policy).**
+        Thanks for reporting any issues with Winter CMS. Before raising a new issue, please ensure that no previous issues already cover the problem you wish to report, to avoid creating duplicate issues. Otherwise, feel free to fill out the form below to submit an issue.
+
+        **Please do not use this form to report a security issue. For security issues, review our [Security Policy](https://github.com/wintercms/winter/security/policy).**
   - type: dropdown
     id: build
     attributes:
       label: Winter CMS Build
-      description: |
-        Please select the Winter CMS build that you encountered your issue with. You can find the version in the **Updates & Plugins** section of the Settings page
-        of the Backend, or by running the `php artisan winter:version` command.
+      description: Please select the Winter CMS build that you encountered your issue with. You can find the version in the **Updates & Plugins** section of the Settings page of the Backend, or by running the `php artisan winter:version` command.
       options:
         - 1.1.3
         - 1.1.2
@@ -71,9 +67,7 @@ body:
     id: description
     attributes:
       label: Issue description
-      description: |
-        Please describe the issue in as much detail as possible. Include screenshots of error messages or copy and paste any logs that
-        result from the issue occurring.
+      description: Please describe the issue in as much detail as possible. Include screenshots of error messages or copy and paste any logs that result from the issue occurring.
     validations:
       required: true
   - type: textarea
@@ -83,6 +77,23 @@ body:
       description: Please list the steps that you took in order for the issue to occur.
     validations:
       required: true
+  - type: dropdown
+    id: frequency
+    attributes:
+      label: Frequency
+      description: Please state how often this issue occurs for you.
+      options:
+        - Every time
+        - Most of the time
+        - Sometimes
+        - Rarely
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Workaround
+      description: If you have a workaround, please detail it here, for the benefit of other users who encounter the issue.
   - type: textarea
     id: other_details
     attributes:
