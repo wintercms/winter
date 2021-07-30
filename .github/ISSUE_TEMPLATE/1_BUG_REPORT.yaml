@@ -9,7 +9,7 @@ body:
         wish to report, to avoid creating duplicate issues. Otherwise, feel free to fill out the form below to submit an issue.
         
         **Please do not use this form to report a security issue. For security issues, review our
-        [Security Policy](https://github.com/wintercms/winter/security/policy)**
+        [Security Policy](https://github.com/wintercms/winter/security/policy).**
   - type: dropdown
     id: build
     attributes:
@@ -30,7 +30,7 @@ body:
         - 1.0.468
         - dev-develop
         - Other (please specify below)
-    validation:
+    validations:
       required: true
   - type: dropdown
     id: php_version
@@ -46,7 +46,7 @@ body:
         - 7.0
         - 5.6
         - Other (please specify below)
-    validation:
+    validations:
       required: true
   - type: dropdown
     id: database
@@ -58,9 +58,9 @@ body:
         - PostgreSQL
         - SQLite
         - SQL Server
-        - None
+        - No database
         - Other (please specify below)
-    validation:
+    validations:
       required: true
   - type: input
     id: plugins
@@ -74,12 +74,17 @@ body:
       description: |
         Please describe the issue in as much detail as possible. Include screenshots of error messages or copy and paste any logs that
         result from the issue occurring.
-    validation:
+    validations:
       required: true
   - type: textarea
     id: replication
     attributes:
       label: Steps to replicate
       description: Please list the steps that you took in order for the issue to occur.
-    validation:
+    validations:
       required: true
+  - type: textarea
+    id: other_details
+    attributes:
+      label: Any further details?
+      description: If some other information is needed to describe this issue, please specify it here.
