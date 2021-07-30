@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for reporting any issues with Winter CMS. Before raising a new issue, please ensure that no previous issues already cover the problem you wish to report, to avoid creating duplicate issues. Otherwise, feel free to fill out the form below to submit an issue.
+        Thanks for your interest in improving Winter CMS! To avoid duplicate issues please ensure that no previous issues already cover the problem you wish to report before you submit your report. Otherwise, feel free to fill out the form below to submit an issue.
 
         **Please do not use this form to report a security issue. For security issues, review our [Security Policy](https://github.com/wintercms/winter/security/policy).**
   - type: dropdown
@@ -14,17 +14,9 @@ body:
       label: Winter CMS Build
       description: Please select the Winter CMS build that you encountered your issue with. You can find the version in the **Updates & Plugins** section of the Settings page of the Backend, or by running the `php artisan winter:version` command.
       options:
-        - 1.1.3
-        - 1.1.2
-        - 1.1.1
-        - 1.1.0
-        - 1.0.473
-        - 1.0.472
-        - 1.0.471
-        - 1.0.470
-        - 1.0.469
-        - 1.0.468
         - dev-develop
+        - 1.1
+        - 1.0 (please try updating first)
         - Other (please specify below)
     validations:
       required: true
@@ -38,9 +30,6 @@ body:
         - 7.4
         - 7.3
         - 7.2
-        - 7.1
-        - 7.0
-        - 5.6
         - Other (please specify below)
     validations:
       required: true
@@ -62,7 +51,7 @@ body:
     id: plugins
     attributes:
       label: Plugins installed
-      description: If any plugins are installed, please list them here in the format `Author.PluginName`.
+      description: If any plugins are installed, please list them here in the format `Author.PluginName, Author2.PluginName, etc`.
   - type: textarea
     id: description
     attributes:
@@ -75,18 +64,6 @@ body:
     attributes:
       label: Steps to replicate
       description: Please list the steps that you took in order for the issue to occur.
-    validations:
-      required: true
-  - type: dropdown
-    id: frequency
-    attributes:
-      label: Frequency
-      description: Please state how often this issue occurs for you.
-      options:
-        - Every time
-        - Most of the time
-        - Sometimes
-        - Rarely
     validations:
       required: true
   - type: textarea
