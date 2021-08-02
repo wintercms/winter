@@ -1201,12 +1201,14 @@ class Lists extends WidgetBase
      */
     protected function evalImageTypeValue($record, $column, $value)
     {
+        $image = null;
         $config = $column->config;
 
         // Get config options with defaults
         $width = isset($config['width']) ? $config['width'] : 50;
         $height = isset($config['height']) ? $config['height'] : 50;
         $options = isset($config['options']) ? $config['options'] : [];
+        $fallback = isset($config['default']) ? $config['default'] : null;
 
         // Handle attachMany relationships
         if (isset($record->attachMany[$column->columnName])) {
@@ -1221,11 +1223,15 @@ class Lists extends WidgetBase
             $image = $value;
 
         // Assume all other values to be from the media library
-        } else {
+        } elseif (!empty($value)) {
             $image = MediaLibrary::url($value);
         }
 
-        if (!is_null($image)) {
+        if (!$image && $fallback) {
+            $image = $fallback;
+        }
+
+        if ($image) {
             $imageUrl = ImageResizer::filterGetUrl($image, $width, $height, $options);
             return "<img src='$imageUrl' width='$width' height='$height' />";
         }
