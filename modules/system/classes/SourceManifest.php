@@ -110,7 +110,11 @@ class SourceManifest
      */
     public function loadSource()
     {
-        $source = Http::get($this->source);
+        if (file_exists($this->source)) {
+            $source = file_get_contents($this->source);
+        } else {
+            $source = Http::get($this->source)->body;
+        }
 
         if (empty($source)) {
             throw new ApplicationException(
@@ -150,7 +154,11 @@ class SourceManifest
      */
     public function loadForks()
     {
-        $forks = Http::get($this->forksUrl);
+        if (file_exists($this->forksUrl)) {
+            $forks = file_get_contents($this->forksUrl);
+        } else {
+            $forks = Http::get($this->forksUrl)->body;
+        }
 
         if (empty($forks)) {
             throw new ApplicationException(
