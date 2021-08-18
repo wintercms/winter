@@ -25,3 +25,8 @@ body:
       description: Please describe what your PR is intending to do.
     validations:
       required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Will this change be backwards-compatible?
+      description: Please describe if this intended change may break backwards compatibility or not. If it does, state the rationale in which you believe this to be an acceptable break in backwards compatibility.
