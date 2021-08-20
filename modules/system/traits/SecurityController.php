@@ -42,17 +42,12 @@ trait SecurityController
 
     /**
      * Checks the request data / headers for a valid CSRF token.
-     * Returns false if a valid token is not found. Override this
-     * method to disable the check.
-     * @return bool
+     *
+     * @return bool Returns false if a valid token is not found or cms.enableCsrfProtection is set to false
      */
     protected function verifyCsrfToken()
     {
         if (!Config::get('cms.enableCsrfProtection', true)) {
-            return true;
-        }
-
-        if (in_array(Request::method(), ['HEAD', 'GET', 'OPTIONS'])) {
             return true;
         }
 
