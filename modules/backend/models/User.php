@@ -243,14 +243,20 @@ class User extends UserBase
     /**
      * Check if this user can be impersonated by the provided impersonator
      * Super users cannot be impersonated and all users cannot be impersonated unless there is an impersonator
-     * present and the impersonator has access to `backend.impersonate_users`.
+     * present and the impersonator has access to `backend.impersonate_users`, and the impersonator is not the
+     * user being impersonated
      *
      * @param static|false $impersonator The user attempting to impersonate this user, false when not available
      * @return boolean
      */
     public function canBeImpersonated($impersonator = false)
     {
-        if ($this->isSuperUser() || !$impersonator || !$impersonator->hasAccess('backend.impersonate_users')) {
+        if (
+            $this->isSuperUser() ||
+            !$impersonator ||
+            !$impersonator->hasAccess('backend.impersonate_users') ||
+            $impersonator === $this
+        ) {
             return false;
         }
         return true;
