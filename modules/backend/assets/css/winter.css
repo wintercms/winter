@@ -577,7 +577,7 @@ body.loading,
 body.loading * {cursor:wait !important}
 body.no-select {-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;cursor:default !important}
 html,
-body {height:100%}
+body {min-height:100%}
 body {font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";background:#f9f9f9;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 #layout-canvas {min-height:100%;height:100%}
 .control-tabs.primary-tabs >ul.nav-tabs,
@@ -586,6 +586,9 @@ body {font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sa
 .control-tabs.primary-tabs.tabs-no-inset >ul.nav-tabs,
 .control-tabs.primary-tabs.tabs-no-inset >div >ul.nav-tabs,
 .control-tabs.primary-tabs.tabs-no-inset >div >div >ul.nav-tabs {margin-left:0;margin-right:0}
+.global-notice{position:sticky;top:0;display:flex;align-items:center;flex-wrap:wrap;gap:0.5em;justify-content:space-between;z-index:10500;background:#ab2a1c;color:#FFF;padding:0.5em 0.75em}
+.global-notice .notice-icon{font-size:1.5em;vertical-align:bottom;display:inline-block;margin-right:.25em}
+.global-notice .notice-text{display:inline-block;vertical-align:middle}
 .layout {display:table;table-layout:fixed;height:100%;width:100%}
 .layout >.layout-row {display:table-row;vertical-align:top;height:100%}
 .layout >.layout-row >.layout-cell {display:table-cell;vertical-align:top;height:100%}
