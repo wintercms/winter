@@ -246,7 +246,7 @@ class User extends UserBase
      * present and the impersonator has access to `backend.impersonate_users`, and the impersonator is not the
      * user being impersonated
      *
-     * @param static|false $impersonator The user attempting to impersonate this user, false when not available
+     * @param \Winter\Storm\Auth\Models\User|false $impersonator The user attempting to impersonate this user, false when not available
      * @return boolean
      */
     public function canBeImpersonated($impersonator = false)
@@ -254,11 +254,18 @@ class User extends UserBase
         if (
             $this->isSuperUser() ||
             !$impersonator ||
+            !($impersonator instanceof static) ||
             !$impersonator->hasAccess('backend.impersonate_users') ||
             $impersonator === $this
         ) {
             return false;
         }
+
+        // Clear the merged permissions before the impersonation starts
+        // so that they are correct even if they had been loaded prior
+        // to the impersonation starting
+        $this->mergedPermissions = null;
+
         return true;
     }
 }
