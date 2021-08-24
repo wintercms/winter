@@ -227,13 +227,16 @@ class User extends UserBase
             $permissions = parent::getMergedPermissions();
 
             // If the user is being impersonated filter out any permissions the impersonator doesn't have access to already
-            if (BackendAuth::isImpersonator() && $impersonator = BackendAuth::getImpersonator() && $impersonator !== $this) {
-                foreach ($permissions as $i => $permission) {
-                    if (!$impersonator->hasAccess($permission)) {
-                        unset($permissions[$i]);
+            if (BackendAuth::isImpersonator()) {
+                $impersonator = BackendAuth::getImpersonator();
+                if ($impersonator && $impersonator !== $this) {
+                    foreach ($permissions as $i => $permission) {
+                        if (!$impersonator->hasAccess($permission)) {
+                            unset($permissions[$i]);
+                        }
                     }
+                    $this->mergedPermissions = $permissions;
                 }
-                $this->mergedPermissions = $permissions;
             }
         }
 
