@@ -63,6 +63,10 @@ return [
         'group' => [
             'all' => 'همه'
         ],
+        'scopes' => [
+            'apply_button_text' => 'اعمال',
+            'clear_button_text' => 'حذف',
+        ],
         'dates' => [
             'all' => 'همه',
             'filter_button_text' => 'فیلتر',
@@ -78,7 +82,6 @@ return [
             'min_placeholder' => 'کم',
             'max_placeholder' => 'زیاد'
         ]
-
     ],
     'eventlog' => [
         'show_stacktrace' => 'نمایش روند اجرا',
