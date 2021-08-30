@@ -66,3 +66,6 @@ RUN set -eux; \
   composer diagnose; \
   rm -f /tmp/installer.php; \
   sudo find /tmp -type d -exec chmod -v 1777 {} +
+
+# Configure Xdebug
+RUN sudo bash -c "echo -e '\nzend_extension = /usr/lib/php/20190902/xdebug.so\n\n[XDebug]\nxdebug.mode=debug\nxdebug.start_with_request = 1\nxdebug.client_host = 127.0.0.1\n' >> /etc/php/7.4/cli/php.ini"
