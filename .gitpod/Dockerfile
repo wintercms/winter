@@ -8,5 +8,5 @@ RUN sudo apt-get update -q \
     # Install Composer 2 (Gitpod comes pre-installed with Composer 1)
     && sudo apt-get remove -y \
         composer \
-    && ./.gitpod/composer-installer \
-    && sudo mv ./composer.phar /usr/local/bin/composer
+    && $GITPOD_REPO_ROOT/.gitpod/composer-installer \
+    && sudo mv $GITPOD_REPO_ROOT/composer.phar /usr/local/bin/composer
