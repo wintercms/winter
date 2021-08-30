@@ -61,7 +61,7 @@ RUN set -eux; \
       exit(1); \
     }" \
   ; \
-  php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION}; \
+  sudo php /tmp/installer.php --no-ansi --install-dir=/usr/bin --filename=composer --version=${COMPOSER_VERSION}; \
   composer --ansi --version --no-interaction; \
   composer diagnose; \
   rm -f /tmp/installer.php; \
