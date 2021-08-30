@@ -75,6 +75,67 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Trusted proxies
+    |--------------------------------------------------------------------------
+    |
+    | You may specify valid proxies for your application, in order for URLs
+    | and requests to be presented as the proxy address should you request
+    | a URL through the proxy.
+    |
+    | Possible values:
+    |  - `null` or `false`: Do not trust any proxies
+    |  - `'*'`: Trust all proxies
+    |  - string: A single or comma-separated list of proxies to trust
+    |  - array: An array of proxies to trust
+    |
+    | Examples:
+    |  - To trust all proxies:
+    |
+    |      'trustedProxies' => '*'
+    |
+    |  - To trust two IP addresses as proxies
+    |
+    |      'trustedProxies' => '192.168.1.1, 192.168.1.2'
+    |      'trustedProxies' => ['192.168.1.1', '192.168.1.2']
+    */
+
+    'trustedProxies' => null,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Trusted proxy headers
+    |--------------------------------------------------------------------------
+    |
+    | In addition to the above, you can also determine which headers to trust
+    | from your proxy when rewriting the request. This is an integer map value
+    | so you may specify more than one value.
+    |
+    | Possible values (prepended with `Illuminate\Http\Request::`)
+    |   - HEADER_X_FORWARDED_ALL - trust all forwarded headers
+    |   - HEADER_X_FORWARDED_FOR - trust only the proxy IP
+    |   - HEADER_X_FORWARDED_HOST - trust only the proxy hostname
+    |   - HEADER_X_FORWARDED_PORT - trust only the proxy port
+    |   - HEADER_X_FORWARDED_PROTO - trust only the proxy protocol
+    |   - HEADER_X_FORWARDED_AWS_ELB - trust Amazon Elastic Load Balancing header
+    |
+    | Examples:
+    |   - To trust only the hostname, use the following:
+    |
+    |       'trustedProxyHeaders' => Illuminate\Http\Request::HEADER_X_FORWARDED_HOST
+    |
+    |   - For trusting all except the protocol, you can use the following:
+    |
+    |       'trustedProxyHeaders' => Illuminate\Http\Request::HEADER_X_FORWARDED_FOR
+    |           | Illuminate\Http\Request::HEADER_X_FORWARDED_HOST
+    |           | Illuminate\Http\Request::HEADER_X_FORWARDED_PORT
+    |
+    |   - Amazon ELB users should always use the "HEADER_X_FORWARDED_AWS_ELB" option.
+    */
+
+    'trustedProxyHeaders' => Illuminate\Http\Request::HEADER_X_FORWARDED_ALL,
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Timezone
     |--------------------------------------------------------------------------
     |
