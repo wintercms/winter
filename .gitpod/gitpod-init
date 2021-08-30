@@ -6,3 +6,7 @@ go get github.com/mailhog/MailHog
 # Install Composer dependencies
 composer update --no-progress
 git reset --hard
+
+# Setup VSCode config
+mkdir -p ./.vscode
+cp ./.gitpod/vscode-launch.json ./.vscode/launch.json
