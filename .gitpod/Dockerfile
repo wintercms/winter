@@ -1,12 +1,12 @@
 FROM gitpod/workspace-mysql
 
 # Install XDebug extension
-RUN apt-get update -q \
-    && apt-get install -y \
+RUN sudo apt-get update -q \
+    && sudo apt-get install -y \
         php-dev \
-    && pecl install xdebug \
+    && sudo pecl install xdebug \
     # Install Composer 2 (Gitpod comes pre-installed with Composer 1)
-    && apt-get remove -y \
+    && sudo apt-get remove -y \
         composer \
     && ./.gitpod/composer-installer \
-    && mv ./composer.phar /usr/local/bin/composer
+    && sudo mv ./composer.phar /usr/local/bin/composer
