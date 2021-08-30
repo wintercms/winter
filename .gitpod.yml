@@ -14,7 +14,7 @@ ports:
     onOpen: ignore
   - port: 8000
     visibility: public
-    onOpen: open-browser
+    onOpen: ignore
   - port: 8025
     onOpen: ignore
   - port: 9003
