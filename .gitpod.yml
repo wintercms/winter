@@ -1,10 +1,22 @@
 image:
   file: ./.gitpod/Dockerfile
 
+tasks:
+  - init: ./.gitpod/gitpod-init
+    command: ./.gitpod/gitpod-cmd
+
 ports:
-  - port: 8000
+  - port: 1025
     onOpen: ignore
-  - port: 9000
+  - port: 3306
+    onOpen: ignore
+  - port: 33060
+    onOpen: ignore
+  - port: 8000
+    onOpen: open-browser
+  - port: 8025
+    onOpen: ignore
+  - port: 9003
     onOpen: ignore
 
 vscode:

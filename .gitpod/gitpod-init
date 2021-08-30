@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Install Mailhog
+go get github.com/mailhog/MailHog
+
+# Install Composer dependencies
+composer update --no-progress
+git reset --hard
