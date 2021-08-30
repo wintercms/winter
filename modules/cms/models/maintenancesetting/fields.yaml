@@ -21,6 +21,7 @@ fields:
         label: cms::lang.maintenance.allowed_ips.name
         type: repeater
         commentAbove: cms::lang.maintenance.allowed_ips.description
+        prompt: cms::lang.maintenance.allowed_ips.prompt
         cssClass: checkbox-align
         form:
             fields:

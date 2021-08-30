@@ -103,6 +103,7 @@ return [
         'allowed_ips' => [
             'name' => 'Allowed IP addresses',
             'description' => 'IP addresses that are permitted to view the site while maintenance mode is active',
+            'prompt' => 'Add an IP Address',
             'ip' => 'IP address',
             'label' => 'Description'
         ]
