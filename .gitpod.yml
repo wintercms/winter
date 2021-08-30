@@ -1,0 +1,13 @@
+image:
+  file: ./.gitpod/Dockerfile
+
+ports:
+  - port: 8000
+    onOpen: ignore
+  - port: 9000
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - felixfbecker.php-debug
+    - bmewburn.vscode-intelephense-client
