@@ -17,6 +17,7 @@ use System\Models\PluginVersion;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
+use System\Classes\VersionYamlProcessor;
 use ApplicationException;
 use Exception;
 
@@ -184,7 +185,9 @@ class Updates extends Controller
         $contents = [];
 
         try {
-            $updates = (array) Yaml::parseFile($path.'/'.$filename);
+            $updates = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($path, $filename) {
+                return (array) $yaml->parseFile($path.'/'.$filename);
+            });
 
             foreach ($updates as $version => $details) {
                 if (!is_array($details)) {
@@ -192,9 +195,9 @@ class Updates extends Controller
                 }
 
                 //Filter out update scripts
-                $details = array_filter($details, function ($string) use ($path) {
+                $details = array_values(array_filter($details, function ($string) use ($path) {
                     return !preg_match('/^[a-z_\-0-9]*\.php$/i', $string) || !File::exists($path . '/updates/' . $string);
-                });
+                }));
 
                 $contents[$version] = $details;
             }
