@@ -43,3 +43,6 @@ php artisan winter:passwd admin admin
 # Serve site
 php artisan serve >/dev/null 2>&1 &
 gp await-port 8000 && gp preview --external $(gp url 8000)
+
+# Open README
+gp open ./.gitpod/README.md
