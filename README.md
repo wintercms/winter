@@ -11,6 +11,8 @@ Winter's mission is to show the world that web development is not rocket science
 [![License](https://img.shields.io/github/license/wintercms/winter?label=open%20source&style=flat-square)](https://packagist.org/packages/wintercms/winter)
 [![Discord](https://img.shields.io/discord/816852513684193281?label=discord&style=flat-square)](https://discord.gg/D5MFSPH6Ux)
 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/wintercms/winter)
+
 ## Installing Winter
 
 Instructions on how to install Winter can be found at the [installation guide](https://wintercms.com/docs/setup/installation).
