@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Hide config file edits from Git changes
+git update-index --no-skip-worktree config/app.php
+git update-index --no-skip-worktree config/cache.php
+git update-index --no-skip-worktree config/cms.php
+git update-index --no-skip-worktree config/database.php
+git update-index --no-skip-worktree config/mail.php
+git update-index --no-skip-worktree config/queue.php
+git update-index --no-skip-worktree config/session.php
