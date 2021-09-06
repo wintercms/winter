@@ -10,6 +10,9 @@ php artisan winter:env
 # Hide config file changes from Git
 ./.gitpod/gitpod-hide-config
 
+# Exclude Debugbar files from Git
+echo -e "plugins/winter/debugbar\nstorage/debugbar" >> ./.git/info/exclude
+
 # Rewrite configuration
 sed -i "s|APP_URL=.*$|APP_URL=${GITPOD_WORKSPACE_URL}|g" .env
 sed -i "s|APP_URL=https://|APP_URL=https://8000-|g" .env
