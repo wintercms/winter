@@ -61,7 +61,7 @@ return [
 
     'filter' => [
         'group' => [
-            'all' => 'all',
+            'all' => 'Alle',
         ],
         'scopes' => [
             'apply_button_text' => 'Anwenden',
