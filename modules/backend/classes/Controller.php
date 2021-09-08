@@ -201,10 +201,10 @@ class Controller extends ControllerBase
         $this->params = $params;
 
         /*
-         * Check security token.
+         * Short circuit requests without a valid CSRF token
          * @see \System\Traits\SecurityController
          */
-        if (!$this->verifyCsrfToken()) {
+        if (!in_array(Request::method(), ['HEAD', 'GET', 'OPTIONS']) && !$this->verifyCsrfToken()) {
             return Response::make(Lang::get('system::lang.page.invalid_token.label'), 403);
         }
 
@@ -283,6 +283,7 @@ class Controller extends ControllerBase
          */
         elseif (
             ($handler = post('_handler')) &&
+            $this->verifyCsrfToken() &&
             ($handlerResponse = $this->runAjaxHandler($handler)) &&
             $handlerResponse !== true
         ) {
@@ -476,7 +477,7 @@ class Controller extends ControllerBase
                  * Execute the handler
                  */
                 if (!$result = $this->runAjaxHandler($handler)) {
-                    throw new ApplicationException(Lang::get('backend::lang.ajax_handler.not_found', ['name'=>$handler]));
+                    throw new SystemException(Lang::get('backend::lang.ajax_handler.not_found', ['name'=>$handler]));
                 }
 
                 /*

@@ -61,32 +61,32 @@ return [
 
     'filter' => [
         'group' => [
-            'all' => 'all'
+            'all' => 'Alle'
         ],
         'dates' => [
-            'all' => 'all',
+            'all' => 'Alle',
             'filter_button_text' => 'Filter',
-            'reset_button_text'  => 'Reset',
-            'date_placeholder' => 'Date',
-            'after_placeholder' => 'After',
-            'before_placeholder' => 'Before'
+            'reset_button_text'  => 'Zurücksetzen',
+            'date_placeholder' => 'Datum',
+            'after_placeholder' => 'Nach',
+            'before_placeholder' => 'Vor'
         ]
     ],
 
     'eventlog' => [
-        'show_stacktrace' => 'Show the stacktrace',
-        'hide_stacktrace' => 'Hide the stacktrace',
+        'show_stacktrace' => 'Stacktrace anzeigen',
+        'hide_stacktrace' => 'Stacktrace ausblenden',
         'tabs' => [
-            'formatted' => 'Formatted',
+            'formatted' => 'Formatiert',
             'raw' => 'Raw',
         ],
         'editor' => [
             'title' => 'Source code editor',
-            'description' => 'Your operating system should be configured to listen to one of these URL schemes.',
-            'openWith' => 'Open with',
-            'remember_choice' => 'Remember selected option for this session',
-            'open' => 'Open',
-            'cancel' => 'Cancel'
+            'description' => 'Das Betriebssystem sollte so konfiguriert sein, dass es auf eines dieser URL-Schemas hört.',
+            'openWith' => 'Öffnen mit',
+            'remember_choice' => 'Ausgewählte Option für diese Session merken',
+            'open' => 'Öffnen',
+            'cancel' => 'Abbrechen'
         ]
     ]
 ];

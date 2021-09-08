@@ -47,7 +47,7 @@ return [
         'impersonate_confirm' => 'Are you sure you want to impersonate this user? You can revert to your original state by logging out.',
         'impersonate_success' => 'You are now impersonating this user',
         'impersonate_working' => 'Impersonating...',
-        'impersonating' => 'Impersonating :full_name',
+        'impersonating' => 'You are temporarily logged in as :impersonatee. Logs are still able to identify you as :impersonator',
         'stop_impersonating' => 'Stop impersonating',
         'unsuspend' => 'Unsuspend',
         'unsuspend_confirm' => 'Are you sure you want to unsuspend this user?',

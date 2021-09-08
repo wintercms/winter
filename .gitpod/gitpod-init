@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Install Mailhog
+go get github.com/mailhog/MailHog
+
+# Add Debug Bar plugin
+composer require --no-update "winter/wn-debugbar-plugin" "4.0.0"
+
+# Install Composer dependencies
+composer update --no-progress
+git reset --hard
+
+# Setup VSCode config
+mkdir -p ./.vscode
+cp ./.gitpod/vscode-launch.json ./.vscode/launch.json
