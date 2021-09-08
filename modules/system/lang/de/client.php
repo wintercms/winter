@@ -61,7 +61,11 @@ return [
 
     'filter' => [
         'group' => [
-            'all' => 'Alle'
+            'all' => 'Alle',
+        ],
+        'scopes' => [
+            'apply_button_text' => 'Anwenden',
+            'clear_button_text' => 'Löschen',
         ],
         'dates' => [
             'all' => 'Alle',
@@ -70,7 +74,14 @@ return [
             'date_placeholder' => 'Datum',
             'after_placeholder' => 'Nach',
             'before_placeholder' => 'Vor'
-        ]
+        ],
+        'numbers' => [
+            'all' => 'Alle',
+            'filter_button_text' => 'Filter',
+            'reset_button_text' => 'Zurücksetzen',
+            'min_placeholder' => 'Min',
+            'max_placeholder' => 'Max',
+        ],
     ],
 
     'eventlog' => [
