@@ -1,12 +1,12 @@
 {
-  "name": "wintercms",
+  "name": "@wintercms/js-framework",
   "description": "Free, open-source, self-hosted CMS platform based on the Laravel PHP Framework. Originally known as October CMS.",
   "directories": {
     "test": "tests/js/cases",
     "helpers": "tests/js/helpers"
   },
   "scripts": {
-    "test": "mocha --require @babel/register tests/js/cases/**/*.js"
+    "test": "mocha --require @babel/register --recursive tests/js/cases"
   },
   "repository": {
     "type": "git",
@@ -14,16 +14,12 @@
   },
   "contributors": [
     {
-      "name": "Alexey Bobkov",
-      "email": "aleksey.bobkov@gmail.com"
+      "name": "Ben Thomson",
+      "email": "git@alfreido.com"
     },
     {
-      "name": "Samuel Georges",
-      "email": "daftspunky@gmail.com"
-    },
-    {
-      "name": "Luke Towers",
-      "email": "wintercms@luketowers.ca"
+      "name": "Winter CMS Maintainers",
+      "url": "https://wintercms.com/"
     }
   ],
   "license": "MIT",
