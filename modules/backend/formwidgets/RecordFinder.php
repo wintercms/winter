@@ -1,5 +1,6 @@
 <?php namespace Backend\FormWidgets;
 
+use Backend\Classes\FormField;
 use Lang;
 use ApplicationException;
 use Backend\Classes\FormWidgetBase;
@@ -241,6 +242,10 @@ class RecordFinder extends FormWidgetBase
      */
     public function getSaveValue($value)
     {
+        if ($this->formField->disabled || $this->formField->hidden) {
+            return FormField::NO_SAVE_DATA;
+        }
+
         return strlen($value) ? $value : null;
     }
 
