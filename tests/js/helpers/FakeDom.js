@@ -1,11 +1,18 @@
+/* globals __dirname, URL */
+
 import { JSDOM } from 'jsdom'
+import path from 'path'
 
 class FakeDom
 {
     constructor(content, options)
     {
+        if (options === undefined) {
+            options = {}
+        }
+
         // Header settings
-        this.url = options.url || 'https://winter.example.org'
+        this.url = options.url || `file://${path.resolve(__dirname, '../../')}`
         this.referer = options.referer
         this.contentType = options.contentType || 'text/html'
 
@@ -24,6 +31,11 @@ class FakeDom
         // Scripts
         this.scripts = []
         this.inline = []
+    }
+
+    static new(content, options)
+    {
+        return new FakeDom(content, options)
     }
 
     setContent(content)
@@ -47,7 +59,7 @@ class FakeDom
 
         if (url.host === base.host) {
             this.scripts.push({
-                url: `file://.${url.pathname}`,
+                url: `${url.pathname}`,
                 id: id || this.generateId(),
             })
         } else {
@@ -78,7 +90,7 @@ class FakeDom
         let charLength = chars.length
 
         for (let i = 0; i < 10; i++) {
-            let currentChar = Math.floor(Math.random() * (charLength + 1))
+            let currentChar = chars.substr(Math.floor(Math.random() * charLength), 1)
             id = `${id}${currentChar}`
         }
 
@@ -90,7 +102,7 @@ class FakeDom
         return new Promise((resolve, reject) => {
             try {
                 const dom = new JSDOM(
-                    this.renderContent(),
+                    this._renderContent(),
                     {
                         url: this.url,
                         referrer: this.referer,
@@ -103,13 +115,40 @@ class FakeDom
                     }
                 )
 
-                dom.window.doResolve = () => {
+                dom.window.resolver = () => {
                     resolve(dom)
                 }
             } catch (e) {
                 reject(e)
             }
         })
+    }
+
+    _renderContent()
+    {
+        // Create content list
+        const content = [
+            this.head,
+            this.bodyStart,
+            this.content,
+        ]
+
+        // Embed scripts
+        this.scripts.forEach((script) => {
+            content.push(`<script src="${script.url}" id="${script.id}"></script>`)
+        })
+        this.inline.forEach((script) => {
+            content.push(`<script id="${script.id}">${script.script}</script>`)
+        })
+
+        // Add resolver
+        content.push(`<script>window.resolver()</script>`)
+
+        // Add final content
+        content.push(this.bodyEnd)
+        content.push(this.foot)
+
+        return content.join('\n')
     }
 }
 
