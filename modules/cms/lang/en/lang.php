@@ -105,8 +105,8 @@ return [
             'description' => 'IP addresses that are permitted to view the site while maintenance mode is active',
             'prompt' => 'Add an IP Address',
             'ip' => 'IP address',
-            'label' => 'Description'
-        ]
+            'label' => 'Description',
+        ],
     ],
     'page' => [
         'not_found_name' => "The page ':name' is not found",
