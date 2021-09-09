@@ -18,12 +18,12 @@
         return
     }
 
-    var WinterJsFramework = function () {
+    var WinterFramework = function () {
         this._modules = {}
     }
 
     /**
-     * Extends the Winter CMS JavaScript framework, or any registered module that allows extensions.
+     * Extends the Winter CMS JavaScript framework.
      *
      * Extensions provide functionality for extendable methods and attachable methods. Extendable methods are
      * intended to be once-off implemented - ie. the first plugin that provides the method handles it. Attachable
@@ -32,7 +32,9 @@
      * @param {String} module
      * @param {(Object|Function)} extension
      */
-    WinterJsFramework.prototype.extend = function (module, extension) {
+    WinterFramework.prototype.extend = function (module, extension) {
+        var winter = this
+
         if (typeof module !== 'string') {
             throw new Error('Module name must be specified as a string.')
         }
@@ -40,70 +42,107 @@
             throw new Error('Module extension must be either an object or function that returns an object.')
         }
 
-        if (this.hasModule(module)) {
-            // We are extending a registered module
-            if (!this.moduleIsExtendable(module) && !this.moduleIsAttachable(module)) {
-                throw new Error('Module "' + module + '" cannot be extended')
+        // Add extension and attached method calls
+        if (this.isExtentable(extension) || this.isAttachable(extension)) {
+            if (extension.hasOwnProperty('extend')) {
+                throw new Error(
+                    'Module "' + module + '" is extendable but the "extend" property is already set. '
+                    + 'Please ensure that the "extend" property is undefined.'
+                )
             }
 
-            var sourceModule = this.getModule(module),
-                extensionMethods = {},
-                extendableMethods = sourceModule.prototype.extendable || [],
-                attachableMethods = sourceModule.prototype.attachable || [],
-                extendedMethods = {},
-                attachedMethods = {},
-                extensionObj = {}
+            extension.prototype.extend = function (name, childExtension) {
+                var sourceModule = winter.getModule(module),
+                    extensionMethods = {},
+                    extendableMethods = sourceModule.prototype.extendable || [],
+                    attachableMethods = sourceModule.prototype.attachable || [],
+                    extendedMethods = {},
+                    attachedMethods = {},
+                    extensionObj = {}
 
-            if (typeof extension === 'function') {
-                extensionMethods = Object.create({}, extension.call(sourceModule))
-            } else {
-                extensionMethods = extension
-            }
-
-            // Allow for once-off boot functionality
-            if (
-                extensionMethods.hasOwnProperty('boot')
-                && typeof extensionMethods.boot === 'function'
-            ) {
-                extensionMethods.boot()
-            }
-
-            for (var method in extensionMethods) {
-                // Allow extensions or attachments only to methods allowed by the module. Discard all others.
-                if (extendableMethods.indexOf(method) === -1 && attachableMethods.indexOf(method) === -1) {
-                    delete extensionMethods[method]
-                }
-                if (extendableMethods.indexOf(method) !== -1) {
-                    extendedMethods[method] = extensionMethods[method]
+                if (typeof childExtension === 'function') {
+                    extensionMethods = Object.create({}, childExtension.call(sourceModule))
                 } else {
-                    attachedMethods[method] = extensionMethods[method]
+                    extensionMethods = childExtension
+                }
+
+                // Allow for once-off boot functionality
+                if (
+                    extensionMethods.hasOwnProperty('boot')
+                    && typeof extensionMethods.boot === 'function'
+                ) {
+                    extensionMethods.boot()
+                }
+
+                for (var method in extensionMethods) {
+                    // Allow extensions or attachments only to methods allowed by the module. Discard all others.
+                    if (extendableMethods.indexOf(method) === -1 && attachableMethods.indexOf(method) === -1) {
+                        delete extensionMethods[method]
+                    }
+                    if (extendableMethods.indexOf(method) !== -1) {
+                        extendedMethods[method] = extensionMethods[method]
+                    } else {
+                        attachedMethods[method] = extensionMethods[method]
+                    }
+                }
+
+                // No extensions or attachments were made
+                if (Object.keys(extendedMethods).length === 0 && Object.keys(attachedMethods).length === 0) {
+                    return
+                }
+
+                extensionObj = {
+                    name: name,
+                    methods: extendedMethods,
+                    events: attachedMethods,
+                }
+
+                window.winter._modules[module].extensions.push(extensionObj)
+            }
+
+            extension.prototype.removeExtension = function (name) {
+                if (window.winter.moduleHasExtension(module, name)) {
+                    window.winter.removeModuleExtension(module, name)
                 }
             }
 
-            // No extensions or attachments were made
-            if (Object.keys(extendedMethods).length === 0 && Object.keys(attachedMethods).length === 0) {
-                return
+            extension.prototype.removeExtensions = function () {
+                window.winter.removeModuleExtensions(module)
+            }
+        }
+
+        if (this.isExtentable(extension)) {
+            if (extension.hasOwnProperty('callExtendable')) {
+                throw new Error(
+                    'Module "' + module + '" is extendable but the "callExtendable" property is already set. '
+                    + 'Please ensure that the "callExtendable" property is undefined.'
+                )
             }
 
-            extensionObj = {
-                methods: extendedMethods,
-                events: attachedMethods,
-            }
-
-            this._modules[module].extensions.push(extensionObj)
-        } else {
-            // We are extending the framework itself
-
-            // Add extension and attached method calls
             extension.prototype.callExtendable = function () {
                 var args = Array.prototype.slice.call(arguments),
                     method = args.shift()
 
+                if (this.extendable.indexOf(method) === -1) {
+                    throw new Error('Module "' + module + '" does not extend the "' + method + '" method.')
+                }
+
                 if (window.winter.isSingleton(module)) {
                     return callExtendable(window.winter.getModuleInstance(module), module, method, args)
                 }
+
                 return callExtendable(this, module, method, args)
             }
+        }
+
+        if (this.isAttachable(extension)) {
+            if (extension.hasOwnProperty('callAttachable')) {
+                throw new Error(
+                    'Module "' + module + '" is attachable but the "callAttachable" property is already set. '
+                    + 'Please ensure that the "callAttachable" property is undefined.'
+                )
+            }
+
             extension.prototype.callAttachable = function () {
                 var args = Array.prototype.slice.call(arguments),
                     method = args.shift(),
@@ -114,43 +153,43 @@
                 }
                 return callAttachable(this, module, method, passThrough, args)
             }
+        }
 
-            this._modules[module] = {
-                instance: null,
-                singleton: false,
-                source: extension,
-                extensions: [],
-            }
+        this._modules[module] = {
+            instance: null,
+            singleton: false,
+            source: extension,
+            extensions: [],
+        }
 
-            // Allow for once-off boot functionality
-            if (
-                extension.prototype.hasOwnProperty('boot')
-                && typeof extension.prototype.boot === 'function'
-            ) {
-                extension.boot()
-            }
+        // Allow for once-off boot functionality
+        if (
+            extension.prototype.hasOwnProperty('boot')
+            && typeof extension.prototype.boot === 'function'
+        ) {
+            extension.boot()
+        }
 
-            if (extension.prototype.singleton === true) {
-                this._modules[module].instance = new extension()
-                this._modules[module].singleton = true
-                this[module] = this[module.toLowerCase()] = this._modules[module].instance
-            } else {
-                this[module] = this[module.toLowerCase()] = function () {
-                    var instance = this.getModule(module)
-                    var args = [null,].concat(Array.prototype.slice.call(arguments))
-                    var factory = instance.bind.apply(instance, args)
+        if (extension.prototype.singleton === true) {
+            this._modules[module].instance = new extension()
+            this._modules[module].singleton = true
+            this[module] = this[module.toLowerCase()] = this._modules[module].instance
+        } else {
+            this[module] = this[module.toLowerCase()] = function () {
+                var instance = this.getModule(module)
+                var args = [null,].concat(Array.prototype.slice.call(arguments))
+                var factory = instance.bind.apply(instance, args)
 
-                    return new factory()
-                }
+                return new factory()
             }
         }
     }
 
-    WinterJsFramework.prototype.hasModule = function (module) {
+    WinterFramework.prototype.hasModule = function (module) {
         return this._modules.hasOwnProperty(module)
     }
 
-    WinterJsFramework.prototype.getModule = function (module) {
+    WinterFramework.prototype.getModule = function (module) {
         if (!this.hasModule(module)) {
             throw new Error('Module "' + module + '" has not been defined in the Winter CMS JS framework')
         }
@@ -158,7 +197,17 @@
         return this._modules[module].source
     }
 
-    WinterJsFramework.prototype.isSingleton = function (module) {
+    WinterFramework.prototype.removeModule = function (module) {
+        if (!this.hasModule(module)) {
+            return
+        }
+
+        delete this._modules[module]
+        delete this[module]
+        delete this[module.toLowerCase()]
+    }
+
+    WinterFramework.prototype.isSingleton = function (module) {
         if (!this.hasModule(module)) {
             throw new Error('Module "' + module + '" has not been defined in the Winter CMS JS framework')
         }
@@ -166,7 +215,7 @@
         return this._modules[module].singleton === true
     }
 
-    WinterJsFramework.prototype.getModuleInstance = function (module) {
+    WinterFramework.prototype.getModuleInstance = function (module) {
         if (!this.hasModule(module)) {
             throw new Error('Module "' + module + '" has not been defined in the Winter CMS JS framework')
         }
@@ -174,7 +223,7 @@
         return this._modules[module].instance
     }
 
-    WinterJsFramework.prototype.getModuleExtensions = function (module) {
+    WinterFramework.prototype.getModuleExtensions = function (module) {
         if (!this.hasModule(module)) {
             throw new Error('Module "' + module + '" has not been defined in the Winter CMS JS framework')
         }
@@ -182,22 +231,43 @@
         return this._modules[module].extensions
     }
 
-    WinterJsFramework.prototype.moduleIsExtendable = function (module) {
-        var sourceModule = this.getModule(module)
-
+    WinterFramework.prototype.isExtentable = function (extension) {
         return (
-            sourceModule.prototype.hasOwnProperty('extendable')
-            && Array.isArray(sourceModule.prototype.extendable)
+            extension.prototype.hasOwnProperty('extendable')
+            && Array.isArray(extension.prototype.extendable)
         )
     }
 
-    WinterJsFramework.prototype.moduleIsAttachable = function (module) {
-        var sourceModule = this.getModule(module)
+    WinterFramework.prototype.moduleIsExtendable = function (module) {
+        return this.isExtentable(this.getModule(module))
+    }
 
+    WinterFramework.prototype.isAttachable = function (extension) {
         return (
-            sourceModule.prototype.hasOwnProperty('attachable')
-            && Array.isArray(sourceModule.prototype.attachable)
+            extension.prototype.hasOwnProperty('attachable')
+            && Array.isArray(extension.prototype.attachable)
         )
+    }
+
+    WinterFramework.prototype.moduleIsAttachable = function (module) {
+        return this.isAttachable(this.getModule(module))
+    }
+
+    WinterFramework.prototype.moduleHasExtension = function (module, extension) {
+        if (!this.hasModule(module)) {
+            return false
+        }
+
+        var hasExtension = false;
+
+        for (var i in this._modules[module].extensions) {
+            if (this._modules[module].extensions[i].name === extension) {
+                hasExtension = true
+                break
+            }
+        }
+
+        return hasExtension
     }
 
     var callExtendable = function (instance, module, method, args) {
@@ -251,7 +321,7 @@
                 var to = Object(target)
 
                 for (var index = 1; index < arguments.length; index++) {
-                    var nextSource = arguments[index];
+                    var nextSource = arguments[index]
 
                     if (nextSource !== null && nextSource !== undefined) {
                         for (var nextKey in nextSource) {
@@ -271,5 +341,5 @@
     }
 
     // Define Winter JS framework in global namespace
-    window.winter = new WinterJsFramework()
+    window.winter = new WinterFramework()
 }(window));
