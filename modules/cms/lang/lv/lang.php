@@ -105,8 +105,8 @@ return [
             'description' => 'IP adreses, kurām ir atļauts skatīt vietni, kamēr uzturēšanas režīms ir aktīvs',
             'prompt' => 'Pievienot IP adresi',
             'ip' => 'IP adrese',
-            'label' => 'Apraksts'
-        ]
+            'label' => 'Apraksts',
+        ],
     ],
     'page' => [
         'not_found_name' => "Lapa ':name' netika atrasta",
