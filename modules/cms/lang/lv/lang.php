@@ -100,6 +100,13 @@ return [
         'is_enabled' => 'Ieslēgt uzturēšanas režīmu',
         'is_enabled_comment' => 'Izvēlieties lapu, kura tiks attēlota, kad uzturēšanas režīms ir aktīvs.',
         'hint' => 'Uzturēšanas režīms attēlos izvēlēto uzturēšanas lapu apmeklētājiem, kuri nav pierakstījušies back-end sistēmā.',
+        'allowed_ips' => [
+            'name' => 'Atļautās IP adreses',
+            'description' => 'IP adreses, kurām ir atļauts skatīt vietni, kamēr uzturēšanas režīms ir aktīvs',
+            'prompt' => 'Pievienot IP adresi',
+            'ip' => 'IP adrese',
+            'label' => 'Apraksts'
+        ]
     ],
     'page' => [
         'not_found_name' => "Lapa ':name' netika atrasta",
