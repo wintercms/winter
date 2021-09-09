@@ -1,0 +1,13 @@
+{
+    "asi": true,
+    "curly": true,
+    "esversion": 6,
+    "indent": 4,
+    "laxbreak": true,
+    "leanswitch": true,
+    "quotmark": "single",
+    "strict": true,
+    "trailingcomma": true,
+    "undef": true,
+    "unused": "strict"
+}
