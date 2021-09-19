@@ -15,6 +15,11 @@ class TestTemporaryCmsObject extends CmsObject
     protected $dirName = 'temporary';
 }
 
+class TestPages extends CmsObject
+{
+    protected $dirName = 'pages';
+}
+
 class CmsObjectTest extends TestCase
 {
     public function testLoad()
@@ -336,5 +341,108 @@ class CmsObjectTest extends TestCase
 
         $this->assertFileExists($destFilePath);
         $this->assertEquals($testContents, file_get_contents($destFilePath));
+    }
+
+    public function testPathResolveOutOfBounds()
+    {
+        $theme = Theme::load('testpaths');
+
+        $this->assertEquals(2, TestPages::listInTheme($theme, true)->count());
+
+        $link = $theme->getPath() . DIRECTORY_SEPARATOR . 'pages' . DIRECTORY_SEPARATOR . 'link.htm';
+        $target = $theme->getPath() . DIRECTORY_SEPARATOR . 'test.htm';
+
+        file_put_contents($target, implode(PHP_EOL, [
+            'url = "/test-page"',
+            '==',
+            '<h1>This page is test</h1>'
+        ]));
+
+        symlink($target, $link);
+
+        $this->expectException(Winter\Storm\Halcyon\Exception\InvalidFileNameException::class);
+
+        try {
+            TestPages::listInTheme($theme, true);
+        } finally {
+            unlink($link);
+            unlink($target);
+        }
+    }
+
+    public function testPathResolveInBounds()
+    {
+        $theme = Theme::load('testpaths');
+
+        $this->assertEquals(2, TestPages::listInTheme($theme, true)->count());
+
+        $link = $theme->getPath() .
+            DIRECTORY_SEPARATOR . 'pages' . DIRECTORY_SEPARATOR . 'a' . DIRECTORY_SEPARATOR . 'link.htm';
+
+        $target = $theme->getPath() . DIRECTORY_SEPARATOR . 'pages' . DIRECTORY_SEPARATOR . 'test.htm';
+
+        file_put_contents($target, implode(PHP_EOL, [
+            'url = "/test-page"',
+            '==',
+            '<h1>This page is test</h1>'
+        ]));
+
+        symlink($target, $link);
+
+        $this->assertEquals(4, TestPages::listInTheme($theme, true)->count());
+
+        unlink($link);
+        unlink($target);
+    }
+
+    public function testListInThemeArray()
+    {
+        $theme = Theme::load('testpaths');
+
+        $array = TestPages::listInThemeArray($theme);
+
+        usort($array, function ($a, $b) {
+            return $a['file'] <=> $b['file'];
+        });
+
+        $this->assertIsArray($array);
+        $this->assertCount(2, $array);
+
+        $this->assertArrayHasKey('file', $array[0]);
+        $this->assertArrayHasKey('pattern', $array[0]);
+        $this->assertEquals('a/a-page.htm', $array[0]['file']);
+        $this->assertEquals('/apage', $array[0]['pattern']);
+
+        $this->assertArrayHasKey('file', $array[1]);
+        $this->assertArrayHasKey('pattern', $array[1]);
+        $this->assertEquals('root-page.htm', $array[1]['file']);
+        $this->assertEquals('/root-page', $array[1]['pattern']);
+    }
+
+    public function testListInThemeArrayExtra()
+    {
+        $theme = Theme::load('testpaths');
+
+        $array = TestPages::listInThemeArray($theme, [
+            'settings.layout' => 'layout',
+            'settings.section.test' => 'testKey'
+        ]);
+
+        usort($array, function ($a, $b) {
+            return $a['file'] <=> $b['file'];
+        });
+
+        $this->assertIsArray($array);
+        $this->assertCount(2, $array);
+
+        $this->assertArrayHasKey('layout', $array[0]);
+        $this->assertArrayHasKey('testKey', $array[0]);
+        $this->assertEquals('a/a-layout', $array[0]['layout']);
+        $this->assertEquals('a page test', $array[0]['testKey']);
+
+        $this->assertArrayHasKey('layout', $array[1]);
+        $this->assertArrayHasKey('testKey', $array[1]);
+        $this->assertNull($array[1]['layout']);
+        $this->assertEquals('root page test', $array[1]['testKey']);
     }
 }

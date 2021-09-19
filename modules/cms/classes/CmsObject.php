@@ -4,12 +4,14 @@ use App;
 use Lang;
 use Event;
 use Config;
+use Cache;
 use Exception;
 use ValidationException;
 use ApplicationException;
 use Cms\Contracts\CmsObject as CmsObjectContract;
 use Winter\Storm\Filesystem\PathResolver;
 use Winter\Storm\Halcyon\Model as HalcyonModel;
+use Winter\Storm\Halcyon\Processors\SectionParser;
 
 /**
  * This is a base class for all CMS objects - content files, pages, partials and layouts.
@@ -174,8 +176,87 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
          *     });
          */
         Event::fire('cms.object.listInTheme', [$instance, $result]);
-
         return $result;
+    }
+
+    /**
+     * Returns the list of files and url patterns in the specified theme.
+     * This method is used internally by the system.
+     * @param \Cms\Classes\Theme $theme Specifies a parent theme.
+     * @param array $extras Request extra fields to be appended to the return
+     * @param boolean $skipCache Indicates if objects should be reloaded from the disk, bypassing the cache.
+     * @return array Returns a array of fileName & url patterns.
+     */
+    public static function listInThemeArray($theme, $extras = [], $skipCache = false)
+    {
+        $instance = static::inTheme($theme);
+        $cacheKey = sprintf(
+            'cms.listInThemeArray.%s-%s-%s',
+            $theme->getId(),
+            $instance->dirName,
+            md5(serialize($extras))
+        );
+
+        if (!$skipCache && Cache::has($cacheKey)) {
+            return Cache::get($cacheKey);
+        }
+
+        $items = $instance->newQuery()->lists('*');
+
+        $results = [];
+        foreach ($items as $item) {
+            $parsed = SectionParser::parse($item[1]);
+
+            $url = $parsed['settings']['url']
+                ?? $parsed['settings']['viewBag']['url']
+                ?? null;
+
+            if (!$url) {
+                continue;
+            }
+
+            $result = ['file' => $item[0], 'pattern' => $url];
+
+            foreach ($extras as $key => $name) {
+                $result[$name] = ($value = array_get($parsed, $key)) ? $value : null;
+            }
+
+            $results[] = $result;
+        }
+
+        /**
+         * @event cms.object.listInThemeArray
+         * Provides opportunity to filter the items returned by a call to CmsObject::listInTheme()
+         *
+         * Parameters provided are `$cmsObject` (the object being listed) and `$objectList` (a collection of the CmsObjects being returned).
+         * > Note: The `$objectList` provided is an object reference to a CmsObjectCollection, to make changes you must use object modifying methods.
+         *
+         * Example usage (filters all pages except for the 404 page on the CMS Maintenance mode settings page):
+         *
+         *     // Extend only the Settings Controller
+         *     \System\Controllers\Settings::extend(function ($controller) {
+         *         // Listen for the cms.object.listInTheme event
+         *         \Event::listen('cms.object.listInTheme', function ($cmsObject, &$pageList) {
+         *             // Get the current context of the Settings Manager to ensure we only affect what we need to affect
+         *             $context = \System\Classes\SettingsManager::instance()->getContext();
+         *             if ($context->owner === 'winter.cms' && $context->itemCode === 'maintenance_settings') {
+         *                 // Double check that this is a Page List that we're modifying
+         *                 if ($cmsObject instanceof \Cms\Classes\Page) {
+         *                     // Perform filtering with an original-object modifying method as $objectList is passed by reference (being that it's an object)
+         *                     foreach ($pageList as $index => $page) {
+         *                         if ($page['pattern'] !== '/404') {
+         *                             unset($pageList[$index]);
+         *                         }
+         *                     }
+         *                 }
+         *             }
+         *         });
+         *     });
+         */
+        Event::fire('cms.object.listInThemeArray', [$instance, $results]);
+        Cache::put($cacheKey, $results);
+
+        return $results;
     }
 
     /**

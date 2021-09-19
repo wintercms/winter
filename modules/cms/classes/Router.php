@@ -240,22 +240,13 @@ class Router
             /*
              * The item doesn't exist in the cache, create the map
              */
-            $pages = $this->theme->listPages();
-            $map = [];
-            foreach ($pages as $page) {
-                if (!$page->url) {
-                    continue;
-                }
-
-                $map[] = ['file' => $page->getFileName(), 'pattern' => $page->url];
-            }
+            $map = $this->theme->listFileUrls();
 
             $this->urlMap = $map;
             if ($cacheable) {
                 $expiresAt = now()->addMinutes(Config::get('cms.urlCacheTtl', 1));
                 Cache::put($key, base64_encode(serialize($map)), $expiresAt);
             }
-
             return false;
         }
 
