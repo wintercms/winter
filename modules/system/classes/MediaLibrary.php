@@ -5,13 +5,13 @@ use Lang;
 use Cache;
 use Config;
 use Storage;
-use Request;
 use Url;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use ApplicationException;
-use System\Models\MediaItem;
 use SystemException;
+use System\Models\MediaItem;
+use System\Models\Parameter;
 use Winter\Storm\Argon\Argon;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
  * Provides abstraction level for the Media Library operations.
@@ -123,8 +123,8 @@ class MediaLibrary
         if (!$folder = MediaItem::folder($path)) {
             return [];
         }
-        return [];
-        // return $folder->contents($sortBy, $filter, $ignoreFolders);
+
+        return $folder->contents($sortBy, $filter, $ignoreFolders);
     }
 
     /**
@@ -590,6 +590,11 @@ class MediaLibrary
             foreach (array_keys($this->scannedMeta) as $path) {
                 MediaItem::where('path', $path)->delete();
             }
+        }
+
+        // Update last scan parameter
+        if ($isRoot) {
+            Parameter::set('media::scan.last_scanned', Argon::now());
         }
     }
 

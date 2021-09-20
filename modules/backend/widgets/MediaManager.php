@@ -1,14 +1,11 @@
 <?php namespace Backend\Widgets;
 
 use Url;
-use Str;
 use Lang;
 use File;
 use Input;
 use Config;
 use Backend;
-use Request;
-use Response;
 use Exception;
 use SystemException;
 use ApplicationException;
@@ -16,7 +13,6 @@ use Backend\Classes\WidgetBase;
 use System\Classes\MediaLibrary;
 use System\Classes\MediaLibraryItem;
 use Winter\Storm\Database\Attach\Resizer;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use Form as FormHelper;
 use System\Models\Parameter;
 
@@ -827,7 +823,15 @@ class MediaManager extends WidgetBase
 
     public function onScanExecute()
     {
-        $contents = MediaLibrary::instance()->scan();
+        MediaLibrary::instance()->scan();
+
+        $this->prepareVars();
+
+        return [
+            '#'.$this->getId('item-list') => $this->makePartial('item-list'),
+            '#'.$this->getId('folder-path') => $this->makePartial('folder-path'),
+            '#'.$this->getId('filters') => $this->makePartial('filters')
+        ];
     }
 
     //

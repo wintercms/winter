@@ -1,6 +1,7 @@
 <?php namespace System\Models;
 
 use Model;
+use Winter\Storm\Argon\Argon;
 use System\Classes\MediaLibraryItem;
 use Winter\Storm\Database\Builder;
 use Winter\Storm\Database\Relations\HasMany;
@@ -112,7 +113,26 @@ class MediaItem extends Model
         // Group by type
         return $query
             ->get()
+            ->map(function ($item) {
+                return $item->toMediaLibraryItem();
+            })
             ->toArray();
+    }
+
+    /**
+     * Converts a media item model instance into a MediaLibraryItem instance.
+     *
+     * @return MediaLibraryItem
+     */
+    protected function toMediaLibraryItem()
+    {
+        return new MediaLibraryItem(
+            $this->path,
+            $this->size,
+            Argon::parse($this->modified_at)->getTimestamp(),
+            $this->type,
+            '',
+        );
     }
 
     /**
