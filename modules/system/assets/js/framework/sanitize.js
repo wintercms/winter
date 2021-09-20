@@ -34,7 +34,7 @@ if (!window.winter) {
             if (attrName.indexOf('on') == 0 || attrValue.indexOf('javascript:') == 0) {
                 node.removeAttribute(attrName)
             }
-        })
+        }
     }
 
     Sanitizer.prototype.sanitize = function (html) {

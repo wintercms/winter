@@ -23,7 +23,7 @@
     }
 
     /**
-     * Extends the Winter CMS JavaScript framework.
+     * Extends the Winter CMS JavaScript framework with a module.
      *
      * Extensions provide functionality for extendable methods and attachable methods. Extendable methods are
      * intended to be once-off implemented - ie. the first plugin that provides the method handles it. Attachable

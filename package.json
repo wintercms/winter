@@ -6,7 +6,8 @@
     "helpers": "tests/js/helpers"
   },
   "scripts": {
-    "test": "mocha --require @babel/register --recursive tests/js/cases"
+    "test": "mocha --require @babel/register --recursive tests/js/cases",
+    "compatibility": "es-check es6 modules/system/assets/js/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -35,12 +36,13 @@
     "@babel/register": "^7.14.0",
     "babel-plugin-module-resolver": "^4.1.0",
     "chai": "^4.3.4",
+    "es-check": "^6.0.0",
     "jquery": "^3.4.1",
     "jsdom": "^17.0.0",
     "mocha": "^9.1.1",
     "sinon": "^11.1.2"
   },
   "engines": {
-      "node": ">=12.0.0"
+    "node": ">=12.0.0"
   }
 }
