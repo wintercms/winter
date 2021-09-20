@@ -2,6 +2,7 @@
 
 use Model;
 use System\Classes\MediaLibraryItem;
+use Winter\Storm\Database\Builder;
 use Winter\Storm\Database\Relations\HasMany;
 
 class MediaItem extends Model
@@ -42,6 +43,28 @@ class MediaItem extends Model
      * @var static
      */
     protected static $rootCache;
+
+    /**
+     * Scope to get the root folder of the media library.
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeRoot(Builder $query)
+    {
+        $query->whereNull('parent_id');
+    }
+
+    /**
+     * Scope to get all but the root folder of the media library.
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeNotRoot(Builder $query)
+    {
+        $query->whereNotNull('parent_id');
+    }
 
     /**
      * Finds a folder at the specific path.

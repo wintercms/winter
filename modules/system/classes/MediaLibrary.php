@@ -68,6 +68,11 @@ class MediaLibrary
     protected $storageFolderNameLength;
 
     /**
+     * @var array Scanned meta, used to compare a subsequent scan to act only on changes.
+     */
+    protected $scannedMeta;
+
+    /**
      * Initialize this singleton.
      */
     protected function init()
@@ -513,14 +518,33 @@ class MediaLibrary
     /**
      * Scans the disk and stores all metadata in the "media_items" table for performant traversing and filtering.
      *
-     * This will clear the "media_items" table.
+     * Scanning, by default,  will be done in a synchronisation fashion - only metadata that needs to be updated
+     * will be updated, in order to keep subsequent scans quicker. It does this by tracking the path and the
+     * modification time, however, you may opt to force a full resync using the `$forceResync` parameter.
+     *
+     * @param MediaItem $folder The root media folder for this iteration. If `null`, the system assumes the root.
+     * @param string|null $path The root path of this folder.
+     * @param bool $forceResync If `true`, a full resync is done by truncating the "media_items" table.
      *
      * @return void
      */
-    public function scan(MediaItem $folder = null, $path = null)
+    public function scan(MediaItem $folder = null, $path = null, $forceResync = false)
     {
-        if ($folder === null) {
-            MediaItem::truncate();
+        $isRoot = is_null($folder);
+
+        if ($isRoot) {
+            if ($forceResync) {
+                MediaItem::truncate();
+            }
+
+            $this->scannedMeta = MediaItem::notRoot()
+                ->get()
+                ->pluck('modified_at', 'path')
+                ->map(function ($item) {
+                    return Argon::parse($item)->getTimestamp();
+                })
+                ->toArray();
+
             $contents = $this->getStorageDisk()->listContents($this->getMediaPath('/'));
             $folder = MediaItem::getRoot();
         } else {
@@ -533,13 +557,39 @@ class MediaLibrary
         });
 
         foreach ($contents as $item) {
+            $mediaPath = ltrim($this->getMediaRelativePath($item['path']), '/');
+
             if ($item['type'] === 'dir') {
-                $subFolder = $this->createFolderMeta($folder, $item);
+                // Determine if we are adding a new directory
+                if (!isset($this->scannedMeta[$mediaPath])) {
+                    $subFolder = $this->createFolderMeta($folder, $item);
+                } else {
+                    $subFolder = MediaItem::where('path', $mediaPath)->first();
+                    unset($this->scannedMeta[$mediaPath]);
+                }
+
                 $this->scan($subFolder, $item['path']);
                 continue;
             }
 
-            $this->createFileMeta($folder, $item);
+            if (!isset($this->scannedMeta[$mediaPath])) {
+                // New file detected
+                $this->createFileMeta($folder, $item);
+                continue;
+            } elseif ($this->scannedMeta[$mediaPath] < $item['timestamp']) {
+                // File was modified
+                MediaItem::where('path', $mediaPath)->delete();
+                $this->createFileMeta($folder, $item);
+            }
+
+            unset($this->scannedMeta[$mediaPath]);
+        }
+
+        // Any scanned meta still in the list when we have looped through the root files are now deleted
+        if ($isRoot && count($this->scannedMeta)) {
+            foreach (array_keys($this->scannedMeta) as $path) {
+                MediaItem::where('path', $path)->delete();
+            }
         }
     }
 
