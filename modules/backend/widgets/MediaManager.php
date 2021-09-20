@@ -18,6 +18,7 @@ use System\Classes\MediaLibraryItem;
 use Winter\Storm\Database\Attach\Resizer;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use Form as FormHelper;
+use System\Models\Parameter;
 
 /**
  * Media Manager widget.
@@ -814,6 +815,21 @@ class MediaManager extends WidgetBase
         return $this->getCropEditImageUrlAndSize($path, $cropSessionKey, $params);
     }
 
+    /**
+     * Executed when the media library has not yet been scanned, or the user opts to manually re-scan the media library.
+     *
+     * @return void
+     */
+    public function onScan()
+    {
+        return $this->makePartial('scan-popup');
+    }
+
+    public function onScanExecute()
+    {
+        $contents = MediaLibrary::instance()->scan();
+    }
+
     //
     // Methods for internal use
     //
@@ -841,6 +857,7 @@ class MediaManager extends WidgetBase
             $this->vars['items'] = $this->findFiles($searchTerm, $filter, ['by' => $sortBy, 'direction' => $sortDirection]);
         }
 
+        $this->vars['isScanned'] = !is_null(Parameter::get('media::scan.last_scanned'));
         $this->vars['currentFolder'] = $folder;
         $this->vars['isRootFolder'] = $folder == self::FOLDER_ROOT;
         $this->vars['pathSegments'] = $this->splitPathToSegments($folder);

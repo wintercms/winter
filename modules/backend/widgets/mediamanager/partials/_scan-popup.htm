@@ -1,0 +1,31 @@
+<div class="modal-body modal-no-header" id="scanPopup">
+    <div class="progress bar-loading-indicator" id="progressScanning">
+        <div class="progress-bar"></div>
+    </div>
+
+    <div class="loading-indicator-container">
+        <p>&nbsp;</p>
+        <div class="loading-indicator transparent">
+            <div id="executeMessage">
+                Scanning media library...
+            </div>
+            <span></span>
+        </div>
+    </div>
+    <p>&nbsp;</p>
+</div>
+
+<script>
+    $('#scanPopup').on('popupComplete', function() {
+        $.request('onScanExecute', {
+            success: function (data) {
+                console.log(data)
+                console.log('success')
+                $('#scanPopup').popup('hide')
+            },
+            error: function (xhr, errno, error) {
+                console.log(error)
+            },
+        })
+    })
+</script>

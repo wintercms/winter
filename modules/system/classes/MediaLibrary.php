@@ -9,7 +9,9 @@ use Request;
 use Url;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use ApplicationException;
+use System\Models\MediaItem;
 use SystemException;
+use Winter\Storm\Argon\Argon;
 
 /**
  * Provides abstraction level for the Media Library operations.
@@ -111,56 +113,13 @@ class MediaLibrary
      * @param boolean $ignoreFolders Determines whether folders should be suppressed in the result list.
      * @return array Returns an array of MediaLibraryItem objects.
      */
-    public function listFolderContents($folder = '/', $sortBy = 'title', $filter = null, $ignoreFolders = false)
+    public function listFolderContents($path = '/', $sortBy = 'title', $filter = null, $ignoreFolders = false)
     {
-        $folder = self::validatePath($folder);
-        $fullFolderPath = $this->getMediaPath($folder);
-
-        /*
-         * Try to load the contents from cache
-         */
-
-        $cached = Cache::get($this->cacheKey, false);
-        $cached = $cached ? @unserialize(@base64_decode($cached)) : [];
-
-        if (!is_array($cached)) {
-            $cached = [];
+        if (!$folder = MediaItem::folder($path)) {
+            return [];
         }
-
-        if (array_key_exists($fullFolderPath, $cached)) {
-            $folderContents = $cached[$fullFolderPath];
-        }
-        else {
-            $folderContents = $this->scanFolderContents($fullFolderPath);
-
-            $cached[$fullFolderPath] = $folderContents;
-            $expiresAt = now()->addMinutes(Config::get('cms.storage.media.ttl', 10));
-            Cache::put(
-                $this->cacheKey,
-                base64_encode(serialize($cached)),
-                $expiresAt
-            );
-        }
-
-        /*
-         * Sort the result and combine the file and folder lists
-         */
-
-        if ($sortBy !== false) {
-            $this->sortItemList($folderContents['files'], $sortBy);
-            $this->sortItemList($folderContents['folders'], $sortBy);
-        }
-
-        $this->filterItemList($folderContents['files'], $filter);
-
-        if (!$ignoreFolders) {
-            $folderContents = array_merge($folderContents['folders'], $folderContents['files']);
-        }
-        else {
-            $folderContents = $folderContents['files'];
-        }
-
-        return $folderContents;
+        return [];
+        // return $folder->contents($sortBy, $filter, $ignoreFolders);
     }
 
     /**
@@ -552,6 +511,118 @@ class MediaLibrary
     }
 
     /**
+     * Scans the disk and stores all metadata in the "media_items" table for performant traversing and filtering.
+     *
+     * This will clear the "media_items" table.
+     *
+     * @return void
+     */
+    public function scan(MediaItem $folder = null, $path = null)
+    {
+        if ($folder === null) {
+            MediaItem::truncate();
+            $contents = $this->getStorageDisk()->listContents($this->getMediaPath('/'));
+            $folder = MediaItem::getRoot();
+        } else {
+            $contents = $this->getStorageDisk()->listContents($path);
+        }
+
+        // Filter contents so that ignored filenames and patterns are applied
+        $contents = array_filter($contents, function ($item) {
+            return $this->isVisible($item['path']);
+        });
+
+        foreach ($contents as $item) {
+            if ($item['type'] === 'dir') {
+                $subFolder = $this->createFolderMeta($folder, $item);
+                $this->scan($subFolder, $item['path']);
+                continue;
+            }
+
+            $this->createFileMeta($folder, $item);
+        }
+    }
+
+    /**
+     * Creates a meta record for a folder in the "media_items" table, as a subfolder of the parent folder.
+     *
+     * @param MediaItem $parent
+     * @param array $meta
+     * @return MediaItem
+     */
+    protected function createFolderMeta(MediaItem $parent, array $meta)
+    {
+        return $parent->children()->create([
+            'name' => $meta['filename'],
+            'path' => ltrim($this->getMediaRelativePath($meta['path']), '/'),
+            'type' => MediaLibraryItem::TYPE_FOLDER,
+            'size' => 0,
+            'modified_at' => Argon::createFromTimestamp($meta['timestamp']),
+        ]);
+    }
+
+    /**
+     * Creates a meta record for a file in the "media_items" table, as a child file of the parent folder.
+     *
+     * @param MediaItem $parent
+     * @param array $meta
+     * @return MediaItem
+     */
+    protected function createFileMeta(MediaItem $parent, array $meta)
+    {
+        // Create a temporary media library item instance
+        $path = ltrim($this->getMediaRelativePath($meta['path']), '/');
+        $mediaItem = new MediaLibraryItem(
+            $path,
+            $meta['size'],
+            $meta['timestamp'],
+            MediaLibraryItem::TYPE_FILE,
+            $this->getPathUrl($path)
+        );
+
+        // Standard metadata
+        $file = $parent->children()->make([
+            'name' => $meta['filename'],
+            'path' => $path,
+            'type' => MediaLibraryItem::TYPE_FILE,
+            'extension' => $meta['extension'],
+            'size' => $meta['size'],
+            'modified_at' => Argon::createFromTimestamp($meta['timestamp']),
+        ]);
+
+        // Extra metadata
+        $file->file_type = $mediaItem->getFileType();
+
+        if ($mediaItem->getFileType() === MediaLibraryItem::FILE_TYPE_IMAGE) {
+            $this->setImageMeta($file, $meta['path']);
+        }
+
+        $file->save();
+
+        return $file;
+    }
+
+    /**
+     * Gets meta for images.
+     *
+     * This scans the image for the dimensions and stores them in the meta table.
+     *
+     * @param MediaItem $file
+     * @param string $path
+     * @return void
+     */
+    protected function setImageMeta(MediaItem $file, $path)
+    {
+        $size = @getimagesizefromstring($this->getStorageDisk()->read($path));
+        if (!is_array($size)) {
+            return;
+        }
+
+        $file->width = $size[0];
+        $file->height = $size[1];
+    }
+
+    /**
      * Returns a file or folder path with the prefixed storage folder.
      * @param string $path Specifies a path to process.
      * @return string Returns a processed string.
@@ -746,33 +817,11 @@ class MediaLibrary
     }
 
     /**
-     * Filters item list by file type.
-     * @param array $itemList Specifies the item list to sort.
-     * @param string $filter Determines the document type filtering preference.
-     * Supported values are 'image', 'video', 'audio', 'document' (see FILE_TYPE_XXX constants of MediaLibraryItem class).
-     */
-    protected function filterItemList(&$itemList, $filter)
-    {
-        if (!$filter) {
-            return;
-        }
-
-        $result = [];
-        foreach ($itemList as $item) {
-            if ($item->getFileType() == $filter) {
-                $result[] = $item;
-            }
-        }
-
-        $itemList = $result;
-    }
-
-    /**
      * Initializes and returns the Media Library disk.
      * This method should always be used instead of trying to access the
      * $storageDisk property directly as initializing the disc requires
      * communicating with the remote storage.
-     * @return mixed Returns the storage disk object.
+     * @return \Illuminate\Contracts\Filesystem\Filesystem Returns the storage disk object.
      */
     protected function getStorageDisk()
     {
