@@ -11,6 +11,7 @@
     data-bottom-toolbar="<?= $this->bottomToolbar ? 'true' : 'false' ?>"
     data-crop-and-insert-button="<?= $this->cropAndInsertButton ? 'true' : 'false' ?>"
     data-read-only="<?= $this->readOnly ? 'true' : 'false'; ?>"
+    data-is-scanned="<?= $isScanned ? 'true' : 'false'; ?>"
     tabindex="0"
 >
 
