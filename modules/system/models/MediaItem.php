@@ -190,7 +190,7 @@ class MediaItem extends Model
                     $options['value'] ?? null,
                     $options['label'] ?? $name,
                     $options['order'] ?? 100,
-                    $options['group'] ?? 'Metadata',
+                    $options['group'] ?? 'Metadata'
                 );
             }
             return;
