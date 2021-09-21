@@ -502,7 +502,7 @@ class MediaLibrary
         }
 
         // Filter contents so that ignored filenames and patterns are applied
-        $contents = array_filter($contents, function ($item) {
+        $contents = array_filter($contents ?? [], function ($item) {
             return $this->isVisible($item['path']);
         });
 
