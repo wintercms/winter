@@ -10,6 +10,7 @@ use ApplicationException;
 use SystemException;
 use System\Models\MediaItem;
 use System\Models\Parameter;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Winter\Storm\Argon\Argon;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
@@ -120,7 +121,9 @@ class MediaLibrary
      */
     public function listFolderContents($path = '/', $sortBy = 'title', $filter = null, $ignoreFolders = false)
     {
-        if (!$folder = MediaItem::folder($path)) {
+        try {
+            $folder = MediaItem::folder($path);
+        } catch (ModelNotFoundException $e) {
             return [];
         }
 
@@ -212,36 +215,9 @@ class MediaLibrary
      */
     public function listAllDirectories($exclude = [])
     {
-        $fullPath = $this->getMediaPath('/');
-
-        $folders = $this->getStorageDisk()->allDirectories($fullPath);
-
-        $folders = array_unique($folders, SORT_LOCALE_STRING);
-
-        $result = [];
-
-        foreach ($folders as $folder) {
-            $folder = $this->getMediaRelativePath($folder);
-            if (!strlen($folder)) {
-                $folder = '/';
-            }
-
-            if (Str::startsWith($folder, $exclude)) {
-                continue;
-            }
-            if (!$this->isVisible($folder)) {
-                $exclude[] = $folder . '/';
-                continue;
-            }
-
-            $result[] = $folder;
-        }
-
-        if (!in_array('/', $result)) {
-            array_unshift($result, '/');
-        }
-
-        return $result;
+        return array_map(function ($item) {
+            return $item->path;
+        }, MediaItem::getRoot()->folders($exclude));
     }
 
     /**

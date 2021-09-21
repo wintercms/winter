@@ -116,7 +116,6 @@ class MediaItem extends Model
         }
 
         $query = self::query();
-        $path = trim($path, '/');
 
         $query
             ->where('type', MediaLibraryItem::TYPE_FOLDER)
@@ -127,6 +126,8 @@ class MediaItem extends Model
 
     /**
      * Retrieves the contents of a folder.
+     *
+     * This includes both files and folders.
      *
      * @param string|array $sortBy
      * @param string|null $filter
@@ -146,9 +147,44 @@ class MediaItem extends Model
             $query->where('type', MediaLibraryItem::TYPE_FILE);
         }
 
-        // Group by type
         return $query
             ->get()
+            ->map(function ($item) {
+                return $item->toMediaLibraryItem();
+            })
+            ->toArray();
+    }
+
+
+    /**
+     * Retrieves the folders within a folder.
+     *
+     * You may optionally provide an array of paths to exclude.
+     *
+     * @param array $exclude
+     * @param bool $includeSelf
+     * @return array
+     */
+    public function folders($exclude = [], $includeSelf = true)
+    {
+        $query = $this->allChildren()->where('type', MediaLibraryItem::TYPE_FOLDER);
+
+        $directories = $query->get();
+
+        if ($includeSelf) {
+            $directories->prepend($this);
+        }
+
+        return $directories
+            ->filter(function ($item) use ($exclude) {
+                foreach ($exclude as $path) {
+                    if (Str::startsWith($item->path, $exclude)) {
+                        return false;
+                    }
+                }
+
+                return true;
+            })
             ->map(function ($item) {
                 return $item->toMediaLibraryItem();
             })
@@ -204,7 +240,7 @@ class MediaItem extends Model
         return new MediaLibraryItem(
             $this->path,
             $this->size,
-            $this->modified_at->getTimestamp(),
+            (isset($this->modified_at)) ? $this->modified_at->getTimestamp() : null,
             $this->type,
             ''
         );
@@ -322,6 +358,7 @@ class MediaItem extends Model
         $root->parent_id = null;
         $root->type = MediaLibraryItem::TYPE_FOLDER;
         $root->name = 'Root';
+        $root->path = '/';
         $root->size = 0;
         $root->save();
 
