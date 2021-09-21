@@ -138,33 +138,7 @@ class MediaLibrary
      */
     public function findFiles($searchTerm, $sortBy = 'title', $filter = null)
     {
-        $words = explode(' ', Str::lower($searchTerm));
-        $result = [];
-
-        $findInFolder = function ($folder) use (&$findInFolder, $words, &$result, $sortBy, $filter) {
-            $folderContents = $this->listFolderContents($folder, $sortBy, $filter);
-
-            foreach ($folderContents as $item) {
-                if ($item->type == MediaLibraryItem::TYPE_FOLDER) {
-                    $findInFolder($item->path);
-                }
-                elseif ($this->pathMatchesSearch($item->path, $words)) {
-                    $result[] = $item;
-                }
-            }
-        };
-
-        $findInFolder('/');
-
-        /*
-         * Sort the result
-         */
-
-        if ($sortBy !== false) {
-            $this->sortItemList($result, $sortBy);
-        }
-
-        return $result;
+        return MediaItem::getRoot()->search($searchTerm, $sortBy, $filter);
     }
 
     /**
@@ -845,57 +819,6 @@ class MediaLibrary
     }
 
     /**
-     * Sorts the item list by title, size or last modified date.
-     * @param array $itemList Specifies the item list to sort.
-     * @param mixed $sortSettings Determines the sorting preference.
-     * Supported values are 'title', 'size', 'lastModified' (see SORT_BY_XXX class constants) or an associative array with a 'by' key and a 'direction' key: ['by' => SORT_BY_XXX, 'direction' => SORT_DIRECTION_XXX].
-     */
-    protected function sortItemList(&$itemList, $sortSettings)
-    {
-        $files = [];
-        $folders = [];
-
-        // Convert string $sortBy to array
-        if (is_string($sortSettings)) {
-            $sortSettings = [
-                'by' => $sortSettings,
-                'direction' => self::SORT_DIRECTION_ASC,
-            ];
-        }
-
-        usort($itemList, function ($a, $b) use ($sortSettings) {
-            $result = 0;
-
-            switch ($sortSettings['by']) {
-                case self::SORT_BY_TITLE:
-                    $result = strcasecmp($a->path, $b->path);
-                    break;
-                case self::SORT_BY_SIZE:
-                    if ($a->size < $b->size) {
-                        $result = -1;
-                    } else {
-                        $result = $a->size > $b->size ? 1 : 0;
-                    }
-                    break;
-                case self::SORT_BY_MODIFIED:
-                    if ($a->lastModified < $b->lastModified) {
-                        $result = -1;
-                    } else {
-                        $result = $a->lastModified > $b->lastModified ? 1 : 0;
-                    }
-                    break;
-            }
-
-            // Reverse the polarity of the result to direct sorting in a descending order instead
-            if ($sortSettings['direction'] === self::SORT_DIRECTION_DESC) {
-                $result = 0 - $result;
-            }
-
-            return $result;
-        });
-    }
-
-    /**
      * Initializes and returns the Media Library disk.
      * This method should always be used instead of trying to access the
      * $storageDisk property directly as initializing the disc requires
@@ -911,30 +834,6 @@ class MediaLibrary
         return $this->storageDisk = Storage::disk(
             Config::get('cms.storage.media.disk', 'local')
         );
-    }
-
-    /**
-     * Determines if file path contains all words form the search term.
-     * @param string $path Specifies a path to examine.
-     * @param array $words A list of words to check against.
-     * @return boolean
-     */
-    protected function pathMatchesSearch($path, $words)
-    {
-        $path = Str::lower($path);
-
-        foreach ($words as $word) {
-            $word = trim($word);
-            if (!strlen($word)) {
-                continue;
-            }
-
-            if (!Str::contains($path, $word)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     protected function generateRandomTmpFolderName($location)

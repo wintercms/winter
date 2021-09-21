@@ -1,7 +1,7 @@
 <?php namespace System\Models;
 
+use Str;
 use Model;
-use Winter\Storm\Argon\Argon;
 use System\Classes\MediaLibraryItem;
 use Winter\Storm\Database\Builder;
 use Winter\Storm\Database\Relations\HasMany;
@@ -156,6 +156,45 @@ class MediaItem extends Model
     }
 
     /**
+     * Searches within a folder recursively for files or folders that match a search query.
+     *
+     * @param string|array $sortBy
+     * @param string|null $filter
+     * @param boolean $ignoreFolders
+     * @return array
+     */
+    public function search($searchTerm, $sortBy = 'title', $filter = null)
+    {
+        // Normalise search term(s)
+        $words = explode(' ', Str::lower($searchTerm));
+
+        $query = $this->allChildren();
+
+        // Only return files as results
+        $query->where('type', MediaLibraryItem::TYPE_FILE);
+
+        $query = $this->applySort($query, $sortBy);
+        if (!is_null($filter)) {
+            $query = $this->applyFilter($query, $filter);
+        }
+
+        // Add search query
+        $query->where(function ($query) use ($words) {
+            foreach ($words as $word) {
+                $query->orWhere('path', 'like', '%' . $word . '%');
+            }
+        });
+
+        // Group by type
+        return $query
+            ->get()
+            ->map(function ($item) {
+                return $item->toMediaLibraryItem();
+            })
+            ->toArray();
+    }
+
+    /**
      * Converts a media item model instance into a MediaLibraryItem instance.
      *
      * @return MediaLibraryItem
@@ -211,13 +250,13 @@ class MediaItem extends Model
     /**
      * Applies sorting to the contents of a folder.
      *
-     * @param HasMany $query
+     * @param HasMany|Builder $query
      * @param string|array $sortBy Accepts either a string value of "title", "size", or "lastModified", or an array
      *   with two keys: "by" which represents the sort type (same 3 options as above), and "direction" - either "asc"
      *   or "desc".
-     * @return HasMany
+     * @return HasMany|Builder
      */
-    protected function applySort(HasMany $query, $sortBy)
+    protected function applySort($query, $sortBy)
     {
         // Force ordering of folders first
         $query->orderBy('type', 'DESC');
@@ -251,11 +290,11 @@ class MediaItem extends Model
     /**
      * Applies a filter to the contents of the directory. This only applies to files, not folders.
      *
-     * @param HasMany $query
+     * @param HasMany|Builder $query
      * @param string $filter Accepts one of the following: "audio", "document", "image", "video"
-     * @return HasMany
+     * @return HasMany|Builder
      */
-    protected function applyFilter(HasMany $query, $filter)
+    protected function applyFilter($query, $filter)
     {
         if (!in_array($filter, [
             MediaLibraryItem::FILE_TYPE_AUDIO,
