@@ -568,7 +568,9 @@ class MediaLibrary
                     unset($this->scannedMeta[$mediaPath]);
                 }
 
-                $this->scan($subFolder, $item['path']);
+                if (!is_null($subFolder)) {
+                    $this->scan($subFolder, $item['path']);
+                }
                 continue;
             }
 
@@ -607,9 +609,15 @@ class MediaLibrary
      */
     protected function createFolderMeta(MediaItem $parent, array $meta)
     {
+        try {
+            $path = self::validatePath($meta['path']);
+        } catch (ApplicationException $e) {
+            return;
+        }
+
         return $parent->children()->create([
             'name' => $meta['filename'],
-            'path' => ltrim($this->getMediaRelativePath($meta['path']), '/'),
+            'path' => $this->getMediaRelativePath($path),
             'type' => MediaLibraryItem::TYPE_FOLDER,
             'size' => 0,
             'modified_at' => Argon::createFromTimestamp($meta['timestamp']),
@@ -625,8 +633,14 @@ class MediaLibrary
      */
     protected function createFileMeta(MediaItem $parent, array $meta)
     {
+        try {
+            $path = self::validatePath($meta['path']);
+        } catch (ApplicationException $e) {
+            return;
+        }
+        $path = $this->getMediaRelativePath($path);
+
         // Create a temporary media library item instance
-        $path = ltrim($this->getMediaRelativePath($meta['path']), '/');
         $mediaItem = new MediaLibraryItem(
             $path,
             $meta['size'],
@@ -673,8 +687,18 @@ class MediaLibrary
             return;
         }
 
-        $file->width = $size[0];
-        $file->height = $size[1];
+        $file->setMetadata([
+            'width' => [
+                'label' => 'system::lang.media.metadata_image_width',
+                'order' => 200,
+                'value' => $size[0],
+            ],
+            'height' => [
+                'label' => 'system::lang.media.metadata_image_height',
+                'order' => 220,
+                'value' => $size[1],
+            ]
+        ]);
     }
 
     /**

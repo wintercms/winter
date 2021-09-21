@@ -21,9 +21,7 @@ class DbMediaItems extends Migration
             $table->string('extension', 20)->nullable();
             $table->string('path')->nullable();
             $table->bigInteger('size')->unsigned();
-            $table->integer('width')->unsigned()->nullable();
-            $table->integer('height')->unsigned()->nullable();
-            $table->integer('duration')->unsigned()->nullable();
+            $table->text('metadata')->nullable();
             $table->dateTime('modified_at')->nullable();
 
             // Indexes

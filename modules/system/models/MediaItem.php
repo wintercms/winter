@@ -39,6 +39,24 @@ class MediaItem extends Model
     ];
 
     /**
+     * Arrayable attributes.
+     *
+     * @var array
+     */
+    public $jsonable = [
+        'metadata',
+    ];
+
+    /**
+     * Date attributes.
+     *
+     * @var array
+     */
+    public $dates = [
+        'modified_at',
+    ];
+
+    /**
      * Cache of the root node.
      *
      * @var static
@@ -65,6 +83,24 @@ class MediaItem extends Model
     public function scopeNotRoot(Builder $query)
     {
         $query->whereNotNull('parent_id');
+    }
+
+    /**
+     * Override of base `setAttribute` method.
+     *
+     * Prevents writing to metadata key directly.
+     *
+     * @param string $key
+     * @param mixed $value
+     * @return mixed
+     */
+    public function setAttribute($key, $value)
+    {
+        if ($key === 'metadata') {
+            return false;
+        }
+
+        return parent::setAttribute($key, $value);
     }
 
     /**
@@ -129,10 +165,47 @@ class MediaItem extends Model
         return new MediaLibraryItem(
             $this->path,
             $this->size,
-            Argon::parse($this->modified_at)->getTimestamp(),
+            $this->modified_at->getTimestamp(),
             $this->type,
-            '',
+            ''
         );
+    }
+
+    /**
+     * Sets metadata for this media item.
+     *
+     * @param string|array $key
+     * @param mixed $value
+     * @param string|null $label
+     * @param integer $order
+     * @param string $group
+     * @return void
+     */
+    public function setMetadata($key, $value = null, $label = null, $order = 100, $group = 'Metadata')
+    {
+        if (is_array($key)) {
+            foreach ($key as $name => $options) {
+                $this->setMetadata(
+                    $name,
+                    $options['value'] ?? null,
+                    $options['label'] ?? $name,
+                    $options['order'] ?? 100,
+                    $options['group'] ?? 'Metadata',
+                );
+            }
+            return;
+        }
+
+        $meta = array_replace($this->metadata ?? [], [
+            $key => [
+                'label' => $label ?? $key,
+                'order' => $order,
+                'group' => $group,
+                'value' => $value,
+            ]
+        ]);
+
+        parent::setAttribute('metadata', $meta);
     }
 
     /**
