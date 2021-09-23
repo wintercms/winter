@@ -150,6 +150,20 @@ class Users extends Controller
     }
 
     /**
+     * Send a password restore email to this user
+     */
+    public function update_onSendPasswordRestore($recordId)
+    {
+        if (!$this->user->hasAccess('backend.manage_users')) {
+            return Response::make(Lang::get('backend::lang.page.access_denied.label'), 403);
+        }
+
+        $this->formFindModelObject($recordId)->sendPasswordRestore();
+
+        Flash::success(Lang::get('backend::lang.account.send_password_restore_success'));
+    }
+
+    /**
      * Unsuspend this user
      */
     public function update_onUnsuspendUser($recordId)

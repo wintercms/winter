@@ -27,8 +27,8 @@ class User extends UserBase
     public $rules = [
         'email' => 'required|between:6,255|email|unique:backend_users',
         'login' => 'required|between:2,255|unique:backend_users',
-        'password' => 'required:create|min:4|confirmed',
-        'password_confirmation' => 'required_with:password|min:4'
+        'password' => 'sometimes|min:4|confirmed',
+        'password_confirmation' => 'sometimes|required_with:password|min:4'
     ];
 
     /**
@@ -153,6 +153,21 @@ class User extends UserBase
     }
 
     /**
+     * Generates a link to the backend, or a password reset link if no password was set on creation.
+     * @return string
+     */
+    public function getInvitationLink()
+    {
+        if (!$this->password) {
+            $code = $this->getResetPasswordCode();
+        
+            return Backend::url('backend/auth/reset/' . $this->id . '/' . $code);
+        }
+
+        return Backend::url('backend');
+    }
+
+    /**
      * Sends an invitation to the user using template "backend::mail.invite".
      * @return void
      */
@@ -161,12 +176,32 @@ class User extends UserBase
         $data = [
             'name' => $this->full_name,
             'login' => $this->login,
-            'password' => $this->getOriginalHashValue('password'),
-            'link' => Backend::url('backend'),
+            'link' => $this->getInvitationLink(),
         ];
 
         Mail::send('backend::mail.invite', $data, function ($message) {
             $message->to($this->email, $this->full_name);
+        });
+    }
+
+
+    /**
+     * Sends a password restore link to the user using template "backend::mail.restore".
+     * @return void
+     */
+    public function sendPasswordRestore()
+    {
+        $code = $this->getResetPasswordCode();
+        
+        $link = Backend::url('backend/auth/reset/' . $this->id . '/' . $code);
+
+        $data = [
+            'name' => $this->full_name,
+            'link' => $link,
+        ];
+
+        Mail::send('backend::mail.restore', $data, function ($message) {
+            $message->to($this->email, $this->full_name)->subject(trans('backend::lang.account.password_reset'));
         });
     }
 
