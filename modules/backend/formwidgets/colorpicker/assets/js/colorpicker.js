@@ -9,7 +9,7 @@
  * $('div#someElement').colorPicker({ dataLocker: 'input#locker' })
  *
  * Dependences:
- * - Some other plugin (filename.js)
+ * - Pickr (https://github.com/Simonwep/pickr)
  */
 
 +function ($) { "use strict";
@@ -17,9 +17,15 @@
     // COLORPICKER CLASS DEFINITION
     // ============================
 
+    var Base = $.wn.foundation.base,
+        BaseProto = Base.prototype
+
     var ColorPicker = function(element, options) {
         this.options   = options
         this.$el       = $(element)
+
+        $.wn.foundation.controlUtils.markDisposable(element)
+        Base.call(this)
 
         // Init
         this.init()
@@ -32,18 +38,21 @@
         disabled: false
     }
 
+    ColorPicker.prototype = Object.create(BaseProto)
+    ColorPicker.prototype.constructor = ColorPicker
+
     ColorPicker.prototype.init = function() {
-        var self = this
         this.$dataLocker  = $(this.options.dataLocker, this.$el)
-        this.$colorList = $('>ul', this.$el)
+        this.$colorList = $('> ul', this.$el)
         this.$customColor = $('[data-custom-color]', this.$el)
-        this.$customColorSpan = $('>span', this.$customColor)
+        this.$customColorSpan = $('> span', this.$customColor)
         this.originalColor = this.$customColor.data('hexColor')
+        this.pickr = null
 
         if (!this.options.disabled) {
-            this.$colorList.on('click', '>li', function(){
-                self.selectColor(this)
-                self.$dataLocker.trigger('change')
+            this.$colorList.on('click', '> li', (event) => {
+                this.selectColor($(event.currentTarget))
+                this.$dataLocker.trigger('change')
             })
         }
 
@@ -51,7 +60,40 @@
          * Custom color
          */
         if (this.$customColor.length) {
-            this.$customColor.spectrum({
+            this.pickr = Pickr.create({
+                el: this.$customColor.get(0),
+                theme: 'nano',
+                disabled: this.options.disabled,
+                swatches: [],
+                lockOpacity: !this.options.showAlpha,
+                useAsButton: true,
+                container: this.$customColor.parent().get(0),
+                comparison: false,
+                components: {
+                    palette: false,
+                    preview: true,
+                    opacity: this.options.showAlpha,
+                    hue: true,
+                    interaction: {
+                        input: true,
+                        cancel: true,
+                        clear: this.options.allowEmpty,
+                        save: true,
+                    }
+                },
+                i18n: {
+                    'btn:save': $.wn.lang.get('colorpicker.choose', 'Ok'),
+                    'btn:cancel': $.wn.lang.get('colorpicker.close', 'Close'),
+                },
+            })
+
+            this.$customColor.on('click', this.proxy(this.showPicker))
+            this.pickr.on('show', () => this.onShow())
+            this.pickr.on('change', (hsva) => this.onChange(hsva))
+            this.pickr.on('save', (hsva) => this.updateColor)
+            this.pickr.on('cancel', () => this.onCancel)
+
+            /*this.$customColor.spectrum({
                 preferredFormat: 'hex',
                 showInput: true,
                 showAlpha: this.options.showAlpha,
@@ -76,8 +118,32 @@
                     var hex = color ? color.toHexString() : ''
                     self.setCustomColor(hex)
                 }
-            })
+            })*/
         }
+    }
+
+    ColorPicker.prototype.dispose = function () {
+        this.$customColor.off('click', this.proxy(this.showPicker))
+
+        if (this.pickr) {
+            this.pickr.destroyAndRemove()
+        }
+
+        this.$el = null
+        BaseProto.dispose.call(this)
+    }
+
+    ColorPicker.prototype.showPicker = function () {
+        this.pickr.show()
+    }
+
+    ColorPicker.prototype.onShow = function () {
+        this.pickr.setColor(this.$customColorSpan.css('background-color'))
+        this.pickr.setColorRepresentation('HEX')
+    }
+
+    ColorPicker.prototype.onChange = function (hsva) {
+        this.$customColorSpan.css('background', hsva.toHEXA())
     }
 
     ColorPicker.prototype.setCustomColor = function(hexColor) {
