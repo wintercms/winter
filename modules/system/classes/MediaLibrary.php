@@ -495,7 +495,8 @@ class MediaLibrary
                 })
                 ->toArray();
 
-            $contents = $this->getStorageDisk()->listContents($this->getMediaPath('/'));
+            $rootMedia = $this->getMediaPath('/');
+            $contents = $this->getStorageDisk()->listContents($rootMedia);
             $folder = MediaItem::getRoot();
         } else {
             $contents = $this->getStorageDisk()->listContents($path);
@@ -507,7 +508,7 @@ class MediaLibrary
         });
 
         foreach ($contents as $item) {
-            $mediaPath = ltrim($this->getMediaRelativePath($item['path']), '/');
+            $mediaPath = $this->getMediaRelativePath($item['path']);
 
             if ($item['type'] === 'dir') {
                 // Determine if we are adding a new directory
