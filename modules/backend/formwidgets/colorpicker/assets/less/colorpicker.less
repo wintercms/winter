@@ -32,11 +32,70 @@
         border-bottom-left-radius: 0;
     }
 
-    // Pickr styles
+    // PICKR OVERRIDES
     .pcr-app[data-theme="nano"] .pcr-selection {
 
+        // Add an additional row to the grid for color selection and preview
+        grid-template-rows: 1fr 5fr auto auto;
+        gap: 0;
+
+        .pcr-color-preview {
+            grid-row-start: 1;
+            grid-column-start: 1;
+            grid-row-end: 1;
+            grid-column-end: 3;
+            margin: 0;
+            flex-direction: row-reverse;
+
+            .pcr-current-color {
+                flex-grow: 0;
+                flex-shrink: 0;
+                width: 70%;
+                border-radius: 0;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+                font-family: @font-family-base;
+                height: 28px;
+                line-height: 29px;
+                text-align: center;
+                font-size: 0.8em;
+
+                &::before {
+                    content: none;
+                }
+            }
+
+            .pcr-last-color {
+                display: block;
+                flex-grow: 0;
+                flex-shrink: 0;
+                width: 30%;
+                border-radius: 0;
+                background: var(--pcr-color);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.5);
+            }
+        }
+
+        .pcr-color-palette {
+            grid-row-start: 2;
+            grid-column-start: 1;
+            grid-row-end: 2;
+            grid-column-end: 3;
+        }
+
         .pcr-color-chooser {
-            grid-area: 2 / 1 / 2 / 3;
+            margin-top: 0.8rem;
+            grid-row-start: 3;
+            grid-column-start: 1;
+            grid-row-end: 3;
+            grid-column-end: 3;
+        }
+
+        .pcr-color-opacity {
+            margin-top: 0.8em;
+            grid-row-start: 4;
+            grid-column-start: 1;
+            grid-row-end: 4;
+            grid-column-end: 3;
         }
 
     }
