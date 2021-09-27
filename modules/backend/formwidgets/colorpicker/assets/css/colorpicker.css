@@ -3,7 +3,7 @@
 .field-colorpicker [data-color-value]{flex:1;border-left:none;border-top-left-radius:0;border-bottom-left-radius:0}
 .field-colorpicker .pcr-app[data-theme="nano"] .pcr-selection{grid-template-rows:1fr 5fr auto auto;gap:0}
 .field-colorpicker .pcr-app[data-theme="nano"] .pcr-selection .pcr-color-preview{grid-row-start:1;grid-column-start:1;grid-row-end:1;grid-column-end:3;margin:0;flex-direction:row-reverse}
-.field-colorpicker .pcr-app[data-theme="nano"] .pcr-selection .pcr-color-preview .pcr-current-color{flex-grow:0;flex-shrink:0;width:70%;border-radius:0;border-bottom:1px solid rgba(0,0,0,0.5);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";height:28px;line-height:29px;text-align:center;font-size:0.8em}
+.field-colorpicker .pcr-app[data-theme="nano"] .pcr-selection .pcr-color-preview .pcr-current-color{flex-grow:0;flex-shrink:0;width:70%;border-radius:0;border-bottom:1px solid rgba(0,0,0,0.5);font-family:monospace;height:28px;line-height:29px;text-align:center;font-size:0.85em}
 .field-colorpicker .pcr-app[data-theme="nano"] .pcr-selection .pcr-color-preview .pcr-current-color::before{content:none}
 .field-colorpicker .pcr-app[data-theme="nano"] .pcr-selection .pcr-color-preview .pcr-last-color{display:block;flex-grow:0;flex-shrink:0;width:30%;border-radius:0;background:var(--pcr-color);border-bottom:1px solid rgba(0,0,0,0.5)}
 .field-colorpicker .pcr-app[data-theme="nano"] .pcr-selection .pcr-color-palette{grid-row-start:2;grid-column-start:1;grid-row-end:2;grid-column-end:3}
