@@ -84,7 +84,8 @@
         // Set up events on various elements
         this.$colorValue.on('focus', this.proxy(this.onFocus))
         this.$colorValue.on('blur', this.proxy(this.onBlur))
-        this.$colorValue.on('keyup', this.proxy(this.onEntry))
+        this.$colorValue.on('keydown', this.proxy(this.onKeydown))
+        this.$colorValue.on('keyup', this.proxy(this.onKeyup))
         this.$colorPreview.on('click', this.proxy(this.onColorClick))
         this.pickr.on('init', () => this.onPickerInit())
         this.pickr.on('change', (hsva) => this.onPickerChange(hsva))
@@ -100,13 +101,17 @@
     ColorPicker.prototype.dispose = function () {
         this.$colorValue.off('focus', this.proxy(this.onFocus))
         this.$colorValue.off('blur', this.proxy(this.onBlur))
-        this.$colorValue.off('keyup', this.proxy(this.onEntry))
+        this.$colorValue.off('keydown', this.proxy(this.onKeydown))
+        this.$colorValue.off('keyup', this.proxy(this.onKeyup))
         this.$colorPreview.off('click', this.proxy(this.onColorClick))
 
         if (this.pickr) {
             this.pickr.destroyAndRemove()
         }
 
+        this.$container = null
+        this.$colorPreview = null
+        this.$colorValue = null
         this.$el = null
         BaseProto.dispose.call(this)
     }
@@ -137,17 +142,41 @@
     }
 
     /**
+     * Fired when a key is pressed down.
+     *
+     * We use this to disable the Enter key submitting the form by mistake.
+     *
+     * @param {Event} event
+     */
+    ColorPicker.prototype.onKeydown = function (event) {
+        if (event.key === 'Enter') {
+            event.preventDefault()
+        }
+    }
+
+    /**
      * Fired when a key is pressed while in the picker, or within the text field of the widget.
      * @param {Event} event
      * @returns null
      */
-    ColorPicker.prototype.onEntry = function (event) {
+    ColorPicker.prototype.onKeyup = function (event) {
         // Escape always acts as a cancel
         if (event.key === 'Escape') {
             this.keyboardEntry = false
             this.setColor(this.originalColor)
             this.hidePicker()
             this.$colorValue.blur()
+            event.stopPropagation()
+            return
+        }
+
+        // Enter will select the current color and hide the picker
+        if (event.key === 'Enter') {
+            this.setColor(this.pickr.getColor())
+            this.hidePicker()
+            this.$colorValue.blur()
+            event.preventDefault()
+            event.stopPropagation()
             return
         }
 
@@ -322,9 +351,9 @@
         var args = Array.prototype.slice.call(arguments, 1), result
         this.each(function () {
             var $this   = $(this)
-            var data    = $this.data('oc.colorpicker')
+            var data    = $this.data('wn.colorpicker')
             var options = $.extend({}, ColorPicker.DEFAULTS, $this.data(), typeof option == 'object' && option)
-            if (!data) $this.data('oc.colorpicker', (data = new ColorPicker(this, options)))
+            if (!data) $this.data('wn.colorpicker', (data = new ColorPicker(this, options)))
             if (typeof option == 'string') result = data[option].apply(data, args)
             if (typeof result != 'undefined') return false
         })
