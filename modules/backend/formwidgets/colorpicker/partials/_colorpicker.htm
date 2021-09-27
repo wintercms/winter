@@ -6,9 +6,10 @@
         class="field-colorpicker <?php if($readOnly || $disabled): ?>disabled<?php endif; ?>"
         data-control="colorpicker"
         data-format="<?= $format ?>"
-        data-available-colors="<?= json_encode($availableColors) ?>"
+        data-available-colors="<?= e(json_encode($availableColors)) ?>"
         <?php if ($showAlpha): ?>data-show-alpha="<?= $showAlpha ?>"<?php endif ?>
         <?php if ($allowEmpty): ?>data-allow-empty="<?= $allowEmpty ?>"<?php endif ?>
+        <?php if ($allowCustom): ?>data-allow-custom="<?= $allowCustom ?>"<?php endif ?>
         data-data-locker="#<?= $this->getId('input') ?>"
         <?php if ($readOnly || $disabled): ?>data-disabled="true"<?php endif; ?>
         <?= $this->formField->getAttributes() ?>>
@@ -20,7 +21,7 @@
                 placeholder="No color"
                 value="<?= $value ?>"
                 <?php if ($disabled): ?> disabled<?php endif ?>
-                <?php if ($readOnly): ?> readonly<?php endif ?>
+                <?php if ($readOnly || !$allowCustom): ?> readonly<?php endif ?>
             >
             <div
                 data-color-preview

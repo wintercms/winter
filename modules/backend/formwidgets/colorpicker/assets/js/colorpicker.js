@@ -44,6 +44,7 @@
 
     ColorPicker.prototype.init = function() {
         this.$dataLocker = $(this.options.dataLocker, this.$el)
+        this.$container = $('.colorpicker-container', this.$el)
         this.$colorPreview = $('[data-color-preview]', this.$el)
         this.$colorValue = $('[data-color-value]', this.$el)
 
@@ -51,16 +52,18 @@
             el: this.$colorPreview.get(0),
             theme: 'nano',
             disabled: this.options.disabled,
-            swatches: [],
+            swatches: this.options.availableColors,
             lockOpacity: !this.options.showAlpha,
             useAsButton: true,
             container: this.$el.get(0),
             comparison: false,
+            showAlways: true,
+            position: 'top-middle',
             components: {
-                palette: false,
-                preview: true,
+                palette: this.options.allowCustom,
+                preview: false,
+                hue: this.options.allowCustom,
                 opacity: this.options.showAlpha,
-                hue: true,
                 interaction: {
                     input: false,
                     cancel: false,
@@ -71,43 +74,16 @@
             i18n: {
             },
         })
-        this.pickr.hide()
 
-        this.$colorValue.on('focus', this.proxy(this.showPicker))
-        this.$colorValue.on('click', this.proxy(this.showPicker))
-        this.$colorPreview.on('click', this.proxy(this.showPicker))
-        this.pickr.on('init', () => this.onInit())
-        this.pickr.on('change', (hsva) => this.onChange(hsva))
+        this.$colorValue.on('focus', this.proxy(this.onFocus))
+        this.$colorValue.on('blur', this.proxy(this.onBlur))
+        this.$colorValue.on('keypress', this.proxy(this.onEntry))
+        this.$colorPreview.on('click', this.proxy(this.onColorClick))
+        this.pickr.on('init', () => this.onPickerInit())
+        this.pickr.on('change', (hsva) => this.onPickerChange(hsva))
         this.pickr.on('save', (hsva) => this.updateColor)
-        this.pickr.on('cancel', () => this.onCancel())
-        this.pickr.on('hide', () => this.onHide())
-
-        /*this.$customColor.spectrum({
-            preferredFormat: 'hex',
-            showInput: true,
-            showAlpha: this.options.showAlpha,
-            allowEmpty: this.options.allowEmpty,
-            color: this.$customColor.data('hexColor'),
-            chooseText: $.wn.lang.get('colorpicker.choose', 'Ok'),
-            cancelText: '⨯',
-            appendTo: 'parent',
-            disabled: this.options.disabled,
-            hide: function(color) {
-                var hex = color ? color.toHexString() : ''
-                self.$customColorSpan.css('background', hex)
-            },
-            show: function(color) {
-                self.selectColor(self.$customColor)
-            },
-            move: function(color) {
-                var hex = color ? color.toHexString() : ''
-                self.$customColorSpan.css('background', hex)
-            },
-            change: function(color) {
-                var hex = color ? color.toHexString() : ''
-                self.setCustomColor(hex)
-            }
-        })*/
+        this.pickr.on('cancel', () => this.onPickerCancel())
+        this.pickr.on('hide', () => this.onPickerHide())
     }
 
     ColorPicker.prototype.dispose = function () {
@@ -121,25 +97,79 @@
         BaseProto.dispose.call(this)
     }
 
+    ColorPicker.prototype.onFocus = function () {
+        this.showPicker()
+    }
+
+    ColorPicker.prototype.onColorClick = function (event) {
+        if ($(event.currentTarget).is(this.$colorValue) === false) {
+            this.$colorValue.focus()
+        }
+        this.showPicker()
+    }
+
+    ColorPicker.prototype.onBlur = function () {
+        this.hidePicker()
+    }
+
+    ColorPicker.prototype.onEntry = function (event) {
+        // this.pickr.
+    }
+
+    /**
+     * PICKER METHODS
+     */
+
     ColorPicker.prototype.showPicker = function () {
         this.pickr.show()
+
+        $(this.pickr.getRoot().app).on('mousedown.pickr.overrideBlur', function (event) {
+            // Prevent blur event of the text field firing if the mouse click started inside picker,
+            // even if it ends up outside. This prevents the whitespace in the picker firing a blur
+            // event and hiding the picker.
+            event.preventDefault()
+            event.stopPropagation()
+        });
     }
 
-    ColorPicker.prototype.onInit = function () {
-        this.pickr.setColor(this.$dataLocker.val())
-        this.pickr.setColorRepresentation('HEX')
-    }
-
-    ColorPicker.prototype.onChange = function (hsva) {
-        this.$colorPreview.css('background', this.valueFromHSVA(hsva, 'hexa'))
-        this.$colorValue.val(this.valueFromHSVA(hsva))
-    }
-
-    ColorPicker.prototype.onCancel = function () {
+    ColorPicker.prototype.hidePicker = function () {
+        $(this.pickr.getRoot().app).off('mousedown.pickr.overrideBlur')
         this.pickr.hide()
     }
 
-    ColorPicker.prototype.onHide = function () {
+    ColorPicker.prototype.onPickerInit = function () {
+        this.pickr.setColor(this.$dataLocker.val())
+
+        switch (this.options.format) {
+            case 'rgb':
+                this.pickr.setColorRepresentation('RGBA')
+                break;
+            case 'hsl':
+                this.pickr.setColorRepresentation('HSLA')
+                break;
+            case 'cmyk':
+                this.pickr.setColorRepresentation('CMYK')
+                break;
+            case 'hex':
+            default:
+                this.pickr.setColorRepresentation('HEX')
+                break;
+        }
+
+        this.hidePicker()
+    }
+
+    ColorPicker.prototype.onPickerChange = function (hsva) {
+        this.$colorPreview.css('background', this.valueFromHSVA(hsva, 'hex'))
+        this.$colorValue.val(this.valueFromHSVA(hsva))
+        this.$dataLocker.val(this.valueFromHSVA(hsva))
+    }
+
+    ColorPicker.prototype.onPickerCancel = function () {
+        this.hidePicker()
+    }
+
+    ColorPicker.prototype.onPickerHide = function () {
         this.pickr.setColor(this.$dataLocker.val())
         this.$colorValue.val(this.$dataLocker.val())
     }
@@ -148,8 +178,14 @@
         var format = overrideFormat || this.options.format
 
         switch (format) {
+            case 'rgb':
+                return hsva.toRGBA().toString(3)
+            case 'hsl':
+                return hsva.toHSLA().toString(3)
+            case 'cmyk':
+                return hsva.toCMYK().toString(3)
             case 'hex':
-            case 'hexa':
+            default:
                 return hsva.toHEXA().toString()
         }
     }

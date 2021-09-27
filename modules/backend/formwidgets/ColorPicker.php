@@ -40,6 +40,11 @@ class ColorPicker extends FormWidgetBase
     public $allowEmpty = false;
 
     /**
+     * @var bool Allow a custom color
+     */
+    public $allowCustom = true;
+
+    /**
      * @var bool Show opacity slider
      */
     public $showAlpha = false;
@@ -56,7 +61,7 @@ class ColorPicker extends FormWidgetBase
 
     /**
      * @var string Color format to use and store.
-     * Allowed values: 'rgb', 'rgba', 'hsl', 'hsla', 'hex', 'hexa', 'cmyk'
+     * Allowed values: 'cmyk', 'hex', 'hsl', 'rgb'
      */
     public $format = 'hex';
 
@@ -78,6 +83,7 @@ class ColorPicker extends FormWidgetBase
             'availableColors',
             'format',
             'allowEmpty',
+            'allowCustom',
             'showAlpha',
             'readOnly',
             'disabled',
@@ -101,11 +107,12 @@ class ColorPicker extends FormWidgetBase
         $this->vars['name'] = $this->getFieldName();
         $this->vars['value'] = $this->getLoadValue();
         $this->vars['availableColors'] = $this->getAvailableColors();
-        $this->vars['format'] = $this->format;
-        $this->vars['allowEmpty'] = $this->allowEmpty;
-        $this->vars['showAlpha'] = $this->showAlpha;
-        $this->vars['readOnly'] = $this->readOnly;
-        $this->vars['disabled'] = $this->disabled;
+        $this->vars['format'] = (in_array($this->format, ['cmyk', 'hex', 'hsl', 'rgb'])) ? $this->format : 'hex';
+        $this->vars['allowEmpty'] = (bool) $this->allowEmpty;
+        $this->vars['allowCustom'] = (bool) $this->allowCustom;
+        $this->vars['showAlpha'] = (bool) $this->showAlpha;
+        $this->vars['readOnly'] = (bool) $this->readOnly;
+        $this->vars['disabled'] = (bool) $this->disabled;
     }
 
     /**

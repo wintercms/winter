@@ -5,16 +5,18 @@
 .field-colorpicker {
 
     .colorpicker-container {
+        display: flex;
+        flex-direction: row-reverse;
         position: relative;
         max-width: 250px;
+        width: 100%;
     }
 
     [data-color-preview] {
-        position: absolute;
-        top: 0;
-        left: 0;
+        flex-grow: 0;
+        flex-shrink: 0;
         width: 40px;
-        height: 100%;
+        height: @input-height-base;
         background: @input-bg;
         cursor: pointer;
         border: 1px solid @input-border;
@@ -24,11 +26,19 @@
     }
 
     [data-color-value] {
-        display: inline-block;
-        margin-left: 40px;
+        flex: 1;
         border-left: none;
         border-top-left-radius: 0;
         border-bottom-left-radius: 0;
+    }
+
+    // Pickr styles
+    .pcr-app[data-theme="nano"] .pcr-selection {
+
+        .pcr-color-chooser {
+            grid-area: 2 / 1 / 2 / 3;
+        }
+
     }
 
 }
