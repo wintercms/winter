@@ -10,6 +10,7 @@ use ApplicationException;
  *
  * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
+ * @author Winter CMS
  */
 class ColorPicker extends FormWidgetBase
 {
@@ -53,6 +54,12 @@ class ColorPicker extends FormWidgetBase
      */
     public $disabled = false;
 
+    /**
+     * @var string Color format to use and store.
+     * Allowed values: 'rgb', 'rgba', 'hsl', 'hsla', 'hex', 'hexa', 'cmyk'
+     */
+    public $format = 'hex';
+
     //
     // Object properties
     //
@@ -69,6 +76,7 @@ class ColorPicker extends FormWidgetBase
     {
         $this->fillFromConfig([
             'availableColors',
+            'format',
             'allowEmpty',
             'showAlpha',
             'readOnly',
@@ -91,13 +99,13 @@ class ColorPicker extends FormWidgetBase
     public function prepareVars()
     {
         $this->vars['name'] = $this->getFieldName();
-        $this->vars['value'] = $value = $this->getLoadValue();
-        $this->vars['availableColors'] = $availableColors = $this->getAvailableColors();
+        $this->vars['value'] = $this->getLoadValue();
+        $this->vars['availableColors'] = $this->getAvailableColors();
+        $this->vars['format'] = $this->format;
         $this->vars['allowEmpty'] = $this->allowEmpty;
         $this->vars['showAlpha'] = $this->showAlpha;
         $this->vars['readOnly'] = $this->readOnly;
         $this->vars['disabled'] = $this->disabled;
-        $this->vars['isCustomColor'] = !in_array($value, $availableColors);
     }
 
     /**

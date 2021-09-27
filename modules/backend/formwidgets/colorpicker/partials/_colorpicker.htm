@@ -5,12 +5,29 @@
         id="<?= $this->getId() ?>"
         class="field-colorpicker <?php if($readOnly || $disabled): ?>disabled<?php endif; ?>"
         data-control="colorpicker"
+        data-format="<?= $format ?>"
+        data-available-colors="<?= json_encode($availableColors) ?>"
         <?php if ($showAlpha): ?>data-show-alpha="<?= $showAlpha ?>"<?php endif ?>
         <?php if ($allowEmpty): ?>data-allow-empty="<?= $allowEmpty ?>"<?php endif ?>
         data-data-locker="#<?= $this->getId('input') ?>"
         <?php if ($readOnly || $disabled): ?>data-disabled="true"<?php endif; ?>
         <?= $this->formField->getAttributes() ?>>
 
+        <div class="colorpicker-container">
+            <input
+                data-color-value
+                class="form-control"
+                placeholder="No color"
+                value="<?= $value ?>"
+                <?php if ($disabled): ?> disabled<?php endif ?>
+                <?php if ($readOnly): ?> readonly<?php endif ?>
+            >
+            <div
+                data-color-preview
+            ></div>
+        </div>
+
+        <?php /*
         <ul>
             <?php if (!$readOnly && !$disabled): ?>
                 <?php foreach ($availableColors as $index => $color): ?>
@@ -31,6 +48,7 @@
                     style="background: <?= $isCustomColor ? e($value) : '#ffffff' ?>"></span>
             </li>
         </ul>
+        */ ?>
 
         <input
             type="hidden"
