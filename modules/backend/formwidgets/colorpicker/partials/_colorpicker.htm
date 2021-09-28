@@ -5,7 +5,7 @@
         id="<?= $this->getId() ?>"
         class="field-colorpicker <?php if($readOnly || $disabled): ?>disabled<?php endif; ?>"
         data-control="colorpicker"
-        data-format="<?= $format ?>"
+        data-formats="<?= e(json_encode($formats)) ?>"
         data-available-colors="<?= e(json_encode($availableColors)) ?>"
         <?php if ($showAlpha): ?>data-show-alpha="<?= $showAlpha ?>"<?php endif ?>
         <?php if ($allowEmpty): ?>data-allow-empty="<?= $allowEmpty ?>"<?php endif ?>

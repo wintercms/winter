@@ -52,6 +52,7 @@
         this.$colorValue = $('[data-color-value]', this.$el)
         this.keyboardEntry = false
         this.originalColor = null
+        this.originalFormat = null
 
         // Create a Pickr instance
         this.pickr = Pickr.create({
@@ -71,6 +72,11 @@
                 hue: this.options.allowCustom,
                 opacity: this.options.showAlpha,
                 interaction: {
+                    hex: (this.options.formats.length > 1 && this.options.formats.indexOf('hex') !== -1),
+                    rgba: (this.options.formats.length > 1 && this.options.formats.indexOf('rgb') !== -1),
+                    hsla: (this.options.formats.length > 1 && this.options.formats.indexOf('hsl') !== -1),
+                    cmyk: (this.options.formats.length > 1 && this.options.formats.indexOf('cmyk') !== -1),
+
                     input: false,
                     cancel: false,
                     clear: this.options.allowEmpty,
@@ -203,6 +209,7 @@
     ColorPicker.prototype.showPicker = function () {
         this.keyboardEntry = false
         this.originalColor = this.pickr.getColor().clone()
+        this.originalFormat = this.getCurrentFormat()
         this.pickr.show()
 
         $(this.pickr.getRoot().app).on('mousedown.pickr.overrideBlur', function (event) {
@@ -227,24 +234,12 @@
      */
     ColorPicker.prototype.onPickerInit = function () {
         this.pickr.setColor(this.$dataLocker.val())
+        this.hidePicker()
 
-        switch (this.options.format) {
-            case 'rgb':
-                this.pickr.setColorRepresentation('RGBA')
-                break
-            case 'hsl':
-                this.pickr.setColorRepresentation('HSLA')
-                break
-            case 'cmyk':
-                this.pickr.setColorRepresentation('CMYK')
-                break
-            case 'hex':
-            default:
-                this.pickr.setColorRepresentation('HEX')
-                break
+        if (this.options.formats.length === 1) {
+            this.setColorFormat(this.options.formats[0])
         }
 
-        this.hidePicker()
         this.setColor(this.pickr.getColor())
     }
 
@@ -253,6 +248,9 @@
      */
     ColorPicker.prototype.onPickerStopChange = function () {
         this.setColor(this.pickr.getColor())
+        if (this.options.formats.length === 1) {
+            this.setColorFormat(this.options.formats[0])
+        }
         this.onPickerChange(this.pickr.getColor())
     }
 
@@ -263,6 +261,12 @@
     ColorPicker.prototype.onPickerChange = function (hsva) {
         this.keyboardEntry = false
         $(this.pickr.getRoot().preview.currentColor).text(this.valueFromHSVA(hsva))
+
+        // If the format changes, change the value
+        if (this.getCurrentFormat() !== this.originalFormat) {
+            this.setColor(hsva)
+            this.originalFormat = this.getCurrentFormat()
+        }
 
         // Set the color selection text to black or white depending on which color is picked
         if (this.isLightColor(hsva)) {
@@ -287,7 +291,12 @@
     ColorPicker.prototype.onPickerHide = function () {
         if (this.keyboardEntry) {
             this.setColor(this.pickr.getColor())
+
+            if (this.options.formats.length === 1) {
+                this.setColorFormat(this.options.formats[0])
+            }
         }
+
         this.pickr.setColor(this.$dataLocker.val())
         this.$colorValue.val(this.$dataLocker.val())
     }
@@ -301,18 +310,39 @@
      * @returns {String}
      */
     ColorPicker.prototype.valueFromHSVA = function (hsva, overrideFormat) {
-        var format = overrideFormat || this.options.format
+        var format = overrideFormat || this.getCurrentFormat()
 
         switch (format) {
             case 'rgb':
-                return hsva.toRGBA().toString(3)
+                return hsva.toRGBA().toString(1)
             case 'hsl':
-                return hsva.toHSLA().toString(3)
+                return hsva.toHSLA().toString(1)
             case 'cmyk':
-                return hsva.toCMYK().toString(3)
+                return hsva.toCMYK().toString(1)
             case 'hex':
             default:
                 return hsva.toHEXA().toString()
+        }
+    }
+
+    /**
+     * Gets the current color representation from Pickr and translates it to our lowercase color format.
+     *
+     * @returns {String}
+     */
+    ColorPicker.prototype.getCurrentFormat = function () {
+        var currentFormat = this.pickr.getColorRepresentation()
+
+        switch (currentFormat) {
+            case 'RGBA':
+                return 'rgb'
+            case 'HSLA':
+                return 'hsl'
+            case 'CMYK':
+                return 'cmyk'
+            case 'HEXA':
+            default:
+                return 'hex'
         }
     }
 
@@ -328,6 +358,29 @@
     }
 
     /**
+     * Sets the color format used for the value.
+     *
+     * @param {String} format One of "rgb", "hsl", "cmyk", "hex"
+     */
+    ColorPicker.prototype.setColorFormat = function (format) {
+        switch (format) {
+            case 'rgb':
+                this.pickr.setColorRepresentation('RGBA')
+                break
+            case 'hsl':
+                this.pickr.setColorRepresentation('HSLA')
+                break
+            case 'cmyk':
+                this.pickr.setColorRepresentation('CMYK')
+                break
+            case 'hex':
+            default:
+                this.pickr.setColorRepresentation('HEX')
+                break
+        }
+    }
+
+    /**
      * Determines if the given HSVAColor is a "light" color.
      *
      * @param {HSVaColor} hsva
@@ -340,8 +393,13 @@
         var ratio = Math.sqrt(
             0.299 * (rgba[0] * rgba[0]) +
             0.587 * (rgba[1] * rgba[1]) +
-            0.114 * (rgba[2] * rgba[0])
+            0.114 * (rgba[2] * rgba[2])
         )
+
+        // If alpha drops by 30%, then assume it is a light color
+        if (rgba[3] < 0.7) {
+            return true
+        }
 
         return (ratio > 127.5)
     }

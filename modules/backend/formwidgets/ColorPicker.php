@@ -14,6 +14,9 @@ use ApplicationException;
  */
 class ColorPicker extends FormWidgetBase
 {
+    // All color formats supported
+    const ALL_FORMATS = ['cmyk', 'hex', 'hsl', 'rgb'];
+
     //
     // Configurable properties
     //
@@ -60,10 +63,11 @@ class ColorPicker extends FormWidgetBase
     public $disabled = false;
 
     /**
-     * @var string Color format to use and store.
-     * Allowed values: 'cmyk', 'hex', 'hsl', 'rgb'
+     * @var string|array Color format(s) to allow for the resulting color value. Specify "all" as a string to allow all
+     * formats.
+     * Allowed values: 'cmyk', 'hex', 'hsl', 'rgb', 'all'
      */
-    public $format = 'hex';
+    public $formats = 'hex';
 
     //
     // Object properties
@@ -81,7 +85,7 @@ class ColorPicker extends FormWidgetBase
     {
         $this->fillFromConfig([
             'availableColors',
-            'format',
+            'formats',
             'allowEmpty',
             'allowCustom',
             'showAlpha',
@@ -107,7 +111,7 @@ class ColorPicker extends FormWidgetBase
         $this->vars['name'] = $this->getFieldName();
         $this->vars['value'] = $this->getLoadValue();
         $this->vars['availableColors'] = $this->getAvailableColors();
-        $this->vars['format'] = (in_array($this->format, ['cmyk', 'hex', 'hsl', 'rgb'])) ? $this->format : 'hex';
+        $this->vars['formats'] = $this->getFormats();
         $this->vars['allowEmpty'] = (bool) $this->allowEmpty;
         $this->vars['allowCustom'] = (bool) $this->allowCustom;
         $this->vars['showAlpha'] = (bool) $this->showAlpha;
@@ -141,6 +145,35 @@ class ColorPicker extends FormWidgetBase
                 ]));
             }
         }
+    }
+
+    /**
+     * Returns the allowed color formats.
+     *
+     * If no valid formats are specified, the "hex" format will be used.
+     *
+     * @return array
+     */
+    protected function getFormats()
+    {
+        if ($this->formats === 'all') {
+            return static::ALL_FORMATS;
+        }
+
+        $availableFormats = [];
+        $configFormats = (is_string($this->formats))
+            ? [$this->formats]
+            : $this->formats;
+
+        foreach ($configFormats as $format) {
+            if (in_array($format, static::ALL_FORMATS)) {
+                $availableFormats[] = $format;
+            }
+        }
+
+        return (count($availableFormats))
+            ? $availableFormats
+            : ['hex'];
     }
 
     /**
