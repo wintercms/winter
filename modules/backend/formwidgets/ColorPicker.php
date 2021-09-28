@@ -3,6 +3,7 @@
 use Lang;
 use Backend\Classes\FormWidgetBase;
 use ApplicationException;
+use Backend\Models\BrandSetting;
 
 /**
  * Color picker
@@ -24,18 +25,7 @@ class ColorPicker extends FormWidgetBase
     /**
      * @var array Default available colors
      */
-    public $availableColors = [
-        '#1abc9c', '#16a085',
-        '#2ecc71', '#27ae60',
-        '#3498db', '#2980b9',
-        '#9b59b6', '#8e44ad',
-        '#34495e', '#2b3e50',
-        '#f1c40f', '#f39c12',
-        '#e67e22', '#d35400',
-        '#e74c3c', '#c0392b',
-        '#ecf0f1', '#bdc3c7',
-        '#95a5a6', '#7f8c8d',
-    ];
+    public $availableColors = null;
 
     /**
      * @var bool Allow empty value
@@ -127,10 +117,10 @@ class ColorPicker extends FormWidgetBase
     protected function getAvailableColors()
     {
         $availableColors = $this->availableColors;
+
         if (is_array($availableColors)) {
             return $availableColors;
-        }
-        elseif (is_string($availableColors) && !empty($availableColors)) {
+        } elseif (is_string($availableColors) && !empty($availableColors)) {
             if ($this->model->methodExists($availableColors)) {
                 return $this->availableColors = $this->model->{$availableColors}(
                     $this->formField->fieldName,
@@ -144,6 +134,71 @@ class ColorPicker extends FormWidgetBase
                     'field'  => $this->formField->fieldName
                 ]));
             }
+        } else {
+            return $this->availableColors = array_map(function ($color) {
+                return $color['color'];
+            }, BrandSetting::get('default_colors', [
+                [
+                    'color' => '#1abc9c',
+                ],
+                [
+                    'color' => '#16a085',
+                ],
+                [
+                    'color' => '#2ecc71',
+                ],
+                [
+                    'color' => '#27ae60',
+                ],
+                [
+                    'color' => '#3498db',
+                ],
+                [
+                    'color' => '#2980b9',
+                ],
+                [
+                    'color' => '#9b59b6',
+                ],
+                [
+                    'color' => '#8e44ad',
+                ],
+                [
+                    'color' => '#34495e',
+                ],
+                [
+                    'color' => '#2b3e50',
+                ],
+                [
+                    'color' => '#f1c40f',
+                ],
+                [
+                    'color' => '#f39c12',
+                ],
+                [
+                    'color' => '#e67e22',
+                ],
+                [
+                    'color' => '#d35400',
+                ],
+                [
+                    'color' => '#e74c3c',
+                ],
+                [
+                    'color' => '#c0392b',
+                ],
+                [
+                    'color' => '#ecf0f1',
+                ],
+                [
+                    'color' => '#bdc3c7',
+                ],
+                [
+                    'color' => '#95a5a6',
+                ],
+                [
+                    'color' => '#7f8c8d',
+                ],
+            ]));
         }
     }
 
