@@ -78,6 +78,10 @@
                 }
             },
             i18n: {
+                'btn:last-color': $.wn.lang.get('colorpicker.last_color', 'Use previously selected color'),
+                'aria:palette': $.wn.lang.get('colorpicker.aria_palette', 'Color selection area'),
+                'aria:hue': $.wn.lang.get('colorpicker.aria_hue', 'Hue selection slider'),
+                'aria:opacity': $.wn.lang.get('colorpicker.aria_opacity', 'Opacity selection slider'),
             },
         })
 
