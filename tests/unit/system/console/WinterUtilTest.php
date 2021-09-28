@@ -1,17 +1,19 @@
 <?php
 
-use Winter\Storm\Foundation\Bootstrap\LoadConfiguration;
-
 class WinterUtilTest extends TestCase
 {
     public function testCompileLang()
     {
+        $defaultClient = base_path('/modules/system/lang/en/client.php');
+
         // mv file so we can inject a test
-        $target = base_path('/modules/system/lang/en/client.php');
-        rename($target, $target . '.backup');
-        file_put_contents($target, '<?php return [\'winter\' => \'is coming\'];');
+        rename($defaultClient, $defaultClient . '.backup');
+
+        file_put_contents($defaultClient, '<?php return [\'winter\' => \'is coming\'];');
+
         // execute compile
         $this->artisan('winter:util compile lang')->execute();
+
         // validate default lang handling
         $lang = file_get_contents(base_path('modules/system/assets/js/lang/lang.en.js'));
         $this->assertStringContainsString('winter', $lang);
@@ -31,16 +33,16 @@ class WinterUtilTest extends TestCase
             }
         }
 
-        // handle existing file
         $langClient = base_path('lang/en/system/client.php');
+        // handle existing file
         if (file_exists($langClient)) {
             rename($langClient, $langClient . '.backup');
         }
 
         file_put_contents($langClient, '<?php return [\'winter\' => \'is epic\'];');
 
-        // handle existing file
         $langCountryClient = base_path('lang/en-gb/system/client.php');
+        // handle existing file
         if (file_exists($langCountryClient)) {
             rename($langCountryClient, $langCountryClient . '.backup');
         }
@@ -49,6 +51,7 @@ class WinterUtilTest extends TestCase
 
         // execute compile
         $this->artisan('winter:util compile lang')->execute();
+
         // validate override handling
         $lang = file_get_contents(base_path('modules/system/assets/js/lang/lang.en.js'));
         $this->assertStringContainsString('winter', $lang);
@@ -62,8 +65,8 @@ class WinterUtilTest extends TestCase
         $this->assertStringContainsString('winter', $lang);
 
         // restore
-        unlink($target);
-        rename($target . '.backup', $target);
+        unlink($defaultClient);
+        rename($defaultClient . '.backup', $defaultClient);
 
         foreach ([$langClient, $langCountryClient] as $client) {
             unlink($client);
@@ -76,7 +79,7 @@ class WinterUtilTest extends TestCase
             rmdir($dir);
         }
 
-        // regenerate compiled lang
+        // regenerate original compiled lang
         $this->artisan('winter:util compile lang')->execute();
     }
 }
