@@ -17,10 +17,11 @@
                                 $build = array_get($item, 'build');
                                 $linkUrl = array_get($item, 'link_url');
                             ?>
-                            <dt><?= e(trans('system::lang.updates.core_build', ['build'=>$build])) ?></dt>
+                            <dt><?= e($build) ?></dt>
                             <?php if ($linkUrl): ?>
                                 <dd>
                                     <?= e($description) ?>
+                                    <br>
                                     <a href="<?= $linkUrl ?>" target="_blank">
                                         <?= e(trans('system::lang.updates.changelog_view_details')) ?>
                                         <i class="icon-external-link"></i>

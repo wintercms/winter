@@ -29,6 +29,9 @@ return [
     | well as their drivers. You may even define multiple stores for the
     | same cache driver to group types of items stored in your caches.
     |
+    | Supported: "apc", "array", "database", "file",
+    |            "memcached", "redis", "dynamodb"
+    |
     */
 
     'stores' => [
@@ -53,7 +56,15 @@ return [
         ],
 
         'memcached' => [
-            'driver'  => 'memcached',
+            'driver'        => 'memcached',
+            'persistent_id' => null,
+            'sasl' => [
+                // env('MEMCACHED_USERNAME'),
+                // env('MEMCACHED_PASSWORD'),
+            ],
+            'options' => [
+                // Memcached::OPT_CONNECT_TIMEOUT => 2000,
+            ],
             'servers' => [
                 [
                     'host'   => '127.0.0.1',
@@ -66,6 +77,15 @@ return [
         'redis' => [
             'driver'     => 'redis',
             'connection' => 'default',
+        ],
+
+        'dynamodb' => [
+            'driver'   => 'dynamodb',
+            'key'      => '',
+            'secret'   => '',
+            'region'   => 'us-east-1',
+            'table'    => 'cache',
+            'endpoint' => '',
         ],
 
     ],
@@ -118,4 +138,5 @@ return [
     */
 
     'disableRequestCache' => null,
+
 ];
