@@ -151,6 +151,8 @@ class Users extends Controller
 
     /**
      * Send a password restore email to this user
+     * @param int $recordId
+     * @return Response|void
      */
     public function update_onSendPasswordRestore($recordId)
     {
