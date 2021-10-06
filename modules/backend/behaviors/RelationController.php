@@ -365,18 +365,19 @@ class RelationController extends ControllerBehavior
 
         $parentClassName = "";
 
-        foreach($allRelations as $relations)
-        {
-            foreach($relations as $key => $value)
-            {
-                if (strtolower($value[0]) == strtolower($parentClass))
+        foreach($allRelations as $relations){
+
+            foreach($relations as $key => $value){
+                if (strtolower($value[0]) == strtolower($parentClass)){
                     $parentClassName = $key;
+                }
             }
+
         }
 
-        if ($parentClassName != "")
+        if ($parentClassName != ""){
               $this->relationModel->{$parentClassName} = $this->model;
-
+        }
 
         $this->manageId = post('manage_id');
         $this->foreignId = post('foreign_id');
