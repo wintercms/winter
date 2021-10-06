@@ -356,6 +356,27 @@ class RelationController extends ControllerBehavior
         $this->relationObject = $this->model->{$field}();
         $this->relationModel = $this->relationObject->getRelated();
 
+        /*
+         * Relationship Parent
+         */
+
+        $parent_classname = "";
+
+        foreach($all_relations as $relations)
+        {
+            foreach($relations as $key => $value)
+            {
+                if (strtolower($value[0]) == strtolower($parent_class))
+                {
+                    $parent_classname = $key;
+                }
+            }
+        }
+
+        if ($parent_classname != "")
+              $this->relationModel->{$parent_classname} = $this->model;
+
+
         $this->manageId = post('manage_id');
         $this->foreignId = post('foreign_id');
         $this->readOnly = $this->getConfig('readOnly');
