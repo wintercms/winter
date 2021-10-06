@@ -360,21 +360,22 @@ class RelationController extends ControllerBehavior
          * Relationship Parent
          */
 
-        $parent_classname = "";
+        $parentClass = get_class($this->model);
+        $allRelations = $this->relationModel->getRelationDefinitions();
 
-        foreach($all_relations as $relations)
+        $parentClassName = "";
+
+        foreach($allRelations as $relations)
         {
             foreach($relations as $key => $value)
             {
-                if (strtolower($value[0]) == strtolower($parent_class))
-                {
-                    $parent_classname = $key;
-                }
+                if (strtolower($value[0]) == strtolower($parentClass))
+                    $parentClassName = $key;
             }
         }
 
-        if ($parent_classname != "")
-              $this->relationModel->{$parent_classname} = $this->model;
+        if ($parentClassName != "")
+              $this->relationModel->{$parentClassName} = $this->model;
 
 
         $this->manageId = post('manage_id');
