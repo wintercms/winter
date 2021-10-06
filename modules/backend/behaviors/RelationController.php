@@ -366,13 +366,11 @@ class RelationController extends ControllerBehavior
         $parentClassName = "";
 
         foreach($allRelations as $relations){
-
             foreach($relations as $key => $value){
                 if (strtolower($value[0]) == strtolower($parentClass)){
                     $parentClassName = $key;
                 }
             }
-
         }
 
         if ($parentClassName != ""){
