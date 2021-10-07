@@ -215,6 +215,8 @@ class RelationController extends ControllerBehavior
      */
     public $deferredBinding = false;
 
+
+
     /**
      * Behavior constructor
      * @param Backend\Classes\Controller $controller
@@ -317,6 +319,7 @@ class RelationController extends ControllerBehavior
 
         $this->config = $this->originalConfig;
         $this->model = $model;
+
         $this->field = $field;
 
         if ($field == null) {
@@ -357,20 +360,21 @@ class RelationController extends ControllerBehavior
         $this->relationModel = $this->relationObject->getRelated();
 
         /*
-         * Relationship Parent
+         * Parent relationship
          */
 
         $parentClass = get_class($this->model);
-        $allRelations = $this->relationModel->getRelationDefinitions();
-
+        $allRelationDefinitions = $this->relationModel->getRelationDefinitions();
         $parentClassName = "";
 
-        foreach($allRelations as $relations){
-            foreach($relations as $key => $value){
+        foreach ($allRelationDefinitions as $relations){
+            foreach ($relations as $key => $value){
                 if (strtolower($value[0]) == strtolower($parentClass)){
                     $parentClassName = $key;
                 }
+
             }
+
         }
 
         if ($parentClassName != ""){
@@ -678,7 +682,6 @@ class RelationController extends ControllerBehavior
     protected function makeViewWidget()
     {
         $widget = null;
-
         /*
          * Multiple (has many, belongs to many)
          */
@@ -1112,6 +1115,7 @@ class RelationController extends ControllerBehavior
         $this->beforeAjax();
         $saveData = $this->manageWidget->getSaveData();
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey(true) : null;
+
 
         if ($this->viewMode == 'multi') {
             $newModel = $this->relationModel;
