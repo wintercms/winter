@@ -215,8 +215,6 @@ class RelationController extends ControllerBehavior
      */
     public $deferredBinding = false;
 
-
-
     /**
      * Behavior constructor
      * @param Backend\Classes\Controller $controller
@@ -319,7 +317,6 @@ class RelationController extends ControllerBehavior
 
         $this->config = $this->originalConfig;
         $this->model = $model;
-
         $this->field = $field;
 
         if ($field == null) {
@@ -359,26 +356,21 @@ class RelationController extends ControllerBehavior
         $this->relationObject = $this->model->{$field}();
         $this->relationModel = $this->relationObject->getRelated();
 
-        /*
-         * Parent relationship
-         */
-
+        // Ensure that the other side of the relationship is set on the related model
         $parentClass = get_class($this->model);
         $allRelationDefinitions = $this->relationModel->getRelationDefinitions();
-        $parentClassName = "";
-
-        foreach ($allRelationDefinitions as $relations){
-            foreach ($relations as $key => $value){
-                if (strtolower($value[0]) == strtolower($parentClass)){
-                    $parentClassName = $key;
+        $inverseRelation = null;
+        foreach ($allRelationDefinitions as $relations) {
+            foreach ($relations as $key => $value) {
+                if (strtolower($value[0]) === strtolower($parentClass)) {
+                    $inverseRelation = $key;
+                    break;
                 }
-
             }
-
         }
 
-        if ($parentClassName != ""){
-              $this->relationModel->{$parentClassName} = $this->model;
+        if (!empty($inverseRelation)){
+            $this->relationModel->{$inverseRelation} = $this->model;
         }
 
         $this->manageId = post('manage_id');
@@ -1115,7 +1107,6 @@ class RelationController extends ControllerBehavior
         $this->beforeAjax();
         $saveData = $this->manageWidget->getSaveData();
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey(true) : null;
-
 
         if ($this->viewMode == 'multi') {
             $newModel = $this->relationModel;
