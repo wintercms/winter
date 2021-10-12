@@ -33,7 +33,7 @@
 
     ColorPicker.DEFAULTS = {
         showAlpha: false,
-        format: 'hexa',
+        format: 'hex',
         allowEmpty: false,
         dataLocker: null,
         disabled: false
