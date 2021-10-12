@@ -27,27 +27,22 @@
     &.size-tiny {
         .editor-write { min-height: @size-tiny; }
         .editor-preview { height: @size-tiny; }
-        &.stretch { min-height: @size-tiny + @markdowneditor-toolbar-height; }
     }
     &.size-small {
         .editor-write { min-height: @size-small; }
         .editor-preview { height: @size-small; }
-        &.stretch { min-height: @size-small + @markdowneditor-toolbar-height; }
     }
     &.size-large {
         .editor-write { min-height: @size-large; }
         .editor-preview { height: @size-large; }
-        &.stretch { min-height: @size-large + @markdowneditor-toolbar-height; }
     }
     &.size-huge {
         .editor-write { min-height: @size-huge; }
         .editor-preview { height: @size-huge; }
-        &.stretch { min-height: @size-huge + @markdowneditor-toolbar-height; }
     }
     &.size-giant {
         .editor-write { min-height: @size-giant; }
         .editor-preview { height: @size-giant; }
-        &.stretch { min-height: @size-giant + @markdowneditor-toolbar-height; }
     }
 
     //
@@ -134,7 +129,6 @@
             float: none;
             height: ~"calc(100% - @{markdowneditor-toolbar-height})";
             position: relative;
-            min-height: 0;
         }
 
         .editor-preview {
