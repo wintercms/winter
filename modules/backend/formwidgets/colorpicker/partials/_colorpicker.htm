@@ -9,7 +9,8 @@
     <?php if ($allowCustom): ?>data-allow-custom="<?= $allowCustom ?>"<?php endif ?>
     data-data-locker="#<?= $this->getId('input') ?>"
     <?php if ($readOnly || $disabled || $this->previewMode): ?>data-disabled="true"<?php endif; ?>
-    <?= $this->formField->getAttributes() ?>>
+    <?= $this->formField->getAttributes() ?>
+>
 
     <div class="colorpicker-container">
         <input
