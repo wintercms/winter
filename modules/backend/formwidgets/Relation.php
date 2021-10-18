@@ -3,7 +3,7 @@
 use Db;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
-use Illuminate\Support\Facades\Lang;
+use Lang;
 use Winter\Storm\Database\Relations\Relation as RelationBase;
 use Winter\Storm\Exception\ApplicationException;
 
