@@ -5,7 +5,7 @@ use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use Lang;
 use Winter\Storm\Database\Relations\Relation as RelationBase;
-use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Form Relationship
@@ -97,7 +97,7 @@ class Relation extends FormWidgetBase
 
     /**
      * Makes the form object used for rendering a simple field type
-     * @throws ApplicationException
+     * @throws SystemException
      */
     protected function makeRenderFormField()
     {
@@ -117,7 +117,7 @@ class Relation extends FormWidgetBase
             elseif (in_array($relationType, ['belongsTo', 'hasOne'])) {
                 $field->type = 'dropdown';
             } else {
-                throw new ApplicationException(
+                throw new SystemException(
                     Lang::get('backend::lang.relation.relationwidget_unsupported_type', [
                         'type' => $relationType
                     ])
