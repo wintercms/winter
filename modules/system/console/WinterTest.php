@@ -24,20 +24,17 @@ class WinterTest extends Command
     protected $name = 'winter:test';
 
     /**
-     * The console command signature as ignoreValidationErrors causes options not to be registered.
-     * @var string
+     * @var string The console command signature as ignoreValidationErrors causes options not to be registered.
      */
     protected $signature = 'winter:test {?--p|plugin=} {?--c|configuration=} {?--o|core}';
 
     /**
-     * The console command description.
-     * @var string
+     * @var string The console command description.
      */
     protected $description = 'Run tests for the Winter CMS core or an existing plugin.';
 
     /**
-     * Path to phpunit binary
-     * @var ?string
+     * @var ?string Path to phpunit binary
      */
     protected $phpUnitExec = null;
 
@@ -59,8 +56,8 @@ class WinterTest extends Command
 
     /**
      * Execute the console command.
-     * @throws ApplicationException
      *
+     * @throws ApplicationException
      * @return int|void
      */
     public function handle()
@@ -75,7 +72,7 @@ class WinterTest extends Command
 
         if ($this->option('core')) {
             if (!$configs['core']) {
-                throw new ApplicationException('unable to find core `phpunit.xml`. Try downloading it from github.');
+                throw new ApplicationException("Unable to find the core's phpunit.xml file. Try downloading it from GitHub.");
             }
             $this->info('Running tests for: Winter CMS core');
 
@@ -84,7 +81,7 @@ class WinterTest extends Command
 
         if ($plugin = $this->option('plugin')) {
             if (!isset($configs['plugins'][strtolower($plugin)])) {
-                throw new ApplicationException(sprintf('unable to find %s\'s `phpunit.xml`', $plugin));
+                throw new ApplicationException(sprintf("Unable to find %s\'s phpunit.xml file', $plugin));
             }
             $this->info('Running tests for plugin: ' . PluginManager::instance()->normalizeIdentifier($plugin));
 
@@ -103,7 +100,7 @@ class WinterTest extends Command
                 continue;
             }
 
-            $this->info('Running tests for: Winter CMS ' . $type);
+            $this->info('Running tests for Winter CMS: ' . $type);
             $exit = $this->execPhpUnit($configs[$type], $arguments);
             $exitCode = $exitCode === 0 ? $exit : $exitCode;
         }
@@ -113,22 +110,18 @@ class WinterTest extends Command
 
     /**
      * Get the console command options.
-     *
-     * @return array
      */
     protected function getOptions(): array
     {
         return [
-            ['plugin', 'p', InputOption::VALUE_OPTIONAL, 'The name of the plugin. Eg: AuthorName.PluginName', null],
-            ['configuration', 'c', InputOption::VALUE_OPTIONAL, 'The path to a phpunit xml config', null],
-            ['core', 'o', InputOption::VALUE_NONE, 'Test the core'],
+            ['plugin', 'p', InputOption::VALUE_OPTIONAL, 'The name of the plugin. Ex: AuthorName.PluginName', null],
+            ['configuration', 'c', InputOption::VALUE_OPTIONAL, 'The path to a PHPUnit XML config file', null],
+            ['core', 'o', InputOption::VALUE_NONE, 'Run the Winter CMS core tests'],
         ];
     }
 
     /**
      * Get the console command arguments.
-     *
-     * @return array
      */
     protected function getArguments(): array
     {
@@ -137,14 +130,14 @@ class WinterTest extends Command
 
     /**
      * Execute a phpunit test
-     * @param string $config path to configuration file
-     * @param array $args array of params for phpunit
      *
-     * @return int exit code from process
+     * @param string $config Path to configuration file
+     * @param array $args Array of params for PHPUnit
+     * @return int Exit code from process
      */
     protected function execPhpUnit(string $config, array $args): int
     {
-        // find and bind the phpunit executable
+        // Find and bind the phpunit executable
         if (!$this->phpUnitExec) {
             $this->phpUnitExec = (new ExecutableFinder())
                 ->find('phpunit', base_path('vendor/bin/phpunit'), [base_path('vendor')]);
@@ -157,7 +150,7 @@ class WinterTest extends Command
             null
         );
 
-        // attempt to set tty mode, if unsupported catch and warn the exception message
+        // Attempt to set tty mode, catch and warn with the exception message if unsupported
         try {
             $process->setTty(true);
         } catch (\Throwable $e) {
@@ -179,8 +172,6 @@ class WinterTest extends Command
 
     /**
      * Find all PHPUnit config files (core, lib, plugins)
-     *
-     * @return array
      */
     protected function getPhpUnitConfigs(): array
     {
@@ -201,9 +192,6 @@ class WinterTest extends Command
     /**
      * Search for the config file to use.
      * Priority order is: phpunit.xml, phpunit.xml.dist
-     * @param string $path
-     *
-     * @return ?string
      */
     protected function getPhpUnitXmlFile(string $path): ?string
     {
@@ -224,8 +212,6 @@ class WinterTest extends Command
 
     /**
      * Strips out commands arguments and options in order to return arguments/options for PHPUnit.
-     *
-     * @return array
      */
     protected function getAdditionalArguments(): array
     {
@@ -252,11 +238,6 @@ class WinterTest extends Command
 
     /**
      * Removes flags from argument list and their value if present
-     *
-     * @param array $arguments
-     * @param string $remove
-     *
-     * @return array
      */
     protected function removeArgument(array $arguments, string $remove): array
     {
