@@ -81,7 +81,7 @@ class WinterTest extends Command
 
         if ($plugin = $this->option('plugin')) {
             if (!isset($configs['plugins'][strtolower($plugin)])) {
-                throw new ApplicationException(sprintf("Unable to find %s\'s phpunit.xml file', $plugin));
+                throw new ApplicationException(sprintf("Unable to find %s\'s phpunit.xml file", $plugin));
             }
             $this->info('Running tests for plugin: ' . PluginManager::instance()->normalizeIdentifier($plugin));
 
