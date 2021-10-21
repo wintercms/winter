@@ -9,7 +9,7 @@ use System\Classes\PluginManager;
 use Winter\Storm\Exception\ApplicationException;
 
 /**
- * Console command to test a plugin or the Winter CMS core.
+ * Console command to run tests for plugins or the Winter CMS core.
  *
  * If a plugin is provided, this command will search for a `phpunit.xml` file inside the plugin's directory and run its tests.
  *
