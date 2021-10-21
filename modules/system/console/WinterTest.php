@@ -121,14 +121,6 @@ class WinterTest extends Command
     }
 
     /**
-     * Get the console command arguments.
-     */
-    protected function getArguments(): array
-    {
-        return [];
-    }
-
-    /**
      * Execute a phpunit test
      *
      * @param string $config Path to configuration file
