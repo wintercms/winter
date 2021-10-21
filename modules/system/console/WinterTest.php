@@ -18,8 +18,7 @@ use Winter\Storm\Exception\ApplicationException;
 class WinterTest extends Command
 {
     /**
-     * The console command name.
-     * @var string
+     * @var string The console command name.
      */
     protected $name = 'winter:test';
 
