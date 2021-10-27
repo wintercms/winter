@@ -97,7 +97,7 @@ class Relation extends FormWidgetBase
 
     /**
      * Makes the form object used for rendering a simple field type
-     * @throws SystemException
+     * @throws SystemException if an unsupported relation type is used.
      */
     protected function makeRenderFormField()
     {
