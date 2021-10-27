@@ -113,8 +113,7 @@ class Relation extends FormWidgetBase
 
             if (in_array($relationType, ['belongsToMany', 'morphToMany', 'morphedByMany', 'hasMany'])) {
                 $field->type = 'checkboxlist';
-            }
-            elseif (in_array($relationType, ['belongsTo', 'hasOne'])) {
+            } elseif (in_array($relationType, ['belongsTo', 'hasOne'])) {
                 $field->type = 'dropdown';
             } else {
                 throw new SystemException(
