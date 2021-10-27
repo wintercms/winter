@@ -297,6 +297,7 @@ return [
         'missing_model' => 'La behavior relation utilisée dans la classe :class n’a pas de modèle défini.',
         'invalid_action_single' => 'Cette action ne peut être effectuée sur une relation unitaire.',
         'invalid_action_multi' => 'Cette action ne peut être effectuée sur une relation multiple.',
+        'relationwidget_unsupported_type' => 'Le type de relation ":type" n\'est pas supporté par le widget Relation.',
         'help' => 'Cliquer sur un élément pour l’ajouter',
         'related_data' => 'Donnée :name liée',
         'add' => 'Ajouter',

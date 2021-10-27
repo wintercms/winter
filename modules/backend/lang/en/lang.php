@@ -320,6 +320,7 @@ return [
         'missing_model' => 'Relation behavior used in :class does not have a model defined.',
         'invalid_action_single' => 'This action cannot be performed on a singular relationship.',
         'invalid_action_multi' => 'This action cannot be performed on a multiple relationship.',
+        'relationwidget_unsupported_type' => 'The ":type" relation type is unsupported by the Relation widget.',
         'help' => 'Click on an item to add',
         'related_data' => 'Related :name data',
         'add' => 'Add',
