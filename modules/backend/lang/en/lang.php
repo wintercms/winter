@@ -75,6 +75,7 @@ return [
         'cancel' => 'Cancel',
         'delete' => 'Delete',
         'ok' => 'OK',
+        'send_invitation_error' => "There seems to be an error with your SMTP configuration. Please check it and try again.\n\n If you don't want to configure it right now, please uncheck the 'Send invitation by email' checkbox."
     ],
     'dashboard' => [
         'menu_label' => 'Dashboard',

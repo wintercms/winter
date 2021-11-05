@@ -4,7 +4,11 @@ use Mail;
 use Event;
 use Backend;
 use BackendAuth;
+use Illuminate\Support\Facades\Lang;
+use Swift_TransportException;
 use Winter\Storm\Auth\Models\User as UserBase;
+use Winter\Storm\Exception\AjaxException;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Administrator user model
@@ -99,8 +103,7 @@ class User extends UserBase
     {
         if (is_string($options)) {
             $options = ['default' => $options];
-        }
-        elseif (!is_array($options)) {
+        } elseif (!is_array($options)) {
             $options = [];
         }
 
@@ -126,7 +129,11 @@ class User extends UserBase
         $this->restorePurgedValues();
 
         if ($this->send_invite) {
-            $this->sendInvitation();
+            try {
+                $this->sendInvitation();
+            } catch (Swift_TransportException $e) {
+                throw new ApplicationException(Lang::get('backend::lang.account.send_invitation_error'));
+            }
         }
     }
 
