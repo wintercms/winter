@@ -4,6 +4,7 @@ return [
     'auth' => [
         'title' => 'Administration Area',
         'invalid_login' => 'The details you entered did not match our records. Please double-check and try again.',
+        'error_recover_smtp' => "There seems to be an error with your SMTP configuration. Please check it before trying to use the 'recover password' feature."
     ],
     'field' => [
         'invalid_type' => 'Invalid field type used :type.',
