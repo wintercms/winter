@@ -1,5 +1,6 @@
 <?php namespace Backend\Controllers;
 
+use Log;
 use Mail;
 use Flash;
 use Config;
@@ -11,12 +12,10 @@ use BackendAuth;
 use ValidationException;
 use ApplicationException;
 use Backend\Models\AccessLog;
-use Swift_TransportException;
 use Backend\Classes\Controller;
 use System\Classes\UpdateManager;
 use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Foundation\Http\Middleware\CheckForTrustedHost;
-use Winter\Storm\Exception\ApplicationException as ExceptionApplicationException;
 
 /**
  * Authentication controller
@@ -143,7 +142,8 @@ class Auth extends Controller
             if (post('postback')) {
                 return $this->restore_onSubmit();
             }
-        } catch (Swift_TransportException $e) {
+        } catch (\Swift_TransportException $ex) {
+            Log::error($ex);
             Flash::error(Lang::get('backend::lang.auth.error_recover_smtp'));
         } catch (Exception $ex) {
             Flash::error($ex->getMessage());

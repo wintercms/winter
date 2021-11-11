@@ -1,13 +1,12 @@
 <?php namespace Backend\Models;
 
+use Log;
 use Mail;
 use Event;
 use Backend;
 use BackendAuth;
 use Illuminate\Support\Facades\Lang;
-use Swift_TransportException;
 use Winter\Storm\Auth\Models\User as UserBase;
-use Winter\Storm\Exception\AjaxException;
 use Winter\Storm\Exception\ApplicationException;
 
 /**
@@ -131,7 +130,8 @@ class User extends UserBase
         if ($this->send_invite) {
             try {
                 $this->sendInvitation();
-            } catch (Swift_TransportException $e) {
+            } catch (\Swift_TransportException $ex) {
+                Log::error($ex);
                 throw new ApplicationException(Lang::get('backend::lang.account.send_invitation_error'));
             }
         }
