@@ -1222,6 +1222,10 @@ class Lists extends WidgetBase
         } elseif (str_contains($value, '://')) {
             $image = $value;
 
+        // Handle embedded data URLs
+        } elseif (starts_with($value, 'data:image')) {
+            $image = $value;
+
         // Assume all other values to be from the media library
         } elseif (!empty($value)) {
             $image = MediaLibrary::url($value);

@@ -1,0 +1,48 @@
+#!/bin/bash
+
+# Create database
+gp await-port 3306 && mysql -e "DROP DATABASE IF EXISTS winter"
+mysql -e "CREATE DATABASE winter"
+
+# Create environment file
+php artisan winter:env
+
+# Hide config file changes from Git
+./.gitpod/gitpod-hide-config
+
+# Exclude Debugbar files from Git
+echo -e "plugins/winter/debugbar\nstorage/debugbar" >> ./.git/info/exclude
+
+# Rewrite configuration
+sed -i "s|APP_URL=.*$|APP_URL=${GITPOD_WORKSPACE_URL}|g" .env
+sed -i "s|APP_URL=https://|APP_URL=https://8000-|g" .env
+sed -i "s|APP_KEY=.*$|APP_KEY=$(cat /dev/urandom | base64 | head -c 32)|g" .env
+sed -i "s|DB_CONNECTION=.*$|DB_CONNECTION=mysql|g" .env
+sed -i "s|DB_HOST=.*$|DB_HOST=127.0.0.1|g" .env
+sed -i "s|DB_PORT=.*$|DB_PORT=3306|g" .env
+sed -i "s|DB_DATABASE=.*$|DB_DATABASE=winter|g" .env
+sed -i "s|DB_USERNAME=.*$|DB_USERNAME=root|g" .env
+sed -i "s|DB_PASSWORD=.*$|DB_PASSWORD=|g" .env
+sed -i "s|MAIL_DRIVER=.*$|MAIL_DRIVER=smtp|g" .env
+sed -i "s|MAIL_HOST=.*$|MAIL_HOST=127.0.0.1|g" .env
+sed -i "s|MAIL_PORT=.*$|MAIL_PORT=1025|g" .env
+sed -i "s|MAIL_ENCRYPTION=.*$|MAIL_ENCRYPTION=null|g" .env
+sed -i "s|MAIL_USERNAME=.*$|MAIL_USERNAME=null|g" .env
+sed -i "s|MAIL_PASSWORD=.*$|MAIL_PASSWORD=null|g" .env
+sed -i "s|'trustedProxies' => null|'trustedProxies' => '*'|g" config/app.php
+
+# Run migrations
+php artisan winter:up
+
+# Set admin password
+php artisan winter:passwd admin admin
+
+# Run Mailhog in background
+/workspace/go/bin/MailHog >/dev/null 2>&1 &
+
+# Serve site
+php artisan serve >/dev/null 2>&1 &
+gp await-port 8000 && gp preview --external $(gp url 8000)
+
+# Open README
+gp open ./.gitpod/README.md

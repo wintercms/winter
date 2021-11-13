@@ -3,7 +3,7 @@
         class="btn btn-sm btn-secondary wn-icon-trash-o"
         data-request="onRelationButtonDelete"
         data-request-confirm="<?= e(trans('backend::lang.relation.delete_confirm')) ?>"
-        data-request-success="$.wn.relationBehavior.changed('<?= e($this->vars['relationField']) ?>', 'deleted')"
+        data-request-success="$.wn.relationBehavior.changed('<?= e($relationField) ?>', 'deleted')"
         data-stripe-load-indicator>
         <?= e(trans($text)) ?>
     </button>
@@ -16,7 +16,7 @@
         disabled="disabled"
         data-request="onRelationButtonDelete"
         data-request-confirm="<?= e(trans('backend::lang.relation.delete_confirm')) ?>"
-        data-request-success="$.wn.relationBehavior.changed('<?= e($this->vars['relationField']) ?>', 'deleted')"
+        data-request-success="$.wn.relationBehavior.changed('<?= e($relationField) ?>', 'deleted')"
         data-trigger-action="enable"
         data-trigger="#<?= $this->relationGetId('view') ?> .control-list input[type=checkbox]"
         data-trigger-condition="checked"

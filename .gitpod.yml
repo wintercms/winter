@@ -1,0 +1,36 @@
+image:
+  file: ./.gitpod/Dockerfile
+
+tasks:
+  - init: ./.gitpod/gitpod-init
+    command: ./.gitpod/gitpod-cmd
+
+ports:
+  - port: 1025
+    onOpen: ignore
+  - port: 3306
+    onOpen: ignore
+  - port: 33060
+    onOpen: ignore
+  - port: 8000
+    visibility: public
+    onOpen: ignore
+  - port: 8025
+    onOpen: ignore
+  - port: 9003
+    onOpen: ignore
+
+vscode:
+  extensions:
+    - felixfbecker.php-debug
+    - bmewburn.vscode-intelephense-client
+
+github:
+  prebuilds:
+    master: true
+    branches: false
+    pullRequests: true
+    pullRequestsFromForks: false
+    addCheck: true
+    addComment: false
+    addBadge: true

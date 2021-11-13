@@ -816,7 +816,16 @@ class UpdateManager
      */
     public function requestChangelog()
     {
-        $result = Http::get($this->createServerUrl('changelog'));
+        $build = Parameter::get('system::core.build');
+
+        // Determine branch
+        if (!is_null($build)) {
+            $branch = explode('.', $build);
+            array_pop($branch);
+            $branch = implode('.', $branch);
+        }
+
+        $result = Http::get($this->createServerUrl('changelog' . ((!is_null($branch)) ? '/' . $branch : '')));
 
         if ($result->code == 404) {
             throw new ApplicationException(Lang::get('system::lang.server.response_empty'));
