@@ -67,7 +67,7 @@
         }
 
         for (var i = itemArray.length-1; i >=0; i--) {
-            this.buildItemEditor(itemArray[i].value, itemArray[i].title)
+            this.buildItemEditor(String(itemArray[i].value), itemArray[i].title)
         }
     }
 
@@ -126,7 +126,7 @@
             },
             editor = new $.wn.inspector.propertyEditors.checkbox(this, property, cell, this.group)
 
-        this.editors.push[editor]
+        this.editors.push(editor)
     }
 
     SetEditor.prototype.isCheckedByDefault = function(value) {
@@ -164,8 +164,8 @@
         $.wn.foundation.element.addClass(link, 'loading-indicator-container size-small')
         this.showLoadingIndicator()
 
-        data['inspectorProperty'] = this.getPropertyPath()
-        data['inspectorClassName'] = this.inspector.options.inspectorClass
+        data.inspectorProperty = this.getPropertyPath()
+        data.inspectorClassName = this.inspector.options.inspectorClass
 
         $form.request('onInspectableGetOptions', {
             data: data,
@@ -187,7 +187,7 @@
             for (var i = data.options.length-1; i >= 0; i--) {
                 this.buildItemEditor(data.options[i].value, data.options[i].title)
 
-                this.loadedItems[data.options[i].value] = data.options[i].title
+                this.loadedItems[String(data.options[i].value)] = data.options[i].title
             }
         }
 
@@ -295,17 +295,18 @@
         // current set value is [create] and checkboxValue is "create".
         // The result of the method will be TRUE.
 
-        var value = this.getNormalizedValue()
+        var value = this.getNormalizedValue(),
+            checkboxValueStr = String(checkboxValue)
 
         if (value === undefined) {
-            return this.isCheckedByDefault(checkboxValue)
+            return this.isCheckedByDefault(checkboxValueStr)
         }
 
         if (!value) {
             return false
         }
 
-        return value.indexOf(checkboxValue) > -1
+        return value.indexOf(checkboxValueStr) > -1
     }
 
     SetEditor.prototype.setPropertyValue = function(checkboxValue, isChecked) {
@@ -313,7 +314,8 @@
         // It acts as a parent surface for the children checkboxes,
         // watching changes in them and updating the link text.
 
-        var currentValue = this.getNormalizedValue()
+        var currentValue = this.getNormalizedValue(),
+            checkboxValueStr = String(checkboxValue)
 
         if (currentValue === undefined) {
             currentValue = this.propertyDefinition.default
@@ -327,7 +329,7 @@
             items = this.getItemsSource()
 
         for (var itemValue in items) {
-            if (itemValue !== checkboxValue) {
+            if (itemValue !== checkboxValueStr) {
                 if (currentValue.indexOf(itemValue) !== -1) {
                     resultValue.push(itemValue)
                 }
