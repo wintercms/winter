@@ -9,12 +9,6 @@ use File;
  * This works similar to the `System\Classes\CombineAssets` class in that it allows modules, plugins and themes to
  * register configurations that will be passed on to Laravel Mix and Node.js for compilation and processing.
  *
- * This class requires the Laravel Mix package to be included by Composer - by default, this is a "dev" dependency as
- * some hosts will not allow Node.js to run. It is intended for this to only run within your development environment.
- *
- * Package registration involves registering the package as a "workspace" in Node.js, thereby combining all requirements
- * into one main dependency map.
- *
  * @package winter\wn-system-module
  * @author Ben Thomson <git@alfreido.com>, Jack Wilkinson <jax@jaxwilko.com>
  * @author Winter CMS
@@ -54,7 +48,6 @@ class MixAssets
         // Call plugins
         $packages = PluginManager::instance()->getRegistrationMethodValues('registerMixPackages');
         if (count($packages)) {
-
         }
     }
 
