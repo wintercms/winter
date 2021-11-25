@@ -9,6 +9,7 @@ use Cache;
 use Route;
 use Config;
 use Request;
+use DateTime;
 use Response;
 use Winter\Storm\Assetic\Asset\FileAsset;
 use Winter\Storm\Assetic\Asset\AssetCache;
@@ -16,8 +17,6 @@ use Winter\Storm\Assetic\Asset\AssetCollection;
 use Winter\Storm\Assetic\Cache\FilesystemCache;
 use Winter\Storm\Assetic\Factory\AssetFactory;
 use System\Helpers\Cache as CacheHelper;
-use ApplicationException;
-use DateTime;
 
 /**
  * Combiner class used for combining JavaScript and StyleSheet files.
