@@ -32,6 +32,7 @@ use Winter\Storm\Support\ModuleServiceProvider;
 use Winter\Storm\Router\Helper as RouterHelper;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
+use System\Classes\MixAssets;
 
 class ServiceProvider extends ModuleServiceProvider
 {
@@ -277,6 +278,9 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('theme.list', 'System\Console\ThemeList');
         $this->registerConsoleCommand('theme.use', 'System\Console\ThemeUse');
         $this->registerConsoleCommand('theme.sync', 'System\Console\ThemeSync');
+
+        $this->registerConsoleCommand('mix.install', 'System\Console\MixInstall');
+        $this->registerConsoleCommand('mix.compile', 'System\Console\MixCompile');
     }
 
     /*
@@ -560,6 +564,10 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
             $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
+        });
+
+        MixAssets::registerCallback(function ($mix) {
+            $mix->registerPackage('framework', '~/modules/system/assets/js/framework-next');
         });
     }
 
