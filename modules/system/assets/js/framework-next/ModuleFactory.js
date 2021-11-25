@@ -12,139 +12,139 @@ import SingletonAbstract from './abstracts/Singleton.js';
  * @author Ben Thomson <git@alfreido.com>
  */
 export default class Module {
-  /**
-   * Constructor.
-   *
-   * Binds the Winter framework to the instance.
-   *
-   * @param {string} name
-   * @param {Winter} winter
-   * @param {ModuleAbstract} instance
-   */
-  constructor(name, winter, instance) {
-    this.name = name;
-    this.winter = winter;
-    this.instance = instance;
-    this.instances = [];
-    this.singleton = instance.prototype instanceof SingletonAbstract;
-  }
-
-  /**
-   * Determines if the current module has a specific method available.
-   *
-   * Returns false if the current module is a callback function.
-   *
-   * @param {string} methodName
-   * @returns {boolean}
-   */
-  hasMethod(methodName) {
-    if (this.isFunction()) {
-      return false;
+    /**
+     * Constructor.
+     *
+     * Binds the Winter framework to the instance.
+     *
+     * @param {string} name
+     * @param {Winter} winter
+     * @param {ModuleAbstract} instance
+     */
+    constructor(name, winter, instance) {
+        this.name = name;
+        this.winter = winter;
+        this.instance = instance;
+        this.instances = [];
+        this.singleton = instance.prototype instanceof SingletonAbstract;
     }
 
-    return (typeof this.instance.prototype[methodName] === 'function');
-  }
+    /**
+     * Determines if the current module has a specific method available.
+     *
+     * Returns false if the current module is a callback function.
+     *
+     * @param {string} methodName
+     * @returns {boolean}
+     */
+    hasMethod(methodName) {
+        if (this.isFunction()) {
+            return false;
+        }
 
-  /**
-   * Returns an instance of the current module.
-   *
-   * If this is a callback function module, the function will be returned.
-   *
-   * If this is a singleton, the single instance of the module will be returned.
-   *
-   * @returns {ModuleAbstract|Function}
-   */
-  getInstance() {
-    if (this.isFunction()) {
-      return this.instance(...arguments);
+        return (typeof this.instance.prototype[methodName] === 'function');
     }
-    if (!this.dependenciesFulfilled()) {
-      const unmet = this.getDependencies().filter((item) => !this.winter.getModuleNames().includes(item));
-      throw new Error(`The "${this.name}" module requires the following modules: ${unmet.join(', ')}`);
-    }
-    if (this.singleton) {
-      if (this.instances.length === 0) {
+
+    /**
+     * Returns an instance of the current module.
+     *
+     * If this is a callback function module, the function will be returned.
+     *
+     * If this is a singleton, the single instance of the module will be returned.
+     *
+     * @returns {ModuleAbstract|Function}
+     */
+    getInstance() {
+        if (this.isFunction()) {
+            return this.instance(...arguments);
+        }
+        if (!this.dependenciesFulfilled()) {
+            const unmet = this.getDependencies().filter((item) => !this.winter.getModuleNames().includes(item));
+            throw new Error(`The "${this.name}" module requires the following modules: ${unmet.join(', ')}`);
+        }
+        if (this.singleton) {
+            if (this.instances.length === 0) {
+                const newInstance = new this.instance(this.winter, ...arguments);
+                newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
+                this.instances.push(newInstance);
+            }
+
+            return this.instances[0];
+        }
+
         const newInstance = new this.instance(this.winter, ...arguments);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
         this.instances.push(newInstance);
-      }
-
-      return this.instances[0];
+        return newInstance;
     }
 
-    const newInstance = new this.instance(this.winter, ...arguments);
-    newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
-    this.instances.push(newInstance);
-    return newInstance;
-  }
+    /**
+     * Gets all instances of the current module.
+     *
+     * If this module is a callback function module, an empty array will be returned.
+     *
+     * @returns {ModuleAbstract[]}
+     */
+    getInstances() {
+        if (this.isFunction()) {
+            return [];
+        }
 
-  /**
-   * Gets all instances of the current module.
-   *
-   * If this module is a callback function module, an empty array will be returned.
-   *
-   * @returns {ModuleAbstract[]}
-   */
-  getInstances() {
-    if (this.isFunction()) {
-      return [];
+        return this.instances;
     }
 
-    return this.instances;
-  }
-
-  /**
-   * Determines if the current module is a simple callback function.
-   *
-   * @returns {boolean}
-   */
-  isFunction() {
-    return (typeof this.instance === 'function' && this.instance.prototype instanceof ModuleAbstract === false);
-  }
-
-  /**
-   * Determines if the current module is a singleton.
-   *
-   * @returns {boolean}
-   */
-  isSingleton() {
-    return this.instance.prototype instanceof SingletonAbstract === true;
-  }
-
-  /**
-   * Gets the dependencies of the current module.
-   *
-   * @returns {string[]}
-   */
-  getDependencies() {
-    // Callback functions cannot have dependencies.
-    if (this.isFunction()) {
-      return [];
+    /**
+     * Determines if the current module is a simple callback function.
+     *
+     * @returns {boolean}
+     */
+    isFunction() {
+        return (typeof this.instance === 'function' && this.instance.prototype instanceof ModuleAbstract === false);
     }
 
-    // No dependency method specified.
-    if (typeof this.instance.prototype.dependencies !== 'function') {
-      return [];
+    /**
+     * Determines if the current module is a singleton.
+     *
+     * @returns {boolean}
+     */
+    isSingleton() {
+        return this.instance.prototype instanceof SingletonAbstract === true;
     }
 
-    return this.instance.prototype.dependencies().map((item) => item.toLowerCase());
-  }
+    /**
+     * Gets the dependencies of the current module.
+     *
+     * @returns {string[]}
+     */
+    getDependencies() {
+        // Callback functions cannot have dependencies.
+        if (this.isFunction()) {
+            return [];
+        }
 
-  /**
-   * Determines if the current module has all its dependencies fulfilled.
-   *
-   * @returns {boolean}
-   */
-  dependenciesFulfilled() {
-    const dependencies = this.getDependencies();
+        // No dependency method specified.
+        if (typeof this.instance.prototype.dependencies !== 'function') {
+            return [];
+        }
 
-    let fulfilled = true;
-    dependencies.forEach((module) => {
-      if (!this.winter.hasModule(module)) {
-        fulfilled = false;
-      }
-    });
+        return this.instance.prototype.dependencies().map((item) => item.toLowerCase());
+    }
 
-    return fulfilled;
-  }
+    /**
+     * Determines if the current module has all its dependencies fulfilled.
+     *
+     * @returns {boolean}
+     */
+    dependenciesFulfilled() {
+        const dependencies = this.getDependencies();
+
+        let fulfilled = true;
+        dependencies.forEach((module) => {
+            if (!this.winter.hasModule(module)) {
+                fulfilled = false;
+            }
+        });
+
+        return fulfilled;
+    }
 }
