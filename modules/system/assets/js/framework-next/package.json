@@ -1,0 +1,35 @@
+{
+    "name": "@wintercms/framework",
+    "version": "2.0.0",
+    "description": "The next evolution for the Winter JavaScript framework.",
+    "main": "framework.js",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wintercms/winter.git"
+    },
+    "author": {
+        "name": "Ben Thomson",
+        "email": "git@alfreido.com",
+        "url": "https://wintercms.com"
+    },
+    "contributors": [
+        {
+            "name": "Winter CMS Maintainers",
+            "url": "https://wintercms.com"
+        }
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/wintercms/winter/issues"
+    },
+    "homepage": "https://github.com/wintercms/winter",
+    "dependencies": {
+        "webpack-strip-block": "^0.3.0"
+    },
+    "devDependencies": {
+        "babel-plugin-module-resolver": "^4.1.0",
+        "laravel-mix": "^6.0.34",
+        "laravel-mix-polyfill": "^3.0.1"
+    }
+}
