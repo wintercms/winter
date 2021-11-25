@@ -1,5 +1,3 @@
-import Singleton from '../../abstracts/Singleton';
-
 /**
  * Enable Data Attributes API for AJAX requests.
  *
@@ -10,7 +8,7 @@ import Singleton from '../../abstracts/Singleton';
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class EnableDataRequest extends Singleton {
+class EnableDataRequest extends Singleton {
     /**
      * Ready event callback.
      *
@@ -202,3 +200,5 @@ export default class EnableDataRequest extends Singleton {
         return data;
     }
 }
+
+winter.addModule('enableDataRequest', EnableDataRequest);

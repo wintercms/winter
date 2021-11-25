@@ -1,5 +1,3 @@
-import Winter from '../Winter';
-
 /**
  * Module abstract.
  *
@@ -8,7 +6,7 @@ import Winter from '../Winter';
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class Module {
+class Module {
     /**
      * Constructor.
      *

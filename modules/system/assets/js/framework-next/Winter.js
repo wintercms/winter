@@ -1,10 +1,3 @@
-import ModuleFactory from './ModuleFactory';
-import ModuleAbstract from './abstracts/Module.js';
-
-import Debounce from './utilities/Debounce';
-import JsonParser from './utilities/JsonParser';
-import Sanitizer from './utilities/Sanitizer';
-
 /**
  * Winter JavaScript framework.
  *
@@ -16,7 +9,7 @@ import Sanitizer from './utilities/Sanitizer';
  * @author Ben Thomson <git@alfreido.com>
  * @link https://wintercms.com/docs/ajax/introduction
  */
-export default class Winter {
+class Winter {
     /**
      * Constructor.
      *
@@ -42,8 +35,6 @@ export default class Winter {
      * themselves to the DOM.
      */
     initialise() {
-        this.loadDefaultUtilities();
-
         window.addEventListener('DOMContentLoaded', () => {
             this.initialiseSingletons();
             this.globalEvent('ready');
@@ -59,15 +50,6 @@ export default class Winter {
                 mod.getInstance();
             }
         });
-    }
-
-    /**
-     * Loads default global utilities used in the Winter framework.
-     */
-    loadDefaultUtilities() {
-        this.addModule('debounce', Debounce);
-        this.addModule('jsonParser', JsonParser);
-        this.addModule('sanitizer', Sanitizer);
     }
 
     /**
@@ -288,3 +270,5 @@ export default class Winter {
     }
     /* develblock:end */
 }
+
+window.winter = new Winter();

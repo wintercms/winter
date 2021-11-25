@@ -20,7 +20,15 @@ mix
             })
         }
     })
-    .js('./framework.js', './framework.build.js')
+    .combine([
+        './abstracts/Module.js',
+        './abstracts/Singleton.js',
+        './ModuleFactory.js',
+        './Winter.js',
+        './utilities/Debounce.js',
+        './utilities/JsonParser.js',
+        './utilities/Sanitizer.js',
+    ], './build/framework.js', true)
     .polyfill({
         enabled: mix.inProduction(),
         useBuiltIns: 'usage',

@@ -1,6 +1,3 @@
-import Winter from '../Winter';
-import Module from '../abstracts/Module';
-
 /**
  * Ajax module abstract.
  *
@@ -13,7 +10,7 @@ import Module from '../abstracts/Module';
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class Ajax extends Module {
+class Ajax extends Module {
     /**
      * Constructor.
      *
@@ -605,3 +602,5 @@ export default class Ajax extends Module {
         return error;
     }
 }
+
+winter.addModule('request', Ajax);

@@ -1,7 +1,3 @@
-import Winter from './Winter';
-import ModuleAbstract from './abstracts/Module.js';
-import SingletonAbstract from './abstracts/Singleton.js';
-
 /**
  * Module factory class.
  *
@@ -11,7 +7,7 @@ import SingletonAbstract from './abstracts/Singleton.js';
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class Module {
+class ModuleFactory {
     /**
      * Constructor.
      *
@@ -19,14 +15,14 @@ export default class Module {
      *
      * @param {string} name
      * @param {Winter} winter
-     * @param {ModuleAbstract} instance
+     * @param {Module} instance
      */
     constructor(name, winter, instance) {
         this.name = name;
         this.winter = winter;
         this.instance = instance;
         this.instances = [];
-        this.singleton = instance.prototype instanceof SingletonAbstract;
+        this.singleton = instance.prototype instanceof Singleton;
     }
 
     /**
@@ -52,7 +48,7 @@ export default class Module {
      *
      * If this is a singleton, the single instance of the module will be returned.
      *
-     * @returns {ModuleAbstract|Function}
+     * @returns {Module|Function}
      */
     getInstance() {
         if (this.isFunction()) {
@@ -83,7 +79,7 @@ export default class Module {
      *
      * If this module is a callback function module, an empty array will be returned.
      *
-     * @returns {ModuleAbstract[]}
+     * @returns {Module[]}
      */
     getInstances() {
         if (this.isFunction()) {
@@ -99,7 +95,7 @@ export default class Module {
      * @returns {boolean}
      */
     isFunction() {
-        return (typeof this.instance === 'function' && this.instance.prototype instanceof ModuleAbstract === false);
+        return (typeof this.instance === 'function' && this.instance.prototype instanceof Module === false);
     }
 
     /**
@@ -108,7 +104,7 @@ export default class Module {
      * @returns {boolean}
      */
     isSingleton() {
-        return this.instance.prototype instanceof SingletonAbstract === true;
+        return this.instance.prototype instanceof Singleton === true;
     }
 
     /**
