@@ -100,7 +100,7 @@ class Backend
             $carbon->setTimezone(\Backend\Models\Preference::get('timezone'));
         } catch (Exception $ex) {
             // Use system default
-            $carbon->setTimezone(Config::get('backend.timezone', Config::get('app.timezone')));
+            $carbon->setTimezone(Config::get('cms.backendTimezone', Config::get('app.timezone')));
         }
 
         return $carbon;

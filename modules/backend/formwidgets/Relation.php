@@ -3,7 +3,9 @@
 use Db;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
+use Lang;
 use Winter\Storm\Database\Relations\Relation as RelationBase;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Form Relationship
@@ -95,6 +97,7 @@ class Relation extends FormWidgetBase
 
     /**
      * Makes the form object used for rendering a simple field type
+     * @throws SystemException if an unsupported relation type is used.
      */
     protected function makeRenderFormField()
     {
@@ -110,9 +113,14 @@ class Relation extends FormWidgetBase
 
             if (in_array($relationType, ['belongsToMany', 'morphToMany', 'morphedByMany', 'hasMany'])) {
                 $field->type = 'checkboxlist';
-            }
-            elseif (in_array($relationType, ['belongsTo', 'hasOne'])) {
+            } elseif (in_array($relationType, ['belongsTo', 'hasOne'])) {
                 $field->type = 'dropdown';
+            } else {
+                throw new SystemException(
+                    Lang::get('backend::lang.relation.relationwidget_unsupported_type', [
+                        'type' => $relationType
+                    ])
+                );
             }
 
             // Order query by the configured option.
