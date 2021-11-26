@@ -20,15 +20,9 @@ mix
             })
         }
     })
-    .combine([
-        './abstracts/Module.js',
-        './abstracts/Singleton.js',
-        './ModuleFactory.js',
-        './Winter.js',
-        './utilities/Debounce.js',
-        './utilities/JsonParser.js',
-        './utilities/Sanitizer.js',
-    ], './build/framework.js', true)
+    .js('./framework.js', './build/framework.js')
+    .js('./ajax/Request.js', './build/framework-js-request.js')
+    .js('./ajax/handlers/AttributeRequest.js', './build/framework-attr-request.js')
     .polyfill({
         enabled: mix.inProduction(),
         useBuiltIns: 'usage',
