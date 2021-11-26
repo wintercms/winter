@@ -2,6 +2,10 @@ import Module from './abstracts/Module';
 import Singleton from './abstracts/Singleton';
 import ModuleFactory from './ModuleFactory';
 
+import Debounce from './utilities/Debounce';
+import JsonParser from './utilities/JsonParser';
+import Sanitizer from './utilities/Sanitizer';
+
 /**
  * Winter JavaScript framework.
  *
@@ -26,6 +30,7 @@ export default class Winter {
         this.modules = {};
 
         this.attachAbstracts();
+        this.loadUtilities();
         this.initialise();
 
         /* develblock:start */
@@ -36,6 +41,12 @@ export default class Winter {
     attachAbstracts() {
         this.Module = Module;
         this.Singleton = Singleton;
+    }
+
+    loadUtilities() {
+        this.addModule('debounce', Debounce);
+        this.addModule('jsonParser', JsonParser);
+        this.addModule('sanitizer', Sanitizer);
     }
 
     /**
