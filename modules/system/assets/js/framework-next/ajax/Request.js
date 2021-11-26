@@ -252,9 +252,45 @@ class Request extends Winter.Module {
      * Updates the partials with the given content.
      *
      * @param {Object} partials
+     * @returns {Promise}
      */
     doUpdate(partials) {
-        console.log(partials);
+        return new Promise((resolve) => {
+            for (const [partial, content] of Object.entries(partials)) {
+                let selector = this.options.update[partial]
+                    ? this.options.update[partial]
+                    : partial;
+
+                let mode = 'replace';
+
+                if (selector.substr(0, 1) === '@') {
+                    mode = 'append';
+                    selector = selector.substr(1);
+                } else if (selector.substr(0, 1) === '^') {
+                    mode = 'prepend';
+                    selector = selector.substr(1);
+                }
+
+                const elements = document.querySelectorAll(selector);
+                if (elements.length > 0) {
+                    elements.forEach((element) => {
+                        switch (mode) {
+                            case 'replace':
+                                element.innerHTML = this.winter.sanitizer().sanitize(content);
+                                break;
+                            case 'append':
+                                element.innerHTML += this.winter.sanitizer().sanitize(content);
+                                break;
+                            case 'prepend':
+                                element.innerHTML = this.winter.sanitizer().sanitize(content) + element.innerHTML;
+                                break;
+                        }
+                    });
+                }
+
+                resolve();
+            }
+        });
     }
 
     /**
@@ -556,6 +592,7 @@ class Request extends Winter.Module {
 
     get data() {
         const data = (typeof this.options.data === 'object') ? this.options.data : {};
+        console.log(data);
 
         const formData = new FormData();
         if (Object.keys(data).length > 0) {
@@ -574,11 +611,11 @@ class Request extends Winter.Module {
     /**
      * Extracts partials.
      *
-     * @param {string[]} update
+     * @param {Object} update
      * @returns {string}
      */
     extractPartials(update) {
-        return update.join('&')
+        return Object.keys(update).join('&');
     }
 
     /**

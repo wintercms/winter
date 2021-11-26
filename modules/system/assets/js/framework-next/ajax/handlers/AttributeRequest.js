@@ -25,7 +25,7 @@ class AttributeRequest extends Winter.Singleton {
      * @returns {string[]}
      */
     dependencies() {
-        return ['request'];
+        return ['request', 'jsonParser'];
     }
 
     /**
@@ -159,11 +159,12 @@ class AttributeRequest extends Winter.Singleton {
     }
 
     ajaxSetup(request) {
-        const fieldName = request.element.getAttribute('name');
+        let fieldName = request.element.getAttribute('name');
 
         const data = Object.assign({}, this.getParentRequestData(request.element), request.options.data);
 
         if (request.element && request.element.matches('input, textarea, select, button') && !request.form && fieldName && !request.options.data[fieldName]) {
+
             data[fieldName] = request.element.value;
         }
 
@@ -198,6 +199,23 @@ class AttributeRequest extends Winter.Singleton {
         });
 
         return data;
+    }
+
+    parseData(data) {
+        let value;
+
+        if (data === undefined) {
+            value = '';
+        }
+        if (typeof value == 'object') {
+            return value;
+        }
+
+        try {
+            return this.winter.jsonparser().parse('{' + data + '}');
+        } catch (e) {
+            throw new Error('Error parsing the data attribute on element: ' + e.message);
+        }
     }
 }
 
