@@ -68,17 +68,14 @@ class MixCompile extends Command
     protected function mixPackage($package)
     {
         $this->createWebpackConfig($package['path'], $package['mix']);
-
-        $command = [
-            $package['path'] . implode(DIRECTORY_SEPARATOR, ['', 'node_modules', 'webpack', 'bin', 'webpack.js']),
-            '--progress',
-            '--config=' . $package['path'] . DIRECTORY_SEPARATOR . 'mix.webpack.js',
-        ];
+        $command = $this->createCommand($package);
 
         $process = new Process(
             $command,
             $package['path'],
-            ['NODE_ENV' => $this->option('production', false) ? 'production' : 'development']
+            ['NODE_ENV' => $this->option('production', false) ? 'production' : 'development'],
+            null,
+            null
         );
 
         try {
@@ -96,6 +93,15 @@ class MixCompile extends Command
         $this->removeWebpackConfig($package['path']);
 
         return $exitCode;
+    }
+
+    protected function createCommand($package)
+    {
+        return [
+            $package['path'] . implode(DIRECTORY_SEPARATOR, ['', 'node_modules', 'webpack', 'bin', 'webpack.js']),
+            '--progress',
+            '--config=' . $package['path'] . DIRECTORY_SEPARATOR . 'mix.webpack.js',
+        ];
     }
 
     protected function createWebpackConfig($path, $mixPath)

@@ -281,6 +281,7 @@ class ServiceProvider extends ModuleServiceProvider
 
         $this->registerConsoleCommand('mix.install', 'System\Console\MixInstall');
         $this->registerConsoleCommand('mix.compile', 'System\Console\MixCompile');
+        $this->registerConsoleCommand('mix.watch', 'System\Console\MixWatch');
     }
 
     /*
