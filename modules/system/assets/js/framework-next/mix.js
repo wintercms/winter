@@ -23,6 +23,7 @@ mix
     .js('./framework.js', './build/framework.js')
     .js('./ajax/Request.js', './build/framework-js-request.js')
     .js('./ajax/handlers/AttributeRequest.js', './build/framework-attr-request.js')
+    .js('./framework.extras.js', './build/framework.extras.js')
     .polyfill({
         enabled: mix.inProduction(),
         useBuiltIns: 'usage',
