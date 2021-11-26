@@ -513,6 +513,9 @@ class Request extends Winter.Module {
         if (!this.element) {
             return null;
         }
+        if (this.element.tagName === 'FORM') {
+            return this.element;
+        }
 
         return this.element.closest('form');
     }
@@ -592,9 +595,8 @@ class Request extends Winter.Module {
 
     get data() {
         const data = (typeof this.options.data === 'object') ? this.options.data : {};
-        console.log(data);
 
-        const formData = new FormData();
+        const formData = new FormData(this.form || undefined);
         if (Object.keys(data).length > 0) {
             for (const [key, value] of Object.entries(data)) {
                 formData.append(key, value);

@@ -164,15 +164,7 @@ class AttributeRequest extends Winter.Singleton {
         const data = Object.assign({}, this.getParentRequestData(request.element), request.options.data);
 
         if (request.element && request.element.matches('input, textarea, select, button') && !request.form && fieldName && !request.options.data[fieldName]) {
-
             data[fieldName] = request.element.value;
-        }
-
-        if (request.form) {
-            const formData = new FormData(request.form);
-            for (const entry of formData) {
-                data[entry[0]] = entry[1];
-            }
         }
 
         request.options.data = data;
