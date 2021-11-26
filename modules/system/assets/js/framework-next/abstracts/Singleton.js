@@ -1,3 +1,5 @@
+import Module from './Module';
+
 /**
  * Singleton module abstract.
  *
@@ -9,6 +11,6 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-class Singleton extends Module {
+export default class Singleton extends Module {
 }
 

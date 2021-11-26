@@ -8,7 +8,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-class EnableDataRequest extends Singleton {
+class AttributeRequest extends Winter.Singleton {
     /**
      * Ready event callback.
      *
@@ -201,4 +201,4 @@ class EnableDataRequest extends Singleton {
     }
 }
 
-winter.addModule('enableDataRequest', EnableDataRequest);
+winter.addModule('attributeRequest', AttributeRequest);

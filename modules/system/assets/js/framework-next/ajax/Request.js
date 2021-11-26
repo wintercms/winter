@@ -10,7 +10,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-class Ajax extends Module {
+class Request extends Winter.Module {
     /**
      * Constructor.
      *
@@ -603,4 +603,4 @@ class Ajax extends Module {
     }
 }
 
-winter.addModule('request', Ajax);
+winter.addModule('request', Request);

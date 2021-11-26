@@ -1,3 +1,7 @@
+import Winter from './Winter';
+import Module from './abstracts/Module';
+import Singleton from "./abstracts/Singleton";
+
 /**
  * Module factory class.
  *
@@ -7,7 +11,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-class ModuleFactory {
+export default class ModuleFactory {
     /**
      * Constructor.
      *

@@ -1,3 +1,7 @@
+import Module from './abstracts/Module';
+import Singleton from './abstracts/Singleton';
+import ModuleFactory from './ModuleFactory';
+
 /**
  * Winter JavaScript framework.
  *
@@ -9,7 +13,7 @@
  * @author Ben Thomson <git@alfreido.com>
  * @link https://wintercms.com/docs/ajax/introduction
  */
-class Winter {
+export default class Winter {
     /**
      * Constructor.
      *
@@ -21,11 +25,17 @@ class Winter {
         /* develblock:end */
         this.modules = {};
 
+        this.attachAbstracts();
         this.initialise();
 
         /* develblock:start */
         this.debug('Winter framework initialised');
         /* develblock:end */
+    }
+
+    attachAbstracts() {
+        this.Module = Module;
+        this.Singleton = Singleton;
     }
 
     /**

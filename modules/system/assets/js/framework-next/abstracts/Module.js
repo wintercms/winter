@@ -6,7 +6,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-class Module {
+export default class Module {
     /**
      * Constructor.
      *
