@@ -71,7 +71,7 @@ body.oc-loading, body.oc-loading * {
 @color-flash-info-bg:                        #5fb6f5;
 @color-flash-text:                           #ffffff;
 
-body > p.flash-message {
+body > div.flash-message {
     position: fixed;
     width: 500px;
     left: 50%;
@@ -79,60 +79,60 @@ body > p.flash-message {
     margin-left: -250px;
     color: @color-flash-text;
     font-size: 14px;
-    padding: 10px 30px 10px 15px;
+    padding: 10px 30px 14px 15px;
     z-index: @zindex-flashmessage;
     word-wrap: break-word;
     text-shadow: 0 -1px 0px rgba(0,0,0,.15);
     text-align: center;
     .box-shadow(@overlay-box-shadow);
     .border-radius(@border-radius-base);
+    cursor: pointer;
 
-    &.fade {
-        .opacity(0);
+    .flash-timer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: #ffffff;
+        opacity: 0.5;
+        .border-radius(@border-radius-base);
+
+        &.timeout-active {
+            .transition(~'width 6s linear');
+        }
+
+        &.timeout-in {
+            width: 100%;
+        }
+
+        &.timeout-out {
+            width: 0%;
+        }
+    }
+
+    &.show-active, &.hide-active {
         .transition(~'all 0.5s, width 0s');
+    }
+
+    &.show-in, &.hide-out {
+        .opacity(0);
         .transform(~'scale(0.9)');
     }
 
-    &.fade.in {
+    &.show-out, &.hide-in {
         .opacity(1);
-        .transform( ~'scale(1)');
+        .transform(~'scale(1)');
     }
 
     &.success { background: @color-flash-success-bg; }
     &.error { background: @color-flash-error-bg; }
     &.warning { background: @color-flash-warning-bg; }
     &.info { background: @color-flash-info-bg; }
-
-    button.close {
-        float: none;
-        position: absolute;
-        right: 10px;
-        top: 8px;
-        color: white;
-        font-size: 21px;
-        line-height: 1;
-        font-weight: bold;
-        .opacity(.2);
-
-        padding: 0;
-        cursor: pointer;
-        background: transparent;
-        border: 0;
-        -webkit-appearance: none;
-        outline: none;
-
-        &:hover,
-        &:focus {
-            color: white;
-            text-decoration: none;
-            cursor: pointer;
-            .opacity(.5);
-        }
-    }
 }
 
 @media (max-width: @screen-sm) {
-    body > p.flash-message {
+    body > div.flash-message {
         left: 10px;
         right: 10px;
         top: 10px;
