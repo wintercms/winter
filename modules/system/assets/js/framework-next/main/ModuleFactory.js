@@ -1,6 +1,6 @@
 import Winter from './Winter';
-import Module from './abstracts/Module';
-import Singleton from "./abstracts/Singleton";
+import Module from '../abstracts/Module';
+import Singleton from "../abstracts/Singleton";
 
 /**
  * Module factory class.

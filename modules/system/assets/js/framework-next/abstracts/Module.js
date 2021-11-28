@@ -1,3 +1,5 @@
+import Winter from '../main/Winter';
+
 /**
  * Module abstract.
  *

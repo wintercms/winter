@@ -1,10 +1,10 @@
-import Module from './abstracts/Module';
-import Singleton from './abstracts/Singleton';
+import Module from '../abstracts/Module';
+import Singleton from '../abstracts/Singleton';
 import ModuleFactory from './ModuleFactory';
 
-import Debounce from './utilities/Debounce';
-import JsonParser from './utilities/JsonParser';
-import Sanitizer from './utilities/Sanitizer';
+import Debounce from '../utilities/Debounce';
+import JsonParser from '../utilities/JsonParser';
+import Sanitizer from '../utilities/Sanitizer';
 
 /**
  * Winter JavaScript framework.
