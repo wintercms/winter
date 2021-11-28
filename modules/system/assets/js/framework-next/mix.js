@@ -27,5 +27,5 @@ mix
     .polyfill({
         enabled: mix.inProduction(),
         useBuiltIns: 'usage',
-        targets: '>0.5%, not ie > 0'
+        targets: '>0.5%, not ie > 0, not op_mini all'
     });
