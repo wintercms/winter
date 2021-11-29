@@ -3,7 +3,7 @@
 import { JSDOM } from 'jsdom'
 import path from 'path'
 
-class FakeDom
+export default class FakeDom
 {
     constructor(content, options)
     {
@@ -151,5 +151,3 @@ class FakeDom
         return content.join('\n')
     }
 }
-
-export default FakeDom

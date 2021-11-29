@@ -1,11 +1,11 @@
 /* globals window */
 
 ((winter) => {
-    class TestModule extends winter.Module {
+    class TestSingleton extends winter.Singleton {
         testMethod() {
             return 'Tested';
         }
     }
 
-    winter.addModule('test', TestModule);
+    winter.addModule('test', TestSingleton);
 })(window.winter);
