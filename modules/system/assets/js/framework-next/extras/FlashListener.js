@@ -23,8 +23,22 @@ export default class FlashListener extends Winter.Singleton {
      */
     listens() {
         return {
+            ready: 'ready',
             ajaxErrorMessage: 'ajaxErrorMessage',
         };
+    }
+
+    /**
+     * Do flash messages for PHP flash responses.
+     */
+    ready() {
+        document.querySelectorAll('[data-control="flash-message"]').forEach((element) => {
+            this.winter.flash(
+                element.innerHTML,
+                element.dataset.flashType,
+                element.dataset.flashDuration,
+            );
+        });
     }
 
     /**

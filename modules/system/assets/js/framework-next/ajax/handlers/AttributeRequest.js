@@ -10,6 +10,18 @@
  */
 class AttributeRequest extends Winter.Singleton {
     /**
+     * Listeners.
+     *
+     * @returns {Object}
+     */
+    listens() {
+        return {
+            ready: 'ready',
+            ajaxSetup: 'onAjaxSetup'
+        };
+    }
+
+    /**
      * Ready event callback.
      *
      * Attaches handlers to the window to listen for all request interactions.
@@ -26,17 +38,6 @@ class AttributeRequest extends Winter.Singleton {
      */
     dependencies() {
         return ['request', 'jsonParser'];
-    }
-
-    /**
-     * Event listeners.
-     *
-     * @returns {Object}
-     */
-    listens() {
-        return {
-            ajaxSetup: 'onAjaxSetup'
-        };
     }
 
     /**
@@ -157,9 +158,9 @@ class AttributeRequest extends Winter.Singleton {
             confirm: ('requestConfirm' in data) ? String(data.requestConfirm) : null,
             redirect: ('requestRedirect' in data) ? String(data.requestRedirect) : null,
             loading: ('requestLoading' in data) ? String(data.requestLoading) : null,
-            flash: ('requestFlash' in data) ? Boolean(data.requestFlash) : null,
-            files: ('requestFiles' in data) ? Boolean(data.requestFiles) : null,
-            browserValidate: ('requestBrowserValidate' in data) ? Boolean(data.requestBrowserValidate) : null,
+            flash: ('requestFlash' in data) ? true : false,
+            files: ('requestFiles' in data) ? true : false,
+            browserValidate: ('requestBrowserValidate' in data) ? true : false,
             form: ('requestForm' in data) ? String(data.requestForm) : null,
             url: ('requestUrl' in data) ? String(data.requestUrl) : null,
             update: ('requestUpdate' in data) ? this.parseData(String(data.requestUpdate)) : [],
