@@ -512,7 +512,7 @@ return [
             'iso_8859_6' => 'ISO-8859-6 (Latin, Aràbic)',
             'iso_8859_7' => 'ISO-8859-7 (Latin, Grec)',
             'iso_8859_8' => 'ISO-8859-8 (Latin, Hebreu)',
-            'iso_8859_0' => 'ISO-8859-9 (Latin-5, Turc)',
+            'iso_8859_9' => 'ISO-8859-9 (Latin-5, Turc)',
             'iso_8859_10' => 'ISO-8859-10 (Latin-6, Nordic)',
             'iso_8859_11' => 'ISO-8859-11 (Latin, Thai)',
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, Regió Bàltica)',
