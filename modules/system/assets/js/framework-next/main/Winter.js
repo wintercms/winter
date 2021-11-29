@@ -169,6 +169,19 @@ export default class Winter {
     }
 
     /**
+     * Returns a ModuleFactory object of a given module.
+     *
+     * @returns {ModuleFactory}
+     */
+    getModule(name) {
+        if (!this.hasModule(name)) {
+            throw new Error(`No module called "${name}" has been registered.`);
+        }
+
+        return this.modules[name];
+    }
+
+    /**
      * Finds all modules that listen to the given event.
      *
      * This works for both normal and promise events.
