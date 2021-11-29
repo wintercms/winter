@@ -30,11 +30,13 @@ export default class Module {
     }
 
     /**
-     * Ready event callback.
+     * Defines the listener methods for global events.
      *
-     * Fired when the DOM is fully loaded.
+     * @returns {Object}
      */
-    ready() {}
+    listens() {
+        return {};
+    }
 
     /**
      * Destructor.

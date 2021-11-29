@@ -87,7 +87,6 @@ describe('Winter framework', function () {
             );
     });
 
-
     it('can add and remove a singleton', function (done) {
         FakeDom
             .new()
@@ -130,6 +129,50 @@ describe('Winter framework', function () {
                         assert.isFalse(winter.hasModule('test'));
                         assert.deepEqual(['debounce', 'jsonparser', 'sanitizer'], dom.window.winter.getModuleNames());
                         assert.isUndefined(winter.test);
+
+                        done()
+                    } catch (error) {
+                        done(error)
+                    }
+                },
+                (error) => {
+                    throw error
+                }
+            );
+    });
+
+    it('can listen and call global events', function (done) {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/framework-next/build/framework.js',
+                'tests/js/fixtures/framework/TestListener.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    // Run assertions
+                    const winter = dom.window.winter;
+
+                    try {
+                        assert.deepEqual(['test'], winter.listensToEvent('eventOne'));
+                        assert.deepEqual(['test'], winter.listensToEvent('eventTwo'));
+                        assert.deepEqual([], winter.listensToEvent('eventThree'));
+
+                        // Call global event one
+                        const testClass = winter.test();
+                        winter.globalEvent('eventOne', 42);
+                        assert.equal('Event called with arg 42', testClass.eventResult);
+
+                        // Call global event two - should fail as the test module doesn't have that method
+                        assert.throws(() => {
+                            winter.globalEvent('eventTwo');
+                        }, /Missing "notExists" method in "test" module/);
+
+                        // Call global event three - nothing should happen
+                        assert.doesNotThrow(() => {
+                            winter.globalEvent('eventThree');
+                        });
 
                         done()
                     } catch (error) {

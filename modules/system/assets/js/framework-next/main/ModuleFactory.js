@@ -46,6 +46,24 @@ export default class ModuleFactory {
     }
 
     /**
+     * Calls a prototype method for a module. This should generally be used for "static" calls.
+     *
+     * @param {string} methodName
+     * @param {...} args
+     * @returns {any}
+     */
+    callMethod() {
+        if (this.isFunction()) {
+            return null;
+        }
+
+        const args = Array.from(arguments);
+        const methodName = args.shift();
+
+        return this.instance.prototype[methodName](args);
+    }
+
+    /**
      * Returns an instance of the current module.
      *
      * If this is a callback function module, the function will be returned.

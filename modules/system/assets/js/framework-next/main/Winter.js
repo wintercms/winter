@@ -184,7 +184,7 @@ export default class Winter {
     /**
      * Finds all modules that listen to the given event.
      *
-     * This works for both normal and promise events.
+     * This works for both normal and promise events. It does NOT check that the module's listener actually exists.
      *
      * @param {string} eventName
      * @returns {string[]} The name of the modules that are listening to this event.
@@ -197,7 +197,13 @@ export default class Winter {
                 continue;
             }
 
-            if (mod.hasMethod(eventName)) {
+            if (!mod.hasMethod('listens')) {
+                continue;
+            }
+
+            const listeners = mod.callMethod('listens');
+
+            if (typeof listeners[eventName] === 'string') {
                 modules.push(name);
             }
         }
@@ -218,28 +224,40 @@ export default class Winter {
         this.debug(`Calling global event "${eventName}"`);
         /* develblock:end */
 
+        // Find out which modules listen to this event - if none listen to it, return true.
+        const listeners = this.listensToEvent(eventName);
+        if (listeners.length === 0) {
+            return true;
+        }
+
         let cancelled = false;
         let args = Array.from(arguments);
         args.shift();
 
-        Object.values(this.modules).forEach((mod) => {
-        if (mod.isFunction()) {
-            return;
-        }
+        listeners.forEach((name) => {
+            const mod = this.getModule(name);
 
-        // Call event handler methods for all modules, if they have a method specified for the event.
-        if (mod.hasMethod(eventName)) {
+            if (mod.isFunction()) {
+                return;
+            }
+
+            const listenMethod = mod.callMethod('listens')[eventName];
+
+            // Call event handler methods for all modules, if they have a method specified for the event.
             mod.getInstances().forEach((instance) => {
                 // If a module has cancelled the event, no further modules are considered.
                 if (cancelled) {
                     return;
                 }
 
-                if (instance[eventName](...args) === false) {
+                if (!instance[listenMethod]) {
+                    throw new Error(`Missing "${listenMethod}" method in "${name}" module`);
+                }
+
+                if (instance[listenMethod](...args) === false) {
                     cancelled = true;
                 }
             });
-        }
         });
 
         return !cancelled;
@@ -258,26 +276,34 @@ export default class Winter {
         this.debug(`Calling global promise event "${eventName}"`);
         /* develblock:end */
 
+        // Find out which modules listen to this event - if none listen to it, return true.
+        const listeners = this.listensToEvent(eventName);
+        if (listeners.length === 0) {
+            return true;
+        }
+
         const promises = [];
         let args = Array.from(arguments);
         args.shift();
 
-        Object.values(this.modules).forEach((mod) => {
-        if (mod.isFunction()) {
-            return;
-        }
+        listeners.forEach((name) => {
+            const mod = this.getModule(name);
 
-        // Call event handler methods for all modules, if they have a method specified for the event.
-        if (mod.hasMethod(eventName)) {
+            if (mod.isFunction()) {
+                return;
+            }
+
+            const listenMethod = mod.callMethod('listens')[eventName];
+
+            // Call event handler methods for all modules, if they have a method specified for the event.
             mod.getInstances().forEach((instance) => {
-                const instancePromise = instance[eventName](...args);
+                const instancePromise = instance[listenMethod](...args);
                 if (instancePromise instanceof Promise === false) {
                     return;
                 }
 
                 promises.push(instancePromise);
             });
-        }
         });
 
         if (promises.length === 0) {

@@ -29,6 +29,17 @@ class AttributeRequest extends Winter.Singleton {
     }
 
     /**
+     * Event listeners.
+     *
+     * @returns {Object}
+     */
+    listens() {
+        return {
+            ajaxSetup: 'onAjaxSetup'
+        };
+    }
+
+    /**
      * Destructor.
      *
      * Detaches all handlers.
@@ -158,7 +169,7 @@ class AttributeRequest extends Winter.Singleton {
         this.winter.request(element, handler, options);
     }
 
-    ajaxSetup(request) {
+    onAjaxSetup(request) {
         let fieldName = request.element.getAttribute('name');
 
         const data = Object.assign({}, this.getParentRequestData(request.element), request.options.data);

@@ -17,6 +17,17 @@ export default class FlashListener extends Winter.Singleton {
     }
 
     /**
+     * Defines listeners.
+     *
+     * @returns {Object}
+     */
+    listens() {
+        return {
+            ajaxErrorMessage: 'ajaxErrorMessage',
+        };
+    }
+
+    /**
      * Shows a flash message for AJAX errors.
      *
      * @param {string} message
