@@ -276,10 +276,10 @@ export default class Winter {
         this.debug(`Calling global promise event "${eventName}"`);
         /* develblock:end */
 
-        // Find out which modules listen to this event - if none listen to it, return true.
+        // Find out which modules listen to this event - if none listen to it, return a resolved promise.
         const listeners = this.listensToEvent(eventName);
         if (listeners.length === 0) {
-            return true;
+            return Promise.resolve();
         }
 
         const promises = [];
@@ -330,5 +330,3 @@ export default class Winter {
     }
     /* develblock:end */
 }
-
-window.winter = new Winter();

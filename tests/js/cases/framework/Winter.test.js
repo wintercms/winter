@@ -184,4 +184,62 @@ describe('Winter framework', function () {
                 }
             );
     });
+
+    it('can listen and call global promise events', function (done) {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/framework-next/build/framework.js',
+                'tests/js/fixtures/framework/TestPromiseListener.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    // Run assertions
+                    const winter = dom.window.winter;
+
+                    try {
+                        assert.deepEqual(['test'], winter.listensToEvent('promiseOne'));
+                        assert.deepEqual(['test'], winter.listensToEvent('promiseTwo'));
+                        assert.deepEqual([], winter.listensToEvent('promiseThree'));
+
+                        // Call global event one
+                        const testClass = winter.test();
+                        winter.globalPromiseEvent('promiseOne', 'promise').then(
+                            () => {
+                                assert.equal('Event called with arg promise', testClass.eventResult);
+
+                                // Call global event two - it should still work, even though it doesn't return a promise
+                                winter.globalPromiseEvent('promiseTwo', 'promise 2').then(
+                                    () => {
+                                        assert.equal('Promise two called with arg promise 2', testClass.eventResult);
+
+                                        // Call global event three - it should still work
+                                        winter.globalPromiseEvent('promiseThree', 'promise 3').then(
+                                            () => {
+                                                done();
+                                            },
+                                            (error) => {
+                                                done(error);
+                                            }
+                                        );
+                                    },
+                                    (error) => {
+                                        done(error);
+                                    }
+                                );
+                            },
+                            (error) => {
+                                done(error);
+                            }
+                        );
+                    } catch (error) {
+                        done(error)
+                    }
+                },
+                (error) => {
+                    throw error
+                }
+            );
+    });
 });
