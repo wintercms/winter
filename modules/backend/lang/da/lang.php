@@ -464,7 +464,7 @@ return [
             'iso_8859_6' => 'ISO-8859-6 (Latin, Arabisk)',
             'iso_8859_7' => 'ISO-8859-7 (Latin, Græsk)',
             'iso_8859_8' => 'ISO-8859-8 (Latin, Hebraisk)',
-            'iso_8859_0' => 'ISO-8859-9 (Latin-5, Tyrkisk)',
+            'iso_8859_9' => 'ISO-8859-9 (Latin-5, Tyrkisk)',
             'iso_8859_10' => 'ISO-8859-10 (Latin-6, Nordisk)',
             'iso_8859_11' => 'ISO-8859-11 (Latin, Thai)',
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, Baltic Rim)',

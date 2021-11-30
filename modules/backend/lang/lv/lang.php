@@ -567,7 +567,7 @@ return [
             'iso_8859_6' => 'ISO-8859-6 (Latīņu, Arābu)',
             'iso_8859_7' => 'ISO-8859-7 (Latīņu, Grieķu)',
             'iso_8859_8' => 'ISO-8859-8 (Latīņu, Ebreju)',
-            'iso_8859_0' => 'ISO-8859-9 (Latīņu-5, Turku)',
+            'iso_8859_9' => 'ISO-8859-9 (Latīņu-5, Turku)',
             'iso_8859_10' => 'ISO-8859-10 (Latīņu-6, Ziemeļvalstu)',
             'iso_8859_11' => 'ISO-8859-11 (Latīņu, Taju)',
             'iso_8859_13' => 'ISO-8859-13 (Latīņu-7, Baltijas reģiona)',
