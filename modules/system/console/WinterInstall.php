@@ -8,7 +8,7 @@ use File;
 use Config;
 use Backend\Database\Seeds\SeedSetupAdmin;
 use System\Classes\UpdateManager;
-use Winter\Storm\Config\ConfigWriter;
+use Winter\Storm\Config\ConfigFile;
 use Illuminate\Console\Command;
 use Illuminate\Encryption\Encrypter;
 use Symfony\Component\Console\Input\InputOption;
@@ -39,18 +39,11 @@ class WinterInstall extends Command
     protected $description = 'Set up Winter for the first time.';
 
     /**
-     * @var Winter\Storm\Config\ConfigWriter
-     */
-    protected $configWriter;
-
-    /**
      * Create a new command instance.
      */
     public function __construct()
     {
         parent::__construct();
-
-        $this->configWriter = new ConfigWriter;
 
         // Register aliases for backwards compatibility with October
         $this->setAliases(['october:install']);
@@ -119,14 +112,15 @@ class WinterInstall extends Command
     protected function setupCommonValues()
     {
         $url = $this->ask('Application URL', Config::get('app.url'));
-        $this->writeToConfig('app', ['url' => $url]);
+        $this->getConfigFile('app')
+            ->set('url', $url)
+            ->write();
     }
 
     protected function setupBackendValues()
     {
         // cms.backendUri
         $backendUri = $this->ask('Backend URL', Config::get('cms.backendUri'));
-        $this->writeToConfig('cms', ['backendUri' => $backendUri]);
 
         // app.locale
         $defaultLocale = Config::get('app.locale');
@@ -149,7 +143,10 @@ class WinterInstall extends Command
             // Installation failed halfway through, recover gracefully
             $locale = $this->ask('Default Backend Locale', $defaultLocale);
         }
-        $this->writeToConfig('app', ['locale' => $locale]);
+
+        $this->getConfigFile('app')
+            ->set('locale', $locale)
+            ->write();
 
         // cms.backendTimezone
         $defaultTimezone = Config::get('cms.backendTimezone');
@@ -189,21 +186,32 @@ class WinterInstall extends Command
             // Installation failed halfway through, recover gracefully
             $timezone = $this->ask('Default Backend Timezone', $defaultTimezone);
         }
-        $this->writeToConfig('cms', ['backendTimezone' => $timezone]);
+
+        $this->getConfigFile('cms')
+            ->set([
+                'backendTimezone' => $timezone,
+                'backendUri' => $backendUri
+            ])
+            ->write();
     }
 
     protected function setupAdvancedValues()
     {
+        $defaultFileMask = $this->ask('File Permission Mask', Config::get('cms.defaultMask.file') ?: '777');
+        $defaultDirMask = $this->ask('Folder Permission Mask', Config::get('cms.defaultMask.folder') ?: '777');
 
-
-        $defaultMask = $this->ask('File Permission Mask', Config::get('cms.defaultMask.file') ?: '777');
-        $this->writeToConfig('cms', ['defaultMask.file' => $defaultMask]);
-
-        $defaultMask = $this->ask('Folder Permission Mask', Config::get('cms.defaultMask.folder') ?: '777');
-        $this->writeToConfig('cms', ['defaultMask.folder' => $defaultMask]);
+        $this->getConfigFile('cms')
+            ->set([
+                'defaultMask.file' => $defaultFileMask,
+                'defaultMask.folder' => $defaultDirMask
+            ])
+            ->write();
 
         $debug = (bool) $this->confirm('Enable Debug Mode?', true);
-        $this->writeToConfig('app', ['debug' => $debug]);
+
+        $this->getConfigFile('app')
+            ->set('debug', $debug)
+            ->write();
     }
 
     protected function askToInstallPlugins()
@@ -244,7 +252,9 @@ class WinterInstall extends Command
             }
         }
 
-        $this->writeToConfig('app', ['key' => $key]);
+        $this->getConfigFile('app')
+            ->set('key', $key)
+            ->write();
 
         $this->info(sprintf('Application key [%s] set successfully.', $key));
     }
@@ -292,11 +302,15 @@ class WinterInstall extends Command
 
         $newConfig = $this->$method();
 
-        $this->writeToConfig('database', ['default' => $driver]);
+        $settings = ['default' => $driver];
 
         foreach ($newConfig as $config => $value) {
-            $this->writeToConfig('database', ['connections.'.$driver.'.'.$config => $value]);
+            $settings['connections.'.$driver.'.'.$config] = $value;
         }
+
+        $this->getConfigFile('database')
+            ->set($settings)
+            ->write();
     }
 
     protected function setupDatabaseMysql()
@@ -329,7 +343,7 @@ class WinterInstall extends Command
             if (!file_exists($filename)) {
                 $directory = dirname($filename);
                 if (!is_dir($directory)) {
-                    mkdir($directory, 0777, true);
+                    mkdir($directory, 0755, true);
                 }
 
                 new PDO('sqlite:'.$filename);
@@ -435,30 +449,25 @@ class WinterInstall extends Command
         $this->line($message);
     }
 
-    protected function writeToConfig($file, $values)
+    /**
+     * Get a config file object.
+     *
+     * @param string $name
+     * @return ConfigFile
+     */
+    protected function getConfigFile(string $name): ConfigFile
     {
-        $configFile = $this->getConfigFile($file);
+        $file = sprintf(
+            '%s/%s%s.php',
+            $this->laravel['path.config'],
+            $this->option('env') ? $this->option('env') . '/' : '',
+            $name
+        );
 
-        foreach ($values as $key => $value) {
-            Config::set($file.'.'.$key, $value);
+        if (!is_dir(dirname($file))) {
+            mkdir(dirname($file), 0755);
         }
 
-        $this->configWriter->toFile($configFile, $values);
-    }
-
-    /**
-     * Get a config file and contents.
-     *
-     * @return array
-     */
-    protected function getConfigFile($name = 'app')
-    {
-        $env = $this->option('env') ? $this->option('env').'/' : '';
-
-        $name .= '.php';
-
-        $contents = File::get($path = $this->laravel['path.config']."/{$env}{$name}");
-
-        return $path;
+        return ConfigFile::read($file, true);
     }
 }
