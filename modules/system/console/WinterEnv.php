@@ -2,6 +2,8 @@
 
 use App;
 use Illuminate\Console\Command;
+use Winter\Storm\Config\ConfigFile;
+use Winter\Storm\Config\EnvFile;
 
 /**
  * Console command to convert configuration to use .env files.
@@ -14,7 +16,6 @@ use Illuminate\Console\Command;
  */
 class WinterEnv extends Command
 {
-
     /**
      * The console command name.
      */
@@ -48,6 +49,11 @@ class WinterEnv extends Command
     protected $connection;
 
     /**
+     * @var string env file name
+     */
+    protected $envFile = '.env';
+
+    /**
      * Create a new command instance.
      */
     public function __construct()
@@ -60,309 +66,114 @@ class WinterEnv extends Command
 
     /**
      * Execute the console command.
+     * @return int
      */
-    public function handle()
+    public function handle(): int
     {
-        if (file_exists('.env')) {
-            return $this->error('.env file already exists.');
+        if (file_exists($this->getEnvPath())) {
+            $this->error('.env file already exists.');
+            return 1;
         }
 
-        $this->overwriteConfig();
+        $env = EnvFile::read($this->getEnvPath());
+        $this->setEnvValues($env);
+        $env->write();
+
+        $this->updateConfig();
+
 
         $this->info('.env configuration file has been created.');
+
+        return 0;
     }
 
     /**
-     * Overwrite config file
-     */
-    protected function overwriteConfig()
-    {
-        foreach (array_keys($this->config()) as $config) {
-            $this->config = $config;
-
-            $this->configToEnv();
-        }
-    }
-
-    /**
-     * Replace config values with env() syntax
-     */
-    protected function configToEnv()
-    {
-        $content = $this->parseConfigFile();
-
-        $this->writeToConfigFile($content);
-    }
-
-    /**
-     * Parse config file line by line
-     *
+     * Get the full path of the env file
      * @return string
      */
-    protected function parseConfigFile()
+    protected function getEnvPath(): string
     {
-        $lines = [];
-
-        foreach ($this->lines() as $line) {
-            $keys = $this->config()[$this->config];
-
-            $lines[] = $this->parseLine($line, $keys);
-        }
-
-        $this->writeToEnv("\n");
-
-        return implode('', $lines);
+        return base_path($this->envFile);
     }
 
     /**
-     * @param $keys
-     * @param $line
-     * @return mixed
+     * Get the full path of a config file
+     * @param string $config
+     * @return string
      */
-    protected function parseLine($line, $keys)
+    protected function getConfigPath(string $config): string
     {
-        $line = $this->replaceConfigLine($line, $keys);
-
-        $line = $this->replaceDbConfigLine($line);
-
-        return $line;
+        return rtrim(App::make('path.config'), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $config . '.php';
     }
 
     /**
-     * @param $line
-     * @param $keys
-     * @return mixed
+     * Set env keys to their config values within the EnvFile object
+     * @param EnvFile $env
+     * @return void
      */
-    protected function replaceConfigLine($line, $keys)
+    protected function setEnvValues(EnvFile $env): void
     {
-        foreach ($keys as $envKey => $configKey) {
-            $pattern = $this->buildPattern($configKey);
-
-            $callback = $this->buildCallback($envKey, $configKey);
-
-            if (preg_match($pattern, $line)) {
-                $line = preg_replace_callback($pattern, $callback, $line);
-            }
-        }
-
-        return $line;
-    }
-
-    /**
-     * @param $line
-     * @return mixed
-     */
-    protected function replaceDbConfigLine($line)
-    {
-        if ($this->config == 'database') {
-            foreach ($this->dbConfig() as $connection => $settings) {
-                $this->setCurrentConnection($line, $connection);
-
-                if ($this->connection == $connection) {
-                    $line = $this->replaceConfigLine($line, $settings);
+        foreach ($this->config() as $config => $items) {
+            foreach ($items as $envKey => $configKey) {
+                $env->set($envKey, config($config . '.' . $configKey));
+                if ($config === 'database' && $envKey === 'DB_CONNECTION') {
+                    if (!$databaseConfig = $this->dbConfig()[config($config . '.' . $configKey)] ?? null) {
+                        continue;
+                    }
+                    foreach ($databaseConfig as $dbEnvKey => $dbConfigKey) {
+                        $env->set($dbEnvKey, config($config . '.' . $dbConfigKey));
+                    }
                 }
             }
-        }
-
-        return $line;
-    }
-
-    /**
-     * @param $line
-     * @param $connection
-     */
-    protected function setCurrentConnection($line, $connection)
-    {
-        if (preg_match("/['\"]" . $connection . "['\"]" . "\s*=>/", $line)) {
-            $this->connection = $connection;
+            $env->addNewLine();
         }
     }
 
     /**
-     * @param $configKey
-     * @return string
+     * Update config files with env function calls
+     * @return void
      */
-    protected function buildPattern($configKey)
+    protected function updateConfig(): void
     {
-        return "/['\"]" . $configKey . "['\"]" . "\s*=>\s*[^,\[]+,/";
-    }
-
-    /**
-     * @param $envKey
-     * @param $configKey
-     * @return \Closure
-     */
-    protected function buildCallback($envKey, $configKey)
-    {
-        return function ($matches) use ($envKey, $configKey) {
-            $value = $this->envValue($configKey);
-
-            $this->saveEnvSettings($envKey, $this->normalizeForEnv($value));
-
-            // Remove protected values from the config files
-            if (in_array($envKey, $this->protectedKeys) && !empty($value)) {
-                $value = '';
+        foreach ($this->config() as $config => $items) {
+            $conf = ConfigFile::read($this->getConfigPath($config));
+            foreach ($items as $envKey => $configKey) {
+                $conf->set(
+                    $configKey,
+                    $conf->function('env', $this->getEnvArgs($envKey, $config . '.' . $configKey))
+                );
+                if ($config === 'database' && $envKey === 'DB_CONNECTION') {
+                    foreach ($this->dbConfig() as $connection => $keys) {
+                        foreach ($keys as $dbEnvKey => $dbConfigKey) {
+                            $path = sprintf('connections.%s.%s', $connection, $dbConfigKey);
+                            $conf->set(
+                                $path,
+                                $conf->function('env', $this->getEnvArgs($dbEnvKey, $config . '.' . $path))
+                            );
+                        }
+                    }
+                }
             }
-
-            return $this->isEnv($matches[0]) ? $matches[0] : "'$configKey' => env('$envKey', {$this->normalizeForConfig($value)}),";
-        };
-    }
-
-    /**
-     * @param $key
-     * @param $value
-     */
-    protected function saveEnvSettings($key, $value)
-    {
-        if (! $this->envKeyExists($key)) {
-            $line = sprintf("%s=%s\n", $key, $value);
-
-            if ($this->config == 'database' && $key != 'DB_CONNECTION') {
-                $this->writeDbEnvSettings($line);
-            } else {
-                $this->writeToEnv($line);
-            }
+            $conf->write();
         }
     }
 
     /**
-     * @param $line
-     */
-    protected function writeDbEnvSettings($line)
-    {
-        if ($this->connection == config('database.default') || $this->connection == 'redis') {
-            $this->writeToEnv($line);
-        }
-    }
-
-    /**
-     * @param $configKey
-     * @return string
-     */
-    protected function envValue($configKey)
-    {
-        $value = config("$this->config.$configKey");
-
-        if ($this->config == 'database') {
-            $value = $this->databaseConfigValue($configKey);
-        }
-
-        return $value;
-    }
-
-    /**
-     * @param $configKey
-     * @return string
-     */
-    protected function databaseConfigValue($configKey)
-    {
-        if ($configKey == 'default') {
-            return config('database.default');
-        }
-
-        if ($configKey == 'useConfigForTesting') {
-            return config('database.useConfigForTesting');
-        }
-
-        if ($this->connection == 'redis') {
-            return config("database.redis.default.$configKey");
-        }
-
-        return config("database.connections.$this->connection.$configKey");
-    }
-
-    /**
-     * Normalizes a value to be inserted into the .env file
-     *
-     * @param $value
-     * @return string
-     */
-    protected function normalizeForEnv($value)
-    {
-        if (is_string($value)) {
-            if (preg_match('/["\'#]/', $value)) {
-                return '"' . str_replace('"', '\\"', $value) . '"';
-            } else {
-                return $value;
-            }
-        } elseif (is_bool($value)) {
-            return $value ? 'true' : 'false';
-        } elseif ($value === null) {
-            return 'null';
-        }
-
-        return $value;
-    }
-
-    /**
-     * Normalizes a value to be inserted into config files.
-     *
-     * @param $value
-     * @return string
-     */
-    protected function normalizeForConfig($value)
-    {
-        if (is_string($value)) {
-            return '\'' . addslashes($value) . '\'';
-        }
-
-        return $this->normalizeForEnv($value);
-    }
-
-    /**
-     * @param $matches
-     * @return bool
-     */
-    protected function isEnv($matches)
-    {
-        return strpos($matches, 'env') !== false;
-    }
-
-    /**
-     * @param $content
-     */
-    protected function writeToEnv($content)
-    {
-        file_put_contents('.env', $content, FILE_APPEND);
-    }
-
-    /**
-     * @return string
-     */
-    protected function readEnvFile()
-    {
-        return file_exists('.env') ? file_get_contents('.env') : '';
-    }
-
-    /**
-     * @param $content
-     */
-    protected function writeToConfigFile($content)
-    {
-        file_put_contents(rtrim(App::make('path.config'), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $this->config . '.php', $content);
-    }
-
-    /**
+     * Return an array used to generate the arguments for an env function call with protection of specific keys
+     * @param string $envConfig
+     * @param string $path
      * @return array
      */
-    protected function lines()
+    protected function getEnvArgs(string $envConfig, string $path): array
     {
-        return file(rtrim(App::make('path.config'), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $this->config . '.php');
+        return [$envConfig, in_array($envConfig, $this->protectedKeys) ? '' : config($path)];
     }
 
     /**
-     * @param $key
-     * @return bool
-     */
-    protected function envKeyExists($key)
-    {
-        return strpos($this->readEnvFile(), $key) !== false;
-    }
-
-    /**
+     * Returns a map of env keys to php config keys for db configs
      * @return array
      */
-    protected function config()
+    protected function config(): array
     {
         return [
             'app' => [
@@ -402,9 +213,10 @@ class WinterEnv extends Command
     }
 
     /**
+     * Returns a map of env keys to php config keys for db configs
      * @return array
      */
-    protected function dbConfig()
+    protected function dbConfig(): array
     {
         return [
             'sqlite' => [
