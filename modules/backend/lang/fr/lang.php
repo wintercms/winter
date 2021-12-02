@@ -9,6 +9,7 @@ return [
         'invalid_type' => 'Type de champ invalide :type.',
         'options_method_invalid_model' => "L’attribut ':field' ne correspond à aucun modèle valide. Essayez de spécifier explicitement la méthode d’options pour la classe du modèle ':model'.",
         'options_method_not_exists' => 'La classe du modèle :model doit définir une méthode :method() renvoyant des options pour le champ ":field" du formulaire.',
+        "options_static_method_invalid_value" => "La méthode statique ':method()' de la classe :class ne renvoie pas un tableau d\'options valide.",
         'colors_method_not_exists' => "La classe du modèle :model doit définir une méthode :method() renvoyant le code html en hexadécimal de la couleur du champ ':field' du formulaire."
     ],
     'widget' => [
@@ -17,6 +18,11 @@ return [
     ],
     'page' => [
         'untitled' => 'Sans titre',
+        '404' => [
+            'label' => 'Page non trouvée',
+            'help' => "Nous avons cherché et cherché mais l'URL demandée n'a pas été trouvée. Peut-être cherchiez-vous autre chose ?",
+            'back_link' => 'Retourner à la page précédente',
+        ],
         'access_denied' => [
             'label' => 'Accès refusé',
             'help' => 'Vous n’êtes pas autorisé à consulter cette page.',
@@ -29,9 +35,24 @@ return [
         ],
     ],
     'partial' => [
-        'not_found_name' => 'Le modèle partiel ":name" est introuvable.'
+        'not_found_name' => 'Le modèle partiel ":name" est introuvable.',
+        "invalid_name" => "Nom de partiel invalide: :name.",
+    ],
+    'ajax_handler' => [
+        'invalid_name' => 'Nom du gestionnaire AJAX non valide: :name.',
+        'not_found' => "Gestionnaire AJAX ':name' non trouvé.",
     ],
     'account' => [
+        'impersonate' => 'Usurper l\'identité d\'un utilisateur',
+        'impersonate_confirm' => 'Êtes-vous sûr de vouloir vous faire passer pour cet utilisateur ? Vous pouvez revenir à votre état initial en vous déconnectant.',
+        'impersonate_success' => 'Vous usurpez maintenant l\'identité de cet utilisateur',
+        'impersonate_working' => 'Usurpation d\'identité...',
+        'impersonating' => 'Vous êtes temporairement connecté en tant que :impersonatee. Les journaux sont toujours capables de vous identifier comme :impersonator',
+        'stop_impersonating' => 'Arrêtez l\'usurpation d\'identité',
+        'unsuspend' => 'Annuler la suspension',
+        'unsuspend_confirm' => 'Voulez-vous vraiment réactiver cet utilisateur ?',
+        'unsuspend_success' => 'L\'utilisateur n\'est plus suspendu.',
+        'unsuspend_working' => 'Réactivation...',
         'signed_in_as' => 'Connecté en tant que :full_name',
         'sign_out' => 'Déconnexion',
         'login' => 'OK',
@@ -219,6 +240,7 @@ return [
         'remove_file' => 'Supprimer le fichier',
     ],
     'repeater' => [
+        'add_new_item' => 'Ajouter un nouvel élément',
         'min_items_failed' => ':name nécessite un minimum de :min choix sélectionné(s), seulement :items sont sélectionné(s)',
         'max_items_failed' => ':name accepte un maximum de :max choix sélectionné(s), :items sont sélectionnés',
     ],
@@ -285,6 +307,7 @@ return [
     ],
     'recordfinder' => [
         'find_record' => 'Trouver un enregistrement',
+        'invalid_model_class' => 'La classe de modèle ":modelClass" fournie pour la recherche d\'enregistrements n\'est pas valide.',
         'cancel' => 'Annuler',
     ],
     'pagelist' => [
@@ -297,7 +320,6 @@ return [
         'missing_model' => 'La behavior relation utilisée dans la classe :class n’a pas de modèle défini.',
         'invalid_action_single' => 'Cette action ne peut être effectuée sur une relation unitaire.',
         'invalid_action_multi' => 'Cette action ne peut être effectuée sur une relation multiple.',
-        'relationwidget_unsupported_type' => 'Le type de relation ":type" n\'est pas supporté par le widget Relation.',
         'help' => 'Cliquer sur un élément pour l’ajouter',
         'related_data' => 'Donnée :name liée',
         'add' => 'Ajouter',
@@ -344,10 +366,13 @@ return [
         'permissions'  => 'PHP ne peut pas écrire dans le répertoire :name et ses sous-dossiers. Veuillez modifier les permissions en écriture du serveur web pour ce répertoire.',
         'extension' => 'L’extension PHP :name n’est pas installée. Veuillez installer la librairie et activer l’extension.',
         'plugin_missing' => 'Le plugin :name est une dépendance mais n\'est pas installé. Veuillez installer le plugin.',
+        'debug' => 'Le mode débogage est activé. Ceci n\'est pas recommandé pour les installations de production.',
+        'decompileBackendAssets' => 'Les ressources du backend ne sont actuellement pas compilées. Ceci n\'est pas recommandé pour les installations de production.',
     ],
     'editor' => [
         'menu_label' => 'Préférences de l’éditeur de code',
         'menu_description' => 'Personnaliser la configuration de l’éditeur de code, telle que la taille de la police ou la coloration syntaxique.',
+        'preview' => 'Prévisualisation',
         'font_size' => 'Taille de la police',
         'tab_size' => 'Taille de la tabulation',
         'use_hard_tabs' => 'Indentation par tabulation',
@@ -382,18 +407,30 @@ return [
         'label' => 'Libellé',
         'class_name' => 'Nom de la classe',
         'markup_tags' => 'Balises',
+        'markup_tag' => 'Balise',
         'allowed_empty_tags' => 'Autoriser les balises vides',
         'allowed_empty_tags_comment' => 'Liste des balises qui ne sont pas supprimées lorsqu’elles sont vides.',
         'allowed_tags' => 'Balises autorisées',
         'allowed_tags_comment' => 'Liste des balises autorisées.',
+        'allowed_attributes' => 'Attributs autorisés',
+        'allowed_attributes_comment' => 'Liste des attributs autorisés.',
         'no_wrap' => 'Balises non encadrées',
         'no_wrap_comment' => 'Liste des balises qui ne doivent pas être encadrées par des balises de bloc.',
         'remove_tags' => 'Balises supprimées',
         'remove_tags_comment' => 'Liste des balises qui sont supprimées ainsi que leur contenu.',
         'line_breaker_tags' => 'Balise de saut de ligne',
         'line_breaker_tags_comment' => 'La liste des balises qui sont utilisées pour mettre des sauts de ligne.',
+        'toolbar_options' => 'Options de la barre d\'outils',
         'toolbar_buttons' => 'Boutons de la barre d\'outils',
         'toolbar_buttons_comment' => 'Les boutons de la barre d\'outils à afficher par défaut dans l\'éditeur de texte enrichi.',
+        'toolbar_buttons_preset' => 'Insérer une configuration prédéfinie des boutons de la barre d\'outils :',
+        'toolbar_buttons_presets' => [
+            'default' => 'Défaut',
+            'minimal' => 'Minimal',
+            'full' => 'Complet',
+        ],
+        'paragraph_formats' => 'Formats de paragraphe',
+        'paragraph_formats_comment' => 'Les options qui apparaîtront dans la liste déroulante Format de paragraphe.',
     ],
     'tooltips' => [
         'preview_website' => 'Aperçu du site'
@@ -413,6 +450,8 @@ return [
         'brand' => 'Marque',
         'logo' => 'Logo',
         'logo_description' => 'Envoyer un logo personnalisé à utiliser dans l’interface d’administration.',
+        'favicon' => 'Icône de favori',
+        'favicon_description' => 'Transférer une icône de favori personnalisée à utiliser dans le back-end',
         'app_name' => 'Nom de l’application',
         'app_name_description' => 'Ce nom est affiché comme titre dans l’interface d’administration.',
         'app_tagline' => 'Slogan de l’application',
@@ -426,6 +465,7 @@ return [
         'navigation' => 'Navigation',
         'menu_mode' => 'Style du menu',
         'menu_mode_inline' => 'Horizontal',
+        'menu_mode_inline_no_icons' => 'Horizontal (pas d\'icônes)',
         'menu_mode_tile' => 'Tuiles',
         'menu_mode_collapsed' => 'Replié',
     ],
@@ -521,22 +561,25 @@ return [
             'iso_8859_6' => 'ISO-8859-6 (Latin, arabe)',
             'iso_8859_7' => 'ISO-8859-7 (Latin, grec)',
             'iso_8859_8' => 'ISO-8859-8 (Latin, hébreu)',
-            'iso_8859_9' => 'ISO-8859-9 (Latin-5, turc)',
+            'iso_8859_0' => 'ISO-8859-9 (Latin-5, turc)',
             'iso_8859_10' => 'ISO-8859-10 (Latin-6, nordique)',
             'iso_8859_11' => 'ISO-8859-11 (Latin, thaï)',
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, balte)',
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, celtique)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, européen occidental révisé avec le signe euro)',
+            'windows_1250' => 'Windows-1250 (CP1250, européen central et oriental)',
             'windows_1251' => 'Windows-1251 (CP1251)',
             'windows_1252' => 'Windows-1252 (CP1252)'
         ]
     ],
     'permissions' => [
-        'manage_media' => 'Déposer et gérer les contenus media - images, vidéos, sons, documents'
+        'manage_media' => 'Déposer et gérer les contenus media - images, vidéos, sons, documents',
+        'allow_unsafe_markdown' => 'Utilisation de Markdown non sécurisé (peut inclure du Javascript)',
     ],
     'mediafinder' => [
         'label' => 'Galerie média',
-        'default_prompt' => 'Cliquez sur le bouton %s pour trouver un élément média'
+        'default_prompt' => 'Cliquez sur le bouton %s pour trouver un élément média',
+        'no_image' => 'L\'image n\'a pas été trouvée',
     ],
     'media' => [
         'menu_label' => 'Média',
