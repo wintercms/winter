@@ -99,7 +99,14 @@ return [
         'settings_menu_description' => 'Configurer la page de maintenance et ajuster ses options.',
         'is_enabled' => 'Activer la maintenance',
         'is_enabled_comment' => 'Si activé, la page choisie ci-dessous sera affichée pour les visiteurs du site Web.',
-        'hint' => 'Le mode maintenance affichera la page de maintenance pour les visiteurs qui ne sont pas authentifiés dans l’interface d’administration.'
+        'hint' => 'Le mode maintenance affichera la page de maintenance pour les visiteurs qui ne sont pas authentifiés dans l’interface d’administration.',
+        'allowed_ips' => [
+            'name' => 'Adresses IP autorisées',
+            'description' => 'Adresses IP autorisées à consulter le site lorsque le mode de maintenance est actif.',
+            'prompt' => 'Ajouter une adresse IP',
+            'ip' => 'Adresse IP',
+            'label' => 'Description'
+        ]
     ],
     'page' => [
         'not_found_name' => 'La page ":name" est introuvable',
