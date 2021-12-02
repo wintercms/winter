@@ -61,6 +61,7 @@ return [
             'label' => 'Nom du plugin',
             'help' => 'Nommer le plugin avec un nom de code unique. Par exemple, Winter.Blog',
         ],
+        'by_author' => 'Par :name',
     ],
     'plugins' => [
         'manage' => 'Gérer les plugins',
@@ -98,6 +99,9 @@ return [
         'refresh_success' => "Les plugins ont été actualisés avec succès.",
         'remove_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer ce plugin ?',
         'remove_success' => "Les plugins ont été supprimés avec succès.",
+        'replace' => [
+            'multi_install_error' => 'Le remplacement de plusieurs plugins n\'est pas pris en charge actuellement.'
+        ]
     ],
     'project' => [
         'name' => 'Projet',
@@ -281,6 +285,7 @@ return [
         'plugin_version' => 'Version',
         'plugin_author' => 'Auteur',
         'plugin_not_found' => 'Plugin non trouvé',
+        'plugin_version_not_found' => 'Version du plugin non trouvée',
         'core_current_build' => 'Version actuelle',
         'core_view_changelog' => 'Voir le Changelog',
         'core_build' => 'Version :build',
@@ -288,6 +293,10 @@ return [
         'core_downloading' => 'Téléchargement des fichiers de l’application',
         'core_extracting' => 'Décompression des fichiers de l’application',
         'core_set_build' => 'Définition du numéro de build',
+        'update_warnings_title' => 'Certains problèmes ont été détectés et nécessitent une attention particulière :',
+        'update_warnings_plugin_missing' => 'Le plugin :parent_code nécessite l\'installation de :code pour fonctionner.',
+        'update_warnings_plugin_replace' => 'Le plugin :plugin remplace :alias, veuillez supprimer :alias pour vous assurer qu\'il n\'y ait pas de conflit.',
+        'update_warnings_plugin_replace_cli' => 'Ce plugin remplace :alias, veuillez supprimer :alias pour vous assurer qu\'il n\'y ait pas de conflits.',
         'changelog' => 'Changelog',
         'changelog_view_details' => 'Voir les détails',
         'plugins' => 'Plugins',
@@ -397,6 +406,7 @@ return [
         'impersonate_users' => 'Usurper l’identité des utilisateurs',
         'manage_preferences' => 'Gérer les préférences de l’interface d’administration',
         'manage_editor' => 'Gérer les préférences de l’éditeur de code',
+        'manage_own_editor' => 'Gérer les préférences personnelles de l\'éditeur de code',
         'view_the_dashboard' => 'Voir le tableau de bord',
         'manage_default_dashboard' => 'Gérer le tableau de bord par défaut',
         'manage_branding' => 'Personnaliser l’interface d’administration'
@@ -415,6 +425,20 @@ return [
     'media' => [
         'invalid_path' => "Le chemin du fichier indiqué est invalide : ':path'.",
         'folder_size_items' => 'Articles(s)',
+    ],
+    'page' => [
+        'custom_error' => [
+            'label' => 'Erreur sur la page',
+            'help' => 'Nous sommes désolés, mais un problème est survenu et la page ne peut pas être affichée.',
+        ],
+        'invalid_token' => [
+            'label' => 'Jeton de sécurité non valide',
+        ],
+        'maintenance' => [
+            'label' => "Nous revenons tout de suite !",
+            'help' => "Nous sommes actuellement indisponibles pour maintenance, revenez bientôt !",
+            'available_at' => 'Essayez à nouveau après:',
+        ],
     ],
     'pagination' => [
         'previous' => 'Précédente',
