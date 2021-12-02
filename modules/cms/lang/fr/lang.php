@@ -105,8 +105,8 @@ return [
             'description' => 'Adresses IP autorisées à consulter le site lorsque le mode de maintenance est actif.',
             'prompt' => 'Ajouter une adresse IP',
             'ip' => 'Adresse IP',
-            'label' => 'Description'
-        ]
+            'label' => 'Description',
+        ],
     ],
     'page' => [
         'not_found_name' => 'La page ":name" est introuvable',
