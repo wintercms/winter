@@ -1,7 +1,9 @@
 <?php namespace System\Classes;
 
-use ApplicationException;
 use File;
+use ApplicationException;
+use Cms\Classes\Theme;
+use Winter\Storm\Filesystem\PathResolver;
 
 /**
  * Mix assets using Laravel Mix for Node.js compilation and processing.
@@ -48,6 +50,22 @@ class MixAssets
         // Call plugins
         $packages = PluginManager::instance()->getRegistrationMethodValues('registerMixPackages');
         if (count($packages)) {
+        }
+
+        // Allow current theme to define mix assets
+        $theme = Theme::getActiveTheme();
+
+        if (!is_null($theme)) {
+            $mix = $theme->getConfigValue('mix', []);
+
+            if (count($mix)) {
+                foreach ($mix as $name => $file) {
+                    $path = PathResolver::resolve($theme->getPath() . '/' . $file);
+                    $pinfo = pathinfo($path);
+
+                    $this->registerPackage($name, $pinfo['dirname'], $pinfo['basename']);
+                }
+            }
         }
     }
 
@@ -111,7 +129,7 @@ class MixAssets
      * @param string $mixJson
      * @return void
      */
-    public function registerPackage($name, $path, $mixJs = 'mix.js')
+    public function registerPackage($name, $path, $mixJs = 'winter-mix.js')
     {
         // Require JS file for $mixJs
         $extension = File::extension($mixJs);
