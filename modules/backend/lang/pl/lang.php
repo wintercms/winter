@@ -542,7 +542,7 @@
             'iso_8859_6' => 'ISO-8859-6 (Latin, Arabski)',
             'iso_8859_7' => 'ISO-8859-7 (Latin, Grecki)',
             'iso_8859_8' => 'ISO-8859-8 (Latin, Hebrajski)',
-            'iso_8859_0' => 'ISO-8859-9 (Latin-5, Turecki)',
+            'iso_8859_9' => 'ISO-8859-9 (Latin-5, Turecki)',
             'iso_8859_10' => 'ISO-8859-10 (Latin-6, Nordycki)',
             'iso_8859_11' => 'ISO-8859-11 (Latin, Tajski)',
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, Kraje Nadbałtyckie)',
