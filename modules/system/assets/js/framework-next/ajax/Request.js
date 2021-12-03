@@ -131,13 +131,7 @@ class Request extends Winter.Module {
      * @returns {Promise}
      */
     doAjax() {
-        this.winter.globalEvent('ajaxStart', this);
-        if (this.element) {
-            const event = new Event('ajaxPromise');
-            this.element.dispatchEvent(event);
-        }
-
-        return new Promise((resolve, reject) => {
+        const ajaxPromise = new Promise((resolve, reject) => {
             fetch(
                 this.url, {
                     method: 'POST',
@@ -204,6 +198,16 @@ class Request extends Winter.Module {
                 }
             );
         });
+
+        this.winter.globalEvent('ajaxStart', this, ajaxPromise);
+
+        if (this.element) {
+            const event = new Event('ajaxPromise');
+            event.promise = ajaxPromise;
+            this.element.dispatchEvent(event);
+        }
+
+        return ajaxPromise;
     }
 
     /**

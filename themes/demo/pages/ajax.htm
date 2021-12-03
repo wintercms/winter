@@ -9,8 +9,8 @@ function onTest()
     $value2 = input('value2', '');
     $operation = input('operation', '');
 
-    if ($value1 === '' || $value2 === '') {
-        Flash::error('You must enter two values to calculate.');
+    if (!is_numeric($value1) || $value1 === '' || !is_numeric($value2) || $value2 === '') {
+        Flash::error('You must enter two numbers to calculate.');
         return;
     }
 
