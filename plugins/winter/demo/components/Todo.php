@@ -39,7 +39,8 @@ class Todo extends ComponentBase
 
         $newItem = post('newItem');
         if (empty($newItem)) {
-            return Flash::error('You must specify something to be done.');
+            Flash::error('You must specify an item to add to the To Do List.');
+            return;
         }
 
         $items[] = $newItem;

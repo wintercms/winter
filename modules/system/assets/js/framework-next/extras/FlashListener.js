@@ -25,6 +25,7 @@ export default class FlashListener extends Winter.Singleton {
         return {
             ready: 'ready',
             ajaxErrorMessage: 'ajaxErrorMessage',
+            ajaxFlashMessages: 'ajaxFlashMessages',
         };
     }
 
@@ -49,6 +50,18 @@ export default class FlashListener extends Winter.Singleton {
      */
     ajaxErrorMessage(message) {
         this.winter.flash(message, 'error');
+        return false;
+    }
+
+    /**
+     * Shows flash messages returned directly from AJAX functionality.
+     *
+     * @param {Object} messages
+     */
+    ajaxFlashMessages(messages) {
+        for (const [cssClass, message] of Object.entries(messages)) {
+            this.winter.flash(message, cssClass);
+        }
         return false;
     }
 }
