@@ -100,8 +100,8 @@ return [
         'remove_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer ce plugin ?',
         'remove_success' => "Les plugins ont été supprimés avec succès.",
         'replace' => [
-            'multi_install_error' => 'Le remplacement de plusieurs plugins n\'est pas pris en charge actuellement.'
-        ]
+            'multi_install_error' => 'Le remplacement de plusieurs plugins n\'est pas pris en charge actuellement.',
+        ],
     ],
     'project' => [
         'name' => 'Projet',
