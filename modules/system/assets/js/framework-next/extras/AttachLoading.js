@@ -35,19 +35,11 @@
             const loadElements = request.element.querySelectorAll('[data-attach-loading]');
             if (loadElements.length > 0) {
                 loadElements.forEach((element) => {
-                    const loadingClass = (element.dataset.attachLoading !== '')
-                        ? element.dataset.attachLoading
-                        : 'wn-loading';
-
-                    element.classList.add(loadingClass);
+                    element.classList.add(this.getLoadingClass(element));
                 });
             }
         } else if (request.element.dataset.attachLoading !== undefined) {
-            const loadingClass = (request.element.dataset.attachLoading !== '')
-                ? request.element.dataset.attachLoading
-                : 'wn-loading';
-
-            request.element.classList.add(loadingClass);
+            request.element.classList.add(this.getLoadingClass(request.element));
         }
     }
 
@@ -60,19 +52,17 @@
             const loadElements = request.element.querySelectorAll('[data-attach-loading]');
             if (loadElements.length > 0) {
                 loadElements.forEach((element) => {
-                    const loadingClass = (element.dataset.attachLoading !== '')
-                        ? element.dataset.attachLoading
-                        : 'wn-loading';
-
-                    element.classList.remove(loadingClass);
+                    element.classList.remove(this.getLoadingClass(element));
                 });
             }
         } else if (request.element.dataset.attachLoading !== undefined) {
-            const loadingClass = (request.element.dataset.attachLoading !== '')
-                ? request.element.dataset.attachLoading
-                : 'wn-loading';
-
-            request.element.classList.remove(loadingClass);
+            request.element.classList.remove(this.getLoadingClass(request.element));
         }
+    }
+
+    getLoadingClass(element) {
+        return (element.dataset.attachLoading !== undefined && element.dataset.attachLoading !== '')
+            ? element.dataset.attachLoading
+            : 'wn-loading';
     }
  }
