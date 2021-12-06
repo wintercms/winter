@@ -26,6 +26,8 @@ class Request extends Winter.Module {
         this.element = element;
         this.handler = handler;
         this.options = options || {};
+        this.responseData = null;
+        this.responseError = null;
 
         this.checkRequest();
         if (!this.winter.globalEvent('ajaxSetup', this)) {
@@ -41,6 +43,7 @@ class Request extends Winter.Module {
                 if (confirmed) {
                     this.doAjax().then(
                         (response) => {
+                            this.responseData = response;
                             this.processUpdate(response).then(
                                 () => {
                                     if (response.X_WINTER_SUCCESS === false) {
@@ -52,6 +55,7 @@ class Request extends Winter.Module {
                             );
                         },
                         (error) => {
+                            this.responseError = error;
                             this.processError(error);
                         }
                     ).finally(() => {
@@ -62,6 +66,7 @@ class Request extends Winter.Module {
         } else {
             this.doAjax().then(
                 (response) => {
+                    this.responseData = response;
                     this.processUpdate(response).then(
                         () => {
                             if (response.X_WINTER_SUCCESS === false) {
@@ -73,9 +78,13 @@ class Request extends Winter.Module {
                     );
                 },
                 (error) => {
+                    this.responseError = error;
                     this.processError(error);
                 }
             ).finally(() => {
+                if (this.options.complete && typeof this.options.complete === 'function') {
+                    this.options.complete(this.responseData, this);
+                }
                 this.winter.globalEvent('ajaxDone', this);
             });
         }
@@ -271,7 +280,7 @@ class Request extends Winter.Module {
     doUpdate(partials) {
         return new Promise((resolve) => {
             for (const [partial, content] of Object.entries(partials)) {
-                let selector = this.options.update[partial]
+                let selector = (this.options.update && this.options.update[partial])
                     ? this.options.update[partial]
                     : partial;
 
@@ -317,6 +326,12 @@ class Request extends Winter.Module {
      * @returns {void}
      */
     processResponse(response) {
+        if (this.options.success && typeof this.options.success === 'function') {
+            if (!this.options.success(this.responseData, this)) {
+                return;
+            }
+        }
+
         // Check for a redirect from the response, or use the redirect as specified in the options. This takes
         // precedent over all other checks.
         if (response.X_WINTER_REDIRECT || this.redirect) {
@@ -342,6 +357,12 @@ class Request extends Winter.Module {
      * @param {Object|Error} error
      */
     processError(error) {
+        if (this.options.error && typeof this.options.error === 'function') {
+            if (!this.options.error(this.responseError, this)) {
+                return;
+            }
+        }
+
         if (error instanceof Error) {
             this.processErrorMessage(error.message);
         } else {
