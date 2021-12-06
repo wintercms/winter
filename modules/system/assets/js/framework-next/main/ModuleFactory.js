@@ -27,6 +27,8 @@ export default class ModuleFactory {
         this.instance = instance;
         this.instances = [];
         this.singleton = instance.prototype instanceof Singleton;
+        this.mocks = {};
+        this.originalFunctions = {};
     }
 
     /**
@@ -80,18 +82,43 @@ export default class ModuleFactory {
             const unmet = this.getDependencies().filter((item) => !this.winter.getModuleNames().includes(item));
             throw new Error(`The "${this.name}" module requires the following modules: ${unmet.join(', ')}`);
         }
-        if (this.singleton) {
+        if (this.isSingleton()) {
             if (this.instances.length === 0) {
                 const newInstance = new this.instance(this.winter, ...arguments);
                 newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
                 this.instances.push(newInstance);
             }
 
+            // Apply mocked methods
+            if (Object.keys(this.mocks).length > 0) {
+                for (const [methodName, callback] of Object.entries(this.originalFunctions)) {
+                    this.instances[0][methodName] = callback;
+                }
+                for (const [methodName, callback] of Object.entries(this.mocks)) {
+                    this.instances[0][methodName] = function () {
+                        return callback(this, ...arguments);
+                    };
+                }
+            }
+
             return this.instances[0];
+        }
+
+        // Apply mocked methods to prototype
+        if (Object.keys(this.mocks).length > 0) {
+            for (const [methodName, callback] of Object.entries(this.originalFunctions)) {
+                this.instance.prototype[methodName] = callback;
+            }
+            for (const [methodName, callback] of Object.entries(this.mocks)) {
+                this.instance.prototype[methodName] = function () {
+                    return callback(this, ...arguments);
+                };
+            }
         }
 
         const newInstance = new this.instance(this.winter, ...arguments);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
+
         this.instances.push(newInstance);
         return newInstance;
     }
@@ -164,5 +191,61 @@ export default class ModuleFactory {
         });
 
         return fulfilled;
+    }
+
+    /**
+     * Allows a method of an instance to be mocked for testing.
+     *
+     * This mock will be applied for the life of an instance. For singletons, the mock will be applied for the life
+     * of the page.
+     *
+     * Mocks cannot be applied to function modules.
+     *
+     * @param {string} methodName
+     * @param {Function} callback
+     */
+    mock(methodName, callback) {
+        if (this.isFunction()) {
+            return;
+        }
+
+        if (!this.instance.prototype[methodName]) {
+            throw new Error(`Function "${methodName}" does not exist and cannot be mocked`);
+        }
+
+        this.mocks[methodName] = callback;
+        this.originalFunctions[methodName] = this.instance.prototype[methodName];
+
+        if (this.isSingleton() && this.instances.length === 0) {
+            const newInstance = new this.instance(this.winter, ...arguments);
+            newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
+            this.instances.push(newInstance);
+
+            // Apply mocked method
+            this.instances[0][methodName] = function () {
+                return callback(this, ...arguments);
+            };
+        }
+    }
+
+    /**
+     * Removes a mock callback from future instances.
+     *
+     * @param {string} methodName
+     */
+    unmock(methodName) {
+        if (this.isFunction()) {
+            return;
+        }
+        if (!this.mocks[methodName]) {
+            return;
+        }
+
+        if (this.isSingleton()) {
+            this.instances[0][methodName] = this.originalFunctions[methodName];
+        }
+
+        delete this.mocks[methodName];
+        delete this.originalFunctions[methodName];
     }
 }
