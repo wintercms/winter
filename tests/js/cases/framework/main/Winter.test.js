@@ -1,4 +1,4 @@
-import FakeDom from '../../helpers/FakeDom';
+import FakeDom from '../../../helpers/FakeDom';
 
 describe('Winter framework', function () {
     it('initialises correctly', function (done) {
@@ -22,6 +22,12 @@ describe('Winter framework', function () {
                         expect(dom.window.winter.getModuleNames()).toEqual(
                             expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer'])
                         );
+                        expect(dom.window.winter.getModule('debounce').isFunction()).toEqual(true);
+                        expect(dom.window.winter.getModule('debounce').isSingleton()).toEqual(false);
+                        expect(dom.window.winter.getModule('jsonparser').isFunction()).toEqual(false);
+                        expect(dom.window.winter.getModule('jsonparser').isSingleton()).toEqual(true);
+                        expect(dom.window.winter.getModule('sanitizer').isFunction()).toEqual(false);
+                        expect(dom.window.winter.getModule('sanitizer').isSingleton()).toEqual(true);
 
                         done();
                     } catch (error) {
