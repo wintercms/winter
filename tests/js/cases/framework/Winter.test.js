@@ -1,4 +1,3 @@
-import { assert } from 'chai';
 import FakeDom from '../../helpers/FakeDom';
 
 describe('Winter framework', function () {
@@ -11,16 +10,18 @@ describe('Winter framework', function () {
                 (dom) => {
                     // Run assertions
                     try {
-                        assert.exists(dom.window.winter);
-                        assert.exists(dom.window.winter.addModule);
-                        assert.typeOf(dom.window.winter.addModule, 'function');
+                        expect(dom.window.winter).toBeDefined();
+                        expect(dom.window.winter.addModule).toBeDefined();
+                        expect(dom.window.winter.addModule).toEqual(expect.any(Function));
 
                         // Check Module and Singleton abstracts exist
-                        assert.exists(dom.window.winter.Module);
-                        assert.exists(dom.window.winter.Singleton);
+                        expect(dom.window.winter.Module).toBeDefined();
+                        expect(dom.window.winter.Singleton).toBeDefined();
 
                         // Check in-built modules
-                        assert.deepEqual(['debounce', 'jsonparser', 'sanitizer'], dom.window.winter.getModuleNames());
+                        expect(dom.window.winter.getModuleNames()).toEqual(
+                            expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer'])
+                        );
 
                         done();
                     } catch (error) {
@@ -48,41 +49,46 @@ describe('Winter framework', function () {
 
                     try {
                         // Check module caller
-                        assert.isTrue(winter.hasModule('test'))
-                        assert.deepEqual(['debounce', 'jsonparser', 'sanitizer', 'test'], dom.window.winter.getModuleNames());
-                        assert.isFunction(winter.test);
+                        expect(winter.hasModule('test')).toBe(true);
+                        expect(winter.getModuleNames()).toEqual(
+                            expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer', 'test'])
+                        );
+                        expect(winter.test).toEqual(expect.any(Function));
+
                         const instance = winter.test();
 
                         // Check module injected methods
-                        assert.equal(winter, instance.winter);
-                        assert.isFunction(instance.destructor);
+                        expect(instance.winter).toBe(winter);
+                        expect(instance.destructor).toEqual(expect.any(Function));
 
                         // Check module method
-                        assert.exists(instance.testMethod)
-                        assert.isFunction(instance.testMethod)
-                        assert.equal('Tested', instance.testMethod())
+                        expect(instance.testMethod).toBeDefined();
+                        expect(instance.testMethod).toEqual(expect.any(Function));
+                        expect(instance.testMethod()).toEqual('Tested');
 
                         // Check multiple instances
                         const instanceOne = winter.test();
                         instanceOne.changed = true;
                         const instanceTwo = winter.test();
-                        assert.notDeepEqual(instanceOne, instanceTwo);
+                        expect(instanceOne).not.toEqual(instanceTwo);
                         const factory = winter.getModule('test');
-                        assert.deepEqual([instance, instanceOne, instanceTwo], factory.getInstances());
+                        expect(factory.getInstances()).toEqual([instance, instanceOne, instanceTwo]);
 
                         // Remove module
                         winter.removeModule('test');
-                        assert.isFalse(winter.hasModule('test'));
-                        assert.deepEqual(['debounce', 'jsonparser', 'sanitizer'], dom.window.winter.getModuleNames());
-                        assert.isUndefined(winter.test);
+                        expect(winter.hasModule('test')).toEqual(false);
+                        expect(dom.window.winter.getModuleNames()).toEqual(
+                            expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer'])
+                        );
+                        expect(winter.test).not.toBeDefined();
 
-                        done()
+                        done();
                     } catch (error) {
-                        done(error)
+                        done(error);
                     }
                 },
                 (error) => {
-                    throw error
+                    throw error;
                 }
             );
     });
@@ -101,42 +107,47 @@ describe('Winter framework', function () {
                     const winter = dom.window.winter;
 
                     try {
-                        // Check module caller
-                        assert.isTrue(winter.hasModule('test'))
-                        assert.deepEqual(['debounce', 'jsonparser', 'sanitizer', 'test'], dom.window.winter.getModuleNames());
-                        assert.isFunction(winter.test);
+                         // Check module caller
+                        expect(winter.hasModule('test')).toBe(true);
+                        expect(winter.getModuleNames()).toEqual(
+                            expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer', 'test'])
+                        );
+                        expect(winter.test).toEqual(expect.any(Function));
+
                         const instance = winter.test();
 
                         // Check module injected methods
-                        assert.equal(winter, instance.winter);
-                        assert.isFunction(instance.destructor);
+                        expect(instance.winter).toBe(winter);
+                        expect(instance.destructor).toEqual(expect.any(Function));
 
                         // Check module method
-                        assert.exists(instance.testMethod)
-                        assert.isFunction(instance.testMethod)
-                        assert.equal('Tested', instance.testMethod())
+                        expect(instance.testMethod).toBeDefined();
+                        expect(instance.testMethod).toEqual(expect.any(Function));
+                        expect(instance.testMethod()).toEqual('Tested');
 
-                        // Check multiple instances (these should all be the same as this instance is a singleton)
+                        // Check multiple instances  (these should all be the same as this instance is a singleton)
                         const instanceOne = winter.test();
                         instanceOne.changed = true;
                         const instanceTwo = winter.test();
-                        assert.deepEqual(instanceOne, instanceTwo);
+                        expect(instanceOne).toEqual(instanceTwo);
                         const factory = winter.getModule('test');
-                        assert.deepEqual([instance], factory.getInstances());
+                        expect(factory.getInstances()).toEqual([instance]);
 
                         // Remove module
                         winter.removeModule('test');
-                        assert.isFalse(winter.hasModule('test'));
-                        assert.deepEqual(['debounce', 'jsonparser', 'sanitizer'], dom.window.winter.getModuleNames());
-                        assert.isUndefined(winter.test);
+                        expect(winter.hasModule('test')).toEqual(false);
+                        expect(dom.window.winter.getModuleNames()).toEqual(
+                            expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer'])
+                        );
+                        expect(winter.test).not.toBeDefined();
 
-                        done()
+                        done();
                     } catch (error) {
-                        done(error)
+                        done(error);
                     }
                 },
                 (error) => {
-                    throw error
+                    throw error;
                 }
             );
     });
@@ -155,32 +166,32 @@ describe('Winter framework', function () {
                     const winter = dom.window.winter;
 
                     try {
-                        assert.deepEqual(['test'], winter.listensToEvent('eventOne'));
-                        assert.deepEqual(['test'], winter.listensToEvent('eventTwo'));
-                        assert.deepEqual([], winter.listensToEvent('eventThree'));
+                        expect(winter.listensToEvent('eventOne')).toEqual(['test']);
+                        expect(winter.listensToEvent('eventTwo')).toEqual(['test']);
+                        expect(winter.listensToEvent('eventThree')).toEqual([]);
 
                         // Call global event one
                         const testClass = winter.test();
                         winter.globalEvent('eventOne', 42);
-                        assert.equal('Event called with arg 42', testClass.eventResult);
+                        expect(testClass.eventResult).toEqual('Event called with arg 42');
 
                         // Call global event two - should fail as the test module doesn't have that method
-                        assert.throws(() => {
+                        expect(() => {
                             winter.globalEvent('eventTwo');
-                        }, /Missing "notExists" method in "test" module/);
+                        }).toThrow('Missing "notExists" method in "test" module');
 
                         // Call global event three - nothing should happen
-                        assert.doesNotThrow(() => {
+                        expect(() => {
                             winter.globalEvent('eventThree');
-                        });
+                        }).not.toThrow();
 
-                        done()
+                        done();
                     } catch (error) {
-                        done(error)
+                        done(error);
                     }
                 },
                 (error) => {
-                    throw error
+                    throw error;
                 }
             );
     });
@@ -199,20 +210,20 @@ describe('Winter framework', function () {
                     const winter = dom.window.winter;
 
                     try {
-                        assert.deepEqual(['test'], winter.listensToEvent('promiseOne'));
-                        assert.deepEqual(['test'], winter.listensToEvent('promiseTwo'));
-                        assert.deepEqual([], winter.listensToEvent('promiseThree'));
+                        expect(winter.listensToEvent('promiseOne')).toEqual(['test']);
+                        expect(winter.listensToEvent('promiseTwo')).toEqual(['test']);
+                        expect(winter.listensToEvent('promiseThree')).toEqual([]);
 
                         // Call global event one
                         const testClass = winter.test();
                         winter.globalPromiseEvent('promiseOne', 'promise').then(
                             () => {
-                                assert.equal('Event called with arg promise', testClass.eventResult);
+                                expect(testClass.eventResult).toEqual('Event called with arg promise');
 
                                 // Call global event two - it should still work, even though it doesn't return a promise
                                 winter.globalPromiseEvent('promiseTwo', 'promise 2').then(
                                     () => {
-                                        assert.equal('Promise two called with arg promise 2', testClass.eventResult);
+                                        expect(testClass.eventResult).toEqual('Promise two called with arg promise 2');
 
                                         // Call global event three - it should still work
                                         winter.globalPromiseEvent('promiseThree', 'promise 3').then(
@@ -234,11 +245,11 @@ describe('Winter framework', function () {
                             }
                         );
                     } catch (error) {
-                        done(error)
+                        done(error);
                     }
                 },
                 (error) => {
-                    throw error
+                    throw error;
                 }
             );
     });
