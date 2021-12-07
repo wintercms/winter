@@ -221,7 +221,7 @@ class Request extends Winter.Module {
             );
         });
 
-        this.winter.globalEvent('ajaxStart', this, ajaxPromise);
+        this.winter.globalEvent('ajaxStart', ajaxPromise, this);
 
         if (this.element) {
             const event = new Event('ajaxPromise');
@@ -264,7 +264,7 @@ class Request extends Winter.Module {
                 return;
             }
 
-            const promises = this.winter.globalPromiseEvent('ajaxBeforeUpdate', this, response);
+            const promises = this.winter.globalPromiseEvent('ajaxBeforeUpdate', response, this);
             promises.then(
                 () => {
                     this.doUpdate(partials).then(
@@ -345,6 +345,11 @@ class Request extends Winter.Module {
             }
         }
 
+        // Allow modules to cancel any further response handling
+        if (this.winter.globalEvent('ajaxSuccess', this.responseData, this) === false) {
+            return;
+        }
+
         // Check for a redirect from the response, or use the redirect as specified in the options. This takes
         // precedent over all other checks.
         if (response.X_WINTER_REDIRECT || this.redirect) {
@@ -374,6 +379,11 @@ class Request extends Winter.Module {
             if (!this.options.error(this.responseError, this)) {
                 return;
             }
+        }
+
+        // Allow modules to cancel any further error handling
+        if (this.winter.globalEvent('ajaxError', this.responseError, this) === false) {
+            return;
         }
 
         if (error instanceof Error) {
@@ -411,7 +421,7 @@ class Request extends Winter.Module {
         }
 
         // Allow modules to cancel the redirect
-        if (this.winter.globalEvent('ajaxRedirect', url) === false) {
+        if (this.winter.globalEvent('ajaxRedirect', url, this) === false) {
             return;
         }
 
@@ -454,7 +464,7 @@ class Request extends Winter.Module {
         }
 
         // Allow modules to cancel the error message being shown
-        if (this.winter.globalEvent('ajaxErrorMessage', message) === false) {
+        if (this.winter.globalEvent('ajaxErrorMessage', message, this) === false) {
             return;
         }
 
@@ -483,7 +493,7 @@ class Request extends Winter.Module {
         }
 
         // Allow modules to cancel the flash messages
-        if (this.winter.globalEvent('ajaxFlashMessages', messages) === false) {
+        if (this.winter.globalEvent('ajaxFlashMessages', messages, this) === false) {
             return;
         }
     }
@@ -508,7 +518,7 @@ class Request extends Winter.Module {
         }
 
         // Allow modules to cancel the validation errors being handled
-        if (this.winter.globalEvent('ajaxValidationErrors', this.form, fields) === false) {
+        if (this.winter.globalEvent('ajaxValidationErrors', this.form, fields, this) === false) {
             return;
         }
     }
@@ -542,7 +552,7 @@ class Request extends Winter.Module {
         }
 
         // Run custom module confirmations
-        const promises = this.winter.globalPromiseEvent('ajaxConfirmMessage', this, this.confirm);
+        const promises = this.winter.globalPromiseEvent('ajaxConfirmMessage', this.confirm, this);
 
         try {
             const fulfilled = await promises;
