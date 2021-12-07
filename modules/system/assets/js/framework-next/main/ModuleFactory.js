@@ -84,9 +84,7 @@ export default class ModuleFactory {
         }
         if (this.isSingleton()) {
             if (this.instances.length === 0) {
-                const newInstance = new this.instance(this.winter, ...arguments);
-                newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
-                this.instances.push(newInstance);
+                this.initialiseSingleton();
             }
 
             // Apply mocked methods
@@ -157,6 +155,21 @@ export default class ModuleFactory {
     }
 
     /**
+     * Initialises the singleton instance.
+     *
+     * @returns {void}
+     */
+    initialiseSingleton() {
+        if (!this.isSingleton()) {
+            return;
+        }
+
+        const newInstance = new this.instance(this.winter);
+        newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
+        this.instances.push(newInstance);
+    }
+
+    /**
      * Gets the dependencies of the current module.
      *
      * @returns {string[]}
@@ -217,9 +230,7 @@ export default class ModuleFactory {
         this.originalFunctions[methodName] = this.instance.prototype[methodName];
 
         if (this.isSingleton() && this.instances.length === 0) {
-            const newInstance = new this.instance(this.winter, ...arguments);
-            newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
-            this.instances.push(newInstance);
+            this.initialiseSingleton();
 
             // Apply mocked method
             this.instances[0][methodName] = function () {

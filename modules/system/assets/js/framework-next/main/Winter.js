@@ -68,7 +68,7 @@ export default class Winter {
     initialiseSingletons() {
         Object.values(this.modules).forEach((mod) => {
             if (mod.isSingleton()) {
-                mod.getInstance();
+                mod.initialiseSingleton();
             }
         });
     }
@@ -240,6 +240,9 @@ export default class Winter {
             if (mod.isFunction()) {
                 return;
             }
+            if (mod.isSingleton() && mod.getInstances().length === 0) {
+                mod.initialiseSingleton();
+            }
 
             const listenMethod = mod.callMethod('listens')[eventName];
 
@@ -291,6 +294,9 @@ export default class Winter {
 
             if (mod.isFunction()) {
                 return;
+            }
+            if (mod.isSingleton() && mod.getInstances().length === 0) {
+                mod.initialiseSingleton();
             }
 
             const listenMethod = mod.callMethod('listens')[eventName];
