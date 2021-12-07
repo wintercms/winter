@@ -97,8 +97,11 @@ export default class FakeDom
         return id
     }
 
-    render()
+    render(content)
     {
+        if (content) {
+            this.content = content;
+        }
         return new Promise((resolve, reject) => {
             try {
                 const dom = new JSDOM(
