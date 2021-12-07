@@ -43,6 +43,9 @@ class Request extends Winter.Module {
                 if (confirmed) {
                     this.doAjax().then(
                         (response) => {
+                            if (response.cancelled) {
+                                return;
+                            }
                             this.responseData = response;
                             this.processUpdate(response).then(
                                 () => {
@@ -66,6 +69,9 @@ class Request extends Winter.Module {
         } else {
             this.doAjax().then(
                 (response) => {
+                    if (response.cancelled) {
+                        return;
+                    }
                     this.responseData = response;
                     this.processUpdate(response).then(
                         () => {
@@ -140,6 +146,13 @@ class Request extends Winter.Module {
      * @returns {Promise}
      */
     doAjax() {
+        // Allow modules to cancel the AJAX request before sending
+        if (this.winter.globalEvent('ajaxBeforeSend', this) === false) {
+            return Promise.resolve({
+                cancelled: true,
+            });
+        }
+
         const ajaxPromise = new Promise((resolve, reject) => {
             fetch(
                 this.url, {
