@@ -28,13 +28,26 @@ class Request extends Winter.Module {
         this.options = options || {};
         this.responseData = null;
         this.responseError = null;
+        this.cancelled = false;
 
         this.checkRequest();
         if (!this.winter.globalEvent('ajaxSetup', this)) {
+            this.cancelled = true;
             return;
+        }
+        if (this.element) {
+            const event = new Event('ajaxSetup', { cancelable: true });
+            event.request = this;
+            this.element.dispatchEvent(event);
+
+            if (event.defaultPrevented) {
+                this.cancelled = true;
+                return;
+            }
         }
 
         if (!this.doClientValidation()) {
+            this.cancelled = true;
             return;
         }
 
@@ -44,6 +57,7 @@ class Request extends Winter.Module {
                     this.doAjax().then(
                         (response) => {
                             if (response.cancelled) {
+                                this.cancelled = true;
                                 return;
                             }
                             this.responseData = response;
@@ -70,6 +84,7 @@ class Request extends Winter.Module {
             this.doAjax().then(
                 (response) => {
                     if (response.cancelled) {
+                        this.cancelled = true;
                         return;
                     }
                     this.responseData = response;
@@ -91,7 +106,15 @@ class Request extends Winter.Module {
                 if (this.options.complete && typeof this.options.complete === 'function') {
                     this.options.complete(this.responseData, this);
                 }
-                this.winter.globalEvent('ajaxDone', this);
+                this.winter.globalEvent('ajaxDone', this.responseData, this);
+
+                if (this.element) {
+                    const event = new Event('ajaxAlways');
+                    event.request = this;
+                    event.responseData = this.responseData;
+                    event.responseError = this.responseError;
+                    this.element.dispatchEvent(event);
+                }
             });
         }
     }
