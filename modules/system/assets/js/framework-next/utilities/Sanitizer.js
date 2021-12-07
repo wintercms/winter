@@ -10,13 +10,16 @@ export default class Sanitizer extends Singleton {
         }
     }
 
-    sanitize(html) {
+    sanitize(html, bodyOnly) {
         const parser = new DOMParser()
         const dom = parser.parseFromString(html, 'text/html')
+        const returnBodyOnly = (bodyOnly !== undefined && typeof bodyOnly === 'boolean')
+            ? bodyOnly
+            : true;
 
         this.sanitizeNode(dom.getRootNode());
 
-        return dom.documentElement.innerHTML;
+        return (returnBodyOnly) ? dom.body.innerHTML : dom.innerHTML;
     }
 
     sanitizeNode(node) {

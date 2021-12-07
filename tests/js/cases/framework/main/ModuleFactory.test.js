@@ -12,12 +12,16 @@ describe('Module factory', function () {
                         return 'all good';
                     });
 
-                    expect(dom.window.winter.sanitizer().sanitize('test')).toEqual('all good');
+                    expect(
+                        dom.window.winter.sanitizer().sanitize('<p onload="derp;"></p>')
+                    ).toEqual('all good');
 
                     // Test unmock
                     dom.window.winter.getModule('sanitizer').unmock('sanitize');
 
-                    expect(dom.window.winter.sanitizer().sanitize('test')).not.toEqual('all good');
+                    expect(
+                        dom.window.winter.sanitizer().sanitize('<p onload="derp;"></p>')
+                    ).toEqual('<p></p>');
 
                     done();
                 },
