@@ -76,6 +76,10 @@ class Request extends Winter.Module {
                             this.processError(error);
                         }
                     ).finally(() => {
+                        if (this.cancelled === true) {
+                            return;
+                        }
+
                         if (this.options.complete && typeof this.options.complete === 'function') {
                             this.options.complete(this.responseData, this);
                         }
@@ -114,6 +118,10 @@ class Request extends Winter.Module {
                     this.processError(error);
                 }
             ).finally(() => {
+                if (this.cancelled === true) {
+                    return;
+                }
+
                 if (this.options.complete && typeof this.options.complete === 'function') {
                     this.options.complete(this.responseData, this);
                 }
