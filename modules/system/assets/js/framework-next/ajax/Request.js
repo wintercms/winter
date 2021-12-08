@@ -76,7 +76,18 @@ class Request extends Winter.Module {
                             this.processError(error);
                         }
                     ).finally(() => {
-                        this.winter.globalEvent('ajaxDone', this);
+                        if (this.options.complete && typeof this.options.complete === 'function') {
+                            this.options.complete(this.responseData, this);
+                        }
+                        this.winter.globalEvent('ajaxDone', this.responseData, this);
+
+                        if (this.element) {
+                            const event = new Event('ajaxAlways');
+                            event.request = this;
+                            event.responseData = this.responseData;
+                            event.responseError = this.responseError;
+                            this.element.dispatchEvent(event);
+                        }
                     })
                 }
             });
@@ -333,19 +344,28 @@ class Request extends Winter.Module {
                 const elements = document.querySelectorAll(selector);
                 if (elements.length > 0) {
                     elements.forEach((element) => {
+                        const sanitizedContent = this.winter.sanitizer().sanitize(content);
                         switch (mode) {
                             case 'replace':
-                                element.innerHTML = this.winter.sanitizer().sanitize(content);
+                                element.innerHTML = sanitizedContent;
                                 break;
                             case 'append':
-                                element.innerHTML += this.winter.sanitizer().sanitize(content);
+                                element.innerHTML += sanitizedContent;
                                 break;
                             case 'prepend':
-                                element.innerHTML = this.winter.sanitizer().sanitize(content) + element.innerHTML;
+                                element.innerHTML = sanitizedContent + element.innerHTML;
                                 break;
                         }
+
+                        // Fire update event for each element that is updated
+                        this.winter.globalEvent('ajaxUpdate', element, sanitizedContent, this);
+                        const event = new Event('ajaxUpdate');
+                        event.content = sanitizedContent;
+                        element.dispatchEvent(event);
                     });
                 }
+
+                this.winter.globalEvent('ajaxUpdateComplete', elements, this);
 
                 resolve();
             }
@@ -371,6 +391,18 @@ class Request extends Winter.Module {
         // Allow modules to cancel any further response handling
         if (this.winter.globalEvent('ajaxSuccess', this.responseData, this) === false) {
             return;
+        }
+
+        // Allow the element to cancel any further response handling
+        if (this.element) {
+            const event = new Event('ajaxDone', { cancelable: true });
+            event.responseData = this.responseData;
+            event.request = this;
+            this.element.dispatchEvent(event);
+
+            if (event.defaultPrevented) {
+                return;
+            }
         }
 
         // Check for a redirect from the response, or use the redirect as specified in the options. This takes
@@ -407,6 +439,18 @@ class Request extends Winter.Module {
         // Allow modules to cancel any further error handling
         if (this.winter.globalEvent('ajaxError', this.responseError, this) === false) {
             return;
+        }
+
+        // Allow the element to cancel any further error handling
+        if (this.element) {
+            const event = new Event('ajaxFail', { cancelable: true });
+            event.responseError = this.responseError;
+            event.request = this;
+            this.element.dispatchEvent(event);
+
+            if (event.defaultPrevented) {
+                return;
+            }
         }
 
         if (error instanceof Error) {
