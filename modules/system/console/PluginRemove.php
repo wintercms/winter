@@ -101,7 +101,7 @@ class PluginRemove extends Command
     protected function getOptions()
     {
         return [
-            ['force', 'f', InputOption::VALUE_NONE, 'Force the operation to run.'],
+            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run and ignore production warning.'],
             ['no-rollback', 'r', InputOption::VALUE_NONE, 'Skip the rollback of the plugin migrations.'],
         ];
     }
