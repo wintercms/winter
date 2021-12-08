@@ -299,6 +299,13 @@
 
         this.pickr.setColor(this.$dataLocker.val())
         this.$colorValue.val(this.$dataLocker.val())
+
+        if (
+            this.originalColor !== null
+            && this.valueFromHSVA(this.pickr.getColor()) !== this.valueFromHSVA(this.originalColor)
+        ) {
+            this.$el.trigger('change')
+        }
     }
 
     /**
