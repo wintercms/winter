@@ -1,5 +1,6 @@
 <?php namespace System\Console;
 
+use App;
 use Illuminate\Console\Command;
 use System\Classes\UpdateManager;
 use Symfony\Component\Console\Input\InputOption;
@@ -42,9 +43,19 @@ class WinterDown extends Command
      */
     public function handle()
     {
-        if (!$this->confirmToProceed('This will DESTROY all database tables.')) {
-            return;
+        if (App::isProduction() && !$this->option('force')) {
+            $this->warn('YOUR APPLICATION IS IN PRODUCTION');
         }
+
+        $this->warn('This will completely delete all database tables in use with your Winter installation.');
+
+        $confirmed = false;
+        $prompt = 'Please type "DELETE" to proceed';
+        do {
+            if (strtolower($this->ask($prompt)) === 'delete') {
+                $confirmed = true;
+            }
+        } while ($confirmed === false);
 
         UpdateManager::instance()
             ->setNotesOutput($this->output)
@@ -58,7 +69,7 @@ class WinterDown extends Command
     protected function getOptions()
     {
         return [
-            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run.'],
+            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run and ignore production warning.'],
         ];
     }
 

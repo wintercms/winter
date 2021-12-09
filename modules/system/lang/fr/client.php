@@ -84,15 +84,15 @@ return [
         ]
     ],
     'eventlog' => [
-        'show_stacktrace' => 'Afficher la pile d’exécution',
-        'hide_stacktrace' => 'Masquer la pile d’exécution',
+        'show_stacktrace' => 'Afficher la pile d\'exécution',
+        'hide_stacktrace' => 'Masquer la pile d\'exécution',
         'tabs' => [
             'formatted' => 'Message formaté',
             'raw' => 'Message brut',
         ],
         'editor' => [
-            'title' => 'Sélectionnez l’éditeur de code source à utiliser',
-            'description' => 'L’environnement de votre système d’exploitation doit être configuré pour ouvrir l’un des schémas d’URL ci-dessous.',
+            'title' => 'Sélectionnez l\'éditeur de code source à utiliser',
+            'description' => 'L\'environnement de votre système d\'exploitation doit être configuré pour ouvrir l\'un des schémas d\'URL ci-dessous.',
             'openWith' => 'Ouvrir avec',
             'remember_choice' => 'Se souvenir de la sélection pour la durée de la session dans ce navigateur',
             'open' => 'Ouvrir',

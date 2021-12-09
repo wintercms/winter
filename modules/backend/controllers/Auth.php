@@ -134,6 +134,8 @@ class Auth extends Controller
      */
     public function restore()
     {
+        $this->bodyClass = 'restore';
+
         try {
             if (post('postback')) {
                 return $this->restore_onSubmit();
@@ -197,6 +199,8 @@ class Auth extends Controller
      */
     public function reset($userId = null, $code = null)
     {
+        $this->bodyClass = 'reset';
+
         try {
             if (post('postback')) {
                 return $this->reset_onSubmit();

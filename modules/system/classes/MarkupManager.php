@@ -220,11 +220,27 @@ class MarkupManager
      */
     public function makeTwigFunctions($functions = [])
     {
+        $defaultOptions = ['is_safe' => ['html']];
         if (!is_array($functions)) {
             $functions = [];
         }
 
         foreach ($this->listFunctions() as $name => $callable) {
+            $options = [];
+            if (is_array($callable) && isset($callable['options'])) {
+                $options = $callable['options'];
+                $callable = $callable['callable'] ?? $callable[0];
+
+                if (isset($options['is_safe']) && !is_array($options['is_safe'])) {
+                    if (is_string($options['is_safe'])) {
+                        $options['is_safe'] = [$options['is_safe']];
+                    } else {
+                        $options['is_safe'] = [];
+                    }
+                }
+            }
+            $options = array_merge($defaultOptions, $options);
+
             /*
              * Handle a wildcard function
              */
@@ -240,7 +256,7 @@ class MarkupManager
                 throw new ApplicationException(sprintf('The markup function for %s is not callable.', $name));
             }
 
-            $functions[] = new TwigSimpleFunction($name, $callable, ['is_safe' => ['html']]);
+            $functions[] = new TwigSimpleFunction($name, $callable, $options);
         }
 
         return $functions;
@@ -253,11 +269,27 @@ class MarkupManager
      */
     public function makeTwigFilters($filters = [])
     {
+        $defaultOptions = ['is_safe' => ['html']];
         if (!is_array($filters)) {
             $filters = [];
         }
 
         foreach ($this->listFilters() as $name => $callable) {
+            $options = [];
+            if (is_array($callable) && isset($callable['options'])) {
+                $options = $callable['options'];
+                $callable = $callable['callable'] ?? $callable[0];
+
+                if (isset($options['is_safe']) && !is_array($options['is_safe'])) {
+                    if (is_string($options['is_safe'])) {
+                        $options['is_safe'] = [$options['is_safe']];
+                    } else {
+                        $options['is_safe'] = [];
+                    }
+                }
+            }
+            $options = array_merge($defaultOptions, $options);
+
             /*
              * Handle a wildcard function
              */
@@ -273,7 +305,7 @@ class MarkupManager
                 throw new ApplicationException(sprintf('The markup filter for %s is not callable.', $name));
             }
 
-            $filters[] = new TwigSimpleFilter($name, $callable, ['is_safe' => ['html']]);
+            $filters[] = new TwigSimpleFilter($name, $callable, $options);
         }
 
         return $filters;

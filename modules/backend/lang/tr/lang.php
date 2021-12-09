@@ -520,7 +520,7 @@ return [
             'iso_8859_6' => 'ISO-8859-6 (Latin, Arapça)',
             'iso_8859_7' => 'ISO-8859-7 (Latin, Yunanca)',
             'iso_8859_8' => 'ISO-8859-8 (Latin, İbranice)',
-            'iso_8859_0' => 'ISO-8859-9 (Latin-5, Türkçe)',
+            'iso_8859_9' => 'ISO-8859-9 (Latin-5, Türkçe)',
             'iso_8859_10' => 'ISO-8859-10 (Latin-6, Norveççe)',
             'iso_8859_11' => 'ISO-8859-11 (Latin, Thai Dili)',
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, Baltık Rim)',

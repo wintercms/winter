@@ -213,6 +213,7 @@ class ServiceProvider extends ModuleServiceProvider
                 'transchoice'    => ['Lang', 'choice'],
                 'md'             => ['Markdown', 'parse'],
                 'md_safe'        => ['Markdown', 'parseSafe'],
+                'md_line'        => ['Markdown', 'parseLine'],
                 'time_since'     => ['System\Helpers\DateTime', 'timeSince'],
                 'time_tense'     => ['System\Helpers\DateTime', 'timeTense'],
             ]);
@@ -262,6 +263,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('winter.passwd', 'System\Console\WinterPasswd');
         $this->registerConsoleCommand('winter.version', 'System\Console\WinterVersion');
         $this->registerConsoleCommand('winter.manifest', 'System\Console\WinterManifest');
+        $this->registerConsoleCommand('winter.test', 'System\Console\WinterTest');
 
         $this->registerConsoleCommand('plugin.install', 'System\Console\PluginInstall');
         $this->registerConsoleCommand('plugin.remove', 'System\Console\PluginRemove');
