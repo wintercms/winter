@@ -110,13 +110,15 @@ return [
     | from your proxy when rewriting the request. This is an integer map value
     | so you may specify more than one value.
     |
-    | Possible values (prepended with `Illuminate\Http\Request::`)
-    |   - HEADER_X_FORWARDED_ALL - trust all forwarded headers
-    |   - HEADER_X_FORWARDED_FOR - trust only the proxy IP
-    |   - HEADER_X_FORWARDED_HOST - trust only the proxy hostname
-    |   - HEADER_X_FORWARDED_PORT - trust only the proxy port
-    |   - HEADER_X_FORWARDED_PROTO - trust only the proxy protocol
-    |   - HEADER_X_FORWARDED_AWS_ELB - trust Amazon Elastic Load Balancing header
+    | Possible values:
+    |   - 'HEADER_X_FORWARDED_ALL' - trust all forwarded headers
+    |   - Illuminate\Http\Request::HEADER_X_FORWARDED_FOR - trust only the proxy IP
+    |   - Illuminate\Http\Request::HEADER_X_FORWARDED_HOST - trust only the proxy hostname
+    |   - Illuminate\Http\Request::HEADER_X_FORWARDED_PORT - trust only the proxy port
+    |   - Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO - trust only the proxy protocol
+    |   - Illuminate\Http\Request::HEADER_X_FORWARDED_PREFIX - trust only the proxy prefix
+    |   - Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB - trust Amazon Elastic Load Balancing headers
+    |   - Illuminate\Http\Request::HEADER_X_FORWARDED_TRAEFIK - trust Traefik reverse proxy headers
     |
     | Examples:
     |   - To trust only the hostname, use the following:
@@ -132,7 +134,7 @@ return [
     |   - Amazon ELB users should always use the "HEADER_X_FORWARDED_AWS_ELB" option.
     */
 
-    'trustedProxyHeaders' => Illuminate\Http\Request::HEADER_X_FORWARDED_ALL,
+    'trustedProxyHeaders' => 'HEADER_X_FORWARDED_ALL',
 
     /*
     |--------------------------------------------------------------------------
