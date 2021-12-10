@@ -15,8 +15,8 @@ return [
     */
 
     'mailgun' => [
-        'domain' => '',
-        'secret' => '',
+        'domain'   => '',
+        'secret'   => '',
         'endpoint' => 'api.mailgun.net', // api.eu.mailgun.net for EU
     ],
 
@@ -29,7 +29,7 @@ return [
     ],
 
     'ses' => [
-        'key' => '',
+        'key'    => '',
         'secret' => '',
         'region' => 'us-east-1',
     ],

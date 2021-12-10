@@ -1,0 +1,14 @@
+blank_issues_enabled: true
+contact_links:
+  - name: General Winter CMS Support
+    url: https://wintercms.com/support
+    about: If you need help with Winter CMS, please review our support options.
+  - name: Discord
+    url: https://discord.gg/D5MFSPH6Ux
+    about: Join us on Discord for general discussions and one-on-one help.
+  - name: Feature Requests
+    url: https://github.com/wintercms/winter/discussions
+    about: Please post an Idea thread to the Discussions section for feature requests.
+  - name: Documentation Issue
+    url: https://github.com/wintercms/docs
+    about: For documentation issues, please submit an issue or PR to the Docs repository.

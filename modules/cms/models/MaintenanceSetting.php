@@ -3,6 +3,8 @@
 use Model;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
+use Winter\Storm\Support\Arr;
+use Symfony\Component\HttpFoundation\IpUtils;
 use ApplicationException;
 
 /**
@@ -88,5 +90,16 @@ class MaintenanceSetting extends Model
         else {
             $this->is_enabled = false;
         }
+    }
+
+    /**
+     * Check if the provided IP is in the allowed IP list.
+     *
+     * @param string $ip
+     * @return bool
+     */
+    public static function isAllowedIp(string $ip): bool
+    {
+        return IpUtils::checkIp($ip, Arr::pluck(static::get('allowed_ips', []), 'ip'));
     }
 }

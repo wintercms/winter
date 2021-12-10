@@ -3,11 +3,14 @@
 return [
     'auth' => [
         'title' => 'بخش مدیریت',
+        'invalid_login' => 'جزییات وارد شده با اطلاعات ما همخوانی ندارد. لطفا دوباره بررسی کنید.',
     ],
     'field' => [
         'invalid_type' => 'نوع فیلد :type نا معتبر می باشد.',
         'options_method_invalid_model' => "خصیصه ':field' به مدل معتبری اشاره نمی کند. گزینه مورد نظر را در مدل :model ایجاد نمایید.",
         'options_method_not_exists' => 'کلاس مدل :model باید شامل متد :method() باشد و گزینه های مورد نیاز ":field" را بازنشاند.',
+        'options_static_method_invalid_value' => "متد استاتیک ':method()' در :class آرایه ی معتبری بر نمی گرداند.",
+        'colors_method_not_exists' => "کلاس مدل :model باید شامل متد :method() باشد و کدهای هگزادسیمال رنگ های HTML  ':field' را بازنشاند.",
     ],
     'widget' => [
         'not_registered' => "کلاس مربوط به ابزارک ':name' به سیستم معرفی نشده است",
@@ -15,6 +18,11 @@ return [
     ],
     'page' => [
         'untitled' => "بدون عنوان",
+        '404' => [
+            'label' => 'صفحه مورد نظر یافت نشد.',
+            'help' => "ما بسیار جستجو کردیم اما آدرس درخواستی پیدا نشد. شاید شما به دنبال چیز دیگری می گردید؟",
+            'back_link' => 'بازگشت به صفحه قبل',
+        ],
         'access_denied' => [
             'label' => "شما مجوز دسترسی ندارید",
             'help' => "شما مجوز لازم براس دسترسی به این صفحه را ندارید.",
@@ -23,13 +31,28 @@ return [
         'no_database' => [
             'label' => 'پایگاه داده یافت نشد',
             'help' => "جهت استفاده از بخش مدیریت به یک پایگاه داده نیاز دارید. تنظیمات پایگاه داده را بررسی نموده و از نصب جدولها در آن اطمینان حاصل کنید.",
-            'cms_link' => 'Return to the homepage'
+            'cms_link' => 'بازگشت به صفحه اصلی'
         ],
     ],
     'partial' => [
         'not_found_name' => "بخشی با نام ':name' یافت نشد.",
+        'invalid_name' => 'نام بخش  :name نامعتبر است',
+    ],
+    'ajax_handler' => [
+        'invalid_name' => 'کنترل کننده آژاکس با نام  :name نامعتبر است.',
+        'not_found' => "کنترل کننده آژاکس با نام ':name' پیدا نشد.",
     ],
     'account' => [
+        'impersonate' => 'استفاده از هویت کاربر',
+        'impersonate_confirm' => 'آیا مطمئن هستید که می خواهید از هویت این کاربر استفاده کنید؟ با خروج از سیستم می توانید به حالت اولیه خود بازگردید.',
+        'impersonate_success' => 'شما اکنون با هویت این کاربر هستید.',
+        'impersonate_working' => 'در حال تغییر هویت ...',
+        'impersonating' => 'تغییر هویت :full_name',
+        'stop_impersonating' => 'توقف تغییر هوست',
+        'unsuspend' => 'خروج از حالت تعلیق',
+        'unsuspend_confirm' => 'آیا جهت خروج این کاربر از حالت تعلیق مطمئن هستید؟',
+        'unsuspend_success' => 'کاربر از حالت تعلیق خارج شد.',
+        'unsuspend_working' => 'در حال خروج از حالت تعلیق ...',
         'signed_in_as' => 'وارد شده به عنوان :full_name',
         'sign_out' => 'خروج',
         'login' => 'ورود',
@@ -135,6 +158,8 @@ return [
         'last_login' => 'آخرین ورود',
         'created_at' => 'ایجاد شده در',
         'updated_at' => 'ویرایش شده در',
+        'deleted_at' => 'حذف شده در',
+        'show_deleted' => 'نمایش حذف شده ها',
         'group' => [
             'name' => 'گروه',
             'name_field' => 'نام',
@@ -167,7 +192,9 @@ return [
         ],
         'preferences' => [
             'not_authenticated' => 'هیچ کاربر ثبت شده ای جهت بارگذاری یا ذخیره تنظیمات وجود ندارد.'
-        ]
+        ],
+        'trashed_hint_title' => 'این کاربر حذف شده است.',
+        'trashed_hint_desc' => 'این کاربرحذف شده است و نمی توانید آن وارد سیستم شوید. جهت بازیابی آن ، روی نماد بازیابی کاربر در سمت چپ-پایین کلیک کنید',
     ],
     'list' => [
         'default_title' => 'لیست',
@@ -212,6 +239,11 @@ return [
         'remove_confirm' => 'آیا اطمینان دارید؟',
         'remove_file' => 'حذف فایل'
     ],
+    'repeater' => [
+        'add_new_item' => 'افزودن مورد جدید',
+        'min_items_failed' => ':name حداقل :min  از مورد, فقط :items که ارائه شده است.',
+        'max_items_failed' => ':name فقط :max مورد اجازه دارید از , :items که ارائه شده است.',
+    ],
     'form' => [
         'create_title' => ":name جدید",
         'update_title' => "ویرایش :name",
@@ -219,6 +251,7 @@ return [
         'create_success' => ':name با موفقیت ایجاد شد.',
         'update_success' => ':name با موفقیت به روز رسانی شد.',
         'delete_success' => ':name با موفقیت حذف شد.',
+        'restore_success' => ':name بازیابی شد',
         'reset_success' => 'بازنشانی موفق بود',
         'missing_id' => "رکورد مشخصه (ID) برای فرم انتخاب نشده است.",
         'missing_model' => 'مدلی برای فرن تعریف شده در کلاس :class مشخص نشده است.',
@@ -238,6 +271,9 @@ return [
         'confirm_delete' => 'آیا از حذف این مورد اطمینان دارید؟',
         'confirm_delete_multiple' => 'آیا از حذف موارد انتخاب شده اطمینان دارید؟',
         'deleting_name' => 'درحال حذف :name...',
+        'restore' => 'بازیابی',
+        'restoring' => 'در حال بازیابی ...',
+        'confirm_restore' => 'آیا از بازیابی این رکورد مطمئن هستید؟',
         'reset_default' => 'بازگشت به پیش فرض',
         'resetting' => 'بازنشانی',
         'resetting_name' => 'بازنشانی name:',
@@ -271,6 +307,7 @@ return [
     ],
     'recordfinder' => [
         'find_record' => 'انتخاب مورد',
+        'invalid_model_class' => 'کلاس مدل فراهم شده  ":modelClass" برای انتخاب رکوردها نامعتبر است.',
         'cancel' => 'انصراف',
     ],
     'pagelist' => [
@@ -329,10 +366,13 @@ return [
         'permissions' => 'پوشه :name یا یکی از زیر پوشه های آن برای PHP قابل نوشتن نیستند. لطفا تنظیمات این پوشه را تعییر دهید.',
         'extension' => 'افزونه PHP با نام :name نصب نشده است. لطفن این افزونه را نصب کرده و فعال نمایید.',
         'plugin_missing' => 'افزونه :name مورد نیاز است ولی نصب نشده. لطفا این افزونه را نصب کنید.',
+        'debug' => 'حالت عیب یابی فعال است. این مورد در حالت ارائه نهایی نرم افزار توصیه نمی شود.',
+        'decompileBackendAssets' => 'فایل های assets   موجود در Backend در حال حاضر کامپایل نشده اند. این مورد هنگام ارائه نهایی نرم افزار توصیه نمی شود.',
     ],
     'editor' => [
         'menu_label' => 'تنظیمات ویرایشگر کد',
         'menu_description' => 'سفارشی سازی ویرایشگر کد، مانند اندازه فونت و رنگ بندی آن.',
+        'preview' => 'مرور',
         'font_size' => 'اندازه فونت',
         'tab_size' => 'اندازه کاراکتر TAB',
         'use_hard_tabs' => 'فاصله گذاری با استفاده از TAB',
@@ -367,16 +407,30 @@ return [
         'label' => 'برچسب',
         'class_name' => 'نام کلاس',
         'markup_tags' => 'تگ های نشانه گذاری',
+        'markup_tag' => 'Markup Tag',
         'allowed_empty_tags' => 'اجاره استفاده از تگ های خالی',
         'allowed_empty_tags_comment' => 'لیست تگ های ای که در صورت خالی بودن حذف نشوند.',
         'allowed_tags' => 'تگ های مجاز',
         'allowed_tags_comment' => 'لیست تگ های مجاز',
+        'allowed_attributes' => 'ویژگی های مجاز',
+        'allowed_attributes_comment' => 'لیست ویژگی های مجاز',
         'no_wrap' => 'تگ های بدون دربرگیرنده',
         'no_wrap_comment' => 'لیست تگ هایی که درون تک بلاک قرار نمیگیرند',
         'remove_tags' => 'تگ های غیر مجاز',
         'remove_tags_comment' => 'تگ هایی که در صورت وارد شدن در ویرایش گر با محتوی خود حذف می شوند',
+        'line_breaker_tags' => 'تگ های جداکننده خط',
+        'line_breaker_tags_comment' => 'لیستی از تگ هایی  که جهت قراردادن خطوط حائل بین عناصر استفاده می شود..',
+        'toolbar_options' => 'گزینه های جعبه ابزار',
         'toolbar_buttons' => 'دکمه های جعبه ابزار',
         'toolbar_buttons_comment' => 'دکمه های پیشفرض جهت نمایش در ویرایشگر.',
+        'toolbar_buttons_preset' => 'پیکربندی دکمه از پیش تعیین شده نوار ابزار را وارد کنید:',
+        'toolbar_buttons_presets' => [
+            'default' => 'پیش فرض',
+            'minimal' => 'کمینه',
+            'full' => 'کامل',
+        ],
+        'paragraph_formats' => 'قالب های پاراگراف',
+        'paragraph_formats_comment' => 'گزینه هایی که در قالب های پاراگراف دیده می شود',
     ],
     'tooltips' => [
         'preview_website' => 'پیش نمایش وب سایت'
@@ -396,6 +450,8 @@ return [
         'brand' => 'برند',
         'logo' => 'لوگو',
         'logo_description' => 'لوگوی شخصی سازی شده خود را جهت استفاده در بخش مدیریت ارسال نمایید.',
+        'favicon' => 'Favicon',
+        'favicon_description' => 'یک favicon دلخواه بارگذاری کنید تا در back-end استفاده شود',
         'app_name' => 'نام برنامه',
         'app_name_description' => 'این نام در بخش عنوان قسمت مدیریت نمایش داده می شود.',
         'app_tagline' => 'شعار برنامه',
@@ -403,12 +459,13 @@ return [
         'colors' => 'رنگ ها',
         'primary_color' => 'اصلی color',
         'secondary_color' => 'ثانویه color',
-        'accent_color' => 'Accent color',
+        'accent_color' => 'رنگ مهم',
         'styles' => 'شیوه نامه ها',
         'custom_stylesheet' => 'شیوه نامه های سفارشی',
         'navigation' => 'ناو بری',
         'menu_mode' => 'سبک منو',
         'menu_mode_inline' => 'آیکون در کنار',
+        'menu_mode_inline_no_icons' => '(بدون آیکون) در کنار',
         'menu_mode_tile' => 'آیکون در بالا',
         'menu_mode_collapsed' => 'جمع شونده'
     ],
@@ -426,7 +483,9 @@ return [
         'hint' => 'این لیست نشاندهنده ورود کاربران مدیر به سیستم می باشد. موارد برای مدت :days روز نگهداری می شوند.',
         'menu_label' => 'ثبت دسترسی ها',
         'menu_description' => 'نمایش لیست ورود موفقیت آمیز کاربران مدیر.',
+        'id' => 'ID',
         'created_at' => 'زمان و تاریخ',
+        'type' => 'نوع',
         'login' => 'ورود',
         'ip_address' => 'نشانی IP',
         'first_name' => 'نام',
@@ -442,6 +501,7 @@ return [
     'import_export' => [
         'upload_csv_file' => '1. ارسال فایل CSV.',
         'import_file' => 'درورن ریزی فایل',
+        'row' => 'سطر :row',
         'first_row_contains_titles' => 'سطر اول شامل عنوان ستون ها می باشد',
         'first_row_contains_titles_desc' => 'اگر سطر اول فایل CSV حاوی عنوان ستون ها می باشد این گزینه را انتخاب نمایید.',
         'match_columns' => '2. مطابقت  سازی ستون های فایل با فیلد های پایگاه داده',
@@ -501,18 +561,21 @@ return [
             'iso_8859_6' => 'ISO-8859-6 (Latin, Arabic)',
             'iso_8859_7' => 'ISO-8859-7 (Latin, Greek)',
             'iso_8859_8' => 'ISO-8859-8 (Latin, Hebrew)',
-            'iso_8859_0' => 'ISO-8859-9 (Latin-5, Turkish)',
+            'iso_8859_9' => 'ISO-8859-9 (Latin-5, Turkish)',
             'iso_8859_10' => 'ISO-8859-10 (Latin-6, Nordic)',
             'iso_8859_11' => 'ISO-8859-11 (Latin, Thai)',
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, Baltic Rim)',
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtic)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
+            'windows_1250' => 'Windows-1250 (CP1250, Central and Eastern European)',
             'windows_1251' => 'Windows-1251 (CP1251)',
             'windows_1252' => 'Windows-1252 (CP1252)'
         ]
     ],
     'permissions' => [
-        'manage_media' => 'مدیریت چند رسانه ها'
+        'manage_media' => 'مدیریت چند رسانه ها',
+        'allow_unsafe_markdown' => 'از مارک داون نامعتبر استفاده کنید(شامل javascript شود(',
+        'no_image' => 'تصویر یافت نشد.',
     ],
     'mediafinder' => [
         'label' => 'جستجوگر رسانه',
@@ -584,5 +647,5 @@ return [
         'rename_new_name' => 'نام جدید',
         'move_please_select' => 'لطفا انتخاب نمایید',
         'move_button' => 'جابجایی',
-    ]
+    ],
 ];

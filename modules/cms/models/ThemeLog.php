@@ -87,7 +87,7 @@ class ThemeLog extends Model
         $record->content = $isDelete ? '' : $newContent;
         $record->old_content = $oldContent;
 
-        if ($user = BackendAuth::getUser()) {
+        if ($user = BackendAuth::getRealUser()) {
             $record->user_id = $user->id;
         }
 

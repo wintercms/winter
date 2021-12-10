@@ -1,0 +1,32 @@
+name: Pre-Pull Request Discussion
+description: If you intend to submit a PR and wish to discuss it first, start here.
+labels: ["Status: Review Needed", "Type: Conceptual Enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in submitting a pull request to Winter CMS. We always value contributions from our community. If you wish to start a discussion on the pull request before submission, such as discussing implementation details, please use this form.
+  - type: dropdown
+    id: subsystem
+    attributes:
+      label: Package targeted
+      description: Please select which portion of Winter CMS your PR is targeting.
+      options:
+        - Winter CMS
+        - Storm Library
+        - Both
+        - Other (please specify below)
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please describe what your PR is intending to do.
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Will this change be backwards-compatible?
+      description: Please describe if this intended change may break backwards compatibility or not. If it does, state the rationale in which you believe this to be an acceptable break in backwards compatibility.

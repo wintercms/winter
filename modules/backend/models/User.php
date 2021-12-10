@@ -209,4 +209,66 @@ class User extends UserBase
     {
         BackendAuth::findThrottleByUserId($this->id)->unsuspend();
     }
+
+    //
+    // Impersonation
+    //
+
+    /**
+     * Returns an array of merged permissions based on the user's individual permissions
+     * and their group permissions filtering out any permissions the impersonator doesn't
+     * have access to (if the current user is being impersonated)
+     *
+     * @return array
+     */
+    public function getMergedPermissions()
+    {
+        if (!$this->mergedPermissions) {
+            $permissions = parent::getMergedPermissions();
+
+            // If the user is being impersonated filter out any permissions the impersonator doesn't have access to already
+            if (BackendAuth::isImpersonator()) {
+                $impersonator = BackendAuth::getImpersonator();
+                if ($impersonator && $impersonator !== $this) {
+                    foreach ($permissions as $i => $permission) {
+                        if (!$impersonator->hasAccess($permission)) {
+                            unset($permissions[$i]);
+                        }
+                    }
+                    $this->mergedPermissions = $permissions;
+                }
+            }
+        }
+
+        return $this->mergedPermissions;
+    }
+
+    /**
+     * Check if this user can be impersonated by the provided impersonator
+     * Super users cannot be impersonated and all users cannot be impersonated unless there is an impersonator
+     * present and the impersonator has access to `backend.impersonate_users`, and the impersonator is not the
+     * user being impersonated
+     *
+     * @param \Winter\Storm\Auth\Models\User|false $impersonator The user attempting to impersonate this user, false when not available
+     * @return boolean
+     */
+    public function canBeImpersonated($impersonator = false)
+    {
+        if (
+            $this->isSuperUser() ||
+            !$impersonator ||
+            !($impersonator instanceof static) ||
+            !$impersonator->hasAccess('backend.impersonate_users') ||
+            $impersonator === $this
+        ) {
+            return false;
+        }
+
+        // Clear the merged permissions before the impersonation starts
+        // so that they are correct even if they had been loaded prior
+        // to the impersonation starting
+        $this->mergedPermissions = null;
+
+        return true;
+    }
 }

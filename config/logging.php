@@ -32,36 +32,36 @@ return [
 
     'channels' => [
         'stack' => [
-            'driver' => 'stack',
-            'channels' => ['daily'],
+            'driver'            => 'stack',
+            'channels'          => ['daily'],
             'ignore_exceptions' => false,
         ],
 
         'single' => [
             'driver' => 'single',
-            'path' => storage_path('logs/system.log'),
-            'level' => 'debug',
+            'path'   => storage_path('logs/system.log'),
+            'level'  => 'debug',
         ],
 
         'daily' => [
             'driver' => 'daily',
-            'path' => storage_path('logs/system.log'),
-            'level' => 'debug',
-            'days' => 14,
+            'path'   => storage_path('logs/system.log'),
+            'level'  => 'debug',
+            'days'   => 14,
         ],
 
         'slack' => [
-            'driver' => 'slack',
-            'url' => env('LOG_SLACK_WEBHOOK_URL'),
+            'driver'   => 'slack',
+            'url'      => env('LOG_SLACK_WEBHOOK_URL'),
             'username' => 'Winter CMS Log',
-            'emoji' => ':boom:',
-            'level' => 'critical',
+            'emoji'    => ':boom:',
+            'level'    => 'critical',
         ],
 
         'papertrail' => [
-            'driver' => 'monolog',
-            'level' => 'debug',
-            'handler' => \Monolog\Handler\SyslogUdpHandler::class,
+            'driver'       => 'monolog',
+            'level'        => 'debug',
+            'handler'      => \Monolog\Handler\SyslogUdpHandler::class,
             'handler_with' => [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
@@ -69,8 +69,8 @@ return [
         ],
 
         'stderr' => [
-            'driver' => 'monolog',
-            'handler' => \Monolog\Handler\StreamHandler::class,
+            'driver'    => 'monolog',
+            'handler'   => \Monolog\Handler\StreamHandler::class,
             'formatter' => env('LOG_STDERR_FORMATTER'),
             'with' => [
                 'stream' => 'php://stderr',
@@ -79,12 +79,12 @@ return [
 
         'syslog' => [
             'driver' => 'syslog',
-            'level' => 'debug',
+            'level'  => 'debug',
         ],
 
         'errorlog' => [
             'driver' => 'errorlog',
-            'level' => 'debug',
+            'level'  => 'debug',
         ],
     ],
 

@@ -52,7 +52,6 @@ class ServiceProvider extends ModuleServiceProvider
          */
         PluginManager::instance()->registerAll();
 
-        $this->registerClassAliases();
         $this->registerConsole();
         $this->registerErrorHandler();
         $this->registerLogging();
@@ -171,26 +170,6 @@ class ServiceProvider extends ModuleServiceProvider
         }
     }
 
-    /**
-     * Register class aliases for the plugins.
-     *
-     * @return void
-     */
-    protected function registerClassAliases()
-    {
-        $plugins = PluginManager::instance()->getRegistrationMethodValues('registerClassAliases');
-        foreach ($plugins as $plugin => $aliases) {
-            if (!is_array($aliases) || empty($aliases)) {
-                continue;
-            }
-            foreach ($aliases as $real => $alias) {
-                if (!class_exists($alias)) {
-                    class_alias($real, $alias);
-                }
-            }
-        }
-    }
-
     /*
      * Register markup tags
      */
@@ -234,6 +213,7 @@ class ServiceProvider extends ModuleServiceProvider
                 'transchoice'    => ['Lang', 'choice'],
                 'md'             => ['Markdown', 'parse'],
                 'md_safe'        => ['Markdown', 'parseSafe'],
+                'md_line'        => ['Markdown', 'parseLine'],
                 'time_since'     => ['System\Helpers\DateTime', 'timeSince'],
                 'time_tense'     => ['System\Helpers\DateTime', 'timeTense'],
             ]);
@@ -283,6 +263,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('winter.passwd', 'System\Console\WinterPasswd');
         $this->registerConsoleCommand('winter.version', 'System\Console\WinterVersion');
         $this->registerConsoleCommand('winter.manifest', 'System\Console\WinterManifest');
+        $this->registerConsoleCommand('winter.test', 'System\Console\WinterTest');
 
         $this->registerConsoleCommand('plugin.install', 'System\Console\PluginInstall');
         $this->registerConsoleCommand('plugin.remove', 'System\Console\PluginRemove');

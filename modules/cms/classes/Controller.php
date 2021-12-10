@@ -113,12 +113,15 @@ class Controller
      * Creates the controller.
      * @param \Cms\Classes\Theme $theme Specifies the CMS theme.
      * If the theme is not specified, the current active theme used.
+     *
+     * @throws SystemException if the provided theme can't be found
+     * @return void
      */
     public function __construct($theme = null)
     {
         $this->theme = $theme ?: Theme::getActiveTheme();
         if (!$this->theme) {
-            throw new CmsException(Lang::get('cms::lang.theme.active.not_found'));
+            throw new SystemException(Lang::get('cms::lang.theme.active.not_found'));
         }
 
         $this->assetPath = Config::get('cms.themesPath', '/themes') . '/' . $this->theme->getDirName();
@@ -163,6 +166,7 @@ class Controller
         if (
             MaintenanceSetting::isConfigured() &&
             MaintenanceSetting::get('is_enabled', false) &&
+            !MaintenanceSetting::isAllowedIp(Request::ip()) &&
             !BackendAuth::getUser()
         ) {
             if (!Request::ajax()) {
@@ -264,21 +268,24 @@ class Controller
     /**
      * Renders a page in its entirety, including component initialization.
      * AJAX will be disabled for this process.
+     *
      * @param string $pageFile Specifies the CMS page file name to run.
      * @param array  $parameters  Routing parameters.
      * @param \Cms\Classes\Theme  $theme  Theme object
+     * @throws SystemException If the Page object or theme are unable to be found
+     * @return mixed
      */
     public static function render($pageFile, $parameters = [], $theme = null)
     {
         if (!$theme && (!$theme = Theme::getActiveTheme())) {
-            throw new CmsException(Lang::get('cms::lang.theme.active.not_found'));
+            throw new SystemException(Lang::get('cms::lang.theme.active.not_found'));
         }
 
         $controller = new static($theme);
         $controller->getRouter()->setParameters($parameters);
 
         if (($page = Page::load($theme, $pageFile)) === null) {
-            throw new CmsException(Lang::get('cms::lang.page.not_found_name', ['name'=>$pageFile]));
+            throw new SystemException(Lang::get('cms::lang.page.not_found_name', ['name'=>$pageFile]));
         }
 
         return $controller->runPage($page, false);
@@ -286,8 +293,10 @@ class Controller
 
     /**
      * Runs a page directly from its object and supplied parameters.
+     *
      * @param \Cms\Classes\Page $page Specifies the CMS page to run.
-     * @return string
+     * @throws SystemException If the Layout object was unable to be found
+     * @return mixed
      */
     public function runPage($page, $useAjax = true)
     {
@@ -301,7 +310,7 @@ class Controller
             $layout = Layout::initFallback($this->theme);
         }
         elseif (($layout = Layout::loadCached($this->theme, $page->layout)) === null) {
-            throw new CmsException(Lang::get('cms::lang.layout.not_found_name', ['name'=>$page->layout]));
+            throw new SystemException(Lang::get('cms::lang.layout.not_found_name', ['name'=>$page->layout]));
         }
 
         $this->layout = $layout;
@@ -705,6 +714,8 @@ class Controller
 
     /**
      * Executes the page, layout, component and plugin AJAX handlers.
+     *
+     * @throws SystemException If the handler is invalid or could not be found
      * @return mixed Returns the AJAX Response object or null.
      */
     protected function execAjaxHandlers()
@@ -715,7 +726,7 @@ class Controller
                  * Validate the handler name
                  */
                 if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
-                    throw new CmsException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name'=>$handler]));
+                    throw new SystemException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name'=>$handler]));
                 }
 
                 /*
@@ -726,7 +737,7 @@ class Controller
 
                     foreach ($partialList as $partial) {
                         if (!preg_match('/^(?:\w+\:{2}|@)?[a-z0-9\_\-\.\/]+$/i', $partial)) {
-                            throw new CmsException(Lang::get('cms::lang.partial.invalid_name', ['name'=>$partial]));
+                            throw new SystemException(Lang::get('cms::lang.partial.invalid_name', ['name'=>$partial]));
                         }
                     }
                 }
@@ -740,7 +751,7 @@ class Controller
                  * Execute the handler
                  */
                 if (!$result = $this->runAjaxHandler($handler)) {
-                    throw new CmsException(Lang::get('cms::lang.ajax_handler.not_found', ['name'=>$handler]));
+                    throw new SystemException(Lang::get('cms::lang.ajax_handler.not_found', ['name'=>$handler]));
                 }
 
                 /*
@@ -925,9 +936,11 @@ class Controller
     /**
      * Renders a requested partial.
      * The framework uses this method internally.
+     *
      * @param string $name The view to load.
      * @param array $parameters Parameter variables to pass to the view.
      * @param bool $throwException Throw an exception if the partial is not found.
+     * @throws SystemException If the partial cannot be found
      * @return mixed Partial contents or false if not throwing an exception.
      */
     public function renderPartial($name, $parameters = [], $throwException = true)
@@ -977,7 +990,7 @@ class Controller
                 }
                 elseif (($componentObj = $this->findComponentByPartial($partialName)) === null) {
                     if ($throwException) {
-                        throw new CmsException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$partialName]));
+                        throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$partialName]));
                     }
 
                     return false;
@@ -988,7 +1001,7 @@ class Controller
              */
             elseif (($componentObj = $this->findComponentByName($componentAlias)) === null) {
                 if ($throwException) {
-                    throw new CmsException(Lang::get('cms::lang.component.not_found', ['name'=>$componentAlias]));
+                    throw new SystemException(Lang::get('cms::lang.component.not_found', ['name'=>$componentAlias]));
                 }
 
                 return false;
@@ -1011,7 +1024,7 @@ class Controller
 
             if ($partial === null) {
                 if ($throwException) {
-                    throw new CmsException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$name]));
+                    throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$name]));
                 }
 
                 return false;
@@ -1027,7 +1040,7 @@ class Controller
          */
         elseif (($partial = Partial::loadCached($this->theme, $name)) === null) {
             if ($throwException) {
-                throw new CmsException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$name]));
+                throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$name]));
             }
 
             return false;
@@ -1055,7 +1068,7 @@ class Controller
                     : [$component, $component];
 
                 if (!$componentObj = $manager->makeComponent($name, $this->pageObj, $properties)) {
-                    throw new CmsException(Lang::get('cms::lang.component.not_found', ['name'=>$name]));
+                    throw new SystemException(Lang::get('cms::lang.component.not_found', ['name'=>$name]));
                 }
 
                 $componentObj->alias = $alias;
@@ -1121,8 +1134,10 @@ class Controller
     /**
      * Renders a requested content file.
      * The framework uses this method internally.
+     *
      * @param string $name The content view to load.
      * @param array $parameters Parameter variables to pass to the view.
+     * @throws SystemException If the content cannot be found
      * @return string
      */
     public function renderContent($name, $parameters = [])
@@ -1151,7 +1166,7 @@ class Controller
          * Load content from theme
          */
         elseif (($content = Content::loadCached($this->theme, $name)) === null) {
-            throw new CmsException(Lang::get('cms::lang.content.not_found_name', ['name'=>$name]));
+            throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name'=>$name]));
         }
 
         $fileContent = $content->parsedMarkup;
@@ -1321,7 +1336,7 @@ class Controller
      * @param mixed $name Specifies the Cms Page file name.
      * @param array $parameters Route parameters to consider in the URL.
      * @param bool $routePersistence By default the existing routing parameters will be included
-     * @return string
+     * @return string|null
      */
     public function pageUrl($name, $parameters = [], $routePersistence = true)
     {
@@ -1412,10 +1427,8 @@ class Controller
      * @param string $alias Alias to give the component
      * @param array $properties Component properties
      * @param bool $addToLayout Add to layout, instead of page
-     *
-     * @return ComponentBase|null Component object. Will return `null` if a soft component is used but not found.
-     * @throws CmsException if the (hard) component is not found.
      * @throws SystemException if the (hard) component class is not found or is not registered.
+     * @return ComponentBase|null Component object. Will return `null` if a soft component is used but not found.
      */
     public function addComponent($name, $alias, $properties, $addToLayout = false)
     {
@@ -1436,7 +1449,7 @@ class Controller
 
         if (is_null($componentObj)) {
             if (!$isSoftComponent) {
-                throw new CmsException(Lang::get('cms::lang.component.not_found', ['name' => $name]));
+                throw new SystemException(Lang::get('cms::lang.component.not_found', ['name' => $name]));
             }
 
             // A missing soft component will return null.
@@ -1506,7 +1519,7 @@ class Controller
     /**
      * Searches the layout and page components by a partial file
      * @param string $partial
-     * @return ComponentBase The component object, if found
+     * @return ComponentBase|null The component object, if found
      */
     public function findComponentByPartial($partial)
     {
