@@ -145,7 +145,7 @@ class CmsException extends ApplicationException
         /*
          * Fatal Error
          */
-        if ($exception instanceof \Symfony\Component\Debug\Exception\FatalErrorException) {
+        if ($exception instanceof \Symfony\Component\ErrorHandler\Error\FatalError) {
             $check = false;
 
             // Expected: */modules/cms/classes/CodeParser.php(165) : eval()'d code line 7
