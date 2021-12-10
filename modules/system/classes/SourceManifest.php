@@ -1,7 +1,8 @@
 <?php namespace System\Classes;
 
-use ApplicationException;
+use Http;
 use Config;
+use ApplicationException;
 use Winter\Storm\Argon\Argon;
 
 /**
@@ -109,7 +110,12 @@ class SourceManifest
      */
     public function loadSource()
     {
-        $source = file_get_contents($this->source);
+        if (file_exists($this->source)) {
+            $source = file_get_contents($this->source);
+        } else {
+            $source = Http::get($this->source)->body;
+        }
+
         if (empty($source)) {
             throw new ApplicationException(
                 'Source manifest not found'
@@ -148,7 +154,12 @@ class SourceManifest
      */
     public function loadForks()
     {
-        $forks = file_get_contents($this->forksUrl);
+        if (file_exists($this->forksUrl)) {
+            $forks = file_get_contents($this->forksUrl);
+        } else {
+            $forks = Http::get($this->forksUrl)->body;
+        }
+
         if (empty($forks)) {
             throw new ApplicationException(
                 'Forked version manifest not found'

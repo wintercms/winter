@@ -57,7 +57,10 @@ return [
         'weekdaysShort' => ['Sv', 'P', 'O', 'T', 'C', 'Pk', 'S']
     ],
     'colorpicker' => [
-        'choose' => 'Labi',
+        'last_color' => 'Lietot iepriekš izvēlēto krāsu',
+        'aria_palette' => 'Krāsas izvēles laukums',
+        'aria_hue' => 'Nokrāsas izvēles slīdnis',
+        'aria_opacity' => 'Caurspīdīguma izvēles slīdnis',
     ],
     'filter' => [
         'group' => [

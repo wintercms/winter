@@ -773,7 +773,7 @@ class PluginManager
         $this->disabledPlugins[$code] = $isUser;
         $this->writeDisabled();
 
-        if ($pluginObj = $this->findByIdentifier($code)) {
+        if ($pluginObj = $this->findByIdentifier($code, true)) {
             $pluginObj->disabled = true;
         }
 
@@ -803,7 +803,7 @@ class PluginManager
         unset($this->disabledPlugins[$code]);
         $this->writeDisabled();
 
-        if ($pluginObj = $this->findByIdentifier($code)) {
+        if ($pluginObj = $this->findByIdentifier($code, true)) {
             $pluginObj->disabled = false;
         }
 

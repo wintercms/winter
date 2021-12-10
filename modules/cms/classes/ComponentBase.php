@@ -99,7 +99,14 @@ abstract class ComponentBase extends Extendable
     }
 
     /**
-     * Returns information about this component, including name and description.
+     * Returns information about this component.
+     *
+     * This method must be defined in your component and, at a minimum, should return an array with two keys:
+     *
+     * - `name`: The name of your component.
+     * - `description`: The description or purpose of your component.
+     *
+     * @return array
      */
     abstract public function componentDetails();
 

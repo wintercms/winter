@@ -31,7 +31,7 @@ return [
         'link' => 'Посилання',
         'horizontalrule' => 'Вставити горизонтальну риску',
         'fullscreen' => 'Повний екран',
-        'preview' => 'Попередній перегляд'
+        'preview' => 'Попередній перегляд',
     ],
     'mediamanager' => [
         'insert_link' => "Вставити медіа-посилання",
@@ -47,7 +47,7 @@ return [
     'alert' => [
         'confirm_button_text' => 'Ок',
         'cancel_button_text' => 'Скасувати',
-        'widget_remove_confirm' => 'Видалити цей віджет?'
+        'widget_remove_confirm' => 'Видалити цей віджет?',
     ],
     'datepicker' => [
         'previousMonth' => 'Попередній місяць',
@@ -56,9 +56,19 @@ return [
         'weekdays' => ['Неділя', 'Понеділок', 'Вівторок', 'Середа', 'Четвер', 'П\'ятниця', 'Cубота'],
         'weekdaysShort' => ['Нд', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
     ],
+    'colorpicker' => [
+        'last_color' => 'Використовувати раніше вибраний колір',
+        'aria_palette' => 'Область вибору кольору',
+        'aria_hue' => 'Повзунок вибору відтінку',
+        'aria_opacity' => 'Повзунок вибору прозорості',
+    ],
     'filter' => [
         'group' => [
-            'all' => 'всі'
+            'all' => 'всі',
+        ],
+        'scopes' => [
+            'apply_button_text' => 'Застосувати',
+            'clear_button_text'  => 'Очистити',
         ],
         'dates' => [
             'all' => 'всі',
@@ -66,7 +76,14 @@ return [
             'reset_button_text' => 'Скинути',
             'date_placeholder' => 'Дата',
             'after_placeholder' => 'Після',
-            'before_placeholder' => 'До'
+            'before_placeholder' => 'До',
+        ],
+        'numbers' => [
+            'all' => 'всі',
+            'filter_button_text' => 'Фільтр',
+            'reset_button_text'  => 'Скидання',
+            'min_placeholder' => 'Min',
+            'max_placeholder' => 'Max',
         ],
     ],
     'eventlog' => [
@@ -74,7 +91,7 @@ return [
         'hide_stacktrace' => 'Приховати трасування стека',
         'tabs' => [
             'formatted' => 'Форматований',
-            'raw' => 'Початковий'
+            'raw' => 'Початковий',
         ],
         'editor' => [
             'title' => 'Редактор вихідного коду',
@@ -82,7 +99,7 @@ return [
             'openWith' => 'Відкрити за допомогою',
             'remember_choice' => 'Запам\'ятати обраний варіант для цієї сесії',
             'open' => 'Відкрити',
-            'cancel' => 'Скасувати'
+            'cancel' => 'Скасувати',
         ],
     ],
 ];

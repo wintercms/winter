@@ -228,7 +228,7 @@ abstract class ImportModel extends Model
             'iso-8859-6',
             'iso-8859-7',
             'iso-8859-8',
-            'iso-8859-0',
+            'iso-8859-9',
             'iso-8859-10',
             'iso-8859-11',
             'iso-8859-13',
