@@ -141,6 +141,9 @@ class WinterTest extends Command
             null
         );
 
+        // Set an unlimited timeout
+        $process->setTimeout(0);
+
         // Attempt to set tty mode, catch and warn with the exception message if unsupported
         try {
             $process->setTty(true);
