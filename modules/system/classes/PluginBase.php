@@ -433,11 +433,11 @@ class PluginBase extends ServiceProviderBase
         $versionFile = $this->getPluginPath() . '/updates/version.yaml';
 
         if (
-            !File::isFile($versionFile) ||
-            !($versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
+            !File::isFile($versionFile)
+            || !($versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
                 return $yaml->parseFile($versionFile);
-            })) ||
-            !is_array($versionInfo)
+            }))
+            || !is_array($versionInfo)
         ) {
             return $this->version = (string) VersionManager::NO_VERSION_VALUE;
         }
