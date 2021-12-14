@@ -76,7 +76,7 @@ class Files extends Controller
         $pathKey = 'backend.file:' . $path;
         $url = Cache::get($pathKey, null);
 
-        if ($url !== false && is_null($url) && $disk->exists($path)) {
+        if (is_null($url) && $disk->exists($path)) {
             $expires = now()->addSeconds(Config::get('cms.storage.uploads.temporaryUrlTTL', 3600));
             $url = Cache::remember($pathKey, $expires, function () use ($disk, $path, $expires) {
                 // Attempt to generate a temporary URL, if a RuntimeException occurs it's "probably"
