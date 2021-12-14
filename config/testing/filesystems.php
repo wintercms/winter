@@ -45,8 +45,8 @@ return [
 
         'local' => [
             'driver' => 'local',
-            'root'   => base_path('tests/storage'),
-            'url'    => '/tests/storage',
+            'root'   => base_path('tests/storage/app'),
+            'url'    => '/tests/storage/app',
         ],
 
         's3' => [
