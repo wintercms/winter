@@ -1,6 +1,6 @@
 <?php namespace System\Classes;
 
-use Winter\Storm\Parse\Processor\Contracts\YamlProcessor;
+use Winter\Storm\Parse\Processor\YamlProcessor;
 
 /**
  * "version.yaml" pre-processor class.
@@ -11,7 +11,7 @@ use Winter\Storm\Parse\Processor\Contracts\YamlProcessor;
  *
  * @author Winter CMS
  */
-class VersionYamlProcessor implements YamlProcessor
+class VersionYamlProcessor extends YamlProcessor
 {
     /**
      * @inheritDoc
