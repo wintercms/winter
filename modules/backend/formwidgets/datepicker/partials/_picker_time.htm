@@ -6,6 +6,7 @@
         id="<?= $this->getId('time') ?>"
         class="form-control align-right"
         autocomplete="off"
+        <?= $field->readOnly ? $field->disabled = true : '' ?>
         <?= $field->getAttributes() ?>
         data-timepicker />
 </div>
