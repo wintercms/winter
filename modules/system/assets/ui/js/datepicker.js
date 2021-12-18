@@ -58,14 +58,6 @@
             this.initTimePicker()
         }
 
-        if (this.$datePicker.prop('readonly')) {
-            this.$datePicker.prop('disabled', true)
-        }
-
-        if (this.$timePicker.prop('readonly')) {
-            this.$timePicker.prop('disabled', true)
-        }
-
         if (changeMonitor !== undefined) {
             changeMonitor.resume()
         }
