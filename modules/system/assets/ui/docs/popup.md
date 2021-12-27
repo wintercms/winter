@@ -132,7 +132,7 @@ The partial for your rendered popup should follow this structure:
 ## API documentation
 
 ### Options:
-- content: content HTML string or callback
+- `content` - content HTML string or callback
 
 ### Data attributes
 - `data-control="popup"` - enables the ajax popup plugin
