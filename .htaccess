@@ -57,4 +57,9 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 
+    ##
+    ## Redirects
+    ##
+    Redirect 301 /index.php /
+
 </IfModule>
