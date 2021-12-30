@@ -58,8 +58,9 @@
     RewriteRule ^ index.php [L]
 
     ##
-    ## Redirects
+    ## index.php
     ##
-    Redirect 301 /index.php /
+    # RewriteCond %{THE_REQUEST} ^GET.*index\.php [NC]
+    # RewriteRule (.*?)index\.php/*(.*) /$1$2 [R=301,NE,L]
 
 </IfModule>
