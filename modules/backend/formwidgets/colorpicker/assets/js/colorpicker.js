@@ -53,6 +53,7 @@
         this.keyboardEntry = false
         this.originalColor = null
         this.originalFormat = null
+        this.formatSet = false
 
         // Create a Pickr instance
         this.pickr = Pickr.create({
@@ -103,6 +104,7 @@
         this.pickr.on('swatchselect', (hsva) => this.onPickerSwatch(hsva))
         this.pickr.on('cancel', () => this.onPickerStopChange())
         this.pickr.on('hide', () => this.onPickerHide())
+        this.pickr.on('clear', () => this.onPickerClear())
     }
 
     /**
@@ -190,7 +192,10 @@
             return
         }
 
-        if (this.pickr.setColor(this.$colorValue.val())) {
+        if (
+            (this.$colorValue.val() === '' && this.options.allowEmpty)
+            || this.pickr.setColor(this.$colorValue.val())
+        ) {
             this.keyboardEntry = true
         } else {
             this.keyboardEntry = false
@@ -233,14 +238,19 @@
      * Fires when the picker is first initialized for a widget.
      */
     ColorPicker.prototype.onPickerInit = function () {
-        this.pickr.setColor(this.$dataLocker.val())
-        this.hidePicker()
-
-        if (this.options.formats.length === 1) {
-            this.setColorFormat(this.options.formats[0])
+        if (this.$dataLocker.val()) {
+            this.pickr.setColor(this.$dataLocker.val())
         }
 
-        this.setColor(this.pickr.getColor())
+        this.hidePicker()
+
+        if (this.$dataLocker.val()) {
+            if (this.options.formats.length === 1) {
+                this.setColorFormat(this.options.formats[0])
+            }
+
+            this.setColor(this.pickr.getColor())
+        }
     }
 
     /**
@@ -260,6 +270,11 @@
      */
     ColorPicker.prototype.onPickerChange = function (hsva) {
         this.keyboardEntry = false
+
+        if (!this.formatSet && this.options.formats.length === 1) {
+            this.setColorFormat(this.options.formats[0])
+        }
+
         $(this.pickr.getRoot().preview.currentColor).text(this.valueFromHSVA(hsva))
 
         // If the format changes, change the value
@@ -283,6 +298,10 @@
     ColorPicker.prototype.onPickerSwatch = function (hsva) {
         this.keyboardEntry = false
         this.setColor(hsva)
+
+        if (this.options.formats.length === 1) {
+            this.setColorFormat(this.options.formats[0])
+        }
     }
 
     /**
@@ -290,15 +309,36 @@
      */
     ColorPicker.prototype.onPickerHide = function () {
         if (this.keyboardEntry) {
-            this.setColor(this.pickr.getColor())
+            if (this.$colorValue.val() === '' && this.options.allowEmpty) {
+                this.setColor()
+            } else {
+                this.setColor(this.pickr.getColor())
 
-            if (this.options.formats.length === 1) {
-                this.setColorFormat(this.options.formats[0])
+                if (this.options.formats.length === 1) {
+                    this.setColorFormat(this.options.formats[0])
+                }
             }
         }
 
-        this.pickr.setColor(this.$dataLocker.val())
+        if (this.$dataLocker.val() === '') {
+            this.pickr.setColor(null)
+        } else {
+            this.pickr.setColor(this.$dataLocker.val())
+        }
         this.$colorValue.val(this.$dataLocker.val())
+
+        if (
+            this.originalColor !== null
+            && this.valueFromHSVA(this.pickr.getColor()) !== this.valueFromHSVA(this.originalColor)
+        ) {
+            this.$el.trigger('change')
+        }
+    }
+
+    ColorPicker.prototype.onPickerClear = function () {
+        this.setColor()
+        this.hidePicker()
+        this.$colorValue.blur()
     }
 
     /**
@@ -349,12 +389,22 @@
     /**
      * Sets the color value for the widget and updates the color preview.
      *
-     * @param {HSVaColor} hsva
+     * @param {HSVaColor?} hsva
      */
     ColorPicker.prototype.setColor = function(hsva) {
-        this.$colorPreview.css('background', this.valueFromHSVA(hsva, 'hex'))
-        this.$colorValue.val(this.valueFromHSVA(hsva))
-        this.$dataLocker.val(this.valueFromHSVA(hsva))
+        if (hsva === undefined && !this.options.allowEmpty) {
+            this.$colorPreview.css('background', this.valueFromHSVA(this.originalColor, 'hex'))
+            this.$colorValue.val(this.valueFromHSVA(this.originalColor))
+            this.$dataLocker.val(this.valueFromHSVA(this.originalColor))
+        } else if (hsva === undefined) {
+            this.$colorPreview.css('background', '#fff')
+            this.$colorValue.val('')
+            this.$dataLocker.val('')
+        } else {
+            this.$colorPreview.css('background', this.valueFromHSVA(hsva, 'hex'))
+            this.$colorValue.val(this.valueFromHSVA(hsva))
+            this.$dataLocker.val(this.valueFromHSVA(hsva))
+        }
     }
 
     /**
@@ -378,6 +428,8 @@
                 this.pickr.setColorRepresentation('HEX')
                 break
         }
+
+        this.formatSet = true
     }
 
     /**

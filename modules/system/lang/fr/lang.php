@@ -3,7 +3,7 @@
 return [
     'app' => [
         'name' => 'Winter CMS',
-        'tagline' => 'Retourner à l’essentiel',
+        'tagline' => 'Retourner à l\'essentiel',
     ],
 
     'directory' => [
@@ -50,7 +50,7 @@ return [
         'install' => 'Installer des thèmes',
         'search' => 'Recherche des thème à installer…',
         'installed' => 'Thèmes installés',
-        'no_themes' => 'Il n’y a aucun thème installé depuis le Marketplace.',
+        'no_themes' => 'Il n\'y a aucun thème installé depuis le Marketplace.',
         'recommended' => 'Recommandé',
         'remove_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer ce thème ?'
     ],
@@ -61,6 +61,7 @@ return [
             'label' => 'Nom du plugin',
             'help' => 'Nommer le plugin avec un nom de code unique. Par exemple, Winter.Blog',
         ],
+        'by_author' => 'Par :name',
     ],
     'plugins' => [
         'manage' => 'Gérer les plugins',
@@ -68,7 +69,7 @@ return [
         'install_products' => 'Installer des produits',
         'search' => 'Recherche des plugins à installer…',
         'installed' => 'Plugins installés',
-        'no_plugins' => 'Il n’y a aucun plugin installé depuis le site d’Winter CMS.',
+        'no_plugins' => 'Il n\'y a aucun plugin installé depuis le site d\'Winter CMS.',
         'recommended' => 'Recommandé',
         'plugin_label'  => 'Plugin',
         'unknown_plugin' => 'Le plugin a été supprimé du système de fichiers.',
@@ -82,7 +83,7 @@ return [
         'unfreeze' => 'activer les mises à jour pour',
         'enable' => 'activer',
         'disable' => 'désactiver',
-        'refresh' => 'remise à l’état initial',
+        'refresh' => 'remise à l\'état initial',
         'remove' => 'Supprimer',
         'freeze_label' => 'Désactiver les mises à jour',
         'unfreeze_label' => 'Activer les mises à jour',
@@ -98,6 +99,9 @@ return [
         'refresh_success' => "Les plugins ont été actualisés avec succès.",
         'remove_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer ce plugin ?',
         'remove_success' => "Les plugins ont été supprimés avec succès.",
+        'replace' => [
+            'multi_install_error' => 'Le remplacement de plusieurs plugins n\'est pas pris en charge actuellement.',
+        ],
     ],
     'project' => [
         'name' => 'Projet',
@@ -107,7 +111,7 @@ return [
         'none' => 'Aucun',
         'id' => [
             'label' => 'ID du projet',
-            'help' => 'Comment trouver l’ID de votre projet',
+            'help' => 'Comment trouver l\'ID de votre projet',
             'missing' => 'Spécifier un ID de projet.',
         ],
         'detach_confirm' => 'Confirmer le détachement de ce projet ?',
@@ -116,7 +120,7 @@ return [
     'settings' => [
         'menu_label' => 'Réglages',
         'not_found' => 'Les paramètres spécifiés sont introuvables.',
-        'missing_model' => 'La page de réglages nécessite la définition d’un Model.',
+        'missing_model' => 'La page de réglages nécessite la définition d\'un Model.',
         'update_success' => 'Les réglages pour :name ont étés mis à jour avec succès.',
         'return' => 'Retourner à la page des réglages du système',
         'search' => 'Rechercher'
@@ -126,9 +130,9 @@ return [
         'menu_label' => 'Configuration des adresses e-mails',
         'menu_description' => 'Gérer la configuration des adresses e-mails.',
         'general' => 'Général',
-        'method' => 'Méthode d’envoi',
-        'sender_name' => 'Nom de l’expéditeur',
-        'sender_email' => 'Adresse e-mail de l’expéditeur',
+        'method' => 'Méthode d\'envoi',
+        'sender_name' => 'Nom de l\'expéditeur',
+        'sender_email' => 'Adresse e-mail de l\'expéditeur',
         'php_mail' => 'Fonction mail de PHP',
         'smtp' => 'SMTP',
         'smtp_address' => 'Adresse SMTP',
@@ -157,14 +161,14 @@ return [
         'ses_key' => 'Clé SES',
         'ses_key_comment' => 'Saisir votre clé API SES',
         'ses_secret' => 'Clé secrète SES',
-        'ses_secret_comment' => 'Saisir votre clé secrète de l’API SES',
+        'ses_secret_comment' => 'Saisir votre clé secrète de l\'API SES',
         'sparkpost' => 'SparkPost',
         'sparkpost_secret' => 'Clé secrète SparkPost',
-        'sparkpost_secret_comment' => 'Entrez votre clé secrète de l’API SparkPost',
+        'sparkpost_secret_comment' => 'Entrez votre clé secrète de l\'API SparkPost',
         'ses_region' => 'Région SES',
         'ses_region_comment' => 'Saisir votre région SES (e.g. us-east-1)',
         'drivers_hint_header' => 'Les drivers ne sont pas installés',
-        'drivers_hint_content' => 'Cette méthode d’envoi d’e-mails nécessite que le plugin ":plugin" soit installé avant de pouvoir envoyer des e-mails.'
+        'drivers_hint_content' => 'Cette méthode d\'envoi d\'e-mails nécessite que le plugin ":plugin" soit installé avant de pouvoir envoyer des e-mails.'
     ],
     'mail_templates' => [
         'menu_label' => 'Modèles des e-mails',
@@ -186,7 +190,7 @@ return [
         'code' => 'Code',
         'code_comment' => 'Code unique utilisé pour identifier ce modèle',
         'subject' => 'Sujet',
-        'subject_comment' => 'Sujet de l’e-mail',
+        'subject_comment' => 'Sujet de l\'e-mail',
         'description' => 'Description',
         'content_html' => 'HTML',
         'content_css' => 'CSS',
@@ -209,11 +213,11 @@ return [
     ],
     'mail_brand' => [
         'menu_label' => 'Personnalisation des courriels',
-        'menu_description' => 'Modifier les couleurs et l’apparence des modèles de courriel.',
-        'page_title' => 'Personnaliser l’apparence du courriel',
+        'menu_description' => 'Modifier les couleurs et l\'apparence des modèles de courriel.',
+        'page_title' => 'Personnaliser l\'apparence du courriel',
         'sample_template' => [
             'heading' => 'En-tête',
-            'paragraph' => 'C’est un paragraphe rempli de Lorem Ipsum et un lien. Cumque dicta <a>doloremque eaque</a>, enim error laboriosam pariatur possimus tenetur veritatis voluptas.',
+            'paragraph' => 'C\'est un paragraphe rempli de Lorem Ipsum et un lien. Cumque dicta <a>doloremque eaque</a>, enim error laboriosam pariatur possimus tenetur veritatis voluptas.',
             'table' => [
                 'item' => 'Article',
                 'description' => 'Description',
@@ -243,7 +247,7 @@ return [
             'button_positive_bg' => 'Arrière-plan du bouton positif',
             'button_negative_bg' => 'Arrière-plan du bouton négatif',
             '_section_type' => 'Typographie',
-            'header_color' => 'Couleur de l’en-tête',
+            'header_color' => 'Couleur de l\'en-tête',
             'heading_color' => 'Couleur des titres',
             'text_color' => 'Couleur du texte',
             'link_color' => 'Couleur des liens',
@@ -262,9 +266,9 @@ return [
         'project_label' => 'Attacher un projet',
         'plugin_label' => 'Installer un plugin',
         'theme_label' => 'Installer un thème',
-        'missing_plugin_name' => 'Saisir le nom d’un plugin à installer.',
-        'missing_theme_name' => 'Saisir le nom d’un thème à installer.',
-        'install_completing' => 'Fin du processus d’installation',
+        'missing_plugin_name' => 'Saisir le nom d\'un plugin à installer.',
+        'missing_theme_name' => 'Saisir le nom d\'un thème à installer.',
+        'install_completing' => 'Fin du processus d\'installation',
         'install_success' => 'Le plugin a été installé avec succès.',
     ],
     'updates' => [
@@ -281,13 +285,18 @@ return [
         'plugin_version' => 'Version',
         'plugin_author' => 'Auteur',
         'plugin_not_found' => 'Plugin non trouvé',
+        'plugin_version_not_found' => 'Version du plugin non trouvée',
         'core_current_build' => 'Version actuelle',
         'core_view_changelog' => 'Voir le Changelog',
         'core_build' => 'Version :build',
         'core_build_help' => 'Une nouvelle version est disponible.',
-        'core_downloading' => 'Téléchargement des fichiers de l’application',
-        'core_extracting' => 'Décompression des fichiers de l’application',
+        'core_downloading' => 'Téléchargement des fichiers de l\'application',
+        'core_extracting' => 'Décompression des fichiers de l\'application',
         'core_set_build' => 'Définition du numéro de build',
+        'update_warnings_title' => 'Certains problèmes ont été détectés et nécessitent une attention particulière :',
+        'update_warnings_plugin_missing' => "Le plugin :parent_code nécessite l'installation de :code pour fonctionner.",
+        'update_warnings_plugin_replace' => "Le plugin :plugin remplace :alias, veuillez supprimer :alias pour vous assurer qu'il n'y ait pas de conflit.",
+        'update_warnings_plugin_replace_cli' => "Ce plugin remplace :alias, veuillez supprimer :alias pour vous assurer qu'il n'y ait pas de conflits.",
         'changelog' => 'Changelog',
         'changelog_view_details' => 'Voir les détails',
         'plugins' => 'Plugins',
@@ -311,11 +320,11 @@ return [
             'help' => 'Cliquer sur « Mettre à jour » pour démarrer le processus.',
         ],
         'none' => [
-            'label' => 'Aucune mise à jour n’est disponible.',
-            'help' => 'Aucune mise à jour plus récente n’a été trouvée.',
+            'label' => 'Aucune mise à jour n\'est disponible.',
+            'help' => 'Aucune mise à jour plus récente n\'a été trouvée.',
         ],
         'important_action' => [
-            'empty' => 'Sélectionner l’action',
+            'empty' => 'Sélectionner l\'action',
             'confirm' => 'Confirmer la mise à jour',
             'skip' => 'Ignorer ce plugin (cette fois uniquement)',
             'ignore' => 'Ignorer ce plugin (toujours)',
@@ -325,7 +334,7 @@ return [
         'important_view_release_notes' => 'Voir les notes de version',
         'important_alert_text' => 'Des mise à jour requièrent votre attention.',
         'details_title' => 'Détails du plugin',
-        'details_view_homepage' => 'Voir la page d’accueil',
+        'details_view_homepage' => 'Voir la page d\'accueil',
         'details_readme' => 'Documentation',
         'details_readme_missing' => 'Aucune documentation fournie.',
         'details_changelog' => 'Journal des modifications',
@@ -339,7 +348,7 @@ return [
     ],
     'server' => [
         'connect_error' => 'Erreur lors de la connexion au serveur.',
-        'response_not_found' => 'Le serveur de mise à jour n’a pas été trouvé.',
+        'response_not_found' => 'Le serveur de mise à jour n\'a pas été trouvé.',
         'response_invalid' => 'Réponse invalide du serveur.',
         'response_empty' => 'Réponse vide du serveur',
         'file_error' => 'Erreur du serveur lors de la transmission du paquet.',
@@ -356,7 +365,7 @@ return [
         'extract_failed' => "Impossible de décompresser le fichier ':file'.",
     ],
     'event_log' => [
-        'hint' => 'Ce journal affiche une liste des erreurs potentielles de l’application, telles que les exceptions et les informations de débogage.',
+        'hint' => 'Ce journal affiche une liste des erreurs potentielles de l\'application, telles que les exceptions et les informations de débogage.',
         'menu_label' => 'Journal des évènements',
         'menu_description' => 'Affiche les évènements des journaux systèmes avec leur date et les détails.',
         'empty_link' => 'Purger le journal des évènements',
@@ -364,7 +373,7 @@ return [
         'empty_success' => 'Le journal des évènements a été purgé avec succès.',
         'return_link' => 'Retour au journal des évènements',
         'id' => 'ID',
-        'id_label' => 'ID de l’évènement',
+        'id_label' => 'ID de l\'évènement',
         'created_at' => 'Date et heure',
         'message' => 'Message',
         'level' => 'Niveau',
@@ -394,12 +403,13 @@ return [
         'manage_mail_templates' => 'Gérer les modèles des e-mails',
         'manage_mail_settings' => 'Gérer les paramètres des e-mail',
         'manage_other_administrators' => 'Gérer les autres administrateurs',
-        'impersonate_users' => 'Usurper l’identité des utilisateurs',
-        'manage_preferences' => 'Gérer les préférences de l’interface d’administration',
-        'manage_editor' => 'Gérer les préférences de l’éditeur de code',
+        'impersonate_users' => 'Usurper l\'identité des utilisateurs',
+        'manage_preferences' => 'Gérer les préférences de l\'interface d\'administration',
+        'manage_editor' => 'Gérer les préférences de l\'éditeur de code',
+        'manage_own_editor' => 'Gérer les préférences personnelles de l\'éditeur de code',
         'view_the_dashboard' => 'Voir le tableau de bord',
         'manage_default_dashboard' => 'Gérer le tableau de bord par défaut',
-        'manage_branding' => 'Personnaliser l’interface d’administration'
+        'manage_branding' => 'Personnaliser l\'interface d\'administration'
     ],
     'log' => [
         'menu_label' => 'Paramètres du journal',
@@ -410,11 +420,25 @@ return [
         'log_requests' => 'Enregistrer les requêtes erronées.',
         'log_requests_comment' => 'Requêtes du navigateur qui peuvent nécessiter une attention particulière, telles que les erreurs 404.',
         'log_theme' => 'Enregistrement des modifications sur le thème ',
-        'log_theme_comment' => 'Lorsqu’une modification est apportée au thème à l’aide du back-end.',
+        'log_theme_comment' => 'Lorsqu\'une modification est apportée au thème à l\'aide du back-end.',
     ],
     'media' => [
         'invalid_path' => "Le chemin du fichier indiqué est invalide : ':path'.",
         'folder_size_items' => 'Articles(s)',
+    ],
+    'page' => [
+        'custom_error' => [
+            'label' => 'Erreur sur la page',
+            'help' => 'Nous sommes désolés, mais un problème est survenu et la page ne peut pas être affichée.',
+        ],
+        'invalid_token' => [
+            'label' => 'Jeton de sécurité non valide',
+        ],
+        'maintenance' => [
+            'label' => "Nous revenons tout de suite !",
+            'help' => "Nous sommes actuellement indisponibles pour maintenance, revenez bientôt !",
+            'available_at' => 'Essayez à nouveau après:',
+        ],
     ],
     'pagination' => [
         'previous' => 'Précédente',
