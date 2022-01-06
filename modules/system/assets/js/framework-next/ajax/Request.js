@@ -15,15 +15,22 @@ class Request extends Winter.Module {
      * Constructor.
      *
      * @param {Winter} winter
-     * @param {HTMLElement} element
+     * @param {HTMLElement|string} element
      * @param {string} handler
      * @param {Object} options
-     * @returns
      */
     constructor(winter, element, handler, options) {
         super(winter);
 
-        this.element = element;
+        if (typeof element === 'string') {
+            const matchedElement = document.querySelector(element);
+            if (matchedElement === null) {
+                throw new Error('No element was found with the given selector: ' + element);
+            }
+            this.element = matchedElement;
+        } else {
+            this.element = element;
+        }
         this.handler = handler;
         this.options = options || {};
         this.responseData = null;
