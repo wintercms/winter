@@ -61,6 +61,12 @@ class AttributeRequest extends Winter.Singleton {
         window.addEventListener('submit', (event) => this.submitHandler(event));
     }
 
+    /**
+     * Disables default form validation for AJAX forms.
+     *
+     * A form that contains a `data-request` attribute to specify an AJAX call without including a `data-browser-validate`
+     * attribute means that the AJAX callback function will likely be handling the validation instead.
+     */
     disableDefaultFormValidation() {
         document.querySelectorAll('form[data-request]:not([data-browser-validate])').forEach((form) => {
             form.setAttribute('novalidate', true);
@@ -85,12 +91,12 @@ class AttributeRequest extends Winter.Singleton {
     changeHandler(event) {
         // Check that we are changing a valid element
         if (!event.target.matches(
-                'select[data-request], input[type=radio][data-request], input[type=checkbox][data-request], input[type=file][data-request]'
-            )) {
+            'select[data-request], input[type=radio][data-request], input[type=checkbox][data-request], input[type=file][data-request]'
+        )) {
             return;
         }
 
-        console.log(event);
+        this.processRequestOnElement(event.target);
     }
 
     /**
@@ -101,14 +107,13 @@ class AttributeRequest extends Winter.Singleton {
     clickHandler(event) {
         // Check that we are clicking a valid element
         if (!event.target.matches(
-                'a[data-request], button[data-request], input[type=button][data-request], input[type=submit][data-request]'
-            )) {
+            'a[data-request], button[data-request], input[type=button][data-request], input[type=submit][data-request]'
+        )) {
             return;
         }
 
         event.preventDefault();
-
-        console.log(event);
+        this.processRequestOnElement(event.target);
     }
 
     /**
@@ -119,12 +124,43 @@ class AttributeRequest extends Winter.Singleton {
     keyDownHandler(event) {
         // Check that we are inputting into a valid element
         if (!event.target.matches(
-                'input[type=text][data-request], input[type=submit][data-request], input[type=password][data-request], textarea[data-request]'
-            )) {
+            'input'
+        )) {
             return;
         }
 
-        console.log(event);
+        // Check that the input type is valid
+        const validTypes = [
+            'checkbox',
+            'color',
+            'date',
+            'datetime',
+            'datetime-local',
+            'email',
+            'image',
+            'month',
+            'number',
+            'password',
+            'radio',
+            'range',
+            'search',
+            'tel',
+            'text',
+            'time',
+            'url',
+            'week',
+        ];
+        if (validTypes.indexOf(event.target.getAttribute('type')) === -1) {
+            return;
+        }
+
+        if (event.key === 'Enter' && event.target.matches('*[data-request]')) {
+            this.processRequestOnElement(event.target);
+            event.preventDefault();
+            event.stopImmediatePropagation();
+        } else if (event.target.matches('*[data-track-input]')) {
+            this.trackInput(event.target);
+        }
     }
 
     /**
@@ -135,14 +171,14 @@ class AttributeRequest extends Winter.Singleton {
     submitHandler(event) {
         // Check that we are submitting a valid form
         if (!event.target.matches(
-                'form[data-request]'
-            )) {
+            'form[data-request]'
+        )) {
             return;
         }
 
         event.preventDefault();
 
-        this.processEventOnElement(event.target);
+        this.processRequestOnElement(event.target);
     }
 
     /**
@@ -150,7 +186,7 @@ class AttributeRequest extends Winter.Singleton {
      *
      * @param {HTMLElement} element
      */
-    processEventOnElement(element) {
+    processRequestOnElement(element) {
         const data = element.dataset;
 
         const handler = String(data.request);
@@ -170,6 +206,11 @@ class AttributeRequest extends Winter.Singleton {
         this.winter.request(element, handler, options);
     }
 
+    /**
+     * Sets up an AJAX request via HTML attributes.
+     *
+     * @param {Request} request
+     */
     onAjaxSetup(request) {
         let fieldName = request.element.getAttribute('name');
 
@@ -182,6 +223,12 @@ class AttributeRequest extends Winter.Singleton {
         request.options.data = data;
     }
 
+    /**
+     * Parses and collates all data from elements up the DOM hierarchy.
+     *
+     * @param {Element} element
+     * @returns {Object}
+     */
     getParentRequestData(element) {
         const elements = [];
         let data = {};
@@ -205,6 +252,12 @@ class AttributeRequest extends Winter.Singleton {
         return data;
     }
 
+    /**
+     * Parses data in the Winter/October JSON format.
+     *
+     * @param {String} data
+     * @returns {Object}
+     */
     parseData(data) {
         let value;
 
@@ -219,6 +272,42 @@ class AttributeRequest extends Winter.Singleton {
             return this.winter.jsonparser().parse('{' + data + '}');
         } catch (e) {
             throw new Error('Error parsing the data attribute on element: ' + e.message);
+        }
+    }
+
+    trackInput(element) {
+        const lastValue = element.dataset.lastValue;
+        const interval = element.dataset.trackInput || 300;
+
+        if (lastValue !== undefined && lastValue === element.value) {
+            return;
+        }
+
+        this.resetTrackInputTimer(element);
+
+        element.dataset.trackInput = window.setTimeout(() => {
+            if (element.dataset.request) {
+                this.processRequestOnElement(element);
+                return;
+            }
+
+            // Traverse up the hierarchy and find a form that sends an AJAX query
+            let currentElement = element;
+            while (currentElement.parentElement && currentElement.parentElement.tagName !== 'HTML') {
+                currentElement = currentElement.parentElement;
+
+                if (currentElement.tagName === 'FORM' && currentElement.dataset.request) {
+                    this.processRequestOnElement(currentElement);
+                    break;
+                }
+            }
+        }, interval);
+    }
+
+    resetTrackInputTimer(element) {
+        if (element.dataset.trackInput) {
+            window.clearTimeout(element.dataset.trackInput);
+            element.dataset.trackInput = null;
         }
     }
 }
