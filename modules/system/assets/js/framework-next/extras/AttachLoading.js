@@ -26,7 +26,7 @@
         };
     }
 
-    ajaxStart(request) {
+    ajaxStart(promise, request) {
         if (!request.element) {
             return;
         }
@@ -43,7 +43,7 @@
         }
     }
 
-    ajaxDone(request) {
+    ajaxDone(data, request) {
         if (!request.element) {
             return;
         }

@@ -23,7 +23,6 @@
         return {
             ready: 'ready',
             ajaxStart: 'ajaxStart',
-            ajaxDone: 'ajaxDone',
         };
     }
 
@@ -33,7 +32,7 @@
         this.createStripe();
     }
 
-    ajaxStart(request, promise) {
+    ajaxStart(promise) {
         this.show();
 
         promise.finally(() => {
