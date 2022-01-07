@@ -77,6 +77,7 @@ class Extension extends TwigExtension
             new FlashTokenParser,
             new ScriptsTokenParser,
             new StylesTokenParser,
+            new WinterJsTokenParser,
         ];
     }
 
