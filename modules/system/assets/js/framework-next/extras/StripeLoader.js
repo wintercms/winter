@@ -35,7 +35,9 @@
     ajaxStart(promise) {
         this.show();
 
-        promise.finally(() => {
+        promise.catch(() => {
+            this.hide();
+        }).finally(() => {
             this.hide();
         });
     }
