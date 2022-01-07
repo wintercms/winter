@@ -102,18 +102,25 @@ class AttributeRequest extends Winter.Singleton {
     /**
      * Handles clicks on hyperlinks and buttons.
      *
+     * This event can bubble up the hierarchy to find a suitable request element.
+     *
      * @param {Event} event
      */
     clickHandler(event) {
-        // Check that we are clicking a valid element
-        if (!event.target.matches(
-            'a[data-request], button[data-request], input[type=button][data-request], input[type=submit][data-request]'
-        )) {
-            return;
-        }
+        let currentElement = event.target;
 
-        event.preventDefault();
-        this.processRequestOnElement(event.target);
+        while (currentElement.tagName !== 'HTML') {
+            if (!currentElement.matches(
+                'a[data-request], button[data-request], input[type=button][data-request], input[type=submit][data-request]'
+            )) {
+                currentElement = currentElement.parentElement;
+                continue;
+            }
+
+            event.preventDefault();
+            this.processRequestOnElement(currentElement);
+            break;
+        }
     }
 
     /**
