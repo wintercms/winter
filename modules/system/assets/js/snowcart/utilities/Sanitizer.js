@@ -1,8 +1,8 @@
 import Singleton from '../abstracts/Singleton';
 
 export default class Sanitizer extends Singleton {
-    constructor(winter) {
-        super(winter);
+    constructor(snowcart) {
+        super(snowcart);
 
         // Add to global function for backwards compatibility
         window.wnSanitize = (html) => {

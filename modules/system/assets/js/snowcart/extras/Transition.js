@@ -13,7 +13,7 @@
  *      transition. This should define the end state of the transition.
  *
  * Usage:
- *      winter.transition(document.element, 'transition', () => {
+ *      snowcart.transition(document.element, 'transition', () => {
  *          console.log('Remove element after 7 seconds');
  *          this.remove();
  *      }, '7s');
@@ -21,19 +21,19 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class Transition extends Winter.Module {
+export default class Transition extends Snowcart.PluginBase {
     /**
      * Constructor.
      *
-     * @param {Winter} winter
+     * @param {Snowcart} snowcart
      * @param {HTMLElement} element The element to transition
      * @param {string} transition The name of the transition, this prefixes the stages of transition.
      * @param {Function} callback An optional callback to call when the transition ends.
      * @param {Number} duration An optional override on the transition duration. Must be specified as 's' (secs) or 'ms' (msecs).
      * @param {Boolean} trailTo If true, the "out" class will remain after the end of the transition.
      */
-    constructor(winter, element, transition, callback, duration, trailTo) {
-        super(winter);
+    constructor(snowcart, element, transition, callback, duration, trailTo) {
+        super(snowcart);
 
         if (element instanceof HTMLElement === false) {
             throw new Error('A HTMLElement must be provided for transitioning');

@@ -1,29 +1,29 @@
-import Winter from './Winter';
-import Module from '../abstracts/Module';
+import Snowcart from './Snowcart';
+import PluginBase from '../abstracts/PluginBase';
 import Singleton from "../abstracts/Singleton";
 
 /**
- * Module factory class.
+ * Plugin loader class.
  *
- * This is a provider class for a single module and provides the link between Winter framework functionality and the
- * underlying module instances.
+ * This is a provider (factory) class for a single plugin and provides the link between Snowcart framework functionality
+ * and the underlying plugin instances. It also provides some basic mocking of plugin methods for testing.
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class ModuleFactory {
+export default class PluginLoader {
     /**
      * Constructor.
      *
      * Binds the Winter framework to the instance.
      *
      * @param {string} name
-     * @param {Winter} winter
-     * @param {Module} instance
+     * @param {Snowcart} snowcart
+     * @param {PluginBase} instance
      */
-    constructor(name, winter, instance) {
+    constructor(name, snowcart, instance) {
         this.name = name;
-        this.winter = winter;
+        this.snowcart = snowcart;
         this.instance = instance;
         this.instances = [];
         this.singleton = instance.prototype instanceof Singleton;
@@ -32,9 +32,9 @@ export default class ModuleFactory {
     }
 
     /**
-     * Determines if the current module has a specific method available.
+     * Determines if the current plugin has a specific method available.
      *
-     * Returns false if the current module is a callback function.
+     * Returns false if the current plugin is a callback function.
      *
      * @param {string} methodName
      * @returns {boolean}
@@ -48,7 +48,7 @@ export default class ModuleFactory {
     }
 
     /**
-     * Calls a prototype method for a module. This should generally be used for "static" calls.
+     * Calls a prototype method for a plugin. This should generally be used for "static" calls.
      *
      * @param {string} methodName
      * @param {...} args
@@ -66,21 +66,20 @@ export default class ModuleFactory {
     }
 
     /**
-     * Returns an instance of the current module.
+     * Returns an instance of the current plugin.
      *
-     * If this is a callback function module, the function will be returned.
+     * - If this is a callback function plugin, the function will be returned.
+     * - If this is a singleton, the single instance of the plugin will be returned.
      *
-     * If this is a singleton, the single instance of the module will be returned.
-     *
-     * @returns {Module|Function}
+     * @returns {PluginBase|Function}
      */
     getInstance() {
         if (this.isFunction()) {
             return this.instance(...arguments);
         }
         if (!this.dependenciesFulfilled()) {
-            const unmet = this.getDependencies().filter((item) => !this.winter.getModuleNames().includes(item));
-            throw new Error(`The "${this.name}" module requires the following modules: ${unmet.join(', ')}`);
+            const unmet = this.getDependencies().filter((item) => !this.snowcart.getPluginNames().includes(item));
+            throw new Error(`The "${this.name}" plugin requires the following plugins: ${unmet.join(', ')}`);
         }
         if (this.isSingleton()) {
             if (this.instances.length === 0) {
@@ -114,7 +113,7 @@ export default class ModuleFactory {
             }
         }
 
-        const newInstance = new this.instance(this.winter, ...arguments);
+        const newInstance = new this.instance(this.snowcart, ...arguments);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
 
         this.instances.push(newInstance);
@@ -122,11 +121,11 @@ export default class ModuleFactory {
     }
 
     /**
-     * Gets all instances of the current module.
+     * Gets all instances of the current plugin.
      *
-     * If this module is a callback function module, an empty array will be returned.
+     * If this plugin is a callback function plugin, an empty array will be returned.
      *
-     * @returns {Module[]}
+     * @returns {PluginBase[]}
      */
     getInstances() {
         if (this.isFunction()) {
@@ -137,16 +136,16 @@ export default class ModuleFactory {
     }
 
     /**
-     * Determines if the current module is a simple callback function.
+     * Determines if the current plugin is a simple callback function.
      *
      * @returns {boolean}
      */
     isFunction() {
-        return (typeof this.instance === 'function' && this.instance.prototype instanceof Module === false);
+        return (typeof this.instance === 'function' && this.instance.prototype instanceof PluginBase === false);
     }
 
     /**
-     * Determines if the current module is a singleton.
+     * Determines if the current plugin is a singleton.
      *
      * @returns {boolean}
      */
@@ -164,13 +163,13 @@ export default class ModuleFactory {
             return;
         }
 
-        const newInstance = new this.instance(this.winter);
+        const newInstance = new this.instance(this.snowcart);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
         this.instances.push(newInstance);
     }
 
     /**
-     * Gets the dependencies of the current module.
+     * Gets the dependencies of the current plugin.
      *
      * @returns {string[]}
      */
@@ -189,7 +188,7 @@ export default class ModuleFactory {
     }
 
     /**
-     * Determines if the current module has all its dependencies fulfilled.
+     * Determines if the current plugin has all its dependencies fulfilled.
      *
      * @returns {boolean}
      */
@@ -197,8 +196,8 @@ export default class ModuleFactory {
         const dependencies = this.getDependencies();
 
         let fulfilled = true;
-        dependencies.forEach((module) => {
-            if (!this.winter.hasModule(module)) {
+        dependencies.forEach((plugin) => {
+            if (!this.snowcart.hasPlugin(plugin)) {
                 fulfilled = false;
             }
         });
@@ -212,7 +211,7 @@ export default class ModuleFactory {
      * This mock will be applied for the life of an instance. For singletons, the mock will be applied for the life
      * of the page.
      *
-     * Mocks cannot be applied to function modules.
+     * Mocks cannot be applied to callback function plugins.
      *
      * @param {string} methodName
      * @param {Function} callback

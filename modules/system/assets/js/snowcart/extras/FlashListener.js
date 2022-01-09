@@ -1,12 +1,12 @@
 /**
  * Defines a default listener for flash events.
  *
- * Connects the Flash module to various events that use flash messages.
+ * Connects the Flash plugin to various events that use flash messages.
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class FlashListener extends Winter.Singleton {
+export default class FlashListener extends Snowcart.Singleton {
     /**
      * Defines dependenices.
      *
@@ -34,7 +34,7 @@ export default class FlashListener extends Winter.Singleton {
      */
     ready() {
         document.querySelectorAll('[data-control="flash-message"]').forEach((element) => {
-            this.winter.flash(
+            this.snowcart.flash(
                 element.innerHTML,
                 element.dataset.flashType,
                 element.dataset.flashDuration,
@@ -49,7 +49,7 @@ export default class FlashListener extends Winter.Singleton {
      * @returns {Boolean}
      */
     ajaxErrorMessage(message) {
-        this.winter.flash(message, 'error');
+        this.snowcart.flash(message, 'error');
         return false;
     }
 
@@ -60,7 +60,7 @@ export default class FlashListener extends Winter.Singleton {
      */
     ajaxFlashMessages(messages) {
         for (const [cssClass, message] of Object.entries(messages)) {
-            this.winter.flash(message, cssClass);
+            this.snowcart.flash(message, cssClass);
         }
         return false;
     }

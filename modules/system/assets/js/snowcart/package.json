@@ -1,8 +1,8 @@
 {
-    "name": "@wintercms/framework",
+    "name": "@wintercms/snowcart",
     "version": "2.0.0",
     "description": "The next evolution for the Winter JavaScript framework.",
-    "main": "framework.js",
+    "main": "snowcart.base.js",
     "private": true,
     "repository": {
         "type": "git",
@@ -23,7 +23,7 @@
     "bugs": {
         "url": "https://github.com/wintercms/winter/issues"
     },
-    "homepage": "https://github.com/wintercms/winter",
+    "homepage": "https://wintercms.com/docs/snowcart/introduction",
     "dependencies": {
         "webpack-strip-block": "^0.3.0"
     },

@@ -1,26 +1,22 @@
 /**
- * Ajax module abstract.
+ * Request plugin.
  *
- * This is a special definition class that the Winter framework will use to interpret the current module as an
- * "ajax" module to handle all AJAX requests.
- *
- * This can also be used as the default AJAX handler which will run using the `fetch()` method that is default in
- * modern browsers.
+ * This is the default AJAX handler which will run using the `fetch()` method that is default in modern browsers.
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-class Request extends Winter.Module {
+class Request extends Snowcart.PluginBase {
     /**
      * Constructor.
      *
-     * @param {Winter} winter
+     * @param {Snowcart} snowcart
      * @param {HTMLElement|string} element
      * @param {string} handler
      * @param {Object} options
      */
-    constructor(winter, element, handler, options) {
-        super(winter);
+    constructor(snowcart, element, handler, options) {
+        super(snowcart);
 
         if (typeof element === 'string') {
             const matchedElement = document.querySelector(element);
@@ -38,7 +34,7 @@ class Request extends Winter.Module {
         this.cancelled = false;
 
         this.checkRequest();
-        if (!this.winter.globalEvent('ajaxSetup', this)) {
+        if (!this.snowcart.globalEvent('ajaxSetup', this)) {
             this.cancelled = true;
             return;
         }
@@ -90,7 +86,7 @@ class Request extends Winter.Module {
                         if (this.options.complete && typeof this.options.complete === 'function') {
                             this.options.complete(this.responseData, this);
                         }
-                        this.winter.globalEvent('ajaxDone', this.responseData, this);
+                        this.snowcart.globalEvent('ajaxDone', this.responseData, this);
 
                         if (this.element) {
                             const event = new Event('ajaxAlways');
@@ -132,7 +128,7 @@ class Request extends Winter.Module {
                 if (this.options.complete && typeof this.options.complete === 'function') {
                     this.options.complete(this.responseData, this);
                 }
-                this.winter.globalEvent('ajaxDone', this.responseData, this);
+                this.snowcart.globalEvent('ajaxDone', this.responseData, this);
 
                 if (this.element) {
                     const event = new Event('ajaxAlways');
@@ -146,7 +142,7 @@ class Request extends Winter.Module {
     }
 
     /**
-     * Dependencies for this module.
+     * Dependencies for this plugin.
      *
      * @returns {string[]}
      */
@@ -195,8 +191,8 @@ class Request extends Winter.Module {
      * @returns {Promise}
      */
     doAjax() {
-        // Allow modules to cancel the AJAX request before sending
-        if (this.winter.globalEvent('ajaxBeforeSend', this) === false) {
+        // Allow plugins to cancel the AJAX request before sending
+        if (this.snowcart.globalEvent('ajaxBeforeSend', this) === false) {
             return Promise.resolve({
                 cancelled: true,
             });
@@ -270,7 +266,7 @@ class Request extends Winter.Module {
             );
         });
 
-        this.winter.globalEvent('ajaxStart', ajaxPromise, this);
+        this.snowcart.globalEvent('ajaxStart', ajaxPromise, this);
 
         if (this.element) {
             const event = new Event('ajaxPromise');
@@ -313,7 +309,7 @@ class Request extends Winter.Module {
                 return;
             }
 
-            const promises = this.winter.globalPromiseEvent('ajaxBeforeUpdate', response, this);
+            const promises = this.snowcart.globalPromiseEvent('ajaxBeforeUpdate', response, this);
             promises.then(
                 () => {
                     this.doUpdate(partials).then(
@@ -359,7 +355,7 @@ class Request extends Winter.Module {
                 const elements = document.querySelectorAll(selector);
                 if (elements.length > 0) {
                     elements.forEach((element) => {
-                        const sanitizedContent = this.winter.sanitizer().sanitize(content);
+                        const sanitizedContent = this.snowcart.sanitizer().sanitize(content);
                         switch (mode) {
                             case 'replace':
                                 element.innerHTML = sanitizedContent;
@@ -373,14 +369,14 @@ class Request extends Winter.Module {
                         }
 
                         // Fire update event for each element that is updated
-                        this.winter.globalEvent('ajaxUpdate', element, sanitizedContent, this);
+                        this.snowcart.globalEvent('ajaxUpdate', element, sanitizedContent, this);
                         const event = new Event('ajaxUpdate');
                         event.content = sanitizedContent;
                         element.dispatchEvent(event);
                     });
                 }
 
-                this.winter.globalEvent('ajaxUpdateComplete', elements, this);
+                this.snowcart.globalEvent('ajaxUpdateComplete', elements, this);
 
                 resolve();
             }
@@ -403,8 +399,8 @@ class Request extends Winter.Module {
             }
         }
 
-        // Allow modules to cancel any further response handling
-        if (this.winter.globalEvent('ajaxSuccess', this.responseData, this) === false) {
+        // Allow plugins to cancel any further response handling
+        if (this.snowcart.globalEvent('ajaxSuccess', this.responseData, this) === false) {
             return;
         }
 
@@ -451,8 +447,8 @@ class Request extends Winter.Module {
             }
         }
 
-        // Allow modules to cancel any further error handling
-        if (this.winter.globalEvent('ajaxError', this.responseError, this) === false) {
+        // Allow plugins to cancel any further error handling
+        if (this.snowcart.globalEvent('ajaxError', this.responseError, this) === false) {
             return;
         }
 
@@ -487,7 +483,7 @@ class Request extends Winter.Module {
      *
      * By default, this processor will simply redirect the user in their browser.
      *
-     * Modules can augment this functionality from the `ajaxRedirect` event. You may also override this functionality on
+     * Plugins can augment this functionality from the `ajaxRedirect` event. You may also override this functionality on
      * a per-request basis through the `handleRedirectResponse` callback option. If a `false` is returned from either, the
      * redirect will be cancelled.
      *
@@ -502,8 +498,8 @@ class Request extends Winter.Module {
             }
         }
 
-        // Allow modules to cancel the redirect
-        if (this.winter.globalEvent('ajaxRedirect', url, this) === false) {
+        // Allow plugins to cancel the redirect
+        if (this.snowcart.globalEvent('ajaxRedirect', url, this) === false) {
             return;
         }
 
@@ -529,7 +525,7 @@ class Request extends Winter.Module {
      *
      * By default, this processor will simply alert the user through a simple `alert()` call.
      *
-     * Modules can augment this functionality from the `ajaxErrorMessage` event. You may also override this functionality
+     * Plugins can augment this functionality from the `ajaxErrorMessage` event. You may also override this functionality
      * on a per-request basis through the `handleErrorMessage` callback option. If a `false` is returned from either, the
      * error message handling will be cancelled.
      *
@@ -545,8 +541,8 @@ class Request extends Winter.Module {
             }
         }
 
-        // Allow modules to cancel the error message being shown
-        if (this.winter.globalEvent('ajaxErrorMessage', message, this) === false) {
+        // Allow plugins to cancel the error message being shown
+        if (this.snowcart.globalEvent('ajaxErrorMessage', message, this) === false) {
             return;
         }
 
@@ -559,7 +555,7 @@ class Request extends Winter.Module {
      *
      * By default, no flash message handling will occur.
      *
-     * Modules can augment this functionality from the `ajaxFlashMessages` event. You may also override this functionality
+     * Plugins can augment this functionality from the `ajaxFlashMessages` event. You may also override this functionality
      * on a per-request basis through the `handleFlashMessages` callback option. If a `false` is returned from either, the
      * flash message handling will be cancelled.
      *
@@ -574,8 +570,8 @@ class Request extends Winter.Module {
             }
         }
 
-        // Allow modules to cancel the flash messages
-        if (this.winter.globalEvent('ajaxFlashMessages', messages, this) === false) {
+        // Allow plugins to cancel the flash messages
+        if (this.snowcart.globalEvent('ajaxFlashMessages', messages, this) === false) {
             return;
         }
     }
@@ -585,7 +581,7 @@ class Request extends Winter.Module {
      *
      * By default, no validation error handling will occur.
      *
-     * Modules can augment this functionality from the `ajaxValidationErrors` event. You may also override this functionality
+     * Plugins can augment this functionality from the `ajaxValidationErrors` event. You may also override this functionality
      * on a per-request basis through the `handleValidationErrors` callback option. If a `false` is returned from either, the
      * validation error handling will be cancelled.
      *
@@ -599,8 +595,8 @@ class Request extends Winter.Module {
             }
         }
 
-        // Allow modules to cancel the validation errors being handled
-        if (this.winter.globalEvent('ajaxValidationErrors', this.form, fields, this) === false) {
+        // Allow plugins to cancel the validation errors being handled
+        if (this.snowcart.globalEvent('ajaxValidationErrors', this.form, fields, this) === false) {
             return;
         }
     }
@@ -612,7 +608,7 @@ class Request extends Winter.Module {
      * confirm the action. This method will return a Promise with a boolean value depending on whether the user confirmed
      * or not.
      *
-     * Modules can augment this functionality from the `ajaxConfirmMessage` event. You may also override this functionality
+     * Plugins can augment this functionality from the `ajaxConfirmMessage` event. You may also override this functionality
      * on a per-request basis through the `handleConfirmMessage` callback option. If a `false` is returned from either,
      * the confirmation is assumed to have been denied.
      *
@@ -628,13 +624,13 @@ class Request extends Winter.Module {
             return true;
         }
 
-        // If no modules have customised the confirmation, use a simple browser confirmation.
-        if (this.winter.listensToEvent('ajaxConfirmMessage').length === 0) {
+        // If no plugins have customised the confirmation, use a simple browser confirmation.
+        if (this.snowcart.listensToEvent('ajaxConfirmMessage').length === 0) {
             return confirm(this.confirm);
         }
 
-        // Run custom module confirmations
-        const promises = this.winter.globalPromiseEvent('ajaxConfirmMessage', this.confirm, this);
+        // Run custom plugin confirmations
+        const promises = this.snowcart.globalPromiseEvent('ajaxConfirmMessage', this.confirm, this);
 
         try {
             const fulfilled = await promises;
@@ -782,4 +778,4 @@ class Request extends Winter.Module {
     }
 }
 
-winter.addModule('request', Request);
+snowcart.addPlugin('request', Request);

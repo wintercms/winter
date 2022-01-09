@@ -10,22 +10,22 @@
  *  - "duration": How long the flash message will stay visible for, in seconds. Default: 7 seconds.
  *
  * Usage:
- *      winter.flash('This is a flash message', 'info', 8);
+ *      snowcart.flash('This is a flash message', 'info', 8);
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class Flash extends Winter.Module {
+export default class Flash extends Snowcart.PluginBase {
     /**
      * Constructor.
      *
-     * @param {Winter} winter
+     * @param {Snowcart} snowcart
      * @param {string} message
      * @param {string} type
      * @param {Number} duration
      */
-    constructor(winter, message, type, duration) {
-        super(winter);
+    constructor(snowcart, message, type, duration) {
+        super(snowcart);
 
         this.message = message;
         this.type = type || 'default';
@@ -84,7 +84,7 @@ export default class Flash extends Winter.Module {
         this.flash.appendChild(this.flashTimer);
         document.body.appendChild(this.flash);
 
-        this.winter.transition(this.flash, 'show', () => {
+        this.snowcart.transition(this.flash, 'show', () => {
             this.startTimer();
         });
     }
@@ -95,7 +95,7 @@ export default class Flash extends Winter.Module {
     remove() {
         this.stopTimer();
 
-        this.winter.transition(this.flash, 'hide', () => {
+        this.snowcart.transition(this.flash, 'hide', () => {
             this.flash.remove();
             this.flash = null;
             this.destructor();
@@ -113,7 +113,7 @@ export default class Flash extends Winter.Module {
      * Starts the timer for this flash message.
      */
     startTimer() {
-        this.timerTrans = this.winter.transition(this.flashTimer, 'timeout', null, `${this.duration}.0s`, true);
+        this.timerTrans = this.snowcart.transition(this.flashTimer, 'timeout', null, `${this.duration}.0s`, true);
         this.timer = window.setTimeout(() => this.remove(), this.duration * 1000);
     }
 
