@@ -3,7 +3,7 @@ require('laravel-mix-polyfill');
 
 mix.setPublicPath(__dirname);
 
-// Compile Snowcart framework
+// Compile Snowboard framework
 mix
     .override((webpackConfig) => {
         if (mix.inProduction()) {
@@ -20,10 +20,10 @@ mix
             })
         }
     })
-    .js('./snowcart.base.js', './build/snowcart.base.js')
-    .js('./ajax/Request.js', './build/snowcart.request.js')
-    .js('./ajax/handlers/AttributeRequest.js', './build/snowcart.data-attr.js')
-    .js('./snowcart.extras.js', './build/snowcart.extras.js')
+    .js('./snowboard.base.js', './build/snowboard.base.js')
+    .js('./ajax/Request.js', './build/snowboard.request.js')
+    .js('./ajax/handlers/AttributeRequest.js', './build/snowboard.data-attr.js')
+    .js('./snowboard.extras.js', './build/snowboard.extras.js')
     .polyfill({
         enabled: mix.inProduction(),
         useBuiltIns: 'usage',

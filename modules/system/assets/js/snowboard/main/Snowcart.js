@@ -7,7 +7,7 @@ import JsonParser from '../utilities/JsonParser';
 import Sanitizer from '../utilities/Sanitizer';
 
 /**
- * Snowcart - the Winter JavaScript framework.
+ * Snowboard - the Winter JavaScript framework.
  *
  * This class represents the base of a modern take on the Winter JS framework, being fully extensible and taking advantage
  * of modern JavaScript features by leveraging the Laravel Mix compilation framework. It also is coded up to remove the
@@ -15,9 +15,9 @@ import Sanitizer from '../utilities/Sanitizer';
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
- * @link https://wintercms.com/docs/snowcart/introduction
+ * @link https://wintercms.com/docs/snowboard/introduction
  */
-export default class Snowcart {
+export default class Snowboard {
     /**
      * Constructor.
      *
@@ -36,7 +36,7 @@ export default class Snowcart {
         this.initialise();
 
         /* develblock:start */
-        this.debug('Snowcart framework initialised');
+        this.debug('Snowboard framework initialised');
         /* develblock:end */
     }
 
@@ -80,13 +80,13 @@ export default class Snowcart {
     /**
      * Adds a plugin to the framework.
      *
-     * Plugins are the cornerstone for additional functionality for Snowcart. A plugin must either be an ES2015 class
+     * Plugins are the cornerstone for additional functionality for Snowboard. A plugin must either be an ES2015 class
      * that extends the PluginBase or Singleton abstract classes, or a simple callback function.
      *
-     * When a plugin is added, it is automatically assigned as a new magic method in the Snowcart class using the name
+     * When a plugin is added, it is automatically assigned as a new magic method in the Snowboard class using the name
      * parameter, and can be called via this method. This method will always be the "lowercase" version of this name.
      *
-     * For example, if a plugin is assigned to the name "myPlugin", it can be called via `Snowcart.myplugin()`.
+     * For example, if a plugin is assigned to the name "myPlugin", it can be called via `Snowboard.myplugin()`.
      *
      * @param {string} name
      * @param {PluginBase|Function} instance
@@ -103,7 +103,7 @@ export default class Snowcart {
         }
 
         if (this[lowername] !== undefined) {
-            throw new Error(`The given name is already in use for a property or method of the Snowcart class.`);
+            throw new Error(`The given name is already in use for a property or method of the Snowboard class.`);
         }
 
         this.plugins[lowerName] = new PluginLoader(lowerName, this, instance);
@@ -118,7 +118,7 @@ export default class Snowcart {
     /**
      * Removes a plugin.
      *
-     * Removes a plugin from Snowcart, calling the destructor method for all active instances of the plugin.
+     * Removes a plugin from Snowboard, calling the destructor method for all active instances of the plugin.
      *
      * @param {string} name
      * @returns {void}
@@ -341,7 +341,7 @@ export default class Snowcart {
             return;
         }
 
-        console.log("%c[Snowcart]", "color: rgb(45, 167, 199);", ...arguments);
+        console.log("%c[Snowboard]", "color: rgb(45, 167, 199);", ...arguments);
     }
     /* develblock:end */
 }

@@ -10,22 +10,22 @@
  *  - "duration": How long the flash message will stay visible for, in seconds. Default: 7 seconds.
  *
  * Usage:
- *      snowcart.flash('This is a flash message', 'info', 8);
+ *      snowboard.flash('This is a flash message', 'info', 8);
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class Flash extends Snowcart.PluginBase {
+export default class Flash extends Snowboard.PluginBase {
     /**
      * Constructor.
      *
-     * @param {Snowcart} snowcart
+     * @param {Snowboard} snowboard
      * @param {string} message
      * @param {string} type
      * @param {Number} duration
      */
-    constructor(snowcart, message, type, duration) {
-        super(snowcart);
+    constructor(snowboard, message, type, duration) {
+        super(snowboard);
 
         this.message = message;
         this.type = type || 'default';
@@ -84,7 +84,7 @@ export default class Flash extends Snowcart.PluginBase {
         this.flash.appendChild(this.flashTimer);
         document.body.appendChild(this.flash);
 
-        this.snowcart.transition(this.flash, 'show', () => {
+        this.snowboard.transition(this.flash, 'show', () => {
             this.startTimer();
         });
     }
@@ -95,7 +95,7 @@ export default class Flash extends Snowcart.PluginBase {
     remove() {
         this.stopTimer();
 
-        this.snowcart.transition(this.flash, 'hide', () => {
+        this.snowboard.transition(this.flash, 'hide', () => {
             this.flash.remove();
             this.flash = null;
             this.destructor();
@@ -113,7 +113,7 @@ export default class Flash extends Snowcart.PluginBase {
      * Starts the timer for this flash message.
      */
     startTimer() {
-        this.timerTrans = this.snowcart.transition(this.flashTimer, 'timeout', null, `${this.duration}.0s`, true);
+        this.timerTrans = this.snowboard.transition(this.flashTimer, 'timeout', null, `${this.duration}.0s`, true);
         this.timer = window.setTimeout(() => this.remove(), this.duration * 1000);
     }
 

@@ -4,7 +4,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
- export default class AttachLoading extends Snowcart.Singleton {
+ export default class AttachLoading extends Snowboard.Singleton {
     /**
      * Defines dependenices.
      *

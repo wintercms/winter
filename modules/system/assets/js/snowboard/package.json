@@ -1,8 +1,8 @@
 {
-    "name": "@wintercms/snowcart",
+    "name": "@wintercms/snowboard",
     "version": "2.0.0",
     "description": "The next evolution for the Winter JavaScript framework.",
-    "main": "snowcart.base.js",
+    "main": "snowboard.base.js",
     "private": true,
     "repository": {
         "type": "git",
@@ -23,7 +23,7 @@
     "bugs": {
         "url": "https://github.com/wintercms/winter/issues"
     },
-    "homepage": "https://wintercms.com/docs/snowcart/introduction",
+    "homepage": "https://wintercms.com/docs/snowboard/introduction",
     "dependencies": {
         "webpack-strip-block": "^0.3.0"
     },

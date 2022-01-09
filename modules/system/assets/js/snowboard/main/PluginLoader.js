@@ -1,11 +1,11 @@
-import Snowcart from './Snowcart';
+import Snowboard from './Snowboard';
 import PluginBase from '../abstracts/PluginBase';
 import Singleton from "../abstracts/Singleton";
 
 /**
  * Plugin loader class.
  *
- * This is a provider (factory) class for a single plugin and provides the link between Snowcart framework functionality
+ * This is a provider (factory) class for a single plugin and provides the link between Snowboard framework functionality
  * and the underlying plugin instances. It also provides some basic mocking of plugin methods for testing.
  *
  * @copyright 2021 Winter.
@@ -18,12 +18,12 @@ export default class PluginLoader {
      * Binds the Winter framework to the instance.
      *
      * @param {string} name
-     * @param {Snowcart} snowcart
+     * @param {Snowboard} snowboard
      * @param {PluginBase} instance
      */
-    constructor(name, snowcart, instance) {
+    constructor(name, snowboard, instance) {
         this.name = name;
-        this.snowcart = snowcart;
+        this.snowboard = snowboard;
         this.instance = instance;
         this.instances = [];
         this.singleton = instance.prototype instanceof Singleton;
@@ -78,7 +78,7 @@ export default class PluginLoader {
             return this.instance(...arguments);
         }
         if (!this.dependenciesFulfilled()) {
-            const unmet = this.getDependencies().filter((item) => !this.snowcart.getPluginNames().includes(item));
+            const unmet = this.getDependencies().filter((item) => !this.snowboard.getPluginNames().includes(item));
             throw new Error(`The "${this.name}" plugin requires the following plugins: ${unmet.join(', ')}`);
         }
         if (this.isSingleton()) {
@@ -113,7 +113,7 @@ export default class PluginLoader {
             }
         }
 
-        const newInstance = new this.instance(this.snowcart, ...arguments);
+        const newInstance = new this.instance(this.snowboard, ...arguments);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
 
         this.instances.push(newInstance);
@@ -163,7 +163,7 @@ export default class PluginLoader {
             return;
         }
 
-        const newInstance = new this.instance(this.snowcart);
+        const newInstance = new this.instance(this.snowboard);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
         this.instances.push(newInstance);
     }
@@ -197,7 +197,7 @@ export default class PluginLoader {
 
         let fulfilled = true;
         dependencies.forEach((plugin) => {
-            if (!this.snowcart.hasPlugin(plugin)) {
+            if (!this.snowboard.hasPlugin(plugin)) {
                 fulfilled = false;
             }
         });

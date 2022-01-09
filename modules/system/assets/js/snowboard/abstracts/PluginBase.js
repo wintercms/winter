@@ -1,4 +1,4 @@
-import Snowcart from '../main/Snowcart';
+import Snowboard from '../main/Snowboard';
 
 /**
  * Plugin base abstract.
@@ -12,12 +12,12 @@ export default class PluginBase {
     /**
      * Constructor.
      *
-     * The constructor is provided the Snowcart framework instance.
+     * The constructor is provided the Snowboard framework instance.
      *
-     * @param {Snowcart} snowcart
+     * @param {Snowboard} snowboard
      */
-    constructor(snowcart) {
-        this.snowcart = snowcart;
+    constructor(snowboard) {
+        this.snowboard = snowboard;
     }
 
     /**
@@ -45,6 +45,6 @@ export default class PluginBase {
      */
     destructor() {
         this.detach();
-        delete this.snowcart;
+        delete this.snowboard;
     }
 }

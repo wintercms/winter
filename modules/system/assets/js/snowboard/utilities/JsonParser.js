@@ -1,8 +1,8 @@
 import Singleton from '../abstracts/Singleton';
 
 export default class JsonParser extends Singleton {
-    constructor(snowcart) {
-        super(snowcart);
+    constructor(snowboard) {
+        super(snowboard);
 
         // Add to global function for backwards compatibility
         window.wnJSON = (json) => {

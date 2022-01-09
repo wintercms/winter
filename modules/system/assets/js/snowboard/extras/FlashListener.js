@@ -6,7 +6,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class FlashListener extends Snowcart.Singleton {
+export default class FlashListener extends Snowboard.Singleton {
     /**
      * Defines dependenices.
      *
@@ -34,7 +34,7 @@ export default class FlashListener extends Snowcart.Singleton {
      */
     ready() {
         document.querySelectorAll('[data-control="flash-message"]').forEach((element) => {
-            this.snowcart.flash(
+            this.snowboard.flash(
                 element.innerHTML,
                 element.dataset.flashType,
                 element.dataset.flashDuration,
@@ -49,7 +49,7 @@ export default class FlashListener extends Snowcart.Singleton {
      * @returns {Boolean}
      */
     ajaxErrorMessage(message) {
-        this.snowcart.flash(message, 'error');
+        this.snowboard.flash(message, 'error');
         return false;
     }
 
@@ -60,7 +60,7 @@ export default class FlashListener extends Snowcart.Singleton {
      */
     ajaxFlashMessages(messages) {
         for (const [cssClass, message] of Object.entries(messages)) {
-            this.snowcart.flash(message, cssClass);
+            this.snowboard.flash(message, cssClass);
         }
         return false;
     }

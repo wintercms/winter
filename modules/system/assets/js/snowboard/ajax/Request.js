@@ -6,17 +6,17 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-class Request extends Snowcart.PluginBase {
+class Request extends Snowboard.PluginBase {
     /**
      * Constructor.
      *
-     * @param {Snowcart} snowcart
+     * @param {Snowboard} snowboard
      * @param {HTMLElement|string} element
      * @param {string} handler
      * @param {Object} options
      */
-    constructor(snowcart, element, handler, options) {
-        super(snowcart);
+    constructor(snowboard, element, handler, options) {
+        super(snowboard);
 
         if (typeof element === 'string') {
             const matchedElement = document.querySelector(element);
@@ -34,7 +34,7 @@ class Request extends Snowcart.PluginBase {
         this.cancelled = false;
 
         this.checkRequest();
-        if (!this.snowcart.globalEvent('ajaxSetup', this)) {
+        if (!this.snowboard.globalEvent('ajaxSetup', this)) {
             this.cancelled = true;
             return;
         }
@@ -86,7 +86,7 @@ class Request extends Snowcart.PluginBase {
                         if (this.options.complete && typeof this.options.complete === 'function') {
                             this.options.complete(this.responseData, this);
                         }
-                        this.snowcart.globalEvent('ajaxDone', this.responseData, this);
+                        this.snowboard.globalEvent('ajaxDone', this.responseData, this);
 
                         if (this.element) {
                             const event = new Event('ajaxAlways');
@@ -128,7 +128,7 @@ class Request extends Snowcart.PluginBase {
                 if (this.options.complete && typeof this.options.complete === 'function') {
                     this.options.complete(this.responseData, this);
                 }
-                this.snowcart.globalEvent('ajaxDone', this.responseData, this);
+                this.snowboard.globalEvent('ajaxDone', this.responseData, this);
 
                 if (this.element) {
                     const event = new Event('ajaxAlways');
@@ -192,7 +192,7 @@ class Request extends Snowcart.PluginBase {
      */
     doAjax() {
         // Allow plugins to cancel the AJAX request before sending
-        if (this.snowcart.globalEvent('ajaxBeforeSend', this) === false) {
+        if (this.snowboard.globalEvent('ajaxBeforeSend', this) === false) {
             return Promise.resolve({
                 cancelled: true,
             });
@@ -266,7 +266,7 @@ class Request extends Snowcart.PluginBase {
             );
         });
 
-        this.snowcart.globalEvent('ajaxStart', ajaxPromise, this);
+        this.snowboard.globalEvent('ajaxStart', ajaxPromise, this);
 
         if (this.element) {
             const event = new Event('ajaxPromise');
@@ -309,7 +309,7 @@ class Request extends Snowcart.PluginBase {
                 return;
             }
 
-            const promises = this.snowcart.globalPromiseEvent('ajaxBeforeUpdate', response, this);
+            const promises = this.snowboard.globalPromiseEvent('ajaxBeforeUpdate', response, this);
             promises.then(
                 () => {
                     this.doUpdate(partials).then(
@@ -355,7 +355,7 @@ class Request extends Snowcart.PluginBase {
                 const elements = document.querySelectorAll(selector);
                 if (elements.length > 0) {
                     elements.forEach((element) => {
-                        const sanitizedContent = this.snowcart.sanitizer().sanitize(content);
+                        const sanitizedContent = this.snowboard.sanitizer().sanitize(content);
                         switch (mode) {
                             case 'replace':
                                 element.innerHTML = sanitizedContent;
@@ -369,14 +369,14 @@ class Request extends Snowcart.PluginBase {
                         }
 
                         // Fire update event for each element that is updated
-                        this.snowcart.globalEvent('ajaxUpdate', element, sanitizedContent, this);
+                        this.snowboard.globalEvent('ajaxUpdate', element, sanitizedContent, this);
                         const event = new Event('ajaxUpdate');
                         event.content = sanitizedContent;
                         element.dispatchEvent(event);
                     });
                 }
 
-                this.snowcart.globalEvent('ajaxUpdateComplete', elements, this);
+                this.snowboard.globalEvent('ajaxUpdateComplete', elements, this);
 
                 resolve();
             }
@@ -400,7 +400,7 @@ class Request extends Snowcart.PluginBase {
         }
 
         // Allow plugins to cancel any further response handling
-        if (this.snowcart.globalEvent('ajaxSuccess', this.responseData, this) === false) {
+        if (this.snowboard.globalEvent('ajaxSuccess', this.responseData, this) === false) {
             return;
         }
 
@@ -448,7 +448,7 @@ class Request extends Snowcart.PluginBase {
         }
 
         // Allow plugins to cancel any further error handling
-        if (this.snowcart.globalEvent('ajaxError', this.responseError, this) === false) {
+        if (this.snowboard.globalEvent('ajaxError', this.responseError, this) === false) {
             return;
         }
 
@@ -499,7 +499,7 @@ class Request extends Snowcart.PluginBase {
         }
 
         // Allow plugins to cancel the redirect
-        if (this.snowcart.globalEvent('ajaxRedirect', url, this) === false) {
+        if (this.snowboard.globalEvent('ajaxRedirect', url, this) === false) {
             return;
         }
 
@@ -542,7 +542,7 @@ class Request extends Snowcart.PluginBase {
         }
 
         // Allow plugins to cancel the error message being shown
-        if (this.snowcart.globalEvent('ajaxErrorMessage', message, this) === false) {
+        if (this.snowboard.globalEvent('ajaxErrorMessage', message, this) === false) {
             return;
         }
 
@@ -571,7 +571,7 @@ class Request extends Snowcart.PluginBase {
         }
 
         // Allow plugins to cancel the flash messages
-        if (this.snowcart.globalEvent('ajaxFlashMessages', messages, this) === false) {
+        if (this.snowboard.globalEvent('ajaxFlashMessages', messages, this) === false) {
             return;
         }
     }
@@ -596,7 +596,7 @@ class Request extends Snowcart.PluginBase {
         }
 
         // Allow plugins to cancel the validation errors being handled
-        if (this.snowcart.globalEvent('ajaxValidationErrors', this.form, fields, this) === false) {
+        if (this.snowboard.globalEvent('ajaxValidationErrors', this.form, fields, this) === false) {
             return;
         }
     }
@@ -625,12 +625,12 @@ class Request extends Snowcart.PluginBase {
         }
 
         // If no plugins have customised the confirmation, use a simple browser confirmation.
-        if (this.snowcart.listensToEvent('ajaxConfirmMessage').length === 0) {
+        if (this.snowboard.listensToEvent('ajaxConfirmMessage').length === 0) {
             return confirm(this.confirm);
         }
 
         // Run custom plugin confirmations
-        const promises = this.snowcart.globalPromiseEvent('ajaxConfirmMessage', this.confirm, this);
+        const promises = this.snowboard.globalPromiseEvent('ajaxConfirmMessage', this.confirm, this);
 
         try {
             const fulfilled = await promises;
@@ -778,4 +778,4 @@ class Request extends Snowcart.PluginBase {
     }
 }
 
-snowcart.addPlugin('request', Request);
+snowboard.addPlugin('request', Request);
