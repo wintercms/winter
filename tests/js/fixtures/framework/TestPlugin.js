@@ -1,11 +1,11 @@
 /* globals window */
 
 ((Snowboard) => {
-    class TestSingleton extends Snowboard.Singleton {
+    class TestPlugin extends Snowboard.PluginBase {
         testMethod() {
             return 'Tested';
         }
     }
 
-    Snowboard.addPlugin('test', TestSingleton);
+    Snowboard.addPlugin('test', TestPlugin);
 })(window.Snowboard);

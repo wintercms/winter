@@ -66,7 +66,7 @@ export default class Snowboard {
      * Initialises an instance of every singleton.
      */
     initialiseSingletons() {
-        Object.values(this.plugin).forEach((plugin) => {
+        Object.values(this.plugins).forEach((plugin) => {
             if (plugin.isSingleton()) {
                 plugin.initialiseSingleton();
             }
@@ -98,7 +98,7 @@ export default class Snowboard {
             throw new Error(`The provided plugin must extend the PluginBase class, or must be a callback function.`);
         }
 
-        if (this[name] !== undefined || this[lowername] !== undefined) {
+        if (this[name] !== undefined || this[lowerName] !== undefined) {
             throw new Error(`The given name is already in use for a property or method of the Snowboard class.`);
         }
 

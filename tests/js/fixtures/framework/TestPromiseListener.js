@@ -1,7 +1,7 @@
 /* globals window */
 
-((winter) => {
-    class TestPromiseListener extends winter.Singleton {
+((Snowboard) => {
+    class TestPromiseListener extends Snowboard.Singleton {
         listens() {
             return {
                 promiseOne: 'promiseOne',
@@ -24,5 +24,5 @@
         }
     }
 
-    winter.addModule('test', TestPromiseListener);
-})(window.winter);
+    Snowboard.addPlugin('test', TestPromiseListener);
+})(window.Snowboard);

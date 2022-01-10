@@ -7,20 +7,20 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render()
             .then(
                 (dom) => {
-                    dom.window.winter.getModule('request').mock('doAjax', (instance) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
                         // Simulate success response
                         const resolved = Promise.resolve({
                             success: true
                         });
 
                         // Mock events
-                        instance.winter.globalEvent('ajaxStart', instance, resolved);
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
 
                         if (instance.element) {
                             const event = new dom.window.Event('ajaxPromise');
@@ -32,7 +32,7 @@ describe('Request AJAX library', function () {
                     });
 
                     // Listen to global event
-                    dom.window.winter.addModule('testListener', class TestListener extends dom.window.winter.Singleton {
+                    dom.window.Snowboard.addPlugin('testListener', class TestListener extends dom.window.Snowboard.Singleton {
                         listens() {
                             return {
                                 ajaxSetup: 'ajaxSetup',
@@ -44,7 +44,7 @@ describe('Request AJAX library', function () {
                         }
                     });
 
-                    dom.window.winter.request(undefined, 'onTest', {
+                    dom.window.Snowboard.request(undefined, 'onTest', {
                         complete: (data, instance) => {
                             expect(instance.handler).toEqual('onChanged');
                             done();
@@ -58,20 +58,20 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render()
             .then(
                 (dom) => {
-                    dom.window.winter.getModule('request').mock('doAjax', (instance) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
                         // Simulate success response
                         const resolved = Promise.resolve({
                             success: true
                         });
 
                         // Mock events
-                        instance.winter.globalEvent('ajaxStart', instance, resolved);
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
 
                         if (instance.element) {
                             const event = new dom.window.Event('ajaxPromise');
@@ -83,7 +83,7 @@ describe('Request AJAX library', function () {
                     });
 
                     // Listen to global event
-                    dom.window.winter.addModule('testListener', class TestListener extends dom.window.winter.Singleton {
+                    dom.window.Snowboard.addPlugin('testListener', class TestListener extends dom.window.Snowboard.Singleton {
                         listens() {
                             return {
                                 ajaxSetup: 'ajaxSetup',
@@ -96,7 +96,7 @@ describe('Request AJAX library', function () {
                         }
                     });
 
-                    const instance = dom.window.winter.request(undefined, 'onTest', {
+                    const instance = dom.window.Snowboard.request(undefined, 'onTest', {
                         complete: (data, instance) => {
                             done(new Error('Request did not cancel'));
                         }
@@ -111,20 +111,20 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render('<button id="testElement">Test</button>')
             .then(
                 (dom) => {
-                    dom.window.winter.getModule('request').mock('doAjax', (instance) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
                         // Simulate success response
                         const resolved = Promise.resolve({
                             success: true
                         });
 
                         // Mock events
-                        instance.winter.globalEvent('ajaxStart', instance, resolved);
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
 
                         if (instance.element) {
                             const event = new dom.window.Event('ajaxPromise');
@@ -143,7 +143,7 @@ describe('Request AJAX library', function () {
                     });
 
 
-                    dom.window.winter.request(element, 'onTest', {
+                    dom.window.Snowboard.request(element, 'onTest', {
                         complete: (data, instance) => {
                             expect(instance.handler).toEqual('onChanged');
                             done();
@@ -157,20 +157,20 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render('<button id="testElement">Test</button>')
             .then(
                 (dom) => {
-                    dom.window.winter.getModule('request').mock('doAjax', (instance) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
                         // Simulate success response
                         const resolved = Promise.resolve({
                             success: true
                         });
 
                         // Mock events
-                        instance.winter.globalEvent('ajaxStart', instance, resolved);
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
 
                         if (instance.element) {
                             const event = new dom.window.Event('ajaxPromise');
@@ -187,7 +187,7 @@ describe('Request AJAX library', function () {
                         event.preventDefault();
                     });
 
-                    const instance = dom.window.winter.request(element, 'onTest', {
+                    const instance = dom.window.Snowboard.request(element, 'onTest', {
                         complete: (data, instance) => {
                             done(new Error('Request did not cancel'));
                         }
@@ -202,20 +202,20 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render()
             .then(
                 (dom) => {
-                    dom.window.winter.getModule('request').mock('doAjax', (instance) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
                         // Simulate success response
                         const resolved = Promise.resolve({
                             success: true
                         });
 
                         // Mock events
-                        instance.winter.globalEvent('ajaxStart', instance, resolved);
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
 
                         if (instance.element) {
                             const event = new Event('ajaxPromise');
@@ -226,7 +226,7 @@ describe('Request AJAX library', function () {
                         return resolved;
                     });
 
-                    dom.window.winter.request(undefined, 'onTest', {
+                    dom.window.Snowboard.request(undefined, 'onTest', {
                         complete: (data, instance) => {
                             expect(data).toEqual({
                                 success: true,
@@ -248,20 +248,20 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render()
             .then(
                 (dom) => {
-                    dom.window.winter.getModule('request').mock('doAjax', (instance) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
                         // Simulate success response
                         const resolved = Promise.resolve({
                             success: true
                         });
 
                         // Mock events
-                        instance.winter.globalEvent('ajaxStart', instance, resolved);
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
 
                         if (instance.element) {
                             const event = new Event('ajaxPromise');
@@ -273,7 +273,7 @@ describe('Request AJAX library', function () {
                     });
 
                     // Listen to global event
-                    dom.window.winter.addModule('testListener', class TestListener extends dom.window.winter.Singleton {
+                    dom.window.Snowboard.addPlugin('testListener', class TestListener extends dom.window.Snowboard.Singleton {
                         listens() {
                             return {
                                 ajaxDone: 'ajaxDone',
@@ -293,7 +293,7 @@ describe('Request AJAX library', function () {
                         }
                     });
 
-                    dom.window.winter.request(undefined, 'onTest');
+                    dom.window.Snowboard.request(undefined, 'onTest');
                 }
             );
     });
@@ -302,20 +302,20 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render('<button id="testElement">Test</button>')
             .then(
                 (dom) => {
-                    dom.window.winter.getModule('request').mock('doAjax', (instance) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
                         // Simulate success response
                         const resolved = Promise.resolve({
                             success: true
                         });
 
                         // Mock events
-                        instance.winter.globalEvent('ajaxStart', instance, resolved);
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
 
                         if (instance.element) {
                             const event = new dom.window.Event('ajaxPromise');
@@ -337,7 +337,7 @@ describe('Request AJAX library', function () {
                         done();
                     });
 
-                    dom.window.winter.request(element, 'onTest');
+                    dom.window.Snowboard.request(element, 'onTest');
                 }
             );
     });
@@ -346,20 +346,20 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render()
             .then(
                 (dom) => {
-                    dom.window.winter.getModule('request').mock('doAjax', (instance) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
                         // Simulate success response
                         const resolved = Promise.resolve({
                             success: true
                         });
 
                         // Mock events
-                        instance.winter.globalEvent('ajaxStart', instance, resolved);
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
 
                         if (instance.element) {
                             const event = new Event('ajaxPromise');
@@ -370,7 +370,7 @@ describe('Request AJAX library', function () {
                         return resolved;
                     });
 
-                    dom.window.winter.request(undefined, 'onTest', {
+                    dom.window.Snowboard.request(undefined, 'onTest', {
                         success: (data, instance) => {
                             expect(data).toEqual({
                                 success: true,
@@ -392,20 +392,20 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render()
             .then(
                 (dom) => {
-                    dom.window.winter.getModule('request').mock('doAjax', (instance) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
                         // Simulate success response
                         const resolved = Promise.resolve({
                             success: true
                         });
 
                         // Mock events
-                        instance.winter.globalEvent('ajaxStart', instance, resolved);
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
 
                         if (instance.element) {
                             const event = new Event('ajaxPromise');
@@ -417,7 +417,7 @@ describe('Request AJAX library', function () {
                     });
 
                     // Listen to global event
-                    dom.window.winter.addModule('testListener', class TestListener extends dom.window.winter.Singleton {
+                    dom.window.Snowboard.addPlugin('testListener', class TestListener extends dom.window.Snowboard.Singleton {
                         listens() {
                             return {
                                 ajaxSuccess: 'ajaxSuccess',
@@ -437,7 +437,7 @@ describe('Request AJAX library', function () {
                         }
                     });
 
-                    dom.window.winter.request(undefined, 'onTest');
+                    dom.window.Snowboard.request(undefined, 'onTest');
                 }
             );
     });
@@ -446,18 +446,18 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render()
             .then(
                 (dom) => {
-                    dom.window.winter.getModule('request').mock('doAjax', (instance) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
                         // Simulate error response
                         const resolved = Promise.reject('This is an error');
 
                         // Mock events
-                        instance.winter.globalEvent('ajaxStart', instance, resolved);
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
 
                         if (instance.element) {
                             const event = new Event('ajaxPromise');
@@ -468,7 +468,7 @@ describe('Request AJAX library', function () {
                         return resolved;
                     });
 
-                    dom.window.winter.request(undefined, 'onTest', {
+                    dom.window.Snowboard.request(undefined, 'onTest', {
                         error: (data, instance) => {
                             expect(data).toEqual('This is an error');
                             expect(instance.responseData).toEqual(null);
@@ -486,18 +486,18 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render()
             .then(
                 (dom) => {
-                    dom.window.winter.getModule('request').mock('doAjax', (instance) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
                         // Simulate error response
                         const resolved = Promise.reject('This is an error');
 
                         // Mock events
-                        instance.winter.globalEvent('ajaxStart', instance, resolved);
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
 
                         if (instance.element) {
                             const event = new Event('ajaxPromise');
@@ -509,7 +509,7 @@ describe('Request AJAX library', function () {
                     });
 
                     // Listen to global event
-                    dom.window.winter.addModule('testListener', class TestListener extends dom.window.winter.Singleton {
+                    dom.window.Snowboard.addPlugin('testListener', class TestListener extends dom.window.Snowboard.Singleton {
                         listens() {
                             return {
                                 ajaxError: 'ajaxError',
@@ -525,7 +525,7 @@ describe('Request AJAX library', function () {
                         }
                     });
 
-                    dom.window.winter.request(undefined, 'onTest');
+                    dom.window.Snowboard.request(undefined, 'onTest');
                 }
             );
     });
@@ -534,15 +534,15 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render()
             .then(
                 (dom) => {
                     expect(() => {
                         const docFragment = dom.window.document.createDocumentFragment();
-                        dom.window.winter.request(docFragment, 'onTest');
+                        dom.window.Snowboard.request(docFragment, 'onTest');
                     }).toThrow('The element provided must be an Element instance');
                 }
             );
@@ -552,14 +552,14 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render()
             .then(
                 (dom) => {
                     expect(() => {
-                        dom.window.winter.request(undefined, undefined);
+                        dom.window.Snowboard.request(undefined, undefined);
                     }).toThrow('The AJAX handler name is not specified');
                 }
             );
@@ -569,14 +569,14 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'modules/system/assets/js/framework-next/build/framework-js-request.js'
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
             .render()
             .then(
                 (dom) => {
                     expect(() => {
-                        dom.window.winter.request(undefined, 'notRight');
+                        dom.window.Snowboard.request(undefined, 'notRight');
                     }).toThrow('Invalid AJAX handler name');
                 }
             );

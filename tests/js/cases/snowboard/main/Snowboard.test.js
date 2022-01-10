@@ -1,33 +1,33 @@
 import FakeDom from '../../../helpers/FakeDom';
 
-describe('Winter framework', function () {
+describe('Snowboard framework', function () {
     it('initialises correctly', function (done) {
         FakeDom
             .new()
-            .addScript('modules/system/assets/js/framework-next/build/framework.js')
+            .addScript('modules/system/assets/js/snowboard/build/snowboard.base.js')
             .render()
             .then(
                 (dom) => {
                     // Run assertions
                     try {
-                        expect(dom.window.winter).toBeDefined();
-                        expect(dom.window.winter.addModule).toBeDefined();
-                        expect(dom.window.winter.addModule).toEqual(expect.any(Function));
+                        expect(dom.window.Snowboard).toBeDefined();
+                        expect(dom.window.Snowboard.addPlugin).toBeDefined();
+                        expect(dom.window.Snowboard.addPlugin).toEqual(expect.any(Function));
 
-                        // Check Module and Singleton abstracts exist
-                        expect(dom.window.winter.Module).toBeDefined();
-                        expect(dom.window.winter.Singleton).toBeDefined();
+                        // Check PluginBase and Singleton abstracts exist
+                        expect(dom.window.Snowboard.PluginBase).toBeDefined();
+                        expect(dom.window.Snowboard.Singleton).toBeDefined();
 
-                        // Check in-built modules
-                        expect(dom.window.winter.getModuleNames()).toEqual(
+                        // Check in-built plugins
+                        expect(dom.window.Snowboard.getPluginNames()).toEqual(
                             expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer'])
                         );
-                        expect(dom.window.winter.getModule('debounce').isFunction()).toEqual(true);
-                        expect(dom.window.winter.getModule('debounce').isSingleton()).toEqual(false);
-                        expect(dom.window.winter.getModule('jsonparser').isFunction()).toEqual(false);
-                        expect(dom.window.winter.getModule('jsonparser').isSingleton()).toEqual(true);
-                        expect(dom.window.winter.getModule('sanitizer').isFunction()).toEqual(false);
-                        expect(dom.window.winter.getModule('sanitizer').isSingleton()).toEqual(true);
+                        expect(dom.window.Snowboard.getPlugin('debounce').isFunction()).toEqual(true);
+                        expect(dom.window.Snowboard.getPlugin('debounce').isSingleton()).toEqual(false);
+                        expect(dom.window.Snowboard.getPlugin('jsonparser').isFunction()).toEqual(false);
+                        expect(dom.window.Snowboard.getPlugin('jsonparser').isSingleton()).toEqual(true);
+                        expect(dom.window.Snowboard.getPlugin('sanitizer').isFunction()).toEqual(false);
+                        expect(dom.window.Snowboard.getPlugin('sanitizer').isSingleton()).toEqual(true);
 
                         done();
                     } catch (error) {
@@ -40,53 +40,53 @@ describe('Winter framework', function () {
             );
     });
 
-    it('can add and remove a module', function (done) {
+    it('can add and remove a plugin', function (done) {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
-                'tests/js/fixtures/framework/TestModule.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'tests/js/fixtures/framework/TestPlugin.js',
             ])
             .render()
             .then(
                 (dom) => {
                     // Run assertions
-                    const winter = dom.window.winter;
+                    const Snowboard = dom.window.Snowboard;
 
                     try {
-                        // Check module caller
-                        expect(winter.hasModule('test')).toBe(true);
-                        expect(winter.getModuleNames()).toEqual(
+                        // Check plugin caller
+                        expect(Snowboard.hasPlugin('test')).toBe(true);
+                        expect(Snowboard.getPluginNames()).toEqual(
                             expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer', 'test'])
                         );
-                        expect(winter.test).toEqual(expect.any(Function));
+                        expect(Snowboard.test).toEqual(expect.any(Function));
 
-                        const instance = winter.test();
+                        const instance = Snowboard.test();
 
-                        // Check module injected methods
-                        expect(instance.winter).toBe(winter);
+                        // Check plugin injected methods
+                        expect(instance.snowboard).toBe(Snowboard);
                         expect(instance.destructor).toEqual(expect.any(Function));
 
-                        // Check module method
+                        // Check plugin method
                         expect(instance.testMethod).toBeDefined();
                         expect(instance.testMethod).toEqual(expect.any(Function));
                         expect(instance.testMethod()).toEqual('Tested');
 
                         // Check multiple instances
-                        const instanceOne = winter.test();
+                        const instanceOne = Snowboard.test();
                         instanceOne.changed = true;
-                        const instanceTwo = winter.test();
+                        const instanceTwo = Snowboard.test();
                         expect(instanceOne).not.toEqual(instanceTwo);
-                        const factory = winter.getModule('test');
+                        const factory = Snowboard.getPlugin('test');
                         expect(factory.getInstances()).toEqual([instance, instanceOne, instanceTwo]);
 
-                        // Remove module
-                        winter.removeModule('test');
-                        expect(winter.hasModule('test')).toEqual(false);
-                        expect(dom.window.winter.getModuleNames()).toEqual(
+                        // Remove plugin
+                        Snowboard.removePlugin('test');
+                        expect(Snowboard.hasPlugin('test')).toEqual(false);
+                        expect(dom.window.Snowboard.getPluginNames()).toEqual(
                             expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer'])
                         );
-                        expect(winter.test).not.toBeDefined();
+                        expect(Snowboard.test).not.toBeDefined();
 
                         done();
                     } catch (error) {
@@ -103,49 +103,49 @@ describe('Winter framework', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestSingleton.js',
             ])
             .render()
             .then(
                 (dom) => {
                     // Run assertions
-                    const winter = dom.window.winter;
+                    const Snowboard = dom.window.Snowboard;
 
                     try {
-                         // Check module caller
-                        expect(winter.hasModule('test')).toBe(true);
-                        expect(winter.getModuleNames()).toEqual(
+                         // Check plugin caller
+                        expect(Snowboard.hasPlugin('test')).toBe(true);
+                        expect(Snowboard.getPluginNames()).toEqual(
                             expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer', 'test'])
                         );
-                        expect(winter.test).toEqual(expect.any(Function));
+                        expect(Snowboard.test).toEqual(expect.any(Function));
 
-                        const instance = winter.test();
+                        const instance = Snowboard.test();
 
-                        // Check module injected methods
-                        expect(instance.winter).toBe(winter);
+                        // Check plugin injected methods
+                        expect(instance.snowboard).toBe(Snowboard);
                         expect(instance.destructor).toEqual(expect.any(Function));
 
-                        // Check module method
+                        // Check plugin method
                         expect(instance.testMethod).toBeDefined();
                         expect(instance.testMethod).toEqual(expect.any(Function));
                         expect(instance.testMethod()).toEqual('Tested');
 
                         // Check multiple instances  (these should all be the same as this instance is a singleton)
-                        const instanceOne = winter.test();
+                        const instanceOne = Snowboard.test();
                         instanceOne.changed = true;
-                        const instanceTwo = winter.test();
+                        const instanceTwo = Snowboard.test();
                         expect(instanceOne).toEqual(instanceTwo);
-                        const factory = winter.getModule('test');
+                        const factory = Snowboard.getPlugin('test');
                         expect(factory.getInstances()).toEqual([instance]);
 
-                        // Remove module
-                        winter.removeModule('test');
-                        expect(winter.hasModule('test')).toEqual(false);
-                        expect(dom.window.winter.getModuleNames()).toEqual(
+                        // Remove plugin
+                        Snowboard.removePlugin('test');
+                        expect(Snowboard.hasPlugin('test')).toEqual(false);
+                        expect(dom.window.Snowboard.getPluginNames()).toEqual(
                             expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer'])
                         );
-                        expect(winter.test).not.toBeDefined();
+                        expect(Snowboard.test).not.toBeDefined();
 
                         done();
                     } catch (error) {
@@ -162,33 +162,33 @@ describe('Winter framework', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestListener.js',
             ])
             .render()
             .then(
                 (dom) => {
                     // Run assertions
-                    const winter = dom.window.winter;
+                    const Snowboard = dom.window.Snowboard;
 
                     try {
-                        expect(winter.listensToEvent('eventOne')).toEqual(['test']);
-                        expect(winter.listensToEvent('eventTwo')).toEqual(['test']);
-                        expect(winter.listensToEvent('eventThree')).toEqual([]);
+                        expect(Snowboard.listensToEvent('eventOne')).toEqual(['test']);
+                        expect(Snowboard.listensToEvent('eventTwo')).toEqual(['test']);
+                        expect(Snowboard.listensToEvent('eventThree')).toEqual([]);
 
                         // Call global event one
-                        const testClass = winter.test();
-                        winter.globalEvent('eventOne', 42);
+                        const testClass = Snowboard.test();
+                        Snowboard.globalEvent('eventOne', 42);
                         expect(testClass.eventResult).toEqual('Event called with arg 42');
 
-                        // Call global event two - should fail as the test module doesn't have that method
+                        // Call global event two - should fail as the test plugin doesn't have that method
                         expect(() => {
-                            winter.globalEvent('eventTwo');
-                        }).toThrow('Missing "notExists" method in "test" module');
+                            Snowboard.globalEvent('eventTwo');
+                        }).toThrow('Missing "notExists" method in "test" plugin');
 
                         // Call global event three - nothing should happen
                         expect(() => {
-                            winter.globalEvent('eventThree');
+                            Snowboard.globalEvent('eventThree');
                         }).not.toThrow();
 
                         done();
@@ -206,33 +206,33 @@ describe('Winter framework', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/framework-next/build/framework.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestPromiseListener.js',
             ])
             .render()
             .then(
                 (dom) => {
                     // Run assertions
-                    const winter = dom.window.winter;
+                    const Snowboard = dom.window.Snowboard;
 
                     try {
-                        expect(winter.listensToEvent('promiseOne')).toEqual(['test']);
-                        expect(winter.listensToEvent('promiseTwo')).toEqual(['test']);
-                        expect(winter.listensToEvent('promiseThree')).toEqual([]);
+                        expect(Snowboard.listensToEvent('promiseOne')).toEqual(['test']);
+                        expect(Snowboard.listensToEvent('promiseTwo')).toEqual(['test']);
+                        expect(Snowboard.listensToEvent('promiseThree')).toEqual([]);
 
                         // Call global event one
-                        const testClass = winter.test();
-                        winter.globalPromiseEvent('promiseOne', 'promise').then(
+                        const testClass = Snowboard.test();
+                        Snowboard.globalPromiseEvent('promiseOne', 'promise').then(
                             () => {
                                 expect(testClass.eventResult).toEqual('Event called with arg promise');
 
                                 // Call global event two - it should still work, even though it doesn't return a promise
-                                winter.globalPromiseEvent('promiseTwo', 'promise 2').then(
+                                Snowboard.globalPromiseEvent('promiseTwo', 'promise 2').then(
                                     () => {
                                         expect(testClass.eventResult).toEqual('Promise two called with arg promise 2');
 
                                         // Call global event three - it should still work
-                                        winter.globalPromiseEvent('promiseThree', 'promise 3').then(
+                                        Snowboard.globalPromiseEvent('promiseThree', 'promise 3').then(
                                             () => {
                                                 done();
                                             },
