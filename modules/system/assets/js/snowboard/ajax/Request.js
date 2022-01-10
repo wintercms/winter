@@ -418,8 +418,8 @@ class Request extends Snowboard.PluginBase {
 
         // Check for a redirect from the response, or use the redirect as specified in the options. This takes
         // precedent over all other checks.
-        if (response.X_WINTER_REDIRECT || this.redirect) {
-            this.processRedirect(response.X_WINTER_REDIRECT || this.redirect);
+        if (this.redirect || response.X_WINTER_REDIRECT) {
+            this.processRedirect(this.redirect || response.X_WINTER_REDIRECT);
             return;
         }
 
