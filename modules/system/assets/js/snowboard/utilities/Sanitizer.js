@@ -8,6 +8,7 @@ export default class Sanitizer extends Singleton {
         window.wnSanitize = (html) => {
             return this.sanitize(html);
         }
+        window.ocSanitize = window.wnSanitize;
     }
 
     sanitize(html, bodyOnly) {

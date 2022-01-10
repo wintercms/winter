@@ -8,6 +8,7 @@ export default class JsonParser extends Singleton {
         window.wnJSON = (json) => {
             return this.parse(json);
         }
+        window.ocJSON = window.wnJSON;
     }
 
     parse(str) {
