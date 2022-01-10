@@ -4,10 +4,10 @@ import Transition from './extras/Transition';
 import AttachLoading from './extras/AttachLoading';
 import StripeLoader from './extras/StripeLoader';
 
-((snowboard) => {
-    snowboard.addModule('transition', Transition)
-    snowboard.addModule('flash', Flash);
-    snowboard.addModule('flashListener', FlashListener);
-    snowboard.addModule('attachLoading', AttachLoading);
-    snowboard.addModule('stripeLoader', StripeLoader);
-})(window.snowboard);
+((Snowboard) => {
+    Snowboard.addPlugin('transition', Transition)
+    Snowboard.addPlugin('flash', Flash);
+    Snowboard.addPlugin('flashListener', FlashListener);
+    Snowboard.addPlugin('attachLoading', AttachLoading);
+    Snowboard.addPlugin('stripeLoader', StripeLoader);
+})(window.Snowboard);
