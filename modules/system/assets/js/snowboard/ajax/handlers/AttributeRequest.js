@@ -8,7 +8,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-class AttributeRequest extends Winter.Singleton {
+class AttributeRequest extends Snowboard.Singleton {
     /**
      * Listeners.
      *
@@ -319,4 +319,4 @@ class AttributeRequest extends Winter.Singleton {
     }
 }
 
-winter.addModule('attributeRequest', AttributeRequest);
+Snowboard.addPlugin('attributeRequest', AttributeRequest);

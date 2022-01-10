@@ -778,4 +778,4 @@ class Request extends Snowboard.PluginBase {
     }
 }
 
-snowboard.addPlugin('request', Request);
+Snowboard.addPlugin('request', Request);
