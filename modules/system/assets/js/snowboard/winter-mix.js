@@ -5,21 +5,6 @@ mix.setPublicPath(__dirname);
 
 // Compile Snowboard framework
 mix
-    .override((webpackConfig) => {
-        if (mix.inProduction()) {
-            // Strip out /* develblock */ code in production.
-            webpackConfig.module.rules.push({
-                test: /\.js$/,
-                enforce: 'pre',
-                exclude: /(node_modules|bower_components|\.spec\.js)/,
-                use: [
-                    {
-                        loader: 'webpack-strip-block'
-                    }
-                ]
-            })
-        }
-    })
     .js('./snowboard.base.js', './build/snowboard.base.js')
     .js('./snowboard.base.debug.js', './build/snowboard.base.debug.js')
     .js('./ajax/Request.js', './build/snowboard.request.js')

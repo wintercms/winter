@@ -25,9 +25,7 @@ export default class Snowboard {
      * @param {boolean} debug Whether debugging logs should be shown. Default: `false`.
      */
     constructor(autoSingletons, debug) {
-        /* develblock:start */
         this.debugEnabled = (typeof debug === 'boolean' && debug === true) ? true : false;
-        /* develblock:end */
         this.autoInitSingletons = (typeof autoSingletons === 'boolean' && autoSingletons === false) ? false : true;
         this.plugins = {};
 
@@ -35,9 +33,7 @@ export default class Snowboard {
         this.loadUtilities();
         this.initialise();
 
-        /* develblock:start */
         this.debug('Snowboard framework initialised');
-        /* develblock:end */
     }
 
     attachAbstracts() {
@@ -110,9 +106,8 @@ export default class Snowboard {
         this[lowerName] = function () {
             return this.plugins[lowerName].getInstance(...arguments);
         };
-        /* develblock:start */
+
         this.debug(`Plugin "${name}" registered`);
-        /* develblock:end */
     }
 
     /**
@@ -140,9 +135,8 @@ export default class Snowboard {
 
         delete this.plugins[lowerName];
         delete this[lowerName];
-        /* develblock:start */
+
         this.debug(`Plugin "${name}" removed`);
-        /* develblock:end */
     }
 
     /**
@@ -229,9 +223,7 @@ export default class Snowboard {
      * @returns {boolean} If event was not cancelled
      */
     globalEvent(eventName) {
-        /* develblock:start */
         this.debug(`Calling global event "${eventName}"`);
-        /* develblock:end */
 
         // Find out which plugins listen to this event - if none listen to it, return true.
         const listeners = this.listensToEvent(eventName);
@@ -284,9 +276,7 @@ export default class Snowboard {
      * @param {string} eventName
      */
     globalPromiseEvent(eventName) {
-        /* develblock:start */
         this.debug(`Calling global promise event "${eventName}"`);
-        /* develblock:end */
 
         // Find out which plugins listen to this event - if none listen to it, return a resolved promise.
         const listeners = this.listensToEvent(eventName);
@@ -328,7 +318,6 @@ export default class Snowboard {
         return Promise.all(promises);
     }
 
-    /* develblock:start */
     /**
      * Log a debug message.
      *
@@ -343,5 +332,4 @@ export default class Snowboard {
 
         console.log("%c[Snowboard]", "color: rgb(45, 167, 199);", ...arguments);
     }
-    /* develblock:end */
 }
