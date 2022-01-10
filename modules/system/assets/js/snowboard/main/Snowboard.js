@@ -95,17 +95,19 @@ export default class Snowboard {
         }
 
         if (typeof instance !== 'function' && instance instanceof PluginBase === false) {
-            throw new Error(`The provided plugin must be a PluginBase class instance or a callback function.`);
+            throw new Error(`The provided plugin must extend the PluginBase class, or must be a callback function.`);
         }
 
-        if (this[lowername] !== undefined) {
+        if (this[name] !== undefined || this[lowername] !== undefined) {
             throw new Error(`The given name is already in use for a property or method of the Snowboard class.`);
         }
 
         this.plugins[lowerName] = new PluginLoader(lowerName, this, instance);
-        this[lowerName] = function () {
+        const callback = function () {
             return this.plugins[lowerName].getInstance(...arguments);
         };
+        this[name] = callback;
+        this[lowerName] = callback;
 
         this.debug(`Plugin "${name}" registered`);
     }
