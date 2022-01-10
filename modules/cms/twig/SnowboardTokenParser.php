@@ -4,12 +4,12 @@ use Twig\Token as TwigToken;
 use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
 
 /**
- * Parser for the `{% winterjs %}` Twig tag.
+ * Parser for the `{% snowboard %}` Twig tag.
  *
  * @package winter\wn-cms-module
  * @author Winter CMS
  */
-class WinterJsTokenParser extends TwigTokenParser
+class SnowboardTokenParser extends TwigTokenParser
 {
     /**
      * @inheritDoc
@@ -47,7 +47,7 @@ class WinterJsTokenParser extends TwigTokenParser
             ];
         }
 
-        return new WinterJsNode($modules, $lineno, $this->getTag());
+        return new SnowboardNode($modules, $lineno, $this->getTag());
     }
 
     /**
@@ -55,6 +55,6 @@ class WinterJsTokenParser extends TwigTokenParser
      */
     public function getTag()
     {
-        return 'winterjs';
+        return 'snowboard';
     }
 }

@@ -7,14 +7,19 @@ use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
 
 /**
- * Represents a "winterjs" node
+ * Represents a "snowboard" node
  *
  * @package winter\wn-cms-module
  * @author Winter CMS
  */
-class WinterJsNode extends TwigNode
+class SnowboardNode extends TwigNode
 {
-    public function __construct(array $modules, $lineno, $tag = 'winterjs')
+    /**
+     * @var bool Indicates if the base Snowboard framework is already loaded, in case of multiple uses of this tag.
+     */
+    public static $baseLoaded = false;
+
+    public function __construct(array $modules, $lineno, $tag = 'snowboard')
     {
         parent::__construct([], ['modules' => $modules], $lineno, $tag);
     }
@@ -35,15 +40,20 @@ class WinterJsNode extends TwigNode
             ->write("\$_minify = ".CombineAssets::class."::instance()->useMinify;" . PHP_EOL);
 
         $moduleMap = [
-            'request' => 'framework-js-request',
-            'attr' => 'framework-attr-request',
-            'extras' => 'framework.extras',
+            'base' => 'snowboard.base',
+            'request' => 'snowboard.request',
+            'attr' => 'snowboard.data-attr',
+            'extras' => 'snowboard.extras',
         ];
-        $basePath = Request::getBasePath() . '/modules/system/assets/js/framework-next/build/';
+        $basePath = Request::getBasePath() . '/modules/system/assets/js/snowboard/build/';
 
-        // Add base script
-        $compiler
-            ->write("echo '<script src=\"${basePath}framework.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+        if (!static::$baseLoaded) {
+            // Add base script
+            $baseJs = $moduleMap['base'];
+            $compiler
+                ->write("echo '<script src=\"${basePath}${baseJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+            static::$baseLoaded = true;
+        }
 
         foreach ($modules as $module) {
             $moduleJs = $moduleMap[$module];
