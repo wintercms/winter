@@ -21,6 +21,7 @@ mix
         }
     })
     .js('./snowboard.base.js', './build/snowboard.base.js')
+    .js('./snowboard.base.debug.js', './build/snowboard.base.debug.js')
     .js('./ajax/Request.js', './build/snowboard.request.js')
     .js('./ajax/handlers/AttributeRequest.js', './build/snowboard.data-attr.js')
     .js('./snowboard.extras.js', './build/snowboard.extras.js')

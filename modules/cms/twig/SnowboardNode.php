@@ -1,5 +1,6 @@
 <?php namespace Cms\Twig;
 
+use Config;
 use Request;
 use System\Models\Parameter;
 use System\Classes\CombineAssets;
@@ -40,7 +41,7 @@ class SnowboardNode extends TwigNode
             ->write("\$_minify = ".CombineAssets::class."::instance()->useMinify;" . PHP_EOL);
 
         $moduleMap = [
-            'base' => 'snowboard.base',
+            'base' => (Config::get('app.debug', false) === true) ? 'snowboard.base.debug' : 'snowboard.base',
             'request' => 'snowboard.request',
             'attr' => 'snowboard.data-attr',
             'extras' => 'snowboard.extras',
