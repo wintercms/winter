@@ -47,9 +47,34 @@ class MixAssets
      */
     public function init()
     {
-        // Call plugins
+        /*
+        * Get packages registered in plugins.
+        *
+        * In the Plugin.php file for your plugin, you can define the "registerMixPackages" method and return an array,
+        * with the name of the package being the key, and the build config path - relative to the plugin directory - as
+        * the value.
+        *
+        * Example:
+        *
+        *   public function registerMixPackages()
+        *   {
+        *       return [
+        *           'package-name-1' => 'winter-mix.js',
+        *           'package-name-2' => 'assets/js/build.js',
+        *       ];
+        *   }
+        */
         $packages = PluginManager::instance()->getRegistrationMethodValues('registerMixPackages');
         if (count($packages)) {
+            foreach ($packages as $pluginCode => $packageArray) {
+                if (!is_array($packageArray)) {
+                    continue;
+                }
+
+                foreach ($packageArray as $name => $package) {
+                    $this->registerPackage($name, PluginManager::instance()->getPluginPath($pluginCode), $package);
+                }
+            }
         }
 
         // Allow current theme to define mix assets
