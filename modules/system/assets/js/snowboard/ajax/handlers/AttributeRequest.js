@@ -210,7 +210,7 @@ class AttributeRequest extends Snowboard.Singleton {
             data: ('requestData' in data) ? this.parseData(String(data.requestData)) : [],
         };
 
-        this.winter.request(element, handler, options);
+        this.snowboard.request(element, handler, options);
     }
 
     /**
@@ -276,7 +276,7 @@ class AttributeRequest extends Snowboard.Singleton {
         }
 
         try {
-            return this.winter.jsonparser().parse('{' + data + '}');
+            return this.snowboard.jsonparser().parse('{' + data + '}');
         } catch (e) {
             throw new Error('Error parsing the data attribute on element: ' + e.message);
         }
