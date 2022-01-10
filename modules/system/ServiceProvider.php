@@ -567,10 +567,11 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
             $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
+            $combiner->registerBundle('~/modules/system/assets/less/snowboard.extras.less');
         });
 
         MixAssets::registerCallback(function ($mix) {
-            $mix->registerPackage('framework', '~/modules/system/assets/js/framework-next');
+            $mix->registerPackage('framework', '~/modules/system/assets/js/snowboard');
         });
     }
 
