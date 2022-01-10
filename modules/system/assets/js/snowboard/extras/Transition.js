@@ -13,7 +13,7 @@
  *      transition. This should define the end state of the transition.
  *
  * Usage:
- *      snowboard.transition(document.element, 'transition', () => {
+ *      Snowboard.transition(document.element, 'transition', () => {
  *          console.log('Remove element after 7 seconds');
  *          this.remove();
  *      }, '7s');

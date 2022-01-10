@@ -10,7 +10,7 @@
  *  - "duration": How long the flash message will stay visible for, in seconds. Default: 7 seconds.
  *
  * Usage:
- *      snowboard.flash('This is a flash message', 'info', 8);
+ *      Snowboard.flash('This is a flash message', 'info', 8);
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
