@@ -4,7 +4,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
- export default class StripeLoader extends Snowboard.Singleton {
+export default class StripeLoader extends Snowboard.Singleton {
     /**
      * Defines dependenices.
      *
@@ -19,7 +19,7 @@
      *
      * @returns {Object}
      */
-     listens() {
+    listens() {
         return {
             ready: 'ready',
             ajaxStart: 'ajaxStart',
@@ -85,4 +85,4 @@
             document.body.classList.remove('wn-loading');
         }
     }
- }
+}

@@ -61,8 +61,7 @@ export default class Transition extends Snowboard.PluginBase {
         this.doTransition();
     }
 
-    eventClasses() {
-        const args = Array.from(arguments);
+    eventClasses(...args) {
         const eventClasses = {
             in: `${this.transition}-in`,
             active: `${this.transition}-active`,
@@ -74,11 +73,13 @@ export default class Transition extends Snowboard.PluginBase {
         }
 
         const returnClasses = [];
-        for (const [key, value] of Object.entries(eventClasses)) {
+        Object.entries(eventClasses).forEach((entry) => {
+            const [key, value] = entry;
+
             if (args.indexOf(key) !== -1) {
                 returnClasses.push(value);
             }
-        }
+        });
 
         return returnClasses;
     }
@@ -101,7 +102,7 @@ export default class Transition extends Snowboard.PluginBase {
             if (window.getComputedStyle(this.element)['transition-duration'] !== '0s') {
                 // Listen for the transition to end
                 this.element.addEventListener('transitionend', () => this.onTransitionEnd(), {
-                    once: true
+                    once: true,
                 });
                 window.requestAnimationFrame(() => {
                     this.element.classList.remove(this.eventClasses('in')[0]);
@@ -138,7 +139,7 @@ export default class Transition extends Snowboard.PluginBase {
 
     cancel() {
         this.element.removeEventListener('transitionend', () => this.onTransitionEnd, {
-            once: true
+            once: true,
         });
 
         this.resetClasses();
@@ -165,7 +166,7 @@ export default class Transition extends Snowboard.PluginBase {
             : 'msec';
 
         return (unit === 'sec')
-            ? (amount * 1000) + 'ms'
-            : Math.floor(amount) + 'ms';
+            ? `${amount * 1000}ms`
+            : `${Math.floor(amount)}ms`;
     }
 }

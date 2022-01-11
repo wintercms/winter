@@ -13,5 +13,5 @@ mix
     .polyfill({
         enabled: mix.inProduction(),
         useBuiltIns: 'usage',
-        targets: '> 0.5%, last 2 versions, not dead, Firefox ESR, not ie > 0'
+        targets: '> 0.5%, last 2 versions, not dead, Firefox ESR, not ie > 0',
     });

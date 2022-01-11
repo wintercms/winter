@@ -5,7 +5,7 @@ import AttachLoading from './extras/AttachLoading';
 import StripeLoader from './extras/StripeLoader';
 
 ((Snowboard) => {
-    Snowboard.addPlugin('transition', Transition)
+    Snowboard.addPlugin('transition', Transition);
     Snowboard.addPlugin('flash', Flash);
     Snowboard.addPlugin('flashListener', FlashListener);
     Snowboard.addPlugin('attachLoading', AttachLoading);

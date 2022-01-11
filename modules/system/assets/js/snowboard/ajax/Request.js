@@ -21,7 +21,7 @@ class Request extends Snowboard.PluginBase {
         if (typeof element === 'string') {
             const matchedElement = document.querySelector(element);
             if (matchedElement === null) {
-                throw new Error('No element was found with the given selector: ' + element);
+                throw new Error(`No element was found with the given selector: ${element}`);
             }
             this.element = matchedElement;
         } else {
@@ -71,13 +71,13 @@ class Request extends Snowboard.PluginBase {
                                     } else {
                                         this.processResponse(response);
                                     }
-                                }
+                                },
                             );
                         },
                         (error) => {
                             this.responseError = error;
                             this.processError(error);
-                        }
+                        },
                     ).finally(() => {
                         if (this.cancelled === true) {
                             return;
@@ -95,7 +95,7 @@ class Request extends Snowboard.PluginBase {
                             event.responseError = this.responseError;
                             this.element.dispatchEvent(event);
                         }
-                    })
+                    });
                 }
             });
         } else {
@@ -113,13 +113,13 @@ class Request extends Snowboard.PluginBase {
                             } else {
                                 this.processResponse(response);
                             }
-                        }
+                        },
                     );
                 },
                 (error) => {
                     this.responseError = error;
                     this.processError(error);
-                }
+                },
             ).finally(() => {
                 if (this.cancelled === true) {
                     return;
@@ -159,11 +159,11 @@ class Request extends Snowboard.PluginBase {
         }
 
         if (this.handler === undefined) {
-            throw new Error('The AJAX handler name is not specified.')
+            throw new Error('The AJAX handler name is not specified.');
         }
 
-        if (!this.handler.match(/^(?:\w+\:{2})?on*/)) {
-            throw new Error('Invalid AJAX handler name. The correct handler name format is: "onEvent".')
+        if (!this.handler.match(/^(?:\w+:{2})?on*/)) {
+            throw new Error('Invalid AJAX handler name. The correct handler name format is: "onEvent".');
         }
     }
 
@@ -199,15 +199,13 @@ class Request extends Snowboard.PluginBase {
         }
 
         const ajaxPromise = new Promise((resolve, reject) => {
-            fetch(
-                this.url, {
-                    method: 'POST',
-                    headers: this.headers,
-                    body: this.data,
-                    redirect: 'follow',
-                    mode: 'same-origin',
-                }
-            ).then(
+            fetch(this.url, {
+                method: 'POST',
+                headers: this.headers,
+                body: this.data,
+                redirect: 'follow',
+                mode: 'same-origin',
+            }).then(
                 (response) => {
                     if (!response.ok && response.status !== 406) {
                         if (response.headers.has('Content-Type') && response.headers.get('Content-Type').includes('/json')) {
@@ -218,12 +216,12 @@ class Request extends Snowboard.PluginBase {
                                         responseData.exception,
                                         responseData.file,
                                         responseData.line,
-                                        responseData.trace
+                                        responseData.trace,
                                     ));
                                 },
                                 (error) => {
                                     reject(this.renderError(`Unable to parse JSON response: ${error}`));
-                                }
+                                },
                             );
                         } else {
                             response.text().then(
@@ -232,37 +230,39 @@ class Request extends Snowboard.PluginBase {
                                 },
                                 (error) => {
                                     reject(this.renderError(`Unable to process response: ${error}`));
-                                }
+                                },
                             );
                         }
+                        return;
+                    }
+
+                    if (response.headers.has('Content-Type') && response.headers.get('Content-Type').includes('/json')) {
+                        response.json().then(
+                            (responseData) => {
+                                resolve({
+                                    ...responseData,
+                                    X_WINTER_SUCCESS: response.status !== 406,
+                                    X_WINTER_RESPONSE_CODE: response.status,
+                                });
+                            },
+                            (error) => {
+                                reject(this.renderError(`Unable to parse JSON response: ${error}`));
+                            },
+                        );
                     } else {
-                        if (response.headers.has('Content-Type') && response.headers.get('Content-Type').includes('/json')) {
-                            response.json().then(
-                                (responseData) => {
-                                    resolve(Object.assign({}, responseData, {
-                                        X_WINTER_SUCCESS: response.status !== 406,
-                                        X_WINTER_RESPONSE_CODE: response.status,
-                                    }));
-                                },
-                                (error) => {
-                                    reject(this.renderError(`Unable to parse JSON response: ${error}`));
-                                }
-                            );
-                        } else {
-                            response.text().then(
-                                (responseData) => {
-                                    resolve(responseData);
-                                },
-                                (error) => {
-                                    reject(this.renderError(`Unable to process response: ${error}`));
-                                }
-                            );
-                        }
+                        response.text().then(
+                            (responseData) => {
+                                resolve(responseData);
+                            },
+                            (error) => {
+                                reject(this.renderError(`Unable to process response: ${error}`));
+                            },
+                        );
                     }
                 },
                 (responseError) => {
                     reject(this.renderError(`Unable to retrieve a response from the server: ${responseError}`));
-                }
+                },
             );
         });
 
@@ -298,11 +298,13 @@ class Request extends Snowboard.PluginBase {
 
             // Extract partial information
             const partials = {};
-            for (const [key, value] of Object.entries(response)) {
+            Object.entries(response).forEach((entry) => {
+                const [key, value] = entry;
+
                 if (key.substr(0, 8) !== 'X_WINTER') {
                     partials[key] = value;
                 }
-            }
+            });
 
             if (Object.keys(partials).length === 0) {
                 resolve();
@@ -319,12 +321,12 @@ class Request extends Snowboard.PluginBase {
                         },
                         () => {
                             reject();
-                        }
+                        },
                     );
                 },
                 () => {
                     reject();
-                }
+                },
             );
         });
     }
@@ -337,7 +339,11 @@ class Request extends Snowboard.PluginBase {
      */
     doUpdate(partials) {
         return new Promise((resolve) => {
-            for (const [partial, content] of Object.entries(partials)) {
+            const affected = [];
+
+            Object.entries(partials).forEach((entry) => {
+                const [partial, content] = entry;
+
                 let selector = (this.options.update && this.options.update[partial])
                     ? this.options.update[partial]
                     : partial;
@@ -356,17 +362,21 @@ class Request extends Snowboard.PluginBase {
                 if (elements.length > 0) {
                     elements.forEach((element) => {
                         const sanitizedContent = this.snowboard.sanitizer().sanitize(content);
+
                         switch (mode) {
-                            case 'replace':
-                                element.innerHTML = sanitizedContent;
-                                break;
                             case 'append':
                                 element.innerHTML += sanitizedContent;
                                 break;
                             case 'prepend':
                                 element.innerHTML = sanitizedContent + element.innerHTML;
                                 break;
+                            case 'replace':
+                            default:
+                                element.innerHTML = sanitizedContent;
+                                break;
                         }
+
+                        affected.push(element);
 
                         // Fire update event for each element that is updated
                         this.snowboard.globalEvent('ajaxUpdate', element, sanitizedContent, this);
@@ -375,11 +385,11 @@ class Request extends Snowboard.PluginBase {
                         element.dispatchEvent(event);
                     });
                 }
+            });
 
-                this.snowboard.globalEvent('ajaxUpdateComplete', elements, this);
+            this.snowboard.globalEvent('ajaxUpdateComplete', affected, this);
 
-                resolve();
-            }
+            resolve();
         });
     }
 
@@ -428,7 +438,7 @@ class Request extends Snowboard.PluginBase {
         }
 
         if (response.X_WINTER_ASSETS) {
-            this.processAssets(response.X_WINTER_ASSETS)
+            this.processAssets(response.X_WINTER_ASSETS);
         }
     }
 
@@ -514,10 +524,10 @@ class Request extends Snowboard.PluginBase {
                 this.element.dispatchEvent(event);
             }
         }, {
-            once: true
+            once: true,
         });
 
-        window.location.assign(url)
+        window.location.assign(url);
     }
 
     /**
@@ -547,7 +557,7 @@ class Request extends Snowboard.PluginBase {
         }
 
         // By default, show a browser error message
-        alert(message);
+        window.alert(message);
     }
 
     /**
@@ -570,10 +580,7 @@ class Request extends Snowboard.PluginBase {
             }
         }
 
-        // Allow plugins to cancel the flash messages
-        if (this.snowboard.globalEvent('ajaxFlashMessages', messages, this) === false) {
-            return;
-        }
+        this.snowboard.globalEvent('ajaxFlashMessages', messages, this);
     }
 
     /**
@@ -596,9 +603,7 @@ class Request extends Snowboard.PluginBase {
         }
 
         // Allow plugins to cancel the validation errors being handled
-        if (this.snowboard.globalEvent('ajaxValidationErrors', this.form, fields, this) === false) {
-            return;
-        }
+        this.snowboard.globalEvent('ajaxValidationErrors', this.form, fields, this);
     }
 
     /**
@@ -626,7 +631,7 @@ class Request extends Snowboard.PluginBase {
 
         // If no plugins have customised the confirmation, use a simple browser confirmation.
         if (this.snowboard.listensToEvent('ajaxConfirmMessage').length === 0) {
-            return confirm(this.confirm);
+            return window.confirm(this.confirm);
         }
 
         // Run custom plugin confirmations
@@ -637,7 +642,9 @@ class Request extends Snowboard.PluginBase {
             if (fulfilled) {
                 return true;
             }
-        } catch (e) {}
+        } catch (e) {
+            return false;
+        }
 
         return false;
     }
@@ -699,8 +706,8 @@ class Request extends Snowboard.PluginBase {
 
     get files() {
         if (this.options.files === true) {
-            if (typeof FormData === undefined) {
-                console.warn('This browser does not support file uploads');
+            if (FormData === undefined) {
+                this.snowboard.debug('This browser does not support file uploads');
                 return false;
             }
 
@@ -716,10 +723,10 @@ class Request extends Snowboard.PluginBase {
         if (document.cookie && document.cookie !== '') {
             const cookies = document.cookie.split(';');
 
-            for (let i = 0; i < cookies.length; i++) {
-                let cookie = cookies[i].trim();
+            for (let i = 0; i < cookies.length; i += 1) {
+                const cookie = cookies[i].trim();
 
-                if (cookie.substring(0, 11) == ('XSRF-TOKEN' + '=')) {
+                if (cookie.substring(0, 11) === 'XSRF-TOKEN=') {
                     cookieValue = decodeURIComponent(cookie.substring(11));
                     break;
                 }
@@ -734,9 +741,10 @@ class Request extends Snowboard.PluginBase {
 
         const formData = new FormData(this.form || undefined);
         if (Object.keys(data).length > 0) {
-            for (const [key, value] of Object.entries(data)) {
+            Object.entries(data).forEach((entry) => {
+                const [key, value] = entry;
                 formData.append(key, value);
-            }
+            });
         }
 
         return formData;

@@ -5,15 +5,13 @@ export default class Sanitizer extends Singleton {
         super(snowboard);
 
         // Add to global function for backwards compatibility
-        window.wnSanitize = (html) => {
-            return this.sanitize(html);
-        }
+        window.wnSanitize = (html) => this.sanitize(html);
         window.ocSanitize = window.wnSanitize;
     }
 
     sanitize(html, bodyOnly) {
-        const parser = new DOMParser()
-        const dom = parser.parseFromString(html, 'text/html')
+        const parser = new DOMParser();
+        const dom = parser.parseFromString(html, 'text/html');
         const returnBodyOnly = (bodyOnly !== undefined && typeof bodyOnly === 'boolean')
             ? bodyOnly
             : true;
@@ -43,7 +41,7 @@ export default class Sanitizer extends Singleton {
             return;
         }
 
-        for (let i = 0; i < node.attributes.length; i++) {
+        for (let i = 0; i < node.attributes.length; i += 1) {
             const attrName = node.attributes.item(i).name;
             const attrValue = node.attributes.item(i).value;
 
@@ -51,6 +49,7 @@ export default class Sanitizer extends Singleton {
             * remove attributes where the names start with "on" (for example: onload, onerror...)
             * remove attributes where the value starts with the "javascript:" pseudo protocol (for example href="javascript:alert(1)")
             */
+            /* eslint-disable-next-line */
             if (attrName.indexOf('on') === 0 || attrValue.indexOf('javascript:') === 0) {
                 node.removeAttribute(attrName);
             }

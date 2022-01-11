@@ -13,4 +13,3 @@ import PluginBase from './PluginBase';
  */
 export default class Singleton extends PluginBase {
 }
-

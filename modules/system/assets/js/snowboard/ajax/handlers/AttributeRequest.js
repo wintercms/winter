@@ -17,7 +17,7 @@ class AttributeRequest extends Snowboard.Singleton {
     listens() {
         return {
             ready: 'ready',
-            ajaxSetup: 'onAjaxSetup'
+            ajaxSetup: 'onAjaxSetup',
         };
     }
 
@@ -91,7 +91,7 @@ class AttributeRequest extends Snowboard.Singleton {
     changeHandler(event) {
         // Check that we are changing a valid element
         if (!event.target.matches(
-            'select[data-request], input[type=radio][data-request], input[type=checkbox][data-request], input[type=file][data-request]'
+            'select[data-request], input[type=radio][data-request], input[type=checkbox][data-request], input[type=file][data-request]',
         )) {
             return;
         }
@@ -111,15 +111,14 @@ class AttributeRequest extends Snowboard.Singleton {
 
         while (currentElement.tagName !== 'HTML') {
             if (!currentElement.matches(
-                'a[data-request], button[data-request], input[type=button][data-request], input[type=submit][data-request]'
+                'a[data-request], button[data-request], input[type=button][data-request], input[type=submit][data-request]',
             )) {
                 currentElement = currentElement.parentElement;
-                continue;
+            } else {
+                event.preventDefault();
+                this.processRequestOnElement(currentElement);
+                break;
             }
-
-            event.preventDefault();
-            this.processRequestOnElement(currentElement);
-            break;
         }
     }
 
@@ -131,7 +130,7 @@ class AttributeRequest extends Snowboard.Singleton {
     keyDownHandler(event) {
         // Check that we are inputting into a valid element
         if (!event.target.matches(
-            'input'
+            'input',
         )) {
             return;
         }
@@ -178,7 +177,7 @@ class AttributeRequest extends Snowboard.Singleton {
     submitHandler(event) {
         // Check that we are submitting a valid form
         if (!event.target.matches(
-            'form[data-request]'
+            'form[data-request]',
         )) {
             return;
         }
@@ -201,9 +200,9 @@ class AttributeRequest extends Snowboard.Singleton {
             confirm: ('requestConfirm' in data) ? String(data.requestConfirm) : null,
             redirect: ('requestRedirect' in data) ? String(data.requestRedirect) : null,
             loading: ('requestLoading' in data) ? String(data.requestLoading) : null,
-            flash: ('requestFlash' in data) ? true : false,
-            files: ('requestFiles' in data) ? true : false,
-            browserValidate: ('requestBrowserValidate' in data) ? true : false,
+            flash: ('requestFlash' in data),
+            files: ('requestFiles' in data),
+            browserValidate: ('requestBrowserValidate' in data),
             form: ('requestForm' in data) ? String(data.requestForm) : null,
             url: ('requestUrl' in data) ? String(data.requestUrl) : null,
             update: ('requestUpdate' in data) ? this.parseData(String(data.requestUpdate)) : [],
@@ -219,9 +218,12 @@ class AttributeRequest extends Snowboard.Singleton {
      * @param {Request} request
      */
     onAjaxSetup(request) {
-        let fieldName = request.element.getAttribute('name');
+        const fieldName = request.element.getAttribute('name');
 
-        const data = Object.assign({}, this.getParentRequestData(request.element), request.options.data);
+        const data = {
+            ...this.getParentRequestData(request.element),
+            ...request.options.data,
+        };
 
         if (request.element && request.element.matches('input, textarea, select, button') && !request.form && fieldName && !request.options.data[fieldName]) {
             data[fieldName] = request.element.value;
@@ -233,13 +235,13 @@ class AttributeRequest extends Snowboard.Singleton {
     /**
      * Parses and collates all data from elements up the DOM hierarchy.
      *
-     * @param {Element} element
+     * @param {Element} target
      * @returns {Object}
      */
-    getParentRequestData(element) {
+    getParentRequestData(target) {
         const elements = [];
         let data = {};
-        let currentElement = element;
+        let currentElement = target;
 
         while (currentElement.parentElement && currentElement.parentElement.tagName !== 'HTML') {
             elements.push(currentElement.parentElement);
@@ -252,7 +254,10 @@ class AttributeRequest extends Snowboard.Singleton {
             const elementData = element.dataset;
 
             if ('requestData' in elementData) {
-                data = Object.assign({}, data, this.parseData(elementData.requestData));
+                data = {
+                    ...data,
+                    ...this.parseData(elementData.requestData),
+                };
             }
         });
 
@@ -271,19 +276,19 @@ class AttributeRequest extends Snowboard.Singleton {
         if (data === undefined) {
             value = '';
         }
-        if (typeof value == 'object') {
+        if (typeof value === 'object') {
             return value;
         }
 
         try {
-            return this.snowboard.jsonparser().parse('{' + data + '}');
+            return this.snowboard.jsonparser().parse(`{${data}}`);
         } catch (e) {
-            throw new Error('Error parsing the data attribute on element: ' + e.message);
+            throw new Error(`Error parsing the data attribute on element: ${e.message}`);
         }
     }
 
     trackInput(element) {
-        const lastValue = element.dataset.lastValue;
+        const { lastValue } = element.dataset;
         const interval = element.dataset.trackInput || 300;
 
         if (lastValue !== undefined && lastValue === element.value) {

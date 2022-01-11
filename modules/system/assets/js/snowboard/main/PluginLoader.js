@@ -1,6 +1,5 @@
-import Snowboard from './Snowboard';
 import PluginBase from '../abstracts/PluginBase';
-import Singleton from "../abstracts/Singleton";
+import Singleton from '../abstracts/Singleton';
 
 /**
  * Plugin loader class.
@@ -54,12 +53,12 @@ export default class PluginLoader {
      * @param {...} args
      * @returns {any}
      */
-    callMethod() {
+    callMethod(...parameters) {
         if (this.isFunction()) {
             return null;
         }
 
-        const args = Array.from(arguments);
+        const args = parameters;
         const methodName = args.shift();
 
         return this.instance.prototype[methodName](args);
@@ -73,9 +72,9 @@ export default class PluginLoader {
      *
      * @returns {PluginBase|Function}
      */
-    getInstance() {
+    getInstance(...parameters) {
         if (this.isFunction()) {
-            return this.instance(...arguments);
+            return this.instance(...parameters);
         }
         if (!this.dependenciesFulfilled()) {
             const unmet = this.getDependencies().filter((item) => !this.snowboard.getPluginNames().includes(item));
@@ -88,14 +87,16 @@ export default class PluginLoader {
 
             // Apply mocked methods
             if (Object.keys(this.mocks).length > 0) {
-                for (const [methodName, callback] of Object.entries(this.originalFunctions)) {
+                Object.entries(this.originalFunctions).forEach((entry) => {
+                    const [methodName, callback] = entry;
                     this.instances[0][methodName] = callback;
-                }
-                for (const [methodName, callback] of Object.entries(this.mocks)) {
+                });
+                Object.entries(this.mocks).forEach((entry) => {
+                    const [methodName, callback] = entry;
                     this.instances[0][methodName] = function () {
-                        return callback(this, ...arguments);
+                        return callback(this, ...parameters);
                     };
-                }
+                });
             }
 
             return this.instances[0];
@@ -103,17 +104,19 @@ export default class PluginLoader {
 
         // Apply mocked methods to prototype
         if (Object.keys(this.mocks).length > 0) {
-            for (const [methodName, callback] of Object.entries(this.originalFunctions)) {
+            Object.entries(this.originalFunctions).forEach((entry) => {
+                const [methodName, callback] = entry;
                 this.instance.prototype[methodName] = callback;
-            }
-            for (const [methodName, callback] of Object.entries(this.mocks)) {
+            });
+            Object.entries(this.mocks).forEach((entry) => {
+                const [methodName, callback] = entry;
                 this.instance.prototype[methodName] = function () {
-                    return callback(this, ...arguments);
+                    return callback(this, ...parameters);
                 };
-            }
+            });
         }
 
-        const newInstance = new this.instance(this.snowboard, ...arguments);
+        const newInstance = new this.instance(this.snowboard, ...parameters);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
 
         this.instances.push(newInstance);
@@ -232,8 +235,8 @@ export default class PluginLoader {
             this.initialiseSingleton();
 
             // Apply mocked method
-            this.instances[0][methodName] = function () {
-                return callback(this, ...arguments);
+            this.instances[0][methodName] = function (...parameters) {
+                return callback(this, ...parameters);
             };
         }
     }

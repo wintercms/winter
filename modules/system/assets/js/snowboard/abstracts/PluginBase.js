@@ -1,5 +1,3 @@
-import Snowboard from '../main/Snowboard';
-
 /**
  * Plugin base abstract.
  *

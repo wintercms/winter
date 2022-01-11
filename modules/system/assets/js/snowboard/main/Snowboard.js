@@ -25,8 +25,8 @@ export default class Snowboard {
      * @param {boolean} debug Whether debugging logs should be shown. Default: `false`.
      */
     constructor(autoSingletons, debug) {
-        this.debugEnabled = (typeof debug === 'boolean' && debug === true) ? true : false;
-        this.autoInitSingletons = (typeof autoSingletons === 'boolean' && autoSingletons === false) ? false : true;
+        this.debugEnabled = (typeof debug === 'boolean' && debug === true);
+        this.autoInitSingletons = (typeof autoSingletons === 'boolean' && autoSingletons === false);
         this.plugins = {};
 
         this.attachAbstracts();
@@ -95,16 +95,16 @@ export default class Snowboard {
         }
 
         if (typeof instance !== 'function' && instance instanceof PluginBase === false) {
-            throw new Error(`The provided plugin must extend the PluginBase class, or must be a callback function.`);
+            throw new Error('The provided plugin must extend the PluginBase class, or must be a callback function.');
         }
 
         if (this[name] !== undefined || this[lowerName] !== undefined) {
-            throw new Error(`The given name is already in use for a property or method of the Snowboard class.`);
+            throw new Error('The given name is already in use for a property or method of the Snowboard class.');
         }
 
         this.plugins[lowerName] = new PluginLoader(lowerName, this, instance);
-        const callback = function () {
-            return this.plugins[lowerName].getInstance(...arguments);
+        const callback = function (...parameters) {
+            return this.plugins[lowerName].getInstance(...parameters);
         };
         this[name] = callback;
         this[lowerName] = callback;
@@ -197,13 +197,15 @@ export default class Snowboard {
     listensToEvent(eventName) {
         const plugins = [];
 
-        for (const [name, plugin] of Object.entries(this.plugins)) {
+        Object.entries(this.plugins).forEach((entry) => {
+            const [name, plugin] = entry;
+
             if (plugin.isFunction()) {
-                continue;
+                return;
             }
 
             if (!plugin.hasMethod('listens')) {
-                continue;
+                return;
             }
 
             const listeners = plugin.callMethod('listens');
@@ -211,7 +213,7 @@ export default class Snowboard {
             if (typeof listeners[eventName] === 'string') {
                 plugins.push(name);
             }
-        }
+        });
 
         return plugins;
     }
@@ -224,7 +226,7 @@ export default class Snowboard {
      * @param {string} eventName
      * @returns {boolean} If event was not cancelled
      */
-    globalEvent(eventName) {
+    globalEvent(eventName, ...parameters) {
         this.debug(`Calling global event "${eventName}"`);
 
         // Find out which plugins listen to this event - if none listen to it, return true.
@@ -234,8 +236,6 @@ export default class Snowboard {
         }
 
         let cancelled = false;
-        let args = Array.from(arguments);
-        args.shift();
 
         listeners.forEach((name) => {
             const plugin = this.getPlugin(name);
@@ -260,7 +260,7 @@ export default class Snowboard {
                     throw new Error(`Missing "${listenMethod}" method in "${name}" plugin`);
                 }
 
-                if (instance[listenMethod](...args) === false) {
+                if (instance[listenMethod](...parameters) === false) {
                     cancelled = true;
                 }
             });
@@ -277,7 +277,7 @@ export default class Snowboard {
      *
      * @param {string} eventName
      */
-    globalPromiseEvent(eventName) {
+    globalPromiseEvent(eventName, ...parameters) {
         this.debug(`Calling global promise event "${eventName}"`);
 
         // Find out which plugins listen to this event - if none listen to it, return a resolved promise.
@@ -287,8 +287,6 @@ export default class Snowboard {
         }
 
         const promises = [];
-        let args = Array.from(arguments);
-        args.shift();
 
         listeners.forEach((name) => {
             const plugin = this.getPlugin(name);
@@ -304,7 +302,7 @@ export default class Snowboard {
 
             // Call event handler methods for all plugins, if they have a method specified for the event.
             plugin.getInstances().forEach((instance) => {
-                const instancePromise = instance[listenMethod](...args);
+                const instancePromise = instance[listenMethod](...parameters);
                 if (instancePromise instanceof Promise === false) {
                     return;
                 }
@@ -327,11 +325,11 @@ export default class Snowboard {
      *
      * @returns {void}
      */
-    debug() {
+    debug(...parameters) {
         if (!this.debugEnabled) {
             return;
         }
 
-        console.log("%c[Snowboard]", "color: rgb(45, 167, 199);", ...arguments);
+        console.log('%c[Snowboard]', 'color: rgb(45, 167, 199);', ...parameters);
     }
 }

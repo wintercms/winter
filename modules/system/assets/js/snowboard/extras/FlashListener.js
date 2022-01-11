@@ -59,9 +59,10 @@ export default class FlashListener extends Snowboard.Singleton {
      * @param {Object} messages
      */
     ajaxFlashMessages(messages) {
-        for (const [cssClass, message] of Object.entries(messages)) {
+        Object.entries(messages).forEach((entry) => {
+            const [cssClass, message] = entry;
             this.snowboard.flash(message, cssClass);
-        }
+        });
         return false;
     }
 }

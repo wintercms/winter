@@ -5,9 +5,7 @@ export default class JsonParser extends Singleton {
         super(snowboard);
 
         // Add to global function for backwards compatibility
-        window.wnJSON = (json) => {
-            return this.parse(json);
-        }
+        window.wnJSON = (json) => this.parse(json);
         window.ocJSON = window.wnJSON;
     }
 
@@ -16,17 +14,17 @@ export default class JsonParser extends Singleton {
         return JSON.parse(jsonString);
     }
 
-    parseString(str) {
-        str = str.trim();
+    parseString(value) {
+        let str = value.trim();
 
         if (!str.length) {
             throw new Error('Broken JSON object.');
         }
 
-        let result = '',
-            type = null,
-            key = null,
-            body = '';
+        let result = '';
+        let type = null;
+        let key = null;
+        let body = '';
 
         /*
         * the mistake ','
@@ -43,8 +41,8 @@ export default class JsonParser extends Singleton {
                 throw new Error('Invalid string JSON object.');
             }
 
-            body = '"'
-            for (var i = 1; i < str.length; i++) {
+            body = '"';
+            for (let i = 1; i < str.length; i += 1) {
                 if (str[i] === '\\') {
                     if (str[i + 1] === '\'') {
                         body += str[i + 1];
@@ -52,7 +50,7 @@ export default class JsonParser extends Singleton {
                         body += str[i];
                         body += str[i + 1];
                     }
-                    i++;
+                    i += 1;
                 } else if (str[i] === str[0]) {
                     body += '"';
                     return body;
@@ -83,8 +81,8 @@ export default class JsonParser extends Singleton {
         /*
         * number
         */
-        var num = parseFloat(str);
-        if (!isNaN(num)) {
+        const num = parseFloat(str);
+        if (!Number.isNaN(num)) {
             return num.toString();
         }
 
@@ -96,12 +94,14 @@ export default class JsonParser extends Singleton {
             key = null;
             result = '{';
 
-            for (var i = 1; i < str.length; i++) {
+            for (let i = 1; i < str.length; i += 1) {
                 if (this.isBlankChar(str[i])) {
+                    /* eslint-disable-next-line */
                     continue;
-                } else if (type === 'needKey' && (str[i] === '"' || str[i] === '\'')) {
+                }
+                if (type === 'needKey' && (str[i] === '"' || str[i] === '\'')) {
                     key = this.parseKey(str, i + 1, str[i]);
-                    result += '"' + key + '"';
+                    result += `"${key}"`;
                     i += key.length;
                     i += 1;
                     type = 'afterKey';
@@ -125,7 +125,7 @@ export default class JsonParser extends Singleton {
                 } else if (type === 'afterBody' || type === 'needKey') {
                     let last = i;
                     while (str[last] === ',' || this.isBlankChar(str[last])) {
-                        last++;
+                        last += 1;
                     }
                     if (str[last] === '}' && last === str.length - 1) {
                         while (result[result.length - 1] === ',') {
@@ -133,7 +133,8 @@ export default class JsonParser extends Singleton {
                         }
                         result += '}';
                         return result;
-                    } else if (last !== i && result !== '{') {
+                    }
+                    if (last !== i && result !== '{') {
                         result += ',';
                         type = 'needKey';
                         i = last - 1;
@@ -141,7 +142,7 @@ export default class JsonParser extends Singleton {
                 }
             }
 
-            throw new Error('Broken JSON object near ' + result);
+            throw new Error(`Broken JSON object near ${result}`);
         }
 
         /*
@@ -150,16 +151,18 @@ export default class JsonParser extends Singleton {
         if (str[0] === '[') {
             result = '[';
             type = 'needBody';
-            for (var i = 1; i < str.length; i++) {
-                if (' ' === str[i] || '\n' === str[i] || '\t' === str[i]) {
+            for (let i = 1; i < str.length; i += 1) {
+                if (str[i] === ' ' || str[i] === '\n' || str[i] === '\t') {
+                    /* eslint-disable-next-line */
                     continue;
                 } else if (type === 'needBody') {
                     if (str[i] === ',') {
                         result += 'null,';
+                        /* eslint-disable-next-line */
                         continue;
                     }
                     if (str[i] === ']' && i === str.length - 1) {
-                        if (result[result.length - 1] === ",") {
+                        if (result[result.length - 1] === ',') {
                             result = result.substr(0, result.length - 1);
                         }
                         result += ']';
@@ -182,7 +185,7 @@ export default class JsonParser extends Singleton {
                             if (str[i + 1] === ',') {
                                 result += 'null,';
                             }
-                            i++;
+                            i += 1;
                         }
                     } else if (str[i] === ']' && i === str.length - 1) {
                         result += ']';
@@ -191,8 +194,10 @@ export default class JsonParser extends Singleton {
                 }
             }
 
-            throw new Error('Broken JSON array near ' + result);
+            throw new Error(`Broken JSON array near ${result}`);
         }
+
+        return '';
     }
 
     getBody(str, pos) {
@@ -202,25 +207,25 @@ export default class JsonParser extends Singleton {
         if (str[pos] === '"' || str[pos] === '\'') {
             body = str[pos];
 
-            for (var i = pos + 1; i < str.length; i++) {
+            for (let i = pos + 1; i < str.length; i += 1) {
                 if (str[i] === '\\') {
                     body += str[i];
                     if (i + 1 < str.length) {
                         body += str[i + 1];
                     }
-                    i++;
+                    i += 1;
                 } else if (str[i] === str[pos]) {
                     body += str[pos];
                     return {
                         originLength: body.length,
-                        body: body,
+                        body,
                     };
                 } else {
                     body += str[i];
                 }
             }
 
-            throw new Error('Broken JSON string body near ' + body);
+            throw new Error(`Broken JSON string body near ${body}`);
         }
 
         // parse true / false
@@ -232,7 +237,7 @@ export default class JsonParser extends Singleton {
                 };
             }
 
-            throw new Error('Broken JSON boolean body near ' + str.substr(0, pos + 10));
+            throw new Error(`Broken JSON boolean body near ${str.substr(0, pos + 10)}`);
         }
         if (str[pos] === 'f') {
             if (str.indexOf('f', pos) === pos) {
@@ -242,7 +247,7 @@ export default class JsonParser extends Singleton {
                 };
             }
 
-            throw new Error('Broken JSON boolean body near ' + str.substr(0, pos + 10));
+            throw new Error(`Broken JSON boolean body near ${str.substr(0, pos + 10)}`);
         }
 
         // parse null
@@ -254,14 +259,14 @@ export default class JsonParser extends Singleton {
                 };
             }
 
-            throw new Error('Broken JSON boolean body near ' + str.substr(0, pos + 10));
+            throw new Error(`Broken JSON boolean body near ${str.substr(0, pos + 10)}`);
         }
 
         // parse number
         if (str[pos] === '-' || str[pos] === '+' || str[pos] === '.' || (str[pos] >= '0' && str[pos] <= '9')) {
             body = '';
 
-            for (var i = pos; i < str.length; i++) {
+            for (let i = pos; i < str.length; i += 1) {
                 if (str[i] === '-' || str[i] === '+' || str[i] === '.' || (str[i] >= '0' && str[i] <= '9')) {
                     body += str[i];
                 } else {
@@ -272,21 +277,23 @@ export default class JsonParser extends Singleton {
                 }
             }
 
-            throw new Error('Broken JSON number body near ' + body);
+            throw new Error(`Broken JSON number body near ${body}`);
         }
 
         // parse object
         if (str[pos] === '{' || str[pos] === '[') {
-            var stack = [str[pos], ];
+            const stack = [
+                str[pos],
+            ];
             body = str[pos];
 
-            for (var i = pos + 1; i < str.length; i++) {
-                body += str[i]
+            for (let i = pos + 1; i < str.length; i += 1) {
+                body += str[i];
                 if (str[i] === '\\') {
                     if (i + 1 < str.length) {
                         body += str[i + 1];
                     }
-                    i++;
+                    i += 1;
                 } else if (str[i] === '"') {
                     if (stack[stack.length - 1] === '"') {
                         stack.pop();
@@ -306,7 +313,7 @@ export default class JsonParser extends Singleton {
                         if (stack[stack.length - 1] === '{') {
                             stack.pop();
                         } else {
-                            throw new Error('Broken JSON ' + (str[pos] === '{' ? 'object' : 'array') + ' body near ' + body);
+                            throw new Error(`Broken JSON ${(str[pos] === '{' ? 'object' : 'array')} body near ${body}`);
                         }
                     } else if (str[i] === '[') {
                         stack.push('[');
@@ -314,7 +321,7 @@ export default class JsonParser extends Singleton {
                         if (stack[stack.length - 1] === '[') {
                             stack.pop();
                         } else {
-                            throw new Error('Broken JSON ' + (str[pos] === '{' ? 'object' : 'array') + ' body near ' + body);
+                            throw new Error(`Broken JSON ${(str[pos] === '{' ? 'object' : 'array')} body near ${body}`);
                         }
                     }
                 }
@@ -326,19 +333,20 @@ export default class JsonParser extends Singleton {
                 }
             }
 
-            throw new Error('Broken JSON ' + (str[pos] === '{' ? 'object' : 'array') + ' body near ' + body);
+            throw new Error(`Broken JSON ${(str[pos] === '{' ? 'object' : 'array')} body near ${body}`);
         }
 
-        throw new Error('Broken JSON body near ' + str.substr((pos - 5 >= 0) ? pos - 5 : 0, 50));
+        throw new Error(`Broken JSON body near ${str.substr((pos - 5 >= 0) ? pos - 5 : 0, 50)}`);
     }
 
     parseKey(str, pos, quote) {
         let key = '';
 
-        for (var i = pos; i < str.length; i++) {
+        for (let i = pos; i < str.length; i += 1) {
             if (quote && quote === str[i]) {
                 return key;
-            } else if (!quote && (str[i] === ' ' || str[i] === ':')) {
+            }
+            if (!quote && (str[i] === ' ' || str[i] === ':')) {
                 return key;
             }
 
@@ -346,11 +354,11 @@ export default class JsonParser extends Singleton {
 
             if (str[i] === '\\' && i + 1 < str.length) {
                 key += str[i + 1];
-                i++;
+                i += 1;
             }
         }
 
-        throw new Error('Broken JSON syntax near ' + key);
+        throw new Error(`Broken JSON syntax near ${key}`);
     }
 
     canBeKeyHead(ch) {
