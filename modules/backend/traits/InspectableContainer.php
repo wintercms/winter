@@ -44,9 +44,10 @@ trait InspectableContainer
             $passed = [];
             foreach ($args as $arg) {
                 if ($arg->isOptional()) {
+                    $passed[] = $arg->getDefaultValue();
                     continue;
                 }
-                $passed[] = ($arg->getDefaultValue() ?? null);
+                $passed[] = null;
             }
             $obj = $reflection->newInstanceArgs($passed);
         }

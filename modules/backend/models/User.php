@@ -230,9 +230,9 @@ class User extends UserBase
             if (BackendAuth::isImpersonator()) {
                 $impersonator = BackendAuth::getImpersonator();
                 if ($impersonator && $impersonator !== $this) {
-                    foreach ($permissions as $i => $permission) {
+                    foreach ($permissions as $permission => $status) {
                         if (!$impersonator->hasAccess($permission)) {
-                            unset($permissions[$i]);
+                            unset($permissions[$permission]);
                         }
                     }
                     $this->mergedPermissions = $permissions;
