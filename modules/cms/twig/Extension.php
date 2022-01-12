@@ -73,6 +73,7 @@ class Extension extends TwigExtension
             new PlaceholderTokenParser,
             new DefaultTokenParser,
             new FrameworkTokenParser,
+            new SnowboardTokenParser,
             new ComponentTokenParser,
             new FlashTokenParser,
             new ScriptsTokenParser,
