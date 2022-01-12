@@ -229,7 +229,7 @@ class User extends UserBase
             // If the user is being impersonated filter out any permissions the impersonator doesn't have access to already
             if (BackendAuth::isImpersonator()) {
                 $impersonator = BackendAuth::getImpersonator();
-                if ($impersonator && $impersonator->getKey() !== $this->getKey()) {
+                if ($impersonator && $impersonator !== $this) {
                     foreach ($permissions as $permission => $status) {
                         if (!$impersonator->hasAccess($permission)) {
                             unset($permissions[$permission]);
