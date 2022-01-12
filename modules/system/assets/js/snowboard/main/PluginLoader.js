@@ -93,9 +93,7 @@ export default class PluginLoader {
                 });
                 Object.entries(this.mocks).forEach((entry) => {
                     const [methodName, callback] = entry;
-                    this.instances[0][methodName] = function () {
-                        return callback(this, ...parameters);
-                    };
+                    this.instances[0][methodName] = (...params) => callback(this, ...params);
                 });
             }
 
@@ -110,9 +108,7 @@ export default class PluginLoader {
             });
             Object.entries(this.mocks).forEach((entry) => {
                 const [methodName, callback] = entry;
-                this.instance.prototype[methodName] = function () {
-                    return callback(this, ...parameters);
-                };
+                this.instance.prototype[methodName] = (...params) => callback(this, ...params);
             });
         }
 
@@ -235,9 +231,7 @@ export default class PluginLoader {
             this.initialiseSingleton();
 
             // Apply mocked method
-            this.instances[0][methodName] = function (...parameters) {
-                return callback(this, ...parameters);
-            };
+            this.instances[0][methodName] = (...parameters) => callback(this, ...parameters);
         }
     }
 

@@ -103,9 +103,7 @@ export default class Snowboard {
         }
 
         this.plugins[lowerName] = new PluginLoader(lowerName, this, instance);
-        const callback = function (...parameters) {
-            return this.plugins[lowerName].getInstance(...parameters);
-        };
+        const callback = (...parameters) => this.plugins[lowerName].getInstance(...parameters);
         this[name] = callback;
         this[lowerName] = callback;
 
@@ -330,6 +328,7 @@ export default class Snowboard {
             return;
         }
 
+        /* eslint-disable-next-line */
         console.log('%c[Snowboard]', 'color: rgb(45, 167, 199);', ...parameters);
     }
 }
