@@ -260,10 +260,6 @@ class WinterEnv extends Command
             return config('database.default');
         }
 
-        if ($configKey == 'useConfigForTesting') {
-            return config('database.useConfigForTesting');
-        }
-
         if ($this->connection == 'redis') {
             return config("database.redis.default.$configKey");
         }
@@ -372,7 +368,6 @@ class WinterEnv extends Command
             ],
             'database' => [
                 'DB_CONNECTION' => 'default',
-                'DB_USE_CONFIG_FOR_TESTING' => 'useConfigForTesting',
             ],
             'cache' => [
                 'CACHE_DRIVER' => 'default',

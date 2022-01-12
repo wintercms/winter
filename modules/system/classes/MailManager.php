@@ -130,14 +130,14 @@ class MailManager
         /*
          * Subject
          */
-        $swiftMessage = $message->getSwiftMessage();
+        $symfonyMessage = $message->getSymfonyMessage();
 
-        if (empty($swiftMessage->getSubject())) {
+        if (empty($symfonyMessage->getSubject())) {
             $message->subject(Twig::parse($template->subject, $data));
         }
 
         $data += [
-            'subject' => $swiftMessage->getSubject()
+            'subject' => $symfonyMessage->getSubject()
         ];
 
         if (!$plainOnly) {

@@ -116,7 +116,9 @@ return [
     |   - Illuminate\Http\Request::HEADER_X_FORWARDED_HOST - trust only the proxy hostname
     |   - Illuminate\Http\Request::HEADER_X_FORWARDED_PORT - trust only the proxy port
     |   - Illuminate\Http\Request::HEADER_X_FORWARDED_PROTO - trust only the proxy protocol
+    |   - Illuminate\Http\Request::HEADER_X_FORWARDED_PREFIX - trust only the proxy prefix
     |   - Illuminate\Http\Request::HEADER_X_FORWARDED_AWS_ELB - trust Amazon Elastic Load Balancing headers
+    |   - Illuminate\Http\Request::HEADER_X_FORWARDED_TRAEFIK - trust Traefik reverse proxy headers
     |
     | Examples:
     |   - To trust only the hostname, use the following:
