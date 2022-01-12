@@ -230,8 +230,10 @@ export default class Snowboard {
         // Find out which plugins listen to this event - if none listen to it, return true.
         const listeners = this.listensToEvent(eventName);
         if (listeners.length === 0) {
+            this.debug(`No listeners found for global event "${eventName}"`);
             return true;
         }
+        this.debug(`Listeners found for global event "${eventName}": ${listeners.join(', ')}`);
 
         let cancelled = false;
 
@@ -260,6 +262,7 @@ export default class Snowboard {
 
                 if (instance[listenMethod](...parameters) === false) {
                     cancelled = true;
+                    this.debug(`Global event "${eventName}" cancelled by "${name}" plugin`);
                 }
             });
         });
@@ -281,8 +284,10 @@ export default class Snowboard {
         // Find out which plugins listen to this event - if none listen to it, return a resolved promise.
         const listeners = this.listensToEvent(eventName);
         if (listeners.length === 0) {
+            this.debug(`No listeners found for global promise event "${eventName}"`);
             return Promise.resolve();
         }
+        this.debug(`Listeners found for global promise event "${eventName}": ${listeners.join(', ')}`);
 
         const promises = [];
 
@@ -328,7 +333,10 @@ export default class Snowboard {
             return;
         }
 
-        /* eslint-disable-next-line */
-        console.log('%c[Snowboard]', 'color: rgb(45, 167, 199);', ...parameters);
+        /* eslint-disable */
+        console.groupCollapsed('%c[Snowboard]', 'color: rgb(45, 167, 199); font-weight: normal;', ...parameters);
+        console.trace();
+        console.groupEnd();
+        /* eslint-enable */
     }
 }
