@@ -826,13 +826,13 @@
             label: 'markdowneditor.link',
             icon: 'link',
             action: 'formatInline',
-            template: '[$1](http://)'
+            template: '[$1](https://)'
         },
         image: {
             label: 'markdowneditor.image',
             icon: 'image',
             action: 'formatInline',
-            template: '![$1](http://)'
+            template: '![$1](https://)'
         },
         horizontalrule: {
             label: 'markdowneditor.horizontalrule',
