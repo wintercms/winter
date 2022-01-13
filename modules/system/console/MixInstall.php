@@ -29,15 +29,7 @@ class MixInstall extends Command
     public function handle(): int
     {
         if ($this->option('npm')) {
-            $this->npmPath = $this->option('npm');
-        }
-
-        $mixedAssets = MixAssets::instance();
-        $mixedAssets->fireCallbacks();
-
-        if ($mixedAssets->getPackageCount() === 0) {
-            $this->info('No packages registered for mixing.');
-            return 0;
+            $this->npmPath = $this->option('npm', 'npm');
         }
 
         if (!version_compare($this->getNpmVersion(), '6', '>')) {
@@ -45,8 +37,31 @@ class MixInstall extends Command
             return 1;
         }
 
+        $mixedAssets = MixAssets::instance();
+        $mixedAssets->fireCallbacks();
+
+        $packages = $mixedAssets->getPackages();
+
+        if (count($this->option('package')) && count($packages)) {
+            foreach (array_keys($packages) as $name) {
+                if (!in_array($name, $this->option('package'))) {
+                    unset($packages[$name]);
+                }
+            }
+        }
+
+        if (!count($packages)) {
+            if (count($this->option('package'))) {
+                $this->error('No registered packages matched the requested packages for installation.');
+                return 1;
+            } else {
+                $this->info('No packages registered for mixing.');
+                return 0;
+            }
+        }
+
         // Process each package
-        foreach ($mixedAssets->getPackages() as $name => $package) {
+        foreach ($packages as $name => $package) {
             $this->info(
                 sprintf('Installing dependencies for package "%s"', $name)
             );
@@ -96,6 +111,7 @@ class MixInstall extends Command
     {
         return [
             ['npm', null, InputOption::VALUE_REQUIRED, 'Defines a custom path to the "npm" binary'],
+            ['package', 'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Defines one or more packages to install'],
         ];
     }
 }

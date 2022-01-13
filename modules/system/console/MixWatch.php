@@ -19,10 +19,6 @@ class MixWatch extends MixCompile
 
     public function handle(): int
     {
-        if ($this->option('npm')) {
-            $this->npmPath = $this->option('npm');
-        }
-
         $mixedAssets = MixAssets::instance();
         $mixedAssets->fireCallbacks();
 
@@ -88,7 +84,6 @@ class MixWatch extends MixCompile
     protected function getOptions()
     {
         return [
-            ['npm', null, InputOption::VALUE_REQUIRED, 'Defines a custom path to the "npm" binary'],
             ['production', 'f', InputOption::VALUE_NONE, 'Run a "production" compilation'],
         ];
     }

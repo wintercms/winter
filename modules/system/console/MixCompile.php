@@ -24,10 +24,6 @@ class MixCompile extends Command
      */
     public function handle(): int
     {
-        if ($this->option('npm')) {
-            $this->npmPath = $this->option('npm');
-        }
-
         $mixedAssets = MixAssets::instance();
         $mixedAssets->fireCallbacks();
 
@@ -131,7 +127,6 @@ class MixCompile extends Command
     protected function getOptions()
     {
         return [
-            ['npm', null, InputOption::VALUE_REQUIRED, 'Defines a custom path to the "npm" binary'],
             ['production', 'f', InputOption::VALUE_NONE, 'Run a "production" compilation'],
             ['package', 'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Defines one or more packages to compile'],
         ];
