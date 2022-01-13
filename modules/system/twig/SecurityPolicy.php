@@ -18,6 +18,9 @@ final class SecurityPolicy implements SecurityPolicyInterface
      * @var array List of forbidden methods.
      */
     protected $blockedMethods = [
+        // Prevent accessing Twig itself
+        'getTwig',
+
         // \Winter\Storm\Extension\ExtendableTrait
         'addDynamicMethod',
         'addDynamicProperty',
@@ -30,6 +33,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
         'insert',
         'update',
         'delete',
+        'write',
     ];
 
     /**
