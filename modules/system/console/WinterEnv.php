@@ -117,11 +117,11 @@ class WinterEnv extends Command
             foreach ($items as $envKey => $configKey) {
                 $env->set($envKey, config($config . '.' . $configKey));
                 if ($config === 'database' && $envKey === 'DB_CONNECTION') {
-                    if (!$databaseConfig = $this->dbConfig()[config($config . '.' . $configKey)] ?? null) {
-                        continue;
-                    }
-                    foreach ($databaseConfig as $dbEnvKey => $dbConfigKey) {
-                        $env->set($dbEnvKey, config($config . '.' . $dbConfigKey));
+                    $default = config('database.default');
+                    $dbConfig = $this->dbConfig()[$default] ?? [];
+
+                    foreach ($dbConfig as $dbEnvKey => $dbConfigKey) {
+                        $env->set($dbEnvKey, config(join('.', [$config, 'connections', $default, $dbConfigKey])));
                     }
                 }
             }
