@@ -10,3 +10,4 @@
 .field-colorpicker .pcr-app[data-theme="nano"] .pcr-selection .pcr-color-palette{grid-row-start:2;grid-column-start:1;grid-row-end:2;grid-column-end:3}
 .field-colorpicker .pcr-app[data-theme="nano"] .pcr-selection .pcr-color-chooser{margin-top:0.8rem;grid-row-start:3;grid-column-start:1;grid-row-end:3;grid-column-end:3}
 .field-colorpicker .pcr-app[data-theme="nano"] .pcr-selection .pcr-color-opacity{margin-top:0.8em;grid-row-start:4;grid-column-start:1;grid-row-end:4;grid-column-end:3}
+.field-colorpicker[data-disabled="true"] [data-color-preview]{cursor:default}

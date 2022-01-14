@@ -26,6 +26,7 @@ body:
       label: PHP Version
       description: Please provide us the branch of PHP version. For example, for PHP version 7.4.9, select `7.4`, or for PHP version 8.0.1, select `8.0`.
       options:
+        - 8.1
         - 8.0
         - 7.4
         - 7.3
@@ -71,8 +72,3 @@ body:
     attributes:
       label: Workaround
       description: If you have a workaround, please detail it here, for the benefit of other users who encounter the issue.
-  - type: textarea
-    id: other_details
-    attributes:
-      label: Any further details?
-      description: If some other information is needed to describe this issue, please specify it here.

@@ -1,5 +1,6 @@
 <?php namespace System\Console;
 
+use App;
 use File;
 use Illuminate\Console\Command;
 use System\Classes\UpdateManager;
@@ -47,15 +48,31 @@ class PluginRemove extends Command
             return $this->error(sprintf('Unable to find a registered plugin called "%s"', $pluginName));
         }
 
-        if (!$this->confirmToProceed(sprintf('This will DELETE plugin "%s" from the filesystem and database.', $pluginName))) {
-            return;
+        if (App::isProduction() && !$this->option('force')) {
+            $this->warn('YOUR APPLICATION IS IN PRODUCTION');
         }
 
-        /*
-         * Rollback plugin
-         */
-        $manager = UpdateManager::instance()->setNotesOutput($this->output);
-        $manager->rollbackPlugin($pluginName);
+        if (!$this->option('no-rollback')) {
+            $this->warn(sprintf('This will remove the database tables and files for the "%s" plugin.', $pluginName));
+        } else {
+            $this->warn(sprintf('This will remove the files for the "%s" plugin.', $pluginName));
+        }
+
+        $confirmed = false;
+        $prompt = sprintf('Please type "%s" to proceed', $pluginName);
+        do {
+            if (strtolower($this->ask($prompt)) === strtolower($pluginName)) {
+                $confirmed = true;
+            }
+        } while ($confirmed === false);
+
+        if (!$this->option('no-rollback')) {
+            /*
+            * Rollback plugin
+            */
+            $manager = UpdateManager::instance()->setNotesOutput($this->output);
+            $manager->rollbackPlugin($pluginName);
+        }
 
         /*
          * Delete from file system
@@ -84,7 +101,8 @@ class PluginRemove extends Command
     protected function getOptions()
     {
         return [
-            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run.'],
+            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run and ignore production warning.'],
+            ['no-rollback', 'r', InputOption::VALUE_NONE, 'Skip the rollback of the plugin migrations.'],
         ];
     }
 

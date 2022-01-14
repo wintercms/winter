@@ -1336,7 +1336,7 @@ class Controller
      * @param mixed $name Specifies the Cms Page file name.
      * @param array $parameters Route parameters to consider in the URL.
      * @param bool $routePersistence By default the existing routing parameters will be included
-     * @return string
+     * @return string|null
      */
     public function pageUrl($name, $parameters = [], $routePersistence = true)
     {
@@ -1519,7 +1519,7 @@ class Controller
     /**
      * Searches the layout and page components by a partial file
      * @param string $partial
-     * @return ComponentBase The component object, if found
+     * @return ComponentBase|null The component object, if found
      */
     public function findComponentByPartial($partial)
     {

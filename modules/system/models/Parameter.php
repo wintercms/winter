@@ -1,5 +1,6 @@
 <?php namespace System\Models;
 
+use App;
 use Cache;
 use Winter\Storm\Database\Model;
 
@@ -48,7 +49,12 @@ class Parameter extends Model
             return static::$cache[$key];
         }
 
-        $record = static::findRecord($key);
+        if (App::hasDatabase()) {
+            $record = static::findRecord($key);
+        } else {
+            $record = null;
+        }
+
         if (!$record) {
             return static::$cache[$key] = $default;
         }

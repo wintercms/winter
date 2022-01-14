@@ -60,7 +60,6 @@ class MailBrandSettings extends Controller
     public function index()
     {
         $this->addJs('/modules/system/assets/js/mailbrandsettings/mailbrandsettings.js', 'core');
-        $this->addCss('/modules/system/assets/css/mailbrandsettings/mailbrandsettings.css', 'core');
 
         $setting = MailBrandSetting::instance();
 

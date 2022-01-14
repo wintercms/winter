@@ -553,7 +553,7 @@ return [
             'iso_8859_6' => 'ISO-8859-6 (Latin, Arapski)',
             'iso_8859_7' => 'ISO-8859-7 (Latin, Grčki)',
             'iso_8859_8' => 'ISO-8859-8 (Latin, Hebrejski)',
-            'iso_8859_0' => 'ISO-8859-9 (Latin-5, Turski)',
+            'iso_8859_9' => 'ISO-8859-9 (Latin-5, Turski)',
             'iso_8859_10' => 'ISO-8859-10 (Latin-6, Nordijski)',
             'iso_8859_11' => 'ISO-8859-11 (Latin, Tajlandski)',
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, Baltički region)',
