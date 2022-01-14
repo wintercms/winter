@@ -31,8 +31,8 @@ class WinterEnvTest extends TestCase
         $envFile = file_get_contents(base_path('.env'));
 
         $this->assertStringContainsString('APP_DEBUG=true', $envFile);
-        $this->assertStringContainsString('APP_URL=https://localhost', $envFile);
-        $this->assertStringContainsString('DB_CONNECTION=mysql', $envFile);
+        $this->assertStringContainsString('APP_URL="https://localhost"', $envFile);
+        $this->assertStringContainsString('DB_CONNECTION="mysql"', $envFile);
         $this->assertStringContainsString('DB_DATABASE="data#base"', $envFile);
         $this->assertStringContainsString('DB_USERNAME="teal\'c"', $envFile);
         $this->assertStringContainsString('DB_PASSWORD="test\\"quotes\'test"', $envFile);
