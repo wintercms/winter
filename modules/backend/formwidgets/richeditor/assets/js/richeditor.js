@@ -94,53 +94,71 @@
             froalaOptions.toolbarButtons = $.wn.richEditorButtons
         }
 
-        froalaOptions.imageStyles = this.options.imageStyles
-            ? this.options.imageStyles
-            : {
+        if (froalaOptions.imageStyles === null) {
+            froalaOptions.imageStyles = {
                 'oc-img-rounded': 'Rounded',
-                'oc-img-bordered': 'Bordered'
+                'oc-img-bordered': 'Bordered',
             }
+        }
+        if(this.options.imageStyles !== null){
+            froalaOptions.imageStyles.assign(this.options.imageStyles)
+        }
 
-        froalaOptions.linkStyles = this.options.linkStyles
-            ? this.options.linkStyles
-            : {
-                'oc-link-green': 'Green',
-                'oc-link-strong': 'Thick'
+        if (froalaOptions.linkStyles === null) {
+            froalaOptions.linkStyles = {
+                "oc-link-green": "Green",
+                "oc-link-strong": "Thick",
             }
+        }
+        if (this.options.linkStyles !== null) {
+            froalaOptions.linkStyles.assign(this.options.linkStyles);
+        }
 
-        froalaOptions.paragraphStyles = this.options.paragraphStyles
-            ? this.options.paragraphStyles
-            : {
-                'oc-text-gray': 'Gray',
-                'oc-text-bordered': 'Bordered',
-                'oc-text-spaced': 'Spaced',
-                'oc-text-uppercase': 'Uppercase'
+        if (froalaOptions.paragraphStyles === null) {
+            froalaOptions.paragraphStyles = {
+                "oc-text-gray": "Gray",
+                "oc-text-bordered": "Bordered",
+                "oc-text-spaced": "Spaced",
+                "oc-text-uppercase": "Uppercase",
             }
+        }
+        if (this.options.paragraphStyles !== null) {
+            froalaOptions.paragraphStyles.assign(this.options.paragraphStyles);
+        }
 
-        froalaOptions.paragraphFormat = this.options.paragraphFormat
-            ? this.options.paragraphFormat
-            : {
-              'N': 'Normal',
-              'H1': 'Heading 1',
-              'H2': 'Heading 2',
-              'H3': 'Heading 3',
-              'H4': 'Heading 4',
-              'PRE': 'Code'
-            }
+        if (froalaOptions.paragraphFormat === null) {
+            froalaOptions.paragraphFormat = {
+                N: "Normal",
+                H1: "Heading 1",
+                H2: "Heading 2",
+                H3: "Heading 3",
+                H4: "Heading 4",
+                PRE: "Code",
+            };
+        }
+        if (this.options.paragraphFormat !== null) {
+            froalaOptions.paragraphFormat.assign(this.options.paragraphFormat);
+        }
 
-        froalaOptions.tableStyles = this.options.tableStyles
-            ? this.options.tableStyles
-            : {
-                'oc-dashed-borders': 'Dashed Borders',
-                'oc-alternate-rows': 'Alternate Rows'
-            }
+        if (froalaOptions.tableStyles === null) {
+            froalaOptions.tableStyles = {
+                "oc-dashed-borders": "Dashed Borders",
+                "oc-alternate-rows": "Alternate Rows",
+            };
+        }
+        if (this.options.tableStyles !== null) {
+            froalaOptions.tableStyles.assign(this.options.tableStyles);
+        }
 
-        froalaOptions.tableCellStyles = this.options.tableCellStyles
-            ? this.options.tableCellStyles
-            : {
-                'oc-cell-highlighted': 'Highlighted',
-                'oc-cell-thick-border': 'Thick'
-            }
+        if (froalaOptions.tableCellStyles === null) {
+            froalaOptions.tableCellStyles = {
+                "oc-cell-highlighted": "Highlighted",
+                "oc-cell-thick-border": "Thick",
+            };
+        }
+        if (this.options.tableCellStyles !== null) {
+            froalaOptions.tableCellStyles.assign(this.options.tableCellStyles);
+        }
 
         froalaOptions.toolbarButtonsMD = froalaOptions.toolbarButtons
         froalaOptions.toolbarButtonsSM = froalaOptions.toolbarButtons
@@ -161,25 +179,40 @@
             froalaOptions.htmlAllowedEmptyTags = ['textarea', 'a', 'iframe', 'object', 'video', 'style', 'script', '.fa', '.fr-emoticon', '.fr-inner', 'path', 'line', 'hr', 'i']
         }
 
-        froalaOptions.htmlAllowedTags = this.options.allowTags
-            ? this.options.allowTags.split(/[\s,]+/)
-            : ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'blockquote', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'menuitem', 'meter', 'nav', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'pre', 'progress', 'queue', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'style', 'section', 'select', 'small', 'source', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr']
+        if(froalaOptions.htmlAllowedTags === null) {
+            froalaOptions.htmlAllowedTags = ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'bdi', 'bdo', 'blockquote', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'header', 'hgroup', 'hr', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'menuitem', 'meter', 'nav', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'pre', 'progress', 'queue', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'style', 'section', 'select', 'small', 'source', 'span', 'strike', 'strong', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr']
+        }
+        if(this.options.allowTags !== null) {
+            froalaOptions.htmlAllowedTags.assign(this.options.allowTags)
+        }
 
-        froalaOptions.htmlAllowedAttrs = this.options.allowAttributes
-            ? this.options.allowAttributes.split(/[\s,]+/)
-            : ['accept', 'accept-charset', 'accesskey', 'action', 'align', 'allowfullscreen', 'allowtransparency', 'alt', 'aria-.*', 'async', 'autocomplete', 'autofocus', 'autoplay', 'autosave', 'background', 'bgcolor', 'border', 'charset', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'color', 'cols', 'colspan', 'content', 'contenteditable', 'contextmenu', 'controls', 'coords', 'data', 'data-.*', 'datetime', 'default', 'defer', 'dir', 'dirname', 'disabled', 'download', 'draggable', 'dropzone', 'enctype', 'for', 'form', 'formaction', 'frameborder', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'http-equiv', 'icon', 'id', 'ismap', 'itemprop', 'keytype', 'kind', 'label', 'lang', 'language', 'list', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'mozallowfullscreen', 'multiple', 'muted', 'name', 'novalidate', 'open', 'optimum', 'pattern', 'ping', 'placeholder', 'playsinline', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'reversed', 'rows', 'rowspan', 'sandbox', 'scope', 'scoped', 'scrolling', 'seamless', 'selected', 'shape', 'size', 'sizes', 'span', 'src', 'srcdoc', 'srclang', 'srcset', 'start', 'step', 'summary', 'spellcheck', 'style', 'tabindex', 'target', 'title', 'type', 'translate', 'usemap', 'value', 'valign', 'webkitallowfullscreen', 'width', 'wrap']
+        if(froalaOptions.htmlAllowedAttrs === null) {
+            froalaOptions.htmlAllowedAttrs = ['accept', 'accept-charset', 'accesskey', 'action', 'align', 'allowfullscreen', 'allowtransparency', 'alt', 'aria-.*', 'async', 'autocomplete', 'autofocus', 'autoplay', 'autosave', 'background', 'bgcolor', 'border', 'charset', 'cellpadding', 'cellspacing', 'checked', 'cite', 'class', 'color', 'cols', 'colspan', 'content', 'contenteditable', 'contextmenu', 'controls', 'coords', 'data', 'data-.*', 'datetime', 'default', 'defer', 'dir', 'dirname', 'disabled', 'download', 'draggable', 'dropzone', 'enctype', 'for', 'form', 'formaction', 'frameborder', 'headers', 'height', 'hidden', 'high', 'href', 'hreflang', 'http-equiv', 'icon', 'id', 'ismap', 'itemprop', 'keytype', 'kind', 'label', 'lang', 'language', 'list', 'loop', 'low', 'max', 'maxlength', 'media', 'method', 'min', 'mozallowfullscreen', 'multiple', 'muted', 'name', 'novalidate', 'open', 'optimum', 'pattern', 'ping', 'placeholder', 'playsinline', 'poster', 'preload', 'pubdate', 'radiogroup', 'readonly', 'rel', 'required', 'reversed', 'rows', 'rowspan', 'sandbox', 'scope', 'scoped', 'scrolling', 'seamless', 'selected', 'shape', 'size', 'sizes', 'span', 'src', 'srcdoc', 'srclang', 'srcset', 'start', 'step', 'summary', 'spellcheck', 'style', 'tabindex', 'target', 'title', 'type', 'translate', 'usemap', 'value', 'valign', 'webkitallowfullscreen', 'width', 'wrap']
+        }
+        if(this.options.allowAttributes !== null) {
+            froalaOptions.htmlAllowedAttrs.assign(this.options.allowAttributes)
+        }
 
-        froalaOptions.htmlDoNotWrapTags = this.options.noWrapTags
-            ? this.options.noWrapTags.split(/[\s,]+/)
-            : ['figure', 'script', 'style']
+        if(froalaOptions.htmlDoNotWrapTags === null) {
+            froalaOptions.htmlDoNotWrapTags = ['figure', 'script', 'style']
+        }
+        if(this.options.noWrapTags !== null) {
+            froalaOptions.htmlDoNotWrapTags.assign(this.options.noWrapTags)
+        }
 
-        froalaOptions.htmlRemoveTags = this.options.removeTags
-            ? this.options.removeTags.split(/[\s,]+/)
-            : ['script', 'style', 'base']
+        if(froalaOptions.htmlRemoveTags === null) {
+            froalaOptions.htmlRemoveTags = ['script', 'style', 'base']
+        }
+        if(this.options.removeTags !== null) {
+            froalaOptions.htmlRemoveTags.assign(this.options.removeTags)
+        }
 
-        froalaOptions.lineBreakerTags = this.options.lineBreakerTags
-            ? this.options.lineBreakerTags.split(/[\s,]+/)
-            : ['figure, table, hr, iframe, form, dl']
+        if(froalaOptions.lineBreakerTags === null) {
+            froalaOptions.lineBreakerTags = ['figure, table, hr, iframe, form, dl']
+        }
+        if(this.options.lineBreakerTags !== null) {
+            froalaOptions.lineBreakerTags.assign(this.options.lineBreakerTags)
+        }
 
         froalaOptions.shortcutsEnabled = ['show', 'bold', 'italic', 'underline', 'indent', 'outdent', 'undo', 'redo']
 
