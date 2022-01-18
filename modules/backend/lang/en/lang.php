@@ -369,6 +369,7 @@ return [
         'plugin_missing' => 'The plugin :name is a dependency but is not installed. Please install this plugin.',
         'debug' => 'Debug mode is enabled. This is not recommended for production installations.',
         'decompileBackendAssets' => 'Assets in the Backend are currently decompiled. This is not recommended for production installations.',
+        'default_backend_user' => 'A user with the default login details (admin / admin@domain.tld) was found. Change their username and / or email address to help protect the system.'
     ],
     'editor' => [
         'menu_label' => 'Editor settings',
