@@ -9,7 +9,7 @@ use Lang;
 use View;
 use Config;
 use Schema;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Winter\Storm\Support\ClassLoader;

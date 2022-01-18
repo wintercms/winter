@@ -5,7 +5,7 @@ use File;
 use Lang;
 use Request;
 use Response;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use System\Classes\MediaLibrary;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 

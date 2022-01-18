@@ -2,7 +2,7 @@
 
 use Str;
 use System\Classes\PluginManager;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use Illuminate\Support\Facades\App;
 
 /**

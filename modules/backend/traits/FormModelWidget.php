@@ -1,7 +1,7 @@
 <?php namespace Backend\Traits;
 
 use Lang;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Exception;
 
 /**

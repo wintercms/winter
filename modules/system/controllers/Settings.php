@@ -8,7 +8,7 @@ use Backend;
 use BackendMenu;
 use System\Classes\SettingsManager;
 use Backend\Classes\Controller;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Exception;
 
 /**

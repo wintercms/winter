@@ -7,7 +7,7 @@ use Backend;
 use Redirect;
 use BackendMenu;
 use ValidationException;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Cms\Models\ThemeExport;
 use Cms\Models\ThemeImport;
 use Cms\Classes\Theme as CmsTheme;

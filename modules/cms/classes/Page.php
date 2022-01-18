@@ -2,7 +2,7 @@
 
 use Lang;
 use BackendAuth;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**

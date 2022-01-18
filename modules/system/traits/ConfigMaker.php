@@ -4,7 +4,7 @@ use Yaml;
 use File;
 use Lang;
 use Event;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use stdClass;
 use Config;
 

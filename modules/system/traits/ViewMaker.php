@@ -3,7 +3,7 @@
 use File;
 use Lang;
 use Block;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use Exception;
 use Throwable;
 use Symfony\Component\Debug\Exception\FatalThrowableError;

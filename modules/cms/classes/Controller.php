@@ -11,7 +11,7 @@ use Session;
 use Request;
 use Response;
 use Exception;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use BackendAuth;
 use Twig\Environment as TwigEnvironment;
 use Twig\Cache\FilesystemCache as TwigCacheFilesystem;

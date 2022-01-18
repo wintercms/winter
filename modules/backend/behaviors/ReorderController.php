@@ -2,7 +2,7 @@
 
 use Lang;
 use Backend;
-use ApplicationException;
+use Winter\Storm\Exception\SystemException;
 use Backend\Classes\ControllerBehavior;
 
 /**
@@ -190,7 +190,7 @@ class ReorderController extends ControllerBehavior
         $modelClass = $this->getConfig('modelClass');
 
         if (!$modelClass) {
-            throw new ApplicationException('Please specify the modelClass property for reordering');
+            throw new SystemException('The modelClass property was not provided to the ReorderController behavior');
         }
 
         return $this->model = new $modelClass;
@@ -230,7 +230,7 @@ class ReorderController extends ControllerBehavior
             $this->showTree = true;
         }
         else {
-            throw new ApplicationException('The model must implement the Sortable trait/behavior or the NestedTree trait.');
+            throw new SystemException('The model must implement the Sortable trait/behavior or the NestedTree trait.');
         }
 
         return $model;

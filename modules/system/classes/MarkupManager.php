@@ -4,7 +4,7 @@ use Str;
 use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
-use ApplicationException;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * This class manages Twig functions, token parsers and filters.
@@ -253,7 +253,7 @@ class MarkupManager
             }
 
             if (!is_callable($callable)) {
-                throw new ApplicationException(sprintf('The markup function for %s is not callable.', $name));
+                throw new SystemException(sprintf('The markup function for %s is not callable.', $name));
             }
 
             $functions[] = new TwigSimpleFunction($name, $callable, $options);

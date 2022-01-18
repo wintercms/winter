@@ -2,7 +2,7 @@
 
 use Str;
 use BackendAuth;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use System\Classes\PluginManager;
 use Event;
 

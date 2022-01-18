@@ -6,7 +6,7 @@ use Event;
 use Config;
 use Exception;
 use ValidationException;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Cms\Contracts\CmsObject as CmsObjectContract;
 use Winter\Storm\Filesystem\PathResolver;
 use Winter\Storm\Halcyon\Model as HalcyonModel;

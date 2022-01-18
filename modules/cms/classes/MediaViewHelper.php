@@ -1,6 +1,6 @@
 <?php namespace Cms\Classes;
 
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Helper class for processing video and audio tags inserted by the Media Manager.

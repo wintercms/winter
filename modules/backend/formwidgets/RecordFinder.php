@@ -1,7 +1,7 @@
 <?php namespace Backend\FormWidgets;
 
 use Lang;
-use ApplicationException;
+use Winter\Storm\Exception\SystemException;
 use Backend\Classes\FormWidgetBase;
 
 /**
@@ -144,7 +144,7 @@ class RecordFinder extends FormWidgetBase
         ]);
 
         if (!$this->useRelation && !class_exists($this->modelClass)) {
-            throw new ApplicationException(Lang::get('backend::lang.recordfinder.invalid_model_class', ['modelClass' => $this->modelClass]));
+            throw new SystemException(Lang::get('backend::lang.recordfinder.invalid_model_class', ['modelClass' => $this->modelClass]));
         }
 
         $modelKey = $this->getRecordModel()->getKeyName();

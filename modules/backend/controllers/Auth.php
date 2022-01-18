@@ -9,7 +9,7 @@ use BackendAuth;
 use Backend\Models\AccessLog;
 use Backend\Classes\Controller;
 use System\Classes\UpdateManager;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use ValidationException;
 use Exception;
 use Config;

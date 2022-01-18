@@ -9,7 +9,7 @@ use Backend\Classes\WidgetBase;
 use Backend\Classes\WidgetManager;
 use Backend\Models\UserPreference;
 use System\Models\Parameter as SystemParameters;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Report Container Widget

@@ -9,7 +9,8 @@ use Redirect;
 use Backend;
 use Backend\Classes\ControllerBehavior;
 use Winter\Storm\Router\Helper as RouterHelper;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
 use Exception;
 
 /**
@@ -408,12 +409,12 @@ class FormController extends ControllerBehavior
      * @see \Backend\Widgets\Form
      * @param array $options Render options
      * @return string Rendered HTML for the form.
-     * @throws \Winter\Storm\Exception\ApplicationException if the Form Widget isn't set
+     * @throws \Winter\Storm\Exception\SystemException if the Form Widget isn't set
      */
     public function formRender($options = [])
     {
         if (!$this->formWidget) {
-            throw new ApplicationException(Lang::get('backend::lang.form.behavior_not_ready'));
+            throw new SystemException(Lang::get('backend::lang.form.behavior_not_ready'));
         }
 
         return $this->formWidget->render($options);
@@ -562,7 +563,7 @@ class FormController extends ControllerBehavior
      *     <?= $this->formRenderPreview() ?>
      *
      * @return string The form HTML markup.
-     * @throws \Winter\Storm\Exception\ApplicationException if the Form Widget isn't set
+     * @throws \Winter\Storm\Exception\SystemException if the Form Widget isn't set
      */
     public function formRenderPreview()
     {
@@ -591,7 +592,7 @@ class FormController extends ControllerBehavior
      *     <?= $this->formRenderOutsideFields() ?>
      *
      * @return string HTML markup
-     * @throws \Winter\Storm\Exception\ApplicationException if the Form Widget isn't set
+     * @throws \Winter\Storm\Exception\SystemException if the Form Widget isn't set
      */
     public function formRenderOutsideFields()
     {
@@ -620,7 +621,7 @@ class FormController extends ControllerBehavior
      *     <?= $this->formRenderPrimaryTabs() ?>
      *
      * @return string HTML markup
-     * @throws \Winter\Storm\Exception\ApplicationException if the Form Widget isn't set
+     * @throws \Winter\Storm\Exception\SystemException if the Form Widget isn't set
      */
     public function formRenderPrimaryTabs()
     {
@@ -649,7 +650,7 @@ class FormController extends ControllerBehavior
      *     <?= $this->formRenderSecondaryTabs() ?>
      *
      * @return string HTML markup
-     * @throws \Winter\Storm\Exception\ApplicationException if the Form Widget isn't set
+     * @throws \Winter\Storm\Exception\SystemException if the Form Widget isn't set
      */
     public function formRenderSecondaryTabs()
     {

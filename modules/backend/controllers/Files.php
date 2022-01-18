@@ -7,7 +7,7 @@ use Backend;
 use Response;
 use System\Models\File as FileModel;
 use Backend\Classes\Controller;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Exception;
 
 /**

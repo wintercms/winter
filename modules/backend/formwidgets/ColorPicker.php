@@ -2,7 +2,7 @@
 
 use Lang;
 use Backend\Classes\FormWidgetBase;
-use ApplicationException;
+use Winter\Storm\Exception\SystemException;
 use Backend\Models\BrandSetting;
 
 /**
@@ -128,7 +128,7 @@ class ColorPicker extends FormWidgetBase
                     $this->formField->config
                 );
             } else {
-                throw new ApplicationException(Lang::get('backend::lang.field.colors_method_not_exists', [
+                throw new SystemException(Lang::get('backend::lang.field.colors_method_not_exists', [
                     'model'  => get_class($this->model),
                     'method' => $availableColors,
                     'field'  => $this->formField->fieldName

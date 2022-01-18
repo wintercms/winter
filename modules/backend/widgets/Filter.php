@@ -8,7 +8,7 @@ use DbDongle;
 use Carbon\Carbon;
 use Backend\Classes\WidgetBase;
 use Backend\Classes\FilterScope;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use BackendAuth;
 
 /**

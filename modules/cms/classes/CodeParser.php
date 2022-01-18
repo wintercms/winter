@@ -4,7 +4,7 @@ use File;
 use Lang;
 use Cache;
 use Config;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Parses the PHP code section of CMS objects.

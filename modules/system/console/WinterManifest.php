@@ -1,6 +1,6 @@
 <?php namespace System\Console;
 
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Http;
 use ZipArchive;
 use System\Classes\FileManifest;

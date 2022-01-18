@@ -1,7 +1,7 @@
 <?php namespace Backend\Models;
 
 use BackendAuth;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Auth\Models\Preferences as PreferencesBase;
 
 /**

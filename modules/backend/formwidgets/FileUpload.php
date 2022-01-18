@@ -1,15 +1,16 @@
 <?php namespace Backend\FormWidgets;
 
 use Db;
+use Lang;
 use Input;
-use Request;
 use Response;
 use Validator;
 use Backend\Widgets\Form;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
 use ValidationException;
 use Exception;
 
@@ -145,7 +146,12 @@ class FileUpload extends FormWidgetBase
         }
 
         if ($this->maxFilesize > $this->getUploadMaxFilesize()) {
-            throw new ApplicationException('Maximum allowed size for uploaded files: ' . $this->getUploadMaxFilesize());
+            throw new SystemException(sprintf(
+                "The %s field cannot set %s as the maxFilesize because the server's max filesize is set to %s",
+                $this->getFieldName(),
+                $this->maxFilesize,
+                $this->getUploadMaxFilesize()
+            ));
         }
 
         $this->vars['fileList'] = $fileList = $this->getFileList();
@@ -372,7 +378,7 @@ class FileUpload extends FormWidgetBase
             return $this->makePartial('config_form');
         }
 
-        throw new ApplicationException('Unable to find file, it may no longer exist');
+        throw new ApplicationException(Lang::get('backend::lang.fileupload.unable_to_find_file'));
     }
 
     /**
@@ -393,7 +399,7 @@ class FileUpload extends FormWidgetBase
                 return ['displayName' => $file->title ?: $file->file_name];
             }
 
-            throw new ApplicationException('Unable to find file, it may no longer exist');
+            throw new ApplicationException(Lang::get('backend::lang.fileupload.unable_to_find_file'));
         }
         catch (Exception $ex) {
             return json_encode(['error' => $ex->getMessage()]);
@@ -424,7 +430,7 @@ class FileUpload extends FormWidgetBase
     {
         try {
             if (!Input::hasFile('file_data')) {
-                throw new ApplicationException('File missing from request');
+                throw new ApplicationException(Lang::get('backend::lang.fileupload.file_missing_from_request'));
             }
 
             $fileModel = $this->getRelationModel();
@@ -449,7 +455,7 @@ class FileUpload extends FormWidgetBase
             }
 
             if (!$uploadedFile->isValid()) {
-                throw new ApplicationException('File is not valid');
+                throw new ApplicationException(Lang::get('backend::lang.fileupload.file_invalid'));
             }
 
             $fileRelation = $this->getRelationObject();

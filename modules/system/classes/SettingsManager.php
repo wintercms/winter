@@ -3,7 +3,7 @@
 use Event;
 use Backend;
 use BackendAuth;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Manages the system settings.

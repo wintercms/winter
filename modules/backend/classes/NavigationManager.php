@@ -4,7 +4,7 @@ use Event;
 use BackendAuth;
 use System\Classes\PluginManager;
 use Validator;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use Log;
 use Config;
 

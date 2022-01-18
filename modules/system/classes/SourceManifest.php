@@ -2,7 +2,7 @@
 
 use Http;
 use Config;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Argon\Argon;
 
 /**

@@ -5,7 +5,7 @@ use Cms\Classes\Page;
 use Cms\Classes\Theme;
 use Winter\Storm\Support\Arr;
 use Symfony\Component\HttpFoundation\IpUtils;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Maintenance mode settings

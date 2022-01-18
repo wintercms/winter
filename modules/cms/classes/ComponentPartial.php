@@ -5,7 +5,7 @@ use Lang;
 use Cms\Contracts\CmsObject as CmsObjectContract;
 use Cms\Helpers\File as FileHelper;
 use Winter\Storm\Extension\Extendable;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * The CMS component partial class. These objects are read-only.

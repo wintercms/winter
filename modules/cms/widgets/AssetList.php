@@ -10,7 +10,7 @@ use Response;
 use Cms\Classes\Theme;
 use Cms\Classes\Asset;
 use Backend\Classes\WidgetBase;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use RecursiveIteratorIterator;

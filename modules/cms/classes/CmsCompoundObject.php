@@ -12,7 +12,7 @@ use System\Twig\Extension as SystemTwigExtension;
 use Winter\Storm\Halcyon\Processors\SectionParser;
 use Twig\Source as TwigSource;
 use Twig\Environment as TwigEnvironment;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * This is a base class for CMS objects that have multiple sections - pages, partials and layouts.
@@ -107,7 +107,7 @@ class CmsCompoundObject extends CmsObject
                 $this->code = $this->getOriginal('code');
             }
         }
-        
+
         $this->checkSafeMode();
     }
 

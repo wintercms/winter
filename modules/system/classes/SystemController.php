@@ -4,8 +4,8 @@ use Lang;
 use Config;
 use Response;
 use Exception;
-use SystemException;
-use ApplicationException;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Exception\ApplicationException;
 use Illuminate\Routing\Controller as ControllerBase;
 
 /**

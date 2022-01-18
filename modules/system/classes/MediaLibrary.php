@@ -8,8 +8,8 @@ use Storage;
 use Request;
 use Url;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
-use ApplicationException;
-use SystemException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Provides abstraction level for the Media Library operations.

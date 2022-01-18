@@ -3,7 +3,8 @@
 use Lang;
 use Event;
 use Flash;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
 use Backend\Classes\ControllerBehavior;
 
 /**
@@ -290,7 +291,7 @@ class ListController extends ControllerBehavior
     /**
      * Bulk delete records.
      * @return void
-     * @throws \Winter\Storm\Exception\ApplicationException when the parent definition is missing.
+     * @throws \Winter\Storm\Exception\SystemException when the parent definition is missing.
      */
     public function index_onDelete()
     {
@@ -304,7 +305,7 @@ class ListController extends ControllerBehavior
         $definition = post('definition', $this->primaryDefinition);
 
         if (!isset($this->listDefinitions[$definition])) {
-            throw new ApplicationException(Lang::get('backend::lang.list.missing_parent_definition', compact('definition')));
+            throw new SystemException(Lang::get('backend::lang.list.missing_parent_definition', compact('definition')));
         }
 
         $listConfig = $this->controller->listGetConfig($definition);
@@ -370,12 +371,12 @@ class ListController extends ControllerBehavior
      * Renders the widget collection.
      * @param  string $definition Optional list definition.
      * @return string Rendered HTML for the list.
-     * @throws \Winter\Storm\Exception\ApplicationException when there are no list widgets set.
+     * @throws \Winter\Storm\Exception\SystemException when there are no list widgets set.
      */
     public function listRender($definition = null)
     {
         if (!count($this->listWidgets)) {
-            throw new ApplicationException(Lang::get('backend::lang.list.behavior_not_ready'));
+            throw new SystemException(Lang::get('backend::lang.list.behavior_not_ready'));
         }
 
         if (!$definition || !isset($this->listDefinitions[$definition])) {

@@ -15,7 +15,7 @@ use System\Classes\ImageResizer;
 use Backend\Classes\ListColumn;
 use Backend\Classes\WidgetBase;
 use Winter\Storm\Database\Model;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use BackendAuth;
 
 /**

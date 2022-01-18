@@ -6,7 +6,7 @@ use Model;
 use Response;
 use League\Csv\Writer as CsvWriter;
 use League\Csv\EscapeFormula as CsvEscapeFormula;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use SplTempFileObject;
 
 /**

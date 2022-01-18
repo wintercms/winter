@@ -4,7 +4,7 @@ use File;
 use Lang;
 use Config;
 use Request;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use ValidationException;
 use Cms\Helpers\File as FileHelper;
 use Winter\Storm\Extension\Extendable;

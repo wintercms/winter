@@ -4,7 +4,7 @@ use Lang;
 use Backend\Widgets\Table;
 use Backend\Classes\FormWidgetBase;
 use Winter\Storm\Html\Helper as HtmlHelper;
-use ApplicationException;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Data Table
@@ -179,7 +179,7 @@ class DataTable extends FormWidgetBase
         $methodName = 'get' . studly_case($this->fieldName) . 'DataTableOptions';
 
         if (!$this->model->methodExists($methodName) && !$this->model->methodExists('getDataTableOptions')) {
-            throw new ApplicationException(
+            throw new SystemException(
                 Lang::get(
                     'backend::lang.model.missing_method',
                     [

@@ -16,7 +16,7 @@ use Winter\Storm\Assetic\Asset\AssetCollection;
 use Winter\Storm\Assetic\Cache\FilesystemCache;
 use Winter\Storm\Assetic\Factory\AssetFactory;
 use System\Helpers\Cache as CacheHelper;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use DateTime;
 
 /**

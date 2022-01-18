@@ -7,7 +7,7 @@ use Event;
 use Config;
 use Storage;
 use Exception;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use File as FileHelper;
 use System\Models\File as SystemFileModel;
 use Winter\Storm\Database\Attach\File as FileModel;

@@ -17,7 +17,7 @@ use System\Models\PluginVersion;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Exception;
 
 /**

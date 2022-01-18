@@ -9,7 +9,7 @@ use Backend\Classes\WidgetManager;
 use Backend\Classes\FormWidgetBase;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Exception;
 use BackendAuth;
 

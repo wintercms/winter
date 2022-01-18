@@ -238,6 +238,9 @@ return [
         'upload_error' => 'Upload error',
         'remove_confirm' => 'Are you sure?',
         'remove_file' => 'Remove file',
+        'unable_to_find_file' => 'Unable to find file, it may no longer exist',
+        'file_missing_from_request' => 'File is missing from the request',
+        'file_invalid' => 'File is inavalid',
     ],
     'repeater' => [
         'add_new_item' => 'Add new item',

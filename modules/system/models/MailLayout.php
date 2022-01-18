@@ -4,7 +4,7 @@ use View;
 use Model;
 use System\Classes\MailManager;
 use Winter\Storm\Mail\MailParser;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use File as FileHelper;
 
 /**

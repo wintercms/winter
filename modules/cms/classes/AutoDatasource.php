@@ -2,7 +2,7 @@
 
 use Cache;
 use Exception;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Halcyon\Model;
 use Winter\Storm\Halcyon\Processors\Processor;
 use Winter\Storm\Halcyon\Datasource\Datasource;

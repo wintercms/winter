@@ -2,7 +2,7 @@
 
 use Backend;
 use BackendMenu;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Cms\Models\ThemeData;
 use Cms\Classes\Theme as CmsTheme;
 use System\Classes\SettingsManager;

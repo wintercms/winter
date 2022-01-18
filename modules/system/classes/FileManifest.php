@@ -1,6 +1,6 @@
 <?php namespace System\Classes;
 
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Config;
 use Winter\Storm\Filesystem\Filesystem;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;

@@ -5,7 +5,7 @@ use BackendAuth;
 use Cms\Classes\Theme;
 use Cms\Models\MaintenanceSetting;
 use Backend\Classes\ReportWidgetBase;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Exception;
 
 /**

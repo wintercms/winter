@@ -8,7 +8,7 @@ use Http;
 use Cache;
 use Schema;
 use Config;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Cms\Classes\ThemeManager;
 use System\Models\Parameter;
 use System\Models\PluginVersion;

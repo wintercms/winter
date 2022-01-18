@@ -2,7 +2,7 @@
 
 use File;
 use Model;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\Zip;
 use Cms\Classes\Theme as CmsTheme;
 use FilesystemIterator;

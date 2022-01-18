@@ -1,7 +1,7 @@
 <?php namespace Cms\Classes;
 
 use File;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use System\Models\Parameter;
 use Cms\Classes\Theme as CmsTheme;
 

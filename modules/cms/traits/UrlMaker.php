@@ -5,7 +5,7 @@ use Cache;
 use Config;
 use Cms\Classes\Page;
 use Cms\Classes\Controller;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * URL Maker Trait

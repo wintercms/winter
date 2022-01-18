@@ -12,7 +12,8 @@ use Illuminate\Database\Eloquent\MassAssignmentException;
 use League\Csv\Reader as CsvReader;
 use League\Csv\Writer as CsvWriter;
 use League\Csv\EscapeFormula as CsvEscapeFormula;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
 use SplTempFileObject;
 use Exception;
 
@@ -577,7 +578,7 @@ class ImportExportController extends ControllerBehavior
         }
 
         if (!$this->controller->isClassExtendedWith('Backend.Behaviors.ListController')) {
-            throw new ApplicationException(Lang::get('backend::lang.import_export.behavior_missing_uselist_error'));
+            throw new SystemException(Lang::get('backend::lang.import_export.behavior_missing_uselist_error'));
         }
 
         if (is_array($useList)) {
@@ -738,7 +739,7 @@ class ImportExportController extends ControllerBehavior
 
         $modelClass = $this->getConfig($type.'[modelClass]');
         if (!$modelClass) {
-            throw new ApplicationException(Lang::get('backend::lang.import_export.missing_model_class_error', [
+            throw new SystemException(Lang::get('backend::lang.import_export.missing_model_class_error', [
                 'type' => $type
             ]));
         }

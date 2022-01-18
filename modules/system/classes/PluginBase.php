@@ -5,7 +5,7 @@ use File;
 use Yaml;
 use Backend;
 use ReflectionClass;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use Composer\Semver\Semver;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider as ServiceProviderBase;

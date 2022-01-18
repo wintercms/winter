@@ -6,7 +6,7 @@ use Request;
 use Form as FormHelper;
 use Backend\Classes\ControllerBehavior;
 use Winter\Storm\Database\Model;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Uses a combination of lists and forms for managing Model relations.

@@ -2,7 +2,7 @@
 
 use Lang;
 use Request;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Inspectable Container Trait

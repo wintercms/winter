@@ -7,7 +7,7 @@ use Input;
 use Request;
 use Backend\Classes\WidgetBase;
 use Winter\Storm\Html\Helper as HtmlHelper;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Table Widget.

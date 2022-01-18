@@ -1,7 +1,7 @@
 <?php namespace Backend\FormWidgets;
 
 use Lang;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Backend\Classes\FormWidgetBase;
 
 /**

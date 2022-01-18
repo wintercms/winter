@@ -10,7 +10,7 @@ use Request;
 use Validator;
 use BackendMenu;
 use BackendAuth;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use Backend\Models\UserRole;
 use Twig\Extension\SandboxExtension;
 use Twig\Environment as TwigEnvironment;

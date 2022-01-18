@@ -25,7 +25,7 @@ use Cms\Helpers\Cms as CmsHelpers;
 use Backend\Classes\Controller;
 use System\Helpers\DateTime;
 use Winter\Storm\Router\Router as StormRouter;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Cms\Classes\Asset;
 
 /**

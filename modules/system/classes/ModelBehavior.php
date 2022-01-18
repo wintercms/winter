@@ -1,7 +1,7 @@
 <?php namespace System\Classes;
 
 use Lang;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Database\ModelBehavior as ModelBehaviorBase;
 
 /**
