@@ -108,7 +108,10 @@ class Status extends ReportWidgetBase
             $warnings[] = Lang::get('backend::lang.warnings.decompileBackendAssets');
         }
 
-        if (User::where('login', 'admin')->orWhere('email', 'admin@domain.tld')->count()) {
+        if (
+            BackendAuth::getUser()->hasAccess('backend.manage_users')
+            && User::where('login', 'admin')->orWhere('email', 'admin@domain.tld')->count()
+        ) {
             $warnings[] = Lang::get('backend::lang.warnings.default_backend_user');
         }
 
