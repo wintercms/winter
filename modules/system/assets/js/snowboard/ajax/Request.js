@@ -147,7 +147,7 @@ class Request extends Snowboard.PluginBase {
      * @returns {string[]}
      */
     dependencies() {
-        return ['jsonParser', 'sanitizer'];
+        return ['cookie', 'jsonParser', 'sanitizer'];
     }
 
     /**
@@ -717,22 +717,7 @@ class Request extends Snowboard.PluginBase {
     }
 
     get xsrfToken() {
-        let cookieValue = null;
-
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-
-            for (let i = 0; i < cookies.length; i += 1) {
-                const cookie = cookies[i].trim();
-
-                if (cookie.substring(0, 11) === 'XSRF-TOKEN=') {
-                    cookieValue = decodeURIComponent(cookie.substring(11));
-                    break;
-                }
-            }
-        }
-
-        return cookieValue;
+        return this.snowboard.cookie().get('XSRF-TOKEN');
     }
 
     get data() {

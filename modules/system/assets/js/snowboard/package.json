@@ -26,7 +26,8 @@
     "homepage": "https://wintercms.com/docs/snowboard/introduction",
     "dependencies": {
         "laravel-mix": "^6.0.34",
-        "laravel-mix-polyfill": "^3.0.1"
+        "laravel-mix-polyfill": "^3.0.1",
+        "js-cookie": "^3.0.1"
     },
     "devDependencies": {
         "babel-plugin-module-resolver": "^4.1.0",

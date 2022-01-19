@@ -5,6 +5,11 @@ mix.setPublicPath(__dirname);
 
 // Compile Snowboard framework
 mix
+    .options({
+        terser: {
+            extractComments: false,
+        },
+    })
     .js('./snowboard.base.js', './build/snowboard.base.js')
     .js('./snowboard.base.debug.js', './build/snowboard.base.debug.js')
     .js('./ajax/Request.js', './build/snowboard.request.js')
