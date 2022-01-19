@@ -1,11 +1,9 @@
 <?php namespace System\Console;
 
-use File;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
+use Illuminate\Console\Command;
 use System\Classes\MixAssets;
 
-class MixList extends MixCompile
+class MixList extends Command
 {
     /**
      * @var string The console command name.
