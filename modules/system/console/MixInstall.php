@@ -72,7 +72,7 @@ class MixInstall extends Command
         // Process each package
         foreach ($packages as $name => $package) {
             $this->info(
-                sprintf('Installing dependencies for package "%s"', $name),
+                sprintf('Installing dependencies for package "%s"', $name)
             );
             if ($this->installPackageDeps($package) !== 0) {
                 $this->error(
