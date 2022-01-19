@@ -2,7 +2,6 @@
 
 use File;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
 use System\Classes\MixAssets;
 
@@ -17,6 +16,16 @@ class MixCompile extends Command
      * @var string The console command description.
      */
     protected $description = 'Mix and compile assets';
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'mix:compile
+        {webpackArgs?* : Arguments to pass through to the Webpack CLI}
+        {--f|production : Runs compilation in "production" mode}
+        {--p|package=* : Defines one or more packages to compile}';
 
     /**
      * Execute the console command.
@@ -93,11 +102,14 @@ class MixCompile extends Command
 
     protected function createCommand($package)
     {
-        return [
+        $command = $this->argument('webpackArgs') ?? [];
+        array_unshift(
+            $command,
             $package['path'] . implode(DIRECTORY_SEPARATOR, ['', 'node_modules', 'webpack', 'bin', 'webpack.js']),
             '--progress',
             '--config=' . $package['path'] . DIRECTORY_SEPARATOR . 'mix.webpack.js',
-        ];
+        );
+        return $command;
     }
 
     protected function createWebpackConfig($path, $mixPath)
@@ -118,17 +130,5 @@ class MixCompile extends Command
         if (File::exists($path . DIRECTORY_SEPARATOR . 'mix.webpack.js')) {
             File::delete($path . DIRECTORY_SEPARATOR . 'mix.webpack.js');
         }
-    }
-
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['production', 'f', InputOption::VALUE_NONE, 'Run a "production" compilation'],
-            ['package', 'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Defines one or more packages to compile'],
-        ];
     }
 }

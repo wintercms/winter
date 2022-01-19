@@ -1,7 +1,6 @@
 <?php namespace System\Console;
 
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Process;
 use System\Classes\MixAssets;
 
@@ -16,6 +15,16 @@ class MixInstall extends Command
      * @var string The console command description.
      */
     protected $description = 'Install Node.js dependencies required for mixed assets';
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'mix:install
+        {npmArgs?* : Arguments to pass through to the "npm" binary}
+        {--npm= : Defines a custom path to the "npm" binary}
+        {--p|package=* : Defines one or more packages to install}';
 
     /**
      * @var string The path to the "npm" executable.
@@ -63,11 +72,15 @@ class MixInstall extends Command
         // Process each package
         foreach ($packages as $name => $package) {
             $this->info(
-                sprintf('Installing dependencies for package "%s"', $name)
+                sprintf('Installing dependencies for package "%s"', $name),
             );
             if ($this->installPackageDeps($package) !== 0) {
                 $this->error(
                     sprintf('Unable to install dependencies for package "%s"', $name)
+                );
+            } else {
+                $this->info(
+                    sprintf('Package "%s" dependencies installed.', $name)
                 );
             }
         }
@@ -83,7 +96,10 @@ class MixInstall extends Command
      */
     protected function installPackageDeps($package)
     {
-        $process = new Process(['npm', 'i'], $package['path']);
+        $command = $this->argument('npmArgs') ?? [];
+        array_unshift($command, 'npm', 'i');
+
+        $process = new Process($command, $package['path']);
         $process->run(function ($status, $stdout) {
             $this->getOutput()->write($stdout);
         });
@@ -101,17 +117,5 @@ class MixInstall extends Command
         $process = new Process(['npm', '--version']);
         $process->run();
         return $process->getOutput();
-    }
-
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['npm', null, InputOption::VALUE_REQUIRED, 'Defines a custom path to the "npm" binary'],
-            ['package', 'p', InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY, 'Defines one or more packages to install'],
-        ];
     }
 }

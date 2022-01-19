@@ -1,8 +1,6 @@
 <?php namespace System\Console;
 
 use File;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use System\Classes\MixAssets;
 
 class MixWatch extends MixCompile
@@ -16,6 +14,16 @@ class MixWatch extends MixCompile
      * @var string The console command description.
      */
     protected $description = 'Mix and compile assets on-the-fly as changes are made.';
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'mix:watch
+        {package : Defines the package to watch for changes}
+        {webpackArgs?* : Arguments to pass through to the Webpack CLI}
+        {--f|production : Runs compilation in "production" mode}';
 
     public function handle(): int
     {
@@ -66,25 +74,5 @@ class MixWatch extends MixCompile
         );
 
         File::put($path . DIRECTORY_SEPARATOR . 'mix.webpack.js', $config);
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getArguments()
-    {
-        return [
-            ['package', InputArgument::REQUIRED, 'The package to watch'],
-        ];
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function getOptions()
-    {
-        return [
-            ['production', 'f', InputOption::VALUE_NONE, 'Run a "production" compilation'],
-        ];
     }
 }
