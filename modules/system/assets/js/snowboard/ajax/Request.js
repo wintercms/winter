@@ -426,15 +426,14 @@ class Request extends Snowboard.PluginBase {
             }
         }
 
-        // Check for a redirect from the response, or use the redirect as specified in the options. This takes
-        // precedent over all other checks.
+        if (this.flash && response.X_WINTER_FLASH_MESSAGES) {
+            this.processFlashMessages(response.X_WINTER_FLASH_MESSAGES);
+        }
+
+        // Check for a redirect from the response, or use the redirect as specified in the options.
         if (this.redirect || response.X_WINTER_REDIRECT) {
             this.processRedirect(this.redirect || response.X_WINTER_REDIRECT);
             return;
-        }
-
-        if (this.flash && response.X_WINTER_FLASH_MESSAGES) {
-            this.processFlashMessages(response.X_WINTER_FLASH_MESSAGES);
         }
 
         if (response.X_WINTER_ASSETS) {
