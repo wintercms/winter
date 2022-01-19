@@ -124,9 +124,7 @@ export default class Snowboard {
         const lowerName = name.toLowerCase();
 
         if (!this.hasPlugin(lowerName)) {
-            /* develblock:start */
             this.debug(`Plugin "${name}" already removed`);
-            /* develblock:end */
             return;
         }
 
