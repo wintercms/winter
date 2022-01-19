@@ -107,7 +107,7 @@ class MixCompile extends Command
             $command,
             $package['path'] . implode(DIRECTORY_SEPARATOR, ['', 'node_modules', 'webpack', 'bin', 'webpack.js']),
             '--progress',
-            '--config=' . $package['path'] . DIRECTORY_SEPARATOR . 'mix.webpack.js',
+            '--config=' . $package['path'] . DIRECTORY_SEPARATOR . 'mix.webpack.js'
         );
         return $command;
     }
