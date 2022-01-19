@@ -29,6 +29,7 @@ class Request extends Snowboard.PluginBase {
         }
         this.handler = handler;
         this.options = options || {};
+        this.fetchOptions = {};
         this.responseData = null;
         this.responseError = null;
         this.cancelled = false;
@@ -168,6 +169,29 @@ class Request extends Snowboard.PluginBase {
     }
 
     /**
+     * Creates a Fetch request.
+     *
+     * This method is made available for plugins to extend or override the default fetch() settings with their own.
+     *
+     * @returns {Promise}
+     */
+    getFetch() {
+        this.fetchOptions = (this.options.fetchOptions !== undefined && typeof this.options.fetchOptions === 'object')
+            ? this.options.fetchOptions
+            : {
+                method: 'POST',
+                headers: this.headers,
+                body: this.data,
+                redirect: 'follow',
+                mode: 'same-origin',
+            };
+
+        this.snowboard.globalEvent('ajaxFetchOptions', this.fetchOptions, this);
+
+        return fetch(this.url, this.fetchOptions);
+    }
+
+    /**
      * Run client-side validation on the form, if available.
      *
      * @returns {boolean}
@@ -199,13 +223,7 @@ class Request extends Snowboard.PluginBase {
         }
 
         const ajaxPromise = new Promise((resolve, reject) => {
-            fetch(this.url, {
-                method: 'POST',
-                headers: this.headers,
-                body: this.data,
-                redirect: 'follow',
-                mode: 'same-origin',
-            }).then(
+            this.getFetch().then(
                 (response) => {
                     if (!response.ok && response.status !== 406) {
                         if (response.headers.has('Content-Type') && response.headers.get('Content-Type').includes('/json')) {
