@@ -20,10 +20,8 @@ describe('Snowboard framework', function () {
 
                         // Check in-built plugins
                         expect(dom.window.Snowboard.getPluginNames()).toEqual(
-                            expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer'])
+                            expect.arrayContaining(['jsonparser', 'sanitizer'])
                         );
-                        expect(dom.window.Snowboard.getPlugin('debounce').isFunction()).toEqual(true);
-                        expect(dom.window.Snowboard.getPlugin('debounce').isSingleton()).toEqual(false);
                         expect(dom.window.Snowboard.getPlugin('jsonparser').isFunction()).toEqual(false);
                         expect(dom.window.Snowboard.getPlugin('jsonparser').isSingleton()).toEqual(true);
                         expect(dom.window.Snowboard.getPlugin('sanitizer').isFunction()).toEqual(false);
@@ -57,7 +55,7 @@ describe('Snowboard framework', function () {
                         // Check plugin caller
                         expect(Snowboard.hasPlugin('test')).toBe(true);
                         expect(Snowboard.getPluginNames()).toEqual(
-                            expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer', 'test'])
+                            expect.arrayContaining(['jsonparser', 'sanitizer', 'test'])
                         );
                         expect(Snowboard.test).toEqual(expect.any(Function));
 
@@ -84,7 +82,7 @@ describe('Snowboard framework', function () {
                         Snowboard.removePlugin('test');
                         expect(Snowboard.hasPlugin('test')).toEqual(false);
                         expect(dom.window.Snowboard.getPluginNames()).toEqual(
-                            expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer'])
+                            expect.arrayContaining(['jsonparser', 'sanitizer'])
                         );
                         expect(Snowboard.test).not.toBeDefined();
 
@@ -116,7 +114,7 @@ describe('Snowboard framework', function () {
                          // Check plugin caller
                         expect(Snowboard.hasPlugin('test')).toBe(true);
                         expect(Snowboard.getPluginNames()).toEqual(
-                            expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer', 'test'])
+                            expect.arrayContaining(['jsonparser', 'sanitizer', 'test'])
                         );
                         expect(Snowboard.test).toEqual(expect.any(Function));
 
@@ -143,7 +141,7 @@ describe('Snowboard framework', function () {
                         Snowboard.removePlugin('test');
                         expect(Snowboard.hasPlugin('test')).toEqual(false);
                         expect(dom.window.Snowboard.getPluginNames()).toEqual(
-                            expect.arrayContaining(['debounce', 'jsonparser', 'sanitizer'])
+                            expect.arrayContaining([ 'jsonparser', 'sanitizer'])
                         );
                         expect(Snowboard.test).not.toBeDefined();
 
