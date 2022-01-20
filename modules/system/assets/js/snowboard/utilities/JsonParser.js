@@ -4,7 +4,7 @@ import Singleton from '../abstracts/Singleton';
  * JSON Parser utility.
  *
  * This utility parses JSON-like data that does not strictly meet the JSON specifications in order to simplify development.
- * It is a safe replacement for JSON.parse(JSON.stringify(eval("({" + value + "})"))) that does require the use of eval()
+ * It is a safe replacement for JSON.parse(JSON.stringify(eval("({" + value + "})"))) that does not require the use of eval()
  *
  * @author Ayumi Hamasaki
  * @author Ben Thomson <git@alfreido.com>
