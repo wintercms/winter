@@ -61,6 +61,12 @@ export default class Transition extends Snowboard.PluginBase {
         this.doTransition();
     }
 
+    /**
+     * Maps event classes to the given transition state.
+     *
+     * @param  {...any} args
+     * @returns {Array}
+     */
     eventClasses(...args) {
         const eventClasses = {
             in: `${this.transition}-in`,
@@ -84,6 +90,11 @@ export default class Transition extends Snowboard.PluginBase {
         return returnClasses;
     }
 
+    /**
+     * Executes the transition.
+     *
+     * @returns {void}
+     */
     doTransition() {
         // Add duration override
         if (this.duration !== null) {
@@ -120,6 +131,13 @@ export default class Transition extends Snowboard.PluginBase {
         });
     }
 
+    /**
+     * Callback function when the transition ends.
+     *
+     * When a transition ends, the instance of the transition is automatically destructed.
+     *
+     * @returns {void}
+     */
     onTransitionEnd() {
         this.eventClasses('active', (!this.trailTo) ? 'out' : '').forEach((eventClass) => {
             this.element.classList.remove(eventClass);
@@ -137,6 +155,11 @@ export default class Transition extends Snowboard.PluginBase {
         this.destructor();
     }
 
+    /**
+     * Cancels a transition.
+     *
+     * @returns {void}
+     */
     cancel() {
         this.element.removeEventListener('transitionend', () => this.onTransitionEnd, {
             once: true,
@@ -152,12 +175,23 @@ export default class Transition extends Snowboard.PluginBase {
         this.destructor();
     }
 
+    /**
+     * Resets the classes, removing any transition classes.
+     *
+     * @returns {void}
+     */
     resetClasses() {
         this.eventClasses().forEach((eventClass) => {
             this.element.classList.remove(eventClass);
         });
     }
 
+    /**
+     * Parses a given duration and converts it to a "ms" value.
+     *
+     * @param {String} duration
+     * @returns {String}
+     */
     parseDuration(duration) {
         const parsed = /^([0-9]+(\.[0-9]+)?)(m?s)?$/.exec(duration);
         const amount = Number(parsed[1]);

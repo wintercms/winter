@@ -3,7 +3,6 @@ import Singleton from '../abstracts/Singleton';
 import PluginLoader from './PluginLoader';
 
 import Cookie from '../utilities/Cookie';
-import Debounce from '../utilities/Debounce';
 import JsonParser from '../utilities/JsonParser';
 import Sanitizer from '../utilities/Sanitizer';
 
@@ -44,7 +43,6 @@ export default class Snowboard {
 
     loadUtilities() {
         this.addPlugin('cookie', Cookie);
-        this.addPlugin('debounce', Debounce);
         this.addPlugin('jsonParser', JsonParser);
         this.addPlugin('sanitizer', Sanitizer);
     }
