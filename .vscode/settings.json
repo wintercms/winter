@@ -7,5 +7,5 @@
         "**/plugins/*/*/widgets/*/partials/*.htm": "php",
         "**/themes/*/layouts/*.htm": "wintercms",
         "**/themes/*/partials/**/*.htm": "wintercms"
-	}
+    }
 }
