@@ -28,7 +28,7 @@ export default class Cookie extends Singleton {
      *
      * @param {Object} options
      */
-    defaults(options) {
+    setDefaults(options) {
         if (typeof options !== 'object') {
             throw new Error('Cookie defaults must be provided as an object');
         }
@@ -68,10 +68,16 @@ export default class Cookie extends Singleton {
      * @returns {string}
      */
     get(name) {
-        let value = BaseCookie.get(name);
+        let value = '';
+
+        if (name === undefined) {
+            value = BaseCookie.get();
+        } else {
+            value = BaseCookie.get(name);
+        }
 
         // Allow plugins to override the gotten value
-        this.snowboard.globalEvents('cookie.get', name, value, (newValue) => {
+        this.snowboard.globalEvent('cookie.get', name, value, (newValue) => {
             value = newValue;
         });
 
@@ -92,7 +98,7 @@ export default class Cookie extends Singleton {
         let saveValue = value;
 
         // Allow plugins to override the value to save
-        this.snowboard.globalEvents('cookie.set', name, value, (newValue) => {
+        this.snowboard.globalEvent('cookie.set', name, value, (newValue) => {
             saveValue = newValue;
         });
 
