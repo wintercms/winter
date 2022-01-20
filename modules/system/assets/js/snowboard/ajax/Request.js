@@ -148,7 +148,7 @@ class Request extends Snowboard.PluginBase {
      * @returns {string[]}
      */
     dependencies() {
-        return ['cookie', 'jsonParser', 'sanitizer'];
+        return ['cookie', 'jsonParser'];
     }
 
     /**
@@ -379,27 +379,25 @@ class Request extends Snowboard.PluginBase {
                 const elements = document.querySelectorAll(selector);
                 if (elements.length > 0) {
                     elements.forEach((element) => {
-                        const sanitizedContent = this.snowboard.sanitizer().sanitize(content);
-
                         switch (mode) {
                             case 'append':
-                                element.innerHTML += sanitizedContent;
+                                element.innerHTML += content;
                                 break;
                             case 'prepend':
-                                element.innerHTML = sanitizedContent + element.innerHTML;
+                                element.innerHTML = content + element.innerHTML;
                                 break;
                             case 'replace':
                             default:
-                                element.innerHTML = sanitizedContent;
+                                element.innerHTML = content;
                                 break;
                         }
 
                         affected.push(element);
 
                         // Fire update event for each element that is updated
-                        this.snowboard.globalEvent('ajaxUpdate', element, sanitizedContent, this);
+                        this.snowboard.globalEvent('ajaxUpdate', element, content, this);
                         const event = new Event('ajaxUpdate');
-                        event.content = sanitizedContent;
+                        event.content = content;
                         element.dispatchEvent(event);
                     });
                 }
