@@ -64,17 +64,27 @@ export default class Cookie extends Singleton {
     /**
      * Get a cookie by name.
      *
-     * @param {string} name
-     * @returns {string}
+     * If `name` is undefined, returns all cookies as an Object.
+     *
+     * @param {String} name
+     * @returns {Object|String}
      */
     get(name) {
-        let value = '';
-
         if (name === undefined) {
-            value = BaseCookie.get();
-        } else {
-            value = BaseCookie.get(name);
+            const cookies = BaseCookie.get();
+
+            Object.entries(cookies).forEach((entry) => {
+                const [cookieName, cookieValue] = entry;
+
+                this.snowboard.globalEvent('cookie.get', cookieName, cookieValue, (newValue) => {
+                    cookies[cookieName] = newValue;
+                });
+            });
+
+            return cookies;
         }
+
+        let value = BaseCookie.get(name);
 
         // Allow plugins to override the gotten value
         this.snowboard.globalEvent('cookie.get', name, value, (newValue) => {
@@ -89,10 +99,10 @@ export default class Cookie extends Singleton {
      *
      * You can specify additional cookie parameters through the "options" parameter.
      *
-     * @param {string} name
-     * @param {string} value
+     * @param {String} name
+     * @param {String} value
      * @param {Object} options
-     * @returns {string}
+     * @returns {String}
      */
     set(name, value, options) {
         let saveValue = value;
@@ -113,8 +123,8 @@ export default class Cookie extends Singleton {
      *
      * You can specify the additional cookie parameters via the "options" parameter.
      *
-     * @param {string} name
-     * @param {*} options
+     * @param {String} name
+     * @param {Object} options
      * @returns {void}
      */
     remove(name, options) {
