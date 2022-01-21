@@ -1,5 +1,13 @@
 import Singleton from '../abstracts/Singleton';
 
+/**
+ * Sanitizer utility.
+ *
+ * Client-side HTML sanitizer designed mostly to prevent self-XSS attacks.
+ * The sanitizer utility will strip all attributes that start with `on` (usually JS event handlers as attributes, i.e. `onload` or `onerror`) or contain the `javascript:` pseudo protocol in their values.
+ *
+ * @author Ben Thomson <git@alfreido.com>
+ */
 export default class Sanitizer extends Singleton {
     constructor(snowboard) {
         super(snowboard);
