@@ -12,7 +12,7 @@
         
         "**/plugins/*/*/behaviors/*/partials/*.htm": "php",
         "**/plugins/*/*/components/*/*.htm": "twig",
-        "**/plugins/*/*/controllers/*.htm": "php",
+        "**/plugins/*/*/controllers/*/*.htm": "php",
         "**/plugins/*/*/formwidgets/*/partials/*.htm": "php",
         "**/plugins/*/*/layouts/*.htm": "php",
         "**/plugins/*/*/models/*/*.htm": "php",
