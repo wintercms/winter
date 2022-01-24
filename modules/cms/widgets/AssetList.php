@@ -534,10 +534,10 @@ class AssetList extends WidgetBase
                 ];
             }
         }
-		
-		// Sort directories & files in alphabetical order
-		usort($result, function($a, $b) { return strcmp($a->name, $b->name); });
-		usort($files, function($a, $b) { return strcmp($a->name, $b->name); });
+
+        // Sort directories & files in alphabetical order
+        usort($result, function($a, $b) { return strcmp($a->name, $b->name); });
+        usort($files, function($a, $b) { return strcmp($a->name, $b->name); });
 
         foreach ($files as $file) {
             $result[] = $file;
