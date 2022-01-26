@@ -37,11 +37,6 @@ use Exception;
 class ImportExportController extends ControllerBehavior
 {
     /**
-     * @inheritDoc
-     */
-    protected $requiredProperties = ['importExportConfig'];
-
-    /**
      * @var array Configuration values that must exist when applying the primary config file.
      */
     protected $requiredConfig = [];
@@ -97,6 +92,11 @@ class ImportExportController extends ControllerBehavior
     protected $exportOptionsFormWidget;
 
     /**
+     * @var mixed Configuration for this behaviour
+     */
+    public $importExportConfig = 'config_import_export.yaml';
+
+    /**
      * Behavior constructor
      * @param Backend\Classes\Controller $controller
      */
@@ -107,7 +107,7 @@ class ImportExportController extends ControllerBehavior
         /*
          * Build configuration
          */
-        $this->config = $this->makeConfig($controller->importExportConfig, $this->requiredConfig);
+        $this->config = $this->makeConfig($controller->importExportConfig ?: $this->importExportConfig, $this->requiredConfig);
 
         /*
          * Process config

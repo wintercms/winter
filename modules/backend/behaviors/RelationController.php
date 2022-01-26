@@ -81,11 +81,6 @@ class RelationController extends ControllerBehavior
     protected $pivotWidget;
 
     /**
-     * @inheritDoc
-     */
-    protected $requiredProperties = ['relationConfig'];
-
-    /**
      * @var array Properties that must exist for each relationship definition.
      */
     protected $requiredRelationProperties = ['label'];
@@ -201,6 +196,11 @@ class RelationController extends ControllerBehavior
     protected $foreignId;
 
     /**
+     * @var mixed Configuration for this behaviour
+     */
+    public $relationConfig = 'config_relation.yaml';
+
+    /**
      * @var string Active session key, used for deferred bindings.
      */
     public $sessionKey;
@@ -229,7 +229,7 @@ class RelationController extends ControllerBehavior
         /*
          * Build configuration
          */
-        $this->config = $this->originalConfig = $this->makeConfig($controller->relationConfig, $this->requiredConfig);
+        $this->config = $this->originalConfig = $this->makeConfig($controller->relationConfig ?: $this->relationConfig, $this->requiredConfig);
     }
 
     /**
