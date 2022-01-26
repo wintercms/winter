@@ -535,6 +535,13 @@ class AssetList extends WidgetBase
             }
         }
 
+        // Sort directories & files in alphabetical order
+        $sortByName = function ($a, $b) {
+            return strcmp($a->name, $b->name);
+        };
+        usort($result, $sortByName);
+        usort($files, $sortByName);
+
         foreach ($files as $file) {
             $result[] = $file;
         }
