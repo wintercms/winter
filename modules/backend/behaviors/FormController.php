@@ -24,7 +24,7 @@ use Exception;
  * This behavior is implemented in the controller like so:
  *
  *     public $implement = [
- *         'Backend.Behaviors.FormController',
+ *         \Backend\Behaviors\FormController::class,
  *     ];
  *
  *     public $formConfig = 'config_form.yaml';
@@ -176,7 +176,7 @@ class FormController extends ControllerBehavior
         /*
          * Detected Relation controller behavior
          */
-        if ($this->controller->isClassExtendedWith('Backend.Behaviors.RelationController')) {
+        if ($this->controller->isClassExtendedWith(\Backend\Behaviors\RelationController::class)) {
             $this->controller->initRelation($model);
         }
 

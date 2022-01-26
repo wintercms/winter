@@ -22,7 +22,7 @@ use Exception;
  * This behavior is implemented in the controller like so:
  *
  *     public $implement = [
- *         'Backend.Behaviors.ImportExportController',
+ *         \Backend\Behaviors\ImportExportController::class,
  *     ];
  *
  *     public $importExportConfig = 'config_import_export.yaml';
@@ -576,7 +576,7 @@ class ImportExportController extends ControllerBehavior
             return false;
         }
 
-        if (!$this->controller->isClassExtendedWith('Backend.Behaviors.ListController')) {
+        if (!$this->controller->isClassExtendedWith(\Backend\Behaviors\ListController::class)) {
             throw new ApplicationException(Lang::get('backend::lang.import_export.behavior_missing_uselist_error'));
         }
 

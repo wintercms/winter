@@ -14,7 +14,7 @@ use ApplicationException;
  * This behavior is implemented in the controller like so:
  *
  *     public $implement = [
- *         'Backend.Behaviors.RelationController',
+ *         \Backend\Behaviors\RelationController::class,
  *     ];
  *
  *     public $relationConfig = 'config_relation.yaml';

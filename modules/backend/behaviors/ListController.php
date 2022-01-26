@@ -12,7 +12,7 @@ use Backend\Classes\ControllerBehavior;
  * This behavior is implemented in the controller like so:
  *
  *     public $implement = [
- *         'Backend.Behaviors.ListController',
+ *         \Backend\Behaviors\ListController::class,
  *     ];
  *
  *     public $listConfig = 'config_list.yaml';

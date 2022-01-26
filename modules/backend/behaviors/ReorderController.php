@@ -11,7 +11,7 @@ use Backend\Classes\ControllerBehavior;
  * This behavior is implemented in the controller like so:
  *
  *     public $implement = [
- *         'Backend.Behaviors.ReorderController',
+ *         \Backend\Behaviors\ReorderController::class,
  *     ];
  *
  *     public $reorderConfig = 'config_reorder.yaml';
