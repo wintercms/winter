@@ -25,21 +25,6 @@ class UserRoles extends Controller
     ];
 
     /**
-     * @var array `FormController` configuration.
-     */
-    public $formConfig = 'config_form.yaml';
-
-    /**
-     * @var array `ListController` configuration.
-     */
-    public $listConfig = 'config_list.yaml';
-
-    /**
-     * @var array `RelationController` configuration.
-     */
-    public $relationConfig = 'config_relation.yaml';
-
-    /**
      * @var array Permissions required to view this page.
      */
     public $requiredPermissions = ['backend.manage_users'];
