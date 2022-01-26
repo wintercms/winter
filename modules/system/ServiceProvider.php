@@ -434,22 +434,22 @@ class ServiceProvider extends ModuleServiceProvider
                 'system.manage_updates' => [
                     'label' => 'system::lang.permissions.manage_software_updates',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'system.access_logs' => [
                     'label' => 'system::lang.permissions.access_logs',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'system.manage_mail_settings' => [
                     'label' => 'system::lang.permissions.manage_mail_settings',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'system.manage_mail_templates' => [
                     'label' => 'system::lang.permissions.manage_mail_templates',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ]
             ]);
             $manager->registerPermissionOwnerAlias('Winter.System', 'October.System');
