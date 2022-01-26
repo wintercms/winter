@@ -28,7 +28,7 @@ tabs:
             tab: 'backend::lang.user.permissions'
             type: 'Backend\FormWidgets\PermissionEditor'
             mode: 'checkbox'
-        _users:
+        _users@update:
             label: ''
             tab: backend::lang.user.menu_label
             type: partial
