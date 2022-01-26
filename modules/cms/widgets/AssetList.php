@@ -536,8 +536,11 @@ class AssetList extends WidgetBase
         }
 
         // Sort directories & files in alphabetical order
-        usort($result, function($a, $b) { return strcmp($a->name, $b->name); });
-        usort($files, function($a, $b) { return strcmp($a->name, $b->name); });
+        $sortByName = function ($a, $b) {
+            return strcmp($a->name, $b->name);
+        });
+        usort($result, $sortByName);
+        usort($files, $sortByName);
 
         foreach ($files as $file) {
             $result[] = $file;
