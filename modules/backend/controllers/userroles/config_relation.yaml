@@ -4,9 +4,7 @@
 
 users:
     label: backend::lang.user.name
-    manage:
-        form: ~/modules/backend/models/user/fields.yaml
-        list: ~/modules/backend/models/user/columns.yaml
     view:
         list: ~/modules/backend/models/user/columns.yaml
         toolbarButtons: add|remove
+        recordUrl: backend/users/update/:id
