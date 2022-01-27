@@ -1,5 +1,4 @@
 <?php
- 
 return [
     'cms_object' => [
         'invalid_file' => 'نام :name برای فایل نام معتبر است. نام فایل میتواند شامل کاراکتر انگلیسی ، خط تیره و نقطه باشد. بعنوان مثال page.htm، page و subdirectory/page',

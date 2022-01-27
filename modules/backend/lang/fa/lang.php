@@ -1,5 +1,4 @@
 <?php
- 
 return [
     'auth' => [
         'title' => 'بخش مدیریت',
