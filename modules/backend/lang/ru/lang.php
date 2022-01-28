@@ -77,7 +77,7 @@ return [
         'ok' => 'OK',
     ],
     'dashboard' => [
-        'menu_label' => 'Панель управления',
+        'menu_label' => 'Дашборд',
         'widget_label' => 'Виджет',
         'widget_width' => 'Ширина',
         'full_width' => 'полная ширина',
