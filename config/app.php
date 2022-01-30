@@ -168,7 +168,7 @@ return [
     | backend yet, as this can cause issues in the backend.
     |
     | Currently supported backend locales are listed in
-    | Backend\Models\Preference->getLocaleOptions())
+    | Backend\Models\Preference->getLocaleOptions()
     |
     */
 
