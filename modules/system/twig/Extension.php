@@ -55,6 +55,7 @@ class Extension extends TwigExtension
         $filters = [
             new TwigSimpleFilter('app', [$this, 'appFilter'], ['is_safe' => ['html']]),
             new TwigSimpleFilter('media', [$this, 'mediaFilter'], ['is_safe' => ['html']]),
+            new TwigSimpleFilter('asset', [$this, 'assetFilter'], ['is_safe' => ['html']]),
             new TwigSimpleFilter('resize', [$this, 'resizeFilter'], ['is_safe' => ['html']]),
             new TwigSimpleFilter('imageWidth', [$this, 'imageWidthFilter'], ['is_safe' => ['html']]),
             new TwigSimpleFilter('imageHeight', [$this, 'imageHeightFilter'], ['is_safe' => ['html']]),
@@ -103,6 +104,16 @@ class Extension extends TwigExtension
     public function mediaFilter($file)
     {
         return MediaLibrary::url($file);
+    }
+
+    /**
+     * Converts supplied file to a URL relative to the `app.asset_url` config.
+     * @param string $file Specifies the asset-relative file
+     * @return string
+     */
+    public function assetFilter($file)
+    {
+        return Url::asset($file);
     }
 
     /**
