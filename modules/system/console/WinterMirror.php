@@ -2,10 +2,13 @@
 
 use File;
 use Event;
-use StdClass;
+use Config;
+use Storage;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Winter\Storm\Support\Finder;
+use Winter\Storm\Filesystem\Definitions;
 
 /**
  * Console command to implement a "public" folder.
@@ -90,12 +93,13 @@ class WinterMirror extends Command
      */
     public function handle()
     {
-        $this->getDestinationPath();
+        $this->destinationPath = $this->getDestinationPath();
 
-        $paths = new StdClass();
-        $paths->files = $this->files;
-        $paths->directories = $this->directories;
-        $paths->wildcards = $this->wildcards;
+        $paths = (object) [
+            'files' => $this->files,
+            'directories' => $this->directories,
+            'wildcards' => $this->wildcards,
+        ];
 
         /**
          * @event system.console.mirror.extendPaths
@@ -112,16 +116,26 @@ class WinterMirror extends Command
          */
         Event::fire('system.console.mirror.extendPaths', [$paths]);
 
-        foreach ($paths->files as $file) {
+        $finder = Finder::create()
+            ->path(array_merge([], ...array_values((array) $paths)))
+            ->match(Definitions::get('assetExtensions'));
+
+        if ($this->option('disk') && $disk = Storage::disk($this->option('disk'))) {
+            if (!$this->argument('destination')) {
+                $this->error('Cannot mirror to disk without destination');
+                return;
+            }
+            $this->mirrorToDisk($disk, $this->argument('destination'), $finder->scan());
+            $this->output->writeln('<info>Mirror complete!</info>');
+            return;
+        }
+
+        foreach ($finder->getFiles() as $file) {
             $this->mirrorFile($file);
         }
 
-        foreach ($paths->directories as $directory) {
+        foreach ($finder->getPaths() as $directory) {
             $this->mirrorDirectory($directory);
-        }
-
-        foreach ($paths->wildcards as $wildcard) {
-            $this->mirrorWildcard($wildcard);
         }
 
         $this->output->writeln('<info>Mirror complete!</info>');
@@ -161,22 +175,23 @@ class WinterMirror extends Command
         $this->mirror($src, $dest);
     }
 
-    protected function mirrorWildcard($wildcard)
+    protected function mirrorToDisk($disk, $destination, $files)
     {
-        if (strpos($wildcard, '*') === false) {
-            return $this->mirrorDirectory($wildcard);
-        }
+        $basePath = base_path();
 
-        list($start, $end) = explode('*', $wildcard, 2);
+        foreach ($files as $file) {
+            $relative = $this->getRelativePath($basePath, $file);
 
-        $startDir = base_path().'/'.$start;
+            $uploadAs = $destination . '/' . $relative;
 
-        if (!File::isDirectory($startDir)) {
-            return false;
-        }
+            if ($disk->exists($uploadAs) /* && file shasum matches*/) {
+                $this->warn('Skipping: ' . $relative);
+                continue;
+            }
 
-        foreach (File::directories($startDir) as $directory) {
-            $this->mirrorWildcard($start.basename($directory).$end);
+            $this->info('Uploading: ' . $relative);
+
+            $disk->put($uploadAs, file_get_contents($file));
         }
     }
 
@@ -204,15 +219,11 @@ class WinterMirror extends Command
             $destPath = base_path() . '/' . $destPath;
         }
 
-        if (!File::isDirectory($destPath)) {
-            File::makeDirectory($destPath, 0755, true);
-        }
-
         $destPath = realpath($destPath);
 
         $this->output->writeln(sprintf('<info>Destination: %s</info>', $destPath));
 
-        return $this->destinationPath = $destPath;
+        return $destPath;
     }
 
     protected function getRelativePath($from, $to)
@@ -248,6 +259,7 @@ class WinterMirror extends Command
     {
         return [
             ['relative', null, InputOption::VALUE_NONE, 'Create symlinks relative to the public directory.'],
+            ['disk', null, InputOption::VALUE_OPTIONAL, 'Specify a disk to mirror to.'],
         ];
     }
 }
