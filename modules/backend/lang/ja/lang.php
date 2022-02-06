@@ -40,7 +40,7 @@ return [
     ],
     'ajax_handler' =>[
         'invalid_name' => "無効なAJAXハンドラ名: :name",
-        'not_found' => "AJAXハンドラ ':name' が見つかりませんでした。"
+        'not_found' => "AJAXハンドラ ':name' が見つかりませんでした。",
     ],
     'account' => [
         'sign_out' => 'ログアウト',
@@ -192,7 +192,7 @@ return [
             'users_count' => 'ユーザー一覧',
         ],
         'preferences' => [
-            'not_authenticated' => '設定を読み込み／保存する、認証されたユーザーが存在していません。'
+            'not_authenticated' => '設定を読み込み／保存する、認証されたユーザーが存在していません。',
         ],
         'trashed_hint_title' => 'このアカウントは削除されました',
         'trashed_hint_desc' => 'このアカウントは削除され、このアカウントでサインインすることはできません。復元するには、右下のユーザー復元アイコンをクリックします。',
@@ -437,16 +437,16 @@ return [
     
     ],
     'tooltips' => [
-        'preview_website' => 'Webサイトをプレビューする'
+        'preview_website' => 'Webサイトをプレビューする',
     ],
     'mysettings' => [
         'menu_label' => 'マイ設定',
-        'menu_description' => 'この管理者アカウントの設定をします。'
+        'menu_description' => 'この管理者アカウントの設定をします。',
     ],
     'myaccount' => [
         'menu_label' => 'アカウント',
         'menu_description' => '名前、電子メールアドレス、パスワードなどのあなたのアカウント詳細をアップデートしてください。',
-        'menu_keywords' => 'セキュリティ ログイン'
+        'menu_keywords' => 'セキュリティ ログイン',
     ],
     'branding' => [
         'menu_label' => 'バックエンドのカスタマイズ',
@@ -486,7 +486,7 @@ return [
         'timezone' => 'タイムゾーン',
         'timezone_comment' => '表示されている日付をこのタイムゾーンに合わせる。',
         'locale' => 'ロケール',
-        'locale_comment' => '使用する言語のロケールを選択してください。'
+        'locale_comment' => '使用する言語のロケールを選択してください。',
     ],
     'access_log' => [
         'hint' => 'このログは管理者のサインインが成功したリストです。記録は:days日間保持されます。',
@@ -498,7 +498,7 @@ return [
         'ip_address' => 'IPアドレス',
         'first_name' => '名',
         'last_name' => '姓',
-        'email' => 'メール'
+        'email' => 'メール',
     ],
     'filter' => [
       'all' => 'すべて',
