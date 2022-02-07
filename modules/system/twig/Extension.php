@@ -1,11 +1,11 @@
 <?php namespace System\Twig;
 
-use Twig\TwigFunction as TwigSimpleFunction;
 use Url;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Classes\MarkupManager;
 use Twig\TwigFilter as TwigSimpleFilter;
+use Twig\TwigFunction as TwigSimpleFunction;
 use Twig\Extension\AbstractExtension as TwigExtension;
 
 /**
