@@ -1,5 +1,6 @@
 <?php namespace System\Twig;
 
+use Twig\TwigFunction as TwigSimpleFunction;
 use Url;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
@@ -35,7 +36,14 @@ class Extension extends TwigExtension
      */
     public function getFunctions()
     {
-        $functions = [];
+        $functions = [
+            new TwigSimpleFunction('app', [$this, 'appFilter']),
+            new TwigSimpleFunction('media', [$this, 'mediaFilter']),
+            new TwigSimpleFunction('asset', [$this, 'assetFilter']),
+            new TwigSimpleFunction('resize', [$this, 'resizeFilter']),
+            new TwigSimpleFunction('imageWidth', [$this, 'imageWidthFilter']),
+            new TwigSimpleFunction('imageHeight', [$this, 'imageHeightFilter']),
+        ];
 
         /*
          * Include extensions provided by plugins
