@@ -61,12 +61,12 @@ class Extension extends TwigExtension
     public function getFilters()
     {
         $filters = [
-            new TwigSimpleFilter('app', [$this, 'appFilter'], ['is_safe' => ['html']]),
-            new TwigSimpleFilter('media', [$this, 'mediaFilter'], ['is_safe' => ['html']]),
-            new TwigSimpleFilter('asset', [$this, 'assetFilter'], ['is_safe' => ['html']]),
-            new TwigSimpleFilter('resize', [$this, 'resizeFilter'], ['is_safe' => ['html']]),
-            new TwigSimpleFilter('imageWidth', [$this, 'imageWidthFilter'], ['is_safe' => ['html']]),
-            new TwigSimpleFilter('imageHeight', [$this, 'imageHeightFilter'], ['is_safe' => ['html']]),
+            new TwigSimpleFilter('app', [$this, 'appFilter']),
+            new TwigSimpleFilter('media', [$this, 'mediaFilter']),
+            new TwigSimpleFilter('asset', [$this, 'assetFilter']),
+            new TwigSimpleFilter('resize', [$this, 'resizeFilter']),
+            new TwigSimpleFilter('imageWidth', [$this, 'imageWidthFilter']),
+            new TwigSimpleFilter('imageHeight', [$this, 'imageHeightFilter']),
         ];
 
         /*
