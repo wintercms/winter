@@ -185,7 +185,6 @@ class ServiceProvider extends ModuleServiceProvider
                 'link_to_asset'  => 'link_to_asset',
                 'link_to_route'  => 'link_to_route',
                 'link_to_action' => 'link_to_action',
-                'asset'          => 'asset',
                 'action'         => 'action',
                 'url'            => 'url',
                 'route'          => 'route',
