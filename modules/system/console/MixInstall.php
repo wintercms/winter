@@ -41,7 +41,7 @@ class MixInstall extends Command
             $this->npmPath = $this->option('npm', 'npm');
         }
 
-        if (!version_compare($this->getNpmVersion(), '6', '>')) {
+        if (!version_compare($this->getNpmVersion(), '7', '>')) {
             $this->error('"npm" version 7 or above must be installed to run this command.');
             return 1;
         }
