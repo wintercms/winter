@@ -22,7 +22,7 @@ use Exception;
  * This behavior is implemented in the controller like so:
  *
  *     public $implement = [
- *         'Backend.Behaviors.ImportExportController',
+ *         \Backend\Behaviors\ImportExportController::class,
  *     ];
  *
  *     public $importExportConfig = 'config_import_export.yaml';
@@ -36,11 +36,6 @@ use Exception;
  */
 class ImportExportController extends ControllerBehavior
 {
-    /**
-     * @inheritDoc
-     */
-    protected $requiredProperties = ['importExportConfig'];
-
     /**
      * @var array Configuration values that must exist when applying the primary config file.
      */
@@ -97,6 +92,11 @@ class ImportExportController extends ControllerBehavior
     protected $exportOptionsFormWidget;
 
     /**
+     * @var mixed Configuration for this behaviour
+     */
+    public $importExportConfig = 'config_import_export.yaml';
+
+    /**
      * Behavior constructor
      * @param Backend\Classes\Controller $controller
      */
@@ -107,7 +107,7 @@ class ImportExportController extends ControllerBehavior
         /*
          * Build configuration
          */
-        $this->config = $this->makeConfig($controller->importExportConfig, $this->requiredConfig);
+        $this->config = $this->makeConfig($controller->importExportConfig ?: $this->importExportConfig, $this->requiredConfig);
 
         /*
          * Process config
@@ -576,7 +576,7 @@ class ImportExportController extends ControllerBehavior
             return false;
         }
 
-        if (!$this->controller->isClassExtendedWith('Backend.Behaviors.ListController')) {
+        if (!$this->controller->isClassExtendedWith(\Backend\Behaviors\ListController::class)) {
             throw new ApplicationException(Lang::get('backend::lang.import_export.behavior_missing_uselist_error'));
         }
 

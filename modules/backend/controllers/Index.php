@@ -77,6 +77,7 @@ class Index extends Controller
             if ($first = array_first(BackendMenu::listMainMenuItems(), $true)) {
                 return Redirect::intended($first->url);
             }
+            return Backend::redirect('backend/users/myaccount');
         }
     }
 }

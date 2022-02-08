@@ -1,0 +1,10 @@
+# ===================================
+#  Relation Behavior Config
+# ===================================
+
+users:
+    label: backend::lang.user.name
+    view:
+        list: ~/modules/backend/models/user/columns.yaml
+        toolbarButtons: add|remove
+        recordUrl: backend/users/update/:id
