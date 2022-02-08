@@ -1,6 +1,6 @@
 # Icon library
 
-Winter provides an icon library with icons of various descriptions, based on the popular [Font Awesome collection](http://fortawesome.github.io/Font-Awesome/).
+Winter provides an icon library with icons of various descriptions, based on the popular [Font Awesome collection](https://fontawesome.com/v4.7).
 
 ### Inline icons
 
