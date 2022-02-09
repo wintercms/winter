@@ -24,6 +24,18 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         return $app;
     }
 
+    /**
+     * Generates a path to a fixture
+     *
+     * @param string $appendPath
+     * @return string
+     */
+    public function fixturePath($appendPath = '')
+    {
+        $appendPath = trim($appendPath, DIRECTORY_SEPARATOR);
+        return base_path('tests/fixtures/' . $appendPath);
+    }
+
     //
     // Helpers
     //

@@ -1,0 +1,9 @@
+{
+    "private": true,
+    "dependencies": [],
+    "devDependencies": [],
+    "engines": {
+        "node": ">= 14",
+        "npm": ">= 7"
+    }
+}

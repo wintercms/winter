@@ -1,0 +1,5 @@
+# Override for package.json tests to ensure package file contents are exactly the same as generated from
+# System\Classes\PackageJson class
+
+[*]
+insert_final_newline = false
