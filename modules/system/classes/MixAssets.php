@@ -1,8 +1,11 @@
 <?php namespace System\Classes;
 
 use File;
-use ApplicationException;
+use Config;
+use SystemException;
 use Cms\Classes\Theme;
+use Winter\Storm\Support\Arr;
+use System\Classes\PluginManager;
 use Winter\Storm\Filesystem\PathResolver;
 
 /**
@@ -25,6 +28,13 @@ class MixAssets
      * @var string
      */
     protected $packageJson = 'package.json';
+
+    /**
+     * The filename that stores the Laravel Mix configuration
+     *
+     * @var string
+     */
+    protected $mixJs = 'winter.mix.js';
 
     /**
      * A list of packages registered for mixing.
@@ -59,8 +69,9 @@ class MixAssets
         *   public function registerMixPackages()
         *   {
         *       return [
-        *           'package-name-1' => 'winter-mix.js',
+        *           'package-name-1' => 'winter.mix.js',
         *           'package-name-2' => 'assets/js/build.js',
+        *           'package-name-3' => 'assets/css', // winter.mix.js is assumed to be the config file in this path
         *       ];
         *   }
         */
@@ -72,24 +83,67 @@ class MixAssets
                 }
 
                 foreach ($packageArray as $name => $package) {
-                    $this->registerPackage($name, PluginManager::instance()->getPluginPath($pluginCode), $package);
+                    $this->registerPackage($name, PluginManager::instance()->getPluginPath($pluginCode) . '/' . $package);
                 }
             }
         }
 
-        // Allow current theme to define mix assets
-        $theme = Theme::getActiveTheme();
+        // Get the currently enabled modules
+        $enabledModules = Config::get('cms.loadModules', []);
 
-        if (!is_null($theme)) {
-            $mix = $theme->getConfigValue('mix', []);
+        if (in_array('Cms', $enabledModules)) {
+            // Allow current theme to define mix assets
+            $theme = Theme::getActiveTheme();
 
-            if (count($mix)) {
-                foreach ($mix as $name => $file) {
-                    $path = PathResolver::resolve($theme->getPath() . '/' . $file);
-                    $pinfo = pathinfo($path);
+            if (!is_null($theme)) {
+                $mix = $theme->getConfigValue('mix', []);
 
-                    $this->registerPackage($name, $pinfo['dirname'], $pinfo['basename']);
+                if (count($mix)) {
+                    foreach ($mix as $name => $file) {
+                        $this->registerPackage($name, $theme->getPath() . '/' . $file);
+                    }
                 }
+            }
+        }
+
+        $packagePaths = [];
+
+        // Search modules for Mix packages to autoregister
+        foreach ($enabledModules as $module) {
+            $module = strtolower($module);
+            $path = base_path("modules/$module") . '/' . $this->mixJs;
+            if (File::exists($path)) {
+                $packagePaths["module-$module"] = $path;
+            }
+        }
+
+        // Search plugins for Mix packages to autoregister
+        $plugins = PluginManager::instance()->getPlugins();
+        foreach ($plugins as $plugin) {
+            $path = $plugin->getPluginPath() . '/' . $this->mixJs;
+            if (File::exists($path)) {
+                $packagePaths[$plugin->getPluginIdentifier()] = $path;
+            }
+        }
+
+        // Search themes for Mix packages to autoregister
+        if (in_array('Cms', $enabledModules)) {
+            $themes = Theme::all();
+            foreach ($themes as $theme) {
+                $path = $theme->getPath() . '/' . $this->mixJs;
+                if (File::exists($path)) {
+                    $packagePaths["theme-" . $theme->getId()] = $path;
+                }
+            }
+        }
+
+        // Register the autodiscovered Mix packages
+        foreach ($packagePaths as $package => $path) {
+            try {
+                $this->registerPackage($package, $path);
+            } catch (SystemException $e) {
+                // Either the package name or the mixJs path have already been registered, skip.
+                continue;
             }
         }
     }
@@ -135,6 +189,7 @@ class MixAssets
      */
     public function getPackages()
     {
+        ksort($this->packages);
         return $this->packages;
     }
 
@@ -146,40 +201,64 @@ class MixAssets
      * The name of the package is an alias that can be used to reference this package in other methods within this
      * class.
      *
-     * By default, the MixAssets class will look for a `package.json` file for Node dependencies, and a `
+     * By default, the MixAssets class will look for a `package.json` file for Node dependencies, and a `winter.mix.js`
+     * file for the Laravel Mix configuration
      *
-     * @param string $name
-     * @param string $path
-     * @param string $packageJson
-     * @param string $mixJson
+     * @param string $name The name of the package being registered
+     * @param string $path The path to the Mix JS configuration file. If there is a related package.json file then it is
+     *                      required to be present in the same directory as the winter.mix.js file
      * @return void
      */
-    public function registerPackage($name, $path, $mixJs = 'winter-mix.js')
+    public function registerPackage($name, $path)
     {
-        // Require JS file for $mixJs
+        // Symbolize the path
+        $path = File::symbolizePath($path);
+
+        // Normalize the arguments
+        $resolvedPath = PathResolver::resolve($path);
+        $pinfo = pathinfo($resolvedPath);
+        $path = $pinfo['dirname'];
+        $mixJs = $pinfo['basename'];
+
+        // Require $mixJs to be a JS file
         $extension = File::extension($mixJs);
         if ($extension !== 'js') {
-            throw new ApplicationException(
+            throw new SystemException(
                 sprintf('The mix configuration for package "%s" must be a JavaScript file ending with .js', $name)
             );
         }
 
-        $path = rtrim(File::symbolizePath($path), '/\\');
-        if (!File::exists($path . DIRECTORY_SEPARATOR . $this->packageJson)) {
-            throw new ApplicationException(
-                sprintf('Missing file "%s" in path "%s" for package "%s"', $this->packageJson, $path, $name)
-            );
-        }
-        if (!File::exists($path . DIRECTORY_SEPARATOR . $mixJs)) {
-            throw new ApplicationException(
-                sprintf('Missing file "%s" in path "%s" for package "%s"', $mixJs, $path, $name)
+        // Check that the package path exists
+        if (!File::exists($path)) {
+            throw new SystemException(
+                sprintf('Cannot register "%s" as a Mix package; the "%s" path does not exist.', $name, $path)
             );
         }
 
+        // Check for any existing packages already registered under the provided name
+        if (isset($this->packages[$name])) {
+            throw new SystemException(
+                sprintf('Cannot register "%s" as a Mix package; it has already been registered at %s.', $name, $this->packages[$name]['mix'])
+            );
+        }
+
+        $package = "$path/{$this->packageJson}";
+        $mix = "$path/$mixJs";
+
+        // Check for any existing package that already registers the given Mix path
+        foreach ($this->packages as $packageName => $config) {
+            if ($config['mix'] === $mix) {
+                throw new SystemException(
+                    sprintf('Cannot register "%s" (%s) as a Mix package; it has already been registered as %s.', $name, $mix, $packageName)
+                );
+            }
+        }
+
+        // Register the package
         $this->packages[$name] = [
             'path' => $path,
-            'package' => $path . DIRECTORY_SEPARATOR . $this->packageJson,
-            'mix' => $path . DIRECTORY_SEPARATOR . $mixJs,
+            'package' => $package,
+            'mix' => $mix,
         ];
     }
 }

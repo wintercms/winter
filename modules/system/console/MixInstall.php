@@ -1,5 +1,6 @@
 <?php namespace System\Console;
 
+use File;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 use System\Classes\MixAssets;
@@ -71,6 +72,17 @@ class MixInstall extends Command
 
         // Process each package
         foreach ($packages as $name => $package) {
+            // Detect missing winter.mix.js files and install them
+            if (!File::exists($package['mix'])) {
+                $this->info(
+                    sprintf('No Mix file found for %s, creating one at %s...', $name, $package['mix'])
+                );
+                File::put($package['mix'], File::get(__DIR__ . 'fixtures/winter.mix.js.fixture'));
+            }
+
+            // @TODO: Integrate with the workspaces property and have some form of attachDefaultDependencies
+            // to load in the Laravel mix dependencies at least somewhere in the chain if required.
+
             $this->info(
                 sprintf('Installing dependencies for package "%s"', $name)
             );
