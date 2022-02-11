@@ -38,6 +38,11 @@ class MixInstall extends Command
     protected $npmPath = 'npm';
 
     /**
+     * @var string Default version of Laravel Mix to install
+     */
+    protected $defaultMixVersion = '^6.0.41';
+
+    /**
      * Execute the console command.
      * @return int
      */
@@ -132,6 +137,18 @@ class MixInstall extends Command
         }
         $workspacesPackages = $packageJson['workspaces']['packages'] ?? [];
 
+        // Check to see if Laravel Mix is already present as a dependency
+        if (
+            (
+                !isset($packageJson['dependencies']['laravel-mix'])
+                || !isset($packageJson['devDependencies']['laravel-mix'])
+            )
+            && $this->confirm('laravel-mix was not found as a dependency in package.json, would you like to add it?', true)
+        ) {
+            $canModifyPackageJson = true;
+            $packageJson['devDependencies'] = array_merge($packageJson['devDependencies'] ?? [], ['laravel-mix' => $this->defaultMixVersion]);
+        }
+
         // Process each package
         foreach ($registeredPackages as $name => $package) {
             // Detect missing winter.mix.js files and install them
@@ -158,9 +175,6 @@ class MixInstall extends Command
                 );
                 $workspacesPackages = array_merge($workspacesPackages, [$package['path']]);
             }
-
-            // @TODO: Integrate with the workspaces property and have some form of attachDefaultDependencies
-            // to load in the Laravel mix dependencies at least somewhere in the chain if required.
         }
 
         // Modify the package.json file if required
