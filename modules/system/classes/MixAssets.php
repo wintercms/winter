@@ -215,6 +215,7 @@ class MixAssets
         $path = File::symbolizePath($path);
 
         // Normalize the arguments
+        $name = strtolower($name);
         $resolvedPath = PathResolver::resolve($path);
         $pinfo = pathinfo($resolvedPath);
         $path = $pinfo['dirname'];

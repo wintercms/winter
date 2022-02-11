@@ -1,9 +1,13 @@
 <?php namespace System\Console;
 
 use File;
+use Config;
+use Cms\Classes\Theme;
+use Winter\Storm\Support\Str;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 use System\Classes\MixAssets;
+use System\Classes\PluginManager;
 
 class MixInstall extends Command
 {
@@ -50,18 +54,62 @@ class MixInstall extends Command
         $mixedAssets = MixAssets::instance();
         $mixedAssets->fireCallbacks();
 
-        $packages = $mixedAssets->getPackages();
+        $registeredPackages = $mixedAssets->getPackages();
+        $requestedPackages = $this->option('package') ?: [];
 
-        if (count($this->option('package')) && count($packages)) {
-            foreach (array_keys($packages) as $name) {
-                if (!in_array($name, $this->option('package'))) {
-                    unset($packages[$name]);
+        if (count($requestedPackages) && count($registeredPackages)) {
+            $availablePackages = array_keys($registeredPackages);
+            $cmsEnabled = in_array('Cms', Config::get('cms.loadModules'));
+
+            // Autogenerate config files for packages that don't exist but can be autodiscovered
+            foreach ($requestedPackages as $package) {
+                // Normalize the package name
+                $package = strtolower($package);
+
+                // Check if the package is already registered
+                if (in_array($package, $availablePackages)) {
+                    continue;
+                }
+
+                // Check if package could be a module (but explicitly ignore core Winter modules)
+                if (Str::startsWith($package, 'module-') && !in_array($package, ['system', 'backend', 'cms'])) {
+                    $mixedAssets->registerPackage($package, base_path('modules/' . Str::after($package, 'module-') . '/winter.mix.js'));
+                    continue;
+                }
+
+                // Check if package could be a theme
+                if (
+                    $cmsEnabled
+                    && Str::startsWith($package, 'theme-')
+                    && Theme::exists(Str::after($package, 'theme-'))
+                ) {
+                    $theme = Theme::load(Str::after($package, 'theme-'));
+                    $mixedAssets->registerPackage($package, $theme->getPath() . '/winter.mix.js');
+                    continue;
+                }
+
+                // Check if a package could be a plugin
+                if (PluginManager::instance()->exists($package)) {
+                    $mixedAssets->registerPackage($package, PluginManager::instance()->getPluginPath($package) . '/winter.mix.js');
+                    continue;
+                }
+
+
+            }
+
+            // Get an updated list of packages including any newly added packages
+            $registeredPackages = $mixedAssets->getPackages();
+
+            // Filter the registered packages to only deal with the requested packages
+            foreach (array_keys($registeredPackages) as $name) {
+                if (!in_array($name, $requestedPackages)) {
+                    unset($registeredPackages[$name]);
                 }
             }
         }
 
-        if (!count($packages)) {
-            if (count($this->option('package'))) {
+        if (!count($registeredPackages)) {
+            if (count($requestedPackages)) {
                 $this->error('No registered packages matched the requested packages for installation.');
                 return 1;
             } else {
@@ -71,13 +119,13 @@ class MixInstall extends Command
         }
 
         // Process each package
-        foreach ($packages as $name => $package) {
+        foreach ($registeredPackages as $name => $package) {
             // Detect missing winter.mix.js files and install them
             if (!File::exists($package['mix'])) {
                 $this->info(
                     sprintf('No Mix file found for %s, creating one at %s...', $name, $package['mix'])
                 );
-                File::put($package['mix'], File::get(__DIR__ . 'fixtures/winter.mix.js.fixture'));
+                File::put($package['mix'], File::get(__DIR__ . '/fixtures/winter.mix.js.fixture'));
             }
 
             // @TODO: Integrate with the workspaces property and have some form of attachDefaultDependencies
