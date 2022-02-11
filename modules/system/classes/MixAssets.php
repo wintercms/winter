@@ -4,7 +4,7 @@ use File;
 use Config;
 use SystemException;
 use Cms\Classes\Theme;
-use Winter\Storm\Support\Arr;
+use Winter\Storm\Support\Str;
 use System\Classes\PluginManager;
 use Winter\Storm\Filesystem\PathResolver;
 
@@ -218,7 +218,7 @@ class MixAssets
         $name = strtolower($name);
         $resolvedPath = PathResolver::resolve($path);
         $pinfo = pathinfo($resolvedPath);
-        $path = $pinfo['dirname'];
+        $path = Str::after($pinfo['dirname'], base_path() . '/');
         $mixJs = $pinfo['basename'];
 
         // Require $mixJs to be a JS file
