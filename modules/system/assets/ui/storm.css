@@ -10452,3 +10452,329 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .wn-icon-zhihu:before,
 .oc-icon-zhihu:before,
 .icon-zhihu:before {content:"\f63f";font-family:'FontAwesome Brands'}
+
+/* Support FontAwesome 4 */
+.wn-icon-address-book-o:before,
+.oc-icon-address-book-o:before,
+.icon-address-book-o:before {content:"\f2ba";font-family:'FontAwesome 4'}
+.wn-icon-address-card-o:before,
+.oc-icon-address-card-o:before,
+.icon-address-card-o:before {content:"\f2bc";font-family:'FontAwesome 4'}
+.wn-icon-bell-o:before,
+.oc-icon-bell-o:before,
+.icon-bell-o:before {content:"\f0a2";font-family:'FontAwesome 4'}
+.wn-icon-bell-slash-o:before,
+.oc-icon-bell-slash-o:before,
+.icon-bell-slash-o:before {content:"\f1f7";font-family:'FontAwesome 4'}
+.wn-icon-bookmark-o:before,
+.oc-icon-bookmark-o:before,
+.icon-bookmark-o:before {content:"\f097";font-family:'FontAwesome 4'}
+.wn-icon-building-o:before,
+.oc-icon-building-o:before,
+.icon-building-o:before {content:"\f0f7";font-family:'FontAwesome 4'}
+.wn-icon-calendar-check-o:before,
+.oc-icon-calendar-check-o:before,
+.icon-calendar-check-o:before {content:"\f274";font-family:'FontAwesome 4'}
+.wn-icon-calendar-minus-o:before,
+.oc-icon-calendar-minus-o:before,
+.icon-calendar-minus-o:before {content:"\f272";font-family:'FontAwesome 4'}
+.wn-icon-calendar-o:before,
+.oc-icon-calendar-o:before,
+.icon-calendar-o:before {content:"\f133";font-family:'FontAwesome 4'}
+.wn-icon-calendar-plus-o:before,
+.oc-icon-calendar-plus-o:before,
+.icon-calendar-plus-o:before {content:"\f271";font-family:'FontAwesome 4'}
+.wn-icon-calendar-times-o:before,
+.oc-icon-calendar-times-o:before,
+.icon-calendar-times-o:before {content:"\f273";font-family:'FontAwesome 4'}
+.wn-icon-caret-square-o-down:before,
+.oc-icon-caret-square-o-down:before,
+.icon-caret-square-o-down:before {content:"\f150";font-family:'FontAwesome 4'}
+.wn-icon-caret-square-o-left:before,
+.oc-icon-caret-square-o-left:before,
+.icon-caret-square-o-left:before {content:"\f191";font-family:'FontAwesome 4'}
+.wn-icon-caret-square-o-right:before,
+.oc-icon-caret-square-o-right:before,
+.icon-caret-square-o-right:before {content:"\f152";font-family:'FontAwesome 4'}
+.wn-icon-caret-square-o-up:before,
+.oc-icon-caret-square-o-up:before,
+.icon-caret-square-o-up:before {content:"\f151";font-family:'FontAwesome 4'}
+.wn-icon-cc:before,
+.oc-icon-cc:before,
+.icon-cc:before {content:"\f20a";font-family:'FontAwesome 4'}
+.wn-icon-check-circle-o:before,
+.oc-icon-check-circle-o:before,
+.icon-check-circle-o:before {content:"\f05d";font-family:'FontAwesome 4'}
+.wn-icon-check-square-o:before,
+.oc-icon-check-square-o:before,
+.icon-check-square-o:before {content:"\f046";font-family:'FontAwesome 4'}
+.wn-icon-circle-o:before,
+.oc-icon-circle-o:before,
+.icon-circle-o:before {content:"\f10c";font-family:'FontAwesome 4'}
+.wn-icon-circle-o-notch:before,
+.oc-icon-circle-o-notch:before,
+.icon-circle-o-notch:before {content:"\f1ce";font-family:'FontAwesome 4'}
+.wn-icon-circle-thin:before,
+.oc-icon-circle-thin:before,
+.icon-circle-thin:before {content:"\f1db";font-family:'FontAwesome 4'}
+.wn-icon-clock-o:before,
+.oc-icon-clock-o:before,
+.icon-clock-o:before {content:"\f017";font-family:'FontAwesome 4'}
+.wn-icon-comment-o:before,
+.oc-icon-comment-o:before,
+.icon-comment-o:before {content:"\f0e5";font-family:'FontAwesome 4'}
+.wn-icon-commenting-o:before,
+.oc-icon-commenting-o:before,
+.icon-commenting-o:before {content:"\f27b";font-family:'FontAwesome 4'}
+.wn-icon-comments-o:before,
+.oc-icon-comments-o:before,
+.icon-comments-o:before {content:"\f0e6";font-family:'FontAwesome 4'}
+.wn-icon-dot-circle-o:before,
+.oc-icon-dot-circle-o:before,
+.icon-dot-circle-o:before {content:"\f192";font-family:'FontAwesome 4'}
+.wn-icon-envelope-o:before,
+.oc-icon-envelope-o:before,
+.icon-envelope-o:before {content:"\f003";font-family:'FontAwesome 4'}
+.wn-icon-envelope-open-o:before,
+.oc-icon-envelope-open-o:before,
+.icon-envelope-open-o:before {content:"\f2b7";font-family:'FontAwesome 4'}
+.wn-icon-file-archive-o:before,
+.oc-icon-file-archive-o:before,
+.icon-file-archive-o:before {content:"\f1c6";font-family:'FontAwesome 4'}
+.wn-icon-file-audio-o:before,
+.oc-icon-file-audio-o:before,
+.icon-file-audio-o:before {content:"\f1c7";font-family:'FontAwesome 4'}
+.wn-icon-file-code-o:before,
+.oc-icon-file-code-o:before,
+.icon-file-code-o:before {content:"\f1c9";font-family:'FontAwesome 4'}
+.wn-icon-file-excel-o:before,
+.oc-icon-file-excel-o:before,
+.icon-file-excel-o:before {content:"\f1c3";font-family:'FontAwesome 4'}
+.wn-icon-file-image-o:before,
+.oc-icon-file-image-o:before,
+.icon-file-image-o:before {content:"\f1c5";font-family:'FontAwesome 4'}
+.wn-icon-file-pdf-o:before,
+.oc-icon-file-pdf-o:before,
+.icon-file-pdf-o:before {content:"\f1c1";font-family:'FontAwesome 4'}
+.wn-icon-file-powerpoint-o:before,
+.oc-icon-file-powerpoint-o:before,
+.icon-file-powerpoint-o:before {content:"\f1c4";font-family:'FontAwesome 4'}
+.wn-icon-file-video-o:before,
+.oc-icon-file-video-o:before,
+.icon-file-video-o:before {content:"\f1c8";font-family:'FontAwesome 4'}
+.wn-icon-file-word-o:before,
+.oc-icon-file-word-o:before,
+.icon-file-word-o:before {content:"\f1c2";font-family:'FontAwesome 4'}
+.wn-icon-flag-o:before,
+.oc-icon-flag-o:before,
+.icon-flag-o:before {content:"\f11d";font-family:'FontAwesome 4'}
+.wn-icon-folder-o:before,
+.oc-icon-folder-o:before,
+.icon-folder-o:before {content:"\f114";font-family:'FontAwesome 4'}
+.wn-icon-folder-open-o:before,
+.oc-icon-folder-open-o:before,
+.icon-folder-open-o:before {content:"\f115";font-family:'FontAwesome 4'}
+.wn-icon-frown-o:before,
+.oc-icon-frown-o:before,
+.icon-frown-o:before {content:"\f119";font-family:'FontAwesome 4'}
+.wn-icon-futbol-o:before,
+.oc-icon-futbol-o:before,
+.icon-futbol-o:before {content:"\f1e3";font-family:'FontAwesome 4'}
+.wn-icon-glass:before,
+.oc-icon-glass:before,
+.icon-glass:before {content:"\f000";font-family:'FontAwesome 4'}
+.wn-icon-hand-lizard-o:before,
+.oc-icon-hand-lizard-o:before,
+.icon-hand-lizard-o:before {content:"\f258";font-family:'FontAwesome 4'}
+.wn-icon-hand-paper-o:before,
+.oc-icon-hand-paper-o:before,
+.icon-hand-paper-o:before {content:"\f256";font-family:'FontAwesome 4'}
+.wn-icon-hand-peace-o:before,
+.oc-icon-hand-peace-o:before,
+.icon-hand-peace-o:before {content:"\f25b";font-family:'FontAwesome 4'}
+.wn-icon-hand-pointer-o:before,
+.oc-icon-hand-pointer-o:before,
+.icon-hand-pointer-o:before {content:"\f25a";font-family:'FontAwesome 4'}
+.wn-icon-hand-rock-o:before,
+.oc-icon-hand-rock-o:before,
+.icon-hand-rock-o:before {content:"\f255";font-family:'FontAwesome 4'}
+.wn-icon-hand-scissors-o:before,
+.oc-icon-hand-scissors-o:before,
+.icon-hand-scissors-o:before {content:"\f257";font-family:'FontAwesome 4'}
+.wn-icon-hand-spock-o:before,
+.oc-icon-hand-spock-o:before,
+.icon-hand-spock-o:before {content:"\f259";font-family:'FontAwesome 4'}
+.wn-icon-handshake-o:before,
+.oc-icon-handshake-o:before,
+.icon-handshake-o:before {content:"\f2b5";font-family:'FontAwesome 4'}
+.wn-icon-hdd-o:before,
+.oc-icon-hdd-o:before,
+.icon-hdd-o:before {content:"\f0a0";font-family:'FontAwesome 4'}
+.wn-icon-heart-o:before,
+.oc-icon-heart-o:before,
+.icon-heart-o:before {content:"\f08a";font-family:'FontAwesome 4'}
+.wn-icon-hourglass-o:before,
+.oc-icon-hourglass-o:before,
+.icon-hourglass-o:before {content:"\f250";font-family:'FontAwesome 4'}
+.wn-icon-id-card-o:before,
+.oc-icon-id-card-o:before,
+.icon-id-card-o:before {content:"\f2c3";font-family:'FontAwesome 4'}
+.wn-icon-keyboard-o:before,
+.oc-icon-keyboard-o:before,
+.icon-keyboard-o:before {content:"\f11c";font-family:'FontAwesome 4'}
+.wn-icon-lemon-o:before,
+.oc-icon-lemon-o:before,
+.icon-lemon-o:before {content:"\f094";font-family:'FontAwesome 4'}
+.wn-icon-lightbulb-o:before,
+.oc-icon-lightbulb-o:before,
+.icon-lightbulb-o:before {content:"\f0eb";font-family:'FontAwesome 4'}
+.wn-icon-map-o:before,
+.oc-icon-map-o:before,
+.icon-map-o:before {content:"\f278";font-family:'FontAwesome 4'}
+.wn-icon-meh-o:before,
+.oc-icon-meh-o:before,
+.icon-meh-o:before {content:"\f11a";font-family:'FontAwesome 4'}
+.wn-icon-minus-square-o:before,
+.oc-icon-minus-square-o:before,
+.icon-minus-square-o:before {content:"\f147";font-family:'FontAwesome 4'}
+.wn-icon-money:before,
+.oc-icon-money:before,
+.icon-money:before {content:"\f0d6";font-family:'FontAwesome 4'}
+.wn-icon-moon-o:before,
+.oc-icon-moon-o:before,
+.icon-moon-o:before {content:"\f186";font-family:'FontAwesome 4'}
+.wn-icon-newspaper-o:before,
+.oc-icon-newspaper-o:before,
+.icon-newspaper-o:before {content:"\f1ea";font-family:'FontAwesome 4'}
+.wn-icon-paper-plane-o:before,
+.oc-icon-paper-plane-o:before,
+.icon-paper-plane-o:before {content:"\f1d9";font-family:'FontAwesome 4'}
+.wn-icon-pencil-square-o:before,
+.oc-icon-pencil-square-o:before,
+.icon-pencil-square-o:before {content:"\f044";font-family:'FontAwesome 4'}
+.wn-icon-picture-o:before,
+.oc-icon-picture-o:before,
+.icon-picture-o:before {content:"\f03e";font-family:'FontAwesome 4'}
+.wn-icon-plus-square-o:before,
+.oc-icon-plus-square-o:before,
+.icon-plus-square-o:before {content:"\f196";font-family:'FontAwesome 4'}
+.wn-icon-question-circle-o:before,
+.oc-icon-question-circle-o:before,
+.icon-question-circle-o:before {content:"\f29c";font-family:'FontAwesome 4'}
+.wn-icon-share-square-o:before,
+.oc-icon-share-square-o:before,
+.icon-share-square-o:before {content:"\f045";font-family:'FontAwesome 4'}
+.wn-icon-smile-o:before,
+.oc-icon-smile-o:before,
+.icon-smile-o:before {content:"\f118";font-family:'FontAwesome 4'}
+.wn-icon-snowflake-o:before,
+.oc-icon-snowflake-o:before,
+.icon-snowflake-o:before {content:"\f2dc";font-family:'FontAwesome 4'}
+.wn-icon-square-o:before,
+.oc-icon-square-o:before,
+.icon-square-o:before {content:"\f096";font-family:'FontAwesome 4'}
+.wn-icon-star-half-o:before,
+.oc-icon-star-half-o:before,
+.icon-star-half-o:before {content:"\f123";font-family:'FontAwesome 4'}
+.wn-icon-star-o:before,
+.oc-icon-star-o:before,
+.icon-star-o:before {content:"\f006";font-family:'FontAwesome 4'}
+.wn-icon-sticky-note-o:before,
+.oc-icon-sticky-note-o:before,
+.icon-sticky-note-o:before {content:"\f24a";font-family:'FontAwesome 4'}
+.wn-icon-sun-o:before,
+.oc-icon-sun-o:before,
+.icon-sun-o:before {content:"\f185";font-family:'FontAwesome 4'}
+.wn-icon-thumbs-o-down:before,
+.oc-icon-thumbs-o-down:before,
+.icon-thumbs-o-down:before {content:"\f088";font-family:'FontAwesome 4'}
+.wn-icon-thumbs-o-up:before,
+.oc-icon-thumbs-o-up:before,
+.icon-thumbs-o-up:before {content:"\f087";font-family:'FontAwesome 4'}
+.wn-icon-times-circle-o:before,
+.oc-icon-times-circle-o:before,
+.icon-times-circle-o:before {content:"\f05c";font-family:'FontAwesome 4'}
+.wn-icon-trash-o:before,
+.oc-icon-trash-o:before,
+.icon-trash-o:before {content:"\f014";font-family:'FontAwesome 4'}
+.wn-icon-user-circle-o:before,
+.oc-icon-user-circle-o:before,
+.icon-user-circle-o:before {content:"\f2be";font-family:'FontAwesome 4'}
+.wn-icon-user-o:before,
+.oc-icon-user-o:before,
+.icon-user-o:before {content:"\f2c0";font-family:'FontAwesome 4'}
+.wn-icon-wheelchair-alt:before,
+.oc-icon-wheelchair-alt:before,
+.icon-wheelchair-alt:before {content:"\f29b";font-family:'FontAwesome 4'}
+.wn-icon-window-close-o:before,
+.oc-icon-window-close-o:before,
+.icon-window-close-o:before {content:"\f2d4";font-family:'FontAwesome 4'}
+.wn-icon-hospital-o:before,
+.oc-icon-hospital-o:before,
+.icon-hospital-o:before {content:"\f0f8";font-family:'FontAwesome 4'}
+.wn-icon-file-o:before,
+.oc-icon-file-o:before,
+.icon-file-o:before {content:"\f016";font-family:'FontAwesome 4'}
+.wn-icon-file-text-o:before,
+.oc-icon-file-text-o:before,
+.icon-file-text-o:before {content:"\f0f6";font-family:'FontAwesome 4'}
+.wn-icon-files-o:before,
+.oc-icon-files-o:before,
+.icon-files-o:before {content:"\f0c5";font-family:'FontAwesome 4'}
+.wn-icon-floppy-o:before,
+.oc-icon-floppy-o:before,
+.icon-floppy-o:before {content:"\f0c7";font-family:'FontAwesome 4'}
+.wn-icon-arrow-circle-o-down:before,
+.oc-icon-arrow-circle-o-down:before,
+.icon-arrow-circle-o-down:before {content:"\f01a";font-family:'FontAwesome 4'}
+.wn-icon-arrow-circle-o-left:before,
+.oc-icon-arrow-circle-o-left:before,
+.icon-arrow-circle-o-left:before {content:"\f190";font-family:'FontAwesome 4'}
+.wn-icon-arrow-circle-o-right:before,
+.oc-icon-arrow-circle-o-right:before,
+.icon-arrow-circle-o-right:before {content:"\f18e";font-family:'FontAwesome 4'}
+.wn-icon-arrow-circle-o-up:before,
+.oc-icon-arrow-circle-o-up:before,
+.icon-arrow-circle-o-up:before {content:"\f01b";font-family:'FontAwesome 4'}
+.wn-icon-hand-o-down:before,
+.oc-icon-hand-o-down:before,
+.icon-hand-o-down:before {content:"\f0a7";font-family:'FontAwesome 4'}
+.wn-icon-hand-o-left:before,
+.oc-icon-hand-o-left:before,
+.icon-hand-o-left:before {content:"\f0a5";font-family:'FontAwesome 4'}
+.wn-icon-hand-o-right:before,
+.oc-icon-hand-o-right:before,
+.icon-hand-o-right:before {content:"\f0a4";font-family:'FontAwesome 4'}
+.wn-icon-hand-o-up:before,
+.oc-icon-hand-o-up:before,
+.icon-hand-o-up:before {content:"\f0a6";font-family:'FontAwesome 4'}
+.wn-icon-pause-circle-o:before,
+.oc-icon-pause-circle-o:before,
+.icon-pause-circle-o:before {content:"\f28c";font-family:'FontAwesome 4'}
+.wn-icon-play-circle-o:before,
+.oc-icon-play-circle-o:before,
+.icon-play-circle-o:before {content:"\f01d";font-family:'FontAwesome 4'}
+.wn-icon-stop-circle-o:before,
+.oc-icon-stop-circle-o:before,
+.icon-stop-circle-o:before {content:"\f28e";font-family:'FontAwesome 4'}
+.wn-icon-youtube-play:before,
+.oc-icon-youtube-play:before,
+.icon-youtube-play:before {content:"\f16a";font-family:'FontAwesome 4'}
+.wn-icon-eercast:before,
+.oc-icon-eercast:before,
+.icon-eercast:before {content:"\f2da";font-family:'FontAwesome 4'}
+.wn-icon-facebook-official:before,
+.oc-icon-facebook-official:before,
+.icon-facebook-official:before {content:"\f230";font-family:'FontAwesome 4'}
+.wn-icon-google-plus-official:before,
+.oc-icon-google-plus-official:before,
+.icon-google-plus-official:before {content:"\f2b3";font-family:'FontAwesome 4'}
+.wn-icon-linkedin-square:before,
+.oc-icon-linkedin-square:before,
+.icon-linkedin-square:before {content:"\f08c";font-family:'FontAwesome 4'}
+.wn-icon-meanpath:before,
+.oc-icon-meanpath:before,
+.icon-meanpath:before {content:"\f20c";font-family:'FontAwesome 4'}
+.wn-icon-tripadvisor:before,
+.oc-icon-tripadvisor:before,
+.icon-tripadvisor:before {content:"\f262";font-family:'FontAwesome 4'}
