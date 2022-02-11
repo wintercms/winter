@@ -433,7 +433,7 @@ class AssetList extends WidgetBase
 
     protected function getThemeFileUrl($path)
     {
-        return Url::to('themes/'.$this->theme->getDirName().'/assets'.$path);
+        return Url::asset('themes/'.$this->theme->getDirName().'/assets'.$path);
     }
 
     public function getCurrentRelativePath()
