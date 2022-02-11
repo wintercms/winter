@@ -3685,10 +3685,10 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .clockpicker-minutes .clockpicker-tick {font-size:16px}
 
 /* Icons */
-@font-face {font-family:'FontAwesome Brands';font-style:normal;font-weight:400;font-display:block;src:url("font/fa-brands-400.woff2?v=6.0.0") format("woff2"), url("font/fa-brands-400.ttf?v=6.0.0") format("truetype")}
-@font-face {font-family:'FontAwesome Regular';font-style:normal;font-weight:400;font-display:block;src:url("font/fa-regular-400.woff2?v=6.0.0") format("woff2"), url("font/fa-regular-400.ttf?v=6.0.0") format("truetype")}
-@font-face {font-family:"FontAwesome";font-display:block;src:url("font/fa-solid-900.woff2?v=6.0.0") format("woff2"), url("font/fa-solid-900.ttf?v=6.0.0") format("truetype")}
-@font-face {font-family:"FontAwesome 4";font-display:block;src:url("font/fontawesome-webfont.woff2?v=6.0.0") format("woff2"), url("font/fontawesome-webfont.ttf?v=6.0.0") format("truetype")}
+@font-face {font-family:'FontAwesome Brands';font-style:normal;font-weight:400;font-display:block;src:url("font/fa-brands-400.woff2?v=1.0.2") format("woff2"), url("font/fa-brands-400.ttf?v=1.0.2") format("truetype")}
+@font-face {font-family:'FontAwesome Regular';font-style:normal;font-weight:400;font-display:block;src:url("font/fa-regular-400.woff2?v=1.0.2") format("woff2"), url("font/fa-regular-400.ttf?v=1.0.2") format("truetype")}
+@font-face {font-family:"FontAwesome";font-display:block;src:url("font/fa-solid-900.woff2?v=1.0.2") format("woff2"), url("font/fa-solid-900.ttf?v=1.0.2") format("truetype")}
+@font-face {font-family:"FontAwesome 4";font-display:block;src:url("font/fontawesome-webfont.woff2?v=1.0.2") format("woff2"), url("font/fontawesome-webfont.ttf?v=1.0.2") format("truetype")}
 [class^="wn-icon-"]:before,
 [class*=" wn-icon-"]:before,
 [class^="oc-icon-"]:before,
@@ -4563,7 +4563,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-beer:before {content:"\f0fc"}
 .wn-icon-bell:before,
 .oc-icon-bell:before,
-.icon-bell:before {content:"\f0f3";font-family:'FontAwesome Regular'}
+.icon-bell:before {content:"\f0f3"}
 .wn-icon-bell-concierge:before,
 .oc-icon-bell-concierge:before,
 .icon-bell-concierge:before {content:"\f562"}
@@ -4572,7 +4572,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-concierge-bell:before {content:"\f562"}
 .wn-icon-bell-slash:before,
 .oc-icon-bell-slash:before,
-.icon-bell-slash:before {content:"\f1f6";font-family:'FontAwesome Regular'}
+.icon-bell-slash:before {content:"\f1f6"}
 .wn-icon-bezier-curve:before,
 .oc-icon-bezier-curve:before,
 .icon-bezier-curve:before {content:"\f55b"}
@@ -4665,7 +4665,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-book-dead:before {content:"\f6b7"}
 .wn-icon-bookmark:before,
 .oc-icon-bookmark:before,
-.icon-bookmark:before {content:"\f02e";font-family:'FontAwesome Regular'}
+.icon-bookmark:before {content:"\f02e"}
 .wn-icon-border-all:before,
 .oc-icon-border-all:before,
 .icon-border-all:before {content:"\f84c"}
@@ -4806,7 +4806,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-calculator:before {content:"\f1ec"}
 .wn-icon-calendar:before,
 .oc-icon-calendar:before,
-.icon-calendar:before {content:"\f133";font-family:'FontAwesome Regular'}
+.icon-calendar:before {content:"\f133"}
 .wn-icon-calendar-check:before,
 .oc-icon-calendar-check:before,
 .icon-calendar-check:before {content:"\f274";font-family:'FontAwesome Regular'}
@@ -5079,10 +5079,10 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-arrow-circle-up:before {content:"\f0aa"}
 .wn-icon-circle-check:before,
 .oc-icon-circle-check:before,
-.icon-circle-check:before {content:"\f058";font-family:'FontAwesome Regular'}
+.icon-circle-check:before {content:"\f058"}
 .wn-icon-check-circle:before,
 .oc-icon-check-circle:before,
-.icon-check-circle:before {content:"\f058"}
+.icon-check-circle:before {content:"\f058";font-family:'FontAwesome Regular'}
 .wn-icon-circle-chevron-down:before,
 .oc-icon-circle-chevron-down:before,
 .icon-circle-chevron-down:before {content:"\f13a"}
@@ -5334,7 +5334,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-colon-sign:before {content:"\e140"}
 .wn-icon-comment:before,
 .oc-icon-comment:before,
-.icon-comment:before {content:"\f075";font-family:'FontAwesome Regular'}
+.icon-comment:before {content:"\f075"}
 .wn-icon-comment-dollar:before,
 .oc-icon-comment-dollar:before,
 .icon-comment-dollar:before {content:"\f651"}
@@ -5526,13 +5526,13 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-dog:before {content:"\f6d3"}
 .wn-icon-dollar-sign:before,
 .oc-icon-dollar-sign:before,
-.icon-dollar-sign:before {content:"\24"}
+.icon-dollar-sign:before {content:"\24";font-family:'FontAwesome Regular'}
 .wn-icon-dollar:before,
 .oc-icon-dollar:before,
 .icon-dollar:before {content:"\24"}
 .wn-icon-usd:before,
 .oc-icon-usd:before,
-.icon-usd:before {content:"\24";font-family:'FontAwesome Regular'}
+.icon-usd:before {content:"\24"}
 .wn-icon-dolly:before,
 .oc-icon-dolly:before,
 .icon-dolly:before {content:"\f472"}
@@ -5685,10 +5685,10 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-ellipsis-v:before {content:"\f142"}
 .wn-icon-envelope:before,
 .oc-icon-envelope:before,
-.icon-envelope:before {content:"\f0e0";font-family:'FontAwesome Regular'}
+.icon-envelope:before {content:"\f0e0"}
 .wn-icon-envelope-open:before,
 .oc-icon-envelope-open:before,
-.icon-envelope-open:before {content:"\f2b6";font-family:'FontAwesome Regular'}
+.icon-envelope-open:before {content:"\f2b6"}
 .wn-icon-envelope-open-text:before,
 .oc-icon-envelope-open-text:before,
 .icon-envelope-open-text:before {content:"\f658"}
@@ -5700,7 +5700,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-mail-bulk:before {content:"\f674"}
 .wn-icon-equals:before,
 .oc-icon-equals:before,
-.icon-equals:before {content:"\3d";font-family:'FontAwesome Regular'}
+.icon-equals:before {content:"\3d"}
 .wn-icon-eraser:before,
 .oc-icon-eraser:before,
 .icon-eraser:before {content:"\f12d"}
@@ -5724,7 +5724,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-expand:before {content:"\f065"}
 .wn-icon-eye:before,
 .oc-icon-eye:before,
-.icon-eye:before {content:"\f06e";font-family:'FontAwesome Regular'}
+.icon-eye:before {content:"\f06e"}
 .wn-icon-eye-dropper:before,
 .oc-icon-eye-dropper:before,
 .icon-eye-dropper:before {content:"\f1fb"}
@@ -5742,7 +5742,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-low-vision:before {content:"\f2a8"}
 .wn-icon-eye-slash:before,
 .oc-icon-eye-slash:before,
-.icon-eye-slash:before {content:"\f070";font-family:'FontAwesome Regular'}
+.icon-eye-slash:before {content:"\f070"}
 .wn-icon-f:before,
 .oc-icon-f:before,
 .icon-f:before {content:"\46"}
@@ -5982,7 +5982,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-feather-alt:before {content:"\f56b"}
 .wn-icon-file:before,
 .oc-icon-file:before,
-.icon-file:before {content:"\f15b";font-family:'FontAwesome Regular'}
+.icon-file:before {content:"\f15b"}
 .wn-icon-file-arrow-down:before,
 .oc-icon-file-arrow-down:before,
 .icon-file-arrow-down:before {content:"\f56d"}
@@ -5997,10 +5997,10 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-file-upload:before {content:"\f574"}
 .wn-icon-file-audio:before,
 .oc-icon-file-audio:before,
-.icon-file-audio:before {content:"\f1c7";font-family:'FontAwesome Regular'}
+.icon-file-audio:before {content:"\f1c7"}
 .wn-icon-file-code:before,
 .oc-icon-file-code:before,
-.icon-file-code:before {content:"\f1c9";font-family:'FontAwesome Regular'}
+.icon-file-code:before {content:"\f1c9"}
 .wn-icon-file-contract:before,
 .oc-icon-file-contract:before,
 .icon-file-contract:before {content:"\f56c"}
@@ -6009,7 +6009,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-file-csv:before {content:"\f6dd"}
 .wn-icon-file-excel:before,
 .oc-icon-file-excel:before,
-.icon-file-excel:before {content:"\f1c3";font-family:'FontAwesome Regular'}
+.icon-file-excel:before {content:"\f1c3"}
 .wn-icon-file-export:before,
 .oc-icon-file-export:before,
 .icon-file-export:before {content:"\f56e"}
@@ -6018,7 +6018,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-arrow-right-from-file:before {content:"\f56e"}
 .wn-icon-file-image:before,
 .oc-icon-file-image:before,
-.icon-file-image:before {content:"\f1c5";font-family:'FontAwesome Regular'}
+.icon-file-image:before {content:"\f1c5"}
 .wn-icon-file-import:before,
 .oc-icon-file-import:before,
 .icon-file-import:before {content:"\f56f"}
@@ -6033,7 +6033,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-file-invoice-dollar:before {content:"\f571"}
 .wn-icon-file-lines:before,
 .oc-icon-file-lines:before,
-.icon-file-lines:before {content:"\f15c";font-family:'FontAwesome Regular'}
+.icon-file-lines:before {content:"\f15c"}
 .wn-icon-file-alt:before,
 .oc-icon-file-alt:before,
 .icon-file-alt:before {content:"\f15c"}
@@ -6045,10 +6045,10 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-file-medical:before {content:"\f477"}
 .wn-icon-file-pdf:before,
 .oc-icon-file-pdf:before,
-.icon-file-pdf:before {content:"\f1c1";font-family:'FontAwesome Regular'}
+.icon-file-pdf:before {content:"\f1c1"}
 .wn-icon-file-powerpoint:before,
 .oc-icon-file-powerpoint:before,
-.icon-file-powerpoint:before {content:"\f1c4";font-family:'FontAwesome Regular'}
+.icon-file-powerpoint:before {content:"\f1c4"}
 .wn-icon-file-prescription:before,
 .oc-icon-file-prescription:before,
 .icon-file-prescription:before {content:"\f572"}
@@ -6057,7 +6057,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-file-signature:before {content:"\f573"}
 .wn-icon-file-video:before,
 .oc-icon-file-video:before,
-.icon-file-video:before {content:"\f1c8";font-family:'FontAwesome Regular'}
+.icon-file-video:before {content:"\f1c8"}
 .wn-icon-file-waveform:before,
 .oc-icon-file-waveform:before,
 .icon-file-waveform:before {content:"\f478"}
@@ -6066,13 +6066,13 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-file-medical-alt:before {content:"\f478"}
 .wn-icon-file-word:before,
 .oc-icon-file-word:before,
-.icon-file-word:before {content:"\f1c2";font-family:'FontAwesome Regular'}
+.icon-file-word:before {content:"\f1c2"}
 .wn-icon-file-zipper:before,
 .oc-icon-file-zipper:before,
 .icon-file-zipper:before {content:"\f1c6"}
 .wn-icon-file-archive:before,
 .oc-icon-file-archive:before,
-.icon-file-archive:before {content:"\f1c6";font-family:'FontAwesome Regular'}
+.icon-file-archive:before {content:"\f1c6"}
 .wn-icon-fill:before,
 .oc-icon-fill:before,
 .icon-fill:before {content:"\f575"}
@@ -6120,7 +6120,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-fish:before {content:"\f578"}
 .wn-icon-flag:before,
 .oc-icon-flag:before,
-.icon-flag:before {content:"\f024";font-family:'FontAwesome Regular'}
+.icon-flag:before {content:"\f024"}
 .wn-icon-flag-checkered:before,
 .oc-icon-flag-checkered:before,
 .icon-flag-checkered:before {content:"\f11e"}
@@ -6141,13 +6141,13 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-florin-sign:before {content:"\e184"}
 .wn-icon-folder:before,
 .oc-icon-folder:before,
-.icon-folder:before {content:"\f07b";font-family:'FontAwesome Regular'}
+.icon-folder:before {content:"\f07b"}
 .wn-icon-folder-minus:before,
 .oc-icon-folder-minus:before,
 .icon-folder-minus:before {content:"\f65d"}
 .wn-icon-folder-open:before,
 .oc-icon-folder-open:before,
-.icon-folder-open:before {content:"\f07c";font-family:'FontAwesome Regular'}
+.icon-folder-open:before {content:"\f07c"}
 .wn-icon-folder-plus:before,
 .oc-icon-folder-plus:before,
 .icon-folder-plus:before {content:"\f65e"}
@@ -6162,7 +6162,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-football:before {content:"\f44e"}
 .wn-icon-football-ball:before,
 .oc-icon-football-ball:before,
-.icon-football-ball:before {content:"\f44e";font-family:'FontAwesome Regular'}
+.icon-football-ball:before {content:"\f44e"}
 .wn-icon-forward:before,
 .oc-icon-forward:before,
 .icon-forward:before {content:"\f04e"}
@@ -6261,7 +6261,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-cogs:before {content:"\f085"}
 .wn-icon-gem:before,
 .oc-icon-gem:before,
-.icon-gem:before {content:"\f3a5";font-family:'FontAwesome Regular'}
+.icon-gem:before {content:"\f3a5"}
 .wn-icon-genderless:before,
 .oc-icon-genderless:before,
 .icon-genderless:before {content:"\f22d"}
@@ -6297,7 +6297,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-mortar-board:before {content:"\f19d"}
 .wn-icon-greater-than:before,
 .oc-icon-greater-than:before,
-.icon-greater-than:before {content:"\3e";font-family:'FontAwesome Regular'}
+.icon-greater-than:before {content:"\3e"}
 .wn-icon-greater-than-equal:before,
 .oc-icon-greater-than-equal:before,
 .icon-greater-than-equal:before {content:"\f532"}
@@ -6480,7 +6480,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-hdd:before {content:"\f0a0";font-family:'FontAwesome Regular'}
 .wn-icon-hashtag:before,
 .oc-icon-hashtag:before,
-.icon-hashtag:before {content:"\23";font-family:'FontAwesome Regular'}
+.icon-hashtag:before {content:"\23"}
 .wn-icon-hat-cowboy:before,
 .oc-icon-hat-cowboy:before,
 .icon-hat-cowboy:before {content:"\f8c0"}
@@ -6522,7 +6522,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-headset:before {content:"\f590"}
 .wn-icon-heart:before,
 .oc-icon-heart:before,
-.icon-heart:before {content:"\f004";font-family:'FontAwesome Regular'}
+.icon-heart:before {content:"\f004"}
 .wn-icon-heart-crack:before,
 .oc-icon-heart-crack:before,
 .icon-heart-crack:before {content:"\f7a9"}
@@ -6834,13 +6834,13 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-lemon:before {content:"\f094";font-family:'FontAwesome Regular'}
 .wn-icon-less-than:before,
 .oc-icon-less-than:before,
-.icon-less-than:before {content:"\3c";font-family:'FontAwesome Regular'}
+.icon-less-than:before {content:"\3c"}
 .wn-icon-less-than-equal:before,
 .oc-icon-less-than-equal:before,
 .icon-less-than-equal:before {content:"\f537"}
 .wn-icon-life-ring:before,
 .oc-icon-life-ring:before,
-.icon-life-ring:before {content:"\f1cd";font-family:'FontAwesome Regular'}
+.icon-life-ring:before {content:"\f1cd"}
 .wn-icon-lightbulb:before,
 .oc-icon-lightbulb:before,
 .icon-lightbulb:before {content:"\f0eb";font-family:'FontAwesome Regular'}
@@ -6969,7 +6969,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-manat-sign:before {content:"\e1d5"}
 .wn-icon-map:before,
 .oc-icon-map:before,
-.icon-map:before {content:"\f279";font-family:'FontAwesome Regular'}
+.icon-map:before {content:"\f279"}
 .wn-icon-map-location:before,
 .oc-icon-map-location:before,
 .icon-map-location:before {content:"\f59f"}
@@ -7161,7 +7161,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-monument:before {content:"\f5a6"}
 .wn-icon-moon:before,
 .oc-icon-moon:before,
-.icon-moon:before {content:"\f186";font-family:'FontAwesome Regular'}
+.icon-moon:before {content:"\f186"}
 .wn-icon-mortar-pestle:before,
 .oc-icon-mortar-pestle:before,
 .icon-mortar-pestle:before {content:"\f5a7"}
@@ -7200,7 +7200,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-neuter:before {content:"\f22c"}
 .wn-icon-newspaper:before,
 .oc-icon-newspaper:before,
-.icon-newspaper:before {content:"\f1ea";font-family:'FontAwesome Regular'}
+.icon-newspaper:before {content:"\f1ea"}
 .wn-icon-not-equal:before,
 .oc-icon-not-equal:before,
 .icon-not-equal:before {content:"\f53e"}
@@ -7218,7 +7218,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-o:before {content:"\4f"}
 .wn-icon-object-group:before,
 .oc-icon-object-group:before,
-.icon-object-group:before {content:"\f247";font-family:'FontAwesome Regular'}
+.icon-object-group:before {content:"\f247"}
 .wn-icon-object-ungroup:before,
 .oc-icon-object-ungroup:before,
 .icon-object-ungroup:before {content:"\f248";font-family:'FontAwesome Regular'}
@@ -7263,7 +7263,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-panorama:before {content:"\e209"}
 .wn-icon-paper-plane:before,
 .oc-icon-paper-plane:before,
-.icon-paper-plane:before {content:"\f1d8";font-family:'FontAwesome Regular'}
+.icon-paper-plane:before {content:"\f1d8"}
 .wn-icon-paperclip:before,
 .oc-icon-paperclip:before,
 .icon-paperclip:before {content:"\f0c6"}
@@ -7494,7 +7494,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-plug:before {content:"\f1e6"}
 .wn-icon-plus:before,
 .oc-icon-plus:before,
-.icon-plus:before {content:"\2b";font-family:'FontAwesome Regular'}
+.icon-plus:before {content:"\2b"}
 .wn-icon-add:before,
 .oc-icon-add:before,
 .icon-add:before {content:"\2b"}
@@ -8043,7 +8043,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-air-freshener:before {content:"\f5d0"}
 .wn-icon-square:before,
 .oc-icon-square:before,
-.icon-square:before {content:"\f0c8";font-family:'FontAwesome Regular'}
+.icon-square:before {content:"\f0c8"}
 .wn-icon-square-arrow-up-right:before,
 .oc-icon-square-arrow-up-right:before,
 .icon-square-arrow-up-right:before {content:"\f14c"}
@@ -8187,16 +8187,16 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-stamp:before {content:"\f5bf"}
 .wn-icon-star:before,
 .oc-icon-star:before,
-.icon-star:before {content:"\f005";font-family:'FontAwesome Regular'}
+.icon-star:before {content:"\f005"}
 .wn-icon-star-and-crescent:before,
 .oc-icon-star-and-crescent:before,
 .icon-star-and-crescent:before {content:"\f699"}
 .wn-icon-star-half:before,
 .oc-icon-star-half:before,
-.icon-star-half:before {content:"\f089";font-family:'FontAwesome Regular'}
+.icon-star-half:before {content:"\f089"}
 .wn-icon-star-half-stroke:before,
 .oc-icon-star-half-stroke:before,
-.icon-star-half-stroke:before {content:"\f5c0";font-family:'FontAwesome Regular'}
+.icon-star-half-stroke:before {content:"\f5c0"}
 .wn-icon-star-half-alt:before,
 .oc-icon-star-half-alt:before,
 .icon-star-half-alt:before {content:"\f5c0"}
@@ -8259,7 +8259,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-suitcase-rolling:before {content:"\f5c1"}
 .wn-icon-sun:before,
 .oc-icon-sun:before,
-.icon-sun:before {content:"\f185";font-family:'FontAwesome Regular'}
+.icon-sun:before {content:"\f185"}
 .wn-icon-superscript:before,
 .oc-icon-superscript:before,
 .icon-superscript:before {content:"\f12b"}
@@ -8448,10 +8448,10 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-thermometer:before {content:"\f491"}
 .wn-icon-thumbs-down:before,
 .oc-icon-thumbs-down:before,
-.icon-thumbs-down:before {content:"\f165";font-family:'FontAwesome Regular'}
+.icon-thumbs-down:before {content:"\f165"}
 .wn-icon-thumbs-up:before,
 .oc-icon-thumbs-up:before,
-.icon-thumbs-up:before {content:"\f164";font-family:'FontAwesome Regular'}
+.icon-thumbs-up:before {content:"\f164"}
 .wn-icon-thumbtack:before,
 .oc-icon-thumbtack:before,
 .icon-thumbtack:before {content:"\f08d"}
@@ -8694,7 +8694,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-upload:before {content:"\f093"}
 .wn-icon-user:before,
 .oc-icon-user:before,
-.icon-user:before {content:"\f007";font-family:'FontAwesome Regular'}
+.icon-user:before {content:"\f007"}
 .wn-icon-user-astronaut:before,
 .oc-icon-user-astronaut:before,
 .icon-user-astronaut:before {content:"\f4fb"}
