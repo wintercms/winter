@@ -3684,10 +3684,11 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .clockpicker-hours .clockpicker-tick.tick-inner {font-size:16px}
 .clockpicker-minutes .clockpicker-tick {font-size:16px}
 
-/* FontAwesome 6.x */
+/* Icons */
 @font-face {font-family:'FontAwesome Brands';font-style:normal;font-weight:400;font-display:block;src:url("font/fa-brands-400.woff2?v=6.0.0") format("woff2"), url("font/fa-brands-400.ttf?v=6.0.0") format("truetype")}
 @font-face {font-family:'FontAwesome Regular';font-style:normal;font-weight:400;font-display:block;src:url("font/fa-regular-400.woff2?v=6.0.0") format("woff2"), url("font/fa-regular-400.ttf?v=6.0.0") format("truetype")}
 @font-face {font-family:"FontAwesome";font-display:block;src:url("font/fa-solid-900.woff2?v=6.0.0") format("woff2"), url("font/fa-solid-900.ttf?v=6.0.0") format("truetype")}
+@font-face {font-family:"FontAwesome 4";font-display:block;src:url("font/fontawesome-webfont.woff2?v=6.0.0") format("woff2"), url("font/fontawesome-webfont.ttf?v=6.0.0") format("truetype")}
 [class^="wn-icon-"]:before,
 [class*=" wn-icon-"]:before,
 [class^="oc-icon-"]:before,
