@@ -157,7 +157,7 @@ return [
         'mailgun' => 'Mailgun',
         'mailgun_domain' => 'Mailgunドメイン',
         'mailgun_domain_comment' => 'Mailgunドメイン名を指定してください。',
-        'mailgun_secret' => 'Mailgun APIキー',    
+        'mailgun_secret' => 'Mailgun APIキー',
     ],
     'mail_templates' => [
         'menu_label' => 'メールテンプレート',

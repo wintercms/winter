@@ -89,7 +89,7 @@ return [
         'new_directory_name_comment' => '複製されたテーマに新しいディレクトリ名を提供します',
         'dir_name_invalid' => '名前には数字、ラテン文字、および以下の記号のみを含めることができます。_-',
         'dir_name_taken' => '希望のテーマディレクトリは既に存在します。',
-        'find_more_themes' => '他のテーマを検索する', 
+        'find_more_themes' => '他のテーマを検索する',
         'saving' => 'テーマの保存...',
         'return' => 'テーマ一覧に戻る',
     ],
