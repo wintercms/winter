@@ -36,6 +36,7 @@ class MixCompile extends Command
         $mixedAssets = MixAssets::instance();
         $mixedAssets->fireCallbacks();
 
+        // @TODO: support changes from mix:install and MixAssets
         $packages = $mixedAssets->getPackages();
 
         if (count($this->option('package')) && count($packages)) {
@@ -105,16 +106,16 @@ class MixCompile extends Command
         $command = $this->argument('webpackArgs') ?? [];
         array_unshift(
             $command,
-            $package['path'] . implode(DIRECTORY_SEPARATOR, ['', 'node_modules', 'webpack', 'bin', 'webpack.js']),
+            $package['path'] . implode('/', ['', 'node_modules', 'webpack', 'bin', 'webpack.js']),
             '--progress',
-            '--config=' . $package['path'] . DIRECTORY_SEPARATOR . 'mix.webpack.js'
+            '--config=' . $package['path'] . '/mix.webpack.js'
         );
         return $command;
     }
 
     protected function createWebpackConfig($path, $mixPath)
     {
-        $fixture = File::get(__DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'mix.webpack.js.fixture');
+        $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
 
         $config = str_replace(
             ['%base%', '%notificationInject%', '%mixConfigPath%'],
@@ -122,13 +123,13 @@ class MixCompile extends Command
             $fixture
         );
 
-        File::put($path . DIRECTORY_SEPARATOR . 'mix.webpack.js', $config);
+        File::put($path . '/mix.webpack.js', $config);
     }
 
     protected function removeWebpackConfig($path)
     {
-        if (File::exists($path . DIRECTORY_SEPARATOR . 'mix.webpack.js')) {
-            File::delete($path . DIRECTORY_SEPARATOR . 'mix.webpack.js');
+        if (File::exists($path . '/mix.webpack.js')) {
+            File::delete($path . '/mix.webpack.js');
         }
     }
 }

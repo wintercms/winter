@@ -65,7 +65,7 @@ class MixWatch extends MixCompile
 
     protected function createWebpackConfig($path, $mixPath)
     {
-        $fixture = File::get(__DIR__ . DIRECTORY_SEPARATOR . 'fixtures' . DIRECTORY_SEPARATOR . 'mix.webpack.js.fixture');
+        $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
 
         $config = str_replace(
             ['%base%', '%notificationInject%', '%mixConfigPath%'],
@@ -73,6 +73,6 @@ class MixWatch extends MixCompile
             $fixture
         );
 
-        File::put($path . DIRECTORY_SEPARATOR . 'mix.webpack.js', $config);
+        File::put($path . '/mix.webpack.js', $config);
     }
 }
