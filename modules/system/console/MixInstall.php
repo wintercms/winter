@@ -8,6 +8,7 @@ use Illuminate\Console\Command;
 use Symfony\Component\Process\Process;
 use System\Classes\MixAssets;
 use System\Classes\PluginManager;
+use Symfony\Component\Process\Exception\ProcessSignaledException;
 
 class MixInstall extends Command
 {
@@ -57,15 +58,21 @@ class MixInstall extends Command
         $registeredPackages = $mixedAssets->getPackages();
         $requestedPackages = $this->option('package') ?: [];
 
+        // Normalize the requestedPackages option
+        if (count($requestedPackages)) {
+            foreach ($requestedPackages as &$name) {
+                $name = strtolower($name);
+            }
+            unset($name);
+        }
+
+        // Filter the registered packages to only include requested packages
         if (count($requestedPackages) && count($registeredPackages)) {
             $availablePackages = array_keys($registeredPackages);
             $cmsEnabled = in_array('Cms', Config::get('cms.loadModules'));
 
             // Autogenerate config files for packages that don't exist but can be autodiscovered
             foreach ($requestedPackages as $package) {
-                // Normalize the package name
-                $package = strtolower($package);
-
                 // Check if the package is already registered
                 if (in_array($package, $availablePackages)) {
                     continue;
@@ -93,8 +100,6 @@ class MixInstall extends Command
                     $mixedAssets->registerPackage($package, PluginManager::instance()->getPluginPath($package) . '/winter.mix.js');
                     continue;
                 }
-
-
             }
 
             // Get an updated list of packages including any newly added packages
@@ -118,6 +123,15 @@ class MixInstall extends Command
             }
         }
 
+        // Load the main package.json for the project
+        $canModifyPackageJson = null;
+        $packageJsonPath = base_path('package.json');
+        $packageJson = [];
+        if (File::exists($packageJsonPath)) {
+            $packageJson = json_decode(File::get($packageJsonPath), true);
+        }
+        $workspacesPackages = $packageJson['workspaces']['packages'] ?? [];
+
         // Process each package
         foreach ($registeredPackages as $name => $package) {
             // Detect missing winter.mix.js files and install them
@@ -128,21 +142,41 @@ class MixInstall extends Command
                 File::put($package['mix'], File::get(__DIR__ . '/fixtures/winter.mix.js.fixture'));
             }
 
+            // Add the package path to the instance's package.json->workspaces->packages property if not present
+            if (!in_array($package['path'], $workspacesPackages)) {
+                if (!isset($canModifyPackageJson)) {
+                    if ($this->confirm('package.json will be modified. Continue?', true)) {
+                        $canModifyPackageJson = true;
+                    } else {
+                        $canModifyPackageJson = false;
+                        break;
+                    }
+                }
+
+                $this->info(
+                    sprintf('Adding %s (%s) to the workspaces.packages property in package.json', $name, $package['path'])
+                );
+                $workspacesPackages = array_merge($workspacesPackages, [$package['path']]);
+            }
+
             // @TODO: Integrate with the workspaces property and have some form of attachDefaultDependencies
             // to load in the Laravel mix dependencies at least somewhere in the chain if required.
+        }
 
-            $this->info(
-                sprintf('Installing dependencies for package "%s"', $name)
-            );
-            if ($this->installPackageDeps($package) !== 0) {
-                $this->error(
-                    sprintf('Unable to install dependencies for package "%s"', $name)
-                );
-            } else {
-                $this->info(
-                    sprintf('Package "%s" dependencies installed.', $name)
-                );
-            }
+        // Modify the package.json file if required
+        if ($canModifyPackageJson) {
+            asort($workspacesPackages);
+            $packageJson['workspaces']['packages'] = array_values($workspacesPackages);
+            File::put($packageJsonPath, json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
+            // Ensure separation between package.json modification messages and rest of output
+            $this->info('');
+        }
+
+        if ($this->installPackageDeps() !== 0) {
+            $this->error('Unable to install dependencies.');
+        } else {
+            $this->info('Dependencies successfully installed!');
         }
 
         return 0;
@@ -151,18 +185,35 @@ class MixInstall extends Command
     /**
      * Installs the dependencies for the given package.
      *
-     * @param string $package
      * @return int
      */
-    protected function installPackageDeps($package)
+    protected function installPackageDeps()
     {
         $command = $this->argument('npmArgs') ?? [];
         array_unshift($command, 'npm', 'i');
 
-        $process = new Process($command, $package['path']);
-        $process->run(function ($status, $stdout) {
-            $this->getOutput()->write($stdout);
-        });
+        $process = new Process($command, base_path());
+
+        // Attempt to set tty mode, catch and warn with the exception message if unsupported
+        try {
+            $process->setTty(true);
+        } catch (\Throwable $e) {
+            $this->warn($e->getMessage());
+        }
+
+        try {
+            return $process->run(function ($status, $stdout) {
+                $this->getOutput()->write($stdout);
+            });
+        } catch (ProcessSignaledException $e) {
+            if (extension_loaded('pcntl') && $e->getSignal() !== SIGINT) {
+                throw $e;
+            }
+
+            return 1;
+        }
+
+        $this->info('');
 
         return $process->getExitCode();
     }
