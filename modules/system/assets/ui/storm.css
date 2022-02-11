@@ -3693,13 +3693,11 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 [class^="oc-icon-"]:before,
 [class*=" oc-icon-"]:before,
 [class^="icon-"]:before,
-[class*=" icon-"]:before {font-family:'FontAwesome';font-weight:400}
+[class*=" icon-"]:before {display:inline-block;font-family:'FontAwesome';-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-style:normal;font-variant:normal;text-rendering:auto}
 [class^="wn-icon-"]:before,
 [class*=" wn-icon-"]:before,
 [class^="oc-icon-"]:before,
-[class*=" oc-icon-"]:before,
-[class^="icon-"]:before,
-[class*=" icon-"]:before {-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;display:inline-block;font-style:normal;font-variant:normal;text-rendering:auto}
+[class*=" oc-icon-"]:before {margin-right:8px;font-weight:normal;text-decoration:inherit;vertical-align:baseline}
 .icon-1x {font-size:1em}
 .icon-2x {font-size:2em}
 .icon-3x {font-size:3em}
@@ -4381,7 +4379,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-arrows:before {content:"\f047"}
 .wn-icon-asterisk:before,
 .oc-icon-asterisk:before,
-.icon-asterisk:before {content:"\2a";font-family:'FontAwesome Regular'}
+.icon-asterisk:before {content:"\2a"}
 .wn-icon-at:before,
 .oc-icon-at:before,
 .icon-at:before {content:"\40";font-family:'FontAwesome Regular'}
@@ -5053,7 +5051,7 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-church:before {content:"\f51d"}
 .wn-icon-circle:before,
 .oc-icon-circle:before,
-.icon-circle:before {content:"\f111";font-family:'FontAwesome Regular'}
+.icon-circle:before {content:"\f111"}
 .wn-icon-circle-arrow-down:before,
 .oc-icon-circle-arrow-down:before,
 .icon-circle-arrow-down:before {content:"\f0ab"}
