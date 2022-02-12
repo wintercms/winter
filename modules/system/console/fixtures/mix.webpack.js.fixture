@@ -10,9 +10,10 @@ module.exports = async () => {
     mix.manifest.refresh = _ => void 0
 
     mix.listen('init', function (mix) {
-        // define aliases
+        // Setup Winter path aliases
         mix._api.alias({
-            '/winter': basePath,
+            '$': '%pluginsPath%',
+            '~': '%appPath%',
         });
         // disable notifications if not in watch
         %notificationInject%

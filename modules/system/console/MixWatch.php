@@ -42,10 +42,18 @@ class MixWatch extends MixCompile
 
         $package = $packages[$name];
 
+        $relativeMixJsPath = $package['mix'];
+        if (!$this->canCompilePackage($relativeMixJsPath)) {
+            $this->error(
+                sprintf('Unable to watch "%s", %s was not found in the package.json\'s workspaces.packages property. Try running mix:install first.', $name, $packagePath)
+            );
+            return 1;
+        }
+
         $this->info(
             sprintf('Watching package "%s" for changes', $name)
         );
-        if ($this->mixPackage($package) !== 0) {
+        if ($this->mixPackage(base_path($relativeMixJsPath)) !== 0) {
             $this->error(
                 sprintf('Unable to compile package "%s"', $name)
             );
@@ -55,24 +63,33 @@ class MixWatch extends MixCompile
         return 0;
     }
 
-    protected function createCommand($package)
+    /**
+     * Create the command array to create a Process object with
+     */
+    protected function createCommand(string $mixJsPath): array
     {
-        $command = parent::createCommand($package);
+        $command = parent::createCommand($mixJsPath);
+
+        // @TODO: Detect Homestead running on Windows to switch to watch-poll-options instead, see https://laravel-mix.com/docs/6.0/cli#polling
         $command[] = '--watch';
 
         return $command;
     }
 
-    protected function createWebpackConfig($path, $mixPath)
+    /**
+     * Create the temporary mix.webpack.js config file to run webpack with
+     */
+    protected function createWebpackConfig(string $mixJsPath): void
     {
+        $basePath = base_path();
         $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
 
         $config = str_replace(
-            ['%base%', '%notificationInject%', '%mixConfigPath%'],
-            [$path, 'mix._api.disableNotifications();', $mixPath],
+            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%'],
+            [$basePath, 'mix._api.disableNotifications();', $mixJsPath, plugins_path(), base_path()],
             $fixture
         );
 
-        File::put($path . '/mix.webpack.js', $config);
+        File::put($this->getWebpackJsPath($mixJsPath), $config);
     }
 }

@@ -141,7 +141,7 @@ class MixInstall extends Command
         if (
             (
                 !isset($packageJson['dependencies']['laravel-mix'])
-                || !isset($packageJson['devDependencies']['laravel-mix'])
+                && !isset($packageJson['devDependencies']['laravel-mix'])
             )
             && $this->confirm('laravel-mix was not found as a dependency in package.json, would you like to add it?', true)
         ) {
