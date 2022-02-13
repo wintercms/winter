@@ -40,7 +40,7 @@ class MixCompile extends Command
     {
         // Exit early if node_modules isn't available yet
         if (!File::exists(base_path('node_modules'))) {
-            $this->error('node_modules is not available, try running mix:install first.');
+            $this->error('The Node dependencies are not available, try running mix:install first.');
             return 1;
         }
 
