@@ -5,6 +5,7 @@ use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Classes\MarkupManager;
 use Twig\TwigFilter as TwigSimpleFilter;
+use Twig\TwigFunction as TwigSimpleFunction;
 use Twig\Extension\AbstractExtension as TwigExtension;
 
 /**
@@ -35,7 +36,14 @@ class Extension extends TwigExtension
      */
     public function getFunctions()
     {
-        $functions = [];
+        $functions = [
+            new TwigSimpleFunction('app', [$this, 'appFilter']),
+            new TwigSimpleFunction('media', [$this, 'mediaFilter']),
+            new TwigSimpleFunction('asset', [$this, 'assetFilter']),
+            new TwigSimpleFunction('resize', [$this, 'resizeFilter']),
+            new TwigSimpleFunction('imageWidth', [$this, 'imageWidthFilter']),
+            new TwigSimpleFunction('imageHeight', [$this, 'imageHeightFilter']),
+        ];
 
         /*
          * Include extensions provided by plugins
@@ -53,11 +61,12 @@ class Extension extends TwigExtension
     public function getFilters()
     {
         $filters = [
-            new TwigSimpleFilter('app', [$this, 'appFilter'], ['is_safe' => ['html']]),
-            new TwigSimpleFilter('media', [$this, 'mediaFilter'], ['is_safe' => ['html']]),
-            new TwigSimpleFilter('resize', [$this, 'resizeFilter'], ['is_safe' => ['html']]),
-            new TwigSimpleFilter('imageWidth', [$this, 'imageWidthFilter'], ['is_safe' => ['html']]),
-            new TwigSimpleFilter('imageHeight', [$this, 'imageHeightFilter'], ['is_safe' => ['html']]),
+            new TwigSimpleFilter('app', [$this, 'appFilter']),
+            new TwigSimpleFilter('media', [$this, 'mediaFilter']),
+            new TwigSimpleFilter('asset', [$this, 'assetFilter']),
+            new TwigSimpleFilter('resize', [$this, 'resizeFilter']),
+            new TwigSimpleFilter('imageWidth', [$this, 'imageWidthFilter']),
+            new TwigSimpleFilter('imageHeight', [$this, 'imageHeightFilter']),
         ];
 
         /*
@@ -103,6 +112,16 @@ class Extension extends TwigExtension
     public function mediaFilter($file)
     {
         return MediaLibrary::url($file);
+    }
+
+    /**
+     * Converts supplied file to a URL relative to the `app.asset_url` config.
+     * @param string $file Specifies the asset-relative file
+     * @return string
+     */
+    public function assetFilter($file)
+    {
+        return Url::asset($file);
     }
 
     /**

@@ -3,7 +3,7 @@
 return [
     'auth' => [
         'title' => 'Панель управления',
-        'invalid_login' => 'Вы ввели некорректные данные. Пожалуйста, перепроверьте их и попробуйте ещё раз.'
+        'invalid_login' => 'Вы ввели некорректные данные. Пожалуйста, перепроверьте их и попробуйте ещё раз.',
     ],
     'field' => [
         'invalid_type' => 'Использован неверный тип поля: :type.',
@@ -77,7 +77,7 @@ return [
         'ok' => 'OK',
     ],
     'dashboard' => [
-        'menu_label' => 'Панель управления',
+        'menu_label' => 'Дашборд',
         'widget_label' => 'Виджет',
         'widget_width' => 'Ширина',
         'full_width' => 'полная ширина',
@@ -369,6 +369,7 @@ return [
         'plugin_missing' => 'Плагин :name имеет зависимость. Установите этот плагин.',
         'debug' => 'Режим отладки включен. Это не рекомендуется для рабочих инсталяций.',
         'decompileBackendAssets' => 'Ассеты в бэкенде в настоящее время декомпилированы. Это не рекомендуется для рабочих инсталяций.',
+        'default_backend_user' => 'Был обнаружен пользователь с данными для входа по умолчанию (admin / admin@domain.tld). Измените свое имя пользователя и/или email-адрес, чтобы защитить систему.',
     ],
     'editor' => [
         'menu_label' => 'Настройки редактора',
@@ -575,7 +576,7 @@ return [
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1250' => 'Windows-1250 (CP1250, Central and Eastern European)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
+            'windows_1252' => 'Windows-1252 (CP1252)',
         ]
     ],
     'permissions' => [
