@@ -3699,22 +3699,22 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 [class*=" wn-icon-"]:before,
 [class^="oc-icon-"]:before,
 [class*=" oc-icon-"]:before {margin-right:8px;font-weight:normal;text-decoration:inherit;vertical-align:baseline}
-.icon-1x {font-size:1em}
-.icon-2x {font-size:2em}
-.icon-3x {font-size:3em}
-.icon-4x {font-size:4em}
-.icon-5x {font-size:5em}
-.icon-6x {font-size:6em}
-.icon-7x {font-size:7em}
-.icon-8x {font-size:8em}
-.icon-9x {font-size:9em}
-.icon-10x {font-size:10em}
-.icon-2xs {font-size:0.625em;line-height:0.1em;vertical-align:0.225em}
-.icon-xs {font-size:0.75em;line-height:0.08333em;vertical-align:0.125em}
-.icon-sm {font-size:0.875em;line-height:0.07143em;vertical-align:0.05357em}
-.icon-lg {font-size:1.25em;line-height:0.05em;vertical-align:-0.075em}
-.icon-xl {font-size:1.5em;line-height:0.04167em;vertical-align:-0.125em}
-.icon-2xl {font-size:2em;line-height:0.03125em;vertical-align:-0.1875em}
+.icon-1x:before {font-size:1em}
+.icon-2x:before {font-size:2em}
+.icon-3x:before {font-size:3em}
+.icon-4x:before {font-size:4em}
+.icon-5x:before {font-size:5em}
+.icon-6x:before {font-size:6em}
+.icon-7x:before {font-size:7em}
+.icon-8x:before {font-size:8em}
+.icon-9x:before {font-size:9em}
+.icon-10x:before {font-size:10em}
+.icon-2xs:before {font-size:0.625em;line-height:0.1em;vertical-align:0.225em}
+.icon-xs:before {font-size:0.75em;line-height:0.08333em;vertical-align:0.125em}
+.icon-sm:before {font-size:0.875em;line-height:0.07143em;vertical-align:0.05357em}
+.icon-lg:before {font-size:1.25em;line-height:0.05em;vertical-align:-0.075em}
+.icon-xl:before {font-size:1.5em;line-height:0.04167em;vertical-align:-0.125em}
+.icon-2xl:before {font-size:2em;line-height:0.03125em;vertical-align:-0.1875em}
 .icon-fw {text-align:center;width:1.25em}
 .icon-ul {list-style-type:none;margin-left:var(--fa-li-margin, 2.5em);padding-left:0}
 .icon-ul > li {position:relative}
@@ -3722,16 +3722,16 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-border {border-color:var(--fa-border-color, #eee);border-radius:var(--fa-border-radius, 0.1em);border-style:var(--fa-border-style, solid);border-width:var(--fa-border-width, 0.08em);padding:var(--fa-border-padding, 0.2em 0.25em 0.15em)}
 .icon-pull-left {float:left;margin-right:var(--fa-pull-margin, 0.3em)}
 .icon-pull-right {float:right;margin-left:var(--fa-pull-margin, 0.3em)}
-.icon-beat {-webkit-animation-name:fa-beat;animation-name:fa-beat;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, ease-in-out);animation-timing-function:var(--fa-animation-timing, ease-in-out)}
-.icon-bounce {-webkit-animation-name:fa-bounce;animation-name:fa-bounce;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1))}
-.icon-fade {-webkit-animation-name:fa-fade;animation-name:fa-fade;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1))}
-.icon-beat-fade {-webkit-animation-name:fa-beat-fade;animation-name:fa-beat-fade;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1))}
-.icon-flip {-webkit-animation-name:fa-flip;animation-name:fa-flip;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, ease-in-out);animation-timing-function:var(--fa-animation-timing, ease-in-out)}
-.icon-shake {-webkit-animation-name:fa-shake;animation-name:fa-shake;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, linear);animation-timing-function:var(--fa-animation-timing, linear)}
-.icon-spin {-webkit-animation-name:fa-spin;animation-name:fa-spin;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 2s);animation-duration:var(--fa-animation-duration, 2s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, linear);animation-timing-function:var(--fa-animation-timing, linear)}
-.icon-spin-reverse {--fa-animation-direction: reverse}
-.icon-pulse,
-.icon-spin-pulse {-webkit-animation-name:fa-spin;animation-name:fa-spin;-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, steps(8));animation-timing-function:var(--fa-animation-timing, steps(8))}
+.icon-beat:before {-webkit-animation-name:fa-beat;animation-name:fa-beat;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, ease-in-out);animation-timing-function:var(--fa-animation-timing, ease-in-out)}
+.icon-bounce:before {-webkit-animation-name:fa-bounce;animation-name:fa-bounce;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1));animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.28, 0.84, 0.42, 1))}
+.icon-fade:before {-webkit-animation-name:fa-fade;animation-name:fa-fade;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1))}
+.icon-beat-fade:before {-webkit-animation-name:fa-beat-fade;animation-name:fa-beat-fade;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1));animation-timing-function:var(--fa-animation-timing, cubic-bezier(0.4, 0, 0.6, 1))}
+.icon-flip:before {-webkit-animation-name:fa-flip;animation-name:fa-flip;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, ease-in-out);animation-timing-function:var(--fa-animation-timing, ease-in-out)}
+.icon-shake:before {-webkit-animation-name:fa-shake;animation-name:fa-shake;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, linear);animation-timing-function:var(--fa-animation-timing, linear)}
+.icon-spin:before {-webkit-animation-name:fa-spin;animation-name:fa-spin;-webkit-animation-delay:var(--fa-animation-delay, 0);animation-delay:var(--fa-animation-delay, 0);-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 2s);animation-duration:var(--fa-animation-duration, 2s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, linear);animation-timing-function:var(--fa-animation-timing, linear)}
+.icon-spin-reverse:before {--fa-animation-direction: reverse}
+.icon-pulse:before,
+.icon-spin-pulse:before {-webkit-animation-name:fa-spin;animation-name:fa-spin;-webkit-animation-direction:var(--fa-animation-direction, normal);animation-direction:var(--fa-animation-direction, normal);-webkit-animation-duration:var(--fa-animation-duration, 1s);animation-duration:var(--fa-animation-duration, 1s);-webkit-animation-iteration-count:var(--fa-animation-iteration-count, infinite);animation-iteration-count:var(--fa-animation-iteration-count, infinite);-webkit-animation-timing-function:var(--fa-animation-timing, steps(8));animation-timing-function:var(--fa-animation-timing, steps(8))}
 @media (prefers-reduced-motion: reduce) {
     .icon-beat,
     .icon-bounce,
@@ -3819,14 +3819,14 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
     0% {-webkit-transform:rotate(0deg);transform:rotate(0deg)}
     100% {-webkit-transform:rotate(360deg);transform:rotate(360deg)}
 }
-.icon-rotate-90 {-webkit-transform:rotate(90deg);transform:rotate(90deg)}
-.icon-rotate-180 {-webkit-transform:rotate(180deg);transform:rotate(180deg)}
-.icon-rotate-270 {-webkit-transform:rotate(270deg);transform:rotate(270deg)}
-.icon-flip-horizontal {-webkit-transform:scale(-1,1);transform:scale(-1,1)}
-.icon-flip-vertical {-webkit-transform:scale(1,-1);transform:scale(1,-1)}
-.icon-flip-both,
-.icon-flip-horizontal.icon-flip-vertical {-webkit-transform:scale(-1, -1);transform:scale(-1, -1)}
-.icon-rotate-by {-webkit-transform:rotate(var(--fa-rotate-angle, none));transform:rotate(var(--fa-rotate-angle, none))}
+.icon-rotate-90:before {-webkit-transform:rotate(90deg);transform:rotate(90deg)}
+.icon-rotate-180:before {-webkit-transform:rotate(180deg);transform:rotate(180deg)}
+.icon-rotate-270:before {-webkit-transform:rotate(270deg);transform:rotate(270deg)}
+.icon-flip-horizontal:before {-webkit-transform:scale(-1,1);transform:scale(-1,1)}
+.icon-flip-vertical:before {-webkit-transform:scale(1,-1);transform:scale(1,-1)}
+.icon-flip-both:before,
+.icon-flip-horizontal.icon-flip-vertical:before {-webkit-transform:scale(-1, -1);transform:scale(-1, -1)}
+.icon-rotate-by:before {-webkit-transform:rotate(var(--fa-rotate-angle, none));transform:rotate(var(--fa-rotate-angle, none))}
 .icon-stack {display:inline-block;height:2em;line-height:2em;position:relative;vertical-align:middle;width:2.5em}
 .icon-stack-1x,
 .icon-stack-2x {left:0;position:absolute;text-align:center;width:100%;z-index:var(--fa-stack-z-index, auto)}
