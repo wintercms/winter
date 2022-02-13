@@ -68,7 +68,7 @@ class CodeBase extends Extendable implements ArrayAccess
     /**
      * ArrayAccess implementation
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->controller->vars[$offset] = $value;
     }
@@ -76,7 +76,7 @@ class CodeBase extends Extendable implements ArrayAccess
     /**
      * ArrayAccess implementation
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->controller->vars[$offset]);
     }
@@ -84,7 +84,7 @@ class CodeBase extends Extendable implements ArrayAccess
     /**
      * ArrayAccess implementation
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->controller->vars[$offset]);
     }
@@ -92,7 +92,7 @@ class CodeBase extends Extendable implements ArrayAccess
     /**
      * ArrayAccess implementation
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->controller->vars[$offset] ?? null;
     }
