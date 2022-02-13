@@ -103,7 +103,10 @@ img {vertical-align:middle}
 .img-rounded {-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px}
 .img-circle {border-radius:50%}
 hr {margin-top:20px;margin-bottom:20px;border:0;border-top:1px solid #eee}
-.sr-only {position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0}
+.sr-only,
+.icon-sr-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+.sr-only-focusable:not(:focus),
+.icon-sr-only-focusable:not(:focus) {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
 @media print {* {text-shadow:none !important;color:#000 !important;background:transparent !important;box-shadow:none !important }a,a:visited {text-decoration:underline }a[href]:after {content:" (" attr(href) ")" }abbr[title]:after {content:" (" attr(title) ")" }a[href^="javascript:"]:after,a[href^="#"]:after {content:"" }pre,blockquote {border:1px solid #999;page-break-inside:avoid }thead {display:table-header-group }tr,img {page-break-inside:avoid }img {max-width:100% !important }p,h2,h3 {orphans:3;widows:3 }h2,h3 {page-break-after:avoid }select {background:#fff !important }.navbar {display:none }.table td,.table th {background-color:#fff !important }.btn >.caret,.dropup >.btn >.caret {border-top-color:#000 !important }.label {border:1px solid #000 }.table {border-collapse:collapse !important }.table-bordered th,.table-bordered td {border:1px solid #ddd !important }}
 .container {margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}
 @media (min-width:768px) {.container {width:750px }}
@@ -3833,10 +3836,6 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .icon-stack-1x {line-height:inherit}
 .icon-stack-2x {font-size:2em}
 .icon-inverse {color:var(--fa-inverse, #fff)}
-.sr-only,
-.icon-sr-only {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
-.sr-only-focusable:not(:focus),
-.icon-sr-only-focusable:not(:focus) {position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
 .wn-icon-0:before,
 .oc-icon-0:before,
 .icon-0:before {content:"\30"}
