@@ -3686,8 +3686,6 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .clockpicker-hours .clockpicker-tick {font-size:12px}
 .clockpicker-hours .clockpicker-tick.tick-inner {font-size:16px}
 .clockpicker-minutes .clockpicker-tick {font-size:16px}
-
-/* Icons */
 @font-face {font-family:'FontAwesome Brands';font-style:normal;font-weight:400;font-display:block;src:url("font/fa-brands-400.woff2?v=1.0.2") format("woff2"), url("font/fa-brands-400.ttf?v=1.0.2") format("truetype")}
 @font-face {font-family:'FontAwesome Regular';font-style:normal;font-weight:400;font-display:block;src:url("font/fa-regular-400.woff2?v=1.0.2") format("woff2"), url("font/fa-regular-400.ttf?v=1.0.2") format("truetype")}
 @font-face {font-family:"FontAwesome";font-display:block;src:url("font/fa-solid-900.woff2?v=1.0.2") format("woff2"), url("font/fa-solid-900.ttf?v=1.0.2") format("truetype")}
@@ -8846,8 +8844,6 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .wn-icon-z:before,
 .oc-icon-z:before,
 .icon-z:before {content:"\5a"}
-
-/* Brands */
 .wn-icon-42-group:before,
 .oc-icon-42-group:before,
 .icon-42-group:before {content:"\e080";font-family:'FontAwesome Brands'}
@@ -10252,8 +10248,6 @@ ul.autocomplete.dropdown-menu.inspector-autocomplete li a {padding:5px 12px;whit
 .wn-icon-zhihu:before,
 .oc-icon-zhihu:before,
 .icon-zhihu:before {content:"\f63f";font-family:'FontAwesome Brands'}
-
-/* Support FontAwesome 4 */
 .wn-icon-address-book-o:before,
 .oc-icon-address-book-o:before,
 .icon-address-book-o:before {content:"\f2ba";font-family:'FontAwesome 4'}
