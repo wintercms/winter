@@ -6,24 +6,25 @@ return [
      * Laravel aliases
      */
     'App'          => Illuminate\Support\Facades\App::class,
-    // 'Arr'       => Illuminate\Support\Arr::class,                   // Replaced by Winter
+    // 'Arr'       => Illuminate\Support\Arr::class,                  // Replaced by Winter
     'Artisan'      => Illuminate\Support\Facades\Artisan::class,
-    // 'Auth'      => Illuminate\Support\Facades\Auth::class,          // Only BackendAuth provided by default
-    // 'Blade'     => Illuminate\Support\Facades\Blade::class,         // Not encouraged
+    // 'Auth'      => Illuminate\Support\Facades\Auth::class,         // Only BackendAuth provided by default
+    // 'Blade'     => Illuminate\Support\Facades\Blade::class,        // Not encouraged
     'Broadcast'    => Illuminate\Support\Facades\Broadcast::class,
     'Bus'          => Illuminate\Support\Facades\Bus::class,
     'Cache'        => Illuminate\Support\Facades\Cache::class,
-    // 'Config'    => Illuminate\Support\Facades\Config::class,        // Replaced by Winter
+    // 'Config'    => Illuminate\Support\Facades\Config::class,       // Replaced by Winter
     'Cookie'       => Illuminate\Support\Facades\Cookie::class,
     'Crypt'        => Illuminate\Support\Facades\Crypt::class,
     'Date'         => Illuminate\Support\Facades\Date::class,
     'DB'           => Illuminate\Support\Facades\DB::class,
     'Eloquent'     => Illuminate\Database\Eloquent\Model::class,
     'Event'        => Illuminate\Support\Facades\Event::class,
-    // 'File'      => Illuminate\Support\Facades\File::class,          // Replaced by Winter
-    // 'Gate'      => Illuminate\Support\Facades\Gate::class,          // Currently unsupported in Winter
+    // 'File'      => Illuminate\Support\Facades\File::class,         // Replaced by Winter
+    // 'Gate'      => Illuminate\Support\Facades\Gate::class,         // Currently unsupported in Winter
     'Hash'         => Illuminate\Support\Facades\Hash::class,
     'Http'         => Illuminate\Support\Facades\Http::class,
+    // 'Js'        => Illuminate\Support\Js::class,                   // Currently unsupported in Winter
     'Lang'         => Illuminate\Support\Facades\Lang::class,
     'Log'          => Illuminate\Support\Facades\Log::class,
     // 'Mail'      => Illuminate\Support\Facades\Mail::class,         // Replaced by Winter
