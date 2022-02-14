@@ -47,7 +47,6 @@ class PluginDisable extends Command
         $plugin->is_disabled = true;
         $plugin->save();
 
-
         $this->output->writeln(sprintf('<info>%s:</info> disabled.', $pluginName));
     }
 
