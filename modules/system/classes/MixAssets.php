@@ -71,7 +71,6 @@ class MixAssets
         *       return [
         *           'package-name-1' => 'winter.mix.js',
         *           'package-name-2' => 'assets/js/build.js',
-        *           'package-name-3' => 'assets/css', // winter.mix.js is assumed to be the config file in this path
         *       ];
         *   }
         */
