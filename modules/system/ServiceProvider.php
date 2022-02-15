@@ -271,12 +271,6 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('plugin.refresh', 'System\Console\PluginRefresh');
         $this->registerConsoleCommand('plugin.rollback', 'System\Console\PluginRollback');
         $this->registerConsoleCommand('plugin.list', 'System\Console\PluginList');
-
-        $this->registerConsoleCommand('theme.install', 'System\Console\ThemeInstall');
-        $this->registerConsoleCommand('theme.remove', 'System\Console\ThemeRemove');
-        $this->registerConsoleCommand('theme.list', 'System\Console\ThemeList');
-        $this->registerConsoleCommand('theme.use', 'System\Console\ThemeUse');
-        $this->registerConsoleCommand('theme.sync', 'System\Console\ThemeSync');
     }
 
     /*

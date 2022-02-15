@@ -1,4 +1,4 @@
-<?php namespace System\Console;
+<?php namespace Cms\Console;
 
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
@@ -11,7 +11,7 @@ use System\Classes\UpdateManager;
  *
  * This lists all the available themes in the system. It also shows the active theme.
  *
- * @package winter\wn-system-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeList extends Command
