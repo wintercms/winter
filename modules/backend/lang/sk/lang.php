@@ -8,32 +8,32 @@ return [
     'field' => [
         'invalid_type' => 'Bol použitý zlý typ :type.',
         'options_method_invalid_model' => "Vlastnosť ':field' nezodpovedá platnému modelu. Skúste špecifikovať metódu možností pre triedu modelu :model explicitne.",
-        'options_method_not_exists' => "Trieda modelu :model musí implementovať metódu :method(), ktorá vracia možností pre formulárové pole ':field'."
+        'options_method_not_exists' => "Trieda modelu :model musí implementovať metódu :method(), ktorá vracia možnosti pre formulárové pole ':field'."
     ],
     'widget' => [
-        'not_registered' => "Trieda widgetu s menom ':name' nie je zaregistrovaná",
+        'not_registered' => "Trieda widget s menom ':name' nie je registrovaná",
         'not_bound' => "Widget s názvom triedy ':name' nie je naviazaný na controller"
     ],
     'page' => [
         'untitled' => 'Bez názvu',
         '404' => [
             'label'     => 'Stránka nenájdená',
-            'help'      => "Hľadali sme a hľadali, ale požadovanú adresu URL jednoducho nebolo možné nájsť. Možno ste hľadali niečo iné?",
-            'back_link' => 'Späť na predchodzú stránku',
+            'help'      => "Hľadali sme a hľadali, ale požadovanú adresu URL jednoducho nebolo možné nájsť. Možno ste hľadali niečo iné ...",
+            'back_link' => 'Späť na predošlú stránku',
         ],
         'access_denied' => [
-            'label' => 'Prístup odmietnutý',
+            'label' => 'Prístup bol odmietnutý',
             'help' => "Nemáte potrebné oprávnenia na zobrazenie tejto stránky.",
             'cms_link' => 'Späť do administrácie'
         ],
         'no_database' => [
             'label' => 'Chýba databáza',
-            'help' => "Pre prístup do administrácie je potrebná databáza. Zkontrolujte, či je databáza nakonfigurovaná a zmigrovaná a skúste to znova.",
+            'help' => "Pre prístup do administrácie je potrebná databáza. Zkontrolujte, či je databáza nakonfigurovaná, migrovaná a skúste to znova.",
             'cms_link' => 'Späť na úvodnú stránku'
         ],
     ],
     'partial' => [
-        'not_found_name' => "Čiastočná šablona ':name' nebola nájdená."
+        'not_found_name' => "Čiastočná šablóna ':name' nebola nájdená."
     ],
     'account' => [
         'signed_in_as' => 'Prihlásený ako :full_name',
@@ -398,7 +398,7 @@ return [
     ],
     'branding' => [
         'menu_label' => 'Nastavenia administrácie',
-        'menu_description' => 'Nastavte si mano, použité farby a logo v administrácií.',
+        'menu_description' => 'Nastavte si meno, použité farby a logo v administrácií.',
         'brand' => 'Značka',
         'logo' => 'Logo',
         'logo_description' => 'Nahrajte vlastné logo, ktoré bude použité v administrácií.',
@@ -508,7 +508,7 @@ return [
             'iso_8859_6' => 'ISO-8859-6 (Latin, Arabic)',
             'iso_8859_7' => 'ISO-8859-7 (Latin, Greek)',
             'iso_8859_8' => 'ISO-8859-8 (Latin, Hebrew)',
-            'iso_8859_0' => 'ISO-8859-9 (Latin-5, Turkish)',
+            'iso_8859_9' => 'ISO-8859-9 (Latin-5, Turkish)',
             'iso_8859_10' => 'ISO-8859-10 (Latin-6, Nordic)',
             'iso_8859_11' => 'ISO-8859-11 (Latin, Thai)',
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, Baltic Rim)',

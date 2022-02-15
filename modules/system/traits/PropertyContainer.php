@@ -45,7 +45,21 @@ trait PropertyContainer
 
     /**
      * Defines the properties used by this class.
-     * This method should be used as an override in the extended class.
+     *
+     * This method should be overriden in your extended class and return an array of properties that your class uses,
+     * with the keys of the array being the name of the properties, and the values being an array of property
+     * parameters.
+     *
+     * Example:
+     *      return [
+     *          'propertyName' => [
+     *              'title' => 'Property name',
+     *              'description' => 'Property description',
+     *              'default' => 'Default value'
+     *          ],
+     *      ];
+     *
+     * @return array
      */
     public function defineProperties()
     {

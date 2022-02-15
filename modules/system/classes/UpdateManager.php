@@ -165,16 +165,6 @@ class UpdateManager
         }
 
         /*
-         * Update plugins
-         */
-        foreach ($plugins as $code => $plugin) {
-            $this->updatePlugin($code);
-        }
-
-        Parameter::set('system::update.count', 0);
-        CacheHelper::clear();
-
-        /*
          * Seed modules
          */
         if ($firstUp) {
@@ -183,6 +173,16 @@ class UpdateManager
                 $this->seedModule($module);
             }
         }
+
+        /*
+         * Update plugins
+         */
+        foreach ($plugins as $code => $plugin) {
+            $this->updatePlugin($code);
+        }
+
+        Parameter::set('system::update.count', 0);
+        CacheHelper::clear();
 
         // Set replacement warning messages
         foreach ($this->pluginManager->getReplacementMap() as $alias => $plugin) {

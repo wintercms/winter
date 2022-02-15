@@ -13,14 +13,22 @@
 >
 
     <div class="colorpicker-container">
-        <input
-            data-color-value
-            class="form-control"
-            placeholder="No color"
-            value="<?= $value ?>"
-            <?php if ($disabled): ?> disabled<?php endif ?>
-            <?php if ($readOnly || !$allowCustom || $this->previewMode): ?> readonly<?php endif ?>
-        >
+        <?php if ($readOnly || !$allowCustom || $this->previewMode): ?>
+            <span
+                data-color-value
+                class="form-control"
+            >
+                <?= $value ?>
+            </span>
+        <?php else: ?>
+            <input
+                data-color-value
+                class="form-control"
+                placeholder="No color"
+                value="<?= $value ?>"
+                <?php if ($disabled): ?> disabled<?php endif ?>
+            >
+        <?php endif ?>
         <div
             data-color-preview
         ></div>

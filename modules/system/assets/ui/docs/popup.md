@@ -132,16 +132,16 @@ The partial for your rendered popup should follow this structure:
 ## API documentation
 
 ### Options:
-- content: content HTML string or callback
+- `content` - content HTML string or callback
 
 ### Data attributes
-- data-control="popup" - enables the ajax popup plugin
-- data-ajax="popup-content.htm" - ajax content to load
-- data-handler="onLoadContent" - Winter ajax request name
-- data-keyboard="false" - Allow popup to be closed with the keyboard
-- data-extra-data="file_id: 1" - Winter ajax request data
-- data-size="large" - Popup size, available sizes: giant, huge, large, small, tiny, adaptive (will scale to fit the window)
-- data-adaptive-height="false" - Allow the popup to fill the height of the screen
+- `data-control="popup"` - enables the ajax popup plugin
+- `data-ajax="popup-content.htm"` - ajax content to load
+- `data-handler="onLoadContent"` - Winter ajax request name
+- `data-keyboard="false"` - Allow popup to be closed with the keyboard
+- `data-extra-data="file_id: 1"` - Winter ajax request data
+- `data-size="large"` - Popup size, available sizes: `giant`, `huge`, `large`, `small`, `tiny`, `adaptive` (will scale to fit the window)
+- `data-adaptive-height="false"` - Allow the popup to fill the height of the screen
 
 ### JavaScript API
 

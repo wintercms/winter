@@ -12,6 +12,9 @@ fields:
         label: backend::lang.user.role.code_field
         commentAbove: backend::lang.user.role.code_comment
         span: auto
+        preset:
+            type: slug
+            field: name
 
     description:
         label: backend::lang.user.role.description_field
@@ -20,3 +23,12 @@ fields:
 
 tabs:
     stretch: true
+    fields:
+        permissions:
+            tab: 'backend::lang.user.permissions'
+            type: 'Backend\FormWidgets\PermissionEditor'
+            mode: 'checkbox'
+        _users@update:
+            label: ''
+            tab: backend::lang.user.menu_label
+            type: partial

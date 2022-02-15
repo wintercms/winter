@@ -369,6 +369,7 @@ return [
         'plugin_missing' => 'The plugin :name is a dependency but is not installed. Please install this plugin.',
         'debug' => 'Debug mode is enabled. This is not recommended for production installations.',
         'decompileBackendAssets' => 'Assets in the Backend are currently decompiled. This is not recommended for production installations.',
+        'default_backend_user' => 'A user with the default login details (admin / admin@domain.tld) was found. Change their username and / or email address to help protect the system.',
     ],
     'editor' => [
         'menu_label' => 'Editor settings',
@@ -567,7 +568,7 @@ return [
             'iso_8859_6' => 'ISO-8859-6 (Latin, Arabic)',
             'iso_8859_7' => 'ISO-8859-7 (Latin, Greek)',
             'iso_8859_8' => 'ISO-8859-8 (Latin, Hebrew)',
-            'iso_8859_0' => 'ISO-8859-9 (Latin-5, Turkish)',
+            'iso_8859_9' => 'ISO-8859-9 (Latin-5, Turkish)',
             'iso_8859_10' => 'ISO-8859-10 (Latin-6, Nordic)',
             'iso_8859_11' => 'ISO-8859-11 (Latin, Thai)',
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, Baltic Rim)',

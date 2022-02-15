@@ -22,13 +22,8 @@ class ThemeOptions extends Controller
      * @var array Extensions implemented by this controller.
      */
     public $implement = [
-        \Backend\Behaviors\FormController::class
+        \Backend\Behaviors\FormController::class,
     ];
-
-    /**
-     * @var array `FormController` configuration.
-     */
-    public $formConfig = 'config_form.yaml';
 
     /**
      * @var array Permissions required to view this page.

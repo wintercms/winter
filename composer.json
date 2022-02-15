@@ -29,7 +29,7 @@
         "source": "https://github.com/wintercms/winter"
     },
     "require": {
-        "php": ">=7.2.9",
+        "php": "^7.2.9|^8.0",
         "winter/storm": "~1.1.2",
         "winter/wn-system-module": "~1.1.2",
         "winter/wn-backend-module": "~1.1.2",
@@ -82,6 +82,12 @@
             "recurse": true,
             "replace": false,
             "merge-dev": false
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true,
+            "wikimedia/composer-merge-plugin": true
         }
     }
 }

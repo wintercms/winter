@@ -370,6 +370,7 @@ class PluginManager
     public function getPluginPath($id)
     {
         $classId = $this->getIdentifier($id);
+        $classId = $this->normalizeIdentifier($classId);
         if (!isset($this->pathMap[$classId])) {
             return null;
         }

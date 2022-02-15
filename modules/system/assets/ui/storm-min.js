@@ -5888,7 +5888,7 @@ if(this.propertyDefinition.items!==undefined){this.loadStaticItems()}
 else{this.loadDynamicItems()}}
 SetEditor.prototype.loadStaticItems=function(){var itemArray=[]
 for(var itemValue in this.propertyDefinition.items){itemArray.push({value:itemValue,title:this.propertyDefinition.items[itemValue]})}
-for(var i=itemArray.length-1;i>=0;i--){this.buildItemEditor(itemArray[i].value,itemArray[i].title)}}
+for(var i=itemArray.length-1;i>=0;i--){this.buildItemEditor(String(itemArray[i].value),itemArray[i].title)}}
 SetEditor.prototype.setLinkText=function(link,value){var value=(value!==undefined&&value!==null)?value:this.getNormalizedValue(),text='[ ]'
 if(value===undefined){value=this.propertyDefinition.default}
 if(value!==undefined&&value.length!==undefined&&value.length>0&&typeof value!=='string'){var textValues=[]
@@ -5904,7 +5904,7 @@ this.buildCheckbox(cell,value,text)
 newRow.appendChild(cell)
 tbody.insertBefore(newRow,currentRow.nextSibling)}
 SetEditor.prototype.buildCheckbox=function(cell,value,title){var property={property:value,title:title,default:this.isCheckedByDefault(value)},editor=new $.wn.inspector.propertyEditors.checkbox(this,property,cell,this.group)
-this.editors.push[editor]}
+this.editors.push(editor)}
 SetEditor.prototype.isCheckedByDefault=function(value){if(!this.propertyDefinition.default){return false}
 return this.propertyDefinition.default.indexOf(value)>-1}
 SetEditor.prototype.showLoadingIndicator=function(){$(this.getLink()).loadIndicator()}
@@ -5915,13 +5915,13 @@ $link.loadIndicator('destroy')}
 SetEditor.prototype.loadDynamicItems=function(){var link=this.getLink(),data=this.inspector.getValues(),$form=$(link).closest('form')
 $.wn.foundation.element.addClass(link,'loading-indicator-container size-small')
 this.showLoadingIndicator()
-data['inspectorProperty']=this.getPropertyPath()
-data['inspectorClassName']=this.inspector.options.inspectorClass
+data.inspectorProperty=this.getPropertyPath()
+data.inspectorClassName=this.inspector.options.inspectorClass
 $form.request('onInspectableGetOptions',{data:data,}).done(this.proxy(this.itemsRequestDone)).always(this.proxy(this.hideLoadingIndicator))}
 SetEditor.prototype.itemsRequestDone=function(data,currentValue,initialization){if(this.isDisposed()){return}
 this.loadedItems={}
 if(data.options){for(var i=data.options.length-1;i>=0;i--){this.buildItemEditor(data.options[i].value,data.options[i].title)
-this.loadedItems[data.options[i].value]=data.options[i].title}}
+this.loadedItems[String(data.options[i].value)]=data.options[i].title}}
 this.setLinkText(this.getLink())}
 SetEditor.prototype.getLink=function(){return this.containerCell.querySelector('a.trigger')}
 SetEditor.prototype.getItemsSource=function(){if(this.propertyDefinition.items!==undefined){return this.propertyDefinition.items}
@@ -5942,15 +5942,15 @@ if(value.length===undefined||typeof value==='string'){return undefined}
 return value}
 SetEditor.prototype.supportsExternalParameterEditor=function(){return false}
 SetEditor.prototype.isGroupedEditor=function(){return true}
-SetEditor.prototype.getPropertyValue=function(checkboxValue){var value=this.getNormalizedValue()
-if(value===undefined){return this.isCheckedByDefault(checkboxValue)}
+SetEditor.prototype.getPropertyValue=function(checkboxValue){var value=this.getNormalizedValue(),checkboxValueStr=String(checkboxValue)
+if(value===undefined){return this.isCheckedByDefault(checkboxValueStr)}
 if(!value){return false}
-return value.indexOf(checkboxValue)>-1}
-SetEditor.prototype.setPropertyValue=function(checkboxValue,isChecked){var currentValue=this.getNormalizedValue()
+return value.indexOf(checkboxValueStr)>-1}
+SetEditor.prototype.setPropertyValue=function(checkboxValue,isChecked){var currentValue=this.getNormalizedValue(),checkboxValueStr=String(checkboxValue)
 if(currentValue===undefined){currentValue=this.propertyDefinition.default}
 if(!currentValue){currentValue=[]}
 var resultValue=[],items=this.getItemsSource()
-for(var itemValue in items){if(itemValue!==checkboxValue){if(currentValue.indexOf(itemValue)!==-1){resultValue.push(itemValue)}}
+for(var itemValue in items){if(itemValue!==checkboxValueStr){if(currentValue.indexOf(itemValue)!==-1){resultValue.push(itemValue)}}
 else{if(isChecked){resultValue.push(itemValue)}}}
 this.inspector.setPropertyValue(this.propertyDefinition.property,this.cleanUpValue(resultValue))
 this.setLinkText(this.getLink())}

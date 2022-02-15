@@ -34,7 +34,23 @@ trait InspectableContainer
             throw new ApplicationException('The options cannot be loaded for the specified class.');
         }
 
-        $obj = new $className(null);
+        // Determine constructor requirements and pass the default value (or NULL) to all required arguments
+        $reflection = new \ReflectionClass($className);
+        $constructor = $reflection->getConstructor();
+        if (is_null($constructor) || !count($constructor->getParameters())) {
+            $obj = new $className();
+        } else {
+            $args = $constructor->getParameters();
+            $passed = [];
+            foreach ($args as $arg) {
+                if ($arg->isOptional()) {
+                    $passed[] = $arg->getDefaultValue();
+                    continue;
+                }
+                $passed[] = null;
+            }
+            $obj = $reflection->newInstanceArgs($passed);
+        }
 
         // Nested properties have names like object.property.
         // Convert them to Object.Property.

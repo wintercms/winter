@@ -8,6 +8,7 @@ use System\Models\LogSetting;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
 use Backend\Classes\ReportWidgetBase;
+use Backend\Models\User;
 use System\Models\EventLog;
 use System\Models\RequestLog;
 use System\Models\PluginVersion;
@@ -105,6 +106,13 @@ class Status extends ReportWidgetBase
 
         if (Config::get('develop.decompileBackendAssets', false)) {
             $warnings[] = Lang::get('backend::lang.warnings.decompileBackendAssets');
+        }
+
+        if (
+            BackendAuth::getUser()->hasAccess('backend.manage_users')
+            && User::where('login', 'admin')->orWhere('email', 'admin@domain.tld')->count()
+        ) {
+            $warnings[] = Lang::get('backend::lang.warnings.default_backend_user');
         }
 
         $requiredExtensions = [

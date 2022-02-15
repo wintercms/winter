@@ -3,7 +3,7 @@
 return [
     'auth' => [
         'title' => 'Панель управления',
-        'invalid_login' => 'Вы ввели некорректные данные. Пожалуйста, перепроверьте их и попробуйте ещё раз.'
+        'invalid_login' => 'Вы ввели некорректные данные. Пожалуйста, перепроверьте их и попробуйте ещё раз.',
     ],
     'field' => [
         'invalid_type' => 'Использован неверный тип поля: :type.',
@@ -77,7 +77,7 @@ return [
         'ok' => 'OK',
     ],
     'dashboard' => [
-        'menu_label' => 'Панель управления',
+        'menu_label' => 'Дашборд',
         'widget_label' => 'Виджет',
         'widget_width' => 'Ширина',
         'full_width' => 'полная ширина',
@@ -320,6 +320,7 @@ return [
         'missing_model' => 'Для поведения отношения, используемого в :class не определена модель.',
         'invalid_action_single' => 'Это действие не может быть выполнено для особого отношения.',
         'invalid_action_multi' => 'Это действие не может быть выполнено для множественных отношений.',
+        'relationwidget_unsupported_type' => '":type" тип связи не поддерживается виджетом Relation.',
         'help' => 'Нажмите на элемент, который нужно добавить',
         'related_data' => 'Связанные :name данные',
         'add' => 'Добавить',
@@ -368,6 +369,7 @@ return [
         'plugin_missing' => 'Плагин :name имеет зависимость. Установите этот плагин.',
         'debug' => 'Режим отладки включен. Это не рекомендуется для рабочих инсталяций.',
         'decompileBackendAssets' => 'Ассеты в бэкенде в настоящее время декомпилированы. Это не рекомендуется для рабочих инсталяций.',
+        'default_backend_user' => 'Был обнаружен пользователь с данными для входа по умолчанию (admin / admin@domain.tld). Измените свое имя пользователя и/или email-адрес, чтобы защитить систему.',
     ],
     'editor' => [
         'menu_label' => 'Настройки редактора',
@@ -457,8 +459,13 @@ return [
         'app_tagline' => 'Слоган приложения',
         'app_tagline_description' => 'Слоган будет отображаться на экране входа в панель управления.',
         'colors' => 'Цвета',
-        'primary_color' => 'Первичный color',
-        'secondary_color' => 'Вторичный color',
+        'branding_colors' => 'Брендовые цвета',
+        'branding_colors_comment' => 'Эти цвета будут использоваться во всем интерфейсе Backend UI, чтобы соответствовать вашему бренду.',
+        'default_colors' => 'Цвета по умолчанию',
+        'default_colors_comment' => 'Эти цвета будут доступны как образцы во всех палитрах цветов, если они не будут переопределены.',
+        'add_default_color' => 'Добавить цвет по умолчанию',
+        'primary_color' => 'Первичный цвет',
+        'secondary_color' => 'Вторичный цвет',
         'accent_color' => 'Цвет акцента',
         'styles' => 'Стили',
         'custom_stylesheet' => 'Пользовательские стили',
@@ -561,7 +568,7 @@ return [
             'iso_8859_6' => 'ISO-8859-6 (Latin, Arabic)',
             'iso_8859_7' => 'ISO-8859-7 (Latin, Greek)',
             'iso_8859_8' => 'ISO-8859-8 (Latin, Hebrew)',
-            'iso_8859_0' => 'ISO-8859-9 (Latin-5, Turkish)',
+            'iso_8859_9' => 'ISO-8859-9 (Latin-5, Turkish)',
             'iso_8859_10' => 'ISO-8859-10 (Latin-6, Nordic)',
             'iso_8859_11' => 'ISO-8859-11 (Latin, Thai)',
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, Baltic Rim)',
@@ -569,7 +576,7 @@ return [
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1250' => 'Windows-1250 (CP1250, Central and Eastern European)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
+            'windows_1252' => 'Windows-1252 (CP1252)',
         ]
     ],
     'permissions' => [

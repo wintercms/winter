@@ -24,9 +24,11 @@ jobs:
             node-version: 12
 
       - name: Install Node dependencies
+        working-directory: ./tests/js
         run: npm install
 
       - name: Run tests
+        working-directory: ./tests/js
         run: npm run test
   phpUnitTests:
     strategy:

@@ -106,4 +106,4 @@ tabs:
             type: codeeditor
             tab: backend::lang.branding.styles
             size: giant
-            language: css
+            language: less
