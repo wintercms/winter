@@ -32,6 +32,7 @@ use Winter\Storm\Support\ModuleServiceProvider;
 use Winter\Storm\Router\Helper as RouterHelper;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
+use System\Classes\MixAssets;
 
 class ServiceProvider extends ModuleServiceProvider
 {
@@ -271,6 +272,11 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('plugin.refresh', 'System\Console\PluginRefresh');
         $this->registerConsoleCommand('plugin.rollback', 'System\Console\PluginRollback');
         $this->registerConsoleCommand('plugin.list', 'System\Console\PluginList');
+
+        $this->registerConsoleCommand('mix.install', \System\Console\MixInstall::class);
+        $this->registerConsoleCommand('mix.list', \System\Console\MixList::class);
+        $this->registerConsoleCommand('mix.compile', \System\Console\MixCompile::class);
+        $this->registerConsoleCommand('mix.watch', \System\Console\MixWatch::class);
     }
 
     /*
@@ -554,6 +560,11 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
             $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
+            $combiner->registerBundle('~/modules/system/assets/less/snowboard.extras.less');
+        });
+
+        MixAssets::registerCallback(function ($mix) {
+            $mix->registerPackage('snowboard', '~/modules/system/assets/js/snowboard/winter.mix.js');
         });
     }
 
