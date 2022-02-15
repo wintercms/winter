@@ -570,7 +570,7 @@ class ServiceProvider extends ModuleServiceProvider
         });
 
         MixAssets::registerCallback(function ($mix) {
-            $mix->registerPackage('snowboard', '~/modules/system/assets/js/snowboard');
+            $mix->registerPackage('snowboard', '~/modules/system/assets/js/snowboard/winter.mix.js');
         });
     }
 

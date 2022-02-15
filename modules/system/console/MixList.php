@@ -1,5 +1,6 @@
 <?php namespace System\Console;
 
+use File;
 use Illuminate\Console\Command;
 use System\Classes\MixAssets;
 
@@ -32,13 +33,26 @@ class MixList extends Command
         $this->info('Packages registered:');
         $this->line('');
 
+        $errors = [];
+
         foreach ($packages as $name => $package) {
             $this->info($name);
             $this->line('  Path:           ' . $package['path']);
             $this->line('  Configuration:  ' . $package['mix']);
+
+            if (!File::exists($package['mix'])) {
+                $errors[] = "The mix file for $name doesn't exist, try running artisan mix:install";
+            }
         }
 
         $this->line('');
+
+        if (!empty($errors)) {
+            foreach ($errors as $error) {
+                $this->error($error);
+            }
+        }
+
         return 0;
     }
 }
