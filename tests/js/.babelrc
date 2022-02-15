@@ -1,11 +1,14 @@
 {
-    "presets": ["@babel/preset-env"],
+    "presets": [
+        "@babel/preset-env"
+    ],
     "plugins": [
+        "@babel/plugin-transform-runtime",
         [
             "module-resolver", {
                 "root": ["."],
                 "alias": {
-                    "helpers": "./tests/js/helpers"
+                    "helpers": "./helpers"
                 }
             }
         ]

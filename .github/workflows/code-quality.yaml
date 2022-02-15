@@ -37,3 +37,24 @@ jobs:
       - name: Run code quality checks (on pull request)
         if: github.event_name == 'pull_request'
         run: ./.github/workflows/utilities/phpcs-pr ${{ github.base_ref }}
+  codeQualityJS:
+    runs-on: ubuntu-latest
+    name: JavaScript
+    steps:
+      - name: Checkout changes
+        uses: actions/checkout@v2
+        with:
+            fetch-depth: 0
+
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+            node-version: 12
+
+      - name: Install Node dependencies
+        working-directory: ./modules/system/assets/js/snowboard
+        run: npm install
+
+      - name: Run code quality checks
+        working-directory: ./modules/system/assets/js/snowboard
+        run: npx eslint .
