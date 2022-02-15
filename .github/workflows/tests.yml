@@ -5,6 +5,7 @@ on:
     branches:
       - 1.0
       - 1.1
+      - wip/1.2
       - develop
   pull_request:
 
