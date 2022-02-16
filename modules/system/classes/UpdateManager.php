@@ -890,15 +890,9 @@ class UpdateManager
      */
     public function requestServerData($uri, $postData = [])
     {
-        // dd(Http::class, (new \ReflectionClass(Http::class))->getFileName());
-
-        // dd($this->createServerUrl($uri));
-
         $result = \Winter\Storm\Network\Http::post($this->createServerUrl($uri), function ($http) use ($postData) {
             $this->applyHttpAttributes($http, $postData);
         });
-
-        dd($result, 'after Http::post');
 
         if ($result->code == 404) {
             throw new ApplicationException(Lang::get('system::lang.server.response_not_found'));

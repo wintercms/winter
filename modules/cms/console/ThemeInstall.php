@@ -36,10 +36,6 @@ class ThemeInstall extends Command
      */
     public function handle()
     {
-        echo 'wtf';
-        \Winter\Storm\Network\Http::post('https://google.com/');
-
-
         $themeName = $this->argument('name');
         $argDirName = $this->argument('dirName');
 
@@ -63,13 +59,9 @@ class ThemeInstall extends Command
 
             $themeDetails = $updateManager->requestThemeDetails($themeName);
 
-            dd('after requestThemeDetails');
-
             if ($themeManager->isInstalled($themeDetails['code'])) {
                 return $this->error(sprintf('The theme %s is already installed.', $themeDetails['code']));
             }
-
-            dd($themeName);
 
             if (Theme::exists($themeDetails['code'])) {
                 return $this->error(sprintf('A theme named %s already exists.', $themeDetails['code']));
@@ -88,8 +80,6 @@ class ThemeInstall extends Command
             if (!$this->confirm('Do you wish to continue? [Y|n]', true)) {
                 return;
             }
-
-            dd($themeName);
 
             $this->info('Downloading theme...');
             $updateManager->downloadTheme($themeDetails['code'], $themeDetails['hash']);
@@ -114,14 +104,11 @@ class ThemeInstall extends Command
 
                 $dirName = $argDirName;
             }
-            dd($themeName);
 
             $this->info(sprintf('The theme %s has been installed. (now %s)', $themeDetails['code'], $dirName));
         } catch (\Throwable $ex) {
             $this->error($ex->getMessage());
         }
-
-        dd($themeName);
     }
 
     /**
