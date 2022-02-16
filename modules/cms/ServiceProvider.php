@@ -30,8 +30,6 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        parent::register('cms');
-
         $this->registerConsole();
         $this->registerAssetBundles();
         $this->registerComponents();
