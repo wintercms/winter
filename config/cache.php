@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    
     /*
     |--------------------------------------------------------------------------
     | Default Cache Store
@@ -17,9 +17,9 @@ return [
     | Cache store, as calling Cache::flush() will flush the entire redis store.
     |
     */
-
+    
     'default' => env('CACHE_DRIVER', 'file'),
-
+    
     /*
     |--------------------------------------------------------------------------
     | Cache Stores
@@ -33,41 +33,34 @@ return [
     |         "memcached", "redis", "dynamodb", "octane", "null"
     |
     */
-
+    
     'stores' => [
-
         'apc' => [
             'driver' => 'apc',
         ],
-
         'array' => [
-            'driver'    => 'array',
+            'driver' => 'array',
             'serialize' => false,
         ],
-
         'database' => [
-            'connection'      => null,
-            'driver'          => 'database',
+            'connection' => null,
+            'driver' => 'database',
             'lock_connection' => null,
-            'table'           => 'cache',
+            'table' => 'cache',
         ],
-
         'file' => [
             'driver' => 'file',
-            'path'   => storage_path('framework/cache'),
+            'path' => storage_path('framework/cache'),
         ],
-
         'memcached' => [
-            'driver'        => 'memcached',
-            'options'       => [
-                // Memcached::OPT_CONNECT_TIMEOUT => 2000,
-            ],
+            'driver' => 'memcached',
+            'options' => [],
             'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
             'sasl' => [
                 env('MEMCACHED_USERNAME'),
                 env('MEMCACHED_PASSWORD'),
             ],
-            'servers'       => [
+            'servers' => [
                 [
                     'host' => env('MEMCACHED_HOST', '127.0.0.1'),
                     'port' => env('MEMCACHED_PORT', 11211),
@@ -75,28 +68,24 @@ return [
                 ],
             ],
         ],
-
         'redis' => [
-            'connection'      => 'cache',
-            'driver'          => 'redis',
+            'connection' => 'cache',
+            'driver' => 'redis',
             'lock_connection' => 'default',
         ],
-
         'dynamodb' => [
-            'driver'   => 'dynamodb',
+            'driver' => 'dynamodb',
             'endpoint' => env('DYNAMODB_ENDPOINT'),
-            'key'      => env('AWS_ACCESS_KEY_ID'),
-            'region'   => env('AWS_DEFAULT_REGION', 'us-east-1'),
-            'secret'   => env('AWS_SECRET_ACCESS_KEY'),
-            'table'    => env('DYNAMODB_CACHE_TABLE', 'cache'),
+            'key' => env('AWS_ACCESS_KEY_ID'),
+            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+            'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'table' => env('DYNAMODB_CACHE_TABLE', 'cache'),
         ],
-
         'octane' => [
             'driver' => 'octane',
         ],
-
     ],
-
+    
     /*
     |--------------------------------------------------------------------------
     | Cache Key Prefix
@@ -107,9 +96,9 @@ return [
     | value to get prefixed to all our keys so we can avoid collisions.
     |
     */
-
-    'prefix' => env('CACHE_PREFIX', str_slug(env('APP_NAME', 'winter'), '_').'_cache'),
-
+    
+    'prefix' => env('CACHE_PREFIX', str_slug(env('APP_NAME', 'winter'), '_') . '_cache'),
+    
     /*
     |--------------------------------------------------------------------------
     | Cache Key for the CMS' PHP code parser cache
@@ -121,9 +110,9 @@ return [
     | prevent conflicts.
     |
     */
-
+    
     'codeParserDataCacheKey' => 'cms-php-file-data',
-
+    
     /*
     |--------------------------------------------------------------------------
     | Disable Request Cache
@@ -143,7 +132,6 @@ return [
     | null  - enable for HTTP requests, disable when running in CLI
     |
     */
-
+    
     'disableRequestCache' => null,
-
 ];
