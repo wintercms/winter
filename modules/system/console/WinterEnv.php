@@ -2,8 +2,8 @@
 
 use App;
 use Illuminate\Console\Command;
-use Winter\Storm\Config\ConfigFile;
-use Winter\Storm\Config\EnvFile;
+use Winter\Storm\Parse\EnvFile;
+use Winter\Storm\Parse\PHP\ArrayFile;
 
 /**
  * Console command to convert configuration to use .env files.
@@ -49,11 +49,6 @@ class WinterEnv extends Command
     protected $connection;
 
     /**
-     * @var string env file name
-     */
-    protected $envFile = '.env';
-
-    /**
      * Create a new command instance.
      */
     public function __construct()
@@ -70,30 +65,20 @@ class WinterEnv extends Command
      */
     public function handle(): int
     {
-        if (file_exists($this->getEnvPath())) {
+        if (file_exists($this->laravel->environmentFilePath())) {
             $this->error('.env file already exists.');
             return 1;
         }
 
-        $env = EnvFile::read($this->getEnvPath());
+        $env = EnvFile::open($this->laravel->environmentFilePath());
         $this->setEnvValues($env);
         $env->write();
 
         $this->updateConfig();
 
-
         $this->info('.env configuration file has been created.');
 
         return 0;
-    }
-
-    /**
-     * Get the full path of the env file
-     * @return string
-     */
-    protected function getEnvPath(): string
-    {
-        return base_path($this->envFile);
     }
 
     /**
@@ -125,7 +110,35 @@ class WinterEnv extends Command
                     }
                 }
             }
-            $env->addNewLine();
+            $env->addEmptyLine();
+        }
+    }
+
+    /**
+     * Update config files with env function calls
+     * @return void
+     */
+    protected function updateConfig(): void
+    {
+        foreach ($this->config() as $config => $items) {
+            $arrayFile = ArrayFile::open($this->getConfigPath($config));
+            foreach ($items as $envKey => $configKey) {
+                $arrayFile->set(
+                    $configKey,
+                    $arrayFile->function('env', $this->getEnvArgs($envKey, $config . '.' . $configKey))
+                );
+                if ($config === 'database' && $envKey === 'DB_CONNECTION') {
+                    foreach ($this->dbConfig() as $connection => $keys) {
+                        foreach ($keys as $dbEnvKey => $dbConfigKey) {
+                            $path = sprintf('connections.%s.%s', $connection, $dbConfigKey);
+                            $arrayFile->set(
+                                $path,
+                                $arrayFile->function('env', $this->getEnvArgs($dbEnvKey, $config . '.' . $path))
+                            );
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -134,7 +147,7 @@ class WinterEnv extends Command
      */
     protected function writeDbEnvSettings($line)
     {
-        if ($this->connection == config('database.default') || $this->connection == 'redis') {
+        if ($this->connection === config('database.default') || $this->connection === 'redis') {
             $this->writeToEnv($line);
         }
     }
@@ -147,7 +160,7 @@ class WinterEnv extends Command
     {
         $value = config("$this->config.$configKey");
 
-        if ($this->config == 'database') {
+        if ($this->config === 'database') {
             $value = $this->databaseConfigValue($configKey);
         }
 
@@ -160,15 +173,15 @@ class WinterEnv extends Command
      */
     protected function databaseConfigValue($configKey)
     {
-        if ($configKey == 'default') {
+        if ($configKey === 'default') {
             return config('database.default');
         }
 
-        if ($this->connection == 'redis') {
+        if ($this->connection === 'redis') {
             return config("database.redis.default.$configKey");
         }
 
-        return config("database.connections.$this->connection.$configKey");
+        return config("database.connections.{$this->connection}.$configKey");
     }
 
     /**
