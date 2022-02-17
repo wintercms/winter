@@ -3,7 +3,7 @@
     <head>
         <meta charset="utf-8">
         <title><?= Lang::get('backend::lang.page.404.label') ?></title>
-        <link href="<?= Url::to('/modules/system/assets/css/styles.css') ?>" rel="stylesheet">
+        <link href="<?= Url::asset('/modules/system/assets/css/styles.css') ?>" rel="stylesheet">
     </head>
     <body>
         <div class="container">

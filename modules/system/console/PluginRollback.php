@@ -1,11 +1,14 @@
 <?php namespace System\Console;
 
+use App;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
-use Symfony\Component\Console\Input\InputArgument;
 use System\Classes\VersionManager;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Completion\CompletionInput;
+use Symfony\Component\Console\Completion\CompletionSuggestions;
 
 /**
  * Console command to rollback a plugin.
@@ -36,10 +39,16 @@ class PluginRollback extends Command
         /*
          * Lookup plugin
          */
+        $pluginManager = PluginManager::instance();
         $pluginName = $this->argument('name');
-        $pluginName = PluginManager::instance()->normalizeIdentifier($pluginName);
-        if (!PluginManager::instance()->exists($pluginName)) {
-            throw new \InvalidArgumentException('Plugin not found');
+        $pluginName = $pluginManager->normalizeIdentifier($pluginName);
+
+        if (!$pluginManager->hasPlugin($pluginName)) {
+            return $this->error(sprintf('Unable to find a registered plugin called "%s"', $pluginName));
+        }
+
+        if (App::isProduction() && !$this->option('force')) {
+            $this->warn('YOUR APPLICATION IS IN PRODUCTION');
         }
 
         $stopOnVersion = ltrim(($this->argument('version') ?: null), 'v');
@@ -48,20 +57,19 @@ class PluginRollback extends Command
             if (!VersionManager::instance()->hasDatabaseVersion($pluginName, $stopOnVersion)) {
                 throw new \InvalidArgumentException('Plugin version not found');
             }
-            $confirmQuestion = 'Please confirm that you wish to revert the plugin to version ' . $stopOnVersion . '. This may result in changes to your database and potential data loss.';
+            $confirmQuestion = "Please confirm that you wish to revert $pluginName to version $stopOnVersion. This may result in changes to your database and potential data loss.";
         } else {
-            $confirmQuestion = 'Please confirm that you wish to completely rollback this plugin. This may result in potential data loss.';
+            $confirmQuestion = "Please confirm that you wish to completely rollback $pluginName. This may result in potential data loss.";
         }
 
         if ($this->option('force') || $this->confirm($confirmQuestion)) {
             $manager = UpdateManager::instance()->setNotesOutput($this->output);
-            $stopOnVersion = ltrim(($this->argument('version') ?: null), 'v');
 
             try {
                 $manager->rollbackPlugin($pluginName, $stopOnVersion);
             } catch (\Exception $exception) {
                 $lastVersion = VersionManager::instance()->getCurrentVersion($pluginName);
-                $this->output->writeln(sprintf("<comment>An exception occurred during the rollback and the process has been stopped. The plugin was rolled back to version v%s.</comment>", $lastVersion));
+                $this->output->writeln(sprintf("<comment>An exception occurred during the rollback and the process has been stopped. %s was rolled back to version v%s.</comment>", $pluginName, $lastVersion));
                 throw $exception;
             }
         }
@@ -79,10 +87,25 @@ class PluginRollback extends Command
         ];
     }
 
+    /**
+     * Get the console command options.
+     * @return array
+     */
     protected function getOptions()
     {
         return [
             ['force', 'f', InputOption::VALUE_NONE, 'Force rollback', null],
         ];
+    }
+
+    /**
+     * Provide autocompletion for this command's input
+     */
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
+    {
+        if ($input->mustSuggestArgumentValuesFor('name')) {
+            $plugins = array_keys(PluginManager::instance()->getPlugins());
+            $suggestions->suggestValues($plugins);
+        }
     }
 }

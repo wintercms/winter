@@ -130,29 +130,60 @@ class WinterEnv extends Command
     }
 
     /**
-     * Update config files with env function calls
-     * @return void
+     * @param $line
      */
-    protected function updateConfig(): void
+    protected function writeDbEnvSettings($line)
     {
-        foreach ($this->config() as $config => $items) {
-            $conf = ConfigFile::read($this->getConfigPath($config));
-            foreach ($items as $envKey => $configKey) {
-                $conf->set(
-                    $configKey,
-                    $conf->function('env', $this->getEnvArgs($envKey, $config . '.' . $configKey))
-                );
-                if ($config === 'database' && $envKey === 'DB_CONNECTION') {
-                    foreach ($this->dbConfig() as $connection => $keys) {
-                        foreach ($keys as $dbEnvKey => $dbConfigKey) {
-                            $path = sprintf('connections.%s.%s', $connection, $dbConfigKey);
-                            $conf->set(
-                                $path,
-                                $conf->function('env', $this->getEnvArgs($dbEnvKey, $config . '.' . $path))
-                            );
-                        }
-                    }
-                }
+        if ($this->connection == config('database.default') || $this->connection == 'redis') {
+            $this->writeToEnv($line);
+        }
+    }
+
+    /**
+     * @param $configKey
+     * @return string
+     */
+    protected function envValue($configKey)
+    {
+        $value = config("$this->config.$configKey");
+
+        if ($this->config == 'database') {
+            $value = $this->databaseConfigValue($configKey);
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param $configKey
+     * @return string
+     */
+    protected function databaseConfigValue($configKey)
+    {
+        if ($configKey == 'default') {
+            return config('database.default');
+        }
+
+        if ($this->connection == 'redis') {
+            return config("database.redis.default.$configKey");
+        }
+
+        return config("database.connections.$this->connection.$configKey");
+    }
+
+    /**
+     * Normalizes a value to be inserted into the .env file
+     *
+     * @param $value
+     * @return string
+     */
+    protected function normalizeForEnv($value)
+    {
+        if (is_string($value)) {
+            if (preg_match('/["\'#]/', $value)) {
+                return '"' . str_replace('"', '\\"', $value) . '"';
+            } else {
+                return $value;
             }
             $conf->write();
         }
@@ -183,7 +214,6 @@ class WinterEnv extends Command
             ],
             'database' => [
                 'DB_CONNECTION' => 'default',
-                'DB_USE_CONFIG_FOR_TESTING' => 'useConfigForTesting',
             ],
             'cache' => [
                 'CACHE_DRIVER' => 'default',

@@ -32,6 +32,7 @@ use Winter\Storm\Support\ModuleServiceProvider;
 use Winter\Storm\Router\Helper as RouterHelper;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
+use System\Classes\MixAssets;
 
 class ServiceProvider extends ModuleServiceProvider
 {
@@ -42,8 +43,6 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        parent::register('system');
-
         $this->registerSingletons();
         $this->registerPrivilegedActions();
 
@@ -185,7 +184,6 @@ class ServiceProvider extends ModuleServiceProvider
                 'link_to_asset'  => 'link_to_asset',
                 'link_to_route'  => 'link_to_route',
                 'link_to_action' => 'link_to_action',
-                'asset'          => 'asset',
                 'action'         => 'action',
                 'url'            => 'url',
                 'route'          => 'route',
@@ -273,11 +271,10 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('plugin.rollback', 'System\Console\PluginRollback');
         $this->registerConsoleCommand('plugin.list', 'System\Console\PluginList');
 
-        $this->registerConsoleCommand('theme.install', 'System\Console\ThemeInstall');
-        $this->registerConsoleCommand('theme.remove', 'System\Console\ThemeRemove');
-        $this->registerConsoleCommand('theme.list', 'System\Console\ThemeList');
-        $this->registerConsoleCommand('theme.use', 'System\Console\ThemeUse');
-        $this->registerConsoleCommand('theme.sync', 'System\Console\ThemeSync');
+        $this->registerConsoleCommand('mix.install', \System\Console\MixInstall::class);
+        $this->registerConsoleCommand('mix.list', \System\Console\MixList::class);
+        $this->registerConsoleCommand('mix.compile', \System\Console\MixCompile::class);
+        $this->registerConsoleCommand('mix.watch', \System\Console\MixWatch::class);
     }
 
     /*
@@ -434,22 +431,22 @@ class ServiceProvider extends ModuleServiceProvider
                 'system.manage_updates' => [
                     'label' => 'system::lang.permissions.manage_software_updates',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'system.access_logs' => [
                     'label' => 'system::lang.permissions.access_logs',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'system.manage_mail_settings' => [
                     'label' => 'system::lang.permissions.manage_mail_settings',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'system.manage_mail_templates' => [
                     'label' => 'system::lang.permissions.manage_mail_templates',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ]
             ]);
             $manager->registerPermissionOwnerAlias('Winter.System', 'October.System');
@@ -561,6 +558,11 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
             $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
+            $combiner->registerBundle('~/modules/system/assets/less/snowboard.extras.less');
+        });
+
+        MixAssets::registerCallback(function ($mix) {
+            $mix->registerPackage('snowboard', '~/modules/system/assets/js/snowboard/winter.mix.js');
         });
     }
 

@@ -97,6 +97,7 @@ class WinterInstall extends Command
 
     /**
      * Get the console command options.
+     * @return array
      */
     protected function getOptions()
     {

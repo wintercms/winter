@@ -5,9 +5,14 @@ layout = "default"
 <?php
 function onTest()
 {
-    $value1 = input('value1');
-    $value2 = input('value2');
-    $operation = input('operation');
+    $value1 = input('value1', '');
+    $value2 = input('value2', '');
+    $operation = input('operation', '');
+
+    if (!is_numeric($value1) || $value1 === '' || !is_numeric($value2) || $value2 === '') {
+        $this['result'] = null;
+        return;
+    }
 
     switch ($operation) {
         case '+' :
@@ -45,14 +50,14 @@ function onTest()
         </div>
         <div class="panel-body">
             <form role="form" class="form-inline" data-request="onTest" data-request-update="calcresult: '#result'">
-                <input type="text" class="form-control" value="15" name="value1" style="width:100px">
-                <select class="form-control" name="operation" style="width: 70px">
+                <input type="text" class="form-control" value="15" name="value1" style="width:100px" data-track-input>
+                <select class="form-control" name="operation" style="width: 70px" data-track-input>
                     <option>+</option>
                     <option>-</option>
                     <option>*</option>
                     <option>/</option>
                 </select>
-                <input type="text" class="form-control" value="5" name="value2" style="width:100px">
+                <input type="text" class="form-control" value="5" name="value2" style="width:100px" data-track-input>
                 <button type="submit" class="btn btn btn-primary" data-attach-loading>Calculate</button>
             </form>
         </div>

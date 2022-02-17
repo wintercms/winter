@@ -44,6 +44,7 @@ class WinterPasswd extends Command
 
     /**
      * Execute the console command.
+     * @return int
      */
     public function handle()
     {
@@ -57,7 +58,7 @@ class WinterPasswd extends Command
                 ->firstOrFail();
         } catch (ModelNotFoundException $e) {
             $this->error('The specified user does not exist.');
-            exit(1);
+            return 1;
         }
 
         $password = $this->argument('password')
@@ -77,11 +78,12 @@ class WinterPasswd extends Command
         if ($this->generatedPassword) {
             $this->output->writeLn('Password set to <info>' . $password . '</info>.');
         }
-        exit(0);
+        return 0;
     }
 
     /**
      * Get the console command options.
+     * @return array
      */
     protected function getArguments()
     {

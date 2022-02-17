@@ -30,8 +30,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        parent::register('cms');
-
+        $this->registerConsole();
         $this->registerAssetBundles();
         $this->registerComponents();
         $this->registerThemeLogging();
@@ -65,6 +64,18 @@ class ServiceProvider extends ModuleServiceProvider
         if (App::runningInBackend()) {
             $this->bootBackendLocalization();
         }
+    }
+
+    /**
+     * Register command line specifics
+     */
+    protected function registerConsole()
+    {
+        $this->registerConsoleCommand('theme.install', \Cms\Console\ThemeInstall::class);
+        $this->registerConsoleCommand('theme.remove', \Cms\Console\ThemeRemove::class);
+        $this->registerConsoleCommand('theme.list', \Cms\Console\ThemeList::class);
+        $this->registerConsoleCommand('theme.use', \Cms\Console\ThemeUse::class);
+        $this->registerConsoleCommand('theme.sync', \Cms\Console\ThemeSync::class);
     }
 
     /**
@@ -228,42 +239,43 @@ class ServiceProvider extends ModuleServiceProvider
                 'cms.manage_content' => [
                     'label' => 'cms::lang.permissions.manage_content',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_assets' => [
                     'label' => 'cms::lang.permissions.manage_assets',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_pages' => [
                     'label' => 'cms::lang.permissions.manage_pages',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_layouts' => [
                     'label' => 'cms::lang.permissions.manage_layouts',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_partials' => [
                     'label' => 'cms::lang.permissions.manage_partials',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_themes' => [
                     'label' => 'cms::lang.permissions.manage_themes',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_theme_options' => [
                     'label' => 'cms::lang.permissions.manage_theme_options',
                     'tab' => 'cms::lang.permissions.name',
+                    'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
                     'order' => 100
                 ],
             ]);

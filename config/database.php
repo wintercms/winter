@@ -4,19 +4,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | PDO Fetch Style
-    |--------------------------------------------------------------------------
-    |
-    | By default, database results will be returned as instances of the PHP
-    | stdClass object; however, you may desire to retrieve records in an
-    | array format for simplicity. Here you can tweak the fetch style.
-    |
-    */
-
-    'fetch' => PDO::FETCH_CLASS,
-
-    /*
-    |--------------------------------------------------------------------------
     | Default Database Connection Name
     |--------------------------------------------------------------------------
     |
@@ -26,7 +13,7 @@ return [
     |
     */
 
-    'default' => 'mysql',
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -46,56 +33,60 @@ return [
     'connections' => [
 
         'sqlite' => [
+            'database'                => env('DB_DATABASE', storage_path('database.sqlite')),
             'driver'                  => 'sqlite',
-            // 'url'                  => env('DATABASE_URL'),
-            'database'                => base_path('storage/database.sqlite'),
+            'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
             'prefix'                  => '',
-            'foreign_key_constraints' => true,
+            'url'                     => env('DATABASE_URL'),
         ],
 
         'mysql' => [
-            'driver'         => 'mysql',
-            // 'url'         => env('DATABASE_URL'),
-            'engine'         => 'InnoDB',
-            'host'           => '127.0.0.1',
-            'port'           => 3306,
-            'database'       => 'database',
-            'username'       => 'root',
-            'password'       => '',
             'charset'        => 'utf8mb4',
             'collation'      => 'utf8mb4_unicode_ci',
+            'database'       => env('DB_DATABASE', 'winter'),
+            'driver'         => 'mysql',
+            'engine'         => 'InnoDB',
+            'host'           => env('DB_HOST', '127.0.0.1'),
+            'options'        => extension_loaded('pdo_mysql') ? array_filter([
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+            ]) : [],
+            'password'       => env('DB_PASSWORD', ''),
+            'port'           => env('DB_PORT', '3306'),
             'prefix'         => '',
             'prefix_indexes' => true,
             'strict'         => true,
+            'unix_socket'    => env('DB_SOCKET', ''),
+            'url'            => env('DATABASE_URL'),
+            'username'       => env('DB_USERNAME', 'winter'),
             'varcharmax'     => 191,
         ],
 
         'pgsql' => [
-            'driver'         => 'pgsql',
-            // 'url'         => env('DATABASE_URL'),
-            'host'           => '127.0.0.1',
-            'port'           => 5432,
-            'database'       => 'database',
-            'username'       => 'root',
-            'password'       => '',
             'charset'        => 'utf8',
+            'database'       => env('DB_DATABASE', 'winter'),
+            'driver'         => 'pgsql',
+            'host'           => env('DB_HOST', '127.0.0.1'),
+            'password'       => env('DB_PASSWORD', ''),
+            'port'           => env('DB_PORT', '5432'),
             'prefix'         => '',
             'prefix_indexes' => true,
-            'schema'         => 'public',
+            'search_path'    => 'public',
             'sslmode'        => 'prefer',
+            'url'            => env('DATABASE_URL'),
+            'username'       => env('DB_USERNAME', 'winter'),
         ],
 
         'sqlsrv' => [
-            'driver'         => 'sqlsrv',
-            // 'url'         => env('DATABASE_URL'),
-            'host'           => '127.0.0.1',
-            'port'           => 1433,
-            'database'       => 'database',
-            'username'       => 'root',
-            'password'       => '',
             'charset'        => 'utf8',
+            'database'       => env('DB_DATABASE', 'winter'),
+            'driver'         => 'sqlsrv',
+            'host'           => env('DB_HOST', '127.0.0.1'),
+            'password'       => env('DB_PASSWORD', ''),
+            'port'           => env('DB_PORT', '1433'),
             'prefix'         => '',
             'prefix_indexes' => true,
+            'url'            => env('DATABASE_URL'),
+            'username'       => env('DB_USERNAME', 'winter'),
         ],
 
     ],
@@ -107,7 +98,7 @@ return [
     |
     | This table keeps track of all the migrations that have already run for
     | your application. Using this information, we can determine which of
-    | the migrations on disk have not actually be run in the databases.
+    | the migrations on disk haven't actually been run in the database.
     |
     */
 
@@ -119,26 +110,34 @@ return [
     |--------------------------------------------------------------------------
     |
     | Redis is an open source, fast, and advanced key-value store that also
-    | provides a richer set of commands than a typical key-value systems
-    | such as APC or Memcached. Winter CMS makes it easy to dig right in.
+    | provides a richer body of commands than a typical key-value system
+    | such as APC or Memcached. Winter makes it easy to dig right in.
     |
     */
 
     'redis' => [
 
-        'client' => 'predis',
+        'client' => env('REDIS_CLIENT', 'phpredis'),
 
         'options' => [
-            'cluster' => 'redis',
-            'prefix'  => '',
+            'cluster' => env('REDIS_CLUSTER', 'redis'),
+            'prefix'  => env('REDIS_PREFIX', str_slug(env('APP_NAME', 'winter'), '_').'_database_'),
         ],
 
         'default' => [
-            // 'url'   => env('REDIS_URL'),
-            'host'     => '127.0.0.1',
-            'password' => null,
-            'port'     => 6379,
-            'database' => 0,
+            'database' => env('REDIS_DB', '0'),
+            'host'     => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD'),
+            'port'     => env('REDIS_PORT', '6379'),
+            'url'      => env('REDIS_URL'),
+        ],
+
+        'cache' => [
+            'database' => env('REDIS_CACHE_DB', '1'),
+            'host'     => env('REDIS_HOST', '127.0.0.1'),
+            'password' => env('REDIS_PASSWORD'),
+            'port'     => env('REDIS_PORT', '6379'),
+            'url'      => env('REDIS_URL'),
         ],
 
     ],

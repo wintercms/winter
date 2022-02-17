@@ -15,7 +15,6 @@ use System\Classes\PluginManager;
  */
 class PluginInstall extends Command
 {
-
     /**
      * The console command name.
      * @var string

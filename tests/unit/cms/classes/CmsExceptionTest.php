@@ -30,7 +30,11 @@ class CmsExceptionTest extends TestCase
         $router = new Router($theme);
         $page = $router->findByUrl('/throw-php');
 
-        $foreignException = new \Symfony\Component\Debug\Exception\FatalErrorException('This is a general error', 100, 1, 'test.php', 20);
+        $error = [
+            'file' => 'test.php',
+            'line' => 20,
+        ];
+        $foreignException = new \Symfony\Component\ErrorHandler\Error\FatalError('This is a general error', 100, $error);
         $this->setProtectedProperty($foreignException, 'file', "/modules/cms/classes/CodeParser.php(165) : eval()'d code line 7");
 
         $exception = new CmsException($page, 300);

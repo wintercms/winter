@@ -27,10 +27,10 @@ vscode:
 
 github:
   prebuilds:
-    master: true
+    master: false
     branches: false
-    pullRequests: true
+    pullRequests: false
     pullRequestsFromForks: false
-    addCheck: true
+    addCheck: false
     addComment: false
     addBadge: true

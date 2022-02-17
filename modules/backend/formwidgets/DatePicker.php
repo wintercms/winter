@@ -128,6 +128,11 @@ class DatePicker extends FormWidgetBase
             $value = $value->toDateTimeString();
         }
 
+        // Disable the datepicker visually when readOnly is enabled
+        if ($this->formField->readOnly) {
+            $this->formField->disabled = true;
+        }
+
         $this->vars['name'] = $this->getFieldName();
         $this->vars['value'] = $value ?: '';
         $this->vars['field'] = $this->formField;

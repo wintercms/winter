@@ -11,7 +11,7 @@ use Backend\Classes\ControllerBehavior;
  * This behavior is implemented in the controller like so:
  *
  *     public $implement = [
- *         'Backend.Behaviors.ReorderController',
+ *         \Backend\Behaviors\ReorderController::class,
  *     ];
  *
  *     public $reorderConfig = 'config_reorder.yaml';
@@ -25,11 +25,6 @@ use Backend\Classes\ControllerBehavior;
  */
 class ReorderController extends ControllerBehavior
 {
-    /**
-     * @inheritDoc
-     */
-    protected $requiredProperties = ['reorderConfig'];
-
     /**
      * @var array Configuration values that must exist when applying the primary config file.
      */
@@ -68,6 +63,11 @@ class ReorderController extends ControllerBehavior
     protected $toolbarWidget;
 
     /**
+     * @var mixed Configuration for this behaviour
+     */
+    public $reorderConfig = 'config_reorder.yaml';
+
+    /**
      * Behavior constructor
      * @param Backend\Classes\Controller $controller
      */
@@ -78,7 +78,7 @@ class ReorderController extends ControllerBehavior
         /*
          * Build configuration
          */
-        $this->config = $this->makeConfig($controller->reorderConfig, $this->requiredConfig);
+        $this->config = $this->makeConfig($controller->reorderConfig ?: $this->reorderConfig, $this->requiredConfig);
 
         /*
          * Widgets

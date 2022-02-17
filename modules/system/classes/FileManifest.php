@@ -32,6 +32,26 @@ class FileManifest
     protected $files = [];
 
     /**
+     * @var array File extensions to normalize newlines for
+     */
+    protected $normalizeExtensions = [
+        'css',
+        'htm',
+        'html',
+        'js',
+        'json',
+        'less',
+        'md',
+        'php',
+        'sass',
+        'scss',
+        'svg',
+        'txt',
+        'xml',
+        'yaml',
+    ];
+
+    /**
      * Constructor.
      *
      * @param string $root The root folder to get the file list from.
@@ -188,6 +208,14 @@ class FileManifest
 
         $contents = file_get_contents($file);
 
-        return str_replace(PHP_EOL, "\n", $contents);
+        // Replace Windows newlines in text files with Unix newlines
+        if (
+            PHP_EOL === "\r\n"
+            && in_array(pathinfo($file, PATHINFO_EXTENSION), $this->normalizeExtensions)
+        ) {
+            $contents = str_replace(PHP_EOL, "\n", $contents);
+        }
+
+        return $contents;
     }
 }

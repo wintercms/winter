@@ -5,6 +5,7 @@ on:
     branches:
       - 1.0
       - 1.1
+      - wip/1.2
       - develop
   pull_request:
 
@@ -24,16 +25,18 @@ jobs:
             node-version: 12
 
       - name: Install Node dependencies
+        working-directory: ./tests/js
         run: npm install
 
       - name: Run tests
+        working-directory: ./tests/js
         run: npm run test
   phpUnitTests:
     strategy:
       max-parallel: 8
       matrix:
         operatingSystem: [ubuntu-latest, windows-latest]
-        phpVersion: ['7.2', '7.3', '7.4', '8.0']
+        phpVersion: ['8.0', '8.1']
       fail-fast: false
     runs-on: ${{ matrix.operatingSystem }}
     name: ${{ matrix.operatingSystem }} / PHP ${{ matrix.phpVersion }}
@@ -82,6 +85,10 @@ jobs:
         if: github.ref == 'refs/heads/1.1' || github.base_ref == '1.1'
         run: php ./.github/workflows/utilities/library-switcher "1.1.x-dev as 1.1"
 
+      - name: Switch library dependency (1.2)
+        if: github.ref == 'refs/heads/wip/1.2' || github.base_ref == 'wip/1.2'
+        run: php ./.github/workflows/utilities/library-switcher "dev-wip/1.2 as 1.2"
+
       - name: Setup dependency cache
         id: composercache
         run: echo "::set-output name=dir::$(composer config cache-files-dir)"
@@ -103,7 +110,7 @@ jobs:
         run: php artisan package:discover
 
       - name: Setup problem matchers for PHPUnit
-        if: matrix.phpVersion == '7.4'
+        if: matrix.phpVersion == '8.1'
         run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Run Linting and Tests
