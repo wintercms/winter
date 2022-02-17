@@ -65,7 +65,7 @@ class WinterVersion extends \Illuminate\Console\Command
             $this->info('*** Detected Winter CMS build ' . $build['build'] . '.');
         }
 
-        if ($this->option('changes')) {
+        if (!empty($build['changes']) && $this->option('changes')) {
             $this->line('');
             $this->comment('We have detected the following modifications:');
 
