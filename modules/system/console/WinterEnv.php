@@ -39,16 +39,6 @@ class WinterEnv extends Command
     ];
 
     /**
-     * The current config cursor.
-     */
-    protected $config;
-
-    /**
-     * The current database connection cursor.
-     */
-    protected $connection;
-
-    /**
      * Create a new command instance.
      */
     public function __construct()
@@ -66,15 +56,12 @@ class WinterEnv extends Command
     public function handle(): int
     {
         if (file_exists($this->laravel->environmentFilePath())) {
-            $this->error('.env file already exists.');
+            $this->error('.env file already exists (' . $this->laravel->environmentFilePath() . ')');
             return 1;
         }
 
-        $env = EnvFile::open($this->laravel->environmentFilePath());
-        $this->setEnvValues($env);
-        $env->write();
-
-        $this->updateConfig();
+        $this->updateEnvFile();
+        $this->updateConfigFiles();
 
         $this->info('.env configuration file has been created.');
 
@@ -93,11 +80,11 @@ class WinterEnv extends Command
 
     /**
      * Set env keys to their config values within the EnvFile object
-     * @param EnvFile $env
-     * @return void
      */
-    protected function setEnvValues(EnvFile $env): void
+    protected function updateEnvFile(): void
     {
+        $env = EnvFile::open($this->laravel->environmentFilePath());
+
         foreach ($this->config() as $config => $items) {
             foreach ($items as $envKey => $configKey) {
                 $env->set($envKey, config($config . '.' . $configKey));
@@ -112,20 +99,21 @@ class WinterEnv extends Command
             }
             $env->addEmptyLine();
         }
+
+        $env->write();
     }
 
     /**
      * Update config files with env function calls
-     * @return void
      */
-    protected function updateConfig(): void
+    protected function updateConfigFiles(): void
     {
         foreach ($this->config() as $config => $items) {
             $arrayFile = ArrayFile::open($this->getConfigPath($config));
             foreach ($items as $envKey => $configKey) {
                 $arrayFile->set(
                     $configKey,
-                    $arrayFile->function('env', $this->getEnvArgs($envKey, $config . '.' . $configKey))
+                    $arrayFile->function('env', $this->getKeyValuePair($envKey, $config . '.' . $configKey))
                 );
                 if ($config === 'database' && $envKey === 'DB_CONNECTION') {
                     foreach ($this->dbConfig() as $connection => $keys) {
@@ -133,7 +121,7 @@ class WinterEnv extends Command
                             $path = sprintf('connections.%s.%s', $connection, $dbConfigKey);
                             $arrayFile->set(
                                 $path,
-                                $arrayFile->function('env', $this->getEnvArgs($dbEnvKey, $config . '.' . $path))
+                                $arrayFile->function('env', $this->getKeyValuePair($dbEnvKey, $config . '.' . $path))
                             );
                         }
                     }
@@ -144,14 +132,14 @@ class WinterEnv extends Command
     }
 
     /**
-     * Return an array used to generate the arguments for an env function call with protection of specific keys
-     * @param string $envConfig
-     * @param string $path
-     * @return array
+     * Returns an array containing the key as the first element and the value
+     * as the second if the key is not a protected key; otherwise the value
+     * will be an empty string
      */
-    protected function getEnvArgs(string $envConfig, string $path): array
+    protected function getKeyValuePair(string $envKey, string $configKey): array
     {
-        return [$envConfig, in_array($envConfig, $this->protectedKeys) ? '' : config($path)];
+        $return = [$envKey, in_array($envKey, $this->protectedKeys) ? '' : config($configKey)];
+        return $return;
     }
 
     /**
@@ -179,7 +167,7 @@ class WinterEnv extends Command
                 'QUEUE_CONNECTION' => 'default',
             ],
             'mail' => [
-                'MAIL_DRIVER' => 'driver',
+                'MAIL_MAILER' => 'default',
                 'MAIL_HOST' => 'host',
                 'MAIL_PORT' => 'port',
                 'MAIL_USERNAME' => 'username',
@@ -191,7 +179,7 @@ class WinterEnv extends Command
                 'ASSET_CACHE' => 'enableAssetCache',
                 'LINK_POLICY' => 'linkPolicy',
                 'ENABLE_CSRF' => 'enableCsrfProtection',
-                'DATABASE_TEMPLATES' => 'databaseTemplates'
+                'DATABASE_TEMPLATES' => 'databaseTemplates',
             ],
         ];
     }

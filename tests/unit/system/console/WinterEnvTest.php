@@ -2,7 +2,7 @@
 
 use Winter\Storm\Foundation\Bootstrap\LoadConfiguration;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use System\Console\WinterEnv;
 
 class WinterEnvTest extends TestCase
@@ -13,25 +13,33 @@ class WinterEnvTest extends TestCase
     /** @var string Stores the original config path from the app container */
     public static $origConfigPath;
 
+    /** @var string Stores the original environment path from the app container */
+    public static $origEnvPath;
+
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->setUpConfigFixtures();
-        $this->stubOutEnvFile();
     }
 
     public function testCommand()
     {
+        $output = new BufferedOutput();
         $command = new WinterEnv();
         $command->setLaravel($this->app);
-        $command->run(new ArrayInput([]), new NullOutput);
+        $result = $command->run(new ArrayInput([]), $output);
+
+        // Ensure that the command actually succeeded
+        if ($result !== 0) {
+            throw new \Exception("Command failed: \r\n" . $output->fetch());
+        }
 
         // Check environment file
-        $envFile = file_get_contents(base_path('.env'));
+        $envFile = file_get_contents($this->app->environmentFilePath());
 
         $this->assertStringContainsString('APP_DEBUG=true', $envFile);
-        $this->assertStringContainsString('APP_URL="https://localhost"', $envFile);
+        $this->assertStringContainsString('APP_URL="https://env-test.localhost"', $envFile);
         $this->assertStringContainsString('DB_CONNECTION="mysql"', $envFile);
         $this->assertStringContainsString('DB_DATABASE="data#base"', $envFile);
         $this->assertStringContainsString('DB_USERNAME="teal\'c"', $envFile);
@@ -42,7 +50,7 @@ class WinterEnvTest extends TestCase
         $appConfigFile = file_get_contents(storage_path('temp/tests/config/app.php'));
 
         $this->assertStringContainsString('\'debug\' => env(\'APP_DEBUG\', true),', $appConfigFile);
-        $this->assertStringContainsString('\'url\' => env(\'APP_URL\', \'https://localhost\'),', $appConfigFile);
+        $this->assertStringContainsString('\'url\' => env(\'APP_URL\', \'https://env-test.localhost\'),', $appConfigFile);
 
         // Check database.php config file
         $appConfigFile = file_get_contents(storage_path('temp/tests/config/database.php'));
@@ -58,7 +66,6 @@ class WinterEnvTest extends TestCase
     protected function tearDown(): void
     {
         $this->tearDownConfigFixtures();
-        $this->restoreEnvFile();
 
         parent::tearDown();
     }
@@ -68,6 +75,9 @@ class WinterEnvTest extends TestCase
         // Mock config path and copy fixtures
         if (!is_dir(storage_path('temp/tests/config'))) {
             mkdir(storage_path('temp/tests/config'), 0777, true);
+        }
+        if (!is_dir(storage_path('temp/tests/env'))) {
+            mkdir(storage_path('temp/tests/env'), 0777, true);
         }
 
         foreach (glob(base_path('tests/fixtures/config/*.php')) as $file) {
@@ -79,8 +89,10 @@ class WinterEnvTest extends TestCase
 
         // Store original config path
         static::$origConfigPath = $this->app->make('path.config');
+        static::$origEnvPath = $this->app->environmentPath();
 
         $this->app->instance('path.config', storage_path('temp/tests/config'));
+        $this->app->useEnvironmentPath(storage_path('temp/tests/env'));
 
         // Re-load configuration
         $configBootstrap = new LoadConfiguration;
@@ -95,6 +107,8 @@ class WinterEnvTest extends TestCase
                 unlink($file);
             }
             rmdir(storage_path('temp/tests/config'));
+            unlink(storage_path('temp/tests/env/.env'));
+            rmdir(storage_path('temp/tests/env'));
             rmdir(storage_path('temp/tests'));
 
             static::$fixturesCopied = false;
@@ -103,31 +117,17 @@ class WinterEnvTest extends TestCase
         // Restore config path
         if (self::$origConfigPath) {
             $this->app->instance('path.config', static::$origConfigPath);
-
             static::$origConfigPath = null;
+        }
+
+        // Restore environment path
+        if (self::$origEnvPath) {
+            $this->app->useEnvironmentPath(static::$origEnvPath);
+            static::$origEnvPath = null;
         }
 
         // Re-load configuration
         $configBootstrap = new LoadConfiguration;
         $configBootstrap->bootstrap($this->app);
-    }
-
-    protected function stubOutEnvFile()
-    {
-        if (file_exists(base_path('.env.stub'))) {
-            unlink(base_path('.env.stub'));
-        }
-        if (file_exists(base_path('.env'))) {
-            rename(base_path('.env'), base_path('.env.stub'));
-        }
-    }
-
-    protected function restoreEnvFile()
-    {
-        unlink(base_path('.env'));
-
-        if (file_exists(base_path('.env.stub'))) {
-            rename(base_path('.env.stub'), base_path('.env'));
-        }
     }
 }
