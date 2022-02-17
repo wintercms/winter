@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    
     /*
     |--------------------------------------------------------------------------
     | Decompile backend assets
@@ -18,9 +18,9 @@ return [
     | false - use compiled backend assets (default)
     |
     */
-
+    
     'decompileBackendAssets' => false,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Allow deep-level symlinks
@@ -40,7 +40,6 @@ return [
     | false - only allow symlinks at the first level of subdirectories (default)
     |
     */
-
+    
     'allowDeepSymlinks' => false,
-
 ];

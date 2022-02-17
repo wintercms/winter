@@ -1,7 +1,7 @@
 <?php
 
 return [
-
+    
     /*
     |--------------------------------------------------------------------------
     | Specifies the default CMS theme.
@@ -10,9 +10,9 @@ return [
     | This parameter value can be overridden by the CMS back-end settings.
     |
     */
-
+    
     'activeTheme' => 'demo',
-
+    
     /*
     |--------------------------------------------------------------------------
     | Bleeding edge updates
@@ -23,9 +23,9 @@ return [
     | and use the development copies of core files and plugins.
     |
     */
-
+    
     'edgeUpdates' => false,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Back-end URI prefix
@@ -35,9 +35,9 @@ return [
     | For example: backend -> http://localhost/backend
     |
     */
-
+    
     'backendUri' => 'backend',
-
+    
     /*
     |--------------------------------------------------------------------------
     | Back-end force HTTPS security
@@ -48,9 +48,9 @@ return [
     | web server config, but can be handled by the app for added security.
     |
     */
-
+    
     'backendForceSecure' => false,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Back-end login remember
@@ -66,9 +66,9 @@ return [
     |         wanted behavior
     |
     */
-
+    
     'backendForceRemember' => true,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Back-end timezone
@@ -79,9 +79,9 @@ return [
     | dates displayed in the back-end will be converted to this timezone.
     |
     */
-
+    
     'backendTimezone' => 'UTC',
-
+    
     /*
     |--------------------------------------------------------------------------
     | Back-end Skin
@@ -90,9 +90,9 @@ return [
     | Specifies the back-end skin to use.
     |
     */
-
-    'backendSkin' => 'Backend\Skins\Standard',
-
+    
+    'backendSkin' => 'Backend\\Skins\\Standard',
+    
     /*
     |--------------------------------------------------------------------------
     | Automatically run migrations on login
@@ -105,9 +105,9 @@ return [
     | and disabled when debug mode is disabled.
     |
     */
-
+    
     'runMigrationsOnLogin' => null,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Determines which modules to load
@@ -116,9 +116,13 @@ return [
     | Specify which modules should be registered when using the application.
     |
     */
-
-    'loadModules' => ['System', 'Backend', 'Cms'],
-
+    
+    'loadModules' => [
+        'System',
+        'Backend',
+        'Cms',
+    ],
+    
     /*
     |--------------------------------------------------------------------------
     | Prevents application updates
@@ -130,9 +134,9 @@ return [
     | and themes will still be downloaded.
     |
     */
-
+    
     'disableCoreUpdates' => false,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Specific plugins to disable
@@ -141,9 +145,9 @@ return [
     | Specify plugin codes which will always be disabled in the application.
     |
     */
-
+    
     'disablePlugins' => [],
-
+    
     /*
     |--------------------------------------------------------------------------
     | Determines if the routing caching is enabled.
@@ -155,9 +159,9 @@ return [
     | to disable the caching during the development, and enable it in the production mode.
     |
     */
-
+    
     'enableRoutesCache' => false,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Time to live for the URL map.
@@ -168,9 +172,9 @@ return [
     | interval, in minutes, specified with the urlMapCacheTTL parameter expires.
     |
     */
-
+    
     'urlCacheTtl' => 10,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Time to live for parsed CMS objects.
@@ -181,9 +185,9 @@ return [
     | the corresponding template file is modified.
     |
     */
-
+    
     'parsedPageCacheTTL' => 10,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Determines if the asset caching is enabled.
@@ -195,9 +199,9 @@ return [
     | to disable the caching during the development, and enable it in the production mode.
     |
     */
-
+    
     'enableAssetCache' => false,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Determines if the asset minification is enabled.
@@ -209,9 +213,9 @@ return [
     | when debug mode (app.debug) is disabled.
     |
     */
-
+    
     'enableAssetMinify' => null,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Check import timestamps when combining assets
@@ -223,9 +227,9 @@ return [
     | is used when debug mode (app.debug) is enabled.
     |
     */
-
+    
     'enableAssetDeepHashing' => null,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Database-driven Themes
@@ -249,9 +253,9 @@ return [
     | from the database.
     |
     */
-
+    
     'databaseTemplates' => false,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Public plugins path
@@ -261,9 +265,9 @@ return [
     | or you can specify a full URL path.
     |
     */
-
+    
     'pluginsPath' => '/plugins',
-
+    
     /*
     |--------------------------------------------------------------------------
     | Public themes path
@@ -273,9 +277,9 @@ return [
     | or you can specify a full URL path.
     |
     */
-
+    
     'themesPath' => '/themes',
-
+    
     /*
     |--------------------------------------------------------------------------
     | Resource storage
@@ -310,30 +314,26 @@ return [
     | path for the uploads disk and `/projects/winter/storage/app/media` as
     | the path for the media disk.
     */
-
+    
     'storage' => [
-
         'uploads' => [
-            'disk'            => 'local',
-            'folder'          => 'uploads',
-            'path'            => '/storage/app/uploads',
+            'disk' => 'local',
+            'folder' => 'uploads',
+            'path' => '/storage/app/uploads',
             'temporaryUrlTTL' => 3600,
         ],
-
         'media' => [
-            'disk'   => 'local',
+            'disk' => 'local',
             'folder' => 'media',
-            'path'   => '/storage/app/media',
+            'path' => '/storage/app/media',
         ],
-
         'resized' => [
-            'disk'   => 'local',
+            'disk' => 'local',
             'folder' => 'resized',
-            'path'   => '/storage/app/resized',
+            'path' => '/storage/app/resized',
         ],
-
     ],
-
+    
     /*
     |--------------------------------------------------------------------------
     | Convert Line Endings
@@ -343,9 +343,9 @@ return [
     | \r\n to the unix style \n.
     |
     */
-
+    
     'convertLineEndings' => false,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Linking policy
@@ -359,9 +359,9 @@ return [
     | force    - force hostname and schema using app.url config value
     |
     */
-
+    
     'linkPolicy' => 'detect',
-
+    
     /*
     |--------------------------------------------------------------------------
     | Default permission mask
@@ -370,9 +370,12 @@ return [
     | Specifies a default file and folder permission for newly created objects.
     |
     */
-
-    'defaultMask' => ['file' => null, 'folder' => null],
-
+    
+    'defaultMask' => [
+        'file' => null,
+        'folder' => null,
+    ],
+    
     /*
     |--------------------------------------------------------------------------
     | Safe mode
@@ -383,9 +386,9 @@ return [
     | debug mode (app.debug) is disabled.
     |
     */
-
+    
     'enableSafeMode' => null,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Cross Site Request Forgery (CSRF) Protection
@@ -395,9 +398,9 @@ return [
     | checked for a valid security token.
     |
     */
-
+    
     'enableCsrfProtection' => true,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Force bytecode invalidation
@@ -408,9 +411,9 @@ return [
     | cache won't update the cache, set to true to get around this.
     |
     */
-
+    
     'forceBytecodeInvalidation' => true,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Twig Strict Variables
@@ -423,9 +426,9 @@ return [
     | enabled.
     |
     */
-
+    
     'enableTwigStrictVariables' => false,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Base Directory Restriction
@@ -442,9 +445,9 @@ return [
     | NEVER have this disabled in production.
     |
     */
-
+    
     'restrictBaseDir' => true,
-
+    
     /*
     |--------------------------------------------------------------------------
     | Backend Service Worker
@@ -464,7 +467,6 @@ return [
     | false - disallow service workers to run in the backend
     |
     */
-
+    
     'enableBackendServiceWorkers' => false,
-
 ];
