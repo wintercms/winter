@@ -45,17 +45,17 @@ class Loader implements TwigLoaderInterface
         return $this->cache[$name] = $path;
     }
 
-    public function getSourceContext($name)
+    public function getSourceContext(string $name): \Twig\Source
     {
         return new TwigSource(File::get($this->findTemplate($name)), $name);
     }
 
-    public function getCacheKey($name)
+    public function getCacheKey(string $name): string
     {
         return $this->findTemplate($name);
     }
 
-    public function isFresh($name, $time)
+    public function isFresh(string $name, int $time): bool
     {
         return File::lastModified($this->findTemplate($name)) <= $time;
     }
@@ -65,7 +65,7 @@ class Loader implements TwigLoaderInterface
         return $this->findTemplate($name);
     }
 
-    public function exists($name)
+    public function exists(string $name)
     {
         try {
             $this->findTemplate($name);
