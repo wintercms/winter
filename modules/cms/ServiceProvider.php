@@ -18,6 +18,7 @@ use Cms\Classes\ComponentManager;
 use System\Classes\CombineAssets;
 use Cms\Classes\Theme as CmsTheme;
 use Backend\Classes\WidgetManager;
+use System\Classes\MarkupManager;
 use System\Classes\SettingsManager;
 use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
 use Cms\Twig\Loader as CmsTwigLoader;

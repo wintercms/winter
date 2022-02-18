@@ -20,7 +20,7 @@ class Extension extends TwigExtension
     public function getFunctions(): array
     {
         $options = [
-            'is_safe' => 'html',
+            'is_safe' => ['html'],
             'needs_context' => true,
         ];
 
@@ -29,7 +29,7 @@ class Extension extends TwigExtension
             new TwigSimpleFunction('partial', [$this, 'partialFunction'], $options),
             new TwigSimpleFunction('content', [$this, 'contentFunction'], $options),
             new TwigSimpleFunction('component', [$this, 'componentFunction'], $options),
-            new TwigSimpleFunction('placeholder', [$this, 'placeholderFunction'], ['is_safe' => 'html']),
+            new TwigSimpleFunction('placeholder', [$this, 'placeholderFunction'], ['is_safe' => ['html']]),
         ];
     }
 
@@ -39,7 +39,7 @@ class Extension extends TwigExtension
     public function getFilters(): array
     {
         $options = [
-            'is_safe' => 'html',
+            'is_safe' => ['html'],
             'needs_context' => true,
         ];
 
@@ -105,7 +105,7 @@ class Extension extends TwigExtension
     /**
      * Renders registered assets of a given type or all types if $type not provided
      */
-    public function assetsFunction(array $context, string $type = null): string
+    public function assetsFunction(array $context, string $type = null): ?string
     {
         return $context['this']['controller']->makeAssets($type);
     }
