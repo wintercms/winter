@@ -31,6 +31,7 @@ class ServiceProvider extends ModuleServiceProvider
     public function register()
     {
         $this->registerConsole();
+        $this->registerTwigParser();
         $this->registerAssetBundles();
         $this->registerComponents();
         $this->registerThemeLogging();
@@ -76,6 +77,19 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('theme.list', \Cms\Console\ThemeList::class);
         $this->registerConsoleCommand('theme.use', \Cms\Console\ThemeUse::class);
         $this->registerConsoleCommand('theme.sync', \Cms\Console\ThemeSync::class);
+    }
+
+    /*
+     * Register Twig Environments and other Twig modifications provided by the module
+     */
+    protected function registerTwigParser()
+    {
+        // Register CMS Twig environment
+        App::singleton('twig.environment.cms', function ($app) {
+            $twig = MarkupManager::makeBaseTwigEnvironment();
+
+            // @TODO: move logic from Cms\Classes\Controller into here and adjust controller to use $twig->getLoader() instead
+        });
     }
 
     /**
