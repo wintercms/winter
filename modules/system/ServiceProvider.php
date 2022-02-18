@@ -12,8 +12,6 @@ use BackendMenu;
 use BackendAuth;
 use SystemException;
 use Backend\Models\UserRole;
-use Twig\Extension\SandboxExtension;
-use Twig\Environment as TwigEnvironment;
 use System\Classes\MailManager;
 use System\Classes\ErrorHandler;
 use System\Classes\MarkupManager;
@@ -21,9 +19,6 @@ use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
 use System\Twig\Engine as TwigEngine;
-use System\Twig\Loader as TwigLoader;
-use System\Twig\Extension as TwigExtension;
-use System\Twig\SecurityPolicy as TwigSecurityPolicy;
 use System\Models\EventLog;
 use System\Models\MailSetting;
 use System\Classes\CombineAssets;
@@ -301,23 +296,22 @@ class ServiceProvider extends ModuleServiceProvider
     }
 
     /*
-     * Register text twig parser
+     * Register Twig Environments and other Twig modifications provided by the module
      */
     protected function registerTwigParser()
     {
-        /*
-         * Register system Twig environment
-         */
+        // Register System Twig environment
         App::singleton('twig.environment', function ($app) {
-            $twig = new TwigEnvironment(new TwigLoader, ['auto_reload' => true]);
-            $twig->addExtension(new TwigExtension);
-            $twig->addExtension(new SandboxExtension(new TwigSecurityPolicy, true));
-            return $twig;
+            return MarkupManager::makeBaseTwigEnvironment();
         });
 
-        /*
-         * Register .htm extension for Twig views
-         */
+        // Register Mailer Twig environment
+        App::singleton('twig.environment.mailer', function ($app) {
+            $twig = MarkupManager::makeBaseTwigEnvironment();
+            $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
+        });
+
+        // Register .htm extension for Twig views
         App::make('view')->addExtension('htm', 'twig', function () {
             return new TwigEngine(App::make('twig.environment'));
         });
