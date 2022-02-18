@@ -14,17 +14,10 @@ use Exception;
 use SystemException;
 use BackendAuth;
 use Twig\Environment as TwigEnvironment;
-use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
-use Twig\Extension\SandboxExtension;
-use Cms\Twig\Loader as TwigLoader;
-use Cms\Twig\DebugExtension;
-use Cms\Twig\Extension as CmsTwigExtension;
 use Cms\Models\MaintenanceSetting;
 use System\Models\RequestLog;
 use System\Helpers\View as ViewHelper;
 use System\Classes\CombineAssets;
-use System\Twig\Extension as SystemTwigExtension;
-use System\Twig\SecurityPolicy;
 use Winter\Storm\Exception\AjaxException;
 use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Parse\Bracket as TextParser;
@@ -53,11 +46,6 @@ class Controller
      * @var \Cms\Classes\Router A reference to the Router object.
      */
     protected $router;
-
-    /**
-     * @var \Cms\Twig\Loader A reference to the Twig template loader.
-     */
-    protected $loader;
 
     /**
      * @var \Cms\Classes\Page A reference to the CMS page template being processed.
@@ -429,8 +417,8 @@ class Controller
              * Render the page
              */
             CmsException::mask($this->page, 400);
-            $this->loader->setObject($this->page);
-            $template = $this->twig->loadTemplate($this->page->getFilePath());
+            $this->getLoader()->setObject($this->page);
+            $template = $this->getTwig()->load($this->page->getFilePath());
             $this->pageContents = $template->render($this->vars);
             CmsException::unmask();
         }
@@ -439,8 +427,8 @@ class Controller
          * Render the layout
          */
         CmsException::mask($this->layout, 400);
-        $this->loader->setObject($this->layout);
-        $template = $this->twig->loadTemplate($this->layout->getFilePath());
+        $this->getLoader()->setObject($this->layout);
+        $template = $this->getTwig()->load($this->layout->getFilePath());
         $result = $template->render($this->vars);
         CmsException::unmask();
 
@@ -595,35 +583,7 @@ class Controller
      */
     protected function initTwigEnvironment()
     {
-        $this->loader = new TwigLoader;
-
-        $useCache = !Config::get('cms.twigNoCache');
-        $isDebugMode = Config::get('app.debug', false);
-        $strictVariables = Config::get('cms.enableTwigStrictVariables', false);
-        $strictVariables = $strictVariables ?? $isDebugMode;
-        $forceBytecode = Config::get('cms.forceBytecodeInvalidation', false);
-
-        $options = [
-            'auto_reload' => true,
-            'debug' => $isDebugMode,
-            'strict_variables' => $strictVariables,
-        ];
-
-        if ($useCache) {
-            $options['cache'] = new TwigCacheFilesystem(
-                storage_path().'/cms/twig',
-                $forceBytecode ? TwigCacheFilesystem::FORCE_BYTECODE_INVALIDATION : 0
-            );
-        }
-
-        $this->twig = new TwigEnvironment($this->loader, $options);
-        $this->twig->addExtension(new CmsTwigExtension($this));
-        $this->twig->addExtension(new SystemTwigExtension);
-        $this->twig->addExtension(new SandboxExtension(new SecurityPolicy, true));
-
-        if ($isDebugMode) {
-            $this->twig->addExtension(new DebugExtension($this));
-        }
+        $this->twig = App::make('twig.environment.cms');
     }
 
     /**
@@ -1096,8 +1056,8 @@ class Controller
          * Render the partial
          */
         CmsException::mask($partial, 400);
-        $this->loader->setObject($partial);
-        $template = $this->twig->loadTemplate($partial->getFilePath());
+        $this->getLoader()->setObject($partial);
+        $template = $this->getTwig()->load($partial->getFilePath());
         $partialContent = $template->render(array_merge($this->vars, $parameters));
         CmsException::unmask();
 
@@ -1274,7 +1234,7 @@ class Controller
      */
     public function getLoader()
     {
-        return $this->loader;
+        return $this->getTwig()->getLoader();
     }
 
     /**

@@ -5,6 +5,7 @@ use Url;
 use Lang;
 use File;
 use Event;
+use Config;
 use Backend;
 use BackendMenu;
 use BackendAuth;
@@ -17,7 +18,12 @@ use Cms\Classes\ComponentManager;
 use System\Classes\CombineAssets;
 use Cms\Classes\Theme as CmsTheme;
 use Backend\Classes\WidgetManager;
+use System\Classes\MarkupManager;
 use System\Classes\SettingsManager;
+use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
+use Cms\Twig\Loader as CmsTwigLoader;
+use Cms\Twig\DebugExtension;
+use Cms\Twig\Extension as CmsTwigExtension;
 
 use Winter\Storm\Support\ModuleServiceProvider;
 
@@ -31,6 +37,7 @@ class ServiceProvider extends ModuleServiceProvider
     public function register()
     {
         $this->registerConsole();
+        $this->registerTwigParser();
         $this->registerAssetBundles();
         $this->registerComponents();
         $this->registerThemeLogging();
@@ -76,6 +83,43 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('theme.list', \Cms\Console\ThemeList::class);
         $this->registerConsoleCommand('theme.use', \Cms\Console\ThemeUse::class);
         $this->registerConsoleCommand('theme.sync', \Cms\Console\ThemeSync::class);
+    }
+
+    /*
+     * Register Twig Environments and other Twig modifications provided by the module
+     */
+    protected function registerTwigParser()
+    {
+        // Register CMS Twig environment
+        App::singleton('twig.environment.cms', function ($app) {
+            // Load Twig options
+            $useCache = !Config::get('cms.twigNoCache');
+            $isDebugMode = Config::get('app.debug', false);
+            $strictVariables = Config::get('cms.enableTwigStrictVariables', false);
+            $strictVariables = $strictVariables ?? $isDebugMode;
+            $forceBytecode = Config::get('cms.forceBytecodeInvalidation', false);
+
+            $options = [
+                'auto_reload' => true,
+                'debug' => $isDebugMode,
+                'strict_variables' => $strictVariables,
+            ];
+
+            if ($useCache) {
+                $options['cache'] = new TwigCacheFilesystem(
+                    storage_path().'/cms/twig',
+                    $forceBytecode ? TwigCacheFilesystem::FORCE_BYTECODE_INVALIDATION : 0
+                );
+            }
+
+            $twig = MarkupManager::makeBaseTwigEnvironment(new CmsTwigLoader, $options);
+            $twig->addExtension(new CmsTwigExtension);
+            if ($isDebugMode) {
+                $twig->addExtension(new DebugExtension);
+            }
+
+            return $twig;
+        });
     }
 
     /**
