@@ -84,7 +84,9 @@ class Extension extends TwigExtension
      */
     public function getTokenParsers()
     {
-        $parsers = [];
+        $parsers = [
+            new SpacelessTokenParser
+        ];
 
         /*
          * Include extensions provided by plugins
