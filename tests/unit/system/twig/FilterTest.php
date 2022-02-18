@@ -113,7 +113,14 @@ EXPECT,
 
 
             $template = $twig->createTemplate($test['template']);
-            $this->assertEquals(trim($test['expect']), trim($template->render($test['data'])));
+            $this->assertEquals(
+                trim($test['expect']),
+                str_replace(
+                    "\r\n",
+                    "\n",
+                    trim($template->render($test['data']))
+                )
+            );
         }
     }
 }
