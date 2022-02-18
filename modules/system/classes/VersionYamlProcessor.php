@@ -28,7 +28,12 @@ class VersionYamlProcessor extends YamlProcessor
 
             // Add quotes around any unquoted text following an array key
             // specifically to ensure usage of !!! in unquoted comments does not fail
-            $line = preg_replace('/^\s*([^\n\r\-:]+)\s*: +(?![\'"\s])(.*)/m', '$1: "$2"', $line);
+            // Also replace quotes with single quotes within the value
+            $line = preg_replace_callback('/^\s*([^\n\r\-:]+)\s*: +(?![\'"\s])(.*)/m', function ($matches) {
+                $key = $matches[1];
+                $value = str_replace('"', "'", $matches[2]);
+                return "$key: \"$value\"";
+            }, rtrim($line));
 
             // If this line is the continuance of a multi-line string, remove the quote from the previous line and
             // continue the quote
@@ -40,8 +45,12 @@ class VersionYamlProcessor extends YamlProcessor
                 $line .= '"';
             }
 
-            // Add quotes around any unquoted array items
-            $line = preg_replace('/^(\s*-\s*)(?![\'" ])(.*)/m', '$1"$2"', $line);
+            // Add quotes around any unquoted array items and replace quotes with single quotes within the item
+            $line = preg_replace_callback('/^(\s*-\s*)(?![\'" ])(.*)/m', function ($matches) {
+                $key = $matches[1];
+                $value = str_replace('"', "'", $matches[2]);
+                return "$key \"$value\"";
+            }, $line);
         }
 
         return implode("\n", $lines);
