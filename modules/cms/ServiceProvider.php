@@ -5,6 +5,7 @@ use Url;
 use Lang;
 use File;
 use Event;
+use Config;
 use Backend;
 use BackendMenu;
 use BackendAuth;
@@ -18,6 +19,10 @@ use System\Classes\CombineAssets;
 use Cms\Classes\Theme as CmsTheme;
 use Backend\Classes\WidgetManager;
 use System\Classes\SettingsManager;
+use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
+use Cms\Twig\Loader as CmsTwigLoader;
+use Cms\Twig\DebugExtension;
+use Cms\Twig\Extension as CmsTwigExtension;
 
 use Winter\Storm\Support\ModuleServiceProvider;
 
@@ -86,9 +91,33 @@ class ServiceProvider extends ModuleServiceProvider
     {
         // Register CMS Twig environment
         App::singleton('twig.environment.cms', function ($app) {
-            $twig = MarkupManager::makeBaseTwigEnvironment();
+            // Load Twig options
+            $useCache = !Config::get('cms.twigNoCache');
+            $isDebugMode = Config::get('app.debug', false);
+            $strictVariables = Config::get('cms.enableTwigStrictVariables', false);
+            $strictVariables = $strictVariables ?? $isDebugMode;
+            $forceBytecode = Config::get('cms.forceBytecodeInvalidation', false);
 
-            // @TODO: move logic from Cms\Classes\Controller into here and adjust controller to use $twig->getLoader() instead
+            $options = [
+                'auto_reload' => true,
+                'debug' => $isDebugMode,
+                'strict_variables' => $strictVariables,
+            ];
+
+            if ($useCache) {
+                $options['cache'] = new TwigCacheFilesystem(
+                    storage_path().'/cms/twig',
+                    $forceBytecode ? TwigCacheFilesystem::FORCE_BYTECODE_INVALIDATION : 0
+                );
+            }
+
+            $twig = MarkupManager::makeBaseTwigEnvironment(new CmsTwigLoader, $options);
+            $twig->addExtension(new CmsTwigExtension);
+            if ($isDebugMode) {
+                $twig->addExtension(new DebugExtension);
+            }
+
+            return $twig;
         });
     }
 

@@ -6,8 +6,9 @@ use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
 use Twig\Environment as TwigEnvironment;
 use Twig\Extension\SandboxExtension;
-use System\Twig\Loader as TwigLoader;
-use System\Twig\Extension as TwigExtension;
+use Twig\Loader\LoaderInterface;
+use System\Twig\Loader as SystemTwigLoader;
+use System\Twig\Extension as SystemTwigExtension;
 use System\Twig\SecurityPolicy as TwigSecurityPolicy;
 
 use ApplicationException;
@@ -52,10 +53,10 @@ class MarkupManager
     /**
      * Make an instance of the base TwigEnvironment to extend further
      */
-    public static function makeBaseTwigEnvironment(TwigLoader $loader = null, array $options = []): TwigEnvironment
+    public static function makeBaseTwigEnvironment(LoaderInterface $loader = null, array $options = []): TwigEnvironment
     {
         if (!$loader) {
-            $loader = new TwigLoader();
+            $loader = new SystemTwigLoader();
         }
 
         $options = array_merge([
@@ -63,7 +64,7 @@ class MarkupManager
         ], $options);
 
         $twig = new TwigEnvironment($loader, $options);
-        $twig->addExtension(new TwigExtension);
+        $twig->addExtension(new SystemTwigExtension);
         $twig->addExtension(new SandboxExtension(new TwigSecurityPolicy, true));
         return $twig;
     }
