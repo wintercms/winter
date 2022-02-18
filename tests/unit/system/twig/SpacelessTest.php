@@ -16,10 +16,18 @@ class SpacelessTest extends TestCase
         );
 
         $this->assertEquals(
-            '<p>Test</p>
+            str_replace(
+                "\r\n",
+                "\n",
+                '<p>Test</p>
 
             <p class="test-1 test-2">This is a sentence.</p><p> This is another sentence.</p>',
-            $template->render()
+            ),
+            str_replace(
+                "\r\n",
+                "\n",
+                trim($template->render())
+            )
         );
     }
 }
