@@ -108,13 +108,13 @@ EXPECT,
         ];
 
         foreach ($tests as $name => $test) {
-            // $byteArray = unpack('C*', $test['template']);
-            // dd($byteArray);
-
-
             $template = $twig->createTemplate($test['template']);
             $this->assertEquals(
-                trim($test['expect']),
+                str_replace(
+                    "\r\n",
+                    "\n",
+                    trim($test['expect']),
+                ),
                 str_replace(
                     "\r\n",
                     "\n",
