@@ -151,7 +151,7 @@ class Extension extends TwigExtension
     /**
      * Opens a layout block.
      */
-    public function startBlock(string $name): string
+    public function startBlock(string $name): void
     {
         Block::startBlock($name);
     }
