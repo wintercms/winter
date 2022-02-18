@@ -418,7 +418,7 @@ class Controller
              */
             CmsException::mask($this->page, 400);
             $this->getLoader()->setObject($this->page);
-            $template = $this->getTwig()->loadTemplate($this->page->getFilePath());
+            $template = $this->getTwig()->load($this->page->getFilePath());
             $this->pageContents = $template->render($this->vars);
             CmsException::unmask();
         }
@@ -428,7 +428,7 @@ class Controller
          */
         CmsException::mask($this->layout, 400);
         $this->getLoader()->setObject($this->layout);
-        $template = $this->getTwig()->loadTemplate($this->layout->getFilePath());
+        $template = $this->getTwig()->load($this->layout->getFilePath());
         $result = $template->render($this->vars);
         CmsException::unmask();
 
@@ -1057,7 +1057,7 @@ class Controller
          */
         CmsException::mask($partial, 400);
         $this->getLoader()->setObject($partial);
-        $template = $this->getTwig()->loadTemplate($partial->getFilePath());
+        $template = $this->getTwig()->load($partial->getFilePath());
         $partialContent = $template->render(array_merge($this->vars, $parameters));
         CmsException::unmask();
 
