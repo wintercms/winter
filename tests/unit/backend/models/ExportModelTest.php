@@ -64,7 +64,7 @@ class ExportModelTest extends TestCase
         $this->assertTrue(
             $response->headers->contains('Content-Type', 'application/csv')
             || $response->headers->contains('Content-Type', 'text/plain'),
-            "Content-Type is not as expected!"
+            "Content-Type is not as expected, provided: " . $response->headers->get('Content-Type')
         );
 
         ob_start();
