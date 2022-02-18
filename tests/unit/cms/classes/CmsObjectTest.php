@@ -59,8 +59,6 @@ class CmsObjectTest extends TestCase
 
     public function testCache()
     {
-        $this->markTestSkipped("@TODO: Failing");
-
         $theme = Theme::load('test');
         $themePath = $theme->getPath();
 
