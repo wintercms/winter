@@ -4,6 +4,8 @@ use Illuminate\Console\Command;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Completion\CompletionInput;
+use Symfony\Component\Console\Completion\CompletionSuggestions;
 
 /**
  * Console command to refresh a plugin.
@@ -16,7 +18,6 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class PluginRefresh extends Command
 {
-
     /**
      * The console command name.
      * @var string
@@ -67,5 +68,16 @@ class PluginRefresh extends Command
         return [
             ['name', InputArgument::REQUIRED, 'The name of the plugin. Eg: AuthorName.PluginName'],
         ];
+    }
+
+    /**
+     * Provide autocompletion for this command's input
+     */
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
+    {
+        if ($input->mustSuggestArgumentValuesFor('name')) {
+            $plugins = array_keys(PluginManager::instance()->getPlugins());
+            $suggestions->suggestValues($plugins);
+        }
     }
 }

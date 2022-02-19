@@ -4,7 +4,7 @@ use Backend\Widgets\Filter;
 use Backend\Models\User;
 use Winter\Tests\Fixtures\Backend\Models\UserFixture;
 
-class FilterTest extends PluginTestCase
+class FilterWidgetTest extends PluginTestCase
 {
     public function testRestrictedScopeWithUserWithNoPermissions()
     {

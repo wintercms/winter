@@ -322,7 +322,7 @@ class PluginManager
          * Add routes, if available
          */
         $routesFile = $pluginPath . '/routes.php';
-        if (File::exists($routesFile)) {
+        if (File::exists($routesFile) && !$this->app->routesAreCached()) {
             require $routesFile;
         }
     }

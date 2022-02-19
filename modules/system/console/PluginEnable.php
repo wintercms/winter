@@ -4,6 +4,8 @@ use Illuminate\Console\Command;
 use System\Classes\PluginManager;
 use System\Models\PluginVersion;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Completion\CompletionInput;
+use Symfony\Component\Console\Completion\CompletionSuggestions;
 
 /**
  * Console command to enable a plugin.
@@ -13,7 +15,6 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class PluginEnable extends Command
 {
-
     /**
      * The console command name.
      * @var string
@@ -60,5 +61,22 @@ class PluginEnable extends Command
         return [
             ['name', InputArgument::REQUIRED, 'The name of the plugin. Eg: AuthorName.PluginName'],
         ];
+    }
+
+    /**
+     * Provide autocompletion for this command's input
+     */
+    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
+    {
+        if ($input->mustSuggestArgumentValuesFor('name')) {
+            $manager = PluginManager::instance();
+            $plugins = array_keys($manager->getAllPlugins());
+            foreach ($plugins as $i => $identifier) {
+                if (!$manager->isDisabled($identifier)) {
+                    unset($plugins[$i]);
+                }
+            }
+            $suggestions->suggestValues($plugins);
+        }
     }
 }

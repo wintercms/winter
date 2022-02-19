@@ -225,9 +225,9 @@ class ImageResizer
         // to support atomic deployments where the base application path changes
         // each deployment but the realpath of the storage directory does not
         if (FileHelper::isLocalDisk($disk)) {
-            $realPath = realpath($disk->getAdapter()->getPathPrefix());
+            $realPath = realpath($disk->getPathPrefix());
             if ($realPath) {
-                $disk->getAdapter()->setPathPrefix($realPath);
+                $disk->setPathPrefix($realPath);
             }
         }
 

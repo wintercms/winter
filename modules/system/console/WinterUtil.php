@@ -33,7 +33,6 @@ use System\Models\File as FileModel;
  */
 class WinterUtil extends Command
 {
-
     use \Illuminate\Console\ConfirmableTrait;
 
     /**
@@ -103,6 +102,7 @@ class WinterUtil extends Command
 
     /**
      * Get the console command options.
+     * @return array
      */
     protected function getOptions()
     {

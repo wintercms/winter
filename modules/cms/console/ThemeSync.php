@@ -1,4 +1,4 @@
-<?php namespace System\Console;
+<?php namespace Cms\Console;
 
 use App;
 use Event;
@@ -19,7 +19,7 @@ use Symfony\Component\Console\Input\InputArgument;
  * - --target defaults to "filesystem", the source will whichever of filesystem vs database is not the target
  * - --force bypasses the confirmation request
  *
- * @package winter\wn-system-module
+ * @package winter\wn-cms-module
  * @author Luke Towers
  */
 class ThemeSync extends Command

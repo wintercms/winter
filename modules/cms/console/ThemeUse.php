@@ -1,4 +1,4 @@
-<?php namespace System\Console;
+<?php namespace Cms\Console;
 
 use Cms\Classes\Theme;
 use Illuminate\Console\Command;
@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
  *
  * This switches the active theme to another one, saved to the database.
  *
- * @package winter\wn-system-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeUse extends Command

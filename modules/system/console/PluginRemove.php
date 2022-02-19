@@ -19,7 +19,6 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class PluginRemove extends Command
 {
-
     use \Illuminate\Console\ConfirmableTrait;
 
     /**

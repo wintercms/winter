@@ -134,6 +134,9 @@ class WinterTest extends Command
                 ->find('phpunit', base_path('vendor/bin/phpunit'), [base_path('vendor')]);
         }
 
+        // Resolve the configuration path based on the current working directory
+        $config = realpath($config);
+
         $process = new Process(
             array_merge([$this->phpUnitExec, '--configuration=' . $config], $args),
             dirname($config),

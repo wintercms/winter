@@ -20,8 +20,6 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        parent::register('backend');
-
         $this->registerMailer();
         $this->registerAssetBundles();
 

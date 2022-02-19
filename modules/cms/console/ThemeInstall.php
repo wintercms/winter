@@ -1,4 +1,4 @@
-<?php namespace System\Console;
+<?php namespace Cms\Console;
 
 use File;
 use Cms\Classes\Theme;
@@ -13,7 +13,7 @@ use Exception;
  *
  * This adds a new theme by requesting it from the Winter marketplace.
  *
- * @package winter\wn-system-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeInstall extends Command
@@ -106,8 +106,7 @@ class ThemeInstall extends Command
             }
 
             $this->info(sprintf('The theme %s has been installed. (now %s)', $themeDetails['code'], $dirName));
-        }
-        catch (Exception $ex) {
+        } catch (\Throwable $ex) {
             $this->error($ex->getMessage());
         }
     }

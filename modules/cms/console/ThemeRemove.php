@@ -1,4 +1,4 @@
-<?php namespace System\Console;
+<?php namespace Cms\Console;
 
 use Cms\Classes\Theme;
 use Cms\Classes\ThemeManager;
@@ -12,7 +12,7 @@ use Exception;
  *
  * This completely deletes an existing theme, including all files and directories.
  *
- * @package winter\wn-system-module
+ * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
 class ThemeRemove extends Command

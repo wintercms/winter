@@ -3,7 +3,7 @@
 use Illuminate\Filesystem\FilesystemAdapter;
 use System\Classes\MediaLibrary;
 
-class MediaLibraryTest extends TestCase // @codingStandardsIgnoreLine
+class MediaLibraryTest extends TestCase
 {
     public function setUp(): void
     {
