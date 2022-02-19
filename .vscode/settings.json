@@ -11,8 +11,7 @@
         "**/modules/*/widgets/*/partials/*.htm": "php",
 
         "**/plugins/*/*/behaviors/*/partials/*.htm": "php",
-        "**/plugins/*/*/components/*/*.htm": "wintercms-twig",
-        "**/plugins/*/*/components/partials/*/*.htm": "wintercms-twig",
+        "**/plugins/*/*/components/**/*.htm": "wintercms-twig",
         "**/plugins/*/*/controllers/*/*.htm": "php",
         "**/plugins/*/*/formwidgets/*/partials/*.htm": "php",
         "**/plugins/*/*/layouts/*.htm": "php",
