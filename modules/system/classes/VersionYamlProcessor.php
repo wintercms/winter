@@ -1,5 +1,6 @@
 <?php namespace System\Classes;
 
+use Str;
 use Winter\Storm\Parse\Processor\YamlProcessor;
 
 /**
@@ -21,6 +22,18 @@ class VersionYamlProcessor extends YamlProcessor
         $lines = preg_split('/[\n\r]+/', $text, -1, PREG_SPLIT_NO_EMPTY);
 
         foreach ($lines as $num => &$line) {
+            // Ensure that !!! lines are quoted
+            // @TODO: This is a brittle workaround, identify the possible cases where this can be a problem
+            //        i.e. quotes inside the message, message part of multi-message update, etc; and resolve them
+            if (Str::contains($line, ': !!!')) {
+                $line = Str::replace(': !!!', ': "!!!', $line);
+                $line .= '"';
+            }
+
+            continue;
+
+
+
             // Surround array keys with quotes if not already
             $line = preg_replace_callback('/^\s*([\'"]{0}[^\'"\n\r:]+[\'"]{0})\s*:/m', function ($matches) {
                 return '"' . trim($matches[1]) . '":';
