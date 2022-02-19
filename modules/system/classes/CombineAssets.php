@@ -159,6 +159,7 @@ class CombineAssets
         $this->registerAlias('snowboard.attr', '~/modules/system/assets/js/snowboard/build/snowboard.data-attr.js');
         $this->registerAlias('snowboard.request', '~/modules/system/assets/js/snowboard/build/snowboard.request.js');
         $this->registerAlias('snowboard.extras', '~/modules/system/assets/js/snowboard/build/snowboard.extras.js');
+        $this->registerAlias('snowboard.extras.css', '~/modules/system/assets/css/snowboard.extras.css');
 
         /*
          * Deferred registration
