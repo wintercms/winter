@@ -1294,7 +1294,7 @@ class Controller
      * Looks up the URL for a supplied page and returns it relative to the website root.
      *
      * @param mixed $name Specifies the Cms Page file name.
-     * @param array $parameters Route parameters to consider in the URL.
+     * @param array|bool $parameters Route parameters to consider in the URL. If boolean will be used as the value for $routePersistence
      * @param bool $routePersistence By default the existing routing parameters will be included
      * @return string|null
      */
