@@ -19,8 +19,7 @@ Event::listen('system.route', function () {
     Event::fire('cms.beforeRoute');
 
     /*
-     * The CMS module intercepts all URLs that were not
-     * handled by the back-end modules.
+     * The CMS module handles all URLs that have not already been handled by the other modules & plugins.
      */
     Route::any('{slug?}', 'Cms\Classes\CmsController@run')->where('slug', '(.*)?')->middleware('web');
 
