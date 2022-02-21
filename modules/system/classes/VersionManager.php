@@ -82,7 +82,7 @@ class VersionManager
         $databaseVersion = $this->getDatabaseVersion($code);
 
         // No updates needed
-        if ($currentVersion == $databaseVersion) {
+        if ($currentVersion === (string) $databaseVersion) {
             $this->note(' - <info>Nothing to update.</info>');
             return;
         }
@@ -330,7 +330,7 @@ class VersionManager
         }
 
         $versions = $this->getFileVersions($code);
-        $position = array_search($version, array_keys($versions));
+        $position = array_search($version, array_keys($versions), true);
 
         return array_slice($versions, ++$position);
     }
