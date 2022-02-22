@@ -28,6 +28,9 @@
         "laravel/framework": "~6.0",
         "composer/semver": "^3.2"
     },
+    "replace": {
+        "october/system": "*"
+    },
     "autoload": {
         "psr-4": {
             "System\\": ""
