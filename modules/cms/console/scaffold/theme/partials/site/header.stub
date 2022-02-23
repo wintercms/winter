@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% placeholder page_title default %}{{ this.page.title }}{% endplaceholder %}</title>
+        {% partial "meta/styles" %}
+        {% partial "meta/seo" %}
+        <meta name="generator" content="Winter CMS">
+    </head>
+    {% set pageId = this.page.id %}
+    {% set pageTitle = this.page.title %}
+    {% if pageId is empty %}
+        {% set pageId = page.id %}
+    {% endif %}
+    {% if pageTitle is empty %}
+        {% set pageTitle = page.title %}
+    {% endif %}
+    <body class="page-{{ pageId }} layout-{{ this.layout.id }}">
