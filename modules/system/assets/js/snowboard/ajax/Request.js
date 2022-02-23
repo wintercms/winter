@@ -155,7 +155,7 @@ class Request extends Snowboard.PluginBase {
      * Validates the element and handler given in the request.
      */
     checkRequest() {
-        if (this.element !== undefined && this.element instanceof Element === false) {
+        if (this.element && this.element instanceof Element === false) {
             throw new Error('The element provided must be an Element instance');
         }
 
