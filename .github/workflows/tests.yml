@@ -80,15 +80,15 @@ jobs:
         run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.1"
 
       - name: Switch library dependency (1.0)
-        if: github.ref == 'refs/heads/1.0' || github.base_ref == '1.0'
+        if: github.head_ref == '1.0' || github.ref == 'refs/heads/1.0' || github.base_ref == '1.0'
         run: php ./.github/workflows/utilities/library-switcher "1.0.x-dev as 1.0"
 
       - name: Switch library dependency (1.1)
-        if: github.ref == 'refs/heads/1.1' || github.base_ref == '1.1'
+        if: github.head_ref == '1.1' || github.ref == 'refs/heads/1.1' || github.base_ref == '1.1'
         run: php ./.github/workflows/utilities/library-switcher "1.1.x-dev as 1.1"
 
       - name: Switch library dependency (1.2)
-        if: github.ref == 'refs/heads/wip/1.2' || github.base_ref == 'wip/1.2'
+        if: github.head_ref == 'wip/1.2' || github.ref == 'refs/heads/wip/1.2' || github.base_ref == 'wip/1.2'
         run: php ./.github/workflows/utilities/library-switcher "dev-wip/1.2 as 1.2"
 
       - name: Setup dependency cache
