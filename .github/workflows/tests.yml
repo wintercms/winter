@@ -72,6 +72,9 @@ jobs:
           php-version: ${{ matrix.phpVersion }}
           extensions: ${{ env.extensions }}
 
+      - name: Echo branches
+        run: echo "${{ github.ref }} | ${{ github.base_ref }}"
+
       - name: Switch library dependency (develop)
         if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
         run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.1"
