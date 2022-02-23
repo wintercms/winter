@@ -245,26 +245,31 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register console commands
          */
-        $this->registerConsoleCommand('winter.up', 'System\Console\WinterUp');
-        $this->registerConsoleCommand('winter.down', 'System\Console\WinterDown');
-        $this->registerConsoleCommand('winter.update', 'System\Console\WinterUpdate');
-        $this->registerConsoleCommand('winter.util', 'System\Console\WinterUtil');
-        $this->registerConsoleCommand('winter.mirror', 'System\Console\WinterMirror');
-        $this->registerConsoleCommand('winter.fresh', 'System\Console\WinterFresh');
-        $this->registerConsoleCommand('winter.env', 'System\Console\WinterEnv');
-        $this->registerConsoleCommand('winter.install', 'System\Console\WinterInstall');
-        $this->registerConsoleCommand('winter.passwd', 'System\Console\WinterPasswd');
-        $this->registerConsoleCommand('winter.version', 'System\Console\WinterVersion');
-        $this->registerConsoleCommand('winter.manifest', 'System\Console\WinterManifest');
-        $this->registerConsoleCommand('winter.test', 'System\Console\WinterTest');
+        $this->registerConsoleCommand('create.command', \System\Console\CreateCommand::class);
+        $this->registerConsoleCommand('create.model', \System\Console\CreateModel::class);
+        $this->registerConsoleCommand('create.plugin', \System\Console\CreatePlugin::class);
+        $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
 
-        $this->registerConsoleCommand('plugin.install', 'System\Console\PluginInstall');
-        $this->registerConsoleCommand('plugin.remove', 'System\Console\PluginRemove');
-        $this->registerConsoleCommand('plugin.disable', 'System\Console\PluginDisable');
-        $this->registerConsoleCommand('plugin.enable', 'System\Console\PluginEnable');
-        $this->registerConsoleCommand('plugin.refresh', 'System\Console\PluginRefresh');
-        $this->registerConsoleCommand('plugin.rollback', 'System\Console\PluginRollback');
-        $this->registerConsoleCommand('plugin.list', 'System\Console\PluginList');
+        $this->registerConsoleCommand('winter.up', \System\Console\WinterUp::class);
+        $this->registerConsoleCommand('winter.down', \System\Console\WinterDown::class);
+        $this->registerConsoleCommand('winter.update', \System\Console\WinterUpdate::class);
+        $this->registerConsoleCommand('winter.util', \System\Console\WinterUtil::class);
+        $this->registerConsoleCommand('winter.mirror', \System\Console\WinterMirror::class);
+        $this->registerConsoleCommand('winter.fresh', \System\Console\WinterFresh::class);
+        $this->registerConsoleCommand('winter.env', \System\Console\WinterEnv::class);
+        $this->registerConsoleCommand('winter.install', \System\Console\WinterInstall::class);
+        $this->registerConsoleCommand('winter.passwd', \System\Console\WinterPasswd::class);
+        $this->registerConsoleCommand('winter.version', \System\Console\WinterVersion::class);
+        $this->registerConsoleCommand('winter.manifest', \System\Console\WinterManifest::class);
+        $this->registerConsoleCommand('winter.test', \System\Console\WinterTest::class);
+
+        $this->registerConsoleCommand('plugin.install', \System\Console\PluginInstall::class);
+        $this->registerConsoleCommand('plugin.remove', \System\Console\PluginRemove::class);
+        $this->registerConsoleCommand('plugin.disable', \System\Console\PluginDisable::class);
+        $this->registerConsoleCommand('plugin.enable', \System\Console\PluginEnable::class);
+        $this->registerConsoleCommand('plugin.refresh', \System\Console\PluginRefresh::class);
+        $this->registerConsoleCommand('plugin.rollback', \System\Console\PluginRollback::class);
+        $this->registerConsoleCommand('plugin.list', \System\Console\PluginList::class);
 
         $this->registerConsoleCommand('mix.install', \System\Console\MixInstall::class);
         $this->registerConsoleCommand('mix.list', \System\Console\MixList::class);

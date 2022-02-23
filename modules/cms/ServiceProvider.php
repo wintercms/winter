@@ -78,6 +78,9 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerConsole()
     {
+        $this->registerConsoleCommand('create.component', \Cms\Console\CreateComponent::class);
+        $this->registerConsoleCommand('create.theme', \Cms\Console\CreateTheme::class);
+
         $this->registerConsoleCommand('theme.install', \Cms\Console\ThemeInstall::class);
         $this->registerConsoleCommand('theme.remove', \Cms\Console\ThemeRemove::class);
         $this->registerConsoleCommand('theme.list', \Cms\Console\ThemeList::class);

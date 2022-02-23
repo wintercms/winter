@@ -1,0 +1,11 @@
+{% if this.theme.googleanalytics_id is not empty %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ this.theme.googleanalytics_id }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', '{{ this.theme.googleanalytics_id }}');
+    </script>
+{% endif %}

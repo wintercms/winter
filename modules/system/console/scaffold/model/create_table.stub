@@ -1,0 +1,22 @@
+<?php namespace {{studly_author}}\{{studly_plugin}}\Updates;
+
+use Schema;
+use Winter\Storm\Database\Schema\Blueprint;
+use Winter\Storm\Database\Updates\Migration;
+
+class Create{{studly_plural_name}}Table extends Migration
+{
+    public function up()
+    {
+        Schema::create('{{lower_author}}_{{lower_plugin}}_{{snake_plural_name}}', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->increments('id');
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('{{lower_author}}_{{lower_plugin}}_{{snake_plural_name}}');
+    }
+}
