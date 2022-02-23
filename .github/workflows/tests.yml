@@ -73,7 +73,7 @@ jobs:
           extensions: ${{ env.extensions }}
 
       - name: Echo branches
-        run: echo "${{ github.ref }} | ${{ github.base_ref }}"
+        run: echo "${{ github.ref }} | ${{ github.head_ref }} | ${{ github.ref_name }} | ${{ github.base_ref }}"
 
       - name: Switch library dependency (develop)
         if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
