@@ -47,6 +47,9 @@ class UpdatesControllerTest extends TestCase
                 'Added some upgrade file and some seeding',
                 'some_seeding_file.php' //does not exist
             ],
+            '1.4.1' => [
+                '!!! Major update here.',
+            ],
         ];
 
         $versions = self::callProtectedMethod(

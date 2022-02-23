@@ -24,7 +24,7 @@ class VersionManagerTest extends TestCase
         $result = self::callProtectedMethod($manager, 'getLatestFileVersion', ['\Winter\\Tester']);
 
         $this->assertNotNull($result);
-        $this->assertEquals('1.3.2', $result);
+        $this->assertEquals('1.4.1', $result);
     }
 
     public function testGetFileVersions()
@@ -32,7 +32,7 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getFileVersions', ['\Winter\\Tester']);
 
-        $this->assertCount(10, $result);
+        $this->assertCount(11, $result);
         $this->assertArrayHasKey('1.0.1', $result);
         $this->assertArrayHasKey('1.0.2', $result);
         $this->assertArrayHasKey('1.0.3', $result);
@@ -43,6 +43,7 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
+        $this->assertArrayHasKey('1.4.1', $result);
 
         $sample = $result['1.0.1'];
         $this->assertEquals('Added some upgrade file and some seeding', $sample[0]);
@@ -91,7 +92,7 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester', '1.0.3']);
 
-        $this->assertCount(7, $result);
+        $this->assertCount(8, $result);
         $this->assertArrayHasKey('1.0.4', $result);
         $this->assertArrayHasKey('1.0.5', $result);
         $this->assertArrayHasKey('1.1.0', $result);
@@ -99,6 +100,7 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
+        $this->assertArrayHasKey('1.4.1', $result);
 
         /*
          * When at version 0, should return everything
@@ -106,7 +108,7 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester']);
 
-        $this->assertCount(10, $result);
+        $this->assertCount(11, $result);
         $this->assertArrayHasKey('1.0.1', $result);
         $this->assertArrayHasKey('1.0.2', $result);
         $this->assertArrayHasKey('1.0.3', $result);
@@ -117,6 +119,7 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
+        $this->assertArrayHasKey('1.4.1', $result);
     }
 
     /**

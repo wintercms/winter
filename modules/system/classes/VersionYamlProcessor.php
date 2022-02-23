@@ -25,12 +25,12 @@ class VersionYamlProcessor extends YamlProcessor
             // Ensure that !!! lines are quoted
             // @TODO: This is a brittle workaround, identify the possible cases where this can be a problem
             //        i.e. quotes inside the message, message part of multi-message update, etc; and resolve them
-            if (Str::contains($line, ': !!!')) {
-                $line = Str::replace(': !!!', ': "!!!', $line);
-                $line .= '"';
-            }
+            // if (Str::contains($line, ': !!!')) {
+            //     $line = Str::replace(': !!!', ': "!!!', $line);
+            //     $line .= '"';
+            // }
 
-            continue;
+            // continue;
 
 
 
