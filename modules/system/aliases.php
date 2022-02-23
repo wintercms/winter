@@ -99,4 +99,14 @@ return [
     'Winter\Storm\Scaffold\Console\CreateReportWidget'   => Backend\Console\CreateReportWidget::class,
     'Winter\Storm\Scaffold\Console\CreateTheme'          => Cms\Console\CreateTheme::class,
     'Winter\Storm\Scaffold\Console\CreateComponent'      => Cms\Console\CreateComponent::class,
+
+    'October\Rain\Scaffold\Console\CreateCommand'        => System\Console\CreateCommand::class,
+    'October\Rain\Scaffold\Console\CreateModel'          => System\Console\CreateModel::class,
+    'October\Rain\Scaffold\Console\CreatePlugin'         => System\Console\CreatePlugin::class,
+    'October\Rain\Scaffold\Console\CreateSettings'       => System\Console\CreateSettings::class,
+    'October\Rain\Scaffold\Console\CreateController'     => Backend\Console\CreateController::class,
+    'October\Rain\Scaffold\Console\CreateFormWidget'     => Backend\Console\CreateFormWidget::class,
+    'October\Rain\Scaffold\Console\CreateReportWidget'   => Backend\Console\CreateReportWidget::class,
+    'October\Rain\Scaffold\Console\CreateTheme'          => Cms\Console\CreateTheme::class,
+    'October\Rain\Scaffold\Console\CreateComponent'      => Cms\Console\CreateComponent::class,
 ];
