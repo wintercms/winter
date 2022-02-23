@@ -1,10 +1,9 @@
-<?php namespace {{studly_author}}\{{studly_plugin}}\Updates;
+<?php
 
-use Schema;
 use Winter\Storm\Database\Schema\Blueprint;
 use Winter\Storm\Database\Updates\Migration;
 
-class Create{{studly_plural_name}}Table extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -19,4 +18,4 @@ class Create{{studly_plural_name}}Table extends Migration
     {
         Schema::dropIfExists('{{lower_author}}_{{lower_plugin}}_{{snake_plural_name}}');
     }
-}
+};
