@@ -44,7 +44,7 @@ class UpdatesControllerTest extends TestCase
                 'Added some stuff',
             ],
             '1.0.1' => [
-                'Added some upgrade file and some seeding',
+                'Added some upgrade file and some "seeding"',
                 'some_seeding_file.php' //does not exist
             ],
             '1.4.1' => [

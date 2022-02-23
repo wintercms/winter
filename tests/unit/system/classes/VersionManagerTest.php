@@ -46,7 +46,7 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.4.1', $result);
 
         $sample = $result['1.0.1'];
-        $this->assertEquals('Added some upgrade file and some seeding', $sample[0]);
+        $this->assertEquals('Added some upgrade file and some "seeding"', $sample[0]);
 
         $sample = $result['1.1.0'];
         $this->assertEquals('!!! Drop support for blog settings', $sample[0]);
