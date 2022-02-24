@@ -1,14 +1,9 @@
 <?php namespace System\Console;
 
 use App;
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
-use System\Classes\PluginManager;
 use System\Classes\VersionManager;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Completion\CompletionInput;
-use Symfony\Component\Console\Completion\CompletionSuggestions;
 
 /**
  * Console command to rollback a plugin.
@@ -18,15 +13,23 @@ use Symfony\Component\Console\Completion\CompletionSuggestions;
  */
 class PluginRollback extends Command
 {
-    /**
-     * The console command name.
-     * @var string
-     */
-    protected $name = 'plugin:rollback';
+    use Traits\HasPluginArgument;
 
     /**
-     * The console command description.
-     * @var string
+     * @var string|null The default command name for lazy loading.
+     */
+    protected static $defaultName = 'plugin:rollback';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'plugin:rollback
+        {plugin : The plugin to disable. <info>(eg: Winter.Blog)</info>}
+        {version? : If this parameter is not specified the plugin will be completely rolled back; otherwise it will stop on the specified version. <info>(eg: 1.3.9)</info>}
+        {--f|force : Force the operation to run and ignore production warning.}';
+
+    /**
+     * @var string The console command description.
      */
     protected $description = 'Rollback an existing plugin.';
 
@@ -36,16 +39,7 @@ class PluginRollback extends Command
      */
     public function handle()
     {
-        /*
-         * Lookup plugin
-         */
-        $pluginManager = PluginManager::instance();
-        $pluginName = $this->argument('name');
-        $pluginName = $pluginManager->normalizeIdentifier($pluginName);
-
-        if (!$pluginManager->hasPlugin($pluginName)) {
-            return $this->error(sprintf('Unable to find a registered plugin called "%s"', $pluginName));
-        }
+        $pluginName = $this->getPluginIdentifier();
 
         if (App::isProduction() && !$this->option('force')) {
             $this->warn('YOUR APPLICATION IS IN PRODUCTION');
@@ -76,36 +70,22 @@ class PluginRollback extends Command
     }
 
     /**
-     * Get the console command arguments.
-     * @return array
+     * Suggest values for the optional version argument
      */
-    protected function getArguments()
+    public function suggestVersionValues(string $value = null, array $allInput): array
     {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the plugin to be rolled back. Eg: AuthorName.PluginName'],
-            ['version', InputArgument::OPTIONAL, 'If this parameter is specified, the process will stop on the specified version, if not, it will completely rollback the plugin. Example: 1.3.9'],
-        ];
-    }
+        // Get the currently selected plugin
+        $pluginName = $this->getPluginIdentifier($allInput['arguments']['plugin']);
 
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['force', 'f', InputOption::VALUE_NONE, 'Force rollback', null],
-        ];
-    }
+        // Get that plugin's versions from the database
+        $history = VersionManager::instance()->getDatabaseHistory($pluginName);
 
-    /**
-     * Provide autocompletion for this command's input
-     */
-    public function complete(CompletionInput $input, CompletionSuggestions $suggestions): void
-    {
-        if ($input->mustSuggestArgumentValuesFor('name')) {
-            $plugins = array_keys(PluginManager::instance()->getPlugins());
-            $suggestions->suggestValues($plugins);
+        // Compile a list of available versions to rollback to
+        $availableVersions = [];
+        foreach ($history as $record) {
+            $availableVersions[] = $record->version;
         }
+
+        return $availableVersions;
     }
 }

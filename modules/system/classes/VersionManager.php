@@ -502,7 +502,7 @@ class VersionManager
     /**
      * Returns all the update history for a plugin.
      */
-    protected function getDatabaseHistory($code)
+    public function getDatabaseHistory($code)
     {
         if ($this->databaseHistory !== null && array_key_exists($code, $this->databaseHistory)) {
             return $this->databaseHistory[$code];
