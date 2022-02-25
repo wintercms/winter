@@ -114,5 +114,10 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
     {
         // Cleanup
         $this->removeWebpackConfig(base_path($this->mixJsPath));
+
+        // Exit cleanly at this point, if this was a user termination
+        if ($signal === SIGINT || $signail === SIGQUIT) {
+            exit(0);
+        }
     }
 }
