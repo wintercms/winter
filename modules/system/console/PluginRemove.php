@@ -1,6 +1,5 @@
 <?php namespace System\Console;
 
-use App;
 use File;
 use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
@@ -17,8 +16,8 @@ use System\Classes\PluginManager;
  */
 class PluginRemove extends Command
 {
+    use \Winter\Storm\Console\Traits\ConfirmsWithInput;
     use Traits\HasPluginArgument;
-    use \Illuminate\Console\ConfirmableTrait;
 
     /**
      * @var string Suggest all plugins
@@ -45,30 +44,23 @@ class PluginRemove extends Command
 
     /**
      * Execute the console command.
-     * @return void
      */
-    public function handle()
+    public function handle(): int
     {
         $pluginName = $this->getPluginIdentifier();
         $pluginManager = PluginManager::instance();
 
-        if (App::isProduction() && !$this->option('force')) {
-            $this->warn('YOUR APPLICATION IS IN PRODUCTION');
-        }
-
+        $confirmQuestion = sprintf('This will remove the files for the "%s" plugin.', $pluginName);
         if (!$this->option('no-rollback')) {
-            $this->warn(sprintf('This will remove the database tables and files for the "%s" plugin.', $pluginName));
-        } else {
-            $this->warn(sprintf('This will remove the files for the "%s" plugin.', $pluginName));
+            $confirmQuestion = sprintf('This will remove the database tables and files for the "%s" plugin.', $pluginName);
         }
 
-        $confirmed = false;
-        $prompt = sprintf('Please type "%s" to proceed', $pluginName);
-        do {
-            if (strtolower($this->ask($prompt)) === strtolower($pluginName)) {
-                $confirmed = true;
-            }
-        } while ($confirmed === false);
+        if (!$this->confirmWithInput(
+            $confirmQuestion,
+            $pluginName
+        )) {
+            return 1;
+        }
 
         if (!$this->option('no-rollback')) {
             /*
@@ -83,18 +75,9 @@ class PluginRemove extends Command
          */
         if ($pluginPath = $pluginManager->getPluginPath($pluginName)) {
             File::deleteDirectory($pluginPath);
-            $this->output->writeln(sprintf('<info>Deleted: %s</info>', $pluginName));
+            $this->output->writeln(sprintf('<info>Deleted: %s</info>', $pluginPath));
         }
-    }
 
-    /**
-     * Get the default confirmation callback.
-     * @return \Closure
-     */
-    protected function getDefaultConfirmCallback()
-    {
-        return function () {
-            return true;
-        };
+        return 0;
     }
 }

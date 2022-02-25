@@ -14,6 +14,7 @@ use System\Classes\UpdateManager;
  */
 class PluginRefresh extends Command
 {
+    use \Winter\Storm\Console\Traits\ConfirmsWithInput;
     use Traits\HasPluginArgument;
 
     /**
@@ -25,7 +26,8 @@ class PluginRefresh extends Command
      * @var string The name and signature of this command.
      */
     protected $signature = 'plugin:refresh
-        {plugin : The plugin to refresh. <info>(eg: Winter.Blog)</info>}';
+        {plugin : The plugin to refresh. <info>(eg: Winter.Blog)</info>}
+        {--f|force : Force the operation to run and ignore production warning.}';
 
     /**
      * @var string The console command description.
@@ -34,14 +36,17 @@ class PluginRefresh extends Command
 
     /**
      * Execute the console command.
-     * @return void
      */
-    public function handle()
+    public function handle(): int
     {
         $pluginName = $this->getPluginIdentifier();
 
-        // @TODO: Implement confirmation logic here.
-        // @TODO: Replace Laravel confirmation logic with the type x to proceed instead of yes/no for very destructive actions
+        if (!$this->confirmWithInput(
+            "This will completely remove and reinstall $pluginName. This may result in potential data loss.",
+            $pluginName
+        )) {
+            return 1;
+        }
 
         // Set the UpdateManager output stream to the CLI
         $manager = UpdateManager::instance()->setNotesOutput($this->output);
@@ -52,5 +57,7 @@ class PluginRefresh extends Command
         // Reinstall the plugin
         $this->output->writeln('<info>Reinstalling plugin...</info>');
         $manager->updatePlugin($pluginName);
+
+        return 0;
     }
 }
