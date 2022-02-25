@@ -1,16 +1,24 @@
 <?php namespace System\Console;
 
 use File;
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use Symfony\Component\Process\Process;
 use System\Classes\MixAssets;
 
 class MixCompile extends Command
 {
     /**
-     * @var string The console command name.
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'mix:compile';
+    protected static $defaultName = 'mix:compile';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'mix:compile
+        {webpackArgs?* : Arguments to pass through to the Webpack CLI}
+        {--f|production : Runs compilation in "production" mode}
+        {--p|package=* : Defines one or more packages to compile}';
 
     /**
      * @var string The console command description.
@@ -21,16 +29,6 @@ class MixCompile extends Command
      * @var array Local cache of the package.json file contents
      */
     protected $packageJson;
-
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'mix:compile
-        {webpackArgs?* : Arguments to pass through to the Webpack CLI}
-        {--f|production : Runs compilation in "production" mode}
-        {--p|package=* : Defines one or more packages to compile}';
 
     /**
      * Execute the console command.

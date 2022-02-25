@@ -27,7 +27,7 @@ class PluginRefresh extends Command
      */
     protected $signature = 'plugin:refresh
         {plugin : The plugin to refresh. <info>(eg: Winter.Blog)</info>}
-        {--f|force : Force the operation to run and ignore production warning.}';
+        {--f|force : Force the operation to run and ignore production warnings and confirmation questions.}';
 
     /**
      * @var string The console command description.

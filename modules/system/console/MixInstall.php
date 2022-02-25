@@ -4,7 +4,7 @@ use File;
 use Config;
 use Cms\Classes\Theme;
 use Winter\Storm\Support\Str;
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use Symfony\Component\Process\Process;
 use System\Classes\MixAssets;
 use System\Classes\PluginManager;
@@ -13,24 +13,22 @@ use Symfony\Component\Process\Exception\ProcessSignaledException;
 class MixInstall extends Command
 {
     /**
-     * @var string The console command name.
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'mix:install';
+    protected static $defaultName = 'mix:install';
 
     /**
-     * @var string The console command description.
-     */
-    protected $description = 'Install Node.js dependencies required for mixed assets';
-
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
+     * @var string The name and signature of this command.
      */
     protected $signature = 'mix:install
         {npmArgs?* : Arguments to pass through to the "npm" binary}
         {--npm= : Defines a custom path to the "npm" binary}
         {--p|package=* : Defines one or more packages to install}';
+
+    /**
+     * @var string The console command description.
+     */
+    protected $description = 'Install Node.js dependencies required for mixed assets';
 
     /**
      * @var string The path to the "npm" executable.

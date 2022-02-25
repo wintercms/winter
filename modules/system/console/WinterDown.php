@@ -24,7 +24,7 @@ class WinterDown extends Command
      * @var string The name and signature of this command.
      */
     protected $signature = 'winter:down
-        {--f|force : Force the operation to run and ignore production warnings.}';
+        {--f|force : Force the operation to run and ignore production warnings and confirmation questionss.}';
 
     /**
      * @var string The console command description.

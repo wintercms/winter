@@ -27,7 +27,7 @@ class PluginRollback extends Command
     protected $signature = 'plugin:rollback
         {plugin : The plugin to disable. <info>(eg: Winter.Blog)</info>}
         {version? : If this parameter is not specified the plugin will be completely rolled back; otherwise it will stop on the specified version. <info>(eg: 1.3.9)</info>}
-        {--f|force : Force the operation to run and ignore production warning.}';
+        {--f|force : Force the operation to run and ignore production warnings and confirmation questions.}';
 
     /**
      * @var string The console command description.

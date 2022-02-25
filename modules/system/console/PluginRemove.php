@@ -34,7 +34,7 @@ class PluginRemove extends Command
      */
     protected $signature = 'plugin:remove
         {plugin : The plugin to remove. <info>(eg: Winter.Blog)</info>}
-        {--f|force : Force the operation to run and ignore production warning.}
+        {--f|force : Force the operation to run and ignore production warnings and confirmation questions.}
         {--r|no-rollback : Skip the rollback of the plugin migrations.}';
 
     /**

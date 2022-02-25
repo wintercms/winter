@@ -5,40 +5,30 @@ use Winter\Storm\Scaffold\GeneratorCommand;
 class CreateModel extends GeneratorCommand
 {
     /**
-     * The default command name for lazy loading.
-     *
-     * @var string|null
+     * @var string|null The default command name for lazy loading.
      */
     protected static $defaultName = 'create:model';
 
     /**
-     * The name and signature of this command.
-     *
-     * @var string
+     * @var string The name and signature of this command.
      */
     protected $signature = 'create:model
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {model : The name of the model to generate. <info>(eg: Post)</info>}
-        {--force : Overwrite existing files with generated files.}';
+        {--f|force : Overwrite existing files with generated files.}';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * @var string The console command description.
      */
     protected $description = 'Creates a new model.';
 
     /**
-     * The type of class being generated.
-     *
-     * @var string
+     * @var string The type of class being generated.
      */
     protected $type = 'Model';
 
     /**
-     * A mapping of stub to generated file.
-     *
-     * @var array
+     * @var array A mapping of stubs to generated files.
      */
     protected $stubs = [
         'scaffold/model/model.stub'        => 'models/{{studly_name}}.php',
@@ -50,7 +40,7 @@ class CreateModel extends GeneratorCommand
     /**
      * Prepare variables for stubs.
      *
-     * return @array
+     * @return array
      */
     protected function prepareVars()
     {

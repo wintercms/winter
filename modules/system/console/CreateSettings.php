@@ -5,40 +5,30 @@ use Winter\Storm\Scaffold\GeneratorCommand;
 class CreateSettings extends GeneratorCommand
 {
     /**
-     * The default command name for lazy loading.
-     *
-     * @var string|null
+     * @var string|null The default command name for lazy loading.
      */
     protected static $defaultName = 'create:settings';
 
     /**
-     * The name and signature of this command.
-     *
-     * @var string
+     * @var string The name and signature of this command.
      */
     protected $signature = 'create:settings
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {settings : The name of the settings model to generate. <info>(eg: BlogSettings)</info>}
-        {--force : Overwrite existing files with generated files.}';
+        {--f|force : Overwrite existing files with generated files.}';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * @var string The console command description.
      */
     protected $description = 'Creates a new settings model.';
 
     /**
-     * The type of class being generated.
-     *
-     * @var string
+     * @var string The type of class being generated.
      */
     protected $type = 'Settings Model';
 
     /**
-     * A mapping of stubs to generated files.
-     *
-     * @var array
+     * @var array A mapping of stubs to generated files.
      */
     protected $stubs = [
         'scaffold/settings/model.stub' => 'models/{{studly_name}}.php',
@@ -48,7 +38,7 @@ class CreateSettings extends GeneratorCommand
     /**
      * Prepare variables for stubs.
      *
-     * return @array
+     * @return array
      */
     protected function prepareVars()
     {

@@ -5,39 +5,29 @@ use Winter\Storm\Scaffold\GeneratorCommand;
 class CreatePlugin extends GeneratorCommand
 {
     /**
-     * The default command name for lazy loading.
-     *
-     * @var string|null
+     * @var string|null The default command name for lazy loading.
      */
     protected static $defaultName = 'create:plugin';
 
     /**
-     * The name and signature of this command.
-     *
-     * @var string
+     * @var string The name and signature of this command.
      */
     protected $signature = 'create:plugin
         {plugin : The name of the plugin to create. <info>(eg: Winter.Blog)</info>}
-        {--force : Overwrite existing files with generated files.}';
+        {--f|force : Overwrite existing files with generated files.}';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * @var string The console command description.
      */
     protected $description = 'Creates a new plugin.';
 
     /**
-     * The type of class being generated.
-     *
-     * @var string
+     * @var string The type of class being generated.
      */
     protected $type = 'Plugin';
 
     /**
-     * A mapping of stub to generated file.
-     *
-     * @var array
+     * @var array A mapping of stubs to generated files.
      */
     protected $stubs = [
         'scaffold/plugin/plugin.stub'  => 'Plugin.php',
@@ -47,7 +37,7 @@ class CreatePlugin extends GeneratorCommand
     /**
      * Prepare variables for stubs.
      *
-     * return @array
+     * @return array
      */
     protected function prepareVars()
     {
