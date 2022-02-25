@@ -54,6 +54,8 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('create.controller', \Backend\Console\CreateController::class);
         $this->registerConsoleCommand('create.formwidget', \Backend\Console\CreateFormWidget::class);
         $this->registerConsoleCommand('create.reportwidget', \Backend\Console\CreateReportWidget::class);
+
+        $this->registerConsoleCommand('winter.passwd', \Backend\Console\WinterPasswd::class);
     }
 
     /**

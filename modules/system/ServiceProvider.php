@@ -258,7 +258,6 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('winter.fresh', \System\Console\WinterFresh::class);
         $this->registerConsoleCommand('winter.env', \System\Console\WinterEnv::class);
         $this->registerConsoleCommand('winter.install', \System\Console\WinterInstall::class);
-        $this->registerConsoleCommand('winter.passwd', \System\Console\WinterPasswd::class);
         $this->registerConsoleCommand('winter.version', \System\Console\WinterVersion::class);
         $this->registerConsoleCommand('winter.manifest', \System\Console\WinterManifest::class);
         $this->registerConsoleCommand('winter.test', \System\Console\WinterTest::class);
