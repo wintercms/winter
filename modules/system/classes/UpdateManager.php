@@ -890,7 +890,7 @@ class UpdateManager
      */
     public function requestServerData($uri, $postData = [])
     {
-        $result = \Winter\Storm\Network\Http::post($this->createServerUrl($uri), function ($http) use ($postData) {
+        $result = Http::post($this->createServerUrl($uri), function ($http) use ($postData) {
             $this->applyHttpAttributes($http, $postData);
         });
 
