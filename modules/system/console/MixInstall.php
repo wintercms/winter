@@ -204,7 +204,7 @@ class MixInstall extends Command
         $command = $this->argument('npmArgs') ?? [];
         array_unshift($command, 'npm', 'i');
 
-        $process = new Process($command, base_path());
+        $process = new Process($command, base_path(), null, null, null);
 
         // Attempt to set tty mode, catch and warn with the exception message if unsupported
         try {
