@@ -218,6 +218,10 @@ class AttributeRequest extends Snowboard.Singleton {
      * @param {Request} request
      */
     onAjaxSetup(request) {
+        if (!request.element) {
+            return;
+        }
+
         const fieldName = request.element.getAttribute('name');
 
         const data = {

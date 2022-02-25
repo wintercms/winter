@@ -110,7 +110,7 @@ class UpdateManager
         /*
          * Ensure temp directory exists
          */
-        if (!File::isDirectory($this->tempDirectory)) {
+        if (!File::isDirectory($this->tempDirectory) && File::isWritable($this->tempDirectory)) {
             File::makeDirectory($this->tempDirectory, 0777, true);
         }
     }
