@@ -435,7 +435,7 @@ class PluginBase extends ServiceProviderBase
         if (
             !File::isFile($versionFile)
             || !($versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
-                return $yaml->parseFile($versionFile);
+                return $yaml->parse(file_get_contents($versionFile));
             }))
             || !is_array($versionInfo)
         ) {
