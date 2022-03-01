@@ -1,5 +1,6 @@
 <?php namespace System\Classes;
 
+use App;
 use Markdown;
 use System\Models\MailPartial;
 use System\Models\MailTemplate;
@@ -134,7 +135,7 @@ class MailManager
              */
             $html = $this->renderTemplate($template, $data);
 
-            $message->setBody($html, 'text/html');
+            $message->html($html);
         }
 
         /*
@@ -142,7 +143,7 @@ class MailManager
          */
         $text = $this->renderTextTemplate($template, $data);
 
-        $message->addPart($text, 'text/plain');
+        $message->text($text);
     }
 
     //
@@ -264,7 +265,7 @@ class MailManager
     protected function renderTwig(string $content, array $data = []): string
     {
         return App::make('twig.environment.mailer')
-                ->createTemplate($contents)
+                ->createTemplate($content)
                 ->render($data);
     }
 

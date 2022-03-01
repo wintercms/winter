@@ -14,6 +14,16 @@ class UpdatesControllerTest extends TestCase
         $controller = $this->getMockBuilder(Updates::class)->disableOriginalConstructor()->getMock();
 
         $expectedVersions = [
+            '1.5.1' => [
+                'Improved signature with the Test::method()',
+                'Translation updates.',
+            ],
+            '1.5.0' => [
+                '!!! Another major update to fix several issues',
+            ],
+            '1.4.1' => [
+                '!!! Major update here.',
+            ],
             '1.3.2' => [
                 'Added support for Translate plugin. Added some new languages.',
             ],
@@ -44,7 +54,7 @@ class UpdatesControllerTest extends TestCase
                 'Added some stuff',
             ],
             '1.0.1' => [
-                'Added some upgrade file and some seeding',
+                'Added some upgrade file and some "seeding"',
                 'some_seeding_file.php' //does not exist
             ],
         ];

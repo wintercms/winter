@@ -2,13 +2,22 @@
 
 use File;
 use System\Classes\MixAssets;
+use Symfony\Component\Console\Command\SignalableCommandInterface;
 
-class MixWatch extends MixCompile
+class MixWatch extends MixCompile implements SignalableCommandInterface
 {
     /**
-     * @var string The console command name.
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'mix:watch';
+    protected static $defaultName = 'mix:watch';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'mix:watch
+        {package : Defines the package to watch for changes}
+        {webpackArgs?* : Arguments to pass through to the Webpack CLI}
+        {--f|production : Runs compilation in "production" mode}';
 
     /**
      * @var string The console command description.
@@ -16,14 +25,9 @@ class MixWatch extends MixCompile
     protected $description = 'Mix and compile assets on-the-fly as changes are made.';
 
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
+     * @var string The path currently being watched
      */
-    protected $signature = 'mix:watch
-        {package : Defines the package to watch for changes}
-        {webpackArgs?* : Arguments to pass through to the Webpack CLI}
-        {--f|production : Runs compilation in "production" mode}';
+    protected $mixJsPath;
 
     public function handle(): int
     {
@@ -53,6 +57,7 @@ class MixWatch extends MixCompile
         $this->info(
             sprintf('Watching package "%s" for changes', $name)
         );
+        $this->mixJsPath = $relativeMixJsPath;
         if ($this->mixPackage(base_path($relativeMixJsPath)) !== 0) {
             $this->error(
                 sprintf('Unable to compile package "%s"', $name)
@@ -91,5 +96,28 @@ class MixWatch extends MixCompile
         );
 
         File::put($this->getWebpackJsPath($mixJsPath), $config);
+    }
+
+    /**
+     * Returns the process signals this command listens to
+     * @see https://www.php.net/manual/en/pcntl.constants.php
+     */
+    public function getSubscribedSignals(): array
+    {
+        return [SIGINT, SIGTERM, SIGQUIT];
+    }
+
+    /**
+     * Handle the provided process signal
+     */
+    public function handleSignal(int $signal): void
+    {
+        // Cleanup
+        $this->removeWebpackConfig(base_path($this->mixJsPath));
+
+        // Exit cleanly at this point, if this was a user termination
+        if ($signal === SIGINT || $signail === SIGQUIT) {
+            exit(0);
+        }
     }
 }
