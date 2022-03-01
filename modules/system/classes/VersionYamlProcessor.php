@@ -22,7 +22,7 @@ class VersionYamlProcessor extends YamlProcessor
 
         foreach ($lines as $num => &$line) {
             // Surround array keys with quotes if not already
-            $line = preg_replace_callback('/^\s*([\'"]{0}[^\'"\n\r:]+[\'"]{0})\s*:/m', function ($matches) {
+            $line = preg_replace_callback('/^\s*([\'"]{0}[^\'"\n\r\-:]+[\'"]{0})\s*:/m', function ($matches) {
                 return '"' . trim($matches[1]) . '":';
             }, rtrim($line));
 
