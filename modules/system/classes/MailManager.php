@@ -1,5 +1,6 @@
 <?php namespace System\Classes;
 
+use App;
 use Markdown;
 use System\Models\MailPartial;
 use System\Models\MailTemplate;
