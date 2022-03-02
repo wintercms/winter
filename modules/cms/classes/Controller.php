@@ -93,9 +93,9 @@ class Controller
     protected $componentContext;
 
     /**
-     * @var array Component partial stack, used internally.
+     * @var PartialStack Component partial stack, used internally.
      */
-    protected $partialStack = [];
+    protected $partialStack;
 
     /**
      * Creates the controller.
@@ -1058,7 +1058,7 @@ class Controller
         CmsException::mask($partial, 400);
         $this->getLoader()->setObject($partial);
         $template = $this->getTwig()->load($partial->getFilePath());
-        $partialContent = $template->render(array_merge($this->vars, $parameters));
+        $partialContent = $template->render($this->vars);
         CmsException::unmask();
 
         if ($partial instanceof Partial) {
