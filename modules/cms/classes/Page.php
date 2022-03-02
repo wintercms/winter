@@ -209,7 +209,7 @@ class Page extends CmsCompoundObject
 
             $result = [];
             $result['url'] = $pageUrl;
-            $result['isActive'] = $pageUrl == $url;
+            $result['isActive'] = $pageUrl === trim($url, "/");
             $result['mtime'] = $page ? $page->mtime : null;
         }
 
