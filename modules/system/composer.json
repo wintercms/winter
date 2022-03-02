@@ -23,9 +23,12 @@
     ],
     "require": {
         "php": ">=7.0",
-        "composer/installers": "dev-main as 1.0",
+        "composer/installers": "~1.11",
         "winter/storm": "~1.0.472",
         "laravel/framework": "~5.5.40"
+    },
+    "replace": {
+        "october/system": "1.0.*"
     },
     "autoload": {
         "psr-4": {
