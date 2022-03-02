@@ -29,7 +29,7 @@
         "composer/semver": "^3.2"
     },
     "replace": {
-        "october/system": "*"
+        "october/system": "1.1.*"
     },
     "autoload": {
         "psr-4": {
