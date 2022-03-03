@@ -1,5 +1,8 @@
 <?php
 
+// Ensure the System ServiceProvider class is available
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'ServiceProvider.php';
+
 return [
 
     /*

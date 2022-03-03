@@ -36,6 +36,8 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
+        parent::register();
+
         $this->registerConsole();
         $this->registerTwigParser();
         $this->registerAssetBundles();

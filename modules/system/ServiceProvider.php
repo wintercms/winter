@@ -38,6 +38,8 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
+        parent::register();
+
         $this->registerSingletons();
         $this->registerPrivilegedActions();
 
@@ -60,7 +62,14 @@ class ServiceProvider extends ModuleServiceProvider
          * Register other module providers
          */
         foreach (Config::get('cms.loadModules', []) as $module) {
-            if (strtolower(trim($module)) != 'system') {
+            $moduleLower = strtolower(trim($module));
+            $serviceProviderPath = base_path("modules/$moduleLower/ServiceProvider.php");
+            if (
+                strtolower(trim($module)) !== 'system'
+                && file_exists($serviceProviderPath)
+            ) {
+                // Load and register the module's ServiceProvider
+                require_once $serviceProviderPath;
                 App::register('\\' . $module . '\ServiceProvider');
             }
         }

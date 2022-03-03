@@ -20,6 +20,8 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
+        parent::register();
+
         $this->registerConsole();
         $this->registerMailer();
         $this->registerAssetBundles();

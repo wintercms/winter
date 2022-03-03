@@ -177,6 +177,10 @@ class PluginManager
             $classObj->disabled = true;
         }
 
+        // Register the plugin with the autoloader
+        $pluginNamespace = Str::before(get_class($classObj), '\\Plugin') . '\\';
+        $this->app->make(ClassLoader::class)->autoloadPackage($pluginNamespace, $path . '/');
+
         $this->plugins[$classId] = $classObj;
         $this->pathMap[$classId] = $path;
         $this->normalizedMap[strtolower($classId)] = $classId;
@@ -292,7 +296,7 @@ class PluginManager
             foreach ($replaces as $replace) {
                 $replaceNamespace = $this->getNamespace($replace);
 
-                App::make(ClassLoader::class)->addNamespaceAliases([
+                $this->app->make(ClassLoader::class)->addNamespaceAliases([
                     // class_alias() expects order to be $real, $alias
                     $this->getNamespace($pluginId) => $replaceNamespace,
                 ]);
