@@ -9,7 +9,6 @@ class PageTest extends TestCase
     public function setUp() : void
     {
         parent::setUp();
-
     }
 
     public function testResolveMenuItem()
