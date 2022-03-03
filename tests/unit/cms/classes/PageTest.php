@@ -8,9 +8,7 @@ class PageTest extends TestCase
 {
     public function testResolveMenuItem()
     {
-        $themeName = 'test';
-
-        $theme = Theme::load($themeName);
+        $theme = Theme::load('test');
         $controller = new Controller;
 
         $item = (object) [
@@ -18,11 +16,15 @@ class PageTest extends TestCase
             'reference' => 'index',
         ];
 
-        // fake current URL to be the same as menu item reference page with extra "/" at the end.
-        $url = $controller->pageUrl($item->reference) . '/';
+        // Check to make sure that resolved menuItems for the provided URL are considered active
+        // with or without a trailing slash
+        $url = $controller->pageUrl($item->reference);
+        $trailingUrl = $url . '/';
 
         $result = Page::resolveMenuItem($item, $url, $theme);
+        $this->assertTrue($result['isActive']);
 
+        $result = Page::resolveMenuItem($item, $trailingUrl, $theme);
         $this->assertTrue($result['isActive']);
     }
 }
