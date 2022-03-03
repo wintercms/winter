@@ -6,11 +6,6 @@ use Cms\Classes\Theme;
 
 class PageTest extends TestCase
 {
-    public function setUp() : void
-    {
-        parent::setUp();
-    }
-
     public function testResolveMenuItem()
     {
         $themeName = 'test';
