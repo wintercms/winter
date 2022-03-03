@@ -1,0 +1,7 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    settings_option:
+        label: This is a sample settings field used by {{author}}.{{plugin}}

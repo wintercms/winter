@@ -35,25 +35,15 @@ abstract class PluginTestCase extends TestCase
         });
 
         /*
-         * Store database in memory by default, if not specified otherwise
+         * Store database in memory by default unless specified otherwise
          */
-        $dbConnection = 'sqlite';
-
-        $dbConnections = [];
-        $dbConnections['sqlite'] = [
-            'driver'   => 'sqlite',
-            'database' => ':memory:',
-            'prefix'   => ''
-        ];
-
-        if (env('APP_ENV') === 'testing' && Config::get('database.useConfigForTesting', false)) {
-            $dbConnection = Config::get('database.default', 'sqlite');
-
-            $dbConnections[$dbConnection] = Config::get('database.connections' . $dbConnection, $dbConnections['sqlite']);
+        if (!file_exists(base_path('config/testing/database.php'))) {
+            $app['config']->set('database.connections.testing', [
+                'driver'   => 'sqlite',
+                'database' => ':memory:',
+            ]);
+            $app['config']->set('database.default', 'testing');
         }
-
-        $app['config']->set('database.default', $dbConnection);
-        $app['config']->set('database.connections.' . $dbConnection, $dbConnections[$dbConnection]);
 
         // Set random encryption key
         $app['config']->set('app.key', bin2hex(random_bytes(16)));
@@ -178,7 +168,7 @@ abstract class PluginTestCase extends TestCase
         /*
          * Execute the command
          */
-        Artisan::call('plugin:refresh', ['name' => $code]);
+        Artisan::call('plugin:refresh', ['plugin' => $code, '--force' => true]);
     }
 
     /**

@@ -23,17 +23,17 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
-        "composer/installers": "~1.11",
-        "laravel/framework": "~6.0"
+        "php": "^8.0.2",
+        "composer/installers": "~1.11.0",
+        "laravel/framework": "^9.0"
+    },
+    "replace": {
+        "october/cms": "1.1.*"
     },
     "autoload": {
         "psr-4": {
             "Cms\\": ""
         }
-    },
-    "extra": {
-        "installer-name": "cms"
     },
     "minimum-stability": "dev"
 }

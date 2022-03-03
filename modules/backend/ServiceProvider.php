@@ -20,8 +20,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        parent::register('backend');
-
+        $this->registerConsole();
         $this->registerMailer();
         $this->registerAssetBundles();
 
@@ -45,6 +44,18 @@ class ServiceProvider extends ModuleServiceProvider
     public function boot()
     {
         parent::boot('backend');
+    }
+
+    /**
+     * Register console commands
+     */
+    protected function registerConsole()
+    {
+        $this->registerConsoleCommand('create.controller', \Backend\Console\CreateController::class);
+        $this->registerConsoleCommand('create.formwidget', \Backend\Console\CreateFormWidget::class);
+        $this->registerConsoleCommand('create.reportwidget', \Backend\Console\CreateReportWidget::class);
+
+        $this->registerConsoleCommand('winter.passwd', \Backend\Console\WinterPasswd::class);
     }
 
     /**

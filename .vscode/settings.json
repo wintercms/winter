@@ -9,9 +9,9 @@
         "**/modules/*/reportwidgets/*/partials/*.htm": "php",
         "**/modules/*/views/mail/*.htm": "wintercms",
         "**/modules/*/widgets/*/partials/*.htm": "php",
-        
+
         "**/plugins/*/*/behaviors/*/partials/*.htm": "php",
-        "**/plugins/*/*/components/*/*.htm": "twig",
+        "**/plugins/*/*/components/*/*.htm": "wintercms-twig",
         "**/plugins/*/*/controllers/*/*.htm": "php",
         "**/plugins/*/*/formwidgets/*/partials/*.htm": "php",
         "**/plugins/*/*/layouts/*.htm": "php",
@@ -20,7 +20,7 @@
         "**/plugins/*/*/reportwidgets/*/partials/*.htm": "php",
         "**/plugins/*/*/views/mail/*.htm": "wintercms",
         "**/plugins/*/*/widgets/*/partials/*.htm": "php",
-        
+
         "**/themes/*/content/**/*.htm": "wintercms",
         "**/themes/*/layouts/*.htm": "wintercms",
         "**/themes/*/pages/**/*.htm": "wintercms",

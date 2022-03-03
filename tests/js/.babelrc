@@ -1,0 +1,16 @@
+{
+    "presets": [
+        "@babel/preset-env"
+    ],
+    "plugins": [
+        "@babel/plugin-transform-runtime",
+        [
+            "module-resolver", {
+                "root": ["."],
+                "alias": {
+                    "helpers": "./helpers"
+                }
+            }
+        ]
+    ]
+}

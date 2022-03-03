@@ -1,9 +1,10 @@
 <?php
 
-/**
- * Register Backend routes before all user routes.
- */
-App::before(function ($request) {
+Event::listen('system.route', function () {
+
+    /**
+     * Register Backend routes before all user routes.
+     */
 
     /**
      * @event backend.beforeRoute
@@ -22,12 +23,11 @@ App::before(function ($request) {
      * Other pages
      */
     Route::group([
-            'middleware' => ['web'],
-            'prefix' => Config::get('cms.backendUri', 'backend')
-        ], function () {
-            Route::any('{slug?}', 'Backend\Classes\BackendController@run')->where('slug', '(.*)?');
-        })
-    ;
+        'middleware' => ['web'],
+        'prefix' => Config::get('cms.backendUri', 'backend')
+    ], function () {
+        Route::any('{slug?}', 'Backend\Classes\BackendController@run')->where('slug', '(.*)?');
+    });
 
     /*
      * Entry point

@@ -369,6 +369,7 @@ return [
         'plugin_missing' => 'Papildus nepieciešams :name spraudnis, taču tas nav instalēts. Lūdzu, instalējiet šo spraudni.',
         'debug' => 'Ieslēgts atkļūdošanas režīms. Nav ieteicams produkcijas vides instalācijām.',
         'decompileBackendAssets' => 'Backend papildu resursu faili šobrīd ir dekompilētā stāvoklī. Nav ieteicams produkcijas vides instalācijām.',
+        'default_backend_user' => 'Tika atrasts lietotājs ar noklusējuma pieteikšanās datiem (admin / admin@domain.tld). Nomainiet viņu lietotājvārdu un / vai e-pasta adresi, lai palīdzētu aizsargāt sistēmu.',
     ],
     'editor' => [
         'menu_label' => 'Koda redaktora iestatījumi',

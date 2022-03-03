@@ -9,6 +9,7 @@ use Lang;
 use View;
 use Config;
 use Schema;
+use Storage;
 use SystemException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
@@ -91,7 +92,7 @@ class PluginManager
     protected function init()
     {
         $this->bindContainerObjects();
-        $this->metaFile = storage_path('cms/disabled.json');
+        $this->metaFile = 'cms/disabled.json';
         $this->loadDisabled();
         $this->loadPlugins();
 
@@ -322,7 +323,7 @@ class PluginManager
          * Add routes, if available
          */
         $routesFile = $pluginPath . '/routes.php';
-        if (File::exists($routesFile)) {
+        if (File::exists($routesFile) && !$this->app->routesAreCached()) {
             require $routesFile;
         }
     }
@@ -370,6 +371,7 @@ class PluginManager
     public function getPluginPath($id)
     {
         $classId = $this->getIdentifier($id);
+        $classId = $this->normalizeIdentifier($classId);
         if (!isset($this->pathMap[$classId])) {
             return null;
         }
@@ -606,7 +608,7 @@ class PluginManager
      */
     public function clearDisabledCache()
     {
-        File::delete($this->metaFile);
+        Storage::delete($this->metaFile);
         $this->disabledPlugins = [];
     }
 
@@ -625,8 +627,8 @@ class PluginManager
             }
         }
 
-        if (File::exists($path)) {
-            $disabled = json_decode(File::get($path), true) ?: [];
+        if (Storage::exists($path)) {
+            $disabled = json_decode(Storage::get($path), true) ?: [];
             $this->disabledPlugins = array_merge($this->disabledPlugins, $disabled);
         } else {
             $this->populateDisabledPluginsFromDb();
@@ -656,7 +658,7 @@ class PluginManager
      */
     protected function writeDisabled()
     {
-        File::put($this->metaFile, json_encode($this->disabledPlugins));
+        Storage::put($this->metaFile, json_encode($this->disabledPlugins));
     }
 
     /**

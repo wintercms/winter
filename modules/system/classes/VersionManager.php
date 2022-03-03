@@ -345,7 +345,9 @@ class VersionManager
         }
 
         $versionFile = $this->getVersionFile($code);
-        $versionInfo = Yaml::parseFile($versionFile);
+        $versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
+            return $yaml->parse(file_get_contents($versionFile));
+        });
 
         if (!is_array($versionInfo)) {
             $versionInfo = [];
@@ -500,7 +502,7 @@ class VersionManager
     /**
      * Returns all the update history for a plugin.
      */
-    protected function getDatabaseHistory($code)
+    public function getDatabaseHistory($code)
     {
         if ($this->databaseHistory !== null && array_key_exists($code, $this->databaseHistory)) {
             return $this->databaseHistory[$code];
