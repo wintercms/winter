@@ -1,7 +1,7 @@
 <?php
 
 return [
-    
+
     /*
     |--------------------------------------------------------------------------
     | Default Mailer
@@ -12,9 +12,9 @@ return [
     | and used as needed; however, this mailer will be used by default.
     |
     */
-    
+
     'default' => env('MAIL_MAILER', 'smtp'),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Mailer Configurations
@@ -32,46 +32,53 @@ return [
     |            "postmark", "log", "array", "failover"
     |
     */
-    
+
     'mailers' => [
         'smtp' => [
             'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'password' => env('MAIL_PASSWORD'),
-            'port' => env('MAIL_PORT', 587),
-            'timeout' => null,
-            'transport' => 'smtp',
-            'username' => env('MAIL_USERNAME'),
+            'host'       => env('MAIL_HOST', 'smtp.mailgun.org'),
+            'password'   => env('MAIL_PASSWORD'),
+            'port'       => env('MAIL_PORT', 587),
+            'timeout'    => null,
+            'transport'  => 'smtp',
+            'username'   => env('MAIL_USERNAME'),
         ],
+
         'ses' => [
             'transport' => 'ses',
         ],
+
         'mailgun' => [
             'transport' => 'mailgun',
         ],
+
         'postmark' => [
             'transport' => 'postmark',
         ],
+
         'sendmail' => [
-            'path' => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -t -i'),
+            'path'      => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -t -i'),
             'transport' => 'sendmail',
         ],
+
         'log' => [
-            'channel' => env('MAIL_LOG_CHANNEL'),
+            'channel'   => env('MAIL_LOG_CHANNEL'),
             'transport' => 'log',
         ],
+
         'array' => [
             'transport' => 'array',
         ],
+
         'failover' => [
-            'mailers' => [
+            'mailers'   => [
                 'smtp',
                 'log',
             ],
             'transport' => 'failover',
         ],
     ],
-    
+
     /*
     |--------------------------------------------------------------------------
     | Global "From" Address
@@ -82,9 +89,10 @@ return [
     | used globally for all e-mails that are sent by your application.
     |
     */
-    
+
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'noreply@example.com'),
-        'name' => env('MAIL_FROM_NAME', env('APP_NAME', 'Winter CMS')),
+        'name'    => env('MAIL_FROM_NAME', env('APP_NAME', 'Winter CMS')),
     ],
+
 ];
