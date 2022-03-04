@@ -110,7 +110,7 @@ class UpdateManager
         /*
          * Ensure temp directory exists
          */
-        if (!File::isDirectory($this->tempDirectory)) {
+        if (!File::isDirectory($this->tempDirectory) && File::isWritable($this->tempDirectory)) {
             File::makeDirectory($this->tempDirectory, 0777, true);
         }
     }
@@ -890,7 +890,7 @@ class UpdateManager
      */
     public function requestServerData($uri, $postData = [])
     {
-        $result = \Winter\Storm\Network\Http::post($this->createServerUrl($uri), function ($http) use ($postData) {
+        $result = Http::post($this->createServerUrl($uri), function ($http) use ($postData) {
             $this->applyHttpAttributes($http, $postData);
         });
 

@@ -4,7 +4,6 @@ use Twig\Template as TwigTemplate;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\Environment as TwigEnvironment;
 use Twig\TwigFunction as TwigSimpleFunction;
-use Cms\Classes\Controller;
 use Cms\Classes\ComponentBase;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
@@ -18,11 +17,6 @@ class DebugExtension extends TwigExtension
     const ARRAY_CAPTION = 'Array variables';
     const OBJECT_CAPTION = 'Object variables';
     const COMPONENT_CAPTION = 'Component variables';
-
-    /**
-     * @var \Cms\Classes\Controller A reference to the CMS controller.
-     */
-    protected $controller;
 
     /**
      * @var integer Helper for rendering table row styles.
@@ -51,15 +45,6 @@ class DebugExtension extends TwigExtension
         'offsetSet',
         'offsetUnset'
     ];
-
-    /**
-     * Creates the extension instance.
-     * @param \Cms\Classes\Controller $controller The CMS controller object.
-     */
-    public function __construct(Controller $controller)
-    {
-        $this->controller = $controller;
-    }
 
     /**
      * Returns a list of global functions to add to the existing list.

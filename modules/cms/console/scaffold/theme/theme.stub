@@ -1,0 +1,9 @@
+name: "{{code}}"
+description: "No description provided yet..."
+author: "Winter CMS Scaffold"
+homepage: "https://example.com"
+code: "{{code}}"
+form:
+    fields:
+        googleanalytics_id:
+            label: 'Google Analytics ID'

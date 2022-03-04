@@ -27,6 +27,9 @@
         "composer/installers": "~1.11.0",
         "laravel/framework": "^9.0"
     },
+    "replace": {
+        "october/backend": "1.1.*"
+    },
     "autoload": {
         "psr-4": {
             "Backend\\": ""

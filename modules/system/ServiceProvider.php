@@ -12,8 +12,6 @@ use BackendMenu;
 use BackendAuth;
 use SystemException;
 use Backend\Models\UserRole;
-use Twig\Extension\SandboxExtension;
-use Twig\Environment as TwigEnvironment;
 use System\Classes\MailManager;
 use System\Classes\ErrorHandler;
 use System\Classes\MarkupManager;
@@ -21,9 +19,6 @@ use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
 use System\Twig\Engine as TwigEngine;
-use System\Twig\Loader as TwigLoader;
-use System\Twig\Extension as TwigExtension;
-use System\Twig\SecurityPolicy as TwigSecurityPolicy;
 use System\Models\EventLog;
 use System\Models\MailSetting;
 use System\Classes\CombineAssets;
@@ -250,26 +245,30 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register console commands
          */
-        $this->registerConsoleCommand('winter.up', 'System\Console\WinterUp');
-        $this->registerConsoleCommand('winter.down', 'System\Console\WinterDown');
-        $this->registerConsoleCommand('winter.update', 'System\Console\WinterUpdate');
-        $this->registerConsoleCommand('winter.util', 'System\Console\WinterUtil');
-        $this->registerConsoleCommand('winter.mirror', 'System\Console\WinterMirror');
-        $this->registerConsoleCommand('winter.fresh', 'System\Console\WinterFresh');
-        $this->registerConsoleCommand('winter.env', 'System\Console\WinterEnv');
-        $this->registerConsoleCommand('winter.install', 'System\Console\WinterInstall');
-        $this->registerConsoleCommand('winter.passwd', 'System\Console\WinterPasswd');
-        $this->registerConsoleCommand('winter.version', 'System\Console\WinterVersion');
-        $this->registerConsoleCommand('winter.manifest', 'System\Console\WinterManifest');
-        $this->registerConsoleCommand('winter.test', 'System\Console\WinterTest');
+        $this->registerConsoleCommand('create.command', \System\Console\CreateCommand::class);
+        $this->registerConsoleCommand('create.model', \System\Console\CreateModel::class);
+        $this->registerConsoleCommand('create.plugin', \System\Console\CreatePlugin::class);
+        $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
 
-        $this->registerConsoleCommand('plugin.install', 'System\Console\PluginInstall');
-        $this->registerConsoleCommand('plugin.remove', 'System\Console\PluginRemove');
-        $this->registerConsoleCommand('plugin.disable', 'System\Console\PluginDisable');
-        $this->registerConsoleCommand('plugin.enable', 'System\Console\PluginEnable');
-        $this->registerConsoleCommand('plugin.refresh', 'System\Console\PluginRefresh');
-        $this->registerConsoleCommand('plugin.rollback', 'System\Console\PluginRollback');
-        $this->registerConsoleCommand('plugin.list', 'System\Console\PluginList');
+        $this->registerConsoleCommand('winter.up', \System\Console\WinterUp::class);
+        $this->registerConsoleCommand('winter.down', \System\Console\WinterDown::class);
+        $this->registerConsoleCommand('winter.update', \System\Console\WinterUpdate::class);
+        $this->registerConsoleCommand('winter.util', \System\Console\WinterUtil::class);
+        $this->registerConsoleCommand('winter.mirror', \System\Console\WinterMirror::class);
+        $this->registerConsoleCommand('winter.fresh', \System\Console\WinterFresh::class);
+        $this->registerConsoleCommand('winter.env', \System\Console\WinterEnv::class);
+        $this->registerConsoleCommand('winter.install', \System\Console\WinterInstall::class);
+        $this->registerConsoleCommand('winter.version', \System\Console\WinterVersion::class);
+        $this->registerConsoleCommand('winter.manifest', \System\Console\WinterManifest::class);
+        $this->registerConsoleCommand('winter.test', \System\Console\WinterTest::class);
+
+        $this->registerConsoleCommand('plugin.install', \System\Console\PluginInstall::class);
+        $this->registerConsoleCommand('plugin.remove', \System\Console\PluginRemove::class);
+        $this->registerConsoleCommand('plugin.disable', \System\Console\PluginDisable::class);
+        $this->registerConsoleCommand('plugin.enable', \System\Console\PluginEnable::class);
+        $this->registerConsoleCommand('plugin.refresh', \System\Console\PluginRefresh::class);
+        $this->registerConsoleCommand('plugin.rollback', \System\Console\PluginRollback::class);
+        $this->registerConsoleCommand('plugin.list', \System\Console\PluginList::class);
 
         $this->registerConsoleCommand('mix.install', \System\Console\MixInstall::class);
         $this->registerConsoleCommand('mix.list', \System\Console\MixList::class);
@@ -301,23 +300,22 @@ class ServiceProvider extends ModuleServiceProvider
     }
 
     /*
-     * Register text twig parser
+     * Register Twig Environments and other Twig modifications provided by the module
      */
     protected function registerTwigParser()
     {
-        /*
-         * Register system Twig environment
-         */
+        // Register System Twig environment
         App::singleton('twig.environment', function ($app) {
-            $twig = new TwigEnvironment(new TwigLoader, ['auto_reload' => true]);
-            $twig->addExtension(new TwigExtension);
-            $twig->addExtension(new SandboxExtension(new TwigSecurityPolicy, true));
-            return $twig;
+            return MarkupManager::makeBaseTwigEnvironment();
         });
 
-        /*
-         * Register .htm extension for Twig views
-         */
+        // Register Mailer Twig environment
+        App::singleton('twig.environment.mailer', function ($app) {
+            $twig = MarkupManager::makeBaseTwigEnvironment();
+            $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
+        });
+
+        // Register .htm extension for Twig views
         App::make('view')->addExtension('htm', 'twig', function () {
             return new TwigEngine(App::make('twig.environment'));
         });
