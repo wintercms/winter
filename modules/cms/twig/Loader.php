@@ -39,11 +39,8 @@ class Loader extends LoaderBase implements TwigLoaderInterface
     /**
      * Returns the Twig content string.
      * This step is cached internally by Twig.
-     *
-     * @param string $name The template name
-     * @return TwigSource
      */
-    public function getSourceContext($name)
+    public function getSourceContext(string $name): TwigSource
     {
         if (!$this->validateCmsObject($name)) {
             return parent::getSourceContext($name);
@@ -70,11 +67,8 @@ class Loader extends LoaderBase implements TwigLoaderInterface
 
     /**
      * Returns the Twig cache key.
-     *
-     * @param string $name The template name
-     * @return string
      */
-    public function getCacheKey($name)
+    public function getCacheKey(string $name): string
     {
         if (!$this->validateCmsObject($name)) {
             return parent::getCacheKey($name);
@@ -90,7 +84,7 @@ class Loader extends LoaderBase implements TwigLoaderInterface
      * @param mixed $time The time to check against the template
      * @return bool
      */
-    public function isFresh($name, $time)
+    public function isFresh(string $name, int $time): bool
     {
         if (!$this->validateCmsObject($name)) {
             return parent::isFresh($name, $time);
@@ -101,11 +95,8 @@ class Loader extends LoaderBase implements TwigLoaderInterface
 
     /**
      * Returns the file name of the loaded template.
-     *
-     * @param string $name The template name
-     * @return string
      */
-    public function getFilename($name)
+    public function getFilename(string $name): string
     {
         if (!$this->validateCmsObject($name)) {
             return parent::getFilename($name);
@@ -116,11 +107,8 @@ class Loader extends LoaderBase implements TwigLoaderInterface
 
     /**
      * Checks that the template exists.
-     *
-     * @param string $name The template name
-     * @return bool
      */
-    public function exists($name)
+    public function exists(string $name): bool
     {
         if (!$this->validateCmsObject($name)) {
             return parent::exists($name);
@@ -132,11 +120,8 @@ class Loader extends LoaderBase implements TwigLoaderInterface
     /**
      * Internal method that checks if the template name matches
      * the loaded object, with fallback support to partials.
-     *
-     * @param string $name The template name to validate
-     * @return bool
      */
-    protected function validateCmsObject($name)
+    protected function validateCmsObject(string $name): bool
     {
         if ($this->obj && $name === $this->obj->getFilePath()) {
             return true;

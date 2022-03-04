@@ -1,9 +1,7 @@
 <?php namespace System\Console;
 
-use App;
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
-use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Console command to tear down the database.
@@ -15,15 +13,21 @@ use Symfony\Component\Console\Input\InputOption;
  */
 class WinterDown extends Command
 {
-    use \Illuminate\Console\ConfirmableTrait;
+    use \Winter\Storm\Console\Traits\ConfirmsWithInput;
 
     /**
-     * The console command name.
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'winter:down';
+    protected static $defaultName = 'winter:down';
 
     /**
-     * The console command description.
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'winter:down
+        {--f|force : Force the operation to run and ignore production warnings and confirmation questionss.}';
+
+    /**
+     * @var string The console command description.
      */
     protected $description = 'Destroys all database tables for Winter and all plugins.';
 
@@ -34,53 +38,26 @@ class WinterDown extends Command
     {
         parent::__construct();
 
-        // Register aliases for backwards compatibility with October
-        $this->setAliases(['october:down']);
+        // Register aliases for backwards compatibility with October & Laravel
+        $this->setAliases(['october:down', 'migrate:reset']);
     }
 
     /**
      * Execute the console command.
      */
-    public function handle()
+    public function handle(): int
     {
-        if (App::isProduction() && !$this->option('force')) {
-            $this->warn('YOUR APPLICATION IS IN PRODUCTION');
+        if (!$this->confirmWithInput(
+            "This will completely delete all database tables in use with your Winter installation.",
+            "DELETE"
+        )) {
+            return 1;
         }
-
-        $this->warn('This will completely delete all database tables in use with your Winter installation.');
-
-        $confirmed = false;
-        $prompt = 'Please type "DELETE" to proceed';
-        do {
-            if (strtolower($this->ask($prompt)) === 'delete') {
-                $confirmed = true;
-            }
-        } while ($confirmed === false);
 
         UpdateManager::instance()
             ->setNotesOutput($this->output)
-            ->uninstall()
-        ;
-    }
+            ->uninstall();
 
-    /**
-     * Get the console command options.
-     */
-    protected function getOptions()
-    {
-        return [
-            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run and ignore production warning.'],
-        ];
-    }
-
-    /**
-     * Get the default confirmation callback.
-     * @return \Closure
-     */
-    protected function getDefaultConfirmCallback()
-    {
-        return function () {
-            return true;
-        };
+        return 0;
     }
 }

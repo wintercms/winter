@@ -1,0 +1,98 @@
+<?php namespace {{studly_author}}\{{studly_name}};
+
+use Backend;
+use Backend\Models\UserRole;
+use System\Classes\PluginBase;
+
+/**
+ * {{name}} Plugin Information File
+ */
+class Plugin extends PluginBase
+{
+    /**
+     * Returns information about this plugin.
+     *
+     * @return array
+     */
+    public function pluginDetails()
+    {
+        return [
+            'name'        => '{{name}}',
+            'description' => 'No description provided yet...',
+            'author'      => '{{author}}',
+            'icon'        => 'icon-leaf'
+        ];
+    }
+
+    /**
+     * Register method, called when the plugin is first registered.
+     *
+     * @return void
+     */
+    public function register()
+    {
+
+    }
+
+    /**
+     * Boot method, called right before the request route.
+     *
+     * @return array
+     */
+    public function boot()
+    {
+
+    }
+
+    /**
+     * Registers any front-end components implemented in this plugin.
+     *
+     * @return array
+     */
+    public function registerComponents()
+    {
+        return []; // Remove this line to activate
+
+        return [
+            '{{studly_author}}\{{studly_name}}\Components\MyComponent' => 'myComponent',
+        ];
+    }
+
+    /**
+     * Registers any back-end permissions used by this plugin.
+     *
+     * @return array
+     */
+    public function registerPermissions()
+    {
+        return []; // Remove this line to activate
+
+        return [
+            '{{lower_author}}.{{lower_name}}.some_permission' => [
+                'tab' => '{{name}}',
+                'label' => 'Some permission',
+                'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
+            ],
+        ];
+    }
+
+    /**
+     * Registers back-end navigation items for this plugin.
+     *
+     * @return array
+     */
+    public function registerNavigation()
+    {
+        return []; // Remove this line to activate
+
+        return [
+            '{{lower_name}}' => [
+                'label'       => '{{name}}',
+                'url'         => Backend::url('{{lower_author}}/{{lower_name}}/mycontroller'),
+                'icon'        => 'icon-leaf',
+                'permissions' => ['{{lower_author}}.{{lower_name}}.*'],
+                'order'       => 500,
+            ],
+        ];
+    }
+}

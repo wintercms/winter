@@ -88,4 +88,25 @@ return [
 
     // Illuminate's HtmlDumper was "dumped" in Laravel 6 - we'll route this to Symfony's HtmlDumper as Laravel have done.
     'Illuminate\Support\Debug\HtmlDumper' => Symfony\Component\VarDumper\Dumper\HtmlDumper::class,
+
+    // Scaffolds were moved from the Storm library into their corresponding modules.
+    'Winter\Storm\Scaffold\Console\CreateCommand'        => System\Console\CreateCommand::class,
+    'Winter\Storm\Scaffold\Console\CreateModel'          => System\Console\CreateModel::class,
+    'Winter\Storm\Scaffold\Console\CreatePlugin'         => System\Console\CreatePlugin::class,
+    'Winter\Storm\Scaffold\Console\CreateSettings'       => System\Console\CreateSettings::class,
+    'Winter\Storm\Scaffold\Console\CreateController'     => Backend\Console\CreateController::class,
+    'Winter\Storm\Scaffold\Console\CreateFormWidget'     => Backend\Console\CreateFormWidget::class,
+    'Winter\Storm\Scaffold\Console\CreateReportWidget'   => Backend\Console\CreateReportWidget::class,
+    'Winter\Storm\Scaffold\Console\CreateTheme'          => Cms\Console\CreateTheme::class,
+    'Winter\Storm\Scaffold\Console\CreateComponent'      => Cms\Console\CreateComponent::class,
+
+    'October\Rain\Scaffold\Console\CreateCommand'        => System\Console\CreateCommand::class,
+    'October\Rain\Scaffold\Console\CreateModel'          => System\Console\CreateModel::class,
+    'October\Rain\Scaffold\Console\CreatePlugin'         => System\Console\CreatePlugin::class,
+    'October\Rain\Scaffold\Console\CreateSettings'       => System\Console\CreateSettings::class,
+    'October\Rain\Scaffold\Console\CreateController'     => Backend\Console\CreateController::class,
+    'October\Rain\Scaffold\Console\CreateFormWidget'     => Backend\Console\CreateFormWidget::class,
+    'October\Rain\Scaffold\Console\CreateReportWidget'   => Backend\Console\CreateReportWidget::class,
+    'October\Rain\Scaffold\Console\CreateTheme'          => Cms\Console\CreateTheme::class,
+    'October\Rain\Scaffold\Console\CreateComponent'      => Cms\Console\CreateComponent::class,
 ];

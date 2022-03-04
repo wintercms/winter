@@ -24,7 +24,7 @@ class VersionManagerTest extends TestCase
         $result = self::callProtectedMethod($manager, 'getLatestFileVersion', ['\Winter\\Tester']);
 
         $this->assertNotNull($result);
-        $this->assertEquals('1.3.2', $result);
+        $this->assertEquals('1.5.1', $result);
     }
 
     public function testGetFileVersions()
@@ -32,7 +32,7 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getFileVersions', ['\Winter\\Tester']);
 
-        $this->assertCount(10, $result);
+        $this->assertCount(13, $result);
         $this->assertArrayHasKey('1.0.1', $result);
         $this->assertArrayHasKey('1.0.2', $result);
         $this->assertArrayHasKey('1.0.3', $result);
@@ -43,9 +43,12 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
+        $this->assertArrayHasKey('1.4.1', $result);
+        $this->assertArrayHasKey('1.5.0', $result);
+        $this->assertArrayHasKey('1.5.1', $result);
 
         $sample = $result['1.0.1'];
-        $this->assertEquals('Added some upgrade file and some seeding', $sample[0]);
+        $this->assertEquals('Added some upgrade file and some "seeding"', $sample[0]);
 
         $sample = $result['1.1.0'];
         $this->assertEquals('!!! Drop support for blog settings', $sample[0]);
@@ -63,6 +66,13 @@ class VersionManagerTest extends TestCase
 
         $sample = $result['1.3.2'];
         $this->assertEquals('Added support for Translate plugin. Added some new languages.', $sample);
+
+        $sample = $result['1.5.0'];
+        $this->assertEquals('!!! Another major update to fix several issues', $sample);
+
+        $sample = $result['1.5.1'];
+        $this->assertEquals('Improved signature with the Test::method()', $sample[0]);
+        $this->assertEquals('Translation updates.', $sample[1]);
 
         /*
          * Test junk file
@@ -91,7 +101,7 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester', '1.0.3']);
 
-        $this->assertCount(7, $result);
+        $this->assertCount(10, $result);
         $this->assertArrayHasKey('1.0.4', $result);
         $this->assertArrayHasKey('1.0.5', $result);
         $this->assertArrayHasKey('1.1.0', $result);
@@ -99,6 +109,9 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
+        $this->assertArrayHasKey('1.4.1', $result);
+        $this->assertArrayHasKey('1.5.0', $result);
+        $this->assertArrayHasKey('1.5.1', $result);
 
         /*
          * When at version 0, should return everything
@@ -106,7 +119,7 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester']);
 
-        $this->assertCount(10, $result);
+        $this->assertCount(13, $result);
         $this->assertArrayHasKey('1.0.1', $result);
         $this->assertArrayHasKey('1.0.2', $result);
         $this->assertArrayHasKey('1.0.3', $result);
@@ -117,6 +130,9 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
+        $this->assertArrayHasKey('1.4.1', $result);
+        $this->assertArrayHasKey('1.5.0', $result);
+        $this->assertArrayHasKey('1.5.1', $result);
     }
 
     /**
