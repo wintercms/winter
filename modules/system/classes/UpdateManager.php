@@ -110,7 +110,7 @@ class UpdateManager
         /*
          * Ensure temp directory exists
          */
-        if (!File::isDirectory($this->tempDirectory)) {
+        if (!File::isDirectory($this->tempDirectory) && File::isWritable($this->tempDirectory)) {
             File::makeDirectory($this->tempDirectory, 0777, true);
         }
     }
@@ -146,16 +146,23 @@ class UpdateManager
             $this->migrateModule($module);
         }
 
-        /*
-         * Update plugins
-         */
         $plugins = $this->pluginManager->getPlugins();
-        foreach ($plugins as $code => $plugin) {
-            $this->updatePlugin($code);
-        }
 
-        Parameter::set('system::update.count', 0);
-        CacheHelper::clear();
+        /*
+         * Replace plugins
+         */
+        foreach ($plugins as $code => $plugin) {
+            if (!$replaces = $plugin->getReplaces()) {
+                continue;
+            }
+            // TODO: add full support for plugins replacing multiple plugins
+            if (count($replaces) > 1) {
+                throw new ApplicationException(Lang::get('system::lang.plugins.replace.multi_install_error'));
+            }
+            foreach ($replaces as $replace) {
+                $this->versionManager->replacePlugin($plugin, $replace);
+            }
+        }
 
         /*
          * Seed modules
@@ -164,6 +171,25 @@ class UpdateManager
             $modules = Config::get('cms.loadModules', []);
             foreach ($modules as $module) {
                 $this->seedModule($module);
+            }
+        }
+
+        /*
+         * Update plugins
+         */
+        foreach ($plugins as $code => $plugin) {
+            $this->updatePlugin($code);
+        }
+
+        Parameter::set('system::update.count', 0);
+        CacheHelper::clear();
+
+        // Set replacement warning messages
+        foreach ($this->pluginManager->getReplacementMap() as $alias => $plugin) {
+            if ($this->pluginManager->getActiveReplacementMap($alias)) {
+                $this->addMessage($plugin, Lang::get('system::lang.updates.update_warnings_plugin_replace_cli', [
+                    'alias' => '<info>' . $alias . '</info>'
+                ]));
             }
         }
 
@@ -330,7 +356,7 @@ class UpdateManager
         /*
          * Rollback plugins
          */
-        $plugins = array_reverse($this->pluginManager->getPlugins());
+        $plugins = array_reverse($this->pluginManager->getAllPlugins());
         foreach ($plugins as $name => $plugin) {
             $this->rollbackPlugin($name);
         }
@@ -790,7 +816,16 @@ class UpdateManager
      */
     public function requestChangelog()
     {
-        $result = Http::get('https://api.wintercms.com/marketplace/changelog');
+        $build = Parameter::get('system::core.build');
+
+        // Determine branch
+        if (!is_null($build)) {
+            $branch = explode('.', $build);
+            array_pop($branch);
+            $branch = implode('.', $branch);
+        }
+
+        $result = Http::get($this->createServerUrl('changelog' . ((!is_null($branch)) ? '/' . $branch : '')));
 
         if ($result->code == 404) {
             throw new ApplicationException(Lang::get('system::lang.server.response_empty'));

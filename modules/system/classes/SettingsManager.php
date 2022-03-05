@@ -14,6 +14,7 @@ use SystemException;
 class SettingsManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
+    use \System\Traits\LazyOwnerAlias;
 
     /**
      * Allocated category types
@@ -88,6 +89,9 @@ class SettingsManager
      */
     protected function init()
     {
+        foreach (static::$lazyAliases as $alias => $owner) {
+            $this->registerOwnerAlias($owner, $alias);
+        }
         $this->pluginManager = PluginManager::instance();
     }
 

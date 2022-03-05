@@ -28,6 +28,17 @@ class WinterUpdate extends Command
     protected $description = 'Updates Winter CMS and all plugins, database and files.';
 
     /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:update']);
+    }
+
+    /**
      * Execute the console command.
      */
     public function handle()
@@ -103,6 +114,7 @@ class WinterUpdate extends Command
 
     /**
      * Get the console command options.
+     * @return array
      */
     protected function getOptions()
     {

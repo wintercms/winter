@@ -117,7 +117,7 @@ class Page extends CmsCompoundObject
      * Helper that makes a URL for a page in the active theme.
      * @param mixed $page Specifies the Cms Page file name.
      * @param array $params Route parameters to consider in the URL.
-     * @return string
+     * @return string|null
      */
     public static function url($page, array $params = [])
     {

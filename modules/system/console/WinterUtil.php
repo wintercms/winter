@@ -33,7 +33,6 @@ use System\Models\File as FileModel;
  */
 class WinterUtil extends Command
 {
-
     use \Illuminate\Console\ConfirmableTrait;
 
     /**
@@ -45,6 +44,17 @@ class WinterUtil extends Command
      * The console command description.
      */
     protected $description = 'Utility commands for Winter';
+
+    /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:util']);
+    }
 
     /**
      * Execute the console command.
@@ -92,6 +102,7 @@ class WinterUtil extends Command
 
     /**
      * Get the console command options.
+     * @return array
      */
     protected function getOptions()
     {
@@ -183,6 +194,7 @@ class WinterUtil extends Command
             $srcPath = base_path() . '/modules/system/lang/'.$locale.'/client.php';
 
             $messages = require $fallbackPath;
+
             if (File::isFile($srcPath) && $fallbackPath != $srcPath) {
                 $messages = array_replace_recursive($messages, require $srcPath);
             }
@@ -190,10 +202,24 @@ class WinterUtil extends Command
             /*
              * Load possible replacements from /lang
              */
+            $overrides = [];
+            $parentOverrides = [];
+
             $overridePath = base_path() . '/lang/'.$locale.'/system/client.php';
             if (File::isFile($overridePath)) {
-                $messages = array_replace_recursive($messages, require $overridePath);
+                $overrides = require $overridePath;
             }
+
+            if (str_contains($locale, '-')) {
+                list($parentLocale, $country) = explode('-', $locale);
+
+                $parentOverridePath = base_path() . '/lang/'.$parentLocale.'/system/client.php';
+                if (File::isFile($parentOverridePath)) {
+                    $parentOverrides = require $parentOverridePath;
+                }
+            }
+
+            $messages = array_replace_recursive($messages, $parentOverrides, $overrides);
 
             /*
              * Compile from stub and save file

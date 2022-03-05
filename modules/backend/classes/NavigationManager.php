@@ -17,6 +17,7 @@ use Config;
 class NavigationManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
+    use \System\Traits\LazyOwnerAlias;
 
     /**
      * @var array Cache of registration callbacks.
@@ -54,6 +55,9 @@ class NavigationManager
      */
     protected function init()
     {
+        foreach (static::$lazyAliases as $alias => $owner) {
+            $this->registerOwnerAlias($owner, $alias);
+        }
         $this->pluginManager = PluginManager::instance();
     }
 
@@ -113,9 +117,11 @@ class NavigationManager
         /*
          * Sort menu items and quick actions
          */
+        $this->applyDefaultOrders($this->items);
         uasort($this->items, static function ($a, $b) {
             return $a->order - $b->order;
         });
+        $this->applyDefaultOrders($this->quickActions);
         uasort($this->quickActions, static function ($a, $b) {
             return $a->order - $b->order;
         });
@@ -132,16 +138,7 @@ class NavigationManager
                 continue;
             }
 
-            /*
-             * Apply incremental default orders
-             */
-            $orderCount = 0;
-            foreach ($item->sideMenu as $sideMenuItem) {
-                if ($sideMenuItem->order !== -1) {
-                    continue;
-                }
-                $sideMenuItem->order = ($orderCount += 100);
-            }
+            $this->applyDefaultOrders($item->sideMenu);
 
             /*
              * Sort side menu items
@@ -154,6 +151,24 @@ class NavigationManager
              * Filter items user lacks permission for
              */
             $item->sideMenu = $this->filterItemPermissions($user, $item->sideMenu);
+        }
+    }
+
+    /**
+     * Apply incremental default orders to items with the explicit auto-order value (-1)
+     * or that have invalid order values (non-integer).
+     *
+     * @param array $items Array of MainMenuItem, SideMenuItem, or QuickActionItem objects
+     * @return void
+     */
+    protected function applyDefaultOrders(array $items)
+    {
+        $orderCount = 0;
+        foreach ($items as $item) {
+            if ($item->order !== -1 && is_integer($item->order)) {
+                continue;
+            }
+            $item->order = ($orderCount += 100);
         }
     }
 
@@ -237,7 +252,7 @@ class NavigationManager
      */
     public function registerOwnerAlias(string $owner, string $alias)
     {
-        $this->aliases[$alias] = $owner;
+        $this->aliases[strtoupper($alias)] = strtoupper($owner);
     }
 
     /**
@@ -632,7 +647,7 @@ class NavigationManager
      */
     public function setContextOwner($owner)
     {
-        $this->contextOwner = $owner;
+        $this->contextOwner = strtoupper($owner);
     }
 
     /**
@@ -685,7 +700,7 @@ class NavigationManager
      */
     public function isMainMenuItemActive($item)
     {
-        return $this->getContextOwner() === $item->owner && $this->contextMainMenuItemCode === $item->code;
+        return $this->getContextOwner() === strtoupper($item->owner) && $this->contextMainMenuItemCode === $item->code;
     }
 
     /**
@@ -716,7 +731,7 @@ class NavigationManager
             return true;
         }
 
-        return $this->getContextOwner() === $item->owner && $this->contextSideMenuItemCode === $item->code;
+        return $this->getContextOwner() === strtoupper($item->owner) && $this->contextSideMenuItemCode === $item->code;
     }
 
     /**
@@ -728,7 +743,7 @@ class NavigationManager
      */
     public function registerContextSidenavPartial($owner, $mainMenuItemCode, $partial)
     {
-        $this->contextSidenavPartials[$owner.$mainMenuItemCode] = $partial;
+        $this->contextSidenavPartials[$this->makeItemKey($owner, $mainMenuItemCode)] = $partial;
     }
 
     /**
@@ -741,10 +756,7 @@ class NavigationManager
      */
     public function getContextSidenavPartial($owner, $mainMenuItemCode)
     {
-        $owner = $this->aliases[$owner] ?? $owner;
-        $key = $owner.$mainMenuItemCode;
-
-        return $this->contextSidenavPartials[$key] ?? null;
+        return $this->contextSidenavPartials[$this->makeItemKey($owner, $mainMenuItemCode)] ?? null;
     }
 
     /**
@@ -778,6 +790,7 @@ class NavigationManager
      */
     protected function makeItemKey($owner, $code)
     {
-        return strtoupper($this->aliases[$owner] ?? $owner).'.'.strtoupper($code);
+        $owner = strtoupper($owner);
+        return ($this->aliases[$owner] ?? $owner) . '.' . strtoupper($code);
     }
 }

@@ -17,7 +17,7 @@ The pie chart outputs information as a circle diagram, with optional label in th
         </ul>
     </div>
 
-![image](https://github.com/wintercms/docs/blob/master/assets/images/traffic-sources.png?raw=true) {.img-responsive .frame}
+![image](https://github.com/wintercms/docs/blob/main/images/traffic-sources.png?raw=true) {.img-responsive .frame}
 
 <a name="line-chart" class="anchor" href="#line-chart"></a>
 ## Line chart
@@ -37,7 +37,7 @@ The next example shows a line chart markup. Data sets are defined with the SPAN 
         </span>
     </div>
 
-![image](https://github.com/wintercms/docs/blob/master/assets/images/line-chart.png?raw=true) {.img-responsive .frame}
+![image](https://github.com/wintercms/docs/blob/main/images/line-chart.png?raw=true) {.img-responsive .frame}
 
 <a name="bar-chart" class="anchor" href="#bar-chart"></a>
 ## Bar chart
@@ -56,7 +56,7 @@ The next example shows a bar chart markup. The **wrap-legend** class is optional
         </ul>
     </div>
 
-![image](https://github.com/wintercms/docs/blob/master/assets/images/bar-chart.png?raw=true) {.img-responsive .frame}
+![image](https://github.com/wintercms/docs/blob/main/images/bar-chart.png?raw=true) {.img-responsive .frame}
 
 # Example
 

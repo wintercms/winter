@@ -17,8 +17,8 @@
         placeholder="<?= e(trans($field->placeholder)) ?>"
         class="form-control"
         autocomplete="off"
-        <?= $min ? 'min="' . $min . '"' : ''; ?>
-        <?= $max ? 'max="' . $max . '"' : ''; ?>
+        <?= $min !== false ? 'min="' . $min . '"' : ''; ?>
+        <?= $max !== false ? 'max="' . $max . '"' : ''; ?>
         <?= $field->hasAttribute('pattern') ? '' : 'pattern="-?\d+(\.\d+)?"' ?>
         <?= $field->hasAttribute('maxlength') ? '' : 'maxlength="255"' ?>
         <?= $field->getAttributes() ?>

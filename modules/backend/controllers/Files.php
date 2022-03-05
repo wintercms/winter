@@ -9,6 +9,7 @@ use System\Models\File as FileModel;
 use Backend\Classes\Controller;
 use ApplicationException;
 use Exception;
+use RuntimeException;
 
 /**
  * Backend files controller
@@ -64,33 +65,33 @@ class Files extends Controller
      */
     protected static function getTemporaryUrl($file, $path = null)
     {
-        // Get the disk and adapter used
-        $url = null;
+        // Get the disk used
         $disk = $file->getDisk();
-        $adapter = $disk->getAdapter();
-        if (class_exists('\League\Flysystem\Cached\CachedAdapter') && $adapter instanceof \League\Flysystem\Cached\CachedAdapter) {
-            $adapter = $adapter->getAdapter();
+
+        if (empty($path)) {
+            $path = $file->getDiskPath();
         }
 
-        if ((class_exists('\League\Flysystem\AwsS3v3\AwsS3Adapter') && $adapter instanceof \League\Flysystem\AwsS3v3\AwsS3Adapter) ||
-            (class_exists('\League\Flysystem\Rackspace\RackspaceAdapter') && $adapter instanceof \League\Flysystem\Rackspace\RackspaceAdapter) ||
-            method_exists($adapter, 'getTemporaryUrl')
-        ) {
-            if (empty($path)) {
-                $path = $file->getDiskPath();
-            }
+        // Check to see if the URL has already been generated
+        $pathKey = 'backend.file:' . $path;
+        $url = Cache::get($pathKey, null);
 
-            // Check to see if the URL has already been generated
-            $pathKey = 'backend.file:' . $path;
-            $url = Cache::get($pathKey);
-
-            // The AWS S3 storage drivers will return a valid temporary URL even if the file does not exist
-            if (is_null($url) && $disk->exists($path)) {
-                $expires = now()->addSeconds(Config::get('cms.storage.uploads.temporaryUrlTTL', 3600));
-                $url = Cache::remember($pathKey, $expires, function () use ($disk, $path, $expires) {
+        if (is_null($url) && $disk->exists($path)) {
+            $expires = now()->addSeconds(Config::get('cms.storage.uploads.temporaryUrlTTL', 3600));
+            $url = Cache::remember($pathKey, $expires, function () use ($disk, $path, $expires) {
+                // Attempt to generate a temporary URL, if a RuntimeException occurs it's "probably"
+                // because the driver doesn't support that method
+                try {
                     return $disk->temporaryUrl($path, $expires);
-                });
-            }
+                } catch (RuntimeException $ex) {
+                    return false;
+                }
+            });
+        }
+
+        // Limit the return types to strings or null
+        if (!is_string($url) || empty($url)) {
+            $url = null;
         }
 
         return $url;

@@ -39,11 +39,10 @@ trait AssetMaker
     }
 
     /**
-     * Outputs `<link>` and `<script>` tags to load assets previously added with addJs and addCss method calls
-     * @param string $type Return an asset collection of a given type (css, rss, js) or null for all.
-     * @return string
+     * Outputs `<link>` and `<script>` tags to load assets previously added
+     * with addJs, addCss, & addRss method calls depending on the provided $type
      */
-    public function makeAssets($type = null)
+    public function makeAssets(string $type = null): ?string
     {
         if ($type != null) {
             $type = strtolower($type);
@@ -115,9 +114,9 @@ trait AssetMaker
             $name = $this->combineAssets($name, $this->getLocalPath($this->assetPath));
         }
 
-        // Alias october.* assets to winter.*
-        if (str_contains($name, 'js/october.')) {
-            $winterPath = str_replace('js/october.', 'js/winter.', $name);
+        // Alias october* assets to winter.*
+        if (str_contains($name, 'js/october')) {
+            $winterPath = str_replace('js/october', 'js/winter', $name);
             if (file_exists(base_path(ltrim(parse_url($winterPath, PHP_URL_PATH), '/')))) {
                 $name = $winterPath;
             }

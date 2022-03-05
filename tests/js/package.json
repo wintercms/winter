@@ -1,0 +1,37 @@
+{
+    "name": "@wintercms/tests",
+    "description": "Test cases for the Winter JavaScript framework",
+    "private": true,
+    "scripts": {
+        "test": "jest"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wintercms/winter.git"
+    },
+    "contributors": [
+        {
+            "name": "Ben Thomson",
+            "email": "git@alfreido.com"
+        },
+        {
+            "name": "Winter CMS Maintainers",
+            "url": "https://wintercms.com/"
+        }
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/wintercms/winter/issues"
+    },
+    "homepage": "https://wintercms.com/",
+    "devDependencies": {
+        "@babel/core": "^7.16.0",
+        "@babel/plugin-transform-runtime": "^7.16.4",
+        "@babel/preset-env": "^7.16.4",
+        "@babel/register": "^7.16.0",
+        "@babel/runtime": "^7.16.3",
+        "babel-plugin-module-resolver": "^4.1.0",
+        "jest": "^27.4.3",
+        "jsdom": "^18.1.1"
+    }
+}

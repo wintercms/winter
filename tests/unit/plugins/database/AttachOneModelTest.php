@@ -41,7 +41,6 @@ class AttachOneModelTest extends PluginTestCase
             base_path().'/tests/fixtures/plugins/database/tester/assets/images/avatar.png',
             $sample->file_name,
             $sample->content_type,
-            $sample->file_size,
             null,
             true
         );

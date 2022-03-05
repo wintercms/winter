@@ -1,9 +1,8 @@
 <?php namespace System\Console;
 
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use System\Classes\PluginManager;
 use System\Models\PluginVersion;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Console command to disable a plugin.
@@ -13,16 +12,21 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class PluginDisable extends Command
 {
+    use Traits\HasPluginArgument;
 
     /**
-     * The console command name.
-     * @var string
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'plugin:disable';
+    protected static $defaultName = 'plugin:disable';
 
     /**
-     * The console command description.
-     * @var string
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'plugin:disable
+        {plugin : The plugin to disable. <info>(eg: Winter.Blog)</info>}';
+
+    /**
+     * @var string The console command description.
      */
     protected $description = 'Disable an existing plugin.';
 
@@ -32,33 +36,16 @@ class PluginDisable extends Command
      */
     public function handle()
     {
+        $pluginName = $this->getPluginIdentifier();
         $pluginManager = PluginManager::instance();
-        $pluginName = $this->argument('name');
-        $pluginName = $pluginManager->normalizeIdentifier($pluginName);
-
-        if (!$pluginManager->hasPlugin($pluginName)) {
-            return $this->error(sprintf('Unable to find a registered plugin called "%s"', $pluginName));
-        }
 
         // Disable this plugin
         $pluginManager->disablePlugin($pluginName);
-
         $plugin = PluginVersion::where('code', $pluginName)->first();
         $plugin->is_disabled = true;
         $plugin->save();
-
+        $pluginManager->clearDisabledCache();
 
         $this->output->writeln(sprintf('<info>%s:</info> disabled.', $pluginName));
-    }
-
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the plugin. Eg: AuthorName.PluginName'],
-        ];
     }
 }

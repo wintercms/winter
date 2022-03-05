@@ -1,5 +1,6 @@
 <?php namespace Cms\Twig;
 
+use System\Models\Parameter;
 use System\Classes\CombineAssets;
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
@@ -24,6 +25,8 @@ class FrameworkNode extends TwigNode
      */
     public function compile(TwigCompiler $compiler)
     {
+        $build = Parameter::get('system::core.build', 'winter');
+        $cacheBust = '?v=' . $build;
         $attrib = $this->getAttribute('name');
         $includeExtras = strtolower(trim($attrib)) === 'extras';
 
@@ -35,20 +38,20 @@ class FrameworkNode extends TwigNode
             $compiler
                 ->write("if (\$_minify) {" . PHP_EOL)
                 ->indent()
-                    ->write("echo '<script src=\"' . Request::getBasePath() . '/modules/system/assets/js/framework.combined-min.js\"></script>'.PHP_EOL;" . PHP_EOL)
+                    ->write("echo '<script src=\"' . Request::getBasePath() . '/modules/system/assets/js/framework.combined-min.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
                 ->outdent()
                 ->write("}" . PHP_EOL)
                 ->write("else {" . PHP_EOL)
                 ->indent()
-                    ->write("echo '<script src=\"' . Request::getBasePath() . '/modules/system/assets/js/framework.js\"></script>'.PHP_EOL;" . PHP_EOL)
-                    ->write("echo '<script src=\"' . Request::getBasePath() . '/modules/system/assets/js/framework.extras.js\"></script>'.PHP_EOL;" . PHP_EOL)
+                    ->write("echo '<script src=\"' . Request::getBasePath() . '/modules/system/assets/js/framework.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
+                    ->write("echo '<script src=\"' . Request::getBasePath() . '/modules/system/assets/js/framework.extras.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
                 ->outdent()
                 ->write("}" . PHP_EOL)
-                ->write("echo '<link rel=\"stylesheet\" property=\"stylesheet\" href=\"' . Request::getBasePath() .'/modules/system/assets/css/framework.extras'.(\$_minify ? '-min' : '').'.css\">'.PHP_EOL;" . PHP_EOL)
+                ->write("echo '<link rel=\"stylesheet\" property=\"stylesheet\" href=\"' . Request::getBasePath() .'/modules/system/assets/css/framework.extras'.(\$_minify ? '-min' : '').'.css$cacheBust\">'.PHP_EOL;" . PHP_EOL)
             ;
         }
         else {
-            $compiler->write("echo '<script src=\"' . Request::getBasePath() . '/modules/system/assets/js/framework'.(\$_minify ? '-min' : '').'.js\"></script>'.PHP_EOL;" . PHP_EOL);
+            $compiler->write("echo '<script src=\"' . Request::getBasePath() . '/modules/system/assets/js/framework'.(\$_minify ? '-min' : '').'.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL);
         }
 
         $compiler->write('unset($_minify);' . PHP_EOL);

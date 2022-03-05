@@ -3173,13 +3173,10 @@ $item.addClass('animate-enter').prependTo($otherContainer).one('webkitAnimationE
 if(!this.scopeValues[this.activeScopeName])
 return
 var
-itemId=$item.data('item-id'),active=this.scopeValues[this.activeScopeName],available=this.scopeAvailable[this.activeScopeName],fromItems=isDeselect?active:available,toItems=isDeselect?available:active,testFunc=function(active){return active.id==itemId},item=$.grep(fromItems,testFunc).pop(),filtered=$.grep(fromItems,testFunc,true)
-if(isDeselect)
-this.scopeValues[this.activeScopeName]=filtered
-else
-this.scopeAvailable[this.activeScopeName]=filtered
-if(item)
-toItems.push(item)
+itemId=$item.data('item-id'),active=this.scopeValues[this.activeScopeName],available=this.scopeAvailable[this.activeScopeName],fromItems=isDeselect?active:available,toItems=isDeselect?available:active,testFunc=function(active){return active.id==itemId},item=$.grep(fromItems,testFunc).pop()??{'id':itemId,'name':$item.text()},filtered=$.grep(fromItems,testFunc,true)
+if(isDeselect){this.scopeValues[this.activeScopeName]=filtered
+this.scopeAvailable[this.activeScopeName].push(item)}else{this.scopeAvailable[this.activeScopeName]=filtered
+this.scopeValues[this.activeScopeName].push(item)}
 this.toggleFilterButtons(active)
 this.updateScopeSetting(this.$activeScope,isDeselect?filtered.length:active.length)
 this.isActiveScopeDirty=true
@@ -3283,7 +3280,7 @@ $.fn.filterWidget.Constructor=FilterWidget
 $.fn.filterWidget.noConflict=function(){$.fn.filterWidget=old
 return this}
 $(document).render(function(){$('[data-control="filterwidget"]').filterWidget();})}(window.jQuery);+function($){"use strict";var FilterWidget=$.fn.filterWidget.Constructor;var overloaded_init=FilterWidget.prototype.init;FilterWidget.prototype.init=function(){overloaded_init.apply(this)
-this.ignoreTimezone=this.$el.children().get(0).hasAttribute('data-ignore-timezone');this.initRegion()
+var self=this;this.$el.children().each(function(key,$filter){if($filter.hasAttribute('data-ignore-timezone')){self.ignoreTimezone=true;}});this.initRegion()
 this.initFilterDate()}
 FilterWidget.prototype.initFilterDate=function(){var self=this
 this.$el.on('show.oc.popover','a.filter-scope-date',function(event){self.initDatePickers($(this).hasClass('range'))
@@ -3397,7 +3394,7 @@ $datepicker.data('pikaday').destroy()})}
 FilterWidget.prototype.updateScopeDateSetting=function($scope,dates){var $setting=$scope.find('.filter-setting'),dateFormat=this.getDateFormat(),dateRegex=/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/,reset=false
 if(dates&&dates.length){dates[0]=dates[0]&&dates[0].match(dateRegex)?dates[0]:null
 if(dates.length>1){dates[1]=dates[1]&&dates[1].match(dateRegex)?dates[1]:null
-if(dates[0]||dates[1]){var after=dates[0]?moment.tz(dates[0],this.appTimezone).tz(this.timezone).format(dateFormat):'∞',before=dates[1]?moment.tz(dates[1],this.appTimezone).tz(this.timezone).format(dateFormat):'∞'
+if(dates[0]||dates[1]){var after=dates[0]?moment.tz(dates[0],this.appTimezone).tz(this.timezone).format(dateFormat):'-∞',before=dates[1]?moment.tz(dates[1],this.appTimezone).tz(this.timezone).format(dateFormat):'∞'
 $setting.text(after+' → '+before)}else{reset=true}}
 else if(dates[0]){$setting.text(moment.tz(dates[0],this.appTimezone).tz(this.timezone).format(dateFormat))}else{reset=true}}
 else{reset=true}
@@ -3524,11 +3521,13 @@ FilterWidget.prototype.initNumberInputs=function(isRange){var self=this,scopeDat
 if(!data){data={numbers:isRange?(scopeData.numbers?scopeData.numbers:[]):(scopeData.number?[scopeData.number]:[])}}
 $inputs.each(function(index,numberinput){var defaultValue=''
 if(0<=index&&index<data.numbers.length){defaultValue=data.numbers[index]?data.numbers[index]:''}
-numberinput.value=''!==defaultValue?defaultValue:'';})}
+numberinput.value=''!==defaultValue?defaultValue:'';if(scopeData.step){numberinput.step=scopeData.step}
+if(scopeData.minValue){numberinput.min=scopeData.minValue}
+if(scopeData.maxValue){numberinput.max=scopeData.maxValue}})}
 FilterWidget.prototype.updateScopeNumberSetting=function($scope,numbers){var $setting=$scope.find('.filter-setting'),numberRegex=/\d*/,reset=false
 if(numbers&&numbers.length){numbers[0]=numbers[0]&&numbers[0].match(numberRegex)?numbers[0]:null
 if(numbers.length>1){numbers[1]=numbers[1]&&numbers[1].match(numberRegex)?numbers[1]:null
-if(numbers[0]||numbers[1]){var min=numbers[0]?numbers[0]:'∞',max=numbers[1]?numbers[1]:'∞'
+if(numbers[0]||numbers[1]){var min=numbers[0]?numbers[0]:'-∞',max=numbers[1]?numbers[1]:'∞'
 $setting.text(min+' → '+max)}else{reset=true}}
 else if(numbers[0]){$setting.text(numbers[0])}else{reset=true}}
 else{reset=true}
@@ -3612,7 +3611,7 @@ $(document).on('ajaxPromise','[data-load-indicator]',function(){var
 indicatorContainer=$(this).closest('.loading-indicator-container'),loadingText=$(this).data('load-indicator'),options={opaque:$(this).data('load-indicator-opaque'),centered:$(this).data('load-indicator-centered'),size:$(this).data('load-indicator-size')}
 if(loadingText)
 options.text=loadingText
-indicatorContainer.loadIndicator(options)}).on('ajaxFail ajaxDone','[data-load-indicator]',function(){$(this).closest('.loading-indicator-container').loadIndicator('hide')})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+indicatorContainer.loadIndicator(options)}).on('ajaxFail ajaxDone ajaxRedirected','[data-load-indicator]',function(){$(this).closest('.loading-indicator-container').loadIndicator('hide')})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
 $.wn={}
 if($.oc===undefined)
 $.oc=$.wn
@@ -3637,7 +3636,7 @@ this.counter=0
 if(this.counter<=0){this.indicator.addClass('hide')
 $(window).off('.cursorLoadIndicator');}}
 $(document).ready(function(){$.wn.cursorLoadIndicator=new CursorLoadIndicator();})
-$(document).on('ajaxPromise','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.show()}).on('ajaxFail ajaxDone','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
+$(document).on('ajaxPromise','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.show()}).on('ajaxFail ajaxDone ajaxRedirected','[data-cursor-load-indicator]',function(){$.wn.cursorLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";if($.wn===undefined)
 $.wn={}
 if($.oc===undefined)
 $.oc=$.wn
@@ -3666,7 +3665,7 @@ $(document).on('ajaxPromise','[data-stripe-load-indicator]',function(event){even
 $.wn.stripeLoadIndicator.show()
 var $el=$(this)
 $(window).one('ajaxUpdateComplete',function(){if($el.closest('html').length===0)
-$.wn.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone','[data-stripe-load-indicator]',function(event){event.stopPropagation()
+$.wn.stripeLoadIndicator.hide()})}).on('ajaxFail ajaxDone ajaxRedirected','[data-stripe-load-indicator]',function(event){event.stopPropagation()
 $.wn.stripeLoadIndicator.hide()})}(window.jQuery);+function($){"use strict";var Popover=function(element,options){var $el=this.$el=$(element);this.options=options||{};this.arrowSize=15
 this.docClickHandler=null
 this.show()}
@@ -5889,7 +5888,7 @@ if(this.propertyDefinition.items!==undefined){this.loadStaticItems()}
 else{this.loadDynamicItems()}}
 SetEditor.prototype.loadStaticItems=function(){var itemArray=[]
 for(var itemValue in this.propertyDefinition.items){itemArray.push({value:itemValue,title:this.propertyDefinition.items[itemValue]})}
-for(var i=itemArray.length-1;i>=0;i--){this.buildItemEditor(itemArray[i].value,itemArray[i].title)}}
+for(var i=itemArray.length-1;i>=0;i--){this.buildItemEditor(String(itemArray[i].value),itemArray[i].title)}}
 SetEditor.prototype.setLinkText=function(link,value){var value=(value!==undefined&&value!==null)?value:this.getNormalizedValue(),text='[ ]'
 if(value===undefined){value=this.propertyDefinition.default}
 if(value!==undefined&&value.length!==undefined&&value.length>0&&typeof value!=='string'){var textValues=[]
@@ -5905,7 +5904,7 @@ this.buildCheckbox(cell,value,text)
 newRow.appendChild(cell)
 tbody.insertBefore(newRow,currentRow.nextSibling)}
 SetEditor.prototype.buildCheckbox=function(cell,value,title){var property={property:value,title:title,default:this.isCheckedByDefault(value)},editor=new $.wn.inspector.propertyEditors.checkbox(this,property,cell,this.group)
-this.editors.push[editor]}
+this.editors.push(editor)}
 SetEditor.prototype.isCheckedByDefault=function(value){if(!this.propertyDefinition.default){return false}
 return this.propertyDefinition.default.indexOf(value)>-1}
 SetEditor.prototype.showLoadingIndicator=function(){$(this.getLink()).loadIndicator()}
@@ -5916,13 +5915,13 @@ $link.loadIndicator('destroy')}
 SetEditor.prototype.loadDynamicItems=function(){var link=this.getLink(),data=this.inspector.getValues(),$form=$(link).closest('form')
 $.wn.foundation.element.addClass(link,'loading-indicator-container size-small')
 this.showLoadingIndicator()
-data['inspectorProperty']=this.getPropertyPath()
-data['inspectorClassName']=this.inspector.options.inspectorClass
+data.inspectorProperty=this.getPropertyPath()
+data.inspectorClassName=this.inspector.options.inspectorClass
 $form.request('onInspectableGetOptions',{data:data,}).done(this.proxy(this.itemsRequestDone)).always(this.proxy(this.hideLoadingIndicator))}
 SetEditor.prototype.itemsRequestDone=function(data,currentValue,initialization){if(this.isDisposed()){return}
 this.loadedItems={}
 if(data.options){for(var i=data.options.length-1;i>=0;i--){this.buildItemEditor(data.options[i].value,data.options[i].title)
-this.loadedItems[data.options[i].value]=data.options[i].title}}
+this.loadedItems[String(data.options[i].value)]=data.options[i].title}}
 this.setLinkText(this.getLink())}
 SetEditor.prototype.getLink=function(){return this.containerCell.querySelector('a.trigger')}
 SetEditor.prototype.getItemsSource=function(){if(this.propertyDefinition.items!==undefined){return this.propertyDefinition.items}
@@ -5943,15 +5942,15 @@ if(value.length===undefined||typeof value==='string'){return undefined}
 return value}
 SetEditor.prototype.supportsExternalParameterEditor=function(){return false}
 SetEditor.prototype.isGroupedEditor=function(){return true}
-SetEditor.prototype.getPropertyValue=function(checkboxValue){var value=this.getNormalizedValue()
-if(value===undefined){return this.isCheckedByDefault(checkboxValue)}
+SetEditor.prototype.getPropertyValue=function(checkboxValue){var value=this.getNormalizedValue(),checkboxValueStr=String(checkboxValue)
+if(value===undefined){return this.isCheckedByDefault(checkboxValueStr)}
 if(!value){return false}
-return value.indexOf(checkboxValue)>-1}
-SetEditor.prototype.setPropertyValue=function(checkboxValue,isChecked){var currentValue=this.getNormalizedValue()
+return value.indexOf(checkboxValueStr)>-1}
+SetEditor.prototype.setPropertyValue=function(checkboxValue,isChecked){var currentValue=this.getNormalizedValue(),checkboxValueStr=String(checkboxValue)
 if(currentValue===undefined){currentValue=this.propertyDefinition.default}
 if(!currentValue){currentValue=[]}
 var resultValue=[],items=this.getItemsSource()
-for(var itemValue in items){if(itemValue!==checkboxValue){if(currentValue.indexOf(itemValue)!==-1){resultValue.push(itemValue)}}
+for(var itemValue in items){if(itemValue!==checkboxValueStr){if(currentValue.indexOf(itemValue)!==-1){resultValue.push(itemValue)}}
 else{if(isChecked){resultValue.push(itemValue)}}}
 this.inspector.setPropertyValue(this.propertyDefinition.property,this.cleanUpValue(resultValue))
 this.setLinkText(this.getLink())}

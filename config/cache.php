@@ -18,7 +18,7 @@ return [
     |
     */
 
-    'default' => 'file',
+    'default' => env('CACHE_DRIVER', 'file'),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,22 +29,27 @@ return [
     | well as their drivers. You may even define multiple stores for the
     | same cache driver to group types of items stored in your caches.
     |
+    | Supported drivers: "apc", "array", "database", "file",
+    |         "memcached", "redis", "dynamodb", "octane", "null"
+    |
     */
 
     'stores' => [
 
         'apc' => [
-            'driver' => 'apc'
+            'driver' => 'apc',
         ],
 
         'array' => [
-            'driver' => 'array'
+            'driver'    => 'array',
+            'serialize' => false,
         ],
 
         'database' => [
-            'driver' => 'database',
-            'table'  => 'cache',
-            'connection' => null,
+            'connection'      => null,
+            'driver'          => 'database',
+            'lock_connection' => null,
+            'table'           => 'cache',
         ],
 
         'file' => [
@@ -53,19 +58,41 @@ return [
         ],
 
         'memcached' => [
-            'driver'  => 'memcached',
-            'servers' => [
+            'driver'        => 'memcached',
+            'options'       => [
+                // Memcached::OPT_CONNECT_TIMEOUT => 2000,
+            ],
+            'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
+            'sasl' => [
+                env('MEMCACHED_USERNAME'),
+                env('MEMCACHED_PASSWORD'),
+            ],
+            'servers'       => [
                 [
-                    'host'   => '127.0.0.1',
-                    'port'   => 11211,
+                    'host' => env('MEMCACHED_HOST', '127.0.0.1'),
+                    'port' => env('MEMCACHED_PORT', 11211),
                     'weight' => 100,
                 ],
             ],
         ],
 
         'redis' => [
-            'driver' => 'redis',
-            'connection' => 'default',
+            'connection'      => 'cache',
+            'driver'          => 'redis',
+            'lock_connection' => 'default',
+        ],
+
+        'dynamodb' => [
+            'driver'   => 'dynamodb',
+            'endpoint' => env('DYNAMODB_ENDPOINT'),
+            'key'      => env('AWS_ACCESS_KEY_ID'),
+            'region'   => env('AWS_DEFAULT_REGION', 'us-east-1'),
+            'secret'   => env('AWS_SECRET_ACCESS_KEY'),
+            'table'    => env('DYNAMODB_CACHE_TABLE', 'cache'),
+        ],
+
+        'octane' => [
+            'driver' => 'octane',
         ],
 
     ],
@@ -81,7 +108,7 @@ return [
     |
     */
 
-    'prefix' => 'winter',
+    'prefix' => env('CACHE_PREFIX', str_slug(env('APP_NAME', 'winter'), '_').'_cache'),
 
     /*
     |--------------------------------------------------------------------------
@@ -118,4 +145,5 @@ return [
     */
 
     'disableRequestCache' => null,
+
 ];

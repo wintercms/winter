@@ -24,6 +24,17 @@ class WinterUp extends Command
     protected $description = 'Builds database tables for Winter and all plugins.';
 
     /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:up', 'migrate']);
+    }
+
+    /**
      * Execute the console command.
      */
     public function handle()
@@ -32,7 +43,6 @@ class WinterUp extends Command
 
         UpdateManager::instance()
             ->setNotesOutput($this->output)
-            ->update()
-        ;
+            ->update();
     }
 }

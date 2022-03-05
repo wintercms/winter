@@ -148,8 +148,6 @@ class BackendController extends ControllerBase
      */
     public function run($url = null)
     {
-        $params = RouterHelper::segmentizeUrl($url);
-
         // Handle NotFoundHttpExceptions in the backend (usually triggered by abort(404))
         Event::listen('exception.beforeRender', function ($exception, $httpCode, $request) {
             if (!$this->cmsHandling && $exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {

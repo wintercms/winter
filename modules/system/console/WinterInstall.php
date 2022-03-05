@@ -51,6 +51,9 @@ class WinterInstall extends Command
         parent::__construct();
 
         $this->configWriter = new ConfigWriter;
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:install']);
     }
 
     /**
@@ -101,6 +104,7 @@ class WinterInstall extends Command
 
     /**
      * Get the console command options.
+     * @return array
      */
     protected function getOptions()
     {

@@ -1,9 +1,7 @@
 <?php namespace System\Console;
 
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
-use System\Classes\PluginManager;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Console command to refresh a plugin.
@@ -16,56 +14,50 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class PluginRefresh extends Command
 {
+    use \Winter\Storm\Console\Traits\ConfirmsWithInput;
+    use Traits\HasPluginArgument;
 
     /**
-     * The console command name.
-     * @var string
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'plugin:refresh';
+    protected static $defaultName = 'plugin:refresh';
 
     /**
-     * The console command description.
-     * @var string
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'plugin:refresh
+        {plugin : The plugin to refresh. <info>(eg: Winter.Blog)</info>}
+        {--f|force : Force the operation to run and ignore production warnings and confirmation questions.}';
+
+    /**
+     * @var string The console command description.
      */
     protected $description = 'Removes and re-adds an existing plugin.';
 
     /**
      * Execute the console command.
-     * @return void
      */
-    public function handle()
+    public function handle(): int
     {
-        /*
-         * Lookup plugin
-         */
-        $pluginName = $this->argument('name');
-        $pluginName = PluginManager::instance()->normalizeIdentifier($pluginName);
-        if (!PluginManager::instance()->exists($pluginName)) {
-            throw new \InvalidArgumentException(sprintf('Plugin "%s" not found.', $pluginName));
+        $pluginName = $this->getPluginIdentifier();
+
+        if (!$this->confirmWithInput(
+            "This will completely remove and reinstall $pluginName. This may result in potential data loss.",
+            $pluginName
+        )) {
+            return 1;
         }
 
+        // Set the UpdateManager output stream to the CLI
         $manager = UpdateManager::instance()->setNotesOutput($this->output);
 
-        /*
-         * Rollback plugin
-         */
+        // Rollback the plugin
         $manager->rollbackPlugin($pluginName);
 
-        /*
-         * Update plugin
-         */
+        // Reinstall the plugin
         $this->output->writeln('<info>Reinstalling plugin...</info>');
         $manager->updatePlugin($pluginName);
-    }
 
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the plugin. Eg: AuthorName.PluginName'],
-        ];
+        return 0;
     }
 }

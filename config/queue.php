@@ -4,19 +4,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Default Queue Driver
+    | Default Queue Connection Name
     |--------------------------------------------------------------------------
     |
-    | The Laravel queue API supports a variety of back-ends via an unified
+    | Winter's queue API supports an assortment of back-ends via a single
     | API, giving you convenient access to each back-end using the same
-    | syntax for each one. Here you may set the default queue driver.
-    |
-    | Supported: "null", "sync", "database", "beanstalkd",
-    |            "sqs", "iron", "redis"
+    | syntax for every one. Here you may define a default connection.
     |
     */
 
-    'default' => 'sync',
+    'default' => env('QUEUE_CONNECTION', 'sync'),
 
     /*
     |--------------------------------------------------------------------------
@@ -25,7 +22,9 @@ return [
     |
     | Here you may configure the connection information for each server that
     | is used by your application. A default configuration has been added
-    | for each back-end shipped with Laravel. You are free to add more.
+    | for each back-end shipped with Winter. You are free to add more.
+    |
+    | Drivers: "sync", "database", "beanstalkd", "sqs", "redis", "null"
     |
     */
 
@@ -36,40 +35,40 @@ return [
         ],
 
         'database' => [
-            'driver' => 'database',
-            'table' => 'jobs',
-            'queue' => 'default',
-            'expire' => 60,
+            'after_commit' => false,
+            'driver'       => 'database',
+            'queue'        => 'default',
+            'retry_after'  => 90,
+            'table'        => 'jobs',
         ],
 
         'beanstalkd' => [
-            'driver' => 'beanstalkd',
-            'host'   => 'localhost',
-            'queue'  => 'default',
-            'ttr'    => 60,
+            'after_commit' => false,
+            'block_for'    => 0,
+            'driver'       => 'beanstalkd',
+            'host'         => 'localhost',
+            'queue'        => 'default',
+            'retry_after'  => 90,
         ],
 
         'sqs' => [
-            'driver' => 'sqs',
-            'key'    => 'your-public-key',
-            'secret' => 'your-secret-key',
-            'queue'  => 'your-queue-url',
-            'region' => 'us-east-1',
-        ],
-
-        'iron' => [
-            'driver'  => 'iron',
-            'host'    => 'mq-aws-us-east-1.iron.io',
-            'token'   => 'your-token',
-            'project' => 'your-project-id',
-            'queue'   => 'your-queue-name',
-            'encrypt' => true,
+            'after_commit' => false,
+            'driver'       => 'sqs',
+            'key'          => env('AWS_ACCESS_KEY_ID'),
+            'prefix'       => env('SQS_PREFIX', 'https://sqs.us-east-1.amazonaws.com/your-account-id'),
+            'queue'        => env('SQS_QUEUE', 'default'),
+            'region'       => env('AWS_DEFAULT_REGION', 'us-east-1'),
+            'secret'       => env('AWS_SECRET_ACCESS_KEY'),
+            'suffix'       => env('SQS_SUFFIX'),
         ],
 
         'redis' => [
-            'driver' => 'redis',
-            'queue'  => 'default',
-            'expire' => 60,
+            'after_commit' => false,
+            'block_for'    => null,
+            'connection'   => 'default',
+            'driver'       => 'redis',
+            'queue'        => env('REDIS_QUEUE', 'default'),
+            'retry_after'  => 90,
         ],
 
     ],
@@ -86,7 +85,9 @@ return [
     */
 
     'failed' => [
-        'database' => 'mysql', 'table' => 'failed_jobs',
+        'database' => env('DB_CONNECTION', 'mysql'),
+        'driver'   => env('QUEUE_FAILED_DRIVER', 'database-uuids'),
+        'table'    => 'failed_jobs',
     ],
 
 ];

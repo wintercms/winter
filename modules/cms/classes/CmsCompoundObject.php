@@ -1,17 +1,14 @@
 <?php namespace Cms\Classes;
 
+use App;
 use Ini;
 use Lang;
 use Cache;
 use Config;
-use Cms\Twig\Loader as TwigLoader;
-use Cms\Twig\Extension as CmsTwigExtension;
 use Cms\Components\ViewBag;
 use Cms\Helpers\Cms as CmsHelpers;
-use System\Twig\Extension as SystemTwigExtension;
 use Winter\Storm\Halcyon\Processors\SectionParser;
 use Twig\Source as TwigSource;
-use Twig\Environment as TwigEnvironment;
 use ApplicationException;
 
 /**
@@ -107,7 +104,7 @@ class CmsCompoundObject extends CmsObject
                 $this->code = $this->getOriginal('code');
             }
         }
-        
+
         $this->checkSafeMode();
     }
 
@@ -414,11 +411,7 @@ class CmsCompoundObject extends CmsObject
      */
     public function getTwigNodeTree($markup = false)
     {
-        $loader = new TwigLoader();
-        $twig = new TwigEnvironment($loader, []);
-        $twig->addExtension(new CmsTwigExtension());
-        $twig->addExtension(new SystemTwigExtension);
-
+        $twig = App::make('twig.environment.cms');
         $stream = $twig->tokenize(new TwigSource($markup === false ? $this->markup : $markup, 'getTwigNodeTree'));
         return $twig->parse($stream);
     }

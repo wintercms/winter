@@ -3,6 +3,18 @@
 use App;
 use System\Classes\UpdateManager;
 
+/**
+ * Detects the version of Winter CMS installed.
+ *
+ * This checks against a central manifest on Winter CMS's GitHub account to determine the version. If any files have
+ * been modified, this will be indicated when detecting the version.
+ *
+ * To get a list of modified files, simply add the "--changes" parameter.
+ *
+ * @package winter\wn-system-module
+ * @author Ben Thomson
+ * @author Winter CMS
+ */
 class WinterVersion extends \Illuminate\Console\Command
 {
     /**
@@ -17,9 +29,20 @@ class WinterVersion extends \Illuminate\Console\Command
                             {--changes : Include the list of changes between this install and the expected files for the detected build.}';
 
     /**
+     * Create a new command instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Register aliases for backwards compatibility with October
+        $this->setAliases(['october:version']);
+    }
+
+    /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -42,7 +65,7 @@ class WinterVersion extends \Illuminate\Console\Command
             $this->info('*** Detected Winter CMS build ' . $build['build'] . '.');
         }
 
-        if ($this->option('changes')) {
+        if (!empty($build['changes']) && $this->option('changes')) {
             $this->line('');
             $this->comment('We have detected the following modifications:');
 
