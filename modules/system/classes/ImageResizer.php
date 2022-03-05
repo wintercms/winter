@@ -225,9 +225,9 @@ class ImageResizer
         // to support atomic deployments where the base application path changes
         // each deployment but the realpath of the storage directory does not
         if (FileHelper::isLocalDisk($disk)) {
-            $realPath = realpath($disk->getAdapter()->getPathPrefix());
+            $realPath = realpath($disk->getPathPrefix());
             if ($realPath) {
-                $disk->getAdapter()->setPathPrefix($realPath);
+                $disk->setPathPrefix($realPath);
             }
         }
 
@@ -649,7 +649,7 @@ class ImageResizer
             }
         }
 
-        if (!$disk || !$path || !$selectedSource || (!in_array(FileHelper::extension($path), ['jpg', 'jpeg', 'png', 'webp', 'gif']))) {
+        if (!$disk || !$path || !$selectedSource || (!in_array(strtolower(FileHelper::extension($path)), ['jpg', 'jpeg', 'png', 'webp', 'gif']))) {
             if (is_object($image)) {
                 $image = get_class($image);
             }
@@ -783,8 +783,8 @@ class ImageResizer
             $resizer = new static($image, $width, $height, $options);
         } catch (SystemException $ex) {
             // Ignore processing this URL if the resizer is unable to identify it
-            if (is_scalar($image)) {
-                return $image;
+            if (is_scalar($image) || empty($image)) {
+                return (string) $image;
             } elseif ($image instanceof FileModel) {
                 return $image->getPath();
             } else {

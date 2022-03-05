@@ -31,7 +31,7 @@ class Engine implements EngineInterface
 
         TwigLoader::$allowInclude = true;
 
-        $template = $this->environment->loadTemplate($path);
+        $template = $this->environment->load($path);
 
         TwigLoader::$allowInclude = $previousAllow;
 

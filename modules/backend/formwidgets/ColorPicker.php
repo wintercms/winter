@@ -3,6 +3,7 @@
 use Lang;
 use Backend\Classes\FormWidgetBase;
 use ApplicationException;
+use Backend\Models\BrandSetting;
 
 /**
  * Color picker
@@ -10,9 +11,13 @@ use ApplicationException;
  *
  * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
+ * @author Winter CMS
  */
 class ColorPicker extends FormWidgetBase
 {
+    // All color formats supported
+    const ALL_FORMATS = ['cmyk', 'hex', 'hsl', 'rgb'];
+
     //
     // Configurable properties
     //
@@ -20,23 +25,17 @@ class ColorPicker extends FormWidgetBase
     /**
      * @var array Default available colors
      */
-    public $availableColors = [
-        '#1abc9c', '#16a085',
-        '#2ecc71', '#27ae60',
-        '#3498db', '#2980b9',
-        '#9b59b6', '#8e44ad',
-        '#34495e', '#2b3e50',
-        '#f1c40f', '#f39c12',
-        '#e67e22', '#d35400',
-        '#e74c3c', '#c0392b',
-        '#ecf0f1', '#bdc3c7',
-        '#95a5a6', '#7f8c8d',
-    ];
+    public $availableColors = null;
 
     /**
      * @var bool Allow empty value
      */
     public $allowEmpty = false;
+
+    /**
+     * @var bool Allow a custom color
+     */
+    public $allowCustom = true;
 
     /**
      * @var bool Show opacity slider
@@ -52,6 +51,13 @@ class ColorPicker extends FormWidgetBase
      * @var bool If true, the color picker is set to disabled mode
      */
     public $disabled = false;
+
+    /**
+     * @var string|array Color format(s) to allow for the resulting color value. Specify "all" as a string to allow all
+     * formats.
+     * Allowed values: 'cmyk', 'hex', 'hsl', 'rgb', 'all'
+     */
+    public $formats = 'hex';
 
     //
     // Object properties
@@ -69,7 +75,9 @@ class ColorPicker extends FormWidgetBase
     {
         $this->fillFromConfig([
             'availableColors',
+            'formats',
             'allowEmpty',
+            'allowCustom',
             'showAlpha',
             'readOnly',
             'disabled',
@@ -91,13 +99,14 @@ class ColorPicker extends FormWidgetBase
     public function prepareVars()
     {
         $this->vars['name'] = $this->getFieldName();
-        $this->vars['value'] = $value = $this->getLoadValue();
-        $this->vars['availableColors'] = $availableColors = $this->getAvailableColors();
-        $this->vars['allowEmpty'] = $this->allowEmpty;
-        $this->vars['showAlpha'] = $this->showAlpha;
-        $this->vars['readOnly'] = $this->readOnly;
-        $this->vars['disabled'] = $this->disabled;
-        $this->vars['isCustomColor'] = !in_array($value, $availableColors);
+        $this->vars['value'] = $this->getLoadValue();
+        $this->vars['availableColors'] = $this->getAvailableColors();
+        $this->vars['formats'] = $this->getFormats();
+        $this->vars['allowEmpty'] = (bool) $this->allowEmpty;
+        $this->vars['allowCustom'] = (bool) $this->allowCustom;
+        $this->vars['showAlpha'] = (bool) $this->showAlpha;
+        $this->vars['readOnly'] = (bool) $this->readOnly;
+        $this->vars['disabled'] = (bool) $this->disabled;
     }
 
     /**
@@ -108,10 +117,10 @@ class ColorPicker extends FormWidgetBase
     protected function getAvailableColors()
     {
         $availableColors = $this->availableColors;
+
         if (is_array($availableColors)) {
             return $availableColors;
-        }
-        elseif (is_string($availableColors) && !empty($availableColors)) {
+        } elseif (is_string($availableColors) && !empty($availableColors)) {
             if ($this->model->methodExists($availableColors)) {
                 return $this->availableColors = $this->model->{$availableColors}(
                     $this->formField->fieldName,
@@ -125,7 +134,101 @@ class ColorPicker extends FormWidgetBase
                     'field'  => $this->formField->fieldName
                 ]));
             }
+        } else {
+            return $this->availableColors = array_map(function ($color) {
+                return $color['color'];
+            }, BrandSetting::get('default_colors', [
+                [
+                    'color' => '#1abc9c',
+                ],
+                [
+                    'color' => '#16a085',
+                ],
+                [
+                    'color' => '#2ecc71',
+                ],
+                [
+                    'color' => '#27ae60',
+                ],
+                [
+                    'color' => '#3498db',
+                ],
+                [
+                    'color' => '#2980b9',
+                ],
+                [
+                    'color' => '#9b59b6',
+                ],
+                [
+                    'color' => '#8e44ad',
+                ],
+                [
+                    'color' => '#34495e',
+                ],
+                [
+                    'color' => '#2b3e50',
+                ],
+                [
+                    'color' => '#f1c40f',
+                ],
+                [
+                    'color' => '#f39c12',
+                ],
+                [
+                    'color' => '#e67e22',
+                ],
+                [
+                    'color' => '#d35400',
+                ],
+                [
+                    'color' => '#e74c3c',
+                ],
+                [
+                    'color' => '#c0392b',
+                ],
+                [
+                    'color' => '#ecf0f1',
+                ],
+                [
+                    'color' => '#bdc3c7',
+                ],
+                [
+                    'color' => '#95a5a6',
+                ],
+                [
+                    'color' => '#7f8c8d',
+                ],
+            ]));
         }
+    }
+
+    /**
+     * Returns the allowed color formats.
+     *
+     * If no valid formats are specified, the "hex" format will be used.
+     *
+     * @return array
+     */
+    protected function getFormats()
+    {
+        if ($this->formats === 'all') {
+            return static::ALL_FORMATS;
+        }
+
+        $availableFormats = [];
+        $configFormats = (is_string($this->formats))
+            ? [$this->formats]
+            : $this->formats;
+
+        foreach ($configFormats as $format) {
+            if (in_array($format, static::ALL_FORMATS)) {
+                $availableFormats[] = $format;
+            }
+        }
+
+        return (count($availableFormats))
+            ? $availableFormats
+            : ['hex'];
     }
 
     /**
@@ -133,8 +236,8 @@ class ColorPicker extends FormWidgetBase
      */
     protected function loadAssets()
     {
-        $this->addCss('vendor/spectrum/spectrum.css', 'core');
-        $this->addJs('vendor/spectrum/spectrum.js', 'core');
+        $this->addCss('vendor/pickr/pickr-nano.min.css', 'core');
+        $this->addJs('vendor/pickr/pickr.min.js', 'core');
         $this->addCss('css/colorpicker.css', 'core');
         $this->addJs('js/colorpicker.js', 'core');
     }

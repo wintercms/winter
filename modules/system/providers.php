@@ -30,7 +30,6 @@ return [
     Winter\Storm\Html\HtmlServiceProvider::class,
     Winter\Storm\Html\UrlServiceProvider::class,
     Winter\Storm\Network\NetworkServiceProvider::class,
-    Winter\Storm\Scaffold\ScaffoldServiceProvider::class,
     Winter\Storm\Flash\FlashServiceProvider::class,
     Winter\Storm\Mail\MailServiceProvider::class,
     Winter\Storm\Argon\ArgonServiceProvider::class,

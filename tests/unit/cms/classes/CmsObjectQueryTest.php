@@ -73,6 +73,7 @@ class CmsObjectQueryTest extends TestCase
             "component-partial-nesting",
             "component-partial-override",
             "cycle-test",
+            "filters-test",
             "index",
             "no-component",
             "no-component-class",

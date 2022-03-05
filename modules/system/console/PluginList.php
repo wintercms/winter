@@ -1,6 +1,6 @@
 <?php namespace System\Console;
 
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use System\Models\PluginVersion;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
@@ -14,14 +14,17 @@ use Symfony\Component\Console\Helper\TableSeparator;
 class PluginList extends Command
 {
     /**
-     * The console command name.
-     * @var string
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'plugin:list';
+    protected static $defaultName = 'plugin:list';
 
     /**
-     * The console command description.
-     * @var string
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'plugin:list';
+
+    /**
+     * @var string The console command description.
      */
     protected $description = 'List existing plugins.';
 

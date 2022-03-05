@@ -45,6 +45,44 @@ class ControllerTest extends TestCase
         // $this->assertEquals('/combine/860afc990164a60a8e90682d04da27ee', $url);
     }
 
+    public function testPageUrl()
+    {
+        $theme = Theme::load('test');
+        $controller = new Controller($theme);
+
+        $loadUrl = '/filters-test/current-slug';
+
+        $response = $controller->run($loadUrl);
+
+        // Check pageUrl for current page
+        $url = $controller->pageUrl('');
+        $this->assertEquals(url($loadUrl), $url);
+
+        // Check pageUrl for persistent URL parameters
+        $url = $controller->pageUrl('blog-post');
+        $this->assertEquals(url('/blog/post/current-slug'), $url);
+
+        // Check pageUrl for providing values for URL parameters
+        $url = $controller->pageUrl('blog-post', ['url_title' => 'test-slug']);
+        $this->assertEquals(url('/blog/post/test-slug'), $url);
+
+        // Check pageUrl for disabling persistent URL parameters
+        $url = $controller->pageUrl('blog-post', [], false);
+        $this->assertEquals(url('/blog/post/default'), $url);
+
+        // Check pageUrl for disabling persistent URL parameters with the second argument being routePersistence
+        $url = $controller->pageUrl('blog-post', false);
+        $this->assertEquals(url('/blog/post/default'), $url);
+
+        // Check the Twig render results
+        $results = $response->getContent();
+        $lines = explode("\n", str_replace("\r\n", "\n", $results));
+        foreach ($lines as $test) {
+            list($result, $expected) = explode(' -> ', $test);
+            $this->assertEquals($expected, $result);
+        }
+    }
+
     public function test404()
     {
         /*
@@ -89,7 +127,7 @@ class ControllerTest extends TestCase
 
     public function testLayoutNotFound()
     {
-        $this->expectException(\Cms\Classes\CmsException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessageMatches('/is\snot\sfound/');
 
         $theme = Theme::load('test');
@@ -193,7 +231,7 @@ class ControllerTest extends TestCase
 
     public function testAjaxHandlerNotFound()
     {
-        $this->expectException(\Cms\Classes\CmsException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessage('AJAX handler \'onNoHandler\' was not found.');
 
         Request::swap($this->configAjaxRequestMock('onNoHandler', ''));
@@ -205,7 +243,7 @@ class ControllerTest extends TestCase
 
     public function testAjaxInvalidHandlerName()
     {
-        $this->expectException(\Cms\Classes\CmsException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessage('Invalid AJAX handler name: delete.');
 
         Request::swap($this->configAjaxRequestMock('delete'));
@@ -217,7 +255,7 @@ class ControllerTest extends TestCase
 
     public function testAjaxInvalidPartial()
     {
-        $this->expectException(\Cms\Classes\CmsException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessage('Invalid partial name: p:artial.');
 
         Request::swap($this->configAjaxRequestMock('onTest', 'p:artial'));
@@ -229,7 +267,7 @@ class ControllerTest extends TestCase
 
     public function testAjaxPartialNotFound()
     {
-        $this->expectException(\Cms\Classes\CmsException::class);
+        $this->expectException(\Winter\Storm\Exception\SystemException::class);
         $this->expectExceptionMessage('The partial \'partial\' is not found.');
 
         Request::swap($this->configAjaxRequestMock('onTest', 'partial'));

@@ -33,6 +33,8 @@ return [
     "different"        => ":attribute e :other devono essere diversi.",
     "digits"           => ":attribute deve essere di :digits cifre.",
     "digits_between"   => ":attribute deve essere tra :min e :max cifre.",
+    'dimensions'       => ':attribute ha delle dimensioni non valide.',
+    'distinct'         => ':attribute ha un valore duplicato.',
     "email"            => "Il formato di :attribute non è valido.",
     "exists"           => "Il valore di :attribute non è valido.",
     "image"            => ":attribute deve essere un'immagine.",

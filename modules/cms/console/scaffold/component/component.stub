@@ -1,0 +1,19 @@
+<?php namespace {{studly_author}}\{{studly_plugin}}\Components;
+
+use Cms\Classes\ComponentBase;
+
+class {{studly_name}} extends ComponentBase
+{
+    public function componentDetails()
+    {
+        return [
+            'name'        => '{{name}} Component',
+            'description' => 'No description provided yet...'
+        ];
+    }
+
+    public function defineProperties()
+    {
+        return [];
+    }
+}

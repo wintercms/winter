@@ -20,8 +20,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        parent::register('backend');
-
+        $this->registerConsole();
         $this->registerMailer();
         $this->registerAssetBundles();
 
@@ -45,6 +44,18 @@ class ServiceProvider extends ModuleServiceProvider
     public function boot()
     {
         parent::boot('backend');
+    }
+
+    /**
+     * Register console commands
+     */
+    protected function registerConsole()
+    {
+        $this->registerConsoleCommand('create.controller', \Backend\Console\CreateController::class);
+        $this->registerConsoleCommand('create.formwidget', \Backend\Console\CreateFormWidget::class);
+        $this->registerConsoleCommand('create.reportwidget', \Backend\Console\CreateReportWidget::class);
+
+        $this->registerConsoleCommand('winter.passwd', \Backend\Console\WinterPasswd::class);
     }
 
     /**
@@ -143,48 +154,52 @@ class ServiceProvider extends ModuleServiceProvider
                 'backend.access_dashboard' => [
                     'label' => 'system::lang.permissions.view_the_dashboard',
                     'tab'   => 'system::lang.permissions.name',
+                    'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
                 ],
                 'backend.manage_default_dashboard' => [
                     'label' => 'system::lang.permissions.manage_default_dashboard',
                     'tab'   => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.manage_users' => [
                     'label' => 'system::lang.permissions.manage_other_administrators',
                     'tab'   => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.impersonate_users' => [
                     'label' => 'system::lang.permissions.impersonate_users',
                     'tab'   => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.manage_preferences' => [
                     'label' => 'system::lang.permissions.manage_preferences',
                     'tab'   => 'system::lang.permissions.name',
+                    'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
                 ],
                 'backend.manage_editor' => [
                     'label' => 'system::lang.permissions.manage_editor',
                     'tab'   => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.manage_own_editor' => [
                     'label' => 'system::lang.permissions.manage_own_editor',
                     'tab'   => 'system::lang.permissions.name',
+                    'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
                 ],
                 'backend.manage_branding' => [
                     'label' => 'system::lang.permissions.manage_branding',
                     'tab'   => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'media.manage_media' => [
                     'label' => 'backend::lang.permissions.manage_media',
                     'tab' => 'system::lang.permissions.name',
+                    'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
                 ],
                 'backend.allow_unsafe_markdown' => [
                     'label' => 'backend::lang.permissions.allow_unsafe_markdown',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
             ]);
             $manager->registerPermissionOwnerAlias('Winter.Backend', 'October.Backend');

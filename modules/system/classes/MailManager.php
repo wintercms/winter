@@ -1,12 +1,11 @@
 <?php namespace System\Classes;
 
-use Twig;
+use App;
 use Markdown;
 use System\Models\MailPartial;
 use System\Models\MailTemplate;
 use System\Models\MailBrandSetting;
 use System\Helpers\View as ViewHelper;
-use System\Twig\MailPartialTokenParser;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 /**
@@ -48,11 +47,6 @@ class MailManager
      * @var bool Internal marker for rendering mode
      */
     protected $isHtmlRenderMode = false;
-
-    /**
-     * @var bool Internal marker for booting custom twig extensions.
-     */
-    protected $isTwigStarted = false;
 
     /**
      * Same as `addContentToMailer` except with raw content.
@@ -172,11 +166,6 @@ class MailManager
     protected function addContentToMailerInternal($message, $html = null, $text = null, array $data = [])
     {
         /*
-         * Start twig transaction
-         */
-        $this->startTwig();
-
-        /*
          * Inject global view variables
          */
         $globalVars = ViewHelper::getGlobalVars();
@@ -187,18 +176,18 @@ class MailManager
         /*
          * Subject
          */
-        $swiftMessage = $message->getSwiftMessage();
+        $symfonyMessage = $message->getSymfonyMessage();
 
-        if (empty($swiftMessage->getSubject())) {
+        if (empty($symfonyMessage->getSubject())) {
             if ($html) {
-                $message->subject(Twig::parse($html->subject, $data));
+                $message->subject($this->renderTwig($html->subject, $data));
             } else if ($text) {
-                $message->subject(Twig::parse($text->subject, $data));
+                $message->subject($this->renderTwig($text->subject, $data));
             }
         }
 
         $data += [
-            'subject' => $swiftMessage->getSubject()
+            'subject' => $symfonyMessage->getSubject()
         ];
 
         /*
@@ -218,7 +207,6 @@ class MailManager
             $method = $html ? 'addPart' : 'setBody';
             $message->{$method}($this->renderTextTemplate($text, $data), 'text/plain');
         }
-
 
         /*
          * End twig transaction
@@ -266,7 +254,7 @@ class MailManager
             $html = $this->renderTwig($template->layout->content_html, [
                 'content' => $html,
                 'css' => $template->layout->content_css,
-                'brandCss' => $css
+                'brandCss' => $css,
             ] + (array) $data);
 
             $css .= PHP_EOL . $template->layout->content_css;
@@ -340,56 +328,13 @@ class MailManager
     }
 
     /**
-     * Internal helper for rendering Twig
+     * Internal helper for rendering Twig using the mailer Twig environment
      */
-    protected function renderTwig($content, $data = [])
+    protected function renderTwig(string $content, array $data = []): string
     {
-        if ($this->isTwigStarted) {
-            return Twig::parse($content, $data);
-        }
-
-        $this->startTwig();
-
-        $result = Twig::parse($content, $data);
-
-        $this->stopTwig();
-
-        return $result;
-    }
-
-    /**
-     * Temporarily registers mail based token parsers with Twig.
-     * @return void
-     */
-    protected function startTwig()
-    {
-        if ($this->isTwigStarted) {
-            return;
-        }
-
-        $this->isTwigStarted = true;
-
-        $markupManager = MarkupManager::instance();
-        $markupManager->beginTransaction();
-        $markupManager->registerTokenParsers([
-            new MailPartialTokenParser
-        ]);
-    }
-
-    /**
-     * Indicates that we are finished with Twig.
-     * @return void
-     */
-    protected function stopTwig()
-    {
-        if (!$this->isTwigStarted) {
-            return;
-        }
-
-        $markupManager = MarkupManager::instance();
-        $markupManager->endTransaction();
-
-        $this->isTwigStarted = false;
+        return App::make('twig.environment.mailer')
+                ->createTemplate($content)
+                ->render($data);
     }
 
     //

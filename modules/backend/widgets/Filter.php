@@ -352,7 +352,7 @@ class Filter extends WidgetBase
      * Returns the available options a scope can use, either from the
      * model relation or from a supplied array. Optionally apply a search
      * constraint to the options.
-     * @param  string $scope
+     * @param  \Backend\Classes\Filter $scope
      * @param  string $searchQuery
      * @return array
      */
@@ -396,6 +396,9 @@ class Filter extends WidgetBase
 
     /**
      * Looks at the model for defined scope items.
+     *
+     * @param \Backend\Classes\FilterScope $scope
+     * @param string|null $searchQuery
      * @return Collection
      */
     protected function getOptionsFromModel($scope, $searchQuery = null)
@@ -404,11 +407,8 @@ class Filter extends WidgetBase
 
         $query = $model->newQuery();
 
-        /*
-         * The 'group' scope has trouble supporting more than 500 records at a time
-         * @todo Introduce a more advanced version with robust list support.
-         */
-        $query->limit(500);
+        // @todo Implement lazy-loading of options
+        $query->limit(250);
 
         /**
          * @event backend.filter.extendQuery
@@ -434,7 +434,17 @@ class Filter extends WidgetBase
         $this->fireSystemEvent('backend.filter.extendQuery', [$query, $scope]);
 
         if (!$searchQuery) {
-            return $query->get();
+            // If scope has active filter(s) run additional query and merge it with base query
+            if ($scope->value) {
+                $modelIds = array_keys($scope->value);
+                $activeOptions = $model::findMany($modelIds);
+            }
+
+            $modelOptions = isset($activeOptions)
+                ? $query->get()->merge($activeOptions)
+                : $query->get();
+
+            return $modelOptions;
         }
 
         $searchFields = [$model->getKeyName(), $this->getScopeNameFrom($scope)];
