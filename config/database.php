@@ -58,7 +58,6 @@ return [
             'unix_socket'    => env('DB_SOCKET', ''),
             'url'            => env('DATABASE_URL'),
             'username'       => env('DB_USERNAME', 'winter'),
-            'varcharmax'     => 191,
         ],
 
         'pgsql' => [
