@@ -90,6 +90,8 @@ return [
     'Illuminate\Support\Debug\HtmlDumper' => Symfony\Component\VarDumper\Dumper\HtmlDumper::class,
 
     // Scaffolds were moved from the Storm library into their corresponding modules.
+    'Winter\Storm\Scaffold\GeneratorCommand'             => System\Console\BaseScaffoldCommand::class,
+    'October\Rain\Scaffold\GeneratorCommand'             => System\Console\BaseScaffoldCommand::class,
     'Winter\Storm\Scaffold\Console\CreateCommand'        => System\Console\CreateCommand::class,
     'Winter\Storm\Scaffold\Console\CreateModel'          => System\Console\CreateModel::class,
     'Winter\Storm\Scaffold\Console\CreatePlugin'         => System\Console\CreatePlugin::class,

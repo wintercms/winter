@@ -1,8 +1,8 @@
 <?php namespace System\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
+use System\Console\BaseScaffoldCommand;
 
-class CreatePlugin extends GeneratorCommand
+class CreatePlugin extends BaseScaffoldCommand
 {
     /**
      * @var string|null The default command name for lazy loading.
@@ -27,6 +27,11 @@ class CreatePlugin extends GeneratorCommand
     protected $type = 'Plugin';
 
     /**
+     * @var string The argument that the generated class name comes from
+     */
+    protected $nameFrom = 'plugin';
+
+    /**
      * @var array A mapping of stubs to generated files.
      */
     protected $stubs = [
@@ -44,22 +49,28 @@ class CreatePlugin extends GeneratorCommand
         /*
          * Extract the author and name from the plugin code
          */
-        $pluginCode = $this->argument('plugin');
-        $parts = explode('.', $pluginCode);
+        $parts = explode('.', $this->getNameInput());
 
-        if (count($parts) != 2) {
+        if (count($parts) !== 2) {
             $this->error('Invalid plugin name, either too many dots or not enough.');
             $this->error('Example name: AuthorName.PluginName');
             return;
         }
 
-
-        $pluginName = array_pop($parts);
-        $authorName = array_pop($parts);
+        $plugin = array_pop($parts);
+        $author = array_pop($parts);
 
         return [
-            'name'   => $pluginName,
-            'author' => $authorName,
+            'name'   => $plugin,
+            'author' => $author,
         ];
+    }
+
+    /**
+     * Don't suggest any values, this command is for creating plugins
+     */
+    public function suggestPluginValues(): array
+    {
+        return [];
     }
 }

@@ -1,21 +1,17 @@
 <?php namespace Backend\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
+use System\Console\BaseScaffoldCommand;
 use Winter\Storm\Support\Str;
 
-class CreateController extends GeneratorCommand
+class CreateController extends BaseScaffoldCommand
 {
     /**
-     * The default command name for lazy loading.
-     *
-     * @var string|null
+     * @var string|null The default command name for lazy loading.
      */
     protected static $defaultName = 'create:controller';
 
     /**
-     * The name and signature of this command.
-     *
-     * @var string
+     * @var string The name and signature of this command.
      */
     protected $signature = 'create:controller
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
@@ -24,23 +20,22 @@ class CreateController extends GeneratorCommand
         {--model= : Defines the model name to use. If not provided, the singular name of the controller is used.}';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * @var string The console command description.
      */
     protected $description = 'Creates a new controller.';
 
     /**
-     * The type of class being generated.
-     *
-     * @var string
+     * @var string The type of class being generated.
      */
     protected $type = 'Controller';
 
     /**
-     * A mapping of stub to generated file.
-     *
-     * @var array
+     * @var string The argument that the generated class name comes from
+     */
+    protected $nameFrom = 'controller';
+
+    /**
+     * @var array A mapping of stub to generated file.
      */
     protected $stubs = [
         'scaffold/controller/_list_toolbar.stub' => 'controllers/{{lower_name}}/_list_toolbar.htm',
@@ -60,13 +55,10 @@ class CreateController extends GeneratorCommand
      */
     protected function prepareVars()
     {
-        $pluginCode = $this->argument('plugin');
-
-        $parts = explode('.', $pluginCode);
+        $parts = explode('.', $this->getPluginIdentifier());
         $plugin = array_pop($parts);
         $author = array_pop($parts);
-
-        $controller = $this->argument('controller');
+        $name = $this->getNameInput();
 
         /*
          * Determine the model name to use,
@@ -74,14 +66,14 @@ class CreateController extends GeneratorCommand
          */
         $model = $this->option('model');
         if (!$model) {
-            $model = Str::singular($controller);
+            $model = Str::singular($name);
         }
 
         return [
-            'name' => $controller,
+            'name' => $name,
             'model' => $model,
             'author' => $author,
-            'plugin' => $plugin
+            'plugin' => $plugin,
         ];
     }
 }

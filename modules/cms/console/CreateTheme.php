@@ -1,9 +1,9 @@
 <?php namespace Cms\Console;
 
 use Exception;
-use Winter\Storm\Scaffold\GeneratorCommand;
+use System\Console\BaseScaffoldCommand;
 
-class CreateTheme extends GeneratorCommand
+class CreateTheme extends BaseScaffoldCommand
 {
     /**
      * The default command name for lazy loading.
@@ -36,6 +36,11 @@ class CreateTheme extends GeneratorCommand
     protected $type = 'Theme';
 
     /**
+     * @var string The argument that the generated class name comes from
+     */
+    protected $nameFrom = 'theme';
+
+    /**
      * A mapping of stub to generated file.
      *
      * @var array
@@ -65,7 +70,7 @@ class CreateTheme extends GeneratorCommand
         /*
          * Extract the author and name from the plugin code
          */
-        $code = str_slug($this->argument('theme'));
+        $code = str_slug($this->getNameInput());
 
         return [
             'code' => $code,

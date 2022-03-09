@@ -20,7 +20,7 @@ class Plugin extends PluginBase
             'name'        => '{{name}}',
             'description' => 'No description provided yet...',
             'author'      => '{{author}}',
-            'icon'        => 'icon-leaf'
+            'icon'        => 'icon-leaf',
         ];
     }
 
