@@ -15,7 +15,3 @@ $loader = new Winter\Storm\Support\ClassLoader(
 );
 
 $loader->register();
-$loader->addDirectories([
-    'modules',
-    'plugins'
-]);
