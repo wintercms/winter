@@ -556,7 +556,7 @@ class MediaLibrary
      * @param string $path Specifies a path to process.
      * @return string Returns a processed string.
      */
-    protected function getMediaPath($path)
+    public function getMediaPath($path)
     {
         return $this->storageFolder.$path;
     }
