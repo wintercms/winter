@@ -774,7 +774,7 @@ class MediaLibrary
      * communicating with the remote storage.
      * @return mixed Returns the storage disk object.
      */
-    protected function getStorageDisk()
+    public function getStorageDisk()
     {
         if ($this->storageDisk) {
             return $this->storageDisk;
