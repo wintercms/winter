@@ -53,6 +53,16 @@ class ThemeData extends Model
     protected static $instances = [];
 
     /**
+     * Constructor
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct();
+
+        $this->bindEvent('model.afterFetch', [$this, 'afterFetchHandler']);
+    }
+
+    /**
      * Before saving the model, strip dynamic attributes applied from config.
      * @return void
      */
@@ -109,7 +119,7 @@ class ThemeData extends Model
      * on form field definitions.
      * @return void
      */
-    public function afterFetch()
+    protected function afterFetchHandler()
     {
         $data = (array) $this->data + $this->getDefaultValues();
 
