@@ -556,7 +556,7 @@ class MediaLibrary
      * @param string $path Specifies a path to process.
      * @return string Returns a processed string.
      */
-    protected function getMediaPath($path)
+    public function getMediaPath($path)
     {
         return $this->storageFolder.$path;
     }
@@ -774,7 +774,7 @@ class MediaLibrary
      * communicating with the remote storage.
      * @return mixed Returns the storage disk object.
      */
-    protected function getStorageDisk()
+    public function getStorageDisk()
     {
         if ($this->storageDisk) {
             return $this->storageDisk;
