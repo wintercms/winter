@@ -121,14 +121,14 @@ class ThemeData extends Model
     {
         $data = (array) $this->data + $this->getDefaultValues();
 
-        /*
-         * Repeater form fields store arrays and must be jsonable.
-         */
         foreach ($this->getFormFields() as $id => $field) {
             if (!isset($field['type'])) {
                 continue;
             }
 
+            /*
+             * Repeater form fields store arrays and must be jsonable.
+             */
             if ($field['type'] === 'repeater') {
                 $this->jsonable[] = $id;
             }
