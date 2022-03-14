@@ -53,12 +53,10 @@ class ThemeData extends Model
     protected static $instances = [];
 
     /**
-     * Constructor
+     * after the model is booted, bind to 'model.afterFetch' event
      */
-    public function __construct(array $attributes = [])
+    public function afterBoot()
     {
-        parent::__construct();
-
         $this->bindEvent('model.afterFetch', [$this, 'afterFetchHandler']);
     }
 
