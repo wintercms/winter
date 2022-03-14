@@ -24,7 +24,12 @@
     $scripts = [
         Backend::skinAsset('assets/js/vendor/jquery.min.js'),
         Backend::skinAsset('assets/js/vendor/jquery-migrate.min.js'),
-        Url::asset('modules/system/assets/js/framework.js')
+        Url::asset('modules/system/assets/js/framework.js'),
+        Url::asset('modules/system/assets/js/snowboard/build/snowboard.base.debug.js'),
+        Url::asset('modules/system/assets/js/snowboard/build/snowboard.request.js'),
+        Url::asset('modules/system/assets/js/snowboard/build/snowboard.extras.js'),
+        Url::asset('modules/system/assets/ui/widgets/base/build/base.js'),
+        Url::asset('modules/system/assets/ui/widgets/inspector/build/inspector.js'),
     ];
     if (Config::get('develop.decompileBackendAssets', false)) {
         $scripts = array_merge($scripts, Backend::decompileAsset('modules/system/assets/ui/storm.js'));
