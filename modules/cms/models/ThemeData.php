@@ -127,8 +127,7 @@ class ThemeData extends Model
             elseif ($field['type'] === 'fileupload') {
                 if (array_get($field, 'multiple', false)) {
                     $this->attachMany[$id] = File::class;
-                }
-                else {
+                } else {
                     $this->attachOne[$id] = File::class;
                 }
                 unset($data[$id]);
