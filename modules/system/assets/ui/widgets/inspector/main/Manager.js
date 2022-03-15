@@ -1,3 +1,6 @@
+import { createApp } from 'vue';
+import Inspector from './Inspector.vue';
+
 /**
  * Inspector manager.
  *
@@ -6,8 +9,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class Manager extends Snowboard.Singleton
-{
+export default class Manager extends Snowboard.Singleton {
     /**
      * Constructor.
      *
@@ -17,6 +19,7 @@ export default class Manager extends Snowboard.Singleton
         super(snowboard);
 
         this.inspectableElements = [];
+        this.currentInspector = null;
     }
 
     /**
@@ -36,6 +39,7 @@ export default class Manager extends Snowboard.Singleton
     listens() {
         return {
             ready: 'ready',
+            'overlay.clicked': 'hideInspector',
         };
     }
 
@@ -65,6 +69,8 @@ export default class Manager extends Snowboard.Singleton
         window.document.querySelectorAll('[data-inspectable]').forEach((element) => {
             const inspectorData = {
                 element,
+                inspectorElement: null,
+                inspectorVue: null,
                 container: this.findInspectableContainer(element),
                 handler: (event) => this.inspectableClick.call(this, event, inspectorData),
                 title: element.dataset.inspectorTitle || 'Inspector',
@@ -91,8 +97,32 @@ export default class Manager extends Snowboard.Singleton
     }
 
     createInspector(inspector) {
-        console.log(this.snowboard);
-        this.snowboard['system.ui.overlay']().toggle();
+        // Create a new inspector <div> to house the Vue instance
+        inspector.inspectorElement = document.createElement('div');
+        document.body.appendChild(inspector.inspectorElement);
+        this.currentInspector = inspector;
+
+        // Create Vue instance and mount it to the above <div>
+        inspector.inspectorVue = createApp(Inspector, {
+            snowboard: this.snowboard,
+            inspectedElement: inspector.element,
+            title: inspector.title,
+            description: inspector.description,
+            placement: inspector.placement,
+            fallbackPlacement: inspector.fallbackPlacement,
+            offsetX: inspector.offset.x,
+            offsetY: inspector.offset.y,
+        });
+        inspector.inspectorVue.mount(inspector.inspectorElement);
+    }
+
+    hideInspector() {
+        if (!this.currentInspector) {
+            return;
+        }
+
+        this.currentInspector.inspectorVue.unmount();
+        document.body.removeChild(this.currentInspector.inspectorElement);
     }
 
     inspectableClick(event, inspector) {

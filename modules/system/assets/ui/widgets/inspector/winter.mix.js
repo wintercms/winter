@@ -10,4 +10,4 @@ mix
             extractComments: false,
         },
     })
-    .js('./inspector.js', './build/inspector.js');
+    .js('./inspector.js', './build/inspector.js').vue({ version: 3 });
