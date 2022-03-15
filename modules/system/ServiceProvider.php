@@ -310,6 +310,7 @@ class ServiceProvider extends ModuleServiceProvider
         App::singleton('twig.environment.mailer', function ($app) {
             $twig = MarkupManager::makeBaseTwigEnvironment();
             $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
+            return $twig;
         });
 
         // Register .htm extension for Twig views
