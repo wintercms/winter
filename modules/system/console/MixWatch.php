@@ -86,7 +86,7 @@ class MixWatch extends MixCompile
 
         $config = str_replace(
             ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%'],
-            [$basePath, 'mix._api.disableNotifications();', $mixJsPath, plugins_path(), base_path()],
+            [$basePath, 'mix.api.disableNotifications();', $mixJsPath, plugins_path(), base_path()],
             $fixture
         );
 
