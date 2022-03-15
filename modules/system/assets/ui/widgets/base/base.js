@@ -5,5 +5,5 @@ if (window.Snowboard === undefined) {
 }
 
 ((Snowboard) => {
-    Snowboard.addPlugin('system.ui.overlay', Overlay);
+    Snowboard.addPlugin('overlay', Overlay);
 })(window.Snowboard);
