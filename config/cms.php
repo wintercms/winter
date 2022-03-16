@@ -117,7 +117,11 @@ return [
     |
     */
 
-    'loadModules' => ['System', 'Backend', 'Cms'],
+    'loadModules' => [
+        'System',
+        'Backend',
+        'Cms',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -312,26 +316,22 @@ return [
     */
 
     'storage' => [
-
         'uploads' => [
-            'disk'            => 'local',
-            'folder'          => 'uploads',
-            'path'            => '/storage/app/uploads',
+            'disk' => 'local',
+            'folder' => 'uploads',
+            'path' => '/storage/app/uploads',
             'temporaryUrlTTL' => 3600,
         ],
-
         'media' => [
-            'disk'   => 'local',
+            'disk' => 'local',
             'folder' => 'media',
-            'path'   => '/storage/app/media',
+            'path' => '/storage/app/media',
         ],
-
         'resized' => [
-            'disk'   => 'local',
+            'disk' => 'local',
             'folder' => 'resized',
-            'path'   => '/storage/app/resized',
+            'path' => '/storage/app/resized',
         ],
-
     ],
 
     /*
@@ -371,7 +371,10 @@ return [
     |
     */
 
-    'defaultMask' => ['file' => null, 'folder' => null],
+    'defaultMask' => [
+        'file' => null,
+        'folder' => null,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -466,5 +469,4 @@ return [
     */
 
     'enableBackendServiceWorkers' => false,
-
 ];

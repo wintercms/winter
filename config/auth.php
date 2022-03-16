@@ -1,8 +1,8 @@
 <?php
 
 return [
-
     'throttle' => [
+
         /*
         |--------------------------------------------------------------------------
         | Enable throttling of Backend authentication attempts
@@ -38,5 +38,4 @@ return [
 
         'suspensionTime' => 15,
     ],
-
 ];

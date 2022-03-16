@@ -29,39 +29,32 @@ return [
     */
 
     'connections' => [
-
         'pusher' => [
-            'app_id'         => env('PUSHER_APP_ID'),
+            'app_id' => env('PUSHER_APP_ID'),
             'client_options' => [
                 // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
             ],
-            'driver'         => 'pusher',
-            'key'            => env('PUSHER_APP_KEY'),
-            'options'        => [
+            'driver' => 'pusher',
+            'key' => env('PUSHER_APP_KEY'),
+            'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS'  => true,
+                'useTLS' => true,
             ],
-            'secret'         => env('PUSHER_APP_SECRET'),
+            'secret' => env('PUSHER_APP_SECRET'),
         ],
-
         'ably' => [
             'driver' => 'ably',
-            'key'    => env('ABLY_KEY'),
+            'key' => env('ABLY_KEY'),
         ],
-
         'redis' => [
             'connection' => 'default',
-            'driver'     => 'redis',
+            'driver' => 'redis',
         ],
-
         'log' => [
             'driver' => 'log',
         ],
-
         'null' => [
             'driver' => 'null',
         ],
-
     ],
-
 ];
