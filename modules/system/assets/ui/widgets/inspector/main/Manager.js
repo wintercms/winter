@@ -69,6 +69,7 @@ export default class Manager extends Snowboard.Singleton {
         window.document.querySelectorAll('[data-inspectable]').forEach((element) => {
             const inspectorData = {
                 element,
+                form: this.findForm(element),
                 inspectorElement: null,
                 inspectorVue: null,
                 container: this.findInspectableContainer(element),
@@ -106,12 +107,15 @@ export default class Manager extends Snowboard.Singleton {
         inspector.inspectorVue = createApp(Inspector, {
             snowboard: this.snowboard,
             inspectedElement: inspector.element,
+            form: inspector.form,
             title: inspector.title,
             description: inspector.description,
             placement: inspector.placement,
             fallbackPlacement: inspector.fallbackPlacement,
             offsetX: inspector.offset.x,
             offsetY: inspector.offset.y,
+            hideFn: () => this.hideInspector(),
+            config: inspector.config,
         });
         inspector.inspectorVue.mount(inspector.inspectorElement);
     }
@@ -123,10 +127,15 @@ export default class Manager extends Snowboard.Singleton {
 
         this.currentInspector.inspectorVue.unmount();
         document.body.removeChild(this.currentInspector.inspectorElement);
+        this.currentInspector = null;
     }
 
     inspectableClick(event, inspector) {
         event.preventDefault();
+
+        if (inspector === this.currentInspector) {
+            return;
+        }
 
         this.createInspector(inspector);
     }
@@ -149,5 +158,15 @@ export default class Manager extends Snowboard.Singleton {
         }
 
         return null;
+    }
+
+    /**
+     * Finds the form that the element belongs to.
+     *
+     * @param {HTMLElement} element
+     * @returns {HTMLElement|undefined}
+     */
+    findForm(element) {
+        return element.closest('form');
     }
 }

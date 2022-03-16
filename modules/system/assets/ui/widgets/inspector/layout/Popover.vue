@@ -12,6 +12,10 @@
             <header>
                 <slot name="title"></slot>
                 <slot name="description"></slot>
+                <div
+                    class="inspector-hide wn-icon-remove"
+                    @click.stop="hideFn"
+                ></div>
             </header>
         </div>
     </transition>
@@ -20,12 +24,20 @@
 <script>
 export default {
     props: {
+        shown: {
+            type: Boolean,
+            default: false,
+        },
         snowboard: {
             type: Object,
             required: true,
         },
         inspectedElement: {
             type: HTMLElement,
+            required: true,
+        },
+        hideFn: {
+            type: Function,
             required: true,
         },
         placement: {
@@ -64,7 +76,6 @@ export default {
     },
     data() {
         return {
-            shown: false,
             top: 0,
             left: 0,
             inspectedElementStyle: {
@@ -93,10 +104,8 @@ export default {
         this.snowboard.overlay().show();
         this.calculatePosition();
         this.highlightInspectedElement();
-        this.shown = true;
     },
     unmounted() {
-        this.shown = false;
         this.snowboard.overlay().hide();
     },
     methods: {
@@ -122,6 +131,7 @@ export default {
 
 // VARIABLES
 @inpsector-popover-width: 340px;
+@inspector-border-radius: @border-radius-base;
 
 @inspector-bg: @body-bg;
 
@@ -132,14 +142,12 @@ export default {
 .inspector.popover-layout {
     position: absolute;
     width: @inpsector-popover-width;
-    min-height: 200px;
     top: 0;
     left: 0;
     margin-top: 15px;
     z-index: 1001;
     box-shadow: @overlay-box-shadow;
-    border-radius: @border-radius-base;
-    background: @inspector-bg;
+    border-radius: @inspector-border-radius;
 
     .arrow {
         position: absolute;
@@ -152,11 +160,12 @@ export default {
     }
 
     header {
-        padding: @padding-large-vertical @padding-large-horizontal;
+        padding: @padding-large-vertical (@padding-large-horizontal + 30px) @padding-large-vertical @padding-large-horizontal;
         background: @inspector-header-bg;
         color: @inspector-header-fg;
-        border-top-left-radius: @border-radius-base;
-        border-top-right-radius: @border-radius-base;
+        border-bottom: 1px solid darken(@inspector-header-bg, 5%);
+        border-top-left-radius: @inspector-border-radius;
+        border-top-right-radius: @inspector-border-radius;
 
         .inspector-title {
             font-weight: bold;
@@ -164,6 +173,36 @@ export default {
 
         .inspector-description {
             font-size: @font-size-small;
+            margin-top: -3px;
+        }
+
+        .inspector-hide {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background: darken(@inspector-header-bg, 8%);
+            border-top-right-radius: @inspector-border-radius;
+            border-bottom-left-radius: @inspector-border-radius;
+            cursor: pointer;
+            transition: background-color 175ms ease;
+
+            &::before {
+                transition: opacity 175ms ease;
+                opacity: 0.7;
+                margin-right: 0;
+            }
+
+            &:hover {
+                background: darken(@inspector-header-bg, 12%);
+
+                &::before {
+                    opacity: 1;
+                }
+            }
         }
     }
 }
