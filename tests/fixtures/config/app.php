@@ -3,7 +3,7 @@
 
 return [
     'debug' => true,
-    'url' => 'https://localhost',
+    'url' => 'https://env-test.localhost',
     'key' => 'CHANGE_ME!!!!!!!!!!!!!!!!!!!!!!!',
     'timezone' => 'UTC',
 ];
