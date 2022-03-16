@@ -1,7 +1,7 @@
 <?php
 
 return [
-    
+
     /*
     |--------------------------------------------------------------------------
     | Cookies that should not be encrypted
@@ -13,6 +13,9 @@ return [
     | via cookies, and vice versa.
     |
     */
-    
-    'unencryptedCookies' => [],
+
+    'unencryptedCookies' => [
+        // 'my_cookie',
+    ],
+
 ];

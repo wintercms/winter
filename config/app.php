@@ -1,7 +1,7 @@
 <?php
 
 return [
-    
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -15,9 +15,9 @@ return [
     | of this page. Otherwise a default error page is shown.
     |
     */
-    
+
     'debug' => env('APP_DEBUG', true),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
@@ -28,9 +28,9 @@ return [
     | any other location as required by the application or its packages.
     |
     */
-    
+
     'name' => env('APP_NAME', 'Winter CMS'),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Application URL
@@ -41,9 +41,9 @@ return [
     | your application so that it is used when running Artisan tasks.
     |
     */
-    
+
     'url' => env('APP_URL', 'http://localhost'),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Asset URL
@@ -57,9 +57,9 @@ return [
     |     'asset_url' => 'https://cdn.example.com/',
     |
     */
-    
+
     'asset_url' => env('ASSET_URL', null),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Trusted hosts
@@ -87,9 +87,9 @@ return [
     | NOTE: Even when set to `false`, this functionality is explicitly enabled
     | on the Backend password reset flow for security reasons.
     */
-    
+
     'trustedHosts' => false,
-    
+
     /*
     |--------------------------------------------------------------------------
     | Trusted proxies
@@ -115,9 +115,9 @@ return [
     |      'trustedProxies' => '192.168.1.1, 192.168.1.2'
     |      'trustedProxies' => ['192.168.1.1', '192.168.1.2']
     */
-    
+
     'trustedProxies' => null,
-    
+
     /*
     |--------------------------------------------------------------------------
     | Trusted proxy headers
@@ -150,9 +150,9 @@ return [
     |
     |   - Amazon ELB users should always use the "HEADER_X_FORWARDED_AWS_ELB" option.
     */
-    
+
     'trustedProxyHeaders' => 'HEADER_X_FORWARDED_ALL',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
@@ -171,9 +171,9 @@ return [
     | to display dates & times.
     |
     */
-    
+
     'timezone' => 'UTC',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
@@ -190,9 +190,9 @@ return [
     | Backend\Models\Preference->getLocaleOptions()
     |
     */
-    
+
     'locale' => 'en',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Application Fallback Locale
@@ -203,9 +203,9 @@ return [
     | the language folders that are provided through your application.
     |
     */
-    
+
     'fallback_locale' => 'en',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Faker Locale
@@ -216,9 +216,9 @@ return [
     | localized telephone numbers, street address information and more.
     |
     */
-    
+
     'faker_locale' => 'en_US',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Encryption Key
@@ -229,10 +229,11 @@ return [
     | will not be safe. Please do this before deploying an application!
     |
     */
-    
+
     'key' => env('APP_KEY'),
+
     'cipher' => 'AES-256-CBC',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
@@ -243,12 +244,14 @@ return [
     | this array to grant expanded functionality to your applications.
     |
     */
-    
-    'providers' => array_merge(include base_path('modules/system/providers.php'), [
+
+    'providers' => array_merge(include(base_path('modules/system/providers.php')), [
+
         // 'Illuminate\Html\HtmlServiceProvider', // Example
-        'System\\ServiceProvider',
+
+        'System\ServiceProvider',
     ]),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Load automatically discovered packages
@@ -266,9 +269,9 @@ return [
     | even if discovery is disabled.
     |
     */
-    
+
     'loadDiscoveredPackages' => false,
-    
+
     /*
     |--------------------------------------------------------------------------
     | Class Aliases
@@ -279,6 +282,11 @@ return [
     | the aliases are "lazy" loaded so they don't hinder performance.
     |
     */
-    
-    'aliases' => array_merge(include base_path('modules/system/aliases.php'), []),
+
+    'aliases' => array_merge(include(base_path('modules/system/aliases.php')), [
+
+        // 'Str' => 'Illuminate\Support\Str', // Example
+
+    ]),
+
 ];

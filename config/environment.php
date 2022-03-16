@@ -1,7 +1,7 @@
 <?php
 
 return [
-    
+
     /*
     |--------------------------------------------------------------------------
     | Default Application Environment
@@ -12,9 +12,9 @@ return [
     | services your application utilizes. Set this in your ".env" file.
     |
     */
-    
+
     'default' => 'development',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Environment Multitenancy
@@ -25,8 +25,11 @@ return [
     | different configuration, such as database and theme, per hostname.
     |
     */
-    
+
     'hosts' => [
+
         'localhost' => 'dev',
+
     ],
+
 ];

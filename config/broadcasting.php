@@ -1,7 +1,7 @@
 <?php
 
 return [
-    
+
     /*
     |--------------------------------------------------------------------------
     | Default Broadcaster
@@ -14,9 +14,9 @@ return [
     | Supported: "pusher", "ably", "redis", "log", "null"
     |
     */
-    
+
     'default' => env('BROADCAST_DRIVER', 'null'),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Broadcast Connections
@@ -27,32 +27,41 @@ return [
     | each available type of connection are provided inside this array.
     |
     */
-    
+
     'connections' => [
+
         'pusher' => [
-            'app_id' => env('PUSHER_APP_ID'),
-            'client_options' => [],
-            'driver' => 'pusher',
-            'key' => env('PUSHER_APP_KEY'),
-            'options' => [
-                'cluster' => env('PUSHER_APP_CLUSTER'),
-                'useTLS' => true,
+            'app_id'         => env('PUSHER_APP_ID'),
+            'client_options' => [
+                // Guzzle client options: https://docs.guzzlephp.org/en/stable/request-options.html
             ],
-            'secret' => env('PUSHER_APP_SECRET'),
+            'driver'         => 'pusher',
+            'key'            => env('PUSHER_APP_KEY'),
+            'options'        => [
+                'cluster' => env('PUSHER_APP_CLUSTER'),
+                'useTLS'  => true,
+            ],
+            'secret'         => env('PUSHER_APP_SECRET'),
         ],
+
         'ably' => [
             'driver' => 'ably',
-            'key' => env('ABLY_KEY'),
+            'key'    => env('ABLY_KEY'),
         ],
+
         'redis' => [
             'connection' => 'default',
-            'driver' => 'redis',
+            'driver'     => 'redis',
         ],
+
         'log' => [
             'driver' => 'log',
         ],
+
         'null' => [
             'driver' => 'null',
         ],
+
     ],
+
 ];

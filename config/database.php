@@ -1,7 +1,7 @@
 <?php
 
 return [
-    
+
     /*
     |--------------------------------------------------------------------------
     | Default Database Connection Name
@@ -12,9 +12,9 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
-    
+
     'default' => env('DB_CONNECTION', 'mysql'),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Database Connections
@@ -29,63 +29,68 @@ return [
     | choice installed on your machine before you begin development.
     |
     */
-    
+
     'connections' => [
+
         'sqlite' => [
-            'database' => env('DB_DATABASE', storage_path('database.sqlite')),
-            'driver' => 'sqlite',
+            'database'                => env('DB_DATABASE', storage_path('database.sqlite')),
+            'driver'                  => 'sqlite',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
-            'prefix' => '',
-            'url' => env('DATABASE_URL'),
+            'prefix'                  => '',
+            'url'                     => env('DATABASE_URL'),
         ],
+
         'mysql' => [
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'database' => env('DB_DATABASE', 'winter'),
-            'driver' => 'mysql',
-            'engine' => 'InnoDB',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
+            'charset'        => 'utf8mb4',
+            'collation'      => 'utf8mb4_unicode_ci',
+            'database'       => env('DB_DATABASE', 'winter'),
+            'driver'         => 'mysql',
+            'engine'         => 'InnoDB',
+            'host'           => env('DB_HOST', '127.0.0.1'),
+            'options'        => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
-            'password' => env('DB_PASSWORD', ''),
-            'port' => env('DB_PORT', '3306'),
-            'prefix' => '',
+            'password'       => env('DB_PASSWORD', ''),
+            'port'           => env('DB_PORT', '3306'),
+            'prefix'         => '',
             'prefix_indexes' => true,
-            'strict' => true,
-            'unix_socket' => env('DB_SOCKET', ''),
-            'url' => env('DATABASE_URL'),
-            'username' => env('DB_USERNAME', 'winter'),
-            'varcharmax' => 191,
+            'strict'         => true,
+            'unix_socket'    => env('DB_SOCKET', ''),
+            'url'            => env('DATABASE_URL'),
+            'username'       => env('DB_USERNAME', 'winter'),
+            'varcharmax'     => 191,
         ],
+
         'pgsql' => [
-            'charset' => 'utf8',
-            'database' => env('DB_DATABASE', 'winter'),
-            'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'password' => env('DB_PASSWORD', ''),
-            'port' => env('DB_PORT', '5432'),
-            'prefix' => '',
+            'charset'        => 'utf8',
+            'database'       => env('DB_DATABASE', 'winter'),
+            'driver'         => 'pgsql',
+            'host'           => env('DB_HOST', '127.0.0.1'),
+            'password'       => env('DB_PASSWORD', ''),
+            'port'           => env('DB_PORT', '5432'),
+            'prefix'         => '',
             'prefix_indexes' => true,
-            'search_path' => 'public',
-            'sslmode' => 'prefer',
-            'url' => env('DATABASE_URL'),
-            'username' => env('DB_USERNAME', 'winter'),
+            'search_path'    => 'public',
+            'sslmode'        => 'prefer',
+            'url'            => env('DATABASE_URL'),
+            'username'       => env('DB_USERNAME', 'winter'),
         ],
+
         'sqlsrv' => [
-            'charset' => 'utf8',
-            'database' => env('DB_DATABASE', 'winter'),
-            'driver' => 'sqlsrv',
-            'host' => env('DB_HOST', '127.0.0.1'),
-            'password' => env('DB_PASSWORD', ''),
-            'port' => env('DB_PORT', '1433'),
-            'prefix' => '',
+            'charset'        => 'utf8',
+            'database'       => env('DB_DATABASE', 'winter'),
+            'driver'         => 'sqlsrv',
+            'host'           => env('DB_HOST', '127.0.0.1'),
+            'password'       => env('DB_PASSWORD', ''),
+            'port'           => env('DB_PORT', '1433'),
+            'prefix'         => '',
             'prefix_indexes' => true,
-            'url' => env('DATABASE_URL'),
-            'username' => env('DB_USERNAME', 'winter'),
+            'url'            => env('DATABASE_URL'),
+            'username'       => env('DB_USERNAME', 'winter'),
         ],
+
     ],
-    
+
     /*
     |--------------------------------------------------------------------------
     | Migration Repository Table
@@ -96,9 +101,9 @@ return [
     | the migrations on disk haven't actually been run in the database.
     |
     */
-    
+
     'migrations' => 'migrations',
-    
+
     /*
     |--------------------------------------------------------------------------
     | Redis Databases
@@ -109,26 +114,32 @@ return [
     | such as APC or Memcached. Winter makes it easy to dig right in.
     |
     */
-    
+
     'redis' => [
+
         'client' => env('REDIS_CLIENT', 'phpredis'),
+
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
-            'prefix' => env('REDIS_PREFIX', str_slug(env('APP_NAME', 'winter'), '_') . '_database_'),
+            'prefix'  => env('REDIS_PREFIX', str_slug(env('APP_NAME', 'winter'), '_').'_database_'),
         ],
+
         'default' => [
             'database' => env('REDIS_DB', '0'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'host'     => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD'),
-            'port' => env('REDIS_PORT', '6379'),
-            'url' => env('REDIS_URL'),
+            'port'     => env('REDIS_PORT', '6379'),
+            'url'      => env('REDIS_URL'),
         ],
+
         'cache' => [
             'database' => env('REDIS_CACHE_DB', '1'),
-            'host' => env('REDIS_HOST', '127.0.0.1'),
+            'host'     => env('REDIS_HOST', '127.0.0.1'),
             'password' => env('REDIS_PASSWORD'),
-            'port' => env('REDIS_PORT', '6379'),
-            'url' => env('REDIS_URL'),
+            'port'     => env('REDIS_PORT', '6379'),
+            'url'      => env('REDIS_URL'),
         ],
+
     ],
+
 ];
