@@ -6,7 +6,6 @@ use Block;
 use SystemException;
 use Exception;
 use Throwable;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Config;
 
 /**
@@ -246,11 +245,8 @@ trait ViewMaker
         try {
             include $filePath;
         }
-        catch (Exception $e) {
-            $this->handleViewException($e, $obLevel);
-        }
         catch (Throwable $e) {
-            $this->handleViewException(new FatalThrowableError($e), $obLevel);
+            $this->handleViewException($e, $obLevel);
         }
 
         return ob_get_clean();
