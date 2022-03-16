@@ -249,7 +249,7 @@ return [
 
         // 'Illuminate\Html\HtmlServiceProvider', // Example
 
-        'System\ServiceProvider',
+        System\ServiceProvider::class,
     ]),
 
     /*

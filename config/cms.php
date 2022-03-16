@@ -91,7 +91,7 @@ return [
     |
     */
 
-    'backendSkin' => 'Backend\Skins\Standard',
+    'backendSkin' => \Backend\Skins\Standard::class,
 
     /*
     |--------------------------------------------------------------------------
