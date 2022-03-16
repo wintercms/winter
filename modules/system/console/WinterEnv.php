@@ -1,8 +1,8 @@
 <?php namespace System\Console;
 
 use App;
-use Illuminate\Console\Command;
 use Winter\Storm\Parse\EnvFile;
+use Winter\Storm\Console\Command;
 use Winter\Storm\Parse\PHP\ArrayFile;
 
 /**
@@ -51,12 +51,13 @@ class WinterEnv extends Command
 
     /**
      * Execute the console command.
-     * @return int
      */
     public function handle(): int
     {
-        if (file_exists($this->laravel->environmentFilePath())) {
-            $this->error('.env file already exists (' . $this->laravel->environmentFilePath() . ')');
+        if (
+            file_exists($this->laravel->environmentFilePath())
+            && !$this->confirmToProceed()
+        ) {
             return 1;
         }
 
@@ -66,6 +67,34 @@ class WinterEnv extends Command
         $this->info('.env configuration file has been created.');
 
         return 0;
+    }
+
+    /**
+     * Confirm before proceeding with the action.
+     *
+     * This method only asks for confirmation in production.
+     *
+     * @param  string  $warning
+     * @param  \Closure|bool|null  $callback
+     * @return bool
+     */
+    public function confirmToProceed($warning = 'Application In Production!', $callback = null)
+    {
+        if ($this->hasOption('force') && $this->option('force')) {
+            return true;
+        }
+
+        $this->alert('The .env file already exists. Proceeding may overwrite some values!');
+
+        $confirmed = $this->confirm('Do you really wish to run this command?');
+
+        if (!$confirmed) {
+            $this->comment('Command Canceled!');
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -96,6 +125,15 @@ class WinterEnv extends Command
                         $env->set($dbEnvKey, config(join('.', [$config, 'connections', $default, $dbConfigKey])));
                     }
                 }
+
+                if ($config === 'mail' && $envKey === 'MAIL_MAILER') {
+                    $default = config('mail.default');
+                    $mailConfig = $this->mailConfig()[$default] ?? [];
+
+                    foreach ($mailConfig as $mailEnvKey => $mailConfigKey) {
+                        $env->set($mailEnvKey, config(join('.', [$config, 'mailers', $default, $mailConfigKey])));
+                    }
+                }
             }
             $env->addEmptyLine();
         }
@@ -122,6 +160,17 @@ class WinterEnv extends Command
                             $arrayFile->set(
                                 $path,
                                 $arrayFile->function('env', $this->getKeyValuePair($dbEnvKey, $config . '.' . $path))
+                            );
+                        }
+                    }
+                }
+                if ($config === 'mail' && $envKey === 'MAIL_MAILER') {
+                    foreach ($this->mailConfig() as $mailer => $keys) {
+                        foreach ($keys as $mailEnvKey => $mailConfigKey) {
+                            $path = sprintf('mailers.%s.%s', $mailer, $mailConfigKey);
+                            $arrayFile->set(
+                                $path,
+                                $arrayFile->function('env', $this->getKeyValuePair($mailEnvKey, $config . '.' . $path))
                             );
                         }
                     }
@@ -168,11 +217,6 @@ class WinterEnv extends Command
             ],
             'mail' => [
                 'MAIL_MAILER' => 'default',
-                'MAIL_HOST' => 'host',
-                'MAIL_PORT' => 'port',
-                'MAIL_USERNAME' => 'username',
-                'MAIL_PASSWORD' => 'password',
-                'MAIL_ENCRYPTION' => 'encryption',
             ],
             'cms' => [
                 'ROUTES_CACHE' => 'enableRoutesCache',
@@ -212,6 +256,29 @@ class WinterEnv extends Command
                 'REDIS_HOST' => 'host',
                 'REDIS_PASSWORD' => 'password',
                 'REDIS_PORT' => 'port',
+            ],
+        ];
+    }
+
+    /**
+     * Returns a map of env keys to php config keys for mail configs
+     * @return array
+     */
+    protected function mailConfig(): array
+    {
+        return [
+            'smtp' => [
+                'MAIL_ENCRYPTION' => 'encryption',
+                'MAIL_HOST' => 'host',
+                'MAIL_PASSWORD' => 'password',
+                'MAIL_PORT' => 'port',
+                'MAIL_USERNAME' => 'username',
+            ],
+            'sendmail' => [
+                'MAIL_SENDMAIL_PATH' => 'path',
+            ],
+            'log' => [
+                'MAIL_LOG_CHANNEL' => 'channel',
             ],
         ];
     }
