@@ -96,13 +96,7 @@ class PluginVersion extends Model
                 }
             }
 
-            if ($this->is_disabled) {
-                $manager->disablePlugin($this->code, true);
-            }
-            else {
-                $manager->enablePlugin($this->code, true);
-            }
-
+            // @TODO: Determine what flags should trigger this and how to identify them here
             $this->disabledBySystem = $pluginObj->disabled;
 
             if (($configDisabled = Config::get('cms.disablePlugins')) && is_array($configDisabled)) {
@@ -118,10 +112,10 @@ class PluginVersion extends Model
 
     /**
      * Returns true if the plugin should be updated by the system.
-     * @return bool
      */
-    public function getIsUpdatableAttribute()
+    public function getIsUpdatableAttribute(): bool
     {
+        // @TODO: Decide which flags prevent a plugin from being updated
         return !$this->is_disabled && !$this->disabledBySystem && !$this->disabledByConfig;
     }
 

@@ -448,4 +448,26 @@ class PluginBase extends ServiceProviderBase
 
         return $this->version = trim(key(array_slice($versionInfo, -1, 1)));
     }
+
+    /**
+     * Verifies the plugin's dependencies are present and enabled
+     */
+    public function checkDependencies(): bool
+    {
+        $manager = PluginManager::instance();
+        $required = $manager->getDependencies($this);
+        if (empty($required)) {
+            return true;
+        }
+
+        foreach ($required as $require) {
+            $requiredPlugin = $manager->findByIdentifier($require);
+
+            if (!$requiredPlugin || $manager->isDisabled($requiredPlugin)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

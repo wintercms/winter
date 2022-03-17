@@ -7,9 +7,9 @@ use Log;
 use File;
 use Lang;
 use View;
+use Cache;
 use Config;
 use Schema;
-use Storage;
 use SystemException;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
@@ -26,15 +26,23 @@ class PluginManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
 
+    public const DISABLED_MISSING = 'disabled-missing';
+    public const DISABLED_REQUEST = 'disabled-request';
+    public const DISABLED_BY_USER = 'disabled-user';
+    public const DISABLED_REPLACED = 'disabled-replaced';
+    public const DISABLED_REPLACEMENT_FAILED = 'disabled-replacement-failed';
+    public const DISABLED_BY_CONFIG = 'disabled-config';
+    public const DISABLED_MISSING_DEPENDENCIES = 'disabled-dependencies';
+
     /**
      * The application instance, since Plugins are an extension of a Service Provider
      */
     protected $app;
 
     /**
-     * @var array Container array used for storing plugin information objects.
+     * @var PluginBase[] Container array used for storing plugin information objects.
      */
-    protected $plugins;
+    protected $plugins = [];
 
     /**
      * @var array A map of plugins and their directory paths.
@@ -67,9 +75,9 @@ class PluginManager
     protected $booted = false;
 
     /**
-     * @var string Path to the JSON encoded file containing the disabled plugins.
+     * @var string Cache key for the disabled plugin data
      */
-    protected $metaFile;
+    protected $disabledCacheKey = 'system-plugins-disabled';
 
     /**
      * @var array Array of disabled plugins
@@ -91,26 +99,12 @@ class PluginManager
      */
     protected function init()
     {
-        $this->bindContainerObjects();
-        $this->metaFile = 'cms/disabled.json';
+        $this->app = App::make('app');
         $this->loadDisabled();
         $this->loadPlugins();
-
-        if ($this->app->runningInBackend()) {
-            $this->loadDependencies();
-        }
+        $this->loadDependencies();
 
         $this->registerReplacedPlugins();
-    }
-
-    /**
-     * These objects are "soft singletons" and may be lost when
-     * the IoC container reboots. This provides a way to rebuild
-     * for the purposes of unit testing.
-     */
-    public function bindContainerObjects()
-    {
-        $this->app = App::make('app');
     }
 
     /**
@@ -157,7 +151,7 @@ class PluginManager
                 return;
             }
 
-            $classObj = new $className($this->app);
+            $pluginObj = new $className($this->app);
         } catch (\Throwable $e) {
             Log::error('Plugin ' . $className . ' could not be instantiated.', [
                 'message' => $e->getMessage(),
@@ -168,27 +162,20 @@ class PluginManager
             return;
         }
 
-        $classId = $this->getIdentifier($classObj);
+        $classId = $this->getIdentifier($pluginObj);
 
-        /*
-         * Check for disabled plugins
-         */
-        if ($this->isDisabled($classId)) {
-            $classObj->disabled = true;
-        }
-
-        $this->plugins[$classId] = $classObj;
+        $this->plugins[$classId] = $pluginObj;
         $this->pathMap[$classId] = $path;
         $this->normalizedMap[strtolower($classId)] = $classId;
 
-        $replaces = $classObj->getReplaces();
+        $replaces = $pluginObj->getReplaces();
         if ($replaces) {
             foreach ($replaces as $replace) {
                 $this->replacementMap[$replace] = $classId;
             }
         }
 
-        return $classObj;
+        return $pluginObj;
     }
 
     /**
@@ -232,12 +219,8 @@ class PluginManager
 
     /**
      * Registers a single plugin object.
-     *
-     * @param PluginBase $plugin The instantiated Plugin object
-     * @param string $pluginId The string identifier for the plugin
-     * @return void
      */
-    public function registerPlugin($plugin, $pluginId = null)
+    public function registerPlugin(PluginBase $plugin, ?string $pluginId = null): void
     {
         if (!$pluginId) {
             $pluginId = $this->getIdentifier($plugin);
@@ -257,7 +240,7 @@ class PluginManager
         /**
          * Prevent autoloaders from loading if plugin is disabled
          */
-        if ($plugin->disabled) {
+        if ($this->isDisabled($pluginId)) {
             return;
         }
 
@@ -292,7 +275,7 @@ class PluginManager
             foreach ($replaces as $replace) {
                 $replaceNamespace = $this->getNamespace($replace);
 
-                App::make(ClassLoader::class)->addNamespaceAliases([
+                $this->app->make(ClassLoader::class)->addNamespaceAliases([
                     // class_alias() expects order to be $real, $alias
                     $this->getNamespace($pluginId) => $replaceNamespace,
                 ]);
@@ -349,13 +332,14 @@ class PluginManager
 
     /**
      * Boots the provided plugin object.
-     *
-     * @param PluginBase $plugin
-     * @return void
      */
-    public function bootPlugin($plugin)
+    public function bootPlugin(PluginBase $plugin): void
     {
-        if (!$plugin || $plugin->disabled || (self::$noInit && !$plugin->elevated)) {
+        if (
+            !$plugin
+            || (self::$noInit && !$plugin->elevated)
+            || $this->isDisabled($plugin)
+        ) {
             return;
         }
 
@@ -608,7 +592,8 @@ class PluginManager
      */
     public function clearDisabledCache()
     {
-        Storage::delete($this->metaFile);
+        // Storage::delete($this->metaFile);
+        Cache::forget($this->disabledCacheKey);
         $this->disabledPlugins = [];
     }
 
@@ -619,20 +604,19 @@ class PluginManager
      */
     protected function loadDisabled()
     {
-        $path = $this->metaFile;
-
+        // Check the config files for disabled plugins
         if (($configDisabled = Config::get('cms.disablePlugins')) && is_array($configDisabled)) {
             foreach ($configDisabled as $disabled) {
-                $this->disabledPlugins[$disabled] = true;
+                $this->flagPlugin($disabled, static::DISABLED_BY_CONFIG);
             }
         }
 
-        if (Storage::exists($path)) {
-            $disabled = json_decode(Storage::get($path), true) ?: [];
-            $this->disabledPlugins = array_merge($this->disabledPlugins, $disabled);
-        } else {
-            $this->populateDisabledPluginsFromDb();
-            $this->writeDisabled();
+        // Check the database for disabled plugins
+        $userDisabled = Cache::rememberForever($this->disabledCacheKey, function () {
+            return $this->getDisabledPluginsFromDb();
+        });
+        foreach ($userDisabled as $code) {
+            $this->flagPlugin($code, static::DISABLED_BY_USER);
         }
     }
 
@@ -658,29 +642,24 @@ class PluginManager
      */
     protected function writeDisabled()
     {
-        Storage::put($this->metaFile, json_encode($this->disabledPlugins));
+        Cache::forever($this->disabledCacheKey, $this->disabledPlugins);
     }
 
     /**
-     * Populates information about disabled plugins from database
-     *
-     * @return void
+     * Returns plugin codes that have been flagged disabled in the database
      */
-    protected function populateDisabledPluginsFromDb()
+    protected function getDisabledPluginsFromDb(): array
     {
-        if (!App::hasDatabase()) {
-            return;
+        $disabled = [];
+
+        if (
+            $this->app->hasDatabase()
+            && Schema::hasTable('system_plugin_versions')
+        ) {
+            $disabled = Db::table('system_plugin_versions')->where('is_disabled', 1)->lists('code') ?? [];
         }
 
-        if (!Schema::hasTable('system_plugin_versions')) {
-            return;
-        }
-
-        $disabled = Db::table('system_plugin_versions')->where('is_disabled', 1)->lists('code');
-
-        foreach ($disabled as $code) {
-            $this->disabledPlugins[$code] = true;
-        }
+        return $disabled;
     }
 
     /**
@@ -727,14 +706,20 @@ class PluginManager
             // Only allow one of the replaced plugin or the replacing plugin to exist
             // at once depending on whether the version constraints are met or not
             if ($this->plugins[$replacement]->canReplacePlugin($target, $this->plugins[$target]->getPluginVersion())) {
+                // Alias the replaced plugin to the replacing plugin
                 $this->aliasPluginAs($replacement, $target);
-                $this->disablePlugin($target);
-                $this->enablePlugin($replacement);
+
+                // Set the plugin flags
+                $this->flagPlugin($target, static::DISABLED_REPLACED);
+                $this->unflagPlugin($replacement, static::DISABLED_REPLACEMENT_FAILED);
+
                 // Register this plugin as actively replaced
                 $this->activeReplacementMap[$target] = $replacement;
             } else {
-                $this->disablePlugin($replacement);
-                $this->enablePlugin($target);
+                // Set the plugin flags
+                $this->flagPlugin($replacement, static::DISABLED_REPLACEMENT_FAILED);
+                $this->unflagPlugin($target, static::DISABLED_REPLACED);
+
                 // Remove the replacement alias to prevent redirection to a disabled plugin
                 unset($this->replacementMap[$target]);
             }
@@ -758,14 +743,72 @@ class PluginManager
     }
 
     /**
-     * Disables a single plugin in the system.
-     *
-     * @param string|PluginBase $id Plugin code/namespace
-     * @param bool $isUser Set to true if disabled by the user, false by default
-     * @return bool Returns false if the plugin was already disabled, true otherwise
+     * Sets the provided flag on the provided plugin
      */
-    public function disablePlugin($id, $isUser = false)
+    protected function flagPlugin(string $plugin, string $flag): void
     {
+        $plugin = $this->normalizeIdentifier($plugin);
+        $this->pluginFlags[$plugin][$flag] = true;
+    }
+
+    /**
+     * Removes the provided flag from the provided plugin
+     */
+    protected function unflagPlugin(string $plugin, string $flag): void
+    {
+        $plugin = $this->normalizeIdentifier($plugin);
+        unset($this->pluginFlags[$plugin][$flag]);
+    }
+
+    /**
+     * Get the PluginVersion record for the provided plugin
+     *
+     * @throws InvalidArgumentException if unable to find the requested plugin record in the database
+     */
+    protected function getPluginRecord(string $plugin): PluginVersion
+    {
+        $plugin = $this->normalizeIdentifier($plugin);
+        if (isset($this->pluginRecords[$plugin])) {
+            return $this->pluginRecords[$plugin];
+        }
+
+        $record = PluginVersion::where('code', $plugin)->first();
+        if (!$record) {
+            throw new InvalidArgumentException("$plugin was not found in the database.");
+        }
+
+        return $this->pluginRecords[$plugin] = $record;
+    }
+
+    /**
+     * Flags the provided plugin as "frozen" (updates cannot be downloaded / installed)
+     */
+    public function freezePlugin(string $plugin): void
+    {
+        $record = $this->getPluginRecord($plugin);
+        $record->is_frozen = true;
+        $record->save();
+    }
+
+    /**
+     * "Unfreezes" the provided plugin, allowing for updates to be performed
+     */
+    public function unfreezePlugin(string $plugin): void
+    {
+        $record = $this->getPluginRecord($plugin);
+        $record->is_frozen = false;
+        $record->save();
+    }
+
+    /**
+     * Disables the provided plugin using the provided flag (defaults to static::DISABLED_BY_USER)
+     */
+    public function disablePlugin(string $plugin, $flag = static::DISABLED_BY_USER): bool
+    {
+        if ($flag === true) {
+            $flag = static::DISABLED_BY_USER;
+        }
+
         $code = $this->getIdentifier($id);
         $code = $this->normalizeIdentifier($code);
         if (isset($this->disabledPlugins[$code])) {
@@ -775,22 +818,27 @@ class PluginManager
         $this->disabledPlugins[$code] = $isUser;
         $this->writeDisabled();
 
-        if ($pluginObj = $this->findByIdentifier($code, true)) {
-            $pluginObj->disabled = true;
+        // Updates the database record for the plugin if required
+        if ($flag === static::DISABLED_BY_USER) {
+            $record = $this->getPluginRecord($plugin);
+            $record->is_disabled = true;
+            $record->save();
         }
+
+        // @TODO: Update the cahce of disabled plugins
 
         return true;
     }
 
     /**
-     * Enables a single plugin in the system.
-     *
-     * @param string|PluginBase $id Plugin code/namespace
-     * @param bool $isUser Set to true if enabled by the user, false by default
-     * @return bool Returns false if the plugin wasn't already disabled or if the user disabled a plugin that the system is trying to re-enable, true otherwise
+     * Enables the provided plugin using the provided flag (defaults to static::DISABLED_BY_USER)
      */
-    public function enablePlugin($id, $isUser = false)
+    public function enablePlugin(string $plugin, $flag = static::DISABLED_BY_USER): bool
     {
+        if ($flag === true) {
+            $flag = static::DISABLED_BY_USER;
+        }
+
         $code = $this->getIdentifier($id);
         $code = $this->normalizeIdentifier($code);
         if (!isset($this->disabledPlugins[$code])) {
@@ -804,10 +852,6 @@ class PluginManager
 
         unset($this->disabledPlugins[$code]);
         $this->writeDisabled();
-
-        if ($pluginObj = $this->findByIdentifier($code, true)) {
-            $pluginObj->disabled = false;
-        }
 
         return true;
     }
@@ -850,32 +894,15 @@ class PluginManager
     }
 
     /**
-     * Cross checks all plugins and their dependancies, if not met plugins
-     * are disabled and vice versa.
-     *
-     * @return void
+     * Checks plugin dependencies and flags plugins with missing dependencies as disabled
      */
-    protected function loadDependencies()
+    protected function loadDependencies(): void
     {
         foreach ($this->plugins as $id => $plugin) {
-            if (!$required = $this->getDependencies($plugin)) {
-                continue;
-            }
-
-            $disable = false;
-
-            foreach ($required as $require) {
-                if (!$pluginObj = $this->findByIdentifier($require)) {
-                    $disable = true;
-                } elseif ($pluginObj->disabled) {
-                    $disable = true;
-                }
-            }
-
-            if ($disable) {
-                $this->disablePlugin($id);
+            if (!$plugin->checkDependencies()) {
+                $this->flagPlugin($id, static::DISABLED_MISSING_DEPENDENCIES);
             } else {
-                $this->enablePlugin($id);
+                $this->unflagPlugin($id, static::DISABLED_MISSING_DEPENDENCIES);
             }
         }
     }
@@ -961,11 +988,8 @@ class PluginManager
 
     /**
      * Returns the plugin identifiers that are required by the supplied plugin.
-     *
-     * @param  string $plugin Plugin identifier, object or class
-     * @return array
      */
-    public function getDependencies($plugin)
+    public function getDependencies(string|PluginBase $plugin): array
     {
         if (is_string($plugin) && (!$plugin = $this->findByIdentifier($plugin))) {
             return [];
