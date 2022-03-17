@@ -55,7 +55,16 @@ class MailSetting extends Model
     public function initSettingsData()
     {
         $config = App::make('config');
-        $mailers = $config->get('mail.mailers', []);
+        $mailers = $config->get('mail.mailers', [
+            'sendmail' => ['path' => $config->get('mail.sendmail', '/usr/sbin/sendmail')],
+            'smtp' => [
+                'host' => $config->get('mail.host'),
+                'port' => $config->get('mail.port', 587),
+                'username' => $config->get('mail.username'),
+                'password' => $config->get('mail.password'),
+                'encryption' => $config->get('mail.encryption'),
+            ],
+        ]);
         $this->send_mode = $config->get('mail.default', static::MODE_MAIL);
         $this->sender_name = $config->get('mail.from.name', 'Your Site');
         $this->sender_email = $config->get('mail.from.address', 'admin@example.com');
