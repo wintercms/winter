@@ -55,16 +55,17 @@ class MailSetting extends Model
     public function initSettingsData()
     {
         $config = App::make('config');
-        $this->send_mode = $config->get('mail.driver', static::MODE_MAIL);
+        $mailers = $config->get('mail.mailers', []);
+        $this->send_mode = $config->get('mail.default', static::MODE_MAIL);
         $this->sender_name = $config->get('mail.from.name', 'Your Site');
         $this->sender_email = $config->get('mail.from.address', 'admin@example.com');
-        $this->sendmail_path = $config->get('mail.sendmail', '/usr/sbin/sendmail');
-        $this->smtp_address = $config->get('mail.host');
-        $this->smtp_port = $config->get('mail.port', 587);
-        $this->smtp_user = $config->get('mail.username');
-        $this->smtp_password = $config->get('mail.password');
+        $this->sendmail_path = array_get($mailers['sendmail'], 'path', '/usr/sbin/sendmail');
+        $this->smtp_address = array_get($mailers['smtp'], 'host');
+        $this->smtp_port = array_get($mailers['smtp'], 'port', 587);
+        $this->smtp_user = array_get($mailers['smtp'], 'username');
+        $this->smtp_password = array_get($mailers['smtp'], 'password');
         $this->smtp_authorization = !!strlen($this->smtp_user);
-        $this->smtp_encryption = $config->get('mail.encryption');
+        $this->smtp_encryption = array_get($mailers['smtp'], 'encryption');
     }
 
     public function getSendModeOptions()
