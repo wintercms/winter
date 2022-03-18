@@ -149,25 +149,11 @@ export default {
 
 <style lang="less">
 @import (reference) '../../../less/global.less';
+@import (reference) '../style/variables.less';
 
 // VARIABLES
 @inpsector-popover-width: 360px;
 @inspector-border-radius: @border-radius-base;
-
-@inspector-bg: #f2f2f2;
-@inspector-font-size: @font-size-small;
-
-@inspector-header-bg: @brand-accent;
-@inspector-header-fg: contrast(@inspector-header-bg, @color-text-title, #fff);
-@inspector-header-title-weight: bold;
-@inspector-header-title-size: @font-size-base;
-@inspector-header-description-weight: normal;
-@inspector-header-description-size: @font-size-small;
-
-@inspector-field-bg: #fff;
-@inspector-field-label-bg: @inspector-bg;
-@inspector-field-label-fg: @color-text-title;
-@inspector-field-label-border: @color-border;
 
 // STYLING
 .inspector-wrapper {
@@ -269,13 +255,17 @@ export default {
                 flex: 3 0;
                 background: @inspector-field-label-bg;
                 color: @inspector-field-label-fg;
-                border-right: 1px solid @inspector-field-label-border;
+                border-right: 1px solid @inspector-field-border;
             }
 
             .field-control {
                 background: @inspector-field-bg;
                 flex: 5 0;
             }
+        }
+
+        .field + .field {
+            border-top: 1px solid @inspector-field-border;
         }
     }
 }

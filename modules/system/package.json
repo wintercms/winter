@@ -1,7 +1,7 @@
 {
-    "name": "@wintercms/ui-inspector",
+    "name": "@wintercms/system",
     "version": "1.0.0",
-    "description": "The Inspector widget used within the Winter CMS Backend.",
+    "description": "The System module for Winter CMS.",
     "main": "inspector.js",
     "private": true,
     "repository": {
@@ -26,6 +26,7 @@
     "homepage": "https://wintercms.com/",
     "dependencies": {
         "@popperjs/core": "^2.11.4",
+        "js-cookie": "^3.0.1",
         "laravel-mix": "^6.0.34",
         "laravel-mix-polyfill": "^3.0.1",
         "vue": "^3.2.31"

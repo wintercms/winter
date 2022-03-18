@@ -568,12 +568,6 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
             $combiner->registerBundle('~/modules/system/assets/less/snowboard.extras.less');
         });
-
-        MixAssets::registerCallback(function ($mix) {
-            $mix->registerPackage('snowboard', '~/modules/system/assets/js/snowboard/winter.mix.js');
-            $mix->registerPackage('system.ui.base', '~/modules/system/assets/ui/widgets/base/winter.mix.js');
-            $mix->registerPackage('system.widgets.inspector', '~/modules/system/assets/ui/widgets/inspector/winter.mix.js');
-        });
     }
 
     /**
