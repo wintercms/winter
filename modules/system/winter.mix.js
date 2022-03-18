@@ -8,7 +8,7 @@ mix
         terser: {
             extractComments: false,
         },
-        runtimeChunkPath: './assets/js/vendor'
+        runtimeChunkPath: './assets/js/vendor',
     })
     .vue({ version: 3 })
 
@@ -20,33 +20,33 @@ mix
     // Compile UI and widgets
     .js(
         './assets/ui/widgets/base/base.js',
-        './assets/ui/widgets/base/build/base.js'
+        './assets/ui/widgets/base/build/base.js',
     )
     .js(
         './assets/ui/widgets/inspector/inspector.js',
-        './assets/ui/widgets/inspector/build/inspector.js'
+        './assets/ui/widgets/inspector/build/inspector.js',
     )
 
     // Compile Snowboard framework
     .js(
         './assets/js/snowboard/snowboard.base.js',
-        './assets/js/snowboard/build/snowboard.base.js'
+        './assets/js/snowboard/build/snowboard.base.js',
     )
     .js(
         './assets/js/snowboard/snowboard.base.debug.js',
-        './assets/js/snowboard/build/snowboard.base.debug.js'
+        './assets/js/snowboard/build/snowboard.base.debug.js',
     )
     .js(
         './assets/js/snowboard/ajax/Request.js',
-        './assets/js/snowboard/build/snowboard.request.js'
+        './assets/js/snowboard/build/snowboard.request.js',
     )
     .js(
         './assets/js/snowboard/ajax/handlers/AttributeRequest.js',
-        './assets/js/snowboard/build/snowboard.data-attr.js'
+        './assets/js/snowboard/build/snowboard.data-attr.js',
     )
     .js(
         './assets/js/snowboard/snowboard.extras.js',
-        './assets/js/snowboard/build/snowboard.extras.js'
+        './assets/js/snowboard/build/snowboard.extras.js',
     )
 
     // Polyfill for all targeted browsers
