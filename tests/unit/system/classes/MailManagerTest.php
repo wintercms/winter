@@ -4,6 +4,7 @@ use Illuminate\Mail\Message;
 use System\Classes\MailManager;
 use System\Models\MailTemplate;
 use Symfony\Component\Mime\Email;
+use Symfony\Component\Mime\Part\TextPart;
 
 class MailManagerTest extends PluginTestCase
 {
@@ -32,7 +33,7 @@ class MailManagerTest extends PluginTestCase
     public function testAddContent_Html()
     {
         $plain = $raw = null;
-        $html = 'html-view';
+        $html = new TextPart('html-view');
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
@@ -45,7 +46,7 @@ class MailManagerTest extends PluginTestCase
     public function testAddContent_Plain()
     {
         $html = $raw = null;
-        $plain = 'plain-view';
+        $plain = new TextPart('plain-view');
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
@@ -60,7 +61,7 @@ class MailManagerTest extends PluginTestCase
     public function testAddContent_Raw()
     {
         $html = $plain = null;
-        $raw = 'my raw content';
+        $raw = new TextPart('my raw content');
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
@@ -75,8 +76,8 @@ class MailManagerTest extends PluginTestCase
     public function testAddContent_Html_Plain()
     {
         $raw = null;
-        $html = 'html-view';
-        $plain = 'plain-view';
+        $html = new TextPart('html-view');
+        $plain = new TextPart('plain-view');
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
@@ -95,9 +96,9 @@ class MailManagerTest extends PluginTestCase
 
     public function testAddContent_Html_Plain_Raw()
     {
-        $html = 'html-view';
-        $plain = 'plain-view';
-        $raw = 'my raw content';
+        $html = new TextPart('html-view');
+        $plain = new TextPart('plain-view');
+        $raw = new TextPart('my raw content');
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
