@@ -8,26 +8,28 @@ mix
         terser: {
             extractComments: false,
         },
-        runtimeChunkPath: './assets/js/vendor',
+        runtimeChunkPath: './assets/js/build',
     })
     .vue({ version: 3 })
 
     // Extract imported libraries
     .extract({
-        to: './assets/js/vendor/vendor.js',
+        to: './assets/js/build/vendor.js',
     })
 
-    // Compile UI and widgets
+    // Compile Snowboard and UI assets for the Backend
     .js(
-        './assets/ui/widgets/base/base.js',
-        './assets/ui/widgets/base/build/base.js',
-    )
-    .js(
-        './assets/ui/widgets/inspector/inspector.js',
-        './assets/ui/widgets/inspector/build/inspector.js',
+        [
+            './assets/js/snowboard/snowboard.base.debug.js',
+            './assets/js/snowboard/ajax/Request.js',
+            './assets/js/snowboard/snowboard.extras.js',
+            './assets/ui/widgets/base/base.js',
+            './assets/ui/widgets/inspector/inspector.js',
+        ],
+        './assets/js/build/system.js',
     )
 
-    // Compile Snowboard framework
+    // Compile Snowboard framework separately for the CMS module
     .js(
         './assets/js/snowboard/snowboard.base.js',
         './assets/js/snowboard/build/snowboard.base.js',
