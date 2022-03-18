@@ -3,6 +3,7 @@
 use Illuminate\Mail\Message;
 use System\Classes\MailManager;
 use System\Models\MailTemplate;
+use Symfony\Component\Mime\Email;
 
 class MailManagerTest extends PluginTestCase
 {
@@ -11,8 +12,7 @@ class MailManagerTest extends PluginTestCase
     {
         parent::setUp();
 
-        $symfonyMessage = Mail::getSymfonyMessage();
-        $this->message = new Message($symfonyMessage->createMessage('message'));
+        $this->message = new Message(new Email());
 
         foreach (['html', 'plain'] as $view) {
             $t = new MailTemplate();
