@@ -5,8 +5,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/vendor/manifest.js',
-                'modules/system/assets/js/vendor/vendor.js',
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/build/vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js'
             ])
             .render()
@@ -46,8 +46,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/vendor/manifest.js',
-                'modules/system/assets/js/vendor/vendor.js',
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/build/vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestPlugin.js',
             ])
@@ -107,8 +107,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/vendor/manifest.js',
-                'modules/system/assets/js/vendor/vendor.js',
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/build/vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestSingleton.js',
             ])
@@ -168,8 +168,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/vendor/manifest.js',
-                'modules/system/assets/js/vendor/vendor.js',
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/build/vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestListener.js',
             ])
@@ -214,8 +214,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/vendor/manifest.js',
-                'modules/system/assets/js/vendor/vendor.js',
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/build/vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestPromiseListener.js',
             ])

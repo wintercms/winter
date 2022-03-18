@@ -5,8 +5,8 @@ describe('PluginLoader class', function () {
         FakeDom
             .new()
             .addScript([
-                'modules/system/assets/js/vendor/manifest.js',
-                'modules/system/assets/js/vendor/vendor.js',
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/build/vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js'
             ])
             .render()
