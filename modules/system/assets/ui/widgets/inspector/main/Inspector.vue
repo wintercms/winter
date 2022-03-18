@@ -18,15 +18,29 @@
             ></div>
         </template>
         <template #fields>
-
+            <Field
+                v-for="(field, i) in inspectorFields"
+                :key="i"
+            >
+                <FieldLabel
+                    :label="field.label"
+                />
+                <div class="field-control" />
+            </Field>
         </template>
     </component>
 </template>
 
 <script>
 import PopoverLayout from '../layout/Popover.vue';
+import Field from '../fields/Field.vue';
+import FieldLabel from '../fields/FieldLabel.vue';
 
 export default {
+    components: {
+        Field,
+        FieldLabel,
+    },
     props: {
         snowboard: {
             type: Object,
@@ -125,6 +139,9 @@ export default {
 
             return this.description;
         },
+        inspectorFields() {
+            return this.userConfig.fields;
+        },
         layoutProps() {
             return {
                 shown: this.showInspector,
@@ -197,7 +214,40 @@ export default {
             });
         },
         processFieldsConfig(config) {
-            console.log(config);
+            const fieldsConfig = (Array.isArray(config))
+                ? this.reformatProperties(config)
+                : config;
+
+            // Post-process the fields config
+            Object.entries(fieldsConfig).forEach((entry) => {
+                const [, fieldConfig] = entry;
+
+                // Rename "title" property to "label"
+                if (fieldConfig.title !== undefined) {
+                    if (fieldConfig.label === undefined) {
+                        fieldConfig.label = fieldConfig.title;
+                    }
+                    delete fieldConfig.title;
+                }
+
+                if (fieldConfig.type === 'set') {
+                    fieldConfig.type = 'checkboxlist';
+                }
+            });
+
+            console.log(fieldsConfig);
+
+            return fieldsConfig;
+        },
+        reformatProperties(properties) {
+            const config = {};
+
+            properties.forEach((property) => {
+                config[property.property] = property;
+                delete config[property.property].property;
+            });
+
+            return config;
         },
     },
 };

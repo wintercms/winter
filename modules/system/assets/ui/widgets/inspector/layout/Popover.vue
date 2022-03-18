@@ -1,27 +1,40 @@
 <template>
-    <transition name="popover-fade">
-        <div
-            v-if="shown"
-            class="inspector popover-layout"
-            :style="styles"
-        >
+    <div
+        ref="popover"
+        class="inspector-wrapper"
+    >
+        <transition name="popover-fade">
             <div
-                class="arrow"
-                :style="arrowStyles"
-            ></div>
-            <header>
-                <slot name="title"></slot>
-                <slot name="description"></slot>
+                v-if="shown"
+                class="inspector popover-layout"
+            >
                 <div
-                    class="inspector-hide wn-icon-remove"
-                    @click.stop="hideFn"
+                    class="arrow"
+                    data-popper-arrow
                 ></div>
-            </header>
-        </div>
-    </transition>
+                <header>
+                    <slot name="title"></slot>
+                    <slot name="description"></slot>
+                    <div
+                        class="inspector-hide wn-icon-remove"
+                        @click.stop="hideFn"
+                    ></div>
+                </header>
+                <main>
+                    <slot name="fields"></slot>
+                </main>
+            </div>
+        </transition>
+    </div>
 </template>
 
 <script>
+import { createPopper } from '@popperjs/core/lib/popper-lite';
+import arrow from '@popperjs/core/lib/modifiers/arrow';
+import flip from '@popperjs/core/lib/modifiers/flip';
+import preventOverflow from '@popperjs/core/lib/modifiers/preventOverflow';
+import offset from '@popperjs/core/lib/modifiers/offset';
+
 export default {
     props: {
         shown: {
@@ -82,38 +95,46 @@ export default {
                 position: null,
                 zIndex: null,
             },
+            popperInstance: null,
         };
     },
-    computed: {
-        styles() {
-            return {
-                top: `${this.top}px`,
-                left: `${this.left}px`,
-            };
+    watch: {
+        /**
+         * Detects if the popover is shown. If shown, show the overlay and create the popover.
+         *
+         * @param {Boolean} isShown
+         */
+        shown(isShown) {
+            if (isShown) {
+                this.snowboard.overlay().show();
+                this.highlightInspectedElement();
+                this.$nextTick(() => {
+                    this.createPopper();
+                });
+            } else {
+                this.popperInstance.destroy();
+                this.snowboard.overlay().hide();
+            }
         },
-        arrowStyles() {
-            const elementRect = this.inspectedElement.getBoundingClientRect();
-            const halfWidth = (elementRect.width / 2) - 5;
-
-            return {
-                left: `${halfWidth}px`,
-            };
-        },
-    },
-    mounted() {
-        this.snowboard.overlay().show();
-        this.calculatePosition();
-        this.highlightInspectedElement();
     },
     unmounted() {
         this.snowboard.overlay().hide();
     },
     methods: {
-        calculatePosition() {
-            const elementRect = this.inspectedElement.getBoundingClientRect();
-
-            this.top = elementRect.bottom + this.offsetY;
-            this.left = elementRect.left + this.offsetX;
+        createPopper() {
+            this.popperInstance = createPopper(this.inspectedElement, this.$refs.popover, {
+                modifiers: [
+                    arrow,
+                    flip,
+                    preventOverflow,
+                    {
+                        ...offset,
+                        options: {
+                            offset: [this.offsetX, this.offsetY + 10],
+                        },
+                    },
+                ],
+            });
         },
         highlightInspectedElement() {
             this.inspectedElementStyle.position = this.inspectedElement.style.position;
@@ -130,49 +151,74 @@ export default {
 @import (reference) '../../../less/global.less';
 
 // VARIABLES
-@inpsector-popover-width: 340px;
+@inpsector-popover-width: 360px;
 @inspector-border-radius: @border-radius-base;
 
-@inspector-bg: @body-bg;
+@inspector-bg: #f2f2f2;
+@inspector-font-size: @font-size-small;
 
-@inspector-header-bg: @brand-secondary;
+@inspector-header-bg: @brand-accent;
 @inspector-header-fg: contrast(@inspector-header-bg, @color-text-title, #fff);
+@inspector-header-title-weight: bold;
+@inspector-header-title-size: @font-size-base;
+@inspector-header-description-weight: normal;
+@inspector-header-description-size: @font-size-small;
+
+@inspector-field-bg: #fff;
+@inspector-field-label-bg: @inspector-bg;
+@inspector-field-label-fg: @color-text-title;
+@inspector-field-label-border: @color-border;
 
 // STYLING
+.inspector-wrapper {
+    z-index: 1002;
+}
+
 .inspector.popover-layout {
-    position: absolute;
+    position: relative;
     width: @inpsector-popover-width;
-    top: 0;
-    left: 0;
-    margin-top: 15px;
-    z-index: 1001;
     box-shadow: @overlay-box-shadow;
     border-radius: @inspector-border-radius;
+    font-size: @inspector-font-size;
+
+    .arrow,
+    .arrow::before {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+    }
 
     .arrow {
-        position: absolute;
-        top: -20px;
-        left: 0;
-        border: 10px solid transparent;
-        border-left-width: 6px;
-        border-right-width: 6px;
-        border-bottom-color: @inspector-header-bg;
+        visibility: hidden;
+        z-index: 1002;
+    }
+
+    .arrow::before {
+        visibility: visible;
+        content: '';
+        transform: rotate(45deg);
+        background-color: @inspector-header-bg;
     }
 
     header {
+        position: relative;
         padding: @padding-large-vertical (@padding-large-horizontal + 30px) @padding-large-vertical @padding-large-horizontal;
         background: @inspector-header-bg;
         color: @inspector-header-fg;
-        border-bottom: 1px solid darken(@inspector-header-bg, 5%);
+        border-bottom: 1px solid darken(@inspector-header-bg, 8%);
         border-top-left-radius: @inspector-border-radius;
         border-top-right-radius: @inspector-border-radius;
+        text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.22);
+        z-index: 1003;
 
         .inspector-title {
-            font-weight: bold;
+            font-weight: @inspector-header-title-weight;
+            font-size: @inspector-header-title-size;
         }
 
         .inspector-description {
-            font-size: @font-size-small;
+            font-weight: @inspector-header-description-weight;
+            font-size: @inspector-header-description-size;
             margin-top: -3px;
         }
 
@@ -205,8 +251,50 @@ export default {
             }
         }
     }
+
+    main {
+        position: relative;
+        background: @inspector-bg;
+        border-bottom-left-radius: @inspector-border-radius;
+        border-bottom-right-radius: @inspector-border-radius;
+        z-index: 1003;
+
+        .field {
+            display: flex;
+            flex-direction: row;
+            justify-content: stretch;
+
+            .field-label {
+                padding: @padding-small-vertical @padding-small-horizontal;
+                flex: 3 0;
+                background: @inspector-field-label-bg;
+                color: @inspector-field-label-fg;
+                border-right: 1px solid @inspector-field-label-border;
+            }
+
+            .field-control {
+                background: @inspector-field-bg;
+                flex: 5 0;
+            }
+        }
+    }
 }
 
+// ARROW PLACEMENT
+.inspector-wrapper[data-popper-placement^='top'] .inspector.popover-layout .arrow {
+    bottom: -5px;
+}
+.inspector-wrapper[data-popper-placement^='bottom'] .inspector.popover-layout .arrow {
+    top: -5px;
+}
+.inspector-wrapper[data-popper-placement^='left'] .inspector.popover-layout .arrow {
+    right: -5px;
+}
+.inspector-wrapper[data-popper-placement^='right'] .inspector.popover-layout .arrow {
+    left: -5px;
+}
+
+// TRANSITIONS
 .popover-fade-enter-active,
 .popover-fade-leave-active {
     transition: opacity 175ms ease-out,

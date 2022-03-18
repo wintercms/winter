@@ -25,6 +25,7 @@
     },
     "homepage": "https://wintercms.com/",
     "dependencies": {
+        "@popperjs/core": "^2.11.4",
         "laravel-mix": "^6.0.34",
         "laravel-mix-polyfill": "^3.0.1",
         "vue": "^3.2.31"
