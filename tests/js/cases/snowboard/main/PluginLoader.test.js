@@ -4,7 +4,11 @@ describe('PluginLoader class', function () {
     it('can mock plugin methods', function (done) {
         FakeDom
             .new()
-            .addScript('modules/system/assets/js/snowboard/build/snowboard.base.js')
+            .addScript([
+                'modules/system/assets/js/vendor/manifest.js',
+                'modules/system/assets/js/vendor/vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js'
+            ])
             .render()
             .then(
                 (dom) => {
