@@ -39,7 +39,7 @@ class MailManagerTest extends PluginTestCase
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
         $symfonyMessage = $this->message->getSymfonyMessage();
 
-        $this->assertEquals('text/html', $symfonyMessage->getHeaders()->get('Content-Type'));
+        $this->assertEquals($html, $symfonyMessage->getHtmlBody());
         $this->assertEquals('html view [test]', $symfonyMessage->getSubject());
     }
 
@@ -53,9 +53,8 @@ class MailManagerTest extends PluginTestCase
         $symfonyMessage = $this->message->getSymfonyMessage();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/plain', $symfonyMessage->getHeaders()->get('Content-Type'));
+        $this->assertEquals($plain, $symfonyMessage->getTextBody());
         $this->assertEquals('plain view [test]', $symfonyMessage->getSubject());
-        $this->assertEquals('my plain view content', $symfonyMessage->getBody());
     }
 
     public function testAddContent_Raw()
@@ -68,7 +67,6 @@ class MailManagerTest extends PluginTestCase
         $symfonyMessage = $this->message->getSymfonyMessage();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/plain', $symfonyMessage->getHeaders()->get('Content-Type'));
         $this->assertEquals('No subject', $symfonyMessage->getSubject());
         $this->assertEquals($raw, $symfonyMessage->getBody());
     }
@@ -85,13 +83,11 @@ class MailManagerTest extends PluginTestCase
         $parts = $symfonyMessage->getAttachments();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/html', $symfonyMessage->getHeaders()->get('Content-Type'));
         $this->assertEquals('html view [test]', $symfonyMessage->getSubject());
-        $this->assertTrue(str_contains($symfonyMessage->getBody(), 'my html view content'));
+        $this->assertEquals($html, $symfonyMessage->getHtmlBody());
 
         $this->assertEquals(1, count($parts));
-        $this->assertEquals('text/plain', $parts[0]->getHeaders()->get('Content-Type'));
-        $this->assertEquals('my plain view content', $parts[0]->getBody());
+        $this->assertEquals($plain, $symfonyMessage->getTextBody());
     }
 
     public function testAddContent_Html_Plain_Raw()
@@ -106,11 +102,11 @@ class MailManagerTest extends PluginTestCase
         $parts = $symfonyMessage->getAttachments();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/html', $symfonyMessage->getHeaders()->get('Content-Type'));
         $this->assertEquals('html view [test]', $symfonyMessage->getSubject());
+        $this->assertEquals($html, $symfonyMessage->getHtmlBody());
 
         $this->assertEquals(1, count($parts));
-        $this->assertEquals('text/plain', $parts[0]->getHeaders()->get('Content-Type'));
-        $this->assertEquals($raw, $parts[0]->getBody());
+        $this->assertEquals($plain, $symfonyMessage->getTextBody());
+        $this->assertEquals($raw, $symfonyMessage->getBody());
     }
 }
