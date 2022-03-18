@@ -1,2 +1,3 @@
 # Ignore Mix files
 node_modules
+mix.webpack.js
