@@ -11,8 +11,8 @@ class MailManagerTest extends PluginTestCase
     {
         parent::setUp();
 
-        $swift = Mail::getSwiftMailer();
-        $this->message = new Message($swift->createMessage('message'));
+        $symfonyMessage = Mail::getSymfonyMessage();
+        $this->message = new Message($symfonyMessage->createMessage('message'));
 
         foreach (['html', 'plain'] as $view) {
             $t = new MailTemplate();
@@ -36,10 +36,10 @@ class MailManagerTest extends PluginTestCase
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
-        $swiftMsg = $this->message->getSwiftMessage();
+        $symfonyMessage = $this->message->getSymfonyMessage();
 
-        $this->assertEquals('text/html', $swiftMsg->getBodyContentType());
-        $this->assertEquals('html view [test]', $swiftMsg->getSubject());
+        $this->assertEquals('text/html', $symfonyMessage->getContentType());
+        $this->assertEquals('html view [test]', $symfonyMessage->getSubject());
     }
 
     public function testAddContent_Plain()
@@ -49,12 +49,12 @@ class MailManagerTest extends PluginTestCase
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
-        $swiftMsg = $this->message->getSwiftMessage();
+        $symfonyMessage = $this->message->getSymfonyMessage();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/plain', $swiftMsg->getBodyContentType());
-        $this->assertEquals('plain view [test]', $swiftMsg->getSubject());
-        $this->assertEquals('my plain view content', $swiftMsg->getBody());
+        $this->assertEquals('text/plain', $symfonyMessage->getContentType());
+        $this->assertEquals('plain view [test]', $symfonyMessage->getSubject());
+        $this->assertEquals('my plain view content', $symfonyMessage->getBody());
     }
 
     public function testAddContent_Raw()
@@ -64,12 +64,12 @@ class MailManagerTest extends PluginTestCase
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
-        $swiftMsg = $this->message->getSwiftMessage();
+        $symfonyMessage = $this->message->getSymfonyMessage();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/plain', $swiftMsg->getBodyContentType());
-        $this->assertEquals('No subject', $swiftMsg->getSubject());
-        $this->assertEquals($raw, $swiftMsg->getBody());
+        $this->assertEquals('text/plain', $symfonyMessage->getContentType());
+        $this->assertEquals('No subject', $symfonyMessage->getSubject());
+        $this->assertEquals($raw, $symfonyMessage->getBody());
     }
 
     public function testAddContent_Html_Plain()
@@ -80,16 +80,16 @@ class MailManagerTest extends PluginTestCase
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
-        $swiftMsg = $this->message->getSwiftMessage();
-        $parts = $swiftMsg->getChildren();
+        $symfonyMessage = $this->message->getSymfonyMessage();
+        $parts = $symfonyMessage->getChildren();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/html', $swiftMsg->getBodyContentType());
-        $this->assertEquals('html view [test]', $swiftMsg->getSubject());
-        $this->assertTrue(str_contains($swiftMsg->getBody(), 'my html view content'));
+        $this->assertEquals('text/html', $symfonyMessage->getContentType());
+        $this->assertEquals('html view [test]', $symfonyMessage->getSubject());
+        $this->assertTrue(str_contains($symfonyMessage->getBody(), 'my html view content'));
 
         $this->assertEquals(1, count($parts));
-        $this->assertEquals('text/plain', $parts[0]->getBodyContentType());
+        $this->assertEquals('text/plain', $parts[0]->getContentType());
         $this->assertEquals('my plain view content', $parts[0]->getBody());
     }
 
@@ -101,15 +101,15 @@ class MailManagerTest extends PluginTestCase
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
-        $swiftMsg = $this->message->getSwiftMessage();
-        $parts = $swiftMsg->getChildren();
+        $symfonyMessage = $this->message->getSymfonyMessage();
+        $parts = $symfonyMessage->getAttachments();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/html', $swiftMsg->getBodyContentType());
-        $this->assertEquals('html view [test]', $swiftMsg->getSubject());
+        $this->assertEquals('text/html', $symfonyMessage->getContentType());
+        $this->assertEquals('html view [test]', $symfonyMessage->getSubject());
 
         $this->assertEquals(1, count($parts));
-        $this->assertEquals('text/plain', $parts[0]->getBodyContentType());
+        $this->assertEquals('text/plain', $parts[0]->getContentType());
         $this->assertEquals($raw, $parts[0]->getBody());
     }
 }
