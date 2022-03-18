@@ -30,7 +30,6 @@ return [
     */
 
     'lifetime' => env('SESSION_LIFETIME', 120),
-
     'expire_on_close' => false,
 
     /*
@@ -111,7 +110,10 @@ return [
     |
     */
 
-    'lottery' => [2, 100],
+    'lottery' => [
+        2,
+        100,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -124,10 +126,7 @@ return [
     |
     */
 
-    'cookie' => env(
-        'SESSION_COOKIE',
-        str_slug(env('APP_NAME', 'winter'), '_').'_session'
-    ),
+    'cookie' => env('SESSION_COOKIE', str_slug(env('APP_NAME', 'winter'), '_') . '_session'),
 
     /*
     |--------------------------------------------------------------------------
@@ -214,5 +213,4 @@ return [
     */
 
     'same_site' => 'lax',
-
 ];
