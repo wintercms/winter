@@ -6,8 +6,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class Overlay extends Snowboard.Singleton
-{
+export default class Overlay extends Snowboard.Singleton {
     /**
      * Constructor.
      *
@@ -19,7 +18,7 @@ export default class Overlay extends Snowboard.Singleton
         this.overlay = null;
         this.shown = false;
         this.color = '#000000';
-        this.opacity = 0.5;
+        this.opacity = 0.42;
         this.speed = 175;
     }
 
