@@ -404,8 +404,6 @@ class PluginBase extends ServiceProviderBase
 
     /**
      * Returns the absolute path to this plugin's directory
-     *
-     * @return string
      */
     public function getPluginPath(): string
     {
@@ -414,7 +412,7 @@ class PluginBase extends ServiceProviderBase
         }
 
         $reflection = new ReflectionClass($this);
-        $this->path = dirname($reflection->getFileName());
+        $this->path = File::normalizePath(dirname($reflection->getFileName()));
 
         return $this->path;
     }
@@ -452,9 +450,8 @@ class PluginBase extends ServiceProviderBase
     /**
      * Verifies the plugin's dependencies are present and enabled
      */
-    public function checkDependencies(): bool
+    public function checkDependencies(PluginManager $manager): bool
     {
-        $manager = PluginManager::instance();
         $required = $manager->getDependencies($this);
         if (empty($required)) {
             return true;
