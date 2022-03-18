@@ -33,13 +33,13 @@ class MailManagerTest extends PluginTestCase
     public function testAddContent_Html()
     {
         $plain = $raw = null;
-        $html = new TextPart('html-view');
+        $html = new TextPart('html-view', $subtype="html");
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
         $symfonyMessage = $this->message->getSymfonyMessage();
 
-        $this->assertEquals('text/html', $symfonyMessage->getContentType());
+        $this->assertEquals('text/html', $symfonyMessage->getPreparedHeaders()->getHeaderParameter('Content-Type'));
         $this->assertEquals('html view [test]', $symfonyMessage->getSubject());
     }
 
@@ -53,7 +53,7 @@ class MailManagerTest extends PluginTestCase
         $symfonyMessage = $this->message->getSymfonyMessage();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/plain', $symfonyMessage->getContentType());
+        $this->assertEquals('text/plain', $symfonyMessage->getPreparedHeaders()->getHeaderParameter('Content-Type'));
         $this->assertEquals('plain view [test]', $symfonyMessage->getSubject());
         $this->assertEquals('my plain view content', $symfonyMessage->getBody());
     }
@@ -68,7 +68,7 @@ class MailManagerTest extends PluginTestCase
         $symfonyMessage = $this->message->getSymfonyMessage();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/plain', $symfonyMessage->getContentType());
+        $this->assertEquals('text/plain', $symfonyMessage->getPreparedHeaders()->getHeaderParameter('Content-Type'));
         $this->assertEquals('No subject', $symfonyMessage->getSubject());
         $this->assertEquals($raw, $symfonyMessage->getBody());
     }
@@ -76,27 +76,27 @@ class MailManagerTest extends PluginTestCase
     public function testAddContent_Html_Plain()
     {
         $raw = null;
-        $html = new TextPart('html-view');
+        $html = new TextPart('html-view', $subtype="html");
         $plain = new TextPart('plain-view');
         $data = ['mode' => 'test'];
 
         $result = MailManager::instance()->addContent($this->message, $html, $plain, $raw, $data);
         $symfonyMessage = $this->message->getSymfonyMessage();
-        $parts = $symfonyMessage->getChildren();
+        $parts = $symfonyMessage->getAttachments();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/html', $symfonyMessage->getContentType());
+        $this->assertEquals('text/html', $symfonyMessage->getPreparedHeaders()->getHeaderParameter('Content-Type'));
         $this->assertEquals('html view [test]', $symfonyMessage->getSubject());
         $this->assertTrue(str_contains($symfonyMessage->getBody(), 'my html view content'));
 
         $this->assertEquals(1, count($parts));
-        $this->assertEquals('text/plain', $parts[0]->getContentType());
+        $this->assertEquals('text/plain', $parts[0]->getPreparedHeaders()->getHeaderParameter('Content-Type'));
         $this->assertEquals('my plain view content', $parts[0]->getBody());
     }
 
     public function testAddContent_Html_Plain_Raw()
     {
-        $html = new TextPart('html-view');
+        $html = new TextPart('html-view', $subtype="html");
         $plain = new TextPart('plain-view');
         $raw = new TextPart('my raw content');
         $data = ['mode' => 'test'];
@@ -106,11 +106,11 @@ class MailManagerTest extends PluginTestCase
         $parts = $symfonyMessage->getAttachments();
 
         $this->assertTrue($result);
-        $this->assertEquals('text/html', $symfonyMessage->getContentType());
+        $this->assertEquals('text/html', $symfonyMessage->getPreparedHeaders()->getHeaderParameter('Content-Type'));
         $this->assertEquals('html view [test]', $symfonyMessage->getSubject());
 
         $this->assertEquals(1, count($parts));
-        $this->assertEquals('text/plain', $parts[0]->getContentType());
+        $this->assertEquals('text/plain', $parts[0]->getPreparedHeaders()->getHeaderParameter('Content-Type'));
         $this->assertEquals($raw, $parts[0]->getBody());
     }
 }
