@@ -65,7 +65,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
      * @param boolean $refresh Default false, set to true to force the cache to be rebuilt
      * @return void
      */
-    protected function populateCache($refresh = false)
+    public function populateCache($refresh = false)
     {
         $pathCache = [];
         foreach ($this->datasources as $datasource) {
