@@ -308,7 +308,7 @@
     // ===============
 
     $(document).render(function() {
-        $('[data-control="fieldrepeater"]').fieldRepeater()
+        $('[data-control="fieldrepeater"][data-sortable]').fieldRepeater()
     });
 
 }(window.jQuery);
