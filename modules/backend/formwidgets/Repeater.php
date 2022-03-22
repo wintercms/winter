@@ -166,6 +166,7 @@ class Repeater extends FormWidgetBase
         $this->vars['titleFrom'] = $this->titleFrom;
         $this->vars['minItems'] = $this->minItems;
         $this->vars['maxItems'] = $this->maxItems;
+        $this->vars['sortable'] = $this->sortable;
         $this->vars['style'] = $this->style;
 
         $this->vars['useGroups'] = $this->useGroups;

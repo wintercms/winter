@@ -4,8 +4,9 @@
      <?= $minItems ? 'data-min-items="'.$minItems.'"' : '' ?>
      <?= $maxItems ? 'data-max-items="'.$maxItems.'"' : '' ?>
      <?= $style ? 'data-style="'.$style.'"' : '' ?>
-     data-sortable-container="#<?= $this->getId('items') ?>"
-     data-sortable-handle=".<?= $this->getId('items') ?>-handle">
+     <?= $sortable ? 'data-sortable-container="#'.$this->getId('items').'"' : '' ?>
+     <?= $sortable ? 'data-sortable-handle=".'.$this->getId('items').'-handle"' : '' ?>
+>
 
     <ul id="<?= $this->getId('items') ?>" class="field-repeater-items">
         <?php foreach ($formWidgets as $index => $widget): ?>
