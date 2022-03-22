@@ -38,12 +38,14 @@
         titleFrom: null,
         minItems: null,
         maxItems: null,
-        sortable: true,
+        sortable: false,
         style: 'default',
     }
 
     Repeater.prototype.init = function() {
-        this.bindSorting()
+        if (this.options.sortable) {
+            this.bindSorting()
+        }
 
         this.$el.on('ajaxDone', '> .field-repeater-items > .field-repeater-item > .repeater-item-remove > [data-repeater-remove]', this.proxy(this.onRemoveItemSuccess))
         this.$el.on('ajaxDone', '> .field-repeater-add-item > [data-repeater-add]', this.proxy(this.onAddItemSuccess))
@@ -82,14 +84,12 @@
     }
 
     Repeater.prototype.bindSorting = function() {
-        if (this.options.sortable) {
-            var sortableOptions = {
-                handle: this.options.sortableHandle,
-                nested: false
-            }
-
-            this.$sortable.sortable(sortableOptions)
+        var sortableOptions = {
+            handle: this.options.sortableHandle,
+            nested: false
         }
+
+        this.$sortable.sortable(sortableOptions)
     }
 
     Repeater.prototype.clickAddGroupButton = function(ev) {
