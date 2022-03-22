@@ -6,7 +6,6 @@
      <?= $style ? 'data-style="'.$style.'"' : '' ?>
      data-sortable-container="#<?= $this->getId('items') ?>"
      data-sortable-handle=".<?= $this->getId('items') ?>-handle">
->
 
     <ul id="<?= $this->getId('items') ?>" class="field-repeater-items">
         <?php foreach ($formWidgets as $index => $widget): ?>
