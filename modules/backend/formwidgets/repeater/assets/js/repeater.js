@@ -20,7 +20,9 @@
     var Repeater = function(element, options) {
         this.options   = options
         this.$el       = $(element)
-        this.$sortable = $(options.sortableContainer, this.$el)
+        if (this.options.sortable) {
+            this.$sortable = $(options.sortableContainer, this.$el)
+        }
 
         $.wn.foundation.controlUtils.markDisposable(element)
         Base.call(this)
@@ -36,6 +38,7 @@
         titleFrom: null,
         minItems: null,
         maxItems: null,
+        sortable: true,
         style: 'default',
     }
 
@@ -54,7 +57,9 @@
     }
 
     Repeater.prototype.dispose = function() {
-        this.$sortable.sortable('destroy')
+        if (this.options.sortable) {
+            this.$sortable.sortable('destroy')
+        }
 
         this.$el.off('ajaxDone', '> .field-repeater-items > .field-repeater-item > .repeater-item-remove > [data-repeater-remove]', this.proxy(this.onRemoveItemSuccess))
         this.$el.off('ajaxDone', '> .field-repeater-add-item > [data-repeater-add]', this.proxy(this.onAddItemSuccess))
@@ -77,12 +82,14 @@
     }
 
     Repeater.prototype.bindSorting = function() {
-        var sortableOptions = {
-            handle: this.options.sortableHandle,
-            nested: false
-        }
+        if (this.options.sortable) {
+            var sortableOptions = {
+                handle: this.options.sortableHandle,
+                nested: false
+            }
 
-        this.$sortable.sortable(sortableOptions)
+            this.$sortable.sortable(sortableOptions)
+        }
     }
 
     Repeater.prototype.clickAddGroupButton = function(ev) {
@@ -308,7 +315,7 @@
     // ===============
 
     $(document).render(function() {
-        $('[data-control="fieldrepeater"][data-sortable]').fieldRepeater()
+        $('[data-control="fieldrepeater"]').fieldRepeater()
     });
 
 }(window.jQuery);
