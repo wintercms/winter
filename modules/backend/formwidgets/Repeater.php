@@ -26,7 +26,7 @@ class Repeater extends FormWidgetBase
     /**
      * @var bool Items can be sorted.
      */
-    public $sortable = false;
+    public $sortable = true;
 
     /**
      * @var string Field name to use for the title of collapsed items
