@@ -4,5 +4,5 @@
 
 fields:
     id:
-        label: ID
+        label: '{{ plugin_id }}::lang.models.general.id'
         disabled: true

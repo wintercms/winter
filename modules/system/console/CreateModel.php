@@ -1,6 +1,6 @@
 <?php namespace System\Console;
 
-use Str;
+use Winter\Storm\Support\Str;
 use System\Console\BaseScaffoldCommand;
 
 class CreateModel extends BaseScaffoldCommand
@@ -86,19 +86,27 @@ class CreateModel extends BaseScaffoldCommand
     }
 
     /**
-     * Prepare variables for stubs.
+     * Adds controller & model lang helpers to the vars
      */
-    protected function prepareVars(): array
+    protected function processVars($vars): array
     {
-        $parts = explode('.', $this->getPluginIdentifier());
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-        $name = $this->getNameInput();
+        $vars = parent::processVars($vars);
 
+        $vars['table_name'] = "{$vars['lower_author']}_{$vars['lower_plugin']}_{$vars['snake_plural_name']}";
+
+        return $vars;
+    }
+
+    /**
+     * Gets the localization keys and values to be stored in the plugin's localization files
+     * Can reference $this->vars and $this->laravel->getLocale() internally
+     */
+    protected function getLangKeys(): array
+    {
         return [
-            'name' => $name,
-            'author' => $author,
-            'plugin' => $plugin,
+            'models.general.id' => 'ID',
+            'models.general.created_at' => 'Created At',
+            'models.general.updated_at' => 'Updated At',
         ];
     }
 
