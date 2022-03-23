@@ -41,19 +41,10 @@ class CreateSettings extends BaseScaffoldCommand
     ];
 
     /**
-     * Prepare variables for stubs.
+     * Get the desired class name from the input.
      */
-    protected function prepareVars(): array
+    protected function getNameInput(): string
     {
-        $parts = explode('.', $this->getPluginIdentifier());
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-        $name = $this->getNameInput() ?? 'Settings';
-
-        return [
-            'name' => $name,
-            'author' => $author,
-            'plugin' => $plugin,
-        ];
+        return parent::getNameInput() ?? 'Settings';
     }
 }

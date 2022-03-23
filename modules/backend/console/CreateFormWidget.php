@@ -51,21 +51,4 @@ class CreateFormWidget extends BaseScaffoldCommand
         'scaffold/formwidget/stylesheet.stub'      => 'formwidgets/{{lower_name}}/assets/css/{{lower_name}}.css',
         'scaffold/formwidget/javascript.stub'      => 'formwidgets/{{lower_name}}/assets/js/{{lower_name}}.js',
     ];
-
-    /**
-     * Prepare variables for stubs.
-     */
-    protected function prepareVars(): array
-    {
-        $parts = explode('.', $this->getPluginIdentifier());
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-        $name = $this->getNameInput();
-
-        return [
-            'name' => $name,
-            'author' => $author,
-            'plugin' => $plugin,
-        ];
-    }
 }

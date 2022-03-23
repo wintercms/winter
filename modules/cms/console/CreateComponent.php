@@ -49,21 +49,4 @@ class CreateComponent extends BaseScaffoldCommand
         'scaffold/component/component.stub'  => 'components/{{studly_name}}.php',
         'scaffold/component/default.stub' => 'components/{{lower_name}}/default.htm',
     ];
-
-    /**
-     * Prepare variables for stubs.
-     */
-    protected function prepareVars(): array
-    {
-        $parts = explode('.', $this->getPluginIdentifier());
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-        $name = $this->getNameInput();
-
-        return [
-            'name' => $name,
-            'author' => $author,
-            'plugin' => $plugin,
-        ];
-    }
 }

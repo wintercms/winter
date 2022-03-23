@@ -49,21 +49,4 @@ class CreateReportWidget extends BaseScaffoldCommand
         'scaffold/reportwidget/reportwidget.stub' => 'reportwidgets/{{studly_name}}.php',
         'scaffold/reportwidget/widget.stub'       => 'reportwidgets/{{lower_name}}/partials/_{{lower_name}}.htm',
     ];
-
-    /**
-     * Prepare variables for stubs.
-     */
-    protected function prepareVars(): array
-    {
-        $parts = explode('.', $this->getPluginIdentifier());
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-        $name = $this->getNameInput();
-
-        return [
-            'name' => $name,
-            'author' => $author,
-            'plugin' => $plugin,
-        ];
-    }
 }

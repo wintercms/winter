@@ -45,15 +45,11 @@ class CreatePlugin extends BaseScaffoldCommand
     protected $validatePluginInput = false;
 
     /**
-     * Prepare variables for stubs.
+     * Get the desired class name from the input.
      */
-    protected function prepareVars(): array
+    protected function getNameInput(): string
     {
-        $vars = parent::prepareVars();
-        $pluginCode = $this->getPluginIdentifier();
-        $vars['name'] = explode('.', $pluginCode)[1];
-
-        return $vars;
+        return explode('.', $this->getPluginIdentifier())[1];
     }
 
     /**
