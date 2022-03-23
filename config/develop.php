@@ -42,5 +42,4 @@ return [
     */
 
     'allowDeepSymlinks' => false,
-
 ];

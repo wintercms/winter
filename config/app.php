@@ -231,7 +231,6 @@ return [
     */
 
     'key' => env('APP_KEY'),
-
     'cipher' => 'AES-256-CBC',
 
     /*
@@ -249,7 +248,7 @@ return [
 
         // 'Illuminate\Html\HtmlServiceProvider', // Example
 
-        'System\ServiceProvider',
+        System\ServiceProvider::class,
     ]),
 
     /*
@@ -284,9 +283,6 @@ return [
     */
 
     'aliases' => array_merge(include(base_path('modules/system/aliases.php')), [
-
         // 'Str' => 'Illuminate\Support\Str', // Example
-
     ]),
-
 ];

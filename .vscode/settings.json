@@ -1,7 +1,7 @@
 {
     "files.associations": {
         "**/modules/*/behaviors/*/partials/*.htm": "php",
-        "**/modules/*/controllers/*.htm": "php",
+        "**/modules/*/controllers/*/*.htm": "php",
         "**/modules/*/formwidgets/*/partials/*.htm": "php",
         "**/modules/*/layouts/*.htm": "php",
         "**/modules/*/models/*/*.htm": "php",
