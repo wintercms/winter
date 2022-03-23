@@ -87,10 +87,8 @@ class CreateModel extends BaseScaffoldCommand
 
     /**
      * Prepare variables for stubs.
-     *
-     * @return array
      */
-    protected function prepareVars()
+    protected function prepareVars(): array
     {
         $parts = explode('.', $this->getPluginIdentifier());
         $plugin = array_pop($parts);

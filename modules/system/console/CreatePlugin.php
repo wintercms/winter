@@ -40,37 +40,32 @@ class CreatePlugin extends BaseScaffoldCommand
     ];
 
     /**
-     * Prepare variables for stubs.
-     *
-     * @return array
+     * @var bool Validate the provided plugin input against the PluginManager, default true.
      */
-    protected function prepareVars()
+    protected $validatePluginInput = false;
+
+    /**
+     * Prepare variables for stubs.
+     */
+    protected function prepareVars(): array
     {
-        /*
-         * Extract the author and name from the plugin code
-         */
-        $parts = explode('.', $this->getNameInput());
+        $vars = parent::prepareVars();
+        $pluginCode = $this->getPluginIdentifier();
+        $vars['name'] = explode('.', $pluginCode)[1];
 
-        if (count($parts) !== 2) {
-            $this->error('Invalid plugin name, either too many dots or not enough.');
-            $this->error('Example name: AuthorName.PluginName');
-            return;
-        }
-
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-
-        return [
-            'name'   => $plugin,
-            'author' => $author,
-        ];
+        return $vars;
     }
 
     /**
-     * Don't suggest any values, this command is for creating plugins
+     * Gets the localization keys and values to be stored in the plugin's localization files
+     * Can reference $this->vars and $this->laravel->getLocale() internally
      */
-    public function suggestPluginValues(): array
+    protected function getLangKeys(): array
     {
-        return [];
+        return [
+            'plugin.name' => $this->vars['name'],
+            'plugin.description' => 'No description provided yet...',
+            'permissions.some_permission' => 'Some permission',
+        ];
     }
 }

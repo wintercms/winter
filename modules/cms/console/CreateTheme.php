@@ -62,10 +62,8 @@ class CreateTheme extends BaseScaffoldCommand
 
     /**
      * Prepare variables for stubs.
-     *
-     * return @array
      */
-    protected function prepareVars()
+    protected function prepareVars(): array
     {
         /*
          * Extract the author and name from the plugin code
@@ -79,10 +77,8 @@ class CreateTheme extends BaseScaffoldCommand
 
     /**
      * Get the plugin path from the input.
-     *
-     * @return string
      */
-    protected function getDestinationPath()
+    protected function getDestinationPath(): string
     {
         $code = $this->prepareVars()['code'];
 
