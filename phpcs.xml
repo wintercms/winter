@@ -9,6 +9,17 @@
         <exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps" />
         <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace" />
         <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace" />
+        <!--
+        We're not enforcing a line length limit
+        -->
+        <exclude name="Generic.Files.LineLength" />
+    </rule>
+
+    <rule ref="Squiz.ControlStructures.ControlSignature">
+        <!-- We use 0 spaces before the colon for short (alternative) tags -->
+        <properties>
+            <property name="requiredSpacesBeforeColon" value="0" />
+        </properties>
     </rule>
 
     <rule ref="PSR1.Classes.ClassDeclaration.MissingNamespace">
@@ -26,6 +37,9 @@
         -->
         <exclude-pattern>*/tests/*</exclude-pattern>
     </rule>
+
+    <arg name="extensions" value="php" />
+    <arg name="colors" />
 
     <file>bootstrap/</file>
     <file>config/</file>
