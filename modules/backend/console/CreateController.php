@@ -53,25 +53,43 @@ class CreateController extends BaseScaffoldCommand
      */
     protected function prepareVars(): array
     {
-        $parts = explode('.', $this->getPluginIdentifier());
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-        $name = $this->getNameInput();
-
+        $vars = parent::prepareVars();
         /*
          * Determine the model name to use,
          * either supplied or singular from the controller name.
          */
         $model = $this->option('model');
         if (!$model) {
-            $model = Str::singular($name);
+            $model = Str::singular($vars['name']);
         }
+        $vars['model'];
 
+        return $vars;
+    }
+
+    /**
+     * Adds controller & model lang helpers to the vars
+     */
+    protected function processVars($vars): array
+    {
+        $vars = parent::processVars($vars);
+
+        $vars['controller_url'] = "{$vars['plugin_url']}/{$vars['lower_name']}";
+        $vars['model_lang_key_short'] = "models.{$vars['lower_model']}";
+        $vars['model_lang_key'] = "{$vars['plugin_id']}::lang.{$vars['model_lang_key_short']}";
+
+        return $vars;
+    }
+
+    /**
+     * Gets the localization keys and values to be stored in the plugin's localization files
+     * Can reference $this->vars and $this->laravel->getLocale() internally
+     */
+    protected function getLangKeys(): array
+    {
         return [
-            'name' => $name,
-            'model' => $model,
-            'author' => $author,
-            'plugin' => $plugin,
+            "{$this->vars['model_lang_key_short']}.label" => $this->vars['title_singular_name'],
+            "{$this->vars['model_lang_key_short']}.label_plural" => $this->vars['title_plural_name'],
         ];
     }
 }
