@@ -1058,7 +1058,7 @@ class Controller
         CmsException::mask($partial, 400);
         $this->getLoader()->setObject($partial);
         $template = $this->getTwig()->load($partial->getFilePath());
-        $partialContent = $template->render($this->vars);
+        $partialContent = $template->render(array_merge($parameters, $this->vars));
         CmsException::unmask();
 
         if ($partial instanceof Partial) {
