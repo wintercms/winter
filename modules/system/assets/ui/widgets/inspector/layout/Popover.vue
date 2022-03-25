@@ -140,14 +140,16 @@ export default {
             this.inspectedElementStyle.position = this.inspectedElement.style.position;
             this.inspectedElementStyle.zIndex = this.inspectedElement.style.zIndex;
 
+            /* eslint-disable */
             this.inspectedElement.style.position = 'relative';
             this.inspectedElement.style.zIndex = 1001;
+            /* eslint-enable */
         },
     },
 };
 </script>
 
-<style lang="less">
+<style lang="less" scoped>
 @import (reference) '../../../less/global.less';
 @import (reference) '../style/variables.less';
 
@@ -165,7 +167,6 @@ export default {
     width: @inpsector-popover-width;
     box-shadow: @overlay-box-shadow;
     border-radius: @inspector-border-radius;
-    font-size: @inspector-font-size;
 
     .arrow,
     .arrow::before {
@@ -187,86 +188,17 @@ export default {
     }
 
     header {
-        position: relative;
-        padding: @padding-large-vertical (@padding-large-horizontal + 30px) @padding-large-vertical @padding-large-horizontal;
-        background: @inspector-header-bg;
-        color: @inspector-header-fg;
-        border-bottom: 1px solid darken(@inspector-header-bg, 8%);
         border-top-left-radius: @inspector-border-radius;
         border-top-right-radius: @inspector-border-radius;
-        text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.22);
-        z-index: 1003;
-
-        .inspector-title {
-            font-weight: @inspector-header-title-weight;
-            font-size: @inspector-header-title-size;
-        }
-
-        .inspector-description {
-            font-weight: @inspector-header-description-weight;
-            font-size: @inspector-header-description-size;
-            margin-top: -3px;
-        }
 
         .inspector-hide {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 30px;
-            height: 30px;
-            line-height: 30px;
-            text-align: center;
-            background: darken(@inspector-header-bg, 8%);
             border-top-right-radius: @inspector-border-radius;
-            border-bottom-left-radius: @inspector-border-radius;
-            cursor: pointer;
-            transition: background-color 175ms ease;
-
-            &::before {
-                transition: opacity 175ms ease;
-                opacity: 0.7;
-                margin-right: 0;
-            }
-
-            &:hover {
-                background: darken(@inspector-header-bg, 12%);
-
-                &::before {
-                    opacity: 1;
-                }
-            }
         }
     }
 
     main {
-        position: relative;
-        background: @inspector-bg;
         border-bottom-left-radius: @inspector-border-radius;
         border-bottom-right-radius: @inspector-border-radius;
-        z-index: 1003;
-
-        .field {
-            display: flex;
-            flex-direction: row;
-            justify-content: stretch;
-
-            .field-label {
-                padding: @padding-small-vertical @padding-small-horizontal;
-                flex: 3 0;
-                background: @inspector-field-label-bg;
-                color: @inspector-field-label-fg;
-                border-right: 1px solid @inspector-field-border;
-            }
-
-            .field-control {
-                background: @inspector-field-bg;
-                flex: 5 0;
-            }
-        }
-
-        .field + .field {
-            border-top: 1px solid @inspector-field-border;
-        }
     }
 }
 

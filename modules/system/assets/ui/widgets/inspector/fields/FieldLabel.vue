@@ -7,6 +7,11 @@
             class="label"
             v-text="label"
         />
+        <span
+            v-if="comment !== ''"
+            class="comment icon-info-circle"
+            :data-tooltip="comment"
+        />
     </div>
 </template>
 
@@ -16,6 +21,10 @@ export default {
         label: {
             type: [String, Boolean],
             default: false,
+        },
+        comment: {
+            type: [String],
+            default: '',
         },
     },
 };

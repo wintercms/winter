@@ -24,6 +24,7 @@
             >
                 <FieldLabel
                     :label="field.label"
+                    :comment="field.comment"
                 />
                 <div class="field-control" />
             </Field>
@@ -235,8 +236,6 @@ export default {
                 }
             });
 
-            console.log(fieldsConfig);
-
             return fieldsConfig;
         },
         reformatProperties(properties) {
@@ -252,3 +251,100 @@ export default {
     },
 };
 </script>
+
+<style lang="less">
+// GLOBAL INSPECTOR STYLES
+@import (reference) '../../../less/global.less';
+@import (reference) '../style/variables.less';
+
+.inspector {
+    font-size: @inspector-font-size;
+
+    header {
+        position: relative;
+        padding: @padding-large-vertical (@padding-small-horizontal + 30px) @padding-large-vertical @padding-small-horizontal;
+        background: @inspector-header-bg;
+        color: @inspector-header-fg;
+        border-bottom: 1px solid darken(@inspector-header-bg, 8%);
+        text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.22);
+        z-index: 1003;
+
+        .inspector-title {
+            font-weight: @inspector-header-title-weight;
+            font-size: @inspector-header-title-size;
+        }
+
+        .inspector-description {
+            font-weight: @inspector-header-description-weight;
+            font-size: @inspector-header-description-size;
+            margin-top: -3px;
+        }
+
+        .inspector-hide {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
+            background: darken(@inspector-header-bg, 8%);
+            border-bottom-left-radius: @inspector-border-radius;
+            cursor: pointer;
+            transition: background-color 175ms ease;
+
+            &::before {
+                transition: opacity 175ms ease;
+                opacity: 0.7;
+                margin-right: 0;
+            }
+
+            &:hover {
+                background: darken(@inspector-header-bg, 12%);
+
+                &::before {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+
+    main {
+        position: relative;
+        background: @inspector-bg;
+        z-index: 1003;
+
+        .field {
+            display: flex;
+            flex-direction: row;
+            justify-content: stretch;
+
+            .field-label {
+                position: relative;
+                padding: @padding-small-vertical @padding-small-horizontal;
+                flex: 3 0;
+                background: @inspector-field-label-bg;
+                color: @inspector-field-label-fg;
+                border-right: 1px solid @inspector-field-border;
+
+                .comment {
+                    position: absolute;
+                    right: @padding-small-vertical;
+                    top: 50%;
+                    transform: translateY(-66%);
+                    color: @text-muted;
+                }
+            }
+
+            .field-control {
+                background: @inspector-field-bg;
+                flex: 5 0;
+            }
+        }
+
+        .field + .field {
+            border-top: 1px solid @inspector-field-border;
+        }
+    }
+}
+</style>
