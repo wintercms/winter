@@ -109,7 +109,7 @@
 
         this.$el.request(handler, {
             data: { sort_orders: this.sortOrders, record_ids: recordIds, _reorder_relation_name: relation },
-            loading: $.oc.stripeLoadIndicator,
+            loading: $.wn.stripeLoadIndicator,
         })
     }
 
