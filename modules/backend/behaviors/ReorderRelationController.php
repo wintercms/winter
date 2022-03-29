@@ -22,7 +22,7 @@ use Winter\Storm\Database\Traits\SortableRelation;
  * values as either a YAML file, located in the controller view directory,
  * or directly as a PHP array.
  *
- * @package october\backend
+ * @package winter\wn-backend-module
  */
 class ReorderRelationController extends ControllerBehavior
 {
@@ -87,7 +87,7 @@ class ReorderRelationController extends ControllerBehavior
      */
     public function onRelationButtonReorder()
     {
-        $this->addJs('../../reordercontroller/assets/js/october.reorder.js', 'core');
+        $this->addJs('../../reordercontroller/assets/js/winter.reorder.js', 'core');
 
         $this->reorderGetModel();
         $this->validateModel();
