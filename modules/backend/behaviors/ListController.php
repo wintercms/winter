@@ -5,7 +5,7 @@ use Event;
 use Flash;
 use ApplicationException;
 use Backend\Classes\ControllerBehavior;
-use October\Rain\Database\Traits\SortableRelation;
+use Winter\Storm\Database\Traits\SortableRelation;
 
 /**
  * Adds features for working with backend lists.

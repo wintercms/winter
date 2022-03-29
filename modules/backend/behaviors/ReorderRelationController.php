@@ -4,8 +4,8 @@ use ApplicationException;
 use Backend;
 use Backend\Classes\ControllerBehavior;
 use Lang;
-use October\Rain\Database\Model;
-use October\Rain\Database\Traits\SortableRelation;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Database\Traits\SortableRelation;
 
 /**
  * Used for reordering and sorting related records.
@@ -170,7 +170,7 @@ class ReorderRelationController extends ControllerBehavior
     /**
      * Extend the relation query used for finding reorder records. Extra conditions
      * can be applied to the query, for example, $query->withTrashed();
-     * @param October\Rain\Database\Builder $query
+     * @param Winter\Storm\Database\Builder $query
      * @return void
      */
     public function reorderExtendRelationQuery($query)
@@ -215,7 +215,7 @@ class ReorderRelationController extends ControllerBehavior
     {
         $modelTraits = class_uses($this->parentModel);
 
-        if (!isset($modelTraits[\October\Rain\Database\Traits\SortableRelation::class])) {
+        if (!isset($modelTraits[\Winter\Storm\Database\Traits\SortableRelation::class])) {
             throw new ApplicationException(
                 sprintf('The "%s" model must implement the SortableRelation trait.', get_class($this->parentModel))
             );
