@@ -6,15 +6,16 @@
  * - Nested sorting: Post back source and target nodes IDs and the move positioning.
  */
 +function ($) { "use strict";
-
     var ReorderBehavior = function() {
 
         this.sortMode = null
+        this.context = 'default'
 
         this.simpleSortOrders = []
 
-        this.initSorting = function (mode) {
+        this.initSorting = function (mode, context) {
             this.sortMode = mode
+            this.context = context
 
             if (mode == 'simple') {
                 this.initSortingSimple()
@@ -34,7 +35,9 @@
                 postData = this.getNestedMoveData(sortData)
             }
 
-            $('#reorderTreeList').request('onReorder', {
+            var handler = this.context === 'relation' ? 'onReorderRelation' : 'onReorder'
+
+            $('#reorderTreeList').request(handler, {
                 data: postData
             })
         }

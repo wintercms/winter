@@ -5,6 +5,7 @@ use Event;
 use Flash;
 use ApplicationException;
 use Backend\Classes\ControllerBehavior;
+use October\Rain\Database\Traits\SortableRelation;
 
 /**
  * Adds features for working with backend lists.
@@ -150,6 +151,7 @@ class ListController extends ControllerBehavior
             'showCheckboxes',
             'showTree',
             'treeExpanded',
+            'sortable',
             'customViewPath',
         ];
 
@@ -429,6 +431,22 @@ class ListController extends ControllerBehavior
         }
 
         return $this->listWidgets[$definition]->onRefresh();
+    }
+
+    /**
+     * Returns the sort order value for a specific record.
+     */
+    public function getRecordSortOrder($record, $relation = '')
+    {
+        if ($relation) {
+            /** @var SortableRelation $modelInstance */
+            $modelInstance = new $this->config->modelClass;
+            $reorderColumn = $modelInstance->getRelationSortOrderColumn($relation);
+
+            return $record->pivot->{$reorderColumn};
+        }
+
+        return $record->{$record->getSortOrderColumn()};
     }
 
     /**

@@ -8,6 +8,8 @@ use DbDongle;
 use Carbon\Carbon;
 use Winter\Storm\Html\Helper as HtmlHelper;
 use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Database\Traits\Sortable;
+use Winter\Storm\Database\Traits\SortableRelation;
 use System\Helpers\DateTime as DateTimeHelper;
 use System\Classes\PluginManager;
 use System\Classes\MediaLibrary;
@@ -72,6 +74,11 @@ class Lists extends WidgetBase
      * @var bool Shows the sorting options for each column.
      */
     public $showSorting = true;
+
+    /**
+     * @var bool Makes this list sortable in-place.
+     */
+    public $sortable = false;
 
     /**
      * @var mixed A default sort column to look for.
@@ -187,6 +194,26 @@ class Lists extends WidgetBase
     protected $sortDirection;
 
     /**
+     * @var string Name of the relation to sort.
+     */
+    protected $reorderRelation;
+
+    /**
+     * @var string Class path of the model to sort.
+     */
+    protected $reorderModel;
+
+    /**
+     * @var string ID of the parent model (used when sorting relations).
+     */
+    protected $reorderParentId;
+
+    /**
+     * @var string Column to sort by.
+     */
+    protected $reorderColumn;
+
+    /**
      * @var array List of CSS classes to apply to the list container element
      */
     public $cssClasses = [];
@@ -205,6 +232,10 @@ class Lists extends WidgetBase
             'showPageNumbers',
             'recordsPerPage',
             'perPageOptions',
+            'sortable',
+            'reorderRelation',
+            'reorderModel',
+            'reorderParentId',
             'showSorting',
             'defaultSort',
             'showCheckboxes',
@@ -232,6 +263,20 @@ class Lists extends WidgetBase
 
         $this->validateModel();
         $this->validateTree();
+
+        if ($this->sortable) {
+            $this->addJs('/modules/system/assets/ui/js/list.sortable.js', 'core');
+            $this->showSorting = false;
+            $this->showTree = false;
+
+            if ($this->reorderRelation) {
+                /** @var SortableRelation $modelInstance */
+                $modelInstance = new $this->reorderModel;
+                $this->reorderColumn = $modelInstance->getRelationSortOrderColumn($this->reorderRelation);
+            } else {
+                $this->reorderColumn = $this->model->getSortOrderColumn();
+            }
+        }
     }
 
     /**
@@ -266,6 +311,10 @@ class Lists extends WidgetBase
         $this->vars['showPagination'] = $this->showPagination;
         $this->vars['showPageNumbers'] = $this->showPageNumbers;
         $this->vars['showSorting'] = $this->showSorting;
+        $this->vars['sortable'] = $this->sortable;
+        $this->vars['reorderModel'] = $this->reorderModel;
+        $this->vars['reorderRelation'] = $this->reorderRelation;
+        $this->vars['reorderParentId'] = $this->reorderParentId;
         $this->vars['sortColumn'] = $this->getSortColumn();
         $this->vars['sortDirection'] = $this->sortDirection;
         $this->vars['showTree'] = $this->showTree;
@@ -337,6 +386,18 @@ class Lists extends WidgetBase
                 'backend::lang.model.invalid_class',
                 ['model'=>get_class($this->model), 'class'=>get_class($this->controller)]
             ));
+        }
+
+        if ($this->sortable) {
+            $checkModel = $this->reorderRelation ? $this->reorderModel : $this->model;
+            $needsTrait = $this->reorderRelation ? SortableRelation::class : Sortable::class;
+            $modelTraits = class_uses($checkModel);
+
+            if (!isset($modelTraits[$needsTrait])) {
+                throw new ApplicationException(
+                    sprintf('The "%s" model must implement the "%s" trait.', get_class($this->model), $needsTrait)
+                );
+            }
         }
 
         return $this->model;
@@ -540,6 +601,12 @@ class Lists extends WidgetBase
             // Set the sorting column to $relation_count if useRelationCount enabled
             if (isset($column->relation) && @$column->config['useRelationCount']) {
                 $sortColumn = $column->relation . '_count';
+            }
+
+            // Fix the sort order if this list has sortable set to true.
+            if ($this->sortable) {
+                $sortColumn = $this->reorderColumn;
+                $this->sortDirection = 'ASC';
             }
 
             $query->orderBy($sortColumn, $this->sortDirection);
@@ -781,6 +848,17 @@ class Lists extends WidgetBase
             throw new ApplicationException(Lang::get('backend::lang.list.missing_columns', compact('class')));
         }
 
+        if ($this->sortable) {
+            $this->allColumns['sort_handle'] = $this->makeListColumn('sort_handle', [
+               'label' => 'backend::lang.list.sort_handle',
+               'path' => '~/modules/backend/widgets/lists/partials/_list_sort_handle.htm',
+               'type' => 'partial',
+               'width' => '20px',
+               'sortable' => false,
+               'clickable' => false,
+            ]);
+        }
+
         $this->addColumns($this->columns);
 
         /**
@@ -963,6 +1041,11 @@ class Lists extends WidgetBase
      */
     public function getHeaderValue($column)
     {
+        // The sort handle should never have a visible column header label.
+        if ($column->label === 'backend::lang.list.sort_handle') {
+            return '';
+        }
+
         $value = Lang::get($column->label);
 
         /**
