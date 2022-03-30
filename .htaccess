@@ -19,6 +19,29 @@
     # RewriteRule (.*) https://%{SERVER_NAME}/$1 [L,R=301]
 
     ##
+    ## Uncomment following lines to force remove www from url
+    ##
+    # RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+    # RewriteRule ^ %{REQUEST_SCHEME}://%1%{REQUEST_URI} [R=301,L]
+
+    ##
+    ## Uncomment following lines to force add www to url
+    ##
+    # RewriteCond %{HTTP_HOST} !^www\. [NC]
+    # RewriteRule ^ %{REQUEST_SCHEME}://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+    ##
+    ## Uncomment following lines to enforce a no-trailing-slash policy.
+    ##
+    # RewriteCond %{REQUEST_FILENAME} !-d
+    # RewriteRule ^(.*)/$ /$1 [L,R=301]
+
+    ##
+    ## Uncomment following line to allow robots.txt file at server root
+    ##
+    # RewriteRule ^robots.txt - [L]
+
+    ##
     ## Paths explicitly blocked from being handled by the server
     ##
     RewriteRule ^bootstrap/.* index.php [L,NC]
