@@ -349,7 +349,7 @@ class RelationController extends ControllerBehavior
             $this->applyExtraConfig($extraConfig);
         }
 
-        if (\Request::is('*/preview/*')) { 
+        if (\Request::is('*/preview/*')) {
             $this->previewMode = true;
         }
 
