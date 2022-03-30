@@ -1,6 +1,6 @@
 <?php if ($this->previewMode): ?>
     <div class="form-control"><?= Backend::dateTime($value, [
-        'format' => $format,
+        'format' => $format . ' H:i',
         'formatAlias' => $formatAlias,
         'defaultValue' => $value
     ]) ?></div>
