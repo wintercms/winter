@@ -216,6 +216,11 @@ class RelationController extends ControllerBehavior
     public $deferredBinding = false;
 
     /**
+     * @var bool Returns if controller is in preview mode or not
+     */
+    public $previewMode = false;
+    
+    /**
      * Behavior constructor
      * @param Backend\Classes\Controller $controller
      */
@@ -342,6 +347,10 @@ class RelationController extends ControllerBehavior
 
         if ($extraConfig = post(self::PARAM_EXTRA_CONFIG)) {
             $this->applyExtraConfig($extraConfig);
+        }
+
+        if (\Request::is('*/preview/*')) { 
+            $this->previewMode = true;
         }
 
         $this->alias = camel_case('relation ' . $field);
