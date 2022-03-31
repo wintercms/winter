@@ -66,7 +66,7 @@ class ReorderRelationController extends ControllerBehavior
      */
     public function onReorderRelation()
     {
-        $this->reorderGetModel();
+        $this->reorderRelationGetModel();
         $this->validateModel();
 
         if (
@@ -89,7 +89,7 @@ class ReorderRelationController extends ControllerBehavior
     {
         $this->addJs('../../reordercontroller/assets/js/winter.reorder.js', 'core');
 
-        $this->reorderGetModel();
+        $this->reorderRelationGetModel();
         $this->validateModel();
         $this->prepareVars();
 
@@ -115,7 +115,7 @@ class ReorderRelationController extends ControllerBehavior
      */
     public function onRelationModalClose()
     {
-        $this->reorderGetModel();
+        $this->reorderRelationGetModel();
 
         $this->controller->initRelation(
             $this->parentModel->newQuery()->findOrFail($this->postValue('_reorder_parent_id')),
@@ -134,9 +134,9 @@ class ReorderRelationController extends ControllerBehavior
     /**
      * Sets all required model properties.
      */
-    public function reorderGetModel()
+    public function reorderRelationGetModel()
     {
-        $this->parentModel = $this->reorderGetParentModel();
+        $this->parentModel = $this->reorderRelationGetParentModel();
         $this->relation = post('_reorder_relation_name');
 
         $relationModelClass = array_get($this->parentModel->getRelationDefinition($this->relation), 0);
@@ -194,7 +194,7 @@ class ReorderRelationController extends ControllerBehavior
      * Return a model instance based on the _reorder_model post value.
      * @return Model
      */
-    public function reorderGetParentModel()
+    public function reorderRelationGetParentModel()
     {
         $model = $this->postValue('_reorder_model');
 
