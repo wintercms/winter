@@ -443,7 +443,7 @@ class ListController extends ControllerBehavior
             $modelInstance = new $this->config->modelClass;
             $reorderColumn = $modelInstance->getRelationSortOrderColumn($relation);
 
-            return $record->pivot->{$reorderColumn};
+            return $this->controller->asExtension('ReorderRelationController')->getRelationRecordSortOrder($record, $reorderColumn);
         }
 
         return $record->{$record->getSortOrderColumn()};
