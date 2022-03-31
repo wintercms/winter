@@ -1623,14 +1623,7 @@ $scope.removeClass('active')}}
 FilterWidget.prototype.selectItem=function($item,isDeselect){var $otherContainer=isDeselect?$item.closest('.control-filter-popover').find('.filter-items:first > ul'):$item.closest('.control-filter-popover').find('.filter-active-items:first > ul')
 $item.addClass('animate-enter').prependTo($otherContainer).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){$(this).removeClass('animate-enter')})
 if(!this.scopeValues[this.activeScopeName])return
-var itemId=$item.data('item-id'),active=this.scopeValues[this.activeScopeName],available=this.scopeAvailable[this.activeScopeName],fromItems=isDeselect?active:available,toItems=isDeselect?available:active,testFunc=function(active){return active.id==itemId},item=($.grep(fromItems,testFunc).pop()??{'id':itemId,'name':$item.text()}),filtered=$.grep(fromItems,testFunc,true)
-if(isDeselect){this.scopeValues[this.activeScopeName]=filtered
-this.scopeAvailable[this.activeScopeName].push(item)}else{this.scopeAvailable[this.activeScopeName]=filtered
-this.scopeValues[this.activeScopeName].push(item)}this.toggleFilterButtons(active)
-this.updateScopeSetting(this.$activeScope,isDeselect?filtered.length:active.length)
-this.isActiveScopeDirty=true
-this.focusSearch()}
-FilterWidget.prototype.displayPopover=function($scope){var self=this,scopeName=$scope.data('scope-name'),data=null,isLoaded=true,container=false
+var itemId=$item.data('item-id'),active=this.scopeValues[this.activeScopeName],available=this.scopeAvailable[this.activeScopeName],fromItems=isDeselect?active:available,toItems=isDeselect?available:active,testFunc=function(active){return active.id==itemId},item=$.grep(fromItems,testFunc).pop()??{'id':itemId,'name':$item.text()},filtered=$.grep(fromItems,testFunc,true)if(isDeselect){this.scopeValues[this.activeScopeName]=filtered this.scopeAvailable[this.activeScopeName].push(item)}else{this.scopeAvailable[this.activeScopeName]=filtered this.scopeValues[this.activeScopeName].push(item)}this.toggleFilterButtons(active)this.updateScopeSetting(this.$activeScope,isDeselect?filtered.length:active.length)this.isActiveScopeDirty=true this.focusSearch()}FilterWidget.prototype.displayPopover=function($scope){var self=this,scopeName=$scope.data('scope-name'),data=null,isLoaded=true,container=false
 if(typeof this.scopeAvailable[scopeName]!=="undefined"&&this.scopeAvailable[scopeName]){data=$.extend({},data,{available:this.scopeAvailable[scopeName],active:this.scopeValues[scopeName]})}var modalParent=$scope.parents('.modal-dialog')
 if(modalParent.length>0){container=modalParent[0]}if(!data){data={loading:true}
 isLoaded=false}data=$.extend({},data,{apply_button_text:this.getLang('filter.scopes.apply_button_text','Apply'),clear_button_text:this.getLang('filter.scopes.clear_button_text','Clear')})
@@ -1639,13 +1632,11 @@ data.optionsHandler=self.options.optionsHandler
 $scope.data('oc.popover',null)
 $scope.ocPopover({content:Mustache.render(self.getPopoverTemplate(),data),modal:false,highlightModalTarget:true,closeOnPageClick:true,placement:'bottom',container:container})
 this.toggleFilterButtons()
-if(!isLoaded){self.loadOptions(scopeName)}}
-FilterWidget.prototype.loadOptions=function(scopeName){var self=this,data={scopeName:scopeName}
+if(!isLoaded){self.loadOptions(scopeName)}}FilterWidget.prototype.loadOptions=function(scopeName){var self=this,data={scopeName:scopeName}
 var populated=this.$el.data('filterScopes')
 if(populated&&populated[scopeName]){self.fillOptions(scopeName,populated[scopeName])
 return false}return this.$el.request(this.options.optionsHandler,{data:data,success:function(data){self.fillOptions(scopeName,data.options)
-self.toggleFilterButtons()}})}
-FilterWidget.prototype.fillOptions=function(scopeName,data){if(this.scopeValues[scopeName])return
+self.toggleFilterButtons()}})}FilterWidget.prototype.fillOptions=function(scopeName,data){if(this.scopeValues[scopeName])return
 if(!data.active)data.active=[]
 if(!data.available)data.available=[]
 this.scopeValues[scopeName]=data.active
@@ -1654,60 +1645,46 @@ if(scopeName!=this.activeScopeName)return
 var container=$('#controlFilterPopover .filter-items > ul').empty()
 this.addItemsToListElement(container,data.available)
 var container=$('#controlFilterPopover .filter-active-items > ul')
-this.addItemsToListElement(container,data.active)}
-FilterWidget.prototype.filterAvailable=function(scopeName,available){if(this.activeScopeName!=scopeName)return
+this.addItemsToListElement(container,data.active)}FilterWidget.prototype.filterAvailable=function(scopeName,available){if(this.activeScopeName!=scopeName)return
 if(!this.scopeValues[this.activeScopeName])return
 var self=this,filtered=[],items=this.scopeValues[scopeName]
 if(items.length){var activeIds=[]
 $.each(items,function(key,obj){activeIds.push(obj.id)})
 filtered=$.grep(available,function(item){return $.inArray(item.id,activeIds)===-1})}else{filtered=available}var container=$('#controlFilterPopover .filter-items > ul').empty()
-self.addItemsToListElement(container,filtered)}
-FilterWidget.prototype.addItemsToListElement=function($ul,items){$.each(items,function(key,obj){var item=$('<li />').data({'item-id':obj.id}).append($('<a />').prop({'href':'javascript:;',}).text(obj.name))
-$ul.append(item)})}
-FilterWidget.prototype.toggleFilterButtons=function(data){var items=$('#controlFilterPopover .filter-active-items > ul'),buttonContainer=$('#controlFilterPopover .filter-buttons')
-if(data){data.length>0?buttonContainer.show():buttonContainer.hide()}else{items.children().length>0?buttonContainer.show():buttonContainer.hide()}}
-FilterWidget.prototype.pushOptions=function(scopeName){if(!this.isActiveScopeDirty||!this.options.updateHandler)return
+self.addItemsToListElement(container,filtered)}FilterWidget.prototype.addItemsToListElement=function($ul,items){$.each(items,function(key,obj){var item=$('<li />').data({'item-id':obj.id}).append($('<a />').prop({'href':'javascript:;',}).text(obj.name))
+$ul.append(item)})}FilterWidget.prototype.toggleFilterButtons=function(data){var items=$('#controlFilterPopover .filter-active-items > ul'),buttonContainer=$('#controlFilterPopover .filter-buttons')
+if(data){data.length>0?buttonContainer.show():buttonContainer.hide()}else{items.children().length>0?buttonContainer.show():buttonContainer.hide()}}FilterWidget.prototype.pushOptions=function(scopeName){if(!this.isActiveScopeDirty||!this.options.updateHandler)return
 var self=this,data={scopeName:scopeName,options:JSON.stringify(this.scopeValues[scopeName])}
 $.wn.stripeLoadIndicator.show()
-this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(function(){self.$el.find('[data-scope-name="'+scopeName+'"]').trigger('change.oc.filterScope')})}
-FilterWidget.prototype.checkboxToggle=function($el){var isChecked=$el.is(':checked'),$scope=$el.closest('.filter-scope'),scopeName=$scope.data('scope-name')
+this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(function(){self.$el.find('[data-scope-name="'+scopeName+'"]').trigger('change.oc.filterScope')})}FilterWidget.prototype.checkboxToggle=function($el){var isChecked=$el.is(':checked'),$scope=$el.closest('.filter-scope'),scopeName=$scope.data('scope-name')
 this.scopeValues[scopeName]=isChecked
 if(this.options.updateHandler){var data={scopeName:scopeName,value:isChecked}
 $.wn.stripeLoadIndicator.show()
-this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()})}$scope.toggleClass('active',isChecked)}
-FilterWidget.prototype.switchToggle=function($el){var switchValue=$el.data('checked'),$scope=$el.closest('.filter-scope'),scopeName=$scope.data('scope-name')
+this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()})}$scope.toggleClass('active',isChecked)}FilterWidget.prototype.switchToggle=function($el){var switchValue=$el.data('checked'),$scope=$el.closest('.filter-scope'),scopeName=$scope.data('scope-name')
 this.scopeValues[scopeName]=switchValue
 if(this.options.updateHandler){var data={scopeName:scopeName,value:switchValue}
 $.wn.stripeLoadIndicator.show()
-this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()})}$scope.toggleClass('active',!!switchValue)}
-FilterWidget.prototype.filterScope=function(isReset){var scopeName=this.$activeScope.data('scope-name')
+this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()})}$scope.toggleClass('active',!!switchValue)}FilterWidget.prototype.filterScope=function(isReset){var scopeName=this.$activeScope.data('scope-name')
 if(isReset){this.scopeValues[scopeName]=null
 this.scopeAvailable[scopeName]=null
 this.isActiveScopeDirty=true
 this.updateScopeSetting(this.$activeScope,0)}this.pushOptions(scopeName)
 this.isActiveScopeDirty=false
-this.$activeScope.data('oc.popover').hide()}
-FilterWidget.prototype.getLang=function(name,defaultValue){if($.oc===undefined||$.wn.lang===undefined){return defaultValue}return $.wn.lang.get(name,defaultValue)}
-FilterWidget.prototype.searchQuery=function($el){if(this.dataTrackInputTimer!==undefined){window.clearTimeout(this.dataTrackInputTimer)}var self=this
+this.$activeScope.data('oc.popover').hide()}FilterWidget.prototype.getLang=function(name,defaultValue){if($.oc===undefined||$.wn.lang===undefined){return defaultValue}return $.wn.lang.get(name,defaultValue)}FilterWidget.prototype.searchQuery=function($el){if(this.dataTrackInputTimer!==undefined){window.clearTimeout(this.dataTrackInputTimer)}var self=this
 this.dataTrackInputTimer=window.setTimeout(function(){var lastValue=$el.data('oc.lastvalue'),thisValue=$el.val()
 if(lastValue!==undefined&&lastValue==thisValue){return}$el.data('oc.lastvalue',thisValue)
 if(self.lastDataTrackInputRequest){self.lastDataTrackInputRequest.abort()}var data={scopeName:self.activeScopeName,search:thisValue}
 $.wn.stripeLoadIndicator.show()
 self.lastDataTrackInputRequest=self.$el.request(self.options.optionsHandler,{data:data}).success(function(data){self.filterAvailable(self.activeScopeName,data.options.available)
-self.toggleFilterButtons()}).always(function(){$.wn.stripeLoadIndicator.hide()})},300)}
-var old=$.fn.filterWidget
-$.fn.filterWidget=function(option){var args=arguments,result
+self.toggleFilterButtons()}).always(function(){$.wn.stripeLoadIndicator.hide()})},300)}var old=$.fn.filterWidget $.fn.filterWidget=function(option){var args=arguments,result
 this.each(function(){var $this=$(this)
 var data=$this.data('oc.filterwidget')
 var options=$.extend({},FilterWidget.DEFAULTS,$this.data(),typeof option=='object'&&option)
 if(!data)$this.data('oc.filterwidget',(data=new FilterWidget(this,options)))
 if(typeof option=='string')result=data[option].call($this)
 if(typeof result!='undefined')return false})
-return result?result:this}
-$.fn.filterWidget.Constructor=FilterWidget
-$.fn.filterWidget.noConflict=function(){$.fn.filterWidget=old
-return this}
-$(document).render(function(){$('[data-control="filterwidget"]').filterWidget();})}(window.jQuery);+function($){"use strict";var FilterWidget=$.fn.filterWidget.Constructor;var overloaded_init=FilterWidget.prototype.init;FilterWidget.prototype.init=function(){overloaded_init.apply(this)
+return result?result:this}$.fn.filterWidget.Constructor=FilterWidget $.fn.filterWidget.noConflict=function(){$.fn.filterWidget=old
+return this}$(document).render(function(){$('[data-control="filterwidget"]').filterWidget();})}(window.jQuery);+function($){"use strict";var FilterWidget=$.fn.filterWidget.Constructor;var overloaded_init=FilterWidget.prototype.init;FilterWidget.prototype.init=function(){overloaded_init.apply(this)
 var self=this;this.$el.children().each(function(key,$filter){if($filter.hasAttribute('data-ignore-timezone')){self.ignoreTimezone=true;}});this.initRegion()
 this.initFilterDate()}
 FilterWidget.prototype.initFilterDate=function(){var self=this
@@ -4684,19 +4661,19 @@ ListSortable.prototype.addList=function(list){this.lists.push(list)
 this.registerListHandlers(list)
 if(this.lists.length==1){$(list).one('dispose-control',this.proxy(this.dispose))}}
 ListSortable.prototype.registerListHandlers=function(list){var $list=$(list)
-$list.on('dragstart','> li',this.proxy(this.onDragStart))
-$list.on('dragover','> li',this.proxy(this.onDragOver))
-$list.on('dragenter','> li',this.proxy(this.onDragEnter))
-$list.on('dragleave','> li',this.proxy(this.onDragLeave))
-$list.on('drop','> li',this.proxy(this.onDragDrop))
-$list.on('dragend','> li',this.proxy(this.onDragEnd))}
+$list.on('dragstart','> *',this.proxy(this.onDragStart))
+$list.on('dragover','> *',this.proxy(this.onDragOver))
+$list.on('dragenter','> *',this.proxy(this.onDragEnter))
+$list.on('dragleave','> *',this.proxy(this.onDragLeave))
+$list.on('drop','> *',this.proxy(this.onDragDrop))
+$list.on('dragend','> *',this.proxy(this.onDragEnd))}
 ListSortable.prototype.unregisterListHandlers=function(list){var $list=$(list)
-$list.off('dragstart','> li',this.proxy(this.onDragStart))
-$list.off('dragover','> li',this.proxy(this.onDragOver))
-$list.off('dragenter','> li',this.proxy(this.onDragEnter))
-$list.off('dragleave','> li',this.proxy(this.onDragLeave))
-$list.off('drop','> li',this.proxy(this.onDragDrop))
-$list.off('dragend','> li',this.proxy(this.onDragEnd))}
+$list.off('dragstart','> *',this.proxy(this.onDragStart))
+$list.off('dragover','> *',this.proxy(this.onDragOver))
+$list.off('dragenter','> *',this.proxy(this.onDragEnter))
+$list.off('dragleave','> *',this.proxy(this.onDragLeave))
+$list.off('drop','> *',this.proxy(this.onDragDrop))
+$list.off('dragend','> *',this.proxy(this.onDragEnd))}
 ListSortable.prototype.unregisterHandlers=function(){$(document).off('dragover',this.proxy(this.onDocumentDragOver))
 $(document).off('mousemove',this.proxy(this.onDocumentMouseMove))
 $(this.lists[0]).off('dispose-control',this.proxy(this.dispose))}
@@ -4712,7 +4689,6 @@ ListSortable.prototype.elementBelongsToManagedList=function(element){for(var i=t
 ListSortable.prototype.isDragStartAllowed=function(element){return true}
 ListSortable.prototype.elementIsPlaceholder=function(element){return element.getAttribute('class')==='list-sortable-placeholder'}
 ListSortable.prototype.getElementSortableId=function(element){if(element.hasAttribute('data-list-sortable-element-id')){return element.getAttribute('data-list-sortable-element-id')}elementsIdCounter++
-var elementId=elementsIdCounter
 element.setAttribute('data-list-sortable-element-id',elementsIdCounter)
 return elementsIdCounter}
 ListSortable.prototype.dataTransferContains=function(ev,element){if(ev.dataTransfer.types.indexOf!==undefined){return ev.dataTransfer.types.indexOf(element)>=0}return ev.dataTransfer.types.contains(element)}
@@ -4741,10 +4717,13 @@ return true}return false}
 ListSortable.prototype.mouseOutsideLists=function(ev){var mousePosition=$.wn.foundation.event.pageCoordinates(ev)
 for(var i=this.lists.length-1;i>=0;i--){if($.wn.foundation.element.elementContainsPoint(this.lists[i],mousePosition)){return false}}return true}
 ListSortable.prototype.getClosestDraggableParent=function(element){var current=element
-while(current){if(current.tagName==='LI'&&current.hasAttribute('draggable')){return current}current=current.parentNode}return null}
+while(current){if(current.hasAttribute('draggable')){return current}current=current.parentNode}return null}
 ListSortable.prototype.onDragStart=function(ev){if(!this.isDragStartAllowed(ev.target)){return}ev.originalEvent.dataTransfer.effectAllowed='move'
 ev.originalEvent.dataTransfer.setData('listsortable/elementid',this.getElementSortableId(ev.target))
 ev.originalEvent.dataTransfer.setData(this.listSortableId,this.listSortableId)
+var container=$(ev.target).closest('[data-sortable]')
+this.originalOverflow=container.css('overflow')
+container.css({overflow:'visible'})
 $(document).on('mousemove',this.proxy(this.onDocumentMouseMove))
 $(document).on('dragover',this.proxy(this.onDocumentDragOver))}
 ListSortable.prototype.onDragOver=function(ev){if(!this.isSourceManagedList(ev.originalEvent)){return}var draggable=this.getClosestDraggableParent(ev.target)
@@ -4760,7 +4739,10 @@ ev.preventDefault()}
 ListSortable.prototype.onDragDrop=function(ev){if(!this.isSourceManagedList(ev.originalEvent)){return}var draggable=this.getClosestDraggableParent(ev.target)
 if(!draggable){return}this.moveElement(draggable,ev.originalEvent)
 this.removePlaceholders()}
-ListSortable.prototype.onDragEnd=function(ev){$(document).off('dragover',this.proxy(this.onDocumentDragOver))}
+ListSortable.prototype.onDragEnd=function(ev){$(document).off('dragover',this.proxy(this.onDocumentDragOver))
+var container=$(ev.target).closest('[data-sortable]')
+if(container){container.trigger('dragged.list.sorted')
+container.css({overflow:this.originalOverflow})}}
 ListSortable.prototype.onDocumentDragOver=function(ev){if(!this.isSourceManagedList(ev.originalEvent)){return}if(this.mouseOutsideLists(ev.originalEvent)){this.removePlaceholders()
 return}}
 ListSortable.prototype.onDocumentMouseMove=function(ev){$(document).off('mousemove',this.proxy(this.onDocumentMouseMove))
