@@ -207,6 +207,11 @@ class ReorderRelationController extends ControllerBehavior
         return new $model;
     }
 
+    public function getRecordSortOrder($record, $sortColumn)
+    {
+        return $record->pivot ? $record->pivot->{$sortColumn} : $record->{$sortColumn};
+    }
+
     /**
      * Validate the supplied form model.
      * @return void
