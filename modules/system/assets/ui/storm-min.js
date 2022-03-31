@@ -1623,7 +1623,14 @@ $scope.removeClass('active')}}
 FilterWidget.prototype.selectItem=function($item,isDeselect){var $otherContainer=isDeselect?$item.closest('.control-filter-popover').find('.filter-items:first > ul'):$item.closest('.control-filter-popover').find('.filter-active-items:first > ul')
 $item.addClass('animate-enter').prependTo($otherContainer).one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend',function(){$(this).removeClass('animate-enter')})
 if(!this.scopeValues[this.activeScopeName])return
-var itemId=$item.data('item-id'),active=this.scopeValues[this.activeScopeName],available=this.scopeAvailable[this.activeScopeName],fromItems=isDeselect?active:available,toItems=isDeselect?available:active,testFunc=function(active){return active.id==itemId},item=$.grep(fromItems,testFunc).pop()??{'id':itemId,'name':$item.text()},filtered=$.grep(fromItems,testFunc,true)if(isDeselect){this.scopeValues[this.activeScopeName]=filtered this.scopeAvailable[this.activeScopeName].push(item)}else{this.scopeAvailable[this.activeScopeName]=filtered this.scopeValues[this.activeScopeName].push(item)}this.toggleFilterButtons(active)this.updateScopeSetting(this.$activeScope,isDeselect?filtered.length:active.length)this.isActiveScopeDirty=true this.focusSearch()}FilterWidget.prototype.displayPopover=function($scope){var self=this,scopeName=$scope.data('scope-name'),data=null,isLoaded=true,container=false
+var itemId=$item.data('item-id'),active=this.scopeValues[this.activeScopeName],available=this.scopeAvailable[this.activeScopeName],fromItems=isDeselect?active:available,toItems=isDeselect?available:active,testFunc=function(active){return active.id==itemId},item=($.grep(fromItems,testFunc).pop()??{'id':itemId,'name':$item.text()}),filtered=$.grep(fromItems,testFunc,true)
+if(isDeselect){this.scopeValues[this.activeScopeName]=filtered
+this.scopeAvailable[this.activeScopeName].push(item)}else{this.scopeAvailable[this.activeScopeName]=filtered
+this.scopeValues[this.activeScopeName].push(item)}this.toggleFilterButtons(active)
+this.updateScopeSetting(this.$activeScope,isDeselect?filtered.length:active.length)
+this.isActiveScopeDirty=true
+this.focusSearch()}
+FilterWidget.prototype.displayPopover=function($scope){var self=this,scopeName=$scope.data('scope-name'),data=null,isLoaded=true,container=false
 if(typeof this.scopeAvailable[scopeName]!=="undefined"&&this.scopeAvailable[scopeName]){data=$.extend({},data,{available:this.scopeAvailable[scopeName],active:this.scopeValues[scopeName]})}var modalParent=$scope.parents('.modal-dialog')
 if(modalParent.length>0){container=modalParent[0]}if(!data){data={loading:true}
 isLoaded=false}data=$.extend({},data,{apply_button_text:this.getLang('filter.scopes.apply_button_text','Apply'),clear_button_text:this.getLang('filter.scopes.clear_button_text','Clear')})
@@ -1632,11 +1639,13 @@ data.optionsHandler=self.options.optionsHandler
 $scope.data('oc.popover',null)
 $scope.ocPopover({content:Mustache.render(self.getPopoverTemplate(),data),modal:false,highlightModalTarget:true,closeOnPageClick:true,placement:'bottom',container:container})
 this.toggleFilterButtons()
-if(!isLoaded){self.loadOptions(scopeName)}}FilterWidget.prototype.loadOptions=function(scopeName){var self=this,data={scopeName:scopeName}
+if(!isLoaded){self.loadOptions(scopeName)}}
+FilterWidget.prototype.loadOptions=function(scopeName){var self=this,data={scopeName:scopeName}
 var populated=this.$el.data('filterScopes')
 if(populated&&populated[scopeName]){self.fillOptions(scopeName,populated[scopeName])
 return false}return this.$el.request(this.options.optionsHandler,{data:data,success:function(data){self.fillOptions(scopeName,data.options)
-self.toggleFilterButtons()}})}FilterWidget.prototype.fillOptions=function(scopeName,data){if(this.scopeValues[scopeName])return
+self.toggleFilterButtons()}})}
+FilterWidget.prototype.fillOptions=function(scopeName,data){if(this.scopeValues[scopeName])return
 if(!data.active)data.active=[]
 if(!data.available)data.available=[]
 this.scopeValues[scopeName]=data.active
@@ -1645,46 +1654,60 @@ if(scopeName!=this.activeScopeName)return
 var container=$('#controlFilterPopover .filter-items > ul').empty()
 this.addItemsToListElement(container,data.available)
 var container=$('#controlFilterPopover .filter-active-items > ul')
-this.addItemsToListElement(container,data.active)}FilterWidget.prototype.filterAvailable=function(scopeName,available){if(this.activeScopeName!=scopeName)return
+this.addItemsToListElement(container,data.active)}
+FilterWidget.prototype.filterAvailable=function(scopeName,available){if(this.activeScopeName!=scopeName)return
 if(!this.scopeValues[this.activeScopeName])return
 var self=this,filtered=[],items=this.scopeValues[scopeName]
 if(items.length){var activeIds=[]
 $.each(items,function(key,obj){activeIds.push(obj.id)})
 filtered=$.grep(available,function(item){return $.inArray(item.id,activeIds)===-1})}else{filtered=available}var container=$('#controlFilterPopover .filter-items > ul').empty()
-self.addItemsToListElement(container,filtered)}FilterWidget.prototype.addItemsToListElement=function($ul,items){$.each(items,function(key,obj){var item=$('<li />').data({'item-id':obj.id}).append($('<a />').prop({'href':'javascript:;',}).text(obj.name))
-$ul.append(item)})}FilterWidget.prototype.toggleFilterButtons=function(data){var items=$('#controlFilterPopover .filter-active-items > ul'),buttonContainer=$('#controlFilterPopover .filter-buttons')
-if(data){data.length>0?buttonContainer.show():buttonContainer.hide()}else{items.children().length>0?buttonContainer.show():buttonContainer.hide()}}FilterWidget.prototype.pushOptions=function(scopeName){if(!this.isActiveScopeDirty||!this.options.updateHandler)return
+self.addItemsToListElement(container,filtered)}
+FilterWidget.prototype.addItemsToListElement=function($ul,items){$.each(items,function(key,obj){var item=$('<li />').data({'item-id':obj.id}).append($('<a />').prop({'href':'javascript:;',}).text(obj.name))
+$ul.append(item)})}
+FilterWidget.prototype.toggleFilterButtons=function(data){var items=$('#controlFilterPopover .filter-active-items > ul'),buttonContainer=$('#controlFilterPopover .filter-buttons')
+if(data){data.length>0?buttonContainer.show():buttonContainer.hide()}else{items.children().length>0?buttonContainer.show():buttonContainer.hide()}}
+FilterWidget.prototype.pushOptions=function(scopeName){if(!this.isActiveScopeDirty||!this.options.updateHandler)return
 var self=this,data={scopeName:scopeName,options:JSON.stringify(this.scopeValues[scopeName])}
 $.wn.stripeLoadIndicator.show()
-this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(function(){self.$el.find('[data-scope-name="'+scopeName+'"]').trigger('change.oc.filterScope')})}FilterWidget.prototype.checkboxToggle=function($el){var isChecked=$el.is(':checked'),$scope=$el.closest('.filter-scope'),scopeName=$scope.data('scope-name')
+this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(function(){self.$el.find('[data-scope-name="'+scopeName+'"]').trigger('change.oc.filterScope')})}
+FilterWidget.prototype.checkboxToggle=function($el){var isChecked=$el.is(':checked'),$scope=$el.closest('.filter-scope'),scopeName=$scope.data('scope-name')
 this.scopeValues[scopeName]=isChecked
 if(this.options.updateHandler){var data={scopeName:scopeName,value:isChecked}
 $.wn.stripeLoadIndicator.show()
-this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()})}$scope.toggleClass('active',isChecked)}FilterWidget.prototype.switchToggle=function($el){var switchValue=$el.data('checked'),$scope=$el.closest('.filter-scope'),scopeName=$scope.data('scope-name')
+this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()})}$scope.toggleClass('active',isChecked)}
+FilterWidget.prototype.switchToggle=function($el){var switchValue=$el.data('checked'),$scope=$el.closest('.filter-scope'),scopeName=$scope.data('scope-name')
 this.scopeValues[scopeName]=switchValue
 if(this.options.updateHandler){var data={scopeName:scopeName,value:switchValue}
 $.wn.stripeLoadIndicator.show()
-this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()})}$scope.toggleClass('active',!!switchValue)}FilterWidget.prototype.filterScope=function(isReset){var scopeName=this.$activeScope.data('scope-name')
+this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()})}$scope.toggleClass('active',!!switchValue)}
+FilterWidget.prototype.filterScope=function(isReset){var scopeName=this.$activeScope.data('scope-name')
 if(isReset){this.scopeValues[scopeName]=null
 this.scopeAvailable[scopeName]=null
 this.isActiveScopeDirty=true
 this.updateScopeSetting(this.$activeScope,0)}this.pushOptions(scopeName)
 this.isActiveScopeDirty=false
-this.$activeScope.data('oc.popover').hide()}FilterWidget.prototype.getLang=function(name,defaultValue){if($.oc===undefined||$.wn.lang===undefined){return defaultValue}return $.wn.lang.get(name,defaultValue)}FilterWidget.prototype.searchQuery=function($el){if(this.dataTrackInputTimer!==undefined){window.clearTimeout(this.dataTrackInputTimer)}var self=this
+this.$activeScope.data('oc.popover').hide()}
+FilterWidget.prototype.getLang=function(name,defaultValue){if($.oc===undefined||$.wn.lang===undefined){return defaultValue}return $.wn.lang.get(name,defaultValue)}
+FilterWidget.prototype.searchQuery=function($el){if(this.dataTrackInputTimer!==undefined){window.clearTimeout(this.dataTrackInputTimer)}var self=this
 this.dataTrackInputTimer=window.setTimeout(function(){var lastValue=$el.data('oc.lastvalue'),thisValue=$el.val()
 if(lastValue!==undefined&&lastValue==thisValue){return}$el.data('oc.lastvalue',thisValue)
 if(self.lastDataTrackInputRequest){self.lastDataTrackInputRequest.abort()}var data={scopeName:self.activeScopeName,search:thisValue}
 $.wn.stripeLoadIndicator.show()
 self.lastDataTrackInputRequest=self.$el.request(self.options.optionsHandler,{data:data}).success(function(data){self.filterAvailable(self.activeScopeName,data.options.available)
-self.toggleFilterButtons()}).always(function(){$.wn.stripeLoadIndicator.hide()})},300)}var old=$.fn.filterWidget $.fn.filterWidget=function(option){var args=arguments,result
+self.toggleFilterButtons()}).always(function(){$.wn.stripeLoadIndicator.hide()})},300)}
+var old=$.fn.filterWidget
+$.fn.filterWidget=function(option){var args=arguments,result
 this.each(function(){var $this=$(this)
 var data=$this.data('oc.filterwidget')
 var options=$.extend({},FilterWidget.DEFAULTS,$this.data(),typeof option=='object'&&option)
 if(!data)$this.data('oc.filterwidget',(data=new FilterWidget(this,options)))
 if(typeof option=='string')result=data[option].call($this)
 if(typeof result!='undefined')return false})
-return result?result:this}$.fn.filterWidget.Constructor=FilterWidget $.fn.filterWidget.noConflict=function(){$.fn.filterWidget=old
-return this}$(document).render(function(){$('[data-control="filterwidget"]').filterWidget();})}(window.jQuery);+function($){"use strict";var FilterWidget=$.fn.filterWidget.Constructor;var overloaded_init=FilterWidget.prototype.init;FilterWidget.prototype.init=function(){overloaded_init.apply(this)
+return result?result:this}
+$.fn.filterWidget.Constructor=FilterWidget
+$.fn.filterWidget.noConflict=function(){$.fn.filterWidget=old
+return this}
+$(document).render(function(){$('[data-control="filterwidget"]').filterWidget();})}(window.jQuery);+function($){"use strict";var FilterWidget=$.fn.filterWidget.Constructor;var overloaded_init=FilterWidget.prototype.init;FilterWidget.prototype.init=function(){overloaded_init.apply(this)
 var self=this;this.$el.children().each(function(key,$filter){if($filter.hasAttribute('data-ignore-timezone')){self.ignoreTimezone=true;}});this.initRegion()
 this.initFilterDate()}
 FilterWidget.prototype.initFilterDate=function(){var self=this
