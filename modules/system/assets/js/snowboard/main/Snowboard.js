@@ -136,7 +136,7 @@ export default class Snowboard {
                 && plugin.hasMethod('listens')
                 && Object.keys(plugin.callMethod('listens')).includes('ready')
             ) {
-                const readyMethod = plugin.callMethod('listens')['ready'];
+                const readyMethod = plugin.callMethod('listens').ready;
                 plugin.callMethod(readyMethod);
             }
         });
