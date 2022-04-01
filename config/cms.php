@@ -469,4 +469,31 @@ return [
     */
 
     'enableBackendServiceWorkers' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Allow AJAX handlers to be run in partial components
+    |--------------------------------------------------------------------------
+    |
+    | By default, for historical and performance reasons, AJAX handlers are
+    | are not executed for a component if it is within a partial. You may opt
+    | to enable this ability if you wish to use components in partials that
+    | rely on AJAX functionality.
+    |
+    | Be aware that this may result in a slight decrease in performance for
+    | some AJAX calls, and the system will run the handler of the first
+    | component it finds that matches the given component and handler. We
+    | recommend the use of aliases for components in partials with this
+    | feature enabled.
+    |
+    | true  - allow AJAX handlers to run for page, layout and partial
+    |         components
+    |
+    | false - allow AJAX handlers to run for page and layout components
+    |         only
+    |
+    */
+
+    'runAjaxInPartials' => false,
+
 ];

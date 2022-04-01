@@ -98,6 +98,21 @@ class Controller
     protected $partialStack;
 
     /**
+     * @var string|null Track a component name during a simulated render, for finding AJAX components in partials.
+     */
+    protected $trackComponent = null;
+
+    /**
+     * @var string|null Track a handler name during a simulated render, for finding AJAX components in partials.
+     */
+    protected $trackHandler = null;
+
+    /**
+     * @var mixed|false|null Track a handler result when finding AJAX components in partials.
+     */
+    protected $trackResult = false;
+
+    /**
      * Creates the controller.
      * @param \Cms\Classes\Theme $theme Specifies the CMS theme.
      * If the theme is not specified, the current active theme used.
@@ -822,6 +837,26 @@ class Controller
                 $result = $componentObj->runAjaxHandler($handlerName);
                 return $result ?: true;
             }
+
+           /*
+            * Simulate a page render, and track components in partials
+            */
+            if (Config::get('cms.runAjaxInPartials', false) && is_null($this->trackComponent)) {
+                $this->trackComponent = $componentName;
+                $this->trackHandler = $handlerName;
+                $this->trackResult = false;
+
+                $this->runPage($this->page, false);
+                $result = $this->trackResult;
+
+                $this->trackComponent = null;
+                $this->trackHandler = null;
+                $this->trackResult = null;
+
+                if ($result !== false) {
+                    return $result ?: true;
+                }
+            }
         }
         /*
          * Process code section handler
@@ -1038,6 +1073,16 @@ class Controller
 
                 $this->setComponentPropertiesFromParams($componentObj, $parameters);
                 $componentObj->init();
+
+                if (Config::get('cms.runAjaxInPartials', false)) {
+                    // If we're tracking an AJAX call through partials, and the alias matches, attempt the component AJAX
+                    // call here
+                    if (!is_null($this->trackComponent) && $this->trackComponent === $alias) {
+                        if ($componentObj->methodExists($this->trackHandler)) {
+                            $this->trackResult = $componentObj->runAjaxHandler($this->trackHandler);
+                        }
+                    }
+                }
             }
 
             CmsException::mask($this->page, 300);
