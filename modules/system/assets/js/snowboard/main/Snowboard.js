@@ -5,6 +5,7 @@ import PluginLoader from './PluginLoader';
 import Cookie from '../utilities/Cookie';
 import JsonParser from '../utilities/JsonParser';
 import Sanitizer from '../utilities/Sanitizer';
+import Url from '../utilities/Url';
 
 /**
  * Snowboard - the Winter JavaScript framework.
@@ -28,6 +29,7 @@ export default class Snowboard {
         this.debugEnabled = (typeof debug === 'boolean' && debug === true);
         this.autoInitSingletons = (typeof autoSingletons === 'boolean' && autoSingletons === false);
         this.plugins = {};
+        this.foundBaseUrl = null;
 
         this.attachAbstracts();
         this.loadUtilities();
@@ -36,15 +38,31 @@ export default class Snowboard {
         this.debug('Snowboard framework initialised');
     }
 
+    /**
+     * Attaches abstract classes as properties of the Snowboard class.
+     *
+     * This will allow Javascript functionality with no build process to still extend these abstracts by prefixing
+     * them with "Snowboard".
+     *
+     * ```
+     * class MyClass extends Snowboard.PluginBase {
+     *     ...
+     * }
+     * ```
+     */
     attachAbstracts() {
         this.PluginBase = PluginBase;
         this.Singleton = Singleton;
     }
 
+    /**
+     * Loads the default utilities.
+     */
     loadUtilities() {
         this.addPlugin('cookie', Cookie);
         this.addPlugin('jsonParser', JsonParser);
         this.addPlugin('sanitizer', Sanitizer);
+        this.addPlugin('url', Url);
     }
 
     /**

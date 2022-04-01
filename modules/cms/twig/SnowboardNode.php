@@ -1,5 +1,6 @@
 <?php namespace Cms\Twig;
 
+use Url;
 use Config;
 use Request;
 use System\Models\Parameter;
@@ -51,15 +52,16 @@ class SnowboardNode extends TwigNode
         if (!static::$baseLoaded) {
             // Add base script
             $baseJs = $moduleMap['base'];
+            $baseUrl = Url::to('/');
             $compiler
-                ->write("echo '<script src=\"${basePath}${baseJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("echo '<script data-module=\"snowboard-base\" data-base-url=\"${baseUrl}\" src=\"${basePath}${baseJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
             static::$baseLoaded = true;
         }
 
         foreach ($modules as $module) {
             $moduleJs = $moduleMap[$module];
             $compiler
-                ->write("echo '<script src=\"${basePath}${moduleJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("echo '<script data-module=\"${module}\" src=\"${basePath}${moduleJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
         }
     }
 }

@@ -77,6 +77,8 @@ export default class Flash extends Snowboard.PluginBase {
      * Creates the flash message.
      */
     create() {
+        this.snowboard.globalEvent('flash.create', this);
+
         this.flash = document.createElement('DIV');
         this.flash.innerHTML = this.message;
         this.flash.classList.add('flash-message', this.type);
@@ -105,6 +107,8 @@ export default class Flash extends Snowboard.PluginBase {
      * Removes the flash message.
      */
     remove() {
+        this.snowboard.globalEvent('flash.remove', this);
+
         this.stopTimer();
 
         this.snowboard.transition(this.flash, 'hide', () => {
