@@ -841,7 +841,7 @@ class Controller
            /*
             * Simulate a page render, and track components in partials
             */
-            if (Config::get('cms.runAjaxInPartials', false) && is_null($this->trackComponent)) {
+            if (Config::get('cms.runAjaxInPartialComponents', false) && is_null($this->trackComponent)) {
                 $this->trackComponent = $componentName;
                 $this->trackHandler = $handlerName;
                 $this->trackResult = false;
@@ -1074,7 +1074,7 @@ class Controller
                 $this->setComponentPropertiesFromParams($componentObj, $parameters);
                 $componentObj->init();
 
-                if (Config::get('cms.runAjaxInPartials', false)) {
+                if (Config::get('cms.runAjaxInPartialComponents', false)) {
                     // If we're tracking an AJAX call through partials, and the alias matches, attempt the component AJAX
                     // call here
                     if (!is_null($this->trackComponent) && $this->trackComponent === $alias) {

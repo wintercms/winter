@@ -494,6 +494,6 @@ return [
     |
     */
 
-    'runAjaxInPartials' => false,
+    'runAjaxInPartialComponents' => false,
 
 ];
