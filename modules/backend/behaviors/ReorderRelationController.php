@@ -5,7 +5,7 @@ use Backend;
 use Backend\Classes\ControllerBehavior;
 use Lang;
 use Winter\Storm\Database\Model;
-use Winter\Storm\Database\Traits\SortableRelation;
+use Winter\Storm\Database\Traits\HasSortableRelations;
 
 /**
  * Used for reordering and sorting related records.
@@ -32,7 +32,7 @@ class ReorderRelationController extends ControllerBehavior
     public $model;
 
     /**
-     * @var SortableRelation|Model The parent/form model
+     * @var HasSortableRelations|Model The parent/form model
      */
     public $parentModel;
 
@@ -76,7 +76,7 @@ class ReorderRelationController extends ControllerBehavior
             return;
         }
 
-        /** @var SortableRelation $instance */
+        /** @var HasSortableRelations $instance */
         $instance = $this->parentModel->newQuery()->find($this->postValue('_reorder_parent_id'));
         $instance->setRelationOrder($this->relation, $ids, $orders);
     }
@@ -220,9 +220,9 @@ class ReorderRelationController extends ControllerBehavior
     {
         $modelTraits = class_uses($this->parentModel);
 
-        if (!isset($modelTraits[\Winter\Storm\Database\Traits\SortableRelation::class])) {
+        if (!isset($modelTraits[\Winter\Storm\Database\Traits\HasSortableRelations::class])) {
             throw new ApplicationException(
-                sprintf('The "%s" model must implement the SortableRelation trait.', get_class($this->parentModel))
+                sprintf('The "%s" model must implement the HasSortableRelations trait.', get_class($this->parentModel))
             );
         }
     }

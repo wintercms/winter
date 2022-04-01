@@ -5,7 +5,7 @@ use Event;
 use Flash;
 use ApplicationException;
 use Backend\Classes\ControllerBehavior;
-use Winter\Storm\Database\Traits\SortableRelation;
+use Winter\Storm\Database\Traits\HasSortableRelations;
 
 /**
  * Adds features for working with backend lists.
@@ -439,7 +439,7 @@ class ListController extends ControllerBehavior
     public function getRecordSortOrder($record, $relation = '')
     {
         if ($relation) {
-            /** @var SortableRelation $modelInstance */
+            /** @var HasSortableRelations $modelInstance */
             $modelInstance = new $this->config->modelClass;
             $reorderColumn = $modelInstance->getRelationSortOrderColumn($relation);
 

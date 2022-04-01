@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Winter\Storm\Html\Helper as HtmlHelper;
 use Winter\Storm\Router\Helper as RouterHelper;
 use Winter\Storm\Database\Traits\Sortable;
-use Winter\Storm\Database\Traits\SortableRelation;
+use Winter\Storm\Database\Traits\HasSortableRelations;
 use System\Helpers\DateTime as DateTimeHelper;
 use System\Classes\PluginManager;
 use System\Classes\MediaLibrary;
@@ -270,7 +270,7 @@ class Lists extends WidgetBase
             $this->showTree = false;
 
             if ($this->reorderRelation) {
-                /** @var SortableRelation $modelInstance */
+                /** @var HasSortableRelations $modelInstance */
                 $modelInstance = new $this->reorderModel;
                 $this->reorderColumn = $modelInstance->getRelationSortOrderColumn($this->reorderRelation);
             } else {
@@ -390,7 +390,7 @@ class Lists extends WidgetBase
 
         if ($this->sortable) {
             $checkModel = $this->reorderRelation ? $this->reorderModel : $this->model;
-            $needsTrait = $this->reorderRelation ? SortableRelation::class : Sortable::class;
+            $needsTrait = $this->reorderRelation ? HasSortableRelations::class : Sortable::class;
             $modelTraits = class_uses($checkModel);
 
             if (!isset($modelTraits[$needsTrait])) {
