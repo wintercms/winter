@@ -85,7 +85,7 @@ export default class Snowboard {
      */
     initialiseSingletons() {
         Object.values(this.plugins).forEach((plugin) => {
-            if (plugin.isSingleton()) {
+            if (plugin.isSingleton() && plugin.dependenciesFulfilled()) {
                 plugin.initialiseSingleton();
             }
         });
@@ -126,6 +126,20 @@ export default class Snowboard {
         this[lowerName] = callback;
 
         this.debug(`Plugin "${name}" registered`);
+
+        // Check if any singletons now have their dependencies fulfilled, and fire their "ready" handler.
+        Object.values(this.getPlugins()).forEach((plugin) => {
+            if (
+                plugin.isSingleton()
+                && !plugin.isInitialised()
+                && plugin.dependenciesFulfilled()
+                && plugin.hasMethod('listens')
+                && Object.keys(plugin.callMethod('listens')).includes('ready')
+            ) {
+                const readyMethod = plugin.callMethod('listens')['ready'];
+                plugin.callMethod(readyMethod);
+            }
+        });
     }
 
     /**
@@ -217,7 +231,9 @@ export default class Snowboard {
             if (plugin.isFunction()) {
                 return;
             }
-
+            if (!plugin.dependenciesFulfilled()) {
+                return;
+            }
             if (!plugin.hasMethod('listens')) {
                 return;
             }
