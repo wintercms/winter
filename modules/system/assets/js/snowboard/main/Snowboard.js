@@ -165,6 +165,7 @@ export default class Snowboard {
 
         delete this.plugins[lowerName];
         delete this[lowerName];
+        delete this[name];
 
         this.debug(`Plugin "${name}" removed`);
     }
