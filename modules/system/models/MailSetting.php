@@ -95,32 +95,32 @@ class MailSetting extends Model
     {
         $config = App::make('config');
         $settings = self::instance();
-        $config->set('mail.driver', $settings->send_mode);
+        $config->set('mail.default', $settings->send_mode);
         $config->set('mail.from.name', $settings->sender_name);
         $config->set('mail.from.address', $settings->sender_email);
 
         switch ($settings->send_mode) {
             case self::MODE_SMTP:
-                $config->set('mail.host', $settings->smtp_address);
-                $config->set('mail.port', $settings->smtp_port);
+                $config->set('mail.mailers.smtp.host', $settings->smtp_address);
+                $config->set('mail.mailers.smtp.port', $settings->smtp_port);
                 if ($settings->smtp_authorization) {
-                    $config->set('mail.username', $settings->smtp_user);
-                    $config->set('mail.password', $settings->smtp_password);
+                    $config->set('mail.mailers.smtp.username', $settings->smtp_user);
+                    $config->set('mail.mailers.smtp.password', $settings->smtp_password);
                 }
                 else {
-                    $config->set('mail.username', null);
-                    $config->set('mail.password', null);
+                    $config->set('mail.mailers.smtp.username', null);
+                    $config->set('mail.mailers.smtp.password', null);
                 }
                 if ($settings->smtp_encryption) {
-                    $config->set('mail.encryption', $settings->smtp_encryption);
+                    $config->set('mail.mailers.smtp.encryption', $settings->smtp_encryption);
                 }
                 else {
-                    $config->set('mail.encryption', null);
+                    $config->set('mail.mailers.smtp.encryption', null);
                 }
                 break;
 
             case self::MODE_SENDMAIL:
-                $config->set('mail.sendmail', $settings->sendmail_path);
+                $config->set('mail.mailers.sendmail.path', $settings->sendmail_path);
                 break;
 
             case self::MODE_MAILGUN:
