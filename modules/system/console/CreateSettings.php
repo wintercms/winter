@@ -45,6 +45,6 @@ class CreateSettings extends BaseScaffoldCommand
      */
     protected function getNameInput(): string
     {
-        return parent::getNameInput() ?? 'Settings';
+        return parent::getNameInput() ?: 'Settings';
     }
 }
