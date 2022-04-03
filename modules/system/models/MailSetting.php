@@ -85,9 +85,7 @@ class MailSetting extends Model
             static::MODE_SENDMAIL => 'system::lang.mail.sendmail',
             static::MODE_SMTP     => 'system::lang.mail.smtp',
             static::MODE_MAILGUN  => 'system::lang.mail.mailgun',
-            static::MODE_MANDRILL => 'system::lang.mail.mandrill',
             static::MODE_SES      => 'system::lang.mail.ses',
-            static::MODE_SPARKPOST => 'system::lang.mail.sparkpost',
         ];
     }
 
@@ -128,18 +126,10 @@ class MailSetting extends Model
                 $config->set('services.mailgun.secret', $settings->mailgun_secret);
                 break;
 
-            case self::MODE_MANDRILL:
-                $config->set('services.mandrill.secret', $settings->mandrill_secret);
-                break;
-
             case self::MODE_SES:
                 $config->set('services.ses.key', $settings->ses_key);
                 $config->set('services.ses.secret', $settings->ses_secret);
                 $config->set('services.ses.region', $settings->ses_region);
-                break;
-
-            case self::MODE_SPARKPOST:
-                $config->set('services.sparkpost.secret', $settings->sparkpost_secret);
                 break;
         }
     }
