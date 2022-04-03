@@ -1,12 +1,15 @@
 <div class="field-repeater"
-     data-control="fieldrepeater"
-     <?= $titleFrom ? 'data-title-from="'.$titleFrom.'"' : '' ?>
-     <?= $minItems ? 'data-min-items="'.$minItems.'"' : '' ?>
-     <?= $maxItems ? 'data-max-items="'.$maxItems.'"' : '' ?>
-     <?= $style ? 'data-style="'.$style.'"' : '' ?>
-     data-sortable-container="#<?= $this->getId('items') ?>"
-     data-sortable-handle=".<?= $this->getId('items') ?>-handle">
-
+    data-control="fieldrepeater"
+    <?= $titleFrom ? 'data-title-from="'.$titleFrom.'"' : '' ?>
+    <?= $minItems ? 'data-min-items="'.$minItems.'"' : '' ?>
+    <?= $maxItems ? 'data-max-items="'.$maxItems.'"' : '' ?>
+    <?= $style ? 'data-style="'.$style.'"' : '' ?>
+    <?php if ($sortable): ?>
+    data-sortable="true"
+    data-sortable-container="#<?= $this->getId('items') ?>"
+    data-sortable-handle=".<?= $this->getId('items') ?>-handle"
+    <?php endif; ?>
+>
     <ul id="<?= $this->getId('items') ?>" class="field-repeater-items">
         <?php foreach ($formWidgets as $index => $widget): ?>
             <?= $this->makePartial('repeater_item', [
