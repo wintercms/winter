@@ -43,7 +43,7 @@ abstract class BaseScaffoldCommand extends GeneratorCommand
         $vars['plugin_id'] = "{$vars['lower_author']}.{$vars['lower_plugin']}";
         $vars['plugin_code'] = "{$vars['studly_author']}.{$vars['studly_plugin']}";
         $vars['plugin_url'] = "{$vars['lower_author']}/{$vars['lower_plugin']}";
-        $vars['plugin_folder'] = "{$vars['lower_author']}" . DIRECTORY_SEPARATOR . "{$vars['lower_plugin']}";
+        $vars['plugin_folder'] = "{$vars['lower_author']}/{$vars['lower_plugin']}";
         $vars['plugin_namespace'] = "{$vars['studly_author']}\\{$vars['studly_plugin']}";
 
         return $vars;
