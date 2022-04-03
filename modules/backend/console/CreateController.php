@@ -3,6 +3,10 @@
 use System\Console\BaseScaffoldCommand;
 use Winter\Storm\Support\Str;
 
+/**
+ * @TODO:
+ * - Support creating related permissions and navigation items and injecting them into the plugin
+ */
 class CreateController extends BaseScaffoldCommand
 {
     /**
@@ -62,7 +66,7 @@ class CreateController extends BaseScaffoldCommand
         if (!$model) {
             $model = Str::singular($vars['name']);
         }
-        $vars['model'];
+        $vars['model'] = $model;
 
         return $vars;
     }
