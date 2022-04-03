@@ -1,96 +1,84 @@
-<?php namespace {{studly_author}}\{{studly_name}};
+<?php namespace {{ plugin_namespace }};
 
 use Backend;
 use Backend\Models\UserRole;
 use System\Classes\PluginBase;
 
 /**
- * {{name}} Plugin Information File
+ * {{ name }} Plugin Information File
  */
 class Plugin extends PluginBase
 {
     /**
      * Returns information about this plugin.
-     *
-     * @return array
      */
-    public function pluginDetails()
+    public function pluginDetails(): array
     {
         return [
-            'name'        => '{{name}}',
-            'description' => 'No description provided yet...',
-            'author'      => '{{author}}',
+            'name'        => '{{ plugin_id }}::lang.plugin.name',
+            'description' => '{{ plugin_id }}::lang.plugin.description',
+            'author'      => '{{ author }}',
             'icon'        => 'icon-leaf'
         ];
     }
 
     /**
      * Register method, called when the plugin is first registered.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
 
     }
 
     /**
      * Boot method, called right before the request route.
-     *
-     * @return array
      */
-    public function boot()
+    public function boot(): void
     {
 
     }
 
     /**
-     * Registers any front-end components implemented in this plugin.
-     *
-     * @return array
+     * Registers any frontend components implemented in this plugin.
      */
-    public function registerComponents()
+    public function registerComponents(): array
     {
         return []; // Remove this line to activate
 
         return [
-            '{{studly_author}}\{{studly_name}}\Components\MyComponent' => 'myComponent',
+            '{{ plugin_namespace }}\Components\MyComponent' => 'myComponent',
         ];
     }
 
     /**
-     * Registers any back-end permissions used by this plugin.
-     *
-     * @return array
+     * Registers any backend permissions used by this plugin.
      */
-    public function registerPermissions()
+    public function registerPermissions(): array
     {
         return []; // Remove this line to activate
 
         return [
-            '{{lower_author}}.{{lower_name}}.some_permission' => [
-                'tab' => '{{name}}',
-                'label' => 'Some permission',
+            '{{ plugin_id }}.some_permission' => [
+                'tab' => '{{ plugin_id }}::lang.plugin.name',
+                'label' => '{{ plugin_id }}::lang.permissions.some_permission',
                 'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
             ],
         ];
     }
 
     /**
-     * Registers back-end navigation items for this plugin.
-     *
-     * @return array
+     * Registers backend navigation items for this plugin.
      */
-    public function registerNavigation()
+    public function registerNavigation(): array
     {
         return []; // Remove this line to activate
 
         return [
-            '{{lower_name}}' => [
-                'label'       => '{{name}}',
-                'url'         => Backend::url('{{lower_author}}/{{lower_name}}/mycontroller'),
+            '{{ lower_name }}' => [
+                'label'       => '{{ plugin_id }}::lang.plugin.name',
+                'url'         => Backend::url('{{ plugin_url }}/mycontroller'),
                 'icon'        => 'icon-leaf',
-                'permissions' => ['{{lower_author}}.{{lower_name}}.*'],
+                'permissions' => ['{{ plugin_id }}.*'],
                 'order'       => 500,
             ],
         ];

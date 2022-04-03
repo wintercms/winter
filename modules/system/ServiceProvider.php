@@ -243,6 +243,7 @@ class ServiceProvider extends ModuleServiceProvider
          * Register console commands
          */
         $this->registerConsoleCommand('create.command', \System\Console\CreateCommand::class);
+        $this->registerConsoleCommand('create.migration', \System\Console\CreateMigration::class);
         $this->registerConsoleCommand('create.model', \System\Console\CreateModel::class);
         $this->registerConsoleCommand('create.plugin', \System\Console\CreatePlugin::class);
         $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
