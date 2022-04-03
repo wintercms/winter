@@ -18,9 +18,7 @@ class MailSetting extends Model
     const MODE_SENDMAIL  = 'sendmail';
     const MODE_SMTP      = 'smtp';
     const MODE_MAILGUN   = 'mailgun';
-    const MODE_MANDRILL  = 'mandrill';
     const MODE_SES       = 'ses';
-    const MODE_SPARKPOST = 'sparkpost';
 
     /**
      * @var array Behaviors implemented by this model.
