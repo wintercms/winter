@@ -2,7 +2,7 @@
 
 use InvalidArgumentException;
 use Winter\Storm\Parse\PHP\ArrayFile;
-use Winter\Storm\Console\GeneratorCommand;
+use Winter\Storm\Scaffold\GeneratorCommand;
 
 abstract class BaseScaffoldCommand extends GeneratorCommand
 {

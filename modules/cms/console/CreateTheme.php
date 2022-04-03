@@ -1,6 +1,6 @@
 <?php namespace Cms\Console;
 
-use Winter\Storm\Console\GeneratorCommand;
+use Winter\Storm\Scaffold\GeneratorCommand;
 
 class CreateTheme extends GeneratorCommand
 {
