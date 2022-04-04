@@ -127,16 +127,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail 路径',
         'sendmail_path_comment' => '请确认 Sendmail 路径.',
-        'mailgun' => 'Mailgun',
-        'mailgun_domain' => 'Mailgun 域名',
-        'mailgun_domain_comment' => '请确认 Mailgun 域名.',
-        'mailgun_secret' => 'Mailgun Secret',
-        'mailgun_secret_comment' => '输入你的 Mailgun API key.',
-        'mandrill' => 'Mandrill',
-        'mandrill_secret' => 'Mandrill Secret',
-        'mandrill_secret_comment' => '输入你的 Mandrill API key.',
-        'drivers_hint_header' => '驱动未安装',
-        'drivers_hint_content' => '这个邮件发送方法需要安装插件":plugin"。'
     ],
     'mail_templates' => [
         'menu_label' => '邮件模板',

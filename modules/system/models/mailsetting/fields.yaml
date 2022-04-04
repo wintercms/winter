@@ -4,7 +4,6 @@
 
 tabs:
     fields:
-
         sender_name:
             label: system::lang.mail.sender_name
             span: auto
@@ -16,19 +15,15 @@ tabs:
             type: email
             tab: system::lang.mail.general
 
+        driver_hint:
+            type: hint
+            path: ~/modules/system/models/mailsetting/_drivers_hint.htm
+            tab: system::lang.mail.general
+
         send_mode:
             label: system::lang.mail.method
             type: dropdown
             tab: system::lang.mail.general
-
-        drivers_hint:
-            type: partial
-            path: ~/modules/system/models/mailsetting/_drivers_hint.htm
-            tab: system::lang.mail.general
-            trigger:
-                action: show
-                field: send_mode
-                condition: value[mandrill][mailgun][ses]
 
         smtp_address:
             label: system::lang.mail.smtp_address
