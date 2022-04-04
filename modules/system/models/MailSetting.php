@@ -17,7 +17,6 @@ class MailSetting extends Model
     const MODE_MAIL      = 'mail';
     const MODE_SENDMAIL  = 'sendmail';
     const MODE_SMTP      = 'smtp';
-    const MODE_MAILGUN   = 'mailgun';
     const MODE_SES       = 'ses';
 
     /**
@@ -82,7 +81,6 @@ class MailSetting extends Model
             static::MODE_MAIL     => 'system::lang.mail.php_mail',
             static::MODE_SENDMAIL => 'system::lang.mail.sendmail',
             static::MODE_SMTP     => 'system::lang.mail.smtp',
-            static::MODE_MAILGUN  => 'system::lang.mail.mailgun',
             static::MODE_SES      => 'system::lang.mail.ses',
         ];
     }
@@ -117,11 +115,6 @@ class MailSetting extends Model
 
             case self::MODE_SENDMAIL:
                 $config->set('mail.mailers.sendmail.path', $settings->sendmail_path);
-                break;
-
-            case self::MODE_MAILGUN:
-                $config->set('services.mailgun.domain', $settings->mailgun_domain);
-                $config->set('services.mailgun.secret', $settings->mailgun_secret);
                 break;
 
             case self::MODE_SES:
