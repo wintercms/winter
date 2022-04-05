@@ -141,13 +141,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Ruta de sendmail',
         'sendmail_path_comment' => "Si us plau especifica una ruta per l'executable de sendmail.",
-        'ses' => 'SES',
-        'ses_key' => 'Clau de SES',
-        'ses_key_comment' => 'Introdueix la teva clau API de SES',
-        'ses_secret' => 'Secret de SES',
-        'ses_secret_comment' => "Introdueix el teu secret d'API de SES",
-        'ses_region' => 'Regió de SES',
-        'ses_region_comment' => 'Introdueix la teva regió de SES (e.g. us-east-1)',
     ],
     'mail_templates' => [
         'menu_label' => 'Plantilles de correu',

@@ -134,13 +134,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Directorio de Sendmail',
         'sendmail_path_comment' => 'Por favor, especifique la ruta de acceso del programa sendmail.',
-        'ses' => 'SES',
-        'ses_key' => 'SES key',
-        'ses_key_comment' => 'Introduzca su key de SES API',
-        'ses_secret' => 'SES secret',
-        'ses_secret_comment' => 'Introduzca su key de SES API',
-        'ses_region' => 'Región SES',
-        'ses_region_comment' => 'Introduzca su región SES (e.g. us-east-1)',
     ],
     'mail_templates' => [
         'menu_label' => 'Plantillas de Correo',

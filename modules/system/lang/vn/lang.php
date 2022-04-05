@@ -178,13 +178,6 @@ return [
         'sendmail' => 'Gửi mail',
         'sendmail_path' => 'Đường dẫn gửi mail',
         'sendmail_path_comment' => 'Please specify the path of the sendmail program.',
-        'ses' => 'SES',
-        'ses_key' => 'Mã SES',
-        'ses_key_comment' => 'Điền vào mã SES API của bạn',
-        'ses_secret' => 'Mã bí mật trên SES (secret key)',
-        'ses_secret_comment' => 'Điền vào mã bí mật trên SES API  của bạn (secret key)',
-        'ses_region' => 'Ku vực SES',
-        'ses_region_comment' => 'Điền vào khu vực SES (ví dụ us-east-1)',
     ],
     'mail_templates' => [
         'menu_label' => 'Các mẫu mail',

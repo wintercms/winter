@@ -187,13 +187,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Caminho do Sendmail',
         'sendmail_path_comment' => 'Por favor, especifique o caminho do programa Sendmail.',
-        'ses' => 'SES',
-        'ses_key' => 'Chave SES',
-        'ses_key_comment' => 'Forneça sua chave do SES',
-        'ses_secret' => 'SES Secret',
-        'ses_secret_comment' => 'Forneça sua chave de API do SES.',
-        'ses_region' => 'Região SES',
-        'ses_region_comment' => 'Entre com sua região SES (exemplo: us-east-1)',
     ],
     'mail_templates' => [
         'menu_label' => 'Modelos de E-mail',

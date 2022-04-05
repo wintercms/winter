@@ -190,13 +190,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail path',
         'sendmail_path_comment' => 'Please specify the path of the sendmail program.',
-        'ses' => 'SES',
-        'ses_key' => 'SES key',
-        'ses_key_comment' => 'Enter your SES API key',
-        'ses_secret' => 'SES secret',
-        'ses_secret_comment' => 'Enter your SES API secret key',
-        'ses_region' => 'SES region',
-        'ses_region_comment' => 'Enter your SES region (e.g. us-east-1)',
         'drivers_hint_content' => 'Please see the <a href=":url" target="_blank">documentation</a> for installing other Mail methods.',
     ],
     'mail_templates' => [

@@ -141,13 +141,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail path',
         'sendmail_path_comment' => 'กรุณากำหนด path ของโปรแกรม sendmail',
-        'ses' => 'SES',
-        'ses_key' => 'SES key',
-        'ses_key_comment' => 'ใส่ SES API key ของท่าน',
-        'ses_secret' => 'SES secret',
-        'ses_secret_comment' => 'ใส่ SES API secret key ของท่าน',
-        'ses_region' => 'SES region',
-        'ses_region_comment' => 'ใส่ SES region ของท่าน (เช่น us-east-1)',
     ],
     'mail_templates' => [
         'menu_label' => 'แม่แบบอีเมล (template)',

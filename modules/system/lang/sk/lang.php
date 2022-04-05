@@ -188,13 +188,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail cest',
         'sendmail_path_comment' => 'Prosím zadajte cestu k sendmail programu.',
-        'ses' => 'SES',
-        'ses_key' => 'SES kľúč',
-        'ses_key_comment' => 'Zadajta váš SES API kľúč.',
-        'ses_secret' => 'SES tajný kľúč (secret)',
-        'ses_secret_comment' => 'Zadajta váš SES API tajný kľúč.',
-        'ses_region' => 'SES región',
-        'ses_region_comment' => 'Zadajta váš SES región (napríiklad us-east-1)',
     ],
     'mail_templates' => [
         'menu_label' => 'E-mailové šablóny',

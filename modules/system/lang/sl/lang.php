@@ -187,13 +187,6 @@ return [
         'sendmail'                   => 'Sendmail',
         'sendmail_path'              => 'Sendmail lokacija',
         'sendmail_path_comment'      => 'Določite lokacijo Sendmail programa.',
-        'ses'                        => 'SES',
-        'ses_key'                    => 'SES ključ',
-        'ses_key_comment'            => 'Vnesite API ključ za SES.',
-        'ses_secret'                 => 'SES geslo',
-        'ses_secret_comment'         => 'Vnesite API ključ za SES (SES API secret key).',
-        'ses_region'                 => 'SES regija',
-        'ses_region_comment'         => 'Vnesite SES regijo (SES region, npr. us-east-1).',
     ],
     'mail_templates' => [
         'menu_label'              => 'E-poštne predloge',

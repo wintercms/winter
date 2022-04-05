@@ -187,13 +187,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Pad naar Sendmail',
         'sendmail_path_comment' => 'Geef hier het volledige pad op naar de Sendmail-applicatie.',
-        'ses' => 'SES',
-        'ses_key' => 'SES key',
-        'ses_key_comment' => 'Voer SES API key in',
-        'ses_secret' => 'SES secret',
-        'ses_secret_comment' => 'Voer SES API secret key in',
-        'ses_region' => 'SES regio',
-        'ses_region_comment' => 'Voer SES regio in (bijv. us-east-1)',
     ],
     'mail_templates' => [
         'menu_label' => 'E-mail sjablonen',

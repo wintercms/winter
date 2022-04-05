@@ -133,13 +133,6 @@ return [
         'sendmail' => "Sendmail",
         'sendmail_path' => "Шлях sendmail",
         'sendmail_path_comment' => "Калі ласка, укажыце шлях дла праграмы sendmail",
-        'ses' => "SES",
-        'ses_key' => "Ключ SES",
-        'ses_key_comment' => "Увядзіце ключ SES API",
-        'ses_secret' => "Сакрэт SES",
-        'ses_secret_comment' => "Увядзіце сакрэтны ключ SES API",
-        'ses_region' => "Рэгіён SES",
-        'ses_region_comment' => "Увядзіце рэгіён SES (e.g. us-east-1)",
     ],
     'mail_templates' => [
         'menu_label' => "Шаблоны пошты",

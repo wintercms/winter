@@ -149,13 +149,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Chemin vers Sendmail',
         'sendmail_path_comment' => 'Saisir le chemin du programme sendmail.',
-        'ses' => 'SES',
-        'ses_key' => 'Clé SES',
-        'ses_key_comment' => 'Saisir votre clé API SES',
-        'ses_secret' => 'Clé secrète SES',
-        'ses_secret_comment' => 'Saisir votre clé secrète de l\'API SES',
-        'ses_region' => 'Région SES',
-        'ses_region_comment' => 'Saisir votre région SES (e.g. us-east-1)',
         'drivers_hint_content' => 'Veuillez lire la <a href=":url" target="_blank">documentation</a> pour des méthodes alternatives.',
     ],
     'mail_templates' => [

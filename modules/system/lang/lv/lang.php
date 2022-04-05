@@ -145,13 +145,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail ceļs',
         'sendmail_path_comment' => 'Lūdzu, norādiet ceļu uz sendmail programmu.',
-        'ses' => 'SES',
-        'ses_key' => 'SES atslēga',
-        'ses_key_comment' => 'Ievadiet savu SES API atslēgu',
-        'ses_secret' => 'SES piekļuves atslēga',
-        'ses_secret_comment' => 'Ievadiet savu SES API piekļuves atslēgu',
-        'ses_region' => 'SES reģions',
-        'ses_region_comment' => 'Ievadiet savu SES reģionu (piemēram, us-east-1)',
     ],
     'mail_templates' => [
         'menu_label' => 'E-pasta veidnes',

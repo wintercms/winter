@@ -190,13 +190,6 @@ return [
         'sendmail'                   => 'Sendmail',
         'sendmail_path'              => 'Путь к Sendmail',
         'sendmail_path_comment'      => 'Пожалуйста, укажите путь к sendmail.',
-        'ses'                        => 'SES',
-        'ses_key'                    => 'SES API-ключ',
-        'ses_key_comment'            => 'Введите ваш SES API-ключ',
-        'ses_secret'                 => 'SES секретный API-ключ',
-        'ses_secret_comment'         => 'Введите ваш секретный SES API-ключ',
-        'ses_region'                 => 'SES регион',
-        'ses_region_comment'         => 'Введите ваш SES регион (например, us-east-1)',
     ],
     'mail_templates' => [
         'menu_label'            => 'Шаблоны почты',
