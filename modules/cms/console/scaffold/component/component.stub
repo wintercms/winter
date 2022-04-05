@@ -4,6 +4,9 @@ use Cms\Classes\ComponentBase;
 
 class {{studly_name}} extends ComponentBase
 {
+    /**
+     * Gets the details for the component
+     */
     public function componentDetails()
     {
         return [
@@ -12,6 +15,9 @@ class {{studly_name}} extends ComponentBase
         ];
     }
 
+    /**
+     * Returns the properties provided by the component
+     */
     public function defineProperties()
     {
         return [];

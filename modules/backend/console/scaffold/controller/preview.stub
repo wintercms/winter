@@ -1,6 +1,6 @@
 <?php Block::put('breadcrumb') ?>
     <ul>
-        <li><a href="<?= Backend::url('{{lower_author}}/{{lower_plugin}}/{{lower_name}}') ?>">{{title_name}}</a></li>
+        <li><a href="<?= Backend::url('{{ controller_url }}') ?>"><?= e(trans('{{ model_lang_key }}.label_plural')); ?></a></li>
         <li><?= e($this->pageTitle) ?></li>
     </ul>
 <?php Block::endPut() ?>
@@ -14,6 +14,6 @@
 <?php else: ?>
 
     <p class="flash-message static error"><?= e($this->fatalError) ?></p>
-    <p><a href="<?= Backend::url('{{lower_author}}/{{lower_plugin}}/{{lower_name}}') ?>" class="btn btn-default">Return to {{lower_title_name}} list</a></p>
+    <p><a href="<?= Backend::url('{{ controller_url }}') ?>" class="btn btn-default"><?= e(trans('backend::lang.form.return_to_list')); ?></a></p>
 
 <?php endif ?>

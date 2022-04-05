@@ -1,8 +1,9 @@
 <?php namespace System\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
+use InvalidArgumentException;
+use System\Console\BaseScaffoldCommand;
 
-class CreateCommand extends GeneratorCommand
+class CreateCommand extends BaseScaffoldCommand
 {
     /**
      * @var string|null The default command name for lazy loading.
@@ -14,13 +15,21 @@ class CreateCommand extends GeneratorCommand
      */
     protected $signature = 'create:command
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
-        {name : The name of the command to generate. <info>(eg: create)</info>}
+        {name : The name of the command to generate. <info>(eg: ImportPosts)</info>}
+        {--command= : The terminal command that should be assigned. <info>(eg: blog:importposts)</info>}
         {--f|force : Overwrite existing files with generated files.}';
 
     /**
      * @var string The console command description.
      */
     protected $description = 'Creates a new console command.';
+
+    /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'make:command',
+    ];
 
     /**
      * @var string The type of class being generated.
@@ -36,22 +45,26 @@ class CreateCommand extends GeneratorCommand
 
     /**
      * Prepare variables for stubs.
-     *
-     * @return array
      */
-    protected function prepareVars()
+    protected function prepareVars(): array
     {
-        $pluginCode = $this->argument('plugin');
-
-        $parts = explode('.', $pluginCode);
+        $parts = explode('.', $this->getPluginIdentifier());
         $plugin = array_pop($parts);
         $author = array_pop($parts);
-        $command = $this->argument('name');
+        $name = $this->getNameInput();
+        $command = trim($this->option('command') ?? strtolower("{$plugin}:{$name}"));
+
+        // More strict than the base Symfony validateName()
+        // method, make a PR if it's a problem for you
+        if (preg_match('/^[a-z]++(:[a-z]++)*$/', $command) !== 1) {
+            throw new InvalidArgumentException(sprintf('Command name "%s" is invalid.', $command));
+        }
 
         return [
-            'name' => $command,
+            'name' => $name,
+            'command' => $command,
             'author' => $author,
-            'plugin' => $plugin
+            'plugin' => $plugin,
         ];
     }
 }

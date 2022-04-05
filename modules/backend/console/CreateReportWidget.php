@@ -1,8 +1,8 @@
 <?php namespace Backend\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
+use System\Console\BaseScaffoldCommand;
 
-class CreateReportWidget extends GeneratorCommand
+class CreateReportWidget extends BaseScaffoldCommand
 {
     /**
      * The default command name for lazy loading.
@@ -36,6 +36,11 @@ class CreateReportWidget extends GeneratorCommand
     protected $type = 'ReportWidget';
 
     /**
+     * @var string The argument that the generated class name comes from
+     */
+    protected $nameFrom = 'widget';
+
+    /**
      * A mapping of stub to generated file.
      *
      * @var array
@@ -44,26 +49,4 @@ class CreateReportWidget extends GeneratorCommand
         'scaffold/reportwidget/reportwidget.stub' => 'reportwidgets/{{studly_name}}.php',
         'scaffold/reportwidget/widget.stub'       => 'reportwidgets/{{lower_name}}/partials/_{{lower_name}}.htm',
     ];
-
-    /**
-     * Prepare variables for stubs.
-     *
-     * return @array
-     */
-    protected function prepareVars()
-    {
-        $pluginCode = $this->argument('plugin');
-
-        $parts = explode('.', $pluginCode);
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-
-        $widget = $this->argument('widget');
-
-        return [
-            'name' => $widget,
-            'author' => $author,
-            'plugin' => $plugin
-        ];
-    }
 }

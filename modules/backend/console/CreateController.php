@@ -1,21 +1,21 @@
 <?php namespace Backend\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
+use System\Console\BaseScaffoldCommand;
 use Winter\Storm\Support\Str;
 
-class CreateController extends GeneratorCommand
+/**
+ * @TODO:
+ * - Support creating related permissions and navigation items and injecting them into the plugin
+ */
+class CreateController extends BaseScaffoldCommand
 {
     /**
-     * The default command name for lazy loading.
-     *
-     * @var string|null
+     * @var string|null The default command name for lazy loading.
      */
     protected static $defaultName = 'create:controller';
 
     /**
-     * The name and signature of this command.
-     *
-     * @var string
+     * @var string The name and signature of this command.
      */
     protected $signature = 'create:controller
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
@@ -24,23 +24,22 @@ class CreateController extends GeneratorCommand
         {--model= : Defines the model name to use. If not provided, the singular name of the controller is used.}';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * @var string The console command description.
      */
     protected $description = 'Creates a new controller.';
 
     /**
-     * The type of class being generated.
-     *
-     * @var string
+     * @var string The type of class being generated.
      */
     protected $type = 'Controller';
 
     /**
-     * A mapping of stub to generated file.
-     *
-     * @var array
+     * @var string The argument that the generated class name comes from
+     */
+    protected $nameFrom = 'controller';
+
+    /**
+     * @var array A mapping of stub to generated file.
      */
     protected $stubs = [
         'scaffold/controller/_list_toolbar.stub' => 'controllers/{{lower_name}}/_list_toolbar.htm',
@@ -55,33 +54,46 @@ class CreateController extends GeneratorCommand
 
     /**
      * Prepare variables for stubs.
-     *
-     * return @array
      */
-    protected function prepareVars()
+    protected function prepareVars(): array
     {
-        $pluginCode = $this->argument('plugin');
-
-        $parts = explode('.', $pluginCode);
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-
-        $controller = $this->argument('controller');
-
+        $vars = parent::prepareVars();
         /*
          * Determine the model name to use,
          * either supplied or singular from the controller name.
          */
         $model = $this->option('model');
         if (!$model) {
-            $model = Str::singular($controller);
+            $model = Str::singular($vars['name']);
         }
+        $vars['model'] = $model;
 
+        return $vars;
+    }
+
+    /**
+     * Adds controller & model lang helpers to the vars
+     */
+    protected function processVars($vars): array
+    {
+        $vars = parent::processVars($vars);
+
+        $vars['controller_url'] = "{$vars['plugin_url']}/{$vars['lower_name']}";
+        $vars['model_lang_key_short'] = "models.{$vars['lower_model']}";
+        $vars['model_lang_key'] = "{$vars['plugin_id']}::lang.{$vars['model_lang_key_short']}";
+
+        return $vars;
+    }
+
+    /**
+     * Gets the localization keys and values to be stored in the plugin's localization files
+     * Can reference $this->vars and $this->laravel->getLocale() internally
+     */
+    protected function getLangKeys(): array
+    {
         return [
-            'name' => $controller,
-            'model' => $model,
-            'author' => $author,
-            'plugin' => $plugin
+            "{$this->vars['model_lang_key_short']}.label" => $this->vars['title_singular_name'],
+            "{$this->vars['model_lang_key_short']}.label_plural" => $this->vars['title_plural_name'],
         ];
     }
 }

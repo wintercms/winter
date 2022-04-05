@@ -1,8 +1,8 @@
 <?php namespace Cms\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
+use System\Console\BaseScaffoldCommand;
 
-class CreateComponent extends GeneratorCommand
+class CreateComponent extends BaseScaffoldCommand
 {
     /**
      * The default command name for lazy loading.
@@ -36,6 +36,11 @@ class CreateComponent extends GeneratorCommand
     protected $type = 'Component';
 
     /**
+     * @var string The argument that the generated class name comes from
+     */
+    protected $nameFrom = 'component';
+
+    /**
      * A mapping of stub to generated file.
      *
      * @var array
@@ -44,25 +49,4 @@ class CreateComponent extends GeneratorCommand
         'scaffold/component/component.stub'  => 'components/{{studly_name}}.php',
         'scaffold/component/default.stub' => 'components/{{lower_name}}/default.htm',
     ];
-
-    /**
-     * Prepare variables for stubs.
-     *
-     * return @array
-     */
-    protected function prepareVars()
-    {
-        $pluginCode = $this->argument('plugin');
-
-        $parts = explode('.', $pluginCode);
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-        $component = $this->argument('component');
-
-        return [
-            'name' => $component,
-            'author' => $author,
-            'plugin' => $plugin
-        ];
-    }
 }

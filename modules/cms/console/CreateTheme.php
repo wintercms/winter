@@ -1,44 +1,38 @@
 <?php namespace Cms\Console;
 
-use Exception;
 use Winter\Storm\Scaffold\GeneratorCommand;
 
 class CreateTheme extends GeneratorCommand
 {
     /**
-     * The default command name for lazy loading.
-     *
-     * @var string|null
+     * @var string|null The default command name for lazy loading.
      */
     protected static $defaultName = 'create:theme';
 
     /**
-     * The name and signature of this command.
-     *
-     * @var string
+     * @var string The name and signature of this command.
      */
     protected $signature = 'create:theme
         {theme : The name of the theme to create. <info>(eg: MyTheme)</info>}
         {--force : Overwrite existing files with generated files.}';
 
     /**
-     * The console command description.
-     *
-     * @var string
+     * @var string The console command description.
      */
     protected $description = 'Creates a new theme.';
 
     /**
-     * The type of class being generated.
-     *
-     * @var string
+     * @var string The type of class being generated.
      */
     protected $type = 'Theme';
 
     /**
-     * A mapping of stub to generated file.
-     *
-     * @var array
+     * @var string The argument that the generated class name comes from
+     */
+    protected $nameFrom = 'theme';
+
+    /**
+     * @var array A mapping of stub to generated file.
      */
     protected $stubs = [
         'scaffold/theme/assets/js/app.stub' => 'assets/js/app.js',
@@ -56,32 +50,29 @@ class CreateTheme extends GeneratorCommand
     ];
 
     /**
-     * Prepare variables for stubs.
-     *
-     * return @array
+     * Get the desired class name from the input.
      */
-    protected function prepareVars()
+    protected function getNameInput(): string
     {
-        /*
-         * Extract the author and name from the plugin code
-         */
-        $code = str_slug($this->argument('theme'));
+        return str_slug(parent::getNameInput());
+    }
 
+    /**
+     * Prepare variables for stubs.
+     */
+    protected function prepareVars(): array
+    {
         return [
-            'code' => $code,
+            'code' => $this->getNameInput(),
         ];
     }
 
     /**
      * Get the plugin path from the input.
-     *
-     * @return string
      */
-    protected function getDestinationPath()
+    protected function getDestinationPath(): string
     {
-        $code = $this->prepareVars()['code'];
-
-        return themes_path($code);
+        return themes_path($this->getNameInput());
     }
 
     /**
@@ -96,11 +87,12 @@ class CreateTheme extends GeneratorCommand
         }
 
         $sourceFile = $this->getSourcePath() . '/' . $stubName;
-        $destinationFile = $this->getDestinationPath() . '/' . $this->stubs[$stubName];
+        $destinationFile = $this->getDestinationForStub($stubName);
         $destinationContent = $this->files->get($sourceFile);
 
         /*
          * Parse each variable in to the destination content and path
+         * @NOTE: CANNOT USE TWIG AS IT WOULD CONFLICT WITH THE TWIG TEMPLATES THEMSELVES
          */
         foreach ($this->vars as $key => $var) {
             $destinationContent = str_replace('{{' . $key . '}}', $var, $destinationContent);
@@ -108,13 +100,6 @@ class CreateTheme extends GeneratorCommand
         }
 
         $this->makeDirectory($destinationFile);
-
-        /*
-         * Make sure this file does not already exist
-         */
-        if ($this->files->exists($destinationFile) && !$this->option('force')) {
-            throw new Exception('Stop everything!!! This file already exists: ' . $destinationFile);
-        }
 
         $this->files->put($destinationFile, $destinationContent);
     }

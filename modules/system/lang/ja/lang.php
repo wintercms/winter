@@ -154,10 +154,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmailパス',
         'sendmail_path_comment' => 'Sendmailプログラムへのパスを指定してください。',
-        'mailgun' => 'Mailgun',
-        'mailgun_domain' => 'Mailgunドメイン',
-        'mailgun_domain_comment' => 'Mailgunドメイン名を指定してください。',
-        'mailgun_secret' => 'Mailgun APIキー',
     ],
     'mail_templates' => [
         'menu_label' => 'メールテンプレート',
