@@ -190,7 +190,7 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail path',
         'sendmail_path_comment' => 'Please specify the path of the sendmail program.',
-        'drivers_hint_content' => 'Please see the <a href=":url" target="_blank">documentation</a> for installing other Mail methods.',
+        'drivers_hint_content' => 'See the <a href=":url" target="_blank">documentation</a> for a list of other supported mail methods and how to enable them.',
     ],
     'mail_templates' => [
         'menu_label' => 'Mail templates',
