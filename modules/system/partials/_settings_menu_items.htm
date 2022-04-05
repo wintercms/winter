@@ -2,7 +2,7 @@
     $context = System\Classes\SettingsManager::instance()->getContext();
 
     $collapsedGroups = explode('|',
-        isset($_COOKIE['sidenav_treegroupStatus']) ? $_COOKIE['sidenav_treegroupStatus'] : null
+        isset($_COOKIE['sidenav_treegroupStatus']) ? $_COOKIE['sidenav_treegroupStatus'] : ''
     );
 
 ?>
