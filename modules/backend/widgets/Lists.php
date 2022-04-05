@@ -926,7 +926,7 @@ class Lists extends WidgetBase
             $config['searchable'] = false;
         }
 
-        $columnType = $config['type'] ?? null;
+        $columnType = $config['type'] ?? '';
 
         $column = new ListColumn($name, $label);
         $column->displayAs($columnType, $config);
