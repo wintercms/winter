@@ -52,6 +52,9 @@ return [
         'postmark' => [
             'transport' => 'postmark',
         ],
+        'mail' => [
+            'transport' => 'mail',
+        ],
         'sendmail' => [
             'path' => env('MAIL_SENDMAIL_PATH', '/usr/sbin/sendmail -t -i'),
             'transport' => 'sendmail',

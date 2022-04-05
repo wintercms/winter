@@ -132,16 +132,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail директория',
         'sendmail_path_comment' => 'Моля, посочете директория на Sendmail програмата.',
-        'mailgun' => 'Mailgun',
-        'mailgun_domain' => 'Mailgun домейн',
-        'mailgun_domain_comment' => 'Моля, посочете домейна за Mailgun.',
-        'mailgun_secret' => 'Mailgun тайна',
-        'mailgun_secret_comment' => 'Въведете своя Mailgun API ключ.',
-        'mandrill' => 'Mandrill',
-        'mandrill_secret' => 'Mandrill тайна',
-        'mandrill_secret_comment' => 'Въведете своя Mandrill API ключ.',
-        'drivers_hint_header' => 'Няма инсталирани драйвъри.',
-        'drivers_hint_content' => 'Този имейл метод изисква добавката ":plugin" да се инсталира преди да можете да изпращате имейл.'
     ],
     'mail_templates' => [
         'menu_label' => 'Имейл шаблони',
