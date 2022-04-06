@@ -163,6 +163,8 @@ return [
         'not_found' => 'Unable to find the specified settings.',
         'missing_model' => 'The settings page is missing a Model definition.',
         'update_success' => ':name settings updated',
+        'test_subject' => 'Mail driver test',
+        'test_content' => 'This is a test email to confirm that the provided mail settings work.',
         'return' => 'Return to system settings',
         'search' => 'Search',
     ],
