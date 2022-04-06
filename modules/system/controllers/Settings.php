@@ -120,7 +120,10 @@ class Settings extends Controller
         }
     }
 
-    public function update_onTest($author, $plugin, $code = null)
+    /**
+     * Saves the current configuration and sends a test email to the current user
+     */
+    public function update_onTest(string $author, string $plugin, $code = null)
     {   
         try {
             $this->update_onSave($author, $plugin, $code);
@@ -132,9 +135,8 @@ class Settings extends Controller
                 $msg->subject(Lang::get('system::lang.settings.test_subject'));
             });
 
-            Flash::success(trans('system::lang.mail_templates.test_success'));
-        }
-        catch (Exception $ex) {
+            Flash::success(Lang::get('system::lang.mail_templates.test_success'));
+        } catch (Exception $ex) {
             Flash::error($ex->getMessage());
         }
     }
