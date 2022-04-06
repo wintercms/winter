@@ -8,6 +8,7 @@ use Request;
 use Backend;
 use BackendMenu;
 use System\Classes\SettingsManager;
+use System\Behaviors\SettingsModel;
 use Backend\Classes\Controller;
 use ApplicationException;
 use Exception;
@@ -116,6 +117,25 @@ class Settings extends Controller
                 : 'system/settings';
 
             return Backend::redirect($redirectUrl);
+        }
+    }
+
+    public function update_onTest($author, $plugin, $code = null)
+    {   
+        try {
+            $this->update_onSave($author, $plugin, $code);
+
+            SettingsModel::clearInternalCache();
+
+            Mail::raw(Lang::get('system::lang.settings.test_content'), function ($msg) {
+                $msg->to([$this->user->email => $this->user->full_name]);
+                $msg->subject(Lang::get('system::lang.settings.test_subject'));
+            });
+
+            Flash::success(trans('system::lang.mail_templates.test_success'));
+        }
+        catch (Exception $ex) {
+            Flash::error($ex->getMessage());
         }
     }
 
@@ -238,17 +258,4 @@ class Settings extends Controller
         return array_pad($segments, 3, null);
     }
 
-    public function onTestMailDriver()
-    {
-        try {
-            $user = $this->user;
-
-            Mail::sendTo([$user->email => $user->full_name], 'system::mail.test-mail');
-
-            Flash::success(trans('system::lang.mail_templates.test_success'));
-        }
-        catch (Exception $ex) {
-            Flash::error($ex->getMessage());
-        }
-    }
 }
