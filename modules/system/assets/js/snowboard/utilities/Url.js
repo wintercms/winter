@@ -71,7 +71,7 @@ export default class Url extends Singleton {
             window.location.host,
             '/',
         ];
-        this.foundBaseUrl = urlParts.join();
+        this.foundBaseUrl = urlParts.join('');
 
         return this.foundBaseUrl;
     }
