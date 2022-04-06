@@ -1,5 +1,6 @@
 <?php namespace System\Controllers;
 
+use Mail;
 use Lang;
 use Flash;
 use Config;
@@ -235,5 +236,19 @@ class Settings extends Controller
 
         // Ensure there's at least 3 segments
         return array_pad($segments, 3, null);
+    }
+
+    public function onTestMailDriver()
+    {
+        try {
+            $user = $this->user;
+
+            Mail::sendTo([$user->email => $user->full_name], 'system::mail.test-mail');
+
+            Flash::success(trans('system::lang.mail_templates.test_success'));
+        }
+        catch (Exception $ex) {
+            Flash::error($ex->getMessage());
+        }
     }
 }
