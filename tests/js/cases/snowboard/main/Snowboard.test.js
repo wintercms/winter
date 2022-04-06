@@ -4,7 +4,11 @@ describe('Snowboard framework', function () {
     it('initialises correctly', function (done) {
         FakeDom
             .new()
-            .addScript('modules/system/assets/js/snowboard/build/snowboard.base.js')
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+            ])
             .render()
             .then(
                 (dom) => {
@@ -42,6 +46,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestPlugin.js',
             ])
@@ -101,6 +107,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestSingleton.js',
             ])
@@ -160,6 +168,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestListener.js',
             ])
@@ -204,6 +214,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestPromiseListener.js',
             ])
@@ -262,6 +274,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestHasDependencies.js',
             ])
@@ -285,6 +299,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestHasDependencies.js',
                 'tests/js/fixtures/framework/TestDependencyOne.js',
@@ -309,6 +325,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestDependencyTwo.js',
                 'tests/js/fixtures/framework/TestHasDependencies.js',
@@ -336,6 +354,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestSingletonWithDependency.js',
             ])

@@ -1,0 +1,6 @@
+# System module ignores
+
+# Ignore Mix files
+node_modules
+package-lock.json
+mix.webpack.js
