@@ -124,7 +124,7 @@ class Settings extends Controller
      * Saves the current configuration and sends a test email to the current user
      */
     public function update_onTest(string $author, string $plugin, $code = null)
-    {   
+    {
         try {
             $this->update_onSave($author, $plugin, $code);
 
