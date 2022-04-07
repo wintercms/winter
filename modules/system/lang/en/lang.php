@@ -165,6 +165,7 @@ return [
         'update_success' => ':name settings updated',
         'test_subject' => 'Mail driver test',
         'test_content' => 'This is a test email to confirm that the provided mail settings work.',
+        'test_confirm' => 'This will save your current configuration and send a test email to :email.',
         'return' => 'Return to system settings',
         'search' => 'Search',
     ],
