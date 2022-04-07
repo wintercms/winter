@@ -25,5 +25,9 @@
         "**/themes/*/layouts/*.htm": "wintercms",
         "**/themes/*/pages/**/*.htm": "wintercms",
         "**/themes/*/partials/**/*.htm": "wintercms"
-    }
+    },
+    "eslint.validate": [
+        "javascript",
+        "vue"
+    ]
 }

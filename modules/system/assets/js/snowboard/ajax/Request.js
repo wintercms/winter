@@ -6,6 +6,10 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
+if (window.Snowboard === undefined) {
+    throw new Error('Snowboard must be loaded in order to use the Request plugin.');
+}
+
 class Request extends Snowboard.PluginBase {
     /**
      * Constructor.

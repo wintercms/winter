@@ -5,6 +5,7 @@ import PluginLoader from './PluginLoader';
 import Cookie from '../utilities/Cookie';
 import JsonParser from '../utilities/JsonParser';
 import Sanitizer from '../utilities/Sanitizer';
+import Url from '../utilities/Url';
 
 /**
  * Snowboard - the Winter JavaScript framework.
@@ -28,6 +29,7 @@ export default class Snowboard {
         this.debugEnabled = (typeof debug === 'boolean' && debug === true);
         this.autoInitSingletons = (typeof autoSingletons === 'boolean' && autoSingletons === false);
         this.plugins = {};
+        this.foundBaseUrl = null;
 
         this.attachAbstracts();
         this.loadUtilities();
@@ -36,15 +38,31 @@ export default class Snowboard {
         this.debug('Snowboard framework initialised');
     }
 
+    /**
+     * Attaches abstract classes as properties of the Snowboard class.
+     *
+     * This will allow Javascript functionality with no build process to still extend these abstracts by prefixing
+     * them with "Snowboard".
+     *
+     * ```
+     * class MyClass extends Snowboard.PluginBase {
+     *     ...
+     * }
+     * ```
+     */
     attachAbstracts() {
         this.PluginBase = PluginBase;
         this.Singleton = Singleton;
     }
 
+    /**
+     * Loads the default utilities.
+     */
     loadUtilities() {
         this.addPlugin('cookie', Cookie);
         this.addPlugin('jsonParser', JsonParser);
         this.addPlugin('sanitizer', Sanitizer);
+        this.addPlugin('url', Url);
     }
 
     /**
@@ -67,7 +85,7 @@ export default class Snowboard {
      */
     initialiseSingletons() {
         Object.values(this.plugins).forEach((plugin) => {
-            if (plugin.isSingleton()) {
+            if (plugin.isSingleton() && plugin.dependenciesFulfilled()) {
                 plugin.initialiseSingleton();
             }
         });
@@ -108,6 +126,20 @@ export default class Snowboard {
         this[lowerName] = callback;
 
         this.debug(`Plugin "${name}" registered`);
+
+        // Check if any singletons now have their dependencies fulfilled, and fire their "ready" handler.
+        Object.values(this.getPlugins()).forEach((plugin) => {
+            if (
+                plugin.isSingleton()
+                && !plugin.isInitialised()
+                && plugin.dependenciesFulfilled()
+                && plugin.hasMethod('listens')
+                && Object.keys(plugin.callMethod('listens')).includes('ready')
+            ) {
+                const readyMethod = plugin.callMethod('listens').ready;
+                plugin.callMethod(readyMethod);
+            }
+        });
     }
 
     /**
@@ -133,6 +165,7 @@ export default class Snowboard {
 
         delete this.plugins[lowerName];
         delete this[lowerName];
+        delete this[name];
 
         this.debug(`Plugin "${name}" removed`);
     }
@@ -199,7 +232,9 @@ export default class Snowboard {
             if (plugin.isFunction()) {
                 return;
             }
-
+            if (!plugin.dependenciesFulfilled()) {
+                return;
+            }
             if (!plugin.hasMethod('listens')) {
                 return;
             }
