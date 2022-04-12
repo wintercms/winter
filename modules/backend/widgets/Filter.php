@@ -687,8 +687,8 @@ class Filter extends WidgetBase
      */
     protected function makeFilterScope($name, $config)
     {
-        $label = $config['label'] ?? null;
-        $scopeType = $config['type'] ?? null;
+        $label = $config['label'] ?? '';
+        $scopeType = $config['type'] ?? '';
 
         $scope = new FilterScope($name, $label);
         $scope->displayAs($scopeType, $config);
