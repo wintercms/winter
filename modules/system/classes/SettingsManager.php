@@ -357,7 +357,7 @@ class SettingsManager
     {
         return (object) [
             'itemCode' => $this->contextItemCode,
-            'owner' => strtolower($this->aliases[$this->contextOwner] ?? $this->contextOwner),
+            'owner' => strtolower($this->aliases[$this->contextOwner] ?? ($this->contextOwner ?? '')),
         ];
     }
 
