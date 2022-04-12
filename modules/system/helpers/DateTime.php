@@ -130,6 +130,6 @@ class DateTime
             $replacements['\\'.$from] = '['.$from.']';
         }
 
-        return strtr($format, $replacements);
+        return strtr($format ?? '', $replacements);
     }
 }
