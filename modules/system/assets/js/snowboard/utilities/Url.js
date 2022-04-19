@@ -85,15 +85,21 @@ export default class Url extends Singleton {
      * @param {string} url
      * @returns {string}
      */
-    validateBaseUrl(url) {
-        const urlRegex = /https?:\/\/(www\.)?[-a-z0-9@:%._+~#=]{1,256}\.[a-z0-9()]{1,6}\b([-a-z0-9()@:%_+.~#?&//=]*)/i;
+     validateBaseUrl(url) {
+        const urlRegex = /^(([^:/?#]+):)?(\/\/([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/i;
+        const urlParts = urlRegex.exec(url);
+        const protocol = urlParts[2];
+        const domain = urlParts[4];
 
-        if (url.match(urlRegex)) {
-            return (url.substr(-1) === '/')
-                ? url
-                : `${url}/`;
+        if (protocol && ['http', 'https'].indexOf(protocol.toLowerCase()) === -1) {
+            throw new Error('Invalid base URL detected');
+        }
+        if (!domain) {
+            throw new Error('Invalid base URL detected');
         }
 
-        throw new Error('Invalid base URL detected');
+        return (url.substr(-1) === '/')
+            ? url
+            : `${url}/`;
     }
 }
