@@ -7,9 +7,11 @@
     class="field-repeater-item">
 
     <?php if (!$this->previewMode): ?>
-        <div class="repeater-item-handle <?= $this->getId('items') ?>-handle">
-            <i class="icon-bars"></i>
-        </div>
+        <?php if ($sortable): ?>
+            <div class="repeater-item-handle <?= $this->getId('items') ?>-handle">
+                <i class="icon-bars"></i>
+            </div>
+        <?php endif; ?>
 
         <div class="repeater-item-remove">
             <button

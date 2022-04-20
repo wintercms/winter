@@ -292,7 +292,7 @@
             fromItems = isDeselect ? active : available,
             toItems = isDeselect ? available : active,
             testFunc = function(active){ return active.id == itemId },
-            item = $.grep(fromItems, testFunc).pop() ?? {'id': itemId, 'name': $item.text()},
+            item = ($.grep(fromItems, testFunc).pop() ?? {'id': itemId, 'name': $item.text()}),
             filtered = $.grep(fromItems, testFunc, true)
 
         if (isDeselect) {

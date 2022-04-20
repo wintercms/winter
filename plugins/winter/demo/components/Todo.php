@@ -1,7 +1,8 @@
 <?php namespace Winter\Demo\Components;
 
-use Cms\Classes\ComponentBase;
+use Flash;
 use ApplicationException;
+use Cms\Classes\ComponentBase;
 
 class Todo extends ComponentBase
 {
@@ -36,9 +37,13 @@ class Todo extends ComponentBase
             throw new ApplicationException(sprintf('Sorry only %s items are allowed.', $this->property('max')));
         }
 
-        if (($newItem = post('newItem')) != '') {
-            $items[] = $newItem;
+        $newItem = post('newItem');
+        if (empty($newItem)) {
+            Flash::error('You must specify an item to add to the To Do List.');
+            return;
         }
+
+        $items[] = $newItem;
 
         $this->page['items'] = $items;
     }

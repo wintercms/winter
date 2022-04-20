@@ -1,9 +1,8 @@
 <?php namespace System\Console;
 
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use System\Classes\PluginManager;
 use System\Models\PluginVersion;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Console command to enable a plugin.
@@ -13,16 +12,26 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class PluginEnable extends Command
 {
+    use Traits\HasPluginArgument;
 
     /**
-     * The console command name.
-     * @var string
+     * @var string Only suggest plugins that are disabled
      */
-    protected $name = 'plugin:enable';
+    protected $hasPluginsFilter = 'disabled';
 
     /**
-     * The console command description.
-     * @var string
+     * @var string|null The default command name for lazy loading.
+     */
+    protected static $defaultName = 'plugin:enable';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'plugin:enable
+        {plugin : The plugin to disable. <info>(eg: Winter.Blog)</info>}';
+
+    /**
+     * @var string The console command description.
      */
     protected $description = 'Enable an existing plugin.';
 
@@ -32,33 +41,16 @@ class PluginEnable extends Command
      */
     public function handle()
     {
+        $pluginName = $this->getPluginIdentifier();
         $pluginManager = PluginManager::instance();
-        $pluginName = $this->argument('name');
-        $pluginName = $pluginManager->normalizeIdentifier($pluginName);
 
-        if (!$pluginManager->hasPlugin($pluginName)) {
-            return $this->error(sprintf('Unable to find a registered plugin called "%s"', $pluginName));
-        }
-
-        // Disable this plugin
+        // Enable this plugin
         $pluginManager->enablePlugin($pluginName);
-
         $plugin = PluginVersion::where('code', $pluginName)->first();
         $plugin->is_disabled = false;
         $plugin->save();
-
+        $pluginManager->clearDisabledCache();
 
         $this->output->writeln(sprintf('<info>%s:</info> enabled.', $pluginName));
-    }
-
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the plugin. Eg: AuthorName.PluginName'],
-        ];
     }
 }

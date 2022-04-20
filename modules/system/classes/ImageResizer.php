@@ -9,6 +9,7 @@ use Storage;
 use Exception;
 use SystemException;
 use File as FileHelper;
+use Illuminate\Filesystem\FilesystemAdapter;
 use System\Models\File as SystemFileModel;
 use Winter\Storm\Database\Attach\File as FileModel;
 use Winter\Storm\Database\Attach\Resizer as DefaultResizer;
@@ -86,7 +87,7 @@ class ImageResizer
      * Prepare the resizer instance
      *
      * @param mixed $image Supported values below:
-     *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
+     *              ['disk' => FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
      *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @param integer|string|bool|null $width Desired width of the resized image
@@ -419,7 +420,7 @@ class ImageResizer
     /**
      * Get the details for the target image
      *
-     * @return array [Illuminate\Filesystem\FilesystemAdapter $disk, (string) $path]
+     * @return array [FilesystemAdapter $disk, (string) $path]
      */
     protected function getTargetDetails()
     {
@@ -542,12 +543,12 @@ class ImageResizer
      * Normalize the provided input into information that the resizer can work with
      *
      * @param mixed $image Supported values below:
-     *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
+     *              ['disk' => FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
      *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @throws SystemException If the image was unable to be identified
      * @return array Array containing the disk, path, source, and fileModel if applicable
-     *               ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void]
+     *               ['disk' => FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void]
      */
     public static function normalizeImage($image)
     {
@@ -564,6 +565,16 @@ class ImageResizer
 
             // Handle disks that couldn't be serialized
             if (is_string($disk)) {
+                // Handle disks of type "system" (the local file system the application is running on)
+                if ($disk === 'system') {
+                    Config::set('filesystems.disks.system', [
+                        'driver' => 'local',
+                        'root' => base_path(),
+                    ]);
+                    // Regenerate the path relative to the newly defined "system" disk
+                    $path = str_after($path, static::normalizePath(base_path()) . '/');
+                }
+
                 $disk = Storage::disk($disk);
             }
 
@@ -730,15 +741,25 @@ class ImageResizer
      */
     public static function fromIdentifier(string $identifier)
     {
-        // Attempt to retrieve the resizer configuration and remove the data from the cache after retrieval
-        $config = Cache::pull(static::CACHE_PREFIX . $identifier, null);
+        $cacheKey = static::CACHE_PREFIX . $identifier;
+
+        // Attempt to retrieve the resizer configuration
+        $config = Cache::get($cacheKey, null);
 
         // Validate that the desired config was able to be loaded
         if (empty($config)) {
             throw new SystemException("Unable to retrieve the configuration for " . e($identifier));
         }
 
-        return new static($config['image'], $config['width'], $config['height'], $config['options']);
+        $resizer = new static($config['image'], $config['width'], $config['height'], $config['options']);
+
+        // Remove the data from the cache only after successfully instantiating the resizer
+        // in order to make it easier to debug should any issues occur during the instantiation
+        // since the browser will "steal" the configuration with the first request it makes
+        // if we pull the configuration data out immediately.
+        Cache::forget($cacheKey);
+
+        return $resizer;
     }
 
     /**
@@ -767,7 +788,7 @@ class ImageResizer
      * Converts supplied input into a URL that will return the desired resized image
      *
      * @param mixed $image Supported values below:
-     *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
+     *              ['disk' => FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
      *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @param integer|string|bool|null $width Desired width of the resized image
@@ -800,7 +821,7 @@ class ImageResizer
      * NOTE: Doesn't currently support being passed a FileModel image that has already been resized
      *
      * @param mixed $image Supported values below:
-     *              ['disk' => Illuminate\Filesystem\FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
+     *              ['disk' => FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void],
      *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @throws SystemException If the provided input was unable to be processed

@@ -12,7 +12,7 @@ use Backend\Classes\ControllerBehavior;
  * This behavior is implemented in the controller like so:
  *
  *     public $implement = [
- *         'Backend.Behaviors.ListController',
+ *         \Backend\Behaviors\ListController::class,
  *     ];
  *
  *     public $listConfig = 'config_list.yaml';
@@ -37,11 +37,6 @@ class ListController extends ControllerBehavior
     protected $primaryDefinition;
 
     /**
-     * @var array List configuration, keys for alias and value for config objects.
-     */
-    protected $listConfig = [];
-
-    /**
      * @var \Backend\Classes\WidgetBase[] Reference to the list widget object.
      */
     protected $listWidgets = [];
@@ -57,11 +52,6 @@ class ListController extends ControllerBehavior
     protected $filterWidgets = [];
 
     /**
-     * @inheritDoc
-     */
-    protected $requiredProperties = ['listConfig'];
-
-    /**
      * @var array Configuration values that must exist when applying the primary config file.
      * - modelClass: Class name for the model
      * - list: List column definitions
@@ -74,6 +64,11 @@ class ListController extends ControllerBehavior
     protected $actions = ['index'];
 
     /**
+     * @var mixed Configuration for this behaviour
+     */
+    public $listConfig = 'config_list.yaml';
+
+    /**
      * Behavior constructor
      * @param \Backend\Classes\Controller $controller
      */
@@ -84,12 +79,13 @@ class ListController extends ControllerBehavior
         /*
          * Extract list definitions
          */
-        if (is_array($controller->listConfig)) {
-            $this->listDefinitions = $controller->listConfig;
+        $config = $controller->listConfig ?: $this->listConfig;
+        if (is_array($config)) {
+            $this->listDefinitions = $config;
             $this->primaryDefinition = key($this->listDefinitions);
         }
         else {
-            $this->listDefinitions = ['list' => $controller->listConfig];
+            $this->listDefinitions = ['list' => $config];
             $this->primaryDefinition = 'list';
         }
 
@@ -382,8 +378,6 @@ class ListController extends ControllerBehavior
             $definition = $this->primaryDefinition;
         }
 
-        $listConfig = $this->controller->listGetConfig($definition);
-
         $vars = [
             'toolbar' => null,
             'filter' => null,
@@ -421,10 +415,10 @@ class ListController extends ControllerBehavior
 
     /**
      * Refreshes the list container only, useful for returning in custom AJAX requests.
-     * @param  string $definition Optional list definition.
+     *
      * @return array The list element selector as the key, and the list contents are the value.
      */
-    public function listRefresh($definition = null)
+    public function listRefresh(string $definition = null)
     {
         if (!count($this->listWidgets)) {
             $this->makeLists();
@@ -441,7 +435,7 @@ class ListController extends ControllerBehavior
      * Returns the widget used by this behavior.
      * @return \Backend\Classes\WidgetBase
      */
-    public function listGetWidget($definition = null)
+    public function listGetWidget(string $definition = null)
     {
         if (!$definition) {
             $definition = $this->primaryDefinition;
@@ -452,16 +446,19 @@ class ListController extends ControllerBehavior
 
     /**
      * Returns the configuration used by this behavior.
-     * @return \Backend\Classes\WidgetBase
+     * @return stdClass
      */
-    public function listGetConfig($definition = null)
+    public function listGetConfig(string $definition = null)
     {
         if (!$definition) {
             $definition = $this->primaryDefinition;
         }
 
-        if (!$config = array_get($this->listConfig, $definition)) {
-            $config = $this->listConfig[$definition] = $this->makeConfig($this->listDefinitions[$definition], $this->requiredConfig);
+        if (
+            !($config = array_get($this->listDefinitions, $definition))
+            || !is_object($config)
+        ) {
+            $config = $this->listDefinitions[$definition] = $this->makeConfig($this->listDefinitions[$definition], $this->requiredConfig);
         }
 
         return $config;

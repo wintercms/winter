@@ -14,7 +14,7 @@ use ApplicationException;
  * This behavior is implemented in the controller like so:
  *
  *     public $implement = [
- *         'Backend.Behaviors.RelationController',
+ *         \Backend\Behaviors\RelationController::class,
  *     ];
  *
  *     public $relationConfig = 'config_relation.yaml';
@@ -79,11 +79,6 @@ class RelationController extends ControllerBehavior
      * @var Backend\Classes\WidgetBase Reference to widget for relations with pivot data.
      */
     protected $pivotWidget;
-
-    /**
-     * @inheritDoc
-     */
-    protected $requiredProperties = ['relationConfig'];
 
     /**
      * @var array Properties that must exist for each relationship definition.
@@ -201,6 +196,11 @@ class RelationController extends ControllerBehavior
     protected $foreignId;
 
     /**
+     * @var mixed Configuration for this behaviour
+     */
+    public $relationConfig = 'config_relation.yaml';
+
+    /**
      * @var string Active session key, used for deferred bindings.
      */
     public $sessionKey;
@@ -229,7 +229,7 @@ class RelationController extends ControllerBehavior
         /*
          * Build configuration
          */
-        $this->config = $this->originalConfig = $this->makeConfig($controller->relationConfig, $this->requiredConfig);
+        $this->config = $this->originalConfig = $this->makeConfig($controller->relationConfig ?: $this->relationConfig, $this->requiredConfig);
     }
 
     /**
@@ -411,7 +411,7 @@ class RelationController extends ControllerBehavior
         /*
          * Pivot widget
          */
-        if ($this->manageMode == 'pivot' && $this->pivotWidget = $this->makePivotWidget()) {
+        if ($this->manageMode === 'pivot' && $this->pivotWidget = $this->makePivotWidget()) {
             $this->controller->relationExtendPivotWidget($this->pivotWidget, $this->field, $this->model);
             $this->pivotWidget->bindToController();
         }
@@ -610,7 +610,7 @@ class RelationController extends ControllerBehavior
         /*
          * Add search to toolbar
          */
-        $useSearch = $this->viewMode == 'multi' && $this->getConfig('view[showSearch]');
+        $useSearch = $this->viewMode === 'multi' && $this->getConfig('view[showSearch]');
 
         if ($useSearch) {
             $toolbarConfig->search = [
@@ -661,7 +661,7 @@ class RelationController extends ControllerBehavior
         /*
          * Multiple (has many, belongs to many)
          */
-        if ($this->viewMode == 'multi') {
+        if ($this->viewMode === 'multi') {
             $config = $this->makeConfigForMode('view', 'list');
             $config->model = $this->relationModel;
             $config->alias = $this->alias . 'ViewList';
@@ -738,9 +738,9 @@ class RelationController extends ControllerBehavior
                 /*
                  * Allows pivot data to enter the fray
                  */
-                if ($this->relationType == 'belongsToMany'
-                    || $this->relationType == 'morphToMany'
-                    || $this->relationType == 'morphedByMany'
+                if ($this->relationType === 'belongsToMany'
+                    || $this->relationType === 'morphToMany'
+                    || $this->relationType === 'morphedByMany'
                 ) {
                     $this->relationObject->setQuery($query->getQuery());
                     return $this->relationObject;
@@ -784,7 +784,7 @@ class RelationController extends ControllerBehavior
         /*
          * Single (belongs to, has one)
          */
-        elseif ($this->viewMode == 'single') {
+        elseif ($this->viewMode === 'single') {
             $this->viewModel = $this->relationObject->getResults()
                 ?: $this->relationModel;
 
@@ -808,8 +808,8 @@ class RelationController extends ControllerBehavior
         /*
          * List / Pivot
          */
-        if ($this->manageMode == 'list' || $this->manageMode == 'pivot') {
-            $isPivot = $this->manageMode == 'pivot';
+        if ($this->manageMode === 'list' || $this->manageMode === 'pivot') {
+            $isPivot = $this->manageMode === 'pivot';
 
             $config = $this->makeConfigForMode('manage', 'list');
             $config->model = $this->relationModel;
@@ -821,7 +821,7 @@ class RelationController extends ControllerBehavior
             $config->recordsPerPage = $this->getConfig('manage[recordsPerPage]');
             $config->noRecordsMessage = $this->getConfig('manage[noRecordsMessage]');
 
-            if ($this->viewMode == 'single') {
+            if ($this->viewMode === 'single') {
                 $config->showCheckboxes = false;
                 $config->recordOnClick = sprintf(
                     "$.wn.relationBehavior.clickManageListRecord(':%s', '%s', '%s')",
@@ -898,7 +898,7 @@ class RelationController extends ControllerBehavior
         /*
          * Form
          */
-        elseif ($this->manageMode == 'form') {
+        elseif ($this->manageMode === 'form') {
             if (!$config = $this->makeConfigForMode('manage', 'form', false)) {
                 return null;
             }
@@ -933,7 +933,7 @@ class RelationController extends ControllerBehavior
         /*
          * Exclude existing relationships
          */
-        if ($this->manageMode == 'pivot' || $this->manageMode == 'list') {
+        if ($this->manageMode === 'pivot' || $this->manageMode === 'list') {
             $widget->bindEvent('list.extendQuery', function ($query) {
                 /*
                  * Where not in the current list of related records
@@ -1070,7 +1070,7 @@ class RelationController extends ControllerBehavior
     {
         $this->beforeAjax();
 
-        if ($this->manageMode == 'pivot' && $this->manageId) {
+        if ($this->manageMode === 'pivot' && $this->manageId) {
             return $this->onRelationManagePivotForm();
         }
 
@@ -1092,7 +1092,7 @@ class RelationController extends ControllerBehavior
         $saveData = $this->manageWidget->getSaveData();
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey(true) : null;
 
-        if ($this->viewMode == 'multi') {
+        if ($this->viewMode === 'multi') {
             $newModel = $this->relationModel;
 
             /*
@@ -1107,14 +1107,34 @@ class RelationController extends ControllerBehavior
                 );
             }
 
+            // Handle Pivot Data when creating related records
+            $isPivot = false;
+            if (
+                in_array($this->relationType, ['belongsToMany', 'morphToMany', 'morphedByMany'])
+                && !empty($saveData['pivot'])
+            ) {
+                $isPivot = true;
+                $pivotModel = $this->relationObject->newPivot();
+                $newModel->setRelation('pivot', $pivotModel);
+            }
+
             $modelsToSave = $this->prepareModelsToSave($newModel, $saveData);
+
             foreach ($modelsToSave as $modelToSave) {
+                if ($modelToSave instanceof \Winter\Storm\Database\Pivot) {
+                    $pivotData = $modelToSave->getAttributes();
+                    continue;
+                }
+
                 $modelToSave->save(null, $this->manageWidget->getSessionKey());
             }
 
-            $this->relationObject->add($newModel, $sessionKey);
-        }
-        elseif ($this->viewMode == 'single') {
+            if ($isPivot && !empty($pivotData)) {
+                $this->relationObject->add($newModel, $sessionKey, $pivotData);
+            } else {
+                $this->relationObject->add($newModel, $sessionKey);
+            }
+        } elseif ($this->viewMode === 'single') {
             $newModel = $this->viewModel = $this->viewWidget->model = $this->manageWidget->model;
             $this->viewWidget->setFormValues($saveData);
 
@@ -1140,7 +1160,7 @@ class RelationController extends ControllerBehavior
              * Belongs to relations won't save when using add() so
              * it should occur if the conditions are right.
              */
-            if (!$this->deferredBinding && $this->relationType == 'belongsTo') {
+            if (!$this->deferredBinding && $this->relationType === 'belongsTo') {
                 $parentModel = $this->relationObject->getParent();
                 if ($parentModel->exists) {
                     $parentModel->save();
@@ -1160,14 +1180,14 @@ class RelationController extends ControllerBehavior
         $this->beforeAjax();
         $saveData = $this->manageWidget->getSaveData();
 
-        if ($this->viewMode == 'multi') {
+        if ($this->viewMode === 'multi') {
             $model = $this->manageWidget->model;
             $modelsToSave = $this->prepareModelsToSave($model, $saveData);
             foreach ($modelsToSave as $modelToSave) {
                 $modelToSave->save(null, $this->manageWidget->getSessionKey());
             }
         }
-        elseif ($this->viewMode == 'single') {
+        elseif ($this->viewMode === 'single') {
             // Ensure that the view widget model is the same instance as the manage widget model
             // since they will technically be different object instances in this context as
             // $viewWidet->model is populated by $this->relationObject->getResults() and
@@ -1191,7 +1211,7 @@ class RelationController extends ControllerBehavior
         /*
          * Multiple (has many, belongs to many)
          */
-        if ($this->viewMode == 'multi') {
+        if ($this->viewMode === 'multi') {
             if (($checkedIds = post('checked')) && is_array($checkedIds)) {
                 foreach ($checkedIds as $relationId) {
                     if (!$obj = $this->relationModel->find($relationId)) {
@@ -1205,7 +1225,7 @@ class RelationController extends ControllerBehavior
         /*
          * Single (belongs to, has one)
          */
-        elseif ($this->viewMode == 'single') {
+        elseif ($this->viewMode === 'single') {
             $relatedModel = $this->viewModel;
             if ($relatedModel->exists) {
                 $relatedModel->delete();
@@ -1234,7 +1254,7 @@ class RelationController extends ControllerBehavior
         /*
          * Add
          */
-        if ($this->viewMode == 'multi') {
+        if ($this->viewMode === 'multi') {
             $checkedIds = $recordId ? [$recordId] : post('checked');
 
             if (is_array($checkedIds)) {
@@ -1254,7 +1274,7 @@ class RelationController extends ControllerBehavior
         /*
          * Link
          */
-        elseif ($this->viewMode == 'single') {
+        elseif ($this->viewMode === 'single') {
             if ($recordId && ($model = $this->relationModel->find($recordId))) {
                 if ($this->relationType === 'hasOne') {
                     // Unassign previous relation if one is already assigned
@@ -1272,7 +1292,7 @@ class RelationController extends ControllerBehavior
                  * Belongs to relations won't save when using add() so
                  * it should occur if the conditions are right.
                  */
-                if (!$this->deferredBinding && $this->relationType == 'belongsTo') {
+                if (!$this->deferredBinding && $this->relationType === 'belongsTo') {
                     $parentModel = $this->relationObject->getParent();
                     if ($parentModel->exists) {
                         $parentModel->save();
@@ -1298,7 +1318,7 @@ class RelationController extends ControllerBehavior
         /*
          * Remove
          */
-        if ($this->viewMode == 'multi') {
+        if ($this->viewMode === 'multi') {
             $checkedIds = $recordId ? [$recordId] : post('checked');
 
             if (is_array($checkedIds)) {
@@ -1313,8 +1333,8 @@ class RelationController extends ControllerBehavior
         /*
          * Unlink
          */
-        elseif ($this->viewMode == 'single') {
-            if ($this->relationType == 'belongsTo') {
+        elseif ($this->viewMode === 'single') {
+            if ($this->relationType === 'belongsTo') {
                 $this->relationObject->dissociate();
                 $this->relationObject->getParent()->save();
 
@@ -1324,7 +1344,7 @@ class RelationController extends ControllerBehavior
                     $this->initRelation($this->model);
                 }
             }
-            elseif ($this->relationType == 'hasOne' || $this->relationType == 'morphOne') {
+            elseif ($this->relationType === 'hasOne' || $this->relationType === 'morphOne') {
                 if ($obj = $relatedModel->find($recordId)) {
                     $this->relationObject->remove($obj, $sessionKey);
                 }
@@ -1689,7 +1709,7 @@ class RelationController extends ControllerBehavior
                 if (isset($this->config->pivot)) {
                     return 'pivot';
                 }
-                elseif ($this->eventTarget == 'list') {
+                elseif ($this->eventTarget === 'list') {
                     return 'form';
                 }
                 else {
@@ -1700,7 +1720,7 @@ class RelationController extends ControllerBehavior
             case 'morphOne':
             case 'hasMany':
             case 'morphMany':
-                if ($this->eventTarget == 'button-add') {
+                if ($this->eventTarget === 'button-add') {
                     return 'list';
                 }
 
@@ -1787,7 +1807,7 @@ class RelationController extends ControllerBehavior
          * - view.list => manage.list
          */
         if (!$config) {
-            if ($mode == 'manage' && $type == 'list') {
+            if ($mode === 'manage' && $type === 'list') {
                 return $this->makeConfigForMode('view', $type);
             }
 

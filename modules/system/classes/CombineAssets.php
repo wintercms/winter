@@ -10,11 +10,18 @@ use Route;
 use Config;
 use Request;
 use Response;
-use Winter\Storm\Assetic\Asset\FileAsset;
-use Winter\Storm\Assetic\Asset\AssetCache;
-use Winter\Storm\Assetic\Asset\AssetCollection;
-use Winter\Storm\Assetic\Cache\FilesystemCache;
-use Winter\Storm\Assetic\Factory\AssetFactory;
+use Assetic\Asset\FileAsset;
+use Assetic\Asset\AssetCache;
+use Assetic\Asset\AssetCollection;
+use Assetic\Factory\AssetFactory;
+use Assetic\Filter\CssImportFilter;
+use Assetic\Filter\CssRewriteFilter;
+use Assetic\Filter\JavaScriptMinifierFilter;
+use Assetic\Filter\StylesheetMinifyFilter;
+use Winter\Storm\Parse\Assetic\Cache\FilesystemCache;
+use Winter\Storm\Parse\Assetic\Filter\LessCompiler;
+use Winter\Storm\Parse\Assetic\Filter\ScssCompiler;
+use Winter\Storm\Parse\Assetic\Filter\JavascriptImporter;
 use System\Helpers\Cache as CacheHelper;
 use ApplicationException;
 use DateTime;
@@ -126,22 +133,23 @@ class CombineAssets
         /*
          * Register JavaScript filters
          */
-        $this->registerFilter('js', new \Winter\Storm\Assetic\Filter\JavascriptImporter);
+        $this->registerFilter('js', new JavascriptImporter);
 
         /*
          * Register CSS filters
          */
-        $this->registerFilter('css', new \Winter\Storm\Assetic\Filter\CssImportFilter);
-        $this->registerFilter(['css', 'less', 'scss'], new \Winter\Storm\Assetic\Filter\CssRewriteFilter);
-        $this->registerFilter('less', new \Winter\Storm\Assetic\Filter\LessCompiler);
-        $this->registerFilter('scss', new \Winter\Storm\Assetic\Filter\ScssCompiler);
+        $this->registerFilter('css', new CssImportFilter);
+        $this->registerFilter(['css', 'less', 'scss'], new CssRewriteFilter);
+
+        $this->registerFilter('less', new LessCompiler);
+        $this->registerFilter('scss', new ScssCompiler);
 
         /*
          * Minification filters
          */
         if ($this->useMinify) {
-            $this->registerFilter('js', new \Winter\Storm\Assetic\Filter\JSMinFilter);
-            $this->registerFilter(['css', 'less', 'scss'], new \Winter\Storm\Assetic\Filter\StylesheetMinify);
+            $this->registerFilter('js', new JavaScriptMinifierFilter);
+            $this->registerFilter(['css', 'less', 'scss'], new StylesheetMinifyFilter);
         }
 
         /*
@@ -153,6 +161,13 @@ class CombineAssets
         $this->registerAlias('framework.extras.js', '~/modules/system/assets/js/framework.extras.js');
         $this->registerAlias('framework.extras', '~/modules/system/assets/css/framework.extras.css');
         $this->registerAlias('framework.extras.css', '~/modules/system/assets/css/framework.extras.css');
+
+        $snowboardBase = (Config::get('app.debug', false) === true) ? 'snowboard.base.debug.js' : 'snowboard.base.js';
+        $this->registerAlias('snowboard.base', '~/modules/system/assets/js/snowboard/build/' . $snowboardBase);
+        $this->registerAlias('snowboard.attr', '~/modules/system/assets/js/snowboard/build/snowboard.data-attr.js');
+        $this->registerAlias('snowboard.request', '~/modules/system/assets/js/snowboard/build/snowboard.request.js');
+        $this->registerAlias('snowboard.extras', '~/modules/system/assets/js/snowboard/build/snowboard.extras.js');
+        $this->registerAlias('snowboard.extras.css', '~/modules/system/assets/css/snowboard.extras.css');
 
         /*
          * Deferred registration

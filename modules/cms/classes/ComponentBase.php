@@ -316,7 +316,7 @@ abstract class ComponentBase extends Extendable
         catch (BadMethodCallException $ex) {
         }
 
-        if (method_exists($this->controller, $method)) {
+        if (isset($this->controller) && method_exists($this->controller, $method)) {
             return call_user_func_array([$this->controller, $method], $parameters);
         }
 

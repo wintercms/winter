@@ -1,0 +1,31 @@
+<?php namespace {{studly_author}}\{{studly_plugin}}\Models;
+
+use Model;
+
+/**
+ * {{name}} Model
+ */
+class {{studly_name}} extends Model
+{
+    use \Winter\Storm\Database\Traits\Validation;
+
+    /**
+     * @var array Behaviors implemented by this model.
+     */
+    public $implement = [\System\Behaviors\SettingsModel::class];
+
+    /**
+     * @var string Unique code
+     */
+    public $settingsCode = '{{lower_author}}_{{lower_plugin}}_{{lower_name}}';
+
+    /**
+     * @var mixed Settings form field definitions
+     */
+    public $settingsFields = 'fields.yaml';
+
+    /**
+     * @var array Validation rules
+     */
+    public $rules = [];
+}

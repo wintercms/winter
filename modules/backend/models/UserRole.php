@@ -23,8 +23,8 @@ class UserRole extends RoleBase
      * @var array Validation rules
      */
     public $rules = [
-        'name' => 'required|between:2,128|unique:backend_user_roles',
-        'code' => 'unique:backend_user_roles',
+        'name' => 'required|between:2,128|unique',
+        'code' => 'unique',
     ];
 
     /**
@@ -37,7 +37,8 @@ class UserRole extends RoleBase
 
     public function filterFields($fields)
     {
-        if ($this->is_system) {
+        // System roles cannot have their code or permissions changed
+        if ($this->isSystemRole()) {
             $fields->code->disabled = true;
             $fields->permissions->disabled = true;
         }
@@ -45,25 +46,33 @@ class UserRole extends RoleBase
 
     public function afterFetch()
     {
-        if ($this->is_system) {
+        // System role permissions are determined by the permissions that attach
+        // themselves to the given role's code via the `roles` property.
+        if ($this->isSystemRole()) {
             $this->permissions = $this->getDefaultPermissions();
         }
     }
 
     public function beforeSave()
     {
+        // System roles cannot have their code or permissions changed
         if ($this->isSystemRole()) {
             $this->is_system = true;
             $this->permissions = [];
+            if ($this->exists) {
+                $this->code = $this->getOriginal('code');
+            }
         }
     }
 
     public function isSystemRole()
     {
+        // System roles must have a valid code property
         if (!$this->code || !strlen(trim($this->code))) {
             return false;
         }
 
+        // Winter default system roles
         if ($this->is_system || in_array($this->code, [
             self::CODE_DEVELOPER,
             self::CODE_PUBLISHER
@@ -71,11 +80,22 @@ class UserRole extends RoleBase
             return true;
         }
 
+        // If any permission attaches itself to a given role's code
+        // that role is now considered a system role
         return AuthManager::instance()->hasPermissionsForRole($this->code);
     }
 
-    public function getDefaultPermissions()
+    /**
+     * Get the permissions that have attached themselves to the current role
+     */
+    public function getDefaultPermissions(): array
     {
-        return AuthManager::instance()->listPermissionsForRole($this->code);
+        // Only the Develper role inherits all "orphaned" / unassigned permissions by default
+        $includeOrphanedPermissions = false;
+        if ($this->code === self::CODE_DEVELOPER) {
+            $includeOrphanedPermissions = true;
+        }
+
+        return AuthManager::instance()->listPermissionsForRole($this->code, $includeOrphanedPermissions);
     }
 }

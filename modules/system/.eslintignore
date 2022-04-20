@@ -1,0 +1,11 @@
+# Ignore build files
+**/node_modules/**
+build/*.js
+**/build/*.js
+**/mix.webpack.js
+
+# Ignore all JS except for Mix-based assets
+assets/js
+!assets/js/snowboard
+assets/ui
+assets/vendor

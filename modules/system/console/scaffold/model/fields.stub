@@ -1,0 +1,8 @@
+# ===================================
+#  Form Field Definitions
+# ===================================
+
+fields:
+    id:
+        label: '{{ plugin_id }}::lang.models.general.id'
+        disabled: true
