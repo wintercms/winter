@@ -121,7 +121,7 @@ class ThemeData extends Model
                 continue;
             }
 
-            if ($field['type'] === 'repeater') {
+            if (in_array($field['type'], ['repeater', 'nestedform'])) {
                 $this->jsonable[] = $id;
             }
             elseif ($field['type'] === 'fileupload') {
