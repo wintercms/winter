@@ -39,6 +39,7 @@
                     <?= e(trans('backend::lang.form.reset_default')) ?>
                 </button>
 
+              <?php if (last($this->params) === 'mail_settings') : ?>
                 <button
                     type="button"
                     class="btn btn-info pull-right"
@@ -48,6 +49,7 @@
                     data-request-confirm="<?= e(trans('system::lang.settings.test_confirm', [ 'email' => e(BackendAuth::getUser()->email)])) ?>">
                     <?= e(trans('system::lang.mail_templates.test_send')) ?>
                 </button>
+              <?php endif; ?>
             </div>
         </div>
     <?= Form::close() ?>
