@@ -91,3 +91,7 @@ tabs:
                 field: send_mode
                 condition: value[sendmail]
 
+        _send_test:
+            type: partial
+            path: ~/modules/system/models/mailsetting/_send_test_button.htm
+            tab: system::lang.mail.general
