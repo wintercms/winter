@@ -67,6 +67,7 @@ tabs:
             label: system::lang.mail.smtp_username
             tab: system::lang.mail.general
             span: left
+            dependsOn: smtp_authorization
             trigger:
                 action: show
                 field: send_mode
@@ -77,6 +78,7 @@ tabs:
             tab: system::lang.mail.general
             type: sensitive
             span: right
+            dependsOn: smtp_authorization
             trigger:
                 action: show
                 field: send_mode
