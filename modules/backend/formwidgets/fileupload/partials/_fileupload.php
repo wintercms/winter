@@ -4,23 +4,23 @@
 
 <?php else: ?>
 
-    <?php switch ($displayMode): ?>
-        <?php case 'image-single': ?>
-            <?= $this->makePartial('image_single') ?>
-        <?php break ?>
+    <?php switch ($displayMode) {
+        case 'image-single':
+            echo $this->makePartial('image_single');
+            break;
 
-        <?php case 'image-multi': ?>
-            <?= $this->makePartial('image_multi') ?>
-        <?php break ?>
+        case 'image-multi':
+            echo $this->makePartial('image_multi');
+            break;
 
-        <?php case 'file-single': ?>
-            <?= $this->makePartial('file_single') ?>
-        <?php break ?>
+        case 'file-single':
+            echo $this->makePartial('file_single');
+            break;
 
-        <?php case 'file-multi': ?>
-            <?= $this->makePartial('file_multi') ?>
-        <?php break ?>
-    <?php endswitch ?>
+        case 'file-multi':
+            echo $this->makePartial('file_multi');
+            break;
+    } ?>
 
     <!-- Error template -->
     <script type="text/template" id="<?= $this->getId('errorTemplate') ?>">
