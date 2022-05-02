@@ -15,11 +15,16 @@ class ViewMakerTest extends TestCase
     private $stub;
     private $relativePath;
 
+    protected function normalizePath(string $path): string
+    {
+        return str_replace('/', DIRECTORY_SEPARATOR, $path);
+    }
+
     public function setUp() : void
     {
         $this->createApplication();
         $this->stub = new ViewMakerStub();
-        $this->relativePath = 'tests/unit/system/traits/viewmakerstub';
+        $this->relativePath = $this->normalizePath('tests/unit/system/traits/viewmakerstub');
     }
 
     public function testViewPaths()
@@ -29,10 +34,10 @@ class ViewMakerTest extends TestCase
 
         // Request a view path first to set the default
         $path = $this->stub->getViewPath('_overridden.php');
-        $this->assertEquals(base_path("$this->relativePath/_overridden.php"), $path);
+        $this->assertEquals(base_path($this->normalizePath("$this->relativePath/_overridden.php")), $path);
 
         // Test addViewPath() & getViewPaths()
-        $overridePath = "~/{$this->relativePath}override";
+        $overridePath = $this->normalizePath("~/{$this->relativePath}override");
         $this->stub->addViewPath($overridePath);
         $this->assertEquals(
             [
@@ -43,10 +48,10 @@ class ViewMakerTest extends TestCase
         );
 
         // Test override taking effect
-        $this->assertEquals('overridden', $this->stub->makePartial('overridden'));
+        $this->assertEquals('overridden', trim($this->stub->makePartial('overridden')));
 
         // Test override of PHP base file with HTM overriding file
-        $this->assertEquals('overridden', $this->stub->makePartial('can_override_php_with_htm'));
+        $this->assertEquals('overridden', trim($this->stub->makePartial('can_override_php_with_htm')));
 
         // Test getViewPath()
         $paths = [
@@ -58,7 +63,7 @@ class ViewMakerTest extends TestCase
         ];
 
         foreach ($paths as $path => $expected) {
-            $this->assertEquals($expected, $this->stub->getViewPath($path));
+            $this->assertEquals($this->normalizePath($expected), $this->normalizePath($this->stub->getViewPath($path)));
         }
     }
 
@@ -75,14 +80,14 @@ class ViewMakerTest extends TestCase
 
         foreach ($partials as $partial => $expected) {
             $contents = $this->stub->makePartial($partial);
-            $this->assertEquals($expected, $contents);
+            $this->assertEquals($expected, trim($contents));
         }
     }
 
     public function testMakeView()
     {
         $this->stub->layout = 'default';
-        $this->assertEquals('layout contents-view contents', $this->stub->makeView('view'));
+        $this->assertEquals('layout contents-view contents', trim($this->stub->makeView('view')));
     }
 
     public function testMakeViewContent()
@@ -93,18 +98,18 @@ class ViewMakerTest extends TestCase
 
         // Layout set, return contents rendered in layout
         $this->stub->layout = 'default';
-        $this->assertEquals('layout contents-input', $this->stub->makeViewContent('input'));
+        $this->assertEquals('layout contents-input', trim($this->stub->makeViewContent('input')));
     }
 
     public function testMakeLayout()
     {
         $this->stub->layout = 'default';
-        $this->assertEquals('layout contents-', $this->stub->makeLayout());
+        $this->assertEquals('layout contents-', trim($this->stub->makeLayout()));
     }
 
     public function testMakeLayoutPartial()
     {
-        $this->assertEquals('layout partial contents', $this->stub->makeLayoutPartial('layout_partial'));
+        $this->assertEquals('layout partial contents', trim($this->stub->makeLayoutPartial('layout_partial')));
     }
 
     // public function testGetViewPath()
