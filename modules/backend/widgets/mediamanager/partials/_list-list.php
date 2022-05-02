@@ -1,1 +1,1 @@
-<?= $this->makePartial('generic-list', ['listClass'=>'list']) ?>
+<?= $this->makePartial('generic-list', ['listClass' => 'list']) ?>

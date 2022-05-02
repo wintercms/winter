@@ -6,7 +6,9 @@
         type="checkbox"
         name="freeze_<?= $record->id ?>"
         value="<?= !$record->is_frozen ?>"
-        <?php if (!$record->is_frozen) : ?>checked=checked<?php endif; ?>
+        <?php if (!$record->is_frozen): ?>
+            checked="checked"
+        <?php endif; ?>
         data-stripe-load-indicator
     >
 

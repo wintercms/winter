@@ -1,5 +1,5 @@
 <?php
-    $fieldOptions = $field->options();
+$fieldOptions = $field->options();
 ?>
 <!-- Balloon selector -->
 <div

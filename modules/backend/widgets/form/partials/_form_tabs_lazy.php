@@ -9,7 +9,9 @@
 $ignoredTypes = ['section', 'partial'];
 
 foreach ($fields as $field):
-    if (in_array($field->type, $ignoredTypes)) continue;
+    if (in_array($field->type, $ignoredTypes)) {
+        continue;
+    }
 
     $isMultiValue = is_array($field->value);
     foreach (array_wrap($field->value) as $index => $value):
@@ -20,14 +22,16 @@ foreach ($fields as $field):
         foreach (array_wrap($value) as $index => $value):
             // Set the correct array keys if the value is an array (repeater form fields).
             $currentFieldName = $valueIsArray ? sprintf('%s[%s]', $fieldName, $index) : $fieldName;
-?>
-        <input
-                type="hidden"
-                name="<?= $currentFieldName ?>"
-                id="<?= $this->nameToId($currentFieldName) ?>"
-                value="<?= e($value) ?>"
-                <?= $field->getAttributes() ?>
-        />
+            ?>
+
+            <input
+                    type="hidden"
+                    name="<?= $currentFieldName ?>"
+                    id="<?= $this->nameToId($currentFieldName) ?>"
+                    value="<?= e($value) ?>"
+                    <?= $field->getAttributes() ?>
+            />
+
         <?php endforeach ?>
     <?php endforeach ?>
 <?php endforeach ?>

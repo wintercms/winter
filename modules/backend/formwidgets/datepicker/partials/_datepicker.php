@@ -10,14 +10,26 @@
         id="<?= $this->getId() ?>"
         class="field-datepicker"
         data-control="datepicker"
-        <?php if ($formatMoment): ?>data-format="<?= $formatMoment ?>"<?php endif ?>
-        <?php if ($minDate): ?>data-min-date="<?= $minDate ?>"<?php endif ?>
-        <?php if ($maxDate): ?>data-max-date="<?= $maxDate ?>"<?php endif ?>
         data-mode="<?= $mode ?>"
-        <?php if ($yearRange): ?>data-year-range="<?= $yearRange ?>"<?php endif ?>
-        <?php if ($firstDay): ?>data-first-day="<?= $firstDay ?>"<?php endif ?>
         data-show-week-number="<?= $showWeekNumber ?>"
-        <?php if ($ignoreTimezone): ?>data-ignore-timezone<?php endif ?>
+        <?php if ($formatMoment): ?>
+            data-format="<?= $formatMoment ?>"
+        <?php endif ?>
+        <?php if ($minDate): ?>
+            data-min-date="<?= $minDate ?>"
+        <?php endif ?>
+        <?php if ($maxDate): ?>
+            data-max-date="<?= $maxDate ?>"
+        <?php endif ?>
+        <?php if ($yearRange): ?>
+            data-year-range="<?= $yearRange ?>"
+        <?php endif ?>
+        <?php if ($firstDay): ?>
+            data-first-day="<?= $firstDay ?>"
+        <?php endif ?>
+        <?php if ($ignoreTimezone): ?>
+            data-ignore-timezone
+        <?php endif ?>
     >
 
         <?php if ($mode == 'date'): ?>

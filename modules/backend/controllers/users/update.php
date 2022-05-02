@@ -44,7 +44,7 @@
                     <span class="btn-text">
                         <?= e(trans('backend::lang.form.or')) ?> <a href="<?= Backend::url('backend/users') ?>"><?= e(trans('backend::lang.form.cancel')) ?></a>
                     </span>
-                    <?php if ($formModel->trashed()) : ?>
+                    <?php if ($formModel->trashed()): ?>
                         <button
                             type="button"
                             class="wn-icon-user-plus btn-icon info pull-right"

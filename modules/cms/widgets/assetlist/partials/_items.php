@@ -1,8 +1,8 @@
 <?php
-    $searchMode = $this->isSearchMode();
+$searchMode = $this->isSearchMode();
 
-    if (($upPath = $this->getUpPath()) !== null && !$searchMode):
-?>
+if (($upPath = $this->getUpPath()) !== null && !$searchMode):
+    ?>
     <p class="parent">
         <a href="<?= $upPath ?>" data-path="<?= $upPath ?>" class="link"><?= $this->getCurrentRelativePath() ?></a>
     </p>
@@ -12,8 +12,16 @@
         <ul class="list">
             <?php foreach ($items as $item):
                 $dataId = 'asset-'.$this->theme->getDirName().'-'.ltrim($item->path, '/');
-            ?>
-                <li class="<?= $item->type ?>" <?php if ($item->editable): ?>data-editable<?php endif ?> data-item-path="<?= e(ltrim($item->path, '/')) ?>" data-item-theme="<?= e($this->theme->getDirName()) ?>" data-item-type="asset" data-id="<?= e($dataId) ?>">
+                ?>
+                <li
+                    class="<?= $item->type ?>"
+                    <?php if ($item->editable): ?>
+                        data-editable
+                    <?php endif ?>
+                    data-item-path="<?= e(ltrim($item->path, '/')) ?>"
+                    data-item-theme="<?= e($this->theme->getDirName()) ?>"
+                    data-item-type="asset" data-id="<?= e($dataId) ?>"
+                >
                     <a class="link" target="_blank" data-path="<?= $item->path ?>" href="<?= $this->getThemeFileUrl($item->path) ?>">
                         <?= e($item->name) ?>
 

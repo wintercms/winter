@@ -1,12 +1,11 @@
 <?php
+$selectionModes = [
+    Backend\Widgets\MediaManager::SELECTION_MODE_NORMAL => trans('backend::lang.media.selection_mode_normal'),
+    Backend\Widgets\MediaManager::SELECTION_MODE_FIXED_RATIO => trans('backend::lang.media.selection_mode_fixed_ratio'),
+    Backend\Widgets\MediaManager::SELECTION_MODE_FIXED_SIZE => trans('backend::lang.media.selection_mode_fixed_size')
+];
 
-    $selectionModes = [
-        Backend\Widgets\MediaManager::SELECTION_MODE_NORMAL => trans('backend::lang.media.selection_mode_normal'),
-        Backend\Widgets\MediaManager::SELECTION_MODE_FIXED_RATIO => trans('backend::lang.media.selection_mode_fixed_ratio'),
-        Backend\Widgets\MediaManager::SELECTION_MODE_FIXED_SIZE => trans('backend::lang.media.selection_mode_fixed_size')
-    ];
-
-    $sizeDisabledAttr = $currentSelectionMode == Backend\Widgets\MediaManager::SELECTION_MODE_NORMAL ? 'disabled="disabled"' : null;
+$sizeDisabledAttr = $currentSelectionMode == Backend\Widgets\MediaManager::SELECTION_MODE_NORMAL ? 'disabled="disabled"' : null;
 ?>
 
 <div class="control-toolbar toolbar-padded">
@@ -23,7 +22,7 @@
 
             <label for="mmcropimagewidth"><?= e(trans('backend::lang.media.selection_mode')) ?></label>
             <select name="selectionMode" class="form-control custom-select w-150" data-control="selection-mode">
-                <?php foreach ($selectionModes as $mode=>$name): ?>
+                <?php foreach ($selectionModes as $mode => $name): ?>
                     <option <?= $mode == $currentSelectionMode ? 'selected="selected"' : null ?> value="<?= $mode ?>"><?= e($name) ?></option>
                 <?php endforeach ?>
             </select>

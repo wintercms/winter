@@ -1,14 +1,14 @@
 <?php
-    $previewMode = false;
-    if ($this->previewMode || $field->readOnly) {
-        $previewMode = true;
-    }
+$previewMode = false;
+if ($this->previewMode || $field->readOnly) {
+    $previewMode = true;
+}
+
+$on = isset($field->config['on']) ? $field->config['on'] : 'backend::lang.form.field_on';
+$off = isset($field->config['off']) ? $field->config['off'] : 'backend::lang.form.field_off';
 ?>
+
 <!-- Switch -->
-<?php
-    $on = isset($field->config['on']) ? $field->config['on'] : 'backend::lang.form.field_on';
-    $off = isset($field->config['off']) ? $field->config['off'] : 'backend::lang.form.field_off';
-?>
 <div class="field-switch">
     <label><?= e(trans($field->label)) ?></label>
     <?php if ($field->comment): ?>

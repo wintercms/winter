@@ -6,8 +6,12 @@
     data-template="#<?= $this->getId('template') ?>"
     data-error-template="#<?= $this->getId('errorTemplate') ?>"
     data-max-filesize="<?= $maxFilesize ?>"
-    <?php if ($useCaption): ?>data-config-handler="<?= $this->getEventHandler('onLoadAttachmentConfig') ?>"<?php endif ?>
-    <?php if ($acceptedFileTypes): ?>data-file-types="<?= $acceptedFileTypes ?>"<?php endif ?>
+    <?php if ($useCaption): ?>
+        data-config-handler="<?= $this->getEventHandler('onLoadAttachmentConfig') ?>"
+    <?php endif ?>
+    <?php if ($acceptedFileTypes): ?>
+        data-file-types="<?= $acceptedFileTypes ?>"
+    <?php endif ?>
     <?= $this->formField->getAttributes() ?>
 >
 

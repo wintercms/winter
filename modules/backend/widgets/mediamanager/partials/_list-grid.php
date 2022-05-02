@@ -19,7 +19,8 @@
 
             <?php foreach ($items as $item):
                 $itemType = $item->getFileType();
-            ?>
+                ?>
+
                 <tr data-type="media-item"
                     data-item-type="<?= $item->type ?>"
                     data-path="<?= e($item->path) ?>"
@@ -36,7 +37,7 @@
                         <div class="item-title no-wrap-text">
                             <i class="<?= $this->itemTypeToIconClass($item, $itemType) ?>"></i> <?= e(basename($item->path)) ?>
 
-                            <?php if (!$this->readOnly) : ?>
+                            <?php if (!$this->readOnly): ?>
                                 <a
                                     href="#"
                                     data-rename

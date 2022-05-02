@@ -1,15 +1,17 @@
 <?php
-    $context = System\Classes\SettingsManager::instance()->getContext();
+$context = System\Classes\SettingsManager::instance()->getContext();
 
-    $collapsedGroups = explode('|',
-        isset($_COOKIE['sidenav_treegroupStatus']) ? $_COOKIE['sidenav_treegroupStatus'] : null
-    );
-
+$collapsedGroups = explode(
+    '|',
+    isset($_COOKIE['sidenav_treegroupStatus']) ? $_COOKIE['sidenav_treegroupStatus'] : null
+);
 ?>
+
 <ul class="top-level">
     <?php foreach ($items as $category => $items):
         $collapsed = in_array($category, $collapsedGroups);
-    ?>
+        ?>
+
         <li data-group-code="<?= e($category) ?>" <?= $collapsed ? 'data-status="collapsed"' : null ?>>
             <div class="group">
                 <h3><?= e(trans($category)) ?></h3>

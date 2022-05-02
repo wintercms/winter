@@ -2,7 +2,7 @@
     <div class="control-toolbar toolbar-padded">
         <div class="toolbar-item toolbar-primary">
             <div data-control="toolbar">
-                <?php if (!$this->readOnly) : ?>
+                <?php if (!$this->readOnly): ?>
                     <div class="btn-group offset-right">
                         <button type="button" class="btn btn-primary wn-icon-upload" data-control="upload"><?= e(trans('backend::lang.media.upload')) ?></button>
                         <button type="button" class="btn btn-primary wn-icon-folder" data-command="create-folder"><?= e(trans('backend::lang.media.add_folder')) ?></button>
@@ -11,7 +11,7 @@
 
                 <button type="button" class="btn btn-default wn-icon-refresh empty offset-right" data-command="refresh"></button>
 
-                <?php if (!$this->readOnly) : ?>
+                <?php if (!$this->readOnly): ?>
                     <div class="btn-group offset-right">
                         <button type="button" class="btn btn-default wn-icon-reply-all" data-command="move"><?= e(trans('backend::lang.media.move')) ?></button>
                         <button type="button" class="btn btn-default wn-icon-trash" data-command="delete"><?= e(trans('backend::lang.media.delete')) ?></button>

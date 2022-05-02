@@ -3,13 +3,26 @@
 <?php else: ?>
     <div
         id="<?= $this->getId() ?>"
-        class="field-markdowneditor size-<?= $size ?> <?= $stretch?'layout-relative stretch':'' ?> <?php if ($readOnly || $disabled): ?>disabled<?php endif; ?>"
+        class="
+            field-markdowneditor
+            size-<?= $size ?>
+            <?php if ($stretch): ?>
+                layout-relative stretch
+            <?php endif ?>
+            <?php if ($readOnly || $disabled): ?>
+                disabled
+            <?php endif ?>
+        "
         data-control="markdowneditor"
         data-refresh-handler="<?= $this->getEventHandler('onRefresh') ?>"
         data-view-mode="<?= $mode ?>"
-        <?php if ($useMediaManager): ?>data-use-media-manager="true"<?php endif ?>
+        <?php if ($useMediaManager): ?>
+            data-use-media-manager="true"
+        <?php endif ?>
         data-vendor-path="<?= Url::asset('/modules/backend/formwidgets/codeeditor/assets/vendor/ace') ?>"
-        <?php if ($readOnly || $disabled): ?>data-disabled="true"<?php endif; ?>
+        <?php if ($readOnly || $disabled): ?>
+            data-disabled="true"
+        <?php endif; ?>
         <?= $this->formField->getAttributes() ?>>
 
         <div class="control-toolbar editor-toolbar"></div>

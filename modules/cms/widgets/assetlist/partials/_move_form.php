@@ -16,7 +16,7 @@
                 name="dest"
                 data-placeholder="<?= e(trans('backend::lang.media.move_please_select')) ?>">
                 <option></option>
-                <?php foreach ($directories as $path=>$directory):?>
+                <?php foreach ($directories as $path => $directory): ?>
                     <option value="<?= e($path) ?>"><?= e($directory) ?></option>
                 <?php endforeach ?>
             </select>

@@ -1,21 +1,27 @@
 <?php
-    $fieldOptions = $field->options();
-    $checkedValues = (array) $field->value;
-    $isScrollable = count($fieldOptions) > 10;
-    $readOnly = $this->previewMode || $field->readOnly || $field->disabled;
-    $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
+$fieldOptions = $field->options();
+$checkedValues = (array) $field->value;
+$isScrollable = count($fieldOptions) > 10;
+$readOnly = $this->previewMode || $field->readOnly || $field->disabled;
+$quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
 ?>
 <!-- Checkbox List -->
 <?php if ($readOnly && $field->value): ?>
 
     <div class="field-checkboxlist">
-        <?php $index = 0; foreach ($fieldOptions as $value => $option): ?>
-            <?php
-                $index++;
-                $checkboxId = 'checkbox_'.$field->getId().'_'.$index;
-                if (!in_array($value, $checkedValues)) continue;
-                if (!is_array($option)) $option = [$option];
+        <?php
+        $index = 0;
+        foreach ($fieldOptions as $value => $option):
+            $index++;
+            $checkboxId = 'checkbox_'.$field->getId().'_'.$index;
+            if (!in_array($value, $checkedValues)) {
+                continue;
+            }
+            if (!is_array($option)) {
+                $option = [$option];
+            }
             ?>
+
             <div class="checkbox custom-checkbox">
                 <input
                     type="checkbox"
@@ -67,12 +73,16 @@
                 name="<?= $field->getName() ?>"
                 value="0" />
 
-            <?php $index = 0; foreach ($fieldOptions as $value => $option): ?>
-                <?php
-                    $index++;
-                    $checkboxId = 'checkbox_'.$field->getId().'_'.$index;
-                    if (!is_array($option)) $option = [$option];
+            <?php
+            $index = 0;
+            foreach ($fieldOptions as $value => $option):
+                $index++;
+                $checkboxId = 'checkbox_'.$field->getId().'_'.$index;
+                if (!is_array($option)) {
+                    $option = [$option];
+                }
                 ?>
+
                 <div class="checkbox custom-checkbox">
                     <input
                         type="checkbox"

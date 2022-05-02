@@ -36,7 +36,7 @@
                 data-request="<?= $this->getEventHandler('onPaginate') ?>"
                 data-load-indicator="<?= e(trans('backend::lang.list.loading')) ?>"
                 autocomplete="off">
-                <?php for($i = 1; $i <= $pageLast ; $i++): ?>
+                <?php for ($i = 1; $i <= $pageLast; $i++): ?>
                     <option value="<?= $i ?>" <?= $i === $pageCurrent ? 'selected' : '' ?>><?= $i ?></option>
                 <?php endfor ?>
             </select>

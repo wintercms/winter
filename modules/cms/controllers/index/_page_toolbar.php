@@ -14,7 +14,12 @@
     <a
         href="<?= Url::to($pageUrl) ?>"
         target="_blank"
-        class="btn btn-primary wn-icon-crosshairs <?php if (!$templatePath): ?>hide<?php endif ?>"
+        class="
+            btn btn-primary wn-icon-crosshairs
+            <?php if (!$templatePath): ?>
+                hide
+            <?php endif ?>
+        "
         data-control="preview-button">
         <?= e(trans('cms::lang.editor.preview')) ?>
     </a>

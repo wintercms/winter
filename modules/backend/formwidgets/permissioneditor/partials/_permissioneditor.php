@@ -11,7 +11,7 @@
 
                 <th class="permission-type"><?= $firstTab ? e(trans('backend::lang.user.allow')) : '' ?></th>
 
-                <?php if ($this->mode === 'radio') : ?>
+                <?php if ($this->mode === 'radio'): ?>
                     <th class="permission-type"><?= $firstTab ? e(trans('backend::lang.user.inherit')) : '' ?></th>
                     <th class="permission-type"><?= $firstTab ? e(trans('backend::lang.user.deny')) : '' ?></th>
                 <?php endif; ?>
@@ -23,28 +23,30 @@
                 $lastIndex = count($tabPermissions) - 1;
             ?>
             <?php foreach ($tabPermissions as $index => $permission): ?>
+
                 <?php
-                    $globalIndex++;
+                $globalIndex++;
 
-                    switch ($this->mode) {
-                        case 'radio':
-                            $permissionValue = array_key_exists($permission->code, $permissionsData)
-                                ? $permissionsData[$permission->code]
-                                : 0;
-                            break;
-                        case 'switch':
-                            $isChecked = !((int) @$permissionsData[$permission->code] === -1);
-                            break;
-                        case 'checkbox':
-                        default:
-                            $isChecked = array_key_exists($permission->code, $permissionsData);
-                            break;
-                    }
+                switch ($this->mode) {
+                    case 'radio':
+                        $permissionValue = array_key_exists($permission->code, $permissionsData)
+                            ? $permissionsData[$permission->code]
+                            : 0;
+                        break;
+                    case 'switch':
+                        $isChecked = !((int) @$permissionsData[$permission->code] === -1);
+                        break;
+                    case 'checkbox':
+                    default:
+                        $isChecked = array_key_exists($permission->code, $permissionsData);
+                        break;
+                }
 
-                    $allowId = $this->getId('permission-' . $globalIndex . '-allow');
-                    $inheritId = $this->getId('permission-' . $globalIndex . '-inherit');
-                    $denyId = $this->getId('permission-' . $globalIndex . '-deny');
+                $allowId = $this->getId('permission-' . $globalIndex . '-allow');
+                $inheritId = $this->getId('permission-' . $globalIndex . '-inherit');
+                $denyId = $this->getId('permission-' . $globalIndex . '-deny');
                 ?>
+
                 <tr class="<?= $lastIndex == $index ? 'last-section-row' : '' ?>
                         <?= $checkboxMode ? 'mode-checkbox' : 'mode-radio' ?>
                         <?= $checkboxMode && !$isChecked ? 'disabled' : '' ?>
@@ -137,9 +139,8 @@
                     <td></td>
                 </tr>
             <?php endforeach ?>
-        <?php
-            $firstTab = false;
-        ?>
+
+            <?php $firstTab = false; ?>
         <?php endforeach ?>
     </table>
     <div class="permissions-overlay"></div>

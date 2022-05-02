@@ -9,7 +9,7 @@
                 <?= e(trans('backend::lang.media.insert')) ?>
             </button>
 
-            <?php if (!$this->readOnly) : ?>
+            <?php if (!$this->readOnly): ?>
                 <button
                     type="button"
                     data-command="popup-command"

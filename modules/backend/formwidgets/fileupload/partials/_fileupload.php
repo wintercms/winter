@@ -4,9 +4,8 @@
 
 <?php else: ?>
 
-    <?php switch ($displayMode):
-
-        case 'image-single': ?>
+    <?php switch ($displayMode): ?>
+        <?php case 'image-single': ?>
             <?= $this->makePartial('image_single') ?>
         <?php break ?>
 
@@ -21,7 +20,6 @@
         <?php case 'file-multi': ?>
             <?= $this->makePartial('file_multi') ?>
         <?php break ?>
-
     <?php endswitch ?>
 
     <!-- Error template -->

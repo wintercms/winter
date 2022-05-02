@@ -19,7 +19,7 @@
             </a>
         </li>
         <li role="separator" class="divider"></li>
-        <?php if (\BackendAuth::getUser()->hasAccess('backend.manage_default_dashboard')) : ?>
+        <?php if (\BackendAuth::getUser()->hasAccess('backend.manage_default_dashboard')): ?>
             <li role="presentation">
                 <a
                     role="menuitem"

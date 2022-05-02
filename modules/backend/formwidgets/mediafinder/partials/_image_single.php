@@ -1,6 +1,16 @@
 <div
     id="<?= $this->getId() ?>"
-    class="field-mediafinder style-image-single is-image <?= $value ? 'is-populated' : '' ?> <?= $this->previewMode ? 'is-preview' : '' ?>"
+    class="
+        field-mediafinder
+        style-image-single
+        is-image
+        <?php if ($value): ?>
+            is-populated
+        <?php endif ?>
+        <?php if ($this->previewMode): ?>
+            is-preview
+        <?php endif ?>
+    "
     data-control="mediafinder"
     data-thumbnail-width="<?= $imageWidth ?: '0' ?>"
     data-thumbnail-height="<?= $imageHeight ?: '0' ?>"
@@ -18,7 +28,7 @@
             <img data-find-image src="<?= $imageUrl ?>" alt="" />
         </div>
 
-        <?php if (!$imageExists && !empty($imageUrl)) : ?>
+        <?php if (!$imageExists && !empty($imageUrl)): ?>
             <p data-find-error class="help-block">
                 <?= e(trans('backend::lang.mediafinder.no_image')) ?>
             </p>

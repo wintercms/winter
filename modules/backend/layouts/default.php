@@ -6,7 +6,7 @@
     </head>
     <body class="<?= $this->bodyClass ?>">
         <div id="layout-canvas">
-            <?php if (\BackendAuth::isImpersonator()) : ?>
+            <?php if (\BackendAuth::isImpersonator()): ?>
                 <div class="global-notice">
                     <div class="notice-content">
                         <span class="notice-text">

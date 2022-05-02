@@ -37,7 +37,7 @@
                     <h4 title="<?= e(basename($item->path)) ?>">
                         <?= e(basename($item->path)) ?>
 
-                        <?php if (!$this->readOnly) : ?>
+                        <?php if (!$this->readOnly): ?>
                             <a
                                 href="#"
                                 data-rename

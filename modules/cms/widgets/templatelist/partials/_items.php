@@ -9,9 +9,9 @@
                     </li>
                 <?php endif ?>
             <?php else: ?>
-            <?php
+                <?php
                 $dataId = $this->itemType.'-'.$this->theme->getDirName().'-'.$item->fileName;
-            ?>
+                ?>
                 <li
                     class="item"
                     data-item-path="<?= e($item->fileName) ?>"

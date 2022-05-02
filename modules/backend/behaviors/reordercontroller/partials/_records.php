@@ -1,7 +1,7 @@
 <?php foreach ($records as $record): ?>
 
     <li data-record-id="<?= $record->getKey() ?>"
-        <?php if ($reorderSortMode === 'simple') : ?>
+        <?php if ($reorderSortMode === 'simple'): ?>
             data-record-sort-order="<?= $record->{$record->getSortOrderColumn()} ?>"
         <?php endif ?>
     >

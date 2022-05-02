@@ -1,8 +1,9 @@
 <?php
-    $activeItem = BackendMenu::getActiveMainMenuItem();
-    $mySettings = System\Classes\SettingsManager::instance()->listItems('mysettings');
-    $navbarMode = Backend\Models\BrandSetting::get('menu_mode', 'inline');
+$activeItem = BackendMenu::getActiveMainMenuItem();
+$mySettings = System\Classes\SettingsManager::instance()->listItems('mysettings');
+$navbarMode = Backend\Models\BrandSetting::get('menu_mode', 'inline');
 ?>
+
 <nav class="navbar control-toolbar navbar-mode-<?= $navbarMode ?>" id="layout-mainmenu" role="navigation">
     <div class="toolbar-item toolbar-primary">
         <div data-control="toolbar" data-use-native-drag="true">
@@ -38,7 +39,9 @@
                         <span
                             class="counter <?= !$item->counter ? 'empty' : null ?>"
                             data-menu-id="<?= e($item->code) ?>"
-                            <?php if ($item->counterLabel): ?>title="<?= e(trans($item->counterLabel)) ?>"<?php endif ?>
+                            <?php if ($item->counterLabel): ?>
+                                title="<?= e(trans($item->counterLabel)) ?>"
+                            <?php endif ?>
                         >
                             <?= e($item->counter) ?>
                         </span>
@@ -90,7 +93,7 @@
 
                         <li>
                             <a href="<?= Backend::url('backend/auth/signout') ?>">
-                                <?php if (\BackendAuth::isImpersonator()) : ?>
+                                <?php if (\BackendAuth::isImpersonator()): ?>
                                     <?= e(trans('backend::lang.account.stop_impersonating')) ?>
                                 <?php else: ?>
                                     <?= e(trans('backend::lang.account.sign_out')) ?>

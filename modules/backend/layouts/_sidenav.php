@@ -35,7 +35,9 @@
                                 <span
                                     class="counter <?= $item->counter === null ? 'empty' : null ?>"
                                     data-menu-id="<?= e($context->mainMenuCode.'/'.$sideItemCode) ?>"
-                                    <?php if ($item->counterLabel): ?>title="<?= e(trans($item->counterLabel)) ?>"<?php endif ?>
+                                    <?php if ($item->counterLabel): ?>
+                                        title="<?= e(trans($item->counterLabel)) ?>"
+                                    <?php endif ?>
                                 >
                                     <?= e($item->counter) ?>
                                 </span>

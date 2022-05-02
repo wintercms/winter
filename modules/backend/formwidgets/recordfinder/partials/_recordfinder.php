@@ -1,8 +1,8 @@
 <?php
-    $previewMode = false;
-    if ($this->previewMode || $field->readOnly) {
-        $previewMode = true;
-    }
+$previewMode = false;
+if ($this->previewMode || $field->readOnly) {
+    $previewMode = true;
+}
 ?>
 <div
     id="<?= $this->getId() ?>"

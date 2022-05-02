@@ -1,7 +1,7 @@
 <?php
-    $expanded = $showTree ? $this->isTreeNodeExpanded($record) : null;
-    $childRecords = $showTree ? $record->getChildren() : null;
-    $treeLevelClass = $showTree ? 'list-tree-level-'.$treeLevel : '';
+$expanded = $showTree ? $this->isTreeNodeExpanded($record) : null;
+$childRecords = $showTree ? $record->getChildren() : null;
+$treeLevelClass = $showTree ? 'list-tree-level-'.$treeLevel : '';
 ?>
 <tr class="<?= $treeLevelClass ?> <?= $this->getRowClass($record) ?>">
     <?php if ($showCheckboxes): ?>

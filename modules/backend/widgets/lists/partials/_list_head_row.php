@@ -17,7 +17,9 @@
     <?php foreach ($columns as $key => $column): ?>
         <?php if ($showSorting && $column->sortable): ?>
             <th
-                <?php if ($column->width): ?>style="width: <?= $column->width ?>"<?php endif ?>
+                <?php if ($column->width): ?>
+                    style="width: <?= $column->width ?>"
+                <?php endif ?>
                 class="<?= $this->sortColumn==$column->columnName?'sort-'.$this->sortDirection.' active':'sort-desc' ?> list-cell-name-<?= $column->getName() ?> list-cell-type-<?= $column->type ?> <?= $column->getAlignClass() ?> <?= $column->headCssClass ?>"
                 >
                 <a
@@ -30,7 +32,9 @@
             </th>
         <?php else: ?>
             <th
-                <?php if ($column->width): ?>style="width: <?= $column->width ?>"<?php endif ?>
+                <?php if ($column->width): ?>
+                    style="width: <?= $column->width ?>"
+                <?php endif ?>
                 class="list-cell-name-<?= $column->getName() ?> list-cell-type-<?= $column->type ?> <?= $column->getAlignClass() ?> <?= $column->headCssClass ?>"
                 >
                 <span><?= $this->getHeaderValue($column) ?></span>

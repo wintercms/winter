@@ -1,16 +1,16 @@
 <?php
-    $selectedValues = is_array($selectedValues) ? $selectedValues : [];
-    $availableOptions = $useKey ? $fieldOptions : array_unique(array_merge($selectedValues, $fieldOptions));
-    $displayOnlyOptions = [];
+$selectedValues = is_array($selectedValues) ? $selectedValues : [];
+$availableOptions = $useKey ? $fieldOptions : array_unique(array_merge($selectedValues, $fieldOptions));
+$displayOnlyOptions = [];
 
-    foreach ($availableOptions as $key => $option) {
-        if (!strlen($option)) {
-            continue;
-        }
-        if (($useKey && in_array($key, $selectedValues)) || (!$useKey && in_array($option, $selectedValues))) {
-            $displayOnlyOptions[] = $option;
-        }
+foreach ($availableOptions as $key => $option) {
+    if (!strlen($option)) {
+        continue;
     }
+    if (($useKey && in_array($key, $selectedValues)) || (!$useKey && in_array($option, $selectedValues))) {
+        $displayOnlyOptions[] = $option;
+    }
+}
 ?>
 <!-- Tag List -->
 <?php if ($this->previewMode || $field->readOnly || $field->disabled): ?>
@@ -37,12 +37,18 @@
         id="<?= $field->getId() ?>"
         name="<?= $field->getName() ?>[]"
         class="form-control custom-select <?= !count($fieldOptions) ? 'select-no-dropdown' : '' ?> select-hide-selected"
-        <?php if (!empty($customSeparators)): ?>data-token-separators="<?= $customSeparators ?>"<?php endif ?>
-        <?php if (!empty($placeholder)): ?>data-placeholder="<?= e(trans($placeholder)) ?>"<?php endif ?>
+        <?php if (!empty($customSeparators)): ?>
+            data-token-separators="<?= $customSeparators ?>"
+        <?php endif ?>
+        <?php if (!empty($placeholder)): ?>
+            data-placeholder="<?= e(trans($placeholder)) ?>"
+        <?php endif ?>
         multiple
         <?= $field->getAttributes() ?>>
         <?php foreach ($availableOptions as $key => $option): ?>
-            <?php if (!strlen($option)) continue ?>
+            <?php if (!strlen($option)) {
+                continue;
+            } ?>
             <?php if ($useKey): ?>
                 <option value="<?= e($key) ?>" <?= in_array($key, $selectedValues) ? 'selected="selected"' : '' ?>><?= e(trans($option)) ?></option>
             <?php else: ?>

@@ -6,7 +6,9 @@
         type="checkbox"
         name="disable_<?= $record->id ?>"
         value="<?= !$record->is_disabled ?>"
-        <?php if (!$record->is_disabled) : ?>checked=checked<?php endif; ?>
+        <?php if (!$record->is_disabled): ?>
+            checked="checked"
+        <?php endif ?>
         data-stripe-load-indicator
     >
 

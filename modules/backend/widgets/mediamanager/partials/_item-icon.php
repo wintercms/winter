@@ -1,9 +1,11 @@
 <div class="icon-container <?= $itemType ?>">
     <div class="icon-wrapper"><i class="<?= $this->itemTypeToIconClass($item, $itemType) ?>"></i></div>
 
-    <?php if ($itemType == System\Classes\MediaLibraryItem::FILE_TYPE_IMAGE):
+    <?php
+    if ($itemType == System\Classes\MediaLibraryItem::FILE_TYPE_IMAGE):
         $thumbnailPath = $this->thumbnailExists($thumbnailParams, $item->path, $item->lastModified);
-    ?>
+        ?>
+
         <div>
             <?php if (!$thumbnailPath): ?>
                 <div class="image-placeholder"

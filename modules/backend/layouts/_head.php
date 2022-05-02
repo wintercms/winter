@@ -12,49 +12,49 @@
     <?= e(trans($this->pageTitle)) ?> | <?= e(Backend\Models\BrandSetting::get('app_name')) ?>
 </title>
 <?php
-    $coreBuild = System\Models\Parameter::get('system::core.build', 1);
+$coreBuild = System\Models\Parameter::get('system::core.build', 1);
 
-    // Styles
-    $styles = [
-        Url::asset('modules/system/assets/ui/storm.css'),
-        Backend::skinAsset('assets/css/winter.css'),
-    ];
+// Styles
+$styles = [
+    Url::asset('modules/system/assets/ui/storm.css'),
+    Backend::skinAsset('assets/css/winter.css'),
+];
 
-    // Scripts
-    $scripts = [
-        Backend::skinAsset('assets/js/vendor/jquery.min.js'),
-        Backend::skinAsset('assets/js/vendor/jquery-migrate.min.js'),
-        Url::asset('modules/system/assets/js/framework.js'),
-        Url::asset('modules/system/assets/js/build/manifest.js'),
-        Url::asset('modules/system/assets/js/build/vendor.js'),
-        Url::asset('modules/system/assets/js/snowboard/build/snowboard.vendor.js'),
-        Url::asset('modules/system/assets/js/build/system.js'),
-    ];
-    if (Config::get('develop.decompileBackendAssets', false)) {
-        $scripts = array_merge($scripts, Backend::decompileAsset('modules/system/assets/ui/storm.js'));
-        $scripts = array_merge($scripts, Backend::decompileAsset('assets/js/winter.js', true));
-    } else {
-        $scripts = array_merge($scripts, [Url::asset('modules/system/assets/ui/storm-min.js')]);
-        $scripts = array_merge($scripts, [Backend::skinAsset('assets/js/winter-min.js')]);
-    }
-    $scripts = array_merge($scripts, [
-        Url::asset('modules/system/assets/js/lang/lang.'.App::getLocale().'.js'),
-        Backend::skinAsset('assets/js/winter.flyout.js'),
-        Backend::skinAsset('assets/js/winter.tabformexpandcontrols.js'),
-    ]);
+// Scripts
+$scripts = [
+    Backend::skinAsset('assets/js/vendor/jquery.min.js'),
+    Backend::skinAsset('assets/js/vendor/jquery-migrate.min.js'),
+    Url::asset('modules/system/assets/js/framework.js'),
+    Url::asset('modules/system/assets/js/build/manifest.js'),
+    Url::asset('modules/system/assets/js/build/vendor.js'),
+    Url::asset('modules/system/assets/js/snowboard/build/snowboard.vendor.js'),
+    Url::asset('modules/system/assets/js/build/system.js'),
+];
+if (Config::get('develop.decompileBackendAssets', false)) {
+    $scripts = array_merge($scripts, Backend::decompileAsset('modules/system/assets/ui/storm.js'));
+    $scripts = array_merge($scripts, Backend::decompileAsset('assets/js/winter.js', true));
+} else {
+    $scripts = array_merge($scripts, [Url::asset('modules/system/assets/ui/storm-min.js')]);
+    $scripts = array_merge($scripts, [Backend::skinAsset('assets/js/winter-min.js')]);
+}
+$scripts = array_merge($scripts, [
+    Url::asset('modules/system/assets/js/lang/lang.'.App::getLocale().'.js'),
+    Backend::skinAsset('assets/js/winter.flyout.js'),
+    Backend::skinAsset('assets/js/winter.tabformexpandcontrols.js'),
+]);
 ?>
 
-<?php foreach ($styles as $style) : ?>
+<?php foreach ($styles as $style): ?>
     <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="stylesheet" importance="high">
     <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="preload" as="style" importance="high">
 <?php endforeach; ?>
 
-<?php foreach ($scripts as $script) : ?>
+<?php foreach ($scripts as $script): ?>
     <script data-cfasync="false" src="<?= $script . '?v=' . $coreBuild; ?>" importance="high"></script>
     <link href="<?= $script . '?v=' . $coreBuild; ?>" rel="preload" as="script" importance="high">
 <?php endforeach; ?>
 
-<?php if (!Config::get('cms.enableBackendServiceWorkers', false)) : ?>
+<?php if (!Config::get('cms.enableBackendServiceWorkers', false)): ?>
     <script>
         "use strict";
         /* Only run on HTTPS connections

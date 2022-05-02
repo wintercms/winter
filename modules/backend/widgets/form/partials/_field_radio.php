@@ -1,16 +1,17 @@
 <?php
-    $fieldOptions = $field->options();
+$fieldOptions = $field->options();
 ?>
 <!-- Radio List -->
 <?php if (count($fieldOptions)): ?>
 
     <?php $index = 0; foreach ($fieldOptions as $value => $option): ?>
         <?php
-            $index++;
-            if (is_string($option))
-                $option = array($option);
+        $index++;
+        if (is_string($option)) {
+            $option = array($option);
+        }
 
-            $fieldId = md5(uniqid($field->getId($index), true));
+        $fieldId = md5(uniqid($field->getId($index), true));
         ?>
         <div class="radio custom-radio">
 

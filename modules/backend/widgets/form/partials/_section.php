@@ -1,11 +1,11 @@
 <?php
-    $type = $tabs->section;
+$type = $tabs->section;
 
-    $containerCss = 'layout-row min-size';
+$containerCss = 'layout-row min-size';
 
-    if ($tabs->stretch) {
-        $containerCss = 'layout-row';
-    }
+if ($tabs->stretch) {
+    $containerCss = 'layout-row';
+}
 ?>
 <!-- <?= ucfirst($type) ?> Tabs -->
 <div class="<?= $containerCss ?>">

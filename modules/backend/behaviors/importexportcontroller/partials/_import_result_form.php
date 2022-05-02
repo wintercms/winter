@@ -33,15 +33,21 @@
 
         <?php if ($importResults->hasMessages): ?>
             <?php
-                $tabs = [
-                    'skipped' => trans('backend::lang.import_export.skipped_rows'),
-                    'warnings' => trans('backend::lang.import_export.warnings'),
-                    'errors' => trans('backend::lang.import_export.errors'),
-                ];
+            $tabs = [
+                'skipped' => trans('backend::lang.import_export.skipped_rows'),
+                'warnings' => trans('backend::lang.import_export.warnings'),
+                'errors' => trans('backend::lang.import_export.errors'),
+            ];
 
-                if (!$importResults->skippedCount) unset($tabs['skipped']);
-                if (!$importResults->warningCount) unset($tabs['warnings']);
-                if (!$importResults->errorCount) unset($tabs['errors']);
+            if (!$importResults->skippedCount) {
+                unset($tabs['skipped']);
+            }
+            if (!$importResults->warningCount) {
+                unset($tabs['warnings']);
+            }
+            if (!$importResults->errorCount) {
+                unset($tabs['errors']);
+            }
             ?>
             <div class="control-tabs secondary-tabs" data-control="tab">
                 <ul class="nav nav-tabs">

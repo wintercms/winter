@@ -1,6 +1,15 @@
 <div
     id="<?= $this->getId() ?>"
-    class="field-mediafinder style-file-single <?= $value ? 'is-populated' : '' ?> <?= $this->previewMode ? 'is-preview' : '' ?>"
+    class="
+        field-mediafinder
+        style-file-single
+        <?php if ($value): ?>
+            is-populated
+        <?php endif ?>
+        <?php if ($this->previewMode): ?>
+            is-preview
+        <?php endif ?>
+    "
     data-control="mediafinder"
     <?= $field->getAttributes() ?>
 >
