@@ -288,7 +288,7 @@ trait ViewMaker
     {
         $classFolder = strtolower(class_basename($class));
         $classFile = realpath(dirname(File::fromClass($class)));
-        $guessedPath = $classFile ? $classFile . '/' . $classFolder . $suffix : null;
+        $guessedPath = $classFile ? $classFile . DIRECTORY_SEPARATOR . $classFolder . $suffix : null;
         return $isPublic ? File::localToPublic($guessedPath) : $guessedPath;
     }
 }

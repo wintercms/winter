@@ -17,7 +17,7 @@ tabs:
 
         driver_hint:
             type: hint
-            path: ~/modules/system/models/mailsetting/_drivers_hint.htm
+            path: ~/modules/system/models/mailsetting/_drivers_hint.php
             tab: system::lang.mail.general
 
         send_mode:
@@ -93,5 +93,5 @@ tabs:
 
         _send_test:
             type: partial
-            path: ~/modules/system/models/mailsetting/_send_test_button.htm
+            path: ~/modules/system/models/mailsetting/_send_test_button.php
             tab: system::lang.mail.general

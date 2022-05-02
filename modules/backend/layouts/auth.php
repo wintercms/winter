@@ -59,7 +59,7 @@
         <?= $this->makeAssets() ?>
         <?= Block::placeholder('head') ?>
         <?= $this->makeLayoutPartial('custom_styles') ?>
-        <?= $this->fireViewEvent('backend.layout.extendHead', ['layout' => 'auth.htm']) ?>
+        <?= $this->fireViewEvent('backend.layout.extendHead', ['layout' => 'auth']) ?>
     </head>
     <body class="outer <?= $this->bodyClass ?>">
         <div id="layout-canvas">
