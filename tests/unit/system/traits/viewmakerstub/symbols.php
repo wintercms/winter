@@ -1,0 +1,1 @@
+symbols content
