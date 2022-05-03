@@ -3,19 +3,6 @@
  */
 
 /*
- * Ensure the CSRF token is added to all AJAX requests.
- */
-
-$.ajaxPrefilter(function(options) {
-    var token = $('meta[name="csrf-token"]').attr('content')
-
-    if (token) {
-        if (!options.headers) options.headers = {}
-        options.headers['X-CSRF-TOKEN'] = token
-    }
-})
-
-/*
  * Path helpers
  */
 

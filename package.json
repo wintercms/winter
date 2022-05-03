@@ -1,0 +1,11 @@
+{
+    "devDependencies": {
+        "laravel-mix": "^6.0.41"
+    },
+    "workspaces": {
+        "packages": [
+            "modules/backend",
+            "modules/system"
+        ]
+    }
+}
