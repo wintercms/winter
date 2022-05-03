@@ -74,19 +74,19 @@ fields:
 
     column_control_panel:
         type: partial
-        path: ~/modules/backend/behaviors/importexportcontroller/partials/_import_toolbar.htm
+        path: ~/modules/backend/behaviors/importexportcontroller/partials/_import_toolbar.php
 
     import_file_columns:
         label: backend::lang.import_export.file_columns
         type: partial
-        path: ~/modules/backend/behaviors/importexportcontroller/partials/_import_file_columns.htm
+        path: ~/modules/backend/behaviors/importexportcontroller/partials/_import_file_columns.php
         dependsOn: [import_file, first_row_titles, format_delimiter, format_enclosure, format_escape, format_encoding]
         span: left
 
     import_db_columns:
         label: backend::lang.import_export.database_fields
         type: partial
-        path: ~/modules/backend/behaviors/importexportcontroller/partials/_import_db_columns.htm
+        path: ~/modules/backend/behaviors/importexportcontroller/partials/_import_db_columns.php
         dependsOn: [import_file, first_row_titles, format_delimiter, format_enclosure, format_escape, format_encoding]
         span: right
 

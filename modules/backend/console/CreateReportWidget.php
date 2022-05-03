@@ -47,6 +47,6 @@ class CreateReportWidget extends BaseScaffoldCommand
      */
     protected $stubs = [
         'scaffold/reportwidget/reportwidget.stub' => 'reportwidgets/{{studly_name}}.php',
-        'scaffold/reportwidget/widget.stub'       => 'reportwidgets/{{lower_name}}/partials/_{{lower_name}}.htm',
+        'scaffold/reportwidget/widget.stub'       => 'reportwidgets/{{lower_name}}/partials/_{{lower_name}}.php',
     ];
 }
