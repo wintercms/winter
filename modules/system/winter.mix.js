@@ -32,7 +32,7 @@ mix
         [
             './assets/js/snowboard/snowboard.base.debug.js',
             './assets/js/snowboard/ajax/Request.js',
-            './assets/js/snowboard/snowboard.extras.js',
+            './assets/js/snowboard/snowboard.backend.extras.js',
         ],
         './assets/js/build/system.js',
     )
