@@ -626,6 +626,21 @@ class Request extends Snowboard.PluginBase {
     }
 
     /**
+     * Processes assets returned by an AJAX request.
+     *
+     * By default, no asset processing will occur.
+     *
+     * Plugins can augment this functionality from the `ajaxLoadAssets` event. This event is simply fired with no checks
+     * implemented. If you need functionality to wait for assets to load, you must implement this yourself in your event
+     * listener.
+     *
+     * @param {Object} assets
+     */
+    processAssets(assets) {
+        this.snowboard.globalEvent('ajaxLoadAssets', assets);
+    }
+
+    /**
      * Confirms the request with the user before proceeding.
      *
      * This is an asynchronous method. By default, it will use the browser's `confirm()` method to query the user to
