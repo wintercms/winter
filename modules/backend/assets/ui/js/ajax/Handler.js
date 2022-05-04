@@ -2,7 +2,7 @@
  * Backend AJAX handler.
  *
  * This is a utility script that resolves some backwards-compatibility issues with the functionality
- * that relies on the old framework, and ensures that Snowboard may work within the Backend
+ * that relies on the old framework, and ensures that Snowboard works well within the Backend
  * environment.
  *
  * Functions:
