@@ -10,6 +10,7 @@
     </div>
 <?= Form::close() ?>
 
+<?php Block::put('head'); ?>
 <script>
 Snowboard.ready(() => {
     Snowboard.request(null, 'onInitReportContainer', {
@@ -19,3 +20,4 @@ Snowboard.ready(() => {
     });
 });
 </script>
+<?php Block::endPut(); ?>
