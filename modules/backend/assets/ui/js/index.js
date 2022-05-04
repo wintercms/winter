@@ -1,5 +1,4 @@
 import BackendAjaxHandler from './ajax/Handler';
-import AssetLoader from './ajax/AssetLoader';
 
 if (window.Snowboard === undefined) {
     throw new Error('Snowboard must be loaded in order to use the Backend UI.');
@@ -7,12 +6,11 @@ if (window.Snowboard === undefined) {
 
 ((Snowboard) => {
     Snowboard.addPlugin('backend.ajax.handler', BackendAjaxHandler);
-    Snowboard.addPlugin('backend.ajax.assetLoader', AssetLoader);
 
     // Add polyfill for AssetManager
     window.AssetManager = {
         load: (assets, callback) => {
-            Snowboard['backend.ajax.assetLoader']().processAssets(assets).finally(
+            Snowboard.assetLoader().processAssets(assets).finally(
                 () => {
                     if (callback && typeof callback === 'function') {
                         callback();

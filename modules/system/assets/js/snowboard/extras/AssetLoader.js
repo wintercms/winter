@@ -1,10 +1,52 @@
+/**
+ * Asset Loader.
+ *
+ * Provides simple asset loading functionality for Snowboard, making it easy to pre-load images or
+ * include JavaScript or CSS assets on the fly.
+ *
+ * By default, this loader will listen to any assets that have been requested to load in an AJAX
+ * response, such as responses from a component.
+ *
+ * You can also load assets manually by calling the following:
+ *
+ * ```js
+ * Snowboard.addPlugin('assetLoader', AssetLoader);
+ * Snowboard.assetLoader().processAssets(assets);
+ * ```
+ *
+ * @copyright 2021 Winter.
+ * @author Ben Thomson <git@alfreido.com>
+ */
 export default class AssetLoader extends window.Snowboard.Singleton {
+    /**
+     * Event listeners.
+     *
+     * @returns {Object}
+     */
     listens() {
         return {
             ajaxLoadAssets: 'processAssets',
         };
     }
 
+    /**
+     * Process and load assets.
+     *
+     * The `assets` property of this method requires an object with any of the following keys and an
+     * array of paths:
+     *
+     * - `js`: An array of JavaScript URLs to load
+     * - `css`: An array of CSS stylesheet URLs to load
+     * - `img`: An array of image URLs to pre-load
+     *
+     * Both `js` and `css` files will be automatically injected, however `img` files will not.
+     *
+     * This method will return a Promise that resolves when all required assets are loaded. If an
+     * asset fails to load, this Promise will be rejected.
+     *
+     * @param {Object} assets
+     * @returns {Promise}
+     */
     processAssets(assets) {
         return new Promise((resolve, reject) => {
             const promises = [];
@@ -42,6 +84,14 @@ export default class AssetLoader extends window.Snowboard.Singleton {
         });
     }
 
+    /**
+     * Injects and loads a JavaScript URL into the DOM.
+     *
+     * The script will be appended before the closing `</body>` tag.
+     *
+     * @param {String} script
+     * @returns {Promise}
+     */
     loadScript(script) {
         return new Promise((resolve, reject) => {
             // Check that script is not already loaded
@@ -66,6 +116,14 @@ export default class AssetLoader extends window.Snowboard.Singleton {
         });
     }
 
+    /**
+     * Injects and loads a CSS stylesheet into the DOM.
+     *
+     * The stylesheet will be appended before the closing `</head>` tag.
+     *
+     * @param {String} script
+     * @returns {Promise}
+     */
     loadStyle(style) {
         return new Promise((resolve, reject) => {
             // Check that stylesheet is not already loaded
@@ -90,6 +148,14 @@ export default class AssetLoader extends window.Snowboard.Singleton {
         });
     }
 
+    /**
+     * Pre-loads an image.
+     *
+     * The image will not be injected into the DOM.
+     *
+     * @param {String} image
+     * @returns {Promise}
+     */
     loadImage(image) {
         return new Promise((resolve, reject) => {
             const img = new Image();
