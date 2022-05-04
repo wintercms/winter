@@ -297,13 +297,28 @@ class Request extends Snowboard.PluginBase {
             });
 
             if (Object.keys(partials).length === 0) {
-                resolve();
+                if (response.X_WINTER_ASSETS) {
+                    this.processAssets(response.X_WINTER_ASSETS).then(
+                        () => {
+                            resolve();
+                        },
+                        () => {
+                            reject();
+                        },
+                    );
+                } else {
+                    resolve();
+                }
                 return;
             }
 
             const promises = this.snowboard.globalPromiseEvent('ajaxBeforeUpdate', response, this);
             promises.then(
-                () => {
+                async () => {
+                    if (response.X_WINTER_ASSETS) {
+                        await this.processAssets(response.X_WINTER_ASSETS);
+                    }
+
                     this.doUpdate(partials).then(
                         () => {
                             // Allow for HTML redraw
@@ -390,11 +405,7 @@ class Request extends Snowboard.PluginBase {
      * @param {Object} response
      * @returns {void}
      */
-    async processResponse(response) {
-        if (response.X_WINTER_ASSETS) {
-            await this.processAssets(response.X_WINTER_ASSETS);
-        }
-
+    processResponse(response) {
         if (this.options.success && typeof this.options.success === 'function') {
             if (!this.options.success(this.responseData, this)) {
                 return;
@@ -608,7 +619,7 @@ class Request extends Snowboard.PluginBase {
      * @param {Object} assets
      * @returns {Promise}
      */
-    async processAssets(assets) {
+    processAssets(assets) {
         return this.snowboard.globalPromiseEvent('ajaxLoadAssets', assets);
     }
 
