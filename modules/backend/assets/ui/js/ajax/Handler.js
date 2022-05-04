@@ -3,6 +3,7 @@ export default class Handler extends Snowboard.Singleton {
         return {
             ready: 'ready',
             ajaxFetchOptions: 'ajaxFetchOptions',
+            ajaxUpdateComplete: 'ajaxUpdateComplete',
         };
     }
 
@@ -19,12 +20,24 @@ export default class Handler extends Snowboard.Singleton {
                 options.headers['X-CSRF-TOKEN'] = this.getToken();
             }
         });
+
+        // Add "render" event for backwards compatibility
+        window.jQuery(document).trigger('render');
     }
 
     ajaxFetchOptions(options) {
         if (this.hasToken()) {
             options.headers['X-CSRF-TOKEN'] = this.getToken();
         }
+    }
+
+    ajaxUpdateComplete() {
+        if (!window.jQuery) {
+            return;
+        }
+
+        // Add "render" event for backwards compatibility
+        window.jQuery(document).trigger('render');
     }
 
     hasToken() {
