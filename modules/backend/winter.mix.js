@@ -12,7 +12,6 @@ mix
         },
         runtimeChunkPath: './assets/js/build',
     })
-    .vue({ version: 3 })
 
     // Compile Snowboard assets for the Backend
     .js(
