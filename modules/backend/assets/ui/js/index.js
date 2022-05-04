@@ -8,4 +8,18 @@ if (window.Snowboard === undefined) {
 ((Snowboard) => {
     Snowboard.addPlugin('backend.ajax.handler', BackendAjaxHandler);
     Snowboard.addPlugin('backend.ajax.assetLoader', AssetLoader);
+
+    // Add polyfill for AssetManager
+    window.AssetManager = {
+        load: (assets, callback) => {
+            Snowboard['backend.ajax.assetLoader']().processAssets(assets).finally(
+                () => {
+                    if (callback && typeof callback === 'function') {
+                        callback();
+                    }
+                },
+            );
+        },
+    };
+    window.assetManager = window.AssetManager;
 })(window.Snowboard);
