@@ -51,10 +51,13 @@ jobs:
         with:
             node-version: 12
 
-      - name: Install Node dependencies for System Module
-        working-directory: ./modules/system
+      - name: Install Node dependencies
         run: npm install
 
       - name: Run code quality checks on System Module
         working-directory: ./modules/system
+        run: npx eslint .
+
+      - name: Run code quality checks on Backend Module
+        working-directory: ./modules/backend
         run: npx eslint .
