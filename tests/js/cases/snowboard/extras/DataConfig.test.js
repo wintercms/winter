@@ -99,7 +99,7 @@ describe('The Data Config extra functionality', function () {
                     id="testElementTwo"
                     data-string-value="Hi there again"
                     data-name="Ben"
-                    data-boolean="0"
+                    data-boolean="false"
                     data-extra-attr="This should now be available"
                 ></div>`
             )
@@ -156,7 +156,7 @@ describe('The Data Config extra functionality', function () {
                     id="testElement"
                     data-string-value="Hi there again"
                     data-name="Ben"
-                    data-boolean="0"
+                    data-boolean="no"
                 ></div>`
             )
             .then(
@@ -223,7 +223,7 @@ describe('The Data Config extra functionality', function () {
                     id="testElement"
                     data-string-value="Hi there again"
                     data-name="Ben"
-                    data-boolean="0"
+                    data-boolean="false"
                 ></div>`
             )
             .then(
@@ -266,7 +266,7 @@ describe('The Data Config extra functionality', function () {
                     id="testElement"
                     data-string-value="Hi there again"
                     data-name="Ben"
-                    data-boolean="0"
+                    data-boolean="no"
                 ></div>`
             )
             .then(
