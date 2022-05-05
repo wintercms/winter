@@ -186,10 +186,10 @@ export default class DataConfig extends Snowboard.PluginBase {
         }
 
         // Boolean value
-        if (['true', 't', '1', 'yes'].includes(stringValue.toLowerCase())) {
+        if (['true', 'yes'].includes(stringValue.toLowerCase())) {
             return true;
         }
-        if (['false', 'f', '0', 'no'].includes(stringValue.toLowerCase())) {
+        if (['false', 'no'].includes(stringValue.toLowerCase())) {
             return false;
         }
 
