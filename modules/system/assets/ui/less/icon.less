@@ -2,18 +2,41 @@
 // Icon
 // --------------------------------------------------
 
-@import "icon.icons.less";
 @import "icon.close.less";
+@import "icon.icons.less";
+@import "icon.shims.less";
+
+:root, :host {
+    --@{fa-css-prefix}-font-regular: normal 400 1em/1 "@{fa-style-family}";
+    --@{fa-css-prefix}-font-solid: normal 900 1em/1 "@{fa-style-family}";
+    --@{fa-css-prefix}-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
+}
 
 @font-face {
-    font-family: 'FontAwesome';
-    src: url('@{icon-font-path}/fontawesome-webfont.eot?v=@{icon-font-version}');
-    src: url('@{icon-font-path}/fontawesome-webfont.eot?#iefix&v=@{icon-font-version}') format('embedded-opentype'),
-        url('@{icon-font-path}/fontawesome-webfont.woff?v=@{icon-font-version}') format('woff'),
-        url('@{icon-font-path}/fontawesome-webfont.ttf?v=@{icon-font-version}') format('truetype'),
-        url('@{icon-font-path}/fontawesome-webfont.svg#fontawesomeregular?v=@{icon-font-version}') format('svg');
-    font-weight: normal;
+    font-family: 'Font Awesome 6 Free';
     font-style: normal;
+    font-weight: 400;
+    font-display: @fa-font-display;
+    src: url('@{icon-font-path}/fa-regular-400.woff2?v=@{icon-font-version}') format('woff2'),
+      url('@{icon-font-path}/fa-regular-400.ttf?v=@{icon-font-version}') format('truetype');
+}
+
+@font-face {
+    font-family: 'Font Awesome 6 Free';
+    font-style: normal;
+    font-weight: 900;
+    font-display: @fa-font-display;
+    src: url('@{icon-font-path}/fa-solid-900.woff2?v=@{icon-font-version}') format('woff2'),
+      url('@{icon-font-path}/fa-solid-900.ttf?v=@{icon-font-version}') format('truetype');
+}
+
+@font-face {
+    font-family: 'Font Awesome 6 Brands';
+    font-style: normal;
+    font-weight: 400;
+    font-display: @fa-font-display;
+    src: url('@{icon-font-path}/fa-brands-400.woff2?v=@{icon-font-version}') format('woff2'),
+      url('@{icon-font-path}/fa-brands-400.ttf?v=@{icon-font-version}') format('truetype');
 }
 
 //
@@ -32,23 +55,51 @@
     background-position: 0% 0%;
     background-repeat: repeat;
     margin-top: 0;
-}
 
-[class^="icon-"]:before,
-[class*=" icon-"]:before {
-    text-decoration: inherit;
-    display: inline-block;
-    speak: none;
-}
+    &::before {
+        text-decoration: inherit;
+        display: inline-block;
+    }
 
-[class^="icon-"],
-[class*=" icon-"] {
+    &.icon-border {
+        border-color: ~'var(--@{fa-css-prefix}-border-color, @{fa-border-color})';
+        border-radius: ~'var(--@{fa-css-prefix}-border-radius, @{fa-border-radius})';
+        border-style: ~'var(--@{fa-css-prefix}-border-style, @{fa-border-style})';
+        border-width: ~'var(--@{fa-css-prefix}-border-width, @{fa-border-width})';
+        padding: ~'var(--@{fa-css-prefix}-border-padding, @{fa-border-padding})';
+    }
+
     &.pull-left {
         margin-right: .3em;
     }
+
     &.pull-right {
         margin-left: .3em;
     }
+}
+
+.far,
+.icon-regular,
+.wn-icon-regular,
+.oc-icon-regular {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 400;
+}
+
+.fad,
+.icon-solid,
+.wn-icon-solid,
+.oc-icon-solid {
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+}
+
+.fab,
+.icon-brands,
+.wn-icon-brands,
+.oc-icon-brands {
+  font-family: 'Font Awesome 6 Brands';
+  font-weight: 400;
 }
 
 //
@@ -74,13 +125,89 @@
 // Icon Sizes
 //
 
-// Makes the font 33% larger relative to the icon container
-.icon-lg {
-  font-size: (4em / 3);
-  line-height: (3em / 4);
-  vertical-align: -15%;
+.icon-1x {
+    font-size: 1em;
 }
-.icon-2x { font-size: 2em; }
-.icon-3x { font-size: 3em; }
-.icon-4x { font-size: 4em; }
-.icon-5x { font-size: 5em; }
+.icon-2x {
+    font-size: 2em;
+}
+.icon-3x {
+    font-size: 3em;
+}
+.icon-4x {
+    font-size: 4em;
+}
+.icon-5x {
+    font-size: 5em;
+}
+.icon-6x {
+    font-size: 6em;
+}
+.icon-7x {
+    font-size: 7em;
+}
+.icon-8x {
+    font-size: 8em;
+}
+.icon-9x {
+    font-size: 9em;
+}
+.icon-10x {
+    font-size: 10em;
+}
+.icon-2xs {
+    font-size: 0.625em;
+    line-height: 0.1em;
+    vertical-align: 0.225em;
+}
+.icon-xs {
+    font-size: 0.75em;
+    line-height: 0.08333333em;
+    vertical-align: 0.125em;
+}
+.icon-sm {
+    font-size: 0.875em;
+    line-height: 0.07142857em;
+    vertical-align: 0.05357143em;
+}
+.icon-lg {
+    font-size: 1.25em;
+    line-height: 0.05em;
+    vertical-align: -0.075em;
+}
+.icon-xl {
+    font-size: 1.5em;
+    line-height: 0.04166667em;
+    vertical-align: -0.125em;
+}
+.icon-2xl {
+    font-size: 2em;
+    line-height: 0.03125em;
+    vertical-align: -0.1875em;
+}
+
+//
+// Icons in a list (borrowed from Font Awesome 6)
+//
+
+.icon-ul {
+    list-style-type: none;
+    margin-left: ~'var(--@{fa-css-prefix}-li-margin, @{fa-li-margin})';
+    padding-left: 0;
+
+    > li { position: relative; }
+}
+
+.icon-li {
+    left: ~'calc(var(--@{fa-css-prefix}-li-width, @{fa-li-width}) * -1)';
+    position: absolute;
+    text-align: center;
+    width: ~'var(--@{fa-css-prefix}-li-width, @{fa-li-width})';
+    line-height: inherit;
+}
+
+@import "../vendor/font-awesome-6/_mixins.less";
+@import "../vendor/font-awesome-6/_fixed-width.less";
+@import "../vendor/font-awesome-6/_animated.less";
+@import "../vendor/font-awesome-6/_rotated-flipped.less";
+@import "../vendor/font-awesome-6/_screen-reader.less";
