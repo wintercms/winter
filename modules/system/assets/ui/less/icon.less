@@ -6,12 +6,6 @@
 @import "icon.icons.less";
 @import "icon.shims.less";
 
-:root, :host {
-    --@{fa-css-prefix}-font-regular: normal 400 1em/1 "@{fa-style-family}";
-    --@{fa-css-prefix}-font-solid: normal 900 1em/1 "@{fa-style-family}";
-    --@{fa-css-prefix}-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
-}
-
 @font-face {
     font-family: 'Font Awesome 6 Free';
     font-style: normal;
@@ -62,11 +56,11 @@
     }
 
     &.icon-border {
-        border-color: ~'var(--@{fa-css-prefix}-border-color, @{fa-border-color})';
-        border-radius: ~'var(--@{fa-css-prefix}-border-radius, @{fa-border-radius})';
-        border-style: ~'var(--@{fa-css-prefix}-border-style, @{fa-border-style})';
-        border-width: ~'var(--@{fa-css-prefix}-border-width, @{fa-border-width})';
-        padding: ~'var(--@{fa-css-prefix}-border-padding, @{fa-border-padding})';
+        border-color: @fa-border-color;
+        border-radius: @fa-border-radius;
+        border-style: @fa-border-style;
+        border-width: @fa-border-width;
+        padding: @fa-border-padding;
     }
 
     &.pull-left {
@@ -192,17 +186,17 @@
 
 .icon-ul {
     list-style-type: none;
-    margin-left: ~'var(--@{fa-css-prefix}-li-margin, @{fa-li-margin})';
+    margin-left: @fa-li-margin;
     padding-left: 0;
 
     > li { position: relative; }
 }
 
 .icon-li {
-    left: ~'calc(var(--@{fa-css-prefix}-li-width, @{fa-li-width}) * -1)';
+    left: @fa-li-width * -1;
     position: absolute;
     text-align: center;
-    width: ~'var(--@{fa-css-prefix}-li-width, @{fa-li-width})';
+    width: @fa-li-width;
     line-height: inherit;
 }
 
