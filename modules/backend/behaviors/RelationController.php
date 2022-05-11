@@ -818,6 +818,7 @@ class RelationController extends ControllerBehavior
             $config->showCheckboxes = $this->getConfig('manage[showCheckboxes]', !$isPivot);
             $config->showSorting = $this->getConfig('manage[showSorting]', !$isPivot);
             $config->defaultSort = $this->getConfig('manage[defaultSort]');
+            $config->sortable = $this->getConfig('view[sortable]', false);
             $config->recordsPerPage = $this->getConfig('manage[recordsPerPage]');
             $config->noRecordsMessage = $this->getConfig('manage[noRecordsMessage]');
 

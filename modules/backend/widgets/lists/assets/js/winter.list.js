@@ -22,6 +22,17 @@
             dragSelector: 'thead'
         })
 
+		if (element.dataset.hasOwnProperty('sortable')) {
+			this.$el.find('.control-list-tbody').listSortable({
+				handle: '.drag-handle'
+			})
+			this.$el.on('dragged.list.sorted', $.proxy(this.processReorder, this))
+
+			this.$el.find('[data-record-sort-order]').each(function (index, el) {
+				this.sortOrders.push(el.dataset.recordSortOrder)
+			}.bind(this))
+		}   
+
         this.update()
     }
 
@@ -85,6 +96,21 @@
         var $checkbox = $('.list-checkbox input[type="checkbox"]', $(el).closest('tr'))
         $checkbox.prop('checked', !$checkbox.is(':checked')).trigger('change')
     }
+
+	ListWidget.prototype.processReorder = function() {
+		var relation = this.$el.data('sortableRelation')
+		var handler = relation ? 'onReorderRelation' : 'onReorder'
+
+		var recordIds = []
+		this.$el.find('[data-record-id]').each(function (index, el) {
+			recordIds.push(el.dataset.recordId)
+		}.bind(this))
+
+		this.$el.request(handler, {
+			data: { sort_orders: this.sortOrders, record_ids: recordIds, _reorder_relation_name: relation },
+			loading: $.wn.stripeLoadIndicator,
+		})
+	}   
 
     // LIST WIDGET PLUGIN DEFINITION
     // ============================

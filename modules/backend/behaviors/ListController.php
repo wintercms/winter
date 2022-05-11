@@ -145,6 +145,7 @@ class ListController extends ControllerBehavior
             'showPageNumbers',
             'noRecordsMessage',
             'defaultSort',
+            'reorder',
             'showSorting',
             'showSetup',
             'showCheckboxes',
@@ -599,4 +600,131 @@ class ListController extends ControllerBehavior
             call_user_func_array($callback, [$widget]);
         });
     }
+
+    /**
+     * Validate the supplied form model.
+     * @return void
+     */
+    protected function validateModel()
+    {
+        $model = $this->reorderGetModel();
+        $modelTraits = class_uses($model);
+
+        if (
+            isset($modelTraits[\Winter\Storm\Database\Traits\Sortable::class]) ||
+            $model->isClassExtendedWith(\Winter\Storm\Database\Behaviors\Sortable::class) ||
+            isset($modelTraits[\October\Rain\Database\Traits\Sortable::class]) ||
+            $model->isClassExtendedWith(\October\Rain\Database\Behaviors\Sortable::class)
+        ) {
+            $this->sortMode = 'simple';
+        }
+        elseif (
+            isset($modelTraits[\Winter\Storm\Database\Traits\NestedTree::class]) ||
+            isset($modelTraits[\October\Rain\Database\Traits\NestedTree::class])
+        ) {
+            $this->sortMode = 'nested';
+            $this->showTree = true;
+        }
+        else {
+            throw new ApplicationException('The model must implement the Sortable trait/behavior or the NestedTree trait.');
+        }
+
+        return $model;
+    }
+
+    public function onReorder()
+    {
+        $model = $this->validateModel();
+
+        /*
+         * Simple
+         */
+        if ($this->sortMode == 'simple') {
+            if (
+                (!$ids = post('record_ids')) ||
+                (!$orders = post('sort_orders'))
+            ) {
+                return;
+            }
+
+            $model->setSortableOrder($ids, $orders);
+        }
+        /*
+         * Nested set
+         */
+        elseif ($this->sortMode == 'nested') {
+            $sourceNode = $model->find(post('sourceNode'));
+            $targetNode = post('targetNode') ? $model->find(post('targetNode')) : null;
+
+            if ($sourceNode == $targetNode) {
+                return;
+            }
+
+            switch (post('position')) {
+                case 'before':
+                    $sourceNode->moveBefore($targetNode);
+                    break;
+
+                case 'after':
+                    $sourceNode->moveAfter($targetNode);
+                    break;
+
+                case 'child':
+                    $sourceNode->makeChildOf($targetNode);
+                    break;
+
+                default:
+                    $sourceNode->makeRoot();
+                    break;
+            }
+        }
+    }
+
+    public function reorderGetModel()
+    {
+        if ($this->model !== null) {
+            return $this->model;
+        }
+
+        $modelClass = $this->getConfig('modelClass');
+
+        if (!$modelClass) {
+            throw new ApplicationException('Please specify the modelClass property for reordering');
+        }
+
+        return $this->model = new $modelClass;
+    }
+
+    /**
+     * Returns all the records from the supplied model.
+     * @return Collection
+     */
+    protected function getRecords()
+    {
+        $records = null;
+        $model = $this->controller->reorderGetModel();
+        $query = $model->newQuery();
+
+        $this->controller->reorderExtendQuery($query);
+
+        if ($this->sortMode == 'simple') {
+            $records = $query
+                ->orderBy($model->getSortOrderColumn())
+                ->get()
+            ;
+        }
+        elseif ($this->sortMode == 'nested') {
+            $records = $query->getNested();
+        }
+
+        return $records;
+    }
+
+    /**     
+     * Returns the sort order value for a specific record.
+     */     
+    public function getRecordSortOrder($record)
+    {       
+        return $record->{$record->getSortOrderColumn()};
+    }   
 }
