@@ -368,6 +368,91 @@ blockquote.pull-right .small:after{content:'\00A0 \2014'}
 blockquote:before,
 blockquote:after{content:""}
 address{margin-bottom:20px;font-style:normal;line-height:1.42857143}
+.close{float:right;font-size:21px;font-weight:bold;line-height:1;color:#000;text-shadow:0 1px 0 #fff;font-family:sans-serif;opacity:0.2;filter:alpha(opacity=20)}
+.close:hover,
+.close:focus{color:#000;text-decoration:none;cursor:pointer;opacity:0.5;filter:alpha(opacity=50)}
+button.close{padding:0;cursor:pointer;background:transparent;border:0;-webkit-appearance:none}
+@font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:400;font-display:block;src:url('../ui/font/fa-regular-400.woff2?v=2.0.0') format('woff2'),url('../ui/font/fa-regular-400.ttf?v=2.0.0') format('truetype')}
+@font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:900;font-display:block;src:url('../ui/font/fa-solid-900.woff2?v=2.0.0') format('woff2'),url('../ui/font/fa-solid-900.ttf?v=2.0.0') format('truetype')}
+@font-face{font-family:'Font Awesome 6 Brands';font-style:normal;font-weight:400;font-display:block;src:url('../ui/font/fa-brands-400.woff2?v=2.0.0') format('woff2'),url('../ui/font/fa-brands-400.ttf?v=2.0.0') format('truetype')}
+[class^="icon-"],
+[class*=" icon-"]{font-family:"Font Awesome 6 Free";font-weight:900;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-style:normal;font-variant:normal;text-rendering:auto;display:inline;width:auto;height:auto;line-height:normal;vertical-align:baseline;background-image:none;background-position:0% 0%;background-repeat:repeat;margin-top:0}
+[class^="icon-"]::before,
+[class*=" icon-"]::before{text-decoration:inherit;display:inline-block}
+[class^="icon-"].icon-border,
+[class*=" icon-"].icon-border{border-color:#eee;border-radius:0.1em;border-style:solid;border-width:0.08em;padding:0.2em 0.25em 0.15em}
+[class^="icon-"].pull-left,
+[class*=" icon-"].pull-left{margin-right:.3em}
+[class^="icon-"].pull-right,
+[class*=" icon-"].pull-right{margin-left:.3em}
+.far,
+.icon-regular,
+.wn-icon-regular,
+.oc-icon-regular{font-family:'Font Awesome 6 Free';font-weight:400}
+.fad,
+.icon-solid,
+.wn-icon-solid,
+.oc-icon-solid{font-family:'Font Awesome 6 Free';font-weight:900}
+.fab,
+.icon-brands,
+.wn-icon-brands,
+.oc-icon-brands{font-family:'Font Awesome 6 Brands';font-weight:400}
+[class^="wn-icon-"]:before,
+[class*=" wn-icon-"]:before,
+[class^="oc-icon-"]:before,
+[class*=" oc-icon-"]:before{display:inline-block;margin-right:8px;font-family:"Font Awesome 6 Free";font-weight:900;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-style:normal;font-variant:normal;text-rendering:auto;vertical-align:baseline}
+[class^="wn-icon-"].empty:before,
+[class*=" wn-icon-"].empty:before,
+[class^="oc-icon-"].empty:before,
+[class*=" oc-icon-"].empty:before{margin-right:0}
+.icon-1x{font-size:1em}
+.icon-2x{font-size:2em}
+.icon-3x{font-size:3em}
+.icon-4x{font-size:4em}
+.icon-5x{font-size:5em}
+.icon-6x{font-size:6em}
+.icon-7x{font-size:7em}
+.icon-8x{font-size:8em}
+.icon-9x{font-size:9em}
+.icon-10x{font-size:10em}
+.icon-2xs{font-size:0.625em;line-height:0.1em;vertical-align:0.225em}
+.icon-xs{font-size:0.75em;line-height:0.08333333em;vertical-align:0.125em}
+.icon-sm{font-size:0.875em;line-height:0.07142857em;vertical-align:0.05357143em}
+.icon-lg{font-size:1.25em;line-height:0.05em;vertical-align:-0.075em}
+.icon-xl{font-size:1.5em;line-height:0.04166667em;vertical-align:-0.125em}
+.icon-2xl{font-size:2em;line-height:0.03125em;vertical-align:-0.1875em}
+.icon-ul{list-style-type:none;margin-left:2.5em;padding-left:0}
+.icon-ul>li{position:relative}
+.icon-li{left:-2em;position:absolute;text-align:center;width:2em;line-height:inherit}
+.icon-fw{text-align:center;width:1.25em}
+.icon-beat{animation-name:icon-beat;animation-delay:var(--icon-animation-delay,0);animation-direction:var(--icon-animation-direction,normal);animation-duration:var(--icon-animation-duration,1s);animation-iteration-count:var(--icon-animation-iteration-count,infinite);animation-timing-function:var(--icon-animation-timing,ease-in-out)}
+.icon-bounce{animation-name:icon-beat;animation-delay:var(--icon-animation-delay,0);animation-direction:var(--icon-animation-direction,normal);animation-duration:var(--icon-animation-duration,1s);animation-iteration-count:var(--icon-animation-iteration-count,infinite);animation-timing-function:var(--icon-animation-timing,cubic-bezier(0.280,0.840,0.420,1))}
+.icon-fade{animation-name:icon-fade;animation-delay:var(--icon-animation-delay,0);animation-direction:var(--icon-animation-direction,normal);animation-duration:var(--icon-animation-duration,1s);animation-iteration-count:var(--icon-animation-iteration-count,infinite);animation-timing-function:var(--icon-animation-timing,cubic-bezier(.4,0,.6,1))}
+.icon-beat-fade{animation-name:icon-beat-fade;animation-delay:var(--icon-animation-delay,0);animation-direction:var(--icon-animation-direction,normal);animation-duration:var(--icon-animation-duration,1s);animation-iteration-count:var(--icon-animation-iteration-count,infinite);animation-timing-function:var(--icon-animation-timing,cubic-bezier(.4,0,.6,1))}
+.icon-flip{animation-name:icon-flip;animation-delay:var(--icon-animation-delay,0);animation-direction:var(--icon-animation-direction,normal);animation-duration:var(--icon-animation-duration,1s);animation-iteration-count:var(--icon-animation-iteration-count,infinite);animation-timing-function:var(--icon-animation-timing,ease-in-out)}
+.icon-shake{animation-name:icon-shake;animation-delay:var(--icon-animation-delay,0);animation-direction:var(--icon-animation-direction,normal);animation-duration:var(--icon-animation-duration,1s);animation-iteration-count:var(--icon-animation-iteration-count,infinite);animation-timing-function:var(--icon-animation-timing,ease-in-out)}
+.icon-spin{animation-name:icon-spin;animation-delay:var(--icon-animation-delay,0);animation-direction:var(--icon-animation-direction,normal);animation-duration:var(--icon-animation-duration,2s);animation-iteration-count:var(--icon-animation-iteration-count,infinite);animation-timing-function:var(--icon-animation-timing,linear)}
+.icon-spin-reverse{--icon-animation-direction:reverse}
+@media (prefers-reduced-motion:reduce){.icon-beat,.icon-bounce,.icon-fade,.icon-beat-fade,.icon-flip,.icon-pulse,.icon-shake,.icon-spin,.icon-spin-pulse{animation-delay:-1ms;animation-duration:1ms;animation-iteration-count:1;transition-delay:0s;transition-duration:0s}}
+@keyframes icon-beat{0%,90%{transform:scale(1)}45%{transform:scale(var(--icon-beat-scale,1.25))}}
+@keyframes icon-bounce{0%{transform:scale(1,1) translateY(0)}10%{transform:scale(var(--#{$fa-css-prefix}-bounce-start-scale-x,1.1),var(--#{$fa-css-prefix}-bounce-start-scale-y,0.9)) translateY(0)}30%{transform:scale(var(--#{$fa-css-prefix}-bounce-jump-scale-x,0.9),var(--#{$fa-css-prefix}-bounce-jump-scale-y,1.1)) translateY(var(--#{$fa-css-prefix}-bounce-height,-0.5em))}50%{transform:scale(var(--#{$fa-css-prefix}-bounce-land-scale-x,1.05),var(--#{$fa-css-prefix}-bounce-land-scale-y,0.95)) translateY(0)}57%{transform:scale(1,1) translateY(var(--#{$fa-css-prefix}-bounce-rebound,-0.125em))}64%{transform:scale(1,1) translateY(0)}100%{transform:scale(1,1) translateY(0)}}
+@keyframes icon-fade{50%{opacity:var(--icon-fade-opacity,0.4)}}
+@keyframes icon-beat-fade{0%,100%{opacity:var(--icon-beat-fade-opacity,0.4);transform:scale(1)}50%{opacity:1;transform:scale(var(--icon-beat-fade-scale,1.125))}}
+@keyframes icon-flip{50%{transform:rotate3d(var(--icon-flip-x,0),var(--icon-flip-y,1),var(--icon-flip-z,0),var(--icon-flip-angle,-180deg))}}
+@keyframes icon-shake{0%{transform:rotate(-15deg)}4%{transform:rotate(15deg)}8%,24%{transform:rotate(-18deg)}12%,28%{transform:rotate(18deg)}16%{transform:rotate(-22deg)}20%{transform:rotate(22deg)}32%{transform:rotate(-12deg)}36%{transform:rotate(12deg)}40%,100%{transform:rotate(0deg)}}
+@keyframes icon-spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.icon-rotate-90{transform:rotate(90deg)}
+.icon-rotate-180{transform:rotate(180deg)}
+.icon-rotate-270{transform:rotate(270deg)}
+.icon-flip-horizontal{transform:scale(-1,1)}
+.icon-flip-vertical{transform:scale(1,-1)}
+.icon-flip-both,
+.icon-flip-horizontal.icon-flip-vertical{transform:scale(-1,-1)}
+.icon-rotate-by{transform:rotate(var(--icon-rotate-angle,none))}
+.sr-only,
+.icon-sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+.sr-only-focusable:not(:focus),
+.icon-sr-only-focusable:not(:focus){position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
 body{padding-top:20px;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";background:#f3f3f3;color:#405261}
 h1,
 h2,
@@ -420,4 +505,9 @@ table.data-table tbody tr:nth-child(2n) th{background-color:#d8d9db}.exception-n
 .syntaxhighlighter table td.code .container{width:100% !important;padding:0}
 .syntaxhighlighter table td.code .container div.line{white-space:nowrap;padding-left:10px}
 .syntaxhighlighter table td.code .container div.line.highlighted{background:#c84530;color:white}
-.syntaxhighlighter table td.code .container div.line code{font:12px/170% Monaco,Menlo,'Ubuntu Mono','Droid Sans Mono','Courier New',monospace !important}
+.syntaxhighlighter table td.code .container div.line code{font:12px/170% Monaco,Menlo,'Ubuntu Mono','Droid Sans Mono','Courier New',monospace !important}.icon-chain-broken::before{content:"\f127"}
+.icon-lock::before{content:"\f023"}
+.icon-database::before{content:"\f1c0"}
+.icon-power-off::before{content:"\f011"}
+.icon-code-fork::before{content:"\e13b"}
+.icon-wrench::before{content:"\f0ad"}

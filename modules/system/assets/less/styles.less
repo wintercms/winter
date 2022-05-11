@@ -1,5 +1,6 @@
 // Basic grid system
 @import "../ui/less/site.less";
+@import "../ui/less/icon.less";
 
 @font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 @color-base: #405261;
@@ -219,4 +220,28 @@ table.data-table {
             }
         }
     }
+}
+
+/*
+ * ICONS
+ * We are loading only the icons required for the standard views here.
+ */
+
+.icon-chain-broken::before {
+    content: "\f127";
+}
+.icon-lock::before {
+    content: "\f023";
+}
+.icon-database::before {
+    content: "\f1c0";
+}
+.icon-power-off::before {
+    content: "\f011";
+}
+.icon-code-fork::before {
+    content: "\e13b";
+}
+.icon-wrench::before {
+    content: "\f0ad";
 }
