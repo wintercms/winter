@@ -553,6 +553,7 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/less/styles.less');
             $combiner->registerBundle('~/modules/system/assets/ui/storm.less');
             $combiner->registerBundle('~/modules/system/assets/ui/storm.js');
+            $combiner->registerBundle('~/modules/system/assets/ui/less/icon.less');
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
             $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
