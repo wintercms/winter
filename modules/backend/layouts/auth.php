@@ -14,7 +14,7 @@
         $coreBuild = System\Models\Parameter::get('system::core.build', 1);
         $styles = [
             Url::asset('modules/system/assets/ui/storm.css'),
-            Url::asset('modules/system/assets/ui/css/icon.css'),
+            Url::asset('modules/system/assets/ui/icons.css'),
             Backend::skinAsset('assets/css/winter.css'),
         ];
         $scripts = [
