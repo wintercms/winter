@@ -80,13 +80,12 @@ class ReorderRelationController extends ControllerBehavior
         $instance = $this->parentModel->newQuery()->find($this->postValue('_reorder_parent_id'));
         $instance->setRelationOrder($this->relation, $ids, $orders);
 
+        // refresh the relation view after reorder
         $this->controller->initRelation(
             $this->parentModel->newQuery()->findOrFail($this->postValue('_reorder_parent_id')),
             $this->relation
         );
-        return [
-            '#' . $this->controller->relationGetId('view') => $this->controller->relationRenderView($this->relation),
-        ];
+        return $this->controller->relationRefresh($this->relation);
     }
 
     //
