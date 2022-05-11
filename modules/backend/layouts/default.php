@@ -2,7 +2,7 @@
 <html lang="<?= App::getLocale() ?>" class="no-js <?= $this->makeLayoutPartial('browser_detector') ?>">
     <head>
         <?= $this->makeLayoutPartial('head') ?>
-        <?= $this->fireViewEvent('backend.layout.extendHead', ['layout' => 'default.htm']) ?>
+        <?= $this->fireViewEvent('backend.layout.extendHead', ['layout' => 'default']) ?>
     </head>
     <body class="<?= $this->bodyClass ?>">
         <div id="layout-canvas">
