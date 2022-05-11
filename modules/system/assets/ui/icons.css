@@ -2,9 +2,9 @@
 .close:hover,
 .close:focus{color:#000;text-decoration:none;cursor:pointer;opacity:0.5;filter:alpha(opacity=50)}
 button.close{padding:0;cursor:pointer;background:transparent;border:0;-webkit-appearance:none}
-@font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:400;font-display:block;src:url('ui/font/fa-regular-400.woff2?v=2.0.0') format('woff2'),url('ui/font/fa-regular-400.ttf?v=2.0.0') format('truetype')}
-@font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:900;font-display:block;src:url('ui/font/fa-solid-900.woff2?v=2.0.0') format('woff2'),url('ui/font/fa-solid-900.ttf?v=2.0.0') format('truetype')}
-@font-face{font-family:'Font Awesome 6 Brands';font-style:normal;font-weight:400;font-display:block;src:url('ui/font/fa-brands-400.woff2?v=2.0.0') format('woff2'),url('ui/font/fa-brands-400.ttf?v=2.0.0') format('truetype')}
+@font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:400;font-display:block;src:url('font/fa-regular-400.woff2?v=2.0.0') format('woff2'),url('font/fa-regular-400.ttf?v=2.0.0') format('truetype')}
+@font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:900;font-display:block;src:url('font/fa-solid-900.woff2?v=2.0.0') format('woff2'),url('font/fa-solid-900.ttf?v=2.0.0') format('truetype')}
+@font-face{font-family:'Font Awesome 6 Brands';font-style:normal;font-weight:400;font-display:block;src:url('font/fa-brands-400.woff2?v=2.0.0') format('woff2'),url('font/fa-brands-400.ttf?v=2.0.0') format('truetype')}
 [class^="icon-"],
 [class*=" icon-"]{font-family:"Font Awesome 6 Free";font-weight:900;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-style:normal;font-variant:normal;text-rendering:auto;display:inline;width:auto;height:auto;line-height:normal;vertical-align:baseline;background-image:none;background-position:0% 0%;background-repeat:repeat;margin-top:0}
 [class^="icon-"]::before,
