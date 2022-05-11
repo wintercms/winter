@@ -79,49 +79,11 @@ class ReorderRelationController extends ControllerBehavior
         /** @var HasSortableRelations $instance */
         $instance = $this->parentModel->newQuery()->find($this->postValue('_reorder_parent_id'));
         $instance->setRelationOrder($this->relation, $ids, $orders);
-    }
-
-    /**
-     * Returns the modal contents.
-     * @return string
-     */
-    public function onRelationButtonReorder()
-    {
-        $this->addJs('../../reordercontroller/assets/js/winter.reorder.js', 'core');
-
-        $this->reorderRelationGetModel();
-        $this->validateModel();
-        $this->prepareVars();
-
-        $params = [
-            'reorderRelation' => $this->relation,
-            'reorderModel' => get_class($this->parentModel),
-            'reorderParentId' => $this->postValue('_reorder_parent_id'),
-            'reorderSortColumn' => $this->parentModel->getRelationSortOrderColumn($this->relation),
-        ];
-
-        return $this->reorderRelationMakePartial(
-            'relation_modal',
-            $params + [
-                'container' => $this->reorderRelationMakePartial('container', $params),
-                'requestParams' => $this->reorderRelationMakePartial('request_params', $params),
-            ]
-        );
-    }
-
-    /**
-     * Update the relation widget once the model gets closed.
-     * @return array
-     */
-    public function onRelationModalClose()
-    {
-        $this->reorderRelationGetModel();
 
         $this->controller->initRelation(
             $this->parentModel->newQuery()->findOrFail($this->postValue('_reorder_parent_id')),
             $this->relation
         );
-
         return [
             '#' . $this->controller->relationGetId('view') => $this->controller->relationRenderView($this->relation),
         ];
