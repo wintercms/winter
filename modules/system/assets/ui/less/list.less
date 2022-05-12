@@ -3,6 +3,7 @@
 // --------------------------------------------------
 
 @import "global.less";
+@import "icon.less";
 
 //
 // Lists
@@ -88,7 +89,7 @@ table.table.data {
     }
 
     tbody {
-        tr:nth-child(even) {
+        tr:nth-of-type(even) {
             td, th { background-color: @color-list-accent; }
         }
         td, th {
@@ -125,6 +126,12 @@ table.table.data {
                     position: relative;
                 }
             }
+        }
+
+        // Prevent a border-top on the first row entry if the placeholder
+        // is placed right above it at the start of a table.
+        .list-sortable-placeholder:first-child + tr td {
+            border-top: 0;
         }
 
         tr:first-child {
@@ -559,7 +566,7 @@ table.table.data {
             }
 
             tbody {
-                tr:nth-child(even) {
+                tr:nth-of-type(even) {
                     td, th { background-color: transparent; }
                 }
             }

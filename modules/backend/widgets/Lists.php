@@ -560,12 +560,6 @@ class Lists extends WidgetBase
                 $sortColumn = Str::snake($column->relation) . '_count';
             }
 
-            // Fix the sort order if this list has sortable set to true.
-            if ($this->reorder) {
-                $sortColumn = $this->reorderColumn;
-                $this->sortDirection = 'ASC';
-            }
-
             $query->orderBy($sortColumn, $this->sortDirection);
         }
 
@@ -807,7 +801,7 @@ class Lists extends WidgetBase
 
         if ($this->reorder) {
             $this->allColumns['sort_handle'] = $this->makeListColumn('sort_handle', [
-                #'label' => 'backend::lang.list.sort_handle',
+                'label' => '',
                 'path' => '~/modules/backend/widgets/lists/partials/_list_sort_handle.htm',
                 'type' => 'partial',
                 'width' => '20px',
@@ -1613,6 +1607,11 @@ class Lists extends WidgetBase
      */
     public function getSortColumn()
     {
+        if ($this->reorder) {
+            $sortColumn = $this->reorderColumn;
+            $this->sortDirection = 'ASC';
+        }
+
         if (!$this->isSortable()) {
             return false;
         }

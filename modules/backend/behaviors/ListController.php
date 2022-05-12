@@ -678,13 +678,15 @@ class ListController extends ControllerBehavior
                     break;
             }
         }
+
+        return $this->listRefresh();
     }
 
     public function reorderGetModel()
     {
-        if ($this->model !== null) {
-            return $this->model;
-        }
+        #if ($this->model !== null) {
+        #    return $this->model;
+        #}
 
         $modelClass = $this->getConfig('modelClass');
 
@@ -693,6 +695,16 @@ class ListController extends ControllerBehavior
         }
 
         return $this->model = new $modelClass;
+    }
+
+    /**
+     * Extend the query used for finding reorder records. Extra conditions
+     * can be applied to the query, for example, $query->withTrashed();
+     * @param Winter\Storm\Database\Builder $query
+     * @return void
+     */
+    public function reorderExtendQuery($query)
+    {
     }
 
     /**

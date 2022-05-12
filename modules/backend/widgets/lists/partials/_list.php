@@ -1,9 +1,12 @@
-<div class="control-list list-scrollable" data-control="listwidget">
+<div class="control-list list-scrollable"
+     data-control="listwidget"
+     <?= $reorder ? 'data-sortable' : '' ?>
+>
     <table class="table data" data-control="rowlink">
         <thead>
             <?= $this->makePartial('list_head_row') ?>
         </thead>
-        <tbody>
+        <tbody class="control-list-tbody">
             <?php if (count($records)): ?>
                 <?= $this->makePartial('list_body_rows') ?>
             <?php else: ?>

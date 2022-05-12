@@ -11,6 +11,7 @@
         var $el = this.$el = $(element);
 
         this.options = options || {};
+		this.sortOrders = []
 
         var scrollClassContainer = options.scrollClassContainer !== undefined
             ? options.scrollClassContainer
@@ -98,16 +99,13 @@
     }
 
 	ListWidget.prototype.processReorder = function() {
-		var relation = this.$el.data('sortableRelation')
-		var handler = relation ? 'onReorderRelation' : 'onReorder'
-
 		var recordIds = []
 		this.$el.find('[data-record-id]').each(function (index, el) {
 			recordIds.push(el.dataset.recordId)
 		}.bind(this))
 
-		this.$el.request(handler, {
-			data: { sort_orders: this.sortOrders, record_ids: recordIds, _reorder_relation_name: relation },
+		this.$el.request('onReorder', {
+			data: { sort_orders: this.sortOrders, record_ids: recordIds },
 			loading: $.wn.stripeLoadIndicator,
 		})
 	}   

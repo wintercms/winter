@@ -4684,19 +4684,19 @@ ListSortable.prototype.addList=function(list){this.lists.push(list)
 this.registerListHandlers(list)
 if(this.lists.length==1){$(list).one('dispose-control',this.proxy(this.dispose))}}
 ListSortable.prototype.registerListHandlers=function(list){var $list=$(list)
-$list.on('dragstart','> li',this.proxy(this.onDragStart))
-$list.on('dragover','> li',this.proxy(this.onDragOver))
-$list.on('dragenter','> li',this.proxy(this.onDragEnter))
-$list.on('dragleave','> li',this.proxy(this.onDragLeave))
-$list.on('drop','> li',this.proxy(this.onDragDrop))
-$list.on('dragend','> li',this.proxy(this.onDragEnd))}
+$list.on('dragstart','> *',this.proxy(this.onDragStart))
+$list.on('dragover','> *',this.proxy(this.onDragOver))
+$list.on('dragenter','> *',this.proxy(this.onDragEnter))
+$list.on('dragleave','> *',this.proxy(this.onDragLeave))
+$list.on('drop','> *',this.proxy(this.onDragDrop))
+$list.on('dragend','> *',this.proxy(this.onDragEnd))}
 ListSortable.prototype.unregisterListHandlers=function(list){var $list=$(list)
-$list.off('dragstart','> li',this.proxy(this.onDragStart))
-$list.off('dragover','> li',this.proxy(this.onDragOver))
-$list.off('dragenter','> li',this.proxy(this.onDragEnter))
-$list.off('dragleave','> li',this.proxy(this.onDragLeave))
-$list.off('drop','> li',this.proxy(this.onDragDrop))
-$list.off('dragend','> li',this.proxy(this.onDragEnd))}
+$list.off('dragstart','> *',this.proxy(this.onDragStart))
+$list.off('dragover','> *',this.proxy(this.onDragOver))
+$list.off('dragenter','> *',this.proxy(this.onDragEnter))
+$list.off('dragleave','> *',this.proxy(this.onDragLeave))
+$list.off('drop','> *',this.proxy(this.onDragDrop))
+$list.off('dragend','> *',this.proxy(this.onDragEnd))}
 ListSortable.prototype.unregisterHandlers=function(){$(document).off('dragover',this.proxy(this.onDocumentDragOver))
 $(document).off('mousemove',this.proxy(this.onDocumentMouseMove))
 $(this.lists[0]).off('dispose-control',this.proxy(this.dispose))}
@@ -4712,7 +4712,6 @@ ListSortable.prototype.elementBelongsToManagedList=function(element){for(var i=t
 ListSortable.prototype.isDragStartAllowed=function(element){return true}
 ListSortable.prototype.elementIsPlaceholder=function(element){return element.getAttribute('class')==='list-sortable-placeholder'}
 ListSortable.prototype.getElementSortableId=function(element){if(element.hasAttribute('data-list-sortable-element-id')){return element.getAttribute('data-list-sortable-element-id')}elementsIdCounter++
-var elementId=elementsIdCounter
 element.setAttribute('data-list-sortable-element-id',elementsIdCounter)
 return elementsIdCounter}
 ListSortable.prototype.dataTransferContains=function(ev,element){if(ev.dataTransfer.types.indexOf!==undefined){return ev.dataTransfer.types.indexOf(element)>=0}return ev.dataTransfer.types.contains(element)}
@@ -4741,10 +4740,13 @@ return true}return false}
 ListSortable.prototype.mouseOutsideLists=function(ev){var mousePosition=$.wn.foundation.event.pageCoordinates(ev)
 for(var i=this.lists.length-1;i>=0;i--){if($.wn.foundation.element.elementContainsPoint(this.lists[i],mousePosition)){return false}}return true}
 ListSortable.prototype.getClosestDraggableParent=function(element){var current=element
-while(current){if(current.tagName==='LI'&&current.hasAttribute('draggable')){return current}current=current.parentNode}return null}
+while(current){if(current.hasAttribute('draggable')){return current}current=current.parentNode}return null}
 ListSortable.prototype.onDragStart=function(ev){if(!this.isDragStartAllowed(ev.target)){return}ev.originalEvent.dataTransfer.effectAllowed='move'
 ev.originalEvent.dataTransfer.setData('listsortable/elementid',this.getElementSortableId(ev.target))
 ev.originalEvent.dataTransfer.setData(this.listSortableId,this.listSortableId)
+var container=$(ev.target).closest('[data-sortable]')
+this.originalOverflow=container.css('overflow')
+container.css({overflow:'visible'})
 $(document).on('mousemove',this.proxy(this.onDocumentMouseMove))
 $(document).on('dragover',this.proxy(this.onDocumentDragOver))}
 ListSortable.prototype.onDragOver=function(ev){if(!this.isSourceManagedList(ev.originalEvent)){return}var draggable=this.getClosestDraggableParent(ev.target)
@@ -4760,7 +4762,10 @@ ev.preventDefault()}
 ListSortable.prototype.onDragDrop=function(ev){if(!this.isSourceManagedList(ev.originalEvent)){return}var draggable=this.getClosestDraggableParent(ev.target)
 if(!draggable){return}this.moveElement(draggable,ev.originalEvent)
 this.removePlaceholders()}
-ListSortable.prototype.onDragEnd=function(ev){$(document).off('dragover',this.proxy(this.onDocumentDragOver))}
+ListSortable.prototype.onDragEnd=function(ev){$(document).off('dragover',this.proxy(this.onDocumentDragOver))
+var container=$(ev.target).closest('[data-sortable]')
+if(container){container.trigger('dragged.list.sorted')
+container.css({overflow:this.originalOverflow})}}
 ListSortable.prototype.onDocumentDragOver=function(ev){if(!this.isSourceManagedList(ev.originalEvent)){return}if(this.mouseOutsideLists(ev.originalEvent)){this.removePlaceholders()
 return}}
 ListSortable.prototype.onDocumentMouseMove=function(ev){$(document).off('mousemove',this.proxy(this.onDocumentMouseMove))
