@@ -296,10 +296,10 @@ trait AssetMaker
         }
 
         if (substr($fileName, 0, 1) == '/' || $assetPath === null) {
-            return $fileName;
+            return Url::asset($fileName);
         }
 
-        return $assetPath . '/' . $fileName;
+        return Url::asset($assetPath . '/' . $fileName);
     }
 
     /**
