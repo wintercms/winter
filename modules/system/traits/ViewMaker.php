@@ -272,7 +272,7 @@ trait ViewMaker
      * @param string $suffix An extra path to attach to the end
      * @param bool $isPublic Returns public path instead of an absolute one
      */
-    public function guessViewPath(string $suffix = '', bool $isPublic = false): string
+    public function guessViewPath(string $suffix = '', bool $isPublic = false): ?string
     {
         $class = get_called_class();
         return $this->guessViewPathFrom($class, $suffix, $isPublic);
@@ -284,7 +284,7 @@ trait ViewMaker
      * @param string $suffix An extra path to attach to the end
      * @param bool $isPublic Returns public path instead of an absolute one
      */
-    public function guessViewPathFrom(string $class, string $suffix = '', bool $isPublic = false): string
+    public function guessViewPathFrom(string $class, string $suffix = '', bool $isPublic = false): ?string
     {
         $classFolder = strtolower(class_basename($class));
         $classFile = realpath(dirname(File::fromClass($class)));
