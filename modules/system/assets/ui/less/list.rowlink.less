@@ -18,3 +18,41 @@ a.rowlink {
     font: inherit;
     text-decoration: inherit;
 }
+
+tr.rowlink[draggable=true] {
+    & > td:first-child {
+        position: relative;
+    }
+    &:hover > td:first-child {
+        &::before {
+            position: absolute;
+            top: 0;
+            margin: 0.7rem 0;
+            padding: 0.5rem 0.5rem;
+            border-radius: 15%;
+            background-color: @gray-lighter;
+            color: @text-color;
+            font-family: "Font Awesome 6 Free";
+            font-weight: 600;
+            font-style: normal;
+            font-variant: normal;
+            content: "\f58e";
+            cursor: grab;
+        }
+    }
+    &.has-list-checkbox:hover > td:first-child::before {
+        right: -10px;
+    }
+
+    &:not(.has-list-checkbox) {
+        & > td:first-child {
+            min-width: 8rem;
+        }
+        &:hover > td:first-child {
+            padding-left: 4rem;
+            &::before {
+                left: 10px;
+            }
+        }
+    }
+}

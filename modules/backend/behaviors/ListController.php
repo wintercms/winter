@@ -711,7 +711,6 @@ class ListController extends ControllerBehavior
     protected function getRecords()
     {
         $records = null;
-        #$model = $this->controller->reorderGetModel();
         $model = $this->controller->validateModel();
         $query = $model->newQuery();
 

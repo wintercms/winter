@@ -3074,6 +3074,12 @@ tr.rowlink:not(.nolink) td{cursor:pointer}
 tr.rowlink:not(.nolink) td.nolink{cursor:auto}
 .table tbody tr.rowlink:hover td{background-color:#f5f5f5}
 a.rowlink{color:inherit;font:inherit;text-decoration:inherit}
+tr.rowlink[draggable=true]>td:first-child{position:relative}
+tr.rowlink[draggable=true]:hover>td:first-child::before{position:absolute;top:0;margin:0.7rem 0;padding:0.5rem 0.5rem;border-radius:15%;background-color:#eee;color:#333;font-family:"Font Awesome 6 Free";font-weight:600;font-style:normal;font-variant:normal;content:"\f58e";cursor:grab}
+tr.rowlink[draggable=true].has-list-checkbox:hover>td:first-child::before{right:-10px}
+tr.rowlink[draggable=true]:not(.has-list-checkbox)>td:first-child{min-width:8rem}
+tr.rowlink[draggable=true]:not(.has-list-checkbox):hover>td:first-child{padding-left:4rem}
+tr.rowlink[draggable=true]:not(.has-list-checkbox):hover>td:first-child::before{left:10px}
 table{max-width:100%;background-color:transparent}
 th{text-align:left}
 .table{width:100%;margin-bottom:20px;border-collapse:separate}
