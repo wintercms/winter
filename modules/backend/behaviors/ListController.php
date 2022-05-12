@@ -609,7 +609,7 @@ class ListController extends ControllerBehavior
      * Validate the supplied form model.
      * @return void
      */
-    protected function validateModel($definition=null)
+    protected function validateModel($definition = null)
     {
         $model = $this->controller->reorderGetModel($definition);
         $modelTraits = class_uses($model);
@@ -687,7 +687,7 @@ class ListController extends ControllerBehavior
         return $this->listRefresh($definition);
     }
 
-    public function reorderGetModel($definition=null)
+    public function reorderGetModel($definition = null)
     {
         $listConfig = $this->controller->listGetConfig($definition);
         $class = $listConfig->modelClass;
