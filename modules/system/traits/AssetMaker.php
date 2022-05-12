@@ -299,11 +299,7 @@ trait AssetMaker
             return $fileName;
         }
 
-        if ($assetUrl = config('app.asset_url')) {
-            $assetPath = $assetUrl . '/' . ltrim($assetPath, '/');
-        }
-
-        return $assetPath . '/' . $fileName;
+        return Url::asset($assetPath . '/' . $fileName);
     }
 
     /**
