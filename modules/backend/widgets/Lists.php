@@ -245,10 +245,7 @@ class Lists extends WidgetBase
             $this->addJs('/modules/system/assets/ui/js/list.sortable.js', 'core');
             $this->showSorting = false;
             $this->showTree = false;
-
-            $this->reorderColumn = $this->model->getSortOrderColumn();
         }
-
     }
 
     /**
@@ -558,6 +555,11 @@ class Lists extends WidgetBase
             // Set the sorting column to $relation_count if useRelationCount enabled
             if (isset($column->relation) && ($column->config['useRelationCount'] ?? false)) {
                 $sortColumn = Str::snake($column->relation) . '_count';
+            }
+
+            if ($this->reorder) {
+                $sortColumn = $this->model->getSortOrderColumn();
+                $this->sortDirection = 'ASC';
             }
 
             $query->orderBy($sortColumn, $this->sortDirection);
@@ -1607,11 +1609,6 @@ class Lists extends WidgetBase
      */
     public function getSortColumn()
     {
-        if ($this->reorder) {
-            $sortColumn = $this->reorderColumn;
-            $this->sortDirection = 'ASC';
-        }
-
         if (!$this->isSortable()) {
             return false;
         }
