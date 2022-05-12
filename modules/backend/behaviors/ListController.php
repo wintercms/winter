@@ -732,11 +732,11 @@ class ListController extends ControllerBehavior
         return $records;
     }
 
-    /**     
+    /**
      * Returns the sort order value for a specific record.
-     */     
+     */
     public function getRecordSortOrder($record)
-    {       
+    {
         return $record->{$record->getSortOrderColumn()};
-    }   
+    }
 }
