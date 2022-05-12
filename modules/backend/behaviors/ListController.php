@@ -160,6 +160,10 @@ class ListController extends ControllerBehavior
             }
         }
 
+        if (isset($listConfig->reorder) && $listConfig->reorder) {
+            $columnConfig->definition = $definition;
+        }
+
         /*
          * List Widget with extensibility
          */
@@ -605,9 +609,9 @@ class ListController extends ControllerBehavior
      * Validate the supplied form model.
      * @return void
      */
-    protected function validateModel()
+    protected function validateModel($definition=null)
     {
-        $model = $this->reorderGetModel();
+        $model = $this->controller->reorderGetModel($definition);
         $modelTraits = class_uses($model);
 
         if (
@@ -634,7 +638,8 @@ class ListController extends ControllerBehavior
 
     public function onReorder()
     {
-        $model = $this->validateModel();
+        $definition = post('definition', $this->primaryDefinition);
+        $model = $this->validateModel($definition);
 
         /*
          * Simple
@@ -679,22 +684,14 @@ class ListController extends ControllerBehavior
             }
         }
 
-        return $this->listRefresh();
+        return $this->listRefresh($definition);
     }
 
-    public function reorderGetModel()
+    public function reorderGetModel($definition=null)
     {
-        #if ($this->model !== null) {
-        #    return $this->model;
-        #}
-
-        $modelClass = $this->getConfig('modelClass');
-
-        if (!$modelClass) {
-            throw new ApplicationException('Please specify the modelClass property for reordering');
-        }
-
-        return $this->model = new $modelClass;
+        $listConfig = $this->controller->listGetConfig($definition);
+        $class = $listConfig->modelClass;
+        return new $class;
     }
 
     /**
@@ -714,7 +711,8 @@ class ListController extends ControllerBehavior
     protected function getRecords()
     {
         $records = null;
-        $model = $this->controller->reorderGetModel();
+        #$model = $this->controller->reorderGetModel();
+        $model = $this->controller->validateModel();
         $query = $model->newQuery();
 
         $this->controller->reorderExtendQuery($query);

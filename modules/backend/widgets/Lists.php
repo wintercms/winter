@@ -46,6 +46,11 @@ class Lists extends WidgetBase
     public $model;
 
     /**
+     * @var List config definition
+     */
+    public $definition;
+
+    /**
      * @var string Link for each record row. Replace :id with the record id.
      */
     public $recordUrl;
@@ -213,6 +218,7 @@ class Lists extends WidgetBase
             'recordsPerPage',
             'perPageOptions',
             'reorder',
+            'definition',
             'showSorting',
             'defaultSort',
             'showCheckboxes',
@@ -244,7 +250,6 @@ class Lists extends WidgetBase
         if ($this->reorder) {
             $this->addJs('/modules/system/assets/ui/js/list.sortable.js', 'core');
             $this->showSorting = false;
-            $this->showTree = false;
         }
     }
 
@@ -281,6 +286,7 @@ class Lists extends WidgetBase
         $this->vars['showPageNumbers'] = $this->showPageNumbers;
         $this->vars['showSorting'] = $this->showSorting;
         $this->vars['reorder'] = $this->reorder;
+        $this->vars['definition'] = $this->definition;
         $this->vars['sortColumn'] = $this->getSortColumn();
         $this->vars['sortDirection'] = $this->sortDirection;
         $this->vars['showTree'] = $this->showTree;
@@ -799,17 +805,6 @@ class Lists extends WidgetBase
         if (!isset($this->columns) || !is_array($this->columns) || !count($this->columns)) {
             $class = get_class($this->model instanceof Model ? $this->model : $this->controller);
             throw new ApplicationException(Lang::get('backend::lang.list.missing_columns', compact('class')));
-        }
-
-        if ($this->reorder) {
-            $this->allColumns['sort_handle'] = $this->makeListColumn('sort_handle', [
-                'label' => '',
-                'path' => '~/modules/backend/widgets/lists/partials/_list_sort_handle.htm',
-                'type' => 'partial',
-                'width' => '20px',
-                'sortable' => false,
-                'clickable' => false,
-            ]);
         }
 
         $this->addColumns($this->columns);

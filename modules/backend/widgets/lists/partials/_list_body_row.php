@@ -2,8 +2,9 @@
 $expanded = $showTree ? $this->isTreeNodeExpanded($record) : null;
 $childRecords = $showTree ? $record->getChildren() : null;
 $treeLevelClass = $showTree ? 'list-tree-level-'.$treeLevel : '';
+$draggable = ($reorder && $showTree) ? ($treeLevel === 0) : $reorder;
 ?>
-    <tr class="<?= $treeLevelClass ?> <?= $this->getRowClass($record) ?>" <?= $reorder ? 'draggable="true"' : '' ?>>
+    <tr class="<?= $treeLevelClass ?> <?= $this->getRowClass($record) ?>" <?= $draggable ? 'draggable="true"' : '' ?>>
     <?php if ($showCheckboxes): ?>
         <?= $this->makePartial('list_body_checkbox', ['record' => $record]) ?>
     <?php endif ?>
@@ -14,6 +15,10 @@ $treeLevelClass = $showTree ? 'list-tree-level-'.$treeLevel : '';
             'expanded' => $expanded,
             'childCount' => $record->getChildCount()
         ]) ?>
+    <?php endif ?>
+
+    <?php if ($reorder): ?>
+        <?= $this->makePartial('list_body_handle', ['draggable' => $draggable]) ?>
     <?php endif ?>
 
     <?php $index = $url = 0; foreach ($columns as $key => $column): ?>

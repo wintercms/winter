@@ -12,6 +12,7 @@
 
         this.options = options || {};
 		this.sortOrders = []
+		this.definition = $el.data('definition')
 
         var scrollClassContainer = options.scrollClassContainer !== undefined
             ? options.scrollClassContainer
@@ -105,7 +106,7 @@
 		}.bind(this))
 
 		this.$el.request('onReorder', {
-			data: { sort_orders: this.sortOrders, record_ids: recordIds },
+			data: { sort_orders: this.sortOrders, record_ids: recordIds, definition: this.definition },
 			loading: $.wn.stripeLoadIndicator,
 		})
 	}   
