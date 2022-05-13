@@ -67,10 +67,10 @@ class VersionManager
 
     /**
      * Updates a single plugin by its code or object with it's latest changes.
-     * If the $stopOnVersion parameter is specified, the process stops after
+     * If the $stopAfterVersion parameter is specified, the process stops after
      * the specified version is applied.
      */
-    public function updatePlugin($plugin, $stopOnVersion = null)
+    public function updatePlugin($plugin, $stopAfterVersion = null)
     {
         $code = is_string($plugin) ? $plugin : $this->pluginManager->getIdentifier($plugin);
 
@@ -82,7 +82,7 @@ class VersionManager
         $databaseVersion = $this->getDatabaseVersion($code);
 
         // No updates needed
-        if ($currentVersion == $databaseVersion) {
+        if ($currentVersion === (string) $databaseVersion) {
             $this->note(' - <info>Nothing to update.</info>');
             return;
         }
@@ -92,7 +92,7 @@ class VersionManager
         foreach ($newUpdates as $version => $details) {
             $this->applyPluginUpdate($code, $version, $details);
 
-            if ($stopOnVersion === $version) {
+            if ($stopAfterVersion === $version) {
                 return true;
             }
         }
@@ -117,7 +117,7 @@ class VersionManager
 
         $code = $plugin->getPluginIdentifier();
 
-        // add history up to $currentVersion
+        // Replace existing migration information with the new identifier
         if ($versions = $this->getOldFileVersions($code, $currentVersion)) {
             foreach ($versions as $version => $details) {
                 list($comments, $scripts) = $this->extractScriptsAndComments($details);
@@ -137,17 +137,17 @@ class VersionManager
                     $this->applyDatabaseComment($code, $version, $comment);
                 }
             }
+
+            // delete replaced plugin history
+            Db::table('system_plugin_history')->where('code', $replace)->delete();
+
+            // replace installed version
+            Db::table('system_plugin_versions')
+                ->where('code', '=', $replace)
+                ->update([
+                    'code' => $code
+                ]);
         }
-
-        // delete replaced plugin history
-        Db::table('system_plugin_history')->where('code', $replace)->delete();
-
-        // replace installed version
-        Db::table('system_plugin_versions')
-            ->where('code', '=', $replace)
-            ->update([
-                'code' => $code
-            ]);
     }
 
     /**
@@ -330,7 +330,7 @@ class VersionManager
         }
 
         $versions = $this->getFileVersions($code);
-        $position = array_search($version, array_keys($versions));
+        $position = array_search($version, array_keys($versions), true);
 
         return array_slice($versions, ++$position);
     }
@@ -353,13 +353,26 @@ class VersionManager
             $versionInfo = [];
         }
 
-        if ($versionInfo) {
-            uksort($versionInfo, function ($a, $b) {
+        $normalizedVersions = [];
+        foreach ($versionInfo as $version => $info) {
+            $normalizedVersions[$this->normalizeVersion($version)] = $info;
+        }
+
+        if ($normalizedVersions) {
+            uksort($normalizedVersions, function ($a, $b) {
                 return version_compare($a, $b);
             });
         }
 
-        return $this->fileVersions[$code] = $versionInfo;
+        return $this->fileVersions[$code] = $normalizedVersions;
+    }
+
+    /**
+     * Normalize a version identifier by removing the optional 'v' prefix
+     */
+    protected function normalizeVersion(string $version): string
+    {
+        return ltrim($version, 'v');
     }
 
     /**
