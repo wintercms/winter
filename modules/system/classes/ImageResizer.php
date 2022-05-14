@@ -231,6 +231,9 @@ class ImageResizer
                 $disk->setPathPrefix($realPath);
             }
         }
+        
+        // Include last modified time to tie generated images to the source image
+        $mtime = $disk->lastModified($this->image['path']);
 
         // Handle disks that can't be serialized by referencing them by their
         // filesystems.php config name
@@ -244,6 +247,7 @@ class ImageResizer
             'image' => [
                 'disk' => $disk,
                 'path' => $this->image['path'],
+                'mtime' => $mtime,
                 'source' => $this->image['source'],
             ],
             'width' => $this->width,
