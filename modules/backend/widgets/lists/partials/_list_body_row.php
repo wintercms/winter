@@ -3,9 +3,14 @@ $expanded = $showTree ? $this->isTreeNodeExpanded($record) : null;
 $childRecords = $showTree ? $record->getChildren() : null;
 $treeLevelClass = $showTree ? 'list-tree-level-'.$treeLevel : '';
 $hasCheckboxesClass = $showCheckboxes ? 'has-list-checkbox' : '';
-$draggable = ($reorder && $showTree) ? ($treeLevel === 0) : $reorder;
+$draggable = ($reorder && $showTree) ? ($reorderSortMode === 'nested' || $treeLevel === 0) : $reorder;
 ?>
-    <tr class="<?= $treeLevelClass ?> <?= $hasCheckboxesClass ?> <?= $this->getRowClass($record) ?>" <?= $draggable ? 'draggable="true"' : '' ?>>
+    <tr
+        class="<?= $treeLevelClass ?> <?= $hasCheckboxesClass ?> <?= $this->getRowClass($record) ?>"
+        data-record-id="<?= e($record->getKey()) ?>"
+        <?= $reorderSortMode === 'simple' ? 'data-record-sort-order="' . e($this->controller->getRecordSortOrder($record)) . '"' : '' ?>
+        <?= $draggable ? 'draggable="true"' : '' ?>
+    >
     <?php if ($showCheckboxes): ?>
         <?= $this->makePartial('list_body_checkbox', ['record' => $record]) ?>
     <?php endif ?>

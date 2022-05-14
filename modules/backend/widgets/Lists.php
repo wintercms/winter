@@ -86,6 +86,11 @@ class Lists extends WidgetBase
     public $reorder = false;
 
     /**
+     * @var string reorder sort mode (simple|nested)
+     */
+    public $reorderSortMode;
+
+    /**
      * @var mixed A default sort column to look for.
      */
     public $defaultSort;
@@ -286,6 +291,7 @@ class Lists extends WidgetBase
         $this->vars['showPageNumbers'] = $this->showPageNumbers;
         $this->vars['showSorting'] = $this->showSorting;
         $this->vars['reorder'] = $this->reorder;
+        $this->vars['reorderSortMode'] = $this->reorderSortMode;
         $this->vars['definition'] = $this->definition;
         $this->vars['sortColumn'] = $this->getSortColumn();
         $this->vars['sortDirection'] = $this->sortDirection;

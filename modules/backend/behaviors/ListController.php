@@ -160,14 +160,13 @@ class ListController extends ControllerBehavior
             }
         }
 
-        if (isset($listConfig->reorder) && $listConfig->reorder) {
-            $columnConfig->definition = $definition;
-        }
-
         /*
          * List Widget with extensibility
          */
         $widget = $this->makeWidget(\Backend\Widgets\Lists::class, $columnConfig);
+
+        $widget->definition = $definition;
+        $widget->reorderSortMode = $this->reorderGetSortMode($model);
 
         $widget->bindEvent('list.extendColumns', function () use ($widget) {
             $this->controller->listExtendColumns($widget);
@@ -605,13 +604,8 @@ class ListController extends ControllerBehavior
         });
     }
 
-    /**
-     * Validate the supplied form model.
-     * @return void
-     */
-    protected function validateModel($definition = null)
+    protected function reorderGetSortMode($model)
     {
-        $model = $this->controller->reorderGetModel($definition);
         $modelTraits = class_uses($model);
 
         if (
@@ -620,31 +614,29 @@ class ListController extends ControllerBehavior
             isset($modelTraits[\October\Rain\Database\Traits\Sortable::class]) ||
             $model->isClassExtendedWith(\October\Rain\Database\Behaviors\Sortable::class)
         ) {
-            $this->sortMode = 'simple';
+            return 'simple';
         }
         elseif (
             isset($modelTraits[\Winter\Storm\Database\Traits\NestedTree::class]) ||
             isset($modelTraits[\October\Rain\Database\Traits\NestedTree::class])
         ) {
-            $this->sortMode = 'nested';
-            $this->showTree = true;
+            return 'nested';
         }
         else {
-            throw new ApplicationException('The model must implement the Sortable trait/behavior or the NestedTree trait.');
+            return null;
         }
-
-        return $model;
     }
 
     public function onReorder()
     {
         $definition = post('definition', $this->primaryDefinition);
-        $model = $this->validateModel($definition);
+        $model = $this->listGetModel($definition);
+        $sortMode = $this->reorderGetSortMode($model);
 
         /*
          * Simple
          */
-        if ($this->sortMode == 'simple') {
+        if ($sortMode == 'simple') {
             if (
                 (!$ids = post('record_ids')) ||
                 (!$orders = post('sort_orders'))
@@ -657,7 +649,7 @@ class ListController extends ControllerBehavior
         /*
          * Nested set
          */
-        elseif ($this->sortMode == 'nested') {
+        elseif ($sortMode == 'nested') {
             $sourceNode = $model->find(post('sourceNode'));
             $targetNode = post('targetNode') ? $model->find(post('targetNode')) : null;
 
@@ -687,7 +679,7 @@ class ListController extends ControllerBehavior
         return $this->listRefresh($definition);
     }
 
-    public function reorderGetModel($definition = null)
+    public function listGetModel($definition = null)
     {
         $listConfig = $this->controller->listGetConfig($definition);
         $class = $listConfig->modelClass;
@@ -711,7 +703,7 @@ class ListController extends ControllerBehavior
     protected function getRecords()
     {
         $records = null;
-        $model = $this->controller->validateModel();
+        $model = $this->controller->listGetModel();
         $query = $model->newQuery();
 
         $this->controller->reorderExtendQuery($query);
