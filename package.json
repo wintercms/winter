@@ -4,6 +4,7 @@
     },
     "workspaces": {
         "packages": [
+            "modules/backend",
             "modules/system"
         ]
     }

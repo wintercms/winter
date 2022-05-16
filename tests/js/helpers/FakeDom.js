@@ -8,68 +8,98 @@ export default class FakeDom
     constructor(content, options)
     {
         if (options === undefined) {
-            options = {}
+            options = {};
         }
 
         // Header settings
-        this.url = options.url || `file://${path.resolve(__dirname, '../../')}`
-        this.referer = options.referer
-        this.contentType = options.contentType || 'text/html'
+        this.url = options.url || `file://${path.resolve(__dirname, '../../')}`;
+        this.referer = options.referer;
+        this.contentType = options.contentType || 'text/html';
 
         // Content settings
-        this.head = options.head || '<!DOCTYPE html><html><head><title>Fake document</title></head>'
-        this.bodyStart = options.bodyStart || '<body>'
-        this.content = content || ''
-        this.bodyEnd = options.bodyEnd || '</body>'
-        this.foot = options.foot || '</html>'
+        this.headStart = options.headStart || '<!DOCTYPE html><html><head><title>Fake document</title>';
+        this.headEnd = options.headEnd || '</head>';
+        this.bodyStart = options.bodyStart || '<body>';
+        this.content = content || '';
+        this.bodyEnd = options.bodyEnd || '</body>';
+        this.foot = options.foot || '</html>';
 
         // Callback settings
         this.beforeParse = (typeof options.beforeParse === 'function')
             ? options.beforeParse
-            : undefined
+            : undefined;
 
-        // Scripts
-        this.scripts = []
-        this.inline = []
+        // Assets
+        this.css = [];
+        this.scripts = [];
+        this.inline = [];
     }
 
     static new(content, options)
     {
-        return new FakeDom(content, options)
+        return new FakeDom(content, options);
     }
 
     setContent(content)
     {
-        this.content = content
-        return this
+        this.content = content;
+        return this;
     }
 
     addScript(script, id)
     {
         if (Array.isArray(script)) {
             script.forEach((item) => {
-                this.addScript(item)
-            })
+                this.addScript(item);
+            });
 
-            return this
+            return this;
         }
 
-        let url = new URL(script, this.url)
-        let base = new URL(this.url)
+        let url = new URL(script, this.url);
+        let base = new URL(this.url);
 
         if (url.host === base.host) {
             this.scripts.push({
                 url: `${url.pathname}`,
                 id: id || this.generateId(),
-            })
+            });
         } else {
             this.scripts.push({
                 url,
                 id: id || this.generateId(),
-            })
+            });
         }
 
-        return this
+        return this;
+    }
+
+    addCss(css, id)
+    {
+        if (Array.isArray(css)) {
+            css.forEach((item) => {
+                this.addCss(item)
+            });
+
+            return this;
+        }
+
+        let url = new URL(css, this.url);
+        let base = new URL(this.url);
+
+        if (url.host === base.host) {
+            this.css.push({
+                url: `${url.pathname}`,
+                id: id || this.generateId(),
+            });
+        } else {
+            this.css.push({
+                url,
+                id: id || this.generateId(),
+            });
+        }
+
+        return this;
     }
 
     addInlineScript(script, id)
@@ -78,23 +108,23 @@ export default class FakeDom
             script,
             id: id || this.generateId(),
             element: null,
-        })
+        });
 
-        return this
+        return this;
     }
 
     generateId()
     {
-        let id = 'script-'
-        let chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'
-        let charLength = chars.length
+        let id = 'script-';
+        let chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-';
+        let charLength = chars.length;
 
         for (let i = 0; i < 10; i++) {
-            let currentChar = chars.substr(Math.floor(Math.random() * charLength), 1)
-            id = `${id}${currentChar}`
+            let currentChar = chars.substr(Math.floor(Math.random() * charLength), 1);
+            id = `${id}${currentChar}`;
         }
 
-        return id
+        return id;
     }
 
     render(content)
@@ -116,41 +146,44 @@ export default class FakeDom
                         pretendToBeVisual: true,
                         beforeParse: this.beforeParse,
                     }
-                )
+                );
 
                 dom.window.resolver = () => {
-                    resolve(dom)
-                }
+                    resolve(dom);
+                };
             } catch (e) {
-                reject(e)
+                reject(e);
             }
-        })
+        });
     }
 
     _renderContent()
     {
         // Create content list
-        const content = [
-            this.head,
-            this.bodyStart,
-            this.content,
-        ]
+        const content = [this.headStart];
+
+        // Embed CSS
+        this.css.forEach((css) => {
+            content.push(`<link rel="stylesheet" href="${css.url}" id="${css.id}">`);
+        });
+
+        content.push(this.headEnd, this.bodyStart, this.content);
 
         // Embed scripts
         this.scripts.forEach((script) => {
-            content.push(`<script src="${script.url}" id="${script.id}"></script>`)
-        })
+            content.push(`<script src="${script.url}" id="${script.id}"></script>`);
+        });
         this.inline.forEach((script) => {
-            content.push(`<script id="${script.id}">${script.script}</script>`)
-        })
+            content.push(`<script id="${script.id}">${script.script}</script>`);
+        });
 
         // Add resolver
-        content.push(`<script>window.resolver()</script>`)
+        content.push(`<script>window.resolver()</script>`);
 
         // Add final content
-        content.push(this.bodyEnd)
-        content.push(this.foot)
+        content.push(this.bodyEnd);
+        content.push(this.foot);
 
-        return content.join('\n')
+        return content.join('\n');
     }
 }

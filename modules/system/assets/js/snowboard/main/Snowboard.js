@@ -29,7 +29,9 @@ export default class Snowboard {
         this.debugEnabled = (typeof debug === 'boolean' && debug === true);
         this.autoInitSingletons = (typeof autoSingletons === 'boolean' && autoSingletons === false);
         this.plugins = {};
+        this.listeners = {};
         this.foundBaseUrl = null;
+        this.domReady = false;
 
         this.attachAbstracts();
         this.loadUtilities();
@@ -77,6 +79,7 @@ export default class Snowboard {
                 this.initialiseSingletons();
             }
             this.globalEvent('ready');
+            this.domReady = true;
         });
     }
 
@@ -127,7 +130,8 @@ export default class Snowboard {
 
         this.debug(`Plugin "${name}" registered`);
 
-        // Check if any singletons now have their dependencies fulfilled, and fire their "ready" handler.
+        // Check if any singletons now have their dependencies fulfilled, and fire their "ready" handler if we're
+        // in a ready state.
         Object.values(this.getPlugins()).forEach((plugin) => {
             if (
                 plugin.isSingleton()
@@ -135,6 +139,7 @@ export default class Snowboard {
                 && plugin.dependenciesFulfilled()
                 && plugin.hasMethod('listens')
                 && Object.keys(plugin.callMethod('listens')).includes('ready')
+                && this.domReady
             ) {
                 const readyMethod = plugin.callMethod('listens').ready;
                 plugin.callMethod(readyMethod);
@@ -250,6 +255,61 @@ export default class Snowboard {
     }
 
     /**
+     * Add a simple ready listener.
+     *
+     * Synonymous with jQuery's "$(document).ready()" functionality, this allows inline scripts to
+     * attach themselves to Snowboard immediately but only fire when the DOM is ready.
+     *
+     * @param {Function} callback
+     */
+    ready(callback) {
+        if (this.domReady) {
+            callback();
+        }
+
+        this.on('ready', callback);
+    }
+
+    /**
+     * Adds a simple listener for an event.
+     *
+     * This can be used for ad-hoc scripts that don't need a full plugin. The given callback will be
+     * called when the event name provided fires. This works for both normal and Promise events. For
+     * a Promise event, your callback must return a Promise.
+     *
+     * @param {String} eventName
+     * @param {Function} callback
+     */
+    on(eventName, callback) {
+        if (!this.listeners[eventName]) {
+            this.listeners[eventName] = [];
+        }
+
+        if (!this.listeners[eventName].includes(callback)) {
+            this.listeners[eventName].push(callback);
+        }
+    }
+
+    /**
+     * Removes a simple listener for an event.
+     *
+     * @param {String} eventName
+     * @param {Function} callback
+     */
+    off(eventName, callback) {
+        if (!this.listeners[eventName]) {
+            return;
+        }
+
+        const index = this.listeners[eventName].indexOf(callback);
+        if (index === -1) {
+            return;
+        }
+
+        this.listeners[eventName].splice(index, 1);
+    }
+
+    /**
      * Calls a global event to all registered plugins.
      *
      * If any plugin returns a `false`, the event is considered cancelled.
@@ -260,7 +320,7 @@ export default class Snowboard {
     globalEvent(eventName, ...parameters) {
         this.debug(`Calling global event "${eventName}"`);
 
-        // Find out which plugins listen to this event - if none listen to it, return true.
+        // Find plugins listening to the event.
         const listeners = this.listensToEvent(eventName);
         if (listeners.length === 0) {
             this.debug(`No listeners found for global event "${eventName}"`);
@@ -300,6 +360,23 @@ export default class Snowboard {
             });
         });
 
+        // Find ad-hoc listeners for this event.
+        if (!cancelled && this.listeners[eventName] && this.listeners[eventName].length > 0) {
+            this.debug(`Found ${this.listeners[eventName].length} ad-hoc listener(s) for global event "${eventName}"`);
+
+            this.listeners[eventName].forEach((listener) => {
+                // If a listener has cancelled the event, no further listeners are considered.
+                if (cancelled) {
+                    return;
+                }
+
+                if (listener(...parameters) === false) {
+                    cancelled = true;
+                    this.debug(`Global event "${eventName} cancelled by an ad-hoc listener.`);
+                }
+            });
+        }
+
         return !cancelled;
     }
 
@@ -314,7 +391,7 @@ export default class Snowboard {
     globalPromiseEvent(eventName, ...parameters) {
         this.debug(`Calling global promise event "${eventName}"`);
 
-        // Find out which plugins listen to this event - if none listen to it, return a resolved promise.
+        // Find plugins listening to this event.
         const listeners = this.listensToEvent(eventName);
         if (listeners.length === 0) {
             this.debug(`No listeners found for global promise event "${eventName}"`);
@@ -346,6 +423,20 @@ export default class Snowboard {
                 promises.push(instancePromise);
             });
         });
+
+        // Find ad-hoc listeners listening to this event.
+        if (this.listeners[eventName] && this.listeners[eventName].length > 0) {
+            this.debug(`Found ${this.listeners[eventName].length} ad-hoc listener(s) for global promise event "${eventName}"`);
+
+            this.listeners[eventName].forEach((listener) => {
+                const listenerPromise = listener(...parameters);
+                if (listenerPromise instanceof Promise === false) {
+                    return;
+                }
+
+                promises.push(listenerPromise);
+            });
+        }
 
         if (promises.length === 0) {
             return Promise.resolve();

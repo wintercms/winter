@@ -1,7 +1,7 @@
 {
-    "name": "@wintercms/wn-system-module",
+    "name": "@wintercms/wn-backend-module",
     "version": "1.0.0",
-    "description": "The System module for Winter CMS.",
+    "description": "The Backend module for Winter CMS.",
     "private": true,
     "repository": {
         "type": "git",
@@ -23,9 +23,6 @@
         "url": "https://github.com/wintercms/winter/issues"
     },
     "homepage": "https://wintercms.com/",
-    "dependencies": {
-        "js-cookie": "^3.0.1"
-    },
     "devDependencies": {
         "babel-plugin-module-resolver": "^4.1.0",
         "eslint": "^8.6.0",
