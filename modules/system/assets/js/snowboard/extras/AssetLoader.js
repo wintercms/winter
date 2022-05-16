@@ -25,7 +25,7 @@ export default class AssetLoader extends window.Snowboard.Singleton {
      */
     listens() {
         return {
-            ajaxLoadAssets: 'processAssets',
+            ajaxLoadAssets: 'load',
         };
     }
 
@@ -47,7 +47,7 @@ export default class AssetLoader extends window.Snowboard.Singleton {
      * @param {Object} assets
      * @returns {Promise}
      */
-    processAssets(assets) {
+    load(assets) {
         return new Promise((resolve, reject) => {
             const promises = [];
 
