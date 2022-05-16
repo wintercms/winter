@@ -151,9 +151,6 @@ export default class DataConfig extends Snowboard.PluginBase {
 
         /* eslint-disable */
         for (const key in this.element.dataset) {
-            if (key === 'sticky') {
-                continue;
-            }
             if (this.acceptedConfigs === true || this.acceptedConfigs.includes(key)) {
                 config[key] = this.coerceValue(this.element.dataset[key]);
             }
