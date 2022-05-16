@@ -105,11 +105,11 @@ export default class AssetLoader extends window.Snowboard.Singleton {
             domScript.setAttribute('type', 'text/javascript');
             domScript.setAttribute('src', script);
             domScript.addEventListener('load', () => {
-                this.snowboard.globalEvent('backend.assetLoaded', 'script', script, domScript);
+                this.snowboard.globalEvent('assetLoader.loaded', 'script', script, domScript);
                 resolve();
             });
             domScript.addEventListener('error', () => {
-                this.snowboard.globalEvent('backend.assetError', 'script', script, domScript);
+                this.snowboard.globalEvent('assetLoader.error', 'script', script, domScript);
                 reject(new Error(`Unable to load script file: "${script}"`));
             });
             document.body.append(domScript);
@@ -137,11 +137,11 @@ export default class AssetLoader extends window.Snowboard.Singleton {
             domCss.setAttribute('rel', 'stylesheet');
             domCss.setAttribute('href', style);
             domCss.addEventListener('load', () => {
-                this.snowboard.globalEvent('backend.assetLoaded', 'style', style, domCss);
+                this.snowboard.globalEvent('assetLoader.loaded', 'style', style, domCss);
                 resolve();
             });
             domCss.addEventListener('error', () => {
-                this.snowboard.globalEvent('backend.assetError', 'style', style, domCss);
+                this.snowboard.globalEvent('assetLoader.error', 'style', style, domCss);
                 reject(new Error(`Unable to load stylesheet file: "${style}"`));
             });
             document.head.append(domCss);
@@ -160,11 +160,11 @@ export default class AssetLoader extends window.Snowboard.Singleton {
         return new Promise((resolve, reject) => {
             const img = new Image();
             img.addEventListener('load', () => {
-                this.snowboard.globalEvent('backend.assetLoaded', 'image', image, img);
+                this.snowboard.globalEvent('assetLoader.loaded', 'image', image, img);
                 resolve();
             });
             img.addEventListener('error', () => {
-                this.snowboard.globalEvent('backend.assetError', 'image', image, img);
+                this.snowboard.globalEvent('assetLoader.error', 'image', image, img);
                 reject(new Error(`Unable to load image file: "${image}"`));
             });
             img.src = image;
