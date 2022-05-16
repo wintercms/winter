@@ -60,7 +60,8 @@ class ServiceProvider extends ModuleServiceProvider
          * Register other module providers
          */
         foreach (Config::get('cms.loadModules', []) as $module) {
-            if (strtolower(trim($module)) != 'system') {
+            if (strtolower(
+                trim($module)) != 'system') {
                 App::register('\\' . $module . '\ServiceProvider');
             }
         }
@@ -81,8 +82,7 @@ class ServiceProvider extends ModuleServiceProvider
      *
      * @return void
      */
-    public function boot()
-    {
+    public function boot() {
         // Fix use of Storage::url() for local disks that haven't been configured correctly
         foreach (Config::get('filesystems.disks') as $key => $config) {
             if ($config['driver'] === 'local' && ends_with($config['root'], '/storage/app') && empty($config['url'])) {
@@ -141,7 +141,9 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Requests
          */
-        $path = RouterHelper::normalizeUrl(Request::path());
+        $path = RouterHelper::normalizeUrl(Request::path(
+
+        ));
         $backendUri = RouterHelper::normalizeUrl(Config::get('cms.backendUri', 'backend'));
         foreach ($requests as $request) {
             if (substr($request, 0, 1) == '@') {

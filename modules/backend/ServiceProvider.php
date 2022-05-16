@@ -18,8 +18,7 @@ class ServiceProvider extends ModuleServiceProvider
      *
      * @return void
      */
-    public function register()
-    {
+    public function register() {
         $this->registerConsole();
         $this->registerMailer();
         $this->registerAssetBundles();
@@ -52,7 +51,9 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerConsole()
     {
         $this->registerConsoleCommand('create.controller', \Backend\Console\CreateController::class);
-        $this->registerConsoleCommand('create.formwidget', \Backend\Console\CreateFormWidget::class);
+        $this->registerConsoleCommand(
+            'create.formwidget', \Backend\Console\CreateFormWidget::class
+        );
         $this->registerConsoleCommand('create.reportwidget', \Backend\Console\CreateReportWidget::class);
 
         $this->registerConsoleCommand('winter.passwd', \Backend\Console\WinterPasswd::class);
@@ -78,7 +79,8 @@ class ServiceProvider extends ModuleServiceProvider
     {
         CombineAssets::registerCallback(function ($combiner) {
             $combiner->registerBundle('~/modules/backend/assets/less/winter.less');
-            $combiner->registerBundle('~/modules/backend/assets/js/winter.js');
+            $combiner->registerBundle(
+                '~/modules/backend/assets/js/winter.js');
             $combiner->registerBundle('~/modules/backend/widgets/table/assets/js/build.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/js/mediamanager-browser.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/less/mediamanager.less');
