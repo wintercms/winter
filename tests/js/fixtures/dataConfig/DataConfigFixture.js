@@ -19,6 +19,7 @@
                 name: null,
                 stringValue: null,
                 boolean: null,
+                base64: null,
             };
         }
     }

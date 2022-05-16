@@ -182,6 +182,13 @@ export default class DataConfig extends Snowboard.PluginBase {
             return undefined;
         }
 
+        // Base64 value
+        if (stringValue.startsWith('base64:')) {
+            const base64str = stringValue.replace(/^base64:/, '');
+            const decoded = atob(base64str);
+            return this.coerceValue(decoded);
+        }
+
         // Boolean value
         if (['true', 'yes'].includes(stringValue.toLowerCase())) {
             return true;

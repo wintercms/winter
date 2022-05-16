@@ -30,6 +30,7 @@ describe('The Data Config extra functionality', function () {
                     data-name="Ben"
                     data-boolean="false"
                     data-extra-attr="This should not be available"
+                    data-base64="base64:SSdtIGEgQmFzZTY0LWRlY29kZWQgc3RyaW5n"
                 ></div>`
             )
             .then(
@@ -52,6 +53,7 @@ describe('The Data Config extra functionality', function () {
                             name: null,
                             stringValue: 'Hi there',
                             boolean: true,
+                            base64: null,
                         });
                     } catch (error) {
                         done(error);
@@ -72,6 +74,8 @@ describe('The Data Config extra functionality', function () {
                         // Extra attr is specified above, but it should not be available as a config value
                         // because it's not part of the `defaults()` in the fixture
                         expect(instanceTwo.config.get('extraAttr')).toBeUndefined();
+                        // Base-64 decoded string
+                        expect(instanceTwo.config.get('base64')).toBe('I\'m a Base64-decoded string');
 
                         done();
                     } catch (error) {
@@ -101,6 +105,9 @@ describe('The Data Config extra functionality', function () {
                     data-name="Ben"
                     data-boolean="false"
                     data-extra-attr="This should now be available"
+                    data-json="{ &quot;name&quot;: &quot;Ben&quot; }"
+                    data-another-base64="base64:dHJ1ZQ=="
+                    data-json-base64="base64:eyAiaWQiOiAxLCAidGl0bGUiOiAiU29tZSB0aXRsZSIgfQ=="
                 ></div>`
             )
             .then(
@@ -118,9 +125,17 @@ describe('The Data Config extra functionality', function () {
                         expect(instance.config.get('stringValue')).toBe('Hi there again');
                         expect(instance.config.get('missing')).toBeUndefined();
                         expect(instance.config.get('boolean')).toBe(false);
-                        // Extra attr is specified above, and although it's not part of the
-                        // defaults, it should be available because "acceptAllDataConfigs" is true
+                        // These attributes below are specified above, and although they're not part of the
+                        // defaults, they should be available because "acceptAllDataConfigs" is true
                         expect(instance.config.get('extraAttr')).toBe('This should now be available');
+                        expect(instance.config.get('json')).toMatchObject({
+                            name: 'Ben'
+                        });
+                        expect(instance.config.get('anotherBase64')).toBe(true);
+                        expect(instance.config.get('jsonBase64')).toMatchObject({
+                            id: 1,
+                            title: 'Some title',
+                        });
 
                         expect(instance.config.get()).toMatchObject({
                             id: null,
@@ -128,6 +143,14 @@ describe('The Data Config extra functionality', function () {
                             stringValue: 'Hi there again',
                             boolean: false,
                             extraAttr: 'This should now be available',
+                            json: {
+                                name: 'Ben',
+                            },
+                            anotherBase64: true,
+                            jsonBase64: {
+                                id: 1,
+                                title: 'Some title',
+                            },
                         });
 
                         done();
