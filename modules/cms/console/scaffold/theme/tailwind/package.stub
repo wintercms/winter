@@ -1,0 +1,12 @@
+{
+    "name": "{{code}}",
+    "private": true,
+    "version": "1.0.0",
+    "devDependencies": {
+        "postcss": "~8.4.x",
+        "postcss-import": "~14.1.x",
+        "tailwindcss": "~3.0.x"
+    },
+    "dependencies": {
+    }
+}

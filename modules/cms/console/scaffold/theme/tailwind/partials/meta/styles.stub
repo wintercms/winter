@@ -1,0 +1,26 @@
+==
+<?php
+use Cms\Classes\Asset;
+use Cms\Classes\Theme;
+function onStart() {
+    // Cache bust the main styles file
+    $styles = (new Asset(Theme::getActiveTheme()))->find('dist/css/theme.css');
+    if ($styles) {
+        $this['lastmodified'] = $styles->mtime;
+    } else {
+        throw new \Exception("Asset files were not detected, try running artisan mix:install && artisan mix:compile -p theme-{{code}}");
+    }
+}
+?>
+==
+<link rel="stylesheet" href="{{ 'assets/dist/css/theme.css' | theme }}?v={{ lastmodified }}">
+
+<style>
+    :root {
+        --primary: {{ this.theme.color_primary }};
+        --secondary: {{ this.theme.color_secondary }};
+    }
+</style>
+
+{% styles %}
+{% placeholder head %}
