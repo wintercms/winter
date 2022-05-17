@@ -44,44 +44,43 @@ export default class AssetLoader extends window.Snowboard.Singleton {
      * This method will return a Promise that resolves when all required assets are loaded. If an
      * asset fails to load, this Promise will be rejected.
      *
+     * ESLint *REALLY* doesn't like this code, but ignore it. It's the only way it works.
+     *
      * @param {Object} assets
      * @returns {Promise}
      */
-    load(assets) {
-        return new Promise((resolve, reject) => {
-            const promises = [];
-
-            if (assets.js && assets.js.length > 0) {
-                assets.js.forEach((script) => {
-                    promises.push(this.loadScript(script));
-                });
+    async load(assets) {
+        if (assets.js && assets.js.length > 0) {
+            for (const script of assets.js) {
+                try {
+                    await this.loadScript(script);
+                } catch (error) {
+                    return Promise.reject(error);
+                }
             }
+        }
 
-            if (assets.css && assets.css.length > 0) {
-                assets.css.forEach((style) => {
-                    promises.push(this.loadStyle(style));
-                });
+        if (assets.css && assets.css.length > 0) {
+            for (const style of assets.css) {
+                try {
+                    await this.loadStyle(style);
+                } catch (error) {
+                    return Promise.reject(error);
+                }
             }
+        }
 
-            if (assets.img && assets.img.length > 0) {
-                assets.img.forEach((image) => {
-                    promises.push(this.loadImage(image));
-                });
+        if (assets.img && assets.img.length > 0) {
+            for (const image of assets.img) {
+                try {
+                    await this.loadImage(image);
+                } catch (error) {
+                    return Promise.reject(error);
+                }
             }
+        }
 
-            if (promises.length === 0) {
-                resolve();
-            }
-
-            Promise.all(promises).then(
-                () => {
-                    resolve();
-                },
-                (error) => {
-                    reject(error);
-                },
-            );
-        });
+        return Promise.resolve();
     }
 
     /**
@@ -98,6 +97,7 @@ export default class AssetLoader extends window.Snowboard.Singleton {
             const loaded = document.querySelector(`script[src="${script}"]`);
             if (loaded) {
                 resolve();
+                return;
             }
 
             // Create script
@@ -130,6 +130,7 @@ export default class AssetLoader extends window.Snowboard.Singleton {
             const loaded = document.querySelector(`link[rel="stylesheet"][href="${style}"]`);
             if (loaded) {
                 resolve();
+                return;
             }
 
             // Create stylesheet
