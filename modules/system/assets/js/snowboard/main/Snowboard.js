@@ -318,7 +318,7 @@ export default class Snowboard {
      * @returns {boolean} If event was not cancelled
      */
     globalEvent(eventName, ...parameters) {
-        this.debug(`Calling global event "${eventName}"`);
+        this.debug(`Calling global event "${eventName}"`, ...parameters);
 
         // Find plugins listening to the event.
         const listeners = this.listensToEvent(eventName);
@@ -452,14 +452,36 @@ export default class Snowboard {
      *
      * @returns {void}
      */
-    debug(...parameters) {
+    debug(message, ...parameters) {
         if (!this.debugEnabled) {
             return;
         }
 
         /* eslint-disable */
-        console.groupCollapsed('%c[Snowboard]', 'color: rgb(45, 167, 199); font-weight: normal;', ...parameters);
-        console.trace();
+        console.groupCollapsed(
+            '%c[Snowboard]',
+            'color: rgb(45, 167, 199); font-weight: normal;',
+            message
+        );
+        if (parameters.length) {
+            console.groupCollapsed(
+                `%cParameters %c(${parameters.length})`,
+                'color: rgb(45, 167, 199); font-weight: bold;',
+                'color: rgb(88, 88, 88); font-weight: normal;'
+            );
+            let index = 0;
+            parameters.forEach((param) => {
+                index += 1;
+                console.log(`%c${index}:`, 'color: rgb(88, 88, 88); font-weight: normal;', param);
+            });
+            console.groupEnd();
+
+            console.groupCollapsed('%cTrace', 'color: rgb(45, 167, 199); font-weight: bold;');
+            console.trace();
+            console.groupEnd();
+        } else {
+            console.trace();
+        }
         console.groupEnd();
         /* eslint-enable */
     }

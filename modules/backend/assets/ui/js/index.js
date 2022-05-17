@@ -10,7 +10,7 @@ if (window.Snowboard === undefined) {
     // Add polyfill for AssetManager
     window.AssetManager = {
         load: (assets, callback) => {
-            Snowboard.assetLoader().load(assets).finally(
+            Snowboard.assetLoader().load(assets).then(
                 () => {
                     if (callback && typeof callback === 'function') {
                         callback();
