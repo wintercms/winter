@@ -1,8 +1,8 @@
 <?php namespace System\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
+use System\Console\BaseScaffoldCommand;
 
-class CreateSettings extends GeneratorCommand
+class CreateSettings extends BaseScaffoldCommand
 {
     /**
      * @var string|null The default command name for lazy loading.
@@ -14,7 +14,7 @@ class CreateSettings extends GeneratorCommand
      */
     protected $signature = 'create:settings
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
-        {settings : The name of the settings model to generate. <info>(eg: BlogSettings)</info>}
+        {settings? : The name of the settings model to generate. <info>(eg: BlogSettings)</info>}
         {--f|force : Overwrite existing files with generated files.}';
 
     /**
@@ -28,6 +28,11 @@ class CreateSettings extends GeneratorCommand
     protected $type = 'Settings Model';
 
     /**
+     * @var string The argument that the generated class name comes from
+     */
+    protected $nameFrom = 'settings';
+
+    /**
      * @var array A mapping of stubs to generated files.
      */
     protected $stubs = [
@@ -36,23 +41,10 @@ class CreateSettings extends GeneratorCommand
     ];
 
     /**
-     * Prepare variables for stubs.
-     *
-     * @return array
+     * Get the desired class name from the input.
      */
-    protected function prepareVars()
+    protected function getNameInput(): string
     {
-        $pluginCode = $this->argument('plugin');
-
-        $parts = explode('.', $pluginCode);
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-        $settings = $this->argument('settings') ?? 'Settings';
-
-        return [
-            'name' => $settings,
-            'author' => $author,
-            'plugin' => $plugin
-        ];
+        return parent::getNameInput() ?: 'Settings';
     }
 }

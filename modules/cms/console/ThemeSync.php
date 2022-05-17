@@ -5,7 +5,7 @@ use Event;
 use Exception;
 use Cms\Classes\Theme;
 
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -39,7 +39,7 @@ class ThemeSync extends Command
     protected $description = 'Sync an existing theme between the DB and Filesystem layers';
 
     /**
-     * @var \Winter\Storm\Datasource\DatasourceInterface The theme's AutoDatasource instance
+     * @var \Cms\Classes\AutoDatasource The theme's AutoDatasource instance
      */
     protected $datasource;
 
@@ -80,6 +80,7 @@ class ThemeSync extends Command
             return $this->error(sprintf('The theme %s does not exist.', $themeName));
         }
         $theme = Theme::load($themeName);
+        $this->datasource = $theme->getDatasource();
 
         // Get the target and source datasources
         $availableSources = ['filesystem', 'database'];
@@ -95,7 +96,7 @@ class ThemeSync extends Command
 
         // Get the theme paths, taking into account if the user has specified paths
         $userPaths = $this->option('paths') ?: null;
-        $themePaths = array_keys($theme->getDatasource()->getSourcePaths($source));
+        $themePaths = array_keys($this->datasource->getSourcePaths($source));
 
         if (!isset($userPaths)) {
             $paths = $themePaths;
@@ -178,8 +179,6 @@ class ThemeSync extends Command
         try {
             $this->info('Syncing files, please wait...');
             $progress = $this->output->createProgressBar(count($validPaths));
-
-            $this->datasource = $theme->getDatasource();
 
             foreach ($validPaths as $path => $model) {
                 $entity = $this->getModelForPath($path, $model, $theme);

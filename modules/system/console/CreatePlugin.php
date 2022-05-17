@@ -1,8 +1,8 @@
 <?php namespace System\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
+use System\Console\BaseScaffoldCommand;
 
-class CreatePlugin extends GeneratorCommand
+class CreatePlugin extends BaseScaffoldCommand
 {
     /**
      * @var string|null The default command name for lazy loading.
@@ -27,6 +27,11 @@ class CreatePlugin extends GeneratorCommand
     protected $type = 'Plugin';
 
     /**
+     * @var string The argument that the generated class name comes from
+     */
+    protected $nameFrom = 'plugin';
+
+    /**
      * @var array A mapping of stubs to generated files.
      */
     protected $stubs = [
@@ -35,31 +40,28 @@ class CreatePlugin extends GeneratorCommand
     ];
 
     /**
-     * Prepare variables for stubs.
-     *
-     * @return array
+     * @var bool Validate the provided plugin input against the PluginManager, default true.
      */
-    protected function prepareVars()
+    protected $validatePluginInput = false;
+
+    /**
+     * Get the desired class name from the input.
+     */
+    protected function getNameInput(): string
     {
-        /*
-         * Extract the author and name from the plugin code
-         */
-        $pluginCode = $this->argument('plugin');
-        $parts = explode('.', $pluginCode);
+        return explode('.', $this->getPluginIdentifier())[1];
+    }
 
-        if (count($parts) != 2) {
-            $this->error('Invalid plugin name, either too many dots or not enough.');
-            $this->error('Example name: AuthorName.PluginName');
-            return;
-        }
-
-
-        $pluginName = array_pop($parts);
-        $authorName = array_pop($parts);
-
+    /**
+     * Gets the localization keys and values to be stored in the plugin's localization files
+     * Can reference $this->vars and $this->laravel->getLocale() internally
+     */
+    protected function getLangKeys(): array
+    {
         return [
-            'name'   => $pluginName,
-            'author' => $authorName,
+            'plugin.name' => $this->vars['name'],
+            'plugin.description' => 'No description provided yet...',
+            'permissions.some_permission' => 'Some permission',
         ];
     }
 }

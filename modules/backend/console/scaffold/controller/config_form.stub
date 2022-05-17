@@ -3,28 +3,28 @@
 # ===================================
 
 # Record name
-name: {{title_singular_name}}
+name: '{{ model_lang_key }}.label'
 
 # Model Form Field configuration
-form: $/{{lower_author}}/{{lower_plugin}}/models/{{lower_model}}/fields.yaml
+form: $/{{ plugin_folder }}/models/{{ lower_model }}/fields.yaml
 
 # Model Class name
-modelClass: {{studly_author}}\{{studly_plugin}}\Models\{{studly_model}}
+modelClass: {{ plugin_namespace }}\Models\{{ studly_model }}
 
 # Default redirect location
-defaultRedirect: {{lower_author}}/{{lower_plugin}}/{{lower_name}}
+defaultRedirect: {{ controller_url }}
 
 # Create page
 create:
     title: backend::lang.form.create_title
-    redirect: {{lower_author}}/{{lower_plugin}}/{{lower_name}}/update/:id
-    redirectClose: {{lower_author}}/{{lower_plugin}}/{{lower_name}}
+    redirect: {{ controller_url }}/update/:id
+    redirectClose: {{ controller_url }}
 
 # Update page
 update:
     title: backend::lang.form.update_title
-    redirect: {{lower_author}}/{{lower_plugin}}/{{lower_name}}
-    redirectClose: {{lower_author}}/{{lower_plugin}}/{{lower_name}}
+    redirect: {{ controller_url }}
+    redirectClose: {{ controller_url }}
 
 # Preview page
 preview:

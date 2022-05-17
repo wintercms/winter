@@ -1,8 +1,8 @@
 <?php namespace Backend\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
+use System\Console\BaseScaffoldCommand;
 
-class CreateFormWidget extends GeneratorCommand
+class CreateFormWidget extends BaseScaffoldCommand
 {
     /**
      * The default command name for lazy loading.
@@ -36,36 +36,19 @@ class CreateFormWidget extends GeneratorCommand
     protected $type = 'FormWidget';
 
     /**
+     * @var string The argument that the generated class name comes from
+     */
+    protected $nameFrom = 'widget';
+
+    /**
      * A mapping of stub to generated file.
      *
      * @var array
      */
     protected $stubs = [
         'scaffold/formwidget/formwidget.stub'      => 'formwidgets/{{studly_name}}.php',
-        'scaffold/formwidget/partial.stub'         => 'formwidgets/{{lower_name}}/partials/_{{lower_name}}.htm',
+        'scaffold/formwidget/partial.stub'         => 'formwidgets/{{lower_name}}/partials/_{{lower_name}}.php',
         'scaffold/formwidget/stylesheet.stub'      => 'formwidgets/{{lower_name}}/assets/css/{{lower_name}}.css',
         'scaffold/formwidget/javascript.stub'      => 'formwidgets/{{lower_name}}/assets/js/{{lower_name}}.js',
     ];
-
-    /**
-     * Prepare variables for stubs.
-     *
-     * return @array
-     */
-    protected function prepareVars()
-    {
-        $pluginCode = $this->argument('plugin');
-
-        $parts = explode('.', $pluginCode);
-        $plugin = array_pop($parts);
-        $author = array_pop($parts);
-
-        $widget = $this->argument('widget');
-
-        return [
-            'name' => $widget,
-            'author' => $author,
-            'plugin' => $plugin
-        ];
-    }
 }

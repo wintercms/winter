@@ -596,7 +596,7 @@ class RelationController extends ControllerBehavior
         $defaultButtons = null;
 
         if (!$this->readOnly && $this->toolbarButtons) {
-            $defaultButtons = '~/modules/backend/behaviors/relationcontroller/partials/_toolbar.htm';
+            $defaultButtons = '~/modules/backend/behaviors/relationcontroller/partials/_toolbar.php';
         }
 
         $defaultConfig['buttons'] = $this->getConfig('view[toolbarPartial]', $defaultButtons);

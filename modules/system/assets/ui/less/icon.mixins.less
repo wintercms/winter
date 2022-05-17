@@ -6,12 +6,14 @@
     content: @icon;
 }
 
-.icon-FontAutumn() {
-    font-family: FontAwesome;
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: inherit;
+.icon-FontAutumn(@weight: 900) {
+    font-family: @fa-style-family;
+    font-weight: @weight;
+    -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
 }
 
 .icon-stack(@width: 2em, @height: 2em, @top-font-size: 1em, @base-font-size: 2em) {

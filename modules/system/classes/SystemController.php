@@ -72,7 +72,7 @@ class SystemController extends ControllerBase
         } catch (Exception $ex) {
             // If it failed for any other reason, restore the config so that
             // the resizer route will continue to work until it succeeds
-            if ($resizer) {
+            if (!empty($resizer)) {
                 $resizer->storeConfig();
             }
 

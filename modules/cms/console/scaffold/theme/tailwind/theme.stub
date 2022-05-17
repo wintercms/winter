@@ -1,0 +1,21 @@
+name: "{{code}}"
+description: "No description provided yet..."
+author: "Winter CMS Scaffold"
+homepage: "https://example.com"
+code: "{{code}}"
+form:
+    fields:
+        googleanalytics_id:
+            label: themes.{{code}}::lang.options.googleanalytics_id
+            type: text
+            span: full
+        color_primary:
+            label: themes.{{code}}::lang.options.color_primary
+            type: colorpicker
+            span: left
+            default: "#103141"
+        color_secondary:
+            label: themes.{{code}}::lang.options.color_secondary
+            type: colorpicker
+            span: right
+            default: "#2DA7C7"

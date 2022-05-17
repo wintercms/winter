@@ -89,16 +89,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail Pfad',
         'sendmail_path_comment' => 'Bitte gib den (absoluten) Pfad zum Sendmail Programm an.',
-        'mailgun' => 'Mailgun',
-        'mailgun_domain' => 'Mailgun-Domain',
-        'mailgun_domain_comment' => 'Bitte gib die Mailgun-Domain an.',
-        'mailgun_secret' => 'Mailgun-Schlüssel',
-        'mailgun_secret_comment' => 'Gib Deinen Mailgun-API-Schlüssel an.',
-        'mandrill' => 'Mandrill',
-        'mandrill_secret' => 'Mandrill-Schlüssel',
-        'mandrill_secret_comment' => 'Gib Deinen Mandrill-API-Schlüssel an.',
-        'drivers_hint_header' => 'Treiber nicht installiert.',
-        'drivers_hint_content' => 'Für diese Mail-Methode muss das Plugin ":plugin" installiert werden, bevor Du Mails verschicken kannst.'
     ],
     'mail_templates' => [
         'menu_label' => 'Mail-Vorlagen',

@@ -131,7 +131,7 @@ class Extension extends TwigExtension
      * @param array|bool $parameters Route parameters to consider in the URL. If boolean will be used as the value for $routePersistence
      * @param bool $routePersistence Set to false to exclude the existing routing parameters from the generated URL
      */
-    public function pageFilter(array $context, $name, $parameters = [], $routePersistence = true): string
+    public function pageFilter(array $context, $name, $parameters = [], $routePersistence = true): ?string
     {
         return $context['this']['controller']->pageUrl($name, $parameters, $routePersistence);
     }

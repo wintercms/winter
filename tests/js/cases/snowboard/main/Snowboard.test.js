@@ -4,7 +4,11 @@ describe('Snowboard framework', function () {
     it('initialises correctly', function (done) {
         FakeDom
             .new()
-            .addScript('modules/system/assets/js/snowboard/build/snowboard.base.js')
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+            ])
             .render()
             .then(
                 (dom) => {
@@ -42,6 +46,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestPlugin.js',
             ])
@@ -101,6 +107,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestSingleton.js',
             ])
@@ -160,6 +168,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestListener.js',
             ])
@@ -204,6 +214,8 @@ describe('Snowboard framework', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'tests/js/fixtures/framework/TestPromiseListener.js',
             ])
@@ -251,6 +263,117 @@ describe('Snowboard framework', function () {
                     } catch (error) {
                         done(error);
                     }
+                },
+                (error) => {
+                    throw error;
+                }
+            );
+    });
+
+    it('will throw an error when using a plugin that has unfulfilled dependencies', function () {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'tests/js/fixtures/framework/TestHasDependencies.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    // Run assertions
+                    const Snowboard = dom.window.Snowboard;
+
+                    expect(() => {
+                        Snowboard.testHasDependencies();
+                    }).toThrow('The "testhasdependencies" plugin requires the following plugins: testdependencyone, testdependencytwo');
+                },
+                (error) => {
+                    throw error;
+                }
+            );
+    });
+
+    it('will throw an error when using a plugin that has some unfulfilled dependencies', function () {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'tests/js/fixtures/framework/TestHasDependencies.js',
+                'tests/js/fixtures/framework/TestDependencyOne.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    // Run assertions
+                    const Snowboard = dom.window.Snowboard;
+
+                    expect(() => {
+                        Snowboard.testHasDependencies();
+                    }).toThrow('The "testhasdependencies" plugin requires the following plugins: testdependencytwo');
+                },
+                (error) => {
+                    throw error;
+                }
+            );
+    });
+
+    it('will not throw an error when using a plugin that has fulfilled dependencies', function () {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'tests/js/fixtures/framework/TestDependencyTwo.js',
+                'tests/js/fixtures/framework/TestHasDependencies.js',
+                'tests/js/fixtures/framework/TestDependencyOne.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    // Run assertions
+                    const Snowboard = dom.window.Snowboard;
+
+                    expect(() => {
+                        Snowboard.testHasDependencies();
+                    }).not.toThrow();
+
+                    expect(Snowboard.testHasDependencies().testMethod()).toEqual('Tested');
+                },
+                (error) => {
+                    throw error;
+                }
+            );
+    });
+
+    it('will not initialise a singleton that has unfulfilled dependencies', function () {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'tests/js/fixtures/framework/TestSingletonWithDependency.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    // Run assertions
+                    const Snowboard = dom.window.Snowboard;
+
+                    expect(() => {
+                        Snowboard.testSingleton();
+                    }).toThrow('The "testsingleton" plugin requires the following plugins: testdependencyone');
+
+                    expect(Snowboard.listensToEvent('ready')).not.toContain('testsingleton');
+
+                    expect(() => {
+                        Snowboard.globalEvent('ready');
+                    }).not.toThrow();
                 },
                 (error) => {
                     throw error;

@@ -65,10 +65,11 @@ body.oc-loading, body.oc-loading * {
 // Flash Messages
 // --------------------------------------------------
 
-@color-flash-success-bg:                     #8da85e;
-@color-flash-error-bg:                       #cc3300;
-@color-flash-warning-bg:                     #f0ad4e;
-@color-flash-info-bg:                        #5fb6f5;
+@color-flash-success-bg:                     #6f9927;
+@color-flash-error-bg:                       #bb380c;
+@color-flash-warning-bg:                     #b87410;
+@color-flash-info-bg:                        #3f91cc;
+@color-flash-default-bg:                     #7a7e83;
 @color-flash-text:                           #ffffff;
 
 body > div.flash-message {
@@ -77,6 +78,7 @@ body > div.flash-message {
     left: 50%;
     top: 13px;
     margin-left: -250px;
+    background-color: @color-flash-default-bg;
     color: @color-flash-text;
     font-size: 14px;
     padding: 10px 30px 14px 15px;
@@ -87,6 +89,10 @@ body > div.flash-message {
     .box-shadow(@overlay-box-shadow);
     .border-radius(@border-radius-base);
     cursor: pointer;
+
+    &.no-timer {
+        padding-bottom: 10px;
+    }
 
     .flash-timer {
         position: absolute;
@@ -113,6 +119,12 @@ body > div.flash-message {
 
     &.show-active, &.hide-active {
         .transition(~'all 0.5s, width 0s');
+    }
+
+    &.hide-out .flash-timer,
+    &.hide-active .flash-timer {
+        transition: none;
+        width: 0% !important;
     }
 
     &.show-in, &.hide-out {

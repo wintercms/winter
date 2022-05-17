@@ -26,6 +26,7 @@ export default class PluginLoader {
         this.instance = instance;
         this.instances = [];
         this.singleton = instance.prototype instanceof Singleton;
+        this.initialised = instance.prototype instanceof PluginBase;
         this.mocks = {};
         this.originalFunctions = {};
     }
@@ -153,6 +154,17 @@ export default class PluginLoader {
     }
 
     /**
+     * Determines if a singleton has been initialised.
+     *
+     * Normal plugins will always return true.
+     *
+     * @returns {boolean}
+     */
+    isInitialised() {
+        return this.initialised;
+    }
+
+    /**
      * Initialises the singleton instance.
      *
      * @returns {void}
@@ -165,6 +177,7 @@ export default class PluginLoader {
         const newInstance = new this.instance(this.snowboard);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
         this.instances.push(newInstance);
+        this.initialised = true;
     }
 
     /**

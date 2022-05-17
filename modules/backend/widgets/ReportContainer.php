@@ -82,7 +82,7 @@ class ReportContainer extends WidgetBase
             $configuration = 'config_report_container.yaml';
         }
 
-        if (!is_array($configuration)) {
+        if (is_string($configuration)) {
             $path = $controller->getConfigPath($configuration);
             if (File::isFile($path)) {
                 $configuration = $this->makeConfig($path);

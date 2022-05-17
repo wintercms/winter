@@ -1,18 +1,18 @@
-<?php namespace {{studly_author}}\{{studly_plugin}}\Models;
+<?php namespace {{ plugin_namespace }}\Models;
 
 use Model;
 
 /**
- * {{name}} Model
+ * {{ name }} Model
  */
-class {{studly_name}} extends Model
+class {{ studly_name }} extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
     /**
      * @var string The database table used by the model.
      */
-    public $table = '{{lower_author}}_{{lower_plugin}}_{{snake_plural_name}}';
+    public $table = '{{ table_name }}';
 
     /**
      * @var array Guarded fields
@@ -54,7 +54,7 @@ class {{studly_name}} extends Model
      */
     protected $dates = [
         'created_at',
-        'updated_at'
+        'updated_at',
     ];
 
     /**
