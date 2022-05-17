@@ -140,8 +140,6 @@ class WinterMirror extends Command
 
     protected function mirrorFile($file)
     {
-        $this->output->writeln(sprintf('<info> - Mirroring: %s</info>', $file));
-
         $src = base_path().'/'.$file;
 
         $dest = $this->getDestinationPath().'/'.$file;
@@ -155,8 +153,6 @@ class WinterMirror extends Command
 
     protected function mirrorDirectory($directory)
     {
-        $this->output->writeln(sprintf('<info> - Mirroring: %s</info>', $directory));
-
         $src = base_path().'/'.$directory;
 
         $dest = $this->getDestinationPath().'/'.$directory;
@@ -191,7 +187,7 @@ class WinterMirror extends Command
         }
     }
 
-    protected function mirror($src, $dest)
+    protected function mirror($src, $dest): bool
     {
         if ($this->option('relative')) {
             $src = $this->getRelativePath($dest, $src);
@@ -201,7 +197,49 @@ class WinterMirror extends Command
             }
         }
 
-        symlink($src, $dest);
+        foreach ($this->option('ignore') as $ignore) {
+            if (preg_match($ignore, $src)) {
+                $this->warn('ignoring: ' . $src);
+                return false;
+            }
+        }
+
+        if (!$this->option('copy')) {
+            symlink($src, $dest);
+            $this->info('Linked: ' . $dest);
+            return true;
+        }
+
+        if (is_dir($src) && !is_dir($dest)) {
+            mkdir($dest, 0755, true);
+        }
+
+        if (is_file($src)) {
+            !is_dir(dirname($dest)) && mkdir(dirname($dest), 0755, true);
+            copy($src, $dest);
+            $this->info('Copied: ' . $dest);
+            return true;
+        }
+
+        foreach (
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(
+                    $src,
+                    \RecursiveDirectoryIterator::SKIP_DOTS
+                ),
+                \RecursiveIteratorIterator::SELF_FIRST
+            ) as $item
+        ) {
+            if ($item->isDir()) {
+                mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+                continue;
+            }
+            copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+        }
+
+        $this->info('Copied: ' . $dest);
+
+        return true;
     }
 
     protected function getDestinationPath()
@@ -261,6 +299,8 @@ class WinterMirror extends Command
     {
         return [
             ['relative', null, InputOption::VALUE_NONE, 'Create symlinks relative to the public directory.'],
+            ['copy', null, InputOption::VALUE_NONE, 'Create symlinks relative to the public directory.'],
+            ['ignore', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Specify patterns to ignore'],
         ];
     }
 }
