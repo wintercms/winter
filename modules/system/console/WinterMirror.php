@@ -140,6 +140,11 @@ class WinterMirror extends Command
             $this->mirrorWildcard($wildcard);
         }
 
+        $index = $this->getDestinationPath() . '/index.php';
+        if ($this->option('copy') && File::isFile($index)) {
+            $this->updateIndexPaths($index);
+        }
+
         $this->output->writeln('<info>Mirror complete!</info>');
     }
 
@@ -290,5 +295,36 @@ class WinterMirror extends Command
         }
 
         return str_repeat('../', count($dir)) . implode('/', $file);
+    }
+
+    protected function updateIndexPaths(string $index): void
+    {
+        $contents = File::get($index);
+
+        /**
+         * @event system.console.mirror.updateIndexPaths
+         * Enables extending the `php artisan winter:mirror` command
+         *
+         * You will have access to the new index path, and the contents of the file.
+         *
+         * Example usage:
+         *
+         *     Event::listen('system.console.mirror.updateIndexPaths', function ($indexPath, $contents) {
+         *          return str_replace('a', 'b', $contents);
+         *     });
+         *
+         */
+        $result = Event::fire('system.console.mirror.updateIndexPaths', [$index, $contents]);
+
+        if ($result) {
+            File::put($index, $result);
+            return;
+        }
+
+        File::put($index, preg_replace(
+            '/\/bootstrap\/(.*?).php\'/',
+            str_repeat('/..', count(explode('/', $this->getRelativePath(base_path(), dirname($index))))) . '$0',
+            $contents
+        ));
     }
 }
