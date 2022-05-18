@@ -205,18 +205,21 @@ class WinterMirror extends Command
         }
 
         if (!$this->option('copy')) {
-            symlink($src, $dest);
+            File::link($src, $dest);
             $this->info('Linked: ' . $dest);
             return true;
         }
 
-        if (is_dir($src) && !is_dir($dest)) {
-            mkdir($dest, 0755, true);
+        if (File::isDirectory($src) && !File::isDirectory($dest)) {
+            File::makeDirectory($dest, 0755, true);
         }
 
-        if (is_file($src)) {
-            !is_dir(dirname($dest)) && mkdir(dirname($dest), 0755, true);
-            copy($src, $dest);
+        if (File::isFile($src)) {
+            if (!File::isDirectory(dirname($dest))) {
+                File::makeDirectory(dirname($dest), 0755, true);
+            }
+
+            File::copy($src, $dest);
             $this->info('Copied: ' . $dest);
             return true;
         }
@@ -231,10 +234,10 @@ class WinterMirror extends Command
             ) as $item
         ) {
             if ($item->isDir()) {
-                mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+                File::makeDirectory($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
                 continue;
             }
-            copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+            File::copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
         }
 
         $this->info('Copied: ' . $dest);
@@ -269,7 +272,7 @@ class WinterMirror extends Command
         $from = str_replace('\\', '/', $from);
         $to = str_replace('\\', '/', $to);
 
-        $dir = explode('/', is_file($from) ? dirname($from) : rtrim($from, '/'));
+        $dir = explode('/', File::isFile($from) ? dirname($from) : rtrim($from, '/'));
         $file = explode('/', $to);
 
         while ($dir && $file && ($dir[0] == $file[0])) {
