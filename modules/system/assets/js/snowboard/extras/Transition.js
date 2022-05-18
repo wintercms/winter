@@ -25,16 +25,13 @@ export default class Transition extends Snowboard.PluginBase {
     /**
      * Constructor.
      *
-     * @param {Snowboard} snowboard
      * @param {HTMLElement} element The element to transition
      * @param {string} transition The name of the transition, this prefixes the stages of transition.
      * @param {Function} callback An optional callback to call when the transition ends.
      * @param {Number} duration An optional override on the transition duration. Must be specified as 's' (secs) or 'ms' (msecs).
      * @param {Boolean} trailTo If true, the "out" class will remain after the end of the transition.
      */
-    constructor(snowboard, element, transition, callback, duration, trailTo) {
-        super(snowboard);
-
+    construct(element, transition, callback, duration, trailTo) {
         if (element instanceof HTMLElement === false) {
             throw new Error('A HTMLElement must be provided for transitioning');
         }
@@ -126,7 +123,7 @@ export default class Transition extends Snowboard.PluginBase {
                     this.callback.apply(this.element);
                 }
 
-                this.destructor();
+                this.destruct();
             }
         });
     }
@@ -152,7 +149,7 @@ export default class Transition extends Snowboard.PluginBase {
             this.element.style.transitionDuration = null;
         }
 
-        this.destructor();
+        this.destruct();
     }
 
     /**
@@ -172,7 +169,8 @@ export default class Transition extends Snowboard.PluginBase {
             this.element.style.transitionDuration = null;
         }
 
-        this.destructor();
+        // Call destructor
+        this.destruct();
     }
 
     /**

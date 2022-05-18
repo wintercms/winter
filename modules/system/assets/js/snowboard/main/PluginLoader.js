@@ -83,7 +83,7 @@ export default class PluginLoader {
         }
         if (this.isSingleton()) {
             if (this.instances.length === 0) {
-                this.initialiseSingleton();
+                this.initialiseSingleton(...parameters);
             }
 
             // Apply mocked methods
@@ -113,10 +113,11 @@ export default class PluginLoader {
             });
         }
 
-        const newInstance = new this.instance(this.snowboard, ...parameters);
+        const newInstance = new this.instance(this.snowboard);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
-
+        newInstance.construct(...parameters);
         this.instances.push(newInstance);
+
         return newInstance;
     }
 
@@ -169,13 +170,14 @@ export default class PluginLoader {
      *
      * @returns {void}
      */
-    initialiseSingleton() {
+    initialiseSingleton(...parameters) {
         if (!this.isSingleton()) {
             return;
         }
 
         const newInstance = new this.instance(this.snowboard);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
+        newInstance.construct(...parameters);
         this.instances.push(newInstance);
         this.initialised = true;
     }

@@ -11,13 +11,10 @@ export default class DataConfig extends Snowboard.PluginBase {
     /**
      * Constructor.
      *
-     * @param {Snowboard} snowboard
      * @param {Snowboard.PluginBase} instance
      * @param {HTMLElement} element
      */
-    constructor(snowboard, instance, element) {
-        super(snowboard);
-
+    construct(instance, element) {
         if (instance instanceof Snowboard.PluginBase === false) {
             throw new Error('You must provide a Snowboard plugin to enable data configuration');
         }
