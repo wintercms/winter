@@ -162,7 +162,7 @@ class WinterMirror extends Command
 
         $dest = $this->getDestinationPath().'/'.$directory;
 
-        if (!File::isDirectory($src) || File::isDirectory($dest)) {
+        if (!File::isDirectory($src) || (File::isDirectory($dest) && !$this->option('copy'))) {
             return false;
         }
 
@@ -241,7 +241,9 @@ class WinterMirror extends Command
             ) as $item
         ) {
             if ($item->isDir()) {
-                File::makeDirectory($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+                if (!File::isDirectory($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname())) {
+                    File::makeDirectory($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+                }
                 continue;
             }
             File::copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
