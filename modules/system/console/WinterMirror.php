@@ -2,10 +2,9 @@
 
 use File;
 use Event;
+use JetBrains\PhpStorm\ArrayShape;
 use StdClass;
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to implement a "public" folder.
@@ -19,14 +18,31 @@ use Symfony\Component\Console\Input\InputArgument;
 class WinterMirror extends Command
 {
     /**
-     * The console command name.
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'winter:mirror';
+    protected static $defaultName = 'winter:mirror';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'winter:mirror
+        {destination : The destination path relative to the current directory. Eg: public/}
+        {--r|relative : Create symlinks relative to the public directory.}
+        {--c|copy : Copies files instead of creating symlinks.}
+        {--i|ignore=* : Regex patterns of paths to ignore.}
+    ';
 
     /**
      * The console command description.
      */
     protected $description = 'Generates a mirrored public folder using symbolic links.';
+
+    /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'october:mirror',
+    ];
 
     /**
      * @var array Files that should be mirrored
@@ -83,18 +99,7 @@ class WinterMirror extends Command
     /**
      * @var string|null Local cache of the mirror destination path
      */
-    protected $destinationPath;
-
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        // Register aliases for backwards compatibility with October
-        $this->setAliases(['october:mirror']);
-    }
+    protected string $destinationPath;
 
     /**
      * Execute the console command.
@@ -138,7 +143,7 @@ class WinterMirror extends Command
         $this->output->writeln('<info>Mirror complete!</info>');
     }
 
-    protected function mirrorFile($file)
+    protected function mirrorFile(string $file): bool
     {
         $src = base_path().'/'.$file;
 
@@ -148,10 +153,10 @@ class WinterMirror extends Command
             return false;
         }
 
-        $this->mirror($src, $dest);
+        return $this->mirror($src, $dest);
     }
 
-    protected function mirrorDirectory($directory)
+    protected function mirrorDirectory(string $directory): bool
     {
         $src = base_path().'/'.$directory;
 
@@ -165,10 +170,10 @@ class WinterMirror extends Command
             File::makeDirectory(dirname($dest), 0755, true);
         }
 
-        $this->mirror($src, $dest);
+        return $this->mirror($src, $dest);
     }
 
-    protected function mirrorWildcard($wildcard)
+    protected function mirrorWildcard(string $wildcard): bool
     {
         if (strpos($wildcard, '*') === false) {
             return $this->mirrorDirectory($wildcard);
@@ -185,9 +190,11 @@ class WinterMirror extends Command
         foreach (File::directories($startDir) as $directory) {
             $this->mirrorWildcard($start.basename($directory).$end);
         }
+
+        return true;
     }
 
-    protected function mirror($src, $dest): bool
+    protected function mirror(string $src, string $dest): bool
     {
         if ($this->option('relative')) {
             $src = $this->getRelativePath($dest, $src);
@@ -245,9 +252,9 @@ class WinterMirror extends Command
         return true;
     }
 
-    protected function getDestinationPath()
+    protected function getDestinationPath(): ?string
     {
-        if ($this->destinationPath !== null) {
+        if (isset($this->destinationPath)) {
             return $this->destinationPath;
         }
 
@@ -281,29 +288,5 @@ class WinterMirror extends Command
         }
 
         return str_repeat('../', count($dir)) . implode('/', $file);
-    }
-
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['destination', InputArgument::REQUIRED, 'The destination path relative to the current directory. Eg: public/'],
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['relative', null, InputOption::VALUE_NONE, 'Create symlinks relative to the public directory.'],
-            ['copy', null, InputOption::VALUE_NONE, 'Create symlinks relative to the public directory.'],
-            ['ignore', null, InputOption::VALUE_OPTIONAL | InputOption::VALUE_IS_ARRAY, 'Specify patterns to ignore'],
-        ];
     }
 }
