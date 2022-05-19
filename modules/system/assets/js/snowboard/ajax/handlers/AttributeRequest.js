@@ -49,10 +49,10 @@ class AttributeRequest extends Snowboard.Singleton {
      *
      * Detaches all handlers.
      */
-    destructor() {
+    destruct() {
         this.detachHandlers();
 
-        super.destructor();
+        super.destruct();
     }
 
     /**

@@ -14,14 +14,11 @@ class Request extends Snowboard.PluginBase {
     /**
      * Constructor.
      *
-     * @param {Snowboard} snowboard
      * @param {HTMLElement|string} element
      * @param {string} handler
      * @param {Object} options
      */
-    constructor(snowboard, element, handler, options) {
-        super(snowboard);
-
+    construct(element, handler, options) {
         if (typeof element === 'string') {
             const matchedElement = document.querySelector(element);
             if (matchedElement === null) {
@@ -682,6 +679,9 @@ class Request extends Snowboard.PluginBase {
             event.responseError = this.responseError;
             this.element.dispatchEvent(event);
         }
+
+        // Fire off the destructor
+        this.destruct();
     }
 
     get form() {

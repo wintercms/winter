@@ -2,9 +2,7 @@
 
 ((Snowboard) => {
     class DataConfigFixture extends Snowboard.PluginBase {
-        constructor(snowboard, element) {
-            super(snowboard);
-
+        construct(element) {
             this.element = element;
             this.config = this.snowboard.dataConfig(this, element);
         }
