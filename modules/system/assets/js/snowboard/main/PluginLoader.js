@@ -113,7 +113,7 @@ export default class PluginLoader {
             });
         }
 
-        const newInstance = new this.instance(this.snowboard);
+        const newInstance = new this.instance(this.snowboard, ...parameters);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
         newInstance.construct(...parameters);
         this.instances.push(newInstance);
@@ -175,7 +175,7 @@ export default class PluginLoader {
             return;
         }
 
-        const newInstance = new this.instance(this.snowboard);
+        const newInstance = new this.instance(this.snowboard, ...parameters);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
         newInstance.construct(...parameters);
         this.instances.push(newInstance);
