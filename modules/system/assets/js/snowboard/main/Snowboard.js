@@ -353,9 +353,16 @@ export default class Snowboard {
                     throw new Error(`Missing "${listenMethod}" method in "${name}" plugin`);
                 }
 
-                if (instance[listenMethod](...parameters) === false) {
-                    cancelled = true;
-                    this.debug(`Global event "${eventName}" cancelled by "${name}" plugin`);
+                try {
+                    if (instance[listenMethod](...parameters) === false) {
+                        cancelled = true;
+                        this.debug(`Global event "${eventName}" cancelled by "${name}" plugin`);
+                    }
+                } catch (error) {
+                    this.error(
+                        `Error thrown in "${eventName}" event by "${name}" plugin.`,
+                        error,
+                    );
                 }
             });
         });
@@ -370,9 +377,16 @@ export default class Snowboard {
                     return;
                 }
 
-                if (listener(...parameters) === false) {
-                    cancelled = true;
-                    this.debug(`Global event "${eventName} cancelled by an ad-hoc listener.`);
+                try {
+                    if (listener(...parameters) === false) {
+                        cancelled = true;
+                        this.debug(`Global event "${eventName} cancelled by an ad-hoc listener.`);
+                    }
+                } catch (error) {
+                    this.error(
+                        `Error thrown in "${eventName}" event by an ad-hoc listener.`,
+                        error,
+                    );
                 }
             });
         }
@@ -415,12 +429,24 @@ export default class Snowboard {
 
             // Call event handler methods for all plugins, if they have a method specified for the event.
             plugin.getInstances().forEach((instance) => {
-                const instancePromise = instance[listenMethod](...parameters);
-                if (instancePromise instanceof Promise === false) {
-                    return;
+                if (!instance[listenMethod]) {
+                    throw new Error(`Missing "${listenMethod}" method in "${name}" plugin`);
                 }
 
-                promises.push(instancePromise);
+                try {
+                    const instancePromise = instance[listenMethod](...parameters);
+
+                    if (instancePromise instanceof Promise === false) {
+                        return;
+                    }
+
+                    promises.push(instancePromise);
+                } catch (error) {
+                    this.error(
+                        `Error thrown in "${eventName}" promise event by "${name}" plugin.`,
+                        error,
+                    );
+                }
             });
         });
 
@@ -429,12 +455,19 @@ export default class Snowboard {
             this.debug(`Found ${this.listeners[eventName].length} ad-hoc listener(s) for global promise event "${eventName}"`);
 
             this.listeners[eventName].forEach((listener) => {
-                const listenerPromise = listener(...parameters);
-                if (listenerPromise instanceof Promise === false) {
-                    return;
-                }
+                try {
+                    const listenerPromise = listener(...parameters);
+                    if (listenerPromise instanceof Promise === false) {
+                        return;
+                    }
 
-                promises.push(listenerPromise);
+                    promises.push(listenerPromise);
+                } catch (error) {
+                    this.error(
+                        `Error thrown in "${eventName}" promise event by an ad-hoc listener.`,
+                        error,
+                    );
+                }
             });
         }
 
@@ -446,21 +479,17 @@ export default class Snowboard {
     }
 
     /**
-     * Log a debug message.
+     * Log a styled message in the console.
      *
-     * These messages are only shown when debugging is enabled.
+     * Includes parameters and a stack trace.
      *
      * @returns {void}
      */
-    debug(message, ...parameters) {
-        if (!this.debugEnabled) {
-            return;
-        }
-
+    logMessage(color, bold, message, ...parameters) {
         /* eslint-disable */
         console.groupCollapsed(
             '%c[Snowboard]',
-            'color: rgb(45, 167, 199); font-weight: normal;',
+            `color: ${color}; font-weight: ${(bold) ? 'bold' : 'normal'};`,
             message
         );
         if (parameters.length) {
@@ -484,5 +513,39 @@ export default class Snowboard {
         }
         console.groupEnd();
         /* eslint-enable */
+    }
+
+    /**
+     * Log a message.
+     *
+     * @returns {void}
+     */
+    log(message, ...parameters) {
+        this.logMessage('rgb(45, 167, 199)', false, message, ...parameters);
+    }
+
+
+    /**
+     * Log a debug message.
+     *
+     * These messages are only shown when debugging is enabled.
+     *
+     * @returns {void}
+     */
+    debug(message, ...parameters) {
+        if (!this.debugEnabled) {
+            return;
+        }
+
+        this.logMessage('rgb(45, 167, 199)', false, message, ...parameters);
+    }
+
+    /**
+     * Logs an error message.
+     *
+     * @returns {void}
+     */
+    error(message, ...parameters) {
+        this.logMessage('rgb(229, 35, 35)', true, message, ...parameters);
     }
 }
