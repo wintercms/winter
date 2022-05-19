@@ -9,9 +9,7 @@ import Singleton from '../abstracts/Singleton';
  * @author Ben Thomson <git@alfreido.com>
  */
 export default class Url extends Singleton {
-    constructor(snowboard) {
-        super(snowboard);
-
+    construct() {
         this.foundBaseUrl = null;
         this.baseUrl();
     }
