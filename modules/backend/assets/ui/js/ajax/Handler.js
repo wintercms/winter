@@ -29,10 +29,22 @@ export default class Handler extends Snowboard.Singleton {
     /**
      * Ready handler.
      *
-     * Adds the jQuery AJAX prefilter that the old framework uses to inject the CSRF token in AJAX
-     * calls, and fires off a "render" event.
+     * Fires off a "render" event.
      */
     ready() {
+        if (!window.jQuery) {
+            return;
+        }
+
+        // Add "render" event for backwards compatibility
+        window.jQuery(document).trigger('render');
+    }
+
+    /**
+     * Adds the jQuery AJAX prefilter that the old framework uses to inject the CSRF token in AJAX
+     * calls.
+     */
+    addPrefilter() {
         if (!window.jQuery) {
             return;
         }
@@ -45,9 +57,6 @@ export default class Handler extends Snowboard.Singleton {
                 options.headers['X-CSRF-TOKEN'] = this.getToken();
             }
         });
-
-        // Add "render" event for backwards compatibility
-        window.jQuery(document).trigger('render');
     }
 
     /**

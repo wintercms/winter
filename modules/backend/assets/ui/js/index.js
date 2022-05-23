@@ -6,6 +6,8 @@ if (window.Snowboard === undefined) {
 
 ((Snowboard) => {
     Snowboard.addPlugin('backend.ajax.handler', BackendAjaxHandler);
+    // Add the pre-filter immediately
+    Snowboard['backend.ajax.handler']().addPrefilter();
 
     // Add polyfill for AssetManager
     window.AssetManager = {
