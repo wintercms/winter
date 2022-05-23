@@ -5,6 +5,7 @@ use Carbon\Carbon;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use System\Helpers\DateTime as DateTimeHelper;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Date picker
@@ -108,7 +109,12 @@ class DatePicker extends FormWidgetBase
      */
     public function render()
     {
-        $this->prepareVars();
+        try {
+            $this->prepareVars();
+        } catch (ApplicationException $ex) {
+            $this->vars['error'] = $ex->getMessage();
+        }
+
         return $this->makePartial('datepicker');
     }
 
@@ -119,6 +125,11 @@ class DatePicker extends FormWidgetBase
     {
         if ($value = $this->getLoadValue()) {
             $value = DateTimeHelper::makeCarbon($value, false);
+
+            if (!($value instanceof Carbon)) {
+                throw new ApplicationException(sprintf('"%s" is not a valid date / time value.', $value));
+            }
+
             if ($this->mode === 'date' && !$this->ignoreTimezone) {
                 $backendTimeZone = \Backend\Models\Preference::get('timezone');
                 $value->setTimezone($backendTimeZone);
