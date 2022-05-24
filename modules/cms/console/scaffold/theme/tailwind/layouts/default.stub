@@ -1,0 +1,8 @@
+description = "Default layout"
+default = true
+==
+{% partial "site/header" %}
+
+    {% page %}
+
+{% partial "site/footer" %}

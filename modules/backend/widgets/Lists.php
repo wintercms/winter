@@ -1,6 +1,7 @@
 <?php namespace Backend\Widgets;
 
 use Db;
+use Str;
 use Html;
 use Lang;
 use Backend;
@@ -483,7 +484,7 @@ class Lists extends WidgetBase
          */
         foreach ($this->getVisibleColumns() as $column) {
             // If useRelationCount is enabled, eager load the count of the relation into $relation_count
-            if ($column->relation && @$column->config['useRelationCount']) {
+            if ($column->relation && ($column->config['useRelationCount'] ?? false)) {
                 $query->withCount($column->relation);
             }
 
@@ -599,8 +600,8 @@ class Lists extends WidgetBase
             }
 
             // Set the sorting column to $relation_count if useRelationCount enabled
-            if (isset($column->relation) && @$column->config['useRelationCount']) {
-                $sortColumn = $column->relation . '_count';
+            if (isset($column->relation) && ($column->config['useRelationCount'] ?? false)) {
+                $sortColumn = Str::snake($column->relation) . '_count';
             }
 
             // Fix the sort order if this list has sortable set to true.
@@ -1117,8 +1118,9 @@ class Lists extends WidgetBase
             if ($record->hasRelation($columnName) && array_key_exists($columnName, $record->attributes)) {
                 $value = $record->attributes[$columnName];
             // Load the value from the relationship counter if useRelationCount is specified
-            } elseif ($column->relation && @$column->config['useRelationCount']) {
-                $value = $record->{"{$column->relation}_count"};
+            } elseif ($column->relation && ($column->config['useRelationCount'] ?? false)) {
+                $relation = Str::snake($column->relation);
+                $value = $record->{"{$relation}_count"};
             } else {
                 $value = $record->{$columnName};
             }

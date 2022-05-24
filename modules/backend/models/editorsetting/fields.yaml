@@ -135,5 +135,5 @@ tabs:
             label: backend::lang.editor.toolbar_buttons_preset
             tab: backend::lang.editor.toolbar_options
             type: partial
-            path: ~/modules/backend/models/editorsetting/_toolbar_presets.htm
+            path: ~/modules/backend/models/editorsetting/_toolbar_presets.php
             span: left

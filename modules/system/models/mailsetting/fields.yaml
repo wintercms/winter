@@ -17,7 +17,7 @@ tabs:
 
         driver_hint:
             type: hint
-            path: ~/modules/system/models/mailsetting/_drivers_hint.htm
+            path: ~/modules/system/models/mailsetting/_drivers_hint.php
             tab: system::lang.mail.general
 
         send_mode:
@@ -67,6 +67,7 @@ tabs:
             label: system::lang.mail.smtp_username
             tab: system::lang.mail.general
             span: left
+            dependsOn: smtp_authorization
             trigger:
                 action: show
                 field: send_mode
@@ -77,6 +78,7 @@ tabs:
             tab: system::lang.mail.general
             type: sensitive
             span: right
+            dependsOn: smtp_authorization
             trigger:
                 action: show
                 field: send_mode
@@ -91,3 +93,7 @@ tabs:
                 field: send_mode
                 condition: value[sendmail]
 
+        _send_test:
+            type: partial
+            path: ~/modules/system/models/mailsetting/_send_test_button.php
+            tab: system::lang.mail.general

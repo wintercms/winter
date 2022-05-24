@@ -7,8 +7,8 @@
  * against these changed files, to speed up the tests.
  */
 if (empty($argv[1])) {
-    echo 'You must provide a commit SHA to check.';
-    echo "\n";
+    fwrite(STDERR, 'You must provide a commit SHA to check.');
+    fwrite(STDERR, "\n");
     exit(1);
 }
 
@@ -20,6 +20,13 @@ foreach ($files as &$file) {
     if (strpos($file, ' ') !== false) {
         $file = str_replace(' ', '\\ ', $file);
     }
+}
+
+// no changes found in diff, early exit
+if (!count($files)) {
+    fwrite(STDOUT, "\e[0;32mFound no changed files.\e[0m");
+    fwrite(STDOUT, "\n");
+    exit(0);
 }
 
 // Run all changed files through the PHPCS code sniffer and generate a CSV report
@@ -34,50 +41,47 @@ $lines = array_map(function ($row) {
 array_shift($lines);
 
 if (!count($lines)) {
-    echo "\e[0;32mFound no issues with code quality.\e[0m";
-    echo "\n";
+    fwrite(STDOUT, "\e[0;32mFound no issues with code quality.\e[0m");
+    fwrite(STDOUT, "\n");
     exit(0);
-} else {
-    // Group errors by file
-    $files = [];
-
-    foreach ($lines as $line) {
-        $filename = str_replace(dirname(dirname(dirname(__DIR__))), '', $line[0]);
-
-        if (empty($files[$filename])) {
-            $files[$filename] = [];
-        }
-
-        $files[$filename][] = [
-            'warning' => ($line[3] === 'warning'),
-            'message' => $line[4],
-            'line' => $line[1],
-        ];
-    }
-
-    // Render report
-    echo "\e[0;31mFound "
-        . ((count($lines) === 1)
-            ? '1 issue'
-            : count($lines) . ' issues')
-        . " with code quality.\e[0m";
-    echo "\n";
-
-    foreach ($files as $file => $errors) {
-        echo "\n";
-        echo "\e[1;37m" . str_replace('"', '', $file) . "\e[0m";
-        echo "\n\n";
-
-        foreach ($errors as $error) {
-            echo "\e[2m" . str_pad('  L' . $error['line'], 7) . " | \e[0m";
-            if ($error['warning'] === false) {
-                echo "\e[0;31mERR:\e[0m  ";
-            } else {
-                echo "\e[1;33mWARN:\e[0m ";
-            }
-            echo $error['message'];
-            echo "\n";
-        }
-    }
-    exit(1);
 }
+
+// Group errors by file
+$files = [];
+
+foreach ($lines as $line) {
+    $filename = str_replace(dirname(dirname(dirname(__DIR__))), '', $line[0]);
+
+    if (empty($files[$filename])) {
+        $files[$filename] = [];
+    }
+
+    $files[$filename][] = [
+        'warning' => (($line[3] ?? 'err') === 'warning'),
+        'message' => $line[4] ?? 'unknown',
+        'line' => $line[1] ?? '0',
+    ];
+}
+
+// Render report
+fwrite(STDERR, "\e[0;31mFound "
+    . ((count($lines) === 1)
+        ? '1 issue'
+        : count($lines) . ' issues')
+    . " with code quality.\e[0m");
+fwrite(STDERR,  "\n");
+
+foreach ($files as $file => $errors) {
+    fwrite(STDERR, "\n");
+    fwrite(STDERR, "\e[1;37m" . str_replace('"', '', $file) . "\e[0m");
+    fwrite(STDERR, "\n\n");
+
+    foreach ($errors as $error) {
+        fwrite(STDERR, "\e[2m" . str_pad('  L' . $error['line'], 7) . " | \e[0m");
+        fwrite(STDERR, $error['warning'] ? "\e[1;33mWARN:\e[0m " : "\e[0;31mERR:\e[0m  ");
+        fwrite(STDERR, $error['message']);
+        fwrite(STDERR, "\n");
+    }
+}
+exit(1);
+

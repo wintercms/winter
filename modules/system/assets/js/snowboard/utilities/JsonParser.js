@@ -11,9 +11,7 @@ import Singleton from '../abstracts/Singleton';
  * @see https://github.com/octobercms/october/pull/4527
  */
 export default class JsonParser extends Singleton {
-    constructor(snowboard) {
-        super(snowboard);
-
+    construct() {
         // Add to global function for backwards compatibility
         window.wnJSON = (json) => this.parse(json);
         window.ocJSON = window.wnJSON;

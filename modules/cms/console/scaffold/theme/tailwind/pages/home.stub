@@ -1,0 +1,7 @@
+title = "Home"
+url = "/"
+layout = "default"
+==
+<div class="container mx-auto">
+    <h1><span class="text-primary">Home</span> <span class="text-secondary">Page</span></h1>
+</div>

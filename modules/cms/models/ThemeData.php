@@ -119,12 +119,11 @@ class ThemeData extends Model
             }
 
             /*
-             * Repeater form fields store arrays and must be jsonable.
+             * Repeater and nested form fields store arrays and must be jsonable.
              */
-            if ($field['type'] === 'repeater') {
+            if (in_array($field['type'], ['repeater', 'nestedform'])) {
                 $this->jsonable[] = $id;
-            }
-            elseif ($field['type'] === 'fileupload') {
+            } elseif ($field['type'] === 'fileupload') {
                 if (array_get($field, 'multiple', false)) {
                     $this->attachMany[$id] = File::class;
                 } else {
