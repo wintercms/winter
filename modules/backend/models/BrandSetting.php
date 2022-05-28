@@ -73,14 +73,12 @@ class BrandSetting extends Model
      */
     public function initSettingsData()
     {
-        $config = App::make('config');
-
-        $this->app_name = $config->get('brand.appName', Lang::get('system::lang.app.name'));
-        $this->app_tagline = $config->get('brand.tagline', Lang::get('system::lang.app.tagline'));
-        $this->primary_color = $config->get('brand.primaryColor', self::PRIMARY_COLOR);
-        $this->secondary_color = $config->get('brand.secondaryColor', self::SECONDARY_COLOR);
-        $this->accent_color = $config->get('brand.accentColor', self::ACCENT_COLOR);
-        $this->default_colors = $config->get('brand.defaultColors', [
+        $this->app_name = Config::get('brand.appName', Lang::get('system::lang.app.name'));
+        $this->app_tagline = Config::get('brand.tagline', Lang::get('system::lang.app.tagline'));
+        $this->primary_color = Config::get('brand.primaryColor', self::PRIMARY_COLOR);
+        $this->secondary_color = Config::get('brand.secondaryColor', self::SECONDARY_COLOR);
+        $this->accent_color = Config::get('brand.accentColor', self::ACCENT_COLOR);
+        $this->default_colors = Config::get('brand.defaultColors', [
             [
                 'color' => '#1abc9c',
             ],
@@ -142,7 +140,7 @@ class BrandSetting extends Model
                 'color' => '#7f8c8d',
             ],
         ]);
-        $this->menu_mode = $config->get('brand.menuMode', self::INLINE_MENU);
+        $this->menu_mode = Config::get('brand.menuMode', self::INLINE_MENU);
 
         // Attempt to load custom CSS
         $brandCssPath = File::symbolizePath(Config::get('brand.customLessPath'));
