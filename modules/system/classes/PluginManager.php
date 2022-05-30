@@ -11,8 +11,10 @@ use Cache;
 use Config;
 use Schema;
 use SystemException;
+use FilesystemIterator;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use System\Models\PluginVersion;
 use Winter\Storm\Support\ClassLoader;
 use Backend\Classes\NavigationManager;
 
@@ -382,11 +384,7 @@ class PluginManager
      */
     public function bootPlugin(PluginBase $plugin): void
     {
-        if (
-            !$plugin
-            || (self::$noInit && !$plugin->elevated)
-            || $this->isDisabled($plugin)
-        ) {
+        if ((self::$noInit && !$plugin->elevated) || $this->isDisabled($plugin)) {
             return;
         }
 
@@ -398,12 +396,7 @@ class PluginManager
      */
     public function getPluginPath(string|PluginBase $plugin): ?string
     {
-        $path = null;
-        $plugin = $this->findByIdentifier($plugin, true);
-        if ($plugin) {
-            $path = $plugin->getPluginPath();
-        }
-        return $path;
+        return $this->findByIdentifier($plugin, true)?->getPluginPath();
     }
 
     /**
@@ -412,7 +405,7 @@ class PluginManager
      * @param string $id Plugin identifier, eg: Namespace.PluginName
      * @return bool
      */
-    public function exists(string|PluginBase $plugin): bool
+    public function exists(PluginBase|string $plugin): bool
     {
         return $this->findByIdentifier($plugin) && !$this->isDisabled($plugin);
     }
@@ -453,7 +446,7 @@ class PluginManager
     /**
      * Returns a plugin registration class based on its identifier (Author.Plugin).
      */
-    public function findByIdentifier(string|PluginBase $identifier, bool $ignoreReplacements = false): ?PluginBase
+    public function findByIdentifier(PluginBase|string $identifier, bool $ignoreReplacements = false): ?PluginBase
     {
         if ($identifier instanceof PluginBase) {
             return $identifier;
@@ -473,7 +466,7 @@ class PluginManager
     /**
      * Checks to see if a plugin has been registered.
      */
-    public function hasPlugin(string|PluginBase $plugin): bool
+    public function hasPlugin(PluginBase|string $plugin): bool
     {
         $normalized = $this->getNormalizedIdentifier($plugin);
 
@@ -513,13 +506,13 @@ class PluginManager
         }
 
         $it = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($dirPath, RecursiveDirectoryIterator::FOLLOW_SYMLINKS)
+            new RecursiveDirectoryIterator($dirPath, FilesystemIterator::FOLLOW_SYMLINKS)
         );
         $it->setMaxDepth(2);
         $it->rewind();
 
         while ($it->valid()) {
-            if (($it->getDepth() > 1) && $it->isFile() && (strtolower($it->getFilename()) == "plugin.php")) {
+            if (($it->getDepth() > 1) && $it->isFile() && (strtolower($it->getFilename()) === "plugin.php")) {
                 $filePath = dirname($it->getPathname());
                 $pluginName = basename($filePath);
                 $vendorName = basename(dirname($filePath));
@@ -536,7 +529,7 @@ class PluginManager
      * Resolves a plugin identifier (Author.Plugin) from a plugin class name
      * (Author\Plugin) or PluginBase instance.
      */
-    public function getIdentifier(string|PluginBase $plugin): string
+    public function getIdentifier(PluginBase|string $plugin): string
     {
         $namespace = Str::normalizeClassName($plugin);
         if (strpos($namespace, '\\') === null) {
@@ -555,20 +548,17 @@ class PluginManager
      * (Author\Plugin\Classes\Example), identifier (Author.Plugin), or
      * PluginBase instance.
      */
-    public function getNamespace(string|PluginBase $plugin): string
+    public function getNamespace(PluginBase|string $plugin): string
     {
-        if (
-            is_object($plugin)
-            || (is_string($plugin) && strpos($plugin, '.') === null)
-        ) {
-            return Str::normalizeClassName($plugin);
+        if (is_string($plugin) && strpos($plugin, '.') !== null) {
+            $parts = explode('.', $plugin);
+            $slice = array_slice($parts, 0, 2);
+            $namespace = implode('\\', $slice);
+
+            return Str::normalizeClassName($namespace);
         }
 
-        $parts = explode('.', $plugin);
-        $slice = array_slice($parts, 0, 2);
-        $namespace = implode('\\', $slice);
-
-        return Str::normalizeClassName($namespace);
+        return Str::normalizeClassName($plugin);
     }
 
     /**
@@ -579,18 +569,14 @@ class PluginManager
     public function normalizeIdentifier(string $code): string
     {
         $code = strtolower($code);
-        if (isset($this->normalizedMap[$code])) {
-            return $this->normalizedMap[$code];
-        }
-
-        return $code;
+        return $this->normalizedMap[$code] ?? $code;
     }
 
     /**
      * Returns the normalized identifier (i.e. Winter.Blog) from the provided
      * string or PluginBase instance.
      */
-    public function getNormalizedIdentifier(string|PluginBase $plugin): string
+    public function getNormalizedIdentifier(PluginBase|string $plugin): string
     {
         return $this->normalizeIdentifier($this->getIdentifier($plugin));
     }
@@ -626,7 +612,7 @@ class PluginManager
     /**
      * Sets the provided flag on the provided plugin
      */
-    protected function flagPlugin(string|PluginBase $plugin, string $flag): void
+    protected function flagPlugin(PluginBase|string $plugin, string $flag): void
     {
         $code = $this->getNormalizedIdentifier($plugin);
         $this->pluginFlags[$code][$flag] = true;
@@ -635,7 +621,7 @@ class PluginManager
     /**
      * Removes the provided flag from the provided plugin
      */
-    protected function unflagPlugin(string|PluginBase $plugin, string $flag): void
+    protected function unflagPlugin(PluginBase|string $plugin, string $flag): void
     {
         $code = $this->getNormalizedIdentifier($plugin);
         unset($this->pluginFlags[$code][$flag]);
@@ -669,7 +655,7 @@ class PluginManager
      * Determines if a plugin is disabled by looking at the meta information
      * or the application configuration.
      */
-    public function isDisabled(string|PluginBase $plugin): bool
+    public function isDisabled(PluginBase|string $plugin): bool
     {
         $code = $this->getNormalizedIdentifier($plugin);
 
@@ -688,12 +674,11 @@ class PluginManager
     /**
      * Returns the actively replaced plugins defined in $this->activeReplacementMap
      */
-    public function getActiveReplacementMap(string|PluginBase|null $plugin = null): array|string|null
+    public function getActiveReplacementMap(PluginBase|string $plugin = null): array|string|null
     {
-        if (!$plugin) {
-            return $this->activeReplacementMap;
-        }
-        return $this->activeReplacementMap[$this->getNormalizedIdentifier($plugin)] ?? null;
+        return $plugin
+            ? $this->activeReplacementMap[$this->getNormalizedIdentifier($plugin)] ?? null
+            : $this->activeReplacementMap;
     }
 
     /**
@@ -760,7 +745,7 @@ class PluginManager
      *
      * @throws InvalidArgumentException if unable to find the requested plugin record in the database
      */
-    protected function getPluginRecord(string|PluginBase $plugin): PluginVersion
+    protected function getPluginRecord(PluginBase|string $plugin): PluginVersion
     {
         $plugin = $this->getNormalizedIdentifier($plugin);
         if (isset($this->pluginRecords[$plugin])) {
@@ -768,8 +753,9 @@ class PluginManager
         }
 
         $record = PluginVersion::where('code', $plugin)->first();
+
         if (!$record) {
-            throw new InvalidArgumentException("$plugin was not found in the database.");
+            throw new \InvalidArgumentException("$plugin was not found in the database.");
         }
 
         return $this->pluginRecords[$plugin] = $record;
@@ -778,7 +764,7 @@ class PluginManager
     /**
      * Flags the provided plugin as "frozen" (updates cannot be downloaded / installed)
      */
-    public function freezePlugin(string|PluginBase $plugin): void
+    public function freezePlugin(PluginBase|string $plugin): void
     {
         $record = $this->getPluginRecord($plugin);
         $record->is_frozen = true;
@@ -788,7 +774,7 @@ class PluginManager
     /**
      * "Unfreezes" the provided plugin, allowing for updates to be performed
      */
-    public function unfreezePlugin(string|PluginBase $plugin): void
+    public function unfreezePlugin(PluginBase|string $plugin): void
     {
         $record = $this->getPluginRecord($plugin);
         $record->is_frozen = false;
@@ -798,7 +784,7 @@ class PluginManager
     /**
      * Disables the provided plugin using the provided flag (defaults to static::DISABLED_BY_USER)
      */
-    public function disablePlugin(string|PluginBase $plugin, $flag = self::DISABLED_BY_USER): bool
+    public function disablePlugin(PluginBase|string $plugin, string|bool $flag = self::DISABLED_BY_USER): bool
     {
         // $flag used to be (bool) $byUser
         if ($flag === true) {
