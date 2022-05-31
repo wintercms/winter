@@ -8,7 +8,6 @@ class PluginManagerTest extends TestCase
     public function setUp() : void
     {
         parent::setUp();
-
         $manager = PluginManager::instance();
         self::callProtectedMethod($manager, 'loadDisabled');
         $manager->loadPlugins();
@@ -289,5 +288,57 @@ class PluginManagerTest extends TestCase
 
         $this->assertEquals('Winter.Replacement', $this->manager->getActiveReplacementMap('Winter.Original'));
         $this->assertNull($this->manager->getActiveReplacementMap('Winter.InvalidReplacement'));
+    }
+
+    public function testFlagDisableStatus()
+    {
+        $plugin = $this->manager->findByIdentifier('DependencyTest.Dependency');
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertEmpty($flags);
+
+        $plugin = $this->manager->findByIdentifier('DependencyTest.NotFound');
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertCount(1, $flags);
+        $this->assertArrayHasKey('disabled-dependencies', $flags);
+
+        $plugin = $this->manager->findByIdentifier('Winter.InvalidReplacement');
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertCount(1, $flags);
+        $this->assertArrayHasKey('disabled-replacement-failed', $flags);
+
+        $plugin = $this->manager->findByIdentifier('Winter.Original', true);
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertCount(1, $flags);
+        $this->assertArrayHasKey('disabled-replaced', $flags);
+    }
+
+    public function testFlagDisabling()
+    {
+        $plugin = $this->manager->findByIdentifier('Winter.Tester', true);
+
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertEmpty($flags);
+
+        $this->manager->disablePlugin($plugin);
+
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertCount(1, $flags);
+        $this->assertArrayHasKey('disabled-user', $flags);
+
+        $this->manager->enablePlugin($plugin);
+
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertEmpty($flags);
+
+        $this->manager->disablePlugin($plugin, PluginManager::DISABLED_BY_CONFIG);
+
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertCount(1, $flags);
+        $this->assertArrayHasKey('disabled-config', $flags);
+
+        $this->manager->enablePlugin($plugin, PluginManager::DISABLED_BY_CONFIG);
+
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertEmpty($flags);
     }
 }
