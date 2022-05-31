@@ -15,6 +15,7 @@ use FilesystemIterator;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use System\Models\PluginVersion;
+use Winter\Storm\Foundation\Application;
 use Winter\Storm\Support\ClassLoader;
 use Backend\Classes\NavigationManager;
 
@@ -39,7 +40,7 @@ class PluginManager
     /**
      * The application instance, since Plugins are an extension of a Service Provider
      */
-    protected $app;
+    protected Application $app;
 
     /**
      * @var PluginBase[] Container array used for storing plugin information objects.
@@ -483,7 +484,7 @@ class PluginManager
 
         foreach ($this->getVendorAndPluginNames() as $vendorName => $vendorList) {
             foreach ($vendorList as $pluginName => $pluginPath) {
-                $namespace = '\\'.$vendorName.'\\'.$pluginName;
+                $namespace = '\\' . $vendorName . '\\' . $pluginName;
                 $namespace = Str::normalizeClassName($namespace);
                 $classNames[$namespace] = $pluginPath;
             }
@@ -500,7 +501,7 @@ class PluginManager
     {
         $plugins = [];
 
-        $dirPath = plugins_path();
+        $dirPath = $this->app->pluginsPath();
         if (!File::isDirectory($dirPath)) {
             return $plugins;
         }
@@ -608,6 +609,12 @@ class PluginManager
     //
     // State Management (Disable, Enable, Freeze, Unfreeze)
     //
+
+    public function getPluginFlags(PluginBase|string $plugin): array
+    {
+        $code = $this->getNormalizedIdentifier($plugin);
+        return $this->pluginFlags[$code] ?? [];
+    }
 
     /**
      * Sets the provided flag on the provided plugin
@@ -813,7 +820,7 @@ class PluginManager
     /**
      * Enables the provided plugin using the provided flag (defaults to static::DISABLED_BY_USER)
      */
-    public function enablePlugin(string $plugin, $flag = self::DISABLED_BY_USER): bool
+    public function enablePlugin(PluginBase|string $plugin, $flag = self::DISABLED_BY_USER): bool
     {
         // $flag used to be (bool) $byUser
         if ($flag === true) {
