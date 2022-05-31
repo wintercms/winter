@@ -21,6 +21,16 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         // Set random encryption key
         $app['config']->set('app.key', bin2hex(random_bytes(16)));
 
+        if (!file_exists(base_path('config/testing/database.php'))) {
+            $app['config']->set('database.connections.testing', [
+                'driver'   => 'sqlite',
+                'database' => ':memory:',
+            ]);
+            $app['config']->set('database.default', 'testing');
+        }
+
+        $this->runWinterUpCommand();
+
         return $app;
     }
 
@@ -87,5 +97,14 @@ class TestCase extends Illuminate\Foundation\Testing\TestCase
         }
 
         Assert::assertRegExp($pattern, $string, $message);
+    }
+
+    /**
+     * Migrate database using winter:up command.
+     * @return void
+     */
+    protected function runWinterUpCommand()
+    {
+        Artisan::call('winter:up');
     }
 }
