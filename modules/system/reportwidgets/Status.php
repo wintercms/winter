@@ -69,6 +69,7 @@ class Status extends ReportWidgetBase
         $this->vars['requestLog']    = RequestLog::count();
         $this->vars['requestLogMsg'] = LogSetting::get('log_requests', false) ? false : true;
 
+        // TODO: Store system boot date in `Parameter`
         $this->vars['appBirthday'] = PluginVersion::orderBy('created_at')->first()->created_at;
     }
 
