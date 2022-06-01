@@ -2,7 +2,6 @@
 
 use File;
 use Event;
-use JetBrains\PhpStorm\ArrayShape;
 use StdClass;
 use Winter\Storm\Console\Command;
 
