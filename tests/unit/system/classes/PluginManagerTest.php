@@ -1,18 +1,18 @@
 <?php
 use System\Classes\PluginManager;
 
-class PluginManagerTest extends TestCase
+class PluginManagerTest extends PluginTestCase
 {
     public $manager;
 
     public function setUp() : void
     {
         parent::setUp();
+
         $manager = PluginManager::instance();
         self::callProtectedMethod($manager, 'loadDisabled');
         $manager->loadPlugins();
         self::callProtectedMethod($manager, 'loadDependencies');
-
         $this->manager = $manager;
     }
 
