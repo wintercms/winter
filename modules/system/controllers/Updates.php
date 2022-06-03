@@ -91,7 +91,7 @@ class Updates extends Controller
     public function manage()
     {
         $this->pageTitle = 'system::lang.plugins.manage';
-        PluginManager::instance()->clearDisabledCache();
+        PluginManager::instance()->clearFlagCache();
         return $this->asExtension('ListController')->index();
     }
 
@@ -237,6 +237,10 @@ class Updates extends Controller
     {
         $warnings = [];
         $missingDependencies = PluginManager::instance()->findMissingDependencies();
+
+        if (!empty($missingDependencies)) {
+            PluginManager::instance()->clearFlagCache();
+        }
 
         foreach ($missingDependencies as $pluginCode => $plugin) {
             foreach ($plugin as $missingPluginCode) {

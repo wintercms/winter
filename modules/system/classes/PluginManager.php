@@ -95,7 +95,7 @@ class PluginManager
     /**
      * Initializes the plugin manager
      */
-    protected function init()
+    protected function init(): void
     {
         $this->app = App::make('app');
 
@@ -197,7 +197,7 @@ class PluginManager
      * Loads the plugin flags (disabled & replacement states) from the cache
      * regenerating them if required.
      */
-    public function loadPluginFlags()
+    public function loadPluginFlags(): void
     {
         // Cache the data for a month so that stale keys can be autocleaned if necessary
         $data = Cache::remember($this->getFlagCacheKey(), now()->addMonths(1), function () {
@@ -223,7 +223,7 @@ class PluginManager
     /**
      * Reset the plugin flag cache
      */
-    protected function clearFlagCache()
+    public function clearFlagCache(): void
     {
         Cache::forget($this->getFlagCacheKey());
     }
@@ -232,9 +232,8 @@ class PluginManager
      * Runs the register() method on all plugins. Can only be called once.
      *
      * @param bool $force Defaults to false, if true will force the re-registration of all plugins. Use unregisterAll() instead.
-     * @return void
      */
-    public function registerAll($force = false)
+    public function registerAll(bool $force = false): void
     {
         if ($this->registered && !$force) {
             return;
@@ -257,10 +256,8 @@ class PluginManager
 
     /**
      * Unregisters all plugins: the inverse of registerAll().
-     *
-     * @return void
      */
-    public function unregisterAll()
+    public function unregisterAll(): void
     {
         $this->registered = false;
         $this->plugins = [];
@@ -365,9 +362,8 @@ class PluginManager
      * Runs the boot() method on all plugins. Can only be called once.
      *
      * @param bool $force Defaults to false, if true will force the re-booting of all plugins
-     * @return void
      */
-    public function bootAll($force = false)
+    public function bootAll(bool $force = false): void
     {
         if ($this->booted && !$force) {
             return;
@@ -395,7 +391,7 @@ class PluginManager
     /**
      * Returns the directory path to a plugin
      */
-    public function getPluginPath(string|PluginBase $plugin): ?string
+    public function getPluginPath(PluginBase|string $plugin): ?string
     {
         return $this->findByIdentifier($plugin, true)?->getPluginPath();
     }
@@ -416,7 +412,7 @@ class PluginManager
      *
      * @return array [$code => $pluginObj]
      */
-    public function getPlugins()
+    public function getPlugins(): array
     {
         return array_diff_key($this->plugins, $this->pluginFlags);
     }
@@ -426,18 +422,15 @@ class PluginManager
      *
      * @return array [$code => $pluginObj]
      */
-    public function getAllPlugins()
+    public function getAllPlugins(): array
     {
         return $this->plugins;
     }
 
     /**
      * Returns a plugin registration class based on its namespace (Author\Plugin).
-     *
-     * @param string $namespace
-     * @return PluginBase|null
      */
-    public function findByNamespace($namespace)
+    public function findByNamespace(string $namespace): ?PluginBase
     {
         $identifier = $this->getIdentifier($namespace);
 
@@ -853,7 +846,7 @@ class PluginManager
     /**
      * Returns the plugin identifiers that are required by the supplied plugin.
      */
-    public function getDependencies(string|PluginBase $plugin): array
+    public function getDependencies(PluginBase|string $plugin): array
     {
         if (is_string($plugin) && (!$plugin = $this->findByIdentifier($plugin))) {
             return [];
@@ -876,9 +869,8 @@ class PluginManager
      *
      *     PluginManager::instance()->findMissingDependencies();
      *
-     * @return array
      */
-    public function findMissingDependencies()
+    public function findMissingDependencies(): array
     {
         $missing = [];
 
@@ -1000,11 +992,8 @@ class PluginManager
 
     /**
      * Completely roll back and delete a plugin from the system.
-     *
-     * @param string $id Plugin code/namespace
-     * @return void
      */
-    public function deletePlugin($id)
+    public function deletePlugin(string $id): void
     {
         /*
          * Rollback plugin
@@ -1027,11 +1016,8 @@ class PluginManager
 
     /**
      * Tears down a plugin's database tables and rebuilds them.
-     *
-     * @param string $id Plugin code/namespace
-     * @return void
      */
-    public function refreshPlugin($id)
+    public function refreshPlugin(string $id): void
     {
         $manager = UpdateManager::instance();
         $manager->rollbackPlugin($id);

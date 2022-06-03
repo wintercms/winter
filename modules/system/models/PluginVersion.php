@@ -2,7 +2,6 @@
 
 use Lang;
 use Model;
-use Config;
 use System\Classes\PluginManager;
 
 /**
@@ -96,11 +95,22 @@ class PluginVersion extends Model
                 }
             }
 
-            // @TODO: Determine what flags should trigger this and how to identify them here
-            $this->disabledBySystem = $pluginObj->disabled;
+            $activeFlags = $manager->getPluginFlags($pluginObj);
+            if (!empty($activeFlags)) {
+                foreach ($activeFlags as $flag => $enabled) {
+                    if (in_array($flag, [
+                        PluginManager::DISABLED_MISSING,
+                        PluginManager::DISABLED_REPLACED,
+                        PluginManager::DISABLED_REPLACEMENT_FAILED,
+                        PluginManager::DISABLED_MISSING_DEPENDENCIES,
+                    ])) {
+                        $this->disabledBySystem = true;
+                    }
 
-            if (($configDisabled = Config::get('cms.disablePlugins')) && is_array($configDisabled)) {
-                $this->disabledByConfig = in_array($this->code, $configDisabled);
+                    if ($flag === PluginManager::DISABLED_BY_CONFIG) {
+                        $this->disabledByConfig = true;
+                    }
+                }
             }
         }
         else {
@@ -115,14 +125,13 @@ class PluginVersion extends Model
      */
     public function getIsUpdatableAttribute(): bool
     {
-        // @TODO: Decide which flags prevent a plugin from being updated
         return !$this->is_disabled && !$this->disabledBySystem && !$this->disabledByConfig;
     }
 
     /**
      * Only include enabled plugins
      * @param $query
-     * @return mixed
+     * @return QueryBuilder
      */
     public function scopeApplyEnabled($query)
     {
@@ -131,10 +140,8 @@ class PluginVersion extends Model
 
     /**
      * Returns the current version for a plugin
-     * @param  string $pluginCode Plugin code. Eg: Acme.Blog
-     * @return string
      */
-    public static function getVersion($pluginCode)
+    public static function getVersion(string $pluginCode): ?string
     {
         if (self::$versionCache === null) {
             self::$versionCache = self::lists('version', 'code');
@@ -146,7 +153,7 @@ class PluginVersion extends Model
     /**
      * Provides the slug attribute.
      */
-    public function getSlugAttribute()
+    public function getSlugAttribute(): string
     {
         return self::makeSlug($this->code);
     }
@@ -154,7 +161,7 @@ class PluginVersion extends Model
     /**
      * Generates a slug for the plugin.
      */
-    public static function makeSlug($code)
+    public static function makeSlug(string $code): string
     {
         return strtolower(str_replace('.', '-', $code));
     }

@@ -396,17 +396,17 @@ class PluginManagerTest extends TestCase
         $plugin = $this->manager->findByIdentifier('DependencyTest.NotFound');
         $flags = $this->manager->getPluginFlags($plugin);
         $this->assertCount(1, $flags);
-        $this->assertArrayHasKey('disabled-dependencies', $flags);
+        $this->assertArrayHasKey(PluginManager::DISABLED_MISSING_DEPENDENCIES, $flags);
 
         $plugin = $this->manager->findByIdentifier('Winter.InvalidReplacement');
         $flags = $this->manager->getPluginFlags($plugin);
         $this->assertCount(1, $flags);
-        $this->assertArrayHasKey('disabled-replacement-failed', $flags);
+        $this->assertArrayHasKey(PluginManager::DISABLED_REPLACEMENT_FAILED, $flags);
 
         $plugin = $this->manager->findByIdentifier('Winter.Original', true);
         $flags = $this->manager->getPluginFlags($plugin);
         $this->assertCount(1, $flags);
-        $this->assertArrayHasKey('disabled-replaced', $flags);
+        $this->assertArrayHasKey(PluginManager::DISABLED_REPLACED, $flags);
     }
 
     public function testFlagDisabling()
@@ -420,7 +420,7 @@ class PluginManagerTest extends TestCase
 
         $flags = $this->manager->getPluginFlags($plugin);
         $this->assertCount(1, $flags);
-        $this->assertArrayHasKey('disabled-user', $flags);
+        $this->assertArrayHasKey(PluginManager::DISABLED_BY_USER, $flags);
 
         $this->manager->enablePlugin($plugin);
 
@@ -431,7 +431,7 @@ class PluginManagerTest extends TestCase
 
         $flags = $this->manager->getPluginFlags($plugin);
         $this->assertCount(1, $flags);
-        $this->assertArrayHasKey('disabled-config', $flags);
+        $this->assertArrayHasKey(PluginManager::DISABLED_BY_CONFIG, $flags);
 
         $this->manager->enablePlugin($plugin, PluginManager::DISABLED_BY_CONFIG);
 
