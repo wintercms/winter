@@ -29,13 +29,22 @@ class PluginManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
 
+    //
+    // Disabled by system
+    //
+
     public const DISABLED_MISSING = 'disabled-missing';
-    public const DISABLED_REQUEST = 'disabled-request';
-    public const DISABLED_BY_USER = 'disabled-user';
     public const DISABLED_REPLACED = 'disabled-replaced';
     public const DISABLED_REPLACEMENT_FAILED = 'disabled-replacement-failed';
-    public const DISABLED_BY_CONFIG = 'disabled-config';
     public const DISABLED_MISSING_DEPENDENCIES = 'disabled-dependencies';
+
+    //
+    // Explicitly disabled for a reason
+    //
+
+    public const DISABLED_REQUEST = 'disabled-request';
+    public const DISABLED_BY_USER = 'disabled-user';
+    public const DISABLED_BY_CONFIG = 'disabled-config';
 
     /**
      * The application instance, since Plugins are an extension of a Service Provider
