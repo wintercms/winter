@@ -326,7 +326,7 @@ class PluginBase extends ServiceProviderBase
             $this->loadedYamlConfiguration = [];
         }
         else {
-            $this->loadedYamlConfiguration = Yaml::parse(file_get_contents($yamlFilePath));
+            $this->loadedYamlConfiguration = Yaml::parseFile($yamlFilePath);
             if (!is_array($this->loadedYamlConfiguration)) {
                 throw new SystemException(sprintf('Invalid format of the plugin configuration file: %s. The file should define an array.', $yamlFilePath));
             }
@@ -433,7 +433,7 @@ class PluginBase extends ServiceProviderBase
         if (
             !File::isFile($versionFile)
             || !($versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
-                return $yaml->parse(file_get_contents($versionFile));
+                return $yaml->parseFile($versionFile);
             }))
             || !is_array($versionInfo)
         ) {
