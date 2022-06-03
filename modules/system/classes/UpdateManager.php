@@ -999,7 +999,8 @@ class UpdateManager
         $postData['server'] = base64_encode(serialize([
             'php'   => PHP_VERSION,
             'url'   => Url::to('/'),
-            'since' => PluginVersion::orderBy('created_at')->value('created_at')
+            // TODO: Store system boot date in `Parameter`
+            'since' => PluginVersion::orderBy('created_at')->first()->created_at
         ]));
 
         if ($projectId = Parameter::get('system::project.id')) {
