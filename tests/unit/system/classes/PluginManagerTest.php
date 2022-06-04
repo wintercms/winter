@@ -1,20 +1,116 @@
 <?php
 use System\Classes\PluginManager;
+use System\Classes\UpdateManager;
+use System\Classes\VersionManager;
+
+use Winter\Storm\Database\Model as ActiveRecord;
 
 class PluginManagerTest extends TestCase
 {
     public $manager;
+    protected $output;
 
+    /**
+     * Creates the application.
+     * @return Symfony\Component\HttpKernel\HttpKernelInterface
+     */
+    public function createApplication()
+    {
+        $app = parent::createApplication();
+
+        /*
+         * Store database in memory by default unless specified otherwise
+         */
+        if (!file_exists(base_path('config/testing/database.php'))) {
+            $app['config']->set('database.connections.testing', [
+                'driver'   => 'sqlite',
+                'database' => ':memory:',
+            ]);
+            $app['config']->set('database.default', 'testing');
+        }
+
+        return $app;
+    }
+
+    /**
+     * Perform test case set up.
+     * @return void
+     */
     public function setUp() : void
     {
+        /*
+         * Force reload of Winter singletons
+         */
+        PluginManager::forgetInstance();
+        UpdateManager::forgetInstance();
+
+        // Forces plugin migrations to be run again on every test
+        VersionManager::forgetInstance();
+
+        $this->output = new \Symfony\Component\Console\Output\BufferedOutput();
+
         parent::setUp();
+
+        /*
+         * Ensure system is up to date
+         */
+        $this->runWinterUpCommand();
 
         $manager = PluginManager::instance();
         self::callProtectedMethod($manager, 'loadDisabled');
         $manager->loadPlugins();
         self::callProtectedMethod($manager, 'loadDependencies');
-
         $this->manager = $manager;
+    }
+
+    /**
+     * Flush event listeners and collect garbage.
+     * @return void
+     */
+    public function tearDown() : void
+    {
+        $this->flushModelEventListeners();
+        parent::tearDown();
+        unset($this->app);
+    }
+
+    /**
+     * Migrate database using winter:up command.
+     * @return void
+     */
+    protected function runWinterUpCommand()
+    {
+        UpdateManager::instance()
+            ->setNotesOutput($this->output)
+            ->update();
+    }
+
+    /**
+     * The models in Winter use a static property to store their events, these
+     * will need to be targeted and reset ready for a new test cycle.
+     * Pivot models are an exception since they are internally managed.
+     * @return void
+     */
+    protected function flushModelEventListeners()
+    {
+        foreach (get_declared_classes() as $class) {
+            if ($class === 'Winter\Storm\Database\Pivot' || strtolower($class) === 'october\rain\database\pivot') {
+                continue;
+            }
+
+            $reflectClass = new ReflectionClass($class);
+            if (
+                !$reflectClass->isInstantiable() ||
+                !$reflectClass->isSubclassOf('Winter\Storm\Database\Model') ||
+                $reflectClass->isSubclassOf('Winter\Storm\Database\Pivot')
+            ) {
+                continue;
+            }
+
+            $class::flushEventListeners();
+        }
+
+        ActiveRecord::flushEventListeners();
     }
 
     //
@@ -289,5 +385,57 @@ class PluginManagerTest extends TestCase
 
         $this->assertEquals('Winter.Replacement', $this->manager->getActiveReplacementMap('Winter.Original'));
         $this->assertNull($this->manager->getActiveReplacementMap('Winter.InvalidReplacement'));
+    }
+
+    public function testFlagDisableStatus()
+    {
+        $plugin = $this->manager->findByIdentifier('DependencyTest.Dependency');
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertEmpty($flags);
+
+        $plugin = $this->manager->findByIdentifier('DependencyTest.NotFound');
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertCount(1, $flags);
+        $this->assertArrayHasKey(PluginManager::DISABLED_MISSING_DEPENDENCIES, $flags);
+
+        $plugin = $this->manager->findByIdentifier('Winter.InvalidReplacement');
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertCount(1, $flags);
+        $this->assertArrayHasKey(PluginManager::DISABLED_REPLACEMENT_FAILED, $flags);
+
+        $plugin = $this->manager->findByIdentifier('Winter.Original', true);
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertCount(1, $flags);
+        $this->assertArrayHasKey(PluginManager::DISABLED_REPLACED, $flags);
+    }
+
+    public function testFlagDisabling()
+    {
+        $plugin = $this->manager->findByIdentifier('Winter.Tester', true);
+
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertEmpty($flags);
+
+        $this->manager->disablePlugin($plugin);
+
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertCount(1, $flags);
+        $this->assertArrayHasKey(PluginManager::DISABLED_BY_USER, $flags);
+
+        $this->manager->enablePlugin($plugin);
+
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertEmpty($flags);
+
+        $this->manager->disablePlugin($plugin, PluginManager::DISABLED_BY_CONFIG);
+
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertCount(1, $flags);
+        $this->assertArrayHasKey(PluginManager::DISABLED_BY_CONFIG, $flags);
+
+        $this->manager->enablePlugin($plugin, PluginManager::DISABLED_BY_CONFIG);
+
+        $flags = $this->manager->getPluginFlags($plugin);
+        $this->assertEmpty($flags);
     }
 }

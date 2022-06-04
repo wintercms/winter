@@ -46,10 +46,6 @@ class PluginEnable extends Command
 
         // Enable this plugin
         $pluginManager->enablePlugin($pluginName);
-        $plugin = PluginVersion::where('code', $pluginName)->first();
-        $plugin->is_disabled = false;
-        $plugin->save();
-        $pluginManager->clearDisabledCache();
 
         $this->output->writeln(sprintf('<info>%s:</info> enabled.', $pluginName));
     }

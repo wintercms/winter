@@ -41,10 +41,6 @@ class PluginDisable extends Command
 
         // Disable this plugin
         $pluginManager->disablePlugin($pluginName);
-        $plugin = PluginVersion::where('code', $pluginName)->first();
-        $plugin->is_disabled = true;
-        $plugin->save();
-        $pluginManager->clearDisabledCache();
 
         $this->output->writeln(sprintf('<info>%s:</info> disabled.', $pluginName));
     }
