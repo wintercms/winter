@@ -55,12 +55,12 @@
     },
     "scripts": {
         "post-create-project-cmd": [
-            "php artisan key:generate",
-            "php artisan package:discover"
+            "@php artisan key:generate",
+            "@php artisan package:discover"
         ],
         "post-update-cmd": [
-            "php artisan winter:version",
-            "php artisan package:discover"
+            "@php artisan winter:version",
+            "@php artisan package:discover"
         ],
         "test": [
             "phpunit --stop-on-failure"

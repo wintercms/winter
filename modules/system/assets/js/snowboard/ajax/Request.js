@@ -404,7 +404,7 @@ class Request extends Snowboard.PluginBase {
      */
     processResponse(response) {
         if (this.options.success && typeof this.options.success === 'function') {
-            if (!this.options.success(this.responseData, this)) {
+            if (this.options.success(this.responseData, this) === false) {
                 return;
             }
         }
@@ -449,7 +449,7 @@ class Request extends Snowboard.PluginBase {
      */
     processError(error) {
         if (this.options.error && typeof this.options.error === 'function') {
-            if (!this.options.error(this.responseError, this)) {
+            if (this.options.error(this.responseError, this) === false) {
                 return;
             }
         }
