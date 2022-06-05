@@ -1,4 +1,4 @@
-<?php if (!empty($error)) : ?>
+<?php if (!empty($error)): ?>
     <p class="flash-message static error">
         <?= e($error); ?></p>
     </p>
