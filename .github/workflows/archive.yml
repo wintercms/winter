@@ -11,20 +11,20 @@ jobs:
     - uses: actions/stale@v1.1.0
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
-        days-before-stale: 60
+        days-before-stale: 182
         days-before-close: 3
         stale-issue-message: >
-          This issue will be closed and archived in 3 days, as there has been no activity in the last 60 days.
+          This issue will be closed and archived in 3 days, as there has been no activity in this issue for the last 6 months.
 
-          If this issue is still relevant or you would like to see it actioned, please respond and we will re-open this issue.
-
-          If this issue is critical to your business, consider joining the [Premium Support Program](https://wintercms.com/premium-support) where a Service Level Agreement is offered.
+          If this issue is still relevant or you would like to see it actioned, please respond within 3 days.
+          
+          If this issue is critical for your business, please reach out to us at wintercms@luketowers.ca.
         stale-pr-message: >
-          This pull request will be closed and archived in 3 days, as there has been no activity in the last 60 days.
+          This pull request will be closed and archived in 3 days, as there has been no activity in this pull request for the last 6 months.
 
-          If this is still being worked on, please respond and we will re-open this pull request.
-
-          If this pull request is critical to your business, consider joining the [Premium Support Program](https://wintercms.com/premium-support) where a Service Level Agreement is offered.
+          If you intend to continue working on this pull request, please respond within 3 days.
+          
+          If this pull request is critical for your business, please reach out to us at wintercms@luketowers.ca.
         stale-issue-label: 'Status: Archived'
         stale-pr-label: 'Status: Archived'
         exempt-issue-label: 'Status: In Progress'

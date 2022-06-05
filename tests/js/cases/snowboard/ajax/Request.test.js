@@ -395,10 +395,18 @@ describe('Request AJAX library', function () {
                                 success: true,
                             });
                             expect(instance.responseError).toEqual(null);
+                        },
+                        complete: (data, instance) => {
+                            expect(data).toEqual({
+                                success: true,
+                            });
+                            expect(instance.responseData).toEqual({
+                                success: true,
+                            });
+                            expect(instance.responseError).toEqual(null);
 
                             done();
-                            return false;
-                        }
+                        },
                     });
                 }
             );
@@ -493,10 +501,15 @@ describe('Request AJAX library', function () {
                             expect(data).toEqual('This is an error');
                             expect(instance.responseData).toEqual(null);
                             expect(instance.responseError).toEqual('This is an error');
+                        },
+                        complete: (data, instance) => {
+                            // Data will be null because no data was provided in the response.
+                            expect(data).toBeNull();
+                            expect(instance.responseData).toEqual(null);
+                            expect(instance.responseError).toEqual('This is an error');
 
                             done();
-                            return false;
-                        }
+                        },
                     });
                 }
             );
