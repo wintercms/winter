@@ -292,6 +292,63 @@ class WinterUtil extends Command
         }
     }
 
+    protected function utilPurgeResizedCache()
+    {
+        if (!$this->confirmToProceed('This will PERMANENTLY DELETE all images in the resized directory.')) {
+            return;
+        }
+
+        $totalCount = 0;
+        $uploadsPath = Config::get('filesystems.disks.local.root', storage_path('app'));
+        $uploadsPath .= '/resized';
+
+        // Recursive function to scan the directory for files and ensure they exist in system_files.
+        $purgeImagesFunc = function ($targetDir) use (&$purgeImagesFunc, &$totalCount, $uploadsPath) {
+            if ($files = File::glob($targetDir.'/*')) {
+                if ($dirs = File::directories($targetDir)) {
+                    foreach ($dirs as $dir) {
+                        $purgeImagesFunc($dir);
+
+                        if (File::isDirectoryEmpty($dir) && is_writeable($dir)) {
+                            rmdir($dir);
+                            $this->info('Removed folder: '. str_replace($uploadsPath, '', $dir));
+                        }
+                    }
+                }
+
+                foreach ($files as $file) {
+                    if (!is_file($file)) {
+                        continue;
+                    }
+
+                    // Skip .gitignore files
+                    if ($file === '.gitignore') {
+                        continue;
+                    }
+
+                    // Skip files unable to be purged
+                    if (!is_writeable($file)) {
+                        $this->warn('Unable to purge file: ' . str_replace($uploadsPath, '', $file));
+                        continue;
+                    }
+
+                    unlink($file);
+                    $this->info('Purged: '. str_replace($uploadsPath, '', $file));
+                    $totalCount++;
+                }
+            }
+        };
+
+        $purgeImagesFunc($uploadsPath);
+
+        if ($totalCount > 0) {
+            $this->comment(sprintf('Successfully deleted %s resized images', $totalCount));
+        }
+        else {
+            $this->comment('No resized images found to delete');
+        }
+    }
+
     protected function utilPurgeUploads()
     {
         if (!$this->confirmToProceed('This will PERMANENTLY DELETE files in the uploads directory that do not exist in the "system_files" table.')) {
