@@ -399,6 +399,53 @@ class PluginManagerTest extends TestCase
         $this->assertTrue($this->manager->hasPlugin('Winter.notinstalled'));
     }
 
+    public function testExistsReplacementMixedCase()
+    {
+        // test checking casing of installed plugin (resolved via getNormalizedIdentifier())
+        $this->assertTrue($this->manager->exists('Winter.ReplaceNotInstalled'));
+        $this->assertTrue($this->manager->exists('Winter.replaceNotInstalled'));
+        $this->assertTrue($this->manager->exists('Winter.replacenotInstalled'));
+        $this->assertTrue($this->manager->exists('winter.replacenotInstalled'));
+        $this->assertTrue($this->manager->exists('winter.replacenotinstalled'));
+
+        // test checking casing of installed replaced plugin (resolved via getNormalizedIdentifier() & replacementMap)
+        $this->assertFalse($this->manager->exists('Winter.Original'));
+        $this->assertFalse($this->manager->exists('Winter.original'));
+        $this->assertFalse($this->manager->exists('winter.original'));
+
+        // test checking casing of uninstalled plugin (resolved via strtolower() on replacement keys)
+        $this->assertTrue($this->manager->exists('Winter.NotInstalled'));
+        $this->assertTrue($this->manager->exists('Winter.notInstalled'));
+        $this->assertTrue($this->manager->exists('winter.notInstalled'));
+        $this->assertTrue($this->manager->exists('Winter.notinstalled'));
+    }
+
+    public function testFindByIdentifierReplacementMixedCase()
+    {
+        // test resolving plugin with mixed casing
+        $this->assertInstanceOf(\Winter\ReplaceNotInstalled\Plugin::class, $this->manager->findByIdentifier('Winter.ReplaceNotInstalled'));
+        $this->assertInstanceOf(\Winter\ReplaceNotInstalled\Plugin::class, $this->manager->findByIdentifier('Winter.replaceNotInstalled'));
+        $this->assertInstanceOf(\Winter\ReplaceNotInstalled\Plugin::class, $this->manager->findByIdentifier('Winter.replacenotInstalled'));
+        $this->assertInstanceOf(\Winter\ReplaceNotInstalled\Plugin::class, $this->manager->findByIdentifier('winter.replacenotInstalled'));
+        $this->assertInstanceOf(\Winter\ReplaceNotInstalled\Plugin::class, $this->manager->findByIdentifier('winter.replacenotinstalled'));
+
+        // test resolving replacement plugin with mixed casing
+        $this->assertInstanceOf(\Winter\Replacement\Plugin::class, $this->manager->findByIdentifier('Winter.Original'));
+        $this->assertInstanceOf(\Winter\Replacement\Plugin::class, $this->manager->findByIdentifier('Winter.original'));
+        $this->assertInstanceOf(\Winter\Replacement\Plugin::class, $this->manager->findByIdentifier('winter.original'));
+
+        // test resolving original plugin with mixed casing when ignoring replacements
+        $this->assertInstanceOf(\Winter\Original\Plugin::class, $this->manager->findByIdentifier('Winter.Original', true));
+        $this->assertInstanceOf(\Winter\Original\Plugin::class, $this->manager->findByIdentifier('Winter.original', true));
+        $this->assertInstanceOf(\Winter\Original\Plugin::class, $this->manager->findByIdentifier('winter.original', true));
+
+        // test resolving replacement plugin of uninstalled plugin with mixed casing
+        $this->assertInstanceOf(\Winter\ReplaceNotInstalled\Plugin::class, $this->manager->findByIdentifier('Winter.NotInstalled'));
+        $this->assertInstanceOf(\Winter\ReplaceNotInstalled\Plugin::class, $this->manager->findByIdentifier('Winter.notInstalled'));
+        $this->assertInstanceOf(\Winter\ReplaceNotInstalled\Plugin::class, $this->manager->findByIdentifier('winter.notInstalled'));
+        $this->assertInstanceOf(\Winter\ReplaceNotInstalled\Plugin::class, $this->manager->findByIdentifier('Winter.notinstalled'));
+    }
+
     public function testGetReplacements()
     {
         $replacementPluginReplaces = $this->manager->findByIdentifier('Winter.Replacement')->getReplaces();
