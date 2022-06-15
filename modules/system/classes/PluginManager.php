@@ -473,7 +473,10 @@ class PluginManager
     {
         $normalized = $this->getNormalizedIdentifier($plugin);
 
-        return isset($this->plugins[$normalized]) || isset($this->replacementMap[$normalized]);
+        return isset($this->plugins[$normalized])
+            || isset($this->replacementMap[$normalized])
+            // TODO: we should refactor the plugin manager to handle identifiers internally as lowers
+            || in_array(strtolower($normalized), array_map('strtolower', array_keys($this->replacementMap)));
     }
 
     /**
