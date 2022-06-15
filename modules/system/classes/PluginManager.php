@@ -571,8 +571,7 @@ class PluginManager
      */
     public function normalizeIdentifier(string $code): string
     {
-        $code = strtolower($code);
-        return $this->normalizedMap[$code] ?? $code;
+        return $this->normalizedMap[strtolower($code)] ?? $code;
     }
 
     /**
