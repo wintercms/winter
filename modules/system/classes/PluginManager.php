@@ -455,8 +455,14 @@ class PluginManager
             return $identifier;
         }
 
-        if (!$ignoreReplacements && is_string($identifier) && isset($this->replacementMap[$identifier])) {
-            $identifier = $this->replacementMap[$identifier];
+        // TODO: we should refactor the plugin manager to handle identifiers internally as lowers
+        $replacementMap = array_combine(
+            array_map('strtolower', array_keys($this->replacementMap)),
+            array_values($this->replacementMap)
+        );
+
+        if (!$ignoreReplacements && is_string($identifier) && isset($replacementMap[strtolower($identifier)])) {
+            $identifier = $replacementMap[strtolower($identifier)];
         }
 
         if (!isset($this->plugins[$identifier])) {
