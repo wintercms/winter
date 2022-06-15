@@ -13,6 +13,7 @@
         this.options = options || {};
 		this.sortOrders = []
 		this.definition = $el.data('definition')
+		this.sortMode = $el.data('sort-mode')
 
         var scrollClassContainer = options.scrollClassContainer !== undefined
             ? options.scrollClassContainer
@@ -25,21 +26,67 @@
         })
 
 		if (element.dataset.hasOwnProperty('sortable')) {
-			this.$el.find('.control-list-tbody').listSortable({
-				handle: '.drag-handle'
-			})
-			this.$el.on('dragged.list.sorted', $.proxy(this.processReorder, this))
+			this.$el.find('.control-list-tbody').listSortable()
+			this.$el.on('dragged.list.sortable', $.proxy(this.processReorder, this))
 
 			this.$el.find('[data-record-sort-order]').each(function (index, el) {
 				this.sortOrders.push(el.dataset.recordSortOrder)
 			}.bind(this))
-		}   
+		}
 
         this.update()
     }
 
     ListWidget.DEFAULTS = {
     }
+
+	ListWidget.prototype.processReorder = function (ev, sortData) {
+		var recordIds = []
+		var postData
+
+		if (this.sortMode == 'simple') {
+			this.$el.find('[data-record-id]').each(function (index, el) {
+				recordIds.push(el.dataset.recordId)
+			}.bind(this))
+
+			postData = { definition: this.definition, sort_orders: this.sortOrders, record_ids: recordIds }
+		}
+		else if (this.sortMode == 'nested') {
+			postData = this.getNestedMoveData(sortData)
+		}
+
+		this.$el.request('onReorder', {
+			data: postData,
+			loading: $.wn.stripeLoadIndicator,
+		})
+	}
+
+	ListWidget.prototype.getNestedMoveData = function (sortData) {
+		var $el,
+			$item = $(sortData.item),
+			moveData = {
+				targetNode: 0,
+				sourceNode: $item.data('recordId'),
+				position: 'root'
+			}
+
+		if (($el = $item.next()) && $el.length) {
+			moveData.position = 'before'
+		}
+		else if (($el = $item.prev()) && $el.length) {
+			moveData.position = 'after'
+		}
+		else if (($el = $item.parents('tr:first')) && $el.length) {
+			moveData.position = 'child'
+		}
+
+		if ($el.length) {
+			moveData.targetNode = $el.data('recordId')
+		}
+
+		console.log(moveData)
+		return moveData
+	}
 
     ListWidget.prototype.update = function() {
         var
@@ -98,18 +145,6 @@
         var $checkbox = $('.list-checkbox input[type="checkbox"]', $(el).closest('tr'))
         $checkbox.prop('checked', !$checkbox.is(':checked')).trigger('change')
     }
-
-	ListWidget.prototype.processReorder = function() {
-		var recordIds = []
-		this.$el.find('[data-record-id]').each(function (index, el) {
-			recordIds.push(el.dataset.recordId)
-		}.bind(this))
-
-		this.$el.request('onReorder', {
-			data: { sort_orders: this.sortOrders, record_ids: recordIds, definition: this.definition },
-			loading: $.wn.stripeLoadIndicator,
-		})
-	}   
 
     // LIST WIDGET PLUGIN DEFINITION
     // ============================

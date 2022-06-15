@@ -1,6 +1,7 @@
 <div class="control-list list-scrollable"
      data-control="listwidget"
      data-definition="<?= $definition ?>"
+     <?= $reorder ? 'data-sort-mode="' . e($reorderSortMode) . '"' : '' ?>
      <?= $reorder ? 'data-sortable' : '' ?>
 >
     <table class="table data" data-control="rowlink">

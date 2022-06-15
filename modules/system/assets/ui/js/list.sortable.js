@@ -38,7 +38,6 @@
  *
  * Events:
  * - dragged.list.sortable - triggered on a list element after it was moved
- * - dragged.list.sorted - triggered on a list after the drag action finished
  */
 
 +function ($) { "use strict";
@@ -234,7 +233,7 @@
         }
 
         placeholder.parentNode.insertBefore(item, placeholder)
-        $(item).trigger('dragged.list.sortable')
+        $(item).trigger('dragged.list.sortable', { 'item': target })
     }
 
     ListSortable.prototype.findDraggedItem = function(elementId) {
@@ -403,7 +402,6 @@
 
         var container = $(ev.target).closest('[data-sortable]')
         if (container) {
-            container.trigger('dragged.list.sorted')
             container.css({overflow: this.originalOverflow})
         }
     }

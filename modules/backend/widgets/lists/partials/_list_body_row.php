@@ -3,7 +3,7 @@ $expanded = $showTree ? $this->isTreeNodeExpanded($record) : null;
 $childRecords = $showTree ? $record->getChildren() : null;
 $treeLevelClass = $showTree ? 'list-tree-level-'.$treeLevel : '';
 $hasCheckboxesClass = $showCheckboxes ? 'has-list-checkbox' : '';
-$draggable = ($reorder && $showTree) ? ($reorderSortMode === 'nested' || $treeLevel === 0) : $reorder;
+$draggable = ($reorder && $showTree) ? ($reorderSortMode !== 'nested' && $treeLevel === 0) : $reorder;
 ?>
     <tr
         class="<?= $treeLevelClass ?> <?= $hasCheckboxesClass ?> <?= $this->getRowClass($record) ?>"

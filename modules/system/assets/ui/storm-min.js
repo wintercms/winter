@@ -4727,7 +4727,7 @@ ListSortable.prototype.moveElement=function(target,ev){var list=target.parentNod
 if(!placeholder){return}var elementId=ev.dataTransfer.getData('listsortable/elementid')
 if(!elementId){return}var item=this.findDraggedItem(elementId)
 if(!item){return}placeholder.parentNode.insertBefore(item,placeholder)
-$(item).trigger('dragged.list.sortable')}
+$(item).trigger('dragged.list.sortable',{'item':target})}
 ListSortable.prototype.findDraggedItem=function(elementId){for(var i=this.lists.length-1;i>=0;i--){var list=this.lists[i],item=list.querySelector('[data-list-sortable-element-id="'+elementId+'"]')
 if(item){return item}}return null}
 ListSortable.prototype.getPlaceholderPlacement=function(hoverElement,ev){var mousePosition=$.wn.foundation.event.pageCoordinates(ev),elementPosition=$.wn.foundation.element.absolutePosition(hoverElement)
@@ -4764,8 +4764,7 @@ if(!draggable){return}this.moveElement(draggable,ev.originalEvent)
 this.removePlaceholders()}
 ListSortable.prototype.onDragEnd=function(ev){$(document).off('dragover',this.proxy(this.onDocumentDragOver))
 var container=$(ev.target).closest('[data-sortable]')
-if(container){container.trigger('dragged.list.sorted')
-container.css({overflow:this.originalOverflow})}}
+if(container){container.css({overflow:this.originalOverflow})}}
 ListSortable.prototype.onDocumentDragOver=function(ev){if(!this.isSourceManagedList(ev.originalEvent)){return}if(this.mouseOutsideLists(ev.originalEvent)){this.removePlaceholders()
 return}}
 ListSortable.prototype.onDocumentMouseMove=function(ev){$(document).off('mousemove',this.proxy(this.onDocumentMouseMove))
