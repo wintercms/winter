@@ -103,6 +103,29 @@ class ImageResizer
     }
 
     /**
+     * A simple static method for resizing an image and receiving the output path
+     *
+     * @param mixed $image
+     * @param int|float $width
+     * @param int|float $height
+     * @param array $options
+     * @return string
+     * @throws Exception
+     */
+    public static function make(mixed $image, int|float $width = 0, int|float $height = 0, array $options = []): string
+    {
+        $mode = $options['mode'] === 'crop' ? 'crop' : 'resize';
+
+        if (!in_array($mode, ['resize', 'crop'])) {
+            throw new \ApplicationException('invalid mode passed to resizer');
+        }
+
+        $resizer = new static($image, $width, $height, $options);
+        $resizer->{$mode}();
+        return $resizer->getPathToResizedImage();
+    }
+
+    /**
      * Get the default options for the resizer
      *
      * @return array
@@ -231,7 +254,7 @@ class ImageResizer
                 $disk->setPathPrefix($realPath);
             }
         }
-        
+
         // Include last modified time to tie generated images to the source image
         $mtime = $disk->lastModified($this->image['path']);
 
@@ -331,6 +354,89 @@ class ImageResizer
              *
              */
             Event::fire('system.resizer.afterResize', [$this, $tempPath]);
+
+            // Store the resized image
+            $disk->put($path, file_get_contents($tempPath));
+
+            // Clean up
+            unlink($tempPath);
+        } catch (Exception $ex) {
+            // Clean up in case of any issues
+            unlink($tempPath);
+
+            // Pass the exception up
+            throw $ex;
+        }
+    }
+
+    public function crop()
+    {
+        if ($this->isResized()) {
+            return;
+        }
+
+        // Get the details for the target image
+        list($disk, $path) = $this->getTargetDetails();
+
+        // Copy the image to be resized to the temp directory
+        $tempPath = $this->getLocalTempPath();
+
+        try {
+            /**
+             * @event system.resizer.processCrop
+             * Halting event that enables replacement of the resizing process. There should only ever be
+             * one listener handling this event per project at most, as other listeners would be ignored.
+             *
+             * Example usage:
+             *
+             *     Event::listen('system.resizer.processCrop', function ((\System\Classes\ImageResizer) $resizer, (string) $localTempPath) {
+             *          // Get the resizing configuration
+             *          $config = $resizer->getConfig();
+             *
+             *          // Resize the image
+             *          $resizedImageContents = My\Custom\Resizer::crop($localTempPath, $config['width], $config['height'], $config['options']);
+             *
+             *          // Place the resized image in the correct location for the resizer to finish processing it
+             *          file_put_contents($localTempPath, $resizedImageContents);
+             *
+             *          // Prevent any other resizing replacer logic from running
+             *          return true;
+             *     });
+             *
+             */
+            $processed = Event::fire('system.resizer.processCrop', [$this, $tempPath], true);
+            if (!$processed) {
+                // Process the crop with the default image resizer
+                DefaultResizer::open($tempPath)
+                    ->crop(
+                        $this->options['offset'][0],
+                        $this->options['offset'][1],
+                        $this->width,
+                        $this->height
+                    )
+                    ->save($tempPath);
+            }
+
+            /**
+             * @event system.resizer.afterCrop
+             * Enables post processing of resized images after they've been resized before the
+             * resizing process is finalized (ex. adding watermarks, further optimizing, etc)
+             *
+             * Example usage:
+             *
+             *     Event::listen('system.resizer.afterCrop', function ((\System\Classes\ImageResizer) $resizer, (string) $localTempPath) {
+             *          // Get the resized image data
+             *          $croppedImageContents = file_get_contents($localTempPath);
+             *
+             *          // Post process the image
+             *          $processedContents = TinyPNG::optimize($croppedImageContents);
+             *
+             *          // Place the processed image in the correct location for the resizer to finish processing it
+             *          file_put_contents($localTempPath, $processedContents);
+             *     });
+             *
+             */
+            Event::fire('system.resizer.afterCrop', [$this, $tempPath]);
 
             // Store the resized image
             $disk->put($path, file_get_contents($tempPath));
