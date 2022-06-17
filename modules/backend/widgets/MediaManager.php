@@ -1323,7 +1323,6 @@ class MediaManager extends WidgetBase
      */
     protected function resizeImage(string $image, array $params): string
     {
-
         return ImageResizer::make($image, $params['width'], $params['height'], array_merge([
             'mode' => 'exact'
         ], $params));
