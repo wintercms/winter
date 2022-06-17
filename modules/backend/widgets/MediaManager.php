@@ -1,5 +1,6 @@
 <?php namespace Backend\Widgets;
 
+use System\Classes\ImageResizer;
 use Url;
 use Str;
 use Lang;
@@ -7,6 +8,7 @@ use File;
 use Input;
 use Config;
 use Backend;
+use Storage;
 use Request;
 use Response;
 use Exception;
@@ -128,8 +130,8 @@ class MediaManager extends WidgetBase
         $this->prepareVars();
 
         return [
-            '#'.$this->getId('item-list') => $this->makePartial('item-list'),
-            '#'.$this->getId('folder-path') => $this->makePartial('folder-path')
+            '#' . $this->getId('item-list') => $this->makePartial('item-list'),
+            '#' . $this->getId('folder-path') => $this->makePartial('folder-path')
         ];
     }
 
@@ -185,33 +187,17 @@ class MediaManager extends WidgetBase
      */
     public function onGetSidebarThumbnail()
     {
-        $path = Input::get('path');
+        $path = MediaLibrary::validatePath(Input::get('path'));
         $lastModified = Input::get('lastModified');
-
-        $thumbnailParams = $this->getThumbnailParams();
-        $thumbnailParams['width'] = 300;
-        $thumbnailParams['height'] = 255;
-        $thumbnailParams['mode'] = 'auto';
-
-        $path = MediaLibrary::validatePath($path);
 
         if (!is_numeric($lastModified)) {
             throw new ApplicationException('Invalid input data');
         }
 
-        /*
-         * If the thumbnail file exists, just return the thumbnail markup,
-         * otherwise generate a new thumbnail.
-         */
-        $thumbnailPath = $this->thumbnailExists($thumbnailParams, $path, $lastModified);
-        if ($thumbnailPath) {
-            return [
-                'markup' => $this->makePartial('thumbnail-image', [
-                    'isError' => $this->thumbnailIsError($thumbnailPath),
-                    'imageUrl' => $this->getThumbnailImageUrl($thumbnailPath)
-                ])
-            ];
-        }
+        $thumbnailParams = $this->getThumbnailParams();
+        $thumbnailParams['width'] = 300;
+        $thumbnailParams['height'] = 255;
+        $thumbnailParams['mode'] = 'auto';
 
         $thumbnailInfo = $thumbnailParams;
         $thumbnailInfo['path'] = $path;
@@ -236,9 +222,9 @@ class MediaManager extends WidgetBase
         $this->prepareVars();
 
         return [
-            '#'.$this->getId('item-list') => $this->makePartial('item-list'),
-            '#'.$this->getId('folder-path') => $this->makePartial('folder-path'),
-            '#'.$this->getId('view-mode-buttons') => $this->makePartial('view-mode-buttons')
+            '#' . $this->getId('item-list') => $this->makePartial('item-list'),
+            '#' . $this->getId('folder-path') => $this->makePartial('folder-path'),
+            '#' . $this->getId('view-mode-buttons') => $this->makePartial('view-mode-buttons')
         ];
     }
 
@@ -257,9 +243,9 @@ class MediaManager extends WidgetBase
         $this->prepareVars();
 
         return [
-            '#'.$this->getId('item-list') => $this->makePartial('item-list'),
-            '#'.$this->getId('folder-path') => $this->makePartial('folder-path'),
-            '#'.$this->getId('filters') => $this->makePartial('filters')
+            '#' . $this->getId('item-list') => $this->makePartial('item-list'),
+            '#' . $this->getId('folder-path') => $this->makePartial('folder-path'),
+            '#' . $this->getId('filters') => $this->makePartial('filters')
         ];
     }
 
@@ -280,8 +266,8 @@ class MediaManager extends WidgetBase
         $this->prepareVars();
 
         return [
-            '#'.$this->getId('item-list') => $this->makePartial('item-list'),
-            '#'.$this->getId('folder-path') => $this->makePartial('folder-path')
+            '#' . $this->getId('item-list') => $this->makePartial('item-list'),
+            '#' . $this->getId('folder-path') => $this->makePartial('folder-path')
         ];
     }
 
@@ -378,7 +364,7 @@ class MediaManager extends WidgetBase
         $this->prepareVars();
 
         return [
-            '#'.$this->getId('item-list') => $this->makePartial('item-list')
+            '#' . $this->getId('item-list') => $this->makePartial('item-list')
         ];
     }
 
@@ -543,7 +529,7 @@ class MediaManager extends WidgetBase
         $this->prepareVars();
 
         return [
-            '#'.$this->getId('item-list') => $this->makePartial('item-list')
+            '#' . $this->getId('item-list') => $this->makePartial('item-list')
         ];
     }
 
@@ -700,25 +686,23 @@ class MediaManager extends WidgetBase
 
     /**
      * Load image for cropping AJAX handler
-     * @return array
+     * @return string
      */
-    public function onLoadImageCropPopup()
+    public function onLoadImageCropPopup(): string
     {
         $this->abortIfReadOnly();
 
         $path = Input::get('path');
         $path = MediaLibrary::validatePath($path);
-        $cropSessionKey = md5(FormHelper::getSessionKey());
         $selectionParams = $this->getSelectionParams();
 
-        $urlAndSize = $this->getCropEditImageUrlAndSize($path, $cropSessionKey);
+        $urlAndSize = $this->getCropEditImageUrlAndSize($path);
         $width = $urlAndSize['dimensions'][0];
         $height = $urlAndSize['dimensions'][1] ?: 1;
 
         $this->vars['currentSelectionMode'] = $selectionParams['mode'];
         $this->vars['currentSelectionWidth'] = $selectionParams['width'];
         $this->vars['currentSelectionHeight'] = $selectionParams['height'];
-        $this->vars['cropSessionKey'] = $cropSessionKey;
         $this->vars['imageUrl'] = $urlAndSize['url'];
         $this->vars['dimensions'] = $urlAndSize['dimensions'];
         $this->vars['originalRatio'] = round($width / $height, 5);
@@ -734,13 +718,6 @@ class MediaManager extends WidgetBase
     public function onEndCroppingSession()
     {
         $this->abortIfReadOnly();
-
-        $cropSessionKey = Input::get('cropSessionKey');
-        if (!preg_match('/^[0-9a-z]+$/', $cropSessionKey)) {
-            throw new ApplicationException('Invalid input data');
-        }
-
-        $this->removeCropEditDir($cropSessionKey);
     }
 
     /**
@@ -751,25 +728,14 @@ class MediaManager extends WidgetBase
     {
         $this->abortIfReadOnly();
 
-        $imageSrcPath = trim(Input::get('img'));
         $selectionData = Input::get('selection');
-        $cropSessionKey = Input::get('cropSessionKey');
-        $path = Input::get('path');
-        $path = MediaLibrary::validatePath($path);
-
-        if (!strlen($imageSrcPath)) {
-            throw new ApplicationException('Invalid input data');
-        }
-
-        if (!preg_match('/^[0-9a-z]+$/', $cropSessionKey)) {
-            throw new ApplicationException('Invalid input data');
-        }
+        $path = MediaLibrary::validatePath(Input::get('path'));
 
         if (!is_array($selectionData)) {
             throw new ApplicationException('Invalid input data');
         }
 
-        $result = $this->cropImage($imageSrcPath, $selectionData, $cropSessionKey, $path);
+        $result = $this->cropImage($path, $selectionData);
 
         $selectionMode = Input::get('selectionMode');
         $selectionWidth = Input::get('selectionWidth');
@@ -1163,27 +1129,28 @@ class MediaManager extends WidgetBase
 
     /**
      * Returns thumbnail parameters
-     * @param string $viewMode
-     * @return array
      */
-    protected function getThumbnailParams($viewMode = null)
+    protected function getThumbnailParams(string $viewMode = null): array
     {
         $result = [
             'mode' => 'crop'
         ];
 
-        if ($viewMode) {
-            if ($viewMode == self::VIEW_MODE_LIST) {
-                $result['width'] = 75;
-                $result['height'] = 75;
-            }
-            else {
-                $result['width'] = 165;
-                $result['height'] = 165;
-            }
+        if (!$viewMode) {
+            return $result;
         }
 
-        return $result;
+        if ($viewMode === self::VIEW_MODE_LIST) {
+            return array_merge($result, [
+                'width' => 75,
+                'height' => 75
+            ]);
+        }
+
+        return array_merge($result, [
+            'width' => 165,
+            'height' => 165
+        ]);
     }
 
     /**
@@ -1227,44 +1194,15 @@ class MediaManager extends WidgetBase
 
     /**
      * Returns the URL to a thumbnail
-     * @param string $imagePath
-     * @return string
      */
-    protected function getThumbnailImageUrl($imagePath)
+    protected function getThumbnailImageUrl(string $imagePath): string
     {
-        return Url::to('/storage/temp'.$imagePath);
-    }
-
-    /**
-     * Check if a thumbnail exists
-     * @param array|null $thumbnailParams
-     * @param string $itemPath
-     * @param int $lastModified
-     * @return bool
-     */
-    protected function thumbnailExists($thumbnailParams, $itemPath, $lastModified)
-    {
-        $thumbnailPath = $this->getThumbnailImagePath($thumbnailParams, $itemPath, $lastModified);
-
-        $fullPath = temp_path(ltrim($thumbnailPath, '/'));
-
-        if (File::exists($fullPath)) {
-            return $thumbnailPath;
-        }
-
-        return false;
-    }
-
-    /**
-     * Check if a thumbnail has caused an error
-     * @param string $thumbnailPath
-     * @return bool
-     */
-    protected function thumbnailIsError($thumbnailPath)
-    {
-        $fullPath = temp_path(ltrim($thumbnailPath, '/'));
-
-        return hash_file('crc32', $fullPath) == $this->getBrokenImageHash();
+        return Url::to(
+            rtrim(
+                Config::get('cms.storage.resized.path', ''),
+                Config::get('cms.storage.resized.folder', '')
+            ) . $imagePath
+        );
     }
 
     /**
@@ -1316,80 +1254,57 @@ class MediaManager extends WidgetBase
      * @param array|null $thumbnailParams
      * @return array
      */
-    protected function generateThumbnail($thumbnailInfo, $thumbnailParams = null)
+    protected function generateThumbnail($thumbnailInfo, $thumbnailParams = null): array
     {
-        $tempFilePath = null;
-        $fullThumbnailPath = null;
-        $thumbnailPath = null;
         $markup = null;
 
-        try {
-            $path = $thumbnailInfo['path'];
+        $path = $thumbnailInfo['path'];
 
-            if ($this->isVector($path)) {
-                $markup = $this->makePartial('thumbnail-image', [
+        if ($this->isVector($path) && ($id = $thumbnailInfo['id'])) {
+            return [
+                'id' => $id,
+                'markup' => $this->makePartial('thumbnail-image', [
                     'isError' => false,
                     'imageUrl' => Url::to(config('cms.storage.media.path') . $thumbnailInfo['path'])
-                ]);
-            } else {
-                /*
-                 * Get and validate input data
-                 */
-                $width = $thumbnailInfo['width'];
-                $height = $thumbnailInfo['height'];
-                $lastModified = $thumbnailInfo['lastModified'];
+                ])
+            ];
+        }
 
-                if (!is_numeric($width) || !is_numeric($height) || !is_numeric($lastModified)) {
-                    throw new ApplicationException('Invalid input data');
-                }
+        try {
+            /*
+             * Get and validate input data
+             */
+            $width = $thumbnailInfo['width'];
+            $height = $thumbnailInfo['height'];
+            $lastModified = $thumbnailInfo['lastModified'];
 
-                if (!$thumbnailParams) {
-                    $thumbnailParams = $this->getThumbnailParams();
-                    $thumbnailParams['width'] = $width;
-                    $thumbnailParams['height'] = $height;
-                }
-
-                $thumbnailPath = $this->getThumbnailImagePath($thumbnailParams, $path, $lastModified);
-                $fullThumbnailPath = temp_path(ltrim($thumbnailPath, '/'));
-
-                /*
-                 * Save the file locally
-                 */
-                $library = MediaLibrary::instance();
-                $tempFilePath = $this->getLocalTempFilePath($path);
-
-                if (!@File::put($tempFilePath, $library->get($path))) {
-                    throw new SystemException('Error saving remote file to a temporary location');
-                }
-
-                /*
-                 * Resize the thumbnail and save to the thumbnails directory
-                 */
-                $this->resizeImage($fullThumbnailPath, $thumbnailParams, $tempFilePath);
-
-                /*
-                 * Delete the temporary file
-                 */
-                File::delete($tempFilePath);
-                $markup = $this->makePartial('thumbnail-image', [
-                    'isError' => false,
-                    'imageUrl' => $this->getThumbnailImageUrl($thumbnailPath)
-                ]);
-            }
-        } catch (Exception $ex) {
-            if ($tempFilePath) {
-                File::delete($tempFilePath);
+            if (!is_numeric($width) || !is_numeric($height) || !is_numeric($lastModified)) {
+                throw new ApplicationException('Invalid input data');
             }
 
-            if ($fullThumbnailPath) {
-                $this->copyBrokenImage($fullThumbnailPath);
+            if (!$thumbnailParams) {
+                $thumbnailParams = $this->getThumbnailParams();
+                $thumbnailParams['width'] = $width;
+                $thumbnailParams['height'] = $height;
             }
-
-            $markup = $this->makePartial('thumbnail-image', ['isError' => true]);
 
             /*
-             * @todo We need to log all types of exceptions here
+             * Resize the thumbnail and save to the thumbnails directory
              */
+
+
+            $fullThumbnailPath = $this->resizeImage(MediaLibrary::url($path), $thumbnailParams);
+
+            /*
+             * Delete the temporary file
+             */
+            $markup = $this->makePartial('thumbnail-image', [
+                'isError' => false,
+                'imageUrl' => $this->getThumbnailImageUrl($fullThumbnailPath)
+            ]);
+        } catch (\Throwable $ex) {
+            $markup = $this->makePartial('thumbnail-image', ['isError' => true]);
+
             traceLog($ex->getMessage());
         }
 
@@ -1399,39 +1314,19 @@ class MediaManager extends WidgetBase
                 'markup' => $markup
             ];
         }
+
+        return [];
     }
 
     /**
      * Resize an image
-     * @param string $fullThumbnailPath
-     * @param array $thumbnailParams
-     * @param string $tempFilePath
-     * @return void
      */
-    protected function resizeImage($fullThumbnailPath, $thumbnailParams, $tempFilePath)
+    protected function resizeImage(string $image, array $params): string
     {
-        $thumbnailDir = dirname($fullThumbnailPath);
-        if (
-            !File::isDirectory($thumbnailDir)
-            && File::makeDirectory($thumbnailDir, 0777, true) === false
-        ) {
-            throw new SystemException('Error creating thumbnail directory');
-        }
 
-        $targetDimensions = $this->getTargetDimensions($thumbnailParams['width'], $thumbnailParams['height'], $tempFilePath);
-
-        $targetWidth = $targetDimensions[0];
-        $targetHeight = $targetDimensions[1];
-
-        Resizer::open($tempFilePath)
-            ->resize($targetWidth, $targetHeight, [
-                'mode'   => $thumbnailParams['mode'],
-                'offset' => [0, 0]
-            ])
-            ->save($fullThumbnailPath)
-        ;
-
-        File::chmod($fullThumbnailPath);
+        return ImageResizer::make($image, $params['width'], $params['height'], array_merge([
+            'mode' => 'exact'
+        ], $params));
     }
 
     /**
@@ -1440,7 +1335,7 @@ class MediaManager extends WidgetBase
      */
     protected function getBrokenImagePath()
     {
-        return __DIR__.'/mediamanager/assets/images/broken-thumbnail.gif';
+        return __DIR__ . '/mediamanager/assets/images/broken-thumbnail.gif';
     }
 
     /**
@@ -1458,278 +1353,99 @@ class MediaManager extends WidgetBase
         return $this->brokenImageHash = hash_file('crc32', $fullPath);
     }
 
-    /**
-     * Copy broken image to destination
-     * @param string $path
-     * @return void
-     */
-    protected function copyBrokenImage($path)
-    {
-        try {
-            $thumbnailDir = dirname($path);
-            if (!File::isDirectory($thumbnailDir) && File::makeDirectory($thumbnailDir, 0777, true) === false) {
-                return;
-            }
-
-            File::copy($this->getBrokenImagePath(), $path);
-        }
-        catch (Exception $ex) {
-            traceLog($ex->getMessage());
-        }
-    }
-
-    /**
-     * Get target dimensions
-     * @param int $width
-     * @param int $height
-     * @param string $originalImagePath
-     * @return void
-     */
-    protected function getTargetDimensions($width, $height, $originalImagePath)
-    {
-        $originalDimensions = [$width, $height];
-
-        try {
-            $dimensions = getimagesize($originalImagePath);
-            if (!$dimensions) {
-                return $originalDimensions;
-            }
-
-            if ($dimensions[0] > $width || $dimensions[1] > $height) {
-                return $originalDimensions;
-            }
-
-            return $dimensions;
-        }
-        catch (Exception $ex) {
-            return $originalDimensions;
-        }
-    }
-
     //
     // Cropping
     //
 
     /**
-     * Returns the crop session working directory path
-     * @param string $cropSessionKey
-     * @return string
-     */
-    protected function getCropSessionDirPath($cropSessionKey)
-    {
-        return $this->getThumbnailDirectory().'edit-crop-'.$cropSessionKey;
-    }
-
-    /**
      * Prepares an image for cropping and returns payload containing a URL
      * @param string $path
-     * @param string $cropSessionKey
      * @param array $params
      * @return array
      */
-    protected function getCropEditImageUrlAndSize($path, $cropSessionKey, $params = null)
+    protected function getCropEditImageUrlAndSize($path, $params = null)
     {
-        $sessionDirectoryPath = $this->getCropSessionDirPath($cropSessionKey);
-        $fullSessionDirectoryPath = temp_path($sessionDirectoryPath);
-        $sessionDirectoryCreated = false;
+        $url = MediaLibrary::url($path);
 
-        if (!File::isDirectory($fullSessionDirectoryPath)) {
-            File::makeDirectory($fullSessionDirectoryPath, 0777, true, true);
-            $sessionDirectoryCreated = true;
+        if ($params) {
+            $url = $this->resizeImage($url, [
+                'mode' => 'exact',
+                'width' => $params['width'],
+                'height' => $params['height'],
+            ]);
         }
-
-        $tempFilePath = null;
-
-        try {
-            $extension = pathinfo($path, PATHINFO_EXTENSION);
-            $library = MediaLibrary::instance();
-            $originalThumbFileName = 'original.'.$extension;
-
-            /*
-             * If the target dimensions are not provided, save the original image to the
-             * crop session directory and return its URL.
-             */
-            if (!$params) {
-                $tempFilePath = $fullSessionDirectoryPath.'/'.$originalThumbFileName;
-
-                if (!@File::put($tempFilePath, $library->get($path))) {
-                    throw new SystemException('Error saving remote file to a temporary location.');
-                }
-
-                $url = $this->getThumbnailImageUrl($sessionDirectoryPath.'/'.$originalThumbFileName);
-                $dimensions = getimagesize($tempFilePath);
-
-                return [
-                    'url' => $url,
-                    'dimensions' => $dimensions
-                ];
-            }
-            /*
-             * If the target dimensions are provided, resize the original image and
-             * return its URL and dimensions.
-             */
-
-            $originalFilePath = $fullSessionDirectoryPath.'/'.$originalThumbFileName;
-            if (!File::isFile($originalFilePath)) {
-                throw new SystemException('The original image is not found in the cropping session directory.');
-            }
-
-            $resizedThumbFileName = 'resized-'.$params['width'].'-'.$params['height'].'.'.$extension;
-            $tempFilePath = $fullSessionDirectoryPath.'/'.$resizedThumbFileName;
-
-            Resizer::open($originalFilePath)
-                ->resize($params['width'], $params['height'], [
-                    'mode' => 'exact'
-                ])
-                ->save($tempFilePath)
-            ;
-
-            $url = $this->getThumbnailImageUrl($sessionDirectoryPath.'/'.$resizedThumbFileName);
-            $dimensions = getimagesize($tempFilePath);
-
-            return [
-                'url' => $url,
-                'dimensions' => $dimensions
-            ];
-        }
-        catch (Exception $ex) {
-            if ($sessionDirectoryCreated) {
-                @File::deleteDirectory($fullSessionDirectoryPath);
-            }
-
-            if ($tempFilePath) {
-                File::delete($tempFilePath);
-            }
-
-            throw $ex;
-        }
-    }
-
-    /**
-     * Cleans up the directory used for cropping based on the session key
-     * @param string $cropSessionKey
-     * @return void
-     */
-    protected function removeCropEditDir($cropSessionKey)
-    {
-        $sessionDirectoryPath = $this->getCropSessionDirPath($cropSessionKey);
-        $fullSessionDirectoryPath = temp_path($sessionDirectoryPath);
-
-        if (File::isDirectory($fullSessionDirectoryPath)) {
-            @File::deleteDirectory($fullSessionDirectoryPath);
-        }
-    }
-
-    /**
-     * Business logic to crop a media library image
-     * @param string $imageSrcPath
-     * @param string $selectionData
-     * @param string $cropSessionKey
-     * @param string $path
-     * @return array
-     */
-    protected function cropImage($imageSrcPath, $selectionData, $cropSessionKey, $path)
-    {
-        $originalFileName = basename($path);
-
-        $path = rtrim(dirname($path), '/').'/';
-        $fileName = basename($imageSrcPath);
-
-        if (
-            strpos($fileName, '..') !== false ||
-            strpos($fileName, '/') !== false ||
-            strpos($fileName, '\\') !== false
-        ) {
-            throw new SystemException('Invalid image file name.');
-        }
-
-        $selectionParams = ['x', 'y', 'w', 'h'];
-
-        foreach ($selectionParams as $paramName) {
-            if (!array_key_exists($paramName, $selectionData)) {
-                throw new SystemException('Invalid selection data.');
-            }
-
-            if (!is_numeric($selectionData[$paramName])) {
-                throw new SystemException('Invalid selection data.');
-            }
-
-            $selectionData[$paramName] = (int) $selectionData[$paramName];
-        }
-
-        $sessionDirectoryPath = $this->getCropSessionDirPath($cropSessionKey);
-        $fullSessionDirectoryPath = temp_path($sessionDirectoryPath);
-
-        if (!File::isDirectory($fullSessionDirectoryPath)) {
-            throw new SystemException('The image editing session is not found.');
-        }
-
-        /*
-         * Find the image on the disk and resize it
-         */
-        $imagePath = $fullSessionDirectoryPath.'/'.$fileName;
-        if (!File::isFile($imagePath)) {
-            throw new SystemException('The image is not found on the disk.');
-        }
-
-        $extension = pathinfo($originalFileName, PATHINFO_EXTENSION);
-
-        $targetImageName = basename($originalFileName, '.'.$extension).'-'
-            .$selectionData['x'].'-'
-            .$selectionData['y'].'-'
-            .$selectionData['w'].'-'
-            .$selectionData['h'].'-';
-
-        $targetImageName .= time();
-        $targetImageName .= '.'.$extension;
-
-        $targetTmpPath = $fullSessionDirectoryPath.'/'.$targetImageName;
-
-        /*
-         * Crop the image, otherwise copy original to target destination.
-         */
-        if ($selectionData['w'] == 0 || $selectionData['h'] == 0) {
-            File::copy($imagePath, $targetTmpPath);
-        }
-        else {
-            Resizer::open($imagePath)
-                ->crop(
-                    $selectionData['x'],
-                    $selectionData['y'],
-                    $selectionData['w'],
-                    $selectionData['h'],
-                    $selectionData['w'],
-                    $selectionData['h']
-                )
-                ->save($targetTmpPath)
-            ;
-        }
-
-        /*
-         * Upload the cropped file to the Library
-         */
-        $targetFolder = $path.'cropped-images';
-        $targetPath = $targetFolder.'/'.$targetImageName;
-
-        $library = MediaLibrary::instance();
-        $library->put($targetPath, file_get_contents($targetTmpPath));
 
         return [
-            'publicUrl' => $library->getPathUrl($targetPath),
-            'documentType' => MediaLibraryItem::FILE_TYPE_IMAGE,
-            'itemType' => MediaLibraryItem::TYPE_FILE,
-            'path' => $targetPath,
-            'title' => $targetImageName,
-            'folder' => $targetFolder
+            'url' => $url,
+            'dimensions' => str_starts_with($url, '/')
+                ? getimagesize(base_path($url))
+                : getimagesize($url)
         ];
     }
 
     /**
-     * Detect if image is vector graphic (SVG)
-     * @param string $path
-     * @return boolean
+     * Business logic to crop a media library image
      */
-    protected function isVector($path)
+    protected function cropImage(string $path, array $selectionData): array
+    {
+        foreach (['x', 'y', 'w', 'h'] as $key) {
+            if (!isset($selectionData[$key]) || !is_numeric($selectionData[$key])) {
+                throw new SystemException('Invalid selection data.');
+            }
+
+            $selectionData[$key] = (int) $selectionData[$key];
+        }
+
+        $croppedPath = $this->resizeImage(MediaLibrary::url($path), [
+            'mode' => 'crop',
+            'height' => $selectionData['h'],
+            'width' => $selectionData['w'],
+            'offset' => [
+                $selectionData['x'],
+                $selectionData['y']
+            ]
+        ]);
+
+        $targetPath = $this->getCroppedPath($path);
+
+        // would be nice to have Resizer::disk()->get($image)
+        MediaLibrary::instance()->put(
+            $targetPath,
+            Storage::disk(Config::get('cms.storage.resized.disk'))->get($croppedPath)
+        );
+
+        return [
+            'publicUrl' => MediaLibrary::url($targetPath),
+            'documentType' => MediaLibraryItem::FILE_TYPE_IMAGE,
+            'itemType' => MediaLibraryItem::TYPE_FILE,
+            'path' => $targetPath,
+            'title' => basename($path),
+            'folder' => dirname($path)
+        ];
+    }
+
+    /**
+     * Get a path to save a cropped image as
+     */
+    protected function getCroppedPath(string $path): string
+    {
+        $parts = (!str_contains(basename($path), '.'))
+            ? [$path, '']
+            : array_map('strrev', array_reverse(explode('.', strrev($path), 2)));
+
+        $i = 1;
+
+        do {
+            $cropped = sprintf('%s_cropped_%d.%s', $parts[0], $i++, $parts[1]);
+        } while (MediaLibrary::instance()->exists($cropped));
+
+        return $cropped;
+    }
+
+    /**
+     * Detect if image is vector graphic (SVG)
+     */
+    protected function isVector(string $path): bool
     {
         return (pathinfo($path, PATHINFO_EXTENSION) == 'svg');
     }
