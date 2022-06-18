@@ -9,7 +9,7 @@ use Winter\Storm\Argon\Argon;
  * Reads and stores the Winter CMS source manifest information.
  *
  * The source manifest is a meta JSON file, stored on GitHub, that contains the hashsums of all module files across all
- * buils of Winter CMS. This allows us to compare the Winter CMS installation against the expected file checksums and
+ * builds of Winter CMS. This allows us to compare the Winter CMS installation against the expected file checksums and
  * determine the installed build and whether it has been modified.
  *
  * Since Winter CMS v1.1.1, a forks manifest is also used to determine at which point we forked a branch off to a new
