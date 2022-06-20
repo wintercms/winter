@@ -324,20 +324,6 @@ class PluginManager
             View::addNamespace($pluginNamespace, $viewsPath);
         }
 
-        /*
-         * Register namespace aliases for any replaced plugins
-         */
-        if ($replaces = $plugin->getReplaces()) {
-            foreach ($replaces as $replace) {
-                $replaceNamespace = $this->getNamespace($replace);
-
-                $this->app->make(ClassLoader::class)->addNamespaceAliases([
-                    // class_alias() expects order to be $real, $alias
-                    $this->getNamespace($pluginId) => $replaceNamespace,
-                ]);
-            }
-        }
-
         /**
          * Disable plugin registration for restricted pages, unless elevated
          */
@@ -734,6 +720,12 @@ class PluginManager
         foreach ($this->replacementMap as $target => $replacement) {
             // Alias the replaced plugin to the replacing plugin
             $this->aliasPluginAs($replacement, $target);
+
+            // Register namespace aliases for any replaced plugins
+            $this->app->make(ClassLoader::class)->addNamespaceAliases([
+                // class_alias() expects order to be $real, $alias
+                $this->getNamespace($replacement) => $this->getNamespace($target),
+            ]);
         }
     }
 
