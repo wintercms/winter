@@ -118,5 +118,5 @@ jobs:
 
       - name: Run Linting and Tests
         run: |
-          ./vendor/bin/parallel-lint --exclude vendor --exclude storage --exclude tests/fixtures/plugins/testvendor/goto/Plugin.php .
+          composer lint
           ./vendor/bin/phpunit
