@@ -14,7 +14,7 @@ class PageTest extends TestCase
         $theme = Theme::load('test');
         $controller = new Controller;
 
-        $item = (object)[
+        $item = (object) [
             'type' => 'cms-page',
             'reference' => 'index',
         ];
