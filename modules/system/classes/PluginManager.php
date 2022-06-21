@@ -226,7 +226,7 @@ class PluginManager
             ];
         });
 
-        list($this->pluginFlag, $this->replacementMap, $this->activeReplacementMap) = $data;
+        list($this->pluginFlags, $this->replacementMap, $this->activeReplacementMap) = $data;
     }
 
     /**
