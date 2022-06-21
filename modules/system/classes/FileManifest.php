@@ -63,7 +63,6 @@ class FileManifest
     /**
      * Sets the root folder.
      *
-     * @param string $root
      * @throws ApplicationException If the specified root does not exist.
      */
     public function setRoot(string $root): static
@@ -83,8 +82,6 @@ class FileManifest
 
     /**
      * Sets the modules.
-     *
-     * @param array $modules
      */
     public function setModules(array $modules): static
     {
@@ -97,8 +94,6 @@ class FileManifest
 
     /**
      * Gets a list of files and their corresponding hashsums.
-     *
-     * @return array
      */
     public function getFiles(): array
     {
@@ -125,8 +120,6 @@ class FileManifest
 
     /**
      * Gets the checksum of a specific install.
-     *
-     * @return array
      */
     public function getModuleChecksums(): array
     {
@@ -153,9 +146,6 @@ class FileManifest
 
     /**
      * Finds all files within the path.
-     *
-     * @param string $basePath The base path to look for files within.
-     * @return array
      */
     protected function findFiles(string $basePath): array
     {
@@ -173,9 +163,6 @@ class FileManifest
 
     /**
      * Returns the filename without the root.
-     *
-     * @param string $file
-     * @return string
      */
     protected function getFilename(string $file): string
     {
@@ -184,9 +171,6 @@ class FileManifest
 
     /**
      * Normalises the file contents, irrespective of OS.
-     *
-     * @param string $file
-     * @return string
      */
     protected function normalizeFileContents(string $file): string
     {
