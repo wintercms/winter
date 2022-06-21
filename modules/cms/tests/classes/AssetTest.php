@@ -11,7 +11,6 @@ class AssetTest extends TestCase
     public function testLoad()
     {
         $theme = Theme::load('test');
-        
         // Valid direct path
         $this->assertStringContainsString(
             'console.log(\'script1.js\');',
