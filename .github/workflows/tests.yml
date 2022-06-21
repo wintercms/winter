@@ -30,6 +30,7 @@ jobs:
       - name: Run tests
         working-directory: ./modules/system/tests/js
         run: npm run test
+
   phpUnitTests:
     strategy:
       max-parallel: 8
