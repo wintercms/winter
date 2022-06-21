@@ -3,7 +3,7 @@
 namespace Backend\Tests\Widgets
 {
     use System\Tests\Bootstrap\PluginTestCase;
-    use Illuminate\Database\Eloquent\Model;
+    use Winter\Storm\Database\Model;
     use Backend\Tests\Fixtures\Models\UserFixture;
     use Backend\Widgets\Form;
 
