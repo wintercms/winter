@@ -42,34 +42,18 @@ class SourceManifest
 
     /**
      * Constructor
-     *
-     * @param string $manifest Manifest file to load
-     * @param string $branches Branches manifest file to load
-     * @param bool $autoload Loads the manifest on construct
      */
-    public function __construct($source = null, $forks = null, $autoload = true)
+    public function __construct(string $source = null, string $forks = null, bool $autoload = true)
     {
-        if (isset($source)) {
-            $this->setSource($source);
-        } else {
-            $this->setSource(
-                Config::get(
-                    'cms.sourceManifestUrl',
-                    'https://raw.githubusercontent.com/wintercms/meta/master/manifest/builds.json'
-                )
-            );
-        }
+        $this->setSource($source ?? Config::get(
+            'cms.sourceManifestUrl',
+            'https://raw.githubusercontent.com/wintercms/meta/master/manifest/builds.json'
+        ));
 
-        if (isset($forks)) {
-            $this->setForksSource($forks);
-        } else {
-            $this->setForksSource(
-                Config::get(
-                    'cms.forkManifestUrl',
-                    'https://raw.githubusercontent.com/wintercms/meta/master/manifest/forks.json'
-                )
-            );
-        }
+        $this->setForksSource($forks ?? Config::get(
+            'cms.forkManifestUrl',
+            'https://raw.githubusercontent.com/wintercms/meta/master/manifest/forks.json'
+        ));
 
         if ($autoload) {
             $this->loadSource();
@@ -108,7 +92,7 @@ class SourceManifest
      *
      * @throws ApplicationException If the manifest is invalid, or cannot be parsed.
      */
-    public function loadSource()
+    public function loadSource(): static
     {
         if (file_exists($this->source)) {
             $source = file_get_contents($this->source);
@@ -152,7 +136,7 @@ class SourceManifest
      *
      * @throws ApplicationException If the manifest is invalid, or cannot be parsed.
      */
-    public function loadForks()
+    public function loadForks(): static
     {
         if (file_exists($this->forksUrl)) {
             $forks = file_get_contents($this->forksUrl);
@@ -222,7 +206,7 @@ class SourceManifest
      *
      * @return array
      */
-    public function getBuilds()
+    public function getBuilds(): array
     {
         return array_values(array_map(function ($build) {
             return $build['version'];
@@ -233,9 +217,8 @@ class SourceManifest
      * Generates the JSON data to be stored with the source manifest.
      *
      * @throws ApplicationException If no builds have been added to this source manifest.
-     * @return string
      */
-    public function generate()
+    public function generate(): string
     {
         if (!count($this->builds)) {
             throw new ApplicationException(
@@ -270,9 +253,8 @@ class SourceManifest
      *
      * @param string|integer $build Build version to get the filelist state for.
      * @throws ApplicationException If the specified build has not been added to the source manifest.
-     * @return array
      */
-    public function getState($build)
+    public function getState(mixed $build): array
     {
         if (is_string($build)) {
             $build = $this->getVersionInt($build);
@@ -328,9 +310,8 @@ class SourceManifest
      *
      * @param FileManifest $manifest The file manifest to compare against the source.
      * @param bool $detailed If true, the list of files modified, added and deleted will be included in the result.
-     * @return array
      */
-    public function compare(FileManifest $manifest, $detailed = false)
+    public function compare(FileManifest $manifest, $detailed = false): array
     {
         $modules = $manifest->getModuleChecksums();
 
@@ -431,7 +412,7 @@ class SourceManifest
      *  or string, used to determine changes with this build.
      * @return array
      */
-    protected function processChanges(FileManifest $manifest, $previous = null)
+    protected function processChanges(FileManifest $manifest, $previous = null): array
     {
         // If no previous build has been provided, all files are added
         if (is_null($previous)) {
@@ -503,11 +484,9 @@ class SourceManifest
     /**
      * Converts a version string into an integer for comparison.
      *
-     * @param string $version
      * @throws ApplicationException if a version string does not match the format "major.minor.path"
-     * @return int
      */
-    protected function getVersionInt(string $version)
+    protected function getVersionInt(string $version): int
     {
         // Get major.minor.patch versions
         if (!preg_match('/^([0-9]+)\.([0-9]+)\.([0-9]+)/', $version, $versionParts)) {

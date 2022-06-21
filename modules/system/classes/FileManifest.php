@@ -53,23 +53,11 @@ class FileManifest
 
     /**
      * Constructor.
-     *
-     * @param string $root The root folder to get the file list from.
-     * @param array $modules An array of modules to include in the file manifest.
      */
-    public function __construct($root = null, array $modules = null)
+    public function __construct(string $root = null, array $modules = null)
     {
-        if (isset($root)) {
-            $this->setRoot($root);
-        } else {
-            $this->setRoot(base_path());
-        }
-
-        if (isset($modules)) {
-            $this->setModules($modules);
-        } else {
-            $this->setModules(Config::get('cms.loadModules', ['System', 'Backend', 'Cms']));
-        }
+        $this->setRoot($root ?? base_path());
+        $this->setModules($modules ?? Config::get('cms.loadModules', ['System', 'Backend', 'Cms']));
     }
 
     /**
@@ -78,7 +66,7 @@ class FileManifest
      * @param string $root
      * @throws ApplicationException If the specified root does not exist.
      */
-    public function setRoot($root)
+    public function setRoot(string $root): static
     {
         if (is_string($root)) {
             $this->root = realpath($root);
@@ -98,7 +86,7 @@ class FileManifest
      *
      * @param array $modules
      */
-    public function setModules(array $modules)
+    public function setModules(array $modules): static
     {
         $this->modules = array_map(function ($module) {
             return strtolower($module);
@@ -112,7 +100,7 @@ class FileManifest
      *
      * @return array
      */
-    public function getFiles()
+    public function getFiles(): array
     {
         if (count($this->files)) {
             return $this->files;
@@ -140,7 +128,7 @@ class FileManifest
      *
      * @return array
      */
-    public function getModuleChecksums()
+    public function getModuleChecksums(): array
     {
         if (!count($this->files)) {
             $this->getFiles();
@@ -169,7 +157,7 @@ class FileManifest
      * @param string $basePath The base path to look for files within.
      * @return array
      */
-    protected function findFiles(string $basePath)
+    protected function findFiles(string $basePath): array
     {
         $datasource = new FileDatasource($basePath, new Filesystem);
 
