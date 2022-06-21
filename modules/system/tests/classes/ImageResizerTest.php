@@ -89,7 +89,6 @@ class ImageResizerTest extends PluginTestCase
         ], $imageResizer->getConfig());
 
         // Resize with an customised defaults
-//        $this->markTestSkipped('@TODO: Something is going funky with serialized closures in PHP 8.0 / Laravel 9.x');
         Event::listen('system.resizer.getDefaultOptions', function (&$options) {
             $options = array_merge($options, [
                 'mode' => 'fit',
