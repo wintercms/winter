@@ -45,14 +45,6 @@
         "php-parallel-lint/php-parallel-lint": "^1.0",
         "dms/phpunit-arraysubset-asserts": "^0.1.0|^0.2.1"
     },
-    "autoload-dev": {
-        "classmap": [
-            "tests/concerns/InteractsWithAuthentication.php",
-            "tests/fixtures/backend/models/UserFixture.php",
-            "tests/TestCase.php",
-            "tests/PluginTestCase.php"
-        ]
-    },
     "scripts": {
         "post-create-project-cmd": [
             "@php artisan key:generate",
@@ -66,7 +58,7 @@
             "phpunit --stop-on-failure"
         ],
         "lint": [
-            "parallel-lint --exclude vendor --exclude storage --exclude tests/fixtures/plugins/testvendor/goto/Plugin.php ."
+            "parallel-lint --exclude vendor --exclude storage --exclude modules/system/tests/fixtures/plugins/testvendor/goto/Plugin.php ."
         ],
         "sniff": [
             "phpcs --colors -nq --report=\"full\" --extensions=\"php\""
