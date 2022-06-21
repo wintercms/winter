@@ -30,7 +30,6 @@ namespace Backend\Tests\Widgets
         }
     }
 
-
     class FormTest extends PluginTestCase
     {
         public function testRestrictedFieldWithUserWithNoPermissions()
