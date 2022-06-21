@@ -63,28 +63,18 @@ class SourceManifest
 
     /**
      * Sets the source manifest URL.
-     *
-     * @param string $source
-     * @return void
      */
-    public function setSource($source)
+    public function setSource(string $source): void
     {
-        if (is_string($source)) {
-            $this->source = $source;
-        }
+        $this->source = $source;
     }
 
     /**
      * Sets the forked version manifest URL.
-     *
-     * @param string $forks
-     * @return void
      */
-    public function setForksSource($forks)
+    public function setForksSource(string $forks): void
     {
-        if (is_string($forks)) {
-            $this->forksUrl = $forks;
-        }
+        $this->forksUrl = $forks;
     }
 
     /**
@@ -180,9 +170,8 @@ class SourceManifest
      *
      * @param integer $build Build number.
      * @param FileManifest $manifest The file manifest to add as a build.
-     * @return void
      */
-    public function addBuild($build, FileManifest $manifest)
+    public function addBuild($build, FileManifest $manifest): void
     {
         $parent = $this->determineParent($build);
 
@@ -203,8 +192,6 @@ class SourceManifest
 
     /**
      * Gets all builds.
-     *
-     * @return array
      */
     public function getBuilds(): array
     {
@@ -311,7 +298,7 @@ class SourceManifest
      * @param FileManifest $manifest The file manifest to compare against the source.
      * @param bool $detailed If true, the list of files modified, added and deleted will be included in the result.
      */
-    public function compare(FileManifest $manifest, $detailed = false): array
+    public function compare(FileManifest $manifest, bool $detailed = false): array
     {
         $modules = $manifest->getModuleChecksums();
 
@@ -410,9 +397,8 @@ class SourceManifest
      * @param FileManifest $manifest The current build's file manifest.
      * @param FileManifest|string|integer $previous Either a previous manifest, or the previous build number as an int
      *  or string, used to determine changes with this build.
-     * @return array
      */
-    protected function processChanges(FileManifest $manifest, $previous = null): array
+    protected function processChanges(FileManifest $manifest, mixed $previous = null): array
     {
         // If no previous build has been provided, all files are added
         if (is_null($previous)) {
@@ -459,7 +445,10 @@ class SourceManifest
         return $changes;
     }
 
-    protected function determineParent(string $build)
+    /**
+     * Determine the parent of the provided build number
+     */
+    protected function determineParent(string $build): ?array
     {
         $buildInt = $this->getVersionInt($build);
 
