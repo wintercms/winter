@@ -21,4 +21,3 @@ $loader->addDirectories([
     'modules',
     'plugins'
 ]);
-

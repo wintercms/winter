@@ -8,7 +8,6 @@ use Backend\Widgets\Filter;
 use ApplicationException;
 use Backend\Models\User;
 
-
 class FilterWidgetTest extends PluginTestCase
 {
     public function testRestrictedScopeWithUserWithNoPermissions()
