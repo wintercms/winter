@@ -14,7 +14,7 @@ describe('The Data Config extra functionality', function () {
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.extras.js',
-                'tests/js/fixtures/dataConfig/DataConfigFixture.js',
+                'modules/system/tests/js/fixtures/dataConfig/DataConfigFixture.js',
             ])
             .render(
                 `<div
@@ -96,7 +96,7 @@ describe('The Data Config extra functionality', function () {
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.extras.js',
-                'tests/js/fixtures/dataConfig/DataConfigFixture.js',
+                'modules/system/tests/js/fixtures/dataConfig/DataConfigFixture.js',
             ])
             .render(
                 `<div
@@ -172,7 +172,7 @@ describe('The Data Config extra functionality', function () {
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.extras.js',
-                'tests/js/fixtures/dataConfig/DataConfigFixture.js',
+                'modules/system/tests/js/fixtures/dataConfig/DataConfigFixture.js',
             ])
             .render(
                 `<div
@@ -239,7 +239,7 @@ describe('The Data Config extra functionality', function () {
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.extras.js',
-                'tests/js/fixtures/dataConfig/DataConfigFixture.js',
+                'modules/system/tests/js/fixtures/dataConfig/DataConfigFixture.js',
             ])
             .render(
                 `<div
@@ -282,7 +282,7 @@ describe('The Data Config extra functionality', function () {
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.extras.js',
-                'tests/js/fixtures/dataConfig/DataConfigFixture.js',
+                'modules/system/tests/js/fixtures/dataConfig/DataConfigFixture.js',
             ])
             .render(
                 `<div

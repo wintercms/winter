@@ -49,7 +49,7 @@ describe('Snowboard framework', function () {
                 'modules/system/assets/js/build/manifest.js',
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
-                'tests/js/fixtures/framework/TestPlugin.js',
+                'modules/system/tests/js/fixtures/framework/TestPlugin.js',
             ])
             .render()
             .then(
@@ -110,7 +110,7 @@ describe('Snowboard framework', function () {
                 'modules/system/assets/js/build/manifest.js',
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
-                'tests/js/fixtures/framework/TestSingleton.js',
+                'modules/system/tests/js/fixtures/framework/TestSingleton.js',
             ])
             .render()
             .then(
@@ -171,7 +171,7 @@ describe('Snowboard framework', function () {
                 'modules/system/assets/js/build/manifest.js',
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
-                'tests/js/fixtures/framework/TestListener.js',
+                'modules/system/tests/js/fixtures/framework/TestListener.js',
             ])
             .render()
             .then(
@@ -217,7 +217,7 @@ describe('Snowboard framework', function () {
                 'modules/system/assets/js/build/manifest.js',
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
-                'tests/js/fixtures/framework/TestPromiseListener.js',
+                'modules/system/tests/js/fixtures/framework/TestPromiseListener.js',
             ])
             .render()
             .then(
@@ -277,7 +277,7 @@ describe('Snowboard framework', function () {
                 'modules/system/assets/js/build/manifest.js',
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
-                'tests/js/fixtures/framework/TestHasDependencies.js',
+                'modules/system/tests/js/fixtures/framework/TestHasDependencies.js',
             ])
             .render()
             .then(
@@ -302,8 +302,8 @@ describe('Snowboard framework', function () {
                 'modules/system/assets/js/build/manifest.js',
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
-                'tests/js/fixtures/framework/TestHasDependencies.js',
-                'tests/js/fixtures/framework/TestDependencyOne.js',
+                'modules/system/tests/js/fixtures/framework/TestHasDependencies.js',
+                'modules/system/tests/js/fixtures/framework/TestDependencyOne.js',
             ])
             .render()
             .then(
@@ -328,9 +328,9 @@ describe('Snowboard framework', function () {
                 'modules/system/assets/js/build/manifest.js',
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
-                'tests/js/fixtures/framework/TestDependencyTwo.js',
-                'tests/js/fixtures/framework/TestHasDependencies.js',
-                'tests/js/fixtures/framework/TestDependencyOne.js',
+                'modules/system/tests/js/fixtures/framework/TestDependencyTwo.js',
+                'modules/system/tests/js/fixtures/framework/TestHasDependencies.js',
+                'modules/system/tests/js/fixtures/framework/TestDependencyOne.js',
             ])
             .render()
             .then(
@@ -357,7 +357,7 @@ describe('Snowboard framework', function () {
                 'modules/system/assets/js/build/manifest.js',
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
-                'tests/js/fixtures/framework/TestSingletonWithDependency.js',
+                'modules/system/tests/js/fixtures/framework/TestSingletonWithDependency.js',
             ])
             .render()
             .then(

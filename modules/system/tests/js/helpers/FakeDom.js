@@ -12,7 +12,7 @@ export default class FakeDom
         }
 
         // Header settings
-        this.url = options.url || `file://${path.resolve(__dirname, '../../')}`;
+        this.url = options.url || `file://${path.resolve(__dirname, '../../../../')}`;
         this.referer = options.referer;
         this.contentType = options.contentType || 'text/html';
 
