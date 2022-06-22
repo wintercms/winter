@@ -411,13 +411,7 @@ class PluginManager
     public function getPlugins(): array
     {
         $plugins = array_diff_key($this->plugins, $this->pluginFlags);
-        $keys = [];
-
-        foreach ($plugins as $code => $plugin) {
-            $keys[] = $this->normalizedMap[$code];
-        }
-
-        return array_combine($keys, $plugins);
+        return array_combine(array_map(fn($code) => $this->normalizedMap[$code], array_keys($plugins)), $plugins);
     }
 
     /**
