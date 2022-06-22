@@ -24,12 +24,13 @@ jobs:
             node-version: 12
 
       - name: Install Node dependencies
-        working-directory: ./tests/js
+        working-directory: ./modules/system/tests/js
         run: npm install
 
       - name: Run tests
-        working-directory: ./tests/js
+        working-directory: ./modules/system/tests/js
         run: npm run test
+
   phpUnitTests:
     strategy:
       max-parallel: 8
@@ -117,5 +118,5 @@ jobs:
 
       - name: Run Linting and Tests
         run: |
-          ./vendor/bin/parallel-lint --exclude vendor --exclude storage --exclude tests/fixtures/plugins/testvendor/goto/Plugin.php .
+          composer lint
           ./vendor/bin/phpunit
