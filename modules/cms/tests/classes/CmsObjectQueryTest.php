@@ -6,8 +6,6 @@ use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Layout;
 use Cms\Classes\Page;
 use Winter\Storm\Halcyon\Model;
-use function base_path;
-use function sort;
 
 class CmsObjectQueryTest extends TestCase
 {

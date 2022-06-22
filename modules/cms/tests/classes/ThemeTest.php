@@ -6,8 +6,6 @@ use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Theme;
 use Config;
 use Event;
-use function base_path;
-use const PHP_OS_FAMILY;
 
 class ThemeTest extends TestCase
 {

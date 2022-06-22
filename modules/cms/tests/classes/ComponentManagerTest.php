@@ -9,7 +9,6 @@ use Cms\Classes\Controller;
 use Cms\Classes\Layout;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
-use function base_path;
 
 class ComponentManagerTest extends TestCase
 {

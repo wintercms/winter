@@ -12,8 +12,6 @@ use Cms\Classes\PageCode;
 use Cms\Classes\Theme;
 use File;
 use ReflectionClass;
-use function base_path;
-use function storage_path;
 
 class CodeParserTest extends TestCase
 {

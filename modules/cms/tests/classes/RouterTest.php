@@ -6,7 +6,6 @@ use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Router;
 use Cms\Classes\Theme;
 use ReflectionClass;
-use function count;
 
 class RouterTest extends TestCase
 {
