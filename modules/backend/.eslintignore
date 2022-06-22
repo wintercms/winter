@@ -12,3 +12,6 @@ controllers/**/*.js
 formwidgets/**/*.js
 reportwidgets/**/*.js
 widgets/**/*.js
+
+# Ignore test fixtures
+tests

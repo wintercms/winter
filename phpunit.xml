@@ -2,7 +2,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     backupGlobals="false"
     backupStaticAttributes="false"
-    bootstrap="tests/bootstrap.php"
+    bootstrap="./modules/system/tests/bootstrap/app.php"
     colors="true"
     convertErrorsToExceptions="true"
     convertNoticesToExceptions="true"
@@ -26,7 +26,9 @@
     </coverage>
     <testsuites>
         <testsuite name="Winter CMS Test Suite">
-            <directory>./tests/unit</directory>
+            <directory>./modules/system</directory>
+            <directory>./modules/cms</directory>
+            <directory>./modules/backend</directory>
         </testsuite>
     </testsuites>
     <php>
