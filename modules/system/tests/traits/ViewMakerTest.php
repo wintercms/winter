@@ -78,6 +78,8 @@ class ViewMakerTest extends TestCase
         $partials = [
             'relative_no_ext' => 'relative no ext',
             'folder/no_ext' => 'folder no ext',
+            "{$this->relativePath}/relative_no_ext" => 'relative path no underscore, no ext',
+            "~/{$this->relativePath}/relative_no_ext" => 'full path no underscore, no ext',
             "~/{$this->relativePath}/symbols.htm" => 'symbols content',
             "~/{$this->relativePath}/symbols.php" => 'symbols content',
             "~/{$this->relativePath}/specific.htm" => 'explicit htm path, but actually php',
