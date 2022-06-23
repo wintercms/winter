@@ -748,11 +748,19 @@ class MediaManager extends WidgetBase
             'width' => $selectionData['w'],
             'offset' => [
                 $selectionData['x'],
-                $selectionData['y']
-            ]
+                $selectionData['y'],
+            ],
         ]);
 
-        $targetPath = $this->getCroppedPath($path);
+        // Generate the target path for the cropped image
+        $parts = pathinfo($path);
+        $targetPath = sprintf(
+            '%s/%s_cropped.%s',
+            $parts['dirname'],
+            $parts['filename'],
+            $parts['extension'],
+        );
+        $targetPath = $this->deduplicatePath($targetPath);
 
         // @TODO: Push this work out to the ImageResizer class more perhaps
         // Something like ImageResizer::getStorageDisk() - caveat being that
@@ -1436,21 +1444,25 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Get a path to save a cropped image as
+     * Process the provided path and add a suffix of _$int to prevent conflicts
+     * with existing paths
      */
-    protected function getCroppedPath(string $path): string
+    protected function deduplicatePath(string $path): string
     {
-        $parts = (!str_contains(basename($path), '.'))
-            ? [$path, '']
-            : array_map('strrev', array_reverse(explode('.', strrev($path), 2)));
-
+        $parts = pathinfo($path);
         $i = 1;
 
-        do {
-            $cropped = sprintf('%s_cropped_%d.%s', $parts[0], $i++, $parts[1]);
-        } while (MediaLibrary::instance()->exists($cropped));
+        while (MediaLibrary::instance()->exists($path)) {
+            $path = sprintf(
+                '%s/%s_%d.%s',
+                $parts['dirname'],
+                $parts['filename'],
+                $i++,
+                $parts['extension']
+            );
+        }
 
-        return $cropped;
+        return $path;
     }
 
     /**
