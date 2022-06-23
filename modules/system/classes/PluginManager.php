@@ -181,7 +181,12 @@ class PluginManager
         $replaces = $pluginObj->getReplaces();
         if ($replaces) {
             foreach ($replaces as $replace) {
-                $this->replacementMap[strtolower($replace)] = $lowerClassId;
+                $lowerReplace = strtolower($replace);
+                $this->replacementMap[$lowerReplace] = $lowerClassId;
+
+                if (!isset($this->normalizedMap[$lowerReplace])) {
+                    $this->normalizedMap[$lowerReplace] = $replace;
+                }
             }
         }
 
@@ -745,6 +750,11 @@ class PluginManager
     protected function registerPluginReplacements(): void
     {
         foreach ($this->replacementMap as $target => $replacement) {
+            list($target, $replacement) = array_map(
+                fn($plugin) => $this->normalizeIdentifier($plugin),
+                [$target, $replacement]
+            );
+
             // Alias the replaced plugin to the replacing plugin
             $this->aliasPluginAs($replacement, $target);
 
