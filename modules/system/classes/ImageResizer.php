@@ -44,9 +44,15 @@ use Winter\Storm\Database\Attach\Resizer as DefaultResizer;
 class ImageResizer
 {
     /**
-     * @var string The cache key prefix for resizer configs
+     * The cache key prefix for resizer configs
      */
     public const CACHE_PREFIX = 'system.resizer.';
+
+    /**
+     * Available methods to use when processing images
+     */
+    public const METHOD_RESIZE = 'resize';
+    public const METHOD_CROP = 'crop';
 
     /**
      * @var array Available sources to get images from
@@ -112,16 +118,20 @@ class ImageResizer
      * @return string
      * @throws Exception
      */
-    public static function make(mixed $image, int|float $width = 0, int|float $height = 0, array $options = []): string
+    public static function processImage(
+        mixed $image,
+        int|float $width = 0,
+        int|float $height = 0,
+        array $options = [],
+        string $method = self::METHOD_RESIZE
+    ): string
     {
-        $mode = $options['mode'] === 'crop' ? 'crop' : 'resize';
-
-        if (!in_array($mode, ['resize', 'crop'])) {
-            throw new \ApplicationException('invalid mode passed to resizer');
+        if (!in_array($method, [static::METHOD_RESIZE, static::METHOD_CROP])) {
+            throw new \ApplicationException('Invalid method passed to processImage');
         }
 
         $resizer = new static($image, $width, $height, $options);
-        $resizer->{$mode}();
+        $resizer->{$method}();
         return $resizer->getPathToResizedImage();
     }
 
@@ -369,6 +379,9 @@ class ImageResizer
         }
     }
 
+    /**
+     * Process the crop request
+     */
     public function crop()
     {
         if ($this->isResized()) {

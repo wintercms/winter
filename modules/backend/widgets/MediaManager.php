@@ -735,7 +735,43 @@ class MediaManager extends WidgetBase
             throw new ApplicationException('Invalid input data');
         }
 
-        $result = $this->cropImage($path, $selectionData);
+        foreach (['x', 'y', 'w', 'h'] as $key) {
+            if (!isset($selectionData[$key]) || !is_numeric($selectionData[$key])) {
+                throw new SystemException('Invalid selection data.');
+            }
+
+            $selectionData[$key] = (int) $selectionData[$key];
+        }
+
+        $croppedPath = $this->cropImage(MediaLibrary::url($path), [
+            'height' => $selectionData['h'],
+            'width' => $selectionData['w'],
+            'offset' => [
+                $selectionData['x'],
+                $selectionData['y']
+            ]
+        ]);
+
+        $targetPath = $this->getCroppedPath($path);
+
+        // @TODO: Push this work out to the ImageResizer class more perhaps
+        // Something like ImageResizer::getStorageDisk() - caveat being that
+        // the method wouldn't always return the actual disk the resized image
+        // is stored on given the support for storing resized FileModel images
+        // on their original disk.
+        MediaLibrary::instance()->put(
+            $targetPath,
+            Storage::disk(Config::get('cms.storage.resized.disk'))->get($croppedPath)
+        );
+
+        $result = [
+            'publicUrl' => MediaLibrary::url($targetPath),
+            'documentType' => MediaLibraryItem::FILE_TYPE_IMAGE,
+            'itemType' => MediaLibraryItem::TYPE_FILE,
+            'path' => $targetPath,
+            'title' => basename($path),
+            'folder' => dirname($path),
+        ];
 
         $selectionMode = Input::get('selectionMode');
         $selectionWidth = Input::get('selectionWidth');
@@ -753,11 +789,6 @@ class MediaManager extends WidgetBase
     public function onResizeImage()
     {
         $this->abortIfReadOnly();
-
-        $cropSessionKey = Input::get('cropSessionKey');
-        if (!preg_match('/^[0-9a-z]+$/', $cropSessionKey)) {
-            throw new ApplicationException('Invalid input data');
-        }
 
         $width = trim(Input::get('width'));
         if (!strlen($width) || !ctype_digit($width)) {
@@ -777,7 +808,7 @@ class MediaManager extends WidgetBase
             'height' => $height
         ];
 
-        return $this->getCropEditImageUrlAndSize($path, $cropSessionKey, $params);
+        return $this->getCropEditImageUrlAndSize($path, $params);
     }
 
     //
@@ -1291,8 +1322,6 @@ class MediaManager extends WidgetBase
             /*
              * Resize the thumbnail and save to the thumbnails directory
              */
-
-
             $fullThumbnailPath = $this->resizeImage(MediaLibrary::url($path), $thumbnailParams);
 
             /*
@@ -1323,9 +1352,33 @@ class MediaManager extends WidgetBase
      */
     protected function resizeImage(string $image, array $params): string
     {
-        return ImageResizer::make($image, $params['width'], $params['height'], array_merge([
-            'mode' => 'exact'
-        ], $params));
+        return ImageResizer::processImage(
+            $image,
+            $params['width'],
+            $params['height'],
+            array_merge(
+                ['mode' => 'exact'],
+                $params
+            ),
+            ImageResizer::METHOD_RESIZE
+        );
+    }
+
+    /**
+     * Crop an image
+     */
+    protected function cropImage(string $image, array $params): string
+    {
+        return ImageResizer::processImage(
+            $image,
+            $params['width'],
+            $params['height'],
+            array_merge(
+                ['mode' => 'exact'],
+                $params
+            ),
+            ImageResizer::METHOD_CROP
+        );
     }
 
     /**
@@ -1379,47 +1432,6 @@ class MediaManager extends WidgetBase
             'dimensions' => str_starts_with($url, '/')
                 ? getimagesize(base_path($url))
                 : getimagesize($url)
-        ];
-    }
-
-    /**
-     * Business logic to crop a media library image
-     */
-    protected function cropImage(string $path, array $selectionData): array
-    {
-        foreach (['x', 'y', 'w', 'h'] as $key) {
-            if (!isset($selectionData[$key]) || !is_numeric($selectionData[$key])) {
-                throw new SystemException('Invalid selection data.');
-            }
-
-            $selectionData[$key] = (int) $selectionData[$key];
-        }
-
-        $croppedPath = $this->resizeImage(MediaLibrary::url($path), [
-            'mode' => 'crop',
-            'height' => $selectionData['h'],
-            'width' => $selectionData['w'],
-            'offset' => [
-                $selectionData['x'],
-                $selectionData['y']
-            ]
-        ]);
-
-        $targetPath = $this->getCroppedPath($path);
-
-        // would be nice to have Resizer::disk()->get($image)
-        MediaLibrary::instance()->put(
-            $targetPath,
-            Storage::disk(Config::get('cms.storage.resized.disk'))->get($croppedPath)
-        );
-
-        return [
-            'publicUrl' => MediaLibrary::url($targetPath),
-            'documentType' => MediaLibraryItem::FILE_TYPE_IMAGE,
-            'itemType' => MediaLibraryItem::TYPE_FILE,
-            'path' => $targetPath,
-            'title' => basename($path),
-            'folder' => dirname($path)
         ];
     }
 
