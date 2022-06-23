@@ -111,12 +111,7 @@ class ImageResizer
     /**
      * A simple static method for resizing an image and receiving the output path
      *
-     * @param mixed $image
-     * @param int|float $width
-     * @param int|float $height
-     * @param array $options
-     * @return string
-     * @throws Exception
+     * @throws ApplicationException If an invalid resize mode is passed to the the method.
      */
     public static function processImage(
         mixed $image,
@@ -397,7 +392,7 @@ class ImageResizer
         try {
             /**
              * @event system.resizer.processCrop
-             * Halting event that enables replacement of the resizing process. There should only ever be
+             * Halting event that enables replacement of the cropping process. There should only ever be
              * one listener handling this event per project at most, as other listeners would be ignored.
              *
              * Example usage:
@@ -432,8 +427,8 @@ class ImageResizer
 
             /**
              * @event system.resizer.afterCrop
-             * Enables post processing of resized images after they've been resized before the
-             * resizing process is finalized (ex. adding watermarks, further optimizing, etc)
+             * Enables post processing of cropped images after they've been cropped before the
+             * cropping process is finalized (ex. adding watermarks, further optimizing, etc)
              *
              * Example usage:
              *
