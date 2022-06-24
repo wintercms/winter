@@ -186,31 +186,29 @@ trait ViewMaker
             $fileName = substr($fileName, 0, strrpos($fileName, '.'));
         }
 
+        // Check if this is a local path reference first
+        $absolutePath = File::symbolizePath($fileName);
+        foreach ($allowedExtensions as $ext) {
+            $viewPath = $absolutePath . ".$ext";
 
-        if (File::isPathSymbol($fileName)) {
-            // Handle path symbols
-            $absolutePath = File::symbolizePath($fileName);
-            foreach ($allowedExtensions as $ext) {
-                $viewPath = $absolutePath . ".$ext";
-
-                if (
-                    File::isLocalPath($viewPath)
-                    || (
-                        !Config::get('cms.restrictBaseDir', true)
-                        && realpath($viewPath) !== false
-                    )
-                ) {
-                    return $viewPath;
-                }
+            if (
+                File::isLocalPath($viewPath)
+                || (
+                    !Config::get('cms.restrictBaseDir', true)
+                    && realpath($viewPath) !== false
+                )
+            ) {
+                return $viewPath;
             }
-        } else {
-            foreach ($viewPaths as $path) {
-                $absolutePath = File::symbolizePath($path);
-                foreach ($allowedExtensions as $ext) {
-                    $viewPath = $absolutePath . DIRECTORY_SEPARATOR . $fileName . ".$ext";
-                    if (File::isFile($viewPath)) {
-                        return $viewPath;
-                    }
+        }
+
+        // Next, check if this a path relative to the view paths
+        foreach ($viewPaths as $path) {
+            $absolutePath = File::symbolizePath($path);
+            foreach ($allowedExtensions as $ext) {
+                $viewPath = $absolutePath . DIRECTORY_SEPARATOR . $fileName . ".$ext";
+                if (File::isFile($viewPath)) {
+                    return $viewPath;
                 }
             }
         }
