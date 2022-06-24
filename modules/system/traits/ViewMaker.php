@@ -186,7 +186,18 @@ trait ViewMaker
             $fileName = substr($fileName, 0, strrpos($fileName, '.'));
         }
 
-        // Check if this is a local path reference first
+        // Check if this a path relative to the view paths
+        foreach ($viewPaths as $path) {
+            $absolutePath = File::symbolizePath($path);
+            foreach ($allowedExtensions as $ext) {
+                $viewPath = $absolutePath . DIRECTORY_SEPARATOR . $fileName . ".$ext";
+                if (File::isFile($viewPath)) {
+                    return $viewPath;
+                }
+            }
+        }
+
+        // Next, check if this is a local path reference
         $absolutePath = File::symbolizePath($fileName);
         foreach ($allowedExtensions as $ext) {
             $viewPath = $absolutePath . ".$ext";
@@ -199,17 +210,6 @@ trait ViewMaker
                 )
             ) {
                 return $viewPath;
-            }
-        }
-
-        // Next, check if this a path relative to the view paths
-        foreach ($viewPaths as $path) {
-            $absolutePath = File::symbolizePath($path);
-            foreach ($allowedExtensions as $ext) {
-                $viewPath = $absolutePath . DIRECTORY_SEPARATOR . $fileName . ".$ext";
-                if (File::isFile($viewPath)) {
-                    return $viewPath;
-                }
             }
         }
 
