@@ -70,11 +70,11 @@ class ViewMakerTest extends TestCase
 
     public function testMakePartial()
     {
-        $sectionContent = '<!-- Section -->' . "\n"
-        . '<div class="field-section">' . "\n"
-        . '            <h4>label</h4>' . "\n"
-        . '    ' . "\n"
-        . '            <p class="help-block">comment</p>' . "\n"
+        $sectionContent = '<!-- Section -->' . PHP_EOL
+        . '<div class="field-section">' . PHP_EOL
+        . '            <h4>label</h4>' . PHP_EOL
+        . '    ' . PHP_EOL
+        . '            <p class="help-block">comment</p>' . PHP_EOL
         . '    </div>';
 
         // Test various paths that are accepted when rendering a partial
