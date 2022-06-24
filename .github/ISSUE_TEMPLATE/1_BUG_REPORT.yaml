@@ -15,6 +15,7 @@ body:
       description: Please select the Winter CMS build that you encountered your issue with. You can find the version in the **Updates & Plugins** section of the Settings page of the Backend, or by running the `php artisan winter:version` command.
       options:
         - dev-develop
+        - 1.2
         - 1.1
         - 1.0 (please try updating first)
         - Other (please specify below)

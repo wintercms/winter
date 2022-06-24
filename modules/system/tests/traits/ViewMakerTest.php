@@ -74,19 +74,34 @@ class ViewMakerTest extends TestCase
 
     public function testMakePartial()
     {
+        $sectionContent = '<!-- Section -->' . PHP_EOL
+        . '<div class="field-section">' . PHP_EOL
+        . '            <h4>label</h4>' . PHP_EOL
+        . '    ' . PHP_EOL
+        . '            <p class="help-block">comment</p>' . PHP_EOL
+        . '    </div>';
+
         // Test various paths that are accepted when rendering a partial
         $partials = [
             'relative_no_ext' => 'relative no ext',
             'folder/no_ext' => 'folder no ext',
-            "{$this->relativePath}/relative_no_ext" => 'relative path no underscore, no ext',
-            "~/{$this->relativePath}/relative_no_ext" => 'full path no underscore, no ext',
+            "{$this->relativePath}/relative_no_ext" => 'relative no ext',
+            "~/{$this->relativePath}/_relative_no_ext.php" => 'relative no ext',
             "~/{$this->relativePath}/symbols.htm" => 'symbols content',
             "~/{$this->relativePath}/symbols.php" => 'symbols content',
             "~/{$this->relativePath}/specific.htm" => 'explicit htm path, but actually php',
+            'modules/backend/widgets/form/partials/field_section' => $sectionContent,
+            '~/modules/backend/widgets/form/partials/_field_section.htm' => $sectionContent,
         ];
 
         foreach ($partials as $partial => $expected) {
-            $contents = $this->stub->makePartial($partial);
+            $contents = $this->stub->makePartial($partial, [
+                'field' => (object) [
+                    'label' => 'label',
+                    'comment' => 'comment',
+                    'commentHtml' => false
+                ],
+            ]);
             $this->assertEquals($expected, trim($contents));
         }
     }
@@ -118,32 +133,4 @@ class ViewMakerTest extends TestCase
     {
         $this->assertEquals('layout partial contents', trim($this->stub->makeLayoutPartial('layout_partial')));
     }
-
-    // public function testGetViewPath()
-    // {
-    //     /**
-    //      * Input paths:
-    //      *  - basename
-    //      *  - relative/folder/basename
-    //      *  - filename.ext
-    //      *  - relative/folder/filename.ext
-    //      *  - ~/modules/system/symbol/filename.htm
-    //      *  - $/plugins/path/symbol/filename.htm
-    //      */
-
-    //     $paths = [
-    //         'relative_no_ext',
-    //         'relative.htm',
-    //         'relative.php',
-
-    //         'relative/folder/no_ext',
-    //         'relative/folder/ext.htm',
-    //         'relative/folder/ext.php',
-
-    //         '~/base_path/ext.htm',
-    //         '~/base_path/ext.php',
-    //         '$/plugin_path/ext.htm',
-    //         '$/plugin_path/ext.php',
-    //     ];
-    // }
 }
