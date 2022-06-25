@@ -7,6 +7,7 @@ return [
      */
     Illuminate\Broadcasting\BroadcastServiceProvider::class,
     Illuminate\Bus\BusServiceProvider::class,
+    Illuminate\Cache\CacheServiceProvider::class,
     Illuminate\Cookie\CookieServiceProvider::class,
     Illuminate\Encryption\EncryptionServiceProvider::class,
     Illuminate\Foundation\Providers\FoundationServiceProvider::class,
@@ -21,7 +22,6 @@ return [
     /*
      * Winter Storm providers
      */
-    Winter\Storm\Cache\CacheServiceProvider::class,
     Winter\Storm\Foundation\Providers\ConsoleSupportServiceProvider::class,
     Winter\Storm\Database\DatabaseServiceProvider::class,
     Winter\Storm\Halcyon\HalcyonServiceProvider::class,
