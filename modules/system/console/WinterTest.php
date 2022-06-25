@@ -143,7 +143,7 @@ class WinterTest extends Command
 
         $process = new Process(
             array_merge([$this->phpUnitExec, '--configuration=' . $config], $args),
-            dirname($config),
+            base_path(),
             null,
             null
         );
