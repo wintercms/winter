@@ -686,6 +686,9 @@ class Request extends Snowboard.PluginBase {
 
     get form() {
         if (this.options.form) {
+            if (typeof this.options.form === 'string') {
+                return document.querySelector(this.options.form);
+            }
             return this.options.form;
         }
         if (!this.element) {
