@@ -743,6 +743,10 @@ class MediaManager extends WidgetBase
             $selectionData[$key] = (int) $selectionData[$key];
         }
 
+        if ($selectionData['h'] === 0 || $selectionData['w'] === 0) {
+            throw new ApplicationException('You must define a crop size before inserting');
+        }
+
         $croppedPath = $this->cropImage(MediaLibrary::url($path), [
             'height' => $selectionData['h'],
             'width' => $selectionData['w'],
@@ -811,12 +815,35 @@ class MediaManager extends WidgetBase
         $path = Input::get('path');
         $path = MediaLibrary::validatePath($path);
 
-        $params = [
+        $croppedPath = $this->resizeImage(MediaLibrary::url($path), [
+            'mode' => 'exact',
             'width' => $width,
             'height' => $height
-        ];
+        ]);
 
-        return $this->getCropEditImageUrlAndSize($path, $params);
+        $parts = pathinfo($path);
+        $targetPath = sprintf(
+            '%s/%s_resized.%s',
+            $parts['dirname'],
+            $parts['filename'],
+            $parts['extension'],
+        );
+        $targetPath = $this->deduplicatePath($targetPath);
+
+        // @TODO: Push this work out to the ImageResizer class more perhaps
+        // Something like ImageResizer::getStorageDisk() - caveat being that
+        // the method wouldn't always return the actual disk the resized image
+        // is stored on given the support for storing resized FileModel images
+        // on their original disk.
+        MediaLibrary::instance()->put(
+            $targetPath,
+            Storage::disk(Config::get('cms.storage.resized.disk'))->get($croppedPath)
+        );
+
+        return [
+            'url' => MediaLibrary::url($targetPath),
+            'dimensions' => [$width, $height]
+        ];
     }
 
     //
