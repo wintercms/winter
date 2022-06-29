@@ -535,6 +535,18 @@ class ImageResizer
         return $this->fileModel;
     }
 
+    public static function getDefaultDisk()
+    {
+        return Storage::disk(Config::get('cms.storage.resized.disk', 'local'));
+    }
+
+    public function getDisk(): \Illuminate\Contracts\Filesystem\Filesystem
+    {
+        return ($this->image['source'] === 'filemodel' && $fileModel = $this->getFileModel())
+            ? $fileModel->getDisk()
+            : static::getDefaultDisk();
+    }
+
     /**
      * Get the details for the target image
      *
@@ -543,14 +555,16 @@ class ImageResizer
     protected function getTargetDetails()
     {
         if ($this->image['source'] === 'filemodel' && $fileModel = $this->getFileModel()) {
-            $disk = $fileModel->getDisk();
-            $path = $fileModel->getDiskPath($fileModel->getThumbFilename($this->width, $this->height, $this->options));
-        } else {
-            $disk = Storage::disk(Config::get('cms.storage.resized.disk', 'local'));
-            $path = $this->getPathToResizedImage();
+            return [
+                $this->getDisk(),
+                $fileModel->getDiskPath($fileModel->getThumbFilename($this->width, $this->height, $this->options)),
+            ];
         }
 
-        return [$disk, $path];
+        return [
+            $this->getDisk(),
+            $this->getPathToResizedImage(),
+        ];
     }
 
     /**
