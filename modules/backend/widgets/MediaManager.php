@@ -20,6 +20,7 @@ use System\Classes\MediaLibraryItem;
 use Winter\Storm\Database\Attach\Resizer;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use Form as FormHelper;
+use Winter\Storm\Filesystem\Storage\Resized;
 
 /**
  * Media Manager widget.
@@ -155,8 +156,8 @@ class MediaManager extends WidgetBase
         $this->prepareVars();
 
         return [
-            '#'.$this->getId('item-list') => $this->makePartial('item-list'),
-            '#'.$this->getId('folder-path') => $this->makePartial('folder-path')
+            '#' . $this->getId('item-list') => $this->makePartial('item-list'),
+            '#' . $this->getId('folder-path') => $this->makePartial('folder-path')
         ];
     }
 
@@ -177,7 +178,7 @@ class MediaManager extends WidgetBase
         }
 
         return [
-            'generatedThumbnails'=>$result
+            'generatedThumbnails' => $result
         ];
     }
 
@@ -301,8 +302,7 @@ class MediaManager extends WidgetBase
                  * Add to bulk collection
                  */
                 $filesToDelete[] = $path;
-            }
-            elseif ($type === MediaLibraryItem::TYPE_FOLDER) {
+            } elseif ($type === MediaLibraryItem::TYPE_FOLDER) {
                 /*
                  * Delete single folder
                  */
@@ -406,7 +406,7 @@ class MediaManager extends WidgetBase
 
         $originalPath = Input::get('originalPath');
         $originalPath = MediaLibrary::validatePath($originalPath);
-        $newPath = dirname($originalPath).'/'.$newName;
+        $newPath = dirname($originalPath) . '/' . $newName;
         $type = Input::get('type');
 
         if ($type == MediaLibraryItem::TYPE_FILE) {
@@ -440,8 +440,7 @@ class MediaManager extends WidgetBase
              *
              */
             $this->fireSystemEvent('media.file.rename', [$originalPath, $newPath]);
-        }
-        else {
+        } else {
             /*
              * Move single folder
              */
@@ -490,7 +489,7 @@ class MediaManager extends WidgetBase
         $path = Input::get('path');
         $path = MediaLibrary::validatePath($path);
 
-        $newFolderPath = $path.'/'.$name;
+        $newFolderPath = $path . '/' . $name;
 
         $library = MediaLibrary::instance();
 
@@ -554,10 +553,9 @@ class MediaManager extends WidgetBase
 
             if ($folder == '/') {
                 $name = Lang::get('backend::lang.media.library');
-            }
-            else {
+            } else {
                 $segments = explode('/', $folder);
-                $name = str_repeat('&nbsp;', (count($segments)-1)*4).basename($folder);
+                $name = str_repeat('&nbsp;', (count($segments) - 1) * 4) . basename($folder);
             }
 
             $folderList[$path] = $name;
@@ -603,7 +601,7 @@ class MediaManager extends WidgetBase
             /*
              * Move a single file
              */
-            $library->moveFile($path, $dest.'/'.basename($path));
+            $library->moveFile($path, $dest . '/' . basename($path));
 
             /**
              * @event media.file.move
@@ -629,7 +627,7 @@ class MediaManager extends WidgetBase
             /*
              * Move a single folder
              */
-            $library->moveFolder($path, $dest.'/'.basename($path));
+            $library->moveFolder($path, $dest . '/' . basename($path));
 
             /**
              * @event media.folder.move
@@ -656,7 +654,7 @@ class MediaManager extends WidgetBase
         $this->prepareVars();
 
         return [
-            '#'.$this->getId('item-list') => $this->makePartial('item-list')
+            '#' . $this->getId('item-list') => $this->makePartial('item-list')
         ];
     }
 
@@ -729,7 +727,8 @@ class MediaManager extends WidgetBase
         $this->abortIfReadOnly();
 
         $selectionData = Input::get('selection');
-        $path = MediaLibrary::validatePath(Input::get('path'));
+
+        [$file, $name, $disk] = $this->resolveImagePath(Input::get('img'), Input::get('path'));
 
         if (!is_array($selectionData)) {
             throw new ApplicationException('Invalid input data');
@@ -740,14 +739,14 @@ class MediaManager extends WidgetBase
                 throw new SystemException('Invalid selection data.');
             }
 
-            $selectionData[$key] = (int) $selectionData[$key];
+            $selectionData[$key] = (int)$selectionData[$key];
         }
 
         if ($selectionData['h'] === 0 || $selectionData['w'] === 0) {
             throw new ApplicationException('You must define a crop size before inserting');
         }
 
-        $croppedPath = $this->cropImage(MediaLibrary::url($path), [
+        $croppedPath = $this->cropImage($disk === 'resized' ? $file : MediaLibrary::url($file), [
             'height' => $selectionData['h'],
             'width' => $selectionData['w'],
             'offset' => [
@@ -757,11 +756,11 @@ class MediaManager extends WidgetBase
         ]);
 
         // Generate the target path for the cropped image
-        $parts = pathinfo($path);
+        $parts = pathinfo($name);
         $targetPath = sprintf(
             '%s/%s_cropped.%s',
             $parts['dirname'],
-            $parts['filename'],
+            preg_replace('/_cropped(_\d)?/', '', $parts['filename']),
             $parts['extension'],
         );
         $targetPath = $this->deduplicatePath($targetPath);
@@ -781,8 +780,8 @@ class MediaManager extends WidgetBase
             'documentType' => MediaLibraryItem::FILE_TYPE_IMAGE,
             'itemType' => MediaLibraryItem::TYPE_FILE,
             'path' => $targetPath,
-            'title' => basename($path),
-            'folder' => dirname($path),
+            'title' => basename($targetPath),
+            'folder' => dirname($targetPath),
         ];
 
         $selectionMode = Input::get('selectionMode');
@@ -792,6 +791,39 @@ class MediaManager extends WidgetBase
         $this->setSelectionParams($selectionMode, $selectionWidth, $selectionHeight);
 
         return $result;
+    }
+
+    /*
+     * This method resolves the img & path submit by the resizer and works what disk they belong to
+     */
+    public function resolveImagePath(string $img, string $path): array
+    {
+        $disk = null;
+        $actual = $img;
+
+        // if the image has been resized, we will be passed it's url in img
+        if (filter_var($actual, FILTER_VALIDATE_URL)) {
+            $actual = parse_url($actual)['path'] ?? '';
+        }
+
+        if (str_starts_with($actual, Config::get('cms.storage.resized.path'))) {
+            $actual = substr($actual, strlen(Config::get('cms.storage.resized.path')));
+            $actual = Config::get('cms.storage.resized.folder') . (!str_starts_with($actual, '/') ? '/' : '') . $actual;
+            $disk = 'resized';
+        }
+
+        if (!ImageResizer::getDefaultDisk()->exists($actual)) {
+            $actual = $path;
+            $disk = 'media';
+        }
+
+        return [
+            $disk === 'resized'
+                ? $img
+                : MediaLibrary::validatePath($actual),
+            MediaLibrary::validatePath($path),
+            $disk
+        ];
     }
 
     /**
@@ -821,27 +853,8 @@ class MediaManager extends WidgetBase
             'height' => $height
         ]);
 
-        $parts = pathinfo($path);
-        $targetPath = sprintf(
-            '%s/%s_resized.%s',
-            $parts['dirname'],
-            $parts['filename'],
-            $parts['extension'],
-        );
-        $targetPath = $this->deduplicatePath($targetPath);
-
-        // @TODO: Push this work out to the ImageResizer class more perhaps
-        // Something like ImageResizer::getStorageDisk() - caveat being that
-        // the method wouldn't always return the actual disk the resized image
-        // is stored on given the support for storing resized FileModel images
-        // on their original disk.
-        MediaLibrary::instance()->put(
-            $targetPath,
-            Storage::disk(Config::get('cms.storage.resized.disk'))->get($croppedPath)
-        );
-
         return [
-            'url' => MediaLibrary::url($targetPath),
+            'url' => $this->getThumbnailImageUrl($croppedPath),
             'dimensions' => [$width, $height]
         ];
     }
