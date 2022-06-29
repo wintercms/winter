@@ -131,10 +131,8 @@ class ImageResizer
 
     /**
      * Get the default options for the resizer
-     *
-     * @return array
      */
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         // Default options for the built in resizing processor
         $defaultOptions = [
@@ -164,10 +162,8 @@ class ImageResizer
 
     /**
      * Get the available sources for processing image resize requests from
-     *
-     * @return array
      */
-    public static function getAvailableSources()
+    public static function getAvailableSources(): array
     {
         if (!empty(static::$availableSources)) {
             return static::$availableSources;
@@ -228,10 +224,8 @@ class ImageResizer
 
     /**
      * Flushes the local sources cache.
-     *
-     * @return void
      */
-    public static function flushAvailableSources()
+    public static function flushAvailableSources(): void
     {
         if (empty(static::$availableSources)) {
             return;
@@ -242,10 +236,8 @@ class ImageResizer
 
     /**
      * Get the current config
-     *
-     * @return array
      */
-    public function getConfig()
+    public function getConfig(): array
     {
         $disk = $this->image['disk'];
 
@@ -295,7 +287,7 @@ class ImageResizer
     /**
      * Process the resize request
      */
-    public function resize()
+    public function resize(): void
     {
         if ($this->isResized()) {
             return;
@@ -376,7 +368,7 @@ class ImageResizer
     /**
      * Process the crop request
      */
-    public function crop()
+    public function crop(): void
     {
         if ($this->isResized()) {
             return;
@@ -460,9 +452,9 @@ class ImageResizer
     }
 
     /**
-     * Define the internal working path, override this method to define.
+     * Get the internal temporary drirectory and ensure it exists
      */
-    public function getTempPath()
+    public function getTempPath(): string
     {
         $path = temp_path() . '/resizer';
 
@@ -477,9 +469,8 @@ class ImageResizer
      * Stores the current source image in the temp directory and returns the path to it
      *
      * @param string $path The path to suffix the temp directory path with, defaults to $identifier.$ext
-     * @return string $tempPath
      */
-    protected function getLocalTempPath($path = null)
+    protected function getLocalTempPath($path = null): string
     {
         if (!is_null($path) && is_string($path)) {
             $tempPath = $this->getTempPath() . '/' . $path;
@@ -497,15 +488,13 @@ class ImageResizer
     /**
      * Returns the file extension.
      */
-    public function getExtension()
+    public function getExtension(): string
     {
         return FileHelper::extension($this->image['path']);
     }
 
     /**
      * Get the contents of the image file to be resized
-     *
-     * @return string
      */
     public function getSourceFileContents()
     {
@@ -514,10 +503,8 @@ class ImageResizer
 
     /**
      * Gets the current fileModel associated with the source image if one exists
-     *
-     * @return FileModel|null
      */
-    public function getFileModel()
+    public function getFileModel(): ?FileModel
     {
         if ($this->fileModel) {
             return $this->fileModel;
@@ -534,11 +521,17 @@ class ImageResizer
         return $this->fileModel;
     }
 
-    public static function getDefaultDisk()
+    /**
+     * Get the default disk used to store processed images
+     */
+    public static function getDefaultDisk(): \Illuminate\Contracts\Filesystem\Filesystem
     {
         return Storage::disk(Config::get('cms.storage.resized.disk', 'local'));
     }
 
+    /**
+     * Get the disk instance for image that is currently being processed
+     */
     public function getDisk(): \Illuminate\Contracts\Filesystem\Filesystem
     {
         return ($this->image['source'] === 'filemodel' && $fileModel = $this->getFileModel())
@@ -551,7 +544,7 @@ class ImageResizer
      *
      * @return array [FilesystemAdapter $disk, (string) $path]
      */
-    protected function getTargetDetails()
+    protected function getTargetDetails(): array
     {
         if ($this->image['source'] === 'filemodel' && $fileModel = $this->getFileModel()) {
             return [
@@ -568,11 +561,8 @@ class ImageResizer
 
     /**
      * Get the reference to the resized image if the requested resize exists
-     *
-     * @param string $identifier The Resizer Identifier that references the source image and desired resizing configuration
-     * @return bool|string
      */
-    public function isResized()
+    public function isResized(): bool
     {
         // Get the details for the target image
         list($disk, $path) = $this->getTargetDetails();
@@ -584,7 +574,7 @@ class ImageResizer
     /**
      * Get the path of the resized image
      */
-    public function getPathToResizedImage()
+    public function getPathToResizedImage(): string
     {
         // Generate the unique file identifier for the resized image
         $fileIdentifier = hash_hmac('sha1', serialize($this->getConfig()), Crypt::getKey());
@@ -602,10 +592,8 @@ class ImageResizer
     /**
      * Gets the current useful URL to the resized image
      * (resizer if not resized, resized image directly if resized)
-     *
-     * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         if ($this->isResized()) {
             return $this->getResizedUrl();
@@ -616,10 +604,8 @@ class ImageResizer
 
     /**
      * Get the URL to the system resizer route for this instance's configuration
-     *
-     * @return string $url
      */
-    public function getResizerUrl()
+    public function getResizerUrl(): string
     {
         // Slashes in URL params have to be double encoded to survive Laravel's router
         // @see https://github.com/octobercms/october/issues/3592#issuecomment-671017380
@@ -642,10 +628,8 @@ class ImageResizer
 
     /**
      * Get the URL to the resized image
-     *
-     * @return string
      */
-    public function getResizedUrl()
+    public function getResizedUrl(): string
     {
         $url = '';
 
@@ -681,7 +665,7 @@ class ImageResizer
      * @return array Array containing the disk, path, source, and fileModel if applicable
      *               ['disk' => FilesystemAdapter, 'path' => string, 'source' => string, 'fileModel' => FileModel|void]
      */
-    public static function normalizeImage($image)
+    public static function normalizeImage($image): array
     {
         $disk = null;
         $path = null;
@@ -817,11 +801,8 @@ class ImageResizer
      *
      * NOTE: Can't use Winter\Storm\FileSystem\PathResolver because it prepends
      * the current working directory to relative paths
-     *
-     * @param string $path
-     * @return string
      */
-    protected static function normalizePath($path)
+    protected static function normalizePath(string $path): string
     {
         return str_replace('\\', '/', $path);
     }
@@ -832,7 +813,7 @@ class ImageResizer
      * @param string $id
      * @return bool
      */
-    public static function isValidIdentifier($id)
+    public static function isValidIdentifier($id): bool
     {
         return is_string($id) && ctype_alnum($id) && strlen($id) === 40;
     }
@@ -842,7 +823,7 @@ class ImageResizer
      *
      * @return string 40 character string used as a unique reference to the provided configuration
      */
-    public function getIdentifier()
+    public function getIdentifier(): string
     {
         if ($this->identifier) {
             return $this->identifier;
@@ -855,7 +836,7 @@ class ImageResizer
     /**
      * Stores the resizer configuration if the resizing hasn't been completed yet
      */
-    public function storeConfig()
+    public function storeConfig(): void
     {
         // If the image hasn't been resized yet, then store the config data for the resizer to use
         if (!$this->isResized()) {
@@ -868,9 +849,8 @@ class ImageResizer
      *
      * @param string $identifier The 40 character cache identifier for the desired resizer configuration
      * @throws SystemException If the identifier is unable to be loaded
-     * @return static
      */
-    public static function fromIdentifier(string $identifier)
+    public static function fromIdentifier(string $identifier): self
     {
         $cacheKey = static::CACHE_PREFIX . $identifier;
 
@@ -896,11 +876,9 @@ class ImageResizer
     /**
      * Check the provided encoded URL to verify its signature and return the decoded URL
      *
-     * @param string $identifier
-     * @param string $encodedUrl
      * @return string|null Returns null if the provided value was invalid
      */
-    public static function getValidResizedUrl($identifier, $encodedUrl)
+    public static function getValidResizedUrl(string $identifier, string $encodedUrl): ?string
     {
         // Slashes in URL params have to be double encoded to survive Laravel's router
         // @see https://github.com/octobercms/october/issues/3592#issuecomment-671017380
@@ -926,9 +904,8 @@ class ImageResizer
      * @param integer|string|bool|null $height Desired height of the resized image
      * @param array|null $options Array of options to pass to the resizer
      * @throws Exception If the provided image was unable to be processed
-     * @return string
      */
-    public static function filterGetUrl($image, $width = null, $height = null, $options = [])
+    public static function filterGetUrl($image, $width = null, $height = null, $options = []): string
     {
         // Attempt to process the provided image
         try {
@@ -956,9 +933,8 @@ class ImageResizer
      *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @throws SystemException If the provided input was unable to be processed
-     * @return array ['width' => int, 'height' => int]
      */
-    public static function filterGetDimensions($image)
+    public static function filterGetDimensions($image): array
     {
         $resizer = new static($image);
 

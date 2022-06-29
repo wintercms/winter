@@ -1,6 +1,5 @@
 <?php namespace Backend\Widgets;
 
-use System\Classes\ImageResizer;
 use Url;
 use Str;
 use Lang;
@@ -15,12 +14,12 @@ use Exception;
 use SystemException;
 use ApplicationException;
 use Backend\Classes\WidgetBase;
+use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Classes\MediaLibraryItem;
 use Winter\Storm\Database\Attach\Resizer;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use Form as FormHelper;
-use Winter\Storm\Filesystem\Storage\Resized;
 
 /**
  * Media Manager widget.
@@ -727,8 +726,8 @@ class MediaManager extends WidgetBase
         $this->abortIfReadOnly();
 
         $selectionData = Input::get('selection');
-
-        [$file, $name, $disk] = $this->resolveImagePath(Input::get('img'), Input::get('path'));
+        $sourceImageUrl = Input::get('img');
+        $mediaItemPath = Input::get('path');
 
         if (!is_array($selectionData)) {
             throw new ApplicationException('Invalid input data');
@@ -739,14 +738,14 @@ class MediaManager extends WidgetBase
                 throw new SystemException('Invalid selection data.');
             }
 
-            $selectionData[$key] = (int)$selectionData[$key];
+            $selectionData[$key] = (int) $selectionData[$key];
         }
 
         if ($selectionData['h'] === 0 || $selectionData['w'] === 0) {
             throw new ApplicationException('You must define a crop size before inserting');
         }
 
-        $croppedPath = $this->cropImage($disk === 'resized' ? $file : MediaLibrary::url($file), [
+        $croppedPath = $this->cropImage($sourceImageUrl, [
             'height' => $selectionData['h'],
             'width' => $selectionData['w'],
             'offset' => [
@@ -756,23 +755,12 @@ class MediaManager extends WidgetBase
         ]);
 
         // Generate the target path for the cropped image
-        $parts = pathinfo($name);
-        $targetPath = sprintf(
-            '%s/%s_cropped.%s',
-            $parts['dirname'],
-            preg_replace('/_cropped(_\d)?/', '', $parts['filename']),
-            $parts['extension'],
-        );
-        $targetPath = $this->deduplicatePath($targetPath);
+        $targetPath = $this->deduplicatePath($mediaItemPath, '_cropped');
 
-        // @TODO: Push this work out to the ImageResizer class more perhaps
-        // Something like ImageResizer::getStorageDisk() - caveat being that
-        // the method wouldn't always return the actual disk the resized image
-        // is stored on given the support for storing resized FileModel images
-        // on their original disk.
+        // Move the cropped image to the target path
         MediaLibrary::instance()->put(
             $targetPath,
-            Storage::disk(Config::get('cms.storage.resized.disk'))->get($croppedPath)
+            ImageResizer::getDefaultDisk()->get($croppedPath)
         );
 
         $result = [
@@ -791,39 +779,6 @@ class MediaManager extends WidgetBase
         $this->setSelectionParams($selectionMode, $selectionWidth, $selectionHeight);
 
         return $result;
-    }
-
-    /*
-     * This method resolves the img & path submit by the resizer and works what disk they belong to
-     */
-    public function resolveImagePath(string $img, string $path): array
-    {
-        $disk = null;
-        $actual = $img;
-
-        // if the image has been resized, we will be passed it's url in img
-        if (filter_var($actual, FILTER_VALIDATE_URL)) {
-            $actual = parse_url($actual)['path'] ?? '';
-        }
-
-        if (str_starts_with($actual, Config::get('cms.storage.resized.path'))) {
-            $actual = substr($actual, strlen(Config::get('cms.storage.resized.path')));
-            $actual = Config::get('cms.storage.resized.folder') . (!str_starts_with($actual, '/') ? '/' : '') . $actual;
-            $disk = 'resized';
-        }
-
-        if (!ImageResizer::getDefaultDisk()->exists($actual)) {
-            $actual = $path;
-            $disk = 'media';
-        }
-
-        return [
-            $disk === 'resized'
-                ? $img
-                : MediaLibrary::validatePath($actual),
-            MediaLibrary::validatePath($path),
-            $disk
-        ];
     }
 
     /**
@@ -1477,7 +1432,7 @@ class MediaManager extends WidgetBase
 
         return [
             'url' => $url,
-            'dimensions' => str_starts_with($url, '/')
+            'dimensions' => Str::startsWith($url, '/')
                 ? getimagesize(base_path($url))
                 : getimagesize($url)
         ];
@@ -1486,16 +1441,41 @@ class MediaManager extends WidgetBase
     /**
      * Process the provided path and add a suffix of _$int to prevent conflicts
      * with existing paths
+     * @TODO: Consider moving this into the File helper and accepting a $disk instance
      */
-    protected function deduplicatePath(string $path): string
+    protected function deduplicatePath(string $path, string $suffix = null): string
     {
         $parts = pathinfo($path);
         $i = 1;
 
+        // Path generation adds a DIRECTORY_SEPARATOR between the dirname and
+        // the filename so ensure that the dirname doesn't already end with one
+        $parts['dirname'] = rtrim($parts['dirname'], DIRECTORY_SEPARATOR);
+
+        // Apply the requested suffix to the path
+        if (!empty($suffix)) {
+            $parts['filename'] = preg_replace(
+                // Remove the suffix if it's already there before re-adding it
+                '/' . preg_quote($suffix, '/') . '(_\d)?/',
+                '',
+                $parts['filename']
+            ) . $suffix;
+
+            // Regenerate the path so that it can be checked for existance
+            $path = sprintf(
+                '%s%s%s.%s',
+                $parts['dirname'],
+                DIRECTORY_SEPARATOR,
+                $parts['filename'],
+                $parts['extension']
+            );
+        }
+
         while (MediaLibrary::instance()->exists($path)) {
             $path = sprintf(
-                '%s/%s_%d.%s',
+                '%s%s%s_%d.%s',
                 $parts['dirname'],
+                DIRECTORY_SEPARATOR,
                 $parts['filename'],
                 $i++,
                 $parts['extension']
