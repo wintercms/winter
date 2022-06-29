@@ -571,11 +571,12 @@ class PluginManager
      * Normalizes the provided plugin identifier (author.plugin) and resolves
      * it case-insensitively to the normalized identifier (Author.Plugin)
      * Returns the provided identifier if a match isn't found
+     *
+     * This is an alias for `getNormalizedIdentifier()`
      */
     public function normalizeIdentifier(string $code): string
     {
-        $code = strtolower($code);
-        return $this->normalizedMap[$code] ?? $code;
+        return $this->getNormalizedIdentifier($code);
     }
 
     /**
@@ -584,7 +585,8 @@ class PluginManager
      */
     public function getNormalizedIdentifier(PluginBase|string $plugin, bool $lower = false): string
     {
-        $identifier = $this->normalizeIdentifier($this->getIdentifier($plugin));
+        $code = $this->getIdentifier($plugin);
+        $identifier = $this->normalizedMap[strtolower($code)] ?? $code;
         return $lower ? strtolower($identifier) : $identifier;
     }
 
