@@ -35,11 +35,17 @@ class ViewMakerTest extends TestCase
     public function testViewPaths()
     {
         // Tests guessViewPath() and guessViewPathFrom()
-        $this->assertEquals(base_path($this->relativePath), $this->stub->guessViewPath());
+        $this->assertEquals(
+            $this->normalizePath(base_path($this->relativePath)),
+            $this->normalizePath($this->stub->guessViewPath())
+        );
 
         // Request a view path first to set the default
         $path = $this->stub->getViewPath('_overridden.htm');
-        $this->assertEquals(base_path($this->normalizePath("$this->relativePath/_overridden.htm")), $path);
+        $this->assertEquals(
+            $this->normalizePath(base_path($this->normalizePath("$this->relativePath/_overridden.htm"))),
+            $this->normalizePath($path)
+        );
 
         // Test addViewPath() & getViewPaths()
         $overridePath = $this->normalizePath("~/{$this->relativePath}override");
