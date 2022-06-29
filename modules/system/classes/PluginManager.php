@@ -571,8 +571,6 @@ class PluginManager
      * Normalizes the provided plugin identifier (author.plugin) and resolves
      * it case-insensitively to the normalized identifier (Author.Plugin)
      * Returns the provided identifier if a match isn't found
-     *
-     * This is an alias for `getNormalizedIdentifier()`
      */
     public function normalizeIdentifier(string $code): string
     {
