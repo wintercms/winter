@@ -136,7 +136,7 @@ class PluginManager
         // Sort all the plugins by number of dependencies
         $this->sortByDependencies();
 
-        return $this->plugins;
+        return $this->getAllPlugins();
     }
 
     /**
@@ -173,14 +173,20 @@ class PluginManager
         }
 
         $classId = $this->getIdentifier($pluginObj);
+        $lowerClassId = strtolower($classId);
 
-        $this->plugins[$classId] = $pluginObj;
-        $this->normalizedMap[strtolower($classId)] = $classId;
+        $this->plugins[$lowerClassId] = $pluginObj;
+        $this->normalizedMap[$lowerClassId] = $classId;
 
         $replaces = $pluginObj->getReplaces();
         if ($replaces) {
             foreach ($replaces as $replace) {
-                $this->replacementMap[$replace] = $classId;
+                $lowerReplace = strtolower($replace);
+                $this->replacementMap[$lowerReplace] = $lowerClassId;
+
+                if (!isset($this->normalizedMap[$lowerReplace])) {
+                    $this->normalizedMap[$lowerReplace] = $replace;
+                }
             }
         }
 
@@ -226,7 +232,7 @@ class PluginManager
             ];
         });
 
-        list($this->pluginFlag, $this->replacementMap, $this->activeReplacementMap) = $data;
+        list($this->pluginFlags, $this->replacementMap, $this->activeReplacementMap) = $data;
     }
 
     /**
@@ -324,20 +330,6 @@ class PluginManager
             View::addNamespace($pluginNamespace, $viewsPath);
         }
 
-        /*
-         * Register namespace aliases for any replaced plugins
-         */
-        if ($replaces = $plugin->getReplaces()) {
-            foreach ($replaces as $replace) {
-                $replaceNamespace = $this->getNamespace($replace);
-
-                $this->app->make(ClassLoader::class)->addNamespaceAliases([
-                    // class_alias() expects order to be $real, $alias
-                    $this->getNamespace($pluginId) => $replaceNamespace,
-                ]);
-            }
-        }
-
         /**
          * Disable plugin registration for restricted pages, unless elevated
          */
@@ -423,7 +415,14 @@ class PluginManager
      */
     public function getPlugins(): array
     {
-        return array_diff_key($this->plugins, $this->pluginFlags);
+        $activePlugins = array_diff_key($this->plugins, $this->pluginFlags);
+        return array_combine(
+            array_map(
+                fn($code) => $this->normalizedMap[$code],
+                array_keys($activePlugins)
+            ),
+            $activePlugins
+        );
     }
 
     /**
@@ -433,7 +432,13 @@ class PluginManager
      */
     public function getAllPlugins(): array
     {
-        return $this->plugins;
+        $plugins = [];
+
+        foreach ($this->plugins as $code => $plugin) {
+            $plugins[$this->normalizedMap[$code]] = $plugin;
+        }
+
+        return $plugins;
     }
 
     /**
@@ -441,7 +446,7 @@ class PluginManager
      */
     public function findByNamespace(string $namespace): ?PluginBase
     {
-        $identifier = $this->getIdentifier($namespace);
+        $identifier = $this->getIdentifier($namespace, true);
 
         return $this->plugins[$identifier] ?? null;
     }
@@ -455,12 +460,10 @@ class PluginManager
             return $identifier;
         }
 
-        if (!$ignoreReplacements && is_string($identifier) && isset($this->replacementMap[$identifier])) {
-            $identifier = $this->replacementMap[$identifier];
-        }
+        $identifier = $this->getNormalizedIdentifier($identifier, true);
 
-        if (!isset($this->plugins[$identifier])) {
-            $identifier = $this->getNormalizedIdentifier($identifier);
+        if (!$ignoreReplacements && isset($this->replacementMap[$identifier])) {
+            $identifier = $this->replacementMap[$identifier];
         }
 
         return $this->plugins[$identifier] ?? null;
@@ -471,7 +474,7 @@ class PluginManager
      */
     public function hasPlugin(PluginBase|string $plugin): bool
     {
-        $normalized = $this->getNormalizedIdentifier($plugin);
+        $normalized = $this->getNormalizedIdentifier($plugin, true);
 
         return isset($this->plugins[$normalized]) || isset($this->replacementMap[$normalized]);
     }
@@ -532,7 +535,7 @@ class PluginManager
      * Resolves a plugin identifier (Author.Plugin) from a plugin class name
      * (Author\Plugin) or PluginBase instance.
      */
-    public function getIdentifier(PluginBase|string $plugin): string
+    public function getIdentifier(PluginBase|string $plugin, bool $lower = false): string
     {
         $namespace = Str::normalizeClassName($plugin);
         if (strpos($namespace, '\\') === null) {
@@ -543,7 +546,7 @@ class PluginManager
         $slice = array_slice($parts, 1, 2);
         $namespace = implode('.', $slice);
 
-        return $namespace;
+        return $lower ? strtolower($namespace) : $namespace;
     }
 
     /**
@@ -571,17 +574,18 @@ class PluginManager
      */
     public function normalizeIdentifier(string $code): string
     {
-        $code = strtolower($code);
-        return $this->normalizedMap[$code] ?? $code;
+        return $this->getNormalizedIdentifier($code);
     }
 
     /**
      * Returns the normalized identifier (i.e. Winter.Blog) from the provided
      * string or PluginBase instance.
      */
-    public function getNormalizedIdentifier(PluginBase|string $plugin): string
+    public function getNormalizedIdentifier(PluginBase|string $plugin, bool $lower = false): string
     {
-        return $this->normalizeIdentifier($this->getIdentifier($plugin));
+        $code = $this->getIdentifier($plugin);
+        $identifier = $this->normalizedMap[strtolower($code)] ?? $code;
+        return $lower ? strtolower($identifier) : $identifier;
     }
 
     /**
@@ -614,7 +618,7 @@ class PluginManager
 
     public function getPluginFlags(PluginBase|string $plugin): array
     {
-        $code = $this->getNormalizedIdentifier($plugin);
+        $code = $this->getNormalizedIdentifier($plugin, true);
         return $this->pluginFlags[$code] ?? [];
     }
 
@@ -623,7 +627,7 @@ class PluginManager
      */
     protected function flagPlugin(PluginBase|string $plugin, string $flag): void
     {
-        $code = $this->getNormalizedIdentifier($plugin);
+        $code = $this->getNormalizedIdentifier($plugin, true);
         $this->pluginFlags[$code][$flag] = true;
     }
 
@@ -632,7 +636,7 @@ class PluginManager
      */
     protected function unflagPlugin(PluginBase|string $plugin, string $flag): void
     {
-        $code = $this->getNormalizedIdentifier($plugin);
+        $code = $this->getNormalizedIdentifier($plugin, true);
         unset($this->pluginFlags[$code][$flag]);
     }
 
@@ -666,7 +670,7 @@ class PluginManager
      */
     public function isDisabled(PluginBase|string $plugin): bool
     {
-        $code = $this->getNormalizedIdentifier($plugin);
+        $code = $this->getNormalizedIdentifier($plugin, true);
 
         // @TODO: Limit this to only disabled flags if we add more than disabled flags
         return !empty($this->pluginFlags[$code]);
@@ -685,9 +689,18 @@ class PluginManager
      */
     public function getActiveReplacementMap(PluginBase|string $plugin = null): array|string|null
     {
-        return $plugin
-            ? $this->activeReplacementMap[$this->getNormalizedIdentifier($plugin)] ?? null
-            : $this->activeReplacementMap;
+        if ($plugin) {
+            return $this->normalizedMap[
+                $this->activeReplacementMap[$this->getNormalizedIdentifier($plugin, true)] ?? null
+            ] ?? null;
+        }
+
+        $map = [];
+        foreach ($this->activeReplacementMap as $key => $value) {
+            $map[$this->normalizedMap[$key]] = $this->normalizedMap[$value];
+        }
+
+        return $map;
     }
 
     /**
@@ -708,7 +721,12 @@ class PluginManager
 
             // Only allow one of the replaced plugin or the replacing plugin to exist
             // at once depending on whether the version constraints are met or not
-            if ($this->plugins[$replacement]->canReplacePlugin($target, $this->plugins[$target]->getPluginVersion())) {
+            if (
+                $this->plugins[$replacement]->canReplacePlugin(
+                    $this->normalizeIdentifier($target),
+                    $this->plugins[$target]->getPluginVersion()
+                )
+            ) {
                 // Set the plugin flags to disable the target plugin
                 $this->flagPlugin($target, static::DISABLED_REPLACED);
                 $this->unflagPlugin($replacement, static::DISABLED_REPLACEMENT_FAILED);
@@ -732,8 +750,19 @@ class PluginManager
     protected function registerPluginReplacements(): void
     {
         foreach ($this->replacementMap as $target => $replacement) {
+            list($target, $replacement) = array_map(
+                fn($plugin) => $this->normalizeIdentifier($plugin),
+                [$target, $replacement]
+            );
+
             // Alias the replaced plugin to the replacing plugin
             $this->aliasPluginAs($replacement, $target);
+
+            // Register namespace aliases for any replaced plugins
+            $this->app->make(ClassLoader::class)->addNamespaceAliases([
+                // class_alias() expects order to be $real, $alias
+                $this->getNamespace($replacement) => $this->getNamespace($target),
+            ]);
         }
     }
 

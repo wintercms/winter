@@ -36,7 +36,11 @@ class Cache
      */
     public function clearCombiner()
     {
-        foreach (File::directories(storage_path().'/cms/combiner') as $directory) {
+        $path = storage_path().'/cms/combiner';
+        if (!is_dir($path)) {
+            return;
+        }
+        foreach (File::directories($path) as $directory) {
             File::deleteDirectory($directory);
         }
     }
@@ -46,6 +50,10 @@ class Cache
      */
     public function clearCache()
     {
+        $path = storage_path().'/cms/cache';
+        if (!is_dir($path)) {
+            return;
+        }
         foreach (File::directories(storage_path().'/cms/cache') as $directory) {
             File::deleteDirectory($directory);
         }
@@ -56,6 +64,10 @@ class Cache
      */
     public function clearTwig()
     {
+        $path = storage_path().'/cms/twig';
+        if (!is_dir($path)) {
+            return;
+        }
         foreach (File::directories(storage_path().'/cms/twig') as $directory) {
             File::deleteDirectory($directory);
         }
@@ -66,7 +78,6 @@ class Cache
      */
     public function clearMeta()
     {
-        File::delete(storage_path().'/cms/disabled.json');
         File::delete(App::getCachedCompilePath());
         File::delete(App::getCachedServicesPath());
     }
