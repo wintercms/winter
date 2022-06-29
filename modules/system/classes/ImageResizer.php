@@ -119,8 +119,7 @@ class ImageResizer
         int|float $height = 0,
         array $options = [],
         string $method = self::METHOD_RESIZE
-    ): string
-    {
+    ): string {
         if (!in_array($method, [static::METHOD_RESIZE, static::METHOD_CROP])) {
             throw new \ApplicationException('Invalid method passed to processImage');
         }
