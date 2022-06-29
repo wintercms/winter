@@ -6,6 +6,7 @@ use System\Tests\Bootstrap\TestCase;
 use System\Classes\PluginManager;
 use System\Classes\UpdateManager;
 use System\Classes\VersionManager;
+use System\Classes\PluginBase;
 use ReflectionClass;
 
 use Winter\Storm\Database\Model as ActiveRecord;
@@ -542,5 +543,50 @@ class PluginManagerTest extends TestCase
 
         $flags = $this->manager->getPluginFlags($plugin);
         $this->assertEmpty($flags);
+    }
+
+    public function testPluginNormalization()
+    {
+        // test lower to upper
+        $this->assertEquals('Database.Tester', $this->manager->normalizeIdentifier('database.tester'));
+        $this->assertEquals('Database.Tester', $this->manager->getNormalizedIdentifier('database.tester'));
+
+        // test exact match
+        $this->assertEquals('DependencyTest.Found', $this->manager->normalizeIdentifier('DependencyTest.Found'));
+        $this->assertEquals('DependencyTest.Found', $this->manager->getNormalizedIdentifier('DependencyTest.Found'));
+
+        // test mixed case
+        $this->assertEquals('DependencyTest.Found', $this->manager->normalizeIdentifier('Dependencytest.Found'));
+        $this->assertEquals('DependencyTest.Found', $this->manager->getNormalizedIdentifier('Dependencytest.Found'));
+
+        // test typeo
+        $this->assertEquals('dpendencytest.Found', $this->manager->normalizeIdentifier('dpendencytest.Found'));
+        $this->assertEquals('dpendencytest.Found', $this->manager->getNormalizedIdentifier('dpendencytest.Found'));
+        $this->assertEquals('Winter.NoUpdate', $this->manager->normalizeIdentifier('Winter.NoUpdate'));
+        $this->assertEquals('Winter.NoUpdate', $this->manager->getNormalizedIdentifier('Winter.NoUpdate'));
+
+        // test multiple mixed case installed plugin
+        $this->assertEquals('Winter.NoUpdates', $this->manager->normalizeIdentifier('Winter.NoUpdates'));
+        $this->assertEquals('Winter.NoUpdates', $this->manager->normalizeIdentifier('winter.noUpdates'));
+        $this->assertEquals('Winter.NoUpdates', $this->manager->normalizeIdentifier('winter.noupdates'));
+        $this->assertEquals('Winter.NoUpdates', $this->manager->getNormalizedIdentifier('Winter.NoUpdates'));
+        $this->assertEquals('Winter.NoUpdates', $this->manager->getNormalizedIdentifier('winter.noUpdates'));
+        $this->assertEquals('Winter.NoUpdates', $this->manager->getNormalizedIdentifier('winter.noupdates'));
+
+        // test multiple mixed case not installed plugin
+        $this->assertEquals('Winter.MissingPlugin', $this->manager->normalizeIdentifier('Winter.MissingPlugin'));
+        $this->assertEquals('Winter.Missingplugin', $this->manager->normalizeIdentifier('Winter.Missingplugin'));
+        $this->assertEquals('Winter.missingplugin', $this->manager->normalizeIdentifier('Winter.missingplugin'));
+        $this->assertEquals('winter.missingplugin', $this->manager->normalizeIdentifier('winter.missingplugin'));
+        $this->assertEquals('Winter.MissingPlugin', $this->manager->getNormalizedIdentifier('Winter.MissingPlugin'));
+        $this->assertEquals('Winter.Missingplugin', $this->manager->getNormalizedIdentifier('Winter.Missingplugin'));
+        $this->assertEquals('Winter.missingplugin', $this->manager->getNormalizedIdentifier('Winter.missingplugin'));
+        $this->assertEquals('winter.missingplugin', $this->manager->getNormalizedIdentifier('winter.missingplugin'));
+
+        // test passing plugin object
+        $plugin = $this->manager->findByIdentifier('Winter.NoUpdates');
+        $this->assertInstanceOf(PluginBase::class, $plugin);
+
+        $this->assertEquals('Winter.NoUpdates', $this->manager->getNormalizedIdentifier($plugin));
     }
 }
