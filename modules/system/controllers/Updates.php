@@ -91,7 +91,7 @@ class Updates extends Controller
     public function manage()
     {
         $this->pageTitle = 'system::lang.plugins.manage';
-        PluginManager::instance()->clearDisabledCache();
+        PluginManager::instance()->clearFlagCache();
         return $this->asExtension('ListController')->index();
     }
 
@@ -237,6 +237,10 @@ class Updates extends Controller
     {
         $warnings = [];
         $missingDependencies = PluginManager::instance()->findMissingDependencies();
+
+        if (!empty($missingDependencies)) {
+            PluginManager::instance()->clearFlagCache();
+        }
 
         foreach ($missingDependencies as $pluginCode => $plugin) {
             foreach ($plugin as $missingPluginCode) {
@@ -845,51 +849,44 @@ class Updates extends Controller
             count($checkedIds)
         ) {
             $manager = PluginManager::instance();
+            $codes = PluginVersion::lists('code', 'id');
 
-            foreach ($checkedIds as $pluginId) {
-                if (!$plugin = PluginVersion::find($pluginId)) {
+            foreach ($checkedIds as $id) {
+                $code = $codes[$id] ?? null;
+                if (!$code) {
                     continue;
                 }
 
-                $savePlugin = true;
                 switch ($bulkAction) {
                     // Enables plugin's updates.
                     case 'freeze':
-                        $plugin->is_frozen = 1;
+                        $manager->freezePlugin($code);
                         break;
 
                     // Disables plugin's updates.
                     case 'unfreeze':
-                        $plugin->is_frozen = 0;
+                        $manager->unfreezePlugin($code);
                         break;
 
                     // Disables plugin on the system.
                     case 'disable':
-                        $plugin->is_disabled = 1;
-                        $manager->disablePlugin($plugin->code, true);
+                        $manager->disablePlugin($code);
                         break;
 
                     // Enables plugin on the system.
                     case 'enable':
-                        $plugin->is_disabled = 0;
-                        $manager->enablePlugin($plugin->code, true);
+                        $manager->enablePlugin($code);
                         break;
 
                     // Rebuilds plugin database migrations.
                     case 'refresh':
-                        $savePlugin = false;
-                        $manager->refreshPlugin($plugin->code);
+                        $manager->refreshPlugin($code);
                         break;
 
                     // Rollback and remove plugins from the system.
                     case 'remove':
-                        $savePlugin = false;
-                        $manager->deletePlugin($plugin->code);
+                        $manager->deletePlugin($code);
                         break;
-                }
-
-                if ($savePlugin) {
-                    $plugin->save();
                 }
             }
         }

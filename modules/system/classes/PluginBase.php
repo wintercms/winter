@@ -326,7 +326,7 @@ class PluginBase extends ServiceProviderBase
             $this->loadedYamlConfiguration = [];
         }
         else {
-            $this->loadedYamlConfiguration = Yaml::parse(file_get_contents($yamlFilePath));
+            $this->loadedYamlConfiguration = Yaml::parseFile($yamlFilePath);
             if (!is_array($this->loadedYamlConfiguration)) {
                 throw new SystemException(sprintf('Invalid format of the plugin configuration file: %s. The file should define an array.', $yamlFilePath));
             }
@@ -404,8 +404,6 @@ class PluginBase extends ServiceProviderBase
 
     /**
      * Returns the absolute path to this plugin's directory
-     *
-     * @return string
      */
     public function getPluginPath(): string
     {
@@ -414,7 +412,7 @@ class PluginBase extends ServiceProviderBase
         }
 
         $reflection = new ReflectionClass($this);
-        $this->path = dirname($reflection->getFileName());
+        $this->path = File::normalizePath(dirname($reflection->getFileName()));
 
         return $this->path;
     }
@@ -435,7 +433,7 @@ class PluginBase extends ServiceProviderBase
         if (
             !File::isFile($versionFile)
             || !($versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
-                return $yaml->parse(file_get_contents($versionFile));
+                return $yaml->parseFile($versionFile);
             }))
             || !is_array($versionInfo)
         ) {
@@ -447,5 +445,26 @@ class PluginBase extends ServiceProviderBase
         });
 
         return $this->version = trim(key(array_slice($versionInfo, -1, 1)));
+    }
+
+    /**
+     * Verifies the plugin's dependencies are present and enabled
+     */
+    public function checkDependencies(PluginManager $manager): bool
+    {
+        $required = $manager->getDependencies($this);
+        if (empty($required)) {
+            return true;
+        }
+
+        foreach ($required as $require) {
+            $requiredPlugin = $manager->findByIdentifier($require);
+
+            if (!$requiredPlugin || $manager->isDisabled($requiredPlugin)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

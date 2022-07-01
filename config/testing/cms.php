@@ -96,7 +96,7 @@ return [
     |
     */
 
-    'pluginsPathLocal' => base_path('tests/fixtures/plugins'),
+    'pluginsPathLocal' => base_path('modules/system/tests/fixtures/plugins'),
 
     /*
     |--------------------------------------------------------------------------
@@ -107,7 +107,7 @@ return [
     |
     */
 
-    'themesPathLocal' => base_path('tests/fixtures/themes'),
+    'themesPathLocal' => base_path('modules/cms/tests/fixtures/themes'),
 
     /*
     |--------------------------------------------------------------------------
@@ -149,20 +149,20 @@ return [
         'uploads' => [
             'disk'            => 'local',
             'folder'          => 'uploads',
-            'path'            => '/tests/storage/app/uploads',
+            'path'            => '/storage/tests/app/uploads',
             'temporaryUrlTTL' => 3600,
         ],
 
         'media' => [
             'disk'   => 'local',
             'folder' => 'media',
-            'path'   => '/tests/storage/app/media',
+            'path'   => '/storage/tests/app/media',
         ],
 
         'resized' => [
             'disk'   => 'local',
             'folder' => 'resized',
-            'path'   => '/tests/storage/app/resized',
+            'path'   => '/storage/tests/app/resized',
         ],
 
     ],

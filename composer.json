@@ -34,7 +34,7 @@
         "winter/wn-system-module": "dev-wip/1.2",
         "winter/wn-backend-module": "dev-wip/1.2",
         "winter/wn-cms-module": "dev-wip/1.2",
-        "laravel/framework": "^9.0",
+        "laravel/framework": "^9.1",
         "wikimedia/composer-merge-plugin": "~2.0.1"
     },
     "require-dev": {
@@ -45,28 +45,20 @@
         "php-parallel-lint/php-parallel-lint": "^1.0",
         "dms/phpunit-arraysubset-asserts": "^0.1.0|^0.2.1"
     },
-    "autoload-dev": {
-        "classmap": [
-            "tests/concerns/InteractsWithAuthentication.php",
-            "tests/fixtures/backend/models/UserFixture.php",
-            "tests/TestCase.php",
-            "tests/PluginTestCase.php"
-        ]
-    },
     "scripts": {
         "post-create-project-cmd": [
-            "php artisan key:generate",
-            "php artisan package:discover"
+            "@php artisan key:generate",
+            "@php artisan package:discover"
         ],
         "post-update-cmd": [
-            "php artisan winter:version",
-            "php artisan package:discover"
+            "@php artisan winter:version",
+            "@php artisan package:discover"
         ],
         "test": [
             "phpunit --stop-on-failure"
         ],
         "lint": [
-            "parallel-lint --exclude vendor --exclude storage --exclude tests/fixtures/plugins/testvendor/goto/Plugin.php ."
+            "parallel-lint --exclude vendor --exclude storage --exclude modules/system/tests/fixtures/plugins/testvendor/goto/Plugin.php ."
         ],
         "sniff": [
             "phpcs --colors -nq --report=\"full\" --extensions=\"php\""

@@ -12,19 +12,11 @@ mix
         },
         runtimeChunkPath: './assets/js/build',
     })
-    .vue({ version: 3 })
 
     // Extract imported libraries
     .extract({
         libraries: ['js-cookie'],
         to: './assets/js/snowboard/build/snowboard.vendor.js',
-    })
-    .extract({
-        libraries: [
-            '@popperjs/core',
-            'vue',
-        ],
-        to: './assets/js/build/vendor.js',
     })
 
     // Compile Snowboard for the Backend / System
@@ -32,7 +24,7 @@ mix
         [
             './assets/js/snowboard/snowboard.base.debug.js',
             './assets/js/snowboard/ajax/Request.js',
-            './assets/js/snowboard/snowboard.extras.js',
+            './assets/js/snowboard/snowboard.backend.extras.js',
         ],
         './assets/js/build/system.js',
     )

@@ -47,7 +47,7 @@ return [
         'impersonate_success' => 'شما اکنون با هویت این کاربر هستید.',
         'impersonate_working' => 'در حال تغییر هویت ...',
         'impersonating' => 'تغییر هویت :full_name',
-        'stop_impersonating' => 'توقف تغییر هوست',
+        'stop_impersonating' => 'توقف تغییر هویت',
         'unsuspend' => 'خروج از حالت تعلیق',
         'unsuspend_confirm' => 'آیا جهت خروج این کاربر از حالت تعلیق مطمئن هستید؟',
         'unsuspend_success' => 'کاربر از حالت تعلیق خارج شد.',

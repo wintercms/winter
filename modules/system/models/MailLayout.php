@@ -183,7 +183,7 @@ class MailLayout extends Model
 
         $this->name = array_get($sections, 'settings.name', '???');
         $this->content_css = $css;
-        $this->content_html =  array_get($sections, 'html');
+        $this->content_html = array_get($sections, 'html');
         $this->content_text = array_get($sections, 'text');
     }
 

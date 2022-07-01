@@ -1,3 +1,9 @@
+<?php if (!empty($error)): ?>
+    <p class="flash-message static error">
+        <?= e($error); ?></p>
+    </p>
+    <?php return; ?>
+<?php endif; ?>
 <?php if ($this->previewMode): ?>
     <div class="form-control"><?= Backend::dateTime($value, [
         'format' => $format,

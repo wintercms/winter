@@ -49,10 +49,10 @@ class AttributeRequest extends Snowboard.Singleton {
      *
      * Detaches all handlers.
      */
-    destructor() {
+    destruct() {
         this.detachHandlers();
 
-        super.destructor();
+        super.destruct();
     }
 
     /**
@@ -305,7 +305,7 @@ class AttributeRequest extends Snowboard.Singleton {
 
         this.resetTrackInputTimer(element);
 
-        element.dataset.trackInput = window.setTimeout(() => {
+        element.dataset.inputTimer = window.setTimeout(() => {
             if (element.dataset.request) {
                 this.processRequestOnElement(element);
                 return;
@@ -325,9 +325,9 @@ class AttributeRequest extends Snowboard.Singleton {
     }
 
     resetTrackInputTimer(element) {
-        if (element.dataset.trackInput) {
-            window.clearTimeout(element.dataset.trackInput);
-            element.dataset.trackInput = null;
+        if (element.dataset.inputTimer) {
+            window.clearTimeout(element.dataset.inputTimer);
+            element.dataset.inputTimer = null;
         }
     }
 }
