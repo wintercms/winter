@@ -3,7 +3,6 @@
 namespace System\Tests\Plugins\Database;
 
 use System\Tests\Bootstrap\PluginTestCase;
-use Carbon\Carbon;
 use Database\Tester\Models\CategoryNested;
 use Model;
 
@@ -58,6 +57,8 @@ class NestedTreeModelTest extends PluginTestCase
             9 => '&nbsp;&nbsp;&nbsp;Spring Trees'
         ], $array);
 
+        CategoryNested::flushDuplicateCache();
+
         $array = CategoryNested::listsNested('name', 'id', '--');
         $this->assertEquals([
             1 => 'Category Orange',
@@ -70,6 +71,8 @@ class NestedTreeModelTest extends PluginTestCase
             8 => '--Winter Snow',
             9 => '--Spring Trees'
         ], $array);
+
+        CategoryNested::flushDuplicateCache();
 
         $array = CategoryNested::listsNested('description', 'name', '**');
         $this->assertEquals([
@@ -120,7 +123,7 @@ class NestedTreeModelTest extends PluginTestCase
             'description' => 'The start of the fall season.'
         ]);
 
-        $october = $autumn->children()->create([
+        $autumn->children()->create([
             'name' => 'October',
             'description' => 'The middle of the fall season.'
         ]);
