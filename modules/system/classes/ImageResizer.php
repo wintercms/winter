@@ -352,7 +352,7 @@ class ImageResizer
             Event::fire('system.resizer.afterResize', [$this, $tempPath]);
 
             // Store the resized image
-            $disk->put($path, file_get_contents($tempPath));
+            $disk->put($path, file_get_contents($tempPath), ['directory_visibility' => 'public', 'visibility' => 'public']);
 
             // Clean up
             unlink($tempPath);
@@ -438,7 +438,7 @@ class ImageResizer
             Event::fire('system.resizer.afterCrop', [$this, $tempPath]);
 
             // Store the resized image
-            $disk->put($path, file_get_contents($tempPath));
+            $disk->put($path, file_get_contents($tempPath), ['directory_visibility' => 'public', 'visibility' => 'public']);
 
             // Clean up
             unlink($tempPath);
