@@ -584,6 +584,7 @@ class Controller
     protected function initTwigEnvironment()
     {
         $this->twig = App::make('twig.environment.cms');
+        $this->twig->addGlobal('this', ['controller' => $this]);
     }
 
     /**
