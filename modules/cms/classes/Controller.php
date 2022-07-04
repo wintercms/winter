@@ -584,6 +584,9 @@ class Controller
     protected function initTwigEnvironment()
     {
         $this->twig = App::make('twig.environment.cms');
+        // Ensure that $this['controller'] is available at all times in the base Twig context
+        // so that CMS Twig functions (in Cms\Twig\Extension) work inside of Macros
+        // @see https://github.com/wintercms/winter/issues/578
         $this->twig->addGlobal('this', ['controller' => $this]);
     }
 
