@@ -8,6 +8,7 @@ use Storage;
 use Request;
 use Url;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Illuminate\Filesystem\FilesystemAdapter;
 use ApplicationException;
 use SystemException;
 
@@ -774,7 +775,7 @@ class MediaLibrary
      * communicating with the remote storage.
      * @return mixed Returns the storage disk object.
      */
-    public function getStorageDisk()
+    public function getStorageDisk(): FilesystemAdapter
     {
         if ($this->storageDisk) {
             return $this->storageDisk;

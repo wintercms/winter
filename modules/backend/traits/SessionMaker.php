@@ -17,7 +17,7 @@ trait SessionMaker
     /**
      * Saves a widget related key/value pair in to session data.
      * @param string $key Unique key for the data store.
-     * @param string $value The value to store.
+     * @param mixed $value The value to store.
      * @return void
      */
     protected function putSession($key, $value)

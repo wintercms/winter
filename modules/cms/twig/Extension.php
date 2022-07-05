@@ -113,7 +113,7 @@ class Extension extends TwigExtension
     /**
      * Renders placeholder content, without removing the block, must be called before the placeholder tag itself
      */
-    public function placeholderFunction(string $name, string $default = null): string
+    public function placeholderFunction(string $name, string $default = null): ?string
     {
         if (($result = Block::get($name)) === null) {
             return null;
