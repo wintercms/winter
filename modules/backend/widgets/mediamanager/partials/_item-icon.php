@@ -1,14 +1,13 @@
 <div class="icon-container <?= $itemType ?>">
     <div class="icon-wrapper"><i class="<?= $this->itemTypeToIconClass($item, $itemType) ?>"></i></div>
-
-    <?php
-    if ($itemType == System\Classes\MediaLibraryItem::FILE_TYPE_IMAGE):
-        $thumbnailPath = $this->thumbnailExists($thumbnailParams, $item->path, $item->lastModified);
-        ?>
-
+    <?php if (
+        $itemType == System\Classes\MediaLibraryItem::FILE_TYPE_IMAGE
+        && $thumbnailUrl = $this->getResizedImageUrl($item->path, $thumbnailParams)
+    ): ?>
         <div>
-            <?php if (!$thumbnailPath): ?>
-                <div class="image-placeholder"
+            <?php if (!$thumbnailUrl): ?>
+                <div
+                    class="image-placeholder"
                     data-width="<?= $thumbnailParams['width'] ?>"
                     data-height="<?= $thumbnailParams['height'] ?>"
                     data-path="<?= e($item->path) ?>"
@@ -19,8 +18,7 @@
                 </div>
             <?php else: ?>
                 <?= $this->makePartial('thumbnail-image', [
-                    'isError' => $this->thumbnailIsError($thumbnailPath),
-                    'imageUrl' => $this->getThumbnailImageUrl($thumbnailPath)
+                    'imageUrl' => $thumbnailUrl,
                 ]) ?>
             <?php endif ?>
         </div>

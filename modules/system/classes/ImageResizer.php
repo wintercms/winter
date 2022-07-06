@@ -49,12 +49,6 @@ class ImageResizer
     public const CACHE_PREFIX = 'system.resizer.';
 
     /**
-     * Available methods to use when processing images
-     */
-    public const METHOD_RESIZE = 'resize';
-    public const METHOD_CROP = 'crop';
-
-    /**
      * @var array Available sources to get images from
      */
     protected static $availableSources = [];
@@ -106,27 +100,6 @@ class ImageResizer
         $this->width = (int) (($width === 'auto') ? 0 : $width);
         $this->height = (int) (($height === 'auto') ? 0 : $height);
         $this->options = array_merge($this->getDefaultOptions(), $options);
-    }
-
-    /**
-     * A simple static method for resizing an image and receiving the output path
-     *
-     * @throws ApplicationException If an invalid resize mode is passed to the the method.
-     */
-    public static function processImage(
-        mixed $image,
-        int|float $width = 0,
-        int|float $height = 0,
-        array $options = [],
-        string $method = self::METHOD_RESIZE
-    ): string {
-        if (!in_array($method, [static::METHOD_RESIZE, static::METHOD_CROP])) {
-            throw new \ApplicationException('Invalid method passed to processImage');
-        }
-
-        $resizer = new static($image, $width, $height, $options);
-        $resizer->{$method}();
-        return $resizer->getPathToResizedImage();
     }
 
     /**
