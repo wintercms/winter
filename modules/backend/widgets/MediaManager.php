@@ -1,25 +1,15 @@
 <?php namespace Backend\Widgets;
 
-use Url;
 use Str;
 use Lang;
-use File;
 use Input;
 use Config;
 use Backend;
-use Storage;
-use Request;
-use Response;
-use Exception;
-use SystemException;
 use ApplicationException;
 use Backend\Classes\WidgetBase;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Classes\MediaLibraryItem;
-use Winter\Storm\Database\Attach\Resizer;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
-use Form as FormHelper;
 
 /**
  * Media Manager widget.
@@ -724,7 +714,7 @@ class MediaManager extends WidgetBase
 
         foreach (['x', 'y', 'w', 'h'] as $key) {
             if (!isset($selectionData[$key]) || !is_numeric($selectionData[$key])) {
-                throw new SystemException('Invalid selection data.');
+                throw new ApplicationException('Invalid selection data.');
             }
 
             $selectionData[$key] = (int) $selectionData[$key];
@@ -1200,6 +1190,7 @@ class MediaManager extends WidgetBase
 
     /**
      * Get placeholder identifier
+     *
      * @param System\Classes\MediaLibraryItem $item
      * @return string
      */
@@ -1210,9 +1201,9 @@ class MediaManager extends WidgetBase
 
     /**
      * Generate thumbnail
+     *
      * @param array $thumbnailInfo
      * @param array|null $thumbnailParams
-     * @return array
      */
     protected function generateThumbnail($thumbnailInfo, $thumbnailParams = null): array
     {
@@ -1291,10 +1282,6 @@ class MediaManager extends WidgetBase
             )
         );
     }
-
-    //
-    // Cropping
-    //
 
     /**
      * Process the provided path and add a suffix of _$int to prevent conflicts
