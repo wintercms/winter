@@ -293,7 +293,6 @@ class MediaManager extends WidgetBase
                  * Add to bulk collection
                  */
                 $filesToDelete[] = $path;
-
             } elseif ($type === MediaLibraryItem::TYPE_FOLDER) {
                 /*
                  * Delete single folder
