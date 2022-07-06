@@ -1,4 +1,4 @@
-<?php if (!$isError): ?>
+<?php if ($imageUrl): ?>
     <img src="<?= $imageUrl ?>"/>
 <?php else: ?>
     <i class="icon-chain-broken" title="<?= e(trans('backend::lang.media.thumbnail_error')) ?>"></i>

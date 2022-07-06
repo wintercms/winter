@@ -802,7 +802,7 @@ class MediaManager extends WidgetBase
         $path = Input::get('path');
         $path = MediaLibrary::validatePath($path);
 
-        $croppedPath = $this->resizeImage(MediaLibrary::url($path), [
+        $croppedPath = $this->resizeImage($path, [
             'mode' => 'exact',
             'width' => $width,
             'height' => $height
@@ -1325,14 +1325,14 @@ class MediaManager extends WidgetBase
             /*
              * Resize the thumbnail and save to the thumbnails directory
              */
-            $fullThumbnailPath = $this->resizeImage(MediaLibrary::url($path), $thumbnailParams);
+            $fullThumbnailPath = $this->lazyResizeImage($path, $thumbnailParams);
 
             /*
              * Delete the temporary file
              */
             $markup = $this->makePartial('thumbnail-image', [
                 'isError' => false,
-                'imageUrl' => $this->getThumbnailImageUrl($fullThumbnailPath)
+                'imageUrl' => $fullThumbnailPath
             ]);
         } catch (\Throwable $ex) {
             $markup = $this->makePartial('thumbnail-image', ['isError' => true]);
@@ -1353,10 +1353,26 @@ class MediaManager extends WidgetBase
     /**
      * Resize an image
      */
-    protected function resizeImage(string $image, array $params): string
+    protected function lazyResizeImage(string $path, array $params): string
+    {
+        return ImageResizer::filterGetUrl(
+            MediaLibrary::url($path),
+            $params['width'],
+            $params['height'],
+            array_merge(
+                ['mode' => 'exact'],
+                $params
+            )
+        );
+    }
+
+    /**
+     * Resize an image
+     */
+    protected function resizeImage(string $path, array $params): string
     {
         return ImageResizer::processImage(
-            $image,
+            MediaLibrary::url($path),
             $params['width'],
             $params['height'],
             array_merge(
@@ -1370,10 +1386,10 @@ class MediaManager extends WidgetBase
     /**
      * Crop an image
      */
-    protected function cropImage(string $image, array $params): string
+    protected function cropImage(string $path, array $params): string
     {
         return ImageResizer::processImage(
-            $image,
+            MediaLibrary::url($path),
             $params['width'],
             $params['height'],
             array_merge(
@@ -1423,7 +1439,7 @@ class MediaManager extends WidgetBase
         $url = MediaLibrary::url($path);
 
         if ($params) {
-            $url = $this->resizeImage($url, [
+            $url = $this->resizeImage($path, [
                 'mode' => 'exact',
                 'width' => $params['width'],
                 'height' => $params['height'],
