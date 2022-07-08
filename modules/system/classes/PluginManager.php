@@ -636,8 +636,14 @@ class PluginManager
      */
     protected function unflagPlugin(PluginBase|string $plugin, string $flag): void
     {
+        // Remove the provided flag from the provided plugin
         $code = $this->getNormalizedIdentifier($plugin, true);
         unset($this->pluginFlags[$code][$flag]);
+
+        // Remove the plugin from the pluginFlags property if it has no flags
+        if (empty($this->pluginFlags[$code])) {
+            unset($this->pluginFlags[$code]);
+        }
     }
 
     /**
