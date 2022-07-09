@@ -89,6 +89,7 @@ class CmsObjectQueryTest extends TestCase
             "with-components",
             "with-content",
             "with-layout",
+            "with-macro",
             "with-partials",
             "with-placeholder",
             "with-soft-component-class",

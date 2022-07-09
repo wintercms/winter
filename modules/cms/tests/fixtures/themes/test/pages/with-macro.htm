@@ -1,0 +1,9 @@
+url = "/with-macro"
+==
+{% macro pageTest(_context) %}
+    {{ 'index' | page }}
+    {{ this.page.fileName }}
+{% endmacro pageTest %}
+
+{{ _self.pageTest() }}
+{{ this.page.fileName }}

@@ -581,4 +581,13 @@ Custom output: And tell him about his brush strokes?
 ESC;
         $this->assertEquals(str_replace(PHP_EOL, "\n", $content), $response);
     }
+
+    public function testMacro()
+    {
+        $theme = Theme::load('test');
+        $controller = new Controller($theme);
+        $response = $controller->run('/with-macro')->getContent();
+
+        $this->assertEquals('<p>Hi</p>', $response);
+    }
 }
