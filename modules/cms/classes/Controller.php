@@ -306,15 +306,7 @@ class Controller
         /*
          * The 'this' variable is reserved for default variables.
          */
-        $this->vars['this'] = [
-            'page'        => $this->page,
-            'layout'      => $this->layout,
-            'theme'       => $this->theme,
-            'param'       => $this->router->getParameters(),
-            'controller'  => $this,
-            'environment' => App::environment(),
-            'session'     => App::make('session'),
-        ];
+        $this->vars['this'] = $this->getFrontendContext();
 
         /*
          * Check for the presence of validation errors in the session.
@@ -584,6 +576,7 @@ class Controller
     protected function initTwigEnvironment()
     {
         $this->twig = App::make('twig.environment.cms');
+        $this->twig->getExtension('Cms\Twig\Extension')->setController($this);
     }
 
     /**
@@ -1563,5 +1556,22 @@ class Controller
     protected function isSoftComponent($label)
     {
         return starts_with($label, '@');
+    }
+
+    /**
+     * Returns the frontend context variables
+     * @return array
+     */
+    public function getFrontendContext(): array
+    {
+        return [
+            'page'        => $this->page,
+            'layout'      => $this->layout,
+            'theme'       => $this->theme,
+            'param'       => $this->router->getParameters(),
+            'controller'  => $this,
+            'environment' => App::environment(),
+            'session'     => App::make('session'),
+        ];
     }
 }

@@ -1,6 +1,7 @@
 <?php namespace Cms\Twig;
 
 use Block;
+use Cms\Classes\Controller;
 use Event;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
@@ -14,6 +15,8 @@ use Twig\TwigFunction as TwigSimpleFunction;
  */
 class Extension extends TwigExtension
 {
+    protected Controller $controller;
+
     /**
      * Returns an array of functions to add to the existing list.
      */
@@ -67,6 +70,7 @@ class Extension extends TwigExtension
             new FlashTokenParser,
             new ScriptsTokenParser,
             new StylesTokenParser,
+            new MacroTokenParser,
         ];
     }
 
@@ -113,7 +117,7 @@ class Extension extends TwigExtension
     /**
      * Renders placeholder content, without removing the block, must be called before the placeholder tag itself
      */
-    public function placeholderFunction(string $name, string $default = null): ?string
+    public function placeholderFunction(string $name, string $default = null): string
     {
         if (($result = Block::get($name)) === null) {
             return null;
@@ -192,5 +196,15 @@ class Extension extends TwigExtension
     public function endBlock($append = true): void
     {
         Block::endBlock($append);
+    }
+
+    public function getFrontendContext(): array
+    {
+        return $this->controller->getFrontendContext();
+    }
+
+    public function setController(Controller $controller)
+    {
+        $this->controller = $controller;
     }
 }
