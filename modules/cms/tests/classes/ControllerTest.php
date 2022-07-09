@@ -588,6 +588,9 @@ ESC;
         $controller = new Controller($theme);
         $response = $controller->run('/with-macro')->getContent();
 
-        $this->assertEquals('<p>Hi</p>', $response);
+        $this->assertStringContainsString(
+            '<p><a href="/">with-macro.htm</a><strong>with-macro.htm</strong></p>',
+            $response
+        );
     }
 }

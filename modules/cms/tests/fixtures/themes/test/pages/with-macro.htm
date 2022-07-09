@@ -1,9 +1,7 @@
 url = "/with-macro"
 ==
-{% macro pageTest(_context) %}
-    {{ 'index' | page }}
-    {{ this.page.fileName }}
-{% endmacro pageTest %}
+{% macro pageTest(_context) -%}
+    <a href="{{ 'index' | page }}">{{ this.page.fileName }}</a>
+{%- endmacro pageTest %}
 
-{{ _self.pageTest() }}
-{{ this.page.fileName }}
+<p>{{ _self.pageTest() }}<strong>{{ this.page.fileName }}</strong></p>
