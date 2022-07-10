@@ -730,7 +730,8 @@ if(!this.appTimezone){this.appTimezone='UTC'}}
 DateTimeConverter.prototype.getDateTimeValue=function(){this.datetime=this.$el.attr('datetime')
 if(this.$el.get(0).hasAttribute('data-ignore-timezone')){this.appTimezone='UTC'
 this.options.timezone='UTC'}var luxonObj=DateTime.fromSQL(this.datetime).setZone(this.appTimezone),result
-if(this.options.locale){luxonObj=luxonObj.setLocale(this.options.locale)}if(this.options.timezone){luxonObj=luxonObj.setZone(this.options.timezone)}if(this.options.timeSince){result=luxonObj.toRelative()}else if(this.options.timeTense){result=luxonObj.toRelativeCalendar()}else{result=luxonObj.toFormat(this.options.format)}return result}
+if(this.options.locale){luxonObj=luxonObj.setLocale(this.options.locale)}if(this.options.timezone){luxonObj=luxonObj.setZone(this.options.timezone)}if(this.options.timeSince){result=luxonObj.toRelative()}else if(this.options.timeTense){const weekAgo=DateTime.now().minus({weeks:1})
+if(weekAgo>=luxonObj){result=luxonObj.toFormat(this.options.format)}else{result=luxonObj.toRelativeCalendar({unit:'days'})}}else{result=luxonObj.toFormat(this.options.format)}return result}
 DateTimeConverter.prototype.getFormatFromAlias=function(alias){var map={time:'t',timeLong:'tt',date:'D',dateMin:'D',dateLong:'DDD',dateLongMin:'DD',dateTime:'fff',dateTimeMin:'ff',dateTimeLong:'ffff',dateTimeLongMin:'ccc ff'}
 return map[alias]?map[alias]:'ccc ff'}
 DateTimeConverter.prototype.dispose=function(){this.$el.off('dispose-control',this.proxy(this.dispose))

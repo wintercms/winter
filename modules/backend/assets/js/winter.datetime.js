@@ -97,7 +97,12 @@
             result = luxonObj.toRelative()
         }
         else if (this.options.timeTense) {
-            result = luxonObj.toRelativeCalendar()
+            const weekAgo = DateTime.now().minus({ weeks: 1 })
+            if (weekAgo >= luxonObj) {
+                result = luxonObj.toFormat(this.options.format)
+            } else {
+                result = luxonObj.toRelativeCalendar({ unit: 'days' })
+            }
         }
         else {
             result = luxonObj.toFormat(this.options.format)
