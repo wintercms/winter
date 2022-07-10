@@ -52,6 +52,9 @@ mix
         './assets/js/snowboard/build/snowboard.extras.js',
     )
 
+    // Copy Mustache into location (Storm UI asset)
+    .copy('../../node_modules/mustache/mustache.js', './assets/ui/vendor/mustache/mustache.js')
+
     // Copy Pickaday into location (Storm UI asset)
     .copy('../../node_modules/pikaday/pikaday.js', './assets/ui/vendor/pikaday/js/pikaday.js')
     .copy('../../node_modules/pikaday/css/pikaday.css', './assets/ui/vendor/pikaday/css/pikaday.css')
