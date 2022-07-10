@@ -3,11 +3,9 @@
     <head>
         <meta charset="utf-8">
         <title>Exception</title>
+        <script src="<?= Url::asset('/modules/system/assets/vendor/prism/prism.js') ?>"></script>
+        <link href="<?= Url::asset('/modules/system/assets/vendor/prism/prism.css') ?>" rel="stylesheet">
         <link href="<?= Url::asset('/modules/system/assets/css/styles.css') ?>" rel="stylesheet">
-        <script src="<?= Url::asset('/modules/system/assets/vendor/syntaxhighlighter/scripts/shCore.js') ?>"></script>
-        <script src="<?= Url::asset('/modules/system/assets/vendor/syntaxhighlighter/scripts/shBrushPhp.js') ?>"></script>
-        <script src="<?= Url::asset('/modules/system/assets/vendor/syntaxhighlighter/scripts/shBrushXml.js') ?>"></script>
-        <link href="<?= Url::asset('/modules/system/assets/vendor/syntaxhighlighter/styles/shCore.css') ?>">
     </head>
     <body>
         <div class="container">
@@ -32,7 +30,7 @@
                 </li>
             </ul>
 
-            <pre class="brush: php"><?php foreach ($exception->getHighlightLines() as $line): ?><?= $line ?><?php endforeach ?></pre>
+            <pre class="line-numbers language-php" data-start="<?= $exception->getHighlight()->startLine + 1 ?>" data-line="<?= $exception->getLine() ?>"><code><?php foreach ($exception->getHighlightLines() as $line): ?><?= $line ?><?php endforeach ?></code></pre>
 
             <h3><i class="icon-code-fork warning"></i> Stack trace</h3>
 
@@ -60,6 +58,7 @@
             </table>
         </div>
 
+        <?php /*
         <script>
             SyntaxHighlighter.defaults['toolbar'] = false;
             SyntaxHighlighter.defaults['quick-code'] = false;
@@ -67,6 +66,7 @@
             SyntaxHighlighter.defaults['first-line'] = <?= $exception->getHighlight()->startLine+1 ?>;
             SyntaxHighlighter.defaults['highlight'] = <?= $exception->getLine() ?>;
             SyntaxHighlighter.all()
-        </script>
+        </script> */
+        ?>
     </body>
 </html>

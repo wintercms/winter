@@ -51,6 +51,21 @@ mix
         './assets/js/snowboard/build/snowboard.extras.js',
     )
 
+    // Copy PrismJS into location
+    .combine([
+        '../../node_modules/prismjs/prism.js',
+        '../../node_modules/prismjs/components/prism-php.js',
+        '../../node_modules/prismjs/components/prism-markup-templating.js',
+        '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.js',
+        '../../node_modules/prismjs/plugins/line-highlight/prism-line-highlight.js',
+    ], './assets/vendor/prism/prism.js')
+
+    .combine([
+        '../../node_modules/prismjs/themes/prism.css',
+        '../../node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css',
+        '../../node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css',
+    ], './assets/vendor/prism/prism.css')
+
     // Polyfill for all targeted browsers
     .polyfill({
         enabled: mix.inProduction(),

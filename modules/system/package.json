@@ -24,7 +24,8 @@
     },
     "homepage": "https://wintercms.com/",
     "dependencies": {
-        "js-cookie": "^3.0.1"
+        "js-cookie": "^3.0.1",
+        "prismjs": "^1.28.0"
     },
     "devDependencies": {
         "babel-plugin-module-resolver": "^4.1.0",

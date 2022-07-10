@@ -176,50 +176,70 @@ table.data-table {
     }
 }
 
-.syntaxhighlighter {
+pre[class*="language-"] {
     margin-bottom: 30px;
     background: white;
-    font: 12px/170% Monaco, Menlo, 'Ubuntu Mono', 'Droid Sans Mono', 'Courier New', monospace!important;
+    padding: 0 1em;
 
-    table {
-        width: 100%;
-        table-layout: fixed;
+    &.line-numbers .line-numbers-rows {
+        background: #7b8892;
+        border-right: none;
 
-        td {
-            padding: 5px 0;
-
-            &.gutter {
-                padding: 5px 10px;
-                width: 35px;
-                background: #7b8892;
-                color: white;
-            }
-
-            &.code {
-                overflow-x: auto;
-                width: 100% !important;
-
-                .container {
-                    width: 100% !important;
-                    padding: 0;
-
-                    div.line {
-                        white-space: nowrap;
-                        padding-left: 10px;
-
-                        &.highlighted {
-                            background: @color-warning;
-                            color: white;
-                        }
-
-                        code {
-                            font: 12px/170% Monaco, Menlo, 'Ubuntu Mono', 'Droid Sans Mono', 'Courier New', monospace!important;
-                        }
-                    }
-                }
-            }
+        span:before {
+            color: white;
+            text-shadow: none !important;
+            padding-right: 0.6em;
         }
     }
+
+    &[data-line] {
+        padding: 0 0 0 3em;
+
+        .line-highlight {
+            margin-top: 0;
+            background: fadeout(@color-warning, 90%);
+        }
+    }
+
+    // table {
+    //     width: 100%;
+    //     table-layout: fixed;
+
+    //     td {
+    //         padding: 5px 0;
+
+    //         &.gutter {
+    //             padding: 5px 10px;
+    //             width: 35px;
+    //             background: #7b8892;
+    //             color: white;
+    //         }
+
+    //         &.code {
+    //             overflow-x: auto;
+    //             width: 100% !important;
+
+    //             .container {
+    //                 width: 100% !important;
+    //                 padding: 0;
+
+    //                 div.line {
+    //                     white-space: nowrap;
+    //                     padding-left: 10px;
+
+    //                     &.highlighted {
+    //                         background: @color-warning;
+    //                         color: white;
+    //                     }
+
+    //                     code {
+    //                         font: 12px/170% Monaco, Menlo, 'Ubuntu Mono', 'Droid Sans Mono', 'Courier New', monospace!important;
+    //                     }
+    //                 }
+    //             }
+    //         }
+    //     }
+    // }
 }
 
 /*
