@@ -66,6 +66,10 @@ mix
         '../../node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css',
     ], './assets/vendor/prism/prism.css')
 
+    // Copy Select2 into location
+    .copy('../../node_modules/select2/dist/js/select2.full.js', './assets/ui/vendor/select2/js/select2.full.js')
+    .copy('../../node_modules/select2/dist/js/i18n/*.js', './assets/ui/vendor/select2/js/i18n')
+
     // Polyfill for all targeted browsers
     .polyfill({
         enabled: mix.inProduction(),
