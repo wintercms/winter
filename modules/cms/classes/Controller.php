@@ -306,7 +306,7 @@ class Controller
         /*
          * The 'this' variable is reserved for default variables.
          */
-        $this->vars['this'] = [
+        $this->getTwig()->addGlobal('this', [
             'page'        => $this->page,
             'layout'      => $this->layout,
             'theme'       => $this->theme,
@@ -314,7 +314,7 @@ class Controller
             'controller'  => $this,
             'environment' => App::environment(),
             'session'     => App::make('session'),
-        ];
+        ]);
 
         /*
          * Check for the presence of validation errors in the session.
@@ -584,6 +584,7 @@ class Controller
     protected function initTwigEnvironment()
     {
         $this->twig = App::make('twig.environment.cms');
+        $this->twig->getExtension(\Cms\Twig\Extension::class)->setController($this);
     }
 
     /**

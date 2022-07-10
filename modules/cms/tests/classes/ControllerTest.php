@@ -2,6 +2,7 @@
 
 namespace Cms\Tests\Classes;
 
+use Cms;
 use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Theme;
 use Cms\Classes\Controller;
@@ -589,7 +590,7 @@ ESC;
         $response = $controller->run('/with-macro')->getContent();
 
         $this->assertStringContainsString(
-            '<p><a href="/">with-macro.htm</a><strong>with-macro.htm</strong></p>',
+            '<p><a href="' . Cms::url('/') . '">with-macro.htm</a><strong>with-macro.htm</strong></p>',
             $response
         );
     }
