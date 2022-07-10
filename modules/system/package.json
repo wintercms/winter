@@ -27,6 +27,7 @@
         "jquery": "^3.6.0",
         "jquery-sortable": "^0.9.13",
         "js-cookie": "^3.0.1",
+        "luxon": "^3.0.1",
         "mustache": "^4.2.0",
         "pikaday": "^1.8.2",
         "prismjs": "^1.28.0",
