@@ -13,7 +13,10 @@
 =require vendor/bootstrap/js/modal.js
 =require vendor/bootstrap/js/tooltip.js
 =require vendor/raphael/raphael.js
+=require vendor/flot/jquery.canvaswrapper.js
+=require vendor/flot/jquery.colorhelpers.js
 =require vendor/flot/jquery.flot.js
+=require vendor/flot/jquery.flot.saturated.js
 =require vendor/flot/jquery.flot.tooltip.js
 =require vendor/flot/jquery.flot.resize.js
 =require vendor/flot/jquery.flot.time.js

@@ -60,8 +60,11 @@ mix
     .copy('../../node_modules/bootstrap/js/transition.js', './assets/ui/vendor/bootstrap/js/transition.js')
 
     // Copy jQuery.Flot into location (Storm UI asset)
+    .copy('../../node_modules/flot/source/jquery.canvaswrapper.js', './assets/ui/vendor/flot/jquery.canvaswrapper.js')
+    .copy('../../node_modules/flot/source/jquery.colorhelpers.js', './assets/ui/vendor/flot/jquery.colorhelpers.js')
     .copy('../../node_modules/flot/source/jquery.flot.js', './assets/ui/vendor/flot/jquery.flot.js')
     .copy('../../node_modules/flot/source/jquery.flot.resize.js', './assets/ui/vendor/flot/jquery.flot.resize.js')
+    .copy('../../node_modules/flot/source/jquery.flot.saturated.js', './assets/ui/vendor/flot/jquery.flot.saturated.js')
     .copy('../../node_modules/flot/source/jquery.flot.time.js', './assets/ui/vendor/flot/jquery.flot.time.js')
     .copy('../../node_modules/jquery.flot.tooltip/js/jquery.flot.tooltip.js', './assets/ui/vendor/flot/jquery.flot.tooltip.js')
 
