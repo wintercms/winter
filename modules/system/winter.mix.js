@@ -52,6 +52,13 @@ mix
         './assets/js/snowboard/build/snowboard.extras.js',
     )
 
+    // Copy Bootstrap 3 JS files into location (Storm UI asset)
+    .copy('../../node_modules/bootstrap/js/dropdown.js', './assets/ui/vendor/bootstrap/js/dropdown.js')
+    .copy('../../node_modules/bootstrap/js/modal.js', './assets/ui/vendor/bootstrap/js/modal.js')
+    .copy('../../node_modules/bootstrap/js/tab.js', './assets/ui/vendor/bootstrap/js/tab.js')
+    .copy('../../node_modules/bootstrap/js/tooltip.js', './assets/ui/vendor/bootstrap/js/tooltip.js')
+    .copy('../../node_modules/bootstrap/js/transition.js', './assets/ui/vendor/bootstrap/js/transition.js')
+
     // Copy Luxon into location (Storm UI asset)
     .copy('../../node_modules/luxon/build/global/luxon.js', './assets/ui/vendor/luxon/luxon.js')
 

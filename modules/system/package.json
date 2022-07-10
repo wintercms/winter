@@ -24,6 +24,7 @@
     },
     "homepage": "https://wintercms.com/",
     "dependencies": {
+        "bootstrap": "^3.4.1",
         "jquery": "^3.6.0",
         "jquery-sortable": "^0.9.13",
         "js-cookie": "^3.0.1",
