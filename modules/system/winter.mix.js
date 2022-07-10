@@ -51,7 +51,7 @@ mix
         './assets/js/snowboard/build/snowboard.extras.js',
     )
 
-    // Copy PrismJS into location
+    // Copy PrismJS into location (Exception pages)
     .combine([
         '../../node_modules/prismjs/prism.js',
         '../../node_modules/prismjs/components/prism-php.js',
@@ -66,7 +66,10 @@ mix
         '../../node_modules/prismjs/plugins/line-highlight/prism-line-highlight.css',
     ], './assets/vendor/prism/prism.css')
 
-    // Copy Select2 into location
+    // Copy Raphael JS into location (Storm UI asset)
+    .copy('../../node_modules/raphael/raphael.js', './assets/ui/vendor/raphael/raphael.js')
+
+    // Copy Select2 into location (Storm UI asset)
     .copy('../../node_modules/select2/dist/js/select2.full.js', './assets/ui/vendor/select2/js/select2.full.js')
     .copy('../../node_modules/select2/dist/js/i18n/*.js', './assets/ui/vendor/select2/js/i18n')
 

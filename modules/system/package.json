@@ -26,6 +26,7 @@
     "dependencies": {
         "js-cookie": "^3.0.1",
         "prismjs": "^1.28.0",
+        "raphael": "^2.3.0",
         "select2": "^4.0.13"
     },
     "devDependencies": {
