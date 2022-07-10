@@ -2,6 +2,7 @@
 
 namespace Cms\Tests\Classes;
 
+use Cms;
 use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Theme;
 use Cms\Classes\Controller;
@@ -580,5 +581,17 @@ Custom output: Would you look over Picasso's shoulder
 Custom output: And tell him about his brush strokes?
 ESC;
         $this->assertEquals(str_replace(PHP_EOL, "\n", $content), $response);
+    }
+
+    public function testMacro()
+    {
+        $theme = Theme::load('test');
+        $controller = new Controller($theme);
+        $response = $controller->run('/with-macro')->getContent();
+
+        $this->assertStringContainsString(
+            '<p><a href="' . Cms::url('/') . '">with-macro.htm</a><strong>with-macro.htm</strong></p>',
+            $response
+        );
     }
 }

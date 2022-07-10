@@ -5,6 +5,7 @@ use Event;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
+use Cms\Classes\Controller;
 
 /**
  * The CMS Twig extension class implements the basic CMS Twig functions and filters.
@@ -15,13 +16,33 @@ use Twig\TwigFunction as TwigSimpleFunction;
 class Extension extends TwigExtension
 {
     /**
+     * The instanciated CMS controller
+     */
+    protected Controller $controller;
+
+    /**
+     * Sets the CMS controller instance
+     */
+    public function setController(Controller $controller)
+    {
+        $this->controller = $controller;
+    }
+
+    /**
+     * Gets the CMS controller instance
+     */
+    public function getController(): Controller
+    {
+        return $this->controller;
+    }
+
+    /**
      * Returns an array of functions to add to the existing list.
      */
     public function getFunctions(): array
     {
         $options = [
             'is_safe' => ['html'],
-            'needs_context' => true,
         ];
 
         return [
@@ -40,7 +61,6 @@ class Extension extends TwigExtension
     {
         $options = [
             'is_safe' => ['html'],
-            'needs_context' => true,
         ];
 
         return [
@@ -73,41 +93,41 @@ class Extension extends TwigExtension
     /**
      * Renders a page; used in the layout code to output the requested page.
      */
-    public function pageFunction(array $context): string
+    public function pageFunction(): string
     {
-        return $context['this']['controller']->renderPage();
+        return $this->controller->renderPage();
     }
 
     /**
      * Renders the requested partial with the provided parameters. Optionally throw an exception if the partial cannot be found
      */
-    public function partialFunction(array $context, string $name, array $parameters = [], bool $throwException = false): string
+    public function partialFunction(string $name, array $parameters = [], bool $throwException = false): string
     {
-        return $context['this']['controller']->renderPartial($name, $parameters, $throwException);
+        return $this->controller->renderPartial($name, $parameters, $throwException);
     }
 
     /**
      * Renders the requested content file.
      */
-    public function contentFunction(array $context, string $name, array $parameters = []): string
+    public function contentFunction(string $name, array $parameters = []): string
     {
-        return $context['this']['controller']->renderContent($name, $parameters);
+        return $this->controller->renderContent($name, $parameters);
     }
 
     /**
      * Renders a component's default partial.
      */
-    public function componentFunction(array $context, string $name, array $parameters = []): string
+    public function componentFunction(string $name, array $parameters = []): string
     {
-        return $context['this']['controller']->renderComponent($name, $parameters);
+        return $this->controller->renderComponent($name, $parameters);
     }
 
     /**
      * Renders registered assets of a given type or all types if $type not provided
      */
-    public function assetsFunction(array $context, string $type = null): ?string
+    public function assetsFunction(string $type = null): ?string
     {
-        return $context['this']['controller']->makeAssets($type);
+        return $this->controller->makeAssets($type);
     }
 
     /**
@@ -126,26 +146,24 @@ class Extension extends TwigExtension
     /**
      * Returns the relative URL for the provided page
      *
-     * @param array $context The Twig context for the call (relies on $context['this']['controller'] to exist)
      * @param mixed $name Specifies the Cms Page file name.
      * @param array|bool $parameters Route parameters to consider in the URL. If boolean will be used as the value for $routePersistence
      * @param bool $routePersistence Set to false to exclude the existing routing parameters from the generated URL
      */
-    public function pageFilter(array $context, $name, $parameters = [], $routePersistence = true): ?string
+    public function pageFilter($name, $parameters = [], $routePersistence = true): ?string
     {
-        return $context['this']['controller']->pageUrl($name, $parameters, $routePersistence);
+        return $this->controller->pageUrl($name, $parameters, $routePersistence);
     }
 
     /**
      * Converts supplied URL to a theme URL relative to the website root. If the URL provided is an
      * array then the files will be combined.
      *
-     * @param array $context The Twig context for the call (relies on $context['this']['controller'] to exist)
      * @param mixed $url Specifies the input to be turned into a URL (arrays will be passed to the AssetCombiner)
      */
-    public function themeFilter(array $context, $url): string
+    public function themeFilter($url): string
     {
-        return $context['this']['controller']->themeUrl($url);
+        return $this->controller->themeUrl($url);
     }
 
     /**

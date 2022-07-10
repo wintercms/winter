@@ -33,6 +33,7 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
             'url' => '/storage/app',
+            'visibility' => 'public',
         ],
         's3' => [
             'bucket' => env('AWS_BUCKET'),
