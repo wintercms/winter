@@ -26,6 +26,7 @@
     "dependencies": {
         "bootstrap": "^3.4.1",
         "jquery": "^3.6.0",
+        "jquery.flot": "^0.8.3",
         "jquery-sortable": "^0.9.13",
         "js-cookie": "^3.0.1",
         "luxon": "^3.0.1",
