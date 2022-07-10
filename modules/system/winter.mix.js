@@ -60,10 +60,10 @@ mix
     .copy('../../node_modules/bootstrap/js/transition.js', './assets/ui/vendor/bootstrap/js/transition.js')
 
     // Copy jQuery.Flot into location (Storm UI asset)
-    .copy('../../node_modules/jquery.flot/jquery.flot.js', './assets/ui/vendor/flot/jquery.flot.js')
-    .copy('../../node_modules/jquery.flot/jquery.flot.reisze.js', './assets/ui/vendor/flot/jquery.flot.reisze.js')
-    .copy('../../node_modules/jquery.flot/jquery.flot.time.js', './assets/ui/vendor/flot/jquery.flot.time.js')
-    .copy('../../node_modules/jquery.flot/jquery.flot.tooltip.js', './assets/ui/vendor/flot/jquery.flot.tooltip.js')
+    .copy('../../node_modules/flot/source/jquery.flot.js', './assets/ui/vendor/flot/jquery.flot.js')
+    .copy('../../node_modules/flot/source/jquery.flot.resize.js', './assets/ui/vendor/flot/jquery.flot.resize.js')
+    .copy('../../node_modules/flot/source/jquery.flot.time.js', './assets/ui/vendor/flot/jquery.flot.time.js')
+    .copy('../../node_modules/jquery.flot.tooltip/js/jquery.flot.tooltip.js', './assets/ui/vendor/flot/jquery.flot.tooltip.js')
 
     // Copy Luxon into location (Storm UI asset)
     .copy('../../node_modules/luxon/build/global/luxon.js', './assets/ui/vendor/luxon/luxon.js')
