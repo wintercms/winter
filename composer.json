@@ -47,8 +47,7 @@
     },
     "scripts": {
         "post-create-project-cmd": [
-            "@php artisan key:generate",
-            "@php artisan package:discover"
+            "@php artisan key:generate"
         ],
         "post-update-cmd": [
             "@php artisan winter:version",
