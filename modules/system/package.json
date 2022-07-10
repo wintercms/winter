@@ -25,6 +25,7 @@
     "homepage": "https://wintercms.com/",
     "dependencies": {
         "js-cookie": "^3.0.1",
+        "pikaday": "^1.8.2",
         "prismjs": "^1.28.0",
         "raphael": "^2.3.0",
         "select2": "^4.0.13"

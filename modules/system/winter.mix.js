@@ -1,5 +1,6 @@
 /* eslint-disable */
 const mix = require('laravel-mix');
+const fs = require('fs');
 require('laravel-mix-polyfill');
 /* eslint-enable */
 
@@ -51,6 +52,11 @@ mix
         './assets/js/snowboard/build/snowboard.extras.js',
     )
 
+    // Copy Pickaday into location (Storm UI asset)
+    .copy('../../node_modules/pikaday/pikaday.js', './assets/ui/vendor/pikaday/js/pikaday.js')
+    .copy('../../node_modules/pikaday/css/pikaday.css', './assets/ui/vendor/pikaday/css/pikaday.css')
+    .copy('../../node_modules/pikaday/plugins/pikaday.jquery.js', './assets/ui/vendor/pikaday/js/pikaday.jquery.js')
+
     // Copy PrismJS into location (Exception pages)
     .combine([
         '../../node_modules/prismjs/prism.js',
@@ -78,4 +84,12 @@ mix
         enabled: mix.inProduction(),
         useBuiltIns: 'usage',
         targets: '> 0.5%, last 2 versions, not dead, Firefox ESR, not ie > 0',
+    })
+
+    // Callbacks after compilation
+    .after(() => {
+        // Fix Pikaday asset permissions (seems to be 0755 in the source)
+        fs.chmodSync('./assets/ui/vendor/pikaday/js/pikaday.js', '644');
+        fs.chmodSync('./assets/ui/vendor/pikaday/js/pikaday.jquery.js', '644');
+        fs.chmodSync('./assets/ui/vendor/pikaday/css/pikaday.css', '644');
     });
