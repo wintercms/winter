@@ -28,7 +28,8 @@
  */
 +function ($) { "use strict";
     var Base = $.wn.foundation.base,
-        BaseProto = Base.prototype
+        BaseProto = Base.prototype,
+        DateTime = luxon.DateTime
 
     var DateTimeConverter = function (element, options) {
         this.$el = $(element)
@@ -60,7 +61,7 @@
         }
 
         if (!this.options.format) {
-            this.options.format = 'llll'
+            this.options.format = 'ccc ff'
         }
 
         if (this.options.formatAlias) {
@@ -81,25 +82,25 @@
             this.options.timezone = 'UTC'
         }
 
-        var momentObj = moment.tz(this.datetime, this.appTimezone),
+        var luxonObj = DateTime.fromSQL(this.datetime).setZone(this.appTimezone),
             result
 
         if (this.options.locale) {
-            momentObj = momentObj.locale(this.options.locale)
+            luxonObj = luxonObj.setLocale(this.options.locale)
         }
 
         if (this.options.timezone) {
-            momentObj = momentObj.tz(this.options.timezone)
+            luxonObj = luxonObj.setZone(this.options.timezone)
         }
 
         if (this.options.timeSince) {
-            result = momentObj.fromNow()
+            result = luxonObj.toRelative()
         }
         else if (this.options.timeTense) {
-            result = momentObj.calendar()
+            result = luxonObj.toRelativeCalendar()
         }
         else {
-            result = momentObj.format(this.options.format)
+            result = luxonObj.toFormat(this.options.format)
         }
 
         return result
@@ -107,19 +108,19 @@
 
     DateTimeConverter.prototype.getFormatFromAlias = function(alias) {
         var map = {
-            time: 'LT',
-            timeLong: 'LTS',
-            date: 'L',
-            dateMin: 'l',
-            dateLong: 'LL',
-            dateLongMin: 'll',
-            dateTime: 'LLL',
-            dateTimeMin: 'lll',
-            dateTimeLong: 'LLLL',
-            dateTimeLongMin: 'llll'
+            time: 't',
+            timeLong: 'tt',
+            date: 'D',
+            dateMin: 'D',
+            dateLong: 'DDD',
+            dateLongMin: 'DD',
+            dateTime: 'fff',
+            dateTimeMin: 'ff',
+            dateTimeLong: 'ffff',
+            dateTimeLongMin: 'ccc ff'
         }
 
-        return map[alias] ? map[alias] : 'llll'
+        return map[alias] ? map[alias] : 'ccc ff'
     }
 
     DateTimeConverter.prototype.dispose = function() {

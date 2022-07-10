@@ -714,7 +714,7 @@ data[option].apply(data,methodArgs)}})}
 $.fn.sidenavTree.Constructor=SidenavTree
 $.fn.sidenavTree.noConflict=function(){$.fn.sidenavTree=old
 return this}
-$(document).ready(function(){$('[data-control=sidenav-tree]').sidenavTree()})}(window.jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype
+$(document).ready(function(){$('[data-control=sidenav-tree]').sidenavTree()})}(window.jQuery);+function($){"use strict";var Base=$.wn.foundation.base,BaseProto=Base.prototype,DateTime=luxon.DateTime
 var DateTimeConverter=function(element,options){this.$el=$(element)
 this.options=options||{}
 $.wn.foundation.controlUtils.markDisposable(element)
@@ -725,14 +725,14 @@ DateTimeConverter.prototype.constructor=DateTimeConverter
 DateTimeConverter.prototype.init=function(){this.initDefaults()
 this.$el.text(this.getDateTimeValue())
 this.$el.one('dispose-control',this.proxy(this.dispose))}
-DateTimeConverter.prototype.initDefaults=function(){if(!this.options.timezone){this.options.timezone=$('meta[name="backend-timezone"]').attr('content')}if(!this.options.locale){this.options.locale=$('meta[name="backend-locale"]').attr('content')}if(!this.options.format){this.options.format='llll'}if(this.options.formatAlias){this.options.format=this.getFormatFromAlias(this.options.formatAlias)}this.appTimezone=$('meta[name="app-timezone"]').attr('content')
+DateTimeConverter.prototype.initDefaults=function(){if(!this.options.timezone){this.options.timezone=$('meta[name="backend-timezone"]').attr('content')}if(!this.options.locale){this.options.locale=$('meta[name="backend-locale"]').attr('content')}if(!this.options.format){this.options.format='ccc ff'}if(this.options.formatAlias){this.options.format=this.getFormatFromAlias(this.options.formatAlias)}this.appTimezone=$('meta[name="app-timezone"]').attr('content')
 if(!this.appTimezone){this.appTimezone='UTC'}}
 DateTimeConverter.prototype.getDateTimeValue=function(){this.datetime=this.$el.attr('datetime')
 if(this.$el.get(0).hasAttribute('data-ignore-timezone')){this.appTimezone='UTC'
-this.options.timezone='UTC'}var momentObj=moment.tz(this.datetime,this.appTimezone),result
-if(this.options.locale){momentObj=momentObj.locale(this.options.locale)}if(this.options.timezone){momentObj=momentObj.tz(this.options.timezone)}if(this.options.timeSince){result=momentObj.fromNow()}else if(this.options.timeTense){result=momentObj.calendar()}else{result=momentObj.format(this.options.format)}return result}
-DateTimeConverter.prototype.getFormatFromAlias=function(alias){var map={time:'LT',timeLong:'LTS',date:'L',dateMin:'l',dateLong:'LL',dateLongMin:'ll',dateTime:'LLL',dateTimeMin:'lll',dateTimeLong:'LLLL',dateTimeLongMin:'llll'}
-return map[alias]?map[alias]:'llll'}
+this.options.timezone='UTC'}var luxonObj=DateTime.fromSQL(this.datetime).setZone(this.appTimezone),result
+if(this.options.locale){luxonObj=luxonObj.setLocale(this.options.locale)}if(this.options.timezone){luxonObj=luxonObj.setZone(this.options.timezone)}if(this.options.timeSince){result=luxonObj.toRelative()}else if(this.options.timeTense){result=luxonObj.toRelativeCalendar()}else{result=luxonObj.toFormat(this.options.format)}return result}
+DateTimeConverter.prototype.getFormatFromAlias=function(alias){var map={time:'t',timeLong:'tt',date:'D',dateMin:'D',dateLong:'DDD',dateLongMin:'DD',dateTime:'fff',dateTimeMin:'ff',dateTimeLong:'ffff',dateTimeLongMin:'ccc ff'}
+return map[alias]?map[alias]:'ccc ff'}
 DateTimeConverter.prototype.dispose=function(){this.$el.off('dispose-control',this.proxy(this.dispose))
 this.$el.removeData('oc.dateTimeConverter')
 this.$el=null
