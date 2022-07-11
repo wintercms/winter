@@ -29,6 +29,8 @@ $scripts = [
     Url::asset('modules/system/assets/js/build/manifest.js'),
     Url::asset('modules/system/assets/js/snowboard/build/snowboard.vendor.js'),
     Url::asset('modules/system/assets/js/build/system.js'),
+    Url::asset('modules/backend/assets/js/build/manifest.js'),
+    Url::asset('modules/backend/assets/ui/js/build/backend.vendor.js'),
     Url::asset('modules/backend/assets/ui/js/build/backend.js'),
 ];
 if (Config::get('develop.decompileBackendAssets', false)) {

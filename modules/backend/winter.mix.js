@@ -13,6 +13,12 @@ mix
         runtimeChunkPath: './assets/js/build',
     })
 
+    // Extract imported libraries
+    .extract({
+        libraries: ['luxon'],
+        to: './assets/ui/js/build/backend.vendor.js',
+    })
+
     // Compile Snowboard assets for the Backend
     .js(
         './assets/ui/js/index.js',
