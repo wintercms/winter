@@ -29,7 +29,6 @@
 =require winter.simplelist.js
 =require winter.treelist.js
 =require winter.sidenav-tree.js
-=require winter.datetime.js
 
 =require backend.js
 */

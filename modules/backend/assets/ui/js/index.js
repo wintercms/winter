@@ -1,4 +1,6 @@
 import BackendAjaxHandler from './ajax/Handler';
+import BackendUIHandler from './UIHandler';
+import DateTimeControl from './controls/DateTime';
 
 if (window.Snowboard === undefined) {
     throw new Error('Snowboard must be loaded in order to use the Backend UI.');
@@ -6,6 +8,9 @@ if (window.Snowboard === undefined) {
 
 ((Snowboard) => {
     Snowboard.addPlugin('backend.ajax.handler', BackendAjaxHandler);
+    Snowboard.addPlugin('backend.controls.dateTime', DateTimeControl);
+    Snowboard.addPlugin('backend.ui.handler', BackendUIHandler);
+
     // Add the pre-filter immediately
     Snowboard['backend.ajax.handler']().addPrefilter();
 
