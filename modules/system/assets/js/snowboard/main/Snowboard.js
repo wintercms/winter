@@ -31,9 +31,16 @@ export default class Snowboard {
         this.plugins = {};
         this.listeners = {};
         this.foundBaseUrl = null;
-        this.domReady = false;
-
+        this.readiness = {
+            dom: false,
+        };
+        // Seal readiness from being modified further.
+        Object.seal(this.readiness);
         this.attachAbstracts();
+
+        // Freeze the Snowboard class to prevent further modifications.
+        Object.freeze(this);
+
         this.loadUtilities();
         this.initialise();
 
@@ -55,6 +62,9 @@ export default class Snowboard {
     attachAbstracts() {
         this.PluginBase = PluginBase;
         this.Singleton = Singleton;
+
+        Object.freeze(this.PluginBase);
+        Object.freeze(this.Singleton);
     }
 
     /**
@@ -79,7 +89,7 @@ export default class Snowboard {
                 this.initialiseSingletons();
             }
             this.globalEvent('ready');
-            this.domReady = true;
+            this.readiness.dom = true;
         });
     }
 
@@ -124,9 +134,6 @@ export default class Snowboard {
         }
 
         this.plugins[lowerName] = new PluginLoader(lowerName, this, instance);
-        const callback = (...parameters) => this.plugins[lowerName].getInstance(...parameters);
-        this[name] = callback;
-        this[lowerName] = callback;
 
         this.debug(`Plugin "${name}" registered`);
 
@@ -139,7 +146,7 @@ export default class Snowboard {
                 && plugin.dependenciesFulfilled()
                 && plugin.hasMethod('listens')
                 && Object.keys(plugin.callMethod('listens')).includes('ready')
-                && this.domReady
+                && this.readiness.dom
             ) {
                 const readyMethod = plugin.callMethod('listens').ready;
                 plugin.callMethod(readyMethod);
@@ -213,11 +220,13 @@ export default class Snowboard {
      * @returns {PluginLoader}
      */
     getPlugin(name) {
-        if (!this.hasPlugin(name)) {
-            throw new Error(`No plugin called "${name}" has been registered.`);
+        const lowerName = name.toLowerCase();
+
+        if (!this.hasPlugin(lowerName)) {
+            throw new Error(`No plugin called "${lowerName}" has been registered.`);
         }
 
-        return this.plugins[name];
+        return this.plugins[lowerName];
     }
 
     /**
@@ -263,7 +272,7 @@ export default class Snowboard {
      * @param {Function} callback
      */
     ready(callback) {
-        if (this.domReady) {
+        if (this.readiness.dom) {
             callback();
         }
 
@@ -523,7 +532,6 @@ export default class Snowboard {
     log(message, ...parameters) {
         this.logMessage('rgb(45, 167, 199)', false, message, ...parameters);
     }
-
 
     /**
      * Log a debug message.
