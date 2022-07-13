@@ -1,1 +1,43 @@
-!function(t){"use strict";var r={saturate:function(t){return t===1/0?Number.MAX_VALUE:t===-1/0?-Number.MAX_VALUE:t},delta:function(t,r,u){return(r-t)/u==1/0?r/u-t/u:(r-t)/u},multiply:function(t,u){return r.saturate(t*u)},multiplyAdd:function(t,u,n){if(isFinite(t*u))return r.saturate(t*u+n);for(var e=n,a=0;a<u;a++)e+=t;return r.saturate(e)},floorInBase:function(t,r){return r*Math.floor(t/r)}};t.plot.saturated=r}(jQuery);
+(function ($) {
+    'use strict';
+    var saturated = {
+        saturate: function (a) {
+            if (a === Infinity) {
+                return Number.MAX_VALUE;
+            }
+
+            if (a === -Infinity) {
+                return -Number.MAX_VALUE;
+            }
+
+            return a;
+        },
+        delta: function(min, max, noTicks) {
+            return ((max - min) / noTicks) === Infinity ? (max / noTicks - min / noTicks) : (max - min) / noTicks
+        },
+        multiply: function (a, b) {
+            return saturated.saturate(a * b);
+        },
+        // returns c * bInt * a. Beahves properly in the case where c is negative
+        // and bInt * a is bigger that Number.MAX_VALUE (Infinity)
+        multiplyAdd: function (a, bInt, c) {
+            if (isFinite(a * bInt)) {
+                return saturated.saturate(a * bInt + c);
+            } else {
+                var result = c;
+
+                for (var i = 0; i < bInt; i++) {
+                    result += a;
+                }
+
+                return saturated.saturate(result);
+            }
+        },
+        // round to nearby lower multiple of base
+        floorInBase: function(n, base) {
+            return base * Math.floor(n / base);
+        }
+    };
+
+    $.plot.saturated = saturated;
+})(jQuery);

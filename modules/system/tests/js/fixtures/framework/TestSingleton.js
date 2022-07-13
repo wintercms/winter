@@ -7,5 +7,5 @@
         }
     }
 
-    Snowboard.addPlugin('test', TestSingleton);
+    Snowboard.addPlugin('testSingleton', TestSingleton);
 })(window.Snowboard);
