@@ -68,9 +68,6 @@ mix
     .copy('../../node_modules/flot/source/jquery.flot.time.js', './assets/ui/vendor/flot/jquery.flot.time.js')
     .copy('../../node_modules/jquery.flot.tooltip/js/jquery.flot.tooltip.js', './assets/ui/vendor/flot/jquery.flot.tooltip.js')
 
-    // Copy Luxon into location (Storm UI asset)
-    .copy('../../node_modules/luxon/build/global/luxon.js', './assets/ui/vendor/luxon/luxon.js')
-
     // Copy Mustache into location (Storm UI asset)
     .copy('../../node_modules/mustache/mustache.js', './assets/ui/vendor/mustache/mustache.js')
 

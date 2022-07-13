@@ -23,6 +23,9 @@
         "url": "https://github.com/wintercms/winter/issues"
     },
     "homepage": "https://wintercms.com/",
+    "dependencies": {
+        "luxon": "^3.0.1"
+    },
     "devDependencies": {
         "babel-plugin-module-resolver": "^4.1.0",
         "eslint": "^8.6.0",
