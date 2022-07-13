@@ -44,6 +44,7 @@ export default class PluginLoader {
 
         // Freeze loader itself
         Object.freeze(this);
+        Object.freeze(PluginLoader.prototype);
     }
 
     /**

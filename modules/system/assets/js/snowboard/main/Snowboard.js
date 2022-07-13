@@ -40,6 +40,7 @@ export default class Snowboard {
 
         // Freeze the Snowboard class to prevent further modifications.
         Object.freeze(this);
+        Object.freeze(Snowboard.prototype);
 
         this.loadUtilities();
         this.initialise();

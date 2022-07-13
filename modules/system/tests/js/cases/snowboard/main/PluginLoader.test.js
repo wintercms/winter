@@ -92,6 +92,8 @@ describe('PluginLoader class', function () {
                         }
                     }).toThrow(TypeError);
 
+                    expect(rootInstance.newMethod).toBeUndefined();
+
                     // Modifications can however be made to instances retrieved from the loader
                     const loadedInstance = dom.window.Snowboard.getPlugin('testPlugin').getInstance();
 
