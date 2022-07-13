@@ -43,8 +43,8 @@ export default class PluginLoader {
         this.originalFunctions = {};
 
         // Freeze loader itself
-        Object.freeze(this);
         Object.freeze(PluginLoader.prototype);
+        Object.freeze(this);
     }
 
     /**

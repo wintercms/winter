@@ -461,4 +461,54 @@ describe('Snowboard framework', function () {
                 }
             );
     });
+
+    it('doesn\'t allow PluginBase or Singleton abstracts to be modified', function () {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    expect(() => {
+                        dom.window.Snowboard.PluginBase.newMethod = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.PluginBase.destruct = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.PluginBase.prototype.newMethod = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.Singleton.newMethod = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.Singleton.destruct = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.Singleton.prototype.newMethod = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+                },
+            );
+    });
 });

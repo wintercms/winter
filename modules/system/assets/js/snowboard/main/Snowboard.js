@@ -34,13 +34,13 @@ export default class Snowboard {
         this.readiness = {
             dom: false,
         };
-        // Seal readiness from being modified further.
+        // Seal readiness from being added to further, but allow the properties to be modified.
         Object.seal(this.readiness);
         this.attachAbstracts();
 
         // Freeze the Snowboard class to prevent further modifications.
-        Object.freeze(this);
         Object.freeze(Snowboard.prototype);
+        Object.freeze(this);
 
         this.loadUtilities();
         this.initialise();
@@ -64,7 +64,9 @@ export default class Snowboard {
         this.PluginBase = PluginBase;
         this.Singleton = Singleton;
 
+        Object.freeze(this.PluginBase.prototype);
         Object.freeze(this.PluginBase);
+        Object.freeze(this.Singleton.prototype);
         Object.freeze(this.Singleton);
     }
 
