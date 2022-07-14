@@ -363,6 +363,11 @@ class Request extends Snowboard.PluginBase {
                 const elements = document.querySelectorAll(selector);
                 if (elements.length > 0) {
                     elements.forEach((element) => {
+                        // Fire before update event for each element that is updated
+                        const beforeEvent = new Event('ajaxBeforeUpdate');
+                        beforeEvent.content = content;
+                        element.dispatchEvent(beforeEvent);
+
                         switch (mode) {
                             case 'append':
                                 element.innerHTML += content;
