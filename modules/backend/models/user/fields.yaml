@@ -75,6 +75,10 @@ secondaryTabs:
             label: ''
             context: [update]
             type: partial
+        btn_password_restore:
+            label: ''
+            context: [update]
+            type: partial
         avatar:
             label: backend::lang.user.avatar
             type: fileupload
