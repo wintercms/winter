@@ -34,7 +34,6 @@
 =require js/flashmessage.js
 =require js/autocomplete.js
 =require js/checkbox.js
-=require js/checkbox.balloon.js
 =require js/dropdown.js
 =require js/callout.js
 =require js/datepicker.js

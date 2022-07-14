@@ -19,6 +19,7 @@ export default class UIHandler extends Snowboard.Singleton {
         return [
             'disposableObserver',
             'disposable',
+            'backend.controls.balloonSelector',
             'backend.controls.dateTime',
         ];
     }
@@ -45,6 +46,7 @@ export default class UIHandler extends Snowboard.Singleton {
      */
     elementMatchers() {
         return {
+            'backend.controls.balloonSelector': 'div[data-control="balloon-selector"]',
             'backend.controls.dateTime': 'time[data-datetime-control]',
         };
     }
