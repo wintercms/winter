@@ -39,7 +39,7 @@ export default class DateTimeControl extends Snowboard.PluginBase {
             return;
         }
         this.element.dataset.controlInitialised = true;
-        this.element.dataset.disposable = true;
+        this.snowboard.disposable(this, element);
 
         this.config = this.snowboard.dataConfig(this, element);
         this.appTimezone = this.getAppTimezone();

@@ -17,6 +17,8 @@ export default class UIHandler extends Snowboard.Singleton {
      */
     dependencies() {
         return [
+            'disposableObserver',
+            'disposable',
             'backend.controls.dateTime',
         ];
     }
@@ -53,7 +55,7 @@ export default class UIHandler extends Snowboard.Singleton {
      * This will enable all UI elements in the entire document.
      */
     ready() {
-        this.initialisePlugins(document.body);
+        this.initializePlugins(document.body);
     }
 
     /**
@@ -64,18 +66,18 @@ export default class UIHandler extends Snowboard.Singleton {
      * @param {HTMLElement} updatedElement
      */
     ajaxUpdate(updatedElement) {
-        this.initialisePlugins(updatedElement);
+        this.initializePlugins(updatedElement);
     }
 
     /**
-     * Initialises plugins within a given root element.
+     * Initializes plugins within a given root element.
      *
      * Each plugin will receive one or more elements that match the element matches provided in the
      * `elementMatchers()` method.
      *
      * @param {HTMLElement} rootElement
      */
-    initialisePlugins(rootElement) {
+    initializePlugins(rootElement) {
         Object.entries(this.elementMatchers()).forEach(([plugin, selector]) => {
             rootElement.querySelectorAll(selector).forEach((element) => {
                 this.snowboard[plugin](element);
