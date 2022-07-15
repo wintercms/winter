@@ -1,15 +1,15 @@
 <?php namespace System\Console;
 
 use File;
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use System\Classes\MixAssets;
 
 class MixList extends Command
 {
     /**
-     * @var string The console command name.
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'mix:list';
+    protected static $defaultName = 'mix:list';
 
     /**
      * @var string The console command description.

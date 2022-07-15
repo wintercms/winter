@@ -1,0 +1,21 @@
+<?php
+
+use Winter\Storm\Database\Schema\Blueprint;
+use Winter\Storm\Database\Updates\Migration;
+
+return new class extends Migration
+{
+    public function up()
+    {
+        Schema::create('{{ table_name }}', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            $table->increments('id');
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('{{ table_name }}');
+    }
+};

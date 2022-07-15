@@ -420,7 +420,7 @@ class Controller extends ControllerBase
             return $this->makeView($actionName);
         }
 
-        return $this->makeViewContent($result);
+        return $this->makeViewContent((string) $result);
     }
 
     /**

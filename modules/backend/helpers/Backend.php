@@ -195,6 +195,23 @@ class Backend
     {
         $assets = $this->parseAsset($file, $skinAsset);
 
+        if (!$assets) {
+            // Return URL-based assets as is
+            if (starts_with($file, ['https://', 'http://'])) {
+                return [$file];
+            }
+
+            // Resolve relative asset paths
+            if ($skinAsset) {
+                $assetPath = base_path(substr(Skin::getActive()->getPath($file, true), 1));
+            } else {
+                $assetPath = base_path($file);
+            }
+            $relativePath = File::localToPublic(realpath($assetPath));
+
+            return [Url::asset($relativePath)];
+        }
+
         return array_map(function ($asset) use ($skinAsset) {
             // Resolve relative asset paths
             if ($skinAsset) {
@@ -217,6 +234,15 @@ class Backend
      */
     protected function parseAsset($file, $skinAsset)
     {
+        if (starts_with($file, ['https://', 'http://'])) {
+            $rootUrl = Url::to('/');
+            if (!starts_with($file, $rootUrl)) {
+                return false;
+            }
+
+            $file = str_replace($rootUrl, '', $file);
+        }
+
         if ($skinAsset) {
             $assetFile = base_path(substr(Skin::getActive()->getPath($file, true), 1));
         } else {

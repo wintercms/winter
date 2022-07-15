@@ -17,10 +17,6 @@ class MailSetting extends Model
     const MODE_MAIL      = 'mail';
     const MODE_SENDMAIL  = 'sendmail';
     const MODE_SMTP      = 'smtp';
-    const MODE_MAILGUN   = 'mailgun';
-    const MODE_MANDRILL  = 'mandrill';
-    const MODE_SES       = 'ses';
-    const MODE_SPARKPOST = 'sparkpost';
 
     /**
      * @var array Behaviors implemented by this model.
@@ -55,16 +51,26 @@ class MailSetting extends Model
     public function initSettingsData()
     {
         $config = App::make('config');
-        $this->send_mode = $config->get('mail.driver', static::MODE_MAIL);
+        $mailers = $config->get('mail.mailers', [
+            'sendmail' => ['path' => $config->get('mail.sendmail', '/usr/sbin/sendmail')],
+            'smtp' => [
+                'host' => $config->get('mail.host'),
+                'port' => $config->get('mail.port', 587),
+                'username' => $config->get('mail.username'),
+                'password' => $config->get('mail.password'),
+                'encryption' => $config->get('mail.encryption'),
+            ],
+        ]);
+        $this->send_mode = $config->get('mail.default', static::MODE_MAIL);
         $this->sender_name = $config->get('mail.from.name', 'Your Site');
         $this->sender_email = $config->get('mail.from.address', 'admin@example.com');
-        $this->sendmail_path = $config->get('mail.sendmail', '/usr/sbin/sendmail');
-        $this->smtp_address = $config->get('mail.host');
-        $this->smtp_port = $config->get('mail.port', 587);
-        $this->smtp_user = $config->get('mail.username');
-        $this->smtp_password = $config->get('mail.password');
+        $this->sendmail_path = array_get($mailers['sendmail'], 'path', '/usr/sbin/sendmail');
+        $this->smtp_address = array_get($mailers['smtp'], 'host');
+        $this->smtp_port = array_get($mailers['smtp'], 'port', 587);
+        $this->smtp_user = array_get($mailers['smtp'], 'username');
+        $this->smtp_password = array_get($mailers['smtp'], 'password');
         $this->smtp_authorization = !!strlen($this->smtp_user);
-        $this->smtp_encryption = $config->get('mail.encryption');
+        $this->smtp_encryption = array_get($mailers['smtp'], 'encryption');
     }
 
     public function getSendModeOptions()
@@ -74,10 +80,6 @@ class MailSetting extends Model
             static::MODE_MAIL     => 'system::lang.mail.php_mail',
             static::MODE_SENDMAIL => 'system::lang.mail.sendmail',
             static::MODE_SMTP     => 'system::lang.mail.smtp',
-            static::MODE_MAILGUN  => 'system::lang.mail.mailgun',
-            static::MODE_MANDRILL => 'system::lang.mail.mandrill',
-            static::MODE_SES      => 'system::lang.mail.ses',
-            static::MODE_SPARKPOST => 'system::lang.mail.sparkpost',
         ];
     }
 
@@ -85,51 +87,32 @@ class MailSetting extends Model
     {
         $config = App::make('config');
         $settings = self::instance();
-        $config->set('mail.driver', $settings->send_mode);
+        $config->set('mail.default', $settings->send_mode);
         $config->set('mail.from.name', $settings->sender_name);
         $config->set('mail.from.address', $settings->sender_email);
 
         switch ($settings->send_mode) {
             case self::MODE_SMTP:
-                $config->set('mail.host', $settings->smtp_address);
-                $config->set('mail.port', $settings->smtp_port);
+                $config->set('mail.mailers.smtp.host', $settings->smtp_address);
+                $config->set('mail.mailers.smtp.port', $settings->smtp_port);
                 if ($settings->smtp_authorization) {
-                    $config->set('mail.username', $settings->smtp_user);
-                    $config->set('mail.password', $settings->smtp_password);
+                    $config->set('mail.mailers.smtp.username', $settings->smtp_user);
+                    $config->set('mail.mailers.smtp.password', $settings->smtp_password);
                 }
                 else {
-                    $config->set('mail.username', null);
-                    $config->set('mail.password', null);
+                    $config->set('mail.mailers.smtp.username', null);
+                    $config->set('mail.mailers.smtp.password', null);
                 }
                 if ($settings->smtp_encryption) {
-                    $config->set('mail.encryption', $settings->smtp_encryption);
+                    $config->set('mail.mailers.smtp.encryption', $settings->smtp_encryption);
                 }
                 else {
-                    $config->set('mail.encryption', null);
+                    $config->set('mail.mailers.smtp.encryption', null);
                 }
                 break;
 
             case self::MODE_SENDMAIL:
-                $config->set('mail.sendmail', $settings->sendmail_path);
-                break;
-
-            case self::MODE_MAILGUN:
-                $config->set('services.mailgun.domain', $settings->mailgun_domain);
-                $config->set('services.mailgun.secret', $settings->mailgun_secret);
-                break;
-
-            case self::MODE_MANDRILL:
-                $config->set('services.mandrill.secret', $settings->mandrill_secret);
-                break;
-
-            case self::MODE_SES:
-                $config->set('services.ses.key', $settings->ses_key);
-                $config->set('services.ses.secret', $settings->ses_secret);
-                $config->set('services.ses.region', $settings->ses_region);
-                break;
-
-            case self::MODE_SPARKPOST:
-                $config->set('services.sparkpost.secret', $settings->sparkpost_secret);
+                $config->set('mail.mailers.sendmail.path', $settings->sendmail_path);
                 break;
         }
     }
@@ -171,6 +154,10 @@ class MailSetting extends Model
                     $fields->smtp_port->value = 25;
                     break;
             }
+        }
+        if (!$fields->smtp_authorization->value) {
+            $fields->smtp_user->hidden = true;
+            $fields->smtp_password->hidden = true;
         }
     }
 }

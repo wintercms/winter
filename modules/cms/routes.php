@@ -1,9 +1,9 @@
 <?php
 
-/**
- * Register CMS routes before all user routes.
- */
-App::before(function ($request) {
+Event::listen('system.route', function () {
+    /**
+     * Register CMS routes before all user routes.
+     */
 
     /**
      * @event cms.beforeRoute
@@ -19,8 +19,7 @@ App::before(function ($request) {
     Event::fire('cms.beforeRoute');
 
     /*
-     * The CMS module intercepts all URLs that were not
-     * handled by the back-end modules.
+     * The CMS module handles all URLs that have not already been handled by the other modules & plugins.
      */
     Route::any('{slug?}', 'Cms\Classes\CmsController@run')->where('slug', '(.*)?')->middleware('web');
 
@@ -36,4 +35,4 @@ App::before(function ($request) {
      *
      */
     Event::fire('cms.route');
-});
+}, PHP_INT_MIN);

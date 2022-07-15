@@ -23,9 +23,12 @@ class UserThrottle extends ThrottleBase
         'user' => User::class
     ];
 
-    public function __construct()
+    /**
+     * @inheritDoc
+     */
+    public function __construct(array $attributes = [])
     {
-        parent::__construct();
+        parent::__construct($attributes);
 
         static::$attemptLimit = Config::get('auth.throttle.attemptLimit', 5);
         static::$suspensionTime = Config::get('auth.throttle.suspensionTime', 15);

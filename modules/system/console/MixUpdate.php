@@ -3,9 +3,9 @@
 class MixUpdate extends MixInstall
 {
     /**
-     * @inheritDoc
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'mix:update';
+    protected static $defaultName = 'mix:update';
 
     /**
      * @inheritDoc

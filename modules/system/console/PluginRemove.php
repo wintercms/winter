@@ -1,12 +1,9 @@
 <?php namespace System\Console;
 
-use App;
 use File;
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Console command to remove a plugin.
@@ -19,52 +16,51 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class PluginRemove extends Command
 {
-
-    use \Illuminate\Console\ConfirmableTrait;
+    use \Winter\Storm\Console\Traits\ConfirmsWithInput;
+    use Traits\HasPluginArgument;
 
     /**
-     * The console command name.
-     * @var string
+     * @var string Suggest all plugins
      */
-    protected $name = 'plugin:remove';
+    protected $hasPluginsFilter = 'all';
 
     /**
-     * The console command description.
-     * @var string
+     * @var string|null The default command name for lazy loading.
+     */
+    protected static $defaultName = 'plugin:remove';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'plugin:remove
+        {plugin : The plugin to remove. <info>(eg: Winter.Blog)</info>}
+        {--f|force : Force the operation to run and ignore production warnings and confirmation questions.}
+        {--r|no-rollback : Skip the rollback of the plugin migrations.}';
+
+    /**
+     * @var string The console command description.
      */
     protected $description = 'Removes an existing plugin.';
 
     /**
      * Execute the console command.
-     * @return void
      */
-    public function handle()
+    public function handle(): int
     {
+        $pluginName = $this->getPluginIdentifier();
         $pluginManager = PluginManager::instance();
-        $pluginName = $this->argument('name');
-        $pluginName = $pluginManager->normalizeIdentifier($pluginName);
 
-        if (!$pluginManager->hasPlugin($pluginName)) {
-            return $this->error(sprintf('Unable to find a registered plugin called "%s"', $pluginName));
-        }
-
-        if (App::isProduction() && !$this->option('force')) {
-            $this->warn('YOUR APPLICATION IS IN PRODUCTION');
-        }
-
+        $confirmQuestion = sprintf('This will remove the files for the "%s" plugin.', $pluginName);
         if (!$this->option('no-rollback')) {
-            $this->warn(sprintf('This will remove the database tables and files for the "%s" plugin.', $pluginName));
-        } else {
-            $this->warn(sprintf('This will remove the files for the "%s" plugin.', $pluginName));
+            $confirmQuestion = sprintf('This will remove the database tables and files for the "%s" plugin.', $pluginName);
         }
 
-        $confirmed = false;
-        $prompt = sprintf('Please type "%s" to proceed', $pluginName);
-        do {
-            if (strtolower($this->ask($prompt)) === strtolower($pluginName)) {
-                $confirmed = true;
-            }
-        } while ($confirmed === false);
+        if (!$this->confirmWithInput(
+            $confirmQuestion,
+            $pluginName
+        )) {
+            return 1;
+        }
 
         if (!$this->option('no-rollback')) {
             /*
@@ -79,41 +75,9 @@ class PluginRemove extends Command
          */
         if ($pluginPath = $pluginManager->getPluginPath($pluginName)) {
             File::deleteDirectory($pluginPath);
-            $this->output->writeln(sprintf('<info>Deleted: %s</info>', $pluginName));
+            $this->output->writeln(sprintf('<info>Deleted: %s</info>', $pluginPath));
         }
-    }
 
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the plugin. Eg: AuthorName.PluginName'],
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run and ignore production warning.'],
-            ['no-rollback', 'r', InputOption::VALUE_NONE, 'Skip the rollback of the plugin migrations.'],
-        ];
-    }
-
-    /**
-     * Get the default confirmation callback.
-     * @return \Closure
-     */
-    protected function getDefaultConfirmCallback()
-    {
-        return function () {
-            return true;
-        };
+        return 0;
     }
 }

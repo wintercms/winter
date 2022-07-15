@@ -23,9 +23,9 @@
         }
     ],
     "require": {
-        "php": ">=7.2",
-        "composer/installers": "~1.11",
-        "laravel/framework": "~6.0"
+        "php": "^8.0.2",
+        "composer/installers": "~1.11.0",
+        "laravel/framework": "^9.1"
     },
     "replace": {
         "october/backend": "1.1.*"
@@ -34,9 +34,6 @@
         "psr-4": {
             "Backend\\": ""
         }
-    },
-    "extra": {
-        "installer-name": "backend"
     },
     "minimum-stability": "dev"
 }

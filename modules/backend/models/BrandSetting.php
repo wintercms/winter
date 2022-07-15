@@ -145,7 +145,7 @@ class BrandSetting extends Model
         $this->menu_mode = $config->get('brand.menuMode', self::INLINE_MENU);
 
         // Attempt to load custom CSS
-        $brandCssPath = File::symbolizePath(Config::get('brand.customLessPath'));
+        $brandCssPath = File::symbolizePath(Config::get('brand.customLessPath', ''));
         if ($brandCssPath && File::exists($brandCssPath)) {
             $this->custom_css = File::get($brandCssPath);
         }
@@ -231,7 +231,7 @@ class BrandSetting extends Model
 
     public static function getDefaultFavicon()
     {
-        $faviconPath = File::symbolizePath(Config::get('brand.faviconPath'));
+        $faviconPath = File::symbolizePath(Config::get('brand.faviconPath', ''));
 
         if ($faviconPath && File::exists($faviconPath)) {
             return Url::asset(File::localToPublic($faviconPath));
@@ -242,7 +242,7 @@ class BrandSetting extends Model
 
     public static function getDefaultLogo()
     {
-        $logoPath = File::symbolizePath(Config::get('brand.logoPath'));
+        $logoPath = File::symbolizePath(Config::get('brand.logoPath', ''));
 
         if ($logoPath && File::exists($logoPath)) {
             return Url::asset(File::localToPublic($logoPath));

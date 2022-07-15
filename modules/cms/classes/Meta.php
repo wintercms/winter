@@ -31,11 +31,11 @@ class Meta extends CmsObject
     protected $defaultExtension = 'yaml';
 
     /**
-     * {inheritDoc}
+     * @inheritDoc
      */
-    public function __construct()
+    public function __construct(array $attributes = [])
     {
-        parent::__construct(...func_get_args());
+        parent::__construct($attributes);
 
         // Bind data processing to model events
         $this->bindEvent('model.beforeSave', function () {

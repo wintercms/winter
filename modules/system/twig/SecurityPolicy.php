@@ -56,7 +56,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
      * @throws SecurityNotAllowedFilterError if a given filter is not allowed
      * @throws SecurityNotAllowedFunctionError if a given function is not allowed
      */
-    public function checkSecurity($tags, $filters, $functions)
+    public function checkSecurity($tags, $filters, $functions): void
     {
     }
 
@@ -67,7 +67,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
      * @param string $property
      * @throws SecurityNotAllowedPropertyError
      */
-    public function checkPropertyAllowed($obj, $property)
+    public function checkPropertyAllowed($obj, $property): void
     {
     }
 
@@ -78,7 +78,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
      * @param string $method
      * @throws SecurityNotAllowedMethodError
      */
-    public function checkMethodAllowed($obj, $method)
+    public function checkMethodAllowed($obj, $method): void
     {
         // No need to check Twig internal objects
         if ($obj instanceof Template || $obj instanceof Markup) {

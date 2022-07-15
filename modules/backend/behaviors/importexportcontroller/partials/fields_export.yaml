@@ -50,7 +50,7 @@ fields:
     export_columns:
         label: backend::lang.import_export.columns
         type: partial
-        path: ~/modules/backend/behaviors/importexportcontroller/partials/_export_columns.htm
+        path: ~/modules/backend/behaviors/importexportcontroller/partials/_export_columns.php
         span: left
 
     step3_section:
