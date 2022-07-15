@@ -11,9 +11,7 @@ import Singleton from '../abstracts/Singleton';
  * @author Ben Thomson <git@alfreido.com>
  */
 export default class Cookie extends Singleton {
-    constructor(snowboard) {
-        super(snowboard);
-
+    construct() {
         this.defaults = {
             expires: null,
             path: '/',

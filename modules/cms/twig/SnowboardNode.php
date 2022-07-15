@@ -1,5 +1,6 @@
 <?php namespace Cms\Twig;
 
+use Url;
 use Config;
 use Request;
 use System\Models\Parameter;
@@ -42,24 +43,35 @@ class SnowboardNode extends TwigNode
 
         $moduleMap = [
             'base' => (Config::get('app.debug', false) === true) ? 'snowboard.base.debug' : 'snowboard.base',
+            'vendor' => 'snowboard.vendor',
             'request' => 'snowboard.request',
             'attr' => 'snowboard.data-attr',
             'extras' => 'snowboard.extras',
         ];
+        $manifestPath = Request::getBasePath() . '/modules/system/assets/js/build/manifest.js';
         $basePath = Request::getBasePath() . '/modules/system/assets/js/snowboard/build/';
 
         if (!static::$baseLoaded) {
+            // Add manifest and vendor files
+            $compiler
+                ->write("echo '<script data-module=\"snowboard-manifest\" src=\"${manifestPath}${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+            $vendorJs = $moduleMap['vendor'];
+            $compiler
+                ->write("echo '<script data-module=\"snowboard-vendor\" src=\"${basePath}${vendorJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+
             // Add base script
             $baseJs = $moduleMap['base'];
+            $baseUrl = Url::to('/');
             $compiler
-                ->write("echo '<script src=\"${basePath}${baseJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("echo '<script data-module=\"snowboard-base\" data-base-url=\"${baseUrl}\" src=\"${basePath}${baseJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+
             static::$baseLoaded = true;
         }
 
         foreach ($modules as $module) {
             $moduleJs = $moduleMap[$module];
             $compiler
-                ->write("echo '<script src=\"${basePath}${moduleJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("echo '<script data-module=\"${module}\" src=\"${basePath}${moduleJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
         }
     }
 }

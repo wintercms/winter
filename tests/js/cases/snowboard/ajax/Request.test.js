@@ -7,6 +7,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -58,6 +60,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -111,6 +115,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -157,6 +163,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -202,6 +210,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -248,6 +258,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -302,6 +314,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -346,6 +360,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -379,10 +395,18 @@ describe('Request AJAX library', function () {
                                 success: true,
                             });
                             expect(instance.responseError).toEqual(null);
+                        },
+                        complete: (data, instance) => {
+                            expect(data).toEqual({
+                                success: true,
+                            });
+                            expect(instance.responseData).toEqual({
+                                success: true,
+                            });
+                            expect(instance.responseError).toEqual(null);
 
                             done();
-                            return false;
-                        }
+                        },
                     });
                 }
             );
@@ -392,6 +416,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -446,6 +472,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -473,10 +501,15 @@ describe('Request AJAX library', function () {
                             expect(data).toEqual('This is an error');
                             expect(instance.responseData).toEqual(null);
                             expect(instance.responseError).toEqual('This is an error');
+                        },
+                        complete: (data, instance) => {
+                            // Data will be null because no data was provided in the response.
+                            expect(data).toBeNull();
+                            expect(instance.responseData).toEqual(null);
+                            expect(instance.responseError).toEqual('This is an error');
 
                             done();
-                            return false;
-                        }
+                        },
                     });
                 }
             );
@@ -486,6 +519,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -534,6 +569,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -552,6 +589,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])
@@ -569,6 +608,8 @@ describe('Request AJAX library', function () {
         FakeDom
             .new()
             .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'
             ])

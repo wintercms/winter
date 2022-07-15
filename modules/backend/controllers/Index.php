@@ -1,5 +1,6 @@
 <?php namespace Backend\Controllers;
 
+use Backend;
 use Redirect;
 use BackendMenu;
 use Backend\Classes\Controller;

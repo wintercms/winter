@@ -280,6 +280,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('theme.sync', \System\Console\ThemeSync::class);
 
         $this->registerConsoleCommand('mix.install', \System\Console\MixInstall::class);
+        $this->registerConsoleCommand('mix.update', \System\Console\MixUpdate::class);
         $this->registerConsoleCommand('mix.list', \System\Console\MixList::class);
         $this->registerConsoleCommand('mix.compile', \System\Console\MixCompile::class);
         $this->registerConsoleCommand('mix.watch', \System\Console\MixWatch::class);
@@ -567,10 +568,6 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
             $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
             $combiner->registerBundle('~/modules/system/assets/less/snowboard.extras.less');
-        });
-
-        MixAssets::registerCallback(function ($mix) {
-            $mix->registerPackage('snowboard', '~/modules/system/assets/js/snowboard/winter.mix.js');
         });
     }
 

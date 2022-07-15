@@ -29,7 +29,7 @@
         "source": "https://github.com/wintercms/winter"
     },
     "require": {
-        "php": "^7.2.9|^8.0",
+        "php": "^7.2.9|~8.0.0",
         "winter/storm": "~1.1.2",
         "winter/wn-system-module": "~1.1.2",
         "winter/wn-backend-module": "~1.1.2",
@@ -55,12 +55,12 @@
     },
     "scripts": {
         "post-create-project-cmd": [
-            "php artisan key:generate",
-            "php artisan package:discover"
+            "@php artisan key:generate",
+            "@php artisan package:discover"
         ],
         "post-update-cmd": [
-            "php artisan winter:version",
-            "php artisan package:discover"
+            "@php artisan winter:version",
+            "@php artisan package:discover"
         ],
         "test": [
             "phpunit --stop-on-failure"

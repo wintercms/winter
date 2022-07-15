@@ -6,18 +6,19 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
+if (window.Snowboard === undefined) {
+    throw new Error('Snowboard must be loaded in order to use the Request plugin.');
+}
+
 class Request extends Snowboard.PluginBase {
     /**
      * Constructor.
      *
-     * @param {Snowboard} snowboard
      * @param {HTMLElement|string} element
      * @param {string} handler
      * @param {Object} options
      */
-    constructor(snowboard, element, handler, options) {
-        super(snowboard);
-
+    construct(element, handler, options) {
         if (typeof element === 'string') {
             const matchedElement = document.querySelector(element);
             if (matchedElement === null) {
@@ -62,6 +63,7 @@ class Request extends Snowboard.PluginBase {
                         (response) => {
                             if (response.cancelled) {
                                 this.cancelled = true;
+                                this.complete();
                                 return;
                             }
                             this.responseData = response;
@@ -79,24 +81,7 @@ class Request extends Snowboard.PluginBase {
                             this.responseError = error;
                             this.processError(error);
                         },
-                    ).finally(() => {
-                        if (this.cancelled === true) {
-                            return;
-                        }
-
-                        if (this.options.complete && typeof this.options.complete === 'function') {
-                            this.options.complete(this.responseData, this);
-                        }
-                        this.snowboard.globalEvent('ajaxDone', this.responseData, this);
-
-                        if (this.element) {
-                            const event = new Event('ajaxAlways');
-                            event.request = this;
-                            event.responseData = this.responseData;
-                            event.responseError = this.responseError;
-                            this.element.dispatchEvent(event);
-                        }
-                    });
+                    );
                 }
             });
         } else {
@@ -104,6 +89,7 @@ class Request extends Snowboard.PluginBase {
                 (response) => {
                     if (response.cancelled) {
                         this.cancelled = true;
+                        this.complete();
                         return;
                     }
                     this.responseData = response;
@@ -121,24 +107,7 @@ class Request extends Snowboard.PluginBase {
                     this.responseError = error;
                     this.processError(error);
                 },
-            ).finally(() => {
-                if (this.cancelled === true) {
-                    return;
-                }
-
-                if (this.options.complete && typeof this.options.complete === 'function') {
-                    this.options.complete(this.responseData, this);
-                }
-                this.snowboard.globalEvent('ajaxDone', this.responseData, this);
-
-                if (this.element) {
-                    const event = new Event('ajaxAlways');
-                    event.request = this;
-                    event.responseData = this.responseData;
-                    event.responseError = this.responseError;
-                    this.element.dispatchEvent(event);
-                }
-            });
+            );
         }
     }
 
@@ -155,7 +124,7 @@ class Request extends Snowboard.PluginBase {
      * Validates the element and handler given in the request.
      */
     checkRequest() {
-        if (this.element !== undefined && this.element instanceof Element === false) {
+        if (this.element && this.element instanceof Element === false) {
             throw new Error('The element provided must be an Element instance');
         }
 
@@ -325,13 +294,28 @@ class Request extends Snowboard.PluginBase {
             });
 
             if (Object.keys(partials).length === 0) {
-                resolve();
+                if (response.X_WINTER_ASSETS) {
+                    this.processAssets(response.X_WINTER_ASSETS).then(
+                        () => {
+                            resolve();
+                        },
+                        () => {
+                            reject();
+                        },
+                    );
+                } else {
+                    resolve();
+                }
                 return;
             }
 
             const promises = this.snowboard.globalPromiseEvent('ajaxBeforeUpdate', response, this);
             promises.then(
-                () => {
+                async () => {
+                    if (response.X_WINTER_ASSETS) {
+                        await this.processAssets(response.X_WINTER_ASSETS);
+                    }
+
                     this.doUpdate(partials).then(
                         () => {
                             // Allow for HTML redraw
@@ -420,7 +404,7 @@ class Request extends Snowboard.PluginBase {
      */
     processResponse(response) {
         if (this.options.success && typeof this.options.success === 'function') {
-            if (!this.options.success(this.responseData, this)) {
+            if (this.options.success(this.responseData, this) === false) {
                 return;
             }
         }
@@ -452,9 +436,7 @@ class Request extends Snowboard.PluginBase {
             return;
         }
 
-        if (response.X_WINTER_ASSETS) {
-            this.processAssets(response.X_WINTER_ASSETS);
-        }
+        this.complete();
     }
 
     /**
@@ -467,7 +449,7 @@ class Request extends Snowboard.PluginBase {
      */
     processError(error) {
         if (this.options.error && typeof this.options.error === 'function') {
-            if (!this.options.error(this.responseError, this)) {
+            if (this.options.error(this.responseError, this) === false) {
                 return;
             }
         }
@@ -501,6 +483,8 @@ class Request extends Snowboard.PluginBase {
                 this.processErrorMessage(error.X_WINTER_ERROR_MESSAGE);
             }
         }
+
+        this.complete();
     }
 
     /**
@@ -622,6 +606,21 @@ class Request extends Snowboard.PluginBase {
     }
 
     /**
+     * Processes assets returned by an AJAX request.
+     *
+     * By default, no asset processing will occur and this will return a resolved Promise.
+     *
+     * Plugins can augment this functionality from the `ajaxLoadAssets` event. This event is considered blocking, and
+     * allows assets to be loaded or processed before continuing with any additional functionality.
+     *
+     * @param {Object} assets
+     * @returns {Promise}
+     */
+    processAssets(assets) {
+        return this.snowboard.globalPromiseEvent('ajaxLoadAssets', assets);
+    }
+
+    /**
      * Confirms the request with the user before proceeding.
      *
      * This is an asynchronous method. By default, it will use the browser's `confirm()` method to query the user to
@@ -664,8 +663,32 @@ class Request extends Snowboard.PluginBase {
         return false;
     }
 
+    /**
+     * Fires off completion events for the Request.
+     */
+    complete() {
+        if (this.options.complete && typeof this.options.complete === 'function') {
+            this.options.complete(this.responseData, this);
+        }
+        this.snowboard.globalEvent('ajaxDone', this.responseData, this);
+
+        if (this.element) {
+            const event = new Event('ajaxAlways');
+            event.request = this;
+            event.responseData = this.responseData;
+            event.responseError = this.responseError;
+            this.element.dispatchEvent(event);
+        }
+
+        // Fire off the destructor
+        this.destruct();
+    }
+
     get form() {
         if (this.options.form) {
+            if (typeof this.options.form === 'string') {
+                return document.querySelector(this.options.form);
+            }
             return this.options.form;
         }
         if (!this.element) {

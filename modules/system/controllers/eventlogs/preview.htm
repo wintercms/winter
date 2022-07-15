@@ -19,7 +19,7 @@
             </div>
             <div class="scoreboard-item title-value">
                 <h4><?= e(trans('system::lang.event_log.created_at')) ?></h4>
-                <p><?= $formModel->created_at->toDayDateTimeString() ?></p>
+                <p><?= Backend::dateTime($formModel->created_at) ?></p>
             </div>
         </div>
     </div>
