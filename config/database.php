@@ -55,7 +55,7 @@ return [
             'strict' => true,
             'unix_socket' => env('DB_SOCKET', ''),
             'url' => env('DATABASE_URL'),
-            'username' => env('DB_USERNAME', 'winter'),
+            'username' => env('DB_USERNAME', 'root'),
         ],
         'pgsql' => [
             'charset' => 'utf8',
