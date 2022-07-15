@@ -17,6 +17,11 @@ trait HasPluginArgument
     // protected $hasPluginsFilter = 'enabled';
 
     /**
+     * @var bool Validate the provided plugin input against the PluginManager, default true.
+     */
+    // protected $validatePluginInput = true;
+
+    /**
      * Return available plugins for autocompletion of the "plugin" argument
      */
     public function suggestPluginValues()
@@ -52,7 +57,10 @@ trait HasPluginArgument
         $pluginName = $identifier ?? $this->argument('plugin');
         $pluginName = $pluginManager->normalizeIdentifier($pluginName);
 
-        if (!$pluginManager->hasPlugin($pluginName)) {
+        if (
+            (isset($this->validatePluginInput) && $this->validatePluginInput !== false)
+            && !$pluginManager->hasPlugin($pluginName)
+        ) {
             throw new InvalidArgumentException(sprintf('Plugin "%s" could not be found.', $pluginName));
         }
 

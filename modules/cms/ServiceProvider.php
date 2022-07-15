@@ -133,6 +133,7 @@ class ServiceProvider extends ModuleServiceProvider
         CombineAssets::registerCallback(function ($combiner) {
             $combiner->registerBundle('~/modules/cms/assets/less/winter.components.less');
             $combiner->registerBundle('~/modules/cms/assets/less/winter.theme-selector.less');
+            $combiner->registerBundle('~/modules/cms/widgets/assetlist/assets/less/assetlist.less');
         });
     }
 

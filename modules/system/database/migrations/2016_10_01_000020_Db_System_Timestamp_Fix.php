@@ -22,6 +22,11 @@ class DbSystemTimestampFix extends Migration
 
             DbDongle::convertTimestamps($table, $columns);
         }
+
+        // Use this opportunity to reset backend styles for stable
+        Db::table('system_settings')
+            ->where('item', 'backend_brand_settings')
+            ->delete();
     }
 
     public function down()

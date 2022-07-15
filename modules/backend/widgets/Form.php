@@ -431,14 +431,14 @@ class Form extends WidgetBase
          * Example usage:
          *
          *     Event::listen('backend.form.refresh', function ((\Backend\Widgets\Form) $formWidget, (array) $result) {
-         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.htm')];
+         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.php')];
          *         return $result;
          *     });
          *
          * Or
          *
          *     $formWidget->bindEvent('form.refresh', function ((array) $result) use ((\Backend\Widgets\Form $formWidget)) {
-         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.htm')];
+         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.php')];
          *         return $result;
          *     });
          *

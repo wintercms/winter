@@ -93,9 +93,9 @@ class Controller
     protected $componentContext;
 
     /**
-     * @var array Component partial stack, used internally.
+     * @var PartialStack Component partial stack, used internally.
      */
-    protected $partialStack = [];
+    protected $partialStack;
 
     /**
      * Creates the controller.
@@ -306,7 +306,7 @@ class Controller
         /*
          * The 'this' variable is reserved for default variables.
          */
-        $this->vars['this'] = [
+        $this->getTwig()->addGlobal('this', [
             'page'        => $this->page,
             'layout'      => $this->layout,
             'theme'       => $this->theme,
@@ -314,7 +314,7 @@ class Controller
             'controller'  => $this,
             'environment' => App::environment(),
             'session'     => App::make('session'),
-        ];
+        ]);
 
         /*
          * Check for the presence of validation errors in the session.
@@ -584,6 +584,7 @@ class Controller
     protected function initTwigEnvironment()
     {
         $this->twig = App::make('twig.environment.cms');
+        $this->twig->getExtension(\Cms\Twig\Extension::class)->setController($this);
     }
 
     /**
@@ -1058,7 +1059,7 @@ class Controller
         CmsException::mask($partial, 400);
         $this->getLoader()->setObject($partial);
         $template = $this->getTwig()->load($partial->getFilePath());
-        $partialContent = $template->render(array_merge($this->vars, $parameters));
+        $partialContent = $template->render(array_merge($parameters, $this->vars));
         CmsException::unmask();
 
         if ($partial instanceof Partial) {

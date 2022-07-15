@@ -1,5 +1,6 @@
 <?php namespace System\Controllers;
 
+use Mail;
 use Lang;
 use Flash;
 use Config;
@@ -7,6 +8,7 @@ use Request;
 use Backend;
 use BackendMenu;
 use System\Classes\SettingsManager;
+use System\Behaviors\SettingsModel;
 use Backend\Classes\Controller;
 use ApplicationException;
 use Exception;
@@ -115,6 +117,27 @@ class Settings extends Controller
                 : 'system/settings';
 
             return Backend::redirect($redirectUrl);
+        }
+    }
+
+    /**
+     * Saves the current configuration and sends a test email to the current user
+     */
+    public function update_onTest(string $author, string $plugin, $code = null)
+    {
+        try {
+            $this->update_onSave($author, $plugin, $code);
+
+            SettingsModel::clearInternalCache();
+
+            Mail::raw(Lang::get('system::lang.settings.test_content'), function ($msg) {
+                $msg->to([$this->user->email => $this->user->full_name]);
+                $msg->subject(Lang::get('system::lang.settings.test_subject'));
+            });
+
+            Flash::success(Lang::get('system::lang.mail_templates.test_success'));
+        } catch (Exception $ex) {
+            Flash::error($ex->getMessage());
         }
     }
 

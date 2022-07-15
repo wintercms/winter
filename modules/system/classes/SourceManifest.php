@@ -9,7 +9,7 @@ use Winter\Storm\Argon\Argon;
  * Reads and stores the Winter CMS source manifest information.
  *
  * The source manifest is a meta JSON file, stored on GitHub, that contains the hashsums of all module files across all
- * buils of Winter CMS. This allows us to compare the Winter CMS installation against the expected file checksums and
+ * builds of Winter CMS. This allows us to compare the Winter CMS installation against the expected file checksums and
  * determine the installed build and whether it has been modified.
  *
  * Since Winter CMS v1.1.1, a forks manifest is also used to determine at which point we forked a branch off to a new
@@ -42,34 +42,18 @@ class SourceManifest
 
     /**
      * Constructor
-     *
-     * @param string $manifest Manifest file to load
-     * @param string $branches Branches manifest file to load
-     * @param bool $autoload Loads the manifest on construct
      */
-    public function __construct($source = null, $forks = null, $autoload = true)
+    public function __construct(string $source = null, string $forks = null, bool $autoload = true)
     {
-        if (isset($source)) {
-            $this->setSource($source);
-        } else {
-            $this->setSource(
-                Config::get(
-                    'cms.sourceManifestUrl',
-                    'https://raw.githubusercontent.com/wintercms/meta/master/manifest/builds.json'
-                )
-            );
-        }
+        $this->setSource($source ?? Config::get(
+            'cms.sourceManifestUrl',
+            'https://raw.githubusercontent.com/wintercms/meta/master/manifest/builds.json'
+        ));
 
-        if (isset($forks)) {
-            $this->setForksSource($forks);
-        } else {
-            $this->setForksSource(
-                Config::get(
-                    'cms.forkManifestUrl',
-                    'https://raw.githubusercontent.com/wintercms/meta/master/manifest/forks.json'
-                )
-            );
-        }
+        $this->setForksSource($forks ?? Config::get(
+            'cms.forkManifestUrl',
+            'https://raw.githubusercontent.com/wintercms/meta/master/manifest/forks.json'
+        ));
 
         if ($autoload) {
             $this->loadSource();
@@ -79,28 +63,18 @@ class SourceManifest
 
     /**
      * Sets the source manifest URL.
-     *
-     * @param string $source
-     * @return void
      */
-    public function setSource($source)
+    public function setSource(string $source): void
     {
-        if (is_string($source)) {
-            $this->source = $source;
-        }
+        $this->source = $source;
     }
 
     /**
      * Sets the forked version manifest URL.
-     *
-     * @param string $forks
-     * @return void
      */
-    public function setForksSource($forks)
+    public function setForksSource(string $forks): void
     {
-        if (is_string($forks)) {
-            $this->forksUrl = $forks;
-        }
+        $this->forksUrl = $forks;
     }
 
     /**
@@ -108,7 +82,7 @@ class SourceManifest
      *
      * @throws ApplicationException If the manifest is invalid, or cannot be parsed.
      */
-    public function loadSource()
+    public function loadSource(): static
     {
         if (file_exists($this->source)) {
             $source = file_get_contents($this->source);
@@ -152,7 +126,7 @@ class SourceManifest
      *
      * @throws ApplicationException If the manifest is invalid, or cannot be parsed.
      */
-    public function loadForks()
+    public function loadForks(): static
     {
         if (file_exists($this->forksUrl)) {
             $forks = file_get_contents($this->forksUrl);
@@ -196,9 +170,8 @@ class SourceManifest
      *
      * @param integer $build Build number.
      * @param FileManifest $manifest The file manifest to add as a build.
-     * @return void
      */
-    public function addBuild($build, FileManifest $manifest)
+    public function addBuild($build, FileManifest $manifest): void
     {
         $parent = $this->determineParent($build);
 
@@ -219,10 +192,8 @@ class SourceManifest
 
     /**
      * Gets all builds.
-     *
-     * @return array
      */
-    public function getBuilds()
+    public function getBuilds(): array
     {
         return array_values(array_map(function ($build) {
             return $build['version'];
@@ -233,9 +204,8 @@ class SourceManifest
      * Generates the JSON data to be stored with the source manifest.
      *
      * @throws ApplicationException If no builds have been added to this source manifest.
-     * @return string
      */
-    public function generate()
+    public function generate(): string
     {
         if (!count($this->builds)) {
             throw new ApplicationException(
@@ -270,9 +240,8 @@ class SourceManifest
      *
      * @param string|integer $build Build version to get the filelist state for.
      * @throws ApplicationException If the specified build has not been added to the source manifest.
-     * @return array
      */
-    public function getState($build)
+    public function getState(mixed $build): array
     {
         if (is_string($build)) {
             $build = $this->getVersionInt($build);
@@ -328,9 +297,8 @@ class SourceManifest
      *
      * @param FileManifest $manifest The file manifest to compare against the source.
      * @param bool $detailed If true, the list of files modified, added and deleted will be included in the result.
-     * @return array
      */
-    public function compare(FileManifest $manifest, $detailed = false)
+    public function compare(FileManifest $manifest, bool $detailed = false): array
     {
         $modules = $manifest->getModuleChecksums();
 
@@ -429,9 +397,8 @@ class SourceManifest
      * @param FileManifest $manifest The current build's file manifest.
      * @param FileManifest|string|integer $previous Either a previous manifest, or the previous build number as an int
      *  or string, used to determine changes with this build.
-     * @return array
      */
-    protected function processChanges(FileManifest $manifest, $previous = null)
+    protected function processChanges(FileManifest $manifest, mixed $previous = null): array
     {
         // If no previous build has been provided, all files are added
         if (is_null($previous)) {
@@ -478,7 +445,10 @@ class SourceManifest
         return $changes;
     }
 
-    protected function determineParent(string $build)
+    /**
+     * Determine the parent of the provided build number
+     */
+    protected function determineParent(string $build): ?array
     {
         $buildInt = $this->getVersionInt($build);
 
@@ -503,11 +473,9 @@ class SourceManifest
     /**
      * Converts a version string into an integer for comparison.
      *
-     * @param string $version
      * @throws ApplicationException if a version string does not match the format "major.minor.path"
-     * @return int
      */
-    protected function getVersionInt(string $version)
+    protected function getVersionInt(string $version): int
     {
         // Get major.minor.patch versions
         if (!preg_match('/^([0-9]+)\.([0-9]+)\.([0-9]+)/', $version, $versionParts)) {

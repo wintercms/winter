@@ -6,6 +6,7 @@ on:
     branches:
       - 1.0
       - 1.1
+      - 1.2
       - develop
 
 jobs:
@@ -26,7 +27,7 @@ jobs:
       - name: Install PHP and PHP Code Sniffer
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.3
+          php-version: 8.0
           extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
           tools: phpcs
 
@@ -51,10 +52,18 @@ jobs:
         with:
             node-version: 12
 
-      - name: Install Node dependencies
-        working-directory: ./modules/system/assets/js/snowboard
+      - name: Install Node dependencies for System Module
+        working-directory: ./modules/system
         run: npm install
 
-      - name: Run code quality checks
-        working-directory: ./modules/system/assets/js/snowboard
+      - name: Run code quality checks on System Module
+        working-directory: ./modules/system
+        run: npx eslint .
+
+      - name: Install Node dependencies for Backend Module
+        working-directory: ./modules/backend
+        run: npm install
+
+      - name: Run code quality checks on Backend Module
+        working-directory: ./modules/backend
         run: npx eslint .

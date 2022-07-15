@@ -1,7 +1,7 @@
 {
     "files.associations": {
         "**/modules/*/behaviors/*/partials/*.htm": "php",
-        "**/modules/*/controllers/*.htm": "php",
+        "**/modules/*/controllers/*/*.htm": "php",
         "**/modules/*/formwidgets/*/partials/*.htm": "php",
         "**/modules/*/layouts/*.htm": "php",
         "**/modules/*/models/*/*.htm": "php",
@@ -11,7 +11,7 @@
         "**/modules/*/widgets/*/partials/*.htm": "php",
 
         "**/plugins/*/*/behaviors/*/partials/*.htm": "php",
-        "**/plugins/*/*/components/*/*.htm": "wintercms-twig",
+        "**/plugins/*/*/components/**/*.htm": "wintercms-twig",
         "**/plugins/*/*/controllers/*/*.htm": "php",
         "**/plugins/*/*/formwidgets/*/partials/*.htm": "php",
         "**/plugins/*/*/layouts/*.htm": "php",
@@ -25,5 +25,9 @@
         "**/themes/*/layouts/*.htm": "wintercms",
         "**/themes/*/pages/**/*.htm": "wintercms",
         "**/themes/*/partials/**/*.htm": "wintercms"
-    }
+    },
+    "eslint.validate": [
+        "javascript",
+        "vue"
+    ]
 }

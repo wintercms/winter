@@ -41,6 +41,19 @@ class MixInstall extends Command
     protected $defaultMixVersion = '^6.0.41';
 
     /**
+     * @return array Terms used in messages.
+     */
+    protected $terms = [
+        'complete' => 'install',
+        'completed' => 'installed',
+    ];
+
+    /**
+     * @var string The NPM command to run.
+     */
+    protected $npmCommand = 'install';
+
+    /**
      * Execute the console command.
      * @return int
      */
@@ -186,9 +199,9 @@ class MixInstall extends Command
         }
 
         if ($this->installPackageDeps() !== 0) {
-            $this->error('Unable to install dependencies.');
+            $this->error("Unable to {$this->terms['complete']} dependencies.");
         } else {
-            $this->info('Dependencies successfully installed!');
+            $this->info("Dependencies successfully {$this->terms['completed']}!");
         }
 
         return 0;
@@ -202,7 +215,7 @@ class MixInstall extends Command
     protected function installPackageDeps()
     {
         $command = $this->argument('npmArgs') ?? [];
-        array_unshift($command, 'npm', 'i');
+        array_unshift($command, 'npm', $this->npmCommand);
 
         $process = new Process($command, base_path(), null, null, null);
 

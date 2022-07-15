@@ -27,9 +27,6 @@ return [
     */
 
     'hosts' => [
-
         'localhost' => 'dev',
-
     ],
-
 ];
