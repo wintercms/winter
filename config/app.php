@@ -65,7 +65,7 @@ return [
     | Temporary Path
     |--------------------------------------------------------------------------
     |
-    | This is used to set the application's tempoary path. Normally this value
+    | This is used to set the application's temporary path. Normally this value
     | is set automatically by the application, however on some systems you
     | may need to change it (Laravel Vapor / read-only systems: /tmp).
     |
