@@ -1215,7 +1215,7 @@ class MediaManager extends WidgetBase
             return [
                 'id' => $id,
                 'markup' => $this->makePartial('thumbnail-image', [
-                    'imageUrl' => MediaLibary::url($thumbnailInfo['path']),
+                    'imageUrl' => MediaLibrary::url($thumbnailInfo['path']),
                 ]),
             ];
         }
