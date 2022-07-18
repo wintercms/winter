@@ -67,7 +67,7 @@ class CreateTheme extends GeneratorCommand
             'scaffold/theme/tailwind/partials/site/footer.stub' => 'partials/site/footer.htm',
             'scaffold/theme/tailwind/.gitignore.stub' => '.gitignore',
             'scaffold/theme/tailwind/package.stub' => 'package.json',
-            'scaffold/theme/tailwind/readme.stub' => 'README.md',
+            'scaffold/theme/tailwind/README.stub' => 'README.md',
             'scaffold/theme/tailwind/tailwind.config.stub' => 'tailwind.config.js',
             'scaffold/theme/tailwind/theme.stub' => 'theme.yaml',
             'scaffold/theme/tailwind/version.stub' => 'version.yaml',
