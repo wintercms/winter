@@ -901,6 +901,8 @@ class PluginManager
         }
 
         return array_map(function ($require) {
+            $require = $this->getNormalizedIdentifier($require, true);
+
             return $this->replacementMap[$require] ?? $require;
         }, is_array($plugin->require) ? $plugin->require : [$plugin->require]);
     }
