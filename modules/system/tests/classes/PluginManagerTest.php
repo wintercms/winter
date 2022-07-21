@@ -594,18 +594,15 @@ class PluginManagerTest extends TestCase
     {
         $result = $this->manager->getPlugins();
 
-        $this->assertEquals([
-            'Database.Tester',
-            'DependencyTest.Dependency',
-            'DependencyTest.Found',
-            'DependencyTest.WrongCase',
-            'TestVendor.Test',
-            'Winter.NoUpdates',
-            'Winter.Replacement',
-            'Winter.ReplaceNotInstalled',
-            'Winter.Sample',
-            'Winter.Tester',
-            'DependencyTest.Acme',
-        ], array_keys($result));
+        $this->assertGreaterThan(
+            array_search('DependencyTest.Dependency', array_keys($result)),
+            array_search('DependencyTest.Found', array_keys($result))
+        );
+
+        // check to make sure dependency comes first and didn't stay in alphanumeric order.
+        $this->assertGreaterThan(
+            array_search('DependencyTest.Dependency', array_keys($result)),
+            array_search('DependencyTest.Acme', array_keys($result))
+        );
     }
 }
