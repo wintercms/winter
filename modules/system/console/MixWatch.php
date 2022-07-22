@@ -49,7 +49,7 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
         $package = $packages[$name];
 
         $relativeMixJsPath = $package['mix'];
-        if (!$this->canCompilePackage($relativeMixJsPath)) {
+        if (!$this->canCompilePackage(base_path($relativeMixJsPath))) {
             $this->error(
                 sprintf('Unable to watch "%s", %s was not found in the package.json\'s workspaces.packages property. Try running mix:install first.', $name, $relativeMixJsPath)
             );
@@ -93,7 +93,7 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
 
         $config = str_replace(
             ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%'],
-            [$basePath, 'mix._api.disableNotifications();', $mixJsPath, plugins_path(), base_path()],
+            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path())],
             $fixture
         );
 
