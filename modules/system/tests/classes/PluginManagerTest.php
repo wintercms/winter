@@ -13,9 +13,9 @@ use Winter\Storm\Database\Model as ActiveRecord;
 
 class PluginManagerTest extends TestCase
 {
-    const INSTALLED_PLUGIN_COUNT = 13;
-    const ENABLED_PLUGIN_COUNT = 10;
-    const PLUGIN_NAMESPACE_COUNT = 14;
+    const INSTALLED_PLUGIN_COUNT = 14;
+    const ENABLED_PLUGIN_COUNT = 11;
+    const PLUGIN_NAMESPACE_COUNT = 15;
 
     public $manager;
     protected $output;
@@ -588,5 +588,21 @@ class PluginManagerTest extends TestCase
         $this->assertInstanceOf(PluginBase::class, $plugin);
 
         $this->assertEquals('Winter.NoUpdates', $this->manager->getNormalizedIdentifier($plugin));
+    }
+
+    public function testSortPluginDependencies()
+    {
+        $result = $this->manager->getPlugins();
+
+        $this->assertGreaterThan(
+            array_search('DependencyTest.Dependency', array_keys($result)),
+            array_search('DependencyTest.Found', array_keys($result))
+        );
+
+        // check to make sure dependency comes first and didn't stay in alphanumeric order.
+        $this->assertGreaterThan(
+            array_search('DependencyTest.Dependency', array_keys($result)),
+            array_search('DependencyTest.Acme', array_keys($result))
+        );
     }
 }
