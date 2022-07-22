@@ -81,7 +81,7 @@ class MixCompile extends Command
 
         foreach ($registeredPackages as $name => $package) {
             $relativeMixJsPath = $package['mix'];
-            if (!$this->canCompilePackage($relativeMixJsPath)) {
+            if (!$this->canCompilePackage(base_path($relativeMixJsPath))) {
                 $this->error(
                     sprintf('Unable to compile "%s", %s was not found in the package.json\'s workspaces.packages property. Try running mix:install first.', $name, $relativeMixJsPath)
                 );
@@ -114,7 +114,7 @@ class MixCompile extends Command
      */
     protected function getWebpackJsPath(string $mixJsPath): string
     {
-        return $this->getPackagePath($mixJsPath) . '/mix.webpack.js';
+        return $this->getPackagePath($mixJsPath) . DIRECTORY_SEPARATOR . 'mix.webpack.js';
     }
 
     /**
@@ -180,7 +180,9 @@ class MixCompile extends Command
         $command = $this->argument('webpackArgs') ?? [];
         array_unshift(
             $command,
-            $basePath . '/node_modules/webpack/bin/webpack.js',
+            "npx",
+            "webpack",
+            "build",
             '--progress',
             '--config=' . $this->getWebpackJsPath($mixJsPath)
         );
@@ -197,7 +199,7 @@ class MixCompile extends Command
 
         $config = str_replace(
             ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%'],
-            [$basePath, '', $mixJsPath, plugins_path(), base_path()],
+            [addslashes($basePath), '', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path())],
             $fixture
         );
 
