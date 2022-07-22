@@ -106,7 +106,15 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
      */
     public function getSubscribedSignals(): array
     {
-        return [SIGINT, SIGTERM, SIGQUIT];
+        //Handle signal issue that exists on Windows
+        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+            return [SIGINT, SIGTERM, SIGQUIT];
+        }
+
+        return [];
+    }
+
+        return [];
     }
 
     /**
@@ -117,9 +125,12 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
         // Cleanup
         $this->removeWebpackConfig(base_path($this->mixJsPath));
 
-        // Exit cleanly at this point, if this was a user termination
-        if (in_array($signal, [SIGINT, SIGQUIT])) {
-            exit(0);
+        //Windows fix for signal issue
+        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+            // Exit cleanly at this point, if this was a user termination
+            if (in_array($signal, [SIGINT, SIGQUIT])) {
+                exit(0);
+            }
         }
     }
 }
