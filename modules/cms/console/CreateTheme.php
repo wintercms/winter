@@ -1,6 +1,7 @@
 <?php namespace Cms\Console;
 
 use Winter\Storm\Scaffold\GeneratorCommand;
+use InvalidArgumentException;
 
 class CreateTheme extends GeneratorCommand
 {
@@ -14,7 +15,8 @@ class CreateTheme extends GeneratorCommand
      */
     protected $signature = 'create:theme
         {theme : The name of the theme to create. <info>(eg: MyTheme)</info>}
-        {--force : Overwrite existing files with generated files.}';
+        {scaffold? : The base theme scaffold to use <info>(eg: less, tailwind)</info>}
+        {--f|force : Overwrite existing files with generated files.}';
 
     /**
      * @var string The console command description.
@@ -32,21 +34,45 @@ class CreateTheme extends GeneratorCommand
     protected $nameFrom = 'theme';
 
     /**
-     * @var array A mapping of stub to generated file.
+     * @var array Available theme scaffolds and their types
      */
-    protected $stubs = [
-        'scaffold/theme/assets/js/app.stub' => 'assets/js/app.js',
-        'scaffold/theme/assets/less/theme.stub' => 'assets/less/theme.less',
-        'scaffold/theme/layouts/default.stub' => 'layouts/default.htm',
-        'scaffold/theme/pages/404.stub' => 'pages/404.htm',
-        'scaffold/theme/pages/error.stub' => 'pages/error.htm',
-        'scaffold/theme/pages/home.stub' => 'pages/home.htm',
-        'scaffold/theme/partials/meta/seo.stub' => 'partials/meta/seo.htm',
-        'scaffold/theme/partials/meta/styles.stub' => 'partials/meta/styles.htm',
-        'scaffold/theme/partials/site/header.stub' => 'partials/site/header.htm',
-        'scaffold/theme/partials/site/footer.stub' => 'partials/site/footer.htm',
-        'scaffold/theme/theme.stub' => 'theme.yaml',
-        'scaffold/theme/version.stub' => 'version.yaml',
+    protected $themeScaffolds = [
+        'less' => [
+            'scaffold/theme/less/assets/js/app.stub' => 'assets/js/app.js',
+            'scaffold/theme/less/assets/less/theme.stub' => 'assets/less/theme.less',
+            'scaffold/theme/less/layouts/default.stub' => 'layouts/default.htm',
+            'scaffold/theme/less/pages/404.stub' => 'pages/404.htm',
+            'scaffold/theme/less/pages/error.stub' => 'pages/error.htm',
+            'scaffold/theme/less/pages/home.stub' => 'pages/home.htm',
+            'scaffold/theme/less/partials/meta/seo.stub' => 'partials/meta/seo.htm',
+            'scaffold/theme/less/partials/meta/styles.stub' => 'partials/meta/styles.htm',
+            'scaffold/theme/less/partials/site/header.stub' => 'partials/site/header.htm',
+            'scaffold/theme/less/partials/site/footer.stub' => 'partials/site/footer.htm',
+            'scaffold/theme/less/theme.stub' => 'theme.yaml',
+            'scaffold/theme/less/version.stub' => 'version.yaml',
+        ],
+        'tailwind' => [
+            'scaffold/theme/tailwind/assets/src/css/base.stub' => 'assets/src/css/base.css',
+            'scaffold/theme/tailwind/assets/src/css/custom.stub' => 'assets/src/css/custom.css',
+            'scaffold/theme/tailwind/assets/src/css/theme.stub' => 'assets/src/css/theme.css',
+            'scaffold/theme/tailwind/assets/src/js/theme.stub' => 'assets/src/js/theme.js',
+            'scaffold/theme/tailwind/lang/en/lang.stub' => 'lang/en/lang.php',
+            'scaffold/theme/tailwind/layouts/default.stub' => 'layouts/default.htm',
+            'scaffold/theme/tailwind/pages/404.stub' => 'pages/404.htm',
+            'scaffold/theme/tailwind/pages/error.stub' => 'pages/error.htm',
+            'scaffold/theme/tailwind/pages/home.stub' => 'pages/home.htm',
+            'scaffold/theme/tailwind/partials/meta/seo.stub' => 'partials/meta/seo.htm',
+            'scaffold/theme/tailwind/partials/meta/styles.stub' => 'partials/meta/styles.htm',
+            'scaffold/theme/tailwind/partials/site/header.stub' => 'partials/site/header.htm',
+            'scaffold/theme/tailwind/partials/site/footer.stub' => 'partials/site/footer.htm',
+            'scaffold/theme/tailwind/.gitignore.stub' => '.gitignore',
+            'scaffold/theme/tailwind/package.stub' => 'package.json',
+            'scaffold/theme/tailwind/README.stub' => 'README.md',
+            'scaffold/theme/tailwind/tailwind.config.stub' => 'tailwind.config.js',
+            'scaffold/theme/tailwind/theme.stub' => 'theme.yaml',
+            'scaffold/theme/tailwind/version.stub' => 'version.yaml',
+            'scaffold/theme/tailwind/winter.mix.stub' => 'winter.mix.js',
+        ],
     ];
 
     /**
@@ -62,9 +88,24 @@ class CreateTheme extends GeneratorCommand
      */
     protected function prepareVars(): array
     {
+        $scaffold = $this->argument('scaffold') ?? 'less';
+        $validOptions = $this->suggestScaffoldValues();
+        if (!in_array($scaffold, $validOptions)) {
+            throw new InvalidArgumentException("$scaffold is not an available theme scaffold type (Available types: " . implode(', ', $validOptions) . ')');
+        }
+        $this->stubs = $this->themeScaffolds[$scaffold];
+
         return [
             'code' => $this->getNameInput(),
         ];
+    }
+
+    /**
+     * Auto suggest valid theme scaffold values
+     */
+    public function suggestScaffoldValues(): array
+    {
+        return array_keys($this->themeScaffolds);
     }
 
     /**

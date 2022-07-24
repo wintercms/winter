@@ -80,8 +80,10 @@ return [
     /*
      * Backwards compatibility aliases
      */
-    'Db'        => Illuminate\Support\Facades\DB::class,
-    'Url'       => Illuminate\Support\Facades\URL::class,
+    'Db'             => Illuminate\Support\Facades\DB::class,
+    'Url'            => Illuminate\Support\Facades\URL::class,
+    'TestCase'       => System\Tests\Bootstrap\TestCase::class,
+    'PluginTestCase' => System\Tests\Bootstrap\PluginTestCase::class,
 
     // Input facade was removed in Laravel 6 - we are keeping it in the Storm library for backwards compatibility.
     'Illuminate\Support\Facades\Input' => Winter\Storm\Support\Facades\Input::class,

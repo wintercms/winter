@@ -499,8 +499,7 @@ MediaManagerImageCropPopup.prototype.updateSelectionSizeLabel=function(width,hei
 return}this.selectionSizeLabel.setAttribute('class','')
 this.selectionSizeLabel.querySelector('[data-label=selection-width]').textContent=parseInt(width)
 this.selectionSizeLabel.querySelector('[data-label=selection-height]').textContent=parseInt(height)}
-MediaManagerImageCropPopup.prototype.onPopupHidden=function(event,element,popup){this.$popupElement.find('form').request(this.options.alias+'::onEndCroppingSession')
-$(document).trigger('mousedown')
+MediaManagerImageCropPopup.prototype.onPopupHidden=function(event,element,popup){$(document).trigger('mousedown')
 this.dispose()}
 MediaManagerImageCropPopup.prototype.onPopupShown=function(event,element,popup){this.$popupElement=popup
 this.$popupElement.on('change','[data-control="selection-mode"]',this.proxy(this.onSelectionModeChanged))

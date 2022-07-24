@@ -1,0 +1,17 @@
+# Ignore build files
+**/node_modules/**
+build/*.js
+**/build/*.js
+**/mix.webpack.js
+
+# Ignore all JS except for Mix-based assets
+assets/js
+assets/vendor
+behaviors/**/*.js
+controllers/**/*.js
+formwidgets/**/*.js
+reportwidgets/**/*.js
+widgets/**/*.js
+
+# Ignore test fixtures
+tests

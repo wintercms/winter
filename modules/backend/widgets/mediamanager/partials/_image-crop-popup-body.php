@@ -27,7 +27,6 @@
         </div>
     </div>
 
-    <input type="hidden" name="cropSessionKey" value="<?= e($cropSessionKey) ?>">
     <input type="hidden" name="path" value="<?= e($path) ?>">
 
     <input type="hidden" data-control="dimension-width" value="<?= $dimensions[0] ?>">

@@ -59,6 +59,19 @@ return [
     */
 
     'asset_url' => env('ASSET_URL', null),
+    
+    /*
+    |--------------------------------------------------------------------------
+    | Temporary Path
+    |--------------------------------------------------------------------------
+    |
+    | This is used to set the application's temporary path. Normally this value
+    | is set automatically by the application, however on some systems you
+    | may need to change it (Laravel Vapor / read-only systems: /tmp).
+    |
+    */
+
+    'tempPath' => env('APP_TEMP_PATH', null),
 
     /*
     |--------------------------------------------------------------------------

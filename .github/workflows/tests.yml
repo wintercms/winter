@@ -5,6 +5,7 @@ on:
     branches:
       - 1.0
       - 1.1
+      - 1.2
       - develop
   pull_request:
 
@@ -24,12 +25,13 @@ jobs:
             node-version: 12
 
       - name: Install Node dependencies
-        working-directory: ./tests/js
+        working-directory: ./modules/system/tests/js
         run: npm install
 
       - name: Run tests
-        working-directory: ./tests/js
+        working-directory: ./modules/system/tests/js
         run: npm run test
+
   phpUnitTests:
     strategy:
       max-parallel: 8
@@ -77,7 +79,7 @@ jobs:
 
       - name: Switch library dependency (develop)
         if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
-        run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.1"
+        run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.2"
 
       - name: Switch library dependency (1.0)
         if: github.head_ref == '1.0' || github.ref == 'refs/heads/1.0' || github.base_ref == '1.0'
@@ -88,8 +90,8 @@ jobs:
         run: php ./.github/workflows/utilities/library-switcher "1.1.x-dev as 1.1"
 
       - name: Switch library dependency (1.2)
-        if: github.head_ref == 'wip/1.2' || github.ref == 'refs/heads/wip/1.2' || github.base_ref == 'wip/1.2'
-        run: php ./.github/workflows/utilities/library-switcher "dev-wip/1.2 as 1.2"
+        if: github.head_ref == '1.2' || github.ref == 'refs/heads/1.2' || github.base_ref == '1.2'
+        run: php ./.github/workflows/utilities/library-switcher "1.2.x-dev as 1.2"
 
       - name: Setup dependency cache
         id: composercache
@@ -117,5 +119,5 @@ jobs:
 
       - name: Run Linting and Tests
         run: |
-          ./vendor/bin/parallel-lint --exclude vendor --exclude storage --exclude tests/fixtures/plugins/testvendor/goto/Plugin.php .
-          ./vendor/bin/phpunit
+          composer lint
+          php artisan winter:test -m system -m backend -m cms
