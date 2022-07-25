@@ -83,6 +83,14 @@ Please follow the following guides and code standards:
 
 In order to ensure that the Winter community is welcoming to all, please review and abide by the [Code of Conduct](https://github.com/wintercms/.github/blob/master/CODE_OF_CONDUCT.md).
 
+## Sponsors
+
+Winter CMS development is financially supported by the generosity of the following sponsors:
+
+- Orville
+
+If you would like to have your name, company and link added to this list and support open-source development, feel free to make a donation to our [Open Collective](https://opencollective.com/wintercms).
+
 ## License
 
 The Winter platform is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
