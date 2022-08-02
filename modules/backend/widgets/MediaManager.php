@@ -352,7 +352,7 @@ class MediaManager extends WidgetBase
     /**
      * Show rename item popup AJAX handler
      */
-    public function onLoadRenamePopup(): array
+    public function onLoadRenamePopup(): string
     {
         $this->abortIfReadOnly();
 
@@ -373,7 +373,7 @@ class MediaManager extends WidgetBase
      * @throws ApplicationException if the new name is invalid
      * @todo Move media events to the MediaLibary class instead.
      */
-    public function onApplyName(): array
+    public function onApplyName(): void
     {
         $this->abortIfReadOnly();
 
