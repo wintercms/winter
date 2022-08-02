@@ -70,7 +70,12 @@ class Status extends ReportWidgetBase
         $this->vars['requestLogMsg'] = LogSetting::get('log_requests', false) ? false : true;
 
         // TODO: Store system boot date in `Parameter`
-        $this->vars['appBirthday'] = PluginVersion::orderBy('created_at')->first()->created_at;
+        $this->vars['appBirthday'] = null;
+        $appBirthday = PluginVersion::orderBy('created_at')->first();
+
+        if ($appBirthday) {
+            $this->vars['appBirthday'] = $appBirthday->created_at;
+        }
     }
 
     public function onLoadWarningsForm()
