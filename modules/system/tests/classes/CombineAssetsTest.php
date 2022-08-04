@@ -104,4 +104,28 @@ class CombineAssetsTest extends TestCase
         $combiner = CombineAssets::instance();
         $this->assertNull($combiner->resetCache());
     }
+
+    public function testAliasesResolving()
+    {
+        $combiner = CombineAssets::instance();
+
+        $combiner->registerAlias('css1', '~/modules/system/tests/fixtures/themes/test/assets/css/style1.css');
+        $combiner->registerAlias('css2', '~/modules/system/tests/fixtures/themes/test/assets/css/style2.css');
+        $combiner->registerAlias('js1', '~/modules/system/tests/fixtures/themes/test/assets/js/script1.js');
+        $combiner->registerAlias('js2', '~/modules/system/tests/fixtures/themes/test/assets/js/script2.js');
+
+        $url = $combiner->combine(
+            ['@js1', '@js2'],
+            base_path() . '/modules/system/tests/fixtures/themes/test'
+        );
+        $this->assertNotNull($url);
+        $this->assertRegExp('/\w+[-]\d+/i', $url); // Must contain hash-number
+
+        $url = $combiner->combine(
+            ['@css1', '@css2'],
+            base_path() . '/modules/system/tests/fixtures/themes/test'
+        );
+        $this->assertNotNull($url);
+        $this->assertRegExp('/\w+[-]\d+/i', $url); // Must contain hash-number
+    }
 }
