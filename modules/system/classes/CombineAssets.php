@@ -344,7 +344,7 @@ class CombineAssets
             $extension = 'css';
             $assets = $combineCss;
         }
-        elseif ($cssCount < $jsCount){
+        elseif ($cssCount < $jsCount) {
             $extension = 'js';
             $assets = $combineJs;
         }
