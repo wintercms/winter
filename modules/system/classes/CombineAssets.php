@@ -338,19 +338,32 @@ class CombineAssets
         /*
          * Determine which group of assets to combine.
          */
-        if (count($combineCss) > count($combineJs)) {
+        $cssCount = count($combineCss);
+        $jsCount = count($combineJs);
+        if ($cssCount > $jsCount) {
             $extension = 'css';
             $assets = $combineCss;
         }
-        else {
+        elseif ($cssCount < $jsCount){
             $extension = 'js';
             $assets = $combineJs;
+        }
+        else {
+            $extension = null;
+            $assets = array_unique([...$combineCss, ...$combineJs]);
         }
 
         /*
          * Apply registered aliases
          */
         if ($aliasMap = $this->getAliases($extension)) {
+            if ($extension === null) {
+                $aliasMap = array_map(function ($map) {
+                    return is_array($map) ? $map : [$map];
+                }, $aliasMap);
+                $aliasMap = array_reduce($aliasMap, 'array_merge', []);
+            }
+
             foreach ($assets as $key => $asset) {
                 if (substr($asset, 0, 1) !== '@') {
                     continue;
