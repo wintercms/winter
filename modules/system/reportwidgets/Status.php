@@ -3,7 +3,6 @@
 use Lang;
 use Config;
 use BackendAuth;
-use Carbon\Carbon;
 use System\Models\Parameter;
 use System\Models\LogSetting;
 use System\Classes\UpdateManager;
@@ -12,7 +11,6 @@ use Backend\Classes\ReportWidgetBase;
 use Backend\Models\User;
 use System\Models\EventLog;
 use System\Models\RequestLog;
-use System\Models\PluginVersion;
 use Exception;
 
 /**
@@ -70,32 +68,13 @@ class Status extends ReportWidgetBase
         $this->vars['requestLog']    = RequestLog::count();
         $this->vars['requestLogMsg'] = LogSetting::get('log_requests', false) ? false : true;
 
-        $this->vars['appBirthday'] = $this->getAppBirthday();
+        $this->vars['appBirthday'] = Parameter::get('system::app.birthday');
     }
 
     public function onLoadWarningsForm()
     {
         $this->vars['warnings'] = $this->getSystemWarnings();
         return $this->makePartial('warnings_form');
-    }
-
-    protected function getAppBirthday()
-    {
-        $appBirthday = Parameter::get('system::app.birthday', null);
-
-        if (is_null($appBirthday)) {
-            $appBirthdayFromPlugins = PluginVersion::orderBy('created_at')->first()?->created_at;
-
-            if (is_null($appBirthdayFromPlugins)) {
-                $appBirthday = Carbon::now()->timestamp;
-            } else {
-                $appBirthday = Carbon::parse($appBirthdayFromPlugins)->timestamp;
-            }
-
-            Parameter::set('system::app.birthday', $appBirthday);
-        }
-
-        return $appBirthday;
     }
 
     protected function getSystemWarnings()
