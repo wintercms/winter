@@ -412,7 +412,7 @@ class VersionManager
                 ->value('version');
         }
 
-        return $this->databaseVersions[$code] ?? self::NO_VERSION_VALUE;
+        return $this->normalizeVersion((string) ($this->databaseVersions[$code] ?? self::NO_VERSION_VALUE));
     }
 
     /**

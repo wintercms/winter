@@ -376,9 +376,9 @@ trait AssetMaker
         }
     }
 
-    protected function getLocalPath(string $relativePath)
+    protected function getLocalPath(?string $relativePath)
     {
-        $relativePath = File::symbolizePath($relativePath);
+        $relativePath = File::symbolizePath((string) $relativePath);
         if (!starts_with($relativePath, [base_path()])) {
             $relativePath = base_path($relativePath);
         }

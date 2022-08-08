@@ -982,6 +982,8 @@ class PluginManager
                 $depends = $this->getDependencies($plugin);
 
                 $depends = array_map(function ($depend) {
+                    $depend = $this->getNormalizedIdentifier($depend, true);
+
                     if (isset($this->replacementMap[$depend])) {
                         return $this->replacementMap[$depend];
                     }

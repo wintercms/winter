@@ -120,4 +120,4 @@ jobs:
       - name: Run Linting and Tests
         run: |
           composer lint
-          ./vendor/bin/phpunit
+          php artisan winter:test -m system -m backend -m cms

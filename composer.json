@@ -68,7 +68,7 @@
     "extra": {
         "merge-plugin": {
             "include": [
-                "plugins/*/*/composer.json"
+                "plugins/myauthor/*/composer.json"
             ],
             "recurse": true,
             "replace": false,

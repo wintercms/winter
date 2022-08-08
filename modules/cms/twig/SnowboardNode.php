@@ -48,8 +48,8 @@ class SnowboardNode extends TwigNode
             'attr' => 'snowboard.data-attr',
             'extras' => 'snowboard.extras',
         ];
-        $manifestPath = Request::getBasePath() . '/modules/system/assets/js/build/manifest.js';
-        $basePath = Request::getBasePath() . '/modules/system/assets/js/snowboard/build/';
+        $manifestPath = Url::asset('/modules/system/assets/js/build/manifest.js');
+        $basePath = Url::asset('/modules/system/assets/js/snowboard/build') . '/';
 
         if (!static::$baseLoaded) {
             // Add manifest and vendor files
