@@ -13,9 +13,10 @@ use Winter\Storm\Database\Model as ActiveRecord;
 
 class PluginManagerTest extends TestCase
 {
-    const INSTALLED_PLUGIN_COUNT = 14;
-    const ENABLED_PLUGIN_COUNT = 11;
-    const PLUGIN_NAMESPACE_COUNT = 15;
+    const INSTALLED_PLUGIN_COUNT = 17;
+    const ENABLED_PLUGIN_COUNT = 14;
+    const PLUGIN_NAMESPACE_COUNT = 18;
+    const PLUGIN_VENDOR_COUNT = 5;
 
     public $manager;
     protected $output;
@@ -250,7 +251,7 @@ class PluginManagerTest extends TestCase
     {
         $vendors = $this->manager->getVendorAndPluginNames();
 
-        $this->assertCount(4, $vendors);
+        $this->assertCount(static::PLUGIN_VENDOR_COUNT, $vendors);
         $this->assertArrayHasKey('winter', $vendors);
         $this->assertArrayHasKey('noupdates', $vendors['winter']);
         $this->assertArrayHasKey('sample', $vendors['winter']);
