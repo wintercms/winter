@@ -48,6 +48,10 @@ class MixCompile extends Command
         $registeredPackages = $mixedAssets->getPackages();
         $requestedPackages = $this->option('package') ?: [];
 
+        if (is_string($requestedPackages)) {
+            $requestedPackages = [$requestedPackages];
+        }
+
         // Normalize the requestedPackages option
         if (count($requestedPackages)) {
             foreach ($requestedPackages as &$name) {
@@ -79,26 +83,31 @@ class MixCompile extends Command
             }
         }
 
+        $exits = [];
         foreach ($registeredPackages as $name => $package) {
             $relativeMixJsPath = $package['mix'];
             if (!$this->canCompilePackage($relativeMixJsPath)) {
-                $this->error(
-                    sprintf('Unable to compile "%s", %s was not found in the package.json\'s workspaces.packages property. Try running mix:install first.', $name, $relativeMixJsPath)
-                );
+                $this->error(sprintf(
+                    'Unable to compile "%s", %s was not found in the package.json\'s workspaces.packages property.'
+                     . ' Try running mix:install first.',
+                    $name,
+                    $relativeMixJsPath
+                ));
                 continue;
             }
 
-            $this->info(
-                sprintf('Mixing package "%s"', $name)
-            );
-            if ($this->mixPackage(base_path($relativeMixJsPath)) !== 0) {
-                $this->error(
-                    sprintf('Unable to compile package "%s"', $name)
-                );
+            $this->info(sprintf('Mixing package "%s"', $name));
+
+            $exitCode = $this->mixPackage(base_path($relativeMixJsPath));
+
+            if ($exitCode !== 0) {
+                $this->error(sprintf('Unable to compile package "%s"', $name));
             }
+
+            $exits[] = $exitCode;
         }
 
-        return 0;
+        return (int) !empty(array_filter($exits));
     }
 
     /**
@@ -124,18 +133,24 @@ class MixCompile extends Command
     {
         if (!isset($this->packageJson)) {
             // Load the main package.json for the project
-            $canModifyPackageJson = null;
-            $packageJsonPath = base_path('package.json');
-            $packageJson = [];
-            if (File::exists($packageJsonPath)) {
-                $packageJson = json_decode(File::get($packageJsonPath), true);
-            }
-            $this->packageJson = $packageJson;
+            $this->packageJson = $this->readNpmPackageManifest();
         }
 
         $workspacesPackages = $this->packageJson['workspaces']['packages'] ?? [];
 
         return in_array($this->getPackagePath($mixJsPath), $workspacesPackages);
+    }
+
+    /**
+     * Read the package.json file for the project, path configurable with the
+     * `NPM_PACKAGE_MANIFEST` env option
+     */
+    protected function readNpmPackageManifest(): array
+    {
+        $packageJsonPath = base_path(env('NPM_PACKAGE_MANIFEST', 'package.json'));
+        return File::exists($packageJsonPath)
+            ? json_decode(File::get($packageJsonPath), true)
+            : [];
     }
 
     /**
@@ -161,9 +176,7 @@ class MixCompile extends Command
         }
 
         $exitCode = $process->run(function ($status, $stdout) {
-            if ($this->option('verbose')) {
-                $this->getOutput()->write($stdout);
-            }
+            $this->getOutput()->write($stdout);
         });
 
         $this->removeWebpackConfig($mixJsPath);
