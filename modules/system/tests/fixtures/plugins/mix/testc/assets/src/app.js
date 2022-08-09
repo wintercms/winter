@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus, no-console, import/no-unresolved */
 const missing = require('some-missing-package');
 
 (() => {
