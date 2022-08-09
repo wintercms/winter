@@ -48,6 +48,8 @@ class MixCompile extends Command
         $registeredPackages = $mixedAssets->getPackages();
         $requestedPackages = $this->option('package') ?: [];
 
+        // Calling commands in unit tests can cause the option casting to not work correctly,
+        // ensure that the option value is always an array
         if (is_string($requestedPackages)) {
             $requestedPackages = [$requestedPackages];
         }
