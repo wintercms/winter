@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         bootstrap="./modules/system/tests/bootstrap/app.php"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
+>
+    <coverage>
+        <include>
+            <directory suffix=".php">./modules/</directory>
+        </include>
+        <exclude>
+            <file>./modules/backend/routes.php</file>
+            <file>./modules/cms/routes.php</file>
+            <file>./modules/system/routes.php</file>
+            <directory suffix=".php">./modules/backend/database</directory>
+            <directory suffix=".php">./modules/cms/database</directory>
+            <directory suffix=".php">./modules/system/database</directory>
+        </exclude>
+    </coverage>
+    <testsuites>
+        <testsuite name="Winter CMS Test Suite">
+            <directory>./modules/system</directory>
+            <directory>./modules/cms</directory>
+            <directory>./modules/backend</directory>
+        </testsuite>
+    </testsuites>
+    <php>
+        <env name="APP_ENV" value="testing"/>
+        <env name="CACHE_DRIVER" value="array"/>
+        <env name="SESSION_DRIVER" value="array"/>
+    </php>
+</phpunit>
