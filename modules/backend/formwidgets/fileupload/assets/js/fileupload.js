@@ -130,11 +130,119 @@
             this.uploaderOptions.headers['X-CSRF-TOKEN'] = token
         }
 
+        console.log([this.$el.get(0), this.options.paramName]);
+
         this.dropzone = new Dropzone(this.$el.get(0), this.uploaderOptions)
         this.dropzone.on('addedfile', this.proxy(this.onUploadAddedFile))
         this.dropzone.on('sending', this.proxy(this.onUploadSending))
         this.dropzone.on('success', this.proxy(this.onUploadSuccess))
         this.dropzone.on('error', this.proxy(this.onUploadError))
+
+        // if the vapor class is available then override the dropzone handling to use it
+        if (typeof window.Vapor !== "undefined") {
+            const _this = this;
+            // override the upload process handler to ensure process is displayed correctly
+            this.dropzone._updateFilesUploadProgress = function _updateFilesUploadProgress(file, progress) {
+                this.emit("uploadprogress", file, progress, file.size / progress);
+            };
+
+            // override the upload data method
+            this.dropzone._uploadData = function _uploadData(files, dataBlocks) {
+                var _dropzone = this;
+                for (var i in files) {
+                    if (!files.hasOwnProperty(i)) {
+                        continue;
+                    }
+                    const file = files[i];
+                    Vapor.store(file, {
+                        signedStorageUrl: "/winter/system/signed-storage-url",
+                        progress: progress => {
+                            // = Math.round(progress * 100)
+                            _dropzone._updateFilesUploadProgress(files, progress);
+                        }
+                    }).then(response => {
+                        var xhr = new XMLHttpRequest(),
+                            method = _dropzone.resolveOption(_dropzone.options.method, files),
+                            url = _dropzone.resolveOption(_dropzone.options.url, files),
+                            steamResponse = {
+                                uuid: response.uuid,
+                                key: response.key,
+                                bucket: response.bucket,
+                                name: files[i].name,
+                                content_type: files[i].type,
+                            },
+                            key;
+
+                        xhr.open(method, url, true);
+
+                        // Setting the timeout after open because of IE11 issue: https://gitlab.com/meno/dropzone/issues/8
+                        xhr.timeout = _dropzone.resolveOption(_dropzone.options.timeout, files);
+
+                        // Has to be after `.open()`. See https://github.com/enyo/dropzone/issues/179
+                        xhr.withCredentials = !!_dropzone.options.withCredentials;
+
+                        xhr.onload = function (e) {
+                            _dropzone._finishedUploading(files, xhr, e);
+                        };
+
+                        xhr.onerror = function () {
+                            _dropzone._handleUploadError(files, xhr);
+                        };
+
+                        // Some browsers do not have the .upload property
+                        var progressObj = xhr.upload != null ? xhr.upload : xhr;
+                        progressObj.onprogress = function (e) {
+                            return _dropzone.dropzone._updateFilesUploadProgress(files, xhr, e);
+                        };
+
+                        var headers = {
+                            "Accept": "application/json",
+                            "Cache-Control": "no-cache",
+                            "X-Requested-With": "XMLHttpRequest"
+                        };
+
+                        if (_dropzone.options.headers) {
+                            Dropzone.extend(headers, _dropzone.options.headers);
+                        }
+
+                        for (var headerName in headers) {
+                            var headerValue = headers[headerName];
+                            if (headerValue) {
+                                xhr.setRequestHeader(headerName, headerValue);
+                            }
+                        }
+
+                        var formData = new FormData();
+
+                        // Adding all @options parameters
+                        if (_dropzone.options.params) {
+                            var additionalParams = _dropzone.options.params;
+                            if (typeof additionalParams === 'function') {
+                                additionalParams = additionalParams.call(_dropzone, files, xhr, files[0].upload.chunked ? _dropzone._getChunk(files[0], xhr) : null);
+                            }
+
+                            for (key in additionalParams) {
+                                var value = additionalParams[key];
+                                formData.append(key, value);
+                            }
+                        }
+
+                        for (key in steamResponse) {
+                            formData.append(key, steamResponse[key]);
+                        }
+
+                        _dropzone.emit("sending", file, xhr, formData);
+
+                        if (_dropzone.options.uploadMultiple) {
+                            _dropzone.emit("sendingmultiple", files, xhr, formData);
+                        }
+
+                        _dropzone._addFormElementData(formData);
+                        _dropzone.submitRequest(xhr, formData, files);
+                    });
+                }
+            }
+        };
     }
 
     FileUpload.prototype.onResizeFileInfo = function(file) {

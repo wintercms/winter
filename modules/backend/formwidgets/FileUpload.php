@@ -1,9 +1,13 @@
 <?php namespace Backend\FormWidgets;
 
 use Db;
+use Illuminate\Http\UploadedFile;
+use Symfony\Component\HttpFoundation\File\UploadedFile as BaseUploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Input;
 use Request;
 use Response;
+use System\Models\File;
 use Validator;
 use Backend\Widgets\Form;
 use Backend\Classes\FormField;
@@ -405,6 +409,10 @@ class FileUpload extends FormWidgetBase
      */
     protected function loadAssets()
     {
+        if (\Config::get('cms.streamS3Uploads.enabled')) {
+            $this->addJs('/modules/system/assets/js/vapor/build/vapor.js');
+        }
+
         $this->addCss('css/fileupload.css', 'core');
         $this->addJs('js/fileupload.js', 'core');
     }
@@ -423,40 +431,35 @@ class FileUpload extends FormWidgetBase
     public function onUpload()
     {
         try {
-            if (!Input::hasFile('file_data')) {
+            if (!Input::hasFile('file_data') && !(\Config::get('cms.streamS3Uploads.enabled') && Input::get('uuid'))) {
                 throw new ApplicationException('File missing from request');
             }
 
             $fileModel = $this->getRelationModel();
-            $uploadedFile = Input::file('file_data');
 
             $validationRules = ['max:'.$fileModel::getMaxFilesize()];
-            if ($fileTypes = $this->getAcceptedFileTypes()) {
-                $validationRules[] = 'extensions:'.$fileTypes;
-            }
 
-            if ($this->mimeTypes) {
-                $validationRules[] = 'mimes:'.$this->mimeTypes;
-            }
-
-            $validation = Validator::make(
-                ['file_data' => $uploadedFile],
-                ['file_data' => $validationRules]
-            );
+            $validation = \Config::get('cms.streamS3Uploads.enabled')
+                ? $this->makeValidatorForStreamedFile(
+                    $validationRules,
+                    (new File())->getDisk(),
+                    Input::get('key'),
+                    Input::get('name')
+                )
+                : $this->makeValidatorForUploadedFile($validationRules);
 
             if ($validation->fails()) {
                 throw new ValidationException($validation);
             }
 
-            if (!$uploadedFile->isValid()) {
-                throw new ApplicationException('File is not valid');
-            }
-
             $fileRelation = $this->getRelationObject();
 
             $file = $fileModel;
-            $file->data = $uploadedFile;
             $file->is_public = $fileRelation->isPublic();
+            $file->data = \Config::get('cms.streamS3Uploads.enabled')
+                ? [Storage::disk(), Input::get('key')]
+                : Input::file('file_data');
+
             $file->save();
 
             /**
@@ -486,6 +489,51 @@ class FileUpload extends FormWidgetBase
         }
 
         return $response;
+    }
+
+    protected function makeValidatorForStreamedFile($validationRules, $disk, $key, $name)
+    {
+        $validationRules = ['size' => $validationRules[0]];
+
+        if ($fileTypes = $this->getAcceptedFileTypes()) {
+            $validationRules['extension'] = 'ends_with:' . $fileTypes;
+        }
+
+        if ($fileTypes = $this->getAcceptedFileTypes()) {
+            $validationRules['name'] = 'ends_with:' . $fileTypes;
+        }
+
+        if ($this->mimeTypes) {
+            $validationRules['mime'] = 'in:' . $this->mimeTypes;
+        }
+
+        return Validator::make([
+            'size' => $disk->size($key),
+            'name' => $name,
+            'mime' => $disk->mimeType($key)
+        ], $validationRules);
+    }
+
+    protected function makeValidatorForUploadedFile($validationRules)
+    {
+        $uploadedFile = Input::file('file_data');
+
+        if (!$uploadedFile->isValid()) {
+            throw new ApplicationException('File is not valid');
+        }
+
+        if ($fileTypes = $this->getAcceptedFileTypes()) {
+            $validationRules[] = 'extensions:'.$fileTypes;
+        }
+
+        if ($this->mimeTypes) {
+            $validationRules[] = 'mimes:'.$this->mimeTypes;
+        }
+
+        return Validator::make(
+            ['file_data' => $uploadedFile],
+            ['file_data' => $validationRules]
+        );
     }
 
     /**
