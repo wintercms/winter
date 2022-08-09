@@ -5,7 +5,7 @@ use Carbon\Carbon;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
 
-class DbSystemAddAppBirthdayDate extends Migration
+return new class extends extends Migration
 {
     public function up()
     {
