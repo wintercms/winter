@@ -10,17 +10,18 @@ class DbSystemAddAppBirthdayDate extends Migration
     public function up()
     {
         $appBirthday = Parameter::get('system::app.birthday');
-
         if ($appBirthday) {
-            return $appBirthday;
+            // Return early if the birthday has already been set
+            return;
         }
 
-        $appBirthdayFromPlugins = PluginVersion::orderBy('created_at')->first()?->created_at;
-        $appBirthday = $appBirthdayFromPlugins ? Carbon::parse($appBirthdayFromPlugins)->timestamp : Carbon::now()->timestamp;
+        $firstPluginCreated = PluginVersion::orderBy('created_at')
+            ->first()
+            ?->created_at;
+
+        $appBirthday = $firstPluginCreated ?: Carbon::now();
 
         Parameter::set('system::app.birthday', $appBirthday);
-
-        return $appBirthday;
     }
 
     public function down()
