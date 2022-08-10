@@ -22,25 +22,27 @@ class MixCompileTest extends TestCase
 
     public function testCompileMultiple()
     {
-        putenv('NPM_PACKAGE_MANIFEST=modules/system/tests/fixtures/npm/package-ab.json');
-
         [$command, $output] = $this->makeCommand();
 
-        $result = $command->run(new ArrayInput([]), $output);
+        $result = $command->run(new ArrayInput([
+            '--manifest' => 'modules/system/tests/fixtures/npm/package-ac.json',
+            '--silent' => true
+        ]), $output);
 
         $this->assertIsInt($result);
         $this->assertEquals(0, $result);
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
-        $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testb/assets/dist/app.js'));
+        $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testc/assets/dist/app.js'));
     }
 
     public function testCompileMultipleWithErrors()
     {
-        putenv('NPM_PACKAGE_MANIFEST=modules/system/tests/fixtures/npm/package-abc.json');
-
         [$command, $output] = $this->makeCommand();
 
-        $result = $command->run(new ArrayInput([]), $output);
+        $result = $command->run(new ArrayInput([
+            '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
+            '--silent' => true
+        ]), $output);
 
         $this->assertIsInt($result);
         $this->assertEquals(1, $result);
@@ -51,11 +53,13 @@ class MixCompileTest extends TestCase
 
     public function testCompileTarget()
     {
-        putenv('NPM_PACKAGE_MANIFEST=modules/system/tests/fixtures/npm/package-abc.json');
-
         [$command, $output] = $this->makeCommand();
 
-        $result = $command->run(new ArrayInput(['--package' => 'mix.testa']), $output);
+        $result = $command->run(new ArrayInput([
+            '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
+            '--package' => 'mix.testa',
+            '--silent' => true
+        ]), $output);
 
         $this->assertIsInt($result);
         $this->assertEquals(0, $result);
@@ -66,17 +70,36 @@ class MixCompileTest extends TestCase
 
     public function testCompileTargetWithError()
     {
-        putenv('NPM_PACKAGE_MANIFEST=modules/system/tests/fixtures/npm/package-abc.json');
-
         [$command, $output] = $this->makeCommand();
 
-        $result = $command->run(new ArrayInput(['--package' => 'mix.testc']), $output);
+        $result = $command->run(new ArrayInput([
+            '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
+            '--package' => 'mix.testb',
+            '--silent' => true
+        ]), $output);
 
         $this->assertIsInt($result);
         $this->assertEquals(1, $result);
         $this->assertFileNotExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
-        $this->assertFileNotExists(base_path('modules/system/tests/fixtures/plugins/mix/testb/assets/dist/app.js'));
-        $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testc/assets/dist/app.js'));
+        $this->assertFileNotExists(base_path('modules/system/tests/fixtures/plugins/mix/testc/assets/dist/app.js'));
+        $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testb/assets/dist/app.js'));
+    }
+
+    public function testCompileTargetStopOnError()
+    {
+        [$command, $output] = $this->makeCommand();
+
+        $result = $command->run(new ArrayInput([
+            '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
+            '--stop-on-error' => true,
+            '--silent' => true
+        ]), $output);
+
+        $this->assertIsInt($result);
+        $this->assertEquals(1, $result);
+        $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
+        $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testb/assets/dist/app.js'));
+        $this->assertFileNotExists(base_path('modules/system/tests/fixtures/plugins/mix/testc/assets/dist/app.js'));
     }
 
     protected function makeCommand(): array
