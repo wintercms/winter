@@ -4,6 +4,9 @@ use File;
 use Yaml;
 use Db;
 use Carbon\Carbon;
+use Illuminate\Console\View\Components\Error;
+use Illuminate\Console\View\Components\Info;
+use Illuminate\Console\View\Components\Task;
 use Winter\Storm\Database\Updater;
 
 /**
@@ -81,13 +84,17 @@ class VersionManager
         $currentVersion = $this->getLatestFileVersion($code);
         $databaseVersion = $this->getDatabaseVersion($code);
 
+        $this->out('', true);
+
         // No updates needed
         if ($currentVersion === (string) $databaseVersion) {
-            $this->note(' - <info>Nothing to update.</info>');
+            $this->write(Info::class, 'Nothing to migrate.');
             return;
         }
 
         $newUpdates = $this->getNewFileVersions($code, $databaseVersion);
+
+        $this->write(Info::class, 'Running migrations.');
 
         foreach ($newUpdates as $version => $details) {
             $this->applyPluginUpdate($code, $version, $details);
@@ -96,6 +103,8 @@ class VersionManager
                 return true;
             }
         }
+
+        $this->out('', true);
 
         return true;
     }
@@ -172,29 +181,33 @@ class VersionManager
     {
         list($comments, $scripts) = $this->extractScriptsAndComments($details);
 
-        /*
-         * Apply scripts, if any
-         */
-        foreach ($scripts as $script) {
-            if ($this->hasDatabaseHistory($code, $version, $script)) {
-                continue;
+        $this->write(Task::class, sprintf(
+            '<info>%s</info>%s',
+            str_pad($version . ':', 10),
+            (strlen($comments[0]) > 120) ? substr($comments[0], 0, 120) . '...' : $comments[0]
+        ), function () use ($code, $version, $comments, $scripts) {
+            /*
+            * Apply scripts, if any
+            */
+            foreach ($scripts as $script) {
+                if ($this->hasDatabaseHistory($code, $version, $script)) {
+                    continue;
+                }
+
+                $this->applyDatabaseScript($code, $version, $script);
             }
 
-            $this->applyDatabaseScript($code, $version, $script);
-        }
-
-        /*
-         * Register the comment and update the version
-         */
-        if (!$this->hasDatabaseHistory($code, $version)) {
-            foreach ($comments as $comment) {
-                $this->applyDatabaseComment($code, $version, $comment);
-
-                $this->note(sprintf(' - <info>v%s: </info> %s', $version, $comment));
+            /*
+            * Register the comment and update the version
+            */
+            if (!$this->hasDatabaseHistory($code, $version)) {
+                foreach ($comments as $comment) {
+                    $this->applyDatabaseComment($code, $version, $comment);
+                }
             }
-        }
 
-        $this->setDatabaseVersion($code, $version);
+            $this->setDatabaseVersion($code, $version);
+        });
     }
 
     /**
@@ -477,7 +490,7 @@ class VersionManager
         $updateFile = $this->pluginManager->getPluginPath($code) . '/updates/' . $script;
 
         if (!File::isFile($updateFile)) {
-            $this->note('- <error>v' . $version . ':  Migration file "' . $script . '" not found</error>');
+            $this->write(Error::class, sprintf('Migration file "%s" not found.', $script));
             return;
         }
 
@@ -576,14 +589,32 @@ class VersionManager
     //
 
     /**
-     * Raise a note event for the migrator.
-     * @param string $message
-     * @return void
+     * Writes output to the console using a Laravel CLI View component.
+     *
+     * @param \Illuminate\Console\View\Components\Component $component
+     * @param array $arguments
+     * @return static
      */
-    protected function note($message)
+    protected function write($component, ...$arguments)
     {
         if ($this->notesOutput !== null) {
-            $this->notesOutput->writeln($message);
+            with(new $component($this->notesOutput))->render(...$arguments);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Writes output to the console.
+     *
+     * @param string $message
+     * @param bool $newline
+     * @return static
+     */
+    protected function out($message, $newline = false)
+    {
+        if ($this->notesOutput !== null) {
+            $this->notesOutput->write($message, $newline);
         }
 
         return $this;
