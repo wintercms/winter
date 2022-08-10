@@ -5,7 +5,7 @@ use Carbon\Carbon;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
 
-return new class extends extends Migration
+return new class extends Migration
 {
     public function up()
     {
@@ -27,4 +27,4 @@ return new class extends extends Migration
     public function down()
     {
     }
-}
+};
