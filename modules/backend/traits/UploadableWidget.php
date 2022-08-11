@@ -3,6 +3,8 @@
 use Str;
 use File;
 use Lang;
+use Config;
+use Storage;
 use Request;
 use Response;
 use ApplicationException;
@@ -26,61 +28,121 @@ trait UploadableWidget
     /**
      * Process file uploads submitted via AJAX
      *
-     * @return void
      * @throws ApplicationException If the file "file_data" wasn't detected in the request or if the file failed to pass validation / security checks
      */
-    public function onUpload()
+    public function onUpload(): ?\Illuminate\Http\Response
     {
         if ($this->readOnly) {
-            return;
+            return null;
+        }
+
+        $method = 'direct';
+
+        if (Config::get('cms.streamS3Uploads.enabled')) {
+            $method = 'stream';
+        }
+
+        switch ($method) {
+            case 'direct':
+                return $this->onUploadDirect();
+            case 'stream':
+                return $this->onUploadStream();
+            default:
+                throw new ApplicationException('Undefined upload method');
+        }
+    }
+
+    public function onUploadStream(): \Illuminate\Http\Response
+    {
+        if (!(Config::get('cms.streamS3Uploads.enabled') && Request::get('uuid'))) {
+            throw new ApplicationException('File missing from request');
         }
 
         try {
-            if (!Request::hasFile('file_data')) {
-                throw new ApplicationException('File missing from request');
+            $diskPath = Request::get('key');
+            $originalName = Request::get('name');
+
+            $fileName = $this->validateMediaFileName(
+                $originalName,
+                strtolower(pathinfo($originalName, PATHINFO_EXTENSION))
+            );
+
+            $disk = Storage::disk(Config::get('cms.storage.media.disk'));
+
+            /*
+             * See mime type handling in the asset manager
+             */
+            if (!$disk->exists($diskPath)) {
+                throw new ApplicationException('The file failed to uploaded');
             }
 
+            // Use the configured upload path unless it's null, in which case use the user-provided path
+            $path = Config::get('cms.storage.media.folder') . (
+                !empty($this->uploadPath)
+                    ? $this->uploadPath
+                    : Request::input('path')
+            );
+            $path = MediaLibrary::validatePath($path);
+            $filePath = rtrim($path, '/') . '/' . $fileName;
+
+            $disk->move($diskPath, $filePath);
+
+            /**
+             * @event media.file.streamedUpload
+             * Called after a file is uploaded via streaming
+             *
+             * Example usage:
+             *
+             *     Event::listen('media.file.streamedUpload', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) &$path) {
+             *         \Log::info($path . " was upoaded.");
+             *     });
+             *
+             * Or
+             *
+             *     $mediaWidget->bindEvent('file.streamedUpload', function ((string) &$path) {
+             *         \Log::info($path . " was uploaded");
+             *     });
+             *
+             */
+            $this->fireSystemEvent('media.file.streamedUpload', [&$filePath]);
+
+            $response = Response::make([
+                'link' => MediaLibrary::url($filePath),
+                'result' => 'success'
+            ]);
+        } catch (\Exception $ex) {
+            throw new ApplicationException($ex->getMessage());
+        }
+
+        return $response;
+    }
+
+    protected function onUploadDirect(): \Illuminate\Http\Response
+    {
+        if (!Request::hasFile('file_data')) {
+            throw new ApplicationException('File missing from request');
+        }
+
+        try {
             $uploadedFile = Request::file('file_data');
 
-            $fileName = $uploadedFile->getClientOriginalName();
-
-            /*
-             * Convert uppcare case file extensions to lower case
-             */
-            $extension = strtolower($uploadedFile->getClientOriginalExtension());
-            $fileName = File::name($fileName).'.'.$extension;
-
-            /*
-             * File name contains non-latin characters, attempt to slug the value
-             */
-            if (!$this->validateFileName($fileName)) {
-                $fileNameClean = $this->cleanFileName(File::name($fileName));
-                $fileName = $fileNameClean . '.' . $extension;
-            }
-
-            /*
-             * Check for unsafe file extensions
-             */
-            if (!$this->validateFileType($fileName)) {
-                throw new ApplicationException(Lang::get('backend::lang.media.type_blocked'));
-            }
+            $fileName = $this->validateMediaFileName(
+                $uploadedFile->getClientOriginalName(),
+                $uploadedFile->getClientOriginalExtension()
+            );
 
             /*
              * See mime type handling in the asset manager
              */
             if (!$uploadedFile->isValid()) {
                 if ($uploadedFile->getError() === UPLOAD_ERR_OK) {
-                    $message = "The file \"{$uploadedFile->getClientOriginalName()}\" uploaded successfully but wasn't available at {$uploadedFile->getPathName()}. Check to make sure that nothing moved it away.";
+                    $message = "The file \"{$uploadedFile->getClientOriginalName()}\" uploaded successfully but wasn't "
+                        . "available at {$uploadedFile->getPathName()}. Check to make sure that nothing moved it away.";
                 } else {
                     $message = $uploadedFile->getErrorMessage();
                 }
                 throw new ApplicationException($message);
             }
-
-            // Use the configured upload path unless it's null, in which case use the user-provided path
-            $path = !empty($this->uploadPath) ? $this->uploadPath : Request::input('path');
-            $path = MediaLibrary::validatePath($path);
-            $filePath = rtrim($path, '/') . '/' . $fileName;
 
             /*
              * getRealPath() can be empty for some environments (IIS)
@@ -88,6 +150,11 @@ trait UploadableWidget
             $realPath = empty(trim($uploadedFile->getRealPath()))
                 ? $uploadedFile->getPath() . DIRECTORY_SEPARATOR . $uploadedFile->getFileName()
                 : $uploadedFile->getRealPath();
+
+            // Use the configured upload path unless it's null, in which case use the user-provided path
+            $path = !empty($this->uploadPath) ? $this->uploadPath : Request::input('path');
+            $path = MediaLibrary::validatePath($path);
+            $filePath = rtrim($path, '/') . '/' . $fileName;
 
             MediaLibrary::instance()->put(
                 $filePath,
@@ -124,13 +191,38 @@ trait UploadableWidget
         return $response;
     }
 
+    protected function validateMediaFileName(string $fileName, string $extension): string
+    {
+        /*
+         * Convert uppcare case file extensions to lower case
+         */
+        $extension = strtolower($extension);
+        $fileName = File::name($fileName).'.'.$extension;
+
+        /*
+         * File name contains non-latin characters, attempt to slug the value
+         */
+        if (!$this->validateFileName($fileName)) {
+            $fileName = $this->cleanFileName(File::name($fileName)) . '.' . $extension;
+        }
+
+        /*
+         * Check for unsafe file extensions
+         */
+        if (!$this->validateFileType($fileName)) {
+            throw new ApplicationException(Lang::get('backend::lang.media.type_blocked'));
+        }
+
+        return $fileName;
+    }
+
     /**
      * Validate a proposed media item file name.
      *
      * @param string
      * @return bool
      */
-    protected function validateFileName($name)
+    protected function validateFileName($name): bool
     {
         if (!preg_match('/^[\w@\.\s_\-]+$/iu', $name)) {
             return false;
@@ -149,7 +241,7 @@ trait UploadableWidget
      * @param string
      * @return bool
      */
-    protected function validateFileType($name)
+    protected function validateFileType($name): bool
     {
         $extension = strtolower(File::extension($name));
 

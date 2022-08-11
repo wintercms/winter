@@ -66,6 +66,10 @@ class MediaManager extends WidgetBase
      */
     protected function loadAssets()
     {
+        if (\Config::get('cms.streamS3Uploads.enabled')) {
+            $this->addJs('/modules/system/assets/js/vapor/build/vapor.js');
+        }
+
         $this->addCss('css/mediamanager.css', 'core');
 
         if (Config::get('develop.decompileBackendAssets', false)) {
