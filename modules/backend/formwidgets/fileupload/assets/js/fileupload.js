@@ -138,7 +138,6 @@
 
         // if the vapor class is available then override the dropzone handling to use it
         if (typeof window.Vapor !== "undefined") {
-            const _this = this;
             // override the upload data method
             this.dropzone._uploadData = function _uploadData(files, dataBlocks) {
                 var _dropzone = this;
@@ -235,7 +234,7 @@
                     });
                 }
             }
-        };
+        }
     }
 
     FileUpload.prototype.onResizeFileInfo = function(file) {
