@@ -130,8 +130,6 @@
             this.uploaderOptions.headers['X-CSRF-TOKEN'] = token
         }
 
-        console.log([this.$el.get(0), this.options.paramName]);
-
         this.dropzone = new Dropzone(this.$el.get(0), this.uploaderOptions)
         this.dropzone.on('addedfile', this.proxy(this.onUploadAddedFile))
         this.dropzone.on('sending', this.proxy(this.onUploadSending))
@@ -141,11 +139,6 @@
         // if the vapor class is available then override the dropzone handling to use it
         if (typeof window.Vapor !== "undefined") {
             const _this = this;
-            // override the upload process handler to ensure process is displayed correctly
-            this.dropzone._updateFilesUploadProgress = function _updateFilesUploadProgress(file, progress) {
-                this.emit("uploadprogress", file, progress, file.size / progress);
-            };
-
             // override the upload data method
             this.dropzone._uploadData = function _uploadData(files, dataBlocks) {
                 var _dropzone = this;
@@ -157,10 +150,10 @@
                     Vapor.store(file, {
                         signedStorageUrl: "/winter/system/signed-storage-url",
                         progress: progress => {
-                            // = Math.round(progress * 100)
                             _dropzone._updateFilesUploadProgress(files, progress);
                         }
                     }).then(response => {
+                        // The following is an adapted version of the original _uploadData
                         var xhr = new XMLHttpRequest(),
                             method = _dropzone.resolveOption(_dropzone.options.method, files),
                             url = _dropzone.resolveOption(_dropzone.options.url, files),
@@ -192,7 +185,7 @@
                         // Some browsers do not have the .upload property
                         var progressObj = xhr.upload != null ? xhr.upload : xhr;
                         progressObj.onprogress = function (e) {
-                            return _dropzone.dropzone._updateFilesUploadProgress(files, xhr, e);
+                            return _dropzone._updateFilesUploadProgress(files, xhr, e);
                         };
 
                         var headers = {
