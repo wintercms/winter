@@ -18,6 +18,7 @@ use Assetic\Filter\CssImportFilter;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\JavaScriptMinifierFilter;
 use Assetic\Filter\StylesheetMinifyFilter;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Parse\Assetic\Cache\FilesystemCache;
 use Winter\Storm\Parse\Assetic\Filter\LessCompiler;
 use Winter\Storm\Parse\Assetic\Filter\ScssCompiler;
@@ -299,6 +300,7 @@ class CombineAssets
      * and processing aliases.
      * @param array $assets
      * @return array
+     * @throws SystemException
      */
     protected function prepareAssets(array $assets)
     {
@@ -317,8 +319,27 @@ class CombineAssets
              * Allow aliases to go through without an extension
              */
             if (substr($asset, 0, 1) == '@') {
-                $combineJs[] = $asset;
-                $combineCss[] = $asset;
+                $aliasName = substr($asset, 1);
+                $aliasFound = false;
+
+                if ($this->hasAlias($aliasName, 'js')) {
+                    $combineJs[] = $this->aliases['js'][$aliasName];
+                    $aliasFound = true;
+                }
+
+                if ($this->hasAlias($aliasName, 'css')) {
+                    $combineCss[] = $this->aliases['css'][$aliasName];
+                    $aliasFound = true;
+                }
+
+                /**
+                 * If not found, just add it to both assets stacks
+                 * It will naturally throw a "not found" error later
+                 */
+                if (!$aliasFound) {
+                    $combineCss[] = $asset;
+                    $combineJs[] = $asset;
+                }
                 continue;
             }
 
@@ -349,31 +370,7 @@ class CombineAssets
             $assets = $combineJs;
         }
         else {
-            $extension = null;
-            $assets = array_unique([...$combineCss, ...$combineJs]);
-        }
-
-        /*
-         * Apply registered aliases
-         */
-        if ($aliasMap = $this->getAliases($extension)) {
-            if ($extension === null) {
-                $aliasMap = array_map(function ($map) {
-                    return is_array($map) ? $map : [$map];
-                }, $aliasMap);
-                $aliasMap = array_reduce($aliasMap, 'array_merge', []);
-            }
-
-            foreach ($assets as $key => $asset) {
-                if (substr($asset, 0, 1) !== '@') {
-                    continue;
-                }
-                $_asset = substr($asset, 1);
-
-                if (isset($aliasMap[$_asset])) {
-                    $assets[$key] = $aliasMap[$_asset];
-                }
-            }
+            throw new SystemException(trans('system::lang.combiner.cant_guess_extension'));
         }
 
         return [$assets, $extension];
@@ -786,6 +783,23 @@ class CombineAssets
         }
 
         return null;
+    }
+
+    /**
+     * Returns if an asset alias is registered with this name
+     * @param string $alias
+     * @param string|null $extension
+     * @return bool
+     */
+    public function hasAlias(string $alias, string $extension = null): bool
+    {
+        $aliases = $this->getAliases($extension);
+
+        if (is_null($extension)) {
+            $aliases = array_reduce($aliases, 'array_merge', []);
+        }
+
+        return isset($aliases[$alias]);
     }
 
     //

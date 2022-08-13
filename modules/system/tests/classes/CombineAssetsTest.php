@@ -163,7 +163,7 @@ class CombineAssetsTest extends TestCase
         $response = $this->get($url);
         $assertContainsStyle1($response);
         $assertContainsStyle2($response);
-        $assertContainsScript1($response);
+        $this->assertStringNotContainsString('script1.js', $response->getContent());
 
         // 1 css 2 js
         $url = $combiner->combine(
@@ -172,21 +172,16 @@ class CombineAssetsTest extends TestCase
         );
         $this->assertNotNull($url);
         $response = $this->get($url);
-        $assertContainsStyle1($response);
         $assertContainsScript1($response);
         $assertContainsScript2($response);
+        $this->assertStringNotContainsString('.style-1', $response->getContent());
 
         // 2 css 2 js
-        $url = $combiner->combine(
+        $this->expectErrorMessage(trans('system::lang.combiner.cant_guess_extension'));
+        $combiner->combine(
             ['@css1', '@css2', '@js1', '@js2'],
             base_path() . '/modules/system/tests/fixtures/themes/test'
         );
-        $this->assertNotNull($url);
-        $response = $this->get($url);
-        $assertContainsStyle1($response);
-        $assertContainsStyle2($response);
-        $assertContainsScript1($response);
-        $assertContainsScript2($response);
 
         // 1 combined
         $url = $combiner->combine(
@@ -195,7 +190,7 @@ class CombineAssetsTest extends TestCase
         );
         $this->assertNotNull($url);
         $response = $this->get($url);
-        $assertContainsFrameworkCss($response);
+        $this->expectErrorMessage(trans('system::lang.combiner.cant_guess_extension'));
 
         // 1 combined 1 css
         $url = $combiner->combine(
@@ -218,14 +213,10 @@ class CombineAssetsTest extends TestCase
         $assertContainsScript2($response);
 
         // 1 combined 1 js 1 css
-        $url = $combiner->combine(
+        $this->expectErrorMessage(trans('system::lang.combiner.cant_guess_extension'));
+        $combiner->combine(
             ['@framework', '@js2', '@css2'],
             base_path() . '/modules/system/tests/fixtures/themes/test'
         );
-        $this->assertNotNull($url);
-        $response = $this->get($url);
-        $assertContainsFrameworkCss($response);
-        $assertContainsScript2($response);
-        $assertContainsStyle2($response);
     }
 }

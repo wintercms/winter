@@ -58,6 +58,7 @@ return [
     ],
     'combiner' => [
         'not_found' => "The combiner file ':name' is not found.",
+        'cant_guess_extension' => "The combiner can't guess the extension.",
     ],
     'system' => [
         'name' => 'System',
