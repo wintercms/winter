@@ -17,7 +17,9 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
     protected $signature = 'mix:watch
         {package : Defines the package to watch for changes}
         {webpackArgs?* : Arguments to pass through to the Webpack CLI}
-        {--f|production : Runs compilation in "production" mode}';
+        {--f|production : Runs compilation in "production" mode}
+        {--m|manifest= : Defines package.json to use for compile}
+        {--s|silent : Silent mode}';
 
     /**
      * @var string The console command description.
