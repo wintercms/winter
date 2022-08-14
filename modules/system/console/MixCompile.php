@@ -152,7 +152,7 @@ class MixCompile extends Command
 
     /**
      * Read the package.json file for the project, path configurable with the
-     * `NPM_PACKAGE_MANIFEST` env option
+     * `--manifest` option
      */
     protected function readNpmPackageManifest(): array
     {
