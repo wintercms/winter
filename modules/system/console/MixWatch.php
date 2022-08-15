@@ -114,9 +114,6 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
         return [];
     }
 
-        return [];
-    }
-
     /**
      * Handle the provided process signal
      */
