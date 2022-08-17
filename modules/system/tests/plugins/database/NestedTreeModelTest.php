@@ -115,12 +115,32 @@ class NestedTreeModelTest extends PluginTestCase
 
         $autumn = $orange->children()->create([
             'name' => 'Autumn Leaves',
-            'description' => 'Disccusion about the season of falling leaves.'
+            'description' => 'Discussion about the season of falling leaves.'
         ]);
 
         $autumn->children()->create([
             'name' => 'September',
             'description' => 'The start of the fall season.'
+        ]);
+
+        $orange->children()->create([
+            'name' => 'Summer Breeze',
+            'description' => 'Discussion about the wind at the ocean.'
+        ]);
+
+        $green = CategoryNested::create([
+            'name' => 'Category Green',
+            'description' => 'A root level test category',
+        ]);
+
+        $green->children()->create([
+            'name' => 'Winter Snow',
+            'description' => 'Discussion about the frosty snow flakes.'
+        ]);
+
+        $green->children()->create([
+            'name' => 'Spring Trees',
+            'description' => 'Discussion about the blooming gardens.'
         ]);
 
         $autumn->children()->create([
@@ -131,26 +151,6 @@ class NestedTreeModelTest extends PluginTestCase
         $autumn->children()->create([
             'name' => 'November',
             'description' => 'The end of the fall season.'
-        ]);
-
-        $orange->children()->create([
-            'name' => 'Summer Breeze',
-            'description' => 'Disccusion about the wind at the ocean.'
-        ]);
-
-        $green = CategoryNested::create([
-            'name' => 'Category Green',
-            'description' => 'A root level test category',
-        ]);
-
-        $green->children()->create([
-            'name' => 'Winter Snow',
-            'description' => 'Disccusion about the frosty snow flakes.'
-        ]);
-
-        $green->children()->create([
-            'name' => 'Spring Trees',
-            'description' => 'Disccusion about the blooming gardens.'
         ]);
 
         Model::reguard();
