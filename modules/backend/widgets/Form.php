@@ -1279,7 +1279,7 @@ class Form extends WidgetBase
      * @param $fieldOptions
      * @return mixed
      */
-    protected function getOptionsFromModel($field, $fieldOptions)
+    public function getOptionsFromModel($field, $fieldOptions)
     {
         /*
          * Advanced usage, supplied options are callable
