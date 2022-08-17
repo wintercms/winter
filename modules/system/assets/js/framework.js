@@ -585,7 +585,7 @@ if (window.jQuery.request !== undefined) {
         }
     }
 
-    function serializeFormToObj ($form) {
+    function serializeFormToObj($form) {
         var arrayData = $form.serializeArray(),
             objectData = {};
 
