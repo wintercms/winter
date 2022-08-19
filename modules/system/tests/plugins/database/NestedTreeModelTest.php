@@ -42,6 +42,33 @@ class NestedTreeModelTest extends PluginTestCase
         $this->assertEquals(2, $items->count());
     }
 
+    public function testWithoutChildrenScope()
+    {
+        $categoryOrange = CategoryNested::firstWhere('name', 'Autumn Leaves');
+        $items = $categoryOrange->withoutChildren()->pluck('name')->toArray();
+
+        $this->assertEquals([
+            'Category Orange',
+            'Summer Breeze',
+            'Category Green',
+            'Winter Snow',
+            'Spring Trees'
+        ], $items);
+
+        $categoryGreen = CategoryNested::firstWhere('name', 'Category Green');
+        $items = $categoryGreen->withoutChildren(true)->pluck('name')->toArray();
+
+        $this->assertEquals([
+            'Category Orange',
+            'Autumn Leaves',
+            'September',
+            'October',
+            'November',
+            'Summer Breeze',
+            'Category Green'
+        ], $items);
+    }
+
     public function testListsNested()
     {
         $array = CategoryNested::listsNested('name', 'id');
