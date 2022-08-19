@@ -27,11 +27,6 @@ Route::any('combine/{file}', 'System\Classes\SystemController@combine');
  */
 Route::get('resizer/{identifier}/{encodedUrl}', 'System\Classes\SystemController@resizer');
 
-/*
- * Signed storage url generator
- */
-Route::post('winter/system/signed-storage-url', 'System\Classes\SignedStorageUrlController@store');
-
 /**
  * @event system.route
  * Fires after system routes get added
