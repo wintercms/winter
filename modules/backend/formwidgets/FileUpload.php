@@ -408,9 +408,6 @@ class FileUpload extends FormWidgetBase
     {
         $this->addCss('css/fileupload.css', 'core');
         $this->addJs('js/fileupload.js', 'core');
-
-        // Allow for custom assets to be injected
-        Event::fire('fileUpload.loadAssets', [$this]);
     }
 
     /**
@@ -427,24 +424,36 @@ class FileUpload extends FormWidgetBase
     public function onUpload()
     {
         try {
-            if (!Input::hasFile('file_data') && !Event::fire('fileUploadWidget.validateInput', [Input::all()], true)) {
-                throw new ApplicationException('File missing from request');
-            }
-
             $fileModel = $this->getRelationModel();
 
-            $validationRules = ['max:'.$fileModel::getMaxFilesize()];
+            if (!($data = Event::fire('fileUploadWidget.onUpload', [$this], true))) {
+                if (!Input::hasFile('file_data')) {
+                    throw new ApplicationException('File missing from request');
+                }
 
-            if (!($validation = Event::fire('fileUploadWidget.makeValidate', [$this, $validationRules], true))) {
-                $validation = $this->makeValidatorForUploadedFile($validationRules);
-            }
-
-            if ($validation->fails()) {
-                throw new ValidationException($validation);
-            }
-
-            if (!($data = Event::fire('fileUploadWidget.getFileData', [], true))) {
+                $validationRules = ['max:'.$fileModel::getMaxFilesize()];
                 $data = Input::file('file_data');
+
+                if (!$data->isValid()) {
+                    throw new ApplicationException('File is not valid');
+                }
+
+                if ($fileTypes = $this->getAcceptedFileTypes()) {
+                    $validationRules[] = 'extensions:'.$fileTypes;
+                }
+
+                if ($this->mimeTypes) {
+                    $validationRules[] = 'mimes:'.$this->mimeTypes;
+                }
+
+                $validation = Validator::make(
+                    ['file_data' => $data],
+                    ['file_data' => $validationRules]
+                );
+
+                if ($validation->fails()) {
+                    throw new ValidationException($validation);
+                }
             }
 
             $fileRelation = $this->getRelationObject();
@@ -482,28 +491,6 @@ class FileUpload extends FormWidgetBase
         }
 
         return $response;
-    }
-
-    protected function makeValidatorForUploadedFile($validationRules)
-    {
-        $uploadedFile = Input::file('file_data');
-
-        if (!$uploadedFile->isValid()) {
-            throw new ApplicationException('File is not valid');
-        }
-
-        if ($fileTypes = $this->getAcceptedFileTypes()) {
-            $validationRules[] = 'extensions:'.$fileTypes;
-        }
-
-        if ($this->mimeTypes) {
-            $validationRules[] = 'mimes:'.$this->mimeTypes;
-        }
-
-        return Validator::make(
-            ['file_data' => $uploadedFile],
-            ['file_data' => $validationRules]
-        );
     }
 
     /**
