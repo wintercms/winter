@@ -50,10 +50,6 @@ mix
         './assets/js/snowboard/snowboard.extras.js',
         './assets/js/snowboard/build/snowboard.extras.js',
     )
-    .js(
-        './assets/js/vapor/vapor.js',
-        './assets/js/vapor/build/vapor.js',
-    )
 
     // Polyfill for all targeted browsers
     .polyfill({
