@@ -238,6 +238,8 @@
         }
 
         this.$el.on('keydown', '.fr-view figure', this.proxy(this.onFigureKeydown))
+
+        snowboard.globalEvent("richEditorInit", this);
     }
 
     RichEditor.prototype.dispose = function() {
