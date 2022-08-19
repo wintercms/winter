@@ -1,13 +1,10 @@
 <?php namespace Backend\FormWidgets;
 
 use Db;
-use Illuminate\Http\UploadedFile;
-use Symfony\Component\HttpFoundation\File\UploadedFile as BaseUploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Input;
+use Event;
 use Request;
 use Response;
-use System\Models\File;
 use Validator;
 use Backend\Widgets\Form;
 use Backend\Classes\FormField;
@@ -409,12 +406,11 @@ class FileUpload extends FormWidgetBase
      */
     protected function loadAssets()
     {
-        if (\Config::get('cms.streamS3Uploads.enabled')) {
-            $this->addJs('/modules/system/assets/js/vapor/build/vapor.js');
-        }
-
         $this->addCss('css/fileupload.css', 'core');
         $this->addJs('js/fileupload.js', 'core');
+
+        // Allow for custom assets to be injected
+        Event::fire('fileUpload.loadAssets', [$this]);
     }
 
     /**
@@ -431,7 +427,7 @@ class FileUpload extends FormWidgetBase
     public function onUpload()
     {
         try {
-            if (!Input::hasFile('file_data') && !(\Config::get('cms.streamS3Uploads.enabled') && Input::get('uuid'))) {
+            if (!Input::hasFile('file_data') && !Event::fire('fileUploadWidget.validateInput', [Input::all()], true)) {
                 throw new ApplicationException('File missing from request');
             }
 
@@ -439,26 +435,23 @@ class FileUpload extends FormWidgetBase
 
             $validationRules = ['max:'.$fileModel::getMaxFilesize()];
 
-            $validation = \Config::get('cms.streamS3Uploads.enabled')
-                ? $this->makeValidatorForStreamedFile(
-                    $validationRules,
-                    (new File())->getDisk(),
-                    Input::get('key'),
-                    Input::get('name')
-                )
-                : $this->makeValidatorForUploadedFile($validationRules);
+            if (!($validation = Event::fire('fileUploadWidget.makeValidate', [$this, $validationRules], true))) {
+                $validation = $this->makeValidatorForUploadedFile($validationRules);
+            }
 
             if ($validation->fails()) {
                 throw new ValidationException($validation);
+            }
+
+            if (!($data = Event::fire('fileUploadWidget.getFileData', [], true))) {
+                $data = Input::file('file_data');
             }
 
             $fileRelation = $this->getRelationObject();
 
             $file = $fileModel;
             $file->is_public = $fileRelation->isPublic();
-            $file->data = \Config::get('cms.streamS3Uploads.enabled')
-                ? [Storage::disk(), Input::get('key')]
-                : Input::file('file_data');
+            $file->data = $data;
 
             $file->save();
 
@@ -489,29 +482,6 @@ class FileUpload extends FormWidgetBase
         }
 
         return $response;
-    }
-
-    protected function makeValidatorForStreamedFile($validationRules, $disk, $key, $name)
-    {
-        $validationRules = ['size' => $validationRules[0]];
-
-        if ($fileTypes = $this->getAcceptedFileTypes()) {
-            $validationRules['extension'] = 'ends_with:' . $fileTypes;
-        }
-
-        if ($fileTypes = $this->getAcceptedFileTypes()) {
-            $validationRules['name'] = 'ends_with:' . $fileTypes;
-        }
-
-        if ($this->mimeTypes) {
-            $validationRules['mime'] = 'in:' . $this->mimeTypes;
-        }
-
-        return Validator::make([
-            'size' => $disk->size($key),
-            'name' => $name,
-            'mime' => $disk->mimeType($key)
-        ], $validationRules);
     }
 
     protected function makeValidatorForUploadedFile($validationRules)

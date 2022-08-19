@@ -3,6 +3,7 @@
 use Str;
 use Lang;
 use Input;
+use Event;
 use Config;
 use Backend;
 use ApplicationException;
@@ -66,10 +67,6 @@ class MediaManager extends WidgetBase
      */
     protected function loadAssets()
     {
-        if (\Config::get('cms.streamS3Uploads.enabled')) {
-            $this->addJs('/modules/system/assets/js/vapor/build/vapor.js');
-        }
-
         $this->addCss('css/mediamanager.css', 'core');
 
         if (Config::get('develop.decompileBackendAssets', false)) {
@@ -80,6 +77,9 @@ class MediaManager extends WidgetBase
         } else {
             $this->addJs('js/mediamanager-browser-min.js', 'core');
         }
+
+        // Allow for custom assets to be injected
+        Event::fire('mediaManager.loadAssets', [$this]);
     }
 
     /**

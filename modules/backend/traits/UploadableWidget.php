@@ -3,6 +3,7 @@
 use Str;
 use File;
 use Lang;
+use Event;
 use Config;
 use Storage;
 use Request;
@@ -36,85 +37,12 @@ trait UploadableWidget
             return null;
         }
 
-        $method = 'direct';
-
-        if (Config::get('cms.streamS3Uploads.enabled')) {
-            $method = 'stream';
+        // Allow for custom assets to be injected
+        if ($result = Event::fire('uploadableWidget.onUpload', [$this], true)) {
+            return $result;
         }
 
-        switch ($method) {
-            case 'direct':
-                return $this->onUploadDirect();
-            case 'stream':
-                return $this->onUploadStream();
-            default:
-                throw new ApplicationException('Undefined upload method');
-        }
-    }
-
-    public function onUploadStream(): \Illuminate\Http\Response
-    {
-        if (!(Config::get('cms.streamS3Uploads.enabled') && Request::get('uuid'))) {
-            throw new ApplicationException('File missing from request');
-        }
-
-        try {
-            $diskPath = Request::get('key');
-            $originalName = Request::get('name');
-
-            $fileName = $this->validateMediaFileName(
-                $originalName,
-                strtolower(pathinfo($originalName, PATHINFO_EXTENSION))
-            );
-
-            $disk = Storage::disk(Config::get('cms.storage.media.disk'));
-
-            /*
-             * See mime type handling in the asset manager
-             */
-            if (!$disk->exists($diskPath)) {
-                throw new ApplicationException('The file failed to uploaded');
-            }
-
-            // Use the configured upload path unless it's null, in which case use the user-provided path
-            $path = Config::get('cms.storage.media.folder') . (
-                !empty($this->uploadPath)
-                    ? $this->uploadPath
-                    : Request::input('path')
-            );
-            $path = MediaLibrary::validatePath($path);
-            $filePath = rtrim($path, '/') . '/' . $fileName;
-
-            $disk->move($diskPath, $filePath);
-
-            /**
-             * @event media.file.streamedUpload
-             * Called after a file is uploaded via streaming
-             *
-             * Example usage:
-             *
-             *     Event::listen('media.file.streamedUpload', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) &$path) {
-             *         \Log::info($path . " was upoaded.");
-             *     });
-             *
-             * Or
-             *
-             *     $mediaWidget->bindEvent('file.streamedUpload', function ((string) &$path) {
-             *         \Log::info($path . " was uploaded");
-             *     });
-             *
-             */
-            $this->fireSystemEvent('media.file.streamedUpload', [&$filePath]);
-
-            $response = Response::make([
-                'link' => MediaLibrary::url($filePath),
-                'result' => 'success'
-            ]);
-        } catch (\Exception $ex) {
-            throw new ApplicationException($ex->getMessage());
-        }
-
-        return $response;
+        return $this->onUploadDirect();
     }
 
     protected function onUploadDirect(): \Illuminate\Http\Response
@@ -191,7 +119,7 @@ trait UploadableWidget
         return $response;
     }
 
-    protected function validateMediaFileName(string $fileName, string $extension): string
+    public function validateMediaFileName(string $fileName, string $extension): string
     {
         /*
          * Convert uppcare case file extensions to lower case
