@@ -77,9 +77,6 @@ class MediaManager extends WidgetBase
         } else {
             $this->addJs('js/mediamanager-browser-min.js', 'core');
         }
-
-        // Allow for custom assets to be injected
-        Event::fire('mediaManager.loadAssets', [$this]);
     }
 
     /**
