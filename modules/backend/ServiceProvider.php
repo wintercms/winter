@@ -103,6 +103,11 @@ class ServiceProvider extends ModuleServiceProvider
                 $combiner->registerBundle('~/modules/backend/formwidgets/richeditor/assets/js/build.js');
             }
         });
+
+
+        \System\Classes\MixAssets::registerCallback(function (\System\Classes\MixAssets $mix) {
+            $mix->registerPackage('formwidget-richeditor', '~/modules/backend/formwidgets/richeditor/winter.mix.js');
+        });
     }
 
     /*

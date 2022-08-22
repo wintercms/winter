@@ -5,7 +5,8 @@
     "workspaces": {
         "packages": [
             "modules/backend",
-            "modules/system"
+            "modules/system",
+            "modules/backend/formwidgets/richeditor"
         ]
     }
 }

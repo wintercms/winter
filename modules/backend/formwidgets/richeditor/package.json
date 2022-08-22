@@ -1,0 +1,29 @@
+{
+    "name": "@wintercms/formwidget-richeditor",
+    "version": "1.0.0",
+    "description": "RichEditor FormWidget for the Winter CMS backend, built on Froala.",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wintercms/winter.git"
+    },
+    "author": {
+        "name": "Luke Towers",
+        "email": "hello@wintercms.com",
+        "url": "https://wintercms.com"
+    },
+    "contributors": [
+        {
+            "name": "Winter CMS Maintainers",
+            "url": "https://wintercms.com"
+        }
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/wintercms/winter/issues"
+    },
+    "homepage": "https://wintercms.com/",
+    "dependencies": {
+        "froala-editor": "^4.0.13"
+    }
+}
