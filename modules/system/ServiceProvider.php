@@ -447,11 +447,6 @@ class ServiceProvider extends ModuleServiceProvider
                     'tab' => 'system::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER],
                 ],
-                'system.stream_s3_uploads' => [
-                    'label' => 'system::lang.permissions.stream_s3_uploads',
-                    'tab' => 'system::lang.permissions.name',
-                    'roles' => [UserRole::CODE_DEVELOPER],
-                ]
             ]);
             $manager->registerPermissionOwnerAlias('Winter.System', 'October.System');
         });
