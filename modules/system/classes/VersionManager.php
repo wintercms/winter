@@ -181,11 +181,7 @@ class VersionManager
     {
         list($comments, $scripts) = $this->extractScriptsAndComments($details);
 
-        $this->write(Task::class, sprintf(
-            '<info>%s</info>%s',
-            str_pad($version . ':', 10),
-            (strlen($comments[0]) > 120) ? substr($comments[0], 0, 120) . '...' : $comments[0]
-        ), function () use ($code, $version, $comments, $scripts) {
+        $updateFn = function () use ($code, $version, $comments, $scripts) {
             /*
             * Apply scripts, if any
             */
@@ -207,7 +203,18 @@ class VersionManager
             }
 
             $this->setDatabaseVersion($code, $version);
-        });
+        };
+
+        if (is_null($this->notesOutput)) {
+            $updateFn();
+            return;
+        }
+
+        $this->write(Task::class, sprintf(
+            '<info>%s</info>%s',
+            str_pad($version . ':', 10),
+            (strlen($comments[0]) > 120) ? substr($comments[0], 0, 120) . '...' : $comments[0]
+        ), $updateFn);
     }
 
     /**
