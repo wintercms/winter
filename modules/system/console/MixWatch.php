@@ -92,8 +92,8 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
         $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
 
         $config = str_replace(
-            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%'],
-            [$basePath, 'mix._api.disableNotifications();', $mixJsPath, plugins_path(), base_path()],
+            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%'],
+            [$basePath, 'mix._api.disableNotifications();', $mixJsPath, plugins_path(), base_path(), (int) $this->option('silent')],
             $fixture
         );
 
