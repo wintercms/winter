@@ -38,7 +38,7 @@ trait UploadableWidget
         }
 
         // Allow for custom assets to be injected
-        if ($result = Event::fire('uploadableWidget.onUpload', [$this], true)) {
+        if ($result = Event::fire('backend.widgets.uploadable.onUpload', [$this], true)) {
             return $result;
         }
 

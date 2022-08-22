@@ -423,14 +423,22 @@ class FileUpload extends FormWidgetBase
     public function onUpload()
     {
         try {
-            $fileModel = $this->getRelationModel();
+            $file = $this->getRelationModel();
+            $fileRelation = $this->getRelationObject();
+            $file->is_public = $fileRelation->isPublic();
 
-            if (!($data = Event::fire('fileUploadWidget.onUpload', [$this], true))) {
+            /**
+             * @event backend.formwidgets.fileupload.onUpload
+             * Provides an opportunity to process the file upload using custom logic.
+             *
+             * Example usage ()
+             */
+            if (!($data = Event::fire('backend.formwidgets.fileupload.onUpload', [$this, $file], true))) {
                 if (!Input::hasFile('file_data')) {
                     throw new ApplicationException('File missing from request');
                 }
 
-                $validationRules = ['max:'.$fileModel::getMaxFilesize()];
+                $validationRules = ['max:'.$file::getMaxFilesize()];
                 $data = Input::file('file_data');
 
                 if (!$data->isValid()) {
@@ -455,12 +463,7 @@ class FileUpload extends FormWidgetBase
                 }
             }
 
-            $fileRelation = $this->getRelationObject();
-
-            $file = $fileModel;
-            $file->is_public = $fileRelation->isPublic();
             $file->data = $data;
-
             $file->save();
 
             /**
