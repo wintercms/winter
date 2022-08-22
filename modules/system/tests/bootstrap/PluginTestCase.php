@@ -11,6 +11,7 @@ use Config;
 use Mail;
 use Artisan;
 use ReflectionClass;
+use Exception;
 
 abstract class PluginTestCase extends TestCase
 {
@@ -132,7 +133,7 @@ abstract class PluginTestCase extends TestCase
             if (!$throwException) {
                 return;
             }
-            throw new \Exception(sprintf('Invalid plugin code: "%s"', $code));
+            throw new Exception(sprintf('Invalid plugin code: "%s"', $code));
         }
 
         $manager = PluginManager::instance();

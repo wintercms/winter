@@ -565,7 +565,7 @@ return [
         'please_select_move_dest' => 'Chọn nơi mà file hoặc thư mục cần chuyển đến.',
         'move_dest_src_match' => 'Chọn thư mục khác.',
         'empty_library' => 'Thư mục trống.Vui lòng tải tệp tin lên hoặc tạo thư mục mới để bắt đầu.',
-        'insert' => 'Chàn vào',
+        'insert' => 'Chèn vào',
         'crop_and_insert' => 'Cắt & Chèn vào',
         'select_single_image' => 'vui lòng chọn một hình ảnh.',
         'selection_not_image' => 'Mục đã chọn không phải là hình ảnh.',

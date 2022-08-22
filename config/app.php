@@ -119,14 +119,18 @@ return [
     |  - array: An array of proxies to trust
     |
     | Examples:
-    |  - To trust all proxies:
+    |  - To trust any proxy (i.e. a single proxy with an unknown IP address):
     |
-    |      'trustedProxies' => '*'
+    |      'trustedProxies' => '*',
+    |
+    |  - To trust all proxies (i.e. AWS ELB behind CloudFront):
+    |
+    |      'trustedProxies' => '**',
     |
     |  - To trust two IP addresses as proxies
     |
-    |      'trustedProxies' => '192.168.1.1, 192.168.1.2'
-    |      'trustedProxies' => ['192.168.1.1', '192.168.1.2']
+    |      'trustedProxies' => '192.168.1.1, 192.168.1.2',
+    |      'trustedProxies' => ['192.168.1.1', '192.168.1.2'],
     */
 
     'trustedProxies' => null,

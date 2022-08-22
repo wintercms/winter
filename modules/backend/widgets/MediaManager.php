@@ -676,11 +676,15 @@ class MediaManager extends WidgetBase
         $path = Input::get('path');
         $path = MediaLibrary::validatePath($path);
         $selectionParams = $this->getSelectionParams();
-
         $url = MediaLibrary::url($path);
-        $dimensions = Str::startsWith($url, '/')
-            ? getimagesize(base_path($url))
-            : getimagesize($url);
+
+        // @TODO: Improve support non-local disks
+        if (Str::startsWith($url, '/')) {
+            $localPath = base_path(implode("/", array_map("rawurldecode", explode("/", $url))));
+            $dimensions = getimagesize($localPath);
+        } else {
+            $dimensions = getimagesize($url);
+        }
 
         $width = $dimensions[0];
         $height = $dimensions[1] ?: 1;
