@@ -42,6 +42,7 @@ return [
             'key' => env('AWS_ACCESS_KEY_ID'),
             'region' => env('AWS_DEFAULT_REGION'),
             'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            'stream_uploads' => env('AWS_S3_STREAM_UPLOADS', false),
             'url' => env('AWS_URL'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
         ],
