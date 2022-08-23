@@ -10,6 +10,7 @@ use Request;
 use Response;
 use ApplicationException;
 use System\Classes\MediaLibrary;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
@@ -27,6 +28,34 @@ trait UploadableWidget
     // public $uploadPath;
 
     /**
+     * Returns the disk that will be used to store the uploaded file
+     */
+    public function uploadableGetDisk(): FilesystemAdapter
+    {
+        return MediaLibrary::instance()->getStorageDisk();
+    }
+
+    /**
+     * Returns the path on the disk to store the uploaded file
+     */
+    public function uploadableGetUploadPath(string $fileName): string
+    {
+        // Use the configured upload path unless it's null, in which case use the user-provided path
+        $path = !empty($this->uploadPath) ? $this->uploadPath : Request::input('path');
+        $path = MediaLibrary::validatePath($path);
+        $filePath = rtrim($path, '/') . '/' . $fileName;
+        return $filePath;
+    }
+
+    /**
+     * Returns the URL to the uploaded file
+     */
+    public function uploadableGetUploadUrl(string $diskPath): string
+    {
+        return MediaLibrary::url($diskPath);
+    }
+
+    /**
      * Process file uploads submitted via AJAX
      *
      * @throws ApplicationException If the file "file_data" wasn't detected in the request or if the file failed to pass validation / security checks
@@ -37,7 +66,12 @@ trait UploadableWidget
             return null;
         }
 
-        // Allow for custom assets to be injected
+        /**
+         * @event backend.widgets.uploadable.onUpload
+         * Provides an opportunity to process the file upload using custom logic.
+         *
+         * Example usage ()
+         */
         if ($result = Event::fire('backend.widgets.uploadable.onUpload', [$this], true)) {
             return $result;
         }
@@ -75,19 +109,13 @@ trait UploadableWidget
             /*
              * getRealPath() can be empty for some environments (IIS)
              */
-            $realPath = empty(trim($uploadedFile->getRealPath()))
+            $sourcePath = empty(trim($uploadedFile->getRealPath()))
                 ? $uploadedFile->getPath() . DIRECTORY_SEPARATOR . $uploadedFile->getFileName()
                 : $uploadedFile->getRealPath();
 
-            // Use the configured upload path unless it's null, in which case use the user-provided path
-            $path = !empty($this->uploadPath) ? $this->uploadPath : Request::input('path');
-            $path = MediaLibrary::validatePath($path);
-            $filePath = rtrim($path, '/') . '/' . $fileName;
+            $filePath = $this->uploadableGetUploadPath($fileName);
 
-            MediaLibrary::instance()->put(
-                $filePath,
-                File::get($realPath)
-            );
+            $this->uploadableGetDisk()->put($filePath, File::get($sourcePath));
 
             /**
              * @event media.file.upload
@@ -109,7 +137,7 @@ trait UploadableWidget
             $this->fireSystemEvent('media.file.upload', [&$filePath, $uploadedFile]);
 
             $response = Response::make([
-                'link' => MediaLibrary::url($filePath),
+                'link' => $this->uploadableGetUploadUrl($filePath),
                 'result' => 'success'
             ]);
         } catch (\Exception $ex) {
