@@ -154,7 +154,7 @@ class TagList extends FormWidgetBase
         $value = parent::getLoadValue();
 
         if ($this->mode === static::MODE_RELATION) {
-            return $value ?: $this->getRelationObject()->lists($this->nameFrom);
+            return $this->getRelationObject()->lists($this->nameFrom);
         }
 
         return $this->mode === static::MODE_STRING

@@ -235,8 +235,8 @@
         // ensure that the widget is properly initialized to handle the upload
         var $form = this.$el.closest('form')
         if ($form.length > 0) {
-            var parentFormData = $form.getParentFormData()
-            $.each(parentFormData, function (key) {
+            var requestParentData = $form.getRequestParentData()
+            $.each(requestParentData, function (key) {
                 formData.append(key, this)
             })
         }
