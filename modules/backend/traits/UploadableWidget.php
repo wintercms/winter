@@ -50,10 +50,18 @@ trait UploadableWidget
 
     /**
      * Returns the URL to the uploaded file
+     *
+     * @TODO: Replace cms.storage system with real disks
      */
     public function uploadableGetUploadUrl(string $diskPath): string
     {
-        return MediaLibrary::url($diskPath);
+        // Get the media folder
+        $storageFolder = MediaLibrary::instance()->getMediaPath('');
+
+        // Remove the media folder from the provided disk path since it already has it
+        $url = MediaLibrary::url(Str::after($diskPath, $storageFolder));
+
+        return $url;
     }
 
     /**
