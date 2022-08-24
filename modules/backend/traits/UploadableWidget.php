@@ -43,6 +43,7 @@ trait UploadableWidget
         // Use the configured upload path unless it's null, in which case use the user-provided path
         $path = !empty($this->uploadPath) ? $this->uploadPath : Request::input('path');
         $path = MediaLibrary::validatePath($path);
+        $path = MediaLibrary::instance()->getMediaPath($path);
         $filePath = rtrim($path, '/') . '/' . $fileName;
         return $filePath;
     }
