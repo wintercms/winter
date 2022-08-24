@@ -145,7 +145,8 @@ this.$textarea.on('froalaEditor.paste.beforeCleanup',this.proxy(this.beforeClean
 this.$form.on('oc.beforeRequest',this.proxy(this.onFormBeforeRequest))
 this.$textarea.froalaEditor(froalaOptions)
 this.editor=this.$textarea.data('froala.editor')
-if(this.options.readOnly){this.editor.edit.off()}this.$el.on('keydown','.fr-view figure',this.proxy(this.onFigureKeydown))}
+if(this.options.readOnly){this.editor.edit.off()}this.$el.on('keydown','.fr-view figure',this.proxy(this.onFigureKeydown))
+snowboard.globalEvent("richEditorInit",this);}
 RichEditor.prototype.dispose=function(){this.unregisterHandlers()
 this.$textarea.froalaEditor('destroy')
 this.$el.removeData('oc.richEditor')
