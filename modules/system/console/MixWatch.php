@@ -60,6 +60,12 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
             sprintf('Watching package "%s" for changes', $name)
         );
         $this->mixJsPath = $relativeMixJsPath;
+
+        // Create Windows signal handler
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' && function_exists('sapi_windows_set_ctrl_handler')) {
+            sapi_windows_set_ctrl_handler([$this, 'handleWindowsSignal'], true);
+        }
+
         if ($this->mixPackage(base_path($relativeMixJsPath)) !== 0) {
             $this->error(
                 sprintf('Unable to compile package "%s"', $name)
@@ -122,12 +128,26 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
         // Cleanup
         $this->removeWebpackConfig(base_path($this->mixJsPath));
 
-        //Windows fix for signal issue
-        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
+        // Exit cleanly at this point, if this was a user termination
+        if (in_array($signal, [SIGINT, SIGQUIT])) {
+            exit(0);
+        }
+    }
+
+    /**
+     * Handles the provided Windows process singal.
+     */
+    public function handleWindowsSignal(int $event): void
+    {
+        if ($event === PHP_WINDOWS_EVENT_CTRL_C || $event === PHP_WINDOWS_EVENT_CTRL_BREAK) {
+            // Cleanup
+            $this->removeWebpackConfig(base_path($this->mixJsPath));
+
+            // Removes the handler
+            sapi_windows_set_ctrl_handler([$this, 'handleWindowsSignal'], false);
+
             // Exit cleanly at this point, if this was a user termination
-            if (in_array($signal, [SIGINT, SIGQUIT])) {
-                exit(0);
-            }
+            exit(0);
         }
     }
 }
