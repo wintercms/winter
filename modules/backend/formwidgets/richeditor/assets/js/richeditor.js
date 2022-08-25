@@ -239,7 +239,7 @@
 
         this.$el.on('keydown', '.fr-view figure', this.proxy(this.onFigureKeydown))
 
-        snowboard.globalEvent("richEditorInit", this);
+        Snowboard.globalEvent("formwidgets.richeditor.init",this)
     }
 
     RichEditor.prototype.dispose = function() {

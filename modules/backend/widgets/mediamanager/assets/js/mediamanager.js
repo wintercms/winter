@@ -737,7 +737,7 @@
         this.dropzone.on('error', this.proxy(this.uploadError))
         this.dropzone.on('success', this.proxy(this.uploadSuccess))
 
-        snowboard.globalEvent("mediaManagerInitUploader", this);
+        Snowboard.globalEvent("widgets.mediamanager.initUploader", this);
     }
 
     MediaManager.prototype.destroyUploader = function() {
