@@ -26,6 +26,9 @@ return [
     |
     | Supported Drivers: "local", "ftp", "sftp", "s3"
     |
+    | NOTE: s3's stream_uploads option requires the Winter.DriverAWS plugin
+    | to be installed and enabled.
+    |
     */
 
     'disks' => [
