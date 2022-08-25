@@ -34,6 +34,7 @@ if ($this->previewMode || $field->readOnly) {
             </button>
         <?php endif ?>
         <button
+            id="<?= $this->getId('popupTrigger') ?>"
             class="btn btn-default find-record"
             data-control="popup"
             data-size="huge"

@@ -10,9 +10,11 @@ if(useFlash){requestHeaders['X-WINTER-REQUEST-FLASH']=1}var csrfToken=getXSRFTok
 if(csrfToken){requestHeaders['X-XSRF-TOKEN']=csrfToken}var requestData,inputName,data={}
 $.each($el.parents('[data-request-data]').toArray().reverse(),function extendRequest(){$.extend(data,paramToObj('data-request-data',$(this).data('request-data')))})
 if($el.is(':input')&&!$form.length){inputName=$el.attr('name')
-if(inputName!==undefined&&options.data[inputName]===undefined){options.data[inputName]=$el.val()}}if(options.data!==undefined&&!$.isEmptyObject(options.data)){$.extend(data,options.data)}if(useFiles){requestData=new FormData($form.length?$form.get(0):undefined)
+if(inputName!==undefined&&options.data[inputName]===undefined){options.data[inputName]=$el.val()}}if(options.data!==undefined&&!$.isEmptyObject(options.data)){$.extend(data,options.data)}var requestParentData=$form.getRequestParentData()
+if(useFiles){requestData=new FormData()
+$.each(requestParentData,function(key){requestData.append(key,this)})
 if($el.is(':file')&&inputName){$.each($el.prop('files'),function(){requestData.append(inputName,this)})
-delete data[inputName]}$.each(data,function(key){if(typeof Blob!=="undefined"&&this instanceof Blob&&this.filename){requestData.append(key,this,this.filename)}else{requestData.append(key,this)}})}else{requestData=[$form.serialize(),$.param(data)].filter(Boolean).join('&')}var requestOptions={url:url,crossDomain:false,global:options.ajaxGlobal,context:context,headers:requestHeaders,success:function(data,textStatus,jqXHR){if(this.options.beforeUpdate.apply(this,[data,textStatus,jqXHR])===false)return
+delete data[inputName]}$.each(data,function(key){if(typeof Blob!=="undefined"&&this instanceof Blob&&this.filename){requestData.append(key,this,this.filename)}else{requestData.append(key,this)}})}else{requestData=[$.param(requestParentData),$.param(data)].filter(Boolean).join('&')}var requestOptions={url:url,crossDomain:false,global:options.ajaxGlobal,context:context,headers:requestHeaders,success:function(data,textStatus,jqXHR){if(this.options.beforeUpdate.apply(this,[data,textStatus,jqXHR])===false)return
 if(options.evalBeforeUpdate&&eval('(function($el, context, data, textStatus, jqXHR) {'+options.evalBeforeUpdate+'}.call($el.get(0), $el, context, data, textStatus, jqXHR))')===false)return
 var _event=jQuery.Event('ajaxBeforeUpdate')
 $triggerEl.trigger(_event,[context,data,textStatus,jqXHR])
@@ -68,8 +70,7 @@ Request.prototype.extractPartials=function(update){var result=[]
 for(var partial in update)result.push(partial)
 return result.join('&')}
 var old=$.fn.request
-$.fn.request=function(handler,option){var args=arguments
-var $this=$(this).first()
+$.fn.request=function(handler,option){var $this=$(this).first()
 var data={evalBeforeUpdate:$this.data('request-before-update'),evalSuccess:$this.data('request-success'),evalError:$this.data('request-error'),evalComplete:$this.data('request-complete'),ajaxGlobal:$this.data('request-ajax-global'),confirm:$this.data('request-confirm'),redirect:$this.data('request-redirect'),loading:$this.data('request-loading'),flash:$this.data('request-flash'),files:$this.data('request-files'),browserValidate:$this.data('browser-validate'),form:$this.data('request-form'),url:$this.data('request-url'),update:paramToObj('data-request-update',$this.data('request-update')),data:paramToObj('data-request-data',$this.data('request-data'))}
 if(!handler)handler=$this.data('request')
 var options=$.extend(true,{},Request.DEFAULTS,data,typeof option=='object'&&option)
@@ -78,9 +79,10 @@ $.fn.request.Constructor=Request
 $.request=function(handler,option){return $(document).request(handler,option)}
 $.fn.request.noConflict=function(){$.fn.request=old
 return this}
+$.fn.getRequestParentData=function(){var $form=$(this).first(),parentDataObjects=[serializeFormToObj($form)],parentFormData={};var findParentForms=function($form){if($form.length&&$form.data('request-parent')){var $parentEl=$($form.data('request-parent'));if($parentEl.length){var parentEmbeddedData={};$.each($parentEl.parents('[data-request-data]').toArray().reverse(),function extendRequest(){$.extend(parentEmbeddedData,paramToObj('data-request-data',$(this).data('request-data')));});if($parentEl.is('[data-request-data]')){$.extend(parentEmbeddedData,paramToObj('data-request-data',$parentEl.data('request-data')));}var $parentForm=$parentEl.closest('form');if($parentForm.length){parentDataObjects.push($.extend(serializeFormToObj($parentForm),parentEmbeddedData));findParentForms($parentForm);}}}};findParentForms($form);parentDataObjects.reverse().forEach(function(data){$.extend(parentFormData,data);});return parentFormData;}
 function paramToObj(name,value){if(value===undefined)value=''
 if(typeof value=='object')return value
-try{return ocJSON("{"+value+"}")}catch(e){throw new Error('Error parsing the '+name+' attribute value. '+e)}}function getXSRFToken(){var cookieValue=null
+try{return ocJSON("{"+value+"}")}catch(e){throw new Error('Error parsing the '+name+' attribute value. '+e)}}function serializeFormToObj($form){var arrayData=$form.serializeArray(),objectData={};arrayData.forEach(function(field){objectData[field.name]=field.value;});return objectData;}function getXSRFToken(){var cookieValue=null
 if(document.cookie&&document.cookie!=''){var cookies=document.cookie.split(';')
 for(var i=0;i<cookies.length;i++){var cookie=jQuery.trim(cookies[i])
 if(cookie.substring(0,11)==('XSRF-TOKEN'+'=')){cookieValue=decodeURIComponent(cookie.substring(11))
