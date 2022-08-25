@@ -3,6 +3,7 @@
 use Str;
 use Lang;
 use Input;
+use Event;
 use Config;
 use Backend;
 use ApplicationException;

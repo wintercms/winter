@@ -135,6 +135,8 @@
         this.dropzone.on('sending', this.proxy(this.onUploadSending))
         this.dropzone.on('success', this.proxy(this.onUploadSuccess))
         this.dropzone.on('error', this.proxy(this.onUploadError))
+
+        Snowboard.globalEvent("formwidgets.fileupload.initUploader", this);
     }
 
     FileUpload.prototype.onResizeFileInfo = function(file) {

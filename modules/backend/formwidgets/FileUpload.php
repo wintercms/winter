@@ -2,6 +2,7 @@
 
 use Db;
 use Input;
+use Event;
 use Request;
 use Response;
 use Validator;
@@ -422,40 +423,47 @@ class FileUpload extends FormWidgetBase
     public function onUpload()
     {
         try {
-            if (!Input::hasFile('file_data')) {
-                throw new ApplicationException('File missing from request');
-            }
-
-            $fileModel = $this->getRelationModel();
-            $uploadedFile = Input::file('file_data');
-
-            $validationRules = ['max:'.$fileModel::getMaxFilesize()];
-            if ($fileTypes = $this->getAcceptedFileTypes()) {
-                $validationRules[] = 'extensions:'.$fileTypes;
-            }
-
-            if ($this->mimeTypes) {
-                $validationRules[] = 'mimes:'.$this->mimeTypes;
-            }
-
-            $validation = Validator::make(
-                ['file_data' => $uploadedFile],
-                ['file_data' => $validationRules]
-            );
-
-            if ($validation->fails()) {
-                throw new ValidationException($validation);
-            }
-
-            if (!$uploadedFile->isValid()) {
-                throw new ApplicationException('File is not valid');
-            }
-
+            $file = $this->getRelationModel();
             $fileRelation = $this->getRelationObject();
-
-            $file = $fileModel;
-            $file->data = $uploadedFile;
             $file->is_public = $fileRelation->isPublic();
+
+            /**
+             * @event backend.formwidgets.fileupload.onUpload
+             * Provides an opportunity to process the file upload using custom logic.
+             *
+             * Example usage ()
+             */
+            if (!($data = Event::fire('backend.formwidgets.fileupload.onUpload', [$this, $file], true))) {
+                if (!Input::hasFile('file_data')) {
+                    throw new ApplicationException('File missing from request');
+                }
+
+                $validationRules = ['max:'.$file::getMaxFilesize()];
+                $data = Input::file('file_data');
+
+                if (!$data->isValid()) {
+                    throw new ApplicationException('File is not valid');
+                }
+
+                if ($fileTypes = $this->getAcceptedFileTypes()) {
+                    $validationRules[] = 'extensions:'.$fileTypes;
+                }
+
+                if ($this->mimeTypes) {
+                    $validationRules[] = 'mimes:'.$this->mimeTypes;
+                }
+
+                $validation = Validator::make(
+                    ['file_data' => $data],
+                    ['file_data' => $validationRules]
+                );
+
+                if ($validation->fails()) {
+                    throw new ValidationException($validation);
+                }
+            }
+
+            $file->data = $data;
             $file->save();
 
             /**

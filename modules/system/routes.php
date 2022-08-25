@@ -27,7 +27,6 @@ Route::any('combine/{file}', 'System\Classes\SystemController@combine');
  */
 Route::get('resizer/{identifier}/{encodedUrl}', 'System\Classes\SystemController@resizer');
 
-
 /**
  * @event system.route
  * Fires after system routes get added
