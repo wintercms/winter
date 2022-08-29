@@ -49,7 +49,7 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
         $package = $packages[$name];
 
         $relativeMixJsPath = $package['mix'];
-        if (!$this->canCompilePackage(base_path($relativeMixJsPath))) {
+        if (!$this->canCompilePackage($relativeMixJsPath)) {
             $this->error(
                 sprintf('Unable to watch "%s", %s was not found in the package.json\'s workspaces.packages property. Try running mix:install first.', $name, $relativeMixJsPath)
             );
@@ -99,7 +99,7 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
 
         $config = str_replace(
             ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%'],
-            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path(), (int) $this->option('silent'))],
+            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent')],
             $fixture
         );
 
@@ -112,12 +112,12 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
      */
     public function getSubscribedSignals(): array
     {
-        //Handle signal issue that exists on Windows
-        if (strtoupper(substr(PHP_OS, 0, 3)) !== 'WIN') {
-            return [SIGINT, SIGTERM, SIGQUIT];
+        //Return empty subscribed signals to the Symfony Console Application Bootloader.
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            return [];
         }
 
-        return [];
+        return [SIGINT, SIGTERM, SIGQUIT];
     }
 
     /**

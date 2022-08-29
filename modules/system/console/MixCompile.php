@@ -4,6 +4,7 @@ use File;
 use Winter\Storm\Console\Command;
 use Symfony\Component\Process\Process;
 use System\Classes\MixAssets;
+use Winter\Storm\Support\Str;
 
 class MixCompile extends Command
 {
@@ -91,7 +92,7 @@ class MixCompile extends Command
         $exits = [];
         foreach ($registeredPackages as $name => $package) {
             $relativeMixJsPath = $package['mix'];
-            if (!$this->canCompilePackage(base_path($relativeMixJsPath))) {
+            if (!$this->canCompilePackage($relativeMixJsPath)) {
                 $this->error(sprintf(
                     'Unable to compile "%s", %s was not found in the package.json\'s workspaces.packages property.'
                      . ' Try running mix:install first.',
@@ -146,8 +147,8 @@ class MixCompile extends Command
         }
 
         $workspacesPackages = $this->packageJson['workspaces']['packages'] ?? [];
-
-        return in_array($this->getPackagePath($mixJsPath), $workspacesPackages);
+        $packagePathUnix = Str::replace("\\","/", $this->getPackagePath($mixJsPath));
+        return in_array($packagePathUnix, $workspacesPackages);
     }
 
     /**
@@ -222,8 +223,8 @@ class MixCompile extends Command
         $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
 
         $config = str_replace(
-            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%'],
-            [addslashes($basePath), '', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path())],
+            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%'],
+            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent')],
             $fixture
         );
 

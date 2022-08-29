@@ -82,7 +82,7 @@ class MixAssets
                 }
 
                 foreach ($packageArray as $name => $package) {
-                    $this->registerPackage($name, PluginManager::instance()->getPluginPath($pluginCode) . DIRECTORY_SEPARATOR . $package);
+                    $this->registerPackage($name, PluginManager::instance()->getPluginPath($pluginCode) . "/" . $package);
                 }
             }
         }
@@ -99,7 +99,7 @@ class MixAssets
 
                 if (count($mix)) {
                     foreach ($mix as $name => $file) {
-                        $this->registerPackage($name, $theme->getPath() . DIRECTORY_SEPARATOR . $file);
+                        $this->registerPackage($name, $theme->getPath() . "/" . $file);
                     }
                 }
             }
@@ -110,7 +110,7 @@ class MixAssets
         // Search modules for Mix packages to autoregister
         foreach ($enabledModules as $module) {
             $module = strtolower($module);
-            $path = base_path("modules/$module") . DIRECTORY_SEPARATOR . $this->mixJs;
+            $path = base_path("modules" . DIRECTORY_SEPARATOR . "$module") . DIRECTORY_SEPARATOR . $this->mixJs;
             if (File::exists($path)) {
                 $packagePaths["module-$module"] = $path;
             }
@@ -119,7 +119,7 @@ class MixAssets
         // Search plugins for Mix packages to autoregister
         $plugins = PluginManager::instance()->getPlugins();
         foreach ($plugins as $plugin) {
-            $path = $plugin->getPluginPath() . DIRECTORY_SEPARATOR . $this->mixJs;
+            $path = $plugin->getPluginPath() . "/" . $this->mixJs;
             if (File::exists($path)) {
                 $packagePaths[$plugin->getPluginIdentifier()] = $path;
             }
@@ -129,7 +129,7 @@ class MixAssets
         if (in_array('Cms', $enabledModules)) {
             $themes = Theme::all();
             foreach ($themes as $theme) {
-                $path = $theme->getPath() . DIRECTORY_SEPARATOR . $this->mixJs;
+                $path = $theme->getPath() . "/" . $this->mixJs;
                 if (File::exists($path)) {
                     $packagePaths["theme-" . $theme->getId()] = $path;
                 }
@@ -242,7 +242,7 @@ class MixAssets
             );
         }
 
-        $package = "$path" . DIRECTORY_SEPARATOR . "{$this->packageJson}";
+        $package = "$path/{$this->packageJson}";
         $mix = "$path" . DIRECTORY_SEPARATOR . "$mixJs";
 
         // Check for any existing package that already registers the given Mix path
