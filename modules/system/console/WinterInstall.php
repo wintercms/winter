@@ -361,15 +361,13 @@ class WinterInstall extends Command
 
     protected function setupAdminUser()
     {
-        SeedSetupAdmin::$password = Str::random(22);
-
         $this->line('Enter a new value, or press ENTER for the default');
 
         SeedSetupAdmin::$firstName = $this->ask('First Name', SeedSetupAdmin::$firstName);
         SeedSetupAdmin::$lastName = $this->ask('Last Name', SeedSetupAdmin::$lastName);
         SeedSetupAdmin::$email = $this->ask('Email Address', SeedSetupAdmin::$email);
         SeedSetupAdmin::$login = $this->ask('Admin Login', SeedSetupAdmin::$login);
-        SeedSetupAdmin::$password = $this->ask('Admin Password', SeedSetupAdmin::$password);
+        SeedSetupAdmin::$password = $this->ask('Admin Password', Str::random(22));
 
         if (!$this->confirm('Is the information correct?', true)) {
             $this->setupAdminUser();
