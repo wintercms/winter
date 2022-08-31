@@ -16,7 +16,7 @@
         <div class="form-buttons">
             <div class="loading-indicator-container">
                 <button
-                    type="submit"
+                    type="button"
                     data-request="onSave"
                     data-hotkey="ctrl+s, cmd+s"
                     data-load-indicator="<?= e(trans('backend::lang.form.creating_name', ['name' => trans('{{ model_lang_key }}.label')])); ?>"
