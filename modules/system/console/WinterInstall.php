@@ -361,6 +361,8 @@ class WinterInstall extends Command
 
     protected function setupAdminUser()
     {
+        SeedSetupAdmin::$password = Str::random(22);
+
         $this->line('Enter a new value, or press ENTER for the default');
 
         SeedSetupAdmin::$firstName = $this->ask('First Name', SeedSetupAdmin::$firstName);
