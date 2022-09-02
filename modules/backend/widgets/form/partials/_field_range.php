@@ -6,6 +6,13 @@
         $min = $field->config['min'] ?? 0;
         $max = $field->config['max'] ?? 100;
         $step = $field->config['step'] ?? 1;
+        $value = $field->value;
+        if ($min > $max) {
+            $min = $max - $step;
+        }
+        if (is_null($value)) {
+            $value = ($min + $max) / 2;
+        }
     ?>
 
     <input
@@ -13,12 +20,12 @@
         step="<?= $step ?>"
         name="<?= $field->getName() ?>"
         id="<?= $field->getId() ?>"
-        value="<?= e($field->value) ?>"
+        value="<?= e($value) ?>"
         min="<?= $min ?>"
-        min="<?= $max ?>"
+        max="<?= $max ?>"
         <?= $field->getAttributes() ?>
     />
-    <span style="position: absolute; transform: translateX(-50%)"><?= isset($field->value) ? $field->value : 50 ?></span>
+    <span style="position: absolute; transform: translateX(-50%)"></span>
     <script>
         (() => {
             const input = document.getElementById("<?= $field->getId() ?>");
@@ -30,4 +37,4 @@
             input.dispatchEvent(new Event('input'));
         })();
     </script>
-<?php endif ?>
+<?php endif; ?>
