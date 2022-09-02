@@ -20,7 +20,7 @@
     />
     <span style="position: absolute; transform: translateX(-50%)"><?= isset($field->value) ? $field->value : 50 ?></span>
     <script>
-        $(document).ready(function () {
+        (() => {
             const input = document.getElementById("<?= $field->getId() ?>");
             input.addEventListener("input", function () {
                 this.nextElementSibling.innerHTML = this.value;
@@ -28,6 +28,6 @@
                 this.nextElementSibling.style.left = `calc(${pos}% + ${8 - pos * 0.15}px)`;
             });
             input.dispatchEvent(new Event('input'));
-        });
+        })();
     </script>
 <?php endif ?>
