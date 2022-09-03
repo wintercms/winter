@@ -162,6 +162,9 @@ class MixInstall extends Command
 
         // Process each package
         foreach ($registeredPackages as $name => $package) {
+            //To compare package path, windows based directory seperators are fixed or path left as is
+            $unixPackagePath = Str::replace('\\', '/', $package['path']);
+
             // Detect missing winter.mix.js files and install them
             if (!File::exists($package['mix'])) {
                 $this->info(
@@ -171,7 +174,7 @@ class MixInstall extends Command
             }
 
             // Add the package path to the instance's package.json->workspaces->packages property if not present
-            if (!in_array($package['path'], $workspacesPackages)) {
+            if (!in_array($unixPackagePath, $workspacesPackages)) {
                 if (!isset($canModifyPackageJson)) {
                     if ($this->confirm('package.json will be modified. Continue?', true)) {
                         $canModifyPackageJson = true;
@@ -182,11 +185,9 @@ class MixInstall extends Command
                 }
 
                 $this->info(
-                    sprintf('Adding %s (%s) to the workspaces.packages property in package.json', $name, $package['path'])
+                    sprintf('Adding %s (%s) to the workspaces.packages property in package.json', $name, $unixPackagePath)
                 );
-
-                // Ensure directory separators are always Unix-based (forward-slash)
-                $workspacesPackages = array_merge($workspacesPackages, [Str::replace('\\', '/', $package['path'])]);
+                $workspacesPackages = array_merge($workspacesPackages, [$unixPackagePath]);
             }
         }
 
