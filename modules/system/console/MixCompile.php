@@ -147,8 +147,11 @@ class MixCompile extends Command
         }
 
         $workspacesPackages = $this->packageJson['workspaces']['packages'] ?? [];
-        $packagePathUnix = Str::replace('\\', '/', $this->getPackagePath($mixJsPath));
-        return in_array($packagePathUnix, $workspacesPackages);
+
+        return in_array(
+            Str::replace('\\', '/', $this->getPackagePath($mixJsPath)),
+            $workspacesPackages
+        );
     }
 
     /**
