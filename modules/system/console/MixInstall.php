@@ -184,8 +184,9 @@ class MixInstall extends Command
                 $this->info(
                     sprintf('Adding %s (%s) to the workspaces.packages property in package.json', $name, $package['path'])
                 );
-                //Since director seperator differently on Windows platform, each "\" replaced with "/"
-                $workspacesPackages = array_merge($workspacesPackages, [Str::replace("\\","/",$package['path'])]);
+
+                // Ensure directory separators are always Unix-based (forward-slash)
+                $workspacesPackages = array_merge($workspacesPackages, [Str::replace('\\', '/', $package['path'])]);
             }
         }
 

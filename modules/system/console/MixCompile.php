@@ -147,7 +147,7 @@ class MixCompile extends Command
         }
 
         $workspacesPackages = $this->packageJson['workspaces']['packages'] ?? [];
-        $packagePathUnix = Str::replace("\\","/", $this->getPackagePath($mixJsPath));
+        $packagePathUnix = Str::replace('\\', '/', $this->getPackagePath($mixJsPath));
         return in_array($packagePathUnix, $workspacesPackages);
     }
 
@@ -205,9 +205,9 @@ class MixCompile extends Command
         $command = $this->argument('webpackArgs') ?? [];
         array_unshift(
             $command,
-            "npx",
-            "webpack",
-            "build",
+            'npx',
+            'webpack',
+            'build',
             '--progress',
             '--config=' . $this->getWebpackJsPath($mixJsPath)
         );
