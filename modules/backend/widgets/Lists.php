@@ -894,7 +894,7 @@ class Lists extends WidgetBase
     /**
      * Creates a list column object from it's name and configuration.
      */
-    protected function makeListColumn($name, $config)
+    protected function makeListColumn($name, $config): ListColumn
     {
         if (is_string($config)) {
             $label = $config;
@@ -1076,7 +1076,7 @@ class Lists extends WidgetBase
      * Returns a column value, with filters applied
      * @return string
      */
-    public function getColumnValue($record, $column)
+    public function getColumnValue($record, ListColumn $column)
     {
         $value = $this->getColumnValueRaw($record, $column);
 
@@ -1160,7 +1160,7 @@ class Lists extends WidgetBase
     /**
      * Process as background color, to be seen at list
      */
-    protected function evalColorPickerTypeValue($record, $column, $value): string
+    protected function evalColorPickerTypeValue($record, ListColumn $column, string $value): string
     {
         return '<span style="width:30px; height:30px; display:inline-block; background:' . e($value) . '; padding:10px"><span>';
     }
@@ -1169,7 +1169,7 @@ class Lists extends WidgetBase
      * Process a custom list types registered by plugins.
      * @throws ApplicationException if the provided type cannot be found.
      */
-    protected function evalCustomListType($type, $record, $column, $value)
+    protected function evalCustomListType(string $type, $record, ListColumn $column, $value)
     {
         $plugins = PluginManager::instance()->getRegistrationMethodValues('registerListColumnTypes');
 
@@ -1196,7 +1196,7 @@ class Lists extends WidgetBase
      /**
      * Process as a datetime value
      */
-    protected function evalDatetimeTypeValue($record, $column, $value)
+    protected function evalDatetimeTypeValue($record, ListColumn $column, $value): ?string
     {
         if ($value === null) {
             return null;
@@ -1206,8 +1206,7 @@ class Lists extends WidgetBase
 
         if ($column->format !== null) {
             $value = $dateTime->format($column->format);
-        }
-        else {
+        } else {
             $value = $dateTime->toDayDateTimeString();
         }
 
@@ -1227,7 +1226,7 @@ class Lists extends WidgetBase
     /**
      * Process as a date value
      */
-    protected function evalDateTypeValue($record, $column, $value)
+    protected function evalDateTypeValue($record, ListColumn $column, $value): ?string
     {
         if ($value === null) {
             return null;
@@ -1257,9 +1256,8 @@ class Lists extends WidgetBase
 
     /**
      * Process an image value
-     * @return string
      */
-    protected function evalImageTypeValue($record, $column, $value)
+    protected function evalImageTypeValue($record, ListColumn $column, $value): ?string
     {
         $image = null;
         $config = $column->config;
@@ -1297,15 +1295,16 @@ class Lists extends WidgetBase
 
         if ($image) {
             $imageUrl = ImageResizer::filterGetUrl($image, $width, $height, $options);
-            return "<img src='$imageUrl' width='$width' height='$height' />";
+            $image = "<img src='$imageUrl' width='$width' height='$height' />";
         }
+
+        return $image;
     }
 
     /**
      * Process as number, proxy to text
-     * @return string
      */
-    protected function evalNumberTypeValue($record, $column, $value)
+    protected function evalNumberTypeValue($record, ListColumn $column, $value): string
     {
         return $this->evalTextTypeValue($record, $column, $value);
     }
@@ -1313,7 +1312,7 @@ class Lists extends WidgetBase
     /**
      * Process as partial reference
      */
-    protected function evalPartialTypeValue($record, $column, $value)
+    protected function evalPartialTypeValue($record, ListColumn $column, $value): string|false
     {
         return $this->controller->makePartial($column->path ?: $column->columnName, [
             'listColumn' => $column,
@@ -1328,7 +1327,7 @@ class Lists extends WidgetBase
     /**
      * Process as boolean switch
      */
-    protected function evalSwitchTypeValue($record, $column, $value)
+    protected function evalSwitchTypeValue($record, ListColumn $column, $value): string
     {
         $contents = '';
 
@@ -1343,9 +1342,8 @@ class Lists extends WidgetBase
 
     /**
      * Process as text, escape the value
-     * @return string
      */
-    protected function evalTextTypeValue($record, $column, $value)
+    protected function evalTextTypeValue($record, ListColumn $column, string|array $value): string
     {
         if (is_array($value) && count($value) == count($value, COUNT_RECURSIVE)) {
             $value = implode(', ', $value);
@@ -1361,7 +1359,7 @@ class Lists extends WidgetBase
     /**
      * Process as diff for humans (1 min ago)
      */
-    protected function evalTimesinceTypeValue($record, $column, $value)
+    protected function evalTimesinceTypeValue($record, ListColumn $column, $value): ?string
     {
         if ($value === null) {
             return null;
@@ -1386,7 +1384,7 @@ class Lists extends WidgetBase
     /**
      * Process as time as current tense (Today at 0:00)
      */
-    protected function evalTimetenseTypeValue($record, $column, $value)
+    protected function evalTimetenseTypeValue($record, ListColumn $column, $value): ?string
     {
         if ($value === null) {
             return null;
@@ -1411,7 +1409,7 @@ class Lists extends WidgetBase
     /**
      * Process as a time value
      */
-    protected function evalTimeTypeValue($record, $column, $value)
+    protected function evalTimeTypeValue($record, ListColumn $column, $value): ?string
     {
         if ($value === null) {
             return null;
@@ -1438,8 +1436,9 @@ class Lists extends WidgetBase
 
     /**
      * Validates a column type as a date
+     * @throws ApplicationException if the provided $value cannot be converted to a Carbon instance
      */
-    protected function validateDateTimeValue($value, $column)
+    protected function validateDateTimeValue(mixed $value, ListColumn $column): Carbon
     {
         $value = DateTimeHelper::makeCarbon($value, false);
 
