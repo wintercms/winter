@@ -1158,7 +1158,16 @@ class Lists extends WidgetBase
     //
 
     /**
+     * Process as background color, to be seen at list
+     */
+    protected function evalColorPickerTypeValue($record, $column, $value): string
+    {
+        return '<span style="width:30px; height:30px; display:inline-block; background:' . e($value) . '; padding:10px"><span>';
+    }
+
+    /**
      * Process a custom list types registered by plugins.
+     * @throws ApplicationException if the provided type cannot be found.
      */
     protected function evalCustomListType($type, $record, $column, $value)
     {
@@ -1184,21 +1193,66 @@ class Lists extends WidgetBase
         throw new ApplicationException(sprintf('List column type "%s" could not be found. %s', $type, $customMessage));
     }
 
-    /**
-     * Process as text, escape the value
-     * @return string
+     /**
+     * Process as a datetime value
      */
-    protected function evalTextTypeValue($record, $column, $value)
+    protected function evalDatetimeTypeValue($record, $column, $value)
     {
-        if (is_array($value) && count($value) == count($value, COUNT_RECURSIVE)) {
-            $value = implode(', ', $value);
+        if ($value === null) {
+            return null;
         }
 
-        if (is_string($column->format) && !empty($column->format)) {
-            $value = sprintf($column->format, $value);
+        $dateTime = $this->validateDateTimeValue($value, $column);
+
+        if ($column->format !== null) {
+            $value = $dateTime->format($column->format);
+        }
+        else {
+            $value = $dateTime->toDayDateTimeString();
         }
 
-        return htmlentities($value, ENT_QUOTES, 'UTF-8', false);
+        $options = [
+            'defaultValue' => $value,
+            'format' => $column->format,
+            'formatAlias' => 'dateTimeLongMin'
+        ];
+
+        if (!empty($column->config['ignoreTimezone'])) {
+            $options['ignoreTimezone'] = true;
+        }
+
+        return Backend::dateTime($dateTime, $options);
+    }
+
+    /**
+     * Process as a date value
+     */
+    protected function evalDateTypeValue($record, $column, $value)
+    {
+        if ($value === null) {
+            return null;
+        }
+
+        $dateTime = $this->validateDateTimeValue($value, $column);
+
+        if ($column->format !== null) {
+            $value = $dateTime->format($column->format);
+        }
+        else {
+            $value = $dateTime->toFormattedDateString();
+        }
+
+        $options = [
+            'defaultValue' => $value,
+            'format' => $column->format,
+            'formatAlias' => 'dateLongMin'
+        ];
+
+        if (!empty($column->config['ignoreTimezone'])) {
+            $options['ignoreTimezone'] = true;
+        }
+
+        return Backend::dateTime($dateTime, $options);
     }
 
     /**
@@ -1280,8 +1334,7 @@ class Lists extends WidgetBase
 
         if ($value) {
             $contents = Lang::get('backend::lang.list.column_switch_true');
-        }
-        else {
+        } else {
             $contents = Lang::get('backend::lang.list.column_switch_false');
         }
 
@@ -1289,93 +1342,20 @@ class Lists extends WidgetBase
     }
 
     /**
-     * Process as a datetime value
+     * Process as text, escape the value
+     * @return string
      */
-    protected function evalDatetimeTypeValue($record, $column, $value)
+    protected function evalTextTypeValue($record, $column, $value)
     {
-        if ($value === null) {
-            return null;
+        if (is_array($value) && count($value) == count($value, COUNT_RECURSIVE)) {
+            $value = implode(', ', $value);
         }
 
-        $dateTime = $this->validateDateTimeValue($value, $column);
-
-        if ($column->format !== null) {
-            $value = $dateTime->format($column->format);
-        }
-        else {
-            $value = $dateTime->toDayDateTimeString();
+        if (is_string($column->format) && !empty($column->format)) {
+            $value = sprintf($column->format, $value);
         }
 
-        $options = [
-            'defaultValue' => $value,
-            'format' => $column->format,
-            'formatAlias' => 'dateTimeLongMin'
-        ];
-
-        if (!empty($column->config['ignoreTimezone'])) {
-            $options['ignoreTimezone'] = true;
-        }
-
-        return Backend::dateTime($dateTime, $options);
-    }
-
-    /**
-     * Process as a time value
-     */
-    protected function evalTimeTypeValue($record, $column, $value)
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        $dateTime = $this->validateDateTimeValue($value, $column);
-
-        $format = $column->format ?? 'g:i A';
-
-        $value = $dateTime->format($format);
-
-        $options = [
-            'defaultValue' => $value,
-            'format' => $column->format,
-            'formatAlias' => 'time'
-        ];
-
-        if (!empty($column->config['ignoreTimezone'])) {
-            $options['ignoreTimezone'] = true;
-        }
-
-        return Backend::dateTime($dateTime, $options);
-    }
-
-    /**
-     * Process as a date value
-     */
-    protected function evalDateTypeValue($record, $column, $value)
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        $dateTime = $this->validateDateTimeValue($value, $column);
-
-        if ($column->format !== null) {
-            $value = $dateTime->format($column->format);
-        }
-        else {
-            $value = $dateTime->toFormattedDateString();
-        }
-
-        $options = [
-            'defaultValue' => $value,
-            'format' => $column->format,
-            'formatAlias' => 'dateLongMin'
-        ];
-
-        if (!empty($column->config['ignoreTimezone'])) {
-            $options['ignoreTimezone'] = true;
-        }
-
-        return Backend::dateTime($dateTime, $options);
+        return htmlentities($value, ENT_QUOTES, 'UTF-8', false);
     }
 
     /**
@@ -1427,13 +1407,35 @@ class Lists extends WidgetBase
 
         return Backend::dateTime($dateTime, $options);
     }
+
     /**
-     * Process as background color, to be seen at list
+     * Process as a time value
      */
-    protected function evalColorPickerTypeValue($record, $column, $value)
+    protected function evalTimeTypeValue($record, $column, $value)
     {
-        return  '<span style="width:30px; height:30px; display:inline-block; background:'.e($value).'; padding:10px"><span>';
+        if ($value === null) {
+            return null;
+        }
+
+        $dateTime = $this->validateDateTimeValue($value, $column);
+
+        $format = $column->format ?? 'g:i A';
+
+        $value = $dateTime->format($format);
+
+        $options = [
+            'defaultValue' => $value,
+            'format' => $column->format,
+            'formatAlias' => 'time'
+        ];
+
+        if (!empty($column->config['ignoreTimezone'])) {
+            $options['ignoreTimezone'] = true;
+        }
+
+        return Backend::dateTime($dateTime, $options);
     }
+
     /**
      * Validates a column type as a date
      */
