@@ -4,6 +4,7 @@ use File;
 use Winter\Storm\Console\Command;
 use Symfony\Component\Process\Process;
 use System\Classes\MixAssets;
+use Winter\Storm\Support\Str;
 
 class MixCompile extends Command
 {
@@ -132,7 +133,7 @@ class MixCompile extends Command
      */
     protected function getWebpackJsPath(string $mixJsPath): string
     {
-        return $this->getPackagePath($mixJsPath) . '/mix.webpack.js';
+        return $this->getPackagePath($mixJsPath) . DIRECTORY_SEPARATOR . 'mix.webpack.js';
     }
 
     /**
@@ -147,7 +148,10 @@ class MixCompile extends Command
 
         $workspacesPackages = $this->packageJson['workspaces']['packages'] ?? [];
 
-        return in_array($this->getPackagePath($mixJsPath), $workspacesPackages);
+        return in_array(
+            Str::replace('\\', '/', $this->getPackagePath($mixJsPath)),
+            $workspacesPackages
+        );
     }
 
     /**
@@ -204,8 +208,10 @@ class MixCompile extends Command
         $command = $this->argument('webpackArgs') ?? [];
         array_unshift(
             $command,
-            $basePath . '/node_modules/webpack/bin/webpack.js',
-            $this->option('silent') ? '--stats=none' : '--progress',
+            'npx',
+            'webpack',
+            'build',
+            '--progress',
             '--config=' . $this->getWebpackJsPath($mixJsPath)
         );
         return $command;
@@ -221,7 +227,7 @@ class MixCompile extends Command
 
         $config = str_replace(
             ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%'],
-            [$basePath, '', $mixJsPath, plugins_path(), base_path(), (int) $this->option('silent')],
+            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent')],
             $fixture
         );
 

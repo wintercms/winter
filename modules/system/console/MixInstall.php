@@ -162,6 +162,9 @@ class MixInstall extends Command
 
         // Process each package
         foreach ($registeredPackages as $name => $package) {
+            // Normalize package path across OS types
+            $packagePath = Str::replace('\\', '/', $package['path']);
+
             // Detect missing winter.mix.js files and install them
             if (!File::exists($package['mix'])) {
                 $this->info(
@@ -171,7 +174,7 @@ class MixInstall extends Command
             }
 
             // Add the package path to the instance's package.json->workspaces->packages property if not present
-            if (!in_array($package['path'], $workspacesPackages)) {
+            if (!in_array($packagePath, $workspacesPackages)) {
                 if (!isset($canModifyPackageJson)) {
                     if ($this->confirm('package.json will be modified. Continue?', true)) {
                         $canModifyPackageJson = true;
@@ -182,9 +185,9 @@ class MixInstall extends Command
                 }
 
                 $this->info(
-                    sprintf('Adding %s (%s) to the workspaces.packages property in package.json', $name, $package['path'])
+                    sprintf('Adding %s (%s) to the workspaces.packages property in package.json', $name, $packagePath)
                 );
-                $workspacesPackages = array_merge($workspacesPackages, [$package['path']]);
+                $workspacesPackages[] = $packagePath;
             }
         }
 

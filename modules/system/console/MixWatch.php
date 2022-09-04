@@ -60,6 +60,12 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
             sprintf('Watching package "%s" for changes', $name)
         );
         $this->mixJsPath = $relativeMixJsPath;
+
+        // Create Windows signal handler
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' && function_exists('sapi_windows_set_ctrl_handler')) {
+            sapi_windows_set_ctrl_handler([$this, 'handleWindowsSignal'], true);
+        }
+
         if ($this->mixPackage(base_path($relativeMixJsPath)) !== 0) {
             $this->error(
                 sprintf('Unable to compile package "%s"', $name)
@@ -93,7 +99,7 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
 
         $config = str_replace(
             ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%'],
-            [$basePath, 'mix._api.disableNotifications();', $mixJsPath, plugins_path(), base_path(), (int) $this->option('silent')],
+            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent')],
             $fixture
         );
 
@@ -106,6 +112,11 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
      */
     public function getSubscribedSignals(): array
     {
+        // Windows does not use POSIX signals
+        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+            return [];
+        }
+
         return [SIGINT, SIGTERM, SIGQUIT];
     }
 
@@ -119,6 +130,23 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
 
         // Exit cleanly at this point, if this was a user termination
         if (in_array($signal, [SIGINT, SIGQUIT])) {
+            exit(0);
+        }
+    }
+
+    /**
+     * Handles the provided Windows process singal.
+     */
+    public function handleWindowsSignal(int $event): void
+    {
+        if ($event === PHP_WINDOWS_EVENT_CTRL_C || $event === PHP_WINDOWS_EVENT_CTRL_BREAK) {
+            // Cleanup
+            $this->removeWebpackConfig(base_path($this->mixJsPath));
+
+            // Removes the handler
+            sapi_windows_set_ctrl_handler([$this, 'handleWindowsSignal'], false);
+
+            // Exit cleanly at this point, if this was a user termination
             exit(0);
         }
     }
