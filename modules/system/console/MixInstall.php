@@ -140,13 +140,13 @@ class MixInstall extends Command
         }
 
         // Load the main package.json for the project
-        $canModifyPackageJson = null;
         $packageJsonPath = base_path('package.json');
         $packageJson = [];
         if (File::exists($packageJsonPath)) {
             $packageJson = json_decode(File::get($packageJsonPath), true);
         }
         $workspacesPackages = $packageJson['workspaces']['packages'] ?? [];
+        $ignoredPackages = $packageJson['workspaces']['ignoredPackages'] ?? [];
 
         // Check to see if Laravel Mix is already present as a dependency
         if (
@@ -156,14 +156,40 @@ class MixInstall extends Command
             )
             && $this->confirm('laravel-mix was not found as a dependency in package.json, would you like to add it?', true)
         ) {
-            $canModifyPackageJson = true;
             $packageJson['devDependencies'] = array_merge($packageJson['devDependencies'] ?? [], ['laravel-mix' => $this->defaultMixVersion]);
+            $this->writePackageJson($packageJsonPath, $packageJson);
         }
 
         // Process each package
         foreach ($registeredPackages as $name => $package) {
             // Normalize package path across OS types
             $packagePath = Str::replace(DIRECTORY_SEPARATOR, '/', $package['path']);
+
+            // Add the package path to the instance's package.json->workspaces->packages property if not present
+            if (
+                !in_array($packagePath, $workspacesPackages)
+                && !in_array($packagePath, $ignoredPackages)
+            ) {
+                if ($this->confirm(
+                        sprintf("Detected %s (%s), should it be added to your package.json?", $name, $packagePath),
+                        true
+                )) {
+                    $workspacesPackages[] = $packagePath;
+                    $this->info(
+                        sprintf('Adding %s (%s) to the workspaces.packages property in package.json', $name, $packagePath)
+                    );
+                } else {
+                    $ignoredPackages[] = $packagePath;
+                    $this->warn(
+                        sprintf('Ignoring %s (%s)', $name, $packagePath)
+                    );
+                }
+                asort($workspacesPackages);
+                asort($ignoredPackages);
+                $packageJson['workspaces']['packages'] = array_values($workspacesPackages);
+                $packageJson['workspaces']['ignoredPackages'] = array_values($ignoredPackages);
+                $this->writePackageJson($packageJsonPath, $packageJson);
+            }
 
             // Detect missing winter.mix.js files and install them
             if (!File::exists($package['mix'])) {
@@ -172,34 +198,10 @@ class MixInstall extends Command
                 );
                 File::put($package['mix'], File::get(__DIR__ . '/fixtures/winter.mix.js.fixture'));
             }
-
-            // Add the package path to the instance's package.json->workspaces->packages property if not present
-            if (!in_array($packagePath, $workspacesPackages)) {
-                if (!isset($canModifyPackageJson)) {
-                    if ($this->confirm('package.json will be modified. Continue?', true)) {
-                        $canModifyPackageJson = true;
-                    } else {
-                        $canModifyPackageJson = false;
-                        break;
-                    }
-                }
-
-                $this->info(
-                    sprintf('Adding %s (%s) to the workspaces.packages property in package.json', $name, $packagePath)
-                );
-                $workspacesPackages[] = $packagePath;
-            }
         }
 
-        // Modify the package.json file if required
-        if ($canModifyPackageJson) {
-            asort($workspacesPackages);
-            $packageJson['workspaces']['packages'] = array_values($workspacesPackages);
-            File::put($packageJsonPath, json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-
-            // Ensure separation between package.json modification messages and rest of output
-            $this->info('');
-        }
+        // Ensure separation between package.json modification messages and rest of output
+        $this->info('');
 
         if ($this->installPackageDeps() !== 0) {
             $this->error("Unable to {$this->terms['complete']} dependencies.");
@@ -208,6 +210,14 @@ class MixInstall extends Command
         }
 
         return 0;
+    }
+
+    /**
+     * Write to the package.json file
+     */
+    protected function writePackageJson(string $path, array $data): void
+    {
+        File::put($path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 
     /**
