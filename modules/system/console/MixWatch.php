@@ -112,7 +112,7 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
      */
     public function getSubscribedSignals(): array
     {
-        //Return empty subscribed signals to the Symfony Console Application Bootloader.
+        // Windows does not use POSIX signals
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             return [];
         }
