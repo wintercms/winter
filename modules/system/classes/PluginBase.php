@@ -412,9 +412,19 @@ class PluginBase extends ServiceProviderBase
         }
 
         $reflection = new ReflectionClass($this);
-        $this->path = File::normalizePath(dirname($reflection->getFileName()));
+        $pluginFilePath = File::normalizePath(dirname($reflection->getFileName()));
 
-        return $this->path;
+        // Check if the plugin actually lives within the application's real plugin directory
+        // If so, return the path under the reported plugin directory instead of the actual path
+        $pluginsPath = $this->app->pluginsPath();
+        if (
+            is_link($pluginsPath)
+            && Str::startsWith($pluginFilePath, realpath($pluginsPath))
+        ) {
+            $pluginFilePath = $pluginsPath . '/' . Str::after($pluginFilePath, realpath($pluginsPath) . '/');
+        }
+
+        return $this->path = $pluginFilePath;
     }
 
     /**
