@@ -171,13 +171,15 @@ class MixInstall extends Command
                 && !in_array($packagePath, $ignoredPackages)
             ) {
                 if (
-                    $this->confirm(sprintf(
-                        "Detected %s (%s), should it be added to your package.json?",
-                        $name,
-                        $packagePath
-                    ),
-                    true
-                )) {
+                    $this->confirm(
+                        sprintf(
+                            "Detected %s (%s), should it be added to your package.json?",
+                            $name,
+                            $packagePath
+                        ),
+                        true
+                    )
+                ) {
                     $workspacesPackages[] = $packagePath;
                     $this->info(sprintf(
                         'Adding %s (%s) to the workspaces.packages property in package.json',
