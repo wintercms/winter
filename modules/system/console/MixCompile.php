@@ -36,7 +36,6 @@ class MixCompile extends Command
 
     /**
      * Execute the console command.
-     * @return int
      */
     public function handle(): int
     {
@@ -149,7 +148,7 @@ class MixCompile extends Command
         $workspacesPackages = $this->packageJson['workspaces']['packages'] ?? [];
 
         return in_array(
-            Str::replace('\\', '/', $this->getPackagePath($mixJsPath)),
+            Str::replace(DIRECTORY_SEPARATOR, '/', $this->getPackagePath($mixJsPath)),
             $workspacesPackages
         );
     }

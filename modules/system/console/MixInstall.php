@@ -163,7 +163,7 @@ class MixInstall extends Command
         // Process each package
         foreach ($registeredPackages as $name => $package) {
             // Normalize package path across OS types
-            $packagePath = Str::replace('\\', '/', $package['path']);
+            $packagePath = Str::replace(DIRECTORY_SEPARATOR, '/', $package['path']);
 
             // Detect missing winter.mix.js files and install them
             if (!File::exists($package['mix'])) {

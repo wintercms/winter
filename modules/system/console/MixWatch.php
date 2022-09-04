@@ -61,11 +61,6 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
         );
         $this->mixJsPath = $relativeMixJsPath;
 
-        // Create Windows signal handler
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' && function_exists('sapi_windows_set_ctrl_handler')) {
-            sapi_windows_set_ctrl_handler([$this, 'handleWindowsSignal'], true);
-        }
-
         if ($this->mixPackage(base_path($relativeMixJsPath)) !== 0) {
             $this->error(
                 sprintf('Unable to compile package "%s"', $name)
@@ -107,47 +102,12 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
     }
 
     /**
-     * Returns the process signals this command listens to
-     * @see https://www.php.net/manual/en/pcntl.constants.php
+     * Handle the cleanup of this command if a termination signal is received
      */
-    public function getSubscribedSignals(): array
+    public function handleCleanup(): void
     {
-        // Windows does not use POSIX signals
-        if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-            return [];
-        }
-
-        return [SIGINT, SIGTERM, SIGQUIT];
-    }
-
-    /**
-     * Handle the provided process signal
-     */
-    public function handleSignal(int $signal): void
-    {
-        // Cleanup
+        $this->newLine();
+        $this->info('Cleaning up: ' . $this->getWebpackJsPath(base_path($this->mixJsPath)));
         $this->removeWebpackConfig(base_path($this->mixJsPath));
-
-        // Exit cleanly at this point, if this was a user termination
-        if (in_array($signal, [SIGINT, SIGQUIT])) {
-            exit(0);
-        }
-    }
-
-    /**
-     * Handles the provided Windows process singal.
-     */
-    public function handleWindowsSignal(int $event): void
-    {
-        if ($event === PHP_WINDOWS_EVENT_CTRL_C || $event === PHP_WINDOWS_EVENT_CTRL_BREAK) {
-            // Cleanup
-            $this->removeWebpackConfig(base_path($this->mixJsPath));
-
-            // Removes the handler
-            sapi_windows_set_ctrl_handler([$this, 'handleWindowsSignal'], false);
-
-            // Exit cleanly at this point, if this was a user termination
-            exit(0);
-        }
     }
 }
