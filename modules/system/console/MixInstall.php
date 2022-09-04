@@ -170,14 +170,20 @@ class MixInstall extends Command
                 !in_array($packagePath, $workspacesPackages)
                 && !in_array($packagePath, $ignoredPackages)
             ) {
-                if ($this->confirm(
-                        sprintf("Detected %s (%s), should it be added to your package.json?", $name, $packagePath),
-                        true
+                if (
+                    $this->confirm(sprintf(
+                        "Detected %s (%s), should it be added to your package.json?",
+                        $name,
+                        $packagePath
+                    ),
+                    true
                 )) {
                     $workspacesPackages[] = $packagePath;
-                    $this->info(
-                        sprintf('Adding %s (%s) to the workspaces.packages property in package.json', $name, $packagePath)
-                    );
+                    $this->info(sprintf(
+                        'Adding %s (%s) to the workspaces.packages property in package.json',
+                        $name,
+                        $packagePath
+                    ));
                 } else {
                     $ignoredPackages[] = $packagePath;
                     $this->warn(
@@ -193,9 +199,11 @@ class MixInstall extends Command
 
             // Detect missing winter.mix.js files and install them
             if (!File::exists($package['mix'])) {
-                $this->info(
-                    sprintf('No Mix file found for %s, creating one at %s...', $name, $package['mix'])
-                );
+                $this->info(sprintf(
+                    'No Mix file found for %s, creating one at %s...',
+                    $name,
+                    $package['mix']
+                ));
                 File::put($package['mix'], File::get(__DIR__ . '/fixtures/winter.mix.js.fixture'));
             }
         }

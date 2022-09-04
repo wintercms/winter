@@ -2,9 +2,8 @@
 
 use File;
 use System\Classes\MixAssets;
-use Symfony\Component\Console\Command\SignalableCommandInterface;
 
-class MixWatch extends MixCompile implements SignalableCommandInterface
+class MixWatch extends MixCompile
 {
     /**
      * @var string|null The default command name for lazy loading.
