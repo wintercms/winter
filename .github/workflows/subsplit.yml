@@ -21,10 +21,10 @@ jobs:
               run: winter split -a "${{ github.ref_name }}"
             - name: Delete branch
               if: github.event_name == 'delete' && github.ref_type == 'branch'
-              run: winter split --remove-branch="${{ github.ref_name }}"
+              run: echo "${{ github.env }}"
             - name: Delete tag
               if: github.event_name == 'delete' && github.ref_type == 'tag'
-              run: winter split --remove-tag="${{ github.ref_name }}"
+              run: winter split --remove-tag="${{ github.event.ref }}"
             - name: Push
               if: github.event_name == 'push'
               run: winter split -b "${{ github.ref_name }}"
