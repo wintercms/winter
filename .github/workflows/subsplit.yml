@@ -10,6 +10,8 @@ jobs:
         name: Sub-split
         runs-on: ubuntu-latest
         container: wintercms/cli:0.3.4
+        env:
+            WINTER_CLI_GITHUB_TOKEN: ${{ secrets.WINTER_SPLIT_TOKEN }}
         steps:
             - name: Create branch
               if: github.event_name == 'create' && github.ref_type == 'branch'
@@ -25,4 +27,4 @@ jobs:
               run: echo "${{ github.ref_name }}"
             - name: Push
               if: github.event_name == 'push'
-              run: echo "${{ github.ref_name }}"
+              run: winter split -b "${{ github.ref_name }}"
