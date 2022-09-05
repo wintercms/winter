@@ -399,7 +399,7 @@ return [
         'theme' => 'Farbschema',
         'markup_styles' => 'Markup Styles',
         'custom_styles' => 'Benutzerdefiniertes Stylesheet',
-        'custom styles_comment' => 'Benutzerdefinierte Styles im HTML-Editor einbinden.',
+        'custom_styles_comment' => 'Benutzerdefinierte Styles im HTML-Editor einbinden.',
         'markup_classes' => 'Markup-Klassen',
         'paragraph' => 'Absatz',
         'link' => 'Link',

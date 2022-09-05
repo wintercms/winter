@@ -365,7 +365,7 @@ return [
         'theme' => 'Esquema de color',
         'markup_styles' => 'Estils de marcat',
         'custom_styles' => "Full d'estils personalitzat",
-        'custom styles_comment' => "Estils personalitzats per incloure a l'editor HTML.",
+        'custom_styles_comment' => "Estils personalitzats per incloure a l'editor HTML.",
         'markup_classes' => 'Classes de marcat',
         'paragraph' => 'Paràgraf',
         'link' => 'Enllaç',

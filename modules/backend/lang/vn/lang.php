@@ -357,7 +357,7 @@ return [
         'theme' => 'Color scheme',
         'markup_styles' => 'Markup Styles',
         'custom_styles' => 'Stylesheet tùy chỉnh',
-        'custom styles_comment' => 'Styles tùy chỉnh được thêm vào HTML editor.',
+        'custom_styles_comment' => 'Styles tùy chỉnh được thêm vào HTML editor.',
         'markup_classes' => 'Markup Classes',
         'paragraph' => 'Paragraph',
         'link' => 'Link',

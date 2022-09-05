@@ -400,7 +400,7 @@ return [
         'theme' => 'カラーテーマ',
         'markup_styles' => 'マークアップ・スタイル',
         'custom_styles' => 'カスタムスタイルシート',
-        'custom styles_comment' => 'HTMLエディタに含めるカスタムスタイル',
+        'custom_styles_comment' => 'HTMLエディタに含めるカスタムスタイル',
         'markup_classes' => 'マークアップクラス',
         'paragraph' => '段落',
         'link' => 'リンク',
@@ -434,7 +434,7 @@ return [
         ],
         'paragraph_formats' => '段落の書式',
         'paragraph_formats_comment' => '段落形式のドロップダウンに表示されるオプション',
-    
+
     ],
     'tooltips' => [
         'preview_website' => 'Webサイトをプレビューする',

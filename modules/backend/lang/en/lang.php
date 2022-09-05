@@ -399,7 +399,7 @@ return [
         'theme' => 'Color scheme',
         'markup_styles' => 'Markup Styles',
         'custom_styles' => 'Custom stylesheet',
-        'custom styles_comment' => 'Custom styles to include in the HTML editor.',
+        'custom_styles_comment' => 'Custom styles to include in the HTML editor.',
         'markup_classes' => 'Markup Classes',
         'paragraph' => 'Paragraph',
         'link' => 'Link',

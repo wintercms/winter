@@ -397,7 +397,7 @@ return [
         'theme' => 'Esquema de cores',
         'markup_styles' => 'Estilos de marcação',
         'custom_styles' => 'Folha de estilo personalizada',
-        'custom styles_comment' => 'Estilos personalizados para incluir no editor HTML.',
+        'custom_styles_comment' => 'Estilos personalizados para incluir no editor HTML.',
         'markup_classes' => 'Classes de marcação',
         'paragraph' => 'Parágrafo',
         'link' => 'Link',
