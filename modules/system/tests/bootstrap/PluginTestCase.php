@@ -88,7 +88,10 @@ abstract class PluginTestCase extends TestCase
         $this->pluginTestCaseLoadedPlugins = [];
 
         // Detect the plugin being tested and load it automatically
-        $this->guessAndLoadPlugin();
+        $pluginCode = $this->guessPluginCode();
+        if (!is_null($pluginCode)) {
+            $this->instantiatePlugin($pluginCode, false);
+        }
 
         // Disable mailing
         Mail::pretend();
@@ -185,13 +188,19 @@ abstract class PluginTestCase extends TestCase
      */
     protected function getPluginObject($code = null): ?PluginBase
     {
-        return $this->pluginTestCaseLoadedPlugins[$code] ?? null;
+        return $this->pluginTestCaseLoadedPlugins[$code]
+            ?? $this->pluginTestCaseLoadedPlugins[$this->guessPluginCode()]
+            ?? null;
     }
 
     /**
-     * The models in Winter use a static property to store their events, these
-     * will need to be targeted and reset ready for a new test cycle.
+     * Flush model event listeners.
+     *
+     * The models in Winter use a static property to store their events. These will need to be
+     * targeted and reset, ready for a new test cycle.
+     *
      * Pivot models are an exception since they are internally managed.
+     *
      * @return void
      */
     protected function flushModelEventListeners(): void
@@ -217,11 +226,9 @@ abstract class PluginTestCase extends TestCase
     }
 
     /**
-     * Locates the plugin code based on the test file location and loads it.
-     *
-     * @return void
+     * Guesses the plugin code being tested.
      */
-    protected function guessAndLoadPlugin(): void
+    protected function guessPluginCode(): ?string
     {
         $reflect = new ReflectionClass($this);
         $fqClass = $reflect->getName();
@@ -233,7 +240,7 @@ abstract class PluginTestCase extends TestCase
             $basePath = $this->app->pluginsPath();
 
             if (!strpos($path, $basePath) === 0) {
-                return;
+                return null;
             }
 
             $pluginCode = ltrim(str_replace('\\', '/', substr($path, strlen($basePath))), '/');
@@ -244,6 +251,6 @@ abstract class PluginTestCase extends TestCase
             $pluginCode = $manager->getIdentifier($fqClass);
         }
 
-        $this->instantiatePlugin($pluginCode, false);
+        return $pluginCode;
     }
 }
