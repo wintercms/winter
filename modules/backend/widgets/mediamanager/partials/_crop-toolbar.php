@@ -28,10 +28,10 @@ $sizeDisabledAttr = $currentSelectionMode == Backend\Widgets\MediaManager::SELEC
             </select>
 
             <label for="mmcropimagewidth"><?= e(trans('backend::lang.media.width')) ?></label>
-            <input id="mmcropimagewidth" type="text" class="form-control w-50" data-control="crop-width-input" name="selectionWidth" value="<?= e($currentSelectionWidth) ?>" <?= $sizeDisabledAttr ?>/>
+            <input id="mmcropimagewidth" type="text" class="form-control w-100" data-control="crop-width-input" name="selectionWidth" value="<?= e($currentSelectionWidth) ?>" <?= $sizeDisabledAttr ?>/>
 
             <label for="mmcropimageheight"><?= e(trans('backend::lang.media.height')) ?></label>
-            <input id="mmcropimageheight" type="text" class="form-control w-50" data-control="crop-height-input" name="selectionHeight" value="<?= e($currentSelectionHeight) ?>" <?= $sizeDisabledAttr ?>/>
+            <input id="mmcropimageheight" type="text" class="form-control w-100" data-control="crop-height-input" name="selectionHeight" value="<?= e($currentSelectionHeight) ?>" <?= $sizeDisabledAttr ?>/>
 
             <label class="standalone hide" data-label="selection-size"><?= e(trans('backend::lang.media.selected_size')) ?> <span data-label="selection-width"></span> x <span data-label="selection-height"></span></label>
 
