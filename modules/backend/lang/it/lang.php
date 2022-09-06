@@ -357,7 +357,7 @@ return [
         'theme' => 'Schema di colori',
         'markup_styles' => 'Stili di markup',
         'custom_styles' => 'Foglio di stile personalizzato',
-        'custom styles_comment' => 'Stili personalizzati da includere nell\'editor HTML.',
+        'custom_styles_comment' => 'Stili personalizzati da includere nell\'editor HTML.',
         'markup_classes' => 'Classi di markup',
         'paragraph' => 'Paragrafo',
         'link' => 'Collegamento',

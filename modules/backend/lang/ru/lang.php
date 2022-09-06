@@ -399,7 +399,7 @@ return [
         'theme' => 'Цветовая схема',
         'markup_styles' => 'Стили разметки',
         'custom_styles' => 'Дополнительные CSS стили',
-        'custom styles_comment' => 'Дополнительные стили для использования в HTML редакторе.',
+        'custom_styles_comment' => 'Дополнительные стили для использования в HTML редакторе.',
         'markup_classes' => 'Классы разметки',
         'paragraph' => 'Параграф',
         'link' => 'Ссылка',

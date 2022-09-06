@@ -357,7 +357,7 @@ return [
         'theme' => 'Väriteema',
         'markup_styles' => 'Markup-tyylit',
         'custom_styles' => 'Oma tyylitiedosto',
-        'custom styles_comment' => 'Omat tyylit jotka käytetään HTML-editorissa.',
+        'custom_styles_comment' => 'Omat tyylit jotka käytetään HTML-editorissa.',
         'markup_classes' => 'Markup-luokat',
         'paragraph' => 'Kappale',
         'link' => 'Linkki',

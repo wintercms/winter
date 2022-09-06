@@ -372,7 +372,7 @@ return [
         'theme' => 'Coloration syntaxique',
         'markup_styles' => 'Styles du balisage',
         'custom_styles' => 'Feuille de styles personnalisée',
-        'custom styles_comment' => 'Styles personnalisés à inclure dans l\'editeur HTML.',
+        'custom_styles_comment' => 'Styles personnalisés à inclure dans l\'editeur HTML.',
         'markup_classes' => 'Classes de style',
         'paragraph' => 'Paragraphe',
         'link' => 'Lien',

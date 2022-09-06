@@ -398,7 +398,7 @@ return [
         'theme' => 'رنگ بندی',
         'markup_styles' => 'سبک نشانه گذاری',
         'custom_styles' => 'شیوه نامه های سفارشی',
-        'custom styles_comment' => 'شیوه نامه های سفارشی جهت وارد کردن در ویرایش گر HTML.',
+        'custom_styles_comment' => 'شیوه نامه های سفارشی جهت وارد کردن در ویرایش گر HTML.',
         'markup_classes' => 'کلاس های نشانه گذاری',
         'paragraph' => 'پاراگراف',
         'link' => 'لینک',

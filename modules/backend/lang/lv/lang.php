@@ -399,7 +399,7 @@ return [
         'theme' => 'Krāsu shēma',
         'markup_styles' => 'Iezīmēšanas stili',
         'custom_styles' => 'Pielāgota stila lapa',
-        'custom styles_comment' => 'Pielāgotie stili, kurus iekļaut HTML redaktorā.',
+        'custom_styles_comment' => 'Pielāgotie stili, kurus iekļaut HTML redaktorā.',
         'markup_classes' => 'Iezīmēšanas klases',
         'paragraph' => 'Rindkopa',
         'link' => 'Saite',

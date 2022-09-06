@@ -346,7 +346,7 @@ return [
         'theme' => 'แผนผังสี',
         'markup_styles' => 'รูปแบบ',
         'custom_styles' => 'กำหนด stylesheet เอง',
-        'custom styles_comment' => 'รูปแบบกำหนดเองที่จะเพิ่มในตัวแก้ไข HTML',
+        'custom_styles_comment' => 'รูปแบบกำหนดเองที่จะเพิ่มในตัวแก้ไข HTML',
         'markup_classes' => 'คลาส',
         'paragraph' => 'ย่อหน้า',
         'link' => 'ลิงก์',

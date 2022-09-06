@@ -397,7 +397,7 @@ return [
         'theme' => 'Színséma',
         'markup_styles' => 'Stílusok',
         'custom_styles' => 'Egyéni megjelenés',
-        'custom styles_comment' => 'Saját stílusok és megjelenések megadása.',
+        'custom_styles_comment' => 'Saját stílusok és megjelenések megadása.',
         'markup_classes' => 'Értékek',
         'paragraph' => 'Bekezdés',
         'link' => 'Hivatkozás',

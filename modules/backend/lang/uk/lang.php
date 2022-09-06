@@ -399,7 +399,7 @@ return [
         'theme' => 'Кольорова схема',
         'markup_styles' => 'Стилі розмітки',
         'custom_styles' => 'Спеціальна таблиця стилів',
-        'custom styles_comment' => 'Спеціальні стилі для включення в редактор HTML.',
+        'custom_styles_comment' => 'Спеціальні стилі для включення в редактор HTML.',
         'markup_classes' => 'Класи розмітки',
         'paragraph' => 'Абзац',
         'link' => 'Посилання',

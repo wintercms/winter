@@ -339,7 +339,7 @@ return [
         'theme' => 'Värvivalik',
         'markup_styles' => 'Markup stiilid',
         'custom_styles' => 'Kohandatud CSS',
-        'custom styles_comment' => 'Kohandatud CSS reglid, mis lisada HTML redaktorile.',
+        'custom_styles_comment' => 'Kohandatud CSS reglid, mis lisada HTML redaktorile.',
         'markup_classes' => 'Markup klassid',
         'paragraph' => 'Lõik',
         'link' => 'Link',

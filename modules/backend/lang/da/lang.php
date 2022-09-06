@@ -323,7 +323,7 @@ return [
         'theme' => 'Farveskema',
         'markup_styles' => 'Markup Styles',
         'custom_styles' => 'Custom stylesheet',
-        'custom styles_comment' => 'Custom styles som skal inkluderes i HTML editoren.',
+        'custom_styles_comment' => 'Custom styles som skal inkluderes i HTML editoren.',
         'markup_classes' => 'Markup Classes',
         'paragraph' => 'Afsnit',
         'link' => 'Link',
