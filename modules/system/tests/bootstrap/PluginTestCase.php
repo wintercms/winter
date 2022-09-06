@@ -70,8 +70,6 @@ abstract class PluginTestCase extends TestCase
 
     /**
      * Perform test case set up.
-     *
-     * @return void
      */
     public function setUp(): void
     {
@@ -98,8 +96,7 @@ abstract class PluginTestCase extends TestCase
     }
 
     /**
-     * Flush event listeners and collect garbage.
-     * @return void
+     * Flush event listeners and tear down.
      */
     public function tearDown(): void
     {
@@ -117,7 +114,7 @@ abstract class PluginTestCase extends TestCase
      * @deprecated v1.2.1 Use `instantiatePlugin()` instead.
      * @return void
      */
-    protected function runPluginRefreshCommand($code, $throwException = true): void
+    protected function runPluginRefreshCommand($code, $throwException = true)
     {
         $this->instantiatePlugin((string) $code, (bool) $throwException);
     }
@@ -127,7 +124,6 @@ abstract class PluginTestCase extends TestCase
      *
      * @param string $code Plugin code.
      * @param boolean $throw Throw an exception if the plugin cannot be found.
-     * @return void
      */
     protected function instantiatePlugin(string $code, bool $throw = true): void
     {
@@ -183,8 +179,6 @@ abstract class PluginTestCase extends TestCase
 
     /**
      * Returns a plugin object from its code, useful for registering events, etc.
-     *
-     * @return PluginBase|null
      */
     protected function getPluginObject($code = null): ?PluginBase
     {
@@ -200,8 +194,6 @@ abstract class PluginTestCase extends TestCase
      * targeted and reset, ready for a new test cycle.
      *
      * Pivot models are an exception since they are internally managed.
-     *
-     * @return void
      */
     protected function flushModelEventListeners(): void
     {
