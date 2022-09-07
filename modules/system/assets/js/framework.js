@@ -356,7 +356,7 @@ if (window.jQuery.request !== undefined) {
                         else if ($.type(selector) == 'string' && selector.charAt(0) == '^') {
                             $(selector.substring(1)).prepend(data[partial]).trigger('ajaxUpdate', [context, data, textStatus, jqXHR])
                         }
-                        else {
+                        else if ($.type(selector) == 'string' && (selector.charAt(0) == '#' || selector.charAt(0) == '.')) {
                             $(selector).trigger('ajaxBeforeReplace')
                             $(selector).html(data[partial]).trigger('ajaxUpdate', [context, data, textStatus, jqXHR])
                         }
