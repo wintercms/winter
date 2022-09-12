@@ -427,15 +427,16 @@
         var element = ev.currentTarget
 
         $(element).trigger('change')
-        var pane = $(element).closest('.tab-pane'),
-            component = $(element).closest('div.layout-cell')
+        var $pane = $(element).closest('.tab-pane'),
+            $component = $(element).closest('div.layout-cell'),
+            $componentList = $('#cms-master-tabs > div.tab-content > .tab-pane.active .control-componentlist .layout')
 
         /*
          * Remove any {% component %} tags in the editor for this component
          */
-        var editor = $('[data-control=codeeditor]', pane)
+        var editor = $('[data-control=codeeditor]', $pane)
         if (editor.length) {
-            var alias = $('input[name="component_aliases[]"]', component).val().replace(/^@/, ''),
+            var alias = $('input[name^="component_aliases["]', $component).val().replace(/^@/, ''),
                 codeEditor = editor.codeEditor('getEditorObject')
 
             codeEditor.replace('', {
@@ -443,10 +444,25 @@
             })
         }
 
-        component.remove()
-        $(window).trigger('oc.updateUi')
+        // Get index of removed component
+        var removedIndex = Number($('input[data-component-index]', $component).attr('data-component-index'))
+        $component.remove()
 
-        this.updateComponentListClass(pane)
+        // Update index of any components with a higher index
+        $('div.layout-cell', $componentList).each(function() {
+            var $component = $(this),
+                index = Number($('input[data-component-index]', $component).attr('data-component-index'))
+
+            if (index > removedIndex) {
+                $('input[name^="component_"]', $component).each(function () {
+                    $(this).attr('name', $(this).attr('name').replace('[' + index + ']', '[' + (index - 1) + ']'))
+                })
+                $('input[data-component-index]', $component).attr('data-component-index', index - 1)
+            }
+        })
+
+        $(window).trigger('oc.updateUi')
+        this.updateComponentListClass($pane)
         return false
     }
 
