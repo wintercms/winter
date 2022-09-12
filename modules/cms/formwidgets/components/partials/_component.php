@@ -12,9 +12,10 @@
         <span class="name"><?= $name ?></span>
         <span class="description"><?= $description ?></span>
         <span class="alias wn-icon-code"><?= e($component->alias) ?></span>
-        <input type="hidden" name="component_properties[]" data-inspector-values value="<?= e($this->getComponentPropertyValues($component)) ?>" />
-        <input type="hidden" name="component_names[]" value="<?= e($component->name) ?>" />
-        <input type="hidden" name="component_aliases[]" value="<?= e($component->alias) ?>" />
+        <input type="hidden" data-component-index="<?= $index ?>">
+        <input type="hidden" name="component_properties[<?= $index ?>]" data-inspector-values value="<?= e($this->getComponentPropertyValues($component)) ?>" />
+        <input type="hidden" name="component_names[<?= $index ?>]" value="<?= e($component->name) ?>" />
+        <input type="hidden" name="component_aliases[<?= $index ?>]" value="<?= e($component->alias) ?>" />
         <a href="#" class="remove">&times;</a>
     </div>
 </div>

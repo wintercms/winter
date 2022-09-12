@@ -399,7 +399,7 @@
         var element = ev.target,
             values = JSON.parse($('[data-inspector-values]', element).val())
 
-        $('[name="component_aliases[]"]', element).val(values['oc.alias'])
+        $('[name^="component_aliases["]', element).val(values['oc.alias'])
         $('span.alias', element).text(values['oc.alias'])
     }
 
@@ -411,10 +411,11 @@
             $cell = $(ev.target).parent()
 
         $('div.layout-cell', $componentList).each(function(){
-            if ($cell.get(0) == this)
+            if ($cell.get(0) == this) {
                 return true
+            }
 
-            var $input = $('input[name="component_aliases[]"]', this)
+            var $input = $('input[name^="component_aliases["]', this)
 
             if ($input.val() == alias) {
                 ev.preventDefault()
@@ -473,9 +474,10 @@
             alias = $aliasInput.val(),
             originalAlias = alias,
             counter = 2,
+            index = $componentList.children().length,
             existingAliases = []
 
-        $('div.layout-cell input[name="component_aliases[]"]', $componentList).each(function(){
+        $('div.layout-cell input[name^="component_aliases["]', $componentList).each(function(){
             existingAliases.push($(this).val())
         })
 
@@ -499,10 +501,18 @@
             'data-inspector-class': $classInput.val()
         })
 
+        // Set component input indexes
+        $('input[name^="component_"]', $component).each(function () {
+            $(this).attr('name', $(this).attr('name').replace('[]', '[' + index + ']'))
+        })
+        var $indexInput = $('<input type="hidden">')
+        $indexInput.attr('data-component-index', index)
+        $('input[name^="component_properties["]', $component).before($indexInput)
+
         $configInput.remove()
-        $('input[name="component_names[]"]', $component).val($nameInput.val())
+        $('input[name^="component_names["]', $component).val($nameInput.val())
         $nameInput.remove()
-        $('input[name="component_aliases[]"]', $component).val(alias)
+        $('input[name^="component_aliases["]', $component).val(alias)
         $component.find('span.alias').text(alias)
         $valuesInput.val($valuesInput.val().replace('--alias--', alias))
         $aliasInput.remove()
