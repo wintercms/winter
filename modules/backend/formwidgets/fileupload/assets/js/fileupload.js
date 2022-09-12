@@ -135,6 +135,8 @@
         this.dropzone.on('sending', this.proxy(this.onUploadSending))
         this.dropzone.on('success', this.proxy(this.onUploadSuccess))
         this.dropzone.on('error', this.proxy(this.onUploadError))
+
+        Snowboard.globalEvent("formwidgets.fileupload.initUploader", this);
     }
 
     FileUpload.prototype.onResizeFileInfo = function(file) {
@@ -219,6 +221,9 @@
         this.$el.closest('[data-field-name]').trigger('change.oc.formwidget')
     }
 
+    /*
+     * Add the required additional data to the fileupload request
+     */
     FileUpload.prototype.addExtraFormData = function(formData) {
         if (this.options.extraData) {
             $.each(this.options.extraData, function (name, value) {
@@ -226,10 +231,13 @@
             })
         }
 
+        // Add the data from the containing form element to the upload request to
+        // ensure that the widget is properly initialized to handle the upload
         var $form = this.$el.closest('form')
         if ($form.length > 0) {
-            $.each($form.serializeArray(), function (index, field) {
-                formData.append(field.name, field.value)
+            var requestParentData = $form.getRequestParentData()
+            $.each(requestParentData, function (key) {
+                formData.append(key, this)
             })
         }
     }

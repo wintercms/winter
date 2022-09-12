@@ -16,7 +16,7 @@
         <div class="form-buttons">
             <div class="loading-indicator-container">
                 <button
-                    type="submit"
+                    type="button"
                     data-request="onSave"
                     data-request-data="redirect:0"
                     data-hotkey="ctrl+s, cmd+s"

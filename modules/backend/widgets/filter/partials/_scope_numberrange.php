@@ -13,4 +13,3 @@
     <span class="filter-label"><?= e(trans($scope->label)) ?>:</span>
     <span class="filter-setting"><?= isset($minStr) && isset($maxStr) ? ($minStr . ' → ' . $maxStr) : e(trans('backend::lang.filter.number_all')) ?></span>
 </a>
-0

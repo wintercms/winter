@@ -83,6 +83,24 @@ Please follow the following guides and code standards:
 
 In order to ensure that the Winter community is welcoming to all, please review and abide by the [Code of Conduct](https://github.com/wintercms/.github/blob/master/CODE_OF_CONDUCT.md).
 
+## Sponsors
+
+Winter CMS development is financially supported by the generosity of the following sponsors:
+
+### Organizations
+
+[![Spatial Media logo](https://cdn.ca.spatialmedia.io/media/images/sm-logo-dark-full.svg)](https://spatialmedia.io)
+Spatial Media employs two of the core contributors (Luke Towers & Jack Wilkinson) and contributes to the ongoing development of Winter.
+
+[![Froala logo](https://froala.com/wp-content/uploads/2019/10/froala.svg)](https://froala.com/wysiwyg-editor/)
+
+Froala provides a perpetual, Enterprise license to Winter CMS which allows us and our users to use the Froala WYSIWYG Editor in Winter CMS powered projects.
+
+### Individuals
+- Orville
+
+If you would like to have your name, company and link added to this list and support open-source development, feel free to make a donation to our [Open Collective](https://opencollective.com/wintercms).
+
 ## License
 
 The Winter platform is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

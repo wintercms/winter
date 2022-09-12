@@ -41,7 +41,7 @@ trait FormModelWidget
      * supports nesting via HTML array.
      * @return Relation
      */
-    protected function getRelationModel()
+    public function getRelationModel()
     {
         list($model, $attribute) = $this->resolveModelAttribute($this->valueFrom);
 

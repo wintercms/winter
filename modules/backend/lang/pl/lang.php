@@ -390,7 +390,7 @@
         'theme' => 'Schemat kolorów',
         'markup_styles' => 'Style znaczników',
         'custom_styles' => 'Niestandardowy arkusz stylów',
-        'custom styles_comment' => 'Niestandardowe style do dołączenia w edytorze HTML.',
+        'custom_styles_comment' => 'Niestandardowe style do dołączenia w edytorze HTML.',
         'markup_classes' => 'Klasy znaczników',
         'paragraph' => 'Paragraf',
         'link' => 'Link',

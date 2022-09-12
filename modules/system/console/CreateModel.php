@@ -139,7 +139,7 @@ class CreateModel extends BaseScaffoldCommand
     {
         $this->call('create:controller', [
             'plugin'  => $this->getPluginIdentifier(),
-            'controller' => Str::pluralize($this->argument('model')),
+            'controller' => Str::plural($this->argument('model')),
             '--model' => $this->getNameInput(),
         ]);
     }

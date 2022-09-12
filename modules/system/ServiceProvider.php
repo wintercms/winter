@@ -446,7 +446,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'label' => 'system::lang.permissions.manage_mail_templates',
                     'tab' => 'system::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER],
-                ]
+                ],
             ]);
             $manager->registerPermissionOwnerAlias('Winter.System', 'October.System');
         });

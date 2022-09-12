@@ -13,9 +13,10 @@ use Winter\Storm\Database\Model as ActiveRecord;
 
 class PluginManagerTest extends TestCase
 {
-    const INSTALLED_PLUGIN_COUNT = 13;
-    const ENABLED_PLUGIN_COUNT = 10;
-    const PLUGIN_NAMESPACE_COUNT = 14;
+    const INSTALLED_PLUGIN_COUNT = 17;
+    const ENABLED_PLUGIN_COUNT = 14;
+    const PLUGIN_NAMESPACE_COUNT = 18;
+    const PLUGIN_VENDOR_COUNT = 5;
 
     public $manager;
     protected $output;
@@ -250,7 +251,7 @@ class PluginManagerTest extends TestCase
     {
         $vendors = $this->manager->getVendorAndPluginNames();
 
-        $this->assertCount(4, $vendors);
+        $this->assertCount(static::PLUGIN_VENDOR_COUNT, $vendors);
         $this->assertArrayHasKey('winter', $vendors);
         $this->assertArrayHasKey('noupdates', $vendors['winter']);
         $this->assertArrayHasKey('sample', $vendors['winter']);
@@ -588,5 +589,21 @@ class PluginManagerTest extends TestCase
         $this->assertInstanceOf(PluginBase::class, $plugin);
 
         $this->assertEquals('Winter.NoUpdates', $this->manager->getNormalizedIdentifier($plugin));
+    }
+
+    public function testSortPluginDependencies()
+    {
+        $result = $this->manager->getPlugins();
+
+        $this->assertGreaterThan(
+            array_search('DependencyTest.Dependency', array_keys($result)),
+            array_search('DependencyTest.Found', array_keys($result))
+        );
+
+        // check to make sure dependency comes first and didn't stay in alphanumeric order.
+        $this->assertGreaterThan(
+            array_search('DependencyTest.Dependency', array_keys($result)),
+            array_search('DependencyTest.Acme', array_keys($result))
+        );
     }
 }

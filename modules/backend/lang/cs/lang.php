@@ -356,7 +356,7 @@ return [
         'theme' => 'Barevné schéma',
         'markup_styles' => 'Styly',
         'custom_styles' => 'Vlastní styly',
-        'custom styles_comment' => 'Vlastní styly, které chcete zahrnout do editoru HTML.',
+        'custom_styles_comment' => 'Vlastní styly, které chcete zahrnout do editoru HTML.',
         'markup_classes' => 'Třídy stylů',
         'paragraph' => 'Odstavec',
         'link' => 'Odkaz',

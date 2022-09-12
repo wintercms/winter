@@ -382,7 +382,7 @@ return [
         'theme' => '色彩主题',
         'markup_styles' => '标记样式',
         'custom_styles' => '定制样式表',
-        'custom styles_comment' => '在HTML编辑器中包含自定义样式',
+        'custom_styles_comment' => '在HTML编辑器中包含自定义样式',
         'markup_classes' => '标记类',
         'paragraph' => '段落',
         'link' => '链接',

@@ -358,6 +358,8 @@ class Request extends Snowboard.PluginBase {
                 } else if (selector.substr(0, 1) === '^') {
                     mode = 'prepend';
                     selector = selector.substr(1);
+                } else if (selector.substr(0, 1) !== '#' && selector.substr(0, 1) !== '.') {
+                    mode = 'noop';
                 }
 
                 const elements = document.querySelectorAll(selector);
@@ -369,6 +371,8 @@ class Request extends Snowboard.PluginBase {
                                 break;
                             case 'prepend':
                                 element.innerHTML = content + element.innerHTML;
+                                break;
+                            case 'noop':
                                 break;
                             case 'replace':
                             default:

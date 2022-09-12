@@ -18,6 +18,7 @@
         "max-len": ["off"],
         "new-cap": ["error", { "properties": false }],
         "no-alert": ["off"],
+        "no-plusplus": "off",
         "no-param-reassign": ["error", {
             "props": false
         }],

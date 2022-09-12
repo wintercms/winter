@@ -327,7 +327,7 @@ return [
         'theme' => 'Fargetema',
         'markup_styles' => 'Markup-stiler',
         'custom_styles' => 'Tilpasset stilsett (CSS)',
-        'custom styles_comment' => 'Tilpassede CSS-stilregler å inkludere i HTML-editoren.',
+        'custom_styles_comment' => 'Tilpassede CSS-stilregler å inkludere i HTML-editoren.',
         'markup_classes' => 'Markup-klasser',
         'paragraph' => 'Avsnitt',
         'link' => 'Link',

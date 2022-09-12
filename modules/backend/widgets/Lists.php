@@ -392,7 +392,11 @@ class Lists extends WidgetBase
         $relationSearchable = [];
 
         $columnsToSearch = [];
-        if (!empty($this->searchTerm) && ($searchableColumns = $this->getSearchableColumns())) {
+        if (
+            strlen($this->searchTerm) !== 0
+            && trim($this->searchTerm) !== ''
+            && ($searchableColumns = $this->getSearchableColumns())
+        ) {
             foreach ($searchableColumns as $column) {
                 /*
                  * Related
@@ -1468,7 +1472,10 @@ class Lists extends WidgetBase
      */
     public function setSearchTerm($term, $resetPagination = false)
     {
-        if (!empty($term)) {
+        if (
+            strlen($this->searchTerm) !== 0
+            && trim($this->searchTerm) !== ''
+        ) {
             $this->showTree = false;
         }
 

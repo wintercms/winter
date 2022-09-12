@@ -397,7 +397,7 @@ return [
         'theme' => 'Schema de culori',
         'markup_styles' => 'Stiluri de marcare',
         'custom_styles' => 'Foaie de stil personalizată',
-        'custom styles_comment' => 'Stiluri personalizate de inclus în editorul HTML.',
+        'custom_styles_comment' => 'Stiluri personalizate de inclus în editorul HTML.',
         'markup_classes' => 'Clase de marcare',
         'paragraph' => 'Paragraf',
         'link' => 'Legătură',

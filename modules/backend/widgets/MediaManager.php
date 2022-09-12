@@ -3,6 +3,7 @@
 use Str;
 use Lang;
 use Input;
+use Event;
 use Config;
 use Backend;
 use ApplicationException;
@@ -352,7 +353,7 @@ class MediaManager extends WidgetBase
     /**
      * Show rename item popup AJAX handler
      */
-    public function onLoadRenamePopup(): array
+    public function onLoadRenamePopup(): string
     {
         $this->abortIfReadOnly();
 
@@ -373,7 +374,7 @@ class MediaManager extends WidgetBase
      * @throws ApplicationException if the new name is invalid
      * @todo Move media events to the MediaLibary class instead.
      */
-    public function onApplyName(): array
+    public function onApplyName(): void
     {
         $this->abortIfReadOnly();
 
@@ -675,11 +676,15 @@ class MediaManager extends WidgetBase
         $path = Input::get('path');
         $path = MediaLibrary::validatePath($path);
         $selectionParams = $this->getSelectionParams();
-
         $url = MediaLibrary::url($path);
-        $dimensions = Str::startsWith($url, '/')
-            ? getimagesize(base_path($url))
-            : getimagesize($url);
+
+        // @TODO: Improve support non-local disks
+        if (Str::startsWith($url, '/')) {
+            $localPath = base_path(implode("/", array_map("rawurldecode", explode("/", $url))));
+            $dimensions = getimagesize($localPath);
+        } else {
+            $dimensions = getimagesize($url);
+        }
 
         $width = $dimensions[0];
         $height = $dimensions[1] ?: 1;
@@ -1215,7 +1220,7 @@ class MediaManager extends WidgetBase
             return [
                 'id' => $id,
                 'markup' => $this->makePartial('thumbnail-image', [
-                    'imageUrl' => MediaLibary::url($thumbnailInfo['path']),
+                    'imageUrl' => MediaLibrary::url($thumbnailInfo['path']),
                 ]),
             ];
         }
