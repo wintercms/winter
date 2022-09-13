@@ -7,5 +7,5 @@
         }
     }
 
-    Snowboard.addPlugin('test', TestPlugin);
+    Snowboard.addPlugin('testPlugin', TestPlugin);
 })(window.Snowboard);

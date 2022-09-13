@@ -1,5 +1,6 @@
 import PluginBase from '../abstracts/PluginBase';
 import Singleton from '../abstracts/Singleton';
+import InnerProxyHandler from './InnerProxyHandler';
 
 /**
  * Plugin loader class.
@@ -22,13 +23,28 @@ export default class PluginLoader {
      */
     constructor(name, snowboard, instance) {
         this.name = name;
-        this.snowboard = snowboard;
+        this.snowboard = new Proxy(
+            snowboard,
+            InnerProxyHandler,
+        );
         this.instance = instance;
+
+        // Freeze instance that has been inserted into this loader
+        Object.freeze(this.instance);
+
         this.instances = [];
-        this.singleton = instance.prototype instanceof Singleton;
-        this.initialised = instance.prototype instanceof PluginBase;
+        this.singleton = {
+            initialised: false,
+        };
+        // Prevent further extension of the singleton status object
+        Object.seal(this.singleton);
+
         this.mocks = {};
         this.originalFunctions = {};
+
+        // Freeze loader itself
+        Object.freeze(PluginLoader.prototype);
+        Object.freeze(this);
     }
 
     /**
@@ -162,7 +178,11 @@ export default class PluginLoader {
      * @returns {boolean}
      */
     isInitialised() {
-        return this.initialised;
+        if (!this.isSingleton()) {
+            return true;
+        }
+
+        return this.singleton.initialised;
     }
 
     /**
@@ -179,7 +199,7 @@ export default class PluginLoader {
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
         newInstance.construct(...parameters);
         this.instances.push(newInstance);
-        this.initialised = true;
+        this.singleton.initialised = true;
     }
 
     /**
