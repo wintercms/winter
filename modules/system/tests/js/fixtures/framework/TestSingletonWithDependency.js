@@ -19,6 +19,10 @@
         testMethod() {
             return 'Tested';
         }
+
+        dependencyTest() {
+            return this.snowboard.testDependencyOne().testMethod();
+        }
     }
 
     Snowboard.addPlugin('testSingleton', TestSingletonWithDependency);
