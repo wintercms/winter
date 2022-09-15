@@ -43,6 +43,23 @@ $app->singleton(
 
 /*
 |--------------------------------------------------------------------------
+| Aliases for Mail manager and factory
+|--------------------------------------------------------------------------
+|
+| Necessaries for resolve and doing initiatable mail service on queue.
+|
+*/
+
+$app->alias(
+    'mail.manager', Illuminate\Mail\MailManager::class
+);
+
+$app->alias(
+    'mail.manager', Illuminate\Contracts\Mail\Factory::class
+);
+
+/*
+|--------------------------------------------------------------------------
 | Return The Application
 |--------------------------------------------------------------------------
 |
