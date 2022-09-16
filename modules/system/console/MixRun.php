@@ -73,11 +73,11 @@ class MixRun extends Command
             null
         );
 
-        try {
-            $process->setTty(true);
-        } catch (\Throwable $e) {
-            // This will fail on unsupported systems
-        }
+        // try {
+        //     $process->setTty(true);
+        // } catch (\Throwable $e) {
+        //     // This will fail on unsupported systems
+        // }
 
         $exitCode = $process->run(function ($status, $stdout) {
             if (!$this->option('silent')) {
