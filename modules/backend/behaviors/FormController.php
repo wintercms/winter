@@ -33,7 +33,7 @@ use Exception;
  * values as either a YAML file, located in the controller view directory,
  * or directly as a PHP array.
  *
- * @see http://wintercms.com/docs/backend/forms Back-end form documentation
+ * @see https://wintercms.com/docs/backend/forms Back-end form documentation
  * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
