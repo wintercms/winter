@@ -65,6 +65,9 @@ class MixRun extends Command
             array_unshift($command, 'npm', 'run', $script);
         }
 
+        echo `pwd`;
+        echo base_path($package['path']);
+
         $process = new Process(
             $command,
             base_path($package['path']),
@@ -73,11 +76,11 @@ class MixRun extends Command
             null
         );
 
-        // try {
-        //     $process->setTty(true);
-        // } catch (\Throwable $e) {
-        //     // This will fail on unsupported systems
-        // }
+        try {
+            $process->setTty(true);
+        } catch (\Throwable $e) {
+            // This will fail on unsupported systems
+        }
 
         $exitCode = $process->run(function ($status, $stdout) {
             if (!$this->option('silent')) {
