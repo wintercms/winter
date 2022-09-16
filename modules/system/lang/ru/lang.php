@@ -193,6 +193,7 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Путь к Sendmail',
         'sendmail_path_comment' => 'Пожалуйста, укажите путь к sendmail.',
+        'drivers_hint_content' => 'Смотрите в <a href=":url" target="_blank">документации</a> список других поддерживаемых почтовых методов и способы их включения.',
     ],
     'mail_templates' => [
         'menu_label' => 'Шаблоны почты',
