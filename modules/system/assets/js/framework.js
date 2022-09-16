@@ -531,7 +531,7 @@ if (window.jQuery.request !== undefined) {
      */
     $.fn.getRequestParentData = function () {
         var $form = $(this).first(),
-            parentDataObjects = [serializeFormToObj($form)],
+            parentDataObjects = [formDataToObj(new FormData($form.get(0)))],
             parentFormData = {};
 
         var findParentForms = function ($form) {
@@ -557,7 +557,7 @@ if (window.jQuery.request !== undefined) {
                     if ($parentForm.length) {
                         // Add the identified parent form to the array for processing its data
                         // and check it for a parent element & containing form of its own
-                        parentDataObjects.push($.extend(serializeFormToObj($parentForm), parentEmbeddedData));
+                        parentDataObjects.push($.extend(formDataToObj(new FormData($form.get(0))), parentEmbeddedData));
                         findParentForms($parentForm);
                     }
                 }
@@ -592,13 +592,22 @@ if (window.jQuery.request !== undefined) {
         }
     }
 
-    function serializeFormToObj($form) {
-        var arrayData = $form.serializeArray(),
-            objectData = {};
+    function formDataToObj(formDataInstance) {
+        var objectData = {};
 
-        arrayData.forEach(function (field) {
-            objectData[field.name] = field.value;
-        });
+        for (const pair of formDataInstance.entries()) {
+            const key = pair[0];
+            const value = pair[1];
+
+            if (!Reflect.has(objectData, key)) {
+                objectData[key] = value;
+                continue;
+            }
+            if (!Array.isArray(objectData[key])) {
+                objectData[key] = [objectData[key]];
+            }
+            objectData[key].push(value);
+        }
 
         return objectData;
     }
