@@ -13,8 +13,9 @@ export default class DataConfig extends Snowboard.PluginBase {
      *
      * @param {Snowboard.PluginBase} instance
      * @param {HTMLElement} element
+     * @param {Object} localConfig
      */
-    construct(instance, element) {
+    construct(instance, element, localConfig) {
         if (instance instanceof Snowboard.PluginBase === false) {
             throw new Error('You must provide a Snowboard plugin to enable data configuration');
         }
@@ -24,6 +25,9 @@ export default class DataConfig extends Snowboard.PluginBase {
 
         this.instance = instance;
         this.element = element;
+        this.localConfig = localConfig || {};
+        this.instanceConfig = {};
+        this.acceptedConfigs = {};
         this.refresh();
     }
 
@@ -64,6 +68,7 @@ export default class DataConfig extends Snowboard.PluginBase {
 
         if (persist === true) {
             this.element.dataset[config] = value;
+            this.localConfig[config] = value;
         }
     }
 
@@ -150,6 +155,12 @@ export default class DataConfig extends Snowboard.PluginBase {
         for (const key in this.element.dataset) {
             if (this.acceptedConfigs === true || this.acceptedConfigs.includes(key)) {
                 config[key] = this.coerceValue(this.element.dataset[key]);
+            }
+        }
+
+        for (const key in this.localConfig) {
+            if (this.acceptedConfigs === true || this.acceptedConfigs.includes(key)) {
+                config[key] = this.localConfig[key];
             }
         }
         /* eslint-enable */
