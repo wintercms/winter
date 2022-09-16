@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     name: JavaScript
     env:
-      nodeVersion: 14
+      nodeVersion: 16
       phpVersion: '8.0'
       extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
       key: winter-cms-cache-develop
