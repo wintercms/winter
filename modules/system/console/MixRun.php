@@ -65,8 +65,6 @@ class MixRun extends Command
             array_unshift($command, 'npm', 'run', $script);
         }
 
-        echo `pwd`;
-        echo base_path($package['path']);
 
         $process = new Process(
             $command,
