@@ -16,16 +16,16 @@ class MixRun extends Command
      * @var string The name and signature of this command.
      */
     protected $signature = 'mix:run
-        {package : Defines the package to watch for changes}
+        {package : Defines the package where the script is located.}
         {script : The name of the script to run, as defined in the package.json "scripts" config.}
-        {additionalArgs?* : Arguments to pass through to the }
-        {--f|production : Runs compilation in "production" mode}
-        {--s|silent : Silent mode}';
+        {additionalArgs?* : Arguments to pass through to the script being run.}
+        {--f|production : Runs the script in "production" mode.}
+        {--s|silent : Silent mode.}';
 
     /**
      * @var string The console command description.
      */
-    protected $description = 'Runs a script in the given package';
+    protected $description = 'Runs a script in a given package.';
 
     /**
      * Execute the console command.
