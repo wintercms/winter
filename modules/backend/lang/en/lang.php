@@ -4,6 +4,12 @@ return [
     'auth' => [
         'title' => 'Administration Area',
         'invalid_login' => 'The details you entered did not match our records. Please double-check and try again.',
+        'invalid_user' => 'A user was not found with the given credentials.',
+        'invalid_password' => 'A user was found to match all plain text credentials however hashed credential :credential did not match.',
+        'attribute_not_provided' => "Login attribute :attribute was not provided.",
+        'attribute_is_required' => "The :attribute attribute is required.",
+        'password_is_required' => 'The password attribute is required.',
+        'user_not_activated' => 'Cannot login user :login as they are not activated.',
     ],
     'field' => [
         'invalid_type' => 'Invalid field type used :type.',
