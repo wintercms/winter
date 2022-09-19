@@ -4,6 +4,12 @@ return [
     'auth' => [
         'title' => 'Beheeromgeving',
         'invalid_login' => 'De ingevoerde gegevens leveren geen resultaat. Controleer je invoer en probeer het opnieuw.',
+        'invalid_user' => 'Er is geen gebruiker gevonden op basis van de inloggegevens.',
+        'invalid_password' => 'Er is een gebruiker gevonden, maar het versleutelde :credential kwam niet overeen.',
+        'attribute_not_provided' => "Login attribuut :attribute was niet voorzien.",
+        'attribute_is_required' => "Het :attribute attribuut is verplicht.",
+        'password_is_required' => 'Het wachtwoord attribuut is verplicht.',
+        'user_not_activated' => 'Kan niet de gebruiker :login niet aanmelden aangezien deze niet geactiveerd is.',
     ],
     'field' => [
         'invalid_type' => 'Ongeldig type veld: :type.',
