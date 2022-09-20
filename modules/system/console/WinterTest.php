@@ -142,11 +142,8 @@ class WinterTest extends Command
         $config = realpath($config);
         $bootstrapPath = base_path('modules/system/tests/bootstrap/app.php');
         
-        if (
-            ($configBoostrap = (string) simplexml_load_file($config)['bootstrap'])
-            && str_starts_with($configBoostrap, './')
-        ) {
-            $bootstrapPath = dirname($config) . ltrim($configBoostrap, '.');
+        if ($configBoostrap = (string) simplexml_load_file($config)['bootstrap']) {
+            $bootstrapPath = dirname($config) . DIRECTORY_SEPARATOR . $configBoostrap;
         }
 
         $process = new Process(
