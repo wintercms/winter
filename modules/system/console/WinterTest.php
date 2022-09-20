@@ -141,6 +141,10 @@ class WinterTest extends Command
         // Resolve the configuration path based on the current working directory
         $config = realpath($config);
         $bootstrapPath = base_path('modules/system/tests/bootstrap/app.php');
+        
+        if ($configBoostrap = (string) simplexml_load_file($config)['bootstrap']) {
+            $bootstrapPath = dirname($config) . DIRECTORY_SEPARATOR . $configBoostrap;
+        }
 
         $process = new Process(
             array_merge([$this->phpUnitExec, '--configuration=' . $config, '--bootstrap=' . $bootstrapPath], $args),
