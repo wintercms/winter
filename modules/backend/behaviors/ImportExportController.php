@@ -17,7 +17,6 @@ use ApplicationException;
 use SplTempFileObject;
 use Exception;
 
-
 /**
  * Adds features for importing and exporting data.
  *
@@ -255,11 +254,7 @@ class ImportExportController extends ControllerBehavior
             $reader->setHeaderOffset(1);
         }
 
-        $result = (new CsvStatement())
-            ￼            ->limit(50)
-            ￼            ->process($reader)
-            ￼            ->fetchColumn((int) $columnId);
-        ￼
+        $result = (new CsvStatement())->limit(50)->process($reader)->fetchColumn((int) $columnId);
         $data = iterator_to_array($result, false);
 
         /*
