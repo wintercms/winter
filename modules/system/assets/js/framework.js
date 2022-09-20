@@ -599,7 +599,7 @@ if (window.jQuery.request !== undefined) {
             const key = pair[0];
             const value = pair[1];
 
-            if (!Reflect.has(objectData, key)) {
+            if (!Reflect.has(objectData, key) || !key.includes('[]')) {
                 objectData[key] = value;
                 continue;
             }
