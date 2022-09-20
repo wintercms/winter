@@ -20,7 +20,10 @@
                                 class="<?= BackendMenu::isSideMenuItemActive($item) ? 'active' : null ?>"
                                 <?= Html::attributes($item->attributes) ?>
                             >
-                                <a href="<?= $item->url ?>">
+                                <a
+                                    href="<?= $item->url ?>"
+                                    <?= Html::attributes($item->anchorAttributes) ?>
+                                >
                                     <span class="nav-icon">
                                         <?php if ($item->iconSvg): ?>
                                             <img class="svg-icon" src="<?= Url::asset($item->iconSvg) ?>">
