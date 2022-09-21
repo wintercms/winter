@@ -22,7 +22,7 @@
                             >
                                 <a
                                     href="<?= $item->url ?>"
-                                    <?= Html::attributes($item->anchorAttributes) ?>
+                                    <?= isset($item->anchorAttributes) ? Html::attributes($item->anchorAttributes) : '' ?>
                                 >
                                     <span class="nav-icon">
                                         <?php if ($item->iconSvg): ?>
