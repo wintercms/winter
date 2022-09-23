@@ -280,7 +280,7 @@
     }
 
     CodeEditor.prototype.onChange = function() {
-        this.$form.trigger('change')
+        this.$textarea.trigger('change')
         this.$textarea.trigger('oc.codeEditorChange')
     }
 
