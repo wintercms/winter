@@ -25,7 +25,7 @@ class ListColumn
     /**
      * @var string Display mode. Text, number
      */
-    public $type = 'text';
+    public string $type = 'text';
 
     /**
      * @var bool Specifies if this column can be searched.

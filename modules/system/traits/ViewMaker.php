@@ -67,7 +67,7 @@ trait ViewMaker
      * Render a partial file contents located in the views folder.
      * @return mixed Partial contents or false if not throwing an exception.
      */
-    public function makePartial(string $partial, array $params = [], bool $throwException = true)
+    public function makePartial(string $partial, array $params = [], bool $throwException = true): string|false
     {
         $notRealPath = realpath($partial) === false || is_dir($partial) === true;
         if (!File::isPathSymbol($partial) && $notRealPath) {
