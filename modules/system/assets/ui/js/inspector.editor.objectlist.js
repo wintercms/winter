@@ -302,7 +302,7 @@
                 enableExternalParameterEditor: false,
                 onChange: this.proxy(this.onInspectorDataChange),
                 inspectorClass: this.inspector.options.inspectorClass,
-                parentContainer: this.inspector.getRootSurface(),
+                parentContainer: this.getRootSurface(),
             }
 
         this.currentRowInspector = new $.wn.inspector.surface(inspectorContainer, properties, values,
