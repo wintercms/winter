@@ -405,7 +405,7 @@
     }
 
     RichEditor.prototype.onChange = function(ev) {
-        this.$form.trigger('change')
+        this.$textarea.trigger('change')
     }
 
     /*
