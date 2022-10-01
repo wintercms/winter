@@ -63,7 +63,7 @@ abstract class ExportModel extends Model
             throw new ApplicationException(Lang::get('backend::lang.import_export.file_not_found_error'));
         }
 
-        return Response::download($csvPath, $outputName)->deleteFileAfterSend(true);
+        return Response::download($csvPath, $outputName, ['Content-Type' => 'text/csv'])->deleteFileAfterSend(true);
     }
 
     /**
