@@ -68,11 +68,15 @@ tabs:
 secondaryTabs:
     fields:
         btn_impersonate:
-            label: ''
+            label: ""
             context: [update]
             type: partial
         btn_unsuspend:
-            label: ''
+            label: ""
+            context: [update]
+            type: partial
+        btn_password_reset:
+            label: ""
             context: [update]
             type: partial
         avatar:
