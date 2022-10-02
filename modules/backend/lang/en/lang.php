@@ -75,10 +75,10 @@ return [
         'cancel' => 'Cancel',
         'delete' => 'Delete',
         'ok' => 'OK',
-        'working' => 'Working...',
+        'sending' => 'Sending...',
         'password_reset_email' => 'Send password reset email',
-        'manual_password_reset_confirm' => 'Are you sure you want to send password reset mail for this user?',
-        'manual_password_reset_success' => 'An email has been sent to user with reset instructions.',
+        'manual_password_reset_confirm' => 'Are you sure you want to send a password reset email to this user?',
+        'manual_password_reset_success' => 'An email has been sent to the user with instructions to reset their password.',
     ],
     'dashboard' => [
         'menu_label' => 'Dashboard',
