@@ -242,8 +242,6 @@ class Users extends Controller
     {
         $user = $this->formFindModelObject($recordId);
 
-        //@todo::Force Trusted Host verification
-
         if ($user) {
             $code = $user->getResetPasswordCode();
             $link = Backend::url('backend/auth/reset/' . $user->id . '/' . $code);
