@@ -1,13 +1,13 @@
 <?php namespace System\Console;
 
+use Config;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 use System\Classes\PluginManager;
 use Winter\Storm\Exception\ApplicationException;
-use Config;
+use Winter\Storm\Filesystem\PathResolver;
 
 /**
  * Console command to run tests for plugins and modules.
@@ -34,6 +34,7 @@ class WinterTest extends Command
     protected $signature = 'winter:test
         {phpunitArgs?* : Arguments to pass through to PHPUnit}
         {?--c|configuration= : A specific phpunit xml file}
+        {?--b|bootstrap= : A custom PHPUnit bootstrap file}
         {?--p|plugin=* : List of plugins to test}
         {?--m|module=* : List of modules to test}
     ';
@@ -139,11 +140,27 @@ class WinterTest extends Command
         }
 
         // Resolve the configuration path based on the current working directory
-        $config = realpath($config);
-        $bootstrapPath = base_path('modules/system/tests/bootstrap/app.php');
-        
-        if ($configBoostrap = (string) simplexml_load_file($config)['bootstrap']) {
-            $bootstrapPath = dirname($config) . DIRECTORY_SEPARATOR . $configBoostrap;
+        $configPath = realpath($config);
+        $bootstrapPath = (string) simplexml_load_file($configPath)['bootstrap'];
+
+        // Use a default bootstrap path if none is specified in the config
+        if (empty($bootstrapPath)) {
+            $bootstrapPath = base_path('modules/system/tests/bootstrap/app.php');
+        } elseif ($this->option('bootstrap')) {
+            $bootstrapPath = $this->option('bootstrap');
+        } else {
+            // Temporarily switch the working directory to the config path to account for relative paths.
+            $cwd = getcwd();
+            chdir(dirname($config));
+            $bootstrapPath = PathResolver::resolve($bootstrapPath);
+            chdir($cwd);
+        }
+
+        if (!is_file($bootstrapPath)) {
+            throw new ApplicationException(sprintf(
+                'Unable to find the bootstrap file "%s"',
+                $bootstrapPath,
+            ));
         }
 
         $process = new Process(
