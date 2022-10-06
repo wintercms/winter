@@ -309,7 +309,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
      */
     protected function makeFilePath(string $dirName, string $fileName, string $extension)
     {
-        return $dirName . '/' . $fileName . '.' . $extension;
+        return ltrim($dirName . '/' . $fileName . '.' . $extension, '/');
     }
 
     /**

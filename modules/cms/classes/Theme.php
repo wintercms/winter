@@ -351,14 +351,14 @@ class Theme extends CmsObject
         }
 
         $sources = [
-            'filesystem' => new FileDatasource(themes_path(), App::make('files'))
+            'filesystem' => new FileDatasource(themes_path($this->getDirName()), App::make('files'))
         ];
 
         if (static::databaseLayerEnabled()) {
             $sources['database'] = new DbDatasource($this->getDirName(), 'cms_theme_templates');
         }
 
-        $data = (new AutoDatasource($sources))->selectOne($this->getDirName(), 'theme', 'yaml');
+        $data = (new AutoDatasource($sources))->selectOne('', 'theme', 'yaml');
 
         if (!$data) {
             return $this->configCache = [];
