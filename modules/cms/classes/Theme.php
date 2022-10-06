@@ -421,6 +421,23 @@ class Theme extends CmsObject
         return $config;
     }
 
+    public function assetUrl(?string $path): string
+    {
+        $config = $this->getConfig();
+
+        $themeDir = $this->getDirName();
+        if (!File::isDirectory(themes_path($this->getDirName())) && !empty($config['parent'])) {
+            $themeDir = $config['parent'];
+        }
+
+        $_url = Config::get('cms.themesPath', '/themes') . '/' . $themeDir;
+        if ($path !== null) {
+            $_url .= '/' . $path;
+        }
+
+        return Url::asset($_url);
+    }
+
     /**
      * Returns a value from the theme configuration file by its name.
      * @param string $name Specifies the configuration parameter name.
