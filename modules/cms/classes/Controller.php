@@ -1356,11 +1356,7 @@ class Controller
             $_url = Url::to(CombineAssets::combine($url, themes_path().'/'.$themeDir));
         }
         else {
-            $_url = Config::get('cms.themesPath', '/themes').'/'.$themeDir;
-            if ($url !== null) {
-                $_url .= '/'.$url;
-            }
-            $_url = Url::asset($_url);
+            $_url = $this->getTheme()->assetUrl($url);
         }
 
         return $_url;
