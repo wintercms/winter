@@ -448,6 +448,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         Event::listen('system.console.theme.sync.getAvailableModelClasses', function () {
             return [
+                Classes\Theme::class,
                 Classes\Meta::class,
                 Classes\Page::class,
                 Classes\Layout::class,

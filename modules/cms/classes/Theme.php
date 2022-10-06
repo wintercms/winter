@@ -26,7 +26,7 @@ use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
-class Theme
+class Theme extends CmsObject
 {
     /**
      * @var string Specifies the theme directory name.
@@ -48,6 +48,16 @@ class Theme
      */
     protected static $editThemeCache = false;
 
+    /**
+     * @var array Allowable file extensions.
+     */
+    protected $allowedExtensions = ['yaml'];
+
+    /**
+     * @var string Default file extension.
+     */
+    protected $defaultExtension = 'yaml';
+
     const ACTIVE_KEY = 'cms::theme.active';
     const EDIT_KEY = 'cms::theme.edit';
 
@@ -55,7 +65,7 @@ class Theme
      * Loads the theme.
      * @return self
      */
-    public static function load($dirName)
+    public static function load($dirName, $file = null)
     {
         $theme = new static;
         $theme->setDirName($dirName);
@@ -216,9 +226,9 @@ class Theme
 
         $theme = static::load(static::getActiveThemeCode());
 
-        if (!File::isDirectory($theme->getPath())) {
-            return self::$activeThemeCache = null;
-        }
+//        if (!File::isDirectory($theme->getPath())) {
+//            return self::$activeThemeCache = null;
+//        }
 
         return self::$activeThemeCache = $theme;
     }
@@ -300,9 +310,9 @@ class Theme
 
         $theme = static::load(static::getEditThemeCode());
 
-        if (!File::isDirectory($theme->getPath())) {
-            return self::$editThemeCache = null;
-        }
+//        if (!File::isDirectory($theme->getPath())) {
+//            return self::$editThemeCache = null;
+//        }
 
         return self::$editThemeCache = $theme;
     }
@@ -340,12 +350,21 @@ class Theme
             return $this->configCache;
         }
 
-        $path = $this->getPath().'/theme.yaml';
-        if (!File::exists($path)) {
+        $sources = [
+            'filesystem' => new FileDatasource(themes_path(), App::make('files'))
+        ];
+
+        if (static::databaseLayerEnabled()) {
+            $sources['database'] = new DbDatasource($this->getDirName(), 'cms_theme_templates');
+        }
+
+        $data = (new AutoDatasource($sources))->selectOne($this->getDirName(), 'theme', 'yaml');
+
+        if (!$data) {
             return $this->configCache = [];
         }
 
-        $config = Yaml::parseFile($path);
+        $config = Yaml::parse($data['content']);
 
         /**
          * @event cms.theme.extendConfig
@@ -551,18 +570,27 @@ class Theme
     {
         $resolver = App::make('halcyon');
 
-        if (!$resolver->hasDatasource($this->dirName)) {
+        if ($resolver->hasDatasource($this->dirName)) {
+            return;
+        }
+
+        $sources = [];
+        if (static::databaseLayerEnabled()) {
+            $sources['database'] = new DbDatasource($this->dirName, 'cms_theme_templates');
+        }
+
+        $sources['filesystem'] = new FileDatasource($this->getPath(), App::make('files'));
+
+        $config = $this->getConfig();
+        if (!empty($config['parent'])) {
             if (static::databaseLayerEnabled()) {
-                $datasource = new AutoDatasource([
-                    'database'   => new DbDatasource($this->dirName, 'cms_theme_templates'),
-                    'filesystem' => new FileDatasource($this->getPath(), App::make('files')),
-                ]);
-            } else {
-                $datasource = new FileDatasource($this->getPath(), App::make('files'));
+                $sources['parent-database'] = new DbDatasource($config['parent'], 'cms_theme_templates');
             }
 
-            $resolver->addDatasource($this->dirName, $datasource);
+            $sources['parent-filesystem'] = new FileDatasource(themes_path($config['parent']), App::make('files'));
         }
+
+        $resolver->addDatasource($this->dirName, new AutoDatasource($sources));
     }
 
     /**
