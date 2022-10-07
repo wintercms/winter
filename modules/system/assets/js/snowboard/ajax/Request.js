@@ -219,13 +219,17 @@ class Request extends Snowboard.PluginBase {
                         if (response.headers.has('Content-Type') && response.headers.get('Content-Type').includes('/json')) {
                             response.json().then(
                                 (responseData) => {
-                                    reject(this.renderError(
-                                        responseData.message,
-                                        responseData.exception,
-                                        responseData.file,
-                                        responseData.line,
-                                        responseData.trace,
-                                    ));
+                                    if (responseData.message && responseData.exception) {
+                                        reject(this.renderError(
+                                            responseData.message,
+                                            responseData.exception,
+                                            responseData.file,
+                                            responseData.line,
+                                            responseData.trace,
+                                        ));
+                                    } else {
+                                        reject(responseData);
+                                    }
                                 },
                                 (error) => {
                                     reject(this.renderError(`Unable to parse JSON response: ${error}`));
