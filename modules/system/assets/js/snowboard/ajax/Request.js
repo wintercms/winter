@@ -14,22 +14,43 @@ class Request extends Snowboard.PluginBase {
     /**
      * Constructor.
      *
+     * The constructor accepts 2 or 3 parameters.
+     *
+     * If 2 parameters are provided, the first parameter is the handler name and the second
+     * parameter is the options. This assumes that this is a detached AJAX request not connected to
+     * an element.
+     *
+     * If 3 parameters are provided, the first parameter is an element or a selector, and the second
+     * and third parameters are the handler and options, respectively.
+     *
      * @param {HTMLElement|string} element
-     * @param {string} handler
+     * @param {string|Object} handler
      * @param {Object} options
      */
     construct(element, handler, options) {
         if (typeof element === 'string') {
-            const matchedElement = document.querySelector(element);
-            if (matchedElement === null) {
-                throw new Error(`No element was found with the given selector: ${element}`);
+            // Allow the element to be a handler name.
+            // This assumes the request is being made against no element, and the handler parameter
+            // will contain options.
+            if (this.isHandlerName(element)) {
+                this.element = null;
+                this.handler = element;
+                this.options = handler || {};
+            } else {
+                const matchedElement = document.querySelector(element);
+                if (matchedElement === null) {
+                    throw new Error(`No element was found with the given selector: ${element}`);
+                }
+                this.element = matchedElement;
+                this.handler = handler;
+                this.options = options || {};
             }
-            this.element = matchedElement;
         } else {
             this.element = element;
+            this.handler = handler;
+            this.options = options || {};
         }
-        this.handler = handler;
-        this.options = options || {};
+
         this.fetchOptions = {};
         this.responseData = null;
         this.responseError = null;
@@ -132,7 +153,7 @@ class Request extends Snowboard.PluginBase {
             throw new Error('The AJAX handler name is not specified.');
         }
 
-        if (!this.handler.match(/^(?:\w+:{2})?on*/)) {
+        if (!this.isHandlerName(this.handler)) {
             throw new Error('Invalid AJAX handler name. The correct handler name format is: "onEvent".');
         }
     }
@@ -810,6 +831,16 @@ class Request extends Snowboard.PluginBase {
         error.line = line || null;
         error.trace = trace || [];
         return error;
+    }
+
+    /**
+     * Checks a given string to see if it is a valid AJAX handler name.
+     *
+     * @param {String} name
+     * @returns {Boolean}
+     */
+    isHandlerName(name) {
+        return /^(?:\w+:{2})?on[A-Z0-9]/.test(name);
     }
 }
 

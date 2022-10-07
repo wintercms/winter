@@ -622,4 +622,44 @@ describe('Request AJAX library', function () {
                 }
             );
     });
+
+    it('can be run detached from an element with two parameters (handler and options)', function (done) {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
+                        // Simulate success response
+                        const resolved = Promise.resolve({
+                            success: true
+                        });
+
+                        // Mock events
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
+
+                        if (instance.element) {
+                            const event = new Event('ajaxPromise');
+                            event.promise = resolved;
+                            instance.element.dispatchEvent(event);
+                        }
+
+                        return resolved;
+                    });
+
+                    dom.window.Snowboard.request('onTest', {
+                        complete: (data, instance) => {
+                            done();
+                            return false;
+                        }
+                    });
+                }
+            );
+    });
 });
