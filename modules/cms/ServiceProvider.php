@@ -394,6 +394,19 @@ class ServiceProvider extends ModuleServiceProvider
 
         $langPath = $theme->getPath() . '/lang';
 
+        while (
+            !is_null($langPath)
+            && !File::isDirectory($langPath)
+        ) {
+            $config = $theme->getConfig();
+            if (empty($config['parent'])) {
+                $langPath = null;
+                break;
+            }
+            $theme = CmsTheme::load($config['parent']);
+            $langPath = $theme->getPath() . '/lang';
+        }
+
         if (File::isDirectory($langPath)) {
             Lang::addNamespace('themes.' . $theme->getId(), $langPath);
         }
