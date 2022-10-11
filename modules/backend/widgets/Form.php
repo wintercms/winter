@@ -366,7 +366,7 @@ class Form extends WidgetBase
          *  parameter will be omitted.
          * @param \stdClass $dataHolder An object containing the data from the form to be saved. It contains one property, `data`, with the array of
          *  form data stored within.
-         * @local-event $formWidget form.beforeRefresh
+         * @local-event $formWidget form.beforeRefresh Attached to a form widget instance.
          */
         $dataHolder = (object) ['data' => $saveData];
         $this->fireSystemEvent('backend.form.beforeRefresh', [$dataHolder]);
