@@ -7,9 +7,9 @@ return new class extends \Winter\Storm\Database\Updates\Migration
     public function up()
     {
         Schema::table($this->getTableName(), function (Blueprint $table) {
-            $table->string('uuid')->unique()->after('id');
+            $table->string('uuid')->nullable()->unique()->after('id');
             $table->longText('payload')->change();
-            $table->longText('exception')->nullable(false)->change();
+            $table->longText('exception')->change();
         });
     }
 
