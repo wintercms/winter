@@ -13,7 +13,6 @@ return new class extends \Winter\Storm\Database\Updates\Migration
 
     public function down()
     {
-
     }
 
     protected function getTableName()
