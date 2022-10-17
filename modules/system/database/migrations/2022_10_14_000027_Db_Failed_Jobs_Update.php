@@ -1,6 +1,7 @@
 <?php
 
 use Winter\Storm\Database\Schema\Blueprint;
+use Winter\Storm\Support\Str;
 
 return new class extends \Winter\Storm\Database\Updates\Migration
 {
@@ -10,6 +11,13 @@ return new class extends \Winter\Storm\Database\Updates\Migration
             $table->string('uuid')->nullable()->unique()->after('id');
             $table->longText('payload')->change();
             $table->longText('exception')->change();
+        });
+
+        // Generate UUIDs for existing failed jobs
+        DB::table($this->getTableName())->whereNull('uuid')->cursor()->each(function ($job) {
+            DB::table($this->getTableName())
+                ->where('id', $job->id)
+                ->update(['uuid' => (string) Str::uuid()]);
         });
     }
 
