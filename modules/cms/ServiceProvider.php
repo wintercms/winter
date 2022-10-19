@@ -110,7 +110,11 @@ class ServiceProvider extends ModuleServiceProvider
 
             if ($useCache) {
                 $options['cache'] = new TwigCacheFilesystem(
-                    storage_path().'/cms/twig',
+                    storage_path(implode(DIRECTORY_SEPARATOR, [
+                        'cms',
+                        'twig',
+                        Config::get('cms.activeTheme')
+                    ])) . DIRECTORY_SEPARATOR,
                     $forceBytecode ? TwigCacheFilesystem::FORCE_BYTECODE_INVALIDATION : 0
                 );
             }
