@@ -249,8 +249,6 @@ class CodeParser
             basename($this->filePath) . '.php',
         ];
 
-        dd(implode(DIRECTORY_SEPARATOR, $pathSegments));
-
         return implode(DIRECTORY_SEPARATOR, $pathSegments);
     }
 
