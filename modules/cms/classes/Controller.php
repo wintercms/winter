@@ -1351,9 +1351,19 @@ class Controller
     public function themeUrl($url = null)
     {
         $themeDir = $this->getTheme()->getDirName();
+        $parentTheme = $this->getTheme()->getConfig()['parent'] ?? false;
 
         if (is_array($url)) {
-            $_url = Url::to(CombineAssets::combine($url, themes_path().'/'.$themeDir));
+            try {
+                $combiner = CombineAssets::combine($url, themes_path() . '/' . $themeDir);
+            } catch (\Exception $ex) {
+                // @TODO: Find a nicer way to handle this to allow for replacing individual files
+                if ($parentTheme) {
+                    $combiner = CombineAssets::combine($url, themes_path() . '/' . $parentTheme);
+                }
+            }
+
+            $_url = Url::to($combiner);
         }
         else {
             $_url = $this->getTheme()->assetUrl($url);
