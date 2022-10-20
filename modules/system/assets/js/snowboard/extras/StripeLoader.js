@@ -35,9 +35,9 @@ export default class StripeLoader extends Snowboard.Singleton {
     ajaxStart(promise) {
         this.show();
 
-        promise.catch(() => {
+        promise.then(() => {
             this.hide();
-        }).finally(() => {
+        }).catch(() => {
             this.hide();
         });
     }

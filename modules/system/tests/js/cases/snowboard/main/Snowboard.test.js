@@ -42,6 +42,49 @@ describe('Snowboard framework', function () {
             );
     });
 
+    it('is frozen on construction and doesn\'t allow prototype pollution', function () {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/tests/js/fixtures/framework/TestPlugin.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    expect(() => {
+                        dom.window.Snowboard.newMethod = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.newProperty = 'test';
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.readiness.test = 'test';
+                    }).toThrow(TypeError);
+
+                    expect(dom.window.Snowboard.newMethod).toBeUndefined();
+                    expect(dom.window.Snowboard.newProperty).toBeUndefined();
+
+                    // You should not be able to modify the Snowboard object fed to plugins either
+                    const instance = dom.window.Snowboard.testPlugin();
+                    expect(() => {
+                        instance.snowboard.newMethod = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+                },
+                (error) => {
+                    throw error;
+                }
+            );
+    });
+
     it('can add and remove a plugin', function (done) {
         FakeDom
             .new()
@@ -59,16 +102,22 @@ describe('Snowboard framework', function () {
 
                     try {
                         // Check plugin caller
-                        expect(Snowboard.hasPlugin('test')).toBe(true);
-                        expect(Snowboard.getPluginNames()).toEqual(
-                            expect.arrayContaining(['jsonparser', 'sanitizer', 'test'])
-                        );
-                        expect(Snowboard.test).toEqual(expect.any(Function));
+                        expect('testPlugin' in Snowboard).toEqual(true);
+                        expect('testSingleton' in Snowboard).toEqual(false);
 
-                        const instance = Snowboard.test();
+                        expect(Snowboard.hasPlugin('testPlugin')).toBe(true);
+                        expect(Snowboard.getPluginNames()).toEqual(
+                            expect.arrayContaining(['jsonparser', 'sanitizer', 'testplugin'])
+                        );
+
+                        const instance = Snowboard.testPlugin();
 
                         // Check plugin injected methods
-                        expect(instance.snowboard).toBe(Snowboard);
+                        expect(instance.snowboard).toBeDefined();
+                        expect(instance.snowboard.getPlugin).toEqual(expect.any(Function));
+                        expect(() => {
+                            const method = instance.snowboard.initialise;
+                        }).toThrow('cannot use');
                         expect(instance.destructor).toEqual(expect.any(Function));
 
                         // Check plugin method
@@ -77,20 +126,20 @@ describe('Snowboard framework', function () {
                         expect(instance.testMethod()).toEqual('Tested');
 
                         // Check multiple instances
-                        const instanceOne = Snowboard.test();
+                        const instanceOne = Snowboard.testPlugin();
                         instanceOne.changed = true;
-                        const instanceTwo = Snowboard.test();
+                        const instanceTwo = Snowboard.testPlugin();
                         expect(instanceOne).not.toEqual(instanceTwo);
-                        const factory = Snowboard.getPlugin('test');
+                        const factory = Snowboard.getPlugin('testPlugin');
                         expect(factory.getInstances()).toEqual([instance, instanceOne, instanceTwo]);
 
                         // Remove plugin
-                        Snowboard.removePlugin('test');
-                        expect(Snowboard.hasPlugin('test')).toEqual(false);
+                        Snowboard.removePlugin('testPlugin');
+                        expect(Snowboard.hasPlugin('testPlugin')).toEqual(false);
                         expect(dom.window.Snowboard.getPluginNames()).toEqual(
                             expect.arrayContaining(['jsonparser', 'sanitizer'])
                         );
-                        expect(Snowboard.test).not.toBeDefined();
+                        expect(Snowboard.testPlugin).not.toBeDefined();
 
                         done();
                     } catch (error) {
@@ -119,17 +168,24 @@ describe('Snowboard framework', function () {
                     const Snowboard = dom.window.Snowboard;
 
                     try {
-                         // Check plugin caller
-                        expect(Snowboard.hasPlugin('test')).toBe(true);
-                        expect(Snowboard.getPluginNames()).toEqual(
-                            expect.arrayContaining(['jsonparser', 'sanitizer', 'test'])
-                        );
-                        expect(Snowboard.test).toEqual(expect.any(Function));
+                        expect('testPlugin' in Snowboard).toEqual(false);
+                        expect('testSingleton' in Snowboard).toEqual(true);
 
-                        const instance = Snowboard.test();
+                         // Check plugin caller
+                        expect(Snowboard.hasPlugin('testSingleton')).toBe(true);
+                        expect(Snowboard.getPluginNames()).toEqual(
+                            expect.arrayContaining(['jsonparser', 'sanitizer', 'testsingleton'])
+                        );
+                        expect(Snowboard.testSingleton).toEqual(expect.any(Function));
+
+                        const instance = Snowboard.testSingleton();
 
                         // Check plugin injected methods
-                        expect(instance.snowboard).toBe(Snowboard);
+                        expect(instance.snowboard).toBeDefined();
+                        expect(instance.snowboard.getPlugin).toEqual(expect.any(Function));
+                        expect(() => {
+                            const method = instance.snowboard.initialise;
+                        }).toThrow('cannot use');
                         expect(instance.destructor).toEqual(expect.any(Function));
 
                         // Check plugin method
@@ -138,20 +194,20 @@ describe('Snowboard framework', function () {
                         expect(instance.testMethod()).toEqual('Tested');
 
                         // Check multiple instances  (these should all be the same as this instance is a singleton)
-                        const instanceOne = Snowboard.test();
+                        const instanceOne = Snowboard.testSingleton();
                         instanceOne.changed = true;
-                        const instanceTwo = Snowboard.test();
+                        const instanceTwo = Snowboard.testSingleton();
                         expect(instanceOne).toEqual(instanceTwo);
-                        const factory = Snowboard.getPlugin('test');
+                        const factory = Snowboard.getPlugin('testSingleton');
                         expect(factory.getInstances()).toEqual([instance]);
 
                         // Remove plugin
-                        Snowboard.removePlugin('test');
-                        expect(Snowboard.hasPlugin('test')).toEqual(false);
+                        Snowboard.removePlugin('testSingleton');
+                        expect(Snowboard.hasPlugin('testSingleton')).toEqual(false);
                         expect(dom.window.Snowboard.getPluginNames()).toEqual(
                             expect.arrayContaining([ 'jsonparser', 'sanitizer'])
                         );
-                        expect(Snowboard.test).not.toBeDefined();
+                        expect(Snowboard.testSingleton).not.toBeDefined();
 
                         done();
                     } catch (error) {
@@ -378,6 +434,81 @@ describe('Snowboard framework', function () {
                 (error) => {
                     throw error;
                 }
+            );
+    });
+
+    it('will allow plugins to call other plugin methods', function () {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/tests/js/fixtures/framework/TestDependencyOne.js',
+                'modules/system/tests/js/fixtures/framework/TestSingletonWithDependency.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    // Run assertions
+                    const Snowboard = dom.window.Snowboard;
+                    const instance = Snowboard.testSingleton();
+
+                    expect(instance.dependencyTest()).toEqual('Tested');
+                },
+                (error) => {
+                    throw error;
+                }
+            );
+    });
+
+    it('doesn\'t allow PluginBase or Singleton abstracts to be modified', function () {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    expect(() => {
+                        dom.window.Snowboard.PluginBase.newMethod = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.PluginBase.destruct = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.PluginBase.prototype.newMethod = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.Singleton.newMethod = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.Singleton.destruct = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+
+                    expect(() => {
+                        dom.window.Snowboard.Singleton.prototype.newMethod = () => {
+                            return true;
+                        };
+                    }).toThrow(TypeError);
+                },
             );
     });
 });

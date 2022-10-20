@@ -1,5 +1,5 @@
 <div id="<?= $this->getId('popup') ?>" class="recordfinder-popup">
-    <?= Form::open() ?>
+    <?= Form::open(['data-request-parent' => "#{$parentElementId}"]) ?>
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="popup">&times;</button>
             <h4 class="modal-title"><?= e(trans($title)) ?></h4>

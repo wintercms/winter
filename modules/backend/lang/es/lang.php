@@ -319,7 +319,7 @@ return [
         'theme' => 'Color del esquema',
         'markup_styles' => 'Estilos de marcado',
         'custom_styles' => 'Hoja de estilo personalizada',
-        'custom styles_comment' => 'Estilos personalizados para incluir en el editor HTML.',
+        'custom_styles_comment' => 'Estilos personalizados para incluir en el editor HTML.',
         'markup_classes' => 'Clases de marcado',
         'paragraph' => 'Párrafo',
         'link' => 'Enlace',

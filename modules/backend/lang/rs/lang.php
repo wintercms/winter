@@ -395,7 +395,7 @@ return [
         'theme' => 'Boje',
         'markup_styles' => 'Stilovi označavanja',
         'custom_styles' => 'Proizvoljni stilovi',
-        'custom styles_comment' => 'Proizvoljni stilovi za uključivanje u HTML editor.',
+        'custom_styles_comment' => 'Proizvoljni stilovi za uključivanje u HTML editor.',
         'markup_classes' => 'Klase označavanja',
         'paragraph' => 'Paragraf',
         'link' => 'Link',

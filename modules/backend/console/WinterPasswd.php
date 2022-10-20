@@ -31,6 +31,13 @@ class WinterPasswd extends Command
      * @var string The console command description.
      */
     protected $description = 'Change the password of a Backend user.';
+    
+    /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'winter:password',
+    ];
 
     /**
      * @var bool Was the password automatically generated?

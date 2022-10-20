@@ -338,7 +338,7 @@ return [
         'theme' => '색상 스키마',
         'markup_styles' => '마크업 스타일',
         'custom_styles' => '별도의 스타일시트',
-        'custom styles_comment' => '에디터에 별도의 스타일시트를 포함시킨다.',
+        'custom_styles_comment' => '에디터에 별도의 스타일시트를 포함시킨다.',
         'markup_classes' => '마크업 클래스',
         'paragraph' => '단락',
         'link' => '링크',

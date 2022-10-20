@@ -39,6 +39,8 @@ export default class FlashListener extends Snowboard.Singleton {
                 element.dataset.flashType,
                 element.dataset.flashDuration,
             );
+
+            element.remove();
         });
     }
 

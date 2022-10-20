@@ -2,9 +2,8 @@
 
 use File;
 use System\Classes\MixAssets;
-use Symfony\Component\Console\Command\SignalableCommandInterface;
 
-class MixWatch extends MixCompile implements SignalableCommandInterface
+class MixWatch extends MixCompile
 {
     /**
      * @var string|null The default command name for lazy loading.
@@ -17,7 +16,9 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
     protected $signature = 'mix:watch
         {package : Defines the package to watch for changes}
         {webpackArgs?* : Arguments to pass through to the Webpack CLI}
-        {--f|production : Runs compilation in "production" mode}';
+        {--f|production : Runs compilation in "production" mode}
+        {--m|manifest= : Defines package.json to use for compile}
+        {--s|silent : Silent mode}';
 
     /**
      * @var string The console command description.
@@ -58,6 +59,7 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
             sprintf('Watching package "%s" for changes', $name)
         );
         $this->mixJsPath = $relativeMixJsPath;
+
         if ($this->mixPackage(base_path($relativeMixJsPath)) !== 0) {
             $this->error(
                 sprintf('Unable to compile package "%s"', $name)
@@ -90,8 +92,8 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
         $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
 
         $config = str_replace(
-            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%'],
-            [$basePath, 'mix._api.disableNotifications();', $mixJsPath, plugins_path(), base_path()],
+            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%'],
+            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent')],
             $fixture
         );
 
@@ -99,25 +101,12 @@ class MixWatch extends MixCompile implements SignalableCommandInterface
     }
 
     /**
-     * Returns the process signals this command listens to
-     * @see https://www.php.net/manual/en/pcntl.constants.php
+     * Handle the cleanup of this command if a termination signal is received
      */
-    public function getSubscribedSignals(): array
+    public function handleCleanup(): void
     {
-        return [SIGINT, SIGTERM, SIGQUIT];
-    }
-
-    /**
-     * Handle the provided process signal
-     */
-    public function handleSignal(int $signal): void
-    {
-        // Cleanup
+        $this->newLine();
+        $this->info('Cleaning up: ' . $this->getWebpackJsPath(base_path($this->mixJsPath)));
         $this->removeWebpackConfig(base_path($this->mixJsPath));
-
-        // Exit cleanly at this point, if this was a user termination
-        if ($signal === SIGINT || $signail === SIGQUIT) {
-            exit(0);
-        }
     }
 }

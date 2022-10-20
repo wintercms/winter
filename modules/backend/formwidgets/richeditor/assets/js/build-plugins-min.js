@@ -145,7 +145,8 @@ this.$textarea.on('froalaEditor.paste.beforeCleanup',this.proxy(this.beforeClean
 this.$form.on('oc.beforeRequest',this.proxy(this.onFormBeforeRequest))
 this.$textarea.froalaEditor(froalaOptions)
 this.editor=this.$textarea.data('froala.editor')
-if(this.options.readOnly){this.editor.edit.off()}this.$el.on('keydown','.fr-view figure',this.proxy(this.onFigureKeydown))}
+if(this.options.readOnly){this.editor.edit.off()}this.$el.on('keydown','.fr-view figure',this.proxy(this.onFigureKeydown))
+Snowboard.globalEvent("formwidgets.richeditor.init",this)}
 RichEditor.prototype.dispose=function(){this.unregisterHandlers()
 this.$textarea.froalaEditor('destroy')
 this.$el.removeData('oc.richEditor')
@@ -198,7 +199,7 @@ RichEditor.prototype.onBlur=function(){this.$el.removeClass('editor-focus')}
 RichEditor.prototype.onFigureKeydown=function(ev){this.$textarea.trigger('figureKeydown.oc.richeditor',[ev,this])}
 RichEditor.prototype.onKeydown=function(ev,editor,keyEv){this.$textarea.trigger('keydown.oc.richeditor',[keyEv,this])
 if(ev.isDefaultPrevented()){return false}}
-RichEditor.prototype.onChange=function(ev){this.$form.trigger('change')}
+RichEditor.prototype.onChange=function(ev){this.$textarea.trigger('change')}
 RichEditor.prototype.onFormBeforeRequest=function(ev){if(!this.editor){return}if(this.isCodeViewActive()){this.editor.html.set(this.editor.codeView.get())}this.$textarea.val(this.editor.html.get())}
 var old=$.fn.richEditor
 $.fn.richEditor=function(option){var args=Array.prototype.slice.call(arguments,1),result

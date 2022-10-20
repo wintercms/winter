@@ -18,6 +18,7 @@
         "max-len": ["off"],
         "new-cap": ["error", { "properties": false }],
         "no-alert": ["off"],
+        "no-plusplus": "off",
         "no-param-reassign": ["error", {
             "props": false
         }],
@@ -32,5 +33,17 @@
             "math": "always"
         }],
         "vue/multi-word-component-names": ["off"]
-    }
+    },
+    "ignorePatterns": [
+        "assets/js/eventlogs",
+        "assets/js/framework.js",
+        "assets/js/framework*.js",
+        "assets/js/lang",
+        "assets/js/mailbrandsettings",
+        "assets/js/updates",
+        "assets/ui",
+        "assets/vendor",
+        "tests/js",
+        "**/build/*.js"
+    ]
 }

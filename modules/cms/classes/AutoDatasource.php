@@ -482,7 +482,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
     /**
      * @inheritDoc
      */
-    public function lastModified(string $dirName, string $fileName, string $extension): int
+    public function lastModified(string $dirName, string $fileName, string $extension): ?int
     {
         return $this->getDatasourceForPath($this->makeFilePath($dirName, $fileName, $extension))->lastModified($dirName, $fileName, $extension);
     }

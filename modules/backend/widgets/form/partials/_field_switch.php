@@ -10,7 +10,7 @@ $off = isset($field->config['off']) ? $field->config['off'] : 'backend::lang.for
 
 <!-- Switch -->
 <div class="field-switch">
-    <label><?= e(trans($field->label)) ?></label>
+    <label for="<?= $field->getId() ?>"><?= e(trans($field->label)) ?></label>
     <?php if ($field->comment): ?>
         <p class="help-block"><?= $field->commentHtml ? trans($field->comment) : e(trans($field->comment)) ?></p>
     <?php endif ?>

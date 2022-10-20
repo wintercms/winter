@@ -397,7 +397,7 @@ return [
         'theme' => 'Kleurschema',
         'markup_styles' => 'Opmaakstijlen',
         'custom_styles' => 'Eigen stylesheet',
-        'custom styles_comment' => 'Eigen stijlen die in de HTML-editor gebruikt moeten worden.',
+        'custom_styles_comment' => 'Eigen stijlen die in de HTML-editor gebruikt moeten worden.',
         'markup_classes' => 'Opmaak classes',
         'paragraph' => 'Paragraaf',
         'link' => 'Link',

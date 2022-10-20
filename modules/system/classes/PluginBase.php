@@ -19,6 +19,11 @@ use Illuminate\Support\ServiceProvider as ServiceProviderBase;
 class PluginBase extends ServiceProviderBase
 {
     /**
+     * @var \Winter\Storm\Foundation\Application The application instance.
+     */
+    protected $app;
+
+    /**
      * @var boolean
      */
     protected $loadedYamlConfiguration = false;

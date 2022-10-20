@@ -110,7 +110,7 @@ class MixAssets
         // Search modules for Mix packages to autoregister
         foreach ($enabledModules as $module) {
             $module = strtolower($module);
-            $path = base_path("modules/$module") . '/' . $this->mixJs;
+            $path = base_path('modules' . DIRECTORY_SEPARATOR . $module) . DIRECTORY_SEPARATOR . $this->mixJs;
             if (File::exists($path)) {
                 $packagePaths["module-$module"] = $path;
             }
@@ -217,7 +217,7 @@ class MixAssets
         $name = strtolower($name);
         $resolvedPath = PathResolver::resolve($path);
         $pinfo = pathinfo($resolvedPath);
-        $path = Str::after($pinfo['dirname'], base_path() . '/');
+        $path = Str::after($pinfo['dirname'], base_path() . DIRECTORY_SEPARATOR);
         $mixJs = $pinfo['basename'];
 
         // Require $mixJs to be a JS file
@@ -243,7 +243,7 @@ class MixAssets
         }
 
         $package = "$path/{$this->packageJson}";
-        $mix = "$path/$mixJs";
+        $mix = $path . DIRECTORY_SEPARATOR . $mixJs;
 
         // Check for any existing package that already registers the given Mix path
         foreach ($this->packages as $packageName => $config) {

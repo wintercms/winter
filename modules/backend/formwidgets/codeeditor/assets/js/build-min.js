@@ -2315,7 +2315,7 @@ this.$el.off('dispose-control',this.proxy(this.dispose))
 $(window).off('resize',this.proxy(this.onResize))
 $(window).off('oc.updateUi',this.proxy(this.onResize))}
 CodeEditor.prototype.onBeforeRequest=function(){this.$textarea.val(this.editor.getSession().getValue())}
-CodeEditor.prototype.onChange=function(){this.$form.trigger('change')
+CodeEditor.prototype.onChange=function(){this.$textarea.trigger('change')
 this.$textarea.trigger('oc.codeEditorChange')}
 CodeEditor.prototype.onResize=function(){this.editor.resize()}
 CodeEditor.prototype.onBlur=function(){this.$el.removeClass('editor-focus')}

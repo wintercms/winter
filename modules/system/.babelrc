@@ -6,7 +6,7 @@
         "@babel/plugin-transform-runtime",
         [
             "module-resolver", {
-                "root": ["."],
+                "root": ["./tests/js"],
                 "alias": {
                     "helpers": "./helpers",
                     "snowboard": "../../modules/system/assets/js/snowboard",

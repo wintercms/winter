@@ -396,7 +396,7 @@ return [
         'theme'                      => 'Barvna shema',
         'markup_styles'              => 'Označevalni slogi',
         'custom_styles'              => 'Slog po meri',
-        'custom styles_comment'      => 'Slogi, ki jih želite vključiti v urejevalnik HTML.',
+        'custom_styles_comment'      => 'Slogi, ki jih želite vključiti v urejevalnik HTML.',
         'markup_classes'             => 'Označevalni razredi',
         'paragraph'                  => 'Odstavek',
         'link'                       => 'Povezava',
