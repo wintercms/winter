@@ -557,7 +557,7 @@ if (window.jQuery.request !== undefined) {
                     if ($parentForm.length) {
                         // Add the identified parent form to the array for processing its data
                         // and check it for a parent element & containing form of its own
-                        parentDataObjects.push($.extend(formDataToObj(new FormData($form.get(0))), parentEmbeddedData));
+                        parentDataObjects.push($.extend(formDataToObj(new FormData($parentForm.get(0))), parentEmbeddedData));
                         findParentForms($parentForm);
                     }
                 }
