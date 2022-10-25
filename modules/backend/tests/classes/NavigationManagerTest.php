@@ -174,6 +174,7 @@ class NavigationManagerTest extends TestCase
     public function testAddSideMenuItems()
     {
         $manager = NavigationManager::instance();
+        $manager->listMainMenuItems();
 
         $manager->addSideMenuItems('Winter.Tester', 'blog', [
             'foo' => [
@@ -212,6 +213,7 @@ class NavigationManagerTest extends TestCase
     public function testAddSideMenuItemsWithAlias()
     {
         $manager = NavigationManager::instance();
+        $manager->listMainMenuItems();
 
         $manager->addSideMenuItems('Winter.Tester', 'blog', [
             'foo' => [
@@ -252,6 +254,8 @@ class NavigationManagerTest extends TestCase
     public function testRemoveSideMenuItem()
     {
         $manager = NavigationManager::instance();
+        $manager->listMainMenuItems();
+
         $manager->addSideMenuItems('Winter.Tester', 'blog', [
             'bar' => [
                 'label' => 'Bar',
@@ -274,6 +278,8 @@ class NavigationManagerTest extends TestCase
     public function testRemoveSideMenuItemByAlias()
     {
         $manager = NavigationManager::instance();
+        $manager->listMainMenuItems();
+
         $manager->addSideMenuItems('Winter.Tester', 'blog', [
             'bar' => [
                 'label' => 'Bar',
