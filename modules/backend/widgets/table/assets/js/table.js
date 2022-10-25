@@ -308,26 +308,27 @@
     }
 
     Table.prototype.updateDataTable = function(onSuccess) {
-        var self = this
-
         this.unfocusTable()
 
-        this.fetchRecords(function onUpdateDataTableSuccess(records, totalCount) {
-            self.buildDataTable(records, totalCount)
+        this.fetchRecords(
+            ({ records, totalCount }) => {
+                this.buildDataTable(records, totalCount)
 
-            if (onSuccess)
-                onSuccess()
+                if (onSuccess)
+                    onSuccess()
 
-            if (totalCount == 0)
-                self.addRecord('above', true)
+                if (totalCount < this.options.minItems) {
+                    for (const i = totalCount; i <= this.options.minItems; i++) {
+                        this.addRecord('bottom', true);
+                    }
+                }
 
-            self.$el.trigger('oc.tableUpdateData', [
-                records,
-                totalCount
-            ])
-
-            self = null
-        })
+                this.$el.trigger('oc.tableUpdateData', [
+                    records,
+                    totalCount
+                ])
+            }
+        );
     }
 
     Table.prototype.updateColumnWidth = function() {
@@ -422,15 +423,13 @@
                 this.search.getQuery(),
                 this.navigation.getPageFirstRowOffset(),
                 this.options.recordsPerPage,
-                onSuccess
-            )
+            ).then(onSuccess);
         }
         else {
             this.dataSource.getRecords(
                 this.navigation.getPageFirstRowOffset(),
                 this.options.recordsPerPage,
-                onSuccess
-            )
+            ).then(onSuccess);
         }
     }
 
@@ -597,8 +596,7 @@
 
         // New records have negative keys
         var keyColumn = this.options.keyColumn,
-            recordData = {},
-            self = this
+            recordData = {}
 
         recordData[keyColumn] = -1 * this.recordsAddedOrDeleted
 
@@ -606,20 +604,22 @@
             recordData
         ])
 
-        this.dataSource.createRecord(recordData, placement, relativeToKey,
+        this.dataSource.createRecord(
+            recordData,
+            placement,
+            relativeToKey,
             this.navigation.getPageFirstRowOffset(),
             this.options.recordsPerPage,
-            function onAddRecordDataTableSuccess(records, totalCount) {
-                self.buildDataTable(records, totalCount)
+        ).then(
+            ({ records, totalCount }) => {
+                this.buildDataTable(records, totalCount)
 
-                var row = self.findRowByKey(recordData[keyColumn])
+                var row = this.findRowByKey(recordData[keyColumn])
                 if (!row)
                     throw new Error('New row is not found in the updated table: '+recordData[keyColumn])
 
                 if (!noFocus)
-                    self.navigation.focusCell(row, 0)
-
-                self = null
+                    this.navigation.focusCell(row, 0)
             }
         )
     }
@@ -630,7 +630,6 @@
 
         var currentRowIndex = this.getCellRowIndex(this.activeCell),
             key = this.getCellRowKey(this.activeCell),
-            self = this,
             paginationEnabled = this.navigation.paginationEnabled(),
             currentPageIndex = this.navigation.pageIndex,
             currentCellIndex = this.activeCell.cellIndex
@@ -651,21 +650,21 @@
             newRecordData,
             this.navigation.getPageFirstRowOffset(),
             this.options.recordsPerPage,
-            function onDeleteRecordDataTableSuccess(records, totalCount) {
-                self.buildDataTable(records, totalCount)
+        ).then(
+            ({ records, totalCount }) => {
+                this.buildDataTable(records, totalCount)
 
-                if (!paginationEnabled)
-                    self.navigation.focusCellInReplacedRow(currentRowIndex, currentCellIndex)
-                else {
-                    if (currentPageIndex != self.navigation.pageIndex)
-                        self.navigation.focusCell('bottom', currentCellIndex)
-                    else
-                        self.navigation.focusCellInReplacedRow(currentRowIndex, currentCellIndex)
+                if (!paginationEnabled) {
+                    this.navigation.focusCellInReplacedRow(currentRowIndex, currentCellIndex)
+                } else {
+                    if (currentPageIndex != this.navigation.pageIndex) {
+                        this.navigation.focusCell('bottom', currentCellIndex)
+                    } else {
+                        this.navigation.focusCellInReplacedRow(currentRowIndex, currentCellIndex)
+                    }
                 }
-
-                self = null
             }
-        )
+        );
     }
 
     Table.prototype.notifyRowProcessorsOnChange = function(cellElement) {
@@ -1126,6 +1125,8 @@
         searching: false,
         rowSorting: false,
         height: false,
+        minItems: 1,
+        maxItems: null,
         dynamicHeight: false
     }
 

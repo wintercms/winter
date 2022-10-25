@@ -38,38 +38,41 @@
     }
 
     /*
-     * Fetches records from the underlying data source and
-     * passes them to the onSuccess callback function.
-     * The onSuccess callback parameters: records, totalCount.
+     * Fetches records from the underlying data source and returns a Promise object
+     * containing two keys: `records` and `totalCount`, representing an array of records
+     * and the total number of records in the data source, respectively.
+     *
      * Each record contains the key field which uniquely identifies
      * the record. The name of the key field is defined with the table
      * widget options.
      */
-    Client.prototype.getRecords = function(offset, count, onSuccess) {
-        if (!count) {
-            // Return all records
-            onSuccess(this.data, this.data.length)
-        }
-        else {
-            // Return a subset of records
-            onSuccess(this.data.slice(offset, offset+count), this.data.length)
-        }
+    Client.prototype.getRecords = function(offset = 0, count) {
+        return Promise.resolve({
+            records: (count > 0) ? this.data.slice(offset, offset + count) : this.data,
+            totalCount: this.data.length,
+        });
     }
 
     /*
-     * Creates a record with the passed data and returns the updated page records
-     * to the onSuccess callback function.
+     * Creates a record with the passed data and returns a Promise object
+     * containing two keys: `records` and `totalCount`, representing an array of all records,
+     * including the newly created one, and the total number of records in the data source,
+     * respectively.
+     *
+     * Parameters provided to this method:
      *
      * - recordData - the record fields
      * - placement - "bottom" (the end of the data set), "above", "below"
      * - relativeToKey - a row key, required if the placement is not "bottom"
      * - offset - the current page's first record index (zero-based)
      * - count - number of records to return
-     * - onSuccess - a callback function to execute when the updated data gets available.
-     *
-     * The onSuccess callback parameters: records, totalCount.
      */
-    Client.prototype.createRecord = function(recordData, placement, relativeToKey, offset, count, onSuccess) {
+    Client.prototype.createRecord = function(recordData, placement, relativeToKey, offset, count) {
+        // Prevent the records going over the max limit
+        if (this.tableObj.options.maxItems && this.data.length >= this.tableObj.options.maxItems) {
+            return this.getRecords(offset, count);
+        }
+
         if (placement === 'bottom') {
             // Add record to the bottom of the dataset
             this.data.push(recordData)
@@ -83,7 +86,7 @@
             this.data.splice(recordIndex, 0, recordData)
         }
 
-        this.getRecords(offset, count, onSuccess)
+        return this.getRecords(offset, count);
     }
 
     /*
@@ -91,6 +94,8 @@
      *
      * - key - the record key in the dataset (primary key, etc)
      * - recordData - the record fields.
+     *
+     * This expects a promise to be returned, but the promise needs no data.
      */
     Client.prototype.updateRecord = function(key, recordData) {
         var recordIndex = this.getIndexOfKey(key)
@@ -98,38 +103,42 @@
         if (recordIndex !== -1) {
             recordData[this.tableObj.options.keyColumn] = key
             this.data[recordIndex] = recordData
+            return Promise.resolve();
         }
-        else {
-            throw new Error('Record with they key '+key+ ' is not found in the data set')
-        }
+
+        return Promise.reject(
+            new Error('Record with they key '+key+ ' is not found in the data set')
+        );
     }
 
     /*
-     * Deletes a record with the specified key.
+     * Deletes a record with the specified key and returns a Promise object
+     * containing two keys: `records` and `totalCount`, representing an array of all records,
+     * excluding the deleted record, and the total number of records in the data source,
+     * respectively.
      *
      * - key - the record key in the dataset (primary key, etc).
      * - newRecordData - replacement record to add to the dataset if the deletion
      *   empties it.
      * - offset - the current page's first record key (zero-based)
      * - count - number of records to return
-     * - onSuccess - a callback function to execute when the updated data gets available.
-     *
-     * The onSuccess callback parameters: records, totalCount.
      */
-    Client.prototype.deleteRecord = function(key, newRecordData, offset, count, onSuccess) {
+    Client.prototype.deleteRecord = function(key, newRecordData, offset, count) {
+        // Prevent the records from going under the min limit
+        if (this.data.length <= this.tableObj.options.minItems) {
+            return this.getRecords(offset, count);
+        }
+
         var recordIndex = this.getIndexOfKey(key)
 
         if (recordIndex !== -1) {
             this.data.splice(recordIndex, 1)
-
-            if (this.data.length == 0)
-                this.data.push(newRecordData)
-
-            this.getRecords(offset, count, onSuccess)
+            return this.getRecords(offset, count)
         }
-        else {
-            throw new Error('Record with they key '+key+ ' is not found in the data set')
-        }
+
+        return Promise.reject(
+            new Error('Record with they key '+key+ ' is not found in the data set')
+        );
     }
 
     Client.prototype.getIndexOfKey = function(key) {

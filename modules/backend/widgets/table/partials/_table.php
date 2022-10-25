@@ -7,13 +7,19 @@
     data-alias="<?= e($this->alias) ?>"
     data-field-name="<?= e($this->fieldName) ?>"
     <?php if (!empty($postbackHandlerName)): ?>
-    data-postback-handler-name="<?= e($postbackHandlerName) ?>"
+        data-postback-handler-name="<?= e($postbackHandlerName) ?>"
     <?php endif; ?>
     data-adding="<?= e($adding) ?>"
     data-searching="<?= e($searching) ?>"
     data-deleting="<?= e($deleting) ?>"
     data-toolbar="<?= e($toolbar) ?>"
     data-height="<?= e($height) ?>"
+    <?php if ($minItems >= 0): ?>
+        data-min-items="<?= e($minItems) ?>"
+    <?php endif ?>
+    <?php if (!empty($maxItems) && $maxItems > 0): ?>
+        data-max-items="<?= e($maxItems) ?>"
+    <?php endif ?>
     data-records-per-page="<?= e($recordsPerPage) ?>"
     data-key-column="<?= e($recordsKeyFrom) ?>"
     data-client-data-source-class="<?= e($clientDataSourceClass) ?>"
