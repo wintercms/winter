@@ -8,6 +8,7 @@ use Request;
 use Backend\Classes\WidgetBase;
 use Winter\Storm\Html\Helper as HtmlHelper;
 use SystemException;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Table Widget.
@@ -64,6 +65,16 @@ class Table extends WidgetBase
         $this->fieldName = $this->getConfig('fieldName', $this->alias);
 
         $this->recordsKeyFrom = $this->getConfig('keyFrom', 'id');
+
+        // Validate limits
+        if (!empty($this->getConfig('maxItems')) && (int) $this->getConfig('minItems', 1) > (int) $this->getConfig('maxItems')) {
+            throw new ApplicationException(
+                sprintf(
+                    'The mininum item limit must be less than or equal to the maximum item limit for the "%s" datatable.',
+                    $this->fieldName
+                )
+            );
+        }
 
         $dataSourceClass = $this->getConfig('dataSource');
         if (!strlen($dataSourceClass)) {
