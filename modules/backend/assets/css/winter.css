@@ -206,7 +206,7 @@ html.mobile .control-scrollbar{overflow:auto;-webkit-overflow-scrolling:touch}
 .control-filelist.filelist-hero ul li>a{padding:11px 45px 10px 50px;font-size:13px;border-bottom:1px solid #ecf0f1}
 .control-filelist.filelist-hero ul li>a span.title{font-size:14px;font-weight:normal;color:#2b3e50}
 .control-filelist.filelist-hero ul li>a span.description{font-size:13px}
-.control-filelist.filelist-hero ul li>a .list-icon{position:absolute;left:14px;top:15px;font-size:22px;color:#b7c0c2}
+.control-filelist.filelist-hero ul li>a .list-icon{position:absolute;left:14px;top:50%;transform:translateY(-50%);font-size:22px;color:#b7c0c2}
 .control-filelist.filelist-hero ul li>a:hover{background:#4ea5e0;border-bottom:1px solid #4ea5e0 !important}
 .control-filelist.filelist-hero ul li>a:hover span.title,
 .control-filelist.filelist-hero ul li>a:hover span.description{color:#fff !important}
