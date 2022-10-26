@@ -152,16 +152,16 @@ Table.prototype.markCellRowDirty=function(cellElement){cellElement.parentNode.se
 Table.prototype.addRecord=function(placement,noFocus){if(!this.activeCell||this.navigation.paginationEnabled()||!this.options.rowSorting)placement='bottom'
 var relativeToKey=null,currentRowIndex=null
 if(placement=='above'||placement=='below'){relativeToKey=this.getCellRowKey(this.activeCell)
-currentRowIndex=this.getCellRowIndex(this.activeCell)}this.unfocusTable()
-if(this.navigation.paginationEnabled()){var newPageIndex=this.navigation.getNewRowPage(placement,currentRowIndex)
-if(newPageIndex!=this.navigation.pageIndex){if(!this.validate())return}this.navigation.pageIndex=newPageIndex}this.recordsAddedOrDeleted++
+currentRowIndex=this.getCellRowIndex(this.activeCell)}this.recordsAddedOrDeleted++
 var keyColumn=this.options.keyColumn,recordData={}
 recordData[keyColumn]=-1*this.recordsAddedOrDeleted
-this.$el.trigger('oc.tableNewRow',[recordData])
-this.dataSource.createRecord(recordData,placement,relativeToKey,this.navigation.getPageFirstRowOffset(),this.options.recordsPerPage,).then(({records,totalCount})=>{this.buildDataTable(records,totalCount)
+this.dataSource.createRecord(recordData,placement,relativeToKey,this.navigation.getPageFirstRowOffset(),this.options.recordsPerPage,).then(({records,totalCount})=>{this.unfocusTable()
+if(this.navigation.paginationEnabled()){var newPageIndex=this.navigation.getNewRowPage(placement,currentRowIndex)
+if(newPageIndex!=this.navigation.pageIndex){if(!this.validate())return}this.navigation.pageIndex=newPageIndex}this.$el.trigger('oc.tableNewRow',[recordData])
+this.buildDataTable(records,totalCount)
 var row=this.findRowByKey(recordData[keyColumn])
 if(!row)throw new Error('New row is not found in the updated table: '+recordData[keyColumn])
-if(!noFocus)this.navigation.focusCell(row,0)})}
+if(!noFocus)this.navigation.focusCell(row,0)},()=>{this.recordsAddedOrDeleted--;})}
 Table.prototype.deleteRecord=function(){if(!this.activeCell)return
 var currentRowIndex=this.getCellRowIndex(this.activeCell),key=this.getCellRowKey(this.activeCell),paginationEnabled=this.navigation.paginationEnabled(),currentPageIndex=this.navigation.pageIndex,currentCellIndex=this.activeCell.cellIndex
 if(paginationEnabled)this.navigation.pageIndex=this.navigation.getPageAfterDeletion(currentRowIndex)
@@ -169,7 +169,7 @@ this.recordsAddedOrDeleted++
 var keyColumn=this.options.keyColumn,newRecordData={}
 newRecordData[keyColumn]=-1*this.recordsAddedOrDeleted
 this.dataSource.deleteRecord(key,newRecordData,this.navigation.getPageFirstRowOffset(),this.options.recordsPerPage,).then(({records,totalCount})=>{this.buildDataTable(records,totalCount)
-if(!paginationEnabled){this.navigation.focusCellInReplacedRow(currentRowIndex,currentCellIndex)}else{if(currentPageIndex!=this.navigation.pageIndex){this.navigation.focusCell('bottom',currentCellIndex)}else{this.navigation.focusCellInReplacedRow(currentRowIndex,currentCellIndex)}}});}
+if(!paginationEnabled){this.navigation.focusCellInReplacedRow(currentRowIndex,currentCellIndex)}else{if(currentPageIndex!=this.navigation.pageIndex){this.navigation.focusCell('bottom',currentCellIndex)}else{this.navigation.focusCellInReplacedRow(currentRowIndex,currentCellIndex)}}},()=>{this.recordsAddedOrDeleted--;});}
 Table.prototype.notifyRowProcessorsOnChange=function(cellElement){var columnName=cellElement.getAttribute('data-column'),row=cellElement.parentNode
 for(var i=0,len=row.children.length;i<len;i++){var column=this.options.columns[i].key
 this.cellProcessors[column].onRowValueChanged(columnName,row.children[i])}}
@@ -431,14 +431,14 @@ Client.prototype.constructor=Client
 Client.prototype.dispose=function(){BaseProto.dispose.call(this)
 this.data=null}
 Client.prototype.getRecords=function(offset=0,count){return Promise.resolve({records:(count>0)?this.data.slice(offset,offset+count):this.data,totalCount:this.data.length,});}
-Client.prototype.createRecord=function(recordData,placement,relativeToKey,offset,count){if(this.tableObj.options.maxItems&&this.data.length>=this.tableObj.options.maxItems){return this.getRecords(offset,count);}if(placement==='bottom'){this.data.push(recordData)}else if(placement=='above'||placement=='below'){var recordIndex=this.getIndexOfKey(relativeToKey)
+Client.prototype.createRecord=function(recordData,placement,relativeToKey,offset,count){if(this.tableObj.options.maxItems&&this.data.length>=this.tableObj.options.maxItems){return Promise.reject(new Error('The maximum number of records has been reached.'));}if(placement==='bottom'){this.data.push(recordData)}else if(placement=='above'||placement=='below'){var recordIndex=this.getIndexOfKey(relativeToKey)
 if(placement=='below')recordIndex++
 this.data.splice(recordIndex,0,recordData)}return this.getRecords(offset,count);}
 Client.prototype.updateRecord=function(key,recordData){var recordIndex=this.getIndexOfKey(key)
 if(recordIndex!==-1){recordData[this.tableObj.options.keyColumn]=key
 this.data[recordIndex]=recordData
 return Promise.resolve();}return Promise.reject(new Error('Record with they key '+key+' is not found in the data set'));}
-Client.prototype.deleteRecord=function(key,newRecordData,offset,count){if(this.data.length<=this.tableObj.options.minItems){return this.getRecords(offset,count);}var recordIndex=this.getIndexOfKey(key)
+Client.prototype.deleteRecord=function(key,newRecordData,offset,count){if(this.data.length<=this.tableObj.options.minItems){return Promise.reject(new Error('The maximum number of records has been reached.'));}var recordIndex=this.getIndexOfKey(key)
 if(recordIndex!==-1){this.data.splice(recordIndex,1)
 return this.getRecords(offset,count)}return Promise.reject(new Error('Record with they key '+key+' is not found in the data set'));}
 Client.prototype.getIndexOfKey=function(key){var keyColumn=this.tableObj.options.keyColumn
@@ -452,16 +452,15 @@ this.data=JSON.parse(dataString)};Server.prototype=Object.create(BaseProto)
 Server.prototype.constructor=Server
 Server.prototype.dispose=function(){BaseProto.dispose.call(this)
 this.data=null}
-Server.prototype.getRecords=function(offset,count,onSuccess){var handlerName=this.tableObj.getAlias()+'::onServerGetRecords'
-this.tableObj.$el.request(handlerName,{data:{offset:offset,count:count}}).done(function(data){onSuccess(data.records,data.count)})}
-Server.prototype.searchRecords=function(query,offset,count,onSuccess){var handlerName=this.tableObj.getAlias()+'::onServerSearchRecords'
-this.tableObj.$el.request(handlerName,{data:{query:query,offset:offset,count:count}}).done(function(data){onSuccess(data.records,data.count)})}
-Server.prototype.createRecord=function(recordData,placement,relativeToKey,offset,count,onSuccess){var handlerName=this.tableObj.getAlias()+'::onServerCreateRecord'
-this.tableObj.$el.request(handlerName,{data:{recordData:recordData,placement:placement,relativeToKey:relativeToKey,offset:offset,count:count}}).done(function(data){onSuccess(data.records,data.count)})}
-Server.prototype.updateRecord=function(key,recordData){var handlerName=this.tableObj.getAlias()+'::onServerUpdateRecord'
-this.tableObj.$el.request(handlerName,{data:{key:key,recordData:recordData}})}
-Server.prototype.deleteRecord=function(key,newRecordData,offset,count,onSuccess){var handlerName=this.tableObj.getAlias()+'::onServerDeleteRecord'
-this.tableObj.$el.request(handlerName,{data:{key:key,offset:offset,count:count}}).done(function(data){onSuccess(data.records,data.count)})}
+Server.prototype.getRecords=function(offset,count){return new Promise((resolve)=>{var handlerName=this.tableObj.getAlias()+'::onServerGetRecords'
+this.tableObj.$el.request(handlerName,{data:{offset:offset,count:count}}).done(function(data){resolve({records:data.records,totalCount:data.count,});});});}
+Server.prototype.searchRecords=function(query,offset,count){return new Promise((resolve)=>{var handlerName=this.tableObj.getAlias()+'::onServerSearchRecords'
+this.tableObj.$el.request(handlerName,{data:{query:query,offset:offset,count:count}}).done(function(data){resolve({records:data.records,totalCount:data.count,});})});}
+Server.prototype.createRecord=function(recordData,placement,relativeToKey,offset,count){return new Promise((resolve)=>{var handlerName=this.tableObj.getAlias()+'::onServerCreateRecord';this.tableObj.$el.request(handlerName,{data:{recordData:recordData,placement:placement,relativeToKey:relativeToKey,offset:offset,count:count}}).done(function(data){resolve({records:data.records,totalCount:data.count,});})});}
+Server.prototype.updateRecord=function(key,recordData){return new Promise((resolve)=>{var handlerName=this.tableObj.getAlias()+'::onServerUpdateRecord'
+this.tableObj.$el.request(handlerName,{data:{key:key,recordData:recordData}}).done(()=>{resolve();});});}
+Server.prototype.deleteRecord=function(key,newRecordData,offset,count){return new Promise((resolve)=>{var handlerName=this.tableObj.getAlias()+'::onServerDeleteRecord'
+this.tableObj.$el.request(handlerName,{data:{key:key,offset:offset,count:count}}).done(function(data){resolve({records:data.records,totalCount:data.count,});})});}
 $.wn.table.datasource.server=Server}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)$.wn.table.processor={}
 var Base=function(tableObj,columnName,columnConfiguration){this.tableObj=tableObj
 this.columnName=columnName
