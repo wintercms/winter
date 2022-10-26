@@ -13,6 +13,7 @@ use Cms\Models\ThemeLog;
 use Cms\Models\ThemeData;
 use Cms\Classes\CmsObject;
 use Backend\Models\UserRole;
+use Cms\Classes\Theme;
 use Cms\Classes\Page as CmsPage;
 use Cms\Classes\ComponentManager;
 use System\Classes\CombineAssets;
@@ -109,11 +110,17 @@ class ServiceProvider extends ModuleServiceProvider
             ];
 
             if ($useCache) {
+                $theme = Theme::getActiveTheme();
+                $themeDir = $theme->getDirName();
+                if ($parent = $theme->getConfig()['parent'] ?? false) {
+                    $themeDir .= '-' . $parent;
+                }
+
                 $options['cache'] = new TwigCacheFilesystem(
                     storage_path(implode(DIRECTORY_SEPARATOR, [
                         'cms',
                         'twig',
-                        Config::get('cms.activeTheme')
+                        $themeDir,
                     ])) . DIRECTORY_SEPARATOR,
                     $forceBytecode ? TwigCacheFilesystem::FORCE_BYTECODE_INVALIDATION : 0
                 );
