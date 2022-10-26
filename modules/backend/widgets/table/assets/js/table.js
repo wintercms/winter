@@ -577,21 +577,6 @@
             currentRowIndex = this.getCellRowIndex(this.activeCell)
         }
 
-        this.unfocusTable()
-
-        if (this.navigation.paginationEnabled()) {
-            var newPageIndex = this.navigation.getNewRowPage(placement, currentRowIndex)
-
-            if (newPageIndex != this.navigation.pageIndex) {
-                // Validate data on the current page if adding a new record
-                // is going to create another page.
-                if (!this.validate())
-                    return
-            }
-
-            this.navigation.pageIndex = newPageIndex
-        }
-
         this.recordsAddedOrDeleted++
 
         // New records have negative keys
@@ -599,10 +584,6 @@
             recordData = {}
 
         recordData[keyColumn] = -1 * this.recordsAddedOrDeleted
-
-        this.$el.trigger('oc.tableNewRow', [
-            recordData
-        ])
 
         this.dataSource.createRecord(
             recordData,
@@ -612,6 +593,25 @@
             this.options.recordsPerPage,
         ).then(
             ({ records, totalCount }) => {
+                this.unfocusTable()
+
+                if (this.navigation.paginationEnabled()) {
+                    var newPageIndex = this.navigation.getNewRowPage(placement, currentRowIndex)
+
+                    if (newPageIndex != this.navigation.pageIndex) {
+                        // Validate data on the current page if adding a new record
+                        // is going to create another page.
+                        if (!this.validate())
+                            return
+                    }
+
+                    this.navigation.pageIndex = newPageIndex
+                }
+
+                this.$el.trigger('oc.tableNewRow', [
+                    recordData
+                ])
+
                 this.buildDataTable(records, totalCount)
 
                 var row = this.findRowByKey(recordData[keyColumn])
@@ -620,6 +620,10 @@
 
                 if (!noFocus)
                     this.navigation.focusCell(row, 0)
+            },
+            () => {
+                // Ignore errors, don't create a new record
+                this.recordsAddedOrDeleted--;
             }
         )
     }
@@ -663,6 +667,10 @@
                         this.navigation.focusCellInReplacedRow(currentRowIndex, currentCellIndex)
                     }
                 }
+            },
+            () => {
+                // Ignore errors, don't apply any changes
+                this.recordsAddedOrDeleted--;
             }
         );
     }

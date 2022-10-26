@@ -70,7 +70,9 @@
     Client.prototype.createRecord = function(recordData, placement, relativeToKey, offset, count) {
         // Prevent the records going over the max limit
         if (this.tableObj.options.maxItems && this.data.length >= this.tableObj.options.maxItems) {
-            return this.getRecords(offset, count);
+            return Promise.reject(
+                new Error('The maximum number of records has been reached.')
+            );
         }
 
         if (placement === 'bottom') {
@@ -126,7 +128,9 @@
     Client.prototype.deleteRecord = function(key, newRecordData, offset, count) {
         // Prevent the records from going under the min limit
         if (this.data.length <= this.tableObj.options.minItems) {
-            return this.getRecords(offset, count);
+            return Promise.reject(
+                new Error('The maximum number of records has been reached.')
+            );
         }
 
         var recordIndex = this.getIndexOfKey(key)
