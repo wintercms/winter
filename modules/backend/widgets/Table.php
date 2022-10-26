@@ -1,14 +1,13 @@
 <?php namespace Backend\Widgets;
 
-use Config;
-use Backend;
 use Lang;
 use Input;
+use Config;
+use Backend;
 use Request;
+use SystemException;
 use Backend\Classes\WidgetBase;
 use Winter\Storm\Html\Helper as HtmlHelper;
-use SystemException;
-use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Table Widget.
@@ -68,7 +67,7 @@ class Table extends WidgetBase
 
         // Validate limits
         if (!empty($this->getConfig('maxItems')) && (int) $this->getConfig('minItems', 1) > (int) $this->getConfig('maxItems')) {
-            throw new ApplicationException(
+            throw new SystemException(
                 sprintf(
                     'The mininum item limit must be less than or equal to the maximum item limit for the "%s" datatable.',
                     $this->fieldName
