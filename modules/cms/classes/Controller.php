@@ -4,8 +4,10 @@ use Cms;
 use Url;
 use App;
 use View;
+use File;
 use Lang;
 use Flash;
+use Cache;
 use Config;
 use Session;
 use Request;
@@ -1348,18 +1350,51 @@ class Controller
      * @param mixed $url Specifies the theme-relative URL. If null, the theme path is returned.
      * @return string
      */
-    public function themeUrl($url = null)
+    public function themeUrl($url = null): string
+    {
+        return is_array($url)
+            ? $this->themeUrlArray($url)
+            : $this->getTheme()->assetUrl($url);
+    }
+
+    protected function themeUrlArray(array $url): string
     {
         $themeDir = $this->getTheme()->getDirName();
+        $parentTheme = $this->getTheme()->getConfig()['parent'] ?? false;
 
-        if (is_array($url)) {
-            $_url = Url::to(CombineAssets::combine($url, themes_path().'/'.$themeDir));
-        }
-        else {
-            $_url = $this->getTheme()->assetUrl($url);
+        $cacheKey = __METHOD__ . '.' . md5(json_encode($url));
+
+        if (!($assets = Cache::get($cacheKey))) {
+            $assets = [];
+            $sources = [
+                themes_path($themeDir)
+            ];
+
+            if ($parentTheme) {
+                $sources[] = themes_path($parentTheme);
+            }
+
+            foreach ($url as $file) {
+                if (str_starts_with($file, '@')) {
+                    $assets[] = $file;
+                    continue;
+                }
+
+                foreach ($sources as $source) {
+                    $asset = $source . DIRECTORY_SEPARATOR . $file;
+                    if (File::exists($asset)) {
+                        $assets[] = $asset;
+                        break 2;
+                    }
+                }
+
+                throw new \Exception('Theme URL File not found: ' . $file);
+            }
+
+            Cache::put($cacheKey, $assets);
         }
 
-        return $_url;
+        return Url::to(CombineAssets::combine($assets));
     }
 
     /**
