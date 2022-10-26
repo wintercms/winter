@@ -581,7 +581,9 @@ class Theme extends CmsObject
         $hasDb = Cache::get($key, null);
         if (is_null($hasDb)) {
             $hasDb = (bool) App::hasDatabase() && Schema::hasTable('cms_theme_templates');
-            Cache::rememberForever($key, function () use ($hasDb) { return $hasDb; });
+            Cache::rememberForever($key, function () use ($hasDb) {
+                return $hasDb;
+            });
         }
 
         return $enableDbLayer && $hasDb;
