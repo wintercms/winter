@@ -207,10 +207,9 @@ class MixCompile extends Command
         $command = $this->argument('webpackArgs') ?? [];
         array_unshift(
             $command,
-            'npx',
-            'webpack',
+            $basePath . sprintf('%1$snode_modules%1$s.bin%1$swebpack', DIRECTORY_SEPARATOR),
             'build',
-            '--progress',
+            $this->option('silent') ? '--stats=none' : '--progress',
             '--config=' . $this->getWebpackJsPath($mixJsPath)
         );
         return $command;

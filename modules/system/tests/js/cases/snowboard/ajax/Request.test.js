@@ -1,4 +1,5 @@
 import FakeDom from '../../../helpers/FakeDom';
+import FetchMock from '../../../helpers/FetchMock';
 
 jest.setTimeout(2000);
 
@@ -619,6 +620,86 @@ describe('Request AJAX library', function () {
                     expect(() => {
                         dom.window.Snowboard.request(undefined, 'notRight');
                     }).toThrow('Invalid AJAX handler name');
+                }
+            );
+    });
+
+    it('can be run detached from an element with two parameters (handler and options)', function (done) {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    dom.window.Snowboard.getPlugin('request').mock('doAjax', (instance) => {
+                        // Simulate success response
+                        const resolved = Promise.resolve({
+                            success: true
+                        });
+
+                        // Mock events
+                        instance.snowboard.globalEvent('ajaxStart', instance, resolved);
+
+                        if (instance.element) {
+                            const event = new Event('ajaxPromise');
+                            event.promise = resolved;
+                            instance.element.dispatchEvent(event);
+                        }
+
+                        return resolved;
+                    });
+
+                    dom.window.Snowboard.request('onTest', {
+                        complete: (data, instance) => {
+                            done();
+                            return false;
+                        }
+                    });
+                }
+            );
+    });
+
+    it('can correctly receive a mocked 404 JSON response', function (done) {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/assets/js/snowboard/build/snowboard.request.js'
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    dom.window.fetch = FetchMock(
+                        dom,
+                        404,
+                        '{"title":"404 Popup","markup":"<div>\\n    <div class=\\"w-full bg-black\\">\\n    <h2 class=\\"p-6 text-white text-2xl\\">Content not found<\\/h2>\\n<\\/div>    <div class=\\"container p-6 mx-auto\\">\\n    The requested popup could not be found, please try again.\\n<\\/div><\\/div>\\n"}',
+                        {
+                            'Content-Type': 'application/json'
+                        }
+                    );
+
+                    dom.window.Snowboard.request('onTest', {
+                        error: (error, instance) => {
+                            expect(error).toEqual({
+                                title: '404 Popup',
+                                markup: '<div>\n    <div class="w-full bg-black">\n    <h2 class="p-6 text-white text-2xl">Content not found</h2>\n</div>    <div class="container p-6 mx-auto">\n    The requested popup could not be found, please try again.\n</div></div>\n'
+                            })
+                            expect(instance).toBeDefined();
+                            expect(instance.responseData).toEqual(null);
+                            expect(instance.responseError).toEqual({
+                                title: '404 Popup',
+                                markup: '<div>\n    <div class="w-full bg-black">\n    <h2 class="p-6 text-white text-2xl">Content not found</h2>\n</div>    <div class="container p-6 mx-auto">\n    The requested popup could not be found, please try again.\n</div></div>\n'
+                            });
+                            done();
+                        }
+                    });
                 }
             );
     });
