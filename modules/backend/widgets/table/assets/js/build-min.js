@@ -84,7 +84,7 @@ return headersTable}
 Table.prototype.updateDataTable=function(onSuccess){this.unfocusTable()
 this.fetchRecords(({records,totalCount})=>{this.buildDataTable(records,totalCount)
 if(onSuccess)onSuccess()
-if(totalCount<this.options.minItems){for(const i=totalCount;i<=this.options.minItems;i++){this.addRecord('bottom',true);}}this.$el.trigger('oc.tableUpdateData',[records,totalCount])});}
+if(totalCount<this.options.minItems){for(let i=totalCount;i<this.options.minItems;i++){this.addRecord('bottom',true);}}this.$el.trigger('oc.tableUpdateData',[records,totalCount])});}
 Table.prototype.updateColumnWidth=function(){var headerCells=this.headerTable.querySelectorAll('th'),dataCells=this.dataTable.querySelectorAll('tr:first-child td')
 for(var i=0,len=headerCells.length;i<len;i++){if(dataCells[i])dataCells[i].setAttribute('style',headerCells[i].getAttribute('style'))}}
 Table.prototype.buildDataTable=function(records,totalCount){var dataTable=document.createElement('table'),tbody=document.createElement('tbody'),keyColumn=this.options.keyColumn

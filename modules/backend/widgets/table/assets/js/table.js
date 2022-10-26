@@ -318,7 +318,7 @@
                     onSuccess()
 
                 if (totalCount < this.options.minItems) {
-                    for (const i = totalCount; i <= this.options.minItems; i++) {
+                    for (let i = totalCount; i < this.options.minItems; i++) {
                         this.addRecord('bottom', true);
                     }
                 }
