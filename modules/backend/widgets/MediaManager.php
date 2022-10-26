@@ -519,9 +519,9 @@ class MediaManager extends WidgetBase
     /**
      * Show move item popup AJAX handler
      *
-     * @throws ApplicationException If the exclude input data is not an array
+     * @throws ApplicationException If the exclude input data is not an string
      */
-    public function onLoadMovePopup(): array
+    public function onLoadMovePopup(): string
     {
         $this->abortIfReadOnly();
 
