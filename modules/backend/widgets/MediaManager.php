@@ -521,7 +521,7 @@ class MediaManager extends WidgetBase
      *
      * @throws ApplicationException If the exclude input data is not an array
      */
-    public function onLoadMovePopup(): array
+    public function onLoadMovePopup(): string
     {
         $this->abortIfReadOnly();
 
