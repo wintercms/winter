@@ -15,7 +15,12 @@ class TwigExtensionTest extends TestCase
         $extension = new Extension;
         $controller = Controller::getController() ?: new Controller;
         $extension->setController($controller);
+
         $this->assertFalse( $extension->partialFunction('invalid-partial-file', [], false) );
+
+        $this->expectException(SystemException::class);
+        $this->expectExceptionMessageMatches('/is\snot\sfound/');
+        $this->assertFalse( $extension->partialFunction('invalid-partial-file', [], true) );
     }
 
     public function testContentFunction()

@@ -1098,9 +1098,9 @@ class Controller
      *
      * @param string $name The content view to load.
      * @param array $parameters Parameter variables to pass to the view.
-     * @param bool $throwException Throw an exception if the partial is not found.
+     * @param bool $throwException Throw an exception if the content file is not found.
      * @throws SystemException If the content cannot be found
-     * @return mixed Partial contents or false if not throwing an exception.
+     * @return mixed Content file or false if not throwing an exception.
      */
     public function renderContent($name, $parameters = [], $throwException = true)
     {
