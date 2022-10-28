@@ -1098,10 +1098,11 @@ class Controller
      *
      * @param string $name The content view to load.
      * @param array $parameters Parameter variables to pass to the view.
+     * @param bool $throwException Throw an exception if the partial is not found.
      * @throws SystemException If the content cannot be found
-     * @return string
+     * @return mixed Partial contents or false if not throwing an exception.
      */
-    public function renderContent($name, $parameters = [])
+    public function renderContent($name, $parameters = [], $throwException = true)
     {
         /**
          * @event cms.page.beforeRenderContent
@@ -1127,7 +1128,11 @@ class Controller
          * Load content from theme
          */
         elseif (($content = Content::loadCached($this->theme, $name)) === null) {
-            throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name'=>$name]));
+            if ($throwException) {
+                throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name'=>$name]));
+            } else {
+                return false;
+            }
         }
 
         $fileContent = $content->parsedMarkup;
