@@ -35,7 +35,7 @@ class FrameworkNode extends TwigNode
             ->addDebugInfo($this)
             ->write("\$_minify = ".CombineAssets::class."::instance()->useMinify;" . PHP_EOL);
 
-        $basePath = Url::asset('/modules/system/assets/js');
+        $basePath = rtrim(Url::asset(''), '/');
 
         if ($includeExtras) {
             $compiler
