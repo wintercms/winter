@@ -19,6 +19,12 @@ class IconPicker extends FormWidgetBase
      */
     protected $defaultAlias = 'iconpicker';
 
+    /**
+     * This is a temporary storage location
+     * Ideally we should update FontAwesome, and generate this somewhere else from all the available icons.
+     * This way there will be no manual intervention to keep the icons updated for the Iconpicker.
+     */
+
     protected array $fontLibraries = [
         [
             "id" => "far",
