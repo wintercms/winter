@@ -148,11 +148,11 @@ button.select-icon {
     width: 5px;
     top: 0;
     left: 0;
-    background-color: #4ea5e0;
+    background-color: var(--secondary);
 }
 
 .aim-modal--sidebar-tab-item.aesthetic-active i {
-    color: #4ea5e0;
+    color: var(--secondary);
 }
 
 
@@ -242,8 +242,8 @@ button.select-icon {
 }
 
 .aim-icon-item.aesthetic-selected {
-    -webkit-box-shadow: 0 1px 12px rgba(0, 0, 0, 0.05), 0 0 0 3px #4ea5e0;
-    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.05), 0 0 0 3px #4ea5e0;
+    -webkit-box-shadow: 0 1px 12px rgba(0, 0, 0, 0.05), 0 0 0 3px var(--secondary);
+    box-shadow: 0 1px 12px rgba(0, 0, 0, 0.05), 0 0 0 3px var(--secondary);
 }
 
 .aim-icon-item-inner {
