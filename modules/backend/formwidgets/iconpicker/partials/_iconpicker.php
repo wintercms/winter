@@ -12,6 +12,3 @@
     ></div>
     <script type="application/json"><?= json_encode($fontLibraries) ?></script>
 <?php endif ?>
-
-
-
