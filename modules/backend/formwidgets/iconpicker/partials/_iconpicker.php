@@ -9,6 +9,12 @@
          data-label="Icon Picker"
          data-prop-value="<?= e($field->getLoadValue()) ?>"
          data-name="<?= $field->getFieldName() ?>"
-    ></div>
-    <script type="application/json"><?= json_encode($fontLibraries) ?></script>
+    >
+        <div class="input-group">
+            <span class="input-group-addon" style="cursor: pointer">
+                <i class="<?= $field->getLoadValue() ? e($field->getLoadValue()) : 'far icon-address-book' ?>"></i>
+            </span>
+            <input type="text" class="form-control" value="<?= $field->getLoadValue() ? e($field->getLoadValue()) : 'far icon-address-book' ?>">
+        </div>
+    </div>
 <?php endif ?>

@@ -2,6 +2,11 @@
     cursor: pointer;
 }
 
+.input-group i {
+    min-width: 14px;
+    display: block;
+}
+
 button.select-icon {
     padding: 20px;
     border-radius: 5px;
