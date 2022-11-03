@@ -68,10 +68,6 @@ class ServiceProvider extends ModuleServiceProvider
 
         $this->bootMenuItemEvents();
         $this->bootRichEditorEvents();
-
-        if (App::runningInBackend()) {
-            $this->bootBackendLocalization();
-        }
     }
 
     /**
@@ -390,37 +386,6 @@ class ServiceProvider extends ModuleServiceProvider
             ]);
             $manager->registerOwnerAlias('Winter.Cms', 'October.Cms');
         });
-    }
-
-    /**
-     * Boots localization from an active theme for backend items.
-     */
-    protected function bootBackendLocalization()
-    {
-        $theme = CmsTheme::getActiveTheme();
-
-        if (is_null($theme)) {
-            return;
-        }
-
-        $langPath = $theme->getPath() . '/lang';
-
-        while (
-            !is_null($langPath)
-            && !File::isDirectory($langPath)
-        ) {
-            $config = $theme->getConfig();
-            if (empty($config['parent'])) {
-                $langPath = null;
-                break;
-            }
-            $theme = CmsTheme::load($config['parent']);
-            $langPath = $theme->getPath() . '/lang';
-        }
-
-        if (File::isDirectory($langPath)) {
-            Lang::addNamespace('themes.' . $theme->getId(), $langPath);
-        }
     }
 
     /**

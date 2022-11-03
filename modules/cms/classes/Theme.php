@@ -245,6 +245,11 @@ class Theme extends CmsObject
 
         Parameter::set(self::ACTIVE_KEY, $code);
 
+        if (App::runningInBackend()) {
+            // Load theme localization
+            static::registerThemeBackendLocalization();
+        }
+
         /**
          * @event cms.theme.setActiveTheme
          * Fires when the active theme has been changed.
@@ -258,6 +263,27 @@ class Theme extends CmsObject
          *
          */
         Event::fire('cms.theme.setActiveTheme', compact('code'));
+    }
+
+    public static function registerThemeBackendLocalization(): void
+    {
+        $theme = static::getActiveTheme();
+
+        $langPath = $theme->getPath() . '/lang';
+
+        while (!File::isDirectory($langPath)) {
+            $config = $theme->getConfig();
+            if (empty($config['parent'])) {
+                $langPath = null;
+                break;
+            }
+            $theme = static::load($config['parent']);
+            $langPath = $theme->getPath() . '/lang';
+        }
+
+        if (File::isDirectory($langPath)) {
+            Lang::addNamespace('themes.' . $theme->getId(), $langPath);
+        }
     }
 
     /**
