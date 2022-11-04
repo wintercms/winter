@@ -12,6 +12,11 @@ class MixList extends Command
     protected static $defaultName = 'mix:list';
 
     /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'mix:list';
+
+    /**
      * @var string The console command description.
      */
     protected $description = 'List all registered Mix packages in this project.';
