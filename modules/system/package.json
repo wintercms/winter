@@ -24,7 +24,8 @@
     },
     "homepage": "https://wintercms.com/",
     "scripts": {
-        "test": "jest --config tests/js/jest.config.js tests/js/cases"
+        "test": "jest --config tests/js/jest.config.js tests/js/cases",
+        "lint": "eslint --ext .js,.vue --ignore-path .gitignore ."
     },
     "dependencies": {
         "@popperjs/core": "^2.11.4",
