@@ -6,6 +6,6 @@ if (window.Snowboard === undefined) {
 }
 
 ((Snowboard) => {
-    Snowboard.addPlugin('overlay', Overlay);
-    Snowboard.addPlugin('tooltip', Tooltip);
+    Snowboard.addPlugin('system.ui.overlay', Overlay);
+    Snowboard.addPlugin('system.ui.tooltip', Tooltip);
 })(window.Snowboard);
