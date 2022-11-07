@@ -33,7 +33,6 @@ use System\Models\File as FileModel;
  */
 class WinterUtil extends Command
 {
-
     use \Illuminate\Console\ConfirmableTrait;
 
     /**
@@ -97,12 +96,13 @@ class WinterUtil extends Command
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info "http://wintercms.com/docs/console/commands#winter-util-command".'],
+            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info "https://wintercms.com/docs/console/commands#winter-util-command".'],
         ];
     }
 
     /**
      * Get the console command options.
+     * @return array
      */
     protected function getOptions()
     {

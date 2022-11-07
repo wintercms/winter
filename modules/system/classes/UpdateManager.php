@@ -8,6 +8,7 @@ use Http;
 use Cache;
 use Schema;
 use Config;
+use Exception;
 use ApplicationException;
 use Cms\Classes\ThemeManager;
 use System\Models\Parameter;
@@ -15,7 +16,8 @@ use System\Models\PluginVersion;
 use System\Helpers\Cache as CacheHelper;
 use Winter\Storm\Filesystem\Zip;
 use Carbon\Carbon;
-use Exception;
+use Illuminate\Console\View\Components\Error;
+use Illuminate\Console\View\Components\Info;
 
 /**
  * Update manager
@@ -135,7 +137,8 @@ class UpdateManager
         $firstUp = !Schema::hasTable($this->getMigrationTableName());
         if ($firstUp) {
             $this->repository->createRepository();
-            $this->note('Migration table created');
+            $this->out('', true);
+            $this->write(Info::class, 'Migration table created');
         }
 
         /*
@@ -192,6 +195,9 @@ class UpdateManager
                 ]));
             }
         }
+
+        $this->out('', true);
+        $this->write(Info::class, 'Migration complete.');
 
         // Print messages returned by migrations / seeders
         $this->printMessages();
@@ -454,7 +460,9 @@ class UpdateManager
             $this->migrator->setOutput($this->notesOutput);
         }
 
-        $this->note($module);
+        $this->out('', true);
+        $this->out(sprintf('<info>Migrating %s module...</info>', $module), true);
+        $this->out('', true);
 
         $this->migrator->run(base_path() . '/modules/'.strtolower($module).'/database/migrations');
 
@@ -473,6 +481,10 @@ class UpdateManager
             return;
         }
 
+        $this->out('', true);
+        $this->out(sprintf('<info>Seeding %s module...</info>', $module), true);
+        $this->out('', true);
+
         $seeder = App::make($className);
         $return = $seeder->run();
 
@@ -480,7 +492,8 @@ class UpdateManager
             $this->addMessage($className, $return);
         }
 
-        $this->note(sprintf('<info>Seeded %s</info> ', $module));
+        $this->write(Info::class, sprintf('Seeded %s', $module));
+
         return $this;
     }
 
@@ -565,11 +578,12 @@ class UpdateManager
          * Update the plugin database and version
          */
         if (!($plugin = $this->pluginManager->findByIdentifier($name))) {
-            $this->note('<error>Unable to find:</error> ' . $name);
+            $this->write(Error::class, sprintf('Unable to find plugin %s', $name));
             return;
         }
 
-        $this->note($name);
+        $this->out(sprintf('<info>Migrating %s (%s) plugin...</info>', Lang::get($plugin->pluginDetails()['name']), $name));
+        $this->out('', true);
 
         $this->versionManager->setNotesOutput($this->notesOutput);
 
@@ -593,7 +607,7 @@ class UpdateManager
         if (!($plugin = $this->pluginManager->findByIdentifier($name))
             && $this->versionManager->purgePlugin($name)
         ) {
-            $this->note('<info>Purged from database:</info> ' . $name);
+            $this->write(Info::class, sprintf('%s purged from database', $name));
             return $this;
         }
 
@@ -602,16 +616,20 @@ class UpdateManager
         }
 
         if ($this->versionManager->removePlugin($plugin, $stopOnVersion, true)) {
-            $this->note('<info>Rolled back:</info> ' . $name);
+            $this->write(Info::class, sprintf('%s rolled back', $name));
 
             if ($currentVersion = $this->versionManager->getCurrentVersion($plugin)) {
-                $this->note('<info>Current Version:</info> ' . $currentVersion . ' (' . $this->versionManager->getCurrentVersionNote($plugin) . ')');
+                $this->write(Info::class, sprintf(
+                    'Current Version: %s (%s)',
+                    $currentVersion,
+                    $this->versionManager->getCurrentVersionNote($plugin)
+                ));
             }
 
             return $this;
         }
 
-        $this->note('<error>Unable to find:</error> ' . $name);
+        $this->write(Error::class, sprintf('Unable to find plugin %s', $name));
 
         return $this;
     }
@@ -853,14 +871,32 @@ class UpdateManager
     //
 
     /**
-     * Raise a note event for the migrator.
-     * @param string $message
-     * @return self
+     * Writes output to the console using a Laravel CLI View component.
+     *
+     * @param \Illuminate\Console\View\Components\Component $component
+     * @param array $arguments
+     * @return static
      */
-    protected function note($message)
+    protected function write($component, ...$arguments)
     {
         if ($this->notesOutput !== null) {
-            $this->notesOutput->writeln($message);
+            with(new $component($this->notesOutput))->render(...$arguments);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Writes output to the console.
+     *
+     * @param string $message
+     * @param bool $newline
+     * @return static
+     */
+    protected function out($message, $newline = false)
+    {
+        if ($this->notesOutput !== null) {
+            $this->notesOutput->write($message, $newline);
         }
 
         return $this;
@@ -999,7 +1035,8 @@ class UpdateManager
         $postData['server'] = base64_encode(serialize([
             'php'   => PHP_VERSION,
             'url'   => Url::to('/'),
-            'since' => PluginVersion::orderBy('created_at')->value('created_at')
+            // TODO: Store system boot date in `Parameter`
+            'since' => PluginVersion::orderBy('created_at')->first()->created_at
         ]));
 
         if ($projectId = Parameter::get('system::project.id')) {
@@ -1089,15 +1126,14 @@ class UpdateManager
             return;
         }
 
-        // Add a line break
-        $this->note('');
-
         foreach ($this->messages as $class => $messages) {
-            $this->note(sprintf('<info>%s reported:</info>', $class));
+            $this->write(Info::class, sprintf('%s reported the following:', $class));
 
             foreach ($messages as $message) {
-                $this->note(' - ' . (string) $message);
+                $this->out('    - ' . $message, true);
             }
+
+            $this->out('', true);
         }
     }
 }

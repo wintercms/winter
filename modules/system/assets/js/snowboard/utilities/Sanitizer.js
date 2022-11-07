@@ -9,9 +9,7 @@ import Singleton from '../abstracts/Singleton';
  * @author Ben Thomson <git@alfreido.com>
  */
 export default class Sanitizer extends Singleton {
-    constructor(snowboard) {
-        super(snowboard);
-
+    construct() {
         // Add to global function for backwards compatibility
         window.wnSanitize = (html) => this.sanitize(html);
         window.ocSanitize = window.wnSanitize;

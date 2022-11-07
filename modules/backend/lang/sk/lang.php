@@ -363,7 +363,7 @@ return [
         'theme' => 'Farebná schéma',
         'markup_styles' => 'Štýly',
         'custom_styles' => 'Vlastné štýly',
-        'custom styles_comment' => 'Vlastné štýly, ktoré budú zahrnuté do editora HTML.',
+        'custom_styles_comment' => 'Vlastné štýly, ktoré budú zahrnuté do editora HTML.',
         'markup_classes' => 'Triedy štýlov',
         'paragraph' => 'Odstavec',
         'link' => 'Odkaz',

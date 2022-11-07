@@ -1,6 +1,7 @@
 <?php namespace Backend\Widgets;
 
 use Db;
+use Str;
 use Html;
 use Lang;
 use Backend;
@@ -391,7 +392,11 @@ class Lists extends WidgetBase
         $relationSearchable = [];
 
         $columnsToSearch = [];
-        if (!empty($this->searchTerm) && ($searchableColumns = $this->getSearchableColumns())) {
+        if (
+            strlen($this->searchTerm) !== 0
+            && trim($this->searchTerm) !== ''
+            && ($searchableColumns = $this->getSearchableColumns())
+        ) {
             foreach ($searchableColumns as $column) {
                 /*
                  * Related
@@ -422,7 +427,7 @@ class Lists extends WidgetBase
          */
         foreach ($this->getVisibleColumns() as $column) {
             // If useRelationCount is enabled, eager load the count of the relation into $relation_count
-            if ($column->relation && @$column->config['useRelationCount']) {
+            if ($column->relation && ($column->config['useRelationCount'] ?? false)) {
                 $query->withCount($column->relation);
             }
 
@@ -509,7 +514,13 @@ class Lists extends WidgetBase
                     ? DbDongle::raw("group_concat(" . $sqlSelect . " separator ', ')")
                     : DbDongle::raw($sqlSelect);
 
-                $joinSql = $countQuery->select($joinSql)->toSql();
+                $joinQuery = $countQuery->select($joinSql);
+
+                if (!empty($column->config['conditions'])) {
+                    $joinQuery->whereRaw(DbDongle::parse($column->config['conditions']));
+                }
+
+                $joinSql = $joinQuery->toSql();
 
                 $selects[] = Db::raw("(".$joinSql.") as ".$alias);
 
@@ -538,8 +549,8 @@ class Lists extends WidgetBase
             }
 
             // Set the sorting column to $relation_count if useRelationCount enabled
-            if (isset($column->relation) && @$column->config['useRelationCount']) {
-                $sortColumn = $column->relation . '_count';
+            if (isset($column->relation) && ($column->config['useRelationCount'] ?? false)) {
+                $sortColumn = Str::snake($column->relation) . '_count';
             }
 
             $query->orderBy($sortColumn, $this->sortDirection);
@@ -1034,8 +1045,9 @@ class Lists extends WidgetBase
             if ($record->hasRelation($columnName) && array_key_exists($columnName, $record->attributes)) {
                 $value = $record->attributes[$columnName];
             // Load the value from the relationship counter if useRelationCount is specified
-            } elseif ($column->relation && @$column->config['useRelationCount']) {
-                $value = $record->{"{$column->relation}_count"};
+            } elseif ($column->relation && ($column->config['useRelationCount'] ?? false)) {
+                $relation = Str::snake($column->relation);
+                $value = $record->{"{$relation}_count"};
             } else {
                 $value = $record->{$columnName};
             }
@@ -1466,7 +1478,10 @@ class Lists extends WidgetBase
      */
     public function setSearchTerm($term, $resetPagination = false)
     {
-        if (!empty($term)) {
+        if (
+            strlen($this->searchTerm) !== 0
+            && trim($this->searchTerm) !== ''
+        ) {
             $this->showTree = false;
         }
 

@@ -4,6 +4,13 @@ use Str;
 use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
+use Twig\Environment as TwigEnvironment;
+use Twig\Extension\SandboxExtension;
+use Twig\Loader\LoaderInterface;
+use System\Twig\Loader as SystemTwigLoader;
+use System\Twig\Extension as SystemTwigExtension;
+use System\Twig\SecurityPolicy as TwigSecurityPolicy;
+
 use ApplicationException;
 
 /**
@@ -36,16 +43,6 @@ class MarkupManager
     protected $pluginManager;
 
     /**
-     * @var array Transaction based extension items
-     */
-    protected $transactionItems;
-
-    /**
-     * @var bool Manager is in transaction mode
-     */
-    protected $transactionMode = false;
-
-    /**
      * Initialize this singleton.
      */
     protected function init()
@@ -53,18 +50,36 @@ class MarkupManager
         $this->pluginManager = PluginManager::instance();
     }
 
-    protected function loadExtensions()
+    /**
+     * Make an instance of the base TwigEnvironment to extend further
+     */
+    public static function makeBaseTwigEnvironment(LoaderInterface $loader = null, array $options = []): TwigEnvironment
     {
-        /*
-         * Load module items
-         */
+        if (!$loader) {
+            $loader = new SystemTwigLoader();
+        }
+
+        $options = array_merge([
+            'auto_reload' => true,
+        ], $options);
+
+        $twig = new TwigEnvironment($loader, $options);
+        $twig->addExtension(new SystemTwigExtension);
+        $twig->addExtension(new SandboxExtension(new TwigSecurityPolicy, true));
+        return $twig;
+    }
+
+    /**
+     * Loads all of the registered Twig extensions
+     */
+    protected function loadExtensions(): void
+    {
+        // Load Module extensions
         foreach ($this->callbacks as $callback) {
             $callback($this);
         }
 
-        /*
-         * Load plugin items
-         */
+        // Load Plugin extensions
         $plugins = $this->pluginManager->getPlugins();
 
         foreach ($plugins as $id => $plugin) {
@@ -95,69 +110,60 @@ class MarkupManager
      *         $manager->registerTokenParsers([...]);
      *     });
      *
-     * @param callable $callback A callable function.
      */
-    public function registerCallback(callable $callback)
+    public function registerCallback(callable $callback): void
     {
         $this->callbacks[] = $callback;
     }
 
     /**
-     * Registers the CMS Twig extension items.
-     * The argument is an array of the extension definitions. The array keys represent the
-     * function/filter name, specific for the plugin/module. Each element in the
-     * array should be an associative array.
-     * @param string $type The extension type: filters, functions, tokens
-     * @param array $definitions An array of the extension definitions.
+     * Registers the Twig extension items.
+     * $type must be one of self::EXTENSION_TOKEN_PARSER, self::EXTENSION_FILTER, or self::EXTENSION_FUNCTION
+     * $definitions is of the format of [$extensionName => $associativeExtensionOptions]
      */
-    public function registerExtensions($type, array $definitions)
+    public function registerExtensions(string $type, array $definitions): void
     {
-        $items = $this->transactionMode ? 'transactionItems' : 'items';
-
-        if ($this->$items === null) {
-            $this->$items = [];
+        if ($this->items === null) {
+            $this->items = [];
         }
 
-        if (!array_key_exists($type, $this->$items)) {
-            $this->$items[$type] = [];
+        if (!array_key_exists($type, $this->items)) {
+            $this->items[$type] = [];
         }
 
         foreach ($definitions as $name => $definition) {
             switch ($type) {
                 case self::EXTENSION_TOKEN_PARSER:
-                    $this->$items[$type][] = $definition;
+                    $this->items[$type][] = $definition;
                     break;
                 case self::EXTENSION_FILTER:
                 case self::EXTENSION_FUNCTION:
-                    $this->$items[$type][$name] = $definition;
+                    $this->items[$type][$name] = $definition;
                     break;
             }
         }
     }
 
     /**
-     * Registers a CMS Twig Filter
-     * @param array $definitions An array of the extension definitions.
+     * Registers a Twig Filter
      */
-    public function registerFilters(array $definitions)
+    public function registerFilters(array $definitions): void
     {
         $this->registerExtensions(self::EXTENSION_FILTER, $definitions);
     }
 
     /**
-     * Registers a CMS Twig Function
-     * @param array $definitions An array of the extension definitions.
+     * Registers a Twig Function
      */
-    public function registerFunctions(array $definitions)
+    public function registerFunctions(array $definitions): void
     {
         $this->registerExtensions(self::EXTENSION_FUNCTION, $definitions);
     }
 
     /**
-     * Registers a CMS Twig Token Parser
-     * @param array $definitions An array of the extension definitions.
+     * Registers a Twig Token Parser
      */
-    public function registerTokenParsers(array $definitions)
+    public function registerTokenParsers(array $definitions): void
     {
         $this->registerExtensions(self::EXTENSION_TOKEN_PARSER, $definitions);
     }
@@ -177,10 +183,6 @@ class MarkupManager
 
         if (isset($this->items[$type]) && is_array($this->items[$type])) {
             $results = $this->items[$type];
-        }
-
-        if ($this->transactionItems !== null && isset($this->transactionItems[$type])) {
-            $results = array_merge($results, $this->transactionItems[$type]);
         }
 
         return $results;
@@ -372,42 +374,5 @@ class MarkupManager
         }
 
         return $isWild;
-    }
-
-    //
-    // Transactions
-    //
-
-    /**
-     * Execute a single serving transaction, containing filters, functions,
-     * and token parsers that are disposed of afterwards.
-     * @param  \Closure  $callback
-     * @return void
-     */
-    public function transaction(Closure $callback)
-    {
-        $this->beginTransaction();
-        $callback($this);
-        $this->endTransaction();
-    }
-
-    /**
-     * Start a new transaction.
-     * @return void
-     */
-    public function beginTransaction()
-    {
-        $this->transactionMode = true;
-    }
-
-    /**
-     * Ends an active transaction.
-     * @return void
-     */
-    public function endTransaction()
-    {
-        $this->transactionMode = false;
-
-        $this->transactionItems = null;
     }
 }

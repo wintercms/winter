@@ -20,8 +20,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        parent::register('backend');
-
+        $this->registerConsole();
         $this->registerMailer();
         $this->registerAssetBundles();
 
@@ -48,6 +47,18 @@ class ServiceProvider extends ModuleServiceProvider
     }
 
     /**
+     * Register console commands
+     */
+    protected function registerConsole()
+    {
+        $this->registerConsoleCommand('create.controller', \Backend\Console\CreateController::class);
+        $this->registerConsoleCommand('create.formwidget', \Backend\Console\CreateFormWidget::class);
+        $this->registerConsoleCommand('create.reportwidget', \Backend\Console\CreateReportWidget::class);
+
+        $this->registerConsoleCommand('winter.passwd', \Backend\Console\WinterPasswd::class);
+    }
+
+    /**
      * Register mail templates
      */
     protected function registerMailer()
@@ -71,6 +82,8 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/backend/widgets/table/assets/js/build.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/js/mediamanager-browser.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/less/mediamanager.less');
+            $combiner->registerBundle('~/modules/backend/widgets/reportcontainer/assets/less/reportcontainer.less');
+            $combiner->registerBundle('~/modules/backend/widgets/table/assets/less/table.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/codeeditor/assets/less/codeeditor.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/repeater/assets/less/repeater.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/codeeditor/assets/js/build.js');

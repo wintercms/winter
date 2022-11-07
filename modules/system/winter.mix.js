@@ -1,5 +1,7 @@
+/* eslint-disable */
 const mix = require('laravel-mix');
 require('laravel-mix-polyfill');
+/* eslint-enable */
 
 mix.setPublicPath(__dirname);
 
@@ -14,15 +16,16 @@ mix
 
     // Extract imported libraries
     .extract({
-        to: './assets/js/build/vendor.js',
+        libraries: ['@popperjs/core', 'js-cookie', 'vue'],
+        to: './assets/js/snowboard/build/snowboard.vendor.js',
     })
 
-    // Compile Snowboard and UI assets for the Backend
+    // Compile Snowboard for the Backend / System
     .js(
         [
             './assets/js/snowboard/snowboard.base.debug.js',
             './assets/js/snowboard/ajax/Request.js',
-            './assets/js/snowboard/snowboard.extras.js',
+            './assets/js/snowboard/snowboard.backend.extras.js',
             './assets/ui/widgets/base/base.js',
             './assets/ui/widgets/inspector/inspector.js',
         ],

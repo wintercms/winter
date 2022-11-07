@@ -6,9 +6,19 @@ use System\Classes\MixAssets;
 class MixWatch extends MixCompile
 {
     /**
-     * @var string The console command name.
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'mix:watch';
+    protected static $defaultName = 'mix:watch';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'mix:watch
+        {package : Defines the package to watch for changes}
+        {webpackArgs?* : Arguments to pass through to the Webpack CLI}
+        {--f|production : Runs compilation in "production" mode}
+        {--m|manifest= : Defines package.json to use for compile}
+        {--s|silent : Silent mode}';
 
     /**
      * @var string The console command description.
@@ -16,14 +26,9 @@ class MixWatch extends MixCompile
     protected $description = 'Mix and compile assets on-the-fly as changes are made.';
 
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
+     * @var string The path currently being watched
      */
-    protected $signature = 'mix:watch
-        {package : Defines the package to watch for changes}
-        {webpackArgs?* : Arguments to pass through to the Webpack CLI}
-        {--f|production : Runs compilation in "production" mode}';
+    protected $mixJsPath;
 
     public function handle(): int
     {
@@ -45,7 +50,7 @@ class MixWatch extends MixCompile
         $relativeMixJsPath = $package['mix'];
         if (!$this->canCompilePackage($relativeMixJsPath)) {
             $this->error(
-                sprintf('Unable to watch "%s", %s was not found in the package.json\'s workspaces.packages property. Try running mix:install first.', $name, $packagePath)
+                sprintf('Unable to watch "%s", %s was not found in the package.json\'s workspaces.packages property. Try running mix:install first.', $name, $relativeMixJsPath)
             );
             return 1;
         }
@@ -53,6 +58,8 @@ class MixWatch extends MixCompile
         $this->info(
             sprintf('Watching package "%s" for changes', $name)
         );
+        $this->mixJsPath = $relativeMixJsPath;
+
         if ($this->mixPackage(base_path($relativeMixJsPath)) !== 0) {
             $this->error(
                 sprintf('Unable to compile package "%s"', $name)
@@ -85,11 +92,21 @@ class MixWatch extends MixCompile
         $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
 
         $config = str_replace(
-            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%'],
-            [$basePath, 'mix.api.disableNotifications();', $mixJsPath, plugins_path(), base_path()],
+            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%'],
+            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent')],
             $fixture
         );
 
         File::put($this->getWebpackJsPath($mixJsPath), $config);
+    }
+
+    /**
+     * Handle the cleanup of this command if a termination signal is received
+     */
+    public function handleCleanup(): void
+    {
+        $this->newLine();
+        $this->info('Cleaning up: ' . $this->getWebpackJsPath(base_path($this->mixJsPath)));
+        $this->removeWebpackConfig(base_path($this->mixJsPath));
     }
 }

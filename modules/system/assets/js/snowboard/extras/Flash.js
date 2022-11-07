@@ -19,17 +19,18 @@ export default class Flash extends Snowboard.PluginBase {
     /**
      * Constructor.
      *
-     * @param {Snowboard} snowboard
      * @param {string} message
      * @param {string} type
      * @param {Number} duration
      */
-    constructor(snowboard, message, type, duration) {
-        super(snowboard);
-
+    construct(message, type, duration) {
         this.message = message;
         this.type = type || 'default';
-        this.duration = duration || 7;
+        this.duration = Number(duration || 7);
+
+        if (this.duration < 0) {
+            throw new Error('Flash duration must be a positive number, or zero');
+        }
 
         this.clear();
         this.timer = null;
@@ -51,37 +52,47 @@ export default class Flash extends Snowboard.PluginBase {
      *
      * This will ensure the flash message is removed and timeout is cleared if the module is removed.
      */
-    destructor() {
+    destruct() {
         if (this.timer !== null) {
             window.clearTimeout(this.timer);
         }
 
-        if (this.flash) {
+        if (this.flashTimer) {
             this.flashTimer.remove();
+        }
+
+        if (this.flash) {
             this.flash.remove();
             this.flash = null;
             this.flashTimer = null;
         }
 
-        super.destructor();
+        super.destruct();
     }
 
     /**
      * Creates the flash message.
      */
     create() {
+        this.snowboard.globalEvent('flash.create', this);
+
         this.flash = document.createElement('DIV');
-        this.flashTimer = document.createElement('DIV');
         this.flash.innerHTML = this.message;
         this.flash.classList.add('flash-message', this.type);
-        this.flashTimer.classList.add('flash-timer');
         this.flash.removeAttribute('data-control');
         this.flash.addEventListener('click', () => this.remove());
         this.flash.addEventListener('mouseover', () => this.stopTimer());
         this.flash.addEventListener('mouseout', () => this.startTimer());
 
+        if (this.duration > 0) {
+            this.flashTimer = document.createElement('DIV');
+            this.flashTimer.classList.add('flash-timer');
+            this.flash.appendChild(this.flashTimer);
+        } else {
+            this.flash.classList.add('no-timer');
+        }
+
         // Add to body
-        this.flash.appendChild(this.flashTimer);
         document.body.appendChild(this.flash);
 
         this.snowboard.transition(this.flash, 'show', () => {
@@ -93,12 +104,14 @@ export default class Flash extends Snowboard.PluginBase {
      * Removes the flash message.
      */
     remove() {
+        this.snowboard.globalEvent('flash.remove', this);
+
         this.stopTimer();
 
         this.snowboard.transition(this.flash, 'hide', () => {
             this.flash.remove();
             this.flash = null;
-            this.destructor();
+            this.destruct();
         });
     }
 
@@ -113,6 +126,10 @@ export default class Flash extends Snowboard.PluginBase {
      * Starts the timer for this flash message.
      */
     startTimer() {
+        if (this.duration === 0) {
+            return;
+        }
+
         this.timerTrans = this.snowboard.transition(this.flashTimer, 'timeout', null, `${this.duration}.0s`, true);
         this.timer = window.setTimeout(() => this.remove(), this.duration * 1000);
     }
@@ -124,6 +141,8 @@ export default class Flash extends Snowboard.PluginBase {
         if (this.timerTrans) {
             this.timerTrans.cancel();
         }
-        window.clearTimeout(this.timer);
+        if (this.timer) {
+            window.clearTimeout(this.timer);
+        }
     }
 }

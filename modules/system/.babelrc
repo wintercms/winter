@@ -1,0 +1,17 @@
+{
+    "presets": [
+        "@babel/preset-env"
+    ],
+    "plugins": [
+        "@babel/plugin-transform-runtime",
+        [
+            "module-resolver", {
+                "root": ["./tests/js"],
+                "alias": {
+                    "helpers": "./helpers",
+                    "snowboard": "../../modules/system/assets/js/snowboard",
+                }
+            }
+        ]
+    ]
+}

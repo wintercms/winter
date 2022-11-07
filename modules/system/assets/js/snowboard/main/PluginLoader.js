@@ -1,5 +1,6 @@
 import PluginBase from '../abstracts/PluginBase';
 import Singleton from '../abstracts/Singleton';
+import InnerProxyHandler from './InnerProxyHandler';
 
 /**
  * Plugin loader class.
@@ -22,12 +23,28 @@ export default class PluginLoader {
      */
     constructor(name, snowboard, instance) {
         this.name = name;
-        this.snowboard = snowboard;
+        this.snowboard = new Proxy(
+            snowboard,
+            InnerProxyHandler,
+        );
         this.instance = instance;
+
+        // Freeze instance that has been inserted into this loader
+        Object.freeze(this.instance);
+
         this.instances = [];
-        this.singleton = instance.prototype instanceof Singleton;
+        this.singleton = {
+            initialised: false,
+        };
+        // Prevent further extension of the singleton status object
+        Object.seal(this.singleton);
+
         this.mocks = {};
         this.originalFunctions = {};
+
+        // Freeze loader itself
+        Object.freeze(PluginLoader.prototype);
+        Object.freeze(this);
     }
 
     /**
@@ -82,7 +99,7 @@ export default class PluginLoader {
         }
         if (this.isSingleton()) {
             if (this.instances.length === 0) {
-                this.initialiseSingleton();
+                this.initialiseSingleton(...parameters);
             }
 
             // Apply mocked methods
@@ -114,8 +131,9 @@ export default class PluginLoader {
 
         const newInstance = new this.instance(this.snowboard, ...parameters);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
-
+        newInstance.construct(...parameters);
         this.instances.push(newInstance);
+
         return newInstance;
     }
 
@@ -153,18 +171,35 @@ export default class PluginLoader {
     }
 
     /**
+     * Determines if a singleton has been initialised.
+     *
+     * Normal plugins will always return true.
+     *
+     * @returns {boolean}
+     */
+    isInitialised() {
+        if (!this.isSingleton()) {
+            return true;
+        }
+
+        return this.singleton.initialised;
+    }
+
+    /**
      * Initialises the singleton instance.
      *
      * @returns {void}
      */
-    initialiseSingleton() {
+    initialiseSingleton(...parameters) {
         if (!this.isSingleton()) {
             return;
         }
 
-        const newInstance = new this.instance(this.snowboard);
+        const newInstance = new this.instance(this.snowboard, ...parameters);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
+        newInstance.construct(...parameters);
         this.instances.push(newInstance);
+        this.singleton.initialised = true;
     }
 
     /**

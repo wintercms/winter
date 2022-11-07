@@ -1,5 +1,6 @@
 # Ignore build files
 **/node_modules/**
+build/*.js
 **/build/*.js
 **/mix.webpack.js
 
@@ -7,5 +8,7 @@
 assets/js
 !assets/js/snowboard
 assets/ui
-!assets/ui/widgets
 assets/vendor
+
+# Ignore test fixtures
+tests/js

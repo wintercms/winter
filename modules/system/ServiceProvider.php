@@ -12,8 +12,6 @@ use BackendMenu;
 use BackendAuth;
 use SystemException;
 use Backend\Models\UserRole;
-use Twig\Extension\SandboxExtension;
-use Twig\Environment as TwigEnvironment;
 use System\Classes\MailManager;
 use System\Classes\ErrorHandler;
 use System\Classes\MarkupManager;
@@ -21,9 +19,6 @@ use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
 use System\Twig\Engine as TwigEngine;
-use System\Twig\Loader as TwigLoader;
-use System\Twig\Extension as TwigExtension;
-use System\Twig\SecurityPolicy as TwigSecurityPolicy;
 use System\Models\EventLog;
 use System\Models\MailSetting;
 use System\Classes\CombineAssets;
@@ -43,8 +38,6 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        parent::register('system');
-
         $this->registerSingletons();
         $this->registerPrivilegedActions();
 
@@ -90,9 +83,6 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function boot()
     {
-        // Fix UTF8MB4 support for MariaDB < 10.2 and MySQL < 5.7
-        $this->applyDatabaseDefaultStringLength();
-
         // Fix use of Storage::url() for local disks that haven't been configured correctly
         foreach (Config::get('filesystems.disks') as $key => $config) {
             if ($config['driver'] === 'local' && ends_with($config['root'], '/storage/app') && empty($config['url'])) {
@@ -146,7 +136,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerPrivilegedActions()
     {
         $requests = ['/combine/', '@/system/updates', '@/system/install', '@/backend/auth'];
-        $commands = ['winter:up', 'winter:update', 'winter:env', 'winter:version', 'winter:manifest'];
+        $commands = ['migrate', 'winter:up', 'winter:update', 'winter:env', 'winter:version', 'winter:manifest'];
 
         /*
          * Requests
@@ -252,6 +242,13 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register console commands
          */
+        $this->registerConsoleCommand('create.command', \System\Console\CreateCommand::class);
+        $this->registerConsoleCommand('create.job', \System\Console\CreateJob::class);
+        $this->registerConsoleCommand('create.migration', \System\Console\CreateMigration::class);
+        $this->registerConsoleCommand('create.model', \System\Console\CreateModel::class);
+        $this->registerConsoleCommand('create.plugin', \System\Console\CreatePlugin::class);
+        $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
+
         $this->registerConsoleCommand('winter.up', \System\Console\WinterUp::class);
         $this->registerConsoleCommand('winter.down', \System\Console\WinterDown::class);
         $this->registerConsoleCommand('winter.update', \System\Console\WinterUpdate::class);
@@ -260,7 +257,6 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('winter.fresh', \System\Console\WinterFresh::class);
         $this->registerConsoleCommand('winter.env', \System\Console\WinterEnv::class);
         $this->registerConsoleCommand('winter.install', \System\Console\WinterInstall::class);
-        $this->registerConsoleCommand('winter.passwd', \System\Console\WinterPasswd::class);
         $this->registerConsoleCommand('winter.version', \System\Console\WinterVersion::class);
         $this->registerConsoleCommand('winter.manifest', \System\Console\WinterManifest::class);
         $this->registerConsoleCommand('winter.test', \System\Console\WinterTest::class);
@@ -273,16 +269,12 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('plugin.rollback', \System\Console\PluginRollback::class);
         $this->registerConsoleCommand('plugin.list', \System\Console\PluginList::class);
 
-        $this->registerConsoleCommand('theme.install', \System\Console\ThemeInstall::class);
-        $this->registerConsoleCommand('theme.remove', \System\Console\ThemeRemove::class);
-        $this->registerConsoleCommand('theme.list', \System\Console\ThemeList::class);
-        $this->registerConsoleCommand('theme.use', \System\Console\ThemeUse::class);
-        $this->registerConsoleCommand('theme.sync', \System\Console\ThemeSync::class);
-
         $this->registerConsoleCommand('mix.install', \System\Console\MixInstall::class);
+        $this->registerConsoleCommand('mix.update', \System\Console\MixUpdate::class);
         $this->registerConsoleCommand('mix.list', \System\Console\MixList::class);
         $this->registerConsoleCommand('mix.compile', \System\Console\MixCompile::class);
         $this->registerConsoleCommand('mix.watch', \System\Console\MixWatch::class);
+        $this->registerConsoleCommand('mix.run', \System\Console\MixRun::class);
     }
 
     /*
@@ -309,23 +301,23 @@ class ServiceProvider extends ModuleServiceProvider
     }
 
     /*
-     * Register text twig parser
+     * Register Twig Environments and other Twig modifications provided by the module
      */
     protected function registerTwigParser()
     {
-        /*
-         * Register system Twig environment
-         */
+        // Register System Twig environment
         App::singleton('twig.environment', function ($app) {
-            $twig = new TwigEnvironment(new TwigLoader, ['auto_reload' => true]);
-            $twig->addExtension(new TwigExtension);
-            $twig->addExtension(new SandboxExtension(new TwigSecurityPolicy, true));
+            return MarkupManager::makeBaseTwigEnvironment();
+        });
+
+        // Register Mailer Twig environment
+        App::singleton('twig.environment.mailer', function ($app) {
+            $twig = MarkupManager::makeBaseTwigEnvironment();
+            $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
             return $twig;
         });
 
-        /*
-         * Register .htm extension for Twig views
-         */
+        // Register .htm extension for Twig views
         App::make('view')->addExtension('htm', 'twig', function () {
             return new TwigEngine(App::make('twig.environment'));
         });
@@ -400,7 +392,7 @@ class ServiceProvider extends ModuleServiceProvider
         BackendMenu::registerContextSidenavPartial(
             'Winter.System',
             'system',
-            '~/modules/system/partials/_system_sidebar.htm'
+            '~/modules/system/partials/_system_sidebar.php'
         );
 
         /*
@@ -455,7 +447,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'label' => 'system::lang.permissions.manage_mail_templates',
                     'tab' => 'system::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER],
-                ]
+                ],
             ]);
             $manager->registerPermissionOwnerAlias('Winter.System', 'October.System');
         });
@@ -563,6 +555,7 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/less/styles.less');
             $combiner->registerBundle('~/modules/system/assets/ui/storm.less');
             $combiner->registerBundle('~/modules/system/assets/ui/storm.js');
+            $combiner->registerBundle('~/modules/system/assets/ui/icons.less');
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
             $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
@@ -615,25 +608,5 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerGlobalViewVars()
     {
         View::share('appName', Config::get('app.name'));
-    }
-
-    /**
-     * Fix UTF8MB4 support for old versions of MariaDB (<10.2) and MySQL (<5.7)
-     */
-    protected function applyDatabaseDefaultStringLength()
-    {
-        if (Db::getDriverName() !== 'mysql') {
-            return;
-        }
-
-        $defaultStrLen = Db::getConfig('varcharmax');
-
-        if ($defaultStrLen === null && Db::getConfig('charset') === 'utf8mb4') {
-            $defaultStrLen = 191;
-        }
-
-        if ($defaultStrLen !== null) {
-            Schema::defaultStringLength((int) $defaultStrLen);
-        }
     }
 }

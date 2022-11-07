@@ -358,20 +358,15 @@ class Form extends WidgetBase
 
         /**
          * @event backend.form.beforeRefresh
-         * Called before the form is refreshed, modify the $dataHolder->data property in place
+         * Called before the form is refreshed.
          *
-         * Example usage:
+         * This allows you to modify the form data before the form is refreshed.
          *
-         *     Event::listen('backend.form.beforeRefresh', function ((\Backend\Widgets\Form) $formWidget, (stdClass) $dataHolder) {
-         *         $dataHolder->data = $arrayOfSaveDataToReplaceExistingDataWith;
-         *     });
-         *
-         * Or
-         *
-         *     $formWidget->bindEvent('form.beforeRefresh', function ((stdClass) $dataHolder) {
-         *         $dataHolder->data = $arrayOfSaveDataToReplaceExistingDataWith;
-         *     });
-         *
+         * @param \Backend\Widgets\Form $formWidget The form widget instance. If the event is attached directly to the form widget, this
+         *  parameter will be omitted.
+         * @param \stdClass $dataHolder An object containing the data from the form to be saved. It contains one property, `data`, with the array of
+         *  form data stored within.
+         * @local-event $formWidget form.beforeRefresh Attached to a form widget instance.
          */
         $dataHolder = (object) ['data' => $saveData];
         $this->fireSystemEvent('backend.form.beforeRefresh', [$dataHolder]);
@@ -431,14 +426,14 @@ class Form extends WidgetBase
          * Example usage:
          *
          *     Event::listen('backend.form.refresh', function ((\Backend\Widgets\Form) $formWidget, (array) $result) {
-         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.htm')];
+         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.php')];
          *         return $result;
          *     });
          *
          * Or
          *
          *     $formWidget->bindEvent('form.refresh', function ((array) $result) use ((\Backend\Widgets\Form $formWidget)) {
-         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.htm')];
+         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.php')];
          *         return $result;
          *     });
          *
@@ -1279,7 +1274,7 @@ class Form extends WidgetBase
      * @param $fieldOptions
      * @return mixed
      */
-    protected function getOptionsFromModel($field, $fieldOptions)
+    public function getOptionsFromModel($field, $fieldOptions)
     {
         /*
          * Advanced usage, supplied options are callable

@@ -2,7 +2,8 @@
 
 return [
     'auth' => [
-        'title' => 'Area de Administración'
+        'title' => 'Area de Administración',
+        'invalid_login' => 'Los datos ingresados no concuerdan con nuestros registros. Por favor verifique e intente nuevamente.'
     ],
     'field' => [
         'invalid_type' => 'El tipo de campo utilizado es inválido :type.',
@@ -318,7 +319,7 @@ return [
         'theme' => 'Color del esquema',
         'markup_styles' => 'Estilos de marcado',
         'custom_styles' => 'Hoja de estilo personalizada',
-        'custom styles_comment' => 'Estilos personalizados para incluir en el editor HTML.',
+        'custom_styles_comment' => 'Estilos personalizados para incluir en el editor HTML.',
         'markup_classes' => 'Clases de marcado',
         'paragraph' => 'Párrafo',
         'link' => 'Enlace',

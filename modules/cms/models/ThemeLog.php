@@ -1,6 +1,7 @@
 <?php namespace Cms\Models;
 
 use App;
+use Schema;
 use Model;
 use BackendAuth;
 use Cms\Classes\Theme;
@@ -54,7 +55,10 @@ class ThemeLog extends Model
      */
     public static function add(HalcyonModel $template, $type = null)
     {
-        if (!App::hasDatabase()) {
+        if (
+            !App::hasDatabase()
+            || !Schema::hasTable((new LogSetting)->getTable())
+        ) {
             return;
         }
 

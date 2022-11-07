@@ -1,15 +1,16 @@
 <?php namespace System\Console;
 
+use Config;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 use System\Classes\PluginManager;
 use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Filesystem\PathResolver;
 
 /**
- * Console command to run tests for plugins or the Winter CMS core.
+ * Console command to run tests for plugins and modules.
  *
  * If a plugin is provided, this command will search for a `phpunit.xml` file inside the plugin's directory and run its tests.
  *
@@ -18,6 +19,11 @@ use Winter\Storm\Exception\ApplicationException;
 class WinterTest extends Command
 {
     /**
+     * @var string|null The default command name for lazy loading.
+     */
+    protected static $defaultName = 'winter:test';
+
+    /**
      * @var string The console command name.
      */
     protected $name = 'winter:test';
@@ -25,7 +31,13 @@ class WinterTest extends Command
     /**
      * @var string The console command signature as ignoreValidationErrors causes options not to be registered.
      */
-    protected $signature = 'winter:test {?--p|plugin=} {?--c|configuration=} {?--o|core}';
+    protected $signature = 'winter:test
+        {phpunitArgs?* : Arguments to pass through to PHPUnit}
+        {?--c|configuration= : A specific phpunit xml file}
+        {?--b|bootstrap= : A custom PHPUnit bootstrap file}
+        {?--p|plugin=* : List of plugins to test}
+        {?--m|module=* : List of modules to test}
+    ';
 
     /**
      * @var string The console command description.
@@ -61,62 +73,55 @@ class WinterTest extends Command
      */
     public function handle()
     {
-        $arguments = $this->getAdditionalArguments();
+        $arguments = $this->argument('phpunitArgs');
 
         if (($config = $this->option('configuration')) && file_exists($config)) {
             return $this->execPhpUnit($config, $arguments);
         }
 
         $configs = $this->getPhpUnitConfigs();
+        $exitCode = null;
 
-        if ($this->option('core')) {
-            if (!$configs['core']) {
-                throw new ApplicationException("Unable to find the core's phpunit.xml file. Try downloading it from GitHub.");
-            }
-            $this->info('Running tests for: Winter CMS core');
-
-            return $this->execPhpUnit($configs['core'], $arguments);
-        }
-
-        if ($plugin = $this->option('plugin')) {
-            if (!isset($configs['plugins'][strtolower($plugin)])) {
-                throw new ApplicationException(sprintf("Unable to find %s\'s phpunit.xml file", $plugin));
-            }
-            $this->info('Running tests for plugin: ' . PluginManager::instance()->normalizeIdentifier($plugin));
-
-            return $this->execPhpUnit($configs['plugins'][strtolower($plugin)], $arguments);
-        }
-
-        $exitCode = 0;
-
-        foreach (['core', 'plugins'] as $type) {
-            if (is_array($configs[$type])) {
-                foreach ($configs[$type] as $plugin => $config) {
-                    $this->info('Running tests for plugin: ' . PluginManager::instance()->normalizeIdentifier($plugin));
-                    $exit = $this->execPhpUnit($config, $arguments);
-                    $exitCode = $exitCode === 0 ? $exit : $exitCode;
+        // loop over arguments and run specified tests
+        foreach (['module', 'plugin'] as $type) {
+            if ($this->option($type)) {
+                foreach ($this->option($type) as $target) {
+                    $target = strtolower($target);
+                    if (!isset($configs[$type . 's'][$target])) {
+                        throw new ApplicationException(sprintf(
+                            'Unable to find %s %s\'s phpunit.xml file',
+                            $type,
+                            $target
+                        ));
+                    }
+                    $this->info(sprintf('Running tests for %s: %s', $type, $target));
+                    $exit = $this->execPhpUnit($configs[$type . 's'][$target], $arguments);
+                    // keep non 0 exit codes for return
+                    $exitCode = !$exitCode ? $exit : $exitCode;
                 }
-                continue;
             }
-
-            $this->info('Running tests for Winter CMS: ' . $type);
-            $exit = $this->execPhpUnit($configs[$type], $arguments);
-            $exitCode = $exitCode === 0 ? $exit : $exitCode;
         }
 
-        return $exitCode;
-    }
+        // if we ran a specific test above we should have an exit code
+        if (!is_null($exitCode)) {
+            return $exitCode;
+        }
 
-    /**
-     * Get the console command options.
-     */
-    protected function getOptions(): array
-    {
-        return [
-            ['plugin', 'p', InputOption::VALUE_OPTIONAL, 'The name of the plugin. Ex: AuthorName.PluginName', null],
-            ['configuration', 'c', InputOption::VALUE_OPTIONAL, 'The path to a PHPUnit XML config file', null],
-            ['core', 'o', InputOption::VALUE_NONE, 'Run the Winter CMS core tests'],
-        ];
+        // default to running all defined configs found
+        foreach (['modules', 'plugins'] as $type) {
+            foreach ($configs[$type] as $name => $config) {
+                $this->info(
+                    $type === 'plugins'
+                        ? 'Running tests for plugin: ' . PluginManager::instance()->normalizeIdentifier($name)
+                        : 'Running tests for module: ' . $name
+                );
+                $exit = $this->execPhpUnit($config, $arguments);
+                // keep non 0 exit codes for return
+                $exitCode = !$exitCode ? $exit : $exitCode;
+            }
+        }
+
+        return $exitCode ?? 0;
     }
 
     /**
@@ -134,10 +139,38 @@ class WinterTest extends Command
                 ->find('phpunit', base_path('vendor/bin/phpunit'), [base_path('vendor')]);
         }
 
+        // Resolve the configuration path based on the current working directory
+        $configPath = realpath($config);
+        $bootstrapPath = (string) simplexml_load_file($configPath)['bootstrap'];
+
+        // Use a default bootstrap path if none is specified in the config
+        if (empty($bootstrapPath)) {
+            $bootstrapPath = base_path('modules/system/tests/bootstrap/app.php');
+        } elseif ($this->option('bootstrap')) {
+            $bootstrapPath = $this->option('bootstrap');
+        } else {
+            // Temporarily switch the working directory to the config path to account for relative paths.
+            $cwd = getcwd();
+            chdir(dirname($config));
+            $bootstrapPath = PathResolver::resolve($bootstrapPath);
+            chdir($cwd);
+        }
+
+        if (!is_file($bootstrapPath)) {
+            throw new ApplicationException(sprintf(
+                'Unable to find the bootstrap file "%s"',
+                $bootstrapPath,
+            ));
+        }
+
         $process = new Process(
-            array_merge([$this->phpUnitExec, '--configuration=' . $config], $args),
-            dirname($config),
-            null,
+            array_merge([$this->phpUnitExec, '--configuration=' . $config, '--bootstrap=' . $bootstrapPath], $args),
+            base_path(),
+            [
+                'APP_ENV' => 'testing',
+                'CACHE_DRIVER' => 'array',
+                'SESSION_DRIVER' => 'array',
+            ],
             null
         );
 
@@ -170,9 +203,16 @@ class WinterTest extends Command
     protected function getPhpUnitConfigs(): array
     {
         $configs = [
-            'core' => $this->getPhpUnitXmlFile(base_path()),
+            'modules' => [],
             'plugins' => []
         ];
+
+        foreach (Config::get('cms.loadModules', ['System', 'Cms', 'Backend']) as $module) {
+            $module = strtolower($module);
+            if ($path = $this->getPhpUnitXmlFile(base_path('modules/' . $module))) {
+                $configs['modules'][$module] = $path;
+            }
+        }
 
         foreach (PluginManager::instance()->getPlugins() as $plugin) {
             if ($path = $this->getPhpUnitXmlFile($plugin->getPluginPath())) {
@@ -190,68 +230,18 @@ class WinterTest extends Command
     protected function getPhpUnitXmlFile(string $path): ?string
     {
         // If a phpunit.xml file exists, returns its path
-        $distFilePath = $path . DIRECTORY_SEPARATOR . 'phpunit.xml';
-        if (file_exists($distFilePath)) {
-            return $distFilePath;
-        }
+        $configFilePath = $path . DIRECTORY_SEPARATOR . 'phpunit.xml';
 
-        // Fallback to phpunit.xml.dist file path if it exists
-        $configFilePath = $path . DIRECTORY_SEPARATOR . 'phpunit.xml.dist';
         if (file_exists($configFilePath)) {
             return $configFilePath;
         }
 
+        // Fallback to phpunit.xml.dist file path if it exists
+        $distFilePath = $path . DIRECTORY_SEPARATOR . 'phpunit.xml.dist';
+        if (file_exists($distFilePath)) {
+            return $distFilePath;
+        }
+
         return null;
-    }
-
-    /**
-     * Strips out commands arguments and options in order to return arguments/options for PHPUnit.
-     */
-    protected function getAdditionalArguments(): array
-    {
-        $arguments = $_SERVER['argv'];
-
-        // First two are always "artisan" and "winter:test"
-        $arguments = array_slice($arguments, 2);
-
-        // If nothing to do then just return
-        if (!count($arguments)) {
-            return $arguments;
-        }
-
-        // Get the arguments provided by this command
-        foreach ($this->getOptions() as $argument) {
-            // For position 0 & 1, pass their names with appropriate dashes
-            for ($i = 0; $i < 2; $i++) {
-                $arguments = $this->removeArgument($arguments, str_repeat('-', 2 - $i) . $argument[$i]);
-            }
-        }
-
-        return $arguments;
-    }
-
-    /**
-     * Removes flags from argument list and their value if present
-     */
-    protected function removeArgument(array $arguments, string $remove): array
-    {
-        // find args that have trailing chars
-        $key = array_values(preg_grep("/^({$remove}|{$remove}=).*/i", $arguments));
-        $remove = (isset($key[0])) ? $key[0] : $remove;
-
-        // find the position of arguments to remove
-        if (($position = array_search($remove, $arguments)) === false) {
-            return $arguments;
-        }
-
-        // remove argument
-        unset($arguments[$position]);
-
-        // if the next item in the array is not a flag, consider it a value of the removed argument
-        if (isset($arguments[$position + 1]) && substr($arguments[$position + 1], 0, 1) !== '-') {
-            unset($arguments[$position + 1]);
-        }
-
-        return array_values($arguments);
     }
 }

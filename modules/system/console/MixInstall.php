@@ -4,7 +4,7 @@ use File;
 use Config;
 use Cms\Classes\Theme;
 use Winter\Storm\Support\Str;
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use Symfony\Component\Process\Process;
 use System\Classes\MixAssets;
 use System\Classes\PluginManager;
@@ -13,24 +13,22 @@ use Symfony\Component\Process\Exception\ProcessSignaledException;
 class MixInstall extends Command
 {
     /**
-     * @var string The console command name.
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'mix:install';
+    protected static $defaultName = 'mix:install';
 
     /**
-     * @var string The console command description.
-     */
-    protected $description = 'Install Node.js dependencies required for mixed assets';
-
-    /**
-     * The name and signature of the console command.
-     *
-     * @var string
+     * @var string The name and signature of this command.
      */
     protected $signature = 'mix:install
         {npmArgs?* : Arguments to pass through to the "npm" binary}
         {--npm= : Defines a custom path to the "npm" binary}
         {--p|package=* : Defines one or more packages to install}';
+
+    /**
+     * @var string The console command description.
+     */
+    protected $description = 'Install Node.js dependencies required for mixed assets';
 
     /**
      * @var string The path to the "npm" executable.
@@ -41,6 +39,19 @@ class MixInstall extends Command
      * @var string Default version of Laravel Mix to install
      */
     protected $defaultMixVersion = '^6.0.41';
+
+    /**
+     * @return array Terms used in messages.
+     */
+    protected $terms = [
+        'complete' => 'install',
+        'completed' => 'installed',
+    ];
+
+    /**
+     * @var string The NPM command to run.
+     */
+    protected $npmCommand = 'install';
 
     /**
      * Execute the console command.
@@ -129,13 +140,13 @@ class MixInstall extends Command
         }
 
         // Load the main package.json for the project
-        $canModifyPackageJson = null;
         $packageJsonPath = base_path('package.json');
         $packageJson = [];
         if (File::exists($packageJsonPath)) {
             $packageJson = json_decode(File::get($packageJsonPath), true);
         }
         $workspacesPackages = $packageJson['workspaces']['packages'] ?? [];
+        $ignoredPackages = $packageJson['workspaces']['ignoredPackages'] ?? [];
 
         // Check to see if Laravel Mix is already present as a dependency
         if (
@@ -145,55 +156,78 @@ class MixInstall extends Command
             )
             && $this->confirm('laravel-mix was not found as a dependency in package.json, would you like to add it?', true)
         ) {
-            $canModifyPackageJson = true;
             $packageJson['devDependencies'] = array_merge($packageJson['devDependencies'] ?? [], ['laravel-mix' => $this->defaultMixVersion]);
+            $this->writePackageJson($packageJsonPath, $packageJson);
         }
 
         // Process each package
         foreach ($registeredPackages as $name => $package) {
-            // Detect missing winter.mix.js files and install them
-            if (!File::exists($package['mix'])) {
-                $this->info(
-                    sprintf('No Mix file found for %s, creating one at %s...', $name, $package['mix'])
-                );
-                File::put($package['mix'], File::get(__DIR__ . '/fixtures/winter.mix.js.fixture'));
-            }
+            // Normalize package path across OS types
+            $packagePath = Str::replace(DIRECTORY_SEPARATOR, '/', $package['path']);
 
             // Add the package path to the instance's package.json->workspaces->packages property if not present
-            if (!in_array($package['path'], $workspacesPackages)) {
-                if (!isset($canModifyPackageJson)) {
-                    if ($this->confirm('package.json will be modified. Continue?', true)) {
-                        $canModifyPackageJson = true;
-                    } else {
-                        $canModifyPackageJson = false;
-                        break;
-                    }
+            if (
+                !in_array($packagePath, $workspacesPackages)
+                && !in_array($packagePath, $ignoredPackages)
+            ) {
+                if (
+                    $this->confirm(
+                        sprintf(
+                            "Detected %s (%s), should it be added to your package.json?",
+                            $name,
+                            $packagePath
+                        ),
+                        true
+                    )
+                ) {
+                    $workspacesPackages[] = $packagePath;
+                    $this->info(sprintf(
+                        'Adding %s (%s) to the workspaces.packages property in package.json',
+                        $name,
+                        $packagePath
+                    ));
+                } else {
+                    $ignoredPackages[] = $packagePath;
+                    $this->warn(
+                        sprintf('Ignoring %s (%s)', $name, $packagePath)
+                    );
                 }
+                asort($workspacesPackages);
+                asort($ignoredPackages);
+                $packageJson['workspaces']['packages'] = array_values($workspacesPackages);
+                $packageJson['workspaces']['ignoredPackages'] = array_values($ignoredPackages);
+                $this->writePackageJson($packageJsonPath, $packageJson);
+            }
 
-                $this->info(
-                    sprintf('Adding %s (%s) to the workspaces.packages property in package.json', $name, $package['path'])
-                );
-                $workspacesPackages = array_merge($workspacesPackages, [$package['path']]);
+            // Detect missing winter.mix.js files and install them
+            if (!File::exists($package['mix'])) {
+                $this->info(sprintf(
+                    'No Mix file found for %s, creating one at %s...',
+                    $name,
+                    $package['mix']
+                ));
+                File::put($package['mix'], File::get(__DIR__ . '/fixtures/winter.mix.js.fixture'));
             }
         }
 
-        // Modify the package.json file if required
-        if ($canModifyPackageJson) {
-            asort($workspacesPackages);
-            $packageJson['workspaces']['packages'] = array_values($workspacesPackages);
-            File::put($packageJsonPath, json_encode($packageJson, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-
-            // Ensure separation between package.json modification messages and rest of output
-            $this->info('');
-        }
+        // Ensure separation between package.json modification messages and rest of output
+        $this->info('');
 
         if ($this->installPackageDeps() !== 0) {
-            $this->error('Unable to install dependencies.');
+            $this->error("Unable to {$this->terms['complete']} dependencies.");
         } else {
-            $this->info('Dependencies successfully installed!');
+            $this->info("Dependencies successfully {$this->terms['completed']}!");
         }
 
         return 0;
+    }
+
+    /**
+     * Write to the package.json file
+     */
+    protected function writePackageJson(string $path, array $data): void
+    {
+        File::put($path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
     }
 
     /**
@@ -204,9 +238,9 @@ class MixInstall extends Command
     protected function installPackageDeps()
     {
         $command = $this->argument('npmArgs') ?? [];
-        array_unshift($command, 'npm', 'i');
+        array_unshift($command, 'npm', $this->npmCommand);
 
-        $process = new Process($command, base_path());
+        $process = new Process($command, base_path(), null, null, null);
 
         // Attempt to set tty mode, catch and warn with the exception message if unsupported
         try {

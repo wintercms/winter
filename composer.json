@@ -29,44 +29,35 @@
         "source": "https://github.com/wintercms/winter"
     },
     "require": {
-        "php": "^7.2.9|^8.0",
-        "winter/storm": "dev-develop as 1.1.999",
-        "winter/wn-system-module": "dev-develop as 1.1.999",
-        "winter/wn-backend-module": "dev-develop as 1.1.999",
-        "winter/wn-cms-module": "dev-develop as 1.1.999",
-        "laravel/framework": "~6.0",
+        "php": "^8.0.2",
+        "winter/storm": "dev-develop as 1.2",
+        "winter/wn-system-module": "dev-develop",
+        "winter/wn-backend-module": "dev-develop",
+        "winter/wn-cms-module": "dev-develop",
+        "laravel/framework": "^9.1",
         "wikimedia/composer-merge-plugin": "~2.0.1"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.4|^9.3.3",
-        "mockery/mockery": "~1.3.3|^1.4.2",
-        "fakerphp/faker": "~1.9",
-        "squizlabs/php_codesniffer": "3.*",
+        "phpunit/phpunit": "^9.5.8",
+        "mockery/mockery": "^1.4.4",
+        "fakerphp/faker": "^1.9.2",
+        "squizlabs/php_codesniffer": "^3.2",
         "php-parallel-lint/php-parallel-lint": "^1.0",
         "dms/phpunit-arraysubset-asserts": "^0.1.0|^0.2.1"
     },
-    "autoload-dev": {
-        "classmap": [
-            "tests/concerns/InteractsWithAuthentication.php",
-            "tests/fixtures/backend/models/UserFixture.php",
-            "tests/TestCase.php",
-            "tests/PluginTestCase.php"
-        ]
-    },
     "scripts": {
         "post-create-project-cmd": [
-            "php artisan key:generate",
-            "php artisan package:discover"
+            "@php artisan key:generate"
         ],
         "post-update-cmd": [
-            "php artisan winter:version",
-            "php artisan package:discover"
+            "@php artisan winter:version",
+            "@php artisan package:discover"
         ],
         "test": [
             "phpunit --stop-on-failure"
         ],
         "lint": [
-            "parallel-lint --exclude vendor --exclude storage --exclude tests/fixtures/plugins/testvendor/goto/Plugin.php ."
+            "parallel-lint --exclude vendor --exclude storage --exclude modules/system/tests/fixtures/plugins/testvendor/goto/Plugin.php ."
         ],
         "sniff": [
             "phpcs --colors -nq --report=\"full\" --extensions=\"php\""
@@ -77,7 +68,7 @@
     "extra": {
         "merge-plugin": {
             "include": [
-                "plugins/*/*/composer.json"
+                "plugins/myauthor/*/composer.json"
             ],
             "recurse": true,
             "replace": false,

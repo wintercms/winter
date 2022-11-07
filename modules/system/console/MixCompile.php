@@ -1,16 +1,28 @@
 <?php namespace System\Console;
 
 use File;
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use Symfony\Component\Process\Process;
 use System\Classes\MixAssets;
+use Winter\Storm\Support\Str;
 
 class MixCompile extends Command
 {
     /**
-     * @var string The console command name.
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'mix:compile';
+    protected static $defaultName = 'mix:compile';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'mix:compile
+        {webpackArgs?* : Arguments to pass through to the Webpack CLI}
+        {--f|production : Runs compilation in "production" mode}
+        {--s|silent : Silent mode}
+        {--e|stop-on-error : Exit once an error is encountered}
+        {--m|manifest= : Defines package.json to use for compile}
+        {--p|package=* : Defines one or more packages to compile}';
 
     /**
      * @var string The console command description.
@@ -23,18 +35,7 @@ class MixCompile extends Command
     protected $packageJson;
 
     /**
-     * The name and signature of the console command.
-     *
-     * @var string
-     */
-    protected $signature = 'mix:compile
-        {webpackArgs?* : Arguments to pass through to the Webpack CLI}
-        {--f|production : Runs compilation in "production" mode}
-        {--p|package=* : Defines one or more packages to compile}';
-
-    /**
      * Execute the console command.
-     * @return int
      */
     public function handle(): int
     {
@@ -49,6 +50,12 @@ class MixCompile extends Command
 
         $registeredPackages = $mixedAssets->getPackages();
         $requestedPackages = $this->option('package') ?: [];
+
+        // Calling commands in unit tests can cause the option casting to not work correctly,
+        // ensure that the option value is always an array
+        if (is_string($requestedPackages)) {
+            $requestedPackages = [$requestedPackages];
+        }
 
         // Normalize the requestedPackages option
         if (count($requestedPackages)) {
@@ -81,26 +88,35 @@ class MixCompile extends Command
             }
         }
 
+        $exits = [];
         foreach ($registeredPackages as $name => $package) {
             $relativeMixJsPath = $package['mix'];
             if (!$this->canCompilePackage($relativeMixJsPath)) {
-                $this->error(
-                    sprintf('Unable to compile "%s", %s was not found in the package.json\'s workspaces.packages property. Try running mix:install first.', $name, $packagePath)
-                );
+                $this->error(sprintf(
+                    'Unable to compile "%s", %s was not found in the package.json\'s workspaces.packages property.'
+                     . ' Try running mix:install first.',
+                    $name,
+                    $relativeMixJsPath
+                ));
                 continue;
             }
 
-            $this->info(
-                sprintf('Mixing package "%s"', $name)
-            );
-            if ($this->mixPackage(base_path($relativeMixJsPath)) !== 0) {
-                $this->error(
-                    sprintf('Unable to compile package "%s"', $name)
-                );
+            $this->info(sprintf('Mixing package "%s"', $name));
+
+            $exitCode = $this->mixPackage(base_path($relativeMixJsPath));
+
+            if ($exitCode > 0) {
+                $this->error(sprintf('Unable to compile package "%s"', $name));
             }
+
+            if ($this->option('stop-on-error') && $exitCode > 0) {
+                return $exitCode;
+            }
+
+            $exits[] = $exitCode;
         }
 
-        return 0;
+        return (int) !empty(array_filter($exits));
     }
 
     /**
@@ -116,7 +132,7 @@ class MixCompile extends Command
      */
     protected function getWebpackJsPath(string $mixJsPath): string
     {
-        return $this->getPackagePath($mixJsPath) . '/mix.webpack.js';
+        return $this->getPackagePath($mixJsPath) . DIRECTORY_SEPARATOR . 'mix.webpack.js';
     }
 
     /**
@@ -126,18 +142,27 @@ class MixCompile extends Command
     {
         if (!isset($this->packageJson)) {
             // Load the main package.json for the project
-            $canModifyPackageJson = null;
-            $packageJsonPath = base_path('package.json');
-            $packageJson = [];
-            if (File::exists($packageJsonPath)) {
-                $packageJson = json_decode(File::get($packageJsonPath), true);
-            }
-            $this->packageJson = $packageJson;
+            $this->packageJson = $this->readNpmPackageManifest();
         }
 
         $workspacesPackages = $this->packageJson['workspaces']['packages'] ?? [];
 
-        return in_array($this->getPackagePath($mixJsPath), $workspacesPackages);
+        return in_array(
+            Str::replace(DIRECTORY_SEPARATOR, '/', $this->getPackagePath($mixJsPath)),
+            $workspacesPackages
+        );
+    }
+
+    /**
+     * Read the package.json file for the project, path configurable with the
+     * `--manifest` option
+     */
+    protected function readNpmPackageManifest(): array
+    {
+        $packageJsonPath = base_path($this->option('manifest') ?? 'package.json');
+        return File::exists($packageJsonPath)
+            ? json_decode(File::get($packageJsonPath), true)
+            : [];
     }
 
     /**
@@ -163,7 +188,7 @@ class MixCompile extends Command
         }
 
         $exitCode = $process->run(function ($status, $stdout) {
-            if ($this->option('verbose')) {
+            if (!$this->option('silent')) {
                 $this->getOutput()->write($stdout);
             }
         });
@@ -182,8 +207,9 @@ class MixCompile extends Command
         $command = $this->argument('webpackArgs') ?? [];
         array_unshift(
             $command,
-            $basePath . '/node_modules/webpack/bin/webpack.js',
-            '--progress',
+            $basePath . sprintf('%1$snode_modules%1$s.bin%1$swebpack', DIRECTORY_SEPARATOR),
+            'build',
+            $this->option('silent') ? '--stats=none' : '--progress',
             '--config=' . $this->getWebpackJsPath($mixJsPath)
         );
         return $command;
@@ -198,8 +224,8 @@ class MixCompile extends Command
         $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
 
         $config = str_replace(
-            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%'],
-            [$basePath, '', $mixJsPath, plugins_path(), base_path()],
+            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%'],
+            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent')],
             $fixture
         );
 

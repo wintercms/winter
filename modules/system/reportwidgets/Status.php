@@ -11,7 +11,6 @@ use Backend\Classes\ReportWidgetBase;
 use Backend\Models\User;
 use System\Models\EventLog;
 use System\Models\RequestLog;
-use System\Models\PluginVersion;
 use Exception;
 
 /**
@@ -69,7 +68,7 @@ class Status extends ReportWidgetBase
         $this->vars['requestLog']    = RequestLog::count();
         $this->vars['requestLogMsg'] = LogSetting::get('log_requests', false) ? false : true;
 
-        $this->vars['appBirthday'] = PluginVersion::orderBy('created_at')->value('created_at');
+        $this->vars['appBirthday'] = Parameter::get('system::app.birthday');
     }
 
     public function onLoadWarningsForm()

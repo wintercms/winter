@@ -9,7 +9,7 @@ class SeedSetupAdmin extends Seeder
 {
     public static $email = 'admin@example.com';
     public static $login = 'admin';
-    public static $password = 'admin';
+    public static $password = '';
     public static $firstName = 'Admin';
     public static $lastName = 'Person';
 

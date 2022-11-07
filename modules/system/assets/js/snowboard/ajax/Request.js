@@ -6,29 +6,51 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
+if (window.Snowboard === undefined) {
+    throw new Error('Snowboard must be loaded in order to use the Request plugin.');
+}
+
 class Request extends Snowboard.PluginBase {
     /**
      * Constructor.
      *
-     * @param {Snowboard} snowboard
+     * The constructor accepts 2 or 3 parameters.
+     *
+     * If 2 parameters are provided, the first parameter is the handler name and the second
+     * parameter is the options. This assumes that this is a detached AJAX request not connected to
+     * an element.
+     *
+     * If 3 parameters are provided, the first parameter is an element or a selector, and the second
+     * and third parameters are the handler and options, respectively.
+     *
      * @param {HTMLElement|string} element
-     * @param {string} handler
+     * @param {string|Object} handler
      * @param {Object} options
      */
-    constructor(snowboard, element, handler, options) {
-        super(snowboard);
-
+    construct(element, handler, options) {
         if (typeof element === 'string') {
-            const matchedElement = document.querySelector(element);
-            if (matchedElement === null) {
-                throw new Error(`No element was found with the given selector: ${element}`);
+            // Allow the element to be a handler name.
+            // This assumes the request is being made against no element, and the handler parameter
+            // will contain options.
+            if (this.isHandlerName(element)) {
+                this.element = null;
+                this.handler = element;
+                this.options = handler || {};
+            } else {
+                const matchedElement = document.querySelector(element);
+                if (matchedElement === null) {
+                    throw new Error(`No element was found with the given selector: ${element}`);
+                }
+                this.element = matchedElement;
+                this.handler = handler;
+                this.options = options || {};
             }
-            this.element = matchedElement;
         } else {
             this.element = element;
+            this.handler = handler;
+            this.options = options || {};
         }
-        this.handler = handler;
-        this.options = options || {};
+
         this.fetchOptions = {};
         this.responseData = null;
         this.responseError = null;
@@ -62,6 +84,7 @@ class Request extends Snowboard.PluginBase {
                         (response) => {
                             if (response.cancelled) {
                                 this.cancelled = true;
+                                this.complete();
                                 return;
                             }
                             this.responseData = response;
@@ -79,24 +102,7 @@ class Request extends Snowboard.PluginBase {
                             this.responseError = error;
                             this.processError(error);
                         },
-                    ).finally(() => {
-                        if (this.cancelled === true) {
-                            return;
-                        }
-
-                        if (this.options.complete && typeof this.options.complete === 'function') {
-                            this.options.complete(this.responseData, this);
-                        }
-                        this.snowboard.globalEvent('ajaxDone', this.responseData, this);
-
-                        if (this.element) {
-                            const event = new Event('ajaxAlways');
-                            event.request = this;
-                            event.responseData = this.responseData;
-                            event.responseError = this.responseError;
-                            this.element.dispatchEvent(event);
-                        }
-                    });
+                    );
                 }
             });
         } else {
@@ -104,6 +110,7 @@ class Request extends Snowboard.PluginBase {
                 (response) => {
                     if (response.cancelled) {
                         this.cancelled = true;
+                        this.complete();
                         return;
                     }
                     this.responseData = response;
@@ -121,24 +128,7 @@ class Request extends Snowboard.PluginBase {
                     this.responseError = error;
                     this.processError(error);
                 },
-            ).finally(() => {
-                if (this.cancelled === true) {
-                    return;
-                }
-
-                if (this.options.complete && typeof this.options.complete === 'function') {
-                    this.options.complete(this.responseData, this);
-                }
-                this.snowboard.globalEvent('ajaxDone', this.responseData, this);
-
-                if (this.element) {
-                    const event = new Event('ajaxAlways');
-                    event.request = this;
-                    event.responseData = this.responseData;
-                    event.responseError = this.responseError;
-                    this.element.dispatchEvent(event);
-                }
-            });
+            );
         }
     }
 
@@ -163,7 +153,7 @@ class Request extends Snowboard.PluginBase {
             throw new Error('The AJAX handler name is not specified.');
         }
 
-        if (!this.handler.match(/^(?:\w+:{2})?on*/)) {
+        if (!this.isHandlerName(this.handler)) {
             throw new Error('Invalid AJAX handler name. The correct handler name format is: "onEvent".');
         }
     }
@@ -229,13 +219,17 @@ class Request extends Snowboard.PluginBase {
                         if (response.headers.has('Content-Type') && response.headers.get('Content-Type').includes('/json')) {
                             response.json().then(
                                 (responseData) => {
-                                    reject(this.renderError(
-                                        responseData.message,
-                                        responseData.exception,
-                                        responseData.file,
-                                        responseData.line,
-                                        responseData.trace,
-                                    ));
+                                    if (responseData.message && responseData.exception) {
+                                        reject(this.renderError(
+                                            responseData.message,
+                                            responseData.exception,
+                                            responseData.file,
+                                            responseData.line,
+                                            responseData.trace,
+                                        ));
+                                    } else {
+                                        reject(responseData);
+                                    }
                                 },
                                 (error) => {
                                     reject(this.renderError(`Unable to parse JSON response: ${error}`));
@@ -325,13 +319,28 @@ class Request extends Snowboard.PluginBase {
             });
 
             if (Object.keys(partials).length === 0) {
-                resolve();
+                if (response.X_WINTER_ASSETS) {
+                    this.processAssets(response.X_WINTER_ASSETS).then(
+                        () => {
+                            resolve();
+                        },
+                        () => {
+                            reject();
+                        },
+                    );
+                } else {
+                    resolve();
+                }
                 return;
             }
 
             const promises = this.snowboard.globalPromiseEvent('ajaxBeforeUpdate', response, this);
             promises.then(
-                () => {
+                async () => {
+                    if (response.X_WINTER_ASSETS) {
+                        await this.processAssets(response.X_WINTER_ASSETS);
+                    }
+
                     this.doUpdate(partials).then(
                         () => {
                             // Allow for HTML redraw
@@ -374,6 +383,8 @@ class Request extends Snowboard.PluginBase {
                 } else if (selector.substr(0, 1) === '^') {
                     mode = 'prepend';
                     selector = selector.substr(1);
+                } else if (selector.substr(0, 1) !== '#' && selector.substr(0, 1) !== '.') {
+                    mode = 'noop';
                 }
 
                 const elements = document.querySelectorAll(selector);
@@ -385,6 +396,8 @@ class Request extends Snowboard.PluginBase {
                                 break;
                             case 'prepend':
                                 element.innerHTML = content + element.innerHTML;
+                                break;
+                            case 'noop':
                                 break;
                             case 'replace':
                             default:
@@ -420,7 +433,7 @@ class Request extends Snowboard.PluginBase {
      */
     processResponse(response) {
         if (this.options.success && typeof this.options.success === 'function') {
-            if (!this.options.success(this.responseData, this)) {
+            if (this.options.success(this.responseData, this) === false) {
                 return;
             }
         }
@@ -452,9 +465,7 @@ class Request extends Snowboard.PluginBase {
             return;
         }
 
-        if (response.X_WINTER_ASSETS) {
-            this.processAssets(response.X_WINTER_ASSETS);
-        }
+        this.complete();
     }
 
     /**
@@ -467,7 +478,7 @@ class Request extends Snowboard.PluginBase {
      */
     processError(error) {
         if (this.options.error && typeof this.options.error === 'function') {
-            if (!this.options.error(this.responseError, this)) {
+            if (this.options.error(this.responseError, this) === false) {
                 return;
             }
         }
@@ -501,6 +512,8 @@ class Request extends Snowboard.PluginBase {
                 this.processErrorMessage(error.X_WINTER_ERROR_MESSAGE);
             }
         }
+
+        this.complete();
     }
 
     /**
@@ -622,6 +635,21 @@ class Request extends Snowboard.PluginBase {
     }
 
     /**
+     * Processes assets returned by an AJAX request.
+     *
+     * By default, no asset processing will occur and this will return a resolved Promise.
+     *
+     * Plugins can augment this functionality from the `ajaxLoadAssets` event. This event is considered blocking, and
+     * allows assets to be loaded or processed before continuing with any additional functionality.
+     *
+     * @param {Object} assets
+     * @returns {Promise}
+     */
+    processAssets(assets) {
+        return this.snowboard.globalPromiseEvent('ajaxLoadAssets', assets);
+    }
+
+    /**
      * Confirms the request with the user before proceeding.
      *
      * This is an asynchronous method. By default, it will use the browser's `confirm()` method to query the user to
@@ -664,8 +692,32 @@ class Request extends Snowboard.PluginBase {
         return false;
     }
 
+    /**
+     * Fires off completion events for the Request.
+     */
+    complete() {
+        if (this.options.complete && typeof this.options.complete === 'function') {
+            this.options.complete(this.responseData, this);
+        }
+        this.snowboard.globalEvent('ajaxDone', this.responseData, this);
+
+        if (this.element) {
+            const event = new Event('ajaxAlways');
+            event.request = this;
+            event.responseData = this.responseData;
+            event.responseError = this.responseError;
+            this.element.dispatchEvent(event);
+        }
+
+        // Fire off the destructor
+        this.destruct();
+    }
+
     get form() {
         if (this.options.form) {
+            if (typeof this.options.form === 'string') {
+                return document.querySelector(this.options.form);
+            }
             return this.options.form;
         }
         if (!this.element) {
@@ -783,6 +835,16 @@ class Request extends Snowboard.PluginBase {
         error.line = line || null;
         error.trace = trace || [];
         return error;
+    }
+
+    /**
+     * Checks a given string to see if it is a valid AJAX handler name.
+     *
+     * @param {String} name
+     * @returns {Boolean}
+     */
+    isHandlerName(name) {
+        return /^(?:\w+:{2})?on[A-Z0-9]/.test(name);
     }
 }
 

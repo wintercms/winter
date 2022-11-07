@@ -16,7 +16,7 @@ return [
     |
     */
 
-    'driver' => 'file',
+    'driver' => env('SESSION_DRIVER', 'file'),
 
     /*
     |--------------------------------------------------------------------------
@@ -29,8 +29,7 @@ return [
     |
     */
 
-    'lifetime' => 120,
-
+    'lifetime' => env('SESSION_LIFETIME', 120),
     'expire_on_close' => false,
 
     /*
@@ -70,7 +69,7 @@ return [
     |
     */
 
-    'connection' => null,
+    'connection' => env('SESSION_CONNECTION'),
 
     /*
     |--------------------------------------------------------------------------
@@ -90,13 +89,15 @@ return [
     | Session Cache Store
     |--------------------------------------------------------------------------
     |
-    | When using the "apc", "memcached", or "dynamodb" session drivers you may
+    | While using one of the framework's cache driven session backends you may
     | list a cache store that should be used for these sessions. This value
     | must match with one of the application's configured cache "stores".
     |
+    | Affects: "apc", "dynamodb", "memcached", "redis"
+    |
     */
 
-    'store' => null,
+    'store' => env('SESSION_STORE'),
 
     /*
     |--------------------------------------------------------------------------
@@ -109,7 +110,10 @@ return [
     |
     */
 
-    'lottery' => [2, 100],
+    'lottery' => [
+        2,
+        100,
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -122,7 +126,7 @@ return [
     |
     */
 
-    'cookie' => 'winter_session',
+    'cookie' => env('SESSION_COOKIE', str_slug(env('APP_NAME', 'winter'), '_') . '_session'),
 
     /*
     |--------------------------------------------------------------------------
@@ -148,7 +152,7 @@ return [
     |
     */
 
-    'domain' => null,
+    'domain' => env('SESSION_DOMAIN'),
 
     /*
     |--------------------------------------------------------------------------
@@ -170,11 +174,11 @@ return [
     |
     | By setting this option to true, session cookies will only be sent back
     | to the server if the browser has a HTTPS connection. This will keep
-    | the cookie from being sent to you if it can not be done securely.
+    | the cookie from being sent to you when it can't be done securely.
     |
     */
 
-    'secure' => false,
+    'secure' => env('SESSION_SECURE_COOKIE', false),
 
     /*
     |--------------------------------------------------------------------------
@@ -182,31 +186,31 @@ return [
     |--------------------------------------------------------------------------
     |
     | This option determines how your cookies behave when cross-site requests
-    | take place and can be used to mitigate CSRF attacks.
+    | take place, and can be used to mitigate CSRF attacks. By default, we
+    | will set this value to "lax" since this is a secure default value.
     |
     | Cookies that match the domain of the current site, i.e. what's displayed
     | in the browser's address bar, are referred to as first-party cookies.
     | Similarly, cookies from domains other than the current site are referred
     | to as third-party cookies.
     |
-    | Cookies without a SameSite attribute will be treated as `SameSite=Lax`,
+    | Cookies without a SameSite attribute will be treated as `SameSite=lax`,
     | meaning the default behaviour will be to restrict cookies to first party
     | contexts only.
     |
     | Cookies for cross-site usage must specify `same_site` as 'None' and `secure`
     | as `true` to work correctly.
     |
-    | Lax - Cookies are allowed to be sent with top-level navigations and will
+    | lax - Cookies are allowed to be sent with top-level navigations and will
     | be sent along with GET request initiated by third party website.
     | This is the default value in modern browsers.
     |
-    | Strict - Cookies will only be sent in a first-party context and not be
+    | strict - Cookies will only be sent in a first-party context and not be
     | sent along with requests initiated by third party websites.
     |
-    | Supported: "Lax", "Strict" and "None"
+    | Supported: "lax", "strict", "none", null
     |
     */
 
-    'same_site' => 'Lax',
-
+    'same_site' => 'lax',
 ];

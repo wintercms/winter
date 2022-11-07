@@ -1,5 +1,6 @@
 <?php namespace Backend\Controllers;
 
+use Mail;
 use Lang;
 use Flash;
 use Backend;
@@ -232,5 +233,31 @@ class Users extends Controller
                 ]
             ]
         ];
+    }
+
+    /**
+     * Send password reset mail
+     */
+    public function update_onManualPasswordReset($recordId)
+    {
+        $user = $this->formFindModelObject($recordId);
+
+        if ($user) {
+            $code = $user->getResetPasswordCode();
+            $link = Backend::url('backend/auth/reset/' . $user->id . '/' . $code);
+
+            $data = [
+                'name' => $user->full_name,
+                'link' => $link,
+            ];
+
+            Mail::send('backend::mail.restore', $data, function ($message) use ($user) {
+                $message->to($user->email, $user->full_name)->subject(trans('backend::lang.account.password_reset'));
+            });
+        }
+
+        Flash::success(Lang::get('backend::lang.account.manual_password_reset_success'));
+
+        return Redirect::refresh();
     }
 }

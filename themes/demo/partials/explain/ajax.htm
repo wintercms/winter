@@ -6,7 +6,7 @@
     <i class="icon-copy"></i> &nbsp; The HTML markup for this example:
 </p>
 
-<pre>{% filter escape %}<!-- The form -->
+<pre>{% apply escape %}<!-- The form -->
 <form role="form" data-request="onTest" data-request-update="calcresult: '#result'">
     <input type="text" value="15" name="value1">
     <select name="operation">
@@ -21,7 +21,7 @@
 
 <!-- The result -->
 <div id="result">{{ "{% partial \"calcresult\" %}" }}</div>
-{% endfilter %}</pre>
+{% endapply %}</pre>
 
 <hr />
 
@@ -29,12 +29,12 @@
     <i class="icon-tags"></i> &nbsp; The <code>calcresult</code> partial:
 </p>
 
-<pre>{% filter escape %}
+<pre>{% apply escape %}
 {{ "{% if result %}" }}
     The result is {{ "{{ result }}" }}.
 {{ "{% else %}" }}
     Click the <em>Calculate</em> button to find the answer.
-{{ "{% endif %}" }}{% endfilter %}</pre>
+{{ "{% endif %}" }}{% endapply %}</pre>
 
 <hr />
 
@@ -49,16 +49,16 @@
     $operation = input('operation');
 
     switch ($operation) {
-        case '+' : 
+        case '+' :
             $this['result'] = $value1 + $value2;
             break;
-        case '-' : 
+        case '-' :
             $this['result'] = $value1 - $value2;
             break;
-        case '*' : 
+        case '*' :
             $this['result'] = $value1 * $value2;
             break;
-        default : 
+        default :
             $this['result'] = $value1 / $value2;
             break;
     }

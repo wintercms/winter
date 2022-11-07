@@ -371,7 +371,7 @@ return [
         'theme' => 'Renk şeması',
         'markup_styles' => 'Markup Stilleri',
         'custom_styles' => 'Özel CSS',
-        'custom styles_comment' => 'HTML editöre uygulanacak özel stiller.',
+        'custom_styles_comment' => 'HTML editöre uygulanacak özel stiller.',
         'markup_classes' => 'Markup Classlar',
         'paragraph' => 'Paragraf',
         'link' => 'Link',

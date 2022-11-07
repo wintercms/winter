@@ -10,12 +10,22 @@ export default class PluginBase {
     /**
      * Constructor.
      *
-     * The constructor is provided the Snowboard framework instance.
+     * The constructor is provided the Snowboard framework instance, and should not be overwritten
+     * unless you absolutely know what you're doing.
      *
      * @param {Snowboard} snowboard
      */
     constructor(snowboard) {
         this.snowboard = snowboard;
+    }
+
+    /**
+     * Plugin constructor.
+     *
+     * This method should be treated as the true constructor of a plugin, and can be overwritten.
+     * It will be called straight after construction.
+     */
+    construct() {
     }
 
     /**
@@ -37,12 +47,22 @@ export default class PluginBase {
     }
 
     /**
-     * Destructor.
+     * Plugin destructor.
      *
-     * Fired when this plugin is removed.
+     * Fired when this plugin is removed. Can be manually called if you have another scenario for
+     * destruction, ie. the element attached to the plugin is removed or changed.
      */
-    destructor() {
+    destruct() {
         this.detach();
         delete this.snowboard;
+    }
+
+    /**
+     * Plugin destructor (old method name).
+     *
+     * Allows previous usage of the "destructor" method to still work.
+     */
+    destructor() {
+        this.destruct();
     }
 }

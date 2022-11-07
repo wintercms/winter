@@ -72,6 +72,10 @@ trait FormModelSaver
             );
 
             if ($isNested && is_array($value)) {
+                // Handle related records that don't exist yet
+                if (!$model->{$attribute} && $model->hasRelation($attribute)) {
+                    $model->{$attribute} = $model->{$attribute}()->getRelated();
+                }
                 $this->setModelAttributes($model->{$attribute}, $value);
             }
             elseif ($value !== FormField::NO_SAVE_DATA) {
