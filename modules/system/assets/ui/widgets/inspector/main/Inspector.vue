@@ -21,13 +21,10 @@
             <Field
                 v-for="(field, i) in inspectorFields"
                 :key="i"
-            >
-                <FieldLabel
-                    :label="field.label"
-                    :comment="field.comment"
-                />
-                <div class="field-control" />
-            </Field>
+                v-bind="field"
+                :property="i"
+                @input="(value) => processValue(field, value)"
+            />
         </template>
     </component>
 </template>
@@ -35,12 +32,10 @@
 <script>
 import PopoverLayout from '../layout/Popover.vue';
 import Field from '../fields/Field.vue';
-import FieldLabel from '../fields/FieldLabel.vue';
 
 export default {
     components: {
         Field,
-        FieldLabel,
     },
     props: {
         snowboard: {
@@ -52,6 +47,10 @@ export default {
             required: true,
         },
         form: {
+            type: HTMLElement,
+            default: null,
+        },
+        valueBag: {
             type: HTMLElement,
             default: null,
         },
@@ -123,6 +122,7 @@ export default {
                 description: null,
                 fields: null,
             },
+            values: {},
         };
     },
     computed: {
@@ -214,6 +214,14 @@ export default {
                 },
             });
         },
+        /**
+         * Processes the fields configuration.
+         *
+         * Applies compatibility changes for older versions of Inspector field configuration to ensure
+         * that the old configuration style works.
+         *
+         * @param {Object} config
+         */
         processFieldsConfig(config) {
             const fieldsConfig = (Array.isArray(config))
                 ? this.reformatProperties(config)
@@ -238,6 +246,12 @@ export default {
 
             return fieldsConfig;
         },
+        /**
+         * Reformats an array of properties (the old style of Inspector field configuration) into
+         * an object.
+         *
+         * @param {Array} properties
+         */
         reformatProperties(properties) {
             const config = {};
 
@@ -247,6 +261,20 @@ export default {
             });
 
             return config;
+        },
+        /**
+         * Processes a single property's value being changed.
+         *
+         * @param {Object} field
+         * @param {any} value
+         */
+        processValue(field, value) {
+            this.values[field.property] = value;
+
+            if (this.valueBag) {
+                /* eslint-disable-next-line */
+                this.valueBag.value = JSON.stringify(this.values);
+            }
         },
     },
 };
@@ -338,6 +366,8 @@ export default {
 
             .field-control {
                 background: @inspector-field-bg;
+                padding: @padding-small-vertical @padding-small-horizontal;
+                cursor: pointer;
                 flex: 5 0;
             }
         }

@@ -106,19 +106,19 @@ export default {
          */
         shown(isShown) {
             if (isShown) {
-                this.snowboard['system.ui.overlay']().show();
+                this.snowboard.overlay().show();
                 this.highlightInspectedElement();
                 this.$nextTick(() => {
                     this.createPopper();
                 });
             } else {
                 this.popperInstance.destroy();
-                this.snowboard['system.ui.overlay']().hide();
+                this.snowboard.overlay().hide();
             }
         },
     },
     unmounted() {
-        this.snowboard['system.ui.overlay']().hide();
+        this.snowboard.overlay().hide();
     },
     methods: {
         createPopper() {

@@ -73,6 +73,7 @@ export default class Manager extends Snowboard.Singleton {
                 inspectorElement: null,
                 inspectorVue: null,
                 container: this.findInspectableContainer(element),
+                valueBag: this.findInspectableValues(element),
                 handler: (event) => this.inspectableClick.call(this, event, inspectorData),
                 title: element.dataset.inspectorTitle || 'Inspector',
                 description: element.dataset.inspectorDescription || null,
@@ -158,6 +159,23 @@ export default class Manager extends Snowboard.Singleton {
         }
 
         return null;
+    }
+
+    /**
+     * Searches up the hierarchy for a container for Inspectable elements.
+     *
+     * @param {HTMLElement} element
+     * @returns {HTMLElement|null}
+     */
+    findInspectableValues(element) {
+        const container = this.findInspectableContainer(element);
+
+        if (!container) {
+            return null;
+        }
+
+        const valueBag = container.querySelector('[data-inspector-values]');
+        return valueBag || null;
     }
 
     /**
