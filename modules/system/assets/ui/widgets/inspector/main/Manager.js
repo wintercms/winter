@@ -28,7 +28,7 @@ export default class Manager extends Snowboard.Singleton {
      * @returns {Array}
      */
     dependencies() {
-        return ['system.ui.overlay', 'system.ui.tooltip'];
+        return ['overlay', 'tooltip'];
     }
 
     /**

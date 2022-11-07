@@ -83,7 +83,7 @@ export default class Url extends Singleton {
      * @param {string} url
      * @returns {string}
      */
-     validateBaseUrl(url) {
+    validateBaseUrl(url) {
         const urlRegex = /^(([^:/?#]+):)?(\/\/([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/i;
         const urlParts = urlRegex.exec(url);
         const protocol = urlParts[2];

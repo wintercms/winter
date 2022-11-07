@@ -50,6 +50,7 @@ export default class AssetLoader extends window.Snowboard.Singleton {
      * @returns {Promise}
      */
     async load(assets) {
+        /* eslint-disable no-await-in-loop,no-restricted-syntax */
         if (assets.js && assets.js.length > 0) {
             for (const script of assets.js) {
                 try {
