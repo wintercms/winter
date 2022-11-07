@@ -109,6 +109,7 @@ export default class Manager extends Snowboard.Singleton {
             snowboard: this.snowboard,
             inspectedElement: inspector.element,
             form: inspector.form,
+            valueBag: inspector.valueBag,
             title: inspector.title,
             description: inspector.description,
             placement: inspector.placement,

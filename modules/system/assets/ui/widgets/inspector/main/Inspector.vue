@@ -23,7 +23,8 @@
                 :key="i"
                 v-bind="field"
                 :property="i"
-                @input="(value) => processValue(field, value)"
+                :value="values[i]"
+                @input="(value) => processValue(i, value)"
             />
         </template>
     </component>
@@ -161,6 +162,7 @@ export default {
     },
     mounted() {
         this.getConfiguration();
+        this.setValues();
     },
     methods: {
         /**
@@ -269,11 +271,25 @@ export default {
          * @param {any} value
          */
         processValue(field, value) {
-            this.values[field.property] = value;
+            this.values[field] = value;
+
+            console.log(this.values);
 
             if (this.valueBag) {
                 /* eslint-disable-next-line */
                 this.valueBag.value = JSON.stringify(this.values);
+            }
+        },
+        setValues() {
+            if (!this.valueBag || !this.valueBag.value) {
+                this.values = {};
+                return;
+            }
+
+            try {
+                this.values = JSON.parse(this.valueBag.value);
+            } catch (e) {
+                this.values = {};
             }
         },
     },
@@ -353,27 +369,46 @@ export default {
                 flex: 3 0;
                 background: @inspector-field-label-bg;
                 color: @inspector-field-label-fg;
-                border-right: 1px solid @inspector-field-border;
 
                 .comment {
                     position: absolute;
                     right: @padding-small-vertical;
                     top: 50%;
-                    transform: translateY(-66%);
+                    transform: translateY(-50%);
                     color: @text-muted;
+                    padding: 5px;
                 }
             }
 
             .field-control {
                 background: @inspector-field-bg;
                 padding: @padding-small-vertical @padding-small-horizontal;
+                border-left: 1px solid @inspector-field-border;
                 cursor: pointer;
                 flex: 5 0;
+
+                &:hover {
+                    position: relative;
+                    z-index: 20;
+                    border-left: 1px solid @inspector-field-hover-border;
+                    box-shadow: 0 1px 0 @inspector-field-hover-border;
+                }
             }
         }
 
         .field + .field {
-            border-top: 1px solid @inspector-field-border;
+            .field-label,
+            .field-control {
+                border-top: 1px solid @inspector-field-border;
+            }
+
+            .field-control:hover {
+                border-top: 1px solid @inspector-field-hover-border;
+            }
+        }
+
+        .field:last-child .field-control:hover {
+            box-shadow: none;
         }
     }
 }

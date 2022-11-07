@@ -1,5 +1,8 @@
 <template>
-    <div class="field">
+    <div
+        ref="fieldElement"
+        class="field"
+    >
         <FieldLabel
             :label="label"
             :comment="comment"
@@ -7,7 +10,7 @@
 
         <component
             :is="fieldComponent"
-            v-bind="$props"
+            v-bind="fieldProperties"
             :value="value"
             @input="setValue"
         />
@@ -24,6 +27,7 @@ export default {
     components: {
         FieldLabel,
     },
+    inheritAttrs: false,
     props: {
         property: {
             type: String,
@@ -58,6 +62,15 @@ export default {
     },
     emits: ['input'],
     computed: {
+        fieldProperties() {
+            const props = { ...this.$props };
+
+            Object.entries(this.$attrs).forEach(([key, value]) => {
+                props[key] = value;
+            });
+
+            return props;
+        },
         fieldComponent() {
             switch (this.type) {
                 case 'text':
