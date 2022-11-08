@@ -121,6 +121,7 @@ export default class Manager extends Snowboard.Singleton {
             hideFn: () => this.hideInspector(),
             config: inspector.config,
         });
+        inspector.inspectorVue.config.unwrapInjectedRef = true;
         inspector.inspectorVue.mount(inspector.inspectorElement);
     }
 

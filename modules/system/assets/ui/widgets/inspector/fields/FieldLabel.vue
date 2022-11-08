@@ -44,8 +44,6 @@
 <script>
 import { createPopper } from '@popperjs/core/lib/popper-lite';
 import arrow from '@popperjs/core/lib/modifiers/arrow';
-import flip from '@popperjs/core/lib/modifiers/flip';
-import preventOverflow from '@popperjs/core/lib/modifiers/preventOverflow';
 import offset from '@popperjs/core/lib/modifiers/offset';
 
 export default {

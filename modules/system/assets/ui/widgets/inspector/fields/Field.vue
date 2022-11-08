@@ -2,6 +2,7 @@
     <div
         ref="fieldElement"
         class="field"
+        :class="{ focused }"
     >
         <FieldLabel
             :label="label"
@@ -11,7 +12,10 @@
         <component
             :is="fieldComponent"
             v-bind="fieldProperties"
+            :focused="focused"
             :value="value"
+            :original-value="originalValue"
+            :dirty="dirty"
             @input="setValue"
         />
     </div>
@@ -27,6 +31,7 @@ export default {
     components: {
         FieldLabel,
     },
+    inject: ['focusedProperty'],
     inheritAttrs: false,
     props: {
         property: {
@@ -59,9 +64,28 @@ export default {
             type: [String, Number, Boolean, Array, Object, Date],
             default: null,
         },
+        originalValue: {
+            type: [String, Number, Boolean, Array, Object, Date],
+            default: null,
+        },
+        secondaryTitleRef: {
+            type: HTMLElement,
+            default: null,
+        },
+        secondaryContentRef: {
+            type: HTMLElement,
+            default: null,
+        },
     },
     emits: ['input'],
     computed: {
+        dirty() {
+            return this.value !== null && (JSON.stringify(this.value) !== JSON.stringify(this.originalValue));
+        },
+        focused() {
+            console.log(this.property, this.focusedProperty);
+            return this.property === this.focusedProperty;
+        },
         fieldProperties() {
             const props = { ...this.$props };
 
@@ -87,8 +111,8 @@ export default {
         },
     },
     methods: {
-        setValue(value) {
-            this.$emit('input', value);
+        setValue(value, reset) {
+            this.$emit('input', value, reset);
         },
     },
 };

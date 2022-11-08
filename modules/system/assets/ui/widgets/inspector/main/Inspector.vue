@@ -6,6 +6,7 @@
         <template #title>
             <div
                 v-if="inspectorTitle"
+                ref="inspectorTitle"
                 class="inspector-title"
                 v-text="inspectorTitle"
             ></div>
@@ -23,20 +24,50 @@
                 :key="i"
                 v-bind="field"
                 :property="i"
-                :value="values[i]"
-                @input="(value) => processValue(i, value)"
+                :value="values[i] || null"
+                :original-value="originalValues[i] || null"
+                @input="(value) => processValue(i, value, reset)"
             />
+        </template>
+        <template #secondaryTitle>
+            <div
+                :ref="(el) => secondaryForm.setTitleRef(el)"
+                class="secondary-form-title"
+            ></div>
+        </template>
+        <template #secondaryContent>
+            <div
+                :ref="(el) => secondaryForm.setContentRef(el)"
+                class="secondary-form-content"
+            ></div>
         </template>
     </component>
 </template>
 
 <script>
+import { computed } from 'vue';
 import PopoverLayout from '../layout/Popover.vue';
 import Field from '../fields/Field.vue';
+import secondaryForm from '../store/secondaryForm';
 
 export default {
     components: {
         Field,
+    },
+    provide() {
+        return {
+            snowboard: this.snowboard,
+            className: this.className,
+            focusedProperty: computed(() => this.focusedProperty),
+            setFocus(child) {
+                this.focusedProperty = child.property;
+            },
+            clearFocus(child) {
+                if (this.focusedProperty === child.property) {
+                    this.focusedProperty = null;
+                }
+            },
+        };
     },
     props: {
         snowboard: {
@@ -122,12 +153,15 @@ export default {
     data() {
         return {
             showInspector: false,
+            secondaryForm,
             userConfig: {
                 title: null,
                 description: null,
                 fields: null,
             },
             values: {},
+            originalValues: {},
+            focusedProperty: null,
         };
     },
     computed: {
@@ -167,6 +201,9 @@ export default {
     mounted() {
         this.getConfiguration();
         this.setValues();
+    },
+    unmounted() {
+        secondaryForm.reset();
     },
     methods: {
         /**
@@ -276,13 +313,18 @@ export default {
         /**
          * Processes a single property's value being changed.
          *
+         * If the `reset` argument is true, the original value will also be set to this value,
+         * effectively making the new value the "clean" value.
+         *
          * @param {Object} field
          * @param {any} value
+         * @param {Boolean} reset
          */
-        processValue(field, value) {
+        processValue(field, value, reset) {
             this.values[field] = value;
-
-            console.log(this.values);
+            if (reset === true) {
+                this.originalValues[field] = value;
+            }
 
             if (this.valueBag) {
                 /* eslint-disable-next-line */
@@ -292,13 +334,16 @@ export default {
         setValues() {
             if (!this.valueBag || !this.valueBag.value) {
                 this.values = {};
+                this.originalValues = {};
                 return;
             }
 
             try {
                 this.values = JSON.parse(this.valueBag.value);
+                this.originalValues = JSON.parse(this.valueBag.value);
             } catch (e) {
                 this.values = {};
+                this.originalValues = {};
             }
         },
     },
@@ -307,10 +352,10 @@ export default {
 
 <style lang="less">
 // GLOBAL INSPECTOR STYLES
-@import (reference) '../../../less/global.less';
 @import (reference) '../style/variables.less';
 
-.inspector {
+.inspector,
+.secondary-form {
     font-size: @inspector-font-size;
 
     header {
@@ -322,18 +367,21 @@ export default {
         text-shadow: 0px 1px 1px rgba(0, 0, 0, 0.22);
         z-index: 1003;
 
-        .inspector-title {
+        .inspector-title,
+        .secondary-form-title {
             font-weight: @inspector-header-title-weight;
             font-size: @inspector-header-title-size;
         }
 
-        .inspector-description {
+        .inspector-description,
+        .secondary-form-description {
             font-weight: @inspector-header-description-weight;
             font-size: @inspector-header-description-size;
             margin-top: -3px;
         }
 
-        .inspector-hide {
+        .inspector-hide,
+        .secondary-form-hide {
             position: absolute;
             top: 0;
             right: 0;
@@ -343,6 +391,7 @@ export default {
             text-align: center;
             background: darken(@inspector-header-bg, 8%);
             border-bottom-left-radius: @inspector-border-radius;
+            border-top-right-radius: @inspector-border-radius;
             cursor: pointer;
             transition: background-color 175ms ease;
 
@@ -395,6 +444,12 @@ export default {
                 border-left: 1px solid @inspector-field-border;
                 cursor: pointer;
                 flex: 5 0;
+                color: @inspector-field-fg;
+
+                &.dirty {
+                    color: @inspector-field-dirty-fg;
+                    font-weight: bold;
+                }
 
                 &:hover {
                     position: relative;
@@ -419,6 +474,31 @@ export default {
         .field:last-child .field-control:hover {
             box-shadow: none;
         }
+    }
+}
+
+.secondary-form {
+    header {
+        background: @inspector-field-label-bg;
+        color: @inspector-field-label-fg;
+        border-bottom: 1px solid @inspector-field-border;
+
+        .secondary-form-title {
+            text-shadow: none;
+        }
+
+        .secondary-form-hide {
+            background: darken(@inspector-field-label-bg, 8%);
+
+            &:hover {
+                background: darken(@inspector-field-label-bg, 12%);
+            }
+        }
+    }
+
+    main {
+        padding: @padding-base-vertical @padding-base-horizontal;
+        background: #fff;
     }
 }
 </style>

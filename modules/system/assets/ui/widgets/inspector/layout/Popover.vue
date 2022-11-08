@@ -1,30 +1,61 @@
 <template>
     <div
-        ref="popover"
         class="inspector-wrapper"
     >
-        <transition name="popover-fade">
-            <div
-                v-if="shown"
-                class="inspector popover-layout"
-            >
+        <div
+            ref="popover"
+            class="main-wrapper"
+        >
+            <transition name="popover-fade">
                 <div
-                    class="arrow"
-                    data-popper-arrow
-                ></div>
-                <header>
-                    <slot name="title"></slot>
-                    <slot name="description"></slot>
+                    v-if="shown"
+                    class="inspector popover-layout"
+                >
                     <div
-                        class="inspector-hide wn-icon-remove"
-                        @click.stop="hideFn"
+                        class="arrow"
+                        data-popper-arrow
                     ></div>
-                </header>
-                <main>
-                    <slot name="fields"></slot>
-                </main>
-            </div>
-        </transition>
+                    <header>
+                        <slot name="title"></slot>
+                        <slot name="description"></slot>
+                        <div
+                            class="inspector-hide wn-icon-remove"
+                            @click.stop="hideFn"
+                        ></div>
+                    </header>
+                    <main>
+                        <slot name="fields"></slot>
+                    </main>
+                </div>
+            </transition>
+        </div>
+
+        <div
+            ref="secondary"
+            class="secondary-wrapper"
+        >
+            <transition name="popover-fade">
+                <div
+                    v-if="showSecondaryForm"
+                    class="secondary-form popover-layout"
+                >
+                    <div
+                        class="arrow"
+                        data-popper-arrow
+                    ></div>
+                    <header>
+                        <slot name="secondaryTitle"></slot>
+                        <div
+                            class="secondary-form-hide wn-icon-remove"
+                            @click.stop="hideSecondaryForm"
+                        ></div>
+                    </header>
+                    <main>
+                        <slot name="secondaryContent"></slot>
+                    </main>
+                </div>
+            </transition>
+        </div>
     </div>
 </template>
 
@@ -34,6 +65,7 @@ import arrow from '@popperjs/core/lib/modifiers/arrow';
 import flip from '@popperjs/core/lib/modifiers/flip';
 import preventOverflow from '@popperjs/core/lib/modifiers/preventOverflow';
 import offset from '@popperjs/core/lib/modifiers/offset';
+import secondaryForm from '../store/secondaryForm';
 
 export default {
     props: {
@@ -87,6 +119,7 @@ export default {
             default: 0,
         },
     },
+    emits: ['hide-secondary-form'],
     data() {
         return {
             top: 0,
@@ -96,6 +129,8 @@ export default {
                 zIndex: null,
             },
             popperInstance: null,
+            secondaryFormInstance: null,
+            showSecondaryForm: secondaryForm.isShown(),
         };
     },
     watch: {
@@ -114,6 +149,20 @@ export default {
             } else {
                 this.popperInstance.destroy();
                 this.snowboard.overlay().hide();
+            }
+        },
+        /**
+         * Detects if the secondary form is shown. If shown, create the popover.
+         *
+         * @param {Boolean} isShown
+         */
+        showSecondaryForm(isShown) {
+            if (isShown) {
+                this.$nextTick(() => {
+                    this.createSecondaryPopper();
+                });
+            } else {
+                this.secondaryFormInstance.destroy();
             }
         },
     },
@@ -136,6 +185,22 @@ export default {
                 ],
             });
         },
+        createSecondaryPopper() {
+            this.secondaryFormInstance = createPopper(this.$refs.popover, this.$refs.secondary, {
+                placement: 'right-start',
+                modifiers: [
+                    arrow,
+                    flip,
+                    preventOverflow,
+                    {
+                        ...offset,
+                        options: {
+                            offset: [0, 10],
+                        },
+                    },
+                ],
+            });
+        },
         highlightInspectedElement() {
             this.inspectedElementStyle.position = this.inspectedElement.style.position;
             this.inspectedElementStyle.zIndex = this.inspectedElement.style.zIndex;
@@ -144,6 +209,9 @@ export default {
             this.inspectedElement.style.position = 'relative';
             this.inspectedElement.style.zIndex = 1001;
             /* eslint-enable */
+        },
+        hideSecondaryForm() {
+            secondaryForm.hide();
         },
     },
 };
@@ -155,10 +223,12 @@ export default {
 
 // VARIABLES
 @inpsector-popover-width: 360px;
+@inspector-secondary-form-width: 280px;
 @inspector-border-radius: @border-radius-base;
 
 // STYLING
-.inspector-wrapper {
+.main-wrapper,
+.secondary-wrapper {
     z-index: 1002;
 }
 
@@ -202,17 +272,61 @@ export default {
     }
 }
 
+.secondary-form.popover-layout {
+    position: relative;
+    width: @inspector-secondary-form-width;
+    box-shadow: @overlay-box-shadow;
+    border-radius: @inspector-border-radius;
+
+    .arrow,
+    .arrow::before {
+        position: absolute;
+        width: 10px;
+        height: 10px;
+    }
+
+    .arrow {
+        visibility: hidden;
+        z-index: 1002;
+    }
+
+    .arrow::before {
+        visibility: visible;
+        content: '';
+        transform: rotate(45deg);
+        background-color: @inspector-field-label-bg;
+    }
+
+    header {
+        border-top-left-radius: @inspector-border-radius;
+        border-top-right-radius: @inspector-border-radius;
+
+        .inspector-hide {
+            border-top-right-radius: @inspector-border-radius;
+        }
+    }
+
+    main {
+        border-bottom-left-radius: @inspector-border-radius;
+        border-bottom-right-radius: @inspector-border-radius;
+    }
+}
+
 // ARROW PLACEMENT
-.inspector-wrapper[data-popper-placement^='top'] .inspector.popover-layout .arrow {
+.main-wrapper[data-popper-placement^='top'] .inspector.popover-layout .arrow,
+.secondary-wrapper[data-popper-placement^='top'] .secondary-form.popover-layout .arrow {
     bottom: -5px;
 }
-.inspector-wrapper[data-popper-placement^='bottom'] .inspector.popover-layout .arrow {
+.main-wrapper[data-popper-placement^='bottom'] .inspector.popover-layout .arrow,
+.secondary-wrapper[data-popper-placement^='bottom'] .secondary-form.popover-layout .arrow {
     top: -5px;
 }
-.inspector-wrapper[data-popper-placement^='left'] .inspector.popover-layout .arrow {
+.main-wrapper[data-popper-placement^='left'] .inspector.popover-layout .arrow,
+.secondary-wrapper[data-popper-placement^='left'] .secondary-form.popover-layout .arrow {
     right: -5px;
 }
-.inspector-wrapper[data-popper-placement^='right'] .inspector.popover-layout .arrow {
+.main-wrapper[data-popper-placement^='right'] .inspector.popover-layout .arrow,
+.secondary-wrapper[data-popper-placement^='right'] .secondary-form.popover-layout .arrow {
     left: -5px;
 }
 
@@ -227,5 +341,10 @@ export default {
 .popover-fade-leave-to {
     opacity: 0;
     transform: translateY(20px);
+}
+
+.secondary-form.popover-fade-enter-from,
+.secondary-form.popover-fade-leave-to {
+    transform: translateX(20px);
 }
 </style>
