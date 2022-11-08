@@ -44,6 +44,7 @@ export default {
 <style lang="less" scoped>
     input {
         appearance: none;
+        -moz-appearance: textfield;
         border: none;
         padding: 0;
         margin: 0;
