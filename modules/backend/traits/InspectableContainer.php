@@ -1,8 +1,11 @@
 <?php namespace Backend\Traits;
 
+use File;
 use Lang;
 use Request;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Arr;
+use Winter\Storm\Support\Str;
 
 /**
  * Inspectable Container Trait
@@ -14,6 +17,82 @@ use ApplicationException;
 
 trait InspectableContainer
 {
+    use \System\Traits\ConfigMaker;
+
+    /**
+     * @var string The name of the inspector config file.
+     */
+    protected string $inspectorFile = 'inspector.yaml';
+
+    /**
+     * Gets the inspector configuration.
+     *
+     * This method will look for the configuration file called `inspector.yaml` first within the given class' config
+     * directory, and failing that, the current controller's given config directory. If it cannot find the file in
+     * either location, an exception will be thrown.
+     *
+     * You may overwrite the filename for the inspector config file by specifying the `$inspectorFile` property in the
+     * controller.
+     *
+     * @throws ApplicationException if the inspector config file cannot be found.
+     */
+    public function onGetInspectorConfiguration(): array
+    {
+        $config = [];
+        $inspectorClass = trim(Request::input('inspectorClassName'));
+        $configPaths = [
+            $this->guessConfigPath('/' . $this->inspectorFile),
+        ];
+
+        if ($inspectorClass) {
+            // Try to find the inspector config within the given class first
+            array_unshift($configPaths, $this->guessConfigPathFrom($inspectorClass, '/' . $this->inspectorFile));
+        }
+
+        foreach ($configPaths as $configPath) {
+            if (File::isFile($configPath)) {
+                $config = (array) $this->makeConfig($configPath);
+                break;
+            }
+        }
+
+        if (!count($config)) {
+            throw new ApplicationException('Missing inspector configuration file.');
+        }
+
+        return $this->processLangKeys($config);
+    }
+
+    /**
+     * Translates certain keys provided by the config.
+     *
+     * @param array $config
+     * @return array
+     */
+    protected function processLangKeys(array $config): array
+    {
+        $translatableKeys = [
+            'title',
+            'description',
+            'fields.*.label',
+            'fields.*.comment',
+            'fields.*.placeholder',
+            'fields.*.emptyOption',
+        ];
+
+        $flattened = Arr::dot($config);
+
+        foreach ($flattened as $key => $value) {
+            foreach ($translatableKeys as $translatable) {
+                if (Str::is($translatable, $key)) {
+                    $flattened[$key] = e(Lang::get($value));
+                }
+            }
+        }
+
+        return Arr::undot($flattened);
+    }
+
     public function onInspectableGetOptions()
     {
         // Disable asset broadcasting

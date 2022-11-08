@@ -71,6 +71,10 @@ export default {
             type: String,
             default: null,
         },
+        className: {
+            type: String,
+            default: null,
+        },
         layout: {
             type: String,
             default: 'popover',
@@ -189,26 +193,31 @@ export default {
                     || userConfig.properties
                     || {},
                 );
+            } else {
+                this.getConfigurationFromBackend();
             }
-
-            this.getConfigurationFromBackend();
         },
         /**
          * Queries the backend for the final Inspector configuration.
          */
         getConfigurationFromBackend() {
             this.snowboard.request(this.form, 'onGetInspectorConfiguration', {
+                data: {
+                    inspectorClassName: this.className,
+                },
                 success: (data) => {
-                    if (data.configuration.title) {
-                        this.userConfig.title = data.configuration.title;
+                    const config = (data.configuration) ? data.configuration : data;
+
+                    if (config.title) {
+                        this.userConfig.title = config.title;
                     }
-                    if (data.configuration.description) {
-                        this.userConfig.description = data.configuration.description;
+                    if (config.description) {
+                        this.userConfig.description = config.description;
                     }
-                    if (data.configuration.fields) {
-                        this.userConfig.fields = this.processFieldsConfig(data.configuration.fields);
-                    } else if (data.configuration.properties) {
-                        this.userConfig.fields = this.processFieldsConfig(data.configuration.properties);
+                    if (config.fields) {
+                        this.userConfig.fields = this.processFieldsConfig(config.fields);
+                    } else if (config.properties) {
+                        this.userConfig.fields = this.processFieldsConfig(config.properties);
                     }
                 },
                 complete: () => {

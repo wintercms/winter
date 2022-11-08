@@ -78,6 +78,7 @@ export default class Manager extends Snowboard.Singleton {
                 title: element.dataset.inspectorTitle || 'Inspector',
                 description: element.dataset.inspectorDescription || null,
                 config: element.dataset.inspectorConfig || null,
+                className: element.dataset.inspectorClass || null,
                 offset: {
                     x: element.dataset.inspectorOffsetX || element.dataset.inspectorOffset || 0,
                     y: element.dataset.inspectorOffsetY || element.dataset.inspectorOffset || 0,
@@ -112,6 +113,7 @@ export default class Manager extends Snowboard.Singleton {
             valueBag: inspector.valueBag,
             title: inspector.title,
             description: inspector.description,
+            className: inspector.className,
             placement: inspector.placement,
             fallbackPlacement: inspector.fallbackPlacement,
             offsetX: inspector.offset.x,
