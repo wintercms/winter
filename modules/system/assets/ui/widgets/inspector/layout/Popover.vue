@@ -36,7 +36,7 @@
         >
             <transition name="popover-fade">
                 <div
-                    v-if="showSecondaryForm"
+                    v-show="showSecondaryForm"
                     class="secondary-form popover-layout"
                 >
                     <div
@@ -294,7 +294,7 @@ export default {
         visibility: visible;
         content: '';
         transform: rotate(45deg);
-        background-color: @inspector-field-label-bg;
+        background-color: #fff;
     }
 
     header {

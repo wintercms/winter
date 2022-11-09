@@ -172,14 +172,19 @@ export default class Manager extends Snowboard.Singleton {
      * @returns {HTMLElement|null}
      */
     findInspectableValues(element) {
+        const valueBag = element.querySelector('[data-inspector-values]');
+
+        if (valueBag) {
+            return valueBag;
+        }
+
         const container = this.findInspectableContainer(element);
 
         if (!container) {
             return null;
         }
 
-        const valueBag = container.querySelector('[data-inspector-values]');
-        return valueBag || null;
+        return container.querySelector('[data-inspector-values]');
     }
 
     /**

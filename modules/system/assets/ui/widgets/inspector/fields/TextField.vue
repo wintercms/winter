@@ -6,39 +6,22 @@
             :value="thisValue"
             :class="{ dirty }"
             @input="onInput"
-            @focus="setFocus(this)"
-            @blur="clearFocus(this)"
+            @focus="hideSecondaryForm(); $emit('focus')"
+            @blur="$emit('blur')"
         >
     </div>
 </template>
 
 <script>
+import fieldProps from './fieldProps';
+import secondaryForm from '../store/secondaryForm';
+
 export default {
-    inject: ['setFocus', 'clearFocus'],
     inheritAttrs: false,
     props: {
-        property: {
-            type: String,
-            required: true,
-        },
-        value: {
-            type: String,
-            default: '',
-        },
-        dirty: {
-            type: Boolean,
-            default: false,
-        },
-        placeholder: {
-            type: String,
-            default: '',
-        },
-        type: {
-            type: String,
-            default: 'text',
-        },
+        ...fieldProps,
     },
-    emits: ['input'],
+    emits: ['input', 'focus', 'blur'],
     data() {
         return {
             thisValue: this.value,
@@ -48,6 +31,9 @@ export default {
         onInput(event) {
             this.thisValue = event.target.value;
             this.$emit('input', this.thisValue);
+        },
+        hideSecondaryForm() {
+            secondaryForm.hide();
         },
     },
 };
@@ -71,6 +57,12 @@ input {
     &.dirty {
         font-weight: bold;
         color: @inspector-field-dirty-fg;
+    }
+
+    &::placeholder,
+    &::-moz-placeholder {
+        color: @inspector-field-placeholder-fg;
+        opacity: 1;
     }
 
     &:placeholder-shown {

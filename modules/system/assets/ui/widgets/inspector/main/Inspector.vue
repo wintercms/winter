@@ -26,7 +26,10 @@
                 :property="i"
                 :value="values[i] || null"
                 :original-value="originalValues[i] || null"
+                :focused-property="focusedProperty"
                 @input="(value) => processValue(i, value, reset)"
+                @focus="(property) => setFocus(property)"
+                @blur="(property) => clearFocus(property)"
             />
         </template>
         <template #secondaryTitle>
@@ -45,7 +48,6 @@
 </template>
 
 <script>
-import { computed } from 'vue';
 import PopoverLayout from '../layout/Popover.vue';
 import Field from '../fields/Field.vue';
 import secondaryForm from '../store/secondaryForm';
@@ -58,54 +60,77 @@ export default {
         return {
             snowboard: this.snowboard,
             className: this.className,
-            focusedProperty: computed(() => this.focusedProperty),
-            setFocus(child) {
-                this.focusedProperty = child.property;
-            },
-            clearFocus(child) {
-                if (this.focusedProperty === child.property) {
-                    this.focusedProperty = null;
-                }
-            },
         };
     },
     props: {
+        /**
+         * The Snowboard instance.
+         */
         snowboard: {
             type: Object,
             required: true,
         },
+        /**
+         * The element that this inspector is attached to.
+         */
         inspectedElement: {
             type: HTMLElement,
             required: true,
         },
+        /**
+         * The form that contains the inspected element.
+         */
         form: {
             type: HTMLElement,
             default: null,
         },
+        /**
+         * The field that will contain the values from the Inspector.
+         */
         valueBag: {
             type: HTMLElement,
             default: null,
         },
+        /**
+         * A function that is run upon the Inspector being closed.
+         */
         hideFn: {
             type: Function,
             required: true,
         },
+        /**
+         * The Inspector configuration.
+         */
         config: {
             type: [String, Object],
             default: null,
         },
+        /**
+         * The title of this Inspector.
+         */
         title: {
             type: String,
             required: true,
         },
+        /**
+         * The description of this Inspector.
+         */
         description: {
             type: String,
             default: null,
         },
+        /**
+         * The class name that will be used to derive options for Inspector selection fields.
+         */
         className: {
             type: String,
             default: null,
         },
+        /**
+         * The layout that this Inspector will use.
+         *
+         * Can be either `popover` or `sidebar`.
+         */
         layout: {
             type: String,
             default: 'popover',
@@ -116,6 +141,11 @@ export default {
                 ].indexOf(value) !== -1;
             },
         },
+        /**
+         * The placement for where this Inspector will be positioned.
+         *
+         * This will be dependent on the layout, but options can be either `top`, `right`, `bottom`, or `left`.
+         */
         placement: {
             type: String,
             default: 'auto',
@@ -129,6 +159,11 @@ export default {
                 ].indexOf(value) !== -1;
             },
         },
+        /**
+         * The fallback placement for where this Inspector will be positioned.
+         *
+         * This will be dependent on the layout, but options can be either `top`, `right`, `bottom`, or `left`.
+         */
         fallbackPlacement: {
             type: String,
             default: 'bottom',
@@ -141,10 +176,16 @@ export default {
                 ].indexOf(value) !== -1;
             },
         },
+        /**
+         * The horizontal offset of this Inspector.
+         */
         offsetX: {
             type: Number,
             default: 0,
         },
+        /**
+         * The vertical offset of this Inspector.
+         */
         offsetY: {
             type: Number,
             default: 0,
@@ -203,7 +244,9 @@ export default {
         this.setValues();
     },
     unmounted() {
+        this.populateValues();
         secondaryForm.reset();
+        secondaryForm.hide();
     },
     methods: {
         /**
@@ -287,8 +330,15 @@ export default {
                     delete fieldConfig.title;
                 }
 
-                if (fieldConfig.type === 'set') {
-                    fieldConfig.type = 'checkboxlist';
+                // Rename "description" property to "comment"
+                if (fieldConfig.description !== undefined) {
+                    fieldConfig.comment = fieldConfig.description;
+                    delete fieldConfig.description;
+                }
+
+                // Rename "text" type to "textarea"
+                if (fieldConfig.type === 'text') {
+                    fieldConfig.type = 'textarea';
                 }
             });
 
@@ -325,11 +375,6 @@ export default {
             if (reset === true) {
                 this.originalValues[field] = value;
             }
-
-            if (this.valueBag) {
-                /* eslint-disable-next-line */
-                this.valueBag.value = JSON.stringify(this.values);
-            }
         },
         setValues() {
             if (!this.valueBag || !this.valueBag.value) {
@@ -344,6 +389,20 @@ export default {
             } catch (e) {
                 this.values = {};
                 this.originalValues = {};
+            }
+        },
+        populateValues() {
+            if (this.valueBag) {
+                /* eslint-disable-next-line */
+                this.valueBag.value = JSON.stringify(this.values);
+            }
+        },
+        setFocus(property) {
+            this.focusedProperty = property;
+        },
+        clearFocus(property) {
+            if (this.focusedProperty === property) {
+                this.focusedProperty = null;
             }
         },
     },
@@ -460,6 +519,13 @@ export default {
             }
         }
 
+        .field.focused .field-control {
+            position: relative;
+            z-index: 20;
+            border-left: 1px solid @inspector-field-focus-border;
+            box-shadow: 0 1px 0 @inspector-field-focus-border;
+        }
+
         .field + .field {
             .field-label,
             .field-control {
@@ -468,6 +534,10 @@ export default {
 
             .field-control:hover {
                 border-top: 1px solid @inspector-field-hover-border;
+            }
+
+            &.focused .field-control {
+                border-top: 1px solid @inspector-field-focus-border;
             }
         }
 

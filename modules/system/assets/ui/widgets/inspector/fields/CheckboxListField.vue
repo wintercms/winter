@@ -6,23 +6,25 @@
     >
         <span
             v-if="!value || !value.length"
+            class="field-value no-selections"
         >
             No selections
         </span>
         <span
             v-else
+            class="field-value"
             v-text="selectedOptions"
         ></span>
 
         <Teleport
-            v-if="secondaryShown"
+            v-if="secondaryShown && focused"
             :to="secondaryTitleRef"
         >
             <span v-text="label"></span>
         </Teleport>
 
         <Teleport
-            v-if="secondaryShown"
+            v-if="secondaryShown && focused"
             :to="secondaryContentRef"
         >
             <div
@@ -58,34 +60,20 @@
 </template>
 
 <script>
+import fieldProps from './fieldProps';
 import secondaryForm from '../store/secondaryForm';
 
 export default {
     inject: ['snowboard', 'className'],
     inheritAttrs: false,
     props: {
-        property: {
-            type: String,
-            required: true,
-        },
-        label: {
-            type: String,
-            default: '',
-        },
-        value: {
-            type: Array,
-            default: () => [],
-        },
+        ...fieldProps,
         options: {
             type: [Array, Object],
             default: () => [],
         },
-        dirty: {
-            type: Boolean,
-            default: false,
-        },
     },
-    emits: ['input'],
+    emits: ['input', 'focus', 'blur'],
     data() {
         return {
             userOptions: [],
@@ -121,7 +109,7 @@ export default {
             const selected = [];
 
             this.value.forEach((value) => {
-                const option = this.availableOptions.find((option) => option.value === value);
+                const option = this.availableOptions.find((availableOption) => availableOption.value === value);
 
                 if (option) {
                     selected.push(option.title);
@@ -129,6 +117,13 @@ export default {
             });
 
             return selected.join(', ');
+        },
+    },
+    watch: {
+        secondaryShown(shown) {
+            if (!shown && this.focused) {
+                this.$emit('blur');
+            }
         },
     },
     mounted() {
@@ -157,7 +152,9 @@ export default {
             });
         },
         showSecondary() {
+            secondaryForm.hide();
             secondaryForm.show();
+            this.$emit('focus');
         },
         toggle(value) {
             const values = this.value ?? [];
@@ -181,6 +178,19 @@ export default {
 
 <style lang="less" scoped>
 @import (reference) '../style/variables.less';
+
+.field-value {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    &.no-selections {
+        color: @inspector-field-placeholder-fg;
+        font-weight: normal !important;
+    }
+}
 
 .checkbox-list {
     display: flex;
@@ -218,6 +228,7 @@ export default {
 
         label {
             cursor: pointer;
+            margin: 0;
         }
     }
 }
