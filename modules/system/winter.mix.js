@@ -22,11 +22,19 @@ mix
     // Compile Snowboard for the Backend / System
     .js(
         [
-            './assets/js/snowboard/snowboard.base.debug.js',
+            './assets/js/snowboard/snowboard.base.js',
             './assets/js/snowboard/ajax/Request.js',
             './assets/js/snowboard/snowboard.backend.extras.js',
         ],
         './assets/js/build/system.js',
+    )
+    .js(
+        [
+            './assets/js/snowboard/snowboard.base.debug.js',
+            './assets/js/snowboard/ajax/Request.js',
+            './assets/js/snowboard/snowboard.backend.extras.js',
+        ],
+        './assets/js/build/system.debug.js',
     )
 
     // Compile Snowboard framework separately for the CMS module

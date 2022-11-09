@@ -162,7 +162,9 @@ class CombineAssets
         $this->registerAlias('framework.extras', '~/modules/system/assets/css/framework.extras.css');
         $this->registerAlias('framework.extras.css', '~/modules/system/assets/css/framework.extras.css');
 
-        $snowboardBase = (Config::get('app.debug', false) === true) ? 'snowboard.base.debug.js' : 'snowboard.base.js';
+        $snowboardBase = (Config::get('develop.debugSnowboard', Config::get('app.debug', false)) === true)
+            ? 'snowboard.base.debug.js'
+            : 'snowboard.base.js';
         $this->registerAlias('snowboard.base', '~/modules/system/assets/js/snowboard/build/' . $snowboardBase);
         $this->registerAlias('snowboard.attr', '~/modules/system/assets/js/snowboard/build/snowboard.data-attr.js');
         $this->registerAlias('snowboard.request', '~/modules/system/assets/js/snowboard/build/snowboard.request.js');
