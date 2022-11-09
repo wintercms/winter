@@ -2562,7 +2562,7 @@ setTimeout(updateValue,100,self,$el,prefix)},timeout)})
 this.$el.on('change',function(){self.cancelled=true})}
 InputPreset.prototype.formatNamespace=function(){var value=this.toCamel(this.$src.val())
 return value.substr(0,1).toUpperCase()+value.substr(1)}
-InputPreset.prototype.formatValue=function(){if(this.options.inputPresetType=='exact'){return this.$src.val();}else if(this.options.inputPresetType=='namespace'){return this.formatNamespace()}if(this.options.inputPresetType=='camel'){var value=this.toCamel(this.$src.val())}else{var value=this.slugify(this.$src.val())}if(this.options.inputPresetType=='url'){value='/'+value}return value.replace(/\s/gi,"-")}
+InputPreset.prototype.formatValue=function(){if(this.options.inputPresetType=='exact'){return this.$src.val();}else if(this.options.inputPresetType=='namespace'){return this.formatNamespace()}if(this.options.inputPresetType=='camel'){var value=this.toCamel(this.$src.val(),this.$el.attr('maxlength'))}else{var value=this.slugify(this.$src.val(),this.$el.attr('maxlength'))}if(this.options.inputPresetType=='url'){value='/'+value}return value.replace(/\s/gi,"-")}
 InputPreset.prototype.toCamel=function(slug,numChars){Downcoder.Initialize()
 slug=slug.replace(Downcoder.regex,function(m){return Downcoder.map[m]})
 slug=this.removeStopWords(slug);slug=slug.toLowerCase()
