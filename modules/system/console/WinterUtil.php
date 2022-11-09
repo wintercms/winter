@@ -299,8 +299,7 @@ class WinterUtil extends Command
         }
 
         $totalCount = 0;
-        $uploadsPath = Config::get('filesystems.disks.local.root', storage_path('app'));
-        $uploadsPath .= '/resized';
+        $uploadsPath = Config::get('cms.storage.resized.disks.root', storage_path('app')) . '/resized';
 
         // Recursive function to scan the directory for files and ensure they exist in system_files.
         $purgeImagesFunc = function ($targetDir) use (&$purgeImagesFunc, &$totalCount, $uploadsPath) {
