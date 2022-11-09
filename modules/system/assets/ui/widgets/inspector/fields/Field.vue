@@ -25,6 +25,7 @@
 import fieldProps from './fieldProps';
 import FieldLabel from './FieldLabel.vue';
 
+import CheckboxField from './CheckboxField.vue';
 import CheckboxListField from './CheckboxListField.vue';
 import DropdownField from './DropdownField.vue';
 import TextField from './TextField.vue';
@@ -68,6 +69,9 @@ export default {
                     return TextField;
                 case 'textarea':
                     return TextareaField;
+                case 'checkbox':
+                case 'switch':
+                    return CheckboxField;
                 case 'checkboxlist':
                 case 'set':
                     return CheckboxListField;
