@@ -688,7 +688,7 @@ body.breadcrumb-fancy .control-breadcrumb,
 //
 
 // Code editor
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs .field-codeeditor {
+.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-codeeditor {
     border: none !important;
     .border-radius(0);
 
@@ -698,7 +698,7 @@ body.breadcrumb-fancy .control-breadcrumb,
 }
 
 // Rich editor
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs .field-richeditor {
+.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-richeditor {
     border: none;
     border-left: 1px solid @color-form-field-border !important;
 
@@ -708,28 +708,22 @@ body.breadcrumb-fancy .control-breadcrumb,
     }
 }
 
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs.secondary-content-tabs .field-richeditor {
+// Rich editor in a secondary content tab
+.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs.secondary-content-tabs > .tab-content > .tab-pane > .form-group >  .field-richeditor {
     .fr-toolbar {
         background: white;
     }
 }
 
-
-body.side-panel-not-fixed .fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs .field-richeditor,
-body.side-panel-not-fixed.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs .field-richeditor {
+// Rich editor when the side panel is not fixed
+body.side-panel-not-fixed .fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-richeditor,
+body.side-panel-not-fixed.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-richeditor {
     border-left: none;
 }
 
-html.cssanimations {
-    .fancy-layout {
-        .form-tabless-fields {
-            .loading-indicator-container {
-                .loading-indicator > span {
-                    .animation(spin 1s linear infinite);
-                    background-image: url('../../../system/assets/ui/images/loader-white.svg');
-                    background-size: 20px 20px;
-                }
-            }
-        }
-    }
+// Loading indicator
+html.cssanimations .fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .form-tabless-fields .loading-indicator-container .loading-indicator > span {
+    .animation(spin 1s linear infinite);
+    background-image: url('../../../system/assets/ui/images/loader-white.svg');
+    background-size: 20px 20px;
 }
