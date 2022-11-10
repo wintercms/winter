@@ -1050,21 +1050,21 @@ body.fancy-layout .master-tabs.control-tabs>.tab-content>.tab-pane.padded-pane,
 .fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .loading-indicator-container .loading-indicator{background-color:#e67e22;padding:0 0 0 30px;color:rgba(255,255,255,0.5);margin-top:1px;height:90%;font-size:12px;line-height:100%}
 .fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .loading-indicator-container .loading-indicator>span{left:-10px;top:18px}
 body.breadcrumb-fancy .control-breadcrumb,
-.control-breadcrumb.breadcrumb-fancy{margin-bottom:0;background-color:#e67e22}
+.control-breadcrumb.breadcrumb-fancy{margin-bottom:0;background-color:#d66908}
 body.breadcrumb-fancy .control-breadcrumb li,
-.control-breadcrumb.breadcrumb-fancy li{background-color:#d35400;color:rgba(255,255,255,0.5)}
+.control-breadcrumb.breadcrumb-fancy li{background-color:#b05606;color:rgba(255,255,255,0.5)}
 body.breadcrumb-fancy .control-breadcrumb li a,
 .control-breadcrumb.breadcrumb-fancy li a{opacity:.5;-webkit-transition:all 0.3s ease;transition:all 0.3s ease}
 body.breadcrumb-fancy .control-breadcrumb li a:hover,
 .control-breadcrumb.breadcrumb-fancy li a:hover{opacity:1}
-body.breadcrumb-fancy .control-breadcrumb li:before,
-.control-breadcrumb.breadcrumb-fancy li:before{border-left-color:#fff;opacity:.5}
+body.breadcrumb-fancy .control-breadcrumb li:not(:last-child)::before,
+.control-breadcrumb.breadcrumb-fancy li:not(:last-child)::before{border-left-color:#e67e22;opacity:.5}
 body.breadcrumb-fancy .control-breadcrumb li:after,
-.control-breadcrumb.breadcrumb-fancy li:after{border-left-color:#d35400}
+.control-breadcrumb.breadcrumb-fancy li:after{border-left-color:#b05606}
 body.breadcrumb-fancy .control-breadcrumb li:last-child,
-.control-breadcrumb.breadcrumb-fancy li:last-child{background-color:#d35400}
+.control-breadcrumb.breadcrumb-fancy li:last-child{background-color:#d66908}
 body.breadcrumb-fancy .control-breadcrumb li:last-child:before,
-.control-breadcrumb.breadcrumb-fancy li:last-child:before{opacity:1;border-left-color:#d35400}
+.control-breadcrumb.breadcrumb-fancy li:last-child:before{opacity:1;border-left-color:#d66908}
 .fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons,
 .fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons{-webkit-transition:all 0.5s;transition:all 0.5s;padding-top:14px;padding-bottom:5px}
 .fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons .btn,

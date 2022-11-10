@@ -602,10 +602,10 @@ body.breadcrumb-fancy .control-breadcrumb,
 .control-breadcrumb.breadcrumb-fancy {
     margin-bottom: 0;
 
-    background-color: @color-fancy-form-tabless-fields-bg;
+    background-color: mix(black, saturate(@color-fancy-form-tabless-fields-bg, 20%), 16%);
 
     li {
-        background-color: @color-fancy-master-tabs-bg;
+        background-color: mix(black, saturate(@color-fancy-form-tabless-fields-bg, 20%), 31%);
         color: rgba(255,255,255, .5);
 
         a {
@@ -617,21 +617,21 @@ body.breadcrumb-fancy .control-breadcrumb,
             }
         }
 
-        &:before {
-            border-left-color: @color-fancy-form-text;
+        &:not(:last-child)::before {
+            border-left-color: @color-fancy-form-tabless-fields-bg;
             opacity: .5;
         }
 
         &:after {
-            border-left-color: @color-fancy-master-tabs-bg;
+            border-left-color: mix(black, saturate(@color-fancy-form-tabless-fields-bg, 20%), 31%);
         }
 
         &:last-child {
-            background-color: @color-fancy-master-tabs-bg;
+            background-color: mix(black, saturate(@color-fancy-form-tabless-fields-bg, 20%), 16%);
 
             &:before {
                 opacity: 1;
-                border-left-color: @color-fancy-master-tabs-bg;
+                border-left-color: mix(black, saturate(@color-fancy-form-tabless-fields-bg, 20%), 16%);
             }
         }
     }
