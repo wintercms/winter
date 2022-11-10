@@ -57,7 +57,10 @@ return [
         'weekdaysShort' => ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
     ],
     'colorpicker' => [
-        'choose' => 'Ok',
+        'last_color' => 'Use previously selected color',
+        'aria_palette' => 'Color selection area',
+        'aria_hue' => 'Hue selection slider',
+        'aria_opacity' => 'Opacity selection slider',
     ],
     'filter' => [
         'group' => [

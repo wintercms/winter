@@ -1,0 +1,13 @@
+url = "/filters-test/:url_title?"
+==
+{# Check pageUrl for current page #}
+{{ '' | page }} -> {{ '/filters-test/current-slug' | app }}
+{# Check pageUrl for persistent URL parameters #}
+{{ 'blog-post' | page }} -> {{ '/blog/post/current-slug' | app }}
+{# Check pageUrl for providing values for URL parameters #}
+{{ 'blog-post' | page({url_title: 'test-slug'}) }} -> {{ '/blog/post/test-slug' | app }}
+{# Check pageUrl for disabling persistent URL parameters #}
+{{ 'blog-post' | page({}, false) }} -> {{ '/blog/post/default' | app }}
+{# Check pageUrl for disabling persistent URL parameters with the second argument being routePersistence #}
+{{ 'blog-post' | page(false) }} -> {{ '/blog/post/default' | app }}
+

@@ -7,7 +7,7 @@ tabs:
 
         html_custom_styles:
             label: backend::lang.editor.custom_styles
-            commentAbove: backend::lang.editor.custom styles_comment
+            commentAbove: backend::lang.editor.custom_styles_comment
             tab: backend::lang.editor.markup_styles
             type: codeeditor
             size: giant
@@ -135,5 +135,5 @@ tabs:
             label: backend::lang.editor.toolbar_buttons_preset
             tab: backend::lang.editor.toolbar_options
             type: partial
-            path: ~/modules/backend/models/editorsetting/_toolbar_presets.htm
+            path: ~/modules/backend/models/editorsetting/_toolbar_presets.php
             span: left

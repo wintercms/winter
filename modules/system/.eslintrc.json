@@ -1,0 +1,49 @@
+{
+    "env": {
+        "es6": true,
+        "browser": true
+    },
+    "globals": {
+        "Snowboard": "writable"
+    },
+    "extends": [
+        "airbnb-base",
+        "plugin:vue/vue3-recommended"
+    ],
+    "rules": {
+        "class-methods-use-this": ["off"],
+        "indent": ["error", 4, {
+            "SwitchCase": 1
+        }],
+        "max-len": ["off"],
+        "new-cap": ["error", { "properties": false }],
+        "no-alert": ["off"],
+        "no-plusplus": "off",
+        "no-param-reassign": ["error", {
+            "props": false
+        }],
+        "vue/html-indent": ["error", 4],
+        "vue/html-self-closing": ["error", {
+            "html": {
+                "void": "never",
+                "normal": "any",
+                "component": "always"
+            },
+            "svg": "always",
+            "math": "always"
+        }],
+        "vue/multi-word-component-names": ["off"]
+    },
+    "ignorePatterns": [
+        "assets/js/eventlogs",
+        "assets/js/framework.js",
+        "assets/js/framework*.js",
+        "assets/js/lang",
+        "assets/js/mailbrandsettings",
+        "assets/js/updates",
+        "assets/ui",
+        "assets/vendor",
+        "tests/js",
+        "**/build/*.js"
+    ]
+}

@@ -21,13 +21,13 @@ class SystemController extends ControllerBase
     /**
      * Combines JavaScript and StyleSheet assets.
      * @param string $name Combined file code
-     * @return string Combined content.
+     * @return Response Combined content.
      */
     public function combine($name)
     {
         try {
             if (!strpos($name, '-')) {
-                throw new ApplicationException(Lang::get('system::lang.combiner.not_found', ['name' => $name]));
+                return Response::make('/* '.e(Lang::get('system::lang.combiner.not_found', ['name' => $name])).' */', 404);
             }
 
             $parts = explode('-', $name);
@@ -72,7 +72,7 @@ class SystemController extends ControllerBase
         } catch (Exception $ex) {
             // If it failed for any other reason, restore the config so that
             // the resizer route will continue to work until it succeeds
-            if ($resizer) {
+            if (!empty($resizer)) {
                 $resizer->storeConfig();
             }
 

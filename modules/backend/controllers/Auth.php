@@ -90,9 +90,7 @@ class Auth extends Controller
             'password' => post('password')
         ], $remember);
 
-        if (is_null($runMigrationsOnLogin = Config::get('cms.runMigrationsOnLogin', null))) {
-            $runMigrationsOnLogin = Config::get('app.debug', false);
-        }
+        $runMigrationsOnLogin = (bool) Config::get('cms.runMigrationsOnLogin', Config::get('app.debug', false));
 
         if ($runMigrationsOnLogin) {
             try {
@@ -134,6 +132,8 @@ class Auth extends Controller
      */
     public function restore()
     {
+        $this->bodyClass = 'restore';
+
         try {
             if (post('postback')) {
                 return $this->restore_onSubmit();
@@ -197,6 +197,8 @@ class Auth extends Controller
      */
     public function reset($userId = null, $code = null)
     {
+        $this->bodyClass = 'reset';
+
         try {
             if (post('postback')) {
                 return $this->reset_onSubmit();

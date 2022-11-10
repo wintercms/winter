@@ -2,7 +2,6 @@
 
 use Lang;
 use Model;
-use Config;
 use System\Classes\PluginManager;
 
 /**
@@ -96,17 +95,22 @@ class PluginVersion extends Model
                 }
             }
 
-            if ($this->is_disabled) {
-                $manager->disablePlugin($this->code, true);
-            }
-            else {
-                $manager->enablePlugin($this->code, true);
-            }
+            $activeFlags = $manager->getPluginFlags($pluginObj);
+            if (!empty($activeFlags)) {
+                foreach ($activeFlags as $flag => $enabled) {
+                    if (in_array($flag, [
+                        PluginManager::DISABLED_MISSING,
+                        PluginManager::DISABLED_REPLACED,
+                        PluginManager::DISABLED_REPLACEMENT_FAILED,
+                        PluginManager::DISABLED_MISSING_DEPENDENCIES,
+                    ])) {
+                        $this->disabledBySystem = true;
+                    }
 
-            $this->disabledBySystem = $pluginObj->disabled;
-
-            if (($configDisabled = Config::get('cms.disablePlugins')) && is_array($configDisabled)) {
-                $this->disabledByConfig = in_array($this->code, $configDisabled);
+                    if ($flag === PluginManager::DISABLED_BY_CONFIG) {
+                        $this->disabledByConfig = true;
+                    }
+                }
             }
         }
         else {
@@ -118,9 +122,8 @@ class PluginVersion extends Model
 
     /**
      * Returns true if the plugin should be updated by the system.
-     * @return bool
      */
-    public function getIsUpdatableAttribute()
+    public function getIsUpdatableAttribute(): bool
     {
         return !$this->is_disabled && !$this->disabledBySystem && !$this->disabledByConfig;
     }
@@ -128,7 +131,7 @@ class PluginVersion extends Model
     /**
      * Only include enabled plugins
      * @param $query
-     * @return mixed
+     * @return QueryBuilder
      */
     public function scopeApplyEnabled($query)
     {
@@ -137,10 +140,8 @@ class PluginVersion extends Model
 
     /**
      * Returns the current version for a plugin
-     * @param  string $pluginCode Plugin code. Eg: Acme.Blog
-     * @return string
      */
-    public static function getVersion($pluginCode)
+    public static function getVersion(string $pluginCode): ?string
     {
         if (self::$versionCache === null) {
             self::$versionCache = self::lists('version', 'code');
@@ -152,7 +153,7 @@ class PluginVersion extends Model
     /**
      * Provides the slug attribute.
      */
-    public function getSlugAttribute()
+    public function getSlugAttribute(): string
     {
         return self::makeSlug($this->code);
     }
@@ -160,7 +161,7 @@ class PluginVersion extends Model
     /**
      * Generates a slug for the plugin.
      */
-    public static function makeSlug($code)
+    public static function makeSlug(string $code): string
     {
         return strtolower(str_replace('.', '-', $code));
     }

@@ -104,6 +104,7 @@ class WinterInstall extends Command
 
     /**
      * Get the console command options.
+     * @return array
      */
     protected function getOptions()
     {
@@ -366,7 +367,7 @@ class WinterInstall extends Command
         SeedSetupAdmin::$lastName = $this->ask('Last Name', SeedSetupAdmin::$lastName);
         SeedSetupAdmin::$email = $this->ask('Email Address', SeedSetupAdmin::$email);
         SeedSetupAdmin::$login = $this->ask('Admin Login', SeedSetupAdmin::$login);
-        SeedSetupAdmin::$password = $this->ask('Admin Password', SeedSetupAdmin::$password);
+        SeedSetupAdmin::$password = $this->ask('Admin Password', Str::random(22));
 
         if (!$this->confirm('Is the information correct?', true)) {
             $this->setupAdminUser();

@@ -1,0 +1,31 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+# Record name
+name: '{{ model_lang_key }}.label'
+
+# Model Form Field configuration
+form: $/{{ plugin_folder }}/models/{{ lower_model }}/fields.yaml
+
+# Model Class name
+modelClass: {{ plugin_namespace }}\Models\{{ studly_model }}
+
+# Default redirect location
+defaultRedirect: {{ controller_url }}
+
+# Create page
+create:
+    title: backend::lang.form.create_title
+    redirect: {{ controller_url }}/update/:id
+    redirectClose: {{ controller_url }}
+
+# Update page
+update:
+    title: backend::lang.form.update_title
+    redirect: {{ controller_url }}
+    redirectClose: {{ controller_url }}
+
+# Preview page
+preview:
+    title: backend::lang.form.preview_title

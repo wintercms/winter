@@ -39,23 +39,57 @@ tabs:
             span: right
             fileTypes: jpg,jpeg,bmp,png,webp,gif,svg,ico
 
+        _branding_colors:
+            label: backend::lang.branding.branding_colors
+            comment: backend::lang.branding.branding_colors_comment
+            type: section
+            tab: backend::lang.branding.colors
+            span: left
+
+        _default_colors:
+            label: backend::lang.branding.default_colors
+            comment: backend::lang.branding.default_colors_comment
+            type: section
+            tab: backend::lang.branding.colors
+            span: right
+
         primary_color:
             label: backend::lang.branding.primary_color
             type: colorpicker
+            span: left
             tab: backend::lang.branding.colors
-            availableColors: [#1abc9c, #6cc551, #b1dbef, #227f96, #b281c5, #103141, #f8e095, #de8754, #b33f32, #95a5a6]
+            availableColors: ['#16a085', '#52a838', '#88c9e7', '#2da7c7', '#7b4e8e', '#081821', '#dcb22d', '#d66829', '#ab2a1c', '#7f8c8d']
+
+        default_colors:
+            label: false
+            type: repeater
+            span: right
+            tab: backend::lang.branding.colors
+            prompt: backend::lang.branding.add_default_color
+            titleFrom: color
+            form:
+                fields:
+                    color:
+                        label: false
+                        type: colorpicker
+                        availableColors: []
+                        allowCustom: true
+                        allowAlpha: true
+                        formats: all
 
         secondary_color:
             label: backend::lang.branding.secondary_color
             type: colorpicker
+            span: left
             tab: backend::lang.branding.colors
-            availableColors: [#16a085, #52a838, #88c9e7, #2da7c7, #7b4e8e, #081821, #dcb22d, #d66829, #ab2a1c, #7f8c8d]
+            availableColors: ['#16a085', '#52a838', '#88c9e7', '#2da7c7', '#7b4e8e', '#081821', '#dcb22d', '#d66829', '#ab2a1c', '#7f8c8d']
 
         accent_color:
             label: backend::lang.branding.accent_color
             type: colorpicker
+            span: left
             tab: backend::lang.branding.colors
-            availableColors: [#16a085, #6cc551, #88c9e7, #2da7c7, #7b4e8e, #081821, #dcb22d, #d66829, #ab2a1c, #7f8c8d]
+            availableColors: ['#16a085', '#6cc551', '#88c9e7', '#2da7c7', '#7b4e8e', '#081821', '#dcb22d', '#d66829', '#ab2a1c', '#7f8c8d']
 
         menu_mode:
             label: backend::lang.branding.menu_mode
@@ -72,4 +106,4 @@ tabs:
             type: codeeditor
             tab: backend::lang.branding.styles
             size: giant
-            language: css
+            language: less

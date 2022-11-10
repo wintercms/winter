@@ -2,7 +2,8 @@
 
 return [
     'auth' => [
-        'title' => 'Area de Administración'
+        'title' => 'Area de Administración',
+        'invalid_login' => 'Los datos ingresados no concuerdan con nuestros registros. Por favor verifique e intente nuevamente.'
     ],
     'field' => [
         'invalid_type' => 'El tipo de campo utilizado es inválido :type.',
@@ -318,7 +319,7 @@ return [
         'theme' => 'Color del esquema',
         'markup_styles' => 'Estilos de marcado',
         'custom_styles' => 'Hoja de estilo personalizada',
-        'custom styles_comment' => 'Estilos personalizados para incluir en el editor HTML.',
+        'custom_styles_comment' => 'Estilos personalizados para incluir en el editor HTML.',
         'markup_classes' => 'Clases de marcado',
         'paragraph' => 'Párrafo',
         'link' => 'Enlace',
@@ -460,7 +461,7 @@ return [
             'iso_8859_6' => 'ISO-8859-6 (Latin, Arabic)',
             'iso_8859_7' => 'ISO-8859-7 (Latin, Greek)',
             'iso_8859_8' => 'ISO-8859-8 (Latin, Hebrew)',
-            'iso_8859_0' => 'ISO-8859-9 (Latin-5, Turkish)',
+            'iso_8859_9' => 'ISO-8859-9 (Latin-5, Turkish)',
             'iso_8859_10' => 'ISO-8859-10 (Latin-6, Nordic)',
             'iso_8859_11' => 'ISO-8859-11 (Latin, Thai)',
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, Baltic Rim)',

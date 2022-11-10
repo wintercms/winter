@@ -1,0 +1,69 @@
+name: Code Quality
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 1.0
+      - 1.1
+      - 1.2
+      - develop
+
+jobs:
+  codeQuality:
+    runs-on: ubuntu-latest
+    name: PHP
+    steps:
+      - name: Cancel previous incomplete runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout changes
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Install PHP and PHP Code Sniffer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.0
+          extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
+          tools: phpcs
+
+      - name: Run code quality checks (on push)
+        if: github.event_name == 'push'
+        run: ./.github/workflows/utilities/phpcs-push ${{ github.sha }}
+
+      - name: Run code quality checks (on pull request)
+        if: github.event_name == 'pull_request'
+        run: ./.github/workflows/utilities/phpcs-pr ${{ github.base_ref }}
+  codeQualityJS:
+    runs-on: ubuntu-latest
+    name: JavaScript
+    steps:
+      - name: Checkout changes
+        uses: actions/checkout@v2
+        with:
+            fetch-depth: 0
+
+      - name: Install Node
+        uses: actions/setup-node@v1
+        with:
+            node-version: 12
+
+      - name: Install Node dependencies for System Module
+        working-directory: ./modules/system
+        run: npm install
+
+      - name: Run code quality checks on System Module
+        working-directory: ./modules/system
+        run: npx eslint .
+
+      - name: Install Node dependencies for Backend Module
+        working-directory: ./modules/backend
+        run: npm install
+
+      - name: Run code quality checks on Backend Module
+        working-directory: ./modules/backend
+        run: npx eslint .

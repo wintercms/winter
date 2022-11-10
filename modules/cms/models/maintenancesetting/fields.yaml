@@ -6,7 +6,7 @@ fields:
 
     hint:
         type: hint
-        path: ~/modules/cms/models/maintenancesetting/_hint.htm
+        path: ~/modules/cms/models/maintenancesetting/_hint.php
 
     is_enabled:
         label: cms::lang.maintenance.is_enabled
@@ -16,3 +16,20 @@ fields:
     cms_page:
         type: dropdown
         cssClass: checkbox-align
+
+    allowed_ips:
+        label: cms::lang.maintenance.allowed_ips.name
+        type: repeater
+        commentAbove: cms::lang.maintenance.allowed_ips.description
+        prompt: cms::lang.maintenance.allowed_ips.prompt
+        cssClass: checkbox-align
+        form:
+            fields:
+                ip:
+                    label: cms::lang.maintenance.allowed_ips.ip
+                    type: text
+                    span: left
+                label:
+                    label: cms::lang.maintenance.allowed_ips.label
+                    type: text
+                    span: right

@@ -238,6 +238,8 @@
         }
 
         this.$el.on('keydown', '.fr-view figure', this.proxy(this.onFigureKeydown))
+
+        Snowboard.globalEvent("formwidgets.richeditor.init",this)
     }
 
     RichEditor.prototype.dispose = function() {
@@ -403,7 +405,7 @@
     }
 
     RichEditor.prototype.onChange = function(ev) {
-        this.$form.trigger('change')
+        this.$textarea.trigger('change')
     }
 
     /*

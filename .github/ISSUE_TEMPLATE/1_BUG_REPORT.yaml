@@ -1,0 +1,75 @@
+name: Bug Report
+description: Report a general Winter CMS or Storm library issue. See our policy below if reporting a security issue.
+labels: ["Status: Review Needed", "Type: Unconfirmed Bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for your interest in improving Winter CMS! To avoid duplicate issues please ensure that no previous issues already cover the problem you wish to report before you submit your report. Otherwise, feel free to fill out the form below to submit an issue.
+
+        **Please do not use this form to report a security issue. For security issues, review our [Security Policy](https://github.com/wintercms/winter/security/policy).**
+  - type: dropdown
+    id: build
+    attributes:
+      label: Winter CMS Build
+      description: Please select the Winter CMS build that you encountered your issue with. You can find the version in the **Updates & Plugins** section of the Settings page of the Backend, or by running the `php artisan winter:version` command.
+      options:
+        - dev-develop
+        - 1.2
+        - 1.1
+        - 1.0 (please try updating first)
+        - Other (please specify below)
+    validations:
+      required: true
+  - type: dropdown
+    id: php_version
+    attributes:
+      label: PHP Version
+      description: Please provide us the branch of PHP version. For example, for PHP version 7.4.9, select `7.4`, or for PHP version 8.0.1, select `8.0`.
+      options:
+        - 8.1
+        - 8.0
+        - 7.4
+        - 7.3
+        - 7.2
+        - Other (please specify below)
+    validations:
+      required: true
+  - type: dropdown
+    id: database
+    attributes:
+      label: Database engine
+      description: Please provide us with the database server type you are running.
+      options:
+        - MySQL/MariaDB
+        - PostgreSQL
+        - SQLite
+        - SQL Server
+        - No database
+        - Other (please specify below)
+    validations:
+      required: true
+  - type: input
+    id: plugins
+    attributes:
+      label: Plugins installed
+      description: If any plugins are installed, please list them here in the format `Author.PluginName, Author2.PluginName, etc`.
+  - type: textarea
+    id: description
+    attributes:
+      label: Issue description
+      description: Please describe the issue in as much detail as possible. Include screenshots of error messages or copy and paste any logs that result from the issue occurring.
+    validations:
+      required: true
+  - type: textarea
+    id: replication
+    attributes:
+      label: Steps to replicate
+      description: Please list the steps that you took in order for the issue to occur.
+    validations:
+      required: true
+  - type: textarea
+    id: workaround
+    attributes:
+      label: Workaround
+      description: If you have a workaround, please detail it here, for the benefit of other users who encounter the issue.

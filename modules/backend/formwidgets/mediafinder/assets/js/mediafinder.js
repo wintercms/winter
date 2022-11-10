@@ -44,11 +44,11 @@
         this.$el.one('dispose-control', this.proxy(this.dispose))
 
         if (this.options.thumbnailWidth > 0) {
-            this.$el.css('maxWidth', this.options.thumbnailWidth + 'px')
+            this.$el.find('[data-find-image]').css('maxWidth', this.options.thumbnailWidth + 'px')
         }
 
         else if (this.options.thumbnailHeight > 0) {
-            this.$el.css('maxHeight', this.options.thumbnailHeight + 'px')
+            this.$el.find('[data-find-image]').css('maxHeight', this.options.thumbnailHeight + 'px')
         }
 
         // Stop here for preview mode

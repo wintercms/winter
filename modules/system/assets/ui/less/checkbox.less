@@ -3,7 +3,6 @@
 // --------------------------------------------------
 
 @import "global.less";
-@import "icon.less";
 
 //
 // Checkbox
@@ -46,7 +45,9 @@
     input[type=radio],
     input[type=checkbox] {
         display: block;
-        opacity: 0;
+        visibility: hidden;
+        height: 0;
+        margin-top: 0;
     }
 
     label {
@@ -171,12 +172,16 @@
 }
 
 .inline-options {
-    .field-checkboxlist:not(.is-scrollable) {
+    .field-checkboxlist-scrollable {
+        padding-left: 0;
+    }
+
+    .field-checkboxlist-inner {
         padding: 10px 20px 20px 20px !important;
 
         .custom-checkbox {
             display: inline-block;
-            margin: 0;
+            margin: 0 5px 10px 0;
 
             label {
                 margin-bottom: 0 !important;

@@ -1,11 +1,14 @@
 <?php namespace System\Classes;
 
-use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Support\ServiceProvider as ServiceProviderBase;
-use ReflectionClass;
-use SystemException;
+use Str;
+use File;
 use Yaml;
 use Backend;
+use ReflectionClass;
+use SystemException;
+use Composer\Semver\Semver;
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Support\ServiceProvider as ServiceProviderBase;
 
 /**
  * Plugin base class
@@ -16,9 +19,24 @@ use Backend;
 class PluginBase extends ServiceProviderBase
 {
     /**
+     * @var \Winter\Storm\Foundation\Application The application instance.
+     */
+    protected $app;
+
+    /**
      * @var boolean
      */
     protected $loadedYamlConfiguration = false;
+
+    /**
+     * @var string The absolute path to this plugin's directory, access with getPluginPath()
+     */
+    protected $path;
+
+    /**
+     * @var string The version of this plugin as reported by updates/version.yaml, access with getPluginVersion()
+     */
+    protected $version;
 
     /**
      * @var array Plugin dependencies
@@ -313,12 +331,145 @@ class PluginBase extends ServiceProviderBase
             $this->loadedYamlConfiguration = [];
         }
         else {
-            $this->loadedYamlConfiguration = Yaml::parse(file_get_contents($yamlFilePath));
+            $this->loadedYamlConfiguration = Yaml::parseFile($yamlFilePath);
             if (!is_array($this->loadedYamlConfiguration)) {
                 throw new SystemException(sprintf('Invalid format of the plugin configuration file: %s. The file should define an array.', $yamlFilePath));
             }
         }
 
         return $this->loadedYamlConfiguration;
+    }
+
+    /**
+     * Gets list of plugins replaced by this plugin
+     *
+     * @param bool $includeConstraints Include version constraints in the results as the array values
+     * @return array ['Author.Plugin'] or ['Author.Plugin' => 'self.version']
+     */
+    public function getReplaces($includeConstraints = false): array
+    {
+        $replaces = $this->pluginDetails()['replaces'] ?? null;
+
+        if ($includeConstraints) {
+            if (is_string($replaces)) {
+                $replaces = [$replaces => 'self.version'];
+            }
+        } else {
+            if (is_array($replaces)) {
+                $replaces = array_keys($replaces);
+            } elseif (is_string($replaces)) {
+                $replaces = [$replaces];
+            }
+        }
+
+        return is_array($replaces) ? $replaces : [];
+    }
+
+    /**
+     * Check if the provided plugin & version can be replaced by this plugin
+     *
+     * @param string $pluginIdentifier
+     * @param string $version
+     * @return bool
+     */
+    public function canReplacePlugin(string $pluginIdentifier, string $version): bool
+    {
+        $replaces = $this->getReplaces(true);
+
+        if (is_array($replaces) && in_array($pluginIdentifier, array_keys($replaces))) {
+            $constraints = $replaces[$pluginIdentifier];
+            if ($constraints === 'self.version') {
+                $constraints = $this->getPluginVersion();
+            }
+
+            return Semver::satisfies($version, $constraints);
+        }
+
+        return false;
+    }
+
+    /**
+     * Gets the identifier for this plugin
+     *
+     * @return string Identifier in format of Author.Plugin
+     */
+    public function getPluginIdentifier(): string
+    {
+        $namespace = Str::normalizeClassName(get_class($this));
+        if (strpos($namespace, '\\') === null) {
+            return $namespace;
+        }
+
+        $parts = explode('\\', $namespace);
+        $slice = array_slice($parts, 1, 2);
+        $namespace = implode('.', $slice);
+
+        return $namespace;
+    }
+
+    /**
+     * Returns the absolute path to this plugin's directory
+     */
+    public function getPluginPath(): string
+    {
+        if ($this->path) {
+            return $this->path;
+        }
+
+        $reflection = new ReflectionClass($this);
+        $this->path = File::normalizePath(dirname($reflection->getFileName()));
+
+        return $this->path;
+    }
+
+    /**
+     * Gets the current version of the plugin as reported by updates/version.yaml
+     *
+     * @return string
+     */
+    public function getPluginVersion(): string
+    {
+        if (isset($this->version)) {
+            return $this->version;
+        }
+
+        $versionFile = $this->getPluginPath() . '/updates/version.yaml';
+
+        if (
+            !File::isFile($versionFile)
+            || !($versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
+                return $yaml->parseFile($versionFile);
+            }))
+            || !is_array($versionInfo)
+        ) {
+            return $this->version = (string) VersionManager::NO_VERSION_VALUE;
+        }
+
+        uksort($versionInfo, function ($a, $b) {
+            return version_compare($a, $b);
+        });
+
+        return $this->version = trim(key(array_slice($versionInfo, -1, 1)));
+    }
+
+    /**
+     * Verifies the plugin's dependencies are present and enabled
+     */
+    public function checkDependencies(PluginManager $manager): bool
+    {
+        $required = $manager->getDependencies($this);
+        if (empty($required)) {
+            return true;
+        }
+
+        foreach ($required as $require) {
+            $requiredPlugin = $manager->findByIdentifier($require);
+
+            if (!$requiredPlugin || $manager->isDisabled($requiredPlugin)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

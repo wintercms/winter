@@ -4,6 +4,9 @@ use File;
 use Yaml;
 use Db;
 use Carbon\Carbon;
+use Illuminate\Console\View\Components\Error;
+use Illuminate\Console\View\Components\Info;
+use Illuminate\Console\View\Components\Task;
 use Winter\Storm\Database\Updater;
 
 /**
@@ -67,10 +70,10 @@ class VersionManager
 
     /**
      * Updates a single plugin by its code or object with it's latest changes.
-     * If the $stopOnVersion parameter is specified, the process stops after
+     * If the $stopAfterVersion parameter is specified, the process stops after
      * the specified version is applied.
      */
-    public function updatePlugin($plugin, $stopOnVersion = null)
+    public function updatePlugin($plugin, $stopAfterVersion = null)
     {
         $code = is_string($plugin) ? $plugin : $this->pluginManager->getIdentifier($plugin);
 
@@ -81,23 +84,79 @@ class VersionManager
         $currentVersion = $this->getLatestFileVersion($code);
         $databaseVersion = $this->getDatabaseVersion($code);
 
+        $this->out('', true);
+
         // No updates needed
-        if ($currentVersion == $databaseVersion) {
-            $this->note(' - <info>Nothing to update.</info>');
+        if ($currentVersion === (string) $databaseVersion) {
+            $this->write(Info::class, 'Nothing to migrate.');
             return;
         }
 
         $newUpdates = $this->getNewFileVersions($code, $databaseVersion);
 
+        $this->write(Info::class, 'Running migrations.');
+
         foreach ($newUpdates as $version => $details) {
             $this->applyPluginUpdate($code, $version, $details);
 
-            if ($stopOnVersion === $version) {
+            if ($stopAfterVersion === $version) {
                 return true;
             }
         }
 
+        $this->out('', true);
+
         return true;
+    }
+
+    /**
+     * Update the current replaced plugin's version to reference the replacing plugin.
+     */
+    public function replacePlugin(PluginBase $plugin, string $replace)
+    {
+        $currentVersion = $this->getDatabaseVersion($replace);
+        if ($currentVersion === self::NO_VERSION_VALUE) {
+            return;
+        }
+
+        // We only care about the database version of the replaced plugin at this point
+        if (!$plugin->canReplacePlugin($replace, $currentVersion)) {
+            return;
+        }
+
+        $code = $plugin->getPluginIdentifier();
+
+        // Replace existing migration information with the new identifier
+        if ($versions = $this->getOldFileVersions($code, $currentVersion)) {
+            foreach ($versions as $version => $details) {
+                list($comments, $scripts) = $this->extractScriptsAndComments($details);
+                $now = now()->toDateTimeString();
+
+                foreach ($scripts as $script) {
+                    Db::table('system_plugin_history')->insert([
+                        'code'       => $code,
+                        'type'       => self::HISTORY_TYPE_SCRIPT,
+                        'version'    => $version,
+                        'detail'     => $script,
+                        'created_at' => $now,
+                    ]);
+                }
+
+                foreach ($comments as $comment) {
+                    $this->applyDatabaseComment($code, $version, $comment);
+                }
+            }
+
+            // delete replaced plugin history
+            Db::table('system_plugin_history')->where('code', $replace)->delete();
+
+            // replace installed version
+            Db::table('system_plugin_versions')
+                ->where('code', '=', $replace)
+                ->update([
+                    'code' => $code
+                ]);
+        }
     }
 
     /**
@@ -122,29 +181,40 @@ class VersionManager
     {
         list($comments, $scripts) = $this->extractScriptsAndComments($details);
 
-        /*
-         * Apply scripts, if any
-         */
-        foreach ($scripts as $script) {
-            if ($this->hasDatabaseHistory($code, $version, $script)) {
-                continue;
+        $updateFn = function () use ($code, $version, $comments, $scripts) {
+            /*
+            * Apply scripts, if any
+            */
+            foreach ($scripts as $script) {
+                if ($this->hasDatabaseHistory($code, $version, $script)) {
+                    continue;
+                }
+
+                $this->applyDatabaseScript($code, $version, $script);
             }
 
-            $this->applyDatabaseScript($code, $version, $script);
-        }
-
-        /*
-         * Register the comment and update the version
-         */
-        if (!$this->hasDatabaseHistory($code, $version)) {
-            foreach ($comments as $comment) {
-                $this->applyDatabaseComment($code, $version, $comment);
-
-                $this->note(sprintf(' - <info>v%s: </info> %s', $version, $comment));
+            /*
+            * Register the comment and update the version
+            */
+            if (!$this->hasDatabaseHistory($code, $version)) {
+                foreach ($comments as $comment) {
+                    $this->applyDatabaseComment($code, $version, $comment);
+                }
             }
+
+            $this->setDatabaseVersion($code, $version);
+        };
+
+        if (is_null($this->notesOutput)) {
+            $updateFn();
+            return;
         }
 
-        $this->setDatabaseVersion($code, $version);
+        $this->write(Task::class, sprintf(
+            '<info>%s</info>%s',
+            str_pad($version . ':', 10),
+            (strlen($comments[0]) > 120) ? substr($comments[0], 0, 120) . '...' : $comments[0]
+        ), $updateFn);
     }
 
     /**
@@ -256,6 +326,21 @@ class VersionManager
     }
 
     /**
+     * Returns older versions up to a supplied version, ie. applied versions.
+     */
+    protected function getOldFileVersions($code, $version = null)
+    {
+        if ($version === null) {
+            $version = self::NO_VERSION_VALUE;
+        }
+
+        $versions = $this->getFileVersions($code);
+        $position = array_search($version, array_keys($versions));
+
+        return array_slice($versions, 0, ++$position);
+    }
+
+    /**
      * Returns any new versions from a supplied version, ie. unapplied versions.
      */
     protected function getNewFileVersions($code, $version = null)
@@ -265,7 +350,8 @@ class VersionManager
         }
 
         $versions = $this->getFileVersions($code);
-        $position = array_search($version, array_keys($versions));
+        $position = array_search($version, array_keys($versions), true);
+
         return array_slice($versions, ++$position);
     }
 
@@ -279,19 +365,34 @@ class VersionManager
         }
 
         $versionFile = $this->getVersionFile($code);
-        $versionInfo = Yaml::parseFile($versionFile);
+        $versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
+            return $yaml->parseFile($versionFile);
+        });
 
         if (!is_array($versionInfo)) {
             $versionInfo = [];
         }
 
-        if ($versionInfo) {
-            uksort($versionInfo, function ($a, $b) {
+        $normalizedVersions = [];
+        foreach ($versionInfo as $version => $info) {
+            $normalizedVersions[$this->normalizeVersion($version)] = $info;
+        }
+
+        if ($normalizedVersions) {
+            uksort($normalizedVersions, function ($a, $b) {
                 return version_compare($a, $b);
             });
         }
 
-        return $this->fileVersions[$code] = $versionInfo;
+        return $this->fileVersions[$code] = $normalizedVersions;
+    }
+
+    /**
+     * Normalize a version identifier by removing the optional 'v' prefix
+     */
+    protected function normalizeVersion(string $version): string
+    {
+        return ltrim($version, 'v');
     }
 
     /**
@@ -331,7 +432,7 @@ class VersionManager
                 ->value('version');
         }
 
-        return $this->databaseVersions[$code] ?? self::NO_VERSION_VALUE;
+        return $this->normalizeVersion((string) ($this->databaseVersions[$code] ?? self::NO_VERSION_VALUE));
     }
 
     /**
@@ -396,7 +497,7 @@ class VersionManager
         $updateFile = $this->pluginManager->getPluginPath($code) . '/updates/' . $script;
 
         if (!File::isFile($updateFile)) {
-            $this->note('- <error>v' . $version . ':  Migration file "' . $script . '" not found</error>');
+            $this->write(Error::class, sprintf('Migration file "%s" not found.', $script));
             return;
         }
 
@@ -434,7 +535,7 @@ class VersionManager
     /**
      * Returns all the update history for a plugin.
      */
-    protected function getDatabaseHistory($code)
+    public function getDatabaseHistory($code)
     {
         if ($this->databaseHistory !== null && array_key_exists($code, $this->databaseHistory)) {
             return $this->databaseHistory[$code];
@@ -495,14 +596,32 @@ class VersionManager
     //
 
     /**
-     * Raise a note event for the migrator.
-     * @param string $message
-     * @return void
+     * Writes output to the console using a Laravel CLI View component.
+     *
+     * @param \Illuminate\Console\View\Components\Component $component
+     * @param array $arguments
+     * @return static
      */
-    protected function note($message)
+    protected function write($component, ...$arguments)
     {
         if ($this->notesOutput !== null) {
-            $this->notesOutput->writeln($message);
+            with(new $component($this->notesOutput))->render(...$arguments);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Writes output to the console.
+     *
+     * @param string $message
+     * @param bool $newline
+     * @return static
+     */
+    protected function out($message, $newline = false)
+    {
+        if ($this->notesOutput !== null) {
+            $this->notesOutput->write($message, $newline);
         }
 
         return $this;

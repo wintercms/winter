@@ -20,11 +20,6 @@ class MailPartials extends Controller
     ];
 
     /**
-     * @var array `FormController` configuration.
-     */
-    public $formConfig = 'config_form.yaml';
-
-    /**
      * @var array Permissions required to view this page.
      */
     public $requiredPermissions = ['system.manage_mail_templates'];

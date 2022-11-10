@@ -4,9 +4,7 @@ use File;
 use Lang;
 use Block;
 use SystemException;
-use Exception;
 use Throwable;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Config;
 
 /**
@@ -45,43 +43,36 @@ trait ViewMaker
 
     /**
      * Prepends a path on the available view path locations.
-     * @param string|array $path
-     * @return void
      */
-    public function addViewPath($path)
+    public function addViewPath(string|array $path): void
     {
         $this->viewPath = (array) $this->viewPath;
 
         if (is_array($path)) {
             $this->viewPath = array_merge($path, $this->viewPath);
-        }
-        else {
+        } else {
             array_unshift($this->viewPath, $path);
         }
     }
 
     /**
      * Returns the active view path locations.
-     * @return array
      */
-    public function getViewPaths()
+    public function getViewPaths(): array
     {
         return (array) $this->viewPath;
     }
 
     /**
      * Render a partial file contents located in the views folder.
-     * @param string $partial The view to load.
-     * @param array $params Parameter variables to pass to the view.
-     * @param bool $throwException Throw an exception if the partial is not found.
      * @return mixed Partial contents or false if not throwing an exception.
      */
-    public function makePartial($partial, $params = [], $throwException = true)
+    public function makePartial(string $partial, array $params = [], bool $throwException = true)
     {
         $notRealPath = realpath($partial) === false || is_dir($partial) === true;
         if (!File::isPathSymbol($partial) && $notRealPath) {
             $folder = strpos($partial, '/') !== false ? dirname($partial) . '/' : '';
-            $partial = $folder . '_' . strtolower(basename($partial)).'.htm';
+            $partial = $folder . '_' . strtolower(basename($partial));
         }
 
         $partialPath = $this->getViewPath($partial);
@@ -98,25 +89,20 @@ trait ViewMaker
     }
 
     /**
-     * Loads a view with the name specified. Applies layout if its name is provided by the parent object.
-     * The view file must be situated in the views directory, and has the extension "htm".
-     * @param string $view Specifies the view name, without extension. Eg: "index".
-     * @return string
+     * Loads the specified view. Applies the layout if one is set.
+     * The view file must have the .php extension (or ".htm" for historical reasons) and be located in the views directory
      */
-    public function makeView($view)
+    public function makeView(string $view): string
     {
-        $viewPath = $this->getViewPath(strtolower($view) . '.htm');
+        $viewPath = $this->getViewPath(strtolower($view));
         $contents = $this->makeFileContents($viewPath);
         return $this->makeViewContent($contents);
     }
 
     /**
      * Renders supplied contents inside a layout.
-     * @param string $contents The inner contents as a string.
-     * @param string $layout Specifies the layout name.
-     * @return string
      */
-    public function makeViewContent($contents, $layout = null)
+    public function makeViewContent(string $contents, string $layout = null): string
     {
         if ($this->suppressLayout || $this->layout == '') {
             return $contents;
@@ -129,21 +115,17 @@ trait ViewMaker
     }
 
     /**
-     * Render a layout.
-     * @param string $name Specifies the layout name.
-     * If this parameter is omitted, the $layout property will be used.
-     * @param array $params Parameter variables to pass to the view.
-     * @param bool $throwException Throw an exception if the layout is not found
-     * @return mixed The layout contents, or false.
+     * Render a layout, defaulting to the layout propery specified on the class
+     * @return string|bool The layout contents, or false.
      */
-    public function makeLayout($name = null, $params = [], $throwException = true)
+    public function makeLayout(string $name = null, array $params = [], bool $throwException = true): string|bool
     {
         $layout = $name ?? $this->layout;
         if ($layout == '') {
             return '';
         }
 
-        $layoutPath = $this->getViewPath($layout . '.htm', $this->layoutPath);
+        $layoutPath = $this->getViewPath($layout, $this->layoutPath);
 
         if (!File::exists($layoutPath)) {
             if ($throwException) {
@@ -158,11 +140,8 @@ trait ViewMaker
 
     /**
      * Renders a layout partial
-     * @param string $partial The view to load.
-     * @param array $params Parameter variables to pass to the view.
-     * @return string The layout partial contents
      */
-    public function makeLayoutPartial($partial, $params = [])
+    public function makeLayoutPartial(string $partial, array $params = []): string
     {
         if (!File::isLocalPath($partial) && !File::isPathSymbol($partial)) {
             $folder = strpos($partial, '/') !== false ? dirname($partial) . '/' : '';
@@ -176,50 +155,71 @@ trait ViewMaker
      * Locates a file based on its definition. The file name can be prefixed with a
      * symbol (~|$) to return in context of the application or plugin base path,
      * otherwise it will be returned in context of this object view path.
-     * @param string $fileName File to load.
-     * @param mixed $viewPath Explicitly define a view path.
-     * @return string Full path to the view file.
+     *
+     * If the fileName cannot be found it will be returned unmodified.
      */
-    public function getViewPath($fileName, $viewPath = null)
+    public function getViewPath(string $fileName, string|array $viewPaths = null): string
     {
+        $input = $fileName;
+        $allowedExtensions = ['php', 'htm'];
+
         if (!isset($this->viewPath)) {
             $this->viewPath = $this->guessViewPath();
         }
 
-        if (!$viewPath) {
-            $viewPath = $this->viewPath;
+        if (!$viewPaths) {
+            $viewPaths = $this->viewPath;
         }
 
-        $fileName = File::symbolizePath($fileName);
-
-        if (File::isLocalPath($fileName) ||
-            (!Config::get('cms.restrictBaseDir', true) && realpath($fileName) !== false)
-        ) {
-            return $fileName;
+        if (!is_array($viewPaths)) {
+            $viewPaths = [$viewPaths];
         }
 
-        if (!is_array($viewPath)) {
-            $viewPath = [$viewPath];
+        // Check the path for an extension
+        $ext = pathinfo($fileName, PATHINFO_EXTENSION);
+        if (!empty($ext)) {
+            if (!in_array($ext, $allowedExtensions)) {
+                throw new SystemException("$ext is not a valid View extension");
+            }
+
+            // Remove the extension from the fileName
+            $fileName = substr($fileName, 0, strrpos($fileName, '.'));
         }
 
-        foreach ($viewPath as $path) {
-            $_fileName = File::symbolizePath($path) . '/' . $fileName;
-            if (File::isFile($_fileName)) {
-                return $_fileName;
+        // Check if this a path relative to the view paths
+        foreach ($viewPaths as $path) {
+            $absolutePath = File::symbolizePath($path);
+            foreach ($allowedExtensions as $ext) {
+                $viewPath = $absolutePath . DIRECTORY_SEPARATOR . $fileName . ".$ext";
+                if (File::isFile($viewPath)) {
+                    return $viewPath;
+                }
             }
         }
 
-        return $fileName;
+        // Next, check if this is a local path reference
+        $absolutePath = File::symbolizePath($fileName);
+        foreach ($allowedExtensions as $ext) {
+            $viewPath = $absolutePath . ".$ext";
+
+            if (
+                File::isLocalPath($viewPath)
+                || (
+                    !Config::get('cms.restrictBaseDir', true)
+                    && realpath($viewPath) !== false
+                )
+            ) {
+                return $viewPath;
+            }
+        }
+
+        return $input;
     }
 
     /**
-     * Includes a file path using output buffering.
-     * Ensures that vars are available.
-     * @param string $filePath Absolute path to the view file.
-     * @param array $extraParams Parameters that should be available to the view.
-     * @return string
+     * Includes a file path using output buffering, making the provided vars available.
      */
-    public function makeFileContents($filePath, $extraParams = [])
+    public function makeFileContents(string $filePath, array $extraParams = []): string
     {
         if (!strlen($filePath) ||
             !File::isFile($filePath) ||
@@ -246,11 +246,8 @@ trait ViewMaker
         try {
             include $filePath;
         }
-        catch (Exception $e) {
-            $this->handleViewException($e, $obLevel);
-        }
         catch (Throwable $e) {
-            $this->handleViewException(new FatalThrowableError($e), $obLevel);
+            $this->handleViewException($e, $obLevel);
         }
 
         return ob_get_clean();
@@ -258,13 +255,8 @@ trait ViewMaker
 
     /**
      * Handle a view exception.
-     *
-     * @param  \Exception  $e
-     * @param  int  $obLevel
-     * @return void
-     *
      */
-    protected function handleViewException($e, $obLevel)
+    protected function handleViewException(Throwable $e, int $obLevel): void
     {
         while (ob_get_level() > $obLevel) {
             ob_end_clean();
@@ -277,9 +269,8 @@ trait ViewMaker
      * Guess the package path for the called class.
      * @param string $suffix An extra path to attach to the end
      * @param bool $isPublic Returns public path instead of an absolute one
-     * @return string
      */
-    public function guessViewPath($suffix = '', $isPublic = false)
+    public function guessViewPath(string $suffix = '', bool $isPublic = false): ?string
     {
         $class = get_called_class();
         return $this->guessViewPathFrom($class, $suffix, $isPublic);
@@ -290,13 +281,12 @@ trait ViewMaker
      * @param string $class Class to guess path from.
      * @param string $suffix An extra path to attach to the end
      * @param bool $isPublic Returns public path instead of an absolute one
-     * @return string
      */
-    public function guessViewPathFrom($class, $suffix = '', $isPublic = false)
+    public function guessViewPathFrom(string $class, string $suffix = '', bool $isPublic = false): ?string
     {
         $classFolder = strtolower(class_basename($class));
         $classFile = realpath(dirname(File::fromClass($class)));
-        $guessedPath = $classFile ? $classFile . '/' . $classFolder . $suffix : null;
+        $guessedPath = $classFile ? $classFile . DIRECTORY_SEPARATOR . $classFolder . $suffix : null;
         return $isPublic ? File::localToPublic($guessedPath) : $guessedPath;
     }
 }

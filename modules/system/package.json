@@ -1,0 +1,48 @@
+{
+    "name": "@wintercms/wn-system-module",
+    "version": "1.0.0",
+    "description": "The System module for Winter CMS.",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/wintercms/winter.git"
+    },
+    "author": {
+        "name": "Ben Thomson",
+        "email": "git@alfreido.com",
+        "url": "https://wintercms.com"
+    },
+    "contributors": [
+        {
+            "name": "Winter CMS Maintainers",
+            "url": "https://wintercms.com"
+        }
+    ],
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/wintercms/winter/issues"
+    },
+    "homepage": "https://wintercms.com/",
+    "scripts": {
+        "test": "jest --config tests/js/jest.config.js tests/js/cases"
+    },
+    "dependencies": {
+        "js-cookie": "^3.0.1"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.16.0",
+        "@babel/plugin-transform-runtime": "^7.16.4",
+        "@babel/preset-env": "^7.16.4",
+        "@babel/register": "^7.16.0",
+        "@babel/runtime": "^7.16.3",
+        "babel-plugin-module-resolver": "^4.1.0",
+        "eslint": "^8.6.0",
+        "eslint-config-airbnb-base": "^15.0.0",
+        "eslint-plugin-import": "^2.25.4",
+        "eslint-plugin-vue": "^8.5.0",
+        "jest": "^27.4.3",
+        "jsdom": "^18.1.1",
+        "laravel-mix": "^6.0.34",
+        "laravel-mix-polyfill": "^3.0.1"
+    }
+}

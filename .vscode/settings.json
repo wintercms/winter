@@ -1,0 +1,33 @@
+{
+    "files.associations": {
+        "**/modules/*/behaviors/*/partials/*.htm": "php",
+        "**/modules/*/controllers/*/*.htm": "php",
+        "**/modules/*/formwidgets/*/partials/*.htm": "php",
+        "**/modules/*/layouts/*.htm": "php",
+        "**/modules/*/models/*/*.htm": "php",
+        "**/modules/*/partials/*.htm": "php",
+        "**/modules/*/reportwidgets/*/partials/*.htm": "php",
+        "**/modules/*/views/mail/*.htm": "wintercms",
+        "**/modules/*/widgets/*/partials/*.htm": "php",
+
+        "**/plugins/*/*/behaviors/*/partials/*.htm": "php",
+        "**/plugins/*/*/components/**/*.htm": "wintercms-twig",
+        "**/plugins/*/*/controllers/*/*.htm": "php",
+        "**/plugins/*/*/formwidgets/*/partials/*.htm": "php",
+        "**/plugins/*/*/layouts/*.htm": "php",
+        "**/plugins/*/*/models/*/*.htm": "php",
+        "**/plugins/*/*/partials/*.htm": "php",
+        "**/plugins/*/*/reportwidgets/*/partials/*.htm": "php",
+        "**/plugins/*/*/views/mail/*.htm": "wintercms",
+        "**/plugins/*/*/widgets/*/partials/*.htm": "php",
+
+        "**/themes/*/content/**/*.htm": "wintercms",
+        "**/themes/*/layouts/*.htm": "wintercms",
+        "**/themes/*/pages/**/*.htm": "wintercms",
+        "**/themes/*/partials/**/*.htm": "wintercms"
+    },
+    "eslint.validate": [
+        "javascript",
+        "vue"
+    ]
+}
