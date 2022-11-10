@@ -86,7 +86,7 @@ th{padding:0}
 *:before,
 *:after{-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
 html{font-size:62.5%;-webkit-tap-highlight-color:rgba(0,0,0,0)}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:14px;line-height:1.42857143;color:#333;background-color:#f9f9f9}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";font-size:14px;line-height:1.42857143;color:#393e4b;background-color:#f9f9f9}
 input,
 button,
 select,
@@ -95,15 +95,15 @@ button,
 input,
 select[multiple],
 textarea{background-image:none}
-a{color:#227f96;text-decoration:none}
+a{color:#26a0be;text-decoration:none}
 a:hover,
-a:focus{color:#061519;text-decoration:underline}
+a:focus{color:#0d353f;text-decoration:underline}
 a:focus{outline:thin dotted;outline-offset:0;outline:4px auto Highlight;outline:4px auto -webkit-focus-ring-color}
 img{vertical-align:middle}
 .img-responsive{display:block;max-width:100%;height:auto}
 .img-rounded{-webkit-border-radius:6px;-moz-border-radius:6px;border-radius:6px}
 .img-circle{border-radius:50%}
-hr{margin-top:20px;margin-bottom:20px;border:0;border-top:1px solid #eee}
+hr{margin-top:20px;margin-bottom:20px;border:0;border-top:1px solid #f7f8f9}
 .sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);border:0}
 @media print{*{text-shadow:none !important;color:#000 !important;background:transparent !important;box-shadow:none !important}a,a:visited{text-decoration:underline}a[href]:after{content:" (" attr(href) ")"}abbr[title]:after{content:" (" attr(title) ")"}a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}p,h2,h3{orphans:3;widows:3}h2,h3{page-break-after:avoid}select{background:#fff !important}.navbar{display:none}.table td,.table th{background-color:#fff !important}.btn>.caret,.dropup>.btn>.caret{border-top-color:#000 !important}.label{border:1px solid #000}.table{border-collapse:collapse !important}.table-bordered th,.table-bordered td{border:1px solid #ddd !important}}
 .container{margin-right:auto;margin-left:auto;padding-left:15px;padding-right:15px}
@@ -242,7 +242,7 @@ h6 .small,
 .h3 .small,
 .h4 .small,
 .h5 .small,
-.h6 .small{font-weight:normal;line-height:1;color:#999}
+.h6 .small{font-weight:normal;line-height:1;color:#979daf}
 h1,
 .h1,
 h2,
@@ -301,7 +301,7 @@ cite{font-style:normal}
 .text-right{text-align:right}
 .text-center{text-align:center}
 .text-justify{text-align:justify}
-.text-muted{color:#999}
+.text-muted{color:#979daf}
 .text-primary{color:#103141}
 a.text-primary:hover{color:#061218}
 .text-success{color:#3c763d}
@@ -322,7 +322,7 @@ a.bg-info:hover{background-color:#afd9ee}
 a.bg-warning:hover{background-color:#f7ecb5}
 .bg-danger{background-color:#f2dede}
 a.bg-danger:hover{background-color:#e4b9b9}
-.page-header{padding-bottom:9px;margin:40px 0 20px;border-bottom:1px solid #eee}
+.page-header{padding-bottom:9px;margin:40px 0 20px;border-bottom:1px solid #f7f8f9}
 ul,
 ol{margin-top:0;margin-bottom:10px}
 ul ul,
@@ -339,20 +339,20 @@ dt{font-weight:bold}
 dd{margin-left:0}
 @media (min-width:768px){.dl-horizontal dt{float:left;width:160px;clear:left;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dl-horizontal dd{margin-left:180px}}
 abbr[title],
-abbr[data-original-title]{cursor:help;border-bottom:1px dotted #999}
+abbr[data-original-title]{cursor:help;border-bottom:1px dotted #979daf}
 .initialism{font-size:90%;text-transform:uppercase}
-blockquote{padding:10px 20px;margin:0 0 20px;font-size:17.5px;border-left:5px solid #eee}
+blockquote{padding:10px 20px;margin:0 0 20px;font-size:17.5px;border-left:5px solid #f7f8f9}
 blockquote p:last-child,
 blockquote ul:last-child,
 blockquote ol:last-child{margin-bottom:0}
 blockquote footer,
 blockquote small,
-blockquote .small{display:block;font-size:80%;line-height:1.42857143;color:#999}
+blockquote .small{display:block;font-size:80%;line-height:1.42857143;color:#979daf}
 blockquote footer:before,
 blockquote small:before,
 blockquote .small:before{content:'\2014 \00A0'}
 .blockquote-reverse,
-blockquote.pull-right{padding-right:15px;padding-left:0;border-right:5px solid #eee;border-left:0;text-align:right}
+blockquote.pull-right{padding-right:15px;padding-left:0;border-right:5px solid #f7f8f9;border-left:0;text-align:right}
 .blockquote-reverse footer:before,
 blockquote.pull-right footer:before,
 .blockquote-reverse small:before,
