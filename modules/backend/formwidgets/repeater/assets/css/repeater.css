@@ -44,11 +44,11 @@
 .field-repeater .field-repeater-add-item:before{color:#bdc3c7;font-family:"Font Awesome 6 Free";font-weight:900;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-style:normal;font-variant:normal;text-rendering:auto;content:"\2b";font-size:16px;position:absolute;left:-23px;top:-11px}
 .field-repeater .field-repeater-add-item>a{color:#bdc3c7;text-align:center;display:block;text-decoration:none;padding:13px 15px;text-transform:uppercase;font-weight:600;font-size:12px}
 .field-repeater .field-repeater-add-item:hover,
-.field-repeater .field-repeater-add-item:focus{background-color:#48b2ce;border-color:transparent}
+.field-repeater .field-repeater-add-item:focus{background-color:#3f90a4;border-color:transparent}
 .field-repeater .field-repeater-add-item:hover:before,
 .field-repeater .field-repeater-add-item:focus:before{color:#999}
 .field-repeater .field-repeater-add-item:hover>a,
 .field-repeater .field-repeater-add-item:focus>a{color:#fff}
-.field-repeater .field-repeater-add-item:active{background:#6cc551;border-color:transparent}
+.field-repeater .field-repeater-add-item:active{background:#d66829;border-color:transparent}
 .field-repeater .field-repeater-add-item:active>a{color:#fff}
 .field-repeater .field-repeater-add-item.in-progress{border-color:#e0e0e0 !important;background:transparent !important}

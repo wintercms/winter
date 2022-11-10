@@ -95,9 +95,9 @@ button,
 input,
 select[multiple],
 textarea{background-image:none}
-a{color:#2da7c7;text-decoration:none}
+a{color:#227f96;text-decoration:none}
 a:hover,
-a:focus{color:#113e4a;text-decoration:underline}
+a:focus{color:#061519;text-decoration:underline}
 a:focus{outline:thin dotted;outline-offset:0;outline:4px auto Highlight;outline:4px auto -webkit-focus-ring-color}
 img{vertical-align:middle}
 .img-responsive{display:block;max-width:100%;height:auto}

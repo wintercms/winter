@@ -10,7 +10,7 @@
 .permissioneditor table td.permission-name{font-size:13px;cursor:pointer;color:#777}
 .permissioneditor table td p.comment{margin-top:5px;margin-bottom:0}
 .permissioneditor table td p.comment:empty{display:none}
-.permissioneditor table tr:hover td{background:#48b2ce}
+.permissioneditor table tr:hover td{background:#3f90a4}
 .permissioneditor table tr:hover td.permission-name{color:#fff !important}
 .permissioneditor table th:first-child,
 .permissioneditor table td:first-child{padding-left:20px}

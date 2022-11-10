@@ -4,7 +4,7 @@
 .control-assetlist p.parent.active a,
 .control-assetlist ul li.active a{background:#ddd;position:relative}
 .control-assetlist p.parent.active a:after,
-.control-assetlist ul li.active a:after{position:absolute;height:100%;width:4px;left:0;top:0;background:#2da7c7;display:block;content:' '}
+.control-assetlist ul li.active a:after{position:absolute;height:100%;width:4px;left:0;top:0;background:#227f96;display:block;content:' '}
 .control-assetlist p.parent a.link,
 .control-assetlist ul li a.link{display:block;position:relative;word-wrap:break-word;padding:10px 50px 10px 20px;outline:none;font-weight:400;color:#405261;font-size:14px}
 .control-assetlist p.parent a.link:hover,
@@ -41,7 +41,7 @@
 .control-assetlist ul li.active a.link,
 .control-assetlist ul li a.link:hover{background:#ddd}
 .control-assetlist ul li.active a.link{position:relative}
-.control-assetlist ul li.active a.link:after{position:absolute;height:100%;width:4px;left:0;top:0;background:#2da7c7;display:block;content:' '}
+.control-assetlist ul li.active a.link:after{position:absolute;height:100%;width:4px;left:0;top:0;background:#227f96;display:block;content:' '}
 .control-assetlist ul li div.controls{position:absolute;right:45px;top:10px}
 .control-assetlist ul li div.controls .dropdown{width:14px;height:21px}
 .control-assetlist ul li div.controls .dropdown.open a.control{display:block !important}
