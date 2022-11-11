@@ -216,7 +216,13 @@ table.table.data {
 
         tr.safe, tr.special {
             td, th, td a, th a {
-                color: #98a7a8;
+                color: fadeout(@color-list-text, 55%);
+            }
+
+            &:hover {
+                td, th, td a, th a {
+                    color: fadeout(@color-list-hover-text, 55%) !important;
+                }
             }
         }
 
