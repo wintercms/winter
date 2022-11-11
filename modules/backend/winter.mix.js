@@ -48,6 +48,9 @@ mix
         './assets/js/backend.js',
     ], './assets/js/winter-min.js')
 
+    // Compile widgets
+    .less('./widgets/reportcontainer/assets/less/reportcontainer.less', './widgets/reportcontainer/assets/css/reportcontainer.css')
+
     // Polyfill for all targeted browsers
     .polyfill({
         enabled: mix.inProduction(),
