@@ -1394,7 +1394,7 @@ class RelationController extends ControllerBehavior
             $foreignIds = (array) $this->foreignId;
             $saveData = $this->pivotWidget->getSaveData();
             $foreignModels = $this->relationModel->whereIn($this->relationModel->getKeyName(), $foreignIds)->get();
-            $this->relationObject->syncWithPivotValues($foreignModels, $saveData['pivot'] ?? []);
+            $this->relationObject->syncWithPivotValues($foreignModels, $saveData['pivot'] ?? [], false);
 
             /*
              * Save data to models
