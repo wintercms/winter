@@ -1,4 +1,4 @@
-@import "../../../backend/assets/less/core/boot.less";
+@import (reference) "../../../backend/assets/less/core/boot.less";
 
 //
 // Stripe loading indicator
@@ -173,41 +173,9 @@ a.oc-loading, button.oc-loading, span.oc-loading {
     }
 }
 
-@-moz-keyframes wn-rotate-loader {
-    0%    { -moz-transform: rotate(0deg); }
-    100%  { -moz-transform: rotate(360deg); }
-}
-@-webkit-keyframes wn-rotate-loader {
-    0%    { -webkit-transform: rotate(0deg); }
-    100%  { -webkit-transform: rotate(360deg); }
-}
-@-o-keyframes wn-rotate-loader {
-    0%    { -o-transform: rotate(0deg); }
-    100%  { -o-transform: rotate(360deg); }
-}
-@-ms-keyframes wn-rotate-loader {
-    0%    { -ms-transform: rotate(0deg); }
-    100%  { -ms-transform: rotate(360deg); }
-}
 @keyframes wn-rotate-loader {
     0%    { transform: rotate(0deg); }
     100%  { transform: rotate(360deg); }
-}
-@-moz-keyframes oc-rotate-loader {
-    0%    { -moz-transform: rotate(0deg); }
-    100%  { -moz-transform: rotate(360deg); }
-}
-@-webkit-keyframes oc-rotate-loader {
-    0%    { -webkit-transform: rotate(0deg); }
-    100%  { -webkit-transform: rotate(360deg); }
-}
-@-o-keyframes oc-rotate-loader {
-    0%    { -o-transform: rotate(0deg); }
-    100%  { -o-transform: rotate(360deg); }
-}
-@-ms-keyframes oc-rotate-loader {
-    0%    { -ms-transform: rotate(0deg); }
-    100%  { -ms-transform: rotate(360deg); }
 }
 @keyframes oc-rotate-loader {
     0%    { transform: rotate(0deg); }
@@ -218,40 +186,17 @@ a.oc-loading, button.oc-loading, span.oc-loading {
 // Infinite loading animation
 // --------------------------------------------------
 
-@startVal: 100%;
+@startVal: 100;
 @start: 0;
 
-.infinite-class (@index, @val) when (@index < 101) {
-    @tmpSelector: ~"@{index}%";
-    @{tmpSelector} { transform: translateX(-@val); }
-    .infinite-class(@index + 10, @val - @val / 2);
+.infinite-class(@index, @val) when (@index < 101) {
+    @keyframeSelector: ~"@{index}%";
+    @processedValue: ~"-@{val}%";
+    @{keyframeSelector} { transform: ~"translateX(@{processedValue})"; }
+    .infinite-class(@index + 10, @val - (@val / 2));
 }
 
-@-moz-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-webkit-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-o-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-ms-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
 @keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-moz-keyframes oc-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-webkit-keyframes oc-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-o-keyframes oc-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-ms-keyframes oc-infinite-loader {
     .infinite-class(@start, @startVal);
 }
 @keyframes oc-infinite-loader {

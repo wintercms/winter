@@ -1,6 +1,5 @@
 <?php namespace System;
 
-use Db;
 use App;
 use View;
 use Event;
@@ -21,13 +20,11 @@ use System\Classes\UpdateManager;
 use System\Twig\Engine as TwigEngine;
 use System\Models\EventLog;
 use System\Models\MailSetting;
-use System\Classes\CombineAssets;
 use Backend\Classes\WidgetManager;
 use Winter\Storm\Support\ModuleServiceProvider;
 use Winter\Storm\Router\Helper as RouterHelper;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
-use System\Classes\MixAssets;
 
 class ServiceProvider extends ModuleServiceProvider
 {
@@ -52,7 +49,6 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerTwigParser();
         $this->registerMailer();
         $this->registerMarkupTags();
-        $this->registerAssetBundles();
         $this->registerValidator();
         $this->registerGlobalViewVars();
 
@@ -540,26 +536,6 @@ class ServiceProvider extends ModuleServiceProvider
                 ],
             ]);
             $manager->registerOwnerAlias('Winter.System', 'October.System');
-        });
-    }
-
-    /**
-     * Register asset bundles
-     */
-    protected function registerAssetBundles()
-    {
-        /*
-         * Register asset bundles
-         */
-        CombineAssets::registerCallback(function ($combiner) {
-            $combiner->registerBundle('~/modules/system/assets/less/styles.less');
-            $combiner->registerBundle('~/modules/system/assets/ui/storm.less');
-            $combiner->registerBundle('~/modules/system/assets/ui/storm.js');
-            $combiner->registerBundle('~/modules/system/assets/ui/icons.less');
-            $combiner->registerBundle('~/modules/system/assets/js/framework.js');
-            $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
-            $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
-            $combiner->registerBundle('~/modules/system/assets/less/snowboard.extras.less');
         });
     }
 
