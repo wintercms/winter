@@ -80,18 +80,18 @@
     }
 
     &:hover {
-        border: 2px dashed #1F99DC;
+        border: 2px dashed @brand-secondary;
 
         .upload-button-icon:before {
-            color: #1F99DC;
+            color: @brand-secondary;
         }
     }
 
     &:focus {
-        border: 2px dashed #1F99DC;
+        border: 2px dashed @brand-secondary;
 
         .upload-button-icon:before {
-            color: #1F99DC;
+            color: @brand-secondary;
         }
     }
 }
@@ -249,7 +249,7 @@
                 .icon(@exclamation-triangle);
                 .animation(none);
                 font-size: 40px;
-                color: #ab2a1c;
+                color: @brand-danger;
                 margin-top: -20px;
                 margin-left: -20px;
                 text-shadow: 2px 2px 0 #fff;
@@ -301,7 +301,7 @@
         }
 
         .info h4 {
-            color: #ab2a1c;
+            color: @brand-danger;
             a {
                 display: none;
             }

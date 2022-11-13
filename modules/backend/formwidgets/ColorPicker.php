@@ -145,52 +145,52 @@ class ColorPicker extends FormWidgetBase
                     'color' => '#16a085',
                 ],
                 [
-                    'color' => '#2ecc71',
+                    'color' => '#6cc551',
                 ],
                 [
-                    'color' => '#27ae60',
+                    'color' => '#52a838',
                 ],
                 [
-                    'color' => '#3498db',
+                    'color' => '#b1dbef',
                 ],
                 [
-                    'color' => '#2980b9',
+                    'color' => '#88c9e7',
                 ],
                 [
-                    'color' => '#9b59b6',
+                    'color' => '#2da7c7',
                 ],
                 [
-                    'color' => '#8e44ad',
+                    'color' => '#227f96',
                 ],
                 [
-                    'color' => '#34495e',
+                    'color' => '#b281c5',
                 ],
                 [
-                    'color' => '#2b3e50',
+                    'color' => '#7b4e8e',
                 ],
                 [
-                    'color' => '#f1c40f',
+                    'color' => '#103141',
                 ],
                 [
-                    'color' => '#f39c12',
+                    'color' => '#081821',
                 ],
                 [
-                    'color' => '#e67e22',
+                    'color' => '#f8e095',
                 ],
                 [
-                    'color' => '#d35400',
+                    'color' => '#dcb22d',
                 ],
                 [
-                    'color' => '#e74c3c',
+                    'color' => '#de8754',
                 ],
                 [
-                    'color' => '#c0392b',
+                    'color' => '#d66829',
                 ],
                 [
-                    'color' => '#ecf0f1',
+                    'color' => '#b33f32',
                 ],
                 [
-                    'color' => '#bdc3c7',
+                    'color' => '#ab2a1c',
                 ],
                 [
                     'color' => '#95a5a6',
