@@ -113,15 +113,13 @@ class ServiceProvider extends ModuleServiceProvider
                 'dashboard' => [
                     'label'       => 'backend::lang.dashboard.menu_label',
                     'icon'        => 'icon-dashboard',
-                    'iconSvg'     => 'modules/backend/assets/images/dashboard-icon.svg',
                     'url'         => Backend::url('backend'),
                     'permissions' => ['backend.access_dashboard'],
                     'order'       => 10
                 ],
                 'media' => [
                     'label'       => 'backend::lang.media.menu_label',
-                    'icon'        => 'icon-folder',
-                    'iconSvg'     => 'modules/backend/assets/images/media-icon.svg',
+                    'icon'        => 'icon-photo-film',
                     'url'         => Backend::url('backend/media'),
                     'permissions' => ['media.*'],
                     'order'       => 200
