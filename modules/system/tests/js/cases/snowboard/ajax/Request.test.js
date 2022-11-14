@@ -62,6 +62,7 @@ describe('Request AJAX library', function () {
             .new()
             .addScript([
                 'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/build/vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
                 'modules/system/assets/js/snowboard/build/snowboard.base.js',
                 'modules/system/assets/js/snowboard/build/snowboard.request.js'

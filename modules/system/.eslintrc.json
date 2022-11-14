@@ -41,8 +41,11 @@
         "assets/js/lang",
         "assets/js/mailbrandsettings",
         "assets/js/updates",
-        "assets/ui",
+        "assets/ui/js",
+        "assets/ui/vendor",
+        "assets/ui/*.js",
         "assets/vendor",
+        "tests/fixtures",
         "tests/js",
         "**/build/*.js"
     ]

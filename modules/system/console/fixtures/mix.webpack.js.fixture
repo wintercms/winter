@@ -11,14 +11,14 @@ module.exports = async () => {
 
     mix.listen('init', function (mix) {
         // Setup Winter path aliases
-        mix._api.alias({
+        mix.api.alias({
             '$': '%pluginsPath%',
             '~': '%appPath%',
         });
         // disable notifications if not in watch
         %notificationInject%
         // define options
-        mix._api.options({
+        mix.api.options({
             processCssUrls: false,
             clearConsole: false,
             cssNano: {
@@ -26,11 +26,11 @@ module.exports = async () => {
             }
         });
         // enable source maps for dev builds
-        if (!mix._api.inProduction()) {
-            mix._api.webpackConfig({
+        if (!mix.api.inProduction()) {
+            mix.api.webpackConfig({
                 devtool: 'inline-source-map'
             });
-            mix._api.sourceMaps();
+            mix.api.sourceMaps();
         }
     });
 

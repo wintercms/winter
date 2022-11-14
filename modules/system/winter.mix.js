@@ -12,10 +12,11 @@ mix
         },
         runtimeChunkPath: './assets/js/build',
     })
+    .vue({ version: 3 })
 
     // Extract imported libraries
     .extract({
-        libraries: ['js-cookie'],
+        libraries: ['@popperjs/core', 'js-cookie', 'vue'],
         to: './assets/js/snowboard/build/snowboard.vendor.js',
     })
 
@@ -25,6 +26,8 @@ mix
             './assets/js/snowboard/snowboard.base.js',
             './assets/js/snowboard/ajax/Request.js',
             './assets/js/snowboard/snowboard.backend.extras.js',
+            './assets/ui/widgets/base/base.js',
+            './assets/ui/widgets/inspector/inspector.js',
         ],
         './assets/js/build/system.js',
     )
@@ -33,6 +36,8 @@ mix
             './assets/js/snowboard/snowboard.base.debug.js',
             './assets/js/snowboard/ajax/Request.js',
             './assets/js/snowboard/snowboard.backend.extras.js',
+            './assets/ui/widgets/base/base.js',
+            './assets/ui/widgets/inspector/inspector.js',
         ],
         './assets/js/build/system.debug.js',
     )

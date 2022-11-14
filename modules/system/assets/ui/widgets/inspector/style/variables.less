@@ -1,0 +1,22 @@
+@import (reference) '../../../less/global.less';
+
+@inspector-bg: #f2f2f2;
+@inspector-font-size: @font-size-small;
+@inspector-border-radius: @border-radius-base;
+
+@inspector-header-bg: @brand-accent;
+@inspector-header-fg: contrast(@inspector-header-bg, @color-text-title, #fff);
+@inspector-header-title-weight: bold;
+@inspector-header-title-size: @font-size-base;
+@inspector-header-description-weight: normal;
+@inspector-header-description-size: @font-size-small;
+
+@inspector-field-bg: #fff;
+@inspector-field-fg: @input-color;
+@inspector-field-border: @color-border;
+@inspector-field-label-bg: @inspector-bg;
+@inspector-field-label-fg: @color-label;
+@inspector-field-hover-border: @brand-accent;
+@inspector-field-focus-border: @color-label;
+@inspector-field-dirty-fg: darken(@input-color, 30%);
+@inspector-field-placeholder-fg: fadeout(@input-color, 75%);
