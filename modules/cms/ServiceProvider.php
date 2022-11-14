@@ -186,8 +186,7 @@ class ServiceProvider extends ModuleServiceProvider
             $manager->registerMenuItems('Winter.Cms', [
                 'cms' => [
                     'label'       => 'cms::lang.cms.menu_label',
-                    'icon'        => 'icon-magic',
-                    'iconSvg'     => 'modules/cms/assets/images/cms-icon.svg',
+                    'icon'        => 'icon-sitemap',
                     'url'         => Backend::url('cms'),
                     'order'       => 100,
                     'permissions' => [

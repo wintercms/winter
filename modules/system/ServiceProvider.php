@@ -372,8 +372,7 @@ class ServiceProvider extends ModuleServiceProvider
             $manager->registerMenuItems('Winter.System', [
                 'system' => [
                     'label'       => 'system::lang.settings.menu_label',
-                    'icon'        => 'icon-cog',
-                    'iconSvg'     => 'modules/system/assets/images/cog-icon.svg',
+                    'icon'        => 'icon-gears',
                     'url'         => Backend::url('system/settings'),
                     'permissions' => [],
                     'order'       => 1000
