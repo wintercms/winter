@@ -1099,8 +1099,8 @@ class Controller
      * @param string $name The content view to load.
      * @param array $parameters Parameter variables to pass to the view.
      * @param bool $throwException Throw an exception if the content file is not found.
-     * @throws SystemException If the content cannot be found
-     * @return mixed Content file or false if not throwing an exception.
+     * @throws SystemException If the content cannot be found, and `$throwException` is true.
+     * @return string|false Content file, or false if `$throwException` is false.
      */
     public function renderContent($name, $parameters = [], $throwException = true)
     {
@@ -1129,7 +1129,7 @@ class Controller
          */
         elseif (($content = Content::loadCached($this->theme, $name)) === null) {
             if ($throwException) {
-                throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name'=>$name]));
+                throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name' => $name]));
             } else {
                 return false;
             }
