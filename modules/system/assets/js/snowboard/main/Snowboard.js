@@ -258,7 +258,7 @@ export default class Snowboard {
 
             const listeners = plugin.callMethod('listens');
 
-            if (typeof listeners[eventName] === 'string') {
+            if (typeof listeners[eventName] === 'string' || typeof listeners[eventName] === 'function') {
                 plugins.push(name);
             }
         });
@@ -361,20 +361,36 @@ export default class Snowboard {
                     return;
                 }
 
-                if (!instance[listenMethod]) {
-                    throw new Error(`Missing "${listenMethod}" method in "${name}" plugin`);
-                }
-
-                try {
-                    if (instance[listenMethod](...parameters) === false) {
-                        cancelled = true;
-                        this.debug(`Global event "${eventName}" cancelled by "${name}" plugin`);
+                if (typeof listenMethod === 'function') {
+                    try {
+                        const result = listenMethod.apply(instance, parameters);
+                        if (result === false) {
+                            cancelled = true;
+                        }
+                    } catch (error) {
+                        this.error(
+                            `Error thrown in "${eventName}" event by "${name}" plugin.`,
+                            error,
+                        );
                     }
-                } catch (error) {
-                    this.error(
-                        `Error thrown in "${eventName}" event by "${name}" plugin.`,
-                        error,
-                    );
+                } else if (typeof listenMethod === 'string') {
+                    if (!instance[listenMethod]) {
+                        throw new Error(`Missing "${listenMethod}" method in "${name}" plugin`);
+                    }
+
+                    try {
+                        if (instance[listenMethod](...parameters) === false) {
+                            cancelled = true;
+                            this.debug(`Global event "${eventName}" cancelled by "${name}" plugin`);
+                        }
+                    } catch (error) {
+                        this.error(
+                            `Error thrown in "${eventName}" event by "${name}" plugin.`,
+                            error,
+                        );
+                    }
+                } else {
+                    this.error(`Listen method for "${eventName}" event in "${name}" plugin is not a function or string.`);
                 }
             });
         });
@@ -441,23 +457,42 @@ export default class Snowboard {
 
             // Call event handler methods for all plugins, if they have a method specified for the event.
             plugin.getInstances().forEach((instance) => {
-                if (!instance[listenMethod]) {
-                    throw new Error(`Missing "${listenMethod}" method in "${name}" plugin`);
-                }
+                if (typeof listenMethod === 'function') {
+                    try {
+                        const instancePromise = listenMethod.apply(instance, parameters);
 
-                try {
-                    const instancePromise = instance[listenMethod](...parameters);
+                        if (instancePromise instanceof Promise === false) {
+                            return;
+                        }
 
-                    if (instancePromise instanceof Promise === false) {
-                        return;
+                        promises.push(instancePromise);
+                    } catch (error) {
+                        this.error(
+                            `Error thrown in "${eventName}" event by "${name}" plugin.`,
+                            error,
+                        );
+                    }
+                } else if (typeof listenMethod === 'string') {
+                    if (!instance[listenMethod]) {
+                        throw new Error(`Missing "${listenMethod}" method in "${name}" plugin`);
                     }
 
-                    promises.push(instancePromise);
-                } catch (error) {
-                    this.error(
-                        `Error thrown in "${eventName}" promise event by "${name}" plugin.`,
-                        error,
-                    );
+                    try {
+                        const instancePromise = instance[listenMethod](...parameters);
+
+                        if (instancePromise instanceof Promise === false) {
+                            return;
+                        }
+
+                        promises.push(instancePromise);
+                    } catch (error) {
+                        this.error(
+                            `Error thrown in "${eventName}" promise event by "${name}" plugin.`,
+                            error,
+                        );
+                    }
+                } else {
+                    this.error(`Listen method for "${eventName}" event in "${name}" plugin is not a function or string.`);
                 }
             });
         });
