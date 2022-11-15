@@ -1100,10 +1100,11 @@ class Controller
      *
      * @param string $name The content view to load.
      * @param array $parameters Parameter variables to pass to the view.
-     * @throws SystemException If the content cannot be found
-     * @return string
+     * @param bool $throwException Throw an exception if the content file is not found.
+     * @throws SystemException If the content cannot be found, and `$throwException` is true.
+     * @return string|false Content file, or false if `$throwException` is false.
      */
-    public function renderContent($name, $parameters = [])
+    public function renderContent($name, $parameters = [], $throwException = true)
     {
         /**
          * @event cms.page.beforeRenderContent
@@ -1129,7 +1130,11 @@ class Controller
          * Load content from theme
          */
         elseif (($content = Content::loadCached($this->theme, $name)) === null) {
-            throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name'=>$name]));
+            if ($throwException) {
+                throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name' => $name]));
+            } else {
+                return false;
+            }
         }
 
         $fileContent = $content->parsedMarkup;

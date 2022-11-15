@@ -446,7 +446,7 @@ return [
     |
     */
 
-    'restrictBaseDir' => true,
+    'restrictBaseDir' => env('RESTRICT_BASE_DIR', true),
 
     /*
     |--------------------------------------------------------------------------
