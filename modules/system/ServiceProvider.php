@@ -65,13 +65,14 @@ class ServiceProvider extends ModuleServiceProvider
             }
         }
 
+        $this->registerBackendPermissions();
+
         /*
          * Backend specific
          */
         if (App::runningInBackend()) {
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
-            $this->registerBackendPermissions();
             $this->registerBackendSettings();
         }
     }
