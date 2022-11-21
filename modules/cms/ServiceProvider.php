@@ -69,7 +69,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->bootMenuItemEvents();
         $this->bootRichEditorEvents();
 
-        if (App::runningInBackend()) {
+        if ($this->app->runningInBackend()) {
             $this->bootBackendLocalization();
         }
     }
