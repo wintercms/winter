@@ -23,6 +23,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsole();
         $this->registerMailer();
         $this->registerAssetBundles();
+        $this->registerBackendPermissions();
 
         /*
          * Backend specific
@@ -31,7 +32,6 @@ class ServiceProvider extends ModuleServiceProvider
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
             $this->registerBackendWidgets();
-            $this->registerBackendPermissions();
             $this->registerBackendSettings();
         }
     }

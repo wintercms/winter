@@ -266,6 +266,51 @@ describe('Snowboard framework', function () {
             );
     });
 
+    it('can listen and call global events that are simple closures', function (done) {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/tests/js/fixtures/framework/TestClosureListener.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    // Run assertions
+                    const Snowboard = dom.window.Snowboard;
+
+                    try {
+                        expect(Snowboard.listensToEvent('eventOne')).toEqual(['testclosure']);
+                        expect(Snowboard.listensToEvent('eventTwo')).toEqual(['testclosure']);
+                        expect(Snowboard.listensToEvent('eventThree')).toEqual([]);
+
+                        // Call global event one
+                        const testClass = Snowboard.testClosure();
+                        Snowboard.globalEvent('eventOne');
+                        expect(testClass.eventResult).toEqual('Closure eventOne called');
+
+                        // Call global event two - should fail as the test plugin doesn't have that method
+                        Snowboard.globalEvent('eventTwo', 42);
+                        expect(testClass.eventResult).toEqual('Closure eventTwo called with arg \'42\'');
+
+                        // Call global event three - nothing should happen
+                        expect(() => {
+                            Snowboard.globalEvent('eventThree');
+                        }).not.toThrow();
+
+                        done();
+                    } catch (error) {
+                        done(error);
+                    }
+                },
+                (error) => {
+                    throw error;
+                }
+            );
+    });
+
     it('can listen and call global promise events', function (done) {
         FakeDom
             .new()
@@ -325,6 +370,67 @@ describe('Snowboard framework', function () {
                 }
             );
     });
+
+    it('can listen and call global promise events that are simple closures', function (done) {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/tests/js/fixtures/framework/TestPromiseClosureListener.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    // Run assertions
+                    const Snowboard = dom.window.Snowboard;
+
+                    try {
+                        expect(Snowboard.listensToEvent('promiseOne')).toEqual(['testclosure']);
+                        expect(Snowboard.listensToEvent('promiseTwo')).toEqual(['testclosure']);
+                        expect(Snowboard.listensToEvent('promiseThree')).toEqual([]);
+
+                        // Call global event one
+                        const testClass = Snowboard.testClosure();
+                        Snowboard.globalPromiseEvent('promiseOne', 'promise').then(
+                            () => {
+                                expect(testClass.eventResult).toEqual('Event called with arg promise');
+
+                                // Call global event two - it should still work, even though it doesn't return a promise
+                                Snowboard.globalPromiseEvent('promiseTwo', 'promise 2').then(
+                                    () => {
+                                        expect(testClass.eventResult).toEqual('Promise two called with arg promise 2');
+
+                                        // Call global event three - it should still work
+                                        Snowboard.globalPromiseEvent('promiseThree', 'promise 3').then(
+                                            () => {
+                                                done();
+                                            },
+                                            (error) => {
+                                                done(error);
+                                            }
+                                        );
+                                    },
+                                    (error) => {
+                                        done(error);
+                                    }
+                                );
+                            },
+                            (error) => {
+                                done(error);
+                            }
+                        );
+                    } catch (error) {
+                        done(error);
+                    }
+                },
+                (error) => {
+                    throw error;
+                }
+            );
+    });
+
 
     it('will throw an error when using a plugin that has unfulfilled dependencies', function () {
         FakeDom
