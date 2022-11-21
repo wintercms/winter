@@ -43,12 +43,15 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerThemeLogging();
         $this->registerCombinerEvents();
         $this->registerHalcyonModels();
-        $this->registerBackendPermissions();
+
+        if (!$this->app->runningUnitTests()) {
+            $this->registerBackendPermissions();
+        }
 
         /*
          * Backend specific
          */
-        if (App::runningInBackend()) {
+        if ($this->app->runningInBackend()) {
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
             $this->registerBackendWidgets();

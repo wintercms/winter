@@ -61,16 +61,18 @@ class ServiceProvider extends ModuleServiceProvider
          */
         foreach (Config::get('cms.loadModules', []) as $module) {
             if (strtolower(trim($module)) != 'system') {
-                App::register('\\' . $module . '\ServiceProvider');
+                $this->app->register('\\' . $module . '\ServiceProvider');
             }
         }
 
-        $this->registerBackendPermissions();
+        if (!$this->app->runningUnitTests()) {
+            $this->registerBackendPermissions();
+        }
 
         /*
          * Backend specific
          */
-        if (App::runningInBackend()) {
+        if ($this->app->runningInBackend()) {
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
             $this->registerBackendSettings();

@@ -1,6 +1,5 @@
 <?php namespace Backend;
 
-use App;
 use Backend;
 use BackendMenu;
 use BackendAuth;
@@ -23,12 +22,15 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsole();
         $this->registerMailer();
         $this->registerAssetBundles();
-        $this->registerBackendPermissions();
+
+        if (!$this->app->runningUnitTests()) {
+            $this->registerBackendPermissions();
+        }
 
         /*
          * Backend specific
          */
-        if (App::runningInBackend()) {
+        if ($this->app->runningInBackend()) {
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
             $this->registerBackendWidgets();
