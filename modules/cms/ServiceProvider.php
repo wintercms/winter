@@ -1,30 +1,28 @@
 <?php namespace Cms;
 
-use App;
-use Url;
-use Lang;
-use File;
-use Event;
-use Config;
 use Backend;
-use BackendMenu;
-use BackendAuth;
-use Cms\Models\ThemeLog;
-use Cms\Models\ThemeData;
-use Cms\Classes\CmsObject;
-use Backend\Models\UserRole;
-use Cms\Classes\Page as CmsPage;
-use Cms\Classes\ComponentManager;
-use System\Classes\CombineAssets;
-use Cms\Classes\Theme as CmsTheme;
 use Backend\Classes\WidgetManager;
+use Backend\Models\UserRole;
+use BackendAuth;
+use BackendMenu;
+use Cms\Classes\CmsObject;
+use Cms\Classes\ComponentManager;
+use Cms\Classes\Page as CmsPage;
+use Cms\Classes\Theme;
+use Cms\Models\ThemeData;
+use Cms\Models\ThemeLog;
+use Cms\Twig\DebugExtension;
+use Cms\Twig\Extension as CmsTwigExtension;
+use Cms\Twig\Loader as CmsTwigLoader;
+use Config;
+use Event;
+use File;
+use Lang;
+use System\Classes\CombineAssets;
 use System\Classes\MarkupManager;
 use System\Classes\SettingsManager;
 use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
-use Cms\Twig\Loader as CmsTwigLoader;
-use Cms\Twig\DebugExtension;
-use Cms\Twig\Extension as CmsTwigExtension;
-
+use Url;
 use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
@@ -97,7 +95,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerTwigParser()
     {
         // Register CMS Twig environment
-        App::bind('twig.environment.cms', function ($app) {
+        $this->app->bind('twig.environment.cms', function ($app) {
             // Load Twig options
             $useCache = !Config::get('cms.twigNoCache');
             $isDebugMode = Config::get('app.debug', false);
@@ -166,7 +164,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerCombinerEvents()
     {
-        if (App::runningInBackend() || App::runningInConsole()) {
+        if ($this->app->runningInBackend() || $this->app->runningInConsole()) {
             return;
         }
 
@@ -389,7 +387,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function bootBackendLocalization()
     {
-        $theme = CmsTheme::getActiveTheme();
+        $theme = Theme::getActiveTheme();
 
         if (is_null($theme)) {
             return;
