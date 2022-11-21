@@ -173,7 +173,7 @@ class FileUpload extends FormWidgetBase
         $record = false;
 
         if (!empty(post('file_id'))) {
-            $record = $this->getRelationModel()::find(post('file_id')) ?: false;
+            $record = $this->getRelationModel()->find(post('file_id')) ?: false;
         }
 
         return $record;
@@ -333,18 +333,19 @@ class FileUpload extends FormWidgetBase
     /**
      * Removes a file attachment.
      */
-    public function onRemoveAttachment()
+    public function onRemoveAttachment(): void
     {
-        $fileModel = $this->getRelationModel();
-        if (($fileId = post('file_id')) && ($file = $fileModel::find($fileId))) {
+        if ($file = $this->getFileRecord()) {
             $this->getRelationObject()->remove($file, $this->sessionKey);
         }
     }
 
     /**
      * Sorts file attachments.
+     *
+     * Expects (array) sortOrder [$fileId => $fileOrder] in the POST data.
      */
-    public function onSortAttachments()
+    public function onSortAttachments(): void
     {
         if ($sortData = post('sortOrder')) {
             $ids = array_keys($sortData);
