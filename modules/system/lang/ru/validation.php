@@ -53,7 +53,7 @@ return [
     'gte'                  => [
         'numeric' => 'Поле :attribute должно быть больше или равно :value.',
         'file'    => 'Файл :attribute должен быть больше или равен :value килобайт.',
-        'string'  => 'Поле :attribute должен быть больше or equal :value символов.',
+        'string'  => 'Поле :attribute должен быть больше или равно :value символов.',
         'array'   => 'Поле :attribute должно содержать :value элементов или больше.',
     ],
     "image"                => "Поле :attribute должно быть изображением.",
@@ -111,7 +111,7 @@ return [
     ],
     'starts_with'          => 'Поле :attribute должно начинаться одним из значений: :values.',
     'string'               => 'Поле :attribute должно быть строкой.',
-    'timezone'             => 'The :attribute must be a valid zone.',
+    'timezone'             => ':attribute должен быть допустимой временной зоной.',
     "unique"               => "Такое значение поля :attribute уже существует.",
     'uploaded'             => ':attribute не удалось загрузить.',
     "url"                  => "Поле :attribute имеет ошибочный формат.",
