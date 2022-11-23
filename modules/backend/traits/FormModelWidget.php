@@ -62,8 +62,9 @@ trait FormModelWidget
     /**
      * Returns the value as a relation object from the model, supports nesting via HTML array.
      * @throws ApplicationException if the relationship cannot be resolved
+     * @return Relation
      */
-    protected function getRelationObject(): Relation
+    protected function getRelationObject()
     {
         list($model, $attribute) = $this->resolveModelAttribute($this->valueFrom);
 
