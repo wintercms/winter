@@ -62,9 +62,7 @@ class ServiceProvider extends ModuleServiceProvider
             }
         }
 
-        if (!$this->app->runningUnitTests()) {
-            $this->registerBackendPermissions();
-        }
+        $this->registerBackendPermissions();
 
         /*
          * Backend specific

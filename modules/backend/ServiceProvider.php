@@ -22,10 +22,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsole();
         $this->registerMailer();
         $this->registerAssetBundles();
-
-        if (!$this->app->runningUnitTests()) {
-            $this->registerBackendPermissions();
-        }
+        $this->registerBackendPermissions();
 
         /*
          * Backend specific
