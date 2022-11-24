@@ -621,7 +621,7 @@ class Theme extends CmsObject
             $sources['parent-filesystem'] = new FileDatasource(themes_path($config['parent']), App::make('files'));
         }
 
-        $resolver->addDatasource($this->dirName, new AutoDatasource($sources));
+        $resolver->addDatasource($this->dirName, new AutoDatasource($sources, 'halcyon-datasource-auto-' . $this->dirName));
     }
 
     /**
