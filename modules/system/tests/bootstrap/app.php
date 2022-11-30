@@ -21,7 +21,9 @@ $loader->register();
 /*
  * Manually register all module classes for autoloading
  */
-// @TODO: Implement this
+foreach (glob($baseDir . '/modules/*', GLOB_ONLYDIR) as $modulePath) {
+    $loader->autoloadPackage(basename($modulePath), $modulePath);
+}
 
 /*
  * Manually register all plugin classes for autoloading
