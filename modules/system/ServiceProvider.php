@@ -35,6 +35,8 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
+        parent::register();
+
         $this->registerSingletons();
         $this->registerPrivilegedActions();
 
