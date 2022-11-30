@@ -150,6 +150,8 @@ class PluginManager
         $className = $namespace . '\Plugin';
         $classPath = $path . '/Plugin.php';
 
+        $this->app->make(ClassLoader::class)->autoloadPackage($namespace, $path);
+
         try {
             // Autoloader failed?
             if (!class_exists($className)) {
