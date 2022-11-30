@@ -50,6 +50,11 @@ class MediaManager extends WidgetBase
     public $cropAndInsertButton = false;
 
     /**
+     * @var boolean Determines whether the Display filters are visible.
+     */
+    public bool $filterDisplay = true;
+
+    /**
      * Constructor.
      */
     public function __construct($controller, $alias, $readOnly = false)
@@ -663,6 +668,13 @@ class MediaManager extends WidgetBase
 
         $this->cropAndInsertButton = Input::get('cropAndInsertButton', $this->cropAndInsertButton);
 
+        if ($mode = Input::get('mode')) {
+            $this->setFilter($mode);
+            if ($mode !== static::FILTER_EVERYTHING) {
+                $this->setFilterDisplay(false);
+            }
+        }
+
         return $this->makePartial('popup-body');
     }
 
@@ -932,6 +944,22 @@ class MediaManager extends WidgetBase
         }
 
         $this->putSession('media_filter', $filter);
+    }
+
+    /**
+     * Sets the filter display option for the request
+     */
+    protected function setFilterDisplay(bool $status): void
+    {
+        $this->filterDisplay = $status;
+    }
+
+    /**
+     * Gets the filter display option for the request
+     */
+    protected function getFilterDisplay(): bool
+    {
+        return $this->filterDisplay;
     }
 
     /**
