@@ -151,6 +151,7 @@ class ListController extends ControllerBehavior
             'showTree',
             'treeExpanded',
             'customViewPath',
+            'alias',
         ];
 
         foreach ($configFieldsToTransfer as $field) {
