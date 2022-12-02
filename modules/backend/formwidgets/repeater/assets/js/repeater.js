@@ -140,6 +140,7 @@
 
         $target.closest('[data-field-name]').trigger('change.oc.formwidget')
         $target.closest('.field-repeater-item').remove()
+        this.$el.trigger('change.oc.formwidget')
         this.togglePrompt()
     }
 
