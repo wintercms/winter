@@ -19,8 +19,8 @@ mix
         './assets/ui/js/build/backend.js',
     )
     .js(
-        './formwidgets/iconpicker/assets/src/app.js',
-        './formwidgets/iconpicker/assets/dist/app.js',
+        './formwidgets/iconpicker/assets/src/iconpicker.js',
+        './formwidgets/iconpicker/assets/dist/iconpicker.js',
     )
     .vue()
 

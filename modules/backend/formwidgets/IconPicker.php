@@ -1,9 +1,11 @@
 <?php namespace Backend\FormWidgets;
 
-use Url;
-use Config;
 use Backend\Classes\FormWidgetBase;
+use Config;
+use File;
+use Url;
 use Winter\Storm\Exception\ApplicationException;
+use Yaml;
 
 /**
  * Icon picker
@@ -14,6 +16,8 @@ use Winter\Storm\Exception\ApplicationException;
  */
 class IconPicker extends FormWidgetBase
 {
+    public const DEFAULT_LIBRARIES = '~/modules/backend/formwidgets/iconpicker/meta/libraries.yaml';
+
     /**
      * @inheritDoc
      */
@@ -52,6 +56,12 @@ class IconPicker extends FormWidgetBase
 
     public function onLoadIconLibrary()
     {
-        return json_encode(Config::get('backend::icons'));
+        $libraries = $this->config->libraries ?? static::DEFAULT_LIBRARIES;
+
+        if (is_string($libraries)) {
+            $libraries = Yaml::parseFile(File::symbolizePath($libraries));
+        }
+
+        return json_encode($libraries);
     }
 }
