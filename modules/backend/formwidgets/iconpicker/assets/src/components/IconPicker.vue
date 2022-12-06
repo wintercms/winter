@@ -80,7 +80,7 @@ export default {
     inheritAttrs: false,
     props: ['label', 'propValue', 'name', 'fontLibraries'],
     data() {
-        const defaultIcon = this.propValue || 'far icon-address-book';
+        let defaultIcon = this.propValue;
         const tabs = [
             {
                 id: 'all',
@@ -102,6 +102,10 @@ export default {
             prefixes.push(library.prefix);
             allGlyphs.push(...library.icons);
         });
+
+        if (allGlyphs.indexOf(defaultIcon) === -1) {
+            defaultIcon = allGlyphs[0] ?? '';
+        }
 
         return {
             modelValue: defaultIcon,

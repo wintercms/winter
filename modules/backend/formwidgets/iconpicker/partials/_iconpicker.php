@@ -7,7 +7,7 @@
     <div id="<?= $field->getId() ?>"
          data-control="iconpicker"
          data-label="Icon Picker"
-         data-prop-value="<?= e($field->getLoadValue()) ?>"
+         data-prop-value="<?= $field->getLoadValue() ? e($field->getLoadValue()) : ($field->config->default ?? 'far icon-address-book') ?>"
          data-name="<?= $field->getFieldName() ?>"
          data-alias="<?= $field->alias ?>"
     >
