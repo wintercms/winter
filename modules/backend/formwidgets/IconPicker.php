@@ -51,7 +51,7 @@ class IconPicker extends FormWidgetBase
     public function loadAssets(): void
     {
         $this->assetPath = Url::asset('modules/backend/formwidgets/iconpicker/assets/dist');
-        $this->addJs('app.js', 'core');
+        $this->addJs('iconpicker.js', 'core');
     }
 
     public function onLoadIconLibrary()
