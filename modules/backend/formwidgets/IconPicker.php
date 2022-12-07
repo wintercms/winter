@@ -1,10 +1,8 @@
 <?php namespace Backend\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
-use Config;
 use File;
 use Url;
-use Winter\Storm\Exception\ApplicationException;
 use Yaml;
 
 /**
@@ -28,12 +26,7 @@ class IconPicker extends FormWidgetBase
      */
     public function render()
     {
-        try {
-            $this->prepareVars();
-        } catch (ApplicationException $ex) {
-            $this->vars['error'] = $ex->getMessage();
-        }
-
+        $this->prepareVars();
         return $this->makePartial('iconpicker');
     }
 
