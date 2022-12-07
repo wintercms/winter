@@ -81,6 +81,7 @@ export default {
     props: ['label', 'propValue', 'name', 'fontLibraries'],
     data() {
         let defaultIcon = this.propValue;
+        let activeGlyph = defaultIcon ?? '';
         const tabs = [
             {
                 id: 'all',
@@ -104,12 +105,12 @@ export default {
         });
 
         if (allGlyphs.indexOf(defaultIcon) === -1) {
-            defaultIcon = allGlyphs[0] ?? '';
+            activeGlyph = allGlyphs[0] ?? '';
         }
 
         return {
             modelValue: defaultIcon,
-            activeGlyph: defaultIcon,
+            activeGlyph,
             filterText: '',
             isVisible: false,
             activeTab: tabs[0],
