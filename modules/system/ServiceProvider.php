@@ -24,6 +24,7 @@ use SystemException;
 use Validator;
 use View;
 use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Support\ClassLoader;
 use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
@@ -36,6 +37,14 @@ class ServiceProvider extends ModuleServiceProvider
     public function register()
     {
         parent::register();
+
+        $modules = Config::get('cms.loadModules', []);
+        $classLoader = $this->app->make(ClassLoader::class);
+        foreach ($modules as $module) {
+            if (strtolower(trim($module)) != 'system') {
+                $classLoader->autoloadPackage($module . '\\', "modules/" . strtolower($module) . '/');
+            }
+        }
 
         $this->registerSingletons();
         $this->registerPrivilegedActions();
@@ -58,7 +67,7 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register other module providers
          */
-        foreach (Config::get('cms.loadModules', []) as $module) {
+        foreach ($modules as $module) {
             if (strtolower(trim($module)) != 'system') {
                 $this->app->register('\\' . $module . '\ServiceProvider');
             }
