@@ -18,6 +18,11 @@ mix
         './assets/ui/js/index.js',
         './assets/ui/js/build/backend.js',
     )
+    .js(
+        './formwidgets/iconpicker/assets/src/iconpicker.js',
+        './formwidgets/iconpicker/assets/dist/iconpicker.js',
+    )
+    .vue()
 
     // Polyfill for all targeted browsers
     .polyfill({
