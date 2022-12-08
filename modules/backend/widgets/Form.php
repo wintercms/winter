@@ -736,13 +736,13 @@ class Form extends WidgetBase
 
             switch (strtolower($addToArea)) {
                 case FormTabs::SECTION_PRIMARY:
-                    $this->allTabs->primary->addField($name, $fieldObj, $fieldTab);
+                    $this->allTabs->primary->addField($fieldObj->fieldName, $fieldObj, $fieldTab);
                     break;
                 case FormTabs::SECTION_SECONDARY:
-                    $this->allTabs->secondary->addField($name, $fieldObj, $fieldTab);
+                    $this->allTabs->secondary->addField($fieldObj->fieldName, $fieldObj, $fieldTab);
                     break;
                 default:
-                    $this->allTabs->outside->addField($name, $fieldObj);
+                    $this->allTabs->outside->addField($fieldObj->fieldName, $fieldObj);
                     break;
             }
         }
