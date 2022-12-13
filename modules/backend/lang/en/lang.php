@@ -391,6 +391,7 @@ return [
         'auto_closing' => 'Automatically close tags',
         'show_invisibles' => 'Show invisible characters',
         'show_gutter' => 'Show gutter',
+        'show_minimap' => 'Show minimap',
         'basic_autocompletion' => 'Basic Autocompletion (Ctrl + Space)',
         'live_autocompletion' => 'Live Autocompletion',
         'enable_snippets' => 'Enable code snippets (Tab)',

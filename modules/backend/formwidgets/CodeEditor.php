@@ -102,6 +102,11 @@ class CodeEditor extends FormWidgetBase
      */
     public $showPrintMargin = false;
 
+    /**
+     * @var boolean Show minimap (code preview) on the right of the editor
+     */
+    public $showMinimap = true;
+
     //
     // Object properties
     //
@@ -176,6 +181,7 @@ class CodeEditor extends FormWidgetBase
         $this->vars['enableSnippets'] = $this->enableSnippets;
         $this->vars['displayIndentGuides'] = $this->displayIndentGuides;
         $this->vars['showPrintMargin'] = $this->showPrintMargin;
+        $this->vars['showMinimap'] = $this->showMinimap;
 
         // Double encode when escaping
         $this->vars['value'] = htmlentities($this->getLoadValue(), ENT_QUOTES, 'UTF-8', true);

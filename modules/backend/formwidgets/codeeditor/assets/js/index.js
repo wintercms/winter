@@ -45,6 +45,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
                 readOnly: false,
                 showGutter: true,
                 showInvisibles: false,
+                showMinimap: true,
                 showPrintMargin: false,
                 tabSize: 4,
                 useSoftTabs: true,
@@ -131,6 +132,9 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
                 insertSpaces: this.config.get('useSoftTabs'),
                 language: this.config.get('language'),
                 lineNumbers: this.config.get('showGutter') ? 'on' : 'off',
+                minimap: {
+                    enabled: this.config.get('showMinimap'),
+                },
                 renderLineHighlight: this.config.get('highlightActiveLine') ? 'all' : 'none',
                 renderWhitespace: this.config.get('showInvisibles') ? 'all' : 'selection',
                 scrollBeyondLastLine: false,

@@ -70,6 +70,7 @@ class Preference extends Model
         $this->editor_enable_snippets = $config->get('editor.enable_snippets', false);
         $this->editor_display_indent_guides = $config->get('editor.display_indent_guides', false);
         $this->editor_show_print_margin = $config->get('editor.show_print_margin', false);
+        $this->editor_show_minimap = $config->get('editor.show_minimap', true);
     }
 
     /**

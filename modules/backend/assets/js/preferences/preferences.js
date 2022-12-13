@@ -19,13 +19,21 @@
 
         enablePreferences() {
             const checkboxes = {
-                show_gutter: 'lineNumbers',
+                show_gutter: 'showGutter',
+                highlight_active_line: 'highlightActiveLine',
+                use_hard_tabs: '!useSoftTabs',
+                display_indent_guides: 'displayIndentGuides',
+                show_invisibles: 'showInvisibles',
+                show_print_margin: 'showPrintMargin',
+                show_minimap: 'showMinimap',
             };
 
             Object.entries(checkboxes).forEach(([key, value]) => {
                 document.getElementById(`Form-field-Preference-editor_${key}`).addEventListener('change', (event) => {
-                    console.log(value, event.target.checked);
-                    this.widget.setConfig(value, event.target.checked);
+                    this.widget.setConfig(
+                        value.replace(/^!/, ''),
+                        /^!/.test(value) ? !event.target.checked : event.target.checked
+                    );
                 });
             });
         }

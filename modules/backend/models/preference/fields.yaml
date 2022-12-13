@@ -95,6 +95,12 @@ tabs:
             type: checkbox
             span: auto
 
+        editor_show_minimap:
+            label: backend::lang.editor.show_minimap
+            tab: backend::lang.backend_preferences.code_editor
+            type: checkbox
+            span: auto
+
         editor_highlight_active_line:
             label: backend::lang.editor.highlight_active_line
             tab: backend::lang.backend_preferences.code_editor
