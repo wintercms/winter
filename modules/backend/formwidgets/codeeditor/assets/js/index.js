@@ -35,6 +35,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
         defaults() {
             return {
                 autoCloseTags: true,
+                bracketColors: false,
                 codeFolding: true,
                 displayIndentGuides: true,
                 fontSize: 12,
@@ -123,6 +124,11 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
                 detectIndentation: false,
                 folding: this.config.get('codeFolding'),
                 fontSize: this.config.get('fontSize'),
+                guides: {
+                    bracketPairs: this.config.get('bracketColors'),
+                    bracketPairsHorizontal: this.config.get('bracketColors') ? 'active' : false,
+                    indentation: this.config.get('displayIndentGuides'),
+                },
                 insertSpaces: this.config.get('useSoftTabs'),
                 language: this.config.get('language'),
                 lineNumbers: this.config.get('showGutter') ? 'on' : 'off',
