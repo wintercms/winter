@@ -69,6 +69,14 @@ class AutoDatasource extends Datasource implements DatasourceInterface
     }
 
     /**
+     * Returns the in memory path cache map
+     */
+    public function getPathCache(): array
+    {
+        return $this->pathCache;
+    }
+
+    /**
      * Populate the local cache of paths available in each datasource
      *
      * @param boolean $refresh Default false, set to true to force the cache to be rebuilt
@@ -78,6 +86,13 @@ class AutoDatasource extends Datasource implements DatasourceInterface
     {
         $pathCache = [];
         foreach ($this->datasources as $datasource) {
+            // Allow AutoDatasource instances to handle their own internal caching
+            if ($datasource instanceof AutoDatasource) {
+                $datasource->populateCache($refresh);
+                $pathCache[] = array_merge(...array_reverse($datasource->getPathCache()));
+                continue;
+            }
+
             // Remove any existing cache data
             if ($refresh && $this->allowCacheRefreshes) {
                 Cache::forget($datasource->getPathsCacheKey());

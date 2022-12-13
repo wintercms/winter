@@ -30,8 +30,6 @@ body>div.flash-message.error{background:#bb380c}
 body>div.flash-message.warning{background:#b87410}
 body>div.flash-message.info{background:#3f91cc}
 @media (max-width:768px){body>div.flash-message{left:10px;right:10px;top:10px;margin-left:0;width:auto}}
-[data-request][data-request-validate] [data-validate-for]:not(.visible),
-[data-request][data-request-validate] [data-validate-error]:not(.visible){display:none}
 a.wn-loading:after,
 button.wn-loading:after,
 span.wn-loading:after,

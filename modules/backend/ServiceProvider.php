@@ -19,6 +19,8 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
+        parent::register();
+
         $this->registerConsole();
         $this->registerMailer();
         $this->registerAssetBundles();
@@ -228,6 +230,7 @@ class ServiceProvider extends ModuleServiceProvider
             $manager->registerFormWidget('Backend\FormWidgets\MediaFinder', 'mediafinder');
             $manager->registerFormWidget('Backend\FormWidgets\NestedForm', 'nestedform');
             $manager->registerFormWidget('Backend\FormWidgets\Sensitive', 'sensitive');
+            $manager->registerFormWidget('Backend\FormWidgets\IconPicker', 'iconpicker');
         });
     }
 
