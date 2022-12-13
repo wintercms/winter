@@ -34,7 +34,7 @@ class Preferences extends Controller
         parent::__construct();
 
         $this->addCss('/modules/backend/formwidgets/codeeditor/assets/css/codeeditor.css', 'core');
-        $this->addJs('/modules/backend/formwidgets/codeeditor/assets/js/build-min.js', 'core');
+        $this->addJs('/modules/backend/formwidgets/codeeditor/assets/js/build/codeeditor.bundle.js', 'core');
         $this->addJs('/modules/backend/assets/js/preferences/preferences.js', 'core');
 
         BackendMenu::setContext('Winter.System', 'system', 'mysettings');

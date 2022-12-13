@@ -1,6 +1,6 @@
 <div
       id="editorpreferencesCodeeditor"
-      class="field-codeeditor size-large layout-relative"
+      class="field-codeeditor size-large"
       data-control="codeeditor"
       data-font-size="<?= $model->editor_font_size ?>"
       data-word-wrap="<?= $model->editor_word_wrap ?>"
@@ -17,6 +17,8 @@
       data-show-gutter="<?= $model->editor_show_gutter ? 'true' : 'false' ?>"
       data-language="css"
       data-margin="0"
-      data-vendor-path="<?= Url::asset('/modules/backend/formwidgets/codeeditor/assets/vendor/ace') ?>/">
-      <textarea name="editorpreferences_codeeditor"><?= e($this->makePartial('example_code')) ?></textarea>
+      data-vendor-path="<?= Url::asset('/modules/backend/formwidgets/codeeditor/assets/vendor/ace') ?>/"
+>
+      <div class="editor-container"></div>
+      <input type="hidden" name="editorpreferences_codeeditor" data-value-bag value="<?= e($this->makePartial('example_code')) ?>">
 </div>

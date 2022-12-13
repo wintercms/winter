@@ -46,9 +46,22 @@ export default class WidgetHandler extends Snowboard.Singleton {
 
             if (instances.length) {
                 instances.forEach((instance) => {
+                    // Prevent double-widget initialisation
+                    if (instance.dataset.widgetInitialised) {
+                        return;
+                    }
+
                     const widgetInstance = this.snowboard[widget.widget](instance);
+                    instance.dataset.widget = widgetInstance;
+                    instance.dataset.widgetInitialised = true;
+                    this.snowboard.globalEvent('backend.widget.initialised', instance, widgetInstance);
+
+                    instance.getWidget = function getWidget() {
+                        return this.dataset.widget;
+                    };
+
                     if (typeof widget.callback === 'function') {
-                        widget.callback(widgetInstance);
+                        widget.callback(widgetInstance, instance);
                     }
                 });
             }

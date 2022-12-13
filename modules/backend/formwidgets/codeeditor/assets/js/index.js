@@ -116,7 +116,6 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
             this.editor = monaco.editor.create(this.element.querySelector('.editor-container'), this.getConfigOptions());
 
             this.attachValueListener();
-            this.setShortcuts();
         }
 
         getConfigOptions() {
@@ -153,8 +152,17 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
             });
         }
 
-        setShortcuts() {
-
+        /**
+         * Sets an editor configuration value.
+         *
+         * @param {*} key
+         * @param {*} value
+         */
+        setConfig(key, value) {
+            this.config.set(key, value);
+            if (this.editor) {
+                this.editor.updateOptions(this.getConfigOptions());
+            }
         }
     }
 
