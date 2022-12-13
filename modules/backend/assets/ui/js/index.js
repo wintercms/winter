@@ -1,4 +1,5 @@
 import BackendAjaxHandler from './ajax/Handler';
+import BackendUiWidgetHandler from './ui/WidgetHandler';
 
 if (window.Snowboard === undefined) {
     throw new Error('Snowboard must be loaded in order to use the Backend UI.');
@@ -6,6 +7,8 @@ if (window.Snowboard === undefined) {
 
 ((Snowboard) => {
     Snowboard.addPlugin('backend.ajax.handler', BackendAjaxHandler);
+    Snowboard.addPlugin('backend.ui.widgetHandler', BackendUiWidgetHandler);
+
     // Add the pre-filter immediately
     Snowboard['backend.ajax.handler']().addPrefilter();
 

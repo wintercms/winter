@@ -7,6 +7,7 @@ use Backend\Models\UserRole;
 use Backend\Classes\WidgetManager;
 use System\Classes\MailManager;
 use System\Classes\CombineAssets;
+use System\Classes\MixAssets;
 use System\Classes\SettingsManager;
 use Winter\Storm\Support\ModuleServiceProvider;
 
@@ -103,6 +104,10 @@ class ServiceProvider extends ModuleServiceProvider
                 $combiner->registerBundle('~/modules/backend/formwidgets/richeditor/assets/less/richeditor.less');
                 $combiner->registerBundle('~/modules/backend/formwidgets/richeditor/assets/js/build.js');
             }
+        });
+
+        MixAssets::instance()->registerCallback(function ($mix) {
+            $mix->registerPackage('module-backend.codeeditor', '~/modules/backend/formwidgets/codeeditor/assets/winter.mix.js');
         });
     }
 
