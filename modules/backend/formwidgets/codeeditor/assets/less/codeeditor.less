@@ -5,12 +5,22 @@
     position: relative;
     border: 2px solid @color-form-field-border;
     .border-radius(@border-radius-base);
-    textarea { .opacity(0); }
 
     &.editor-focus { border: 2px solid @color-form-field-border-focus; }
 
     .editor-code {
         .border-radius(@border-radius-base);
+    }
+
+    &.size-tiny { height: @size-tiny; }
+    &.size-small { height: @size-small; }
+    &.size-large { height: @size-large; }
+    &.size-huge { height: @size-huge; }
+    &.size-giant { height: @size-giant; }
+
+    .editor-container {
+        width: 100%;
+        height: 100%;
     }
 
     .editor-toolbar {

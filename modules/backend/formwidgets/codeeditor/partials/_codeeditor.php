@@ -25,7 +25,9 @@
         data-language="<?= $language ?>"
         data-margin="<?= $margin ?>"
         data-vendor-path="<?= Url::asset('/modules/backend/formwidgets/codeeditor/assets/vendor/ace') ?>"
-        <?= $this->formField->getAttributes() ?>>
+        <?= $this->formField->getAttributes() ?>
+    >
+        <div class="editor-container"></div>
         <div class="editor-toolbar">
             <ul>
                 <li class="searchbox-enable">
@@ -66,6 +68,6 @@
                 </li>
             </ul>
         </div>
-        <textarea name="<?= $name ?>" id="<?= $this->getId('textarea') ?>"><?= e($value) ?></textarea>
+        <input name="<?= $name ?>" data-value-bag id="<?= $this->getId('value') ?>" type="hidden" value="<?= e($value) ?>">
     </div>
 <?php endif ?>
