@@ -23,6 +23,9 @@
         "url": "https://github.com/wintercms/winter/issues"
     },
     "homepage": "https://wintercms.com/",
+    "dependencies": {
+        "vue": "^3.2.26"
+    },
     "devDependencies": {
         "babel-plugin-module-resolver": "^4.1.0",
         "eslint": "^8.6.0",
@@ -30,6 +33,9 @@
         "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-vue": "^8.5.0",
         "laravel-mix": "^6.0.34",
-        "laravel-mix-polyfill": "^3.0.1"
+        "laravel-mix-polyfill": "^3.0.1",
+        "monaco-editor": "^0.34.1",
+        "monaco-editor-webpack-plugin": "^7.0.1",
+        "vue-loader": "^16.8.3"
     }
 }
