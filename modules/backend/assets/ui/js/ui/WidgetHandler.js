@@ -5,7 +5,7 @@
  * a dependency in order to be loaded and initialised after the handler, in order to correctly
  * register.
  *
- * @copyright 2021 Winter.
+ * @copyright 2022 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
 export default class WidgetHandler extends Snowboard.Singleton {

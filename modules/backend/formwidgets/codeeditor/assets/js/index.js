@@ -120,7 +120,8 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
         }
 
         getConfigOptions() {
-            return {
+            const options = {
+                automaticLayout: true,
                 detectIndentation: false,
                 folding: this.config.get('codeFolding'),
                 fontSize: this.config.get('fontSize'),
@@ -138,10 +139,21 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
                 renderLineHighlight: this.config.get('highlightActiveLine') ? 'all' : 'none',
                 renderWhitespace: this.config.get('showInvisibles') ? 'all' : 'selection',
                 scrollBeyondLastLine: false,
+                tabSize: this.config.get('tabSize'),
                 theme: 'vs-dark',
                 value: this.valueBag.value,
-                wordWrap: this.config.get('wordWrap') ? 'on' : 'off',
             };
+
+            if (this.config.get('wordWrap') === 'fluid') {
+                options.wordWrap = 'on';
+            } else if (typeof this.config.get('wordWrap') === 'number') {
+                options.wordWrap = 'bounded';
+                options.wordWrapColumn = this.config.get('wordWrap');
+            } else {
+                options.wordWrap = 'off';
+            }
+
+            return options;
         }
 
         /**

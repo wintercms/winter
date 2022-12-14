@@ -24,6 +24,7 @@
     },
     "homepage": "https://wintercms.com/",
     "dependencies": {
+        "jquery-events-to-dom-events": "^1.1.0",
         "vue": "^3.2.26"
     },
     "devDependencies": {

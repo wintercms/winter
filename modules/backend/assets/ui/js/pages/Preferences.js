@@ -1,3 +1,5 @@
+import { delegate } from 'jquery-events-to-dom-events';
+
 ((Snowboard) => {
     class Preferences extends Snowboard.Singleton {
         construct() {
@@ -18,6 +20,8 @@
         }
 
         enablePreferences() {
+            delegate('change');
+
             const checkboxes = {
                 show_gutter: 'showGutter',
                 highlight_active_line: 'highlightActiveLine',
@@ -37,10 +41,26 @@
                 });
             });
 
-            this.element('font_size').addEventListener('change', (event) => {
-                console.log(event);
-                console.log(parseInt(event.target.value, 10));
-                this.widget.setConfig('fontSize', parseInt(event.target.value, 10));
+            this.element('font_size').addEventListener('$change', (event) => {
+                this.widget.setConfig('fontSize', event.target.value);
+            });
+
+            this.element('tab_size').addEventListener('$change', (event) => {
+                this.widget.setConfig('tabSize', event.target.value);
+            });
+
+            this.element('word_wrap').addEventListener('$change', (event) => {
+                const { value } = event.target;
+                switch (value) {
+                    case 'off':
+                        this.widget.setConfig('wordWrap', false);
+                        break;
+                    case 'fluid':
+                        this.widget.setConfig('wordWrap', 'fluid');
+                        break;
+                    default:
+                        this.widget.setConfig('wordWrap', parseInt(value, 10));
+                }
             });
         }
 
