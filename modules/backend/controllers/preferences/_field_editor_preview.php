@@ -2,6 +2,7 @@
       id="editorpreferencesCodeeditor"
       class="field-codeeditor size-large"
       data-control="codeeditor"
+      data-alias="null"
       data-font-size="<?= $model->editor_font_size ?>"
       data-word-wrap="<?= $model->editor_word_wrap ?>"
       data-code-folding="<?= ($model->editor_enable_folding ?? ($model->editor_code_folding !== 'manual')) ? 'true' : 'false' ?>"

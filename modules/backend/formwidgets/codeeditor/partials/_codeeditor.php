@@ -7,6 +7,7 @@
         id="<?= $this->getId() ?>"
         class="field-codeeditor size-<?= $size ?> <?= $stretch?'layout-relative':'' ?>"
         data-control="codeeditor"
+        data-alias="<?= $this->alias ?? 'null' ?>"
         data-font-size="<?= $fontSize ?>"
         data-word-wrap="<?= $wordWrap ?>"
         data-code-folding="<?= $codeFolding ? 'true' : 'false' ?>"

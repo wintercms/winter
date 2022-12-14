@@ -1,7 +1,9 @@
 <?php namespace Backend\FormWidgets;
 
+use File;
 use Backend\Models\Preference as BackendPreference;
 use Backend\Classes\FormWidgetBase;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Code Editor
@@ -187,6 +189,29 @@ class CodeEditor extends FormWidgetBase
         // Double encode when escaping
         $this->vars['value'] = htmlentities($this->getLoadValue(), ENT_QUOTES, 'UTF-8', true);
         $this->vars['name'] = $this->getFieldName();
+    }
+
+    /**
+     * Loads a theme via AJAX.
+     */
+    public function onLoadTheme()
+    {
+        $theme = post('theme');
+
+        if (empty($theme)) {
+            throw new ApplicationException('No theme specified');
+        }
+        if (!preg_match('/^[a-z\-\_]+$/i', $theme)) {
+            throw new ApplicationException('Invalid theme name');
+        }
+
+        $themePath = __DIR__ . '/codeeditor/assets/themes/' . $theme . '.tmTheme';
+
+        if (!File::exists($themePath)) {
+            throw new ApplicationException(sprintf('Theme "%s" not found', $theme));
+        }
+
+        return File::get($themePath);
     }
 
     /**

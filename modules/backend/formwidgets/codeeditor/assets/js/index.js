@@ -1,4 +1,5 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { parse as parseXml } from 'fast-plist';
 
 ((Snowboard) => {
     /**
@@ -19,10 +20,12 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
             this.element = element;
             this.elementObserver = null;
             this.config = this.snowboard.dataConfig(this, element);
+            this.alias = this.config.get('alias');
             this.model = null;
             this.valueListener = null;
             this.editor = null;
             this.valueBag = this.element.querySelector('[data-value-bag]');
+            this.cachedThemes = {};
 
             this.observeElement();
         }
@@ -34,6 +37,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
          */
         defaults() {
             return {
+                alias: null,
                 autoCloseTags: true,
                 bracketColors: false,
                 codeFolding: true,
@@ -49,6 +53,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
                 showMinimap: true,
                 showPrintMargin: false,
                 tabSize: 4,
+                theme: 'vs-dark',
                 useSoftTabs: true,
                 wordWrap: true,
             };
@@ -118,6 +123,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
             this.editor = monaco.editor.create(this.element.querySelector('.editor-container'), this.getConfigOptions());
 
             this.attachValueListener();
+            this.loadTheme();
         }
 
         /**
@@ -203,6 +209,229 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
                     this.editor.updateOptions(this.getConfigOptions());
                 }
             }
+        }
+
+        /**
+         * Loads and applies a theme for the editor.
+         *
+         * @param {String} theme
+         */
+        loadTheme(theme) {
+            const newTheme = theme || this.config.get('theme');
+
+            if (newTheme === 'vs-dark') {
+                return;
+            }
+
+            if (!this.cachedThemes[newTheme]) {
+                this.snowboard.request(
+                    this.element,
+                    (this.alias) ? `${this.alias}::onLoadTheme` : 'onLoadTheme',
+                    {
+                        data: {
+                            theme: theme || this.config.get('theme'),
+                        },
+                        success: (data) => {
+                            if (data.result) {
+                                const themeData = this.convertTmTheme(data.result);
+                                this.cachedThemes[newTheme] = themeData;
+                                console.log(themeData);
+
+                                monaco.editor.defineTheme(newTheme, themeData);
+                                monaco.editor.setTheme(newTheme);
+                            }
+                        },
+                        error: () => {
+                            console.log(`Unable to load theme "${newTheme}"`);
+                        },
+                    },
+                );
+                return;
+            }
+
+            monaco.editor.setTheme(newTheme);
+        }
+
+        convertTmTheme(content) {
+            const themeData = parseXml(content);
+            const globalColors = this.mapGlobalColors(themeData.settings.shift().settings);
+            const scopes = [];
+
+            themeData.settings.forEach((setting) => {
+                if (!setting.scope) {
+                    return;
+                }
+
+                const scope = {
+                    token: setting.scope,
+                };
+
+                if (setting.settings.foreground) {
+                    scope.foreground = this.parseColor(setting.settings.foreground);
+                }
+                if (setting.settings.background) {
+                    scope.background = this.parseColor(setting.settings.background);
+                }
+                if (setting.settings.fontStyle) {
+                    scope.fontStyle = setting.settings.fontStyle;
+                }
+
+                scopes.push(scope);
+            });
+
+            console.log(scopes);
+
+            return {
+                base: (this.isDarkTheme(globalColors['editor.background'])) ? 'vs-dark' : 'vs',
+                inherit: false,
+                rules: scopes,
+                colors: globalColors,
+            };
+        }
+
+        mapGlobalColors(settings) {
+            const colors = {};
+            const colorMap = [
+                {
+                    tm: 'foreground',
+                    mn: 'editor.foreground',
+                },
+                {
+                    tm: 'background',
+                    mn: 'editor.background',
+                },
+                {
+                    tm: 'selection',
+                    mn: 'editor.selectionBackground',
+                },
+                {
+                    tm: 'inactiveSelection',
+                    mn: 'editor.inactiveSelectionBackground',
+                },
+                {
+                    tm: 'selectionHighlightColor',
+                    mn: 'editor.selectionHighlightBackground',
+                },
+                {
+                    tm: 'findMatchHighlight',
+                    mn: 'editor.findMatchHighlightBackground',
+                },
+                {
+                    tm: 'currentFindMatchHighlight',
+                    mn: 'editor.findMatchBackground',
+                },
+                {
+                    tm: 'hoverHighlight',
+                    mn: 'editor.hoverHighlightBackground',
+                },
+                {
+                    tm: 'wordHighlight',
+                    mn: 'editor.wordHighlightBackground',
+                },
+                {
+                    tm: 'wordHighlightStrong',
+                    mn: 'editor.wordHighlightStrongBackground',
+                },
+                {
+                    tm: 'findRangeHighlight',
+                    mn: 'editor.findRangeHighlightBackground',
+                },
+                {
+                    tm: 'findMatchHighlight',
+                    mn: 'peekViewResult.matchHighlightBackground',
+                },
+                {
+                    tm: 'referenceHighlight',
+                    mn: 'peekViewEditor.matchHighlightBackground',
+                },
+                {
+                    tm: 'lineHighlight',
+                    mn: 'editor.lineHighlightBackground',
+                },
+                {
+                    tm: 'rangeHighlight',
+                    mn: 'editor.rangeHighlightBackground',
+                },
+                {
+                    tm: 'caret',
+                    mn: 'editorCursor.foreground',
+                },
+                {
+                    tm: 'invisibles',
+                    mn: 'editorWhitespace.foreground',
+                },
+                {
+                    tm: 'guide',
+                    mn: 'editorIndentGuide.background',
+                },
+                {
+                    tm: 'activeGuide',
+                    mn: 'editorIndentGuide.activeBackground',
+                },
+                {
+                    tm: 'selectionBorder',
+                    mn: 'editor.selectionHighlightBorder',
+                },
+            ];
+
+            colorMap.forEach((color) => {
+                if (settings[color.tm]) {
+                    colors[color.mn] = this.parseColor(settings[color.tm]);
+                }
+            });
+
+            return colors;
+        }
+
+        parseColor(color) {
+            let currentColor = color;
+
+            if (!currentColor.length) {
+                return null;
+            }
+            if (currentColor.length === 4) {
+                currentColor = color.replace(/[a-fA-F\d]/g, '$&$&');
+            }
+            if (currentColor.length === 7) {
+                return currentColor;
+            }
+            if (color.length === 9) {
+                return color;
+            }
+            if (!color.match(/^#(..)(..)(..)(..)$/)) {
+                console.error("can't parse color", color);
+            }
+            const rgba = color.match(/^#(..)(..)(..)(..)$/).slice(1).map((c) => parseInt(c, 16));
+            rgba[3] = (rgba[3] / 0xFF).toPrecision(2);
+            return `rgba(${rgba.join(', ')})`;
+        }
+
+        /**
+         * Converts a hexidecimal color to an RGB array.
+         *
+         * @param {String} color
+         * @returns {Array}
+         */
+        rgbColor(color) {
+            if (typeof color === 'object') {
+                return color;
+            }
+            if (color[0] === '#') {
+                return color.match(/^#(..)(..)(..)/).slice(1).map((c) => parseInt(c, 16));
+            }
+
+            return color.match(/\(([^,]+),([^,]+),([^,]+)/).slice(1).map((c) => parseInt(c, 10));
+        }
+
+        /**
+         * Determines if a theme is dark by the color of the background.
+         *
+         * @param {String} background
+         * @returns {Boolean}
+         */
+        isDarkTheme(background) {
+            const rgb = this.rgbColor(background);
+            return (((0.21 * rgb[0] + 0.72 * rgb[1] + 0.07 * rgb[2]) / 255) < 0.5);
         }
     }
 

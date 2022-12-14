@@ -44,6 +44,10 @@ import { delegate } from 'jquery-events-to-dom-events';
                 });
             });
 
+            this.element('theme').addEventListener('$change', (event) => {
+                this.widget.loadTheme(event.target.value);
+            });
+
             this.element('font_size').addEventListener('$change', (event) => {
                 this.widget.setConfig('fontSize', event.target.value);
             });

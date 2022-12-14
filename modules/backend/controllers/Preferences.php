@@ -1,5 +1,6 @@
 <?php namespace Backend\Controllers;
 
+use File;
 use Lang;
 use Flash;
 use Backend;
@@ -7,6 +8,7 @@ use BackendMenu;
 use Backend\Classes\Controller;
 use System\Classes\SettingsManager;
 use Backend\Models\Preference as PreferenceModel;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Editor Settings controller
@@ -75,5 +77,28 @@ class Preferences extends Controller
     public function formFindModelObject()
     {
         return PreferenceModel::instance();
+    }
+
+    /**
+     * Loads a theme via AJAX.
+     */
+    public function index_onLoadTheme()
+    {
+        $theme = post('theme');
+
+        if (empty($theme)) {
+            throw new ApplicationException('No theme specified');
+        }
+        if (!preg_match('/^[a-z\-\_]+$/i', $theme)) {
+            throw new ApplicationException('Invalid theme name');
+        }
+
+        $themePath = base_path('modules/backend/formwidgets/codeeditor/assets/themes/' . $theme . '.tmTheme');
+
+        if (!File::exists($themePath)) {
+            throw new ApplicationException(sprintf('Theme "%s" not found', $theme));
+        }
+
+        return File::get($themePath);
     }
 }
