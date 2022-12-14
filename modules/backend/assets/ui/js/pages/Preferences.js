@@ -30,6 +30,9 @@ import { delegate } from 'jquery-events-to-dom-events';
                 show_invisibles: 'showInvisibles',
                 show_print_margin: 'showPrintMargin',
                 show_minimap: 'showMinimap',
+                enable_folding: 'codeFolding',
+                bracket_colors: 'bracketColors',
+                show_colors: 'showColors',
             };
 
             Object.entries(checkboxes).forEach(([key, value]) => {

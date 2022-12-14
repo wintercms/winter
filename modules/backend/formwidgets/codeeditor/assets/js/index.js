@@ -43,6 +43,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
                 language: 'html',
                 margin: 0,
                 readOnly: false,
+                showColors: true,
                 showGutter: true,
                 showInvisibles: false,
                 showMinimap: true,
@@ -119,9 +120,23 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
             this.attachValueListener();
         }
 
+        /**
+         * Completely disposes and re-creates the editor.
+         */
+        refresh() {
+            this.dispose();
+            this.createEditor();
+        }
+
+        /**
+         * Gets the configuration object to provide to the editor.
+         *
+         * @returns {Object}
+         */
         getConfigOptions() {
             const options = {
                 automaticLayout: true,
+                colorDecorators: this.config.get('showColors'),
                 detectIndentation: false,
                 folding: this.config.get('codeFolding'),
                 fontSize: this.config.get('fontSize'),
@@ -153,6 +168,10 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
                 options.wordWrap = 'off';
             }
 
+            if (this.config.get('showPrintMargin')) {
+                options.rulers = [80];
+            }
+
             return options;
         }
 
@@ -177,7 +196,12 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
         setConfig(key, value) {
             this.config.set(key, value);
             if (this.editor) {
-                this.editor.updateOptions(this.getConfigOptions());
+                // Some keys need a full refresh to take effect
+                if (key === 'showPrintMargin') {
+                    this.refresh();
+                } else {
+                    this.editor.updateOptions(this.getConfigOptions());
+                }
             }
         }
     }

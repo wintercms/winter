@@ -59,6 +59,8 @@ class Preference extends Model
         $this->editor_font_size = $config->get('editor.font_size', 12);
         $this->editor_word_wrap = $config->get('editor.word_wrap', 'fluid');
         $this->editor_code_folding = $config->get('editor.code_folding', 'manual');
+        // @deprecated v1.2.2
+        $this->editor_enable_folding = $config->get('editor.enable_folding', $config->get('editor.code_folding', 'manual') !== 'manual');
         $this->editor_tab_size = $config->get('editor.tab_size', 4);
         $this->editor_theme = $config->get('editor.theme', static::DEFAULT_THEME);
         $this->editor_show_invisibles = $config->get('editor.show_invisibles', false);
@@ -71,6 +73,8 @@ class Preference extends Model
         $this->editor_display_indent_guides = $config->get('editor.display_indent_guides', false);
         $this->editor_show_print_margin = $config->get('editor.show_print_margin', false);
         $this->editor_show_minimap = $config->get('editor.show_minimap', true);
+        $this->editor_bracket_colors = $config->get('editor.bracket_colors', false);
+        $this->editor_show_colors = $config->get('editor.show_colors', true);
     }
 
     /**
