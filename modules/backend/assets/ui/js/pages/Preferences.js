@@ -6,11 +6,11 @@
 
         listens() {
             return {
-                'backend.widget.initialised': 'onWidgetInitialised',
+                'backend.widget.initialized': 'onWidgetInitialized',
             };
         }
 
-        onWidgetInitialised(element, widget) {
+        onWidgetInitialized(element, widget) {
             if (element === document.getElementById('editorpreferencesCodeeditor')) {
                 this.widget = widget;
                 this.enablePreferences();
@@ -29,13 +29,23 @@
             };
 
             Object.entries(checkboxes).forEach(([key, value]) => {
-                document.getElementById(`Form-field-Preference-editor_${key}`).addEventListener('change', (event) => {
+                this.element(key).addEventListener('change', (event) => {
                     this.widget.setConfig(
                         value.replace(/^!/, ''),
-                        /^!/.test(value) ? !event.target.checked : event.target.checked
+                        /^!/.test(value) ? !event.target.checked : event.target.checked,
                     );
                 });
             });
+
+            this.element('font_size').addEventListener('change', (event) => {
+                console.log(event);
+                console.log(parseInt(event.target.value, 10));
+                this.widget.setConfig('fontSize', parseInt(event.target.value, 10));
+            });
+        }
+
+        element(key) {
+            return document.getElementById(`Form-field-Preference-editor_${key}`);
         }
     }
 
