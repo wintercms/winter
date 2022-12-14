@@ -18,7 +18,6 @@
       data-show-colors="<?= $model->editor_show_colors ? 'true' : 'false' ?>"
       data-language="css"
       data-margin="0"
-      data-vendor-path="<?= Url::asset('/modules/backend/formwidgets/codeeditor/assets/vendor/ace') ?>/"
 >
       <div class="editor-container"></div>
       <input type="hidden" name="editorpreferences_codeeditor" data-value-bag value="<?= e($this->makePartial('example_code')) ?>">
