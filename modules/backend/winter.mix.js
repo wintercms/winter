@@ -26,6 +26,12 @@ mix
         './formwidgets/iconpicker/assets/dist/iconpicker.js',
     )
 
+    // Compile pages
+    .js(
+        './assets/ui/js/pages/Preferences.js',
+        './assets/js/preferences/preferences.js',
+    )
+
     // Polyfill for all targeted browsers
     .polyfill({
         enabled: mix.inProduction(),
