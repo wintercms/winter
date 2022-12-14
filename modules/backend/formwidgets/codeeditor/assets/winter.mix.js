@@ -51,6 +51,7 @@ mix
                     'comment',
                     'contextmenu',
                     'cursorUndo',
+                    'documentSymbols',
                     'find',
                     'folding',
                     'gotoSymbol',

@@ -161,7 +161,7 @@ import { parse as parseXml } from 'fast-plist';
                 renderWhitespace: this.config.get('showInvisibles') ? 'all' : 'selection',
                 scrollBeyondLastLine: false,
                 tabSize: this.config.get('tabSize'),
-                theme: 'vs-dark',
+                theme: this.config.get('theme'),
                 value: this.valueBag.value,
             };
 
@@ -203,7 +203,7 @@ import { parse as parseXml } from 'fast-plist';
             this.config.set(key, value);
             if (this.editor) {
                 // Some keys need a full refresh to take effect
-                if (key === 'showPrintMargin') {
+                if (['showPrintMargin'].includes(key)) {
                     this.refresh();
                 } else {
                     this.editor.updateOptions(this.getConfigOptions());
@@ -239,6 +239,7 @@ import { parse as parseXml } from 'fast-plist';
 
                                 monaco.editor.defineTheme(newTheme, themeData);
                                 monaco.editor.setTheme(newTheme);
+                                this.setConfig('theme', newTheme);
                             }
                         },
                         error: () => {
@@ -250,6 +251,7 @@ import { parse as parseXml } from 'fast-plist';
             }
 
             monaco.editor.setTheme(newTheme);
+            this.setConfig('theme', newTheme);
         }
 
         convertTmTheme(content) {
@@ -267,10 +269,10 @@ import { parse as parseXml } from 'fast-plist';
                 };
 
                 if (setting.settings.foreground) {
-                    scope.foreground = this.parseColor(setting.settings.foreground);
+                    scope.foreground = this.parseColor(setting.settings.foreground).replace('#', '');
                 }
                 if (setting.settings.background) {
-                    scope.background = this.parseColor(setting.settings.background);
+                    scope.background = this.parseColor(setting.settings.background).replace('#', '');
                 }
                 if (setting.settings.fontStyle) {
                     scope.fontStyle = setting.settings.fontStyle;
@@ -278,8 +280,6 @@ import { parse as parseXml } from 'fast-plist';
 
                 scopes.push(scope);
             });
-
-            console.log(scopes);
 
             return {
                 base: (this.isDarkTheme(globalColors['editor.background'])) ? 'vs-dark' : 'vs',
