@@ -161,7 +161,7 @@ import { parse as parseXml } from 'fast-plist';
                 renderWhitespace: this.config.get('showInvisibles') ? 'all' : 'selection',
                 scrollBeyondLastLine: false,
                 tabSize: this.config.get('tabSize'),
-                theme: 'vs-dark',
+                theme: this.config.get('theme'),
                 value: this.valueBag.value,
             };
 
@@ -212,12 +212,32 @@ import { parse as parseXml } from 'fast-plist';
         }
 
         /**
+         * Sets the code editor value.
+         *
+         * @param {String} value
+         */
+        setValue(value) {
+            this.model.setValue(value);
+        }
+
+        /**
+         * Sets the language of the editor.
+         *
+         * @param {String} language
+         */
+        setLanguage(language) {
+            monaco.editor.setModelLanguage(this.model, language);
+            this.setConfig('language', language);
+        }
+
+        /**
          * Loads and applies a theme for the editor.
          *
          * @param {String} theme
          */
         loadTheme(theme) {
             const newTheme = theme || this.config.get('theme');
+            const newThemeVS = newTheme.replace(/[^a-z0-9]+/g, '');
 
             if (newTheme === 'vs-dark') {
                 return;
@@ -235,10 +255,10 @@ import { parse as parseXml } from 'fast-plist';
                             if (data.result) {
                                 const themeData = this.convertTmTheme(data.result);
                                 this.cachedThemes[newTheme] = themeData;
-                                console.log(themeData);
 
-                                monaco.editor.defineTheme(newTheme, themeData);
-                                monaco.editor.setTheme(newTheme);
+                                monaco.editor.defineTheme(newThemeVS, themeData);
+                                monaco.editor.setTheme(newThemeVS);
+                                this.setConfig('theme', newThemeVS);
                             }
                         },
                         error: () => {
@@ -249,13 +269,28 @@ import { parse as parseXml } from 'fast-plist';
                 return;
             }
 
-            monaco.editor.setTheme(newTheme);
+            monaco.editor.setTheme(newThemeVS);
+            this.setConfig('theme', newThemeVS);
         }
 
+        /**
+         * Converts a Textmate theme plist (XML) document into a theme config that Monaco supports.
+         *
+         * Based off the implementation at https://github.com/brijeshb42/monaco-themes.
+         *
+         * @param {String} content
+         * @returns {Object}
+         */
         convertTmTheme(content) {
             const themeData = parseXml(content);
             const globalColors = this.mapGlobalColors(themeData.settings.shift().settings);
-            const scopes = [];
+            const scopes = [
+                {
+                    token: '',
+                    foreground: globalColors['editor.foreground'].replace(/^#/, ''),
+                    background: globalColors['editor.background'].replace(/^#/, ''),
+                },
+            ];
 
             themeData.settings.forEach((setting) => {
                 if (!setting.scope) {
@@ -267,10 +302,10 @@ import { parse as parseXml } from 'fast-plist';
                 };
 
                 if (setting.settings.foreground) {
-                    scope.foreground = this.parseColor(setting.settings.foreground);
+                    scope.foreground = this.parseColor(setting.settings.foreground).replace(/^#/, '');
                 }
                 if (setting.settings.background) {
-                    scope.background = this.parseColor(setting.settings.background);
+                    scope.background = this.parseColor(setting.settings.background).replace(/^#/, '');
                 }
                 if (setting.settings.fontStyle) {
                     scope.fontStyle = setting.settings.fontStyle;
@@ -279,16 +314,20 @@ import { parse as parseXml } from 'fast-plist';
                 scopes.push(scope);
             });
 
-            console.log(scopes);
-
             return {
                 base: (this.isDarkTheme(globalColors['editor.background'])) ? 'vs-dark' : 'vs',
-                inherit: false,
-                rules: scopes,
+                inherit: true,
+                rules: this.populateMissingScopes(scopes),
                 colors: globalColors,
             };
         }
 
+        /**
+         * Maps global colors needed for the theme.
+         *
+         * @param {Object} settings
+         * @returns {Object}
+         */
         mapGlobalColors(settings) {
             const colors = {};
             const colorMap = [
@@ -353,14 +392,6 @@ import { parse as parseXml } from 'fast-plist';
                     mn: 'editor.rangeHighlightBackground',
                 },
                 {
-                    tm: 'caret',
-                    mn: 'editorCursor.foreground',
-                },
-                {
-                    tm: 'invisibles',
-                    mn: 'editorWhitespace.foreground',
-                },
-                {
                     tm: 'guide',
                     mn: 'editorIndentGuide.background',
                 },
@@ -383,6 +414,12 @@ import { parse as parseXml } from 'fast-plist';
             return colors;
         }
 
+        /**
+         * Parses a colour and returns it in a readable format.
+         *
+         * @param {String} color
+         * @returns {String}
+         */
         parseColor(color) {
             let currentColor = color;
 
@@ -432,6 +469,111 @@ import { parse as parseXml } from 'fast-plist';
         isDarkTheme(background) {
             const rgb = this.rgbColor(background);
             return (((0.21 * rgb[0] + 0.72 * rgb[1] + 0.07 * rgb[2]) / 255) < 0.5);
+        }
+
+        /**
+         * Goes through the scopes retrieved from the theme and adds any scopes that are needed for
+         * the Monarch tokenizer.
+         *
+         * It appears that the tokenizer in Monaco is different to the one in VScode, which means
+         * that tokens are interpreted a little differently. We'll try a whole lot of alternate
+         * scope names and find the best fit.
+         *
+         * @param {Array} scopes
+         * @returns {Array}
+         */
+        populateMissingScopes(scopes) {
+            const mapScopes = {
+                comment: ['comment.block', 'comment.line'],
+                number: ['constant.numeric', 'constant.number', 'string.number'],
+                regexp: ['string.regexp'],
+                tag: ['meta.tag', 'entity.name.tag'],
+                metatag: ['meta.tag', 'declaration.tag', 'constant.language', 'entity.name.tag'],
+                annotation: ['meta.embedded', 'meta.annotation', 'string.annotation', 'comment.block', 'comment.line'],
+                attribute: ['entity.other.attribute-name', 'support.type.property-name'],
+                identifier: ['entity.name.function', 'meta.tag', 'declaration.tag', 'constant.language', 'entity.name.tag', 'support.type'],
+                type: ['support.type', 'support.function'],
+                operator: ['support.constant', 'constant.numeric', 'constant.number', 'string.number', 'support'],
+                'attribute.name': ['support.type', 'support.constant', 'entity.other.attribute-name', 'support.type.property-name'],
+                'attribute.value.html': ['string.quoted.double.html', 'string.quoted.single.html', 'string.quoted.double', 'string.quoted.single', 'string'],
+                'attribute.value.unit': ['keyword', 'support', 'number', 'string.number', 'constant.numeric', 'constant.number'],
+                'attribute.value.number': ['number', 'string.number', 'constant.numeric', 'constant.number'],
+            };
+            const processedScopes = {};
+            Object.entries(mapScopes).forEach(([scope, map]) => {
+                processedScopes[scope] = {
+                    scope,
+                    map,
+                    currentSettings: null,
+                    currentRank: null,
+                };
+            });
+
+            scopes.forEach((scope) => {
+                if (!scope.token) {
+                    return;
+                }
+
+                const tokens = scope.token.split(/, +/);
+                tokens.forEach((token, index) => {
+                    const nested = token.split(/ +/);
+
+                    nested.forEach((nestToken, nestIndex) => {
+                        const matches = Object.values(processedScopes).filter((item) => item.map.filter((mapItem) => nestToken.startsWith(mapItem)).length > 0);
+
+                        if (!matches.length) {
+                            return;
+                        }
+
+                        // Determine the rank of this scope
+                        matches.forEach((match) => {
+                            const rank = 10 - index - (nestIndex * 2) - (!match.map.includes(nestToken) ? 5 : (match.map.indexOf(nestToken)));
+                            if (match.currentRank !== null && match.currentRank >= rank) {
+                                return;
+                            }
+
+                            processedScopes[match.scope].currentSettings = {};
+                            processedScopes[match.scope].currentRank = rank;
+
+                            if (scope.foreground) {
+                                processedScopes[match.scope].currentSettings.foreground = scope.foreground;
+                            }
+                            if (scope.background) {
+                                processedScopes[match.scope].currentSettings.background = scope.background;
+                            }
+                            if (scope.fontStyle) {
+                                processedScopes[match.scope].currentSettings.fontStyle = scope.fontStyle;
+                            }
+                        });
+                    });
+                });
+            });
+
+            // Re-apply scopes only if needed
+            Object.values(processedScopes).forEach((scope) => {
+                if (!scope.currentSettings) {
+                    return;
+                }
+                if (scopes.some((item) => item.token === scope.scope)) {
+                    return;
+                }
+
+                const newScope = {
+                    token: scope.scope,
+                };
+                if (scope.currentSettings.foreground) {
+                    newScope.foreground = scope.currentSettings.foreground;
+                }
+                if (scope.currentSettings.background) {
+                    newScope.background = scope.currentSettings.background;
+                }
+                if (scope.currentSettings.fontStyle) {
+                    newScope.fontStyle = scope.currentSettings.fontStyle;
+                }
+                scopes.push(newScope);
+            });
+
+            return scopes;
         }
     }
 

@@ -69,6 +69,21 @@ import { delegate } from 'jquery-events-to-dom-events';
                         this.widget.setConfig('wordWrap', parseInt(value, 10));
                 }
             });
+
+            document.querySelectorAll('[data-switch-lang]').forEach((element) => {
+                element.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const language = element.dataset.switchLang;
+                    const template = document.querySelector(`[data-lang-snippet="${language}"]`);
+
+                    if (!template) {
+                        return;
+                    }
+
+                    this.widget.setValue(template.textContent.trim());
+                    this.widget.setLanguage(language);
+                });
+            });
         }
 
         element(key) {
