@@ -1,6 +1,6 @@
 <div
     id="editorpreferencesCodeeditor"
-    class="field-codeeditor size-large"
+    class="field-codeeditor size-giant"
     data-control="codeeditor"
     data-alias="null"
     data-font-size="<?= $model->editor_font_size ?>"
