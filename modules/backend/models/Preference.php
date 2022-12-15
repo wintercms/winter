@@ -278,15 +278,14 @@ class Preference extends Model
      */
     public function getEditorThemeOptions()
     {
-        $themeDir = new DirectoryIterator("modules/backend/formwidgets/codeeditor/assets/vendor/ace/");
+        $themeDir = new DirectoryIterator('modules/backend/formwidgets/codeeditor/assets/themes/');
         $themes = [];
 
         // Iterate through the themes
         foreach ($themeDir as $node) {
             // If this file is a theme (starting by "theme-")
-            if (!$node->isDir() && substr($node->getFileName(), 0, 6) == 'theme-') {
-                // Remove the theme- prefix and the .js suffix, create an user friendly and capitalized name
-                $themeId = substr($node->getFileName(), 6, -3);
+            if ($node->isFile() && $node->getExtension() === 'tmTheme') {
+                $themeId = $node->getBasename('.tmTheme');
                 $themeName = ucwords(str_replace("_", " ", $themeId));
 
                 // Add the values to the themes array
