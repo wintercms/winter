@@ -203,7 +203,7 @@ import { parse as parseXml } from 'fast-plist';
             this.config.set(key, value);
             if (this.editor) {
                 // Some keys need a full refresh to take effect
-                if (key === 'showPrintMargin') {
+                if (['showPrintMargin'].includes(key)) {
                     this.refresh();
                 } else {
                     this.editor.updateOptions(this.getConfigOptions());
