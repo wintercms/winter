@@ -24,6 +24,7 @@ export default class WidgetHandler extends Snowboard.Singleton {
     listens() {
         return {
             ready: 'onReady',
+            render: 'onReady',
             ajaxUpdate: 'onAjaxUpdate',
         };
     }
@@ -90,7 +91,7 @@ export default class WidgetHandler extends Snowboard.Singleton {
      */
     initializeWidgets(element) {
         this.registeredWidgets.forEach((widget) => {
-            const instances = element.querySelectorAll(`[data-control="${widget.control}"]`);
+            const instances = element.querySelectorAll(`[data-control="${widget.control}"]:not([data-widget-initialized])`);
 
             if (instances.length) {
                 instances.forEach((instance) => {

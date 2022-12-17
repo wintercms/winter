@@ -316,7 +316,7 @@ import { parse as parseXml } from 'fast-plist';
 
             return {
                 base: (this.isDarkTheme(globalColors['editor.background'])) ? 'vs-dark' : 'vs',
-                inherit: true,
+                inherit: false,
                 rules: this.populateMissingScopes(scopes),
                 colors: globalColors,
             };
@@ -496,7 +496,7 @@ import { parse as parseXml } from 'fast-plist';
                 operator: ['support.constant', 'constant.numeric', 'constant.number', 'string.number', 'support'],
                 'attribute.name': ['support.type', 'support.constant', 'entity.other.attribute-name', 'support.type.property-name'],
                 'attribute.value.html': ['string.quoted.double.html', 'string.quoted.single.html', 'string.quoted.double', 'string.quoted.single', 'string'],
-                'attribute.value.unit': ['keyword', 'support', 'number', 'string.number', 'constant.numeric', 'constant.number'],
+                'attribute.value.unit': ['keyword.unit', 'support.unit', 'keyword', 'support', 'number', 'string.number', 'constant.numeric', 'constant.number'],
                 'attribute.value.number': ['number', 'string.number', 'constant.numeric', 'constant.number'],
             };
             const processedScopes = {};
@@ -573,7 +573,26 @@ import { parse as parseXml } from 'fast-plist';
                 scopes.push(newScope);
             });
 
-            return scopes;
+            // Split scopes up
+            const splitScopes = [];
+            scopes.forEach((scope) => {
+                if (scope.token.indexOf(',') === -1) {
+                    splitScopes.push(scope);
+                    return;
+                }
+
+                const tokens = scope.token.split(/, +/);
+                tokens.forEach((token) => {
+                    splitScopes.push({
+                        token,
+                        foreground: scope.foreground,
+                        background: scope.background,
+                        fontStyle: scope.fontStyle,
+                    });
+                });
+            });
+
+            return splitScopes;
         }
     }
 
