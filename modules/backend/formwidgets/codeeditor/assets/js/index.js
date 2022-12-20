@@ -20,6 +20,7 @@ import { parse as parseXml } from 'fast-plist';
             this.element = element;
             this.elementObserver = null;
             this.config = this.snowboard.dataConfig(this, element);
+            this.events = this.snowboard['backend.ui.eventHandler'](this, 'backend.formwidget.codeeditor');
             this.alias = this.config.get('alias');
             this.model = null;
             this.valueListener = null;
@@ -86,6 +87,7 @@ import { parse as parseXml } from 'fast-plist';
                 this.editor.dispose();
                 this.editor = null;
             }
+            this.events.fire('dispose', this, this.editor);
         }
 
         /**
@@ -124,6 +126,8 @@ import { parse as parseXml } from 'fast-plist';
 
             this.attachValueListener();
             this.loadTheme();
+
+            this.events.fire('create', this, this.editor);
         }
 
         /**

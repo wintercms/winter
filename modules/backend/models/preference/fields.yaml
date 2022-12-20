@@ -19,11 +19,17 @@ tabs:
             type: dropdown
             span: left
 
-        editor_preview:
-            type: partial
+        _editor_preview:
+            type: codeeditor
             label: backend::lang.editor.preview
             tab: backend::lang.backend_preferences.code_editor
-            path: field_editor_preview
+            size: giant
+
+        _editor_preview_lang:
+            type: partial
+            label: false
+            tab: backend::lang.backend_preferences.code_editor
+            path: field_editor_preview_lang
 
         editor_theme:
             label: backend::lang.editor.theme
