@@ -60,11 +60,11 @@ export default class EventHandler extends Snowboard.PluginBase {
      * @param {Function} callback
      */
     once(event, callback) {
-        this.events.push({
+        const length = this.events.push({
             event,
             callback: (...parameters) => {
                 callback(...parameters);
-                this.off(event, callback);
+                this.events.splice(length - 1, 1);
             },
         });
     }
