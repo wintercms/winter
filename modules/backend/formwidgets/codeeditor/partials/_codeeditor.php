@@ -21,7 +21,7 @@
         data-use-soft-tabs="<?= $useSoftTabs ? 'true' : 'false' ?>"
         data-show-gutter="<?= $showGutter ? 'true' : 'false' ?>"
         data-read-only="<?= $readOnly ? 'true' : 'false' ?>"
-        data-show-minimap="<?= $readOnly ? 'true' : 'false' ?>"
+        data-show-minimap="<?= $showMinimap ? 'true' : 'false' ?>"
         data-bracket-colors="<?= $bracketColors ? 'true': 'false' ?>"
         data-show-colors="<?= $showColors ? 'true' : 'false' ?>"
         data-language="<?= $language ?>"
@@ -29,45 +29,18 @@
         <?= $this->formField->getAttributes() ?>
     >
         <div class="editor-container"></div>
-        <div class="editor-toolbar">
-            <ul>
-                <li class="searchbox-enable">
-                    <a href="javascript:;">
-                        <i class="icon-search"></i>
-                        <abbr title="ctrl+f"><?= e(trans('cms::lang.editor.open_searchbox')) ?></abbr>
-                    </a>
-                </li>
-                <li class="searchbox-disable">
-                    <a href="javascript:;">
-                        <i class="icon-search"></i>
-                        <abbr title="ctrl+f or esc"><?= e(trans('cms::lang.editor.close_searchbox')) ?></abbr>
-                    </a>
-                </li>
-                <li class="replacebox-enable">
-                    <a href="javascript:;">
-                        <i class="icon-random"></i>
-                        <abbr title="ctrl+h"><?= e(trans('cms::lang.editor.open_replacebox')) ?></abbr>
-                    </a>
-                </li>
-                <li class="replacebox-disable">
-                    <a href="javascript:;">
-                        <i class="icon-random"></i>
-                        <abbr title="ctrl+h or esc"><?= e(trans('cms::lang.editor.close_replacebox')) ?></abbr>
-                    </a>
-                </li>
-                <li class="fullscreen-enable">
-                    <a href="javascript:;">
-                        <i class="icon-desktop"></i>
-                        <abbr title="ctrl+shift+f"><?= e(trans('cms::lang.editor.enter_fullscreen')) ?></abbr>
-                    </a>
-                </li>
-                <li class="fullscreen-disable">
-                    <a href="javascript:;">
-                        <i class="icon-desktop"></i>
-                        <abbr title="ctrl+shift+f or esc"><?= e(trans('cms::lang.editor.exit_fullscreen')) ?></abbr>
-                    </a>
-                </li>
-            </ul>
+        <div class="editor-toolbar" data-status-bar>
+            <div class="language">
+                <?= strtoupper($language) ?>
+            </div>
+            <div class="position">
+
+            </div>
+            <div class="actions">
+                <a href="#" class="action" data-full-screen data-toggle="tooltip" title="<?= e(trans('backend::lang.editor.toggle_fullscreen')) ?>">
+                    <i class="icon-maximize"></i>
+                </a>
+            </div>
         </div>
         <input name="<?= $name ?>" data-value-bag id="<?= $this->getId('value') ?>" type="hidden" value="<?= e($value) ?>">
     </div>

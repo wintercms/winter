@@ -24,9 +24,26 @@ import { parse as parseXml } from 'fast-plist';
             this.alias = this.config.get('alias');
             this.model = null;
             this.valueListener = null;
+            this.positionListener = null;
+            this.resizeListener = false;
+            this.visibilityListener = false;
             this.editor = null;
             this.valueBag = this.element.querySelector('[data-value-bag]');
+            this.statusBar = this.element.querySelector('[data-status-bar]');
+            this.language = this.statusBar.querySelector('.language');
+            this.position = this.statusBar.querySelector('.position');
+            this.fullscreen = false;
             this.cachedThemes = {};
+            this.resizeThrottle = null;
+            this.callbacks = {
+                fullScreenChange: () => this.onFullScreenChange(),
+                resize: () => {
+                    // Throttled event
+                    clearTimeout(this.resizeThrottle);
+                    this.resizeThrottle = setTimeout(() => this.onResize(), 80);
+                },
+                visibilityChange: () => this.onVisibilityChange(),
+            };
 
             this.observeElement();
         }
@@ -70,6 +87,10 @@ import { parse as parseXml } from 'fast-plist';
             if (this.elementObserver) {
                 this.elementObserver.disconnect();
             }
+            if (this.visibilityListener) {
+                document.removeEventListener('visibilitychange', this.callbacks.visibilityChange);
+                this.visibilityListener = false;
+            }
         }
 
         /**
@@ -82,6 +103,14 @@ import { parse as parseXml } from 'fast-plist';
             if (this.valueListener) {
                 this.valueListener.dispose();
                 this.valueListener = null;
+            }
+            if (this.positionListener) {
+                this.positionListener.dispose();
+                this.positionListener = null;
+            }
+            if (this.resizeListener) {
+                window.removeEventListener('resize', this.callbacks.resize);
+                this.resizeListener = false;
             }
             if (this.editor) {
                 this.editor.dispose();
@@ -124,8 +153,10 @@ import { parse as parseXml } from 'fast-plist';
 
             this.editor = monaco.editor.create(this.element.querySelector('.editor-container'), this.getConfigOptions());
 
-            this.attachValueListener();
+            this.attachListeners();
             this.loadTheme();
+            this.updateLanguage();
+            this.enableStatusBarActions();
 
             this.events.fire('create', this, this.editor);
         }
@@ -186,15 +217,32 @@ import { parse as parseXml } from 'fast-plist';
         }
 
         /**
-         * Attaches a value listener to the editor.
+         * Attaches listeners to the editor.
          *
-         * This will update the value of the field when the editor has a change made to it.
+         * The listeners in this widget include:
+         *  - A value listener for when the editor value changes
+         *  - A position listener when the editor caret position changes
+         *  - A window resize listener
+         *  - A visibility change listener
          */
-        attachValueListener() {
+        attachListeners() {
             this.model = this.editor.getModel();
+
             this.valueListener = this.model.onDidChangeContent(() => {
                 this.valueBag.value = this.model.getValue();
             });
+
+            this.positionListener = this.editor.onDidChangeCursorPosition((event) => {
+                this.updatePosition(event.position);
+            });
+
+            window.addEventListener('resize', this.callbacks.resize);
+            this.resizeListener = true;
+
+            if (!this.visibilityListener) {
+                document.addEventListener('visibilitychange', this.callbacks.visibilityChange);
+                this.visibilityListener = true;
+            }
         }
 
         /**
@@ -232,6 +280,15 @@ import { parse as parseXml } from 'fast-plist';
         setLanguage(language) {
             monaco.editor.setModelLanguage(this.model, language);
             this.setConfig('language', language);
+            this.updateLanguage();
+        }
+
+        /**
+         * Updates language status.
+         * @param {String} language
+         */
+        updateLanguage() {
+            this.language.innerText = this.getConfigOptions().language.toUpperCase();
         }
 
         /**
@@ -263,6 +320,7 @@ import { parse as parseXml } from 'fast-plist';
                                 monaco.editor.defineTheme(newThemeVS, themeData);
                                 monaco.editor.setTheme(newThemeVS);
                                 this.setConfig('theme', newThemeVS);
+                                this.updateStatusBarColor(themeData);
                             }
                         },
                         error: () => {
@@ -275,6 +333,7 @@ import { parse as parseXml } from 'fast-plist';
 
             monaco.editor.setTheme(newThemeVS);
             this.setConfig('theme', newThemeVS);
+            this.updateStatusBarColor(this.cachedThemes[newTheme]);
         }
 
         /**
@@ -597,6 +656,83 @@ import { parse as parseXml } from 'fast-plist';
             });
 
             return splitScopes;
+        }
+
+        /**
+         * Updates the position indicator in the status bar.
+         *
+         * @param {Object} position
+         */
+        updatePosition(position) {
+            this.position.innerText = `Line ${position.lineNumber}, Column ${position.column}`;
+        }
+
+        /**
+         * Updates the styling of the status bar based on the theme.
+         *
+         * @param {Object} colors
+         */
+        updateStatusBarColor(colors) {
+            const foreground = colors.colors['editor.foreground'];
+            const background = colors.colors['editor.background'];
+            if (this.isDarkTheme(background)) {
+                this.statusBar.classList.add('is-dark');
+            } else {
+                this.statusBar.classList.remove('is-dark');
+            }
+            this.statusBar.style.color = foreground;
+            this.statusBar.style.backgroundColor = background;
+        }
+
+        /**
+         * Enables status bar action functionality.
+         */
+        enableStatusBarActions() {
+            const fullscreen = this.statusBar.querySelector('[data-full-screen]');
+            fullscreen.addEventListener('click', () => {
+                if (!this.fullscreen) {
+                    this.element.requestFullscreen({
+                        navigationUI: 'hide',
+                    }).then(() => {
+                        this.fullscreen = true;
+                        fullscreen.classList.add('active');
+                        this.element.addEventListener('fullscreenchange', this.callbacks.fullScreenChange);
+                        this.refresh();
+                    });
+                } else {
+                    document.exitFullscreen();
+                }
+            });
+        }
+
+        /**
+         * Tracks if the element exists fullscreen mode and resets the fullscreen state.
+         */
+        onFullScreenChange() {
+            if (!document.fullscreenElement) {
+                this.fullscreen = false;
+                this.statusBar.querySelector('[data-full-screen]').classList.remove('active');
+                this.element.removeEventListener('fullscreenchange', this.callbacks.fullScreenChange);
+                this.refresh();
+            }
+        }
+
+        /**
+         * Tracks a resize event from the browser window.
+         */
+        onResize() {
+            this.refresh();
+        }
+
+        /**
+         * Tracks a visibility change event from the browser window (ie. the user changes tab or minimizes the window)
+         */
+        onVisibilityChange() {
+            if (document.hidden) {
+                this.dispose();
+            } else {
+                this.createEditor();
+            }
         }
     }
 

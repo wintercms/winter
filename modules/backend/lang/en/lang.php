@@ -438,6 +438,7 @@ return [
         ],
         'paragraph_formats' => 'Paragraph Formats',
         'paragraph_formats_comment' => 'The options that will appear in the Paragraph Format dropdown.',
+        'toggle_fullscreen' => 'Toggle fullscreen',
     ],
     'tooltips' => [
         'preview_website' => 'Preview the website',

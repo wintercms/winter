@@ -1,6 +1,8 @@
 @import "../../../../assets/less/core/boot.less";
 
 .field-codeeditor {
+    display: flex;
+    flex-direction: column;
     width: 100%;
     position: relative;
     border: 2px solid @color-form-field-border;
@@ -19,52 +21,63 @@
     &.size-giant { height: @size-giant; }
 
     .editor-container {
-        width: 100%;
+        flex-grow: 1;
+        flex-shrink: 1;
         height: 100%;
+        width: 100%;
     }
 
     .editor-toolbar {
-        position: absolute;
-        padding: 0 5px;
-        bottom: 10px;
-        right: 25px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 20px;
+        height: 24px;
+        font-size: 11px;
+        position: relative;
+        flex-grow: 0;
+        flex-shrink: 0;
+        padding: 2px 8px;
         z-index: @zindex-form;
         background: rgba(0,0,0,.8);
-        border-radius: 5px;
 
-        > ul, ul > li { list-style-type: none; padding: 0; margin: 0; }
-        > ul > li {
-            float: left;
-
-            .tooltip.left {
-                margin-right: 25px;
-            }
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 9;
+            background: rgba(0, 0, 0, 0.08);
         }
-        > ul > li > a {
-            display: block;
-            height: 25px;
-            width: 25px;
-            color: #666;
-            font-size: 20px;
-            text-align: center;
-            text-decoration: none;
-            text-shadow: 0 0 5px #000;
 
-            > abbr {
-                position: absolute;
-                .text-hide();
-            }
-            > i {
-                .opacity(1);
-                display: block;
-                &:before {
-                    font-size: 15px;
+        &.is-dark::before {
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        > div {
+            z-index: 11;
+        }
+
+        .position {
+            flex-grow: 1;
+        }
+
+        .actions {
+            .action {
+                margin: -2px 0;
+                padding: 0 5px;
+                font-size: 1.1rem;
+                color: inherit;
+                opacity: 0.5;
+
+                &:hover {
+                    opacity: 0.8;
                 }
-            }
-            &:hover, &:focus {
-                > i {
-                    .opacity(1);
-                    color: #fff;
+
+                &.active {
+                    opacity: 1;
                 }
             }
         }
