@@ -15,6 +15,7 @@
         //
 
         this.init()
+        this.widgets = Snowboard['backend.ui.widgetHandler']()
     }
 
     CmsPage.prototype = Object.create(BaseProto)
@@ -271,17 +272,17 @@
         }
 
         // If no PHP tag is available, add it and hide it from the editor. Otherwise, hide the PHP tag.
-        let matches = widget.model.findMatches('<\\?php\s*', false, true, false, null, true, 1);
-        if (!matches.length) {
+        let match = widget.find(/<\?php\s*/, false);
+        if (!match) {
             widget.setValue('<?php\n' + widget.getValue());
-            matches = widget.model.findMatches('<\\?php\s*', false, true, false, null, true, 1);
+            match = widget.find(/<\?php\s*/, false);
 
-            if (!matches.length) {
+            if (!match) {
                 return;
             }
         }
 
-        widget.setHiddenRange(matches[0].range);
+        widget.setHiddenRange(match.range);
     }
 
     CmsPage.prototype.onAfterAllTabsClosed = function(ev) {
@@ -459,11 +460,9 @@
         var editor = $('[data-control=codeeditor]', pane)
         if (editor.length) {
             var alias = $('input[name="component_aliases[]"]', component).val().replace(/^@/, ''),
-                codeEditor = editor.codeEditor('getEditorObject')
+                codeEditor = this.widgets.getWidget(editor.get(0))
 
-            codeEditor.replace('', {
-                needle: "{% component '" + alias + "' %}"
-            })
+            codeEditor.replace(new RegExp('\\{% +component +\'' + alias + '\'.*?%\\}'), '');
         }
 
         component.remove()
