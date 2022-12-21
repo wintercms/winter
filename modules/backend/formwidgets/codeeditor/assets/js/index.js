@@ -217,6 +217,24 @@ import { parse as parseXml } from 'fast-plist';
         }
 
         /**
+         * Returns the editor instance.
+         *
+         * @returns {monaco.editor.IStandaloneCodeEditor}
+         */
+        getEditor() {
+            return this.editor;
+        }
+
+        /**
+         * Returns the editor model.
+         *
+         * @returns {monaco.editor.IModel}
+         */
+        getModel() {
+            return this.model;
+        }
+
+        /**
          * Attaches listeners to the editor.
          *
          * The listeners in this widget include:
@@ -277,6 +295,70 @@ import { parse as parseXml } from 'fast-plist';
          */
         setValue(value) {
             this.model.setValue(value);
+        }
+
+        /**
+         * Inserts a value into the editor at the current position.
+         *
+         * @param {String} value
+         */
+        insert(value) {
+            this.model.pushEditOperations(this.editor.getSelections(), [
+                {
+                    forceMoveMarkers: true,
+                    range: this.editor.getSelection(),
+                    text: value,
+                },
+            ]);
+        }
+
+        /**
+         * Finds a single match in the editor content.
+         *
+         * @param {String|RegExp} search
+         * @param {Boolean} matchCase
+         * @returns {monaco.editor.FindMatch|null}
+         */
+        find(search, matchCase) {
+            return this.findAll(search, matchCase)[0] || null;
+        }
+
+        /**
+         * Finds all matches in the editor content.
+         *
+         * @param {String|RegExp} search
+         * @param {Boolean} matchCase
+         * @returns {monaco.editor.FindMatch[]}
+         */
+        findAll(search, matchCase) {
+            const searchString = (search instanceof RegExp) ? search.source : search;
+            const matches = this.model.findMatches(searchString, true, (search instanceof RegExp), matchCase || false, null, true, 1);
+
+            return matches;
+        }
+
+        /**
+         * Finds and replaces a single match in the editor content.
+         *
+         * @param {String|RegExp} search
+         * @param {String} replace
+         * @param {Boolean} matchCase
+         * @returns {monaco.editor.FindMatch|null}
+         */
+        replace(search, replace, matchCase) {
+            const found = this.find(search, matchCase);
+
+            if (!found) {
+                return;
+            }
+
+            this.model.pushEditOperations(this.editor.getSelections(), [
+                {
+                    forceMoveMarkers: false,
+                    range: new monaco.Range(found.range.startLineNumber, found.range.startColumn, found.range.endLineNumber, found.range.endColumn),
+                    text: replace,
+                },
+            ]);
         }
 
         /**
