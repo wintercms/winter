@@ -58,6 +58,9 @@
         $document.on('hiding.oc.inspector', '[data-inspectable]', this.proxy(this.onInspectorHiding))
         $document.on('click', '#cms-master-tabs > div.tab-content > .tab-pane.active .control-componentlist a.remove', this.proxy(this.onComponentRemove))
         $document.on('click', '#cms-component-list [data-component]', this.proxy(this.onComponentClick))
+
+        // Watch for PHP editors
+        window.Snowboard.on('backend.formwidget.codeeditor.create', this.proxy(this.onCodeEditorCreate));
     }
 
     // EVENT HANDLERS
@@ -259,7 +262,26 @@
             self.updateModifiedCounter()
         })
 
-        this.addTokenExpanderToEditor(data.pane, $form)
+        // this.addTokenExpanderToEditor(data.pane, $form)
+    }
+
+    CmsPage.prototype.onCodeEditorCreate = function (widget, editor) {
+        if (widget.config.get('language') !== 'php') {
+            return;
+        }
+
+        // If no PHP tag is available, add it and hide it from the editor. Otherwise, hide the PHP tag.
+        let matches = widget.model.findMatches('<\\?php\s*', false, true, false, null, true, 1);
+        if (!matches.length) {
+            widget.setValue('<?php\n' + widget.getValue());
+            matches = widget.model.findMatches('<\\?php\s*', false, true, false, null, true, 1);
+
+            if (!matches.length) {
+                return;
+            }
+        }
+
+        widget.setHiddenRange(matches[0].range);
     }
 
     CmsPage.prototype.onAfterAllTabsClosed = function(ev) {
@@ -544,7 +566,7 @@
             extension = 'txt',
             mode = 'plain_text',
             modes = $.wn.codeEditorExtensionModes,
-            editor = $('[data-control=codeeditor]', pane)
+            editor = pane.querySelector('[data-control="codeeditor"]').getWidget()
 
         if (parts.length >= 2)
             extension = parts.pop().toLowerCase()

@@ -264,6 +264,13 @@ import { parse as parseXml } from 'fast-plist';
         }
 
         /**
+         * Gets the code editor value.
+         */
+        getValue() {
+            return this.model.getValue();
+        }
+
+        /**
          * Sets the code editor value.
          *
          * @param {String} value
@@ -733,6 +740,17 @@ import { parse as parseXml } from 'fast-plist';
             } else {
                 this.createEditor();
             }
+        }
+
+        /**
+         * Allows parts of the code to be hidden from editing.
+         *
+         * @param {Array|String} range
+         */
+        setHiddenRange(range) {
+            const ranges = (!Array.isArray(range)) ? [range] : range;
+            const processed = ranges.map((item) => new monaco.Range(item.startLineNumber, item.startColumn, item.endLineNumber, item.endColumn));
+            this.editor.setHiddenAreas(processed);
         }
     }
 
