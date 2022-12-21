@@ -14,6 +14,7 @@ export default class WidgetHandler extends Snowboard.Singleton {
      */
     construct() {
         this.registeredWidgets = [];
+        this.elements = [];
     }
 
     /**
@@ -101,10 +102,12 @@ export default class WidgetHandler extends Snowboard.Singleton {
                     }
 
                     const widgetInstance = this.snowboard[widget.widget](instance);
-                    instance.dataset.widget = widgetInstance;
+                    this.elements.push({
+                        element: instance,
+                        instance: widgetInstance,
+                    });
                     instance.dataset.widgetInitialized = true;
                     this.snowboard.globalEvent('backend.widget.initialized', instance, widgetInstance);
-                    instance.getWidget = () => instance.dataset.widget;
 
                     if (typeof widget.callback === 'function') {
                         widget.callback(widgetInstance, instance);
@@ -112,5 +115,21 @@ export default class WidgetHandler extends Snowboard.Singleton {
                 });
             }
         });
+    }
+
+    /**
+     * Returns a widget that is attached to the given element, if any.
+     *
+     * @param {HTMLElement} element
+     * @returns {Snowboard.PluginBase|null}
+     */
+    getWidget(element) {
+        const found = this.elements.find((widget) => widget.element === element);
+
+        if (found) {
+            return found.instance;
+        }
+
+        return null;
     }
 }
