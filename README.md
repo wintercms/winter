@@ -89,8 +89,7 @@ Winter CMS development is financially supported by the generosity of the followi
 
 ### Organizations
 
-[![Spatial Media logo](https://cdn.ca.spatialmedia.io/media/images/sm-logo-dark-full.svg)](https://spatialmedia.io)
-Spatial Media employs two of the core contributors (Luke Towers & Jack Wilkinson) and contributes to the ongoing development of Winter.
+Spatial Media employs one of the core maintainers (Jack Wilkinson) who contributes to the ongoing development of Winter.
 
 [![Froala logo](https://froala.com/wp-content/uploads/2019/10/froala.svg)](https://froala.com/wysiwyg-editor/)
 
