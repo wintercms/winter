@@ -54,6 +54,16 @@ class PluginBase extends ServiceProviderBase
     public $disabled = false;
 
     /**
+     * Create a new Plugin (Winter service provider) instance.
+     *
+     * @return void
+     */
+    public function __construct(\Winter\Storm\Foundation\Application $app)
+    {
+        $this->app = $app;
+    }
+
+    /**
      * Returns information about this plugin, including plugin name and developer name.
      *
      * @return array

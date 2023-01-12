@@ -24,6 +24,10 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
         // Set random encryption key
         $app['config']->set('app.key', bin2hex(random_bytes(16)));
 
+        $app->bind(\Winter\Storm\Foundation\Application::class, function () {
+            return $this->createApplication();
+        });
+
         return $app;
     }
 

@@ -1,0 +1,16 @@
+<?php
+
+namespace {{ plugin_namespace }}\Tests\{{ test_namespace }};
+
+use System\Tests\Bootstrap\TestCase;
+
+class {{ studly_name }} extends TestCase
+{
+    /**
+     * A basic unit test example.
+     */
+    public function test_example(): void
+    {
+        $this->assertTrue(true);
+    }
+}

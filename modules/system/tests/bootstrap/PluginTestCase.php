@@ -65,6 +65,10 @@ abstract class PluginTestCase extends TestCase
         // Modify the plugin path away from the test context
         $app->setPluginsPath(realpath(base_path() . Config::get('cms.pluginsPath')));
 
+        $app->bind(\Winter\Storm\Foundation\Application::class, function () {
+            return $this->createApplication();
+        });
+
         return $app;
     }
 

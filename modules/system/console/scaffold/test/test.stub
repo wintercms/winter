@@ -1,0 +1,18 @@
+<?php
+
+namespace {{ plugin_namespace }}\Tests\{{ test_namespace }};
+
+use System\Tests\Bootstrap\PluginTestCase;
+
+class {{ studly_name }} extends PluginTestCase
+{
+    /**
+     * A basic feature test example.
+     */
+    public function test_example(): void
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+    }
+}
