@@ -236,6 +236,7 @@ class ServiceProvider extends ModuleServiceProvider
             $manager->registerFormWidget('Backend\FormWidgets\NestedForm', 'nestedform');
             $manager->registerFormWidget('Backend\FormWidgets\Sensitive', 'sensitive');
             $manager->registerFormWidget('Backend\FormWidgets\IconPicker', 'iconpicker');
+            $manager->registerFormWidget('Backend\FormWidgets\VisualEditor', 'visualeditor');
         });
     }
 

@@ -1,0 +1,62 @@
+@import "../../../../assets/less/core/boot.less";
+
+.field-visualeditor {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border: 1px solid @input-border;
+    background: @input-bg;
+    outline: none;
+    padding: @padding-base-vertical @padding-base-horizontal;
+    border-radius: @border-radius-base;
+
+    &.size-tiny   { height: @size-tiny; }
+    &.size-small  { height: @size-small; }
+    &.size-large  { height: @size-large; }
+    &.size-huge   { height: @size-huge; }
+    &.size-giant  { height: @size-giant; }
+
+    > textarea {
+        display: none;
+    }
+
+    > .visualeditor-toolbar {
+        flex-grow: 0;
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: row;
+        gap: 6px;
+        height: 38px;
+        padding-bottom: 5px;
+        border-bottom: 1px solid @color-border-light;
+
+        button {
+            appearance: none;
+            -moz-appearance: none;
+            background: none;
+            border: none;
+            padding: 6px 10px;
+            color: @input-color;
+            opacity: 0.4;
+            border-radius: @border-radius-base;
+
+            &:hover {
+                background: #f4f4f4;
+                opacity: 0.6;
+            }
+
+            &.active {
+                background: #f4f4f4;
+                opacity: 1;
+            }
+        }
+    }
+
+    > .ProseMirror {
+        flex-grow: 1;
+        outline: none;
+        color: @input-color;
+        overflow-y: auto;
+        margin-top: 10px;
+    }
+}

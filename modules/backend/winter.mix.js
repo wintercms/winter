@@ -25,6 +25,14 @@ mix
         './formwidgets/iconpicker/assets/src/iconpicker.js',
         './formwidgets/iconpicker/assets/dist/iconpicker.js',
     )
+    .js(
+        './formwidgets/visualeditor/assets/js/src/VisualEditor.js',
+        './formwidgets/visualeditor/assets/js/dist/visualeditor.js',
+    )
+    .less(
+        './formwidgets/visualeditor/assets/less/visualeditor.less',
+        './formwidgets/visualeditor/assets/css/visualeditor.css',
+    )
 
     // Compile pages
     .js(
