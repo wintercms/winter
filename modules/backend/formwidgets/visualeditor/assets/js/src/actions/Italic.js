@@ -5,12 +5,20 @@ export default class Italic extends EditorAction {
         return 'italic';
     }
 
+    tooltip() {
+        return 'Italic';
+    }
+
+    shortcutKey() {
+        return 'I';
+    }
+
     isActive() {
         return this.editor.isActive('italic');
     }
 
     isEnabled() {
-        return true;
+        return this.editor.can().toggleItalic();
     }
 
     action() {

@@ -10,11 +10,11 @@
     padding: @padding-base-vertical @padding-base-horizontal;
     border-radius: @border-radius-base;
 
-    &.size-tiny   { height: @size-tiny; }
-    &.size-small  { height: @size-small; }
-    &.size-large  { height: @size-large; }
-    &.size-huge   { height: @size-huge; }
-    &.size-giant  { height: @size-giant; }
+    &.size-tiny   { height: (@size-tiny + 42px); }
+    &.size-small  { height: (@size-small + 42px); }
+    &.size-large  { height: (@size-large + 42px); }
+    &.size-huge   { height: (@size-huge + 42px); }
+    &.size-giant  { height: (@size-giant + 42px); }
 
     > textarea {
         display: none;
@@ -25,10 +25,18 @@
         flex-shrink: 0;
         display: flex;
         flex-direction: row;
-        gap: 6px;
+        gap: 2px;
         height: 38px;
-        padding-bottom: 5px;
-        border-bottom: 1px solid @color-border-light;
+        padding-bottom: (@padding-base-vertical / 2);
+        border-bottom: 1px solid fadeout(@input-color, 90);
+        margin-top: ((@padding-base-vertical / 2) * -1);
+        opacity: 0.5;
+        transition: opacity 125ms ease;
+
+        &:hover,
+        &:focus-within {
+            opacity: 1;
+        }
 
         button {
             appearance: none;
@@ -37,17 +45,41 @@
             border: none;
             padding: 6px 10px;
             color: @input-color;
-            opacity: 0.4;
+            opacity: 0.6;
             border-radius: @border-radius-base;
 
             &:hover {
-                background: #f4f4f4;
-                opacity: 0.6;
+                background: fadeout(@input-color, 90);
+                opacity: 0.8;
             }
 
             &.active {
-                background: #f4f4f4;
+                background: fadeout(@input-color, 85);
                 opacity: 1;
+            }
+
+            &.dropdown::after {
+                content: '';
+                display: inline-block;
+                position: relative;
+                border: 4px solid transparent;
+                border-top-color: @input-color;
+                height: 50%;
+                top: 1px;
+                margin-left: 4px;
+            }
+
+            > .status {
+                display: inline-block;
+                position: relative;
+                margin-left: 4px;
+                top: -1px;
+                font-size: 9px;
+                padding: 2px;
+                border-radius: 2px;
+                width: 28px;
+                background: fadeout(@input-color, 90);
+                border: 1px solid fadeout(@input-color, 80);
             }
         }
     }
@@ -57,6 +89,5 @@
         outline: none;
         color: @input-color;
         overflow-y: auto;
-        margin-top: 10px;
     }
 }

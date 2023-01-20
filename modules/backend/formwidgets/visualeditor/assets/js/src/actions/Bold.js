@@ -5,12 +5,20 @@ export default class Bold extends EditorAction {
         return 'bold';
     }
 
+    tooltip() {
+        return 'Bold';
+    }
+
+    shortcutKey() {
+        return 'B';
+    }
+
     isActive() {
         return this.editor.isActive('bold');
     }
 
     isEnabled() {
-        return true;
+        return this.editor.can().toggleBold();
     }
 
     action() {
