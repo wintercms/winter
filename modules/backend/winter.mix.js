@@ -34,8 +34,8 @@ mix
         './assets/ui/js/build/backend.js',
     )
     .js(
-        './formwidgets/iconpicker/assets/src/IconPicker.js',
-        './formwidgets/iconpicker/assets/dist/iconpicker.js',
+        './formwidgets/iconpicker/assets/js/src/iconpicker.js',
+        './formwidgets/iconpicker/assets/js/dist/iconpicker.js',
     )
     .js(
         './formwidgets/colorpicker/assets/js/src/ColorPicker.js',

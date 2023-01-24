@@ -236,7 +236,6 @@ class ColorPicker extends FormWidgetBase
      */
     protected function loadAssets()
     {
-        $this->addCss('css/colorpicker.css', 'core');
         $this->addJs('js/dist/colorpicker.js', 'core');
     }
 

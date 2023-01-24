@@ -1,5 +1,6 @@
 import Pickr from '@simonwep/pickr';
 import '@simonwep/pickr/dist/themes/nano.min.css';
+import '../../less/colorpicker.less';
 
 ((Snowboard, $) => {
     class ColorPicker extends Snowboard.PluginBase {
