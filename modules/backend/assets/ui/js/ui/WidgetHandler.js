@@ -16,8 +16,9 @@ export default class WidgetHandler extends Snowboard.Singleton {
         this.registeredWidgets = [];
         this.elements = [];
         this.events = {
-            mutate: (mutations, observer) => this.onMutation(mutations, observer),
+            mutate: (mutations) => this.onMutation(mutations),
         };
+        this.observer = null;
     }
 
     /**
@@ -28,7 +29,7 @@ export default class WidgetHandler extends Snowboard.Singleton {
     listens() {
         return {
             ready: 'onReady',
-            render: 'onReady',
+            render: 'onRender',
             ajaxUpdate: 'onAjaxUpdate',
         };
     }
@@ -70,6 +71,24 @@ export default class WidgetHandler extends Snowboard.Singleton {
      */
     onReady() {
         this.initializeWidgets(document.body);
+
+        // Register a DOM observer and watch for any removed nodes
+        if (!this.observer) {
+            this.observer = new MutationObserver(this.events.mutate);
+            this.observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+            });
+        }
+    }
+
+    /**
+     * Render handler.
+     *
+     * Initializes widgets within the entire document.
+     */
+    onRender() {
+        this.initializeWidgets(document.body);
     }
 
     /**
@@ -104,17 +123,10 @@ export default class WidgetHandler extends Snowboard.Singleton {
                         return;
                     }
 
-                    // Create mutation observer on parent
-                    const observer = new MutationObserver(this.events.mutate);
-                    observer.observe(instance.parentElement, {
-                        childList: true,
-                    });
-
                     const widgetInstance = this.snowboard[widget.widget](instance);
                     this.elements.push({
                         element: instance,
                         instance: widgetInstance,
-                        observer,
                     });
                     instance.dataset.widgetInitialized = true;
                     this.snowboard.globalEvent('backend.widget.initialized', instance, widgetInstance);
@@ -145,11 +157,25 @@ export default class WidgetHandler extends Snowboard.Singleton {
 
     /**
      * Callback for mutation events.
+     *
+     * We're only tracking removed nodes, to ensure that those widgets are disposed of.
+     *
      * @param {MutationRecord[]} mutations
-     * @param {MutationObserver} observer
      */
-    onMutation(mutations, observer) {
-        console.log(mutations);
-        console.log(observer);
+    onMutation(mutations) {
+        const removedNodes = mutations.filter((mutation) => mutation.removedNodes.length).map((mutation) => Array.from(mutation.removedNodes)).flat();
+        if (!removedNodes.length) {
+            return;
+        }
+
+        removedNodes.forEach((node) => {
+            const widgets = this.elements.filter((widget) => node.contains(widget.element));
+            if (widgets.length) {
+                widgets.forEach((widget) => {
+                    widget.instance.destruct();
+                    this.elements = this.elements.filter((element) => element !== widget);
+                });
+            }
+        });
     }
 }

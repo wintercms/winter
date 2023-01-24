@@ -27,7 +27,6 @@ import IconPickerVue from './components/IconPicker.vue';
         }
 
         destruct() {
-            console.log('destruct');
             if (this.iconPickerApp) {
                 this.iconPickerApp.unmount();
                 this.iconPickerApp = null;
