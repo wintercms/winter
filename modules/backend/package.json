@@ -24,6 +24,7 @@
     },
     "homepage": "https://wintercms.com/",
     "dependencies": {
+        "@simonwep/pickr": "^1.8.2",
         "jquery-events-to-dom-events": "^1.1.0",
         "vue": "^3.2.45"
     },

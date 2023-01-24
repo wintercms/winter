@@ -37,6 +37,10 @@ mix
         './formwidgets/iconpicker/assets/src/IconPicker.js',
         './formwidgets/iconpicker/assets/dist/iconpicker.js',
     )
+    .js(
+        './formwidgets/colorpicker/assets/js/src/ColorPicker.js',
+        './formwidgets/colorpicker/assets/js/dist/colorpicker.js',
+    )
 
     // Polyfill for all targeted browsers
     .polyfill({
