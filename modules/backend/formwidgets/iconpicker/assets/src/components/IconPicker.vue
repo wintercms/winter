@@ -3,7 +3,7 @@
         <span class="input-group-addon" @click="togglePicker" style="cursor: pointer">
             <i :class="modelValue"></i>
         </span>
-        <input type="text" class="form-control" v-model="modelValue" :name="name">
+        <input type="text" class="form-control" v-model="modelValue" :name="name" @click="togglePicker">
     </div>
 
     <div class="aim-modal aim-open" v-if="isVisible">

@@ -1,20 +1,56 @@
-import { createApp } from 'vue'
-import IconPicker from './components/IconPicker.vue'
+import { createApp } from 'vue';
+import IconPickerVue from './components/IconPicker.vue';
 
-window.addEventListener('load', () => {
-    const elements = document.querySelectorAll("[data-control='iconpicker']:not([data-v-app])");
-    elements.forEach(element => {
-        element.querySelector(".input-group").addEventListener("click", () => {
-            snowboard.request(null, element.dataset.alias + "::onLoadIconLibrary", {
+((Snowboard) => {
+    /**
+     * Icon picker form widget.
+     *
+     * Creates an icon picker form widget, that contains a text field with the icon class, and a
+     * popup that allows a user to easily select an icon.
+     *
+     * @author Robert Alexa <mail@robertalexa.me>
+     * @copyright 2022 Winter CMS.
+     */
+    class IconPicker extends Snowboard.PluginBase {
+        construct(element) {
+            this.element = element;
+            this.events = {
+                click: () => this.showPicker(),
+            };
+            this.iconPickerApp = null;
+
+            this.attachEvents();
+        }
+
+        attachEvents() {
+            this.element.querySelector('.input-group').addEventListener('click', this.events.click);
+        }
+
+        destruct() {
+            console.log('destruct');
+            if (this.iconPickerApp) {
+                this.iconPickerApp.unmount();
+                this.iconPickerApp = null;
+            }
+
+            this.element.querySelector('.input-group').removeEventListener('click', this.events.click);
+            this.element = null;
+        }
+
+        showPicker() {
+            this.snowboard.request(null, `${this.element.dataset.alias}::onLoadIconLibrary`, {
                 success: (data) => {
-                    let iconPicker = createApp(IconPicker, {
-                        ...element.dataset,
-                        fontLibraries: JSON.parse(data.result)
-                    }).mount(element);
+                    this.iconPickerApp = createApp(IconPickerVue, {
+                        ...this.element.dataset,
+                        fontLibraries: JSON.parse(data.result),
+                    }).mount(this.element);
 
-                    iconPicker.togglePicker();
+                    this.iconPickerApp.togglePicker();
                 },
-            })
-        });
-    });
-});
+            });
+        }
+    }
+
+    Snowboard.addPlugin('backend.formwidgets.iconpicker', IconPicker);
+    Snowboard['backend.ui.widgetHandler']().register('iconpicker', 'backend.formwidgets.iconpicker');
+})(window.Snowboard);

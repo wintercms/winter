@@ -10,7 +10,22 @@ mix
         terser: {
             extractComments: false,
         },
-        runtimeChunkPath: './assets/js/build',
+        runtimeChunkPath: './assets/ui/js/build',
+    })
+    .vue({ version: 3 })
+
+    // Extract shared vendor libraries
+    .extract({
+        libraries: [
+            '@vue',
+            'babel-loader',
+            'css-loader',
+            'jquery-events-to-dom-events',
+            'style-loader',
+            'vue',
+            'vue-loader',
+        ],
+        to: './assets/ui/js/build/vendor.js',
     })
 
     // Compile Snowboard assets for the Backend
@@ -19,10 +34,9 @@ mix
         './assets/ui/js/build/backend.js',
     )
     .js(
-        './formwidgets/iconpicker/assets/src/iconpicker.js',
+        './formwidgets/iconpicker/assets/src/IconPicker.js',
         './formwidgets/iconpicker/assets/dist/iconpicker.js',
     )
-    .vue()
 
     // Polyfill for all targeted browsers
     .polyfill({

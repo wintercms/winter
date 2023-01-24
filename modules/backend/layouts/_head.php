@@ -33,6 +33,8 @@ $scripts = [
             ? 'modules/system/assets/js/build/system.debug.js'
             : 'modules/system/assets/js/build/system.js'
     ),
+    Url::asset('modules/backend/assets/ui/js/build/manifest.js'),
+    Url::asset('modules/backend/assets/ui/js/build/vendor.js'),
     Url::asset('modules/backend/assets/ui/js/build/backend.js'),
 ];
 if (Config::get('develop.decompileBackendAssets', false)) {
