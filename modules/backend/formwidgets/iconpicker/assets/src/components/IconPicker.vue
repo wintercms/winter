@@ -66,7 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div class="form-buttons aim-modal--footer">
+            <div class="form-buttons normalized aim-modal--footer">
                 <button class="btn btn-primary aim-insert-icon-button" @click="insert">Insert</button>
                 <button class="btn btn-secondary no-margin-right" @click="closePicker">Close</button>
             </div>
