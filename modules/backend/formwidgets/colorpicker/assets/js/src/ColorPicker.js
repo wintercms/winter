@@ -3,6 +3,15 @@ import '@simonwep/pickr/dist/themes/nano.min.css';
 import '../../less/colorpicker.less';
 
 ((Snowboard, $) => {
+    /**
+     * Color picker widget.
+     *
+     * The color picker widget allows for easy colour selection from a color swatches, or a custom
+     * color from a palette. The colour can be returned in various formats.
+     *
+     * @author Ben Thomson <git@alfreido.com>
+     * @copyright 2023 Winter CMS
+     */
     class ColorPicker extends Snowboard.PluginBase {
         /**
          * Constructor.
@@ -59,20 +68,20 @@ import '../../less/colorpicker.less';
          *
          * Available options:
          *
-         * - `allowCustom`: If `true`, allows custom colors to be picked or entered, outside of the
-         *                available colors.
-         * - `allowEmpty`: If `true`, allows the color to be cleared.
-         * - `availableColors`: An array of colors to be used as swatches.
-         * - `dataLocker`: A selector for the element that will be used to contain the selected color value.
-         * - `disabled`: If `true`, disables the color picker.
-         * - `format`: The format to use for the color value. Can be `hex`, `rgb`, `hsl`, or `cmyk`.
-         * - `showAlpha`: If `true`, shows the alpha channel.
+         * - `data-allow-custom`: If set, allows custom colors to be picked or entered, outside
+         *      of the available colors.
+         * - `data-allow-empty`: If set, allows the color to be cleared.
+         * - `data-available-colors=""`: An array of colors to be used as swatches.
+         * - `data-data-locker=""`: A selector for the element that will be used to contain the selected color value.
+         * - `data-disabled`: If set, disables the color picker.
+         * - `data-formats=""`: The format to use for the color value. Can be `hex`, `rgb`, `hsl`, or `cmyk`.
+         * - `data-show-alpha`: If set, shows the alpha channel.
          *
          * @returns {Object}
          */
         defaults() {
             return {
-                allowCustom: true,
+                allowCustom: false,
                 allowEmpty: false,
                 availableColors: [],
                 dataLocker: null,

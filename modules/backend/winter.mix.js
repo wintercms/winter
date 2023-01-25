@@ -34,12 +34,16 @@ mix
         './assets/ui/js/build/backend.js',
     )
     .js(
+        './formwidgets/colorpicker/assets/js/src/ColorPicker.js',
+        './formwidgets/colorpicker/assets/js/dist/colorpicker.js',
+    )
+    .js(
         './formwidgets/iconpicker/assets/js/src/iconpicker.js',
         './formwidgets/iconpicker/assets/js/dist/iconpicker.js',
     )
     .js(
-        './formwidgets/colorpicker/assets/js/src/ColorPicker.js',
-        './formwidgets/colorpicker/assets/js/dist/colorpicker.js',
+        './formwidgets/sensitive/assets/js/src/Sensitive.js',
+        './formwidgets/sensitive/assets/js/dist/sensitive.js',
     )
 
     // Polyfill for all targeted browsers
