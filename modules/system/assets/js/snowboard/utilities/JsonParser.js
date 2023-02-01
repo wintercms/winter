@@ -89,7 +89,7 @@ export default class JsonParser extends Singleton {
         /*
         * number
         */
-        const num = parseFloat(str);
+        const num = Number(str);
         if (!Number.isNaN(num)) {
             return num.toString();
         }

@@ -111,7 +111,6 @@ class Sensitive extends FormWidgetBase
      */
     protected function loadAssets()
     {
-        $this->addCss('css/sensitive.css', 'core');
-        $this->addJs('js/sensitive.js', 'core');
+        $this->addJs('js/dist/sensitive.js', 'core');
     }
 }

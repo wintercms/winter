@@ -75,6 +75,10 @@ return [
         'cancel' => 'Atcelt',
         'delete' => 'Dzēst',
         'ok' => 'Labi',
+        'sending' => 'Sūta...',
+        'password_reset_email' => 'Nosūtīt paroles atiest. e-pastu',
+        'manual_password_reset_confirm' => 'Vai esat pārliecināts, ka vēlaties nostūtīt paroles atiestatīšanas e-pastu šim lietotājam?',
+        'manual_password_reset_success' => 'Lietotājam tika nosūtīts e-pasts ar instrukcijām kā veikt paroles atiestatīšanu.',
     ],
     'dashboard' => [
         'menu_label' => 'Mērinstrumentu panelis',

@@ -177,7 +177,7 @@ class FormController extends ControllerBehavior
          * Detected Relation controller behavior
          */
         if ($this->controller->isClassExtendedWith(\Backend\Behaviors\RelationController::class)) {
-            $this->controller->initRelation($model);
+            $this->controller->initRelation(clone $model);
         }
 
         $this->prepareVars($model);

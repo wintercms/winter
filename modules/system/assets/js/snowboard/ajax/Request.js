@@ -503,12 +503,14 @@ class Request extends Snowboard.PluginBase {
         if (error instanceof Error) {
             this.processErrorMessage(error.message);
         } else {
+            let skipError = false;
+
             // Process validation errors
             if (error.X_WINTER_ERROR_FIELDS) {
-                this.processValidationErrors(error.X_WINTER_ERROR_FIELDS);
+                skipError = this.processValidationErrors(error.X_WINTER_ERROR_FIELDS);
             }
 
-            if (error.X_WINTER_ERROR_MESSAGE) {
+            if (error.X_WINTER_ERROR_MESSAGE && !skipError) {
                 this.processErrorMessage(error.X_WINTER_ERROR_MESSAGE);
             }
         }
@@ -626,12 +628,16 @@ class Request extends Snowboard.PluginBase {
     processValidationErrors(fields) {
         if (typeof this.options.handleValidationErrors === 'function') {
             if (this.options.handleValidationErrors.apply(this, [this.form, fields]) === false) {
-                return;
+                return true;
             }
         }
 
         // Allow plugins to cancel the validation errors being handled
-        this.snowboard.globalEvent('ajaxValidationErrors', this.form, fields, this);
+        if (this.snowboard.globalEvent('ajaxValidationErrors', this.form, fields, this) === false) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
