@@ -30,6 +30,18 @@ class DataTable extends FormWidgetBase
      */
     public $rowSorting = false;
 
+    /**
+     * @var boolean Flag for using the name of the field as a relation name to interact with directly on the parent model. This will make the
+     *   underlying table widget use a server datasource (`Backend\FormWidgets\Table\ModelDatasource`).
+     */
+    public $useRelation = false;
+
+    /**
+     * @var string Class of the model to use for the table records. This will make the underlying table widget use a server datasource
+     *   (`Backend\FormWidgets\Table\ModelDatasource`). This overrides the `useRelation` property if specified.
+     */
+    public $modelClass;
+
     //
     // Object properties
     //
@@ -52,6 +64,8 @@ class DataTable extends FormWidgetBase
         $this->fillFromConfig([
             'size',
             'rowSorting',
+            'useRelation',
+            'modelClass',
         ]);
 
         $this->table = $this->makeTableWidget();
@@ -148,7 +162,12 @@ class DataTable extends FormWidgetBase
     {
         $config = $this->makeConfig((array) $this->config);
 
-        $config->dataSource = 'client';
+        if ($this->modelClass || $this->useRelation) {
+            $config->dataSource = 'Backend\FormWidgets\Table\ModelDatasource';
+        } else {
+            $config->dataSource = 'client';
+        }
+
         if (isset($this->getParentForm()->arrayName)) {
             $config->alias = studly_case(HtmlHelper::nameToId($this->getParentForm()->arrayName . '[' . $this->fieldName . ']')) . 'datatable';
             $config->fieldName = $this->getParentForm()->arrayName . '[' . $this->fieldName . ']';
