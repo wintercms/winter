@@ -16,6 +16,10 @@ use System\Classes\ModelBehavior;
  *     public $settingsCode = 'author_plugin_code';
  *     public $settingsFields = 'fields.yaml';
  *
+ * Optionally:
+ *
+ *     public $settingsCacheTtl = 1440;
+ *
  */
 class SettingsModel extends ModelBehavior
 {
@@ -24,6 +28,11 @@ class SettingsModel extends ModelBehavior
     protected $recordCode;
     protected $fieldConfig;
     protected $fieldValues = [];
+
+    /**
+     * @var integer Settings cache TTL, in seconds.
+     */
+    protected int $cacheTtl = 1440;
 
     /**
      * @var array Internal cache of model objects.
@@ -62,6 +71,10 @@ class SettingsModel extends ModelBehavior
          * Parse the config
          */
         $this->recordCode = $this->model->settingsCode;
+
+        if ($this->model->propertyExists('settingsCacheTtl')) {
+            $this->cacheTtl = (int) $this->model->settingsCacheTtl;
+        }
     }
 
     /**
@@ -108,10 +121,13 @@ class SettingsModel extends ModelBehavior
      */
     public function getSettingsRecord()
     {
-        $record = $this->model
-            ->where('item', $this->recordCode)
-            ->remember(1440, $this->getCacheKey())
-            ->first();
+        $query = $this->model->where('item', $this->recordCode);
+
+        if ($this->cacheTtl > 0) {
+            $query = $query->remember($this->cacheTtl, $this->getCacheKey());
+        }
+
+        $record = $query->first();
 
         return $record ?: null;
     }
