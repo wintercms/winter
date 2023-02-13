@@ -45,6 +45,14 @@ mix
         './formwidgets/iconpicker/assets/js/dist/iconpicker.js',
     )
     .js(
+        './formwidgets/markdowneditor/assets/js/src/MarkdownEditor.js',
+        './formwidgets/markdowneditor/assets/js/dist/markdowneditor.js',
+    )
+    .less(
+        './formwidgets/markdowneditor/assets/less/markdowneditor.less',
+        './formwidgets/markdowneditor/assets/css/markdowneditor.css',
+    )
+    .js(
         './formwidgets/sensitive/assets/js/src/Sensitive.js',
         './formwidgets/sensitive/assets/js/dist/sensitive.js',
     )
