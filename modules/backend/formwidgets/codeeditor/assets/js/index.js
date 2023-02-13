@@ -30,8 +30,10 @@ import { parse as parseXml } from 'fast-plist';
             this.editor = null;
             this.valueBag = this.element.querySelector('[data-value-bag]');
             this.statusBar = this.element.querySelector('[data-status-bar]');
-            this.language = this.statusBar.querySelector('.language');
-            this.position = this.statusBar.querySelector('.position');
+            if (this.statusBar) {
+                this.language = this.statusBar.querySelector('.language');
+                this.position = this.statusBar.querySelector('.position');
+            }
             this.fullscreen = false;
             this.cachedThemes = {};
             this.resizeThrottle = null;
@@ -377,6 +379,10 @@ import { parse as parseXml } from 'fast-plist';
          * @param {String} language
          */
         updateLanguage() {
+            if (!this.language) {
+                return;
+            }
+
             this.language.innerText = this.getConfigOptions().language.toUpperCase();
         }
 
@@ -753,6 +759,10 @@ import { parse as parseXml } from 'fast-plist';
          * @param {Object} position
          */
         updatePosition(position) {
+            if (!this.position) {
+                return;
+            }
+
             this.position.innerText = `Line ${position.lineNumber}, Column ${position.column}`;
         }
 
@@ -762,6 +772,10 @@ import { parse as parseXml } from 'fast-plist';
          * @param {Object} colors
          */
         updateStatusBarColor(colors) {
+            if (!this.statusBar) {
+                return;
+            }
+
             const foreground = colors.colors['editor.foreground'];
             const background = colors.colors['editor.background'];
             if (this.isDarkTheme(background)) {
@@ -777,6 +791,10 @@ import { parse as parseXml } from 'fast-plist';
          * Enables status bar action functionality.
          */
         enableStatusBarActions() {
+            if (!this.statusBar) {
+                return;
+            }
+
             const fullscreen = this.statusBar.querySelector('[data-full-screen]');
             fullscreen.addEventListener('click', () => {
                 if (!this.fullscreen) {
@@ -800,7 +818,9 @@ import { parse as parseXml } from 'fast-plist';
         onFullScreenChange() {
             if (!document.fullscreenElement) {
                 this.fullscreen = false;
-                this.statusBar.querySelector('[data-full-screen]').classList.remove('active');
+                if (this.statusBar) {
+                    this.statusBar.querySelector('[data-full-screen]').classList.remove('active');
+                }
                 this.element.removeEventListener('fullscreenchange', this.callbacks.fullScreenChange);
                 this.refresh();
             }
