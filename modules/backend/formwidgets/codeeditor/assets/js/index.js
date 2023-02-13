@@ -315,6 +315,29 @@ import { parse as parseXml } from 'fast-plist';
         }
 
         /**
+         * Wraps the currently selected text with the given values.
+         *
+         * If no selection range is established, this acts like an "insert".
+         *
+         * @param {*} before
+         * @param {*} after
+         */
+        wrap(before, after) {
+            if (this.editor.getSelection().isEmpty()) {
+                this.insert(`${before}${after}`);
+                return;
+            }
+
+            this.model.pushEditOperations(this.editor.getSelections(), [
+                {
+                    forceMoveMarkers: true,
+                    range: this.editor.getSelection(),
+                    text: `${before}${this.editor.getModel().getValueInRange(this.editor.getSelection())}${after}`,
+                },
+            ]);
+        }
+
+        /**
          * Finds a single match in the editor content.
          *
          * @param {String|RegExp} search
