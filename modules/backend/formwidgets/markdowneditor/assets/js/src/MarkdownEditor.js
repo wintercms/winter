@@ -43,6 +43,7 @@ import Bold from './actions/Bold';
 
             // Set config
             this.editor.loadTheme('chrome');
+            this.editor.setConfig('fontSize', 14);
             this.editor.setConfig('showGutter', false);
             this.editor.setConfig('showMinimap', false);
             this.editor.setConfig('showColors', false);

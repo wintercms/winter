@@ -11,7 +11,7 @@ export default class EditorAction {
      * Constructor.
      *
      * @param {MarkdownEditor} editor
-     * @param {monaco.IEditor} monaco
+     * @param {CodeEditor} monaco
      */
     constructor(editor, monaco) {
         this.editor = editor;

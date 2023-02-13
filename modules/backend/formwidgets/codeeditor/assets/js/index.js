@@ -300,12 +300,20 @@ import { parse as parseXml } from 'fast-plist';
         }
 
         /**
+         * Sets focus on the editor.
+         */
+        focus() {
+            this.editor.focus();
+        }
+
+        /**
          * Inserts a value into the editor at the current position.
          *
          * @param {String} value
+         * @returns {monaco.Selection[]}
          */
         insert(value) {
-            this.model.pushEditOperations(this.editor.getSelections(), [
+            return this.model.pushEditOperations(this.editor.getSelections(), [
                 {
                     forceMoveMarkers: true,
                     range: this.editor.getSelection(),
@@ -321,20 +329,20 @@ import { parse as parseXml } from 'fast-plist';
          *
          * @param {*} before
          * @param {*} after
+         * @returns {monaco.Selection[]}
          */
         wrap(before, after) {
             if (this.editor.getSelection().isEmpty()) {
-                this.insert(`${before}${after}`);
-                return;
+                return this.insert(`${before}${after}`);
             }
 
-            this.model.pushEditOperations(this.editor.getSelections(), [
+            return this.model.pushEditOperations(this.editor.getSelections(), [
                 {
                     forceMoveMarkers: true,
                     range: this.editor.getSelection(),
                     text: `${before}${this.editor.getModel().getValueInRange(this.editor.getSelection())}${after}`,
                 },
-            ]);
+            ], () => [this.editor.getSelection()]);
         }
 
         /**
