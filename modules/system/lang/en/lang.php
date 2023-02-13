@@ -449,7 +449,7 @@ return [
     ],
     'media' => [
         'invalid_path' => "Invalid file path specified: ':path'.",
-        'folder_size_items' => 'item(s)',
+        'folder_size_items' => 'item|items',
     ],
     'page' => [
         'custom_error' => [

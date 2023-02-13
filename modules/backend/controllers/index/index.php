@@ -20,4 +20,4 @@ Snowboard.ready(() => {
     });
 });
 </script>
-<?php Block::endPut(); ?>
+<?php Block::endPut(true); ?>

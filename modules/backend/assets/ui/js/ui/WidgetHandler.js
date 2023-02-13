@@ -15,6 +15,10 @@ export default class WidgetHandler extends Snowboard.Singleton {
     construct() {
         this.registeredWidgets = [];
         this.elements = [];
+        this.events = {
+            mutate: (mutations) => this.onMutation(mutations),
+        };
+        this.observer = null;
     }
 
     /**
@@ -25,7 +29,7 @@ export default class WidgetHandler extends Snowboard.Singleton {
     listens() {
         return {
             ready: 'onReady',
-            render: 'onReady',
+            render: 'onRender',
             ajaxUpdate: 'onAjaxUpdate',
         };
     }
@@ -66,6 +70,24 @@ export default class WidgetHandler extends Snowboard.Singleton {
      * Initializes widgets within the entire document.
      */
     onReady() {
+        this.initializeWidgets(document.body);
+
+        // Register a DOM observer and watch for any removed nodes
+        if (!this.observer) {
+            this.observer = new MutationObserver(this.events.mutate);
+            this.observer.observe(document.body, {
+                childList: true,
+                subtree: true,
+            });
+        }
+    }
+
+    /**
+     * Render handler.
+     *
+     * Initializes widgets within the entire document.
+     */
+    onRender() {
         this.initializeWidgets(document.body);
     }
 
@@ -131,5 +153,29 @@ export default class WidgetHandler extends Snowboard.Singleton {
         }
 
         return null;
+    }
+
+    /**
+     * Callback for mutation events.
+     *
+     * We're only tracking removed nodes, to ensure that those widgets are disposed of.
+     *
+     * @param {MutationRecord[]} mutations
+     */
+    onMutation(mutations) {
+        const removedNodes = mutations.filter((mutation) => mutation.removedNodes.length).map((mutation) => Array.from(mutation.removedNodes)).flat();
+        if (!removedNodes.length) {
+            return;
+        }
+
+        removedNodes.forEach((node) => {
+            const widgets = this.elements.filter((widget) => node.contains(widget.element));
+            if (widgets.length) {
+                widgets.forEach((widget) => {
+                    widget.instance.destruct();
+                    this.elements = this.elements.filter((element) => element !== widget);
+                });
+            }
+        });
     }
 }

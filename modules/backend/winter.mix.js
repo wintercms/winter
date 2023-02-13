@@ -10,7 +10,22 @@ mix
         terser: {
             extractComments: false,
         },
-        runtimeChunkPath: './assets/js/build',
+        runtimeChunkPath: './assets/ui/js/build',
+    })
+    .vue({ version: 3 })
+
+    // Extract shared vendor libraries
+    .extract({
+        libraries: [
+            '@vue',
+            'babel-loader',
+            'css-loader',
+            'jquery-events-to-dom-events',
+            'style-loader',
+            'vue',
+            'vue-loader',
+        ],
+        to: './assets/ui/js/build/vendor.js',
     })
     .vue({ version: 3 })
 
@@ -22,8 +37,16 @@ mix
 
     // Compile widgets for Backend
     .js(
-        './formwidgets/iconpicker/assets/src/iconpicker.js',
-        './formwidgets/iconpicker/assets/dist/iconpicker.js',
+        './formwidgets/colorpicker/assets/js/src/ColorPicker.js',
+        './formwidgets/colorpicker/assets/js/dist/colorpicker.js',
+    )
+    .js(
+        './formwidgets/iconpicker/assets/js/src/iconpicker.js',
+        './formwidgets/iconpicker/assets/js/dist/iconpicker.js',
+    )
+    .js(
+        './formwidgets/sensitive/assets/js/src/Sensitive.js',
+        './formwidgets/sensitive/assets/js/dist/sensitive.js',
     )
     .js(
         './formwidgets/visualeditor/assets/js/src/VisualEditor.js',

@@ -39,6 +39,12 @@ export default class Handler extends Snowboard.Singleton {
         }
         delegate('render');
 
+        // Add global event for rendering in Snowboard
+        delegate('render');
+        document.addEventListener('$render', () => {
+            this.snowboard.globalEvent('render');
+        });
+
         // Add "render" event for backwards compatibility
         window.jQuery(document).trigger('render');
 
