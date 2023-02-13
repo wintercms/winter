@@ -236,10 +236,7 @@ class ColorPicker extends FormWidgetBase
      */
     protected function loadAssets()
     {
-        $this->addCss('vendor/pickr/pickr-nano.min.css', 'core');
-        $this->addJs('vendor/pickr/pickr.min.js', 'core');
-        $this->addCss('css/colorpicker.css', 'core');
-        $this->addJs('js/colorpicker.js', 'core');
+        $this->addJs('js/dist/colorpicker.js', 'core');
     }
 
     /**

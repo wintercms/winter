@@ -7,7 +7,7 @@
         <?php if (!$isRootFolder && !$searchMode): ?>
             <li tabindex="0" data-type="media-item" data-item-type="folder" data-root data-path="<?= e(dirname($currentFolder)) ?>">
                 <div class="icon-container folder">
-                    <div class="icon-wrapper"><i class="icon-folder"></i></div>
+                    <div class="icon-wrapper"><i class="icon-arrow-turn-up"></i></div>
                 </div>
                 <div class="info">
                     <h4 title="<?= e(trans('backend::lang.media.return_to_parent')) ?>"><?= e(trans('backend::lang.media.return_to_parent_label')) ?></h4>

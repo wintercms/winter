@@ -11,7 +11,7 @@
         <?php if (count($items) > 0 || !$isRootFolder): ?>
             <?php if (!$isRootFolder && !$searchMode): ?>
                 <tr data-type="media-item" data-item-type="folder" data-root data-path="<?= e(dirname($currentFolder)) ?>" tabindex="0">
-                    <td><i class="icon-folder"></i>..</td>
+                    <td><i class="icon-arrow-turn-up"></i>..</td>
                     <td></td>
                     <td></td>
                 </tr>

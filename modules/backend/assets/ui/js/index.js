@@ -1,3 +1,4 @@
+import * as Vue from 'vue';
 import BackendAjaxHandler from './ajax/Handler';
 import BackendUiEventHandler from './ui/EventHandler';
 import BackendUiWidgetHandler from './ui/WidgetHandler';
@@ -28,3 +29,6 @@ if (window.Snowboard === undefined) {
     };
     window.assetManager = window.AssetManager;
 })(window.Snowboard);
+
+// Add Vue to global scope
+window.Vue = Vue;
