@@ -63,6 +63,11 @@ class User extends UserBase
     protected $purgeable = ['password_confirmation', 'send_invite'];
 
     /**
+     * @var array List of attribute names which are json encoded and decoded from the database.
+     */
+    protected $jsonable = ['permissions', 'metadata'];
+
+    /**
      * @var string Login attribute
      */
     public static $loginAttribute = 'login';
