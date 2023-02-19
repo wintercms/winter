@@ -317,18 +317,18 @@ return [
 
     'storage' => [
         'uploads' => [
-            'disk' => 'local',
+            'disk' => env('FILESYSTEM_UPLOADS_DISK', 'local'),
             'folder' => 'uploads',
             'path' => '/storage/app/uploads',
             'temporaryUrlTTL' => 3600,
         ],
         'media' => [
-            'disk' => 'local',
+            'disk' => env('FILESYSTEM_MEDIA_DISK', 'local'),
             'folder' => 'media',
             'path' => '/storage/app/media',
         ],
         'resized' => [
-            'disk' => 'local',
+            'disk' => env('FILESYSTEM_RESIZED_DISK', 'local'),
             'folder' => 'resized',
             'path' => '/storage/app/resized',
         ],
