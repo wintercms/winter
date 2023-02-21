@@ -71,7 +71,7 @@ class File extends FileBase
             $uploadsPath .= '/protected';
         }
 
-        return $this->getDisk()->url($uploadsPath) . '/';
+        return Url::asset($uploadsPath) . '/';
     }
 
     /**
