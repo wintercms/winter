@@ -23,6 +23,11 @@ class MediaLibrary
 {
     use \Winter\Storm\Support\Traits\Singleton;
 
+    /**
+     * The name of the storage disk used by this class.
+     */
+    public const DISK = 'media';
+
     const SORT_BY_TITLE = 'title';
     const SORT_BY_SIZE = 'size';
     const SORT_BY_MODIFIED = 'modified';
@@ -773,7 +778,6 @@ class MediaLibrary
      * This method should always be used instead of trying to access the
      * $storageDisk property directly as initializing the disc requires
      * communicating with the remote storage.
-     * @return mixed Returns the storage disk object.
      */
     public function getStorageDisk(): FilesystemAdapter
     {
@@ -781,9 +785,7 @@ class MediaLibrary
             return $this->storageDisk;
         }
 
-        return $this->storageDisk = Storage::disk(
-            Config::get('cms.storage.media.disk', 'local')
-        );
+        return $this->storageDisk = Storage::disk(static::DISK);
     }
 
     /**

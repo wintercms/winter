@@ -24,7 +24,7 @@ return [
     | may even configure multiple disks of the same driver. Defaults have
     | been setup for each driver as an example of the required options.
     |
-    | Supported Drivers: "local", "ftp", "sftp", "s3"
+    | Supported Drivers: "local", "ftp", "sftp", "s3", "scoped"
     |
     | NOTE: s3's stream_uploads option requires the Winter.DriverAWS plugin
     | to be installed and enabled.
@@ -32,6 +32,32 @@ return [
     */
 
     'disks' => [
+
+        // The "uploads" disk is used by the System module to store uploaded files (System\Models\File).
+        'uploads' => [
+            'driver' => 'scoped',
+            'disk' => 'local',
+            'prefix' => 'uploads',
+            'visibility' => 'public',
+            'temporaryUrlTTL' => 3600,
+        ],
+
+        // The "media" disk is used by the System module's MediaLibrary to store media files.
+        'media' => [
+            'driver' => 'scoped',
+            'disk' => 'local',
+            'prefix' => 'media',
+            'visibility' => 'public',
+        ],
+
+        // The "resized" disk is used by the System module's ImageResizer to store resized images.
+        'resized' => [
+            'driver' => 'scoped',
+            'disk' => 'local',
+            'prefix' => 'uploads',
+            'visibility' => 'public',
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),

@@ -99,6 +99,24 @@ class ServiceProvider extends ModuleServiceProvider
             }
         }
 
+        // Polyfill the system disks if they are not defined
+        $systemDisks = ['uploads', 'media', 'resized'];
+        foreach ($systemDisks as $disk) {
+            $oldConfig = Config::get("cms.storage.$disk");
+            if (!Config::get("filesystems.disks.$disk") && !empty($oldConfig)) {
+                $newConfig = [
+                    'driver' => 'scoped',
+                    'disk' => $oldConfig['disk'],
+                    'prefix' => $oldConfig['folder'],
+                    'url' => $oldConfig['path'],
+                ];
+                if (!empty($oldConfig['tempoaryUrlTTL'])) {
+                    $newConfig['temporaryUrlTTL'] = $oldConfig['tempoaryUrlTTL'];
+                }
+                Config::set("filesystems.disks.$disk", $newConfig);
+            }
+        }
+
         /*
          * Set a default samesite config value for invalid values
          */

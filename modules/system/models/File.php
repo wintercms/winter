@@ -1,10 +1,9 @@
-<?php namespace System\Models;
+<?php
 
-use Url;
-use Config;
-use Storage;
-use Winter\Storm\Database\Attach\File as FileBase;
+namespace System\Models;
+
 use Backend\Controllers\Files;
+use Winter\Storm\Database\Attach\File as FileBase;
 
 /**
  * File attachment model
@@ -14,6 +13,11 @@ use Backend\Controllers\Files;
  */
 class File extends FileBase
 {
+    /**
+     * The name of the storage disk used by this class.
+     */
+    public const DISK = 'uploads';
+
     /**
      * @var string The database table used by the model.
      */
@@ -45,7 +49,7 @@ class File extends FileBase
     /**
      * {@inheritDoc}
      */
-    public function getPath($fileName = null)
+    public function getPath(?string $fileName = null): string
     {
         $url = '';
         if (!$this->isPublic() && class_exists(Files::class)) {
@@ -55,45 +59,5 @@ class File extends FileBase
         }
 
         return $url;
-    }
-
-    /**
-     * Define the public address for the storage path.
-     */
-    public function getPublicPath()
-    {
-        $uploadsPath = Config::get('cms.storage.uploads.path', '/storage/app/uploads');
-
-        if ($this->isPublic()) {
-            $uploadsPath .= '/public';
-        }
-        else {
-            $uploadsPath .= '/protected';
-        }
-
-        return Url::asset($uploadsPath) . '/';
-    }
-
-    /**
-     * Define the internal storage path.
-     */
-    public function getStorageDirectory()
-    {
-        $uploadsFolder = Config::get('cms.storage.uploads.folder');
-
-        if ($this->isPublic()) {
-            return $uploadsFolder . '/public/';
-        }
-
-        return $uploadsFolder . '/protected/';
-    }
-
-    /**
-     * Returns the storage disk the file is stored on
-     * @return FilesystemAdapter
-     */
-    public function getDisk()
-    {
-        return Storage::disk(Config::get('cms.storage.uploads.disk'));
     }
 }
