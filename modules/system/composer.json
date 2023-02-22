@@ -26,7 +26,7 @@
         "php": "^8.0.2",
         "composer/installers": "~1.11.0",
         "composer/semver": "^3.2",
-        "flysystem-path-prefixing": "^3.0",
+        "league/flysystem-path-prefixing": "^3.0",
         "laravel/framework": "^9.1"
     },
     "replace": {
