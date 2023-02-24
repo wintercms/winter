@@ -426,19 +426,42 @@ class Theme extends CmsObject
      */
     public function assetUrl(?string $path): string
     {
-        $config = $this->getConfig();
+        $cacheTime = Config::get('cms.urlCacheTtl', 10);
 
-        $themeDir = $this->getDirName();
-        if (!File::isDirectory(themes_path($this->getDirName())) && !empty($config['parent'])) {
-            $themeDir = $config['parent'];
-        }
+        return Cache::remember('winter.cms.assetUrl.' . $path, $cacheTime, function () use ($path) {
+            $config = $this->getConfig();
+            $themeDir = $this->getDirName();
 
-        $_url = Config::get('cms.themesPath', '/themes') . '/' . $themeDir;
-        if ($path !== null) {
-            $_url .= '/' . $path;
-        }
+            // If the active theme does not have a directory, then just check the parent theme
+            if (!File::isDirectory(themes_path($this->getDirName())) && !empty($config['parent'])) {
+                $themeDir = $config['parent'];
+            }
 
-        return Url::asset($_url);
+            // Define a helper for constructing the URL
+            $urlPath = function ($themeDir, $path) {
+                $_url = Config::get('cms.themesPath', '/themes') . '/' . $themeDir;
+
+                if ($path !== null) {
+                    $_url .= '/' . $path;
+                }
+
+                return $_url;
+            };
+
+            $url = $urlPath($themeDir, $path);
+
+            // If the file cannot be found in the theme, generate a url for the parent theme
+            if (!File::exists(base_path($url)) && !empty($config['parent']) && $themeDir !== $config['parent']) {
+                $parentUrl = $urlPath($config['parent'], $path);
+                // If found in the parent, return it
+                if (File::exists(base_path($parentUrl))) {
+                    return  Url::asset($parentUrl);
+                }
+            }
+
+            // Default to returning the current theme's url
+            return Url::asset($url);
+        });
     }
 
     /**
