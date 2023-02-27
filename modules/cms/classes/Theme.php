@@ -229,9 +229,6 @@ class Theme extends CmsObject
 
         $theme = static::load(static::getActiveThemeCode());
 
-//        if (!File::isDirectory($theme->getPath())) {
-//            return self::$activeThemeCache = null;
-//        }
 
         return self::$activeThemeCache = $theme;
     }
