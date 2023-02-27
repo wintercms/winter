@@ -160,12 +160,12 @@ class Theme extends CmsObject
          * If a value is returned from this halting event, it will be used as the active
          * theme code. Example usage:
          *
-         *     Event::listen('cms.theme.getActiveTheme', function (string $activeTheme) {
+         *     Event::listen('cms.theme.getActiveTheme', function () {
          *         return 'mytheme';
          *     });
          *
          */
-        $apiResult = Event::fire('cms.theme.getActiveTheme', [$activeTheme], true);
+        $apiResult = Event::fire('cms.theme.getActiveTheme', [], true);
         if ($apiResult !== null) {
             return $apiResult;
         }
@@ -640,7 +640,27 @@ class Theme extends CmsObject
         $datasource = count($sources) > 1
             ? new AutoDatasource($sources, 'halcyon-datasource-auto-' . $this->dirName)
             : array_shift($sources);
+
         $resolver->addDatasource($this->dirName, $datasource);
+
+        /**
+         * @event cms.theme.registerHalcyonDatasource
+         * Fires immediately after the theme's Datasource has been registered.
+         *
+         * Allows for extension of the theme Halcyon Datasource, example usage:
+         *
+         *     use Cms\Classes\Theme;
+         *     use Winter\Storm\Halcyon\Datasource\Resolver;
+         *
+         *     Event::listen('cms.theme.registerHalcyonDatasource', function (Theme $theme, Resolver $resolver) {
+         *         $resolver->addDatasource($theme->getDirName(), new AutoDatasource([
+         *             'theme' => $theme->getDatasource(),
+         *             'example' => new ExampleDatasource(),
+         *         ], 'example-autodatasource'));
+         *     });
+         *
+         */
+        Event::fire('cms.theme.registerHalcyonDatasource', [$this, $resolver]);
     }
 
     /**
