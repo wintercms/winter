@@ -1358,11 +1358,14 @@ class Controller
     public function themeUrl($url = null): string
     {
         return is_array($url)
-            ? $this->themeUrlArray($url)
+            ? $this->themeCombineAssets($url)
             : $this->getTheme()->assetUrl($url);
     }
 
-    protected function themeUrlArray(array $url): string
+    /**
+     * Generates a URL to the AssetCombiner for the provided array of assets
+     */
+    protected function themeCombineAssets(array $url): string
     {
         $themeDir = $this->getTheme()->getDirName();
         $parentTheme = $this->getTheme()->getConfig()['parent'] ?? false;
