@@ -426,7 +426,7 @@ class Theme extends CmsObject
      */
     public function assetUrl(?string $path): string
     {
-        $cacheTime = Config::get('cms.urlCacheTtl', 10);
+        $cacheTime = now()->addMinutes(Config::get('cms.urlCacheTtl', 10));
 
         return Cache::remember('winter.cms.assetUrl.' . $path, $cacheTime, function () use ($path) {
             $config = $this->getConfig();
