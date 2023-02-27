@@ -541,7 +541,7 @@ class Lists extends WidgetBase
         /*
          * Apply sorting
          */
-        if (($sortColumn = $this->getSortColumn()) && !$this->showTree && in_array($sortColumn, array_keys($this->getVisibleColumns()))) {
+        if (($sortColumn = $this->getSortColumn()) && !$this->showTree) {
             if (($column = array_get($this->allColumns, $sortColumn)) && $column->valueFrom) {
                 $sortColumn = $this->isColumnPivot($column)
                     ? 'pivot_' . $column->valueFrom
@@ -1596,7 +1596,7 @@ class Lists extends WidgetBase
             return false;
         }
 
-        if ($this->sortColumn !== null) {
+        if ($this->sortColumn !== null && $this->isSortable($this->sortColumn)) {
             return $this->sortColumn;
         }
 

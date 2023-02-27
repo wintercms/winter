@@ -7,7 +7,7 @@
 No matter how large or small your project is, Winter provides a rich development environment, regardless of your level of experience.
 
 [![Version](https://img.shields.io/github/v/release/wintercms/winter?sort=semver&style=flat-square)](https://github.com/wintercms/winter/releases)
-[![Tests](https://img.shields.io/github/workflow/status/wintercms/winter/Tests/develop?label=tests&style=flat-square)](https://github.com/wintercms/winter/actions)
+[![Tests](https://img.shields.io/github/actions/workflow/status/wintercms/winter/tests.yml?branch=develop&label=tests&style=flat-square)](https://github.com/wintercms/winter/actions)
 [![License](https://img.shields.io/github/license/wintercms/winter?label=open%20source&style=flat-square)](https://packagist.org/packages/wintercms/winter)
 [![Discord](https://img.shields.io/discord/816852513684193281?label=discord&style=flat-square)](https://discord.gg/D5MFSPH6Ux)
 
@@ -89,8 +89,7 @@ Winter CMS development is financially supported by the generosity of the followi
 
 ### Organizations
 
-[![Spatial Media logo](https://cdn.ca.spatialmedia.io/media/images/sm-logo-dark-full.svg)](https://spatialmedia.io)
-Spatial Media employs two of the core contributors (Luke Towers & Jack Wilkinson) and contributes to the ongoing development of Winter.
+Spatial Media employs one of the core maintainers (Jack Wilkinson) who contributes to the ongoing development of Winter.
 
 [![Froala logo](https://froala.com/wp-content/uploads/2019/10/froala.svg)](https://froala.com/wysiwyg-editor/)
 
