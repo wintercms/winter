@@ -405,7 +405,7 @@ class AssetList extends WidgetBase
     {
         $assetsPath = $this->getAssetsPath();
 
-        // theme dir does not exist
+        // theme dir does not exist (i.e. in a child theme without an assets directory
         if (!is_dir(dirname($assetsPath))) {
             return [];
         }
