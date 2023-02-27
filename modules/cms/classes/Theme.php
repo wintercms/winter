@@ -455,7 +455,7 @@ class Theme extends CmsObject
                 $parentUrl = $urlPath($config['parent'], $path);
                 // If found in the parent, return it
                 if (File::exists(base_path($parentUrl))) {
-                    return  Url::asset($parentUrl);
+                    return Url::asset($parentUrl);
                 }
             }
 
