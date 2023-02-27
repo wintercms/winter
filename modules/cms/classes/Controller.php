@@ -1383,6 +1383,7 @@ class Controller
             }
 
             foreach ($url as $file) {
+                // Leave Combiner Aliases assets unmodified
                 if (str_starts_with($file, '@')) {
                     $assets[] = $file;
                     continue;
