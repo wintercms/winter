@@ -1397,7 +1397,9 @@ class Controller
                     }
                 }
 
-                throw new \Exception('Theme URL File not found: ' . $file);
+                // Skip combining missing assets and log an error
+                Log::error("$file could not be found in any of the theme's sources (" . implode(', ', $sources) . ',');
+                continue;
             }
 
             Cache::put($cacheKey, $assets);
