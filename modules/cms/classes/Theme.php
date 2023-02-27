@@ -309,9 +309,6 @@ class Theme extends CmsObject
 
         $theme = static::load(static::getEditThemeCode());
 
-//        if (!File::isDirectory($theme->getPath())) {
-//            return self::$editThemeCache = null;
-//        }
 
         return self::$editThemeCache = $theme;
     }
@@ -347,14 +344,13 @@ class Theme extends CmsObject
             return $this->configCache;
         }
 
+        // Attempt to load the theme's config file from whatever datasources are available.
         $sources = [
             'filesystem' => new FileDatasource(themes_path($this->getDirName()), App::make('files'))
         ];
-
         if (static::databaseLayerEnabled()) {
             $sources['database'] = new DbDatasource($this->getDirName(), 'cms_theme_templates');
         }
-
         $data = (new AutoDatasource($sources))->selectOne('', 'theme', 'yaml');
 
         if (!$data) {
@@ -423,9 +419,8 @@ class Theme extends CmsObject
      */
     public function assetUrl(?string $path): string
     {
-        $cacheTime = now()->addMinutes(Config::get('cms.urlCacheTtl', 10));
-
-        return Cache::remember('winter.cms.assetUrl.' . $path, $cacheTime, function () use ($path) {
+        $expiresAt = now()->addMinutes(Config::get('cms.urlCacheTtl', 10));
+        return Cache::remember('winter.cms.assetUrl.' . $path, $expiresAt, function () use ($path) {
             $config = $this->getConfig();
             $themeDir = $this->getDirName();
 
@@ -543,6 +538,7 @@ class Theme extends CmsObject
         self::$activeThemeCache = false;
         self::$editThemeCache = false;
 
+        // Sometimes it may be desired to only clear the local cache of the active / edit themes instead of the persistent cache
         if (!$memoryOnly) {
             Cache::forget(self::ACTIVE_KEY);
             Cache::forget(self::EDIT_KEY);
@@ -641,7 +637,10 @@ class Theme extends CmsObject
             $sources['parent-filesystem'] = new FileDatasource(themes_path($config['parent']), App::make('files'));
         }
 
-        $resolver->addDatasource($this->dirName, new AutoDatasource($sources, 'halcyon-datasource-auto-' . $this->dirName));
+        $datasource = count($sources) > 1
+            ? new AutoDatasource($sources, 'halcyon-datasource-auto-' . $this->dirName)
+            : array_shift($sources);
+        $resolver->addDatasource($this->dirName, $datasource);
     }
 
     /**
