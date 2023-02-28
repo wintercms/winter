@@ -48,12 +48,9 @@ return [
     | Enable Snowboard debugging
     |--------------------------------------------------------------------------
     |
-    | By default, Snowboard debugging and client-side logging will be enabled
-    | if the application is in debug mode (via `app.debug`).
+    | By default, Snowboard debugging and client-side logging is disabled.
     |
-    | If you wish to control Snowboard debugging independently, you may instead
-    | set this value to `true` or `false` to enable or disable Snowboard
-    | debugging, respectively.
+    | If you wish to enable Snowboard debugging, set this value to `true`.
     |
     */
 
