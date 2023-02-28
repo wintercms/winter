@@ -40,7 +40,7 @@ return [
     ],
     'ajax_handler' => [
         'invalid_name' => 'Nom du gestionnaire AJAX non valide: :name.',
-        'not_found' => "Le gestionnaire AJAX ':name' n'a pas été trouvé..",
+        'not_found' => "Le gestionnaire AJAX ':name' n'a pas été trouvé.",
     ],
     'account' => [
         'impersonate' => "Usurper l'identité d'un utilisateur",
