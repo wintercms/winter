@@ -57,5 +57,5 @@ return [
     |
     */
 
-    'debugSnowboard' => env('APP_DEBUG', true),
+    'debugSnowboard' => env('DEBUG_SNOWBOARD', false),
 ];
