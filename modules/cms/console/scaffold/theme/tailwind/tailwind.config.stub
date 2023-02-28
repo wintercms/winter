@@ -1,8 +1,12 @@
 module.exports = {
     content: [
+        '../../plugins/*/*/blocks/*.block',
         './theme.yaml',
-        './**/*.htm',
-        './assets/src/js/**/*.{js,vue}'
+        './assets/src/js/**/*.{js,vue}',
+        './blocks/**/*.block',
+        './layouts/**/*.htm',
+        './pages/**/*.htm',
+        './partials/**/*.htm',
     ],
     theme: {
         extend: {
