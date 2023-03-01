@@ -164,6 +164,17 @@ class ControllerTest extends TestCase
         $this->assertEquals('<div>LAYOUT PARTIAL<p>Hey PAGE PARTIAL Homer Simpson A partial</p></div>', $response);
     }
 
+    public function testChildThemePartials()
+    {
+        /*
+         * Test partials referred in the layout and page
+         */
+        $theme = Theme::load('childtest');
+        $controller = new Controller($theme);
+        $response = $controller->run('/with-partials')->getContent();
+        $this->assertEquals('<div>LAYOUT PARTIAL<p>Hey PAGE PARTIAL Homer Simpson A child partial</p></div>', $response);
+    }
+
     public function testContent()
     {
         $theme = Theme::load('test');
@@ -172,9 +183,25 @@ class ControllerTest extends TestCase
         $this->assertEquals('<div>LAYOUT CONTENT<p>Hey PAGE CONTENT A content</p></div>', $response);
     }
 
+    public function testChildThemeContent()
+    {
+        $theme = Theme::load('childtest');
+        $controller = new Controller($theme);
+        $response = $controller->run('/with-content')->getContent();
+        $this->assertEquals('<div>LAYOUT CONTENT<p>Hey PAGE CONTENT A child content</p></div>', $response);
+    }
+
     public function testBlocks()
     {
         $theme = Theme::load('test');
+        $controller = new Controller($theme);
+        $response = $controller->run('/with-placeholder')->getContent();
+        $this->assertEquals("<div>LAYOUT CONTENT <span>BLOCK\n  DEFAULT</span> <p>Hey PAGE CONTENT</p></div>SECOND BLOCK", $response);
+    }
+
+    public function testChildThemeBlocks()
+    {
+        $theme = Theme::load('childtest');
         $controller = new Controller($theme);
         $response = $controller->run('/with-placeholder')->getContent();
         $this->assertEquals("<div>LAYOUT CONTENT <span>BLOCK\n  DEFAULT</span> <p>Hey PAGE CONTENT</p></div>SECOND BLOCK", $response);
@@ -198,9 +225,27 @@ class ControllerTest extends TestCase
         $response = $controller->run('/no-partial')->getContent();
     }
 
+    public function testChildThemePartialNotFound()
+    {
+        $this->expectException(\Twig\Error\RuntimeError::class);
+        $this->expectExceptionMessageMatches('/is\snot\sfound/');
+
+        $theme = Theme::load('childtest');
+        $controller = new Controller($theme);
+        $response = $controller->run('/no-partial')->getContent();
+    }
+
     public function testPageLifeCycle()
     {
         $theme = Theme::load('test');
+        $controller = new Controller($theme);
+        $response = $controller->run('/cycle-test')->getContent();
+        $this->assertEquals('12345', $response);
+    }
+
+    public function testChildThemePageLifeCycle()
+    {
+        $theme = Theme::load('childtest');
         $controller = new Controller($theme);
         $response = $controller->run('/cycle-test')->getContent();
         $this->assertEquals('12345', $response);
