@@ -15,9 +15,9 @@
                 echo $this->makePartial('file_single', ['mode' => $mode]);
                 break;
             case 'file':
-            case 'everything':
+            case 'all':
             default:
-                echo $this->makePartial('file_single', ['mode' => 'everything']);
+                echo $this->makePartial('file_single', ['mode' => 'all']);
         }
     ?>
 

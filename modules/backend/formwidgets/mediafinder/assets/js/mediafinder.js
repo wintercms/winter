@@ -42,7 +42,7 @@
         }
 
         if (this.options.mode === null) {
-            this.options.mode = this.$el.data("mediafinder-mode") || "everything";
+            this.options.mode = this.$el.data("mediafinder-mode") || "all";
         }
 
         this.$el.one('dispose-control', this.proxy(this.dispose))
@@ -99,7 +99,7 @@
 
         new $.wn.mediaManager.popup({
             alias: 'ocmediamanager',
-            cropAndInsertButton: ["image", "everything"].indexOf(self.options.mode) > -1,
+            cropAndInsertButton: ["image", "all"].indexOf(self.options.mode) > -1,
             mode: self.options.mode,
             onInsert: function(items) {
                 if (!items.length) {

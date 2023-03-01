@@ -32,7 +32,7 @@ class MediaManager extends WidgetBase
     const SELECTION_MODE_FIXED_RATIO = 'fixed-ratio';
     const SELECTION_MODE_FIXED_SIZE = 'fixed-size';
 
-    const FILTER_EVERYTHING = 'everything';
+    const FILTER_ALL = 'all';
 
     /**
      * @var boolean Determines whether the widget is in readonly mode or not.
@@ -670,7 +670,7 @@ class MediaManager extends WidgetBase
 
         if ($mode = Input::get('mode')) {
             $this->setFilter($mode);
-            if ($mode !== static::FILTER_EVERYTHING) {
+            if ($mode !== static::FILTER_ALL) {
                 $this->setFilterDisplay(false);
             }
         }
@@ -883,7 +883,7 @@ class MediaManager extends WidgetBase
      */
     protected function listFolderItems($folder, $filter, $sortBy)
     {
-        $filter = $filter !== self::FILTER_EVERYTHING ? $filter : null;
+        $filter = $filter !== self::FILTER_ALL ? $filter : null;
 
         return MediaLibrary::instance()->listFolderContents($folder, $sortBy, $filter);
     }
@@ -899,7 +899,7 @@ class MediaManager extends WidgetBase
      */
     protected function findFiles($searchTerm, $filter, $sortBy)
     {
-        $filter = $filter !== self::FILTER_EVERYTHING ? $filter : null;
+        $filter = $filter !== self::FILTER_ALL ? $filter : null;
 
         return MediaLibrary::instance()->findFiles($searchTerm, $sortBy, $filter);
     }
@@ -934,7 +934,7 @@ class MediaManager extends WidgetBase
     protected function setFilter($filter): void
     {
         if (!in_array($filter, [
-            self::FILTER_EVERYTHING,
+            self::FILTER_ALL,
             MediaLibraryItem::FILE_TYPE_IMAGE,
             MediaLibraryItem::FILE_TYPE_AUDIO,
             MediaLibraryItem::FILE_TYPE_DOCUMENT,
@@ -969,7 +969,7 @@ class MediaManager extends WidgetBase
      */
     protected function getFilter()
     {
-        return $this->getSession('media_filter', self::FILTER_EVERYTHING);
+        return $this->getSession('media_filter', self::FILTER_ALL);
     }
 
     /**
