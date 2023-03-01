@@ -533,7 +533,7 @@ return [
         'add_folder' => 'Pridať priečinok',
         'search' => 'Hľadať',
         'display' => 'Zobraziť',
-        'filter_everything' => 'Všetko',
+        'filter_all' => 'Všetko',
         'filter_images' => 'Obrázky',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',

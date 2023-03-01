@@ -600,7 +600,7 @@ return [
         'add_folder' => 'Add folder',
         'search' => 'Search',
         'display' => 'Display',
-        'filter_everything' => 'Everything',
+        'filter_all' => 'Everything',
         'filter_images' => 'Images',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',
