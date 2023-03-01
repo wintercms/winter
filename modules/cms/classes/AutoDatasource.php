@@ -23,6 +23,11 @@ class AutoDatasource extends Datasource implements DatasourceInterface
     protected $datasources = [];
 
     /**
+     * @var string The cache key to use for this datasource instance
+     */
+    protected $cacheKey = 'halcyon-datastore-auto';
+
+    /**
      * @var array Local cache of paths available in the datasources
      */
     protected $pathCache = [];
@@ -48,15 +53,27 @@ class AutoDatasource extends Datasource implements DatasourceInterface
      * @param array $datasources Array of datasources to utilize. Lower indexes = higher priority ['datasourceName' => $datasource]
      * @return void
      */
-    public function __construct(array $datasources)
+    public function __construct(array $datasources, ?string $cacheKey = null)
     {
         $this->datasources = $datasources;
+
+        if ($cacheKey) {
+            $this->cacheKey = $cacheKey;
+        }
 
         $this->activeDatasourceKey = array_keys($datasources)[0];
 
         $this->populateCache();
 
         $this->postProcessor = new Processor;
+    }
+
+    /**
+     * Returns the in memory path cache map
+     */
+    public function getPathCache(): array
+    {
+        return $this->pathCache;
     }
 
     /**
@@ -69,6 +86,13 @@ class AutoDatasource extends Datasource implements DatasourceInterface
     {
         $pathCache = [];
         foreach ($this->datasources as $datasource) {
+            // Allow AutoDatasource instances to handle their own internal caching
+            if ($datasource instanceof AutoDatasource) {
+                $datasource->populateCache($refresh);
+                $pathCache[] = array_merge(...array_reverse($datasource->getPathCache()));
+                continue;
+            }
+
             // Remove any existing cache data
             if ($refresh && $this->allowCacheRefreshes) {
                 Cache::forget($datasource->getPathsCacheKey());
@@ -309,7 +333,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
      */
     protected function makeFilePath(string $dirName, string $fileName, string $extension)
     {
-        return $dirName . '/' . $fileName . '.' . $extension;
+        return ltrim($dirName . '/' . $fileName . '.' . $extension, '/');
     }
 
     /**
@@ -507,7 +531,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
      */
     public function getPathsCacheKey(): string
     {
-        return 'halcyon-datastore-auto';
+        return $this->cacheKey;
     }
 
     /**

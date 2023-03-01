@@ -4,8 +4,10 @@ use Cms;
 use Url;
 use App;
 use View;
+use File;
 use Lang;
 use Flash;
+use Cache;
 use Config;
 use Session;
 use Request;
@@ -1353,22 +1355,57 @@ class Controller
      * @param mixed $url Specifies the theme-relative URL. If null, the theme path is returned.
      * @return string
      */
-    public function themeUrl($url = null)
+    public function themeUrl($url = null): string
+    {
+        return is_array($url)
+            ? $this->themeCombineAssets($url)
+            : $this->getTheme()->assetUrl($url);
+    }
+
+    /**
+     * Generates a URL to the AssetCombiner for the provided array of assets
+     */
+    protected function themeCombineAssets(array $url): string
     {
         $themeDir = $this->getTheme()->getDirName();
+        $parentTheme = $this->getTheme()->getConfig()['parent'] ?? false;
 
-        if (is_array($url)) {
-            $_url = Url::to(CombineAssets::combine($url, themes_path().'/'.$themeDir));
-        }
-        else {
-            $_url = Config::get('cms.themesPath', '/themes').'/'.$themeDir;
-            if ($url !== null) {
-                $_url .= '/'.$url;
+        $cacheKey = __METHOD__ . '.' . md5(json_encode($url));
+
+        if (!($assets = Cache::get($cacheKey))) {
+            $assets = [];
+            $sources = [
+                themes_path($themeDir)
+            ];
+
+            if ($parentTheme) {
+                $sources[] = themes_path($parentTheme);
             }
-            $_url = Url::asset($_url);
+
+            foreach ($url as $file) {
+                // Leave Combiner Aliases assets unmodified
+                if (str_starts_with($file, '@')) {
+                    $assets[] = $file;
+                    continue;
+                }
+
+                foreach ($sources as $source) {
+                    $asset = $source . DIRECTORY_SEPARATOR . $file;
+                    if (File::exists($asset)) {
+                        $assets[] = $asset;
+                        break 2;
+                    }
+                }
+
+                // Skip combining missing assets and log an error
+                Log::error("$file could not be found in any of the theme's sources (" . implode(', ', $sources) . ',');
+                continue;
+            }
+
+            Cache::put($cacheKey, $assets);
         }
 
-        return $_url;
+        return Url::to(CombineAssets::combine($assets));
     }
 
     /**

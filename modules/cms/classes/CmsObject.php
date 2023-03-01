@@ -124,7 +124,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * This method is used internally by the system.
      * @param \Cms\Classes\Theme $theme Specifies a parent theme.
      * @param boolean $skipCache Indicates if objects should be reloaded from the disk bypassing the cache.
-     * @return Collection Returns a collection of CMS objects.
+     * @return CmsObjectCollection Returns a collection of CMS objects.
      */
     public static function listInTheme($theme, $skipCache = false)
     {
