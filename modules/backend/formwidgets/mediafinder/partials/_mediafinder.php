@@ -5,20 +5,20 @@
 <?php else: ?>
 
     <?php
-        switch ($mode) {
-            case 'image':
-                echo $this->makePartial('image_single');
-                break;
-            case 'video':
-            case 'audio':
-            case 'document':
-                echo $this->makePartial('file_single', ['mode' => $mode]);
-                break;
-            case 'file':
-            case 'all':
-            default:
-                echo $this->makePartial('file_single', ['mode' => 'all']);
-        }
+    switch ($mode) {
+        case 'image':
+            echo $this->makePartial('image_single');
+            break;
+        case 'video':
+        case 'audio':
+        case 'document':
+            echo $this->makePartial('file_single', ['mode' => $mode]);
+            break;
+        case 'file':
+        case 'all':
+        default:
+            echo $this->makePartial('file_single', ['mode' => 'all']);
+    }
     ?>
 
 <?php endif ?>
