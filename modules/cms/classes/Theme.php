@@ -666,7 +666,7 @@ class Theme extends CmsObject
     /**
      * Get the theme's datasource
      */
-    public function getDatasource(): AutoDatasource
+    public function getDatasource(): DatasourceInterface
     {
         $resolver = App::make('halcyon');
         return $resolver->datasource($this->getDirName());
