@@ -342,7 +342,7 @@ class VersionManager
             }
         }
 
-        return array_slice($versions, 0, ++$position);
+        return array_slice($versions, 0, $maxVersions);
     }
 
     /**
