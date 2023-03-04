@@ -22,6 +22,9 @@ export default class Bold extends EditorAction {
     }
 
     action() {
-        this.monaco.wrap('**', '**');
+        const selection = this.monaco.wrap('**', '**');
+        console.log(selection);
+        this.monaco.focus();
+        this.monaco.getEditor().setSelection(selection);
     }
 }

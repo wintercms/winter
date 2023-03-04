@@ -250,6 +250,7 @@ import { parse as parseXml } from 'fast-plist';
 
             this.valueListener = this.model.onDidChangeContent(() => {
                 this.valueBag.value = this.model.getValue();
+                this.events.fire('input', this.valueBag.value, this, this.editor);
             });
 
             this.positionListener = this.editor.onDidChangeCursorPosition((event) => {

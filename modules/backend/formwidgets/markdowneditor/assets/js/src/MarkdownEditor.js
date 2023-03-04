@@ -23,10 +23,20 @@ import Bold from './actions/Bold';
             this.editorElement = element.querySelector('.markdowneditor-editor');
             this.editor = null;
             this.actions = [];
+            this.events = {
+                value: (value) => this.updatePreview(value),
+            };
 
             this.createEditor();
             this.registerActions();
             this.createToolbar();
+        }
+
+        destruct() {
+            if (this.editor) {
+                this.editor.events.off('input', this.events.value);
+                this.editor.destruct();
+            }
         }
 
         /**
@@ -52,6 +62,13 @@ import Bold from './actions/Bold';
             this.editor.events.once('create', () => {
                 this.editor.setLanguage('markdown');
             });
+
+            // Value listener
+            this.editor.events.on('input', this.events.value);
+        }
+
+        updatePreview(value) {
+            console.log(value);
         }
 
         registerActions() {
