@@ -6,6 +6,7 @@ use App;
 use View;
 use File;
 use Lang;
+use Log;
 use Flash;
 use Cache;
 use Config;
