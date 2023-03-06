@@ -581,7 +581,7 @@ class Theme extends CmsObject
         $langPath = $this->getPath() . '/lang';
 
         if (File::isDirectory($langPath)) {
-            Lang::addNamespace($this->getDirName(), $langPath);
+            Lang::addNamespace('themes.' . $this->getDirName(), $langPath);
         }
 
         // Check the parent theme if present
