@@ -38,6 +38,15 @@ export default class PluginBase {
     }
 
     /**
+     * Defines objects that will be merged into the plugin as traits (mixins).
+     *
+     * @returns {Object[]} An array of trait objects to be applied to the plugin.
+     */
+    traits() {
+        return [];
+    }
+
+    /**
      * Defines the listener methods for global events.
      *
      * @returns {Object}

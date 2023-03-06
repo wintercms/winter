@@ -26,6 +26,8 @@ describe('Snowboard plugins with traits', function () {
                         expect(fixture.property).toEqual('Trait property');
                         expect(fixture.internalMethod()).toEqual('Internal method called');
                         expect(fixture.internalProperty).toEqual('Internal property');
+                        expect(fixture.testInferredProperty()).toEqual('Inferred property');
+                        expect(fixture.testSnowboard()).toEqual(true);
 
                         done();
                     } catch (error) {
@@ -108,6 +110,50 @@ describe('Snowboard plugins with traits', function () {
                         expect(fixture.property).toEqual('Trait property');
                         expect(fixture.internalMethod()).toEqual('Internal method called');
                         expect(fixture.internalProperty).toEqual('Internal property');
+
+                        done();
+                    } catch (error) {
+                        done(error);
+                    }
+                },
+                (error) => {
+                    throw error;
+                }
+            );
+    });
+
+    it('inherit traits from parent classes', function (done) {
+        FakeDom
+            .new()
+            .addScript([
+                'modules/system/assets/js/build/manifest.js',
+                'modules/system/assets/js/snowboard/build/snowboard.vendor.js',
+                'modules/system/assets/js/snowboard/build/snowboard.base.js',
+                'modules/system/tests/js/fixtures/framework/TestTrait.js',
+                'modules/system/tests/js/fixtures/framework/TestTraitTwo.js',
+                'modules/system/tests/js/fixtures/framework/TestExtensionOfClassWithTrait.js',
+            ])
+            .render()
+            .then(
+                (dom) => {
+                    // Run assertions
+                    const Snowboard = dom.window.Snowboard;
+
+                    try {
+                        const fixture = Snowboard.testExtensionOfClassWithTrait();
+
+                        expect(fixture.testMethod()).toEqual('Trait method called');
+                        expect(fixture.testMethodTwo()).toEqual('Overridden method called');
+                        expect(fixture.testMethodThree()).toEqual('Trait two method three called');
+                        expect(fixture.testMethodFour()).toEqual('Trait two method four called');
+                        // The following property is defined in both traits, but since TestTraitTwo is loaded
+                        // first as a local trait to the fixture, it becomes the precedented property.
+                        expect(fixture.traitProperty).toEqual('Trait two property');
+                        expect(fixture.traitTwoProperty).toEqual('Trait two property');
+                        expect(fixture.property).toEqual('Trait two property');
+                        expect(fixture.internalMethod()).toEqual('Internal method called');
+                        expect(fixture.internalProperty).toEqual('Internal property');
+                        expect(fixture.extendedMethod()).toEqual('Extension method called');
 
                         done();
                     } catch (error) {
