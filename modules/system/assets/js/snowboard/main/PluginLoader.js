@@ -132,6 +132,7 @@ export default class PluginLoader {
         const newInstance = new this.instance(this.snowboard, ...parameters);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
         newInstance.construct(...parameters);
+        this.loadTraits(newInstance);
         this.instances.push(newInstance);
 
         return newInstance;
@@ -198,7 +199,9 @@ export default class PluginLoader {
         const newInstance = new this.instance(this.snowboard, ...parameters);
         newInstance.detach = () => this.instances.splice(this.instances.indexOf(newInstance), 1);
         newInstance.construct(...parameters);
+        this.loadTraits(newInstance);
         this.instances.push(newInstance);
+
         this.singleton.initialised = true;
     }
 
@@ -289,5 +292,82 @@ export default class PluginLoader {
 
         delete this.mocks[methodName];
         delete this.originalFunctions[methodName];
+    }
+
+    /**
+     * Attaches traits (mixins) to the given instance.
+     *
+     * Traits form code reuse within Snowboard plugin classes. A trait will populate its own
+     * methods and properties into the instance. If this instance overwrites a trait method or
+     * property, the instance's method or property will be used instead.
+     *
+     * This implementation of traits will also go up the hierarchy of prototypes to inherit all
+     * traits from parent classes, making it operate similar to PHP traits.
+     *
+     * Differences from PHP traits:
+     *   - Traits are classes in JavaScript.
+     *   - Locally defined traits do *not* overwrite methods from parent classes.
+     *   - Two or more traits can have the same method name - precedence is first-come-first-serve,
+     *     (ie. the first trait that provides the method will be used), since aliasing does not exist.
+     *
+     * @param {PluginBase} instance
+     * @returns {void}
+     */
+    loadTraits(instance) {
+        const traits = [];
+        let currentPrototype = instance;
+
+        while (currentPrototype.constructor.name !== 'Object') {
+            if (
+                currentPrototype.traits
+                && typeof currentPrototype.traits === 'function'
+            ) {
+                const currentTraits = currentPrototype.traits();
+
+                if (Array.isArray(currentTraits)) {
+                    currentTraits.forEach((trait) => {
+                        if (traits.includes(trait)) {
+                            return;
+                        }
+
+                        traits.push(trait);
+                    });
+                }
+            }
+
+            currentPrototype = Object.getPrototypeOf(currentPrototype);
+        }
+
+        // Apply traits (inspired by https://calebporzio.com/equivalent-of-php-class-traits-in-javascript)
+        traits.forEach((Trait) => {
+            const traitInstance = new Trait();
+
+            // Get defined properties in trait constructor.
+            const descriptors = Object.keys(traitInstance).reduce((innerDescriptors, key) => {
+                innerDescriptors[key] = Object.getOwnPropertyDescriptor(traitInstance, key);
+                return innerDescriptors;
+            }, {});
+
+            // Get methods defined in trait prototype.
+            Object.getOwnPropertyNames(Trait.prototype).forEach((propertyName) => {
+                if (propertyName === 'constructor') {
+                    return;
+                }
+
+                const descriptor = Object.getOwnPropertyDescriptor(Trait.prototype, propertyName);
+                descriptors[propertyName] = descriptor;
+            });
+
+            // Filter out any of the above that already exist in the instance.
+            const newDescriptors = Object.keys(descriptors)
+                .filter((key) => instance[key] === undefined)
+                .reduce((filtered, key) => {
+                    filtered[key] = descriptors[key];
+                    return filtered;
+                }, {});
+
+            // Apply new descriptors to instance.
+            Object.defineProperties(instance, newDescriptors);
+        });
     }
 }
