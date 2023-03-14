@@ -21,7 +21,7 @@ import IconPickerVue from './components/IconPicker.vue';
             };
             this.iconPickerApp = null;
 
-            this.input = element.querySelector('[data-input]');
+            this.input = element.querySelector('input');
 
             this.attachEvents();
         }

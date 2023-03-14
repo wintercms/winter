@@ -21,7 +21,6 @@
                    class="form-control"
                    name="<?= $field->getFieldName() ?>"
                    value="<?= $icon ?>"
-                   data-input
             >
         </div>
     </div>
