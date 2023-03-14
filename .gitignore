@@ -31,5 +31,10 @@ _ide_helper.php
 package-lock.json
 /node_modules
 
+/plugins
+/themes
+/config
+*sublime*
+
 # Ignore generated public directory from `winter:mirror public`
 public

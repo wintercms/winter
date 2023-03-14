@@ -6,6 +6,9 @@
         "packages": [
             "modules/backend",
             "modules/system"
+        ],
+        "ignoredPackages": [
+            "plugins/winter/blocks"
         ]
     }
 }

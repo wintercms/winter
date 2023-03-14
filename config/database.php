@@ -48,14 +48,14 @@ return [
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
             ]) : [],
-            'password' => env('DB_PASSWORD', ''),
+            'password' => env('DB_PASSWORD', 'changeme'),
             'port' => env('DB_PORT', '3306'),
             'prefix' => '',
             'prefix_indexes' => true,
             'strict' => true,
             'unix_socket' => env('DB_SOCKET', ''),
             'url' => env('DATABASE_URL'),
-            'username' => env('DB_USERNAME', 'winter'),
+            'username' => env('DB_USERNAME', 'root'),
         ],
         'pgsql' => [
             'charset' => 'utf8',

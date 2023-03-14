@@ -42,7 +42,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://winter.andoria'),
 
     /*
     |--------------------------------------------------------------------------
@@ -59,7 +59,7 @@ return [
     */
 
     'asset_url' => env('ASSET_URL', null),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Temporary Path
@@ -247,7 +247,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => env('APP_KEY', 'v3FJMiEefuWEojppGNoFfnbBzJjgiIpw'),
     'cipher' => 'AES-256-CBC',
 
     /*
@@ -300,6 +300,6 @@ return [
     */
 
     'aliases' => array_merge(include(base_path('modules/system/aliases.php')), [
-        // 'Str' => 'Illuminate\Support\Str', // Example
+        'Log' => 'Xitara\Logger\Classes\Logger',
     ]),
 ];
