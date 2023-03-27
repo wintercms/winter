@@ -54,15 +54,15 @@ class AssetMakerTest extends TestCase
     {
         $assetPath = 'my/path/assets';
 
-        // assetPath should be ignored since we use pathSymbol for plugins
+        // assetPath is ignored since we use pathSymbol for plugins
         $path = $this->stub->getAssetPath('$/author/plugin/assets/js/myAsset.js', $assetPath);
         $this->assertEquals('http://localhost/plugins/author/plugin/assets/js/myAsset.js', $path);
 
-        // assetPath should be ignored since we use pathSymbol for theme
-        $path = $this->stub->getAssetPath('#/myTheme/assets/js/myAsset.js', $assetPath);
-        $this->assertEquals('http://localhost/themes/myTheme/assets/js/myAsset.js', $path);
+        // assetPath is ignored since we use pathSymbol for theme
+        $path = $this->stub->getAssetPath('#/mytheme/assets/js/myAsset.js', $assetPath);
+        $this->assertEquals('http://localhost/themes/mytheme/assets/js/myAsset.js', $path);
 
-        // assetPath should be ignored since we use pathSymbol for app root
+        // assetPath is ignored since we use pathSymbol for app root
         $path = $this->stub->getAssetPath('~/plugins/author/plugin/assets/js/myAsset.js', $assetPath);
         $this->assertEquals('http://localhost/plugins/author/plugin/assets/js/myAsset.js', $path);
 
