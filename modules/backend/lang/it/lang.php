@@ -58,7 +58,10 @@ return [
         'apply' => 'Applica',
         'cancel' => 'Annulla',
         'delete' => 'Elimina',
-        'ok' => 'OK'
+        'ok' => 'OK',
+        'password_reset_email' => 'Invia mail recupero password',
+        'manual_password_reset_confirm' => 'Sei sicuro di volere inviare una mail per il recupero della password per questo utente?',
+        'manual_password_reset_success' => 'Una mail con le istruzioni per il recupero della password è stata invata all\'utente.',
     ],
     'dashboard' => [
         'menu_label' => 'Dashboard',
