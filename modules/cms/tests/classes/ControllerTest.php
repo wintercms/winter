@@ -639,4 +639,34 @@ ESC;
             $response
         );
     }
+
+    public function testThemeCombineAssets(): void
+    {
+        $theme = Theme::load('test');
+        $controller = new Controller($theme);
+
+        // Generate a url
+        $url = $controller->themeUrl(['assets/css/style1.css', 'assets/css/style2.css']);
+        $this->assertIsString($url);
+
+        // Grab the cache key from the url
+        $cacheKey = 'combiner.' . str_before(basename($url), '-');
+
+        // Load the cached config
+        $combinerConfig = \Cache::get($cacheKey);
+        $this->assertIsString($combinerConfig);
+
+        // Decode the config
+        $combinerConfig = unserialize(base64_decode($combinerConfig));
+
+        // Assert the result is an array and includes files
+        $this->assertIsArray($combinerConfig);
+        $this->assertArrayHasKey('files', $combinerConfig);
+        $this->assertCount(2, $combinerConfig['files']);
+
+        // Check our input file names against our output file names
+        $files = array_map('basename', $combinerConfig['files']);
+        $this->assertTrue(in_array('style1.css', $files));
+        $this->assertTrue(in_array('style2.css', $files));
+    }
 }
