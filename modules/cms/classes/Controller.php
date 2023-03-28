@@ -1394,7 +1394,7 @@ class Controller
                     $asset = $source . DIRECTORY_SEPARATOR . $file;
                     if (File::exists($asset)) {
                         $assets[] = $asset;
-                        break 2;
+                        break;
                     }
                 }
 
