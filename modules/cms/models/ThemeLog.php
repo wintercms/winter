@@ -77,12 +77,6 @@ class ThemeLog extends Model
         $newContent = $template->toCompiled();
         $oldContent = $template->getOriginal('content');
 
-        if ($newContent === $oldContent && $templateName === $oldTemplateName && !$isDelete) {
-            traceLog($newContent, $oldContent);
-            traceLog('Content not dirty for: '. $template->getObjectTypeDirName().'/'.$template->fileName);
-            return;
-        }
-
         $record = new self;
         $record->type = $type;
         $record->theme = Theme::getEditThemeCode();
