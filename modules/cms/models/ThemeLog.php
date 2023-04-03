@@ -78,8 +78,6 @@ class ThemeLog extends Model
         $oldContent = $template->getOriginal('content');
 
         if ($newContent === $oldContent && $templateName === $oldTemplateName && !$isDelete) {
-            traceLog($newContent, $oldContent);
-            traceLog('Content not dirty for: '. $template->getObjectTypeDirName().'/'.$template->fileName);
             return;
         }
 
