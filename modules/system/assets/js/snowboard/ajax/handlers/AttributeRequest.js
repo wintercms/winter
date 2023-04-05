@@ -1,3 +1,5 @@
+import Singleton from '../../abstracts/Singleton';
+
 /**
  * Enable Data Attributes API for AJAX requests.
  *
@@ -8,11 +10,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-if (window.Snowboard === undefined) {
-    throw new Error('Snowboard must be loaded in order to use the Data Attributes plugin.');
-}
-
-class AttributeRequest extends Snowboard.Singleton {
+export default class AttributeRequest extends Singleton {
     /**
      * Listeners.
      *
@@ -331,5 +329,3 @@ class AttributeRequest extends Snowboard.Singleton {
         }
     }
 }
-
-Snowboard.addPlugin('attributeRequest', AttributeRequest);
