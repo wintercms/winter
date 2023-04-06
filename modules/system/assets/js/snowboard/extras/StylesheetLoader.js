@@ -1,10 +1,12 @@
+import Singleton from '../abstracts/Singleton';
+
 /**
  * Embeds the "extras" stylesheet into the page, if it is not loaded through the theme.
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class StylesheetLoader extends Snowboard.Singleton {
+export default class StylesheetLoader extends Singleton {
     /**
      * Defines listeners.
      *

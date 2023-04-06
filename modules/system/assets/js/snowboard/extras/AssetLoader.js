@@ -1,3 +1,5 @@
+import Singleton from '../abstracts/Singleton';
+
 /**
  * Asset Loader.
  *
@@ -17,7 +19,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class AssetLoader extends window.Snowboard.Singleton {
+export default class AssetLoader extends Singleton {
     /**
      * Event listeners.
      *
