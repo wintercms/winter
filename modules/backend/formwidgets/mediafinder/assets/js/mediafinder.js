@@ -42,7 +42,7 @@
         }
 
         if (this.options.mode === null) {
-            this.options.mode = this.$el.data("mediafinder-mode") || "all";
+            this.options.mode = this.$el.data('mediafinder-mode') || 'all';
         }
 
         this.$el.one('dispose-control', this.proxy(this.dispose))
