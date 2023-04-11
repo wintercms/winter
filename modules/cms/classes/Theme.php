@@ -421,6 +421,11 @@ class Theme extends CmsObject
     {
         $expiresAt = now()->addMinutes(Config::get('cms.urlCacheTtl', 10));
         return Cache::remember('winter.cms.assetUrl.' . $path, $expiresAt, function () use ($path) {
+            // Handle symbolized paths
+            if ($path && File::isPathSymbol($path)) {
+                return Url::asset(File::localToPublic(File::symbolizePath($path)));
+            }
+
             $config = $this->getConfig();
             $themeDir = $this->getDirName();
 

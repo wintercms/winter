@@ -96,6 +96,7 @@ return [
     |
     */
 
+    'pluginsPath' => '/modules/system/tests/fixtures/plugins',
     'pluginsPathLocal' => base_path('modules/system/tests/fixtures/plugins'),
 
     /*
@@ -107,6 +108,7 @@ return [
     |
     */
 
+    'themesPath' => '/modules/cms/tests/fixtures/themes',
     'themesPathLocal' => base_path('modules/cms/tests/fixtures/themes'),
 
     /*
