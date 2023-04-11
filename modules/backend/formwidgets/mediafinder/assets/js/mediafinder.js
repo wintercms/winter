@@ -99,7 +99,7 @@
 
         new $.wn.mediaManager.popup({
             alias: 'ocmediamanager',
-            cropAndInsertButton: ["image", "all"].indexOf(self.options.mode) > -1,
+            cropAndInsertButton: ['image', 'all'].includes(self.options.mode),
             mode: self.options.mode,
             onInsert: function(items) {
                 if (!items.length) {
