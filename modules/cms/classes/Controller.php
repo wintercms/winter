@@ -1384,8 +1384,8 @@ class Controller
             }
 
             foreach ($url as $file) {
-                // Leave Combiner Aliases assets unmodified
-                if (str_starts_with($file, '@')) {
+                // Leave Combiner Aliases assets & absolute path assets (using path symbols like $, #, ~) unmodified
+                if (str_starts_with($file, '@') || File::isPathSymbol($file)) {
                     $assets[] = $file;
                     continue;
                 }
