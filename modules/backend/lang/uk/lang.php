@@ -600,7 +600,7 @@ return [
         'add_folder' => 'Створити папку',
         'search' => 'Пошук',
         'display' => 'Показати',
-        'filter_everything' => 'Всі файли',
+        'filter_all' => 'Всі файли',
         'filter_images' => 'Зображення',
         'filter_video' => 'Відео',
         'filter_audio' => 'Музика',

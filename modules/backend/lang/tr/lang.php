@@ -545,7 +545,7 @@ return [
         'add_folder' => 'Yeni Klasör',
         'search' => 'Ara',
         'display' => 'Görüntüle',
-        'filter_everything' => 'Her şey',
+        'filter_all' => 'Her şey',
         'filter_images' => 'Resimler',
         'filter_video' => 'Video',
         'filter_audio' => 'Ses',

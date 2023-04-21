@@ -600,7 +600,7 @@ return [
         'add_folder' => 'Ajouter un répertoire',
         'search' => 'Rechercher',
         'display' => 'Affichage',
-        'filter_everything' => 'Tout',
+        'filter_all' => 'Tout',
         'filter_images' => 'Images',
         'filter_video' => 'Vidéo',
         'filter_audio' => 'Audio',

@@ -589,7 +589,7 @@ return [
         'add_folder' => 'Adăugați dosar',
         'search' => 'Căutare',
         'display' => 'Afișare',
-        'filter_everything' => 'Toate fișierele',
+        'filter_all' => 'Toate fișierele',
         'filter_images' => 'Imagini',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',

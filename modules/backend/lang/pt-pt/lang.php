@@ -568,7 +568,7 @@ return [
         'add_folder' => 'Adicionar pasta',
         'search' => 'Procurar',
         'display' => 'Mostrar',
-        'filter_everything' => 'Tudo',
+        'filter_all' => 'Tudo',
         'filter_images' => 'Imagens',
         'filter_video' => 'Vídeos',
         'filter_audio' => 'Áudios',
