@@ -102,6 +102,14 @@ class DatePicker extends FormWidgetBase
                 ? Carbon::createFromTimestamp($this->maxDate)
                 : Carbon::parse($this->maxDate);
         }
+
+        // Add inputmode attribute (can still be overriden in field config)
+        $fieldAttributes = array_merge(
+            ['inputmode' => 'none'],
+            $this->formField->getAttributes('field', false),
+        );
+
+        $this->formField->attributes($fieldAttributes, 'field');
     }
 
     /**
