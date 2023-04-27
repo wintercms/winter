@@ -96,7 +96,7 @@ jobs:
       max-parallel: 8
       matrix:
         operatingSystem: [ubuntu-latest, windows-latest]
-        phpVersion: ['8.0', '8.1']
+        phpVersion: ['8.0', '8.1', '8.2']
       fail-fast: false
     runs-on: ${{ matrix.operatingSystem }}
     name: ${{ matrix.operatingSystem }} / PHP ${{ matrix.phpVersion }}
