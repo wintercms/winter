@@ -1391,7 +1391,7 @@ class Controller
                 }
 
                 foreach ($sources as $source) {
-                    $asset = $source . DIRECTORY_SEPARATOR . $file;
+                    $asset = $source . '/' . $file;
                     if (File::exists($asset)) {
                         $assets[] = $asset;
                         break;
