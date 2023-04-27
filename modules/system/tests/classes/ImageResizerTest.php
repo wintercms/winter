@@ -2,26 +2,31 @@
 
 namespace System\Tests\Classes;
 
-use System\Tests\Bootstrap\PluginTestCase;
+use Backend\Facades\Backend;
+use Cms\Classes\Controller as CmsController;
 use Cms\Classes\Theme;
+use Config;
+use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
+use Event;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Models\File as FileModel;
-use Cms\Classes\Controller as CmsController;
-use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
-use Winter\Storm\Exception\SystemException;
-use Config;
-use Event;
+use System\Tests\Bootstrap\PluginTestCase;
 use URL;
-use Backend\Facades\Backend;
+use Winter\Storm\Exception\SystemException;
 
 class ImageResizerTest extends PluginTestCase
 {
     use ArraySubsetAsserts;
 
+    protected $originalThemesPath = '';
+
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->originalThemesPath = Config::get('cms.themesPath');
+        Config::set('cms.themesPath', '/modules/system/tests/fixtures/themes');
 
         Config::set('cms.activeTheme', 'test');
         Event::flush('cms.theme.getActiveTheme');
@@ -31,6 +36,9 @@ class ImageResizerTest extends PluginTestCase
     public function tearDown(): void
     {
         $this->removeMedia();
+
+        Config::set('cms.themesPath', $this->originalThemesPath);
+
         ImageResizer::flushAvailableSources();
         parent::tearDown();
     }
@@ -186,7 +194,7 @@ class ImageResizerTest extends PluginTestCase
         $this->copyMedia();
 
         $imageResizer = new ImageResizer(
-            '/themes/test/assets/images/winter.png',
+            '/modules/system/tests/fixtures/themes/test/assets/images/winter.png',
             100,
             100
         );
@@ -227,7 +235,7 @@ class ImageResizerTest extends PluginTestCase
 
         // Plugin URL (relative URL)
         $imageResizer = new ImageResizer(
-            '/plugins/database/tester/assets/images/avatar.png',
+            '/modules/system/tests/fixtures/plugins/database/tester/assets/images/avatar.png',
             100,
             100
         );
@@ -235,7 +243,7 @@ class ImageResizerTest extends PluginTestCase
 
         // Plugin URL (absolute URL)
         $imageResizer = new ImageResizer(
-            URL::to('plugins/database/tester/assets/images/avatar.png'),
+            URL::to('modules/system/tests/fixtures/plugins/database/tester/assets/images/avatar.png'),
             100,
             100
         );
