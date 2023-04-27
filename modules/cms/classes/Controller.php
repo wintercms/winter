@@ -1370,17 +1370,18 @@ class Controller
     {
         $themeDir = $this->getTheme()->getDirName();
         $parentTheme = $this->getTheme()->getConfig()['parent'] ?? false;
+        $themesPath = themes_path();
 
         $cacheKey = __METHOD__ . '.' . md5(json_encode($url));
 
         if (!($assets = Cache::get($cacheKey))) {
             $assets = [];
             $sources = [
-                themes_path($themeDir)
+                $themesPath . '/' . $themeDir
             ];
 
             if ($parentTheme) {
-                $sources[] = themes_path($parentTheme);
+                $sources[] = $themesPath . '/' . $parentTheme;
             }
 
             foreach ($url as $file) {
