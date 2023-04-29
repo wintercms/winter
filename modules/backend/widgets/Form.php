@@ -496,6 +496,7 @@ class Form extends WidgetBase
         /**
          * @event backend.form.extendFieldsBefore
          * Called before the form fields are defined
+         * >**NOTE**: You should test `$formWidget->isNested` to prevent adding fields to nested elements
          *
          * Example usage:
          *
@@ -569,6 +570,7 @@ class Form extends WidgetBase
         /**
          * @event backend.form.extendFields
          * Called after the form fields are defined
+         * >**NOTE**: You should test `$formWidget->isNested` to prevent adding fields to nested elements
          *
          * Example usage:
          *
