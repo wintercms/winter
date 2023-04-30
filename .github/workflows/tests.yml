@@ -56,9 +56,6 @@ jobs:
         with:
           node-version: ${{ env.nodeVersion }}
 
-      - name: Echo branches
-        run: echo "${{ github.ref }} | ${{ github.head_ref }} | ${{ github.ref_name }} | ${{ github.base_ref }}"
-
       - name: Switch library dependency (develop)
         if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
         run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.2"
@@ -99,7 +96,7 @@ jobs:
       max-parallel: 8
       matrix:
         operatingSystem: [ubuntu-latest, windows-latest]
-        phpVersion: ['8.0', '8.1']
+        phpVersion: ['8.0', '8.1', '8.2']
       fail-fast: false
     runs-on: ${{ matrix.operatingSystem }}
     name: ${{ matrix.operatingSystem }} / PHP ${{ matrix.phpVersion }}

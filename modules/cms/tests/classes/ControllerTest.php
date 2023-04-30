@@ -8,12 +8,19 @@ use Cms\Classes\Theme;
 use Cms\Classes\Controller;
 use Request;
 use Winter\Storm\Halcyon\Model;
+use Winter\Storm\Support\Facades\Config;
 
 class ControllerTest extends TestCase
 {
+    protected string $origThemePath;
+
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->origThemePath = Config::get('cms.themesPath');
+        // Set temporary themes path for tests
+        Config::set('cms.themesPath', '/modules/cms/tests/fixtures/themes');
 
         Model::clearBootedModels();
         Model::flushEventListeners();
@@ -24,6 +31,14 @@ class ControllerTest extends TestCase
         include_once base_path() . '/modules/system/tests/fixtures/plugins/winter/tester/components/ContentBlock.php';
         include_once base_path() . '/modules/system/tests/fixtures/plugins/winter/tester/components/Comments.php';
         include_once base_path() . '/modules/system/tests/fixtures/plugins/winter/tester/classes/Users.php';
+    }
+
+    public function tearDown(): void
+    {
+        // Restore original themes path
+        Config::set('cms.themesPath', $this->origThemePath);
+
+        parent::tearDown();
     }
 
     public function testThemeUrl()

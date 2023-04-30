@@ -72,6 +72,7 @@
             ],
             "recurse": true,
             "replace": false,
+            "merge-replace": false,
             "merge-dev": false
         }
     },
