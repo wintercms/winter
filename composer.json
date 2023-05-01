@@ -35,7 +35,7 @@
         "winter/wn-backend-module": "dev-develop",
         "winter/wn-cms-module": "dev-develop",
         "laravel/framework": "^9.1",
-        "wikimedia/composer-merge-plugin": "~2.0.1"
+        "wikimedia/composer-merge-plugin": "~2.1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.8",
@@ -72,6 +72,7 @@
             ],
             "recurse": true,
             "replace": false,
+            "merge-replace": false,
             "merge-dev": false
         }
     },

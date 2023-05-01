@@ -54,7 +54,8 @@
     MediaManagerPopup.prototype.show = function() {
         var data = {
             bottomToolbar: this.options.bottomToolbar ? 1 : 0,
-            cropAndInsertButton: this.options.cropAndInsertButton ? 1 : 0
+            cropAndInsertButton: this.options.cropAndInsertButton ? 1 : 0,
+            mode: this.options.mode || 'all',
         }
 
         this.$popupRootElement.popup({

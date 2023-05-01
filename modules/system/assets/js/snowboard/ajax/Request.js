@@ -1,3 +1,5 @@
+import PluginBase from '../abstracts/PluginBase';
+
 /**
  * Request plugin.
  *
@@ -6,11 +8,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-if (window.Snowboard === undefined) {
-    throw new Error('Snowboard must be loaded in order to use the Request plugin.');
-}
-
-class Request extends Snowboard.PluginBase {
+export default class Request extends PluginBase {
     /**
      * Constructor.
      *
@@ -853,5 +851,3 @@ class Request extends Snowboard.PluginBase {
         return /^(?:\w+:{2})?on[A-Z0-9]/.test(name);
     }
 }
-
-Snowboard.addPlugin('request', Request);

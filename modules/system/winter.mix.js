@@ -23,7 +23,7 @@ mix
     .js(
         [
             './assets/js/snowboard/snowboard.base.js',
-            './assets/js/snowboard/ajax/Request.js',
+            './assets/js/snowboard/snowboard.request.js',
             './assets/js/snowboard/snowboard.backend.extras.js',
         ],
         './assets/js/build/system.js',
@@ -31,7 +31,7 @@ mix
     .js(
         [
             './assets/js/snowboard/snowboard.base.debug.js',
-            './assets/js/snowboard/ajax/Request.js',
+            './assets/js/snowboard/snowboard.request.js',
             './assets/js/snowboard/snowboard.backend.extras.js',
         ],
         './assets/js/build/system.debug.js',
@@ -47,11 +47,11 @@ mix
         './assets/js/snowboard/build/snowboard.base.debug.js',
     )
     .js(
-        './assets/js/snowboard/ajax/Request.js',
+        './assets/js/snowboard/snowboard.request.js',
         './assets/js/snowboard/build/snowboard.request.js',
     )
     .js(
-        './assets/js/snowboard/ajax/handlers/AttributeRequest.js',
+        './assets/js/snowboard/snowboard.data-attr.js',
         './assets/js/snowboard/build/snowboard.data-attr.js',
     )
     .js(

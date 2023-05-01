@@ -596,7 +596,7 @@ return [
         'add_folder' => 'Ordner erstellen',
         'search' => 'Suchen',
         'display' => 'Anzeigen',
-        'filter_everything' => 'Alles',
+        'filter_all' => 'Alles',
         'filter_images' => 'Bilder',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',

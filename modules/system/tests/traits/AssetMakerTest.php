@@ -49,4 +49,29 @@ class AssetMakerTest extends TestCase
         $resolvedPath = $this->callProtectedMethod($this->stub, 'getLocalPath', [$basePath.'/some/wild/absolute/path/']);
         $this->assertEquals(realpath($basePath.'/some/wild/absolute/path/'), realpath($resolvedPath));
     }
+
+    public function testGetAssetPath()
+    {
+        $assetPath = 'my/path/assets';
+
+        // assetPath is ignored since we use pathSymbol for plugins
+        $path = $this->stub->getAssetPath('$/author/plugin/assets/js/myAsset.js', $assetPath);
+        $this->assertEquals('http://localhost/plugins/author/plugin/assets/js/myAsset.js', $path);
+
+        // assetPath is ignored since we use pathSymbol for theme
+        $path = $this->stub->getAssetPath('#/mytheme/assets/js/myAsset.js', $assetPath);
+        $this->assertEquals('http://localhost/themes/mytheme/assets/js/myAsset.js', $path);
+
+        // assetPath is ignored since we use pathSymbol for app root
+        $path = $this->stub->getAssetPath('~/plugins/author/plugin/assets/js/myAsset.js', $assetPath);
+        $this->assertEquals('http://localhost/plugins/author/plugin/assets/js/myAsset.js', $path);
+
+        // assetPath is used since we use a relative path without pathSymbol
+        $path = $this->stub->getAssetPath('js/myAsset.js', $assetPath);
+        $this->assertEquals('http://localhost/' . $assetPath . '/js/myAsset.js', $path);
+
+        // assetPath is ignored since we use an absolute path
+        $path = $this->stub->getAssetPath('/js/myAsset.js', $assetPath);
+        $this->assertEquals('http://localhost/js/myAsset.js', $path);
+    }
 }

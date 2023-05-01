@@ -1,3 +1,5 @@
+import Singleton from '../abstracts/Singleton';
+
 /**
  * Adds AJAX-driven form validation to Snowboard requests.
  *
@@ -7,7 +9,7 @@
  * @copyright 2022 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class FormValidation extends Snowboard.Singleton {
+export default class FormValidation extends Singleton {
     /**
      * Constructor.
      */
