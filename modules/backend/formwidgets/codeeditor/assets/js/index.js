@@ -25,6 +25,7 @@ import { parse as parseXml } from 'fast-plist';
             this.model = null;
             this.valueListener = null;
             this.positionListener = null;
+            this.selectionListener = null;
             this.resizeListener = false;
             this.visibilityListener = false;
             this.editor = null;
@@ -109,6 +110,10 @@ import { parse as parseXml } from 'fast-plist';
             if (this.positionListener) {
                 this.positionListener.dispose();
                 this.positionListener = null;
+            }
+            if (this.selectionListener) {
+                this.selectionListener.dispose();
+                this.selectionListener = null;
             }
             if (this.resizeListener) {
                 window.removeEventListener('resize', this.callbacks.resize);
@@ -255,6 +260,11 @@ import { parse as parseXml } from 'fast-plist';
 
             this.positionListener = this.editor.onDidChangeCursorPosition((event) => {
                 this.updatePosition(event.position);
+                this.events.fire('position', event);
+            });
+
+            this.selectionListener = this.editor.onDidChangeCursorSelection((event) => {
+                this.events.fire('selection', event);
             });
 
             window.addEventListener('resize', this.callbacks.resize);
@@ -308,6 +318,33 @@ import { parse as parseXml } from 'fast-plist';
         }
 
         /**
+         * Gets the current editor position.
+         *
+         * Note that when selecting a range, this will be the end of the main selection.
+         */
+        getPosition() {
+            return this.editor.getPosition();
+        }
+
+        /**
+         * Gets the current editor selection.
+         *
+         * This will only include the main selection, which is generally the first selection range made.
+         */
+        getSelection() {
+            return this.editor.getSelection();
+        }
+
+        /**
+         * Gets the current editor selections.
+         *
+         * This may include multiple selections.
+         */
+        getSelections() {
+            return this.editor.getSelections();
+        }
+
+        /**
          * Inserts a value into the editor at the current position.
          *
          * @param {String} value
@@ -342,6 +379,35 @@ import { parse as parseXml } from 'fast-plist';
                     forceMoveMarkers: true,
                     range: this.editor.getSelection(),
                     text: `${before}${this.editor.getModel().getValueInRange(this.editor.getSelection())}${after}`,
+                },
+            ], () => [this.editor.getSelection()]);
+        }
+
+        /**
+         * Unwraps the currently selected text from the given values.
+         *
+         * @param {*} before
+         * @param {*} after
+         * @returns {monaco.Selection[]}
+         */
+        unwrap(before, after) {
+            if (this.editor.getSelection().isEmpty()) {
+                return this.editor.getSelection();
+            }
+
+            let modification = this.editor.getModel().getValueInRange(this.editor.getSelection());
+            if (modification.startsWith(before)) {
+                modification = modification.substring(before.length);
+            }
+            if (modification.endsWith(after)) {
+                modification = modification.substring(0, modification.length - after.length);
+            }
+
+            return this.model.pushEditOperations(this.editor.getSelections(), [
+                {
+                    forceMoveMarkers: true,
+                    range: this.editor.getSelection(),
+                    text: modification,
                 },
             ], () => [this.editor.getSelection()]);
         }

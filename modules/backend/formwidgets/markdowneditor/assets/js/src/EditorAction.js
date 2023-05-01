@@ -10,12 +10,12 @@ export default class EditorAction {
     /**
      * Constructor.
      *
-     * @param {MarkdownEditor} editor
-     * @param {CodeEditor} monaco
+     * @param {MarkdownEditor} widget
+     * @param {CodeEditor} editor
      */
-    constructor(editor, monaco) {
+    constructor(widget, editor) {
+        this.widget = widget;
         this.editor = editor;
-        this.monaco = monaco;
         this.button = null;
     }
 

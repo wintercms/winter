@@ -21,6 +21,8 @@ import Bold from './actions/Bold';
             this.element = element;
             this.toolbar = element.querySelector('.markdowneditor-toolbar');
             this.editorElement = element.querySelector('.markdowneditor-editor');
+            this.preview = element.querySelector('.markdowneditor-preview');
+            this.config = this.snowboard.dataConfig(this, this.element);
             this.editor = null;
             this.actions = [];
             this.events = {
@@ -30,6 +32,13 @@ import Bold from './actions/Bold';
             this.createEditor();
             this.registerActions();
             this.createToolbar();
+        }
+
+        defaults() {
+            return {
+                refreshHandler: null,
+                useMediaManager: false,
+            };
         }
 
         destruct() {
@@ -65,10 +74,25 @@ import Bold from './actions/Bold';
 
             // Value listener
             this.editor.events.on('input', this.events.value);
+
+            // Position / selection lister
+            this.editor.events.on('position', () => {
+                this.updateToolbarButtonStates();
+            });
+            this.editor.events.on('selection', () => {
+                this.updateToolbarButtonStates();
+            });
         }
 
         updatePreview(value) {
-            console.log(value);
+            this.snowboard.request(this.config.get('refreshHandler'), {
+                data: {
+                    content: value,
+                },
+                success: (data) => {
+                    this.preview.innerHTML = data.preview;
+                },
+            });
         }
 
         registerActions() {
