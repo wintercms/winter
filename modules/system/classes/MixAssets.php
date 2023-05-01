@@ -89,22 +89,6 @@ class MixAssets
 
         // Get the currently enabled modules
         $enabledModules = Config::get('cms.loadModules', []);
-
-        if (in_array('Cms', $enabledModules)) {
-            // Allow current theme to define mix assets
-            $theme = Theme::getActiveTheme();
-
-            if (!is_null($theme)) {
-                $mix = $theme->getConfigValue('mix', []);
-
-                if (count($mix)) {
-                    foreach ($mix as $name => $file) {
-                        $this->registerPackage($name, $theme->getPath() . '/' . $file);
-                    }
-                }
-            }
-        }
-
         $packagePaths = [];
 
         // Search modules for Mix packages to autoregister
@@ -132,6 +116,14 @@ class MixAssets
                 $path = $theme->getPath() . '/' . $this->mixJs;
                 if (File::exists($path)) {
                     $packagePaths["theme-" . $theme->getId()] = $path;
+                }
+
+                $mix = $theme->getConfigValue('mix', []);
+
+                if (count($mix)) {
+                    foreach ($mix as $name => $file) {
+                        $this->registerPackage($name, $theme->getPath() . '/' . $file);
+                    }
                 }
             }
         }
