@@ -496,13 +496,22 @@ class Form extends WidgetBase
         /**
          * @event backend.form.extendFieldsBefore
          * Called before the form fields are defined
-         * >**NOTE**: You should test `$formWidget->isNested` to prevent adding fields to nested elements
          *
          * Example usage:
          *
          *     Event::listen('backend.form.extendFieldsBefore', function ((\Backend\Widgets\Form) $formWidget) {
-         *         // You should always check to see if you're extending correct model/controller
-         *         if (!$formWidget->model instanceof \Foo\Example\Models\Bar) {
+         *         // Only for the User controller
+         *         if (!$formWidget->getController() instanceof \Winter\User\Controllers\Users) {
+         *             return;
+         *         }
+         *
+         *         // Only for the User model
+         *         if (!$formWidget->model instanceof \Winter\User\Models\User) {
+         *             return;
+         *         }
+         *
+         *         // Only for main form fields
+         *         if ($formWidget->isNested) {
          *             return;
          *         }
          *
@@ -570,7 +579,6 @@ class Form extends WidgetBase
         /**
          * @event backend.form.extendFields
          * Called after the form fields are defined
-         * >**NOTE**: You should test `$formWidget->isNested` to prevent adding fields to nested elements
          *
          * Example usage:
          *
@@ -582,6 +590,11 @@ class Form extends WidgetBase
          *
          *         // Only for the User model
          *         if (!$formWidget->model instanceof \Winter\User\Models\User) {
+         *             return;
+         *         }
+         *
+         *         // Only for main form fields
+         *         if ($formWidget->isNested) {
          *             return;
          *         }
          *
