@@ -1,4 +1,5 @@
 import Bold from './actions/Bold';
+import Italic from './actions/Italic';
 
 ((Snowboard) => {
     /**
@@ -68,6 +69,9 @@ import Bold from './actions/Bold';
             this.editor.setConfig('showColors', false);
             this.editor.setConfig('displayIndentGuides', false);
             this.editor.setConfig('codeFolding', false);
+            this.editor.setConfig('wordWrap', 'fluid');
+            this.editor.setConfig('showOccurrences', false);
+            this.editor.setConfig('semanticHighlighting', false);
             this.editor.events.once('create', () => {
                 this.editor.setLanguage('markdown');
             });
@@ -99,6 +103,10 @@ import Bold from './actions/Bold';
             this.actions.push({
                 name: 'bold',
                 action: new Bold(this, this.editor),
+            });
+            this.actions.push({
+                name: 'italic',
+                action: new Italic(this, this.editor),
             });
         }
 

@@ -67,7 +67,9 @@ import { parse as parseXml } from 'fast-plist';
                 highlightActiveLine: true,
                 language: 'html',
                 margin: 0,
+                showOccurrences: true,
                 readOnly: false,
+                semanticHighlighting: true,
                 showColors: true,
                 showGutter: true,
                 showInvisibles: false,
@@ -199,6 +201,8 @@ import { parse as parseXml } from 'fast-plist';
                 minimap: {
                     enabled: this.config.get('showMinimap'),
                 },
+                occurrencesHighlight: this.config.get('showOccurrences'),
+                'semanticHighlighting.enabled': this.config.get('semanticHighlighting') ? 'configuredByTheme' : false,
                 renderLineHighlight: this.config.get('highlightActiveLine') ? 'all' : 'none',
                 renderWhitespace: this.config.get('showInvisibles') ? 'all' : 'selection',
                 scrollBeyondLastLine: false,
