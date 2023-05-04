@@ -23,11 +23,13 @@ import Italic from './actions/Italic';
             this.toolbar = element.querySelector('.markdowneditor-toolbar');
             this.editorElement = element.querySelector('.markdowneditor-editor');
             this.preview = element.querySelector('.markdowneditor-preview');
+            this.valueBag = element.querySelector('[data-value-bag]');
             this.config = this.snowboard.dataConfig(this, this.element);
+            this.previewTimer = null;
             this.editor = null;
             this.actions = [];
             this.events = {
-                value: (value) => this.updatePreview(value),
+                value: (value) => this.onValue(value),
             };
 
             this.createEditor();
@@ -67,10 +69,12 @@ import Italic from './actions/Italic';
             this.editor.setConfig('showGutter', false);
             this.editor.setConfig('showMinimap', false);
             this.editor.setConfig('showColors', false);
+            this.editor.setConfig('showScrollbar', false);
             this.editor.setConfig('displayIndentGuides', false);
             this.editor.setConfig('codeFolding', false);
             this.editor.setConfig('wordWrap', 'fluid');
             this.editor.setConfig('showOccurrences', false);
+            this.editor.setConfig('showSelectionOccurrences', false);
             this.editor.setConfig('semanticHighlighting', false);
             this.editor.events.once('create', () => {
                 this.editor.setLanguage('markdown');
@@ -88,11 +92,22 @@ import Italic from './actions/Italic';
             });
         }
 
-        updatePreview(value) {
-            this.snowboard.request(this.config.get('refreshHandler'), {
-                data: {
-                    content: value,
-                },
+        onValue() {
+            this.valueBag.value = this.editor.getValue();
+
+            if (this.previewTimer) {
+                clearTimeout(this.previewTimer);
+            }
+
+            this.previewTimer = setTimeout(() => {
+                this.updatePreview();
+                this.previewTimer = null;
+            }, 100);
+        }
+
+        updatePreview() {
+            this.snowboard.request(this.element, this.config.get('refreshHandler'), {
+                loading: false,
                 success: (data) => {
                     this.preview.innerHTML = data.preview;
                 },

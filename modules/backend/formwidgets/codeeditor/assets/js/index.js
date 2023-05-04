@@ -67,14 +67,17 @@ import { parse as parseXml } from 'fast-plist';
                 highlightActiveLine: true,
                 language: 'html',
                 margin: 0,
-                showOccurrences: true,
                 readOnly: false,
                 semanticHighlighting: true,
+                selectionHighlighting: true,
                 showColors: true,
                 showGutter: true,
                 showInvisibles: false,
                 showMinimap: true,
+                showOccurrences: true,
                 showPrintMargin: false,
+                showScrollbar: true,
+                showSelectionOccurrences: true,
                 tabSize: 4,
                 theme: 'vs-dark',
                 useSoftTabs: true,
@@ -202,9 +205,19 @@ import { parse as parseXml } from 'fast-plist';
                     enabled: this.config.get('showMinimap'),
                 },
                 occurrencesHighlight: this.config.get('showOccurrences'),
+                selectionHighlight: this.config.get('showSelectionOccurrences'),
                 'semanticHighlighting.enabled': this.config.get('semanticHighlighting') ? 'configuredByTheme' : false,
-                renderLineHighlight: this.config.get('highlightActiveLine') ? 'all' : 'none',
+                renderLineHighlight: this.getLineHighlightOption(),
                 renderWhitespace: this.config.get('showInvisibles') ? 'all' : 'selection',
+                scrollbar: {
+                    horizontalHasArrows: this.config.get('showScrollbar'),
+                    horizontalScrollbarSize: this.config.get('showScrollbar') ? 10 : 0,
+                    horizontalSliderSize: this.config.get('showScrollbar') ? 10 : 6,
+                    verticalHasArrows: this.config.get('showScrollbar'),
+                    verticalScrollbarSize: this.config.get('showScrollbar') ? 10 : 0,
+                    verticalSliderSize: this.config.get('showScrollbar') ? 10 : 6,
+                    useShadows: this.config.get('showScrollbar'),
+                },
                 scrollBeyondLastLine: false,
                 tabSize: this.config.get('tabSize'),
                 theme: this.config.get('theme'),
@@ -225,6 +238,18 @@ import { parse as parseXml } from 'fast-plist';
             }
 
             return options;
+        }
+
+        getLineHighlightOption() {
+            if (!this.config.get('highlightActiveLine')) {
+                return 'none';
+            }
+
+            if (!this.config.get('showGutter')) {
+                return 'line';
+            }
+
+            return 'all';
         }
 
         /**

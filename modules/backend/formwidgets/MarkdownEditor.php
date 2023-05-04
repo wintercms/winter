@@ -124,7 +124,7 @@ class MarkdownEditor extends FormWidgetBase
      */
     public function onRefresh()
     {
-        $value = post('content');
+        $value = post($this->getFieldName());
         $previewHtml = $this->safe
             ? Markdown::parseSafe($value)
             : Markdown::parse($value);
