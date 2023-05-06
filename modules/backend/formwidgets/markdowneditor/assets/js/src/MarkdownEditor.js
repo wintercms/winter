@@ -70,6 +70,7 @@ import Italic from './actions/Italic';
             this.editor.setConfig('showMinimap', false);
             this.editor.setConfig('showColors', false);
             this.editor.setConfig('showScrollbar', false);
+            this.editor.setConfig('showSuggestions', false);
             this.editor.setConfig('displayIndentGuides', false);
             this.editor.setConfig('codeFolding', false);
             this.editor.setConfig('wordWrap', 'fluid');
@@ -78,6 +79,7 @@ import Italic from './actions/Italic';
             this.editor.setConfig('semanticHighlighting', false);
             this.editor.events.once('create', () => {
                 this.editor.setLanguage('markdown');
+                this.registerKeyBindings();
             });
 
             // Value listener
@@ -368,6 +370,29 @@ import Italic from './actions/Italic';
             }
 
             return modifierKeyPrefix;
+        }
+
+        /**
+         * Registers key bindings with the code editor.
+         */
+        registerKeyBindings() {
+            if (!this.actions.length) {
+                return;
+            }
+
+            this.actions.forEach((item) => {
+                if (!item.action.shortcutKey()) {
+                    return;
+                }
+
+                this.editor.addKeyBinding({
+                    key: item.action.shortcutKey(),
+                    ctrl: true,
+                }, () => {
+                    item.action.action();
+                    this.updateToolbarButtonStates();
+                });
+            });
         }
     }
 

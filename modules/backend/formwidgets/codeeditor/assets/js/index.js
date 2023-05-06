@@ -47,12 +47,48 @@ import { parse as parseXml } from 'fast-plist';
                 },
                 visibilityChange: () => this.onVisibilityChange(),
             };
+            this.keybindings = [];
 
             this.observeElement();
         }
 
         /**
          * Data configuration defaults.
+         *
+         * Options available:
+         *
+         * - `alias`: Defines the alias of the field. Used for linking the code editor to the
+         *      backend.
+         * - `autoCloseTags`: Defines whether tags should be automatically closed.
+         * - `bracketColors`: Defines whether brackets should be highlighted with matching colors
+         *      for matching bracket pairs.
+         * - `codeFolding`: Defines whether code blocks can be folded from the left gutter.
+         * - `displayIndentGuides`: Defines whether indentation guides should be shown.
+         * - `fontSize`: Defines the font size of the editor.
+         * - `highlightActiveLine`: Defines whether the active line should be highlighted.
+         * - `language`: Defines the language of the editor. This should not be changed via the
+         *      config. Use the `setLanguage()` method instead.
+         * - `margin`: Defines the margin size surrounded the horizontal sides of the editor.
+         * - `readOnly`: Defines whether the editor should be read only.
+         * - `semanticHighlighting`: Defines if the selected word, variable or method should be
+         *      highlighted across the document.
+         * - `selectionHighlighting`: Defines whether occurrences of the selected content should be
+         *      highlighted.
+         * - `showColors`: Defines whether colors should be shown (and modified) in the editor.
+         * - `showGutter`: Defines whether the gutter should be shown.
+         * - `showInvisibles`: Defines whether invisible characters should be shown.
+         * - `showMinimap`: Defines whether the minimap should be shown.
+         * - `showOccurrences`: Defines whether occurrences of the selected content should be
+         *      highlighted.
+         * - `showPrintMargin`: Defines whether the print margin should be shown.
+         * - `showScrollbar`: Defines whether the scrollbars should be shown.
+         * - `showSelectionOccurrences`: Defines whether occurrences of the selected content should
+         *      be highlighted.
+         * - `showSuggestions`: Defines whether suggestions should be shown.
+         * - `tabSize`: Defines the size of a tab.
+         * - `theme`: Defines the theme of the editor.
+         * - `useSoftTabs`: Defines whether soft tabs (spaces) should be used.
+         * - `wordWrap`: Defines whether the editor should wrap long lines.
          *
          * @returns {Object}
          */
@@ -78,6 +114,7 @@ import { parse as parseXml } from 'fast-plist';
                 showPrintMargin: false,
                 showScrollbar: true,
                 showSelectionOccurrences: true,
+                showSuggestions: true,
                 tabSize: 4,
                 theme: 'vs-dark',
                 useSoftTabs: true,
@@ -169,6 +206,7 @@ import { parse as parseXml } from 'fast-plist';
             this.loadTheme();
             this.updateLanguage();
             this.enableStatusBarActions();
+            this.registerKeyBindings();
 
             this.events.fire('create', this, this.editor);
         }
@@ -205,8 +243,7 @@ import { parse as parseXml } from 'fast-plist';
                     enabled: this.config.get('showMinimap'),
                 },
                 occurrencesHighlight: this.config.get('showOccurrences'),
-                selectionHighlight: this.config.get('showSelectionOccurrences'),
-                'semanticHighlighting.enabled': this.config.get('semanticHighlighting') ? 'configuredByTheme' : false,
+                quickSuggestions: this.config.get('showSuggestions'),
                 renderLineHighlight: this.getLineHighlightOption(),
                 renderWhitespace: this.config.get('showInvisibles') ? 'all' : 'selection',
                 scrollbar: {
@@ -219,6 +256,10 @@ import { parse as parseXml } from 'fast-plist';
                     useShadows: this.config.get('showScrollbar'),
                 },
                 scrollBeyondLastLine: false,
+                selectionHighlight: this.config.get('showSelectionOccurrences'),
+                'semanticHighlighting.enabled': this.config.get('semanticHighlighting')
+                    ? 'configuredByTheme'
+                    : false,
                 tabSize: this.config.get('tabSize'),
                 theme: this.config.get('theme'),
                 value: this.valueBag.value,
@@ -980,6 +1021,146 @@ import { parse as parseXml } from 'fast-plist';
             const ranges = (!Array.isArray(range)) ? [range] : range;
             const processed = ranges.map((item) => new monaco.Range(item.startLineNumber, item.startColumn, item.endLineNumber, item.endColumn));
             this.editor.setHiddenAreas(processed);
+        }
+
+        /**
+         * Adds a keybinding to the editor.
+         *
+         * The `keyCode` parameter can be either a string or an object, if you need to specify modifiers.
+         *
+         * For example:
+         *
+         * ```js
+         * this.addKeyBinding('Ctrl+B', () => {});
+         * // - or -
+         * this.addKeyBinding({ key: 'B', ctrl: true }, () => {});
+         * ```
+         *
+         * Note that the Command key is considered Ctrl on Macs.
+         *
+         * @param {Object|string} keyCode
+         * @param {*} callback
+         */
+        addKeyBinding(keyCode, callback) {
+            const keybinding = this.normalizeKeyBinding(keyCode);
+
+            this.keybindings.push({
+                keybinding,
+                callback,
+            });
+
+            if (this.editor) {
+                const keyName = monaco.KeyCode[`Key${keybinding.key.toUpperCase()}`];
+                let binding = 0;
+
+                if (keybinding.shift) {
+                    /* eslint-disable-next-line no-bitwise */
+                    binding |= monaco.KeyMod.Shift;
+                }
+                if (keybinding.ctrl) {
+                    /* eslint-disable-next-line no-bitwise */
+                    binding |= monaco.KeyMod.CtrlCmd;
+                }
+                if (keybinding.alt) {
+                    /* eslint-disable-next-line no-bitwise */
+                    binding |= monaco.KeyMod.Alt;
+                }
+
+                /* eslint-disable-next-line no-bitwise */
+                binding |= keyName;
+
+                this.editor.addCommand(binding, callback);
+            }
+        }
+
+        /**
+         * Removes a keybinding from the editor.
+         *
+         * Note that Monaco doesn't allow us to remove keybindings, so we'll just stub out the
+         * callback if this is called.
+         *
+         * @param {Object|string} keyCode
+         * @param {*} callback
+         */
+        removeKeyBinding(keyCode) {
+            const keybinding = this.normalizeKeyBinding(keyCode);
+
+            const index = this.keybindings.findIndex((item) => item.keybinding === keybinding);
+
+            if (index === -1) {
+                return;
+            }
+
+            this.keybindings[index].callback = () => {};
+        }
+
+        /**
+         * Normalizes a keycode into an object.
+         *
+         * @param {Object|string} keyCode
+         * @returns Object
+         */
+        normalizeKeyBinding(keyCode) {
+            let keyBinding = {
+                key: null,
+                ctrl: false,
+                alt: false,
+                shift: false,
+            };
+
+            if (typeof keyCode === 'string') {
+                if (keyCode.startsWith('Shift+Ctrl+')) {
+                    keyBinding.key = keyCode.replace('Shift+Ctrl+', '');
+                    keyBinding.shift = true;
+                    keyBinding.ctrl = true;
+                } else if (keyCode.startsWith('Shift+Alt+')) {
+                    keyBinding.key = keyCode.replace('Shift+Alt+', '');
+                    keyBinding.shift = true;
+                    keyBinding.ctrl = true;
+                } else if (keyCode.startsWith('Ctrl+')) {
+                    keyBinding.key = keyCode.replace('Ctrl+', '');
+                    keyBinding.ctrl = true;
+                } else if (keyCode.startsWith('Alt+')) {
+                    keyBinding.key = keyCode.replace('Alt+', '');
+                    keyBinding.alt = true;
+                }
+            } else {
+                keyBinding = { ...keyBinding, ...keyCode };
+            }
+
+            return keyBinding;
+        }
+
+        /**
+         * Registers keybindings in the editor.
+         */
+        registerKeyBindings() {
+            if (this.keybindings.length === 0) {
+                return;
+            }
+
+            this.keybindings.forEach((item) => {
+                const keyName = monaco.KeyCode[`Key${item.keybinding.key.toUpperCase()}`];
+                let binding = 0;
+
+                if (item.keybinding.shift) {
+                    /* eslint-disable-next-line no-bitwise */
+                    binding |= monaco.KeyMod.Shift;
+                }
+                if (item.keybinding.ctrl) {
+                    /* eslint-disable-next-line no-bitwise */
+                    binding |= monaco.KeyMod.CtrlCmd;
+                }
+                if (item.keybinding.alt) {
+                    /* eslint-disable-next-line no-bitwise */
+                    binding |= monaco.KeyMod.Alt;
+                }
+
+                /* eslint-disable-next-line no-bitwise */
+                binding |= keyName;
+
+                this.editor.addCommand(binding, item.callback);
+            });
         }
     }
 

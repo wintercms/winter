@@ -4,7 +4,7 @@
  * Version: 0.34.1(547870b6881302c5b4ff32173c16d06009e3588f)
  * Released under the MIT license
  * https://github.com/microsoft/monaco-editor/blob/main/LICENSE.txt
- *-----------------------------------------------------------------------------*/},6758:function(e,t,n){n.r(t),n.d(t,{conf:function(){return d},language:function(){return u}});var o,r,i=n(4908),s=Object.defineProperty,a=Object.getOwnPropertyDescriptor,c=Object.getOwnPropertyNames,g=Object.prototype.hasOwnProperty,l=(e,t,n,o)=>{if(t&&"object"==typeof t||"function"==typeof t)for(let r of c(t))g.call(e,r)||r===n||s(e,r,{get:()=>t[r],enumerable:!(o=a(t,r))||o.enumerable});return e},p={};
+ *-----------------------------------------------------------------------------*/},6758:function(e,t,n){n.r(t),n.d(t,{conf:function(){return d},language:function(){return u}});var o,r,i=n(4604),s=Object.defineProperty,a=Object.getOwnPropertyDescriptor,c=Object.getOwnPropertyNames,g=Object.prototype.hasOwnProperty,l=(e,t,n,o)=>{if(t&&"object"==typeof t||"function"==typeof t)for(let r of c(t))g.call(e,r)||r===n||s(e,r,{get:()=>t[r],enumerable:!(o=a(t,r))||o.enumerable});return e},p={};
 /*!-----------------------------------------------------------------------------
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Version: 0.34.1(547870b6881302c5b4ff32173c16d06009e3588f)

@@ -58,12 +58,18 @@ export default class Bold extends Italic {
         } else if (this.isCurrentSelectionItalic()) {
             const selection = this.editor.getSelection();
 
-            this.editor.getEditor().setSelection({
-                startLineNumber: selection.startLineNumber,
-                startColumn: selection.startColumn - 1,
-                endLineNumber: selection.endLineNumber,
-                endColumn: selection.endColumn + 1,
-            });
+            if (
+                /^\*[^*]/.test(this.editor.getModel().getValueInRange(selection)) === false
+                || /[^*]\*$/.test(this.editor.getModel().getValueInRange(selection)) === false
+            ) {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: selection.startLineNumber,
+                    startColumn: selection.startColumn - 1,
+                    endLineNumber: selection.endLineNumber,
+                    endColumn: selection.endColumn + 1,
+                });
+            }
+
             this.editor.unwrap('*', '*');
             this.editor.wrap('**', '**');
             this.editor.focus();
@@ -71,12 +77,18 @@ export default class Bold extends Italic {
         } else if (this.isCurrentSelectionBold()) {
             const selection = this.editor.getSelection();
 
-            this.editor.getEditor().setSelection({
-                startLineNumber: selection.startLineNumber,
-                startColumn: selection.startColumn - 2,
-                endLineNumber: selection.endLineNumber,
-                endColumn: selection.endColumn + 2,
-            });
+            if (
+                /^\*\*/.test(this.editor.getModel().getValueInRange(selection)) === false
+                || /\*\*$/.test(this.editor.getModel().getValueInRange(selection)) === false
+            ) {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: selection.startLineNumber,
+                    startColumn: selection.startColumn - 2,
+                    endLineNumber: selection.endLineNumber,
+                    endColumn: selection.endColumn + 2,
+                });
+            }
+
             this.editor.unwrap('**', '**');
             this.editor.focus();
             return;

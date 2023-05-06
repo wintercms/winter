@@ -58,24 +58,50 @@ export default class Italic extends EditorAction {
         } else if (this.isCurrentSelectionItalic()) {
             const selection = this.editor.getSelection();
 
-            this.editor.getEditor().setSelection({
-                startLineNumber: selection.startLineNumber,
-                startColumn: selection.startColumn - 1,
-                endLineNumber: selection.endLineNumber,
-                endColumn: selection.endColumn + 1,
-            });
+            if (
+                /^\*[^*]/.test(this.editor.getModel().getValueInRange(selection))
+                && /[^*]\*$/.test(this.editor.getModel().getValueInRange(selection))
+            ) {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: selection.startLineNumber,
+                    startColumn: selection.startColumn + 1,
+                    endLineNumber: selection.endLineNumber,
+                    endColumn: selection.endColumn - 1,
+                });
+            } else {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: selection.startLineNumber,
+                    startColumn: selection.startColumn - 1,
+                    endLineNumber: selection.endLineNumber,
+                    endColumn: selection.endColumn + 1,
+                });
+            }
+
             this.editor.unwrap('*', '*');
             this.editor.focus();
             return;
         } else if (this.isCurrentSelectionBold()) {
             const selection = this.editor.getSelection();
 
-            this.editor.getEditor().setSelection({
-                startLineNumber: selection.startLineNumber,
-                startColumn: selection.startColumn - 2,
-                endLineNumber: selection.endLineNumber,
-                endColumn: selection.endColumn + 2,
-            });
+            if (
+                /^\*\*/.test(this.editor.getModel().getValueInRange(selection))
+                && /\*\*$/.test(this.editor.getModel().getValueInRange(selection))
+            ) {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: selection.startLineNumber,
+                    startColumn: selection.startColumn + 2,
+                    endLineNumber: selection.endLineNumber,
+                    endColumn: selection.endColumn - 2,
+                });
+            } else {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: selection.startLineNumber,
+                    startColumn: selection.startColumn - 2,
+                    endLineNumber: selection.endLineNumber,
+                    endColumn: selection.endColumn + 2,
+                });
+            }
+
             this.editor.unwrap('**', '**');
             this.editor.wrap('*', '*');
             this.editor.focus();
@@ -129,6 +155,8 @@ export default class Italic extends EditorAction {
     isCurrentWordItalic() {
         const expandedValue = this.getExpandedWord();
 
+        console.log(expandedValue);
+
         if (expandedValue === false) {
             return false;
         }
@@ -137,6 +165,15 @@ export default class Italic extends EditorAction {
     }
 
     isCurrentSelectionBold() {
+        const selection = this.editor.getSelection();
+
+        if (
+            /^\*\*/.test(this.editor.getModel().getValueInRange(selection))
+            && /\*\*$/.test(this.editor.getModel().getValueInRange(selection))
+        ) {
+            return true;
+        }
+
         const expandedValue = this.getExpandedSelection();
 
         if (expandedValue === false) {
@@ -147,6 +184,15 @@ export default class Italic extends EditorAction {
     }
 
     isCurrentSelectionItalic() {
+        const selection = this.editor.getSelection();
+
+        if (
+            /^\*[^*]/.test(this.editor.getModel().getValueInRange(selection))
+            && /[^*]\*$/.test(this.editor.getModel().getValueInRange(selection))
+        ) {
+            return true;
+        }
+
         const expandedValue = this.getExpandedSelection();
 
         if (expandedValue === false) {
@@ -167,19 +213,23 @@ export default class Italic extends EditorAction {
         const currentLineLength = this.editor.getModel().getLineLength(word.selection.startLineNumber);
 
         if (word.selection.startColumn < 3) {
-            return false;
+            word.selection.startColumn = 1;
+        } else {
+            word.selection.startColumn -= 2;
         }
 
         if (word.selection.endColumn > (currentLineLength - 1)) {
-            return false;
+            word.selection.endColumn = currentLineLength;
+        } else {
+            word.selection.endColumn += 2;
         }
 
         // Get expanded value
         return this.editor.getModel().getValueInRange({
             startLineNumber: word.selection.startLineNumber,
-            startColumn: word.selection.startColumn - 2,
+            startColumn: word.selection.startColumn,
             endLineNumber: word.selection.endLineNumber,
-            endColumn: word.selection.endColumn + 2,
+            endColumn: word.selection.endColumn,
         });
     }
 
@@ -193,18 +243,22 @@ export default class Italic extends EditorAction {
         const currentLineLength = this.editor.getModel().getLineLength(selection.startLineNumber);
 
         if (selection.startColumn < 3) {
-            return false;
+            selection.startColumn = 1;
+        } else {
+            selection.startColumn -= 2;
         }
 
         if (selection.endColumn > (currentLineLength - 1)) {
-            return false;
+            selection.endColumn = currentLineLength;
+        } else {
+            selection.endColumn += 2;
         }
 
         return this.editor.getModel().getValueInRange({
             startLineNumber: selection.startLineNumber,
-            startColumn: selection.startColumn - 2,
+            startColumn: selection.startColumn,
             endLineNumber: selection.endLineNumber,
-            endColumn: selection.endColumn + 2,
+            endColumn: selection.endColumn,
         });
     }
 }
