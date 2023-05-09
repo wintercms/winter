@@ -56,7 +56,7 @@ export default class Italic extends EditorAction {
                 this.editor.getEditor().setSelection(word.selection);
             }
         } else if (this.isCurrentSelectionItalic()) {
-            const selection = this.editor.getSelection();
+            const selection = this.editor.getSafeSelection();
 
             if (
                 /^\*[^*]/.test(this.editor.getModel().getValueInRange(selection))
@@ -81,7 +81,7 @@ export default class Italic extends EditorAction {
             this.editor.focus();
             return;
         } else if (this.isCurrentSelectionBold()) {
-            const selection = this.editor.getSelection();
+            const selection = this.editor.getSafeSelection();
 
             if (
                 /^\*\*/.test(this.editor.getModel().getValueInRange(selection))
@@ -113,7 +113,7 @@ export default class Italic extends EditorAction {
     }
 
     selectCurrentWord() {
-        const selection = this.editor.getSelection();
+        const selection = this.editor.getSelection().toJSON();
         const valueInSelection = this.editor.getModel().getValueInRange(selection);
 
         // If the selection crosses multiple words or lines, we cannot select a word.
@@ -155,17 +155,17 @@ export default class Italic extends EditorAction {
     isCurrentWordItalic() {
         const expandedValue = this.getExpandedWord();
 
-        console.log(expandedValue);
-
         if (expandedValue === false) {
             return false;
         }
 
-        return (/^[^*]\*/.test(expandedValue) && /\*[^*]$/.test(expandedValue));
+        console.log(expandedValue);
+
+        return (/^[^*]?\*/.test(expandedValue) && /\*[^*]?$/.test(expandedValue));
     }
 
     isCurrentSelectionBold() {
-        const selection = this.editor.getSelection();
+        const selection = this.editor.getSelection().toJSON();
 
         if (
             /^\*\*/.test(this.editor.getModel().getValueInRange(selection))
@@ -184,7 +184,7 @@ export default class Italic extends EditorAction {
     }
 
     isCurrentSelectionItalic() {
-        const selection = this.editor.getSelection();
+        const selection = this.editor.getSelection().toJSON();
 
         if (
             /^\*[^*]/.test(this.editor.getModel().getValueInRange(selection))
@@ -219,7 +219,7 @@ export default class Italic extends EditorAction {
         }
 
         if (word.selection.endColumn > (currentLineLength - 1)) {
-            word.selection.endColumn = currentLineLength;
+            word.selection.endColumn = currentLineLength + 1;
         } else {
             word.selection.endColumn += 2;
         }
@@ -234,7 +234,7 @@ export default class Italic extends EditorAction {
     }
 
     getExpandedSelection() {
-        const selection = this.editor.getSelection();
+        const selection = this.editor.getSafeSelection();
 
         if (selection.startLineNumber !== selection.endLineNumber) {
             return false;
@@ -249,7 +249,7 @@ export default class Italic extends EditorAction {
         }
 
         if (selection.endColumn > (currentLineLength - 1)) {
-            selection.endColumn = currentLineLength;
+            selection.endColumn = currentLineLength + 1;
         } else {
             selection.endColumn += 2;
         }
