@@ -134,73 +134,77 @@ class UpdateManager
      */
     public function update()
     {
-        $firstUp = !Schema::hasTable($this->getMigrationTableName());
-        if ($firstUp) {
-            $this->repository->createRepository();
-            $this->out('', true);
-            $this->write(Info::class, 'Migration table created');
-        }
-
-        /*
-         * Update modules
-         */
-        $modules = Config::get('cms.loadModules', []);
-        foreach ($modules as $module) {
-            $this->migrateModule($module);
-        }
-
-        $plugins = $this->pluginManager->getPlugins();
-
-        /*
-         * Replace plugins
-         */
-        foreach ($plugins as $code => $plugin) {
-            if (!$replaces = $plugin->getReplaces()) {
-                continue;
+        try {
+            $firstUp = !Schema::hasTable($this->getMigrationTableName());
+            if ($firstUp) {
+                $this->repository->createRepository();
+                $this->out('', true);
+                $this->write(Info::class, 'Migration table created');
             }
-            // TODO: add full support for plugins replacing multiple plugins
-            if (count($replaces) > 1) {
-                throw new ApplicationException(Lang::get('system::lang.plugins.replace.multi_install_error'));
-            }
-            foreach ($replaces as $replace) {
-                $this->versionManager->replacePlugin($plugin, $replace);
-            }
-        }
 
-        /*
-         * Seed modules
-         */
-        if ($firstUp) {
+            /*
+            * Update modules
+            */
             $modules = Config::get('cms.loadModules', []);
             foreach ($modules as $module) {
-                $this->seedModule($module);
+                $this->migrateModule($module);
             }
-        }
 
-        /*
-         * Update plugins
-         */
-        foreach ($plugins as $code => $plugin) {
-            $this->updatePlugin($code);
-        }
+            $plugins = $this->pluginManager->getPlugins();
 
-        Parameter::set('system::update.count', 0);
-        CacheHelper::clear();
-
-        // Set replacement warning messages
-        foreach ($this->pluginManager->getReplacementMap() as $alias => $plugin) {
-            if ($this->pluginManager->getActiveReplacementMap($alias)) {
-                $this->addMessage($plugin, Lang::get('system::lang.updates.update_warnings_plugin_replace_cli', [
-                    'alias' => '<info>' . $alias . '</info>'
-                ]));
+            /*
+            * Replace plugins
+            */
+            foreach ($plugins as $code => $plugin) {
+                if (!$replaces = $plugin->getReplaces()) {
+                    continue;
+                }
+                // TODO: add full support for plugins replacing multiple plugins
+                if (count($replaces) > 1) {
+                    throw new ApplicationException(Lang::get('system::lang.plugins.replace.multi_install_error'));
+                }
+                foreach ($replaces as $replace) {
+                    $this->versionManager->replacePlugin($plugin, $replace);
+                }
             }
+
+            /*
+            * Seed modules
+            */
+            if ($firstUp) {
+                $modules = Config::get('cms.loadModules', []);
+                foreach ($modules as $module) {
+                    $this->seedModule($module);
+                }
+            }
+
+            /*
+            * Update plugins
+            */
+            foreach ($plugins as $code => $plugin) {
+                $this->updatePlugin($code);
+            }
+
+            Parameter::set('system::update.count', 0);
+            CacheHelper::clear();
+
+            // Set replacement warning messages
+            foreach ($this->pluginManager->getReplacementMap() as $alias => $plugin) {
+                if ($this->pluginManager->getActiveReplacementMap($alias)) {
+                    $this->addMessage($plugin, Lang::get('system::lang.updates.update_warnings_plugin_replace_cli', [
+                        'alias' => '<info>' . $alias . '</info>'
+                    ]));
+                }
+            }
+
+            $this->out('', true);
+            $this->write(Info::class, 'Migration complete.');
+        } catch (\Throwable $ex) {
+            throw $ex;
+        } finally {
+            // Print messages returned by migrations / seeders
+            $this->printMessages();
         }
-
-        $this->out('', true);
-        $this->write(Info::class, 'Migration complete.');
-
-        // Print messages returned by migrations / seeders
-        $this->printMessages();
 
         return $this;
     }
