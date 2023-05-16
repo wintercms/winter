@@ -47,7 +47,7 @@ class RelationManager extends FormWidgetBase
             'recordUrl' => $this->recordUrl,
         ];
         if (isset($this->recordOnClick)) {
-            $options['recordOnClick'] = $this->recordOnClicks;
+            $options['recordOnClick'] = $this->recordOnClick;
         }
 
         return $this->controller->relationRender($this->formField->fieldName, $options);
