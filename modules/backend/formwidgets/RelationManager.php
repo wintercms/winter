@@ -31,8 +31,8 @@ class RelationManager extends FormWidgetBase
     {
         $this->fillFromConfig([
             'readOnly',
-            '$recordUrl',
-            '$recordOnClick',
+            'recordUrl',
+            'recordOnClick',
         ]);
 
         if (!isset($this->readOnly)) {
