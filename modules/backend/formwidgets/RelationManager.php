@@ -14,17 +14,17 @@ class RelationManager extends FormWidgetBase
 
     /**
      * @var bool Disables the ability to add, update, delete or create relations.
-     */             
+     */
     protected $readOnly;
 
     /**
      * @var string path to controller action to open a record.
-     */             
+     */
     protected $recordUrl;
 
     /**
      * @var string custom JavaScript code to execute when clicking on a record.
-     */             
+     */
     protected $recordOnClick;
 
     public function init(): void
