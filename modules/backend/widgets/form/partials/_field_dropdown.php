@@ -9,7 +9,7 @@ $emptyOption = $field->getConfig('emptyOption', $field->placeholder);
     <div class="form-control" <?= $field->readOnly ? 'disabled="disabled"' : ''; ?>>
         <?= (isset($fieldOptions[$field->value])) ? e(trans($fieldOptions[$field->value])) : '' ?>
     </div>
-    <input name="<?= $field->getName() ?>" value="<?= $field->value ?>">
+    <input type="hidden" name="<?= $field->getName() ?>" value="<?= $field->value ?>">
 <?php else: ?>
     <select
         id="<?= $field->getId() ?>"
