@@ -6,6 +6,6 @@
     class="form-control"
     value="<?= e($field->value) ?>"
     placeholder="<?= e(trans($field->placeholder)) ?>"
-    <?= $field->getAttributes() ?>
     <?= $this->previewMode ? 'disabled' : '' ?>
+    <?= $field->getAttributes() ?>
 />
