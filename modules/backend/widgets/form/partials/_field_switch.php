@@ -16,12 +16,6 @@ $off = isset($field->config['off']) ? $field->config['off'] : 'backend::lang.for
     <?php endif ?>
 </div>
 
-<input
-    type="hidden"
-    name="<?= $field->getName() ?>"
-    value="0"
-    <?= $previewMode ? 'disabled="disabled"' : '' ?>>
-
 <label class="custom-switch" <?= $previewMode ? 'onclick="return false"' : '' ?>>
     <input
         type="checkbox"
@@ -30,7 +24,8 @@ $off = isset($field->config['off']) ? $field->config['off'] : 'backend::lang.for
         value="1"
         <?= $previewMode ? 'readonly="readonly"' : '' ?>
         <?= $field->value == 1 ? 'checked="checked"' : '' ?>
-        <?= $field->getAttributes() ?>>
+        <?= $field->getAttributes() ?>
+    >
     <span><span><?= e(trans($on)) ?></span><span><?= e(trans($off)) ?></span></span>
     <a class="slide-button"></a>
 </label>

@@ -28,7 +28,7 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
                     id="<?= $checkboxId ?>"
                     name="<?= $field->getName() ?>[]"
                     value="<?= e($value) ?>"
-                    disabled="disabled"
+                    disabled
                     checked="checked">
 
                 <label for="<?= $checkboxId ?>">

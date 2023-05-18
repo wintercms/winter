@@ -21,7 +21,7 @@ $fieldOptions = $field->options();
                 value="<?= e($value) ?>"
                 type="radio"
                 <?= $field->isSelected($value) ? 'checked="checked"' : '' ?>
-                <?= $this->previewMode ? 'disabled="disabled"' : '' ?>
+                <?= $this->previewMode ? 'disabled' : '' ?>
                 <?= $field->getAttributes() ?>>
 
             <label for="<?= $fieldId ?>">
