@@ -6,7 +6,7 @@
         name="<?= $field->getName() ?>"
         value="1"
         <?= $this->previewMode ? 'disabled' : '' ?>
-        <?= $field->isSelected() ? 'checked="checked"' : '' ?>
+        <?= $field->isSelected() ? 'checked' : '' ?>
         <?= $field->getAttributes() ?>
     >
 

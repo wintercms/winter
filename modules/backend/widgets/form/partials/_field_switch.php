@@ -22,8 +22,8 @@ $off = isset($field->config['off']) ? $field->config['off'] : 'backend::lang.for
         id="<?= $field->getId() ?>"
         name="<?= $field->getName() ?>"
         value="1"
-        <?= $previewMode ? 'readonly="readonly"' : '' ?>
-        <?= $field->value == 1 ? 'checked="checked"' : '' ?>
+        <?= $previewMode ? 'readonly' : '' ?>
+        <?= $field->value == 1 ? 'checked' : '' ?>
         <?= $field->getAttributes() ?>
     >
     <span><span><?= e(trans($on)) ?></span><span><?= e(trans($off)) ?></span></span>

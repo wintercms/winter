@@ -29,7 +29,8 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
                     name="<?= $field->getName() ?>[]"
                     value="<?= e($value) ?>"
                     disabled
-                    checked="checked">
+                    checked
+                >
 
                 <label for="<?= $checkboxId ?>">
                     <?= e(trans($option[0])) ?>
@@ -89,7 +90,7 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
                         id="<?= $checkboxId ?>"
                         name="<?= $field->getName() ?>[]"
                         value="<?= e($value) ?>"
-                        <?= in_array($value, $checkedValues) ? 'checked="checked"' : '' ?>>
+                        <?= in_array($value, $checkedValues) ? 'checked' : '' ?>>
 
                     <label for="<?= $checkboxId ?>">
                         <?= e(trans($option[0])) ?>
