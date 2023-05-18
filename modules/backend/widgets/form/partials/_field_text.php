@@ -7,6 +7,6 @@
     placeholder="<?= e(trans($field->placeholder)) ?>"
     class="form-control"
     autocomplete="off"
-    <?= $field->getAttributes() ?>
     <?= $this->previewMode ? 'disabled' : '' ?>
+    <?= $field->getAttributes() ?>
 />

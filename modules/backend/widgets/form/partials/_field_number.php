@@ -16,8 +16,8 @@
     autocomplete="off"
     <?= $min !== false ? 'min="' . $min . '"' : ''; ?>
     <?= $max !== false ? 'max="' . $max . '"' : ''; ?>
+    <?= $this->previewMode ? 'disabled' : '' ?>
     <?= $field->hasAttribute('pattern') ? '' : 'pattern="-?\d+(\.\d+)?"' ?>
     <?= $field->hasAttribute('maxlength') ? '' : 'maxlength="255"' ?>
     <?= $field->getAttributes() ?>
-    <?= $this->previewMode ? 'disabled' : '' ?>
 />

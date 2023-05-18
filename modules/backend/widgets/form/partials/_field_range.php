@@ -20,8 +20,8 @@ if (is_null($value)) {
     value="<?= e($value) ?>"
     min="<?= $min ?>"
     max="<?= $max ?>"
-    <?= $field->getAttributes() ?>
     <?= $this->previewMode ? 'disabled' : '' ?>
+    <?= $field->getAttributes() ?>
 />
 <span style="position: absolute; transform: translateX(-50%)"></span>
 <script>
