@@ -6,7 +6,8 @@ $fieldOptions = $field->options();
     data-control="balloon-selector"
     id="<?= $field->getId() ?>"
     class="control-balloon-selector <?= $this->previewMode || $field->disabled ? 'control-disabled' : '' ?>"
-    <?= $field->getAttributes() ?>>
+    <?= $field->getAttributes() ?>
+>
     <ul>
         <?php foreach ($fieldOptions as $value => $text): ?>
             <li data-value="<?= e($value) ?>" class="<?= $field->isSelected($value) ? 'active' : '' ?>"><?= e(trans($text)) ?></li>
