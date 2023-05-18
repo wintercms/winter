@@ -72,7 +72,8 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
             <input
                 type="hidden"
                 name="<?= $field->getName() ?>"
-                value="0" />
+                value="0"
+            >
 
             <?php
             $index = 0;

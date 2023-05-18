@@ -30,7 +30,7 @@ foreach ($fields as $field):
                     id="<?= $this->nameToId($currentFieldName) ?>"
                     value="<?= e($value) ?>"
                     <?= $field->getAttributes() ?>
-            />
+            >
 
         <?php endforeach ?>
     <?php endforeach ?>

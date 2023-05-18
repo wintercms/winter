@@ -22,7 +22,7 @@ if (is_null($value)) {
     max="<?= $max ?>"
     <?= $this->previewMode ? 'disabled' : '' ?>
     <?= $field->getAttributes() ?>
-/>
+>
 <span style="position: absolute; transform: translateX(-50%)"></span>
 <script>
     (() => {

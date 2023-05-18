@@ -20,4 +20,4 @@
     <?= $field->hasAttribute('pattern') ? '' : 'pattern="-?\d+(\.\d+)?"' ?>
     <?= $field->hasAttribute('maxlength') ? '' : 'maxlength="255"' ?>
     <?= $field->getAttributes() ?>
-/>
+>

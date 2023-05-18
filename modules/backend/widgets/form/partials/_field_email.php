@@ -8,4 +8,4 @@
     placeholder="<?= e(trans($field->placeholder)) ?>"
     <?= $this->previewMode ? 'disabled' : '' ?>
     <?= $field->getAttributes() ?>
-/>
+>

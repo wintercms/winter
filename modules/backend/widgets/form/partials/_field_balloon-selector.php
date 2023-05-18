@@ -18,5 +18,5 @@ $fieldOptions = $field->options();
         name="<?= $field->getName() ?>"
         id="<?= $field->getId() ?>"
         value="<?= e($field->value) ?>"
-        />
+    >
 </div>
