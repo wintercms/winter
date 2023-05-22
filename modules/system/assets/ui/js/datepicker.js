@@ -136,6 +136,10 @@
         }
 
         this.$datePicker.pikaday(pikadayOptions)
+
+		if (!this.$datePicker.attr('inputmode')) {
+			this.$datePicker.attr('inputmode', 'none')
+		}
     }
 
     DatePicker.prototype.onSelectDatePicker = function(pickerMoment) {
@@ -195,6 +199,10 @@
         })
 
         this.$timePicker.val(this.getDataLockerValue(this.getTimeFormat()))
+
+		if (!this.$timePicker.attr('inputmode')) {
+			this.$timePicker.attr('inputmode', 'none')
+		}
     }
 
     DatePicker.prototype.onSelectTimePicker = function() {
