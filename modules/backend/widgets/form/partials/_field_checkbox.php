@@ -1,6 +1,6 @@
 <!-- Checkbox -->
 <div class="checkbox custom-checkbox" tabindex="0">
-   <input
+    <input
        type="hidden"
        name="<?= $field->getName() ?>"
        value="0"
