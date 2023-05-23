@@ -1,5 +1,11 @@
 <!-- Checkbox -->
 <div class="checkbox custom-checkbox" tabindex="0">
+   <input
+       type="hidden"
+       name="<?= $field->getName() ?>"
+       value="0"
+       <?= $this->previewMode ? 'disabled' : '' ?>
+    >
     <input
         type="checkbox"
         id="<?= $field->getId() ?>"
