@@ -16,6 +16,12 @@ $off = isset($field->config['off']) ? $field->config['off'] : 'backend::lang.for
     <?php endif ?>
 </div>
 
+<input
+    type="hidden"
+    name="<?= $field->getName() ?>"
+    value="0"
+    <?= $previewMode ? 'disabled' : '' ?>
+>
 <label class="custom-switch" <?= $previewMode ? 'onclick="return false"' : '' ?>>
     <input
         type="checkbox"
