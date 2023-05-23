@@ -1,15 +1,15 @@
 <!-- Range -->
 <?php
-$min = $field->config['min'] ?? 0;
-$max = $field->config['max'] ?? 100;
-$step = $field->config['step'] ?? 1;
-$value = $field->value;
-if ($min > $max) {
-    $min = $max - $step;
-}
-if (is_null($value)) {
-    $value = ($min + $max) / 2;
-}
+    $min = $field->config['min'] ?? 0;
+    $max = $field->config['max'] ?? 100;
+    $step = $field->config['step'] ?? 1;
+    $value = $field->value;
+    if ($min > $max) {
+        $min = $max - $step;
+    }
+    if (is_null($value)) {
+        $value = ($min + $max) / 2;
+    }
 ?>
 
 <input
