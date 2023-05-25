@@ -312,7 +312,7 @@ class BackendController extends ControllerBase
             return \Closure::fromCallable($params[0])->call($this, $params[1] ?? $this);
         }
 
-        return $this->extendableCall($name, $params);
+        return parent::__call($name, $params);
     }
 
     public static function __callStatic($name, $params)
