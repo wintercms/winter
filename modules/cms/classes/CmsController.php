@@ -1,8 +1,8 @@
 <?php namespace Cms\Classes;
 
 use App;
-use Illuminate\Routing\Controller as ControllerBase;
 use Closure;
+use Illuminate\Routing\Controller as ControllerBase;
 
 /**
  * This is the master controller for all front-end pages.
@@ -53,7 +53,7 @@ class CmsController extends ControllerBase
             return \Closure::fromCallable($params[0])->call($this, $params[1] ?? $this);
         }
 
-        return parent::__call($name, $params);
+        return $this->extendableCall($name, $params);
     }
 
     public static function __callStatic($name, $params)

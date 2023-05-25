@@ -2,6 +2,7 @@
 
 use Str;
 use App;
+use Closure;
 use File;
 use View;
 use Event;
@@ -11,7 +12,6 @@ use Response;
 use Illuminate\Routing\Controller as ControllerBase;
 use Winter\Storm\Router\Helper as RouterHelper;
 use System\Classes\PluginManager;
-use Closure;
 
 /**
  * This is the master controller for all back-end pages.
@@ -312,7 +312,7 @@ class BackendController extends ControllerBase
             return \Closure::fromCallable($params[0])->call($this, $params[1] ?? $this);
         }
 
-        return parent::__call($name, $params);
+        return $this->extendableCall($name, $params);
     }
 
     public static function __callStatic($name, $params)
