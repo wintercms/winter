@@ -1212,9 +1212,8 @@ class Controller
     /**
      * Returns an existing instance of the controller.
      * If the controller doesn't exists, returns null.
-     * @return mixed Returns the controller object or null.
      */
-    public static function getController()
+    public static function getController(): ?self
     {
         return self::$instance;
     }
