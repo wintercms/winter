@@ -322,7 +322,7 @@ return [
         'add_folder' => '增加檔案夾',
         'search' => '搜尋',
         'display' => '顯示',
-        'filter_everything' => '所有',
+        'filter_all' => '所有',
         'filter_images' => '圖片',
         'filter_video' => '影片',
         'filter_audio' => '音訊',

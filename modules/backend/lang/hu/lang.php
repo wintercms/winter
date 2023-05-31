@@ -587,7 +587,7 @@ return [
         'add_folder' => 'Könyvtár létrehozása',
         'search' => 'Keresés...',
         'display' => 'Megjelenítés',
-        'filter_everything' => 'Összes',
+        'filter_all' => 'Összes',
         'filter_images' => 'Kép',
         'filter_video' => 'Videó',
         'filter_audio' => 'Audió',

@@ -4,8 +4,11 @@ use Cms;
 use Url;
 use App;
 use View;
+use File;
 use Lang;
+use Log;
 use Flash;
+use Cache;
 use Config;
 use Session;
 use Request;
@@ -1098,10 +1101,11 @@ class Controller
      *
      * @param string $name The content view to load.
      * @param array $parameters Parameter variables to pass to the view.
-     * @throws SystemException If the content cannot be found
-     * @return string
+     * @param bool $throwException Throw an exception if the content file is not found.
+     * @throws SystemException If the content cannot be found, and `$throwException` is true.
+     * @return string|false Content file, or false if `$throwException` is false.
      */
-    public function renderContent($name, $parameters = [])
+    public function renderContent($name, $parameters = [], $throwException = true)
     {
         /**
          * @event cms.page.beforeRenderContent
@@ -1127,7 +1131,11 @@ class Controller
          * Load content from theme
          */
         elseif (($content = Content::loadCached($this->theme, $name)) === null) {
-            throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name'=>$name]));
+            if ($throwException) {
+                throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name' => $name]));
+            } else {
+                return false;
+            }
         }
 
         $fileContent = $content->parsedMarkup;
@@ -1204,9 +1212,8 @@ class Controller
     /**
      * Returns an existing instance of the controller.
      * If the controller doesn't exists, returns null.
-     * @return mixed Returns the controller object or null.
      */
-    public static function getController()
+    public static function getController(): ?self
     {
         return self::$instance;
     }
@@ -1348,22 +1355,58 @@ class Controller
      * @param mixed $url Specifies the theme-relative URL. If null, the theme path is returned.
      * @return string
      */
-    public function themeUrl($url = null)
+    public function themeUrl($url = null): string
+    {
+        return is_array($url)
+            ? $this->themeCombineAssets($url)
+            : $this->getTheme()->assetUrl($url);
+    }
+
+    /**
+     * Generates a URL to the AssetCombiner for the provided array of assets
+     */
+    protected function themeCombineAssets(array $url): string
     {
         $themeDir = $this->getTheme()->getDirName();
+        $parentTheme = $this->getTheme()->getConfig()['parent'] ?? false;
+        $themesPath = themes_path();
 
-        if (is_array($url)) {
-            $_url = Url::to(CombineAssets::combine($url, themes_path().'/'.$themeDir));
-        }
-        else {
-            $_url = Config::get('cms.themesPath', '/themes').'/'.$themeDir;
-            if ($url !== null) {
-                $_url .= '/'.$url;
+        $cacheKey = __METHOD__ . '.' . md5(json_encode($url));
+
+        if (!($assets = Cache::get($cacheKey))) {
+            $assets = [];
+            $sources = [
+                $themesPath . '/' . $themeDir
+            ];
+
+            if ($parentTheme) {
+                $sources[] = $themesPath . '/' . $parentTheme;
             }
-            $_url = Url::asset($_url);
+
+            foreach ($url as $file) {
+                // Leave Combiner Aliases assets & absolute path assets (using path symbols like $, #, ~) unmodified
+                if (str_starts_with($file, '@') || File::isPathSymbol($file)) {
+                    $assets[] = $file;
+                    continue;
+                }
+
+                foreach ($sources as $source) {
+                    $asset = $source . '/' . $file;
+                    if (File::exists($asset)) {
+                        $assets[] = $asset;
+                        break;
+                    }
+                }
+
+                // Skip combining missing assets and log an error
+                Log::error("$file could not be found in any of the theme's sources (" . implode(', ', $sources) . ',');
+                continue;
+            }
+
+            Cache::put($cacheKey, $assets);
         }
 
-        return $_url;
+        return Url::to(CombineAssets::combine($assets));
     }
 
     /**

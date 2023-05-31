@@ -32,7 +32,7 @@ class MediaManager extends WidgetBase
     const SELECTION_MODE_FIXED_RATIO = 'fixed-ratio';
     const SELECTION_MODE_FIXED_SIZE = 'fixed-size';
 
-    const FILTER_EVERYTHING = 'everything';
+    const FILTER_ALL = 'all';
 
     /**
      * @var boolean Determines whether the widget is in readonly mode or not.
@@ -48,6 +48,11 @@ class MediaManager extends WidgetBase
      * @var boolean Determines whether the Crop & Insert button is visible.
      */
     public $cropAndInsertButton = false;
+
+    /**
+     * @var boolean Determines whether the Display filters are visible.
+     */
+    public bool $filterDisplay = true;
 
     /**
      * Constructor.
@@ -521,7 +526,7 @@ class MediaManager extends WidgetBase
      *
      * @throws ApplicationException If the exclude input data is not an array
      */
-    public function onLoadMovePopup(): array
+    public function onLoadMovePopup(): string
     {
         $this->abortIfReadOnly();
 
@@ -662,6 +667,13 @@ class MediaManager extends WidgetBase
         $this->bottomToolbar = Input::get('bottomToolbar', $this->bottomToolbar);
 
         $this->cropAndInsertButton = Input::get('cropAndInsertButton', $this->cropAndInsertButton);
+
+        if ($mode = Input::get('mode')) {
+            $this->setFilter($mode);
+            if ($mode !== static::FILTER_ALL) {
+                $this->setFilterDisplay(false);
+            }
+        }
 
         return $this->makePartial('popup-body');
     }
@@ -871,7 +883,7 @@ class MediaManager extends WidgetBase
      */
     protected function listFolderItems($folder, $filter, $sortBy)
     {
-        $filter = $filter !== self::FILTER_EVERYTHING ? $filter : null;
+        $filter = $filter !== self::FILTER_ALL ? $filter : null;
 
         return MediaLibrary::instance()->listFolderContents($folder, $sortBy, $filter);
     }
@@ -887,7 +899,7 @@ class MediaManager extends WidgetBase
      */
     protected function findFiles($searchTerm, $filter, $sortBy)
     {
-        $filter = $filter !== self::FILTER_EVERYTHING ? $filter : null;
+        $filter = $filter !== self::FILTER_ALL ? $filter : null;
 
         return MediaLibrary::instance()->findFiles($searchTerm, $sortBy, $filter);
     }
@@ -922,7 +934,7 @@ class MediaManager extends WidgetBase
     protected function setFilter($filter): void
     {
         if (!in_array($filter, [
-            self::FILTER_EVERYTHING,
+            self::FILTER_ALL,
             MediaLibraryItem::FILE_TYPE_IMAGE,
             MediaLibraryItem::FILE_TYPE_AUDIO,
             MediaLibraryItem::FILE_TYPE_DOCUMENT,
@@ -935,13 +947,29 @@ class MediaManager extends WidgetBase
     }
 
     /**
+     * Sets the filter display option for the request
+     */
+    protected function setFilterDisplay(bool $status): void
+    {
+        $this->filterDisplay = $status;
+    }
+
+    /**
+     * Gets the filter display option for the request
+     */
+    protected function getFilterDisplay(): bool
+    {
+        return $this->filterDisplay;
+    }
+
+    /**
      * Gets the user filter from the session state
      *
      * @return string
      */
     protected function getFilter()
     {
-        return $this->getSession('media_filter', self::FILTER_EVERYTHING);
+        return $this->getSession('media_filter', self::FILTER_ALL);
     }
 
     /**

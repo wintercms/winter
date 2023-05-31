@@ -8,11 +8,17 @@ use Backend\Classes\AuthManager;
 
 class AuthManagerTest extends TestCase
 {
+    protected AuthManager $instance;
+    protected $existingPermissions = [];
+
     public function setUp(): void
     {
         $this->createApplication();
 
         $this->instance = AuthManager::instance();
+
+        $this->existingPermissions = $this->instance->listPermissions();
+
         $this->instance->registerPermissions('Winter.TestCase', [
             'test.permission_one' => [
                 'label' => 'Test Permission 1',
@@ -27,6 +33,14 @@ class AuthManagerTest extends TestCase
         ]);
     }
 
+    protected function listNewPermissions()
+    {
+        $existing = collect($this->existingPermissions)->pluck('code')->toArray();
+        $allPermissions = collect($this->instance->listPermissions());
+
+        return $allPermissions->whereNotIn('code', $existing)->pluck('code')->toArray();
+    }
+
     public function tearDown(): void
     {
         AuthManager::forgetInstance();
@@ -34,12 +48,12 @@ class AuthManagerTest extends TestCase
 
     public function testListPermissions()
     {
-        $permissions = $this->instance->listPermissions();
+        $permissions = $this->listNewPermissions();
         $this->assertCount(2, $permissions);
         $this->assertEquals([
             'test.permission_one',
             'test.permission_two'
-        ], collect($permissions)->pluck('code')->toArray());
+        ], $permissions);
     }
 
     public function testRegisterPermissions()
@@ -52,29 +66,29 @@ class AuthManagerTest extends TestCase
             ]
         ]);
 
-        $permissions = $this->instance->listPermissions();
+        $permissions = $this->listNewPermissions();
         $this->assertCount(3, $permissions);
         $this->assertEquals([
             'test.permission_three',
             'test.permission_one',
             'test.permission_two'
-        ], collect($permissions)->pluck('code')->toArray());
+        ], $permissions);
     }
 
     public function testAliasesPermissions()
     {
         $this->instance->registerPermissionOwnerAlias('Winter.TestCase', 'Aliased.TestCase');
 
-        $permissions = $this->instance->listPermissions();
+        $permissions = $this->listNewPermissions();
         $this->assertCount(2, $permissions);
 
         $this->instance->removePermission('Aliased.TestCase', 'test.permission_one');
 
-        $permissions = $this->instance->listPermissions();
+        $permissions = $this->listNewPermissions();
         $this->assertCount(1, $permissions);
         $this->assertEquals([
             'test.permission_two'
-        ], collect($permissions)->pluck('code')->toArray());
+        ], $permissions);
     }
 
     public function testRegisterPermissionsThroughCallbacks()
@@ -101,14 +115,14 @@ class AuthManagerTest extends TestCase
             ]);
         });
 
-        $permissions = $this->instance->listPermissions();
+        $permissions = $this->listNewPermissions();
         $this->assertCount(4, $permissions);
         $this->assertEquals([
             'test.permission_three',
             'test.permission_one',
             'test.permission_two',
             'test.permission_four'
-        ], collect($permissions)->pluck('code')->toArray());
+        ], $permissions);
     }
 
     public function testRegisterAdditionalTab()
@@ -132,6 +146,11 @@ class AuthManagerTest extends TestCase
         });
 
         $tabs = $this->instance->listTabbedPermissions();
+
+        // Remove the core tabs
+        unset($tabs['cms::lang.permissions.name']);
+        unset($tabs['system::lang.permissions.name']);
+
         $this->assertCount(2, $tabs);
         $this->assertEquals([
             'Test 2',
@@ -151,11 +170,11 @@ class AuthManagerTest extends TestCase
     {
         $this->instance->removePermission('Winter.TestCase', 'test.permission_one');
 
-        $permissions = $this->instance->listPermissions();
+        $permissions = $this->listNewPermissions();
         $this->assertCount(1, $permissions);
         $this->assertEquals([
             'test.permission_two'
-        ], collect($permissions)->pluck('code')->toArray());
+        ], $permissions);
     }
 
     public function testCannotRemovePermissionsBeforeLoaded()

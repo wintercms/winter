@@ -541,7 +541,7 @@ class Lists extends WidgetBase
         /*
          * Apply sorting
          */
-        if (($sortColumn = $this->getSortColumn()) && !$this->showTree && in_array($sortColumn, array_keys($this->getVisibleColumns()))) {
+        if (($sortColumn = $this->getSortColumn()) && !$this->showTree) {
             if (($column = array_get($this->allColumns, $sortColumn)) && $column->valueFrom) {
                 $sortColumn = $this->isColumnPivot($column)
                     ? 'pivot_' . $column->valueFrom
@@ -1596,7 +1596,7 @@ class Lists extends WidgetBase
             return false;
         }
 
-        if ($this->sortColumn !== null) {
+        if ($this->sortColumn !== null && $this->isSortable($this->sortColumn)) {
             return $this->sortColumn;
         }
 
@@ -1802,11 +1802,10 @@ class Lists extends WidgetBase
 
     /**
      * Check if column refers to a relation of the model
-     * @param  ListColumn  $column List column object
      * @param  boolean     $multi  If set, returns true only if the relation is a "multiple relation type"
      * @return boolean
      */
-    protected function isColumnRelated($column, $multi = false)
+    protected function isColumnRelated(ListColumn $column, bool $multi = false): bool
     {
         if (!isset($column->relation) || $this->isColumnPivot($column)) {
             return false;

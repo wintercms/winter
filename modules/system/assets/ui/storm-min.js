@@ -2562,7 +2562,7 @@ setTimeout(updateValue,100,self,$el,prefix)},timeout)})
 this.$el.on('change',function(){self.cancelled=true})}
 InputPreset.prototype.formatNamespace=function(){var value=this.toCamel(this.$src.val())
 return value.substr(0,1).toUpperCase()+value.substr(1)}
-InputPreset.prototype.formatValue=function(){if(this.options.inputPresetType=='exact'){return this.$src.val();}else if(this.options.inputPresetType=='namespace'){return this.formatNamespace()}if(this.options.inputPresetType=='camel'){var value=this.toCamel(this.$src.val())}else{var value=this.slugify(this.$src.val())}if(this.options.inputPresetType=='url'){value='/'+value}return value.replace(/\s/gi,"-")}
+InputPreset.prototype.formatValue=function(){if(this.options.inputPresetType=='exact'){return this.$src.val();}else if(this.options.inputPresetType=='namespace'){return this.formatNamespace()}if(this.options.inputPresetType=='camel'){var value=this.toCamel(this.$src.val(),this.$el.attr('maxlength'))}else{var value=this.slugify(this.$src.val(),this.$el.attr('maxlength'))}if(this.options.inputPresetType=='url'){value='/'+value}return value.replace(/\s/gi,"-")}
 InputPreset.prototype.toCamel=function(slug,numChars){Downcoder.Initialize()
 slug=slug.replace(Downcoder.regex,function(m){return Downcoder.map[m]})
 slug=this.removeStopWords(slug);slug=slug.toLowerCase()
@@ -3680,7 +3680,7 @@ this.createPlaceholder(select)
 this.createOptions(select,this.propertyDefinition.options)
 if(value===undefined){value=this.propertyDefinition.default}select.value=value}
 DropdownEditor.prototype.loadDynamicOptions=function(initialization){var currentValue=this.inspector.getPropertyValue(this.propertyDefinition.property),data=this.getRootSurface().getValues(),self=this,$form=$(this.getSelect()).closest('form'),dependents=this.inspector.findDependentProperties(this.propertyDefinition.property)
-if(currentValue===undefined){currentValue=this.propertyDefinition.default}var callback=function dropdownOptionsRequestDoneClosure(data){self.hideLoadingIndicator()
+if(this.inspector.options.parentContainer){data=this.inspector.options.parentContainer.getValues()}if(currentValue===undefined){currentValue=this.propertyDefinition.default}var callback=function dropdownOptionsRequestDoneClosure(data){self.hideLoadingIndicator()
 self.optionsRequestDone(data,currentValue,true)
 if(dependents.length>0){for(var i in dependents){var editor=self.inspector.findPropertyEditor(dependents[i])
 if(editor&&typeof editor.onInspectorPropertyChanged==='function'){editor.onInspectorPropertyChanged(self.propertyDefinition.property)}}}}
@@ -3694,7 +3694,7 @@ $inspectable.trigger(optionsEvent,[{values:values,callback:callback,property:thi
 if(optionsEvent.isDefaultPrevented()){return false}return true}
 DropdownEditor.prototype.saveDependencyValues=function(){this.prevDependencyValues=this.getDependencyValues()}
 DropdownEditor.prototype.getDependencyValues=function(){var result=''
-for(var i=0,len=this.propertyDefinition.depends.length;i<len;i++){var property=this.propertyDefinition.depends[i],value=this.inspector.getPropertyValue(property)
+for(var i=0,len=this.propertyDefinition.depends.length;i<len;i++){var property=this.propertyDefinition.depends[i],value=this.getRootSurface().getPropertyValue(property)
 if(value===undefined){value='';}result+=property+':'+value+'-'}return result}
 DropdownEditor.prototype.showLoadingIndicator=function(){if(!Modernizr.touchevents){this.indicatorContainer.loadIndicator()}}
 DropdownEditor.prototype.hideLoadingIndicator=function(){if(this.isDisposed()){return}if(!Modernizr.touchevents){this.indicatorContainer.loadIndicator('hide')
@@ -3983,8 +3983,8 @@ $.wn.foundation.element.removeClass(selectedRow,'active')}this.disposeInspector(
 $.wn.foundation.element.addClass(row,'active')
 this.createInspectorForRow(row,inspectorContainer)}
 ObjectListEditor.prototype.createInspectorForRow=function(row,inspectorContainer){var dataStr=row.getAttribute('data-inspector-values')
-if(dataStr===undefined||typeof dataStr!=='string'){throw new Error('Values not found for the selected row.')}var properties=this.propertyDefinition.itemProperties,values=JSON.parse(dataStr),options={enableExternalParameterEditor:false,onChange:this.proxy(this.onInspectorDataChange),inspectorClass:this.inspector.options.inspectorClass}
-this.currentRowInspector=new $.wn.inspector.surface(inspectorContainer,properties,values,$.wn.inspector.helpers.generateElementUniqueId(inspectorContainer),options)}
+if(dataStr===undefined||typeof dataStr!=='string'){throw new Error('Values not found for the selected row.')}var properties=this.propertyDefinition.itemProperties,values=JSON.parse(dataStr),options={enableExternalParameterEditor:false,onChange:this.proxy(this.onInspectorDataChange),inspectorClass:this.inspector.options.inspectorClass,parentContainer:this.getRootSurface(),}
+this.currentRowInspector=new $.wn.inspector.surface(inspectorContainer,properties,values,$.wn.inspector.helpers.generateElementUniqueId(inspectorContainer),options,null,null,this.propertyDefinition.property)}
 ObjectListEditor.prototype.disposeInspector=function(){$.wn.foundation.controlUtils.disposeControls(this.popup.querySelector('[data-inspector-container]'))
 this.currentRowInspector=null}
 ObjectListEditor.prototype.applyDataToRow=function(row){if(this.currentRowInspector===null){return}var data=this.currentRowInspector.getValues()

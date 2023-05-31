@@ -1,3 +1,5 @@
+import Singleton from '../abstracts/Singleton';
+
 /**
  * Defines a default listener for flash events.
  *
@@ -6,7 +8,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class FlashListener extends Snowboard.Singleton {
+export default class FlashListener extends Singleton {
     /**
      * Defines dependenices.
      *

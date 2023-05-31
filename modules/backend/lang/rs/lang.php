@@ -580,7 +580,7 @@ return [
         'add_folder' => 'Dodaj direktorijum',
         'search' => 'Traži',
         'display' => 'Prikaži',
-        'filter_everything' => 'Sve',
+        'filter_all' => 'Sve',
         'filter_images' => 'Slike',
         'filter_video' => 'Video zapisi',
         'filter_audio' => 'Audio zapisi',

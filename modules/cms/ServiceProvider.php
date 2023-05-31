@@ -1,30 +1,28 @@
 <?php namespace Cms;
 
-use App;
-use Url;
-use Lang;
-use File;
-use Event;
-use Config;
 use Backend;
-use BackendMenu;
-use BackendAuth;
-use Cms\Models\ThemeLog;
-use Cms\Models\ThemeData;
-use Cms\Classes\CmsObject;
-use Backend\Models\UserRole;
-use Cms\Classes\Page as CmsPage;
-use Cms\Classes\ComponentManager;
-use System\Classes\CombineAssets;
-use Cms\Classes\Theme as CmsTheme;
 use Backend\Classes\WidgetManager;
+use Backend\Models\UserRole;
+use BackendAuth;
+use BackendMenu;
+use Cms\Classes\CmsObject;
+use Cms\Classes\ComponentManager;
+use Cms\Classes\Page as CmsPage;
+use Cms\Classes\Theme;
+use Cms\Models\ThemeData;
+use Cms\Models\ThemeLog;
+use Cms\Twig\DebugExtension;
+use Cms\Twig\Extension as CmsTwigExtension;
+use Cms\Twig\Loader as CmsTwigLoader;
+use Config;
+use Event;
+use File;
+use Lang;
+use System\Classes\CombineAssets;
 use System\Classes\MarkupManager;
 use System\Classes\SettingsManager;
 use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
-use Cms\Twig\Loader as CmsTwigLoader;
-use Cms\Twig\DebugExtension;
-use Cms\Twig\Extension as CmsTwigExtension;
-
+use Url;
 use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
@@ -36,6 +34,8 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
+        parent::register();
+
         $this->registerConsole();
         $this->registerTwigParser();
         $this->registerAssetBundles();
@@ -43,14 +43,14 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerThemeLogging();
         $this->registerCombinerEvents();
         $this->registerHalcyonModels();
+        $this->registerBackendPermissions();
 
         /*
          * Backend specific
          */
-        if (App::runningInBackend()) {
+        if ($this->app->runningInBackend()) {
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
-            $this->registerBackendPermissions();
             $this->registerBackendWidgets();
             $this->registerBackendSettings();
         }
@@ -67,10 +67,6 @@ class ServiceProvider extends ModuleServiceProvider
 
         $this->bootMenuItemEvents();
         $this->bootRichEditorEvents();
-
-        if (App::runningInBackend()) {
-            $this->bootBackendLocalization();
-        }
     }
 
     /**
@@ -94,7 +90,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerTwigParser()
     {
         // Register CMS Twig environment
-        App::bind('twig.environment.cms', function ($app) {
+        $this->app->bind('twig.environment.cms', function ($app) {
             // Load Twig options
             $useCache = !Config::get('cms.twigNoCache');
             $isDebugMode = Config::get('app.debug', false);
@@ -109,8 +105,18 @@ class ServiceProvider extends ModuleServiceProvider
             ];
 
             if ($useCache) {
+                $theme = Theme::getActiveTheme();
+                $themeDir = $theme->getDirName();
+                if ($parent = $theme->getConfig()['parent'] ?? false) {
+                    $themeDir .= '-' . $parent;
+                }
+
                 $options['cache'] = new TwigCacheFilesystem(
-                    storage_path().'/cms/twig',
+                    storage_path(implode(DIRECTORY_SEPARATOR, [
+                        'cms',
+                        'twig',
+                        $themeDir,
+                    ])) . DIRECTORY_SEPARATOR,
                     $forceBytecode ? TwigCacheFilesystem::FORCE_BYTECODE_INVALIDATION : 0
                 );
             }
@@ -163,7 +169,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerCombinerEvents()
     {
-        if (App::runningInBackend() || App::runningInConsole()) {
+        if ($this->app->runningInBackend() || $this->app->runningInConsole()) {
             return;
         }
 
@@ -382,24 +388,6 @@ class ServiceProvider extends ModuleServiceProvider
     }
 
     /**
-     * Boots localization from an active theme for backend items.
-     */
-    protected function bootBackendLocalization()
-    {
-        $theme = CmsTheme::getActiveTheme();
-
-        if (is_null($theme)) {
-            return;
-        }
-
-        $langPath = $theme->getPath() . '/lang';
-
-        if (File::isDirectory($langPath)) {
-            Lang::addNamespace('themes.' . $theme->getId(), $langPath);
-        }
-    }
-
-    /**
      * Registers events for menu items.
      */
     protected function bootMenuItemEvents()
@@ -448,6 +436,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         Event::listen('system.console.theme.sync.getAvailableModelClasses', function () {
             return [
+                Classes\Theme::class,
                 Classes\Meta::class,
                 Classes\Page::class,
                 Classes\Layout::class,

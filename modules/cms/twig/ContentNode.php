@@ -39,6 +39,7 @@ class ContentNode extends TwigNode
             ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->contentFunction(")
             ->subcompile($this->getNode('nodes')->getNode(0))
             ->write(", \$context['__cms_content_params']")
+            ->write(", true")
             ->write(");\n")
         ;
 

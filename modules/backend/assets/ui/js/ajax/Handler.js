@@ -1,3 +1,5 @@
+import { delegate } from 'jquery-events-to-dom-events';
+
 /**
  * Backend AJAX handler.
  *
@@ -35,6 +37,12 @@ export default class Handler extends Snowboard.Singleton {
         if (!window.jQuery) {
             return;
         }
+
+        // Add global event for rendering in Snowboard
+        delegate('render');
+        document.addEventListener('$render', () => {
+            this.snowboard.globalEvent('render');
+        });
 
         // Add "render" event for backwards compatibility
         window.jQuery(document).trigger('render');

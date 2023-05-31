@@ -28,7 +28,13 @@ $scripts = [
     Url::asset('modules/system/assets/js/framework.js'),
     Url::asset('modules/system/assets/js/build/manifest.js'),
     Url::asset('modules/system/assets/js/snowboard/build/snowboard.vendor.js'),
-    Url::asset('modules/system/assets/js/build/system.js'),
+    Url::asset(
+        (Config::get('develop.debugSnowboard', Config::get('app.debug', false)) === true)
+            ? 'modules/system/assets/js/build/system.debug.js'
+            : 'modules/system/assets/js/build/system.js'
+    ),
+    Url::asset('modules/backend/assets/ui/js/build/manifest.js'),
+    Url::asset('modules/backend/assets/ui/js/build/vendor.js'),
     Url::asset('modules/backend/assets/ui/js/build/backend.js'),
 ];
 if (Config::get('develop.decompileBackendAssets', false)) {

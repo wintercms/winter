@@ -3,6 +3,7 @@
 use Lang;
 use ApplicationException;
 use Backend\Classes\FormWidgetBase;
+use Winter\Storm\Database\Model;
 
 /**
  * Record Finder
@@ -312,10 +313,8 @@ class RecordFinder extends FormWidgetBase
 
     /**
      * Gets the base model instance used by this field
-     *
-     * @return \Winter\Storm\Database\Model
      */
-    protected function getRecordModel()
+    protected function getRecordModel(): Model
     {
         $model = null;
         if ($this->useRelation) {

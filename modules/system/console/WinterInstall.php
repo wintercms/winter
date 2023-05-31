@@ -94,7 +94,7 @@ class WinterInstall extends Command
         foreach ($chosenToInstall as $pluginCode) {
             $this->output->writeln('<info>Installing plugin ' . $pluginCode . '</info>');
             $this->callSilent('plugin:install', [
-                'name' => $pluginCode
+                'plugin' => $pluginCode
             ]);
             $this->output->writeln('<info>' . $pluginCode . ' installed successfully.</info>');
         }
@@ -195,8 +195,6 @@ class WinterInstall extends Command
 
     protected function setupAdvancedValues()
     {
-
-
         $defaultMask = $this->ask('File Permission Mask', Config::get('cms.defaultMask.file') ?: '777');
         $this->writeToConfig('cms', ['defaultMask.file' => $defaultMask]);
 
@@ -210,9 +208,6 @@ class WinterInstall extends Command
     protected function askToInstallPlugins()
     {
         $chosenToInstall = [];
-        if ($this->confirm('Install the Winter.Drivers plugin?', false)) {
-            $chosenToInstall[] = 'Winter.Drivers';
-        }
         if ($this->confirm('Install the Winter.Builder plugin?', false)) {
             $chosenToInstall[] = 'Winter.Builder';
         }

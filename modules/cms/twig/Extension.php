@@ -101,7 +101,7 @@ class Extension extends TwigExtension
     /**
      * Renders the requested partial with the provided parameters. Optionally throw an exception if the partial cannot be found
      */
-    public function partialFunction(string $name, array $parameters = [], bool $throwException = false): string
+    public function partialFunction(string $name, array $parameters = [], bool $throwException = false): string|bool
     {
         return $this->controller->renderPartial($name, $parameters, $throwException);
     }
@@ -109,9 +109,9 @@ class Extension extends TwigExtension
     /**
      * Renders the requested content file.
      */
-    public function contentFunction(string $name, array $parameters = []): string
+    public function contentFunction(string $name, array $parameters = [], bool $throwException = false): string|bool
     {
-        return $this->controller->renderContent($name, $parameters);
+        return $this->controller->renderContent($name, $parameters, $throwException);
     }
 
     /**

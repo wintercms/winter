@@ -3,6 +3,8 @@
 use Lang;
 use ApplicationException;
 use Exception;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Database\Relations\Relation;
 
 /**
  * Form Model Widget Trait
@@ -12,18 +14,14 @@ use Exception;
  * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
-
 trait FormModelWidget
 {
-
     /**
-     * Returns the final model and attribute name of
-     * a nested HTML array attribute.
+     * Returns the final model and attribute name of a nested HTML array attribute.
      * Eg: list($model, $attribute) = $this->resolveModelAttribute($this->valueFrom);
-     * @param  string $attribute.
-     * @return array
+     * @throws ApplicationException if something goes wrong when attempting to resolve the model attribute
      */
-    public function resolveModelAttribute($attribute)
+    public function resolveModelAttribute(string $attribute): array
     {
         try {
             return $this->formField->resolveModelAttribute($this->model, $attribute);
@@ -37,11 +35,10 @@ trait FormModelWidget
     }
 
     /**
-     * Returns the model of a relation type,
-     * supports nesting via HTML array.
-     * @return Relation
+     * Returns the model of a relation type, supports nesting via HTML array.
+     * @throws ApplicationException if the related model cannot be resolved
      */
-    public function getRelationModel()
+    public function getRelationModel(): Model
     {
         list($model, $attribute) = $this->resolveModelAttribute($this->valueFrom);
 
@@ -63,8 +60,8 @@ trait FormModelWidget
     }
 
     /**
-     * Returns the value as a relation object from the model,
-     * supports nesting via HTML array.
+     * Returns the value as a relation object from the model, supports nesting via HTML array.
+     * @throws ApplicationException if the relationship cannot be resolved
      * @return Relation
      */
     protected function getRelationObject()
@@ -89,11 +86,9 @@ trait FormModelWidget
     }
 
     /**
-     * Returns the value as a relation type from the model,
-     * supports nesting via HTML array.
-     * @return Relation
+     * Returns the value as a relation type from the model, supports nesting via HTML array.
      */
-    protected function getRelationType()
+    protected function getRelationType(): ?string
     {
         list($model, $attribute) = $this->resolveModelAttribute($this->valueFrom);
         return $model->getRelationType($attribute);

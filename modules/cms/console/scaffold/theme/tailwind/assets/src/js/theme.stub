@@ -28,6 +28,6 @@
     });
 }(jQuery));
 
-if (typeof(gtag) !== 'function') {
+if (typeof(gtag) !== 'undefined' && typeof(gtag) !== 'function') {
     gtag = function() { console.log('GoogleAnalytics not present.'); }
 }

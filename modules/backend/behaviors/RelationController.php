@@ -1392,14 +1392,15 @@ class RelationController extends ControllerBehavior
              * Add the checked IDs to the pivot table
              */
             $foreignIds = (array) $this->foreignId;
-            $this->relationObject->sync($foreignIds, false);
+            $saveData = $this->pivotWidget->getSaveData();
+            $foreignModels = $this->relationModel->whereIn($this->relationModel->getKeyName(), $foreignIds)->get();
+            $this->relationObject->syncWithPivotValues($foreignModels, $saveData['pivot'] ?? [], false);
 
             /*
              * Save data to models
              */
             $foreignKeyName = $this->relationModel->getQualifiedKeyName();
             $hydratedModels = $this->relationObject->whereIn($foreignKeyName, $foreignIds)->get();
-            $saveData = $this->pivotWidget->getSaveData();
 
             foreach ($hydratedModels as $hydratedModel) {
                 $modelsToSave = $this->prepareModelsToSave($hydratedModel, $saveData);

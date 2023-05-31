@@ -1,33 +1,31 @@
 <?php namespace System;
 
-use Db;
-use App;
-use View;
-use Event;
-use Config;
 use Backend;
-use Request;
-use Validator;
-use BackendMenu;
-use BackendAuth;
-use SystemException;
+use Backend\Classes\WidgetManager;
 use Backend\Models\UserRole;
-use System\Classes\MailManager;
+use BackendAuth;
+use BackendMenu;
+use Config;
+use Event;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Schema;
+use Request;
+use System\Classes\CombineAssets;
 use System\Classes\ErrorHandler;
+use System\Classes\MailManager;
 use System\Classes\MarkupManager;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
-use System\Twig\Engine as TwigEngine;
 use System\Models\EventLog;
 use System\Models\MailSetting;
-use System\Classes\CombineAssets;
-use Backend\Classes\WidgetManager;
-use Winter\Storm\Support\ModuleServiceProvider;
+use System\Twig\Engine as TwigEngine;
+use SystemException;
+use Validator;
+use View;
 use Winter\Storm\Router\Helper as RouterHelper;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Schema;
-use System\Classes\MixAssets;
+use Winter\Storm\Support\ClassLoader;
+use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
 {
@@ -38,6 +36,16 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
+        parent::register();
+
+        $modules = Config::get('cms.loadModules', []);
+        $classLoader = $this->app->make(ClassLoader::class);
+        foreach ($modules as $module) {
+            if (strtolower(trim($module)) != 'system') {
+                $classLoader->autoloadPackage($module . '\\', "modules/" . strtolower($module) . '/');
+            }
+        }
+
         $this->registerSingletons();
         $this->registerPrivilegedActions();
 
@@ -59,19 +67,20 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register other module providers
          */
-        foreach (Config::get('cms.loadModules', []) as $module) {
+        foreach ($modules as $module) {
             if (strtolower(trim($module)) != 'system') {
-                App::register('\\' . $module . '\ServiceProvider');
+                $this->app->register('\\' . $module . '\ServiceProvider');
             }
         }
+
+        $this->registerBackendPermissions();
 
         /*
          * Backend specific
          */
-        if (App::runningInBackend()) {
+        if ($this->app->runningInBackend()) {
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
-            $this->registerBackendPermissions();
             $this->registerBackendSettings();
         }
     }
@@ -113,19 +122,19 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerSingletons()
     {
-        App::singleton('cms.helper', function () {
+        $this->app->singleton('cms.helper', function () {
             return new \Cms\Helpers\Cms;
         });
 
-        App::singleton('backend.helper', function () {
+        $this->app->singleton('backend.helper', function () {
             return new \Backend\Helpers\Backend;
         });
 
-        App::singleton('backend.menu', function () {
+        $this->app->singleton('backend.menu', function () {
             return \Backend\Classes\NavigationManager::instance();
         });
 
-        App::singleton('backend.auth', function () {
+        $this->app->singleton('backend.auth', function () {
             return \Backend\Classes\AuthManager::instance();
         });
     }
@@ -156,7 +165,7 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * CLI
          */
-        if (App::runningInConsole() && count(array_intersect($commands, Request::server('argv', []))) > 0) {
+        if ($this->app->runningInConsole() && count(array_intersect($commands, Request::server('argv', []))) > 0) {
             PluginManager::$noInit = true;
         }
     }
@@ -220,7 +229,7 @@ class ServiceProvider extends ModuleServiceProvider
          */
         Event::listen('console.schedule', function ($schedule) {
             // Fix initial system migration with plugins that use settings for scheduling - see #3208
-            if (App::hasDatabase() && !Schema::hasTable(UpdateManager::instance()->getMigrationTableName())) {
+            if ($this->app->hasDatabase() && !Schema::hasTable(UpdateManager::instance()->getMigrationTableName())) {
                 return;
             }
 
@@ -306,20 +315,20 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerTwigParser()
     {
         // Register System Twig environment
-        App::singleton('twig.environment', function ($app) {
+        $this->app->singleton('twig.environment', function ($app) {
             return MarkupManager::makeBaseTwigEnvironment();
         });
 
         // Register Mailer Twig environment
-        App::singleton('twig.environment.mailer', function ($app) {
+        $this->app->singleton('twig.environment.mailer', function ($app) {
             $twig = MarkupManager::makeBaseTwigEnvironment();
             $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
             return $twig;
         });
 
         // Register .htm extension for Twig views
-        App::make('view')->addExtension('htm', 'twig', function () {
-            return new TwigEngine(App::make('twig.environment'));
+        $this->app->make('view')->addExtension('htm', 'twig', function () {
+            return new TwigEngine($this->app->make('twig.environment'));
         });
     }
 

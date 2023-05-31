@@ -2,6 +2,7 @@
 
 use Str;
 use App;
+use Closure;
 use File;
 use View;
 use Event;
@@ -11,7 +12,6 @@ use Response;
 use Illuminate\Routing\Controller as ControllerBase;
 use Winter\Storm\Router\Helper as RouterHelper;
 use System\Classes\PluginManager;
-use Closure;
 
 /**
  * This is the master controller for all back-end pages.
@@ -101,14 +101,6 @@ class BackendController extends ControllerBase
         });
 
         $this->extendableConstruct();
-    }
-
-    /**
-     * Extend this object properties upon construction.
-     */
-    public static function extend(Closure $callback)
-    {
-        self::extendableExtendCallback($callback);
     }
 
     /**
@@ -306,5 +298,33 @@ class BackendController extends ControllerBase
     {
         return (isset($options['only']) && !in_array($method, (array) $options['only'])) ||
             (!empty($options['except']) && in_array($method, (array) $options['except']));
+    }
+
+    public function __call($name, $params)
+    {
+        if ($name === 'extend') {
+            if (empty($params[0]) || !is_callable($params[0])) {
+                throw new \InvalidArgumentException('The extend() method requires a callback parameter or closure.');
+            }
+            if ($params[0] instanceof \Closure) {
+                return $params[0]->call($this, $params[1] ?? $this);
+            }
+            return \Closure::fromCallable($params[0])->call($this, $params[1] ?? $this);
+        }
+
+        return $this->extendableCall($name, $params);
+    }
+
+    public static function __callStatic($name, $params)
+    {
+        if ($name === 'extend') {
+            if (empty($params[0])) {
+                throw new \InvalidArgumentException('The extend() method requires a callback parameter or closure.');
+            }
+            self::extendableExtendCallback($params[0], $params[1] ?? false, $params[2] ?? null);
+            return;
+        }
+
+        return self::extendableCallStatic($name, $params);
     }
 }
