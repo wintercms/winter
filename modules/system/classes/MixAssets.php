@@ -259,6 +259,23 @@ class MixAssets
             'path' => $path,
             'package' => $package,
             'mix' => $mix,
+            'ignored' => $this->isPackageIgnored($path),
         ];
+    }
+
+    /**
+     * Check if the provided package is ignored.
+     */
+    protected function isPackageIgnored(string $packagePath): bool
+    {
+        // Load the main package.json for the project
+        $packageJsonPath = base_path($this->packageJson);
+        $packageJson = [];
+        if (File::exists($packageJsonPath)) {
+            $packageJson = json_decode(File::get($packageJsonPath), true);
+        }
+        $included = $packageJson['workspaces']['packages'] ?? [];
+        $ignored = $packageJson['workspaces']['ignoredPackages'] ?? [];
+        return in_array($packagePath, $ignored);
     }
 }

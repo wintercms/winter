@@ -41,7 +41,12 @@ class MixList extends Command
         $errors = [];
 
         foreach ($packages as $name => $package) {
-            $this->info($name);
+            if ($package['ignored'] ?? false) {
+                $this->warn($name);
+            } else {
+                $this->info($name);
+            }
+
             $this->line('  Path:           ' . $package['path']);
             $this->line('  Configuration:  ' . $package['mix']);
 
