@@ -26,6 +26,17 @@ tabs:
             disabled: true
             span: auto
 
+        scaffold@create:
+            label: cms::lang.theme.scaffold.label
+            type: balloon-selector
+            span: full
+            required: true
+            options:
+                empty: cms::lang.theme.scaffold.empty
+                less: cms::lang.theme.scaffold.less
+                tailwind: cms::lang.theme.scaffold.tailwind
+            default: less
+
         description:
             label: cms::lang.theme.description_label
             placeholder: cms::lang.theme.description_placeholder
