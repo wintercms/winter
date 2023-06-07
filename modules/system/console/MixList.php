@@ -28,7 +28,7 @@ class MixList extends Command
         $mixedAssets = MixAssets::instance();
         $mixedAssets->fireCallbacks();
 
-        $packages = $mixedAssets->getPackages();
+        $packages = $mixedAssets->getPackages(true);
 
         if (count($packages) === 0) {
             $this->info('No packages have been registered.');
