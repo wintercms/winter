@@ -39,6 +39,7 @@
         minItems: null,
         maxItems: null,
         sortable: false,
+        showEmpty: false,
         style: 'default',
     }
 
@@ -280,6 +281,9 @@
                     break
             }
         })
+        if (!items.length && self.options.showEmpty) {
+            $('> .field-repeater-add-item > [data-repeater-add]', this.$el).click();
+        }
     }
 
     // FIELD REPEATER PLUGIN DEFINITION

@@ -4,6 +4,7 @@
     <?= $minItems ? 'data-min-items="'.$minItems.'"' : '' ?>
     <?= $maxItems ? 'data-max-items="'.$maxItems.'"' : '' ?>
     <?= $style ? 'data-style="'.$style.'"' : '' ?>
+    <?= $showEmpty ? 'data-show-empty="'.$showEmpty.'"' : '' ?>
     <?php if ($sortable): ?>
     data-sortable="true"
     data-sortable-container="#<?= $this->getId('items') ?>"

@@ -29,6 +29,11 @@ class Repeater extends FormWidgetBase
     public $sortable = true;
 
     /**
+     * @var bool Show an empty repeater form when it's first rendered and has no items yet.
+     */
+    public $showEmpty = false;
+
+    /**
      * @var string Field name to use for the title of collapsed items
      */
     public $titleFrom = false;
@@ -113,9 +118,10 @@ class Repeater extends FormWidgetBase
             'style',
             'prompt',
             'sortable',
+            'showEmpty',
             'titleFrom',
             'minItems',
-            'maxItems',
+            'maxItems'
         ]);
 
         if ($this->formField->disabled) {
@@ -167,6 +173,7 @@ class Repeater extends FormWidgetBase
         $this->vars['minItems'] = $this->minItems;
         $this->vars['maxItems'] = $this->maxItems;
         $this->vars['sortable'] = $this->sortable;
+        $this->vars['showEmpty'] = $this->showEmpty;
         $this->vars['style'] = $this->style;
 
         $this->vars['useGroups'] = $this->useGroups;
