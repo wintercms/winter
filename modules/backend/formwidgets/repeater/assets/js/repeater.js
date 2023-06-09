@@ -144,8 +144,11 @@
     }
 
     Repeater.prototype.onAddItemSuccess = function(ev) {
-        this.togglePrompt()
-        $(ev.target).closest('[data-field-name]').trigger('change.oc.formwidget')
+        var self = this;
+        setTimeout(function () {
+            self.togglePrompt();
+            $(ev.target).closest('[data-field-name]').trigger('change.oc.formwidget')
+        }, 10);
     }
 
     Repeater.prototype.togglePrompt = function () {
