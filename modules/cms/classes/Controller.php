@@ -1401,7 +1401,7 @@ class Controller
                 }
                 if (is_null($asset)) {
                     // Skip combining missing assets and log an error
-                    Log::error("$file could not be found in any of the theme's sources (" . implode(', ', $sources) . ',');
+                    Log::error("$file could not be found in any of the theme's sources (" . implode(', ', $sources) . ")");
                     continue;
                 }
             }
