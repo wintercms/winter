@@ -29,6 +29,10 @@
         "**/themes/*/pages/**/*.htm": "wintercms",
         "**/themes/*/partials/**/*.htm": "wintercms"
     },
+    "emmet.includeLanguages": {
+        "wintercms": "html",
+        "wintercms-twig": "html",
+    },
     "eslint.validate": [
         "javascript",
         "vue"

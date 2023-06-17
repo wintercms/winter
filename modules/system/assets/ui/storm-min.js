@@ -1442,7 +1442,8 @@ var pikadayOptions={yearRange:this.options.yearRange,firstDay:this.options.first
 $(this.el).css({left:'auto',right:$(window).width()-$field.offset().left-$field.outerWidth()})},onSelect:function(){self.onSelectDatePicker.call(self,this.getMoment())}}
 var lang=this.getLang('datepicker',false)
 if(lang){pikadayOptions.i18n=lang}this.$datePicker.val(this.getDataLockerValue(dateFormat))
-if(this.options.minDate){pikadayOptions.minDate=new Date(this.options.minDate)}if(this.options.maxDate){pikadayOptions.maxDate=new Date(this.options.maxDate)}this.$datePicker.pikaday(pikadayOptions)}
+if(this.options.minDate){pikadayOptions.minDate=new Date(this.options.minDate)}if(this.options.maxDate){pikadayOptions.maxDate=new Date(this.options.maxDate)}this.$datePicker.pikaday(pikadayOptions)
+if(!this.$datePicker.attr('inputmode')){this.$datePicker.attr('inputmode','none')}}
 DatePicker.prototype.onSelectDatePicker=function(pickerMoment){var pickerValue=pickerMoment.format(this.dbDateFormat)
 var timeValue=this.options.mode==='date'?'00:00:00':this.getTimePickerValue()
 var momentObj=moment.tz(pickerValue+' '+timeValue,this.dbDateTimeFormat,this.timezone).tz(this.appTimezone)
@@ -1453,7 +1454,8 @@ if(!this.hasDate||!value){return moment.tz(this.appTimezone).tz(this.timezone).f
 DatePicker.prototype.getDateFormat=function(){var format='YYYY-MM-DD'
 if(this.options.format){format=this.options.format}else if(this.locale){format=moment().locale(this.locale).localeData().longDateFormat('l')}return format}
 DatePicker.prototype.initTimePicker=function(){this.$timePicker.clockpicker({autoclose:'true',placement:'auto',align:'right',twelvehour:this.isTimeTwelveHour(),afterDone:this.proxy(this.onChangeTimePicker)})
-this.$timePicker.val(this.getDataLockerValue(this.getTimeFormat()))}
+this.$timePicker.val(this.getDataLockerValue(this.getTimeFormat()))
+if(!this.$timePicker.attr('inputmode')){this.$timePicker.attr('inputmode','none')}}
 DatePicker.prototype.onSelectTimePicker=function(){var pickerValue=this.$timePicker.val()
 var timeValue=moment(pickerValue,this.getTimeFormat()).format(this.dbTimeFormat)
 var dateValue=this.getDatePickerValue()

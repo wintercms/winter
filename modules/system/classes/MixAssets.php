@@ -24,38 +24,28 @@ class MixAssets
 
     /**
      * The filename that stores the package definition.
-     *
-     * @var string
      */
-    protected $packageJson = 'package.json';
+    protected string $packageJson = 'package.json';
 
     /**
      * The filename that stores the Laravel Mix configuration
-     *
-     * @var string
      */
-    protected $mixJs = 'winter.mix.js';
+    protected string $mixJs = 'winter.mix.js';
 
     /**
      * A list of packages registered for mixing.
-     *
-     * @var array
      */
-    protected $packages = [];
+    protected array $packages = [];
 
     /**
      * Registered callbacks.
-     *
-     * @var array
      */
-    protected static $callbacks = [];
+    protected static array $callbacks = [];
 
     /**
      * Constructor.
-     *
-     * @return void
      */
-    public function init()
+    public function init(): void
     {
         /*
         * Get packages registered in plugins.
@@ -141,21 +131,16 @@ class MixAssets
 
     /**
      * Registers a callback for processing.
-     *
-     * @param callable $callback
-     * @return void
      */
-    public static function registerCallback(callable $callback)
+    public static function registerCallback(callable $callback): void
     {
         static::$callbacks[] = $callback;
     }
 
     /**
      * Calls the deferred callbacks.
-     *
-     * @return void
      */
-    public function fireCallbacks()
+    public function fireCallbacks(): void
     {
         // Call callbacks
         foreach (static::$callbacks as $callback) {
@@ -165,22 +150,25 @@ class MixAssets
 
     /**
      * Returns the count of packages registered.
-     *
-     * @return int
      */
-    public function getPackageCount()
+    public function getPackageCount(): int
     {
         return count($this->packages);
     }
 
     /**
      * Returns all packages registered.
-     *
-     * @return array
      */
-    public function getPackages()
+    public function getPackages(bool $includeIgnored = false): array
     {
         ksort($this->packages);
+
+        if (!$includeIgnored) {
+            return array_filter($this->packages, function ($package) {
+                return !($package['ignored'] ?? false);
+            });
+        }
+
         return $this->packages;
     }
 
@@ -198,9 +186,8 @@ class MixAssets
      * @param string $name The name of the package being registered
      * @param string $path The path to the Mix JS configuration file. If there is a related package.json file then it is
      *                      required to be present in the same directory as the winter.mix.js file
-     * @return void
      */
-    public function registerPackage($name, $path)
+    public function registerPackage(string $name, string $path): void
     {
         // Symbolize the path
         $path = File::symbolizePath($path);
@@ -251,6 +238,23 @@ class MixAssets
             'path' => $path,
             'package' => $package,
             'mix' => $mix,
+            'ignored' => $this->isPackageIgnored($path),
         ];
+    }
+
+    /**
+     * Check if the provided package is ignored.
+     */
+    protected function isPackageIgnored(string $packagePath): bool
+    {
+        // Load the main package.json for the project
+        $packageJsonPath = base_path($this->packageJson);
+        $packageJson = [];
+        if (File::exists($packageJsonPath)) {
+            $packageJson = json_decode(File::get($packageJsonPath), true);
+        }
+        $included = $packageJson['workspaces']['packages'] ?? [];
+        $ignored = $packageJson['workspaces']['ignoredPackages'] ?? [];
+        return in_array($packagePath, $ignored);
     }
 }

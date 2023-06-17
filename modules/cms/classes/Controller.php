@@ -1212,9 +1212,8 @@ class Controller
     /**
      * Returns an existing instance of the controller.
      * If the controller doesn't exists, returns null.
-     * @return mixed Returns the controller object or null.
      */
-    public static function getController()
+    public static function getController(): ?self
     {
         return self::$instance;
     }
@@ -1396,12 +1395,15 @@ class Controller
                     if (File::exists($asset)) {
                         $assets[] = $asset;
                         break;
+                    } else {
+                        $asset = null;
                     }
                 }
-
-                // Skip combining missing assets and log an error
-                Log::error("$file could not be found in any of the theme's sources (" . implode(', ', $sources) . ',');
-                continue;
+                if (is_null($asset)) {
+                    // Skip combining missing assets and log an error
+                    Log::error("$file could not be found in any of the theme's sources (" . implode(', ', $sources) . ")");
+                    continue;
+                }
             }
 
             Cache::put($cacheKey, $assets);
