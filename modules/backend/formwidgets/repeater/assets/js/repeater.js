@@ -65,9 +65,9 @@
         }
 
         this.$el.off('ajaxDone', '> .field-repeater-items > .field-repeater-item > .repeater-item-remove > [data-repeater-remove]', this.proxy(this.onRemoveItemSuccess))
-        this.$el.off('ajaxDone', '> .field-repeater-add-item > [data-repeater-add]', this.proxy(this.onAddItemSuccess))
-        this.$el.off('click', '> .field-repeater-items > .field-repeater-item > .repeater-item-collapse .repeater-item-collapse-one', this.proxy(this.toggleCollapse))
-        this.$el.off('click', '> .field-repeater-add-item > [data-repeater-add-group]', this.proxy(this.clickAddGroupButton))
+        this.$el.off('ajaxDone', '> .field-repeater-items > .field-repeater-add-item > [data-repeater-add]', this.proxy(this.onAddItemSuccess))
+        this.$el.off('click', '> ul > li > .repeater-item-collapse .repeater-item-collapse-one', this.proxy(this.toggleCollapse))
+        this.$el.off('click', '> .field-repeater-items > .field-repeater-add-item > [data-repeater-add-group]', this.proxy(this.clickAddGroupButton))
 
         this.$el.off('dispose-control', this.proxy(this.dispose))
         this.$el.removeData('oc.repeater')
@@ -95,7 +95,7 @@
     }
 
     Repeater.prototype.clickAddGroupButton = function(ev) {
-        var $self = this;
+        var $self = this
         var templateHtml = $('> [data-group-palette-template]', this.$el).html(),
             $target = $(ev.target),
             $form = this.$el.closest('form'),
@@ -121,11 +121,10 @@
                     $loadContainer.loadIndicator('hide')
                     $self.togglePrompt()
                     $($self.$el).find('.field-repeater-items > .field-repeater-add-item').each(function () {
-                        console.log($(this).html());
                         if ($(this).children().length === 0) {
-                            $(this).remove();
+                            $(this).remove()
                         }
-                    });
+                    })
                 })
             })
 
@@ -157,16 +156,16 @@
             $(ev.target).closest('[data-field-name]').trigger('change.oc.formwidget')
             $(this.$el).find('.field-repeater-items > .field-repeater-add-item').each(function () {
                 if ($(this).children().length === 0) {
-                    $(this).remove();
+                    $(this).remove()
                 }
-            });
+            })
         })
     }
 
     Repeater.prototype.togglePrompt = function () {
         if (this.options.minItems && this.options.minItems > 0) {
             var repeatedItems = this.$el.find('> .field-repeater-items > .field-repeater-item').length,
-                $removeItemBtn = this.$el.find('> .field-repeater-items > .field-repeater-item > .repeater-item-remove');
+                $removeItemBtn = this.$el.find('> .field-repeater-items > .field-repeater-item > .repeater-item-remove')
 
             $removeItemBtn.toggleClass('disabled', !(repeatedItems > this.options.minItems))
         }
@@ -220,7 +219,7 @@
 
     Repeater.prototype.collapse = function($item) {
         $item.addClass('collapsed')
-        $('.repeater-item-collapsed-title', $item).text(this.getCollapseTitle($item));
+        $('.repeater-item-collapsed-title', $item).text(this.getCollapseTitle($item))
     }
 
     Repeater.prototype.expand = function($item) {
@@ -249,13 +248,13 @@
             $target = $item
         }
 
-        var $textInput = $('input[type=text]:first, select:first', $target).first();
+        var $textInput = $('input[type=text]:first, select:first', $target).first()
         if ($textInput.length) {
             switch($textInput.prop("tagName")) {
                 case 'SELECT':
-                    return $textInput.find('option:selected').text();
+                    return $textInput.find('option:selected').text()
                 default:
-                    return $textInput.val();
+                    return $textInput.val()
             }
         } else {
             var $disabledTextInput = $('.text-field:first > .form-control', $target)
@@ -268,17 +267,21 @@
     }
 
     Repeater.prototype.getStyle = function() {
-        var style = 'default';
+        var style = 'default'
 
         // Validate style
         if (this.options.style && ['collapsed', 'accordion'].indexOf(this.options.style) !== -1) {
             style = this.options.style
         }
 
-        return style;
+        return style
     }
 
     Repeater.prototype.applyStyle = function() {
+        if (this.options.mode === 'grid') {
+            return
+        }
+
         var style = this.getStyle(),
             self = this,
             items = $(this.$el).children('.field-repeater-items').children('.field-repeater-item')
@@ -331,6 +334,6 @@
 
     $(document).render(function() {
         $('[data-control="fieldrepeater"]').fieldRepeater()
-    });
+    })
 
 }(window.jQuery);
