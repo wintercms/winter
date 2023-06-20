@@ -2,7 +2,9 @@
     <li
         id="<?= $this->getId('add-item') ?>"
         class="field-repeater-add-item loading-indicator-container indicator-center"
-        <?php if ($mode === 'grid'): ?>style="min-height: <?= $rowHeight ?>px"<?php endif ?>
+        <?php if ($mode === 'grid'): ?>
+        style="min-height: <?= $rowHeight ?>px"
+        <?php endif ?>
     >
         <?php if ($useGroups): ?>
             <a

@@ -5,7 +5,9 @@
 <li
     <?= $itemTitle ? 'data-collapse-title="'.e(trans($itemTitle)).'"' : '' ?>
     class="field-repeater-item"
-    <?php if ($mode === 'grid'): ?>style="min-height: <?= $rowHeight ?>px"<?php endif ?>
+    <?php if ($mode === 'grid'): ?>
+    style="min-height: <?= $rowHeight ?>px"
+    <?php endif ?>
 >
 
     <?php if (!$this->previewMode): ?>

@@ -5,7 +5,9 @@
     <?= $maxItems ? 'data-max-items="'.$maxItems.'"' : '' ?>
     <?= $style ? 'data-style="'.$style.'"' : '' ?>
     data-mode="<?= $mode ?>"
-    <?php if ($mode === 'grid'): ?> data-columns="<?= $columns ?>" <?php endif ?>
+    <?php if ($mode === 'grid'): ?>
+    data-columns="<?= $columns ?>"
+    <?php endif ?>
     <?php if ($sortable): ?>
     data-sortable="true"
     data-sortable-container="#<?= $this->getId('items') ?>"
