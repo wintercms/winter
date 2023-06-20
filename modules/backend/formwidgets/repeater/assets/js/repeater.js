@@ -39,6 +39,7 @@
         minItems: null,
         maxItems: null,
         sortable: false,
+        mode: 'list',
         style: 'default',
     }
 
@@ -48,9 +49,9 @@
         }
 
         this.$el.on('ajaxDone', '> .field-repeater-items > .field-repeater-item > .repeater-item-remove > [data-repeater-remove]', this.proxy(this.onRemoveItemSuccess))
-        this.$el.on('ajaxDone', '> .field-repeater-add-item > [data-repeater-add]', this.proxy(this.onAddItemSuccess))
+        this.$el.on('ajaxDone', '> .field-repeater-items > .field-repeater-add-item > [data-repeater-add]', this.proxy(this.onAddItemSuccess))
         this.$el.on('click', '> ul > li > .repeater-item-collapse .repeater-item-collapse-one', this.proxy(this.toggleCollapse))
-        this.$el.on('click', '> .field-repeater-add-item > [data-repeater-add-group]', this.proxy(this.clickAddGroupButton))
+        this.$el.on('click', '> .field-repeater-items > .field-repeater-add-item > [data-repeater-add-group]', this.proxy(this.clickAddGroupButton))
 
         this.$el.one('dispose-control', this.proxy(this.dispose))
 
@@ -86,7 +87,8 @@
     Repeater.prototype.bindSorting = function() {
         var sortableOptions = {
             handle: this.options.sortableHandle,
-            nested: false
+            nested: false,
+            vertical: this.options.mode === 'list',
         }
 
         this.$sortable.sortable(sortableOptions)
@@ -115,9 +117,15 @@
             .on('ajaxPromise', '[data-repeater-add]', function(ev, context) {
                 $loadContainer.loadIndicator()
 
-                $form.one('ajaxComplete', function() {
+                $(window).one('ajaxUpdateComplete', function() {
                     $loadContainer.loadIndicator('hide')
                     $self.togglePrompt()
+                    $($self.$el).find('.field-repeater-items > .field-repeater-add-item').each(function () {
+                        console.log($(this).html());
+                        if ($(this).children().length === 0) {
+                            $(this).remove();
+                        }
+                    });
                 })
             })
 
@@ -145,9 +153,14 @@
 
     Repeater.prototype.onAddItemSuccess = function(ev) {
         window.requestAnimationFrame(() => {
-            this.togglePrompt();
+            this.togglePrompt()
             $(ev.target).closest('[data-field-name]').trigger('change.oc.formwidget')
-        });
+            $(this.$el).find('.field-repeater-items > .field-repeater-add-item').each(function () {
+                if ($(this).children().length === 0) {
+                    $(this).remove();
+                }
+            });
+        })
     }
 
     Repeater.prototype.togglePrompt = function () {
