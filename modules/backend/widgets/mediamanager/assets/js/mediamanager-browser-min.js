@@ -44,7 +44,7 @@ MediaManager.prototype.getSelectedItems=function(returnNotProcessed,allowRootIte
 if(!allowRootItem){var filteredItems=[]
 for(var i=0,len=items.length;i<len;i++){var item=items[i]
 if(!item.hasAttribute('data-root'))filteredItems.push(item)}items=filteredItems}if(returnNotProcessed===true)return items
-for(var i=0,len=items.length;i<len;i++){var item=items[i],itemDetails={itemType:item.getAttribute('data-item-type'),path:item.getAttribute('data-path'),title:item.getAttribute('data-title'),documentType:item.getAttribute('data-document-type'),folder:item.getAttribute('data-folder'),publicUrl:item.getAttribute('data-public-url')}
+for(var i=0,len=items.length;i<len;i++){var item=items[i],itemDetails={itemType:item.getAttribute('data-item-type'),path:item.getAttribute('data-path'),title:item.getAttribute('data-title'),sizeBytes:item.getAttribute('data-size-bytes'),lastModified:item.getAttribute('data-last-modified-ts'),documentType:item.getAttribute('data-document-type'),folder:item.getAttribute('data-folder'),publicUrl:item.getAttribute('data-public-url')}
 result.push(itemDetails)}return result}
 MediaManager.prototype.init=function(){this.itemListElement=this.$el.find('[data-control="item-list"]').get(0)
 this.scrollContentElement=this.itemListElement.querySelector('.scroll-wrapper')
