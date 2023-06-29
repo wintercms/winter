@@ -488,6 +488,8 @@ class Form extends WidgetBase
      */
     protected function defineFormFields()
     {
+        $this->applyFiltersFromModel();
+
         if ($this->fieldsDefined) {
             return;
         }
@@ -677,7 +679,6 @@ class Form extends WidgetBase
         }
 
         $this->fieldsDefined = true;
-        $this->applyFiltersFromModel();
     }
 
     /**
