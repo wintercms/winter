@@ -306,6 +306,7 @@ class Form extends WidgetBase
     protected function prepareVars()
     {
         $this->defineFormFields();
+        $this->applyFiltersFromModel();
         $this->vars['sessionKey'] = $this->getSessionKey();
         $this->vars['outsideTabs'] = $this->allTabs->outside;
         $this->vars['primaryTabs'] = $this->allTabs->primary;
@@ -677,7 +678,6 @@ class Form extends WidgetBase
         }
 
         $this->fieldsDefined = true;
-        $this->applyFiltersFromModel();
     }
 
     /**
@@ -1177,6 +1177,7 @@ class Form extends WidgetBase
     public function getSaveData()
     {
         $this->defineFormFields();
+        $this->applyFiltersFromModel();
 
         $result = [];
 
