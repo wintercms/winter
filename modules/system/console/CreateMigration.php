@@ -207,6 +207,10 @@ class CreateMigration extends BaseScaffoldCommand
     {
         $vars = parent::processVars($vars);
 
+        if (!$this->option('create')) {
+            return;
+        }
+
         $vars['fields'] = [];
 
         try {
