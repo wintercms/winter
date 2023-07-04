@@ -2,7 +2,6 @@
 
 use Lang;
 use Html;
-use Yaml;
 use File;
 use Flash;
 use Backend;
@@ -17,7 +16,6 @@ use System\Models\PluginVersion;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
-use System\Classes\VersionYamlProcessor;
 use ApplicationException;
 use Exception;
 
