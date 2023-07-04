@@ -212,7 +212,7 @@ class CreateMigration extends BaseScaffoldCommand
         try {
             $fields_path = '$/' . $vars['plugin_url'] . '/models/' . $vars['lower_model'] . '/fields.yaml';
             $fields = Yaml::parseFile(File::symbolizePath($fields_path));
-        } catch(\Exception $e) {
+        } catch (\Exception $e) {
             die($e->getMessage());
         }
 
