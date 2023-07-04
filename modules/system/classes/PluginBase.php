@@ -431,23 +431,12 @@ class PluginBase extends ServiceProviderBase
             return $this->version;
         }
 
-        $versionFile = $this->getPluginPath() . '/updates/version.yaml';
-
-        if (
-            !File::isFile($versionFile)
-            || !($versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
-                return $yaml->parseFile($versionFile);
-            }))
-            || !is_array($versionInfo)
-        ) {
+        $versions = $this->getPluginVersions();
+        if (empty($versions)) {
             return $this->version = (string) VersionManager::NO_VERSION_VALUE;
         }
 
-        uksort($versionInfo, function ($a, $b) {
-            return version_compare($a, $b);
-        });
-
-        return $this->version = trim(key(array_slice($versionInfo, -1, 1)));
+        return $this->version = trim(key(array_slice($versions, -1, 1)));
     }
 
     /**
