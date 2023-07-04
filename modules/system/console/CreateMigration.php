@@ -1,5 +1,6 @@
 <?php namespace System\Console;
 
+use File;
 use InvalidArgumentException;
 use Str;
 use System\Console\BaseScaffoldCommand;
@@ -157,11 +158,13 @@ class CreateMigration extends BaseScaffoldCommand
         }
 
         if ($this->option('create') && $this->option('update')) {
-            $this->error('The create & update options cannot both be set at the same time');
-            return false;
+            throw new InvalidArgumentException('The create & update options cannot both be set at the same time');
         }
 
         if ($this->option('create')) {
+            if (empty($model)) {
+                throw new InvalidArgumentException('The create options requires the --model option');
+            }
             $scaffold = 'create';
         } elseif ($this->option('update')) {
             $scaffold = 'update';
@@ -189,6 +192,7 @@ class CreateMigration extends BaseScaffoldCommand
             'name' => $name,
             'author' => $author,
             'plugin' => $plugin,
+            'model' => $model,
             'version' => $version,
         ];
 
@@ -197,6 +201,116 @@ class CreateMigration extends BaseScaffoldCommand
         }
 
         return $vars;
+    }
+
+    protected function processVars($vars): array
+    {
+        $vars = parent::processVars($vars);
+
+        $vars['fields'] = [];
+
+        try {
+            $fields_path = '$/' . $vars['plugin_url'] . '/models/' . $vars['lower_model'] . '/fields.yaml';
+            $fields = Yaml::parseFile(File::symbolizePath($fields_path));
+        } catch(\Exception $e) {
+            die($e->getMessage());
+        }
+
+        $modelName = $vars['plugin_namespace'] . '\\Models\\' . $vars['model'];
+
+        $vars['model'] = $model = new $modelName();
+
+        foreach (['fields', 'tabs', 'secondaryTabs'] as $type) {
+            if (!isset($fields[$type])) {
+                continue;
+            }
+            if ($type === 'fields') {
+                $fieldList = $fields[$type];
+            } else {
+                $fieldList = $fields[$type]['fields'];
+            }
+
+            foreach ($fieldList as $field => $config) {
+                if (str_contains($field, '@')) {
+                    list($field, $context) = explode('@', $field);
+                }
+
+                $type = $config['type'] ?? 'text';
+
+                if (str_starts_with($field, '_')
+                    or $field === 'id'
+                    or str_contains($field, '[')
+                    or in_array($type, ['fileupload','relation','relationmanager','section','hint'])
+                    or in_array($field, $model->purgeable ?? [])
+                    or $model->getRelationType($field)
+                ) {
+                    continue;
+                }
+
+                $vars['fields'][$field] = $this->mapFieldType($field, $config);
+            }
+        }
+
+        foreach ($model->getRelationDefinitions() as $relationType => $definitions) {
+            if (in_array($relationType, ['belongsTo', 'hasOne'])) {
+                foreach (array_keys($definitions) as $relation) {
+                    $vars['fields'][$relation . '_id'] = [
+                        'type' => 'foreignId',
+                        'index' => true,
+                        'required' => true,
+                    ];
+                }
+            }
+        }
+
+        if ($model->methodExists('getSortOrderColumn')) {
+            $field = $model->getSortOrderColumn();
+            $vars['fields'][$field] = [
+                'type' => 'unsignedinteger',
+                'required' => false,
+                'index' => true,
+            ];
+        }
+
+        $vars['primaryKey'] = $model->getKeyName();
+        $vars['jsonable'] = $model->getJsonable();
+        $vars['timestamps'] = $model->timestamps;
+
+        if ($morphable = $model->morphTo) {
+            $vars['morphable'] = array_keys($morphable);
+        }
+
+        return $vars;
+    }
+
+    protected function mapFieldType($name, $fieldConfig)
+    {
+        switch ($fieldConfig['type'] ?? 'text') {
+            case 'checkbox':
+            case 'switch':
+                $dbType = 'unsignedinteger';
+                break;
+            case 'number':
+            case 'range':
+                $dbType = 'integer';
+                break;
+            case 'datepicker':
+                $dbType = 'timestamp';
+                break;
+            case 'markdown':
+            case 'textarea':
+                $dbType = 'text';
+                break;
+            default:
+                $dbType = 'string';
+        }
+        $required = $fieldConfig['required'] ?? false;
+
+        return [
+            'type' => $dbType,
+            'required' => $required,
+            'index' => in_array($name, ["slug"]) or str_ends_with($name, "_id"),
+        ];
     }
 
     /**
