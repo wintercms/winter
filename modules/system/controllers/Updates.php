@@ -1,23 +1,23 @@
 <?php namespace System\Controllers;
 
-use Lang;
-use Html;
+use ApplicationException;
+use Backend;
+use Backend\Classes\Controller;
+use BackendMenu;
+use Cms\Classes\ThemeManager;
+use Exception;
 use File;
 use Flash;
-use Backend;
+use Html;
+use Lang;
 use Markdown;
 use Redirect;
 use Response;
-use BackendMenu;
-use Cms\Classes\ThemeManager;
-use Backend\Classes\Controller;
-use System\Models\Parameter;
-use System\Models\PluginVersion;
-use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
-use ApplicationException;
-use Exception;
+use System\Classes\UpdateManager;
+use System\Models\Parameter;
+use System\Models\PluginVersion;
 
 /**
  * Updates controller
