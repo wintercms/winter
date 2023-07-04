@@ -23,6 +23,7 @@ class CreateModel extends BaseScaffoldCommand
         {--s|seed : Create a new seeder for the model}
         {--p|pivot : Indicates if the generated model should be a custom intermediate table model}
         {--no-migration : Don\'t create a migration file for the model}
+        {--uninspiring : Disable inspirational quotes}
     ';
 
     /**
