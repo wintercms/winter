@@ -145,7 +145,7 @@ class Updates extends Controller
             if ($path && $plugin) {
                 $details = $plugin->pluginDetails();
                 $readme = $this->getPluginMarkdownFile($path, $readmeFiles);
-                $changelog = $this->getPluginVersionFile($path, 'updates/version.yaml');
+                $changelog = $plugin->getPluginVersions(false);
                 $upgrades = $this->getPluginMarkdownFile($path, $upgradeFiles);
                 $licence = $this->getPluginMarkdownFile($path, $licenceFiles);
 
@@ -178,38 +178,6 @@ class Updates extends Controller
         catch (Exception $ex) {
             $this->handleError($ex);
         }
-    }
-
-    protected function getPluginVersionFile($path, $filename)
-    {
-        $contents = [];
-
-        try {
-            $updates = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($path, $filename) {
-                return (array) $yaml->parseFile($path.'/'.$filename);
-            });
-
-            foreach ($updates as $version => $details) {
-                if (!is_array($details)) {
-                    $details = (array)$details;
-                }
-
-                //Filter out update scripts
-                $details = array_values(array_filter($details, function ($string) use ($path) {
-                    return !preg_match('/^[a-z_\-0-9]*\.php$/i', $string) || !File::exists($path . '/updates/' . $string);
-                }));
-
-                $contents[$version] = $details;
-            }
-        }
-        catch (Exception $ex) {
-        }
-
-        uksort($contents, function ($a, $b) {
-            return version_compare($b, $a);
-        });
-
-        return $contents;
     }
 
     protected function getPluginMarkdownFile($path, $filenames)
