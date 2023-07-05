@@ -294,14 +294,15 @@ class CreateMigration extends BaseScaffoldCommand
                 $dbType = 'boolean';
                 break;
             case 'number':
-                if ($fieldConfig['step'] && is_int($fieldConfig['step'])) {
+                if (isset($fieldConfig['step']) && is_int($fieldConfig['step'])) {
                     $dbType = 'integer';
                 } else {
                     $dbType = 'double';
                 }
-                if ($dbType === 'integer' && $fieldConfig['min'] >= 0) {
+                if ($dbType === 'integer' && isset($fieldConfig['min']) && $fieldConfig['min'] >= 0) {
                     $dbType = 'unsignedInteger';
                 }
+                break;
             case 'range':
                 $dbType = 'unsignedInteger';
                 break;
