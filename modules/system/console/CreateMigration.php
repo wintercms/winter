@@ -210,6 +210,7 @@ class CreateMigration extends BaseScaffoldCommand
     {
         $vars = parent::processVars($vars);
 
+        // --model option needed below
         if (empty($vars['model'])) {
             return $vars;
         }
