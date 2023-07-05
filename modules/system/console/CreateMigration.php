@@ -291,14 +291,14 @@ class CreateMigration extends BaseScaffoldCommand
         switch ($fieldConfig['type'] ?? 'text') {
             case 'checkbox':
             case 'switch':
-                $dbType = 'unsignedinteger';
+                $dbType = 'boolean';
                 break;
             case 'number':
             case 'range':
                 $dbType = 'integer';
                 break;
             case 'datepicker':
-                $dbType = 'timestamp';
+                $dbType = 'datetime';
                 break;
             case 'markdown':
             case 'textarea':
