@@ -32,7 +32,7 @@ class MigrationTest extends TestCase
         ]);
         $this->assertEquals($result['type'], 'unsignedInteger');
 
-        $result = Migration::mapFieldType( 'integerTest', [
+        $result = Migration::mapFieldType('integerTest', [
             'type' => 'number',
             'step' => 2,
         ]);
