@@ -5,6 +5,7 @@ use InvalidArgumentException;
 use Str;
 use System\Console\BaseScaffoldCommand;
 use System\Classes\VersionManager;
+use System\Helpers\Migration;
 use Yaml;
 
 /**
@@ -250,7 +251,7 @@ class CreateMigration extends BaseScaffoldCommand
                     continue;
                 }
 
-                $vars['fields'][$field] = $this->mapFieldType($field, $config);
+                $vars['fields'][$field] = Migration::mapFieldType($field, $config);
             }
         }
 
@@ -284,45 +285,6 @@ class CreateMigration extends BaseScaffoldCommand
         }
 
         return $vars;
-    }
-
-    protected function mapFieldType($name, $fieldConfig)
-    {
-        switch ($fieldConfig['type'] ?? 'text') {
-            case 'checkbox':
-            case 'switch':
-                $dbType = 'boolean';
-                break;
-            case 'number':
-                if (isset($fieldConfig['step']) && is_int($fieldConfig['step'])) {
-                    $dbType = 'integer';
-                } else {
-                    $dbType = 'double';
-                }
-                if ($dbType === 'integer' && isset($fieldConfig['min']) && $fieldConfig['min'] >= 0) {
-                    $dbType = 'unsignedInteger';
-                }
-                break;
-            case 'range':
-                $dbType = 'unsignedInteger';
-                break;
-            case 'datepicker':
-                $dbType = 'datetime';
-                break;
-            case 'markdown':
-            case 'textarea':
-                $dbType = 'mediumText';
-                break;
-            default:
-                $dbType = 'string';
-        }
-        $required = $fieldConfig['required'] ?? false;
-
-        return [
-            'type' => $dbType,
-            'required' => $required,
-            'index' => in_array($name, ["slug"]) or str_ends_with($name, "_id"),
-        ];
     }
 
     /**
