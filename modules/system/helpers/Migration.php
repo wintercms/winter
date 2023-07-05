@@ -1,8 +1,18 @@
-<?php namespace System\Helpers;
+<?php
 
+namespace System\Helpers;
+
+/**
+ * This helper class is used in migration scaffolding console scripts
+ *
+ */
 class Migration
 {
-    public static function mapFieldType($name, $fieldConfig)
+
+    /**
+     * Maps model fields config to DB Schema column types.
+     */
+    public static function mapFieldType(string $fieldName, array $fieldConfig) : array
     {
         switch ($fieldConfig['type'] ?? 'text') {
             case 'checkbox':
@@ -37,7 +47,7 @@ class Migration
         return [
             'type' => $dbType,
             'required' => $required,
-            'index' => in_array($name, ["slug"]) or str_ends_with($name, "_id"),
+            'index' => in_array($fieldName, ["slug"]) or str_ends_with($fieldName, "_id"),
         ];
     }
 }
