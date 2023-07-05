@@ -303,7 +303,7 @@ class CreateMigration extends BaseScaffoldCommand
                 break;
             case 'markdown':
             case 'textarea':
-                $dbType = 'text';
+                $dbType = 'mediumText';
                 break;
             default:
                 $dbType = 'string';
