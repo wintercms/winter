@@ -203,7 +203,10 @@ class CreateMigration extends BaseScaffoldCommand
         return $vars;
     }
 
-    protected function processVars($vars): array
+    /**
+     * Create vars for model fields mappings so they can be used in update/create stubs
+     */
+    protected function processVars(array $vars): array
     {
         $vars = parent::processVars($vars);
 
