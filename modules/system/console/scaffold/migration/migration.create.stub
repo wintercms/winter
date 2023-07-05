@@ -14,7 +14,11 @@ return new class extends Migration
     public function up()
     {
         Schema::create('{{ table }}', function (Blueprint $table) {
+{% if primaryKey %}
             $table->increments('{{ primaryKey }}');
+{% else %}
+            $table->id();
+{% endif %}
 {% for field,config in fields %}
             $table->{{ config.type }}('{{ field }}'){{ config.required == false ? '->nullable()'}}{{ config.index ? '->index()' }};
 {% endfor %}
@@ -24,7 +28,7 @@ return new class extends Migration
 {% for field in morphable %}
             $table->nullableMorphs('{{ field }}', 'morphable_index');
 {% endfor %}
-{% if timestamps %}
+{% if not model or timestamps %}
             $table->timestamps();
 {% endif %}
         });

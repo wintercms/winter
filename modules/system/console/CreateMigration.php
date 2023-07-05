@@ -162,9 +162,6 @@ class CreateMigration extends BaseScaffoldCommand
         }
 
         if ($this->option('create')) {
-            if (empty($model)) {
-                throw new InvalidArgumentException('The create options requires the --model option');
-            }
             $scaffold = 'create';
         } elseif ($this->option('update')) {
             $scaffold = 'update';
@@ -192,10 +189,12 @@ class CreateMigration extends BaseScaffoldCommand
             'name' => $name,
             'author' => $author,
             'plugin' => $plugin,
-            'model' => $model,
             'version' => $version,
         ];
 
+        if (!empty($model)) {
+            $vars['model'] = $model;
+        }
         if (!empty($table)) {
             $vars['table'] = $table;
         }
@@ -207,7 +206,7 @@ class CreateMigration extends BaseScaffoldCommand
     {
         $vars = parent::processVars($vars);
 
-        if (!$this->option('create')) {
+        if (empty($vars['model'])) {
             return $vars;
         }
 
