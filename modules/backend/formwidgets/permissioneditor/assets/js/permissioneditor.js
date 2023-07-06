@@ -23,16 +23,17 @@
     // ============================
 
     PermissionEditor.prototype.onPermissionTypeClick = function (ev) {
-        var $rows = $(ev.target).closest("tr").nextAll()
+        var $rows = $(ev.target).closest('tr').nextAll()
+        var index = $(ev.target).index()
 
         var allChecked = true
 
         for (let i = 0; i < $rows.length; i++) {
             var $row = $rows.eq(i)
-            var $checkbox = $row.find("input[type=checkbox]").eq(0)
+            var $check = $row.find('td:nth-child(' + (index + 1) + ') input[type=radio], td:nth-child(' + (index + 1) + ') input[type=checkbox]').eq(0)
 
-            if ($checkbox.length > 0) {
-                if (!$checkbox[0].checked) {
+            if ($check.length > 0) {
+                if (!$check[0].checked) {
                     allChecked = false
                     break
                 }
@@ -41,8 +42,14 @@
 
         for (let i = 0; i < $rows.length; i++) {
             var $row = $rows.eq(i)
-            var $checkbox = $row.find("input[type=checkbox]").eq(0)
-            if ($checkbox.length > 0) $checkbox.prop("checked", !allChecked)
+            var $check = $row.find('td:nth-child(' + (index + 1) + ') input[type=radio], td:nth-child(' + (index + 1) + ') input[type=checkbox]').eq(0)
+            if ($check.length > 0) {
+                if ($check.is('input[type=checkbox]')) {
+                    $check.prop('checked', !allChecked)
+                } else {
+                    $check.prop('checked', true)
+                }
+            }
         }
     };
 
