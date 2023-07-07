@@ -16,7 +16,10 @@ Event::listen('system.route', function () {
      *     });
      *
      */
-    Event::fire('cms.beforeRoute');
+    $result = Event::fire('cms.beforeRoute', [], true);
+    if ($result === false) {
+        return;
+    }
 
     /*
      * The CMS module handles all URLs that have not already been handled by the other modules & plugins.

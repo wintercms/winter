@@ -424,8 +424,6 @@ class PluginBase extends ServiceProviderBase
 
     /**
      * Gets the current version of the plugin as reported by updates/version.yaml
-     *
-     * @return string
      */
     public function getPluginVersion(): string
     {
@@ -433,23 +431,50 @@ class PluginBase extends ServiceProviderBase
             return $this->version;
         }
 
-        $versionFile = $this->getPluginPath() . '/updates/version.yaml';
-
-        if (
-            !File::isFile($versionFile)
-            || !($versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
-                return $yaml->parseFile($versionFile);
-            }))
-            || !is_array($versionInfo)
-        ) {
+        $versions = $this->getPluginVersions();
+        if (empty($versions)) {
             return $this->version = (string) VersionManager::NO_VERSION_VALUE;
         }
 
-        uksort($versionInfo, function ($a, $b) {
+        return $this->version = trim(key(array_slice($versions, -1, 1)));
+    }
+
+    /**
+     * Gets the contents of the plugin's updates/version.yaml file and normalizes the results
+     */
+    public function getPluginVersions(bool $includeScripts = true): array
+    {
+        $path = $this->getPluginPath();
+        $versionFile = $path . '/updates/version.yaml';
+        if (!File::isFile($versionFile)) {
+            return [];
+        }
+
+        $updates = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
+            return (array) $yaml->parseFile($versionFile);
+        });
+
+        uksort($updates, function ($a, $b) {
             return version_compare($a, $b);
         });
 
-        return $this->version = trim(key(array_slice($versionInfo, -1, 1)));
+        $versions = [];
+        foreach ($updates as $version => $details) {
+            if (!is_array($details)) {
+                $details = [$details];
+            }
+
+            if (!$includeScripts) {
+                // Filter out valid update scripts
+                $details = array_values(array_filter($details, function ($string) use ($path) {
+                    return !Str::endsWith($string, '.php') || !File::exists($path . '/updates/' . $string);
+                }));
+            }
+
+            $versions[$version] = $details;
+        }
+
+        return $versions;
     }
 
     /**

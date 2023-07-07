@@ -19,7 +19,9 @@ class CreateReportWidget extends BaseScaffoldCommand
     protected $signature = 'create:reportwidget
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {widget : The name of the report widget to generate. <info>(eg: PostViews)</info>}
-        {--force : Overwrite existing files with generated files.}';
+        {--force : Overwrite existing files with generated files.}
+        {--uninspiring : Disable inspirational quotes}
+    ';
 
     /**
      * The console command description.

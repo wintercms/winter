@@ -46,6 +46,9 @@
         "dms/phpunit-arraysubset-asserts": "^0.1.0|^0.2.1"
     },
     "scripts": {
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
         "post-create-project-cmd": [
             "@php artisan key:generate"
         ],

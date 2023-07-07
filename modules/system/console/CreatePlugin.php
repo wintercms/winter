@@ -14,7 +14,9 @@ class CreatePlugin extends BaseScaffoldCommand
      */
     protected $signature = 'create:plugin
         {plugin : The name of the plugin to create. <info>(eg: Winter.Blog)</info>}
-        {--f|force : Overwrite existing files with generated files.}';
+        {--f|force : Overwrite existing files with generated files.}
+        {--uninspiring : Disable inspirational quotes}
+    ';
 
     /**
      * @var string The console command description.
