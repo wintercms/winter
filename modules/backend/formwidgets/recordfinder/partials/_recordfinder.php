@@ -25,7 +25,7 @@ if ($this->previewMode || $field->readOnly) {
         <?php if ($value): ?>
             <button
                 type="button"
-                class="btn btn-default clear-record"
+                class="btn btn-default"
                 data-request="<?= $this->getEventHandler('onClearRecord') ?>"
                 data-request-confirm="<?= e(trans('backend::lang.form.action_confirm')) ?>"
                 data-request-success="var $locker = $('#<?= $field->getId() ?>'); $locker.val(''); $locker.trigger('change')"
