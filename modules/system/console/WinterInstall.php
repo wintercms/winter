@@ -11,6 +11,7 @@ use System\Classes\UpdateManager;
 use Winter\Storm\Config\ConfigWriter;
 use Illuminate\Console\Command;
 use Illuminate\Encryption\Encrypter;
+use Winter\LaravelConfigWriter\EnvFile;
 use Symfony\Component\Console\Input\InputOption;
 use Exception;
 
@@ -44,6 +45,11 @@ class WinterInstall extends Command
     protected $configWriter;
 
     /**
+     * @var Winter\Storm\Config\EnvFile
+     */
+    protected $envFileWriter;
+
+    /**
      * Create a new command instance.
      */
     public function __construct()
@@ -51,6 +57,8 @@ class WinterInstall extends Command
         parent::__construct();
 
         $this->configWriter = new ConfigWriter;
+
+        $this->envFileWriter = new EnvFile(base_path('.env.example'));
 
         // Register aliases for backwards compatibility with October
         $this->setAliases(['october:install']);
@@ -121,6 +129,7 @@ class WinterInstall extends Command
     {
         $url = $this->ask('Application URL', Config::get('app.url'));
         $this->writeToConfig('app', ['url' => $url]);
+        $this->writeToEnv(['APP_URL' => $url]);
     }
 
     protected function setupBackendValues()
@@ -151,6 +160,7 @@ class WinterInstall extends Command
             $locale = $this->ask('Default Backend Locale', $defaultLocale);
         }
         $this->writeToConfig('app', ['locale' => $locale]);
+        $this->writeToEnv(['APP_LOCALE' => $locale]);
 
         // cms.backendTimezone
         $defaultTimezone = Config::get('cms.backendTimezone');
@@ -203,6 +213,7 @@ class WinterInstall extends Command
 
         $debug = (bool) $this->confirm('Enable Debug Mode?', true);
         $this->writeToConfig('app', ['debug' => $debug]);
+        $this->writeToEnv(['APP_DEBUG' => $debug]);
     }
 
     protected function askToInstallPlugins()
@@ -241,6 +252,7 @@ class WinterInstall extends Command
         }
 
         $this->writeToConfig('app', ['key' => $key]);
+        $this->writeToEnv(['APP_KEY' => $key]);
 
         $this->info(sprintf('Application key [%s] set successfully.', $key));
     }
@@ -282,16 +294,18 @@ class WinterInstall extends Command
             'SQL Server' => 'sqlsrv',
         ];
 
-        $driver = array_get($typeMap, $type, 'sqlite');
+        $driver = array_get($typeMap, $type, env('DB_CONNECTION', 'sqlite'));
 
         $method = 'setupDatabase'.Str::studly($driver);
 
         $newConfig = $this->$method();
 
         $this->writeToConfig('database', ['default' => $driver]);
+        $this->writeToEnv(['DB_CONNECTION' => $driver]);
 
         foreach ($newConfig as $config => $value) {
             $this->writeToConfig('database', ['connections.'.$driver.'.'.$config => $value]);
+            $this->writeToEnv(['DB_' . Str::upper($config) => $value]);
         }
     }
 
@@ -440,6 +454,17 @@ class WinterInstall extends Command
         }
 
         $this->configWriter->toFile($configFile, $values);
+    }
+
+    protected function writeToEnv($values)
+    {
+        $path = base_path('.env');
+
+        foreach ($values as $key => $value) {
+            $this->envFileWriter->set($key, $value);
+        }
+
+        $this->envFileWriter->write($path);
     }
 
     /**
