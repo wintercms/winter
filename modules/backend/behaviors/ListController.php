@@ -387,9 +387,9 @@ class ListController extends ControllerBehavior
         /*
          * Validate checked identifiers
          */
-        $checkedIds = post('checked');
+        $checkedIds = post('checked', []);
 
-        if (!$checkedIds || !is_array($checkedIds) || !count($checkedIds)) {
+        if (!is_array($checkedIds) || !count($checkedIds)) {
             Flash::error(Lang::get(
                 (!empty($listConfig->noRecordsCopiedMessage))
                     ? $listConfig->noRecordsCopiedMessage
