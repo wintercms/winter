@@ -231,6 +231,7 @@ return [
         'copy_selected' => 'Copy selected',
         'copy_selected_empty' => 'There are no selected records to copy.',
         'copy_selected_confirm' => 'Copy the selected records?',
+        'copy_selected_failed' => 'An error has occured when copying records.',
         'copy_selected_success' => 'Selected records has been copied.',
         'column_switch_true' => 'Yes',
         'column_switch_false' => 'No',

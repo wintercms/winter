@@ -232,6 +232,7 @@ return [
         'copy_selected_empty' => 'Il n\'y a aucun enregistrement à copier',
         'copy_selected_confirm' => 'Confirmer la copie des enregistrements sélectionnés ?',
         'copy_selected_success' => 'Les enregistrements ont été copiés.',
+        'copy_selected_failed' => 'Une erreur s\'est produite pendant la copie des enregistrements.',
         'column_switch_true' => 'Oui',
         'column_switch_false' => 'Non'
     ],

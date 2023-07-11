@@ -5,6 +5,8 @@ use Event;
 use Flash;
 use ApplicationException;
 use Backend\Classes\ControllerBehavior;
+use Winter\Storm\Exception\ValidationException;
+use Exception;
 
 /**
  * Adds features for working with backend lists.
@@ -433,20 +435,22 @@ class ListController extends ControllerBehavior
         $records = $query->get();
 
         if ($records->count()) {
-            foreach ($records as $record) {
-                $copy = $record->replicate($protectedColumns);
-                $this->controller->listBeforeCopy($record);
-                $copy->save();
-                $this->controller->listAfterCopy($record);
+            try {
+                foreach ($records as $record) {
+                    $copy = $record->replicate($protectedColumns);
+                    $this->controller->listBeforeCopy($record);
+                    $copy->save();
+                    $this->controller->listAfterCopy($record);
+                }
+                Flash::success(Lang::get(
+                    (!empty($listConfig->copyMessage))
+                        ? $listConfig->copyMessage
+                        : 'backend::lang.list.copy_selected_success'
+                ));
+            } catch (ValidationException $e) {
+                Flash::error($e->getErrors()->first());
             }
-
-            Flash::success(Lang::get(
-                (!empty($listConfig->copyMessage))
-                    ? $listConfig->copyMessage
-                    : 'backend::lang.list.copy_selected_success'
-            ));
-        }
-        else {
+        } else {
             Flash::error(Lang::get(
                 (!empty($listConfig->noRecordsCopiedMessage))
                     ? $listConfig->noRecordsCopiedMessage
