@@ -363,6 +363,103 @@ class ListController extends ControllerBehavior
     }
 
     /**
+     * Bulk copy records.
+     * @return void
+     * @throws \Winter\Storm\Exception\ApplicationException when the parent definition is missing.
+     */
+    public function index_onCopy()
+    {
+        if (method_exists($this->controller, 'onCopy')) {
+            return call_user_func_array([$this->controller, 'onCopy'], func_get_args());
+        }
+
+        /*
+         * Establish the list definition
+         */
+        $definition = post('definition', $this->primaryDefinition);
+
+        if (!isset($this->listDefinitions[$definition])) {
+            throw new ApplicationException(Lang::get('backend::lang.list.missing_parent_definition', compact('definition')));
+        }
+
+        $listConfig = $this->controller->listGetConfig($definition);
+
+        /*
+         * Validate checked identifiers
+         */
+        $checkedIds = post('checked');
+
+        if (!$checkedIds || !is_array($checkedIds) || !count($checkedIds)) {
+            Flash::error(Lang::get(
+                (!empty($listConfig->noRecordsCopiedMessage))
+                    ? $listConfig->noRecordsCopiedMessage
+                    : 'backend::lang.list.copy_selected_empty'
+            ));
+            return $this->controller->listRefresh();
+        }
+
+        /*
+         * Create the model
+         */
+        $class = $listConfig->modelClass;
+        $model = new $class;
+        $model = $this->controller->listExtendModel($model, $definition);
+
+        /*
+         * Create the query
+         */
+        $query = $model->newQuery();
+        $this->controller->listExtendQueryBefore($query, $definition);
+
+        $query->whereIn($model->getKeyName(), $checkedIds);
+        $this->controller->listExtendQuery($query, $definition);
+
+        /*
+         *  Retrieve protected columns from list column configuration
+         */
+        $columnConfig = $this->makeConfig($listConfig->list);
+
+        $protectedColumns = [];
+
+        foreach ($columnConfig as $column => $definition) {
+            if (array_key_exists('protected', $definition)) {
+                if ($definition['protected']) {
+                    $protectedColumns[] = $column;
+                }
+            }
+        }
+
+        /*
+         * Copy records
+         */
+        $records = $query->get();
+
+        if ($records->count()) {
+            foreach ($records as $record) {
+                $copy = $record->replicate($protectedColumns);
+                $this->controller->listBeforeCopy($record);
+                $copy->save();
+                $this->controller->listAfterCopy($record);
+            }
+
+            Flash::success(Lang::get(
+                (!empty($listConfig->copyMessage))
+                    ? $listConfig->copyMessage
+                    : 'backend::lang.list.copy_selected_success'
+            ));
+        }
+        else {
+            Flash::error(Lang::get(
+                (!empty($listConfig->noRecordsCopiedMessage))
+                    ? $listConfig->noRecordsCopiedMessage
+                    : 'backend::lang.list.copy_selected_empty'
+            ));
+        }
+
+        return $this->controller->listRefresh($definition);
+    }
+
+    /**
      * Renders the widget collection.
      * @param  string $definition Optional list definition.
      * @return string Rendered HTML for the list.
@@ -467,6 +564,22 @@ class ListController extends ControllerBehavior
     //
     // Overrides
     //
+
+    /**
+     * Called before a list record is copied.
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
+     */
+    public function listBeforeCopy($model)
+    {
+    }
+
+    /**
+     * Called after a list record is copied.
+     * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
+     */
+    public function listAfterCopy($model)
+    {
+    }
 
     /**
      * Called after the list columns are defined.

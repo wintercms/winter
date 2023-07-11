@@ -228,6 +228,10 @@ return [
         'delete_selected_empty' => 'Il n\'y a aucun enregistrement à supprimer',
         'delete_selected_confirm' => 'Confirmer la suppression des enregistrements sélectionnés ?',
         'delete_selected_success' => 'Les enregistrements ont été supprimés.',
+        'copy_selected' => 'Copier la sélection',
+        'copy_selected_empty' => 'Il n\'y a aucun enregistrement à copier',
+        'copy_selected_confirm' => 'Confirmer la copie des enregistrements sélectionnés ?',
+        'copy_selected_success' => 'Les enregistrements ont été copiés.',
         'column_switch_true' => 'Oui',
         'column_switch_false' => 'Non'
     ],
