@@ -17,7 +17,9 @@ class CreateCommand extends BaseScaffoldCommand
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {name : The name of the command to generate. <info>(eg: ImportPosts)</info>}
         {--command= : The terminal command that should be assigned. <info>(eg: blog:importposts)</info>}
-        {--f|force : Overwrite existing files with generated files.}';
+        {--f|force : Overwrite existing files with generated files.}
+        {--uninspiring : Disable inspirational quotes}
+    ';
 
     /**
      * @var string The console command description.

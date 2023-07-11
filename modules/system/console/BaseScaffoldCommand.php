@@ -54,9 +54,12 @@ abstract class BaseScaffoldCommand extends GeneratorCommand
      */
     protected function getDestinationPath(): string
     {
-        $plugin = $this->getPluginIdentifier();
+        $plugin = $this->getPlugin();
+        if ($plugin) {
+            return $plugin->getPluginPath();
+        }
 
-        $parts = explode('.', $plugin);
+        $parts = explode('.', $this->getPluginIdentifier());
         $name = array_pop($parts);
         $author = array_pop($parts);
 
