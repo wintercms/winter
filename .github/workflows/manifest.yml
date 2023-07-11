@@ -11,7 +11,7 @@ jobs:
     name: Update manifest
     runs-on: ubuntu-latest
     env:
-      phpVersion: '8.0'
+      phpVersion: '8.1'
       extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
       key: winter-cms-cache-develop
     steps:
@@ -45,13 +45,13 @@ jobs:
           extensions: ${{ env.extensions }}
 
       - name: Setup dependency cache
-        id: composercache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache dependencies
         uses: actions/cache@v3
         with:
-          path: ${{ steps.composercache.outputs.dir }}
+          path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
@@ -69,3 +69,32 @@ jobs:
         with:
           name: winter-manifest
           path: builds.json
+  commitManifest:
+    name: Commit manifest
+    runs-on: ubuntu-latest
+    needs: updateManifest
+    steps:
+      - name: Cancel previous incomplete runs
+        uses: styfle/cancel-workflow-action@0.8.0
+        with:
+          access_token: ${{ github.token }}
+
+      - name: Checkout changes
+        uses: actions/checkout@v3
+        with:
+          repository: wintercms/meta
+          ref: main
+          token: ${{ secrets.WINTER_BOT_TOKEN }}
+
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: winter-manifest
+          path: manifest
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update manifest
+          commit_user_name: Winter Bot
+          commit_user_email: 80384029+WinterCMSBot@users.noreply.github.com
