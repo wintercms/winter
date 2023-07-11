@@ -423,8 +423,8 @@ class ListController extends ControllerBehavior
 
         $protectedColumns = [];
 
-        foreach ($columnConfig as $column => $definition) {
-            if (array_key_exists('protected', $definition) && $definition['protected'] === true) {
+        foreach ($columnConfig as $column => $config) {
+            if (array_key_exists('protected', $config) && $config['protected'] === true) {
                 $protectedColumns[] = $column;
             }
         }
