@@ -448,7 +448,7 @@ class ListController extends ControllerBehavior
                         : 'backend::lang.list.replicate_selected_success'
                 ));
             } catch (ValidationException $e) {
-                Flash::error($e->getErrors()->first());
+                throw new ApplicationException($e->getErrors()->first());
             }
         } else {
             Flash::error(Lang::get(
