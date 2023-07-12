@@ -398,8 +398,8 @@ class ListController extends ControllerBehavior
 
         if (!is_array($checkedIds) || !count($checkedIds)) {
             Flash::error(Lang::get(
-                (!empty($listConfig->noRecordsCopiedMessage))
-                    ? $listConfig->noRecordsCopiedMessage
+                (!empty($replicationConfig->noRecordsReplicatedMessage))
+                    ? $replicationConfig->noRecordsReplicatedMessage
                     : 'backend::lang.list.replicate_selected_empty'
             ));
             return $this->controller->listRefresh();
@@ -468,8 +468,8 @@ class ListController extends ControllerBehavior
                     $this->controller->listAfterReplicate($replicated, $record);
                 }
                 Flash::success(Lang::get(
-                    (!empty($listConfig->replicateMessage))
-                        ? $listConfig->replicateMessage
+                    (!empty($replicationConfig->replicateMessage))
+                        ? $replicationConfig->replicateMessage
                         : 'backend::lang.list.replicate_selected_success'
                 ));
             } catch (ValidationException $e) {
@@ -477,8 +477,8 @@ class ListController extends ControllerBehavior
             }
         } else {
             Flash::error(Lang::get(
-                (!empty($listConfig->noRecordsReplicatedMessage))
-                    ? $listConfig->noRecordsReplicatedMessage
+                (!empty($replicationConfig->noRecordsReplicatedMessage))
+                    ? $replicationConfig->noRecordsReplicatedMessage
                     : 'backend::lang.list.replicate_selected_empty'
             ));
         }
