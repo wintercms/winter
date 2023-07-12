@@ -417,7 +417,7 @@ class ListController extends ControllerBehavior
         $this->controller->listExtendQuery($query, $definition);
 
         /*
-         *  Retrieve protected columns from list column configuration
+         * Retrieve protected columns from list column configuration
          */
         $columnConfig = $this->makeConfig($listConfig->list);
 
