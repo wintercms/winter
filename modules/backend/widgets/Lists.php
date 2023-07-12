@@ -62,7 +62,7 @@ class Lists extends WidgetBase
     /**
      * @var int Maximum rows to display for each page.
      */
-    public $recordsPerPage;
+    public $recordsPerPage = 20;
 
     /**
      * @var array Options for number of items per page.
