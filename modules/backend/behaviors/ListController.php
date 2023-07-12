@@ -366,17 +366,16 @@ class ListController extends ControllerBehavior
 
     /**
      * Bulk replicate records.
-     * @return void
-     * @throws \Winter\Storm\Exception\ApplicationException when the parent definition is missing.
+     * @throws \Winter\Storm\Exception\ApplicationException when the parent definition is missing or when replication fails due to validation errors.
      */
-    public function index_onReplicate()
+    public function index_onReplicate(): array
     {
-        if (method_exists($this->controller, 'onCopy')) {
-            return call_user_func_array([$this->controller, 'onCopy'], func_get_args());
+        if (method_exists($this->controller, 'onReplicate')) {
+            return call_user_func_array([$this->controller, 'onReplicate'], func_get_args());
         }
 
         /*
-         * Establish the list definition
+         * Establish the list replication definition
          */
         $definition = post('definition', $this->primaryDefinition);
 
@@ -385,6 +384,12 @@ class ListController extends ControllerBehavior
         }
 
         $listConfig = $this->controller->listGetConfig($definition);
+
+        if (!isset($listConfig->replication)) {
+            throw new ApplicationException(Lang::get('backend::lang.list.missing_replication_definition', compact('definition')));
+        }
+
+        $replicationConfig = $this->makeConfig($listConfig->replication, ['enabled']);
 
         /*
          * Validate checked identifiers
@@ -417,30 +422,50 @@ class ListController extends ControllerBehavior
         $this->controller->listExtendQuery($query, $definition);
 
         /*
-         * Retrieve protected columns from list column configuration
+         * If replication is enabled and neither is provided then
+         * we should default to looking at the model's fillable / guarded definitions
+         * (allowing explicit configuration in the config_list.yaml to overrule those values if desired).
          */
-        $columnConfig = $this->makeConfig($listConfig->list);
+        if (!$replicationConfig->enabled) {
+            throw new ApplicationException(Lang::get('backend::lang.list.replication_disabled'));
+        }
 
-        $protectedColumns = [];
+        if ($model->totallyGuarded()) {
+            $allowed = [];
+        } else {
+            $allowed = array_diff($model->getFillable(), $model->getGuarded());
+        }
 
-        foreach ($columnConfig as $column => $config) {
-            if (array_key_exists('protected', $config) && $config['protected'] === true) {
-                $protectedColumns[] = $column;
-            }
+        if (isset($replicationConfig->allowed)) {
+            $allowed = $replicationConfig->allowed;
+        }
+
+        if (isset($replicationConfig->ignored)) {
+            $allowed = array_diff($allowed, $replicationConfig->ignored);
+        }
+
+        // There is no attribute to replicate
+        if (count($allowed) === 0) {
+            throw new ApplicationException(Lang::get('backend::lang.list.replication_protected'));
         }
 
         /*
-         * Copy records
+         * Replicate records
          */
         $records = $query->get();
 
         if ($records->count()) {
             try {
                 foreach ($records as $record) {
-                    $copy = $record->replicate($protectedColumns);
-                    $this->controller->listBeforeCopy($record);
-                    $copy->save();
-                    $this->controller->listAfterCopy($record);
+                    // Replicate the model without protected attributes
+                    $replicated = $record->replicate(
+                        array_diff($allowed, array_keys($record->getAttributes()))
+                    );
+                    $this->controller->listBeforeReplicate($replicated, $record);
+
+                    $replicated->save();
+
+                    $this->controller->listAfterReplicate($replicated, $record);
                 }
                 Flash::success(Lang::get(
                     (!empty($listConfig->replicateMessage))
@@ -568,18 +593,18 @@ class ListController extends ControllerBehavior
     //
 
     /**
-     * Called before a list record is copied.
+     * Called before a list record is replicated.
      * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
-    public function listBeforeCopy($model)
+    public function listBeforeReplicate($model, $original)
     {
     }
 
     /**
-     * Called after a list record is copied.
+     * Called after a list record is replicated.
      * @param \Winter\Storm\Database\Model|\Winter\Storm\Halcyon\Model
      */
-    public function listAfterCopy($model)
+    public function listAfterReplicate($model, $original)
     {
     }
 
