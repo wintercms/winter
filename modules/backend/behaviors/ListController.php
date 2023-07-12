@@ -365,11 +365,11 @@ class ListController extends ControllerBehavior
     }
 
     /**
-     * Bulk copy records.
+     * Bulk replicate records.
      * @return void
      * @throws \Winter\Storm\Exception\ApplicationException when the parent definition is missing.
      */
-    public function index_onCopy()
+    public function index_onReplicate()
     {
         if (method_exists($this->controller, 'onCopy')) {
             return call_user_func_array([$this->controller, 'onCopy'], func_get_args());
@@ -395,7 +395,7 @@ class ListController extends ControllerBehavior
             Flash::error(Lang::get(
                 (!empty($listConfig->noRecordsCopiedMessage))
                     ? $listConfig->noRecordsCopiedMessage
-                    : 'backend::lang.list.copy_selected_empty'
+                    : 'backend::lang.list.replicate_selected_empty'
             ));
             return $this->controller->listRefresh();
         }
@@ -443,18 +443,18 @@ class ListController extends ControllerBehavior
                     $this->controller->listAfterCopy($record);
                 }
                 Flash::success(Lang::get(
-                    (!empty($listConfig->copyMessage))
-                        ? $listConfig->copyMessage
-                        : 'backend::lang.list.copy_selected_success'
+                    (!empty($listConfig->replicateMessage))
+                        ? $listConfig->replicateMessage
+                        : 'backend::lang.list.replicate_selected_success'
                 ));
             } catch (ValidationException $e) {
                 Flash::error($e->getErrors()->first());
             }
         } else {
             Flash::error(Lang::get(
-                (!empty($listConfig->noRecordsCopiedMessage))
-                    ? $listConfig->noRecordsCopiedMessage
-                    : 'backend::lang.list.copy_selected_empty'
+                (!empty($listConfig->noRecordsReplicatedMessage))
+                    ? $listConfig->noRecordsReplicatedMessage
+                    : 'backend::lang.list.replicate_selected_empty'
             ));
         }
 
