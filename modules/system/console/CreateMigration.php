@@ -1,9 +1,9 @@
 <?php namespace System\Console;
 
 use InvalidArgumentException;
-use Str;
-use System\Console\BaseScaffoldCommand;
 use System\Classes\VersionManager;
+use System\Console\BaseScaffoldCommand;
+use Winter\Storm\Support\Str;
 use Yaml;
 
 /**

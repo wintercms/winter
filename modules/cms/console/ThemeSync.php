@@ -1,13 +1,9 @@
 <?php namespace Cms\Console;
 
-use App;
+use Cms\Classes\Theme;
 use Event;
 use Exception;
-use Cms\Classes\Theme;
-
 use Winter\Storm\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Console command to sync a theme between the DB and Filesystem layers.
@@ -31,6 +27,16 @@ class ThemeSync extends Command
      * @var string
      */
     protected $name = 'theme:sync';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'theme:sync
+        {name? : The name of the theme (directory name). Defaults to currently active theme.}
+        {--paths=  : Comma-separated specific paths (relative to provided theme directory) to specificaly sync. Default is all paths. You may use regular expressions.}
+        {--target= : The target of the sync, the other will be used as the source. Defaults to "filesystem", can be "database"}
+        {--f|force : Force the operation to run.}
+    ';
 
     /**
      * The console command description.
@@ -224,31 +230,5 @@ class ThemeSync extends Command
 
             return $entity;
         });
-
-        return $entity;
-    }
-
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::OPTIONAL, 'The name of the theme (directory name). Defaults to currently active theme.'],
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['paths', null, InputOption::VALUE_REQUIRED, 'Comma-separated specific paths (relative to provided theme directory) to specificaly sync. Default is all paths. You may use regular expressions.'],
-            ['target', null, InputOption::VALUE_REQUIRED, 'The target of the sync, the other will be used as the source. Defaults to "filesystem", can be "database"'],
-            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run.'],
-        ];
     }
 }

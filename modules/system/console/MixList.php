@@ -40,20 +40,21 @@ class MixList extends Command
 
         $errors = [];
 
+        $rows = [];
         foreach ($packages as $name => $package) {
-            if ($package['ignored'] ?? false) {
-                $this->warn($name);
-            } else {
-                $this->info($name);
-            }
-
-            $this->line('  Path:           ' . $package['path']);
-            $this->line('  Configuration:  ' . $package['mix']);
+            $rows[] = [
+                'name' => $name,
+                'active' => $package['ignored'] ?? false ? '<fg=red>No</>' : '<info>Yes</info>',
+                'path' => $package['path'],
+                'configuration' => $package['mix'],
+            ];
 
             if (!File::exists($package['mix'])) {
                 $errors[] = "The mix file for $name doesn't exist, try running artisan mix:install";
             }
         }
+
+        $this->table(['Name', 'Active', 'Path', 'Configuration'], $rows);
 
         $this->line('');
 

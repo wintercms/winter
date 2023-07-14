@@ -1,10 +1,10 @@
 <?php namespace Backend\Console;
 
-use Str;
 use Backend\Models\User;
-use Winter\Storm\Console\Command;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Str;
 use Symfony\Component\Console\Question\Question;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to change the password of a Backend user via CLI.
@@ -25,17 +25,19 @@ class WinterPasswd extends Command
      */
     protected $signature = 'winter:passwd
         {username? : The username or email of the Backend user. <info>(eg: admin or admin@example.com)</info>}
-        {password? : The new password to set.}';
+        {password? : The new password to set.}
+    ';
 
     /**
      * @var string The console command description.
      */
     protected $description = 'Change the password of a Backend user.';
-    
+
     /**
      * @var array List of commands that this command replaces (aliases)
      */
     protected $replaces = [
+        'october:passwd',
         'winter:password',
     ];
 
@@ -43,17 +45,6 @@ class WinterPasswd extends Command
      * @var bool Was the password automatically generated?
      */
     protected $generatedPassword = false;
-
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        // Register aliases for backwards compatibility with October
-        $this->setAliases(['october:passwd']);
-    }
 
     /**
      * Execute the console command.
