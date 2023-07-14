@@ -60,7 +60,7 @@ class ThemeSync extends Command
     public function handle()
     {
         // Check to see if the application even uses a database
-        if (!App::hasDatabase()) {
+        if (!$this->laravel->hasDatabase()) {
             return $this->error("The application is not using a database.");
         }
 

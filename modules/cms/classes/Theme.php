@@ -1,23 +1,22 @@
 <?php namespace Cms\Classes;
 
 use App;
-use Url;
-use File;
-use Yaml;
-use Lang;
-use Cache;
-use Event;
-use Config;
-use Schema;
-use Exception;
-use SystemException;
-use DirectoryIterator;
 use ApplicationException;
+use Cache;
 use Cms\Models\ThemeData;
+use Config;
+use DirectoryIterator;
+use Event;
+use Exception;
+use File;
+use Lang;
 use System\Models\Parameter;
+use SystemException;
+use Url;
+use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 use Winter\Storm\Halcyon\Datasource\DbDatasource;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;
-use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
+use Yaml;
 
 /**
  * This class represents the CMS theme.
@@ -610,7 +609,7 @@ class Theme extends CmsObject
         }
 
         $hasDb = Cache::rememberForever('cms.databaseTemplates.hasTables', function () {
-            return App::hasDatabase() && Schema::hasTable('cms_theme_templates');
+            return App::hasDatabaseTable('cms_theme_templates');
         });
 
         return $enableDbLayer && $hasDb;
