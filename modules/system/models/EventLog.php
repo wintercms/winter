@@ -1,9 +1,9 @@
 <?php namespace System\Models;
 
 use App;
-use Str;
-use Model;
 use Exception;
+use Model;
+use Str;
 
 /**
  * Model for logging system errors and debug trace messages
@@ -25,27 +25,22 @@ class EventLog extends Model
 
     /**
      * Returns true if this logger should be used.
-     * @return bool
      */
-    public static function useLogging()
+    public static function useLogging(): bool
     {
         return (
+            !defined('WINTER_NO_EVENT_LOGGING') &&
             class_exists('Model') &&
             Model::getConnectionResolver() &&
             App::hasDatabase() &&
-            !defined('WINTER_NO_EVENT_LOGGING') &&
             LogSetting::get('log_events')
         );
     }
 
     /**
      * Creates a log record
-     * @param string $message Specifies the message text
-     * @param string $level Specifies the logging level
-     * @param string $details Specifies the error details string
-     * @return self
      */
-    public static function add($message, $level = 'info', $details = null)
+    public static function add(string $message, string $level = 'info', ?string $details = null): self
     {
         $record = new static;
         $record->message = $message;
@@ -66,10 +61,8 @@ class EventLog extends Model
 
     /**
      * Beautify level value.
-     * @param  string $level
-     * @return string
      */
-    public function getLevelAttribute($level)
+    public function getLevelAttribute(string $level): string
     {
         return ucfirst($level);
     }
@@ -77,9 +70,8 @@ class EventLog extends Model
     /**
      * Creates a shorter version of the message attribute,
      * extracts the exception message or limits by 100 characters.
-     * @return string
      */
-    public function getSummaryAttribute()
+    public function getSummaryAttribute(): string
     {
         if (preg_match("/with message '(.+)' in/", $this->message, $match)) {
             return $match[1];
