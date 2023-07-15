@@ -248,7 +248,7 @@ class CreateMigration extends BaseScaffoldCommand
                 if (str_starts_with($field, '_')
                     or $field === $model->getKeyName()
                     or str_contains($field, '[')
-                    or in_array($type, ['fileupload','relation','relationmanager','section','hint'])
+                    or in_array($type, ['fileupload','relation','relationmanager','repeater','section','hint'])
                     or in_array($field, $model->purgeable ?? [])
                     or $model->getRelationType($field)
                 ) {
