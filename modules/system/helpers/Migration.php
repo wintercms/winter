@@ -2,6 +2,8 @@
 
 namespace System\Helpers;
 
+use Winter\Storm\Database\Model;
+
 /**
  * This helper class is used in migration scaffolding console scripts
  *
@@ -12,7 +14,7 @@ class Migration
     /**
      * Maps model fields config to DB Schema column types.
      */
-    public static function mapFieldType(string $fieldName, array $fieldConfig) : array
+    public static function mapFieldType(string $fieldName, array $fieldConfig, ?Model $model = null) : array
     {
         switch ($fieldConfig['type'] ?? 'text') {
             case 'checkbox':
@@ -42,7 +44,15 @@ class Migration
             default:
                 $dbType = 'string';
         }
-        $required = $fieldConfig['required'] ?? false;
+
+        if ($model) {
+            $rule = array_get($model->rules ?? [], $name, '');
+            $rule = is_array($rule) ? implode(',', $rule) : $rule;
+
+            $required = str_contains($rule, 'required') ? true : $fieldConfig['required'] ?? false;
+        } else {
+            $required = $fieldConfig['required'] ?? false;
+        }
 
         return [
             'type' => $dbType,

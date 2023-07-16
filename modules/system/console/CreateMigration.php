@@ -255,7 +255,7 @@ class CreateMigration extends BaseScaffoldCommand
                     continue;
                 }
 
-                $vars['fields'][$field] = Migration::mapFieldType($field, $config);
+                $vars['fields'][$field] = Migration::mapFieldType($field, $config, $model);
             }
         }
 
