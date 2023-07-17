@@ -14,112 +14,137 @@ class Repeater extends FormWidgetBase
     //
 
     /**
-     * @var array Form field configuration
+     * Form field configuration
      */
-    public $form;
+    public array $form = [];
 
     /**
-     * @var string Prompt text for adding new items.
+     * Repeater mode. Can be either `list` (default) to display items in a vertical list, or `grid` to
+     *  display items in a grid.
      */
-    public $prompt;
+    public string $mode = 'list';
 
     /**
-     * @var bool Items can be sorted.
+     * Prompt text for adding new items.
      */
-    public $sortable = true;
+    public string $prompt = 'backend::lang.repeater.add_new_item';
 
     /**
-     * @var string Field name to use for the title of collapsed items
+     * If `true`, items can be sorted.
      */
-    public $titleFrom = false;
+    public bool $sortable = true;
 
     /**
-     * @var int Minimum items required. Pre-displays those items when not using groups
+     * Field name to use for the title of collapsed items
      */
-    public $minItems;
+    public ?string $titleFrom = null;
 
     /**
-     * @var int Maximum items permitted
+     * Minimum items required. Pre-displays those items when not using groups. Set to `0` to not enforce a minimum.
      */
-    public $maxItems;
+    public int $minItems = 0;
 
     /**
-     * @var string The style of the repeater. Can be one of three values:
+     * Maximum items permitted. Set to `0` to not enforce a limit.
+     */
+    public int $maxItems = 0;
+
+    /**
+     * Number of columns in a grid mode repeater. Can be between 2 and 6. Defaults to `4`.
+     */
+    public int $columns = 4;
+
+    /**
+     * The row height, in pixels, of a grid mode repeater. Defaults to `120`. Note that if items are larger than this
+     *   value, the row will scale accordingly.
+     */
+    public int $rowHeight = 120;
+
+    /**
+     * The style of the repeater. Can be one of three values:
      *  - "default": Shows all repeater items expanded on load.
      *  - "collapsed": Shows all repeater items collapsed on load.
      *  - "accordion": Shows only the first repeater item expanded on load. When another item is clicked, all other open
      *      items are collapsed.
+     *
+     *  Ignored when using `grid` mode.
      */
-    public $style;
+    public string $style = 'default';
 
     //
     // Object properties
     //
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected $defaultAlias = 'repeater';
 
     /**
-     * @var array Meta data associated to each field, organised by index
+     * Meta data associated to each field, organised by index
      */
-    protected $indexMeta = [];
+    protected array $indexMeta = [];
 
     /**
-     * @var array Collection of form widgets.
+     * Collection of form widgets.
      */
-    protected $formWidgets = [];
+    protected array $formWidgets = [];
 
     /**
-     * @var bool Stops nested repeaters populating from previous sibling.
+     * Stops nested repeaters populating from previous sibling.
      */
-    protected static $onAddItemCalled = false;
+    protected static bool $onAddItemCalled = false;
 
     /**
      * Determines if a child repeater has made an AJAX request to add an item
-     *
-     * @var bool
      */
-    protected $childAddItemCalled = false;
+    protected bool $childAddItemCalled = false;
 
     /**
      * Determines which child index has made the AJAX request to add an item
-     *
-     * @var int
      */
-    protected $childIndexCalled;
+    protected ?int $childIndexCalled = null;
 
-    protected $useGroups = false;
+    /**
+     * If `true`, sets the repeater to use "grouped" items. Grouped items are selectable form configurations that can
+     *   be different for each item in the repeater.
+     */
+    protected bool $useGroups = false;
 
-    protected $groupDefinitions = [];
+    /**
+     * Defines the group item form definitions available for the repeater.
+     */
+    protected array $groupDefinitions = [];
 
     /**
      * Determines if repeater has been initialised previously
-     *
-     * @var boolean
      */
-    protected $loaded = false;
+    protected bool $loaded = false;
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function init()
     {
-        $this->prompt = Lang::get('backend::lang.repeater.add_new_item');
-
         $this->fillFromConfig([
             'form',
+            'mode',
             'style',
             'prompt',
             'sortable',
             'titleFrom',
             'minItems',
             'maxItems',
+            'columns',
+            'rowHeight',
         ]);
 
         if ($this->formField->disabled) {
             $this->previewMode = true;
+        }
+
+        if ($this->columns < 2 || $this->columns > 6) {
+            $this->columns = 4;
         }
 
         // Check for loaded flag in POST
@@ -136,7 +161,7 @@ class Repeater extends FormWidgetBase
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function render()
     {
@@ -162,12 +187,15 @@ class Repeater extends FormWidgetBase
         }
 
         $this->vars['prompt'] = $this->prompt;
+        $this->vars['mode'] = in_array($this->mode, ['list', 'grid']) ? $this->mode : 'list';
         $this->vars['formWidgets'] = $this->formWidgets;
         $this->vars['titleFrom'] = $this->titleFrom;
-        $this->vars['minItems'] = $this->minItems;
-        $this->vars['maxItems'] = $this->maxItems;
-        $this->vars['sortable'] = $this->sortable;
-        $this->vars['style'] = $this->style;
+        $this->vars['minItems'] = (int) $this->minItems;
+        $this->vars['maxItems'] = (int) $this->maxItems;
+        $this->vars['sortable'] = (bool) $this->sortable;
+        $this->vars['style'] = in_array($this->style, ['default', 'collapsed', 'accordion']) ? $this->style : 'default';
+        $this->vars['columns'] = (int) $this->columns;
+        $this->vars['rowHeight'] = (int) $this->rowHeight;
 
         $this->vars['useGroups'] = $this->useGroups;
         $this->vars['groupDefinitions'] = $this->groupDefinitions;
@@ -348,9 +376,11 @@ class Repeater extends FormWidgetBase
         $this->vars['indexValue'] = $index;
 
         $itemContainer = '@#' . $this->getId('items');
+        $addItemContainer = '#' . $this->getId('add-item');
 
         return [
-            $itemContainer => $this->makePartial('repeater_item')
+            $addItemContainer => '',
+            $itemContainer => $this->makePartial('repeater_item') . $this->makePartial('repeater_add_item')
         ];
     }
 
