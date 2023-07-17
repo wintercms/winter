@@ -1,7 +1,7 @@
 <?php namespace Cms\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
 use InvalidArgumentException;
+use Winter\Storm\Scaffold\GeneratorCommand;
 
 class CreateTheme extends GeneratorCommand
 {

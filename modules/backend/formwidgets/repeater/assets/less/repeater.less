@@ -1,3 +1,5 @@
+// out: false
+
 @import "../../../../assets/less/core/boot.less";
 
 .field-repeater {
@@ -237,6 +239,85 @@
         &.in-progress {
             border-color: #e0e0e0 !important;
             background: transparent !important;
+        }
+    }
+
+    &[data-mode="grid"] {
+        ul.field-repeater-items {
+            display: grid;
+            gap: 20px;
+
+            .field-repeater-item {
+                margin-bottom: 0 !important;
+            }
+
+            .field-repeater-add-item {
+                margin-top: 0;
+
+                a {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    height: 100%;
+                }
+
+                &:before {
+                    display: none;
+                }
+            }
+        }
+
+        &[data-columns="2"] ul.field-repeater-items {
+            grid-template-columns: repeat(2, 1fr);
+        }
+        &[data-columns="3"] ul.field-repeater-items {
+            grid-template-columns: repeat(3, 1fr);
+        }
+        &[data-columns="4"] ul.field-repeater-items {
+            grid-template-columns: repeat(4, 1fr);
+
+            @media (max-width: 1600px) {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        &[data-columns="5"] ul.field-repeater-items {
+            grid-template-columns: repeat(5, 1fr);
+
+            @media (max-width: 1600px) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+        &[data-columns="6"] ul.field-repeater-items {
+            grid-template-columns: repeat(6, 1fr);
+
+            @media (max-width: 1600px) {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        @media (min-width: @screen-sm-min) and (max-width: @screen-md-max) {
+            ul.field-repeater-items {
+                grid-template-columns: repeat(2, 1fr) !important;;
+            }
+        }
+
+        @media (max-width: @screen-xs-max) {
+            ul.field-repeater-items {
+                grid-template-columns: 1fr !important;
+
+                .field-repeater-item,
+                .field-repeater-add-item {
+                    min-height: 0 !important;
+                }
+
+                .field-repeater-add-item {
+                    margin-top: 10px;
+
+                    &::before {
+                        display: block;
+                    }
+                }
+            }
         }
     }
 }
