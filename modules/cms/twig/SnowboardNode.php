@@ -1,12 +1,11 @@
 <?php namespace Cms\Twig;
 
-use Url;
 use Config;
-use Request;
-use System\Models\Parameter;
 use System\Classes\CombineAssets;
-use Twig\Node\Node as TwigNode;
+use System\Models\Parameter;
 use Twig\Compiler as TwigCompiler;
+use Twig\Node\Node as TwigNode;
+use Url;
 
 /**
  * Represents a "snowboard" node
@@ -56,16 +55,17 @@ class SnowboardNode extends TwigNode
         if (!static::$baseLoaded) {
             // Add manifest and vendor files
             $compiler
-                ->write("echo '<script data-module=\"snowboard-manifest\" src=\"${manifestPath}${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("echo '<script data-module=\"snowboard-manifest\" src=\"{$manifestPath}{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
             $vendorJs = $moduleMap['vendor'];
             $compiler
-                ->write("echo '<script data-module=\"snowboard-vendor\" src=\"${basePath}${vendorJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("echo '<script data-module=\"snowboard-vendor\" src=\"{$basePath}{$vendorJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
 
             // Add base script
             $baseJs = $moduleMap['base'];
             $baseUrl = Url::to('/');
+            $assetUrl = Url::asset('/');
             $compiler
-                ->write("echo '<script data-module=\"snowboard-base\" data-base-url=\"${baseUrl}\" src=\"${basePath}${baseJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("echo '<script data-module=\"snowboard-base\" data-base-url=\"{$baseUrl}\" data-asset-url=\"{$assetUrl}\" src=\"{$basePath}{$baseJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
 
             static::$baseLoaded = true;
         }
@@ -73,7 +73,7 @@ class SnowboardNode extends TwigNode
         foreach ($modules as $module) {
             $moduleJs = $moduleMap[$module];
             $compiler
-                ->write("echo '<script data-module=\"${module}\" src=\"${basePath}${moduleJs}.js${cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+                ->write("echo '<script data-module=\"{$module}\" src=\"{$basePath}{$moduleJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
         }
     }
 }
