@@ -116,7 +116,7 @@ export default class Url extends Singleton {
         }
 
         if (document.querySelector('script[data-module="snowboard-base"]') !== null) {
-            this.foundAssetUrl = this.validateBaseUrl(document.querySelector('script[data-module="snowboard-base"]').dataset.baseUrl);
+            this.foundAssetUrl = this.validateBaseUrl(document.querySelector('script[data-module="snowboard-base"]').dataset.assetUrl);
             return this.foundAssetUrl;
         }
 
