@@ -38,8 +38,10 @@ class Migration
                 $dbType = 'datetime';
                 break;
             case 'markdown':
-            case 'textarea':
                 $dbType = 'mediumText';
+                break;
+            case 'textarea':
+                $dbType = 'text';
                 break;
             default:
                 $dbType = 'string';
