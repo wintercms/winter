@@ -66,7 +66,7 @@ class MigrationTest extends TestCase
         $result = Migration::mapFieldType('textareaTest', [
             'type' => 'textarea',
         ]);
-        $this->assertEquals($result['type'], 'mediumText');
+        $this->assertEquals($result['type'], 'text');
     }
 
     public function testMarkdownType()
