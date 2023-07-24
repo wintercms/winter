@@ -25,7 +25,7 @@ export default class Url extends Singleton {
      * @returns {string}
      */
     to(url) {
-        const urlRegex = /[-a-z0-9_+:]+:\/\/[-a-z0-9@:%._+~#=]{1,256}\.[a-z0-9()]{1,6}\b([-a-z0-9()@:%_+.~#?&//=]*)/i;
+        const urlRegex = /^(?:[^:]+:\/\/)[-a-z0-9@:%._+~#=]{1,256}\b([-a-z0-9()@:%_+.~#?&//=]*)/i;
 
         if (url.match(urlRegex)) {
             return url;
@@ -45,7 +45,7 @@ export default class Url extends Singleton {
      * @returns {string}
      */
     asset(url) {
-        const urlRegex = /[-a-z0-9_+:]+:\/\/[-a-z0-9@:%._+~#=]{1,256}\.[a-z0-9()]{1,6}\b([-a-z0-9()@:%_+.~#?&//=]*)/i;
+        const urlRegex = /^(?:[^:]+:\/\/)[-a-z0-9@:%._+~#=]{1,256}\b([-a-z0-9()@:%_+.~#?&//=]*)/i;
 
         if (url.match(urlRegex)) {
             return url;
