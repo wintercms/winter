@@ -45,6 +45,7 @@
                         <?= e(trans('backend::lang.relation.cancel')) ?>
                     </button>
                 <?php endif ?>
+                <?= $this->fireViewEvent('backend.relationController.extendManageFormView', [$relationField]) ?>
             </div>
 
         <?= Form::close() ?>
