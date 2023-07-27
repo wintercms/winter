@@ -1343,6 +1343,11 @@ class Form extends WidgetBase
                         ]));
                     }
                     return $result;
+                } else {
+                    // Handle localization keys that return arrays
+                    if (is_array($options = Lang::get($fieldOptions))) {
+                        return $options;
+                    }
                 }
             }
 
