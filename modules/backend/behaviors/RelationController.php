@@ -1410,7 +1410,13 @@ class RelationController extends ControllerBehavior
             }
         });
 
-        return ['#'.$this->relationGetId('view') => $this->relationRenderView()];
+        $result = ['#'.$this->relationGetId('view') => $this->relationRenderView()];
+
+        if ($eventResult = $this->controller->relationExtendRefreshResults($this->validateField())) {
+            $result = $eventResult + $result;
+        }
+
+        return $result;
     }
 
     public function onRelationManagePivotUpdate()
@@ -1426,7 +1432,13 @@ class RelationController extends ControllerBehavior
             $modelToSave->save(null, $this->pivotWidget->getSessionKey());
         }
 
-        return ['#'.$this->relationGetId('view') => $this->relationRenderView()];
+        $result = ['#'.$this->relationGetId('view') => $this->relationRenderView()];
+
+        if ($eventResult = $this->controller->relationExtendRefreshResults($this->validateField())) {
+            $result = $eventResult + $result;
+        }
+
+        return $result;
     }
 
     //
