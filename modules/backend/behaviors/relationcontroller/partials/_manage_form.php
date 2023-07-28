@@ -25,27 +25,7 @@
             </div>
 
             <div class="modal-footer">
-                <?php if ($this->readOnly): ?>
-                    <button
-                        type="button"
-                        class="btn btn-default"
-                        data-dismiss="popup">
-                        <?= e(trans('backend::lang.relation.close')) ?>
-                    </button>
-                <?php else: ?>
-                    <button
-                        type="submit"
-                        class="btn btn-primary">
-                        <?= e(trans('backend::lang.relation.update')) ?>
-                    </button>
-                    <button
-                        type="button"
-                        class="btn btn-default"
-                        data-dismiss="popup">
-                        <?= e(trans('backend::lang.relation.cancel')) ?>
-                    </button>
-                <?php endif ?>
-                <?= $this->fireViewEvent('backend.relationController.extendManageFormView', [$relationField]) ?>
+                <?= $this->relationMakePartial('manage_update_form_footer') ?>
             </div>
 
         <?= Form::close() ?>
@@ -75,17 +55,7 @@
 
             </div>
             <div class="modal-footer">
-                <button
-                    type="submit"
-                    class="btn btn-primary">
-                    <?= e(trans('backend::lang.relation.create')) ?>
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-default"
-                    data-dismiss="popup">
-                    <?= e(trans('backend::lang.relation.cancel')) ?>
-                </button>
+                <?= $this->relationMakePartial('manage_create_form_footer') ?>
             </div>
         <?= Form::close() ?>
 
