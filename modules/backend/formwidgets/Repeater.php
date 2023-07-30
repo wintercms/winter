@@ -16,7 +16,7 @@ class Repeater extends FormWidgetBase
     /**
      * Form field configuration
      */
-    public array $form = [];
+    public array|string|object $form = [];
 
     /**
      * Repeater mode. Can be either `list` (default) to display items in a vertical list, or `grid` to
