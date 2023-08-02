@@ -934,6 +934,11 @@ class UpdateManager
             $this->applyHttpAttributes($http, $postData);
         });
 
+        // @TODO: Refactor when marketplace API finalized
+        if ($result->body === 'Package not found') {
+            $result->code = 500;
+        }
+
         if ($result->code == 404) {
             throw new ApplicationException(Lang::get('system::lang.server.response_not_found'));
         }

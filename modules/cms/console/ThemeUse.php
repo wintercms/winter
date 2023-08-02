@@ -1,9 +1,7 @@
 <?php namespace Cms\Console;
 
 use Cms\Classes\Theme;
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to switch themes.
@@ -22,6 +20,14 @@ class ThemeUse extends Command
      * @var string
      */
     protected $name = 'theme:use';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'theme:use
+        {name : The name of the theme. (directory name).}
+        {--f|force : Force the operation to run.}
+    ';
 
     /**
      * The console command description.
@@ -56,27 +62,5 @@ class ThemeUse extends Command
         $this->info(sprintf('Switching theme from %s to %s', $from, $newTheme->getId()));
 
         Theme::setActiveTheme($newThemeName);
-    }
-
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the theme. (directory name)'],
-        ];
-    }
-
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['force', null, InputOption::VALUE_NONE, 'Force the operation to run.'],
-        ];
     }
 }

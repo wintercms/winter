@@ -1,18 +1,17 @@
 <?php namespace System\Console;
 
-use Db;
-use App;
-use Str;
-use PDO;
-use File;
-use Config;
 use Backend\Database\Seeds\SeedSetupAdmin;
+use Config;
+use Db;
+use Exception;
+use File;
+use Illuminate\Encryption\Encrypter;
+use PDO;
+use Str;
+use Symfony\Component\Console\Input\InputOption;
 use System\Classes\UpdateManager;
 use Winter\Storm\Config\ConfigWriter;
-use Illuminate\Console\Command;
-use Illuminate\Encryption\Encrypter;
-use Symfony\Component\Console\Input\InputOption;
-use Exception;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to install Winter.
@@ -39,6 +38,13 @@ class WinterInstall extends Command
     protected $description = 'Set up Winter for the first time.';
 
     /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'october:install',
+    ];
+
+    /**
      * @var Winter\Storm\Config\ConfigWriter
      */
     protected $configWriter;
@@ -51,9 +57,6 @@ class WinterInstall extends Command
         parent::__construct();
 
         $this->configWriter = new ConfigWriter;
-
-        // Register aliases for backwards compatibility with October
-        $this->setAliases(['october:install']);
     }
 
     /**
@@ -64,7 +67,7 @@ class WinterInstall extends Command
         $this->displayIntro();
 
         if (
-            App::hasDatabase() &&
+            $this->laravel->hasDatabase() &&
             !$this->confirm('Application appears to be installed already. Continue anyway?', false)
         ) {
             return;
