@@ -25,7 +25,7 @@
             </div>
 
             <div class="modal-footer">
-                <?= $this->relationMakePartial('manage_update_form_footer') ?>
+                <?= $this->relationMakePartial('manage_form_footer_update') ?>
             </div>
 
         <?= Form::close() ?>
@@ -55,7 +55,7 @@
 
             </div>
             <div class="modal-footer">
-                <?= $this->relationMakePartial('manage_create_form_footer') ?>
+                <?= $this->relationMakePartial('manage_form_footer_create') ?>
             </div>
         <?= Form::close() ?>
 
