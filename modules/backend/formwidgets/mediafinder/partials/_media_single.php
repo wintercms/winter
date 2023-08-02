@@ -12,33 +12,33 @@
         <?php endif ?>
     "
     data-control="mediafinder"
-    data-mediafinder-mode="image"
-    data-thumbnail-width="<?= $imageWidth ?: '0' ?>"
-    data-thumbnail-height="<?= $imageHeight ?: '0' ?>"
+    data-mode="<?= $mode ?>"
+    data-image-width="<?= $imageWidth ?: 'null' ?>"
+    data-image-height="<?= $imageHeight ?: 'null' ?>"
     <?= $field->getAttributes() ?>
 >
 
     <!-- Find Button -->
-    <a href="javascript:;" class="find-button">
+    <a href="javascript:;" class="find-button" data-find>
         <span class="find-button-icon wn-icon-image"></span>
     </a>
 
     <!-- Existing value -->
     <div class="find-object">
         <div class="icon-container">
-            <img data-find-image src="<?= $imageUrl ?>" alt="" />
+            <img data-image src="<?= $imageUrl ?>" alt="" />
         </div>
 
         <?php if (!$imageExists && !empty($imageUrl)): ?>
-            <p data-find-error class="help-block">
+            <p data-error class="help-block">
                 <?= e(trans('backend::lang.mediafinder.no_image')) ?>
             </p>
         <?php endif; ?>
 
         <div class="info">
             <h4 class="filename">
-                <span data-find-file-name><?= e(ltrim($value, '/')) ?></span>
-                <a href="javascript:;" class="find-remove-button">
+                <span data-file-name><?= e(ltrim($value, '/')) ?></span>
+                <a href="javascript:;" class="find-remove-button" data-remove>
                     <i class="icon-times"></i>
                 </a>
             </h4>
@@ -51,6 +51,6 @@
         name="<?= $field->getName() ?>"
         id="<?= $field->getId() ?>"
         value="<?= e($value) ?>"
-        data-find-value
+        data-value
         />
 </div>
