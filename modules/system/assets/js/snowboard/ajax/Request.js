@@ -301,7 +301,7 @@ export default class Request extends PluginBase {
         return new Promise((resolve, reject) => {
             if (typeof this.options.beforeUpdate === 'function') {
                 if (this.options.beforeUpdate.apply(this, [response]) === false) {
-                    reject();
+                    resolve();
                     return;
                 }
             }
@@ -350,7 +350,7 @@ export default class Request extends PluginBase {
                     );
                 },
                 () => {
-                    reject();
+                    resolve();
                 },
             );
         });
