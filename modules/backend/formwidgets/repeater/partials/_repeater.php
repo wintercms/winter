@@ -4,6 +4,10 @@
     <?= $minItems ? 'data-min-items="'.$minItems.'"' : '' ?>
     <?= $maxItems ? 'data-max-items="'.$maxItems.'"' : '' ?>
     <?= $style ? 'data-style="'.$style.'"' : '' ?>
+    data-mode="<?= $mode ?>"
+    <?php if ($mode === 'grid'): ?>
+    data-columns="<?= $columns ?>"
+    <?php endif ?>
     <?php if ($sortable): ?>
     data-sortable="true"
     data-sortable-container="#<?= $this->getId('items') ?>"
@@ -14,31 +18,14 @@
         <?php foreach ($formWidgets as $index => $widget): ?>
             <?= $this->makePartial('repeater_item', [
                 'widget' => $widget,
-                'indexValue' => $index
+                'indexValue' => $index,
             ]) ?>
         <?php endforeach ?>
+
+        <?= $this->makePartial('repeater_add_item') ?>
     </ul>
 
     <?php if (!$this->previewMode): ?>
-        <div class="field-repeater-add-item loading-indicator-container indicator-center">
-            <?php if ($useGroups): ?>
-                <a
-                    href="javascript:;"
-                    data-repeater-add-group
-                    data-load-indicator>
-                    <?= e(trans($prompt)) ?>
-                </a>
-            <?php else: ?>
-                <a
-                    href="javascript:;"
-                    data-repeater-add
-                    data-request="<?= $this->getEventHandler('onAddItem') ?>"
-                    data-load-indicator>
-                    <?= e(trans($prompt)) ?>
-                </a>
-            <?php endif ?>
-        </div>
-
         <input type="hidden" name="<?= $this->alias; ?>_loaded" value="1">
     <?php endif ?>
 

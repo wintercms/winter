@@ -662,8 +662,7 @@ class PluginManager
 
         // Check the database for disabled plugins
         if (
-            $this->app->hasDatabase()
-            && Schema::hasTable('system_plugin_versions')
+            $this->app->hasDatabaseTable('system_plugin_versions')
         ) {
             $userDisabled = Db::table('system_plugin_versions')->where('is_disabled', 1)->lists('code') ?? [];
             foreach ($userDisabled as $code) {

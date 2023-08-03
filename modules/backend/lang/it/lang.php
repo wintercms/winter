@@ -541,7 +541,7 @@ return [
         'add_folder' => 'Aggiungi cartella',
         'search' => 'Cerca',
         'display' => 'Visualizza',
-        'filter_everything' => 'Tutto',
+        'filter_all' => 'Tutto',
         'filter_images' => 'Immagini',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',

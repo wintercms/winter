@@ -146,7 +146,7 @@ MediaManagerPopup.prototype.registerHandlers=function(){this.$popupRootElement.o
 this.$popupRootElement.one('shown.oc.popup',this.proxy(this.onPopupShown))}
 MediaManagerPopup.prototype.unregisterHandlers=function(){this.$popupElement.off('popupcommand',this.proxy(this.onPopupCommand))
 this.$popupRootElement.off('popupcommand',this.proxy(this.onPopupCommand))}
-MediaManagerPopup.prototype.show=function(){var data={bottomToolbar:this.options.bottomToolbar?1:0,cropAndInsertButton:this.options.cropAndInsertButton?1:0}
+MediaManagerPopup.prototype.show=function(){var data={bottomToolbar:this.options.bottomToolbar?1:0,cropAndInsertButton:this.options.cropAndInsertButton?1:0,mode:this.options.mode||'all',}
 this.$popupRootElement.popup({extraData:data,size:'adaptive',adaptiveHeight:true,handler:this.options.alias+'::onLoadPopup'})}
 MediaManagerPopup.prototype.hide=function(){if(this.$popupElement)this.$popupElement.trigger('close.oc.popup')}
 MediaManagerPopup.prototype.getMediaManagerElement=function(){return this.$popupElement.find('[data-control="media-manager"]')}

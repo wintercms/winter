@@ -1,10 +1,12 @@
+import Singleton from '../abstracts/Singleton';
+
 /**
  * Displays a stripe at the top of the page that indicates loading.
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class StripeLoader extends Snowboard.Singleton {
+export default class StripeLoader extends Singleton {
     /**
      * Defines dependenices.
      *
@@ -32,7 +34,11 @@ export default class StripeLoader extends Snowboard.Singleton {
         this.createStripe();
     }
 
-    ajaxStart(promise) {
+    ajaxStart(promise, request) {
+        if (request.options.stripe === false) {
+            return;
+        }
+
         this.show();
 
         promise.then(() => {

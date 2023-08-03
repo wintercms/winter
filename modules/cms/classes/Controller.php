@@ -1212,9 +1212,8 @@ class Controller
     /**
      * Returns an existing instance of the controller.
      * If the controller doesn't exists, returns null.
-     * @return mixed Returns the controller object or null.
      */
-    public static function getController()
+    public static function getController(): ?self
     {
         return self::$instance;
     }
@@ -1370,37 +1369,41 @@ class Controller
     {
         $themeDir = $this->getTheme()->getDirName();
         $parentTheme = $this->getTheme()->getConfig()['parent'] ?? false;
+        $themesPath = themes_path();
 
         $cacheKey = __METHOD__ . '.' . md5(json_encode($url));
 
         if (!($assets = Cache::get($cacheKey))) {
             $assets = [];
             $sources = [
-                themes_path($themeDir)
+                $themesPath . '/' . $themeDir
             ];
 
             if ($parentTheme) {
-                $sources[] = themes_path($parentTheme);
+                $sources[] = $themesPath . '/' . $parentTheme;
             }
 
             foreach ($url as $file) {
-                // Leave Combiner Aliases assets unmodified
-                if (str_starts_with($file, '@')) {
+                // Leave Combiner Aliases assets & absolute path assets (using path symbols like $, #, ~) unmodified
+                if (str_starts_with($file, '@') || File::isPathSymbol($file)) {
                     $assets[] = $file;
                     continue;
                 }
 
                 foreach ($sources as $source) {
-                    $asset = $source . DIRECTORY_SEPARATOR . $file;
+                    $asset = $source . '/' . $file;
                     if (File::exists($asset)) {
                         $assets[] = $asset;
                         break;
+                    } else {
+                        $asset = null;
                     }
                 }
-
-                // Skip combining missing assets and log an error
-                Log::error("$file could not be found in any of the theme's sources (" . implode(', ', $sources) . ',');
-                continue;
+                if (is_null($asset)) {
+                    // Skip combining missing assets and log an error
+                    Log::error("$file could not be found in any of the theme's sources (" . implode(', ', $sources) . ")");
+                    continue;
+                }
             }
 
             Cache::put($cacheKey, $assets);

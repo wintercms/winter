@@ -568,7 +568,7 @@
         'add_folder' => 'Dodaj folder',
         'search' => 'Szukaj',
         'display' => 'Pokaż',
-        'filter_everything' => 'Wszystko',
+        'filter_all' => 'Wszystko',
         'filter_images' => 'Obrazki',
         'filter_video' => 'Filmy',
         'filter_audio' => 'Dźwięki',

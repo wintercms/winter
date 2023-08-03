@@ -1,10 +1,12 @@
+import Singleton from '../abstracts/Singleton';
+
 /**
  * Allows attaching a loading class on elements that an AJAX request is targeting.
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class AttachLoading extends Snowboard.Singleton {
+export default class AttachLoading extends Singleton {
     /**
      * Defines dependenices.
      *
