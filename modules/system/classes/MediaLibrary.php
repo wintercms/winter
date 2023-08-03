@@ -636,9 +636,20 @@ class MediaLibrary
             $size = $this->getFolderItemCount($item['path']);
         }
 
+        /*
+         * set image dimensions,
+         * folders dimensions is always NULL.
+         */
+        if ($itemType === MediaLibraryItem::TYPE_FILE) {
+            $imageDimensions = getimagesize($this->getStorageDisk()->path($item['path']));
+            $dimensions = "$imageDimensions[0] x $imageDimensions[1]";
+        } else {
+            $dimensions = null;
+        }
+
         $publicUrl = $this->getPathUrl($relativePath);
 
-        return new MediaLibraryItem($relativePath, $size, $lastModified, $itemType, $publicUrl);
+        return new MediaLibraryItem($relativePath, $dimensions, $size, $lastModified, $itemType, $publicUrl);
     }
 
     /**
