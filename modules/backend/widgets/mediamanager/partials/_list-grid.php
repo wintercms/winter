@@ -25,6 +25,7 @@
                     data-item-type="<?= $item->type ?>"
                     data-path="<?= e($item->path) ?>"
                     data-title="<?= e(basename($item->path)) ?>"
+                    data-dimensions="<?= e($item->dimensions) ?>"
                     data-size="<?= e($item->sizeToString()) ?>"
                     data-last-modified="<?= e($item->lastModifiedAsString()) ?>"
                     data-last-modified-ts="<?= $item->lastModified ?>"
