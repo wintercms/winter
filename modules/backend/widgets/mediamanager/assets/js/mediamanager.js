@@ -514,6 +514,7 @@
             var item = items[0],
                 lastModified = item.getAttribute('data-last-modified')
 
+            previewPanel.querySelector('[data-label="dimensions"]').textContent = item.getAttribute('data-dimensions')
             previewPanel.querySelector('[data-label="size"]').textContent = item.getAttribute('data-size')
             previewPanel.querySelector('[data-label="title"]').textContent = item.getAttribute('data-title')
             previewPanel.querySelector('[data-label="last-modified"]').textContent = lastModified
