@@ -154,6 +154,7 @@ MediaManager.prototype.updateSidebarPreview=function(resetSidebar){if(!this.side
 var items=resetSidebar===undefined?this.$el.get(0).querySelectorAll('[data-type="media-item"].selected'):[],previewPanel=this.sidebarPreviewElement
 if(items.length==0){this.sidebarPreviewElement.querySelector('[data-control="sidebar-labels"]').setAttribute('class','hide')}else if(items.length==1&&!items[0].hasAttribute('data-root')){this.sidebarPreviewElement.querySelector('[data-control="sidebar-labels"]').setAttribute('class','panel')
 var item=items[0],lastModified=item.getAttribute('data-last-modified')
+previewPanel.querySelector('[data-label="size"]').textContent = item.getAttribute('data-dimensions')
 previewPanel.querySelector('[data-label="size"]').textContent=item.getAttribute('data-size')
 previewPanel.querySelector('[data-label="title"]').textContent=item.getAttribute('data-title')
 previewPanel.querySelector('[data-label="last-modified"]').textContent=lastModified
