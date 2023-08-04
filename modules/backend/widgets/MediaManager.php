@@ -21,6 +21,7 @@ use System\Classes\MediaLibraryItem;
 class MediaManager extends WidgetBase
 {
     use \Backend\Traits\UploadableWidget;
+    use \Backend\Traits\PreferenceMaker;
 
     const FOLDER_ROOT = '/';
 
@@ -86,9 +87,8 @@ class MediaManager extends WidgetBase
 
     /**
      * Abort the request with an access-denied code if readOnly mode is active
-     * @return void
      */
-    protected function abortIfReadOnly()
+    protected function abortIfReadOnly(): void
     {
         if ($this->readOnly) {
             abort(403);
@@ -97,9 +97,8 @@ class MediaManager extends WidgetBase
 
     /**
      * Renders the widget.
-     * @return string
      */
-    public function render()
+    public function render(): string
     {
         $this->prepareVars();
 
@@ -111,7 +110,7 @@ class MediaManager extends WidgetBase
     //
 
     /**
-     * Perform search AJAX handler
+     * Perform a search with the query specified in the request ("search")
      */
     public function onSearch(): array
     {
@@ -126,7 +125,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Change view AJAX handler
+     * Go to the path specified in the request ("path")
      */
     public function onGoToFolder(): array
     {
@@ -150,7 +149,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Generate thumbnail AJAX handler
+     * Generate thumbnails for the provided array of thumbnail info ("batch")
      */
     public function onGenerateThumbnails(): array
     {
@@ -170,7 +169,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Get thumbnail AJAX handler
+     * Get the thumbnail for the provided path ("path") and lastModified date ("lastModified")
      *
      * @throws ApplicationException if the lastModified date is invalid
      */
@@ -197,7 +196,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Set view preference AJAX handler
+     * Render the view for the provided "path" and "view" mode from the request
      */
     public function onChangeView(): array
     {
@@ -217,7 +216,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Set filter preference AJAX handler
+     * Set the current filter from the request ("filter")
      */
     public function onSetFilter(): array
     {
@@ -237,7 +236,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Set sorting preference AJAX handler
+     * Set the current sorting configuration from the request ("sortBy", "sortDirection")
      */
     public function onSetSorting(): array
     {
@@ -258,7 +257,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Delete library item AJAX handler
+     * Deletes the provided paths from the request ("paths")
      *
      * @throws ApplicationException if the paths input is invalid
      * @todo Move media events to the MediaLibary class instead.
@@ -356,7 +355,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Show rename item popup AJAX handler
+     * Render the rename popup for the provided "path" from the request
      */
     public function onLoadRenamePopup(): string
     {
@@ -374,7 +373,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Rename library item AJAX handler
+     * Rename the provided path from the request ("originalPath") to the new name ("name")
      *
      * @throws ApplicationException if the new name is invalid
      * @todo Move media events to the MediaLibary class instead.
@@ -458,7 +457,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Create library folder AJAX handler
+     * Create a new folder ("name") in the provided "path" from the request
      *
      * @throws ApplicationException If the requested folder already exists or is otherwise invalid
      */
@@ -522,7 +521,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Show move item popup AJAX handler
+     * Render the move popup with a list of folders to move the selected items to excluding the provided paths in the request ("exclude")
      *
      * @throws ApplicationException If the exclude input data is not an array
      */
@@ -558,7 +557,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Move library item AJAX handler
+     * Move the selected items ("files", "folders") to the provided destination path from the request ("dest")
      *
      * @throws ApplicationException if the input data is invalid
      */
@@ -650,7 +649,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Sidebar visibility AJAX handler
+     * Sets the sidebar visibility state from the request ("visible")
      */
     public function onSetSidebarVisible(): void
     {
@@ -660,7 +659,7 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Renders the widget in a popup body
+     * Renders the widget in a popup body (options include "bottomToolbar" and "cropAndInsertButton")
      */
     public function onLoadPopup(): string
     {
@@ -905,11 +904,9 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Sets the user current folder from the session state
-     *
-     * @param string $path
+     * Sets the provided path as the current folder in the session
      */
-    protected function setCurrentFolder($path): void
+    protected function setCurrentFolder(string $path): void
     {
         $path = MediaLibrary::validatePath($path);
 
@@ -917,21 +914,17 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Gets the user current folder from the session state
-     *
-     * @return string
+     * Gets the user's current folder from the session
      */
-    protected function getCurrentFolder()
+    protected function getCurrentFolder(): string
     {
         return $this->getSession('media_folder', self::FOLDER_ROOT);
     }
 
     /**
-     * Sets the user filter from the session state
-     *
-     * @param string $filter
+     * Sets the user filter from the session
      */
-    protected function setFilter($filter): void
+    protected function setFilter(string $filter): void
     {
         if (!in_array($filter, [
             self::FILTER_ALL,
@@ -984,20 +977,16 @@ class MediaManager extends WidgetBase
 
     /**
      * Gets the user search term from the session state
-     *
-     * @return string
      */
-    protected function getSearchTerm()
+    protected function getSearchTerm(): ?string
     {
         return $this->getSession('media_search', null);
     }
 
     /**
-     * Sets the user sort column from the session state
-     *
-     * @param string $sortBy
+     * Sets the sort column
      */
-    protected function setSortBy($sortBy): void
+    protected function setSortBy(string $sortBy): void
     {
         if (!in_array($sortBy, [
             MediaLibrary::SORT_BY_TITLE,
@@ -1007,21 +996,22 @@ class MediaManager extends WidgetBase
             throw new ApplicationException('Invalid input data');
         }
 
-        $this->putSession('media_sort_by', $sortBy);
+        $key = 'media_sort_by';
+        $this->putUserPreference($key, $sortBy);
+        $this->putSession($key, $sortBy);
     }
 
     /**
-     * Gets the user sort column from the session state
-     *
-     * @return string
+     * Gets the current column to sort by
      */
-    protected function getSortBy()
+    protected function getSortBy(): string
     {
-        return $this->getSession('media_sort_by', MediaLibrary::SORT_BY_TITLE);
+        $key = 'media_sort_by';
+        return $this->getSession($key, $this->getUserPreference($key, MediaLibrary::SORT_BY_TITLE));
     }
 
     /**
-     * Sets the user sort direction from the session state
+     * Sets the sort direction from the session state
      *
      * @param string $sortDirection
      */
@@ -1034,17 +1024,18 @@ class MediaManager extends WidgetBase
             throw new ApplicationException('Invalid input data');
         }
 
-        $this->putSession('media_sort_direction', $sortDirection);
+        $key = 'media_sort_direction';
+        $this->putUserPreference($key, $sortDirection);
+        $this->putSession($key, $sortDirection);
     }
 
     /**
      * Gets the user sort direction from the session state
-     *
-     * @return string
      */
-    protected function getSortDirection()
+    protected function getSortDirection(): string
     {
-        return $this->getSession('media_sort_direction', MediaLibrary::SORT_DIRECTION_ASC);
+        $key = 'media_sort_direction';
+        return $this->getSession($key, $this->getUserPreference($key, MediaLibrary::SORT_DIRECTION_ASC));
     }
 
     /**
@@ -1184,7 +1175,9 @@ class MediaManager extends WidgetBase
             throw new ApplicationException('Invalid input data');
         }
 
-        $this->putSession('view_mode', $viewMode);
+        $key = 'view_mode';
+        $this->putUserPreference($key, $viewMode);
+        $this->putSession($key, $viewMode);
     }
 
     /**
@@ -1192,7 +1185,8 @@ class MediaManager extends WidgetBase
      */
     protected function getViewMode(): string
     {
-        return $this->getSession('view_mode', self::VIEW_MODE_GRID);
+        $key = 'view_mode';
+        return $this->getSession($key, $this->getUserPreference($key, self::VIEW_MODE_GRID));
     }
 
     /**
@@ -1370,5 +1364,16 @@ class MediaManager extends WidgetBase
     protected function isVector(string $path): bool
     {
         return (pathinfo($path, PATHINFO_EXTENSION) == 'svg');
+    }
+
+    /**
+     * Returns a unique identifier for this widget and controller action for preference storage.
+     *
+     * @return string
+     */
+    protected function getPreferenceKey()
+    {
+        // User preferences should persist across controller usages for the MediaManager
+        return "backend::widgets.media_manager." . strtolower($this->getId());
     }
 }
