@@ -26,6 +26,15 @@ foreach (glob($baseDir . '/modules/*', GLOB_ONLYDIR) as $modulePath) {
 }
 
 /*
+ * Manually register System aliases
+ */
+foreach (require(__DIR__ . '/../../aliases.php') as $alias => $class) {
+    if (!class_exists($alias)) {
+        class_alias($class, $alias);
+    }
+}
+
+/*
  * Manually register all plugin classes for autoloading
  */
 $dirPath = $baseDir . '/plugins';

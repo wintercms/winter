@@ -600,7 +600,7 @@ return [
         'add_folder' => 'Pievienot mapi',
         'search' => 'Meklēt',
         'display' => 'Attēlot',
-        'filter_everything' => 'Visi',
+        'filter_all' => 'Visi',
         'filter_images' => 'Attēli',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',

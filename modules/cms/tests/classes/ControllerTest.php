@@ -8,12 +8,19 @@ use Cms\Classes\Theme;
 use Cms\Classes\Controller;
 use Request;
 use Winter\Storm\Halcyon\Model;
+use Winter\Storm\Support\Facades\Config;
 
 class ControllerTest extends TestCase
 {
+    protected string $origThemePath;
+
     public function setUp(): void
     {
         parent::setUp();
+
+        $this->origThemePath = Config::get('cms.themesPath');
+        // Set temporary themes path for tests
+        Config::set('cms.themesPath', '/modules/cms/tests/fixtures/themes');
 
         Model::clearBootedModels();
         Model::flushEventListeners();
@@ -26,28 +33,64 @@ class ControllerTest extends TestCase
         include_once base_path() . '/modules/system/tests/fixtures/plugins/winter/tester/classes/Users.php';
     }
 
+    public function tearDown(): void
+    {
+        // Restore original themes path
+        Config::set('cms.themesPath', $this->origThemePath);
+
+        parent::tearDown();
+    }
+
     public function testThemeUrl()
     {
         $theme = Theme::load('test');
         $controller = new Controller($theme);
 
         $url = $controller->themeUrl();
-        $this->assertEquals(url('/themes/test'), $url);
+        $this->assertEquals(url('/modules/cms/tests/fixtures/themes/test'), $url);
 
-        $url = $controller->themeUrl('foo/bar.css');
-        $this->assertEquals(url('/themes/test/foo/bar.css'), $url);
+        $url = $controller->themeUrl('assets/css/style1.css');
+        $this->assertEquals(url('/modules/cms/tests/fixtures/themes/test/assets/css/style1.css'), $url);
 
-        //
-        // These tests seem to bear different results
-        //
+        $pathSymbolTests = [
+            '~/modules/cms/tests/fixtures/themes/test/assets/css/style1.css' => '/',
+            '$/fakeauthor/fakeplugin/assets/src/app.js' => '/plugins/',
+            '#/faketheme/assets/css/style1.css' => '/themes/',
+        ];
+        foreach ($pathSymbolTests as $symbolizedPath => $urlPrefix) {
+            $url = $controller->themeUrl($symbolizedPath);
+            $this->assertEquals(url(str_replace(substr($symbolizedPath, 0, 2), $urlPrefix, $symbolizedPath)), $url);
+        }
+    }
 
-        // $url = $controller->themeUrl(['assets/css/style1.css', 'assets/css/style2.css']);
-        // $url = substr($url, 0, strpos($url, '-'));
-        // $this->assertEquals('/combine/88634b8fa6f4f6442ce830d38296640a', $url);
+    public function testThemeCombineAssets(): void
+    {
+        $theme = Theme::load('test');
+        $controller = new Controller($theme);
 
-        // $url = $controller->themeUrl(['assets/js/script1.js', 'assets/js/script2.js']);
-        // $url = substr($url, 0, strpos($url, '-'));
-        // $this->assertEquals('/combine/860afc990164a60a8e90682d04da27ee', $url);
+        // Generate a url
+        $url = $controller->themeUrl(['~/modules/cms/tests/fixtures/themes/test/assets/css/style1.css', 'assets/css/style2.css']);
+        $this->assertIsString($url);
+
+        // Grab the cache key from the url
+        $cacheKey = 'combiner.' . str_before(basename($url), '-');
+
+        // Load the cached config
+        $combinerConfig = \Cache::get($cacheKey);
+        $this->assertIsString($combinerConfig);
+
+        // Decode the config
+        $combinerConfig = unserialize(base64_decode($combinerConfig));
+
+        // Assert the result is an array and includes files
+        $this->assertIsArray($combinerConfig);
+        $this->assertArrayHasKey('files', $combinerConfig);
+        $this->assertCount(2, $combinerConfig['files']);
+
+        // Check our input file names against our output file names
+        $files = array_map('basename', $combinerConfig['files']);
+        $this->assertTrue(in_array('style1.css', $files));
+        $this->assertTrue(in_array('style2.css', $files));
     }
 
     public function testPageUrl()

@@ -500,8 +500,12 @@ class Form extends WidgetBase
          * Example usage:
          *
          *     Event::listen('backend.form.extendFieldsBefore', function ((\Backend\Widgets\Form) $formWidget) {
-         *         // You should always check to see if you're extending correct model/controller
-         *         if (!$formWidget->model instanceof \Foo\Example\Models\Bar) {
+         *         // Check that we're extending the correct Form widget instance
+         *         if (
+         *             !($formWidget->getController() instanceof \Winter\User\Controllers\Users)
+         *             || !($formWidget->model instanceof \Winter\User\Models\User)
+         *             || $formWidget->isNested
+         *         ) {
          *             return;
          *         }
          *
@@ -518,8 +522,12 @@ class Form extends WidgetBase
          * Or
          *
          *     $formWidget->bindEvent('form.extendFieldsBefore', function () use ((\Backend\Widgets\Form $formWidget)) {
-         *         // You should always check to see if you're extending correct model/controller
-         *         if (!$formWidget->model instanceof \Foo\Example\Models\Bar) {
+         *         // Check that we're extending the correct Form widget instance
+         *         if (
+         *             !($formWidget->getController() instanceof \Winter\User\Controllers\Users)
+         *             || !($formWidget->model instanceof \Winter\User\Models\User)
+         *             || $formWidget->isNested
+         *         ) {
          *             return;
          *         }
          *
@@ -573,13 +581,12 @@ class Form extends WidgetBase
          * Example usage:
          *
          *     Event::listen('backend.form.extendFields', function ((\Backend\Widgets\Form) $formWidget) {
-         *         // Only for the User controller
-         *         if (!$formWidget->getController() instanceof \Winter\User\Controllers\Users) {
-         *             return;
-         *         }
-         *
-         *         // Only for the User model
-         *         if (!$formWidget->model instanceof \Winter\User\Models\User) {
+         *         // Check that we're extending the correct Form widget instance
+         *         if (
+         *             !($formWidget->getController() instanceof \Winter\User\Controllers\Users)
+         *             || !($formWidget->model instanceof \Winter\User\Models\User)
+         *             || $formWidget->isNested
+         *         ) {
          *             return;
          *         }
          *
@@ -599,13 +606,12 @@ class Form extends WidgetBase
          * Or
          *
          *     $formWidget->bindEvent('form.extendFields', function () use ((\Backend\Widgets\Form $formWidget)) {
-         *         // Only for the User controller
-         *         if (!$formWidget->getController() instanceof \Winter\User\Controllers\Users) {
-         *             return;
-         *         }
-         *
-         *         // Only for the User model
-         *         if (!$formWidget->model instanceof \Winter\User\Models\User) {
+         *         // Check that we're extending the correct Form widget instance
+         *         if (
+         *             !($formWidget->getController() instanceof \Winter\User\Controllers\Users)
+         *             || !($formWidget->model instanceof \Winter\User\Models\User)
+         *             || $formWidget->isNested
+         *         ) {
          *             return;
          *         }
          *
@@ -1171,6 +1177,7 @@ class Form extends WidgetBase
     public function getSaveData()
     {
         $this->defineFormFields();
+        $this->applyFiltersFromModel();
 
         $result = [];
 
@@ -1336,6 +1343,11 @@ class Form extends WidgetBase
                         ]));
                     }
                     return $result;
+                } else {
+                    // Handle localization keys that return arrays
+                    if (is_array($options = Lang::get($fieldOptions))) {
+                        return $options;
+                    }
                 }
             }
 
