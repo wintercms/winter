@@ -510,7 +510,9 @@ class Lists extends WidgetBase
                 $relationObj = $this->model->{$column->relation}();
                 $countQuery = $relationObj->getRelationExistenceQuery($relationObj->getRelated()->newQueryWithoutScopes(), $query);
 
-                $joinSql = $this->isColumnRelated($column, true)
+                $limit = $column->config['limit'] ?? false;
+
+                $joinSql = $this->isColumnRelated($column, true) && $limit !== 1
                     ? DbDongle::raw("group_concat(" . $sqlSelect . " separator ', ')")
                     : DbDongle::raw($sqlSelect);
 
@@ -518,6 +520,10 @@ class Lists extends WidgetBase
 
                 if (!empty($column->config['conditions'])) {
                     $joinQuery->whereRaw(DbDongle::parse($column->config['conditions']));
+                }
+
+                if ($limit) {
+                    $joinQuery->limit($column->config['limit']);
                 }
 
                 $joinSql = $joinQuery->toSql();
