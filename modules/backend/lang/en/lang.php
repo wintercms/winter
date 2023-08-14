@@ -327,6 +327,7 @@ return [
         'relationwidget_unsupported_type' => 'The ":type" relation type is unsupported by the Relation widget.',
         'help' => 'Click on an item to add',
         'related_data' => 'Related :name data',
+        'refresh' => 'Refresh',
         'add' => 'Add',
         'add_selected' => 'Add selected',
         'add_a_new' => 'Add a new :name',
