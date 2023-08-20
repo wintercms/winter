@@ -48,7 +48,7 @@ class Migration
         }
 
         if ($model) {
-            $rule = array_get($model->rules ?? [], $name, '');
+            $rule = array_get($model->rules ?? [], $fieldName, '');
             $rule = is_array($rule) ? implode(',', $rule) : $rule;
 
             $required = str_contains($rule, 'required') ? true : $fieldConfig['required'] ?? false;
