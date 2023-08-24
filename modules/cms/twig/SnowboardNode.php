@@ -41,7 +41,7 @@ class SnowboardNode extends TwigNode
             ->write("\$_minify = ".CombineAssets::class."::instance()->useMinify;" . PHP_EOL);
 
         $moduleMap = [
-            'base' => (Config::get('develop.debugSnowboard', Config::get('app.debug', false)) === true)
+            'base' => (Config::get('develop.debugSnowboard', false) === true)
                 ? 'snowboard.base.debug'
                 : 'snowboard.base',
             'vendor' => 'snowboard.vendor',
