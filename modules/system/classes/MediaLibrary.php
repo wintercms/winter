@@ -6,13 +6,16 @@ use Cache;
 use Config;
 use Storage;
 use Url;
-use ApplicationException;
-use SystemException;
 use System\Models\MediaItem;
 use System\Models\Parameter;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\FileAttributes;
+use League\Flysystem\StorageAttributes;
 use Winter\Storm\Argon\Argon;
+use Winter\Storm\Exception\ApplicationException ;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
@@ -504,14 +507,15 @@ class MediaLibrary
         }
 
         // Filter contents so that ignored filenames and patterns are applied
-        $contents = array_filter($contents ?? [], function ($item) {
-            return $this->isVisible($item['path']);
+        $contents = $contents->filter(function (StorageAttributes $item) {
+            return $this->isVisible($item->path());
         });
 
+        /** @var StorageAttributes $item */
         foreach ($contents as $item) {
             $mediaPath = $this->getMediaRelativePath($item['path']);
 
-            if ($item['type'] === 'dir') {
+            if ($item->type() === 'dir') {
                 // Determine if we are adding a new directory
                 if (!isset($this->scannedMeta[$mediaPath])) {
                     $subFolder = $this->createFolderMeta($folder, $item);
@@ -530,7 +534,7 @@ class MediaLibrary
                 // New file detected
                 $this->createFileMeta($folder, $item);
                 continue;
-            } elseif ($this->scannedMeta[$mediaPath] < $item['timestamp']) {
+            } elseif ($this->scannedMeta[$mediaPath] < $item->timestamp) {
                 // File was modified
                 MediaItem::where('path', $mediaPath)->delete();
                 $this->createFileMeta($folder, $item);
@@ -554,68 +558,52 @@ class MediaLibrary
 
     /**
      * Creates a meta record for a folder in the "media_items" table, as a subfolder of the parent folder.
-     *
-     * @param MediaItem $parent
-     * @param array $meta
-     * @return MediaItem
      */
-    protected function createFolderMeta(MediaItem $parent, array $meta)
+    protected function createFolderMeta(MediaItem $parent, DirectoryAttributes $meta): MediaItem
     {
-        try {
-            $path = self::validatePath($meta['path']);
-        } catch (ApplicationException $e) {
-            return;
-        }
+        $path = self::validatePath($meta->path());
 
         return $parent->children()->create([
-            'name' => $meta['filename'],
+            'name' => basename($path),
             'path' => $this->getMediaRelativePath($path),
             'type' => MediaLibraryItem::TYPE_FOLDER,
             'size' => 0,
-            'modified_at' => Argon::createFromTimestamp($meta['timestamp']),
+            'modified_at' => Argon::createFromTimestamp($meta->lastModified()),
         ]);
     }
 
     /**
      * Creates a meta record for a file in the "media_items" table, as a child file of the parent folder.
-     *
-     * @param MediaItem $parent
-     * @param array $meta
-     * @return MediaItem
      */
-    protected function createFileMeta(MediaItem $parent, array $meta)
+    protected function createFileMeta(MediaItem $parent, FileAttributes $meta): MediaItem
     {
-        try {
-            $path = self::validatePath($meta['path']);
-        } catch (ApplicationException $e) {
-            return;
-        }
+        $path = self::validatePath($meta->path());
         $path = $this->getMediaRelativePath($path);
 
         // Create a temporary media library item instance
         $mediaItem = new MediaLibraryItem(
             $path,
-            $meta['size'],
-            $meta['timestamp'],
+            $meta->fileSize(),
+            $meta->lastModified(),
             MediaLibraryItem::TYPE_FILE,
             $this->getPathUrl($path)
         );
 
         // Standard metadata
         $file = $parent->children()->make([
-            'name' => $meta['filename'],
+            'name' => basename($path),
             'path' => $path,
             'type' => MediaLibraryItem::TYPE_FILE,
-            'extension' => $meta['extension'],
-            'size' => $meta['size'],
-            'modified_at' => Argon::createFromTimestamp($meta['timestamp']),
+            'extension' => strtolower(pathinfo($path, PATHINFO_EXTENSION)),
+            'size' => $meta->fileSize(),
+            'modified_at' => Argon::createFromTimestamp($meta->lastModified()),
         ]);
 
         // Extra metadata
         $file->file_type = $mediaItem->getFileType();
 
         if ($mediaItem->getFileType() === MediaLibraryItem::FILE_TYPE_IMAGE) {
-            $this->setImageMeta($file, $meta['path']);
+            $this->setImageMeta($file, $meta->path());
         }
 
         $file->save();
