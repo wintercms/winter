@@ -168,7 +168,7 @@ class MediaItem extends Model
      */
     public function folders($exclude = [], $includeSelf = true)
     {
-        $query = $this->allChildren()->where('type', MediaLibraryItem::TYPE_FOLDER);
+        $query = $this->descendants()->where('type', MediaLibraryItem::TYPE_FOLDER);
 
         $directories = $query->get();
 
@@ -205,7 +205,7 @@ class MediaItem extends Model
         // Normalise search term(s)
         $words = explode(' ', Str::lower($searchTerm));
 
-        $query = $this->allChildren();
+        $query = $this->descendants();
 
         // Only return files as results
         $query->where('type', MediaLibraryItem::TYPE_FILE);
