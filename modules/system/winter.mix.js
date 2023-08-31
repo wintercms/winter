@@ -15,7 +15,7 @@ mix
 
     // Extract imported libraries
     .extract({
-        libraries: ['js-cookie'],
+        libraries: ['js-cookie', '@wintercms/snowboard'],
         to: './assets/js/snowboard/build/snowboard.vendor.js',
     })
 

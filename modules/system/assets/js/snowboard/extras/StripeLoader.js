@@ -1,4 +1,4 @@
-import Singleton from '../abstracts/Singleton';
+import { Singleton } from "@wintercms/snowboard";
 
 /**
  * Displays a stripe at the top of the page that indicates loading.

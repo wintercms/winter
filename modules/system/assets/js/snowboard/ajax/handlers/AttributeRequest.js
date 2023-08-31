@@ -1,4 +1,4 @@
-import Singleton from '../../abstracts/Singleton';
+import { Singleton } from "@wintercms/snowboard";
 
 /**
  * Enable Data Attributes API for AJAX requests.
@@ -39,7 +39,7 @@ export default class AttributeRequest extends Singleton {
      * @returns {string[]}
      */
     dependencies() {
-        return ['request', 'jsonParser'];
+        return ['request', 'cookie', 'jsonParser'];
     }
 
     /**

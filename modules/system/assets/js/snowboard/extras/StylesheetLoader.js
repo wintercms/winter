@@ -1,4 +1,4 @@
-import Singleton from '../abstracts/Singleton';
+import { Singleton } from "@wintercms/snowboard";
 
 /**
  * Embeds the "extras" stylesheet into the page, if it is not loaded through the theme.

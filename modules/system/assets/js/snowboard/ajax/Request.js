@@ -1,4 +1,4 @@
-import PluginBase from '../abstracts/PluginBase';
+import { PluginBase } from "@wintercms/snowboard";
 
 /**
  * Request plugin.
