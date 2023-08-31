@@ -12,9 +12,7 @@ class DbMediaItems extends Migration
             $table->engine = 'InnoDB';
             $table->increments('id');
             $table->integer('parent_id')->unsigned()->nullable();
-            $table->integer('nest_left')->unsigned()->nullable();
-            $table->integer('nest_right')->unsigned()->nullable();
-            $table->integer('nest_depth')->unsigned()->nullable();
+            $table->string('location', 192)->nullable();
             $table->string('type', 20)->nullable();
             $table->string('file_type', 20)->nullable();
             $table->string('name');

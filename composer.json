@@ -30,7 +30,7 @@
     },
     "require": {
         "php": "^8.0.2",
-        "winter/storm": "dev-develop as 1.2",
+        "winter/storm": "dev-wip/path-enumerable-trait as 1.2",
         "winter/wn-system-module": "dev-develop",
         "winter/wn-backend-module": "dev-develop",
         "winter/wn-cms-module": "dev-develop",

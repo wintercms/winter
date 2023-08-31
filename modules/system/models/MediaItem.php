@@ -8,7 +8,8 @@ use Winter\Storm\Database\Relations\HasMany;
 
 class MediaItem extends Model
 {
-    use \Winter\Storm\Database\Traits\NestedTree;
+    use \Winter\Storm\Database\Traits\PathEnumerable;
+    const PATH_COLUMN = 'location';
 
     /**
      * Table to use.
