@@ -18,7 +18,6 @@ use Symfony\Component\Console\Input\InputArgument;
  */
 class WinterMirror extends Command
 {
-
     /**
      * The console command name.
      */
@@ -29,6 +28,9 @@ class WinterMirror extends Command
      */
     protected $description = 'Generates a mirrored public folder using symbolic links.';
 
+    /**
+     * @var array Files that should be mirrored
+     */
     protected $files = [
         '.htaccess',
         'index.php',
@@ -38,6 +40,9 @@ class WinterMirror extends Command
         'sitemap.xml',
     ];
 
+    /**
+     * @var array Directories that should be mirrored
+     */
     protected $directories = [
         'storage/app/uploads/public',
         'storage/app/media',
@@ -45,11 +50,16 @@ class WinterMirror extends Command
         'storage/temp/public',
     ];
 
+    /**
+     * @var array Wildcard paths that should be mirrored
+     */
     protected $wildcards = [
         'modules/*/assets',
         'modules/*/resources',
         'modules/*/behaviors/*/assets',
         'modules/*/behaviors/*/resources',
+        'modules/*/components/*/assets',
+        'modules/*/components/*/resources',
         'modules/*/widgets/*/assets',
         'modules/*/widgets/*/resources',
         'modules/*/formwidgets/*/assets',
@@ -61,6 +71,8 @@ class WinterMirror extends Command
         'plugins/*/*/resources',
         'plugins/*/*/behaviors/*/assets',
         'plugins/*/*/behaviors/*/resources',
+        'plugins/*/*/components/*/assets',
+        'plugins/*/*/components/*/resources',
         'plugins/*/*/reportwidgets/*/assets',
         'plugins/*/*/reportwidgets/*/resources',
         'plugins/*/*/formwidgets/*/assets',
@@ -72,6 +84,9 @@ class WinterMirror extends Command
         'themes/*/resources',
     ];
 
+    /**
+     * @var string|null Local cache of the mirror destination path
+     */
     protected $destinationPath;
 
     /**
@@ -233,6 +248,7 @@ class WinterMirror extends Command
 
     /**
      * Get the console command arguments.
+     * @return array
      */
     protected function getArguments()
     {
@@ -243,6 +259,7 @@ class WinterMirror extends Command
 
     /**
      * Get the console command options.
+     * @return array
      */
     protected function getOptions()
     {

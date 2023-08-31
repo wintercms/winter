@@ -4,7 +4,7 @@ use File;
 use Twig\Error\Error as TwigError;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Halcyon\Processors\SectionParser;
-use Exception;
+use Throwable;
 
 /**
  * The CMS exception class.
@@ -40,9 +40,9 @@ class CmsException extends ApplicationException
      * Error 200: Mask the exception as INI content.
      * Error 300: Mask the exception as PHP content.
      * Error 400: Mask the exception as Twig content.
-     * @param \Exception $previous Previous exception.
+     * @param Throwable $previous Previous exception.
      */
-    public function __construct($message = null, $code = 100, Exception $previous = null)
+    public function __construct($message = null, $code = 100, Throwable $previous = null)
     {
         if ($message instanceof CmsCompoundObject || $message instanceof ComponentPartial) {
             $this->compoundObject = $message;
@@ -62,10 +62,10 @@ class CmsException extends ApplicationException
      * has occurred in external code, the function will return false. Otherwise return
      * true and modify the exception by overriding it's content, line and message values
      * to be accurate against a CMS object properties.
-     * @param \Exception $exception The exception to modify.
+     * @param Throwable $exception The exception to modify.
      * @return bool
      */
-    public function processCompoundObject(Exception $exception)
+    public function processCompoundObject(Throwable $exception)
     {
         switch ($this->code) {
             case 200:
@@ -94,10 +94,10 @@ class CmsException extends ApplicationException
     /**
      * Override properties of an exception specific to the INI section
      * of a CMS object.
-     * @param \Exception $exception The exception to modify.
+     * @param Throwable $exception The exception to modify.
      * @return bool
      */
-    protected function processIni(Exception $exception)
+    protected function processIni(Throwable $exception)
     {
         $message = $exception->getMessage();
 
@@ -137,15 +137,15 @@ class CmsException extends ApplicationException
     /**
      * Override properties of an exception specific to the PHP section
      * of a CMS object.
-     * @param \Exception $exception The exception to modify.
+     * @param Throwable $exception The exception to modify.
      * @return bool
      */
-    protected function processPhp(Exception $exception)
+    protected function processPhp(Throwable $exception)
     {
         /*
          * Fatal Error
          */
-        if ($exception instanceof \Symfony\Component\Debug\Exception\FatalErrorException) {
+        if ($exception instanceof \Symfony\Component\ErrorHandler\Error\FatalError) {
             $check = false;
 
             // Expected: */modules/cms/classes/CodeParser.php(165) : eval()'d code line 7
@@ -193,10 +193,10 @@ class CmsException extends ApplicationException
     /**
      * Override properties of an exception specific to the Twig section
      * of a CMS object.
-     * @param \Exception $exception The exception to modify.
+     * @param Throwable $exception The exception to modify.
      * @return bool
      */
-    protected function processTwig(Exception $exception)
+    protected function processTwig(Throwable $exception)
     {
         // Must be a Twig related exception
         if (!$exception instanceof TwigError) {
@@ -219,14 +219,14 @@ class CmsException extends ApplicationException
     /**
      * Masks this exception with the details of the supplied. The error code for
      * this exception object will determine how the supplied exception is used.
-     * Error 100: A general exception. Inherits \System\Classes\ExceptionBase::applyMask()
+     * Error 100: A general exception. Inherits \Winter\Storm\Exception\ExceptionBase::applyMask()
      * Error 200: Mask the exception as INI content.
      * Error 300: Mask the exception as PHP content.
      * Error 400: Mask the exception as Twig content.
-     * @param \Exception $exception The exception to modify.
+     * @param Throwable $exception The exception to modify.
      * @return void
      */
-    public function applyMask(Exception $exception)
+    public function applyMask(Throwable $exception)
     {
         if ($this->code == 100 || $this->processCompoundObject($exception) === false) {
             parent::applyMask($exception);

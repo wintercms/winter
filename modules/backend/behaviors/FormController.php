@@ -24,7 +24,7 @@ use Exception;
  * This behavior is implemented in the controller like so:
  *
  *     public $implement = [
- *         'Backend.Behaviors.FormController',
+ *         \Backend\Behaviors\FormController::class,
  *     ];
  *
  *     public $formConfig = 'config_form.yaml';
@@ -33,7 +33,7 @@ use Exception;
  * values as either a YAML file, located in the controller view directory,
  * or directly as a PHP array.
  *
- * @see http://wintercms.com/docs/backend/forms Back-end form documentation
+ * @see https://wintercms.com/docs/backend/forms Back-end form documentation
  * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  */
@@ -67,11 +67,6 @@ class FormController extends ControllerBehavior
     protected $formWidget;
 
     /**
-     * @inheritDoc
-     */
-    protected $requiredProperties = ['formConfig'];
-
-    /**
      * @var array Configuration values that must exist when applying the primary config file.
      * - modelClass: Class name for the model
      * - form: Form field definitions
@@ -94,6 +89,11 @@ class FormController extends ControllerBehavior
     protected $model;
 
     /**
+     * @var mixed Configuration for this behaviour
+     */
+    public $formConfig = 'config_form.yaml';
+
+    /**
      * Behavior constructor
      * @param \Backend\Classes\Controller $controller
      */
@@ -104,7 +104,7 @@ class FormController extends ControllerBehavior
         /*
          * Build configuration
          */
-        $this->config = $this->makeConfig($controller->formConfig, $this->requiredConfig);
+        $this->config = $this->makeConfig($controller->formConfig ?: $this->formConfig, $this->requiredConfig);
         $this->config->modelClass = Str::normalizeClassName($this->config->modelClass);
     }
 
@@ -176,8 +176,8 @@ class FormController extends ControllerBehavior
         /*
          * Detected Relation controller behavior
          */
-        if ($this->controller->isClassExtendedWith('Backend.Behaviors.RelationController')) {
-            $this->controller->initRelation($model);
+        if ($this->controller->isClassExtendedWith(\Backend\Behaviors\RelationController::class)) {
+            $this->controller->initRelation(clone $model);
         }
 
         $this->prepareVars($model);

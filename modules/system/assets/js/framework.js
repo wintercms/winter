@@ -1,6 +1,6 @@
 /* ========================================================================
  * Winter CMS: front-end JavaScript framework
- * http://wintercms.com
+ * https://wintercms.com
  * ========================================================================
  * Copyright 2016-2020 Alexey Bobkov, Samuel Georges
  * ======================================================================== */
@@ -84,6 +84,30 @@ if (window.jQuery.request !== undefined) {
             requestHeaders['X-XSRF-TOKEN'] = csrfToken
         }
 
+        /**
+         * Request Data Merging / Prioritization Process:
+         *
+         * 1. START:
+         *      options.data contains $el's data-request-data
+         *      data is an empty object
+         *
+         * 2. Populate data with data-request-data attributes
+         *      The data var is populated with the values from data-request-data attributes present on any elements
+         *      that are parents of the $el element (all the way up to the document root) with closer elements taking priority
+         *
+         * 3. Add $el's data to options.data if $el is a form input AND is not present in a containing <form> element
+         *      options.data.{$el.attr('name')} = $el.val()
+         *
+         * 4. Merge data with options.data, options.data takes priority
+         *
+         * 5. Merge any data from the request's parent requests (if any); prioritizing keys from the current request
+         *      If the containing form has a request-parent element specified, then we move to that element
+         *      and process it's data as if it was the element creating the request, including checking for a
+         *      parent element to that request. Once we've gone all the way up until there are no more parent
+         *      elements detected then the parent data is merged such that the closest data in the chain to the
+         *      original element that triggered the request has the highest priority.
+         */
+
         /*
          * Request data
          */
@@ -91,6 +115,8 @@ if (window.jQuery.request !== undefined) {
             inputName,
             data = {}
 
+        // Loop through every parent element with the data-request-data attribute and attach the data
+        // to the request data object with closer element data overwriting further element data
         $.each($el.parents('[data-request-data]').toArray().reverse(), function extendRequest() {
             $.extend(data, paramToObj('data-request-data', $(this).data('request-data')))
         })
@@ -106,9 +132,24 @@ if (window.jQuery.request !== undefined) {
             $.extend(data, options.data)
         }
 
-        if (useFiles) {
-            requestData = new FormData($form.length ? $form.get(0) : undefined)
+        // Get the form data from parent requests (uses data-request-parent)
+        var requestParentData = $form.getRequestParentData()
 
+        if (useFiles) {
+            requestData = new FormData()
+
+            // Initialize the FormData object with the merged parent form data
+            $.each(requestParentData, function (key) {
+                if (Array.isArray(this)) {
+                    for (let i = 0; i < this.length; i++) {
+                        requestData.append(key, this[i])
+                    }
+                } else {
+                    requestData.append(key, this)
+                }
+            })
+
+            // Attach file data if the request element is a file input
             if ($el.is(':file') && inputName) {
                 $.each($el.prop('files'), function() {
                     requestData.append(inputName, this)
@@ -117,6 +158,7 @@ if (window.jQuery.request !== undefined) {
                 delete data[inputName]
             }
 
+            // Append the data from the options array
             $.each(data, function(key) {
                 if (typeof Blob !== "undefined" && this instanceof Blob && this.filename) {
                     requestData.append(key, this, this.filename)
@@ -126,7 +168,7 @@ if (window.jQuery.request !== undefined) {
             })
         }
         else {
-            requestData = [$form.serialize(), $.param(data)].filter(Boolean).join('&')
+            requestData = [$.param(requestParentData), $.param(data)].filter(Boolean).join('&')
         }
 
         /*
@@ -320,7 +362,7 @@ if (window.jQuery.request !== undefined) {
                         else if ($.type(selector) == 'string' && selector.charAt(0) == '^') {
                             $(selector.substring(1)).prepend(data[partial]).trigger('ajaxUpdate', [context, data, textStatus, jqXHR])
                         }
-                        else {
+                        else if ($.type(selector) == 'string' && (selector.charAt(0) == '#' || selector.charAt(0) == '.')) {
                             $(selector).trigger('ajaxBeforeReplace')
                             $(selector).html(data[partial]).trigger('ajaxUpdate', [context, data, textStatus, jqXHR])
                         }
@@ -440,8 +482,6 @@ if (window.jQuery.request !== undefined) {
     var old = $.fn.request
 
     $.fn.request = function(handler, option) {
-        var args = arguments
-
         var $this = $(this).first()
         var data  = {
             evalBeforeUpdate: $this.data('request-before-update'),
@@ -479,6 +519,70 @@ if (window.jQuery.request !== undefined) {
         return this
     }
 
+    // $.fn.getRequestParentData() PLUGIN DEFINITION
+    // ==============
+
+    /**
+     * Identify and merge the data from the request's parent elements
+     *
+     * If the current $form element was spawned by an element that exists in a different form element
+     * (usually because the current form is in a popup), then it will have a data-request-parent
+     * attribute present that identifies the element that spawned it. We then need to merge the data
+     * from that element's containing form element and in turn check to see if it was spawned by another
+     * element (i.e. nested popups) until we have completed the chain down to the original form element.
+     * The closer a form element is to the current request $el, the higher priority its data will be in
+     * merge conflicts. This is required in order to ensure that all the data that was required to render
+     * a given widget is still present in any requests made to that widget so that it will be properly
+     * instantiated on the server side and ready to respond to our requests.
+     */
+    $.fn.getRequestParentData = function () {
+        var $form = $(this).first(),
+            parentDataObjects = [formDataToObj(new FormData($form.get(0)))],
+            parentFormData = {};
+
+        var findParentForms = function ($form) {
+            // If the form element exists and has a parent element defined
+            if ($form.length && $form.data('request-parent')) {
+                // Identify the owning form of the parent element
+                var $parentEl = $($form.data('request-parent'));
+                if ($parentEl.length) {
+                    var parentEmbeddedData = {};
+
+                    // Loop through every parent element with the data-request-data attribute and attach the data
+                    // to the request data object with closer element data overwriting further element data
+                    $.each($parentEl.parents('[data-request-data]').toArray().reverse(), function extendRequest() {
+                        $.extend(parentEmbeddedData, paramToObj('data-request-data', $(this).data('request-data')));
+                    });
+
+                    // If the parent element has embedded data include it
+                    if ($parentEl.is('[data-request-data]')) {
+                        $.extend(parentEmbeddedData, paramToObj('data-request-data', $parentEl.data('request-data')));
+                    }
+
+                    var $parentForm = $parentEl.closest('form');
+                    if ($parentForm.length) {
+                        // Add the identified parent form to the array for processing its data
+                        // and check it for a parent element & containing form of its own
+                        parentDataObjects.push($.extend(formDataToObj(new FormData($parentForm.get(0))), parentEmbeddedData));
+                        findParentForms($parentForm);
+                    }
+                }
+            }
+        };
+
+        // Attempt to find all the parent forms in the chain
+        findParentForms($form);
+
+        // Loop through the discovered forms in reverse order so that the forms that are closer to the
+        // current element have priority when it comes to data merge conflicts
+        parentDataObjects.reverse().forEach(function (data) {
+            $.extend(parentFormData, data);
+        });
+
+        return parentFormData;
+    }
+
+
     // REQUEST DATA-API
     // ==============
 
@@ -492,6 +596,26 @@ if (window.jQuery.request !== undefined) {
         catch (e) {
             throw new Error('Error parsing the '+name+' attribute value. '+e)
         }
+    }
+
+    function formDataToObj(formDataInstance) {
+        var objectData = {};
+
+        for (const pair of formDataInstance.entries()) {
+            const key = pair[0];
+            const value = pair[1];
+
+            if (!Reflect.has(objectData, key) || !key.includes('[]')) {
+                objectData[key] = value;
+                continue;
+            }
+            if (!Array.isArray(objectData[key])) {
+                objectData[key] = [objectData[key]];
+            }
+            objectData[key].push(value);
+        }
+
+        return objectData;
     }
 
     function getXSRFToken() {

@@ -1,10 +1,8 @@
 <?php namespace System\Console;
 
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
+use InvalidArgumentException;
+use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
-use System\Classes\PluginManager;
-use Symfony\Component\Console\Input\InputArgument;
 use System\Classes\VersionManager;
 
 /**
@@ -15,74 +13,83 @@ use System\Classes\VersionManager;
  */
 class PluginRollback extends Command
 {
-    /**
-     * The console command name.
-     * @var string
-     */
-    protected $name = 'plugin:rollback';
+    use \Winter\Storm\Console\Traits\ConfirmsWithInput;
+    use Traits\HasPluginArgument;
 
     /**
-     * The console command description.
-     * @var string
+     * @var string|null The default command name for lazy loading.
+     */
+    protected static $defaultName = 'plugin:rollback';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'plugin:rollback
+        {plugin : The plugin to disable. <info>(eg: Winter.Blog)</info>}
+        {version? : If this parameter is not specified the plugin will be completely rolled back; otherwise it will stop on the specified version. <info>(eg: 1.3.9)</info>}
+        {--f|force : Force the operation to run and ignore production warnings and confirmation questions.}';
+
+    /**
+     * @var string The console command description.
      */
     protected $description = 'Rollback an existing plugin.';
 
     /**
      * Execute the console command.
-     * @return void
+     * @throws Exception if the UpdateManager is unable to rollback the requested plugin to the requested version
+     * @throws InvalidArgumentException if the requested rollback version can't be found
      */
-    public function handle()
+    public function handle(): int
     {
-        /*
-         * Lookup plugin
-         */
-        $pluginName = $this->argument('name');
-        $pluginName = PluginManager::instance()->normalizeIdentifier($pluginName);
-        if (!PluginManager::instance()->exists($pluginName)) {
-            throw new \InvalidArgumentException('Plugin not found');
-        }
-
+        $pluginName = $this->getPluginIdentifier();
         $stopOnVersion = ltrim(($this->argument('version') ?: null), 'v');
 
         if ($stopOnVersion) {
             if (!VersionManager::instance()->hasDatabaseVersion($pluginName, $stopOnVersion)) {
-                throw new \InvalidArgumentException('Plugin version not found');
+                throw new InvalidArgumentException('Plugin version not found');
             }
-            $confirmQuestion = 'Please confirm that you wish to revert the plugin to version ' . $stopOnVersion . '. This may result in changes to your database and potential data loss.';
+            $confirmQuestion = "This will revert $pluginName to version $stopOnVersion - changes to the database and potential data loss may occur.";
         } else {
-            $confirmQuestion = 'Please confirm that you wish to completely rollback this plugin. This may result in potential data loss.';
+            $confirmQuestion = "This will completely rollback $pluginName. This may result in potential data loss.";
         }
 
-        if ($this->option('force') || $this->confirm($confirmQuestion)) {
-            $manager = UpdateManager::instance()->setNotesOutput($this->output);
-            $stopOnVersion = ltrim(($this->argument('version') ?: null), 'v');
-
-            try {
-                $manager->rollbackPlugin($pluginName, $stopOnVersion);
-            } catch (\Exception $exception) {
-                $lastVersion = VersionManager::instance()->getCurrentVersion($pluginName);
-                $this->output->writeln(sprintf("<comment>An exception occurred during the rollback and the process has been stopped. The plugin was rolled back to version v%s.</comment>", $lastVersion));
-                throw $exception;
-            }
+        if (!$this->confirmWithInput(
+            $confirmQuestion,
+            $pluginName
+        )) {
+            return 1;
         }
+
+        $manager = UpdateManager::instance()->setNotesOutput($this->output);
+
+        try {
+            $manager->rollbackPlugin($pluginName, $stopOnVersion);
+        } catch (\Exception $exception) {
+            $lastVersion = VersionManager::instance()->getCurrentVersion($pluginName);
+            $this->output->writeln(sprintf("<comment>An exception occurred during the rollback and the process has been stopped. %s was rolled back to version v%s.</comment>", $pluginName, $lastVersion));
+            throw $exception;
+        }
+
+        return 0;
     }
 
     /**
-     * Get the console command arguments.
-     * @return array
+     * Suggest values for the optional version argument
      */
-    protected function getArguments()
+    public function suggestVersionValues(string $value = null, array $allInput): array
     {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the plugin to be rolled back. Eg: AuthorName.PluginName'],
-            ['version', InputArgument::OPTIONAL, 'If this parameter is specified, the process will stop on the specified version, if not, it will completely rollback the plugin. Example: 1.3.9'],
-        ];
-    }
+        // Get the currently selected plugin
+        $pluginName = $this->getPluginIdentifier($allInput['arguments']['plugin']);
 
-    protected function getOptions()
-    {
-        return [
-            ['force', 'f', InputOption::VALUE_NONE, 'Force rollback', null],
-        ];
+        // Get that plugin's versions from the database
+        $history = VersionManager::instance()->getDatabaseHistory($pluginName);
+
+        // Compile a list of available versions to rollback to
+        $availableVersions = [];
+        foreach ($history as $record) {
+            $availableVersions[] = $record->version;
+        }
+
+        return $availableVersions;
     }
 }

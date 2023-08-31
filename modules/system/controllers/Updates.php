@@ -1,24 +1,23 @@
 <?php namespace System\Controllers;
 
-use Lang;
-use Html;
-use Yaml;
+use ApplicationException;
+use Backend;
+use Backend\Classes\Controller;
+use BackendMenu;
+use Cms\Classes\ThemeManager;
+use Exception;
 use File;
 use Flash;
-use Backend;
+use Html;
+use Lang;
 use Markdown;
 use Redirect;
 use Response;
-use BackendMenu;
-use Cms\Classes\ThemeManager;
-use Backend\Classes\Controller;
-use System\Models\Parameter;
-use System\Models\PluginVersion;
-use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
-use ApplicationException;
-use Exception;
+use System\Classes\UpdateManager;
+use System\Models\Parameter;
+use System\Models\PluginVersion;
 
 /**
  * Updates controller
@@ -33,7 +32,7 @@ class Updates extends Controller
      * @var array Extensions implemented by this controller.
      */
     public $implement = [
-        \Backend\Behaviors\ListController::class
+        \Backend\Behaviors\ListController::class,
     ];
 
     /**
@@ -90,7 +89,7 @@ class Updates extends Controller
     public function manage()
     {
         $this->pageTitle = 'system::lang.plugins.manage';
-        PluginManager::instance()->clearDisabledCache();
+        PluginManager::instance()->clearFlagCache();
         return $this->asExtension('ListController')->index();
     }
 
@@ -144,7 +143,7 @@ class Updates extends Controller
             if ($path && $plugin) {
                 $details = $plugin->pluginDetails();
                 $readme = $this->getPluginMarkdownFile($path, $readmeFiles);
-                $changelog = $this->getPluginVersionFile($path, 'updates/version.yaml');
+                $changelog = $plugin->getPluginVersions(false);
                 $upgrades = $this->getPluginMarkdownFile($path, $upgradeFiles);
                 $licence = $this->getPluginMarkdownFile($path, $licenceFiles);
 
@@ -179,36 +178,6 @@ class Updates extends Controller
         }
     }
 
-    protected function getPluginVersionFile($path, $filename)
-    {
-        $contents = [];
-
-        try {
-            $updates = (array) Yaml::parseFile($path.'/'.$filename);
-
-            foreach ($updates as $version => $details) {
-                if (!is_array($details)) {
-                    $details = (array)$details;
-                }
-
-                //Filter out update scripts
-                $details = array_filter($details, function ($string) use ($path) {
-                    return !preg_match('/^[a-z_\-0-9]*\.php$/i', $string) || !File::exists($path . '/updates/' . $string);
-                });
-
-                $contents[$version] = $details;
-            }
-        }
-        catch (Exception $ex) {
-        }
-
-        uksort($contents, function ($a, $b) {
-            return version_compare($b, $a);
-        });
-
-        return $contents;
-    }
-
     protected function getPluginMarkdownFile($path, $filenames)
     {
         $contents = null;
@@ -234,6 +203,10 @@ class Updates extends Controller
     {
         $warnings = [];
         $missingDependencies = PluginManager::instance()->findMissingDependencies();
+
+        if (!empty($missingDependencies)) {
+            PluginManager::instance()->clearFlagCache();
+        }
 
         foreach ($missingDependencies as $pluginCode => $plugin) {
             foreach ($plugin as $missingPluginCode) {
@@ -842,51 +815,44 @@ class Updates extends Controller
             count($checkedIds)
         ) {
             $manager = PluginManager::instance();
+            $codes = PluginVersion::lists('code', 'id');
 
-            foreach ($checkedIds as $pluginId) {
-                if (!$plugin = PluginVersion::find($pluginId)) {
+            foreach ($checkedIds as $id) {
+                $code = $codes[$id] ?? null;
+                if (!$code) {
                     continue;
                 }
 
-                $savePlugin = true;
                 switch ($bulkAction) {
                     // Enables plugin's updates.
                     case 'freeze':
-                        $plugin->is_frozen = 1;
+                        $manager->freezePlugin($code);
                         break;
 
                     // Disables plugin's updates.
                     case 'unfreeze':
-                        $plugin->is_frozen = 0;
+                        $manager->unfreezePlugin($code);
                         break;
 
                     // Disables plugin on the system.
                     case 'disable':
-                        $plugin->is_disabled = 1;
-                        $manager->disablePlugin($plugin->code, true);
+                        $manager->disablePlugin($code);
                         break;
 
                     // Enables plugin on the system.
                     case 'enable':
-                        $plugin->is_disabled = 0;
-                        $manager->enablePlugin($plugin->code, true);
+                        $manager->enablePlugin($code);
                         break;
 
                     // Rebuilds plugin database migrations.
                     case 'refresh':
-                        $savePlugin = false;
-                        $manager->refreshPlugin($plugin->code);
+                        $manager->refreshPlugin($code);
                         break;
 
                     // Rollback and remove plugins from the system.
                     case 'remove':
-                        $savePlugin = false;
-                        $manager->deletePlugin($plugin->code);
+                        $manager->deletePlugin($code);
                         break;
-                }
-
-                if ($savePlugin) {
-                    $plugin->save();
                 }
             }
         }

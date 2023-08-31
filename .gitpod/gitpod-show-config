@@ -8,3 +8,4 @@ git update-index --no-skip-worktree config/database.php
 git update-index --no-skip-worktree config/mail.php
 git update-index --no-skip-worktree config/queue.php
 git update-index --no-skip-worktree config/session.php
+git update-index --no-skip-worktree package.json

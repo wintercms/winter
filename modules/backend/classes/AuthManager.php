@@ -253,7 +253,7 @@ class AuthManager extends StormAuthManager
     /**
      * Returns an array of registered permissions belonging to a given role code
      * @param string $role
-     * @param bool $includeOrphans
+     * @param bool $includeOrphans Include any permissons that do not have a default role specified
      * @return array
      */
     public function listPermissionsForRole($role, $includeOrphans = true)

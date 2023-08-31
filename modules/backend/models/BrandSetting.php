@@ -16,6 +16,7 @@ use Exception;
  *
  * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
+ * @author Winter CMS
  */
 class BrandSetting extends Model
 {
@@ -79,10 +80,72 @@ class BrandSetting extends Model
         $this->primary_color = $config->get('brand.primaryColor', self::PRIMARY_COLOR);
         $this->secondary_color = $config->get('brand.secondaryColor', self::SECONDARY_COLOR);
         $this->accent_color = $config->get('brand.accentColor', self::ACCENT_COLOR);
+        $this->default_colors = $config->get('brand.defaultColors', [
+            [
+                'color' => '#1abc9c',
+            ],
+            [
+                'color' => '#16a085',
+            ],
+            [
+                'color' => '#2ecc71',
+            ],
+            [
+                'color' => '#27ae60',
+            ],
+            [
+                'color' => '#3498db',
+            ],
+            [
+                'color' => '#2980b9',
+            ],
+            [
+                'color' => '#9b59b6',
+            ],
+            [
+                'color' => '#8e44ad',
+            ],
+            [
+                'color' => '#34495e',
+            ],
+            [
+                'color' => '#2b3e50',
+            ],
+            [
+                'color' => '#f1c40f',
+            ],
+            [
+                'color' => '#f39c12',
+            ],
+            [
+                'color' => '#e67e22',
+            ],
+            [
+                'color' => '#d35400',
+            ],
+            [
+                'color' => '#e74c3c',
+            ],
+            [
+                'color' => '#c0392b',
+            ],
+            [
+                'color' => '#ecf0f1',
+            ],
+            [
+                'color' => '#bdc3c7',
+            ],
+            [
+                'color' => '#95a5a6',
+            ],
+            [
+                'color' => '#7f8c8d',
+            ],
+        ]);
         $this->menu_mode = $config->get('brand.menuMode', self::INLINE_MENU);
 
         // Attempt to load custom CSS
-        $brandCssPath = File::symbolizePath(Config::get('brand.customLessPath'));
+        $brandCssPath = File::symbolizePath(Config::get('brand.customLessPath', ''));
         if ($brandCssPath && File::exists($brandCssPath)) {
             $this->custom_css = File::get($brandCssPath);
         }
@@ -168,7 +231,7 @@ class BrandSetting extends Model
 
     public static function getDefaultFavicon()
     {
-        $faviconPath = File::symbolizePath(Config::get('brand.faviconPath'));
+        $faviconPath = File::symbolizePath(Config::get('brand.faviconPath', ''));
 
         if ($faviconPath && File::exists($faviconPath)) {
             return Url::asset(File::localToPublic($faviconPath));
@@ -179,7 +242,7 @@ class BrandSetting extends Model
 
     public static function getDefaultLogo()
     {
-        $logoPath = File::symbolizePath(Config::get('brand.logoPath'));
+        $logoPath = File::symbolizePath(Config::get('brand.logoPath', ''));
 
         if ($logoPath && File::exists($logoPath)) {
             return Url::asset(File::localToPublic($logoPath));

@@ -5,6 +5,7 @@ use Artisan;
 use Cache;
 use Log;
 use Exception;
+use Illuminate\Database\QueryException;
 use System\Classes\ModelBehavior;
 
 /**
@@ -16,6 +17,10 @@ use System\Classes\ModelBehavior;
  *     public $settingsCode = 'author_plugin_code';
  *     public $settingsFields = 'fields.yaml';
  *
+ * Optionally:
+ *
+ *     public $settingsCacheTtl = 1440;
+ *
  */
 class SettingsModel extends ModelBehavior
 {
@@ -24,6 +29,11 @@ class SettingsModel extends ModelBehavior
     protected $recordCode;
     protected $fieldConfig;
     protected $fieldValues = [];
+
+    /**
+     * @var integer Settings cache TTL, in seconds.
+     */
+    protected int $cacheTtl = 1440;
 
     /**
      * @var array Internal cache of model objects.
@@ -62,6 +72,10 @@ class SettingsModel extends ModelBehavior
          * Parse the config
          */
         $this->recordCode = $this->model->settingsCode;
+
+        if ($this->model->propertyExists('settingsCacheTtl')) {
+            $this->cacheTtl = (int) $this->model->settingsCacheTtl;
+        }
     }
 
     /**
@@ -95,9 +109,8 @@ class SettingsModel extends ModelBehavior
 
     /**
      * Checks if the model has been set up previously, intended as a static method
-     * @return bool
      */
-    public function isConfigured()
+    public function isConfigured(): bool
     {
         return App::hasDatabase() && $this->getSettingsRecord() !== null;
     }
@@ -108,10 +121,21 @@ class SettingsModel extends ModelBehavior
      */
     public function getSettingsRecord()
     {
-        $record = $this->model
-            ->where('item', $this->recordCode)
-            ->remember(1440, $this->getCacheKey())
-            ->first();
+        $query = $this->model->where('item', $this->recordCode);
+
+        if ($this->cacheTtl > 0) {
+            $query = $query->remember($this->cacheTtl, $this->getCacheKey());
+        }
+
+        try {
+            $record = $query->first();
+        } catch (QueryException $ex) {
+            // SQLSTATE[42S02]: Base table or view not found - migrations haven't run yet
+            if ($ex->getCode() === '42S02') {
+                $record = null;
+                traceLog($ex);
+            }
+        }
 
         return $record ?: null;
     }

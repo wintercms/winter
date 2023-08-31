@@ -73,6 +73,7 @@
         showPrintMargin: false,
         highlightSelectedWord: false,
         hScrollBarAlwaysVisible: false,
+        scrollPastEnd: 0,
         readOnly: false
     }
 
@@ -156,6 +157,7 @@
         editor.setFontSize(options.fontSize)
         editor.on('blur', this.proxy(this.onBlur))
         editor.on('focus', this.proxy(this.onFocus))
+        editor.setOption("scrollPastEnd", options.scrollPastEnd)
         this.setWordWrap(options.wordWrap)
 
         // Set the vendor path for Ace's require path
@@ -280,7 +282,7 @@
     }
 
     CodeEditor.prototype.onChange = function() {
-        this.$form.trigger('change')
+        this.$textarea.trigger('change')
         this.$textarea.trigger('oc.codeEditorChange')
     }
 

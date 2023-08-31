@@ -57,7 +57,10 @@ return [
         'weekdaysShort' => ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
     ],
     'colorpicker' => [
-        'choose' => 'Ok',
+        'last_color' => 'Utiliser la couleur sélectionnée précédemment',
+        'aria_palette' => 'Zone de sélection des couleurs',
+        'aria_hue' => 'Curseur de sélection de la teinte',
+        'aria_opacity' => "Curseur de sélection de l'opacité",
     ],
     'filter' => [
         'group' => [
@@ -84,15 +87,15 @@ return [
         ]
     ],
     'eventlog' => [
-        'show_stacktrace' => 'Afficher la pile d’exécution',
-        'hide_stacktrace' => 'Masquer la pile d’exécution',
+        'show_stacktrace' => 'Afficher la pile d\'exécution',
+        'hide_stacktrace' => 'Masquer la pile d\'exécution',
         'tabs' => [
             'formatted' => 'Message formaté',
             'raw' => 'Message brut',
         ],
         'editor' => [
-            'title' => 'Sélectionnez l’éditeur de code source à utiliser',
-            'description' => 'L’environnement de votre système d’exploitation doit être configuré pour ouvrir l’un des schémas d’URL ci-dessous.',
+            'title' => 'Sélectionnez l\'éditeur de code source à utiliser',
+            'description' => 'L\'environnement de votre système d\'exploitation doit être configuré pour ouvrir l\'un des schémas d\'URL ci-dessous.',
             'openWith' => 'Ouvrir avec',
             'remember_choice' => 'Se souvenir de la sélection pour la durée de la session dans ce navigateur',
             'open' => 'Ouvrir',

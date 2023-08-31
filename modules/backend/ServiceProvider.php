@@ -1,6 +1,5 @@
 <?php namespace Backend;
 
-use App;
 use Backend;
 use BackendMenu;
 use BackendAuth;
@@ -20,19 +19,20 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        parent::register('backend');
+        parent::register();
 
+        $this->registerConsole();
         $this->registerMailer();
         $this->registerAssetBundles();
+        $this->registerBackendPermissions();
 
         /*
          * Backend specific
          */
-        if (App::runningInBackend()) {
+        if ($this->app->runningInBackend()) {
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
             $this->registerBackendWidgets();
-            $this->registerBackendPermissions();
             $this->registerBackendSettings();
         }
     }
@@ -45,6 +45,18 @@ class ServiceProvider extends ModuleServiceProvider
     public function boot()
     {
         parent::boot('backend');
+    }
+
+    /**
+     * Register console commands
+     */
+    protected function registerConsole()
+    {
+        $this->registerConsoleCommand('create.controller', \Backend\Console\CreateController::class);
+        $this->registerConsoleCommand('create.formwidget', \Backend\Console\CreateFormWidget::class);
+        $this->registerConsoleCommand('create.reportwidget', \Backend\Console\CreateReportWidget::class);
+
+        $this->registerConsoleCommand('winter.passwd', \Backend\Console\WinterPasswd::class);
     }
 
     /**
@@ -71,16 +83,16 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/backend/widgets/table/assets/js/build.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/js/mediamanager-browser.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/less/mediamanager.less');
+            $combiner->registerBundle('~/modules/backend/widgets/reportcontainer/assets/less/reportcontainer.less');
+            $combiner->registerBundle('~/modules/backend/widgets/table/assets/less/table.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/codeeditor/assets/less/codeeditor.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/repeater/assets/less/repeater.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/codeeditor/assets/js/build.js');
             $combiner->registerBundle('~/modules/backend/formwidgets/fileupload/assets/less/fileupload.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/nestedform/assets/less/nestedform.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/richeditor/assets/js/build-plugins.js');
-            $combiner->registerBundle('~/modules/backend/formwidgets/colorpicker/assets/less/colorpicker.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/permissioneditor/assets/less/permissioneditor.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/markdowneditor/assets/less/markdowneditor.less');
-            $combiner->registerBundle('~/modules/backend/formwidgets/sensitive/assets/less/sensitive.less');
 
             /*
              * Rich Editor is protected by DRM
@@ -143,48 +155,52 @@ class ServiceProvider extends ModuleServiceProvider
                 'backend.access_dashboard' => [
                     'label' => 'system::lang.permissions.view_the_dashboard',
                     'tab'   => 'system::lang.permissions.name',
+                    'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
                 ],
                 'backend.manage_default_dashboard' => [
                     'label' => 'system::lang.permissions.manage_default_dashboard',
                     'tab'   => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.manage_users' => [
                     'label' => 'system::lang.permissions.manage_other_administrators',
                     'tab'   => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.impersonate_users' => [
                     'label' => 'system::lang.permissions.impersonate_users',
                     'tab'   => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.manage_preferences' => [
                     'label' => 'system::lang.permissions.manage_preferences',
                     'tab'   => 'system::lang.permissions.name',
+                    'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
                 ],
                 'backend.manage_editor' => [
                     'label' => 'system::lang.permissions.manage_editor',
                     'tab'   => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.manage_own_editor' => [
                     'label' => 'system::lang.permissions.manage_own_editor',
                     'tab'   => 'system::lang.permissions.name',
+                    'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
                 ],
                 'backend.manage_branding' => [
                     'label' => 'system::lang.permissions.manage_branding',
                     'tab'   => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'media.manage_media' => [
                     'label' => 'backend::lang.permissions.manage_media',
                     'tab' => 'system::lang.permissions.name',
+                    'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
                 ],
                 'backend.allow_unsafe_markdown' => [
                     'label' => 'backend::lang.permissions.allow_unsafe_markdown',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
             ]);
             $manager->registerPermissionOwnerAlias('Winter.Backend', 'October.Backend');
@@ -212,6 +228,7 @@ class ServiceProvider extends ModuleServiceProvider
             $manager->registerFormWidget('Backend\FormWidgets\MediaFinder', 'mediafinder');
             $manager->registerFormWidget('Backend\FormWidgets\NestedForm', 'nestedform');
             $manager->registerFormWidget('Backend\FormWidgets\Sensitive', 'sensitive');
+            $manager->registerFormWidget('Backend\FormWidgets\IconPicker', 'iconpicker');
         });
     }
 

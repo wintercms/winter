@@ -1,24 +1,28 @@
 <?php namespace Cms;
 
-use App;
-use Url;
-use Lang;
-use File;
-use Event;
 use Backend;
-use BackendMenu;
-use BackendAuth;
-use Cms\Models\ThemeLog;
-use Cms\Models\ThemeData;
-use Cms\Classes\CmsObject;
-use Backend\Models\UserRole;
-use Cms\Classes\Page as CmsPage;
-use Cms\Classes\ComponentManager;
-use System\Classes\CombineAssets;
-use Cms\Classes\Theme as CmsTheme;
 use Backend\Classes\WidgetManager;
+use Backend\Models\UserRole;
+use BackendAuth;
+use BackendMenu;
+use Cms\Classes\CmsObject;
+use Cms\Classes\ComponentManager;
+use Cms\Classes\Page as CmsPage;
+use Cms\Classes\Theme;
+use Cms\Models\ThemeData;
+use Cms\Models\ThemeLog;
+use Cms\Twig\DebugExtension;
+use Cms\Twig\Extension as CmsTwigExtension;
+use Cms\Twig\Loader as CmsTwigLoader;
+use Config;
+use Event;
+use File;
+use Lang;
+use System\Classes\CombineAssets;
+use System\Classes\MarkupManager;
 use System\Classes\SettingsManager;
-
+use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
+use Url;
 use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
@@ -30,21 +34,23 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        parent::register('cms');
+        parent::register();
 
+        $this->registerConsole();
+        $this->registerTwigParser();
         $this->registerAssetBundles();
         $this->registerComponents();
         $this->registerThemeLogging();
         $this->registerCombinerEvents();
         $this->registerHalcyonModels();
+        $this->registerBackendPermissions();
 
         /*
          * Backend specific
          */
-        if (App::runningInBackend()) {
+        if ($this->app->runningInBackend()) {
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
-            $this->registerBackendPermissions();
             $this->registerBackendWidgets();
             $this->registerBackendSettings();
         }
@@ -61,10 +67,68 @@ class ServiceProvider extends ModuleServiceProvider
 
         $this->bootMenuItemEvents();
         $this->bootRichEditorEvents();
+    }
 
-        if (App::runningInBackend()) {
-            $this->bootBackendLocalization();
-        }
+    /**
+     * Register command line specifics
+     */
+    protected function registerConsole()
+    {
+        $this->registerConsoleCommand('create.component', \Cms\Console\CreateComponent::class);
+        $this->registerConsoleCommand('create.theme', \Cms\Console\CreateTheme::class);
+
+        $this->registerConsoleCommand('theme.install', \Cms\Console\ThemeInstall::class);
+        $this->registerConsoleCommand('theme.remove', \Cms\Console\ThemeRemove::class);
+        $this->registerConsoleCommand('theme.list', \Cms\Console\ThemeList::class);
+        $this->registerConsoleCommand('theme.use', \Cms\Console\ThemeUse::class);
+        $this->registerConsoleCommand('theme.sync', \Cms\Console\ThemeSync::class);
+    }
+
+    /*
+     * Register Twig Environments and other Twig modifications provided by the module
+     */
+    protected function registerTwigParser()
+    {
+        // Register CMS Twig environment
+        $this->app->bind('twig.environment.cms', function ($app) {
+            // Load Twig options
+            $useCache = !Config::get('cms.twigNoCache');
+            $isDebugMode = Config::get('app.debug', false);
+            $strictVariables = Config::get('cms.enableTwigStrictVariables', false);
+            $strictVariables = $strictVariables ?? $isDebugMode;
+            $forceBytecode = Config::get('cms.forceBytecodeInvalidation', false);
+
+            $options = [
+                'auto_reload' => true,
+                'debug' => $isDebugMode,
+                'strict_variables' => $strictVariables,
+            ];
+
+            if ($useCache) {
+                $theme = Theme::getActiveTheme();
+                $themeDir = $theme->getDirName();
+                if ($parent = $theme->getConfig()['parent'] ?? false) {
+                    $themeDir .= '-' . $parent;
+                }
+
+                $options['cache'] = new TwigCacheFilesystem(
+                    storage_path(implode(DIRECTORY_SEPARATOR, [
+                        'cms',
+                        'twig',
+                        $themeDir,
+                    ])) . DIRECTORY_SEPARATOR,
+                    $forceBytecode ? TwigCacheFilesystem::FORCE_BYTECODE_INVALIDATION : 0
+                );
+            }
+
+            $twig = MarkupManager::makeBaseTwigEnvironment(new CmsTwigLoader, $options);
+            $twig->addExtension(new CmsTwigExtension);
+            if ($isDebugMode) {
+                $twig->addExtension(new DebugExtension);
+            }
+
+            return $twig;
+        });
     }
 
     /**
@@ -75,6 +139,7 @@ class ServiceProvider extends ModuleServiceProvider
         CombineAssets::registerCallback(function ($combiner) {
             $combiner->registerBundle('~/modules/cms/assets/less/winter.components.less');
             $combiner->registerBundle('~/modules/cms/assets/less/winter.theme-selector.less');
+            $combiner->registerBundle('~/modules/cms/widgets/assetlist/assets/less/assetlist.less');
         });
     }
 
@@ -104,7 +169,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerCombinerEvents()
     {
-        if (App::runningInBackend() || App::runningInConsole()) {
+        if ($this->app->runningInBackend() || $this->app->runningInConsole()) {
             return;
         }
 
@@ -228,42 +293,43 @@ class ServiceProvider extends ModuleServiceProvider
                 'cms.manage_content' => [
                     'label' => 'cms::lang.permissions.manage_content',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_assets' => [
                     'label' => 'cms::lang.permissions.manage_assets',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_pages' => [
                     'label' => 'cms::lang.permissions.manage_pages',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_layouts' => [
                     'label' => 'cms::lang.permissions.manage_layouts',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_partials' => [
                     'label' => 'cms::lang.permissions.manage_partials',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_themes' => [
                     'label' => 'cms::lang.permissions.manage_themes',
                     'tab' => 'cms::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_theme_options' => [
                     'label' => 'cms::lang.permissions.manage_theme_options',
                     'tab' => 'cms::lang.permissions.name',
+                    'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
                     'order' => 100
                 ],
             ]);
@@ -322,24 +388,6 @@ class ServiceProvider extends ModuleServiceProvider
     }
 
     /**
-     * Boots localization from an active theme for backend items.
-     */
-    protected function bootBackendLocalization()
-    {
-        $theme = CmsTheme::getActiveTheme();
-
-        if (is_null($theme)) {
-            return;
-        }
-
-        $langPath = $theme->getPath() . '/lang';
-
-        if (File::isDirectory($langPath)) {
-            Lang::addNamespace('themes.' . $theme->getId(), $langPath);
-        }
-    }
-
-    /**
      * Registers events for menu items.
      */
     protected function bootMenuItemEvents()
@@ -388,6 +436,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         Event::listen('system.console.theme.sync.getAvailableModelClasses', function () {
             return [
+                Classes\Theme::class,
                 Classes\Meta::class,
                 Classes\Page::class,
                 Classes\Layout::class,

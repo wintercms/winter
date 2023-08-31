@@ -32,33 +32,40 @@ class FileManifest
     protected $files = [];
 
     /**
-     * Constructor.
-     *
-     * @param string $root The root folder to get the file list from.
-     * @param array $modules An array of modules to include in the file manifest.
+     * @var array File extensions to normalize newlines for
      */
-    public function __construct($root = null, array $modules = null)
-    {
-        if (isset($root)) {
-            $this->setRoot($root);
-        } else {
-            $this->setRoot(base_path());
-        }
+    protected $normalizeExtensions = [
+        'css',
+        'htm',
+        'html',
+        'js',
+        'json',
+        'less',
+        'md',
+        'php',
+        'sass',
+        'scss',
+        'svg',
+        'txt',
+        'xml',
+        'yaml',
+    ];
 
-        if (isset($modules)) {
-            $this->setModules($modules);
-        } else {
-            $this->setModules(Config::get('cms.loadModules', ['System', 'Backend', 'Cms']));
-        }
+    /**
+     * Constructor.
+     */
+    public function __construct(string $root = null, array $modules = null)
+    {
+        $this->setRoot($root ?? base_path());
+        $this->setModules($modules ?? Config::get('cms.loadModules', ['System', 'Backend', 'Cms']));
     }
 
     /**
      * Sets the root folder.
      *
-     * @param string $root
      * @throws ApplicationException If the specified root does not exist.
      */
-    public function setRoot($root)
+    public function setRoot(string $root): static
     {
         if (is_string($root)) {
             $this->root = realpath($root);
@@ -75,10 +82,8 @@ class FileManifest
 
     /**
      * Sets the modules.
-     *
-     * @param array $modules
      */
-    public function setModules(array $modules)
+    public function setModules(array $modules): static
     {
         $this->modules = array_map(function ($module) {
             return strtolower($module);
@@ -89,10 +94,8 @@ class FileManifest
 
     /**
      * Gets a list of files and their corresponding hashsums.
-     *
-     * @return array
      */
-    public function getFiles()
+    public function getFiles(): array
     {
         if (count($this->files)) {
             return $this->files;
@@ -117,10 +120,8 @@ class FileManifest
 
     /**
      * Gets the checksum of a specific install.
-     *
-     * @return array
      */
-    public function getModuleChecksums()
+    public function getModuleChecksums(): array
     {
         if (!count($this->files)) {
             $this->getFiles();
@@ -145,11 +146,8 @@ class FileManifest
 
     /**
      * Finds all files within the path.
-     *
-     * @param string $basePath The base path to look for files within.
-     * @return array
      */
-    protected function findFiles(string $basePath)
+    protected function findFiles(string $basePath): array
     {
         $datasource = new FileDatasource($basePath, new Filesystem);
 
@@ -165,9 +163,6 @@ class FileManifest
 
     /**
      * Returns the filename without the root.
-     *
-     * @param string $file
-     * @return string
      */
     protected function getFilename(string $file): string
     {
@@ -176,9 +171,6 @@ class FileManifest
 
     /**
      * Normalises the file contents, irrespective of OS.
-     *
-     * @param string $file
-     * @return string
      */
     protected function normalizeFileContents(string $file): string
     {
@@ -188,6 +180,14 @@ class FileManifest
 
         $contents = file_get_contents($file);
 
-        return str_replace(PHP_EOL, "\n", $contents);
+        // Replace Windows newlines in text files with Unix newlines
+        if (
+            PHP_EOL === "\r\n"
+            && in_array(pathinfo($file, PATHINFO_EXTENSION), $this->normalizeExtensions)
+        ) {
+            $contents = str_replace(PHP_EOL, "\n", $contents);
+        }
+
+        return $contents;
     }
 }

@@ -98,6 +98,8 @@
                     itemType: item.getAttribute('data-item-type'),
                     path: item.getAttribute('data-path'),
                     title: item.getAttribute('data-title'),
+                    sizeBytes: item.getAttribute('data-size-bytes'),
+                    lastModified: item.getAttribute('data-last-modified-ts'),
                     documentType: item.getAttribute('data-document-type'),
                     folder: item.getAttribute('data-folder'),
                     publicUrl: item.getAttribute('data-public-url')
@@ -740,6 +742,8 @@
         this.dropzone.on('sending', this.proxy(this.uploadSending))
         this.dropzone.on('error', this.proxy(this.uploadError))
         this.dropzone.on('success', this.proxy(this.uploadSuccess))
+
+        Snowboard.globalEvent("widgets.mediamanager.initUploader", this);
     }
 
     MediaManager.prototype.destroyUploader = function() {

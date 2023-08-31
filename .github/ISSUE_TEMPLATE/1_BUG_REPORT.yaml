@@ -15,6 +15,7 @@ body:
       description: Please select the Winter CMS build that you encountered your issue with. You can find the version in the **Updates & Plugins** section of the Settings page of the Backend, or by running the `php artisan winter:version` command.
       options:
         - dev-develop
+        - 1.2
         - 1.1
         - 1.0 (please try updating first)
         - Other (please specify below)
@@ -26,6 +27,7 @@ body:
       label: PHP Version
       description: Please provide us the branch of PHP version. For example, for PHP version 7.4.9, select `7.4`, or for PHP version 8.0.1, select `8.0`.
       options:
+        - 8.1
         - 8.0
         - 7.4
         - 7.3
@@ -71,8 +73,3 @@ body:
     attributes:
       label: Workaround
       description: If you have a workaround, please detail it here, for the benefit of other users who encounter the issue.
-  - type: textarea
-    id: other_details
-    attributes:
-      label: Any further details?
-      description: If some other information is needed to describe this issue, please specify it here.

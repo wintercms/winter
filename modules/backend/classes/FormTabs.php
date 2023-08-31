@@ -3,6 +3,7 @@
 use IteratorAggregate;
 use ArrayIterator;
 use ArrayAccess;
+use Traversable;
 
 /**
  * Form Tabs definition
@@ -236,9 +237,8 @@ class FormTabs implements IteratorAggregate, ArrayAccess
 
     /**
      * Get an iterator for the items.
-     * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         return new ArrayIterator(
             $this->suppressTabs
@@ -250,7 +250,7 @@ class FormTabs implements IteratorAggregate, ArrayAccess
     /**
      * ArrayAccess implementation
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->fields[$offset] = $value;
     }
@@ -258,7 +258,7 @@ class FormTabs implements IteratorAggregate, ArrayAccess
     /**
      * ArrayAccess implementation
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->fields[$offset]);
     }
@@ -266,7 +266,7 @@ class FormTabs implements IteratorAggregate, ArrayAccess
     /**
      * ArrayAccess implementation
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->fields[$offset]);
     }
@@ -274,7 +274,7 @@ class FormTabs implements IteratorAggregate, ArrayAccess
     /**
      * ArrayAccess implementation
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         return $this->fields[$offset] ?? null;
     }

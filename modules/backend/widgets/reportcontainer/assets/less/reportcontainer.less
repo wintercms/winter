@@ -91,7 +91,7 @@
                     padding-left: 18px;
                 }
 
-                .drag-handle { 
+                .drag-handle {
                     .opacity(1);
                 }
             }
@@ -107,7 +107,7 @@
             &.width-9 {width: 74.97%;}
             &.width-10 {width: 83.3%;}
             &.width-11 {width: 91.63%;}
-            &.width-12 {width: 100%;}			
+            &.width-12 {width: 100%;}
 
             &.dragged {
                 .transition-duration(0s) !important;
@@ -176,13 +176,11 @@
     }
 
     &.isotope {
-      .transition-property(height, width);
+        transition-property: height, width;
     }
 
     &.isotope .isotope-item {
-      -webkit-transition-property: -webkit-transform, opacity;
-         -moz-transition-property:    -moz-transform, opacity;
-              transition-property:         transform, opacity;
+        transition-property: transform, opacity;
     }
 }
 
@@ -190,7 +188,7 @@
     .report-container {
         ul .item {
             // The breakpoint should be defined in the CSS and JS,
-            // otherwise some widgets can't calculate the width properly, 
+            // otherwise some widgets can't calculate the width properly,
             // as the JS is applied too late.
             width: 100% !important;
         }

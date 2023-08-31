@@ -10,6 +10,7 @@ use ApplicationException;
 use SystemException;
 use System\Models\MediaItem;
 use System\Models\Parameter;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Winter\Storm\Argon\Argon;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
@@ -657,7 +658,7 @@ class MediaLibrary
      * @param string $path Specifies a path to process.
      * @return string Returns a processed string.
      */
-    protected function getMediaPath($path)
+    public function getMediaPath($path)
     {
         return $this->storageFolder.$path;
     }
@@ -802,7 +803,7 @@ class MediaLibrary
      * communicating with the remote storage.
      * @return \Illuminate\Contracts\Filesystem\Filesystem Returns the storage disk object.
      */
-    protected function getStorageDisk()
+    public function getStorageDisk(): FilesystemAdapter
     {
         if ($this->storageDisk) {
             return $this->storageDisk;

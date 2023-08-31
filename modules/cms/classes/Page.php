@@ -117,7 +117,7 @@ class Page extends CmsCompoundObject
      * Helper that makes a URL for a page in the active theme.
      * @param mixed $page Specifies the Cms Page file name.
      * @param array $params Route parameters to consider in the URL.
-     * @return string
+     * @return string|null
      */
     public static function url($page, array $params = [])
     {
@@ -182,26 +182,23 @@ class Page extends CmsCompoundObject
      *   return all available records.
      * - items - an array of arrays with the same keys (url, isActive, items) + the title key.
      *   The items array should be added only if the $item's $nesting property value is TRUE.
-     * @param \Winter\Pages\Classes\MenuItem $item Specifies the menu item.
-     * @param string $url Specifies the current page URL, normalized, in lower case
-     * @param \Cms\Classes\Theme $theme Specifies the current theme.
-     * The URL is specified relative to the website root, it includes the subdirectory name, if any.
-     * @return mixed Returns an array. Returns null if the item cannot be resolved.
+     *
+     * @param \Winter\Sitemap\Classes\DefinitionItem|\Winter\Pages\Classes\MenuItem $item Specifies the menu item.
      */
-    public static function resolveMenuItem($item, string $url, Theme $theme)
+    public static function resolveMenuItem(object $item, string $url, Theme $theme): ?array
     {
         $result = null;
 
         if ($item->type === 'cms-page') {
             if (!$item->reference) {
-                return;
+                return null;
             }
 
             $page = self::loadCached($theme, $item->reference);
 
             // Remove hidden CMS pages from menus when backend user is logged out
             if ($page && $page->is_hidden && !BackendAuth::getUser()) {
-                return;
+                return null;
             }
 
             $controller = Controller::getController() ?: new Controller;
@@ -209,7 +206,7 @@ class Page extends CmsCompoundObject
 
             $result = [];
             $result['url'] = $pageUrl;
-            $result['isActive'] = $pageUrl == $url;
+            $result['isActive'] = rtrim($pageUrl, '/') === rtrim($url, '/');
             $result['mtime'] = $page ? $page->mtime : null;
         }
 

@@ -2,6 +2,7 @@
 
 use Db;
 use Input;
+use Event;
 use Request;
 use Response;
 use Validator;
@@ -172,7 +173,7 @@ class FileUpload extends FormWidgetBase
         $record = false;
 
         if (!empty(post('file_id'))) {
-            $record = $this->getRelationModel()::find(post('file_id')) ?: false;
+            $record = $this->getRelationModel()->find(post('file_id')) ?: false;
         }
 
         return $record;
@@ -180,10 +181,8 @@ class FileUpload extends FormWidgetBase
 
     /**
      * Get the instantiated config Form widget
-     *
-     * @return void
      */
-    public function getConfigFormWidget()
+    public function getConfigFormWidget(): Form
     {
         if ($this->configFormWidget) {
             return $this->configFormWidget;
@@ -221,9 +220,8 @@ class FileUpload extends FormWidgetBase
 
     /**
      * Returns the display mode for the file upload. Eg: file-multi, image-single, etc.
-     * @return string
      */
-    protected function getDisplayMode()
+    protected function getDisplayMode(): string
     {
         $mode = $this->getConfig('mode', 'image');
 
@@ -232,16 +230,15 @@ class FileUpload extends FormWidgetBase
         }
 
         $relationType = $this->getRelationType();
-        $mode .= ($relationType == 'attachMany' || $relationType == 'morphMany') ? '-multi' : '-single';
+        $mode .= ($relationType === 'attachMany' || $relationType === 'morphMany') ? '-multi' : '-single';
 
         return $mode;
     }
 
     /**
      * Returns the escaped and translated prompt text to display according to the type.
-     * @return string
      */
-    protected function getPromptText()
+    protected function getPromptText(): string
     {
         if ($this->prompt === null) {
             $isMulti = ends_with($this->getDisplayMode(), 'multi');
@@ -256,10 +253,8 @@ class FileUpload extends FormWidgetBase
     /**
      * Returns the CSS dimensions for the uploaded image,
      * uses auto where no dimension is provided.
-     * @param string $mode
-     * @return string
      */
-    protected function getCssDimensions($mode = null)
+    protected function getCssDimensions(?string $mode = null): string
     {
         if (!$this->imageWidth && !$this->imageHeight) {
             return '';
@@ -269,20 +264,19 @@ class FileUpload extends FormWidgetBase
 
         if ($mode == 'block') {
             $cssDimensions .= $this->imageWidth
-                ? 'width: '.$this->imageWidth.'px;'
-                : 'width: '.$this->imageHeight.'px;';
+                ? 'width: ' . $this->imageWidth . 'px;'
+                : 'width: ' . $this->imageHeight . 'px;';
 
             $cssDimensions .= ($this->imageHeight)
-                ? 'max-height: '.$this->imageHeight.'px;'
+                ? 'max-height: ' . $this->imageHeight . 'px;'
                 : 'height: auto;';
-        }
-        else {
+        } else {
             $cssDimensions .= $this->imageWidth
-                ? 'width: '.$this->imageWidth.'px;'
+                ? 'width: ' . $this->imageWidth . 'px;'
                 : 'width: auto;';
 
             $cssDimensions .= ($this->imageHeight)
-                ? 'max-height: '.$this->imageHeight.'px;'
+                ? 'max-height: ' . $this->imageHeight . 'px;'
                 : 'height: auto;';
         }
 
@@ -332,18 +326,19 @@ class FileUpload extends FormWidgetBase
     /**
      * Removes a file attachment.
      */
-    public function onRemoveAttachment()
+    public function onRemoveAttachment(): void
     {
-        $fileModel = $this->getRelationModel();
-        if (($fileId = post('file_id')) && ($file = $fileModel::find($fileId))) {
+        if ($file = $this->getFileRecord()) {
             $this->getRelationObject()->remove($file, $this->sessionKey);
         }
     }
 
     /**
      * Sorts file attachments.
+     *
+     * Expects (array) sortOrder [$fileId => $fileOrder] in the POST data.
      */
-    public function onSortAttachments()
+    public function onSortAttachments(): void
     {
         if ($sortData = post('sortOrder')) {
             $ids = array_keys($sortData);
@@ -356,18 +351,18 @@ class FileUpload extends FormWidgetBase
 
     /**
      * Loads the configuration form for an attachment, allowing title and description to be set.
+     *
+     * @throws ApplicationException if unable to find the file record
      */
-    public function onLoadAttachmentConfig()
+    public function onLoadAttachmentConfig(): string
     {
-        $fileModel = $this->getRelationModel();
         if ($file = $this->getFileRecord()) {
             $file = $this->decorateFileAttributes($file);
 
             $this->vars['file'] = $file;
             $this->vars['displayMode'] = $this->getDisplayMode();
             $this->vars['cssDimensions'] = $this->getCssDimensions();
-            $this->vars['relationManageId'] = post('manage_id');
-            $this->vars['relationField'] = post('_relation_field');
+            $this->vars['parentElementId'] = $this->getId();
 
             return $this->makePartial('config_form');
         }
@@ -423,40 +418,47 @@ class FileUpload extends FormWidgetBase
     public function onUpload()
     {
         try {
-            if (!Input::hasFile('file_data')) {
-                throw new ApplicationException('File missing from request');
-            }
-
-            $fileModel = $this->getRelationModel();
-            $uploadedFile = Input::file('file_data');
-
-            $validationRules = ['max:'.$fileModel::getMaxFilesize()];
-            if ($fileTypes = $this->getAcceptedFileTypes()) {
-                $validationRules[] = 'extensions:'.$fileTypes;
-            }
-
-            if ($this->mimeTypes) {
-                $validationRules[] = 'mimes:'.$this->mimeTypes;
-            }
-
-            $validation = Validator::make(
-                ['file_data' => $uploadedFile],
-                ['file_data' => $validationRules]
-            );
-
-            if ($validation->fails()) {
-                throw new ValidationException($validation);
-            }
-
-            if (!$uploadedFile->isValid()) {
-                throw new ApplicationException('File is not valid');
-            }
-
+            $file = $this->getRelationModel();
             $fileRelation = $this->getRelationObject();
-
-            $file = $fileModel;
-            $file->data = $uploadedFile;
             $file->is_public = $fileRelation->isPublic();
+
+            /**
+             * @event backend.formwidgets.fileupload.onUpload
+             * Provides an opportunity to process the file upload using custom logic.
+             *
+             * Example usage ()
+             */
+            if (!($data = Event::fire('backend.formwidgets.fileupload.onUpload', [$this, $file], true))) {
+                if (!Input::hasFile('file_data')) {
+                    throw new ApplicationException('File missing from request');
+                }
+
+                $validationRules = ['max:'.$file::getMaxFilesize()];
+                $data = Input::file('file_data');
+
+                if (!$data->isValid()) {
+                    throw new ApplicationException('File is not valid');
+                }
+
+                if ($fileTypes = $this->getAcceptedFileTypes()) {
+                    $validationRules[] = 'extensions:'.$fileTypes;
+                }
+
+                if ($this->mimeTypes) {
+                    $validationRules[] = 'mimes:'.$this->mimeTypes;
+                }
+
+                $validation = Validator::make(
+                    ['file_data' => $data],
+                    ['file_data' => $validationRules]
+                );
+
+                if ($validation->fails()) {
+                    throw new ValidationException($validation);
+                }
+            }
+
+            $file->data = $data;
             $file->save();
 
             /**
@@ -516,7 +518,7 @@ class FileUpload extends FormWidgetBase
     {
         $size = ini_get('upload_max_filesize');
         if (preg_match('/^([\d\.]+)([KMG])$/i', $size, $match)) {
-            $pos = array_search($match[2], ['K', 'M', 'G']);
+            $pos = array_search(strtoupper($match[2]), ['K', 'M', 'G']);
             if ($pos !== false) {
                 $size = $match[1] * pow(1024, $pos + 1);
             }

@@ -39,11 +39,10 @@ trait AssetMaker
     }
 
     /**
-     * Outputs `<link>` and `<script>` tags to load assets previously added with addJs and addCss method calls
-     * @param string $type Return an asset collection of a given type (css, rss, js) or null for all.
-     * @return string
+     * Outputs `<link>` and `<script>` tags to load assets previously added
+     * with addJs, addCss, & addRss method calls depending on the provided $type
      */
-    public function makeAssets($type = null)
+    public function makeAssets(string $type = null): ?string
     {
         if ($type != null) {
             $type = strtolower($type);
@@ -296,11 +295,17 @@ trait AssetMaker
             $assetPath = $this->assetPath;
         }
 
-        if (substr($fileName, 0, 1) == '/' || $assetPath === null) {
-            return $fileName;
+        // Process absolute or symbolized paths
+        $publicPath = File::localToPublic(File::symbolizePath($fileName));
+        if ($publicPath) {
+            $fileName = $publicPath;
         }
 
-        return $assetPath . '/' . $fileName;
+        if (substr($fileName, 0, 1) == '/' || $assetPath === null) {
+            return Url::asset($fileName);
+        }
+
+        return Url::asset($assetPath . '/' . $fileName);
     }
 
     /**
@@ -377,9 +382,9 @@ trait AssetMaker
         }
     }
 
-    protected function getLocalPath(string $relativePath)
+    protected function getLocalPath(?string $relativePath)
     {
-        $relativePath = File::symbolizePath($relativePath);
+        $relativePath = File::symbolizePath((string) $relativePath);
         if (!starts_with($relativePath, [base_path()])) {
             $relativePath = base_path($relativePath);
         }

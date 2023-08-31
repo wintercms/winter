@@ -405,6 +405,11 @@ class AssetList extends WidgetBase
     {
         $assetsPath = $this->getAssetsPath();
 
+        // theme dir does not exist (i.e. in a child theme without an assets directory
+        if (!is_dir(dirname($assetsPath))) {
+            return [];
+        }
+
         if (!file_exists($assetsPath) || !is_dir($assetsPath)) {
             if (!File::makeDirectory($assetsPath)) {
                 throw new ApplicationException(Lang::get(
@@ -433,7 +438,7 @@ class AssetList extends WidgetBase
 
     protected function getThemeFileUrl($path)
     {
-        return Url::to('themes/'.$this->theme->getDirName().'/assets'.$path);
+        return Url::asset('themes/'.$this->theme->getDirName().'/assets'.$path);
     }
 
     public function getCurrentRelativePath()
@@ -534,6 +539,13 @@ class AssetList extends WidgetBase
                 ];
             }
         }
+
+        // Sort directories & files in alphabetical order
+        $sortByName = function ($a, $b) {
+            return strcmp($a->name, $b->name);
+        };
+        usort($result, $sortByName);
+        usort($files, $sortByName);
 
         foreach ($files as $file) {
             $result[] = $file;

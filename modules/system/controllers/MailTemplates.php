@@ -21,13 +21,8 @@ class MailTemplates extends Controller
      */
     public $implement = [
         \Backend\Behaviors\FormController::class,
-        \Backend\Behaviors\ListController::class
+        \Backend\Behaviors\ListController::class,
     ];
-
-    /**
-     * @var array `FormController` configuration.
-     */
-    public $formConfig = 'config_form.yaml';
 
     /**
      * @var array `ListController` configuration.

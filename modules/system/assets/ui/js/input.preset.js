@@ -35,12 +35,12 @@
         'U', 'Ứ': 'U', 'Ừ': 'U', 'Ử': 'U', 'Ữ': 'U', 'Ự': 'U', 'Ý': 'Y', 'Ỳ': 'Y',
         'Ỷ': 'Y', 'Ỹ': 'Y', 'Ỵ': 'Y', 'á': 'a', 'à': 'a', 'ã': 'a', 'ả': 'a', 'ạ':
         'a', 'ắ': 'a', 'ằ': 'a', 'ẵ': 'a', 'ẳ': 'a', 'ặ': 'a', 'ấ': 'a', 'ầ': 'a',
-        'ẫ': 'a', 'ẩ': 'a', 'ậ': 'a', 'đ': 'd', 'é': 'e', 'è': 'e', 'ẽ': 'e', 'ẻ': 
-        'e', 'ẹ': 'e', 'ế': 'e', 'ề': 'e', 'ễ': 'e', 'ể': 'e', 'ệ': 'e', 'ó': 'o', 
-        'ò': 'o', 'ỏ': 'o', 'õ': 'o', 'ọ': 'o', 'ố': 'o', 'ồ': 'o', 'ổ': 'o', 'ỗ': 
-        'o', 'ộ': 'o', 'ơ': 'o', 'ớ': 'o', 'ờ': 'o', 'ở': 'o', 'ỡ': 'o', 'ợ': 'o', 
-        'í': 'i', 'ì': 'i', 'ỉ': 'i', 'ĩ': 'i', 'ị': 'i', 'ú': 'u', 'ù': 'u', 'ủ': 
-        'u', 'ũ': 'u', 'ụ': 'u', 'ư': 'u', 'ứ': 'u', 'ừ': 'u', 'ử': 'u', 'ữ': 'u', 
+        'ẫ': 'a', 'ẩ': 'a', 'ậ': 'a', 'đ': 'd', 'é': 'e', 'è': 'e', 'ẽ': 'e', 'ẻ':
+        'e', 'ẹ': 'e', 'ế': 'e', 'ề': 'e', 'ễ': 'e', 'ể': 'e', 'ệ': 'e', 'ó': 'o',
+        'ò': 'o', 'ỏ': 'o', 'õ': 'o', 'ọ': 'o', 'ố': 'o', 'ồ': 'o', 'ổ': 'o', 'ỗ':
+        'o', 'ộ': 'o', 'ơ': 'o', 'ớ': 'o', 'ờ': 'o', 'ở': 'o', 'ỡ': 'o', 'ợ': 'o',
+        'í': 'i', 'ì': 'i', 'ỉ': 'i', 'ĩ': 'i', 'ị': 'i', 'ú': 'u', 'ù': 'u', 'ủ':
+        'u', 'ũ': 'u', 'ụ': 'u', 'ư': 'u', 'ứ': 'u', 'ừ': 'u', 'ử': 'u', 'ữ': 'u',
         'ự': 'u', 'ý': 'y', 'ỳ': 'y', 'ỷ': 'y', 'ỹ': 'y', 'ỵ': 'y'
     },
     LATIN_MAP = {
@@ -195,7 +195,7 @@
         }
     }
 
-    
+
 
     var InputPreset = function (element, options) {
         var $el = this.$el = $(element)
@@ -222,26 +222,26 @@
 
         this.$src = $(options.inputPreset, parent)
 
-        this.$src.on('input paste', function(event) { 
-            if (self.cancelled) 
-                return 
- 
-            var timeout = event.type === 'paste' ? 100 : 0 
-            var updateValue = function(self, el, prefix) { 
+        this.$src.on('input paste', function(event) {
+            if (self.cancelled)
+                return
+
+            var timeout = event.type === 'paste' ? 100 : 0
+            var updateValue = function(self, el, prefix) {
                 if (el.data('update') === false) {
                     return
                 }
-                el   
-                    .val(prefix + self.formatValue()) 
-                    .trigger('oc.inputPreset.afterUpdate') 
-            } 
- 
-            var src = $(this) 
-            setTimeout(function() { 
-                $el.trigger('oc.inputPreset.beforeUpdate', [src]) 
-                setTimeout(updateValue, 100, self, $el, prefix) 
-            }, timeout) 
-        }) 
+                el
+                    .val(prefix + self.formatValue())
+                    .trigger('oc.inputPreset.afterUpdate')
+            }
+
+            var src = $(this)
+            setTimeout(function() {
+                $el.trigger('oc.inputPreset.beforeUpdate', [src])
+                setTimeout(updateValue, 100, self, $el, prefix)
+            }, timeout)
+        })
 
         this.$el.on('change', function() {
             self.cancelled = true
@@ -263,10 +263,10 @@
         }
 
         if (this.options.inputPresetType == 'camel') {
-            var value = this.toCamel(this.$src.val())
+            var value = this.toCamel(this.$src.val(), this.$el.attr('maxlength'))
         }
         else {
-            var value = this.slugify(this.$src.val())
+            var value = this.slugify(this.$src.val(), this.$el.attr('maxlength'))
         }
 
         if (this.options.inputPresetType == 'url') {

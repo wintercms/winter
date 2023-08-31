@@ -8,6 +8,7 @@ use Http;
 use Cache;
 use Schema;
 use Config;
+use Exception;
 use ApplicationException;
 use Cms\Classes\ThemeManager;
 use System\Models\Parameter;
@@ -15,7 +16,8 @@ use System\Models\PluginVersion;
 use System\Helpers\Cache as CacheHelper;
 use Winter\Storm\Filesystem\Zip;
 use Carbon\Carbon;
-use Exception;
+use Illuminate\Console\View\Components\Error;
+use Illuminate\Console\View\Components\Info;
 
 /**
  * Update manager
@@ -110,7 +112,7 @@ class UpdateManager
         /*
          * Ensure temp directory exists
          */
-        if (!File::isDirectory($this->tempDirectory)) {
+        if (!File::isDirectory($this->tempDirectory) && File::isWritable($this->tempDirectory)) {
             File::makeDirectory($this->tempDirectory, 0777, true);
         }
     }
@@ -132,69 +134,77 @@ class UpdateManager
      */
     public function update()
     {
-        $firstUp = !Schema::hasTable($this->getMigrationTableName());
-        if ($firstUp) {
-            $this->repository->createRepository();
-            $this->note('Migration table created');
-        }
-
-        /*
-         * Update modules
-         */
-        $modules = Config::get('cms.loadModules', []);
-        foreach ($modules as $module) {
-            $this->migrateModule($module);
-        }
-
-        $plugins = $this->pluginManager->getPlugins();
-
-        /*
-         * Replace plugins
-         */
-        foreach ($plugins as $code => $plugin) {
-            if (!$replaces = $plugin->getReplaces()) {
-                continue;
+        try {
+            $firstUp = !Schema::hasTable($this->getMigrationTableName());
+            if ($firstUp) {
+                $this->repository->createRepository();
+                $this->out('', true);
+                $this->write(Info::class, 'Migration table created');
             }
-            // TODO: add full support for plugins replacing multiple plugins
-            if (count($replaces) > 1) {
-                throw new ApplicationException(Lang::get('system::lang.plugins.replace.multi_install_error'));
-            }
-            foreach ($replaces as $replace) {
-                $this->versionManager->replacePlugin($plugin, $replace);
-            }
-        }
 
-        /*
-         * Update plugins
-         */
-        foreach ($plugins as $code => $plugin) {
-            $this->updatePlugin($code);
-        }
-
-        Parameter::set('system::update.count', 0);
-        CacheHelper::clear();
-
-        /*
-         * Seed modules
-         */
-        if ($firstUp) {
+            /*
+            * Update modules
+            */
             $modules = Config::get('cms.loadModules', []);
             foreach ($modules as $module) {
-                $this->seedModule($module);
+                $this->migrateModule($module);
             }
-        }
 
-        // Set replacement warning messages
-        foreach ($this->pluginManager->getReplacementMap() as $alias => $plugin) {
-            if ($this->pluginManager->getActiveReplacementMap($alias)) {
-                $this->addMessage($plugin, Lang::get('system::lang.updates.update_warnings_plugin_replace_cli', [
-                    'alias' => '<info>' . $alias . '</info>'
-                ]));
+            $plugins = $this->pluginManager->getPlugins();
+
+            /*
+            * Replace plugins
+            */
+            foreach ($plugins as $code => $plugin) {
+                if (!$replaces = $plugin->getReplaces()) {
+                    continue;
+                }
+                // TODO: add full support for plugins replacing multiple plugins
+                if (count($replaces) > 1) {
+                    throw new ApplicationException(Lang::get('system::lang.plugins.replace.multi_install_error'));
+                }
+                foreach ($replaces as $replace) {
+                    $this->versionManager->replacePlugin($plugin, $replace);
+                }
             }
-        }
 
-        // Print messages returned by migrations / seeders
-        $this->printMessages();
+            /*
+            * Seed modules
+            */
+            if ($firstUp) {
+                $modules = Config::get('cms.loadModules', []);
+                foreach ($modules as $module) {
+                    $this->seedModule($module);
+                }
+            }
+
+            /*
+            * Update plugins
+            */
+            foreach ($plugins as $code => $plugin) {
+                $this->updatePlugin($code);
+            }
+
+            Parameter::set('system::update.count', 0);
+            CacheHelper::clear();
+
+            // Set replacement warning messages
+            foreach ($this->pluginManager->getReplacementMap() as $alias => $plugin) {
+                if ($this->pluginManager->getActiveReplacementMap($alias)) {
+                    $this->addMessage($plugin, Lang::get('system::lang.updates.update_warnings_plugin_replace_cli', [
+                        'alias' => '<info>' . $alias . '</info>'
+                    ]));
+                }
+            }
+
+            $this->out('', true);
+            $this->write(Info::class, 'Migration complete.');
+        } catch (\Throwable $ex) {
+            throw $ex;
+        } finally {
+            // Print messages returned by migrations / seeders
+            $this->printMessages();
+        }
 
         return $this;
     }
@@ -454,7 +464,9 @@ class UpdateManager
             $this->migrator->setOutput($this->notesOutput);
         }
 
-        $this->note($module);
+        $this->out('', true);
+        $this->out(sprintf('<info>Migrating %s module...</info>', $module), true);
+        $this->out('', true);
 
         $this->migrator->run(base_path() . '/modules/'.strtolower($module).'/database/migrations');
 
@@ -473,6 +485,10 @@ class UpdateManager
             return;
         }
 
+        $this->out('', true);
+        $this->out(sprintf('<info>Seeding %s module...</info>', $module), true);
+        $this->out('', true);
+
         $seeder = App::make($className);
         $return = $seeder->run();
 
@@ -480,7 +496,8 @@ class UpdateManager
             $this->addMessage($className, $return);
         }
 
-        $this->note(sprintf('<info>Seeded %s</info> ', $module));
+        $this->write(Info::class, sprintf('Seeded %s', $module));
+
         return $this;
     }
 
@@ -565,11 +582,12 @@ class UpdateManager
          * Update the plugin database and version
          */
         if (!($plugin = $this->pluginManager->findByIdentifier($name))) {
-            $this->note('<error>Unable to find:</error> ' . $name);
+            $this->write(Error::class, sprintf('Unable to find plugin %s', $name));
             return;
         }
 
-        $this->note($name);
+        $this->out(sprintf('<info>Migrating %s (%s) plugin...</info>', Lang::get($plugin->pluginDetails()['name']), $name));
+        $this->out('', true);
 
         $this->versionManager->setNotesOutput($this->notesOutput);
 
@@ -593,7 +611,7 @@ class UpdateManager
         if (!($plugin = $this->pluginManager->findByIdentifier($name))
             && $this->versionManager->purgePlugin($name)
         ) {
-            $this->note('<info>Purged from database:</info> ' . $name);
+            $this->write(Info::class, sprintf('%s purged from database', $name));
             return $this;
         }
 
@@ -602,16 +620,20 @@ class UpdateManager
         }
 
         if ($this->versionManager->removePlugin($plugin, $stopOnVersion, true)) {
-            $this->note('<info>Rolled back:</info> ' . $name);
+            $this->write(Info::class, sprintf('%s rolled back', $name));
 
             if ($currentVersion = $this->versionManager->getCurrentVersion($plugin)) {
-                $this->note('<info>Current Version:</info> ' . $currentVersion . ' (' . $this->versionManager->getCurrentVersionNote($plugin) . ')');
+                $this->write(Info::class, sprintf(
+                    'Current Version: %s (%s)',
+                    $currentVersion,
+                    $this->versionManager->getCurrentVersionNote($plugin)
+                ));
             }
 
             return $this;
         }
 
-        $this->note('<error>Unable to find:</error> ' . $name);
+        $this->write(Error::class, sprintf('Unable to find plugin %s', $name));
 
         return $this;
     }
@@ -816,7 +838,16 @@ class UpdateManager
      */
     public function requestChangelog()
     {
-        $result = Http::get($this->createServerUrl('changelog'));
+        $build = Parameter::get('system::core.build');
+
+        // Determine branch
+        if (!is_null($build)) {
+            $branch = explode('.', $build);
+            array_pop($branch);
+            $branch = implode('.', $branch);
+        }
+
+        $result = Http::get($this->createServerUrl('changelog' . ((!is_null($branch)) ? '/' . $branch : '')));
 
         if ($result->code == 404) {
             throw new ApplicationException(Lang::get('system::lang.server.response_empty'));
@@ -844,14 +875,32 @@ class UpdateManager
     //
 
     /**
-     * Raise a note event for the migrator.
-     * @param string $message
-     * @return self
+     * Writes output to the console using a Laravel CLI View component.
+     *
+     * @param \Illuminate\Console\View\Components\Component $component
+     * @param array $arguments
+     * @return static
      */
-    protected function note($message)
+    protected function write($component, ...$arguments)
     {
         if ($this->notesOutput !== null) {
-            $this->notesOutput->writeln($message);
+            with(new $component($this->notesOutput))->render(...$arguments);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Writes output to the console.
+     *
+     * @param string $message
+     * @param bool $newline
+     * @return static
+     */
+    protected function out($message, $newline = false)
+    {
+        if ($this->notesOutput !== null) {
+            $this->notesOutput->write($message, $newline);
         }
 
         return $this;
@@ -884,6 +933,11 @@ class UpdateManager
         $result = Http::post($this->createServerUrl($uri), function ($http) use ($postData) {
             $this->applyHttpAttributes($http, $postData);
         });
+
+        // @TODO: Refactor when marketplace API finalized
+        if ($result->body === 'Package not found') {
+            $result->code = 500;
+        }
 
         if ($result->code == 404) {
             throw new ApplicationException(Lang::get('system::lang.server.response_not_found'));
@@ -990,7 +1044,8 @@ class UpdateManager
         $postData['server'] = base64_encode(serialize([
             'php'   => PHP_VERSION,
             'url'   => Url::to('/'),
-            'since' => PluginVersion::orderBy('created_at')->value('created_at')
+            // TODO: Store system boot date in `Parameter`
+            'since' => PluginVersion::orderBy('created_at')->first()->created_at
         ]));
 
         if ($projectId = Parameter::get('system::project.id')) {
@@ -1080,15 +1135,14 @@ class UpdateManager
             return;
         }
 
-        // Add a line break
-        $this->note('');
-
         foreach ($this->messages as $class => $messages) {
-            $this->note(sprintf('<info>%s reported:</info>', $class));
+            $this->write(Info::class, sprintf('%s reported the following:', $class));
 
             foreach ($messages as $message) {
-                $this->note(' - ' . (string) $message);
+                $this->out('    - ' . $message, true);
             }
+
+            $this->out('', true);
         }
     }
 }

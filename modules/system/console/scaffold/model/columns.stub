@@ -1,0 +1,19 @@
+# ===================================
+#  List Column Definitions
+# ===================================
+
+columns:
+    id:
+        label: '{{ plugin_id }}::lang.models.general.id'
+        searchable: true
+    created_at:
+        label: '{{ plugin_id }}::lang.models.general.created_at'
+        type: datetime
+        searchable: true
+        sortable: true
+        invisible: true
+    updated_at:
+        label: '{{ plugin_id }}::lang.models.general.updated_at'
+        type: datetime
+        searchable: true
+        sortable: true

@@ -120,9 +120,8 @@ class TagList extends FormWidgetBase
     /**
      * Returns an array suitable for saving against a relation (array of keys).
      * This method also creates non-existent tags.
-     * @return array
      */
-    protected function hydrateRelationSaveValue($names)
+    protected function hydrateRelationSaveValue($names): ?array
     {
         if (!$names) {
             return $names;

@@ -31,7 +31,7 @@ class WinterUp extends Command
         parent::__construct();
 
         // Register aliases for backwards compatibility with October
-        $this->setAliases(['october:up']);
+        $this->setAliases(['october:up', 'migrate']);
     }
 
     /**
@@ -43,7 +43,6 @@ class WinterUp extends Command
 
         UpdateManager::instance()
             ->setNotesOutput($this->output)
-            ->update()
-        ;
+            ->update();
     }
 }

@@ -1,0 +1,12 @@
+{
+    "devDependencies": {
+        "laravel-mix": "^6.0.41"
+    },
+    "workspaces": {
+        "packages": [
+            "modules/system/tests/fixtures/plugins/mix/testa",
+            "modules/system/tests/fixtures/plugins/mix/testb",
+            "modules/system/tests/fixtures/plugins/mix/testc"
+        ]
+    }
+}

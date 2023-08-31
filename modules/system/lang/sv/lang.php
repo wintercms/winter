@@ -133,16 +133,6 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail-sökväg',
         'sendmail_path_comment' => 'Vänligen ange sökvägen till sendmail',
-        'mailgun' => 'Mailgun',
-        'mailgun_domain' => 'Mailgun domän',
-        'mailgun_domain_comment' => 'Vänligen ange Mailgun domännamnet.',
-        'mailgun_secret' => 'Mailgun hemlighet',
-        'mailgun_secret_comment' => 'Ange din Mailgun API-nyckel.',
-        'mandrill' => 'Mandrill',
-        'mandrill_secret' => 'Mandrill hemlighet',
-        'mandrill_secret_comment' => 'Ange din API-nyckel.',
-        'drivers_hint_header' => 'Drivrutiner är inte installerade',
-        'drivers_hint_content' => 'Den här e-postmetoden kräver att tillägget ":plugin" är installerat innan du kan skicka e-post.'
     ],
     'mail_templates' => [
         'menu_label' => 'E-postmall',

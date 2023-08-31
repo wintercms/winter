@@ -43,4 +43,16 @@ return [
 
     'allowDeepSymlinks' => false,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Enable Snowboard debugging
+    |--------------------------------------------------------------------------
+    |
+    | By default, Snowboard debugging and client-side logging is disabled.
+    |
+    | If you wish to enable Snowboard debugging, set this value to `true`.
+    |
+    */
+
+    'debugSnowboard' => env('DEBUG_SNOWBOARD', false),
 ];

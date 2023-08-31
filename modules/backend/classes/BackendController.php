@@ -1,17 +1,17 @@
 <?php namespace Backend\Classes;
 
-use Str;
 use App;
-use File;
-use View;
-use Event;
+use Closure;
 use Config;
+use Event;
+use File;
+use Illuminate\Routing\Controller as ControllerBase;
 use Request;
 use Response;
-use Illuminate\Routing\Controller as ControllerBase;
-use Winter\Storm\Router\Helper as RouterHelper;
+use Str;
 use System\Classes\PluginManager;
-use Closure;
+use View;
+use Winter\Storm\Router\Helper as RouterHelper;
 
 /**
  * This is the master controller for all back-end pages.
@@ -104,14 +104,6 @@ class BackendController extends ControllerBase
     }
 
     /**
-     * Extend this object properties upon construction.
-     */
-    public static function extend(Closure $callback)
-    {
-        self::extendableExtendCallback($callback);
-    }
-
-    /**
      * @inheritDoc
      */
     public function callAction($method, $parameters)
@@ -148,8 +140,6 @@ class BackendController extends ControllerBase
      */
     public function run($url = null)
     {
-        $params = RouterHelper::segmentizeUrl($url);
-
         // Handle NotFoundHttpExceptions in the backend (usually triggered by abort(404))
         Event::listen('exception.beforeRender', function ($exception, $httpCode, $request) {
             if (!$this->cmsHandling && $exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
@@ -308,5 +298,33 @@ class BackendController extends ControllerBase
     {
         return (isset($options['only']) && !in_array($method, (array) $options['only'])) ||
             (!empty($options['except']) && in_array($method, (array) $options['except']));
+    }
+
+    public function __call($name, $params)
+    {
+        if ($name === 'extend') {
+            if (empty($params[0]) || !is_callable($params[0])) {
+                throw new \InvalidArgumentException('The extend() method requires a callback parameter or closure.');
+            }
+            if ($params[0] instanceof Closure) {
+                return $params[0]->call($this, $params[1] ?? $this);
+            }
+            return Closure::fromCallable($params[0])->call($this, $params[1] ?? $this);
+        }
+
+        return $this->extendableCall($name, $params);
+    }
+
+    public static function __callStatic($name, $params)
+    {
+        if ($name === 'extend') {
+            if (empty($params[0])) {
+                throw new \InvalidArgumentException('The extend() method requires a callback parameter or closure.');
+            }
+            self::extendableExtendCallback($params[0], $params[1] ?? false, $params[2] ?? null);
+            return;
+        }
+
+        return self::extendableCallStatic($name, $params);
     }
 }

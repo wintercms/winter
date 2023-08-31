@@ -58,7 +58,7 @@ class WinterFresh extends Command
 
         $demoPluginPath = plugins_path().'/winter/demo';
         if (File::exists($demoPluginPath)) {
-            Artisan::call('plugin:remove', ['name' => 'Winter.Demo', '--force' => true]);
+            Artisan::call('plugin:remove', ['plugin' => 'Winter.Demo', '--force' => true]);
             $pluginRemoved = true;
         }
 
@@ -75,6 +75,7 @@ class WinterFresh extends Command
 
     /**
      * Get the console command options.
+     * @return array
      */
     protected function getOptions()
     {

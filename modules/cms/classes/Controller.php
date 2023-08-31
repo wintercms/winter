@@ -4,8 +4,11 @@ use Cms;
 use Url;
 use App;
 use View;
+use File;
 use Lang;
+use Log;
 use Flash;
+use Cache;
 use Config;
 use Session;
 use Request;
@@ -14,17 +17,10 @@ use Exception;
 use SystemException;
 use BackendAuth;
 use Twig\Environment as TwigEnvironment;
-use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
-use Twig\Extension\SandboxExtension;
-use Cms\Twig\Loader as TwigLoader;
-use Cms\Twig\DebugExtension;
-use Cms\Twig\Extension as CmsTwigExtension;
 use Cms\Models\MaintenanceSetting;
 use System\Models\RequestLog;
 use System\Helpers\View as ViewHelper;
 use System\Classes\CombineAssets;
-use System\Twig\Extension as SystemTwigExtension;
-use System\Twig\SecurityPolicy;
 use Winter\Storm\Exception\AjaxException;
 use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Parse\Bracket as TextParser;
@@ -53,11 +49,6 @@ class Controller
      * @var \Cms\Classes\Router A reference to the Router object.
      */
     protected $router;
-
-    /**
-     * @var \Cms\Twig\Loader A reference to the Twig template loader.
-     */
-    protected $loader;
 
     /**
      * @var \Cms\Classes\Page A reference to the CMS page template being processed.
@@ -105,9 +96,9 @@ class Controller
     protected $componentContext;
 
     /**
-     * @var array Component partial stack, used internally.
+     * @var PartialStack Component partial stack, used internally.
      */
-    protected $partialStack = [];
+    protected $partialStack;
 
     /**
      * Creates the controller.
@@ -318,7 +309,7 @@ class Controller
         /*
          * The 'this' variable is reserved for default variables.
          */
-        $this->vars['this'] = [
+        $this->getTwig()->addGlobal('this', [
             'page'        => $this->page,
             'layout'      => $this->layout,
             'theme'       => $this->theme,
@@ -326,7 +317,7 @@ class Controller
             'controller'  => $this,
             'environment' => App::environment(),
             'session'     => App::make('session'),
-        ];
+        ]);
 
         /*
          * Check for the presence of validation errors in the session.
@@ -429,8 +420,8 @@ class Controller
              * Render the page
              */
             CmsException::mask($this->page, 400);
-            $this->loader->setObject($this->page);
-            $template = $this->twig->loadTemplate($this->page->getFilePath());
+            $this->getLoader()->setObject($this->page);
+            $template = $this->getTwig()->load($this->page->getFilePath());
             $this->pageContents = $template->render($this->vars);
             CmsException::unmask();
         }
@@ -439,8 +430,8 @@ class Controller
          * Render the layout
          */
         CmsException::mask($this->layout, 400);
-        $this->loader->setObject($this->layout);
-        $template = $this->twig->loadTemplate($this->layout->getFilePath());
+        $this->getLoader()->setObject($this->layout);
+        $template = $this->getTwig()->load($this->layout->getFilePath());
         $result = $template->render($this->vars);
         CmsException::unmask();
 
@@ -595,35 +586,8 @@ class Controller
      */
     protected function initTwigEnvironment()
     {
-        $this->loader = new TwigLoader;
-
-        $useCache = !Config::get('cms.twigNoCache');
-        $isDebugMode = Config::get('app.debug', false);
-        $strictVariables = Config::get('cms.enableTwigStrictVariables', false);
-        $strictVariables = $strictVariables ?? $isDebugMode;
-        $forceBytecode = Config::get('cms.forceBytecodeInvalidation', false);
-
-        $options = [
-            'auto_reload' => true,
-            'debug' => $isDebugMode,
-            'strict_variables' => $strictVariables,
-        ];
-
-        if ($useCache) {
-            $options['cache'] = new TwigCacheFilesystem(
-                storage_path().'/cms/twig',
-                $forceBytecode ? TwigCacheFilesystem::FORCE_BYTECODE_INVALIDATION : 0
-            );
-        }
-
-        $this->twig = new TwigEnvironment($this->loader, $options);
-        $this->twig->addExtension(new CmsTwigExtension($this));
-        $this->twig->addExtension(new SystemTwigExtension);
-        $this->twig->addExtension(new SandboxExtension(new SecurityPolicy, true));
-
-        if ($isDebugMode) {
-            $this->twig->addExtension(new DebugExtension($this));
-        }
+        $this->twig = App::make('twig.environment.cms');
+        $this->twig->getExtension(\Cms\Twig\Extension::class)->setController($this);
     }
 
     /**
@@ -1096,9 +1060,9 @@ class Controller
          * Render the partial
          */
         CmsException::mask($partial, 400);
-        $this->loader->setObject($partial);
-        $template = $this->twig->loadTemplate($partial->getFilePath());
-        $partialContent = $template->render(array_merge($this->vars, $parameters));
+        $this->getLoader()->setObject($partial);
+        $template = $this->getTwig()->load($partial->getFilePath());
+        $partialContent = $template->render(array_merge($parameters, $this->vars));
         CmsException::unmask();
 
         if ($partial instanceof Partial) {
@@ -1137,10 +1101,11 @@ class Controller
      *
      * @param string $name The content view to load.
      * @param array $parameters Parameter variables to pass to the view.
-     * @throws SystemException If the content cannot be found
-     * @return string
+     * @param bool $throwException Throw an exception if the content file is not found.
+     * @throws SystemException If the content cannot be found, and `$throwException` is true.
+     * @return string|false Content file, or false if `$throwException` is false.
      */
-    public function renderContent($name, $parameters = [])
+    public function renderContent($name, $parameters = [], $throwException = true)
     {
         /**
          * @event cms.page.beforeRenderContent
@@ -1166,7 +1131,11 @@ class Controller
          * Load content from theme
          */
         elseif (($content = Content::loadCached($this->theme, $name)) === null) {
-            throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name'=>$name]));
+            if ($throwException) {
+                throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name' => $name]));
+            } else {
+                return false;
+            }
         }
 
         $fileContent = $content->parsedMarkup;
@@ -1243,9 +1212,8 @@ class Controller
     /**
      * Returns an existing instance of the controller.
      * If the controller doesn't exists, returns null.
-     * @return mixed Returns the controller object or null.
      */
-    public static function getController()
+    public static function getController(): ?self
     {
         return self::$instance;
     }
@@ -1274,7 +1242,7 @@ class Controller
      */
     public function getLoader()
     {
-        return $this->loader;
+        return $this->getTwig()->getLoader();
     }
 
     /**
@@ -1334,9 +1302,9 @@ class Controller
      * Looks up the URL for a supplied page and returns it relative to the website root.
      *
      * @param mixed $name Specifies the Cms Page file name.
-     * @param array $parameters Route parameters to consider in the URL.
+     * @param array|bool $parameters Route parameters to consider in the URL. If boolean will be used as the value for $routePersistence
      * @param bool $routePersistence By default the existing routing parameters will be included
-     * @return string
+     * @return string|null
      */
     public function pageUrl($name, $parameters = [], $routePersistence = true)
     {
@@ -1387,22 +1355,61 @@ class Controller
      * @param mixed $url Specifies the theme-relative URL. If null, the theme path is returned.
      * @return string
      */
-    public function themeUrl($url = null)
+    public function themeUrl($url = null): string
+    {
+        return is_array($url)
+            ? $this->themeCombineAssets($url)
+            : $this->getTheme()->assetUrl($url);
+    }
+
+    /**
+     * Generates a URL to the AssetCombiner for the provided array of assets
+     */
+    protected function themeCombineAssets(array $url): string
     {
         $themeDir = $this->getTheme()->getDirName();
+        $parentTheme = $this->getTheme()->getConfig()['parent'] ?? false;
+        $themesPath = themes_path();
 
-        if (is_array($url)) {
-            $_url = Url::to(CombineAssets::combine($url, themes_path().'/'.$themeDir));
-        }
-        else {
-            $_url = Config::get('cms.themesPath', '/themes').'/'.$themeDir;
-            if ($url !== null) {
-                $_url .= '/'.$url;
+        $cacheKey = __METHOD__ . '.' . md5(json_encode($url));
+
+        if (!($assets = Cache::get($cacheKey))) {
+            $assets = [];
+            $sources = [
+                $themesPath . '/' . $themeDir
+            ];
+
+            if ($parentTheme) {
+                $sources[] = $themesPath . '/' . $parentTheme;
             }
-            $_url = Url::asset($_url);
+
+            foreach ($url as $file) {
+                // Leave Combiner Aliases assets & absolute path assets (using path symbols like $, #, ~) unmodified
+                if (str_starts_with($file, '@') || File::isPathSymbol($file)) {
+                    $assets[] = $file;
+                    continue;
+                }
+
+                foreach ($sources as $source) {
+                    $asset = $source . '/' . $file;
+                    if (File::exists($asset)) {
+                        $assets[] = $asset;
+                        break;
+                    } else {
+                        $asset = null;
+                    }
+                }
+                if (is_null($asset)) {
+                    // Skip combining missing assets and log an error
+                    Log::error("$file could not be found in any of the theme's sources (" . implode(', ', $sources) . ")");
+                    continue;
+                }
+            }
+
+            Cache::put($cacheKey, $assets);
         }
 
-        return $_url;
+        return Url::to(CombineAssets::combine($assets));
     }
 
     /**
@@ -1519,7 +1526,7 @@ class Controller
     /**
      * Searches the layout and page components by a partial file
      * @param string $partial
-     * @return ComponentBase The component object, if found
+     * @return ComponentBase|null The component object, if found
      */
     public function findComponentByPartial($partial)
     {

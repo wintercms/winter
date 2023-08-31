@@ -63,6 +63,11 @@ class User extends UserBase
     protected $purgeable = ['password_confirmation', 'send_invite'];
 
     /**
+     * @var array List of attribute names which are json encoded and decoded from the database.
+     */
+    protected $jsonable = ['permissions', 'metadata'];
+
+    /**
      * @var string Login attribute
      */
     public static $loginAttribute = 'login';
@@ -230,9 +235,9 @@ class User extends UserBase
             if (BackendAuth::isImpersonator()) {
                 $impersonator = BackendAuth::getImpersonator();
                 if ($impersonator && $impersonator !== $this) {
-                    foreach ($permissions as $i => $permission) {
+                    foreach ($permissions as $permission => $status) {
                         if (!$impersonator->hasAccess($permission)) {
-                            unset($permissions[$i]);
+                            unset($permissions[$permission]);
                         }
                     }
                     $this->mergedPermissions = $permissions;

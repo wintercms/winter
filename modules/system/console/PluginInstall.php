@@ -1,8 +1,7 @@
 <?php namespace System\Console;
 
-use Illuminate\Console\Command;
+use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
-use Symfony\Component\Console\Input\InputArgument;
 use System\Classes\PluginManager;
 
 /**
@@ -15,16 +14,19 @@ use System\Classes\PluginManager;
  */
 class PluginInstall extends Command
 {
-
     /**
-     * The console command name.
-     * @var string
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'plugin:install';
+    protected static $defaultName = 'plugin:install';
 
     /**
-     * The console command description.
-     * @var string
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'plugin:install
+        {plugin : The plugin to install. <info>(eg: Winter.Blog)</info>}';
+
+    /**
+     * @var string The console command description.
      */
     protected $description = 'Install a plugin from the Winter marketplace.';
 
@@ -34,7 +36,7 @@ class PluginInstall extends Command
      */
     public function handle()
     {
-        $pluginName = $this->argument('name');
+        $pluginName = $this->argument('plugin');
         $manager = UpdateManager::instance()->setNotesOutput($this->output);
 
         $pluginDetails = $manager->requestPluginDetails($pluginName);
@@ -61,16 +63,5 @@ class PluginInstall extends Command
          */
         $this->output->writeln(sprintf('<info>Migrating plugin...</info>', $code));
         $manager->updatePlugin($code);
-    }
-
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the plugin. Eg: AuthorName.PluginName'],
-        ];
     }
 }

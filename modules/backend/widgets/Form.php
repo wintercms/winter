@@ -358,20 +358,15 @@ class Form extends WidgetBase
 
         /**
          * @event backend.form.beforeRefresh
-         * Called before the form is refreshed, modify the $dataHolder->data property in place
+         * Called before the form is refreshed.
          *
-         * Example usage:
+         * This allows you to modify the form data before the form is refreshed.
          *
-         *     Event::listen('backend.form.beforeRefresh', function ((\Backend\Widgets\Form) $formWidget, (stdClass) $dataHolder) {
-         *         $dataHolder->data = $arrayOfSaveDataToReplaceExistingDataWith;
-         *     });
-         *
-         * Or
-         *
-         *     $formWidget->bindEvent('form.beforeRefresh', function ((stdClass) $dataHolder) {
-         *         $dataHolder->data = $arrayOfSaveDataToReplaceExistingDataWith;
-         *     });
-         *
+         * @param \Backend\Widgets\Form $formWidget The form widget instance. If the event is attached directly to the form widget, this
+         *  parameter will be omitted.
+         * @param \stdClass $dataHolder An object containing the data from the form to be saved. It contains one property, `data`, with the array of
+         *  form data stored within.
+         * @local-event $formWidget form.beforeRefresh Attached to a form widget instance.
          */
         $dataHolder = (object) ['data' => $saveData];
         $this->fireSystemEvent('backend.form.beforeRefresh', [$dataHolder]);
@@ -431,14 +426,14 @@ class Form extends WidgetBase
          * Example usage:
          *
          *     Event::listen('backend.form.refresh', function ((\Backend\Widgets\Form) $formWidget, (array) $result) {
-         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.htm')];
+         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.php')];
          *         return $result;
          *     });
          *
          * Or
          *
          *     $formWidget->bindEvent('form.refresh', function ((array) $result) use ((\Backend\Widgets\Form $formWidget)) {
-         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.htm')];
+         *         $result['#my-partial-id' => $formWidget->makePartial('$/path/to/custom/backend/partial.php')];
          *         return $result;
          *     });
          *
@@ -505,8 +500,12 @@ class Form extends WidgetBase
          * Example usage:
          *
          *     Event::listen('backend.form.extendFieldsBefore', function ((\Backend\Widgets\Form) $formWidget) {
-         *         // You should always check to see if you're extending correct model/controller
-         *         if (!$formWidget->model instanceof \Foo\Example\Models\Bar) {
+         *         // Check that we're extending the correct Form widget instance
+         *         if (
+         *             !($formWidget->getController() instanceof \Winter\User\Controllers\Users)
+         *             || !($formWidget->model instanceof \Winter\User\Models\User)
+         *             || $formWidget->isNested
+         *         ) {
          *             return;
          *         }
          *
@@ -523,8 +522,12 @@ class Form extends WidgetBase
          * Or
          *
          *     $formWidget->bindEvent('form.extendFieldsBefore', function () use ((\Backend\Widgets\Form $formWidget)) {
-         *         // You should always check to see if you're extending correct model/controller
-         *         if (!$formWidget->model instanceof \Foo\Example\Models\Bar) {
+         *         // Check that we're extending the correct Form widget instance
+         *         if (
+         *             !($formWidget->getController() instanceof \Winter\User\Controllers\Users)
+         *             || !($formWidget->model instanceof \Winter\User\Models\User)
+         *             || $formWidget->isNested
+         *         ) {
          *             return;
          *         }
          *
@@ -578,13 +581,12 @@ class Form extends WidgetBase
          * Example usage:
          *
          *     Event::listen('backend.form.extendFields', function ((\Backend\Widgets\Form) $formWidget) {
-         *         // Only for the User controller
-         *         if (!$formWidget->getController() instanceof \Winter\User\Controllers\Users) {
-         *             return;
-         *         }
-         *
-         *         // Only for the User model
-         *         if (!$formWidget->model instanceof \Winter\User\Models\User) {
+         *         // Check that we're extending the correct Form widget instance
+         *         if (
+         *             !($formWidget->getController() instanceof \Winter\User\Controllers\Users)
+         *             || !($formWidget->model instanceof \Winter\User\Models\User)
+         *             || $formWidget->isNested
+         *         ) {
          *             return;
          *         }
          *
@@ -604,13 +606,12 @@ class Form extends WidgetBase
          * Or
          *
          *     $formWidget->bindEvent('form.extendFields', function () use ((\Backend\Widgets\Form $formWidget)) {
-         *         // Only for the User controller
-         *         if (!$formWidget->getController() instanceof \Winter\User\Controllers\Users) {
-         *             return;
-         *         }
-         *
-         *         // Only for the User model
-         *         if (!$formWidget->model instanceof \Winter\User\Models\User) {
+         *         // Check that we're extending the correct Form widget instance
+         *         if (
+         *             !($formWidget->getController() instanceof \Winter\User\Controllers\Users)
+         *             || !($formWidget->model instanceof \Winter\User\Models\User)
+         *             || $formWidget->isNested
+         *         ) {
          *             return;
          *         }
          *
@@ -741,13 +742,13 @@ class Form extends WidgetBase
 
             switch (strtolower($addToArea)) {
                 case FormTabs::SECTION_PRIMARY:
-                    $this->allTabs->primary->addField($name, $fieldObj, $fieldTab);
+                    $this->allTabs->primary->addField($fieldObj->fieldName, $fieldObj, $fieldTab);
                     break;
                 case FormTabs::SECTION_SECONDARY:
-                    $this->allTabs->secondary->addField($name, $fieldObj, $fieldTab);
+                    $this->allTabs->secondary->addField($fieldObj->fieldName, $fieldObj, $fieldTab);
                     break;
                 default:
-                    $this->allTabs->outside->addField($name, $fieldObj);
+                    $this->allTabs->outside->addField($fieldObj->fieldName, $fieldObj);
                     break;
             }
         }
@@ -1176,6 +1177,7 @@ class Form extends WidgetBase
     public function getSaveData()
     {
         $this->defineFormFields();
+        $this->applyFiltersFromModel();
 
         $result = [];
 
@@ -1279,7 +1281,7 @@ class Form extends WidgetBase
      * @param $fieldOptions
      * @return mixed
      */
-    protected function getOptionsFromModel($field, $fieldOptions)
+    public function getOptionsFromModel($field, $fieldOptions)
     {
         /*
          * Advanced usage, supplied options are callable
@@ -1341,6 +1343,11 @@ class Form extends WidgetBase
                         ]));
                     }
                     return $result;
+                } else {
+                    // Handle localization keys that return arrays
+                    if (is_array($options = Lang::get($fieldOptions))) {
+                        return $options;
+                    }
                 }
             }
 

@@ -51,6 +51,10 @@
 #layout-side-panel {
     .sidepanel-content-header {
         background: @custom-dark-secondary;
+
+        &::after {
+            border-top-color: @custom-dark-secondary;
+        }
     }
 }
 
@@ -117,7 +121,7 @@ table.table.data {
 // Fancy Layout
 //
 
-.fancy-layout .form-tabless-fields {
+.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .form-tabless-fields {
     background: @brand-secondary;
 
     .loading-indicator-container .loading-indicator {
@@ -125,8 +129,8 @@ table.table.data {
     }
 }
 
-.fancy-layout .control-tabs.master-tabs,
-.fancy-layout.control-tabs.master-tabs {
+body.fancy-layout .master-tabs.control-tabs,
+.master-tabs.control-tabs.fancy-layout {
     > div > div.tabs-container > ul.nav-tabs > li.active a > span.title {
         &, &:before, &:after {
             background: @brand-secondary;
@@ -144,15 +148,14 @@ table.table.data {
     }
 }
 
-.fancy-layout .control-tabs.primary-tabs,
-.fancy-layout.control-tabs.primary-tabs {
+.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs.primary-tabs,
+*:not(.nested-form) > .form-widget > .layout-row > .control-tabs.fancy-layout.primary-tabs {
     &.master-area > div > ul.nav-tabs {
         background: @brand-secondary;
     }
 }
 
-.fancy-layout .control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed,
-.fancy-layout.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed {
+.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed {
     > div > ul.nav-tabs {
         background: @brand-secondary;
     }

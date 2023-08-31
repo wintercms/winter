@@ -48,7 +48,7 @@ class WinterManifest extends \Illuminate\Console\Command
     /**
      * Execute the console command.
      *
-     * @return mixed
+     * @return void
      */
     public function handle()
     {
@@ -227,7 +227,7 @@ class WinterManifest extends \Illuminate\Console\Command
     protected function getVersionInt(string $version)
     {
         // Get major.minor.patch versions
-        if (!preg_match('/^([0-9]+)\.([0-9]+)\.([0-9]+)/', $version, $versionParts)) {
+        if (!preg_match('/^v?([0-9]+)\.([0-9]+)\.([0-9]+)/', $version, $versionParts)) {
             throw new ApplicationException('Invalid version string - must be of the format "major.minor.path"');
         }
 

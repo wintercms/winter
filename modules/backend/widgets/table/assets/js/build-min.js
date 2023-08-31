@@ -1,10 +1,6 @@
-
-+function($){"use strict";if($.wn===undefined)
-$.wn={}
-if($.oc===undefined)
-$.oc=$.wn
-if($.wn.table===undefined)
-$.wn.table={}
++function($){"use strict";if($.wn===undefined)$.wn={}
+if($.oc===undefined)$.oc=$.wn
+if($.wn.table===undefined)$.wn.table={}
 var Table=function(element,options){this.el=element
 this.$el=$(element)
 this.options=options
@@ -24,9 +20,7 @@ this.keydownHandler=this.onKeydown.bind(this)
 this.documentClickHandler=this.onDocumentClick.bind(this)
 this.toolbarClickHandler=this.onToolbarClick.bind(this)
 if(this.options.postback&&this.options.clientDataSourceClass=='client'){if(!this.options.postbackHandlerName){var formHandler=this.$el.closest('form').data('request')
-this.options.postbackHandlerName=formHandler||'onSave'}
-this.formSubmitHandler=this.onFormSubmit.bind(this)}
-this.navigation=null
+this.options.postbackHandlerName=formHandler||'onSave'}this.formSubmitHandler=this.onFormSubmit.bind(this)}this.navigation=null
 this.search=null
 this.recordsAddedOrDeleted=0
 this.disposeBound=this.dispose.bind(this)
@@ -40,57 +34,41 @@ this.buildUi()
 this.registerHandlers()}
 Table.prototype.disposeCellProcessors=function(){for(var i=0,len=this.options.columns.length;i<len;i++){var column=this.options.columns[i].key
 this.cellProcessors[column].dispose()
-this.cellProcessors[column]=null}
-this.cellProcessors=null
+this.cellProcessors[column]=null}this.cellProcessors=null
 this.activeCellProcessor=null}
 Table.prototype.createDataSource=function(){var dataSourceClass=this.options.clientDataSourceClass
-if($.wn.table.datasource===undefined||$.wn.table.datasource[dataSourceClass]==undefined)
-throw new Error('The table client-side data source class "'+dataSourceClass+'" is not '+'found in the $.wn.table.datasource namespace.')
+if($.wn.table.datasource===undefined||$.wn.table.datasource[dataSourceClass]==undefined)throw new Error('The table client-side data source class "'+dataSourceClass+'" is not '+'found in the $.wn.table.datasource namespace.')
 this.dataSource=new $.wn.table.datasource[dataSourceClass](this)}
 Table.prototype.registerHandlers=function(){this.el.addEventListener('click',this.clickHandler)
 this.el.addEventListener('keydown',this.keydownHandler)
 this.$el.one('dispose-control',this.disposeBound)
 document.addEventListener('click',this.documentClickHandler)
-if(this.options.postback&&this.options.clientDataSourceClass=='client')
-this.$el.closest('form').bind('oc.beforeRequest',this.formSubmitHandler)
+if(this.options.postback&&this.options.clientDataSourceClass=='client')this.$el.closest('form').bind('oc.beforeRequest',this.formSubmitHandler)
 var toolbar=this.getToolbar()
-if(toolbar)
-toolbar.addEventListener('click',this.toolbarClickHandler);}
+if(toolbar)toolbar.addEventListener('click',this.toolbarClickHandler);}
 Table.prototype.unregisterHandlers=function(){this.el.removeEventListener('click',this.clickHandler);document.removeEventListener('click',this.documentClickHandler)
 this.clickHandler=null
 this.el.removeEventListener('keydown',this.keydownHandler);this.keydownHandler=null
 var toolbar=this.getToolbar()
-if(toolbar)
-toolbar.removeEventListener('click',this.toolbarClickHandler);this.toolbarClickHandler=null
+if(toolbar)toolbar.removeEventListener('click',this.toolbarClickHandler);this.toolbarClickHandler=null
 if(this.formSubmitHandler){this.$el.closest('form').unbind('oc.beforeRequest',this.formSubmitHandler)
 this.formSubmitHandler=null}}
 Table.prototype.initCellProcessors=function(){for(var i=0,len=this.options.columns.length;i<len;i++){var columnConfiguration=this.options.columns[i],column=columnConfiguration.key,columnType=columnConfiguration.type
 if(columnType===undefined){columnType='string'
-this.options.columns[i].type=columnType}
-if($.wn.table.processor===undefined||$.wn.table.processor[columnType]==undefined)
-throw new Error('The table cell processor for the column type "'+columnType+'" is not '+'found in the $.wn.table.processor namespace.')
+this.options.columns[i].type=columnType}if($.wn.table.processor===undefined||$.wn.table.processor[columnType]==undefined)throw new Error('The table cell processor for the column type "'+columnType+'" is not '+'found in the $.wn.table.processor namespace.')
 this.cellProcessors[column]=new $.wn.table.processor[columnType](this,column,columnConfiguration)}}
 Table.prototype.getCellProcessor=function(columnName){return this.cellProcessors[columnName]}
 Table.prototype.buildUi=function(){this.tableContainer=document.createElement('div')
 this.tableContainer.setAttribute('class','table-container')
-if(this.options.toolbar){this.buildToolbar()}
-this.tableContainer.appendChild(this.buildHeaderTable())
+if(this.options.toolbar){this.buildToolbar()}this.tableContainer.appendChild(this.buildHeaderTable())
 this.el.insertBefore(this.tableContainer,this.el.children[0])
-if(!this.options.height){this.dataTableContainer=this.tableContainer}
-else{this.dataTableContainer=this.buildScrollbar()}
-this.updateDataTable()}
-Table.prototype.buildToolbar=function(){if(!this.options.adding&&!this.options.deleting){return}
-this.toolbar=$($('[data-table-toolbar]',this.el).html()).appendTo(this.tableContainer).get(0)
-if(!this.options.adding){$('[data-cmd^="record-add"]',this.toolbar).remove()}
-else{if(this.navigation.paginationEnabled()||!this.options.rowSorting){$('[data-cmd=record-add-below], [data-cmd=record-add-above]',this.toolbar).remove()}
-else{$('[data-cmd=record-add]',this.toolbar).remove()}}
-if(!this.options.deleting){$('[data-cmd="record-delete"]',this.toolbar).remove()}}
+if(!this.options.height){this.dataTableContainer=this.tableContainer}else{this.dataTableContainer=this.buildScrollbar()}this.updateDataTable()}
+Table.prototype.buildToolbar=function(){if(!this.options.adding&&!this.options.deleting){return}this.toolbar=$($('[data-table-toolbar]',this.el).html()).appendTo(this.tableContainer).get(0)
+if(!this.options.adding){$('[data-cmd^="record-add"]',this.toolbar).remove()}else{if(this.navigation.paginationEnabled()||!this.options.rowSorting){$('[data-cmd=record-add-below], [data-cmd=record-add-above]',this.toolbar).remove()}else{$('[data-cmd=record-add]',this.toolbar).remove()}}if(!this.options.deleting){$('[data-cmd="record-delete"]',this.toolbar).remove()}}
 Table.prototype.buildScrollbar=function(){var scrollbar=document.createElement('div'),scrollbarContent=document.createElement('div')
 scrollbar.setAttribute('class','control-scrollbar')
-if(this.options.dynamicHeight)
-scrollbar.setAttribute('style','max-height: '+this.options.height+'px')
-else
-scrollbar.setAttribute('style','height: '+this.options.height+'px')
+if(this.options.dynamicHeight)scrollbar.setAttribute('style','max-height: '+this.options.height+'px')
+else scrollbar.setAttribute('style','height: '+this.options.height+'px')
 scrollbar.appendChild(scrollbarContent)
 this.tableContainer.appendChild(scrollbar)
 $(scrollbar).scrollbar({animation:false})
@@ -99,29 +77,23 @@ Table.prototype.buildHeaderTable=function(){var headersTable=document.createElem
 headersTable.className='headers'
 headersTable.appendChild(row)
 for(var i=0,len=this.options.columns.length;i<len;i++){var header=document.createElement('th')
-if(this.options.columns[i].width)
-header.setAttribute('style','width: '+this.options.columns[i].width)
+if(this.options.columns[i].width)header.setAttribute('style','width: '+this.options.columns[i].width)
 header.textContent!==undefined?header.textContent=this.options.columns[i].title:header.innerText=this.options.columns[i].title
-row.appendChild(header)}
-this.headerTable=headersTable
+row.appendChild(header)}this.headerTable=headersTable
 return headersTable}
 Table.prototype.updateDataTable=function(onSuccess){var self=this
 this.unfocusTable()
 this.fetchRecords(function onUpdateDataTableSuccess(records,totalCount){self.buildDataTable(records,totalCount)
-if(onSuccess)
-onSuccess()
-if(totalCount==0)
-self.addRecord('above',true)
+if(onSuccess)onSuccess()
+if(totalCount==0)self.addRecord('above',true)
 self.$el.trigger('oc.tableUpdateData',[records,totalCount])
 self=null})}
 Table.prototype.updateColumnWidth=function(){var headerCells=this.headerTable.querySelectorAll('th'),dataCells=this.dataTable.querySelectorAll('tr:first-child td')
-for(var i=0,len=headerCells.length;i<len;i++){if(dataCells[i])
-dataCells[i].setAttribute('style',headerCells[i].getAttribute('style'))}}
+for(var i=0,len=headerCells.length;i<len;i++){if(dataCells[i])dataCells[i].setAttribute('style',headerCells[i].getAttribute('style'))}}
 Table.prototype.buildDataTable=function(records,totalCount){var dataTable=document.createElement('table'),tbody=document.createElement('tbody'),keyColumn=this.options.keyColumn
 dataTable.setAttribute('class','data')
 for(var i=0,len=records.length;i<len;i++){var row=document.createElement('tr')
-if(records[i][keyColumn]===undefined)
-throw new Error('The row attribute '+keyColumn+' is not set for the row #'+i);row.setAttribute('data-row',records[i][keyColumn])
+if(records[i][keyColumn]===undefined)throw new Error('The row attribute '+keyColumn+' is not set for the row #'+i);row.setAttribute('data-row',records[i][keyColumn])
 for(var j=0,colsLen=this.options.columns.length;j<colsLen;j++){var cell=document.createElement('td'),dataContainer=document.createElement('input'),cellContentContainer=document.createElement('div'),column=this.options.columns[j],columnName=column.key,cellProcessor=this.getCellProcessor(columnName)
 cell.setAttribute('data-column',columnName)
 cell.setAttribute('data-column-type',column.type)
@@ -132,124 +104,86 @@ cellContentContainer.setAttribute('class','content-container')
 cell.appendChild(cellContentContainer)
 row.appendChild(cell)
 cell.appendChild(dataContainer)
-cellProcessor.renderCell(records[i][columnName],cellContentContainer)}
-tbody.appendChild(row)}
-dataTable.appendChild(tbody)
-if(this.dataTable!==null)
-this.dataTableContainer.replaceChild(dataTable,this.dataTable)
-else
-this.dataTableContainer.appendChild(dataTable)
+cellProcessor.renderCell(records[i][columnName],cellContentContainer)}tbody.appendChild(row)}dataTable.appendChild(tbody)
+if(this.dataTable!==null)this.dataTableContainer.replaceChild(dataTable,this.dataTable)
+else this.dataTableContainer.appendChild(dataTable)
 this.dataTable=dataTable
 this.updateColumnWidth()
 this.updateScrollbar()
 this.navigation.buildPagination(totalCount)
 this.search.buildSearchForm()}
-Table.prototype.formatDataContainerValue=function(value){if(value===undefined){return''}
-if(typeof value==='boolean'){return value?1:''}
-return value}
-Table.prototype.fetchRecords=function(onSuccess){if(this.search.hasQuery()){this.dataSource.searchRecords(this.search.getQuery(),this.navigation.getPageFirstRowOffset(),this.options.recordsPerPage,onSuccess)}
-else{this.dataSource.getRecords(this.navigation.getPageFirstRowOffset(),this.options.recordsPerPage,onSuccess)}}
-Table.prototype.updateScrollbar=function(){if(!this.options.height)
-return
+Table.prototype.formatDataContainerValue=function(value){if(value===undefined){return''}if(typeof value==='boolean'){return value?1:''}return value}
+Table.prototype.fetchRecords=function(onSuccess){if(this.search.hasQuery()){this.dataSource.searchRecords(this.search.getQuery(),this.navigation.getPageFirstRowOffset(),this.options.recordsPerPage,onSuccess)}else{this.dataSource.getRecords(this.navigation.getPageFirstRowOffset(),this.options.recordsPerPage,onSuccess)}}
+Table.prototype.updateScrollbar=function(){if(!this.options.height)return
 $(this.dataTableContainer.parentNode).data('oc.scrollbar').update()}
-Table.prototype.scrollCellIntoView=function(){if(!this.options.height||!this.activeCell)
-return
+Table.prototype.scrollCellIntoView=function(){if(!this.options.height||!this.activeCell)return
 $(this.dataTableContainer.parentNode).data('oc.scrollbar').gotoElement(this.activeCell)}
-Table.prototype.disposeScrollbar=function(){if(!this.options.height)
-return
+Table.prototype.disposeScrollbar=function(){if(!this.options.height)return
 $(this.dataTableContainer.parentNode).data('oc.scrollbar').dispose()
 $(this.dataTableContainer.parentNode).data('oc.scrollbar',null)}
-Table.prototype.setActiveProcessor=function(processor){if(this.activeCellProcessor)
-this.activeCellProcessor.onUnfocus()
+Table.prototype.setActiveProcessor=function(processor){if(this.activeCellProcessor)this.activeCellProcessor.onUnfocus()
 this.activeCellProcessor=processor}
-Table.prototype.commitEditedRow=function(){if(this.editedRowKey===null)
-return
+Table.prototype.commitEditedRow=function(){if(this.editedRowKey===null)return
 var editedRow=this.dataTable.querySelector('tr[data-row="'+this.editedRowKey+'"]')
-if(!editedRow)
-return
-if(editedRow.getAttribute('data-dirty')!=1)
-return
+if(!editedRow)return
+if(editedRow.getAttribute('data-dirty')!=1)return
 var cells=editedRow.children,data={}
 for(var i=0,len=cells.length;i<len;i++){var cell=cells[i]
-data[cell.getAttribute('data-column')]=this.getCellValue(cell)}
-this.dataSource.updateRecord(this.editedRowKey,data)
+data[cell.getAttribute('data-column')]=this.getCellValue(cell)}this.dataSource.updateRecord(this.editedRowKey,data)
 editedRow.setAttribute('data-dirty',0)}
 Table.prototype.unfocusTable=function(){this.elementRemoveClass(this.el,'active')
-if(this.activeCellProcessor)
-this.activeCellProcessor.onUnfocus()
+if(this.activeCellProcessor)this.activeCellProcessor.onUnfocus()
 this.commitEditedRow()
 this.activeCellProcessor=null
-if(this.activeCell)
-this.activeCell.setAttribute('class','')
+if(this.activeCell)this.activeCell.setAttribute('class','')
 this.activeCell=null}
 Table.prototype.focusTable=function(){this.elementAddClass(this.el,'active')}
 Table.prototype.focusCell=function(cellElement,isClick){var columnName=cellElement.getAttribute('data-column')
-if(columnName===null)
-return
+if(columnName===null)return
 this.focusTable()
 var processor=this.getCellProcessor(columnName)
-if(!processor)
-throw new Error("Cell processor not found for the column "+columnName)
-if(this.activeCell!==cellElement){if(this.activeCell)
-this.elementRemoveClass(this.activeCell,'active')
+if(!processor)throw new Error("Cell processor not found for the column "+columnName)
+if(this.activeCell!==cellElement){if(this.activeCell)this.elementRemoveClass(this.activeCell,'active')
 this.setActiveProcessor(processor)
 this.activeCell=cellElement
-if(processor.isCellFocusable())
-this.elementAddClass(this.activeCell,'active')}
-var rowKey=this.getCellRowKey(cellElement)
-if(this.editedRowKey!==null&&rowKey!=this.editedRowKey)
-this.commitEditedRow()
+if(processor.isCellFocusable())this.elementAddClass(this.activeCell,'active')}var rowKey=this.getCellRowKey(cellElement)
+if(this.editedRowKey!==null&&rowKey!=this.editedRowKey)this.commitEditedRow()
 this.editedRowKey=rowKey
 processor.onFocus(cellElement,isClick)
 this.scrollCellIntoView()}
 Table.prototype.markCellRowDirty=function(cellElement){cellElement.parentNode.setAttribute('data-dirty',1)}
-Table.prototype.addRecord=function(placement,noFocus){if(!this.activeCell||this.navigation.paginationEnabled()||!this.options.rowSorting)
-placement='bottom'
+Table.prototype.addRecord=function(placement,noFocus){if(!this.activeCell||this.navigation.paginationEnabled()||!this.options.rowSorting)placement='bottom'
 var relativeToKey=null,currentRowIndex=null
 if(placement=='above'||placement=='below'){relativeToKey=this.getCellRowKey(this.activeCell)
-currentRowIndex=this.getCellRowIndex(this.activeCell)}
-this.unfocusTable()
+currentRowIndex=this.getCellRowIndex(this.activeCell)}this.unfocusTable()
 if(this.navigation.paginationEnabled()){var newPageIndex=this.navigation.getNewRowPage(placement,currentRowIndex)
-if(newPageIndex!=this.navigation.pageIndex){if(!this.validate())
-return}
-this.navigation.pageIndex=newPageIndex}
-this.recordsAddedOrDeleted++
+if(newPageIndex!=this.navigation.pageIndex){if(!this.validate())return}this.navigation.pageIndex=newPageIndex}this.recordsAddedOrDeleted++
 var keyColumn=this.options.keyColumn,recordData={},self=this
 recordData[keyColumn]=-1*this.recordsAddedOrDeleted
 this.$el.trigger('oc.tableNewRow',[recordData])
 this.dataSource.createRecord(recordData,placement,relativeToKey,this.navigation.getPageFirstRowOffset(),this.options.recordsPerPage,function onAddRecordDataTableSuccess(records,totalCount){self.buildDataTable(records,totalCount)
 var row=self.findRowByKey(recordData[keyColumn])
-if(!row)
-throw new Error('New row is not found in the updated table: '+recordData[keyColumn])
-if(!noFocus)
-self.navigation.focusCell(row,0)
+if(!row)throw new Error('New row is not found in the updated table: '+recordData[keyColumn])
+if(!noFocus)self.navigation.focusCell(row,0)
 self=null})}
-Table.prototype.deleteRecord=function(){if(!this.activeCell)
-return
+Table.prototype.deleteRecord=function(){if(!this.activeCell)return
 var currentRowIndex=this.getCellRowIndex(this.activeCell),key=this.getCellRowKey(this.activeCell),self=this,paginationEnabled=this.navigation.paginationEnabled(),currentPageIndex=this.navigation.pageIndex,currentCellIndex=this.activeCell.cellIndex
-if(paginationEnabled)
-this.navigation.pageIndex=this.navigation.getPageAfterDeletion(currentRowIndex)
+if(paginationEnabled)this.navigation.pageIndex=this.navigation.getPageAfterDeletion(currentRowIndex)
 this.recordsAddedOrDeleted++
 var keyColumn=this.options.keyColumn,newRecordData={}
 newRecordData[keyColumn]=-1*this.recordsAddedOrDeleted
 this.dataSource.deleteRecord(key,newRecordData,this.navigation.getPageFirstRowOffset(),this.options.recordsPerPage,function onDeleteRecordDataTableSuccess(records,totalCount){self.buildDataTable(records,totalCount)
-if(!paginationEnabled)
-self.navigation.focusCellInReplacedRow(currentRowIndex,currentCellIndex)
-else{if(currentPageIndex!=self.navigation.pageIndex)
-self.navigation.focusCell('bottom',currentCellIndex)
-else
-self.navigation.focusCellInReplacedRow(currentRowIndex,currentCellIndex)}
-self=null})}
+if(!paginationEnabled)self.navigation.focusCellInReplacedRow(currentRowIndex,currentCellIndex)
+else{if(currentPageIndex!=self.navigation.pageIndex)self.navigation.focusCell('bottom',currentCellIndex)
+else self.navigation.focusCellInReplacedRow(currentRowIndex,currentCellIndex)}self=null})}
 Table.prototype.notifyRowProcessorsOnChange=function(cellElement){var columnName=cellElement.getAttribute('data-column'),row=cellElement.parentNode
 for(var i=0,len=row.children.length;i<len;i++){var column=this.options.columns[i].key
 this.cellProcessors[column].onRowValueChanged(columnName,row.children[i])}}
 Table.prototype.getToolbar=function(){return this.tableContainer.querySelector('div.toolbar')}
 Table.prototype.validate=function(){var rows=this.dataTable.querySelectorAll('tbody tr[data-row]')
 for(var i=0,len=rows.length;i<len;i++){var row=rows[i]
-this.elementRemoveClass(row,'error')}
-for(var i=0,rowsLen=rows.length;i<rowsLen;i++){var row=rows[i],rowData=this.getRowData(row)
-for(var j=0,colsLen=row.children.length;j<colsLen;j++)
-this.elementRemoveClass(row.children[j],'error')
+this.elementRemoveClass(row,'error')}for(var i=0,rowsLen=rows.length;i<rowsLen;i++){var row=rows[i],rowData=this.getRowData(row)
+for(var j=0,colsLen=row.children.length;j<colsLen;j++)this.elementRemoveClass(row.children[j],'error')
 for(var columnName in rowData){var cellProcessor=this.getCellProcessor(columnName),message=cellProcessor.validate(rowData[columnName],rowData)
 if(message!==undefined){var cell=row.querySelector('td[data-column="'+columnName+'"]'),self=this
 this.elementAddClass(row,'error')
@@ -259,52 +193,34 @@ window.setTimeout(function(){self.focusCell(cell,false)
 cell=null
 self=null
 cellProcessor=null},100)
-return false}}}
-return true}
+return false}}}return true}
 Table.prototype.onClick=function(ev){this.focusTable()
-if(this.navigation.onClick(ev)===false)
-return
-if(this.search.onClick(ev)===false)
-return
+if(this.navigation.onClick(ev)===false)return
+if(this.search.onClick(ev)===false)return
 for(var i=0,len=this.options.columns.length;i<len;i++){var column=this.options.columns[i].key
-this.cellProcessors[column].onClick(ev)}
-var target=this.getEventTarget(ev,'TD')
-if(!target){this.unfocusTable();return;}
-if(target.tagName!='TD'){this.unfocusTable();return;}
-this.focusCell(target,true)}
-Table.prototype.onKeydown=function(ev){if((ev.key==='a'||ev.key==='A')&&ev.altKey&&this.options.adding){if(!ev.shiftKey){this.addRecord('below')}
-else{this.addRecord('above')}
+this.cellProcessors[column].onClick(ev)}var target=this.getEventTarget(ev,'TD')
+if(!target){this.unfocusTable();return;}if(target.tagName!='TD'){this.unfocusTable();return;}this.focusCell(target,true)}
+Table.prototype.onKeydown=function(ev){if((ev.key==='a'||ev.key==='A')&&ev.altKey&&this.options.adding){if(!ev.shiftKey){this.addRecord('below')}else{this.addRecord('above')}this.stopEvent(ev)
+return}if((ev.key==='d'||ev.key==='D')&&ev.altKey&&this.options.deleting){this.deleteRecord()
 this.stopEvent(ev)
-return}
-if((ev.key==='d'||ev.key==='D')&&ev.altKey&&this.options.deleting){this.deleteRecord()
-this.stopEvent(ev)
-return}
-for(var i=0,len=this.options.columns.length;i<len;i++){var column=this.options.columns[i].key
-if(this.cellProcessors[column].onKeyDown(ev)===false){return}}
-if(this.navigation.onKeydown(ev)===false){return}
-if(this.search.onKeydown(ev)===false){return}}
+return}for(var i=0,len=this.options.columns.length;i<len;i++){var column=this.options.columns[i].key
+if(this.cellProcessors[column].onKeyDown(ev)===false){return}}if(this.navigation.onKeydown(ev)===false){return}if(this.search.onKeydown(ev)===false){return}}
 Table.prototype.onFormSubmit=function(ev,data){if(data.handler==this.options.postbackHandlerName){this.unfocusTable()
 if(!this.validate()){ev.preventDefault()
-return}
-var fieldName=this.options.fieldName.indexOf('[')>-1?this.options.fieldName+'[TableData]':this.options.fieldName+'TableData'
+return}var fieldName=this.options.fieldName.indexOf('[')>-1?this.options.fieldName+'[TableData]':this.options.fieldName+'TableData'
 data.options.data[fieldName]=this.dataSource.getAllData()}}
 Table.prototype.onToolbarClick=function(ev){var target=this.getEventTarget(ev),cmd=target.getAttribute('data-cmd')
-if(!cmd){return}
-switch(cmd){case'record-add':case'record-add-below':this.addRecord('below')
+if(!cmd){return}switch(cmd){case'record-add':case'record-add-below':this.addRecord('below')
 break
 case'record-add-above':this.addRecord('above')
 break
 case'record-delete':this.deleteRecord()
-break}
-this.stopEvent(ev)}
+break}this.stopEvent(ev)}
 Table.prototype.onDocumentClick=function(ev){var target=this.getEventTarget(ev)
-if(this.parentContainsElement(this.el,target))
-return
-if(this.activeCellProcessor&&this.activeCellProcessor.elementBelongsToProcessor(target))
-return
+if(this.parentContainsElement(this.el,target))return
+if(this.activeCellProcessor&&this.activeCellProcessor.elementBelongsToProcessor(target))return
 this.unfocusTable()}
-Table.prototype.dispose=function(){if(this.disposed){return}
-this.disposed=true
+Table.prototype.dispose=function(){if(this.disposed){return}this.disposed=true
 this.disposeBound=true
 this.unfocusTable()
 this.dataSource.dispose()
@@ -323,49 +239,32 @@ this.$el=null
 this.dataTableContainer=null
 this.activeCell=null}
 Table.prototype.setRowValues=function(rowIndex,rowValues){var row=this.findRowByIndex(rowIndex)
-if(!row){return false}
-var dataUpdated=false
+if(!row){return false}var dataUpdated=false
 for(var i=0,len=row.children.length;i<len;i++){var cell=row.children[i],cellColumnName=this.getCellColumnName(cell)
 for(var rowColumnName in rowValues){if(rowColumnName==cellColumnName){this.setCellValue(cell,rowValues[rowColumnName],true)
-dataUpdated=true}}}
-if(dataUpdated){var originalEditedRowKey=this.editedRowKey
+dataUpdated=true}}}if(dataUpdated){var originalEditedRowKey=this.editedRowKey
 this.editedRowKey=this.getRowKey(row)
 this.commitEditedRow()
-this.editedRowKey=originalEditedRowKey}
-return true}
+this.editedRowKey=originalEditedRowKey}return true}
 Table.prototype.getElement=function(){return this.el}
 Table.prototype.getAlias=function(){return this.options.alias}
 Table.prototype.getTableContainer=function(){return this.tableContainer}
 Table.prototype.getDataTableBody=function(){return this.dataTable.children[0]}
 Table.prototype.getEventTarget=function(ev,tag){var target=ev.target?ev.target:ev.srcElement
-if(tag===undefined)
-return target
+if(tag===undefined)return target
 var tagName=target.tagName
 while(tagName!=tag){target=target.parentNode
-if(!target)
-return null
-tagName=target.tagName}
-return target}
-Table.prototype.stopEvent=function(ev){if(ev.stopPropagation)
-ev.stopPropagation()
-else
-ev.cancelBubble=true
-if(ev.preventDefault)
-ev.preventDefault()
-else
-ev.returnValue=false}
-Table.prototype.elementHasClass=function(el,className){if(el.classList)
-return el.classList.contains(className);return new RegExp('(^| )'+className+'( |$)','gi').test(el.className);}
-Table.prototype.elementAddClass=function(el,className){if(this.elementHasClass(el,className))
-return
-if(el.classList)
-el.classList.add(className);else
-el.className+=' '+className;}
-Table.prototype.elementRemoveClass=function(el,className){if(el.classList)
-el.classList.remove(className);else
-el.className=el.className.replace(new RegExp('(^|\\b)'+className.split(' ').join('|')+'(\\b|$)','gi'),' ');}
-Table.prototype.parentContainsElement=function(parent,element){while(element&&element!=parent){element=element.parentNode}
-return element?true:false}
+if(!target)return null
+tagName=target.tagName}return target}
+Table.prototype.stopEvent=function(ev){if(ev.stopPropagation)ev.stopPropagation()
+else ev.cancelBubble=true
+if(ev.preventDefault)ev.preventDefault()
+else ev.returnValue=false}
+Table.prototype.elementHasClass=function(el,className){if(el.classList)return el.classList.contains(className);return new RegExp('(^| )'+className+'( |$)','gi').test(el.className);}
+Table.prototype.elementAddClass=function(el,className){if(this.elementHasClass(el,className))return
+if(el.classList)el.classList.add(className);else el.className+=' '+className;}
+Table.prototype.elementRemoveClass=function(el,className){if(el.classList)el.classList.remove(className);else el.className=el.className.replace(new RegExp('(^|\\b)'+className.split(' ').join('|')+'(\\b|$)','gi'),' ');}
+Table.prototype.parentContainsElement=function(parent,element){while(element&&element!=parent){element=element.parentNode}return element?true:false}
 Table.prototype.getCellValue=function(cellElement){return cellElement.querySelector('[data-container]').value}
 Table.prototype.getCellRowKey=function(cellElement){return parseInt(cellElement.parentNode.getAttribute('data-row'))}
 Table.prototype.getRowKey=function(rowElement){return parseInt(rowElement.getAttribute('data-row'))}
@@ -373,13 +272,11 @@ Table.prototype.findRowByKey=function(key){return this.dataTable.querySelector('
 Table.prototype.findRowByIndex=function(index){return this.getDataTableBody().children[index]}
 Table.prototype.getCellRowIndex=function(cellElement){return parseInt(cellElement.parentNode.rowIndex)}
 Table.prototype.getRowCellValueByColumnName=function(row,columnName){var cell=row.querySelector('td[data-column="'+columnName+'"]')
-if(!cell)
-return cell
+if(!cell)return cell
 return this.getCellValue(cell)}
 Table.prototype.getRowData=function(row){var result={}
 for(var i=0,len=row.children.length;i<len;i++){var cell=row.children[i]
-result[cell.getAttribute('data-column')]=this.getCellValue(cell)}
-return result}
+result[cell.getAttribute('data-column')]=this.getCellValue(cell)}return result}
 Table.prototype.getCellColumnName=function(cellElement){return cellElement.getAttribute('data-column')}
 Table.prototype.setCellValue=function(cellElement,value,suppressEvents){var dataContainer=cellElement.querySelector('[data-container]')
 if(dataContainer.value!=value){dataContainer.value=value
@@ -400,9 +297,7 @@ $.fn.table.Constructor=Table
 $.wn.table.table=Table
 $.fn.table.noConflict=function(){$.fn.table=old
 return this}
-$(document).on('render',function(){$('div[data-control=table]').table()})}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.helper===undefined)
-$.wn.table.helper={}
+$(document).on('render',function(){$('div[data-control=table]').table()})}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.helper===undefined)$.wn.table.helper={}
 var Navigation=function(tableObj){this.tableObj=tableObj
 this.pageIndex=0
 this.pageCount=0
@@ -410,148 +305,96 @@ this.init()};Navigation.prototype.init=function(){}
 Navigation.prototype.dispose=function(){this.tableObj=null}
 Navigation.prototype.paginationEnabled=function(){return this.tableObj.options.recordsPerPage!=null&&this.tableObj.options.recordsPerPage!=false}
 Navigation.prototype.getPageFirstRowOffset=function(){return this.pageIndex*this.tableObj.options.recordsPerPage}
-Navigation.prototype.buildPagination=function(recordCount){if(!this.paginationEnabled())
-return
+Navigation.prototype.buildPagination=function(recordCount){if(!this.paginationEnabled())return
 var paginationContainer=this.tableObj.getElement().querySelector('.pagination'),newPaginationContainer=false,curRecordCount=0
 this.pageCount=this.calculatePageCount(recordCount,this.tableObj.options.recordsPerPage)
 if(!paginationContainer){paginationContainer=document.createElement('div')
 paginationContainer.setAttribute('class','pagination')
-newPaginationContainer=true}
-else{curRecordCount=this.getRecordCount(paginationContainer)}
-if(newPaginationContainer||curRecordCount!=recordCount){paginationContainer.setAttribute('data-record-count',recordCount)
+newPaginationContainer=true}else{curRecordCount=this.getRecordCount(paginationContainer)}if(newPaginationContainer||curRecordCount!=recordCount){paginationContainer.setAttribute('data-record-count',recordCount)
 var pageList=this.buildPaginationLinkList(recordCount,this.tableObj.options.recordsPerPage,this.pageIndex)
-if(!newPaginationContainer){paginationContainer.replaceChild(pageList,paginationContainer.children[0])}
-else{paginationContainer.appendChild(pageList)
-this.tableObj.getElement().appendChild(paginationContainer)}}
-else{this.markActiveLinkItem(paginationContainer,this.pageIndex)}}
+if(!newPaginationContainer){paginationContainer.replaceChild(pageList,paginationContainer.children[0])}else{paginationContainer.appendChild(pageList)
+this.tableObj.getElement().appendChild(paginationContainer)}}else{this.markActiveLinkItem(paginationContainer,this.pageIndex)}}
 Navigation.prototype.calculatePageCount=function(recordCount,recordsPerPage){var pageCount=Math.ceil(recordCount/recordsPerPage)
-if(!pageCount)
-pageCount=1
+if(!pageCount)pageCount=1
 return pageCount}
 Navigation.prototype.getRecordCount=function(paginationContainer){var container=paginationContainer?paginationContainer:this.tableObj.getElement().querySelector('.pagination')
 return parseInt(container.getAttribute('data-record-count'))}
 Navigation.prototype.buildPaginationLinkList=function(recordCount,recordsPerPage,pageIndex){var pageCount=this.calculatePageCount(recordCount,recordsPerPage),pageList=document.createElement('ul')
 for(var i=0;i<pageCount;i++){var item=document.createElement('li'),link=document.createElement('a')
-if(i==pageIndex)
-item.setAttribute('class','active')
+if(i==pageIndex)item.setAttribute('class','active')
 link.innerText=i+1
 link.setAttribute('data-page-index',i)
 link.setAttribute('href','#')
 item.appendChild(link)
 pageList.appendChild(item)
-$(link).addClass('pagination-link')}
-return pageList}
+$(link).addClass('pagination-link')}return pageList}
 Navigation.prototype.markActiveLinkItem=function(paginationContainer,pageIndex){var activeItem=paginationContainer.querySelector('.active'),list=paginationContainer.children[0]
 activeItem.setAttribute('class','')
 for(var i=0,len=list.children.length;i<len;i++){if(i==pageIndex){list.children[i].setAttribute('class','active')}}}
 Navigation.prototype.gotoPage=function(pageIndex,onSuccess){this.tableObj.unfocusTable()
-if(!this.tableObj.validate())
-return
+if(!this.tableObj.validate())return
 this.pageIndex=pageIndex
 this.tableObj.updateDataTable(onSuccess)}
 Navigation.prototype.getRowCountOnPage=function(cellElement){return this.tableObj.getDataTableBody().children.length}
 Navigation.prototype.getNewRowPage=function(placement,currentRowIndex){var curRecordCount=this.getRecordCount()
-if(placement==='bottom')
-return this.calculatePageCount(curRecordCount+1,this.tableObj.options.recordsPerPage)-1
-if(placement=='above')
-return this.pageIndex
-if(placement=='below'){if(currentRowIndex==(this.tableObj.options.recordsPerPage-1))
-return this.pageIndex+1
+if(placement==='bottom')return this.calculatePageCount(curRecordCount+1,this.tableObj.options.recordsPerPage)-1
+if(placement=='above')return this.pageIndex
+if(placement=='below'){if(currentRowIndex==(this.tableObj.options.recordsPerPage-1))return this.pageIndex+1
+return this.pageIndex}return this.pageIndex}
+Navigation.prototype.getPageAfterDeletion=function(currentRowIndex){if(currentRowIndex==0&&this.getRowCountOnPage()==1)return this.pageIndex==0?0:this.pageIndex-1
 return this.pageIndex}
-return this.pageIndex}
-Navigation.prototype.getPageAfterDeletion=function(currentRowIndex){if(currentRowIndex==0&&this.getRowCountOnPage()==1)
-return this.pageIndex==0?0:this.pageIndex-1
-return this.pageIndex}
-Navigation.prototype.navigateDown=function(ev,forceCellIndex){if(!this.tableObj.activeCell)
-return
-if(this.tableObj.activeCellProcessor&&!this.tableObj.activeCellProcessor.keyNavigationAllowed(ev,'down'))
-return
+Navigation.prototype.navigateDown=function(ev,forceCellIndex){if(!this.tableObj.activeCell)return
+if(this.tableObj.activeCellProcessor&&!this.tableObj.activeCellProcessor.keyNavigationAllowed(ev,'down'))return
 var row=this.tableObj.activeCell.parentNode,newRow=!ev.shiftKey?row.nextElementSibling:row.parentNode.children[row.parentNode.children.length-1],cellIndex=forceCellIndex!==undefined?forceCellIndex:this.tableObj.activeCell.cellIndex
 if(newRow){var cell=newRow.children[cellIndex]
-if(cell)
-this.tableObj.focusCell(cell)}
-else{if(!this.paginationEnabled())
-return
+if(cell)this.tableObj.focusCell(cell)}else{if(!this.paginationEnabled())return
 if(this.pageIndex<this.pageCount-1){var self=this
 this.gotoPage(this.pageIndex+1,function navDownPageSuccess(){self.focusCell('top',cellIndex)
 self=null})}}}
-Navigation.prototype.navigateUp=function(ev,forceCellIndex,isTab){if(!this.tableObj.activeCell)
-return
-if(this.tableObj.activeCellProcessor&&!this.tableObj.activeCellProcessor.keyNavigationAllowed(ev,'up'))
-return
+Navigation.prototype.navigateUp=function(ev,forceCellIndex,isTab){if(!this.tableObj.activeCell)return
+if(this.tableObj.activeCellProcessor&&!this.tableObj.activeCellProcessor.keyNavigationAllowed(ev,'up'))return
 var row=this.tableObj.activeCell.parentNode,newRow=(!ev.shiftKey||isTab)?row.previousElementSibling:row.parentNode.children[0],cellIndex=forceCellIndex!==undefined?forceCellIndex:this.tableObj.activeCell.cellIndex
 if(newRow){var cell=newRow.children[cellIndex]
-if(cell)
-this.tableObj.focusCell(cell)}
-else{if(!this.paginationEnabled())
-return
+if(cell)this.tableObj.focusCell(cell)}else{if(!this.paginationEnabled())return
 if(this.pageIndex>0){var self=this
 this.gotoPage(this.pageIndex-1,function navUpPageSuccess(){self.focusCell('bottom',cellIndex)
 self=null})}}}
-Navigation.prototype.navigateLeft=function(ev,isTab){if(!this.tableObj.activeCell)
-return
-if(!isTab&&this.tableObj.activeCellProcessor&&!this.tableObj.activeCellProcessor.keyNavigationAllowed(ev,'left'))
-return
+Navigation.prototype.navigateLeft=function(ev,isTab){if(!this.tableObj.activeCell)return
+if(!isTab&&this.tableObj.activeCellProcessor&&!this.tableObj.activeCellProcessor.keyNavigationAllowed(ev,'left'))return
 var row=this.tableObj.activeCell.parentNode,newIndex=(!ev.shiftKey||isTab)?this.tableObj.activeCell.cellIndex-1:0
 var cell=row.children[newIndex]
-if(cell){this.tableObj.focusCell(cell)}
-else{this.navigateUp(ev,row.children.length-1,isTab)}}
-Navigation.prototype.navigateRight=function(ev,isTab){if(!this.tableObj.activeCell)
-return
-if(!isTab&&this.tableObj.activeCellProcessor&&!this.tableObj.activeCellProcessor.keyNavigationAllowed(ev,'right'))
-return
+if(cell){this.tableObj.focusCell(cell)}else{this.navigateUp(ev,row.children.length-1,isTab)}}
+Navigation.prototype.navigateRight=function(ev,isTab){if(!this.tableObj.activeCell)return
+if(!isTab&&this.tableObj.activeCellProcessor&&!this.tableObj.activeCellProcessor.keyNavigationAllowed(ev,'right'))return
 var row=this.tableObj.activeCell.parentNode,newIndex=!ev.shiftKey?this.tableObj.activeCell.cellIndex+1:row.children.length-1
 var cell=row.children[newIndex]
-if(cell){this.tableObj.focusCell(cell)}
-else{this.navigateDown(ev,0)}}
-Navigation.prototype.navigateNext=function(ev){if(!this.tableObj.activeCell)
-return
-if(this.tableObj.activeCellProcessor&&!this.tableObj.activeCellProcessor.keyNavigationAllowed(ev,'tab'))
-return
-if(!ev.shiftKey)
-this.navigateRight(ev,true)
-else
-this.navigateLeft(ev,true)
+if(cell){this.tableObj.focusCell(cell)}else{this.navigateDown(ev,0)}}
+Navigation.prototype.navigateNext=function(ev){if(!this.tableObj.activeCell)return
+if(this.tableObj.activeCellProcessor&&!this.tableObj.activeCellProcessor.keyNavigationAllowed(ev,'tab'))return
+if(!ev.shiftKey)this.navigateRight(ev,true)
+else this.navigateLeft(ev,true)
 this.tableObj.stopEvent(ev)}
 Navigation.prototype.focusCell=function(rowReference,cellIndex){var row=null,tbody=this.tableObj.getDataTableBody()
-if(typeof rowReference==='object'){row=rowReference}
-else{if(rowReference=='bottom'){row=tbody.children[tbody.children.length-1]}
-else if(rowReference=='top'){row=tbody.children[0]}}
-if(!row)
-return
+if(typeof rowReference==='object'){row=rowReference}else{if(rowReference=='bottom'){row=tbody.children[tbody.children.length-1]}else if(rowReference=='top'){row=tbody.children[0]}}if(!row)return
 var cell=row.children[cellIndex]
-if(cell)
-this.tableObj.focusCell(cell)}
-Navigation.prototype.focusCellInReplacedRow=function(rowIndex,cellIndex){if(rowIndex==0){this.focusCell('top',cellIndex)}
-else{var focusRow=this.tableObj.findRowByIndex(rowIndex)
-if(!focusRow)
-focusRow=this.tableObj.findRowByIndex(rowIndex-1)
-if(focusRow)
-this.focusCell(focusRow,cellIndex)
-else
-this.focusCell('top',cellIndex)}}
-Navigation.prototype.onKeydown=function(ev){if(ev.key==='ArrowDown')
-return this.navigateDown(ev)
-else if(ev.key==='ArrowUp')
-return this.navigateUp(ev)
-else if(ev.key==='ArrowLeft')
-return this.navigateLeft(ev)
-if(ev.key==='ArrowRight')
-return this.navigateRight(ev)
-if(ev.key==='Tab')
-return this.navigateNext(ev)}
+if(cell)this.tableObj.focusCell(cell)}
+Navigation.prototype.focusCellInReplacedRow=function(rowIndex,cellIndex){if(rowIndex==0){this.focusCell('top',cellIndex)}else{var focusRow=this.tableObj.findRowByIndex(rowIndex)
+if(!focusRow)focusRow=this.tableObj.findRowByIndex(rowIndex-1)
+if(focusRow)this.focusCell(focusRow,cellIndex)
+else this.focusCell('top',cellIndex)}}
+Navigation.prototype.onKeydown=function(ev){if(ev.key==='ArrowDown')return this.navigateDown(ev)
+else if(ev.key==='ArrowUp')return this.navigateUp(ev)
+else if(ev.key==='ArrowLeft')return this.navigateLeft(ev)
+if(ev.key==='ArrowRight')return this.navigateRight(ev)
+if(ev.key==='Tab')return this.navigateNext(ev)}
 Navigation.prototype.onClick=function(ev){var target=this.tableObj.getEventTarget(ev,'A')
-if(!target||!$(target).hasClass('pagination-link'))
-return
+if(!target||!$(target).hasClass('pagination-link'))return
 var pageIndex=parseInt(target.getAttribute('data-page-index'))
-if(pageIndex===null)
-return
+if(pageIndex===null)return
 this.gotoPage(pageIndex)
 this.tableObj.stopEvent(ev)
 return false}
-$.wn.table.helper.navigation=Navigation;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.helper===undefined)
-$.wn.table.helper={}
+$.wn.table.helper.navigation=Navigation;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.helper===undefined)$.wn.table.helper={}
 var Search=function(tableObj){this.tableObj=tableObj
 this.searchForm=null
 this.searchInput=null
@@ -562,8 +405,7 @@ this.init()};Search.prototype.init=function(){}
 Search.prototype.dispose=function(){this.tableObj=null
 this.searchForm=null
 this.searchInput=null}
-Search.prototype.buildSearchForm=function(){if(!this.searchEnabled())
-return
+Search.prototype.buildSearchForm=function(){if(!this.searchEnabled())return
 var el=this.tableObj.getElement(),toolbar=this.tableObj.getToolbar(),searchForm=toolbar.querySelector('.table-search')
 if(!searchForm){this.searchForm=$($('[data-table-toolbar-search]',el).html()).appendTo(toolbar).get(0)
 this.searchInput=$('.table-search-input',this.searchForm).get(0)}}
@@ -574,15 +416,11 @@ Search.prototype.performSearch=function(query,onSuccess){var isDirty=this.active
 this.activeQuery=query
 if(isDirty){this.tableObj.updateDataTable(onSuccess)}}
 Search.prototype.onKeydown=function(ev){if(ev.key==='Tab'){this.onClick(ev)
-return}
-if(!this.isActive){return}
-var self=this
+return}if(!this.isActive){return}var self=this
 this.inputTrackTimer=window.setTimeout(function(){self.performSearch(self.searchInput.value)},300)}
 Search.prototype.onClick=function(ev){var target=this.tableObj.getEventTarget(ev,'INPUT')
 this.isActive=target&&$(target).hasClass('table-search-input')}
-$.wn.table.helper.search=Search;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.datasource===undefined)
-$.wn.table.datasource={}
+$.wn.table.helper.search=Search;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.datasource===undefined)$.wn.table.datasource={}
 var Base=function(tableObj){this.tableObj=tableObj}
 Base.prototype.dispose=function(){this.tableObj=null}
 Base.prototype.getRecords=function(offset,count,onSuccess){onSuccess([])}
@@ -590,45 +428,32 @@ Base.prototype.searchRecords=function(query,offset,count,onSuccess){onSuccess([]
 Base.prototype.createRecord=function(recordData,placement,relativeToKey,offset,count,onSuccess){onSuccess([],0)}
 Base.prototype.updateRecord=function(key,recordData){}
 Base.prototype.deleteRecord=function(key,newRecordData,offset,count,onSuccess){onSuccess([],0)}
-$.wn.table.datasource.base=Base;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.datasource===undefined)
-throw new Error("The $.wn.table.datasource namespace is not defined. Make sure that the table.datasource.base.js script is loaded.");var Base=$.wn.table.datasource.base,BaseProto=Base.prototype
+$.wn.table.datasource.base=Base;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.datasource===undefined)throw new Error("The $.wn.table.datasource namespace is not defined. Make sure that the table.datasource.base.js script is loaded.");var Base=$.wn.table.datasource.base,BaseProto=Base.prototype
 var Client=function(tableObj){Base.call(this,tableObj)
 var dataString=tableObj.getElement().getAttribute('data-data')
-if(dataString===null||dataString===undefined)
-throw new Error('The required data-data attribute is not found on the table control element.')
+if(dataString===null||dataString===undefined)throw new Error('The required data-data attribute is not found on the table control element.')
 this.data=JSON.parse(dataString)};Client.prototype=Object.create(BaseProto)
 Client.prototype.constructor=Client
 Client.prototype.dispose=function(){BaseProto.dispose.call(this)
 this.data=null}
-Client.prototype.getRecords=function(offset,count,onSuccess){if(!count){onSuccess(this.data,this.data.length)}
-else{onSuccess(this.data.slice(offset,offset+count),this.data.length)}}
-Client.prototype.createRecord=function(recordData,placement,relativeToKey,offset,count,onSuccess){if(placement==='bottom'){this.data.push(recordData)}
-else if(placement=='above'||placement=='below'){var recordIndex=this.getIndexOfKey(relativeToKey)
-if(placement=='below')
-recordIndex++
-this.data.splice(recordIndex,0,recordData)}
-this.getRecords(offset,count,onSuccess)}
+Client.prototype.getRecords=function(offset,count,onSuccess){if(!count){onSuccess(this.data,this.data.length)}else{onSuccess(this.data.slice(offset,offset+count),this.data.length)}}
+Client.prototype.createRecord=function(recordData,placement,relativeToKey,offset,count,onSuccess){if(placement==='bottom'){this.data.push(recordData)}else if(placement=='above'||placement=='below'){var recordIndex=this.getIndexOfKey(relativeToKey)
+if(placement=='below')recordIndex++
+this.data.splice(recordIndex,0,recordData)}this.getRecords(offset,count,onSuccess)}
 Client.prototype.updateRecord=function(key,recordData){var recordIndex=this.getIndexOfKey(key)
 if(recordIndex!==-1){recordData[this.tableObj.options.keyColumn]=key
-this.data[recordIndex]=recordData}
-else{throw new Error('Record with they key '+key+' is not found in the data set')}}
+this.data[recordIndex]=recordData}else{throw new Error('Record with they key '+key+' is not found in the data set')}}
 Client.prototype.deleteRecord=function(key,newRecordData,offset,count,onSuccess){var recordIndex=this.getIndexOfKey(key)
 if(recordIndex!==-1){this.data.splice(recordIndex,1)
-if(this.data.length==0)
-this.data.push(newRecordData)
-this.getRecords(offset,count,onSuccess)}
-else{throw new Error('Record with they key '+key+' is not found in the data set')}}
+if(this.data.length==0)this.data.push(newRecordData)
+this.getRecords(offset,count,onSuccess)}else{throw new Error('Record with they key '+key+' is not found in the data set')}}
 Client.prototype.getIndexOfKey=function(key){var keyColumn=this.tableObj.options.keyColumn
 return this.data.map(function(record){return record[keyColumn]+""}).indexOf(key+"")}
 Client.prototype.getAllData=function(){return this.data}
-$.wn.table.datasource.client=Client}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.datasource===undefined)
-throw new Error("The $.wn.table.datasource namespace is not defined. Make sure that the table.datasource.base.js script is loaded.");var Base=$.wn.table.datasource.base,BaseProto=Base.prototype
+$.wn.table.datasource.client=Client}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.datasource===undefined)throw new Error("The $.wn.table.datasource namespace is not defined. Make sure that the table.datasource.base.js script is loaded.");var Base=$.wn.table.datasource.base,BaseProto=Base.prototype
 var Server=function(tableObj){Base.call(this,tableObj)
 var dataString=tableObj.getElement().getAttribute('data-data')
-if(dataString===null||dataString===undefined)
-throw new Error('The required data-data attribute is not found on the table control element.')
+if(dataString===null||dataString===undefined)throw new Error('The required data-data attribute is not found on the table control element.')
 this.data=JSON.parse(dataString)};Server.prototype=Object.create(BaseProto)
 Server.prototype.constructor=Server
 Server.prototype.dispose=function(){BaseProto.dispose.call(this)
@@ -643,9 +468,7 @@ Server.prototype.updateRecord=function(key,recordData){var handlerName=this.tabl
 this.tableObj.$el.request(handlerName,{data:{key:key,recordData:recordData}})}
 Server.prototype.deleteRecord=function(key,newRecordData,offset,count,onSuccess){var handlerName=this.tableObj.getAlias()+'::onServerDeleteRecord'
 this.tableObj.$el.request(handlerName,{data:{key:key,offset:offset,count:count}}).done(function(data){onSuccess(data.records,data.count)})}
-$.wn.table.datasource.server=Server}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)
-$.wn.table.processor={}
+$.wn.table.datasource.server=Server}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)$.wn.table.processor={}
 var Base=function(tableObj,columnName,columnConfiguration){this.tableObj=tableObj
 this.columnName=columnName
 this.columnConfiguration=columnConfiguration
@@ -677,18 +500,13 @@ Base.prototype.showViewContainer=function(cellElement){return this.getViewContai
 Base.prototype.hideViewContainer=function(cellElement){return this.getViewContainer(cellElement).setAttribute('class','hide')}
 Base.prototype.setViewContainerValue=function(cellElement,value){return this.getViewContainer(cellElement).textContent=value}
 Base.prototype.elementBelongsToProcessor=function(element){return false}
-Base.prototype.initValidators=function(){if(this.columnConfiguration.validation===undefined)
-return
-for(var validatorName in this.columnConfiguration.validation){if($.wn.table.validator===undefined||$.wn.table.validator[validatorName]==undefined)
-throw new Error('The table cell validator "'+validatorName+'" for the column "'+this.columnName+'" is not '+'found in the $.wn.table.validator namespace.')
+Base.prototype.initValidators=function(){if(this.columnConfiguration.validation===undefined)return
+for(var validatorName in this.columnConfiguration.validation){if($.wn.table.validator===undefined||$.wn.table.validator[validatorName]==undefined)throw new Error('The table cell validator "'+validatorName+'" for the column "'+this.columnName+'" is not '+'found in the $.wn.table.validator namespace.')
 var validator=new $.wn.table.validator[validatorName](this.columnConfiguration.validation[validatorName])
 this.validators.push(validator)}}
 Base.prototype.validate=function(value,rowData){for(var i=0,len=this.validators.length;i<len;i++){var message=this.validators[i].validate(value,rowData)
-if(message!==undefined)
-return message}}
-$.wn.table.processor.base=Base}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)
-throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.base,BaseProto=Base.prototype
+if(message!==undefined)return message}}
+$.wn.table.processor.base=Base}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.base,BaseProto=Base.prototype
 var StringProcessor=function(tableObj,columnName,columnConfiguration){this.focusTimeoutHandler=this.onFocusTimeout.bind(this)
 Base.call(this,tableObj,columnName,columnConfiguration)}
 StringProcessor.prototype=Object.create(BaseProto)
@@ -696,67 +514,49 @@ StringProcessor.prototype.constructor=StringProcessor
 StringProcessor.prototype.dispose=function(){BaseProto.dispose.call(this)
 this.focusTimeoutHandler=null}
 StringProcessor.prototype.renderCell=function(value,cellContentContainer){this.createViewContainer(cellContentContainer,value)}
-StringProcessor.prototype.onFocus=function(cellElement,isClick){if(this.activeCell===cellElement)
-return
+StringProcessor.prototype.onFocus=function(cellElement,isClick){if(this.activeCell===cellElement)return
 this.activeCell=cellElement
 this.buildEditor(cellElement,this.getCellContentContainer(cellElement))}
-StringProcessor.prototype.onUnfocus=function(){if(!this.activeCell)
-return
+StringProcessor.prototype.onUnfocus=function(){if(!this.activeCell)return
 var editor=this.activeCell.querySelector('.string-input')
 if(editor){this.tableObj.setCellValue(this.activeCell,editor.value)
 this.setViewContainerValue(this.activeCell,editor.value)
-editor.parentNode.removeChild(editor)}
-this.showViewContainer(this.activeCell)
+editor.parentNode.removeChild(editor)}this.showViewContainer(this.activeCell)
 this.activeCell=null}
 StringProcessor.prototype.buildEditor=function(cellElement,cellContentContainer){this.hideViewContainer(this.activeCell)
 var input=document.createElement('input')
 input.setAttribute('type','text')
 input.setAttribute('class','string-input')
 input.value=this.tableObj.getCellValue(cellElement)
-if(this.columnConfiguration.readOnly){input.setAttribute('readonly',true)}
-cellContentContainer.appendChild(input)
+if(this.columnConfiguration.readOnly){input.setAttribute('readonly',true)}cellContentContainer.appendChild(input)
 this.setCaretPosition(input,0)
 window.setTimeout(this.focusTimeoutHandler,0)}
-StringProcessor.prototype.keyNavigationAllowed=function(ev,direction){if(direction!='left'&&direction!='right')
-return true
-if(!this.activeCell)
-return true
+StringProcessor.prototype.keyNavigationAllowed=function(ev,direction){if(direction!='left'&&direction!='right')return true
+if(!this.activeCell)return true
 var editor=this.activeCell.querySelector('.string-input')
-if(!editor)
-return true
+if(!editor)return true
 var caretPosition=this.getCaretPosition(editor)
-if(direction=='left')
-return caretPosition==0
-if(direction=='right')
-return caretPosition==editor.value.length
+if(direction=='left')return caretPosition==0
+if(direction=='right')return caretPosition==editor.value.length
 return true}
-StringProcessor.prototype.onRowValueChanged=function(columnName,cellElement){if(columnName!=this.columnName){return}
-var value=this.tableObj.getCellValue(cellElement)
+StringProcessor.prototype.onRowValueChanged=function(columnName,cellElement){if(columnName!=this.columnName){return}var value=this.tableObj.getCellValue(cellElement)
 this.setViewContainerValue(cellElement,value)}
-StringProcessor.prototype.onFocusTimeout=function(){if(!this.activeCell)
-return
+StringProcessor.prototype.onFocusTimeout=function(){if(!this.activeCell)return
 var editor=this.activeCell.querySelector('.string-input')
-if(!editor)
-return
+if(!editor)return
 editor.focus()
 this.setCaretPosition(editor,0)}
 StringProcessor.prototype.getCaretPosition=function(input){if(document.selection){var selection=document.selection.createRange()
 selection.moveStart('character',-input.value.length)
-return selection.text.length}
-if(input.selectionStart!==undefined)
-return input.selectionStart
+return selection.text.length}if(input.selectionStart!==undefined)return input.selectionStart
 return 0}
 StringProcessor.prototype.setCaretPosition=function(input,position){if(document.selection){var range=input.createTextRange()
 setTimeout(function(){range.collapse(true)
 range.moveStart("character",position)
 range.moveEnd("character",0)
-range.select()},0)}
-if(input.selectionStart!==undefined){setTimeout(function(){input.selectionStart=position
-input.selectionEnd=position},0)}
-return 0}
-$.wn.table.processor.string=StringProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)
-throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.base,BaseProto=Base.prototype
+range.select()},0)}if(input.selectionStart!==undefined){setTimeout(function(){input.selectionStart=position
+input.selectionEnd=position},0)}return 0}
+$.wn.table.processor.string=StringProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.base,BaseProto=Base.prototype
 var CheckboxProcessor=function(tableObj,columnName,columnConfiguration){Base.call(this,tableObj,columnName,columnConfiguration)}
 CheckboxProcessor.prototype=Object.create(BaseProto)
 CheckboxProcessor.prototype.constructor=CheckboxProcessor
@@ -765,29 +565,21 @@ CheckboxProcessor.prototype.isCellFocusable=function(){return false}
 CheckboxProcessor.prototype.renderCell=function(value,cellContentContainer){var checkbox=document.createElement('div')
 checkbox.setAttribute('data-checkbox-element','true')
 checkbox.setAttribute('tabindex','0')
-if(value&&value!=0&&value!="false"){checkbox.setAttribute('class','checked')}
-cellContentContainer.appendChild(checkbox)}
+if(value&&value!=0&&value!="false"){checkbox.setAttribute('class','checked')}cellContentContainer.appendChild(checkbox)}
 CheckboxProcessor.prototype.onFocus=function(cellElement,isClick){cellElement.querySelector('div[data-checkbox-element]').focus()}
-CheckboxProcessor.prototype.onKeyDown=function(ev){if(ev.key==='(Space character)'||ev.key==='Spacebar'||ev.key===' ')
-this.onClick(ev)}
+CheckboxProcessor.prototype.onKeyDown=function(ev){if(ev.key==='(Space character)'||ev.key==='Spacebar'||ev.key===' ')this.onClick(ev)}
 CheckboxProcessor.prototype.onClick=function(ev){var target=this.tableObj.getEventTarget(ev,'DIV')
 if(target.getAttribute('data-checkbox-element')){var container=this.getCheckboxContainerNode(target)
-if(container.getAttribute('data-column')!==this.columnName){return}
-this.changeState(target)
+if(container.getAttribute('data-column')!==this.columnName){return}this.changeState(target)
 $(ev.target).trigger('change')}}
 CheckboxProcessor.prototype.changeState=function(divElement){var cell=divElement.parentNode.parentNode
 if(divElement.getAttribute('class')=='checked'){divElement.setAttribute('class','')
-this.tableObj.setCellValue(cell,0)}
-else{divElement.setAttribute('class','checked')
+this.tableObj.setCellValue(cell,0)}else{divElement.setAttribute('class','checked')
 this.tableObj.setCellValue(cell,1)}}
 CheckboxProcessor.prototype.getCheckboxContainerNode=function(checkbox){return checkbox.parentNode.parentNode}
-CheckboxProcessor.prototype.onRowValueChanged=function(columnName,cellElement){if(columnName!=this.columnName){return}
-var checkbox=cellElement.querySelector('div[data-checkbox-element]'),value=this.tableObj.getCellValue(cellElement)
-if(value&&value!=0&&value!="false"){checkbox.setAttribute('class','checked')}
-else{checkbox.setAttribute('class','')}}
-$.wn.table.processor.checkbox=CheckboxProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)
-throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.base,BaseProto=Base.prototype
+CheckboxProcessor.prototype.onRowValueChanged=function(columnName,cellElement){if(columnName!=this.columnName){return}var checkbox=cellElement.querySelector('div[data-checkbox-element]'),value=this.tableObj.getCellValue(cellElement)
+if(value&&value!=0&&value!="false"){checkbox.setAttribute('class','checked')}else{checkbox.setAttribute('class','')}}
+$.wn.table.processor.checkbox=CheckboxProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.base,BaseProto=Base.prototype
 var DropdownProcessor=function(tableObj,columnName,columnConfiguration){this.itemListElement=null
 this.cachedOptionPromises={}
 this.searching=false
@@ -806,23 +598,18 @@ this.itemMouseMoveHandler=null
 this.itemListElement=null
 this.cachedOptionPromises=null
 BaseProto.dispose.call(this)}
-DropdownProcessor.prototype.unregisterListHandlers=function(){if(this.itemListElement)
-{this.itemListElement.removeEventListener('click',this.itemClickHandler)
+DropdownProcessor.prototype.unregisterListHandlers=function(){if(this.itemListElement){this.itemListElement.removeEventListener('click',this.itemClickHandler)
 this.itemListElement.removeEventListener('keydown',this.itemKeyDownHandler)
 this.itemListElement.removeEventListener('mousemove',this.itemMouseMoveHandler)}}
 DropdownProcessor.prototype.renderCell=function(value,cellContentContainer){var viewContainer=this.createViewContainer(cellContentContainer,'...')
-this.fetchOptions(cellContentContainer.parentNode,function renderCellFetchOptions(options){if(options[value]!==undefined)
-viewContainer.textContent=options[value]
+this.fetchOptions(cellContentContainer.parentNode,function renderCellFetchOptions(options){if(options[value]!==undefined)viewContainer.textContent=options[value]
 cellContentContainer.setAttribute('tabindex',0)})}
 DropdownProcessor.prototype.onFocus=function(cellElement,isClick){if(this.activeCell===cellElement){this.showDropdown()
-return}
-this.activeCell=cellElement
+return}this.activeCell=cellElement
 var cellContentContainer=this.getCellContentContainer(cellElement)
 this.buildEditor(cellElement,cellContentContainer,isClick)
-if(!isClick)
-cellContentContainer.focus()}
-DropdownProcessor.prototype.onUnfocus=function(){if(!this.activeCell)
-return
+if(!isClick)cellContentContainer.focus()}
+DropdownProcessor.prototype.onUnfocus=function(){if(!this.activeCell)return
 this.unregisterListHandlers()
 this.hideDropdown()
 this.itemListElement=null
@@ -842,12 +629,9 @@ for(var value in options){var itemElement=document.createElement('li')
 itemElement.setAttribute('data-value',value)
 itemElement.textContent=options[value]
 itemElement.setAttribute('tabindex',0)
-if(value==currentValue)
-itemElement.setAttribute('class','selected')
-listElement.appendChild(itemElement)}
-self.itemListElement.appendChild(listElement)
-if(isClick)
-self.showDropdown()
+if(value==currentValue)itemElement.setAttribute('class','selected')
+listElement.appendChild(itemElement)}self.itemListElement.appendChild(listElement)
+if(isClick)self.showDropdown()
 self=null})}
 DropdownProcessor.prototype.hideDropdown=function(){if(this.itemListElement&&this.activeCell&&this.itemListElement.parentNode){var cellContentContainer=this.getCellContentContainer(this.activeCell)
 cellContentContainer.setAttribute('data-dropdown-open','false')
@@ -857,100 +641,61 @@ DropdownProcessor.prototype.showDropdown=function(){if(this.itemListElement&&thi
 document.body.appendChild(this.itemListElement)
 var activeItemElement=this.itemListElement.querySelector('ul li.selected')
 if(!activeItemElement){activeItemElement=this.itemListElement.querySelector('ul li:first-child')
-if(activeItemElement)
-activeItemElement.setAttribute('class','selected')}
-if(activeItemElement){window.setTimeout(function(){activeItemElement.focus()},0)}}}
-DropdownProcessor.prototype.fetchOptions=function(cellElement,onSuccess){if(this.columnConfiguration.options){onSuccess(this.columnConfiguration.options)}
-else{var row=cellElement.parentNode,cachingKey=this.createOptionsCachingKey(row),viewContainer=this.getViewContainer(cellElement)
+if(activeItemElement)activeItemElement.setAttribute('class','selected')}if(activeItemElement){window.setTimeout(function(){activeItemElement.focus()},0)}}}
+DropdownProcessor.prototype.fetchOptions=function(cellElement,onSuccess){if(this.columnConfiguration.options){onSuccess(this.columnConfiguration.options)}else{var row=cellElement.parentNode,cachingKey=this.createOptionsCachingKey(row),viewContainer=this.getViewContainer(cellElement)
 viewContainer.setAttribute('class','loading')
 if(!this.cachedOptionPromises[cachingKey]){var requestData={column:this.columnName,rowData:this.tableObj.getRowData(row)},handlerName=this.tableObj.getAlias()+'::onGetDropdownOptions'
-this.cachedOptionPromises[cachingKey]=this.tableObj.$el.request(handlerName,{data:requestData})}
-this.cachedOptionPromises[cachingKey].done(function onDropDownLoadOptionsSuccess(data){onSuccess(data.options)}).always(function onDropDownLoadOptionsAlways(){viewContainer.setAttribute('class','')})}}
+this.cachedOptionPromises[cachingKey]=this.tableObj.$el.request(handlerName,{data:requestData})}this.cachedOptionPromises[cachingKey].done(function onDropDownLoadOptionsSuccess(data){onSuccess(data.options)}).always(function onDropDownLoadOptionsAlways(){viewContainer.setAttribute('class','')})}}
 DropdownProcessor.prototype.createOptionsCachingKey=function(row){var cachingKey='non-dependent',dependsOn=this.columnConfiguration.dependsOn
-if(dependsOn){if(typeof dependsOn=='object'){for(var i=0,len=dependsOn.length;i<len;i++)
-cachingKey+=dependsOn[i]+this.tableObj.getRowCellValueByColumnName(row,dependsOn[i])}else
-cachingKey=dependsOn+this.tableObj.getRowCellValueByColumnName(row,dependsOn)}
-return cachingKey}
+if(dependsOn){if(typeof dependsOn=='object'){for(var i=0,len=dependsOn.length;i<len;i++)cachingKey+=dependsOn[i]+this.tableObj.getRowCellValueByColumnName(row,dependsOn[i])}else cachingKey=dependsOn+this.tableObj.getRowCellValueByColumnName(row,dependsOn)}return cachingKey}
 DropdownProcessor.prototype.getAbsolutePosition=function(element){var top=document.body.scrollTop,left=0
-do{top+=element.offsetTop||0;top-=element.scrollTop||0;left+=element.offsetLeft||0;element=element.offsetParent;}while(element)
-return{top:top,left:left}}
-DropdownProcessor.prototype.updateCellFromFocusedItem=function(focusedItem){if(!focusedItem){focusedItem=this.findFocusedItem();}
-this.setSelectedItem(focusedItem);}
-DropdownProcessor.prototype.findSelectedItem=function(){if(this.itemListElement)
-return this.itemListElement.querySelector('ul li.selected')
+do{top+=element.offsetTop||0;top-=element.scrollTop||0;left+=element.offsetLeft||0;element=element.offsetParent;}while(element)return{top:top,left:left}}
+DropdownProcessor.prototype.updateCellFromFocusedItem=function(focusedItem){if(!focusedItem){focusedItem=this.findFocusedItem();}this.setSelectedItem(focusedItem);}
+DropdownProcessor.prototype.findSelectedItem=function(){if(this.itemListElement)return this.itemListElement.querySelector('ul li.selected')
 return null}
-DropdownProcessor.prototype.setSelectedItem=function(item){if(!this.itemListElement)
-return null;if(item.tagName=='LI'&&this.itemListElement.contains(item)){this.itemListElement.querySelectorAll('ul li').forEach(function(option){option.removeAttribute('class');});item.setAttribute('class','selected');}
-this.tableObj.setCellValue(this.activeCell,item.getAttribute('data-value'))
+DropdownProcessor.prototype.setSelectedItem=function(item){if(!this.itemListElement)return null;if(item.tagName=='LI'&&this.itemListElement.contains(item)){this.itemListElement.querySelectorAll('ul li').forEach(function(option){option.removeAttribute('class');});item.setAttribute('class','selected');}this.tableObj.setCellValue(this.activeCell,item.getAttribute('data-value'))
 this.setViewContainerValue(this.activeCell,item.textContent)}
-DropdownProcessor.prototype.findFocusedItem=function(){if(this.itemListElement)
-return this.itemListElement.querySelector('ul li:focus')
+DropdownProcessor.prototype.findFocusedItem=function(){if(this.itemListElement)return this.itemListElement.querySelector('ul li:focus')
 return null}
 DropdownProcessor.prototype.onItemClick=function(ev){var target=this.tableObj.getEventTarget(ev)
 if(target.tagName=='LI'){target.focus();this.updateCellFromFocusedItem(target)
 this.hideDropdown()}}
-DropdownProcessor.prototype.onItemKeyDown=function(ev){if(!this.itemListElement)
-return
-if(ev.key==='ArrowDown'||ev.key==='ArrowUp')
-{var focused=this.findFocusedItem(),newFocusedItem=focused.nextElementSibling
-if(ev.key==='ArrowUp')
-newFocusedItem=focused.previousElementSibling
-if(newFocusedItem){newFocusedItem.focus()}
-return}
-if(ev.key==='Enter'||ev.key==='(Space character)'||ev.key==='Spacebar'||ev.key===' '){this.updateCellFromFocusedItem()
+DropdownProcessor.prototype.onItemKeyDown=function(ev){if(!this.itemListElement)return
+if(ev.key==='ArrowDown'||ev.key==='ArrowUp'){var focused=this.findFocusedItem(),newFocusedItem=focused.nextElementSibling
+if(ev.key==='ArrowUp')newFocusedItem=focused.previousElementSibling
+if(newFocusedItem){newFocusedItem.focus()}return}if(ev.key==='Enter'||ev.key==='(Space character)'||ev.key==='Spacebar'||ev.key===' '){this.updateCellFromFocusedItem()
 this.hideDropdown()
-return}
-if(ev.key==='Tab'){this.updateCellFromFocusedItem()
+return}if(ev.key==='Tab'){this.updateCellFromFocusedItem()
 this.tableObj.navigation.navigateNext(ev)
 this.tableObj.stopEvent(ev)
-return}
-if(ev.key==='Escape'){this.hideDropdown()
-return}
-this.searchByTextInput(ev,true);}
-DropdownProcessor.prototype.onItemMouseMove=function(ev){if(!this.itemListElement)
-return
+return}if(ev.key==='Escape'){this.hideDropdown()
+return}this.searchByTextInput(ev,true);}
+DropdownProcessor.prototype.onItemMouseMove=function(ev){if(!this.itemListElement)return
 var target=this.tableObj.getEventTarget(ev)
 if(target.tagName=='LI'){target.focus();}}
-DropdownProcessor.prototype.onKeyDown=function(ev){if(!this.itemListElement)
-return
-if((ev.key==='(Space character)'||ev.key==='Spacebar'||ev.key===' ')&&!this.searching){this.showDropdown()}else if(ev.key==='ArrowDown'||ev.key==='ArrowUp'){var selected=this.findSelectedItem(),newSelectedItem;if(!selected){if(ev.key==='ArrowUp'){return false}
-newSelectedItem=this.itemListElement.querySelector('ul li:first-child')}else{newSelectedItem=selected.nextElementSibling
-if(ev.key==='ArrowUp')
-newSelectedItem=selected.previousElementSibling}
-if(newSelectedItem){this.setSelectedItem(newSelectedItem);}
-return false}else{this.searchByTextInput(ev);}}
-DropdownProcessor.prototype.onRowValueChanged=function(columnName,cellElement){if(!this.columnConfiguration.dependsOn)
-return
+DropdownProcessor.prototype.onKeyDown=function(ev){if(!this.itemListElement)return
+if((ev.key==='(Space character)'||ev.key==='Spacebar'||ev.key===' ')&&!this.searching){this.showDropdown()}else if(ev.key==='ArrowDown'||ev.key==='ArrowUp'){var selected=this.findSelectedItem(),newSelectedItem;if(!selected){if(ev.key==='ArrowUp'){return false}newSelectedItem=this.itemListElement.querySelector('ul li:first-child')}else{newSelectedItem=selected.nextElementSibling
+if(ev.key==='ArrowUp')newSelectedItem=selected.previousElementSibling}if(newSelectedItem){this.setSelectedItem(newSelectedItem);}return false}else{this.searchByTextInput(ev);}}
+DropdownProcessor.prototype.onRowValueChanged=function(columnName,cellElement){if(!this.columnConfiguration.dependsOn)return
 var dependsOnColumn=false,dependsOn=this.columnConfiguration.dependsOn
 if(typeof dependsOn=='object'){for(var i=0,len=dependsOn.length;i<len;i++){if(dependsOn[i]==columnName){dependsOnColumn=true
-break}}}
-else{dependsOnColumn=dependsOn==columnName}
-if(!dependsOnColumn)
-return
+break}}}else{dependsOnColumn=dependsOn==columnName}if(!dependsOnColumn)return
 var currentValue=this.tableObj.getCellValue(cellElement),viewContainer=this.getViewContainer(cellElement)
 this.fetchOptions(cellElement,function rowValueChangedFetchOptions(options){var value=options[currentValue]!==undefined?options[currentValue]:'...'
 viewContainer.textContent=value
 viewContainer=null})}
-DropdownProcessor.prototype.elementBelongsToProcessor=function(element){if(!this.itemListElement)
-return false
+DropdownProcessor.prototype.elementBelongsToProcessor=function(element){if(!this.itemListElement)return false
 return this.tableObj.parentContainsElement(this.itemListElement,element)}
-DropdownProcessor.prototype.searchByTextInput=function(ev,focusOnly){if(focusOnly===undefined){focusOnly=false;}
-var character=ev.key;if(character.length===1||character==='Space'){if(!this.searching){this.searching=true;this.searchQuery='';}
-this.searchQuery+=(character==='Space')?' ':character;var validItem=null;var query=this.searchQuery;this.itemListElement.querySelectorAll('ul li').forEach(function(item){if(validItem===null&&item.dataset.value&&item.dataset.value.toLowerCase().indexOf(query.toLowerCase())===0){validItem=item;}});if(validItem){if(focusOnly===true){validItem.focus();}else{this.setSelectedItem(validItem);}
-if(this.searchInterval){clearTimeout(this.searchInterval);}
-this.searchInterval=setTimeout(this.cancelTextSearch.bind(this),1000);}else{this.cancelTextSearch();}}}
+DropdownProcessor.prototype.searchByTextInput=function(ev,focusOnly){if(focusOnly===undefined){focusOnly=false;}var character=ev.key;if(character.length===1||character==='Space'){if(!this.searching){this.searching=true;this.searchQuery='';}this.searchQuery+=(character==='Space')?' ':character;var validItem=null;var query=this.searchQuery;this.itemListElement.querySelectorAll('ul li').forEach(function(item){if(validItem===null&&item.dataset.value&&item.dataset.value.toLowerCase().indexOf(query.toLowerCase())===0){validItem=item;}});if(validItem){if(focusOnly===true){validItem.focus();}else{this.setSelectedItem(validItem);}if(this.searchInterval){clearTimeout(this.searchInterval);}this.searchInterval=setTimeout(this.cancelTextSearch.bind(this),1000);}else{this.cancelTextSearch();}}}
 DropdownProcessor.prototype.cancelTextSearch=function(){this.searching=false;this.searchQuery=null;this.searchInterval=null;}
-$.wn.table.processor.dropdown=DropdownProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)
-throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.string,BaseProto=Base.prototype
+$.wn.table.processor.dropdown=DropdownProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.string,BaseProto=Base.prototype
 var AutocompleteProcessor=function(tableObj,columnName,columnConfiguration){this.cachedOptionPromises={}
 Base.call(this,tableObj,columnName,columnConfiguration)}
 AutocompleteProcessor.prototype=Object.create(BaseProto)
 AutocompleteProcessor.prototype.constructor=AutocompleteProcessor
 AutocompleteProcessor.prototype.dispose=function(){this.cachedOptionPromises=null
 BaseProto.dispose.call(this)}
-AutocompleteProcessor.prototype.onUnfocus=function(){if(!this.activeCell)
-return
+AutocompleteProcessor.prototype.onUnfocus=function(){if(!this.activeCell)return
 this.removeAutocomplete()
 BaseProto.onUnfocus.call(this)}
 AutocompleteProcessor.prototype.renderCell=function(value,cellContentContainer){BaseProto.renderCell.call(this,value,cellContentContainer)}
@@ -958,128 +703,77 @@ AutocompleteProcessor.prototype.buildEditor=function(cellElement,cellContentCont
 var self=this
 this.fetchOptions(cellElement,function autocompleteFetchOptions(options){self.buildAutoComplete(options)
 self=null})}
-AutocompleteProcessor.prototype.fetchOptions=function(cellElement,onSuccess){if(this.columnConfiguration.options){if(onSuccess!==undefined){onSuccess(this.columnConfiguration.options)}}else{if(this.triggerGetOptions(onSuccess)===false){return}
-var row=cellElement.parentNode,cachingKey=this.createOptionsCachingKey(row),viewContainer=this.getViewContainer(cellElement)
+AutocompleteProcessor.prototype.fetchOptions=function(cellElement,onSuccess){if(this.columnConfiguration.options){if(onSuccess!==undefined){onSuccess(this.columnConfiguration.options)}}else{if(this.triggerGetOptions(onSuccess)===false){return}var row=cellElement.parentNode,cachingKey=this.createOptionsCachingKey(row),viewContainer=this.getViewContainer(cellElement)
 $.wn.foundation.element.addClass(viewContainer,'loading')
 if(!this.cachedOptionPromises[cachingKey]){var requestData={column:this.columnName,rowData:this.tableObj.getRowData(row)},handlerName=this.tableObj.getAlias()+'::onGetAutocompleteOptions'
-this.cachedOptionPromises[cachingKey]=this.tableObj.$el.request(handlerName,{data:requestData})}
-this.cachedOptionPromises[cachingKey].done(function onAutocompleteLoadOptionsSuccess(data){if(onSuccess!==undefined){onSuccess(data.options)}}).always(function onAutocompleteLoadOptionsAlways(){$.wn.foundation.element.removeClass(viewContainer,'loading')})}}
+this.cachedOptionPromises[cachingKey]=this.tableObj.$el.request(handlerName,{data:requestData})}this.cachedOptionPromises[cachingKey].done(function onAutocompleteLoadOptionsSuccess(data){if(onSuccess!==undefined){onSuccess(data.options)}}).always(function onAutocompleteLoadOptionsAlways(){$.wn.foundation.element.removeClass(viewContainer,'loading')})}}
 AutocompleteProcessor.prototype.createOptionsCachingKey=function(row){var cachingKey='non-dependent',dependsOn=this.columnConfiguration.dependsOn
-if(dependsOn){if(typeof dependsOn=='object'){for(var i=0,len=dependsOn.length;i<len;i++)
-cachingKey+=dependsOn[i]+this.tableObj.getRowCellValueByColumnName(row,dependsOn[i])}else
-cachingKey=dependsOn+this.tableObj.getRowCellValueByColumnName(row,dependsOn)}
-return cachingKey}
+if(dependsOn){if(typeof dependsOn=='object'){for(var i=0,len=dependsOn.length;i<len;i++)cachingKey+=dependsOn[i]+this.tableObj.getRowCellValueByColumnName(row,dependsOn[i])}else cachingKey=dependsOn+this.tableObj.getRowCellValueByColumnName(row,dependsOn)}return cachingKey}
 AutocompleteProcessor.prototype.triggerGetOptions=function(callback){var tableElement=this.tableObj.getElement()
-if(!tableElement){return}
-var optionsEvent=$.Event('autocompleteitems.oc.table'),values={}
+if(!tableElement){return}var optionsEvent=$.Event('autocompleteitems.oc.table'),values={}
 $(tableElement).trigger(optionsEvent,[{values:values,callback:callback,column:this.columnName,columnConfiguration:this.columnConfiguration}])
-if(optionsEvent.isDefaultPrevented()){return false}
-return true}
-AutocompleteProcessor.prototype.getInput=function(){if(!this.activeCell){return null}
-return this.activeCell.querySelector('.string-input')}
-AutocompleteProcessor.prototype.buildAutoComplete=function(items){if(!this.activeCell){return}
-var input=this.getInput()
-if(!input){return}
-if(items===undefined){items=[]}
-$(input).autocomplete({source:this.prepareItems(items),matchWidth:true,menu:'<ul class="autocomplete dropdown-menu table-widget-autocomplete"></ul>',bodyContainer:true})}
+if(optionsEvent.isDefaultPrevented()){return false}return true}
+AutocompleteProcessor.prototype.getInput=function(){if(!this.activeCell){return null}return this.activeCell.querySelector('.string-input')}
+AutocompleteProcessor.prototype.buildAutoComplete=function(items){if(!this.activeCell){return}var input=this.getInput()
+if(!input){return}if(items===undefined){items=[]}$(input).autocomplete({source:this.prepareItems(items),matchWidth:true,menu:'<ul class="autocomplete dropdown-menu table-widget-autocomplete"></ul>',bodyContainer:true})}
 AutocompleteProcessor.prototype.prepareItems=function(items){var result={}
-if($.isArray(items)){for(var i=0,len=items.length;i<len;i++){result[items[i]]=items[i]}}
-else{result=items}
-return result}
+if($.isArray(items)){for(var i=0,len=items.length;i<len;i++){result[items[i]]=items[i]}}else{result=items}return result}
 AutocompleteProcessor.prototype.removeAutocomplete=function(){var input=this.getInput()
 $(input).autocomplete('destroy')}
-$.wn.table.processor.autocomplete=AutocompleteProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
-$.wn.table.validator={}
+$.wn.table.processor.autocomplete=AutocompleteProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)$.wn.table.validator={}
 var Base=function(options){this.options=options}
-Base.prototype.validate=function(value,rowData){if(this.options.requiredWith!==undefined&&!this.rowHasValue(this.options.requiredWith,rowData))
-return
+Base.prototype.validate=function(value,rowData){if(this.options.requiredWith!==undefined&&!this.rowHasValue(this.options.requiredWith,rowData))return
 return this.validateValue(value,rowData)}
 Base.prototype.validateValue=function(value,rowData){}
-Base.prototype.trim=function(value){if(String.prototype.trim)
-return value.trim()
+Base.prototype.trim=function(value){if(String.prototype.trim)return value.trim()
 return value.replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g,'')}
-Base.prototype.getMessage=function(defaultValue){if(this.options.message!==undefined)
-return this.options.message
+Base.prototype.getMessage=function(defaultValue){if(this.options.message!==undefined)return this.options.message
 return defaultValue}
-Base.prototype.rowHasValue=function(columnName,rowData){if(rowData[columnName]===undefined)
-return false
-if(typeof rowData[columnName]=='boolean')
-return rowData[columnName]
+Base.prototype.rowHasValue=function(columnName,rowData){if(rowData[columnName]===undefined)return false
+if(typeof rowData[columnName]=='boolean')return rowData[columnName]
 var value=this.trim(String(rowData[columnName]))
 return value.length>0}
-$.wn.table.validator.base=Base;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
-throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
+$.wn.table.validator.base=Base;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
 var Required=function(options){Base.call(this,options)};Required.prototype=Object.create(BaseProto)
 Required.prototype.constructor=Required
 Required.prototype.validateValue=function(value,rowData){value=this.trim(value)
-if(value.length===0)
-return this.getMessage("The value should not be empty.")
+if(value.length===0)return this.getMessage("The value should not be empty.")
 return}
-$.wn.table.validator.required=Required}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
-throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
+$.wn.table.validator.required=Required}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
 var BaseNumber=function(options){Base.call(this,options)};BaseNumber.prototype=Object.create(BaseProto)
 BaseNumber.prototype.constructor=BaseNumber
-BaseNumber.prototype.doCommonChecks=function(value){if(this.options.min!==undefined||this.options.max!==undefined){if(this.options.min!==undefined){if(this.options.min.value===undefined)
-throw new Error('The min.value parameter is not defined in the table validator configuration')
-if(value<this.options.min.value){return this.options.min.message!==undefined?this.options.min.message:"The value should not be less than "+this.options.min.value}}
-if(this.options.max!==undefined){if(this.options.max.value===undefined)
-throw new Error('The max.value parameter is not defined in the table validator configuration')
-if(value>this.options.max.value){return this.options.max.message!==undefined?this.options.max.message:"The value should not be more than "+this.options.max.value}}}
-return}
-$.wn.table.validator.baseNumber=BaseNumber}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
-throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");if($.wn.table.validator.baseNumber===undefined)
-throw new Error("The $.wn.table.validator.baseNumber namespace is not defined. Make sure that the table.validator.baseNumber.js script is loaded.");var Base=$.wn.table.validator.baseNumber,BaseProto=Base.prototype
+BaseNumber.prototype.doCommonChecks=function(value){if(this.options.min!==undefined||this.options.max!==undefined){if(this.options.min!==undefined){if(this.options.min.value===undefined)throw new Error('The min.value parameter is not defined in the table validator configuration')
+if(value<this.options.min.value){return this.options.min.message!==undefined?this.options.min.message:"The value should not be less than "+this.options.min.value}}if(this.options.max!==undefined){if(this.options.max.value===undefined)throw new Error('The max.value parameter is not defined in the table validator configuration')
+if(value>this.options.max.value){return this.options.max.message!==undefined?this.options.max.message:"The value should not be more than "+this.options.max.value}}}return}
+$.wn.table.validator.baseNumber=BaseNumber}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");if($.wn.table.validator.baseNumber===undefined)throw new Error("The $.wn.table.validator.baseNumber namespace is not defined. Make sure that the table.validator.baseNumber.js script is loaded.");var Base=$.wn.table.validator.baseNumber,BaseProto=Base.prototype
 var Integer=function(options){Base.call(this,options)};Integer.prototype=Object.create(BaseProto)
 Integer.prototype.constructor=Integer
 Integer.prototype.validateValue=function(value,rowData){value=this.trim(value)
-if(value.length==0)
-return
+if(value.length==0)return
 var testResult=this.options.allowNegative?/^\-?[0-9]*$/.test(value):/^[0-9]*$/.test(value)
-if(!testResult){var defaultMessage=this.options.allowNegative?'The value should be an integer.':'The value should be a positive integer';return this.getMessage(defaultMessage)}
-return this.doCommonChecks(parseInt(value))}
-$.wn.table.validator.integer=Integer}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
-throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");if($.wn.table.validator.baseNumber===undefined)
-throw new Error("The $.wn.table.validator.baseNumber namespace is not defined. Make sure that the table.validator.baseNumber.js script is loaded.");var Base=$.wn.table.validator.baseNumber,BaseProto=Base.prototype
+if(!testResult){var defaultMessage=this.options.allowNegative?'The value should be an integer.':'The value should be a positive integer';return this.getMessage(defaultMessage)}return this.doCommonChecks(parseInt(value))}
+$.wn.table.validator.integer=Integer}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");if($.wn.table.validator.baseNumber===undefined)throw new Error("The $.wn.table.validator.baseNumber namespace is not defined. Make sure that the table.validator.baseNumber.js script is loaded.");var Base=$.wn.table.validator.baseNumber,BaseProto=Base.prototype
 var Float=function(options){Base.call(this,options)};Float.prototype=Object.create(BaseProto)
 Float.prototype.constructor=Float
 Float.prototype.validateValue=function(value,rowData){value=this.trim(value)
-if(value.length==0)
-return
+if(value.length==0)return
 var testResult=this.options.allowNegative?/^[-]?([0-9]+\.[0-9]+|[0-9]+)$/.test(value):/^([0-9]+\.[0-9]+|[0-9]+)$/.test(value)
-if(!testResult){var defaultMessage=this.options.allowNegative?'The value should be a floating point number.':'The value should be a positive floating point number';return this.getMessage(defaultMessage)}
-return this.doCommonChecks(parseFloat(value))}
-$.wn.table.validator.float=Float}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
-throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
+if(!testResult){var defaultMessage=this.options.allowNegative?'The value should be a floating point number.':'The value should be a positive floating point number';return this.getMessage(defaultMessage)}return this.doCommonChecks(parseFloat(value))}
+$.wn.table.validator.float=Float}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
 var Length=function(options){Base.call(this,options)};Length.prototype=Object.create(BaseProto)
 Length.prototype.constructor=Length
 Length.prototype.validateValue=function(value,rowData){value=this.trim(value)
-if(value.length==0)
-return
-if(this.options.min!==undefined||this.options.max!==undefined){if(this.options.min!==undefined){if(this.options.min.value===undefined)
-throw new Error('The min.value parameter is not defined in the Length table validator configuration')
-if(value.length<this.options.min.value){return this.options.min.message!==undefined?this.options.min.message:"The string should not be shorter than "+this.options.min.value}}
-if(this.options.max!==undefined){if(this.options.max.value===undefined)
-throw new Error('The max.value parameter is not defined in the Length table validator configuration')
-if(value.length>this.options.max.value){return this.options.max.message!==undefined?this.options.max.message:"The string should not be longer than "+this.options.max.value}}}
-return}
-$.wn.table.validator.length=Length}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)
-throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)
-throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
+if(value.length==0)return
+if(this.options.min!==undefined||this.options.max!==undefined){if(this.options.min!==undefined){if(this.options.min.value===undefined)throw new Error('The min.value parameter is not defined in the Length table validator configuration')
+if(value.length<this.options.min.value){return this.options.min.message!==undefined?this.options.min.message:"The string should not be shorter than "+this.options.min.value}}if(this.options.max!==undefined){if(this.options.max.value===undefined)throw new Error('The max.value parameter is not defined in the Length table validator configuration')
+if(value.length>this.options.max.value){return this.options.max.message!==undefined?this.options.max.message:"The string should not be longer than "+this.options.max.value}}}return}
+$.wn.table.validator.length=Length}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)throw new Error("The $.wn.table.validator namespace is not defined. Make sure that the table.validator.base.js script is loaded.");var Base=$.wn.table.validator.base,BaseProto=Base.prototype
 var Regex=function(options){Base.call(this,options)};Regex.prototype=Object.create(BaseProto)
 Regex.prototype.constructor=Regex
 Regex.prototype.validateValue=function(value,rowData){value=this.trim(value)
-if(value.length==0)
-return
-if(this.options.pattern===undefined)
-throw new Error('The pattern parameter is not defined in the Regex table validator configuration')
+if(value.length==0)return
+if(this.options.pattern===undefined)throw new Error('The pattern parameter is not defined in the Regex table validator configuration')
 var regexObj=new RegExp(this.options.pattern,this.options.modifiers)
-if(!regexObj.test(value))
-return this.getMessage("Invalid value format.")
+if(!regexObj.test(value))return this.getMessage("Invalid value format.")
 return}
 $.wn.table.validator.regex=Regex}(window.jQuery);

@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\MassAssignmentException;
 use League\Csv\Reader as CsvReader;
 use League\Csv\Writer as CsvWriter;
 use League\Csv\EscapeFormula as CsvEscapeFormula;
+use League\Csv\Statement as CsvStatement;
 use ApplicationException;
 use SplTempFileObject;
 use Exception;
@@ -22,7 +23,7 @@ use Exception;
  * This behavior is implemented in the controller like so:
  *
  *     public $implement = [
- *         'Backend.Behaviors.ImportExportController',
+ *         \Backend\Behaviors\ImportExportController::class,
  *     ];
  *
  *     public $importExportConfig = 'config_import_export.yaml';
@@ -36,11 +37,6 @@ use Exception;
  */
 class ImportExportController extends ControllerBehavior
 {
-    /**
-     * @inheritDoc
-     */
-    protected $requiredProperties = ['importExportConfig'];
-
     /**
      * @var array Configuration values that must exist when applying the primary config file.
      */
@@ -97,6 +93,11 @@ class ImportExportController extends ControllerBehavior
     protected $exportOptionsFormWidget;
 
     /**
+     * @var mixed Configuration for this behaviour
+     */
+    public $importExportConfig = 'config_import_export.yaml';
+
+    /**
      * Behavior constructor
      * @param Backend\Classes\Controller $controller
      */
@@ -107,7 +108,7 @@ class ImportExportController extends ControllerBehavior
         /*
          * Build configuration
          */
-        $this->config = $this->makeConfig($controller->importExportConfig, $this->requiredConfig);
+        $this->config = $this->makeConfig($controller->importExportConfig ?: $this->importExportConfig, $this->requiredConfig);
 
         /*
          * Process config
@@ -250,10 +251,10 @@ class ImportExportController extends ControllerBehavior
         $reader = $this->createCsvReader($path);
 
         if (post('first_row_titles')) {
-            $reader->setOffset(1);
+            $reader->setHeaderOffset(1);
         }
 
-        $result = $reader->setLimit(50)->fetchColumn((int) $columnId);
+        $result = (new CsvStatement())->limit(50)->process($reader)->fetchColumn((int) $columnId);
         $data = iterator_to_array($result, false);
 
         /*
@@ -576,7 +577,7 @@ class ImportExportController extends ControllerBehavior
             return false;
         }
 
-        if (!$this->controller->isClassExtendedWith('Backend.Behaviors.ListController')) {
+        if (!$this->controller->isClassExtendedWith(\Backend\Behaviors\ListController::class)) {
             throw new ApplicationException(Lang::get('backend::lang.import_export.behavior_missing_uselist_error'));
         }
 

@@ -378,8 +378,6 @@
     // ============================
 
     MediaManagerImageCropPopup.prototype.onPopupHidden = function(event, element, popup) {
-        this.$popupElement.find('form').request(this.options.alias+'::onEndCroppingSession')
-
         // Release clickedElement reference inside redactor.js
         // If we don't do it, the image editor popup DOM elements
         // won't be removed from the memory.

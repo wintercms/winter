@@ -1,37 +1,31 @@
 <?php namespace System;
 
-use Db;
-use App;
-use View;
-use Event;
-use Config;
 use Backend;
-use Request;
-use Validator;
-use BackendMenu;
-use BackendAuth;
-use SystemException;
+use Backend\Classes\WidgetManager;
 use Backend\Models\UserRole;
-use Twig\Extension\SandboxExtension;
-use Twig\Environment as TwigEnvironment;
-use System\Classes\MailManager;
+use BackendAuth;
+use BackendMenu;
+use Config;
+use Event;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Schema;
+use Request;
+use System\Classes\CombineAssets;
 use System\Classes\ErrorHandler;
+use System\Classes\MailManager;
 use System\Classes\MarkupManager;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
-use System\Twig\Engine as TwigEngine;
-use System\Twig\Loader as TwigLoader;
-use System\Twig\Extension as TwigExtension;
-use System\Twig\SecurityPolicy as TwigSecurityPolicy;
 use System\Models\EventLog;
 use System\Models\MailSetting;
-use System\Classes\CombineAssets;
-use Backend\Classes\WidgetManager;
-use Winter\Storm\Support\ModuleServiceProvider;
+use System\Twig\Engine as TwigEngine;
+use SystemException;
+use Validator;
+use View;
 use Winter\Storm\Router\Helper as RouterHelper;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Schema;
+use Winter\Storm\Support\ClassLoader;
+use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
 {
@@ -42,7 +36,15 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
-        parent::register('system');
+        parent::register();
+
+        $modules = Config::get('cms.loadModules', []);
+        $classLoader = $this->app->make(ClassLoader::class);
+        foreach ($modules as $module) {
+            if (strtolower(trim($module)) != 'system') {
+                $classLoader->autoloadPackage($module . '\\', "modules/" . strtolower($module) . '/');
+            }
+        }
 
         $this->registerSingletons();
         $this->registerPrivilegedActions();
@@ -65,19 +67,20 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register other module providers
          */
-        foreach (Config::get('cms.loadModules', []) as $module) {
+        foreach ($modules as $module) {
             if (strtolower(trim($module)) != 'system') {
-                App::register('\\' . $module . '\ServiceProvider');
+                $this->app->register('\\' . $module . '\ServiceProvider');
             }
         }
+
+        $this->registerBackendPermissions();
 
         /*
          * Backend specific
          */
-        if (App::runningInBackend()) {
+        if ($this->app->runningInBackend()) {
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
-            $this->registerBackendPermissions();
             $this->registerBackendSettings();
         }
     }
@@ -89,9 +92,6 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function boot()
     {
-        // Fix UTF8MB4 support for MariaDB < 10.2 and MySQL < 5.7
-        $this->applyDatabaseDefaultStringLength();
-
         // Fix use of Storage::url() for local disks that haven't been configured correctly
         foreach (Config::get('filesystems.disks') as $key => $config) {
             if ($config['driver'] === 'local' && ends_with($config['root'], '/storage/app') && empty($config['url'])) {
@@ -122,19 +122,19 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerSingletons()
     {
-        App::singleton('cms.helper', function () {
+        $this->app->singleton('cms.helper', function () {
             return new \Cms\Helpers\Cms;
         });
 
-        App::singleton('backend.helper', function () {
+        $this->app->singleton('backend.helper', function () {
             return new \Backend\Helpers\Backend;
         });
 
-        App::singleton('backend.menu', function () {
+        $this->app->singleton('backend.menu', function () {
             return \Backend\Classes\NavigationManager::instance();
         });
 
-        App::singleton('backend.auth', function () {
+        $this->app->singleton('backend.auth', function () {
             return \Backend\Classes\AuthManager::instance();
         });
     }
@@ -145,11 +145,9 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerPrivilegedActions()
     {
         $requests = ['/combine/', '@/system/updates', '@/system/install', '@/backend/auth'];
-        $commands = ['winter:up', 'winter:update', 'winter:env', 'winter:version', 'winter:manifest'];
+        $commands = ['migrate', 'winter:up', 'winter:update', 'winter:env', 'winter:version', 'winter:manifest'];
 
-        /*
-         * Requests
-         */
+        // Requests
         $path = RouterHelper::normalizeUrl(Request::path());
         $backendUri = RouterHelper::normalizeUrl(Config::get('cms.backendUri', 'backend'));
         foreach ($requests as $request) {
@@ -162,10 +160,20 @@ class ServiceProvider extends ModuleServiceProvider
             }
         }
 
-        /*
-         * CLI
-         */
-        if (App::runningInConsole() && count(array_intersect($commands, Request::server('argv', []))) > 0) {
+        // CLI
+        if ($this->app->runningInConsole()
+            && (
+                // Protected command
+                count(array_intersect($commands, Request::server('argv', []))) > 0
+
+                // Database configured but not initialized yet
+                // @see octobercms/october#3208
+                || (
+                    $this->app->hasDatabase()
+                    && !Schema::hasTable(UpdateManager::instance()->getMigrationTableName())
+                )
+            )
+        ) {
             PluginManager::$noInit = true;
         }
     }
@@ -185,7 +193,6 @@ class ServiceProvider extends ModuleServiceProvider
                 'link_to_asset'  => 'link_to_asset',
                 'link_to_route'  => 'link_to_route',
                 'link_to_action' => 'link_to_action',
-                'asset'          => 'asset',
                 'action'         => 'action',
                 'url'            => 'url',
                 'route'          => 'route',
@@ -213,6 +220,7 @@ class ServiceProvider extends ModuleServiceProvider
                 'transchoice'    => ['Lang', 'choice'],
                 'md'             => ['Markdown', 'parse'],
                 'md_safe'        => ['Markdown', 'parseSafe'],
+                'md_line'        => ['Markdown', 'parseLine'],
                 'time_since'     => ['System\Helpers\DateTime', 'timeSince'],
                 'time_tense'     => ['System\Helpers\DateTime', 'timeTense'],
             ]);
@@ -228,11 +236,6 @@ class ServiceProvider extends ModuleServiceProvider
          * Allow plugins to use the scheduler
          */
         Event::listen('console.schedule', function ($schedule) {
-            // Fix initial system migration with plugins that use settings for scheduling - see #3208
-            if (App::hasDatabase() && !Schema::hasTable(UpdateManager::instance()->getMigrationTableName())) {
-                return;
-            }
-
             $plugins = PluginManager::instance()->getPlugins();
             foreach ($plugins as $plugin) {
                 if (method_exists($plugin, 'registerSchedule')) {
@@ -251,31 +254,39 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register console commands
          */
-        $this->registerConsoleCommand('winter.up', 'System\Console\WinterUp');
-        $this->registerConsoleCommand('winter.down', 'System\Console\WinterDown');
-        $this->registerConsoleCommand('winter.update', 'System\Console\WinterUpdate');
-        $this->registerConsoleCommand('winter.util', 'System\Console\WinterUtil');
-        $this->registerConsoleCommand('winter.mirror', 'System\Console\WinterMirror');
-        $this->registerConsoleCommand('winter.fresh', 'System\Console\WinterFresh');
-        $this->registerConsoleCommand('winter.env', 'System\Console\WinterEnv');
-        $this->registerConsoleCommand('winter.install', 'System\Console\WinterInstall');
-        $this->registerConsoleCommand('winter.passwd', 'System\Console\WinterPasswd');
-        $this->registerConsoleCommand('winter.version', 'System\Console\WinterVersion');
-        $this->registerConsoleCommand('winter.manifest', 'System\Console\WinterManifest');
+        $this->registerConsoleCommand('create.command', \System\Console\CreateCommand::class);
+        $this->registerConsoleCommand('create.job', \System\Console\CreateJob::class);
+        $this->registerConsoleCommand('create.migration', \System\Console\CreateMigration::class);
+        $this->registerConsoleCommand('create.model', \System\Console\CreateModel::class);
+        $this->registerConsoleCommand('create.plugin', \System\Console\CreatePlugin::class);
+        $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
 
-        $this->registerConsoleCommand('plugin.install', 'System\Console\PluginInstall');
-        $this->registerConsoleCommand('plugin.remove', 'System\Console\PluginRemove');
-        $this->registerConsoleCommand('plugin.disable', 'System\Console\PluginDisable');
-        $this->registerConsoleCommand('plugin.enable', 'System\Console\PluginEnable');
-        $this->registerConsoleCommand('plugin.refresh', 'System\Console\PluginRefresh');
-        $this->registerConsoleCommand('plugin.rollback', 'System\Console\PluginRollback');
-        $this->registerConsoleCommand('plugin.list', 'System\Console\PluginList');
+        $this->registerConsoleCommand('winter.up', \System\Console\WinterUp::class);
+        $this->registerConsoleCommand('winter.down', \System\Console\WinterDown::class);
+        $this->registerConsoleCommand('winter.update', \System\Console\WinterUpdate::class);
+        $this->registerConsoleCommand('winter.util', \System\Console\WinterUtil::class);
+        $this->registerConsoleCommand('winter.mirror', \System\Console\WinterMirror::class);
+        $this->registerConsoleCommand('winter.fresh', \System\Console\WinterFresh::class);
+        $this->registerConsoleCommand('winter.env', \System\Console\WinterEnv::class);
+        $this->registerConsoleCommand('winter.install', \System\Console\WinterInstall::class);
+        $this->registerConsoleCommand('winter.version', \System\Console\WinterVersion::class);
+        $this->registerConsoleCommand('winter.manifest', \System\Console\WinterManifest::class);
+        $this->registerConsoleCommand('winter.test', \System\Console\WinterTest::class);
 
-        $this->registerConsoleCommand('theme.install', 'System\Console\ThemeInstall');
-        $this->registerConsoleCommand('theme.remove', 'System\Console\ThemeRemove');
-        $this->registerConsoleCommand('theme.list', 'System\Console\ThemeList');
-        $this->registerConsoleCommand('theme.use', 'System\Console\ThemeUse');
-        $this->registerConsoleCommand('theme.sync', 'System\Console\ThemeSync');
+        $this->registerConsoleCommand('plugin.install', \System\Console\PluginInstall::class);
+        $this->registerConsoleCommand('plugin.remove', \System\Console\PluginRemove::class);
+        $this->registerConsoleCommand('plugin.disable', \System\Console\PluginDisable::class);
+        $this->registerConsoleCommand('plugin.enable', \System\Console\PluginEnable::class);
+        $this->registerConsoleCommand('plugin.refresh', \System\Console\PluginRefresh::class);
+        $this->registerConsoleCommand('plugin.rollback', \System\Console\PluginRollback::class);
+        $this->registerConsoleCommand('plugin.list', \System\Console\PluginList::class);
+
+        $this->registerConsoleCommand('mix.install', \System\Console\MixInstall::class);
+        $this->registerConsoleCommand('mix.update', \System\Console\MixUpdate::class);
+        $this->registerConsoleCommand('mix.list', \System\Console\MixList::class);
+        $this->registerConsoleCommand('mix.compile', \System\Console\MixCompile::class);
+        $this->registerConsoleCommand('mix.watch', \System\Console\MixWatch::class);
+        $this->registerConsoleCommand('mix.run', \System\Console\MixRun::class);
     }
 
     /*
@@ -302,25 +313,25 @@ class ServiceProvider extends ModuleServiceProvider
     }
 
     /*
-     * Register text twig parser
+     * Register Twig Environments and other Twig modifications provided by the module
      */
     protected function registerTwigParser()
     {
-        /*
-         * Register system Twig environment
-         */
-        App::singleton('twig.environment', function ($app) {
-            $twig = new TwigEnvironment(new TwigLoader, ['auto_reload' => true]);
-            $twig->addExtension(new TwigExtension);
-            $twig->addExtension(new SandboxExtension(new TwigSecurityPolicy, true));
+        // Register System Twig environment
+        $this->app->singleton('twig.environment', function ($app) {
+            return MarkupManager::makeBaseTwigEnvironment();
+        });
+
+        // Register Mailer Twig environment
+        $this->app->singleton('twig.environment.mailer', function ($app) {
+            $twig = MarkupManager::makeBaseTwigEnvironment();
+            $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
             return $twig;
         });
 
-        /*
-         * Register .htm extension for Twig views
-         */
-        App::make('view')->addExtension('htm', 'twig', function () {
-            return new TwigEngine(App::make('twig.environment'));
+        // Register .htm extension for Twig views
+        $this->app->make('view')->addExtension('htm', 'twig', function () {
+            return new TwigEngine($this->app->make('twig.environment'));
         });
     }
 
@@ -393,7 +404,7 @@ class ServiceProvider extends ModuleServiceProvider
         BackendMenu::registerContextSidenavPartial(
             'Winter.System',
             'system',
-            '~/modules/system/partials/_system_sidebar.htm'
+            '~/modules/system/partials/_system_sidebar.php'
         );
 
         /*
@@ -432,23 +443,23 @@ class ServiceProvider extends ModuleServiceProvider
                 'system.manage_updates' => [
                     'label' => 'system::lang.permissions.manage_software_updates',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'system.access_logs' => [
                     'label' => 'system::lang.permissions.access_logs',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'system.manage_mail_settings' => [
                     'label' => 'system::lang.permissions.manage_mail_settings',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
+                    'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'system.manage_mail_templates' => [
                     'label' => 'system::lang.permissions.manage_mail_templates',
                     'tab' => 'system::lang.permissions.name',
-                    'roles' => UserRole::CODE_DEVELOPER,
-                ]
+                    'roles' => [UserRole::CODE_DEVELOPER],
+                ],
             ]);
             $manager->registerPermissionOwnerAlias('Winter.System', 'October.System');
         });
@@ -556,9 +567,11 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/less/styles.less');
             $combiner->registerBundle('~/modules/system/assets/ui/storm.less');
             $combiner->registerBundle('~/modules/system/assets/ui/storm.js');
+            $combiner->registerBundle('~/modules/system/assets/ui/icons.less');
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
             $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
+            $combiner->registerBundle('~/modules/system/assets/less/snowboard.extras.less');
         });
     }
 
@@ -607,25 +620,5 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerGlobalViewVars()
     {
         View::share('appName', Config::get('app.name'));
-    }
-
-    /**
-     * Fix UTF8MB4 support for old versions of MariaDB (<10.2) and MySQL (<5.7)
-     */
-    protected function applyDatabaseDefaultStringLength()
-    {
-        if (Db::getDriverName() !== 'mysql') {
-            return;
-        }
-
-        $defaultStrLen = Db::getConfig('varcharmax');
-
-        if ($defaultStrLen === null && Db::getConfig('charset') === 'utf8mb4') {
-            $defaultStrLen = 191;
-        }
-
-        if ($defaultStrLen !== null) {
-            Schema::defaultStringLength((int) $defaultStrLen);
-        }
     }
 }

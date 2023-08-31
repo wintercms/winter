@@ -1,5 +1,6 @@
 <?php namespace Backend\Controllers;
 
+use Backend;
 use Redirect;
 use BackendMenu;
 use Backend\Classes\Controller;
@@ -77,6 +78,7 @@ class Index extends Controller
             if ($first = array_first(BackendMenu::listMainMenuItems(), $true)) {
                 return Redirect::intended($first->url);
             }
+            return Backend::redirect('backend/users/myaccount');
         }
     }
 }

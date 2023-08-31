@@ -3,6 +3,7 @@
 use Lang;
 use ApplicationException;
 use Backend\Classes\FormWidgetBase;
+use Winter\Storm\Database\Model;
 
 /**
  * Record Finder
@@ -296,6 +297,9 @@ class RecordFinder extends FormWidgetBase
     {
         $this->prepareVars();
 
+        // Attach the parent element ID to the popup
+        $this->vars['parentElementId'] = $this->getId('popupTrigger');
+
         /*
          * Purge the search term stored in session
          */
@@ -309,10 +313,8 @@ class RecordFinder extends FormWidgetBase
 
     /**
      * Gets the base model instance used by this field
-     *
-     * @return \Winter\Storm\Database\Model
      */
-    protected function getRecordModel()
+    protected function getRecordModel(): Model
     {
         $model = null;
         if ($this->useRelation) {

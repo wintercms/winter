@@ -22,3 +22,15 @@ columns:
         valueFrom: count
         default: 0
         sortable: false
+
+    created_at:
+        label: backend::lang.user.created_at
+        searchable: true
+        invisible: true
+        type: datetime
+
+    updated_at:
+        label: backend::lang.user.updated_at
+        searchable: true
+        invisible: true
+        type: datetime
