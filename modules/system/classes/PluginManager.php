@@ -14,6 +14,7 @@ use SystemException;
 use FilesystemIterator;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use System\Classes\Packager\Composer;
 use System\Models\PluginVersion;
 use Winter\Storm\Foundation\Application;
 use Winter\Storm\Support\ClassLoader;
@@ -62,6 +63,11 @@ class PluginManager
     protected $pluginFlags = [];
 
     /**
+     * @var array Array of packages installed via composer
+     */
+    protected $composerPackages = [];
+
+    /**
      * @var PluginVersion[] Local cache of loaded PluginVersion records keyed by plugin code
      */
     protected $pluginRecords = [];
@@ -108,6 +114,9 @@ class PluginManager
     {
         $this->app = App::make('app');
 
+        // Load the packages registered via composer
+        $this->loadComposer();
+
         // Load the plugins from the filesystem and sort them by dependencies
         $this->loadPlugins();
 
@@ -117,6 +126,53 @@ class PluginManager
 
         // Register plugin replacements
         $this->registerPluginReplacements();
+    }
+
+    public function loadComposer(): array
+    {
+        return $this->composerPackages = Cache::rememberForever(Composer::COMPOSER_CACHE_KEY, function () {
+            $outdated = Composer::show('outdated')['installed'] ?? [];
+            $outdated = array_combine(array_map(fn ($pack) => $pack['name'], $outdated), $outdated);
+
+            $paths = Composer::show(path: true)['installed'] ?? [];
+            $paths = array_combine(
+                array_map(fn ($pack) => $pack['name'], $paths),
+                array_map(fn ($pack) => $pack['path'], $paths),
+            );
+
+            $packages = [];
+            foreach (Composer::show()['installed'] as $package) {
+                if ($package['direct-dependency']) {
+                    if (isset($outdated[$package['name']])) {
+                        $package['outdated'] = $outdated[$package['name']];
+                    }
+                    if (isset($paths[$package['name']])) {
+                        $package['path'] = $paths[$package['name']];
+                        if (is_file($paths[$package['name']] . '/composer.json')) {
+                            $json = json_decode(file_get_contents($paths[$package['name']] . '/composer.json'));
+                            if (isset($json->type)) {
+                                $package['type'] = $json->type;
+                                switch ($package['type']) {
+                                    case 'winter-plugin':
+                                        $packages['plugins'][$package['name']] = $package;
+                                        break;
+                                    case 'winter-module':
+                                        $packages['modules'][$package['name']] = $package;
+                                        break;
+                                    case 'winter-theme':
+                                        $packages['themes'][$package['name']] = $package;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return $packages;
+        });
     }
 
     /**
@@ -179,6 +235,16 @@ class PluginManager
 
         $this->plugins[$lowerClassId] = $pluginObj;
         $this->normalizedMap[$lowerClassId] = $classId;
+
+        $pluginObj->setComposerPackage(Cache::rememberForever($lowerClassId . '.composerPackage', function () use ($path) {
+            foreach ($this->composerPackages['plugins'] ?? [] as $name => $package) {
+                if (($package['path'] ?? '') === $path) {
+                    return $name;
+                }
+            }
+
+            return null;
+        }));
 
         $replaces = $pluginObj->getReplaces();
         if ($replaces) {

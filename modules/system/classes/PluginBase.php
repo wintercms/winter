@@ -54,6 +54,11 @@ class PluginBase extends ServiceProviderBase
     public $disabled = false;
 
     /**
+     * @var ?string The composer package a plugin belongs to.
+     */
+    public readonly ?string $package;
+
+    /**
      * Returns information about this plugin, including plugin name and developer name.
      *
      * @return array
@@ -475,6 +480,11 @@ class PluginBase extends ServiceProviderBase
         }
 
         return $versions;
+    }
+
+    public function setComposerPackage(?string $package): void
+    {
+        $this->package = $package;
     }
 
     /**
