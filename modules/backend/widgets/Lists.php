@@ -1059,6 +1059,10 @@ class Lists extends WidgetBase
             }
         }
 
+        if ($value instanceof BackedEnum) {
+            $value = $value->value;
+        }
+
         /**
          * @event backend.list.overrideColumnValueRaw
          * Overrides the raw column value in a list widget.
