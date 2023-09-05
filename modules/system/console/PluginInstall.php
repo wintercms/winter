@@ -1,8 +1,11 @@
 <?php namespace System\Console;
 
+use System\Classes\Packager\Composer;
+use System\Classes\VersionManager;
 use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Console command to install a new plugin.
@@ -34,21 +37,24 @@ class PluginInstall extends Command
      * Execute the console command.
      * @return void
      */
-    public function handle()
+    public function handle(): void
     {
         $pluginName = $this->argument('plugin');
-        $manager = UpdateManager::instance()->setNotesOutput($this->output);
+        $manager = null;
 
-        $pluginDetails = $manager->requestPluginDetails($pluginName);
+        if (strpos($pluginName, '/')) {
+            $code = $this->composerInstall($pluginName);
+            if (!$code) {
+                return;
+            }
+        } elseif (strpos($pluginName, '.')) {
+            $manager = UpdateManager::instance()->setNotesOutput($this->output);
+            $code = $this->winterInstall($pluginName, $manager);
+        }
 
-        $code = array_get($pluginDetails, 'code');
-        $hash = array_get($pluginDetails, 'hash');
-
-        $this->output->writeln(sprintf('<info>Downloading plugin: %s</info>', $code));
-        $manager->downloadPlugin($code, $hash, true);
-
-        $this->output->writeln(sprintf('<info>Unpacking plugin: %s</info>', $code));
-        $manager->extractPlugin($code, $hash);
+        if (!$manager) {
+            $manager = UpdateManager::instance()->setNotesOutput($this->output);
+        }
 
         /*
          * Make sure plugin is registered
@@ -63,5 +69,47 @@ class PluginInstall extends Command
          */
         $this->output->writeln(sprintf('<info>Migrating plugin...</info>', $code));
         $manager->updatePlugin($code);
+    }
+
+    public function winterInstall(string $pluginName, UpdateManager $manager): string
+    {
+        $pluginDetails = $manager->requestPluginDetails($pluginName);
+
+        $code = array_get($pluginDetails, 'code');
+        $hash = array_get($pluginDetails, 'hash');
+
+        $this->output->writeln(sprintf('<info>Downloading plugin: %s</info>', $code));
+        $manager->downloadPlugin($code, $hash, true);
+
+        $this->output->writeln(sprintf('<info>Unpacking plugin: %s</info>', $code));
+        $manager->extractPlugin($code, $hash);
+
+        return $code;
+    }
+
+    public function composerInstall(string $pluginName): ?string
+    {
+        try {
+            $result = Composer::search($pluginName, 'winter-plugin')->getResults();
+
+            if (count($result) > 1) {
+                throw new SystemException('More than 1 plugin returned via composer search');
+            }
+
+            if (count($result) === 0) {
+                throw new SystemException('Plugin could not be found');
+            }
+
+            Composer::require($pluginName);
+        } catch (\Throwable $e) {
+            $this->error($e->getMessage());
+            return null;
+        }
+
+        PluginManager::forgetInstance();
+        UpdateManager::forgetInstance();
+        VersionManager::forgetInstance();
+
+        return PluginManager::instance()->findByComposerPackage($pluginName)->getPluginIdentifier();
     }
 }
