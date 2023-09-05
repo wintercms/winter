@@ -3,7 +3,7 @@
 namespace System\Classes\Packager\Commands;
 
 use Cache;
-use System\Classes\Packager\ComposerFactory;
+use System\Classes\Packager\Composer;
 use Winter\Packager\Commands\BaseCommand;
 use Winter\Packager\Exceptions\CommandException;
 
@@ -55,7 +55,7 @@ class RemoveCommand extends BaseCommand
             throw new CommandException($message);
         }
 
-        Cache::forget(ComposerFactory::COMPOSER_CACHE_KEY);
+        Cache::forget(Composer::COMPOSER_CACHE_KEY);
 
         return $message;
     }

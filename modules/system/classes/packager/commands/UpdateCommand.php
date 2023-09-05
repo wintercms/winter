@@ -3,7 +3,7 @@
 namespace System\Classes\Packager\Commands;
 
 use Cache;
-use System\Classes\Packager\ComposerFactory;
+use System\Classes\Packager\Composer;
 use Winter\Packager\Commands\Update;
 
 class UpdateCommand extends Update
@@ -82,7 +82,7 @@ class UpdateCommand extends Update
 
     public function execute()
     {
-        Cache::forget(ComposerFactory::COMPOSER_CACHE_KEY);
+        Cache::forget(Composer::COMPOSER_CACHE_KEY);
         return parent::execute();
     }
 }

@@ -3,6 +3,7 @@
 namespace System\Classes\Packager;
 
 use System\Classes\Packager\Commands\RemoveCommand;
+use System\Classes\Packager\Commands\SearchCommand;
 use System\Classes\Packager\Commands\ShowCommand;
 use System\Classes\Packager\Commands\UpdateCommand;
 use System\Classes\Packager\Commands\RequireCommand;
@@ -34,10 +35,11 @@ class Composer
         static::$composer = new PackagerComposer();
         static::$composer->setWorkDir(base_path());
 
-        static::$composer->setCommand('show', new ShowCommand(static::$composer));
-        static::$composer->setCommand('update', new UpdateCommand(static::$composer));
         static::$composer->setCommand('remove', new RemoveCommand(static::$composer));
         static::$composer->setCommand('require', new RequireCommand(static::$composer));
+        static::$composer->setCommand('search', new SearchCommand(static::$composer));
+        static::$composer->setCommand('show', new ShowCommand(static::$composer));
+        static::$composer->setCommand('update', new UpdateCommand(static::$composer));
 
         return static::$composer;
     }
