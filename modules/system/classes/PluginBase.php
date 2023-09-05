@@ -54,9 +54,9 @@ class PluginBase extends ServiceProviderBase
     public $disabled = false;
 
     /**
-     * @var ?string The composer package a plugin belongs to.
+     * @var ?array The composer package details for this plugin.
      */
-    public readonly ?string $package;
+    protected ?array $composerPackage = null;
 
     /**
      * Returns information about this plugin, including plugin name and developer name.
@@ -482,9 +482,28 @@ class PluginBase extends ServiceProviderBase
         return $versions;
     }
 
-    public function setComposerPackage(?string $package): void
+    /**
+     * Set the composer package property for the plugin
+     */
+    public function setComposerPackage(?array $package): void
     {
-        $this->package = $package;
+        $this->composerPackage = $package;
+    }
+
+    /**
+     * Get the composer package details
+     */
+    public function getComposerPackage(): ?array
+    {
+        return $this->composerPackage;
+    }
+
+    /**
+     * Get the composer package name
+     */
+    public function getComposerPackageName(): ?string
+    {
+        return $this->composerPackage['name'] ?? null;
     }
 
     /**

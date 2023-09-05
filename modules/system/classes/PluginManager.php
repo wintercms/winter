@@ -10,6 +10,7 @@ use View;
 use Cache;
 use Config;
 use Schema;
+use Storage;
 use SystemException;
 use FilesystemIterator;
 use RecursiveIteratorIterator;
@@ -131,43 +132,25 @@ class PluginManager
     public function loadComposer(): array
     {
         return $this->composerPackages = Cache::rememberForever(Composer::COMPOSER_CACHE_KEY, function () {
-            $outdated = Composer::show('outdated')['installed'] ?? [];
-            $outdated = array_combine(array_map(fn ($pack) => $pack['name'], $outdated), $outdated);
-
-            $paths = Composer::show(path: true)['installed'] ?? [];
-            $paths = array_combine(
-                array_map(fn ($pack) => $pack['name'], $paths),
-                array_map(fn ($pack) => $pack['path'], $paths),
-            );
-
+            $packageFile = Storage::path('../framework/packages.json');
+            if (!is_file($packageFile)) {
+                return [];
+            }
             $packages = [];
-            foreach (Composer::show()['installed'] as $package) {
-                if ($package['direct-dependency']) {
-                    if (isset($outdated[$package['name']])) {
-                        $package['outdated'] = $outdated[$package['name']];
-                    }
-                    if (isset($paths[$package['name']])) {
-                        $package['path'] = $paths[$package['name']];
-                        if (is_file($paths[$package['name']] . '/composer.json')) {
-                            $json = json_decode(file_get_contents($paths[$package['name']] . '/composer.json'));
-                            if (isset($json->type)) {
-                                $package['type'] = $json->type;
-                                switch ($package['type']) {
-                                    case 'winter-plugin':
-                                        $packages['plugins'][$package['name']] = $package;
-                                        break;
-                                    case 'winter-module':
-                                        $packages['modules'][$package['name']] = $package;
-                                        break;
-                                    case 'winter-theme':
-                                        $packages['themes'][$package['name']] = $package;
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        }
-                    }
+            $installed = json_decode(file_get_contents($packageFile), JSON_OBJECT_AS_ARRAY);
+            foreach ($installed as $package) {
+                switch ($package['type']) {
+                    case 'winter-plugin':
+                        $packages['plugins'][$package['path']] = $package;
+                        break;
+                    case 'winter-module':
+                        $packages['modules'][$package['path']] = $package;
+                        break;
+                    case 'winter-theme':
+                        $packages['themes'][$package['path']] = $package;
+                        break;
+                    default:
+                        break;
                 }
             }
 
@@ -236,15 +219,7 @@ class PluginManager
         $this->plugins[$lowerClassId] = $pluginObj;
         $this->normalizedMap[$lowerClassId] = $classId;
 
-        $pluginObj->setComposerPackage(Cache::rememberForever($lowerClassId . '.composerPackage', function () use ($path) {
-            foreach ($this->composerPackages['plugins'] ?? [] as $name => $package) {
-                if (($package['path'] ?? '') === $path) {
-                    return $name;
-                }
-            }
-
-            return null;
-        }));
+        $pluginObj->setComposerPackage($this->composerPackages['plugins'][$path] ?? null);
 
         $replaces = $pluginObj->getReplaces();
         if ($replaces) {
@@ -535,6 +510,17 @@ class PluginManager
         }
 
         return $this->plugins[$identifier] ?? null;
+    }
+
+    public function findByComposerPackage(string $identifier): ?PluginBase
+    {
+        foreach ($this->getAllPlugins() as $plugin) {
+            if ($plugin->getComposerPackageName() === $identifier) {
+                return $plugin;
+            }
+        }
+
+        return null;
     }
 
     /**
