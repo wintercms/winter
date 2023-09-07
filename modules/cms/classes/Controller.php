@@ -324,10 +324,9 @@ class Controller
          */
         $globalVars = ViewHelper::getGlobalVars();
         if (!empty($globalVars)) {
-            $specified = array_keys($this->getTwig()->getGlobals());
-
+            $existingGlobals = array_keys($this->getTwig()->getGlobals());
             foreach ($globalVars as $key => $value) {
-                if (!in_array($key, $specified)) {
+                if (!in_array($key, $existingGlobals)) {
                     $this->getTwig()->addGlobal($key, $value);
                 }
             }
