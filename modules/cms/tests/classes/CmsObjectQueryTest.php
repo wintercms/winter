@@ -84,6 +84,8 @@ class CmsObjectQueryTest extends TestCase
             "no-soft-component-class",
             "optional-full-php-tags",
             "optional-short-php-tags",
+            "shared-variable",
+            "shared-variable-override",
             "throw-php",
             "with-component",
             "with-components",
