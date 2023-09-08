@@ -28,13 +28,35 @@
         "discord": "https://discord.gg/D5MFSPH6Ux",
         "source": "https://github.com/wintercms/winter"
     },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../winter-dev/modules/system",
+            "options": { "symlink": false  }
+        },
+        {
+            "type": "path",
+            "url": "../winter-dev/modules/backend",
+            "options": { "symlink": false  }
+        },
+        {
+            "type": "path",
+            "url": "../winter-dev/modules/cms",
+            "options": { "symlink": false  }
+        },
+        {
+            "type": "path",
+            "url": "../winter-dev/vendor/winter/storm",
+            "options": { "symlink": false  }
+        }
+    ],
     "require": {
         "php": "^8.0.2",
         "winter/storm": "dev-develop as 1.2",
         "winter/wn-system-module": "dev-develop",
         "winter/wn-backend-module": "dev-develop",
         "winter/wn-cms-module": "dev-develop",
-        "laravel/framework": "^9.1",
+        "laravel/framework": "^10.1",
         "wikimedia/composer-merge-plugin": "~2.1.0"
     },
     "require-dev": {
