@@ -200,6 +200,10 @@ return [
         'trashed_hint_title' => 'This account has been deleted',
         'trashed_hint_desc' => 'This account has been deleted and will be unable to be signed in under. To restore it, click the restore user icon in the bottom right',
     ],
+    'calendar' => [
+        'title' => 'Calendar',
+        'behavior_not_ready' => 'Calendar behavior has not been initialized, check that you have called makeCalendar() in your controller.',
+    ],
     'list' => [
         'default_title' => 'List',
         'search_prompt' => 'Search...',
