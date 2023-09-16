@@ -327,6 +327,7 @@ return [
         'relationwidget_unsupported_type' => 'Relāciju logrīks neatbalsta relāciju veidu ":type".',
         'help' => 'Noklikšķiniet uz vienuma, lai pievienotu',
         'related_data' => 'Saistītie :name dati',
+        'refresh' => 'Atsvaidzināt',
         'add' => 'Pievienot',
         'add_selected' => 'Pievienot izvēlētos',
         'add_a_new' => 'Pievienot jaunu :name',
