@@ -51,7 +51,7 @@
         }
     ],
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.1",
         "winter/storm": "dev-develop as 1.2",
         "winter/wn-system-module": "dev-develop",
         "winter/wn-backend-module": "dev-develop",
