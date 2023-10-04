@@ -320,6 +320,19 @@ class Controller
         ]);
 
         /*
+         * Add global vars defined by View::share() into Twig, only if they have yet to be specified.
+         */
+        $globalVars = ViewHelper::getGlobalVars();
+        if (!empty($globalVars)) {
+            $existingGlobals = array_keys($this->getTwig()->getGlobals());
+            foreach ($globalVars as $key => $value) {
+                if (!in_array($key, $existingGlobals)) {
+                    $this->getTwig()->addGlobal($key, $value);
+                }
+            }
+        }
+
+        /*
          * Check for the presence of validation errors in the session.
          */
         $this->vars['errors'] = (Config::get('session.driver') && Session::has('errors'))

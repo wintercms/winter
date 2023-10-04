@@ -1059,7 +1059,7 @@ class Lists extends WidgetBase
             }
         }
 
-        if ($value instanceof BackedEnum) {
+        if ($value instanceof \BackedEnum) {
             $value = $value->value;
         }
 
