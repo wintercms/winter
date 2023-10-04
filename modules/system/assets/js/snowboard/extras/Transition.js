@@ -1,4 +1,4 @@
-import { PluginBase } from "@wintercms/snowboard";
+import { PluginBase } from '@wintercms/snowboard';
 
 /**
  * Provides transition support for elements.

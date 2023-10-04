@@ -1,4 +1,4 @@
-import { Singleton } from "@wintercms/snowboard";
+import { Singleton } from '@wintercms/snowboard';
 
 /**
  * Defines a default listener for flash events.

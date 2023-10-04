@@ -1,4 +1,4 @@
-import { Singleton } from "@wintercms/snowboard";
+import { Singleton } from '@wintercms/snowboard';
 
 /**
  * Enable Data Attributes API for AJAX requests.

@@ -1,4 +1,4 @@
-import { Singleton } from "@wintercms/snowboard";
+import { Singleton } from '@wintercms/snowboard';
 
 /**
  * Adds AJAX-driven form validation to Snowboard requests.

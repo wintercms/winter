@@ -1,4 +1,4 @@
-import { Singleton } from "@wintercms/snowboard";
+import { Singleton } from '@wintercms/snowboard';
 
 /**
  * Allows attaching a loading class on elements that an AJAX request is targeting.
