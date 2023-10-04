@@ -14,7 +14,6 @@ import IconPickerVue from './components/IconPicker.vue';
     class IconPicker extends Snowboard.PluginBase {
         construct(element) {
             this.element = element;
-            this.config = this.snowboard.dataConfig(this, element);
 
             this.events = {
                 click: () => this.showPicker(),
@@ -24,6 +23,12 @@ import IconPickerVue from './components/IconPicker.vue';
             this.input = element.querySelector('input');
 
             this.attachEvents();
+        }
+
+        traits() {
+            return [
+                'Configurable',
+            ];
         }
 
         defaults() {
@@ -47,7 +52,7 @@ import IconPickerVue from './components/IconPicker.vue';
         }
 
         showPicker() {
-            this.snowboard.request(this.input, this.config.get('eventHandler'), {
+            this.snowboard.request(this.input, this.getConfig('eventHandler'), {
                 success: (data) => {
                     this.iconPickerApp = createApp(IconPickerVue, {
                         ...this.element.dataset,

@@ -18,7 +18,6 @@ import '../../less/sensitive.less';
          */
         construct(element) {
             this.element = element;
-            this.config = this.snowboard.dataConfig(this, element);
             this.clean = Boolean(element.dataset.clean);
             this.hidden = true;
 
@@ -36,7 +35,15 @@ import '../../less/sensitive.less';
                 tabChange: () => this.onTabChange(),
                 copy: () => this.onCopy(),
             };
+        }
 
+        traits() {
+            return [
+                'Configurable',
+            ];
+        }
+
+        init() {
             this.attachEvents();
         }
 
@@ -69,7 +76,7 @@ import '../../less/sensitive.less';
             this.input.addEventListener('keydown', this.events.input);
             this.toggle.addEventListener('click', this.events.toggle);
 
-            if (this.config.get('hideOnTabChange')) {
+            if (this.getConfig('hideOnTabChange')) {
                 // Watch for tab change or minimise
                 document.addEventListener('visibilitychange', this.events.tabChange);
             }
@@ -86,7 +93,7 @@ import '../../less/sensitive.less';
             this.input.removeEventListener('keydown', this.events.input);
             this.toggle.removeEventListener('click', this.events.toggle);
 
-            if (this.config.get('hideOnTabChange')) {
+            if (this.getConfig('hideOnTabChange')) {
                 // Watch for tab change or minimise
                 document.removeEventListener('visibilitychange', this.events.tabChange);
             }
@@ -210,7 +217,7 @@ import '../../less/sensitive.less';
                 this.icon.style.visibility = 'hidden';
                 this.loader.classList.remove('hide');
 
-                this.snowboard.request(this.input, this.config.get('eventHandler'), {
+                this.snowboard.request(this.input, this.getConfig('eventHandler'), {
                     success: (data) => {
                         this.input.value = data.value;
                         this.clean = false;

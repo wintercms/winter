@@ -1,6 +1,5 @@
 import * as Vue from 'vue';
 import BackendAjaxHandler from './ajax/Handler';
-import BackendUiEventHandler from './ui/EventHandler';
 import BackendUiWidgetHandler from './ui/WidgetHandler';
 
 if (window.Snowboard === undefined) {
@@ -9,7 +8,6 @@ if (window.Snowboard === undefined) {
 
 ((Snowboard) => {
     Snowboard.addPlugin('backend.ajax.handler', BackendAjaxHandler);
-    Snowboard.addPlugin('backend.ui.eventHandler', BackendUiEventHandler);
     Snowboard.addPlugin('backend.ui.widgetHandler', BackendUiWidgetHandler);
 
     // Add the pre-filter immediately
