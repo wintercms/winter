@@ -48,6 +48,7 @@ class Extension extends TwigExtension
         return [
             new TwigSimpleFunction('page', [$this, 'pageFunction'], $options),
             new TwigSimpleFunction('partial', [$this, 'partialFunction'], $options),
+            new TwigSimpleFunction('partialExists', [$this, 'partialExistsFunction'], $options),
             new TwigSimpleFunction('content', [$this, 'contentFunction'], $options),
             new TwigSimpleFunction('component', [$this, 'componentFunction'], $options),
             new TwigSimpleFunction('placeholder', [$this, 'placeholderFunction'], ['is_safe' => ['html']]),
@@ -104,6 +105,14 @@ class Extension extends TwigExtension
     public function partialFunction(string $name, array $parameters = [], bool $throwException = false): string|bool
     {
         return $this->controller->renderPartial($name, $parameters, $throwException);
+    }
+
+    /**
+     * Checks if the requested partial exists
+     */
+    public function partialExistsFunction(string $name, bool $throwException = false): bool
+    {
+        return (bool) $this->controller->findPartial($name, $throwException);
     }
 
     /**

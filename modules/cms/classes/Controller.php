@@ -1,30 +1,32 @@
-<?php namespace Cms\Classes;
+<?php
 
-use Cms;
-use Url;
+namespace Cms\Classes;
+
 use App;
-use View;
+use BackendAuth;
+use Cache;
+use Cms;
+use Cms\Models\MaintenanceSetting;
+use Config;
+use Exception;
 use File;
+use Flash;
+use Illuminate\Http\RedirectResponse;
 use Lang;
 use Log;
-use Flash;
-use Cache;
-use Config;
-use Session;
 use Request;
 use Response;
-use Exception;
-use SystemException;
-use BackendAuth;
-use Twig\Environment as TwigEnvironment;
-use Cms\Models\MaintenanceSetting;
-use System\Models\RequestLog;
-use System\Helpers\View as ViewHelper;
+use Session;
 use System\Classes\CombineAssets;
+use System\Helpers\View as ViewHelper;
+use System\Models\RequestLog;
+use Twig\Environment as TwigEnvironment;
+use Url;
+use View;
 use Winter\Storm\Exception\AjaxException;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Parse\Bracket as TextParser;
-use Illuminate\Http\RedirectResponse;
 
 /**
  * The CMS controller class.
@@ -911,30 +913,23 @@ class Controller
     }
 
     /**
-     * Renders a requested partial.
-     * The framework uses this method internally.
+     * Finds a requested partial
      *
-     * @param string $name The view to load.
-     * @param array $parameters Parameter variables to pass to the view.
-     * @param bool $throwException Throw an exception if the partial is not found.
      * @throws SystemException If the partial cannot be found
-     * @return mixed Partial contents or false if not throwing an exception.
      */
-    public function renderPartial($name, $parameters = [], $throwException = true)
+    public function findPartial(string $name, bool $throwException = false): Partial|ComponentPartial|bool
     {
-        $vars = $this->vars;
-        $this->vars = array_merge($this->vars, $parameters);
+        $partial = false;
 
-        /*
-         * Alias @ symbol for ::
-         */
+        // @ is an alias for ::
         if (substr($name, 0, 1) == '@') {
             $name = '::' . substr($name, 1);
         }
 
         /**
          * @event cms.page.beforeRenderPartial
-         * Provides an opportunity to manipulate the name of the partial being rendered before it renders
+         * Provides an opportunity to manipulate the name of the partial being rendered before it renders.
+         * Must return a Partial instance, ComponentPartial instance, or false.
          *
          * Example usage:
          *
@@ -950,78 +945,138 @@ class Controller
          *
          */
         if ($event = $this->fireSystemEvent('cms.page.beforeRenderPartial', [$name])) {
-            $partial = $event;
+            return $event;
+        }
+
+        /*
+         * Handle Component Partials
+         */
+        if (strpos($name, '::') !== false) {
+            $componentPartial = $this->findComponentPartial($name, $throwException);
+            if (!$componentPartial) {
+                return false;
+            } else {
+                list($componentObj, $partial) = $componentPartial;
+
+                // Set the component context for the controller
+                $this->componentContext = $componentObj;
+
+                // Set the component context for the partial
+                $this->vars['__SELF__'] = $componentObj;
+            }
         }
         /*
-         * Process Component partial
+         * Handle Theme Partials
          */
-        elseif (strpos($name, '::') !== false) {
-            list($componentAlias, $partialName) = explode('::', $name);
-
-            /*
-             * Component alias not supplied
-             */
-            if (!strlen($componentAlias)) {
-                if ($this->componentContext !== null) {
-                    $componentObj = $this->componentContext;
-                }
-                elseif (($componentObj = $this->findComponentByPartial($partialName)) === null) {
-                    if ($throwException) {
-                        throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$partialName]));
-                    }
-
-                    return false;
-                }
-            }
-            /*
-             * Component alias is supplied
-             */
-            elseif (($componentObj = $this->findComponentByName($componentAlias)) === null) {
-                if ($throwException) {
-                    throw new SystemException(Lang::get('cms::lang.component.not_found', ['name'=>$componentAlias]));
-                }
-
-                return false;
-            }
-
-            $partial = null;
-            $this->componentContext = $componentObj;
-
-            /*
-             * Check if the theme has an override
-             */
-            $partial = ComponentPartial::loadOverrideCached($this->theme, $componentObj, $partialName);
-
-            /*
-             * Check the component partial
-             */
-            if ($partial === null) {
-                $partial = ComponentPartial::loadCached($componentObj, $partialName);
-            }
-
-            if ($partial === null) {
-                if ($throwException) {
-                    throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$name]));
-                }
-
-                return false;
-            }
-
-            /*
-             * Set context for self access
-             */
-            $this->vars['__SELF__'] = $componentObj;
+        else {
+            $partial = Partial::loadCached($this->theme, $name);
         }
-        /*
-         * Process theme partial
-         */
-        elseif (($partial = Partial::loadCached($this->theme, $name)) === null) {
+
+        if (!$partial) {
             if ($throwException) {
-                throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$name]));
+                throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name' => $name]));
             }
 
             return false;
         }
+
+        return $partial;
+    }
+
+    /**
+     * Finds a ComponentPartial by its name.
+     *
+     * @throws SystemException If the partial or component cannot be found
+     * @return [Component, ComponentPartial]|false
+     */
+    public function findComponentPartial(string $name, bool $throwException = false): array|bool
+    {
+        if (strpos($name, '::') === false) {
+            if ($throwException) {
+                throw new SystemException(Lang::get('cms::lang.partial.invalid_name', ['name' => $name]));
+            }
+
+            return false;
+        }
+
+        list($componentAlias, $partialName) = explode('::', $name);
+
+        // Component alias not supplied
+        if (!strlen($componentAlias)) {
+            $componentObj = $this->componentContext ?? $this->findComponentByPartial($partialName);
+            if (!$componentObj) {
+                if ($throwException) {
+                    throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name' => $partialName]));
+                }
+
+                return false;
+            }
+        }
+
+        // Component alias is supplied
+        elseif (($componentObj = $this->findComponentByName($componentAlias)) === null) {
+            if ($throwException) {
+                throw new SystemException(Lang::get('cms::lang.component.not_found', ['name' => $componentAlias]));
+            }
+
+            return false;
+        }
+
+        // Check for a theme override
+        $partial = ComponentPartial::loadOverrideCached($this->theme, $componentObj, $partialName);
+
+        // Check for the component partial
+        if (!$partial) {
+            $partial = ComponentPartial::loadCached($componentObj, $partialName);
+        }
+
+        // Failed to find a component partial
+        if (!$partial) {
+            if ($throwException) {
+                throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name' => $name]));
+            }
+
+            return false;
+        }
+
+        return [$componentObj, $partial];
+    }
+
+    /**
+     * Renders a requested partial.
+     * The framework uses this method internally.
+     *
+     * @param string $name The view to load.
+     * @param array $parameters Parameter variables to pass to the view.
+     * @param bool $throwException Throw an exception if the partial is not found.
+     * @throws SystemException If the partial cannot be found
+     * @return mixed Partial contents or false if not throwing an exception.
+     */
+    public function renderPartial(string $name, array $parameters = [], bool $throwException = true)
+    {
+        $original = [
+            'componentContext' => $this->componentContext,
+            '__SELF__' => array_get($this->vars, '__SELF__'),
+        ];
+
+        try {
+            $partial = $this->findPartial($name, $throwException);
+        } catch (SystemException $ex) {
+            // Cleanup
+            $this->componentContext = $original['componentContext'];
+            $this->vars['__SELF__'] = $original['__SELF__'];
+            throw $ex;
+        }
+
+        if (!$partial) {
+            // Cleanup
+            $this->componentContext = $original['componentContext'];
+            $this->vars['__SELF__'] = $original['__SELF__'];
+            return false;
+        }
+
+        $vars = $this->vars;
+        $this->vars = array_merge($this->vars, $parameters);
 
         /*
          * Run functions for CMS partials only (Cms\Classes\Partial)
@@ -1086,7 +1141,8 @@ class Controller
 
         /**
          * @event cms.page.renderPartial
-         * Provides an opportunity to manipulate the output of a partial after being rendered
+         * Provides an opportunity to manipulate the output of a partial after being rendered.
+         * Return string or false.
          *
          * Example usage:
          *
