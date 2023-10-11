@@ -1489,10 +1489,19 @@ class Lists extends WidgetBase
     public function setSearchTerm($term, $resetPagination = false)
     {
         if (
-            strlen($this->searchTerm) !== 0
-            && trim($this->searchTerm) !== ''
+            strlen($term) !== 0
+            && trim($term) !== ''
         ) {
+            if ($this->showTree === true) {
+                // save initial list config showTree value
+                $this->putSession('showTree', true);
+            }
             $this->showTree = false;
+        } else {
+            if ($this->getSession('showTree')) {
+                // restore initial list config showTree value
+                $this->showTree = true;
+            }
         }
 
         if ($resetPagination) {
