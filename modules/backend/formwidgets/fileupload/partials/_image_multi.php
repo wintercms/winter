@@ -26,10 +26,10 @@
         <?php foreach ($fileList as $file): ?>
             <div class="upload-object is-success" data-id="<?= $file->id ?>" data-path="<?= $file->pathUrl ?>">
                 <div class="icon-container image">
-                    <?php if ($file->extension !== "pdf"): ?>
-                        <img src="<?= $file->thumbUrl ?>" alt=""/>
-                    <?php else: ?>
+                    <?php if ($file->extension === "pdf"): ?>
                         <i class="icon-file-pdf"></i>
+                    <?php else: ?>
+                        <img src="<?= $file->thumbUrl ?>" alt=""/>
                     <?php endif ?>
                 </div>
                 <div class="info">
