@@ -31,7 +31,7 @@ export default class StylesheetLoader extends Singleton {
         if (!stylesLoaded) {
             const stylesheet = document.createElement('link');
             stylesheet.setAttribute('rel', 'stylesheet');
-            stylesheet.setAttribute('href', this.snowboard.url().to('/modules/system/assets/css/snowboard.extras.css'));
+            stylesheet.setAttribute('href', this.snowboard.url().asset('/modules/system/assets/css/snowboard.extras.css'));
             document.head.appendChild(stylesheet);
         }
     }

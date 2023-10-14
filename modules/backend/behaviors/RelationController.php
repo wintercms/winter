@@ -1025,6 +1025,12 @@ class RelationController extends ControllerBehavior
         return $this->onRelationManageForm();
     }
 
+    public function onRelationButtonRefresh()
+    {
+        $this->beforeAjax();
+        return $this->relationRefresh();
+    }
+
     public function onRelationButtonUnlink()
     {
         return $this->onRelationManageRemove();
@@ -1586,6 +1592,10 @@ class RelationController extends ControllerBehavior
 
                     case 'add':
                         $text = 'backend::lang.relation.add_name';
+                        break;
+
+                    case 'refresh':
+                        $text = 'backend::lang.relation.refresh';
                         break;
 
                     case 'remove':
