@@ -13,14 +13,15 @@ class FileManifestTest extends TestCase
     /** @var FileManifest instance */
     protected $fileManifest;
 
+    /** @var root path */
+    protected $root;
+
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->fileManifest = new FileManifest(
-            base_path('modules/system/tests/fixtures/manifest/1_0_1'),
-            ['test', 'test2']
-        );
+        $this->root = base_path('modules/system/tests/fixtures/manifest/1_0_1');
+        $this->fileManifest = new FileManifest($this->root, ['test', 'test2']);
     }
 
     public function testGetFiles()
@@ -66,13 +67,11 @@ class FileManifestTest extends TestCase
 
     public function testGetFilename()
     {
-        link(base_path('modules/system/tests/fixtures/manifest/1_0_1'), '/test');
-
-        $fileManifest = new FileManifest('/test', ['test', 'test2']);
-
         $class = new ReflectionClass('System\Classes\FileManifest');
         $method = $class->getMethod('getFilename');
 
-        $this->assertEquals('/test', $method->invoke($fileManifest, '/modules/test/file1.php'));
+        $filename = '/modules/test/file1.php';
+
+        $this->assertEquals($filename, $method->invoke($this->fileManifest, $this->root . $filename));
     }
 }
