@@ -2,6 +2,8 @@
 
 namespace System\Tests\Classes;
 
+use ReflectionClass;
+
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Exception\ApplicationException;
 use System\Classes\FileManifest;
@@ -60,5 +62,17 @@ class FileManifestTest extends TestCase
         $this->assertEquals([
             'test' => 'c0b794ff210862a4ce16223802efe6e28969f5a4fb42480ec8c2fef2da23d181',
         ], $this->fileManifest->getModuleChecksums());
+    }
+
+    public function testGetFilename()
+    {
+        link(base_path('modules/system/tests/fixtures/manifest/1_0_1'), '/test');
+
+        $fileManifest = new FileManifest('/test', ['test', 'test2']);
+
+        $class = new ReflectionClass('System\Classes\FileManifest');
+        $method = $class->getMethod('getFilename');
+
+        $this->assertEquals('/test', $method->invoke($fileManifest, '/test/test'));
     }
 }
