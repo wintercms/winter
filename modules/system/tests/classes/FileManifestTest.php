@@ -69,6 +69,7 @@ class FileManifestTest extends TestCase
     {
         $class = new ReflectionClass('System\Classes\FileManifest');
         $method = $class->getMethod('getFilename');
+        $method->setAccessible(true);
 
         $filename = '/modules/test/file1.php';
 
