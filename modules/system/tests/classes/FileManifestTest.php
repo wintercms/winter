@@ -73,6 +73,6 @@ class FileManifestTest extends TestCase
         $class = new ReflectionClass('System\Classes\FileManifest');
         $method = $class->getMethod('getFilename');
 
-        $this->assertEquals('/test', $method->invoke($fileManifest, '/test/test'));
+        $this->assertEquals('/test', $method->invoke($fileManifest, '/modules/test/file1.php'));
     }
 }
