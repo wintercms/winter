@@ -2,8 +2,10 @@
 
 namespace Backend\FormWidgets;
 
+use ApplicationException;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
+use Lang;
 
 class RelationManager extends FormWidgetBase
 {
@@ -42,6 +44,13 @@ class RelationManager extends FormWidgetBase
 
     public function render()
     {
+        if (!$this->controller->isClassExtendedWith(\Backend\Behaviors\RelationController::class)) {
+            $error = Lang::get('backend::lang.relation.missing_behavior', [
+                'controller' => get_class($this->controller)
+            ]);
+            throw new ApplicationException($error);
+        }
+
         $options = [
             'readOnly' => $this->readOnly,
             'recordUrl' => $this->recordUrl,
