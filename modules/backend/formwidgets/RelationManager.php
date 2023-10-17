@@ -29,12 +29,18 @@ class RelationManager extends FormWidgetBase
      */
     protected $recordOnClick;
 
+    /**
+     * @var string relation name if different from the field name.
+     */
+    protected $relation;
+
     public function init(): void
     {
         $this->fillFromConfig([
             'readOnly',
             'recordUrl',
             'recordOnClick',
+            'relation',
         ]);
 
         if (!isset($this->readOnly)) {
@@ -60,7 +66,9 @@ class RelationManager extends FormWidgetBase
             $options['recordOnClick'] = $this->recordOnClick;
         }
 
-        return $this->controller->relationRender($this->formField->fieldName, $options);
+        $relation = $this->relation ?: $this->formField->fieldName;
+
+        return $this->controller->relationRender($relation, $options);
     }
 
     public function getSaveValue($value)
