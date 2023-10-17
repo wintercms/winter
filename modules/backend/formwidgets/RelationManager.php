@@ -2,10 +2,10 @@
 
 namespace Backend\FormWidgets;
 
-use SystemException;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use Lang;
+use SystemException;
 
 class RelationManager extends FormWidgetBase
 {
