@@ -2,7 +2,7 @@
 
 namespace Backend\FormWidgets;
 
-use ApplicationException;
+use SystemException;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use Lang;
@@ -17,22 +17,22 @@ class RelationManager extends FormWidgetBase
     /**
      * @var bool Disables the ability to add, update, delete or create relations.
      */
-    protected $readOnly;
+    protected bool $readOnly;
 
     /**
      * @var string path to controller action to open a record.
      */
-    protected $recordUrl;
+    protected string $recordUrl;
 
     /**
      * @var string custom JavaScript code to execute when clicking on a record.
      */
-    protected $recordOnClick;
+    protected string $recordOnClick;
 
     /**
      * @var string relation name if different from the field name.
      */
-    protected $relation;
+    protected string $relation;
 
     public function init(): void
     {
@@ -55,7 +55,7 @@ class RelationManager extends FormWidgetBase
                 'field' => $this->formField->fieldName,
                 'controller' => get_class($this->controller),
             ]);
-            throw new ApplicationException($error);
+            throw new SystemException($error);
         }
 
         $options = [
