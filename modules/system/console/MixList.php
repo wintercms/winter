@@ -28,7 +28,7 @@ class MixList extends Command
         $mixedAssets = MixAssets::instance();
         $mixedAssets->fireCallbacks();
 
-        $packages = $mixedAssets->getPackages();
+        $packages = $mixedAssets->getPackages(true);
 
         if (count($packages) === 0) {
             $this->info('No packages have been registered.');
@@ -40,15 +40,21 @@ class MixList extends Command
 
         $errors = [];
 
+        $rows = [];
         foreach ($packages as $name => $package) {
-            $this->info($name);
-            $this->line('  Path:           ' . $package['path']);
-            $this->line('  Configuration:  ' . $package['mix']);
+            $rows[] = [
+                'name' => $name,
+                'active' => $package['ignored'] ?? false ? '<fg=red>No</>' : '<info>Yes</info>',
+                'path' => $package['path'],
+                'configuration' => $package['mix'],
+            ];
 
             if (!File::exists($package['mix'])) {
                 $errors[] = "The mix file for $name doesn't exist, try running artisan mix:install";
             }
         }
+
+        $this->table(['Name', 'Active', 'Path', 'Configuration'], $rows);
 
         $this->line('');
 

@@ -1290,9 +1290,9 @@ getData=function(row){return popup.data[row];};popup.getRow=function(){return se
     z-index: 2;\
 }\
 .ace_editor.ace_autocomplete .ace_scroller {\
-   background: none;\
-   border: none;\
-   box-shadow: none;\
+    background: none;\
+    border: none;\
+    box-shadow: none;\
 }\
 .ace_rightAlignedText {\
     color: gray;\
@@ -2235,7 +2235,7 @@ $.wn.foundation.controlUtils.markDisposable(element)
 this.init();this.$el.trigger('oc.codeEditorReady')}
 CodeEditor.prototype=Object.create(BaseProto)
 CodeEditor.prototype.constructor=CodeEditor
-CodeEditor.DEFAULTS={fontSize:12,wordWrap:'off',codeFolding:'manual',autocompletion:'manual',tabSize:4,theme:'textmate',showInvisibles:true,highlightActiveLine:true,useSoftTabs:true,autoCloseTags:true,showGutter:true,enableEmmet:true,language:'php',margin:0,vendorPath:'/',showPrintMargin:false,highlightSelectedWord:false,hScrollBarAlwaysVisible:false,readOnly:false}
+CodeEditor.DEFAULTS={fontSize:12,wordWrap:'off',codeFolding:'manual',autocompletion:'manual',tabSize:4,theme:'textmate',showInvisibles:true,highlightActiveLine:true,useSoftTabs:true,autoCloseTags:true,showGutter:true,enableEmmet:true,language:'php',margin:0,vendorPath:'/',showPrintMargin:false,highlightSelectedWord:false,hScrollBarAlwaysVisible:false,scrollPastEnd:0,readOnly:false}
 CodeEditor.prototype.init=function(){var self=this;if(!this.$el.attr('id')){this.$el.attr('id','element-'+Math.random().toString(36).substring(7))}this.$code=$('<div />').addClass('editor-code').attr('id',this.$el.attr('id')+'-code').css({position:'absolute',top:0,right:0,bottom:0,left:0}).appendTo(this.$el)
 var editor=this.editor=ace.edit(this.$code.attr('id')),options=this.options,$form=this.$el.closest('form');editor.$blockScrolling=Infinity
 this.$form=$form
@@ -2264,6 +2264,7 @@ editor.getSession().setFoldStyle(options.codeFolding)
 editor.setFontSize(options.fontSize)
 editor.on('blur',this.proxy(this.onBlur))
 editor.on('focus',this.proxy(this.onFocus))
+editor.setOption("scrollPastEnd",options.scrollPastEnd)
 this.setWordWrap(options.wordWrap)
 ace.require('ace/config').set('basePath',this.options.vendorPath)
 editor.setOptions({enableEmmet:options.enableEmmet,enableBasicAutocompletion:options.autocompletion==='basic',enableSnippets:options.enableSnippets,enableLiveAutocompletion:options.autocompletion==='live'})

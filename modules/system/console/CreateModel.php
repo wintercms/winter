@@ -23,6 +23,7 @@ class CreateModel extends BaseScaffoldCommand
         {--s|seed : Create a new seeder for the model}
         {--p|pivot : Indicates if the generated model should be a custom intermediate table model}
         {--no-migration : Don\'t create a migration file for the model}
+        {--uninspiring : Disable inspirational quotes}
     ';
 
     /**
@@ -51,9 +52,9 @@ class CreateModel extends BaseScaffoldCommand
      * @var array A mapping of stubs to generated files.
      */
     protected $stubs = [
-        'scaffold/model/model.stub'        => 'models/{{studly_name}}.php',
-        'scaffold/model/fields.stub'       => 'models/{{lower_name}}/fields.yaml',
-        'scaffold/model/columns.stub'      => 'models/{{lower_name}}/columns.yaml',
+        'scaffold/model/model.stub'   => 'models/{{studly_name}}.php',
+        'scaffold/model/fields.stub'  => 'models/{{lower_name}}/fields.yaml',
+        'scaffold/model/columns.stub' => 'models/{{lower_name}}/columns.yaml',
     ];
 
     /**
@@ -80,7 +81,7 @@ class CreateModel extends BaseScaffoldCommand
             $this->createSeeder();
         }
 
-        if ($this->option('no-migration') !== false) {
+        if (!$this->option('no-migration')) {
             $this->createMigration();
         }
     }
@@ -118,6 +119,9 @@ class CreateModel extends BaseScaffoldCommand
         $this->call('create:migration', [
             'plugin'  => $this->getPluginIdentifier(),
             '--model' => $this->getNameInput(),
+            '--create' => true,
+            '--force' => $this->option('force'),
+            '--uninspiring' => $this->option('uninspiring'),
         ]);
     }
 
@@ -126,9 +130,14 @@ class CreateModel extends BaseScaffoldCommand
      */
     public function createSeeder()
     {
+        // @TODO: Implement this
+        return;
+
         $this->call('create:seeder', [
             'plugin'  => $this->getPluginIdentifier(),
             'model' => $this->getNameInput(),
+            '--force' => $this->option('force'),
+            '--uninspiring' => $this->option('uninspiring'),
         ]);
     }
 
@@ -141,6 +150,8 @@ class CreateModel extends BaseScaffoldCommand
             'plugin'  => $this->getPluginIdentifier(),
             'controller' => Str::plural($this->argument('model')),
             '--model' => $this->getNameInput(),
+            '--force' => $this->option('force'),
+            '--uninspiring' => $this->option('uninspiring'),
         ]);
     }
 }

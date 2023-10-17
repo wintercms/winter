@@ -93,6 +93,13 @@ return [
         'find_more_themes' => 'Find more themes',
         'saving' => 'Saving theme...',
         'return' => 'Return to themes list',
+        'default_description' => 'Custom theme generated for :url',
+        'scaffold' => [
+            'label' => 'Scaffold',
+            'empty' => 'Empty',
+            'less' => 'Basic (LESS)',
+            'tailwind' => 'Tailwind CSS',
+        ],
     ],
     'maintenance' => [
         'settings_menu' => 'Maintenance mode',

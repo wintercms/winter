@@ -1,6 +1,5 @@
 <?php namespace System\Console;
 
-use App;
 use System\Classes\UpdateManager;
 
 /**
@@ -15,7 +14,7 @@ use System\Classes\UpdateManager;
  * @author Ben Thomson
  * @author Winter CMS
  */
-class WinterVersion extends \Illuminate\Console\Command
+class WinterVersion extends \Winter\Storm\Console\Command
 {
     /**
      * @var string The console command description.
@@ -26,7 +25,8 @@ class WinterVersion extends \Illuminate\Console\Command
      * @var string The name and signature of the console command.
      */
     protected $signature = 'winter:version
-                            {--changes : Include the list of changes between this install and the expected files for the detected build.}';
+        {--changes : Include the list of changes between this install and the expected files for the detected build.}
+    ';
 
     /**
      * Create a new command instance.
@@ -48,7 +48,7 @@ class WinterVersion extends \Illuminate\Console\Command
     {
         $this->comment('*** Detecting Winter CMS build...');
 
-        if (!App::hasDatabase()) {
+        if (!$this->laravel->hasDatabase()) {
             $build = UpdateManager::instance()->getBuildNumberManually($this->option('changes'));
 
             // Skip setting the build number if no database is detected to set it within

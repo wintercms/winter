@@ -510,7 +510,9 @@ class Lists extends WidgetBase
                 $relationObj = $this->model->{$column->relation}();
                 $countQuery = $relationObj->getRelationExistenceQuery($relationObj->getRelated()->newQueryWithoutScopes(), $query);
 
-                $joinSql = $this->isColumnRelated($column, true)
+                $limit = $column->config['limit'] ?? false;
+
+                $joinSql = $this->isColumnRelated($column, true) && $limit !== 1
                     ? DbDongle::raw("group_concat(" . $sqlSelect . " separator ', ')")
                     : DbDongle::raw($sqlSelect);
 
@@ -518,6 +520,10 @@ class Lists extends WidgetBase
 
                 if (!empty($column->config['conditions'])) {
                     $joinQuery->whereRaw(DbDongle::parse($column->config['conditions']));
+                }
+
+                if ($limit) {
+                    $joinQuery->limit($column->config['limit']);
                 }
 
                 $joinSql = $joinQuery->toSql();
@@ -1053,6 +1059,10 @@ class Lists extends WidgetBase
             }
         }
 
+        if ($value instanceof \BackedEnum) {
+            $value = $value->value;
+        }
+
         /**
          * @event backend.list.overrideColumnValueRaw
          * Overrides the raw column value in a list widget.
@@ -1479,10 +1489,19 @@ class Lists extends WidgetBase
     public function setSearchTerm($term, $resetPagination = false)
     {
         if (
-            strlen($this->searchTerm) !== 0
-            && trim($this->searchTerm) !== ''
+            strlen($term) !== 0
+            && trim($term) !== ''
         ) {
+            if ($this->showTree === true) {
+                // save initial list config showTree value
+                $this->putSession('showTree', true);
+            }
             $this->showTree = false;
+        } else {
+            if ($this->getSession('showTree')) {
+                // restore initial list config showTree value
+                $this->showTree = true;
+            }
         }
 
         if ($resetPagination) {

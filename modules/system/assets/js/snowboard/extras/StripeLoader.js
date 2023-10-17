@@ -34,7 +34,11 @@ export default class StripeLoader extends Singleton {
         this.createStripe();
     }
 
-    ajaxStart(promise) {
+    ajaxStart(promise, request) {
+        if (request.options.stripe === false) {
+            return;
+        }
+
         this.show();
 
         promise.then(() => {
