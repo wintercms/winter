@@ -12,7 +12,7 @@ class RelationManager extends FormWidgetBase
     /**
      * @inheritDoc
      */
-    protected $defaultAlias = 'relationmanager';
+    protected string $defaultAlias = 'relationmanager';
 
     /**
      * Disables the ability to add, update, delete or create relations.
