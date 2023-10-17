@@ -46,7 +46,8 @@ class RelationManager extends FormWidgetBase
     {
         if (!$this->controller->isClassExtendedWith(\Backend\Behaviors\RelationController::class)) {
             $error = Lang::get('backend::lang.relation.missing_behavior', [
-                'controller' => get_class($this->controller)
+                'field' => $this->formField->fieldName,
+                'controller' => get_class($this->controller),
             ]);
             throw new ApplicationException($error);
         }

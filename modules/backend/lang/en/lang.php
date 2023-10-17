@@ -320,6 +320,7 @@ return [
     ],
     'relation' => [
         'missing_behavior' => 'You must implement the RelationController behavior in your :controller controller.',
+        'missing_behavior' => 'Field ":field" requires the ":controller" controller to implement the "RelationController" behavior.',
         'missing_config' => "Relation behavior does not have any configuration for ':config'.",
         'missing_definition' => "Relation behavior does not contain a definition for ':field'.",
         'missing_model' => 'Relation behavior used in :class does not have a model defined.',
