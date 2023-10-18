@@ -12,27 +12,27 @@ class RelationManager extends FormWidgetBase
     /**
      * @inheritDoc
      */
-    protected string $defaultAlias = 'relationmanager';
+    protected $defaultAlias = 'relationmanager';
 
     /**
      * Disables the ability to add, update, delete or create relations.
      */
-    protected bool $readOnly;
+    protected bool $readOnly = false;
 
     /**
      * Path to controller action to open a record.
      */
-    protected string $recordUrl;
+    protected string $recordUrl = '';
 
     /**
      * Custom JavaScript code to execute when clicking on a record.
      */
-    protected string $recordOnClick;
+    protected string $recordOnClick = '';
 
     /**
      * Relation name if different from the field name.
      */
-    protected string $relation;
+    protected string $relation = '';
 
     public function init(): void
     {
@@ -62,7 +62,8 @@ class RelationManager extends FormWidgetBase
             'readOnly' => $this->readOnly,
             'recordUrl' => $this->recordUrl,
         ];
-        if (isset($this->recordOnClick)) {
+
+        if ($this->recordOnClick) {
             $options['recordOnClick'] = $this->recordOnClick;
         }
 
