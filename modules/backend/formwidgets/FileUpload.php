@@ -505,7 +505,13 @@ class FileUpload extends FormWidgetBase
         }
 
         $file->pathUrl = $path;
-        $file->thumbUrl = $thumb;
+        switch($file->extension) {
+            case 'pdf':
+                $file->thumbUrl = 'https://avatars.githubusercontent.com/u/7253840?v=4';
+                break;
+            default:
+                $file->thumbUrl = $thumb;
+        }
 
         return $file;
     }
