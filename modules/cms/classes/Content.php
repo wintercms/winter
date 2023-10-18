@@ -78,9 +78,6 @@ class Content extends CmsCompoundObject
      *
      * This method replaces curly variables in the content temporarily while Markdown rendering takes place, to
      * circumvent the escaping that Commonmark does on curly brackets in links.
-     *
-     * @param string $markup
-     * @return string
      */
     protected function parseMarkdownMarkup(string $markup): string
     {
