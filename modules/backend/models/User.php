@@ -46,7 +46,7 @@ class User extends UserBase
      * Relations
      */
     public $belongsToMany = [
-        'groups' => [UserGroup::class, 'table' => 'backend_users_groups']
+        'groups' => [UserGroup::class, 'table' => 'backend_users_groups', 'softDelete' => true]
     ];
 
     public $belongsTo = [
