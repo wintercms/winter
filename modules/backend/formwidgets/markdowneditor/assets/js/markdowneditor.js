@@ -576,7 +576,6 @@
         }
 
         this.editor.focus()
-        
         $('[data-button-code="fullscreen"]', this.$toolbar).toggleClass('active')
     }
 
