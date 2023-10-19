@@ -571,9 +571,12 @@
         this.setFullscreen(!this.isFullscreen)
         if (this.isPreview) {
             this.togglePreview()
+        } else {
+            this.setMLButton()
         }
 
         this.editor.focus()
+        
         $('[data-button-code="fullscreen"]', this.$toolbar).toggleClass('active')
     }
 
@@ -585,12 +588,20 @@
         }
         else {
             this.editor.focus()
+            this.setMLButton()
         }
 
         this.$el.toggleClass('is-preview', this.isPreview)
         $('.btn', this.$buttons).prop('disabled', this.isPreview)
 
         $('[data-button-code="preview"]', this.$toolbar).toggleClass('active')
+    }
+
+    MarkdownEditor.prototype.setMLButton = function() {
+        if (this.$el.attr('id').substr(0, 2) === 'ML') {
+            var input = this.$el.find('.ace_text-input')
+            if (input) setTimeout(function() { input.keyup() }, 0)
+        }
     }
 
     MarkdownEditor.prototype.insertLine = function(template) {
