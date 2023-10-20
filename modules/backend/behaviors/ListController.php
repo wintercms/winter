@@ -164,6 +164,10 @@ class ListController extends ControllerBehavior
          */
         $widget = $this->makeWidget(\Backend\Widgets\Lists::class, $columnConfig);
 
+        $widget->bindEvent('list.extendColumnsBefore', function () use ($widget) {
+            $this->controller->listExtendColumnsBefore($widget);
+        });
+
         $widget->bindEvent('list.extendColumns', function () use ($widget) {
             $this->controller->listExtendColumns($widget);
         });
@@ -467,6 +471,15 @@ class ListController extends ControllerBehavior
     //
     // Overrides
     //
+
+    /**
+     * Called before the list columns are defined.
+     * @param \Backend\Widgets\Lists $host The hosting list widget
+     * @return void
+     */
+    public function listExtendColumnsBefore($host)
+    {
+    }
 
     /**
      * Called after the list columns are defined.
