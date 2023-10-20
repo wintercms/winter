@@ -800,7 +800,7 @@ class Lists extends WidgetBase
 
         /**
          * @event backend.list.extendColumnsBefore
-         * Provides an opportunity to modify the columns of a List widget
+         * Provides an opportunity to modify the columns of a List widget before the columns are created.
          *
          * Example usage:
          *
