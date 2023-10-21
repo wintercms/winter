@@ -32,6 +32,16 @@ fields:
       label: Datetime
       type: datepicker
 
+    date:
+      label: Date
+      type: datepicker
+      mode: date
+
+    time:
+      label: Time
+      type: datepicker
+      mode: time
+
     md:
       label: Markdown
       type: markdown

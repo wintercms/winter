@@ -323,6 +323,9 @@ class CreateMigration extends BaseScaffoldCommand
                 break;
             case 'datepicker':
                 $dbType = 'datetime';
+                if (isset($fieldConfig['mode']) && $fieldConfig['mode']) {
+                    $dbType = $fieldConfig['mode'];
+                }
                 break;
             case 'markdown':
                 $dbType = 'mediumText';

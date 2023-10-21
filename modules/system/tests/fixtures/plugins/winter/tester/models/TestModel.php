@@ -15,6 +15,10 @@ class TestModel extends Model
      */
     protected $guarded = [];
 
+    public $jsonable = [
+        'data',
+    ];
+
     /**
      * @var array Relations
      */
