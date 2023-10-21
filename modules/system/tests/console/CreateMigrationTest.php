@@ -18,7 +18,7 @@ class CreateMigrationTest extends PluginTestCase
         $this->artisan('create:migration Winter.Tester -c --force --model TestModel');
     }
 
-    public function testCreateMigration()
+    public function testUpdateMigration()
     {
         $this->artisan('create:migration Winter.Tester -u --force --model TestModel');
     }
