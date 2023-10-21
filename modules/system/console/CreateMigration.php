@@ -309,10 +309,9 @@ class CreateMigration extends BaseScaffoldCommand
                 $dbType = 'boolean';
                 break;
             case 'number':
+                $dbType = 'double';
                 if (isset($fieldConfig['step']) && is_int($fieldConfig['step'])) {
                     $dbType = 'integer';
-                } else {
-                    $dbType = 'double';
                 }
                 if ($dbType === 'integer' && isset($fieldConfig['min']) && $fieldConfig['min'] >= 0) {
                     $dbType = 'unsignedInteger';
@@ -322,10 +321,7 @@ class CreateMigration extends BaseScaffoldCommand
                 $dbType = 'unsignedInteger';
                 break;
             case 'datepicker':
-                $dbType = 'datetime';
-                if (isset($fieldConfig['mode']) && $fieldConfig['mode']) {
-                    $dbType = $fieldConfig['mode'];
-                }
+                $dbType = $fieldConfig['mode'] ?? 'datetime';
                 break;
             case 'markdown':
                 $dbType = 'mediumText';
