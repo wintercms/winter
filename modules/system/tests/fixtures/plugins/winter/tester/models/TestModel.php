@@ -29,6 +29,11 @@ class TestModel extends Model
     public $morphTo = [
         'taggable' => []
     ];
+
+    public $rules = [
+        'uint' => 'required',
+        'range' => 'required|integer|between:1,10',
+    ];
 }
 
 class TestUser extends Model
