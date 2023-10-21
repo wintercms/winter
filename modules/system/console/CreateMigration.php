@@ -217,8 +217,8 @@ class CreateMigration extends BaseScaffoldCommand
 
         $vars['fields'] = [];
 
-        $fields_path = '$/' . $vars['plugin_url'] . '/models/' . $vars['lower_model'] . '/fields.yaml';
-        $fields = Yaml::parseFile(File::symbolizePath($fields_path));
+        $fields_path = $vars['plugin_url'] . '/models/' . $vars['lower_model'] . '/fields.yaml';
+        $fields = Yaml::parseFile(plugins_path($fields_path));
 
         $modelName = $vars['plugin_namespace'] . '\\Models\\' . $vars['model'];
 
