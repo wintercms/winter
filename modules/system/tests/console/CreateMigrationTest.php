@@ -13,6 +13,8 @@ class CreateMigrationTest extends PluginTestCase
         parent::setUp();
 
         $this->app->setPluginsPath(base_path() . '/modules/system/tests/fixtures/plugins/');
+
+        $this->table = 'winter_tester_test_model';
         $this->versionFile = plugins_path('winter/tester/updates/version.yaml');
         $this->versionFolder = plugins_path('winter/tester/updates/v0.0.1');
 
@@ -27,38 +29,48 @@ class CreateMigrationTest extends PluginTestCase
         $migration = require_once $this->versionFolder . '/create_table.php';
         $migration->up();
 
-        $table = 'winter_tester_test_model';
-        $this->assertTrue(Schema::hasTable($table));
+        $this->assertTrue(Schema::hasTable($this->table));
 
         $columns = [
-            'id' => 'integer',
-            'cb' => 'boolean',
-            'switch' => 'boolean',
-            'int' => 'integer',
-            'uint' => 'integer', # 'unsignedInteger'
-            'double' => 'float', # 'double'
-            'range' => 'integer', # 'unsignedInteger'
-            'datetime' => 'datetime',
-            'date' => 'date',
-            'time' => 'time',
-            'md' => 'text', # 'mediumText'
-            'textarea' => 'text',
-            'text' => 'string',
-            'phone_id' => 'integer', # 'unsignedInteger'
-            'user_id' => 'integer', # 'unsignedInteger'
-            'data' => 'text', # mediumText
-            'taggable_type' => 'string',
-            'taggable_id' => 'integer',
-            'created_at' => 'datetime',
-            'updated_at' => 'datetime',
+            'id'            => ['type'=>'integer', 'index'=>true],
+            'cb'            => ['type'=>'boolean'],
+            'switch'        => ['type'=>'boolean'],
+            'int'           => ['type'=>'integer'],
+            'uint'          => ['type'=>'integer'],
+            'double'        => ['type'=>'float'],
+            'range'         => ['type'=>'integer'],
+            'datetime'      => ['type'=>'datetime'],
+            'date'          => ['type'=>'date'],
+            'time'          => ['type'=>'time'],
+            'md'            => ['type'=>'text'],
+            'textarea'      => ['type'=>'text'],
+            'text'          => ['type'=>'string'],
+            'phone_id'      => ['type'=>'integer', 'index'=>true],
+            'user_id'       => ['type'=>'integer', 'index'=>true],
+            'data'          => ['type'=>'text'],
+            'taggable_type' => ['type'=>'string', 'index'=>true],
+            'taggable_id'   => ['type'=>'integer', 'index'=>true],
+            'created_at'    => ['type'=>'datetime'],
+            'updated_at'    => ['type'=>'datetime'],
         ];
 
-        foreach ($columns as $name => $type) {
-            $this->assertEquals($type, Schema::getColumnType($table, $name));
+        $sm = Schema::getConnection()->getDoctrineSchemaManager();
+
+        $indexFields = collect($sm->listTableIndexes($this->table))->map(function ($item) {
+            return $item->getColumns();
+        })->flatten()->all();
+
+        foreach ($columns as $name => $definition) {
+            $this->assertEquals(array_get($definition, 'type'), Schema::getColumnType($this->table, $name));
+
+            // assert an index has been created for the primary, morph and foreign keys
+            if (array_get($definition, 'index')) {
+                $this->assertTrue(in_array($name, $indexFields));
+            }
         }
 
         $migration->down();
-        $this->assertFalse(Schema::hasTable($table));
+        $this->assertFalse(Schema::hasTable($this->table));
     }
 
     public function tearDown(): void
