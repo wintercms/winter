@@ -10,17 +10,17 @@ class CreateMigrationTest extends PluginTestCase
     {
         parent::setUp();
 
-        $this->app->setPluginsPath(base_path() . '/modules/system/tests/fixtures/plugins');
-
-        $this->artisan('create:migration Winter.Tester -c --model TestModel');
+        $this->app->setPluginsPath(base_path() . '/modules/system/tests/fixtures/plugins/');
     }
 
     public function testCreateMigration()
     {
+        $this->artisan('create:migration Winter.Tester -c --force --model TestModel');
     }
 
-    public function testUpdateMigration()
+    public function testCreateMigration()
     {
+        $this->artisan('create:migration Winter.Tester -u --force --model TestModel');
     }
 
     public function tearDown(): void
