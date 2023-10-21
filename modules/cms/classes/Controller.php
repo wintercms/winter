@@ -13,7 +13,7 @@ use Config;
 use Session;
 use Request;
 use Response;
-use Exception;
+use Throwable;
 use SystemException;
 use BackendAuth;
 use Twig\Environment as TwigEnvironment;
@@ -778,8 +778,8 @@ class Controller
                 $responseContents['X_WINTER_ERROR_MESSAGE'] = $ex->getMessage();
                 throw new AjaxException($responseContents);
             }
-            catch (Exception $ex) {
-                throw $ex;
+            catch (Throwable $ex) {
+                throw new SystemException(Lang::get('cms::lang.ajax_handler.error_occurred'), previous: $ex);
             }
         }
 

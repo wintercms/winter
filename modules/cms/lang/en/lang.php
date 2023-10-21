@@ -169,6 +169,7 @@ return [
     'ajax_handler' => [
         'invalid_name' => 'Invalid AJAX handler name: :name.',
         'not_found' => "AJAX handler ':name' was not found.",
+        'error_occurred' => 'An error occurred while executing the AJAX handler.',
     ],
     'cms' => [
         'menu_label' => 'CMS',
