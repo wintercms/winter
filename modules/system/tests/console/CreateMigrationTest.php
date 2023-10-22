@@ -3,6 +3,7 @@
 namespace System\Tests\Console;
 
 use File;
+use Illuminate\Database\Schema\Blueprint;
 use Schema;
 use System\Tests\Bootstrap\PluginTestCase;
 
@@ -32,7 +33,7 @@ class CreateMigrationTest extends PluginTestCase
         $this->assertTrue(Schema::hasTable($this->table));
 
         $columns = [
-            'id'            => ['type'=>'integer', 'index'=>true],
+            'id'            => ['type'=>'integer', 'index'=>'primary'],
             'cb'            => ['type'=>'boolean'],
             'switch'        => ['type'=>'boolean'],
             'int'           => ['type'=>'integer'],
@@ -48,24 +49,30 @@ class CreateMigrationTest extends PluginTestCase
             'phone_id'      => ['type'=>'integer', 'index'=>true],
             'user_id'       => ['type'=>'integer', 'index'=>true],
             'data'          => ['type'=>'text'],
-            'taggable_type' => ['type'=>'string', 'index'=>true],
-            'taggable_id'   => ['type'=>'integer', 'index'=>true],
+            'sort_order'    => ['type'=>'integer', 'index'=>true],
+            'taggable_id'   => ['type'=>'integer', 'index'=>'morphable_index'],
+            'taggable_type' => ['type'=>'string', 'index'=>'morphable_index'],
             'created_at'    => ['type'=>'datetime'],
             'updated_at'    => ['type'=>'datetime'],
         ];
 
-        $sm = Schema::getConnection()->getDoctrineSchemaManager();
-
-        $indexFields = collect($sm->listTableIndexes($this->table))->map(function ($item) {
-            return $item->getColumns();
-        })->flatten()->all();
+        $schemaManager = Schema::getConnection()->getDoctrineSchemaManager();
+        $table = $schemaManager->listTableDetails($this->table);
 
         foreach ($columns as $name => $definition) {
             $this->assertEquals(array_get($definition, 'type'), Schema::getColumnType($this->table, $name));
 
             // assert an index has been created for the primary, morph and foreign keys
-            if (array_get($definition, 'index')) {
-                $this->assertTrue(in_array($name, $indexFields));
+            if ($indexName = array_get($definition, 'index')) {
+                if ($indexName === true) {
+                    $indexName = sprintf("%s_%s_index", $this->table, $name);
+                }
+                $this->assertTrue($table->hasIndex($indexName));
+
+                if ($indexName === 'morphable_index') {
+                    $index = $table->getIndex($indexName);
+                    $this->assertTrue(in_array($name, $index->getColumns()));
+                }
             }
         }
 

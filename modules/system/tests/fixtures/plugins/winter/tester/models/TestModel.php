@@ -4,24 +4,14 @@ use Model;
 
 class TestModel extends Model
 {
+    use \Winter\Storm\Database\Traits\Sortable;
 
-    /**
-     * @var string The database table used by the model.
-     */
     public $table = 'winter_tester_test_model';
-
-    /**
-     * @var array Guarded fields
-     */
-    protected $guarded = [];
 
     public $jsonable = [
         'data',
     ];
 
-    /**
-     * @var array Relations
-     */
     public $belongsTo = [
         'user' => TestUser::class
     ];
