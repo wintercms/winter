@@ -56,8 +56,7 @@ class CreateMigrationTest extends PluginTestCase
             'updated_at'    => ['type'=>'datetime'],
         ];
 
-        $schemaManager = Schema::getConnection()->getDoctrineSchemaManager();
-        $table = $schemaManager->listTableDetails($this->table);
+        $table = Schema::getConnection()->getDoctrineSchemaManager()->listTableDetails($this->table);
 
         foreach ($columns as $name => $definition) {
             $this->assertEquals(array_get($definition, 'type'), Schema::getColumnType($this->table, $name));
