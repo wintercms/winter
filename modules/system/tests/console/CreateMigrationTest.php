@@ -33,21 +33,21 @@ class CreateMigrationTest extends PluginTestCase
         $this->assertTrue(Schema::hasTable($this->table));
 
         $columns = [
-            'id'            => ['type'=>'integer', 'index'=>'primary'],
+            'id'            => ['type'=>'integer', 'index'=>'primary', 'required'=>true],
             'cb'            => ['type'=>'boolean'],
             'switch'        => ['type'=>'boolean'],
             'int'           => ['type'=>'integer'],
-            'uint'          => ['type'=>'integer'],
+            'uint'          => ['type'=>'integer', 'required'=>true],
             'double'        => ['type'=>'float'],
-            'range'         => ['type'=>'integer'],
+            'range'         => ['type'=>'integer', 'required'=>true],
             'datetime'      => ['type'=>'datetime'],
-            'date'          => ['type'=>'date'],
+            'date'          => ['type'=>'date', 'required'=>true],
             'time'          => ['type'=>'time'],
             'md'            => ['type'=>'text'],
             'textarea'      => ['type'=>'text'],
-            'text'          => ['type'=>'string'],
-            'phone_id'      => ['type'=>'integer', 'index'=>true],
-            'user_id'       => ['type'=>'integer', 'index'=>true],
+            'text'          => ['type'=>'string', 'required'=>true],
+            'phone_id'      => ['type'=>'integer', 'index'=>true, 'required'=>true],
+            'user_id'       => ['type'=>'integer', 'index'=>true, 'required'=>true],
             'data'          => ['type'=>'text'],
             'sort_order'    => ['type'=>'integer', 'index'=>true],
             'taggable_id'   => ['type'=>'integer', 'index'=>'morphable_index'],
@@ -74,6 +74,7 @@ class CreateMigrationTest extends PluginTestCase
                     $this->assertTrue(in_array($name, $index->getColumns()));
                 }
             }
+            $this->assertEquals(array_get($definition, 'required', false), $table->getColumn($name)->getNotnull());
         }
 
         $migration->down();

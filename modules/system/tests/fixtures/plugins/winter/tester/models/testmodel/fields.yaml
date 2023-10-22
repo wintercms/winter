@@ -36,6 +36,7 @@ fields:
       label: Date
       type: datepicker
       mode: date
+      required: true
 
     time:
       label: Time
