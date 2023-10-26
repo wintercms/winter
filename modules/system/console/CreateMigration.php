@@ -174,6 +174,10 @@ class CreateMigration extends BaseScaffoldCommand
             throw new InvalidArgumentException('The table or model options are required when using the create or update options');
         }
 
+        if (($table || $model) && !in_array($scaffold, ['create', 'update'])) {
+            throw new InvalidArgumentException('One of create or update option is required when using the model or table options');
+        }
+
         $this->stubs = $this->migrationScaffolds[$scaffold];
 
         if (!empty($this->option('for-version'))) {
