@@ -32,7 +32,7 @@
                 class="btn btn-primary"
                 data-request="<?= $this->getEventHandler('onSaveAttachmentConfig') ?>"
                 data-popup-load-indicator>
-                <?= e(trans('backend::lang.form.save')) ?>
+                <?= e(trans('backend::lang.form.confirm')) ?>
             </button>
             <button
                 type="button"
