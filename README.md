@@ -96,7 +96,7 @@ Froala provides a perpetual, Enterprise license to Winter CMS which allows us an
 
 Big thanks to our sponsors on OpenCollective:
 
-- [Frogehost](https://froge.host/?utm_source=wintercms)
+- [FrogeHost](https://froge.host/?utm_source=wintercms)
 
 ### Individuals
 
