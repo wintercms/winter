@@ -11,6 +11,7 @@ use Backend\Classes\WidgetBase;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Classes\MediaLibraryItem;
+use System\Models\Parameter;
 
 /**
  * Media Manager widget.
@@ -833,6 +834,29 @@ class MediaManager extends WidgetBase
         ];
     }
 
+    /**
+     * Executed when the media library has not yet been scanned, or the user opts to manually re-scan the media library.
+     *
+     * @return void
+     */
+    public function onScan()
+    {
+        return $this->makePartial('scan-popup');
+    }
+
+    public function onScanExecute()
+    {
+        MediaLibrary::instance()->scan();
+
+        $this->prepareVars();
+
+        return [
+            '#'.$this->getId('item-list') => $this->makePartial('item-list'),
+            '#'.$this->getId('folder-path') => $this->makePartial('folder-path'),
+            '#'.$this->getId('filters') => $this->makePartial('filters')
+        ];
+    }
+
     //
     // Methods for internal use
     //
@@ -859,6 +883,7 @@ class MediaManager extends WidgetBase
             $this->vars['items'] = $this->findFiles($searchTerm, $filter, ['by' => $sortBy, 'direction' => $sortDirection]);
         }
 
+        $this->vars['isScanned'] = !is_null(Parameter::get('media::scan.last_scanned'));
         $this->vars['currentFolder'] = $folder;
         $this->vars['isRootFolder'] = $folder == self::FOLDER_ROOT;
         $this->vars['pathSegments'] = $this->splitPathToSegments($folder);

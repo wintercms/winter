@@ -53,7 +53,8 @@ if(this.options.cropAndInsertButton)this.$el.find('[data-popup-command="crop-and
 this.updateSidebarPreview()
 this.generateThumbnails()
 this.initUploader()
-this.initScroll()}
+this.initScroll()
+if(!this.options.isScanned){this.doScan()}}
 MediaManager.prototype.registerHandlers=function(){this.$el.on('dblclick',this.proxy(this.onNavigate))
 this.$el.on('click.tree-path','ul.tree-path, [data-control="sidebar-labels"]',this.proxy(this.onNavigate))
 this.$el.on('click.command','[data-command]',this.proxy(this.onCommandClick))
@@ -358,6 +359,7 @@ break;case'ArrowLeft':case'ArrowUp':this.selectRelative(false,ev.shiftKey)
 eventHandled=true
 break;}if(eventHandled){ev.preventDefault()
 ev.stopPropagation()}}
+MediaManager.prototype.doScan=function(){$.popup({handler:'onScan'});}
 MediaManager.DEFAULTS={url:window.location,uploadHandler:null,alias:'',deleteEmpty:'Please select files to delete.',deleteConfirm:'Delete the selected file(s)?',moveEmpty:'Please select files to move.',selectSingleImage:'Please select a single image.',selectionNotImage:'The selected item is not an image.',bottomToolbar:false,cropAndInsertButton:false}
 var old=$.fn.mediaManager
 $.fn.mediaManager=function(option){var args=Array.prototype.slice.call(arguments,1),result=undefined

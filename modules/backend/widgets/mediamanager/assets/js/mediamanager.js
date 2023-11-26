@@ -131,6 +131,10 @@
         this.generateThumbnails()
         this.initUploader()
         this.initScroll()
+
+        if (!this.options.isScanned) {
+            this.doScan()
+        }
     }
 
     MediaManager.prototype.registerHandlers = function() {
@@ -1281,6 +1285,16 @@
             ev.preventDefault()
             ev.stopPropagation()
         }
+    }
+
+    //
+    // Media scanning
+    //
+
+    MediaManager.prototype.doScan = function() {
+        $.popup({
+            handler: 'onScan'
+        });
     }
 
     // MEDIA MANAGER PLUGIN DEFINITION

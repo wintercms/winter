@@ -3,7 +3,7 @@
 namespace System\Tests\Classes;
 
 use System\Tests\Bootstrap\TestCase;
-use Illuminate\Filesystem\FilesystemAdapter;
+use League\Flysystem\FilesystemInterface;
 use System\Classes\MediaLibrary;
 
 class MediaLibraryTest extends TestCase
@@ -84,38 +84,168 @@ class MediaLibraryTest extends TestCase
         $this->setUpStorage();
         $this->copyMedia();
 
+        // Rescan library
+        MediaLibrary::instance()->scan(null, null, true);
+
         $contents = MediaLibrary::instance()->listFolderContents();
+
         $this->assertNotEmpty($contents, 'Media library item is not discovered');
         $this->assertCount(3, $contents);
-
-        $this->assertEquals('file', $contents[2]->type, 'Media library item does not have the right type');
-        $this->assertEquals('/winter.png', $contents[2]->path, 'Media library item does not have the right path');
-        $this->assertNotEmpty($contents[2]->lastModified, 'Media library item last modified is empty');
-        $this->assertNotEmpty($contents[2]->size, 'Media library item size is empty');
 
         $this->assertEquals('file', $contents[0]->type, 'Media library item does not have the right type');
         $this->assertEquals('/text.txt', $contents[0]->path, 'Media library item does not have the right path');
         $this->assertNotEmpty($contents[0]->lastModified, 'Media library item last modified is empty');
         $this->assertNotEmpty($contents[0]->size, 'Media library item size is empty');
+
+        $this->assertEquals('file', $contents[1]->type, 'Media library item does not have the right type');
+        $this->assertEquals('/winter.png', $contents[1]->path, 'Media library item does not have the right path');
+        $this->assertNotEmpty($contents[1]->lastModified, 'Media library item last modified is empty');
+        $this->assertNotEmpty($contents[1]->size, 'Media library item size is empty');
+
+        $this->assertEquals('file', $contents[2]->type, 'Media library item does not have the right type');
+        $this->assertEquals('/winter space.png', $contents[2]->path, 'Media library item does not have the right path');
+        $this->assertNotEmpty($contents[2]->lastModified, 'Media library item last modified is empty');
+        $this->assertNotEmpty($contents[2]->size, 'Media library item size is empty');
     }
 
     public function testListAllDirectories()
     {
-        $disk = $this->createConfiguredMock(FilesystemAdapter::class, [
-            'allDirectories' => [
-                '/media/.ignore1',
-                '/media/.ignore2',
-                '/media/dir',
-                '/media/dir/sub',
-                '/media/exclude',
-                '/media/hidden',
-                '/media/hidden/sub1',
-                '/media/hidden/sub1/deep1',
-                '/media/hidden/sub2',
-                '/media/hidden but not really',
-                '/media/name'
-            ]
-        ]);
+        $disk = $this->createMock(FilesystemInterface::class);
+
+        $disk->expects($this->any())
+            ->method('listContents')
+            ->willReturnCallback(function ($path) {
+                switch ($path) {
+                    case '/media/':
+                        return [
+                            [
+                                'type' => 'dir',
+                                'path' => 'media/.ignore1',
+                                'timestamp' => now(),
+                                'size' => 0,
+                                'dirname' => 'media',
+                                'basename' => '.ignore1',
+                                'extension' => '',
+                                'filename' => '.ignore1'
+                            ],
+                            [
+                                'type' => 'dir',
+                                'path' => 'media/.ignore2',
+                                'timestamp' => now(),
+                                'size' => 0,
+                                'dirname' => 'media',
+                                'basename' => '.ignore2',
+                                'extension' => '',
+                                'filename' => '.ignore2'
+                            ],
+                            [
+                                'type' => 'dir',
+                                'path' => 'media/dir',
+                                'timestamp' => now(),
+                                'size' => 0,
+                                'dirname' => 'media',
+                                'basename' => 'dir',
+                                'extension' => '',
+                                'filename' => 'dir'
+                            ],
+                            [
+                                'type' => 'dir',
+                                'path' => 'media/exclude',
+                                'timestamp' => now(),
+                                'size' => 0,
+                                'dirname' => 'media',
+                                'basename' => 'exclude',
+                                'extension' => '',
+                                'filename' => 'exclude'
+                            ],
+                            [
+                                'type' => 'dir',
+                                'path' => 'media/hidden',
+                                'timestamp' => now(),
+                                'size' => 0,
+                                'dirname' => 'media',
+                                'basename' => 'hidden',
+                                'extension' => '',
+                                'filename' => 'hidden'
+                            ],
+                            [
+                                'type' => 'dir',
+                                'path' => 'media/hidden but not really',
+                                'timestamp' => now(),
+                                'size' => 0,
+                                'dirname' => 'media',
+                                'basename' => 'hidden but not really',
+                                'extension' => '',
+                                'filename' => 'hidden but not really'
+                            ],
+                            [
+                                'type' => 'file',
+                                'path' => 'media/name',
+                                'timestamp' => now(),
+                                'size' => 24,
+                                'dirname' => 'media',
+                                'basename' => 'name',
+                                'extension' => '',
+                                'filename' => 'name'
+                            ],
+                        ];
+                        break;
+                    case '/media/dir':
+                        return [
+                            [
+                                'type' => 'dir',
+                                'path' => 'media/dir/sub',
+                                'timestamp' => now(),
+                                'size' => 0,
+                                'dirname' => 'media/dir',
+                                'basename' => 'sub',
+                                'extension' => '',
+                                'filename' => 'sub'
+                            ],
+                        ];
+                        break;
+                    case '/media/hidden':
+                        return [
+                            [
+                                'type' => 'dir',
+                                'path' => 'media/hidden/sub1',
+                                'timestamp' => now(),
+                                'size' => 0,
+                                'dirname' => 'media/hidden',
+                                'basename' => 'sub1',
+                                'extension' => '',
+                                'filename' => 'sub1'
+                            ],
+                            [
+                                'type' => 'dir',
+                                'path' => 'media/hidden/sub2',
+                                'timestamp' => now(),
+                                'size' => 0,
+                                'dirname' => 'media/hidden',
+                                'basename' => 'sub2',
+                                'extension' => '',
+                                'filename' => 'sub2'
+                            ],
+                        ];
+                        break;
+                    case '/media/hidden/sub1':
+                        return [
+                            [
+                                'type' => 'dir',
+                                'path' => 'media/hidden/sub1/deep1',
+                                'timestamp' => now(),
+                                'size' => 0,
+                                'dirname' => 'media/hidden/sub1',
+                                'basename' => 'deep1',
+                                'extension' => '',
+                                'filename' => 'deep1'
+                            ],
+                        ];
+                        break;
+                    default:
+                        return [];
+                }
+            });
 
         $this->app['config']->set('cms.storage.media.folder', 'media');
         $this->app['config']->set('cms.storage.media.ignore', ['hidden']);
@@ -123,7 +253,10 @@ class MediaLibraryTest extends TestCase
         $instance = MediaLibrary::instance();
         $this->setProtectedProperty($instance, 'storageDisk', $disk);
 
-        $this->assertEquals(['/', '/dir', '/dir/sub', '/hidden but not really', '/name'], $instance->listAllDirectories(['/exclude']));
+        // Rescan library
+        MediaLibrary::instance()->scan(null, null, true);
+
+        $this->assertEquals(['/', '/dir', '/dir/sub', '/hidden but not really'], $instance->listAllDirectories(['/exclude']));
     }
 
     protected function setUpStorage()

@@ -449,6 +449,10 @@ return [
     ],
     'media' => [
         'invalid_path' => "Invalid file path specified: ':path'.",
+        'folder_size_items' => 'item(s)',
+        'metadata_image_width' => 'Width',
+        'metadata_image_height' => 'Height',
+        'metadata_video_duration' => 'Duration',
         'folder_size_items' => 'item|items',
     ],
     'page' => [

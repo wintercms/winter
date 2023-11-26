@@ -5,12 +5,18 @@ use Lang;
 use Cache;
 use Config;
 use Storage;
-use Request;
 use Url;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use System\Models\MediaItem;
+use System\Models\Parameter;
 use Illuminate\Filesystem\FilesystemAdapter;
-use ApplicationException;
-use SystemException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use League\Flysystem\DirectoryAttributes;
+use League\Flysystem\FileAttributes;
+use League\Flysystem\StorageAttributes;
+use Winter\Storm\Argon\Argon;
+use Winter\Storm\Exception\ApplicationException ;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
  * Provides abstraction level for the Media Library operations.
@@ -67,6 +73,11 @@ class MediaLibrary
     protected $storageFolderNameLength;
 
     /**
+     * @var array Scanned meta, used to compare a subsequent scan to act only on changes.
+     */
+    protected $scannedMeta;
+
+    /**
      * Initialize this singleton.
      */
     protected function init()
@@ -112,56 +123,15 @@ class MediaLibrary
      * @param boolean $ignoreFolders Determines whether folders should be suppressed in the result list.
      * @return array Returns an array of MediaLibraryItem objects.
      */
-    public function listFolderContents($folder = '/', $sortBy = 'title', $filter = null, $ignoreFolders = false)
+    public function listFolderContents($path = '/', $sortBy = 'title', $filter = null, $ignoreFolders = false)
     {
-        $folder = self::validatePath($folder);
-        $fullFolderPath = $this->getMediaPath($folder);
-
-        /*
-         * Try to load the contents from cache
-         */
-
-        $cached = Cache::get($this->cacheKey, false);
-        $cached = $cached ? @unserialize(@base64_decode($cached)) : [];
-
-        if (!is_array($cached)) {
-            $cached = [];
+        try {
+            $folder = MediaItem::folder($path);
+        } catch (ModelNotFoundException $e) {
+            return [];
         }
 
-        if (array_key_exists($fullFolderPath, $cached)) {
-            $folderContents = $cached[$fullFolderPath];
-        }
-        else {
-            $folderContents = $this->scanFolderContents($fullFolderPath);
-
-            $cached[$fullFolderPath] = $folderContents;
-            $expiresAt = now()->addMinutes(Config::get('cms.storage.media.ttl', 10));
-            Cache::put(
-                $this->cacheKey,
-                base64_encode(serialize($cached)),
-                $expiresAt
-            );
-        }
-
-        /*
-         * Sort the result and combine the file and folder lists
-         */
-
-        if ($sortBy !== false) {
-            $this->sortItemList($folderContents['files'], $sortBy);
-            $this->sortItemList($folderContents['folders'], $sortBy);
-        }
-
-        $this->filterItemList($folderContents['files'], $filter);
-
-        if (!$ignoreFolders) {
-            $folderContents = array_merge($folderContents['folders'], $folderContents['files']);
-        }
-        else {
-            $folderContents = $folderContents['files'];
-        }
-
-        return $folderContents;
+        return $folder->contents($sortBy, $filter, $ignoreFolders);
     }
 
     /**
@@ -175,33 +145,7 @@ class MediaLibrary
      */
     public function findFiles($searchTerm, $sortBy = 'title', $filter = null)
     {
-        $words = explode(' ', Str::lower($searchTerm));
-        $result = [];
-
-        $findInFolder = function ($folder) use (&$findInFolder, $words, &$result, $sortBy, $filter) {
-            $folderContents = $this->listFolderContents($folder, $sortBy, $filter);
-
-            foreach ($folderContents as $item) {
-                if ($item->type == MediaLibraryItem::TYPE_FOLDER) {
-                    $findInFolder($item->path);
-                }
-                elseif ($this->pathMatchesSearch($item->path, $words)) {
-                    $result[] = $item;
-                }
-            }
-        };
-
-        $findInFolder('/');
-
-        /*
-         * Sort the result
-         */
-
-        if ($sortBy !== false) {
-            $this->sortItemList($result, $sortBy);
-        }
-
-        return $result;
+        return MediaItem::getRoot()->search($searchTerm, $sortBy, $filter);
     }
 
     /**
@@ -275,36 +219,9 @@ class MediaLibrary
      */
     public function listAllDirectories($exclude = [])
     {
-        $fullPath = $this->getMediaPath('/');
-
-        $folders = $this->getStorageDisk()->allDirectories($fullPath);
-
-        $folders = array_unique($folders, SORT_LOCALE_STRING);
-
-        $result = [];
-
-        foreach ($folders as $folder) {
-            $folder = $this->getMediaRelativePath($folder);
-            if (!strlen($folder)) {
-                $folder = '/';
-            }
-
-            if (Str::startsWith($folder, $exclude)) {
-                continue;
-            }
-            if (!$this->isVisible($folder)) {
-                $exclude[] = $folder . '/';
-                continue;
-            }
-
-            $result[] = $folder;
-        }
-
-        if (!in_array('/', $result)) {
-            array_unshift($result, '/');
-        }
-
-        return $result;
+        return array_map(function ($item) {
+            return $item->path;
+        }, MediaItem::getRoot()->folders($exclude));
     }
 
     /**
@@ -553,6 +470,178 @@ class MediaLibrary
     }
 
     /**
+     * Scans the disk and stores all metadata in the "media_items" table for performant traversing and filtering.
+     *
+     * Scanning, by default,  will be done in a synchronisation fashion - only metadata that needs to be updated
+     * will be updated, in order to keep subsequent scans quicker. It does this by tracking the path and the
+     * modification time, however, you may opt to force a full resync using the `$forceResync` parameter.
+     *
+     * @param MediaItem $folder The root media folder for this iteration. If `null`, the system assumes the root.
+     * @param string|null $path The root path of this folder.
+     * @param bool $forceResync If `true`, a full resync is done by truncating the "media_items" table.
+     *
+     * @return void
+     */
+    public function scan(MediaItem $folder = null, $path = null, $forceResync = false)
+    {
+        $isRoot = is_null($folder);
+
+        if ($isRoot) {
+            if ($forceResync) {
+                MediaItem::truncate();
+            }
+
+            $this->scannedMeta = MediaItem::notRoot()
+                ->get()
+                ->pluck('modified_at', 'path')
+                ->map(function ($item) {
+                    return Argon::parse($item)->getTimestamp();
+                })
+                ->toArray();
+
+            $rootMedia = $this->getMediaPath('/');
+            $contents = $this->getStorageDisk()->listContents($rootMedia);
+            $folder = MediaItem::getRoot();
+        } else {
+            $contents = $this->getStorageDisk()->listContents($path);
+        }
+
+        // Filter contents so that ignored filenames and patterns are applied
+        $contents = $contents->filter(function (StorageAttributes $item) {
+            return $this->isVisible($item->path());
+        });
+
+        /** @var StorageAttributes $item */
+        foreach ($contents as $item) {
+            $mediaPath = $this->getMediaRelativePath($item['path']);
+
+            if ($item->type() === 'dir') {
+                // Determine if we are adding a new directory
+                if (!isset($this->scannedMeta[$mediaPath])) {
+                    $subFolder = $this->createFolderMeta($folder, $item);
+                } else {
+                    $subFolder = MediaItem::where('path', $mediaPath)->first();
+                    unset($this->scannedMeta[$mediaPath]);
+                }
+
+                if (!is_null($subFolder)) {
+                    $this->scan($subFolder, $item['path']);
+                }
+                continue;
+            }
+
+            if (!isset($this->scannedMeta[$mediaPath])) {
+                // New file detected
+                $this->createFileMeta($folder, $item);
+                continue;
+            } elseif ($this->scannedMeta[$mediaPath] < $item->timestamp) {
+                // File was modified
+                MediaItem::where('path', $mediaPath)->delete();
+                $this->createFileMeta($folder, $item);
+            }
+
+            unset($this->scannedMeta[$mediaPath]);
+        }
+
+        // Any scanned meta still in the list when we have looped through the root files are now deleted
+        if ($isRoot && count($this->scannedMeta)) {
+            foreach (array_keys($this->scannedMeta) as $path) {
+                MediaItem::where('path', $path)->delete();
+            }
+        }
+
+        // Update last scan parameter
+        if ($isRoot) {
+            Parameter::set('media::scan.last_scanned', Argon::now());
+        }
+    }
+
+    /**
+     * Creates a meta record for a folder in the "media_items" table, as a subfolder of the parent folder.
+     */
+    protected function createFolderMeta(MediaItem $parent, DirectoryAttributes $meta): MediaItem
+    {
+        $path = self::validatePath($meta->path());
+
+        return $parent->children()->create([
+            'name' => basename($path),
+            'path' => $this->getMediaRelativePath($path),
+            'type' => MediaLibraryItem::TYPE_FOLDER,
+            'size' => 0,
+            'modified_at' => Argon::createFromTimestamp($meta->lastModified()),
+        ]);
+    }
+
+    /**
+     * Creates a meta record for a file in the "media_items" table, as a child file of the parent folder.
+     */
+    protected function createFileMeta(MediaItem $parent, FileAttributes $meta): MediaItem
+    {
+        $path = self::validatePath($meta->path());
+        $path = $this->getMediaRelativePath($path);
+
+        // Create a temporary media library item instance
+        $mediaItem = new MediaLibraryItem(
+            $path,
+            $meta->fileSize(),
+            $meta->lastModified(),
+            MediaLibraryItem::TYPE_FILE,
+            $this->getPathUrl($path)
+        );
+
+        // Standard metadata
+        $file = $parent->children()->make([
+            'name' => basename($path),
+            'path' => $path,
+            'type' => MediaLibraryItem::TYPE_FILE,
+            'extension' => strtolower(pathinfo($path, PATHINFO_EXTENSION)),
+            'size' => $meta->fileSize(),
+            'modified_at' => Argon::createFromTimestamp($meta->lastModified()),
+        ]);
+
+        // Extra metadata
+        $file->file_type = $mediaItem->getFileType();
+
+        if ($mediaItem->getFileType() === MediaLibraryItem::FILE_TYPE_IMAGE) {
+            $this->setImageMeta($file, $meta->path());
+        }
+
+        $file->save();
+
+        return $file;
+    }
+
+    /**
+     * Gets meta for images.
+     *
+     * This scans the image for the dimensions and stores them in the meta table.
+     *
+     * @param MediaItem $file
+     * @param string $path
+     * @return void
+     */
+    protected function setImageMeta(MediaItem $file, $path)
+    {
+        $size = @getimagesizefromstring($this->getStorageDisk()->read($path));
+        if (!is_array($size)) {
+            return;
+        }
+
+        $file->setMetadata([
+            'width' => [
+                'label' => 'system::lang.media.metadata_image_width',
+                'order' => 200,
+                'value' => $size[0],
+            ],
+            'height' => [
+                'label' => 'system::lang.media.metadata_image_height',
+                'order' => 220,
+                'value' => $size[1],
+            ]
+        ]);
+    }
+
+    /**
      * Returns a file or folder path with the prefixed storage folder.
      * @param string $path Specifies a path to process.
      * @return string Returns a processed string.
@@ -696,84 +785,11 @@ class MediaLibrary
     }
 
     /**
-     * Sorts the item list by title, size or last modified date.
-     * @param array $itemList Specifies the item list to sort.
-     * @param mixed $sortSettings Determines the sorting preference.
-     * Supported values are 'title', 'size', 'lastModified' (see SORT_BY_XXX class constants) or an associative array with a 'by' key and a 'direction' key: ['by' => SORT_BY_XXX, 'direction' => SORT_DIRECTION_XXX].
-     */
-    protected function sortItemList(&$itemList, $sortSettings)
-    {
-        $files = [];
-        $folders = [];
-
-        // Convert string $sortBy to array
-        if (is_string($sortSettings)) {
-            $sortSettings = [
-                'by' => $sortSettings,
-                'direction' => self::SORT_DIRECTION_ASC,
-            ];
-        }
-
-        usort($itemList, function ($a, $b) use ($sortSettings) {
-            $result = 0;
-
-            switch ($sortSettings['by']) {
-                case self::SORT_BY_TITLE:
-                    $result = strcasecmp($a->path, $b->path);
-                    break;
-                case self::SORT_BY_SIZE:
-                    if ($a->size < $b->size) {
-                        $result = -1;
-                    } else {
-                        $result = $a->size > $b->size ? 1 : 0;
-                    }
-                    break;
-                case self::SORT_BY_MODIFIED:
-                    if ($a->lastModified < $b->lastModified) {
-                        $result = -1;
-                    } else {
-                        $result = $a->lastModified > $b->lastModified ? 1 : 0;
-                    }
-                    break;
-            }
-
-            // Reverse the polarity of the result to direct sorting in a descending order instead
-            if ($sortSettings['direction'] === self::SORT_DIRECTION_DESC) {
-                $result = 0 - $result;
-            }
-
-            return $result;
-        });
-    }
-
-    /**
-     * Filters item list by file type.
-     * @param array $itemList Specifies the item list to sort.
-     * @param string $filter Determines the document type filtering preference.
-     * Supported values are 'image', 'video', 'audio', 'document' (see FILE_TYPE_XXX constants of MediaLibraryItem class).
-     */
-    protected function filterItemList(&$itemList, $filter)
-    {
-        if (!$filter) {
-            return;
-        }
-
-        $result = [];
-        foreach ($itemList as $item) {
-            if ($item->getFileType() == $filter) {
-                $result[] = $item;
-            }
-        }
-
-        $itemList = $result;
-    }
-
-    /**
      * Initializes and returns the Media Library disk.
      * This method should always be used instead of trying to access the
      * $storageDisk property directly as initializing the disc requires
      * communicating with the remote storage.
-     * @return mixed Returns the storage disk object.
+     * @return \Illuminate\Contracts\Filesystem\Filesystem Returns the storage disk object.
      */
     public function getStorageDisk(): FilesystemAdapter
     {
@@ -784,30 +800,6 @@ class MediaLibrary
         return $this->storageDisk = Storage::disk(
             Config::get('cms.storage.media.disk', 'local')
         );
-    }
-
-    /**
-     * Determines if file path contains all words form the search term.
-     * @param string $path Specifies a path to examine.
-     * @param array $words A list of words to check against.
-     * @return boolean
-     */
-    protected function pathMatchesSearch($path, $words)
-    {
-        $path = Str::lower($path);
-
-        foreach ($words as $word) {
-            $word = trim($word);
-            if (!strlen($word)) {
-                continue;
-            }
-
-            if (!Str::contains($path, $word)) {
-                return false;
-            }
-        }
-
-        return true;
     }
 
     protected function generateRandomTmpFolderName($location)
