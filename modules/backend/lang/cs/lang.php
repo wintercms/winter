@@ -504,7 +504,7 @@ return [
         'add_folder' => 'Přidat složku',
         'search' => 'Vyhledat',
         'display' => 'Zobrazit',
-        'filter_everything' => 'Vše',
+        'filter_all' => 'Vše',
         'filter_images' => 'Obrázky',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',

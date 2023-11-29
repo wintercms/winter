@@ -1,6 +1,9 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use System\Console\BaseScaffoldCommand;
+use Winter\Storm\Support\Str;
 
 class CreateTest extends BaseScaffoldCommand
 {
@@ -14,10 +17,12 @@ class CreateTest extends BaseScaffoldCommand
      */
     protected $signature = 'create:test
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
-        {name : The name of the test class to generate. <info>(eg: BlogTest)</info>}
+        {name : The name of the test class to generate. Test will be automatically added to the end. Can also be a relative path to a class to generate a test for. <info>(eg: Components\Posts)</info>}
         {--u|unit : Generate a Unit test (defaults to generating Feature tests).}
         {--p|pest : Generate a Pest PHP test (defaults to generating PHPUnit tests).}
-        {--f|force : Overwrite existing files with generated files.}';
+        {--f|force : Overwrite existing files with generated files.}
+        {--uninspiring : Disable inspirational quotes}
+    ';
 
     /**
      * @var string The console command description.
@@ -37,65 +42,78 @@ class CreateTest extends BaseScaffoldCommand
     protected $type = 'Test';
 
     /**
-     * @var array A mapping of stubs to generated files.
+     * @var array Stub files to make a plugin testable
      */
-    protected $stubs = [
-        'scaffold/test/test.stub' => 'tests/Feature/{{studly_name}}.php',
+    protected $pluginStubs = [
+        'scaffold/test/test.plugin.stub' => 'tests/Unit/PluginTest.php',
+        'scaffold/test/phpunit.stub' => 'phpunit.xml',
     ];
 
     /**
-     * @inheritDoc
+     * Adds controller & model lang helpers to the vars
      */
-    public function processVars(array $vars): array
+    protected function processVars($vars): array
     {
         $vars = parent::processVars($vars);
 
-        $prefix = $this->option('pest') ? 'pest' : 'test';
-        $suffix = '.stub';
-        $type = 'Feature';
-        $testName = "{{studly_name}}.php";
-        if ($this->option('unit')) {
-            $suffix = '.unit.stub';
-            $type = 'Unit';
-
-            $name = $this->argument('name');
-            $class = $vars['plugin_namespace'] . '\\' . $name;
-            if (class_exists($class)) {
-                $reflection = new \ReflectionClass($class);
-                $publicMethods = [];
-                $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC) ?: [];
-                foreach ($methods as $method) {
-                    if ($method->class === $class) {
-                        $publicMethods[] = $method->name;
-                    }
-                }
-
-                $namePieces = explode('\\', $name);
-
-                $vars['tested_class'] = array_pop($namePieces);
-
-                if (count($namePieces)) {
-                    $type .= '\\' . implode('\\', $namePieces);
-                }
-
-                $vars['public_methods'] = $publicMethods;
-                $suffix = '.class.stub';
-                $vars['tested_class_full'] = $class;
-                $testName = '{{ tested_class }}Test.php';
-            }
+        // Enable testing on the plugin if it isn't already
+        if (!$this->files->exists($this->getDestinationPath() . '/phpunit.xml')) {
+            $this->stubs = array_merge($this->pluginStubs, $this->stubs);
         }
+
+        // Populate Pest.php if it doesn't exist
+        $isPest = $this->option('pest');
+        if ($isPest && !$this->files->exists($this->getDestinationPath() . '/tests/Pest.php')) {
+            $this->stubs = array_merge($this->stubs, [
+                'scaffold/test/pest.init.stub' => 'tests/Pest.php',
+            ]);
+        }
+
+        $prefix = $isPest ? 'pest' : 'test';
+        $type = $this->option('unit') ? 'Unit' : 'Feature';
+        $suffix = $this->option('unit') ? '.unit.stub' : '.stub';
+
+        $name = $this->argument('name');
+        $class = $vars['plugin_namespace'] . '\\' . $name;
+
+        // provided name is a class in the plugin
+        if (class_exists($class)) {
+            // Get the public methods to stub out tests for
+            $reflection = new \ReflectionClass($class);
+            $publicMethods = [];
+            $methods = $reflection->getMethods(\ReflectionMethod::IS_PUBLIC) ?: [];
+            foreach ($methods as $method) {
+                if ($method->class === $class) {
+                    $publicMethods[] = $method->name;
+                }
+            }
+            $vars['public_methods'] = $publicMethods;
+
+            // Generate the necessary stub variables
+            $namePieces = explode('\\', $name);
+            $vars['tested_class_full'] = $class;
+            $vars['tested_class'] = array_pop($namePieces);
+            $testClass = $vars['tested_class'] . 'Test';
+            $suffix = '.class.stub';
+            if (count($namePieces)) {
+                $type .= '\\' . implode('\\', $namePieces);
+            }
+        // sometimes a name is just a name. Move on.
+        } else {
+            $testClass = $name . 'Test';
+        }
+
+        // Just in case :)
+        $testClass = Str::replace('TestTest', 'Test', $testClass);
 
         $folder = str_replace('\\', '/', $type);
-        $this->stubs = [
-            "scaffold/test/{$prefix}{$suffix}" => "tests/$folder/$testName",
-        ];
+        $vars['test_class'] = $testClass;
+        $vars['test_namespace'] = "{$vars['plugin_namespace']}\\Tests\\$type";
 
-        if (!file_exists($this->getDestinationPath() . '/phpunit.xml')) {
-            $this->stubs['scaffold/test/phpunit.xml.stub'] = 'phpunit.xml';
-        }
+        $this->stubs["scaffold/test/{$prefix}{$suffix}"] = "tests/$folder/$testClass.php";
 
         return array_merge($vars, [
-            'test_namespace' => $type,
+            'test_namespace' => "{$vars['plugin_namespace']}\\Tests\\$type",
         ]);
     }
 }

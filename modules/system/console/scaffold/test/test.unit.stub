@@ -1,10 +1,10 @@
 <?php
 
-namespace {{ plugin_namespace }}\Tests\{{ test_namespace }};
+namespace {{ test_namespace }};
 
-use System\Tests\Bootstrap\TestCase;
+use PHPUnit\Framework\TestCase;
 
-class {{ studly_name }} extends TestCase
+class {{ test_class }} extends TestCase
 {
     /**
      * A basic unit test example.

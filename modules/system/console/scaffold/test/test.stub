@@ -1,10 +1,10 @@
 <?php
 
-namespace {{ plugin_namespace }}\Tests\{{ test_namespace }};
+namespace {{ test_namespace }};
 
 use System\Tests\Bootstrap\PluginTestCase;
 
-class {{ studly_name }} extends PluginTestCase
+class {{ test_class }} extends PluginTestCase
 {
     /**
      * A basic feature test example.

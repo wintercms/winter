@@ -12,7 +12,7 @@ $.each($el.parents('[data-request-data]').toArray().reverse(),function extendReq
 if($el.is(':input')&&!$form.length){inputName=$el.attr('name')
 if(inputName!==undefined&&options.data[inputName]===undefined){options.data[inputName]=$el.val()}}if(options.data!==undefined&&!$.isEmptyObject(options.data)){$.extend(data,options.data)}var requestParentData=$form.getRequestParentData()
 if(useFiles){requestData=new FormData()
-$.each(requestParentData,function(key){requestData.append(key,this)})
+$.each(requestParentData,function(key){if(Array.isArray(this)){for(let i=0;i<this.length;i++){requestData.append(key,this[i])}}else{requestData.append(key,this)}})
 if($el.is(':file')&&inputName){$.each($el.prop('files'),function(){requestData.append(inputName,this)})
 delete data[inputName]}$.each(data,function(key){if(typeof Blob!=="undefined"&&this instanceof Blob&&this.filename){requestData.append(key,this,this.filename)}else{requestData.append(key,this)}})}else{requestData=[$.param(requestParentData),$.param(data)].filter(Boolean).join('&')}var requestOptions={url:url,crossDomain:false,global:options.ajaxGlobal,context:context,headers:requestHeaders,success:function(data,textStatus,jqXHR){if(this.options.beforeUpdate.apply(this,[data,textStatus,jqXHR])===false)return
 if(options.evalBeforeUpdate&&eval('(function($el, context, data, textStatus, jqXHR) {'+options.evalBeforeUpdate+'}.call($el.get(0), $el, context, data, textStatus, jqXHR))')===false)return

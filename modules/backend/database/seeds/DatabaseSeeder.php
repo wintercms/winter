@@ -26,7 +26,8 @@ class DatabaseSeeder extends Seeder
             $this->call($adminSeeder);
         });
 
-        return $shouldRandomizePassword ? 'The following password has been automatically generated for the "admin" account: '
-            . "<fg=yellow;options=bold>${adminPassword}</>" : '';
+        return ($shouldRandomizePassword)
+            ? 'The following password has been automatically generated for the "admin" account: <fg=yellow;options=bold>' . $adminPassword . '</>'
+            : '';
     }
 }

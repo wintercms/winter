@@ -67,10 +67,6 @@ class ServiceProvider extends ModuleServiceProvider
 
         $this->bootMenuItemEvents();
         $this->bootRichEditorEvents();
-
-        if ($this->app->runningInBackend()) {
-            $this->bootBackendLocalization();
-        }
     }
 
     /**
@@ -109,8 +105,18 @@ class ServiceProvider extends ModuleServiceProvider
             ];
 
             if ($useCache) {
+                $theme = Theme::getActiveTheme();
+                $themeDir = $theme->getDirName();
+                if ($parent = $theme->getConfig()['parent'] ?? false) {
+                    $themeDir .= '-' . $parent;
+                }
+
                 $options['cache'] = new TwigCacheFilesystem(
-                    storage_path().'/cms/twig',
+                    storage_path(implode(DIRECTORY_SEPARATOR, [
+                        'cms',
+                        'twig',
+                        $themeDir,
+                    ])) . DIRECTORY_SEPARATOR,
                     $forceBytecode ? TwigCacheFilesystem::FORCE_BYTECODE_INVALIDATION : 0
                 );
             }
@@ -382,24 +388,6 @@ class ServiceProvider extends ModuleServiceProvider
     }
 
     /**
-     * Boots localization from an active theme for backend items.
-     */
-    protected function bootBackendLocalization()
-    {
-        $theme = Theme::getActiveTheme();
-
-        if (is_null($theme)) {
-            return;
-        }
-
-        $langPath = $theme->getPath() . '/lang';
-
-        if (File::isDirectory($langPath)) {
-            Lang::addNamespace('themes.' . $theme->getId(), $langPath);
-        }
-    }
-
-    /**
      * Registers events for menu items.
      */
     protected function bootMenuItemEvents()
@@ -448,6 +436,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         Event::listen('system.console.theme.sync.getAvailableModelClasses', function () {
             return [
+                Classes\Theme::class,
                 Classes\Meta::class,
                 Classes\Page::class,
                 Classes\Layout::class,

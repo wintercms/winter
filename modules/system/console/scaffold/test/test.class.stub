@@ -1,16 +1,16 @@
 <?php
 
-namespace {{ plugin_namespace }}\Tests\{{ test_namespace }};
+namespace {{ test_namespace }};
 
 use {{ tested_class_full }};
 use System\Tests\Bootstrap\TestCase as WinterTestCase;
 
-class {{ tested_class }}Test extends WinterTestCase
+class {{ test_class }} extends WinterTestCase
 {
     /**
      * An instance of the class being tested
      */
-    protected $instance = null;
+    protected ?{{ tested_class }} $instance = null;
 
     /**
      * Initialize the {{ tested_class }}
@@ -28,7 +28,7 @@ class {{ tested_class }}Test extends WinterTestCase
      */
     public function test_{{ method }}()
     {
-        // $this->assertTrue($this->instance->{{ method }}());
+        $this->assertTrue(method_exists($this->instance, '{{ method }}'));
     }
 {% endfor %}
 }

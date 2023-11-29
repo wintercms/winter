@@ -1,7 +1,7 @@
 <?php namespace Cms\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
 use InvalidArgumentException;
+use Winter\Storm\Scaffold\GeneratorCommand;
 
 class CreateTheme extends GeneratorCommand
 {
@@ -16,7 +16,9 @@ class CreateTheme extends GeneratorCommand
     protected $signature = 'create:theme
         {theme : The name of the theme to create. <info>(eg: MyTheme)</info>}
         {scaffold? : The base theme scaffold to use <info>(eg: less, tailwind)</info>}
-        {--f|force : Overwrite existing files with generated files.}';
+        {--f|force : Overwrite existing files with generated files.}
+        {--uninspiring : Disable inspirational quotes}
+    ';
 
     /**
      * @var string The console command description.

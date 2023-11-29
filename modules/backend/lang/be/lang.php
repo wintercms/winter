@@ -478,7 +478,7 @@ return [
         'add_folder' => "Дадаць каталог",
         'search' => "Пошук",
         'display' => "Паказаць",
-        'filter_everything' => "Усё",
+        'filter_all' => "Усё",
         'filter_images' => "Выявы",
         'filter_video' => "Відэа",
         'filter_audio' => "Аўдыё",

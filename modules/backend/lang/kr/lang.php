@@ -504,7 +504,7 @@ return [
         'add_folder' => '폴더 추가',
         'search' => '검색',
         'display' => '표시방법',
-        'filter_everything' => '전체표시',
+        'filter_all' => '전체표시',
         'filter_images' => '이미지',
         'filter_video' => '동영상',
         'filter_audio' => '소리',

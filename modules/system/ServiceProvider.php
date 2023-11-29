@@ -147,9 +147,7 @@ class ServiceProvider extends ModuleServiceProvider
         $requests = ['/combine/', '@/system/updates', '@/system/install', '@/backend/auth'];
         $commands = ['migrate', 'winter:up', 'winter:update', 'winter:env', 'winter:version', 'winter:manifest'];
 
-        /*
-         * Requests
-         */
+        // Requests
         $path = RouterHelper::normalizeUrl(Request::path());
         $backendUri = RouterHelper::normalizeUrl(Config::get('cms.backendUri', 'backend'));
         foreach ($requests as $request) {
@@ -162,10 +160,20 @@ class ServiceProvider extends ModuleServiceProvider
             }
         }
 
-        /*
-         * CLI
-         */
-        if ($this->app->runningInConsole() && count(array_intersect($commands, Request::server('argv', []))) > 0) {
+        // CLI
+        if ($this->app->runningInConsole()
+            && (
+                // Protected command
+                count(array_intersect($commands, Request::server('argv', []))) > 0
+
+                // Database configured but not initialized yet
+                // @see octobercms/october#3208
+                || (
+                    $this->app->hasDatabase()
+                    && !Schema::hasTable(UpdateManager::instance()->getMigrationTableName())
+                )
+            )
+        ) {
             PluginManager::$noInit = true;
         }
     }
@@ -228,11 +236,6 @@ class ServiceProvider extends ModuleServiceProvider
          * Allow plugins to use the scheduler
          */
         Event::listen('console.schedule', function ($schedule) {
-            // Fix initial system migration with plugins that use settings for scheduling - see #3208
-            if ($this->app->hasDatabase() && !Schema::hasTable(UpdateManager::instance()->getMigrationTableName())) {
-                return;
-            }
-
             $plugins = PluginManager::instance()->getPlugins();
             foreach ($plugins as $plugin) {
                 if (method_exists($plugin, 'registerSchedule')) {

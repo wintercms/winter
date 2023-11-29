@@ -1,3 +1,5 @@
+import Singleton from '../abstracts/Singleton';
+
 /**
  * Adds AJAX-driven form validation to Snowboard requests.
  *
@@ -7,7 +9,7 @@
  * @copyright 2022 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class FormValidation extends Snowboard.Singleton {
+export default class FormValidation extends Singleton {
     /**
      * Constructor.
      */
@@ -47,7 +49,7 @@ export default class FormValidation extends Snowboard.Singleton {
      * @returns {Boolean}
      */
     doValidation(form, invalidFields, request) {
-        if (request.element.dataset.requestValidate === undefined) {
+        if (request.element && request.element.dataset.requestValidate === undefined) {
             return null;
         }
         if (!form) {
@@ -70,7 +72,7 @@ export default class FormValidation extends Snowboard.Singleton {
      * @returns {void}
      */
     clearValidation(promise, request) {
-        if (request.element.dataset.requestValidate === undefined) {
+        if (request.element && request.element.dataset.requestValidate === undefined) {
             return;
         }
         if (!request.form) {

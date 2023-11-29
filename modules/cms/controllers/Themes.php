@@ -1,22 +1,26 @@
 <?php namespace Cms\Controllers;
 
-use Lang;
-use File;
-use Flash;
-use Backend;
-use Redirect;
-use BackendMenu;
-use ValidationException;
 use ApplicationException;
+use Artisan;
+use Backend;
+use Backend\Classes\Controller;
+use Backend\Models\BrandSetting;
+use Backend\Widgets\Form;
+use BackendMenu;
+use Cms\Classes\Theme as CmsTheme;
+use Cms\Classes\ThemeManager;
+use Cms\Helpers\Cms as CmsHelper;
 use Cms\Models\ThemeExport;
 use Cms\Models\ThemeImport;
-use Cms\Classes\Theme as CmsTheme;
-use Cms\Helpers\Cms as CmsHelper;
-use Cms\Classes\ThemeManager;
-use System\Classes\SettingsManager;
-use Backend\Classes\Controller;
 use Exception;
-use Backend\Widgets\Form;
+use File;
+use Flash;
+use Lang;
+use Redirect;
+use System\Classes\SettingsManager;
+use Url;
+use ValidationException;
+use Winter\Storm\Support\Str;
 
 /**
  * Theme selector controller
@@ -137,7 +141,7 @@ class Themes extends Controller
         $widget = $this->makeCreateFormWidget();
         $data = $widget->getSaveData();
         $newDirName = trim(array_get($data, 'dir_name'));
-        $destinationPath = themes_path().'/'.$newDirName;
+        $destinationPath = themes_path($newDirName);
 
         $data = array_except($data, 'dir_name');
 
@@ -153,13 +157,29 @@ class Themes extends Controller
             throw new ValidationException(['dir_name' => Lang::get('cms::lang.theme.dir_name_taken')]);
         }
 
-        File::makeDirectory($destinationPath);
-        File::makeDirectory($destinationPath.'/assets');
-        File::makeDirectory($destinationPath.'/content');
-        File::makeDirectory($destinationPath.'/layouts');
-        File::makeDirectory($destinationPath.'/pages');
-        File::makeDirectory($destinationPath.'/partials');
-        File::put($destinationPath.'/theme.yaml', '');
+        switch ($data['scaffold']) {
+            case 'empty':
+                File::makeDirectory($destinationPath);
+                File::makeDirectory($destinationPath.'/assets');
+                File::makeDirectory($destinationPath.'/content');
+                File::makeDirectory($destinationPath.'/layouts');
+                File::makeDirectory($destinationPath.'/pages');
+                File::makeDirectory($destinationPath.'/partials');
+                File::put($destinationPath.'/theme.yaml', '');
+                break;
+            default:
+                try {
+                    Artisan::call('create:theme', [
+                        'theme' => $newDirName,
+                        'scaffold' => $data['scaffold']
+                    ]);
+                } catch (\Exception $ex) {
+                    throw new ApplicationException($ex->getMessage());
+                }
+                break;
+        }
+
+        unset($data['scaffold']);
 
         $theme = CmsTheme::load($newDirName);
         $theme->writeConfig($data);
@@ -170,11 +190,26 @@ class Themes extends Controller
 
     protected function makeCreateFormWidget()
     {
+        $theme = new CmsTheme;
+        $theme->setDirName('newtheme');
         $widgetConfig = $this->makeConfig('~/modules/cms/classes/theme/fields.yaml');
         $widgetConfig->alias = 'formCreateTheme';
-        $widgetConfig->model = new CmsTheme;
+        $widgetConfig->model = $theme;
         $widgetConfig->arrayName = 'Theme';
         $widgetConfig->context = 'create';
+
+        // Setup default values
+        $name = BrandSetting::get('app_name');
+        $slug = Str::slug($name);
+        $url = Url::to('/');
+        $widgetConfig->data = [
+            'name' => $name,
+            'dir_name' => $slug,
+            'description' => Lang::get('cms::lang.theme.default_description', ['url' => $url]),
+            'code' => $slug,
+            'author' => $this->user->full_name,
+            'homepage' => $url,
+        ];
 
         return $this->makeWidget('Backend\Widgets\Form', $widgetConfig);
     }

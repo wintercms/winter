@@ -8,6 +8,7 @@ use Symfony\Component\Process\Process;
 use System\Classes\PluginManager;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\PathResolver;
+use Winter\Storm\Support\Str;
 
 /**
  * Console command to run tests for plugins and modules.
@@ -135,8 +136,10 @@ class WinterTest extends Command
     {
         // Find and bind the phpunit executable
         if (!$this->phpUnitExec) {
-            $this->phpUnitExec = (new ExecutableFinder())
-                ->find('phpunit', base_path('vendor/bin/phpunit'), [base_path('vendor')]);
+            $finder = new ExecutableFinder();
+            $this->phpUnitExec = $finder
+                ->find('pest', base_path('vendor/bin/pest'), [base_path('vendor')]) ?:
+                $finder->find('phpunit', base_path('vendor/bin/phpunit'), [base_path('vendor')]);
         }
 
         // Resolve the configuration path based on the current working directory
@@ -163,8 +166,15 @@ class WinterTest extends Command
             ));
         }
 
+        $testDirectory = Str::after(dirname($config), base_path() . DIRECTORY_SEPARATOR) . '/tests';
+
         $process = new Process(
-            array_merge([$this->phpUnitExec, '--configuration=' . $config, '--bootstrap=' . $bootstrapPath], $args),
+            array_merge([
+                $this->phpUnitExec,
+                '--configuration=' . $config,
+                '--bootstrap=' . $bootstrapPath,
+                '--test-directory=' . $testDirectory,
+            ], $args),
             base_path(),
             [
                 'APP_ENV' => 'testing',

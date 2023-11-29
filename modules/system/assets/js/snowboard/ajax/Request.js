@@ -1,3 +1,5 @@
+import PluginBase from '../abstracts/PluginBase';
+
 /**
  * Request plugin.
  *
@@ -6,11 +8,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-if (window.Snowboard === undefined) {
-    throw new Error('Snowboard must be loaded in order to use the Request plugin.');
-}
-
-class Request extends Snowboard.PluginBase {
+export default class Request extends PluginBase {
     /**
      * Constructor.
      *
@@ -303,7 +301,7 @@ class Request extends Snowboard.PluginBase {
         return new Promise((resolve, reject) => {
             if (typeof this.options.beforeUpdate === 'function') {
                 if (this.options.beforeUpdate.apply(this, [response]) === false) {
-                    reject();
+                    resolve();
                     return;
                 }
             }
@@ -352,7 +350,7 @@ class Request extends Snowboard.PluginBase {
                     );
                 },
                 () => {
-                    reject();
+                    resolve();
                 },
             );
         });
@@ -853,5 +851,3 @@ class Request extends Snowboard.PluginBase {
         return /^(?:\w+:{2})?on[A-Z0-9]/.test(name);
     }
 }
-
-Snowboard.addPlugin('request', Request);

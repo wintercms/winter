@@ -502,7 +502,7 @@ return [
         'add_folder' => 'Pridėti katalogą',
         'search' => 'Ieškoti',
         'display' => 'Rodyti',
-        'filter_everything' => 'Viskas',
+        'filter_all' => 'Viskas',
         'filter_images' => 'Paveiksliukai',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',

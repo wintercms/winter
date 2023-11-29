@@ -1,1 +1,10 @@
 * text=auto
+
+*.md diff=markdown
+*.php diff=php
+
+/.github export-ignore
+/.gitpod export-ignore
+.gitattributes export-ignore
+.gitpod.yml export-ignore
+CHANGELOG.md export-ignore
