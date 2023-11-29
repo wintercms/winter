@@ -1,16 +1,18 @@
-<?php namespace System\Classes;
+<?php
 
-use Str;
-use Lang;
+namespace System\Classes;
+
+use ApplicationException;
 use Cache;
 use Config;
+use Illuminate\Filesystem\FilesystemAdapter;
+use Lang;
 use Storage;
-use Request;
+use SystemException;
 use Url;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
-use Illuminate\Filesystem\FilesystemAdapter;
-use ApplicationException;
-use SystemException;
+use Winter\Storm\Support\Str;
+use Winter\Storm\Support\Svg;
 
 /**
  * Provides abstraction level for the Media Library operations.
@@ -345,6 +347,15 @@ class MediaLibrary
 
         $newPath = self::validatePath($newPath);
         $fullNewPath = $this->getMediaPath($newPath);
+
+        // If the file extension is changed to SVG, ensure that it has been sanitized
+        $oldExt = pathinfo($oldPath, PATHINFO_EXTENSION);
+        $newExt = pathinfo($newPath, PATHINFO_EXTENSION);
+        if ($oldExt !== $newExt && $newExt === 'svg') {
+            $contents = $this->getStorageDisk()->get($fullOldPath);
+            $contents = Svg::sanitize($contents);
+            $this->getStorageDisk()->put($fullOldPath, $contents);
+        }
 
         return $this->getStorageDisk()->move($fullOldPath, $fullNewPath);
     }
