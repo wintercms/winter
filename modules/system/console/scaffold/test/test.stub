@@ -1,0 +1,20 @@
+<?php
+
+namespace {{ test_namespace }};
+
+use System\Tests\Bootstrap\PluginTestCase;
+
+class {{ class }} extends PluginTestCase
+{
+    /**
+     * A basic feature test example.
+     *
+     * @return void
+     */
+    public function test_example()
+    {
+        $response = $this->get('/');
+
+        $response->assertStatus(200);
+    }
+}
