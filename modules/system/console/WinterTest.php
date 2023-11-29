@@ -138,7 +138,7 @@ class WinterTest extends Command
         if (!$this->phpUnitExec) {
             $finder = new ExecutableFinder();
             $this->phpUnitExec = $finder
-                ->find('pest', base_path('vendor/bin/pest'), [base_path('vendor')]) ?:
+                ->find('pest', base_path('vendor/bin/pest'), [base_path('vendor')]) ??
                 $finder->find('phpunit', base_path('vendor/bin/phpunit'), [base_path('vendor')]);
         }
 
