@@ -9,6 +9,7 @@ return [
         'invalid_type' => 'Type de champ invalide :type.',
         'options_method_invalid_model' => "L\'attribut ':field' ne correspond à aucun modèle valide. Essayez de spécifier explicitement la méthode d\'options pour la classe du modèle ':model'.",
         'options_method_not_exists' => 'La classe du modèle :model doit définir une méthode :method() renvoyant des options pour le champ ":field" du formulaire.',
+        'options_static_method_invalid_value' => "La méthode statique ':method()' de :class ne renvoie pas un tableau d'options valide.",
         'colors_method_not_exists' => "La classe du modèle :model doit définir une méthode :method() renvoyant le code html en hexadécimal de la couleur du champ ':field' du formulaire."
     ],
     'widget' => [
@@ -17,6 +18,11 @@ return [
     ],
     'page' => [
         'untitled' => 'Sans titre',
+        '404' => [
+            'label' => 'Page non trouvée',
+            'help' => "Nous avons cherché et cherché mais l'URL demandée n'a pas été trouvée. Peut-être cherchiez-vous autre chose ?",
+            'back_link' => 'Retourner à la page précédente',
+        ],
         'access_denied' => [
             'label' => 'Accès refusé',
             'help' => 'Vous n\'êtes pas autorisé à consulter cette page.',
@@ -29,9 +35,24 @@ return [
         ],
     ],
     'partial' => [
-        'not_found_name' => 'Le modèle partiel ":name" est introuvable.'
+        'not_found_name' => 'Le modèle partiel ":name" est introuvable.',
+        'invalid_name' => 'Le nom du modèle partiel est invalide: :name.',
+    ],
+    'ajax_handler' => [
+        'invalid_name' => 'Nom du gestionnaire AJAX non valide: :name.',
+        'not_found' => "Le gestionnaire AJAX ':name' n'a pas été trouvé.",
     ],
     'account' => [
+        'impersonate' => "Usurper l'identité d'un utilisateur",
+        'impersonate_confirm' => 'Êtes-vous sûr de vouloir vous identifier comme cet utilisateur ? Vous pouvez revenir à votre état initial en vous déconnectant.',
+        'impersonate_success' => "Vous usurpez l'identité de cet utilisateur",
+        'impersonate_working' => "Usurpation d'identité...",
+        'impersonating' => 'Vous êtes temporairement connecté en tant que :impersonatee. Les journaux de logs sont toujours capables de vous identifier en tant que :impersonator.',
+        'stop_impersonating' => "Arrêtez l'usurpation d'identité",
+        'unsuspend' => 'Réactiver',
+        'unsuspend_confirm' => 'Êtes-vous sûr de vouloir réactiver cet utilisateur ?',
+        'unsuspend_success' => "L'utilisateur a été réactivé.",
+        'unsuspend_working' => 'Réactivation...',
         'signed_in_as' => 'Connecté en tant que :full_name',
         'sign_out' => 'Déconnexion',
         'login' => 'OK',
@@ -53,7 +74,11 @@ return [
         'apply' => 'Appliquer',
         'cancel' => 'Annuler',
         'delete' => 'Supprimer',
-        'ok' => 'OK'
+        'ok' => 'OK',
+        'sending' => 'Transmission ...',
+        'password_reset_email' => 'Envoyer un e-mail de réinitialisation du mot de passe',
+        'manual_password_reset_confirm' => 'Êtes-vous sûr de vouloir envoyer un e-mail de réinitialisation du mot de passe à cet utilisateur ?',
+        'manual_password_reset_success' => "Un courriel a été envoyé à l'utilisateur avec des instructions pour réinitialiser son mot de passe.",
     ],
     'dashboard' => [
         'menu_label' => 'Tableau de bord',
@@ -219,6 +244,7 @@ return [
         'remove_file' => 'Supprimer le fichier',
     ],
     'repeater' => [
+        'add_new_item' => 'Ajouter un nouvel élément',
         'min_items_failed' => ':name nécessite un minimum de :min choix sélectionné(s), seulement :items sont sélectionné(s)',
         'max_items_failed' => ':name accepte un maximum de :max choix sélectionné(s), :items sont sélectionnés',
     ],
@@ -285,6 +311,7 @@ return [
     ],
     'recordfinder' => [
         'find_record' => 'Trouver un enregistrement',
+        'invalid_model_class' => "La classe du modèle \":modelClass\" fournie pour le recordfinder n'est pas valide.",
         'cancel' => 'Annuler',
     ],
     'pagelist' => [
@@ -344,10 +371,14 @@ return [
         'permissions'  => 'PHP ne peut pas écrire dans le répertoire :name et ses sous-dossiers. Veuillez modifier les permissions en écriture du serveur web pour ce répertoire.',
         'extension' => 'L\'extension PHP :name n\'est pas installée. Veuillez installer la librairie et activer l\'extension.',
         'plugin_missing' => 'Le plugin :name est une dépendance mais n\'est pas installé. Veuillez installer le plugin.',
+        'debug' => "Le mode debug est activé. Cela n'est pas recommandé pour les installations en production.",
+        'decompileBackendAssets' => "Les assets dans le Backend sont actuellement décompilés. Cela n'est pas recommandé pour les installations en production.",
+        'default_backend_user' => "Un utilisateur avec les détails de connexion par défaut (admin / admin@domain.tld) a été trouvé. Changez son nom d'utilisateur et / ou son adresse e-mail pour aider à protéger le système.",
     ],
     'editor' => [
         'menu_label' => 'Préférences de l\'éditeur de code',
         'menu_description' => 'Personnaliser la configuration de l\'éditeur de code, telle que la taille de la police ou la coloration syntaxique.',
+        'preview' => 'Prévisualisation',
         'font_size' => 'Taille de la police',
         'tab_size' => 'Taille de la tabulation',
         'use_hard_tabs' => 'Indentation par tabulation',
@@ -425,11 +456,18 @@ return [
         'brand' => 'Marque',
         'logo' => 'Logo',
         'logo_description' => 'Envoyer un logo personnalisé à utiliser dans l\'interface d\'administration.',
+        'favicon' => 'Favicon',
+        'favicon_description' => 'Téléchargez un favicon personnalisé à utiliser dans le back-end.',
         'app_name' => 'Nom de l\'application',
         'app_name_description' => 'Ce nom est affiché comme titre dans l\'interface d\'administration.',
         'app_tagline' => 'Slogan de l\'application',
         'app_tagline_description' => 'Ce slogan est affiché sur la page d\'inscription à l\'interface d\'administration.',
         'colors' => 'Couleurs',
+        'branding_colors' => 'Couleurs de la marque',
+        'branding_colors_comment' => "Ces couleurs seront utilisées dans l'interface utilisateur du backend pour correspondre à votre image de marque.",
+        'default_colors' => 'Couleurs par défaut',
+        'default_colors_comment' => 'Ces couleurs seront disponibles comme échantillons dans tous les sélecteurs de couleurs, sauf si elles sont remplacées.',
+        'add_default_color' => 'Ajouter une couleur par défaut',
         'primary_color' => 'Couleur principale',
         'secondary_color' => 'Couleur secondaire',
         'accent_color' => 'Couleur d\'accentuation',
@@ -438,6 +476,7 @@ return [
         'navigation' => 'Navigation',
         'menu_mode' => 'Style du menu',
         'menu_mode_inline' => 'Horizontal',
+        'menu_mode_inline_no_icons' => 'Horizontal (sans icônes)',
         'menu_mode_tile' => 'Tuiles',
         'menu_mode_collapsed' => 'Replié',
     ],
@@ -539,16 +578,19 @@ return [
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, balte)',
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, celtique)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, européen occidental révisé avec le signe euro)',
+            'windows_1250' => 'Windows-1250 (CP1250, Europe centrale et orientale)',
             'windows_1251' => 'Windows-1251 (CP1251)',
             'windows_1252' => 'Windows-1252 (CP1252)'
         ]
     ],
     'permissions' => [
-        'manage_media' => 'Déposer et gérer les contenus media - images, vidéos, sons, documents'
+        'manage_media' => 'Déposer et gérer les contenus media - images, vidéos, sons, documents',
+        'allow_unsafe_markdown' => 'Utilisation de Markdown non sécurisé (peut inclure du Javascript)',
     ],
     'mediafinder' => [
         'label' => 'Galerie média',
-        'default_prompt' => 'Cliquez sur le bouton %s pour trouver un élément média'
+        'default_prompt' => 'Cliquez sur le bouton %s pour trouver un élément média',
+        'no_image' => "L'image n'a pas été trouvée",
     ],
     'media' => [
         'menu_label' => 'Média',
@@ -558,7 +600,7 @@ return [
         'add_folder' => 'Ajouter un répertoire',
         'search' => 'Rechercher',
         'display' => 'Affichage',
-        'filter_everything' => 'Tout',
+        'filter_all' => 'Tout',
         'filter_images' => 'Images',
         'filter_video' => 'Vidéo',
         'filter_audio' => 'Audio',

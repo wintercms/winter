@@ -399,7 +399,7 @@ return [
         'return_link'=> 'Вернуться в журнал событий',
         'id' => 'ID',
         'id_label' => 'ID события',
-        'created_at' => 'Дата & Время',
+        'created_at' => 'Дата и время',
         'message'=> 'Сообщение',
         'level'=> 'Уровень',
         'preview_title'=> 'События',
@@ -449,7 +449,7 @@ return [
     ],
     'media'=> [
         'invalid_path'=> "Указан недопустимый путь к файлу: ':path'.",
-        'folder_size_items' => 'объектов',
+        'folder_size_items' => 'элемент|элемента|элементов',
     ],
     'page' => [
         'custom_error' => [

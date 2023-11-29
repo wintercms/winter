@@ -1,10 +1,9 @@
 <?php namespace Cms\Console;
 
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
 use Cms\Classes\Theme;
 use Cms\Classes\ThemeManager;
 use System\Classes\UpdateManager;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to list themes.
@@ -22,6 +21,13 @@ class ThemeList extends Command
     protected $name = 'theme:list';
 
     /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'theme:list
+        {--m|include-marketplace : Include downloadable themes from the Winter marketplace.}
+    ';
+
+    /**
      * The console command description.
      */
     protected $description = 'List available themes.';
@@ -33,36 +39,28 @@ class ThemeList extends Command
     {
         $themeManager = ThemeManager::instance();
         $updateManager = UpdateManager::instance();
+        $results = [];
 
         foreach (Theme::all() as $theme) {
-            $flag = $theme->isActiveTheme() ? '[*] ' : '[-] ';
-            $themeId = $theme->getId();
-            $themeName = $themeManager->findByDirName($themeId) ?: $themeId;
-            $this->info($flag . $themeName);
+            $results[] = [
+                'code' => $theme->getId(),
+                'is_active' => $theme->isActiveTheme() ? '<info>Yes</info>': '<fg=red>No</>',
+                'is_installed' => '<info>Yes</info>',
+            ];
         }
 
         if ($this->option('include-marketplace')) {
-            // @todo List everything in the marketplace - not just popular.
-
+            // @TODO List everything in the marketplace - not just popular.
             $popularThemes = $updateManager->requestPopularProducts('theme');
-
             foreach ($popularThemes as $popularTheme) {
-                if (!$themeManager->isInstalled($popularTheme['code'])) {
-                    $this->info('[ ] '.$popularTheme['code']);
-                }
+                $results[] = [
+                    'code' => $popularTheme['code'],
+                    'is_active' => '<fg=red>No</>',
+                    'is_installed' => $themeManager->isInstalled($popularTheme['code']) ? '<info>Yes</info>': '<fg=red>No</>',
+                ];
             }
         }
 
-        $this->info(PHP_EOL."[*] Active    [-] Installed    [ ] Not installed");
-    }
-
-    /**
-     * Get the console command options.
-     */
-    protected function getOptions()
-    {
-        return [
-            ['include-marketplace', 'm', InputOption::VALUE_NONE, 'Include downloadable themes from the Winter marketplace.']
-        ];
+        $this->table(['Theme', 'Active', 'Installed'], $results);
     }
 }

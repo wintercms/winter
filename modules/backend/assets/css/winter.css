@@ -65,6 +65,9 @@
 .sweet-alert h2{word-break:break-word;word-wrap:break-word;max-height:350px;overflow-y:auto;margin:10px 0 17px 0;color:#2b3e50;text-align:left;font-size:15px;line-height:23px}
 .sweet-alert p{margin:0}
 .sweet-alert p.text-muted{margin-bottom:20px;color:#555}
+.global-notice{position:sticky;top:0;display:flex;align-items:center;flex-wrap:wrap;gap:0.5em;justify-content:space-between;z-index:10500;background:#ab2a1c;color:#FFF;padding:0.5em 0.75em}
+.global-notice .notice-icon{font-size:1.5em;vertical-align:bottom;display:inline-block;margin-right:.25em}
+.global-notice .notice-text{display:inline-block;vertical-align:middle}
 .control-simplelist{font-size:13px;padding:20px 20px 2px 20px;margin-bottom:20px;background:#fff;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
 .control-simplelist ul{padding-left:15px}
 .control-simplelist.form-control ul{margin-bottom:0}
@@ -1065,22 +1068,22 @@ body.breadcrumb-fancy .control-breadcrumb li:last-child,
 .control-breadcrumb.breadcrumb-fancy li:last-child{background-color:#d66908}
 body.breadcrumb-fancy .control-breadcrumb li:last-child:before,
 .control-breadcrumb.breadcrumb-fancy li:last-child:before{opacity:1;border-left-color:#d66908}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons{-webkit-transition:all 0.5s;transition:all 0.5s;padding-top:14px;padding-bottom:5px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons .btn,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons .btn{padding:0;margin-right:5px;margin-top:-6px;margin-right:30px;background:transparent;color:#fff;font-weight:normal;-webkit-box-shadow:none;box-shadow:none;opacity:0.5;filter:alpha(opacity=50);-webkit-transition:all 0.3s ease;transition:all 0.3s ease}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons .btn:hover,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons .btn:hover{opacity:1;filter:alpha(opacity=100)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons .btn:last-child,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons .btn:last-child{margin-right:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons .btn[class^="wn-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons .btn[class^="wn-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons .btn[class*=" wn-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons .btn[class*=" wn-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons .btn[class^="oc-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons .btn[class^="oc-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons .btn[class*=" oc-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons .btn[class*=" oc-icon-"]:before{opacity:1}
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized),
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized){-webkit-transition:all 0.5s;transition:all 0.5s;padding-top:14px;padding-bottom:5px}
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn,
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn{padding:0;margin-right:5px;margin-top:-6px;margin-right:30px;background:transparent;color:#fff;font-weight:normal;-webkit-box-shadow:none;box-shadow:none;opacity:0.5;filter:alpha(opacity=50);-webkit-transition:all 0.3s ease;transition:all 0.3s ease}
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn:hover,
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn:hover{opacity:1;filter:alpha(opacity=100)}
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn:last-child,
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn:last-child{margin-right:0}
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class^="wn-icon-"]:before,
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class^="wn-icon-"]:before,
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class*=" wn-icon-"]:before,
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class*=" wn-icon-"]:before,
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class^="oc-icon-"]:before,
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class^="oc-icon-"]:before,
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class*=" oc-icon-"]:before,
+.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class*=" oc-icon-"]:before{opacity:1}
 .fancy-layout form[class$="-data-changed"] *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .btn.save{opacity:1;filter:alpha(opacity=100)}
 .fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-codeeditor{border:none !important;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
 .fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-codeeditor .editor-code{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}

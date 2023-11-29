@@ -495,7 +495,7 @@ return [
         'add_folder' => 'Προσθήκη καταλόγου',
         'search' => 'Αναζήτηση',
         'display' => 'Εμφάνιση',
-        'filter_everything' => 'Όλα',
+        'filter_all' => 'Όλα',
         'filter_images' => 'Εικόνες',
         'filter_video' => 'Βίντεο',
         'filter_audio' => 'Ήχος',
