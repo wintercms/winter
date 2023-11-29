@@ -15,7 +15,7 @@ class CreateJob extends BaseScaffoldCommand
     protected $signature = 'create:job
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {name : The name of the job class to generate. <info>(eg: ImportPosts)</info>}
-        {--s|sync : Indicates that job should be synchronous.}
+        {--s|sync : Generates a non-queueable job.}
         {--f|force : Overwrite existing files with generated files.}
         {--uninspiring : Disable inspirational quotes}
     ';
