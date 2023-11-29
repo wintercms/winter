@@ -260,6 +260,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('create.model', \System\Console\CreateModel::class);
         $this->registerConsoleCommand('create.plugin', \System\Console\CreatePlugin::class);
         $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
+        $this->registerConsoleCommand('create.test', \System\Console\CreateTest::class);
 
         $this->registerConsoleCommand('winter.up', \System\Console\WinterUp::class);
         $this->registerConsoleCommand('winter.down', \System\Console\WinterDown::class);

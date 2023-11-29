@@ -1,4 +1,6 @@
-<?php namespace {{studly_author}}\{{studly_plugin}}\Console;
+<?php
+
+namespace {{ plugin_namespace }}\Console;
 
 use Winter\Storm\Console\Command;
 
