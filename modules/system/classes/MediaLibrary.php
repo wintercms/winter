@@ -351,7 +351,7 @@ class MediaLibrary
         // If the file extension is changed to SVG, ensure that it has been sanitized
         $oldExt = pathinfo($oldPath, PATHINFO_EXTENSION);
         $newExt = pathinfo($newPath, PATHINFO_EXTENSION);
-        if ($oldExt !== $newExt && $newExt === 'svg') {
+        if ($oldExt !== $newExt && strtolower($newExt) === 'svg') {
             $contents = $this->getStorageDisk()->get($fullOldPath);
             $contents = Svg::sanitize($contents);
             $this->getStorageDisk()->put($fullOldPath, $contents);
