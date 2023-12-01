@@ -52,13 +52,13 @@ $scripts = array_merge($scripts, [
 ?>
 
 <?php foreach ($styles as $style): ?>
-    <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="stylesheet">
-    <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="preload" as="style">
+    <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="stylesheet" fetchpriority="high">
+    <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="preload" as="style" fetchpriority="high">
 <?php endforeach; ?>
 
 <?php foreach ($scripts as $script): ?>
-    <script data-cfasync="false" src="<?= $script . '?v=' . $coreBuild; ?>"></script>
-    <link href="<?= $script . '?v=' . $coreBuild; ?>" rel="preload" as="script">
+    <script data-cfasync="false" src="<?= $script . '?v=' . $coreBuild; ?>" async fetchpriority="high"></script>
+    <link href="<?= $script . '?v=' . $coreBuild; ?>" rel="preload" as="script" fetchpriority="high">
 <?php endforeach; ?>
 
 <?php if (!Config::get('cms.enableBackendServiceWorkers', false)): ?>
