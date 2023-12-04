@@ -278,7 +278,7 @@ return [
         'restore' => 'Geri yükle',
         'restoring' => 'Geri yükleniyor',
         'confirm_restore' => 'Bu kaydı geri yüklemek istediğinize emin misiniz?',
-        'reset_default' => 'Ön Tanımlı Ayarlara Dön!',
+        'reset_default' => 'Tüm Ayarları Sıfırla!',
         'resetting' => 'İşleniyor',
         'resetting_name' => ':name İşleniyor',
         'undefined_tab' => 'Çeşitli',
