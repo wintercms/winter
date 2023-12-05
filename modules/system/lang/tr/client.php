@@ -57,7 +57,10 @@ return [
         'weekdaysShort' => ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'],
     ],
     'colorpicker' => [
-        'choose' => 'Seç',
+        'last_color' => 'Önceden seçilen rengi kullan',
+        'aria_palette' => 'Renk seçim alanı',
+        'aria_hue' => 'Renk tonu seçimi',
+        'aria_opacity' => 'Opaklık seçimi',
     ],
     'filter' => [
         'group' => [

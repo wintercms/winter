@@ -43,6 +43,7 @@ return [
         'sv' => 'Svenska',
         'sk' => 'Slovenský',
         'sl' => 'Slovenščina',
+        'th' => 'ไทย',
         'tr' => 'Türkçe',
         'uk' => 'Українська мова',
         'zh-cn' => '简体中文',
@@ -54,11 +55,6 @@ return [
     ],
     'file' => [
         'create_fail' => "Dosya oluşturulamıyor: :name",
-    ],
-    'page' => [
-        'invalid_token' => [
-            'label' => 'Geçersiz güvenlik anahtarı',
-        ],
     ],
     'combiner' => [
         'not_found' => "Kombine dosyası: ':name' bulunamadı.",
@@ -144,6 +140,9 @@ return [
         'refresh_success' => 'Eklentiler başarıyla yenilendi.',
         'remove_confirm' => 'Seçili eklentileri kaldırmak istediğinize emin misiniz? Bu işlem, ilişkili tüm verileri de kaldıracaktır.',
         'remove_success' => 'Eklentiler sistemden başarıyla kaldırıldı.',
+        'replace' => [
+            'multi_install_error' => 'Birden fazla eklentinin değiştirilmesi şu anda desteklenmiyor',
+        ],
     ],
     'project' => [
         'name' => 'Proje',
@@ -164,6 +163,9 @@ return [
         'not_found' => 'Belirtilen ayarlar bulunamadı.',
         'missing_model' => 'Ayarlar sayfasında Model tanımı eksik.',
         'update_success' => ':name için ayarlar güncellendi.',
+        'test_subject' => 'Mail entegrasyon testi',
+        'test_content' => 'Bu, e-mail ayarlarının çalıştığını doğrulamaya yönelik bir test e-postasıdır.',
+        'test_confirm' => 'Bu, mevcut yapılandırmanızı kaydedecek ve :email adresine bir test e-postası gönderecektir.',
         'return' => 'Sistem ayarları sayfasına dön',
         'search' => 'Ara',
     ],
@@ -191,6 +193,7 @@ return [
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail Yolu',
         'sendmail_path_comment' => 'Sendmail programının yolunu belirtin.',
+        'drivers_hint_content' => 'Desteklenen diğer <a href=":url" target="_blank">email gönderim yöntemlerinin listesi</a> ve bunların nasıl etkinleştirileceği için dökümanlara bakın.',
     ],
     'mail_templates' => [
         'menu_label' => 'Mail şablonları',
@@ -306,13 +309,21 @@ return [
         'plugin_description' => 'Açıklama',
         'plugin_version' => 'Versiyon',
         'plugin_author' => 'Yazar',
-        'plugin_not_found' => 'Plugin not found',
+        'plugin_not_found' => 'Plugin bulunamadı',
+        'plugin_version_not_found' => 'Plugin versiyonu bulunamadı',
         'core_current_build' => 'Mevcut versiyon',
+        'core_view_changelog' => 'Değişim Günlüğünü İncele',
         'core_build' => 'Versiyon :build',
         'core_build_help' => 'Son versiyon kullanılabilir.',
         'core_downloading' => 'Uygulama dosyaları indiriliyor',
         'core_extracting' => 'Uygulama dosyaları çıkarılıyor',
         'core_set_build' => 'Build numarası güncelleniyor',
+        'update_warnings_title' => 'Bazı sorunlar tespit edildi ve ilgilenilmesi gerekiyor:',
+        'update_warnings_plugin_missing' => ':parent_code eklentisi çalışmadan önce :code un kurulu olması gerekiyor.',
+        'update_warnings_plugin_replace' => ':plugin eklentisi, :alias ın yerine geçer, çakışma olmaması için lütfen :alias ı kaldırın.',
+        'update_warnings_plugin_replace_cli' => 'Bu eklenti :alias ın yerine geçer, çakışma olmaması için lütfen :alias ı kaldırın.',
+        'changelog' => 'Değişim Günlüğünü',
+        'changelog_view_details' => 'Detaylar',
         'plugins' => 'Modüller',
         'themes' => 'Temalar',
         'disabled' => 'Devre dışı',
@@ -417,8 +428,10 @@ return [
         'manage_mail_templates' => 'E-posta şablonları yönetebilir',
         'manage_mail_settings' => 'E-posta ayarlarını yönetebilir',
         'manage_other_administrators' => 'Diğer yöneticileri düzenleyebilir',
+        'impersonate_users' => 'Kullanıcıların kimliğine bürün',
         'manage_preferences' => 'Yönetim paneli seçeneklerini düzenleyebilir',
         'manage_editor' => 'Kod editör ayarlarını düzenleyebilir',
+        'manage_own_editor' => 'Kendine özel kod editör ayarlarını düzenleyebilir',
         'view_the_dashboard' => 'Panoyu görüntüleyebilir',
         'manage_default_dashboard' => 'Varsayılan kontrol panelini yönetebilir',
         'manage_branding' => 'Yönetim Panelini özelleştirebilir',
@@ -437,5 +450,24 @@ return [
     'media' => [
         'invalid_path' => "Geçersiz dosya dizini belirtildi: ':path'.",
         'folder_size_items' => 'öğe(ler)',
+    ],
+    'page' => [
+        'custom_error' => [
+            'label' => 'Sayfa hatası',
+            'help' => 'Üzgünüz ama bir şeyler ters gitti ve sayfa görüntülenemiyor.',
+        ],
+        'invalid_token' => [
+            'label' => 'Geçersiz güvenlik anahtarı',
+        ],
+        'maintenance' => [
+            'label' => "Hemen geri döneceğiz!",
+            'help' => "Şu anda bakım aşamasındayız, kısa süre sonra tekrar kontrol edin!",
+            'message' => 'Mesaj:',
+            'available_at' => 'Şu süreden sonra tekrar deneyin:',
+        ],
+    ],
+    'pagination' => [
+        'previous' => 'Önceki',
+        'next' => 'Sonraki',
     ],
 ];
