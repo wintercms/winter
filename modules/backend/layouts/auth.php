@@ -28,12 +28,14 @@
         ];
         ?>
 
-        <?php foreach ($styles as $style): ?>
-            <link rel='preload' href="<?= $style . '?v=' . $coreBuild; ?>" as="style">
+        <?php foreach ($styles as $style) : ?>
+            <link rel="preload" href="<?= $style . '?v=' . $coreBuild; ?>" as="style">
+            <link rel="stylesheet" href="<?= $style . '?v=' . $coreBuild; ?>"/>
         <?php endforeach; ?>
-        
-        <?php foreach ($scripts as $script): ?>
+
+        <?php foreach ($scripts as $script) : ?>
             <link rel="preload" href="<?= $script . '?v=' . $coreBuild; ?>" as="script">
+            <script src="<?= $script . '?v=' . $coreBuild; ?>"></script>
         <?php endforeach; ?>
 
         <?php if (!Config::get('cms.enableBackendServiceWorkers', false)): ?>
