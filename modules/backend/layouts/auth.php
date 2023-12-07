@@ -29,13 +29,11 @@
         ?>
 
         <?php foreach ($styles as $style): ?>
-            <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="stylesheet" fetchpriority="high">
-            <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="preload" as="style" fetchpriority="high">
+            <link rel='preload' href="<?= $style . '?v=' . $coreBuild; ?>" as="style">
         <?php endforeach; ?>
-
+        
         <?php foreach ($scripts as $script): ?>
-            <script data-cfasync="false" src="<?= $script . '?v=' . $coreBuild; ?>" async fetchpriority="high"></script>
-            <link href="<?= $script . '?v=' . $coreBuild; ?>" rel="preload" as="script" fetchpriority="high">
+            <link rel="preload" href="<?= $script . '?v=' . $coreBuild; ?>" as="script">
         <?php endforeach; ?>
 
         <?php if (!Config::get('cms.enableBackendServiceWorkers', false)): ?>
