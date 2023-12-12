@@ -53,7 +53,7 @@ $scripts = array_merge($scripts, [
 
 <?php foreach ($styles as $style) : ?>
     <link rel="preload" href="<?= $style . '?v=' . $coreBuild; ?>" as="style">
-    <link rel="stylesheet" href="<?= $style . '?v=' . $coreBuild; ?>"/>
+    <link rel="stylesheet" href="<?= $style . '?v=' . $coreBuild; ?>">
 <?php endforeach; ?>
 
 <?php foreach ($scripts as $script) : ?>
