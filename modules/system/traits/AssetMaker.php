@@ -1,4 +1,6 @@
-<?php namespace System\Traits;
+<?php
+
+namespace System\Traits;
 
 use Url;
 use Html;
@@ -28,6 +30,11 @@ trait AssetMaker
     public $assetPath;
 
     /**
+     * Ensures "first-come, first-served" applies to assets of the same priority level.
+     */
+    protected int $priorityFactor = 0;
+
+    /**
      * Disables the use, and subequent broadcast, of assets. This is useful
      * to call during an AJAX request to speed things up. This method works
      * by specifically targeting the hasAssetsDefined method.
@@ -48,11 +55,20 @@ trait AssetMaker
             $type = strtolower($type);
         }
         $result = null;
-        $reserved = ['build'];
+        $reserved = ['build', 'priority'];
 
         $this->removeDuplicates();
 
         if ($type == null || $type == 'css') {
+            array_multisort(
+                array_map(function ($item) {
+                    return $item['attributes']['priority'];
+                }, $this->assets['css']),
+                SORT_NUMERIC,
+                SORT_ASC,
+                $this->assets['css']
+            );
+
             foreach ($this->assets['css'] as $asset) {
                 /*
                  * Prevent duplicates
@@ -70,6 +86,15 @@ trait AssetMaker
         }
 
         if ($type == null || $type == 'rss') {
+            array_multisort(
+                array_map(function ($item) {
+                    return $item['attributes']['priority'];
+                }, $this->assets['rss']),
+                SORT_NUMERIC,
+                SORT_ASC,
+                $this->assets['rss']
+            );
+
             foreach ($this->assets['rss'] as $asset) {
                 $attributes = Html::attributes(array_merge(
                     [
@@ -86,6 +111,15 @@ trait AssetMaker
         }
 
         if ($type == null || $type == 'js') {
+            array_multisort(
+                array_map(function ($item) {
+                    return $item['attributes']['priority'];
+                }, $this->assets['js']),
+                SORT_NUMERIC,
+                SORT_ASC,
+                $this->assets['js']
+            );
+
             foreach ($this->assets['js'] as $asset) {
                 $attributes = Html::attributes(array_merge(
                     [
@@ -237,6 +271,13 @@ trait AssetMaker
                 // Fire global event
                 (Event::fire('system.assets.beforeAddAsset', [&$type, &$path, &$attributes], true) !== false)
             ) {
+                $this->priorityFactor++;
+
+                // Apply priority
+                $attributes['priority'] = (!isset($attributes['priority']))
+                    ? 100 + $this->priorityFactor
+                    : intval($attributes['priority']) + $this->priorityFactor;
+
                 $this->assets[$type][] = ['path' => $path, 'attributes' => $attributes];
             }
         }
