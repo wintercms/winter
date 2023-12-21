@@ -55,24 +55,35 @@ trait AssetMaker
             $type = strtolower($type);
         }
         $result = null;
-        $reserved = ['build', 'priority'];
+        $reserved = ['build', 'priority', 'preload'];
 
         $this->removeDuplicates();
 
         if ($type == null || $type == 'css') {
             foreach ($this->prioritiseAssets($this->assets['css']) as $asset) {
-                /*
-                 * Prevent duplicates
-                 */
-                $attributes = Html::attributes(array_merge(
-                    [
-                        'rel'  => 'stylesheet',
+                if ($asset['attributes']['preload'] ?? false) {
+                    $preloadAttributes = Html::attributes([
+                        'rel' => 'preload',
+                        'as' => 'style',
                         'href' => $this->getAssetEntryBuildPath($asset)
-                    ],
-                    array_except($asset['attributes'], $reserved)
-                ));
+                    ]);
+                    $attributes = Html::attributes(array_merge(
+                        [
+                            'rel'  => 'stylesheet',
+                            'href' => $this->getAssetEntryBuildPath($asset)
+                        ],
+                    ));
+                    $result .= '<link' . $preloadAttributes . '>' . PHP_EOL . '<link' . $attributes . '>' . PHP_EOL;
+                } else {
+                    $attributes = Html::attributes(array_merge(
+                        [
+                            'rel'  => 'stylesheet',
+                            'href' => $this->getAssetEntryBuildPath($asset)
+                        ],
+                    ));
 
-                $result .= '<link' . $attributes . '>' . PHP_EOL;
+                    $result .= '<link' . $attributes . '>' . PHP_EOL;
+                }
             }
         }
 
@@ -94,14 +105,28 @@ trait AssetMaker
 
         if ($type == null || $type == 'js') {
             foreach ($this->prioritiseAssets($this->assets['js']) as $asset) {
-                $attributes = Html::attributes(array_merge(
-                    [
-                        'src' => $this->getAssetEntryBuildPath($asset)
-                    ],
-                    array_except($asset['attributes'], $reserved)
-                ));
+                if ($asset['attributes']['preload'] ?? false) {
+                    $preloadAttributes = Html::attributes([
+                        'rel' => 'preload',
+                        'as' => 'script',
+                        'href' => $this->getAssetEntryBuildPath($asset)
+                    ]);
+                    $attributes = Html::attributes(array_merge(
+                        [
+                            'src' => $this->getAssetEntryBuildPath($asset)
+                        ],
+                    ));
+                    $result .= '<link' . $preloadAttributes . '>' . PHP_EOL . '<script' . $attributes . '></script>' . PHP_EOL;
+                } else {
+                    $attributes = Html::attributes(array_merge(
+                        [
+                            'src' => $this->getAssetEntryBuildPath($asset)
+                        ],
+                        array_except($asset['attributes'], $reserved)
+                    ));
 
-                $result .= '<script' . $attributes . '></script>' . PHP_EOL;
+                    $result .= '<script' . $attributes . '></script>' . PHP_EOL;
+                }
             }
         }
 
