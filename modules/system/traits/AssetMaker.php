@@ -60,16 +60,7 @@ trait AssetMaker
         $this->removeDuplicates();
 
         if ($type == null || $type == 'css') {
-            array_multisort(
-                array_map(function ($item) {
-                    return $item['attributes']['priority'];
-                }, $this->assets['css']),
-                SORT_NUMERIC,
-                SORT_ASC,
-                $this->assets['css']
-            );
-
-            foreach ($this->assets['css'] as $asset) {
+            foreach ($this->prioritiseAssets($this->assets['css']) as $asset) {
                 /*
                  * Prevent duplicates
                  */
@@ -86,16 +77,7 @@ trait AssetMaker
         }
 
         if ($type == null || $type == 'rss') {
-            array_multisort(
-                array_map(function ($item) {
-                    return $item['attributes']['priority'];
-                }, $this->assets['rss']),
-                SORT_NUMERIC,
-                SORT_ASC,
-                $this->assets['rss']
-            );
-
-            foreach ($this->assets['rss'] as $asset) {
+            foreach ($this->prioritiseAssets($this->assets['rss']) as $asset) {
                 $attributes = Html::attributes(array_merge(
                     [
                         'rel'   => 'alternate',
@@ -111,16 +93,7 @@ trait AssetMaker
         }
 
         if ($type == null || $type == 'js') {
-            array_multisort(
-                array_map(function ($item) {
-                    return $item['attributes']['priority'];
-                }, $this->assets['js']),
-                SORT_NUMERIC,
-                SORT_ASC,
-                $this->assets['js']
-            );
-
-            foreach ($this->assets['js'] as $asset) {
+            foreach ($this->prioritiseAssets($this->assets['js']) as $asset) {
                 $attributes = Html::attributes(array_merge(
                     [
                         'src' => $this->getAssetEntryBuildPath($asset)
@@ -275,8 +248,8 @@ trait AssetMaker
 
                 // Apply priority
                 $attributes['priority'] = (!isset($attributes['priority']))
-                    ? 100 + $this->priorityFactor
-                    : intval($attributes['priority']) + $this->priorityFactor;
+                    ? 100 + ($this->priorityFactor / 10000)
+                    : intval($attributes['priority']) + ($this->priorityFactor / 10000);
 
                 $this->assets[$type][] = ['path' => $path, 'attributes' => $attributes];
             }
@@ -301,6 +274,9 @@ trait AssetMaker
 
     /**
      * Returns an array of all registered asset paths.
+     *
+     * Assets will be prioritised based on their priority levels.
+     *
      * @return array
      */
     public function getAssetPaths()
@@ -310,7 +286,7 @@ trait AssetMaker
         $assets = [];
         foreach ($this->assets as $type => $collection) {
             $assets[$type] = [];
-            foreach ($collection as $asset) {
+            foreach ($this->prioritiseAssets($collection) as $asset) {
                 $assets[$type][] = $this->getAssetEntryBuildPath($asset);
             }
         }
@@ -430,5 +406,25 @@ trait AssetMaker
             $relativePath = base_path($relativePath);
         }
         return $relativePath;
+    }
+
+    /**
+     * Prioritise assets based on a given "priority" level.
+     */
+    public function prioritiseAssets(array $assets): array
+    {
+        // Copy assets array so that the stored asset array is not modified.
+        $sortedAssets = $assets;
+
+        array_multisort(
+            array_map(function ($item) {
+                return $item['attributes']['priority'];
+            }, $sortedAssets),
+            SORT_NUMERIC,
+            SORT_ASC,
+            $sortedAssets
+        );
+
+        return $sortedAssets;
     }
 }
