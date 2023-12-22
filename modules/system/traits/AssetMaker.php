@@ -30,9 +30,9 @@ trait AssetMaker
     public $assetPath;
 
     /**
-     * Ensures "first-come, first-served" applies to assets of the same priority level.
+     * Ensures "first-come, first-served" applies to assets of the same ordering.
      */
-    protected int $priorityFactor = 0;
+    protected int $orderFactor = 0;
 
     /**
      * Disables the use, and subequent broadcast, of assets. This is useful
@@ -55,12 +55,12 @@ trait AssetMaker
             $type = strtolower($type);
         }
         $result = null;
-        $reserved = ['build', 'priority', 'preload'];
+        $reserved = ['build', 'order', 'preload'];
 
         $this->removeDuplicates();
 
         if ($type == null || $type == 'css') {
-            foreach ($this->prioritiseAssets($this->assets['css']) as $asset) {
+            foreach ($this->orderAssets($this->assets['css']) as $asset) {
                 if ($asset['attributes']['preload'] ?? false) {
                     $preloadAttributes = Html::attributes([
                         'rel' => 'preload',
@@ -88,7 +88,7 @@ trait AssetMaker
         }
 
         if ($type == null || $type == 'rss') {
-            foreach ($this->prioritiseAssets($this->assets['rss']) as $asset) {
+            foreach ($this->orderAssets($this->assets['rss']) as $asset) {
                 $attributes = Html::attributes(array_merge(
                     [
                         'rel'   => 'alternate',
@@ -104,7 +104,7 @@ trait AssetMaker
         }
 
         if ($type == null || $type == 'js') {
-            foreach ($this->prioritiseAssets($this->assets['js']) as $asset) {
+            foreach ($this->orderAssets($this->assets['js']) as $asset) {
                 if ($asset['attributes']['preload'] ?? false) {
                     $preloadAttributes = Html::attributes([
                         'rel' => 'preload',
@@ -269,12 +269,12 @@ trait AssetMaker
                 // Fire global event
                 (Event::fire('system.assets.beforeAddAsset', [&$type, &$path, &$attributes], true) !== false)
             ) {
-                $this->priorityFactor++;
+                $this->orderFactor++;
 
-                // Apply priority
-                $attributes['priority'] = (!isset($attributes['priority']))
-                    ? 100 + ($this->priorityFactor / 10000)
-                    : intval($attributes['priority']) + ($this->priorityFactor / 10000);
+                // Apply ordering
+                $attributes['order'] = (!isset($attributes['order']))
+                    ? 500 + ($this->orderFactor / 10000)
+                    : intval($attributes['order']) + ($this->orderFactor / 10000);
 
                 $this->assets[$type][] = ['path' => $path, 'attributes' => $attributes];
             }
@@ -300,7 +300,7 @@ trait AssetMaker
     /**
      * Returns an array of all registered asset paths.
      *
-     * Assets will be prioritised based on their priority levels.
+     * Assets will be prioritized based on their defined ordering.
      *
      * @return array
      */
@@ -311,7 +311,7 @@ trait AssetMaker
         $assets = [];
         foreach ($this->assets as $type => $collection) {
             $assets[$type] = [];
-            foreach ($this->prioritiseAssets($collection) as $asset) {
+            foreach ($this->orderAssets($collection) as $asset) {
                 $assets[$type][] = $this->getAssetEntryBuildPath($asset);
             }
         }
@@ -434,16 +434,16 @@ trait AssetMaker
     }
 
     /**
-     * Prioritise assets based on a given "priority" level.
+     * Prioritize assets based on the given order.
      */
-    public function prioritizeAssets(array $assets): array
+    public function orderAssets(array $assets): array
     {
         // Copy assets array so that the stored asset array is not modified.
         $sortedAssets = $assets;
 
         array_multisort(
             array_map(function ($item) {
-                return $item['attributes']['priority'];
+                return $item['attributes']['order'];
             }, $sortedAssets),
             SORT_NUMERIC,
             SORT_ASC,
