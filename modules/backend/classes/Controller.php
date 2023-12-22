@@ -770,39 +770,39 @@ class Controller extends ControllerBase
      */
     protected function addGlobalAssets(): void
     {
-        $this->addCss('modules/system/assets/ui/storm.css', ['build' => 'core', 'priority' => 1, 'preload' => true]);
-        $this->addCss('modules/system/assets/ui/icons.css', ['build' => 'core', 'priority' => 1, 'preload' => true]);
-        $this->addCss(Backend::skinAsset('assets/css/winter.css'), ['build' => 'core', 'priority' => 1, 'preload' => true]);
+        $this->addCss('modules/system/assets/ui/storm.css', ['build' => 'core', 'order' => 1, 'preload' => true]);
+        $this->addCss('modules/system/assets/ui/icons.css', ['build' => 'core', 'order' => 1, 'preload' => true]);
+        $this->addCss(Backend::skinAsset('assets/css/winter.css'), ['build' => 'core', 'order' => 1, 'preload' => true]);
 
-        $this->addJs(Backend::skinAsset('assets/js/vendor/jquery.min.js'), ['build' => 'core', 'priority' => 1, 'preload' => true]);
-        $this->addJs(Backend::skinAsset('assets/js/vendor/jquery-migrate.min.js'), ['build' => 'core', 'priority' => 1, 'preload' => true]);
-        $this->addJs('modules/system/assets/js/framework.js', ['build' => 'core', 'priority' => 1, 'preload' => true]);
-        $this->addJs('modules/system/assets/js/build/manifest.js', ['build' => 'core', 'priority' => 1]);
-        $this->addJs('modules/system/assets/js/snowboard/build/snowboard.vendor.js', ['build' => 'core', 'priority' => 1]);
+        $this->addJs(Backend::skinAsset('assets/js/vendor/jquery.min.js'), ['build' => 'core', 'order' => 1, 'preload' => true]);
+        $this->addJs(Backend::skinAsset('assets/js/vendor/jquery-migrate.min.js'), ['build' => 'core', 'order' => 1, 'preload' => true]);
+        $this->addJs('modules/system/assets/js/framework.js', ['build' => 'core', 'order' => 1, 'preload' => true]);
+        $this->addJs('modules/system/assets/js/build/manifest.js', ['build' => 'core', 'order' => 1]);
+        $this->addJs('modules/system/assets/js/snowboard/build/snowboard.vendor.js', ['build' => 'core', 'order' => 1]);
         $this->addJs(
             (Config::get('develop.debugSnowboard', false) === true)
                 ? 'modules/system/assets/js/build/system.debug.js'
                 : 'modules/system/assets/js/build/system.js',
-            ['build' => 'core', 'priority' => 1]
+            ['build' => 'core', 'order' => 1]
         );
-        $this->addJs('modules/backend/assets/ui/js/build/manifest.js', ['build' => 'core', 'priority' => 1]);
-        $this->addJs('modules/backend/assets/ui/js/build/vendor.js', ['build' => 'core', 'priority' => 1]);
-        $this->addJs('modules/backend/assets/ui/js/build/backend.js', ['build' => 'core', 'priority' => 1]);
+        $this->addJs('modules/backend/assets/ui/js/build/manifest.js', ['build' => 'core', 'order' => 1]);
+        $this->addJs('modules/backend/assets/ui/js/build/vendor.js', ['build' => 'core', 'order' => 1]);
+        $this->addJs('modules/backend/assets/ui/js/build/backend.js', ['build' => 'core', 'order' => 1]);
 
         if (Config::get('develop.decompileBackendAssets', false)) {
             foreach (Backend::decompileAsset('modules/system/assets/ui/storm.js') as $script) {
-                $this->addJs($script, ['build' => 'core', 'priority' => 1]);
+                $this->addJs($script, ['build' => 'core', 'order' => 1]);
             }
             foreach (Backend::decompileAsset('assets/js/winter.js', true) as $script) {
-                $this->addJs($script, ['build' => 'core', 'priority' => 1]);
+                $this->addJs($script, ['build' => 'core', 'order' => 1]);
             }
         } else {
-            $this->addJs('modules/system/assets/ui/storm-min.js', ['build' => 'core', 'priority' => 1]);
-            $this->addJs(Backend::skinAsset('assets/js/winter-min.js'), ['build' => 'core', 'priority' => 1]);
+            $this->addJs('modules/system/assets/ui/storm-min.js', ['build' => 'core', 'order' => 1]);
+            $this->addJs(Backend::skinAsset('assets/js/winter-min.js'), ['build' => 'core', 'order' => 1]);
         }
 
-        $this->addJs('modules/system/assets/js/lang/lang.'.app()->getLocale().'.js', ['build' => 'core', 'priority' => 1]);
-        $this->addJs(Backend::skinAsset('assets/js/winter.flyout.js'), ['build' => 'core', 'priority' => 1]);
-        $this->addJs(Backend::skinAsset('assets/js/winter.tabformexpandcontrols.js'), ['build' => 'core', 'priority' => 1]);
+        $this->addJs('modules/system/assets/js/lang/lang.'.app()->getLocale().'.js', ['build' => 'core', 'order' => 1]);
+        $this->addJs(Backend::skinAsset('assets/js/winter.flyout.js'), ['build' => 'core', 'order' => 1]);
+        $this->addJs(Backend::skinAsset('assets/js/winter.tabformexpandcontrols.js'), ['build' => 'core', 'order' => 1]);
     }
 }
