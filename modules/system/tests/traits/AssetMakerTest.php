@@ -80,19 +80,19 @@ class AssetMakerTest extends TestCase
         $this->assertEquals($hostUrl . 'js/myAsset.js', $path);
     }
 
-    public function testAssetPriorities(): void
+    public function testAssetOrdering(): void
     {
         $hostUrl = Url::to('/');
 
         // Test specified priorities
         $this->stub->addCss('mySecond.css', [
-            'priority' => 2,
+            'order' => 2,
         ]);
         $this->stub->addCss('myThird.css', [
-            'priority' => 3,
+            'order' => 3,
         ]);
         $this->stub->addCss('myFirst.css', [
-            'priority' => 1,
+            'order' => 1,
         ]);
 
         $assets = $this->stub->getAssetPaths();
