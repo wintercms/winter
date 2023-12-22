@@ -436,7 +436,7 @@ trait AssetMaker
     /**
      * Prioritise assets based on a given "priority" level.
      */
-    public function prioritiseAssets(array $assets): array
+    public function prioritizeAssets(array $assets): array
     {
         // Copy assets array so that the stored asset array is not modified.
         $sortedAssets = $assets;
