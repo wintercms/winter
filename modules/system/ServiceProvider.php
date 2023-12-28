@@ -147,9 +147,7 @@ class ServiceProvider extends ModuleServiceProvider
         $requests = ['/combine/', '@/system/updates', '@/system/install', '@/backend/auth'];
         $commands = ['migrate', 'winter:up', 'winter:update', 'winter:env', 'winter:version', 'winter:manifest'];
 
-        /*
-         * Requests
-         */
+        // Requests
         $path = RouterHelper::normalizeUrl(Request::path());
         $backendUri = RouterHelper::normalizeUrl(Config::get('cms.backendUri', 'backend'));
         foreach ($requests as $request) {
@@ -162,10 +160,20 @@ class ServiceProvider extends ModuleServiceProvider
             }
         }
 
-        /*
-         * CLI
-         */
-        if ($this->app->runningInConsole() && count(array_intersect($commands, Request::server('argv', []))) > 0) {
+        // CLI
+        if ($this->app->runningInConsole()
+            && (
+                // Protected command
+                count(array_intersect($commands, Request::server('argv', []))) > 0
+
+                // Database configured but not initialized yet
+                // @see octobercms/october#3208
+                || (
+                    $this->app->hasDatabase()
+                    && !Schema::hasTable(UpdateManager::instance()->getMigrationTableName())
+                )
+            )
+        ) {
             PluginManager::$noInit = true;
         }
     }
@@ -228,11 +236,6 @@ class ServiceProvider extends ModuleServiceProvider
          * Allow plugins to use the scheduler
          */
         Event::listen('console.schedule', function ($schedule) {
-            // Fix initial system migration with plugins that use settings for scheduling - see #3208
-            if ($this->app->hasDatabase() && !Schema::hasTable(UpdateManager::instance()->getMigrationTableName())) {
-                return;
-            }
-
             $plugins = PluginManager::instance()->getPlugins();
             foreach ($plugins as $plugin) {
                 if (method_exists($plugin, 'registerSchedule')) {
@@ -257,6 +260,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('create.model', \System\Console\CreateModel::class);
         $this->registerConsoleCommand('create.plugin', \System\Console\CreatePlugin::class);
         $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
+        $this->registerConsoleCommand('create.test', \System\Console\CreateTest::class);
 
         $this->registerConsoleCommand('winter.up', \System\Console\WinterUp::class);
         $this->registerConsoleCommand('winter.down', \System\Console\WinterDown::class);

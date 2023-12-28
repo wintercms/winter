@@ -1,7 +1,7 @@
 {
     "files.associations": {
         "**/modules/*/behaviors/*/partials/*.htm": "php",
-        "**/modules/*/blocks/*.block": "wintercms",
+        "**/modules/*/blocks/*.block": "wintercms-block",
         "**/modules/*/controllers/*/*.htm": "php",
         "**/modules/*/formwidgets/*/partials/*.htm": "php",
         "**/modules/*/layouts/*.htm": "php",
@@ -12,7 +12,7 @@
         "**/modules/*/widgets/*/partials/*.htm": "php",
 
         "**/plugins/*/*/behaviors/*/partials/*.htm": "php",
-        "**/plugins/*/*/blocks/*.block": "wintercms",
+        "**/plugins/*/*/blocks/*.block": "wintercms-block",
         "**/plugins/*/*/components/**/*.htm": "wintercms-twig",
         "**/plugins/*/*/controllers/*/*.htm": "php",
         "**/plugins/*/*/formwidgets/*/partials/*.htm": "php",
@@ -23,7 +23,7 @@
         "**/plugins/*/*/views/mail/*.htm": "wintercms",
         "**/plugins/*/*/widgets/*/partials/*.htm": "php",
 
-        "**/themes/*/blocks/**/*.block": "wintercms",
+        "**/themes/*/blocks/**/*.block": "wintercms-block",
         "**/themes/*/content/**/*.htm": "wintercms",
         "**/themes/*/layouts/*.htm": "wintercms",
         "**/themes/*/pages/**/*.htm": "wintercms",
@@ -32,6 +32,7 @@
     "emmet.includeLanguages": {
         "wintercms": "html",
         "wintercms-twig": "html",
+        "wintercms-block": "html"
     },
     "eslint.validate": [
         "javascript",

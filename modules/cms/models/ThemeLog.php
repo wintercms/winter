@@ -1,13 +1,11 @@
 <?php namespace Cms\Models;
 
-use App;
-use Schema;
-use Model;
 use BackendAuth;
 use Cms\Classes\Theme;
+use Exception;
+use Model;
 use System\Models\LogSetting;
 use Winter\Storm\Halcyon\Model as HalcyonModel;
-use Exception;
 
 /**
  * Model for changes made to the theme
@@ -51,19 +49,15 @@ class ThemeLog extends Model
 
     /**
      * Creates a log record
-     * @return self
      */
-    public static function add(HalcyonModel $template, $type = null)
+    public static function add(HalcyonModel $template, ?string $type = null): ?self
     {
-        if (
-            !App::hasDatabase()
-            || !Schema::hasTable((new LogSetting)->getTable())
-        ) {
-            return;
+        if (!LogSetting::hasDatabaseTable()) {
+            return null;
         }
 
         if (!LogSetting::get('log_theme')) {
-            return;
+            return null;
         }
 
         if (!$type) {
@@ -78,7 +72,7 @@ class ThemeLog extends Model
         $oldContent = $template->getOriginal('content');
 
         if ($newContent === $oldContent && $templateName === $oldTemplateName && !$isDelete) {
-            return;
+            return null;
         }
 
         $record = new self;
@@ -95,8 +89,7 @@ class ThemeLog extends Model
 
         try {
             $record->save();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
         }
 
         return $record;

@@ -1,17 +1,17 @@
 <?php namespace Backend\Classes;
 
-use Str;
 use App;
 use Closure;
-use File;
-use View;
-use Event;
 use Config;
+use Event;
+use File;
+use Illuminate\Routing\Controller as ControllerBase;
 use Request;
 use Response;
-use Illuminate\Routing\Controller as ControllerBase;
-use Winter\Storm\Router\Helper as RouterHelper;
+use Str;
 use System\Classes\PluginManager;
+use View;
+use Winter\Storm\Router\Helper as RouterHelper;
 
 /**
  * This is the master controller for all back-end pages.
@@ -306,10 +306,10 @@ class BackendController extends ControllerBase
             if (empty($params[0]) || !is_callable($params[0])) {
                 throw new \InvalidArgumentException('The extend() method requires a callback parameter or closure.');
             }
-            if ($params[0] instanceof \Closure) {
+            if ($params[0] instanceof Closure) {
                 return $params[0]->call($this, $params[1] ?? $this);
             }
-            return \Closure::fromCallable($params[0])->call($this, $params[1] ?? $this);
+            return Closure::fromCallable($params[0])->call($this, $params[1] ?? $this);
         }
 
         return $this->extendableCall($name, $params);

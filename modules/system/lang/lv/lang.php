@@ -191,7 +191,7 @@ return [
         'smtp_encryption_tls' => 'TLS',
         'smtp_encryption_ssl' => 'SSL',
         'sendmail' => 'Sendmail',
-        'sendmail_path' => 'Sendmail ceļs',
+        'sendmail_path' => 'Sendmail ceļš',
         'sendmail_path_comment' => 'Lūdzu, norādiet ceļu uz sendmail programmu.',
         'drivers_hint_content' => 'Apskatiet <a href=":url" target="_blank">dokumentāciju</a>, lai uzzinātu vairāk par atbalstītajām pasta metodēm un kā tās ieslēgt.',
     ],
@@ -449,7 +449,7 @@ return [
     ],
     'media' => [
         'invalid_path' => "Norādīts nederīgs faila ceļš: ':path'.",
-        'folder_size_items' => 'vienums(-i)',
+        'folder_size_items' => 'vienumu|vienums|vienumi',
     ],
     'page' => [
         'custom_error' => [
