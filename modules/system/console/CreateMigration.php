@@ -1,8 +1,10 @@
 <?php namespace System\Console;
 
+use File;
 use InvalidArgumentException;
 use System\Classes\VersionManager;
 use System\Console\BaseScaffoldCommand;
+use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Str;
 use Yaml;
 
@@ -157,8 +159,7 @@ class CreateMigration extends BaseScaffoldCommand
         }
 
         if ($this->option('create') && $this->option('update')) {
-            $this->error('The create & update options cannot both be set at the same time');
-            return false;
+            throw new InvalidArgumentException('The create & update options cannot both be set at the same time');
         }
 
         if ($this->option('create')) {
@@ -171,6 +172,10 @@ class CreateMigration extends BaseScaffoldCommand
 
         if (in_array($scaffold, ['create', 'update']) && empty($table)) {
             throw new InvalidArgumentException('The table or model options are required when using the create or update options');
+        }
+
+        if (($table || $model) && !in_array($scaffold, ['create', 'update'])) {
+            throw new InvalidArgumentException('One of create or update option is required when using the model or table options');
         }
 
         $this->stubs = $this->migrationScaffolds[$scaffold];
@@ -192,8 +197,95 @@ class CreateMigration extends BaseScaffoldCommand
             'version' => $version,
         ];
 
+        if (!empty($model)) {
+            $vars['model'] = $model;
+        }
         if (!empty($table)) {
             $vars['table'] = $table;
+        }
+
+        return $vars;
+    }
+
+    /**
+     * Create vars for model fields mappings so they can be used in update/create stubs
+     */
+    protected function processVars(array $vars): array
+    {
+        $vars = parent::processVars($vars);
+
+        // --model option needed below
+        if (empty($vars['model'])) {
+            return $vars;
+        }
+
+        $vars['fields'] = [];
+
+        $fields_path = $vars['plugin_url'] . '/models/' . $vars['lower_model'] . '/fields.yaml';
+        $fields = Yaml::parseFile(plugins_path($fields_path));
+
+        $modelName = $vars['plugin_namespace'] . '\\Models\\' . $vars['model'];
+
+        $vars['model'] = $model = new $modelName();
+
+        foreach (['fields', 'tabs', 'secondaryTabs'] as $type) {
+            if (!isset($fields[$type])) {
+                continue;
+            }
+            if ($type === 'fields') {
+                $fieldList = $fields[$type];
+            } else {
+                $fieldList = $fields[$type]['fields'];
+            }
+
+            foreach ($fieldList as $field => $config) {
+                if (str_contains($field, '@')) {
+                    list($field, $context) = explode('@', $field);
+                }
+
+                $type = $config['type'] ?? 'text';
+
+                if (str_starts_with($field, '_')
+                    || $field === $model->getKeyName()
+                    || str_contains($field, '[')
+                    || in_array($type, ['fileupload', 'relation', 'relationmanager', 'repeater', 'section', 'hint'])
+                    || in_array($field, $model->purgeable ?? [])
+                    || $model->getRelationType($field)
+                ) {
+                    continue;
+                }
+
+                $vars['fields'][$field] = $this->mapFieldType($field, $config, $model);
+            }
+        }
+
+        foreach ($model->getRelationDefinitions() as $relationType => $definitions) {
+            if (in_array($relationType, ['belongsTo', 'hasOne'])) {
+                foreach (array_keys($definitions) as $relation) {
+                    $vars['fields'][$relation . '_id'] = [
+                        'type' => 'foreignId',
+                        'index' => true,
+                        'required' => true,
+                    ];
+                }
+            }
+        }
+
+        if ($model->methodExists('getSortOrderColumn')) {
+            $field = $model->getSortOrderColumn();
+            $vars['fields'][$field] = [
+                'type' => 'unsignedinteger',
+                'required' => false,
+                'index' => true,
+            ];
+        }
+
+        $vars['primaryKey'] = $model->getKeyName();
+        $vars['jsonable'] = $model->getJsonable();
+        $vars['timestamps'] = $model->timestamps;
+
+        if ($morphable = $model->morphTo) {
+            $vars['morphable'] = array_keys($morphable);
         }
 
         return $vars;
@@ -208,5 +300,56 @@ class CreateMigration extends BaseScaffoldCommand
         $parts = explode('.', $currentVersion);
         $parts[count($parts) - 1] = (int) $parts[count($parts) - 1] + 1;
         return 'v' . implode('.', $parts);
+    }
+
+    /**
+     * Maps model fields config to DB Schema column types.
+     */
+    protected function mapFieldType(string $fieldName, array $fieldConfig, ?Model $model = null) : array
+    {
+        switch ($fieldConfig['type'] ?? 'text') {
+            case 'checkbox':
+            case 'switch':
+                $dbType = 'boolean';
+                break;
+            case 'number':
+                $dbType = 'double';
+                if (isset($fieldConfig['step']) && is_int($fieldConfig['step'])) {
+                    $dbType = 'integer';
+                }
+                if ($dbType === 'integer' && isset($fieldConfig['min']) && $fieldConfig['min'] >= 0) {
+                    $dbType = 'unsignedInteger';
+                }
+                break;
+            case 'range':
+                $dbType = 'unsignedInteger';
+                break;
+            case 'datepicker':
+                $dbType = $fieldConfig['mode'] ?? 'datetime';
+                break;
+            case 'markdown':
+                $dbType = 'mediumText';
+                break;
+            case 'textarea':
+                $dbType = 'text';
+                break;
+            default:
+                $dbType = 'string';
+        }
+
+        if ($model) {
+            $rule = array_get($model->rules ?? [], $fieldName, '');
+            $rule = is_array($rule) ? implode(',', $rule) : $rule;
+
+            $required = str_contains($rule, 'required') ? true : $fieldConfig['required'] ?? false;
+        } else {
+            $required = $fieldConfig['required'] ?? false;
+        }
+
+        return [
+            'type' => $dbType,
+            'required' => $required,
+            'index' => in_array($fieldName, ["slug"]) or str_ends_with($fieldName, "_id"),
+        ];
     }
 }

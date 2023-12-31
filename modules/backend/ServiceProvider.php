@@ -218,22 +218,23 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerBackendWidgets()
     {
         WidgetManager::instance()->registerFormWidgets(function ($manager) {
-            $manager->registerFormWidget('Backend\FormWidgets\CodeEditor', 'codeeditor');
-            $manager->registerFormWidget('Backend\FormWidgets\RichEditor', 'richeditor');
-            $manager->registerFormWidget('Backend\FormWidgets\MarkdownEditor', 'markdown');
-            $manager->registerFormWidget('Backend\FormWidgets\FileUpload', 'fileupload');
-            $manager->registerFormWidget('Backend\FormWidgets\Relation', 'relation');
-            $manager->registerFormWidget('Backend\FormWidgets\DatePicker', 'datepicker');
-            $manager->registerFormWidget('Backend\FormWidgets\TimePicker', 'timepicker');
-            $manager->registerFormWidget('Backend\FormWidgets\ColorPicker', 'colorpicker');
-            $manager->registerFormWidget('Backend\FormWidgets\DataTable', 'datatable');
-            $manager->registerFormWidget('Backend\FormWidgets\RecordFinder', 'recordfinder');
-            $manager->registerFormWidget('Backend\FormWidgets\Repeater', 'repeater');
-            $manager->registerFormWidget('Backend\FormWidgets\TagList', 'taglist');
-            $manager->registerFormWidget('Backend\FormWidgets\MediaFinder', 'mediafinder');
-            $manager->registerFormWidget('Backend\FormWidgets\NestedForm', 'nestedform');
-            $manager->registerFormWidget('Backend\FormWidgets\Sensitive', 'sensitive');
-            $manager->registerFormWidget('Backend\FormWidgets\IconPicker', 'iconpicker');
+            $manager->registerFormWidget(\Backend\FormWidgets\CodeEditor::class, 'codeeditor');
+            $manager->registerFormWidget(\Backend\FormWidgets\ColorPicker::class, 'colorpicker');
+            $manager->registerFormWidget(\Backend\FormWidgets\DataTable::class, 'datatable');
+            $manager->registerFormWidget(\Backend\FormWidgets\DatePicker::class, 'datepicker');
+            $manager->registerFormWidget(\Backend\FormWidgets\FileUpload::class, 'fileupload');
+            $manager->registerFormWidget(\Backend\FormWidgets\IconPicker::class, 'iconpicker');
+            $manager->registerFormWidget(\Backend\FormWidgets\MarkdownEditor::class, 'markdown');
+            $manager->registerFormWidget(\Backend\FormWidgets\MediaFinder::class, 'mediafinder');
+            $manager->registerFormWidget(\Backend\FormWidgets\NestedForm::class, 'nestedform');
+            $manager->registerFormWidget(\Backend\FormWidgets\RecordFinder::class, 'recordfinder');
+            $manager->registerFormWidget(\Backend\FormWidgets\Relation::class, 'relation');
+            $manager->registerFormWidget(\Backend\FormWidgets\RelationManager::class, 'relationmanager');
+            $manager->registerFormWidget(\Backend\FormWidgets\Repeater::class, 'repeater');
+            $manager->registerFormWidget(\Backend\FormWidgets\RichEditor::class, 'richeditor');
+            $manager->registerFormWidget(\Backend\FormWidgets\Sensitive::class, 'sensitive');
+            $manager->registerFormWidget(\Backend\FormWidgets\TagList::class, 'taglist');
+            $manager->registerFormWidget(\Backend\FormWidgets\TimePicker::class, 'timepicker');
         });
     }
 

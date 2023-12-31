@@ -31,14 +31,14 @@
                 data-color-value
                 class="form-control"
             >
-                <?= $value ?>
+                <?= e($value); ?>
             </span>
         <?php else: ?>
             <input
                 data-color-value
                 class="form-control"
                 placeholder="No color"
-                value="<?= $value ?>"
+                value="<?= e($value); ?>"
                 <?php if ($disabled): ?>
                     disabled
                 <?php endif ?>

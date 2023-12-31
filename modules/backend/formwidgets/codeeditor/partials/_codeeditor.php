@@ -26,6 +26,7 @@
         data-show-colors="<?= $showColors ? 'true' : 'false' ?>"
         data-language="<?= $language ?>"
         data-margin="<?= $margin ?>"
+        data-scroll-past-end="<?= $scrollPastEnd ?>"
         <?= $this->formField->getAttributes() ?>
     >
         <div class="editor-container"></div>

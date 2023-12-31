@@ -1,4 +1,6 @@
-<?php namespace {{studly_author}}\{{studly_plugin}}\Models;
+<?php
+
+namespace {{ plugin_namespace }}\Models;
 
 use Model;
 

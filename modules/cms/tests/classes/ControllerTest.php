@@ -3,10 +3,11 @@
 namespace Cms\Tests\Classes;
 
 use Cms;
+use Request;
 use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Theme;
 use Cms\Classes\Controller;
-use Request;
+use System\Helpers\View;
 use Winter\Storm\Halcyon\Model;
 use Winter\Storm\Support\Facades\Config;
 
@@ -24,6 +25,8 @@ class ControllerTest extends TestCase
 
         Model::clearBootedModels();
         Model::flushEventListeners();
+
+        View::clearVarCache();
 
         include_once base_path() . '/modules/system/tests/fixtures/plugins/winter/tester/components/Archive.php';
         include_once base_path() . '/modules/system/tests/fixtures/plugins/winter/tester/components/Post.php';
@@ -679,6 +682,70 @@ ESC;
 
         $this->assertStringContainsString(
             '<p><a href="' . Cms::url('/') . '">with-macro.htm</a><strong>with-macro.htm</strong></p>',
+            $response
+        );
+    }
+
+    public function testSharedVariable()
+    {
+        $this->app['view']->share('winterStatus', 'Is Awesome');
+
+        $theme = Theme::load('test');
+        $controller = new Controller($theme);
+        $response = $controller->run('/shared-variable')->getContent();
+
+        $this->assertStringContainsString(
+            '<p>Winter Is Awesome</p>',
+            $response
+        );
+
+        $this->assertStringContainsString(
+            '<p>/shared-variable</p>',
+            $response
+        );
+    }
+
+    public function testSharedVariableCannotOverrideSystemGlobals()
+    {
+        $this->app['view']->share('winterStatus', 'Is Awesome');
+
+        // This override should not apply and change the page URL in the fixture template
+        $this->app['view']->share('this', [
+            'page' => [
+                'url' => '/overriden',
+            ],
+        ]);
+
+        $theme = Theme::load('test');
+        $controller = new Controller($theme);
+        $response = $controller->run('/shared-variable')->getContent();
+
+        $this->assertStringContainsString(
+            '<p>Winter Is Awesome</p>',
+            $response
+        );
+
+        $this->assertStringContainsString(
+            '<p>/shared-variable</p>',
+            $response
+        );
+    }
+
+    public function testSharedVariableCanBeOverriddenLocally()
+    {
+        $this->app['view']->share('winterStatus', 'Is Awesome');
+
+        $theme = Theme::load('test');
+        $controller = new Controller($theme);
+        $response = $controller->run('/shared-variable-override')->getContent();
+
+        $this->assertStringContainsString(
+            '<p>Winter Is Coming</p>',
+            $response
+        );
+
+        $this->assertStringContainsString(
+            '<p>/shared-variable-override</p>',
             $response
         );
     }

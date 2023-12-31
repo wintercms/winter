@@ -35,7 +35,7 @@ export default class StripeLoader extends Singleton {
     }
 
     ajaxStart(promise, request) {
-        if (request.loading === false) {
+        if (request.loading === false || request.options.stripe === false) {
             return;
         }
 

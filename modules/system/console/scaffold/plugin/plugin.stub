@@ -1,4 +1,6 @@
-<?php namespace {{ plugin_namespace }};
+<?php
+
+namespace {{ plugin_namespace }};
 
 use Backend;
 use Backend\Models\UserRole;

@@ -49,7 +49,7 @@ export default class FormValidation extends Singleton {
      * @returns {Boolean}
      */
     doValidation(form, invalidFields, request) {
-        if (request.element.dataset.requestValidate === undefined) {
+        if (request.element && request.element.dataset.requestValidate === undefined) {
             return null;
         }
         if (!form) {
@@ -72,7 +72,7 @@ export default class FormValidation extends Singleton {
      * @returns {void}
      */
     clearValidation(promise, request) {
-        if (request.element.dataset.requestValidate === undefined) {
+        if (request.element && request.element.dataset.requestValidate === undefined) {
             return;
         }
         if (!request.form) {

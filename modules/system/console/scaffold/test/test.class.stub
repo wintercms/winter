@@ -1,0 +1,34 @@
+<?php
+
+namespace {{ test_namespace }};
+
+use {{ tested_class_full }};
+use System\Tests\Bootstrap\TestCase as WinterTestCase;
+
+class {{ test_class }} extends WinterTestCase
+{
+    /**
+     * An instance of the class being tested
+     */
+    protected ?{{ tested_class }} $instance = null;
+
+    /**
+     * Initialize the {{ tested_class }}
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->instance = $this->app->make({{ tested_class }}::class);
+    }
+{% for method in public_methods %}
+
+    /**
+     * Test for the {{ method }} method
+     */
+    public function test_{{ method }}()
+    {
+        $this->assertTrue(method_exists($this->instance, '{{ method }}'));
+    }
+{% endfor %}
+}

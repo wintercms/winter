@@ -1,0 +1,57 @@
+fields:
+    cb:
+        label: Checkbox
+        type: checkbox
+
+    switch:
+        label: Switch
+        type: switch
+
+    int:
+        label: Integer
+        type: number
+        step: 1
+
+    uint:
+        label: Unsigned Integer
+        type: number
+        step: 1
+        min: 0
+
+    double:
+        label: Double
+        type: number
+
+    range:
+        label: Range
+        type: range
+        min: 1
+        max: 10
+
+    datetime:
+        label: Datetime
+        type: datepicker
+
+    date:
+        label: Date
+        type: datepicker
+        mode: date
+        required: true
+
+    time:
+        label: Time
+        type: datepicker
+        mode: time
+
+    md:
+        label: Markdown
+        type: markdown
+
+    textarea:
+        label: Textarea
+        type: textarea
+
+    text:
+        label: Text
+        required: true
+

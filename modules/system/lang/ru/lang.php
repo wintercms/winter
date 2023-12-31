@@ -399,7 +399,7 @@ return [
         'return_link'=> 'Вернуться в журнал событий',
         'id' => 'ID',
         'id_label' => 'ID события',
-        'created_at' => 'Дата & Время',
+        'created_at' => 'Дата и время',
         'message'=> 'Сообщение',
         'level'=> 'Уровень',
         'preview_title'=> 'События',

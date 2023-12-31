@@ -111,7 +111,7 @@ export default class AttributeRequest extends Singleton {
     clickHandler(event) {
         let currentElement = event.target;
 
-        while (currentElement.tagName !== 'HTML') {
+        while (currentElement && currentElement.tagName !== 'HTML') {
             if (!currentElement.matches(
                 'a[data-request], button[data-request], input[type=button][data-request], input[type=submit][data-request]',
             )) {
