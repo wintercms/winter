@@ -406,6 +406,16 @@ import { parse as parseXml } from 'fast-plist';
         }
 
         /**
+         * Gets the current editor selection.
+         *
+         * This is the same as `getSelection`, except that the selection range is copied to a new object to prevent any changes to the selection range from modifying positioning properties.
+         */
+        getSafeSelection() {
+            const selection = this.editor.getSelection();
+            return new monaco.Selection(selection.startLineNumber, selection.startColumn, selection.endLineNumber, selection.endColumn);
+        }
+
+        /**
          * Gets the current editor selections.
          *
          * This may include multiple selections.

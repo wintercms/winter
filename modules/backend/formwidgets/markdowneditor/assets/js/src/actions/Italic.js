@@ -159,9 +159,7 @@ export default class Italic extends EditorAction {
             return false;
         }
 
-        console.log(expandedValue);
-
-        return (/^[^*]?\*/.test(expandedValue) && /\*[^*]?$/.test(expandedValue));
+        return (/^[^*]\*/.test(expandedValue) && /\*[^*]$/.test(expandedValue));
     }
 
     isCurrentSelectionBold() {
