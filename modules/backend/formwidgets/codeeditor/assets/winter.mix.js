@@ -1,5 +1,7 @@
 /* eslint-disable */
 const mix = require('laravel-mix');
+const fs = require('fs');
+const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 require('laravel-mix-polyfill');
 /* eslint-enable */
@@ -77,4 +79,11 @@ mix
         enabled: mix.inProduction(),
         useBuiltIns: 'usage',
         targets: '> 0.5%, last 2 versions, not dead, Firefox ESR, not ie > 0',
+    })
+
+    .after(() => {
+        // Remove inline CSS calls to the codicon font
+        const bundle = fs.readFileSync('js/build/codeeditor.bundle.js', 'utf8');
+        newBundle = bundle.replace(/\\n\\n@font-face \{[^\}]+codicon[^\}]+}\\n\\n/g, '\\n\\n');
+        fs.writeFileSync('js/build/codeeditor.bundle.js', newBundle);
     });
