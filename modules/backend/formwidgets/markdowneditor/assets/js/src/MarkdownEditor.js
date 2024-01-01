@@ -266,7 +266,9 @@ import Italic from './actions/Italic';
                 if (item.enabled) {
                     listItemLink.addEventListener('click', (event) => {
                         event.preventDefault();
-                        item.action();
+                        if (item.isEnabled()) {
+                            item.action();
+                        }
                         this.updateToolbarButtonStates();
                     });
                 }
@@ -389,7 +391,10 @@ import Italic from './actions/Italic';
                     key: item.action.shortcutKey(),
                     ctrl: true,
                 }, () => {
-                    item.action.action();
+                    if (item.action.isEnabled()) {
+                        item.action.action();
+                    }
+
                     this.updateToolbarButtonStates();
                 });
             });
