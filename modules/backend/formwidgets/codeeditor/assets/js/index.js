@@ -573,7 +573,27 @@ import { parse as parseXml } from 'fast-plist';
             const newTheme = theme || this.config.get('theme');
             const newThemeVS = newTheme.replace(/[^a-z0-9]+/g, '');
 
+            if (newTheme === 'vs') {
+                monaco.editor.setTheme('vs');
+                this.setConfig('theme', 'vs');
+                this.updateStatusBarColor({
+                    colors: {
+                        'editor.foreground': '#000000',
+                        'editor.background': '#ffffff',
+                    }
+                });
+                return;
+            }
+
             if (newTheme === 'vs-dark') {
+                monaco.editor.setTheme('vs-dark');
+                this.setConfig('theme', 'vs-dark');
+                this.updateStatusBarColor({
+                    colors: {
+                        'editor.foreground': '#d4d4d4',
+                        'editor.background': '#1E1E1E',
+                    }
+                });
                 return;
             }
 
