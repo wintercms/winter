@@ -64,7 +64,7 @@ import Italic from './actions/Italic';
             this.editor = this.snowboard['backend.formwidgets.codeeditor'](this.editorElement);
 
             // Set config
-            this.editor.loadTheme('chrome');
+            this.editor.loadTheme('vs');
             this.editor.setConfig('fontSize', 14);
             this.editor.setConfig('showGutter', false);
             this.editor.setConfig('showMinimap', false);
