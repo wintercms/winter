@@ -29,6 +29,7 @@ import { parse as parseXml } from 'fast-plist';
             this.resizeListener = false;
             this.visibilityListener = false;
             this.editor = null;
+            this.container = this.element.querySelector('.editor-container');
             this.valueBag = this.element.querySelector('[data-value-bag]');
             this.statusBar = this.element.querySelector('[data-status-bar]');
             if (this.statusBar) {
@@ -200,6 +201,11 @@ import { parse as parseXml } from 'fast-plist';
             // eslint-disable-next-line
             __webpack_public_path__ = this.snowboard.url().to('/modules/backend/formwidgets/codeeditor/assets/');
 
+            // Force a specific height on the container - stops Monaco from indefinitely trying
+            // to resize if the container has a fluid height
+            this.container.style.height = null;
+            this.container.style.height = getComputedStyle(this.container).height;
+
             this.editor = monaco.editor.create(this.element.querySelector('.editor-container'), this.getConfigOptions());
 
             this.attachListeners();
@@ -216,7 +222,7 @@ import { parse as parseXml } from 'fast-plist';
          */
         refresh() {
             this.dispose();
-            this.createEditor();
+            window.requestAnimationFrame(() => this.createEditor());
         }
 
         /**
