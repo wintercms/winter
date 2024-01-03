@@ -206,7 +206,7 @@ import constrainedEditor from 'constrained-editor-plugin';
             // Force a specific height on the container - stops Monaco from indefinitely trying
             // to resize if the container has a fluid height
             this.container.style.height = null;
-            this.container.style.height = getComputedStyle(this.container).height;
+            this.container.style.height = Math.round(Number(getComputedStyle(this.container).height.replace('px', ''))) + 'px';
 
             this.editor = monaco.editor.create(this.element.querySelector('.editor-container'), this.getConfigOptions());
 
