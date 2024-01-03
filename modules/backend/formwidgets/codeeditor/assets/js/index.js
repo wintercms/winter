@@ -1,5 +1,6 @@
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 import { parse as parseXml } from 'fast-plist';
+import constrainedEditor from 'constrained-editor-plugin';
 
 ((Snowboard) => {
     /**
@@ -49,6 +50,7 @@ import { parse as parseXml } from 'fast-plist';
                 visibilityChange: () => this.onVisibilityChange(),
             };
             this.keybindings = [];
+            this.customLineNumbering = null;
 
             this.observeElement();
         }
@@ -244,7 +246,9 @@ import { parse as parseXml } from 'fast-plist';
                 },
                 insertSpaces: this.config.get('useSoftTabs'),
                 language: this.config.get('language'),
-                lineNumbers: this.config.get('showGutter') ? 'on' : 'off',
+                lineNumbers: (this.customLineNumbering)
+                    ? this.customLineNumbering
+                    : this.config.get('showGutter') ? 'on' : 'off',
                 minimap: {
                     enabled: this.config.get('showMinimap'),
                 },
@@ -1049,14 +1053,46 @@ import { parse as parseXml } from 'fast-plist';
         }
 
         /**
-         * Allows parts of the code to be hidden from editing.
+         * Allows the editor to start from a specific line.
          *
-         * @param {Array|String} range
+         * This acts as a way to define prepended content for the editor that cannot be seen or
+         * edited. For example, the "Code" view in the CMS editor has a line to define the opening
+         * "<?php" tag, but this is hidden from the user.
+         *
+         * @param {Number} line
          */
-        setHiddenRange(range) {
-            const ranges = (!Array.isArray(range)) ? [range] : range;
-            const processed = ranges.map((item) => new monaco.Range(item.startLineNumber, item.startColumn, item.endLineNumber, item.endColumn));
-            this.editor.setHiddenAreas(processed);
+        fromLine(line) {
+            if (line <= 1) {
+                this.customLineNumbering = null;
+                return;
+            }
+
+            const modelLines = this.getModel().getFullModelRange().endLineNumber;
+            const modelEndColumn = this.getModel().getFullModelRange().endColumn;
+
+            if (line > modelLines) {
+                this.customLineNumbering = null;
+                throw new Error('The line number is greater than the number of lines in the editor.');
+            }
+
+            const hiddenRange = new monaco.Range(1, 1, line - 1, modelEndColumn);
+            const editableRange = new monaco.Range(line, 1, modelLines, modelEndColumn);
+
+            const constrainedInstance = constrainedEditor(monaco);
+            constrainedInstance.initializeIn(this.editor);
+            constrainedInstance.addRestrictionsTo(this.getModel(), [{
+                range: [editableRange.startLineNumber, editableRange.startColumn, editableRange.endLineNumber, editableRange.endColumn],
+                allowMultiline: true,
+            }]);
+
+            this.editor.setHiddenAreas([hiddenRange]);
+
+            if (this.config.get('showGutter')) {
+                this.customLineNumbering = (number) => {
+                    return (number >= line) ? String((number - line) + 1) : '';
+                };
+                this.editor.updateOptions(this.getConfigOptions());
+            }
         }
 
         /**

@@ -282,7 +282,7 @@
             }
         }
 
-        widget.setHiddenRange(match.range);
+        widget.fromLine(2);
     }
 
     CmsPage.prototype.onAfterAllTabsClosed = function(ev) {

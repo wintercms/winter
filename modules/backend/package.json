@@ -27,6 +27,7 @@
         "fast-plist": "^0.1.3",
         "jquery-events-to-dom-events": "^1.1.0",
         "monaco-editor": "^0.34.1",
+        "constrained-editor-plugin": "^1.3.0",
         "vue": "^3.2.45",
         "@simonwep/pickr": "^1.8.2"
     },
