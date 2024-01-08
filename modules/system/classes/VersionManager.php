@@ -357,7 +357,11 @@ class VersionManager
         $versions = $this->getFileVersions($code);
         $position = array_search($version, array_keys($versions), true);
 
-        return array_slice($versions, ++$position);
+        if ($position === false) {
+            return $versions;
+        }
+
+        return array_slice($versions, $position++);
     }
 
     /**
