@@ -1,9 +1,12 @@
-<?php namespace Backend\Classes;
+<?php
 
-use Str;
+namespace Backend\Classes;
+
+use BackedEnum;
 use Html;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
+use Winter\Storm\Support\Str;
 
 /**
  * Form Field definition
@@ -370,7 +373,10 @@ class FormField
             return false;
         }
 
-        return (string) $value === (string) $this->value;
+        $value = ($value instanceof BackedEnum) ? $value->value : $value;
+        $currentValue = ($this->value instanceof BackedEnum) ? $this->value->value : $this->value;
+
+        return (string) $value === (string) $currentValue;
     }
 
     /**
