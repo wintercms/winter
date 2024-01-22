@@ -675,12 +675,14 @@ class RelationController extends ControllerBehavior
             $config->noRecordsMessage = $this->getConfig('view[noRecordsMessage]');
 
             $defaultOnClick = sprintf(
-                "$.wn.relationBehavior.clickViewListRecord(':%s', '%s', '%s')",
+                "$.wn.relationBehavior.clickViewListRecord(':%s', '%s', '%s', '%s', '%s')",
                 $this->relationModel->getKeyName(),
                 $this->relationGetId(),
-                $this->relationGetSessionKey()
+                $this->relationGetSessionKey(),
+                $config->size,
+                $config->cssClass
             );
-
+            
             if ($config->recordUrl) {
                 $defaultOnClick = null;
             }
