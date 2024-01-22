@@ -49,7 +49,8 @@
         content: null,
         size: null,
         adaptiveHeight: false,
-        zIndex: null
+        zIndex: null,
+        cssClass: null
     }
 
     Popup.prototype.init = function(){
@@ -206,6 +207,9 @@
 
         if (this.options.adaptiveHeight)
             modalDialog.addClass('adaptive-height')
+
+        if (this.options.cssClass)
+            modalDialog.addClass(this.options.cssClass)
 
         if (this.options.zIndex !== null)
             modal.css('z-index', this.options.zIndex + 20)
