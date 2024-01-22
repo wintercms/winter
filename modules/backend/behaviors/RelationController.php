@@ -673,6 +673,8 @@ class RelationController extends ControllerBehavior
             $config->recordUrl = $this->getConfig('view[recordUrl]');
             $config->customViewPath = $this->getConfig('view[customViewPath]');
             $config->noRecordsMessage = $this->getConfig('view[noRecordsMessage]');
+            $config->size = $this->getConfig('manage[size]');
+            $config->cssClass = $this->getConfig('manage[cssClass]');
 
             $defaultOnClick = sprintf(
                 "$.wn.relationBehavior.clickViewListRecord(':%s', '%s', '%s', '%s', '%s')",
