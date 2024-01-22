@@ -2153,7 +2153,7 @@ this.initEvents()
 this.init()}
 Popup.prototype=Object.create(BaseProto)
 Popup.prototype.constructor=Popup
-Popup.DEFAULTS={ajax:null,handler:null,keyboard:true,extraData:{},content:null,size:null,adaptiveHeight:false,zIndex:null}
+Popup.DEFAULTS={ajax:null,handler:null,keyboard:true,extraData:{},content:null,size:null,adaptiveHeight:false,zIndex:null,cssClass:null}
 Popup.prototype.init=function(){var self=this
 if(self.isOpen)return
 this.setBackdrop(true)
@@ -2197,6 +2197,7 @@ BaseProto.dispose.call(this)}
 Popup.prototype.createPopupContainer=function(){var modal=$('<div />').prop({class:'control-popup modal fade',role:'dialog',tabindex:-1}),modalDialog=$('<div />').addClass('modal-dialog'),modalContent=$('<div />').addClass('modal-content')
 if(this.options.size)modalDialog.addClass('size-'+this.options.size)
 if(this.options.adaptiveHeight)modalDialog.addClass('adaptive-height')
+if(this.options.cssClass)modalDialog.addClass(this.options.cssClass)
 if(this.options.zIndex!==null)modal.css('z-index',this.options.zIndex+20)
 return modal.append(modalDialog.append(modalContent))}
 Popup.prototype.setContent=function(contents){this.$content.html(contents)
@@ -2814,7 +2815,7 @@ return this}}(window.jQuery);+function($){"use strict";var Tab=function(element,
 this.$tabsContainer=$('.nav-tabs:first',$el)
 this.$pagesContainer=$('.tab-content:first',$el)
 this.tabId='tabs'+$el.parents().length+Math.round(Math.random()*1000);if(this.options.closable!==undefined&&this.options.closable!==false)$el.attr('data-closable','')
-this.init()}
+var self=this;setTimeout(function(){self.init()},300)}
 Tab.prototype.init=function(){var self=this;this.options.slidable=this.options.slidable!==undefined&&this.options.slidable!==false
 $('> li',this.$tabsContainer).each(function(index){self.initTab(this)})
 this.$el.on('close.oc.tab',function(ev,data){ev.preventDefault()
