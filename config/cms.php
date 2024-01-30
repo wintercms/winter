@@ -473,4 +473,31 @@ return [
     */
 
     'enableBackendServiceWorkers' => false,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Specifies the allowed file types.
+    |--------------------------------------------------------------------------
+    |
+    | Allow specific file types that can be uploaded into the Media Manager.
+    |
+    | By default only certain file types can be used, but it is possible to 
+    | extend them with yours.
+    | File types are grouped into five categories: 
+    |  - defaultExtensions: Extensions that are particularly benign.
+    |  - assetExtensions: Extensions seen as public assets.
+    |  - imageExtensions: Extensions typically used as images.
+    |  - videoExtensions: Extensions typically used as videos.
+    |  - audioExtensions: Extensions typically used as audios.
+    |
+    | The following example shows how to extend the default extensions.
+    |
+    */
+
+    // 'fileDefinitions' => [
+    //     'defaultExtensions' => array_merge(
+    //         \Winter\Storm\Filesystem\Definitions::get('defaultExtensions'),
+    //         ['fig']
+    //     ),
+    // ],
 ];
