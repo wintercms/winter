@@ -1954,7 +1954,8 @@ var selectOptions={templateResult:formatSelectOption,templateSelection:formatSel
 $('select.custom-select').each(function(){var $element=$(this),extraOptions={dropdownCssClass:'',containerCssClass:''}
 if($element.data('select2')!=null){return true;}$element.attr('data-disposable','data-disposable')
 $element.one('dispose-control',function(){if($element.data('select2')){$element.select2('destroy')}})
-if($element.hasClass('select-no-search')){extraOptions.minimumResultsForSearch=Infinity}if($element.hasClass('select-no-dropdown')){extraOptions.dropdownCssClass+=' select-no-dropdown'
+if($element.hasClass('select-no-search')){extraOptions.minimumResultsForSearch=Infinity}if($element.hasClass('select-modifiable')){extraOptions.tags=true;extraOptions.createTag=function(params){var term=$.trim(params.term);if(term===''){return null;}return{id:term,text:term,newTag:true};}
+extraOptions.templateResult=function(state){if(!state.id){return state.text;}var icon=state.newTag?'<i class="icon-plus"></i> ':'';return $('<span>'+icon+state.text+'</span>');}}if($element.hasClass('select-no-dropdown')){extraOptions.dropdownCssClass+=' select-no-dropdown'
 extraOptions.containerCssClass+=' select-no-dropdown'}if($element.hasClass('select-hide-selected')){extraOptions.dropdownCssClass+=' select-hide-selected'}var source=$element.data('handler');if(source){extraOptions.ajax={transport:function(params,success,failure){var $request=$element.request(source,{data:params.data})
 $request.done(success)
 $request.fail(failure)

@@ -66,6 +66,34 @@
             if ($element.hasClass('select-no-search')) {
                 extraOptions.minimumResultsForSearch = Infinity
             }
+            if ($element.hasClass('select-modifiable')) {
+                extraOptions.tags = true;
+
+                extraOptions.createTag = function (params) {
+                    var term = $.trim(params.term);
+
+                    if (term === '') {
+                        return null;
+                    }
+
+                    return {
+                        id: term,
+                        text: term,
+                        newTag: true
+                    };
+                }
+
+                extraOptions.templateResult = function (state) {
+                    if (!state.id) {
+                        return state.text;
+                    }
+                    var icon = state.newTag ? '<i class="icon-plus"></i> ' : '';
+
+                    return $(
+                        '<span>' + icon + state.text + '</span>'
+                    );
+                }
+            }
             if ($element.hasClass('select-no-dropdown')) {
                 extraOptions.dropdownCssClass += ' select-no-dropdown'
                 extraOptions.containerCssClass += ' select-no-dropdown'
