@@ -215,6 +215,7 @@
             if (target.classList.contains('control-popup')) {
                 modal.hide()
                 $('.popup-backdrop').remove()
+                $(document.body).removeClass('modal-open')
             }
         });
         
