@@ -210,6 +210,14 @@
         if (this.options.zIndex !== null)
             modal.css('z-index', this.options.zIndex + 20)
 
+        modal.on('click', function(e) {
+            const target = e.target;
+            if (target.classList.contains('control-popup')) {
+                modal.hide()
+                $('.popup-backdrop').remove()
+            }
+        });
+        
         return modal.append(modalDialog.append(modalContent))
     }
 
