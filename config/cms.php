@@ -358,6 +358,10 @@ return [
     | insecure - detect hostname and force HTTP schema
     | force    - force hostname and schema using app.url config value
     |
+    | NOTE: force will ensure that the app.url value is used as the host for
+    | urls generated through the URL helpers which might have unintended
+    | consequences for projects that support multiple hostnames.
+    |
     */
 
     'linkPolicy' => env('LINK_POLICY', 'detect'),

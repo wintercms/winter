@@ -294,6 +294,8 @@ class CmsCompoundObject extends CmsObject
             }
 
             return [];
+        } else {
+            $objectComponentMap[$objectCode] = [];
         }
 
         if (!isset($this->settings['components'])) {

@@ -41,6 +41,10 @@
             this.options.isImage = this.$el.hasClass('is-image')
         }
 
+        if (this.options.mode === null) {
+            this.options.mode = this.$el.data('mediafinder-mode') || 'all';
+        }
+
         this.$el.one('dispose-control', this.proxy(this.dispose))
 
         if (this.options.thumbnailWidth > 0) {
@@ -95,7 +99,8 @@
 
         new $.wn.mediaManager.popup({
             alias: 'ocmediamanager',
-            cropAndInsertButton: true,
+            cropAndInsertButton: ['image', 'all'].includes(self.options.mode),
+            mode: self.options.mode,
             onInsert: function(items) {
                 if (!items.length) {
                     alert('Please select image(s) to insert.')
@@ -136,7 +141,8 @@
     MediaFinder.DEFAULTS = {
         isMulti: null,
         isPreview: null,
-        isImage: null
+        isImage: null,
+        mode: null
     }
 
     // PLUGIN DEFINITION

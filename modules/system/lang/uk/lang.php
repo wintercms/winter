@@ -449,7 +449,7 @@ return [
     ],
     'media' => [
         'invalid_path' => 'Вказано неприпустимий шлях до файлу: ":path".',
-        'folder_size_items' => 'Об\'єктів',
+        'folder_size_items' => 'елемент|елементи|елементів',
     ],
     'page' => [
         'custom_error' => [

@@ -492,7 +492,7 @@ return [
         'add_folder' => 'Ny mappe',
         'search' => 'Søk',
         'display' => 'Vis',
-        'filter_everything' => 'Alle filer',
+        'filter_all' => 'Alle filer',
         'filter_images' => 'Bilder',
         'filter_video' => 'Video',
         'filter_audio' => 'Lyd',

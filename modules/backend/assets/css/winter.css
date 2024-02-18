@@ -65,6 +65,9 @@
 .sweet-alert h2{word-break:break-word;word-wrap:break-word;max-height:350px;overflow-y:auto;margin:10px 0 17px 0;color:#2b3e50;text-align:left;font-size:15px;line-height:23px}
 .sweet-alert p{margin:0}
 .sweet-alert p.text-muted{margin-bottom:20px;color:#555}
+.global-notice{position:sticky;top:0;display:flex;align-items:center;flex-wrap:wrap;gap:0.5em;justify-content:space-between;z-index:10500;background:#ab2a1c;color:#FFF;padding:0.5em 0.75em}
+.global-notice .notice-icon{font-size:1.5em;vertical-align:bottom;display:inline-block;margin-right:.25em}
+.global-notice .notice-text{display:inline-block;vertical-align:middle}
 .control-simplelist{font-size:13px;padding:20px 20px 2px 20px;margin-bottom:20px;background:#fff;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
 .control-simplelist ul{padding-left:15px}
 .control-simplelist.form-control ul{margin-bottom:0}

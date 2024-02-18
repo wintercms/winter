@@ -21,7 +21,9 @@ class CreateController extends BaseScaffoldCommand
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {controller : The name of the controller to generate. <info>(eg: Posts)</info>}
         {--force : Overwrite existing files with generated files.}
-        {--model= : Defines the model name to use. If not provided, the singular name of the controller is used.}';
+        {--model= : Defines the model name to use. If not provided, the singular name of the controller is used.}
+        {--uninspiring : Disable inspirational quotes}
+    ';
 
     /**
      * @var string The console command description.

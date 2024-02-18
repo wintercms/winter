@@ -1,9 +1,12 @@
-<?php namespace Backend\Classes;
+<?php
 
-use Str;
+namespace Backend\Classes;
+
+use BackedEnum;
 use Html;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
+use Winter\Storm\Support\Str;
 
 /**
  * Form Field definition
@@ -370,7 +373,10 @@ class FormField
             return false;
         }
 
-        return (string) $value === (string) $this->value;
+        $value = ($value instanceof BackedEnum) ? $value->value : $value;
+        $currentValue = ($this->value instanceof BackedEnum) ? $this->value->value : $this->value;
+
+        return (string) $value === (string) $currentValue;
     }
 
     /**
@@ -700,23 +706,24 @@ class FormField
             if ($result instanceof Model && $result->hasRelation($key)) {
                 if ($key == $lastField) {
                     $result = $result->getRelationValue($key) ?: $default;
-                }
-                else {
+                } else {
                     $result = $result->{$key};
                 }
-            }
-            elseif (is_array($result)) {
+            } elseif (is_array($result)) {
                 if (!array_key_exists($key, $result)) {
                     return $default;
                 }
                 $result = $result[$key];
-            }
-            else {
+            } else {
                 if (!isset($result->{$key})) {
                     return $default;
                 }
                 $result = $result->{$key};
             }
+        }
+
+        if ($result instanceof BackedEnum) {
+            $result = $result->value;
         }
 
         return $result;

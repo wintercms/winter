@@ -5,6 +5,7 @@ use Artisan;
 use Cache;
 use Log;
 use Exception;
+use Illuminate\Database\QueryException;
 use System\Classes\ModelBehavior;
 
 /**
@@ -108,9 +109,8 @@ class SettingsModel extends ModelBehavior
 
     /**
      * Checks if the model has been set up previously, intended as a static method
-     * @return bool
      */
-    public function isConfigured()
+    public function isConfigured(): bool
     {
         return App::hasDatabase() && $this->getSettingsRecord() !== null;
     }
@@ -127,7 +127,15 @@ class SettingsModel extends ModelBehavior
             $query = $query->remember($this->cacheTtl, $this->getCacheKey());
         }
 
-        $record = $query->first();
+        try {
+            $record = $query->first();
+        } catch (QueryException $ex) {
+            // SQLSTATE[42S02]: Base table or view not found - migrations haven't run yet
+            if ($ex->getCode() === '42S02') {
+                $record = null;
+                traceLog($ex);
+            }
+        }
 
         return $record ?: null;
     }

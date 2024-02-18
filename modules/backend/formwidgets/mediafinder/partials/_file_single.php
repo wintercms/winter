@@ -11,6 +11,7 @@
         <?php endif ?>
     "
     data-control="mediafinder"
+    data-mediafinder-mode="<?= $mode ?? 'all' ?>"
     <?= $field->getAttributes() ?>
 >
 

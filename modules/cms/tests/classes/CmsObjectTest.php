@@ -268,6 +268,29 @@ class CmsObjectTest extends TestCase
     /**
      * @depends testRename
      */
+    public function testSaveSameName()
+    {
+        $theme = Theme::load('apitest');
+
+        $filePath = $theme->getPath() . '/testobjects/anotherobj.htm';
+        $this->assertFileExists($filePath);
+
+        $testContents = 'new content';
+        $obj = TestCmsObject::load($theme, 'anotherobj.htm');
+
+        $obj->fill([
+            'fileName' => 'anotherobj',
+            'content' => $testContents
+        ]);
+        $obj->save();
+
+        $this->assertFileExists($filePath);
+        $this->assertEquals($testContents, file_get_contents($filePath));
+    }
+
+    /**
+     * @depends testRename
+     */
     public function testRenameToExistingFile()
     {
         $this->expectException(\Winter\Storm\Exception\ApplicationException::class);
@@ -287,29 +310,6 @@ class CmsObjectTest extends TestCase
         $obj = TestCmsObject::load($theme, 'anotherobj.htm');
         $obj->fill(['fileName' => 'existingobj']);
         $obj->save();
-    }
-
-    /**
-     * @depends testRename
-     */
-    public function testSaveSameName()
-    {
-        $theme = Theme::load('apitest');
-
-        $filePath = $theme->getPath() . '/testobjects/anotherobj.htm';
-        $this->assertFileExists($filePath);
-
-        $testContents = 'new content';
-        $obj = TestCmsObject::load($theme, 'anotherobj.htm');
-
-        $obj->fill([
-            'fileName' => 'anotherobj',
-            'content' => $testContents
-        ]);
-        $obj->save();
-
-        $this->assertFileExists($filePath);
-        $this->assertEquals($testContents, file_get_contents($filePath));
     }
 
     public function testSaveNewDir()

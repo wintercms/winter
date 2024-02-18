@@ -295,6 +295,12 @@ trait AssetMaker
             $assetPath = $this->assetPath;
         }
 
+        // Process absolute or symbolized paths
+        $publicPath = File::localToPublic(File::symbolizePath($fileName));
+        if ($publicPath) {
+            $fileName = $publicPath;
+        }
+
         if (substr($fileName, 0, 1) == '/' || $assetPath === null) {
             return Url::asset($fileName);
         }

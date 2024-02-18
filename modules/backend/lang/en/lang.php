@@ -11,6 +11,7 @@ return [
         'options_method_not_exists' => "The model class :model must define a method :method() returning options for the ':field' form field.",
         'options_static_method_invalid_value' => "The static method ':method()' on :class did not return a valid options array.",
         'colors_method_not_exists' => "The model class :model must define a method :method() returning html color HEX codes for the ':field' form field.",
+        'colors_invalid_input' => 'The color value supplied is invalid, please try again.',
     ],
     'widget' => [
         'not_registered' => "A widget class name ':name' has not been registered",
@@ -319,6 +320,7 @@ return [
         'select_page' => 'Select a page...',
     ],
     'relation' => [
+        'missing_behavior' => 'Field ":field" requires the ":controller" controller to implement the "RelationController" behavior.',
         'missing_config' => "Relation behavior does not have any configuration for ':config'.",
         'missing_definition' => "Relation behavior does not contain a definition for ':field'.",
         'missing_model' => 'Relation behavior used in :class does not have a model defined.',
@@ -327,6 +329,7 @@ return [
         'relationwidget_unsupported_type' => 'The ":type" relation type is unsupported by the Relation widget.',
         'help' => 'Click on an item to add',
         'related_data' => 'Related :name data',
+        'refresh' => 'Refresh',
         'add' => 'Add',
         'add_selected' => 'Add selected',
         'add_a_new' => 'Add a new :name',
@@ -600,7 +603,7 @@ return [
         'add_folder' => 'Add folder',
         'search' => 'Search',
         'display' => 'Display',
-        'filter_everything' => 'Everything',
+        'filter_all' => 'Everything',
         'filter_images' => 'Images',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',

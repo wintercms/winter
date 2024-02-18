@@ -1,3 +1,5 @@
+import PluginBase from '../abstracts/PluginBase';
+
 /**
  * Provides flash messages for the CMS.
  *
@@ -15,7 +17,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class Flash extends Snowboard.PluginBase {
+export default class Flash extends PluginBase {
     /**
      * Constructor.
      *

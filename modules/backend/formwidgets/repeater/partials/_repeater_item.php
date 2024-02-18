@@ -4,7 +4,11 @@
 ?>
 <li
     <?= $itemTitle ? 'data-collapse-title="'.e(trans($itemTitle)).'"' : '' ?>
-    class="field-repeater-item">
+    class="field-repeater-item"
+    <?php if ($mode === 'grid'): ?>
+    style="min-height: <?= $rowHeight ?>px"
+    <?php endif ?>
+>
 
     <?php if (!$this->previewMode): ?>
         <?php if ($sortable): ?>
@@ -27,6 +31,7 @@
         </div>
     <?php endif ?>
 
+    <?php if ($mode !== 'grid'): ?>
     <div class="repeater-item-collapse">
         <a href="javascript:;" class="repeater-item-collapse-one">
             <i class="icon-chevron-up"></i>
@@ -34,6 +39,7 @@
     </div>
 
     <div class="repeater-item-collapsed-title"></div>
+    <?php endif ?>
 
     <div class="field-repeater-form"
          data-control="formwidget"
