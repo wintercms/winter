@@ -7,10 +7,14 @@
             switch($extension)
             {
                 case 'css';
-                    $labelColor = '#3BA390'; break;
+                case 'less';
+                case 'scss';
+                    $labelColor = '#B73FD9'; break;
                 case 'html';
-                    $labelColor = '#3BA390'; break;
+                case 'xml';
+                    $labelColor = '#EA9B47'; break;
                 case 'js';
+                case 'json';
                     $labelColor = '#A9A9A9'; break;
                 case 'pdf';
                     $labelColor = '#E30713'; break;
@@ -22,6 +26,11 @@
                     $labelColor = '#F9B234'; break;
                 case 'psd';
                     $labelColor = '#2DAAE2'; break;
+                case 'ttf';
+                case 'otf';
+                case 'woff';
+                case 'woff2';
+                    $labelColor = '#C4CA10'; break;
                 case 'doc';
                 case 'docx';
                 case 'rtf';
