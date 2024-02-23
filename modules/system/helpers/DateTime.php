@@ -32,7 +32,7 @@ class DateTime
         $yesterday = $datetime->subDays(1);
         $tomorrow = $datetime->addDays(1);
         $time = $datetime->format('H:i');
-        $date = $datetime->format('j M Y');
+        $date = $datetime->isoFormat('D MMM YYYY');
 
         if ($datetime->isToday()) {
             $date = Lang::get('system::lang.datetime.today');
