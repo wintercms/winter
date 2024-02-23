@@ -11,10 +11,8 @@ class DateTime
     /**
      * Returns a human readable time difference from the value to the
      * current time. Eg: **10 minutes ago**
-     *
-     * @return string
      */
-    public static function timeSince($datetime)
+    public static function timeSince($datetime): string
     {
         return self::makeCarbon($datetime)->diffForHumans();
     }
@@ -23,10 +21,8 @@ class DateTime
      * Returns 24-hour time and the day using the grammatical tense
      * of the current time. Eg: Today at 12:49, Yesterday at 4:00
      * or 18 Sep 2015 at 14:33.
-     *
-     * @return string
      */
-    public static function timeTense($datetime)
+    public static function timeTense($datetime): string
     {
         $datetime = self::makeCarbon($datetime);
         $yesterday = $datetime->subDays(1);
@@ -82,10 +78,8 @@ class DateTime
 
     /**
      * Converts a PHP date format to "Moment.js" format.
-     * @param string $format
-     * @return string
      */
-    public static function momentFormat($format)
+    public static function momentFormat(string $format): string
     {
         $replacements = [
             'd' => 'DD',
