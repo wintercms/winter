@@ -2153,7 +2153,7 @@ this.initEvents()
 this.init()}
 Popup.prototype=Object.create(BaseProto)
 Popup.prototype.constructor=Popup
-Popup.DEFAULTS={ajax:null,handler:null,keyboard:true,extraData:{},content:null,size:null,adaptiveHeight:false,zIndex:null,cssClass:null}
+Popup.DEFAULTS={ajax:null,handler:null,keyboard:true,extraData:{},content:null,size:null,adaptiveHeight:false,zIndex:null,cssClass:null,allowDismiss:false}
 Popup.prototype.init=function(){var self=this
 if(self.isOpen)return
 this.setBackdrop(true)
