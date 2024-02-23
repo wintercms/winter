@@ -9,7 +9,7 @@
             $(el).closest('.control-list').listWidget('toggleChecked', [el])
         }
 
-        this.clickViewListRecord = function(recordId, relationId, sessionKey, size, cssClass) {
+        this.clickViewListRecord = function(recordId, relationId, sessionKey, size, cssClass, allowDismiss) {
             var newPopup = $('<a />'),
                 $container = $('#'+relationId),
                 requestData = paramToObj('data-request-data', $container.data('request-data'))
@@ -22,6 +22,7 @@
                 handler: 'onRelationClickViewList',
                 size: size,
                 cssClass: cssClass,
+                allowDismiss: allowDismiss,
                 extraData: $.extend({}, requestData, {
                     'manage_id': recordId,
                     '_session_key': sessionKey
