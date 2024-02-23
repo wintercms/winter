@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use DateTime as PhpDateTime;
 use InvalidArgumentException;
 use Exception;
+use Lang;
 
 class DateTime
 {
@@ -34,16 +35,16 @@ class DateTime
         $date = $datetime->format('j M Y');
 
         if ($datetime->isToday()) {
-            $date = 'Today';
+            $date = Lang::get('system::lang.datetime.today');
         }
         elseif ($datetime->isYesterday()) {
-            $date = 'Yesterday';
+            $date = Lang::get('system::lang.datetime.yesterday');
         }
         elseif ($datetime->isTomorrow()) {
-            $date = 'Tomorrow';
+            $date = Lang::get('system::lang.datetime.tomorrow');
         }
 
-        return $date.' at '.$time;
+        return $date . ' ' . Lang::get('system::lang.datetime.at') . ' ' . $time;
     }
 
     /**
