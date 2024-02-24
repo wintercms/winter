@@ -78,8 +78,9 @@ class DateTime
 
     /**
      * Converts a PHP date format to "Moment.js" format.
+     * @param string $format
      */
-    public static function momentFormat(string $format): string
+    public static function momentFormat($format): string
     {
         $replacements = [
             'd' => 'DD',
