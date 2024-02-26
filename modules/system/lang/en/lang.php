@@ -474,6 +474,6 @@ return [
         'today' => 'Today',
         'yesterday' => 'Yesterday',
         'tomorrow' => 'Tomorrow',
-        'at' => 'at',
+        'at' => ':date at :time',
     ],
 ];
