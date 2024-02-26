@@ -55,7 +55,7 @@
 
         if ($itemIconClass == 'icon-file'): ?>
             <svg viewBox="0 0 250 250" xml:space="preserve"
-                style="max-width:90%;max-height:90%;fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+                style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
                 <path d="M62.5,0c-8.594,0 -15.625,7.031 -15.625,15.625l0,218.75c0,8.594 7.031,15.625 15.625,15.625l156.25,0c8.594,0 15.625,-7.031 15.625,-15.625l0,-171.875l-62.5,-62.5l-109.375,0Z" style="fill:#e2e5e7;fill-rule:nonzero;"/>
                 <path d="M187.5,62.5l46.875,0l-62.5,-62.5l0,46.875c0,8.594 7.031,15.625 15.625,15.625Z" style="fill:#b0b7bd;fill-rule:nonzero;"/>
                 <path d="M234.375,109.375l-46.875,-46.875l46.875,0l0,46.875Z" style="fill:#cad1d8;fill-rule:nonzero;"/>
