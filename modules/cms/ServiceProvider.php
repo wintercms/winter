@@ -90,7 +90,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerTwigParser()
     {
         // Register CMS Twig environment
-        $this->app->bind('twig.environment.cms', function ($app) {
+        $this->app->singleton('twig.environment.cms', function ($app) {
             // Load Twig options
             $useCache = !Config::get('cms.twigNoCache');
             $isDebugMode = Config::get('app.debug', false);
