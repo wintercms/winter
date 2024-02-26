@@ -20,7 +20,8 @@ $off = isset($field->config['off']) ? $field->config['off'] : 'backend::lang.for
     <input
         type="hidden"
         name="<?= $field->getName() ?>"
-        value="0">
+        value="0"
+        <?= $previewMode ? 'disabled="disabled"' : '' ?>>
 
     <label class="custom-switch" <?= $previewMode ? 'onclick="return false"' : '' ?>>
         <input
