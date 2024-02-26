@@ -40,7 +40,7 @@ class DateTime
             $date = Lang::get('system::lang.datetime.tomorrow');
         }
 
-        return $date . ' ' . Lang::get('system::lang.datetime.at') . ' ' . $time;
+        return Lang::get('system::lang.datetime.at', ['date' => $date, 'time' => $time]);
     }
 
     /**
