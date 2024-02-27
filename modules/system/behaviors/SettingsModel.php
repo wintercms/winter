@@ -6,6 +6,7 @@ use Cache;
 use Log;
 use Exception;
 use Illuminate\Database\QueryException;
+use Str;
 use System\Classes\ModelBehavior;
 
 /**
@@ -178,6 +179,12 @@ class SettingsModel extends ModelBehavior
     {
         if ($this->isKeyAllowed($key)) {
             return;
+        }
+
+        if ($this->model->hasSetMutator($key)) {
+            // set mutators are called AFTER the value sent to the `model.setAttribute` event is fetched
+            // we need to fetch the value again from the model to get its mutated value
+            $value = array_get($this->model->attributes, $key);
         }
 
         $this->fieldValues[$key] = $value;
