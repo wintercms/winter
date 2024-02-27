@@ -3,10 +3,9 @@
 use App;
 use Artisan;
 use Cache;
-use Log;
 use Exception;
+use Log;
 use Illuminate\Database\QueryException;
-use Str;
 use System\Classes\ModelBehavior;
 
 /**
