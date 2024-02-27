@@ -3,9 +3,10 @@
 use App;
 use Artisan;
 use Cache;
-use Log;
 use Exception;
+use Log;
 use Illuminate\Database\QueryException;
+use Str;
 use System\Classes\ModelBehavior;
 
 /**
@@ -178,6 +179,11 @@ class SettingsModel extends ModelBehavior
     {
         if ($this->isKeyAllowed($key)) {
             return;
+        }
+
+        if ($this->model->hasSetMutator($key)) {
+            $mutator = 'set'.Str::studly($key).'Attribute';
+            $value = $this->model->{$mutator}($value);
         }
 
         $this->fieldValues[$key] = $value;
