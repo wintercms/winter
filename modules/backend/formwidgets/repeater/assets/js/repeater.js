@@ -248,11 +248,13 @@
             $target = $item
         }
 
-        var $textInput = $('input[type=text]:first, select:first', $target).first()
+        var $textInput = $('input[type=text]:first, select:first, ul:first', $target).first()
         if ($textInput.length) {
             switch($textInput.prop("tagName")) {
                 case 'SELECT':
                     return $textInput.find('option:selected').text()
+                case 'UL':
+                    return $textInput.find('li.active').text()
                 default:
                     return $textInput.val()
             }

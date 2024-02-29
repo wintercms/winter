@@ -1,4 +1,6 @@
-<?php namespace {{ plugin_namespace }}\Models;
+<?php
+
+namespace {{ plugin_namespace }}\Models;
 
 use Model;
 

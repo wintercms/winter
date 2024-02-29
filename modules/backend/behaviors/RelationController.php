@@ -665,6 +665,7 @@ class RelationController extends ControllerBehavior
             $config = $this->makeConfigForMode('view', 'list');
             $config->model = $this->relationModel;
             $config->alias = $this->alias . 'ViewList';
+            $config->showSetup = $this->getConfig('view[showSetup]', true);
             $config->showSorting = $this->getConfig('view[showSorting]', true);
             $config->defaultSort = $this->getConfig('view[defaultSort]');
             $config->recordsPerPage = $this->getConfig('view[recordsPerPage]');
@@ -814,7 +815,7 @@ class RelationController extends ControllerBehavior
             $config = $this->makeConfigForMode('manage', 'list');
             $config->model = $this->relationModel;
             $config->alias = $this->alias . 'ManageList';
-            $config->showSetup = false;
+            $config->showSetup = $this->getConfig('manage[showSetup]', !$isPivot);
             $config->showCheckboxes = $this->getConfig('manage[showCheckboxes]', !$isPivot);
             $config->showSorting = $this->getConfig('manage[showSorting]', !$isPivot);
             $config->defaultSort = $this->getConfig('manage[defaultSort]');

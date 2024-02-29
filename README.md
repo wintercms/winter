@@ -90,13 +90,18 @@ Winter CMS development is financially supported by the generosity of the followi
 
 ### Organizations
 
-Spatial Media employs one of the core maintainers (Jack Wilkinson) who contributes to the ongoing development of Winter.
-
 [![Froala logo](https://froala.com/wp-content/uploads/2019/10/froala.svg)](https://froala.com/wysiwyg-editor/)
 
 Froala provides a perpetual, Enterprise license to Winter CMS which allows us and our users to use the Froala WYSIWYG Editor in Winter CMS powered projects.
 
+Big thanks to our sponsors on OpenCollective:
+
+- [FrogeHost](https://froge.host/?utm_source=wintercms)
+
 ### Individuals
+
+Big thanks to our sponsors on OpenCollective:
+
 - Orville
 
 If you would like to have your name, company and link added to this list and support open-source development, feel free to make a donation to our [Open Collective](https://opencollective.com/wintercms).

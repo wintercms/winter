@@ -1,4 +1,6 @@
-<?php namespace {{studly_author}}\{{studly_plugin}}\Jobs;
+<?php
+
+namespace {{ plugin_namespace }}\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

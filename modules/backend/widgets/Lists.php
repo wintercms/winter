@@ -798,6 +798,57 @@ class Lists extends WidgetBase
             throw new ApplicationException(Lang::get('backend::lang.list.missing_columns', compact('class')));
         }
 
+        /**
+         * @event backend.list.extendColumnsBefore
+         * Provides an opportunity to modify the columns of a List widget before the columns are created.
+         *
+         * Example usage:
+         *
+         *     Event::listen('backend.list.extendColumnsBefore', function ($listWidget) {
+         *         // Only for the User controller
+         *         if (!$listWidget->getController() instanceof \Backend\Controllers\Users) {
+         *             return;
+         *         }
+         *
+         *         // Only for the User model
+         *         if (!$listWidget->model instanceof \Backend\Models\User) {
+         *             return;
+         *         }
+         *
+         *         // Add a column in first position
+         *         $listWidget->columns = array_merge([
+         *             'myColumn' => [
+         *                 'type' => 'text',
+         *                 'label' => 'My Column',
+         *             ],
+         *         ], $listWidget->columns);
+         *     });
+         *
+         * Or
+         *
+         *     $listWidget->bindEvent('list.extendColumnsBefore', function () use ($listWidget) {
+         *         // Only for the User controller
+         *         if (!$listWidget->getController() instanceof \Backend\Controllers\Users) {
+         *             return;
+         *         }
+         *
+         *         // Only for the User model
+         *         if (!$listWidget->model instanceof \Backend\Models\User) {
+         *             return;
+         *         }
+         *
+         *         // Add a column in first position
+         *         $listWidget->columns = array_merge([
+         *             'myColumn' => [
+         *                 'type' => 'text',
+         *                 'label' => 'My Column',
+         *             ],
+         *         ], $listWidget->columns);
+         *     });
+         *
+         */
+        $this->fireSystemEvent('backend.list.extendColumnsBefore');
+
         $this->addColumns($this->columns);
 
         /**
@@ -1489,10 +1540,19 @@ class Lists extends WidgetBase
     public function setSearchTerm($term, $resetPagination = false)
     {
         if (
-            strlen($this->searchTerm) !== 0
-            && trim($this->searchTerm) !== ''
+            strlen($term) !== 0
+            && trim($term) !== ''
         ) {
+            if ($this->showTree === true) {
+                // save initial list config showTree value
+                $this->putSession('showTree', true);
+            }
             $this->showTree = false;
+        } else {
+            if ($this->getSession('showTree')) {
+                // restore initial list config showTree value
+                $this->showTree = true;
+            }
         }
 
         if ($resetPagination) {
