@@ -10,23 +10,20 @@ import '../../less/sensitive.less';
      * @author Ben Thomson <git@alfreido.com>
      * @copyright 2023 Winter CMS
      */
-    class Sensitive extends Snowboard.PluginBase {
+    class Sensitive extends Snowboard.WinterControl {
         /**
          * Constructor.
-         *
-         * @param {HTMLElement} element
          */
-        construct(element) {
-            this.element = element;
-            this.clean = Boolean(element.dataset.clean);
+        construct() {
+            this.clean = Boolean(this.element.dataset.clean);
             this.hidden = true;
 
             // Child elements
-            this.input = element.querySelector('[data-input]');
-            this.toggle = element.querySelector('[data-toggle]');
-            this.icon = element.querySelector('[data-icon]');
-            this.loader = element.querySelector('[data-loader]');
-            this.copy = element.querySelector('[data-copy]');
+            this.input = this.element.querySelector('[data-input]');
+            this.toggle = this.element.querySelector('[data-toggle]');
+            this.icon = this.element.querySelector('[data-icon]');
+            this.loader = this.element.querySelector('[data-loader]');
+            this.copy = this.element.querySelector('[data-copy]');
 
             // Events
             this.events = {
@@ -35,12 +32,6 @@ import '../../less/sensitive.less';
                 tabChange: () => this.onTabChange(),
                 copy: () => this.onCopy(),
             };
-        }
-
-        traits() {
-            return [
-                'Configurable',
-            ];
         }
 
         init() {
@@ -236,6 +227,5 @@ import '../../less/sensitive.less';
         }
     }
 
-    Snowboard.addPlugin('backend.formwidget.sensitive', Sensitive);
-    Snowboard['backend.ui.widgethandler']().register('sensitive', 'backend.formwidget.sensitive');
+    Snowboard['backend.ui.controls'].register('sensitive', Sensitive);
 })(window.Snowboard);

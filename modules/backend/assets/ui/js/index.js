@@ -1,6 +1,6 @@
 import * as Vue from 'vue';
+import { Control, ControlHandler } from '@wintercms/snowboard-controls';
 import BackendAjaxHandler from './ajax/Handler';
-import BackendUiWidgetHandler from './ui/WidgetHandler';
 
 if (window.Snowboard === undefined) {
     throw new Error('Snowboard must be loaded in order to use the Backend UI.');
@@ -8,7 +8,8 @@ if (window.Snowboard === undefined) {
 
 ((Snowboard) => {
     Snowboard.addPlugin('backend.ajax.handler', BackendAjaxHandler);
-    Snowboard.addPlugin('backend.ui.widgetHandler', BackendUiWidgetHandler);
+    Snowboard.addPlugin('backend.ui.controls', ControlHandler);
+    Snowboard.addAbstract('WinterControl', Control);
 
     // Add the pre-filter immediately
     Snowboard['backend.ajax.handler']().addPrefilter();

@@ -27,7 +27,7 @@
         "test": "jest --config tests/js/jest.config.js tests/js/cases"
     },
     "dependencies": {
-        "@wintercms/snowboard": "^0.5.0",
+        "@wintercms/snowboard": "^0.6.0",
         "js-cookie": "^3.0.1"
     },
     "devDependencies": {

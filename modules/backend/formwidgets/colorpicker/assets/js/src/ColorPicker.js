@@ -12,20 +12,17 @@ import '../../less/colorpicker.less';
      * @author Ben Thomson <git@alfreido.com>
      * @copyright 2023 Winter CMS
      */
-    class ColorPicker extends Snowboard.PluginBase {
+    class ColorPicker extends Snowboard.WinterControl {
         /**
          * Constructor.
-         *
-         * @param {HTMLElement} element
          */
-        construct(element) {
-            this.element = element;
+        construct() {
             this.pickr = null;
 
             // Child elements
-            this.container = element.querySelector('.colorpicker-container');
-            this.colorPreview = element.querySelector('[data-color-preview]');
-            this.colorValue = element.querySelector('[data-color-value]');
+            this.container = this.element.querySelector('.colorpicker-container');
+            this.colorPreview = this.element.querySelector('[data-color-preview]');
+            this.colorValue = this.element.querySelector('[data-color-value]');
 
             // User inputs
             this.keyboardEntry = false;
@@ -52,12 +49,6 @@ import '../../less/colorpicker.less';
                     event.stopPropagation();
                 },
             };
-        }
-
-        traits() {
-            return [
-                'Configurable',
-            ];
         }
 
         init() {
@@ -513,6 +504,5 @@ import '../../less/colorpicker.less';
         }
     }
 
-    Snowboard.addPlugin('backend.formwidget.colorpicker', ColorPicker);
-    Snowboard['backend.ui.widgethandler']().register('colorpicker', 'backend.formwidget.colorpicker');
+    Snowboard['backend.ui.controls']().register('colorpicker', ColorPicker);
 })(window.Snowboard, window.jQuery);
