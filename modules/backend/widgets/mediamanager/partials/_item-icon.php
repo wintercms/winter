@@ -4,53 +4,29 @@
             $itemIconClass = $this->itemTypeToIconClass($item, $itemType);
             $extension = substr(strtolower(pathinfo($item->path, PATHINFO_EXTENSION)), 0, 4) ?? '???';
 
-            switch($extension)
-            {
-                case 'css';
-                case 'less';
-                case 'scss';
-                    $labelColor = '#B73FD9'; break;
-                case 'html';
-                case 'xml';
-                    $labelColor = '#EA9B47'; break;
-                case 'js';
-                case 'json';
-                    $labelColor = '#A9A9A9'; break;
-                case 'pdf';
-                    $labelColor = '#E30713'; break;
-                case 'txt';
-                    $labelColor = '#248BD0'; break;
-                case 'ai';
-                    $labelColor = '#F29200'; break;
-                case 'eps';
-                    $labelColor = '#F9B234'; break;
-                case 'psd';
-                    $labelColor = '#2DAAE2'; break;
-                case 'ttf';
-                case 'otf';
-                case 'woff';
-                case 'woff2';
-                    $labelColor = '#C4CA10'; break;
-                case 'doc';
-                case 'docx';
-                case 'rtf';
-                case 'odt';
-                    $labelColor = '#0F70B7'; break;
-                case 'csv';
-                case 'ods';
-                case 'xls';
-                case 'xlsx';
-                    $labelColor = '#3BAA34'; break;
-                case 'odp';
-                case 'ppt';
-                case 'pptx';
-                    $labelColor = '#D04526'; break;
-                case 'rar';
-                case 'tar';
-                case 'zip';
-                    $labelColor = '#363A56'; break;
-                default;
-                    $labelColor = '#576D7E'; break;
+            $colorsByExtension = [
+                '#B73FD9' => ['css', 'less', 'scss'],
+                '#EA9B47' => ['html', 'xml'],
+                '#A9A9A9' => ['js', 'json'],
+                '#E30713' => ['pdf'],
+                '#248BD0' => ['txt'],
+                '#F29200' => ['ai'],
+                '#F9B234' => ['eps'],
+                '#2DAAE2' => ['psd'],
+                '#C4CA10' => ['ttf', 'otf', 'woff', 'woff2'],
+                '#0F70B7' => ['doc', 'docx', 'rtf', 'odt'],
+                '#3BAA34' => ['csv', 'ods', 'xls', 'xlsx'],
+                '#D04526' => ['odp', 'ppt', 'pptx'],
+                '#363A56' => ['rar', 'tar', 'zip'],
+                '#576D7E' => ['default'], // Default color
+            ];
+
+            $labelColor = '#576D7E'; // Default color
+            foreach ($colorsByExtension as $color => $extensions) {
+                if (in_array($extension, $extensions)) {
+                    $labelColor = $color;
+                    break;
+                }
             }
 
         if ($itemIconClass == 'icon-file'): ?>
