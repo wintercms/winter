@@ -218,13 +218,13 @@ class ServiceProvider extends ModuleServiceProvider
                 'studly'         => ['Str', 'studly'],
                 'trans'          => ['Lang', 'get'],
                 'transchoice'    => ['Lang', 'choice'],
-                'md'             => function($value) {
+                'md'             => function ($value) {
                     return (is_string($value) && $value !== '') ? Markdown::parse($value) : '';
                 },
-                'md_safe'        => function($value) {
+                'md_safe'        => function ($value) {
                     return (is_string($value) && $value !== '') ? Markdown::parseSafe($value) : '';
                 },
-                'md_line'        => function($value) {
+                'md_line'        => function ($value) {
                     return (is_string($value) && $value !== '') ? Markdown::parseLine($value) : '';
                 },
                 'time_since'     => ['System\Helpers\DateTime', 'timeSince'],
