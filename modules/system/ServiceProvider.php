@@ -9,6 +9,7 @@ use Config;
 use Event;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
+use Markdown;
 use Request;
 use System\Classes\CombineAssets;
 use System\Classes\ErrorHandler;
