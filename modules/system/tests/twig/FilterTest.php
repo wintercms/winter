@@ -11,7 +11,6 @@ class FilterTest extends TestCase
         parent::setUp();
 
         $this->twig = $this->app->make('twig.environment');
-
     }
 
     public function testFilterUpper()
