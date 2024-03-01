@@ -6,11 +6,16 @@ use System\Tests\Bootstrap\TestCase;
 
 class FilterTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->twig = $this->app->make('twig.environment');
+
+    }
+
     public function testFilterUpper()
     {
-        // Get the Twig Environment
-        $twig = $this->app->make('twig.environment');
-
         // Run the Twig Filter tests
         // @see https://github.com/twigphp/Twig/commit/d475a92c83d13951fbcadd20e64b8ebca82bfc7e
         $tests = [
@@ -112,7 +117,7 @@ EXPECT,
         ];
 
         foreach ($tests as $name => $test) {
-            $template = $twig->createTemplate($test['template']);
+            $template = $this->twig->createTemplate($test['template']);
             $this->assertEquals(
                 str_replace(
                     "\r\n",
@@ -130,24 +135,21 @@ EXPECT,
 
     public function testFilterMdNull()
     {
-        $twig = $this->app->make('twig.environment');
-        $template = $twig->createTemplate('{% filter md %}{{ value }}{% endfilter %}');
+        $template = $this->twig->createTemplate('{% filter md %}{{ value }}{% endfilter %}');
 
         $this->assertEquals('', $template->render(['value' => null]));
     }
 
     public function testFilterMdSafeNull()
     {
-        $twig = $this->app->make('twig.environment');
-        $template = $twig->createTemplate('{% filter md_safe %}{{ value }}{% endfilter %}');
+        $template = $this->twig->createTemplate('{% filter md_safe %}{{ value }}{% endfilter %}');
 
         $this->assertEquals('', $template->render(['value' => null]));
     }
 
     public function testFilterMdLineNull()
     {
-        $twig = $this->app->make('twig.environment');
-        $template = $twig->createTemplate('{% filter md_line %}{{ value }}{% endfilter %}');
+        $template = $this->twig->createTemplate('{% filter md_line %}{{ value }}{% endfilter %}');
 
         $this->assertEquals('', $template->render(['value' => null]));
     }
