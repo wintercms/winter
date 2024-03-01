@@ -127,4 +127,28 @@ EXPECT,
             );
         }
     }
+
+    public function testFilterMdNull()
+    {
+        $twig = $this->app->make('twig.environment');
+        $template = $twig->createTemplate('{% filter md %}{{ value }}{% endfilter %}');
+
+        $this->assertEquals('', $template->render(['value' => null]));
+    }
+
+    public function testFilterMdSafeNull()
+    {
+        $twig = $this->app->make('twig.environment');
+        $template = $twig->createTemplate('{% filter md_safe %}{{ value }}{% endfilter %}');
+
+        $this->assertEquals('', $template->render(['value' => null]));
+    }
+
+    public function testFilterMdLineNull()
+    {
+        $twig = $this->app->make('twig.environment');
+        $template = $twig->createTemplate('{% filter md_line %}{{ value }}{% endfilter %}');
+
+        $this->assertEquals('', $template->render(['value' => null]));
+    }
 }
