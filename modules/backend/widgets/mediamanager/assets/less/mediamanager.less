@@ -325,12 +325,14 @@ div[data-control="media-manager"] {
         margin-bottom: 20px;
     }
 
-    .sidebar-image-placeholder-container {
+    .sidebar-image-placeholder-container,
+    .sidebar-document-placeholder-container {
         display: table;
         width: 100%;
     }
 
-    .sidebar-image-placeholder {
+    .sidebar-image-placeholder,
+    .sidebar-document-placeholder {
         display: table-cell;
         height: 225px;
         position: relative;
@@ -338,6 +340,10 @@ div[data-control="media-manager"] {
         text-align: center;
         border-bottom: 1px solid #ecf0f1;
         box-sizing: content-box;
+    }
+
+    .sidebar-image-placeholder {
+        height: 225px;
 
         &[data-loading] {
             background: #ecf0f1;
@@ -363,6 +369,15 @@ div[data-control="media-manager"] {
         img {
             max-width: 100%;
             max-height: 225px;
+        }
+    }
+
+    .sidebar-document-placeholder {
+        height: 155px;
+
+        svg {
+            width: 100px;
+            height: 100px;
         }
     }
 
