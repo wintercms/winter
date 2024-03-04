@@ -470,4 +470,10 @@ return [
         'previous' => 'Previous',
         'next' => 'Next',
     ],
+    'datetime' => [
+        'today' => 'Today',
+        'yesterday' => 'Yesterday',
+        'tomorrow' => 'Tomorrow',
+        'at' => ':date at :time',
+    ],
 ];
