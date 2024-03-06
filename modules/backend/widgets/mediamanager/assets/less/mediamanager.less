@@ -63,6 +63,82 @@ div[data-control="media-manager"] {
         max-height: 225px;
     }
 
+    .file-icon {
+        fill-rule: evenodd;
+        clip-rule: evenodd;
+        stroke-linejoin: round;
+        stroke-miterlimit: 2;
+
+        &-extension {
+            font-family: 'ArialMT','Arial',sans-serif;
+            font-size: 4em;
+            font-weight: 900;
+            fill: #fff;
+        }
+
+        &-label {
+            fill: #576D7E; /* Default color */
+            fill-rule: nonzero;
+        }
+
+        &-css,
+        &-less,
+        &-scss {
+            fill: #B73FD9;
+        }
+        &-html,
+        &-xml {
+            fill: #EA9B47;
+        }
+        &-js,
+        &-json {
+            fill: #A9A9A9;
+        }
+        &-pdf {
+            fill: #E30713;
+        }
+        &-txt {
+            fill: #248BD0;
+        }
+        &-ai {
+            fill: #F29200;
+        }
+        &-eps {
+            fill: #F9B234;
+        }
+        &-psd {
+            fill: #2DAAE2;
+        }
+        &-ttf,
+        &-otf,
+        &-woff,
+        &-woff2 {
+            fill: #C4CA10;
+        }
+        &-doc,
+        &-docx,
+        &-rtf,
+        &-odt {
+            fill: #0F70B7;
+        }
+        &-csv,
+        &-ods,
+        &-xls,
+        &-xlsx {
+            fill: #3BAA34;
+        }
+        &-odp,
+        &-ppt,
+        &-pptx {
+            fill: #D04526;
+        }
+        &-rar,
+        &-tar,
+        &-zip {
+            fill: #363A56;
+        }
+    }
+
     .media-player-fallback {
         font-size: 13px;
         color: #95a5a6;
@@ -215,6 +291,10 @@ div[data-control="media-manager"] {
                     font-size: 35px;
                 }
 
+                svg {
+                    max-height: 44px;
+                }
+
                 &.image {
                     border-right: 1px solid #ecf0f1!important;
                 }
@@ -290,6 +370,10 @@ div[data-control="media-manager"] {
                     font-size: 55px;
                 }
 
+                svg {
+                    max-height: 65px;
+                }
+
                 p {
                     font-family: @font-family-base;
                 }
@@ -317,19 +401,24 @@ div[data-control="media-manager"] {
         margin-bottom: 20px;
     }
 
-    .sidebar-image-placeholder-container {
+    .sidebar-image-placeholder-container,
+    .sidebar-document-placeholder-container {
         display: table;
         width: 100%;
     }
 
-    .sidebar-image-placeholder {
+    .sidebar-image-placeholder,
+    .sidebar-document-placeholder {
         display: table-cell;
-        height: 225px;
         position: relative;
         vertical-align: middle;
         text-align: center;
         border-bottom: 1px solid #ecf0f1;
         box-sizing: content-box;
+    }
+
+    .sidebar-image-placeholder {
+        height: 225px;
 
         &[data-loading] {
             background: #ecf0f1;
@@ -355,6 +444,15 @@ div[data-control="media-manager"] {
         img {
             max-width: 100%;
             max-height: 225px;
+        }
+    }
+
+    .sidebar-document-placeholder {
+        height: 155px;
+
+        svg {
+            width: 100px;
+            height: 100px;
         }
     }
 
