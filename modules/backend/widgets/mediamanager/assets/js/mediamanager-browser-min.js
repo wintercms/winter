@@ -100,8 +100,9 @@ MediaManager.prototype.selectItem=function(node,expandSelection){if(!expandSelec
 for(var i=0,len=items.length;i<len;i++){items[i].setAttribute('class','')}node.setAttribute('class','selected')}else{if(node.getAttribute('class')=='selected')node.setAttribute('class','')
 else node.setAttribute('class','selected')}node.focus()
 this.clearSelectTimer()
-if(this.isPreviewSidebarVisible()){this.selectTimer=setTimeout(this.proxy(this.updateSidebarPreview),100)}if(node.hasAttribute('data-root')&&!expandSelection){this.toggleMoveAndDelete(true)}else{this.toggleMoveAndDelete(false)}if(expandSelection){this.unselectRoot()}}
-MediaManager.prototype.toggleMoveAndDelete=function(value){$('[data-command=delete]',this.$el).prop('disabled',value)
+if(this.isPreviewSidebarVisible()){this.selectTimer=setTimeout(this.proxy(this.updateSidebarPreview),100)}if(node.hasAttribute('data-root')&&!expandSelection){this.toggleMoveCloneDelete(true)}else{this.toggleMoveCloneDelete(false)}if(expandSelection){this.unselectRoot()}}
+MediaManager.prototype.toggleMoveCloneDelete=function(value){$('[data-command=delete]',this.$el).prop('disabled',value)
+$('[data-command=clone]',this.$el).prop('disabled',value)
 $('[data-command=move]',this.$el).prop('disabled',value)}
 MediaManager.prototype.unselectRoot=function(){var rootItem=this.$el.get(0).querySelector('[data-type="media-item"][data-root].selected')
 if(rootItem)rootItem.setAttribute('class','')}
@@ -283,6 +284,14 @@ ev.preventDefault()
 return false}
 MediaManager.prototype.folderCreated=function(){this.$el.find('button[data-command="create-folder"]').popup('hide')
 this.afterNavigate()}
+MediaManager.prototype.cloneItems=function(ev){var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
+if(!items.length){$.wn.alert(this.options.cloneEmpty)
+return}if(items.length>1){$.wn.confirm(this.options.cloneMultipleConfirm,this.proxy(this.cloneMultipleConfirmation))}else{$(ev.target).popup({handler:this.options.alias+'::onLoadClonePopup',zIndex:1200})}}
+MediaManager.prototype.cloneMultipleConfirmation=function(confirmed){if(!confirmed)return
+var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected'),paths=[]
+for(var i=0,len=items.length;i<len;i++){if(items[i].hasAttribute('data-root')){continue;}paths.push({'path':items[i].getAttribute('data-path'),'type':items[i].getAttribute('data-item-type')})}var data={paths:paths}
+$.wn.stripeLoadIndicator.show()
+this.$form.request(this.options.alias+'::onCloneItems',{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(this.proxy(this.afterNavigate))}
 MediaManager.prototype.moveItems=function(ev){var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
 if(!items.length){$.wn.alert(this.options.moveEmpty)
 return}var data={exclude:[],path:this.$el.find('[data-type="current-folder"]').val()}
@@ -310,6 +319,7 @@ break;case'close-uploader':this.hideUploadUi()
 break;case'set-filter':this.setFilter($(ev.currentTarget).data('filter'))
 break;case'delete':this.deleteItems()
 break;case'create-folder':this.createFolder(ev)
+break;case'clone':this.cloneItems(ev)
 break;case'move':this.moveItems(ev)
 break;case'toggle-sidebar':this.toggleSidebar(ev)
 break;case'popup-command':var popupCommand=$(ev.currentTarget).data('popup-command')
@@ -362,7 +372,7 @@ break;case'ArrowLeft':case'ArrowUp':this.selectRelative(false,ev.shiftKey)
 eventHandled=true
 break;}if(eventHandled){ev.preventDefault()
 ev.stopPropagation()}}
-MediaManager.DEFAULTS={url:window.location,uploadHandler:null,alias:'',deleteEmpty:'Please select files to delete.',deleteConfirm:'Delete the selected file(s)?',moveEmpty:'Please select files to move.',selectSingleImage:'Please select a single image.',selectionNotImage:'The selected item is not an image.',bottomToolbar:false,cropAndInsertButton:false}
+MediaManager.DEFAULTS={url:window.location,uploadHandler:null,alias:'',cloneEmpty:'Please select an item to clone.',cloneMultipleConfirm:'You have selected multiple iems, they are going to be cloned with generated names. Are you sure?',deleteEmpty:'Please select files to delete.',deleteConfirm:'Delete the selected file(s)?',moveEmpty:'Please select files to move.',selectSingleImage:'Please select a single image.',selectionNotImage:'The selected item is not an image.',bottomToolbar:false,cropAndInsertButton:false}
 var old=$.fn.mediaManager
 $.fn.mediaManager=function(option){var args=Array.prototype.slice.call(arguments,1),result=undefined
 this.each(function(){var $this=$(this)

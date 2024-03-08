@@ -269,12 +269,12 @@
             this.selectTimer = setTimeout(this.proxy(this.updateSidebarPreview), 100)
         }
 
-        // Disable delete and move buttons
+        // Disable delete, clone and move buttons
         if (node.hasAttribute('data-root') && !expandSelection) {
-            this.toggleMoveAndDelete(true)
+            this.toggleMoveCloneDelete(true)
         }
         else {
-            this.toggleMoveAndDelete(false)
+            this.toggleMoveCloneDelete(false)
         }
 
         // Always unselect root when selecting multiples
@@ -283,8 +283,9 @@
         }
     }
 
-    MediaManager.prototype.toggleMoveAndDelete = function(value) {
+    MediaManager.prototype.toggleMoveCloneDelete = function(value) {
         $('[data-command=delete]', this.$el).prop('disabled', value)
+        $('[data-command=clone]', this.$el).prop('disabled', value)
         $('[data-command=move]', this.$el).prop('disabled', value)
     }
 
@@ -998,6 +999,55 @@
         this.afterNavigate()
     }
 
+    MediaManager.prototype.cloneItems = function(ev) {
+        var items = this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
+
+        if (!items.length) {
+            $.wn.alert(this.options.cloneEmpty)
+            return
+        }
+
+        if (items.length > 1) {
+            $.wn.confirm(this.options.cloneMultipleConfirm, this.proxy(this.cloneMultipleConfirmation))
+        } else {
+            $(ev.target).popup({
+                handler: this.options.alias+'::onLoadClonePopup',
+                // extraData: data,
+                zIndex: 1200 // Media Manager can be opened in a popup, so this new popup should have a higher z-index
+            })
+        }
+    }
+
+    MediaManager.prototype.cloneMultipleConfirmation = function (confirmed) {
+        if (!confirmed)
+            return
+
+        var items = this.$el.get(0).querySelectorAll('[data-type="media-item"].selected'),
+            paths = []
+
+        for (var i = 0, len = items.length; i < len; i++) {
+            // Skip the 'return to parent' item
+            if (items[i].hasAttribute('data-root')) {
+                continue;
+            }
+            paths.push({
+                'path': items[i].getAttribute('data-path'),
+                'type': items[i].getAttribute('data-item-type')
+            })
+        }
+
+        var data = {
+            paths: paths
+        }
+
+        $.wn.stripeLoadIndicator.show()
+        this.$form.request(this.options.alias + '::onCloneItems', {
+            data: data
+        }).always(function () {
+            $.wn.stripeLoadIndicator.hide()
+        }).done(this.proxy(this.afterNavigate))
+    }
+
     MediaManager.prototype.moveItems = function(ev) {
         var items = this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
 
@@ -1107,6 +1157,9 @@
             break;
             case 'create-folder':
                 this.createFolder(ev)
+            break;
+            case 'clone':
+                this.cloneItems(ev)
             break;
             case 'move':
                 this.moveItems(ev)
@@ -1303,6 +1356,8 @@
         url: window.location,
         uploadHandler: null,
         alias: '',
+        cloneEmpty: 'Please select an item to clone.',
+        cloneMultipleConfirm: 'Multiple items selected, they will be cloned with generated names. Are you sure?',
         deleteEmpty: 'Please select files to delete.',
         deleteConfirm: 'Delete the selected file(s)?',
         moveEmpty: 'Please select files to move.',

@@ -521,6 +521,140 @@ class MediaManager extends WidgetBase
     }
 
     /**
+     * Render the clone popup
+     *
+     * @throws ApplicationException If the exclude input data is not an array
+     */
+    public function onLoadClonePopup(): string
+    {
+        $this->abortIfReadOnly();
+
+        // $exclude = Input::get('exclude', []);
+        // if (!is_array($exclude)) {
+        //     throw new ApplicationException('Invalid input data');
+        // }
+
+        // $folders = MediaLibrary::instance()->listAllDirectories($exclude);
+
+        // $folderList = [];
+        // foreach ($folders as $folder) {
+        //     $path = $folder;
+
+        //     if ($folder == '/') {
+        //         $name = Lang::get('backend::lang.media.library');
+        //     } else {
+        //         $segments = explode('/', $folder);
+        //         $name = str_repeat('&nbsp;', (count($segments) - 1) * 4) . basename($folder);
+        //     }
+
+        //     $folderList[$path] = $name;
+        // }
+
+        // $this->vars['folders'] = $folderList;
+        $this->vars['originalPath'] = Input::get('path');
+
+        return $this->makePartial('move-form');
+    }
+
+    /**
+     * Clone the selected items ("files", "folders") without prompting the user
+     *
+     * @throws ApplicationException if the input data is invalid
+     */
+    public function onCloneItems(): array
+    {
+        $this->abortIfReadOnly();
+
+        $paths = Input::get('paths');
+
+        if (!is_array($paths)) {
+            throw new ApplicationException('Invalid input data');
+        }
+
+        $library = MediaLibrary::instance();
+
+        $itemsToClone = [];
+        foreach ($paths as $pathInfo) {
+            $path = array_get($pathInfo, 'path');
+            $type = array_get($pathInfo, 'type');
+
+            if (!$path || !$type) {
+                throw new ApplicationException('Invalid input data');
+            }
+
+            if ($type === MediaLibraryItem::TYPE_FILE) {
+                /*
+                 * Add to bulk collection
+                 */
+                $itemsToClone[] = $path;
+            } elseif ($type === MediaLibraryItem::TYPE_FOLDER) {
+                /*
+                 * Clone single folder
+                 */
+                $library->cloneFolder($path);
+
+                /**
+                 * @event media.folder.clone
+                 * Called after a folder is cloned
+                 *
+                 * Example usage:
+                 *
+                 *     Event::listen('media.folder.clone', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $path) {
+                 *         \Log::info($path . " was cloned");
+                 *     });
+                 *
+                 * Or
+                 *
+                 *     $mediaWidget->bindEvent('folder.clone', function ((string) $path) {
+                 *         \Log::info($path . " was cloned");
+                 *     });
+                 *
+                 */
+                $this->fireSystemEvent('media.folder.delete', [$path]);
+            }
+        }
+
+        if (count($itemsToClone) > 0) {
+            /*
+             * Clone collection of files
+             */
+            $library->cloneFiles($itemsToClone);
+
+            /*
+             * Extensibility
+             */
+            foreach ($itemsToClone as $path) {
+                /**
+                 * @event media.file.clone
+                 * Called after a file is cloned
+                 *
+                 * Example usage:
+                 *
+                 *     Event::listen('media.file.clone', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $path) {
+                 *         \Log::info($path . " was cloned");
+                 *     });
+                 *
+                 * Or
+                 *
+                 *     $mediaWidget->bindEvent('file.clone', function ((string) $path) {
+                 *         \Log::info($path . " was cloned");
+                 *     });
+                 *
+                 */
+                $this->fireSystemEvent('media.file.clone', [$path]);
+            }
+        }
+
+        $library->resetCache();
+        $this->prepareVars();
+
+        return [
+            '#' . $this->getId('item-list') => $this->makePartial('item-list')
+        ];
+    }
+
+
+    /**
      * Render the move popup with a list of folders to move the selected items to excluding the provided paths in the request ("exclude")
      *
      * @throws ApplicationException If the exclude input data is not an array

@@ -3,6 +3,8 @@
     class="layout"
     data-alias="<?= $this->alias ?>"
     data-upload-handler="<?= $this->getEventHandler('onUpload') ?>"
+    data-clone-empty="<?= e(trans('backend::lang.media.clone_empty')) ?>"
+    data-clone-multiple-confirm="<?= e(trans('backend::lang.media.clone_multiple_confirm')) ?>"
     data-delete-empty="<?= e(trans('backend::lang.media.delete_empty')) ?>"
     data-delete-confirm="<?= e(trans('backend::lang.media.delete_confirm')) ?>"
     data-move-empty="<?= e(trans('backend::lang.media.move_empty')) ?>"

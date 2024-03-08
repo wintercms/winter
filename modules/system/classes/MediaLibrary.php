@@ -207,6 +207,70 @@ class MediaLibrary
     }
 
     /**
+     * Clones a file from the Library.
+     * @param array $paths A list of file paths relative to the Library root to clone.
+     */
+    public function cloneFiles($paths)
+    {
+        $disk = $this->getStorageDisk();
+
+        $getDuplicateFileName = function ($path) use ($disk) {
+            $pathInfos = pathinfo($path);
+            $sameFiles = array_filter(
+                $disk->files($pathInfos['dirname']),
+                function ($file) use ($pathInfos) {
+                    return preg_match('/'. $pathInfos['filename'] .'-(\d*)\.'. $pathInfos['extension'] .'$/U', $file);
+                }
+            );
+            $newIndex = count($sameFiles) + 1;
+
+            return $pathInfos['dirname'] .'/'. $pathInfos['filename'] .'-' . $newIndex . '.' . $pathInfos['extension'];
+        };
+
+        $duplicateFiles = function ($paths) use ($disk, $getDuplicateFileName) {
+            foreach ($paths as $path) {
+                $path = self::validatePath($path);
+                $fullSrcPath = $this->getMediaPath($path);
+                $fullDestPath = $getDuplicateFileName($fullSrcPath);
+
+                if (!$disk->copy($fullSrcPath, $fullDestPath)) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        return $duplicateFiles($paths);
+    }
+
+    /**
+     * Clones a folder from the Library.
+     * @param array $path Specifies the folder path relative to the Library root.
+     */
+    public function cloneFolder($path)
+    {
+        $originalPath = self::validatePath($path);
+        $disk = $this->getStorageDisk();
+
+        $getDuplicateFolderName = function ($path) use ($disk) {
+            $sameFolders = array_filter(
+                $disk->directories(dirname($this->getMediaPath($path))),
+                function ($folder) use ($path) {
+                    return preg_match('/'. basename($path) .'-(\d*)$/U', $folder);
+                }
+            );
+            $newIndex = count($sameFolders) + 1;
+
+            return dirname($path) .'/'. basename($path) .'-' . $newIndex;
+        };
+
+        $newPath = $getDuplicateFolderName($originalPath);
+
+        return $this->copyFolder($originalPath, $newPath);
+    }
+
+    /**
      * Deletes a file from the Library.
      * @param array $paths A list of file paths relative to the Library root to delete.
      */
