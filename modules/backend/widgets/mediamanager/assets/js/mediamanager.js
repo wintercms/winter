@@ -150,6 +150,8 @@
         this.$el.on('mediarefresh', this.proxy(this.refresh))
         this.$el.on('shown.oc.popup', '[data-command="create-folder"]', this.proxy(this.onFolderPopupShown))
         this.$el.on('hidden.oc.popup', '[data-command="create-folder"]', this.proxy(this.onFolderPopupHidden))
+        this.$el.on('shown.oc.popup', '[data-command="clone"]', this.proxy(this.onClonePopupShown))
+        this.$el.on('hidden.oc.popup', '[data-command="clone"]', this.proxy(this.onClonePopupHidden))
         this.$el.on('shown.oc.popup', '[data-command="move"]', this.proxy(this.onMovePopupShown))
         this.$el.on('hidden.oc.popup', '[data-command="move"]', this.proxy(this.onMovePopupHidden))
         this.$el.on('keydown', this.proxy(this.onKeyDown))
@@ -170,6 +172,8 @@
         this.$el.off('keyup', '[data-control="search"]', this.proxy(this.onSearchChanged))
         this.$el.off('shown.oc.popup', '[data-command="create-folder"]', this.proxy(this.onFolderPopupShown))
         this.$el.off('hidden.oc.popup', '[data-command="create-folder"]', this.proxy(this.onFolderPopupHidden))
+        this.$el.off('shown.oc.popup', '[data-command="clone"]', this.proxy(this.onClonePopupShown))
+        this.$el.off('hidden.oc.popup', '[data-command="clone"]', this.proxy(this.onClonePopupHidden))
         this.$el.off('shown.oc.popup', '[data-command="move"]', this.proxy(this.onMovePopupShown))
         this.$el.off('hidden.oc.popup', '[data-command="move"]', this.proxy(this.onMovePopupHidden))
         this.$el.off('keydown', this.proxy(this.onKeyDown))
@@ -1010,9 +1014,15 @@
         if (items.length > 1) {
             $.wn.confirm(this.options.cloneMultipleConfirm, this.proxy(this.cloneMultipleConfirmation))
         } else {
+            var data = {
+                // path: this.$el.find('[data-type="current-folder"]').val()
+                path: items[0].getAttribute('data-path'),
+                type: items[0].getAttribute('data-item-type')
+            }
+
             $(ev.target).popup({
                 handler: this.options.alias+'::onLoadClonePopup',
-                // extraData: data,
+                extraData: data,
                 zIndex: 1200 // Media Manager can be opened in a popup, so this new popup should have a higher z-index
             })
         }
@@ -1046,6 +1056,39 @@
         }).always(function () {
             $.wn.stripeLoadIndicator.hide()
         }).done(this.proxy(this.afterNavigate))
+    }
+
+    MediaManager.prototype.onClonePopupShown = function (ev, button, popup) {
+        $(popup).on('submit.media', 'form', this.proxy(this.onCloneItemSubmit))
+    }
+
+    MediaManager.prototype.onCloneItemSubmit = function (ev) {
+        var item = this.$el.get(0).querySelector('[data-type="media-item"].selected'),
+            data = {
+                newName: $(ev.target).find('input[name=newName]').val(),
+                originalPath: $(ev.target).find('input[name=originalPath]').val(),
+                type: $(ev.target).find('input[name=type]').val()
+            }
+
+        $.wn.stripeLoadIndicator.show()
+        this.$form.request(this.options.alias + '::onCloneItem', {
+            data: data
+        }).always(function () {
+            $.wn.stripeLoadIndicator.hide()
+        }).done(this.proxy(this.itemCloned))
+
+        ev.preventDefault()
+        return false
+    }
+
+    MediaManager.prototype.onClonePopupHidden = function (ev, button, popup) {
+        $(popup).off('.media', 'form')
+    }
+
+    MediaManager.prototype.itemCloned = function () {
+        this.$el.find('button[data-command="clone"]').popup('hide')
+
+        this.afterNavigate()
     }
 
     MediaManager.prototype.moveItems = function(ev) {

@@ -207,70 +207,6 @@ class MediaLibrary
     }
 
     /**
-     * Clones a file from the Library.
-     * @param array $paths A list of file paths relative to the Library root to clone.
-     */
-    public function cloneFiles($paths)
-    {
-        $disk = $this->getStorageDisk();
-
-        $getDuplicateFileName = function ($path) use ($disk) {
-            $pathInfos = pathinfo($path);
-            $sameFiles = array_filter(
-                $disk->files($pathInfos['dirname']),
-                function ($file) use ($pathInfos) {
-                    return preg_match('/'. $pathInfos['filename'] .'-(\d*)\.'. $pathInfos['extension'] .'$/U', $file);
-                }
-            );
-            $newIndex = count($sameFiles) + 1;
-
-            return $pathInfos['dirname'] .'/'. $pathInfos['filename'] .'-' . $newIndex . '.' . $pathInfos['extension'];
-        };
-
-        $duplicateFiles = function ($paths) use ($disk, $getDuplicateFileName) {
-            foreach ($paths as $path) {
-                $path = self::validatePath($path);
-                $fullSrcPath = $this->getMediaPath($path);
-                $fullDestPath = $getDuplicateFileName($fullSrcPath);
-
-                if (!$disk->copy($fullSrcPath, $fullDestPath)) {
-                    return false;
-                }
-            }
-
-            return true;
-        };
-
-        return $duplicateFiles($paths);
-    }
-
-    /**
-     * Clones a folder from the Library.
-     * @param array $path Specifies the folder path relative to the Library root.
-     */
-    public function cloneFolder($path)
-    {
-        $originalPath = self::validatePath($path);
-        $disk = $this->getStorageDisk();
-
-        $getDuplicateFolderName = function ($path) use ($disk) {
-            $sameFolders = array_filter(
-                $disk->directories(dirname($this->getMediaPath($path))),
-                function ($folder) use ($path) {
-                    return preg_match('/'. basename($path) .'-(\d*)$/U', $folder);
-                }
-            );
-            $newIndex = count($sameFolders) + 1;
-
-            return dirname($path) .'/'. basename($path) .'-' . $newIndex;
-        };
-
-        $newPath = $getDuplicateFolderName($originalPath);
-
-        return $this->copyFolder($originalPath, $newPath);
-    }
-
-    /**
      * Deletes a file from the Library.
      * @param array $paths A list of file paths relative to the Library root to delete.
      */
@@ -396,6 +332,68 @@ class MediaLibrary
         $path = self::validatePath($path);
         $fullPath = $this->getMediaPath($path);
         return $this->getStorageDisk()->put($fullPath, $contents);
+    }
+
+    /**
+     * Clones files from the Library.
+     *
+     * @param array $paths A list of file paths relative to the Library root to clone.
+     */
+    public function cloneFiles($paths)
+    {
+        $duplicateFiles = function ($paths) {
+            foreach ($paths as $path) {
+                $path = self::validatePath($path);
+                // $fullSrcPath = $this->getMediaPath($path);
+                $destPath = dirname($path) .'/'. $this->generateIncrementedFileName($path);
+
+                if (!$this->copyFile($path, $destPath)) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        return $duplicateFiles($paths);
+    }
+
+    /**
+     * Clones a folder from the Library.
+     * @param array $path Specifies the folder path relative to the Library root.
+     */
+    public function cloneFolder($path)
+    {
+        $originalPath = self::validatePath($path);
+        $newPath = dirname($path) .'/'. $this->generateIncrementedFolderName($originalPath);
+
+        return $this->copyFolder($originalPath, $newPath);
+    }
+
+    /**
+     * Copy a file to another location.
+     * @param string $oldPath Specifies the original path of the file.
+     * @param string $newPath Specifies the new path of the file.
+     * @return boolean
+     */
+    public function copyFile($oldPath, $newPath, $isRename = false)
+    {
+        $oldPath = self::validatePath($oldPath);
+        $fullOldPath = $this->getMediaPath($oldPath);
+
+        $newPath = self::validatePath($newPath);
+        $fullNewPath = $this->getMediaPath($newPath);
+
+        // If the file extension is changed to SVG, ensure that it has been sanitized
+        $oldExt = pathinfo($oldPath, PATHINFO_EXTENSION);
+        $newExt = pathinfo($newPath, PATHINFO_EXTENSION);
+        if ($oldExt !== $newExt && strtolower($newExt) === 'svg') {
+            $contents = $this->getStorageDisk()->get($fullOldPath);
+            $contents = Svg::sanitize($contents);
+            return $this->getStorageDisk()->put($fullNewPath, $contents);
+        }
+
+        return $this->getStorageDisk()->copy($fullOldPath, $fullNewPath);
     }
 
     /**
@@ -897,5 +895,46 @@ class MediaLibrary
         }
 
         return $tmpPath;
+    }
+
+    /**
+     * Generates a incremental file name based
+     * on the existing files in the same folder.
+     *
+     * @param string $path Specifies a file path to check.
+     * @return string The generated file name.
+     */
+    public function generateIncrementedFileName($path): string
+    {
+        $pathInfos = pathinfo($path);
+        $sameFiles = array_filter(
+            $this->getStorageDisk()->files($pathInfos['dirname']),
+            function ($file) use ($pathInfos) {
+                return preg_match('/'. $pathInfos['filename'] .'-(\d*)\.'. $pathInfos['extension'] .'$/U', $file);
+            }
+        );
+        $newIndex = count($sameFiles) + 1;
+
+        return $pathInfos['filename'] .'-' . $newIndex . '.' . $pathInfos['extension'];
+    }
+
+    /**
+     * Generates a incremental folder name based
+     * on the existing folders in the same folder.
+     *
+     * @param string $path Specifies a folder path to check.
+     * @return string The generated folder name.
+     */
+    public function generateIncrementedFolderName($path)
+    {
+        $sameFolders = array_filter(
+            $this->getStorageDisk()->directories(dirname($this->getMediaPath($path))),
+            function ($folder) use ($path) {
+                return preg_match('/'. basename($path) .'-(\d*)$/U', $folder);
+            }
+        );
+        $newIndex = count($sameFolders) + 1;
+
+        return basename($path) .'-' . $newIndex;
     }
 }

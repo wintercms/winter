@@ -64,6 +64,8 @@ this.$el.on('input','[data-control="search"]',this.proxy(this.onSearchChanged))
 this.$el.on('mediarefresh',this.proxy(this.refresh))
 this.$el.on('shown.oc.popup','[data-command="create-folder"]',this.proxy(this.onFolderPopupShown))
 this.$el.on('hidden.oc.popup','[data-command="create-folder"]',this.proxy(this.onFolderPopupHidden))
+this.$el.on('shown.oc.popup','[data-command="clone"]',this.proxy(this.onClonePopupShown))
+this.$el.on('hidden.oc.popup','[data-command="clone"]',this.proxy(this.onClonePopupHidden))
 this.$el.on('shown.oc.popup','[data-command="move"]',this.proxy(this.onMovePopupShown))
 this.$el.on('hidden.oc.popup','[data-command="move"]',this.proxy(this.onMovePopupHidden))
 this.$el.on('keydown',this.proxy(this.onKeyDown))
@@ -77,6 +79,8 @@ this.$el.off('change','[data-control="sorting"]',this.proxy(this.onSortingChange
 this.$el.off('keyup','[data-control="search"]',this.proxy(this.onSearchChanged))
 this.$el.off('shown.oc.popup','[data-command="create-folder"]',this.proxy(this.onFolderPopupShown))
 this.$el.off('hidden.oc.popup','[data-command="create-folder"]',this.proxy(this.onFolderPopupHidden))
+this.$el.off('shown.oc.popup','[data-command="clone"]',this.proxy(this.onClonePopupShown))
+this.$el.off('hidden.oc.popup','[data-command="clone"]',this.proxy(this.onClonePopupHidden))
 this.$el.off('shown.oc.popup','[data-command="move"]',this.proxy(this.onMovePopupShown))
 this.$el.off('hidden.oc.popup','[data-command="move"]',this.proxy(this.onMovePopupHidden))
 this.$el.off('keydown',this.proxy(this.onKeyDown))
@@ -286,12 +290,22 @@ MediaManager.prototype.folderCreated=function(){this.$el.find('button[data-comma
 this.afterNavigate()}
 MediaManager.prototype.cloneItems=function(ev){var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
 if(!items.length){$.wn.alert(this.options.cloneEmpty)
-return}if(items.length>1){$.wn.confirm(this.options.cloneMultipleConfirm,this.proxy(this.cloneMultipleConfirmation))}else{$(ev.target).popup({handler:this.options.alias+'::onLoadClonePopup',zIndex:1200})}}
+return}if(items.length>1){$.wn.confirm(this.options.cloneMultipleConfirm,this.proxy(this.cloneMultipleConfirmation))}else{var data={path:items[0].getAttribute('data-path'),type:items[0].getAttribute('data-item-type')}
+$(ev.target).popup({handler:this.options.alias+'::onLoadClonePopup',extraData:data,zIndex:1200})}}
 MediaManager.prototype.cloneMultipleConfirmation=function(confirmed){if(!confirmed)return
 var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected'),paths=[]
 for(var i=0,len=items.length;i<len;i++){if(items[i].hasAttribute('data-root')){continue;}paths.push({'path':items[i].getAttribute('data-path'),'type':items[i].getAttribute('data-item-type')})}var data={paths:paths}
 $.wn.stripeLoadIndicator.show()
 this.$form.request(this.options.alias+'::onCloneItems',{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(this.proxy(this.afterNavigate))}
+MediaManager.prototype.onClonePopupShown=function(ev,button,popup){$(popup).on('submit.media','form',this.proxy(this.onCloneItemSubmit))}
+MediaManager.prototype.onCloneItemSubmit=function(ev){var item=this.$el.get(0).querySelector('[data-type="media-item"].selected'),data={newName:$(ev.target).find('input[name=newName]').val(),originalPath:$(ev.target).find('input[name=originalPath]').val(),type:$(ev.target).find('input[name=type]').val()}
+$.wn.stripeLoadIndicator.show()
+this.$form.request(this.options.alias+'::onCloneItem',{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(this.proxy(this.itemCloned))
+ev.preventDefault()
+return false}
+MediaManager.prototype.onClonePopupHidden=function(ev,button,popup){$(popup).off('.media','form')}
+MediaManager.prototype.itemCloned=function(){this.$el.find('button[data-command="clone"]').popup('hide')
+this.afterNavigate()}
 MediaManager.prototype.moveItems=function(ev){var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
 if(!items.length){$.wn.alert(this.options.moveEmpty)
 return}var data={exclude:[],path:this.$el.find('[data-type="current-folder"]').val()}
@@ -372,7 +386,7 @@ break;case'ArrowLeft':case'ArrowUp':this.selectRelative(false,ev.shiftKey)
 eventHandled=true
 break;}if(eventHandled){ev.preventDefault()
 ev.stopPropagation()}}
-MediaManager.DEFAULTS={url:window.location,uploadHandler:null,alias:'',cloneEmpty:'Please select an item to clone.',cloneMultipleConfirm:'You have selected multiple iems, they are going to be cloned with generated names. Are you sure?',deleteEmpty:'Please select files to delete.',deleteConfirm:'Delete the selected file(s)?',moveEmpty:'Please select files to move.',selectSingleImage:'Please select a single image.',selectionNotImage:'The selected item is not an image.',bottomToolbar:false,cropAndInsertButton:false}
+MediaManager.DEFAULTS={url:window.location,uploadHandler:null,alias:'',cloneEmpty:'Please select an item to clone.',cloneMultipleConfirm:'Multiple items selected, they will be cloned with generated names. Are you sure?',deleteEmpty:'Please select files to delete.',deleteConfirm:'Delete the selected file(s)?',moveEmpty:'Please select files to move.',selectSingleImage:'Please select a single image.',selectionNotImage:'The selected item is not an image.',bottomToolbar:false,cropAndInsertButton:false}
 var old=$.fn.mediaManager
 $.fn.mediaManager=function(option){var args=Array.prototype.slice.call(arguments,1),result=undefined
 this.each(function(){var $this=$(this)
