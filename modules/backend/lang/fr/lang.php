@@ -630,7 +630,7 @@ return [
         'clone_empty' => 'Veuillez sélectionner les éléments à cloner.',
         'clone_multiple_confirm' => 'Plusieurs éléments sélectionnés, ils seront clonés avec des noms générés. Êtes-vous sûr ?',
         'clone_popup_title' => 'Cloner un fichier ou dossier',
-        'clone_new_name' => 'Nouveau nom (suggestion)',
+        'clone_new_name' => 'Nouveau nom',
         'clone_button' => 'Cloner',
         'delete_empty' => 'Veuillez sélectionner les éléments à supprimer.',
         'delete_confirm' => 'Confirmer la suppression de ces éléments ?',

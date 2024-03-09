@@ -633,7 +633,7 @@ return [
         'clone_empty' => 'Please select items to clone.',
         'clone_multiple_confirm' => 'Multiple items selected, they will be cloned with generated names. Are you sure?',
         'clone_popup_title' => 'Clone file or folder',
-        'clone_new_name' => 'New name (suggested)',
+        'clone_new_name' => 'New name',
         'clone_button' => 'Clone',
         'delete_empty' => 'Please select items to delete.',
         'delete_confirm' => 'Delete the selected item(s)?',

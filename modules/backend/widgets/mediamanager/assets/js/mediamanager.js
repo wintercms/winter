@@ -1015,7 +1015,6 @@
             $.wn.confirm(this.options.cloneMultipleConfirm, this.proxy(this.cloneMultipleConfirmation))
         } else {
             var data = {
-                // path: this.$el.find('[data-type="current-folder"]').val()
                 path: items[0].getAttribute('data-path'),
                 type: items[0].getAttribute('data-item-type')
             }
