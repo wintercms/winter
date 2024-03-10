@@ -15,6 +15,7 @@
         //
 
         this.init()
+        this.widgets = Snowboard['backend.ui.widgetHandler']()
     }
 
     CmsPage.prototype = Object.create(BaseProto)
@@ -58,6 +59,9 @@
         $document.on('hiding.oc.inspector', '[data-inspectable]', this.proxy(this.onInspectorHiding))
         $document.on('click', '#cms-master-tabs > div.tab-content > .tab-pane.active .control-componentlist a.remove', this.proxy(this.onComponentRemove))
         $document.on('click', '#cms-component-list [data-component]', this.proxy(this.onComponentClick))
+
+        // Watch for PHP editors
+        window.Snowboard.on('backend.formwidget.codeeditor.create', this.proxy(this.onCodeEditorCreate));
     }
 
     // EVENT HANDLERS
@@ -259,7 +263,26 @@
             self.updateModifiedCounter()
         })
 
-        this.addTokenExpanderToEditor(data.pane, $form)
+        // this.addTokenExpanderToEditor(data.pane, $form)
+    }
+
+    CmsPage.prototype.onCodeEditorCreate = function (widget, editor) {
+        if (widget.config.get('language') !== 'php') {
+            return;
+        }
+
+        // If no PHP tag is available, add it and hide it from the editor. Otherwise, hide the PHP tag.
+        let match = widget.find(/<\?php\s*/, false);
+        if (!match) {
+            widget.setValue('<?php\n' + widget.getValue());
+            match = widget.find(/<\?php\s*/, false);
+
+            if (!match) {
+                return;
+            }
+        }
+
+        widget.fromLine(2);
     }
 
     CmsPage.prototype.onAfterAllTabsClosed = function(ev) {
@@ -437,11 +460,9 @@
         var editor = $('[data-control=codeeditor]', pane)
         if (editor.length) {
             var alias = $('input[name="component_aliases[]"]', component).val().replace(/^@/, ''),
-                codeEditor = editor.codeEditor('getEditorObject')
+                codeEditor = this.widgets.getWidget(editor.get(0))
 
-            codeEditor.replace('', {
-                needle: "{% component '" + alias + "' %}"
-            })
+            codeEditor.replace(new RegExp('\\{% +component +\'' + alias + '\'.*?%\\}'), '');
         }
 
         component.remove()
@@ -544,7 +565,7 @@
             extension = 'txt',
             mode = 'plain_text',
             modes = $.wn.codeEditorExtensionModes,
-            editor = $('[data-control=codeeditor]', pane)
+            editor = pane.querySelector('[data-control="codeeditor"]').getWidget()
 
         if (parts.length >= 2)
             extension = parts.pop().toLowerCase()

@@ -19,11 +19,17 @@ tabs:
             type: dropdown
             span: left
 
-        editor_preview:
-            type: partial
+        _editor_preview:
+            type: codeeditor
             label: backend::lang.editor.preview
             tab: backend::lang.backend_preferences.code_editor
-            path: field_editor_preview
+            size: giant
+
+        _editor_preview_lang:
+            type: partial
+            label: false
+            tab: backend::lang.backend_preferences.code_editor
+            path: field_editor_preview_lang
 
         editor_theme:
             label: backend::lang.editor.theme
@@ -69,28 +75,26 @@ tabs:
                 7: 7
                 8: 8
 
-        editor_code_folding:
-            label: backend::lang.editor.code_folding
-            tab: backend::lang.backend_preferences.code_editor
-            type: dropdown
-            span: auto
-            options:
-                manual: backend::lang.editor.mode_off
-                markbegin: backend::lang.editor.code_folding_begin
-                markbeginend: backend::lang.editor.code_folding_begin_end
-
-        editor_autocompletion:
-            label: backend::lang.editor.autocompletion
-            tab: backend::lang.backend_preferences.code_editor
-            type: dropdown
-            span: auto
-            options:
-                manual: backend::lang.editor.mode_off
-                basic: backend::lang.editor.basic_autocompletion
-                live: backend::lang.editor.live_autocompletion
-
         editor_show_gutter:
             label: backend::lang.editor.show_gutter
+            tab: backend::lang.backend_preferences.code_editor
+            type: checkbox
+            span: auto
+
+        editor_show_minimap:
+            label: backend::lang.editor.show_minimap
+            tab: backend::lang.backend_preferences.code_editor
+            type: checkbox
+            span: auto
+
+        editor_bracket_colors:
+            label: backend::lang.editor.bracket_colors
+            tab: backend::lang.backend_preferences.code_editor
+            type: checkbox
+            span: auto
+
+        editor_enable_folding:
+            label: backend::lang.editor.enable_folding
             tab: backend::lang.backend_preferences.code_editor
             type: checkbox
             span: auto
@@ -119,6 +123,12 @@ tabs:
             type: checkbox
             span: auto
 
+        editor_show_colors:
+            label: backend::lang.editor.show_colors
+            tab: backend::lang.backend_preferences.code_editor
+            type: checkbox
+            span: auto
+
         editor_show_print_margin:
             label: backend::lang.editor.show_print_margin
             tab: backend::lang.backend_preferences.code_editor
@@ -127,12 +137,6 @@ tabs:
 
         editor_auto_closing:
             label: backend::lang.editor.auto_closing
-            tab: backend::lang.backend_preferences.code_editor
-            type: checkbox
-            span: auto
-
-        editor_enable_snippets:
-            label: backend::lang.editor.enable_snippets
             tab: backend::lang.backend_preferences.code_editor
             type: checkbox
             span: auto

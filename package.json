@@ -5,7 +5,9 @@
     "workspaces": {
         "packages": [
             "modules/backend",
+            "modules/backend/formwidgets/codeeditor/assets",
             "modules/system"
-        ]
+        ],
+        "ignoredPackages": []
     }
 }

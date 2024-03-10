@@ -37,6 +37,7 @@ export default class Handler extends Snowboard.Singleton {
         if (!window.jQuery) {
             return;
         }
+        delegate('render');
 
         // Add global event for rendering in Snowboard
         delegate('render');
@@ -46,6 +47,11 @@ export default class Handler extends Snowboard.Singleton {
 
         // Add "render" event for backwards compatibility
         window.jQuery(document).trigger('render');
+
+        // Add global event for rendering in Snowboard
+        document.addEventListener('$render', () => {
+            this.snowboard.globalEvent('render');
+        });
     }
 
     /**

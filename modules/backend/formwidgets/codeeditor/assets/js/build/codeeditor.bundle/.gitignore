@@ -1,0 +1,2 @@
+# Ignore dev chunks
+node_modules_*.js

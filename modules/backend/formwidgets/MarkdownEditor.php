@@ -89,9 +89,9 @@ class MarkdownEditor extends FormWidgetBase
      */
     protected function loadAssets()
     {
+        $this->addJs('/modules/backend/formwidgets/codeeditor/assets/js/build/codeeditor.bundle.js', 'core');
         $this->addCss('css/markdowneditor.css', 'core');
-        $this->addJs('js/markdowneditor.js', 'core');
-        $this->addJs('/modules/backend/formwidgets/codeeditor/assets/js/build-min.js', 'core');
+        $this->addJs('js/dist/markdowneditor.js', 'core');
     }
 
     /**
