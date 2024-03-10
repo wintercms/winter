@@ -37,7 +37,11 @@
                 afterMove: this.proxy(this.onAfterMove)
             }
 
-        this.$el.find('> ol').sortable($.extend(sortableOptions, this.options))
+        if (!this.options.table) {
+            this.$el.find('> ol').sortable($.extend(sortableOptions, this.options))
+        } else {
+            this.$el.sortable($.extend(sortableOptions, this.options))
+        }
 
         if (!this.options.nested)
             this.$el.find('> ol ol').sortable($.extend(sortableOptions, this.options))
@@ -53,7 +57,11 @@
     TreeListWidget.prototype.unbind = function() {
         this.$el.off('dispose-control', this.proxy(this.dispose))
 
-        this.$el.find('> ol').sortable('destroy')
+        if (!this.options.table) {
+            this.$el.find('> ol').sortable('destroy')
+        } else {
+            this.$el.sortable('destroy')
+        }
 
         if (!this.options.nested) {
             this.$el.find('> ol ol').sortable('destroy')
@@ -67,7 +75,8 @@
 
     TreeListWidget.DEFAULTS = {
         handle: null,
-        nested: true
+        nested: true,
+        table: false
     }
 
     // TREELIST EVENT HANDLERS
