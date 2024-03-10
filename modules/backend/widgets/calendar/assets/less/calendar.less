@@ -1,0 +1,61 @@
+@calendar_default_color: #0594CD;
+
+.calendar-container {
+    margin:10px;
+    padding: 0;
+    font-size: 15px;
+
+    .loading-indicator{
+        background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    .calendar-control{
+        max-width: 1000px;
+        margin: 0 auto;
+
+        button {
+            color:@calendar_default_color;
+            background-color: transparent;
+            background-image: none;
+            border-color: @calendar_default_color
+        }
+
+        .fc-event {
+            background-color: @calendar_default_color;
+        }
+
+    }
+
+    .calendar-tooltip {
+        position: absolute;
+        z-index: 9999;
+        color: black;
+        width: 150px;
+        border-radius: 3px;
+        box-shadow: 0 0 2px rgba(0,0,0,0.5);
+        text-align: center;
+        &[x-placement^="top"] {
+            margin-bottom: 5px;
+            .tooltip-arrow {
+                border-width: 5px 5px 0 5px;
+                border-left-color: transparent;
+                border-right-color: transparent;
+                border-bottom-color: transparent;
+                bottom: -5px;
+                left: calc(50% - 5px);
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+        }
+        .tooltip-arrow {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            position: absolute;
+            margin: 5px;
+            border-color: #34495e;
+        }
+    }
+}
+
+
