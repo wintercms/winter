@@ -3,9 +3,7 @@
 use File;
 use Event;
 use StdClass;
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputArgument;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to implement a "public" folder.
@@ -19,14 +17,31 @@ use Symfony\Component\Console\Input\InputArgument;
 class WinterMirror extends Command
 {
     /**
-     * The console command name.
+     * @var string|null The default command name for lazy loading.
      */
-    protected $name = 'winter:mirror';
+    protected static $defaultName = 'winter:mirror';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'winter:mirror
+        {destination : The destination path relative to the current directory. Eg: public/}
+        {--r|relative : Create symlinks relative to the public directory.}
+        {--c|copy : Copies files instead of creating symlinks.}
+        {--i|ignore=* : Regex patterns of paths to ignore.}
+    ';
 
     /**
      * The console command description.
      */
     protected $description = 'Generates a mirrored public folder using symbolic links.';
+
+    /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'october:mirror',
+    ];
 
     /**
      * @var array Files that should be mirrored
@@ -87,18 +102,7 @@ class WinterMirror extends Command
     /**
      * @var string|null Local cache of the mirror destination path
      */
-    protected $destinationPath;
-
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
-
-        // Register aliases for backwards compatibility with October
-        $this->setAliases(['october:mirror']);
-    }
+    protected string $destinationPath;
 
     /**
      * Execute the console command.
@@ -139,13 +143,16 @@ class WinterMirror extends Command
             $this->mirrorWildcard($wildcard);
         }
 
+        $index = $this->getDestinationPath() . '/index.php';
+        if ($this->option('copy') && File::isFile($index)) {
+            $this->updateIndexPaths($index);
+        }
+
         $this->output->writeln('<info>Mirror complete!</info>');
     }
 
-    protected function mirrorFile($file)
+    protected function mirrorFile(string $file): bool
     {
-        $this->output->writeln(sprintf('<info> - Mirroring: %s</info>', $file));
-
         $src = base_path().'/'.$file;
 
         $dest = $this->getDestinationPath().'/'.$file;
@@ -154,18 +161,16 @@ class WinterMirror extends Command
             return false;
         }
 
-        $this->mirror($src, $dest);
+        return $this->mirror($src, $dest);
     }
 
-    protected function mirrorDirectory($directory)
+    protected function mirrorDirectory(string $directory): bool
     {
-        $this->output->writeln(sprintf('<info> - Mirroring: %s</info>', $directory));
-
         $src = base_path().'/'.$directory;
 
         $dest = $this->getDestinationPath().'/'.$directory;
 
-        if (!File::isDirectory($src) || File::isDirectory($dest)) {
+        if (!File::isDirectory($src) || (File::isDirectory($dest) && !$this->option('copy'))) {
             return false;
         }
 
@@ -173,10 +178,10 @@ class WinterMirror extends Command
             File::makeDirectory(dirname($dest), 0755, true);
         }
 
-        $this->mirror($src, $dest);
+        return $this->mirror($src, $dest);
     }
 
-    protected function mirrorWildcard($wildcard)
+    protected function mirrorWildcard(string $wildcard): bool
     {
         if (strpos($wildcard, '*') === false) {
             return $this->mirrorDirectory($wildcard);
@@ -193,9 +198,11 @@ class WinterMirror extends Command
         foreach (File::directories($startDir) as $directory) {
             $this->mirrorWildcard($start.basename($directory).$end);
         }
+
+        return true;
     }
 
-    protected function mirror($src, $dest)
+    protected function mirror(string $src, string $dest): bool
     {
         if ($this->option('relative')) {
             $src = $this->getRelativePath($dest, $src);
@@ -205,12 +212,59 @@ class WinterMirror extends Command
             }
         }
 
-        symlink($src, $dest);
+        foreach ($this->option('ignore') as $ignore) {
+            if (preg_match($ignore, $src)) {
+                $this->warn('ignoring: ' . $src);
+                return false;
+            }
+        }
+
+        if (!$this->option('copy')) {
+            File::link($src, $dest);
+            $this->info('Linked: ' . $dest);
+            return true;
+        }
+
+        if (File::isDirectory($src) && !File::isDirectory($dest)) {
+            File::makeDirectory($dest, 0755, true);
+        }
+
+        if (File::isFile($src)) {
+            if (!File::isDirectory(dirname($dest))) {
+                File::makeDirectory(dirname($dest), 0755, true);
+            }
+
+            File::copy($src, $dest);
+            $this->info('Copied: ' . $dest);
+            return true;
+        }
+
+        foreach (
+            $iterator = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(
+                    $src,
+                    \RecursiveDirectoryIterator::SKIP_DOTS
+                ),
+                \RecursiveIteratorIterator::SELF_FIRST
+            ) as $item
+        ) {
+            if ($item->isDir()) {
+                if (!File::isDirectory($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname())) {
+                    File::makeDirectory($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+                }
+                continue;
+            }
+            File::copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathname());
+        }
+
+        $this->info('Copied: ' . $dest);
+
+        return true;
     }
 
-    protected function getDestinationPath()
+    protected function getDestinationPath(): ?string
     {
-        if ($this->destinationPath !== null) {
+        if (isset($this->destinationPath)) {
             return $this->destinationPath;
         }
 
@@ -235,7 +289,7 @@ class WinterMirror extends Command
         $from = str_replace('\\', '/', $from);
         $to = str_replace('\\', '/', $to);
 
-        $dir = explode('/', is_file($from) ? dirname($from) : rtrim($from, '/'));
+        $dir = explode('/', File::isFile($from) ? dirname($from) : rtrim($from, '/'));
         $file = explode('/', $to);
 
         while ($dir && $file && ($dir[0] == $file[0])) {
@@ -246,25 +300,34 @@ class WinterMirror extends Command
         return str_repeat('../', count($dir)) . implode('/', $file);
     }
 
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
+    protected function updateIndexPaths(string $index): void
     {
-        return [
-            ['destination', InputArgument::REQUIRED, 'The destination path relative to the current directory. Eg: public/'],
-        ];
-    }
+        $contents = File::get($index);
 
-    /**
-     * Get the console command options.
-     * @return array
-     */
-    protected function getOptions()
-    {
-        return [
-            ['relative', null, InputOption::VALUE_NONE, 'Create symlinks relative to the public directory.'],
-        ];
+        /**
+         * @event system.console.mirror.updateIndexPaths
+         * Enables extending the `php artisan winter:mirror` command
+         *
+         * You will have access to the new index path, and the contents of the file.
+         *
+         * Example usage:
+         *
+         *     Event::listen('system.console.mirror.updateIndexPaths', function ($indexPath, $contents) {
+         *          return str_replace('a', 'b', $contents);
+         *     });
+         *
+         */
+        $result = Event::fire('system.console.mirror.updateIndexPaths', [$index, $contents]);
+
+        if ($result) {
+            File::put($index, $result);
+            return;
+        }
+
+        File::put($index, preg_replace(
+            '/\/bootstrap\/(.*?).php\'/',
+            str_repeat('/..', count(explode('/', $this->getRelativePath(base_path(), dirname($index))))) . '$0',
+            $contents
+        ));
     }
 }
