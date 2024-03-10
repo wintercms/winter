@@ -41,7 +41,7 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
         <?php endforeach ?>
     </div>
 
-<?php elseif (!$readOnly && count($fieldOptions)): ?>
+<?php elseif (count($fieldOptions)): ?>
 
     <div class="field-checkboxlist <?= $isScrollable ? 'is-scrollable' : '' ?>">
         <?php if ($quickselectEnabled): ?>
@@ -89,6 +89,7 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
                         id="<?= $checkboxId ?>"
                         name="<?= $field->getName() ?>[]"
                         value="<?= e($value) ?>"
+                        <?= $readOnly ? 'disabled="disabled"' : '' ?>
                         <?= in_array($value, $checkedValues) ? 'checked="checked"' : '' ?>>
 
                     <label for="<?= $checkboxId ?>">
