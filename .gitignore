@@ -9,6 +9,7 @@ composer.lock
 .env.php
 selenium.php
 /bootstrap/compiled.php
+/storage/framework/packages.json
 .phpunit.result.cache
 
 # Hosting ignores

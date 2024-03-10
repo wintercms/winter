@@ -2,6 +2,7 @@
 
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
+use System\Classes\PluginManager;
 use System\Models\PluginVersion;
 use Winter\Storm\Console\Command;
 
@@ -34,24 +35,25 @@ class PluginList extends Command
      */
     public function handle()
     {
-        $allPlugins  = PluginVersion::all();
-        $pluginsCount = count($allPlugins);
+        $plugins = PluginManager::instance()->getAllPlugins();
+        $pluginVersions = PluginVersion::all()->keyBy('code');
 
-        if ($pluginsCount <= 0) {
+        if (count($plugins) <= 0) {
             $this->info('No plugin found');
             return;
         }
 
         $rows = [];
-        foreach ($allPlugins as $plugin) {
+        foreach ($plugins as $plugin) {
             $rows[] = [
-                $plugin->code,
-                $plugin->version,
-                (!$plugin->is_frozen) ? '<info>Yes</info>': '<fg=red>No</>',
-                (!$plugin->is_disabled) ? '<info>Yes</info>': '<fg=red>No</>',
+                $plugin->getPluginIdentifier(),
+                $plugin->package,
+                $plugin->getPluginVersion(),
+                (!$pluginVersions[$plugin->getPluginIdentifier()]->is_frozen) ? '<info>Yes</info>': '<fg=red>No</>',
+                (!$pluginVersions[$plugin->getPluginIdentifier()]->is_disabled) ? '<info>Yes</info>': '<fg=red>No</>',
             ];
         }
 
-        $this->table(['Plugin name', 'Version', 'Updates enabled', 'Plugin enabled'], $rows);
+        $this->table(['Plugin name', 'Composer Package', 'Version', 'Updates enabled', 'Plugin enabled'], $rows);
     }
 }
