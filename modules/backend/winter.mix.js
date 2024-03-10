@@ -38,6 +38,10 @@ mix
         './formwidgets/colorpicker/assets/js/dist/colorpicker.js',
     )
     .js(
+        './formwidgets/mediafinder/assets/js/src/MediaFinder.js',
+        './formwidgets/mediafinder/assets/js/dist/mediafinder.js',
+    )
+    .js(
         './formwidgets/iconpicker/assets/js/src/iconpicker.js',
         './formwidgets/iconpicker/assets/js/dist/iconpicker.js',
     )

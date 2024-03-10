@@ -120,7 +120,7 @@ class MediaFinder extends FormWidgetBase
      */
     protected function loadAssets()
     {
-        $this->addJs('js/mediafinder.js', 'core');
+        $this->addJs('js/dist/mediafinder.js', 'core');
         $this->addCss('css/mediafinder.css', 'core');
     }
 }

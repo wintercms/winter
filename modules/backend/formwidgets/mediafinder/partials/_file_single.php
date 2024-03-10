@@ -11,12 +11,12 @@
         <?php endif ?>
     "
     data-control="mediafinder"
-    data-mediafinder-mode="<?= $mode ?? 'all' ?>"
+    data-mode="<?= $mode ?>"
     <?= $field->getAttributes() ?>
 >
 
     <!-- Find Button -->
-    <button type="button" class="btn btn-default find-button">
+    <button type="button" class="btn btn-default find-button" data-find>
         <i class="icon-folder"></i>
     </button>
 
@@ -27,11 +27,11 @@
         </div>
         <div class="info">
             <h4 class="filename">
-                <span data-find-file-name><?= e(ltrim($value, '/')) ?></span>
+                <span data-file-name><?= e(ltrim($value, '/')) ?></span>
             </h4>
         </div>
         <div class="meta">
-            <a href="javascript:;" class="find-remove-button">
+            <a href="javascript:;" class="find-remove-button" data-remove>
                 <i class="icon-times"></i>
             </a>
         </div>
@@ -48,6 +48,6 @@
         name="<?= $field->getName() ?>"
         id="<?= $field->getId() ?>"
         value="<?= e($value) ?>"
-        data-find-value
+        data-value
         />
 </div>
