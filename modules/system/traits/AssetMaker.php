@@ -1,4 +1,6 @@
-<?php namespace System\Traits;
+<?php
+
+namespace System\Traits;
 
 use Url;
 use Html;
@@ -28,6 +30,11 @@ trait AssetMaker
     public $assetPath;
 
     /**
+     * Ensures "first-come, first-served" applies to assets of the same ordering.
+     */
+    protected int $orderFactor = 0;
+
+    /**
      * Disables the use, and subequent broadcast, of assets. This is useful
      * to call during an AJAX request to speed things up. This method works
      * by specifically targeting the hasAssetsDefined method.
@@ -48,29 +55,40 @@ trait AssetMaker
             $type = strtolower($type);
         }
         $result = null;
-        $reserved = ['build'];
+        $reserved = ['build', 'order', 'preload'];
 
         $this->removeDuplicates();
 
         if ($type == null || $type == 'css') {
-            foreach ($this->assets['css'] as $asset) {
-                /*
-                 * Prevent duplicates
-                 */
-                $attributes = Html::attributes(array_merge(
-                    [
-                        'rel'  => 'stylesheet',
+            foreach ($this->orderAssets($this->assets['css']) as $asset) {
+                if ($asset['attributes']['preload'] ?? false) {
+                    $preloadAttributes = Html::attributes([
+                        'rel' => 'preload',
+                        'as' => 'style',
                         'href' => $this->getAssetEntryBuildPath($asset)
-                    ],
-                    array_except($asset['attributes'], $reserved)
-                ));
+                    ]);
+                    $attributes = Html::attributes(array_merge(
+                        [
+                            'rel'  => 'stylesheet',
+                            'href' => $this->getAssetEntryBuildPath($asset)
+                        ],
+                    ));
+                    $result .= '<link' . $preloadAttributes . '>' . PHP_EOL . '<link' . $attributes . '>' . PHP_EOL;
+                } else {
+                    $attributes = Html::attributes(array_merge(
+                        [
+                            'rel'  => 'stylesheet',
+                            'href' => $this->getAssetEntryBuildPath($asset)
+                        ],
+                    ));
 
-                $result .= '<link' . $attributes . '>' . PHP_EOL;
+                    $result .= '<link' . $attributes . '>' . PHP_EOL;
+                }
             }
         }
 
         if ($type == null || $type == 'rss') {
-            foreach ($this->assets['rss'] as $asset) {
+            foreach ($this->orderAssets($this->assets['rss']) as $asset) {
                 $attributes = Html::attributes(array_merge(
                     [
                         'rel'   => 'alternate',
@@ -86,15 +104,29 @@ trait AssetMaker
         }
 
         if ($type == null || $type == 'js') {
-            foreach ($this->assets['js'] as $asset) {
-                $attributes = Html::attributes(array_merge(
-                    [
-                        'src' => $this->getAssetEntryBuildPath($asset)
-                    ],
-                    array_except($asset['attributes'], $reserved)
-                ));
+            foreach ($this->orderAssets($this->assets['js']) as $asset) {
+                if ($asset['attributes']['preload'] ?? false) {
+                    $preloadAttributes = Html::attributes([
+                        'rel' => 'preload',
+                        'as' => 'script',
+                        'href' => $this->getAssetEntryBuildPath($asset)
+                    ]);
+                    $attributes = Html::attributes(array_merge(
+                        [
+                            'src' => $this->getAssetEntryBuildPath($asset)
+                        ],
+                    ));
+                    $result .= '<link' . $preloadAttributes . '>' . PHP_EOL . '<script' . $attributes . '></script>' . PHP_EOL;
+                } else {
+                    $attributes = Html::attributes(array_merge(
+                        [
+                            'src' => $this->getAssetEntryBuildPath($asset)
+                        ],
+                        array_except($asset['attributes'], $reserved)
+                    ));
 
-                $result .= '<script' . $attributes . '></script>' . PHP_EOL;
+                    $result .= '<script' . $attributes . '></script>' . PHP_EOL;
+                }
             }
         }
 
@@ -237,6 +269,13 @@ trait AssetMaker
                 // Fire global event
                 (Event::fire('system.assets.beforeAddAsset', [&$type, &$path, &$attributes], true) !== false)
             ) {
+                $this->orderFactor++;
+
+                // Apply ordering
+                $attributes['order'] = (!isset($attributes['order']))
+                    ? 500 + ($this->orderFactor / 10000)
+                    : intval($attributes['order']) + ($this->orderFactor / 10000);
+
                 $this->assets[$type][] = ['path' => $path, 'attributes' => $attributes];
             }
         }
@@ -260,6 +299,9 @@ trait AssetMaker
 
     /**
      * Returns an array of all registered asset paths.
+     *
+     * Assets will be prioritized based on their defined ordering.
+     *
      * @return array
      */
     public function getAssetPaths()
@@ -269,7 +311,7 @@ trait AssetMaker
         $assets = [];
         foreach ($this->assets as $type => $collection) {
             $assets[$type] = [];
-            foreach ($collection as $asset) {
+            foreach ($this->orderAssets($collection) as $asset) {
                 $assets[$type][] = $this->getAssetEntryBuildPath($asset);
             }
         }
@@ -389,5 +431,25 @@ trait AssetMaker
             $relativePath = base_path($relativePath);
         }
         return $relativePath;
+    }
+
+    /**
+     * Prioritize assets based on the given order.
+     */
+    public function orderAssets(array $assets): array
+    {
+        // Copy assets array so that the stored asset array is not modified.
+        $sortedAssets = $assets;
+
+        array_multisort(
+            array_map(function ($item) {
+                return $item['attributes']['order'];
+            }, $sortedAssets),
+            SORT_NUMERIC,
+            SORT_ASC,
+            $sortedAssets
+        );
+
+        return $sortedAssets;
     }
 }
