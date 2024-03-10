@@ -7,6 +7,7 @@ use Log;
 use Exception;
 use Illuminate\Database\QueryException;
 use System\Classes\ModelBehavior;
+use Winter\Storm\Database\Model;
 
 /**
  * Settings model extension
@@ -81,7 +82,7 @@ class SettingsModel extends ModelBehavior
     /**
      * Create an instance of the settings model, intended as a static method
      */
-    public function instance()
+    public function instance(): Model
     {
         if (isset(self::$instances[$this->recordCode])) {
             return self::$instances[$this->recordCode];
@@ -89,6 +90,7 @@ class SettingsModel extends ModelBehavior
 
         if (!$item = $this->getSettingsRecord()) {
             $this->model->initSettingsData();
+            $this->afterModelFetch();
             $item = $this->model;
         }
 
@@ -174,11 +176,13 @@ class SettingsModel extends ModelBehavior
     /**
      * Set a single setting value, if allowed.
      */
-    public function setSettingsValue($key, $value)
+    public function setSettingsValue($key)
     {
         if ($this->isKeyAllowed($key)) {
             return;
         }
+
+        $value = $this->model->getAttribute($key);
 
         $this->fieldValues[$key] = $value;
     }
@@ -195,8 +199,7 @@ class SettingsModel extends ModelBehavior
      */
     public function afterModelFetch()
     {
-        $this->fieldValues = $this->model->value ?: [];
-        $this->model->attributes = array_merge($this->fieldValues, $this->model->attributes);
+        $this->fieldValues = $this->model->attributes = array_merge($this->model->value ?: [], $this->model->attributes);
     }
 
     /**
@@ -235,6 +238,8 @@ class SettingsModel extends ModelBehavior
         } catch (Exception $e) {
             Log::warning($e->getMessage());
         }
+
+        $this->afterModelFetch();
     }
 
     /**
