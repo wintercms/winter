@@ -4,6 +4,7 @@ use Lang;
 use File;
 use Config;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use System\Classes\UpdateManager;
@@ -96,7 +97,7 @@ class WinterUtil extends Command
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info "https://wintercms.com/docs/console/commands#winter-util-command".'],
+            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info, see "https://wintercms.com/docs/v1.2/docs/console/utilities#utility-runner".'],
         ];
     }
 

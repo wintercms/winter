@@ -2837,6 +2837,8 @@ html.cssanimations .cursor-loading-indicator.hide{display:none}
 .inline-options .field-checkboxlist-inner .custom-checkbox label:before{top:10px}
 .inline-options.radio-field>label{display:block}
 .inline-options.radio-field .custom-radio{display:inline-block;margin-bottom:0}
+.switch-field .disabled{opacity:.5;cursor:not-allowed;display:inline-block}
+.switch-field .disabled *{cursor:inherit}
 .switch-field .field-switch{padding-left:85px;float:left}
 .switch-field .field-switch>label{margin-top:3px}
 .custom-switch{display:block;width:65px;height:26px;position:relative;text-transform:uppercase;border:none;cursor:pointer;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}

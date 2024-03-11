@@ -145,7 +145,9 @@ for(var i=0,len=previewContainer.children.length;i<len;i++){previewContainer.rem
 switch(documentType){case'audio':template=previewPanel.querySelector('[data-control="audio-template"]').innerHTML
 break;case'video':template=previewPanel.querySelector('[data-control="video-template"]').innerHTML
 break;case'image':template=previewPanel.querySelector('[data-control="image-template"]').innerHTML
+break;case'document':template=previewPanel.querySelector('[data-control="document-template"]').innerHTML
 break;}previewContainer.innerHTML=template.replace('{src}',item.getAttribute('data-public-url')).replace('{path}',item.getAttribute('data-path')).replace('{last-modified}',item.getAttribute('data-last-modified-ts'))
+if(documentType=='document')this.loadSidebarDocumentIcon(item)
 if(documentType=='image')this.loadSidebarThumbnail()}else if(items.length==1&&items[0].hasAttribute('data-root')){template=previewPanel.querySelector('[data-control="go-up"]').innerHTML
 previewContainer.innerHTML=template}else if(items.length==0){template=previewPanel.querySelector('[data-control="no-selection-template"]').innerHTML
 previewContainer.innerHTML=template}else{template=previewPanel.querySelector('[data-control="multi-selection-template"]').innerHTML
@@ -164,6 +166,8 @@ if(this.isSearchMode()){previewPanel.querySelector('[data-control="item-folder"]
 var folderNode=previewPanel.querySelector('[data-label="folder"]')
 folderNode.textContent=item.getAttribute('data-folder')
 folderNode.setAttribute('data-path',item.getAttribute('data-folder'))}else{previewPanel.querySelector('[data-control="item-folder"]').setAttribute('class','hide')}}else{this.sidebarPreviewElement.querySelector('[data-control="sidebar-labels"]').setAttribute('class','hide')}this.updateSidebarMediaPreview(items)}
+MediaManager.prototype.loadSidebarDocumentIcon=function(item){var sidebarDocument=this.sidebarPreviewElement.querySelector('[data-control="sidebar-document"]'),svg=item.querySelector('svg')
+sidebarDocument.innerHTML=svg.outerHTML}
 MediaManager.prototype.loadSidebarThumbnail=function(){if(this.sidebarThumbnailAjax){try{this.sidebarThumbnailAjax.abort()}catch(e){}this.sidebarThumbnailAjax=null}var sidebarThumbnail=this.sidebarPreviewElement.querySelector('[data-control="sidebar-thumbnail"]')
 if(!sidebarThumbnail)return
 var data={path:sidebarThumbnail.getAttribute('data-path'),lastModified:sidebarThumbnail.getAttribute('data-last-modified')}
