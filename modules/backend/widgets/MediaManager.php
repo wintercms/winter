@@ -521,9 +521,9 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Render the clone popup for the provided "path" from the request
+     * Render the duplicate popup for the provided "path" from the request
      */
-    public function onLoadClonePopup(): string
+    public function onLoadDuplicatePopup(): string
     {
         $this->abortIfReadOnly();
 
@@ -544,15 +544,15 @@ class MediaManager extends WidgetBase
         $this->vars['newName'] = $suggestedName;
         $this->vars['type'] = $type;
 
-        return $this->makePartial('clone-form');
+        return $this->makePartial('duplicate-form');
     }
 
     /**
-     * Clone the provided path from the request ("originalPath") to the new name ("name")
+     * Duplicate the provided path from the request ("originalPath") to the new name ("name")
      *
      * @throws ApplicationException if the new name is invalid
      */
-    public function onCloneItem(): array
+    public function onDuplicateItem(): array
     {
         $this->abortIfReadOnly();
 
@@ -582,52 +582,52 @@ class MediaManager extends WidgetBase
             }
 
             /*
-             * Clone single file
+             * Duplicate single file
              */
             $library->copyFile($originalPath, $newPath);
 
             /**
-             * @event media.file.clone
-             * Called after a file is cloned
+             * @event media.file.duplicate
+             * Called after a file is duplicated
              *
              * Example usage:
              *
-             *     Event::listen('media.file.clone', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $originalPath, (string) $newPath) {
-             *         \Log::info($originalPath . " was cloned to " . $path);
+             *     Event::listen('media.file.duplicate', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $originalPath, (string) $newPath) {
+             *         \Log::info($originalPath . " was duplicated to " . $path);
              *     });
              *
              * Or
              *
-             *     $mediaWidget->bindEvent('file.clone', function ((string) $originalPath, (string) $newPath) {
-             *         \Log::info($originalPath . " was cloned to " . $path);
+             *     $mediaWidget->bindEvent('file.duplicate', function ((string) $originalPath, (string) $newPath) {
+             *         \Log::info($originalPath . " was duplicated to " . $path);
              *     });
              *
              */
-            $this->fireSystemEvent('media.file.clone', [$originalPath, $newPath]);
+            $this->fireSystemEvent('media.file.duplicate', [$originalPath, $newPath]);
         } else {
             /*
-             * Clone single folder
+             * Duplicate single folder
              */
             $library->copyFolder($originalPath, $newPath);
 
             /**
-             * @event media.folder.clone
-             * Called after a folder is cloned
+             * @event media.folder.duplicate
+             * Called after a folder is duplicated
              *
              * Example usage:
              *
-             *     Event::listen('media.folder.clone', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $originalPath, (string) $newPath) {
-             *         \Log::info($originalPath . " was cloned to " . $path);
+             *     Event::listen('media.folder.duplicate', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $originalPath, (string) $newPath) {
+             *         \Log::info($originalPath . " was duplicated to " . $path);
              *     });
              *
              * Or
              *
-             *     $mediaWidget->bindEvent('folder.clone', function ((string) $originalPath, (string) $newPath) {
-             *         \Log::info($originalPath . " was cloned to " . $path);
+             *     $mediaWidget->bindEvent('folder.duplicate', function ((string) $originalPath, (string) $newPath) {
+             *         \Log::info($originalPath . " was duplicated to " . $path);
              *     });
              *
              */
-            $this->fireSystemEvent('media.folder.clone', [$originalPath, $newPath]);
+            $this->fireSystemEvent('media.folder.duplicate', [$originalPath, $newPath]);
         }
 
         $library->resetCache();
@@ -639,12 +639,12 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Clone the selected files or folders without prompting the user
+     * Duplicate the selected files or folders without prompting the user
      * The new name will be generated in an incremented sequence
      *
      * @throws ApplicationException if the input data is invalid
      */
-    public function onCloneItems(): array
+    public function onDuplicateItems(): array
     {
         $this->abortIfReadOnly();
 
@@ -656,7 +656,7 @@ class MediaManager extends WidgetBase
 
         $library = MediaLibrary::instance();
 
-        $filesToClone = [];
+        $filesToDuplicate = [];
         foreach ($paths as $pathInfo) {
             $path = array_get($pathInfo, 'path');
             $type = array_get($pathInfo, 'type');
@@ -669,62 +669,62 @@ class MediaManager extends WidgetBase
                 /*
                  * Add to bulk collection
                  */
-                $filesToClone[] = $path;
+                $filesToDuplicate[] = $path;
             } elseif ($type === MediaLibraryItem::TYPE_FOLDER) {
                 /*
-                 * Clone single folder
+                 * Duplicate single folder
                  */
-                $library->cloneFolder($path);
+                $library->duplicateFolder($path);
 
                 /**
-                 * @event media.folder.clone
-                 * Called after a folder is cloned
+                 * @event media.folder.duplicate
+                 * Called after a folder is duplicated
                  *
                  * Example usage:
                  *
-                 *     Event::listen('media.folder.clone', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $path) {
-                 *         \Log::info($path . " was cloned");
+                 *     Event::listen('media.folder.duplicate', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $path) {
+                 *         \Log::info($path . " was duplicated");
                  *     });
                  *
                  * Or
                  *
-                 *     $mediaWidget->bindEvent('folder.clone', function ((string) $path) {
-                 *         \Log::info($path . " was cloned");
+                 *     $mediaWidget->bindEvent('folder.duplicate', function ((string) $path) {
+                 *         \Log::info($path . " was duplicated");
                  *     });
                  *
                  */
-                $this->fireSystemEvent('media.folder.clone', [$path]);
+                $this->fireSystemEvent('media.folder.duplicate', [$path]);
             }
         }
 
-        if (count($filesToClone) > 0) {
+        if (count($filesToDuplicate) > 0) {
             /*
-             * Clone collection of files
+             * Duplicate collection of files
              */
-            $library->cloneFiles($filesToClone);
+            $library->duplicateFiles($filesToDuplicate);
 
             /*
              * Extensibility
              */
-            foreach ($filesToClone as $path) {
+            foreach ($filesToDuplicate as $path) {
                 /**
-                 * @event media.file.clone
-                 * Called after a file is cloned
+                 * @event media.file.duplicate
+                 * Called after a file is duplicated
                  *
                  * Example usage:
                  *
-                 *     Event::listen('media.file.clone', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $path) {
-                 *         \Log::info($path . " was cloned");
+                 *     Event::listen('media.file.duplicate', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $path) {
+                 *         \Log::info($path . " was duplicated");
                  *     });
                  *
                  * Or
                  *
-                 *     $mediaWidget->bindEvent('file.clone', function ((string) $path) {
-                 *         \Log::info($path . " was cloned");
+                 *     $mediaWidget->bindEvent('file.duplicate', function ((string) $path) {
+                 *         \Log::info($path . " was duplicated");
                  *     });
                  *
                  */
-                $this->fireSystemEvent('media.file.clone', [$path]);
+                $this->fireSystemEvent('media.file.duplicate', [$path]);
             }
         }
 

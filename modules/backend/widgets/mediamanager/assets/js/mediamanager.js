@@ -150,8 +150,8 @@
         this.$el.on('mediarefresh', this.proxy(this.refresh))
         this.$el.on('shown.oc.popup', '[data-command="create-folder"]', this.proxy(this.onFolderPopupShown))
         this.$el.on('hidden.oc.popup', '[data-command="create-folder"]', this.proxy(this.onFolderPopupHidden))
-        this.$el.on('shown.oc.popup', '[data-command="clone"]', this.proxy(this.onClonePopupShown))
-        this.$el.on('hidden.oc.popup', '[data-command="clone"]', this.proxy(this.onClonePopupHidden))
+        this.$el.on('shown.oc.popup', '[data-command="duplicate"]', this.proxy(this.onDuplicatePopupShown))
+        this.$el.on('hidden.oc.popup', '[data-command="duplicate"]', this.proxy(this.onDuplicatePopupHidden))
         this.$el.on('shown.oc.popup', '[data-command="move"]', this.proxy(this.onMovePopupShown))
         this.$el.on('hidden.oc.popup', '[data-command="move"]', this.proxy(this.onMovePopupHidden))
         this.$el.on('keydown', this.proxy(this.onKeyDown))
@@ -172,8 +172,8 @@
         this.$el.off('keyup', '[data-control="search"]', this.proxy(this.onSearchChanged))
         this.$el.off('shown.oc.popup', '[data-command="create-folder"]', this.proxy(this.onFolderPopupShown))
         this.$el.off('hidden.oc.popup', '[data-command="create-folder"]', this.proxy(this.onFolderPopupHidden))
-        this.$el.off('shown.oc.popup', '[data-command="clone"]', this.proxy(this.onClonePopupShown))
-        this.$el.off('hidden.oc.popup', '[data-command="clone"]', this.proxy(this.onClonePopupHidden))
+        this.$el.off('shown.oc.popup', '[data-command="duplicate"]', this.proxy(this.onDuplicatePopupShown))
+        this.$el.off('hidden.oc.popup', '[data-command="duplicate"]', this.proxy(this.onDuplicatePopupHidden))
         this.$el.off('shown.oc.popup', '[data-command="move"]', this.proxy(this.onMovePopupShown))
         this.$el.off('hidden.oc.popup', '[data-command="move"]', this.proxy(this.onMovePopupHidden))
         this.$el.off('keydown', this.proxy(this.onKeyDown))
@@ -273,12 +273,12 @@
             this.selectTimer = setTimeout(this.proxy(this.updateSidebarPreview), 100)
         }
 
-        // Disable delete, clone and move buttons
+        // Disable delete, duplicate and move buttons
         if (node.hasAttribute('data-root') && !expandSelection) {
-            this.toggleMoveCloneDelete(true)
+            this.toggleMoveDuplicateDelete(true)
         }
         else {
-            this.toggleMoveCloneDelete(false)
+            this.toggleMoveDuplicateDelete(false)
         }
 
         // Always unselect root when selecting multiples
@@ -287,9 +287,9 @@
         }
     }
 
-    MediaManager.prototype.toggleMoveCloneDelete = function(value) {
+    MediaManager.prototype.toggleMoveDuplicateDelete = function(value) {
         $('[data-command=delete]', this.$el).prop('disabled', value)
-        $('[data-command=clone]', this.$el).prop('disabled', value)
+        $('[data-command=duplicate]', this.$el).prop('disabled', value)
         $('[data-command=move]', this.$el).prop('disabled', value)
     }
 
@@ -1003,16 +1003,16 @@
         this.afterNavigate()
     }
 
-    MediaManager.prototype.cloneItems = function(ev) {
+    MediaManager.prototype.duplicateItems = function(ev) {
         var items = this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
 
         if (!items.length) {
-            $.wn.alert(this.options.cloneEmpty)
+            $.wn.alert(this.options.duplicateEmpty)
             return
         }
 
         if (items.length > 1) {
-            $.wn.confirm(this.options.cloneMultipleConfirm, this.proxy(this.cloneMultipleConfirmation))
+            $.wn.confirm(this.options.duplicateMultipleConfirm, this.proxy(this.duplicateMultipleConfirmation))
         } else {
             var data = {
                 path: items[0].getAttribute('data-path'),
@@ -1020,14 +1020,14 @@
             }
 
             $(ev.target).popup({
-                handler: this.options.alias+'::onLoadClonePopup',
+                handler: this.options.alias+'::onLoadDuplicatePopup',
                 extraData: data,
                 zIndex: 1200 // Media Manager can be opened in a popup, so this new popup should have a higher z-index
             })
         }
     }
 
-    MediaManager.prototype.cloneMultipleConfirmation = function (confirmed) {
+    MediaManager.prototype.duplicateMultipleConfirmation = function (confirmed) {
         if (!confirmed)
             return
 
@@ -1050,18 +1050,18 @@
         }
 
         $.wn.stripeLoadIndicator.show()
-        this.$form.request(this.options.alias + '::onCloneItems', {
+        this.$form.request(this.options.alias + '::onDuplicateItems', {
             data: data
         }).always(function () {
             $.wn.stripeLoadIndicator.hide()
         }).done(this.proxy(this.afterNavigate))
     }
 
-    MediaManager.prototype.onClonePopupShown = function (ev, button, popup) {
-        $(popup).on('submit.media', 'form', this.proxy(this.onCloneItemSubmit))
+    MediaManager.prototype.onDuplicatePopupShown = function (ev, button, popup) {
+        $(popup).on('submit.media', 'form', this.proxy(this.onDuplicateItemSubmit))
     }
 
-    MediaManager.prototype.onCloneItemSubmit = function (ev) {
+    MediaManager.prototype.onDuplicateItemSubmit = function (ev) {
         var item = this.$el.get(0).querySelector('[data-type="media-item"].selected'),
             data = {
                 newName: $(ev.target).find('input[name=newName]').val(),
@@ -1070,22 +1070,22 @@
             }
 
         $.wn.stripeLoadIndicator.show()
-        this.$form.request(this.options.alias + '::onCloneItem', {
+        this.$form.request(this.options.alias + '::onDuplicateItem', {
             data: data
         }).always(function () {
             $.wn.stripeLoadIndicator.hide()
-        }).done(this.proxy(this.itemCloned))
+        }).done(this.proxy(this.itemDuplicated))
 
         ev.preventDefault()
         return false
     }
 
-    MediaManager.prototype.onClonePopupHidden = function (ev, button, popup) {
+    MediaManager.prototype.onDuplicatePopupHidden = function (ev, button, popup) {
         $(popup).off('.media', 'form')
     }
 
-    MediaManager.prototype.itemCloned = function () {
-        this.$el.find('button[data-command="clone"]').popup('hide')
+    MediaManager.prototype.itemDuplicated = function () {
+        this.$el.find('button[data-command="duplicate"]').popup('hide')
 
         this.afterNavigate()
     }
@@ -1200,8 +1200,8 @@
             case 'create-folder':
                 this.createFolder(ev)
             break;
-            case 'clone':
-                this.cloneItems(ev)
+            case 'duplicate':
+                this.duplicateItems(ev)
             break;
             case 'move':
                 this.moveItems(ev)
@@ -1398,8 +1398,8 @@
         url: window.location,
         uploadHandler: null,
         alias: '',
-        cloneEmpty: 'Please select an item to clone.',
-        cloneMultipleConfirm: 'Multiple items selected, they will be cloned with generated names. Are you sure?',
+        duplicateEmpty: 'Please select an item to duplicate.',
+        duplicateMultipleConfirm: 'Multiple items selected, they will be duplicated with generated names. Are you sure?',
         deleteEmpty: 'Please select files to delete.',
         deleteConfirm: 'Delete the selected file(s)?',
         moveEmpty: 'Please select files to move.',

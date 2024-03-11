@@ -335,11 +335,11 @@ class MediaLibrary
     }
 
     /**
-     * Clones files from the Library.
+     * Duplicates files from the Library.
      *
-     * @param array $paths A list of file paths relative to the Library root to clone.
+     * @param array $paths A list of file paths relative to the Library root to duplicate.
      */
-    public function cloneFiles($paths)
+    public function duplicateFiles($paths)
     {
         $duplicateFiles = function ($paths) {
             foreach ($paths as $path) {
@@ -359,10 +359,10 @@ class MediaLibrary
     }
 
     /**
-     * Clones a folder from the Library.
+     * Duplicates a folder from the Library.
      * @param array $path Specifies the folder path relative to the Library root.
      */
-    public function cloneFolder($path)
+    public function duplicateFolder($path)
     {
         $originalPath = self::validatePath($path);
         $newPath = dirname($path) .'/'. $this->generateIncrementedFolderName($originalPath);
@@ -908,7 +908,7 @@ class MediaLibrary
     {
         $pathInfos = pathinfo($path);
         $sameFiles = array_filter(
-            $this->getStorageDisk()->files($pathInfos['dirname']),
+            $this->getStorageDisk()->files(dirname($this->getMediaPath($path))),
             function ($file) use ($pathInfos) {
                 return preg_match('/'. $pathInfos['filename'] .'-(\d*)\.'. $pathInfos['extension'] .'$/U', $file);
             }

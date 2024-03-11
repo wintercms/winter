@@ -1,11 +1,11 @@
 <?= Form::open() ?>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="popup">&times;</button>
-        <h4 class="modal-title"><?= e(trans('backend::lang.media.clone_popup_title')) ?></h4>
+        <h4 class="modal-title"><?= e(trans('backend::lang.media.duplicate_popup_title')) ?></h4>
     </div>
     <div class="modal-body">
         <div class="form-group">
-            <label><?= e(trans('backend::lang.media.clone_new_name')) ?></label>
+            <label><?= e(trans('backend::lang.media.duplicate_new_name')) ?></label>
             <input
                 type="text"
                 name="newName"
@@ -22,7 +22,7 @@
         <button
             type="submit"
             class="btn btn-primary">
-            <?= e(trans('backend::lang.media.clone_button')) ?>
+            <?= e(trans('backend::lang.media.duplicate_button')) ?>
         </button>
         <button
             type="button"
