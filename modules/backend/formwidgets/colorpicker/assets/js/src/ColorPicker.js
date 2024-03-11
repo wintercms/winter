@@ -12,26 +12,17 @@ import '../../less/colorpicker.less';
      * @author Ben Thomson <git@alfreido.com>
      * @copyright 2023 Winter CMS
      */
-    class ColorPicker extends Snowboard.PluginBase {
+    class ColorPicker extends Snowboard.WinterControl {
         /**
          * Constructor.
-         *
-         * @param {HTMLElement} element
          */
-        construct(element) {
-            this.element = element;
+        construct() {
             this.pickr = null;
-            this.config = this.snowboard.dataConfig(this, element);
-
-            if (typeof this.config.get('formats') === 'string') {
-                this.config.set('formats', [this.config.get('formats')]);
-            }
 
             // Child elements
-            this.dataLocker = element.querySelector(this.config.get('dataLocker'));
-            this.container = element.querySelector('.colorpicker-container');
-            this.colorPreview = element.querySelector('[data-color-preview]');
-            this.colorValue = element.querySelector('[data-color-value]');
+            this.container = this.element.querySelector('.colorpicker-container');
+            this.colorPreview = this.element.querySelector('[data-color-preview]');
+            this.colorValue = this.element.querySelector('[data-color-value]');
 
             // User inputs
             this.keyboardEntry = false;
@@ -58,7 +49,14 @@ import '../../less/colorpicker.less';
                     event.stopPropagation();
                 },
             };
+        }
 
+        init() {
+            if (typeof this.getConfig('formats') === 'string') {
+                this.setConfig('formats', [this.getConfig('formats')]);
+            }
+
+            this.dataLocker = this.element.querySelector(this.getConfig('dataLocker'));
             this.createPickr();
             this.attachEvents();
         }
@@ -98,28 +96,28 @@ import '../../less/colorpicker.less';
             this.pickr = Pickr.create({
                 el: this.colorPreview,
                 theme: 'nano',
-                disabled: this.config.get('disabled'),
-                swatches: this.config.get('availableColors'),
-                lockOpacity: !this.config.get('showAlpha'),
+                disabled: this.getConfig('disabled'),
+                swatches: this.getConfig('availableColors'),
+                lockOpacity: !this.getConfig('showAlpha'),
                 useAsButton: true,
                 container: this.element,
                 comparison: true,
                 showAlways: true,
                 position: 'top-middle',
                 components: {
-                    palette: this.config.get('allowCustom'),
-                    preview: this.config.get('allowCustom'),
-                    hue: this.config.get('allowCustom'),
-                    opacity: this.config.get('showAlpha'),
+                    palette: this.getConfig('allowCustom'),
+                    preview: this.getConfig('allowCustom'),
+                    hue: this.getConfig('allowCustom'),
+                    opacity: this.getConfig('showAlpha'),
                     interaction: {
-                        hex: (this.config.get('formats').length > 1 && this.config.get('formats').includes('hex')),
-                        rgba: (this.config.get('formats').length > 1 && this.config.get('formats').includes('rgb')),
-                        hsla: (this.config.get('formats').length > 1 && this.config.get('formats').includes('hsl')),
-                        cmyk: (this.config.get('formats').length > 1 && this.config.get('formats').includes('cmyk')),
+                        hex: (this.getConfig('formats').length > 1 && this.getConfig('formats').includes('hex')),
+                        rgba: (this.getConfig('formats').length > 1 && this.getConfig('formats').includes('rgb')),
+                        hsla: (this.getConfig('formats').length > 1 && this.getConfig('formats').includes('hsl')),
+                        cmyk: (this.getConfig('formats').length > 1 && this.getConfig('formats').includes('cmyk')),
 
                         input: false,
                         cancel: false,
-                        clear: this.config.get('allowEmpty'),
+                        clear: this.getConfig('allowEmpty'),
                         save: false,
                     },
                 },
@@ -177,7 +175,6 @@ import '../../less/colorpicker.less';
             this.container = null;
             this.colorPreview = null;
             this.colorValue = null;
-            this.config = null;
 
             super.destruct();
         }
@@ -248,7 +245,7 @@ import '../../less/colorpicker.less';
             }
 
             this.keyboardEntry = (
-                (this.colorValue.value === '' && this.config.get('allowEmpty'))
+                (this.colorValue.value === '' && this.getConfig('allowEmpty'))
                 || this.pickr.setColor(this.colorValue.value)
             );
         }
@@ -289,8 +286,8 @@ import '../../less/colorpicker.less';
             this.hidePicker();
 
             if (this.dataLocker.value) {
-                if (this.config.get('formats').length === 1) {
-                    this.setColorFormat(this.config.get('formats')[0]);
+                if (this.getConfig('formats').length === 1) {
+                    this.setColorFormat(this.getConfig('formats')[0]);
                 }
 
                 this.setColor(this.pickr.getColor());
@@ -304,8 +301,8 @@ import '../../less/colorpicker.less';
         onPickerChange(hsva) {
             this.keyboardEntry = false;
 
-            if (!this.formatSet && this.config.get('formats').length === 1) {
-                this.setColorFormat(this.config.get('formats')[0]);
+            if (!this.formatSet && this.getConfig('formats').length === 1) {
+                this.setColorFormat(this.getConfig('formats')[0]);
             }
 
             this.pickr.getRoot().preview.currentColor.innerText = this.valueFromHSVA(hsva);
@@ -329,8 +326,8 @@ import '../../less/colorpicker.less';
          */
         onPickerStopChange() {
             this.setColor(this.pickr.getColor());
-            if (this.config.get('formats').length === 1) {
-                this.setColorFormat(this.config.get('formats')[0]);
+            if (this.getConfig('formats').length === 1) {
+                this.setColorFormat(this.getConfig('formats')[0]);
             }
             this.onPickerChange(this.pickr.getColor());
         }
@@ -344,8 +341,8 @@ import '../../less/colorpicker.less';
             this.keyboardEntry = false;
             this.setColor(hsva);
 
-            if (this.config.get('formats').length === 1) {
-                this.setColorFormat(this.config.get('formats')[0]);
+            if (this.getConfig('formats').length === 1) {
+                this.setColorFormat(this.getConfig('formats')[0]);
             }
         }
 
@@ -354,13 +351,13 @@ import '../../less/colorpicker.less';
          */
         onPickerHide() {
             if (this.keyboardEntry) {
-                if (this.colorValue.value === '' && this.config.get('allowEmpty')) {
+                if (this.colorValue.value === '' && this.getConfig('allowEmpty')) {
                     this.setColor();
                 } else {
                     this.setColor(this.pickr.getColor());
 
-                    if (this.config.get('formats').length === 1) {
-                        this.setColorFormat(this.config.get('formats')[0]);
+                    if (this.getConfig('formats').length === 1) {
+                        this.setColorFormat(this.getConfig('formats')[0]);
                     }
                 }
             }
@@ -442,7 +439,7 @@ import '../../less/colorpicker.less';
          * @param {HSVaColor?} hsva
          */
         setColor(hsva) {
-            if (hsva === undefined && !this.config.get('allowEmpty') && this.originalColor) {
+            if (hsva === undefined && !this.getConfig('allowEmpty') && this.originalColor) {
                 this.colorPreview.style.background = this.valueFromHSVA(this.originalColor, 'hex');
                 this.colorValue.value = this.valueFromHSVA(this.originalColor);
                 this.dataLocker.value = this.valueFromHSVA(this.originalColor);
@@ -507,6 +504,5 @@ import '../../less/colorpicker.less';
         }
     }
 
-    Snowboard.addPlugin('backend.formwidget.colorpicker', ColorPicker);
-    Snowboard['backend.ui.widgethandler']().register('colorpicker', 'backend.formwidget.colorpicker');
+    Snowboard['backend.ui.controls']().register('colorpicker', ColorPicker);
 })(window.Snowboard, window.jQuery);

@@ -11,17 +11,14 @@ import IconPickerVue from './components/IconPicker.vue';
      * @author Robert Alexa <mail@robertalexa.me>
      * @copyright 2022 Winter CMS.
      */
-    class IconPicker extends Snowboard.PluginBase {
-        construct(element) {
-            this.element = element;
-            this.config = this.snowboard.dataConfig(this, element);
-
+    class IconPicker extends Snowboard.WinterControl {
+        construct() {
             this.events = {
                 click: () => this.showPicker(),
             };
             this.iconPickerApp = null;
 
-            this.input = element.querySelector('input');
+            this.input = this.element.querySelector('input');
 
             this.attachEvents();
         }
@@ -47,7 +44,7 @@ import IconPickerVue from './components/IconPicker.vue';
         }
 
         showPicker() {
-            this.snowboard.request(this.input, this.config.get('eventHandler'), {
+            this.snowboard.request(this.input, this.getConfig('eventHandler'), {
                 success: (data) => {
                     this.iconPickerApp = createApp(IconPickerVue, {
                         ...this.element.dataset,
@@ -60,6 +57,5 @@ import IconPickerVue from './components/IconPicker.vue';
         }
     }
 
-    Snowboard.addPlugin('backend.formwidgets.iconpicker', IconPicker);
-    Snowboard['backend.ui.widgetHandler']().register('iconpicker', 'backend.formwidgets.iconpicker');
+    Snowboard['backend.ui.controls']().register('iconpicker', IconPicker);
 })(window.Snowboard);

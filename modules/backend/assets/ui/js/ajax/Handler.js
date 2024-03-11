@@ -10,6 +10,7 @@ import { delegate } from 'jquery-events-to-dom-events';
  * Functions:
  *  - Adds the "render" jQuery event to Snowboard requests that widgets use to initialise.
  *  - Ensures the CSRF token is included in requests.
+ *  - Initialises controls within AJAX-changed partials.
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
@@ -23,6 +24,7 @@ export default class Handler extends Snowboard.Singleton {
     listens() {
         return {
             ready: 'ready',
+            ajaxUpdate: 'onAjaxUpdate',
             ajaxFetchOptions: 'ajaxFetchOptions',
             ajaxUpdateComplete: 'ajaxUpdateComplete',
         };
@@ -42,6 +44,10 @@ export default class Handler extends Snowboard.Singleton {
         delegate('render');
         document.addEventListener('$render', () => {
             this.snowboard.globalEvent('render');
+        });
+        delegate('ajaxUpdate', ['event', 'context', 'data', 'status', 'xhr']);
+        document.addEventListener('$ajaxUpdate', (event) => {
+            this.snowboard.globalEvent('ajaxUpdate', event.target, event.detail.data);
         });
 
         // Add "render" event for backwards compatibility
@@ -120,5 +126,16 @@ export default class Handler extends Snowboard.Singleton {
      */
     getToken() {
         return document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    }
+
+    /**
+     * AJAX update handler.
+     *
+     * Initializes widgets inside an update element from an AJAX response.
+     *
+     * @param {HTMLElement} element
+     */
+    onAjaxUpdate(element) {
+        this.snowboard['backend.ui.controls']().initializeControls(element);
     }
 }

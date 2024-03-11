@@ -18,6 +18,7 @@ mix
     .extract({
         libraries: [
             '@vue',
+            '@wintercms/snowboard-controls',
             'babel-loader',
             'css-loader',
             'jquery-events-to-dom-events',

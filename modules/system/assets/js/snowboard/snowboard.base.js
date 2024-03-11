@@ -1,14 +1,10 @@
-import Snowboard from './main/Snowboard';
-import ProxyHandler from './main/ProxyHandler';
+import { Snowboard } from '@wintercms/snowboard';
 
 ((window) => {
-    const snowboard = new Proxy(
-        new Snowboard(),
-        ProxyHandler,
-    );
+    const instance = new Snowboard();
 
     // Cover all aliases
-    window.snowboard = snowboard;
-    window.Snowboard = snowboard;
-    window.SnowBoard = snowboard;
+    window.snowboard = instance;
+    window.Snowboard = instance;
+    window.SnowBoard = instance;
 })(window);
