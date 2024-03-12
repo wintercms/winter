@@ -1,11 +1,13 @@
-<?php namespace Cms\Classes;
+<?php
 
-use File;
-use Lang;
+namespace Cms\Classes;
+
+use ApplicationException;
 use Cms\Contracts\CmsObject as CmsObjectContract;
 use Cms\Helpers\File as FileHelper;
+use File;
+use Lang;
 use Winter\Storm\Extension\Extendable;
-use ApplicationException;
 
 /**
  * The CMS component partial class. These objects are read-only.
@@ -93,13 +95,8 @@ class ComponentPartial extends Extendable implements CmsObjectContract
      * Since the beginning of time, Winter inconsistently checked for overrides
      * using the component alias exactly, resulting in a folder with uppercase
      * characters, subsequently this method checks for both variants.
-     *
-     * @param \Cms\Classes\Theme $theme
-     * @param \Cms\Classes\ComponentBase $component
-     * @param string $fileName
-     * @return mixed
      */
-    public static function loadOverrideCached($theme, $component, $fileName)
+    public static function loadOverrideCached(string|Theme $theme, ComponentBase $component, string $fileName): ?Partial
     {
         $partial = Partial::loadCached($theme, strtolower($component->alias) . '/' . $fileName);
 

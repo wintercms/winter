@@ -184,10 +184,8 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
 
     /**
      * Prepares the theme datasource for the model.
-     * @param \Cms\Classes\Theme $theme Specifies a parent theme.
-     * @return $this
      */
-    public static function inTheme($theme)
+    public static function inTheme(string|Theme $theme): self
     {
         if (is_string($theme)) {
             $theme = Theme::load($theme);
@@ -199,13 +197,12 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
     /**
      * Save the object to the theme.
      *
-     * @param  array  $options
      * @return bool
      */
     public function save(array $options = null)
     {
         try {
-            parent::save($options);
+            return parent::save($options);
         }
         catch (Exception $ex) {
             $this->throwHalcyonSaveException($ex);
