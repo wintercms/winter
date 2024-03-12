@@ -609,6 +609,7 @@ return [
         'filter_audio' => 'Audio',
         'filter_documents' => 'Documents',
         'library' => 'Library',
+        'dimensions' => 'Dimensions',
         'size' => 'Size',
         'title' => 'Title',
         'last_modified' => 'Last modified',
