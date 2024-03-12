@@ -33,11 +33,11 @@ class WinterTest extends Command
      * @var string The console command signature as ignoreValidationErrors causes options not to be registered.
      */
     protected $signature = 'winter:test
-        {phpunitArgs?* : Arguments to pass through to PHPUnit}
-        {?--c|configuration= : A specific phpunit xml file}
-        {?--b|bootstrap= : A custom PHPUnit bootstrap file}
-        {?--p|plugin=* : List of plugins to test}
-        {?--m|module=* : List of modules to test}
+        {phpunitArgs?* : use "--" followed by the arguments to pass through to PHPUnit such as "-- --stop-on-failure"}
+        {--c|configuration= : A specific phpunit xml file}
+        {--b|bootstrap= : A custom PHPUnit bootstrap file}
+        {--p|plugin=* : List of plugins to test}
+        {--m|module=* : List of modules to test}
     ';
 
     /**

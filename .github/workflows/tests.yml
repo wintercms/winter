@@ -18,7 +18,7 @@ jobs:
     name: ${{ matrix.operatingSystem }} / JavaScript
     env:
       nodeVersion: 16
-      phpVersion: '8.0'
+      phpVersion: '8.1'
       extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
       key: winter-cms-cache-develop
     steps:
