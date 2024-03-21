@@ -141,7 +141,7 @@ class MailSetting extends Model
      */
     public function filterFields($fields, $context = null)
     {
-        if (in_array($fields->smtp_port->value ?? 25, [25, 465, 587])) {
+        if ($fields->smtp_port && $fields->smtp_encryption) {
             switch ($fields->smtp_encryption->value ?? '') {
                 case 'tls':
                     $fields->smtp_port->value = 587;
@@ -151,13 +151,8 @@ class MailSetting extends Model
                     break;
                 case '':
                 default:
-                    $fields->smtp_port->value = 25;
-                    break;
+                    $fields->smtp_port->value = 587;
             }
-        }
-        if (!$fields->smtp_authorization->value) {
-            $fields->smtp_user->hidden = true;
-            $fields->smtp_password->hidden = true;
         }
     }
 }
