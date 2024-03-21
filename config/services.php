@@ -19,8 +19,17 @@ return [
         'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
         'secret' => env('MAILGUN_SECRET'),
     ],
+    'mandrill' => [
+        'secret' => env('MANDRILL_SECRET'),
+    ],
     'postmark' => [
-        'token' => env('POSTMARK_TOKEN'),
+        'secret' => env('POSTMARK_SECRET'),
+    ],
+    'sendgrid' => [
+        'api_key' => env('SENDGRID_API_KEY'),
+    ],
+    'sparkpost' => [
+        'secret' => env('SPARKPOST_SECRET'),
     ],
     'ses' => [
         'key' => env('AWS_ACCESS_KEY_ID'),
