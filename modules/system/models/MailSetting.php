@@ -149,9 +149,10 @@ class MailSetting extends Model
                 case 'ssl':
                     $fields->smtp_port->value = 465;
                     break;
-                case '':
                 default:
-                    $fields->smtp_port->value = 587;
+                    if (!$fields->smtp_port->value) {
+                        $fields->smtp_port->value = 587;
+                    }
             }
         }
     }
