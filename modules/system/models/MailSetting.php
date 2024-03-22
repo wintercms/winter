@@ -124,6 +124,8 @@ class MailSetting extends Model
 
     /**
      * @return array smtp_encryption options values
+     * Note: port 587 (submission) no need to specify encryption as it is explicitly enabled (STARTTLS)
+     * Note: port 465 encryption is implicit for most existing implementations
      */
     public function getSmtpEncryptionOptions()
     {
