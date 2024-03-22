@@ -37,7 +37,6 @@ tabs:
             label: system::lang.mail.smtp_port
             tab: system::lang.mail.general
             span: auto
-            dependsOn: smtp_encryption
             trigger:
                 action: show
                 field: send_mode
