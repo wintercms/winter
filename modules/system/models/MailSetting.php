@@ -61,6 +61,8 @@ class MailSetting extends Model
                 'encryption' => $config->get('mail.encryption'),
             ],
         ]);
+        $encryption = array_get($mailers['smtp'], 'encryption');
+
         $this->send_mode = $config->get('mail.default', static::MODE_MAIL);
         $this->sender_name = $config->get('mail.from.name', 'Your Site');
         $this->sender_email = $config->get('mail.from.address', 'admin@example.com');
@@ -70,7 +72,7 @@ class MailSetting extends Model
         $this->smtp_user = array_get($mailers['smtp'], 'username');
         $this->smtp_password = array_get($mailers['smtp'], 'password');
         $this->smtp_authorization = !!strlen($this->smtp_user);
-        $this->smtp_encryption = array_get($mailers['smtp'], 'encryption');
+        $this->smtp_encryption = $encryption === 'ssl' ? 'tls' : $encryption;
     }
 
     public function getSendModeOptions()
@@ -104,7 +106,10 @@ class MailSetting extends Model
                     $config->set('mail.mailers.smtp.password', null);
                 }
                 if ($settings->smtp_encryption) {
-                    $config->set('mail.mailers.smtp.encryption', $settings->smtp_encryption);
+                    # convert deprecated 'ssl' encryption to 'tls'
+                    $encryption = $settings->smtp_encryption === 'ssl' ? 'tls' : $settings->smtp_encryption;
+
+                    $config->set('mail.mailers.smtp.encryption', $encryption);
                 }
                 else {
                     $config->set('mail.mailers.smtp.encryption', null);
@@ -119,45 +124,14 @@ class MailSetting extends Model
 
     /**
      * @return array smtp_encryption options values
+     * Note: port 587 (submission) no need to specify encryption as it is explicitly enabled (STARTTLS)
+     * Note: port 465 encryption is implicit for most existing implementations
      */
     public function getSmtpEncryptionOptions()
     {
         return [
             '' => 'system::lang.mail.smtp_encryption_none',
             'tls' => 'system::lang.mail.smtp_encryption_tls',
-            'ssl' => 'system::lang.mail.smtp_encryption_ssl',
         ];
-    }
-
-    /**
-     * Filter fields callback.
-     *
-     * We use this to automatically set the SMTP port to the encryption type's corresponding port, if it was originally
-     * using a default port.
-     *
-     * @param array $fields
-     * @param string|null $context
-     * @return void
-     */
-    public function filterFields($fields, $context = null)
-    {
-        if (in_array($fields->smtp_port->value ?? 25, [25, 465, 587])) {
-            switch ($fields->smtp_encryption->value ?? '') {
-                case 'tls':
-                    $fields->smtp_port->value = 587;
-                    break;
-                case 'ssl':
-                    $fields->smtp_port->value = 465;
-                    break;
-                case '':
-                default:
-                    $fields->smtp_port->value = 25;
-                    break;
-            }
-        }
-        if (!$fields->smtp_authorization->value) {
-            $fields->smtp_user->hidden = true;
-            $fields->smtp_password->hidden = true;
-        }
     }
 }
