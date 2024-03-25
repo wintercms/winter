@@ -40,7 +40,7 @@ class MixList extends Command
         foreach ($packages as $name => $package) {
             $rows[] = [
                 'name' => $name,
-                'active' => $this->option('json') ? !$package['ignored'] : ($package['ignored'] ? '<fg=red>No</>' : '<info>Yes</info>'),
+                'active' => !$package['ignored'],
                 'path' => $package['path'],
                 'configuration' => $package['mix'],
             ];
@@ -50,13 +50,16 @@ class MixList extends Command
             }
         }
 
-        if($this->option('json')) {
-            echo json_encode($rows, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        if ($this->option('json')) {
+            $this->line(json_encode($rows, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         } else {
             $this->line('');
             $this->info('Packages registered:');
             $this->line('');
-            $this->table(['Name', 'Active', 'Path', 'Configuration'], $rows);
+            $this->table(['Name', 'Active', 'Path', 'Configuration'], array_map(function ($row) {
+                $row['active'] = ($row['active']) ? '<info>Yes</info>' : '<fg=red>No</>';
+                return $row;
+            }, $rows));
             $this->line('');
         }
 

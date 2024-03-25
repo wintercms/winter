@@ -102,7 +102,7 @@ class MixCompile extends Command
                 continue;
             }
 
-            if (!$this->option('no-progress')) {
+            if (!$this->option('silent')) {
                 $this->info(sprintf('Mixing package "%s"', $name));
             }
 
