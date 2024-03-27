@@ -22,7 +22,8 @@ class MixCompile extends Command
         {--s|silent : Silent mode}
         {--e|stop-on-error : Exit once an error is encountered}
         {--m|manifest= : Defines package.json to use for compile}
-        {--p|package=* : Defines one or more packages to compile}';
+        {--p|package=* : Defines one or more packages to compile}
+        {--no-progress : Do not show mix progress}';
 
     /**
      * @var string The console command description.
@@ -101,7 +102,9 @@ class MixCompile extends Command
                 continue;
             }
 
-            $this->info(sprintf('Mixing package "%s"', $name));
+            if (!$this->option('silent')) {
+                $this->info(sprintf('Mixing package "%s"', $name));
+            }
 
             $exitCode = $this->mixPackage(base_path($relativeMixJsPath));
 
@@ -224,8 +227,8 @@ class MixCompile extends Command
         $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
 
         $config = str_replace(
-            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%'],
-            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent')],
+            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%', '%noProgress%'],
+            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent'), (int) $this->option('no-progress')],
             $fixture
         );
 

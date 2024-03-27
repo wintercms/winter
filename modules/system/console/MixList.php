@@ -14,7 +14,8 @@ class MixList extends Command
     /**
      * @var string The name and signature of this command.
      */
-    protected $signature = 'mix:list';
+    protected $signature = 'mix:list
+        {--json : Output as JSON}';
 
     /**
      * @var string The console command description.
@@ -23,8 +24,6 @@ class MixList extends Command
 
     public function handle(): int
     {
-        $this->line('');
-
         $mixedAssets = MixAssets::instance();
         $mixedAssets->fireCallbacks();
 
@@ -35,16 +34,13 @@ class MixList extends Command
             return 0;
         }
 
-        $this->info('Packages registered:');
-        $this->line('');
-
         $errors = [];
 
         $rows = [];
         foreach ($packages as $name => $package) {
             $rows[] = [
                 'name' => $name,
-                'active' => $package['ignored'] ?? false ? '<fg=red>No</>' : '<info>Yes</info>',
+                'active' => !$package['ignored'],
                 'path' => $package['path'],
                 'configuration' => $package['mix'],
             ];
@@ -54,9 +50,18 @@ class MixList extends Command
             }
         }
 
-        $this->table(['Name', 'Active', 'Path', 'Configuration'], $rows);
-
-        $this->line('');
+        if ($this->option('json')) {
+            $this->line(json_encode($rows, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        } else {
+            $this->line('');
+            $this->info('Packages registered:');
+            $this->line('');
+            $this->table(['Name', 'Active', 'Path', 'Configuration'], array_map(function ($row) {
+                $row['active'] = ($row['active']) ? '<info>Yes</info>' : '<fg=red>No</>';
+                return $row;
+            }, $rows));
+            $this->line('');
+        }
 
         if (!empty($errors)) {
             foreach ($errors as $error) {
