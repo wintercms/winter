@@ -28,6 +28,7 @@ class MixList extends Command
         $mixedAssets = MixAssets::instance();
         $mixedAssets->fireCallbacks();
 
+        // If after registration package is not active, check in package.json for workspaces.packages; can be set automatically as ignored.
         $packages = $mixedAssets->getPackages(true);
 
         if (count($packages) === 0) {
