@@ -78,7 +78,8 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
     /**
      * Stub for `assertRegExp` to allow compatibility with both PHPUnit 8 and 9.
      *
-     * @param string $filename
+     * @param string $pattern
+     * @param string $string
      * @param string $message
      * @return void
      */
@@ -90,5 +91,23 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
         }
 
         Assert::assertRegExp($pattern, $string, $message);
+    }
+
+    /**
+     * Stub for `assertObjectHasAttribute` to allow compatibility with both PHPUnit 9 and 10.
+     *
+     * @param string $propertyName
+     * @param object $object
+     * @param string $message
+     * @return void
+     */
+    public static function assertObjectHasAttribute(string $propertyName, $object, string $message = ''): void
+    {
+        if (method_exists(Assert::class, 'assertObjectHasProperty')) {
+            Assert::assertObjectHasProperty($propertyName, $object, $message);
+            return;
+        }
+
+        Assert::assertObjectHasAttribute($propertyName, $object, $message);
     }
 }
