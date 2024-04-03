@@ -28,39 +28,16 @@
         "discord": "https://discord.gg/D5MFSPH6Ux",
         "source": "https://github.com/wintercms/winter"
     },
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../winter-dev/modules/system",
-            "options": { "symlink": false  }
-        },
-        {
-            "type": "path",
-            "url": "../winter-dev/modules/backend",
-            "options": { "symlink": false  }
-        },
-        {
-            "type": "path",
-            "url": "../winter-dev/modules/cms",
-            "options": { "symlink": false  }
-        },
-        {
-            "type": "path",
-            "url": "../winter-dev/vendor/winter/storm",
-            "options": { "symlink": false  }
-        }
-    ],
     "require": {
-        "php": "^8.1",
-        "winter/storm": "dev-develop as 1.2",
-        "winter/wn-system-module": "dev-develop",
-        "winter/wn-backend-module": "dev-develop",
-        "winter/wn-cms-module": "dev-develop",
-        "laravel/framework": "^10.1",
+        "php": "^8.2",
+        "winter/storm": "dev-wip-laravel-11",
+        "winter/wn-system-module": "dev-wip-laravel-11",
+        "winter/wn-backend-module": "dev-wip-laravel-11",
+        "winter/wn-cms-module": "dev-wip-laravel-11",
+        "laravel/framework": "^11.0",
         "wikimedia/composer-merge-plugin": "~2.1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^9.5.8",
         "mockery/mockery": "^1.4.4",
         "fakerphp/faker": "^1.9.2",
         "squizlabs/php_codesniffer": "^3.2",
