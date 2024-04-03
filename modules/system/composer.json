@@ -23,9 +23,9 @@
         }
     ],
     "require": {
-        "php": "^8.0.2",
+        "php": "^8.2",
         "composer/installers": "~1.11.0",
-        "laravel/framework": "^10.1",
+        "laravel/framework": "^11.0",
         "composer/semver": "^3.2"
     },
     "replace": {
