@@ -62,7 +62,6 @@
             "phpcs --colors -nq --report=\"full\" --extensions=\"php\""
         ]
     },
-    "minimum-stability": "dev",
     "prefer-stable": true,
     "extra": {
         "merge-plugin": {
