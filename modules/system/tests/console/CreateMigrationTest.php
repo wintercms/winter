@@ -34,46 +34,50 @@ class CreateMigrationTest extends PluginTestCase
 
         $columns = [
             'id'            => ['type'=>'integer', 'index'=>'primary', 'required'=>true],
-            'cb'            => ['type'=>'boolean'],
-            'switch'        => ['type'=>'boolean'],
+            'cb'            => ['type'=>'tinyint'],
+            'switch'        => ['type'=>'tinyint'],
             'int'           => ['type'=>'integer'],
             'uint'          => ['type'=>'integer', 'required'=>true],
-            'double'        => ['type'=>'float'],
+            'double'        => ['type'=>'double'],
             'range'         => ['type'=>'integer', 'required'=>true],
             'datetime'      => ['type'=>'datetime'],
             'date'          => ['type'=>'date', 'required'=>true],
             'time'          => ['type'=>'time'],
             'md'            => ['type'=>'text'],
             'textarea'      => ['type'=>'text'],
-            'text'          => ['type'=>'string', 'required'=>true],
+            'text'          => ['type'=>'varchar', 'required'=>true],
             'phone_id'      => ['type'=>'integer', 'index'=>true, 'required'=>true],
             'user_id'       => ['type'=>'integer', 'index'=>true, 'required'=>true],
             'data'          => ['type'=>'text'],
             'sort_order'    => ['type'=>'integer', 'index'=>true],
             'taggable_id'   => ['type'=>'integer', 'index'=>'morphable_index'],
-            'taggable_type' => ['type'=>'string', 'index'=>'morphable_index'],
+            'taggable_type' => ['type'=>'varchar', 'index'=>'morphable_index'],
             'created_at'    => ['type'=>'datetime'],
             'updated_at'    => ['type'=>'datetime'],
         ];
 
-        $table = Schema::getConnection()->getDoctrineSchemaManager()->listTableDetails($this->table);
+        $schemaBuilder = Schema::getConnection()->getSchemaBuilder();
+
+        $tableColumns = collect($schemaBuilder->getColumns($this->table));
+        $tableIndexes = collect($schemaBuilder->getIndexes($this->table))->pluck('columns', 'name');
 
         foreach ($columns as $name => $definition) {
-            $this->assertEquals(array_get($definition, 'type'), Schema::getColumnType($this->table, $name));
+            $column = $tableColumns->where('name', $name)->first();
+
+            $this->assertEquals(array_get($definition, 'type'), $column['type_name']);
+            $this->assertEquals(array_get($definition, 'required', false), !$column['nullable']);
 
             // assert an index has been created for the primary, morph and foreign keys
             if ($indexName = array_get($definition, 'index')) {
                 if ($indexName === true) {
                     $indexName = sprintf("%s_%s_index", $this->table, $name);
                 }
-                $this->assertTrue($table->hasIndex($indexName));
+                $this->assertTrue($schemaBuilder->hasIndex($this->table, $indexName));
 
-                if ($indexName === 'morphable_index') {
-                    $index = $table->getIndex($indexName);
-                    $this->assertTrue(in_array($name, $index->getColumns()));
+                if ($indexColumns = array_get($indexName, $tableIndexes)) {
+                    $this->assertTrue(in_array($name, $indexColumns));
                 }
             }
-            $this->assertEquals(array_get($definition, 'required', false), $table->getColumn($name)->getNotnull());
         }
 
         $migration->down();
