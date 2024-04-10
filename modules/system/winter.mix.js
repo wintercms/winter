@@ -19,6 +19,9 @@ mix
         to: './assets/js/snowboard/build/snowboard.vendor.js',
     })
 
+    // Compile updates assets
+    .less('./assets/less/updates/updates.less', './assets/css/updates/updates.css')
+
     // Compile Snowboard for the Backend / System
     .js(
         [

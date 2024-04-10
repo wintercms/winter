@@ -56,6 +56,7 @@ return [
     'BackendMenu'          => Backend\Facades\BackendMenu::class,
     'Block'                => Winter\Storm\Support\Facades\Block::class,
     'Cms'                  => Cms\Facades\Cms::class,
+    'Composer'             => System\Facades\Composer::class,
     'Config'               => Winter\Storm\Support\Facades\Config::class,
     'DbDongle'             => Winter\Storm\Support\Facades\DbDongle::class,
     'File'                 => Winter\Storm\Support\Facades\File::class,

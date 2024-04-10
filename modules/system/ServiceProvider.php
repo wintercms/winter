@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Schema;
 use Markdown;
 use Request;
 use System\Classes\CombineAssets;
+use System\Classes\DetailedPackage;
+use System\Classes\DetailedVersionedPackage;
 use System\Classes\ErrorHandler;
 use System\Classes\MailManager;
 use System\Classes\MarkupManager;
@@ -83,6 +85,7 @@ class ServiceProvider extends ModuleServiceProvider
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
             $this->registerBackendSettings();
+            $this->registerComposer();
         }
     }
 
@@ -580,6 +583,7 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
             $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
             $combiner->registerBundle('~/modules/system/assets/less/snowboard.extras.less');
+            $combiner->registerBundle('~/modules/system/assets/less/updates/updates.less');
         });
     }
 
@@ -628,5 +632,21 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerGlobalViewVars()
     {
         View::share('appName', Config::get('app.name'));
+    }
+
+    protected function registerComposer()
+    {
+        $this->app->bind('system.composer', function () {
+            \Winter\Packager\Composer::setPackageClass('detailedPackage', DetailedPackage::class);
+            \Winter\Packager\Composer::setPackageClass('detailedVersionedPackage', DetailedVersionedPackage::class);
+
+            $composer = new \Winter\Packager\Composer;
+            $composer
+                ->setHomeDir(storage_path('temp/packager'), true)
+                ->setWorkDir(base_path())
+                ->setStorage(new \System\Classes\PackageStorage);
+
+            return $composer;
+        });
     }
 }

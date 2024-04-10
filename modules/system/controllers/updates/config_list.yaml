@@ -3,8 +3,8 @@
 # ===================================
 
 title: system::lang.updates.title
-list: ~/modules/system/models/pluginversion/columns.yaml
-modelClass: System\Models\PluginVersion
+list: ~/modules/system/models/pluginlist/columns.yaml
+modelClass: System\Models\PluginList
 noRecordsMessage: backend::lang.list.no_records
 recordUrl: system/updates/details/:slug
 

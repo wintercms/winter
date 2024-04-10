@@ -16,8 +16,10 @@ use Response;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
+use System\Facades\Composer;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
+use Winter\Packager\Enums\ShowMode;
 
 /**
  * Updates controller
@@ -73,7 +75,7 @@ class Updates extends Controller
      */
     public function index()
     {
-        $this->vars['coreBuild'] = Parameter::get('system::core.build');
+        $this->vars['coreBuild'] = $this->getCurrentBuild();
         $this->vars['coreBuildModified'] = Parameter::get('system::core.modified', false);
         $this->vars['projectId'] = Parameter::get('system::project.id');
         $this->vars['projectName'] = Parameter::get('system::project.name');
@@ -1039,5 +1041,17 @@ class Updates extends Controller
         }
 
         return $plugins;
+    }
+
+    /**
+     * Get current build from Composer.
+     *
+     * @return string
+     */
+    protected function getCurrentBuild(): string
+    {
+        $package = Composer::show(ShowMode::SELF);
+
+        return $package->getVersion();
     }
 }
