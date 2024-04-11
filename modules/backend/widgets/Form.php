@@ -354,7 +354,7 @@ class Form extends WidgetBase
     public function onRefresh()
     {
         $result = [];
-        $saveData = $this->getSaveData(false);
+        $saveData = $this->getSaveData(true);
 
         /**
          * @event backend.form.beforeRefresh
@@ -1174,12 +1174,10 @@ class Form extends WidgetBase
      *
      * @return array
      */
-    public function getSaveData($applyFilters=true)
+    public function getSaveData($allFields=false)
     {
         $this->defineFormFields();
-        if ($applyFilters) {
-            $this->applyFiltersFromModel();
-        }
+        $this->applyFiltersFromModel();
 
         $result = [];
 
@@ -1198,7 +1196,7 @@ class Form extends WidgetBase
             /*
              * Disabled and hidden should be omitted from data set
              */
-            if ($field->disabled || $field->hidden) {
+            if (!$allFields && ($field->disabled || $field->hidden)) {
                 continue;
             }
 
