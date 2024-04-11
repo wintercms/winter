@@ -354,7 +354,7 @@ class Form extends WidgetBase
     public function onRefresh()
     {
         $result = [];
-        $saveData = $this->getSaveData();
+        $saveData = $this->getSaveData(false);
 
         /**
          * @event backend.form.beforeRefresh
@@ -1174,9 +1174,12 @@ class Form extends WidgetBase
      *
      * @return array
      */
-    public function getSaveData()
+    public function getSaveData($applyFilters=true)
     {
         $this->defineFormFields();
+        if ($applyFilters) {
+            $this->applyFiltersFromModel();
+        }
 
         $result = [];
 
