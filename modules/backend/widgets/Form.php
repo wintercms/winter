@@ -1171,8 +1171,6 @@ class Form extends WidgetBase
 
     /**
      * Returns post data from a submitted form.
-     *
-     * @return array
      */
     public function getSaveData(bool $includeAllFields = false): array
     {
