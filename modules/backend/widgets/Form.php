@@ -1196,7 +1196,7 @@ class Form extends WidgetBase
             /*
              * Disabled and hidden should be omitted from data set
              */
-            if (!$allFields && ($field->disabled || $field->hidden)) {
+            if (!$includeAllFields && ($field->disabled || $field->hidden)) {
                 continue;
             }
 
