@@ -315,7 +315,8 @@ class ServiceProvider extends ModuleServiceProvider
     {
         Event::listen(\Illuminate\Log\Events\MessageLogged::class, function ($event) {
             if (EventLog::useLogging()) {
-                EventLog::add($event->message, $event->level);
+                $details = $event->context ?? null;
+                EventLog::add($event->message, $event->level, $details);
             }
         });
     }
