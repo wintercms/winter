@@ -7,6 +7,7 @@ use Exception;
 use File;
 use Illuminate\Encryption\Encrypter;
 use PDO;
+use Schema;
 use Str;
 use Symfony\Component\Console\Input\InputOption;
 use System\Classes\UpdateManager;
@@ -375,6 +376,16 @@ class WinterInstall extends Command
     protected function setupMigrateDatabase()
     {
         $this->line('Migrating application and plugins...');
+
+        $connection = Schema::getConnection();
+
+        if ($connection->getDriverName() === 'sqlite') {
+            $parts = explode('.', $connection->getServerVersion());
+            if (count($parts) < 2 || !($parts[0] == 3 && $parts[1] >= 35)) {
+                $this->error("SQLite version minimum requirement not met (>= 3.35)");
+                exit;
+            }
+        };
 
         try {
             Db::purge();
