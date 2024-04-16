@@ -157,7 +157,7 @@ class VersionManagerTest extends TestCase
         $this->assertEquals($expectedScripts, $scripts);
     }
 
-    public function versionInfoProvider()
+    public static function versionInfoProvider()
     {
         return [
             [

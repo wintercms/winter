@@ -111,9 +111,4 @@ return [
     'October\Rain\Scaffold\Console\CreateReportWidget'   => Backend\Console\CreateReportWidget::class,
     'October\Rain\Scaffold\Console\CreateTheme'          => Cms\Console\CreateTheme::class,
     'October\Rain\Scaffold\Console\CreateComponent'      => Cms\Console\CreateComponent::class,
-
-    # this is currently required because Illuminate\Foundation\Testing\Concerns\InteractsWithTestCaseLifecycle
-    # references the wrong Class in newer PHPUnit
-    # TODO: send a PR to Laravel about this
-    'PHPUnit\Metadata\Annotation\Parser\Registry'        => 'PHPUnit\Util\Annotation\Registry',
 ];
