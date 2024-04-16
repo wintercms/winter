@@ -380,8 +380,7 @@ class WinterInstall extends Command
         $connection = Schema::getConnection();
 
         if ($connection->getDriverName() === 'sqlite') {
-            $parts = explode('.', $connection->getServerVersion());
-            if (count($parts) < 2 || !($parts[0] == 3 && $parts[1] >= 35)) {
+            if (version_compare($connection->getServerVersion(), '3.35', '<')) {
                 $this->error("SQLite version minimum requirement not met (>= 3.35)");
                 exit;
             }
