@@ -58,7 +58,7 @@ jobs:
 
       - name: Switch library dependency (develop)
         if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
-        run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.3"
+        run: php ./.github/workflows/utilities/library-switcher "dev-wip-laravel-11 as 1.2"
 
       - name: Switch library dependency (1.2)
         if: github.head_ref == '1.2' || github.ref == 'refs/heads/1.2' || github.base_ref == '1.2'
@@ -135,7 +135,7 @@ jobs:
 
       - name: Switch library dependency (develop)
         if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
-        run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.3"
+        run: php ./.github/workflows/utilities/library-switcher "dev-wip-laravel-11 as 1.2"
 
       - name: Switch library dependency (1.0)
         if: github.head_ref == '1.0' || github.ref == 'refs/heads/1.0' || github.base_ref == '1.0'
