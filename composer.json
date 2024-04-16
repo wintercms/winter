@@ -30,7 +30,7 @@
     },
     "require": {
         "php": "^8.2",
-        "winter/storm": "dev-wip-laravel-11",
+        "winter/storm": "dev-wip-laravel-11 as 1.2",
         "winter/wn-system-module": "dev-wip-laravel-11",
         "winter/wn-backend-module": "dev-wip-laravel-11",
         "winter/wn-cms-module": "dev-wip-laravel-11",

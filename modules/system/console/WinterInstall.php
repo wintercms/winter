@@ -377,15 +377,6 @@ class WinterInstall extends Command
     {
         $this->line('Migrating application and plugins...');
 
-        $connection = Schema::getConnection();
-
-        if ($connection->getDriverName() === 'sqlite') {
-            if (version_compare($connection->getServerVersion(), '3.35', '<')) {
-                $this->error("SQLite version minimum requirement not met (>= 3.35)");
-                exit;
-            }
-        };
-
         try {
             Db::purge();
 
