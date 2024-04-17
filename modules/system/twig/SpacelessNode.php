@@ -30,6 +30,5 @@ class SpacelessNode extends Node implements NodeOutputInterface
         $compiler
             ->write(sprintf("yield trim(preg_replace('/>\s+</', '><', '%s'));\n", $this->getNode('body')->getAttribute('data')))
         ;
-
     }
 }
