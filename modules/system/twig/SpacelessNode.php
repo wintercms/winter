@@ -27,14 +27,9 @@ class SpacelessNode extends Node implements NodeOutputInterface
         $compiler
             ->addDebugInfo($this)
         ;
-        if ($compiler->getEnvironment()->isDebug()) {
-            $compiler->write("ob_start(); yield '';\n");
-        } else {
-            $compiler->write("ob_start(function () { return ''; }); yield '';\n");
-        }
         $compiler
-            ->subcompile($this->getNode('body'))
-            ->write("yield trim(preg_replace('/>\s+</', '><', ob_get_clean()));\n")
+            ->write(sprintf("yield trim(preg_replace('/>\s+</', '><', '%s'));\n", $this->getNode('body')->getAttribute('data')))
         ;
+
     }
 }
