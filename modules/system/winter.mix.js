@@ -19,6 +19,24 @@ mix
         to: './assets/js/snowboard/build/snowboard.vendor.js',
     })
 
+    // Compile Storm UI and framework assets
+    .less('./assets/less/styles.less', './assets/css/styles.css')
+    .less('./assets/ui/storm.less', './assets/ui/storm.css')
+    .less('./assets/less/framework.extras.less', './assets/css/framework.extras.css', {
+        lessOptions: {
+            strictMath: true,
+        },
+    })
+    .less('./assets/less/snowboard.extras.less', './assets/css/snowboard.extras.css', {
+        lessOptions: {
+            strictMath: true,
+        },
+    })
+
+    // Compile Font Awesome icons and fonts
+    .less('./assets/ui/icons.less', './assets/ui/icons.css')
+    .copy('./../../node_modules/@fortawesome/fontawesome-free/webfonts/*', './assets/ui/font')
+
     // Compile Snowboard for the Backend / System
     .js(
         [

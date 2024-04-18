@@ -573,14 +573,9 @@ class ServiceProvider extends ModuleServiceProvider
          * Register asset bundles
          */
         CombineAssets::registerCallback(function ($combiner) {
-            $combiner->registerBundle('~/modules/system/assets/less/styles.less');
-            $combiner->registerBundle('~/modules/system/assets/ui/storm.less');
             $combiner->registerBundle('~/modules/system/assets/ui/storm.js');
-            $combiner->registerBundle('~/modules/system/assets/ui/icons.less');
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
-            $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
-            $combiner->registerBundle('~/modules/system/assets/less/snowboard.extras.less');
         });
     }
 
