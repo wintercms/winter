@@ -201,6 +201,7 @@ class ServiceProvider extends ModuleServiceProvider
                 'secure_asset'   => 'secure_asset',
 
                 // Classes
+                'array_*'        => ['Arr', '*'],
                 'str_*'          => ['Str', '*'],
                 'url_*'          => ['Url', '*'],
                 'html_*'         => ['Html', '*'],
