@@ -32,6 +32,7 @@ mix
             strictMath: true,
         },
     })
+    .less('./assets/ui/less/select.less', './assets/ui/vendor/select2/css/select2.css')
 
     // Compile Font Awesome icons and fonts
     .less('./assets/ui/icons.less', './assets/ui/icons.css')
