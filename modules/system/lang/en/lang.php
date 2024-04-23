@@ -187,7 +187,7 @@ return [
         'smtp_port' => 'SMTP port',
         'smtp_ssl' => 'SSL connection required',
         'smtp_encryption' => 'SMTP encryption protocol',
-        'smtp_encryption_none' => 'No encryption / STARTTLS',
+        'smtp_encryption_none' => 'No encryption',
         'smtp_encryption_tls' => 'TLS',
         'smtp_encryption_ssl' => 'SSL',
         'sendmail' => 'Sendmail',

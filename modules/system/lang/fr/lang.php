@@ -141,7 +141,7 @@ return [
         'smtp_port' => 'Port SMTP',
         'smtp_ssl' => 'Connexion SSL requise',
         'smtp_encryption' => 'Protocole de sécurisation des échanges SMTP',
-        'smtp_encryption_none' => 'Aucun cryptage / STARTTLS',
+        'smtp_encryption_none' => 'Aucun cryptage',
         'smtp_encryption_tls' => 'TLS',
         'smtp_encryption_ssl' => 'SSL',
         'sendmail' => 'Sendmail',
