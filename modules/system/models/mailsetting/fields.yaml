@@ -67,20 +67,18 @@ tabs:
             label: system::lang.mail.smtp_username
             tab: system::lang.mail.general
             span: left
-            trigger:
-                action: show
-                field: smtp_authorization
-                condition: checked
+            dependsOn:
+              - send_mode
+              - smtp_authorization
 
         smtp_password:
             label: system::lang.mail.smtp_password
             tab: system::lang.mail.general
             type: sensitive
             span: right
-            trigger:
-                action: show
-                field: smtp_authorization
-                condition: checked
+            dependsOn:
+              - send_mode
+              - smtp_authorization
 
         sendmail_path:
             label: system::lang.mail.sendmail_path

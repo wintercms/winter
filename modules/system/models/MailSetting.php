@@ -155,5 +155,13 @@ class MailSetting extends Model
                     break;
             }
         }
+
+        $hideAuth = $fields->send_mode->value !== 'smtp' || !$fields->smtp_authorization->value;
+        if (isset($fields->smtp_user)) {
+            $fields->smtp_user->hidden = $hideAuth;
+        }
+        if (isset($fields->smtp_password)) {
+            $fields->smtp_password->hidden = $hideAuth;
+        }
     }
 }
