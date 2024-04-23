@@ -155,9 +155,5 @@ class MailSetting extends Model
                     break;
             }
         }
-        if (!$fields->smtp_authorization->value) {
-            $fields->smtp_user->hidden = true;
-            $fields->smtp_password->hidden = true;
-        }
     }
 }

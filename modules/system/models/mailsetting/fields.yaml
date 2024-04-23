@@ -70,8 +70,8 @@ tabs:
             dependsOn: smtp_authorization
             trigger:
                 action: show
-                field: send_mode
-                condition: value[smtp]
+                field: smtp_authorization
+                condition: checked
 
         smtp_password:
             label: system::lang.mail.smtp_password
@@ -81,8 +81,8 @@ tabs:
             dependsOn: smtp_authorization
             trigger:
                 action: show
-                field: send_mode
-                condition: value[smtp]
+                field: smtp_authorization
+                condition: checked
 
         sendmail_path:
             label: system::lang.mail.sendmail_path
