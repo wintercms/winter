@@ -58,10 +58,9 @@ class MailSetting extends Model
                 'port' => $config->get('mail.port', 587),
                 'username' => $config->get('mail.username'),
                 'password' => $config->get('mail.password'),
-                'encryption' => $config->get('mail.encryption'),
+                'encryption' => $config->get('mail.encryption', 'tls'),
             ],
         ]);
-        $encryption = array_get($mailers['smtp'], 'encryption');
 
         $this->send_mode = $config->get('mail.default', static::MODE_MAIL);
         $this->sender_name = $config->get('mail.from.name', 'Your Site');
