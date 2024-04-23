@@ -71,6 +71,7 @@ class MailSetting extends Model
         $this->smtp_user = array_get($mailers['smtp'], 'username');
         $this->smtp_password = array_get($mailers['smtp'], 'password');
         $this->smtp_authorization = !!strlen($this->smtp_user);
+        $this->smtp_encryption = 'tls';
     }
 
     public function getSendModeOptions()
