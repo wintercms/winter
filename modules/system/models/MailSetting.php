@@ -72,7 +72,6 @@ class MailSetting extends Model
         $this->smtp_user = array_get($mailers['smtp'], 'username');
         $this->smtp_password = array_get($mailers['smtp'], 'password');
         $this->smtp_authorization = !!strlen($this->smtp_user);
-        $this->smtp_encryption = $encryption === 'ssl' ? 'tls' : $encryption;
     }
 
     public function getSendModeOptions()
@@ -97,6 +96,7 @@ class MailSetting extends Model
             case self::MODE_SMTP:
                 $config->set('mail.mailers.smtp.host', $settings->smtp_address);
                 $config->set('mail.mailers.smtp.port', $settings->smtp_port);
+                $config->set('mail.mailers.smtp.encryption', 'tls');
                 if ($settings->smtp_authorization) {
                     $config->set('mail.mailers.smtp.username', $settings->smtp_user);
                     $config->set('mail.mailers.smtp.password', $settings->smtp_password);
@@ -105,33 +105,11 @@ class MailSetting extends Model
                     $config->set('mail.mailers.smtp.username', null);
                     $config->set('mail.mailers.smtp.password', null);
                 }
-                if ($settings->smtp_encryption) {
-                    # convert deprecated 'ssl' encryption to 'tls'
-                    $encryption = $settings->smtp_encryption === 'ssl' ? 'tls' : $settings->smtp_encryption;
-
-                    $config->set('mail.mailers.smtp.encryption', $encryption);
-                }
-                else {
-                    $config->set('mail.mailers.smtp.encryption', null);
-                }
                 break;
 
             case self::MODE_SENDMAIL:
                 $config->set('mail.mailers.sendmail.path', $settings->sendmail_path);
                 break;
         }
-    }
-
-    /**
-     * @return array smtp_encryption options values
-     * Note: port 587 (submission) no need to specify encryption as it is explicitly enabled (STARTTLS)
-     * Note: port 465 encryption is implicit for most existing implementations
-     */
-    public function getSmtpEncryptionOptions()
-    {
-        return [
-            '' => 'system::lang.mail.smtp_encryption_none',
-            'tls' => 'system::lang.mail.smtp_encryption_tls',
-        ];
     }
 }
