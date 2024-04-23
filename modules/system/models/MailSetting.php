@@ -112,4 +112,26 @@ class MailSetting extends Model
                 break;
         }
     }
+
+    /**
+     * Filter fields callback.
+     *
+     * We use this to automatically set the SMTP port to the encryption type's corresponding port, if it was originally
+     * using a default port.
+     *
+     * @param array $fields
+     * @param string|null $context
+     * @return void
+     */
+    public function filterFields($fields, $context = null)
+    {
+        $hideAuth = $fields->send_mode->value !== 'smtp' || !$fields->smtp_authorization->value;
+
+        if (isset($fields->smtp_user)) {
+            $fields->smtp_user->hidden = $hideAuth;
+        }
+        if (isset($fields->smtp_password)) {
+            $fields->smtp_password->hidden = $hideAuth;
+        }
+    }
 }
