@@ -58,7 +58,6 @@ class MailSetting extends Model
                 'port' => $config->get('mail.port', 587),
                 'username' => $config->get('mail.username'),
                 'password' => $config->get('mail.password'),
-                'encryption' => $config->get('mail.encryption', 'tls'),
             ],
         ]);
 
@@ -115,8 +114,7 @@ class MailSetting extends Model
     /**
      * Filter fields callback.
      *
-     * We use this to automatically set the SMTP port to the encryption type's corresponding port, if it was originally
-     * using a default port.
+     * We use this to show smtp credential fields only for smtp mode and when smtp authorization is required.
      *
      * @param array $fields
      * @param string|null $context
