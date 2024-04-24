@@ -95,7 +95,7 @@ class MailSetting extends Model
             case self::MODE_SMTP:
                 $config->set('mail.mailers.smtp.host', $settings->smtp_address);
                 $config->set('mail.mailers.smtp.port', $settings->smtp_port);
-                $config->set('mail.mailers.smtp.encryption', 'tls');
+                $config->set('mail.mailers.smtp.encryption', $settings->smtp_port === 465 ? 'tls' : null);
                 if ($settings->smtp_authorization) {
                     $config->set('mail.mailers.smtp.username', $settings->smtp_user);
                     $config->set('mail.mailers.smtp.password', $settings->smtp_password);
