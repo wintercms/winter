@@ -66,7 +66,7 @@ class SettingsModel extends ModelBehavior
         $this->model->bindEvent('model.afterFetch', [$this, 'afterModelFetch']);
         $this->model->bindEvent('model.beforeSave', [$this, 'beforeModelSave']);
         $this->model->bindEvent('model.afterSave', [$this, 'afterModelSave']);
-        $this->model->bindEvent('model.setAttribute', [$this, 'setSettingsValue']);
+        $this->model->bindEvent('model.setAttribute', [$this, 'syncModelAttribute']);
         $this->model->bindEvent('model.saveInternal', [$this, 'saveModelInternal']);
 
         /*
@@ -176,15 +176,21 @@ class SettingsModel extends ModelBehavior
     /**
      * Set a single setting value, if allowed.
      */
-    public function setSettingsValue($key)
+    public function setSettingsValue($key, $value)
     {
         if ($this->isKeyAllowed($key)) {
             return;
         }
 
-        $value = $this->model->getAttribute($key);
-
         $this->fieldValues[$key] = $value;
+    }
+
+    /**
+     * Sync the provided attribute into the settings value
+     */
+    protected function syncModelAttribute($key)
+    {
+        $this->setSettingsValue($key, $this->model->getAttribute($key));
     }
 
     /**
@@ -199,7 +205,8 @@ class SettingsModel extends ModelBehavior
      */
     public function afterModelFetch()
     {
-        $this->fieldValues = $this->model->attributes = array_merge($this->model->value ?: [], $this->model->attributes);
+        $this->fieldValues = $this->model->value ?: [];
+        $this->model->attributes = array_merge($this->fieldValues, $this->model->attributes);
     }
 
     /**
