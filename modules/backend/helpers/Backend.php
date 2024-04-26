@@ -11,6 +11,7 @@ use Winter\Storm\Router\Helper as RouterHelper;
 use System\Helpers\DateTime as DateTimeHelper;
 use Backend\Classes\Skin;
 use Backend\Helpers\Exception\DecompileException;
+use Backend\Models\Preference as BackendPreference;
 
 /**
  * Backend Helper
@@ -97,7 +98,7 @@ class Backend
 
         try {
             // Find user preference
-            $carbon->setTimezone(\Backend\Models\Preference::get('timezone'));
+            $carbon->setTimezone(BackendPreference::get('timezone'));
         } catch (Exception $ex) {
             // Use system default
             $carbon->setTimezone(Config::get('cms.backendTimezone', Config::get('app.timezone')));
@@ -146,7 +147,7 @@ class Backend
             return '';
         }
 
-        $carbon = DateTimeHelper::makeCarbon($dateTime);
+        $carbon = self::makeCarbon($dateTime);
 
         if ($jsFormat !== null) {
             $format = $jsFormat;
