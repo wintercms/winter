@@ -64,7 +64,7 @@ module.exports = async () => {
                     };
                     break;
                 case "WebpackBarPlugin":
-                    if (%silent%) {
+                    if (%silent% || %noProgress%) {
                         plugins[index].apply = _ => void 0;
                     }
                     break;
