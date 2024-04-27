@@ -7,17 +7,15 @@
     <?php
     switch ($mode) {
         case 'image':
-            echo $this->makePartial('image_single');
-            break;
         case 'video':
         case 'audio':
-        case 'document':
-            echo $this->makePartial('file_single', ['mode' => $mode]);
+            echo $this->makePartial('media_single', ['mode' => $mode]);
             break;
+        case 'document':
         case 'file':
         case 'all':
         default:
-            echo $this->makePartial('file_single', ['mode' => 'all']);
+            echo $this->makePartial('file_single', ['mode' => $mode]);
     }
     ?>
 
