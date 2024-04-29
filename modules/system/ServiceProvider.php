@@ -25,6 +25,7 @@ use System\Models\MailSetting;
 use System\Twig\Engine as TwigEngine;
 use SystemException;
 use Twig\Environment;
+use Twig\Extension\CoreExtension;
 use Validator;
 use View;
 use Winter\Storm\Router\Helper as RouterHelper;
@@ -202,9 +203,17 @@ class ServiceProvider extends ModuleServiceProvider
                 'route'          => 'route',
                 'secure_url'     => 'secure_url',
                 'secure_asset'   => 'secure_asset',
-                'date'           => [function (Environment $env, $value, $timezone = null) {
+                'date'           => [function (Environment $env, $value = null, $timezone = null) {
                     if (!($value instanceof DateInterval)) {
                         $value = DateTime::makeCarbon($value)->toDateTime();
+                    }
+
+                    if (is_null($value) || $value === 'now') {
+                        if (is_null($value)) {
+                            $value = 'now';
+                        }
+
+                        return DateTime::makeCarbon(new \DateTime($value, false !== $timezone ? $timezone : $env->getExtension(CoreExtension::class)->getTimezone()));
                     }
 
                     return twig_date_converter($env, $value, $timezone);
