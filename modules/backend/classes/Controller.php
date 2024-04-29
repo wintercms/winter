@@ -111,6 +111,13 @@ class Controller extends ControllerBase
     ];
 
     /**
+     * The array of trait initializers that will be called on each new instance.
+     *
+     * @var array
+     */
+    protected static $traitInitializers = [];
+
+    /**
      * @var array Controller specified methods which cannot be called as actions.
      */
     protected $guarded = [];
@@ -159,6 +166,9 @@ class Controller extends ControllerBase
         }
 
         $this->extendableConstruct();
+
+        static::bootTraits();
+        $this->initializeTraits();
     }
 
     public function __get($name)
@@ -760,5 +770,47 @@ class Controller extends ControllerBase
     {
         $hiddenHints = UserPreference::forUser()->get('backend::hints.hidden', []);
         return array_key_exists($name, $hiddenHints);
+    }
+
+    /**
+     * Boot all of the bootable traits on the controller.
+     *
+     */
+    protected static function bootTraits(): void
+    {
+        $class = static::class;
+
+        $booted = [];
+
+        static::$traitInitializers[$class] = [];
+
+        foreach (class_uses_recursive($class) as $trait) {
+            $method = 'boot'.class_basename($trait);
+
+            if (method_exists($class, $method) && ! in_array($method, $booted)) {
+                forward_static_call([$class, $method]);
+
+                $booted[] = $method;
+            }
+
+            if (method_exists($class, $method = 'initialize'.class_basename($trait))) {
+                static::$traitInitializers[$class][] = $method;
+
+                static::$traitInitializers[$class] = array_unique(
+                    static::$traitInitializers[$class]
+                );
+            }
+        }
+    }
+
+    /**
+     * Initialize any initializable traits on the controller.
+     *
+     */
+    protected function initializeTraits(): void
+    {
+        foreach (static::$traitInitializers[static::class] as $method) {
+            $this->{$method}();
+        }
     }
 }
