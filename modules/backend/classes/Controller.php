@@ -112,10 +112,8 @@ class Controller extends ControllerBase
 
     /**
      * The array of trait initializers that will be called on each new instance.
-     *
-     * @var array
      */
-    protected static $traitInitializers = [];
+    protected static array $traitInitializers = [];
 
     /**
      * @var array Controller specified methods which cannot be called as actions.
@@ -774,7 +772,6 @@ class Controller extends ControllerBase
 
     /**
      * Boot all of the bootable traits on the controller.
-     *
      */
     protected static function bootTraits(): void
     {
@@ -805,7 +802,6 @@ class Controller extends ControllerBase
 
     /**
      * Initialize any initializable traits on the controller.
-     *
      */
     protected function initializeTraits(): void
     {
