@@ -775,10 +775,8 @@ class Controller extends ControllerBase
      */
     protected static function bootTraits(): void
     {
-        $class = static::class;
-
         $booted = [];
-
+        $class = static::class;
         static::$traitInitializers[$class] = [];
 
         foreach (class_uses_recursive($class) as $trait) {
@@ -786,13 +784,11 @@ class Controller extends ControllerBase
 
             if (method_exists($class, $method) && ! in_array($method, $booted)) {
                 forward_static_call([$class, $method]);
-
                 $booted[] = $method;
             }
 
             if (method_exists($class, $method = 'initialize'.class_basename($trait))) {
                 static::$traitInitializers[$class][] = $method;
-
                 static::$traitInitializers[$class] = array_unique(
                     static::$traitInitializers[$class]
                 );
