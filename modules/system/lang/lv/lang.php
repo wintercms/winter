@@ -77,7 +77,7 @@ return [
             'customers' => 'Klienti',
             'my_settings' => 'Mani iestatījumi',
             'notifications' => 'Paziņojumi',
-        ]
+        ],
     ],
     'theme' => [
         'label' => 'Tēma',
@@ -464,5 +464,11 @@ return [
     'pagination' => [
         'previous' => 'Iepriekšējie',
         'next' => 'Nākamie',
+    ],
+    'datetime' => [
+        'today' => 'Šodien',
+        'yesterday' => 'Vakar',
+        'tomorrow' => 'Rīt',
+        'at' => ':date plkst. :time',
     ],
 ];
