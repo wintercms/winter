@@ -1,17 +1,17 @@
 <?php namespace Backend\Widgets;
 
-use Lang;
-use Form as FormHelper;
-use Backend\Classes\FormTabs;
+use ApplicationException;
 use Backend\Classes\FormField;
+use Backend\Classes\FormTabs;
+use Backend\Classes\FormWidgetBase;
 use Backend\Classes\WidgetBase;
 use Backend\Classes\WidgetManager;
-use Backend\Classes\FormWidgetBase;
+use BackendAuth;
+use Exception;
+use Form as FormHelper;
+use Lang;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
-use ApplicationException;
-use Exception;
-use BackendAuth;
 
 /**
  * Form Widget
@@ -1225,7 +1225,10 @@ class Form extends WidgetBase
                 continue;
             }
 
-            $widgetValue = $widget->getSaveValue($this->dataArrayGet($result, $parts));
+            $widgetValue = $widget->getSaveValue($this->dataArrayGet($result, $parts, FormField::NO_SAVE_DATA));
+            if ($widgetValue === FormField::NO_SAVE_DATA) {
+                continue;
+            }
             $this->dataArraySet($result, $parts, $widgetValue);
         }
 
