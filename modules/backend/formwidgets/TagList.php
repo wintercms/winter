@@ -127,6 +127,10 @@ class TagList extends FormWidgetBase
             return $names;
         }
 
+        if (!is_array($names)) {
+            $names = [$names];
+        }
+
         $relationModel = $this->getRelationModel();
         $existingTags = $relationModel
             ->whereIn($this->nameFrom, $names)
