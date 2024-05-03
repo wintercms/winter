@@ -4,7 +4,7 @@ use Config;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\ExecutableFinder;
-use Symfony\Component\Process\Process;
+use Winter\Storm\Console\Process;
 use System\Classes\PluginManager;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\PathResolver;

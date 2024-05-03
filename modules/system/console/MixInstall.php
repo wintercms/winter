@@ -5,7 +5,7 @@ use Config;
 use Cms\Classes\Theme;
 use Winter\Storm\Support\Str;
 use Winter\Storm\Console\Command;
-use Symfony\Component\Process\Process;
+use Winter\Storm\Console\Process;
 use System\Classes\MixAssets;
 use System\Classes\PluginManager;
 use Symfony\Component\Process\Exception\ProcessSignaledException;

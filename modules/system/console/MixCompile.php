@@ -2,7 +2,7 @@
 
 use File;
 use Winter\Storm\Console\Command;
-use Symfony\Component\Process\Process;
+use Winter\Storm\Console\Process;
 use System\Classes\MixAssets;
 use Winter\Storm\Support\Str;
 
