@@ -7,7 +7,7 @@ use Winter\Storm\Database\Model;
 use System\Tests\Bootstrap\PluginTestCase;
 
 class CheckboxTest extends PluginTestCase
-{ 
+{
     public $form = null;
 
     public function setUp(): void
@@ -33,7 +33,7 @@ class CheckboxTest extends PluginTestCase
                     'default' => false,
                 ],
             ],
-        ]); 
+        ]);
         
         $this->form->render();
     }
