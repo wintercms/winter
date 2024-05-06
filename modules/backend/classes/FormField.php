@@ -370,7 +370,7 @@ class FormField
     public function isSelected($value = true)
     {
         if ($this->value === null) {
-            return false;
+            return $this->defaults ?? false;
         }
 
         $value = ($value instanceof BackedEnum) ? $value->value : $value;
