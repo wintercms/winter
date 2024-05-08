@@ -1225,7 +1225,14 @@ class Form extends WidgetBase
                 continue;
             }
 
-            $widgetValue = $widget->getSaveValue($this->dataArrayGet($result, $parts, FormField::NO_SAVE_DATA));
+            // Exclude fields that didn't provide any value
+            $fieldValue = $this->dataArrayGet($result, $parts, FormField::NO_SAVE_DATA);
+            if ($fieldValue === FormField::NO_SAVE_DATA) {
+                continue;
+            }
+
+            // Exclude fields where the widget returns NO_SAVE_DATA
+            $widgetValue = $widget->getSaveValue($fieldValue);
             if ($widgetValue === FormField::NO_SAVE_DATA) {
                 continue;
             }
