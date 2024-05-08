@@ -123,8 +123,8 @@ class TagList extends FormWidgetBase
      */
     protected function hydrateRelationSaveValue($names): ?array
     {
-        if (!$names) {
-            return $names;
+        if (!$names || is_int($names)) {
+            return [];
         }
 
         if (!is_array($names)) {
