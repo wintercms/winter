@@ -92,7 +92,6 @@ return [
         'smtp_username' => 'Nombre de usuario',
         'smtp_password' => 'Contraseña',
         'smtp_port' => 'Puerto SMTP',
-        'smtp_ssl' => 'Conexión SSL requerida',
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Ruta del Sendmail',
         'sendmail_path_comment' => 'Por favor, especifique la ruta del programa sendmail.',

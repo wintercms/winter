@@ -66,6 +66,11 @@ class DateTime
             try {
                 $value = Carbon::parse($value);
             } catch (Exception $ex) {
+                // Try one last time to parse the date in case periods were used
+                try {
+                    $value = Carbon::parse(str_replace('.', '/', $value));
+                } catch (Exception $ex2) {
+                }
             }
         }
 

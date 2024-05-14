@@ -58,9 +58,9 @@ class MailSetting extends Model
                 'port' => $config->get('mail.port', 587),
                 'username' => $config->get('mail.username'),
                 'password' => $config->get('mail.password'),
-                'encryption' => $config->get('mail.encryption'),
             ],
         ]);
+
         $this->send_mode = $config->get('mail.default', static::MODE_MAIL);
         $this->sender_name = $config->get('mail.from.name', 'Your Site');
         $this->sender_email = $config->get('mail.from.address', 'admin@example.com');
@@ -70,7 +70,6 @@ class MailSetting extends Model
         $this->smtp_user = array_get($mailers['smtp'], 'username');
         $this->smtp_password = array_get($mailers['smtp'], 'password');
         $this->smtp_authorization = !!strlen($this->smtp_user);
-        $this->smtp_encryption = array_get($mailers['smtp'], 'encryption');
     }
 
     public function getSendModeOptions()
@@ -95,6 +94,7 @@ class MailSetting extends Model
             case self::MODE_SMTP:
                 $config->set('mail.mailers.smtp.host', $settings->smtp_address);
                 $config->set('mail.mailers.smtp.port', $settings->smtp_port);
+                $config->set('mail.mailers.smtp.encryption', $settings->smtp_port === 465 ? 'tls' : null);
                 if ($settings->smtp_authorization) {
                     $config->set('mail.mailers.smtp.username', $settings->smtp_user);
                     $config->set('mail.mailers.smtp.password', $settings->smtp_password);
@@ -102,12 +102,6 @@ class MailSetting extends Model
                 else {
                     $config->set('mail.mailers.smtp.username', null);
                     $config->set('mail.mailers.smtp.password', null);
-                }
-                if ($settings->smtp_encryption) {
-                    $config->set('mail.mailers.smtp.encryption', $settings->smtp_encryption);
-                }
-                else {
-                    $config->set('mail.mailers.smtp.encryption', null);
                 }
                 break;
 
@@ -118,22 +112,9 @@ class MailSetting extends Model
     }
 
     /**
-     * @return array smtp_encryption options values
-     */
-    public function getSmtpEncryptionOptions()
-    {
-        return [
-            '' => 'system::lang.mail.smtp_encryption_none',
-            'tls' => 'system::lang.mail.smtp_encryption_tls',
-            'ssl' => 'system::lang.mail.smtp_encryption_ssl',
-        ];
-    }
-
-    /**
      * Filter fields callback.
      *
-     * We use this to automatically set the SMTP port to the encryption type's corresponding port, if it was originally
-     * using a default port.
+     * We use this to show smtp credential fields only for smtp mode and when smtp authorization is required.
      *
      * @param array $fields
      * @param string|null $context
@@ -141,23 +122,13 @@ class MailSetting extends Model
      */
     public function filterFields($fields, $context = null)
     {
-        if (in_array($fields->smtp_port->value ?? 25, [25, 465, 587])) {
-            switch ($fields->smtp_encryption->value ?? '') {
-                case 'tls':
-                    $fields->smtp_port->value = 587;
-                    break;
-                case 'ssl':
-                    $fields->smtp_port->value = 465;
-                    break;
-                case '':
-                default:
-                    $fields->smtp_port->value = 25;
-                    break;
-            }
+        $hideAuth = $fields->send_mode->value !== 'smtp' || !$fields->smtp_authorization->value;
+
+        if (isset($fields->smtp_user)) {
+            $fields->smtp_user->hidden = $hideAuth;
         }
-        if (!$fields->smtp_authorization->value) {
-            $fields->smtp_user->hidden = true;
-            $fields->smtp_password->hidden = true;
+        if (isset($fields->smtp_password)) {
+            $fields->smtp_password->hidden = $hideAuth;
         }
     }
 }
