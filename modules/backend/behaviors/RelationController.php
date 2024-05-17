@@ -400,11 +400,13 @@ class RelationController extends ControllerBehavior
          *
          * Example usage:
          *
-         *     $controller->bindEvent('relation.extendViewWidget', function ($widget, $field, $model) {
+         *     $controller->bindEvent('relation.extendViewWidget', function (\Backend\Widgets\Lists|\Backend\Widgets\Form $widget, string $field, \Winter\Storm\Database\Model $model) {
          *         if ($field === 'myRelationField') {
-         *             $widget->addColumns([
-         *                 'myNewColumn' => ['label' => 'My New Column'],
-         *             ]);
+         *             $widget->model->bindEvent('list.extendColumns', function ($widget) {
+         *                 $widget->addColumns([
+         *                      'myNewColumn' => ['label' => 'My New Column'],
+         *                 ]);
+         *             });
          *         }
          *     });
          */
@@ -422,7 +424,7 @@ class RelationController extends ControllerBehavior
          *
          * Example usage:
          *
-         *     $controller->bindEvent('relation.extendManageWidget', function ($widget, $field, $model) {
+         *     $controller->bindEvent('relation.extendManageWidget', function (\Backend\Widgets\Lists|\Backend\Widgets\Form $widget, string $field, \Winter\Storm\Database\Model $model) {
          *         if ($field === 'myRelationField') {
          *             $widget->model->bindEvent('model.form.filterFields', function ($widget, $fields, $context) {
          *                 if (isset($fields->myFormField)) {
@@ -446,10 +448,12 @@ class RelationController extends ControllerBehavior
          *
          * Example usage:
          *
-         *     $controller->bindEvent('relation.extendPivotWidget', function ($widget, $field, $model) {
+         *     $controller->bindEvent('relation.extendPivotWidget', function (\Backend\Widgets\Form $widget, string $field, \Winter\Storm\Database\Model $model) {
          *         if ($field === 'myRelationField') {
-         *             $widget->addFields([
-         *                 'myNewPivotField' => ['label' => 'My New Pivot Field'],
+         *             $widget->model->bindEvent('form.extendFields', function ($widget) {
+         *                 $widget->addFields([
+         *                     'myNewPivotField' => ['label' => 'My New Pivot Field'],
+         *                 ]);
          *             });
          *         }
          *     });
