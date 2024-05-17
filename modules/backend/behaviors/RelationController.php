@@ -396,8 +396,8 @@ class RelationController extends ControllerBehavior
          * View widget
          */
         if ($this->viewWidget = $this->makeViewWidget()) {
-            $this->controller->relationExtendViewWidget($this->viewWidget, $this->field, $this->model);
-            $this->controller->fireEvent('relation.extendViewWidget', [$this->viewWidget, $this->field, $this->model]);
+            $this->controller->bindEvent('relation.extendViewWidget', [$this, 'relationExtendViewWidget']);
+            $this->controller->fireEvent('relation.extendViewWidget', [$this->viewWidget, $this->field, $this->model], halt:true);
             $this->viewWidget->bindToController();
         }
 
@@ -405,8 +405,8 @@ class RelationController extends ControllerBehavior
          * Manage widget
          */
         if ($this->manageWidget = $this->makeManageWidget()) {
-            $this->controller->relationExtendManageWidget($this->manageWidget, $this->field, $this->model);
-            $this->controller->fireEvent('relation.extendManageWidget', [$this->manageWidget, $this->field, $this->model]);
+            $this->controller->bindEvent('relation.extendManageWidget', [$this, 'relationExtendManageWidget']);
+            $this->controller->fireEvent('relation.extendManageWidget', [$this->manageWidget, $this->field, $this->model], halt:true);
             $this->manageWidget->bindToController();
         }
 
@@ -414,8 +414,8 @@ class RelationController extends ControllerBehavior
          * Pivot widget
          */
         if ($this->manageMode === 'pivot' && $this->pivotWidget = $this->makePivotWidget()) {
-            $this->controller->relationExtendPivotWidget($this->pivotWidget, $this->field, $this->model);
-            $this->controller->fireEvent('relation.extendPivotWidget', [$this->pivotWidget, $this->field, $this->model]);
+            $this->controller->bindEvent('relation.extendPivotWidget', [$this, 'relationExtendPivotWidget']);
+            $this->controller->fireEvent('relation.extendPivotWidget', [$this->pivotWidget, $this->field, $this->model], halt:true);
             $this->pivotWidget->bindToController();
         }
     }
