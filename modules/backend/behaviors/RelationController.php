@@ -394,6 +394,19 @@ class RelationController extends ControllerBehavior
 
         /*
          * View widget
+         *
+         * @event relation.extendViewWidget
+         * Called when the relation viewWidget is created
+         *
+         * Example usage:
+         *
+         *     $controller->bindEvent('relation.extendViewWidget', function ($widget, $field, $model) {
+         *         if ($field === 'myRelationField') {
+         *             $widget->addColumns([
+         *                 'myNewColumn' => ['label' => 'My New Column'],
+         *             ]);
+         *         }
+         *     });
          */
         if ($this->viewWidget = $this->makeViewWidget()) {
             $this->controller->bindEvent('relation.extendViewWidget', [$this->controller, 'relationExtendViewWidget']);
@@ -403,6 +416,21 @@ class RelationController extends ControllerBehavior
 
         /*
          * Manage widget
+         *
+         * @event relation.extendManageWidget
+         * Called when the relation manageWidget is created
+         *
+         * Example usage:
+         *
+         *     $controller->bindEvent('relation.extendManageWidget', function ($widget, $field, $model) {
+         *         if ($field === 'myRelationField') {
+         *             $widget->model->bindEvent('model.form.filterFields', function ($widget, $fields, $context) {
+         *                 if (isset($fields->myFormField)) {
+         *                     $fields->myFormField->hidden = true;
+         *                 }
+         *             });
+         *         }
+         *     });
          */
         if ($this->manageWidget = $this->makeManageWidget()) {
             $this->controller->bindEvent('relation.extendManageWidget', [$this->controller, 'relationExtendManageWidget']);
@@ -412,6 +440,19 @@ class RelationController extends ControllerBehavior
 
         /*
          * Pivot widget
+         *
+         * @event relation.extendPivotWidget
+         * Called when the relation pivotWidget is created
+         *
+         * Example usage:
+         *
+         *     $controller->bindEvent('relation.extendPivotWidget', function ($widget, $field, $model) {
+         *         if ($field === 'myRelationField') {
+         *             $widget->addFields([
+         *                 'myNewPivotField' => ['label' => 'My New Pivot Field'],
+         *             });
+         *         }
+         *     });
          */
         if ($this->manageMode === 'pivot' && $this->pivotWidget = $this->makePivotWidget()) {
             $this->controller->bindEvent('relation.extendPivotWidget', [$this->controller, 'relationExtendPivotWidget']);
