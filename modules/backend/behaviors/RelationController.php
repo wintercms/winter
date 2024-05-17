@@ -397,6 +397,7 @@ class RelationController extends ControllerBehavior
          */
         if ($this->viewWidget = $this->makeViewWidget()) {
             $this->controller->relationExtendViewWidget($this->viewWidget, $this->field, $this->model);
+            $this->controller->fireEvent('relation.extendViewWidget', [$this->viewWidget, $this->field, $this->model]);
             $this->viewWidget->bindToController();
         }
 
@@ -405,6 +406,7 @@ class RelationController extends ControllerBehavior
          */
         if ($this->manageWidget = $this->makeManageWidget()) {
             $this->controller->relationExtendManageWidget($this->manageWidget, $this->field, $this->model);
+            $this->controller->fireEvent('relation.extendManageWidget', [$this->manageWidget, $this->field, $this->model]);
             $this->manageWidget->bindToController();
         }
 
@@ -413,6 +415,7 @@ class RelationController extends ControllerBehavior
          */
         if ($this->manageMode === 'pivot' && $this->pivotWidget = $this->makePivotWidget()) {
             $this->controller->relationExtendPivotWidget($this->pivotWidget, $this->field, $this->model);
+            $this->controller->fireEvent('relation.extendPivotWidget', [$this->pivotWidget, $this->field, $this->model]);
             $this->pivotWidget->bindToController();
         }
     }
