@@ -55,7 +55,7 @@ return [
         'unsuspend_working' => 'Réactivation...',
         'signed_in_as' => 'Connecté en tant que :full_name',
         'sign_out' => 'Déconnexion',
-        'login' => 'OK',
+        'login' => 'Usager',
         'reset' => 'Réinitialiser',
         'restore' => 'Restaurer',
         'login_placeholder' => 'identifiant',
