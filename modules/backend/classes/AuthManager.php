@@ -286,4 +286,24 @@ class AuthManager extends StormAuthManager
     {
         return !!$this->listPermissionsForRole($role, false);
     }
+
+    public function beforeSignin(string $ssoProvider)
+    {
+        return Event::fire('backend.user.beforeSignin', [$this, $ssoProvider], halt: true);
+    }
+
+    public function afterSignin(string $ssoProvider, $ssoUser)
+    {
+        return Event::fire('backend.user.signin', [$this, $ssoProvider, $ssoUser]);
+    }
+
+    public function beforeRegister(\Backend\Model\User $user)
+    {
+        return Event::fire('backend.user.beforeRegister', [$this, $user], halt: true);
+    }
+
+    public function afterRegister(\Backend\Model\User $user)
+    {
+        return Event::fire('backend.user.register', [$this, $user]);
+    }
 }
