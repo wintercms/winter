@@ -1,19 +1,20 @@
-<?php namespace System\Console;
+<?php namespace System\Console\Asset\Vite;
 
 use File;
-use System\Classes\MixAssets;
+use System\Classes\CompilableAssets;
+use System\Console\Asset\Mix\MixCompile;
 
-class MixWatch extends MixCompile
+class ViteWatch extends MixCompile
 {
     /**
      * @var string|null The default command name for lazy loading.
      */
-    protected static $defaultName = 'mix:watch';
+    protected static $defaultName = 'vite:watch';
 
     /**
      * @var string The name and signature of this command.
      */
-    protected $signature = 'mix:watch
+    protected $signature = 'vite:watch
         {package : Defines the package to watch for changes}
         {webpackArgs?* : Arguments to pass through to the Webpack CLI}
         {--f|production : Runs compilation in "production" mode}
@@ -33,7 +34,7 @@ class MixWatch extends MixCompile
 
     public function handle(): int
     {
-        $mixedAssets = MixAssets::instance();
+        $mixedAssets = CompilableAssets::instance();
         $mixedAssets->fireCallbacks();
 
         $packages = $mixedAssets->getPackages();

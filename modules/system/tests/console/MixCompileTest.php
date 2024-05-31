@@ -3,11 +3,10 @@
 namespace System\Tests\Console;
 
 use File;
-use System\Classes\MixAssets;
-use System\Console\MixCompile;
-use System\Tests\Bootstrap\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use System\Console\Asset\Mix\MixCompile;
+use System\Tests\Bootstrap\TestCase;
 
 class MixCompileTest extends TestCase
 {

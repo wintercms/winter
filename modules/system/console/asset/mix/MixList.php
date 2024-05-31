@@ -1,8 +1,8 @@
-<?php namespace System\Console;
+<?php namespace System\Console\Asset\Mix;
 
 use File;
+use System\Classes\CompilableAssets;
 use Winter\Storm\Console\Command;
-use System\Classes\MixAssets;
 
 class MixList extends Command
 {
@@ -24,7 +24,7 @@ class MixList extends Command
 
     public function handle(): int
     {
-        $mixedAssets = MixAssets::instance();
+        $mixedAssets = CompilableAssets::instance();
         $mixedAssets->fireCallbacks();
 
         $packages = $mixedAssets->getPackages(true);

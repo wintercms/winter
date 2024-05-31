@@ -1,29 +1,29 @@
-<?php namespace System\Console;
+<?php namespace System\Console\Asset\Vite;
 
 use File;
-use Winter\Storm\Console\Command;
 use Symfony\Component\Process\Process;
-use System\Classes\MixAssets;
+use System\Classes\CompilableAssets;
+use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Str;
 
-class MixCompile extends Command
+class ViteCompile extends Command
 {
     /**
      * @var string|null The default command name for lazy loading.
      */
-    protected static $defaultName = 'mix:compile';
+    protected static $defaultName = 'vite:compile';
 
     /**
      * @var string The name and signature of this command.
      */
-    protected $signature = 'mix:compile
+    protected $signature = 'vite:compile
         {webpackArgs?* : Arguments to pass through to the Webpack CLI}
         {--f|production : Runs compilation in "production" mode}
         {--s|silent : Silent mode}
         {--e|stop-on-error : Exit once an error is encountered}
         {--m|manifest= : Defines package.json to use for compile}
         {--p|package=* : Defines one or more packages to compile}
-        {--no-progress : Do not show mix progress}';
+        {--no-progress : Do not show vite progress}';
 
     /**
      * @var string The console command description.
@@ -42,14 +42,14 @@ class MixCompile extends Command
     {
         // Exit early if node_modules isn't available yet
         if (!File::exists(base_path('node_modules'))) {
-            $this->error('The Node dependencies are not available, try running mix:install first.');
+            $this->error('The Node dependencies are not available, try running vite:install first.');
             return 1;
         }
 
-        $mixedAssets = MixAssets::instance();
-        $mixedAssets->fireCallbacks();
+        $viteedAssets = CompilableAssets::instance();
+        $viteedAssets->fireCallbacks();
 
-        $registeredPackages = $mixedAssets->getPackages();
+        $registeredPackages = $viteedAssets->getPackages();
         $requestedPackages = $this->option('package') ?: [];
 
         // Calling commands in unit tests can cause the option casting to not work correctly,
@@ -69,7 +69,7 @@ class MixCompile extends Command
         // Filter the registered packages to only include requested packages
         if (count($requestedPackages) && count($registeredPackages)) {
             // Get an updated list of packages including any newly added packages
-            $registeredPackages = $mixedAssets->getPackages();
+            $registeredPackages = $viteedAssets->getPackages();
 
             // Filter the registered packages to only deal with the requested packages
             foreach (array_keys($registeredPackages) as $name) {
@@ -84,18 +84,18 @@ class MixCompile extends Command
                 $this->error('No registered packages matched the requested packages for compilation.');
                 return 1;
             } else {
-                $this->info('No packages registered for mixing.');
+                $this->info('No packages registered for viteing.');
                 return 0;
             }
         }
 
         $exits = [];
         foreach ($registeredPackages as $name => $package) {
-            $relativeMixJsPath = $package['mix'];
+            $relativeMixJsPath = $package['vite'];
             if (!$this->canCompilePackage($relativeMixJsPath)) {
                 $this->error(sprintf(
                     'Unable to compile "%s", %s was not found in the package.json\'s workspaces.packages property.'
-                     . ' Try running mix:install first.',
+                     . ' Try running vite:install first.',
                     $name,
                     $relativeMixJsPath
                 ));
@@ -106,7 +106,7 @@ class MixCompile extends Command
                 $this->info(sprintf('Mixing package "%s"', $name));
             }
 
-            $exitCode = $this->mixPackage(base_path($relativeMixJsPath));
+            $exitCode = $this->vitePackage(base_path($relativeMixJsPath));
 
             if ($exitCode > 0) {
                 $this->error(sprintf('Unable to compile package "%s"', $name));
@@ -123,25 +123,25 @@ class MixCompile extends Command
     }
 
     /**
-     * Get the package path for the provided winter.mix.js file
+     * Get the package path for the provided winter.vite.js file
      */
-    protected function getPackagePath(string $mixJsPath): string
+    protected function getPackagePath(string $viteJsPath): string
     {
-        return pathinfo($mixJsPath, PATHINFO_DIRNAME);
+        return pathinfo($viteJsPath, PATHINFO_DIRNAME);
     }
 
     /**
-     * Get the path to the mix.webpack.js file for the provided winter.mix.js file
+     * Get the path to the vite.webpack.js file for the provided winter.vite.js file
      */
-    protected function getWebpackJsPath(string $mixJsPath): string
+    protected function getWebpackJsPath(string $viteJsPath): string
     {
-        return $this->getPackagePath($mixJsPath) . DIRECTORY_SEPARATOR . 'mix.webpack.js';
+        return $this->getPackagePath($viteJsPath) . DIRECTORY_SEPARATOR . 'vite.webpack.js';
     }
 
     /**
-     * Check if Mix is able to compile the provided winter.mix.js file
+     * Check if Mix is able to compile the provided winter.vite.js file
      */
-    protected function canCompilePackage(string $mixJsPath): bool
+    protected function canCompilePackage(string $viteJsPath): bool
     {
         if (!isset($this->packageJson)) {
             // Load the main package.json for the project
@@ -151,7 +151,7 @@ class MixCompile extends Command
         $workspacesPackages = $this->packageJson['workspaces']['packages'] ?? [];
 
         return in_array(
-            Str::replace(DIRECTORY_SEPARATOR, '/', $this->getPackagePath($mixJsPath)),
+            Str::replace(DIRECTORY_SEPARATOR, '/', $this->getPackagePath($viteJsPath)),
             $workspacesPackages
         );
     }
@@ -169,16 +169,16 @@ class MixCompile extends Command
     }
 
     /**
-     * Run the mix command against the provided package
+     * Run the vite command against the provided package
      */
-    protected function mixPackage(string $mixJsPath): int
+    protected function vitePackage(string $viteJsPath): int
     {
-        $this->createWebpackConfig($mixJsPath);
-        $command = $this->createCommand($mixJsPath);
+        $this->createWebpackConfig($viteJsPath);
+        $command = $this->createCommand($viteJsPath);
 
         $process = new Process(
             $command,
-            $this->getPackagePath($mixJsPath),
+            $this->getPackagePath($viteJsPath),
             ['NODE_ENV' => $this->option('production', false) ? 'production' : 'development'],
             null,
             null
@@ -196,7 +196,7 @@ class MixCompile extends Command
             }
         });
 
-        $this->removeWebpackConfig($mixJsPath);
+        $this->removeWebpackConfig($viteJsPath);
 
         return $exitCode;
     }
@@ -204,7 +204,7 @@ class MixCompile extends Command
     /**
      * Create the command array to create a Process object with
      */
-    protected function createCommand(string $mixJsPath): array
+    protected function createCommand(string $viteJsPath): array
     {
         $basePath = base_path();
         $command = $this->argument('webpackArgs') ?? [];
@@ -213,34 +213,34 @@ class MixCompile extends Command
             $basePath . sprintf('%1$snode_modules%1$s.bin%1$swebpack', DIRECTORY_SEPARATOR),
             'build',
             $this->option('silent') ? '--stats=none' : '--progress',
-            '--config=' . $this->getWebpackJsPath($mixJsPath)
+            '--config=' . $this->getWebpackJsPath($viteJsPath)
         );
         return $command;
     }
 
     /**
-     * Create the temporary mix.webpack.js config file to run webpack with
+     * Create the temporary vite.webpack.js config file to run webpack with
      */
-    protected function createWebpackConfig(string $mixJsPath): void
+    protected function createWebpackConfig(string $viteJsPath): void
     {
         $basePath = base_path();
-        $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
+        $fixture = File::get(__DIR__ . '/fixtures/vite.webpack.js.fixture');
 
         $config = str_replace(
-            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%', '%noProgress%'],
-            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent'), (int) $this->option('no-progress')],
+            ['%base%', '%notificationInject%', '%viteConfigPath%', '%pluginsPath%', '%appPath%', '%silent%', '%noProgress%'],
+            [addslashes($basePath), 'vite._api.disableNotifications();', addslashes($viteJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent'), (int) $this->option('no-progress')],
             $fixture
         );
 
-        File::put($this->getWebpackJsPath($mixJsPath), $config);
+        File::put($this->getWebpackJsPath($viteJsPath), $config);
     }
 
     /**
-     * Remove the temporary mix.webpack.js file
+     * Remove the temporary vite.webpack.js file
      */
-    protected function removeWebpackConfig(string $mixJsPath): void
+    protected function removeWebpackConfig(string $viteJsPath): void
     {
-        $webpackJsPath = $this->getWebpackJsPath($mixJsPath);
+        $webpackJsPath = $this->getWebpackJsPath($viteJsPath);
         if (File::exists($webpackJsPath)) {
             File::delete($webpackJsPath);
         }

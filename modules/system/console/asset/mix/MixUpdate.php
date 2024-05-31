@@ -1,4 +1,4 @@
-<?php namespace System\Console;
+<?php namespace System\Console\Asset\Mix;
 
 class MixUpdate extends MixInstall
 {
@@ -23,7 +23,7 @@ class MixUpdate extends MixInstall
     /**
      * @inheritDoc
      */
-    protected $terms = [
+    protected array $terms = [
         'complete' => 'update',
         'completed' => 'updated',
     ];
@@ -31,5 +31,5 @@ class MixUpdate extends MixInstall
     /**
      * @inheritDoc
      */
-    protected $npmCommand = 'update';
+    protected string $npmCommand = 'update';
 }

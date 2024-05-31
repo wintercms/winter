@@ -1,8 +1,8 @@
-<?php namespace System\Console;
+<?php namespace System\Console\Asset\Mix;
 
 use File;
 use Symfony\Component\Process\Process;
-use System\Classes\MixAssets;
+use System\Classes\CompilableAssets;
 use Winter\Storm\Console\Command;
 
 class MixRun extends Command
@@ -32,7 +32,7 @@ class MixRun extends Command
      */
     public function handle(): int
     {
-        $mixedAssets = MixAssets::instance();
+        $mixedAssets = CompilableAssets::instance();
         $mixedAssets->fireCallbacks();
 
         $packages = $mixedAssets->getPackages();

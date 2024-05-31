@@ -1,49 +1,27 @@
-<?php namespace System\Console;
+<?php namespace System\Console\Asset;
 
-use File;
-use Config;
 use Cms\Classes\Theme;
-use Winter\Storm\Support\Str;
-use Winter\Storm\Console\Command;
-use Symfony\Component\Process\Process;
-use System\Classes\MixAssets;
-use System\Classes\PluginManager;
 use Symfony\Component\Process\Exception\ProcessSignaledException;
+use Symfony\Component\Process\Process;
+use System\Classes\CompilableAssets;
+use System\Classes\PackageJson;
+use System\Classes\PluginManager;
+use Winter\Storm\Console\Command;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Str;
 
-class MixInstall extends Command
+abstract class AssetInstall extends Command
 {
-    /**
-     * @var string|null The default command name for lazy loading.
-     */
-    protected static $defaultName = 'mix:install';
-
-    /**
-     * @var string The name and signature of this command.
-     */
-    protected $signature = 'mix:install
-        {npmArgs?* : Arguments to pass through to the "npm" binary}
-        {--npm= : Defines a custom path to the "npm" binary}
-        {--p|package=* : Defines one or more packages to install}';
-
-    /**
-     * @var string The console command description.
-     */
-    protected $description = 'Install Node.js dependencies required for mixed assets';
-
     /**
      * @var string The path to the "npm" executable.
      */
-    protected $npmPath = 'npm';
-
-    /**
-     * @var string Default version of Laravel Mix to install
-     */
-    protected $defaultMixVersion = '^6.0.41';
+    protected string $npmPath = 'npm';
 
     /**
      * @return array Terms used in messages.
      */
-    protected $terms = [
+    protected array $terms = [
         'complete' => 'install',
         'completed' => 'installed',
     ];
@@ -51,7 +29,22 @@ class MixInstall extends Command
     /**
      * @var string The NPM command to run.
      */
-    protected $npmCommand = 'install';
+    protected string $npmCommand = 'install';
+
+    /**
+     * @var string Type of asset to be installed, @see CompilableAssets
+     */
+    protected string $assetType;
+
+    /**
+     * @var string The asset config file
+     */
+    protected string $configFile;
+
+    /**
+     * @var array The packages required for asset compilation
+     */
+    protected array $packages;
 
     /**
      * Execute the console command.
@@ -68,10 +61,49 @@ class MixInstall extends Command
             return 1;
         }
 
-        $mixedAssets = MixAssets::instance();
-        $mixedAssets->fireCallbacks();
+        [$requestedPackages, $registeredPackages] = $this->getRequestedAndRegisteredPackages();
 
-        $registeredPackages = $mixedAssets->getPackages();
+        if (!count($registeredPackages)) {
+            if (count($requestedPackages)) {
+                $this->error('No registered packages matched the requested packages for installation.');
+                return 1;
+            } else {
+                $this->info('No packages registered for mixing.');
+                return 0;
+            }
+        }
+
+        // Load the main package.json for the project
+        $packageJsonPath = base_path('package.json');
+
+        // Get base package.json
+        $packageJson = new PackageJson($packageJsonPath);
+        // Ensure asset compiling packages are set in package.json, then save
+        $this->validateRequirePackagesPresent($packageJson)
+            ->save();
+        // Process compilable asset packages, then save
+        $this->processPackages($registeredPackages, $packageJson)
+            ->save();
+
+        // Ensure separation between package.json modification messages and rest of output
+        $this->info('');
+
+        if ($this->installPackageDeps() !== 0) {
+            $this->error("Unable to {$this->terms['complete']} dependencies.");
+            return 1;
+        }
+
+        $this->info("Dependencies successfully {$this->terms['completed']}!");
+
+        return 0;
+    }
+
+    protected function getRequestedAndRegisteredPackages(): array
+    {
+        $compilableAssets = CompilableAssets::instance();
+        $compilableAssets->fireCallbacks();
+
+        $registeredPackages = $compilableAssets->getPackages(type: $this->assetType);
         $requestedPackages = $this->option('package') ?: [];
 
         // Normalize the requestedPackages option
@@ -96,7 +128,11 @@ class MixInstall extends Command
 
                 // Check if package could be a module (but explicitly ignore core Winter modules)
                 if (Str::startsWith($package, 'module-') && !in_array($package, ['system', 'backend', 'cms'])) {
-                    $mixedAssets->registerPackage($package, base_path('modules/' . Str::after($package, 'module-') . '/winter.mix.js'));
+                    $compilableAssets->registerPackage(
+                        $package,
+                        base_path('modules/' . Str::after($package, 'module-') . '/' . $this->configFile),
+                        $this->assetType
+                    );
                     continue;
                 }
 
@@ -107,19 +143,27 @@ class MixInstall extends Command
                     && Theme::exists(Str::after($package, 'theme-'))
                 ) {
                     $theme = Theme::load(Str::after($package, 'theme-'));
-                    $mixedAssets->registerPackage($package, $theme->getPath() . '/winter.mix.js');
+                    $compilableAssets->registerPackage(
+                        $package,
+                        $theme->getPath() . '/' . $this->configFile,
+                        $this->assetType
+                    );
                     continue;
                 }
 
                 // Check if a package could be a plugin
                 if (PluginManager::instance()->exists($package)) {
-                    $mixedAssets->registerPackage($package, PluginManager::instance()->getPluginPath($package) . '/winter.mix.js');
+                    $compilableAssets->registerPackage(
+                        $package,
+                        PluginManager::instance()->getPluginPath($package) . '/' . $this->configFile,
+                        $this->assetType
+                    );
                     continue;
                 }
             }
 
             // Get an updated list of packages including any newly added packages
-            $registeredPackages = $mixedAssets->getPackages();
+            $registeredPackages = $compilableAssets->getPackages();
 
             // Filter the registered packages to only deal with the requested packages
             foreach (array_keys($registeredPackages) as $name) {
@@ -129,47 +173,32 @@ class MixInstall extends Command
             }
         }
 
-        if (!count($registeredPackages)) {
-            if (count($requestedPackages)) {
-                $this->error('No registered packages matched the requested packages for installation.');
-                return 1;
-            } else {
-                $this->info('No packages registered for mixing.');
-                return 0;
+        return [$requestedPackages, $registeredPackages];
+    }
+
+    protected function validateRequirePackagesPresent(PackageJson $packageJson): PackageJson
+    {
+        // Check to see if required packages are already present as a dependency
+        foreach ($this->packages as $package => $version) {
+            if (
+                !$packageJson->hasDependency($package)
+                && $this->confirm($package . ' was not found as a dependency in package.json, would you like to add it?', true)
+            ) {
+                $packageJson->addDependency($package, $version, dev: true);
             }
         }
 
-        // Load the main package.json for the project
-        $packageJsonPath = base_path('package.json');
-        $packageJson = [];
-        if (File::exists($packageJsonPath)) {
-            $packageJson = json_decode(File::get($packageJsonPath), true);
-        }
-        $workspacesPackages = $packageJson['workspaces']['packages'] ?? [];
-        $ignoredPackages = $packageJson['workspaces']['ignoredPackages'] ?? [];
+        return $packageJson;
+    }
 
-        // Check to see if Laravel Mix is already present as a dependency
-        if (
-            (
-                !isset($packageJson['dependencies']['laravel-mix'])
-                && !isset($packageJson['devDependencies']['laravel-mix'])
-            )
-            && $this->confirm('laravel-mix was not found as a dependency in package.json, would you like to add it?', true)
-        ) {
-            $packageJson['devDependencies'] = array_merge($packageJson['devDependencies'] ?? [], ['laravel-mix' => $this->defaultMixVersion]);
-            $this->writePackageJson($packageJsonPath, $packageJson);
-        }
-
+    protected function processPackages(array $registeredPackages, PackageJson $packageJson): PackageJson
+    {
         // Process each package
         foreach ($registeredPackages as $name => $package) {
             // Normalize package path across OS types
             $packagePath = Str::replace(DIRECTORY_SEPARATOR, '/', $package['path']);
-
             // Add the package path to the instance's package.json->workspaces->packages property if not present
-            if (
-                !in_array($packagePath, $workspacesPackages)
-                && !in_array($packagePath, $ignoredPackages)
-            ) {
+            if (!$packageJson->hasWorkspace($packagePath) && !$packageJson->hasIgnoredPackage($packagePath)) {
                 if (
                     $this->confirm(
                         sprintf(
@@ -180,54 +209,32 @@ class MixInstall extends Command
                         true
                     )
                 ) {
-                    $workspacesPackages[] = $packagePath;
+                    $packageJson->addWorkspace($packagePath);
                     $this->info(sprintf(
                         'Adding %s (%s) to the workspaces.packages property in package.json',
                         $name,
                         $packagePath
                     ));
                 } else {
-                    $ignoredPackages[] = $packagePath;
+                    $packageJson->addIgnoredPackage($packagePath);
                     $this->warn(
                         sprintf('Ignoring %s (%s)', $name, $packagePath)
                     );
                 }
-                asort($workspacesPackages);
-                asort($ignoredPackages);
-                $packageJson['workspaces']['packages'] = array_values($workspacesPackages);
-                $packageJson['workspaces']['ignoredPackages'] = array_values($ignoredPackages);
-                $this->writePackageJson($packageJsonPath, $packageJson);
             }
 
             // Detect missing winter.mix.js files and install them
-            if (!File::exists($package['mix'])) {
+            if (!File::exists($package['config'])) {
                 $this->info(sprintf(
-                    'No Mix file found for %s, creating one at %s...',
+                    'No config file found for %s, creating one at %s...',
                     $name,
-                    $package['mix']
+                    $package['config']
                 ));
-                File::put($package['mix'], File::get(__DIR__ . '/fixtures/winter.mix.js.fixture'));
+                File::put($package['config'], File::get(__DIR__ . '/fixtures/' . $this->configFile . '.fixture'));
             }
         }
 
-        // Ensure separation between package.json modification messages and rest of output
-        $this->info('');
-
-        if ($this->installPackageDeps() !== 0) {
-            $this->error("Unable to {$this->terms['complete']} dependencies.");
-        } else {
-            $this->info("Dependencies successfully {$this->terms['completed']}!");
-        }
-
-        return 0;
-    }
-
-    /**
-     * Write to the package.json file
-     */
-    protected function writePackageJson(string $path, array $data): void
-    {
-        File::put($path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        return $packageJson;
     }
 
     /**
@@ -235,7 +242,7 @@ class MixInstall extends Command
      *
      * @return int
      */
-    protected function installPackageDeps()
+    protected function installPackageDeps(): int
     {
         $command = $this->argument('npmArgs') ?? [];
         array_unshift($command, 'npm', $this->npmCommand);
@@ -271,7 +278,7 @@ class MixInstall extends Command
      *
      * @return string
      */
-    protected function getNpmVersion()
+    protected function getNpmVersion(): string
     {
         $process = new Process(['npm', '--version']);
         $process->run();
