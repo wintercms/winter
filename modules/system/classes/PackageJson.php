@@ -103,6 +103,7 @@ class PackageJson
 
         // Sort the packages
         asort($this->data['workspaces']['packages']);
+        $this->data['workspaces']['packages'] = array_values($this->data['workspaces']['packages']);
 
         return $this;
     }
@@ -157,6 +158,8 @@ class PackageJson
 
         // Sort the packages
         asort($this->data['workspaces']['ignoredPackages']);
+        $this->data['workspaces']['ignoredPackages'] = array_values($this->data['workspaces']['ignoredPackages']);
+
 
         return $this;
     }
