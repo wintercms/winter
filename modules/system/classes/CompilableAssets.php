@@ -301,13 +301,7 @@ class CompilableAssets
     protected function isPackageIgnored(string $packagePath): bool
     {
         // Load the main package.json for the project
-        $packageJsonPath = base_path($this->packageJson);
-        $packageJson = [];
-        if (File::exists($packageJsonPath)) {
-            $packageJson = json_decode(File::get($packageJsonPath), true);
-        }
-        $included = $packageJson['workspaces']['packages'] ?? [];
-        $ignored = $packageJson['workspaces']['ignoredPackages'] ?? [];
-        return in_array($packagePath, $ignored);
+        $packageJson = new PackageJson(base_path($this->packageJson));
+        return $packageJson->hasIgnoredPackage($packagePath);
     }
 }
