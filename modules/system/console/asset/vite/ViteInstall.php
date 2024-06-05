@@ -35,6 +35,7 @@ class ViteInstall extends AssetInstall
      * @var array The packages required for asset compilation
      */
     protected array $packages = [
-        'vite' => '^5.2.11'
+        'vite' => '^5.2.11',
+        'laravel-vite-plugin' => '^1.0.4',
     ];
 }
