@@ -1,4 +1,6 @@
-<?php namespace System\Console\Asset\Vite;
+<?php
+
+namespace System\Console\Asset\Vite;
 
 use System\Console\Asset\AssetConfig;
 

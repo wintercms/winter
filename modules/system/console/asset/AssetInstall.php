@@ -1,4 +1,6 @@
-<?php namespace System\Console\Asset;
+<?php
+
+namespace System\Console\Asset;
 
 use Cms\Classes\Theme;
 use Symfony\Component\Process\Exception\ProcessSignaledException;

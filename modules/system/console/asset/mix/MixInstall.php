@@ -22,6 +22,9 @@ class MixInstall extends AssetInstall
      */
     protected $description = 'Install Node.js dependencies required for mixed assets';
 
+    /**
+     * @var string The asset compiler being used
+     */
     protected string $assetType = 'mix';
 
     /**

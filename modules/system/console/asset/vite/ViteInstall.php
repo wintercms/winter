@@ -1,4 +1,6 @@
-<?php namespace System\console\Asset\Vite;
+<?php
+
+namespace System\Console\Asset\Vite;
 
 use System\Console\Asset\AssetInstall;
 
@@ -22,7 +24,7 @@ class ViteInstall extends AssetInstall
      */
     protected $description = 'Install Node.js dependencies required for vite assets';
 
-    protected string $assetType = 'mix';
+    protected string $assetType = 'vite';
 
     /**
      * @var string The asset config file

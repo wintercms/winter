@@ -1,10 +1,10 @@
-<?php namespace System\Console\Asset\Vite;
+<?php
 
-use File;
-use System\Classes\CompilableAssets;
-use System\Console\Asset\Mix\MixCompile;
+namespace System\Console\Asset\Vite;
 
-class ViteWatch extends MixCompile
+use Winter\Storm\Support\Facades\File;
+
+class ViteWatch extends ViteCompile
 {
     /**
      * @var string|null The default command name for lazy loading.
@@ -16,7 +16,7 @@ class ViteWatch extends MixCompile
      */
     protected $signature = 'vite:watch
         {package : Defines the package to watch for changes}
-        {webpackArgs?* : Arguments to pass through to the Webpack CLI}
+        {viteArgs?* : Arguments to pass through to the Webpack CLI}
         {--f|production : Runs compilation in "production" mode}
         {--m|manifest= : Defines package.json to use for compile}
         {--s|silent : Silent mode}
@@ -25,90 +25,43 @@ class ViteWatch extends MixCompile
     /**
      * @var string The console command description.
      */
-    protected $description = 'Mix and compile assets on-the-fly as changes are made.';
+    protected $description = 'Vite and compile assets on-the-fly as changes are made.';
 
     /**
-     * @var string The path currently being watched
+     * Call the AssetCompile::watchHandle with the vite type
+     *
+     * @return int
      */
-    protected $mixJsPath;
-
     public function handle(): int
     {
-        $mixedAssets = CompilableAssets::instance();
-        $mixedAssets->fireCallbacks();
-
-        $packages = $mixedAssets->getPackages();
-        $name = $this->argument('package');
-
-        if (!in_array($name, array_keys($packages))) {
-            $this->error(
-                sprintf('Package "%s" is not a registered package.', $name)
-            );
-            return 1;
-        }
-
-        $package = $packages[$name];
-
-        $relativeMixJsPath = $package['mix'];
-        if (!$this->canCompilePackage($relativeMixJsPath)) {
-            $this->error(
-                sprintf('Unable to watch "%s", %s was not found in the package.json\'s workspaces.packages property. Try running mix:install first.', $name, $relativeMixJsPath)
-            );
-            return 1;
-        }
-
-        $this->info(
-            sprintf('Watching package "%s" for changes', $name)
-        );
-        $this->mixJsPath = $relativeMixJsPath;
-
-        if ($this->mixPackage(base_path($relativeMixJsPath)) !== 0) {
-            $this->error(
-                sprintf('Unable to compile package "%s"', $name)
-            );
-            return 1;
-        }
-
-        return 0;
+        return $this->watchHandle('vite');
     }
 
     /**
      * Create the command array to create a Process object with
      */
-    protected function createCommand(string $mixJsPath): array
+    protected function createCommand(string $configPath): array
     {
-        $command = parent::createCommand($mixJsPath);
+        $command = parent::createCommand($configPath);
+        $key = array_search('build', $command);
+        unset($command[$key]);
 
-        // @TODO: Detect Homestead running on Windows to switch to watch-poll-options instead, see https://laravel-mix.com/docs/6.0/cli#polling
-        $command[] = '--watch';
+        $command[] = '--host';
 
-        return $command;
+        return array_values($command);
     }
 
     /**
-     * Create the temporary mix.webpack.js config file to run webpack with
+     * Create the public dir if required
+     *
+     * @param string $configPath
+     * @return void
      */
-    protected function createWebpackConfig(string $mixJsPath): void
+    protected function beforeExecution(string $configPath): void
     {
-        $basePath = base_path();
-        $fixture = File::get(__DIR__ . '/fixtures/mix.webpack.js.fixture');
-
-        $config = str_replace(
-            ['%base%', '%notificationInject%', '%mixConfigPath%', '%pluginsPath%', '%appPath%', '%silent%', '%noProgress%'],
-            [addslashes($basePath), 'mix._api.disableNotifications();', addslashes($mixJsPath), addslashes(plugins_path()), addslashes(base_path()), (int) $this->option('silent'), (int) $this->option('no-progress')],
-            $fixture
-        );
-
-        File::put($this->getWebpackJsPath($mixJsPath), $config);
-    }
-
-    /**
-     * Handle the cleanup of this command if a termination signal is received
-     */
-    public function handleCleanup(): void
-    {
-        $this->newLine();
-        $this->info('Cleaning up: ' . $this->getWebpackJsPath(base_path($this->mixJsPath)));
-        $this->removeWebpackConfig(base_path($this->mixJsPath));
+        $publicDir = dirname($configPath) . '/public';
+        if (!File::exists($publicDir)) {
+            File::makeDirectory($publicDir);
+        }
     }
 }

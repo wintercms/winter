@@ -1,29 +1,29 @@
 <?php
 
-namespace System\Console\Asset\Mix;
+namespace System\console\asset\vite;
 
 use System\Console\Asset\AssetList;
 
-class MixList extends AssetList
+class ViteList extends AssetList
 {
     /**
      * @var string|null The default command name for lazy loading.
      */
-    protected static $defaultName = 'mix:list';
+    protected static $defaultName = 'vite:list';
 
     /**
      * @var string The name and signature of this command.
      */
-    protected $signature = 'mix:list
+    protected $signature = 'vite:list
         {--json : Output as JSON}';
 
     /**
      * @var string The console command description.
      */
-    protected $description = 'List all registered Mix packages in this project.';
+    protected $description = 'List all registered Vite packages in this project.';
 
     /**
      * @var string The asset compiler being used
      */
-    protected string $assetType = 'mix';
+    protected string $assetType = 'vite';
 }

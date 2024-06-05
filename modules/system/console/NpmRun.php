@@ -1,16 +1,18 @@
-<?php namespace System\Console\Asset\Mix;
+<?php
 
-use File;
+namespace System\Console;
+
 use Symfony\Component\Process\Process;
 use System\Classes\CompilableAssets;
 use Winter\Storm\Console\Command;
+use Winter\Storm\Support\Facades\File;
 
-class MixRun extends Command
+class NpmRun extends Command
 {
     /**
      * @var string|null The default command name for lazy loading.
      */
-    protected static $defaultName = 'mix:run';
+    protected static $defaultName = 'npm:run';
 
     /**
      * @var string The name and signature of this command.
@@ -26,6 +28,13 @@ class MixRun extends Command
      * @var string The console command description.
      */
     protected $description = 'Runs a script in a given package.';
+
+    /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'mix:run'
+    ];
 
     /**
      * Execute the console command.

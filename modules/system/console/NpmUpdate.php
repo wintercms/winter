@@ -1,11 +1,15 @@
-<?php namespace System\Console\Asset\Mix;
+<?php
 
-class MixUpdate extends MixInstall
+namespace System\Console;
+
+use System\Console\Asset\AssetInstall;
+
+class NpmUpdate extends AssetInstall
 {
     /**
      * @var string|null The default command name for lazy loading.
      */
-    protected static $defaultName = 'mix:update';
+    protected static $defaultName = 'npm:update';
 
     /**
      * @inheritDoc
@@ -15,7 +19,7 @@ class MixUpdate extends MixInstall
     /**
      * @inheritDoc
      */
-    protected $signature = 'mix:update
+    protected $signature = 'npm:update
         {npmArgs?* : Arguments to pass through to the "npm" binary}
         {--npm= : Defines a custom path to the "npm" binary}
         {--p|package=* : Defines one or more packages to update}';
@@ -32,4 +36,11 @@ class MixUpdate extends MixInstall
      * @inheritDoc
      */
     protected string $npmCommand = 'update';
+
+    /**
+     * @inheritDoc
+     */
+    public $replaces = [
+        'mix:update'
+    ];
 }
