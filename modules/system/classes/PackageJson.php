@@ -79,7 +79,7 @@ class PackageJson
      */
     public function hasWorkspace(string $path): bool
     {
-        return in_array($path, $this->data['workspaces']['packages']);
+        return in_array($path, $this->data['workspaces']['packages'] ?? []);
     }
 
     /**
@@ -134,7 +134,7 @@ class PackageJson
      */
     public function hasIgnoredPackage(string $path): bool
     {
-        return in_array($path, $this->data['workspaces']['ignoredPackages']);
+        return in_array($path, $this->data['workspaces']['ignoredPackages'] ?? []);
     }
 
     /**
