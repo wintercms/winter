@@ -6,8 +6,19 @@ use InvalidArgumentException;
 use RuntimeException;
 use Winter\Storm\Support\Facades\File;
 
+/**
+ * Php based interface for interacting with package.json files. This allows for modification of deps, devDeps, package
+ * name and workspaces.
+ *
+ * @package winter\wn-system-module
+ * @author Jack Wilkinson <me@jackwilky.com>
+ * @author Winter CMS
+ */
 class PackageJson
 {
+    /**
+     * @var array The contents of the package.json being modified
+     */
     protected array $data;
 
     /**

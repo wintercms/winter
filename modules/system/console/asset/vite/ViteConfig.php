@@ -19,5 +19,13 @@ class ViteConfig extends AssetConfig
         {--t|tailwind : Setup tailwind}
         {--u|vue : Setup vue}';
 
+    /**
+     * @var string The type of compilable to configure
+     */
     protected string $assetType = 'vite';
+
+    /**
+     * @var string The name of the config file
+     */
+    protected string $configFile = 'vite.config.js';
 }

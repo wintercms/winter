@@ -2,9 +2,7 @@
 
 namespace System\Console\Asset\Vite;
 
-use System\Classes\CompilableAssets;
 use System\Console\Asset\AssetCompile;
-use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Str;
 
 class ViteCompile extends AssetCompile
@@ -31,6 +29,9 @@ class ViteCompile extends AssetCompile
      */
     protected $description = 'Vite and compile assets';
 
+    /**
+     * @var string Name of config file i.e. mix.webpack.js, vite.config.js
+     */
     protected string $configFile = 'vite.config.js';
 
     /**

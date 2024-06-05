@@ -22,15 +22,29 @@ abstract class AssetConfig extends Command
      */
     protected $description = 'Create configuration.';
 
-    private string $configPath;
+    /**
+     * @var string Local cache of fixture path
+     */
+    private string $fixturePath;
 
+    /**
+     * @var string The type of compilable to configure
+     */
     protected string $assetType;
 
+    /**
+     * @var string The name of the config file
+     */
+    protected string $configFile;
+
+    /**
+     * Execute the console command.
+     */
     public function handle(): int
     {
         $package = $this->argument('packageName');
 
-        $this->configPath = __DIR__ . '/fixtures/config';
+        $this->fixturePath = __DIR__ . '/fixtures/config';
 
         $compilableAssets = CompilableAssets::instance();
         $compilableAssets->fireCallbacks();
@@ -54,26 +68,22 @@ abstract class AssetConfig extends Command
             $packageJson->setName(strtolower(str_replace('.', '-', $package)));
         }
 
-        switch ($this->assetType) {
-            case 'mix':
-                $this->installMix($packageJson, $package, $type, $path, [
-                    'tailwind' => $this->option('tailwind'),
-                    'vue' => $this->option('vue')
-                ]);
-                break;
-            case 'vite':
-                $this->installVite($packageJson, $package, $type, $path, [
-                    'tailwind' => $this->option('tailwind'),
-                    'vue' => $this->option('vue')
-                ]);
-                break;
-        }
+        $this->installConfigs($packageJson, $package, $type, $path, [
+            'tailwind' => $this->option('tailwind'),
+            'vue' => $this->option('vue')
+        ]);
 
         $packageJson->save();
 
         return 0;
     }
 
+    /**
+     * Resolve the path and type of the package by name
+     *
+     * @param string $package
+     * @return array|null[]
+     */
     protected function getPackagePathType(string $package): array
     {
         if (str_starts_with($package, 'theme-')) {
@@ -91,7 +101,17 @@ abstract class AssetConfig extends Command
         return [null, null];
     }
 
-    protected function installMix(
+    /**
+     * Write out config files based on assetType and the requested options
+     *
+     * @param PackageJson $packageJson
+     * @param string $package
+     * @param string $type
+     * @param string $path
+     * @param array $options
+     * @return void
+     */
+    protected function installConfigs(
         PackageJson $packageJson,
         string $package,
         string $type,
@@ -101,7 +121,7 @@ abstract class AssetConfig extends Command
         if ($options['tailwind']) {
             $this->writeFile(
                 $path . '/tailwind.config.js',
-                File::get($this->configPath . '/' . $type . '.tailwind.config.js.fixture')
+                File::get($this->fixturePath . '/' . $type . '.tailwind.config.js.fixture')
             );
 
             $packageJson->addDependency('tailwindcss', static::DEFAULT_VERSION_TAILWIND, dev: true);
@@ -116,53 +136,26 @@ abstract class AssetConfig extends Command
             strtolower(str_replace('.', '-', $package)),
             File::get(
                 sprintf(
-                    '%s/mix/winter.mix%s%s.js.fixture',
-                    $this->configPath,
+                    '%s/%s/%s%s%s.js.fixture',
+                    $this->fixturePath,
+                    $this->assetType,
+                    pathinfo($this->configFile, PATHINFO_FILENAME),
                     $options['tailwind'] ? '.tailwind' : '',
                     $options['vue'] ? '.vue' : '',
                 )
             )
         );
 
-        $this->writeFile($path . '/winter.mix.js', $config);
+        $this->writeFile($path . '/' . $this->configFile, $config);
     }
 
-    protected function installVite(
-        PackageJson $packageJson,
-        string $package,
-        string $type,
-        string $path,
-        array $options
-    ): void {
-        if ($options['tailwind']) {
-            $this->writeFile(
-                $path . '/tailwind.config.js',
-                File::get($this->configPath . '/' . $type . '.tailwind.config.js.fixture')
-            );
-
-            $packageJson->addDependency('tailwindcss', static::DEFAULT_VERSION_TAILWIND, dev: true);
-        }
-
-        if ($options['vue']) {
-            $packageJson->addDependency('vue', static::DEFAULT_VERSION_VUE, dev: true);
-        }
-
-        $config = str_replace(
-            '{{packageName}}',
-            strtolower(str_replace('.', '-', $package)),
-            File::get(
-                sprintf(
-                    '%s/vite/vite.config%s%s.js.fixture',
-                    $this->configPath,
-                    $options['tailwind'] ? '.tailwind' : '',
-                    $options['vue'] ? '.vue' : '',
-                )
-            )
-        );
-
-        $this->writeFile($path . '/vite.config.js', $config);
-    }
-
+    /**
+     * Write a file but ask for conformation before overwriting
+     *
+     * @param string $path
+     * @param string $content
+     * @return int
+     */
     protected function writeFile(string $path, string $content): int
     {
         if (File::exists($path) && !$this->confirm(sprintf('%s already exists, overwrite?', basename($path)))) {

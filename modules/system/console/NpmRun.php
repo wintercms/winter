@@ -41,10 +41,10 @@ class NpmRun extends Command
      */
     public function handle(): int
     {
-        $mixedAssets = CompilableAssets::instance();
-        $mixedAssets->fireCallbacks();
+        $compilableAssets = CompilableAssets::instance();
+        $compilableAssets->fireCallbacks();
 
-        $packages = $mixedAssets->getPackages();
+        $packages = $compilableAssets->getPackages();
         $name = $this->argument('package');
         $script = $this->argument('script');
 
@@ -89,13 +89,11 @@ class NpmRun extends Command
             // This will fail on unsupported systems
         }
 
-        $exitCode = $process->run(function ($status, $stdout) {
+        return $process->run(function ($status, $stdout) {
             if (!$this->option('silent')) {
                 $this->getOutput()->write($stdout);
             }
         });
-
-        return $exitCode;
     }
 
     /**
