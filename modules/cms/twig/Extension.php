@@ -168,7 +168,14 @@ class Extension extends TwigExtension
         return $this->controller->themeUrl($url);
     }
 
-    public function viteFunction(array $arguments, string $base)
+    /**
+     * Generates Vite tags via Laravel's Vite Object.
+     *
+     * @param array $arguments
+     * @param string $base The relative base path of the plugin or theme
+     * @return \Illuminate\Support\HtmlString
+     */
+    public function viteFunction(array $arguments, string $base): \Illuminate\Support\HtmlString
     {
         $vite = app(Vite::class);
         $vite->useHotFile(base_path($base . '/public/hot'));
