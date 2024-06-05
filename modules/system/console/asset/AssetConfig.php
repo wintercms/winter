@@ -152,7 +152,7 @@ abstract class AssetConfig extends Command
             strtolower(str_replace('.', '-', $package)),
             File::get(
                 sprintf(
-                    '%s/mix/winter.mix%s%s.js',
+                    '%s/vite/vite.config%s%s.js',
                     $this->configPath,
                     $options['tailwind'] ? '.tailwind' : '',
                     $options['vue'] ? '.vue' : '',
