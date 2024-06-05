@@ -232,6 +232,7 @@ abstract class AssetInstall extends Command
                     $name,
                     $package['config']
                 ));
+                // @TODO: consider this when using vite
                 File::put($package['config'], File::get(__DIR__ . '/fixtures/' . $this->configFile . '.fixture'));
             }
         }

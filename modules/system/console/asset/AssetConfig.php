@@ -101,7 +101,7 @@ abstract class AssetConfig extends Command
         if ($options['tailwind']) {
             $this->writeFile(
                 $path . '/tailwind.config.js',
-                File::get($this->configPath . '/' . $type . '.tailwind.config.js')
+                File::get($this->configPath . '/' . $type . '.tailwind.config.js.fixture')
             );
 
             $packageJson->addDependency('tailwindcss', static::DEFAULT_VERSION_TAILWIND, dev: true);
@@ -116,7 +116,7 @@ abstract class AssetConfig extends Command
             strtolower(str_replace('.', '-', $package)),
             File::get(
                 sprintf(
-                    '%s/mix/winter.mix%s%s.js',
+                    '%s/mix/winter.mix%s%s.js.fixture',
                     $this->configPath,
                     $options['tailwind'] ? '.tailwind' : '',
                     $options['vue'] ? '.vue' : '',
@@ -137,7 +137,7 @@ abstract class AssetConfig extends Command
         if ($options['tailwind']) {
             $this->writeFile(
                 $path . '/tailwind.config.js',
-                File::get($this->configPath . '/' . $type . '.tailwind.config.js')
+                File::get($this->configPath . '/' . $type . '.tailwind.config.js.fixture')
             );
 
             $packageJson->addDependency('tailwindcss', static::DEFAULT_VERSION_TAILWIND, dev: true);
@@ -152,7 +152,7 @@ abstract class AssetConfig extends Command
             strtolower(str_replace('.', '-', $package)),
             File::get(
                 sprintf(
-                    '%s/vite/vite.config%s%s.js',
+                    '%s/vite/vite.config%s%s.js.fixture',
                     $this->configPath,
                     $options['tailwind'] ? '.tailwind' : '',
                     $options['vue'] ? '.vue' : '',
