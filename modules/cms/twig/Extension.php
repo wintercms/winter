@@ -2,6 +2,7 @@
 
 use Block;
 use Event;
+use Illuminate\Foundation\Vite;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
@@ -51,6 +52,7 @@ class Extension extends TwigExtension
             new TwigSimpleFunction('content', [$this, 'contentFunction'], $options),
             new TwigSimpleFunction('component', [$this, 'componentFunction'], $options),
             new TwigSimpleFunction('placeholder', [$this, 'placeholderFunction'], ['is_safe' => ['html']]),
+            new TwigSimpleFunction('vite', [$this, 'viteFunction'], $options),
         ];
     }
 
@@ -164,6 +166,13 @@ class Extension extends TwigExtension
     public function themeFilter($url): string
     {
         return $this->controller->themeUrl($url);
+    }
+
+    public function viteFunction(array $arguments, string $base)
+    {
+        $vite = app(Vite::class);
+        $vite->useHotFile(base_path($base . '/public/hot'));
+        return $vite($arguments, $base . '/public/build');
     }
 
     /**
