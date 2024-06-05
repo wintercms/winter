@@ -58,7 +58,7 @@ jobs:
 
       - name: Run code quality checks on System Module
         working-directory: ./modules/system
-        run: npx eslint . --ignore-pattern "console/asset/fixtures/*"
+        run: npx eslint .
 
       - name: Install Node dependencies for Backend Module
         working-directory: ./modules/backend
