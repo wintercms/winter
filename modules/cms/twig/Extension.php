@@ -171,7 +171,7 @@ class Extension extends TwigExtension
     /**
      * Generates Vite tags via Laravel's Vite Object.
      *
-     * @param array $arguments
+     * @param array $arguments The list of entry points for Vite
      * @param string $base The relative base path of the plugin or theme
      * @return \Illuminate\Support\HtmlString
      */

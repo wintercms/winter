@@ -144,6 +144,7 @@ class ServiceProvider extends ModuleServiceProvider
             return \Backend\Classes\AuthManager::instance();
         });
 
+        // Register the Laravel Vite singleton
         $this->app->singleton(Vite::class, Vite::class);
     }
 

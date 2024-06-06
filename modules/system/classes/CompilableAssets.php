@@ -12,7 +12,7 @@ use Winter\Storm\Support\Str;
  * Compilable assets using for Node.js compilation and processing.
  *
  * This works similar to the `System\Classes\CombineAssets` class in that it allows modules, plugins and themes to
- * register configurations that will be passed on to Laravel Mix and Node.js for compilation and processing.
+ * register configurations that will be passed on to Node.js based compilers for processing.
  *
  * @package winter\wn-system-module
  * @author Ben Thomson <git@alfreido.com>, Jack Wilkinson <me@jackwilky.com>
