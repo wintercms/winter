@@ -16,12 +16,12 @@ use Winter\Storm\Support\Str;
 abstract class AssetInstall extends Command
 {
     /**
-     * @var string The path to the "npm" executable.
+     * The path to the "npm" executable.
      */
     protected string $npmPath = 'npm';
 
     /**
-     * @return array Terms used in messages.
+     * Terms used in messages.
      */
     protected array $terms = [
         'complete' => 'install',
@@ -29,28 +29,27 @@ abstract class AssetInstall extends Command
     ];
 
     /**
-     * @var string The NPM command to run.
+     * The NPM command to run.
      */
     protected string $npmCommand = 'install';
 
     /**
-     * @var string Type of asset to be installed, @see CompilableAssets
+     * Type of asset to be installed, @see CompilableAssets
      */
     protected string $assetType;
 
     /**
-     * @var string The asset config file
+     * The asset config file
      */
     protected string $configFile;
 
     /**
-     * @var array The packages required for asset compilation
+     * The packages required for asset compilation
      */
     protected array $packages;
 
     /**
      * Execute the console command.
-     * @return int
      */
     public function handle(): int
     {
@@ -242,8 +241,6 @@ abstract class AssetInstall extends Command
 
     /**
      * Installs the dependencies for the given package.
-     *
-     * @return int
      */
     protected function installPackageDeps(): int
     {
@@ -277,9 +274,7 @@ abstract class AssetInstall extends Command
     }
 
     /**
-     * Gets the install NPM version.
-     *
-     * @return string
+     * Gets the installed NPM version.
      */
     protected function getNpmVersion(): string
     {

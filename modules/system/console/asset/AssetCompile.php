@@ -16,17 +16,17 @@ abstract class AssetCompile extends Command
     protected $description = 'Mix and compile assets';
 
     /**
-     * @var array Local cache of the package.json file contents
+     * Local cache of the package.json file contents
      */
     protected array $packageJson;
 
     /**
-     * @var string Name of config file i.e. mix.webpack.js, vite.config.js
+     * Name of config file i.e. mix.webpack.js, vite.config.js
      */
     protected string $configFile;
 
     /**
-     * @var string File path being watched, used for cleanup by mix:watch
+     * File path being watched, used for cleanup by mix:watch
      */
     protected string $watchingFilePath;
 
@@ -235,9 +235,6 @@ abstract class AssetCompile extends Command
 
     /**
      * Ran before dispatching the compile process, use for setting up
-     *
-     * @param string $configPath
-     * @return void
      */
     protected function beforeExecution(string $configPath): void
     {
@@ -246,9 +243,6 @@ abstract class AssetCompile extends Command
 
     /**
      * Ran after dispatching the compile process, use for tearing down
-     *
-     * @param string $configPath
-     * @return void
      */
     protected function afterExecution(string $configPath): void
     {

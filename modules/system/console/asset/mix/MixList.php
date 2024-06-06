@@ -23,7 +23,7 @@ class MixList extends AssetList
     protected $description = 'List all registered Mix packages in this project.';
 
     /**
-     * @var string The asset compiler being used
+     * The asset compiler being used
      */
     protected string $assetType = 'mix';
 }

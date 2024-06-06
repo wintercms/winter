@@ -38,19 +38,17 @@ class MixCompile extends AssetCompile
     ];
 
     /**
-     * @var string Name of config file i.e. mix.webpack.js, vite.config.js
+     * Name of config file i.e. mix.webpack.js, vite.config.js
      */
     protected string $configFile = 'mix.webpack.js';
 
     /**
-     * @var array Local cache of the package.json file contents
+     * Local cache of the package.json file contents
      */
     protected array $packageJson;
 
     /**
      * Call the AssetCompile::compileHandle with the mix type
-     *
-     * @return int
      */
     public function handle(): int
     {

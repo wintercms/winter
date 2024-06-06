@@ -36,8 +36,6 @@ class ViteWatch extends ViteCompile
 
     /**
      * Call the AssetCompile::watchHandle with the vite type
-     *
-     * @return int
      */
     public function handle(): int
     {
@@ -60,9 +58,6 @@ class ViteWatch extends ViteCompile
 
     /**
      * Create the public dir if required
-     *
-     * @param string $configPath
-     * @return void
      */
     protected function beforeExecution(string $configPath): void
     {

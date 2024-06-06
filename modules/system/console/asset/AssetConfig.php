@@ -23,17 +23,17 @@ abstract class AssetConfig extends Command
     protected $description = 'Create configuration.';
 
     /**
-     * @var string Local cache of fixture path
+     * Local cache of fixture path
      */
     private string $fixturePath;
 
     /**
-     * @var string The type of compilable to configure
+     * The type of compilable to configure
      */
     protected string $assetType;
 
     /**
-     * @var string The name of the config file
+     * The name of the config file
      */
     protected string $configFile;
 
@@ -81,7 +81,6 @@ abstract class AssetConfig extends Command
     /**
      * Resolve the path and type of the package by name
      *
-     * @param string $package
      * @return array|null[]
      */
     protected function getPackagePathType(string $package): array
@@ -103,13 +102,6 @@ abstract class AssetConfig extends Command
 
     /**
      * Write out config files based on assetType and the requested options
-     *
-     * @param PackageJson $packageJson
-     * @param string $package
-     * @param string $type
-     * @param string $path
-     * @param array $options
-     * @return void
      */
     protected function installConfigs(
         PackageJson $packageJson,
@@ -151,10 +143,6 @@ abstract class AssetConfig extends Command
 
     /**
      * Write a file but ask for conformation before overwriting
-     *
-     * @param string $path
-     * @param string $content
-     * @return int
      */
     protected function writeFile(string $path, string $content): int
     {

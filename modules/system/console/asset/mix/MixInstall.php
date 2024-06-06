@@ -23,17 +23,17 @@ class MixInstall extends AssetInstall
     protected $description = 'Install Node.js dependencies required for mixed assets';
 
     /**
-     * @var string The asset compiler being used
+     * The asset compiler being used
      */
     protected string $assetType = 'mix';
 
     /**
-     * @var string The asset config file
+     * The asset config file
      */
     protected string $configFile = 'winter.mix.js';
 
     /**
-     * @var array The packages required for asset compilation
+     * The packages required for asset compilation
      */
     protected array $packages = [
         'laravel-mix' => '^6.0.41'

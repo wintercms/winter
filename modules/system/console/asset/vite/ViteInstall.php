@@ -24,15 +24,18 @@ class ViteInstall extends AssetInstall
      */
     protected $description = 'Install Node.js dependencies required for vite assets';
 
+    /**
+     * The type of compilable to configure
+     */
     protected string $assetType = 'vite';
 
     /**
-     * @var string The asset config file
+     * The asset config file
      */
     protected string $configFile = 'vite.config.js';
 
     /**
-     * @var array The packages required for asset compilation
+     * The packages required for asset compilation
      */
     protected array $packages = [
         'vite' => '^5.2.11',

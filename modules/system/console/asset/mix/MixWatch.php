@@ -36,8 +36,6 @@ class MixWatch extends MixCompile
 
     /**
      * Call the AssetCompile::watchHandle with the mix type
-     *
-     * @return int
      */
     public function handle(): int
     {

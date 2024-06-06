@@ -18,12 +18,12 @@ class MixConfig extends AssetConfig
         {--u|vue : Setup vue}';
 
     /**
-     * @var string The type of compilable to configure
+     * The type of compilable to configure
      */
     protected string $assetType = 'mix';
 
     /**
-     * @var string The name of the config file
+     * The name of the config file
      */
     protected string $configFile = 'winter.mix.js';
 }

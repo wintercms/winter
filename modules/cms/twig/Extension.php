@@ -1,12 +1,12 @@
 <?php namespace Cms\Twig;
 
 use Block;
+use Cms\Classes\Controller;
 use Event;
 use Illuminate\Foundation\Vite;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
-use Cms\Classes\Controller;
 
 /**
  * The CMS Twig extension class implements the basic CMS Twig functions and filters.

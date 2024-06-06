@@ -23,7 +23,7 @@ class ViteList extends AssetList
     protected $description = 'List all registered Vite packages in this project.';
 
     /**
-     * @var string The asset compiler being used
+     * The asset compiler being used
      */
     protected string $assetType = 'vite';
 }

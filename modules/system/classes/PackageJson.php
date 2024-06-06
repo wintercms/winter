@@ -17,14 +17,12 @@ use Winter\Storm\Support\Facades\File;
 class PackageJson
 {
     /**
-     * @var array The contents of the package.json being modified
+     * The contents of the package.json being modified
      */
     protected array $data;
 
     /**
      * Create a new instance with optional path, loads file if file already exists
-     *
-     * @param string|null $path
      */
     public function __construct(
         protected ?string $path = null
@@ -36,8 +34,6 @@ class PackageJson
 
     /**
      * Returns the package name if set
-     *
-     * @return string|null
      */
     public function getName(): ?string
     {
@@ -46,9 +42,6 @@ class PackageJson
 
     /**
      * Sets the package name, throws `InvalidArgumentException` on invalid name
-     *
-     * @param string|null $name
-     * @return $this
      */
     public function setName(?string $name): static
     {
@@ -84,9 +77,6 @@ class PackageJson
 
     /**
      * Checks if workspace package is set
-     *
-     * @param string $path
-     * @return bool
      */
     public function hasWorkspace(string $path): bool
     {
@@ -95,9 +85,6 @@ class PackageJson
 
     /**
      * Adds a new workspace, removes from ignored workspaces if present
-     *
-     * @param string $path
-     * @return $this
      */
     public function addWorkspace(string $path): static
     {
@@ -121,9 +108,6 @@ class PackageJson
 
     /**
      * Removes a workspace
-     *
-     * @param string $path
-     * @return $this
      */
     public function removeWorkspace(string $path): static
     {
@@ -139,9 +123,6 @@ class PackageJson
 
     /**
      * Check if package is ignored
-     *
-     * @param string $path
-     * @return bool
      */
     public function hasIgnoredPackage(string $path): bool
     {
@@ -150,9 +131,6 @@ class PackageJson
 
     /**
      * Adds an ignored package, removes from workspaces if present
-     *
-     * @param string $path
-     * @return $this
      */
     public function addIgnoredPackage(string $path): static
     {
@@ -177,9 +155,6 @@ class PackageJson
 
     /**
      * Removes an ignored package
-     *
-     * @param string $path
-     * @return $this
      */
     public function removeIgnoredPackage(string $path): static
     {
@@ -195,9 +170,6 @@ class PackageJson
 
     /**
      * Checks if package.json has a dependency
-     *
-     * @param string $package
-     * @return bool
      */
     public function hasDependency(string $package): bool
     {
@@ -207,12 +179,6 @@ class PackageJson
     /**
      * Adds a dependency, supports adding to `dependencies` or `devDependencies` based on `$dev` and allows moving if
      * `$overwrite` is set
-     *
-     * @param string $package
-     * @param string $version
-     * @param bool $dev
-     * @param bool $overwrite
-     * @return $this
      */
     public function addDependency(string $package, string $version, bool $dev = false, bool $overwrite = false): static
     {
@@ -235,9 +201,6 @@ class PackageJson
 
     /**
      * Removes a package from both `dependencies` and `devDependencies`
-     *
-     * @param string $package
-     * @return $this
      */
     public function removeDependency(string $package): static
     {
@@ -247,8 +210,6 @@ class PackageJson
 
     /**
      * Returns the package.json contents as an array
-     *
-     * @return array
      */
     public function getContents(): array
     {
@@ -258,9 +219,6 @@ class PackageJson
     /**
      * Saves the contents to a file, if the object was init'ed with a path it will save to the path, or can be
      * overwritten with `$path`.
-     *
-     * @param string|null $path
-     * @return int
      */
     public function save(?string $path = null): int
     {

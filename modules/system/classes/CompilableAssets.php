@@ -163,10 +163,7 @@ class CompilableAssets
     }
 
     /**
-     * Register a compilable config, this allows the
-     * @param string $name
-     * @param array $config
-     * @return void
+     * Register a compilable config.
      */
     public function registerCompilable(string $name, array $config): void
     {
