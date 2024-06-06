@@ -28,6 +28,13 @@ class MixWatch extends MixCompile
     protected $description = 'Mix and compile assets on-the-fly as changes are made.';
 
     /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'mix:dev'
+    ];
+
+    /**
      * Call the AssetCompile::watchHandle with the mix type
      *
      * @return int

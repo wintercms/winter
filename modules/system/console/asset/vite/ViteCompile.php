@@ -30,6 +30,13 @@ class ViteCompile extends AssetCompile
     protected $description = 'Vite and compile assets';
 
     /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'vite:build'
+    ];
+
+    /**
      * @var string Name of config file i.e. mix.webpack.js, vite.config.js
      */
     protected string $configFile = 'vite.config.js';

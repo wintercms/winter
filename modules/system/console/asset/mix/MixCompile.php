@@ -30,6 +30,16 @@ class MixCompile extends AssetCompile
      */
     protected $description = 'Mix and compile assets';
 
+    /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'mix:build'
+    ];
+
+    /**
+     * @var string Name of config file i.e. mix.webpack.js, vite.config.js
+     */
     protected string $configFile = 'mix.webpack.js';
 
     /**
