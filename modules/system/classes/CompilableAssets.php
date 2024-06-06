@@ -42,7 +42,7 @@ class CompilableAssets
     ];
 
     /**
-     * A list of packages registered for mixing.
+     * A list of packages registered for compiling.
      */
     protected array $packages = [];
 
@@ -67,7 +67,7 @@ class CompilableAssets
          *
          * Example:
          *
-         *   public function registerMixPackages()
+         *   public function registerMixPackages(): array
          *   {
          *       return [
          *           'package-name-1' => 'winter.mix.js',
@@ -75,7 +75,7 @@ class CompilableAssets
          *       ];
          *   }
          *
-         *   public function registerVitePackages()
+         *   public function registerVitePackages(): array
          *   {
          *       return [
          *           'package-name-1' => 'vite.config.js',
