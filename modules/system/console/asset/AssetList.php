@@ -15,7 +15,7 @@ abstract class AssetList extends Command
         $compilableAssets = CompilableAssets::instance();
         $compilableAssets->fireCallbacks();
 
-        $packages = $compilableAssets->getPackages(true, $this->assetType);
+        $packages = $compilableAssets->getPackages($this->assetType, true);
 
         if (count($packages) === 0) {
             $this->info('No packages have been registered.');

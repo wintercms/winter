@@ -104,7 +104,7 @@ abstract class AssetInstall extends Command
         $compilableAssets = CompilableAssets::instance();
         $compilableAssets->fireCallbacks();
 
-        $registeredPackages = $compilableAssets->getPackages(type: $this->assetType);
+        $registeredPackages = $compilableAssets->getPackages($this->assetType);
         $requestedPackages = $this->option('package') ?: [];
 
         // Normalize the requestedPackages option
@@ -164,7 +164,7 @@ abstract class AssetInstall extends Command
             }
 
             // Get an updated list of packages including any newly added packages
-            $registeredPackages = $compilableAssets->getPackages();
+            $registeredPackages = $compilableAssets->getPackages($this->assetType);
 
             // Filter the registered packages to only deal with the requested packages
             foreach (array_keys($registeredPackages) as $name) {

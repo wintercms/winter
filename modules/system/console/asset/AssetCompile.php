@@ -41,7 +41,7 @@ abstract class AssetCompile extends Command
         $compilableAssets = CompilableAssets::instance();
         $compilableAssets->fireCallbacks();
 
-        $registeredPackages = $compilableAssets->getPackages(type: $type);
+        $registeredPackages = $compilableAssets->getPackages($type);
         $requestedPackages = $this->option('package') ?: [];
 
         // Calling commands in unit tests can cause the option casting to not work correctly,
@@ -61,7 +61,7 @@ abstract class AssetCompile extends Command
         // Filter the registered packages to only include requested packages
         if (count($requestedPackages) && count($registeredPackages)) {
             // Get an updated list of packages including any newly added packages
-            $registeredPackages = $compilableAssets->getPackages(type: $type);
+            $registeredPackages = $compilableAssets->getPackages($type);
 
             // Filter the registered packages to only deal with the requested packages
             foreach (array_keys($registeredPackages) as $name) {
@@ -120,7 +120,7 @@ abstract class AssetCompile extends Command
         $compilableAssets = CompilableAssets::instance();
         $compilableAssets->fireCallbacks();
 
-        $packages = $compilableAssets->getPackages(type: $type);
+        $packages = $compilableAssets->getPackages($type);
         $name = $this->argument('package');
 
         if (!in_array($name, array_keys($packages))) {

@@ -49,7 +49,7 @@ abstract class AssetConfig extends Command
         $compilableAssets = CompilableAssets::instance();
         $compilableAssets->fireCallbacks();
 
-        $packages = $compilableAssets->getPackages(true);
+        $packages = $compilableAssets->getPackages($this->assetType, true);
 
         if (isset($packages[$package])) {
             $this->warn('Package `' . $package . '` has already been configured');

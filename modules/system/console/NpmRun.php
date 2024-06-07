@@ -4,8 +4,8 @@ namespace System\Console;
 
 use Symfony\Component\Process\Process;
 use System\Classes\CompilableAssets;
+use System\Classes\PackageJson;
 use Winter\Storm\Console\Command;
-use Winter\Storm\Support\Facades\File;
 
 class NpmRun extends Command
 {
@@ -44,21 +44,22 @@ class NpmRun extends Command
         $compilableAssets = CompilableAssets::instance();
         $compilableAssets->fireCallbacks();
 
-        $packages = $compilableAssets->getPackages();
         $name = $this->argument('package');
         $script = $this->argument('script');
 
-        if (!in_array($name, array_keys($packages))) {
+        if ($compilableAssets->hasPackage($name)) {
             $this->error(
                 sprintf('Package "%s" is not a registered package.', $name)
             );
             return 1;
         }
 
-        $package = $packages[$name];
-        $packageJson = $this->readPackageJson($package);
+        $package = $compilableAssets->getPackage($name);
 
-        if (!isset($packageJson['scripts'][$script])) {
+        // Assume that packages with matching names have matching package.json files
+        $packageJson = new PackageJson($package[0]['package'] ?? null);
+
+        if (!$packageJson->hasScript($script)) {
             $this->error(
                 sprintf('Script "%s" is not defined in package "%s".', $script, $name)
             );
@@ -94,16 +95,5 @@ class NpmRun extends Command
                 $this->getOutput()->write($stdout);
             }
         });
-    }
-
-    /**
-     * Reads the package.json file for the given package.
-     */
-    protected function readPackageJson(array $package): array
-    {
-        $packageJsonPath = base_path($package['package']);
-        return File::exists($packageJsonPath)
-            ? json_decode(File::get($packageJsonPath), true)
-            : [];
     }
 }

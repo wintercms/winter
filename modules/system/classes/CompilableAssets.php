@@ -200,7 +200,7 @@ class CompilableAssets
     /**
      * Returns all packages registered.
      */
-    public function getPackages(bool $includeIgnored = false, string $type = 'mix'): array
+    public function getPackages(string $type, bool $includeIgnored = false): array
     {
         $packages = $this->packages[$type] ?? [];
 
@@ -213,6 +213,39 @@ class CompilableAssets
         }
 
         return $packages;
+    }
+
+    /**
+     * Returns if package(s) is registered.
+     */
+    public function hasPackage(string $name, bool $includeIgnored = false): bool
+    {
+        foreach ($this->packages ?? [] as $packages) {
+            foreach ($packages as $packageName => $config) {
+                if ($name === $packageName && (!$config['ignored'] || $includeIgnored)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns package(s).
+     */
+    public function getPackage(string $name, bool $includeIgnored = false): array
+    {
+        $results = [];
+        foreach ($this->packages ?? [] as $packages) {
+            foreach ($packages as $packageName => $config) {
+                if ($name === $packageName && (!$config['ignored'] || $includeIgnored)) {
+                    $results[] = $packages;
+                }
+            }
+        }
+
+        return $results;
     }
 
     /**

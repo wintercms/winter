@@ -15,5 +15,10 @@
     },
     "devDependencies": {
         "test-dev": "^3.0.2"
+    },
+    "scripts": {
+        "test": "testing",
+        "example": "example test",
+        "foo": "bar ./test"
     }
 }

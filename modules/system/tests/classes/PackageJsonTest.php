@@ -300,6 +300,76 @@ class PackageJsonTest extends TestCase
     }
 
     /**
+     * Test checking if a script exists in a package.json
+     *
+     * @return void
+     */
+    public function testHasScript(): void
+    {
+        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+
+        $this->assertTrue($packageJson->hasScript('foo'));
+        $this->assertTrue($packageJson->hasScript('example'));
+        $this->assertTrue($packageJson->hasScript('test'));
+
+        $this->assertFalse($packageJson->hasScript('bar'));
+        $this->assertFalse($packageJson->hasScript('winter'));
+        $this->assertFalse($packageJson->hasScript('testing'));
+    }
+
+    /**
+     * Test getting the value of a script by name
+     *
+     * @return void
+     */
+    public function testGetScript(): void
+    {
+        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+
+        $this->assertEquals('bar ./test', $packageJson->getScript('foo'));
+        $this->assertEquals('example test', $packageJson->getScript('example'));
+        $this->assertEquals('testing', $packageJson->getScript('test'));
+    }
+
+    /**
+     * Test getting the value of a script by name
+     *
+     * @return void
+     */
+    public function testAddScript(): void
+    {
+        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+
+        $packageJson->addScript('winter', 'winter ./testing');
+
+        $this->assertTrue($packageJson->hasScript('winter'));
+        $this->assertEquals('winter ./testing', $packageJson->getScript('winter'));
+
+        $contents = $packageJson->getContents();
+
+        $this->assertTrue(isset($contents['scripts']['winter']));
+        $this->assertEquals('winter ./testing', $contents['scripts']['winter']);
+    }
+
+    /**
+     * Test removing scripts from package.json
+     *
+     * @return void
+     */
+    public function testRemoveScript(): void
+    {
+        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+
+        $this->assertTrue($packageJson->hasScript('foo'));
+        $packageJson->removeScript('foo');
+        $this->assertFalse($packageJson->hasScript('foo'));
+
+        $this->assertTrue($packageJson->hasScript('example'));
+        $packageJson->removeScript('example');
+        $this->assertFalse($packageJson->hasScript('example'));
+    }
+
+    /**
      * Test saving, when saving with a file path set on init and passing a file path on save. Fails when no path given
      *
      * @return void

@@ -209,6 +209,40 @@ class PackageJson
     }
 
     /**
+     * Returns if a script exists
+     */
+    public function hasScript(string $name): bool
+    {
+        return isset($this->data['scripts'][$name]);
+    }
+
+    /**
+     * Returns the value of a script by name
+     */
+    public function getScript(string $name): ?string
+    {
+        return $this->data['scripts'][$name] ?? null;
+    }
+
+    /**
+     * Adds a script
+     */
+    public function addScript(string $name, string $script): static
+    {
+        $this->data['scripts'][$name] = $script;
+        return $this;
+    }
+
+    /**
+     * Removes a script by name
+     */
+    public function removeScript(string $name): static
+    {
+        unset($this->data['scripts'][$name]);
+        return $this;
+    }
+
+    /**
      * Returns the package.json contents as an array
      */
     public function getContents(): array
