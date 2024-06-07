@@ -43,11 +43,6 @@ class MixCompile extends AssetCompile
     protected string $configFile = 'mix.webpack.js';
 
     /**
-     * Local cache of the package.json file contents
-     */
-    protected array $packageJson;
-
-    /**
      * Call the AssetCompile::compileHandle with the mix type
      */
     public function handle(): int
@@ -67,7 +62,7 @@ class MixCompile extends AssetCompile
             $basePath . sprintf('%1$snode_modules%1$s.bin%1$swebpack', DIRECTORY_SEPARATOR),
             'build',
             $this->option('silent') ? '--stats=none' : '--progress',
-            '--config=' . $this->getPackagePath($configPath)
+            '--config=' . $this->getJsConfigPath($configPath)
         );
 
         return $command;
@@ -91,7 +86,7 @@ class MixCompile extends AssetCompile
             '%noProgress%' => (int) $this->option('no-progress')
         ], $fixture);
 
-        File::put($this->getPackagePath($configPath), $config);
+        File::put($this->getJsConfigPath($configPath), $config);
     }
 
     /**

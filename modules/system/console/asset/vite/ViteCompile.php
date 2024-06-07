@@ -42,11 +42,6 @@ class ViteCompile extends AssetCompile
     protected string $configFile = 'vite.config.js';
 
     /**
-     * Local cache of the package.json file contents
-     */
-    protected array $packageJson;
-
-    /**
      * Call the AssetCompile::compileHandle with the vite type
      */
     public function handle(): int

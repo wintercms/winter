@@ -4,6 +4,7 @@ namespace System\Console\Asset;
 
 use Symfony\Component\Process\Process;
 use System\Classes\CompilableAssets;
+use System\Classes\PackageJson;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Str;
@@ -16,9 +17,9 @@ abstract class AssetCompile extends Command
     protected $description = 'Mix and compile assets';
 
     /**
-     * Local cache of the package.json file contents
+     * PackageJson object holding the contents of the active package.json
      */
-    protected array $packageJson;
+    protected PackageJson $packageJson;
 
     /**
      * Name of config file i.e. mix.webpack.js, vite.config.js
@@ -180,11 +181,8 @@ abstract class AssetCompile extends Command
             $this->packageJson = $this->getNpmPackageManifest();
         }
 
-        $workspacesPackages = $this->packageJson['workspaces']['packages'] ?? [];
-
-        return in_array(
-            Str::replace(DIRECTORY_SEPARATOR, '/', $this->getPackagePath($mixJsPath)),
-            $workspacesPackages
+        return $this->packageJson->hasWorkspace(
+            Str::replace(DIRECTORY_SEPARATOR, '/', $this->getPackagePath($mixJsPath))
         );
     }
 
@@ -192,12 +190,9 @@ abstract class AssetCompile extends Command
      * Read the package.json file for the project, path configurable with the
      * `--manifest` option
      */
-    protected function getNpmPackageManifest(): array
+    protected function getNpmPackageManifest(): PackageJson
     {
-        $packageJsonPath = base_path($this->option('manifest') ?? 'package.json');
-        return File::exists($packageJsonPath)
-            ? json_decode(File::get($packageJsonPath), true)
-            : [];
+        return new PackageJson(base_path($this->option('manifest') ?? 'package.json'));
     }
 
     /**
