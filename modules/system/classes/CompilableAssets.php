@@ -222,7 +222,7 @@ class CompilableAssets
     {
         foreach ($this->packages ?? [] as $packages) {
             foreach ($packages as $packageName => $config) {
-                if ($name === $packageName && (!$config['ignored'] || $includeIgnored)) {
+                if (($name === $packageName) && (!$config['ignored'] || $includeIgnored)) {
                     return true;
                 }
             }
@@ -239,8 +239,8 @@ class CompilableAssets
         $results = [];
         foreach ($this->packages ?? [] as $packages) {
             foreach ($packages as $packageName => $config) {
-                if ($name === $packageName && (!$config['ignored'] || $includeIgnored)) {
-                    $results[] = $packages;
+                if (($name === $packageName) && (!$config['ignored'] || $includeIgnored)) {
+                    $results[] = $config;
                 }
             }
         }

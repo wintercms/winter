@@ -54,10 +54,10 @@ class NpmRun extends Command
             return 1;
         }
 
-        $package = $compilableAssets->getPackage($name);
+        $package = $compilableAssets->getPackage($name, true)[0] ?? [];
 
         // Assume that packages with matching names have matching package.json files
-        $packageJson = new PackageJson($package[0]['package'] ?? null);
+        $packageJson = new PackageJson($package['package'] ?? null);
 
         if (!$packageJson->hasScript($script)) {
             $this->error(
