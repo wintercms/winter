@@ -12,3 +12,5 @@ assets/vendor
 
 # Ignore test fixtures
 tests/js
+tests/fixtures/themes/test/assets/js
+tests/fixtures/themes/vitetest/assets/javascript
