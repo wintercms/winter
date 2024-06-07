@@ -47,7 +47,7 @@ class NpmRun extends Command
         $name = $this->argument('package');
         $script = $this->argument('script');
 
-        if ($compilableAssets->hasPackage($name)) {
+        if (!$compilableAssets->hasPackage($name, true)) {
             $this->error(
                 sprintf('Package "%s" is not a registered package.', $name)
             );
