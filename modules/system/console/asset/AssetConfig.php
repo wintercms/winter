@@ -70,7 +70,8 @@ abstract class AssetConfig extends Command
 
         $this->installConfigs($packageJson, $package, $type, $path, [
             'tailwind' => $this->option('tailwind'),
-            'vue' => $this->option('vue')
+            'vue' => $this->option('vue'),
+            'stubs' => $this->option('stubs')
         ]);
 
         $packageJson->save();
@@ -113,7 +114,7 @@ abstract class AssetConfig extends Command
         if ($options['tailwind']) {
             $this->writeFile(
                 $path . '/tailwind.config.js',
-                File::get($this->fixturePath . '/' . $type . '.tailwind.config.js.fixture')
+                File::get($this->fixturePath . '/tailwind/' . $type . '.tailwind.config.js.fixture')
             );
 
             $packageJson->addDependency('tailwindcss', static::DEFAULT_VERSION_TAILWIND, dev: true);
@@ -123,9 +124,22 @@ abstract class AssetConfig extends Command
             $packageJson->addDependency('vue', static::DEFAULT_VERSION_VUE, dev: true);
         }
 
+        $packageName = strtolower(str_replace('.', '-', $package));
+
+        if ($options['stubs']) {
+            if (!File::exists($path . '/assets/css')) {
+                File::makeDirectory($path . '/assets/css', recursive: true);
+            }
+
+            $this->writeFile(
+                $path . '/assets/css/' . $packageName . '.css',
+                File::get($this->fixturePath . '/css/' . ($options['tailwind'] ? 'tailwind' : 'default') . '.css.fixture')
+            );
+        }
+
         $config = str_replace(
             '{{packageName}}',
-            strtolower(str_replace('.', '-', $package)),
+            $packageName,
             File::get(
                 sprintf(
                     '%s/%s/%s%s%s.js.fixture',

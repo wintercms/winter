@@ -15,7 +15,8 @@ class MixConfig extends AssetConfig
     protected $signature = 'mix:config
         {packageName : The package name to add configuration for}
         {--t|tailwind : Setup tailwind}
-        {--u|vue : Setup vue}';
+        {--u|vue : Setup vue}
+        {--s|stubs : Setup stub files}';
 
     /**
      * The type of compilable to configure
