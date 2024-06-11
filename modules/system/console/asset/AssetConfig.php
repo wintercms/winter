@@ -114,7 +114,12 @@ abstract class AssetConfig extends Command
         if ($options['tailwind']) {
             $this->writeFile(
                 $path . '/tailwind.config.js',
-                File::get($this->fixturePath . '/tailwind/' . $type . '.tailwind.config.js.fixture')
+                File::get($this->fixturePath . '/tailwind/tailwind.' . $type . '.config.js.fixture')
+            );
+
+            $this->writeFile(
+                $path . '/postcss.config.mjs',
+                File::get($this->fixturePath . '/tailwind/postcss.config.js.fixture')
             );
 
             $packageJson->addDependency('tailwindcss', static::DEFAULT_VERSION_TAILWIND, dev: true);
