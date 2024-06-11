@@ -3,12 +3,10 @@
 use Block;
 use Cms\Classes\Controller;
 use Event;
-use Illuminate\Foundation\Vite;
-use System\Classes\CompilableAssets;
+use System\Classes\Vite;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
-use Winter\Storm\Exception\SystemException;
 
 /**
  * The CMS Twig extension class implements the basic CMS Twig functions and filters.
@@ -173,19 +171,12 @@ class Extension extends TwigExtension
     /**
      * Generates Vite tags via Laravel's Vite Object.
      *
-     * @param array $arguments The list of entry points for Vite
+     * @param array $entrypoints The list of entry points for Vite
      * @param string $package The package name of the plugin or theme
-     * @return \Illuminate\Support\HtmlString
      */
-    public function viteFunction(array $arguments, string $package): \Illuminate\Support\HtmlString
+    public function viteFunction(array $entrypoints, string $package): \Illuminate\Support\HtmlString
     {
-        if (!($compilableAssetPackage = CompilableAssets::instance()->getPackages('vite')[$package] ?? null)) {
-            throw new SystemException('Unable to resolve package: ' . $package);
-        }
-
-        $vite = app(Vite::class);
-        $vite->useHotFile(base_path($compilableAssetPackage['path'] . '/public/hot'));
-        return $vite($arguments, $compilableAssetPackage['path'] . '/public/build');
+        return Vite::tags($entrypoints, $package);
     }
 
     /**

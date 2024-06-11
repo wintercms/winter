@@ -145,7 +145,7 @@ class ServiceProvider extends ModuleServiceProvider
         });
 
         // Register the Laravel Vite singleton
-        $this->app->singleton(Vite::class, Vite::class);
+        $this->app->singleton(Vite::class, \System\Classes\Vite::class);
     }
 
     /**
