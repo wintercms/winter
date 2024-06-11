@@ -9,7 +9,7 @@ export default defineConfig({
             ],
             refresh: {
                 paths: [
-                    'assets/**/*.htm',
+                    './**/*.htm',
                     'assets/**/*.css',
                     'assets/**/*.js',
                 ]
