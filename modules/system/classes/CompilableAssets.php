@@ -15,8 +15,8 @@ use Winter\Storm\Support\Str;
  * register configurations that will be passed on to Node.js based compilers for processing.
  *
  * @package winter\wn-system-module
- * @author Ben Thomson <git@alfreido.com>, Jack Wilkinson <me@jackwilky.com>
- * @author Winter CMS
+ * @author Jack Wilkinson <me@jackwilky.com>
+ * @copyright Winter CMS Maintainers
  */
 class CompilableAssets
 {
@@ -28,7 +28,7 @@ class CompilableAssets
     protected string $packageJson = 'package.json';
 
     /**
-     * List of package types and registration methods
+     * @var array<string, array<string, string>> List of package types and registration methods
      */
     protected array $compilableConfigs = [
         'mix' => [
@@ -256,7 +256,7 @@ class CompilableAssets
      * The name of the package is an alias that can be used to reference this package in other methods within this
      * class.
      *
-     * By default, the CompilableAssets class will look for a `package.json` file for Node dependencies, and a config
+     * By default, the `CompilableAssets` class will look for a `package.json` file for Node dependencies, and a config
      * file for the compilable configuration
      *
      * @param string $name The name of the package being registered
