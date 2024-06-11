@@ -32,7 +32,7 @@ class ViteInstall extends AssetInstall
     /**
      * The asset config file
      */
-    protected string $configFile = 'vite.config.js';
+    protected string $configFile = 'vite.config.mjs';
 
     /**
      * The packages required for asset compilation

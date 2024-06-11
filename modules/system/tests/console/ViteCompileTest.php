@@ -27,7 +27,7 @@ class ViteCompileTest extends TestCase
         // Add our testing theme because it won't be auto discovered
         CompilableAssets::instance()->registerPackage(
             'theme-vitetest',
-            $themePath . '/vite.config.js',
+            $themePath . '/vite.config.mjs',
             'vite'
         );
 

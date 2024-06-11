@@ -39,7 +39,7 @@ class ViteCompile extends AssetCompile
     /**
      * Name of config file i.e. mix.webpack.js, vite.config.js
      */
-    protected string $configFile = 'vite.config.js';
+    protected string $configFile = 'vite.config.mjs';
 
     /**
      * Call the AssetCompile::compileHandle with the vite type

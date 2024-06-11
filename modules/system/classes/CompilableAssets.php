@@ -37,7 +37,7 @@ class CompilableAssets
         ],
         'vite' => [
             'registrationMethod' => 'registerVitePackages',
-            'configFile' => 'vite.config.js'
+            'configFile' => 'vite.config.mjs'
         ]
     ];
 
@@ -78,7 +78,7 @@ class CompilableAssets
          *   public function registerVitePackages(): array
          *   {
          *       return [
-         *           'package-name-1' => 'vite.config.js',
+         *           'package-name-1' => 'vite.config.mjs',
          *           'package-name-2' => 'assets/js/build.js',
          *       ];
          *   }
@@ -279,17 +279,20 @@ class CompilableAssets
 
         // Require $configFile to be a JS file
         $extension = File::extension($configFile);
-        if ($extension !== 'js') {
-            throw new SystemException(
-                sprintf('Compilable configuration for package "%s" must be a JavaScript file ending with .js', $name)
-            );
+        if (!in_array($extension, ['js', 'mjs'])) {
+            throw new SystemException(sprintf(
+                'Compilable configuration for package "%s" must be a JavaScript file ending with .js or .mjs',
+                $name
+            ));
         }
 
         // Check that the package path exists
         if (!File::exists($path)) {
-            throw new SystemException(
-                sprintf('Cannot register "%s" as a compilable package; the "%s" path does not exist.', $name, $path)
-            );
+            throw new SystemException(sprintf(
+                'Cannot register "%s" as a compilable package; the "%s" path does not exist.',
+                $name,
+                $path
+            ));
         }
 
         // Check for any existing packages already registered under the provided name
