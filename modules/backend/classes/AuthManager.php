@@ -290,7 +290,7 @@ class AuthManager extends StormAuthManager
     /**
      * SSO Before signin event
      */
-    public function beforeSignin(string $ssoProvider): boolean|mixed
+    public function beforeSignin(string $ssoProvider): mixed
     {
         /**
          * @event backend.user.sso.beforeSignin
@@ -309,7 +309,7 @@ class AuthManager extends StormAuthManager
     /**
      * SSO After signin event
      */
-    public function afterSignin(string $ssoProvider, $ssoUser)
+    public function afterSignin(string $ssoProvider, $ssoUser): mixed
     {
         /**
          * @event backend.user.sso.signin
@@ -328,7 +328,7 @@ class AuthManager extends StormAuthManager
     /**
      * Before register event
      */
-    public function beforeRegister(\Backend\Models\User $user)
+    public function beforeRegister(\Backend\Models\User $user): mixed
     {
         /**
          * @event backend.user.beforeRegister
@@ -347,7 +347,7 @@ class AuthManager extends StormAuthManager
     /**
      * After register event
      */
-    public function afterRegister(\Backend\Models\User $user)
+    public function afterRegister(\Backend\Models\User $user): mixed
     {
         /**
          * @event backend.user.afterRegister
