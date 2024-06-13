@@ -287,23 +287,79 @@ class AuthManager extends StormAuthManager
         return !!$this->listPermissionsForRole($role, false);
     }
 
-    public function beforeSignin(string $ssoProvider)
+    /**
+     * SSO Before signin event
+     */
+    public function beforeSignin(string $ssoProvider): boolean|mixed
     {
-        return Event::fire('backend.user.beforeSignin', [$this, $ssoProvider], halt: true);
+        /**
+         * @event backend.user.sso.beforeSignin
+         * Provides an opportunity to interact with the Backend User model before the user signs in with the SSO provider.
+         *
+         * Example usage:
+         *
+         *     Event::listen('backend.user.sso.beforeSignin', function (\Backend\Classes\AuthManager $authManager, string $ssoProvider) {
+         *     });
+         *
+         */
+
+        return Event::fire('backend.user.sso.beforeSignin', [$this, $ssoProvider], halt: true);
     }
 
+    /**
+     * SSO After signin event
+     */
     public function afterSignin(string $ssoProvider, $ssoUser)
     {
-        return Event::fire('backend.user.signin', [$this, $ssoProvider, $ssoUser]);
+        /**
+         * @event backend.user.sso.signin
+         * Provides an opportunity to interact with the Backend User model after the user signs in with the SSO provider.
+         *
+         * Example usage:
+         *
+         *     Event::listen('backend.user.sso.signin', function (\Backend\Classes\AuthManager $authManager, string $ssoProvider, $ssoUser) {
+         *     });
+         *
+         */
+
+        return Event::fire('backend.user.sso.signin', [$this, $ssoProvider, $ssoUser]);
     }
 
-    public function beforeRegister(\Backend\Model\User $user)
+    /**
+     * Before register event
+     */
+    public function beforeRegister(\Backend\Models\User $user)
     {
+        /**
+         * @event backend.user.beforeRegister
+         * Provides an opportunity to interact with the Backend User model before the user is registered.
+         *
+         * Example usage:
+         *
+         *     Event::listen('backend.user.beforeRegister', function (\Backend\Classes\AuthManager $authManager, \Backend\Models\User $user) {
+         *     });
+         *
+         */
+
         return Event::fire('backend.user.beforeRegister', [$this, $user], halt: true);
     }
 
-    public function afterRegister(\Backend\Model\User $user)
+    /**
+     * After register event
+     */
+    public function afterRegister(\Backend\Models\User $user)
     {
+        /**
+         * @event backend.user.afterRegister
+         * Provides an opportunity to interact with the Backend User model after the user is registered.
+         *
+         * Example usage:
+         *
+         *     Event::listen('backend.user.beforeRegister', function (\Backend\Classes\AuthManager $authManager, \Backend\Models\User $user) {
+         *     });
+         *
+         */
+
         return Event::fire('backend.user.register', [$this, $user]);
     }
 }
