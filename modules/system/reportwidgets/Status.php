@@ -99,19 +99,46 @@ class Status extends ReportWidgetBase
             $writablePaths[] = themes_path();
         }
 
+        // Warn if debug mode is enabled - this is a security risk
         if (Config::get('app.debug', true)) {
-            $warnings[] = Lang::get('backend::lang.warnings.debug');
+            $warnings[] = [
+                'message' => Lang::get('backend::lang.warnings.debug'),
+                'fixUrl' => 'https://wintercms.com/docs/v1.2/docs/setup/configuration#debug-mode',
+            ];
         }
-
-        if (Config::get('develop.decompileBackendAssets', false)) {
-            $warnings[] = Lang::get('backend::lang.warnings.decompileBackendAssets');
+        // Warn if CSRF protection is disabled - this is a security risk
+        if (Config::get('cms.enableCsrfProtection', true) === false) {
+            $warnings[] = [
+                'message' => Lang::get('backend::lang.warnings.csrf'),
+                'fixUrl' => 'https://wintercms.com/docs/v1.2/docs/setup/configuration#csrf-protection',
+            ];
         }
-
+        // Warn if backend auth throttling is disabled - this is a security risk
+        if (Config::get('auth.throttle.enabled', true) === false) {
+            $warnings[] = [
+                'message' => Lang::get('backend::lang.warnings.auth_throttle_disabled'),
+            ];
+        }
+        // Warn if the user has disabled base directory restriction - this is a security risk
+        if (Config::get('cms.restrictBaseDir', true) === false) {
+            $warnings[] = [
+                'message' => Lang::get('backend::lang.warnings.restrict_base_dir'),
+            ];
+        }
+        // Warn if the default backend user is using the default username or email, and has access to manage users
         if (
             BackendAuth::getUser()->hasAccess('backend.manage_users')
             && User::where('login', 'admin')->orWhere('email', 'admin@domain.tld')->count()
         ) {
-            $warnings[] = Lang::get('backend::lang.warnings.default_backend_user');
+            $warnings[] = [
+                'message' => Lang::get('backend::lang.warnings.default_backend_user'),
+            ];
+        }
+        // Warn if backend assets are being decompiled
+        if (Config::get('develop.decompileBackendAssets', false)) {
+            $warnings[] = [
+                'message' => Lang::get('backend::lang.warnings.decompileBackendAssets'),
+            ];
         }
 
         $requiredExtensions = [
@@ -124,22 +151,29 @@ class Status extends ReportWidgetBase
 
         foreach ($writablePaths as $path) {
             if (!is_writable($path)) {
-                $warnings[] = Lang::get('backend::lang.warnings.permissions', ['name' => '<strong>'.$path.'</strong>']);
+                $warnings[] = [
+                    'message' => Lang::get('backend::lang.warnings.permissions', ['name' => '<strong>'.$path.'</strong>'])
+                ];
             }
         }
 
         foreach ($requiredExtensions as $extension => $installed) {
             if (!$installed) {
-                $warnings[] = Lang::get('backend::lang.warnings.extension', ['name' => '<strong>'.$extension.'</strong>']);
+                $warnings[] = [
+                    'message' => Lang::get('backend::lang.warnings.extension', ['name' => '<strong>'.$extension.'</strong>']),
+                    'fixUrl' => 'https://wintercms.com/docs/v1.2/docs/setup/installation#minimum-system-requirements',
+                ];
             }
         }
 
         foreach ($missingDependencies as $pluginCode => $plugin) {
             foreach ($plugin as $missingPluginCode) {
-                $warnings[] = Lang::get('system::lang.updates.update_warnings_plugin_missing', [
-                    'code' => '<strong>' . $missingPluginCode . '</strong>',
-                    'parent_code' => '<strong>' . $pluginCode . '</strong>'
-                ]);
+                $warnings[] = [
+                    'message' => Lang::get('system::lang.updates.update_warnings_plugin_missing', [
+                        'code' => '<strong>' . $missingPluginCode . '</strong>',
+                        'parent_code' => '<strong>' . $pluginCode . '</strong>'
+                    ]),
+                ];
             }
         }
 
