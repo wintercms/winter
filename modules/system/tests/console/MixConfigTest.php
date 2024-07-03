@@ -1,6 +1,6 @@
 <?php
 
-namespace System\tests\console;
+namespace System\Tests\Console;
 
 use System\Classes\PluginManager;
 use System\Tests\Bootstrap\TestCase;
