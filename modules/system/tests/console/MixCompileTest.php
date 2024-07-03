@@ -2,14 +2,13 @@
 
 namespace System\Tests\Console;
 
-use File;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
-use System\Console\Asset\Mix\MixCompile;
+use Winter\Storm\Support\Facades\File;
 use System\Tests\Bootstrap\TestCase;
 
 class MixCompileTest extends TestCase
 {
+    protected string $command = 'mix:compile';
+
     public function setUp(): void
     {
         parent::setUp();
@@ -21,30 +20,22 @@ class MixCompileTest extends TestCase
 
     public function testCompileMultiple()
     {
-        [$command, $output] = $this->makeCommand();
-
-        $result = $command->run(new ArrayInput([
+        $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-ac.json',
             '--silent' => true
-        ]), $output);
+        ])->assertExitCode(0);
 
-        $this->assertIsInt($result);
-        $this->assertEquals(0, $result);
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testc/assets/dist/app.js'));
     }
 
     public function testCompileMultipleWithErrors()
     {
-        [$command, $output] = $this->makeCommand();
-
-        $result = $command->run(new ArrayInput([
+        $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
             '--silent' => true
-        ]), $output);
+        ])->assertExitCode(1);
 
-        $this->assertIsInt($result);
-        $this->assertEquals(1, $result);
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testb/assets/dist/app.js'));
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testc/assets/dist/app.js'));
@@ -52,16 +43,12 @@ class MixCompileTest extends TestCase
 
     public function testCompileTarget()
     {
-        [$command, $output] = $this->makeCommand();
-
-        $result = $command->run(new ArrayInput([
+        $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
             '--package' => 'mix.testa',
             '--silent' => true
-        ]), $output);
+        ])->assertExitCode(0);
 
-        $this->assertIsInt($result);
-        $this->assertEquals(0, $result);
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
         $this->assertFileNotExists(base_path('modules/system/tests/fixtures/plugins/mix/testb/assets/dist/app.js'));
         $this->assertFileNotExists(base_path('modules/system/tests/fixtures/plugins/mix/testc/assets/dist/app.js'));
@@ -69,16 +56,12 @@ class MixCompileTest extends TestCase
 
     public function testCompileTargetWithError()
     {
-        [$command, $output] = $this->makeCommand();
-
-        $result = $command->run(new ArrayInput([
+        $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
             '--package' => 'mix.testb',
             '--silent' => true
-        ]), $output);
+        ])->assertExitCode(1);
 
-        $this->assertIsInt($result);
-        $this->assertEquals(1, $result);
         $this->assertFileNotExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
         $this->assertFileNotExists(base_path('modules/system/tests/fixtures/plugins/mix/testc/assets/dist/app.js'));
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testb/assets/dist/app.js'));
@@ -86,27 +69,15 @@ class MixCompileTest extends TestCase
 
     public function testCompileTargetStopOnError()
     {
-        [$command, $output] = $this->makeCommand();
-
-        $result = $command->run(new ArrayInput([
+        $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
             '--stop-on-error' => true,
             '--silent' => true
-        ]), $output);
+        ])->assertExitCode(1);
 
-        $this->assertIsInt($result);
-        $this->assertEquals(1, $result);
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testb/assets/dist/app.js'));
         $this->assertFileNotExists(base_path('modules/system/tests/fixtures/plugins/mix/testc/assets/dist/app.js'));
-    }
-
-    protected function makeCommand(): array
-    {
-        $output = new BufferedOutput();
-        $command = new MixCompile();
-        $command->setLaravel($this->app);
-        return [$command, $output];
     }
 
     public function tearDown(): void
