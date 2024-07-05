@@ -211,10 +211,12 @@ abstract class AssetCompile extends Command
             null
         );
 
-        try {
-            $process->setTty(true);
-        } catch (\Throwable $e) {
-            // This will fail on unsupported systems
+        if (!$this->option('disable-tty')) {
+            try {
+                $process->setTty(true);
+            } catch (\Throwable $e) {
+                // This will fail on unsupported systems
+            }
         }
 
         $exitCode = $process->run(function ($status, $stdout) {
