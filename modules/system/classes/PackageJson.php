@@ -134,11 +134,17 @@ class PackageJson
      */
     public function addIgnoredPackage(string $path): static
     {
-        if (!in_array($path, $this->data['workspaces']['ignoredPackages'])) {
+        if (
+            !isset($this->data['workspaces']['ignoredPackages'])
+            || !in_array($path, $this->data['workspaces']['ignoredPackages'])
+        ) {
             $this->data['workspaces']['ignoredPackages'][] = $path;
         }
 
-        if (($key = array_search($path, $this->data['workspaces']['packages'])) !== false) {
+        if (
+            isset($this->data['workspaces']['packages'])
+            &&($key = array_search($path, $this->data['workspaces']['packages'])) !== false
+        ) {
             // remove the package from ignored workspaces
             unset($this->data['workspaces']['packages'][$key]);
             // reset keys
@@ -158,7 +164,10 @@ class PackageJson
      */
     public function removeIgnoredPackage(string $path): static
     {
-        if (($key = array_search($path, $this->data['workspaces']['ignoredPackages'])) !== false) {
+        if (
+            isset($this->data['workspaces']['ignoredPackages'])
+            && ($key = array_search($path, $this->data['workspaces']['ignoredPackages'])) !== false
+        ) {
             // remove the package from workspace packages
             unset($this->data['workspaces']['ignoredPackages'][$key]);
             // reset keys
