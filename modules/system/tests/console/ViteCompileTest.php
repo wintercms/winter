@@ -2,15 +2,14 @@
 
 namespace System\Tests\Console;
 
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
 use System\Classes\CompilableAssets;
-use System\Console\Asset\Vite\ViteCompile;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Support\Facades\File;
 
 class ViteCompileTest extends TestCase
 {
+    protected string $themePath;
+
     public function setUp(): void
     {
         parent::setUp();
@@ -18,33 +17,27 @@ class ViteCompileTest extends TestCase
         if (!File::exists(base_path('node_modules'))) {
             $this->markTestSkipped('This test requires node_modules to be installed');
         }
-    }
 
-    public function testThemeCompile(): void
-    {
-        $themePath = base_path('modules/system/tests/fixtures/themes/vitetest');
+        $this->themePath = base_path('modules/system/tests/fixtures/themes/vitetest');
 
         // Add our testing theme because it won't be auto discovered
         CompilableAssets::instance()->registerPackage(
             'theme-vitetest',
-            $themePath . '/vite.config.mjs',
+            $this->themePath . '/vite.config.mjs',
             'vite'
         );
+    }
 
-        // Create command and output objects
-        [$command, $output] = $this->makeCommand();
+    public function testThemeCompile(): void
+    {
         // Run the vite:compile command
-        $result = $command->run(new ArrayInput([
+        $this->artisan('vite:compile', [
             'theme-vitetest',
             '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
             '--silent' => true
-        ]), $output);
+        ])->assertExitCode(0);
 
-        // Confirm command ran correctly
-        $this->assertIsInt($result);
-        $this->assertEquals(0, $result, 'Vite command execution failed');
-
-        $manifestPath = $themePath . '/public/build/manifest.json';
+        $manifestPath = $this->themePath . '/public/build/manifest.json';
 
         // Validate the manifest was written
         $this->assertFileExists($manifestPath);
@@ -54,27 +47,63 @@ class ViteCompileTest extends TestCase
 
         // Validate the css was compiled correctly
         $this->assertArrayHasKey('assets/css/theme.css', $manifest);
-        $this->assertFileExists($themePath . '/public/build/' . $manifest['assets/css/theme.css']['file']);
+        $this->assertFileExists($this->themePath . '/public/build/' . $manifest['assets/css/theme.css']['file']);
         $this->assertEquals(
             'h1{color:red}',
-            trim(File::get($themePath . '/public/build/' . $manifest['assets/css/theme.css']['file']))
+            trim(File::get($this->themePath . '/public/build/' . $manifest['assets/css/theme.css']['file']))
         );
 
         // Validate the js was compiled correctly
         $this->assertArrayHasKey('assets/javascript/theme.js', $manifest);
-        $this->assertFileExists($themePath . '/public/build/' . $manifest['assets/javascript/theme.js']['file']);
+        $this->assertFileExists($this->themePath . '/public/build/' . $manifest['assets/javascript/theme.js']['file']);
         $this->assertEquals(
             'window.alert("hello world");',
-            trim(File::get($themePath . '/public/build/' . $manifest['assets/javascript/theme.js']['file']))
+            trim(File::get($this->themePath . '/public/build/' . $manifest['assets/javascript/theme.js']['file']))
         );
     }
 
-    protected function makeCommand(): array
+    public function testThemeCompileFailed(): void
     {
-        $output = new BufferedOutput();
-        $command = new ViteCompile();
-        $command->setLaravel($this->app);
-        return [$command, $output];
+        // Rename the css file so vite cannot find it
+        File::move($this->themePath . '/assets/css/theme.css', $this->themePath . '/assets/css/theme.back');
+
+        // Run the vite:compile command
+        $this->artisan('vite:compile', [
+            'theme-vitetest',
+            '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
+            '--disable-tty' => true
+        ])
+            ->expectsOutputToContain('Could not resolve entry module "assets/css/theme.css".')
+            ->assertExitCode(1);
+
+        // Validate the manifest was not written
+        $this->assertFileNotExists($this->themePath . '/public/build/manifest.json');
+
+        // Put the css file back
+        File::move($this->themePath . '/assets/css/theme.back', $this->themePath . '/assets/css/theme.css');
+    }
+
+    public function testThemeCompileWarning(): void
+    {
+        // Rename the css file so vite cannot find it
+        $contents = File::get($this->themePath . '/assets/css/theme.css');
+
+        File::put($this->themePath . '/assets/css/theme.css', 'h1 {color:');
+
+        // Run the vite:compile command
+        $this->artisan('vite:compile', [
+            'theme-vitetest',
+            '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
+            '--disable-tty' => true
+        ])
+            ->expectsOutputToContain('[WARNING] Expected "}" to go with "{" [css-syntax-error]')
+            ->assertExitCode(0);
+
+        // Validate the manifest was not written
+        $this->assertFileExists($this->themePath . '/public/build/manifest.json');
+
+        // Put the css file back
+        File::put($this->themePath . '/assets/css/theme.css', $contents);
     }
 
     public function tearDown(): void

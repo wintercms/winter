@@ -33,8 +33,10 @@ class MixCompileTest extends TestCase
     {
         $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
-            '--silent' => true
-        ])->assertExitCode(1);
+            '--disable-tty' => true
+        ])
+            ->expectsOutputToContain('Error: Can\'t resolve \'some-missing-package\'')
+            ->assertExitCode(1);
 
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testb/assets/dist/app.js'));
@@ -59,8 +61,10 @@ class MixCompileTest extends TestCase
         $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
             '--package' => 'mix.testb',
-            '--silent' => true
-        ])->assertExitCode(1);
+            '--disable-tty' => true
+        ])
+            ->expectsOutputToContain('Error: Can\'t resolve \'some-missing-package\'')
+            ->assertExitCode(1);
 
         $this->assertFileNotExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
         $this->assertFileNotExists(base_path('modules/system/tests/fixtures/plugins/mix/testc/assets/dist/app.js'));
@@ -72,8 +76,10 @@ class MixCompileTest extends TestCase
         $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
             '--stop-on-error' => true,
-            '--silent' => true
-        ])->assertExitCode(1);
+            '--disable-tty' => true
+        ])
+            ->expectsOutputToContain('Error: Can\'t resolve \'some-missing-package\'')
+            ->assertExitCode(1);
 
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testb/assets/dist/app.js'));
