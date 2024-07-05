@@ -20,6 +20,7 @@ class ViteWatch extends ViteCompile
         {--f|production : Runs compilation in "production" mode}
         {--m|manifest= : Defines package.json to use for compile}
         {--s|silent : Silent mode}
+        {--d|disable-tty : Disable tty mode}
         {--no-progress : Do not show mix progress}';
 
     /**

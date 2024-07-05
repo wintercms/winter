@@ -19,6 +19,7 @@ class ViteCompile extends AssetCompile
         {viteArgs?* : Arguments to pass through to the Vite CLI}
         {--f|production : Runs compilation in "production" mode}
         {--s|silent : Silent mode}
+        {--d|disable-tty : Disable tty mode}
         {--e|stop-on-error : Exit once an error is encountered}
         {--m|manifest= : Defines package.json to use for compile}
         {--p|package=* : Defines one or more packages to compile}
