@@ -51,8 +51,10 @@ abstract class AssetConfig extends Command
 
         $packages = $compilableAssets->getPackages($this->assetType, true);
 
-        if (isset($packages[$package])) {
-            $this->warn('Package `' . $package . '` has already been configured');
+        if (
+            isset($packages[$package])
+            && !$this->confirm('Package `' . $package . '` has already been configured, are you sure you wish to continue?')
+        ) {
             return 1;
         }
 
