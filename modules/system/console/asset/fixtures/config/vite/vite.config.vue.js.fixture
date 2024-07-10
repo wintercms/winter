@@ -11,6 +11,7 @@ export default defineConfig({
             refresh: {
                 paths: [
                     './**/*.htm',
+                    './**/*.block',
                     'assets/**/*.css',
                     'assets/**/*.js',
                 ]
