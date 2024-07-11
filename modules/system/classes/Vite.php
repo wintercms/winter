@@ -24,6 +24,9 @@ class Vite extends LaravelVite
             throw new SystemException('A package must be passed');
         }
 
+        // Normalise the package name
+        $package = strtolower($package);
+
         if (!($compilableAssetPackage = CompilableAssets::instance()->getPackages('vite')[$package] ?? null)) {
             throw new SystemException('Unable to resolve package: ' . $package);
         }
