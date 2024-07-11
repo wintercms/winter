@@ -67,4 +67,17 @@ class ViteWatch extends ViteCompile
             File::makeDirectory($publicDir);
         }
     }
+
+    /**
+     * Handle the cleanup of this command if a termination signal is received
+     */
+    public function handleCleanup(): void
+    {
+        $this->newLine();
+        $this->info('Running compile to ensure files exist after exit');
+
+        $this->call('vite:compile', [
+            '--package' => $this->argument('package'),
+        ]);
+    }
 }
