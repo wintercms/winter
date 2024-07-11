@@ -149,22 +149,22 @@ abstract class AssetConfig extends Command
 
         if ($options['stubs']) {
             // Setup css stubs
-            if (!File::exists($path . '/assets/css')) {
-                File::makeDirectory($path . '/assets/css', recursive: true);
+            if (!File::exists($path . '/assets/src/css')) {
+                File::makeDirectory($path . '/assets/src/css', recursive: true);
             }
 
             $this->writeFile(
-                $path . '/assets/css/' . $packageName . '.css',
+                $path . '/assets/src/css/' . $packageName . '.css',
                 File::get($this->fixturePath . '/css/' . ($options['tailwind'] ? 'tailwind' : 'default') . '.css.fixture')
             );
 
             // Setup js stubs
-            if (!File::exists($path . '/assets/js')) {
-                File::makeDirectory($path . '/assets/js', recursive: true);
+            if (!File::exists($path . '/assets/src/js')) {
+                File::makeDirectory($path . '/assets/src/js', recursive: true);
             }
 
             $this->writeFile(
-                $path . '/assets/js/' . $packageName . '.js',
+                $path . '/assets/src/js/' . $packageName . '.js',
                 File::get($this->fixturePath . '/js/' . ($options['vue'] ? 'vue' : 'default') . '.js.fixture')
             );
         }
