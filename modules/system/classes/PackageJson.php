@@ -88,11 +88,11 @@ class PackageJson
      */
     public function addWorkspace(string $path): static
     {
-        if (!in_array($path, $this->data['workspaces']['packages'])) {
+        if (!in_array($path, $this->data['workspaces']['packages'] ?? [])) {
             $this->data['workspaces']['packages'][] = $path;
         }
 
-        if (($key = array_search($path, $this->data['workspaces']['ignoredPackages'])) !== false) {
+        if (($key = array_search($path, $this->data['workspaces']['ignoredPackages'] ?? [])) !== false) {
             // remove the package from ignored workspaces
             unset($this->data['workspaces']['ignoredPackages'][$key]);
             // reset keys
@@ -111,7 +111,7 @@ class PackageJson
      */
     public function removeWorkspace(string $path): static
     {
-        if (($key = array_search($path, $this->data['workspaces']['packages'])) !== false) {
+        if (($key = array_search($path, $this->data['workspaces']['packages'] ?? [])) !== false) {
             // remove the package from workspace packages
             unset($this->data['workspaces']['packages'][$key]);
             // reset keys
@@ -134,17 +134,11 @@ class PackageJson
      */
     public function addIgnoredPackage(string $path): static
     {
-        if (
-            !isset($this->data['workspaces']['ignoredPackages'])
-            || !in_array($path, $this->data['workspaces']['ignoredPackages'])
-        ) {
+        if (!in_array($path, $this->data['workspaces']['ignoredPackages'] ?? [])) {
             $this->data['workspaces']['ignoredPackages'][] = $path;
         }
 
-        if (
-            isset($this->data['workspaces']['packages'])
-            &&($key = array_search($path, $this->data['workspaces']['packages'])) !== false
-        ) {
+        if (($key = array_search($path, $this->data['workspaces']['packages'] ?? [])) !== false) {
             // remove the package from ignored workspaces
             unset($this->data['workspaces']['packages'][$key]);
             // reset keys
@@ -153,8 +147,7 @@ class PackageJson
 
         // Sort the packages
         asort($this->data['workspaces']['ignoredPackages']);
-        $this->data['workspaces']['ignoredPackages'] = array_values($this->data['workspaces']['ignoredPackages']);
-
+        $this->data['workspaces']['ignoredPackages'] = array_values($this->data['workspaces']['ignoredPackages'] ?? []);
 
         return $this;
     }
@@ -164,10 +157,7 @@ class PackageJson
      */
     public function removeIgnoredPackage(string $path): static
     {
-        if (
-            isset($this->data['workspaces']['ignoredPackages'])
-            && ($key = array_search($path, $this->data['workspaces']['ignoredPackages'])) !== false
-        ) {
+        if (($key = array_search($path, $this->data['workspaces']['ignoredPackages'] ?? [])) !== false) {
             // remove the package from workspace packages
             unset($this->data['workspaces']['ignoredPackages'][$key]);
             // reset keys
@@ -200,7 +190,7 @@ class PackageJson
         }
 
         // Clear any existing settings because we are overwriting
-        unset($this->data['dependencies'][$package], $this->data['devDependencies'][$package]);
+        $this->removeDependency($package);
 
         // Define the dep
         $this->data[$dev ? 'devDependencies' : 'dependencies'][$package] = $version;

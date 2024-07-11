@@ -140,6 +140,12 @@ class PackageJsonTest extends TestCase
         $this->assertFalse($packageJson->hasWorkspace('themes/test'));
         $packageJson->addWorkspace('themes/test');
         $this->assertTrue($packageJson->hasWorkspace('themes/test'));
+
+        // Create blank source
+        $packageJson = new PackageJson();
+        $this->assertFalse($packageJson->hasWorkspace('themes/test'));
+        $packageJson->addWorkspace('themes/test');
+        $this->assertTrue($packageJson->hasWorkspace('themes/test'));
     }
 
     /**
@@ -151,6 +157,11 @@ class PackageJsonTest extends TestCase
     {
         $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
         $this->assertTrue($packageJson->hasWorkspace('themes/demo'));
+        $packageJson->removeWorkspace('themes/demo');
+        $this->assertFalse($packageJson->hasWorkspace('themes/demo'));
+
+        // Create blank source
+        $packageJson = new PackageJson();
         $packageJson->removeWorkspace('themes/demo');
         $this->assertFalse($packageJson->hasWorkspace('themes/demo'));
     }
@@ -182,6 +193,11 @@ class PackageJsonTest extends TestCase
         $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
         $this->assertTrue($packageJson->hasIgnoredPackage('modules/backend'));
         $this->assertFalse($packageJson->hasIgnoredPackage('modules/test'));
+
+        // Create blank source
+        $packageJson = new PackageJson();
+        $this->assertFalse($packageJson->hasIgnoredPackage('modules/backend'));
+        $this->assertFalse($packageJson->hasIgnoredPackage('modules/test'));
     }
 
     /**
@@ -195,6 +211,11 @@ class PackageJsonTest extends TestCase
         $this->assertFalse($packageJson->hasIgnoredPackage('themes/example'));
         $packageJson->addIgnoredPackage('themes/example');
         $this->assertTrue($packageJson->hasIgnoredPackage('themes/example'));
+
+        // Create blank source
+        $packageJson = new PackageJson();
+        $packageJson->addIgnoredPackage('themes/example');
+        $this->assertTrue($packageJson->hasIgnoredPackage('themes/example'));
     }
 
     /**
@@ -206,6 +227,11 @@ class PackageJsonTest extends TestCase
     {
         $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
         $this->assertTrue($packageJson->hasIgnoredPackage('modules/system'));
+        $packageJson->removeIgnoredPackage('modules/system');
+        $this->assertFalse($packageJson->hasIgnoredPackage('modules/system'));
+
+        // Create blank source
+        $packageJson = new PackageJson();
         $packageJson->removeIgnoredPackage('modules/system');
         $this->assertFalse($packageJson->hasIgnoredPackage('modules/system'));
     }
@@ -277,6 +303,13 @@ class PackageJsonTest extends TestCase
         $this->assertArrayNotHasKey('test', $packageJson->getContents()['dependencies']);
         $this->assertArrayHasKey('test', $packageJson->getContents()['devDependencies']);
         $this->assertEquals('6.0.1', $packageJson->getContents()['devDependencies']['test']);
+
+        // Create blank source
+        $packageJson = new PackageJson();
+        // Add a non-dev dependency
+        $packageJson->addDependency('winter', '4.0.1', dev: false);
+        // Add a dev dependency
+        $packageJson->addDependency('winter-dev', '4.0.1', dev: true);
     }
 
     /**
@@ -289,14 +322,19 @@ class PackageJsonTest extends TestCase
         $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
 
         // Check package removed from dev deps
-        $this->assertArrayHasKey('test-dev', $packageJson->getContents()['devDependencies']);
+        $this->assertArrayHasKey('test-dev', $packageJson->getContents()['devDependencies'] ?? []);
         $packageJson->removeDependency('test-dev');
-        $this->assertArrayNotHasKey('test-dev', $packageJson->getContents()['devDependencies']);
+        $this->assertArrayNotHasKey('test-dev', $packageJson->getContents()['devDependencies'] ?? []);
 
         // Check package removed from deps
-        $this->assertArrayHasKey('test', $packageJson->getContents()['dependencies']);
+        $this->assertArrayHasKey('test', $packageJson->getContents()['dependencies'] ?? []);
         $packageJson->removeDependency('test');
-        $this->assertArrayNotHasKey('test', $packageJson->getContents()['dependencies']);
+        $this->assertArrayNotHasKey('test', $packageJson->getContents()['dependencies'] ?? []);
+
+        // Create blank source
+        $packageJson = new PackageJson();
+        $packageJson->removeDependency('test-dev');
+        $this->assertArrayNotHasKey('test-dev', $packageJson->getContents()['devDependencies'] ?? []);
     }
 
     /**
@@ -329,6 +367,9 @@ class PackageJsonTest extends TestCase
         $this->assertEquals('bar ./test', $packageJson->getScript('foo'));
         $this->assertEquals('example test', $packageJson->getScript('example'));
         $this->assertEquals('testing', $packageJson->getScript('test'));
+
+        $packageJson = new PackageJson();
+        $this->assertNull($packageJson->getScript('foo'));
     }
 
     /**
@@ -349,6 +390,10 @@ class PackageJsonTest extends TestCase
 
         $this->assertTrue(isset($contents['scripts']['winter']));
         $this->assertEquals('winter ./testing', $contents['scripts']['winter']);
+
+        $packageJson = new PackageJson();
+        $packageJson->addScript('winter', 'winter ./testing');
+        $this->assertTrue($packageJson->hasScript('winter'));
     }
 
     /**
@@ -367,6 +412,11 @@ class PackageJsonTest extends TestCase
         $this->assertTrue($packageJson->hasScript('example'));
         $packageJson->removeScript('example');
         $this->assertFalse($packageJson->hasScript('example'));
+
+
+        $packageJson = new PackageJson();
+        $packageJson->removeScript('foo');
+        $this->assertFalse($packageJson->hasScript('foo'));
     }
 
     /**
