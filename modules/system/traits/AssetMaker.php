@@ -1,12 +1,17 @@
-<?php namespace System\Traits;
+<?php
 
-use Url;
-use Html;
-use File;
-use Event;
+namespace System\Traits;
+
+use System\Classes\CombineAssets;
+use System\Classes\PluginManager;
+use System\Classes\Vite;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
-use System\Classes\CombineAssets;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Html;
+use Winter\Storm\Support\Facades\Url;
 
 /**
  * Asset Maker Trait
@@ -20,7 +25,7 @@ trait AssetMaker
     /**
      * @var array Collection of assets to display in the layout.
      */
-    protected $assets = ['js'=>[], 'css'=>[], 'rss'=>[]];
+    protected $assets = ['js'=>[], 'css'=>[], 'rss'=>[], 'vite'=>[]];
 
     /**
      * @var string Specifies a path to the asset directory.
@@ -35,7 +40,7 @@ trait AssetMaker
      */
     public function flushAssets()
     {
-        $this->assets = ['js'=>[], 'css'=>[], 'rss'=>[]];
+        $this->assets = ['js'=>[], 'css'=>[], 'rss'=>[], 'vite'=>[]];
     }
 
     /**
@@ -98,6 +103,12 @@ trait AssetMaker
             }
         }
 
+        if ($type == null || $type == 'vite') {
+            foreach ($this->assets['vite'] as $asset) {
+                $result .= Vite::tags($asset['attributes']['entrypoints'], $asset['path']);
+            }
+        }
+
         return $result;
     }
 
@@ -105,7 +116,7 @@ trait AssetMaker
      * Adds JavaScript asset to the asset list. Call $this->makeAssets() in a view
      * to output corresponding markup.
      * @param array|string $name Specifies a path (URL) or an array of paths to the script(s).
-     * @param array $attributes Adds extra HTML attributes to the asset link.
+     * @param array|string $attributes Adds extra HTML attributes to the asset link.
      * @return void
      */
     public function addJs($name, $attributes = [])
@@ -141,7 +152,7 @@ trait AssetMaker
      * Adds StyleSheet asset to the asset list. Call $this->makeAssets() in a view
      * to output corresponding markup.
      * @param array|string $name Specifies a path (URL) or an array of paths to the stylesheet(s).
-     * @param array $attributes Adds extra HTML attributes to the asset link.
+     * @param array|string $attributes Adds extra HTML attributes to the asset link.
      * @return void
      */
     public function addCss($name, $attributes = [])
@@ -187,6 +198,32 @@ trait AssetMaker
         $rssPath = $this->getAssetScheme($rssPath);
 
         $this->addAsset('rss', $rssPath, $attributes);
+    }
+
+    /**
+     * Adds Vite tags
+     * @param string|array $entrypoints The list of entry points for Vite
+     * @param ?string $package The package name of the plugin or theme
+     */
+    public function addVite(array|string $entrypoints, ?string $package = null): void
+    {
+        if (!is_array($entrypoints)) {
+            $entrypoints = [$entrypoints];
+        }
+
+        // If package was not set, attempt to guess
+        if (is_null($package)) {
+            $caller = get_called_class();
+            if (!($plugin = PluginManager::instance()->findByNamespace($caller))) {
+                throw new ApplicationException('Unable to determine vite package from namespace: ' . $caller);
+            }
+            // Set package to the plugin id
+            $package = $plugin->getPluginIdentifier();
+        }
+
+        $this->addAsset('vite', $package, [
+            'entrypoints' => $entrypoints
+        ]);
     }
 
     /**
