@@ -14,13 +14,23 @@ abstract class AssetConfig extends Command
     protected const TYPE_THEME = 'theme';
     protected const TYPE_PLUGIN = 'plugin';
 
-    protected const DEFAULT_VERSION_TAILWIND = '^3.4.0';
-    protected const DEFAULT_VERSION_VUE = '^3.4.0';
-
     /**
      * @var string The console command description.
      */
     protected $description = 'Create configuration.';
+
+    /**
+     * @var array|array[] List of meta packages
+     */
+    protected array $packages = [
+        'tailwind' => [
+            'tailwindcss' => '^3.4.0',
+            '@tailwindcss/forms' => '^0.5.2',
+        ],
+        'vue' => [
+            'vue' => '^3.4.0',
+        ]
+    ];
 
     /**
      * Local cache of fixture path
@@ -124,16 +134,21 @@ abstract class AssetConfig extends Command
                 File::get($this->fixturePath . '/tailwind/postcss.config.js.fixture')
             );
 
-            $packageJson->addDependency('tailwindcss', static::DEFAULT_VERSION_TAILWIND, dev: true);
+            foreach ($this->packages['tailwind'] as $dependency => $version) {
+                $packageJson->addDependency($dependency, $version, dev: true);
+            }
         }
 
         if ($options['vue']) {
-            $packageJson->addDependency('vue', static::DEFAULT_VERSION_VUE, dev: true);
+            foreach ($this->packages['vue'] as $dependency => $version) {
+                $packageJson->addDependency($dependency, $version, dev: true);
+            }
         }
 
         $packageName = strtolower(str_replace('.', '-', $package));
 
         if ($options['stubs']) {
+            // Setup css stubs
             if (!File::exists($path . '/assets/css')) {
                 File::makeDirectory($path . '/assets/css', recursive: true);
             }
@@ -141,6 +156,16 @@ abstract class AssetConfig extends Command
             $this->writeFile(
                 $path . '/assets/css/' . $packageName . '.css',
                 File::get($this->fixturePath . '/css/' . ($options['tailwind'] ? 'tailwind' : 'default') . '.css.fixture')
+            );
+
+            // Setup js stubs
+            if (!File::exists($path . '/assets/js')) {
+                File::makeDirectory($path . '/assets/js', recursive: true);
+            }
+
+            $this->writeFile(
+                $path . '/assets/js/' . $packageName . '.js',
+                File::get($this->fixturePath . '/js/' . ($options['vue'] ? 'vue' : 'default') . '.js.fixture')
             );
         }
 
