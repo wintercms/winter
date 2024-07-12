@@ -17,7 +17,7 @@ class NpmRun extends Command
     /**
      * @var string The name and signature of this command.
      */
-    protected $signature = 'mix:run
+    protected $signature = 'npm:run
         {package : Defines the package where the script is located.}
         {script : The name of the script to run, as defined in the package.json "scripts" config.}
         {additionalArgs?* : Arguments to pass through to the script being run.}
