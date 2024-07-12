@@ -34,7 +34,7 @@
         <?php endforeach; ?>
 
         <?php foreach ($scripts as $script) : ?>
-            <link rel="preload" href="<?= $script . '?v=' . $coreBuild; ?>" as="script">
+            <link rel="preload" href="<?= $script . '?v=' . $coreBuild; ?>" as="script" data-cfasync="false">
             <script src="<?= $script . '?v=' . $coreBuild; ?>"></script>
         <?php endforeach; ?>
 
