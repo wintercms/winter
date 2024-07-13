@@ -6,9 +6,11 @@ use Backend\Models\UserRole;
 use BackendAuth;
 use BackendMenu;
 use Config;
+use DateInterval;
 use Event;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
+use Markdown;
 use Request;
 use System\Classes\CombineAssets;
 use System\Classes\ErrorHandler;
@@ -17,10 +19,13 @@ use System\Classes\MarkupManager;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
+use System\Helpers\DateTime;
 use System\Models\EventLog;
 use System\Models\MailSetting;
 use System\Twig\Engine as TwigEngine;
 use SystemException;
+use Twig\Environment;
+use Twig\Extension\CoreExtension;
 use Validator;
 use View;
 use Winter\Storm\Router\Helper as RouterHelper;
@@ -198,8 +203,24 @@ class ServiceProvider extends ModuleServiceProvider
                 'route'          => 'route',
                 'secure_url'     => 'secure_url',
                 'secure_asset'   => 'secure_asset',
+                'date'           => [function (Environment $env, $value = null, $timezone = null) {
+                    if (!($value instanceof DateInterval)) {
+                        $value = DateTime::makeCarbon($value)->toDateTime();
+                    }
+
+                    if (is_null($value) || $value === 'now') {
+                        if (is_null($value)) {
+                            $value = 'now';
+                        }
+
+                        return DateTime::makeCarbon(new \DateTime($value, false !== $timezone ? $timezone : $env->getExtension(CoreExtension::class)->getTimezone()));
+                    }
+
+                    return twig_date_converter($env, $value, $timezone);
+                }, 'options' => ['needs_environment' => true]],
 
                 // Classes
+                'array_*'        => ['Arr', '*'],
                 'str_*'          => ['Str', '*'],
                 'url_*'          => ['Url', '*'],
                 'html_*'         => ['Html', '*'],
@@ -218,9 +239,22 @@ class ServiceProvider extends ModuleServiceProvider
                 'studly'         => ['Str', 'studly'],
                 'trans'          => ['Lang', 'get'],
                 'transchoice'    => ['Lang', 'choice'],
-                'md'             => ['Markdown', 'parse'],
-                'md_safe'        => ['Markdown', 'parseSafe'],
-                'md_line'        => ['Markdown', 'parseLine'],
+                'date'           => [function (Environment $env, $value, $format = null, $timezone = null) {
+                    if (!($value instanceof DateInterval)) {
+                        $value = DateTime::makeCarbon($value)->toDateTime();
+                    }
+
+                    return twig_date_format_filter($env, $value, $format, $timezone);
+                }, 'options' => ['needs_environment' => true]],
+                'md'             => function ($value) {
+                    return (is_string($value) && $value !== '') ? Markdown::parse($value) : '';
+                },
+                'md_safe'        => function ($value) {
+                    return (is_string($value) && $value !== '') ? Markdown::parseSafe($value) : '';
+                },
+                'md_line'        => function ($value) {
+                    return (is_string($value) && $value !== '') ? Markdown::parseLine($value) : '';
+                },
                 'time_since'     => ['System\Helpers\DateTime', 'timeSince'],
                 'time_tense'     => ['System\Helpers\DateTime', 'timeTense'],
             ]);
@@ -308,7 +342,8 @@ class ServiceProvider extends ModuleServiceProvider
     {
         Event::listen(\Illuminate\Log\Events\MessageLogged::class, function ($event) {
             if (EventLog::useLogging()) {
-                EventLog::add($event->message, $event->level);
+                $details = $event->context ?? null;
+                EventLog::add($event->message, $event->level, $details);
             }
         });
     }
@@ -565,14 +600,9 @@ class ServiceProvider extends ModuleServiceProvider
          * Register asset bundles
          */
         CombineAssets::registerCallback(function ($combiner) {
-            $combiner->registerBundle('~/modules/system/assets/less/styles.less');
-            $combiner->registerBundle('~/modules/system/assets/ui/storm.less');
             $combiner->registerBundle('~/modules/system/assets/ui/storm.js');
-            $combiner->registerBundle('~/modules/system/assets/ui/icons.less');
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
-            $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
-            $combiner->registerBundle('~/modules/system/assets/less/snowboard.extras.less');
         });
     }
 

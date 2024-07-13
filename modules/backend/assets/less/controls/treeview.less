@@ -57,6 +57,7 @@
                     margin-top: 2px;
                     overflow: hidden;
                     text-overflow: ellipsis;
+                    white-space: nowrap;
                 }
 
                 > span.expand {
@@ -297,6 +298,10 @@
             &.placeholder {
                 position: relative;
                 .opacity(.5);
+
+                ol {
+                    display: none;
+                }
             }
 
             &.dragged {
@@ -306,6 +311,10 @@
 
                 > div {
                     .border-radius(3px);
+                }
+
+                ol {
+                    display: none;
                 }
             }
 
@@ -548,8 +557,7 @@
 body.dragging .control-treeview {
     ol.dragging, ol.dragging ol {
         background: #ccc;
-        padding-right: 20px;
-        .transition(padding 1s);
+        padding-right: 0;
 
         > li {
             > div {

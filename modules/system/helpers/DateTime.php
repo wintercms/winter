@@ -4,16 +4,15 @@ use Carbon\Carbon;
 use DateTime as PhpDateTime;
 use InvalidArgumentException;
 use Exception;
+use Lang;
 
 class DateTime
 {
     /**
      * Returns a human readable time difference from the value to the
      * current time. Eg: **10 minutes ago**
-     *
-     * @return string
      */
-    public static function timeSince($datetime)
+    public static function timeSince($datetime): string
     {
         return self::makeCarbon($datetime)->diffForHumans();
     }
@@ -22,28 +21,26 @@ class DateTime
      * Returns 24-hour time and the day using the grammatical tense
      * of the current time. Eg: Today at 12:49, Yesterday at 4:00
      * or 18 Sep 2015 at 14:33.
-     *
-     * @return string
      */
-    public static function timeTense($datetime)
+    public static function timeTense($datetime): string
     {
         $datetime = self::makeCarbon($datetime);
         $yesterday = $datetime->subDays(1);
         $tomorrow = $datetime->addDays(1);
         $time = $datetime->format('H:i');
-        $date = $datetime->format('j M Y');
+        $date = $datetime->isoFormat('D MMM YYYY');
 
         if ($datetime->isToday()) {
-            $date = 'Today';
+            $date = Lang::get('system::lang.datetime.today');
         }
         elseif ($datetime->isYesterday()) {
-            $date = 'Yesterday';
+            $date = Lang::get('system::lang.datetime.yesterday');
         }
         elseif ($datetime->isTomorrow()) {
-            $date = 'Tomorrow';
+            $date = Lang::get('system::lang.datetime.tomorrow');
         }
 
-        return $date.' at '.$time;
+        return Lang::get('system::lang.datetime.at', ['date' => $date, 'time' => $time]);
     }
 
     /**
@@ -69,6 +66,11 @@ class DateTime
             try {
                 $value = Carbon::parse($value);
             } catch (Exception $ex) {
+                // Try one last time to parse the date in case periods were used
+                try {
+                    $value = Carbon::parse(str_replace('.', '/', $value));
+                } catch (Exception $ex2) {
+                }
             }
         }
 
@@ -82,9 +84,8 @@ class DateTime
     /**
      * Converts a PHP date format to "Moment.js" format.
      * @param string $format
-     * @return string
      */
-    public static function momentFormat($format)
+    public static function momentFormat($format): string
     {
         $replacements = [
             'd' => 'DD',

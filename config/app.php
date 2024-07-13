@@ -14,6 +14,10 @@ return [
     | You can create a CMS page with route "/error" to set the contents
     | of this page. Otherwise a default error page is shown.
     |
+    | IMPORTANT: Always have debug mode set to false in production environments
+    | as it can reveal sensitive information about your application and
+    | infrastructure to untrusted users through more detailed errors.
+    |
     */
 
     'debug' => env('APP_DEBUG', true),

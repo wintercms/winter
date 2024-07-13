@@ -471,12 +471,18 @@
                 case 'image' :
                     template = previewPanel.querySelector('[data-control="image-template"]').innerHTML
                 break;
+                case 'document' :
+                    template = previewPanel.querySelector('[data-control="document-template"]').innerHTML
+                break;
             }
 
             previewContainer.innerHTML = template
                 .replace('{src}', item.getAttribute('data-public-url'))
                 .replace('{path}', item.getAttribute('data-path'))
                 .replace('{last-modified}', item.getAttribute('data-last-modified-ts'))
+
+            if (documentType == 'document')
+                this.loadSidebarDocumentIcon(item)
 
             if (documentType == 'image')
                 this.loadSidebarThumbnail()
@@ -542,6 +548,13 @@
         }
 
         this.updateSidebarMediaPreview(items)
+    }
+
+    MediaManager.prototype.loadSidebarDocumentIcon = function(item) {
+        var sidebarDocument = this.sidebarPreviewElement.querySelector('[data-control="sidebar-document"]'),
+            svg = item.querySelector('svg')
+
+        sidebarDocument.innerHTML = svg.outerHTML
     }
 
     MediaManager.prototype.loadSidebarThumbnail = function() {

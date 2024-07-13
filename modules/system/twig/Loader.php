@@ -1,10 +1,13 @@
 <?php namespace System\Twig;
 
 use App;
-use File;
-use Twig\Source as TwigSource;
-use Twig\Loader\LoaderInterface as TwigLoaderInterface;
 use Exception;
+use File;
+use InvalidArgumentException;
+use Twig\Source as TwigSource;
+use Twig\Error\LoaderError;
+use Twig\Loader\LoaderInterface as TwigLoaderInterface;
+use Winter\Storm\Support\Str;
 
 /**
  * This class implements a Twig template loader for the core system and backend.
@@ -39,7 +42,15 @@ class Loader implements TwigLoaderInterface
             return $this->cache[$name] = $name;
         }
 
-        $path = $finder->find($name);
+        try {
+            $path = $finder->find($name);
+        } catch (InvalidArgumentException $ex) {
+            if (Str::contains($ex->getMessage(), 'not found')) {
+                throw new LoaderError($ex->getMessage());
+            }
+            throw $ex;
+        }
+
         return $this->cache[$name] = $path;
     }
 
