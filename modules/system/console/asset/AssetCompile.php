@@ -35,7 +35,10 @@ abstract class AssetCompile extends Command
     {
         // Exit early if node_modules isn't available yet
         if (!File::exists(base_path('node_modules'))) {
-            $this->error('The Node dependencies are not available, try running mix:install first.');
+            $this->error(sprintf(
+                'The Node dependencies are not available, try running %s:install first.',
+                $type
+            ));
             return 1;
         }
 
