@@ -7,7 +7,7 @@ use RuntimeException;
 use Winter\Storm\Support\Facades\File;
 
 /**
- * Php based interface for interacting with package.json files. This allows for modification of deps, devDeps, package
+ * PHP based interface for interacting with package.json files. This allows for modification of deps, devDeps, package
  * name and workspaces.
  *
  * @package winter\wn-system-module
