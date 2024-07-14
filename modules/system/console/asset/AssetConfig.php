@@ -26,6 +26,7 @@ abstract class AssetConfig extends Command
         'tailwind' => [
             'tailwindcss' => '^3.4.0',
             '@tailwindcss/forms' => '^0.5.2',
+            '@tailwindcss/typography' => '^0.5.2',
         ],
         'vue' => [
             'vue' => '^3.4.0',
