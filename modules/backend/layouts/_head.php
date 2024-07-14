@@ -61,8 +61,6 @@ foreach ($scripts as $script) {
 }
 ?>
 
-<?= $this->makeAssets() ?>
-
 <?php if (!Config::get('cms.enableBackendServiceWorkers', false)): ?>
     <script>
         "use strict";
@@ -82,5 +80,6 @@ foreach ($scripts as $script) {
     </script>
 <?php endif; ?>
 
+<?= $this->makeAssets() ?>
 <?= Block::placeholder('head') ?>
 <?= $this->makeLayoutPartial('custom_styles') ?>
