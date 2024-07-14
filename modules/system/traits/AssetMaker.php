@@ -7,7 +7,7 @@ use System\Classes\PluginManager;
 use System\Classes\Vite;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
-use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Html;
@@ -215,7 +215,7 @@ trait AssetMaker
         if (is_null($package)) {
             $caller = get_called_class();
             if (!($plugin = PluginManager::instance()->findByNamespace($caller))) {
-                throw new ApplicationException('Unable to determine vite package from namespace: ' . $caller);
+                throw new SystemException('Unable to determine vite package from namespace: ' . $caller);
             }
             // Set package to the plugin id
             $package = $plugin->getPluginIdentifier();
