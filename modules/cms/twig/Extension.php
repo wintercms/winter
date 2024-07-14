@@ -170,9 +170,6 @@ class Extension extends TwigExtension
 
     /**
      * Generates Vite tags via Laravel's Vite Object.
-     *
-     * @param array $entrypoints The list of entry points for Vite
-     * @param string $package The package name of the plugin or theme
      */
     public function viteFunction(array $entrypoints, string $package): \Illuminate\Support\HtmlString
     {
