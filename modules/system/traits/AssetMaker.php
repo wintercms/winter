@@ -1,12 +1,14 @@
-<?php namespace System\Traits;
+<?php
 
-use Url;
-use Html;
-use File;
-use Event;
+namespace System\Traits;
+
+use System\Classes\CombineAssets;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
-use System\Classes\CombineAssets;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Html;
+use Winter\Storm\Support\Facades\Url;
 
 /**
  * Asset Maker Trait
@@ -18,9 +20,9 @@ use System\Classes\CombineAssets;
 trait AssetMaker
 {
     /**
-     * @var array Collection of assets to display in the layout.
+     * Collection of assets to display in the layout.
      */
-    protected $assets = ['js'=>[], 'css'=>[], 'rss'=>[]];
+    protected array $assets = ['js' => [], 'css' => [], 'rss' => []];
 
     /**
      * @var string Specifies a path to the asset directory.
@@ -28,14 +30,18 @@ trait AssetMaker
     public $assetPath;
 
     /**
+     * Ensures "first-come, first-served" applies to assets of the same ordering.
+     */
+    protected int $orderFactor = 0;
+
+    /**
      * Disables the use, and subequent broadcast, of assets. This is useful
      * to call during an AJAX request to speed things up. This method works
      * by specifically targeting the hasAssetsDefined method.
-     * @return void
      */
-    public function flushAssets()
+    public function flushAssets(): void
     {
-        $this->assets = ['js'=>[], 'css'=>[], 'rss'=>[]];
+        $this->assets = ['js' => [], 'css' => [], 'rss' => []];
     }
 
     /**
@@ -48,15 +54,12 @@ trait AssetMaker
             $type = strtolower($type);
         }
         $result = null;
-        $reserved = ['build'];
+        $reserved = ['build', 'order'];
 
         $this->removeDuplicates();
 
         if ($type == null || $type == 'css') {
-            foreach ($this->assets['css'] as $asset) {
-                /*
-                 * Prevent duplicates
-                 */
+            foreach ($this->orderAssets($this->assets['css']) as $asset) {
                 $attributes = Html::attributes(array_merge(
                     [
                         'rel'  => 'stylesheet',
@@ -70,7 +73,7 @@ trait AssetMaker
         }
 
         if ($type == null || $type == 'rss') {
-            foreach ($this->assets['rss'] as $asset) {
+            foreach ($this->orderAssets($this->assets['rss']) as $asset) {
                 $attributes = Html::attributes(array_merge(
                     [
                         'rel'   => 'alternate',
@@ -86,7 +89,7 @@ trait AssetMaker
         }
 
         if ($type == null || $type == 'js') {
-            foreach ($this->assets['js'] as $asset) {
+            foreach ($this->orderAssets($this->assets['js']) as $asset) {
                 $attributes = Html::attributes(array_merge(
                     [
                         'src' => $this->getAssetEntryBuildPath($asset)
@@ -104,11 +107,10 @@ trait AssetMaker
     /**
      * Adds JavaScript asset to the asset list. Call $this->makeAssets() in a view
      * to output corresponding markup.
-     * @param array|string $name Specifies a path (URL) or an array of paths to the script(s).
-     * @param array $attributes Adds extra HTML attributes to the asset link.
-     * @return void
+     * @param string|array $name When an array of paths are provided they will be passed to the Asset Combiner
+     * @param array|string $attributes When a string is provided it will be used as the 'build' attribute value
      */
-    public function addJs($name, $attributes = [])
+    public function addJs(string|array $name, array|string $attributes = []): void
     {
         if (is_array($name)) {
             $name = $this->combineAssets($name, $this->getLocalPath($this->assetPath));
@@ -140,11 +142,10 @@ trait AssetMaker
     /**
      * Adds StyleSheet asset to the asset list. Call $this->makeAssets() in a view
      * to output corresponding markup.
-     * @param array|string $name Specifies a path (URL) or an array of paths to the stylesheet(s).
-     * @param array $attributes Adds extra HTML attributes to the asset link.
-     * @return void
+     * @param string|array $name When an array of paths are provided they will be passed to the Asset Combiner
+     * @param array|string $attributes When a string is provided it will be used as the 'build' attribute value
      */
-    public function addCss($name, $attributes = [])
+    public function addCss(string|array $name, array|string $attributes = []): void
     {
         if (is_array($name)) {
             $name = $this->combineAssets($name, $this->getLocalPath($this->assetPath));
@@ -168,11 +169,8 @@ trait AssetMaker
     /**
      * Adds an RSS link asset to the asset list. Call $this->makeAssets() in a view
      * to output corresponding markup.
-     * @param string $name Specifies a path (URL) to the RSS channel
-     * @param array $attributes Adds extra HTML attributes to the asset link.
-     * @return void
      */
-    public function addRss($name, $attributes = [])
+    public function addRss(string $name, array|string $attributes = []): void
     {
         $rssPath = $this->getAssetPath($name);
 
@@ -191,12 +189,8 @@ trait AssetMaker
 
     /**
      * Adds the provided asset to the internal asset collections
-     *
-     * @param string $type The type of the asset: 'js' || 'css' || 'rss'
-     * @param string $path The path to the asset
-     * @param array $attributes The attributes for the asset
      */
-    protected function addAsset(string $type, string $path, array $attributes)
+    protected function addAsset(string $type, string $path, array $attributes): void
     {
         if (!in_array($path, $this->assets[$type])) {
             /**
@@ -237,6 +231,13 @@ trait AssetMaker
                 // Fire global event
                 (Event::fire('system.assets.beforeAddAsset', [&$type, &$path, &$attributes], true) !== false)
             ) {
+                $this->orderFactor++;
+
+                // Apply ordering
+                $attributes['order'] = (!isset($attributes['order']))
+                    ? 500 + ($this->orderFactor / 10000)
+                    : intval($attributes['order']) + ($this->orderFactor / 10000);
+
                 $this->assets[$type][] = ['path' => $path, 'attributes' => $attributes];
             }
         }
@@ -244,11 +245,8 @@ trait AssetMaker
 
     /**
      * Run the provided assets through the Asset Combiner
-     * @param array $assets Collection of assets
-     * @param string $localPath Prefix all assets with this path (optional)
-     * @return string
      */
-    public function combineAssets(array $assets, $localPath = '')
+    public function combineAssets(array $assets, string $localPath = ''): string
     {
         // Short circuit if no assets actually provided
         if (empty($assets)) {
@@ -260,16 +258,17 @@ trait AssetMaker
 
     /**
      * Returns an array of all registered asset paths.
-     * @return array
+     *
+     * Assets will be prioritized based on their defined ordering.
      */
-    public function getAssetPaths()
+    public function getAssetPaths(): array
     {
         $this->removeDuplicates();
 
         $assets = [];
         foreach ($this->assets as $type => $collection) {
             $assets[$type] = [];
-            foreach ($collection as $asset) {
+            foreach ($this->orderAssets($collection) as $asset) {
                 $assets[$type][] = $this->getAssetEntryBuildPath($asset);
             }
         }
@@ -278,14 +277,10 @@ trait AssetMaker
     }
 
     /**
-     * Locates a file based on it's definition. If the file starts with
-     * a forward slash, it will be returned in context of the application public path,
-     * otherwise it will be returned in context of the asset path.
-     * @param string $fileName File to load.
-     * @param string $assetPath Explicitly define an asset path.
-     * @return string Relative path to the asset file.
+     * Returns the URL to the provided asset. If the provided fileName is a relative path
+     * without a leading slash it will be assumbed to be relative to the asset path.
      */
-    public function getAssetPath($fileName, $assetPath = null)
+    public function getAssetPath(string $fileName, ?string $assetPath = null): string
     {
         if (starts_with($fileName, ['//', 'http://', 'https://'])) {
             return $fileName;
@@ -310,19 +305,16 @@ trait AssetMaker
 
     /**
      * Returns true if assets any have been added.
-     * @return bool
      */
-    public function hasAssetsDefined()
+    public function hasAssetsDefined(): bool
     {
         return count($this->assets, COUNT_RECURSIVE) > 3;
     }
 
     /**
      * Internal helper, attaches a build code to an asset path
-     * @param  array $asset Stored asset array
-     * @return string
      */
-    protected function getAssetEntryBuildPath($asset)
+    protected function getAssetEntryBuildPath(array $asset): string
     {
         $path = $asset['path'];
         if (isset($asset['attributes']['build'])) {
@@ -330,8 +322,7 @@ trait AssetMaker
 
             if ($build == 'core') {
                 $build = 'v' . Parameter::get('system::core.build', 1);
-            }
-            elseif ($pluginVersion = PluginVersion::getVersion($build)) {
+            } elseif ($pluginVersion = PluginVersion::getVersion($build)) {
                 $build = 'v' . $pluginVersion;
             }
 
@@ -343,10 +334,8 @@ trait AssetMaker
 
     /**
      * Internal helper, get asset scheme
-     * @param string $asset Specifies a path (URL) to the asset.
-     * @return string
      */
-    protected function getAssetScheme($asset)
+    protected function getAssetScheme(string $asset): string
     {
         if (starts_with($asset, ['//', 'http://', 'https://'])) {
             return $asset;
@@ -361,9 +350,8 @@ trait AssetMaker
 
     /**
      * Removes duplicate assets from the entire collection.
-     * @return void
      */
-    protected function removeDuplicates()
+    protected function removeDuplicates(): void
     {
         foreach ($this->assets as $type => &$collection) {
             $pathCache = [];
@@ -382,12 +370,32 @@ trait AssetMaker
         }
     }
 
-    protected function getLocalPath(?string $relativePath)
+    protected function getLocalPath(?string $relativePath): string
     {
         $relativePath = File::symbolizePath((string) $relativePath);
         if (!starts_with($relativePath, [base_path()])) {
             $relativePath = base_path($relativePath);
         }
         return $relativePath;
+    }
+
+    /**
+     * Prioritize assets based on the given order.
+     */
+    public function orderAssets(array $assets): array
+    {
+        // Copy assets array so that the stored asset array is not modified.
+        $sortedAssets = $assets;
+
+        array_multisort(
+            array_map(function ($item) {
+                return $item['attributes']['order'];
+            }, $sortedAssets),
+            SORT_NUMERIC,
+            SORT_ASC,
+            $sortedAssets
+        );
+
+        return $sortedAssets;
     }
 }
