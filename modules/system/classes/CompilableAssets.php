@@ -32,11 +32,9 @@ class CompilableAssets
      */
     protected array $compilableConfigs = [
         'mix' => [
-            'registrationMethod' => 'registerMixPackages',
             'configFile' => 'winter.mix.js'
         ],
         'vite' => [
-            'registrationMethod' => 'registerVitePackages',
             'configFile' => 'vite.config.mjs'
         ]
     ];
@@ -84,7 +82,9 @@ class CompilableAssets
          *   }
          */
         foreach ($this->compilableConfigs as $type => $config) {
-            $packages = PluginManager::instance()->getRegistrationMethodValues($config['registrationMethod']);
+            $packages = PluginManager::instance()->getRegistrationMethodValues(
+                $this->getRegistrationMethod($type)
+            );
             if (count($packages)) {
                 foreach ($packages as $pluginCode => $packageArray) {
                     if (!is_array($packageArray)) {
@@ -326,6 +326,14 @@ class CompilableAssets
             'config' => $config,
             'ignored' => $this->isPackageIgnored($path),
         ];
+    }
+
+    /**
+     * Returns the registration method for a compiler type
+     */
+    protected function getRegistrationMethod(string $type): string
+    {
+        return sprintf('register%sPackages', ucfirst($type));
     }
 
     /**
