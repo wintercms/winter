@@ -224,15 +224,13 @@ abstract class AssetInstall extends Command
                 }
             }
 
-            // Detect missing winter.mix.js files and install them
+            // Detect missing config files and install them
             if (!File::exists($package['config'])) {
                 $this->info(sprintf(
-                    'No config file found for %s, creating one at %s...',
+                    'No config file found for %s, you should run %s:config',
                     $name,
-                    $package['config']
+                    $this->assetType
                 ));
-                // @TODO: consider this when using vite
-                File::put($package['config'], File::get(__DIR__ . '/fixtures/' . $this->configFile . '.fixture'));
             }
         }
 
