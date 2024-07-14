@@ -21,7 +21,7 @@ class Vite extends LaravelVite
     public function __invoke($entrypoints, $package = null)
     {
         if (!$package) {
-            throw new SystemException('A package must be passed');
+            throw new \InvalidArgumentException('A package must be passed');
         }
 
         // Normalise the package name
