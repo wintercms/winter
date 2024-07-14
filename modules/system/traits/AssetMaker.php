@@ -55,35 +55,21 @@ trait AssetMaker
             $type = strtolower($type);
         }
         $result = null;
-        $reserved = ['build', 'order', 'preload'];
+        $reserved = ['build', 'order'];
 
         $this->removeDuplicates();
 
         if ($type == null || $type == 'css') {
             foreach ($this->orderAssets($this->assets['css']) as $asset) {
-                if ($asset['attributes']['preload'] ?? false) {
-                    $preloadAttributes = Html::attributes([
-                        'rel' => 'preload',
-                        'as' => 'style',
+                $attributes = Html::attributes(array_merge(
+                    [
+                        'rel'  => 'stylesheet',
                         'href' => $this->getAssetEntryBuildPath($asset)
-                    ]);
-                    $attributes = Html::attributes(array_merge(
-                        [
-                            'rel'  => 'stylesheet',
-                            'href' => $this->getAssetEntryBuildPath($asset)
-                        ],
-                    ));
-                    $result .= '<link' . $preloadAttributes . '>' . PHP_EOL . '<link' . $attributes . '>' . PHP_EOL;
-                } else {
-                    $attributes = Html::attributes(array_merge(
-                        [
-                            'rel'  => 'stylesheet',
-                            'href' => $this->getAssetEntryBuildPath($asset)
-                        ],
-                    ));
+                    ],
+                    array_except($asset['attributes'], $reserved)
+                ));
 
-                    $result .= '<link' . $attributes . '>' . PHP_EOL;
-                }
+                $result .= '<link' . $attributes . '>' . PHP_EOL;
             }
         }
 
@@ -105,28 +91,14 @@ trait AssetMaker
 
         if ($type == null || $type == 'js') {
             foreach ($this->orderAssets($this->assets['js']) as $asset) {
-                if ($asset['attributes']['preload'] ?? false) {
-                    $preloadAttributes = Html::attributes([
-                        'rel' => 'preload',
-                        'as' => 'script',
-                        'href' => $this->getAssetEntryBuildPath($asset)
-                    ]);
-                    $attributes = Html::attributes(array_merge(
-                        [
-                            'src' => $this->getAssetEntryBuildPath($asset)
-                        ],
-                    ));
-                    $result .= '<link' . $preloadAttributes . '>' . PHP_EOL . '<script' . $attributes . '></script>' . PHP_EOL;
-                } else {
-                    $attributes = Html::attributes(array_merge(
-                        [
-                            'src' => $this->getAssetEntryBuildPath($asset)
-                        ],
-                        array_except($asset['attributes'], $reserved)
-                    ));
+                $attributes = Html::attributes(array_merge(
+                    [
+                        'src' => $this->getAssetEntryBuildPath($asset)
+                    ],
+                    array_except($asset['attributes'], $reserved)
+                ));
 
-                    $result .= '<script' . $attributes . '></script>' . PHP_EOL;
-                }
+                $result .= '<script' . $attributes . '></script>' . PHP_EOL;
             }
         }
 
