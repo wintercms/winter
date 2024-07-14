@@ -107,9 +107,10 @@ trait AssetMaker
     /**
      * Adds JavaScript asset to the asset list. Call $this->makeAssets() in a view
      * to output corresponding markup.
-     * @param array|string $name When an array of paths are provided they will be passed to the Asset Combiner
+     * @param string|array $name When an array of paths are provided they will be passed to the Asset Combiner
+     * @param array|string $attributes When a string is provided it will be used as the 'build' attribute value
      */
-    public function addJs(string|array $name, array $attributes = []): void
+    public function addJs(string|array $name, array|string $attributes = []): void
     {
         if (is_array($name)) {
             $name = $this->combineAssets($name, $this->getLocalPath($this->assetPath));
@@ -141,9 +142,10 @@ trait AssetMaker
     /**
      * Adds StyleSheet asset to the asset list. Call $this->makeAssets() in a view
      * to output corresponding markup.
-     * @param array|string $name When an array of paths are provided they will be passed to the Asset Combiner
+     * @param string|array $name When an array of paths are provided they will be passed to the Asset Combiner
+     * @param array|string $attributes When a string is provided it will be used as the 'build' attribute value
      */
-    public function addCss(string|array $name, array $attributes = []): void
+    public function addCss(string|array $name, array|string $attributes = []): void
     {
         if (is_array($name)) {
             $name = $this->combineAssets($name, $this->getLocalPath($this->assetPath));
@@ -168,7 +170,7 @@ trait AssetMaker
      * Adds an RSS link asset to the asset list. Call $this->makeAssets() in a view
      * to output corresponding markup.
      */
-    public function addRss(string $name, array $attributes = []): void
+    public function addRss(string $name, array|string $attributes = []): void
     {
         $rssPath = $this->getAssetPath($name);
 

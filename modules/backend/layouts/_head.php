@@ -11,6 +11,55 @@
 <title data-title-template="<?= empty($this->pageTitleTemplate) ? '%s' : e($this->pageTitleTemplate) ?> | <?= e(Backend\Models\BrandSetting::get('app_name')) ?>">
     <?= e(trans($this->pageTitle)) ?> | <?= e(Backend\Models\BrandSetting::get('app_name')) ?>
 </title>
+<?php
+// Styles
+$styles = [
+    Url::asset('modules/system/assets/ui/storm.css'),
+    Url::asset('modules/system/assets/ui/icons.css'),
+    Backend::skinAsset('assets/css/winter.css'),
+];
+foreach ($styles as $style) {
+    $this->addCss($style, [
+        'build' => 'core',
+        'order' => 1,
+    ]);
+}
+
+// Scripts
+$scripts = [
+    Backend::skinAsset('assets/js/vendor/jquery.min.js'),
+    Backend::skinAsset('assets/js/vendor/jquery-migrate.min.js'),
+    Url::asset('modules/system/assets/js/framework.js'),
+    Url::asset('modules/system/assets/js/build/manifest.js'),
+    Url::asset('modules/system/assets/js/snowboard/build/snowboard.vendor.js'),
+    Url::asset(
+        (Config::get('develop.debugSnowboard', false) === true)
+            ? 'modules/system/assets/js/build/system.debug.js'
+            : 'modules/system/assets/js/build/system.js'
+    ),
+    Url::asset('modules/backend/assets/ui/js/build/manifest.js'),
+    Url::asset('modules/backend/assets/ui/js/build/vendor.js'),
+    Url::asset('modules/backend/assets/ui/js/build/backend.js'),
+];
+if (Config::get('develop.decompileBackendAssets', false)) {
+    $scripts = array_merge($scripts, Backend::decompileAsset('modules/system/assets/ui/storm.js'));
+    $scripts = array_merge($scripts, Backend::decompileAsset('assets/js/winter.js', true));
+} else {
+    $scripts = array_merge($scripts, [Url::asset('modules/system/assets/ui/storm-min.js')]);
+    $scripts = array_merge($scripts, [Backend::skinAsset('assets/js/winter-min.js')]);
+}
+$scripts = array_merge($scripts, [
+    Url::asset('modules/system/assets/js/lang/lang.'.App::getLocale().'.js'),
+    Backend::skinAsset('assets/js/winter.flyout.js'),
+    Backend::skinAsset('assets/js/winter.tabformexpandcontrols.js'),
+]);
+foreach ($scripts as $script) {
+    $this->addJs($script, [
+        'build' => 'core',
+        'order' => 1,
+    ]);
+}
+?>
 
 <?= $this->makeAssets() ?>
 
