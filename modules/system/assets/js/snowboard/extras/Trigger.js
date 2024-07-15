@@ -5,13 +5,15 @@ import PluginBase from '../abstracts/PluginBase';
  * @property {string} trigger The selector for the trigger target element(s).
  * @property {string} condition The condition that must be met for the trigger to fire.
  * @property {string} action The action to perform when the trigger fires.
- * @property {string} parent The parent element with which to limit the trigger scope.
+ * @property {string|undefined} parent The parent element with which to limit the trigger scope.
+ * @property {string|number} priority The priority of the trigger event.
  * @property {HTMLElement[]} elements The target elements that this trigger applies to.
  */
 /**
  * @typedef {Object} TriggerElement
  * @property {HTMLElement} element The target element.
  * @property {string} eventName The trigger event name.
+ * @property {int} priority The trigger event priority.
  * @property {Function} event The trigger event function.
  */
 
@@ -42,14 +44,19 @@ export default class Trigger extends PluginBase {
         this.element = element;
 
         /**
-         * @var {Map<string, Map<TriggerEntity>>} The triggers for this element.
+         * @type {Map<string, Map<TriggerEntity>>} The triggers for this element.
          */
         this.triggers = new Map();
 
         /**
-         * @var {Set<TriggerElement>} The events that have been bound by triggers.
+         * @type {Map<Element, Set<TriggerElement>>} A map of elements that trigger events.
          */
-        this.events = new Set();
+        this.events = new Map();
+
+        /**
+         * @type {Map<Element, Map<string, Function>>} A map of elements and their event connectors.
+         */
+        this.connectors = new Map();
 
         this.parseTriggers();
 
@@ -98,7 +105,7 @@ export default class Trigger extends PluginBase {
                 return;
             }
 
-            const triggerParts = /([a-z0-9\-.:_]+?)(?:(?:-)(closest-parent|condition|when|action|parent))?$/i.exec(
+            const triggerParts = /([a-z0-9\-.:_]+?)(?:(?:-)(closest-parent|condition|when|action|parent|priority))?$/i.exec(
                 dashStyle.replace('trigger-', '').toLowerCase(),
             );
 
@@ -114,7 +121,7 @@ export default class Trigger extends PluginBase {
                 triggerType = (triggerParts[1] === 'closest') ? 'parent' : triggerParts[1];
             } else if (
                 triggerParts[2] === undefined
-                || ['closest-parent', 'condition', 'when', 'action', 'parent'].indexOf(triggerParts[2]) !== -1
+                || ['closest-parent', 'condition', 'when', 'action', 'parent', 'priority'].indexOf(triggerParts[2]) !== -1
             ) {
                 // Parse multi-trigger format
                 [, triggerName] = triggerParts;
@@ -129,6 +136,9 @@ export default class Trigger extends PluginBase {
                         break;
                     case 'action':
                         triggerType = 'action';
+                        break;
+                    case 'priority':
+                        triggerType = 'priority';
                         break;
                     default:
                         triggerType = 'trigger';
@@ -161,6 +171,9 @@ export default class Trigger extends PluginBase {
                 this.triggers.delete(name);
             } else {
                 trigger.set('elements', elements);
+                if (!trigger.has('priority')) {
+                    trigger.set('priority', 100);
+                }
             }
         });
     }
@@ -231,7 +244,7 @@ export default class Trigger extends PluginBase {
     /**
      * Checks if any elements are accessible by the provided trigger.
      *
-     * @param {TriggerEntity} trigger
+     * @param {Map<TriggerEntity>} trigger
      * @returns {HTMLElement[]}
      */
     getSelectableElements(trigger) {
@@ -275,6 +288,8 @@ export default class Trigger extends PluginBase {
             'disable',
             'empty',
             'value',
+            'check',
+            'uncheck',
             'class',
             'attr',
             'style',
@@ -288,16 +303,20 @@ export default class Trigger extends PluginBase {
         this.triggers.forEach((trigger) => {
             const { name, parameters } = this.parseCommand(trigger.get('condition'));
 
-            switch (name) {
+            switch (name.toLowerCase()) {
                 case 'value':
-                case 'oneOf':
+                case 'oneof':
                     this.createValueEvent(trigger, false, ...parameters);
                     break;
-                case 'allOf':
+                case 'allof':
                     this.createValueEvent(trigger, true, ...parameters);
                     break;
                 case 'empty':
                     this.createEmptyEvent(trigger);
+                    break;
+                case 'checked':
+                case 'unchecked':
+                    this.createCheckedEvent(trigger, (name === 'checked'), parameters[0] ?? undefined);
                     break;
                 default:
             }
@@ -356,24 +375,12 @@ export default class Trigger extends PluginBase {
         };
 
         supportedElements.forEach((element) => {
-            const elementEvent = () => thisEvent();
-
             if (element.matches('input[type=checkbox], input[type=radio]')) {
-                this.events.add({
-                    element,
-                    eventName: 'click',
-                    event: elementEvent,
-                });
-                element.addEventListener('click', elementEvent);
+                this.addEvent(element, trigger, 'click', () => thisEvent());
                 return;
             }
 
-            this.events.add({
-                element,
-                eventName: 'input',
-                event: elementEvent,
-            });
-            element.addEventListener('input', elementEvent);
+            this.addEvent(element, trigger, 'input', () => thisEvent());
         });
     }
 
@@ -420,35 +427,123 @@ export default class Trigger extends PluginBase {
         };
 
         supportedElements.forEach((element) => {
-            const elementEvent = () => thisEvent();
-
             if (element.matches('input[type=checkbox], input[type=radio]')) {
-                this.events.add({
-                    element,
-                    eventName: 'click',
-                    event: elementEvent,
-                });
-                element.addEventListener('click', elementEvent);
+                this.addEvent(element, trigger, 'click', () => thisEvent());
                 return;
             }
 
-            this.events.add({
-                element,
-                eventName: 'input',
-                event: elementEvent,
-            });
-            element.addEventListener('input', elementEvent);
+            this.addEvent(element, trigger, 'input', () => thisEvent());
         });
+    }
+
+    /**
+     * Creates a trigger that fires when a target element is checked/unchecked.
+     *
+     * @param {TriggerEntity} trigger
+     * @param {boolean} checked If the element should be checked or unchecked.
+     * @param {number|undefined} atLeast The minimum number of elements that must be checked.
+     *  Defaults to 1 if undefined.
+     */
+    createCheckedEvent(trigger, checked, atLeast = undefined) {
+        const supportedElements = new Set();
+
+        trigger.get('elements').forEach((element) => {
+            // Only supports checkboxes and radio buttons
+            if (element.matches('input[type=radio], input[type=checkbox]')) {
+                supportedElements.add(element);
+            }
+        });
+
+        const thisEvent = () => {
+            const elementValues = new Set();
+
+            supportedElements.forEach((element) => {
+                if (checked === element.checked) {
+                    elementValues.add(element);
+                }
+            });
+
+            const atLeastCount = atLeast ? Number(atLeast) : 1;
+
+            if (elementValues.size >= atLeastCount) {
+                this.executeAction(trigger, true);
+            } else {
+                this.executeAction(trigger, false);
+            }
+        };
+
+        supportedElements.forEach((element) => {
+            this.addEvent(element, trigger, 'click', () => thisEvent());
+        });
+    }
+
+    /**
+     * Adds an event to an element.
+     *
+     * This registers the event in the `events` map for later usage and removal, and adds a
+     * connector to the element for the event, so that we may enable prioritisation and control over
+     * the firing of the events.
+     *
+     * @param {HTMLElement} element
+     * @param {TriggerEntity} trigger
+     * @param {string} eventName
+     * @param {Function} callback
+     */
+    addEvent(element, trigger, eventName, callback) {
+        if (!this.events.has(element)) {
+            this.events.set(element, new Set());
+        }
+
+        const event = {
+            element,
+            eventName,
+            priority: Number(trigger.get('priority')),
+            event: callback,
+        };
+
+        this.events.get(element).add(event);
+
+        if (!this.connectors.has(element)) {
+            this.connectors.set(element, new Map());
+        }
+        if (!this.connectors.get(element).has(eventName)) {
+            this.connectors.get(element).set(eventName, () => {
+                const events = [];
+
+                this.events.get(element).forEach((elementEvent) => {
+                    if (elementEvent.eventName === eventName) {
+                        events.push(elementEvent);
+                    }
+                });
+
+                events
+                    .sort((a, b) => a.priority - b.priority)
+                    .forEach((elementEvent) => {
+                        elementEvent.event();
+                    });
+            });
+
+            element.addEventListener(eventName, this.connectors.get(element).get(eventName));
+        }
     }
 
     runEvents() {
-        this.events.forEach((event) => event.event());
+        this.connectors.forEach((elementConnectors) => {
+            elementConnectors.forEach((connector) => {
+                connector();
+            });
+        });
     }
 
     resetEvents() {
-        this.events.forEach((event) => {
-            event.element.removeEventListener(event.eventName, event.event);
+        this.connectors.forEach((elementConnectors, element) => {
+            elementConnectors.forEach((connector, event) => {
+                element.removeEventListener(event, connector);
+            });
         });
+
+        this.connectors.clear();
+        this.events.clear();
     }
 
     executeAction(trigger, conditionMet) {
@@ -464,7 +559,7 @@ export default class Trigger extends PluginBase {
     }
 
     actionShow(trigger, show) {
-        if (show && this.element.style.display === 'none') {
+        if (show && getComputedStyle(this.element).display === 'none') {
             this.element.classList.remove('hide');
 
             if (!this.element.dataset.originalDisplay) {
@@ -476,7 +571,7 @@ export default class Trigger extends PluginBase {
             delete this.element.dataset.originalDisplay;
 
             this.afterAction(trigger);
-        } else if (this.element.style.display !== 'none') {
+        } else if (!show && getComputedStyle(this.element).display !== 'none') {
             this.element.classList.add('hide');
 
             this.element.dataset.originalDisplay = getComputedStyle(this.element).display;
