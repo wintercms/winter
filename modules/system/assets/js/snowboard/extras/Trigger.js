@@ -191,7 +191,7 @@ export default class Trigger extends PluginBase {
      */
     parseCommand(command) {
         // Support old-format value command (value[foo,bar])
-        if (command.startsWith('value')) {
+        if (command.startsWith('value') && command.includes('[')) {
             const match = command.match(/[^[\]]+(?=])/g);
             const values = [];
 
@@ -437,7 +437,7 @@ export default class Trigger extends PluginBase {
     }
 
     /**
-     * Creates a trigger that fires when a target element is checked/unchecked.
+     * Creates a trigger that fires when a target element(s) is checked/unchecked.
      *
      * @param {TriggerEntity} trigger
      * @param {boolean} checked If the element should be checked or unchecked.
