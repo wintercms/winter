@@ -87,8 +87,9 @@ export default class Trigger extends PluginBase {
      *
      * Supported parameters are:
      *  - `condition` or `where`: The condition that must be met for the trigger to fire.
-     *  - `action`: The action to perform when the trigger fires.
-     *  - `parent` or `closest-parent`: The parent element with which to limit the trigger scope.
+     *  - `action` or `do`: The action to perform when the trigger fires.
+     *  - `closest-parent` or `parent`: The parent element with which to limit the trigger scope.
+     *  - `priority`: The priority in which to consider the trigger.
      *
      * Internally, the trigger map uses the `trigger` parameter to store the trigger selector.
      */
@@ -168,8 +169,8 @@ export default class Trigger extends PluginBase {
                 || !trigger.has('condition')
                 || !trigger.has('action')
                 || elements.length === 0
-                || !this.isValidCondition(trigger)
-                || !this.isValidAction(trigger)
+                || !this.hasValidConditions(trigger)
+                || !this.hasValidActions(trigger)
             ) {
                 this.triggers.delete(name);
             } else {
@@ -189,10 +190,13 @@ export default class Trigger extends PluginBase {
      *
      * If a parameter requires a comma within, the parameter should be wrapped in quotes.
      *
+     * Multiple commands can be separated by a pipe character `|`.
+     *
      * @param {string} command
+     * @param {string} allowMultiple
      * @returns {{name: string, parameters: string[]}[]}
      */
-    parseCommand(command) {
+    parseCommand(command, allowMultiple = true) {
         // Support old-format value command (value[foo,bar])
         if (command.startsWith('value') && command.includes('[')) {
             const match = command.match(/[^[\]]+(?=])/g);
@@ -219,14 +223,14 @@ export default class Trigger extends PluginBase {
         }
 
         // Handle multiple commands
-        if (command.includes('|')) {
+        if (command.includes('|') && allowMultiple) {
             const splitCommands = command.replace(/("[^"]*")|('[^']*')/g, (quoted) => quoted.replace(/\|/g, '|||'))
                 .split('|')
                 .map((splitValue) => splitValue.replace(/\|\|\|/g, '|'));
 
             const commands = [];
             splitCommands.forEach((splitCommand) => {
-                commands.push(...this.parseCommand(splitCommand));
+                commands.push(...this.parseCommand(splitCommand, false));
             });
 
             return commands;
@@ -278,7 +282,7 @@ export default class Trigger extends PluginBase {
      * @param {TriggerEntity} trigger
      * @returns {boolean}
      */
-    isValidCondition(trigger) {
+    hasValidConditions(trigger) {
         return this.parseCommand(trigger.get('condition')).every((condition) => [
             'checked',
             'unchecked',
@@ -297,7 +301,7 @@ export default class Trigger extends PluginBase {
      * @param {TriggerEntity} trigger
      * @returns {boolean}
      */
-    isValidAction(trigger) {
+    hasValidActions(trigger) {
         return this.parseCommand(trigger.get('action')).every((action) => [
             'show',
             'hide',
@@ -343,7 +347,7 @@ export default class Trigger extends PluginBase {
                     case 'checked':
                     case 'unchecked':
                         trigger.get('conditionCallbacks').push(
-                            this.createCheckedCondition(trigger, (condition.name === 'checked'), condition.parameters[0] ?? undefined),
+                            this.createCheckedCondition(trigger, (condition.name === 'checked'), ...condition.parameters),
                         );
                         break;
                     default:
@@ -541,10 +545,10 @@ export default class Trigger extends PluginBase {
      *
      * @param {TriggerEntity} trigger
      * @param {boolean} checked If the element should be checked or unchecked.
-     * @param {number|undefined} atLeast The minimum number of elements that must be checked.
-     *  Defaults to 1 if undefined.
+     * @param {string|number|undefined} atLeast The minimum number of elements that must be checked.
+     *  Defaults to 1 if undefined. If specified as `all`, all elements must be checked.
      */
-    createCheckedCondition(trigger, checked, atLeast = undefined) {
+    createCheckedCondition(trigger, checked, atLeast = undefined, atMost = undefined) {
         const supportedElements = new Set();
 
         trigger.get('elements').forEach((element) => {
@@ -567,9 +571,18 @@ export default class Trigger extends PluginBase {
                 }
             });
 
-            const atLeastCount = (Number(atLeast).toFixed() > 1) ? Number(atLeast).toFixed() : 1;
+            if (atLeast === 'all') {
+                return elementValues.size === supportedElements.size;
+            }
 
-            return elementValues.size >= atLeastCount;
+            const atLeastCount = (atLeast !== undefined && Math.floor(atLeast) > 0)
+                ? Math.floor(atLeast)
+                : 1;
+            const atMostCount = (atLeast !== undefined && Math.floor(atMost) > 1)
+                ? Math.floor(atMost)
+                : supportedElements.size;
+
+            return elementValues.size >= atLeastCount && elementValues.size <= atMostCount;
         };
     }
 
