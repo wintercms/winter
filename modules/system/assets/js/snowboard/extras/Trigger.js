@@ -123,7 +123,7 @@ export default class Trigger extends PluginBase {
                 triggerType = (triggerParts[1] === 'closest') ? 'parent' : triggerParts[1];
             } else if (
                 triggerParts[2] === undefined
-                || ['closest-parent', 'condition', 'when', 'action', 'parent', 'priority'].indexOf(triggerParts[2]) !== -1
+                || ['closest-parent', 'condition', 'when', 'action', 'parent', 'priority', 'do'].indexOf(triggerParts[2]) !== -1
             ) {
                 // Parse multi-trigger format
                 [, triggerName] = triggerParts;
@@ -137,6 +137,7 @@ export default class Trigger extends PluginBase {
                         triggerType = 'condition';
                         break;
                     case 'action':
+                    case 'do':
                         triggerType = 'action';
                         break;
                     case 'priority':
