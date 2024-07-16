@@ -46,7 +46,7 @@ export default class Trigger extends PluginBase {
         this.element = element;
 
         /**
-         * @type {Map<string, Map<TriggerEntity>>} The triggers for this element.
+         * @type {Map<string, TriggerEntity>} The triggers for this element.
          */
         this.triggers = new Map();
 
@@ -209,7 +209,7 @@ export default class Trigger extends PluginBase {
                     return;
                 }
 
-                const splitValues = value.replace(/("[^"]*")|('[^']*')/g, (quoted) => quoted.replace(/,/g, '|||'))
+                const splitValues = value.replace(/('.*?(?<!\\)')|(".*?(?<!\\)")/g, (quoted) => quoted.replace(/,/g, '|||'))
                     .split(',')
                     .map((splitValue) => splitValue.replace(/\|\|\|/g, ',').replace(/^['"]|['"]$/g, '').trim());
 
@@ -224,7 +224,7 @@ export default class Trigger extends PluginBase {
 
         // Handle multiple commands
         if (command.includes('|') && allowMultiple) {
-            const splitCommands = command.replace(/("[^"]*")|('[^']*')/g, (quoted) => quoted.replace(/\|/g, '|||'))
+            const splitCommands = command.replace(/('.*?(?<!\\)')|(".*?(?<!\\)")/g, (quoted) => quoted.replace(/\|/g, '|||'))
                 .split('|')
                 .map((splitValue) => splitValue.replace(/\|\|\|/g, '|'));
 
@@ -252,9 +252,9 @@ export default class Trigger extends PluginBase {
             }];
         }
 
-        const splitValues = parameters.replace(/("[^"]*")|('[^']*')/g, (quoted) => quoted.replace(/,/g, '|||'))
+        const splitValues = parameters.replace(/('.*?(?<!\\)')|(".*?(?<!\\)")/g, (quoted) => quoted.replace(/,/g, '|||'))
             .split(',')
-            .map((splitValue) => splitValue.replace(/\|\|\|/g, ',').replace(/^['"]|['"]$/g, '').trim());
+            .map((splitValue) => splitValue.replace(/\|\|\|/g, ',').replace(/^['"]|['"]$/g, '').replace(/\\(['"])/, '$1').trim());
 
         return [{
             name,
@@ -292,6 +292,8 @@ export default class Trigger extends PluginBase {
             'allof',
             'focus',
             'blur',
+            'attr',
+            'class',
         ].includes(condition.name.toLowerCase()));
     }
 
@@ -309,11 +311,15 @@ export default class Trigger extends PluginBase {
             'disable',
             'empty',
             'value',
+            'valueOf',
             'check',
             'uncheck',
             'class',
+            'classOf',
             'attr',
+            'attrOf',
             'style',
+            'styleOf',
         ].includes(action.name.toLowerCase()));
     }
 
@@ -586,6 +592,11 @@ export default class Trigger extends PluginBase {
         };
     }
 
+    /**
+     * Manually runs all registered triggers.
+     *
+     * This can be used to update the state of the triggers.
+     */
     runEvents() {
         this.connectors.forEach((elementConnectors) => {
             elementConnectors.forEach((connector) => {
@@ -594,6 +605,11 @@ export default class Trigger extends PluginBase {
         });
     }
 
+    /**
+     * Clears all registered events.
+     *
+     * This  will disable all triggers and their event listeners on the target elements.
+     */
     resetEvents() {
         this.connectors.forEach((elementConnectors, element) => {
             elementConnectors.forEach((connector, event) => {
@@ -605,43 +621,193 @@ export default class Trigger extends PluginBase {
         this.events.clear();
     }
 
+    /**
+     * Executes actions based on the trigger condition.
+     *
+     * Actions should be binary, and show one state when the condition is met, and another when it
+     * is not. The second parameter is used to determine if the conditions of the trigger have been
+     * met. If a trigger has multiple conditions, ALL conditions must be met.
+     *
+     * @param {TriggerEntity} trigger
+     * @param {boolean} conditionMet
+     */
     executeActions(trigger, conditionMet) {
         this.parseCommand(trigger.get('action')).forEach((action) => {
             switch (action.name) {
                 case 'show':
                 case 'hide':
-                    this.actionShow(trigger, (action.name === 'show') ? conditionMet : !conditionMet);
+                    this.actionShow(
+                        trigger,
+                        (action.parameters[0])
+                            ? Array.from(this.element.querySelectorAll(action.parameters[0]))
+                            : [this.element],
+                        (action.name === 'show') ? conditionMet : !conditionMet,
+                    );
                     break;
+                case 'enable':
+                case 'disable':
+                    this.actionEnable(
+                        trigger,
+                        (action.parameters[0])
+                            ? Array.from(this.element.querySelectorAll(action.parameters[0]))
+                            : [this.element],
+                        (action.name === 'enable') ? conditionMet : !conditionMet,
+                    );
+                    break;
+                case 'empty':
+                    if (conditionMet) {
+                        this.actionValue(
+                            trigger,
+                            conditionMet,
+                            (action.parameters[0])
+                                ? Array.from(this.element.querySelectorAll(action.parameters[0]))
+                                : [this.element],
+                            '',
+                        );
+                    }
+                    break;
+                case 'value':
+                case 'valueOf':
+                    this.actionValue(
+                        trigger,
+                        conditionMet,
+                        (action.name === 'valueOf')
+                            ? Array.from(this.element.querySelectorAll(action.parameters[0]))
+                            : [this.element],
+                        ...(action.parameters.length > 0 && action.name === 'valueOf')
+                            ? action.parameters.slice(1)
+                            : action.parameters,
+                    );
+                    break;
+                case 'class':
+                case 'classOf':
+                    this.actionClass(
+                        trigger,
+                        conditionMet,
+                        (action.name === 'classOf')
+                            ? Array.from(this.element.querySelectorAll(action.parameters[0]))
+                            : [this.element],
+                        ...(action.name === 'classOf')
+                            ? action.parameters.slice(1)
+                            : action.parameters,
+                    );
                 default:
             }
         });
     }
 
-    actionShow(trigger, show) {
-        if (show && getComputedStyle(this.element).display === 'none') {
-            this.element.classList.remove('hide');
+    /**
+     * Shows or hides a trigger element.
+     *
+     * This action will toggle the `hide` class on the element, and set the `display` style to
+     * `none` when hidden, and the original display value when shown.
+     *
+     * @param {TriggerEntity} trigger
+     * @param {HTMLElement[]} elements
+     * @param {boolean} show
+     */
+    actionShow(trigger, elements, show) {
+        elements.forEach((element) => {
+            if (show && getComputedStyle(element).display === 'none') {
+                element.classList.remove('hide');
 
-            if (!this.element.dataset.originalDisplay) {
-                this.element.style.display = 'block';
-            } else {
-                this.element.style.display = this.element.dataset.originalDisplay;
+                if (!element.dataset.originalDisplay) {
+                    element.style.display = 'block';
+                } else {
+                    element.style.display = element.dataset.originalDisplay;
+                }
+
+                delete element.dataset.originalDisplay;
+
+                this.afterAction(trigger, element);
+            } else if (!show && getComputedStyle(element).display !== 'none') {
+                element.classList.add('hide');
+
+                element.dataset.originalDisplay = getComputedStyle(element).display;
+                element.style.display = 'none';
+
+                this.afterAction(trigger, element);
             }
-
-            delete this.element.dataset.originalDisplay;
-
-            this.afterAction(trigger);
-        } else if (!show && getComputedStyle(this.element).display !== 'none') {
-            this.element.classList.add('hide');
-
-            this.element.dataset.originalDisplay = getComputedStyle(this.element).display;
-            this.element.style.display = 'none';
-
-            this.afterAction(trigger);
-        }
+        });
     }
 
-    afterAction(trigger) {
-        this.snowboard.debug('Trigger fired', this.element, trigger);
-        this.snowboard.globalEvent('trigger.fired', this.element, trigger);
+    /**
+     * Enables or disables a trigger element.
+     *
+     * This action will toggle the `control-disabled` class on the element, and set the `disabled`
+     * property to `true` when disabled, and `false` when enabled.
+     *
+     * @param {TriggerEntity} trigger
+     * @param {HTMLElement[]} elements
+     * @param {boolean} enable
+     */
+    actionEnable(trigger, elements, enable) {
+        elements.forEach((element) => {
+            element.classList[(enable) ? 'remove' : 'add']('control-disabled');
+
+            if (element.disabled !== undefined) {
+                element.disabled = !enable;
+            }
+
+            this.afterAction(trigger, element);
+        });
+    }
+
+    /**
+     * Sets the value of either the trigger element or a child element(s) within.
+     *
+     * This is a one-way action if the unmet value is not defined.
+     */
+    actionValue(trigger, conditionMet, elements, value, unmetValue = undefined) {
+        if (!conditionMet && unmetValue === undefined) {
+            return;
+        }
+
+        const newValue = (conditionMet) ? value : unmetValue;
+
+        elements.forEach((element) => {
+            if (element.matches('input[type=checkbox], input[type=radio]')) {
+                element.checked = (element.value === newValue);
+                return;
+            }
+
+            if (element.matches('input, select, textarea')) {
+                element.value = newValue;
+                return;
+            }
+
+            element.textContent = newValue;
+
+            this.afterAction(trigger);
+        });
+    }
+
+    /**
+     * Adds or removes the class from the trigger element or a child element(s) within.
+     *
+     * This will simply remove the class if the unmet class is not defined. Otherwise, the classes
+     * will be toggled.
+     */
+    actionClass(trigger, conditionMet, elements, cssClass, unmetCssClass = undefined) {
+        elements.forEach((element) => {
+            if (conditionMet) {
+                element.classList.add(cssClass);
+                if (unmetCssClass) {
+                    element.classList.remove(unmetCssClass);
+                }
+            } else {
+                element.classList.remove(cssClass);
+                if (unmetCssClass) {
+                    element.classList.add(unmetCssClass);
+                }
+            }
+
+            this.afterAction(trigger);
+        });
+    }
+
+    afterAction(trigger, element) {
+        this.snowboard.debug('Trigger fired', element, trigger);
+        this.snowboard.globalEvent('trigger.fired', element, trigger);
     }
 }
