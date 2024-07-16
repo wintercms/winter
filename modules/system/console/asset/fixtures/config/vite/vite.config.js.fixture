@@ -1,0 +1,21 @@
+import { defineConfig } from 'vite';
+import laravel from 'laravel-vite-plugin';
+
+export default defineConfig({
+    plugins: [
+        laravel({
+            input: [
+                'assets/src/css/{{packageName}}.css',
+                'assets/src/js/{{packageName}}.js',
+            ],
+            refresh: {
+                paths: [
+                    './**/*.htm',
+                    './**/*.block',
+                    'assets/**/*.css',
+                    'assets/**/*.js',
+                ]
+            },
+        }),
+    ],
+});

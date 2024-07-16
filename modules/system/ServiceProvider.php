@@ -8,6 +8,7 @@ use BackendMenu;
 use Config;
 use DateInterval;
 use Event;
+use Illuminate\Foundation\Vite;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Markdown;
@@ -142,6 +143,9 @@ class ServiceProvider extends ModuleServiceProvider
         $this->app->singleton('backend.auth', function () {
             return \Backend\Classes\AuthManager::instance();
         });
+
+        // Register the Laravel Vite singleton
+        $this->app->singleton(Vite::class, \System\Classes\Vite::class);
     }
 
     /**
@@ -316,12 +320,20 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('plugin.rollback', \System\Console\PluginRollback::class);
         $this->registerConsoleCommand('plugin.list', \System\Console\PluginList::class);
 
-        $this->registerConsoleCommand('mix.install', \System\Console\MixInstall::class);
-        $this->registerConsoleCommand('mix.update', \System\Console\MixUpdate::class);
-        $this->registerConsoleCommand('mix.list', \System\Console\MixList::class);
-        $this->registerConsoleCommand('mix.compile', \System\Console\MixCompile::class);
-        $this->registerConsoleCommand('mix.watch', \System\Console\MixWatch::class);
-        $this->registerConsoleCommand('mix.run', \System\Console\MixRun::class);
+        $this->registerConsoleCommand('mix.compile', Console\Asset\Mix\MixCompile::class);
+        $this->registerConsoleCommand('mix.config', Console\Asset\Mix\MixConfig::class);
+        $this->registerConsoleCommand('mix.install', Console\Asset\Mix\MixInstall::class);
+        $this->registerConsoleCommand('mix.list', Console\Asset\Mix\MixList::class);
+        $this->registerConsoleCommand('mix.watch', Console\Asset\Mix\MixWatch::class);
+
+        $this->registerConsoleCommand('vite.compile', Console\Asset\Vite\ViteCompile::class);
+        $this->registerConsoleCommand('vite.config', Console\Asset\Vite\ViteConfig::class);
+        $this->registerConsoleCommand('vite.install', Console\Asset\Vite\ViteInstall::class);
+        $this->registerConsoleCommand('vite.list', Console\Asset\Vite\ViteList::class);
+        $this->registerConsoleCommand('vite.watch', Console\Asset\Vite\ViteWatch::class);
+
+        $this->registerConsoleCommand('npm.run', Console\NpmRun::class);
+        $this->registerConsoleCommand('npm.update', Console\NpmUpdate::class);
     }
 
     /*

@@ -8,3 +8,4 @@
 .gitattributes export-ignore
 .gitpod.yml export-ignore
 CHANGELOG.md export-ignore
+/package.json export-ignore
