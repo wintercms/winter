@@ -57,7 +57,7 @@ export default class TriggerHandler extends Snowboard.Singleton {
             .filter(
                 (element) => [...element.attributes].filter(
                     ({ name }) => name.startsWith('data-trigger-'),
-                ).length > 0
+                ).length > 0,
             ).forEach((element) => {
                 const trigger = this.snowboard.trigger(element);
                 element.addEventListener('$oc.triggerOn.update', () => {
