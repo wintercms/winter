@@ -4,6 +4,7 @@ namespace System\Console\Asset;
 
 use Cms\Classes\Theme;
 use System\Classes\CompilableAssets;
+use System\Classes\NodePackageVersions;
 use System\Classes\PackageJson;
 use System\Classes\PluginManager;
 use Winter\Storm\Console\Command;
@@ -23,13 +24,20 @@ abstract class AssetConfig extends Command
      * @var array|array[] List of meta packages
      */
     protected array $packages = [
-        'tailwind' => [
-            'tailwindcss' => '^3.4.0',
-            '@tailwindcss/forms' => '^0.5.2',
-            '@tailwindcss/typography' => '^0.5.2',
+        'generic' => [
+            'tailwind' => [
+                'tailwindcss',
+                '@tailwindcss/forms',
+                '@tailwindcss/typography',
+            ],
+            'vue' => [
+                'vue',
+            ]
         ],
-        'vue' => [
-            'vue' => '^3.4.0',
+        'vite' => [
+            'vue' => [
+                '@vitejs/plugin-vue'
+            ]
         ]
     ];
 
@@ -89,6 +97,8 @@ abstract class AssetConfig extends Command
 
         $packageJson->save();
 
+        $this->info(ucfirst($this->assetType) . ' configuration complete.');
+
         return 0;
     }
 
@@ -124,6 +134,24 @@ abstract class AssetConfig extends Command
         string $path,
         array $options
     ): void {
+        // Add required packages by option to the packages package.json
+        foreach ($options as $option => $required) {
+            if (!isset($this->packages['generic'][$option]) || !$required) {
+                continue;
+            }
+
+            foreach ($this->packages['generic'][$option] as $dependency) {
+                $packageJson->addDependency($dependency, NodePackageVersions::get($dependency), dev: true);
+            }
+
+            if (isset($this->packages[$this->assetType][$option])) {
+                foreach ($this->packages[$this->assetType][$option] as $dependency) {
+                    $packageJson->addDependency($dependency, NodePackageVersions::get($dependency), dev: true);
+                }
+            }
+        }
+
+        // Config tailwind if required
         if ($options['tailwind']) {
             $this->writeFile(
                 $path . '/tailwind.config.js',
@@ -134,16 +162,6 @@ abstract class AssetConfig extends Command
                 $path . '/postcss.config.mjs',
                 File::get($this->fixturePath . '/tailwind/postcss.config.js.fixture')
             );
-
-            foreach ($this->packages['tailwind'] as $dependency => $version) {
-                $packageJson->addDependency($dependency, $version, dev: true);
-            }
-        }
-
-        if ($options['vue']) {
-            foreach ($this->packages['vue'] as $dependency => $version) {
-                $packageJson->addDependency($dependency, $version, dev: true);
-            }
         }
 
         $packageName = strtolower(str_replace('.', '-', $package));
@@ -197,6 +215,10 @@ abstract class AssetConfig extends Command
             return 0;
         }
 
-        return File::put($path, $content);
+        $result = File::put($path, $content);
+
+        $this->warn('File generated: ' . str_after($path, base_path()));
+
+        return $result;
     }
 }
