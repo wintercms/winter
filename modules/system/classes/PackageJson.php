@@ -250,6 +250,14 @@ class PackageJson
     }
 
     /**
+     * Returns the path of the package.json if set
+     */
+    public function getPath(): ?string
+    {
+        return $this->path;
+    }
+
+    /**
      * Saves the contents to a file, if the object was init'ed with a path it will save to the path, or can be
      * overwritten with `$path`.
      */

@@ -72,6 +72,23 @@ class PackageJsonTest extends TestCase
     }
 
     /**
+     * Test getting the path of the current file
+     *
+     * @return void
+     */
+    public function testGetPath(): void
+    {
+        $packageJson = new PackageJson(__DIR__ . '/package.json');
+        $path = $packageJson->getPath();
+        $this->assertIsString($path);
+        $this->assertEquals(__DIR__ . '/package.json', $path);
+
+        $packageJson = new PackageJson();
+        $path = $packageJson->getPath();
+        $this->assertNull($path);
+    }
+
+    /**
      * Test validating the name on set
      *
      * @return void
