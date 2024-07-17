@@ -67,7 +67,7 @@ export default class Trigger extends PluginBase {
             this.createTriggerEvents();
             this.runEvents();
 
-            this.snowboard.globalEvent('triggers.ready', this.element);
+            this.snowboard.globalEvent('triggers.ready', this.element, this.triggers);
         }
     }
 
@@ -478,6 +478,13 @@ export default class Trigger extends PluginBase {
         supportedElements.forEach((element) => {
             if (element.matches('input[type=checkbox], input[type=radio]')) {
                 this.addEvent(element, trigger, 'click');
+                this.addEvent(element, trigger, 'change');
+                return;
+            }
+
+            if (element.matches('input[type=hidden]')) {
+                this.addEvent(element, trigger, 'change');
+                return;
             }
 
             this.addEvent(element, trigger, 'input');
@@ -527,6 +534,7 @@ export default class Trigger extends PluginBase {
         supportedElements.forEach((element) => {
             if (element.matches('input[type=checkbox], input[type=radio]')) {
                 this.addEvent(element, trigger, 'click');
+                this.addEvent(element, trigger, 'change');
                 return;
             }
 
@@ -621,12 +629,16 @@ export default class Trigger extends PluginBase {
     }
 
     /**
-     * Manually runs all registered triggers.
+     * Manually runs all registered triggers, optionally for a specific element.
      *
      * This can be used to update the state of the triggers.
      */
-    runEvents() {
-        this.connectors.forEach((elementConnectors) => {
+    runEvents(forElement = undefined) {
+        this.connectors.forEach((elementConnectors, element) => {
+            if (forElement && element !== forElement) {
+                return;
+            }
+
             elementConnectors.forEach((connector) => {
                 connector();
             });
@@ -661,11 +673,22 @@ export default class Trigger extends PluginBase {
      */
     executeActions(trigger, conditionMet) {
         this.parseCommand(trigger.get('action')).forEach((action) => {
+            // Allow plugins to override action(s) and prevent the default functionality from firing.
+            if (this.snowboard.globalEvent('trigger.action', this.element, trigger, action, conditionMet) === false) {
+                this.afterAction(trigger, this.element, {
+                    action: action.name,
+                    override: true,
+                    conditionMet,
+                });
+                return;
+            }
+
             switch (action.name) {
                 case 'show':
                 case 'hide':
                     this.actionShow(
                         trigger,
+                        conditionMet,
                         (action.parameters[0])
                             ? Array.from(this.element.querySelectorAll(action.parameters[0]))
                             : [this.element],
@@ -676,6 +699,7 @@ export default class Trigger extends PluginBase {
                 case 'disable':
                     this.actionEnable(
                         trigger,
+                        conditionMet,
                         (action.parameters[0])
                             ? Array.from(this.element.querySelectorAll(action.parameters[0]))
                             : [this.element],
@@ -731,30 +755,36 @@ export default class Trigger extends PluginBase {
      * `none` when hidden, and the original display value when shown.
      *
      * @param {TriggerEntity} trigger
+     * @param {boolean} conditionMet
      * @param {HTMLElement[]} elements
      * @param {boolean} show
      */
-    actionShow(trigger, elements, show) {
+    actionShow(trigger, conditionMet, elements, show) {
         elements.forEach((element) => {
-            if (show && getComputedStyle(element).display === 'none') {
-                element.classList.remove('hide');
-
-                if (!element.dataset.originalDisplay) {
-                    element.style.display = 'block';
-                } else {
+            if (show && (!element.style.display || element.style.display === 'none')) {
+                if (element.dataset.originalDisplay !== undefined) {
                     element.style.display = element.dataset.originalDisplay;
+                    delete element.dataset.originalDisplay;
+                } else if (element.style.display ) {
+                    element.style.display = null;
                 }
 
-                delete element.dataset.originalDisplay;
-
-                this.afterAction(trigger, element);
-            } else if (!show && getComputedStyle(element).display !== 'none') {
-                element.classList.add('hide');
-
-                element.dataset.originalDisplay = getComputedStyle(element).display;
+                this.afterAction(trigger, element, {
+                    action: 'show',
+                    conditionMet,
+                    show,
+                });
+            } else if (!show && (!element.style.display || element.style.display !== 'none')) {
+                if (element.style.display) {
+                    element.dataset.originalDisplay = element.style.display;
+                }
                 element.style.display = 'none';
 
-                this.afterAction(trigger, element);
+                this.afterAction(trigger, element, {
+                    action: 'show',
+                    conditionMet,
+                    show,
+                });
             }
         });
     }
@@ -766,10 +796,11 @@ export default class Trigger extends PluginBase {
      * property to `true` when disabled, and `false` when enabled.
      *
      * @param {TriggerEntity} trigger
+     * @param {boolean} conditionMet
      * @param {HTMLElement[]} elements
      * @param {boolean} enable
      */
-    actionEnable(trigger, elements, enable) {
+    actionEnable(trigger, conditionMet, elements, enable) {
         elements.forEach((element) => {
             element.classList[(enable) ? 'remove' : 'add']('control-disabled');
 
@@ -777,7 +808,11 @@ export default class Trigger extends PluginBase {
                 element.disabled = !enable;
             }
 
-            this.afterAction(trigger, element);
+            this.afterAction(trigger, element, {
+                action: 'enable',
+                conditionMet,
+                enable,
+            });
         });
     }
 
@@ -806,7 +841,12 @@ export default class Trigger extends PluginBase {
 
             element.textContent = newValue;
 
-            this.afterAction(trigger);
+            this.afterAction(trigger, element, {
+                action: 'value',
+                conditionMet,
+                value,
+                unmetValue,
+            });
         });
     }
 
@@ -830,12 +870,27 @@ export default class Trigger extends PluginBase {
                 }
             }
 
-            this.afterAction(trigger);
+            this.afterAction(trigger, element, {
+                action: 'class',
+                conditionMet,
+                cssClass,
+                unmetCssClass,
+            });
         });
     }
 
-    afterAction(trigger, element) {
-        this.snowboard.debug('Trigger fired', element, trigger);
-        this.snowboard.globalEvent('trigger.fired', element, trigger);
+    /**
+     * Fires off an event when a trigger action has been executed.
+     *
+     * The element affected, the trigger and details about the action are passed through to the
+     * event.
+     *
+     * @param {TriggerEntity} trigger
+     * @param {HTMLElement} element
+     * @param {Object} action
+     */
+    afterAction(trigger, element, action) {
+        this.snowboard.debug('Trigger fired', element, trigger, action);
+        this.snowboard.globalEvent('trigger.fired', element, trigger, action);
     }
 }
