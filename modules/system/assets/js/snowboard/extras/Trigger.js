@@ -270,6 +270,9 @@ export default class Trigger extends PluginBase {
      */
     getSelectableElements(trigger) {
         if (trigger.has('parent')) {
+            if (!this.element.closest(trigger.get('parent'))) {
+                return [];
+            }
             return Array.from(this.element.closest(trigger.get('parent')).querySelectorAll(trigger.get('trigger')));
         }
 
@@ -291,7 +294,6 @@ export default class Trigger extends PluginBase {
             'oneof',
             'allof',
             'focus',
-            'blur',
             'attr',
             'class',
         ].includes(condition.name.toLowerCase()));
@@ -354,6 +356,11 @@ export default class Trigger extends PluginBase {
                     case 'unchecked':
                         trigger.get('conditionCallbacks').push(
                             this.createCheckedCondition(trigger, (condition.name === 'checked'), ...condition.parameters),
+                        );
+                        break;
+                    case 'focus':
+                        trigger.get('conditionCallbacks').push(
+                            this.createFocusedCondition(trigger),
                         );
                         break;
                     default:
@@ -590,6 +597,27 @@ export default class Trigger extends PluginBase {
 
             return elementValues.size >= atLeastCount && elementValues.size <= atMostCount;
         };
+    }
+
+    /**
+     * Creates a trigger that fires when a target element(s) is focused or blurred.
+     *
+     * @param {TriggerEntity} trigger
+     */
+    createFocusedCondition(trigger) {
+        const supportedElements = new Set();
+
+        trigger.get('elements').forEach((element) => {
+            // All elements are supported (technically)
+            supportedElements.add(element);
+        });
+
+        supportedElements.forEach((element) => {
+            this.addEvent(element, trigger, 'focus');
+            this.addEvent(element, trigger, 'blur');
+        });
+
+        return () => Array.from(supportedElements).some((element) => document.activeElement === element);
     }
 
     /**
