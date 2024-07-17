@@ -3,13 +3,14 @@
 namespace System\tests\classes;
 
 use System\Classes\NodePackageVersions;
+use System\Classes\PackageJson;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Support\Facades\Config;
 
 class NodePackageVersionsTest extends TestCase
 {
     /**
-     * Test loading a package.json file from path
+     * Test getting a version number for a package
      *
      * @return void
      */
@@ -21,12 +22,21 @@ class NodePackageVersionsTest extends TestCase
         $this->assertEquals('^1.0.3', $version);
     }
 
+    /**
+     * Test getting a missing package returns null
+     *
+     * @return void
+     */
     public function testGetMissingPackageVersion(): void
     {
         $this->assertNull(NodePackageVersions::get('this-is-a-test'));
     }
 
-
+    /**
+     * Test setting a package version in config overwrites the version returned
+     *
+     * @return void
+     */
     public function testConfigOverriding(): void
     {
         $version = NodePackageVersions::get('winter-test-js-package');
