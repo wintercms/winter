@@ -23,27 +23,6 @@ abstract class AssetConfig extends Command
     protected $description = 'Create configuration.';
 
     /**
-     * @var array|array[] List of meta packages
-     */
-    protected array $packages = [
-        'generic' => [
-            'tailwind' => [
-                'tailwindcss',
-                '@tailwindcss/forms',
-                '@tailwindcss/typography',
-            ],
-            'vue' => [
-                'vue',
-            ]
-        ],
-        'vite' => [
-            'vue' => [
-                '@vitejs/plugin-vue'
-            ]
-        ]
-    ];
-
-    /**
      * Local cache of fixture path
      */
     private string $fixturePath;
@@ -58,6 +37,9 @@ abstract class AssetConfig extends Command
      */
     protected string $configFile;
 
+    /**
+     * Dynamically generate options for all available bundles
+     */
     public function __construct()
     {
         parent::__construct();
