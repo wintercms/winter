@@ -1,6 +1,6 @@
 <?php
 
-namespace System\tests\classes;
+namespace System\Tests\Classes;
 
 use System\Classes\PackageJson;
 use System\Tests\Bootstrap\TestCase;
