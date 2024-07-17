@@ -70,6 +70,40 @@ class NodePackages
             }
         }
 
+        $this->addSetupHandler('tailwind', function (string $packagePath, string $packageType) {
+            $this->writeFile(
+                $packagePath . '/tailwind.config.js',
+                $this->getFixture('tailwind/tailwind.' . $packageType . '.config.js.fixture')
+            );
+
+            $this->writeFile(
+                $packagePath . '/postcss.config.mjs',
+                $this->getFixture('tailwind/postcss.config.js.fixture')
+            );
+        });
+
+        $this->addScaffoldHandler('tailwind', function (string $contents, string $contentType) {
+            if ($contentType === 'vite') {
+                return $contents;
+            }
+
+            if ($contentType === 'mix') {
+                return $contents . PHP_EOL . <<<JAVASCRIPT
+                mix.postCss('assets/src/css/{{packageName}}.css', 'assets/dist/css/{{packageName}}.css', [
+                    require('postcss-import'),
+                    require('tailwindcss'),
+                    require('autoprefixer'),
+                ]);
+                JAVASCRIPT;
+            }
+
+            if ($contentType === 'css') {
+                return $this->getFixture('css/tailwind.css.fixture');
+            }
+
+            return $contents;
+        });
+
         $this->addScaffoldHandler('vue', function (string $contents, string $contentType) {
             if ($contentType === 'vite') {
                 return str_replace(
@@ -109,40 +143,6 @@ class NodePackages
 
             if ($contentType === 'js') {
                 return $this->getFixture('js/vue.js.fixture');
-            }
-
-            return $contents;
-        });
-
-        $this->addSetupHandler('tailwind', function (string $packagePath, string $packageType) {
-            $this->writeFile(
-                $packagePath . '/tailwind.config.js',
-                $this->getFixture('tailwind/tailwind.' . $packageType . '.config.js.fixture')
-            );
-
-            $this->writeFile(
-                $packagePath . '/postcss.config.mjs',
-                $this->getFixture('tailwind/postcss.config.js.fixture')
-            );
-        });
-
-        $this->addScaffoldHandler('tailwind', function (string $contents, string $contentType) {
-            if ($contentType === 'vite') {
-                return $contents;
-            }
-
-            if ($contentType === 'mix') {
-                return $contents . PHP_EOL . <<<JAVASCRIPT
-                mix.postCss('assets/src/css/{{packageName}}.css', 'assets/dist/css/{{packageName}}.css', [
-                    require('postcss-import'),
-                    require('tailwindcss'),
-                    require('autoprefixer'),
-                ]);
-                JAVASCRIPT;
-            }
-
-            if ($contentType === 'css') {
-                return $this->getFixture('css/tailwind.css.fixture');
             }
 
             return $contents;
