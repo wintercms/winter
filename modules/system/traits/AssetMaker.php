@@ -3,8 +3,11 @@
 namespace System\Traits;
 
 use System\Classes\CombineAssets;
+use System\Classes\PluginManager;
+use System\Classes\Vite;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Html;
@@ -22,7 +25,7 @@ trait AssetMaker
     /**
      * Collection of assets to display in the layout.
      */
-    protected array $assets = ['js' => [], 'css' => [], 'rss' => []];
+    protected array $assets = ['js' => [], 'css' => [], 'rss' => [], 'vite' => []];
 
     /**
      * @var string Specifies a path to the asset directory.
@@ -41,7 +44,7 @@ trait AssetMaker
      */
     public function flushAssets(): void
     {
-        $this->assets = ['js' => [], 'css' => [], 'rss' => []];
+        $this->assets = ['js' => [], 'css' => [], 'rss' => [], 'vite' => []];
     }
 
     /**
@@ -98,6 +101,12 @@ trait AssetMaker
                 ));
 
                 $result .= '<script' . $attributes . '></script>' . PHP_EOL;
+            }
+        }
+
+        if ($type == null || $type == 'vite') {
+            foreach ($this->assets['vite'] as $asset) {
+                $result .= Vite::tags($asset['attributes']['entrypoints'], $asset['path']);
             }
         }
 
@@ -185,6 +194,32 @@ trait AssetMaker
         $rssPath = $this->getAssetScheme($rssPath);
 
         $this->addAsset('rss', $rssPath, $attributes);
+    }
+
+    /**
+     * Adds Vite tags
+     * @param string|array $entrypoints The list of entry points for Vite
+     * @param ?string $package The package name of the plugin or theme
+     */
+    public function addVite(array|string $entrypoints, ?string $package = null): void
+    {
+        if (!is_array($entrypoints)) {
+            $entrypoints = [$entrypoints];
+        }
+
+        // If package was not set, attempt to guess
+        if (is_null($package)) {
+            $caller = get_called_class();
+            if (!($plugin = PluginManager::instance()->findByNamespace($caller))) {
+                throw new SystemException('Unable to determine vite package from namespace: ' . $caller);
+            }
+            // Set package to the plugin id
+            $package = $plugin->getPluginIdentifier();
+        }
+
+        $this->addAsset('vite', $package, [
+            'entrypoints' => $entrypoints
+        ]);
     }
 
     /**
