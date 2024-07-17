@@ -32,7 +32,7 @@ class ViteConfigTest extends TestCase
         $fixture = str_replace(
             '{{packageName}}',
             'winter-sample',
-            File::get(base_path('modules/system/console/asset/fixtures/config/vite/vite.config.js.fixture')),
+            File::get(base_path('modules/system/console/asset/fixtures/config/vite/vite.config.mjs.fixture')),
         );
 
         // Check the file written is what was expected
