@@ -6,7 +6,7 @@ use Cms\Classes\Theme;
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\Process;
 use System\Classes\CompilableAssets;
-use System\Classes\NodePackageVersions;
+use System\Classes\NodePackages;
 use System\Classes\PackageJson;
 use System\Classes\PluginManager;
 use Winter\Storm\Console\Command;
@@ -43,11 +43,6 @@ abstract class AssetInstall extends Command
      * The asset config file
      */
     protected string $configFile;
-
-    /**
-     * The packages required for asset compilation
-     */
-    protected array $packages;
 
     /**
      * Execute the console command.
@@ -181,12 +176,12 @@ abstract class AssetInstall extends Command
     protected function validateRequirePackagesPresent(PackageJson $packageJson): PackageJson
     {
         // Check to see if required packages are already present as a dependency
-        foreach ($this->packages as $package) {
+        foreach (NodePackages::instance()->getCompilerPackages($this->assetType) as $package => $version) {
             if (
                 !$packageJson->hasDependency($package)
                 && $this->confirm($package . ' was not found as a dependency in package.json, would you like to add it?', true)
             ) {
-                $packageJson->addDependency($package, NodePackageVersions::get($package), dev: true);
+                $packageJson->addDependency($package, $version, dev: true);
             }
         }
 

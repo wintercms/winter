@@ -31,11 +31,4 @@ class MixInstall extends AssetInstall
      * The asset config file
      */
     protected string $configFile = 'winter.mix.js';
-
-    /**
-     * The packages required for asset compilation
-     */
-    protected array $packages = [
-        'laravel-mix',
-    ];
 }

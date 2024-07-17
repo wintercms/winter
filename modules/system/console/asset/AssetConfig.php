@@ -3,7 +3,9 @@
 namespace System\Console\Asset;
 
 use Cms\Classes\Theme;
+use Symfony\Component\Console\Input\InputOption;
 use System\Classes\CompilableAssets;
+use System\Classes\NodePackages;
 use System\Classes\NodePackageVersions;
 use System\Classes\PackageJson;
 use System\Classes\PluginManager;
@@ -56,6 +58,15 @@ abstract class AssetConfig extends Command
      */
     protected string $configFile;
 
+    public function __construct()
+    {
+        parent::__construct();
+
+        foreach (NodePackages::instance()->getBundles() as $bundle) {
+            $this->addOption($bundle, null, InputOption::VALUE_NONE, 'Create ' . $bundle . ' configuration');
+        }
+    }
+
     /**
      * Execute the console command.
      */
@@ -97,6 +108,7 @@ abstract class AssetConfig extends Command
 
         $packageJson->save();
 
+        $this->warn('File generated: ' . str_after($packageJson->getPath(), base_path()));
         $this->info(ucfirst($this->assetType) . ' configuration complete.');
 
         return 0;
@@ -134,38 +146,30 @@ abstract class AssetConfig extends Command
         string $path,
         array $options
     ): void {
-        // Add required packages by option to the packages package.json
-        foreach ($options as $option => $required) {
-            if (!isset($this->packages['generic'][$option]) || !$required) {
+        // Bind the nodePackages instance
+        $nodePackages = NodePackages::instance();
+
+        // For each bundle offered by node packages
+        foreach ($nodePackages->getBundles() as $bundle) {
+            // If the bundle was not selected exit
+            if (!$this->option($bundle)) {
                 continue;
             }
 
-            foreach ($this->packages['generic'][$option] as $dependency) {
-                $packageJson->addDependency($dependency, NodePackageVersions::get($dependency), dev: true);
+            // Require all packages specified by the bundle
+            foreach ($nodePackages->getBundlePackages($bundle, $this->assetType) as $dependency => $version) {
+                $packageJson->addDependency($dependency, $version, dev: true);
             }
 
-            if (isset($this->packages[$this->assetType][$option])) {
-                foreach ($this->packages[$this->assetType][$option] as $dependency) {
-                    $packageJson->addDependency($dependency, NodePackageVersions::get($dependency), dev: true);
-                }
+            //
+            foreach ($nodePackages->getHandlers($bundle) as $bootstrapper) {
+                \Closure::bind($bootstrapper, $this)->call($this, $path, $type);
             }
-        }
-
-        // Config tailwind if required
-        if ($options['tailwind']) {
-            $this->writeFile(
-                $path . '/tailwind.config.js',
-                File::get($this->fixturePath . '/tailwind/tailwind.' . $type . '.config.js.fixture')
-            );
-
-            $this->writeFile(
-                $path . '/postcss.config.mjs',
-                File::get($this->fixturePath . '/tailwind/postcss.config.js.fixture')
-            );
         }
 
         $packageName = strtolower(str_replace('.', '-', $package));
 
+        // TODO: migrate this to some sort of stream manager with callables modifying content
         if ($options['stubs']) {
             // Setup css stubs
             if (!File::exists($path . '/assets/src/css')) {
@@ -220,5 +224,10 @@ abstract class AssetConfig extends Command
         $this->warn('File generated: ' . str_after($path, base_path()));
 
         return $result;
+    }
+
+    protected function getFixture(string $path): string
+    {
+        return File::get($this->fixturePath . '/' . $path);
     }
 }
