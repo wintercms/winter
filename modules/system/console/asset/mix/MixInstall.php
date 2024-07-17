@@ -36,6 +36,6 @@ class MixInstall extends AssetInstall
      * The packages required for asset compilation
      */
     protected array $packages = [
-        'laravel-mix' => '^6.0.41'
+        'laravel-mix',
     ];
 }
