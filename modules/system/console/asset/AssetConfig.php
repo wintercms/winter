@@ -100,11 +100,7 @@ abstract class AssetConfig extends Command
             $packageJson->setName(strtolower(str_replace('.', '-', $package)));
         }
 
-        $this->installConfigs($packageJson, $package, $type, $path, [
-            'tailwind' => $this->option('tailwind'),
-            'vue' => $this->option('vue'),
-            'stubs' => $this->option('stubs')
-        ]);
+        $this->installConfigs($packageJson, $package, $type, $path);
 
         $packageJson->save();
 
@@ -143,11 +139,15 @@ abstract class AssetConfig extends Command
         PackageJson $packageJson,
         string $package,
         string $type,
-        string $path,
-        array $options
+        string $path
     ): void {
         // Bind the nodePackages instance
         $nodePackages = NodePackages::instance();
+
+        // Get the default config
+        $configContents = $this->getFixture(
+            $this->assetType . '/' . pathinfo($this->configFile, PATHINFO_BASENAME) . '.fixture'
+        );
 
         // For each bundle offered by node packages
         foreach ($nodePackages->getBundles() as $bundle) {
@@ -161,53 +161,47 @@ abstract class AssetConfig extends Command
                 $packageJson->addDependency($dependency, $version, dev: true);
             }
 
-            //
-            foreach ($nodePackages->getHandlers($bundle) as $bootstrapper) {
-                \Closure::bind($bootstrapper, $this)->call($this, $path, $type);
+            // Fire any setup handlers required
+            foreach ($nodePackages->getSetupHandlers($bundle) as $setupHandler) {
+                \Closure::bind($setupHandler, $this)->call($this, $path, $type);
+            }
+
+            // Loop through all the scaffold handlers to build configs / stubs
+            foreach ($nodePackages->getScaffoldHandlers($bundle) as $scaffoldHandler) {
+                // Generate the config
+                $configContents = \Closure::bind($scaffoldHandler, $this)
+                    ->call($this, $configContents ?? '', $this->assetType);
+
+                // Generate stub files if required
+                if ($this->option('stubs')) {
+                    $cssContents = \Closure::bind($scaffoldHandler, $this)->call($this, $cssContents ?? '', 'css');
+                    $jsContents = \Closure::bind($scaffoldHandler, $this)->call($this, $jsContents ?? '', 'js');
+                }
             }
         }
 
+        // Normalize package name
         $packageName = strtolower(str_replace('.', '-', $package));
 
-        // TODO: migrate this to some sort of stream manager with callables modifying content
-        if ($options['stubs']) {
-            // Setup css stubs
-            if (!File::exists($path . '/assets/src/css')) {
-                File::makeDirectory($path . '/assets/src/css', recursive: true);
+        if ($this->option('stubs')) {
+            foreach (['css', 'js'] as $assetType) {
+                if (!File::exists($path . '/assets/src/' . $assetType)) {
+                    File::makeDirectory($path . '/assets/src/' . $assetType, recursive: true);
+                }
+                $content = $assetType . 'Contents';
+                $this->writeFile(
+                    sprintf('%1$s/assets/src/%2$s/%3$s.%2$s', $path, $assetType, $packageName),
+                    $$content ?? null ? $$content : $this->getFixture(sprintf('%1$s/default.%1$s.fixture', $assetType))
+                );
             }
-
-            $this->writeFile(
-                $path . '/assets/src/css/' . $packageName . '.css',
-                File::get($this->fixturePath . '/css/' . ($options['tailwind'] ? 'tailwind' : 'default') . '.css.fixture')
-            );
-
-            // Setup js stubs
-            if (!File::exists($path . '/assets/src/js')) {
-                File::makeDirectory($path . '/assets/src/js', recursive: true);
-            }
-
-            $this->writeFile(
-                $path . '/assets/src/js/' . $packageName . '.js',
-                File::get($this->fixturePath . '/js/' . ($options['vue'] ? 'vue' : 'default') . '.js.fixture')
-            );
         }
 
-        $config = str_replace(
+        // Write out the config file
+        $this->writeFile($path . '/' . $this->configFile, str_replace(
             '{{packageName}}',
             $packageName,
-            File::get(
-                sprintf(
-                    '%s/%s/%s%s%s.js.fixture',
-                    $this->fixturePath,
-                    $this->assetType,
-                    pathinfo($this->configFile, PATHINFO_FILENAME),
-                    $options['tailwind'] ? '.tailwind' : '',
-                    $options['vue'] ? '.vue' : '',
-                )
-            )
-        );
-
-        $this->writeFile($path . '/' . $this->configFile, $config);
+            $configContents
+        ));
     }
 
     /**

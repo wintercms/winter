@@ -100,19 +100,19 @@ class NodePackagesTest extends TestCase
     }
 
     /**
-     * Test the NodePackages handlers functionality
+     * Test the NodePackages setup handlers functionality
      */
-    public function testHandlers(): void
+    public function testSetupHandlers(): void
     {
         // Test that the default handler is accessible
-        $handlers = $this->nodePackages->getHandlers('tailwind');
+        $handlers = $this->nodePackages->getSetupHandlers('tailwind');
         $this->assertIsArray($handlers);
         $this->assertArrayHasKey(0, $handlers);
         $this->assertIsCallable($handlers[0]);
 
         // Add a new handler
-        $this->nodePackages->addHandler('testing', fn () => true);
-        $handlers = $this->nodePackages->getHandlers('testing');
+        $this->nodePackages->addSetupHandler('testing', fn () => true);
+        $handlers = $this->nodePackages->getSetupHandlers('testing');
         $this->assertIsArray($handlers);
 
         // Validate that the array returns our handler
@@ -121,8 +121,45 @@ class NodePackagesTest extends TestCase
         $this->assertTrue($handlers[0]());
 
         // Add a second handler
-        $this->nodePackages->addHandler('testing', fn () => false);
-        $handlers = $this->nodePackages->getHandlers('testing');
+        $this->nodePackages->addSetupHandler('testing', fn () => false);
+        $handlers = $this->nodePackages->getSetupHandlers('testing');
+        $this->assertIsArray($handlers);
+
+        // Validate that the first handler does what we expect
+        $this->assertArrayHasKey(0, $handlers);
+        $this->assertIsCallable($handlers[0]);
+        $this->assertTrue($handlers[0]());
+
+        // Validate that the second handler does what we expect
+        $this->assertArrayHasKey(1, $handlers);
+        $this->assertIsCallable($handlers[1]);
+        $this->assertFalse($handlers[1]());
+    }
+
+    /**
+     * Test the NodePackages scaffold handlers functionality
+     */
+    public function testScaffoldHandlers(): void
+    {
+        // Test that the default handler is accessible
+        $handlers = $this->nodePackages->getScaffoldHandlers('tailwind');
+        $this->assertIsArray($handlers);
+        $this->assertArrayHasKey(0, $handlers);
+        $this->assertIsCallable($handlers[0]);
+
+        // Add a new handler
+        $this->nodePackages->addScaffoldHandler('testing', fn () => true);
+        $handlers = $this->nodePackages->getScaffoldHandlers('testing');
+        $this->assertIsArray($handlers);
+
+        // Validate that the array returns our handler
+        $this->assertArrayHasKey(0, $handlers);
+        $this->assertIsCallable($handlers[0]);
+        $this->assertTrue($handlers[0]());
+
+        // Add a second handler
+        $this->nodePackages->addScaffoldHandler('testing', fn () => false);
+        $handlers = $this->nodePackages->getScaffoldHandlers('testing');
         $this->assertIsArray($handlers);
 
         // Validate that the first handler does what we expect

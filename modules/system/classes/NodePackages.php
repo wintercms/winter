@@ -51,7 +51,13 @@ class NodePackages
     /**
      * @var array Handlers to allow for config generation
      */
-    protected array $handlers = [];
+    protected array $setupHandlers = [];
+
+
+    /**
+     * @var array Handlers to allow for config generation
+     */
+    protected array $scaffoldHandlers = [];
 
     /**
      * Initialize the singleton, pulls any handlers from config and binds them to the instance
@@ -60,11 +66,55 @@ class NodePackages
     {
         foreach (Config::get('node.handlers', []) as $name => $handlers) {
             foreach ($handlers as $handler) {
-                $this->addHandler($name, $handler);
+                $this->addSetupHandler($name, $handler);
             }
         }
 
-        $this->addHandler('tailwind', function (string $packagePath, string $packageType) {
+        $this->addScaffoldHandler('vue', function (string $contents, string $contentType) {
+            if ($contentType === 'vite') {
+                return str_replace(
+                    '}),',
+                    <<<JAVASCRIPT
+                    }),
+                            vue({
+                                template: {
+                                    transformAssetUrls: {
+                                        // The Vue plugin will re-write asset URLs, when referenced
+                                        // in Single File Components, to point to the Laravel web
+                                        // server. Setting this to `null` allows the Laravel plugin
+                                        // to instead re-write asset URLs to point to the Vite
+                                        // server instead.
+                                        base: null,
+
+                                        // The Vue plugin will parse absolute URLs and treat them
+                                        // as absolute paths to files on disk. Setting this to
+                                        // `false` will leave absolute URLs un-touched so they can
+                                        // reference assets in the public directory as expected.
+                                        includeAbsolute: false,
+                                    },
+                                },
+                            }),
+                    JAVASCRIPT,
+                    $contents
+                );
+            }
+
+            if ($contentType === 'mix') {
+                return str_replace(
+                    'mix.js(\'assets/src/js/{{packageName}}.js\', \'assets/dist/js/{{packageName}}.js\');',
+                    'mix.js(\'assets/src/js/{{packageName}}.js\', \'assets/dist/js/{{packageName}}.js\').vue({ version: 3 });',
+                    $contents
+                );
+            }
+
+            if ($contentType === 'js') {
+                return $this->getFixture('js/vue.js.fixture');
+            }
+
+            return $contents;
+        });
+
+        $this->addSetupHandler('tailwind', function (string $packagePath, string $packageType) {
             $this->writeFile(
                 $packagePath . '/tailwind.config.js',
                 $this->getFixture('tailwind/tailwind.' . $packageType . '.config.js.fixture')
@@ -74,6 +124,28 @@ class NodePackages
                 $packagePath . '/postcss.config.mjs',
                 $this->getFixture('tailwind/postcss.config.js.fixture')
             );
+        });
+
+        $this->addScaffoldHandler('tailwind', function (string $contents, string $contentType) {
+            if ($contentType === 'vite') {
+                return $contents;
+            }
+
+            if ($contentType === 'mix') {
+                return $contents . PHP_EOL . <<<JAVASCRIPT
+                mix.postCss('assets/src/css/{{packageName}}.css', 'assets/dist/css/{{packageName}}.css', [
+                    require('postcss-import'),
+                    require('tailwindcss'),
+                    require('autoprefixer'),
+                ]);
+                JAVASCRIPT;
+            }
+
+            if ($contentType === 'css') {
+                return $this->getFixture('css/tailwind.css.fixture');
+            }
+
+            return $contents;
         });
     }
 
@@ -122,18 +194,34 @@ class NodePackages
     }
 
     /**
-     * Add a handler for a bundle
+     * Add a setup handler for a bundle
      */
-    public function addHandler(string $name, callable $callable): void
+    public function addSetupHandler(string $name, callable $callable): void
     {
-        $this->handlers[$name][] = $callable;
+        $this->setupHandlers[$name][] = $callable;
     }
 
     /**
-     * Get all handlers for a bundle
+     * Get all setup handlers for a bundle
      */
-    public function getHandlers(string $name): array
+    public function getSetupHandlers(string $name): array
     {
-        return $this->handlers[$name] ?? [];
+        return $this->setupHandlers[$name] ?? [];
+    }
+
+    /**
+     * Add a scaffold handler for a bundle
+     */
+    public function addScaffoldHandler(string $name, callable $callable): void
+    {
+        $this->scaffoldHandlers[$name][] = $callable;
+    }
+
+    /**
+     * Get all scaffold handlers for a bundle
+     */
+    public function getScaffoldHandlers(string $name): array
+    {
+        return $this->scaffoldHandlers[$name] ?? [];
     }
 }
