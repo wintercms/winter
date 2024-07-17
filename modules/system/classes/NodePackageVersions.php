@@ -21,15 +21,20 @@ class NodePackageVersions
     protected static array $defaultVersions = [
         // Mix compiler
         'laravel-mix' => '^6.0.41',
+
         // Vite compiler
         'vite' => '^5.2.11',
         'laravel-vite-plugin' => '^1.0.4',
+
         // Plugins
         'tailwindcss' => '^3.4.0',
         '@tailwindcss/forms' => '^0.5.3',
         '@tailwindcss/typography' => '^0.5.2',
         'vue' => '^3.4.0',
         '@vitejs/plugin-vue' => '^5.0.5',
+
+        // Test package - this allows us to statically test with a version that will not change
+        'winter-test-js-package' => '^1.0.3',
     ];
 
     /**
