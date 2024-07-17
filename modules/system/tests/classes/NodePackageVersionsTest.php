@@ -1,9 +1,8 @@
 <?php
 
-namespace System\tests\classes;
+namespace System\Tests\Classes;
 
 use System\Classes\NodePackageVersions;
-use System\Classes\PackageJson;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Support\Facades\Config;
 
