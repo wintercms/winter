@@ -83,30 +83,22 @@ class NodePackages
         });
 
         $this->addScaffoldHandler('tailwind', function (string $contents, string $contentType) {
-            if ($contentType === 'vite') {
-                return $contents;
-            }
-
-            if ($contentType === 'mix') {
-                return $contents . PHP_EOL . <<<JAVASCRIPT
+            return match ($contentType) {
+                'mix' => $contents . PHP_EOL . <<<JAVASCRIPT
                 mix.postCss('assets/src/css/{{packageName}}.css', 'assets/dist/css/{{packageName}}.css', [
                     require('postcss-import'),
                     require('tailwindcss'),
                     require('autoprefixer'),
                 ]);
-                JAVASCRIPT;
-            }
-
-            if ($contentType === 'css') {
-                return $this->getFixture('css/tailwind.css.fixture');
-            }
-
-            return $contents;
+                JAVASCRIPT,
+                'css' => $this->getFixture('css/tailwind.css.fixture'),
+                default => $contents
+            };
         });
 
         $this->addScaffoldHandler('vue', function (string $contents, string $contentType) {
-            if ($contentType === 'vite') {
-                return str_replace(
+            return match ($contentType) {
+                'vite' => str_replace(
                     '}),',
                     <<<JAVASCRIPT
                     }),
@@ -129,23 +121,20 @@ class NodePackages
                                 },
                             }),
                     JAVASCRIPT,
-                    $contents
-                );
-            }
-
-            if ($contentType === 'mix') {
-                return str_replace(
+                    str_replace(
+                        'import laravel from \'laravel-vite-plugin\';',
+                        'import laravel from \'laravel-vite-plugin\';' . PHP_EOL . 'import vue from \'@vitejs/plugin-vue\';',
+                        $contents
+                    )
+                ),
+                'mix' => str_replace(
                     'mix.js(\'assets/src/js/{{packageName}}.js\', \'assets/dist/js/{{packageName}}.js\');',
                     'mix.js(\'assets/src/js/{{packageName}}.js\', \'assets/dist/js/{{packageName}}.js\').vue({ version: 3 });',
                     $contents
-                );
-            }
-
-            if ($contentType === 'js') {
-                return $this->getFixture('js/vue.js.fixture');
-            }
-
-            return $contents;
+                ),
+                'js' => $this->getFixture('js/vue.js.fixture'),
+                default => $contents
+            };
         });
     }
 
