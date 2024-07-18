@@ -18,6 +18,10 @@ class ViteCompileTest extends TestCase
             $this->markTestSkipped('This test requires node_modules to be installed');
         }
 
+        if (!File::exists(base_path('node_modules/.bin/vite'))) {
+            $this->markTestSkipped('This test requires the vite package to be installed');
+        }
+
         $this->themePath = base_path('modules/system/tests/fixtures/themes/vitetest');
 
         // Add our testing theme because it won't be auto discovered

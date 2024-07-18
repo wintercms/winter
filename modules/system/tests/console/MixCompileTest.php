@@ -16,6 +16,10 @@ class MixCompileTest extends TestCase
         if (!File::exists(base_path('node_modules'))) {
             $this->markTestSkipped('This test requires node_modules to be installed');
         }
+
+        if (!File::exists(base_path('node_modules/.bin/mix'))) {
+            $this->markTestSkipped('This test requires the mix package to be installed');
+        }
     }
 
     public function testCompileMultiple()
