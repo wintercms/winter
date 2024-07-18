@@ -6,7 +6,6 @@ use Cms\Classes\Theme;
 use Symfony\Component\Console\Input\InputOption;
 use System\Classes\CompilableAssets;
 use System\Classes\NodePackages;
-use System\Classes\NodePackageVersions;
 use System\Classes\PackageJson;
 use System\Classes\PluginManager;
 use Winter\Storm\Console\Command;
