@@ -64,7 +64,7 @@ class NodePackages
      */
     public function init(): void
     {
-        foreach (Config::get('node.handlers', []) as $name => $handlers) {
+        foreach (Config::get('node.setupHandlers', []) as $name => $handlers) {
             foreach ($handlers as $handler) {
                 $this->addSetupHandler($name, $handler);
             }
