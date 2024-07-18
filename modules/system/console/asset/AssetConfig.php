@@ -119,8 +119,8 @@ abstract class AssetConfig extends Command
     protected function installConfigs(
         PackageJson $packageJson,
         string $package,
-        string $type,
-        string $path
+        string $packageType,
+        string $packagePath
     ): void {
         // Bind the nodePackages instance
         $nodePackages = NodePackages::instance();
@@ -144,7 +144,7 @@ abstract class AssetConfig extends Command
 
             // Fire any setup handlers required
             foreach ($nodePackages->getSetupHandlers($bundle) as $setupHandler) {
-                \Closure::bind($setupHandler, $this)->call($this, $path, $type);
+                \Closure::bind($setupHandler, $this)->call($this, $packagePath, $packageType);
             }
 
             // Loop through all the scaffold handlers to build configs / stubs
@@ -155,8 +155,8 @@ abstract class AssetConfig extends Command
 
                 // Generate stub files if required
                 if ($this->option('stubs')) {
-                    $cssContents = \Closure::bind($scaffoldHandler, $this)->call($this, $cssContents ?? '', 'css');
-                    $jsContents = \Closure::bind($scaffoldHandler, $this)->call($this, $jsContents ?? '', 'js');
+                    $css = \Closure::bind($scaffoldHandler, $this)->call($this, $css ?? '', 'css');
+                    $js = \Closure::bind($scaffoldHandler, $this)->call($this, $js ?? '', 'js');
                 }
             }
         }
@@ -165,20 +165,19 @@ abstract class AssetConfig extends Command
         $packageName = strtolower(str_replace('.', '-', $package));
 
         if ($this->option('stubs')) {
-            foreach (['css', 'js'] as $assetType) {
-                if (!File::exists($path . '/assets/src/' . $assetType)) {
-                    File::makeDirectory($path . '/assets/src/' . $assetType, recursive: true);
+            foreach (['css', 'js'] as $asset) {
+                if (!File::exists($packagePath . '/assets/src/' . $asset)) {
+                    File::makeDirectory($packagePath . '/assets/src/' . $asset, recursive: true);
                 }
-                $content = $assetType . 'Contents';
                 $this->writeFile(
-                    sprintf('%1$s/assets/src/%2$s/%3$s.%2$s', $path, $assetType, $packageName),
-                    $$content ?? null ? $$content : $this->getFixture(sprintf('%1$s/default.%1$s.fixture', $assetType))
+                    sprintf('%1$s/assets/src/%2$s/%3$s.%2$s', $packagePath, $asset, $packageName),
+                    $$asset ?? null ? $$asset : $this->getFixture(sprintf('%1$s/default.%1$s.fixture', $asset))
                 );
             }
         }
 
         // Write out the config file
-        $this->writeFile($path . '/' . $this->configFile, str_replace(
+        $this->writeFile($packagePath . '/' . $this->configFile, str_replace(
             '{{packageName}}',
             $packageName,
             $configContents
