@@ -70,6 +70,12 @@ class NodePackages
             }
         }
 
+        foreach (Config::get('node.scaffoldHandlers', []) as $name => $handlers) {
+            foreach ($handlers as $handler) {
+                $this->addScaffoldHandler($name, $handler);
+            }
+        }
+
         $this->addSetupHandler('tailwind', function (string $packagePath, string $packageType) {
             $this->writeFile(
                 $packagePath . '/tailwind.config.js',
