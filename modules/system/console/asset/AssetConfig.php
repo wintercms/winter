@@ -118,15 +118,17 @@ abstract class AssetConfig extends Command
      */
     protected function installConfigs(
         PackageJson $packageJson,
-        string $package,
+        string $packageName,
         string $packageType,
         string $packagePath
     ): void {
+        // Normalize package name
+        $packageName = strtolower(str_replace('.', '-', $packageName));
         // Bind the nodePackages instance
         $nodePackages = NodePackages::instance();
 
         // Get the default config
-        $configContents = $this->getFixture(
+        $config = $this->getFixture(
             $this->assetType . '/' . pathinfo($this->configFile, PATHINFO_BASENAME) . '.fixture'
         );
 
@@ -150,9 +152,7 @@ abstract class AssetConfig extends Command
             // Loop through all the scaffold handlers to build configs / stubs
             foreach ($nodePackages->getScaffoldHandlers($bundle) as $scaffoldHandler) {
                 // Generate the config
-                $configContents = \Closure::bind($scaffoldHandler, $this)
-                    ->call($this, $configContents ?? '', $this->assetType);
-
+                $config = \Closure::bind($scaffoldHandler, $this)->call($this, $config, $this->assetType);
                 // Generate stub files if required
                 if ($this->option('stubs')) {
                     $css = \Closure::bind($scaffoldHandler, $this)->call($this, $css ?? '', 'css');
@@ -161,9 +161,7 @@ abstract class AssetConfig extends Command
             }
         }
 
-        // Normalize package name
-        $packageName = strtolower(str_replace('.', '-', $package));
-
+        // Create stub files if required
         if ($this->option('stubs')) {
             foreach (['css', 'js'] as $asset) {
                 if (!File::exists($packagePath . '/assets/src/' . $asset)) {
@@ -180,7 +178,7 @@ abstract class AssetConfig extends Command
         $this->writeFile($packagePath . '/' . $this->configFile, str_replace(
             '{{packageName}}',
             $packageName,
-            $configContents
+            $config
         ));
     }
 
