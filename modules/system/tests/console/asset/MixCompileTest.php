@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Tests\Console;
+namespace System\Tests\Console\Asset;
 
 use Winter\Storm\Support\Facades\File;
 use System\Tests\Bootstrap\TestCase;

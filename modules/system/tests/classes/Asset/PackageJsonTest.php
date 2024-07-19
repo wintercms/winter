@@ -1,16 +1,14 @@
 <?php
 
-namespace System\Tests\Classes;
+namespace System\Tests\Classes\Asset;
 
-use System\Classes\PackageJson;
+use System\Classes\Asset\PackageJson;
 use System\Tests\Bootstrap\TestCase;
 
 class PackageJsonTest extends TestCase
 {
     /**
      * Test loading a package.json file from path
-     *
-     * @return void
      */
     public function testLoadFile(): void
     {
@@ -24,8 +22,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test creating an instance with non-existing file
-     *
-     * @return void
      */
     public function testNewFile(): void
     {
@@ -37,8 +33,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test creating an instance without a path
-     *
-     * @return void
      */
     public function testMemoryInstance(): void
     {
@@ -50,8 +44,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test setting and getting the name property
-     *
-     * @return void
      */
     public function testNameMethods(): void
     {
@@ -73,8 +65,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test getting the path of the current file
-     *
-     * @return void
      */
     public function testGetPath(): void
     {
@@ -90,8 +80,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test validating the name on set
-     *
-     * @return void
      */
     public function testNameValidation(): void
     {
@@ -136,8 +124,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test checking package workspace exists
-     *
-     * @return void
      */
     public function testHasWorkspace(): void
     {
@@ -148,8 +134,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test adding workspace package
-     *
-     * @return void
      */
     public function testAddWorkspace(): void
     {
@@ -167,8 +151,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test removing workspace package
-     *
-     * @return void
      */
     public function testRemoveWorkspace(): void
     {
@@ -185,8 +167,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test when adding a workspace package, it removes the package from ignored workspace packages
-     *
-     * @return void
      */
     public function testAddWorkspaceRemovesIgnoredPackage(): void
     {
@@ -202,8 +182,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test checking ignore package workspace exists
-     *
-     * @return void
      */
     public function testHasIgnoredPackage(): void
     {
@@ -219,8 +197,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test adding ignore workspace package
-     *
-     * @return void
      */
     public function testAddIgnoredPackage(): void
     {
@@ -237,8 +213,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test removing ignore workspace package
-     *
-     * @return void
      */
     public function testRemoveIgnoredPackage(): void
     {
@@ -255,8 +229,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test when adding an ignore workspace package, it removes the package from workspace packages
-     *
-     * @return void
      */
     public function testAddIgnoredPackageRemovesWorkspace(): void
     {
@@ -272,8 +244,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test checking if package.json has deps
-     *
-     * @return void
      */
     public function testHasDependency(): void
     {
@@ -331,8 +301,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test removing dependencies
-     *
-     * @return void
      */
     public function testRemoveDependency(): void
     {
@@ -356,8 +324,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test checking if a script exists in a package.json
-     *
-     * @return void
      */
     public function testHasScript(): void
     {
@@ -374,8 +340,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test getting the value of a script by name
-     *
-     * @return void
      */
     public function testGetScript(): void
     {
@@ -391,8 +355,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test getting the value of a script by name
-     *
-     * @return void
      */
     public function testAddScript(): void
     {
@@ -415,8 +377,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test removing scripts from package.json
-     *
-     * @return void
      */
     public function testRemoveScript(): void
     {
@@ -438,8 +398,6 @@ class PackageJsonTest extends TestCase
 
     /**
      * Test saving, when saving with a file path set on init and passing a file path on save. Fails when no path given
-     *
-     * @return void
      */
     public function testSave(): void
     {

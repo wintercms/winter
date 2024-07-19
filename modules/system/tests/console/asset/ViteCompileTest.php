@@ -1,8 +1,8 @@
 <?php
 
-namespace System\Tests\Console;
+namespace System\Tests\Console\Asset;
 
-use System\Classes\CompilableAssets;
+use System\Classes\Asset\PackageManager;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Support\Facades\File;
 
@@ -25,7 +25,7 @@ class ViteCompileTest extends TestCase
         $this->themePath = base_path('modules/system/tests/fixtures/themes/vitetest');
 
         // Add our testing theme because it won't be auto discovered
-        CompilableAssets::instance()->registerPackage(
+        PackageManager::instance()->registerPackage(
             'theme-vitetest',
             $this->themePath . '/vite.config.mjs',
             'vite'

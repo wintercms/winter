@@ -1,25 +1,29 @@
 <?php
 
-namespace System\Classes;
+namespace System\Classes\Asset;
 
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Traits\Singleton;
 
 /**
- * Node packages manager.
+ * Asset Bundle manager.
  *
- * This is a centralised system for managing node package versions and allowing for user customisation
+ * This class manages "asset bundles" registered by the core and plugins that are used by the
+ * [mix|vite]:create commands to generate & populate the required files for a given bundle.
+ * Bundles include information on the specific packages & versions required for the bundle
+ * to function the context of the Winter package (plugin or theme) it is being used in;
+ * as well as dependencies specific to the desired compiler (e.g. mix or vite).
  *
  * @package winter\wn-system-module
  * @author Jack Wilkinson <me@jackwilky.com>
  * @copyright Winter CMS Maintainers
  */
-class NodePackages
+class BundleManager
 {
     use Singleton;
 
     /**
-     * @var array|array[] Packages required for compilers
+     * Packages required for compilers
      */
     protected array $compilerPackages = [
         'mix' => [
@@ -32,7 +36,7 @@ class NodePackages
     ];
 
     /**
-     * @var array List of packages available to install. Allows for `$compilerName` => [`CompilerSpecificPackage`]
+     * List of packages available to install. Allows for `$compilerName` => [`CompilerSpecificPackage`]
      */
     protected array $bundlePackages = [
         'tailwind' => [
@@ -44,18 +48,17 @@ class NodePackages
             'vue' => '^3.4.0',
             'vite' => [
                 '@vitejs/plugin-vue' => '^5.0.5'
-            ]
-        ]
+            ],
+        ],
     ];
 
     /**
-     * @var array Handlers to allow for config generation
+     * Handlers to allow for config generation
      */
     protected array $setupHandlers = [];
 
-
     /**
-     * @var array Handlers to allow for config generation
+     * Handlers to allow for config generation
      */
     protected array $scaffoldHandlers = [];
 

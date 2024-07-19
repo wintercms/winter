@@ -4,14 +4,14 @@ namespace System\Console\Asset;
 
 use Cms\Classes\Theme;
 use Symfony\Component\Console\Input\InputOption;
-use System\Classes\CompilableAssets;
-use System\Classes\NodePackages;
-use System\Classes\PackageJson;
+use System\Classes\Asset\BundleManager;
+use System\Classes\Asset\PackageJson;
+use System\Classes\Asset\PackageManager;
 use System\Classes\PluginManager;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\File;
 
-abstract class AssetConfig extends Command
+abstract class AssetCreate extends Command
 {
     protected const TYPE_THEME = 'theme';
     protected const TYPE_PLUGIN = 'plugin';
@@ -43,7 +43,7 @@ abstract class AssetConfig extends Command
     {
         parent::__construct();
 
-        foreach (NodePackages::instance()->getBundles() as $bundle) {
+        foreach (BundleManager::instance()->getBundles() as $bundle) {
             $this->addOption($bundle, null, InputOption::VALUE_NONE, 'Create ' . $bundle . ' configuration');
         }
     }
@@ -57,7 +57,7 @@ abstract class AssetConfig extends Command
 
         $this->fixturePath = __DIR__ . '/fixtures/config';
 
-        $compilableAssets = CompilableAssets::instance();
+        $compilableAssets = PackageManager::instance();
         $compilableAssets->fireCallbacks();
 
         $packages = $compilableAssets->getPackages($this->assetType, true);
@@ -126,7 +126,7 @@ abstract class AssetConfig extends Command
         // Normalize package name
         $packageName = strtolower(str_replace('.', '-', $packageName));
         // Bind the nodePackages instance
-        $nodePackages = NodePackages::instance();
+        $nodePackages = BundleManager::instance();
 
         // Get the default config
         $config = $this->getFixture(

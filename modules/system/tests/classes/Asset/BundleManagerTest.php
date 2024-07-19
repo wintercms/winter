@@ -1,19 +1,19 @@
 <?php
 
-namespace System\Tests\Classes;
+namespace System\Tests\Classes\Asset;
 
-use System\Classes\NodePackages;
+use System\Classes\Asset\BundleManager;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Support\Facades\Config;
 
-class NodePackagesTest extends TestCase
+class BundleManagerTest extends TestCase
 {
-    protected NodePackages $nodePackages;
+    protected BundleManager $bundleManager;
 
     public function setUp(): void
     {
         parent::setUp();
-        $this->nodePackages = NodePackages::instance();
+        $this->bundleManager = BundleManager::instance();
     }
 
     /**
@@ -21,7 +21,7 @@ class NodePackagesTest extends TestCase
      */
     public function testGetBundles(): void
     {
-        $bundles = $this->nodePackages->getBundles();
+        $bundles = $this->bundleManager->getBundles();
 
         $this->assertIsArray($bundles);
         $count = count($bundles);
@@ -30,7 +30,7 @@ class NodePackagesTest extends TestCase
             'a' => 'v0.1.2'
         ]);
 
-        $this->assertCount($count + 1, $this->nodePackages->getBundles());
+        $this->assertCount($count + 1, $this->bundleManager->getBundles());
     }
 
     /**
@@ -39,22 +39,22 @@ class NodePackagesTest extends TestCase
     public function testGetBundlePackages(): void
     {
         // Test that getting a default returns an array and validate one of the packages
-        $packages = $this->nodePackages->getBundlePackages('tailwind', 'mix');
+        $packages = $this->bundleManager->getBundlePackages('tailwind', 'mix');
         $this->assertIsArray($packages);
         $this->assertArrayHasKey('tailwindcss', $packages);
 
         // Test that getting a package with compiler dependant packages does not return the package for invalid compiler
-        $packages = $this->nodePackages->getBundlePackages('vue', 'mix');
+        $packages = $this->bundleManager->getBundlePackages('vue', 'mix');
         $this->assertIsArray($packages);
         $this->assertArrayNotHasKey('@vitejs/plugin-vue', $packages);
 
         // Test that getting a package with compiler dependant packages does return the package for a valid compiler
-        $packages = $this->nodePackages->getBundlePackages('vue', 'vite');
+        $packages = $this->bundleManager->getBundlePackages('vue', 'vite');
         $this->assertIsArray($packages);
         $this->assertArrayHasKey('@vitejs/plugin-vue', $packages);
 
         // Validate that `testing` does not exist
-        $packages = $this->nodePackages->getBundlePackages('testing', 'vite');
+        $packages = $this->bundleManager->getBundlePackages('testing', 'vite');
         $this->assertIsArray($packages);
         $this->assertEmpty($packages);
 
@@ -67,11 +67,11 @@ class NodePackagesTest extends TestCase
         ]);
 
         // Validate the testing bundle works with compiler dependent packages
-        $packages = $this->nodePackages->getBundlePackages('testing', 'vite');
+        $packages = $this->bundleManager->getBundlePackages('testing', 'vite');
         $this->assertIsArray($packages);
         $this->assertCount(1, $packages);
 
-        $packages = $this->nodePackages->getBundlePackages('testing', 'mix');
+        $packages = $this->bundleManager->getBundlePackages('testing', 'mix');
         $this->assertIsArray($packages);
         $this->assertCount(2, $packages);
     }
@@ -82,7 +82,7 @@ class NodePackagesTest extends TestCase
     public function testGetCompilerPackages(): void
     {
         // Test a default compiler
-        $packages = $this->nodePackages->getCompilerPackages('mix');
+        $packages = $this->bundleManager->getCompilerPackages('mix');
         $this->assertIsArray($packages);
         $this->assertArrayHasKey('laravel-mix', $packages);
 
@@ -93,26 +93,26 @@ class NodePackagesTest extends TestCase
         ]);
 
         // Test the compiler packages are returned correctly
-        $packages = $this->nodePackages->getCompilerPackages('testing');
+        $packages = $this->bundleManager->getCompilerPackages('testing');
         $this->assertIsArray($packages);
         $this->assertArrayHasKey('a', $packages);
         $this->assertArrayHasKey('b', $packages);
     }
 
     /**
-     * Test the NodePackages setup handlers functionality
+     * Test the AssetBundles setup handlers functionality
      */
     public function testSetupHandlers(): void
     {
         // Test that the default handler is accessible
-        $handlers = $this->nodePackages->getSetupHandlers('tailwind');
+        $handlers = $this->bundleManager->getSetupHandlers('tailwind');
         $this->assertIsArray($handlers);
         $this->assertArrayHasKey(0, $handlers);
         $this->assertIsCallable($handlers[0]);
 
         // Add a new handler
-        $this->nodePackages->addSetupHandler('testing', fn () => true);
-        $handlers = $this->nodePackages->getSetupHandlers('testing');
+        $this->bundleManager->addSetupHandler('testing', fn () => true);
+        $handlers = $this->bundleManager->getSetupHandlers('testing');
         $this->assertIsArray($handlers);
 
         // Validate that the array returns our handler
@@ -121,8 +121,8 @@ class NodePackagesTest extends TestCase
         $this->assertTrue($handlers[0]());
 
         // Add a second handler
-        $this->nodePackages->addSetupHandler('testing', fn () => false);
-        $handlers = $this->nodePackages->getSetupHandlers('testing');
+        $this->bundleManager->addSetupHandler('testing', fn () => false);
+        $handlers = $this->bundleManager->getSetupHandlers('testing');
         $this->assertIsArray($handlers);
 
         // Validate that the first handler does what we expect
@@ -137,19 +137,19 @@ class NodePackagesTest extends TestCase
     }
 
     /**
-     * Test the NodePackages scaffold handlers functionality
+     * Test the AssetBundles scaffold handlers functionality
      */
     public function testScaffoldHandlers(): void
     {
         // Test that the default handler is accessible
-        $handlers = $this->nodePackages->getScaffoldHandlers('tailwind');
+        $handlers = $this->bundleManager->getScaffoldHandlers('tailwind');
         $this->assertIsArray($handlers);
         $this->assertArrayHasKey(0, $handlers);
         $this->assertIsCallable($handlers[0]);
 
         // Add a new handler
-        $this->nodePackages->addScaffoldHandler('testing', fn () => true);
-        $handlers = $this->nodePackages->getScaffoldHandlers('testing');
+        $this->bundleManager->addScaffoldHandler('testing', fn () => true);
+        $handlers = $this->bundleManager->getScaffoldHandlers('testing');
         $this->assertIsArray($handlers);
 
         // Validate that the array returns our handler
@@ -158,8 +158,8 @@ class NodePackagesTest extends TestCase
         $this->assertTrue($handlers[0]());
 
         // Add a second handler
-        $this->nodePackages->addScaffoldHandler('testing', fn () => false);
-        $handlers = $this->nodePackages->getScaffoldHandlers('testing');
+        $this->bundleManager->addScaffoldHandler('testing', fn () => false);
+        $handlers = $this->bundleManager->getScaffoldHandlers('testing');
         $this->assertIsArray($handlers);
 
         // Validate that the first handler does what we expect

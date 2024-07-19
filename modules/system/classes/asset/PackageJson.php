@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Classes;
+namespace System\Classes\Asset;
 
 use InvalidArgumentException;
 use RuntimeException;

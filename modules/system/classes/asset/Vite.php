@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Classes;
+namespace System\Classes\Asset;
 
 use Illuminate\Foundation\Vite as LaravelVite;
 use Illuminate\Support\Facades\App;
@@ -27,7 +27,7 @@ class Vite extends LaravelVite
         // Normalise the package name
         $package = strtolower($package);
 
-        if (!($compilableAssetPackage = CompilableAssets::instance()->getPackages('vite')[$package] ?? null)) {
+        if (!($compilableAssetPackage = PackageManager::instance()->getPackages('vite')[$package] ?? null)) {
             throw new SystemException('Unable to resolve package: ' . $package);
         }
 

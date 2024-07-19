@@ -2,8 +2,6 @@
 
 namespace System\Console\Asset\Mix;
 
-use System\Classes\CompilableAssets;
-
 class MixWatch extends MixCompile
 {
     /**

@@ -332,8 +332,8 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('vite.list', Console\Asset\Vite\ViteList::class);
         $this->registerConsoleCommand('vite.watch', Console\Asset\Vite\ViteWatch::class);
 
-        $this->registerConsoleCommand('npm.run', Console\NpmRun::class);
-        $this->registerConsoleCommand('npm.update', Console\NpmUpdate::class);
+        $this->registerConsoleCommand('npm.run', Console\Asset\NpmRun::class);
+        $this->registerConsoleCommand('npm.update', Console\Asset\NpmUpdate::class);
     }
 
     /*
