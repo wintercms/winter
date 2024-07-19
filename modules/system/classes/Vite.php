@@ -31,8 +31,8 @@ class Vite extends LaravelVite
             throw new SystemException('Unable to resolve package: ' . $package);
         }
 
-        $this->useHotFile(base_path($compilableAssetPackage['path'] . '/public/hot'));
-        return parent::__invoke($entrypoints, $compilableAssetPackage['path'] . '/public/build');
+        $this->useHotFile(base_path($compilableAssetPackage['path'] . '/assets/dist/hot'));
+        return parent::__invoke($entrypoints, $compilableAssetPackage['path'] . '/assets/dist');
     }
 
     /**

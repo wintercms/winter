@@ -164,6 +164,11 @@ abstract class AssetConfig extends Command
         // Create stub files if required
         if ($this->option('stubs')) {
             foreach (['css', 'js'] as $asset) {
+                // Create asset dist dir so laravel-vite-plugin doesn't complain
+                if (!File::exists($packagePath . '/assets/dist')) {
+                    File::makeDirectory($packagePath . '/assets/dist/', recursive: true);
+                }
+                // Create asset src dirs for stubs
                 if (!File::exists($packagePath . '/assets/src/' . $asset)) {
                     File::makeDirectory($packagePath . '/assets/src/' . $asset, recursive: true);
                 }
