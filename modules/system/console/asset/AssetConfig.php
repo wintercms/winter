@@ -83,9 +83,10 @@ abstract class AssetConfig extends Command
 
         $this->installConfigs($packageJson, $package, $type, $path);
 
+        $verb = File::exists($packageJson->getPath()) ? 'updated' : 'generated';
         $packageJson->save();
 
-        $this->warn('File generated: ' . str_after($packageJson->getPath(), base_path()));
+        $this->warn("File $verb: " . str_after($packageJson->getPath(), base_path()));
         $this->info(ucfirst($this->assetType) . ' configuration complete.');
 
         return 0;
