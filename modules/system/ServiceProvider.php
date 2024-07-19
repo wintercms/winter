@@ -321,13 +321,13 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('plugin.list', \System\Console\PluginList::class);
 
         $this->registerConsoleCommand('mix.compile', Console\Asset\Mix\MixCompile::class);
-        $this->registerConsoleCommand('mix.config', Console\Asset\Mix\MixConfig::class);
+        $this->registerConsoleCommand('mix.config', Console\Asset\Mix\MixCreate::class);
         $this->registerConsoleCommand('mix.install', Console\Asset\Mix\MixInstall::class);
         $this->registerConsoleCommand('mix.list', Console\Asset\Mix\MixList::class);
         $this->registerConsoleCommand('mix.watch', Console\Asset\Mix\MixWatch::class);
 
         $this->registerConsoleCommand('vite.compile', Console\Asset\Vite\ViteCompile::class);
-        $this->registerConsoleCommand('vite.config', Console\Asset\Vite\ViteConfig::class);
+        $this->registerConsoleCommand('vite.config', Console\Asset\Vite\ViteCreate::class);
         $this->registerConsoleCommand('vite.install', Console\Asset\Vite\ViteInstall::class);
         $this->registerConsoleCommand('vite.list', Console\Asset\Vite\ViteList::class);
         $this->registerConsoleCommand('vite.watch', Console\Asset\Vite\ViteWatch::class);
