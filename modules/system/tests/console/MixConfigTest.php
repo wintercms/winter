@@ -21,6 +21,7 @@ class MixConfigTest extends TestCase
         // Run the config command to generate the vite config
         $this->artisan('mix:config', [
             'packageName' => $this->testPlugin,
+            '--no-stubs' => true,
         ])
             ->doesntExpectOutput('winter.mix.js already exists, overwrite?')
             ->assertExitCode(0);
@@ -44,6 +45,7 @@ class MixConfigTest extends TestCase
         // Check that refusing to overwrite does not replace file contents
         $this->artisan('mix:config', [
             'packageName' => $this->testPlugin,
+            '--no-stubs' => true,
         ])
             ->expectsQuestion('winter.mix.js already exists, overwrite?', false)
             ->assertExitCode(0);
@@ -54,6 +56,7 @@ class MixConfigTest extends TestCase
         // Run command confirming to overwrite file contents works
         $this->artisan('mix:config', [
             'packageName' => $this->testPlugin,
+            '--no-stubs' => true,
         ])
             ->expectsQuestion('winter.mix.js already exists, overwrite?', true)
             ->assertExitCode(0);
@@ -74,7 +77,8 @@ class MixConfigTest extends TestCase
         // Run the config command to generate the vite config
         $this->artisan('mix:config', [
             'packageName' => $this->testPlugin,
-            '--tailwind' => true
+            '--tailwind' => true,
+            '--no-stubs' => true,
         ])
             ->assertExitCode(0);
 
@@ -102,7 +106,8 @@ class MixConfigTest extends TestCase
         // Run the config command to generate the vite config with vue
         $this->artisan('mix:config', [
             'packageName' => $this->testPlugin,
-            '--vue' => true
+            '--vue' => true,
+            '--no-stubs' => true,
         ])
             ->assertExitCode(0);
 
@@ -130,7 +135,8 @@ class MixConfigTest extends TestCase
         $this->artisan('mix:config', [
             'packageName' => $this->testPlugin,
             '--tailwind' => true,
-            '--vue' => true
+            '--vue' => true,
+            '--no-stubs' => true,
         ])
             ->assertExitCode(0);
 
