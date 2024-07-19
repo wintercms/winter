@@ -16,7 +16,7 @@ class ViteConfig extends AssetConfig
      */
     protected $signature = 'vite:config
         {packageName : The package name to add configuration for}
-        {--s|stubs : Setup stub files}';
+        {--no-stubs : Disable stub file generation}';
 
     /**
      * The type of compilable to configure

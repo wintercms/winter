@@ -154,7 +154,7 @@ abstract class AssetConfig extends Command
                 // Generate the config
                 $config = \Closure::bind($scaffoldHandler, $this)->call($this, $config, $this->assetType);
                 // Generate stub files if required
-                if ($this->option('stubs')) {
+                if (!$this->option('no-stubs')) {
                     $css = \Closure::bind($scaffoldHandler, $this)->call($this, $css ?? '', 'css');
                     $js = \Closure::bind($scaffoldHandler, $this)->call($this, $js ?? '', 'js');
                 }
@@ -162,7 +162,7 @@ abstract class AssetConfig extends Command
         }
 
         // Create stub files if required
-        if ($this->option('stubs')) {
+        if (!$this->option('no-stubs')) {
             foreach (['css', 'js'] as $asset) {
                 // Create asset dist dir so laravel-vite-plugin doesn't complain
                 if (!File::exists($packagePath . '/assets/dist')) {
