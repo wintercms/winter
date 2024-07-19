@@ -599,7 +599,7 @@ export default class Trigger extends PluginBase {
             const atLeastCount = (atLeast !== undefined && Math.floor(atLeast) > 0)
                 ? Math.floor(atLeast)
                 : 1;
-            const atMostCount = (atLeast !== undefined && Math.floor(atMost) > 1)
+            const atMostCount = (atLeast !== undefined && Math.floor(atMost) > 0)
                 ? Math.floor(atMost)
                 : supportedElements.size;
 
