@@ -108,7 +108,7 @@ export default class Trigger extends PluginBase {
                 return;
             }
 
-            const triggerParts = /([a-z0-9\-.:_]+?)(?:(?:-)(closest-parent|condition|when|action|parent|priority|do))?$/i.exec(
+            const triggerParts = /([a-z0-9\-.:_]+?)(?:(?:-)(closest-parent|condition|when|action|parent|priority|do))?(?:(?<=(?:action|do)(\.oneway)?)(\.oneway))?$/i.exec(
                 dashStyle.replace('trigger-', '').toLowerCase(),
             );
 
@@ -194,7 +194,7 @@ export default class Trigger extends PluginBase {
      *
      * @param {string} command
      * @param {string} allowMultiple
-     * @returns {{name: string, parameters: string[]}[]}
+     * @returns {{name: string, parameters: string[], oneWay: boolean}[]}
      */
     parseCommand(command, allowMultiple = true) {
         // Support old-format value command (value[foo,bar])
@@ -219,6 +219,7 @@ export default class Trigger extends PluginBase {
             return [{
                 name: 'value',
                 parameters: values,
+                oneWay: false,
             }];
         }
 
@@ -237,18 +238,41 @@ export default class Trigger extends PluginBase {
         }
 
         if (!command.includes(':')) {
+            if (
+                command.includes('.oneway')
+                && (command.startsWith('do') || command.startsWith('action'))
+            ) {
+                return [{
+                    name: command.replace('.oneway', ''),
+                    parameters: [],
+                    oneWay: true,
+                }];
+            }
+
             return [{
                 name: command,
                 parameters: [],
+                oneWay: false,
             }];
         }
 
-        const [name, parameters] = command.split(':', 2);
+        let [name] = command.split(':', 2);
+        const [, parameters] = command.split(':', 2);
+        let oneWay = false;
+
+        if (
+            name.includes('.oneway')
+            && (name.startsWith('do') || name.startsWith('action'))
+        ) {
+            name = command.replace('.oneway', '');
+            oneWay = true;
+        }
 
         if (!parameters.includes(',')) {
             return [{
                 name,
                 parameters: [parameters],
+                oneWay,
             }];
         }
 
@@ -259,6 +283,7 @@ export default class Trigger extends PluginBase {
         return [{
             name,
             parameters: splitValues,
+            oneWay,
         }];
     }
 
@@ -294,8 +319,6 @@ export default class Trigger extends PluginBase {
             'oneof',
             'allof',
             'focus',
-            'attr',
-            'class',
         ].includes(condition.name.toLowerCase()));
     }
 
@@ -683,6 +706,11 @@ export default class Trigger extends PluginBase {
                 return;
             }
 
+            // A one-way action won't occur if the condition is not met
+            if (action.oneWay && !conditionMet) {
+                return;
+            }
+
             switch (action.name) {
                 case 'show':
                 case 'hide':
@@ -743,6 +771,7 @@ export default class Trigger extends PluginBase {
                             ? action.parameters.slice(1)
                             : action.parameters,
                     );
+                    break;
                 default:
             }
         });
@@ -765,7 +794,7 @@ export default class Trigger extends PluginBase {
                 if (element.dataset.originalDisplay !== undefined) {
                     element.style.display = element.dataset.originalDisplay;
                     delete element.dataset.originalDisplay;
-                } else if (element.style.display ) {
+                } else if (element.style.display) {
                     element.style.display = null;
                 }
 
