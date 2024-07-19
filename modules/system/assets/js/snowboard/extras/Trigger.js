@@ -319,6 +319,8 @@ export default class Trigger extends PluginBase {
             'oneof',
             'allof',
             'focus',
+            'within',
+            'notWithin',
         ].includes(condition.name.toLowerCase()));
     }
 
@@ -384,6 +386,12 @@ export default class Trigger extends PluginBase {
                     case 'focus':
                         trigger.get('conditionCallbacks').push(
                             this.createFocusedCondition(trigger),
+                        );
+                        break;
+                    case 'within':
+                    case 'notWithin':
+                        trigger.get('conditionCallbacks').push(
+                            this.createWithinCondition(trigger, (condition.name === 'within'), ...condition.parameters),
                         );
                         break;
                     default:
@@ -648,7 +656,47 @@ export default class Trigger extends PluginBase {
             this.addEvent(element, trigger, 'blur');
         });
 
-        return () => Array.from(supportedElements).some((element) => document.activeElement === element);
+        return Array.from(supportedElements).some((element) => document.activeElement === element);
+    }
+
+    /**
+     * Creates a trigger that fires when all supported elements are within a specific element(s).
+     *
+     * @param {TriggerEntity} trigger
+     * @param {boolean} isWithin If the elements must be within the selector.
+     * @param {string} selector The selector to check if the elements are within.
+     */
+    createWithinCondition(trigger, isWithin, selector) {
+        const supportedElements = new Set();
+
+        trigger.get('elements').forEach((element) => {
+            // All elements are supported (technically)
+            supportedElements.add(element);
+        });
+
+        supportedElements.forEach((element) => {
+            this.addEvent(element, trigger, 'click');
+            this.addEvent(element, trigger, 'change');
+            this.addEvent(element, trigger, 'focus');
+            this.addEvent(element, trigger, 'blur');
+        });
+
+        return Array.from(supportedElements).every(
+            (element) => {
+                let within = false;
+
+                document.querySelectorAll(selector).forEach((parent) => {
+                    if (within === true) {
+                        return;
+                    }
+                    if (parent.contains(element)) {
+                        within = true;
+                    }
+                });
+
+                return within === isWithin;
+            },
+        );
     }
 
     /**
