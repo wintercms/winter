@@ -8,11 +8,25 @@ use System\Tests\Bootstrap\TestCase;
 class PackageJsonTest extends TestCase
 {
     /**
+     * Default test file fixture
+     */
+    protected string $testFile;
+
+    /**
+     * Bind the default test file fixture
+     */
+    public function setUp(): void
+    {
+        parent::setUp();
+        $this->testFile = __DIR__ . '/../../fixtures/npm/package-test.json';
+    }
+
+    /**
      * Test loading a package.json file from path
      */
     public function testLoadFile(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
         $contents = $packageJson->getContents();
 
         $this->assertArrayHasKey('workspaces', $contents);
@@ -127,7 +141,7 @@ class PackageJsonTest extends TestCase
      */
     public function testHasWorkspace(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
         $this->assertTrue($packageJson->hasWorkspace('themes/demo'));
         $this->assertFalse($packageJson->hasWorkspace('themes/test'));
     }
@@ -137,7 +151,7 @@ class PackageJsonTest extends TestCase
      */
     public function testAddWorkspace(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
         $this->assertFalse($packageJson->hasWorkspace('themes/test'));
         $packageJson->addWorkspace('themes/test');
         $this->assertTrue($packageJson->hasWorkspace('themes/test'));
@@ -154,7 +168,7 @@ class PackageJsonTest extends TestCase
      */
     public function testRemoveWorkspace(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
         $this->assertTrue($packageJson->hasWorkspace('themes/demo'));
         $packageJson->removeWorkspace('themes/demo');
         $this->assertFalse($packageJson->hasWorkspace('themes/demo'));
@@ -170,7 +184,7 @@ class PackageJsonTest extends TestCase
      */
     public function testAddWorkspaceRemovesIgnoredPackage(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
         $this->assertFalse($packageJson->hasWorkspace('modules/backend'));
         $this->assertTrue($packageJson->hasIgnoredPackage('modules/backend'));
 
@@ -185,7 +199,7 @@ class PackageJsonTest extends TestCase
      */
     public function testHasIgnoredPackage(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
         $this->assertTrue($packageJson->hasIgnoredPackage('modules/backend'));
         $this->assertFalse($packageJson->hasIgnoredPackage('modules/test'));
 
@@ -200,7 +214,7 @@ class PackageJsonTest extends TestCase
      */
     public function testAddIgnoredPackage(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
         $this->assertFalse($packageJson->hasIgnoredPackage('themes/example'));
         $packageJson->addIgnoredPackage('themes/example');
         $this->assertTrue($packageJson->hasIgnoredPackage('themes/example'));
@@ -216,7 +230,7 @@ class PackageJsonTest extends TestCase
      */
     public function testRemoveIgnoredPackage(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
         $this->assertTrue($packageJson->hasIgnoredPackage('modules/system'));
         $packageJson->removeIgnoredPackage('modules/system');
         $this->assertFalse($packageJson->hasIgnoredPackage('modules/system'));
@@ -232,7 +246,7 @@ class PackageJsonTest extends TestCase
      */
     public function testAddIgnoredPackageRemovesWorkspace(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
         $this->assertTrue($packageJson->hasWorkspace('themes/demo'));
         $this->assertFalse($packageJson->hasIgnoredPackage('themes/demo'));
 
@@ -247,7 +261,7 @@ class PackageJsonTest extends TestCase
      */
     public function testHasDependency(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
         // Check that deps exist
         $this->assertTrue($packageJson->hasDependency('test'));
         $this->assertTrue($packageJson->hasDependency('test-dev'));
@@ -264,7 +278,7 @@ class PackageJsonTest extends TestCase
     public function testAddDependency(): void
     {
         // Test adding packages
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
 
         $packageJson->addDependency('winter', '4.0.1', dev: false)
             ->addDependency('winter-dev', '4.0.1', dev: true);
@@ -275,7 +289,7 @@ class PackageJsonTest extends TestCase
         $this->assertArrayHasKey('winter-dev', $packageJson->getContents()['devDependencies']);
 
         // Test adding packages with overwrites
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
 
         // Should do nothing as test is already in deps not dev deps
         $packageJson->addDependency('test', '6.0.1', dev: true, overwrite: false);
@@ -304,7 +318,7 @@ class PackageJsonTest extends TestCase
      */
     public function testRemoveDependency(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
 
         // Check package removed from dev deps
         $this->assertArrayHasKey('test-dev', $packageJson->getContents()['devDependencies'] ?? []);
@@ -327,7 +341,7 @@ class PackageJsonTest extends TestCase
      */
     public function testHasScript(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
 
         $this->assertTrue($packageJson->hasScript('foo'));
         $this->assertTrue($packageJson->hasScript('example'));
@@ -343,7 +357,7 @@ class PackageJsonTest extends TestCase
      */
     public function testGetScript(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
 
         $this->assertEquals('bar ./test', $packageJson->getScript('foo'));
         $this->assertEquals('example test', $packageJson->getScript('example'));
@@ -358,7 +372,7 @@ class PackageJsonTest extends TestCase
      */
     public function testAddScript(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
 
         $packageJson->addScript('winter', 'winter ./testing');
 
@@ -380,7 +394,7 @@ class PackageJsonTest extends TestCase
      */
     public function testRemoveScript(): void
     {
-        $packageJson = new PackageJson(__DIR__ . '/../fixtures/npm/package-test.json');
+        $packageJson = new PackageJson($this->testFile);
 
         $this->assertTrue($packageJson->hasScript('foo'));
         $packageJson->removeScript('foo');
@@ -401,8 +415,8 @@ class PackageJsonTest extends TestCase
      */
     public function testSave(): void
     {
-        $srcFile = __DIR__ . '/../fixtures/npm/package-test.json';
-        $backupFile = __DIR__ . '/../fixtures/npm/package-test.json.back';
+        $srcFile = $this->testFile;
+        $backupFile = __DIR__ . '/../../fixtures/npm/package-test.json.back';
 
         // Backup config file
         copy($srcFile, $backupFile);
@@ -423,7 +437,7 @@ class PackageJsonTest extends TestCase
         unlink($backupFile);
 
         // Test saving file to new path
-        $testFile = __DIR__ . '/../fixtures/npm/package-test.json.test';
+        $testFile = __DIR__ . '/../../fixtures/npm/package-test.json.test';
         $packageJson = new PackageJson($srcFile);
         $this->assertNull($packageJson->getName());
         $packageJson->setName('testing');
