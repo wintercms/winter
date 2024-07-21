@@ -208,7 +208,7 @@ class BundleManager
      */
     public function registerBundles(array $definitions)
     {
-        $this->registeredBundles = array_keys(array_replace_recursive($this->bundlePackages, $definitions));
+        $this->registeredBundles = array_keys(array_replace_recursive($this->registeredBundles, $definitions));
     }
 
     /**
