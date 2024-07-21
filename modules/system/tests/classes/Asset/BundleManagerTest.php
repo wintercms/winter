@@ -65,6 +65,27 @@ class BundleManagerTest extends TestCase
     }
 
     /**
+     * Test the forcing a package to a new version
+     */
+    public function testRegisterBundlesOverrideDefault(): void
+    {
+        $tailwindPackages = $this->bundleManager->getBundlePackages('tailwind', 'mix');
+
+        $this->bundleManager->registerBundle('tailwind', [
+            'tailwindcss' => 'dev-999.999.999',
+            '@tailwindcss/forms' => 'dev-999.999.999',
+            '@tailwindcss/typography' => 'dev-999.999.999',
+        ]);
+
+        $updatedTailwindPackages = $this->bundleManager->getBundlePackages('tailwind', 'mix');
+
+        foreach ($tailwindPackages as $tailwindPackage => $version) {
+            $this->assertArrayHasKey($tailwindPackage, $updatedTailwindPackages);
+            $this->assertNotEquals($updatedTailwindPackages[$tailwindPackage], $version);
+        }
+    }
+
+    /**
      * Test getting all supported bundles
      */
     public function testGetBundles(): void
