@@ -3,8 +3,6 @@
 namespace System\Classes\Asset;
 
 use Closure;
-use System\Classes\PluginManager;
-use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Traits\Singleton;
 
 /**

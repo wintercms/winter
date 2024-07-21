@@ -5,7 +5,6 @@ namespace System\Console\Asset;
 use Cms\Classes\Theme;
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\Process;
-use System\Classes\Asset\BundleManager;
 use System\Classes\Asset\PackageJson;
 use System\Classes\Asset\PackageManager;
 use System\Classes\PluginManager;

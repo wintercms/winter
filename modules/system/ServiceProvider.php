@@ -8,7 +8,7 @@ use BackendMenu;
 use Config;
 use DateInterval;
 use Event;
-use Illuminate\Foundation\Vite;
+use Illuminate\Foundation\Vite as LaravelVite;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Markdown;
@@ -145,7 +145,7 @@ class ServiceProvider extends ModuleServiceProvider
         });
 
         // Register the Laravel Vite singleton
-        $this->app->singleton(Vite::class, \System\Classes\Vite::class);
+        $this->app->singleton(LaravelVite::class, \System\Classes\Asset\Vite::class);
     }
 
     /**

@@ -95,7 +95,7 @@ class BundleManagerTest extends TestCase
 
         // Override the handler
         $this->bundleManager->registerSetupHandler('testing', fn () => false);
-        $handler = $this->bundleManager->getSetupHandler('testing');;
+        $handler = $this->bundleManager->getSetupHandler('testing');
         $this->assertIsCallable($handler);
         $this->assertFalse($handler());
     }
@@ -119,7 +119,7 @@ class BundleManagerTest extends TestCase
 
         // Override the handler
         $this->bundleManager->registerScaffoldHandler('testing', fn () => false);
-        $handler = $this->bundleManager->getScaffoldHandler('testing');;
+        $handler = $this->bundleManager->getScaffoldHandler('testing');
         $this->assertIsCallable($handler);
         $this->assertFalse($handler());
     }

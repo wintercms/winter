@@ -19,7 +19,7 @@ class MixCreateTest extends TestCase
         $this->assertFileNotExists($configPath);
 
         // Run the config command to generate the vite config
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
             '--no-stubs' => true,
         ])
@@ -43,7 +43,7 @@ class MixCreateTest extends TestCase
         File::put($configPath, 'testing');
 
         // Check that refusing to overwrite does not replace file contents
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
             '--no-stubs' => true,
         ])
@@ -54,7 +54,7 @@ class MixCreateTest extends TestCase
         $this->assertNotEquals($fixture, File::get($configPath));
 
         // Run command confirming to overwrite file contents works
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
             '--no-stubs' => true,
         ])
@@ -75,7 +75,7 @@ class MixCreateTest extends TestCase
         $this->assertFileNotExists($configPath);
 
         // Run the config command to generate the vite config
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
             '--tailwind' => true,
             '--no-stubs' => true,
@@ -104,7 +104,7 @@ class MixCreateTest extends TestCase
         $this->assertFileNotExists($configPath);
 
         // Run the config command to generate the vite config with vue
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
             '--vue' => true,
             '--no-stubs' => true,
@@ -132,7 +132,7 @@ class MixCreateTest extends TestCase
         $this->assertFileNotExists($configPath);
 
         // Run the config command to generate the vite config with vue
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
             '--tailwind' => true,
             '--vue' => true,
