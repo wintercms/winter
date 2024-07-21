@@ -4,7 +4,6 @@ namespace System\Tests\Classes\Asset;
 
 use System\Classes\Asset\BundleManager;
 use System\Tests\Bootstrap\TestCase;
-use Winter\Storm\Support\Facades\Config;
 
 class BundleManagerTest extends TestCase
 {
@@ -26,8 +25,8 @@ class BundleManagerTest extends TestCase
         $this->assertIsArray($bundles);
         $count = count($bundles);
 
-        Config::set('node.bundlePackages.test', [
-            'a' => 'v0.1.2'
+        $this->bundleManager->registerBundle('test', [
+            'a' => 'v0.1.2',
         ]);
 
         $this->assertCount($count + 1, $this->bundleManager->getBundles());
@@ -58,8 +57,7 @@ class BundleManagerTest extends TestCase
         $this->assertIsArray($packages);
         $this->assertEmpty($packages);
 
-        // Add a `testing` bundle
-        Config::set('node.bundlePackages.testing', [
+        $this->bundleManager->registerBundle('testing', [
             'a' => 'v0.1.2',
             'mix' => [
                 'b' => 'v0.1.3',
