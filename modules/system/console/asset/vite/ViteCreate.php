@@ -34,4 +34,19 @@ class ViteCreate extends AssetCreate
      * The name of the config file
      */
     protected string $configFile = 'vite.config.mjs';
+
+    /**
+     * Output a helpful message with the twig code to set up vite after config generation is complete
+     */
+    public function afterExecution(): void
+    {
+        $packageName = $this->makePackageName($this->argument('packageName'));
+        $this->output->writeln('');
+        $this->info('Add the following to your twig to enable asset loading:');
+        $this->output->writeln(sprintf(
+            '<fg=blue>{{ vite([\'assets/src/css/%1$s.css\', \'assets/src/js/%1$s.js\'], \'%2$s\') }}</>',
+            $packageName,
+            strtolower($this->argument('packageName'))
+        ));
+    }
 }
