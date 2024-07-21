@@ -12,7 +12,56 @@ class BundleManagerTest extends TestCase
     public function setUp(): void
     {
         parent::setUp();
+        // Reset the bundle manager
+        BundleManager::forgetInstance();
+        // Bind the instance for convenience
         $this->bundleManager = BundleManager::instance();
+    }
+
+    /**
+     * Test the registerBundles & registerBundle functions correctly allow the user to append bundles
+     */
+    public function testRegisterBundles(): void
+    {
+        $defaultBundles = $this->bundleManager->getBundles();
+        $this->bundleManager->registerBundles([
+            'winter1js' => [
+                'winter1js' => 'v1.0.0'
+            ]
+        ]);
+
+        $this->bundleManager->registerBundle('winter2js', [
+            'winter2js' => 'v1.0.0'
+        ]);
+
+        $bundles = $this->bundleManager->getBundles();
+        $this->assertCount(count($defaultBundles) + 2, $bundles);
+        $this->assertContains('winter1js', $bundles);
+        $this->assertContains('winter2js', $bundles);
+    }
+
+    /**
+     * This test ensures that defining new bundles does not affect the default bundles
+     */
+    public function testRegisterBundlesDoesNotBreakDefaults(): void
+    {
+        // Get the default bundles so we can validate them existing later
+        $defaultBundles = $this->bundleManager->getBundles();
+        // Flush the instance as if we have just booted
+        BundleManager::forgetInstance();
+        $this->bundleManager = BundleManager::instance();
+        // Register a new bundle
+        $this->bundleManager->registerBundles([
+            'winterjs' => [
+                'winterjs' => 'v1.0.0'
+            ]
+        ]);
+        // Grab the current bundles
+        $bundles = $this->bundleManager->getBundles();
+        // Validate that all default bundles have been registered when adding a new bundle
+        foreach ($defaultBundles as $defaultBundle) {
+            $this->assertArrayHasKey($defaultBundle, $bundles);
+        }
     }
 
     /**
@@ -120,5 +169,48 @@ class BundleManagerTest extends TestCase
         $handler = $this->bundleManager->getScaffoldHandler('testing');
         $this->assertIsCallable($handler);
         $this->assertFalse($handler());
+    }
+
+    /**
+     * Validate that when registered a callable is added to the `callbacks` array within the BundleManager
+     */
+    public function testRegisterCallback(): void
+    {
+        $this->bundleManager->registerCallback(function (BundleManager $manager) {
+            throw new \RuntimeException('callback registered');
+        });
+
+        $this->expectExceptionMessage('callback registered');
+
+        $this->bundleManager->loadRegisteredBundles();
+    }
+
+    /**
+     * Test that calling registerBundles within registerCallback functions correctly
+     */
+    public function testLoadRegisteredBundles(): void
+    {
+        $this->bundleManager->registerCallback(function (BundleManager $manager) {
+            $manager->registerBundles([
+                'winter-test-js' => [
+                    'test-package' => 'v0.1.2',
+                    'vite' => [
+                        'vite-package' => 'v0.1.3',
+                    ]
+                ]
+            ]);
+        });
+
+        $this->bundleManager->loadRegisteredBundles();
+
+        $this->assertContains('winter-test-js', $this->bundleManager->getBundles());
+
+        $bundle = $this->bundleManager->getBundlePackages('winter-test-js', 'mix');
+        $this->assertArrayHasKey('test-package', $bundle);
+        $this->assertArrayNotHasKey('vite-package', $bundle);
+
+        $bundle = $this->bundleManager->getBundlePackages('winter-test-js', 'vite');
+        $this->assertArrayHasKey('test-package', $bundle);
+        $this->assertArrayHasKey('vite-package', $bundle);
     }
 }
