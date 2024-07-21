@@ -208,7 +208,7 @@ class BundleManager
      */
     public function registerBundles(array $definitions)
     {
-        $this->registeredBundles = array_keys(array_replace_recursive($this->registeredBundles, $definitions));
+        $this->registeredBundles = array_replace_recursive($this->registeredBundles, $definitions);
     }
 
     /**
@@ -240,7 +240,7 @@ class BundleManager
      */
     public function getSetupHandler(string $name): ?Closure
     {
-        return $this->registeredBundles[$name][static::HANDLER_SETUP] ?? null;
+        return $this->listRegisteredBundles()[$name][static::HANDLER_SETUP] ?? null;
     }
 
     /**
@@ -248,6 +248,6 @@ class BundleManager
      */
     public function getScaffoldHandler(string $name): ?Closure
     {
-        return $this->registeredBundles[$name][static::HANDLER_SCAFFOLD] ?? null;
+        return $this->listRegisteredBundles()[$name][static::HANDLER_SCAFFOLD] ?? null;
     }
 }
