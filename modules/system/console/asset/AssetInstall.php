@@ -45,6 +45,11 @@ abstract class AssetInstall extends Command
     protected string $configFile;
 
     /**
+     * The required packages for this compiler
+     */
+    protected array $requiredPackages = [];
+
+    /**
      * Execute the console command.
      */
     public function handle(): int
@@ -176,7 +181,7 @@ abstract class AssetInstall extends Command
     protected function validateRequirePackagesPresent(PackageJson $packageJson): PackageJson
     {
         // Check to see if required packages are already present as a dependency
-        foreach (BundleManager::instance()->getCompilerPackages($this->assetType) as $package => $version) {
+        foreach ($this->requiredPackages as $package => $version) {
             if (
                 !$packageJson->hasDependency($package)
                 && $this->confirm($package . ' was not found as a dependency in package.json, would you like to add it?', true)

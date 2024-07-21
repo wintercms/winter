@@ -33,4 +33,12 @@ class ViteInstall extends AssetInstall
      * The asset config file
      */
     protected string $configFile = 'vite.config.mjs';
+
+    /**
+     * The required packages for this compiler
+     */
+    protected array $requiredPackages = [
+        'vite' => '^5.2.11',
+        'laravel-vite-plugin' => '^1.0.4',
+    ];
 }

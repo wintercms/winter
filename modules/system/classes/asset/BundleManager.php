@@ -22,18 +22,6 @@ class BundleManager
 {
     use Singleton;
 
-    /**
-     * Packages required for compilers
-     */
-    protected array $compilerPackages = [
-        'mix' => [
-            'laravel-mix' => '^6.0.41',
-        ],
-        'vite' => [
-            'vite' => '^5.2.11',
-            'laravel-vite-plugin' => '^1.0.4',
-        ],
-    ];
 
     /**
      * List of packages available to install. Allows for `$compilerName` => [`CompilerSpecificPackage`]

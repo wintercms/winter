@@ -77,29 +77,6 @@ class BundleManagerTest extends TestCase
     }
 
     /**
-     * Test getting compiler packages works and allows for config overloading
-     */
-    public function testGetCompilerPackages(): void
-    {
-        // Test a default compiler
-        $packages = $this->bundleManager->getCompilerPackages('mix');
-        $this->assertIsArray($packages);
-        $this->assertArrayHasKey('laravel-mix', $packages);
-
-        // Add a custom compiler
-        Config::set('node.compilerPackages.testing', [
-            'a' => 'v0.1.2',
-            'b' => 'v0.1.3',
-        ]);
-
-        // Test the compiler packages are returned correctly
-        $packages = $this->bundleManager->getCompilerPackages('testing');
-        $this->assertIsArray($packages);
-        $this->assertArrayHasKey('a', $packages);
-        $this->assertArrayHasKey('b', $packages);
-    }
-
-    /**
      * Test the AssetBundles setup handlers functionality
      */
     public function testSetupHandlers(): void
