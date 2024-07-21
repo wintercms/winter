@@ -90,6 +90,8 @@ abstract class AssetCreate extends Command
         $this->warn("File $verb: " . str_after($packageJson->getPath(), base_path()));
         $this->info(ucfirst($this->assetType) . ' configuration complete.');
 
+        $this->afterExecution();
+
         return 0;
     }
 
@@ -123,7 +125,7 @@ abstract class AssetCreate extends Command
         string $packagePath
     ): void {
         // Normalize package name
-        $packageName = strtolower(str_replace('.', '-', $packageName));
+        $packageName = $this->makePackageName($packageName);
         // Bind the bundleManager instance
         $bundleManager = BundleManager::instance();
 
@@ -205,8 +207,27 @@ abstract class AssetCreate extends Command
         return $result;
     }
 
+    /**
+     * Helper method for loading fixtures from the default library
+     */
     protected function getFixture(string $path): string
     {
         return File::get($this->fixturePath . '/' . $path);
+    }
+
+    /**
+     * Converts the user supplied package name into a consistent internal format
+     */
+    protected function makePackageName(string $package): string
+    {
+        return strtolower(str_replace('.', '-', $package));
+    }
+
+    /**
+     * Ran after configuration is complete, use for tearing down / reporting
+     */
+    protected function afterExecution(): void
+    {
+        // do nothing
     }
 }
