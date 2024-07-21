@@ -58,7 +58,7 @@ class BundleManager
     public function init(): void
     {
         // Register the default bundles
-        $this->registerCallback(function ($manager) {
+        $this->registerCallback(function (self $manager) {
             $manager->registerBundles($this->defaultPackages);
 
             $manager->registerSetupHandler('tailwind', function (string $packagePath, string $packageType) {
