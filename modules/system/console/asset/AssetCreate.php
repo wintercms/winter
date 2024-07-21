@@ -101,7 +101,7 @@ abstract class AssetCreate extends Command
     protected function getPackagePathType(string $package): array
     {
         if (str_starts_with($package, 'theme-')) {
-            if ($theme = Theme::load(str_after($package, 'theme-'))) {
+            if (($theme = Theme::load(str_after($package, 'theme-'))) && File::exists($theme->getPath())) {
                 return [$theme->getPath(), static::TYPE_THEME];
             }
 
