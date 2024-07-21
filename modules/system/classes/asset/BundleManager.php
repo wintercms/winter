@@ -145,7 +145,7 @@ class BundleManager
      */
     public function listRegisteredBundles(): array
     {
-        if ($this->registeredBundles === null) {
+        if (empty($this->registeredBundles)) {
             $this->loadRegisteredBundles();
         }
 
