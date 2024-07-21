@@ -82,35 +82,22 @@ class BundleManagerTest extends TestCase
     public function testSetupHandlers(): void
     {
         // Test that the default handler is accessible
-        $handlers = $this->bundleManager->getSetupHandlers('tailwind');
-        $this->assertIsArray($handlers);
-        $this->assertArrayHasKey(0, $handlers);
-        $this->assertIsCallable($handlers[0]);
+        $handler = $this->bundleManager->getSetupHandler('tailwind');
+        $this->assertIsCallable($handler);
 
         // Add a new handler
-        $this->bundleManager->addSetupHandler('testing', fn () => true);
-        $handlers = $this->bundleManager->getSetupHandlers('testing');
-        $this->assertIsArray($handlers);
+        $this->bundleManager->registerSetupHandler('testing', fn () => true);
+        $handler = $this->bundleManager->getSetupHandler('testing');
+        $this->assertIsCallable($handler);
 
-        // Validate that the array returns our handler
-        $this->assertArrayHasKey(0, $handlers);
-        $this->assertIsCallable($handlers[0]);
-        $this->assertTrue($handlers[0]());
+        // Validate that handler returned is ours
+        $this->assertTrue($handler());
 
-        // Add a second handler
-        $this->bundleManager->addSetupHandler('testing', fn () => false);
-        $handlers = $this->bundleManager->getSetupHandlers('testing');
-        $this->assertIsArray($handlers);
-
-        // Validate that the first handler does what we expect
-        $this->assertArrayHasKey(0, $handlers);
-        $this->assertIsCallable($handlers[0]);
-        $this->assertTrue($handlers[0]());
-
-        // Validate that the second handler does what we expect
-        $this->assertArrayHasKey(1, $handlers);
-        $this->assertIsCallable($handlers[1]);
-        $this->assertFalse($handlers[1]());
+        // Override the handler
+        $this->bundleManager->registerSetupHandler('testing', fn () => false);
+        $handler = $this->bundleManager->getSetupHandler('testing');;
+        $this->assertIsCallable($handler);
+        $this->assertFalse($handler());
     }
 
     /**
@@ -119,34 +106,21 @@ class BundleManagerTest extends TestCase
     public function testScaffoldHandlers(): void
     {
         // Test that the default handler is accessible
-        $handlers = $this->bundleManager->getScaffoldHandlers('tailwind');
-        $this->assertIsArray($handlers);
-        $this->assertArrayHasKey(0, $handlers);
-        $this->assertIsCallable($handlers[0]);
+        $handler = $this->bundleManager->getScaffoldHandler('tailwind');
+        $this->assertIsCallable($handler);
 
         // Add a new handler
-        $this->bundleManager->addScaffoldHandler('testing', fn () => true);
-        $handlers = $this->bundleManager->getScaffoldHandlers('testing');
-        $this->assertIsArray($handlers);
+        $this->bundleManager->registerScaffoldHandler('testing', fn () => true);
+        $handler = $this->bundleManager->getScaffoldHandler('testing');
+        $this->assertIsCallable($handler);
 
-        // Validate that the array returns our handler
-        $this->assertArrayHasKey(0, $handlers);
-        $this->assertIsCallable($handlers[0]);
-        $this->assertTrue($handlers[0]());
+        // Validate that handler returned is ours
+        $this->assertTrue($handler());
 
-        // Add a second handler
-        $this->bundleManager->addScaffoldHandler('testing', fn () => false);
-        $handlers = $this->bundleManager->getScaffoldHandlers('testing');
-        $this->assertIsArray($handlers);
-
-        // Validate that the first handler does what we expect
-        $this->assertArrayHasKey(0, $handlers);
-        $this->assertIsCallable($handlers[0]);
-        $this->assertTrue($handlers[0]());
-
-        // Validate that the second handler does what we expect
-        $this->assertArrayHasKey(1, $handlers);
-        $this->assertIsCallable($handlers[1]);
-        $this->assertFalse($handlers[1]());
+        // Override the handler
+        $this->bundleManager->registerScaffoldHandler('testing', fn () => false);
+        $handler = $this->bundleManager->getScaffoldHandler('testing');;
+        $this->assertIsCallable($handler);
+        $this->assertFalse($handler());
     }
 }

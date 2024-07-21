@@ -2,6 +2,8 @@
 
 namespace System\Classes\Asset;
 
+use Closure;
+use System\Classes\PluginManager;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Traits\Singleton;
 
@@ -11,7 +13,7 @@ use Winter\Storm\Support\Traits\Singleton;
  * This class manages "asset bundles" registered by the core and plugins that are used by the
  * [mix|vite]:create commands to generate & populate the required files for a given bundle.
  * Bundles include information on the specific packages & versions required for the bundle
- * to function the context of the Winter package (plugin or theme) it is being used in;
+ * to function in the context of the Winter package (plugin or theme) it is being used in,
  * as well as dependencies specific to the desired compiler (e.g. mix or vite).
  *
  * @package winter\wn-system-module
@@ -22,11 +24,13 @@ class BundleManager
 {
     use Singleton;
 
+    protected const HANDLER_SETUP = '_setup';
+    protected const HANDLER_SCAFFOLD = '_scaffold';
 
     /**
      * List of packages available to install. Allows for `$compilerName` => [`CompilerSpecificPackage`]
      */
-    protected array $bundlePackages = [
+    protected array $defaultPackages = [
         'tailwind' => [
             'tailwindcss' => '^3.4.0',
             '@tailwindcss/forms' => '^0.5.3',
@@ -41,109 +45,113 @@ class BundleManager
     ];
 
     /**
-     * Handlers to allow for config generation
+     * Cache of registration callbacks.
      */
-    protected array $setupHandlers = [];
+    protected array $callbacks = [];
 
     /**
-     * Handlers to allow for config generation
+     * List of registered asset bundles in the system
      */
-    protected array $scaffoldHandlers = [];
+    protected array $registeredBundles = [];
 
     /**
-     * Initialize the singleton, pulls any handlers from config and binds them to the instance
+     * Initialize the singleton
      */
     public function init(): void
     {
-        foreach (Config::get('node.setupHandlers', []) as $name => $handlers) {
-            foreach ($handlers as $handler) {
-                $this->addSetupHandler($name, $handler);
-            }
-        }
+        // Register the default bundles
+        $this->registerCallback(function ($manager) {
+            $manager->registerBundles($this->defaultPackages);
 
-        foreach (Config::get('node.scaffoldHandlers', []) as $name => $handlers) {
-            foreach ($handlers as $handler) {
-                $this->addScaffoldHandler($name, $handler);
-            }
-        }
+            $manager->registerSetupHandler('tailwind', function (string $packagePath, string $packageType) {
+                $this->writeFile(
+                    $packagePath . '/tailwind.config.js',
+                    $this->getFixture('tailwind/tailwind.' . $packageType . '.config.js.fixture')
+                );
 
-        $this->addSetupHandler('tailwind', function (string $packagePath, string $packageType) {
-            $this->writeFile(
-                $packagePath . '/tailwind.config.js',
-                $this->getFixture('tailwind/tailwind.' . $packageType . '.config.js.fixture')
-            );
+                $this->writeFile(
+                    $packagePath . '/postcss.config.mjs',
+                    $this->getFixture('tailwind/postcss.config.js.fixture')
+                );
+            });
 
-            $this->writeFile(
-                $packagePath . '/postcss.config.mjs',
-                $this->getFixture('tailwind/postcss.config.js.fixture')
-            );
-        });
-
-        $this->addScaffoldHandler('tailwind', function (string $contents, string $contentType) {
-            return match ($contentType) {
-                'mix' => $contents . PHP_EOL . <<<JAVASCRIPT
-                mix.postCss('assets/src/css/{{packageName}}.css', 'assets/dist/css/{{packageName}}.css', [
-                    require('postcss-import'),
-                    require('tailwindcss'),
-                    require('autoprefixer'),
-                ]);
-                JAVASCRIPT,
-                'css' => $this->getFixture('css/tailwind.css.fixture'),
-                default => $contents
-            };
-        });
-
-        $this->addScaffoldHandler('vue', function (string $contents, string $contentType) {
-            return match ($contentType) {
-                'vite' => str_replace(
-                    '}),',
-                    <<<JAVASCRIPT
-                    }),
-                            vue({
-                                template: {
-                                    transformAssetUrls: {
-                                        // The Vue plugin will re-write asset URLs, when referenced
-                                        // in Single File Components, to point to the Laravel web
-                                        // server. Setting this to `null` allows the Laravel plugin
-                                        // to instead re-write asset URLs to point to the Vite
-                                        // server instead.
-                                        base: null,
-
-                                        // The Vue plugin will parse absolute URLs and treat them
-                                        // as absolute paths to files on disk. Setting this to
-                                        // `false` will leave absolute URLs un-touched so they can
-                                        // reference assets in the public directory as expected.
-                                        includeAbsolute: false,
-                                    },
-                                },
-                            }),
+            $manager->registerScaffoldHandler('tailwind', function (string $contents, string $contentType) {
+                return match ($contentType) {
+                    'mix' => $contents . PHP_EOL . <<<JAVASCRIPT
+                    mix.postCss('assets/src/css/{{packageName}}.css', 'assets/dist/css/{{packageName}}.css', [
+                        require('postcss-import'),
+                        require('tailwindcss'),
+                        require('autoprefixer'),
+                    ]);
                     JAVASCRIPT,
-                    str_replace(
-                        'import laravel from \'laravel-vite-plugin\';',
-                        'import laravel from \'laravel-vite-plugin\';' . PHP_EOL . 'import vue from \'@vitejs/plugin-vue\';',
+                    'css' => $this->getFixture('css/tailwind.css.fixture'),
+                    default => $contents
+                };
+            });
+
+            $manager->registerScaffoldHandler('vue', function (string $contents, string $contentType) {
+                return match ($contentType) {
+                    'vite' => str_replace(
+                        '}),',
+                        <<<JAVASCRIPT
+                        }),
+                                vue({
+                                    template: {
+                                        transformAssetUrls: {
+                                            // The Vue plugin will re-write asset URLs, when referenced
+                                            // in Single File Components, to point to the Laravel web
+                                            // server. Setting this to `null` allows the Laravel plugin
+                                            // to instead re-write asset URLs to point to the Vite
+                                            // server instead.
+                                            base: null,
+
+                                            // The Vue plugin will parse absolute URLs and treat them
+                                            // as absolute paths to files on disk. Setting this to
+                                            // `false` will leave absolute URLs un-touched so they can
+                                            // reference assets in the public directory as expected.
+                                            includeAbsolute: false,
+                                        },
+                                    },
+                                }),
+                        JAVASCRIPT,
+                        str_replace(
+                            'import laravel from \'laravel-vite-plugin\';',
+                            'import laravel from \'laravel-vite-plugin\';' . PHP_EOL . 'import vue from \'@vitejs/plugin-vue\';',
+                            $contents
+                        )
+                    ),
+                    'mix' => str_replace(
+                        'mix.js(\'assets/src/js/{{packageName}}.js\', \'assets/dist/js/{{packageName}}.js\');',
+                        'mix.js(\'assets/src/js/{{packageName}}.js\', \'assets/dist/js/{{packageName}}.js\').vue({ version: 3 });',
                         $contents
-                    )
-                ),
-                'mix' => str_replace(
-                    'mix.js(\'assets/src/js/{{packageName}}.js\', \'assets/dist/js/{{packageName}}.js\');',
-                    'mix.js(\'assets/src/js/{{packageName}}.js\', \'assets/dist/js/{{packageName}}.js\').vue({ version: 3 });',
-                    $contents
-                ),
-                'js' => $this->getFixture('js/vue.js.fixture'),
-                default => $contents
-            };
+                    ),
+                    'js' => $this->getFixture('js/vue.js.fixture'),
+                    default => $contents
+                };
+            });
         });
     }
 
     /**
-     * Get packages required for a specific compiler
+     * Loads registered asset bundles from modules and plugins
      */
-    public function getCompilerPackages(string $name): array
+    public function loadRegisteredBundles(): void
     {
-        return array_replace_recursive(
-            $this->compilerPackages[$name] ?? [],
-            Config::get('node.compilerPackages.' . $name, [])
-        );
+        foreach ($this->callbacks as $callback) {
+            $callback($this);
+        }
+    }
+
+    /**
+     * Returns a list of the registered asset bundles.
+     */
+    public function listRegisteredBundles(): array
+    {
+        if ($this->registeredBundles === null) {
+            $this->loadRegisteredBundles();
+        }
+
+        return $this->registeredBundles;
     }
 
     /**
@@ -151,7 +159,7 @@ class BundleManager
      */
     public function getBundles(): array
     {
-        return array_keys(array_replace_recursive($this->bundlePackages, Config::get('node.bundlePackages', [])));
+        return array_keys($this->listRegisteredBundles());
     }
 
     /**
@@ -159,55 +167,89 @@ class BundleManager
      */
     public function getBundlePackages(string $name, string $assetType): array
     {
-        $packages = array_replace_recursive(
-            $this->bundlePackages[$name] ?? [],
-            Config::get('node.bundlePackages.' . $name, [])
-        );
+        $config = $this->listRegisteredBundles()[$name] ?? [];
 
-        $bundle = [];
-        foreach ($packages as $key => $value) {
+        $packages = [];
+        foreach ($config as $key => $value) {
+            // Skip handlers
+            if (in_array($key, [static::HANDLER_SETUP, static::HANDLER_SCAFFOLD])) {
+                continue;
+            }
+
+            // Merge in any compiler specific packages for the current compiler
             if (is_array($value)) {
                 if ($key === $assetType) {
-                    $bundle = array_merge($bundle, $value);
+                    $packages = array_merge($packages, $value);
                 }
                 continue;
             }
 
-            $bundle[$key] = $value;
+            $packages[$key] = $value;
         }
 
-        return $bundle;
+        return $packages;
     }
 
     /**
-     * Add a setup handler for a bundle
+     * Registers a callback function that defines asset bundles. The callback function
+     * should register bundles by calling the manager's registerBundles() function.
+     * This instance is passed to the callback function as an argument. Usage:
+     *
+     *     BundleManager::registerCallback(function ($manager) {
+     *         $manager->registerAssetBundles([...]);
+     *     });
+     *
      */
-    public function addSetupHandler(string $name, callable $callable): void
+    public function registerCallback(callable $callback): void
     {
-        $this->setupHandlers[$name][] = $callable;
+        $this->callbacks[] = $callback;
     }
 
     /**
-     * Get all setup handlers for a bundle
+     * Registers asset bundles.
      */
-    public function getSetupHandlers(string $name): array
+    public function registerBundles(array $definitions)
     {
-        return $this->setupHandlers[$name] ?? [];
+        $this->registeredBundles = array_keys(array_replace_recursive($this->bundlePackages, $definitions));
     }
 
     /**
-     * Add a scaffold handler for a bundle
+     * Registers a single asset bundle.
      */
-    public function addScaffoldHandler(string $name, callable $callable): void
+    public function registerBundle(string $name, array $definition): void
     {
-        $this->scaffoldHandlers[$name][] = $callable;
+        $this->registerBundles([$name => $definition]);
     }
 
     /**
-     * Get all scaffold handlers for a bundle
+     * Registers a single bundle setup handler.
      */
-    public function getScaffoldHandlers(string $name): array
+    public function registerSetupHandler(string $name, Closure $closure): void
     {
-        return $this->scaffoldHandlers[$name] ?? [];
+        $this->registeredBundles[$name][static::HANDLER_SETUP] = $closure;
+    }
+
+    /**
+     * Registers a single bundle scaffold handler.
+     */
+    public function registerScaffoldHandler(string $name, Closure $closure): void
+    {
+        $this->registeredBundles[$name][static::HANDLER_SCAFFOLD] = $closure;
+    }
+
+    /**
+     * Gets the setup handler for a bundle.
+     */
+    public function getSetupHandler(string $name): ?Closure
+    {
+        return $this->registeredBundles[$name][static::HANDLER_SETUP] ?? null;
+    }
+
+    /**
+     * Gets the scaffold handler for a bundle.
+     */
+    public function getScaffoldHandler(string $name): ?Closure
+    {
+        return $this->registeredBundles[$name][static::HANDLER_SCAFFOLD] ?? null;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace System\Console\Asset;
 
+use Closure;
 use Cms\Classes\Theme;
 use Symfony\Component\Console\Input\InputOption;
 use System\Classes\Asset\BundleManager;
@@ -19,7 +20,7 @@ abstract class AssetCreate extends Command
     /**
      * @var string The console command description.
      */
-    protected $description = 'Create configuration.';
+    protected $description = 'Creates the compiler configuration files for the provided package and optionally installs the necessary dependencies for any selected asset bundles.';
 
     /**
      * Local cache of fixture path
@@ -94,8 +95,6 @@ abstract class AssetCreate extends Command
 
     /**
      * Resolve the path and type of the package by name
-     *
-     * @return array|null[]
      */
     protected function getPackagePathType(string $package): array
     {
@@ -125,8 +124,8 @@ abstract class AssetCreate extends Command
     ): void {
         // Normalize package name
         $packageName = strtolower(str_replace('.', '-', $packageName));
-        // Bind the nodePackages instance
-        $nodePackages = BundleManager::instance();
+        // Bind the bundleManager instance
+        $bundleManager = BundleManager::instance();
 
         // Get the default config
         $config = $this->getFixture(
@@ -134,30 +133,32 @@ abstract class AssetCreate extends Command
         );
 
         // For each bundle offered by node packages
-        foreach ($nodePackages->getBundles() as $bundle) {
+        foreach ($bundleManager->getBundles() as $bundle) {
             // If the bundle was not selected exit
             if (!$this->option($bundle)) {
                 continue;
             }
 
             // Require all packages specified by the bundle
-            foreach ($nodePackages->getBundlePackages($bundle, $this->assetType) as $dependency => $version) {
+            foreach ($bundleManager->getBundlePackages($bundle, $this->assetType) as $dependency => $version) {
                 $packageJson->addDependency($dependency, $version, dev: true);
             }
 
             // Fire any setup handlers required
-            foreach ($nodePackages->getSetupHandlers($bundle) as $setupHandler) {
-                \Closure::bind($setupHandler, $this)->call($this, $packagePath, $packageType);
+            $setupHandler = $bundleManager->getSetupHandler($bundle);
+            if ($setupHandler) {
+                Closure::bind($setupHandler, $this)->call($this, $packagePath, $packageType);
             }
 
             // Loop through all the scaffold handlers to build configs / stubs
-            foreach ($nodePackages->getScaffoldHandlers($bundle) as $scaffoldHandler) {
+            $scaffoldHandler = $bundleManager->getScaffoldHandler($bundle);
+            if ($scaffoldHandler) {
                 // Generate the config
-                $config = \Closure::bind($scaffoldHandler, $this)->call($this, $config, $this->assetType);
+                $config = Closure::bind($scaffoldHandler, $this)->call($this, $config, $this->assetType);
                 // Generate stub files if required
                 if (!$this->option('no-stubs')) {
-                    $css = \Closure::bind($scaffoldHandler, $this)->call($this, $css ?? '', 'css');
-                    $js = \Closure::bind($scaffoldHandler, $this)->call($this, $js ?? '', 'js');
+                    $css = Closure::bind($scaffoldHandler, $this)->call($this, $css ?? '', 'css');
+                    $js = Closure::bind($scaffoldHandler, $this)->call($this, $js ?? '', 'js');
                 }
             }
         }
