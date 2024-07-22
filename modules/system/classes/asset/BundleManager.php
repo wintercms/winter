@@ -43,11 +43,6 @@ class BundleManager
     ];
 
     /**
-     * Cache of registration callbacks.
-     */
-    protected array $callbacks = [];
-
-    /**
      * List of registered asset bundles in the system
      */
     protected array $registeredBundles = [];
