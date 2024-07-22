@@ -198,41 +198,53 @@ class BundleManager
      *     });
      *
      */
-    public function registerCallback(callable $callback): void
+    public function registerCallback(callable $callback): static
     {
         $this->callbacks[] = $callback;
+
+        return $this;
     }
 
     /**
      * Registers asset bundles.
      */
-    public function registerBundles(array $definitions)
+    public function registerBundles(array $definitions): static
     {
-        $this->registeredBundles = array_replace_recursive($this->registeredBundles, $definitions);
+        foreach ($definitions as $name => $definition) {
+            $this->registerBundle($name, $definition);
+        }
+
+        return $this;
     }
 
     /**
      * Registers a single asset bundle.
      */
-    public function registerBundle(string $name, array $definition): void
+    public function registerBundle(string $name, array $definition): static
     {
-        $this->registerBundles([$name => $definition]);
+        $this->registeredBundles[$name] = $definition;
+
+        return $this;
     }
 
     /**
      * Registers a single bundle setup handler.
      */
-    public function registerSetupHandler(string $name, Closure $closure): void
+    public function registerSetupHandler(string $name, Closure $closure): static
     {
         $this->registeredBundles[$name][static::HANDLER_SETUP] = $closure;
+
+        return $this;
     }
 
     /**
      * Registers a single bundle scaffold handler.
      */
-    public function registerScaffoldHandler(string $name, Closure $closure): void
+    public function registerScaffoldHandler(string $name, Closure $closure): static
     {
         $this->registeredBundles[$name][static::HANDLER_SCAFFOLD] = $closure;
+
+        return $this;
     }
 
     /**
