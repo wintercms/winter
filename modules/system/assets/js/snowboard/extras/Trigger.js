@@ -389,7 +389,7 @@ export default class Trigger extends PluginBase {
                         );
                         break;
                     case 'within':
-                    case 'notWithin':
+                    case 'notwithin':
                         trigger.get('conditionCallbacks').push(
                             this.createWithinCondition(trigger, (condition.name === 'within'), ...condition.parameters),
                         );
