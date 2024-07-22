@@ -67,7 +67,7 @@ abstract class AssetCreate extends Command
             isset($packages[$package])
             && !$this->confirm('Package `' . $package . '` has already been configured, are you sure you wish to continue?')
         ) {
-            return 1;
+            return 0;
         }
 
         [$path, $type] = $this->getPackagePathType($package);
