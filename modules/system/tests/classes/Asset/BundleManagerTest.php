@@ -60,7 +60,7 @@ class BundleManagerTest extends TestCase
         $bundles = $this->bundleManager->getBundles();
         // Validate that all default bundles have been registered when adding a new bundle
         foreach ($defaultBundles as $defaultBundle) {
-            $this->assertArrayHasKey($defaultBundle, $bundles);
+            $this->assertContains($defaultBundle, $bundles);
         }
     }
 
@@ -197,13 +197,10 @@ class BundleManagerTest extends TestCase
      */
     public function testRegisterCallback(): void
     {
+        $this->expectExceptionMessage('callback registered');
         $this->bundleManager->registerCallback(function (BundleManager $manager) {
             throw new \RuntimeException('callback registered');
         });
-
-        $this->expectExceptionMessage('callback registered');
-
-        $this->bundleManager->loadRegisteredBundles();
     }
 
     /**
@@ -221,8 +218,6 @@ class BundleManagerTest extends TestCase
                 ]
             ]);
         });
-
-        $this->bundleManager->loadRegisteredBundles();
 
         $this->assertContains('winter-test-js', $this->bundleManager->getBundles());
 
