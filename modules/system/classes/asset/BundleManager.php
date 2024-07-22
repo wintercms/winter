@@ -131,24 +131,10 @@ class BundleManager
     }
 
     /**
-     * Loads registered asset bundles from modules and plugins
-     */
-    public function loadRegisteredBundles(): void
-    {
-        foreach ($this->callbacks as $callback) {
-            $callback($this);
-        }
-    }
-
-    /**
      * Returns a list of the registered asset bundles.
      */
     public function listRegisteredBundles(): array
     {
-        if (empty($this->registeredBundles)) {
-            $this->loadRegisteredBundles();
-        }
-
         return $this->registeredBundles;
     }
 
@@ -200,7 +186,7 @@ class BundleManager
      */
     public function registerCallback(callable $callback): static
     {
-        $this->callbacks[] = $callback;
+        $callback($this);
 
         return $this;
     }
