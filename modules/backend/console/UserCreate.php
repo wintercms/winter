@@ -58,7 +58,7 @@ class UserCreate extends Command
             'first_name' => $this->option('fname') ?: $this->ask('First name', ''),
             'last_name' => $this->option('lname') ?: $this->ask('Last name', ''),
             'role_id' => (
-                $role = UserRole::where(
+                UserRole::where(
                     'code',
                     $this->option('role') ?: $this->choice(
                         'Role',
