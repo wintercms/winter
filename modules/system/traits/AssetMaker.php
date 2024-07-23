@@ -4,7 +4,7 @@ namespace System\Traits;
 
 use System\Classes\CombineAssets;
 use System\Classes\PluginManager;
-use System\Classes\Vite;
+use System\Classes\Asset\Vite;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
 use Winter\Storm\Exception\SystemException;
