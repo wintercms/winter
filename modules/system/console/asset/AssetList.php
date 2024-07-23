@@ -2,7 +2,7 @@
 
 namespace System\Console\Asset;
 
-use System\Classes\CompilableAssets;
+use System\Classes\Asset\PackageManager;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\File;
 
@@ -12,7 +12,7 @@ abstract class AssetList extends Command
 
     public function handle(): int
     {
-        $compilableAssets = CompilableAssets::instance();
+        $compilableAssets = PackageManager::instance();
         $compilableAssets->fireCallbacks();
 
         $packages = $compilableAssets->getPackages($this->assetType, true);

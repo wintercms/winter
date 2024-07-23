@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Console;
+namespace System\Console\Asset;
 
 use System\Console\Asset\AssetInstall;
 

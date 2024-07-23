@@ -3,8 +3,8 @@
 namespace System\Console\Asset;
 
 use Symfony\Component\Process\Process;
-use System\Classes\CompilableAssets;
-use System\Classes\PackageJson;
+use System\Classes\Asset\PackageManager;
+use System\Classes\Asset\PackageJson;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Str;
@@ -42,7 +42,7 @@ abstract class AssetCompile extends Command
             return 1;
         }
 
-        $compilableAssets = CompilableAssets::instance();
+        $compilableAssets = PackageManager::instance();
         $compilableAssets->fireCallbacks();
 
         $registeredPackages = $compilableAssets->getPackages($type);
@@ -121,7 +121,7 @@ abstract class AssetCompile extends Command
 
     public function watchHandle(string $type): int
     {
-        $compilableAssets = CompilableAssets::instance();
+        $compilableAssets = PackageManager::instance();
         $compilableAssets->fireCallbacks();
 
         $packages = $compilableAssets->getPackages($type);

@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Classes;
+namespace System\Classes\Asset;
 
 use InvalidArgumentException;
 use RuntimeException;
@@ -247,6 +247,14 @@ class PackageJson
     public function getContents(): array
     {
         return $this->data;
+    }
+
+    /**
+     * Returns the path of the package.json if set
+     */
+    public function getPath(): ?string
+    {
+        return $this->path;
     }
 
     /**
