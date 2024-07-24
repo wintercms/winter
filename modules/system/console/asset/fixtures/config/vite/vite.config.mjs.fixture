@@ -16,8 +16,8 @@ export default defineConfig({
                 paths: [
                     './**/*.htm',
                     './**/*.block',
-                    'assets/**/*.css',
-                    'assets/**/*.js',
+                    'assets/src/**/*.css',
+                    'assets/src/**/*.js',
                 ]
             },
         }),
