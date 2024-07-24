@@ -1,21 +1,23 @@
-<?php namespace System\Console;
+<?php
 
-use File;
+namespace System\Console\Asset;
+
 use Symfony\Component\Process\Process;
-use System\Classes\MixAssets;
+use System\Classes\Asset\PackageManager;
+use System\Classes\Asset\PackageJson;
 use Winter\Storm\Console\Command;
 
-class MixRun extends Command
+class NpmRun extends Command
 {
     /**
      * @var string|null The default command name for lazy loading.
      */
-    protected static $defaultName = 'mix:run';
+    protected static $defaultName = 'npm:run';
 
     /**
      * @var string The name and signature of this command.
      */
-    protected $signature = 'mix:run
+    protected $signature = 'npm:run
         {package : Defines the package where the script is located.}
         {script : The name of the script to run, as defined in the package.json "scripts" config.}
         {additionalArgs?* : Arguments to pass through to the script being run.}
@@ -28,28 +30,36 @@ class MixRun extends Command
     protected $description = 'Runs a script in a given package.';
 
     /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'mix:run'
+    ];
+
+    /**
      * Execute the console command.
      */
     public function handle(): int
     {
-        $mixedAssets = MixAssets::instance();
-        $mixedAssets->fireCallbacks();
+        $compilableAssets = PackageManager::instance();
+        $compilableAssets->fireCallbacks();
 
-        $packages = $mixedAssets->getPackages();
         $name = $this->argument('package');
         $script = $this->argument('script');
 
-        if (!in_array($name, array_keys($packages))) {
+        if (!$compilableAssets->hasPackage($name, true)) {
             $this->error(
                 sprintf('Package "%s" is not a registered package.', $name)
             );
             return 1;
         }
 
-        $package = $packages[$name];
-        $packageJson = $this->readPackageJson($package);
+        $package = $compilableAssets->getPackage($name, true)[0] ?? [];
 
-        if (!isset($packageJson['scripts'][$script])) {
+        // Assume that packages with matching names have matching package.json files
+        $packageJson = new PackageJson($package['package'] ?? null);
+
+        if (!$packageJson->hasScript($script)) {
             $this->error(
                 sprintf('Script "%s" is not defined in package "%s".', $script, $name)
             );
@@ -80,23 +90,10 @@ class MixRun extends Command
             // This will fail on unsupported systems
         }
 
-        $exitCode = $process->run(function ($status, $stdout) {
+        return $process->run(function ($status, $stdout) {
             if (!$this->option('silent')) {
                 $this->getOutput()->write($stdout);
             }
         });
-
-        return $exitCode;
-    }
-
-    /**
-     * Reads the package.json file for the given package.
-     */
-    protected function readPackageJson(array $package): array
-    {
-        $packageJsonPath = base_path($package['package']);
-        return File::exists($packageJsonPath)
-            ? json_decode(File::get($packageJsonPath), true)
-            : [];
     }
 }

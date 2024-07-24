@@ -1,33 +1,21 @@
-<?php namespace System\Console;
+<?php
 
-use File;
+namespace System\Console\Asset;
+
+use System\Classes\Asset\PackageManager;
 use Winter\Storm\Console\Command;
-use System\Classes\MixAssets;
+use Winter\Storm\Support\Facades\File;
 
-class MixList extends Command
+abstract class AssetList extends Command
 {
-    /**
-     * @var string|null The default command name for lazy loading.
-     */
-    protected static $defaultName = 'mix:list';
-
-    /**
-     * @var string The name and signature of this command.
-     */
-    protected $signature = 'mix:list
-        {--json : Output as JSON}';
-
-    /**
-     * @var string The console command description.
-     */
-    protected $description = 'List all registered Mix packages in this project.';
+    protected string $assetType;
 
     public function handle(): int
     {
-        $mixedAssets = MixAssets::instance();
-        $mixedAssets->fireCallbacks();
+        $compilableAssets = PackageManager::instance();
+        $compilableAssets->fireCallbacks();
 
-        $packages = $mixedAssets->getPackages(true);
+        $packages = $compilableAssets->getPackages($this->assetType, true);
 
         if (count($packages) === 0) {
             $this->info('No packages have been registered.');
@@ -42,11 +30,11 @@ class MixList extends Command
                 'name' => $name,
                 'active' => !$package['ignored'],
                 'path' => $package['path'],
-                'configuration' => $package['mix'],
+                'configuration' => $package['config'],
             ];
 
-            if (!File::exists($package['mix'])) {
-                $errors[] = "The mix file for $name doesn't exist, try running artisan mix:install";
+            if (!File::exists($package['config'])) {
+                $errors[] = "The config file for $name doesn't exist, try running artisan $this->assetType:install";
             }
         }
 
