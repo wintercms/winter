@@ -246,7 +246,9 @@ class FormController extends ControllerBehavior
         $this->controller->formBeforeSave($model);
         $this->controller->formBeforeCreate($model);
 
-        $modelsToSave = $this->prepareModelsToSave($model, $this->formWidget->getSaveData(applyFilters:false));
+        $this->formWidget->setFormValues();
+        $modelsToSave = $this->prepareModelsToSave($model, $this->formWidget->getSaveData());
+
         Db::transaction(function () use ($modelsToSave) {
             foreach ($modelsToSave as $modelToSave) {
                 $modelToSave->save(null, $this->formWidget->getSessionKey());
