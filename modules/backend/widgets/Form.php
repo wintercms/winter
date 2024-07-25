@@ -1172,13 +1172,10 @@ class Form extends WidgetBase
     /**
      * Returns post data from a submitted form.
      */
-    public function getSaveData(bool $includeAllFields = false, $applyFilters = true): array
+    public function getSaveData(bool $includeAllFields = false): array
     {
         $this->defineFormFields();
-
-        if ($applyFilters) {
-            $this->applyFiltersFromModel();
-        }
+        $this->applyFiltersFromModel();
 
         $result = [];
 
