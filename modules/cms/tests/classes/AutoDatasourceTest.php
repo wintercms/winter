@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Tests\Classes;
+namespace Cms\Tests\Classes;
 
 use System\Tests\Bootstrap\PluginTestCase;
 use Cms\Classes\AutoDatasource;
