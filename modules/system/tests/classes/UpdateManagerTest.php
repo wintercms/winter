@@ -84,7 +84,7 @@ class UpdateManagerTest extends TestCase
 
         // Normalize paths to make sure comparison is correct regardless of OS
         $normalizedPluginPaths = array_map('realpath', $pluginPaths);
-        $normalizedExpectedPaths = array_map(function($path) use ($tempPath) {
+        $normalizedExpectedPaths = array_map(function ($path) use ($tempPath) {
             return $tempPath . $path;
         }, $expectedPaths);
 
