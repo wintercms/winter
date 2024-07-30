@@ -1,30 +1,35 @@
-<?php namespace System\Controllers;
+<?php
 
-use ApplicationException;
-use Backend;
+namespace System\Controllers;
+
 use Backend\Classes\Controller;
-use BackendMenu;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
+use Backend\Widgets\Form;
 use Cms\Classes\ThemeManager;
 use Exception;
-use File;
-use Flash;
-use Html;
-use Lang;
-use Markdown;
-use Redirect;
-use Response;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Response as HttpResponse;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Html;
+use Winter\Storm\Support\Facades\Markdown;
 
 /**
  * Updates controller
  *
  * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
- *
  */
 class Updates extends Controller
 {
@@ -71,7 +76,7 @@ class Updates extends Controller
     /**
      * Index controller
      */
-    public function index()
+    public function index(): void
     {
         $this->vars['coreBuild'] = Parameter::get('system::core.build');
         $this->vars['coreBuildModified'] = Parameter::get('system::core.modified', false);
@@ -80,23 +85,23 @@ class Updates extends Controller
         $this->vars['projectOwner'] = Parameter::get('system::project.owner');
         $this->vars['pluginsActiveCount'] = PluginVersion::applyEnabled()->count();
         $this->vars['pluginsCount'] = PluginVersion::count();
-        return $this->asExtension('ListController')->index();
+        $this->asExtension('ListController')->index();
     }
 
     /**
      * Plugin manage controller
      */
-    public function manage()
+    public function manage(): void
     {
         $this->pageTitle = 'system::lang.plugins.manage';
         PluginManager::instance()->clearFlagCache();
-        return $this->asExtension('ListController')->index();
+        $this->asExtension('ListController')->index();
     }
 
     /**
      * Install new plugins / themes
      */
-    public function install($tab = null)
+    public function install($tab = null): ?HttpResponse
     {
         if (get('search')) {
             return Response::make($this->onSearchProducts());
@@ -116,9 +121,11 @@ class Updates extends Controller
         catch (Exception $ex) {
             $this->handleError($ex);
         }
+
+        return null;
     }
 
-    public function details($urlCode = null, $tab = null)
+    public function details($urlCode = null, $tab = null): void
     {
         try {
             $this->pageTitle = 'system::lang.updates.details_title';
@@ -178,15 +185,15 @@ class Updates extends Controller
         }
     }
 
-    protected function getPluginMarkdownFile($path, $filenames)
+    protected function getPluginMarkdownFile(string $path, array $filenames): ?string
     {
         $contents = null;
         foreach ($filenames as $file) {
-            if (!File::exists($path . '/'.$file)) {
+            if (!File::exists($path . '/' . $file)) {
                 continue;
             }
 
-            $contents = File::get($path . '/'.$file);
+            $contents = File::get($path . '/' . $file);
 
             /*
              * Parse markdown, clean HTML, remove first H1 tag
@@ -199,7 +206,7 @@ class Updates extends Controller
         return $contents;
     }
 
-    protected function getWarnings()
+    protected function getWarnings(): array
     {
         $warnings = [];
         $missingDependencies = PluginManager::instance()->findMissingDependencies();
@@ -242,9 +249,8 @@ class Updates extends Controller
      * - positive - Default CSS class
      *
      * @see Backend\Behaviors\ListController
-     * @return string
      */
-    public function listInjectRowClass($record, $definition = null)
+    public function listInjectRowClass($record, $definition = null): string
     {
         if ($record->disabledByConfig) {
             return 'hidden';
@@ -255,7 +261,7 @@ class Updates extends Controller
         }
 
         if ($definition != 'manage') {
-            return;
+            return '';
         }
 
         if ($record->disabledBySystem) {
@@ -272,7 +278,7 @@ class Updates extends Controller
     /**
      * Runs a specific update step.
      */
-    public function onExecuteStep()
+    public function onExecuteStep(): ?RedirectResponse
     {
         /*
          * Address timeout limits
@@ -321,6 +327,8 @@ class Updates extends Controller
                 Flash::success(Lang::get('system::lang.install.install_success'));
                 return Redirect::refresh();
         }
+
+        return null;
     }
 
     //
@@ -330,7 +338,7 @@ class Updates extends Controller
     /**
      * Spawns the update checker popup.
      */
-    public function onLoadUpdates()
+    public function onLoadUpdates(): string
     {
         return $this->makePartial('update_form');
     }
@@ -338,7 +346,7 @@ class Updates extends Controller
     /**
      * Contacts the update server for a list of necessary updates.
      */
-    public function onCheckForUpdates()
+    public function onCheckForUpdates(): array
     {
         try {
             $manager = UpdateManager::instance();
@@ -362,10 +370,8 @@ class Updates extends Controller
 
     /**
      * Loops the update list and checks for actionable updates.
-     * @param array  $result
-     * @return array
      */
-    protected function processImportantUpdates($result)
+    protected function processImportantUpdates(array $result): array
     {
         $hasImportantUpdates = false;
 
@@ -416,10 +422,8 @@ class Updates extends Controller
 
     /**
      * Reverses the update lists for the core and all plugins.
-     * @param array  $result
-     * @return array
      */
-    protected function processUpdateLists($result)
+    protected function processUpdateLists(array $result): array
     {
         if ($core = array_get($result, 'core')) {
             $result['core']['updates'] = array_reverse(array_get($core, 'updates', []), true);
@@ -435,10 +439,9 @@ class Updates extends Controller
     /**
      * Contacts the update server for a list of necessary updates.
      *
-     * @param bool $force Whether or not to force the redownload of existing tools
-     * @return string The rendered "execute" partial
+     * @param $force Whether or not to force the redownload of existing tools
      */
-    public function onForceUpdate($force = true)
+    public function onForceUpdate(bool $force = true): string
     {
         try {
             $manager = UpdateManager::instance();
@@ -485,7 +488,7 @@ class Updates extends Controller
     /**
      * Converts the update data to an actionable array of steps.
      */
-    public function onApplyUpdates()
+    public function onApplyUpdates(): string
     {
         try {
             /*
@@ -577,7 +580,7 @@ class Updates extends Controller
         return $this->makePartial('execute');
     }
 
-    protected function buildUpdateSteps($core, $plugins, $themes, $isInstallationRequest)
+    protected function buildUpdateSteps($core, $plugins, $themes, $isInstallationRequest): array
     {
         if (!is_array($core)) {
             $core = [null, null];
@@ -669,7 +672,7 @@ class Updates extends Controller
     /**
      * Displays the form for entering a Project ID
      */
-    public function onLoadProjectForm()
+    public function onLoadProjectForm(): string
     {
         return $this->makePartial('project_form');
     }
@@ -677,7 +680,7 @@ class Updates extends Controller
     /**
      * Validate the project ID and execute the project installation
      */
-    public function onAttachProject()
+    public function onAttachProject(): string
     {
         try {
             if (!$projectId = trim(post('project_id'))) {
@@ -701,7 +704,7 @@ class Updates extends Controller
         }
     }
 
-    public function onDetachProject()
+    public function onDetachProject(): RedirectResponse
     {
         Parameter::set([
             'system::project.id'    => null,
@@ -719,8 +722,10 @@ class Updates extends Controller
 
     /**
      * Displays changelog information
+     *
+     * @throws ApplicationException if the changelog could not be fetched from the server
      */
-    public function onLoadChangelog()
+    public function onLoadChangelog(): string
     {
         try {
             $fetchedContent = UpdateManager::instance()->requestChangelog();
@@ -746,8 +751,10 @@ class Updates extends Controller
 
     /**
      * Validate the plugin code and execute the plugin installation
+     *
+     * @throws ApplicationException If validation fails or the plugin cannot be installed
      */
-    public function onInstallPlugin()
+    public function onInstallPlugin(): string
     {
         try {
             if (!$code = trim(post('code'))) {
@@ -791,9 +798,8 @@ class Updates extends Controller
 
     /**
      * Rollback and remove a single plugin from the system.
-     * @return void
      */
-    public function onRemovePlugin()
+    public function onRemovePlugin(): RedirectResponse
     {
         if ($pluginCode = post('code')) {
             PluginManager::instance()->deletePlugin($pluginCode);
@@ -805,9 +811,8 @@ class Updates extends Controller
 
     /**
      * Perform a bulk action on the provided plugins
-     * @return void
      */
-    public function onBulkAction()
+    public function onBulkAction(): RedirectResponse
     {
         if (($bulkAction = post('action')) &&
             ($checkedIds = post('checked')) &&
@@ -912,9 +917,8 @@ class Updates extends Controller
 
     /**
      * Deletes a single theme from the system.
-     * @return void
      */
-    public function onRemoveTheme()
+    public function onRemoveTheme(): RedirectResponse
     {
         if ($themeCode = post('code')) {
             ThemeManager::instance()->deleteTheme($themeCode);
@@ -929,7 +933,7 @@ class Updates extends Controller
     // Product install
     //
 
-    public function onSearchProducts()
+    public function onSearchProducts(): array
     {
         $searchType = get('search', 'plugins');
         $serverUri = $searchType == 'plugins' ? 'plugin/search' : 'theme/search';
@@ -938,7 +942,7 @@ class Updates extends Controller
         return $manager->requestServerData($serverUri, ['query' => get('query')]);
     }
 
-    public function onGetPopularPlugins()
+    public function onGetPopularPlugins(): array
     {
         $installed = $this->getInstalledPlugins();
         $popular = UpdateManager::instance()->requestPopularProducts('plugin');
@@ -947,7 +951,7 @@ class Updates extends Controller
         return ['result' => $popular];
     }
 
-    public function onGetPopularThemes()
+    public function onGetPopularThemes(): array
     {
         $installed = $this->getInstalledThemes();
         $popular = UpdateManager::instance()->requestPopularProducts('theme');
@@ -956,14 +960,14 @@ class Updates extends Controller
         return ['result' => $popular];
     }
 
-    protected function getInstalledPlugins()
+    protected function getInstalledPlugins(): array
     {
         $installed = PluginVersion::lists('code');
         $manager = UpdateManager::instance();
         return $manager->requestProductDetails($installed, 'plugin');
     }
 
-    protected function getInstalledThemes()
+    protected function getInstalledThemes(): array
     {
         $history = Parameter::get('system::theme.history', []);
         $manager = UpdateManager::instance();
@@ -983,7 +987,7 @@ class Updates extends Controller
     /*
      * Remove installed products from the collection
      */
-    protected function filterPopularProducts($popular, $installed)
+    protected function filterPopularProducts($popular, $installed): array
     {
         $installedArray = [];
         foreach ($installed as $product) {
@@ -1007,7 +1011,7 @@ class Updates extends Controller
     /**
      * Encode HTML safe product code, this is to prevent issues with array_get().
      */
-    protected function encodeCode($code)
+    protected function encodeCode(string $code): string
     {
         return str_replace('.', ':', $code);
     }
@@ -1015,18 +1019,15 @@ class Updates extends Controller
     /**
      * Decode HTML safe product code.
      */
-    protected function decodeCode($code)
+    protected function decodeCode(string $code): string
     {
         return str_replace(':', '.', $code);
     }
 
     /**
      * Adds require plugin codes to the collection based on a result.
-     * @param array $plugins
-     * @param array $result
-     * @return array
      */
-    protected function appendRequiredPlugins(array $plugins, array $result)
+    protected function appendRequiredPlugins(array $plugins, array $result): array
     {
         foreach ((array) array_get($result, 'require') as $plugin) {
             if (
