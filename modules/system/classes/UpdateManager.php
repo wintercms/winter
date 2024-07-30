@@ -486,11 +486,7 @@ class UpdateManager
     {
         $filePath = $this->getFilePath('core');
 
-        if (!Zip::extract($filePath, $this->baseDirectory)) {
-            throw new ApplicationException(Lang::get('system::lang.zip.extract_failed', ['file' => $filePath]));
-        }
-
-        @unlink($filePath);
+        $this->extractArchive($filePath, $this->baseDirectory);
     }
 
     /**
@@ -615,11 +611,7 @@ class UpdateManager
         $fileCode = $name . $hash;
         $filePath = $this->getFilePath($fileCode);
 
-        if (!Zip::extract($filePath, plugins_path())) {
-            throw new ApplicationException(Lang::get('system::lang.zip.extract_failed', ['file' => $filePath]));
-        }
-
-        @unlink($filePath);
+        $this->extractArchive($filePath, plugins_path());
     }
 
     //
@@ -652,15 +644,11 @@ class UpdateManager
         $fileCode = $name . $hash;
         $filePath = $this->getFilePath($fileCode);
 
-        if (!Zip::extract($filePath, themes_path())) {
-            throw new ApplicationException(Lang::get('system::lang.zip.extract_failed', ['file' => $filePath]));
-        }
+        $this->extractArchive($filePath, themes_path());
 
         if ($this->themeManager) {
             $this->themeManager->setInstalled($name);
         }
-
-        @unlink($filePath);
     }
 
     //
@@ -1062,5 +1050,19 @@ class UpdateManager
 
             $this->out('', true);
         }
+    }
+
+    /**
+     * Extract the provided archive
+     *
+     * @throws ApplicationException if the archive failed to extract
+     */
+    public function extractArchive(string $archive, string $destination): void
+    {
+        if (!Zip::extract($archive, $destination)) {
+            throw new ApplicationException(Lang::get('system::lang.zip.extract_failed', ['file' => $archive]));
+        }
+
+        @unlink($archive);
     }
 }
