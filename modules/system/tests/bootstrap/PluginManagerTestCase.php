@@ -2,10 +2,13 @@
 
 namespace System\Tests\Bootstrap;
 
+use Illuminate\Console\OutputStyle;
+use ReflectionClass;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+use System\Classes\PluginManager;
 use System\Classes\UpdateManager;
 use System\Classes\VersionManager;
-use System\Classes\PluginManager;
-use ReflectionClass;
 
 use Winter\Storm\Database\Model as ActiveRecord;
 
@@ -51,7 +54,10 @@ class PluginManagerTestCase extends TestCase
         // Forces plugin migrations to be run again on every test
         VersionManager::forgetInstance();
 
-        $this->output = new \Symfony\Component\Console\Output\BufferedOutput();
+        $this->output = new OutputStyle(
+            new ArrayInput([]),
+            new BufferedOutput()
+        );
 
         parent::setUp();
 
