@@ -104,9 +104,14 @@ return [
         ],
         'by_author' => 'By :name',
     ],
+    'actions' => [
+        'upload' => 'Upload',
+        'cancel' => 'Cancel',
+    ],
     'plugins' => [
         'manage' => 'Manage plugins',
         'install' => 'Install plugins',
+        'upload' => 'Upload Plugin',
         'install_products' => 'Install products',
         'search' => 'search plugins to install...',
         'installed' => 'Installed plugins',

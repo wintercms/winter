@@ -117,6 +117,7 @@ class Updates extends Controller
             $this->vars['activeTab'] = $tab ?: 'plugins';
             $this->vars['installedPlugins'] = $this->getInstalledPlugins();
             $this->vars['installedThemes'] = $this->getInstalledThemes();
+            $this->vars['packageUploadWidget'] = $this->getPackageUploadWidget($tab === 'themes' ? 'theme' : 'plugin');
         }
         catch (Exception $ex) {
             $this->handleError($ex);
@@ -748,6 +749,85 @@ class Updates extends Controller
     //
     // Plugin management
     //
+
+    protected ?Form $packageUploadWidget = null;
+
+    /**
+     * Get the form widget for the import popup.
+     */
+    protected function getPackageUploadWidget(string $type = 'plugin'): Form
+    {
+        $type = post('type', $type);
+
+        if (!in_array($type, ['plugin', 'theme'])) {
+            throw new ApplicationException('Invalid package type');
+        }
+
+        if ($this->packageUploadWidget !== null) {
+            return $this->packageUploadWidget;
+        }
+
+        $config = $this->makeConfig("form.{$type}_upload.yaml");
+        $config->model = new class extends Model {
+            public $attachOne = [
+                'uploaded_package' => [\System\Models\File::class, 'public' => false],
+            ];
+        };
+        $widget = $this->makeWidget(Form::class, $config);
+        $widget->bindToController();
+
+        return $this->packageUploadWidget = $widget;
+    }
+
+    /**
+     * Displays the plugin uploader form
+     */
+    public function onLoadPluginUploader(): string
+    {
+        $this->vars['packageUploadWidget'] = $this->getPackageUploadWidget('plugin');
+        return $this->makePartial('popup_upload_plugin');
+    }
+
+    /**
+     * Installs an uploaded plugin
+     */
+    public function onInstallUploadedPlugin(): string
+    {
+        try {
+            $manager = UpdateManager::instance();
+            $result = $manager->installUploadedPlugin();
+
+            if (!isset($result['code']) || !isset($result['hash'])) {
+                throw new ApplicationException(Lang::get('system::lang.server.response_invalid'));
+            }
+
+            $name = $result['code'];
+            $hash = $result['hash'];
+            $plugins = [$name => $hash];
+            $plugins = $this->appendRequiredPlugins($plugins, $result);
+
+            /*
+             * Update steps
+             */
+            $updateSteps = $this->buildUpdateSteps(null, $plugins, [], true);
+
+            /*
+             * Finish up
+             */
+            $updateSteps[] = [
+                'code'  => 'completeInstall',
+                'label' => Lang::get('system::lang.install.install_completing'),
+            ];
+
+            $this->vars['updateSteps'] = $updateSteps;
+
+            return $this->makePartial('execute');
+        }
+        catch (Exception $ex) {
+            $this->handleError($ex);
+            return $this->makePartial('plugin_uploader');
+        }
+    }
 
     /**
      * Validate the plugin code and execute the plugin installation
