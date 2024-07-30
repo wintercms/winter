@@ -3,6 +3,8 @@
 use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Str;
 
 /**
  * Console command to install a new plugin.
@@ -32,12 +34,43 @@ class PluginInstall extends Command
 
     /**
      * Execute the console command.
-     * @return void
+     *
+     *
+     * Tests:
+     *  plugin.zip - doesn't exist
+     *  plugin.zip - does exist
      */
-    public function handle()
+    public function handle(): int
     {
         $pluginName = $this->argument('plugin');
         $manager = UpdateManager::instance()->setNotesOutput($this->output);
+
+        if (Str::endsWith($pluginName, '.zip')) {
+            $packageZip = base_path($pluginName);
+            $tempPath = temp_path('packages/' . md5($packageZip));
+
+            // @TODO: Testing only
+            File::copy(base_path('plugin-test.zip'), $packageZip);
+
+            // Check if the file exists
+            if (!File::exists($packageZip)) {
+                $this->output->writeln(sprintf('<error>File not found: %s</error>', $pluginName));
+                return 1;
+            }
+
+            // Attempt to extract the plugin
+            $manager->extractArchive($packageZip, $tempPath);
+
+            // Look for the Plugin.php file
+            $pluginFile = $tempPath . '/Plugin.php';
+            if (!File::exists($pluginFile)) {
+                $this->output->writeln(sprintf('<error>File not found: %s</error>', $pluginFile));
+                return 1;
+            }
+
+
+            return 1;
+        }
 
         $pluginDetails = $manager->requestPluginDetails($pluginName);
 
@@ -63,5 +96,7 @@ class PluginInstall extends Command
          */
         $this->output->writeln(sprintf('<info>Migrating plugin...</info>', $code));
         $manager->updatePlugin($code);
+
+        return 0;
     }
 }
