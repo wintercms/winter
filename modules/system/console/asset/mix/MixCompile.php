@@ -95,9 +95,9 @@ class MixCompile extends AssetCompile
      */
     protected function afterExecution(string $configPath): void
     {
-        $webpackJsPath = $this->getPackagePath($configPath);
-        if (File::exists($webpackJsPath)) {
-            File::delete($webpackJsPath);
+        $webpackConfigPath = $this->getJsConfigPath($configPath);
+        if (File::exists($webpackConfigPath) && File::isFile($webpackConfigPath)) {
+            File::delete($webpackConfigPath);
         }
     }
 }
