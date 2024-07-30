@@ -1,22 +1,27 @@
 <?php namespace System\Console\Asset\Mix;
 
-use System\Console\Asset\AssetConfig;
+use System\Console\Asset\AssetCreate;
 
-class MixConfig extends AssetConfig
+class MixCreate extends AssetCreate
 {
     /**
      * @var string|null The default command name for lazy loading.
      */
-    protected static $defaultName = 'mix:config';
+    protected static $defaultName = 'mix:create';
 
     /**
      * @var string The name and signature of this command.
      */
-    protected $signature = 'mix:config
+    protected $signature = 'mix:create
         {packageName : The package name to add configuration for}
-        {--t|tailwind : Setup tailwind}
-        {--u|vue : Setup vue}
-        {--s|stubs : Setup stub files}';
+        {--no-stubs : Disable stub file generation}';
+
+    /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'mix:config',
+    ];
 
     /**
      * The type of compilable to configure

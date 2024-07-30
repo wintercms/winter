@@ -50,6 +50,10 @@ class ImageResizerTest extends PluginTestCase
      */
     public function testConfiguration()
     {
+        if (!in_array('Cms', Config::get('cms.loadModules', []))) {
+            $this->markTestSkipped('The CMS module is not active.');
+        }
+
         // Resize with default options
         $imageResizer = new ImageResizer(
             (new CmsController())->themeUrl('assets/images/winter.png'),
@@ -178,6 +182,10 @@ class ImageResizerTest extends PluginTestCase
      */
     public function testURLSources()
     {
+        if (!in_array('Cms', Config::get('cms.loadModules', []))) {
+            $this->markTestSkipped('The CMS module is not active.');
+        }
+
         // Theme URL (absolute URL)
         $this->setUpStorage();
         $this->copyMedia();
@@ -352,6 +360,10 @@ class ImageResizerTest extends PluginTestCase
 
     public function testGetResizedUrl()
     {
+        if (!in_array('Cms', Config::get('cms.loadModules', []))) {
+            $this->markTestSkipped('The CMS module is not active.');
+        }
+
         $imageResizer = new ImageResizer((new CmsController())->themeUrl('assets/images/winter.png'));
 
         Config::set('cms.linkPolicy', 'force');
@@ -365,6 +377,10 @@ class ImageResizerTest extends PluginTestCase
 
     public function testGetResizerUrl()
     {
+        if (!in_array('Cms', Config::get('cms.loadModules', []))) {
+            $this->markTestSkipped('The CMS module is not active.');
+        }
+
         $imageResizer = new ImageResizer((new CmsController())->themeUrl('assets/images/winter.png'));
 
         Config::set('cms.linkPolicy', 'force');

@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Classes;
+namespace System\Classes\Asset;
 
 use Illuminate\Foundation\Vite as LaravelVite;
 use Illuminate\Support\Facades\App;
@@ -27,12 +27,12 @@ class Vite extends LaravelVite
         // Normalise the package name
         $package = strtolower($package);
 
-        if (!($compilableAssetPackage = CompilableAssets::instance()->getPackages('vite')[$package] ?? null)) {
+        if (!($compilableAssetPackage = PackageManager::instance()->getPackages('vite')[$package] ?? null)) {
             throw new SystemException('Unable to resolve package: ' . $package);
         }
 
-        $this->useHotFile(base_path($compilableAssetPackage['path'] . '/public/hot'));
-        return parent::__invoke($entrypoints, $compilableAssetPackage['path'] . '/public/build');
+        $this->useHotFile(base_path($compilableAssetPackage['path'] . '/assets/dist/hot'));
+        return parent::__invoke($entrypoints, $compilableAssetPackage['path'] . '/assets/dist');
     }
 
     /**

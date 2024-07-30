@@ -8,7 +8,7 @@ use BackendMenu;
 use Config;
 use DateInterval;
 use Event;
-use Illuminate\Foundation\Vite;
+use Illuminate\Foundation\Vite as LaravelVite;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Schema;
 use Markdown;
@@ -145,7 +145,7 @@ class ServiceProvider extends ModuleServiceProvider
         });
 
         // Register the Laravel Vite singleton
-        $this->app->singleton(Vite::class, \System\Classes\Vite::class);
+        $this->app->singleton(LaravelVite::class, \System\Classes\Asset\Vite::class);
     }
 
     /**
@@ -321,19 +321,19 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('plugin.list', \System\Console\PluginList::class);
 
         $this->registerConsoleCommand('mix.compile', Console\Asset\Mix\MixCompile::class);
-        $this->registerConsoleCommand('mix.config', Console\Asset\Mix\MixConfig::class);
+        $this->registerConsoleCommand('mix.config', Console\Asset\Mix\MixCreate::class);
         $this->registerConsoleCommand('mix.install', Console\Asset\Mix\MixInstall::class);
         $this->registerConsoleCommand('mix.list', Console\Asset\Mix\MixList::class);
         $this->registerConsoleCommand('mix.watch', Console\Asset\Mix\MixWatch::class);
 
         $this->registerConsoleCommand('vite.compile', Console\Asset\Vite\ViteCompile::class);
-        $this->registerConsoleCommand('vite.config', Console\Asset\Vite\ViteConfig::class);
+        $this->registerConsoleCommand('vite.config', Console\Asset\Vite\ViteCreate::class);
         $this->registerConsoleCommand('vite.install', Console\Asset\Vite\ViteInstall::class);
         $this->registerConsoleCommand('vite.list', Console\Asset\Vite\ViteList::class);
         $this->registerConsoleCommand('vite.watch', Console\Asset\Vite\ViteWatch::class);
 
-        $this->registerConsoleCommand('npm.run', Console\NpmRun::class);
-        $this->registerConsoleCommand('npm.update', Console\NpmUpdate::class);
+        $this->registerConsoleCommand('npm.run', Console\Asset\NpmRun::class);
+        $this->registerConsoleCommand('npm.update', Console\Asset\NpmUpdate::class);
     }
 
     /*

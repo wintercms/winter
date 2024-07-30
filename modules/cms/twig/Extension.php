@@ -3,7 +3,7 @@
 use Block;
 use Cms\Classes\Controller;
 use Event;
-use System\Classes\Vite;
+use System\Classes\Asset\Vite;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
