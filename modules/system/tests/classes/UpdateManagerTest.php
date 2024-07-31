@@ -28,39 +28,39 @@ class UpdateManagerTest extends TestCase
             'single_plugin_contents' => [
                 'zipFile' => 'single-plugin-contents.zip',
                 'expectedPaths' => [
-                    'Plugin.php',
+                    'Extracted.TestA' => 'Plugin.php',
                 ],
             ],
             'single_plugin_nested' => [
                 'zipFile' => 'single-plugin-nested.zip',
                 'expectedPaths' => [
-                    'testa/Plugin.php',
+                    'Extracted.TestA' => 'testa/Plugin.php',
                 ],
             ],
             'multiple_plugins_no_author' => [
                 'zipFile' => 'multiple-plugins-no-author.zip',
                 'expectedPaths' => [
-                    'testa/Plugin.php',
-                    'testb/Plugin.php',
-                    'testc/Plugin.php',
+                    'Extracted.TestA' => 'testa/Plugin.php',
+                    'Extracted.TestB' => 'testb/Plugin.php',
+                    'Extracted.TestC' => 'testc/Plugin.php',
                 ],
             ],
             'multiple_authors' => [
                 'zipFile' => 'multiple-authors.zip',
                 'expectedPaths' => [
-                    'mix/testa/Plugin.php',
-                    'mix/testb/Plugin.php',
-                    'mix/testc/Plugin.php',
-                    'testvendor/test/Plugin.php',
+                    'Expanded.Test' => 'expanded/test/Plugin.php',
+                    'Extracted.TestA' => 'extracted/testa/Plugin.php',
+                    'Extracted.TestB' => 'extracted/testb/Plugin.php',
+                    'Extracted.TestC' => 'extracted/testc/Plugin.php',
                 ],
             ],
             'entire_plugins_directory' => [
                 'zipFile' => 'entire-plugins-directory.zip',
                 'expectedPaths' => [
-                    'plugins/mix/testa/Plugin.php',
-                    'plugins/mix/testb/Plugin.php',
-                    'plugins/mix/testc/Plugin.php',
-                    'plugins/testvendor/test/Plugin.php',
+                    'Expanded.Test' => 'plugins/expanded/test/Plugin.php',
+                    'Extracted.TestA' => 'plugins/extracted/testa/Plugin.php',
+                    'Extracted.TestB' => 'plugins/extracted/testb/Plugin.php',
+                    'Extracted.TestC' => 'plugins/extracted/testc/Plugin.php',
                 ],
             ],
         ];
@@ -71,16 +71,19 @@ class UpdateManagerTest extends TestCase
      */
     public function testExtractPlugins($zipFile, $expectedPaths)
     {
+        // Reset temp directory
+        File::deleteDirectory(temp_path('packages/'));
+        File::makeDirectory(temp_path('packages/'), 0755, true, true);
+
         $zipPath = base_path('modules/system/tests/fixtures/plugin-archives/' . $zipFile);
         $tempZipPath = temp_path('packages/'. pathinfo($zipPath, PATHINFO_BASENAME));
         $tempPath = temp_path('packages/'. pathinfo($zipPath, PATHINFO_FILENAME) . '_contents') . '/';
 
-        File::makeDirectory(temp_path('packages/'), 0755, true, true);
         File::copy($zipPath, $tempZipPath);
 
         $this->manager->extractArchive($tempZipPath, $tempPath);
 
-        $pluginPaths = $this->findPluginFiles($tempPath);
+        $pluginPaths = $this->manager->findPluginsInPath($tempPath);
 
         // Normalize paths to make sure comparison is correct regardless of OS
         $normalizedPluginPaths = array_map('realpath', $pluginPaths);
@@ -88,7 +91,7 @@ class UpdateManagerTest extends TestCase
             return $tempPath . $path;
         }, $expectedPaths);
 
-        $this->assertEqualsCanonicalizing($normalizedExpectedPaths, $normalizedPluginPaths);
+        $this->assertEquals($normalizedExpectedPaths, $normalizedPluginPaths);
 
         // @TODO: Cleanup after self
     }
@@ -96,26 +99,9 @@ class UpdateManagerTest extends TestCase
     /**
      * @TODO:
      * - Move this into a utility class (UpdateManager?)
-     * - Include logic for detecting the plugin author / name from the plugin class namespace
+     * - √ - Include logic for detecting the plugin author / name from the plugin class namespace
      * - Maybe include logic for determining what order the plugins should be installed in
-     * - Rename plugins in the fixture files to not conflict with the testing plugins when we
+     * - √ - Rename plugins in the fixture files to not conflict with the testing plugins when we
      * add cases for testing the actual installation of plugins
      */
-    protected function findPluginFiles($path)
-    {
-        $pluginFiles = [];
-
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::SELF_FIRST
-        );
-
-        foreach ($iterator as $file) {
-            if ($file->isFile() && $file->getFilename() === 'Plugin.php') {
-                $pluginFiles[] = $file->getPathname();
-            }
-        }
-
-        return $pluginFiles;
-    }
 }

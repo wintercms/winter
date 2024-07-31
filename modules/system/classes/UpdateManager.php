@@ -13,6 +13,8 @@ use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use System\Helpers\Cache as CacheHelper;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
@@ -1064,5 +1066,35 @@ class UpdateManager
         }
 
         @unlink($archive);
+    }
+
+    /**
+     * Finds all plugins in a given path by looking for valid Plugin.php files
+     */
+    public function findPluginsInPath(string $path): array
+    {
+        $pluginFiles = [];
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, RecursiveDirectoryIterator::SKIP_DOTS),
+            RecursiveIteratorIterator::SELF_FIRST
+        );
+
+        foreach ($iterator as $file) {
+            if ($file->isFile() && $file->getFilename() === 'Plugin.php') {
+                // Attempt to extract the plugin's code
+                if (!preg_match('/namespace (.+?);/', file_get_contents($file->getRealPath()), $match)) {
+                    continue;
+                }
+
+                $code = str_replace('\\', '.', $match[1]);
+
+                if (str_contains($code, '.')) {
+                    $pluginFiles[$code] = $file->getPathname();
+                }
+            }
+        }
+
+        return $pluginFiles;
     }
 }

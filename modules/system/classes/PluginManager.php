@@ -1,23 +1,24 @@
-<?php namespace System\Classes;
+<?php
 
-use Db;
-use App;
-use Str;
-use Log;
-use File;
-use Lang;
-use View;
-use Cache;
-use Config;
-use Schema;
-use SystemException;
+namespace System\Classes;
+
+use Backend\Classes\NavigationManager;
 use FilesystemIterator;
-use RecursiveIteratorIterator;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\View;
 use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use System\Models\PluginVersion;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Foundation\Application;
 use Winter\Storm\Support\ClassLoader;
-use Backend\Classes\NavigationManager;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Str;
 
 /**
  * Plugin manager
@@ -664,7 +665,7 @@ class PluginManager
         if (
             $this->app->hasDatabaseTable('system_plugin_versions')
         ) {
-            $userDisabled = Db::table('system_plugin_versions')->where('is_disabled', 1)->lists('code') ?? [];
+            $userDisabled = DB::table('system_plugin_versions')->where('is_disabled', 1)->lists('code') ?? [];
             foreach ($userDisabled as $code) {
                 $this->flagPlugin($code, static::DISABLED_BY_USER);
             }
