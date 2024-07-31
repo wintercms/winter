@@ -2,8 +2,6 @@
 
 namespace System\Tests\Classes;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
 use System\Tests\Bootstrap\TestCase;
 use System\Classes\UpdateManager;
 use Winter\Storm\Support\Facades\File;
@@ -88,7 +86,7 @@ class UpdateManagerTest extends TestCase
         // Normalize paths to make sure comparison is correct regardless of OS
         $normalizedPluginPaths = array_map('realpath', $pluginPaths);
         $normalizedExpectedPaths = array_map(function ($path) use ($tempPath) {
-            return $tempPath . $path;
+            return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $tempPath . $path);
         }, $expectedPaths);
 
         $this->assertEquals($normalizedExpectedPaths, $normalizedPluginPaths);
