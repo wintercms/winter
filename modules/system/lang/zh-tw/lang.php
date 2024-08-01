@@ -116,7 +116,6 @@ return [
         'smtp_username' => '使用者名',
         'smtp_password' => '密碼',
         'smtp_port' => 'SMTP 端口',
-        'smtp_ssl' => '需要SSL連接',
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail 路徑',
         'sendmail_path_comment' => '請確認 Sendmail 路徑.',

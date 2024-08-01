@@ -215,7 +215,7 @@ class ComponentManager
         }
 
         if (class_exists($className)) {
-            $component = App::make($className, [$cmsObject, $properties]);
+            $component = App::make($className, ['cmsObject' => $cmsObject, 'properties' => $properties]);
             $component->name = $name;
 
             return $component;
