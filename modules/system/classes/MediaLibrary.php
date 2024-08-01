@@ -5,12 +5,14 @@ namespace System\Classes;
 use ApplicationException;
 use Cache;
 use Config;
+use File;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Lang;
 use Storage;
 use SystemException;
 use Url;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Arr;
 use Winter\Storm\Support\Str;
 use Winter\Storm\Support\Svg;
 
@@ -907,15 +909,18 @@ class MediaLibrary
     public function generateIncrementedFileName($path): string
     {
         $pathInfos = pathinfo($path);
-        $sameFiles = array_filter(
-            $this->getStorageDisk()->files(dirname($this->getMediaPath($path))),
-            function ($file) use ($pathInfos) {
-                return preg_match('/'. $pathInfos['filename'] .'-(\d*)\.'. $pathInfos['extension'] .'$/U', $file);
-            }
-        );
-        $newIndex = count($sameFiles) + 1;
+        $dirName = dirname($this->getMediaPath($path));
 
-        return $pathInfos['filename'] .'-' . $newIndex . '.' . $pathInfos['extension'];
+        $sameFilesInFolder = Arr::map(array_filter(
+            $this->getStorageDisk()->files($dirName),
+            function ($file) use ($pathInfos) {
+                return preg_match('/'. $pathInfos['filename'] .'(_(\d*))?\.'. $pathInfos['extension'] .'$/U', $file);
+            }
+        ), function ($value) use ($dirName) {
+            return str_replace($dirName .'/', '', '/'. $value);
+        });
+
+        return File::unique($pathInfos['basename'], $sameFilesInFolder);
     }
 
     /**
@@ -927,14 +932,17 @@ class MediaLibrary
      */
     public function generateIncrementedFolderName($path)
     {
-        $sameFolders = array_filter(
+        $dirName = dirname($this->getMediaPath($path));
+
+        $sameFolders = Arr::map(array_filter(
             $this->getStorageDisk()->directories(dirname($this->getMediaPath($path))),
             function ($folder) use ($path) {
-                return preg_match('/'. basename($path) .'-(\d*)$/U', $folder);
+                return preg_match('/'. basename($path) .'(_(\d*))?$/U', $folder);
             }
-        );
-        $newIndex = count($sameFolders) + 1;
+        ), function ($value) use ($dirName) {
+            return str_replace($dirName .'/', '', '/'. $value);
+        });
 
-        return basename($path) .'-' . $newIndex;
+        return Str::unique(basename($path), $sameFolders);
     }
 }
