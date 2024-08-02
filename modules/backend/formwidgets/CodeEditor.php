@@ -1,7 +1,9 @@
 <?php namespace Backend\FormWidgets;
 
+use File;
 use Backend\Models\Preference as BackendPreference;
 use Backend\Classes\FormWidgetBase;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Code Editor
@@ -32,9 +34,9 @@ class CodeEditor extends FormWidgetBase
     public $wordWrap = true;
 
     /**
-     * @var string Cold folding mode: manual, markbegin, markbeginend.
+     * @var bool Enables code folding.
      */
-    public $codeFolding = 'manual';
+    public $codeFolding = true;
 
     /**
      * @var boolean Automatically close tags and special characters,
@@ -88,16 +90,6 @@ class CodeEditor extends FormWidgetBase
     public $readOnly = false;
 
     /**
-     * @var string Autocomplete mode: manual, basic, live.
-     */
-    public $autocompletion = 'manual';
-
-    /**
-     * @var boolean If true, the editor activate use Snippets
-     */
-    public $enableSnippets = true;
-
-    /**
      * @var boolean If true, the editor show Indent Guides
      */
     public $displayIndentGuides = true;
@@ -106,6 +98,21 @@ class CodeEditor extends FormWidgetBase
      * @var boolean If true, the editor show Print Margin
      */
     public $showPrintMargin = false;
+
+    /**
+     * @var boolean Show minimap (code preview) on the right of the editor
+     */
+    public $showMinimap = true;
+
+    /**
+     * @var boolean Colorize brackets
+     */
+    public $bracketColors = false;
+
+    /**
+     * @var boolean Show inline color previews and color picker
+     */
+    public $showColors = true;
 
     //
     // Object properties
@@ -142,10 +149,11 @@ class CodeEditor extends FormWidgetBase
             'showInvisibles',
             'highlightActiveLine',
             'readOnly',
-            'autocompletion',
-            'enableSnippets',
             'displayIndentGuides',
-            'showPrintMargin'
+            'showPrintMargin',
+            'showMinimap',
+            'bracketColors',
+            'showColors',
         ]);
     }
 
@@ -179,14 +187,38 @@ class CodeEditor extends FormWidgetBase
         $this->vars['stretch'] = $this->formField->stretch;
         $this->vars['size'] = $this->formField->size;
         $this->vars['readOnly'] = $this->readOnly;
-        $this->vars['autocompletion'] = $this->autocompletion;
-        $this->vars['enableSnippets'] = $this->enableSnippets;
         $this->vars['displayIndentGuides'] = $this->displayIndentGuides;
         $this->vars['showPrintMargin'] = $this->showPrintMargin;
+        $this->vars['showMinimap'] = $this->showMinimap;
+        $this->vars['bracketColors'] = $this->bracketColors;
+        $this->vars['showColors'] = $this->showColors;
 
         // Double encode when escaping
         $this->vars['value'] = htmlentities($this->getLoadValue(), ENT_QUOTES, 'UTF-8', true);
         $this->vars['name'] = $this->getFieldName();
+    }
+
+    /**
+     * Loads a theme via AJAX.
+     */
+    public function onLoadTheme()
+    {
+        $theme = post('theme');
+
+        if (empty($theme)) {
+            throw new ApplicationException('No theme specified');
+        }
+        if (!preg_match('/^[a-z\-\_]+$/i', $theme)) {
+            throw new ApplicationException('Invalid theme name');
+        }
+
+        $themePath = __DIR__ . '/codeeditor/assets/themes/' . $theme . '.tmTheme';
+
+        if (!File::exists($themePath)) {
+            throw new ApplicationException(sprintf('Theme "%s" not found', $theme));
+        }
+
+        return File::get($themePath);
     }
 
     /**
@@ -195,7 +227,7 @@ class CodeEditor extends FormWidgetBase
     protected function loadAssets()
     {
         $this->addCss('css/codeeditor.css', 'core');
-        $this->addJs('js/build-min.js', 'core');
+        $this->addJs('js/build/codeeditor.bundle.js', 'core');
     }
 
     /**
@@ -209,7 +241,7 @@ class CodeEditor extends FormWidgetBase
 
         $this->fontSize = $preferences->editor_font_size;
         $this->wordWrap = $preferences->editor_word_wrap;
-        $this->codeFolding = $preferences->editor_code_folding;
+        $this->codeFolding = $preferences->editor_enable_folding ?? ($preferences->editor_code_folding !== 'manual');
         $this->autoClosing = $preferences->editor_auto_closing;
         $this->tabSize = $preferences->editor_tab_size;
         $this->theme = $preferences->editor_theme;
@@ -217,9 +249,10 @@ class CodeEditor extends FormWidgetBase
         $this->highlightActiveLine = $preferences->editor_highlight_active_line;
         $this->useSoftTabs = !$preferences->editor_use_hard_tabs;
         $this->showGutter = $preferences->editor_show_gutter;
-        $this->autocompletion = $preferences->editor_autocompletion;
-        $this->enableSnippets = $preferences->editor_enable_snippets;
         $this->displayIndentGuides = $preferences->editor_display_indent_guides;
         $this->showPrintMargin = $preferences->editor_show_print_margin;
+        $this->showMinimap = $preferences->editor_show_minimap;
+        $this->bracketColors = $preferences->editor_bracket_colors;
+        $this->showColors = $preferences->editor_show_colors;
     }
 }

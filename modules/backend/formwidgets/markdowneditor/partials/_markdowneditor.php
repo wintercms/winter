@@ -19,19 +19,19 @@
         <?php if ($useMediaManager): ?>
             data-use-media-manager="true"
         <?php endif ?>
-        data-vendor-path="<?= Url::asset('/modules/backend/formwidgets/codeeditor/assets/vendor/ace') ?>"
         <?php if ($readOnly || $disabled): ?>
             data-disabled="true"
         <?php endif; ?>
         <?= $this->formField->getAttributes() ?>>
 
-        <div class="control-toolbar editor-toolbar"></div>
-
-        <div class="editor-write layout-cell">
-            <textarea name="<?= $name ?>" id="<?= $this->getId('textarea') ?>"><?= e($value) ?></textarea>
+        <div class="markdowneditor-container">
+            <div class="markdowneditor-toolbar"></div>
+            <div class="markdowneditor-editor">
+                <div class="editor-container"></div>
+                <input name="<?= $name ?>" data-value-bag id="<?= $this->getId('value') ?>" type="hidden" value="<?= e($value) ?>">
+            </div>
         </div>
-
-        <div class="editor-preview layout-cell"></div>
+        <div class="markdowneditor-preview"></div>
 
     </div>
 <?php endif ?>

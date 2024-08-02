@@ -5,6 +5,7 @@ use BackendMenu;
 use BackendAuth;
 use Backend\Models\UserRole;
 use Backend\Classes\WidgetManager;
+use System\Classes\Asset\PackageManager;
 use System\Classes\MailManager;
 use System\Classes\CombineAssets;
 use System\Classes\SettingsManager;
@@ -101,6 +102,10 @@ class ServiceProvider extends ModuleServiceProvider
                 $combiner->registerBundle('~/modules/backend/formwidgets/richeditor/assets/less/richeditor.less');
                 $combiner->registerBundle('~/modules/backend/formwidgets/richeditor/assets/js/build.js');
             }
+        });
+
+        PackageManager::instance()->registerCallback(function ($mix) {
+            $mix->registerPackage('module-backend.formwidgets.codeeditor', '~/modules/backend/formwidgets/codeeditor/assets/winter.mix.js');
         });
     }
 

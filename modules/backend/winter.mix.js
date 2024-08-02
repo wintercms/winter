@@ -27,12 +27,15 @@ mix
         ],
         to: './assets/ui/js/build/vendor.js',
     })
+    .vue({ version: 3 })
 
     // Compile Snowboard assets for the Backend
     .js(
         './assets/ui/js/index.js',
         './assets/ui/js/build/backend.js',
     )
+
+    // Compile widgets for Backend
     .js(
         './formwidgets/colorpicker/assets/js/src/ColorPicker.js',
         './formwidgets/colorpicker/assets/js/dist/colorpicker.js',
@@ -42,8 +45,22 @@ mix
         './formwidgets/iconpicker/assets/js/dist/iconpicker.js',
     )
     .js(
+        './formwidgets/markdowneditor/assets/js/src/MarkdownEditor.js',
+        './formwidgets/markdowneditor/assets/js/dist/markdowneditor.js',
+    )
+    .less(
+        './formwidgets/markdowneditor/assets/less/markdowneditor.less',
+        './formwidgets/markdowneditor/assets/css/markdowneditor.css',
+    )
+    .js(
         './formwidgets/sensitive/assets/js/src/Sensitive.js',
         './formwidgets/sensitive/assets/js/dist/sensitive.js',
+    )
+
+    // Compile pages
+    .js(
+        './assets/ui/js/pages/Preferences.js',
+        './assets/js/preferences/preferences.js',
     )
 
     // Polyfill for all targeted browsers
