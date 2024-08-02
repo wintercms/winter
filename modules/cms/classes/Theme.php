@@ -356,7 +356,7 @@ class Theme extends CmsObject
             return $this->configCache = [];
         }
 
-        $config = Yaml::parse($data['content']);
+        $config = Yaml::parse($data['content']) ?: [];
 
         /**
          * @event cms.theme.extendConfig

@@ -5,9 +5,9 @@ use BackendMenu;
 use BackendAuth;
 use Backend\Models\UserRole;
 use Backend\Classes\WidgetManager;
+use System\Classes\Asset\PackageManager;
 use System\Classes\MailManager;
 use System\Classes\CombineAssets;
-use System\Classes\MixAssets;
 use System\Classes\SettingsManager;
 use Winter\Storm\Support\ModuleServiceProvider;
 
@@ -56,7 +56,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('create.controller', \Backend\Console\CreateController::class);
         $this->registerConsoleCommand('create.formwidget', \Backend\Console\CreateFormWidget::class);
         $this->registerConsoleCommand('create.reportwidget', \Backend\Console\CreateReportWidget::class);
-
+        $this->registerConsoleCommand('user.create', \Backend\Console\UserCreate::class);
         $this->registerConsoleCommand('winter.passwd', \Backend\Console\WinterPasswd::class);
     }
 
@@ -104,7 +104,7 @@ class ServiceProvider extends ModuleServiceProvider
             }
         });
 
-        MixAssets::instance()->registerCallback(function ($mix) {
+        PackageManager::instance()->registerCallback(function ($mix) {
             $mix->registerPackage('module-backend.formwidgets.codeeditor', '~/modules/backend/formwidgets/codeeditor/assets/winter.mix.js');
         });
     }

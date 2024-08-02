@@ -304,7 +304,7 @@ html.mobile .control-scrollbar{overflow:auto;-webkit-overflow-scrolling:touch}
 .control-treeview ol>li>div{font-size:14px;font-weight:normal;background:#fff;border-bottom:1px solid #ecf0f1;position:relative}
 .control-treeview ol>li>div>a{color:#2b3e50;padding:11px 45px 10px 61px;display:block;line-height:150%;text-decoration:none;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
 .control-treeview ol>li>div:before{content:' ';background-image:url(../images/treeview-icons.png);background-position:0 -28px;background-repeat:no-repeat;background-size:42px auto;position:absolute;width:21px;height:22px;left:28px;top:15px}
-.control-treeview ol>li>div span.comment{display:block;font-weight:400;color:#95a5a6;font-size:13px;margin-top:2px;overflow:hidden;text-overflow:ellipsis}
+.control-treeview ol>li>div span.comment{display:block;font-weight:400;color:#95a5a6;font-size:13px;margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .control-treeview ol>li>div>span.expand{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;display:none;position:absolute;width:20px;height:20px;top:19px;left:2px;cursor:pointer;color:#bdc3c7;-webkit-transition:transform 0.1s ease;transition:transform 0.1s ease}
 .control-treeview ol>li>div>span.expand:before{font-family:"Font Awesome 6 Free";font-weight:900;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-style:normal;font-variant:normal;text-rendering:auto;content:"\f0da";line-height:100%;font-size:15px;position:relative;left:8px;top:2px}
 .control-treeview ol>li>div>span.drag-handle{font:0/0 a;color:transparent;text-shadow:none;background-color:transparent;border:0;-webkit-transition:opacity 0.4s;transition:opacity 0.4s;position:absolute;right:9px;bottom:0;width:18px;height:19px;cursor:move;color:#bdc3c7;opacity:0;filter:alpha(opacity=0)}
@@ -358,8 +358,10 @@ html.mobile .control-scrollbar{overflow:auto;-webkit-overflow-scrolling:touch}
 .control-treeview ol>li.has-subitems>div.popover-highlight:before{background-position:0 -52px}
 .control-treeview ol>li.has-subitems>div span.expand{display:block}
 .control-treeview ol>li.placeholder{position:relative;opacity:0.5;filter:alpha(opacity=50)}
+.control-treeview ol>li.placeholder ol{display:none}
 .control-treeview ol>li.dragged{position:absolute;z-index:2000;opacity:0.25;filter:alpha(opacity=25)}
 .control-treeview ol>li.dragged>div{-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px}
+.control-treeview ol>li.dragged ol{display:none}
 .control-treeview ol>li.drop-target>div{background-color:#2581b8 !important}
 .control-treeview ol>li.drop-target>div>a{color:#fff}
 .control-treeview ol>li.drop-target>div>a>span.comment{color:#fff}
@@ -438,7 +440,7 @@ html.mobile .control-scrollbar{overflow:auto;-webkit-overflow-scrolling:touch}
 .control-treeview.treeview-light ol>li>div>ul.submenu li p a{display:table-cell;vertical-align:middle;height:100%;padding:0 20px;font-size:13px;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}
 .control-treeview.treeview-light ol>li>div>ul.submenu li p a i.control-icon{font-size:22px;margin-right:0}
 body.dragging .control-treeview ol.dragging,
-body.dragging .control-treeview ol.dragging ol{background:#ccc;padding-right:20px;-webkit-transition:padding 1s;transition:padding 1s}
+body.dragging .control-treeview ol.dragging ol{background:#ccc;padding-right:0}
 body.dragging .control-treeview ol.dragging>li>div,
 body.dragging .control-treeview ol.dragging ol>li>div{margin-right:0;-webkit-transition:margin 1s;transition:margin 1s}
 body.dragging .control-treeview ol.dragging>li>div .custom-checkbox,

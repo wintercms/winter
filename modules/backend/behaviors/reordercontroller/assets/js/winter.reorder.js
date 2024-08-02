@@ -69,8 +69,8 @@
         this.initSortingSimple = function () {
             var sortOrders = []
 
-            $('#reorderTreeList li').each(function(){
-                sortOrders.push($(this).data('recordSortOrder'))
+            $('#reorderTreeList li').each(function(i) {
+                sortOrders.push(i);
             })
 
             this.simpleSortOrders = sortOrders

@@ -1,13 +1,13 @@
-<?php namespace Backend\Classes;
+<?php
+
+namespace Backend\Classes;
 
 use Lang;
 use View;
 use Flash;
 use Config;
-use Closure;
 use Request;
 use Backend;
-use Session;
 use Redirect;
 use Response;
 use Exception;

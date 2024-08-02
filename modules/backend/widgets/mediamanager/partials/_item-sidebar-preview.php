@@ -18,6 +18,10 @@
     <div class="sidebar-image-placeholder-container"><div class="sidebar-image-placeholder" data-path="{path}" data-last-modified="{last-modified}" data-loading="true" data-control="sidebar-thumbnail"></div></div>
 </script>
 
+<script type="text/template" data-control="document-template">
+    <div class="sidebar-document-placeholder-container"><div class="sidebar-document-placeholder" data-path="{path}" data-last-modified="{last-modified}" data-control="sidebar-document"></div></div>
+</script>
+
 <script type="text/template" data-control="no-selection-template">
     <div class="sidebar-image-placeholder-container">
         <div class="sidebar-image-placeholder no-border">
