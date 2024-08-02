@@ -113,7 +113,7 @@ export default class Italic extends EditorAction {
     }
 
     selectCurrentWord() {
-        const selection = this.editor.getSelection().toJSON();
+        const selection = this.editor.getSafeSelection();
         const valueInSelection = this.editor.getModel().getValueInRange(selection);
 
         // If the selection crosses multiple words or lines, we cannot select a word.
@@ -139,6 +139,7 @@ export default class Italic extends EditorAction {
                 endLineNumber: position.lineNumber,
                 endColumn: word.endColumn,
             },
+            caret: selection
         };
     }
 

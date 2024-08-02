@@ -26,36 +26,23 @@ export default class Bold extends Italic {
     }
 
     action() {
-        if (this.editor.getSelection().isEmpty()) {
-            const word = this.selectCurrentWord();
+        let selection;
+        let word = null;
 
-            if (word && this.isCurrentWordItalic()) {
-                this.editor.getEditor().setSelection({
-                    startLineNumber: word.selection.startLineNumber,
-                    startColumn: word.selection.startColumn - 1,
-                    endLineNumber: word.selection.endLineNumber,
-                    endColumn: word.selection.endColumn + 1,
-                });
-                this.editor.unwrap('*', '*');
-                this.editor.wrap('**', '**');
-                this.editor.focus();
-                return;
-            }
-            if (word && this.isCurrentWordBold()) {
-                this.editor.getEditor().setSelection({
-                    startLineNumber: word.selection.startLineNumber,
-                    startColumn: word.selection.startColumn - 2,
-                    endLineNumber: word.selection.endLineNumber,
-                    endColumn: word.selection.endColumn + 2,
-                });
-                this.editor.unwrap('**', '**');
-                this.editor.focus();
-                return;
-            }
+        if (this.editor.getSelection().isEmpty()) {
+            word = this.selectCurrentWord();
+
             if (word) {
+                selection = word.selection;
                 this.editor.getEditor().setSelection(word.selection);
+            } else {
+                selection = this.editor.getSelection();
             }
-        } else if (this.isCurrentSelectionItalic()) {
+        } else {
+            selection = this.editor.getSelection();
+        }
+
+        if (this.isCurrentSelectionItalic()) {
             const selection = this.editor.getSelection();
 
             if (
@@ -73,8 +60,20 @@ export default class Bold extends Italic {
             this.editor.unwrap('*', '*');
             this.editor.wrap('**', '**');
             this.editor.focus();
+
+            if (word) {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: word.caret.positionLineNumber,
+                    startColumn: word.caret.positionColumn + 2,
+                    endLineNumber: word.caret.positionLineNumber,
+                    endColumn: word.caret.positionColumn + 2,
+                });
+            } else {
+                this.editor.getEditor().setSelection(selection);
+            }
             return;
-        } else if (this.isCurrentSelectionBold()) {
+        }
+        if (this.isCurrentSelectionBold()) {
             const selection = this.editor.getSelection();
 
             if (
@@ -91,10 +90,42 @@ export default class Bold extends Italic {
 
             this.editor.unwrap('**', '**');
             this.editor.focus();
+
+            if (word) {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: word.caret.positionLineNumber,
+                    startColumn: word.caret.positionColumn - 2,
+                    endLineNumber: word.caret.positionLineNumber,
+                    endColumn: word.caret.positionColumn - 2,
+                });
+            } else {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: selection.startLineNumber,
+                    startColumn: selection.startColumn - 2,
+                    endLineNumber: selection.endLineNumber,
+                    endColumn: selection.endColumn - 2,
+                });
+            }
             return;
         }
 
         this.editor.wrap('**', '**');
         this.editor.focus();
+
+        if (word) {
+            this.editor.getEditor().setSelection({
+                startLineNumber: word.caret.positionLineNumber,
+                startColumn: word.caret.positionColumn + 2,
+                endLineNumber: word.caret.positionLineNumber,
+                endColumn: word.caret.positionColumn + 2,
+            });
+        } else {
+            this.editor.getEditor().setSelection({
+                startLineNumber: selection.startLineNumber,
+                startColumn: selection.startColumn + 2,
+                endLineNumber: selection.endLineNumber,
+                endColumn: selection.endColumn + 2,
+            });
+        }
     }
 }

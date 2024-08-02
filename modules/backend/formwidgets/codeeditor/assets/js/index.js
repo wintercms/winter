@@ -30,7 +30,8 @@ import constrainedEditor from 'constrained-editor-plugin';
             this.resizeListener = false;
             this.visibilityListener = false;
             this.clickListener = false;
-            this.editorClickListener = null;
+            this.editorMouseDownListener = null;
+            this.editorMouseUpListener = null;
             this.clickStartedInEditor = false;
             this.editor = null;
             this.container = this.element.querySelector('.editor-container');
@@ -171,9 +172,13 @@ import constrainedEditor from 'constrained-editor-plugin';
                 window.removeEventListener('resize', this.callbacks.resize);
                 this.resizeListener = false;
             }
-            if (this.editorClickListener) {
-                this.editorClickListener.dispose();
-                this.editorClickListener = null;
+            if (this.editorMouseUpListener) {
+                this.editorMouseUpListener.dispose();
+                this.editorMouseUpListener = null;
+            }
+            if (this.editorMouseDownListener) {
+                this.editorMouseDownListener.dispose();
+                this.editorMouseDownListener = null;
             }
             if (this.editor) {
                 this.editor.dispose();
@@ -357,9 +362,13 @@ import constrainedEditor from 'constrained-editor-plugin';
             this.selectionListener = this.editor.onDidChangeCursorSelection((event) => {
                 this.events.fire('selection', event);
             });
-
-            this.editorClickListener = this.editor.onMouseDown(() => {
+            this.editorMouseDownListener = this.editor.onMouseDown(() => {
                 this.clickStartedInEditor = true;
+            });
+            this.editorMouseUpListener = this.editor.onMouseUp(() => {
+                setTimeout(() => {
+                    this.clickStartedInEditor = false;
+                }, 20);
             });
             document.addEventListener('click', this.callbacks.click, {
                 capture: true,
