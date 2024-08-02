@@ -29,6 +29,9 @@ import constrainedEditor from 'constrained-editor-plugin';
             this.selectionListener = null;
             this.resizeListener = false;
             this.visibilityListener = false;
+            this.clickListener = false;
+            this.editorClickListener = null;
+            this.clickStartedInEditor = false;
             this.editor = null;
             this.container = this.element.querySelector('.editor-container');
             this.valueBag = this.element.querySelector('[data-value-bag]');
@@ -47,6 +50,7 @@ import constrainedEditor from 'constrained-editor-plugin';
                     clearTimeout(this.resizeThrottle);
                     this.resizeThrottle = setTimeout(() => this.onResize(), 80);
                 },
+                click: (event) => this.checkEditorClick(event),
                 visibilityChange: () => this.onVisibilityChange(),
             };
             this.keybindings = [];
@@ -139,6 +143,9 @@ import constrainedEditor from 'constrained-editor-plugin';
                 document.removeEventListener('visibilitychange', this.callbacks.visibilityChange);
                 this.visibilityListener = false;
             }
+            if (this.clickListener) {
+                document.removeEventListener('click', this.callbacks.click);
+            }
         }
 
         /**
@@ -163,6 +170,10 @@ import constrainedEditor from 'constrained-editor-plugin';
             if (this.resizeListener) {
                 window.removeEventListener('resize', this.callbacks.resize);
                 this.resizeListener = false;
+            }
+            if (this.editorClickListener) {
+                this.editorClickListener.dispose();
+                this.editorClickListener = null;
             }
             if (this.editor) {
                 this.editor.dispose();
@@ -345,6 +356,13 @@ import constrainedEditor from 'constrained-editor-plugin';
 
             this.selectionListener = this.editor.onDidChangeCursorSelection((event) => {
                 this.events.fire('selection', event);
+            });
+
+            this.editorClickListener = this.editor.onMouseDown(() => {
+                this.clickStartedInEditor = true;
+            });
+            document.addEventListener('click', this.callbacks.click, {
+                capture: true,
             });
 
             window.addEventListener('resize', this.callbacks.resize);
@@ -1233,6 +1251,15 @@ import constrainedEditor from 'constrained-editor-plugin';
 
                 this.editor.addCommand(binding, item.callback);
             });
+        }
+
+        checkEditorClick(event) {
+            if (this.clickStartedInEditor && !this.element.contains(event.target)) {
+                event.stopImmediatePropagation();
+                event.preventDefault();
+            }
+
+            this.clickStartedInEditor = false;
         }
     }
 
