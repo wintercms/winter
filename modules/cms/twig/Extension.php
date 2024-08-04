@@ -3,6 +3,7 @@
 use Block;
 use Cms\Classes\Controller;
 use Event;
+use System\Classes\Asset\Mix;
 use System\Classes\Asset\Vite;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
@@ -68,6 +69,7 @@ class Extension extends TwigExtension
         return [
             new TwigSimpleFilter('page', [$this, 'pageFilter'], $options),
             new TwigSimpleFilter('theme', [$this, 'themeFilter'], $options),
+            new TwigSimpleFilter('mix', [Mix::class, 'mix'], $options),
         ];
     }
 
