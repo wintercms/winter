@@ -1,8 +1,8 @@
 <div id="pluginUploadPopup">
     <?= Form::ajax('onInstallUploadedPlugin', [
         'data-popup-load-indicator' => true,
-        'data-request-data' => 'type:plugin',
     ]) ?>
+        <input type="hidden" name="type" value="plugin">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             <h4 class="modal-title"><?= e(trans('system::lang.plugins.upload')) ?></h4>

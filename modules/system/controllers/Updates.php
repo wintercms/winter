@@ -19,11 +19,13 @@ use System\Classes\UpdateManager;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
 use Winter\Storm\Database\Model;
+use Winter\Storm\Database\Models\DeferredBinding;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Flash;
 use Winter\Storm\Support\Facades\Html;
 use Winter\Storm\Support\Facades\Markdown;
+use Winter\Storm\Support\Str;
 
 /**
  * Updates controller
@@ -794,7 +796,31 @@ class Updates extends Controller
     public function onInstallUploadedPlugin(): string
     {
         try {
+            // Get the deferred binding record for the uploaded file
+            $widget = $this->getPackageUploadWidget();
+            $class = Str::before(get_class($widget->model), chr(0));
+            $deferred = DeferredBinding::query()
+                ->where('master_type', 'LIKE', str_replace('\\', '\\\\', $class) . '%')
+                ->where('master_field', 'uploaded_package')
+                ->where('session_key', $widget->getSessionKey())
+                ->first();
+
+            // Attempt to get the file from the deferred binding
+            if (!$deferred || !$deferred->slave) {
+                throw new ApplicationException(Lang::get('system::lang.server.response_invalid'));
+            }
+            $file = $deferred->slave;
+
+            /**
+             * @TODO:
+             * - Process the uploaded file to identify the plugins to install
+             * - (optional) require confirmation to install each detected plugin
+             * - Install the identified plugins
+             * - Ensure that deferred binding records and uploaded files are removed post processing or on failure
+             */
+
             $manager = UpdateManager::instance();
+
             $result = $manager->installUploadedPlugin();
 
             if (!isset($result['code']) || !isset($result['hash'])) {
@@ -824,6 +850,8 @@ class Updates extends Controller
             return $this->makePartial('execute');
         }
         catch (Exception $ex) {
+            // @TODO: Remove this, temporary debugging
+            throw $ex;
             $this->handleError($ex);
             return $this->makePartial('plugin_uploader');
         }
