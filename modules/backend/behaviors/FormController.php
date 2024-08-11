@@ -246,9 +246,11 @@ class FormController extends ControllerBehavior
         $this->controller->formBeforeSave($model);
         $this->controller->formBeforeCreate($model);
 
-        $this->formWidget->setFormValues();
-        $modelsToSave = $this->prepareModelsToSave($model, $this->formWidget->getSaveData());
+        $saveData = $this->formWidget->getSaveData(true);
+        $this->formWidget->setFormValues($saveData);
+        $this->formWidget->applyFiltersFromModel();
 
+        $modelsToSave = $this->prepareModelsToSave($model, $this->formWidget->getSaveData());
         Db::transaction(function () use ($modelsToSave) {
             foreach ($modelsToSave as $modelToSave) {
                 $modelToSave->save(null, $this->formWidget->getSessionKey());
@@ -316,9 +318,11 @@ class FormController extends ControllerBehavior
         $this->controller->formBeforeSave($model);
         $this->controller->formBeforeUpdate($model);
 
-        $this->formWidget->setFormValues();
-        $modelsToSave = $this->prepareModelsToSave($model, $this->formWidget->getSaveData());
+        $saveData = $this->formWidget->getSaveData(true);
+        $this->formWidget->setFormValues($saveData);
+        $this->formWidget->applyFiltersFromModel();
 
+        $modelsToSave = $this->prepareModelsToSave($model, $this->formWidget->getSaveData());
         Db::transaction(function () use ($modelsToSave) {
             foreach ($modelsToSave as $modelToSave) {
                 $modelToSave->save(null, $this->formWidget->getSessionKey());

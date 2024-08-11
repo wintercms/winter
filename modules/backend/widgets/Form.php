@@ -1175,7 +1175,6 @@ class Form extends WidgetBase
     public function getSaveData(bool $includeAllFields = false): array
     {
         $this->defineFormFields();
-        $this->applyFiltersFromModel();
 
         $result = [];
 
