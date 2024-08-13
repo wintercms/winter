@@ -797,7 +797,7 @@ export default class Request extends PluginBase {
         const formData = new FormData(this.form || undefined);
 
         if (Object.keys(data).length > 0) {
-            this.createFormData(formData, '', data);
+            this.createFormData(formData, data);
         }
 
         return formData;
@@ -810,11 +810,11 @@ export default class Request extends PluginBase {
      * objects and arrays are correctly prefixed and added as POST data.
      *
      * @param {FormData} formData
-     * @param {string} prefix
      * @param {Object} data
+     * @param {string} prefix
      * @returns {void}
      */
-    createFormData(formData, prefix, data) {
+    createFormData(formData, data, prefix = '') {
         if (typeof data !== 'object') {
             formData.append(prefix, data);
             return;
@@ -822,22 +822,19 @@ export default class Request extends PluginBase {
 
         if (Array.isArray(data)) {
             data.forEach((item) => {
-                this.createFormData(formData, `${prefix}[]`, item);
+                this.createFormData(formData, item, `${prefix}[]`);
             });
             return;
         }
 
         Object.entries(data).forEach((entry) => {
             const [key, value] = entry;
-            let newPrefix = '';
 
-            if (prefix !== '') {
-                newPrefix = `${prefix}[${key}]`;
-            } else {
-                newPrefix = key;
-            }
-
-            this.createFormData(formData, newPrefix, value);
+            this.createFormData(
+                formData,
+                value,
+                (prefix !== '') ? `${prefix}[${key}]` : key,
+            );
         });
     }
 
