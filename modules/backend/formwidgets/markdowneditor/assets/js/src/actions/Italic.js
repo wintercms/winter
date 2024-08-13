@@ -26,6 +26,107 @@ export default class Italic extends EditorAction {
     }
 
     action() {
+        let selection;
+        let word = null;
+
+        if (this.editor.getSelection().isEmpty()) {
+            word = this.selectCurrentWord();
+
+            if (word) {
+                selection = word.selection;
+                this.editor.getEditor().setSelection(word.selection);
+            } else {
+                selection = this.editor.getSelection();
+            }
+        } else {
+            selection = this.editor.getSelection();
+        }
+
+        if (this.isCurrentSelectionItalic()) {
+            const selection = this.editor.getSelection();
+
+            if (
+                /^\*[^*]/.test(this.editor.getModel().getValueInRange(selection)) === false
+                || /[^*]\*$/.test(this.editor.getModel().getValueInRange(selection)) === false
+            ) {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: selection.startLineNumber,
+                    startColumn: selection.startColumn - 1,
+                    endLineNumber: selection.endLineNumber,
+                    endColumn: selection.endColumn + 1,
+                });
+            }
+
+            this.editor.unwrap('*', '*');
+            this.editor.focus();
+
+            if (word) {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: word.caret.positionLineNumber,
+                    startColumn: word.caret.positionColumn + 1,
+                    endLineNumber: word.caret.positionLineNumber,
+                    endColumn: word.caret.positionColumn + 1,
+                });
+            } else {
+                this.editor.getEditor().setSelection(selection);
+            }
+            return;
+        }
+        if (this.isCurrentSelectionBold()) {
+            const selection = this.editor.getSelection();
+
+            if (
+                /^\*\*/.test(this.editor.getModel().getValueInRange(selection)) === false
+                || /\*\*$/.test(this.editor.getModel().getValueInRange(selection)) === false
+            ) {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: selection.startLineNumber,
+                    startColumn: selection.startColumn - 2,
+                    endLineNumber: selection.endLineNumber,
+                    endColumn: selection.endColumn + 2,
+                });
+            }
+
+            this.editor.unwrap('**', '**');
+            this.editor.focus();
+
+            if (word) {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: word.caret.positionLineNumber,
+                    startColumn: word.caret.positionColumn - 2,
+                    endLineNumber: word.caret.positionLineNumber,
+                    endColumn: word.caret.positionColumn - 2,
+                });
+            } else {
+                this.editor.getEditor().setSelection({
+                    startLineNumber: selection.startLineNumber,
+                    startColumn: selection.startColumn - 2,
+                    endLineNumber: selection.endLineNumber,
+                    endColumn: selection.endColumn - 2,
+                });
+            }
+            return;
+        }
+
+        this.editor.wrap('**', '**');
+        this.editor.focus();
+
+        if (word) {
+            this.editor.getEditor().setSelection({
+                startLineNumber: word.caret.positionLineNumber,
+                startColumn: word.caret.positionColumn + 2,
+                endLineNumber: word.caret.positionLineNumber,
+                endColumn: word.caret.positionColumn + 2,
+            });
+        } else {
+            this.editor.getEditor().setSelection({
+                startLineNumber: selection.startLineNumber,
+                startColumn: selection.startColumn + 2,
+                endLineNumber: selection.endLineNumber,
+                endColumn: selection.endColumn + 2,
+            });
+        }
+
         if (this.editor.getSelection().isEmpty()) {
             const word = this.selectCurrentWord();
 
@@ -160,7 +261,7 @@ export default class Italic extends EditorAction {
             return false;
         }
 
-        return (/^[^*]\*/.test(expandedValue) && /\*[^*]$/.test(expandedValue));
+        return (/^(?!<\*)\*[^\*]+\*(?!\*)$/.test(expandedValue));
     }
 
     isCurrentSelectionBold() {

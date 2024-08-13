@@ -64,12 +64,17 @@ export default class Bold extends Italic {
             if (word) {
                 this.editor.getEditor().setSelection({
                     startLineNumber: word.caret.positionLineNumber,
-                    startColumn: word.caret.positionColumn + 2,
+                    startColumn: word.caret.positionColumn + 1,
                     endLineNumber: word.caret.positionLineNumber,
-                    endColumn: word.caret.positionColumn + 2,
+                    endColumn: word.caret.positionColumn + 1,
                 });
             } else {
-                this.editor.getEditor().setSelection(selection);
+                this.editor.getEditor().setSelection({
+                    startLineNumber: selection.startLineNumber,
+                    startColumn: selection.startColumn + 1,
+                    endLineNumber: selection.endLineNumber,
+                    endColumn: selection.endColumn + 1,
+                });
             }
             return;
         }
