@@ -820,7 +820,7 @@ export default class Request extends PluginBase {
             return;
         }
 
-        if (Array.isArray(data)) {
+        if (Array.isArray(data) && prefix !== '') {
             data.forEach((item) => {
                 this.createFormData(formData, item, `${prefix}[]`);
             });
