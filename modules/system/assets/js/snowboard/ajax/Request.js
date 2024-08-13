@@ -794,16 +794,51 @@ export default class Request extends PluginBase {
 
     get data() {
         const data = (typeof this.options.data === 'object') ? this.options.data : {};
-
         const formData = new FormData(this.form || undefined);
+
         if (Object.keys(data).length > 0) {
-            Object.entries(data).forEach((entry) => {
-                const [key, value] = entry;
-                formData.append(key, value);
-            });
+            this.createFormData(formData, '', data);
         }
 
         return formData;
+    }
+
+    /**
+     * Recursively adds data to a FormData object.
+     *
+     * This method is used internally to recursively add data to a FormData object, ensuring that
+     * objects and arrays are correctly prefixed and added as POST data.
+     *
+     * @param {FormData} formData
+     * @param {string} prefix
+     * @param {Object} data
+     * @returns {void}
+     */
+    createFormData(formData, prefix, data) {
+        if (typeof data !== 'object') {
+            formData.append(prefix, data);
+            return;
+        }
+
+        if (Array.isArray(data)) {
+            data.forEach((item) => {
+                this.createFormData(formData, `${prefix}[]`, item);
+            });
+            return;
+        }
+
+        Object.entries(data).forEach((entry) => {
+            const [key, value] = entry;
+            let newPrefix = '';
+
+            if (prefix !== '') {
+                newPrefix = `${prefix}[${key}]`;
+            } else {
+                newPrefix = key;
+            }
+
+            this.createFormData(formData, newPrefix, value);
+        });
     }
 
     get confirm() {
