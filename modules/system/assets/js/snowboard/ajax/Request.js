@@ -1,3 +1,4 @@
+import { Idiomorph } from 'idiomorph/dist/idiomorph.esm';
 import PluginBase from '../abstracts/PluginBase';
 
 /**
@@ -388,19 +389,8 @@ export default class Request extends PluginBase {
                 const elements = document.querySelectorAll(selector);
                 if (elements.length > 0) {
                     elements.forEach((element) => {
-                        switch (mode) {
-                            case 'append':
-                                element.innerHTML += content;
-                                break;
-                            case 'prepend':
-                                element.innerHTML = content + element.innerHTML;
-                                break;
-                            case 'noop':
-                                break;
-                            case 'replace':
-                            default:
-                                element.innerHTML = content;
-                                break;
+                        if (mode !== 'noop') {
+                            this.updateElement(element, mode, content);
                         }
 
                         affected.push(element);
@@ -417,6 +407,63 @@ export default class Request extends PluginBase {
             this.snowboard.globalEvent('ajaxUpdateComplete', affected, this);
 
             resolve();
+        });
+    }
+
+    /**
+     * Updates the element with the given HTML content.
+     *
+     * This has been split off into another method as there's now two methods of updating the DOM:
+     *
+     * - The standard way, which by default, will simply change the inner HTML of the element
+     *   depending on the mode.
+     * - The new "morph" way, which more intelligently updates the DOM to only apply changes to
+     *   the DOM as required, leaving the state of unchanged elements alone.
+     *
+     * The morph way can be used by defining the `morph` option as true when calling the request.
+     *
+     * @param {HTMLElement} element
+     * @param {string} mode
+     * @param {string} content
+     * @returns {void}
+     */
+    updateElement(element, mode = 'replace', content = '') {
+        if (!this.options.morph) {
+            switch (mode) {
+                case 'append':
+                    element.innerHTML += content;
+                    break;
+                case 'prepend':
+                    element.innerHTML = content + element.innerHTML;
+                    break;
+                case 'replace':
+                default:
+                    element.innerHTML = content;
+                    break;
+            }
+
+            return;
+        }
+
+        // Append or prepend the content without affecting current nodes.
+        if (mode === 'append' || mode === 'prepend') {
+            const parser = new DOMParser();
+            const newDom = parser.parseFromString(content, 'text/html');
+
+            newDom.body.childNodes.forEach((node) => {
+                if (mode === 'append') {
+                    element.appendChild(node);
+                } else {
+                    element.insertBefore(node, element.firstChild);
+                }
+            });
+
+            return;
+        }
+
+        // Otherwise, morph the element.
+        Idiomorph.morph(element, content, {
+            morphStyle: 'innerHTML',
         });
     }
 

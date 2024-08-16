@@ -47,4 +47,27 @@ class Todo extends ComponentBase
 
         $this->page['items'] = $items;
     }
+
+    public function onRemoveItem()
+    {
+        $items = post('items', []);
+        $removeKey = post('key');
+
+        $this->page['items'] = $items;
+
+        if (is_null($removeKey)) {
+            Flash::error('You did not specify an item to remove.');
+            return;
+        }
+
+        if (!array_key_exists($removeKey, $items)) {
+            $this->page['items'] = $items;
+            Flash::error('The specified item does not exist.');
+            return;
+        }
+
+        array_splice($items, $removeKey, 1);
+
+        $this->page['items'] = $items;
+    }
 }

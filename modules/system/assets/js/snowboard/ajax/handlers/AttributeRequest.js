@@ -209,6 +209,7 @@ export default class AttributeRequest extends Singleton {
             url: ('requestUrl' in data) ? String(data.requestUrl) : null,
             update: ('requestUpdate' in data) ? this.parseData(String(data.requestUpdate)) : [],
             data: ('requestData' in data) ? this.parseData(String(data.requestData)) : [],
+            morph: ('requestMorph' in data),
         };
 
         this.snowboard.request(element, handler, options);
