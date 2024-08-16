@@ -37,6 +37,9 @@ export default class AttachLoading extends Singleton {
             const loadElements = request.element.querySelectorAll('[data-attach-loading]');
             if (loadElements.length > 0) {
                 loadElements.forEach((element) => {
+                    if (element.matches('[data-request]') || element.closest('[data-request]') !== request.element) {
+                        return;
+                    }
                     element.classList.add(this.getLoadingClass(element));
                 });
             }
@@ -54,6 +57,9 @@ export default class AttachLoading extends Singleton {
             const loadElements = request.element.querySelectorAll('[data-attach-loading]');
             if (loadElements.length > 0) {
                 loadElements.forEach((element) => {
+                    if (element.matches('[data-request]') || element.closest('[data-request]') !== request.element) {
+                        return;
+                    }
                     element.classList.remove(this.getLoadingClass(element));
                 });
             }
