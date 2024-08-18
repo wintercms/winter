@@ -14,8 +14,6 @@ class Mix
 
         $theme = Theme::getActiveTheme();
 
-        $themePath = $theme->getPath($theme->getDirName());
-
         $path = Str::start($path, '/');
 
         if ($manifestDirectory && ! str_starts_with($manifestDirectory, '/')) {
@@ -24,7 +22,7 @@ class Mix
             $manifestDirectory = Str::start($theme->getConfigValue('mix_manifest_path', '/'), '/');
         }
 
-        $manifestPath = $themePath.rtrim($manifestDirectory, '/').'/mix-manifest.json';
+        $manifestPath = $theme->getPath($theme->getDirName() . '/' . $manifestDirectory . '/mix-manifest.json');
 
         if (! isset($manifests[$manifestPath])) {
             if (! is_file($manifestPath)) {
