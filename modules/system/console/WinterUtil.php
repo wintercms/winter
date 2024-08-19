@@ -262,7 +262,6 @@ class WinterUtil extends Command
         }
 
         $resizedDisk = Config::get('cms.storage.resized.disk', 'local');
-
         $resizedFolder = Config::get('cms.storage.resized.folder', 'resized');
 
         $totalCount = count(Storage::disk($resizedDisk)->allFiles($resizedFolder));
