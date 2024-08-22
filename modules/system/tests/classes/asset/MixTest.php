@@ -58,6 +58,14 @@ class MixTest extends TestCase
         parent::tearDown();
     }
 
+    public function testThrowsExceptionWhenMixManifestIsMissing(): void
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The Mix manifest does not exist');
+
+        Mix::mix('assets/dist/foo.css');
+    }
+
     public function testGeneratesAssetUrls(): void
     {
         $this->artisan('mix:compile', [
@@ -122,5 +130,32 @@ class MixTest extends TestCase
                 $theme->getPath($theme->getDirName() . '/winter.mix.js')
             );
         }
+    }
+
+    public function testThrowsAnExceptionForInvalidMixFileWhenDebugIsEnabled()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Unable to locate Mix file: /assets/dist/foo.css');
+
+        $this->artisan('mix:compile', [
+            'theme-mixtest',
+            '--manifest' => 'modules/system/tests/fixtures/npm/package-mixtest.json',
+            '--disable-tty' => true,
+        ])->assertExitCode(0);
+
+        Mix::mix('assets/dist/foo.css');
+    }
+
+    public function testDoesNotThrowAnExceptionForInvalidMixFileWhenDebugIsDisabled(): void
+    {
+        Config::set('app.debug', false);
+
+        $this->artisan('mix:compile', [
+            'theme-mixtest',
+            '--manifest' => 'modules/system/tests/fixtures/npm/package-mixtest.json',
+            '--disable-tty' => true,
+        ])->assertExitCode(0);
+
+        $this->assertEquals('/assets/dist/foo.css', Mix::mix('assets/dist/foo.css'));
     }
 }
