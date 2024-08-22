@@ -4,6 +4,8 @@ namespace System\Classes\Asset;
 
 use Cms\Classes\Theme;
 use Illuminate\Support\HtmlString;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\Str;
 
 class Mix
@@ -46,6 +48,8 @@ class Mix
             }
         }
 
-        return new HtmlString($theme->assetUrl(ltrim($manifest[$path], '/')));
+        $url = Config::get('cms.themesPath', '/themes') . '/' . $theme->getDirName() . $manifest[$path];
+
+        return new HtmlString(Url::asset($url));
     }
 }
