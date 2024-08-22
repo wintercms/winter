@@ -2,7 +2,7 @@ const mix = require('laravel-mix');
 
 mix.setPublicPath(__dirname)
     .options({
-        manifest: true,
+        manifest: 'assets/dist/mix-manifest.json',
     })
     .version()
 

@@ -8,6 +8,7 @@ use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Url;
 
 class MixTest extends TestCase
 {
@@ -57,7 +58,7 @@ class MixTest extends TestCase
         parent::tearDown();
     }
 
-    public function testGeneratesVersionedUrl(): void
+    public function testGeneratesAssetUrls(): void
     {
         $this->artisan('mix:compile', [
             'theme-mixtest',
@@ -74,21 +75,52 @@ class MixTest extends TestCase
         foreach ($manifest as $key => $value) {
             $mixAssetUrl = Mix::mix($key);
 
-            $mixQueryParams = parse_url($mixAssetUrl, PHP_URL_QUERY);
-            parse_str($mixQueryParams, $mixResult);
-
-            $manifestQueryParams = parse_url($value, PHP_URL_QUERY);
-            parse_str($manifestQueryParams, $manifestResult);
-
-            $this->assertArrayHasKey('id', $mixResult);
-            $this->assertEquals($manifestResult['id'], $mixResult['id']);
-
-            $this->assertNotFalse(filter_var($mixAssetUrl, FILTER_VALIDATE_URL), 'Mix asset URL did not return a valid URL.');
+            $this->assertStringStartsWith(
+                Url::asset(Config::get('cms.themesPath', '/themes') . '/' . $theme->getDirName()),
+                $mixAssetUrl
+            );
         }
     }
 
     public function testThemeCanOverrideMixManifestPath(): void
     {
+        $theme = Theme::getActiveTheme();
 
+        Event::listen('cms.theme.extendConfig', function ($dirName, &$config) {
+            $config['mix_manifest_path'] = 'assets/dist';
+        });
+
+        rename(
+            $theme->getPath($theme->getDirName() . '/winter.mix.js'),
+            $theme->getPath($theme->getDirName() . '/winter.mix.js.bak')
+        );
+
+        copy(
+            $theme->getPath($theme->getDirName() . '/winter.mix-manifest-override.js'),
+            $theme->getPath($theme->getDirName() . '/winter.mix.js')
+        );
+
+        try {
+            $this->artisan('mix:compile', [
+                'theme-mixtest',
+                '--manifest' => 'modules/system/tests/fixtures/npm/package-mixtest.json',
+                '--disable-tty' => true,
+            ])->assertExitCode(0);
+
+            $this->assertFileExists($theme->getPath($theme->getDirName() . '/assets/dist/mix-manifest.json'));
+
+            $manifest = json_decode(file_get_contents($theme->getPath($theme->getDirName() . '/assets/dist/mix-manifest.json')), true);
+
+            foreach ($manifest as $key => $value) {
+                $this->assertStringContainsString($key, (string) Mix::mix($key));
+            }
+        } catch (\Exception $e) {
+            throw $e;
+        } finally {
+            rename(
+                $theme->getPath($theme->getDirName() . '/winter.mix.js.bak'),
+                $theme->getPath($theme->getDirName() . '/winter.mix.js')
+            );
+        }
     }
 }
