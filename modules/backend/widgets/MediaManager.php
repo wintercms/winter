@@ -929,11 +929,11 @@ class MediaManager extends WidgetBase
     {
         if (
             !in_array($filter, [
-            self::FILTER_ALL,
-            MediaLibraryItem::FILE_TYPE_IMAGE,
-            MediaLibraryItem::FILE_TYPE_AUDIO,
-            MediaLibraryItem::FILE_TYPE_DOCUMENT,
-            MediaLibraryItem::FILE_TYPE_VIDEO,
+                self::FILTER_ALL,
+                MediaLibraryItem::FILE_TYPE_IMAGE,
+                MediaLibraryItem::FILE_TYPE_AUDIO,
+                MediaLibraryItem::FILE_TYPE_DOCUMENT,
+                MediaLibraryItem::FILE_TYPE_VIDEO,
             ])
         ) {
             throw new ApplicationException('Invalid input data');
@@ -993,9 +993,9 @@ class MediaManager extends WidgetBase
     {
         if (
             !in_array($sortBy, [
-            MediaLibrary::SORT_BY_TITLE,
-            MediaLibrary::SORT_BY_SIZE,
-            MediaLibrary::SORT_BY_MODIFIED,
+                MediaLibrary::SORT_BY_TITLE,
+                MediaLibrary::SORT_BY_SIZE,
+                MediaLibrary::SORT_BY_MODIFIED,
             ])
         ) {
             throw new ApplicationException('Invalid input data');
@@ -1024,8 +1024,8 @@ class MediaManager extends WidgetBase
     {
         if (
             !in_array($sortDirection, [
-            MediaLibrary::SORT_DIRECTION_ASC,
-            MediaLibrary::SORT_DIRECTION_DESC,
+                MediaLibrary::SORT_DIRECTION_ASC,
+                MediaLibrary::SORT_DIRECTION_DESC,
             ])
         ) {
             throw new ApplicationException('Invalid input data');
@@ -1086,9 +1086,9 @@ class MediaManager extends WidgetBase
     {
         if (
             !in_array($selectionMode, [
-            self::SELECTION_MODE_NORMAL,
-            self::SELECTION_MODE_FIXED_RATIO,
-            self::SELECTION_MODE_FIXED_SIZE,
+                self::SELECTION_MODE_NORMAL,
+                self::SELECTION_MODE_FIXED_RATIO,
+                self::SELECTION_MODE_FIXED_SIZE,
             ])
         ) {
             throw new ApplicationException('Invalid input data');
@@ -1178,9 +1178,9 @@ class MediaManager extends WidgetBase
     {
         if (
             !in_array($viewMode, [
-            self::VIEW_MODE_GRID,
-            self::VIEW_MODE_LIST,
-            self::VIEW_MODE_TILES,
+                self::VIEW_MODE_GRID,
+                self::VIEW_MODE_LIST,
+                self::VIEW_MODE_TILES,
             ])
         ) {
             throw new ApplicationException('Invalid input data');

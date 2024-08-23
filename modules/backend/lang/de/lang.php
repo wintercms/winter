@@ -500,10 +500,10 @@ return [
         'email' => 'E-Mail',
     ],
     'filter' => [
-      'all' => 'Alle',
-      'options_method_not_exists' => 'Die Modelklasse :model muss eine Methode :method() definiert haben, welche die Optionen für den Filter ":filter" zurückgibt.',
-      'date_all' => 'Ganzen Zeitraum',
-      'number_all' => 'Alle Zahlen',
+        'all' => 'Alle',
+        'options_method_not_exists' => 'Die Modelklasse :model muss eine Methode :method() definiert haben, welche die Optionen für den Filter ":filter" zurückgibt.',
+        'date_all' => 'Ganzen Zeitraum',
+        'number_all' => 'Alle Zahlen',
     ],
     'import_export' => [
         'upload_csv_file' => '1. CSV-Datei hochladen',

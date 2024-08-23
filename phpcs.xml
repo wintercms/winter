@@ -175,6 +175,28 @@
         <exclude-pattern>*/plugins/*/*/partials/*\.php</exclude-pattern>
     </rule>
 
+    <rule ref="Generic.Arrays.ArrayIndent">
+        <!--
+        Partials may format arrays differently to improve readability within HTML code
+        -->
+        <exclude-pattern>*/modules/*/behaviors/*/partials/*\.php</exclude-pattern>
+        <exclude-pattern>*/modules/*/components/*/*\.php</exclude-pattern>
+        <exclude-pattern>*/modules/*/controllers/*/*\.php</exclude-pattern>
+        <exclude-pattern>*/modules/*/formwidgets/*/partials/*\.php</exclude-pattern>
+        <exclude-pattern>*/modules/*/reportwidgets/*/partials/*\.php</exclude-pattern>
+        <exclude-pattern>*/modules/*/widgets/*/partials/*\.php</exclude-pattern>
+        <exclude-pattern>*/modules/*/layouts/*\.php</exclude-pattern>
+        <exclude-pattern>*/modules/*/partials/*\.php</exclude-pattern>
+        <exclude-pattern>*/modules/*/views/*\.php</exclude-pattern>
+        <exclude-pattern>*/plugins/*/*/behaviors/*/partials/*\.php</exclude-pattern>
+        <exclude-pattern>*/plugins/*/*/components/*/*\.php</exclude-pattern>
+        <exclude-pattern>*/plugins/*/*/controllers/*/*\.php</exclude-pattern>
+        <exclude-pattern>*/plugins/*/*/formwidgets/*/partials/*\.php</exclude-pattern>
+        <exclude-pattern>*/plugins/*/*/reportwidgets/*/partials/*\.php</exclude-pattern>
+        <exclude-pattern>*/plugins/*/*/widgets/*/partials/*\.php</exclude-pattern>
+        <exclude-pattern>*/plugins/*/*/partials/*\.php</exclude-pattern>
+    </rule>
+
     <!-- All arrays must have a trailing comma on the last item in the array -->
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma" />
     <!-- Imports should be alphabetically ordered -->

@@ -60,7 +60,7 @@ return [
             'label' => 'Tilläggsnamn',
             'help' => 'Namnge tillägget efter dess unika kod. Exempelvis Winter.Blog',
         ],
-        ],
+    ],
     'plugins' => [
         'manage' => 'Hantera tillägg',
         'enable_or_disable' => 'Aktivera eller inaktivera',

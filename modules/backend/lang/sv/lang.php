@@ -310,7 +310,7 @@ return [
         'email' => 'E-post',
     ],
     'filter' => [
-      'all' => 'alla',
+        'all' => 'alla',
     ],
     'permissions' => [
         'manage_media' => 'Hantera media',

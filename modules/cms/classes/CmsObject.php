@@ -340,7 +340,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
             ]);
         } elseif ($ex instanceof \Winter\Storm\Halcyon\Exception\InvalidFileNameException) {
             throw new ValidationException([
-               'fileName' => Lang::get('cms::lang.cms_object.invalid_file', ['name' => $ex->getInvalidFileName()]),
+                'fileName' => Lang::get('cms::lang.cms_object.invalid_file', ['name' => $ex->getInvalidFileName()]),
             ]);
         } elseif ($ex instanceof \Winter\Storm\Halcyon\Exception\FileExistsException) {
             throw new ApplicationException(

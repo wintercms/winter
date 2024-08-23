@@ -102,10 +102,10 @@ class PluginVersion extends Model
                 foreach ($activeFlags as $flag => $enabled) {
                     if (
                         in_array($flag, [
-                        PluginManager::DISABLED_MISSING,
-                        PluginManager::DISABLED_REPLACED,
-                        PluginManager::DISABLED_REPLACEMENT_FAILED,
-                        PluginManager::DISABLED_MISSING_DEPENDENCIES,
+                            PluginManager::DISABLED_MISSING,
+                            PluginManager::DISABLED_REPLACED,
+                            PluginManager::DISABLED_REPLACEMENT_FAILED,
+                            PluginManager::DISABLED_MISSING_DEPENDENCIES,
                         ])
                     ) {
                         $this->disabledBySystem = true;

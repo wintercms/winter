@@ -224,7 +224,8 @@ class ServiceProvider extends ModuleServiceProvider
                     }
 
                     return twig_date_converter($env, $value, $timezone);
-                }, 'options' => ['needs_environment' => true]],
+                }, 'options' => ['needs_environment' => true],
+                ],
 
                 // Classes
                 'array_*'        => ['Arr', '*'],
@@ -252,7 +253,8 @@ class ServiceProvider extends ModuleServiceProvider
                     }
 
                     return twig_date_format_filter($env, $value, $format, $timezone);
-                }, 'options' => ['needs_environment' => true]],
+                }, 'options' => ['needs_environment' => true],
+                ],
                 'md'             => function ($value) {
                     return (is_string($value) && $value !== '') ? Markdown::parse($value) : '';
                 },

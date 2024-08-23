@@ -248,7 +248,7 @@ return [
         'email' => 'Email',
     ],
     'filter' => [
-      'all' => 'Todo',
+        'all' => 'Todo',
     ],
     'media' => [
         'rename_popup_title' => 'Renombrar',

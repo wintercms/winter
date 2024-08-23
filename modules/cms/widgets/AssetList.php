@@ -77,7 +77,7 @@ class AssetList extends WidgetBase
     public function render()
     {
         return $this->makePartial('body', [
-           'data' => $this->getData(),
+            'data' => $this->getData(),
         ]);
     }
 

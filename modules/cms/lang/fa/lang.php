@@ -189,7 +189,7 @@ return [
         'hidden_comment' => 'صفحات مخفی فقط برای کاربران وارد شده به سیستم نمایش داده می شود.',
         'enter_fullscreen' => 'حالت تمام صفحه',
         'exit_fullscreen' => 'خروج از حالت تمام صفحه',
-         'open_searchbox' => 'نمایش جستجو',
+        'open_searchbox' => 'نمایش جستجو',
         'close_searchbox'  => 'بستن جستجو',
         'open_replacebox' => 'نمایش جایگزینی',
         'close_replacebox'  => 'بستن جایگزینی',

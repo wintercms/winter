@@ -295,7 +295,7 @@ return [
         'email' => 'Surel',
     ],
     'filter' => [
-      'all' => 'semua',
+        'all' => 'semua',
     ],
     'media' => [
         'rename_popup_title' => 'Ganti nama',

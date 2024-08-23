@@ -77,8 +77,8 @@ class UserRole extends RoleBase
         // Winter default system roles
         if (
             $this->is_system || in_array($this->code, [
-            self::CODE_DEVELOPER,
-            self::CODE_PUBLISHER,
+                self::CODE_DEVELOPER,
+                self::CODE_PUBLISHER,
             ])
         ) {
             return true;

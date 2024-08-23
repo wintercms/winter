@@ -133,13 +133,15 @@ class MediaLibraryTest extends TestCase
         config(['filesystems.disks.test_local' => [
             'driver' => 'local',
             'root'   => storage_path('app'),
-        ]]);
+        ],
+        ]);
 
         config(['cms.storage.media' => [
             'disk'   => 'test_local',
             'folder' => 'media',
             'path'   => '/storage/app/media',
-        ]]);
+        ],
+        ]);
     }
 
     protected function copyMedia()

@@ -18,8 +18,8 @@ class Post extends ComponentBase
     {
         return [
             'show-featured' => [
-                 'description' => 'Display the post featured image or not',
-                 'default' => true,
+                'description' => 'Display the post featured image or not',
+                'default' => true,
             ],
         ];
     }
