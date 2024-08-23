@@ -33,6 +33,11 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-scripts
 
+      - name: Reset modules
+        run: |
+          git reset --hard
+          git clean -fd
+
       - name: Run code quality checks (on push)
         if: github.event_name == 'push'
         run: ./.github/workflows/utilities/phpcs-push ${{ github.sha }}
