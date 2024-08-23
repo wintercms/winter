@@ -2,12 +2,12 @@
 
 namespace System\Models;
 
-use File as FileHelper;
 use Illuminate\Support\Facades\View;
 use System\Classes\MailManager;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Mail\MailParser;
+use Winter\Storm\Support\Facades\File as FileHelper;
 
 /**
  * Mail layout
