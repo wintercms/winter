@@ -20,7 +20,7 @@ jobs:
           access_token: ${{ github.token }}
 
       - name: Checkout changes
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -45,7 +45,7 @@ jobs:
     name: JavaScript
     steps:
       - name: Checkout changes
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
             fetch-depth: 0
 
