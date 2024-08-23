@@ -2,17 +2,17 @@
 
 namespace Backend\Widgets;
 
-use ApplicationException;
 use Backend\Classes\FormField;
 use Backend\Classes\FormTabs;
 use Backend\Classes\FormWidgetBase;
 use Backend\Classes\WidgetBase;
 use Backend\Classes\WidgetManager;
-use BackendAuth;
+use Backend\Facades\BackendAuth;
 use Exception;
 use Form as FormHelper;
-use Lang;
+use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Html\Helper as HtmlHelper;
 
 /**
@@ -274,7 +274,7 @@ class Form extends WidgetBase
             'field_' . $field->type,
             [
                 'field' => $field,
-                'formModel' => $this->model
+                'formModel' => $this->model,
             ]
         );
     }
@@ -1304,7 +1304,7 @@ class Form extends WidgetBase
             } catch (Exception $ex) {
                 throw new ApplicationException(Lang::get('backend::lang.field.options_method_invalid_model', [
                     'model' => get_class($this->model),
-                    'field' => $field->fieldName
+                    'field' => $field->fieldName,
                 ]));
             }
 
@@ -1316,7 +1316,7 @@ class Form extends WidgetBase
                 throw new ApplicationException(Lang::get('backend::lang.field.options_method_not_exists', [
                     'model'  => get_class($model),
                     'method' => $methodName,
-                    'field'  => $field->fieldName
+                    'field'  => $field->fieldName,
                 ]));
             }
 
@@ -1336,7 +1336,7 @@ class Form extends WidgetBase
                     if (!is_array($result)) {
                         throw new ApplicationException(Lang::get('backend::lang.field.options_static_method_invalid_value', [
                             'class' => $options[0],
-                            'method' => $options[1]
+                            'method' => $options[1],
                         ]));
                     }
                     return $result;
@@ -1353,7 +1353,7 @@ class Form extends WidgetBase
                 throw new ApplicationException(Lang::get('backend::lang.field.options_method_not_exists', [
                     'model'  => get_class($this->model),
                     'method' => $fieldOptions,
-                    'field'  => $field->fieldName
+                    'field'  => $field->fieldName,
                 ]));
             }
 

@@ -2,9 +2,9 @@
 
 namespace Cms\Helpers;
 
-use Url;
-use Route;
-use Config;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * CMS Helper

@@ -2,7 +2,6 @@
 
 namespace System\Console;
 
-use Config;
 use Illuminate\Console\Command;
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\ExecutableFinder;
@@ -10,6 +9,7 @@ use Symfony\Component\Process\Process;
 use System\Classes\PluginManager;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\PathResolver;
+use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Str;
 
 /**
@@ -227,7 +227,7 @@ class WinterTest extends Command
     {
         $configs = [
             'modules' => [],
-            'plugins' => []
+            'plugins' => [],
         ];
 
         foreach (Config::get('cms.loadModules', ['System', 'Cms', 'Backend']) as $module) {

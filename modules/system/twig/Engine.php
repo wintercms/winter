@@ -2,9 +2,9 @@
 
 namespace System\Twig;
 
+use Illuminate\Contracts\View\Engine as EngineInterface;
 use System\Twig\Loader as TwigLoader;
 use Twig\Environment as TwigEnvironment;
-use Illuminate\Contracts\View\Engine as EngineInterface;
 
 /**
  * View engine used by the system, used for converting .htm files to twig.

@@ -11,7 +11,7 @@ class Plugin extends PluginBase
         return [
             'name' => 'Winter Empty Plugin',
             'description' => 'Empty plugin used by unit tests.',
-            'author' => 'Alexey Bobkov, Samuel Georges'
+            'author' => 'Alexey Bobkov, Samuel Georges',
         ];
     }
 }

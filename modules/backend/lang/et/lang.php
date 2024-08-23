@@ -2,32 +2,32 @@
 
 return [
     'auth' => [
-        'title' => 'Haldusliides'
+        'title' => 'Haldusliides',
     ],
     'field' => [
         'invalid_type' => 'Välja tüüpi :type pole olemas.',
         'options_method_invalid_model' => "Atribuut ':field' ei vasta ühelegi olemasolevale andmemudelile. Palun defineeri valikväärtuste funktioon :model andmemudelis.",
-        'options_method_not_exists' => "Andmemudelis :model peab olema defineeritud funktsioon :method(), mis tagastab valikväärtused välja ':field' jaoks."
+        'options_method_not_exists' => "Andmemudelis :model peab olema defineeritud funktsioon :method(), mis tagastab valikväärtused välja ':field' jaoks.",
     ],
     'widget' => [
         'not_registered' => "Vidina klassinimi ':name' pole registreeritud",
-        'not_bound' => "Vidin klassinimega ':name' pole seotud kontrolleriga"
+        'not_bound' => "Vidin klassinimega ':name' pole seotud kontrolleriga",
     ],
     'page' => [
         'untitled' => 'Nimeta',
         'access_denied' => [
             'label' => 'Juurdepääs keelatud',
             'help' => "Sul pole vajalikke õiguseid, et seda lehte näha.",
-            'cms_link' => 'Tagasi haldusliidesesse'
+            'cms_link' => 'Tagasi haldusliidesesse',
         ],
         'no_database' => [
             'label' => 'Andmebaas puudub',
             'help' => "Haldusliidese kasutamiseks peab olemas seadistatud andmebaas. Enne jätkamist palun kontrolli andmebaasi seadistust.",
-            'cms_link' => 'Tagasi kodulehele'
+            'cms_link' => 'Tagasi kodulehele',
         ],
     ],
     'partial' => [
-        'not_found_name' => "Koodiblokki ':name' ei leitud."
+        'not_found_name' => "Koodiblokki ':name' ei leitud.",
     ],
     'account' => [
         'sign_out' => 'Logi välja',
@@ -49,7 +49,7 @@ return [
         'apply' => 'Rakenda',
         'cancel' => 'Loobu',
         'delete' => 'Kustuta',
-        'ok' => 'OK'
+        'ok' => 'OK',
     ],
     'dashboard' => [
         'menu_label' => 'Töölaud',
@@ -98,7 +98,7 @@ return [
             'last_sign_in' => 'Sinu viimane sisselogimine oli',
             'view_access_logs' => 'Vaata juurdepääsu logi',
             'nice_message' => 'Kena päeva jätku!',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Administraator',
@@ -145,11 +145,11 @@ return [
             'new' => 'Uus grupp',
             'delete_confirm' => 'Kusuta see grupp?',
             'return' => 'Tagasi nimekirja',
-            'users_count' => 'Kasutajad'
+            'users_count' => 'Kasutajad',
         ],
         'preferences' => [
-            'not_authenticated' => 'Puudub autoriseeritud kasutaja kellele seadeid laadida või salvestada.'
-        ]
+            'not_authenticated' => 'Puudub autoriseeritud kasutaja kellele seadeid laadida või salvestada.',
+        ],
     ],
     'list' => [
         'default_title' => 'Nimekiri',
@@ -180,7 +180,7 @@ return [
         'delete_selected_confirm' => 'Kustuta valitud kirjed?',
         'delete_selected_success' => 'Valitud kirjed on kustutatud.',
         'column_switch_true' => 'Jah',
-        'column_switch_false' => 'Ei'
+        'column_switch_false' => 'Ei',
     ],
     'fileupload' => [
         'attachment' => 'Manus',
@@ -192,7 +192,7 @@ return [
         'upload_file' => 'Lae fail üles',
         'upload_error' => 'Üleslaadimisel tekkis viga',
         'remove_confirm' => 'Oled sa kindel?',
-        'remove_file' => 'Eemalda fail'
+        'remove_file' => 'Eemalda fail',
     ],
     'form' => [
         'create_title' => 'Loomine: :name',
@@ -249,7 +249,7 @@ return [
         'delete_row' => 'Kustuta rida',
         'concurrency_file_changed_title' => 'Faili on muudetud',
         'concurrency_file_changed_description' => "Teine kasutaja on muutnud sama faili, mida sina praegu muudad. Võid faili uuesti laadida ja sellega kaotada oma muudatused või kirjutada üle teise kasutaja muudatused.",
-        'return_to_list' => 'Tagasi nimekirja'
+        'return_to_list' => 'Tagasi nimekirja',
     ],
     'recordfinder' => [
         'find_record' => 'Leia kirje',
@@ -257,7 +257,7 @@ return [
     ],
     'pagelist' => [
         'page_link' => 'Lehe link',
-        'select_page' => 'Vali leht...'
+        'select_page' => 'Vali leht...',
     ],
     'relation' => [
         'missing_config' => "':config' jaoks puuduvad seoste definitsioonid.",
@@ -290,11 +290,11 @@ return [
         'link_name' => 'Lisa :name',
         'unlink' => 'Eemalda',
         'unlink_name' => 'Eemalda :name',
-        'unlink_confirm' => 'Oled sa kindel?'
+        'unlink_confirm' => 'Oled sa kindel?',
     ],
     'reorder' => [
         'default_title' => 'Muuda järjestust',
-        'no_records' => 'Ühtegi kirjet ei leitud.'
+        'no_records' => 'Ühtegi kirjet ei leitud.',
     ],
     'model' => [
         'name' => 'Andmemudel',
@@ -303,7 +303,7 @@ return [
         'missing_relation' => "Andmemudelil ':class' puudub definitsioon seosele ':relation'.",
         'missing_method' => "Andmemudelil ':class' puudub funktsioon ':method'.",
         'invalid_class' => "Klassis :class kasutatud andmemudel :model ei ole korrektne. See peab olema päritud klassist \Model.",
-        'mass_assignment_failed' => "Andmemudeli atribuudi ':attribute' väärtuste määramine ebaõnnestus."
+        'mass_assignment_failed' => "Andmemudeli atribuudi ':attribute' väärtuste määramine ebaõnnestus.",
     ],
     'warnings' => [
         'tips' => 'Näpunäited süsteemi seadistamiseks',
@@ -356,19 +356,19 @@ return [
         'no_wrap' => 'HTML blokktägid',
         'no_wrap_comment' => 'Nimekiri HTML tägidest, mida ei ole automaatselt vaja panna blokktägide sisse.',
         'remove_tags' => 'Eemalda HTML tägid',
-        'remove_tags_comment' => 'Nimekiri HTML tägidest, mis eemaldatakse automaatselt koos sisuga.'
+        'remove_tags_comment' => 'Nimekiri HTML tägidest, mis eemaldatakse automaatselt koos sisuga.',
     ],
     'tooltips' => [
-        'preview_website' => 'Kodulehe eelvaade'
+        'preview_website' => 'Kodulehe eelvaade',
     ],
     'mysettings' => [
         'menu_label' => 'Minu seaded',
-        'menu_description' => 'Sinu haldusliidese kontoga seonduvad seadistused'
+        'menu_description' => 'Sinu haldusliidese kontoga seonduvad seadistused',
     ],
     'myaccount' => [
         'menu_label' => 'Minu konto',
         'menu_description' => 'Muuda oma konto andmeid nagu nimi, e-posti aadress ja parool.',
-        'menu_keywords' => 'parool konto turva sala'
+        'menu_keywords' => 'parool konto turva sala',
     ],
     'branding' => [
         'menu_label' => 'Isikupärasta haldusliidest',
@@ -390,7 +390,7 @@ return [
         'menu_mode' => 'Menüü stiil',
         'menu_mode_inline' => 'Järjekorras',
         'menu_mode_tile' => 'Kastid',
-        'menu_mode_collapsed' => 'Minimaalne'
+        'menu_mode_collapsed' => 'Minimaalne',
     ],
     'backend_preferences' => [
         'menu_label' => 'Haldusliidese seaded',
@@ -400,7 +400,7 @@ return [
         'timezone' => 'Ajatsoon',
         'timezone_comment' => 'Kuva kõiki kuupäevi selles ajatsoonis.',
         'locale' => 'Keel',
-        'locale_comment' => 'Vali haldusliidese keel.'
+        'locale_comment' => 'Vali haldusliidese keel.',
     ],
     'access_log' => [
         'hint' => 'See logi sisaldab kõiki edukaid sisselogimisi haldusliidesesse. Andmeid hoitakse maksimaalselt :days päeva.',
@@ -411,12 +411,12 @@ return [
         'ip_address' => 'IP aaddress',
         'first_name' => 'Eesnimi',
         'last_name' => 'Perenimi',
-        'email' => 'E-post'
+        'email' => 'E-post',
     ],
     'filter' => [
         'all' => 'kõik',
         'options_method_not_exists' => "Andmemudelis :model peab olema defineeritud functioon :method(), mis tagastab valikud filtrile ':filter'.",
-        'date_all' => 'kõik perioodid'
+        'date_all' => 'kõik perioodid',
     ],
     'import_export' => [
         'upload_csv_file' => '1. Lae üles CSV fail',
@@ -487,15 +487,15 @@ return [
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtic)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
-        'manage_media' => 'Upload and manage media contents - images, videos, sounds, documents'
+        'manage_media' => 'Upload and manage media contents - images, videos, sounds, documents',
     ],
     'mediafinder' => [
         'label' => 'Media Finder',
-        'default_prompt' => 'Click the %s button to find a media item'
+        'default_prompt' => 'Click the %s button to find a media item',
     ],
     'media' => [
         'menu_label' => 'Media',

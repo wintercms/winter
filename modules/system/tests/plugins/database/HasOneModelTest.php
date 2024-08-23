@@ -2,10 +2,10 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Database\Tester\Models\Author;
 use Database\Tester\Models\Phone;
-use Model;
+use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Database\Model;
 
 class HasOneModelTest extends PluginTestCase
 {

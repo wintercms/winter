@@ -20,7 +20,7 @@ return [
             'online' => 'Σε λειτουργία',
             'maintenance' => 'Σε συντήρηση',
             'manage_themes' => 'Διαχείριση θεμάτων',
-        ]
+        ],
     ],
     'theme' => [
         'not_found_name' => "Το θέμα ':name' δεν βρέθηκε.",

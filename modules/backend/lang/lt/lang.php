@@ -2,32 +2,32 @@
 
 return [
     'auth' => [
-        'title' => 'Administracijos zona'
+        'title' => 'Administracijos zona',
     ],
     'field' => [
         'invalid_type' => 'Netinkamas laukelio tipas :type.',
         'options_method_invalid_model' => "Artributas ':field' nenuskaito tinkamo modelio. Bandykite nurodyti parinkties metodą išskirtinai modelio klasei :model",
-        'options_method_not_exists' => "Modelio klasė :model turi nurodyti metodą :method() gražinantį parinktis ':field' formos laukeliui."
+        'options_method_not_exists' => "Modelio klasė :model turi nurodyti metodą :method() gražinantį parinktis ':field' formos laukeliui.",
     ],
     'widget' => [
         'not_registered' => "Valdiklio klasės pavadinimas ':name' neiregistruotas",
-        'not_bound' => "Valdiklio klasės pavadinimas ':name' nepriskirtas kontroleriui"
+        'not_bound' => "Valdiklio klasės pavadinimas ':name' nepriskirtas kontroleriui",
     ],
     'page' => [
         'untitled' => 'Neužvardintas',
         'access_denied' => [
             'label' => 'Prieiga atmesta',
             'help' => "Neturite reikiamų prieigos teisių šio puslapio peržiūrai.",
-            'cms_link' => 'Grįžti į administraciją'
+            'cms_link' => 'Grįžti į administraciją',
         ],
         'no_database' => [
             'label' => 'Truksta duombazės',
             'help' => "Duomenų bazė reikalinga administracijos prieigai. Patikrinkite duomenų bazės konfigūraciją bei migracijas ir bandykite dar kartą.",
-            'cms_link' => 'Grįžti į svetainę'
+            'cms_link' => 'Grįžti į svetainę',
         ],
     ],
     'partial' => [
-        'not_found_name' => "Priedėlis ':name' nerastas."
+        'not_found_name' => "Priedėlis ':name' nerastas.",
     ],
     'account' => [
         'sign_out' => 'Atsijungti',
@@ -49,7 +49,7 @@ return [
         'apply' => 'Taikyti',
         'cancel' => 'Atšaukti',
         'delete' => 'trinti',
-        'ok' => 'GERAI'
+        'ok' => 'GERAI',
     ],
     'dashboard' => [
         'menu_label' => 'Valdymas',
@@ -98,7 +98,7 @@ return [
             'last_sign_in' => 'Paskutinį kartą prisijungėte',
             'view_access_logs' => 'Žiurėti prieigos registrą',
             'nice_message' => 'Geros Jums dienos!',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Administratorius',
@@ -145,11 +145,11 @@ return [
             'new' => 'Nauja Grupė',
             'delete_confirm' => 'Ištrinti šią administratorių grupę?',
             'return' => 'Grįžti į grupių sąrašą',
-            'users_count' => 'Vartotojai(ų)'
+            'users_count' => 'Vartotojai(ų)',
         ],
         'preferences' => [
-            'not_authenticated' => 'Nėra prisijungusio vartotojo, kurio nustatymus būtų galima užkrauti arba išsaugoti.'
-        ]
+            'not_authenticated' => 'Nėra prisijungusio vartotojo, kurio nustatymus būtų galima užkrauti arba išsaugoti.',
+        ],
     ],
     'list' => [
         'default_title' => 'Sąrašas',
@@ -180,7 +180,7 @@ return [
         'delete_selected_confirm' => 'Ištrinti pasirinktus įrašus?',
         'delete_selected_success' => 'Pasirinktus įrašus ištrynėme.',
         'column_switch_true' => 'Taip',
-        'column_switch_false' => 'Ne'
+        'column_switch_false' => 'Ne',
     ],
     'fileupload' => [
         'attachment' => 'Priedas',
@@ -192,7 +192,7 @@ return [
         'upload_file' => 'Įkelti failą',
         'upload_error' => 'Įkėlimo klaida',
         'remove_confirm' => 'Ar tikrai?',
-        'remove_file' => 'Pašalinti failą'
+        'remove_file' => 'Pašalinti failą',
     ],
     'form' => [
         'create_title' => 'Naujas :name',
@@ -248,14 +248,14 @@ return [
         'delete_row' => 'Trinti Eilutę',
         'concurrency_file_changed_title' => 'Failas buvo pakeistas',
         'concurrency_file_changed_description' => "Jūsų redaguojamą failą diske pakeitė kitas vartotojas. Galite perkrauti failą prarasdami pakeitimus arba perrašyti failą diske.",
-        'return_to_list' => 'Grįžti į sąrašą'
+        'return_to_list' => 'Grįžti į sąrašą',
     ],
     'recordfinder' => [
-        'find_record' => 'Rasti Įrašą'
+        'find_record' => 'Rasti Įrašą',
     ],
     'pagelist' => [
         'page_link' => 'Puslapio nuoroda',
-        'select_page' => 'Pasirinkti puslapį...'
+        'select_page' => 'Pasirinkti puslapį...',
     ],
     'relation' => [
         'missing_config' => "Subendrinimo elgsena neturi konfigūracijos ':config'.",
@@ -288,11 +288,11 @@ return [
         'link_name' => 'Nuoroda :name',
         'unlink' => 'Atjungti',
         'unlink_name' => 'Atjungti :name',
-        'unlink_confirm' => 'Ar tikrai?'
+        'unlink_confirm' => 'Ar tikrai?',
     ],
     'reorder' => [
         'default_title' => 'Rūšiuoti įrašus',
-        'no_records' => 'Nėra įrašų galimų rūšiavimui.'
+        'no_records' => 'Nėra įrašų galimų rūšiavimui.',
     ],
     'model' => [
         'name' => 'Modelis',
@@ -301,13 +301,13 @@ return [
         'missing_relation' => "Modelis ':class' neturi nustatymo ':relation'.",
         'missing_method' => "Modelis ':class' neturi metodo ':method'.",
         'invalid_class' => "Modelis :model naudojamas klasėje :class yra netinkamas. Jis turi kreiptis į \Model klasę.",
-        'mass_assignment_failed' => "Masinis priskyrimas nepavyko Modelio atributui ':attribute'."
+        'mass_assignment_failed' => "Masinis priskyrimas nepavyko Modelio atributui ':attribute'.",
     ],
     'warnings' => [
         'tips' => 'Sistemos konfigūracijos patarimai',
         'tips_description' => 'Yra problemų į kurias turėtumėte atkreipti dėmesį norėdami sukonfigūruoti sistemą tinkamai.',
         'permissions'  => 'Direktorija :name arba jos subdirektorijos nėra įrašomos naudojant PHP. Prašome nustatyti rašymo prieigą serveryje šiai direktorijai.',
-        'extension' => 'PHP priedas :name nėra įdiegtas. Prašome įdiegti ir aktyvuoti šį priedą.'
+        'extension' => 'PHP priedas :name nėra įdiegtas. Prašome įdiegti ir aktyvuoti šį priedą.',
     ],
     'editor' => [
         'menu_label' => 'Redaktoriaus nustatymai',
@@ -353,19 +353,19 @@ return [
         'no_wrap' => 'Neperkelti tagų',
         'no_wrap_comment' => 'Tagų sąrašas, kurie nebus perkeliami blokuose.',
         'remove_tags' => 'Pašalinti tagus',
-        'remove_tags_comment' => 'Tagų sąrašas, kurie šalinami su esančiu turiniu juose.'
+        'remove_tags_comment' => 'Tagų sąrašas, kurie šalinami su esančiu turiniu juose.',
     ],
     'tooltips' => [
-        'preview_website' => 'Peržiūrėti svetainę'
+        'preview_website' => 'Peržiūrėti svetainę',
     ],
     'mysettings' => [
         'menu_label' => 'Mano nustatymai',
-        'menu_description' => 'Nustatymai susieto su Jūsų administracine anketa'
+        'menu_description' => 'Nustatymai susieto su Jūsų administracine anketa',
     ],
     'myaccount' => [
         'menu_label' => 'Mano anketa',
         'menu_description' => 'Atnaujinkite savo anketos informaciją tokią kaip vardas, el.paštas ir slaptažodis.',
-        'menu_keywords' => 'saugus prisijungimas'
+        'menu_keywords' => 'saugus prisijungimas',
     ],
     'branding' => [
         'menu_label' => 'Redaguoti posistemę',
@@ -387,7 +387,7 @@ return [
         'menu_mode' => 'Meniu stilius',
         'menu_mode_inline' => 'Linijoje',
         'menu_mode_tile' => 'Langeliais',
-        'menu_mode_collapsed' => 'Sutraukta'
+        'menu_mode_collapsed' => 'Sutraukta',
     ],
     'backend_preferences' => [
         'menu_label' => 'Posistemės savybės',
@@ -397,7 +397,7 @@ return [
         'timezone' => 'Laiko Juosta',
         'timezone_comment' => 'Pritaikyti rodomas datas šiai laiko juostai.',
         'locale' => 'Kalba',
-        'locale_comment' => 'Pasirinkite norimą kalbą.'
+        'locale_comment' => 'Pasirinkite norimą kalbą.',
     ],
     'access_log' => [
         'hint' => 'Šis registras rodo sėkmingų administratoriaus prisijungimų sąrašą. Įrašai yra saugomi viso :days dienų.',
@@ -408,12 +408,12 @@ return [
         'ip_address' => 'IP adresas',
         'first_name' => 'Vardas',
         'last_name' => 'Pavardė',
-        'email' => 'El.paštas'
+        'email' => 'El.paštas',
     ],
     'filter' => [
         'all' => 'viską',
         'options_method_not_exists' => "Modelio klasė :model turi nurodyti metodą :method() gražinantš parinktis ':filter' filtrui.",
-        'date_all' => 'visas periodas'
+        'date_all' => 'visas periodas',
     ],
     'import_export' => [
         'upload_csv_file' => '1. Įkelkite CSV failą',
@@ -484,15 +484,15 @@ return [
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtic)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
-        'manage_media' => 'Įkelti ir tvarkyti media elementus - paveiksliukus, video, garsus, dokumentus'
+        'manage_media' => 'Įkelti ir tvarkyti media elementus - paveiksliukus, video, garsus, dokumentus',
     ],
     'mediafinder' => [
         'label' => 'Failų Tvarkyklė',
-        'default_prompt' => 'Spauskite %s mygtuką media failų paieškai'
+        'default_prompt' => 'Spauskite %s mygtuką media failų paieškai',
     ],
     'media' => [
         'menu_label' => 'Media',
@@ -557,5 +557,5 @@ return [
         'rename_new_name' => 'Naujas pavadinimas',
         'move_please_select' => 'prašome pasirinkti',
         'move_button' => 'Perkelti',
-    ]
+    ],
 ];

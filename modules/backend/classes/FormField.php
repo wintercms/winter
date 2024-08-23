@@ -3,9 +3,9 @@
 namespace Backend\Classes;
 
 use BackedEnum;
-use Html;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
+use Winter\Storm\Support\Facades\Html;
 use Winter\Storm\Support\Str;
 
 /**
@@ -520,7 +520,7 @@ class FormField
             'data-trigger' => '[name="' . $fullTriggerField . '"]',
             'data-trigger-action' => $triggerAction,
             'data-trigger-condition' => $triggerCondition,
-            'data-trigger-closest-parent' => 'form, div[data-control="formwidget"]'
+            'data-trigger-closest-parent' => 'form, div[data-control="formwidget"]',
         ];
 
         return $attributes + $newAttributes;
@@ -554,7 +554,7 @@ class FormField
         $newAttributes = [
             'data-input-preset' => '[name="' . $fullPresetField . '"]',
             'data-input-preset-type' => $presetType,
-            'data-input-preset-closest-parent' => 'form'
+            'data-input-preset-closest-parent' => 'form',
         ];
 
         if ($prefixInput = array_get($this->preset, 'prefixInput')) {

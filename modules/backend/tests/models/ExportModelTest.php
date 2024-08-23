@@ -2,9 +2,9 @@
 
 namespace Backend\Tests\Models;
 
-use System\Tests\Bootstrap\TestCase;
 use Backend\Models\ExportModel;
 use Illuminate\Http\Request;
+use System\Tests\Bootstrap\TestCase;
 
 if (!class_exists('Model')) {
     class_alias('Winter\Storm\Database\Model', 'Model');

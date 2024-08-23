@@ -2,10 +2,10 @@
 
 namespace Cms\Classes;
 
-use Str;
-use System\Classes\PluginManager;
-use SystemException;
 use Illuminate\Support\Facades\App;
+use System\Classes\PluginManager;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Str;
 
 /**
  * Component manager

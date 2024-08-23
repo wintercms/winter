@@ -2,13 +2,13 @@
 
 namespace Cms\Classes;
 
-use Lang;
-use File;
-use Cache;
-use Config;
-use Event;
-use Winter\Storm\Router\Router as StormRouter;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Router\Router as StormRouter;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * The router parses page URL patterns and finds pages by URLs.

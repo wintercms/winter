@@ -2,7 +2,7 @@
 
 namespace Cms\Classes;
 
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Helper class for processing video and audio tags inserted by the Media Manager.
@@ -44,7 +44,7 @@ class MediaViewHelper
 
         $tagDefinitions = [
             'audio' => '/data\-audio\s*=\s*"([^"]+)"/',
-            'video' => '/data\-video\s*=\s*"([^"]+)"/'
+            'video' => '/data\-video\s*=\s*"([^"]+)"/',
         ];
 
         if (preg_match_all('/\<figure\s+[^\>]+\>[^\<]*\<\/figure\>/i', $html, $matches)) {
@@ -55,7 +55,7 @@ class MediaViewHelper
                         $result[] = [
                             'declaration' => $mediaDeclaration,
                             'type' => $type,
-                            'src' => $nameMatch[1]
+                            'src' => $nameMatch[1],
                         ];
                     }
                 }

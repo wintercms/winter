@@ -2,13 +2,13 @@
 
 namespace Cms\Models;
 
-use File;
-use Model;
-use ApplicationException;
-use Winter\Storm\Filesystem\Zip;
 use Cms\Classes\Theme as CmsTheme;
-use FilesystemIterator;
 use Exception;
+use FilesystemIterator;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Filesystem\Zip;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Theme import model
@@ -41,7 +41,7 @@ class ThemeImport extends Model
     protected $fillable = [];
 
     public $attachOne = [
-        'uploaded_file' => \System\Models\File::class
+        'uploaded_file' => \System\Models\File::class,
     ];
 
     /**
@@ -58,7 +58,7 @@ class ThemeImport extends Model
             'layouts'  => true,
             'partials' => true,
             'content'  => true,
-        ]
+        ],
     ];
 
     /**

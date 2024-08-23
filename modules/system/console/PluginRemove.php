@@ -2,10 +2,10 @@
 
 namespace System\Console;
 
-use File;
-use Winter\Storm\Console\Command;
-use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
+use System\Classes\UpdateManager;
+use Winter\Storm\Console\Command;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Console command to remove a plugin.

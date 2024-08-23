@@ -2,18 +2,18 @@
 
 namespace System\Controllers;
 
-use Lang;
-use File;
-use Flash;
-use Config;
-use Redirect;
-use BackendMenu;
-use System\Models\MailBrandSetting;
-use System\Classes\SettingsManager;
-use System\Classes\MailManager;
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use System\Classes\MailManager;
+use System\Classes\SettingsManager;
+use System\Models\MailBrandSetting;
 use System\Models\MailLayout;
 use System\Models\MailTemplate;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Mail brand customization controller
@@ -97,7 +97,7 @@ class MailBrandSettings extends Controller
         $data = [
             'subject' => Config::get('app.name'),
             'appName' => Config::get('app.name'),
-            'texts' => Lang::get('system::lang.mail_brand.sample_template')
+            'texts' => Lang::get('system::lang.mail_brand.sample_template'),
         ];
 
         $layout = new MailLayout();

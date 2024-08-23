@@ -2,8 +2,8 @@
 
 namespace Backend\Traits;
 
-use Str;
 use Session;
+use Winter\Storm\Support\Str;
 
 /**
  * Session Maker Trait

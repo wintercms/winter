@@ -2,8 +2,8 @@
 
 namespace Winter\Tester\Components;
 
-use Cms\Classes\ComponentBase;
 use Cms\Classes\CodeBase;
+use Cms\Classes\ComponentBase;
 
 class Categories extends ComponentBase
 {
@@ -16,7 +16,7 @@ class Categories extends ComponentBase
     {
         return [
             'name' => 'Blog Categories Dummy Component',
-            'description' => 'Displays the list of categories in the blog.'
+            'description' => 'Displays the list of categories in the blog.',
         ];
     }
 
@@ -24,7 +24,7 @@ class Categories extends ComponentBase
     {
         return [
             ['title' => 'Lorum ipsum', 'content' => 'Post Content #1'],
-            ['title' => 'La Playa Nudista', 'content' => 'Second Post Content']
+            ['title' => 'La Playa Nudista', 'content' => 'Second Post Content'],
         ];
     }
 

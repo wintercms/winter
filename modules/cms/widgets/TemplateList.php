@@ -2,12 +2,12 @@
 
 namespace Cms\Widgets;
 
-use Str;
-use File;
-use Input;
-use Request;
-use Cms\Classes\Theme;
 use Backend\Classes\WidgetBase;
+use Cms\Classes\Theme;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Str;
 
 /**
  * Template list widget.
@@ -118,7 +118,7 @@ class TemplateList extends WidgetBase
         $this->vars['toolbarClass'] = $toolbarClass;
 
         return $this->makePartial('body', [
-            'data' => $this->getData()
+            'data' => $this->getData(),
         ]);
     }
 
@@ -215,7 +215,7 @@ class TemplateList extends WidgetBase
                 if (!array_key_exists($group, $foundGroups)) {
                     $newGroup = (object)[
                         'title' => $group,
-                        'items' => []
+                        'items' => [],
                     ];
 
                     $foundGroups[$group] = $newGroup;
@@ -295,7 +295,7 @@ class TemplateList extends WidgetBase
             'fileName'     => $item->getFileName(),
             'description'  => $description,
             'descriptions' => $descriptions,
-            'dragValue'    => $this->getItemDragValue($item)
+            'dragValue'    => $this->getItemDragValue($item),
         ];
 
         foreach ($this->sortingProperties as $property => $name) {
@@ -347,7 +347,7 @@ class TemplateList extends WidgetBase
     protected function updateList()
     {
         return [
-            '#' . $this->getId('template-list') => $this->makePartial('items', ['items' => $this->getData()])
+            '#' . $this->getId('template-list') => $this->makePartial('items', ['items' => $this->getData()]),
         ];
     }
 

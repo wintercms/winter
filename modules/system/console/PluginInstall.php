@@ -2,9 +2,9 @@
 
 namespace System\Console;
 
-use Winter\Storm\Console\Command;
-use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
+use System\Classes\UpdateManager;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to install a new plugin.

@@ -3,43 +3,43 @@
 return [
     'auth' => [
         'title' => '管理',
-        'invalid_login' => '无法匹配到您输入的相关内容，请检查后重试。'
+        'invalid_login' => '无法匹配到您输入的相关内容，请检查后重试。',
     ],
     'field' => [
         'invalid_type' => '不合法的字段类型 :type.',
         'options_method_invalid_model' => "属性 ':field' 不能解析为有效模型. 请尝试为模型类:model指定一个可选方法.",
         'options_method_not_exists' => "模型 :model 必须定义一个返回 ':field' 表单字段选项的方法 :method()。",
-        'colors_method_not_exists' => "模型 :model 必须定义一个返回十六进制格式的颜色值 ':field' 字段的 :method() 方法。 "
+        'colors_method_not_exists' => "模型 :model 必须定义一个返回十六进制格式的颜色值 ':field' 字段的 :method() 方法。 ",
     ],
     'widget' => [
         'not_registered' => "未注册部件 ':name' ",
-        'not_bound' => "部件 ':name' 未绑定至控制器"
+        'not_bound' => "部件 ':name' 未绑定至控制器",
     ],
     'page' => [
         'untitled' => '未命名',
         '404' => [
             'label'     => '找不到页面',
             'help'      => "无法访问到您请求的URL资源，试试其它的？",
-            'back_link' => '返回上个页面'
+            'back_link' => '返回上个页面',
         ],
         'access_denied' => [
             'label' => '拒绝访问',
             'help' => "您没有访问该页面所需的权限.",
-            'cms_link' => '返回后台'
+            'cms_link' => '返回后台',
         ],
         'no_database' => [
             'label' => '无法找到数据库',
             'help' => "需要数据库以访问后端。请在再次尝试之前检查数据库的配置和迁移。",
-            'cms_link' => '返回首页'
+            'cms_link' => '返回首页',
         ],
     ],
     'partial' => [
         'not_found_name' => "未找到部件 ':name' ",
-        'invalid_name' => '未知的部件名称 :name '
+        'invalid_name' => '未知的部件名称 :name ',
     ],
     'ajax_handler' => [
         'invalid_name' => '未知的AJAX处理方法 :name.',
-        'not_found' => "无法找到AJAX处理方法 ':name' "
+        'not_found' => "无法找到AJAX处理方法 ':name' ",
     ],
     'account' => [
         'signed_in_as' => '以 :full_name 身份登陆',
@@ -63,7 +63,7 @@ return [
         'apply' => '应用',
         'cancel' => '取消',
         'delete' => '删除',
-        'ok' => 'OK'
+        'ok' => 'OK',
     ],
     'dashboard' => [
         'menu_label' => '仪表盘',
@@ -112,7 +112,7 @@ return [
             'last_sign_in' => '您最后登陆是',
             'view_access_logs' => '访问登陆日志',
             'nice_message' => '祝你有美好的一天！',
-        ]
+        ],
     ],
     'user' => [
         'name' => '管理员',
@@ -163,7 +163,7 @@ return [
             'new' => '新管理组',
             'delete_confirm' => '您真的想要删除这个管理组?',
             'return' => '返回组列表',
-            'users_count' => '用户'
+            'users_count' => '用户',
         ],
         'role' => [
             'name' => '角色',
@@ -177,13 +177,13 @@ return [
             'new' => '新建角色',
             'delete_confirm' => '确定删除该角色?',
             'return' => '返回角色列表',
-            'users_count' => '用户'
+            'users_count' => '用户',
         ],
         'preferences' => [
-            'not_authenticated' => '无认证用户加载或保存设置.'
+            'not_authenticated' => '无认证用户加载或保存设置.',
         ],
         'trashed_hint_title' => '该账户已经被删除',
-        'trashed_hint_desc' => '该账户已经被删除而无法登录。你可以点击右下角的恢复按钮进行恢复。'
+        'trashed_hint_desc' => '该账户已经被删除而无法登录。你可以点击右下角的恢复按钮进行恢复。',
     ],
     'list' => [
         'default_title' => '列表',
@@ -214,7 +214,7 @@ return [
         'delete_selected_confirm' => '删除选中的项?',
         'delete_selected_success' => '成功删除选择项',
         'column_switch_true' => '是',
-        'column_switch_false' => '否'
+        'column_switch_false' => '否',
     ],
     'fileupload' => [
         'attachment' => '附件',
@@ -226,11 +226,11 @@ return [
         'upload_file' => '上传文件',
         'upload_error' => '上传错误',
         'remove_confirm' => '你确定吗？',
-        'remove_file' => '删除文件'
+        'remove_file' => '删除文件',
     ],
     'repeater' => [
         'min_items_failed' => ':name 需要大于 :min ',
-        'max_items_failed' => ':name 需要小于 :max '
+        'max_items_failed' => ':name 需要小于 :max ',
     ],
     'form' => [
         'create_title' => '新 :name',
@@ -291,7 +291,7 @@ return [
         'delete_row' => '删除行',
         'concurrency_file_changed_title' => '文件改动',
         'concurrency_file_changed_description' => "您正在编辑的文件正在被其他用户修改，您可以重载或覆盖磁盘上的文件。",
-        'return_to_list' => '返回列表'
+        'return_to_list' => '返回列表',
     ],
     'recordfinder' => [
         'find_record' => '查找记录',
@@ -300,7 +300,7 @@ return [
     ],
     'pagelist' => [
         'page_link' => '页面链接',
-        'select_page' => '选择一个页面...'
+        'select_page' => '选择一个页面...',
     ],
     'relation' => [
         'missing_config' => "关系无配置文件 ':config'",
@@ -337,7 +337,7 @@ return [
     ],
     'reorder' => [
         'default_title' => '重新排序记录',
-        'no_records' => '没有可供排序的记录.'
+        'no_records' => '没有可供排序的记录.',
     ],
     'model' => [
         'name' => '模型',
@@ -346,14 +346,14 @@ return [
         'missing_relation' => "模型 ':class' 不包含 ':relation'.",
         'missing_method' => "模型 ':class' 不包含 ':method'.",
         'invalid_class' => "模型 :model 在 :class 中是不合法的，它必须继承 \\Model 类.",
-        'mass_assignment_failed' => "为模型属性':attribute'赋值失败."
+        'mass_assignment_failed' => "为模型属性':attribute'赋值失败.",
     ],
     'warnings' => [
         'tips' => '系统配置小技巧',
         'tips_description' => '您需要注意以下问题以使系统更好工作。',
         'permissions' => '目录 :name 或子目录对PHP不可写. 请在服务器中对此目录设置正确权限。',
         'extension' => 'PHP扩展 :name 未安装，请安装此库并激活扩展.',
-        'plugin_missing' => '依赖于未安装的插件 :name，请安装该插件.'
+        'plugin_missing' => '依赖于未安装的插件 :name，请安装该插件.',
     ],
     'editor' => [
         'menu_label' => '代码编辑器选项',
@@ -401,19 +401,19 @@ return [
         'remove_tags' => '移除标签',
         'remove_tags_comment' => '所列标签将与其包裹的内容一起删除.',
         'toolbar_buttons' => '工具栏按钮',
-        'toolbar_buttons_comment' => '默认在富文本编辑器中显示的工具栏按钮。例如：'
+        'toolbar_buttons_comment' => '默认在富文本编辑器中显示的工具栏按钮。例如：',
     ],
     'tooltips' => [
-        'preview_website' => '预览网站'
+        'preview_website' => '预览网站',
     ],
     'mysettings' => [
         'menu_label' => '我的设置',
-        'menu_description' => '涉及您管理帐号的设置'
+        'menu_description' => '涉及您管理帐号的设置',
     ],
     'myaccount' => [
         'menu_label' => '我的账户',
         'menu_description' => '更新你的账户细节, 如姓名、邮件地址和密码.',
-        'menu_keywords' => '安全登录'
+        'menu_keywords' => '安全登录',
     ],
     'branding' => [
         'menu_label' => '自定义后台',
@@ -438,7 +438,7 @@ return [
         'menu_mode_inline' => '行内',
         'menu_mode_inline_no_icons' => '行内（无图标）',
         'menu_mode_tile' => '标题',
-        'menu_mode_collapsed' => '已折叠'
+        'menu_mode_collapsed' => '已折叠',
     ],
     'backend_preferences' => [
         'menu_label' => '后台设置',
@@ -448,7 +448,7 @@ return [
         'timezone' => '时区',
         'timezone_comment' => '选择您希望使用的本地语言。',
         'locale' => '语言',
-        'locale_comment' => '选择您想要的语言环境.'
+        'locale_comment' => '选择您想要的语言环境.',
     ],
     'access_log' => [
         'hint' => '此日志显示管理员成功登录信息。记录将保存 :days 天。',
@@ -461,13 +461,13 @@ return [
         'ip_address' => 'IP地址',
         'first_name' => '名',
         'last_name' => '姓',
-        'email' => '电子邮箱'
+        'email' => '电子邮箱',
     ],
     'filter' => [
         'all' => '全部',
         'options_method_not_exists' => "模型 :model 必须定义方法 :method() 并为过滤器 ':filter'返回可选项.",
         'date_all' => '所有日期',
-        'number_all' => '任意数值'
+        'number_all' => '任意数值',
     ],
     'import_export' => [
         'upload_csv_file' => '1. 上传一个 CSV 文件',
@@ -539,15 +539,15 @@ return [
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtic)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
-        'manage_media' => '管理媒体'
+        'manage_media' => '管理媒体',
     ],
     'mediafinder' => [
         'label' => '媒体查找器',
-        'default_prompt' => '点击 %s 按钮查找媒体项'
+        'default_prompt' => '点击 %s 按钮查找媒体项',
     ],
     'media' => [
         'menu_label' => '媒体',
@@ -615,5 +615,5 @@ return [
         'rename_new_name' => '新名称',
         'move_please_select' => '请选择',
         'move_button' => '移动',
-    ]
+    ],
 ];

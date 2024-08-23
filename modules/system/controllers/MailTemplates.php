@@ -2,13 +2,13 @@
 
 namespace System\Controllers;
 
-use Mail;
-use Flash;
-use BackendMenu;
 use Backend\Classes\Controller;
-use System\Models\MailTemplate;
-use System\Classes\SettingsManager;
+use Backend\Facades\BackendMenu;
 use Exception;
+use System\Classes\SettingsManager;
+use System\Models\MailTemplate;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Mail;
 
 /**
  * Mail templates controller
@@ -32,7 +32,7 @@ class MailTemplates extends Controller
     public $listConfig = [
         'templates' => 'config_templates_list.yaml',
         'layouts' => 'config_layouts_list.yaml',
-        'partials' => 'config_partials_list.yaml'
+        'partials' => 'config_partials_list.yaml',
     ];
 
     /**

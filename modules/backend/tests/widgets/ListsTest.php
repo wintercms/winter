@@ -2,11 +2,11 @@
 
 namespace Backend\Tests\Widgets;
 
+use Backend\Models\User;
+use Backend\Tests\Fixtures\Models\UserFixture;
+use Backend\Widgets\Lists;
 use System\Tests\Bootstrap\PluginTestCase;
 use Winter\Storm\Exception\ApplicationException;
-use Backend\Tests\Fixtures\Models\UserFixture;
-use Backend\Models\User;
-use Backend\Widgets\Lists;
 
 class ListsTest extends PluginTestCase
 {
@@ -65,14 +65,14 @@ class ListsTest extends PluginTestCase
             'columns' => [
                 'id' => [
                     'type' => 'text',
-                    'label' => 'ID'
+                    'label' => 'ID',
                 ],
                 'email' => [
                     'type' => 'text',
                     'label' => 'Email',
-                    'permission' => 'test.*'
-                ]
-            ]
+                    'permission' => 'test.*',
+                ],
+            ],
         ]);
         $list->render();
 
@@ -128,16 +128,16 @@ class ListsTest extends PluginTestCase
             'columns' => [
                 'id' => [
                     'type' => 'text',
-                    'label' => 'ID'
+                    'label' => 'ID',
                 ],
                 'email' => [
                     'type' => 'text',
                     'label' => 'Email',
                     'permissions' => ($singlePermission) ? 'test.access_field' : [
-                        'test.access_field'
-                    ]
-                ]
-            ]
+                        'test.access_field',
+                    ],
+                ],
+            ],
         ]);
     }
 }

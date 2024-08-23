@@ -2,8 +2,8 @@
 
 namespace Backend\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Backend\Classes\NavigationManager;
+use System\Tests\Bootstrap\TestCase;
 
 class NavigationManagerTest extends TestCase
 {
@@ -18,8 +18,8 @@ class NavigationManagerTest extends TestCase
                 'label' => 'Dashboard',
                 'icon' => 'icon-dashboard',
                 'url' => 'http://example.com',
-                'order' => 100
-            ]
+                'order' => 100,
+            ],
         ]);
 
         $items = $manager->listMainMenuItems();
@@ -88,8 +88,8 @@ class NavigationManagerTest extends TestCase
             'print' => [
                 'label' => 'Print',
                 'icon' => 'icon-print',
-                'url' => 'javascript:window.print()'
-            ]
+                'url' => 'javascript:window.print()',
+            ],
         ]);
 
         $items = $manager->listMainMenuItems();
@@ -113,8 +113,8 @@ class NavigationManagerTest extends TestCase
             'print' => [
                 'label' => 'Print',
                 'icon' => 'icon-print',
-                'url' => 'javascript:window.print()'
-            ]
+                'url' => 'javascript:window.print()',
+            ],
         ]);
 
         $manager->registerOwnerAlias('Winter.Tester', 'Alias.Tester');
@@ -136,8 +136,8 @@ class NavigationManagerTest extends TestCase
             'close' => [
                 'label' => 'Close',
                 'icon' => 'icon-times',
-                'url' => 'javascript:window.close()'
-            ]
+                'url' => 'javascript:window.close()',
+            ],
         ]);
 
         $items = $manager->listMainMenuItems();
@@ -156,8 +156,8 @@ class NavigationManagerTest extends TestCase
             'close' => [
                 'label' => 'Close',
                 'icon' => 'icon-times',
-                'url' => 'javascript:window.close()'
-            ]
+                'url' => 'javascript:window.close()',
+            ],
         ]);
 
         $manager->registerOwnerAlias('Winter.Tester', 'Alias.Tester');
@@ -183,9 +183,9 @@ class NavigationManagerTest extends TestCase
                 'url' => 'http://google.com',
                 'permissions' => [
                     'winter.tester.access_foo',
-                    'winter.tester.access_bar'
-                ]
-            ]
+                    'winter.tester.access_bar',
+                ],
+            ],
         ]);
 
         $manager->setContext('Winter.Tester', 'blog');
@@ -222,9 +222,9 @@ class NavigationManagerTest extends TestCase
                 'url' => 'http://google.com',
                 'permissions' => [
                     'winter.tester.access_foo',
-                    'winter.tester.access_bar'
-                ]
-            ]
+                    'winter.tester.access_bar',
+                ],
+            ],
         ]);
 
         $manager->registerOwnerAlias('Winter.Tester', 'Alias.Tester');
@@ -260,8 +260,8 @@ class NavigationManagerTest extends TestCase
             'bar' => [
                 'label' => 'Bar',
                 'icon' => 'icon-bars',
-                'url' => 'http://yahoo.com'
-            ]
+                'url' => 'http://yahoo.com',
+            ],
         ]);
 
         $manager->setContext('Winter.Tester', 'blog');
@@ -284,8 +284,8 @@ class NavigationManagerTest extends TestCase
             'bar' => [
                 'label' => 'Bar',
                 'icon' => 'icon-bars',
-                'url' => 'http://yahoo.com'
-            ]
+                'url' => 'http://yahoo.com',
+            ],
         ]);
 
         $manager->registerOwnerAlias('Winter.Tester', 'Alias.Tester');

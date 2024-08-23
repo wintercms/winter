@@ -76,15 +76,15 @@ return [
             'events' => 'Eventos',
             'customers' => 'Clientes',
             'my_settings' => 'Configurações',
-            'notifications' => 'Notificações'
-        ]
+            'notifications' => 'Notificações',
+        ],
     ],
     'theme' => [
         'label' => 'Tema',
         'unnamed' => 'Tema sem nome',
         'name' => [
             'label' => 'Nome do Tema',
-            'help' => 'Nome do tema deve ser único. Por exemplo, Winter.Vanilla'
+            'help' => 'Nome do tema deve ser único. Por exemplo, Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -93,7 +93,7 @@ return [
         'installed' => 'Temas instalados',
         'no_themes' => 'Não há temas instalados.',
         'recommended' => 'Recomendado',
-        'remove_confirm' => 'Você tem certeza que deseja remover este tema?'
+        'remove_confirm' => 'Você tem certeza que deseja remover este tema?',
     ],
     'plugin' => [
         'label' => 'Plugin',
@@ -102,7 +102,7 @@ return [
             'label' => 'Nome do Plugin',
             'help' => 'Nomeie o plugin pelo seu código exclusivo. Por exemplo, Winter.Blog',
         ],
-        'by_author' => 'Por :name'
+        'by_author' => 'Por :name',
     ],
     'plugins' => [
         'manage' => 'Gerenciar plugins',
@@ -222,7 +222,7 @@ return [
         'sending' => 'Enviando mensagem de teste...',
         'return' => 'Retornar à lista de modelos',
         'options' => 'Opções',
-        'disable_auto_inline_css' => 'Desativar CSS inline automático'
+        'disable_auto_inline_css' => 'Desativar CSS inline automático',
     ],
     'mail_brand' => [
         'menu_label' => 'Personalizar Email',
@@ -236,7 +236,7 @@ return [
                 'description' => 'Descrição',
                 'price' => 'Priço',
                 'centered' => 'Centralizado',
-                'right_aligned' => 'Alinhado à direita'
+                'right_aligned' => 'Alinhado à direita',
             ],
             'buttons' => [
                 'primary' => 'Botão principal',
@@ -247,7 +247,7 @@ return [
             'more' => 'Mais alguns textos',
             'promotion' => 'Código do cupom: WINTER',
             'subcopy' => 'Esta é a subcópia do email',
-            'thanks' => 'Obrigado'
+            'thanks' => 'Obrigado',
         ],
         'fields' => [
             '_section_background' => 'Fundo',
@@ -273,7 +273,7 @@ return [
             'panel_bg' => 'Fundo do painel',
             'promotion_bg' => 'Fundo do cupom promocional',
             'promotion_border_color' => 'Cor da borda cupom promocional',
-        ]
+        ],
     ],
     'install' => [
         'project_label' => 'Anexar ao projeto',
@@ -388,7 +388,7 @@ return [
         'created_at' => 'Data & Hora',
         'message' => 'Mensagem',
         'level' => 'Nível',
-        'preview_title' => 'Evento'
+        'preview_title' => 'Evento',
     ],
     'request_log' => [
         'hint' => 'Este registro mostra uma lista de requisições que requerem atenção. Por exemplo, se um usuário solicitar uma página não encontrada, será registrado com o status 404.',
@@ -404,7 +404,7 @@ return [
         'referer' => 'Referências',
         'url' => 'URL',
         'status_code' => 'Status',
-        'preview_title' => 'Requisição'
+        'preview_title' => 'Requisição',
     ],
     'permissions' => [
         'name' => 'Sistema',
@@ -420,7 +420,7 @@ return [
         'manage_own_editor' => 'Gerenciar preferências pessoais do editor de código',
         'view_the_dashboard' => 'Visualizar o painel',
         'manage_default_dashboard' => 'Gerenciar o painel padrão',
-        'manage_branding' => 'Personalizar o painel'
+        'manage_branding' => 'Personalizar o painel',
     ],
     'log' => [
         'menu_label' => 'Configurações de registros',
@@ -440,7 +440,7 @@ return [
     'page' => [
         'custom_error' => [
             'label' => 'Erro de página',
-            'help' => "Desculpe, mas algo deu errado e a página não pode ser exibida."
+            'help' => "Desculpe, mas algo deu errado e a página não pode ser exibida.",
         ],
         'invalid_token' => [
             'label' => 'Token de segurança inválido',

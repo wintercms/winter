@@ -10,19 +10,19 @@ return [
         'invalid_file_extension' => 'Felaktig filändelse: :invalid. Tillåtna filändelser är: :allowed.',
         'error_deleting' => 'Det gick inte att radera mallfilen: ":name".',
         'delete_success' => 'Mallarna är nu raderade: :count.',
-        'file_name_required' => 'Filnamnsfältet är obligatoriskt.'
+        'file_name_required' => 'Filnamnsfältet är obligatoriskt.',
     ],
     'dashboard' => [
         'active_theme' => [
             'online' => 'online',
             'maintenance' => 'i underhåll',
-        ]
+        ],
     ],
     'theme' => [
         'not_found_name' => "Kunde inte hitta temat ':name'.",
         'active' => [
             'not_set' => "Ett aktivt tema är ej valt",
-            'not_found' => 'Kunde inte hitta det aktiva temat.'
+            'not_found' => 'Kunde inte hitta det aktiva temat.',
         ],
         'edit' => [
             'not_set' => "Redigeringstemat är ej valt",
@@ -91,7 +91,7 @@ return [
         'settings_menu' => 'Underhållsläge',
         'settings_menu_description' => 'Konfigurera underhållsläge-sidan och växla inställningen.',
         'is_enabled' => 'Akrivera underhållsläge-läget',
-        'is_enabled_comment' => 'När den är aktiverad så kommer besökare att se sidan som väljs nedan.'
+        'is_enabled_comment' => 'När den är aktiverad så kommer besökare att se sidan som väljs nedan.',
     ],
     'page' => [
         'not_found_name' => "The page ':name' is not found",
@@ -110,7 +110,7 @@ return [
         'invalid_url' => 'Felaktigt URL-format. URLen skall starta med ett / och kan innehålla siffror, bokstäver och följande tecken: ._-[]:?|/+*^$',
         'delete_confirm_multiple' => 'Vill du verkligen radera markerade sidor?',
         'delete_confirm_single' => 'Vill du verkligen radera denna sida?',
-        'no_layout' => '-- ingen layout --'
+        'no_layout' => '-- ingen layout --',
     ],
     'layout' => [
         'not_found_name' => "Layouten ':name' hittades ej",
@@ -119,7 +119,7 @@ return [
         'no_list_records' => 'Inga layouter funna',
         'new' => 'Ny layout',
         'delete_confirm_multiple' => 'Vill du verkligen radera valda layouter?',
-        'delete_confirm_single' => 'Vill du verkligen radera denna layouter?'
+        'delete_confirm_single' => 'Vill du verkligen radera denna layouter?',
     ],
     'partial' => [
         'not_found_name' => "En partial med namnet ':name' kunde ej hittas",
@@ -129,7 +129,7 @@ return [
         'no_list_records' => 'Inga partials funna',
         'delete_confirm_multiple' => 'Vill du verkligen radera markerade partials?',
         'delete_confirm_single' => 'Vill du verkligen radera denna partial?',
-        'new' => 'Ny partial'
+        'new' => 'Ny partial',
     ],
     'content' => [
         'not_found_name' => "Innehållet ':name' kunde ej hittas",
@@ -138,18 +138,18 @@ return [
         'no_list_records' => 'Inga innehållsfiler funna',
         'delete_confirm_multiple' => 'Vill du verkligen radera markerade filer eller mappar?',
         'delete_confirm_single' => 'Vill du verkligen radera detta innehållsfil?',
-        'new' => 'Ny innehållsfil'
+        'new' => 'Ny innehållsfil',
     ],
     'ajax_handler' => [
         'invalid_name' => "Felaktig AJAX-hanterare: :name",
         'not_found' => "AJAX-hanterare ':name' kunde ej hittas",
     ],
     'cms' => [
-        'menu_label' => "CMS"
+        'menu_label' => "CMS",
     ],
     'sidebar' => [
         'add' => 'Lägg till',
-        'search' => 'Sök...'
+        'search' => 'Sök...',
     ],
     'editor' => [
         'settings' => 'Inställningar',
@@ -169,7 +169,7 @@ return [
         'hidden' => 'Dold',
         'hidden_comment' => 'Dolda sidor är endast tillgängliga genom inloggade back-end användare.',
         'enter_fullscreen' => 'Starta helskärmsläge',
-        'exit_fullscreen' => 'Avsluta helskärmsläge'
+        'exit_fullscreen' => 'Avsluta helskärmsläge',
     ],
     'asset' => [
         'menu_label' => "Filsystem",
@@ -207,7 +207,7 @@ return [
         'error_moving_file' => 'Ett fel uppstod vid flytt av fil :file',
         'error_moving_directory' => 'Ett fel uppstod vid flytt av mapp :dir',
         'error_deleting_directory' => 'Ett fel uppstod vid radering av orginalmapp :dir',
-        'path' => 'Sökväg'
+        'path' => 'Sökväg',
     ],
     'component' => [
         'menu_label' => "Komponenter",
@@ -224,7 +224,7 @@ return [
     'template' => [
         'invalid_type' => "Felaktig malltyp",
         'not_found' => "Den angivna mallen kunde ej hittas",
-        'saved' => "Mallen har sparats"
+        'saved' => "Mallen har sparats",
     ],
     'permissions' => [
         'name' => 'Cms',

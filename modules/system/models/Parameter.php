@@ -2,8 +2,8 @@
 
 namespace System\Models;
 
-use App;
-use Cache;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Winter\Storm\Database\Model;
 
 /**

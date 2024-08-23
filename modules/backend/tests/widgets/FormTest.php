@@ -2,10 +2,10 @@
 
 namespace Backend\Tests\Widgets
 {
-    use System\Tests\Bootstrap\PluginTestCase;
-    use Winter\Storm\Database\Model;
     use Backend\Tests\Fixtures\Models\UserFixture;
     use Backend\Widgets\Form;
+    use System\Tests\Bootstrap\PluginTestCase;
+    use Winter\Storm\Database\Model;
 
     class FormTestModel extends Model
     {
@@ -76,14 +76,14 @@ namespace Backend\Tests\Widgets
                 'fields' => [
                     'testField' => [
                         'type' => 'text',
-                        'label' => 'Test 1'
+                        'label' => 'Test 1',
                     ],
                     'testRestricted' => [
                         'type' => 'text',
                         'label' => 'Test 2',
-                        'permission' => 'test.*'
-                    ]
-                ]
+                        'permission' => 'test.*',
+                    ],
+                ],
             ]);
 
             $form->render();
@@ -132,18 +132,18 @@ namespace Backend\Tests\Widgets
                     'trigger' => [
                         'type' => 'checkboxlist',
                         'options' => [
-                            '1' => 'Value One'
-                        ]
+                            '1' => 'Value One',
+                        ],
                     ],
                     'triggered' => [
                         'type' => 'text',
                         'trigger' => [
                             'field' => 'trigger[]',
                             'action' => 'show',
-                            'condition' => 'value[1]'
-                        ]
-                    ]
-                ]
+                            'condition' => 'value[1]',
+                        ],
+                    ],
+                ],
             ]);
 
             $form->render();
@@ -197,7 +197,7 @@ namespace Backend\Tests\Widgets
                         'type' => 'dropdown',
                         'expect' => ['dropdown', 'options'],
                     ],
-                ]
+                ],
             ]);
 
             $form->render();
@@ -215,16 +215,16 @@ namespace Backend\Tests\Widgets
                 'fields' => [
                     'testField' => [
                         'type' => 'text',
-                        'label' => 'Test 1'
+                        'label' => 'Test 1',
                     ],
                     'testRestricted' => [
                         'type' => 'text',
                         'label' => 'Test 2',
                         'permissions' => ($singlePermission) ? 'test.access_field' : [
-                            'test.access_field'
-                        ]
-                    ]
-                ]
+                            'test.access_field',
+                        ],
+                    ],
+                ],
             ]);
         }
     }

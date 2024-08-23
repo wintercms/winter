@@ -2,9 +2,9 @@
 
 namespace Backend\Traits;
 
-use Str;
 use Backend\Classes\FormField;
 use Winter\Storm\Halcyon\Model as HalcyonModel;
+use Winter\Storm\Support\Str;
 
 /**
  * Implements special logic for processing form data, typically from from postback, and

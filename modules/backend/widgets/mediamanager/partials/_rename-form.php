@@ -1,7 +1,7 @@
 <?= Form::ajax($this->getEventHandler('onApplyName'), [
     'success' => "\$el.trigger('close.oc.popup'); \$('#" . $listId . "').trigger('mediarefresh');",
     'data-stripe-load-indicator' => 1,
-    'id' => 'media-rename-popup-form'
+    'id' => 'media-rename-popup-form',
 ]) ?>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="popup">&times;</button>

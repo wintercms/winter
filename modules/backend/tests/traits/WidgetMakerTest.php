@@ -2,8 +2,8 @@
 
 namespace Backend\Tests\Traits;
 
-use System\Tests\Bootstrap\TestCase;
 use Backend\Classes\Controller;
+use System\Tests\Bootstrap\TestCase;
 
 class ExampleTraitClass
 {

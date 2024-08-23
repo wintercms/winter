@@ -2,10 +2,10 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Controller;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
+use System\Tests\Bootstrap\TestCase;
 
 class PageTest extends TestCase
 {

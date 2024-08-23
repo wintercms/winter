@@ -583,7 +583,7 @@ return [
             'windows_1250' => 'Windows-1250 (CP1250, Central and Eastern European)',
             'windows_1251' => 'Windows-1251 (CP1251)',
             'windows_1252' => 'Windows-1252 (CP1252)',
-        ]
+        ],
     ],
     'permissions' => [
         'manage_media' => 'Загрузка и управление медиаконтентом - изображениями, видео, звуками, документами',

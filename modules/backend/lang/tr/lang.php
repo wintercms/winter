@@ -195,7 +195,7 @@ return [
             'users_count' => 'Kişiler',
         ],
         'preferences' => [
-            'not_authenticated' => 'Ayarları görüntülemek veya düzenlemek için yetkili bir kullanıcı yok.'
+            'not_authenticated' => 'Ayarları görüntülemek veya düzenlemek için yetkili bir kullanıcı yok.',
         ],
         'trashed_hint_title' => 'Bu hesap silindi',
         'trashed_hint_desc' => 'Bu hesap silindi ve oturum açılamadı. Tekrar aktifleştirmek için sağ alt kısımdaki kullanıcıyı aktifleştir simgesine tıklayın.',

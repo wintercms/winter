@@ -2,8 +2,8 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Database\Tester\Models\Post;
+use System\Tests\Bootstrap\PluginTestCase;
 
 class PluginModelTest extends PluginTestCase
 {

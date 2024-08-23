@@ -32,7 +32,7 @@ class PartialStack
         }
 
         $this->activePartial = [
-            'components' => []
+            'components' => [],
         ];
     }
 
@@ -51,7 +51,7 @@ class PartialStack
     {
         array_push($this->activePartial['components'], [
             'name' => $alias,
-            'obj' => $componentObj
+            'obj' => $componentObj,
         ]);
     }
 

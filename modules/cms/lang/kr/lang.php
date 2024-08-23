@@ -11,7 +11,7 @@ return [
         'error_deleting' => '":name" 파일 삭제 오류',
         'delete_success' => ':count 개의 템플릿을 삭제했습니다.',
         'file_name_required' => '파일명 필드가 필요합니다.',
-        'safe_mode_enabled' => '안전모드가 활성화 되었습니다.'
+        'safe_mode_enabled' => '안전모드가 활성화 되었습니다.',
     ],
     'dashboard' => [
         'active_theme' => [
@@ -19,8 +19,8 @@ return [
             'online' => '온라인',
             'maintenance' => '유지보수중',
             'manage_themes' => '테마관리',
-            'customize_theme' => '테마변경'
-        ]
+            'customize_theme' => '테마변경',
+        ],
     ],
     'theme' => [
         'not_found_name' => "':name' 테마를 찾을 수 없습니다.",
@@ -92,14 +92,14 @@ return [
         'dir_name_taken' => '원하는 디렉토리가 이미 있습니다.',
         'find_more_themes' => '테마 더 찾아보기',
         'saving' => '테마를 저장하는 중입니다...',
-        'return' => '테마 목록으로 돌아가기'
+        'return' => '테마 목록으로 돌아가기',
     ],
     'maintenance' => [
         'settings_menu' => '유지보수모드',
         'settings_menu_description' => '유지보수모드 페이지의 설정과 변경을 합니다.',
         'is_enabled' => '유지보수모드 활성화',
         'is_enabled_comment' => '유지보수모드일때 웹사이트 방문자가 보는 페이지를 선택해주세요.',
-        'hint' => '유지보수모드는 백엔드에 로그인하지않은 방문자에 유지보수안내 페이지를 표시합니다.'
+        'hint' => '유지보수모드는 백엔드에 로그인하지않은 방문자에 유지보수안내 페이지를 표시합니다.',
     ],
     'page' => [
         'not_found_name' => "':name' 페이지가 없습니다.",
@@ -122,7 +122,7 @@ return [
         'cms_page' => 'CMS 페이지',
         'title' => '페이지 제목',
         'url' => '페이지 URL',
-        'file_name' => '페이지 파일 이름'
+        'file_name' => '페이지 파일 이름',
     ],
     'layout' => [
         'not_found_name' => "':name' 레이아웃이 없습니다.",
@@ -185,7 +185,7 @@ return [
         'open_searchbox' => '검색 열기',
         'close_searchbox'  => '검색 닫기',
         'open_replacebox' => '교체 열기',
-        'close_replacebox'  => '교체 닫기'
+        'close_replacebox'  => '교체 닫기',
     ],
     'asset' => [
         'menu_label' => "자산",
@@ -245,7 +245,7 @@ return [
         'saved' => "템플릿을 저장합니다.",
         'no_list_records' => '템플릿을 찾을 수 없습니다',
         'delete_confirm' => '선택한 템플릿을 삭제하시겠습니까?',
-        'order_by' => '정렬방법'
+        'order_by' => '정렬방법',
     ],
     'permissions' => [
         'name' => 'CMS',

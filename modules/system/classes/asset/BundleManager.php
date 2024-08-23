@@ -37,7 +37,7 @@ class BundleManager
         'vue' => [
             'vue' => '^3.4.0',
             'vite' => [
-                '@vitejs/plugin-vue' => '^5.0.5'
+                '@vitejs/plugin-vue' => '^5.0.5',
             ],
         ],
     ];

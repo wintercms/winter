@@ -2,9 +2,9 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Asset;
 use Cms\Classes\Theme;
+use System\Tests\Bootstrap\TestCase;
 
 class AssetTest extends TestCase
 {

@@ -31,7 +31,7 @@ return [
         'link' => 'Vínculo',
         'horizontalrule' => 'Insertar Regla Horizontal',
         'fullscreen' => 'Pantalla completa',
-        'preview' => 'Previsualizar'
+        'preview' => 'Previsualizar',
     ],
     'mediamanager' => [
         'insert_link' => "Insertar Media Vínculo",
@@ -46,18 +46,18 @@ return [
     ],
     'alert' => [
         'confirm_button_text' => 'OK',
-        'cancel_button_text' => 'Cancelar'
+        'cancel_button_text' => 'Cancelar',
     ],
     'datepicker' => [
         'previousMonth' => 'Mes Anterior',
         'nextMonth' => 'Mes Siguiente',
         'months' => ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
         'weekdays' => ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'],
-        'weekdaysShort' => ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab']
+        'weekdaysShort' => ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab'],
     ],
     'filter' => [
         'group' => [
-            'all' => 'todos'
+            'all' => 'todos',
         ],
         'scopes' => [
             'apply_button_text' => 'Aplicar',
@@ -69,7 +69,7 @@ return [
             'reset_button_text' => 'Restablecer',
             'date_placeholder' => 'Fecha',
             'after_placeholder' => 'Desde',
-            'before_placeholder' => 'Hasta'
+            'before_placeholder' => 'Hasta',
         ],
         'numbers' => [
             'all' => 'todos',
@@ -77,7 +77,7 @@ return [
             'reset_button_text' => 'Restablecer',
             'min_placeholder' => 'Mínimo',
             'max_placeholder' => 'Máximo',
-            'number_placeholder' => 'Número'
+            'number_placeholder' => 'Número',
         ],
     ],
     'eventlog' => [
@@ -93,7 +93,7 @@ return [
             'openWith' => 'Abrir con',
             'rememberChoice' => 'Recuerde la opción seleccionada para esta sesión del navegador',
             'open' => 'Abrir',
-            'cancel' => 'Cancelar'
-        ]
-    ]
+            'cancel' => 'Cancelar',
+        ],
+    ],
 ];

@@ -11,7 +11,7 @@ class Plugin extends PluginBase
         return [
             'name' => 'Another Test Plugin',
             'description' => 'Test plugin used by unit tests with the same name.',
-            'author' => 'Test Vendor'
+            'author' => 'Test Vendor',
         ];
     }
 
@@ -20,8 +20,8 @@ class Plugin extends PluginBase
         return [
             'TestVendor\Test\FormWidgets\Sample' => [
                 'label' => 'Sample',
-                'code'  => 'sample'
-            ]
+                'code'  => 'sample',
+            ],
         ];
     }
 }

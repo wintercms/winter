@@ -3,9 +3,9 @@
 namespace System\Console;
 
 use InvalidArgumentException;
-use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
 use System\Classes\VersionManager;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to rollback a plugin.

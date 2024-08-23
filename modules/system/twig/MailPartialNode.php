@@ -2,8 +2,8 @@
 
 namespace System\Twig;
 
-use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
+use Twig\Node\Node as TwigNode;
 
 /**
  * Represents a partial node

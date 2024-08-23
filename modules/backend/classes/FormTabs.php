@@ -2,9 +2,9 @@
 
 namespace Backend\Classes;
 
-use IteratorAggregate;
-use ArrayIterator;
 use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
 use Traversable;
 
 /**

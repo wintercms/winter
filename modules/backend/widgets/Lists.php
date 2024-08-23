@@ -2,24 +2,24 @@
 
 namespace Backend\Widgets;
 
-use Db;
-use Str;
-use Html;
-use Lang;
-use Backend;
-use DbDongle;
-use Carbon\Carbon;
-use Winter\Storm\Html\Helper as HtmlHelper;
-use Winter\Storm\Router\Helper as RouterHelper;
-use System\Helpers\DateTime as DateTimeHelper;
-use System\Classes\PluginManager;
-use System\Classes\MediaLibrary;
-use System\Classes\ImageResizer;
 use Backend\Classes\ListColumn;
 use Backend\Classes\WidgetBase;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Lang;
+use System\Classes\ImageResizer;
+use System\Classes\MediaLibrary;
+use System\Classes\PluginManager;
+use System\Helpers\DateTime as DateTimeHelper;
 use Winter\Storm\Database\Model;
-use ApplicationException;
-use BackendAuth;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Html\Helper as HtmlHelper;
+use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\DbDongle;
+use Winter\Storm\Support\Facades\Html;
+use Winter\Storm\Support\Str;
 
 /**
  * List Widget
@@ -30,7 +30,7 @@ use BackendAuth;
  */
 class Lists extends WidgetBase
 {
-    use Backend\Traits\PreferenceMaker;
+    use \Backend\Traits\PreferenceMaker;
 
     //
     // Configurable properties
@@ -1300,7 +1300,7 @@ class Lists extends WidgetBase
             'listValue'  => $value,
             'column'     => $column,
             'record'     => $record,
-            'value'      => $value
+            'value'      => $value,
         ]);
     }
 
@@ -1340,7 +1340,7 @@ class Lists extends WidgetBase
         $options = [
             'defaultValue' => $value,
             'format' => $column->format,
-            'formatAlias' => 'dateTimeLongMin'
+            'formatAlias' => 'dateTimeLongMin',
         ];
 
         if (!empty($column->config['ignoreTimezone'])) {
@@ -1368,7 +1368,7 @@ class Lists extends WidgetBase
         $options = [
             'defaultValue' => $value,
             'format' => $column->format,
-            'formatAlias' => 'time'
+            'formatAlias' => 'time',
         ];
 
         if (!empty($column->config['ignoreTimezone'])) {
@@ -1398,7 +1398,7 @@ class Lists extends WidgetBase
         $options = [
             'defaultValue' => $value,
             'format' => $column->format,
-            'formatAlias' => 'dateLongMin'
+            'formatAlias' => 'dateLongMin',
         ];
 
         if (!empty($column->config['ignoreTimezone'])) {
@@ -1423,7 +1423,7 @@ class Lists extends WidgetBase
 
         $options = [
             'defaultValue' => $value,
-            'timeSince' => true
+            'timeSince' => true,
         ];
 
         if (!empty($column->config['ignoreTimezone'])) {
@@ -1448,7 +1448,7 @@ class Lists extends WidgetBase
 
         $options = [
             'defaultValue' => $value,
-            'timeTense' => true
+            'timeTense' => true,
         ];
 
         if (!empty($column->config['ignoreTimezone'])) {
@@ -1533,7 +1533,7 @@ class Lists extends WidgetBase
     {
         extract(array_merge([
             'mode' => null,
-            'scope' => null
+            'scope' => null,
         ], $options));
 
         $this->searchMode = $mode;
@@ -1855,7 +1855,7 @@ class Lists extends WidgetBase
             'morphedByMany',
             'morphMany',
             'attachMany',
-            'hasManyThrough'
+            'hasManyThrough',
         ]);
     }
 

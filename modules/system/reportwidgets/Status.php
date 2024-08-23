@@ -2,18 +2,18 @@
 
 namespace System\ReportWidgets;
 
-use Lang;
-use Config;
-use BackendAuth;
-use System\Models\Parameter;
-use System\Models\LogSetting;
-use System\Classes\UpdateManager;
-use System\Classes\PluginManager;
 use Backend\Classes\ReportWidgetBase;
+use Backend\Facades\BackendAuth;
 use Backend\Models\User;
-use System\Models\EventLog;
-use System\Models\RequestLog;
 use Exception;
+use Illuminate\Support\Facades\Lang;
+use System\Classes\PluginManager;
+use System\Classes\UpdateManager;
+use System\Models\EventLog;
+use System\Models\LogSetting;
+use System\Models\Parameter;
+use System\Models\RequestLog;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * System status report widget.
@@ -51,7 +51,7 @@ class Status extends ReportWidgetBase
                 'type'              => 'string',
                 'validationPattern' => '^.+$',
                 'validationMessage' => 'backend::lang.dashboard.widget_title_error',
-            ]
+            ],
         ];
     }
 
@@ -153,7 +153,7 @@ class Status extends ReportWidgetBase
         foreach ($writablePaths as $path) {
             if (!is_writable($path)) {
                 $warnings[] = [
-                    'message' => Lang::get('backend::lang.warnings.permissions', ['name' => '<strong>' . $path . '</strong>'])
+                    'message' => Lang::get('backend::lang.warnings.permissions', ['name' => '<strong>' . $path . '</strong>']),
                 ];
             }
         }
@@ -172,7 +172,7 @@ class Status extends ReportWidgetBase
                 $warnings[] = [
                     'message' => Lang::get('system::lang.updates.update_warnings_plugin_missing', [
                         'code' => '<strong>' . $missingPluginCode . '</strong>',
-                        'parent_code' => '<strong>' . $pluginCode . '</strong>'
+                        'parent_code' => '<strong>' . $pluginCode . '</strong>',
                     ]),
                 ];
             }

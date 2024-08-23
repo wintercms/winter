@@ -76,7 +76,7 @@ class TagList extends FormWidgetBase
             'mode',
             'nameFrom',
             'useKey',
-            'placeholder'
+            'placeholder',
         ]);
     }
 

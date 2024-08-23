@@ -3,9 +3,9 @@
 namespace Cms\Console;
 
 use Cms\Classes\Theme;
-use Event;
 use Exception;
 use Winter\Storm\Console\Command;
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * Console command to sync a theme between the DB and Filesystem layers.

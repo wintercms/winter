@@ -2,8 +2,8 @@
 
 namespace Winter\Tester\Components;
 
-use Cms\Classes\ComponentBase;
 use Cms\Classes\CodeBase;
+use Cms\Classes\ComponentBase;
 use Winter\Tester\Classes\Users;
 
 class Comments extends ComponentBase
@@ -20,7 +20,7 @@ class Comments extends ComponentBase
     {
         return [
             'name' => 'Blog Comments Dummy Component',
-            'description' => 'Displays the list of comments on a post.'
+            'description' => 'Displays the list of comments on a post.',
         ];
     }
 
@@ -28,7 +28,7 @@ class Comments extends ComponentBase
     {
         return [
             ['title' => 'Lorum ipsum', 'content' => 'Post Content #1'],
-            ['title' => 'La Playa Nudista', 'content' => 'Second Post Content']
+            ['title' => 'La Playa Nudista', 'content' => 'Second Post Content'],
         ];
     }
 

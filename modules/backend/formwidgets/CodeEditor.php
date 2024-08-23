@@ -2,8 +2,8 @@
 
 namespace Backend\FormWidgets;
 
-use Backend\Models\Preference as BackendPreference;
 use Backend\Classes\FormWidgetBase;
+use Backend\Models\Preference as BackendPreference;
 
 /**
  * Code Editor
@@ -147,7 +147,7 @@ class CodeEditor extends FormWidgetBase
             'autocompletion',
             'enableSnippets',
             'displayIndentGuides',
-            'showPrintMargin'
+            'showPrintMargin',
         ]);
     }
 

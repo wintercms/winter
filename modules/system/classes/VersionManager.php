@@ -2,14 +2,14 @@
 
 namespace System\Classes;
 
-use File;
-use Yaml;
-use Db;
 use Carbon\Carbon;
 use Illuminate\Console\View\Components\Error;
 use Illuminate\Console\View\Components\Info;
 use Illuminate\Console\View\Components\Task;
 use Winter\Storm\Database\Updater;
+use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Yaml;
 
 /**
  * Version manager
@@ -156,7 +156,7 @@ class VersionManager
             Db::table('system_plugin_versions')
                 ->where('code', '=', $replace)
                 ->update([
-                    'code' => $code
+                    'code' => $code,
                 ]);
         }
     }
@@ -457,12 +457,12 @@ class VersionManager
             Db::table('system_plugin_versions')->insert([
                 'code'       => $code,
                 'version'    => $version,
-                'created_at' => new Carbon()
+                'created_at' => new Carbon(),
             ]);
         } elseif ($version && $currentVersion) {
             Db::table('system_plugin_versions')->where('code', $code)->update([
                 'version'    => $version,
-                'created_at' => new Carbon()
+                'created_at' => new Carbon(),
             ]);
         } elseif ($currentVersion) {
             Db::table('system_plugin_versions')->where('code', $code)->delete();
@@ -481,7 +481,7 @@ class VersionManager
             'type'       => self::HISTORY_TYPE_COMMENT,
             'version'    => $version,
             'detail'     => $comment,
-            'created_at' => new Carbon()
+            'created_at' => new Carbon(),
         ]);
     }
 
@@ -519,7 +519,7 @@ class VersionManager
             'type'       => self::HISTORY_TYPE_SCRIPT,
             'version'    => $version,
             'detail'     => $script,
-            'created_at' => new Carbon()
+            'created_at' => new Carbon(),
         ]);
     }
 

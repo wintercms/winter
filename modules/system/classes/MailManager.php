@@ -2,13 +2,13 @@
 
 namespace System\Classes;
 
-use App;
-use Markdown;
+use Illuminate\Support\Facades\App;
+use System\Helpers\View as ViewHelper;
+use System\Models\MailBrandSetting;
 use System\Models\MailPartial;
 use System\Models\MailTemplate;
-use System\Models\MailBrandSetting;
-use System\Helpers\View as ViewHelper;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
+use Winter\Storm\Support\Facades\Markdown;
 
 /**
  * This class manages Mail sending functions
@@ -127,7 +127,7 @@ class MailManager
         }
 
         $data += [
-            'subject' => $symfonyMessage->getSubject()
+            'subject' => $symfonyMessage->getSubject(),
         ];
 
         if (!$plainOnly) {
@@ -233,7 +233,7 @@ class MailManager
 
         if ($template->layout) {
             $text = $this->renderTwig($template->layout->content_text, [
-                'content' => $text
+                'content' => $text,
             ] + (array) $data);
         }
 

@@ -2,13 +2,13 @@
 
 namespace Backend\Controllers;
 
-use Lang;
-use Flash;
-use Backend;
-use BackendMenu;
 use Backend\Classes\Controller;
-use System\Classes\SettingsManager;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
 use Backend\Models\Preference as PreferenceModel;
+use Illuminate\Support\Facades\Lang;
+use System\Classes\SettingsManager;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Editor Settings controller

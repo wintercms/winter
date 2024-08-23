@@ -19,8 +19,8 @@ return [
             'online' => 'Online',
             'maintenance' => 'em manutenção',
             'manage_themes' => 'Gerir temas',
-            'customize_theme' => 'Personalizar tema'
-        ]
+            'customize_theme' => 'Personalizar tema',
+        ],
     ],
     'theme' => [
         'not_found_name' => 'O tema ":name" não foi encontrado.',
@@ -98,7 +98,7 @@ return [
         'settings_menu_description' => 'Configurar modo de manutenção e a página exibida.',
         'is_enabled' => 'Activar modo de manutenção',
         'is_enabled_comment' => 'Quando activado visitantes do site vão ver a página selecionada.',
-        'hint' => 'Modo de manutenção mostra a página de manutenção aos visitantes que não tenham feito acesso na área de backend.'
+        'hint' => 'Modo de manutenção mostra a página de manutenção aos visitantes que não tenham feito acesso na área de backend.',
     ],
     'page' => [
         'not_found_name' => 'A página ":name" não foi encontrada',
@@ -121,7 +121,7 @@ return [
         'cms_page' => 'Página do CMS',
         'title' => 'Título da página',
         'url' => 'URL da página',
-        'file_name' => 'Nome ficheiro da página'
+        'file_name' => 'Nome ficheiro da página',
     ],
     'layout' => [
         'not_found_name' => 'O esboço ":name" não foi encontrado',
@@ -184,7 +184,7 @@ return [
         'open_searchbox' => 'Abrir caixa de pesquisa',
         'close_searchbox'  => 'Fechar caixa de pesquisa',
         'open_replacebox' => 'Abrir caixa de substituição',
-        'close_replacebox'  => 'Fechar caixa de substituição'
+        'close_replacebox'  => 'Fechar caixa de substituição',
     ],
     'asset' => [
         'menu_label' => 'Ficheiros',
@@ -244,7 +244,7 @@ return [
         'saved' => 'O modelo foi salvo com sucesso.',
         'no_list_records' => 'Não foram encontrados registos',
         'delete_confirm' => 'Apagar modelos selecionados?',
-        'order_by' => 'Ordenar por'
+        'order_by' => 'Ordenar por',
     ],
     'permissions' => [
         'name' => 'Cms',

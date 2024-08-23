@@ -34,7 +34,7 @@ class UserRole extends RoleBase
      */
     public $hasMany = [
         'users' => [User::class, 'key' => 'role_id'],
-        'users_count' => [User::class, 'key' => 'role_id', 'count' => true]
+        'users_count' => [User::class, 'key' => 'role_id', 'count' => true],
     ];
 
     public function filterFields($fields)
@@ -78,7 +78,7 @@ class UserRole extends RoleBase
         if (
             $this->is_system || in_array($this->code, [
             self::CODE_DEVELOPER,
-            self::CODE_PUBLISHER
+            self::CODE_PUBLISHER,
             ])
         ) {
             return true;

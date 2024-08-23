@@ -2,12 +2,12 @@
 
 namespace System\Models;
 
-use View;
-use Model;
-use System\Classes\MailManager;
-use Winter\Storm\Mail\MailParser;
-use ApplicationException;
 use File as FileHelper;
+use Illuminate\Support\Facades\View;
+use System\Classes\MailManager;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Mail\MailParser;
 
 /**
  * Mail layout
@@ -47,7 +47,7 @@ class MailLayout extends Model
      * @var array Options array
      */
     protected $jsonable = [
-        'options'
+        'options',
     ];
 
     public static $codeCache;

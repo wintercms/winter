@@ -2,13 +2,11 @@
 
 namespace System\Console;
 
-use File;
 use InvalidArgumentException;
 use System\Classes\VersionManager;
-use System\Console\BaseScaffoldCommand;
 use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\Yaml;
 use Winter\Storm\Support\Str;
-use Yaml;
 
 /**
  * Scaffolds a new migration file

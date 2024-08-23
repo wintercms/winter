@@ -2,9 +2,9 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Content;
 use Cms\Classes\Theme;
+use System\Tests\Bootstrap\TestCase;
 
 class ContentTest extends TestCase
 {

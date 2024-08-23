@@ -2,10 +2,10 @@
 
 namespace System\Classes;
 
-use Event;
-use Backend;
-use BackendAuth;
-use SystemException;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * Manages the system settings.
@@ -78,7 +78,7 @@ class SettingsManager
         'permissions' => [],
         'order'       => 500,
         'context'     => 'system',
-        'keywords'    => null
+        'keywords'    => null,
     ];
 
     /**
@@ -289,7 +289,7 @@ class SettingsManager
 
         $item = array_merge(self::$itemDefaults, array_merge($definition, [
             'code' => $code,
-            'owner' => $owner
+            'owner' => $owner,
         ]));
 
         /*

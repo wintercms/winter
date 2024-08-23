@@ -2,7 +2,7 @@
 
 namespace Backend\Traits;
 
-use Input;
+use Winter\Storm\Support\Facades\Input;
 
 /**
  * Selectable Widget Trait

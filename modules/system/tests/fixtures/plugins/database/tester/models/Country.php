@@ -2,7 +2,7 @@
 
 namespace Database\Tester\Models;
 
-use Model;
+use Winter\Storm\Database\Model;
 
 class Country extends Model
 {
@@ -26,7 +26,7 @@ class Country extends Model
         'posts' => [
             'Database\Tester\Models\Post',
             'through' => 'Database\Tester\Models\Author',
-        ]
+        ],
     ];
 }
 

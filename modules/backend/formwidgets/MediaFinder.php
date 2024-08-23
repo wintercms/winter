@@ -2,10 +2,10 @@
 
 namespace Backend\FormWidgets;
 
-use BackendAuth;
 use Backend\Classes\FormField;
-use System\Classes\MediaLibrary;
 use Backend\Classes\FormWidgetBase;
+use Backend\Facades\BackendAuth;
+use System\Classes\MediaLibrary;
 
 /**
  * Media Finder
@@ -63,7 +63,7 @@ class MediaFinder extends FormWidgetBase
             'mode',
             'prompt',
             'imageWidth',
-            'imageHeight'
+            'imageHeight',
         ]);
 
         $user = BackendAuth::getUser();

@@ -3,35 +3,35 @@
 return [
     'auth' => [
         'title' => "Àrea d'Administració",
-        'invalid_login' => "Els detalls que has introduït no corresponen als nostres registres. Si us plau revisa'ls i torna-ho a intentar."
+        'invalid_login' => "Els detalls que has introduït no corresponen als nostres registres. Si us plau revisa'ls i torna-ho a intentar.",
     ],
     'field' => [
         'invalid_type' => 'El tipus de camp :type utilitzat és invàlid.',
         'options_method_invalid_model' => "L'atribut ':field' no resol a un model vàlid. Intenta especificar explícitament el mètode d'opcions per la classe de model :model.",
-        'options_method_not_exists' => "La classe de model :model ha de definir un mètode :method() que retorni opcions pel camp de formulari ':field'."
+        'options_method_not_exists' => "La classe de model :model ha de definir un mètode :method() que retorni opcions pel camp de formulari ':field'.",
     ],
     'widget' => [
         'not_registered' => "No s'ha registrat un widget amb el nom de classe ':name'",
-        'not_bound' => "No s'ha vinculat al controlador un widget amb el nom de classe ':name'"
+        'not_bound' => "No s'ha vinculat al controlador un widget amb el nom de classe ':name'",
     ],
     'page' => [
         'untitled' => 'Sense títol',
         'access_denied' => [
             'label' => 'Accés denegat',
             'help' => "No tens els permisos necessaris per veure aquesta pàgina.",
-            'cms_link' => "Tornar al panell d'administració"
+            'cms_link' => "Tornar al panell d'administració",
         ],
         'no_database' => [
             'label' => 'No es troba la base de dades',
             'help' => "Es requereix una base de dades per accedir al panell d'administració. Comprova que la base de dades estigui configurada i migrada abans de tornar-ho a intentar.",
-            'cms_link' => 'Tornar a la pàgina principal'
+            'cms_link' => 'Tornar a la pàgina principal',
         ],
         'invalid_token' => [
-            'label' => 'Token de seguretat invàlid'
-        ]
+            'label' => 'Token de seguretat invàlid',
+        ],
     ],
     'partial' => [
-        'not_found_name' => "El parcial ':name' no s'ha trobat."
+        'not_found_name' => "El parcial ':name' no s'ha trobat.",
     ],
     'account' => [
         'signed_in_as' => 'Connectat com :full_name',
@@ -55,7 +55,7 @@ return [
         'apply' => 'Aplicar',
         'cancel' => 'Cancel·lar',
         'delete' => 'Eliminar',
-        'ok' => 'OK'
+        'ok' => 'OK',
     ],
     'dashboard' => [
         'menu_label' => 'Escriptori',
@@ -104,7 +104,7 @@ return [
             'last_sign_in' => "L'últim cop que vas accedir va ser",
             'view_access_logs' => "Veure els registres d'accés",
             'nice_message' => 'Que tinguis un gran dia!',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Administrador',
@@ -153,7 +153,7 @@ return [
             'new' => 'Nou grup',
             'delete_confirm' => "Eliminar aquest grup d'administració?",
             'return' => 'Tornar a la llista de grups',
-            'users_count' => 'Usuaris'
+            'users_count' => 'Usuaris',
         ],
         'role' => [
             'name' => 'Rol',
@@ -167,11 +167,11 @@ return [
             'new' => 'Nou rol',
             'delete_confirm' => "Eliminar aquest rol d'administració?",
             'return' => 'Tornar a la llista de rols',
-            'users_count' => 'Usuaris'
+            'users_count' => 'Usuaris',
         ],
         'preferences' => [
-            'not_authenticated' => 'No hi ha un usuari autenticat per a qui carregar o guardar les preferències.'
-        ]
+            'not_authenticated' => 'No hi ha un usuari autenticat per a qui carregar o guardar les preferències.',
+        ],
     ],
     'list' => [
         'default_title' => 'Llista',
@@ -202,7 +202,7 @@ return [
         'delete_selected_confirm' => 'Eliminar els registres seleccionats?',
         'delete_selected_success' => 'Registres eliminats.',
         'column_switch_true' => 'Sí',
-        'column_switch_false' => 'No'
+        'column_switch_false' => 'No',
     ],
     'fileupload' => [
         'attachment' => 'Adjunt',
@@ -214,7 +214,7 @@ return [
         'upload_file' => 'Pujar arxiu',
         'upload_error' => 'Error de pujada',
         'remove_confirm' => 'Segur que ho vols eliminar?',
-        'remove_file' => 'Elminar arxiu'
+        'remove_file' => 'Elminar arxiu',
     ],
     'repeater' => [
         'min_items_failed' => ":name requereix un mínim de :min elements, només n'hi ha :items",
@@ -275,7 +275,7 @@ return [
         'delete_row' => 'Eliminar fila',
         'concurrency_file_changed_title' => "L'arxiu ha canviat",
         'concurrency_file_changed_description' => "L'arxiu que estàs editant ha estat canviat al disc per un altre usuari. Pots o bé recarregar l'arxiu i perdre els teus canvis, o bé sobreescriure l'arxiu al disc.",
-        'return_to_list' => 'Tornar a la llista'
+        'return_to_list' => 'Tornar a la llista',
     ],
     'recordfinder' => [
         'find_record' => 'Trobar registre',
@@ -283,7 +283,7 @@ return [
     ],
     'pagelist' => [
         'page_link' => 'Enllaç a pàgina',
-        'select_page' => 'Selecciona una pàgina...'
+        'select_page' => 'Selecciona una pàgina...',
     ],
     'relation' => [
         'missing_config' => "El comportament Relation no té una configuració per ':config'.",
@@ -316,11 +316,11 @@ return [
         'link_name' => 'Vincular :name',
         'unlink' => 'Desvincular',
         'unlink_name' => 'Desvincular :name',
-        'unlink_confirm' => "N'estàs segur?"
+        'unlink_confirm' => "N'estàs segur?",
     ],
     'reorder' => [
         'default_title' => 'Reordenar registres',
-        'no_records' => 'No hi ha registres disponibles per reordenar.'
+        'no_records' => 'No hi ha registres disponibles per reordenar.',
     ],
     'model' => [
         'name' => 'Model',
@@ -329,7 +329,7 @@ return [
         'missing_relation' => "El model ':class' no té una definició per ':relation'.",
         'missing_method' => "El model ':class' no té un mètode ':method'.",
         'invalid_class' => "El model :model utilitzat a :class no és vàlid, ha d'heretar la classe \Model.",
-        'mass_assignment_failed' => "L'assignació massiva ha fallat per l'atribut ':attribute' del model."
+        'mass_assignment_failed' => "L'assignació massiva ha fallat per l'atribut ':attribute' del model.",
     ],
     'warnings' => [
         'tips' => 'Consells de configuració del sistema',
@@ -389,16 +389,16 @@ return [
         'toolbar_buttons_comment' => "Els botons de la barra d'eines que es mostraran en l'editor de text enriquit per defecte.",
     ],
     'tooltips' => [
-        'preview_website' => 'Previsualitzar el lloc web'
+        'preview_website' => 'Previsualitzar el lloc web',
     ],
     'mysettings' => [
         'menu_label' => 'Les meves opcions',
-        'menu_description' => "Les opcions de configuració relacionades amb el teu compte d'administració"
+        'menu_description' => "Les opcions de configuració relacionades amb el teu compte d'administració",
     ],
     'myaccount' => [
         'menu_label' => 'El meu compte',
         'menu_description' => "Actualitza els teus detalls de compte com ara el nom, adreça d'email i contrasenya.",
-        'menu_keywords' => 'seguretat acces security login'
+        'menu_keywords' => 'seguretat acces security login',
     ],
     'branding' => [
         'menu_label' => "Personalitzar el panell d'administració",
@@ -420,7 +420,7 @@ return [
         'menu_mode' => 'Estil del menú',
         'menu_mode_inline' => 'En línia',
         'menu_mode_tile' => 'Rajoles',
-        'menu_mode_collapsed' => 'Comprimit'
+        'menu_mode_collapsed' => 'Comprimit',
     ],
     'backend_preferences' => [
         'menu_label' => 'Preferències del panell',
@@ -430,7 +430,7 @@ return [
         'timezone' => 'Zona horària',
         'timezone_comment' => 'Ajustar les dates mostrades a aquesta zona horària.',
         'locale' => 'Idioma',
-        'locale_comment' => 'Selecciona el teu idioma preferit.'
+        'locale_comment' => 'Selecciona el teu idioma preferit.',
     ],
     'access_log' => [
         'hint' => "Aquest registre mostra una llista dels accessos d'administradors. Els registres es guarden durant :days dies.",
@@ -441,7 +441,7 @@ return [
         'ip_address' => 'Adreça IP',
         'first_name' => 'Nom',
         'last_name' => 'Cognom',
-        'email' => 'Email'
+        'email' => 'Email',
     ],
     'filter' => [
         'all' => 'tots',
@@ -519,15 +519,15 @@ return [
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celta)',
             'iso_8859_15' => "ISO-8859-15 (Latin-9, Europa Occidental - revisió amb signe de l'euro)",
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
-        'manage_media' => 'Puja i gestiona continguts multimèdia - imatges, vídeos, sons, documents'
+        'manage_media' => 'Puja i gestiona continguts multimèdia - imatges, vídeos, sons, documents',
     ],
     'mediafinder' => [
         'label' => 'Cercador multimèdia',
-        'default_prompt' => 'Clica el botó %s per cercar un element multimèdia'
+        'default_prompt' => 'Clica el botó %s per cercar un element multimèdia',
     ],
     'media' => [
         'menu_label' => 'Mèdia',

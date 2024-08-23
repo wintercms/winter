@@ -2,12 +2,12 @@
 
 namespace Cms\Traits;
 
-use File;
-use Cache;
-use Config;
-use Cms\Classes\Page;
 use Cms\Classes\Controller;
-use ApplicationException;
+use Cms\Classes\Page;
+use Illuminate\Support\Facades\Cache;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * URL Maker Trait
@@ -189,7 +189,7 @@ trait UrlMaker
         $cached = [
             'path'     => $filePath,
             'fileName' => $baseFileName,
-            'mtime'    => @File::lastModified($filePath)
+            'mtime'    => @File::lastModified($filePath),
         ];
 
         $expiresAt = now()->addMinutes(Config::get('cms.parsedPageCacheTTL', 1440));

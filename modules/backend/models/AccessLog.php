@@ -2,8 +2,8 @@
 
 namespace Backend\Models;
 
-use Model;
-use Request;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Database\Model;
 
 /**
  * Model for logging access to the back-end
@@ -22,7 +22,7 @@ class AccessLog extends Model
      * @var array Relations
      */
     public $belongsTo = [
-        'user' => User::class
+        'user' => User::class,
     ];
 
     /**

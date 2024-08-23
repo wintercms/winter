@@ -2,32 +2,32 @@
 
 return [
     'auth' => [
-        'title' => 'Khu vực quản trị'
+        'title' => 'Khu vực quản trị',
     ],
     'field' => [
         'invalid_type' => 'Loại Field không hợp lệ :type.',
         'options_method_invalid_model' => "Thuộc tính ':field' không đưa ra được model hợp lệ. Hãy thử chỉ định phương pháp tùy chọn cho model :model một cách rõ ràng.",
-        'options_method_not_exists' => "Model class :model phải khai báo :method() trả về tùy chọn cho trường ':field'."
+        'options_method_not_exists' => "Model class :model phải khai báo :method() trả về tùy chọn cho trường ':field'.",
     ],
     'widget' => [
         'not_registered' => "Tên của widget class ':name' chưa được đăng ký",
-        'not_bound' => "Widget với tên class ':name' đã không bị ràng buộc với controller"
+        'not_bound' => "Widget với tên class ':name' đã không bị ràng buộc với controller",
     ],
     'page' => [
         'untitled' => 'Không có tiêu đề',
         'access_denied' => [
             'label' => 'Truy cập bị chặn',
             'help' => "Bạn không đủ quyền để xem trang này.",
-            'cms_link' => 'Quay lại trang quản trị'
+            'cms_link' => 'Quay lại trang quản trị',
         ],
         'no_database' => [
             'label' => 'Không tìm thấy Database',
             'help' => "Bắt buộc phải có 1 database để truy cập vào trang quản trị. Kiểm tra lại cấu hình database và migrated trước khi thử lại.",
-            'cms_link' => 'Quay lại trang chủ'
+            'cms_link' => 'Quay lại trang chủ',
         ],
     ],
     'partial' => [
-        'not_found_name' => "Không tìm thấy partial ':name'."
+        'not_found_name' => "Không tìm thấy partial ':name'.",
     ],
     'account' => [
         'signed_in_as' => 'Đã đăng nhập với :full_name',
@@ -51,7 +51,7 @@ return [
         'apply' => 'Áp dụng',
         'cancel' => 'Bỏ qua',
         'delete' => 'Xóa',
-        'ok' => 'OK'
+        'ok' => 'OK',
     ],
     'dashboard' => [
         'menu_label' => 'Bảng điều khiển chính',
@@ -100,7 +100,7 @@ return [
             'last_sign_in' => 'Lần cuối bạn đăng nhập vào lúc',
             'view_access_logs' => 'Xem nhật ký các lần đăng nhập',
             'nice_message' => 'Chúc bạn một ngày vui vẻ!',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Administrator',
@@ -149,7 +149,7 @@ return [
             'new' => 'Nhóm mới',
             'delete_confirm' => 'Xóa nhóm này?',
             'return' => 'Quay lại danh sách nhóm',
-            'users_count' => 'Số user'
+            'users_count' => 'Số user',
         ],
         'role' => [
             'name' => 'Role',
@@ -163,11 +163,11 @@ return [
             'new' => 'Thêm mới Role',
             'delete_confirm' => 'Xóa role này?',
             'return' => 'Quay lại trang  danh sách role',
-            'users_count' => 'Số user'
+            'users_count' => 'Số user',
         ],
         'preferences' => [
-            'not_authenticated' => 'Người dùng không xác định.'
-        ]
+            'not_authenticated' => 'Người dùng không xác định.',
+        ],
     ],
     'list' => [
         'default_title' => 'Trang danh sách các bản ghi',
@@ -198,7 +198,7 @@ return [
         'delete_selected_confirm' => 'Xóa các bản ghi đã chọn?',
         'delete_selected_success' => 'Xóa thành công các bản ghi.',
         'column_switch_true' => 'Có',
-        'column_switch_false' => 'Không'
+        'column_switch_false' => 'Không',
     ],
     'fileupload' => [
         'attachment' => 'Tệp đính kèm',
@@ -210,7 +210,7 @@ return [
         'upload_file' => 'Upload file',
         'upload_error' => 'Lỗi upload',
         'remove_confirm' => 'Bạn có chắc chắn muốn xóa?',
-        'remove_file' => 'Xóa file'
+        'remove_file' => 'Xóa file',
     ],
     'form' => [
         'create_title' => 'Thêm mới :name',
@@ -267,7 +267,7 @@ return [
         'delete_row' => 'Xóa Row',
         'concurrency_file_changed_title' => 'File đã được thay đổi',
         'concurrency_file_changed_description' => "File bạn đang chỉnh sửa đã bị thay đổi bởi người khác. Bạn có thể tải lại và các thay đổi của bạn không được lưu hoặc ghi đè lên file đó",
-        'return_to_list' => 'Quay lại trang danh sách'
+        'return_to_list' => 'Quay lại trang danh sách',
     ],
     'recordfinder' => [
         'find_record' => 'Tìm kiếm bản ghi',
@@ -275,7 +275,7 @@ return [
     ],
     'pagelist' => [
         'page_link' => 'Page link',
-        'select_page' => 'Lựa chọn một trang...'
+        'select_page' => 'Lựa chọn một trang...',
     ],
     'relation' => [
         'missing_config' => "Relation behavior không được cấu hình cho ':config'.",
@@ -308,11 +308,11 @@ return [
         'link_name' => 'Link :name',
         'unlink' => 'Unlink',
         'unlink_name' => 'Unlink :name',
-        'unlink_confirm' => 'Bạn có chắc muốn xóa?'
+        'unlink_confirm' => 'Bạn có chắc muốn xóa?',
     ],
     'reorder' => [
         'default_title' => 'Xắp xếp các bản ghi',
-        'no_records' => 'Không có bản ghi nào để sắp xếp.'
+        'no_records' => 'Không có bản ghi nào để sắp xếp.',
     ],
     'model' => [
         'name' => 'Model',
@@ -321,7 +321,7 @@ return [
         'missing_relation' => "Model ':class' không được định nghĩa cho ':relation'.",
         'missing_method' => "Model ':class' không có phương thức ':method'.",
         'invalid_class' => "Model :model sử dụng trong :class không hợp lệ, nó phải được kế thừa từ \Model class.",
-        'mass_assignment_failed' => "Có lỗi của Model attribute ':attribute'."
+        'mass_assignment_failed' => "Có lỗi của Model attribute ':attribute'.",
     ],
     'warnings' => [
         'tips' => 'Hướng dẫn cấu hình hệ thống',
@@ -379,16 +379,16 @@ return [
         'toolbar_buttons_comment' => 'Các nút mặc định ở trên thanh công cụ  của Rich Editor.',
     ],
     'tooltips' => [
-        'preview_website' => 'Xem trước website'
+        'preview_website' => 'Xem trước website',
     ],
     'mysettings' => [
         'menu_label' => 'Những cài đặt của tôi',
-        'menu_description' => 'Những cài đặt liên quan đến tài khoản quản trị của bạn'
+        'menu_description' => 'Những cài đặt liên quan đến tài khoản quản trị của bạn',
     ],
     'myaccount' => [
         'menu_label' => 'Tài khoản của tôi',
         'menu_description' => 'Cập nhật thông tin tài khoản của bạn ví dụ như tên, email hoặc mật khẩu.',
-        'menu_keywords' => 'bảo mật đăng nhập'
+        'menu_keywords' => 'bảo mật đăng nhập',
     ],
     'branding' => [
         'menu_label' => 'Tùy chỉnh trang quản trị',
@@ -410,7 +410,7 @@ return [
         'menu_mode' => 'Kiểu menu',
         'menu_mode_inline' => 'Icon và tiêu đề cùng một dòng',
         'menu_mode_tile' => 'Icon và tiêu đề khác dòng',
-        'menu_mode_collapsed' => 'Thu gọn icon và tiêu đề'
+        'menu_mode_collapsed' => 'Thu gọn icon và tiêu đề',
     ],
     'backend_preferences' => [
         'menu_label' => 'Tùy chỉnh cá nhân',
@@ -420,7 +420,7 @@ return [
         'timezone' => 'Múi giờ',
         'timezone_comment' => 'Điều chỉnh thời gian hiển thị cho múi giờ này.',
         'locale' => 'Ngôn ngữ địa phương',
-        'locale_comment' => 'Chọn khu vực của bạn để sử dụng đúng ngôn ngữ.'
+        'locale_comment' => 'Chọn khu vực của bạn để sử dụng đúng ngôn ngữ.',
     ],
     'access_log' => [
         'hint' => 'Nhật ký những lần đăng nhập thành công của administrators. Số bản ghi được lưu trữ trong :days ngày.',
@@ -431,7 +431,7 @@ return [
         'ip_address' => 'Địa chỉ IP',
         'first_name' => 'First name',
         'last_name' => 'Last name',
-        'email' => 'Email'
+        'email' => 'Email',
     ],
     'filter' => [
         'all' => 'tất cả',
@@ -508,15 +508,15 @@ return [
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtic)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
-        'manage_media' => 'Tải lên và quản lý các tập tin đa phương tiện - images, videos, sounds, documents'
+        'manage_media' => 'Tải lên và quản lý các tập tin đa phương tiện - images, videos, sounds, documents',
     ],
     'mediafinder' => [
         'label' => 'Media Finder',
-        'default_prompt' => 'Bấm vào nút %s để tìm kiếm medai file'
+        'default_prompt' => 'Bấm vào nút %s để tìm kiếm medai file',
     ],
     'media' => [
         'menu_label' => 'Media',

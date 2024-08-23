@@ -4,9 +4,9 @@ namespace System\Helpers;
 
 use Carbon\Carbon;
 use DateTime as PhpDateTime;
-use InvalidArgumentException;
 use Exception;
-use Lang;
+use Illuminate\Support\Facades\Lang;
+use InvalidArgumentException;
 
 class DateTime
 {

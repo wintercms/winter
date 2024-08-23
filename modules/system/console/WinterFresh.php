@@ -2,10 +2,10 @@
 
 namespace System\Console;
 
-use File;
-use Artisan;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Console\Input\InputOption;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Console command to remove boilerplate.

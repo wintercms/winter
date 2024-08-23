@@ -2,13 +2,13 @@
 
 namespace System\Traits;
 
-use Yaml;
-use File;
-use Lang;
-use Event;
-use SystemException;
+use Illuminate\Support\Facades\Lang;
 use stdClass;
-use Config;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Yaml;
 
 /**
  * Config Maker Trait

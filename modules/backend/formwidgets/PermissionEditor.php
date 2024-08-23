@@ -3,7 +3,7 @@
 namespace Backend\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
-use BackendAuth;
+use Backend\Facades\BackendAuth;
 
 /**
  * User/group permission editor

@@ -2,10 +2,10 @@
 
 namespace Backend\Classes;
 
-use Lang;
-use ApplicationException;
-use Winter\Storm\Extension\ExtensionBase;
+use Illuminate\Support\Facades\Lang;
 use System\Traits\ViewMaker;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Extension\ExtensionBase;
 use Winter\Storm\Html\Helper as HtmlHelper;
 
 /**
@@ -61,7 +61,7 @@ class ControllerBehavior extends ExtensionBase
                 throw new ApplicationException(Lang::get('system::lang.behavior.missing_property', [
                     'class' => get_class($controller),
                     'property' => $property,
-                    'behavior' => get_called_class()
+                    'behavior' => get_called_class(),
                 ]));
             }
         }

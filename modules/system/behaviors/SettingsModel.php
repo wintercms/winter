@@ -2,12 +2,12 @@
 
 namespace System\Behaviors;
 
-use App;
-use Artisan;
-use Cache;
-use Log;
 use Exception;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use System\Classes\ModelBehavior;
 
 /**

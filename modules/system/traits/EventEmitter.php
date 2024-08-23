@@ -2,7 +2,7 @@
 
 namespace System\Traits;
 
-use Event;
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * Adds system event related features to any class.

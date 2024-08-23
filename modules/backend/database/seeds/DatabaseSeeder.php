@@ -2,10 +2,9 @@
 
 namespace Backend\Database\Seeds;
 
-use Str;
-use Seeder;
-use Eloquent;
-use Backend\Database\Seeds\SeedSetupAdmin;
+use Illuminate\Database\Eloquent\Model as Eloquent;
+use Winter\Storm\Database\Updates\Seeder;
+use Winter\Storm\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,7 +22,7 @@ class DatabaseSeeder extends Seeder
             // Generate a random password for the seeded admin account
             $adminSeeder = new \Backend\Database\Seeds\SeedSetupAdmin();
             $adminSeeder->setDefaults([
-                'password' => $adminPassword
+                'password' => $adminPassword,
             ]);
             $this->call($adminSeeder);
         });

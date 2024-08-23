@@ -2,11 +2,11 @@
 
 namespace System\Models;
 
-use Url;
-use Config;
+use Backend\Controllers\Files;
+use Illuminate\Support\Facades\URL;
 use Storage;
 use Winter\Storm\Database\Attach\File as FileBase;
-use Backend\Controllers\Files;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * File attachment model

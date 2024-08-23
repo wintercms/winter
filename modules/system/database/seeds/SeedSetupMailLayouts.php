@@ -2,8 +2,8 @@
 
 namespace System\Database\Seeds;
 
-use Seeder;
 use System\Models\MailLayout;
+use Winter\Storm\Database\Updates\Seeder;
 
 class SeedSetupMailLayouts extends Seeder
 {

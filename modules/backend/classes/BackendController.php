@@ -2,18 +2,18 @@
 
 namespace Backend\Classes;
 
-use App;
 use Closure;
-use Config;
-use Event;
-use File;
 use Illuminate\Routing\Controller as ControllerBase;
-use Request;
-use Response;
-use Str;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
 use System\Classes\PluginManager;
-use View;
 use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Str;
 
 /**
  * This is the master controller for all back-end pages.
@@ -204,7 +204,7 @@ class BackendController extends ControllerBase
             return [
                 'controller' => $controllerObj,
                 'action' => $action,
-                'params' => $controllerParams
+                'params' => $controllerParams,
             ];
         }
 
@@ -233,7 +233,7 @@ class BackendController extends ControllerBase
                 return [
                     'controller' => $controllerObj,
                     'action' => $action,
-                    'params' => $controllerParams
+                    'params' => $controllerParams,
                 ];
             }
         }

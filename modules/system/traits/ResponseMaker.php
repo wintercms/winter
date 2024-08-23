@@ -2,9 +2,9 @@
 
 namespace System\Traits;
 
-use Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Response Maker Trait

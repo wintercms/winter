@@ -2,32 +2,32 @@
 
 return [
     'auth' => [
-        'title' => 'Ylläpitoalue'
+        'title' => 'Ylläpitoalue',
     ],
     'field' => [
         'invalid_type' => 'Kentän tyyppi :type ei ole sallittu.',
         'options_method_invalid_model' => "Attribuutti ':field' ratkaise kelvollista mallia. Spesifioit vaihtoehtoinen metodi mallille :model explisiittisesti.",
-        'options_method_not_exists' => "Luokan :model täytyy määritellä metodi :method(), joka palauttaa ':field' lomakekentän ehdot."
+        'options_method_not_exists' => "Luokan :model täytyy määritellä metodi :method(), joka palauttaa ':field' lomakekentän ehdot.",
     ],
     'widget' => [
         'not_registered' => "Vimpaimen luokan nimi ':name' ei ole rekisteröity",
-        'not_bound' => "Vimpaimen luokkaa nimellä ':name' ei ole löydetty ohjaimeen"
+        'not_bound' => "Vimpaimen luokkaa nimellä ':name' ei ole löydetty ohjaimeen",
     ],
     'page' => [
         'untitled' => 'Nimetön',
         'access_denied' => [
             'label' => 'Pääsy kielletty',
             'help' => "Sinulla ei ole tarvittavia oikeuksia tälle sivulle.",
-            'cms_link' => 'Palaa ylläpitopuolelle'
+            'cms_link' => 'Palaa ylläpitopuolelle',
         ],
         'no_database' => [
             'label' => 'Tietokanta puuttuu',
             'help' => "Tietokanta on pakollinen. Varmista, että tietokanta on olemassa ja pystyssä kunnes kokeilet uudelleen.",
-            'cms_link' => 'Palaa kotisivulle'
+            'cms_link' => 'Palaa kotisivulle',
         ],
     ],
     'partial' => [
-        'not_found_name' => "Osiota ':name' ei löydy."
+        'not_found_name' => "Osiota ':name' ei löydy.",
     ],
     'account' => [
         'signed_in_as' => 'Kirjauduit nimellä :full_name',
@@ -51,7 +51,7 @@ return [
         'apply' => 'Käytä',
         'cancel' => 'Peruuta',
         'delete' => 'Poista',
-        'ok' => 'OK'
+        'ok' => 'OK',
     ],
     'dashboard' => [
         'menu_label' => 'Dashboard',
@@ -100,7 +100,7 @@ return [
             'last_sign_in' => 'Viimeisin kirjautumisesi',
             'view_access_logs' => 'Tarkastele kirjautumislokiasi',
             'nice_message' => 'Hauskaa päivää!',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Ylläpitäjä',
@@ -149,7 +149,7 @@ return [
             'new' => 'Uusi ryhmä',
             'delete_confirm' => 'Poista tämä ylläpitoryhmä?',
             'return' => 'Palaa ryhmälistaukseen',
-            'users_count' => 'Käyttäjät'
+            'users_count' => 'Käyttäjät',
         ],
         'role' => [
             'name' => 'Rooli',
@@ -163,11 +163,11 @@ return [
             'new' => 'Uusi Rooli',
             'delete_confirm' => 'Poista tämä hallintarooli?',
             'return' => 'Palaa roolilistaukseen',
-            'users_count' => 'Käyttäjät'
+            'users_count' => 'Käyttäjät',
         ],
         'preferences' => [
-            'not_authenticated' => 'Sallittua käyttäjää, joka voisi tallentaa asetukset, ei löydy.'
-        ]
+            'not_authenticated' => 'Sallittua käyttäjää, joka voisi tallentaa asetukset, ei löydy.',
+        ],
     ],
     'list' => [
         'default_title' => 'Lista',
@@ -198,7 +198,7 @@ return [
         'delete_selected_confirm' => 'Poistetaan valitut tietueet?',
         'delete_selected_success' => 'Tietueet poistettu.',
         'column_switch_true' => 'Kyllä',
-        'column_switch_false' => 'Ei'
+        'column_switch_false' => 'Ei',
     ],
     'fileupload' => [
         'attachment' => 'Liite',
@@ -210,7 +210,7 @@ return [
         'upload_file' => 'Siirrä tiedosto',
         'upload_error' => 'Virhe siirrossa',
         'remove_confirm' => 'Oletko varma?',
-        'remove_file' => 'Poista tiedosto'
+        'remove_file' => 'Poista tiedosto',
     ],
     'form' => [
         'create_title' => 'Uusi :name',
@@ -267,7 +267,7 @@ return [
         'delete_row' => 'Poista rivi',
         'concurrency_file_changed_title' => 'Tiedosto muutettu',
         'concurrency_file_changed_description' => "Toinen käyttäjä on muokannut samaa tiedostoa, jota olet muokkaamassa. Voit joko ladata tiedoston ja menettää tekemäsi muutokset tai ylikirjoittaa toisen käyttäjän tekemät muutokset.",
-        'return_to_list' => 'Palaa listaukseen'
+        'return_to_list' => 'Palaa listaukseen',
     ],
     'recordfinder' => [
         'find_record' => 'Etsi tietue',
@@ -275,7 +275,7 @@ return [
     ],
     'pagelist' => [
         'page_link' => 'Linkki sivuun',
-        'select_page' => 'Valitse sivu...'
+        'select_page' => 'Valitse sivu...',
     ],
     'relation' => [
         'missing_config' => "Suhteella ei ole mitään asetuksia ':config'.",
@@ -308,11 +308,11 @@ return [
         'link_name' => 'Linkki :name',
         'unlink' => 'Poista linkki',
         'unlink_name' => 'Poista linkki :name',
-        'unlink_confirm' => 'Oletko varma?'
+        'unlink_confirm' => 'Oletko varma?',
     ],
     'reorder' => [
         'default_title' => 'Järjestä tietueet uudelleen',
-        'no_records' => 'Ei järjestettäviä tietueita.'
+        'no_records' => 'Ei järjestettäviä tietueita.',
     ],
     'model' => [
         'name' => 'Malli',
@@ -321,7 +321,7 @@ return [
         'missing_relation' => "Malli ':class' ei sisällä määritelmää suhteelle ':relation'.",
         'missing_method' => "Malli ':class' ei sisällä metodia ':method'.",
         'invalid_class' => "Mallia :model luokassa :class ei ole kelvollinen, sen täytyy periä \Model luokka.",
-        'mass_assignment_failed' => "Massan osoittaminen epäonnistui malli attribuutille ':attribute'."
+        'mass_assignment_failed' => "Massan osoittaminen epäonnistui malli attribuutille ':attribute'.",
     ],
     'warnings' => [
         'tips' => 'Järjestelmän kokoonpanovinkkejä',
@@ -379,16 +379,16 @@ return [
         'toolbar_buttons_comment' => 'Työkalurivin nappulat, jotka näytetään editorissa oletuksena.',
     ],
     'tooltips' => [
-        'preview_website' => 'Esikatsele verkkosivusto'
+        'preview_website' => 'Esikatsele verkkosivusto',
     ],
     'mysettings' => [
         'menu_label' => 'Omat asetukset',
-        'menu_description' => 'Ylläpitäjän tiliin liittyvät asetukset.'
+        'menu_description' => 'Ylläpitäjän tiliin liittyvät asetukset.',
     ],
     'myaccount' => [
         'menu_label' => 'Oma tili',
         'menu_description' => 'Päivitä tilisi asetukset, kuten nimesi, sähköpostisi ja salasanasi.',
-        'menu_keywords' => 'tietoturvakirjautuminen'
+        'menu_keywords' => 'tietoturvakirjautuminen',
     ],
     'branding' => [
         'menu_label' => 'Kustomoi ylläpito',
@@ -410,7 +410,7 @@ return [
         'menu_mode' => 'Valikon tyyli',
         'menu_mode_inline' => 'Rivissä',
         'menu_mode_tile' => 'Laatat',
-        'menu_mode_collapsed' => 'Taitettu'
+        'menu_mode_collapsed' => 'Taitettu',
     ],
     'backend_preferences' => [
         'menu_label' => 'Hallinnan asetukset',
@@ -420,7 +420,7 @@ return [
         'timezone' => 'Aikavyöhyke',
         'timezone_comment' => 'Säätää kellonajat tähän aikavyöhykkeeseen.',
         'locale' => 'Kieli',
-        'locale_comment' => 'Valitse haluttu käyttöliittymän kieli.'
+        'locale_comment' => 'Valitse haluttu käyttöliittymän kieli.',
     ],
     'access_log' => [
         'hint' => 'Tämä loki näyttää listan onnistuneista kirjautumisista järjestelmänvalvojilta. Tiedot pidetään tallessa :days päivää.',
@@ -431,12 +431,12 @@ return [
         'ip_address' => 'IP-osoite',
         'first_name' => 'Etunimi',
         'last_name' => 'Sukunimi',
-        'email' => 'Sähköposti'
+        'email' => 'Sähköposti',
     ],
     'filter' => [
         'all' => 'kaikki',
         'options_method_not_exists' => "Mallin :model täytyy määritellä metodi :method(), joka palauttaa ehdot ':filter' suodattimelle.",
-        'date_all' => 'kaikilta ajoilta'
+        'date_all' => 'kaikilta ajoilta',
     ],
     'import_export' => [
         'upload_csv_file' => '1. Vie CSV-tiedosto',
@@ -507,15 +507,15 @@ return [
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Kelttiläinen)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Länsi-Eurooppalainen vedos euro symbolilla)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
-        'manage_media' => 'Siirrä ja hallitse mediaa - kuvat, videot, äänet, dokumentit'
+        'manage_media' => 'Siirrä ja hallitse mediaa - kuvat, videot, äänet, dokumentit',
     ],
     'mediafinder' => [
         'label' => 'Mediaetsin',
-        'default_prompt' => 'Klikkaa %s nappulaa etsiäksesi media'
+        'default_prompt' => 'Klikkaa %s nappulaa etsiäksesi media',
     ],
     'media' => [
         'menu_label' => 'Media',

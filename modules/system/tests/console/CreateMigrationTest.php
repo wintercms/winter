@@ -2,10 +2,9 @@
 
 namespace System\Tests\Console;
 
-use File;
-use Illuminate\Database\Schema\Blueprint;
-use Schema;
 use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Schema;
 
 class CreateMigrationTest extends PluginTestCase
 {

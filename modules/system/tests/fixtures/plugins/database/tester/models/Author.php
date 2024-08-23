@@ -2,7 +2,7 @@
 
 namespace Database\Tester\Models;
 
-use Model;
+use Winter\Storm\Database\Model;
 
 class Author extends Model
 {
@@ -36,12 +36,12 @@ class Author extends Model
     public $belongsToMany = [
         'roles' => [
             'Database\Tester\Models\Role',
-            'table' => 'database_tester_authors_roles'
+            'table' => 'database_tester_authors_roles',
         ],
         'executive_authors' => [
             'Database\Tester\Models\Role',
             'table' => 'database_tester_authors_roles',
-            'conditions' => 'is_executive = 1'
+            'conditions' => 'is_executive = 1',
         ],
     ];
 
@@ -58,7 +58,7 @@ class Author extends Model
             'Database\Tester\Models\Tag',
             'name'  => 'taggable',
             'table' => 'database_tester_taggables',
-            'pivot' => ['added_by']
+            'pivot' => ['added_by'],
         ],
     ];
 }

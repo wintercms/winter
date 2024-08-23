@@ -19,18 +19,18 @@ return [
             'online' => 'Online',
             'maintenance' => 'Vedlikeholdsmodus',
             'manage_themes' => 'Administrer temaer',
-        ]
+        ],
     ],
     'theme' => [
         'not_found_name' => "Tema ':name' ble ikke funnet.",
         'active' => [
             'not_set' => 'Aktivt tema er ikke valgt.',
-            'not_found' => 'Aktivt tema ikke funnet.'
+            'not_found' => 'Aktivt tema ikke funnet.',
         ],
         'edit' => [
             'not_set' => 'Redigeringstema er ikke valgt.',
             'not_found' => 'Redigeringstema ikke funnet.',
-            'not_match' => "Objektet du prøver å åpne tilhører ikke temaet som endres. Vennligst oppdater siden."
+            'not_match' => "Objektet du prøver å åpne tilhører ikke temaet som endres. Vennligst oppdater siden.",
         ],
         'settings_menu' => 'Frontend tema',
         'settings_menu_description' => 'Forhåndsvis en liste over installerte temaer og velg et aktivt tema.',
@@ -101,11 +101,11 @@ return [
         'not_found_name' => "Siden ':name' ble ikke funnet",
         'not_found' => [
             'label' => 'Side ikke funnet',
-            'help' => 'Den forespurte siden ble ikke funnet.'
+            'help' => 'Den forespurte siden ble ikke funnet.',
         ],
         'custom_error' => [
             'label' => 'Side-feil',
-            'help' => "Noe gikk galt. Siden kan ikke vises."
+            'help' => "Noe gikk galt. Siden kan ikke vises.",
         ],
         'menu_label' => 'Sider',
         'unsaved_label' => 'Ulagrede sider',
@@ -114,7 +114,7 @@ return [
         'invalid_url' => 'Ugyldig URL-format. URL-en skal starte med skråstrek og kan inneholde tall, latinske bokstaver og følgende symbol: ._-[]:?|/+*^$',
         'delete_confirm_multiple' => 'Vil du virkelig slette valgte sider?',
         'delete_confirm_single' => 'Vil du virkelig slette denne siden?',
-        'no_layout' => '-- ingen layout --'
+        'no_layout' => '-- ingen layout --',
     ],
     'layout' => [
         'not_found_name' => "Layouten ':name' ble ikke funnet",
@@ -123,7 +123,7 @@ return [
         'no_list_records' => 'Ingen layouts funnet',
         'new' => 'Ny layout',
         'delete_confirm_multiple' => 'Vil du virkelig slette valgte layouts?',
-        'delete_confirm_single' => 'Vil du virkelig slette denne layout?'
+        'delete_confirm_single' => 'Vil du virkelig slette denne layout?',
     ],
     'partial' => [
         'not_found_name' => "Partial ':name' ble ikke funnet.",
@@ -133,7 +133,7 @@ return [
         'no_list_records' => 'Ingen partials funnet',
         'delete_confirm_multiple' => 'Vil du virkelig slette valgte partials?',
         'delete_confirm_single' => 'Vil du virkelig slette denne partialen?',
-        'new' => 'Ny partial'
+        'new' => 'Ny partial',
     ],
     'content' => [
         'not_found_name' => "Innholdsfilen ':name' ble ikke funnet.",
@@ -142,18 +142,18 @@ return [
         'no_list_records' => 'No content files found',
         'delete_confirm_multiple' => 'Vil du virkelig slette valgte innholdsfiler eller -mapper?',
         'delete_confirm_single' => 'Vil du virkelig slette denne innholdsfilen eller -mappen?',
-        'new' => 'Ny innholdsfil'
+        'new' => 'Ny innholdsfil',
     ],
     'ajax_handler' => [
         'invalid_name' => 'Ugyldig AJAX handler navn: :name.',
-        'not_found' => "AJAX handler ':name' ble ikke funnet."
+        'not_found' => "AJAX handler ':name' ble ikke funnet.",
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => 'Legg til',
-        'search' => 'Søk...'
+        'search' => 'Søk...',
     ],
     'editor' => [
         'settings' => 'Innstillinger',
@@ -177,7 +177,7 @@ return [
         'open_searchbox' => 'Vis søkefelt',
         'close_searchbox'  => 'Skjul søkefelt',
         'open_replacebox' => 'Vis erstatt-felt',
-        'close_replacebox'  => 'Skjul erstatt-felt'
+        'close_replacebox'  => 'Skjul erstatt-felt',
     ],
     'asset' => [
         'menu_label' => 'Ressurser',
@@ -215,7 +215,7 @@ return [
         'error_moving_file' => 'Kunne ikke flytte filen :file',
         'error_moving_directory' => 'Kunne ikke flytte mappen :dir',
         'error_deleting_directory' => 'Kunne ikke slette original mappe :dir',
-        'path' => 'Mål'
+        'path' => 'Mål',
     ],
     'component' => [
         'menu_label' => 'Komponenter',
@@ -227,12 +227,12 @@ return [
         'invalid_request' => 'Templaten kan ikke lagres på grunn av ugyldig komponentdata.',
         'no_records' => 'Ingen komponenter funnet',
         'not_found' => "Komponenten ':name' ble ikke funnet.",
-        'method_not_found' => "Komponenten ':name' inneholder ikke en metode ':method'."
+        'method_not_found' => "Komponenten ':name' inneholder ikke en metode ':method'.",
     ],
     'template' => [
         'invalid_type' => 'Ukjent template-type.',
         'not_found' => 'Forespurt template ikke funnet.',
-        'saved' => 'Templaten har blitt lagret.'
+        'saved' => 'Templaten har blitt lagret.',
     ],
     'permissions' => [
         'name' => 'Cms',

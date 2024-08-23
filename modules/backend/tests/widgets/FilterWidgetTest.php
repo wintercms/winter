@@ -2,11 +2,11 @@
 
 namespace Backend\Tests\Widgets;
 
-use System\Tests\Bootstrap\PluginTestCase;
+use Backend\Models\User;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use Backend\Widgets\Filter;
-use ApplicationException;
-use Backend\Models\User;
+use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Exception\ApplicationException;
 
 class FilterWidgetTest extends PluginTestCase
 {
@@ -65,14 +65,14 @@ class FilterWidgetTest extends PluginTestCase
             'scopes' => [
                 'id' => [
                     'type' => 'text',
-                    'label' => 'ID'
+                    'label' => 'ID',
                 ],
                 'email' => [
                     'type' => 'text',
                     'label' => 'Email',
-                    'permission' => 'test.*'
-                ]
-            ]
+                    'permission' => 'test.*',
+                ],
+            ],
         ]);
         $filter->render();
 
@@ -128,16 +128,16 @@ class FilterWidgetTest extends PluginTestCase
             'scopes' => [
                 'id' => [
                     'type' => 'text',
-                    'label' => 'ID'
+                    'label' => 'ID',
                 ],
                 'email' => [
                     'type' => 'text',
                     'label' => 'Email',
                     'permissions' => ($singlePermission) ? 'test.access_field' : [
-                        'test.access_field'
-                    ]
-                ]
-            ]
+                        'test.access_field',
+                    ],
+                ],
+            ],
         ]);
     }
 }

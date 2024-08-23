@@ -2,7 +2,7 @@
 
 namespace Winter\Tester\Models;
 
-use Model;
+use Winter\Storm\Database\Model;
 
 class TestModel extends Model
 {
@@ -15,15 +15,15 @@ class TestModel extends Model
     ];
 
     public $belongsTo = [
-        'user' => TestUser::class
+        'user' => TestUser::class,
     ];
 
     public $hasOne = [
-        'phone' => TestPhone::class
+        'phone' => TestPhone::class,
     ];
 
     public $morphTo = [
-        'taggable' => []
+        'taggable' => [],
     ];
 
     public $rules = [

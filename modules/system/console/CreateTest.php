@@ -2,7 +2,6 @@
 
 namespace System\Console;
 
-use System\Console\BaseScaffoldCommand;
 use Winter\Storm\Support\Str;
 
 class CreateTest extends BaseScaffoldCommand

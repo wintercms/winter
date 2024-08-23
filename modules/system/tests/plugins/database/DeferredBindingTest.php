@@ -2,11 +2,11 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
-use Database\Tester\Models\Post;
 use Database\Tester\Models\Author;
+use Database\Tester\Models\Post;
+use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Database\Model;
 use Winter\Storm\Database\Models\DeferredBinding;
-use Model;
 
 class DeferredBindingTest extends PluginTestCase
 {

@@ -3,7 +3,7 @@
 return [
     'app' => [
         'name' => 'Winter CMS',
-        'tagline' => 'Tagasi põhitõdede juurde'
+        'tagline' => 'Tagasi põhitõdede juurde',
     ],
     'locale' => [
         'be' => 'Беларуская',
@@ -41,13 +41,13 @@ return [
         'tr' => 'Türkçe',
         'zh-cn' => '简体中文',
         'zh-tw' => '繁體中文',
-        'vn' => 'Tiếng việt'
+        'vn' => 'Tiếng việt',
     ],
     'directory' => [
-        'create_fail' => 'Kataloogi :name ei õnnestunud luua'
+        'create_fail' => 'Kataloogi :name ei õnnestunud luua',
     ],
     'file' => [
-        'create_fail' => 'Faili :name ei õnnestunud luua'
+        'create_fail' => 'Faili :name ei õnnestunud luua',
     ],
     'page' => [
         'invalid_token' => [
@@ -55,7 +55,7 @@ return [
         ],
     ],
     'combiner' => [
-        'not_found' => "Ühendaja faili ':name' ei leitud."
+        'not_found' => "Ühendaja faili ':name' ei leitud.",
     ],
     'system' => [
         'name' => 'Süsteem',
@@ -72,15 +72,15 @@ return [
             'social' => 'Suhtlusvõrgustikud',
             'events' => 'Sündmused',
             'customers' => 'Kliendid',
-            'my_settings' => 'Minu seaded'
-        ]
+            'my_settings' => 'Minu seaded',
+        ],
     ],
     'theme' => [
         'label' => 'Teema',
         'unnamed' => 'Nimeta teema',
         'name' => [
             'label' => 'Teema nimi',
-            'help' => 'Anna teemale nimi selle unikaalse koodi järgi, nt Winter.Vanilla'
+            'help' => 'Anna teemale nimi selle unikaalse koodi järgi, nt Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -89,16 +89,16 @@ return [
         'installed' => 'Paigaldatud teemad',
         'no_themes' => 'Ühtegi ostetud teemat pole paigaldatud.',
         'recommended' => 'Soovitatud',
-        'remove_confirm' => 'Oled sa kindel, et soovid selle teema eemaldada?'
+        'remove_confirm' => 'Oled sa kindel, et soovid selle teema eemaldada?',
     ],
     'plugin' => [
         'label' => 'Plugin',
         'unnamed' => 'Nimeta plugin',
         'name' => [
             'label' => 'Plugina nimi',
-            'help' => 'Anna pluginale nimi selle unikaalse koodi järgi. Nt Winter.Blog'
+            'help' => 'Anna pluginale nimi selle unikaalse koodi järgi. Nt Winter.Blog',
         ],
-        'by_author' => 'Autor: :name'
+        'by_author' => 'Autor: :name',
     ],
     'plugins' => [
         'manage' => 'Halda pluginaid',
@@ -124,7 +124,7 @@ return [
         'disable_confirm' => 'Oled sa kindel?',
         'disable_success' => 'Valitud plugin on nüüd keelatud.',
         'enable_success' => 'Valitud pluginad on nüüd lubatud.',
-        'unknown_plugin' => 'Plugin on edukalt eemaldatud.'
+        'unknown_plugin' => 'Plugin on edukalt eemaldatud.',
     ],
     'project' => [
         'name' => 'Projekt',
@@ -135,10 +135,10 @@ return [
         'id' => [
             'label' => 'Projekti ID',
             'help' => 'Kuidas leida projekti ID-d',
-            'missing' => 'Palun sisesta projekti ID.'
+            'missing' => 'Palun sisesta projekti ID.',
         ],
         'detach_confirm' => 'Oled sa kindel, et soovid selle projekti eemaldada?',
-        'unbind_success' => 'Projekt on eemaldatud.'
+        'unbind_success' => 'Projekt on eemaldatud.',
     ],
     'settings' => [
         'menu_label' => 'Seaded',
@@ -146,7 +146,7 @@ return [
         'missing_model' => 'Seadete lehel puudub modeli seos.',
         'update_success' => ':name seaded on uuendatud',
         'return' => 'Tagasi süsteemi seadete juurde',
-        'search' => 'Otsi'
+        'search' => 'Otsi',
     ],
     'mail' => [
         'log_file' => 'Logi fail',
@@ -201,7 +201,7 @@ return [
         'deleting' => 'Kustutan malli...',
         'deleting_layout' => 'Kustutan kujundust...',
         'sending' => 'Saadan testkirja...',
-        'return' => 'Tagasi mallide nimekirja'
+        'return' => 'Tagasi mallide nimekirja',
     ],
     'install' => [
         'project_label' => 'Lisa projektile',
@@ -210,7 +210,7 @@ return [
         'missing_plugin_name' => 'Palun sisesta plugina nimi, mida paigaldada.',
         'missing_theme_name' => 'Palun sisesta teema nimi, mida paigaldada.',
         'install_completing' => 'Lõpetan paigaldamise protsessi',
-        'install_success' => 'Plugin on edukalt paigaldatud'
+        'install_success' => 'Plugin on edukalt paigaldatud',
     ],
     'updates' => [
         'title' => 'Halda uuendusi',
@@ -249,17 +249,17 @@ return [
         'force_label' => 'Uuenda igal juhul',
         'found' => [
             'label' => 'Found new updates!',
-            'help' => 'Kliki "Uuenda tarkvara," et alustada uuendamise protsesse.'
+            'help' => 'Kliki "Uuenda tarkvara," et alustada uuendamise protsesse.',
         ],
         'none' => [
             'label' => 'Uuendusi ei ole',
-            'help' => 'Uusi uuendusi ei leitud.'
+            'help' => 'Uusi uuendusi ei leitud.',
         ],
         'important_action' => [
             'empty' => 'Vali tegevus',
             'confirm' => 'Kinnita uuendus',
             'skip' => 'Jäta see uuendus vahele (ainult nüüd)',
-            'ignore' => 'Jäta see uuendus vahele (alati)'
+            'ignore' => 'Jäta see uuendus vahele (alati)',
         ],
         'important_action_required' => 'Vajalik tegevus',
         'important_view_guide' => 'Vaata uuendamise juhendit',
@@ -276,7 +276,7 @@ return [
         'details_licence' => 'Litsents',
         'details_licence_missing' => 'Litsentsi pole lisatud.',
         'details_current_version' => 'Praegune versioon',
-        'details_author' => 'Autor'
+        'details_author' => 'Autor',
     ],
     'server' => [
         'connect_error' => 'Ühendus serveriga nurjus.',
@@ -284,17 +284,17 @@ return [
         'response_invalid' => 'Serverilt saadi vigane vastus.',
         'response_empty' => 'Serverilt saadi tühi vastus.',
         'file_error' => 'Paketi saatmine ebaõnnestus.',
-        'file_corrupt' => 'Saadetud fail on vigane.'
+        'file_corrupt' => 'Saadetud fail on vigane.',
     ],
     'behavior' => [
-        'missing_property' => 'Klass :class peab defineerima atribuudi $:property, mida kasutab käitumine :behavior.'
+        'missing_property' => 'Klass :class peab defineerima atribuudi $:property, mida kasutab käitumine :behavior.',
     ],
     'config' => [
         'not_found' => 'Ei leitud :location jaoks seadete faili :file.',
-        'required' => ":location seade peab sisaldama ':property' väärtust."
+        'required' => ":location seade peab sisaldama ':property' väärtust.",
     ],
     'zip' => [
-        'extract_failed' => "Süsteemifaili ':file' lahtipakkimine ebaõnnestus."
+        'extract_failed' => "Süsteemifaili ':file' lahtipakkimine ebaõnnestus.",
     ],
     'event_log' => [
         'hint' => 'See logi sisaldab veateateid, mis esinevad süsteemi töös.',
@@ -309,7 +309,7 @@ return [
         'created_at' => 'Kuupäev & kellaaeg',
         'message' => 'Sisu',
         'level' => 'Tase',
-        'preview_title' => 'Sündmus'
+        'preview_title' => 'Sündmus',
     ],
     'request_log' => [
         'hint' => 'See logi sisaldab süsteemi juurdepääsuinfot, mis võiks vajada tähelepanu. Näiteks salvestatakse 404 päringud kui kasutaja üritab vaadata lehte, mida ei ole olemas.',
@@ -325,7 +325,7 @@ return [
         'referer' => 'Allikas',
         'url' => 'URL',
         'status_code' => 'Staatus',
-        'preview_title' => 'Päring'
+        'preview_title' => 'Päring',
     ],
     'permissions' => [
         'name' => 'Süsteem',
@@ -338,7 +338,7 @@ return [
         'manage_preferences' => 'Haldusliidese seadete muutmine',
         'manage_editor' => 'Koodi redaktori seadete muutmine',
         'view_the_dashboard' => 'Juurdepääs töölauale',
-        'manage_branding' => 'Haldusliidese kohandamine'
+        'manage_branding' => 'Haldusliidese kohandamine',
     ],
     'log' => [
         'menu_label' => 'Logi seaded',

@@ -2,17 +2,17 @@
 
 namespace Backend\Widgets;
 
-use Str;
-use Lang;
-use Input;
-use Event;
-use Config;
-use Backend;
-use ApplicationException;
 use Backend\Classes\WidgetBase;
+use Backend\Facades\Backend;
+use Illuminate\Support\Facades\Lang;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Classes\MediaLibraryItem;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Str;
 
 /**
  * Media Manager widget.
@@ -122,7 +122,7 @@ class MediaManager extends WidgetBase
 
         return [
             '#' . $this->getId('item-list') => $this->makePartial('item-list'),
-            '#' . $this->getId('folder-path') => $this->makePartial('folder-path')
+            '#' . $this->getId('folder-path') => $this->makePartial('folder-path'),
         ];
     }
 
@@ -146,7 +146,7 @@ class MediaManager extends WidgetBase
 
         return [
             '#' . $this->getId('item-list') => $this->makePartial('item-list'),
-            '#' . $this->getId('folder-path') => $this->makePartial('folder-path')
+            '#' . $this->getId('folder-path') => $this->makePartial('folder-path'),
         ];
     }
 
@@ -166,7 +166,7 @@ class MediaManager extends WidgetBase
         }
 
         return [
-            'generatedThumbnails' => $result
+            'generatedThumbnails' => $result,
         ];
     }
 
@@ -213,7 +213,7 @@ class MediaManager extends WidgetBase
         return [
             '#' . $this->getId('item-list') => $this->makePartial('item-list'),
             '#' . $this->getId('folder-path') => $this->makePartial('folder-path'),
-            '#' . $this->getId('view-mode-buttons') => $this->makePartial('view-mode-buttons')
+            '#' . $this->getId('view-mode-buttons') => $this->makePartial('view-mode-buttons'),
         ];
     }
 
@@ -233,7 +233,7 @@ class MediaManager extends WidgetBase
         return [
             '#' . $this->getId('item-list') => $this->makePartial('item-list'),
             '#' . $this->getId('folder-path') => $this->makePartial('folder-path'),
-            '#' . $this->getId('filters') => $this->makePartial('filters')
+            '#' . $this->getId('filters') => $this->makePartial('filters'),
         ];
     }
 
@@ -254,7 +254,7 @@ class MediaManager extends WidgetBase
 
         return [
             '#' . $this->getId('item-list') => $this->makePartial('item-list'),
-            '#' . $this->getId('folder-path') => $this->makePartial('folder-path')
+            '#' . $this->getId('folder-path') => $this->makePartial('folder-path'),
         ];
     }
 
@@ -352,7 +352,7 @@ class MediaManager extends WidgetBase
         $this->prepareVars();
 
         return [
-            '#' . $this->getId('item-list') => $this->makePartial('item-list')
+            '#' . $this->getId('item-list') => $this->makePartial('item-list'),
         ];
     }
 
@@ -518,7 +518,7 @@ class MediaManager extends WidgetBase
         $this->prepareVars();
 
         return [
-            '#' . $this->getId('item-list') => $this->makePartial('item-list')
+            '#' . $this->getId('item-list') => $this->makePartial('item-list'),
         ];
     }
 
@@ -646,7 +646,7 @@ class MediaManager extends WidgetBase
         $this->prepareVars();
 
         return [
-            '#' . $this->getId('item-list') => $this->makePartial('item-list')
+            '#' . $this->getId('item-list') => $this->makePartial('item-list'),
         ];
     }
 
@@ -831,7 +831,7 @@ class MediaManager extends WidgetBase
 
         return [
             'url' => $resizedUrl,
-            'dimensions' => [$width, $height]
+            'dimensions' => [$width, $height],
         ];
     }
 
@@ -933,7 +933,7 @@ class MediaManager extends WidgetBase
             MediaLibraryItem::FILE_TYPE_IMAGE,
             MediaLibraryItem::FILE_TYPE_AUDIO,
             MediaLibraryItem::FILE_TYPE_DOCUMENT,
-            MediaLibraryItem::FILE_TYPE_VIDEO
+            MediaLibraryItem::FILE_TYPE_VIDEO,
             ])
         ) {
             throw new ApplicationException('Invalid input data');
@@ -995,7 +995,7 @@ class MediaManager extends WidgetBase
             !in_array($sortBy, [
             MediaLibrary::SORT_BY_TITLE,
             MediaLibrary::SORT_BY_SIZE,
-            MediaLibrary::SORT_BY_MODIFIED
+            MediaLibrary::SORT_BY_MODIFIED,
             ])
         ) {
             throw new ApplicationException('Invalid input data');
@@ -1025,7 +1025,7 @@ class MediaManager extends WidgetBase
         if (
             !in_array($sortDirection, [
             MediaLibrary::SORT_DIRECTION_ASC,
-            MediaLibrary::SORT_DIRECTION_DESC
+            MediaLibrary::SORT_DIRECTION_DESC,
             ])
         ) {
             throw new ApplicationException('Invalid input data');
@@ -1071,7 +1071,7 @@ class MediaManager extends WidgetBase
         return [
             'mode'   => self::SELECTION_MODE_NORMAL,
             'width'  => null,
-            'height' => null
+            'height' => null,
         ];
     }
 
@@ -1088,7 +1088,7 @@ class MediaManager extends WidgetBase
             !in_array($selectionMode, [
             self::SELECTION_MODE_NORMAL,
             self::SELECTION_MODE_FIXED_RATIO,
-            self::SELECTION_MODE_FIXED_SIZE
+            self::SELECTION_MODE_FIXED_SIZE,
             ])
         ) {
             throw new ApplicationException('Invalid input data');
@@ -1105,7 +1105,7 @@ class MediaManager extends WidgetBase
         $this->putSession('media_crop_selection_params', [
             'mode'   => $selectionMode,
             'width'  => $selectionWidth,
-            'height' => $selectionHeight
+            'height' => $selectionHeight,
         ]);
     }
 
@@ -1180,7 +1180,7 @@ class MediaManager extends WidgetBase
             !in_array($viewMode, [
             self::VIEW_MODE_GRID,
             self::VIEW_MODE_LIST,
-            self::VIEW_MODE_TILES
+            self::VIEW_MODE_TILES,
             ])
         ) {
             throw new ApplicationException('Invalid input data');
@@ -1206,7 +1206,7 @@ class MediaManager extends WidgetBase
     protected function getThumbnailParams(string $viewMode = null): array
     {
         $result = [
-            'mode' => 'crop'
+            'mode' => 'crop',
         ];
 
         if (!$viewMode) {
@@ -1216,13 +1216,13 @@ class MediaManager extends WidgetBase
         if ($viewMode === self::VIEW_MODE_LIST) {
             return array_merge($result, [
                 'width' => 75,
-                'height' => 75
+                'height' => 75,
             ]);
         }
 
         return array_merge($result, [
             'width' => 165,
-            'height' => 165
+            'height' => 165,
         ]);
     }
 

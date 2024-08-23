@@ -2,9 +2,9 @@
 
 namespace Backend\Classes;
 
-use File;
-use Config;
 use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Skin Base class

@@ -2,9 +2,9 @@
 
 namespace System\Models;
 
-use App;
-use Model;
-use Request;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Database\Model;
 
 /**
  * Model for logging 404 errors

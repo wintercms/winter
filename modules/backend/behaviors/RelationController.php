@@ -2,13 +2,13 @@
 
 namespace Backend\Behaviors;
 
-use Db;
-use Lang;
-use Request;
-use Form as FormHelper;
 use Backend\Classes\ControllerBehavior;
+use Form as FormHelper;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
 use Winter\Storm\Database\Model;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\DB;
 
 /**
  * Uses a combination of lists and forms for managing Model relations.
@@ -616,7 +616,7 @@ class RelationController extends ControllerBehavior
 
         if ($useSearch) {
             $toolbarConfig->search = [
-                'prompt' => 'backend::lang.list.search_prompt'
+                'prompt' => 'backend::lang.list.search_prompt',
             ];
         }
 

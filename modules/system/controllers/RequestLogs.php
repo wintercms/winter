@@ -2,12 +2,12 @@
 
 namespace System\Controllers;
 
-use Lang;
-use Flash;
-use BackendMenu;
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
+use Illuminate\Support\Facades\Lang;
 use System\Classes\SettingsManager;
 use System\Models\RequestLog;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Request Logs controller

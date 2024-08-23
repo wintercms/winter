@@ -3,8 +3,7 @@
 namespace System\Tests\Classes;
 
 use System\Tests\Bootstrap\TestCase;
-use System\Classes\PluginManager;
-use Validator;
+use Winter\Storm\Support\Facades\Validator;
 
 class CoreLangTest extends TestCase
 {

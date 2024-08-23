@@ -62,7 +62,7 @@ return [
             'widget_title_default' => 'Estado del sistema',
             'online' => 'online',
             'update_available' => '{0} actualizaciones disponibles!|{1} actualizaciones disponibles!|[2,Inf] actualizaciones disponibles!',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Administrador',
@@ -99,8 +99,8 @@ return [
             'return' => 'Regresar a la lista de grupos',
         ],
         'preferences' => [
-            'not_authenticated' => 'No existe un usuario autenticado para cargar o guardar las preferencias.'
-        ]
+            'not_authenticated' => 'No existe un usuario autenticado para cargar o guardar las preferencias.',
+        ],
     ],
     'list' => [
         'default_title' => 'Listar',
@@ -125,7 +125,7 @@ return [
         'attachment' => 'Adjunto',
         'help' => 'Añadir un título y una descripción para este Adjunto.',
         'title_label' => 'Título',
-        'description_label' => 'Descripción'
+        'description_label' => 'Descripción',
     ],
 
     'form' => [
@@ -203,7 +203,7 @@ return [
         'tips' => 'Consejos de configuración del sistema.',
         'tips_description' => 'Hay problemas que necesitan de su atención para configurar el sistema correctamente.',
         'permissions'  => 'El directorio :name o los subdirectorios no se puede escribir por PHP. Por favor establezca los permisos correctos para el servidor web en este directorio.',
-        'extension' => 'La extensión PHP :name no está instalada. Por favor instale esta librería y active la extensión.'
+        'extension' => 'La extensión PHP :name no está instalada. Por favor instale esta librería y active la extensión.',
     ],
     'editor' => [
         'menu_label' => 'Preferencias del editor de código',
@@ -219,7 +219,7 @@ return [
         'theme' => 'Color del esquema',
     ],
     'tooltips' => [
-        'preview_website' => 'Vista previa de la página web'
+        'preview_website' => 'Vista previa de la página web',
     ],
     'mysettings' => [
         'menu_label' => 'Mi configuración',
@@ -228,7 +228,7 @@ return [
     'myaccount' => [
         'menu_label' => 'Mi cuenta',
         'menu_description' => 'Actualizar información de su cuenta, como nombre, dirección de correo electrónico y contraseña.',
-        'menu_keywords' => 'Inicio seguro'
+        'menu_keywords' => 'Inicio seguro',
     ],
     'backend_preferences' => [
         'menu_label' => 'Preferencias de backend',
@@ -248,7 +248,7 @@ return [
         'email' => 'Email',
     ],
     'filter' => [
-      'all' => 'Todo'
+      'all' => 'Todo',
     ],
     'media' => [
         'rename_popup_title' => 'Renombrar',
@@ -256,5 +256,5 @@ return [
         'move_please_select' => 'por favor seleccionar',
         'move_button' => 'Mover',
 
-    ]
+    ],
 ];

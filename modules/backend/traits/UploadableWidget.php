@@ -2,16 +2,16 @@
 
 namespace Backend\Traits;
 
-use ApplicationException;
-use Event;
-use File;
 use Illuminate\Filesystem\FilesystemAdapter;
-use Lang;
-use Request;
-use Response;
-use Str;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
 use System\Classes\MediaLibrary;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Str;
 use Winter\Storm\Support\Svg;
 
 /**
@@ -153,7 +153,7 @@ trait UploadableWidget
 
             $response = Response::make([
                 'link' => $this->uploadableGetUploadUrl($filePath),
-                'result' => 'success'
+                'result' => 'success',
             ]);
         } catch (\Exception $ex) {
             throw new ApplicationException($ex->getMessage());

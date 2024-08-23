@@ -2,10 +2,10 @@
 
 namespace System\Helpers;
 
-use App;
-use File;
 use Cache as CacheFacade;
-use Config;
+use Illuminate\Support\Facades\App;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 class Cache
 {

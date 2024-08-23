@@ -2,13 +2,13 @@
 
 namespace Backend\Classes;
 
-use Event;
-use BackendAuth;
+use Backend\Facades\BackendAuth;
+use Illuminate\Support\Facades\Log;
 use System\Classes\PluginManager;
-use Validator;
-use SystemException;
-use Log;
-use Config;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Validator;
 
 /**
  * Manages the backend navigation.
@@ -285,7 +285,7 @@ class NavigationManager
 
         $item = array_merge($definition, [
             'code'  => $code,
-            'owner' => $owner
+            'owner' => $owner,
         ]);
 
         $this->items[$itemKey] = MainMenuItem::createFromArray($item);
@@ -356,7 +356,7 @@ class NavigationManager
 
         $definition = array_merge($definition, [
             'code'  => $sideCode,
-            'owner' => $owner
+            'owner' => $owner,
         ]);
 
         if (isset($mainItem->sideMenu[$sideCode])) {
@@ -524,7 +524,7 @@ class NavigationManager
         $validator = Validator::make($definitions, [
             '*.label' => 'required',
             '*.icon' => 'required_without:*.iconSvg',
-            '*.url' => 'required'
+            '*.url' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -571,7 +571,7 @@ class NavigationManager
 
         $item = array_merge($definition, [
             'code'  => $code,
-            'owner' => $owner
+            'owner' => $owner,
         ]);
 
         $this->quickActions[$itemKey] = QuickActionItem::createFromArray($item);

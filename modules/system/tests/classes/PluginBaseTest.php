@@ -15,16 +15,16 @@ class PluginBaseTest extends PluginManagerTestCase
         $expectedVersions = [
             '1.0.1' => [
                 'Added some upgrade file and some "seeding"',
-                'some_seeding_file.php' //does not exist
+                'some_seeding_file.php', //does not exist
             ],
             '1.0.2' => [
                 'Added some stuff',
             ],
             '1.0.3' => [
-                'Bug fix update that uses no scripts'
+                'Bug fix update that uses no scripts',
             ],
             '1.0.4' => [
-                'Another fix'
+                'Another fix',
             ],
             '1.0.5' => [
                 'Create blog settings table',

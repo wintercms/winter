@@ -3,17 +3,17 @@
 namespace System\Console;
 
 use Backend\Database\Seeds\SeedSetupAdmin;
-use Config;
-use Db;
 use Exception;
-use File;
 use Illuminate\Encryption\Encrypter;
 use PDO;
-use Str;
 use Symfony\Component\Console\Input\InputOption;
 use System\Classes\UpdateManager;
 use Winter\Storm\Config\ConfigWriter;
 use Winter\Storm\Console\Command;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Str;
 
 /**
  * Console command to install Winter.
@@ -98,7 +98,7 @@ class WinterInstall extends Command
         foreach ($chosenToInstall as $pluginCode) {
             $this->output->writeln('<info>Installing plugin ' . $pluginCode . '</info>');
             $this->callSilent('plugin:install', [
-                'plugin' => $pluginCode
+                'plugin' => $pluginCode,
             ]);
             $this->output->writeln('<info>' . $pluginCode . ' installed successfully.</info>');
         }

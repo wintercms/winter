@@ -4,9 +4,9 @@ namespace Cms\Console;
 
 use Cms\Classes\Theme;
 use Cms\Classes\ThemeManager;
-use File;
 use System\Classes\UpdateManager;
 use Winter\Storm\Console\Command;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Console command to install a new theme.

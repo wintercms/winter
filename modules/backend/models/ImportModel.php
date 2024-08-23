@@ -3,11 +3,11 @@
 namespace Backend\Models;
 
 use Backend\Behaviors\ImportExportController\TranscodeFilter;
-use Str;
-use Lang;
-use Model;
+use Illuminate\Support\Facades\Lang;
 use League\Csv\Reader as CsvReader;
 use League\Csv\Statement as CsvStatement;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Str;
 
 /**
  * Model used for importing data
@@ -40,7 +40,7 @@ abstract class ImportModel extends Model
         'created' => 0,
         'errors' => [],
         'warnings' => [],
-        'skipped' => []
+        'skipped' => [],
     ];
 
     /**
@@ -101,7 +101,7 @@ abstract class ImportModel extends Model
             'delimiter' => null,
             'enclosure' => null,
             'escape' => null,
-            'encoding' => null
+            'encoding' => null,
         ];
 
         $options = array_merge($defaultOptions, $options);
@@ -238,7 +238,7 @@ abstract class ImportModel extends Model
             'iso-8859-15',
             'Windows-1250',
             'Windows-1251',
-            'Windows-1252'
+            'Windows-1252',
         ];
 
         $translated = array_map(function ($option) {

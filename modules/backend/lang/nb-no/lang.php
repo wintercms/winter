@@ -2,31 +2,31 @@
 
 return [
     'auth' => [
-        'title' => 'Administrasjonsområde'
+        'title' => 'Administrasjonsområde',
     ],
     'field' => [
         'invalid_type' => 'Ugyldig felttype brukt :type.',
-        'options_method_not_exists' => "Modellklassen :model må definere en metode :method() som returnerer vilkår for formfeltet ':field'."
+        'options_method_not_exists' => "Modellklassen :model må definere en metode :method() som returnerer vilkår for formfeltet ':field'.",
     ],
     'widget' => [
         'not_registered' => "En widget med klassenavnet ':name' har ikke blitt registrert",
-        'not_bound' => "En widget med klassenavnet ':name' er ikke bundet til kontrolleren"
+        'not_bound' => "En widget med klassenavnet ':name' er ikke bundet til kontrolleren",
     ],
     'page' => [
         'untitled' => 'Uten navn',
         'access_denied' => [
             'label' => 'Ingen tilgang',
             'help' => "Du har ikke nødvendig tilgang til å se denne siden.",
-            'cms_link' => 'Tilbake til backend'
+            'cms_link' => 'Tilbake til backend',
         ],
         'no_database' => [
             'label' => 'Database mangler',
             'help' => "En database kreves for å koble til backend. Sjekk at databasetilgang er konfigurert og migrert før du prøver igjen.",
-            'cms_link' => 'Tilbake til hovedsiden'
+            'cms_link' => 'Tilbake til hovedsiden',
         ],
     ],
     'partial' => [
-        'not_found_name' => "En partial ved navn ':name' ble ikke funnet."
+        'not_found_name' => "En partial ved navn ':name' ble ikke funnet.",
     ],
     'account' => [
         'sign_out' => 'Logg ut',
@@ -48,7 +48,7 @@ return [
         'apply' => 'Fortsett',
         'cancel' => 'Avbryt',
         'delete' => 'Slett',
-        'ok' => 'OK'
+        'ok' => 'OK',
     ],
     'dashboard' => [
         'menu_label' => 'Dashboard',
@@ -95,7 +95,7 @@ return [
             'last_sign_in' => 'Forrige innlogging var',
             'view_access_logs' => 'Vis adgangslogg',
             'nice_message' => 'Ha en fantastisk dag!!',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Administrator',
@@ -142,11 +142,11 @@ return [
             'new' => 'Ny gruppe',
             'delete_confirm' => 'Vil du virkelig slette denne administratorgruppen?',
             'return' => 'Tilbake til gruppeoversikten',
-            'users_count' => 'Antall brukere'
+            'users_count' => 'Antall brukere',
         ],
         'preferences' => [
-            'not_authenticated' => 'Det er ingen autentiserte brukere å laste eller lagre innstillinger for.'
-        ]
+            'not_authenticated' => 'Det er ingen autentiserte brukere å laste eller lagre innstillinger for.',
+        ],
     ],
     'list' => [
         'default_title' => 'Liste',
@@ -175,7 +175,7 @@ return [
         'delete_selected_confirm' => 'Vil du slette valgte rader?',
         'delete_selected_success' => 'Rader har blitt slettet.',
         'column_switch_true' => 'Ja',
-        'column_switch_false' => 'Nei'
+        'column_switch_false' => 'Nei',
     ],
     'fileupload' => [
         'attachment' => 'Vedlegg',
@@ -187,7 +187,7 @@ return [
         'upload_file' => 'Last opp fil',
         'upload_error' => 'Feil ved opplasting',
         'remove_confirm' => 'Er du sikker?',
-        'remove_file' => 'Fjern filen'
+        'remove_file' => 'Fjern filen',
     ],
     'form' => [
         'create_title' => 'Ny :name',
@@ -243,10 +243,10 @@ return [
         'delete_row' => 'Slett rad',
         'concurrency_file_changed_title' => 'Filen er endret',
         'concurrency_file_changed_description' => "Filen du endrer på har blitt endret på disken av en annen bruker. Du kan enten oppdatere filen og tape endret data, eller overskrive filen på disken.",
-        'return_to_list' => 'Tilbake til listen'
+        'return_to_list' => 'Tilbake til listen',
     ],
     'recordfinder' => [
-        'find_record' => 'Finn oppføring'
+        'find_record' => 'Finn oppføring',
     ],
     'relation' => [
         'missing_config' => "Relasjonen mangler en konfigurasjon for ':config'.",
@@ -283,7 +283,7 @@ return [
     ],
     'reorder' => [
         'default_title' => 'Sortere oppføringer',
-        'no_records' => 'Det er ingen tilgjengelige oppføringer å sortere.'
+        'no_records' => 'Det er ingen tilgjengelige oppføringer å sortere.',
     ],
     'model' => [
         'name' => 'Modell',
@@ -292,13 +292,13 @@ return [
         'missing_relation' => "Modellen ':class' mangler en definisjon for ':relation'.",
         'missing_method' => "Modellen ':class' mangler metoden ':method'.",
         'invalid_class' => "Modellen :model som brukes i :class er ugyldig, den må arve \Model-klassen.",
-        'mass_assignment_failed' => "Mass assignment feilet for modell-attributten ':attribute'."
+        'mass_assignment_failed' => "Mass assignment feilet for modell-attributten ':attribute'.",
     ],
     'warnings' => [
         'tips' => 'Tips for systemkonfigurasjon',
         'tips_description' => 'Det er problemer du må være oppmerksom på for å konfigurere systemet riktig.',
         'permissions'  => 'Mappen :name eller dens undermapper kan ikke skrives på av PHP. Vennligst sjekk skrivetilganger på serveren.',
-        'extension' => 'PHP-extensionen :name er ikke installert..'
+        'extension' => 'PHP-extensionen :name er ikke installert..',
     ],
     'editor' => [
         'menu_label' => 'Teksteditor-innstillinger',
@@ -344,19 +344,19 @@ return [
         'no_wrap' => 'Ikke pakk inn tagger',
         'no_wrap_comment' => 'Liste av tagger som ikke kan puttes inne i block-tagger.',
         'remove_tags' => 'Fjern tagger',
-        'remove_tags_comment' => 'Liste over tagger som fjernes med innholdet.'
+        'remove_tags_comment' => 'Liste over tagger som fjernes med innholdet.',
     ],
     'tooltips' => [
-        'preview_website' => 'Forhåndsvis nettsiden'
+        'preview_website' => 'Forhåndsvis nettsiden',
     ],
     'mysettings' => [
         'menu_label' => 'Mine innstillinger',
-        'menu_description' => 'Innstillinger relatert til din administratorkonto'
+        'menu_description' => 'Innstillinger relatert til din administratorkonto',
     ],
     'myaccount' => [
         'menu_label' => 'Min konto',
         'menu_description' => 'Oppdater dine kontodetaljer, som navn, e-postadresse og passord.',
-        'menu_keywords' => 'sikkerhetsinnlogging'
+        'menu_keywords' => 'sikkerhetsinnlogging',
     ],
     'branding' => [
         'menu_label' => 'Tilpass backend',
@@ -378,7 +378,7 @@ return [
         'menu_mode' => 'Menystyil',
         'menu_mode_inline' => 'Inline',
         'menu_mode_tile' => 'Fliser',
-        'menu_mode_collapsed' => 'Kollapset'
+        'menu_mode_collapsed' => 'Kollapset',
     ],
     'backend_preferences' => [
         'menu_label' => 'Backend-innstillinger',
@@ -388,7 +388,7 @@ return [
         'timezone' => 'Tidssone',
         'timezone_comment' => 'Formatér viste datoer til gjeldende tidssone.',
         'locale' => 'Språk',
-        'locale_comment' => 'Velg ønsket språk.'
+        'locale_comment' => 'Velg ønsket språk.',
     ],
     'access_log' => [
         'hint' => 'Denne loggen viser en liste over vellykkede administratorinnlogginger. Innloggingene blir lagret i 60 dager.',
@@ -399,12 +399,12 @@ return [
         'ip_address' => 'IP-adresse',
         'first_name' => 'Fornavn',
         'last_name' => 'Etternavn',
-        'email' => 'E-postadresse'
+        'email' => 'E-postadresse',
     ],
     'filter' => [
         'all' => 'alle',
         'options_method_not_exists' => "Modellen :model må definere en metode :method() som sender tilbake regler for  ':filter' filteret.",
-        'date_all' => 'hele perioden'
+        'date_all' => 'hele perioden',
     ],
     'import_export' => [
         'upload_csv_file' => '1. Last opp en CSV-fil',
@@ -475,14 +475,14 @@ return [
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtic)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
         'manage_media' => 'Last opp og behandle media - bilder, video, lydfiler, dokumenter',
     ],
     'mediafinder' => [
-        'default_prompt' => 'Klikk på %s knappen for å hente media'
+        'default_prompt' => 'Klikk på %s knappen for å hente media',
     ],
     'media' => [
         'menu_label' => 'Media',
@@ -547,5 +547,5 @@ return [
         'rename_new_name' => 'Nytt navn',
         'move_please_select' => 'velg',
         'move_button' => 'Flytt',
-    ]
+    ],
 ];

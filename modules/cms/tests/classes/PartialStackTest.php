@@ -2,8 +2,8 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\PartialStack;
+use System\Tests\Bootstrap\TestCase;
 
 class PartialStackTest extends TestCase
 {

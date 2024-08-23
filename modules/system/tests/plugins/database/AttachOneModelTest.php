@@ -2,12 +2,12 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
-use System\Models\File as FileModel;
-use Database\Tester\Models\User;
 use Database\Tester\Models\SoftDeleteUser;
+use Database\Tester\Models\User;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Model;
+use System\Models\File as FileModel;
+use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Database\Model;
 
 class AttachOneModelTest extends PluginTestCase
 {

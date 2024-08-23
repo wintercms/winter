@@ -2,8 +2,7 @@
 
 namespace Backend\Models;
 
-use BackendAuth;
-use SystemException;
+use Backend\Facades\BackendAuth;
 use Winter\Storm\Auth\Models\Preferences as PreferencesBase;
 
 /**

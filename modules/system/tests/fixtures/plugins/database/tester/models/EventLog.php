@@ -2,7 +2,7 @@
 
 namespace Database\Tester\Models;
 
-use Model;
+use Winter\Storm\Database\Model;
 
 class EventLog extends Model
 {
@@ -27,6 +27,6 @@ class EventLog extends Model
      * @var array Relations
      */
     public $morphTo = [
-        'related' => []
+        'related' => [],
     ];
 }

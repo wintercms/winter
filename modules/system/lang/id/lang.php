@@ -3,16 +3,16 @@
 return [
     'app' => [
         'name' => 'Winter CMS',
-        'tagline' => 'Dapati kembali yang mendasar'
+        'tagline' => 'Dapati kembali yang mendasar',
     ],
     'directory' => [
-        'create_fail' => 'Tidak dapat membuat direktori: :name'
+        'create_fail' => 'Tidak dapat membuat direktori: :name',
     ],
     'file' => [
-        'create_fail' => 'Tidak dapat membuat berkas: :name'
+        'create_fail' => 'Tidak dapat membuat berkas: :name',
     ],
     'combiner' => [
-        'not_found' => "Berkas penggabung ':name' tidak ditemukan."
+        'not_found' => "Berkas penggabung ':name' tidak ditemukan.",
     ],
     'system' => [
         'name' => 'Sistem',
@@ -29,15 +29,15 @@ return [
             'social' => 'Sosial',
             'events' => 'Peristiwa',
             'customers' => 'Pelanggan',
-            'my_settings' => 'Pengaturanku'
-        ]
+            'my_settings' => 'Pengaturanku',
+        ],
     ],
     'plugin' => [
         'unnamed' => 'Pengaya Tak Bernama',
         'name' => [
             'label' => 'Nama Pengaya',
-            'help' => 'Namai pengaya dengan kode uniknya. Contoh, Winter.Blog'
-        ]
+            'help' => 'Namai pengaya dengan kode uniknya. Contoh, Winter.Blog',
+        ],
     ],
     'plugins' => [
         'manage' => 'Kelola pengaya',
@@ -55,7 +55,7 @@ return [
         'disable_confirm' => 'Anda yakin akan melumpuhkannya?',
         'disable_success' => 'Berhasil melumpuhkan pengaya tersebut.',
         'enable_success' => 'Berhasil memberdayakan pengaya tersebut.',
-        'unknown_plugin' => 'Pengaya telah dilepas dari sistem berkas.'
+        'unknown_plugin' => 'Pengaya telah dilepas dari sistem berkas.',
     ],
     'project' => [
         'name' => 'Proyek',
@@ -66,10 +66,10 @@ return [
         'id' => [
             'label' => 'ID Proyek',
             'help' => 'Bagaimana menemukan ID Proyek Anda',
-            'missing' => 'Silakan tentukan ID Proyek yang akan digunakan.'
+            'missing' => 'Silakan tentukan ID Proyek yang akan digunakan.',
         ],
         'detach_confirm' => 'Anda yakin akan melepaskan proyek ini?',
-        'unbind_success' => 'Proyek telah berhasil dilepaskan.'
+        'unbind_success' => 'Proyek telah berhasil dilepaskan.',
     ],
     'settings' => [
         'menu_label' => 'Pengaturan',
@@ -77,7 +77,7 @@ return [
         'missing_model' => 'Laman pengaturan kehilangan definisi Model.',
         'update_success' => 'Pengaturan untuk :name berhasil diperbarui.',
         'return' => 'Kembali ke pengaturan sistem',
-        'search' => 'Pencarian'
+        'search' => 'Pencarian',
     ],
     'mail' => [
         'log_file' => 'Berkas catatan',
@@ -121,14 +121,14 @@ return [
         'content_text' => 'Teks polos',
         'test_send' => 'Kirim pesan ujicoba',
         'test_success' => 'Pesan ujicoba berhasil dikirim.',
-        'return' => 'Kembali ke senarai acuan'
+        'return' => 'Kembali ke senarai acuan',
     ],
     'install' => [
         'project_label' => 'Kaitkan Ke Proyek',
         'plugin_label' => 'Pasang Pengaya',
         'missing_plugin_name' => 'Silakan tentukan nama Pengaya yang akan dipasang.',
         'install_completing' => 'Menyelesaikan proses pemasangan',
-        'install_success' => 'Pengaya berhasil dipasang.'
+        'install_success' => 'Pengaya berhasil dipasang.',
     ],
     'updates' => [
         'title' => 'Kelola Pembaruan',
@@ -163,12 +163,12 @@ return [
         'force_label' => 'Paksa pembaruan',
         'found' => [
             'label' => 'Terdapat pembaruan baru!',
-            'help' => 'Klik Pembaruan perangkat lunak untuk memulai proses pembaruan.'
+            'help' => 'Klik Pembaruan perangkat lunak untuk memulai proses pembaruan.',
         ],
         'none' => [
             'label' => 'Tidak ada pembaruan',
-            'help' => 'Tidak ditemukan pembaruan baru.'
-        ]
+            'help' => 'Tidak ditemukan pembaruan baru.',
+        ],
     ],
     'server' => [
         'connect_error' => 'Galat mengkoneksikan dengan peladen.',
@@ -176,17 +176,17 @@ return [
         'response_invalid' => 'Tanggapan tidak valid dari peladen.',
         'response_empty' => 'Tanggapan kosong dari peladen.',
         'file_error' => 'Peladen gagal mengirimkan paket.',
-        'file_corrupt' => 'Berkas dari peladen tidak lengkap.'
+        'file_corrupt' => 'Berkas dari peladen tidak lengkap.',
     ],
     'behavior' => [
-        'missing_property' => 'Kelas :class harus menetapkan properti $:property digunakan oleh behavior :behavior.'
+        'missing_property' => 'Kelas :class harus menetapkan properti $:property digunakan oleh behavior :behavior.',
     ],
     'config' => [
         'not_found' => 'Tidak dapat menemukan berkas pengaturan :file ditetapkan untuk :location.',
-        'required' => "Pengaturan yang digunakan pada :location harus memberikan nilai ':property'."
+        'required' => "Pengaturan yang digunakan pada :location harus memberikan nilai ':property'.",
     ],
     'zip' => [
-        'extract_failed' => "Tidak dapat membuka berkas inti ':file'."
+        'extract_failed' => "Tidak dapat membuka berkas inti ':file'.",
     ],
     'event_log' => [
         'hint' => 'Catatan ini menampilkan senarai kemungkinan galat yang terjadi pada aplikasi, seperti `exception` dan informasi awakutu.',
@@ -200,7 +200,7 @@ return [
         'id_label' => 'ID Peristiwa',
         'created_at' => 'Tanggal & Waktu',
         'message' => 'Pesan',
-        'level' => 'Tingkat'
+        'level' => 'Tingkat',
     ],
     'request_log' => [
         'hint' => 'Catatan ini menampilkan senarai permintaan dari peramban yang mungkin memerlukan perhatian. Contohnya, jika pengunjung membuka laman CMS yang tidak dapat ditemukan, rekam dibuat dengan kode status 404.',
@@ -215,7 +215,7 @@ return [
         'count' => 'Hitungan',
         'referer' => 'Perujuk',
         'url' => 'URL',
-        'status_code' => 'Status'
+        'status_code' => 'Status',
     ],
     'permissions' => [
         'name' => 'Sistem',
@@ -224,6 +224,6 @@ return [
         'manage_mail_templates' => 'Kelola acuan surat',
         'manage_mail_settings' => 'Kelola pengaturan surat',
         'manage_other_administrators' => 'Kelola administrator lainnya',
-        'view_the_dashboard' => 'Tampilan dasbor'
-    ]
+        'view_the_dashboard' => 'Tampilan dasbor',
+    ],
 ];

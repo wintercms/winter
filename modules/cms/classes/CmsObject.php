@@ -2,16 +2,16 @@
 
 namespace Cms\Classes;
 
-use App;
-use Lang;
-use Event;
-use Config;
-use Exception;
-use ValidationException;
-use ApplicationException;
 use Cms\Contracts\CmsObject as CmsObjectContract;
+use Exception;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Filesystem\PathResolver;
 use Winter\Storm\Halcyon\Model as HalcyonModel;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * This is a base class for all CMS objects - content files, pages, partials and layouts.
@@ -50,7 +50,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * @var array The attributes that are mass assignable.
      */
     protected $fillable = [
-        'content'
+        'content',
     ];
 
     /**
@@ -329,18 +329,18 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
     {
         if ($ex instanceof \Winter\Storm\Halcyon\Exception\MissingFileNameException) {
             throw new ValidationException([
-                'fileName' => Lang::get('cms::lang.cms_object.file_name_required')
+                'fileName' => Lang::get('cms::lang.cms_object.file_name_required'),
             ]);
         } elseif ($ex instanceof \Winter\Storm\Halcyon\Exception\InvalidExtensionException) {
             throw new ValidationException(['fileName' =>
                 Lang::get('cms::lang.cms_object.invalid_file_extension', [
                     'allowed' => implode(', ', $ex->getAllowedExtensions()),
-                    'invalid' => $ex->getInvalidExtension()
-                ])
+                    'invalid' => $ex->getInvalidExtension(),
+                ]),
             ]);
         } elseif ($ex instanceof \Winter\Storm\Halcyon\Exception\InvalidFileNameException) {
             throw new ValidationException([
-               'fileName' => Lang::get('cms::lang.cms_object.invalid_file', ['name' => $ex->getInvalidFileName()])
+               'fileName' => Lang::get('cms::lang.cms_object.invalid_file', ['name' => $ex->getInvalidFileName()]),
             ]);
         } elseif ($ex instanceof \Winter\Storm\Halcyon\Exception\FileExistsException) {
             throw new ApplicationException(

@@ -366,7 +366,7 @@ return [
         'missing_relation' => "Modelis ':class' nesatur definīciju ':relation'.",
         'missing_method' => "Modelis ':class' nesatur metodi ':method'.",
         'invalid_class' => "Klasē :class lietotais modelis :model nav derīgs, modelim jāpārmanto \Model klase.",
-        'mass_assignment_failed' => "Masveida vērtību piešķiršana neizdevās modeļa atribūtam ':attribute'."
+        'mass_assignment_failed' => "Masveida vērtību piešķiršana neizdevās modeļa atribūtam ':attribute'.",
     ],
     'warnings' => [
         'tips' => 'Sistēmas konfigurācijas padomi',

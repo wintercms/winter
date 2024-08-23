@@ -2,9 +2,8 @@
 
 namespace System\Console;
 
-use Winter\Storm\Console\Command;
 use System\Classes\PluginManager;
-use System\Models\PluginVersion;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to enable a plugin.

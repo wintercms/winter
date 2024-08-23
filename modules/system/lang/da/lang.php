@@ -3,13 +3,13 @@
 return [
     'app' => [
         'name' => 'Winter CMS',
-        'tagline' => 'Getting back to basics'
+        'tagline' => 'Getting back to basics',
     ],
     'directory' => [
-        'create_fail' => 'Kan ikke oprette mappen: :name'
+        'create_fail' => 'Kan ikke oprette mappen: :name',
     ],
     'file' => [
-        'create_fail' => 'Kan ikke oprette filen: :name'
+        'create_fail' => 'Kan ikke oprette filen: :name',
     ],
     'page' => [
         'invalid_token' => [
@@ -17,7 +17,7 @@ return [
         ],
     ],
     'combiner' => [
-        'not_found' => "Kombineringsfilen ':name', kunne ikke findes."
+        'not_found' => "Kombineringsfilen ':name', kunne ikke findes.",
     ],
     'system' => [
         'name' => 'System',
@@ -34,15 +34,15 @@ return [
             'social' => 'Social',
             'events' => 'Begivenheder',
             'customers' => 'Kunder',
-            'my_settings' => 'Mine Indstillinger'
-        ]
+            'my_settings' => 'Mine Indstillinger',
+        ],
     ],
     'theme' => [
         'label' => 'Tema',
         'unnamed' => 'Unavngivet tema',
         'name' => [
             'label' => 'Temanavn',
-            'help' => 'Navngiv temaet med en unik kode. Feks., Winter.Vanilla'
+            'help' => 'Navngiv temaet med en unik kode. Feks., Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -51,15 +51,15 @@ return [
         'installed' => 'Installerede temaer',
         'no_themes' => 'Der er ikke installeret nogle temaer fra markedspladsen.',
         'recommended' => 'Anbefalede',
-        'remove_confirm' => 'Er du sikker på at du vil fjerne dette tema?'
+        'remove_confirm' => 'Er du sikker på at du vil fjerne dette tema?',
     ],
     'plugin' => [
         'label' => 'Plugin',
         'unnamed' => 'Unavngivet plugin',
         'name' => [
             'label' => 'Pluginnavn',
-            'help' => 'Navngiv pluginet med en unik kode. Feks., Winter.Blog'
-        ]
+            'help' => 'Navngiv pluginet med en unik kode. Feks., Winter.Blog',
+        ],
     ],
     'plugins' => [
         'manage' => 'Administrer plugins',
@@ -85,7 +85,7 @@ return [
         'disable_confirm' => 'Er du sikker?',
         'disable_success' => 'Disse plugins blev deaktiveret.',
         'enable_success' => 'Disse plugins blev aktiveret.',
-        'unknown_plugin' => 'Pluginet er blevet fjernet fra filsystemet.'
+        'unknown_plugin' => 'Pluginet er blevet fjernet fra filsystemet.',
     ],
     'project' => [
         'name' => 'Projekt',
@@ -96,10 +96,10 @@ return [
         'id' => [
             'label' => 'Projekt ID',
             'help' => 'Sådan findes dit projekt ID',
-            'missing' => 'Specificer venligst et projekt ID.'
+            'missing' => 'Specificer venligst et projekt ID.',
         ],
         'detach_confirm' => 'Er du sikker på at du vil frakoble dette projekt?',
-        'unbind_success' => 'Projektet er blevet frakoblet.'
+        'unbind_success' => 'Projektet er blevet frakoblet.',
     ],
     'settings' => [
         'menu_label' => 'Indstillinger',
@@ -107,7 +107,7 @@ return [
         'missing_model' => 'Indstillingssiden mangler en Model definition.',
         'update_success' => ':name indstillinger opdateret',
         'return' => 'Tilbage til systemindstillinger',
-        'search' => 'Søg'
+        'search' => 'Søg',
     ],
     'mail' => [
         'log_file' => 'Logfil',
@@ -162,7 +162,7 @@ return [
         'deleting' => 'Sletter Skabelon...',
         'deleting_layout' => 'Sletter Layout...',
         'sending' => 'Sender test besked...',
-        'return' => 'Tilbage til skabelonoversigt'
+        'return' => 'Tilbage til skabelonoversigt',
     ],
     'install' => [
         'project_label' => 'Tilknyt til Projekt',
@@ -171,7 +171,7 @@ return [
         'missing_plugin_name' => 'Angiv venligst et pluginnavn, at installere.',
         'missing_theme_name' => 'Angiv venligst et temanavn, at installere.',
         'install_completing' => 'Afslutter installationsproces',
-        'install_success' => 'Plugin blev installeret'
+        'install_success' => 'Plugin blev installeret',
     ],
     'updates' => [
         'title' => 'Administrer Opdateringer',
@@ -210,11 +210,11 @@ return [
         'force_label' => 'Tvangsopdater',
         'found' => [
             'label' => 'Ny opdateringer blev fundet!',
-            'help' => 'Tryk opdater software, for at begynde opdateringsprocessen.'
+            'help' => 'Tryk opdater software, for at begynde opdateringsprocessen.',
         ],
         'none' => [
             'label' => 'Ingen opdateringer',
-            'help' => 'Der blev ikke fundet nogle nye opdateringer.'
+            'help' => 'Der blev ikke fundet nogle nye opdateringer.',
         ],
         'important_action' => [
             'empty' => 'Vælg handling',
@@ -240,17 +240,17 @@ return [
         'response_invalid' => 'Ugyldigt svar fra serveren.',
         'response_empty' => 'Tomt svar fra serveren.',
         'file_error' => 'Det lykkedes ikke serveren at sende pakken.',
-        'file_corrupt' => 'Filen fra serveren er beskadiget.'
+        'file_corrupt' => 'Filen fra serveren er beskadiget.',
     ],
     'behavior' => [
-        'missing_property' => 'Klassen :class skal definere instansvariablen $:property, som bliver brugt af :behavior behavioren.'
+        'missing_property' => 'Klassen :class skal definere instansvariablen $:property, som bliver brugt af :behavior behavioren.',
     ],
     'config' => [
         'not_found' => 'Kunne ikke finde konfigurationsfilen :file defineret for :location.',
-        'required' => "Konfiguration brugt i :location skal angive værdien for ':property'."
+        'required' => "Konfiguration brugt i :location skal angive værdien for ':property'.",
     ],
     'zip' => [
-        'extract_failed' => "Kunne ikke udpakke corefilen ':file'."
+        'extract_failed' => "Kunne ikke udpakke corefilen ':file'.",
     ],
     'event_log' => [
         'hint' => 'Denne log viser en liste af potentielle fejl i applikationen.',
@@ -265,7 +265,7 @@ return [
         'created_at' => 'Dato & Tid',
         'message' => 'Besked',
         'level' => 'Grad',
-        'preview_title' => 'Event'
+        'preview_title' => 'Event',
     ],
     'request_log' => [
         'hint' => 'Denne log viser en liste af browserrequests som måske kræver din opmærksomhed. Feks. hvis en gæst åbner en CMS side der ikke findes, bliver der oprettet en record med statuskode 404.',
@@ -281,7 +281,7 @@ return [
         'referer' => 'Referers',
         'url' => 'URL',
         'status_code' => 'Status',
-        'preview_title' => 'Request'
+        'preview_title' => 'Request',
     ],
     'permissions' => [
         'name' => 'System',
@@ -294,7 +294,7 @@ return [
         'manage_preferences' => 'Administrer backendindstillinger',
         'manage_editor' => 'Administrer kode redigeringsværktøjets indstillinger',
         'view_the_dashboard' => 'Vis administratorpanelet',
-        'manage_branding' => 'Tilpas backenden'
+        'manage_branding' => 'Tilpas backenden',
     ],
     'media' => [
         'invalid_path' => "Ugyldig sti: ':path'.",

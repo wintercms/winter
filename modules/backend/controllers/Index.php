@@ -2,11 +2,11 @@
 
 namespace Backend\Controllers;
 
-use Backend;
-use Redirect;
-use BackendMenu;
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
 use Backend\Widgets\ReportContainer;
+use Illuminate\Support\Facades\Redirect;
 
 /**
  * Dashboard controller

@@ -2,12 +2,12 @@
 
 namespace System\Traits;
 
-use File;
-use Lang;
-use Block;
-use SystemException;
+use Illuminate\Support\Facades\Lang;
 use Throwable;
-use Config;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Block;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * View Maker Trait

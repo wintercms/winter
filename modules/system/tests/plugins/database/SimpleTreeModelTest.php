@@ -2,10 +2,9 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
-use Carbon\Carbon;
 use Database\Tester\Models\CategorySimple;
-use Model;
+use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Database\Model;
 
 class SimpleTreeModelTest extends PluginTestCase
 {
@@ -119,7 +118,7 @@ class SimpleTreeModelTest extends PluginTestCase
             16 => 'Graphic design',
             17 => '&nbsp;&nbsp;&nbsp;Photoshop',
             18 => '&nbsp;&nbsp;&nbsp;Illustrator',
-            19 => '&nbsp;&nbsp;&nbsp;Fireworks'
+            19 => '&nbsp;&nbsp;&nbsp;Fireworks',
         ], $array);
 
         $array = CategorySimple::listsNested('name', 'id', '--');
@@ -142,7 +141,7 @@ class SimpleTreeModelTest extends PluginTestCase
             16 => 'Graphic design',
             17 => '--Photoshop',
             18 => '--Illustrator',
-            19 => '--Fireworks'
+            19 => '--Fireworks',
         ], $array);
 
         $array = CategorySimple::listsNested('id', 'name', '**');
@@ -165,7 +164,7 @@ class SimpleTreeModelTest extends PluginTestCase
             'Graphic design' => '16',
             'Photoshop' => '**17',
             'Illustrator' => '**18',
-            'Fireworks' => '**19'
+            'Fireworks' => '**19',
         ], $array);
     }
 
@@ -200,7 +199,7 @@ class SimpleTreeModelTest extends PluginTestCase
             16 => 'Graphic design (#16)',
             17 => '...Photoshop (#17)',
             18 => '...Illustrator (#18)',
-            19 => '...Fireworks (#19)'
+            19 => '...Fireworks (#19)',
         ], $array);
     }
 
@@ -210,7 +209,7 @@ class SimpleTreeModelTest extends PluginTestCase
         Model::unguard();
 
         $webdev = CategorySimple::create([
-            'name' => 'Web development'
+            'name' => 'Web development',
         ]);
 
         $webdev->children()->create(['name' => 'HTML5']);
@@ -224,7 +223,7 @@ class SimpleTreeModelTest extends PluginTestCase
         $winter->children()->create(['name' => 'November']);
 
         $mobdev = CategorySimple::create([
-            'name' => 'Mobile development'
+            'name' => 'Mobile development',
         ]);
 
         $mobdev->children()->create(['name' => 'iOS']);
@@ -233,7 +232,7 @@ class SimpleTreeModelTest extends PluginTestCase
         $mobdev->children()->create(['name' => 'Android']);
 
         $design = CategorySimple::create([
-            'name' => 'Graphic design'
+            'name' => 'Graphic design',
         ]);
 
         $design->children()->create(['name' => 'Photoshop']);

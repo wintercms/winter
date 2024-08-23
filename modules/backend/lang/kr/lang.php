@@ -2,7 +2,7 @@
 
 return [
     'auth' => [
-        'title' => '시스템관리자영역'
+        'title' => '시스템관리자영역',
     ],
     'field' => [
         'invalid_type' => '유효하지 않은 필드타입 사용 :type ',
@@ -23,7 +23,7 @@ return [
         'no_database' => [
             'label' => 'DB를 찾을 수 없습니다',
             'help' => "백엔드에 접속하기 위해선 DB가 필요합니다. 다시 접속하시기 전에 DB가 정상적으로 설정및 이전되었는지 확인해주세요.",
-            'cms_link' => '홈페이지로 돌아가기'
+            'cms_link' => '홈페이지로 돌아가기',
         ],
     ],
     'partial' => [
@@ -98,7 +98,7 @@ return [
             'last_sign_in' => '당신의 최종 접속은 ',
             'view_access_logs' => '접속 로그 보기',
             'nice_message' => '좋은 하루 되세요!',
-        ]
+        ],
     ],
     'user' => [
         'name' => '사용자관리',
@@ -144,11 +144,11 @@ return [
             'new' => '신규 그룹',
             'delete_confirm' => '이 사용자 그룹을 삭제하시겠습니까?',
             'return' => '그룹 관리로 돌아가기',
-            'users_count' => '명'
+            'users_count' => '명',
         ],
         'preferences' => [
-            'not_authenticated' => '설정을 저장하기 위한 권한확인이 되지 않았습니다.'
-        ]
+            'not_authenticated' => '설정을 저장하기 위한 권한확인이 되지 않았습니다.',
+        ],
     ],
     'list' => [
         'default_title' => '목록',
@@ -179,7 +179,7 @@ return [
         'delete_selected_confirm' => '선택하신 기록을 삭제하시겠습니까?',
         'delete_selected_success' => '선택하신 기록을 삭제했습니다.',
         'column_switch_true' => 'Y',
-        'column_switch_false' => 'N'
+        'column_switch_false' => 'N',
     ],
     'fileupload' => [
         'attachment' => '첨부',
@@ -191,7 +191,7 @@ return [
         'upload_file' => '파일 업로드',
         'upload_error' => '업로드 오류',
         'remove_confirm' => '삭제하시겠습니까?',
-        'remove_file' => '파일 삭제'
+        'remove_file' => '파일 삭제',
     ],
     'form' => [
         'create_title' => '신규 :name',
@@ -248,7 +248,7 @@ return [
         'delete_row' => '행 삭제',
         'concurrency_file_changed_title' => '파일이 변경되었습니다',
         'concurrency_file_changed_description' => "다른 사용자에의해 파일이 변경되었습니다. 갱신하여 변경내용을 버리거나 덮어쓰기를 하실 수 있습니다.",
-        'return_to_list' => '목록으로 돌아가기'
+        'return_to_list' => '목록으로 돌아가기',
     ],
     'recordfinder' => [
         'find_record' => '기록 찾기',
@@ -256,7 +256,7 @@ return [
     ],
     'pagelist' => [
         'page_link' => '페이지 링크',
-        'select_page' => '페이지를 선택...'
+        'select_page' => '페이지를 선택...',
     ],
     'relation' => [
         'missing_config' => "릴레이션 행동은 ':config' 설정을 가지고 있지 않습니다.",
@@ -293,7 +293,7 @@ return [
     ],
     'reorder' => [
         'default_title' => '기록순서변경',
-        'no_records' => '분류할 기록이 없습니다.'
+        'no_records' => '분류할 기록이 없습니다.',
     ],
     'model' => [
         'name' => "모델",
@@ -355,19 +355,19 @@ return [
         'no_wrap' => '테그를 줄바꿈하지 않음',
         'no_wrap_comment' => '블록 테그안에서 줄바꿈 하지않을 테그목록',
         'remove_tags' => '테그제거',
-        'remove_tags_comment' => '내용과 함께 제거할 테그목록'
+        'remove_tags_comment' => '내용과 함께 제거할 테그목록',
     ],
     'tooltips' => [
-        'preview_website' => '웹사이트 미리보기'
+        'preview_website' => '웹사이트 미리보기',
     ],
     'mysettings' => [
         'menu_label' => '내 설정',
-        'menu_description' => '사용자 계정의 설정을 합니다.'
+        'menu_description' => '사용자 계정의 설정을 합니다.',
     ],
     'myaccount' => [
         'menu_label' => '계정',
         'menu_description' => '이름, 이메일주소, 비밀번호 등의 계정 세부정보를 변경해주세요.',
-        'menu_keywords' => '보안 로그인'
+        'menu_keywords' => '보안 로그인',
     ],
     'branding' => [
         'menu_label' => '백엔드 설정변경',
@@ -389,7 +389,7 @@ return [
         'menu_mode' => '메뉴 스타일',
         'menu_mode_inline' => '인라인',
         'menu_mode_tile' => '타일',
-        'menu_mode_collapsed' => '접힘'
+        'menu_mode_collapsed' => '접힘',
     ],
     'backend_preferences' => [
         'menu_label' => '백엔드 환경설정',
@@ -399,7 +399,7 @@ return [
         'timezone' => '타임존',
         'timezone_comment' => '타임존에 맞는 날짜 조정.',
         'locale' => '로케일',
-        'locale_comment' => '사용언어에 맞는 로케일을 선택해주세요.'
+        'locale_comment' => '사용언어에 맞는 로케일을 선택해주세요.',
     ],
     'access_log' => [
         'hint' => '이 로그는 사용자들의 성공적인 로그인 접속 기록 목록을 표시합니다. 총 :days일보관함.',
@@ -410,12 +410,12 @@ return [
         'ip_address' => 'IP주소',
         'first_name' => '이름',
         'last_name' => '성',
-        'email' => '이메일'
+        'email' => '이메일',
     ],
     'filter' => [
         'all' => '전체',
         'options_method_not_exists' => ":model 모델클래스는 ':filter' 필터옵션을 리턴하기위해서 반드시 :method() 메소드를 정의해야합니다.",
-        'date_all' => '전체기간'
+        'date_all' => '전체기간',
     ],
     'import_export' => [
         'upload_csv_file' => '1. CSV 파일 업로드',
@@ -486,15 +486,15 @@ return [
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtic)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
-        'manage_media' => '미디어관리와 업로드 - 이미지, 동영상, 소리, 문서'
+        'manage_media' => '미디어관리와 업로드 - 이미지, 동영상, 소리, 문서',
     ],
     'mediafinder' => [
         'label' => '미디어 탐색기',
-        'default_prompt' => '%s 버튼 클릭하여 미디어 아이템 찾기'
+        'default_prompt' => '%s 버튼 클릭하여 미디어 아이템 찾기',
     ],
     'media' => [
         'menu_label' => '미디어',

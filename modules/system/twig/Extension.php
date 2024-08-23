@@ -2,13 +2,13 @@
 
 namespace System\Twig;
 
-use Url;
+use Illuminate\Support\Facades\URL;
 use System\Classes\ImageResizer;
-use System\Classes\MediaLibrary;
 use System\Classes\MarkupManager;
+use System\Classes\MediaLibrary;
+use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
-use Twig\Extension\AbstractExtension as TwigExtension;
 
 /**
  * The System Twig extension class implements common Twig functions and filters.

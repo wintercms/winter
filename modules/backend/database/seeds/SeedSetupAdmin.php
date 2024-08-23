@@ -2,10 +2,10 @@
 
 namespace Backend\Database\Seeds;
 
-use Seeder;
 use Backend\Models\User;
-use Backend\Models\UserRole;
 use Backend\Models\UserGroup;
+use Backend\Models\UserRole;
+use Winter\Storm\Database\Updates\Seeder;
 
 class SeedSetupAdmin extends Seeder
 {
@@ -43,7 +43,7 @@ class SeedSetupAdmin extends Seeder
             'name' => 'Owners',
             'code' => UserGroup::CODE_OWNERS,
             'description' => 'Default group for website owners.',
-            'is_new_user_default' => false
+            'is_new_user_default' => false,
         ]);
 
         $user = User::create([
@@ -56,7 +56,7 @@ class SeedSetupAdmin extends Seeder
             'permissions'           => [],
             'is_superuser'          => true,
             'is_activated'          => true,
-            'role_id'               => $role->id
+            'role_id'               => $role->id,
         ]);
 
         $user->addGroup($group);

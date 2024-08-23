@@ -118,7 +118,7 @@ return [
             'last_sign_in' => 'O último acesso foi em',
             'view_access_logs' => 'Visualizar registos de acesso',
             'nice_message' => 'Tenha um excelente dia!',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Administrador',

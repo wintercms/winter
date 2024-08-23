@@ -10,7 +10,7 @@ class Post extends ComponentBase
     {
         return [
             'name' => 'Blog Post Dummy Component',
-            'description' => 'Displays a blog post.'
+            'description' => 'Displays a blog post.',
         ];
     }
 
@@ -19,8 +19,8 @@ class Post extends ComponentBase
         return [
             'show-featured' => [
                  'description' => 'Display the post featured image or not',
-                 'default' => true
-            ]
+                 'default' => true,
+            ],
         ];
     }
 }

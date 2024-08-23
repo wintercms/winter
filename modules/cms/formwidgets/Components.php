@@ -3,8 +3,8 @@
 namespace Cms\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
-use Cms\Classes\ComponentManager;
 use Cms\Classes\ComponentHelpers;
+use Cms\Classes\ComponentManager;
 use Cms\Components\SoftComponent;
 use Cms\Components\UnknownComponent;
 use Exception;

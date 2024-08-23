@@ -2,9 +2,8 @@
 
 namespace Backend\Controllers;
 
-use Backend;
-use BackendMenu;
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
 use System\Classes\SettingsManager;
 
 /**

@@ -2,9 +2,9 @@
 
 namespace Cms\Classes;
 
-use Lang;
-use BackendAuth;
-use ApplicationException;
+use Backend\Facades\BackendAuth;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
@@ -33,7 +33,7 @@ class Page extends CmsCompoundObject
         'meta_description',
         'markup',
         'settings',
-        'code'
+        'code',
     ];
 
     /**
@@ -47,7 +47,7 @@ class Page extends CmsCompoundObject
      */
     public $rules = [
         'title' => 'required',
-        'url'   => ['required', 'regex:/^\/[a-z0-9\/\:_\-\*\[\]\+\?\|\.\^\\\$]*$/i']
+        'url'   => ['required', 'regex:/^\/[a-z0-9\/\:_\-\*\[\]\+\?\|\.\^\\\$]*$/i'],
     ];
 
     /**
@@ -166,7 +166,7 @@ class Page extends CmsCompoundObject
             $result = [
                 'references'   => $references,
                 'nesting'      => false,
-                'dynamicItems' => false
+                'dynamicItems' => false,
             ];
         }
 

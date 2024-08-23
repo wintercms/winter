@@ -31,7 +31,7 @@ return [
         'no_database' => [
             'label' => 'پایگاه داده یافت نشد',
             'help' => "جهت استفاده از بخش مدیریت به یک پایگاه داده نیاز دارید. تنظیمات پایگاه داده را بررسی نموده و از نصب جدولها در آن اطمینان حاصل کنید.",
-            'cms_link' => 'بازگشت به صفحه اصلی'
+            'cms_link' => 'بازگشت به صفحه اصلی',
         ],
     ],
     'partial' => [
@@ -123,7 +123,7 @@ return [
             'last_sign_in' => 'آخرین ورود شما',
             'view_access_logs' => 'نمایش گزارش دسترسی ها',
             'nice_message' => 'روز خوبی داشته باشید',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'مدیریت',
@@ -174,7 +174,7 @@ return [
             'new' => 'گروه مدیریت جدید',
             'delete_confirm' => 'آیا از حذف این گروه از مدیران اطمینان دارید?',
             'return' => 'بازگشت به لیست گروه ها',
-            'users_count' => 'کاربران'
+            'users_count' => 'کاربران',
         ],
         'role' => [
             'name' => 'نقش',
@@ -188,10 +188,10 @@ return [
             'new' => 'نقش جدید',
             'delete_confirm' => 'آیا از حذف این نقش اطمینان دارید؟',
             'return' => 'بازگشت به لیست نقش ها',
-            'users_count' => 'کاربران'
+            'users_count' => 'کاربران',
         ],
         'preferences' => [
-            'not_authenticated' => 'هیچ کاربر ثبت شده ای جهت بارگذاری یا ذخیره تنظیمات وجود ندارد.'
+            'not_authenticated' => 'هیچ کاربر ثبت شده ای جهت بارگذاری یا ذخیره تنظیمات وجود ندارد.',
         ],
         'trashed_hint_title' => 'این کاربر حذف شده است.',
         'trashed_hint_desc' => 'این کاربرحذف شده است و نمی توانید آن وارد سیستم شوید. جهت بازیابی آن ، روی نماد بازیابی کاربر در سمت چپ-پایین کلیک کنید',
@@ -225,7 +225,7 @@ return [
         'delete_selected_confirm' => 'آیا میخواهید موارد انتخابی را حذف کنید؟',
         'delete_selected_success' => 'حدف موارد انتخابی انجام شد.',
         'column_switch_true' => 'بله',
-        'column_switch_false' => 'خیر'
+        'column_switch_false' => 'خیر',
     ],
     'fileupload' => [
         'attachment' => 'فایل ضمیمه',
@@ -237,7 +237,7 @@ return [
         'upload_file' => 'ارسال فایل',
         'upload_error' => 'خطا در ارسال فایل',
         'remove_confirm' => 'آیا اطمینان دارید؟',
-        'remove_file' => 'حذف فایل'
+        'remove_file' => 'حذف فایل',
     ],
     'repeater' => [
         'add_new_item' => 'افزودن مورد جدید',
@@ -303,7 +303,7 @@ return [
         'delete_row' => 'حذف سطر',
         'concurrency_file_changed_title' => 'فایل تغییر کرد',
         'concurrency_file_changed_description' => 'فایلی که شما ویرایش کردید توسط کاربر دیگری تغییر یافته و ذخیره شده است. شما میتوانید فایل را مجددا بارگذاری نمایید و تغییراتی که اعمال کرده اید را از دست بدهید و یا تغییرات اعمال شده توسط آن کاربر را بین برده و فایل را بازنویسی نمایید.',
-        'return_to_list' => 'بازگشت به لیست'
+        'return_to_list' => 'بازگشت به لیست',
     ],
     'recordfinder' => [
         'find_record' => 'انتخاب مورد',
@@ -312,7 +312,7 @@ return [
     ],
     'pagelist' => [
         'page_link' => 'لینک صفحه',
-        'select_page' => 'صفحه ای را انتخاب نمایید...'
+        'select_page' => 'صفحه ای را انتخاب نمایید...',
     ],
     'relation' => [
         'missing_config' => "کنترل کننده ارتباطات پایگاه داده شامل تعریفی برای ':config' نمی باشد.",
@@ -435,7 +435,7 @@ return [
         'paragraph_formats_comment' => 'گزینه هایی که در قالب های پاراگراف دیده می شود',
     ],
     'tooltips' => [
-        'preview_website' => 'پیش نمایش وب سایت'
+        'preview_website' => 'پیش نمایش وب سایت',
     ],
     'mysettings' => [
         'menu_label' => 'تنظیمات من',
@@ -444,7 +444,7 @@ return [
     'myaccount' => [
         'menu_label' => 'حساب کاربری من',
         'menu_description' => 'به روز رسانی اطلاعات حساب کار بری شما مانند نام و کلمه عبور و ... .',
-        'menu_keywords' => 'ورود امن'
+        'menu_keywords' => 'ورود امن',
     ],
     'branding' => [
         'menu_label' => 'شخصی سازی بخش مدیریت',
@@ -474,7 +474,7 @@ return [
         'menu_mode_inline' => 'آیکون در کنار',
         'menu_mode_inline_no_icons' => '(بدون آیکون) در کنار',
         'menu_mode_tile' => 'آیکون در بالا',
-        'menu_mode_collapsed' => 'جمع شونده'
+        'menu_mode_collapsed' => 'جمع شونده',
     ],
     'backend_preferences' => [
         'menu_label' => 'تنظیمات مدیریت',
@@ -576,8 +576,8 @@ return [
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1250' => 'Windows-1250 (CP1250, Central and Eastern European)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
         'manage_media' => 'مدیریت چند رسانه ها',
@@ -586,7 +586,7 @@ return [
     ],
     'mediafinder' => [
         'label' => 'جستجوگر رسانه',
-        'default_prompt' => '%s را جهت انتخاب فایل چند رسانه ای انتخاب کنید'
+        'default_prompt' => '%s را جهت انتخاب فایل چند رسانه ای انتخاب کنید',
     ],
     'media' => [
         'menu_label' => 'چند رسانه ای',

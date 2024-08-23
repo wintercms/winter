@@ -2,12 +2,12 @@
 
 namespace System\Controllers;
 
-use Lang;
-use Flash;
-use Redirect;
-use BackendMenu;
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
 use System\Classes\SettingsManager;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Mail layouts controller

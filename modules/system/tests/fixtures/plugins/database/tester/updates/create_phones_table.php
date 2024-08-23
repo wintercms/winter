@@ -2,8 +2,8 @@
 
 namespace Database\Tester\Updates;
 
-use Schema;
 use Winter\Storm\Database\Updates\Migration;
+use Winter\Storm\Support\Facades\Schema;
 
 class CreatePhonesTable extends Migration
 {

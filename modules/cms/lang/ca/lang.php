@@ -11,7 +11,7 @@ return [
         'error_deleting' => "Error eliminant l'arxiu de plantilla ':name'. Si us plau revisa els permisos d'escriptura.",
         'delete_success' => 'Plantilles eliminades: :count.',
         'file_name_required' => "El camp 'Nom d'arxiu' és obligatori.",
-        'safe_mode_enabled' => 'El mode segur està activat.'
+        'safe_mode_enabled' => 'El mode segur està activat.',
     ],
     'dashboard' => [
         'active_theme' => [
@@ -19,20 +19,20 @@ return [
             'online' => 'Online',
             'maintenance' => 'En manteniment',
             'manage_themes' => 'Gestionar temes',
-            'customize_theme' => 'Personalitzar tema'
-        ]
+            'customize_theme' => 'Personalitzar tema',
+        ],
     ],
     'theme' => [
         'not_found_name' => "No s'ha trobat el tema ':name'.",
         'by_author' => 'Per :name',
         'active' => [
             'not_set' => "No s'ha establit un tema actiu.",
-            'not_found' => "No s'ha trobat el tema actiu."
+            'not_found' => "No s'ha trobat el tema actiu.",
         ],
         'edit' => [
             'not_set' => "No s'ha establit un tema d'edició.",
             'not_found' => "No s'ha trobat el tema d'edició.",
-            'not_match' => "L'objecte al que estàs intentant accedir no pertany al tema que estàs editant. Si us plau recarrega la pàgina."
+            'not_match' => "L'objecte al que estàs intentant accedir no pertany al tema que estàs editant. Si us plau recarrega la pàgina.",
         ],
         'settings_menu' => 'Tema de front-end',
         'settings_menu_description' => 'Gestionar el tema de front-end i les opcions de personalització.',
@@ -92,24 +92,24 @@ return [
         'dir_name_taken' => 'El nom de directori desitjat ja existeix.',
         'find_more_themes' => 'Trobar més temes',
         'saving' => 'Guardant tema...',
-        'return' => 'Tornar a la llista de temes'
+        'return' => 'Tornar a la llista de temes',
     ],
     'maintenance' => [
         'settings_menu' => 'Mode de manteniment',
         'settings_menu_description' => "Configura el mode de manteniment i canvia l'activació.",
         'is_enabled' => 'Activar el mode de manteniment',
         'is_enabled_comment' => 'Selecciona la pàgina per mostrar quan el mode de manteniment està activat.',
-        'hint' => "El mode de manteniment mostrarà la pàgina de manteniment als visitants que no hagin accedit a l'àrea d'administració."
+        'hint' => "El mode de manteniment mostrarà la pàgina de manteniment als visitants que no hagin accedit a l'àrea d'administració.",
     ],
     'page' => [
         'not_found_name' => "La pàgina ':name' no s'ha trobat",
         'not_found' => [
             'label' => 'Pàgina no trobada',
-            'help' => 'La pàgina demanada no es pot trobar.'
+            'help' => 'La pàgina demanada no es pot trobar.',
         ],
         'custom_error' => [
             'label' => 'Error de pàgina',
-            'help' => "Ens sap greu, però alguna cosa ha anat malament i la pàgina no es pot mostrar."
+            'help' => "Ens sap greu, però alguna cosa ha anat malament i la pàgina no es pot mostrar.",
         ],
         'menu_label' => 'Pàgines',
         'unsaved_label' => 'Pàgines no guardades',
@@ -122,7 +122,7 @@ return [
         'cms_page' => 'Pàgina de CMS',
         'title' => 'Títol de pàgina',
         'url' => 'URL de pàgina',
-        'file_name' => "Nom de l'arxiu de pàgina"
+        'file_name' => "Nom de l'arxiu de pàgina",
     ],
     'layout' => [
         'not_found_name' => "La plantilla ':name' no s'ha trobat",
@@ -131,7 +131,7 @@ return [
         'no_list_records' => "No s'han trobat plantilles",
         'new' => 'Nova plantilla',
         'delete_confirm_multiple' => 'Eliminar plantilles seleccionades?',
-        'delete_confirm_single' => 'Eliminar aquesta plantilla?'
+        'delete_confirm_single' => 'Eliminar aquesta plantilla?',
     ],
     'partial' => [
         'not_found_name' => "El parcial ':name' no s'ha trobat.",
@@ -141,7 +141,7 @@ return [
         'no_list_records' => "No s'han trobat parcials",
         'delete_confirm_multiple' => 'Eliminar parcials seleccionats?',
         'delete_confirm_single' => 'Eliminar aquest parcial?',
-        'new' => 'Nou parcial'
+        'new' => 'Nou parcial',
     ],
     'content' => [
         'not_found_name' => "L'arxiu de contingut ':name' no s'ha trobat.",
@@ -150,18 +150,18 @@ return [
         'no_list_records' => "No s'han trobat arxius de contingut",
         'delete_confirm_multiple' => 'Eliminar arxius o directoris de contingut seleccionats?',
         'delete_confirm_single' => 'Eliminar aquest arxiu de contingut?',
-        'new' => 'Nou arxiu de contingut'
+        'new' => 'Nou arxiu de contingut',
     ],
     'ajax_handler' => [
         'invalid_name' => "Nom de manipulador d'AJAX invàlid: :name.",
-        'not_found' => "El manipulador d'AJAX ':name' no s'ha trobat."
+        'not_found' => "El manipulador d'AJAX ':name' no s'ha trobat.",
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => 'Afegir',
-        'search' => 'Cercar...'
+        'search' => 'Cercar...',
     ],
     'editor' => [
         'settings' => 'Opcions',
@@ -185,7 +185,7 @@ return [
         'open_searchbox' => 'Obrir caixa de cerca',
         'close_searchbox'  => 'Tancar caixa de cerca',
         'open_replacebox' => 'Obrir caixa de substitució',
-        'close_replacebox'  => 'Tancar caixa de substitució'
+        'close_replacebox'  => 'Tancar caixa de substitució',
     ],
     'asset' => [
         'menu_label' => 'Recursos',
@@ -225,7 +225,7 @@ return [
         'error_deleting_directory' => 'Error eliminant el directori original :dir',
         'no_list_records' => "No s'han trobat arxius",
         'delete_confirm' => 'Eliminar els arxius o directoris seleccionats?',
-        'path' => 'Ruta'
+        'path' => 'Ruta',
     ],
     'component' => [
         'menu_label' => 'Components',
@@ -237,7 +237,7 @@ return [
         'invalid_request' => 'La plantilla no es pot guardar perquè conté dades de components invàlides.',
         'no_records' => "No s'han trobat components",
         'not_found' => "No s'ha trobat el component ':name'.",
-        'method_not_found' => "El component ':name' no conté un mètode ':method'."
+        'method_not_found' => "El component ':name' no conté un mètode ':method'.",
     ],
     'template' => [
         'invalid_type' => 'Tipus de plantilla desconegut.',
@@ -245,7 +245,7 @@ return [
         'saved' => 'Plantilla guardada.',
         'no_list_records' => "No s'han trobat registres",
         'delete_confirm' => 'Eliminar les plantilles seleccionades?',
-        'order_by' => 'Ordenar per'
+        'order_by' => 'Ordenar per',
     ],
     'permissions' => [
         'name' => 'CMS',

@@ -2,11 +2,11 @@
 
 namespace Cms\Classes;
 
-use File;
-use Lang;
-use Cache;
-use Config;
-use SystemException;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Str;
 
 /**
@@ -75,7 +75,7 @@ class CodeParser
             'filePath' => $path,
             'className' => null,
             'source' => null,
-            'offset' => 0
+            'offset' => 0,
         ];
 
         /*

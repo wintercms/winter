@@ -2,7 +2,7 @@
 
 namespace Database\Tester\Models;
 
-use Model;
+use Winter\Storm\Database\Model;
 
 class Meta extends Model
 {
@@ -11,7 +11,7 @@ class Meta extends Model
     public $timestamps = false;
 
     public $morphTo = [
-        'taggable' => []
+        'taggable' => [],
     ];
 
     public $fillable = [
@@ -21,6 +21,6 @@ class Meta extends Model
         'canonical_url',
         'redirect_url',
         'robot_index',
-        'robot_follow'
+        'robot_follow',
     ];
 }

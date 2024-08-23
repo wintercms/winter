@@ -19,8 +19,8 @@ return [
             'online' => 'online',
             'maintenance' => 'em manutenção',
             'manage_themes' => 'Gerenciar temas',
-            'customize_theme' => 'Customizar tema'
-        ]
+            'customize_theme' => 'Customizar tema',
+        ],
     ],
     'theme' => [
         'not_found_name' => 'O tema ":name" não foi encontrado.',
@@ -99,7 +99,7 @@ return [
         'settings_menu_description' => 'Configurar modo de manutenção e a página exibida.',
         'is_enabled' => 'Ativar modo de manutenção',
         'is_enabled_comment' => 'Quando ativado visitantes do site vão ver a página selecionada.',
-        'hint' => 'O modo de manutenção exibirá a página de manutenção para visitantes que não estão conectados à área de back-end.'
+        'hint' => 'O modo de manutenção exibirá a página de manutenção para visitantes que não estão conectados à área de back-end.',
     ],
     'page' => [
         'not_found_name' => 'A página ":name" não foi encontrada',
@@ -122,7 +122,7 @@ return [
         'cms_page' => 'Página do CMS',
         'title' => 'Título da página',
         'url' => 'URL da página',
-        'file_name' => 'Nome do arquivo da página'
+        'file_name' => 'Nome do arquivo da página',
     ],
     'layout' => [
         'not_found_name' => 'O esboço ":name" não foi encontrado',
@@ -256,7 +256,7 @@ return [
         'saved' => 'O modelo foi salvo com sucesso.',
         'no_list_records' => 'Nenhum registro foi encontrado',
         'delete_confirm' => 'Excluir modelos selecionados?',
-        'order_by' => 'Ordenar por'
+        'order_by' => 'Ordenar por',
     ],
     'permissions' => [
         'name' => 'Cms',

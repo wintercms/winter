@@ -157,7 +157,7 @@ return [
         'not_found'    => "Ni mogoče najti AJAX akcije ':name'.",
     ],
     'cms'          => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar'      => [
         'add'    => 'Dodaj',

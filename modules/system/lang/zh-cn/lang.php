@@ -3,16 +3,16 @@
 return [
     'app' => [
         'name' => 'Winter CMS',
-        'tagline' => '欢迎使用Winter CMS！'
+        'tagline' => '欢迎使用Winter CMS！',
     ],
     'directory' => [
-        'create_fail' => '不能创建目录: :name'
+        'create_fail' => '不能创建目录: :name',
     ],
     'file' => [
-        'create_fail' => '不能创建文件: :name'
+        'create_fail' => '不能创建文件: :name',
     ],
     'combiner' => [
-        'not_found' => "组合文件 ':name' 没找到."
+        'not_found' => "组合文件 ':name' 没找到.",
     ],
     'system' => [
         'name' => '系统',
@@ -31,15 +31,15 @@ return [
             'events' => '事件',
             'customers' => '自定义',
             'my_settings' => '我的设置',
-            'notifications' => '通知'
-        ]
+            'notifications' => '通知',
+        ],
     ],
     'theme' => [
         'label' => '主题',
         'unnamed' => '未命名主题',
         'name' => [
             'label' => '主题名称',
-            'help' => '主题的唯一名称，例如：Winter.Vanilla'
+            'help' => '主题的唯一名称，例如：Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -48,16 +48,16 @@ return [
         'installed' => '已安装主题',
         'no_themes' => '市场上没有已安装的主题。',
         'recommended' => '推荐',
-        'remove_confirm' => '你确定要删除这些主题吗？'
+        'remove_confirm' => '你确定要删除这些主题吗？',
     ],
     'plugin' => [
         'label' => '插件',
         'unnamed' => '未命名的插件',
         'name' => [
             'label' => '插件名称',
-            'help' => '插件的唯一名称，例如：Winter.Blog'
+            'help' => '插件的唯一名称，例如：Winter.Blog',
         ],
-        'by_author' => '作者 :name'
+        'by_author' => '作者 :name',
     ],
     'plugins' => [
         'manage' => '管理插件',
@@ -83,7 +83,7 @@ return [
         'disable_confirm' => '你确定吗?',
         'disable_success' => '成功禁用了这些插件.',
         'enable_success' => '成功启用了这些插件',
-        'unknown_plugin' => '插件从文件系统中移除了.'
+        'unknown_plugin' => '插件从文件系统中移除了.',
     ],
     'project' => [
         'name' => '项目',
@@ -94,10 +94,10 @@ return [
         'id' => [
             'label' => '项目ID',
             'help' => '如何找到您的项目ID',
-            'missing' => '请确认你想使用的项目ID。'
+            'missing' => '请确认你想使用的项目ID。',
         ],
         'detach_confirm' => '你确定要删除这个项目吗?',
-        'unbind_success' => '项目删除成功。'
+        'unbind_success' => '项目删除成功。',
     ],
     'settings' => [
         'menu_label' => '设置',
@@ -105,7 +105,7 @@ return [
         'missing_model' => '设置页缺少模型定义.',
         'update_success' => ':name 的设置更新成功了.',
         'return' => '返回系统设置',
-        'search' => '搜索'
+        'search' => '搜索',
     ],
     'mail' => [
         'log_file' => '日志文件',
@@ -149,7 +149,7 @@ return [
         'content_text' => '纯文本',
         'test_send' => '发送测试消息',
         'test_success' => '测试消息已经成功发送.',
-        'return' => '返回模板列表'
+        'return' => '返回模板列表',
     ],
     'mail_brand' => [
         'menu_label' => '自定义邮件模板',
@@ -163,7 +163,7 @@ return [
                 'description' => 'Description',
                 'price' => 'Price',
                 'centered' => 'Centered',
-                'right_aligned' => 'Right-Aligned'
+                'right_aligned' => 'Right-Aligned',
             ],
             'buttons' => [
                 'primary' => 'Primary button',
@@ -174,7 +174,7 @@ return [
             'more' => 'Some more text',
             'promotion' => 'Coupon code: WINTER',
             'subcopy' => 'This is the subcopy of the email',
-            'thanks' => 'Thanks'
+            'thanks' => 'Thanks',
         ],
         'fields' => [
             '_section_background' => '背景',
@@ -200,7 +200,7 @@ return [
             'panel_bg' => 'Panel 背景色',
             'promotion_bg' => 'Promotion 背景色',
             'promotion_border_color' => 'Promotion 边框颜色',
-        ]
+        ],
     ],
     'install' => [
         'project_label' => '加入项目',
@@ -209,7 +209,7 @@ return [
         'missing_plugin_name' => '请输入要安装的插件名称。',
         'missing_theme_name' => '请输入要安装的主题名称。',
         'install_completing' => '完成安装过程',
-        'install_success' => '插件安装成功。'
+        'install_success' => '插件安装成功。',
     ],
     'updates' => [
         'title' => '管理更新',
@@ -248,11 +248,11 @@ return [
         'force_label' => '强制更新',
         'found' => [
             'label' => '发现新的更新!',
-            'help' => '点击更新.'
+            'help' => '点击更新.',
         ],
         'none' => [
             'label' => '没有更新',
-            'help' => '没有发现新的更新.'
+            'help' => '没有发现新的更新.',
         ],
         'important_action' => [
             'empty' => '选择操作',
@@ -282,17 +282,17 @@ return [
         'response_invalid' => '服务器返回异常.',
         'response_empty' => '服务器返回为空.',
         'file_error' => '服务器下载文件失败.',
-        'file_corrupt' => '服务器下载文件校验失败.'
+        'file_corrupt' => '服务器下载文件校验失败.',
     ],
     'behavior' => [
-        'missing_property' => '行为 :behavior 使用的类 :class 必须定义属性 $:property。'
+        'missing_property' => '行为 :behavior 使用的类 :class 必须定义属性 $:property。',
     ],
     'config' => [
         'not_found' => '无法找到定义 :location 的配置文件 :file。',
-        'required' => "配置 :location 必须有 ':property'。"
+        'required' => "配置 :location 必须有 ':property'。",
     ],
     'zip' => [
-        'extract_failed' => "不能解压文件 ':file'。"
+        'extract_failed' => "不能解压文件 ':file'。",
     ],
     'event_log' => [
         'hint' => '日志显示了程序中的潜在错误, 比如异常和调试信息。',
@@ -307,7 +307,7 @@ return [
         'created_at' => '时间和日期',
         'message' => '消息',
         'level' => '级别',
-        'preview_title' => '事件详情'
+        'preview_title' => '事件详情',
     ],
     'request_log' => [
         'hint' => '这个日志显示了需要注意的浏览器请求. 比如如果一个访问者打开一个没有的CMS页面, 一条返回状态404的记录被创建。',
@@ -323,7 +323,7 @@ return [
         'referer' => '来源',
         'url' => 'URL',
         'status_code' => '状态',
-        'preview_title' => '预览事件日志'
+        'preview_title' => '预览事件日志',
     ],
     'permissions' => [
         'name' => '系统',
@@ -337,7 +337,7 @@ return [
         'manage_editor' => '管理代码编辑器偏好设置',
         'view_the_dashboard' => '查看仪表盘',
         'manage_default_dashboard' => '管理默认的仪表盘面板',
-        'manage_branding' => '自定义后台'
+        'manage_branding' => '自定义后台',
     ],
     'log' => [
         'menu_label' => '日志设置',
@@ -357,7 +357,7 @@ return [
     'page' => [
         'custom_error' => [
             'label' => '页面错误',
-            'help' => "抱歉，页面因为一些错误导致无法显示"
+            'help' => "抱歉，页面因为一些错误导致无法显示",
         ],
         'invalid_token' => [
             'label' => '非法安全令牌',
@@ -365,6 +365,6 @@ return [
     ],
     'pagination' => [
         'previous' => '上一页',
-        'next' => '下一页'
+        'next' => '下一页',
     ],
 ];

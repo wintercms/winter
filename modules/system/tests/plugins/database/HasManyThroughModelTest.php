@@ -2,12 +2,12 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Database\Tester\Models\Author;
 use Database\Tester\Models\Country;
 use Database\Tester\Models\Post;
+use System\Tests\Bootstrap\PluginTestCase;
 use Winter\Storm\Database\Collection;
-use Model;
+use Winter\Storm\Database\Model;
 
 class HasManyThroughModelTest extends PluginTestCase
 {
@@ -45,14 +45,14 @@ class HasManyThroughModelTest extends PluginTestCase
         $author2->save();
 
         $country = Country::with([
-            'posts'
+            'posts',
         ])->find($country->id);
 
         $this->assertEquals([
             $post1->id,
             $post2->id,
             $post3->id,
-            $post4->id
+            $post4->id,
         ], $country->posts->pluck('id')->toArray());
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Backend\Models;
 
-use File;
-use Cache;
-use Model;
-use Less_Parser;
 use Exception;
+use Illuminate\Support\Facades\Cache;
+use Less_Parser;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Editor settings that affect all users
@@ -23,7 +23,7 @@ class EditorSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**
@@ -171,7 +171,7 @@ class EditorSetting extends Model
             if (array_has($value, ['class_name', 'class_label'])) {
                 return [
                     array_get($value, 'class_name'),
-                    array_get($value, 'class_label')
+                    array_get($value, 'class_label'),
                 ];
             }
         });
@@ -187,7 +187,7 @@ class EditorSetting extends Model
             if (array_has($value, ['format_tag', 'format_label'])) {
                 return [
                     array_get($value, 'format_tag'),
-                    array_get($value, 'format_label')
+                    array_get($value, 'format_label'),
                 ];
             }
         });

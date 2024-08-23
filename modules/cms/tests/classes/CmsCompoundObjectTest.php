@@ -2,10 +2,10 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\CmsCompoundObject;
 use Cms\Classes\CmsObject;
 use Cms\Classes\Theme;
+use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Halcyon\Model;
 
 class TestCmsCompoundObject extends CmsCompoundObject
@@ -212,7 +212,7 @@ class CmsCompoundObjectTest extends TestCase
         $obj = TestCmsCompoundObject::inTheme($theme);
         $obj->fill([
             'markup' => '<p>Hello, world!</p>',
-            'fileName' => 'compound-markup'
+            'fileName' => 'compound-markup',
         ]);
         $obj->save();
 
@@ -238,7 +238,7 @@ class CmsCompoundObjectTest extends TestCase
         $obj->fill([
             'settings' => ['var' => 'value'],
             'markup' => '<p>Hello, world!</p>',
-            'fileName' => 'compound-markup-settings'
+            'fileName' => 'compound-markup-settings',
         ]);
         $obj->save();
 
@@ -265,7 +265,7 @@ class CmsCompoundObjectTest extends TestCase
             'fileName' => 'compound',
             'settings' => ['var' => 'value'],
             'code' => 'function a() {return true;}',
-            'markup' => '<p>Hello, world!</p>'
+            'markup' => '<p>Hello, world!</p>',
         ]);
         $obj->save();
 

@@ -2,9 +2,9 @@
 
 namespace Backend\Skins;
 
-use File;
 use Backend\Classes\Skin;
 use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Standard skin information file.
@@ -32,7 +32,7 @@ class Standard extends Skin
     public function skinDetails()
     {
         return [
-            'name' => 'Default Skin'
+            'name' => 'Default Skin',
         ];
     }
 

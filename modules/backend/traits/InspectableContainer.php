@@ -2,9 +2,9 @@
 
 namespace Backend\Traits;
 
-use Lang;
-use Request;
-use ApplicationException;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Inspectable Container Trait
@@ -84,7 +84,7 @@ trait InspectableContainer
         }
 
         return [
-            'options' => $optionsArray
+            'options' => $optionsArray,
         ];
     }
 }

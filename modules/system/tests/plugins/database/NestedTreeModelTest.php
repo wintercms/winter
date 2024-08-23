@@ -2,9 +2,9 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Database\Tester\Models\CategoryNested;
-use Model;
+use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Database\Model;
 
 class NestedTreeModelTest extends PluginTestCase
 {
@@ -54,7 +54,7 @@ class NestedTreeModelTest extends PluginTestCase
             6 => '&nbsp;&nbsp;&nbsp;Summer Breeze',
             7 => 'Category Green',
             8 => '&nbsp;&nbsp;&nbsp;Winter Snow',
-            9 => '&nbsp;&nbsp;&nbsp;Spring Trees'
+            9 => '&nbsp;&nbsp;&nbsp;Spring Trees',
         ], $array);
 
         CategoryNested::flushDuplicateCache();
@@ -69,7 +69,7 @@ class NestedTreeModelTest extends PluginTestCase
             6 => '--Summer Breeze',
             7 => 'Category Green',
             8 => '--Winter Snow',
-            9 => '--Spring Trees'
+            9 => '--Spring Trees',
         ], $array);
 
         CategoryNested::flushDuplicateCache();
@@ -84,7 +84,7 @@ class NestedTreeModelTest extends PluginTestCase
             'Summer Breeze' => '**Disccusion about the wind at the ocean.',
             'Category Green' => 'A root level test category',
             'Winter Snow' => '**Disccusion about the frosty snow flakes.',
-            'Spring Trees' => '**Disccusion about the blooming gardens.'
+            'Spring Trees' => '**Disccusion about the blooming gardens.',
         ], $array);
     }
 
@@ -100,7 +100,7 @@ class NestedTreeModelTest extends PluginTestCase
             6 => '...Summer Breeze (#6)',
             7 => 'Category Green (#7)',
             8 => '...Winter Snow (#8)',
-            9 => '...Spring Trees (#9)'
+            9 => '...Spring Trees (#9)',
         ], $array);
     }
 
@@ -115,27 +115,27 @@ class NestedTreeModelTest extends PluginTestCase
 
         $autumn = $orange->children()->create([
             'name' => 'Autumn Leaves',
-            'description' => 'Disccusion about the season of falling leaves.'
+            'description' => 'Disccusion about the season of falling leaves.',
         ]);
 
         $autumn->children()->create([
             'name' => 'September',
-            'description' => 'The start of the fall season.'
+            'description' => 'The start of the fall season.',
         ]);
 
         $autumn->children()->create([
             'name' => 'October',
-            'description' => 'The middle of the fall season.'
+            'description' => 'The middle of the fall season.',
         ]);
 
         $autumn->children()->create([
             'name' => 'November',
-            'description' => 'The end of the fall season.'
+            'description' => 'The end of the fall season.',
         ]);
 
         $orange->children()->create([
             'name' => 'Summer Breeze',
-            'description' => 'Disccusion about the wind at the ocean.'
+            'description' => 'Disccusion about the wind at the ocean.',
         ]);
 
         $green = CategoryNested::create([
@@ -145,12 +145,12 @@ class NestedTreeModelTest extends PluginTestCase
 
         $green->children()->create([
             'name' => 'Winter Snow',
-            'description' => 'Disccusion about the frosty snow flakes.'
+            'description' => 'Disccusion about the frosty snow flakes.',
         ]);
 
         $green->children()->create([
             'name' => 'Spring Trees',
-            'description' => 'Disccusion about the blooming gardens.'
+            'description' => 'Disccusion about the blooming gardens.',
         ]);
 
         Model::reguard();

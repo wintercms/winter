@@ -2,10 +2,10 @@
 
 namespace System\Classes;
 
-use ApplicationException;
-use Config;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\Filesystem;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Stores the file manifest for this Winter CMS installation.

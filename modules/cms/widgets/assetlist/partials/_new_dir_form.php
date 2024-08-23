@@ -2,7 +2,7 @@
     'data-request' => $this->getEventHandler('onNewDirectory'),
     'data-request-success' => "\$(this).trigger('close.oc.popup')",
     'data-stripe-load-indicator' => 1,
-    'id' => 'asset-new-dir-popup-form'
+    'id' => 'asset-new-dir-popup-form',
 ]) ?>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="popup">&times;</button>

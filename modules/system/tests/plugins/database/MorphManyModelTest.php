@@ -2,13 +2,13 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Database\Tester\Models\Author;
-use Database\Tester\Models\Tag;
-use Database\Tester\Models\Post;
 use Database\Tester\Models\EventLog;
+use Database\Tester\Models\Post;
+use Database\Tester\Models\Tag;
+use System\Tests\Bootstrap\PluginTestCase;
 use Winter\Storm\Database\Collection;
-use Model;
+use Winter\Storm\Database\Model;
 
 class MorphManyModelTest extends PluginTestCase
 {
@@ -43,7 +43,7 @@ class MorphManyModelTest extends PluginTestCase
         $this->assertEquals('Database\Tester\Models\Author', $event2->related_type);
         $this->assertEquals([
             'user-created',
-            'user-updated'
+            'user-updated',
         ], $author->event_log->lists('action'));
 
         // Set by primary key
@@ -54,7 +54,7 @@ class MorphManyModelTest extends PluginTestCase
         $this->assertEquals($author->id, $event3->related_id);
         $this->assertEquals('Database\Tester\Models\Author', $event3->related_type);
         $this->assertEquals([
-            'user-deleted'
+            'user-deleted',
         ], $author->event_log->lists('action'));
 
         // Nullify
@@ -70,7 +70,7 @@ class MorphManyModelTest extends PluginTestCase
         $this->assertEquals($author->id, $event4->related_id);
         $this->assertEquals('Database\Tester\Models\Author', $event4->related_type);
         $this->assertEquals([
-            'user-restored'
+            'user-restored',
         ], $author->event_log->lists('action'));
     }
 
@@ -125,7 +125,7 @@ class MorphManyModelTest extends PluginTestCase
         $this->assertEquals(1, $author->event_log()->count());
         $this->assertEquals($author->id, $event->related_id);
         $this->assertEquals([
-            'user-created'
+            'user-created',
         ], $author->event_log->lists('action'));
 
         $this->assertEquals(1, $author->tags()->count());
@@ -146,7 +146,7 @@ class MorphManyModelTest extends PluginTestCase
         $this->assertEquals(0, $author->event_log()->withDeferred($sessionKey)->count());
         $this->assertEquals($author->id, $event->related_id);
         $this->assertEquals([
-            'user-created'
+            'user-created',
         ], $author->event_log->lists('action'));
 
         $author->tags()->remove($tagForAuthor, $sessionKey);

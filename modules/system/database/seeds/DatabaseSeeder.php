@@ -2,8 +2,8 @@
 
 namespace System\Database\Seeds;
 
-use Seeder;
-use Eloquent;
+use Illuminate\Database\Eloquent\Model as Eloquent;
+use Winter\Storm\Database\Updates\Seeder;
 
 class DatabaseSeeder extends Seeder
 {

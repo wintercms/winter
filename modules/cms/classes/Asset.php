@@ -2,15 +2,15 @@
 
 namespace Cms\Classes;
 
-use File;
-use Lang;
-use Config;
-use Request;
-use ApplicationException;
-use ValidationException;
 use Cms\Helpers\File as FileHelper;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Extension\Extendable;
 use Winter\Storm\Filesystem\PathResolver;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * The CMS theme asset file class.
@@ -55,7 +55,7 @@ class Asset extends Extendable
      */
     protected $fillable = [
         'fileName',
-        'content'
+        'content',
     ];
 
     /**
@@ -245,8 +245,8 @@ class Asset extends Extendable
             throw new ValidationException(['fileName' =>
                 Lang::get('cms::lang.cms_object.file_name_required', [
                     'allowed' => implode(', ', $this->allowedExtensions),
-                    'invalid' => pathinfo($fileName, PATHINFO_EXTENSION)
-                ])
+                    'invalid' => pathinfo($fileName, PATHINFO_EXTENSION),
+                ]),
             ]);
         }
 
@@ -254,16 +254,16 @@ class Asset extends Extendable
             throw new ValidationException(['fileName' =>
                 Lang::get('cms::lang.cms_object.invalid_file_extension', [
                     'allowed' => implode(', ', $this->allowedExtensions),
-                    'invalid' => pathinfo($fileName, PATHINFO_EXTENSION)
-                ])
+                    'invalid' => pathinfo($fileName, PATHINFO_EXTENSION),
+                ]),
             ]);
         }
 
         if (!FileHelper::validatePath($fileName, null)) {
             throw new ValidationException(['fileName' =>
                 Lang::get('cms::lang.cms_object.invalid_file', [
-                    'name' => $fileName
-                ])
+                    'name' => $fileName,
+                ]),
             ]);
         }
     }

@@ -3,8 +3,8 @@
 namespace Backend\Tests\FormWidgets;
 
 use Backend\Widgets\Form;
-use Winter\Storm\Database\Model;
 use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Database\Model;
 
 class CheckboxTest extends PluginTestCase
 {

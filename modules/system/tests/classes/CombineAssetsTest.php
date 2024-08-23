@@ -2,9 +2,8 @@
 
 namespace System\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
-use Cms\Classes\Theme;
 use System\Classes\CombineAssets;
+use System\Tests\Bootstrap\TestCase;
 
 class CombineAssetsTest extends TestCase
 {
@@ -46,7 +45,7 @@ class CombineAssetsTest extends TestCase
         $url = $combiner->combine(
             [
                 'assets/css/style1.css',
-                'assets/css/style2.css'
+                'assets/css/style2.css',
             ],
             base_path() . '/modules/system/tests/fixtures/themes/test'
         );
@@ -56,7 +55,7 @@ class CombineAssetsTest extends TestCase
         $url = $combiner->combine(
             [
                 'assets/js/script1.js',
-                'assets/js/script2.js'
+                'assets/js/script2.js',
             ],
             base_path() . '/modules/system/tests/fixtures/themes/test'
         );

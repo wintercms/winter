@@ -123,6 +123,23 @@
         <exclude-pattern>*/plugins/*/*/partials/*\.php</exclude-pattern>
     </rule>
 
+    <!-- All arrays must have a trailing comma on the last item in the array -->
+    <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma" />
+    <!-- Imports should be alphabetically ordered -->
+    <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses" />
+    <!-- Don't allow group use declarations as they make diffs ugly -->
+    <rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse" />
+    <!-- Don't allow use definitions for a class in the same namespace -->
+    <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace" />
+    <!-- Don't allow starting backslash for imports as there's no need for them -->
+    <rule ref="SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash" />
+    <!-- Don't allow unused imports (using them in docblocks is OK)-->
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <property name="searchAnnotations" value="true" />
+        </properties>
+    </rule>
+
     <arg name="extensions" value="php" />
     <arg name="colors" />
 

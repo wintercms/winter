@@ -2,15 +2,15 @@
 
 namespace Cms\Twig;
 
-use Twig\Template as TwigTemplate;
-use Twig\Extension\AbstractExtension as TwigExtension;
-use Twig\Environment as TwigEnvironment;
-use Twig\TwigFunction as TwigSimpleFunction;
 use Cms\Classes\ComponentBase;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
-use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
+use Twig\Environment as TwigEnvironment;
+use Twig\Extension\AbstractExtension as TwigExtension;
+use Twig\Template as TwigTemplate;
+use Twig\TwigFunction as TwigSimpleFunction;
 use Winter\Storm\Database\Model;
 
 class DebugExtension extends TwigExtension
@@ -45,7 +45,7 @@ class DebugExtension extends TwigExtension
         'offsetExists',
         'offsetGet',
         'offsetSet',
-        'offsetUnset'
+        'offsetUnset',
     ];
 
     /**
@@ -58,7 +58,7 @@ class DebugExtension extends TwigExtension
             new TwigSimpleFunction('dump', [$this, 'runDump'], [
                 'is_safe' => ['html'],
                 'needs_context' => true,
-                'needs_environment' => true
+                'needs_environment' => true,
             ]),
         ];
     }

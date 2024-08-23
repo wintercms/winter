@@ -2,8 +2,6 @@
 
 namespace System\Console;
 
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableSeparator;
 use System\Models\PluginVersion;
 use Winter\Storm\Console\Command;
 

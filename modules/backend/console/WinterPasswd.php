@@ -4,9 +4,9 @@ namespace Backend\Console;
 
 use Backend\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Str;
 use Symfony\Component\Console\Question\Question;
 use Winter\Storm\Console\Command;
+use Winter\Storm\Support\Str;
 
 /**
  * Console command to change the password of a Backend user via CLI.

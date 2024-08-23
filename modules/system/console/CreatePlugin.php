@@ -2,8 +2,6 @@
 
 namespace System\Console;
 
-use System\Console\BaseScaffoldCommand;
-
 class CreatePlugin extends BaseScaffoldCommand
 {
     /**

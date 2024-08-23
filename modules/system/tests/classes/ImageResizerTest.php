@@ -5,15 +5,15 @@ namespace System\Tests\Classes;
 use Backend\Facades\Backend;
 use Cms\Classes\Controller as CmsController;
 use Cms\Classes\Theme;
-use Config;
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
-use Event;
+use Illuminate\Support\Facades\URL;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Models\File as FileModel;
 use System\Tests\Bootstrap\PluginTestCase;
-use URL;
 use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
 
 class ImageResizerTest extends PluginTestCase
 {
@@ -84,7 +84,7 @@ class ImageResizerTest extends PluginTestCase
                 'sharpen' => 23,
                 'interlace' => true,
                 'quality' => 73,
-                'extension' => 'jpg'
+                'extension' => 'jpg',
             ]
         );
         self::assertArraySubset([
@@ -96,7 +96,7 @@ class ImageResizerTest extends PluginTestCase
                 'sharpen' => 23,
                 'interlace' => true,
                 'quality' => 73,
-                'extension' => 'jpg'
+                'extension' => 'jpg',
             ],
         ], $imageResizer->getConfig());
 

@@ -2,14 +2,13 @@
 
 namespace System\Classes;
 
-use View;
-use Config;
-use Cms\Classes\Theme;
-use Cms\Classes\Router;
 use Cms\Classes\Controller as CmsController;
-use Winter\Storm\Exception\ErrorHandler as ErrorHandlerBase;
-use Winter\Storm\Exception\SystemException;
+use Cms\Classes\Router;
+use Cms\Classes\Theme;
+use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\Response;
+use Winter\Storm\Exception\ErrorHandler as ErrorHandlerBase;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * System Error Handler, this class handles application exception events.

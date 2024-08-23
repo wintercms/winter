@@ -2,20 +2,20 @@
 
 namespace Backend\Controllers;
 
-use ApplicationException;
-use Backend;
-use BackendAuth;
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
 use Backend\Models\AccessLog;
-use Config;
 use Exception;
-use Flash;
-use Mail;
-use Request;
+use Illuminate\Support\Facades\Request;
 use System\Classes\UpdateManager;
-use ValidationException;
-use Validator;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Foundation\Http\Middleware\CheckForTrustedHost;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Mail;
+use Winter\Storm\Support\Facades\Validator;
 
 /**
  * Authentication controller
@@ -78,7 +78,7 @@ class Auth extends Controller
     {
         $rules = [
             'login'    => 'required|between:2,255',
-            'password' => 'required|between:4,255'
+            'password' => 'required|between:4,255',
         ];
 
         $validation = Validator::make(post(), $rules);
@@ -93,7 +93,7 @@ class Auth extends Controller
         // Authenticate user
         $user = BackendAuth::authenticate([
             'login' => post('login'),
-            'password' => post('password')
+            'password' => post('password'),
         ], $remember);
 
         $runMigrationsOnLogin = (bool) Config::get('cms.runMigrationsOnLogin', Config::get('app.debug', false));
@@ -169,7 +169,7 @@ class Auth extends Controller
         }
 
         $rules = [
-            'login' => 'required|between:2,255'
+            'login' => 'required|between:2,255',
         ];
 
         $validation = Validator::make(post(), $rules);
@@ -231,7 +231,7 @@ class Auth extends Controller
         }
 
         $rules = [
-            'password' => 'required|between:4,255'
+            'password' => 'required|between:4,255',
         ];
 
         $validation = Validator::make(post(), $rules);

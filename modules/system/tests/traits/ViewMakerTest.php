@@ -107,7 +107,7 @@ class ViewMakerTest extends TestCase
                 'field' => (object) [
                     'label' => 'label',
                     'comment' => 'comment',
-                    'commentHtml' => false
+                    'commentHtml' => false,
                 ],
             ]);
             $this->assertEquals($expected, trim($contents));

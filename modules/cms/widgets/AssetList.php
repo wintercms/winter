@@ -2,23 +2,23 @@
 
 namespace Cms\Widgets;
 
-use Str;
-use Url;
-use File;
-use Lang;
-use Input;
-use Request;
-use Response;
-use Cms\Classes\Theme;
-use Cms\Classes\Asset;
 use Backend\Classes\WidgetBase;
-use ApplicationException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
+use Cms\Classes\Asset;
+use Cms\Classes\Theme;
 use DirectoryIterator;
 use Exception;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\URL;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Str;
 
 /**
  * CMS asset list widget.
@@ -77,7 +77,7 @@ class AssetList extends WidgetBase
     public function render()
     {
         return $this->makePartial('body', [
-           'data' => $this->getData()
+           'data' => $this->getData(),
         ]);
     }
 
@@ -100,14 +100,14 @@ class AssetList extends WidgetBase
         $this->putSession('currentPath', $path);
 
         return [
-            '#' . $this->getId('asset-list') => $this->makePartial('items', ['items' => $this->getData()])
+            '#' . $this->getId('asset-list') => $this->makePartial('items', ['items' => $this->getData()]),
         ];
     }
 
     public function onRefresh()
     {
         return [
-            '#' . $this->getId('asset-list') => $this->makePartial('items', ['items' => $this->getData()])
+            '#' . $this->getId('asset-list') => $this->makePartial('items', ['items' => $this->getData()]),
         ];
     }
 
@@ -173,7 +173,7 @@ class AssetList extends WidgetBase
         return [
             'deleted' => $deleted,
             'error'   => $error,
-            'theme'   => Request::input('theme')
+            'theme'   => Request::input('theme'),
         ];
     }
 
@@ -236,7 +236,7 @@ class AssetList extends WidgetBase
         }
 
         return [
-            '#' . $this->getId('asset-list') => $this->makePartial('items', ['items' => $this->getData()])
+            '#' . $this->getId('asset-list') => $this->makePartial('items', ['items' => $this->getData()]),
         ];
     }
 
@@ -277,7 +277,7 @@ class AssetList extends WidgetBase
         }
 
         return [
-            '#' . $this->getId('asset-list') => $this->makePartial('items', ['items' => $this->getData()])
+            '#' . $this->getId('asset-list') => $this->makePartial('items', ['items' => $this->getData()]),
         ];
     }
 
@@ -384,7 +384,7 @@ class AssetList extends WidgetBase
         }
 
         return [
-            '#' . $this->getId('asset-list') => $this->makePartial('items', ['items' => $this->getData()])
+            '#' . $this->getId('asset-list') => $this->makePartial('items', ['items' => $this->getData()]),
         ];
     }
 
@@ -526,14 +526,14 @@ class AssetList extends WidgetBase
                     'type'     => 'directory',
                     'path'     => File::normalizePath($this->getRelativePath($node->getPathname())),
                     'name'     => $node->getFilename(),
-                    'editable' => false
+                    'editable' => false,
                 ];
             } elseif ($node->isFile()) {
                 $files[] = (object)[
                     'type'     => 'file',
                     'path'     => File::normalizePath($this->getRelativePath($node->getPathname())),
                     'name'     => $node->getFilename(),
-                    'editable' => in_array(strtolower($node->getExtension()), $editableAssetTypes)
+                    'editable' => in_array(strtolower($node->getExtension()), $editableAssetTypes),
                 ];
             }
         }
@@ -728,7 +728,7 @@ class AssetList extends WidgetBase
                         'type'     => 'file',
                         'path'     => File::normalizePath($path),
                         'name'     => $item->getFilename(),
-                        'editable' => in_array(strtolower($item->getExtension()), $editableAssetTypes)
+                        'editable' => in_array(strtolower($item->getExtension()), $editableAssetTypes),
                     ];
                 }
             }

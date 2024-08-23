@@ -2,16 +2,16 @@
 
 namespace Backend\Widgets;
 
-use Db;
-use Str;
-use Lang;
-use Backend;
-use DbDongle;
-use Carbon\Carbon;
-use Backend\Classes\WidgetBase;
 use Backend\Classes\FilterScope;
-use ApplicationException;
-use BackendAuth;
+use Backend\Classes\WidgetBase;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\DbDongle;
+use Winter\Storm\Support\Str;
 
 /**
  * Filter Widget
@@ -337,7 +337,7 @@ class Filter extends WidgetBase
             'options' => [
                 'available' => $this->optionsToAjax($available),
                 'active'    => $this->optionsToAjax($active),
-            ]
+            ],
         ];
     }
 
@@ -467,7 +467,7 @@ class Filter extends WidgetBase
                 throw new ApplicationException(Lang::get('backend::lang.filter.options_method_not_exists', [
                     'model'  => get_class($model),
                     'method' => $methodName,
-                    'filter' => $scope->scopeName
+                    'filter' => $scope->scopeName,
                 ]));
             }
 
@@ -752,7 +752,7 @@ class Filter extends WidgetBase
                         $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
                             ':filtered' => $value->format('Y-m-d'),
                             ':after'    => $value->format('Y-m-d H:i:s'),
-                            ':before'   => $value->copy()->addDay()->addMinutes(-1)->format('Y-m-d H:i:s')
+                            ':before'   => $value->copy()->addDay()->addMinutes(-1)->format('Y-m-d H:i:s'),
                         ])));
                     } elseif ($scopeMethod = $scope->scope) {
                         $query->$scopeMethod($value);
@@ -771,7 +771,7 @@ class Filter extends WidgetBase
                                 ':afterDate'  => $after->format('Y-m-d'),
                                 ':after'      => $after->format('Y-m-d H:i:s'),
                                 ':beforeDate' => $before->format('Y-m-d'),
-                                ':before'     => $before->format('Y-m-d H:i:s')
+                                ':before'     => $before->format('Y-m-d H:i:s'),
                             ])));
                         } elseif ($scopeMethod = $scope->scope) {
                             $query->$scopeMethod($after, $before);
@@ -802,7 +802,7 @@ class Filter extends WidgetBase
                         if ($scopeConditions = $scope->conditions) {
                             $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
                                 ':min'  => $min === null ? -2147483647 : $min,
-                                ':max'  => $max === null ? 2147483647 : $max
+                                ':max'  => $max === null ? 2147483647 : $max,
                             ])));
                         } elseif ($scopeMethod = $scope->scope) {
                             $query->$scopeMethod($min, $max);

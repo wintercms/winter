@@ -2,10 +2,10 @@
 
 namespace System\Tests\Classes;
 
+use System\Classes\FileManifest;
+use System\Classes\SourceManifest;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Argon\Argon;
-use System\Classes\SourceManifest;
-use System\Classes\FileManifest;
 
 class SourceManifestTest extends TestCase
 {
@@ -234,37 +234,37 @@ class SourceManifestTest extends TestCase
         $this->assertEquals([
             'build' => '1.0.0',
             'modified' => false,
-            'confident' => true
+            'confident' => true,
         ], $this->sourceManifest->compare($this->builds['1.0.0']));
 
         $this->assertEquals([
             'build' => '1.0.1',
             'modified' => false,
-            'confident' => true
+            'confident' => true,
         ], $this->sourceManifest->compare($this->builds['1.0.1']));
 
         $this->assertEquals([
             'build' => '1.0.2',
             'modified' => false,
-            'confident' => true
+            'confident' => true,
         ], $this->sourceManifest->compare($this->builds['1.0.2']));
 
         $this->assertEquals([
             'build' => '1.0.3',
             'modified' => false,
-            'confident' => true
+            'confident' => true,
         ], $this->sourceManifest->compare($this->builds['1.0.3']));
 
         $this->assertEquals([
             'build' => '1.1.0',
             'modified' => false,
-            'confident' => true
+            'confident' => true,
         ], $this->sourceManifest->compare($this->builds['1.1.0']));
 
         $this->assertEquals([
             'build' => '1.1.1',
             'modified' => false,
-            'confident' => true
+            'confident' => true,
         ], $this->sourceManifest->compare($this->builds['1.1.1']));
     }
 

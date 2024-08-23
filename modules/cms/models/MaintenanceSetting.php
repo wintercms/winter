@@ -2,12 +2,12 @@
 
 namespace Cms\Models;
 
-use Model;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
-use Winter\Storm\Support\Arr;
 use Symfony\Component\HttpFoundation\IpUtils;
-use ApplicationException;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Arr;
 
 /**
  * Maintenance mode settings
@@ -23,7 +23,7 @@ class MaintenanceSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**

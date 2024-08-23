@@ -2,24 +2,24 @@
 
 namespace System\Controllers;
 
-use ApplicationException;
-use Backend;
 use Backend\Classes\Controller;
-use BackendMenu;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
 use Cms\Classes\ThemeManager;
 use Exception;
-use File;
-use Flash;
-use Html;
-use Lang;
-use Markdown;
-use Redirect;
-use Response;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Html;
+use Winter\Storm\Support\Facades\Markdown;
 
 /**
  * Updates controller
@@ -42,7 +42,7 @@ class Updates extends Controller
      */
     public $listConfig = [
         'list' => 'config_list.yaml',
-        'manage' => 'config_manage_list.yaml'
+        'manage' => 'config_manage_list.yaml',
     ];
 
     /**
@@ -211,7 +211,7 @@ class Updates extends Controller
             foreach ($plugin as $missingPluginCode) {
                 $warnings[] = Lang::get('system::lang.updates.update_warnings_plugin_missing', [
                     'code' => '<strong>' . $missingPluginCode . '</strong>',
-                    'parent_code' => '<strong>' . $pluginCode . '</strong>'
+                    'parent_code' => '<strong>' . $pluginCode . '</strong>',
                 ]);
             }
         }
@@ -222,7 +222,7 @@ class Updates extends Controller
             if (PluginManager::instance()->getActiveReplacementMap($alias)) {
                 $warnings[] = Lang::get('system::lang.updates.update_warnings_plugin_replace', [
                     'plugin' => '<strong>' . $plugin . '</strong>',
-                    'alias' => '<strong>' . $alias . '</strong>'
+                    'alias' => '<strong>' . $alias . '</strong>',
                 ]);
             }
         }
@@ -545,7 +545,7 @@ class Updates extends Controller
 
                 if ($pluginAction == 'ignore') {
                     PluginVersion::whereCode($code)->update([
-                        'is_frozen' => true
+                        'is_frozen' => true,
                     ]);
                 }
             }
@@ -595,7 +595,7 @@ class Updates extends Controller
             $updateSteps[] = [
                 'code'  => 'downloadCore',
                 'label' => Lang::get('system::lang.updates.core_downloading'),
-                'hash'  => $coreHash
+                'hash'  => $coreHash,
             ];
         }
 
@@ -604,7 +604,7 @@ class Updates extends Controller
                 'code'  => 'downloadTheme',
                 'label' => Lang::get('system::lang.updates.theme_downloading', compact('name')),
                 'name'  => $name,
-                'hash'  => $hash
+                'hash'  => $hash,
             ];
         }
 
@@ -614,7 +614,7 @@ class Updates extends Controller
                 'label' => Lang::get('system::lang.updates.plugin_downloading', compact('name')),
                 'name'  => $name,
                 'hash'  => $hash,
-                'install' => $isInstallationRequest ? 1 : 0
+                'install' => $isInstallationRequest ? 1 : 0,
             ];
         }
 
@@ -624,14 +624,14 @@ class Updates extends Controller
         if ($coreHash) {
             $updateSteps[] = [
                 'code'  => 'extractCore',
-                'label' => Lang::get('system::lang.updates.core_extracting')
+                'label' => Lang::get('system::lang.updates.core_extracting'),
             ];
 
             $updateSteps[] = [
                 'code'  => 'setBuild',
                 'label' => Lang::get('system::lang.updates.core_set_build'),
                 'hash'  => $coreHash,
-                'build' => $coreBuild
+                'build' => $coreBuild,
             ];
         }
 
@@ -640,7 +640,7 @@ class Updates extends Controller
                 'code' => 'extractTheme',
                 'label' => Lang::get('system::lang.updates.theme_extracting', compact('name')),
                 'name' => $name,
-                'hash' => $hash
+                'hash' => $hash,
             ];
         }
 
@@ -649,7 +649,7 @@ class Updates extends Controller
                 'code' => 'extractPlugin',
                 'label' => Lang::get('system::lang.updates.plugin_extracting', compact('name')),
                 'name' => $name,
-                'hash' => $hash
+                'hash' => $hash,
             ];
         }
 

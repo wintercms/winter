@@ -46,25 +46,25 @@ return [
     'alert' => [
         'confirm_button_text' => 'OK',
         'cancel_button_text' => 'Peruuta',
-        'widget_remove_confirm' => 'Poista tämä vimpain?'
+        'widget_remove_confirm' => 'Poista tämä vimpain?',
     ],
     'datepicker' => [
         'previousMonth' => 'Edellinen kuukausi',
         'nextMonth' => 'Seuraava kuukausi',
         'months' => ['tammikuu', 'helmikuu', 'maaliskuu', 'huhtikuu', 'toukokuu', 'kesäkuu', 'heinäkuu', 'elokuu', 'syyskuu', 'lokakuu', 'marraskuu', 'joulukuu'],
         'weekdays' => ['sunnutai', 'maanantai', 'tiistai', 'keskiviikko', 'torstai', 'perjantai', 'lauantai'],
-        'weekdaysShort' => ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la']
+        'weekdaysShort' => ['su', 'ma', 'ti', 'ke', 'to', 'pe', 'la'],
     ],
     'colorpicker' => [
         'choose' => 'Ok',
     ],
     'filter' => [
         'group' => [
-            'all' => 'kaikki'
+            'all' => 'kaikki',
         ],
         'scopes' => [
             'apply_button_text' => 'Ota käyttöön',
-            'clear_button_text'  => 'Tyhjennä'
+            'clear_button_text'  => 'Tyhjennä',
         ],
         'dates' => [
             'all' => 'kaikki',
@@ -72,15 +72,15 @@ return [
             'reset_button_text'  => 'Palauta',
             'date_placeholder' => 'Päivä',
             'after_placeholder' => 'Jälkeen',
-            'before_placeholder' => 'Ennen'
+            'before_placeholder' => 'Ennen',
         ],
         'numbers' => [
             'all' => 'kaikki',
             'filter_button_text' => 'Suodata',
             'reset_button_text'  => 'Palauta',
             'min_placeholder' => 'Väh.',
-            'max_placeholder' => 'Enint.'
-        ]
+            'max_placeholder' => 'Enint.',
+        ],
     ],
     'eventlog' => [
         'show_stacktrace' => 'Näytä stacktrace',
@@ -95,7 +95,7 @@ return [
             'openWith' => 'Avaa sovelluksessa',
             'remember_choice' => 'Muista valittu vaihtoehto istunnon ajan',
             'open' => 'Avaa',
-            'cancel' => 'Peruuta'
-        ]
-    ]
+            'cancel' => 'Peruuta',
+        ],
+    ],
 ];

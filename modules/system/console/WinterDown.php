@@ -2,8 +2,8 @@
 
 namespace System\Console;
 
-use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to tear down the database.

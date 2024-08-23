@@ -10,45 +10,45 @@ return [
         'invalid_file_extension' => 'Ekstensi berkas: :invalid tidak valid. Ekstensi yang diperbolehkan: :allowed.',
         'error_deleting' => "Galat menghapus berkas acuan ':name'. Silakan periksa izin tulis.",
         'delete_success' => 'Acuan: :count berhasil dihapus.',
-        'file_name_required' => 'Bidang nama berkas diperlukan.'
+        'file_name_required' => 'Bidang nama berkas diperlukan.',
     ],
     'dashboard' => [
         'active_theme' => [
             'online' => 'daring',
             'maintenance' => 'dalam perawatan',
-        ]
+        ],
     ],
     'theme' => [
         'active' => [
             'not_set' => 'Tema aktif tidak diatur.',
-            'not_found' => 'Tema aktif tidak ditemukan.'
+            'not_found' => 'Tema aktif tidak ditemukan.',
         ],
         'edit' => [
             'not_set' => 'Tema tersunting tidak diatur.',
             'not_found' => 'Tema tersunting tidak ditemukan.',
-            'not_match' => "Objek yang Anda coba akses tidak dimiliki oleh tema yang akan disunting. Silakan muat ulang laman."
+            'not_match' => "Objek yang Anda coba akses tidak dimiliki oleh tema yang akan disunting. Silakan muat ulang laman.",
         ],
         'settings_menu' => 'Tema front-end',
         'settings_menu_description' => 'Tinjau senarai tema terpasang dan pilih tema aktif.',
         'find_more_themes' => 'Temukan lebih banyak tema pada Toko Tema Winter CMS.',
         'activate_button' => 'Aktifkan',
         'active_button' => 'Aktif',
-        'customize_button' => 'Ubah suai'
+        'customize_button' => 'Ubah suai',
     ],
     'maintenance' => [
         'settings_menu' => 'Mode perbaikan',
         'settings_menu_description' => 'Penyusunan laman mode perbaikan dan tukar pengaturan.',
         'is_enabled' => 'Berdayakan mode perbaikan',
-        'is_enabled_comment' => 'Bila diaktifkan, pengunjung website akan melihat laman terpilih berikut.'
+        'is_enabled_comment' => 'Bila diaktifkan, pengunjung website akan melihat laman terpilih berikut.',
     ],
     'page' => [
         'not_found' => [
             'label' => 'Laman tidak ditemukan',
-            'help' => 'Laman yang diminta tidak dapat ditemukan.'
+            'help' => 'Laman yang diminta tidak dapat ditemukan.',
         ],
         'custom_error' => [
             'label' => 'Lamat galat',
-            'help' => "Mohon maaf, ada sesuatu yang salah dan laman tidak dapat ditampilkan."
+            'help' => "Mohon maaf, ada sesuatu yang salah dan laman tidak dapat ditampilkan.",
         ],
         'menu_label' => 'Laman',
         'unsaved_label' => 'Laman tak tersimpan',
@@ -57,7 +57,7 @@ return [
         'invalid_url' => 'Format URL tidak valid. URL harus diawali dengan garis miring terbalik dan memuat huruf latin, angka dan simbol-simbol ini: ._-[]:?|/+*^$',
         'delete_confirm_multiple' => 'Anda yakin akan menghapus laman terpilih?',
         'delete_confirm_single' => 'Anda yakin akan menghapus laman ini?',
-        'no_layout' => '-- tanpa tata letak --'
+        'no_layout' => '-- tanpa tata letak --',
     ],
     'layout' => [
         'not_found' => "Tata letak ':name' tidak ditemukan",
@@ -66,7 +66,7 @@ return [
         'no_list_records' => 'Tidak ada tata letak ditemukan',
         'new' => 'Tata letak baru',
         'delete_confirm_multiple' => 'Anda yakin akan menghapus tata letak terpilih?',
-        'delete_confirm_single' => 'Anda yakin akan menghapus tata letak ini?'
+        'delete_confirm_single' => 'Anda yakin akan menghapus tata letak ini?',
     ],
     'partial' => [
         'invalid_name' => 'Nama bagian: :name tidak valid.',
@@ -76,7 +76,7 @@ return [
         'no_list_records' => 'Tidak ada bagian ditemukan',
         'delete_confirm_multiple' => 'Anda yakin akan menghapus bagian terpilih?',
         'delete_confirm_single' => 'Anda yakin akan menghapus bagian ini?',
-        'new' => 'Bagian baru'
+        'new' => 'Bagian baru',
     ],
     'content' => [
         'not_found' => "Berkas muatan ':name' tidak ditemukan.",
@@ -85,18 +85,18 @@ return [
         'no_list_records' => 'Tidak ada muatan ditemukan',
         'delete_confirm_multiple' => 'Anda yakin akan menghapus berkas atau direktori muatan terpilih?',
         'delete_confirm_single' => 'Anda yakin akan menghapus berkas muatan ini?',
-        'new' => 'Berkas muatan baru'
+        'new' => 'Berkas muatan baru',
     ],
     'ajax_handler' => [
         'invalid_name' => 'Nama AJAX handler: :name tidak valid.',
-        'not_found' => "AJAX handler ':name' tidak ditemukan."
+        'not_found' => "AJAX handler ':name' tidak ditemukan.",
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => 'Tambah',
-        'search' => 'Pencarian...'
+        'search' => 'Pencarian...',
     ],
     'editor' => [
         'settings' => 'Pengaturan',
@@ -116,7 +116,7 @@ return [
         'hidden' => 'Tersembunyi',
         'hidden_comment' => 'Laman tersembunyi hanya dapat diakses oleh pengguna back-end yang telah catat masuk.',
         'enter_fullscreen' => 'Masuk mode layar penuh',
-        'exit_fullscreen' => 'Keluar mode layar penuh'
+        'exit_fullscreen' => 'Keluar mode layar penuh',
     ],
     'asset' => [
         'menu_label' => 'Aset',
@@ -154,7 +154,7 @@ return [
         'error_moving_file' => 'Galat memindahkan berkas :file',
         'error_moving_directory' => 'Galat memindahkan direktori :dir',
         'error_deleting_directory' => 'Galat menghapus direktori asal :dir',
-        'path' => 'Jalur'
+        'path' => 'Jalur',
     ],
     'component' => [
         'menu_label' => 'Komponen',
@@ -166,12 +166,12 @@ return [
         'invalid_request' => 'Acuan tidak dapat disimpan dikarenakan data komponen tidak valid.',
         'no_records' => 'Tidak ada komponen ditemukan',
         'not_found' => "Komponen ':name' tidak ditemukan.",
-        'method_not_found' => "Komponen ':name' tidak berisi metode ':method'."
+        'method_not_found' => "Komponen ':name' tidak berisi metode ':method'.",
     ],
     'template' => [
         'invalid_type' => 'Jenis acuan tidak diketahui.',
         'not_found' => 'Acuan yang diminta tidak ditemukan.',
-        'saved' => 'Acuan berhasil disimpan.'
+        'saved' => 'Acuan berhasil disimpan.',
     ],
     'permissions' => [
         'name' => 'Cms',
@@ -180,6 +180,6 @@ return [
         'manage_pages' => 'Kelola laman',
         'manage_layouts' => 'Kelola tata letak',
         'manage_partials' => 'Kelola bagian',
-        'manage_themes' => 'Kelola tema'
-    ]
+        'manage_themes' => 'Kelola tema',
+    ],
 ];

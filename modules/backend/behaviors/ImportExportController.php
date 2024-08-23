@@ -2,22 +2,22 @@
 
 namespace Backend\Behaviors;
 
-use Str;
-use Lang;
-use View;
-use Response;
-use Backend;
-use BackendAuth;
-use Backend\Classes\ControllerBehavior;
 use Backend\Behaviors\ImportExportController\TranscodeFilter;
-use Illuminate\Database\Eloquent\MassAssignmentException;
-use League\Csv\Reader as CsvReader;
-use League\Csv\Writer as CsvWriter;
-use League\Csv\EscapeFormula as CsvEscapeFormula;
-use League\Csv\Statement as CsvStatement;
-use ApplicationException;
-use SplTempFileObject;
+use Backend\Classes\ControllerBehavior;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
 use Exception;
+use Illuminate\Database\Eloquent\MassAssignmentException;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
+use League\Csv\EscapeFormula as CsvEscapeFormula;
+use League\Csv\Reader as CsvReader;
+use League\Csv\Statement as CsvStatement;
+use League\Csv\Writer as CsvWriter;
+use SplTempFileObject;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Str;
 
 /**
  * Adds features for importing and exporting data.
@@ -420,7 +420,7 @@ class ImportExportController extends ControllerBehavior
 
             if (!$found) {
                 throw new ApplicationException(Lang::get('backend::lang.import_export.required_match_column_error', [
-                    'label' => Lang::get($label)
+                    'label' => Lang::get($label),
                 ]));
             }
         }
@@ -736,7 +736,7 @@ class ImportExportController extends ControllerBehavior
         $modelClass = $this->getConfig($type . '[modelClass]');
         if (!$modelClass) {
             throw new ApplicationException(Lang::get('backend::lang.import_export.missing_model_class_error', [
-                'type' => $type
+                'type' => $type,
             ]));
         }
 

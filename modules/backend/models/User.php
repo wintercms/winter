@@ -2,11 +2,11 @@
 
 namespace Backend\Models;
 
-use Mail;
-use Event;
-use Backend;
-use BackendAuth;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
 use Winter\Storm\Auth\Models\User as UserBase;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Mail;
 
 /**
  * Administrator user model
@@ -30,7 +30,7 @@ class User extends UserBase
         'email' => 'required|between:6,255|email|unique:backend_users',
         'login' => 'required|between:2,255|unique:backend_users',
         'password' => 'required:create|min:4|confirmed',
-        'password_confirmation' => 'required_with:password|min:4'
+        'password_confirmation' => 'required_with:password|min:4',
     ];
 
     /**
@@ -48,15 +48,15 @@ class User extends UserBase
      * Relations
      */
     public $belongsToMany = [
-        'groups' => [UserGroup::class, 'table' => 'backend_users_groups', 'softDelete' => true]
+        'groups' => [UserGroup::class, 'table' => 'backend_users_groups', 'softDelete' => true],
     ];
 
     public $belongsTo = [
-        'role' => UserRole::class
+        'role' => UserRole::class,
     ];
 
     public $attachOne = [
-        'avatar' => \System\Models\File::class
+        'avatar' => \System\Models\File::class,
     ];
 
     /**

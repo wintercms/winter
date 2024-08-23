@@ -2,31 +2,30 @@
 
 namespace System\Classes;
 
-use App;
-use Url;
-use File;
-use Lang;
-use Event;
-use Cache;
-use Route;
-use Config;
-use Request;
-use Response;
-use Assetic\Asset\FileAsset;
 use Assetic\Asset\AssetCache;
 use Assetic\Asset\AssetCollection;
+use Assetic\Asset\FileAsset;
 use Assetic\Factory\AssetFactory;
 use Assetic\Filter\CssImportFilter;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\JavaScriptMinifierFilter;
 use Assetic\Filter\StylesheetMinifyFilter;
+use DateTime;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
+use System\Helpers\Cache as CacheHelper;
 use Winter\Storm\Parse\Assetic\Cache\FilesystemCache;
+use Winter\Storm\Parse\Assetic\Filter\JavascriptImporter;
 use Winter\Storm\Parse\Assetic\Filter\LessCompiler;
 use Winter\Storm\Parse\Assetic\Filter\ScssCompiler;
-use Winter\Storm\Parse\Assetic\Filter\JavascriptImporter;
-use System\Helpers\Cache as CacheHelper;
-use ApplicationException;
-use DateTime;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Combiner class used for combining JavaScript and StyleSheet files.
@@ -411,7 +410,7 @@ class CombineAssets
                 'lastMod'   => $lastMod,
                 'files'     => $assets,
                 'path'      => $this->localPath,
-                'extension' => $extension
+                'extension' => $extension,
             ];
 
             $this->putCache($cacheKey, $cacheInfo);

@@ -2,16 +2,16 @@
 
 namespace Backend\Models;
 
-use App;
-use Backend;
-use Url;
-use File;
-use Lang;
-use Model;
-use Cache;
-use Config;
-use Less_Parser;
+use Backend\Facades\Backend;
 use Exception;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\URL;
+use Less_Parser;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Brand settings that affect all users
@@ -29,7 +29,7 @@ class BrandSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**
@@ -44,7 +44,7 @@ class BrandSetting extends Model
 
     public $attachOne = [
         'favicon' => \System\Models\File::class,
-        'logo' => \System\Models\File::class
+        'logo' => \System\Models\File::class,
     ];
 
     /**

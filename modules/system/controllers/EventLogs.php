@@ -2,13 +2,13 @@
 
 namespace System\Controllers;
 
-use App;
-use Lang;
-use Flash;
-use BackendMenu;
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
 use System\Classes\SettingsManager;
 use System\Models\EventLog;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Event Logs controller

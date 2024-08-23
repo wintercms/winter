@@ -2,17 +2,17 @@
 
 namespace System\Console;
 
-use Lang;
-use File;
-use Config;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use System\Classes\UpdateManager;
+use Symfony\Component\Console\Input\InputOption;
 use System\Classes\CombineAssets;
-use System\Models\Parameter;
+use System\Classes\UpdateManager;
 use System\Models\File as FileModel;
+use System\Models\Parameter;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Console command for other utility commands.

@@ -10,7 +10,7 @@ return [
         'invalid_file_extension' => 'Extensión de archivo inválida: :invalid. Las extensiones permitidas son: :allowed.',
         'error_deleting' => 'Error borrando el archivo template ":name". Por favor revisar los permisos de escritura.',
         'delete_success' => 'Los templates fueron borrados exitosamente: :count.',
-        'file_name_required' => 'Falta el nombre del campo del archivo.'
+        'file_name_required' => 'Falta el nombre del campo del archivo.',
     ],
     'theme' => [
         'active' => [
@@ -20,7 +20,7 @@ return [
         'edit' => [
             'not_set' => "El tema de edición no se ha establecido.",
             'not_found' => "El tema de edición no se encuentra.",
-            'not_match' => "El objeto que está intentando acceder no pertenece al tema que se está editando. Vuelve a cargar la página."
+            'not_match' => "El objeto que está intentando acceder no pertenece al tema que se está editando. Vuelve a cargar la página.",
         ],
         'settings_menu' => 'Plantilla',
         'settings_menu_description' => 'Vista previa de la lista de las plantillas instaladas.',
@@ -43,7 +43,7 @@ return [
         'invalid_url' => 'Formato de URL inválido. El URL debe comenzar con el símbolo de barra diagonal y puede contener dígitos, letras latinas y los siguientes símbolos: _-[]:?|/+*^$',
         'delete_confirm_multiple' => '¿Realmente quiere eliminar las páginas seleccionadas?',
         'delete_confirm_single' => '¿Realmente quieres eliminar esta página?',
-        'no_layout' => '-- ninguna disposición --'
+        'no_layout' => '-- ninguna disposición --',
     ],
     'layout' => [
         'not_found_name' => "El diseño ':name' no se encuentra",
@@ -51,7 +51,7 @@ return [
         'no_list_records' => 'No se ecnontraron diseños',
         'new' => 'Nuevo diseño',
         'delete_confirm_multiple' => 'Realmente quiere borrar los diseños seleccionados?',
-        'delete_confirm_single' => 'Realmente quiere borrar este diseño?'
+        'delete_confirm_single' => 'Realmente quiere borrar este diseño?',
     ],
     'partial' => [
         'not_found_name' => "El nombre parcial ':name' no se encuentra.",
@@ -60,7 +60,7 @@ return [
         'no_list_records' => 'No se encontraron parciales',
         'delete_confirm_multiple' => 'Realmente quiere borrar los parciales seleccionados?',
         'delete_confirm_single' => 'Realmente quiere borrar este parcial?',
-        'new' => 'Nuevo parcial'
+        'new' => 'Nuevo parcial',
     ],
     'content' => [
         'not_found_name' => "El contenido del archivo ':name' no se encuentra.",
@@ -68,18 +68,18 @@ return [
         'no_list_records' => 'No se encuentra el conteinod de los archivos',
         'delete_confirm_multiple' => 'Realmente desea borrar los contenidos seleccionados de los archivos o directorios?',
         'delete_confirm_single' => 'Realmente desea borrar el contenido de este archivo?',
-        'new' => 'Nuevo contenido de archivo'
+        'new' => 'Nuevo contenido de archivo',
     ],
     'ajax_handler' => [
         'invalid_name' => "Manejador de AJAX inválido: :name.",
         'not_found' => "El manejador de AJAX ':name' no se encuentra.",
     ],
     'cms' => [
-        'menu_label' => "Gestión"
+        'menu_label' => "Gestión",
     ],
     'sidebar' => [
         'add' => 'Agregar',
-        'search' => 'Buscar...'
+        'search' => 'Buscar...',
     ],
     'editor' => [
         'settings' => 'Configuración',
@@ -99,7 +99,7 @@ return [
         'hidden' => 'Oculto',
         'hidden_comment' => 'A las páginas ocultas solamente pueden acceder los usuarios del back-end que se encuentren logueados.',
         'enter_fullscreen' => 'Ingresar en el modo pantalla completa',
-        'exit_fullscreen' => 'Salir de pantalla completa'
+        'exit_fullscreen' => 'Salir de pantalla completa',
     ],
     'asset' => [
         'menu_label' => "Assets",
@@ -136,7 +136,7 @@ return [
         'error_moving_file' => 'Error moviendo archivo :file',
         'error_moving_directory' => 'Error moviendo el directorio :dir',
         'error_deleting_directory' => 'Error borrando el directorio original :dir',
-        'path' => 'Path'
+        'path' => 'Path',
     ],
     'component' => [
         'menu_label' => "Componentes",
@@ -153,7 +153,7 @@ return [
     'template' => [
         'invalid_type' => "Tipo de plantilla Desconocido.",
         'not_found' => "No se encontró la plantilla solicitada.",
-        'saved' => "La plantilla se ha guardado correctamente."
+        'saved' => "La plantilla se ha guardado correctamente.",
     ],
     'permissions' => [
         'manage_content' => 'Gestionar contenido',
@@ -161,6 +161,6 @@ return [
         'manage_pages' => 'Gestionar páginas',
         'manage_layouts' => 'Gestionar diseños',
         'manage_partials' => 'Gestionar parciales',
-        'manage_themes' => 'Gestionar plantilla'
-    ]
+        'manage_themes' => 'Gestionar plantilla',
+    ],
 ];

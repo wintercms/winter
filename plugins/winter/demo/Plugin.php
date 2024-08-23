@@ -16,14 +16,14 @@ class Plugin extends PluginBase
             'name'        => 'Winter Demo',
             'description' => 'Provides features used by the provided demonstration theme.',
             'author'      => 'Alexey Bobkov, Samuel Georges',
-            'icon'        => 'icon-leaf'
+            'icon'        => 'icon-leaf',
         ];
     }
 
     public function registerComponents()
     {
         return [
-            '\Winter\Demo\Components\Todo' => 'demoTodo'
+            '\Winter\Demo\Components\Todo' => 'demoTodo',
         ];
     }
 }

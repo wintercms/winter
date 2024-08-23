@@ -2,13 +2,13 @@
 
 namespace Cms\ReportWidgets;
 
-use Lang;
-use BackendAuth;
+use Backend\Classes\ReportWidgetBase;
+use Backend\Facades\BackendAuth;
 use Cms\Classes\Theme;
 use Cms\Models\MaintenanceSetting;
-use Backend\Classes\ReportWidgetBase;
-use ApplicationException;
 use Exception;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Active theme report widget.
@@ -46,7 +46,7 @@ class ActiveTheme extends ReportWidgetBase
                 'type'              => 'string',
                 'validationPattern' => '^.+$',
                 'validationMessage' => 'backend::lang.dashboard.widget_title_error',
-            ]
+            ],
         ];
     }
 

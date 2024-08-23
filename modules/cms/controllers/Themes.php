@@ -2,26 +2,26 @@
 
 namespace Cms\Controllers;
 
-use ApplicationException;
-use Artisan;
-use Backend;
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
 use Backend\Models\BrandSetting;
 use Backend\Widgets\Form;
-use BackendMenu;
 use Cms\Classes\Theme as CmsTheme;
 use Cms\Classes\ThemeManager;
 use Cms\Helpers\Cms as CmsHelper;
 use Cms\Models\ThemeExport;
 use Cms\Models\ThemeImport;
 use Exception;
-use File;
-use Flash;
-use Lang;
-use Redirect;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 use System\Classes\SettingsManager;
-use Url;
-use ValidationException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\ValidationException;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Flash;
 use Winter\Storm\Support\Str;
 
 /**
@@ -81,7 +81,7 @@ class Themes extends Controller
         CmsTheme::setActiveTheme(post('theme'));
 
         return [
-            '#theme-list' => $this->makePartial('theme_list')
+            '#theme-list' => $this->makePartial('theme_list'),
         ];
     }
 
@@ -173,7 +173,7 @@ class Themes extends Controller
                 try {
                     Artisan::call('create:theme', [
                         'theme' => $newDirName,
-                        'scaffold' => $data['scaffold']
+                        'scaffold' => $data['scaffold'],
                     ]);
                 } catch (\Exception $ex) {
                     throw new ApplicationException($ex->getMessage());

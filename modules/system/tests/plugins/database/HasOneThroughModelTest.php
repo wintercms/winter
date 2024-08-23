@@ -2,11 +2,11 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Database\Tester\Models\Author;
 use Database\Tester\Models\Phone;
 use Database\Tester\Models\User;
-use Model;
+use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Database\Model;
 
 class HasOneThroughModelTest extends PluginTestCase
 {
@@ -35,7 +35,7 @@ class HasOneThroughModelTest extends PluginTestCase
         $author->save();
 
         $user = User::with([
-            'phone'
+            'phone',
         ])->find($user->id);
 
         $this->assertEquals($phone->id, $user->phone->id);

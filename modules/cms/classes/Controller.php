@@ -2,13 +2,22 @@
 
 namespace Cms\Classes;
 
-use Exception;
 use Backend\Facades\BackendAuth;
 use Cms\Facades\Cms;
 use Cms\Models\MaintenanceSetting;
-use System\Models\RequestLog;
-use System\Helpers\View as ViewHelper;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\View;
 use System\Classes\CombineAssets;
+use System\Helpers\View as ViewHelper;
+use System\Models\RequestLog;
 use Twig\Environment as TwigEnvironment;
 use Winter\Storm\Exception\AjaxException;
 use Winter\Storm\Exception\SystemException;
@@ -18,15 +27,6 @@ use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Flash;
 use Winter\Storm\Support\Facades\Url;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\View;
 
 /**
  * The CMS controller class.
@@ -1357,7 +1357,7 @@ class Controller
         if (!($assets = Cache::get($cacheKey))) {
             $assets = [];
             $sources = [
-                $themesPath . '/' . $themeDir
+                $themesPath . '/' . $themeDir,
             ];
 
             if ($parentTheme) {

@@ -2,9 +2,9 @@
 
 namespace System\Classes;
 
-use Lang;
-use ApplicationException;
+use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Database\ModelBehavior as ModelBehaviorBase;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Base class for model behaviors.
@@ -35,7 +35,7 @@ class ModelBehavior extends ModelBehaviorBase
                 throw new ApplicationException(Lang::get('system::lang.behavior.missing_property', [
                     'class' => get_class($model),
                     'property' => $property,
-                    'behavior' => get_called_class()
+                    'behavior' => get_called_class(),
                 ]));
             }
         }

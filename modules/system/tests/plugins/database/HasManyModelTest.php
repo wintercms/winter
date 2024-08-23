@@ -2,11 +2,11 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Database\Tester\Models\Author;
 use Database\Tester\Models\Post;
+use System\Tests\Bootstrap\PluginTestCase;
 use Winter\Storm\Database\Collection;
-use Model;
+use Winter\Storm\Database\Model;
 
 class HasManyModelTest extends PluginTestCase
 {
@@ -37,7 +37,7 @@ class HasManyModelTest extends PluginTestCase
         $this->assertEquals($author->id, $post2->author_id);
         $this->assertEquals([
             'First post',
-            'Second post'
+            'Second post',
         ], $author->posts->lists('title'));
 
         // Set by primary key
@@ -47,7 +47,7 @@ class HasManyModelTest extends PluginTestCase
         $post3 = Post::find($postId);
         $this->assertEquals($author->id, $post3->author_id);
         $this->assertEquals([
-            'Third post'
+            'Third post',
         ], $author->posts->lists('title'));
 
         // Nullify
@@ -61,7 +61,7 @@ class HasManyModelTest extends PluginTestCase
         $author->posts = $post4;
         $this->assertEquals($author->id, $post4->author_id);
         $this->assertEquals([
-            'Fourth post'
+            'Fourth post',
         ], $author->posts->lists('title'));
     }
 
@@ -101,7 +101,7 @@ class HasManyModelTest extends PluginTestCase
         $this->assertEquals(1, $author->posts()->count());
         $this->assertEquals($author->id, $post->author_id);
         $this->assertEquals([
-            'First post'
+            'First post',
         ], $author->posts->lists('title'));
 
         // New session
@@ -113,7 +113,7 @@ class HasManyModelTest extends PluginTestCase
         $this->assertEquals(0, $author->posts()->withDeferred($sessionKey)->count());
         $this->assertEquals($author->id, $post->author_id);
         $this->assertEquals([
-            'First post'
+            'First post',
         ], $author->posts->lists('title'));
 
         // Commit deferred

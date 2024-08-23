@@ -2,9 +2,9 @@
 
 namespace System\Models;
 
-use Lang;
-use Model;
+use Illuminate\Support\Facades\Lang;
 use System\Classes\PluginManager;
+use Winter\Storm\Database\Model;
 
 /**
  * Stores information about current plugin versions.

@@ -2,10 +2,10 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
-use System\Models\File as FileModel;
 use Database\Tester\Models\User;
-use Model;
+use System\Models\File as FileModel;
+use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Database\Model;
 
 class AttachManyModelTest extends PluginTestCase
 {

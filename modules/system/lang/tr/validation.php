@@ -54,7 +54,7 @@ return [
         'numeric'   => ':attribute, :value değerinden büyük veya ona eşit olmalıdır.',
         'file'      => ':attribute, :value kilobayttan büyük veya ona eşit olmalıdır.',
         'string'    => ':attribute, :value karakterden büyük veya ona eşit olmalıdır.',
-        'array'     => ':attribute, :value öğeden veya daha fazlasına sahip olmalıdır.'
+        'array'     => ':attribute, :value öğeden veya daha fazlasına sahip olmalıdır.',
     ],
     'image'             => ':attribute alanı resim dosyası olmalıdır.',
     'in'                => ':attribute değeri geçersiz.',

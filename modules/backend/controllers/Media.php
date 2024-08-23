@@ -2,8 +2,8 @@
 
 namespace Backend\Controllers;
 
-use BackendMenu;
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
 use Backend\Widgets\MediaManager;
 
 /**

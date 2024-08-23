@@ -2,14 +2,14 @@
 
 namespace Backend\Models;
 
-use File;
-use Lang;
-use Model;
-use Response;
-use League\Csv\Writer as CsvWriter;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Response;
 use League\Csv\EscapeFormula as CsvEscapeFormula;
-use ApplicationException;
+use League\Csv\Writer as CsvWriter;
 use SplTempFileObject;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Model used for exporting data
@@ -89,7 +89,7 @@ abstract class ExportModel extends Model
             'fileName' => 'export.csv',
             'delimiter' => null,
             'enclosure' => null,
-            'escape' => null
+            'escape' => null,
         ];
 
         $options = array_merge($defaultOptions, $options);

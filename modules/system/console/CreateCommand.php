@@ -3,7 +3,6 @@
 namespace System\Console;
 
 use InvalidArgumentException;
-use System\Console\BaseScaffoldCommand;
 
 class CreateCommand extends BaseScaffoldCommand
 {

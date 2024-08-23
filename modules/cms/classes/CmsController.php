@@ -2,9 +2,8 @@
 
 namespace Cms\Classes;
 
-use App;
-use Closure;
 use Illuminate\Routing\Controller as ControllerBase;
+use Illuminate\Support\Facades\App;
 
 /**
  * This is the master controller for all front-end pages.

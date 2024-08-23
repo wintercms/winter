@@ -2,8 +2,8 @@
 
 namespace Cms\Classes;
 
-use File;
-use Markdown;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Markdown;
 
 /**
  * The CMS content file class.

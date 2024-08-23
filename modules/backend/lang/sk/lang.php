@@ -3,7 +3,7 @@
 return [
     'auth' => [
         'title' => 'Administrácia',
-        'invalid_login' => 'Údaje, ktoré ste zadali sú nesprávne. Prosím skontrolujte údaje a skúste to znova.'
+        'invalid_login' => 'Údaje, ktoré ste zadali sú nesprávne. Prosím skontrolujte údaje a skúste to znova.',
     ],
     'field' => [
         'invalid_type' => 'Bol použitý zlý typ :type.',
@@ -14,7 +14,7 @@ return [
     ],
     'widget' => [
         'not_registered' => "Trieda widget s menom ':name' nie je registrovaná",
-        'not_bound' => "Widget s názvom triedy ':name' nie je naviazaný na controller"
+        'not_bound' => "Widget s názvom triedy ':name' nie je naviazaný na controller",
     ],
     'page' => [
         'untitled' => 'Bez názvu',
@@ -26,12 +26,12 @@ return [
         'access_denied' => [
             'label' => 'Prístup bol odmietnutý',
             'help' => "Nemáte potrebné oprávnenia na zobrazenie tejto stránky.",
-            'cms_link' => 'Späť do administrácie'
+            'cms_link' => 'Späť do administrácie',
         ],
         'no_database' => [
             'label' => 'Chýba databáza',
             'help' => "Pre prístup do administrácie je potrebná databáza. Zkontrolujte, či je databáza nakonfigurovaná, migrovaná a skúste to znova.",
-            'cms_link' => 'Späť na úvodnú stránku'
+            'cms_link' => 'Späť na úvodnú stránku',
         ],
     ],
     'partial' => [
@@ -127,7 +127,7 @@ return [
             'last_sign_in' => 'Vaše posledné prihlásenie bolo',
             'view_access_logs' => 'Zobraziť záznam prihlásení',
             'nice_message' => 'Pekný deň!',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Administrátor',
@@ -178,7 +178,7 @@ return [
             'new' => 'Nová skupina',
             'delete_confirm' => 'Skutočne zmazať túto skupinu administrátorov?',
             'return' => 'Späť na zoznam skupín',
-            'users_count' => 'Užívateľov'
+            'users_count' => 'Užívateľov',
         ],
         'role' => [
             'name' => 'Rola',
@@ -192,10 +192,10 @@ return [
             'new' => 'Nová rola',
             'delete_confirm' => 'Skutočne znazať túto rolu?',
             'return' => 'Späť na zoznam rolí',
-            'users_count' => 'Užívatelia'
+            'users_count' => 'Užívatelia',
         ],
         'preferences' => [
-            'not_authenticated' => 'Nebol nájdený žiadny prihlásený užívateľ pre načítanie alebo uloženie nastavení.'
+            'not_authenticated' => 'Nebol nájdený žiadny prihlásený užívateľ pre načítanie alebo uloženie nastavení.',
         ],
         'trashed_hint_title' => 'Konto bolo vymazané',
         'trashed_hint_desc' => 'Tento účet bol odstránený a nebude možné sa pod neho prihlásiť. Ak ho chcete obnoviť, kliknite na ikonu obnovenia používateľa vpravo dole',
@@ -229,7 +229,7 @@ return [
         'delete_selected_confirm' => 'Skutočne chcete zmazať vybrané záznamy?',
         'delete_selected_success' => 'Vybrané záznamy boli zmazané.',
         'column_switch_true' => 'Áno',
-        'column_switch_false' => 'Nie'
+        'column_switch_false' => 'Nie',
     ],
     'fileupload' => [
         'attachment' => 'Príloha',
@@ -241,7 +241,7 @@ return [
         'upload_file' => 'Nahrať súbor',
         'upload_error' => 'Chyba nahrávanie',
         'remove_confirm' => 'Ste si istý?',
-        'remove_file' => 'Odstrániť súbor'
+        'remove_file' => 'Odstrániť súbor',
     ],
     'repeater' => [
         'add_new_item' => 'Pridať novú položku',
@@ -307,7 +307,7 @@ return [
         'delete_row' => 'Zmazať riadok',
         'concurrency_file_changed_title' => 'Súbor bol zmenený',
         'concurrency_file_changed_description' => "Súbor, ktorý upravujete bol na disku zmenený iným užívateľom. Môžete buď znovu načítať súbor a stratiť zmeny alebo prepísať súbor na disku.",
-        'return_to_list' => 'Spať na zoznam'
+        'return_to_list' => 'Spať na zoznam',
     ],
     'recordfinder' => [
         'find_record' => 'Nájsť záznam',
@@ -316,7 +316,7 @@ return [
     ],
     'pagelist' => [
         'page_link' => 'Odkaz na stránku',
-        'select_page' => 'Vyberte stránku...'
+        'select_page' => 'Vyberte stránku...',
     ],
     'relation' => [
         'missing_config' => "Správanie relácie nemá žiadne nastavenie pre ':config'.",
@@ -350,11 +350,11 @@ return [
         'link_name' => 'Väzba :name',
         'unlink' => 'Zrušiť väzbu',
         'unlink_name' => 'Zrušiť väzbu :name',
-        'unlink_confirm' => 'Ste si istý?'
+        'unlink_confirm' => 'Ste si istý?',
     ],
     'reorder' => [
         'default_title' => 'Zoradiť záznamy',
-        'no_records' => 'Nenašli sa žiadne záznamy na zoradenie.'
+        'no_records' => 'Nenašli sa žiadne záznamy na zoradenie.',
     ],
     'model' => [
         'name' => 'Model',
@@ -363,7 +363,7 @@ return [
         'missing_relation' => "Model ':class' neobsahuje definíciu pre ':relation'.",
         'missing_method' => "Model ':class' nemá implementovanú metódu ':method'.",
         'invalid_class' => "Model :model použitý v :class nie je platný, musí dediť triedu \Model.",
-        'mass_assignment_failed' => "Hromadné priradenie zlyhalo pre atribút ':attribute'."
+        'mass_assignment_failed' => "Hromadné priradenie zlyhalo pre atribút ':attribute'.",
     ],
     'warnings' => [
         'tips' => 'Tipy pre konfiguráciu systému',
@@ -439,16 +439,16 @@ return [
         'paragraph_formats_comment' => 'Možnosti, ktoré sa zobrazia v rozbaľovacej ponuke Formát odseku.',
     ],
     'tooltips' => [
-        'preview_website' => 'Náhľad stránok'
+        'preview_website' => 'Náhľad stránok',
     ],
     'mysettings' => [
         'menu_label' => 'Moje nastavenia',
-        'menu_description' => 'Nastavenia vášho administrátorského účtu'
+        'menu_description' => 'Nastavenia vášho administrátorského účtu',
     ],
     'myaccount' => [
         'menu_label' => 'Môj účet',
         'menu_description' => 'Nastavte si detaily svojho účtu ako meno, e-mail a heslo.',
-        'menu_keywords' => 'bezpečnosť login'
+        'menu_keywords' => 'bezpečnosť login',
     ],
     'branding' => [
         'menu_label' => 'Nastavenia administrácie',
@@ -478,7 +478,7 @@ return [
         'menu_mode_inline' => 'V riadku',
         'menu_mode_inline_no_icons' => 'V riadku (žiadne ikony)',
         'menu_mode_tile' => 'Dlaždice',
-        'menu_mode_collapsed' => 'Zbalené'
+        'menu_mode_collapsed' => 'Zbalené',
     ],
     'backend_preferences' => [
         'menu_label' => 'Nastavenia administrácie',
@@ -488,7 +488,7 @@ return [
         'timezone' => 'Časové pásmo',
         'timezone_comment' => 'Upraví zobrazenie času podľa tejto časovej zóny.',
         'locale' => 'Jazyk',
-        'locale_comment' => 'Vyberte jazyk administrácie.'
+        'locale_comment' => 'Vyberte jazyk administrácie.',
     ],
     'access_log' => [
         'hint' => 'Tento záznam zobrazuje zoznam úspešných administrátorských prihlásení. Záznamy sú uchovávané po dobu :days dní.',
@@ -501,7 +501,7 @@ return [
         'ip_address' => 'IP adresa',
         'first_name' => 'Meno',
         'last_name' => 'Priezvisko',
-        'email' => 'E-mail'
+        'email' => 'E-mail',
     ],
     'filter' => [
         'all' => 'všetko',
@@ -580,8 +580,8 @@ return [
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1250' => 'Windows-1250 (CP1250, Central and Eastern European)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
         'manage_media' => 'Nahrávanie a správa mediálneho obsahu - obrázkov, videí, zvukov, dokumentov',

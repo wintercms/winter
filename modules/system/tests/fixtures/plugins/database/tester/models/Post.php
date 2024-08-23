@@ -2,7 +2,7 @@
 
 namespace Database\Tester\Models;
 
-use Model;
+use Winter\Storm\Database\Model;
 
 class Post extends Model
 {
@@ -32,8 +32,8 @@ class Post extends Model
         'categories' => [
             'Database\Tester\Models\Category',
             'table' => 'database_tester_categories_posts',
-            'pivot' => ['category_name', 'post_name']
-        ]
+            'pivot' => ['category_name', 'post_name'],
+        ],
     ];
 
     public $morphMany = [
@@ -49,7 +49,7 @@ class Post extends Model
             'Database\Tester\Models\Tag',
             'name'  => 'taggable',
             'table' => 'database_tester_taggables',
-            'pivot' => ['added_by']
+            'pivot' => ['added_by'],
         ],
     ];
 }
@@ -85,7 +85,7 @@ class SluggablePost extends Post
      */
     protected $slugs = [
         'slug' => 'title',
-        'long_slug' => ['title', 'description']
+        'long_slug' => ['title', 'description'],
     ];
 }
 
@@ -113,7 +113,7 @@ class RevisionablePost extends Post
         'description',
         'is_published',
         'published_at',
-        'deleted_at'
+        'deleted_at',
     ];
 
     /**
@@ -125,7 +125,7 @@ class RevisionablePost extends Post
      * @var array Relations
      */
     public $morphMany = [
-        'revision_history' => ['System\Models\Revision', 'name' => 'revisionable']
+        'revision_history' => ['System\Models\Revision', 'name' => 'revisionable'],
     ];
 
     /**

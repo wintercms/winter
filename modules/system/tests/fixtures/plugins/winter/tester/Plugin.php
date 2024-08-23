@@ -11,7 +11,7 @@ class Plugin extends PluginBase
         return [
             'name' => 'Winter Test Plugin',
             'description' => 'Test plugin used by unit tests.',
-            'author' => 'Alexey Bobkov, Samuel Georges'
+            'author' => 'Alexey Bobkov, Samuel Georges',
         ];
     }
 
@@ -31,8 +31,8 @@ class Plugin extends PluginBase
         return [
             'Winter\Tester\FormWidgets\Preview' => [
                 'label' => 'Preview',
-                'code'  => 'preview'
-            ]
+                'code'  => 'preview',
+            ],
         ];
     }
 
@@ -51,16 +51,16 @@ class Plugin extends PluginBase
                         'label'       => 'Posts',
                         'icon'        => 'icon-copy',
                         'url'         => 'http://example.com/blog/posts',
-                        'permissions' => ['winter.blog.access_posts']
+                        'permissions' => ['winter.blog.access_posts'],
                     ],
                     'categories' => [
                         'label'       => 'Categories',
                         'icon'        => 'icon-list-ul',
                         'url'         => 'http://example.com/blog/categories',
-                        'permissions' => ['winter.blog.access_categories']
+                        'permissions' => ['winter.blog.access_categories'],
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 

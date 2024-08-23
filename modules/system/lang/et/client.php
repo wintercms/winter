@@ -47,18 +47,18 @@ return [
     'alert' => [
         'confirm_button_text' => 'OK',
         'cancel_button_text' => 'Loobu',
-        'widget_remove_confirm' => 'Eemalda see widget?'
+        'widget_remove_confirm' => 'Eemalda see widget?',
     ],
     'datepicker' => [
         'previousMonth' => 'Eelmine kuu',
         'nextMonth' => 'Järgmine kuu',
         'months' => ['Jaanuar', 'Veebruar', 'Märts', 'Aprill', 'Mai', 'Juuni', 'Juuli', 'August', 'September', 'Oktoober', 'November', 'Detsember'],
         'weekdays' => ['Pühapäev', 'Esmaspäev', 'Teisipäev', 'Kolmapäev', 'Neljapäev', 'Reede', 'Laupäev'],
-        'weekdaysShort' => ['P', 'E', 'T', 'K', 'N', 'R', 'L']
+        'weekdaysShort' => ['P', 'E', 'T', 'K', 'N', 'R', 'L'],
     ],
     'filter' => [
         'group' => [
-            'all' => 'kõik'
+            'all' => 'kõik',
         ],
         'dates' => [
             'all' => 'kõik',
@@ -66,8 +66,8 @@ return [
             'reset_button_text'  => 'Lähtesta',
             'date_placeholder' => 'Kuupäev',
             'after_placeholder' => 'Hiljem kui',
-            'before_placeholder' => 'Varem kui'
-        ]
+            'before_placeholder' => 'Varem kui',
+        ],
     ],
     'eventlog' => [
         'show_stacktrace' => 'Näita stacktrace',
@@ -82,7 +82,7 @@ return [
             'openWith' => 'Ava programmiga',
             'remember_choice' => 'Jäta valik selleks sessiooniks meelde',
             'open' => 'Ava',
-            'cancel' => 'Loobu'
-        ]
-    ]
+            'cancel' => 'Loobu',
+        ],
+    ],
 ];

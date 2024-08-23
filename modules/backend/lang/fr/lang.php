@@ -3,18 +3,18 @@
 return [
     'auth' => [
         'title' => 'Zone d\'administration',
-        'invalid_login' => 'L\'utilisateur saisi ne correspond à aucun utilisateur enregistré. Merci de vérifier votre saisie et de réessayer.'
+        'invalid_login' => 'L\'utilisateur saisi ne correspond à aucun utilisateur enregistré. Merci de vérifier votre saisie et de réessayer.',
     ],
     'field' => [
         'invalid_type' => 'Type de champ invalide :type.',
         'options_method_invalid_model' => "L\'attribut ':field' ne correspond à aucun modèle valide. Essayez de spécifier explicitement la méthode d\'options pour la classe du modèle ':model'.",
         'options_method_not_exists' => 'La classe du modèle :model doit définir une méthode :method() renvoyant des options pour le champ ":field" du formulaire.',
         'options_static_method_invalid_value' => "La méthode statique ':method()' de :class ne renvoie pas un tableau d'options valide.",
-        'colors_method_not_exists' => "La classe du modèle :model doit définir une méthode :method() renvoyant le code html en hexadécimal de la couleur du champ ':field' du formulaire."
+        'colors_method_not_exists' => "La classe du modèle :model doit définir une méthode :method() renvoyant le code html en hexadécimal de la couleur du champ ':field' du formulaire.",
     ],
     'widget' => [
         'not_registered' => 'Aucun widget au nom de classe ":name" n\'a été enregistré',
-        'not_bound' => 'Un widget au nom de classe ":name" n\'a pas été lié au contrôleur'
+        'not_bound' => 'Un widget au nom de classe ":name" n\'a pas été lié au contrôleur',
     ],
     'page' => [
         'untitled' => 'Sans titre',
@@ -26,12 +26,12 @@ return [
         'access_denied' => [
             'label' => 'Accès refusé',
             'help' => 'Vous n\'êtes pas autorisé à consulter cette page.',
-            'cms_link' => 'Retour à l\'interface d\'administration'
+            'cms_link' => 'Retour à l\'interface d\'administration',
         ],
         'no_database' => [
             'label' => 'Base de données introuvable',
             'help' => 'Une base de données est requise pour l\'accès à l\'interface d\'administration. Veuillez vérifier que la base de données existe et que les migrations ont été effectuées avant de réessayer.',
-            'cms_link' => 'Retour à l\'accueil'
+            'cms_link' => 'Retour à l\'accueil',
         ],
     ],
     'partial' => [
@@ -127,7 +127,7 @@ return [
             'last_sign_in' => 'Votre dernière connexion remonte au',
             'view_access_logs' => 'Consulter le journal des accès',
             'nice_message' => 'Passez une agréable journée !',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Administrateur',
@@ -178,7 +178,7 @@ return [
             'new' => 'Ajouter un groupe d\'administrateurs',
             'delete_confirm' => 'Supprimer ce groupe d\'administrateurs ?',
             'return' => 'Retour à la liste des groupes',
-            'users_count' => 'Utilisateurs'
+            'users_count' => 'Utilisateurs',
         ],
         'role' => [
             'name' => 'Rôle',
@@ -192,10 +192,10 @@ return [
             'new' => 'Nouveau rôle',
             'delete_confirm' => 'Supprimer le rôle administrateur ?',
             'return' => 'Retourner à la liste des rôles',
-            'users_count' => 'Utilisateurs'
+            'users_count' => 'Utilisateurs',
         ],
         'preferences' => [
-            'not_authenticated' => 'Il n\'y a aucun utilisateur authentifié pour lequel il est possible de charger ou modifier les préférences.'
+            'not_authenticated' => 'Il n\'y a aucun utilisateur authentifié pour lequel il est possible de charger ou modifier les préférences.',
         ],
         'trashed_hint_title' => 'Ce compte a été supprimé',
         'trashed_hint_desc' => 'Ce compte a été supprimé et il sera impossible de se connecter avec. Pour le récupérer, cliquer sur l\'icône "Utilisateur" en bas à droite.',
@@ -229,7 +229,7 @@ return [
         'delete_selected_confirm' => 'Confirmer la suppression des enregistrements sélectionnés ?',
         'delete_selected_success' => 'Les enregistrements ont été supprimés.',
         'column_switch_true' => 'Oui',
-        'column_switch_false' => 'Non'
+        'column_switch_false' => 'Non',
     ],
     'fileupload' => [
         'attachment' => 'Pièce jointe',
@@ -307,7 +307,7 @@ return [
         'delete_row' => 'Supprimer une ligne',
         'concurrency_file_changed_title' => 'Le fichier a été modifié',
         'concurrency_file_changed_description' => 'Un autre utilisateur a modifié ce fichier sur le disque. Vous pouvez ou recharger le fichier depuis le disque, mais vous perdrez vos modifications, ou écraser le fichier sur le disque.',
-        'return_to_list' => 'Retourner à la liste'
+        'return_to_list' => 'Retourner à la liste',
     ],
     'recordfinder' => [
         'find_record' => 'Trouver un enregistrement',
@@ -316,7 +316,7 @@ return [
     ],
     'pagelist' => [
         'page_link' => 'Lien de page',
-        'select_page' => 'Sélectionnez une page...'
+        'select_page' => 'Sélectionnez une page...',
     ],
     'relation' => [
         'missing_config' => 'La behavior relation n\'a pas de configuration pour ":config".',
@@ -363,7 +363,7 @@ return [
         'missing_relation' => 'Le modèle ":class" ne contient pas de définition ":relation".',
         'missing_method' => 'Le modèle ":class" ne contient pas de méthode ":method".',
         'invalid_class' => 'Le modèle :model utilisé dans la classe :class est invalide, il doit hériter de la classe \Model.',
-        'mass_assignment_failed' => 'L\'affectation de masse a échoué pour l\'attribut ":attribute" du modèle.'
+        'mass_assignment_failed' => 'L\'affectation de masse a échoué pour l\'attribut ":attribute" du modèle.',
     ],
     'warnings' => [
         'tips' => 'Astuces de configuration du système',
@@ -439,16 +439,16 @@ return [
         'paragraph_formats_comment' => 'Les options qui apparaîtrons dans la liste déroulante des styles de paragraphe.',
     ],
     'tooltips' => [
-        'preview_website' => 'Aperçu du site'
+        'preview_website' => 'Aperçu du site',
     ],
     'mysettings' => [
         'menu_label' => 'Mes paramètres',
-        'menu_description' => 'Paramètres de votre compte administrateur'
+        'menu_description' => 'Paramètres de votre compte administrateur',
     ],
     'myaccount' => [
         'menu_label' => 'Mon compte',
         'menu_description' => 'Modifier les informations de votre compte comme le nom, l\'adresse e-mail ou le mot de passe.',
-        'menu_keywords' => 'identification de sécurité'
+        'menu_keywords' => 'identification de sécurité',
     ],
     'branding' => [
         'menu_label' => 'Personnaliser l\'interface d\'administration',
@@ -488,7 +488,7 @@ return [
         'timezone' => 'Fuseau horaire',
         'timezone_comment' => 'Ajuster les dates affichées à ce fuseau horaire.',
         'locale' => 'Langue',
-        'locale_comment' => 'Choisir une langue.'
+        'locale_comment' => 'Choisir une langue.',
     ],
     'access_log' => [
         'hint' => 'Ce journal affiche la liste des tentatives d\'authentification réussies des administrateurs. Les données sont sauvegardées pendant :days jours.',
@@ -501,7 +501,7 @@ return [
         'ip_address' => 'Adresse IP',
         'first_name' => 'Prénom',
         'last_name' => 'Nom',
-        'email' => 'Adresse e-mail'
+        'email' => 'Adresse e-mail',
     ],
     'filter' => [
       'all' => 'tous',
@@ -580,8 +580,8 @@ return [
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, européen occidental révisé avec le signe euro)',
             'windows_1250' => 'Windows-1250 (CP1250, Europe centrale et orientale)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
         'manage_media' => 'Déposer et gérer les contenus media - images, vidéos, sons, documents',
@@ -658,5 +658,5 @@ return [
         'rename_new_name' => 'Nouveau nom',
         'move_please_select' => 'Faire une sélection',
         'move_button' => 'Déplacer',
-    ]
+    ],
 ];

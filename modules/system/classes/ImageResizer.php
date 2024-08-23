@@ -2,19 +2,18 @@
 
 namespace System\Classes;
 
-use Url;
-use Crypt;
-use Cache;
-use Event;
-use Config;
-use Storage;
 use Exception;
-use SystemException;
 use File as FileHelper;
-use Illuminate\Filesystem\FilesystemAdapter;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\URL;
+use Storage;
 use System\Models\File as SystemFileModel;
 use Winter\Storm\Database\Attach\File as FileModel;
 use Winter\Storm\Database\Attach\Resizer as DefaultResizer;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * Image Resizing class used for resizing any image resources accessible

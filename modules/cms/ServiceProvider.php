@@ -2,11 +2,11 @@
 
 namespace Cms;
 
-use Backend;
 use Backend\Classes\WidgetManager;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Backend\Facades\BackendMenu;
 use Backend\Models\UserRole;
-use BackendAuth;
-use BackendMenu;
 use Cms\Classes\CmsObject;
 use Cms\Classes\ComponentManager;
 use Cms\Classes\Page as CmsPage;
@@ -16,15 +16,13 @@ use Cms\Models\ThemeLog;
 use Cms\Twig\DebugExtension;
 use Cms\Twig\Extension as CmsTwigExtension;
 use Cms\Twig\Loader as CmsTwigLoader;
-use Config;
-use Event;
-use File;
-use Lang;
+use Illuminate\Support\Facades\URL;
 use System\Classes\CombineAssets;
 use System\Classes\MarkupManager;
 use System\Classes\SettingsManager;
 use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
-use Url;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
@@ -203,7 +201,7 @@ class ServiceProvider extends ModuleServiceProvider
                         'cms.manage_assets',
                         'cms.manage_pages',
                         'cms.manage_layouts',
-                        'cms.manage_partials'
+                        'cms.manage_partials',
                     ],
                     'sideMenu' => [
                         'pages' => [
@@ -212,7 +210,7 @@ class ServiceProvider extends ModuleServiceProvider
                             'url'          => 'javascript:;',
                             'attributes'   => ['data-menu-item' => 'pages'],
                             'permissions'  => ['cms.manage_pages'],
-                            'counterLabel' => 'cms::lang.page.unsaved_label'
+                            'counterLabel' => 'cms::lang.page.unsaved_label',
                         ],
                         'partials' => [
                             'label'        => 'cms::lang.partial.menu_label',
@@ -220,7 +218,7 @@ class ServiceProvider extends ModuleServiceProvider
                             'url'          => 'javascript:;',
                             'attributes'   => ['data-menu-item' => 'partials'],
                             'permissions'  => ['cms.manage_partials'],
-                            'counterLabel' => 'cms::lang.partial.unsaved_label'
+                            'counterLabel' => 'cms::lang.partial.unsaved_label',
                         ],
                         'layouts' => [
                             'label'        => 'cms::lang.layout.menu_label',
@@ -228,7 +226,7 @@ class ServiceProvider extends ModuleServiceProvider
                             'url'          => 'javascript:;',
                             'attributes'   => ['data-menu-item' => 'layouts'],
                             'permissions'  => ['cms.manage_layouts'],
-                            'counterLabel' => 'cms::lang.layout.unsaved_label'
+                            'counterLabel' => 'cms::lang.layout.unsaved_label',
                         ],
                         'content' => [
                             'label'        => 'cms::lang.content.menu_label',
@@ -236,7 +234,7 @@ class ServiceProvider extends ModuleServiceProvider
                             'url'          => 'javascript:;',
                             'attributes'   => ['data-menu-item' => 'content'],
                             'permissions'  => ['cms.manage_content'],
-                            'counterLabel' => 'cms::lang.content.unsaved_label'
+                            'counterLabel' => 'cms::lang.content.unsaved_label',
                         ],
                         'assets' => [
                             'label'        => 'cms::lang.asset.menu_label',
@@ -244,17 +242,17 @@ class ServiceProvider extends ModuleServiceProvider
                             'url'          => 'javascript:;',
                             'attributes'   => ['data-menu-item' => 'assets'],
                             'permissions'  => ['cms.manage_assets'],
-                            'counterLabel' => 'cms::lang.asset.unsaved_label'
+                            'counterLabel' => 'cms::lang.asset.unsaved_label',
                         ],
                         'components' => [
                             'label'       => 'cms::lang.component.menu_label',
                             'icon'        => 'icon-puzzle-piece',
                             'url'         => 'javascript:;',
                             'attributes'  => ['data-menu-item' => 'components'],
-                            'permissions' => ['cms.manage_pages', 'cms.manage_layouts', 'cms.manage_partials']
-                        ]
-                    ]
-                ]
+                            'permissions' => ['cms.manage_pages', 'cms.manage_layouts', 'cms.manage_partials'],
+                        ],
+                    ],
+                ],
             ]);
             $manager->registerQuickActions('Winter.Cms', [
                 'preview' => [
@@ -280,7 +278,7 @@ class ServiceProvider extends ModuleServiceProvider
         WidgetManager::instance()->registerReportWidgets(function ($manager) {
             $manager->registerReportWidget(\Cms\ReportWidgets\ActiveTheme::class, [
                 'label'   => 'cms::lang.dashboard.active_theme.widget_title_default',
-                'context' => 'dashboard'
+                'context' => 'dashboard',
             ]);
         });
     }
@@ -296,43 +294,43 @@ class ServiceProvider extends ModuleServiceProvider
                     'label' => 'cms::lang.permissions.manage_content',
                     'tab' => 'cms::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER],
-                    'order' => 100
+                    'order' => 100,
                 ],
                 'cms.manage_assets' => [
                     'label' => 'cms::lang.permissions.manage_assets',
                     'tab' => 'cms::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER],
-                    'order' => 100
+                    'order' => 100,
                 ],
                 'cms.manage_pages' => [
                     'label' => 'cms::lang.permissions.manage_pages',
                     'tab' => 'cms::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER],
-                    'order' => 100
+                    'order' => 100,
                 ],
                 'cms.manage_layouts' => [
                     'label' => 'cms::lang.permissions.manage_layouts',
                     'tab' => 'cms::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER],
-                    'order' => 100
+                    'order' => 100,
                 ],
                 'cms.manage_partials' => [
                     'label' => 'cms::lang.permissions.manage_partials',
                     'tab' => 'cms::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER],
-                    'order' => 100
+                    'order' => 100,
                 ],
                 'cms.manage_themes' => [
                     'label' => 'cms::lang.permissions.manage_themes',
                     'tab' => 'cms::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER],
-                    'order' => 100
+                    'order' => 100,
                 ],
                 'cms.manage_theme_options' => [
                     'label' => 'cms::lang.permissions.manage_theme_options',
                     'tab' => 'cms::lang.permissions.name',
                     'roles' => [UserRole::CODE_DEVELOPER, UserRole::CODE_PUBLISHER],
-                    'order' => 100
+                    'order' => 100,
                 ],
             ]);
             $manager->registerPermissionOwnerAlias('Winter.Cms', 'October.Cms');
@@ -363,7 +361,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'icon'        => 'icon-picture-o',
                     'url'         => Backend::url('cms/themes'),
                     'permissions' => ['cms.manage_themes', 'cms.manage_theme_options'],
-                    'order'       => 200
+                    'order'       => 200,
                 ],
                 'maintenance_settings' => [
                     'label'       => 'cms::lang.maintenance.settings_menu',
@@ -372,7 +370,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'icon'        => 'icon-plug',
                     'class'       => Models\MaintenanceSetting::class,
                     'permissions' => ['cms.manage_themes'],
-                    'order'       => 300
+                    'order'       => 300,
                 ],
                 'theme_logs' => [
                     'label'       => 'cms::lang.theme_log.menu_label',
@@ -382,8 +380,8 @@ class ServiceProvider extends ModuleServiceProvider
                     'url'         => Backend::url('cms/themelogs'),
                     'permissions' => ['system.access_logs'],
                     'order'       => 910,
-                    'keywords'    => 'theme change log'
-                ]
+                    'keywords'    => 'theme change log',
+                ],
             ]);
             $manager->registerOwnerAlias('Winter.Cms', 'October.Cms');
         });
@@ -396,7 +394,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         Event::listen('pages.menuitem.listTypes', function () {
             return [
-                'cms-page' => 'cms::lang.page.cms_page'
+                'cms-page' => 'cms::lang.page.cms_page',
             ];
         });
 
@@ -420,7 +418,7 @@ class ServiceProvider extends ModuleServiceProvider
     {
         Event::listen('backend.richeditor.listTypes', function () {
             return [
-                'cms-page' => 'cms::lang.page.cms_page'
+                'cms-page' => 'cms::lang.page.cms_page',
             ];
         });
 
@@ -443,7 +441,7 @@ class ServiceProvider extends ModuleServiceProvider
                 Classes\Page::class,
                 Classes\Layout::class,
                 Classes\Content::class,
-                Classes\Partial::class
+                Classes\Partial::class,
             ];
         });
     }

@@ -2,11 +2,11 @@
 
 namespace Cms\Classes;
 
-use Str;
-use Lang;
-use Config;
-use Winter\Storm\Extension\Extendable;
 use BadMethodCallException;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Extension\Extendable;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Str;
 
 /**
  * Component base class
@@ -323,7 +323,7 @@ abstract class ComponentBase extends Extendable
 
         throw new BadMethodCallException(Lang::get('cms::lang.component.method_not_found', [
             'name' => get_class($this),
-            'method' => $method
+            'method' => $method,
         ]));
     }
 

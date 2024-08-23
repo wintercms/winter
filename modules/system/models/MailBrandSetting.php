@@ -2,13 +2,13 @@
 
 namespace System\Models;
 
-use App;
-use Str;
-use Model;
-use Cache;
-use Less_Parser;
 use Exception;
 use File as FileHelper;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Less_Parser;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Str;
 
 /**
  * Mail brand settings
@@ -25,7 +25,7 @@ class MailBrandSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**

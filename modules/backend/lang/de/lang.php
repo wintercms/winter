@@ -435,7 +435,7 @@ return [
         'paragraph_formats_comment' => 'Die Optionen, welche in der Dropdown-Liste für Absatzformatierungen angezeigt werden.',
     ],
     'tooltips' => [
-        'preview_website' => 'Vorschau der Webseite'
+        'preview_website' => 'Vorschau der Webseite',
     ],
     'mysettings' => [
         'menu_label' => 'Meine Einstellungen',

@@ -2,10 +2,10 @@
 
 namespace System\Models;
 
-use App;
 use Exception;
-use Model;
-use Str;
+use Illuminate\Support\Facades\App;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Str;
 
 /**
  * Model for logging system errors and debug trace messages

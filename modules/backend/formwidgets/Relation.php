@@ -2,12 +2,12 @@
 
 namespace Backend\FormWidgets;
 
-use Db;
-use Lang;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use Illuminate\Database\Eloquent\Relations\Relation as RelationBase;
+use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\DB;
 
 /**
  * Form Relationship
@@ -120,7 +120,7 @@ class Relation extends FormWidgetBase
             } else {
                 throw new SystemException(
                     Lang::get('backend::lang.relation.relationwidget_unsupported_type', [
-                        'type' => $relationType
+                        'type' => $relationType,
                     ])
                 );
             }

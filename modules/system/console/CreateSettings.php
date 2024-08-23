@@ -2,8 +2,6 @@
 
 namespace System\Console;
 
-use System\Console\BaseScaffoldCommand;
-
 class CreateSettings extends BaseScaffoldCommand
 {
     /**
@@ -41,7 +39,7 @@ class CreateSettings extends BaseScaffoldCommand
      */
     protected $stubs = [
         'scaffold/settings/model.stub' => 'models/{{studly_name}}.php',
-        'scaffold/settings/fields.stub'   => 'models/{{lower_name}}/fields.yaml'
+        'scaffold/settings/fields.stub'   => 'models/{{lower_name}}/fields.yaml',
     ];
 
     /**

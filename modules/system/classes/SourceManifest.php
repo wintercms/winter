@@ -2,10 +2,10 @@
 
 namespace System\Classes;
 
-use Http;
-use Config;
-use ApplicationException;
 use Winter\Storm\Argon\Argon;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Http;
 
 /**
  * Reads and stores the Winter CMS source manifest information.
@@ -381,7 +381,7 @@ class SourceManifest
         $details = [
             'build' => $likelyBuild,
             'modified' => true,
-            'confident' => ($buildMatch[$likelyBuild] >= 60)
+            'confident' => ($buildMatch[$likelyBuild] >= 60),
         ];
 
         if ($detailed) {

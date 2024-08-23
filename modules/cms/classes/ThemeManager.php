@@ -2,10 +2,10 @@
 
 namespace Cms\Classes;
 
-use File;
-use ApplicationException;
-use System\Models\Parameter;
 use Cms\Classes\Theme as CmsTheme;
+use System\Models\Parameter;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Theme manager

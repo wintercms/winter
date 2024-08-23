@@ -2,9 +2,9 @@
 
 namespace Backend\FormWidgets;
 
-use Lang;
-use ApplicationException;
 use Backend\Classes\FormWidgetBase;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Repeater Form Widget
@@ -340,7 +340,7 @@ class Repeater extends FormWidgetBase
         $widget->bindToController();
 
         $this->indexMeta[$index] = [
-            'groupCode' => $groupCode
+            'groupCode' => $groupCode,
         ];
 
         return $this->formWidgets[$index] = $widget;
@@ -382,7 +382,7 @@ class Repeater extends FormWidgetBase
 
         return [
             $addItemContainer => '',
-            $itemContainer => $this->makePartial('repeater_item') . $this->makePartial('repeater_add_item')
+            $itemContainer => $this->makePartial('repeater_item') . $this->makePartial('repeater_add_item'),
         ];
     }
 
@@ -507,7 +507,7 @@ class Repeater extends FormWidgetBase
                 'name' => array_get($config, 'name'),
                 'icon' => array_get($config, 'icon', 'icon-square-o'),
                 'description' => array_get($config, 'description'),
-                'fields' => array_get($config, 'fields')
+                'fields' => array_get($config, 'fields'),
             ];
         }
 

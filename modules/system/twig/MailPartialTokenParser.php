@@ -2,10 +2,10 @@
 
 namespace System\Twig;
 
+use Twig\Error\SyntaxError as TwigErrorSyntax;
 use Twig\Node\Node as TwigNode;
 use Twig\Token as TwigToken;
 use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
-use Twig\Error\SyntaxError as TwigErrorSyntax;
 
 /**
  * Parser for the `{% partial %}` Twig tag.

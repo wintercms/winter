@@ -2,8 +2,8 @@
 
 namespace System\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use System\Classes\MarkupManager;
+use System\Tests\Bootstrap\TestCase;
 
 class MarkupManagerTest extends TestCase
 {

@@ -2,8 +2,8 @@
 
 namespace Backend\Behaviors;
 
-use System\Behaviors\SettingsModel;
 use Backend\Models\UserPreference;
+use System\Behaviors\SettingsModel;
 
 /**
  * User Preferences model extension, identical to System\Behaviors\SettingsModel

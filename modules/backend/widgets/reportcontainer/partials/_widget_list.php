@@ -2,6 +2,6 @@
     <?= $this->makePartial('widget', [
         'widgetAlias' => $widgetAlias,
         'widget' => $widgetInfo['widget'],
-        'sortOrder' => $widgetInfo['sortOrder']
+        'sortOrder' => $widgetInfo['sortOrder'],
     ]) ?>
 <?php endforeach ?>

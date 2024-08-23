@@ -2,9 +2,9 @@
 
 namespace Backend\Tests\Helpers;
 
-use System\Tests\Bootstrap\TestCase;
 use Backend\Helpers\Backend;
 use Backend\Helpers\Exception\DecompileException;
+use System\Tests\Bootstrap\TestCase;
 
 class BackendHelperTest extends TestCase
 {

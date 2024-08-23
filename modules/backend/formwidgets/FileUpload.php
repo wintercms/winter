@@ -2,19 +2,18 @@
 
 namespace Backend\FormWidgets;
 
-use Db;
-use Input;
-use Event;
-use Request;
-use Response;
-use Validator;
-use Backend\Widgets\Form;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
-use ApplicationException;
-use ValidationException;
+use Backend\Widgets\Form;
 use Exception;
+use Illuminate\Support\Facades\Response;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\ValidationException;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Facades\Validator;
 
 /**
  * File upload field
@@ -72,7 +71,7 @@ class FileUpload extends FormWidgetBase
      */
     public $thumbOptions = [
         'mode'      => 'crop',
-        'extension' => 'auto'
+        'extension' => 'auto',
     ];
 
     /**
@@ -478,7 +477,7 @@ class FileUpload extends FormWidgetBase
             $result = [
                 'id' => $file->id,
                 'thumb' => $file->thumbUrl,
-                'path' => $file->pathUrl
+                'path' => $file->pathUrl,
             ];
 
             $response = Response::make($result, 200);

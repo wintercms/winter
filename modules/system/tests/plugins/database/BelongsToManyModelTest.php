@@ -2,13 +2,13 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
+use Database\Tester\Models\Author;
 use Database\Tester\Models\Category;
 use Database\Tester\Models\Post as PostModel;
 use Database\Tester\Models\Role;
-use Database\Tester\Models\Author;
-use Model;
-use DB;
+use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\DB;
 
 class BelongsToManyModelTest extends PluginTestCase
 {

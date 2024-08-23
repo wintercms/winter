@@ -2,9 +2,9 @@
 
 namespace Cms\Classes;
 
-use ApplicationException;
-use Cache;
 use Exception;
+use Illuminate\Support\Facades\Cache;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Halcyon\Datasource\Datasource;
 use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 use Winter\Storm\Halcyon\Exception\DeleteFileException;

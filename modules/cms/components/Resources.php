@@ -2,9 +2,9 @@
 
 namespace Cms\Components;
 
-use File;
 use Cms\Classes\ComponentBase;
 use System\Classes\CombineAssets;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Resources component
@@ -52,32 +52,32 @@ class Resources extends ComponentBase
                 'title'             => 'JavaScript',
                 'description'       => 'JavaScript file(s) in the assets/js folder',
                 'type'              => 'stringList',
-                'showExternalParam' => false
+                'showExternalParam' => false,
             ],
             'less' => [
                 'title'             => 'LESS',
                 'description'       => 'LESS file(s) in the assets/less folder',
                 'type'              => 'stringList',
-                'showExternalParam' => false
+                'showExternalParam' => false,
             ],
             'sass' => [
                 'title'             => 'SASS',
                 'description'       => 'SASS file(s) in the assets/sass folder',
                 'type'              => 'stringList',
-                'showExternalParam' => false
+                'showExternalParam' => false,
             ],
             'css' => [
                 'title'             => 'CSS',
                 'description'       => 'Stylesheet file(s) in the assets/css folder',
                 'type'              => 'stringList',
-                'showExternalParam' => false
+                'showExternalParam' => false,
             ],
             'vars' => [
                 'title'             => 'Variables',
                 'description'       => 'Page variables name(s) and value(s)',
                 'type'              => 'dictionary',
-                'showExternalParam' => false
-            ]
+                'showExternalParam' => false,
+            ],
         ];
     }
 

@@ -2,14 +2,14 @@
 
 namespace Cms\Controllers;
 
-use Backend;
-use BackendMenu;
-use ApplicationException;
-use Cms\Models\ThemeData;
-use Cms\Classes\Theme as CmsTheme;
-use System\Classes\SettingsManager;
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
+use Cms\Classes\Theme as CmsTheme;
+use Cms\Models\ThemeData;
 use Exception;
+use System\Classes\SettingsManager;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Theme customization controller

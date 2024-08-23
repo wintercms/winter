@@ -2,8 +2,8 @@
 
 namespace Backend\Widgets;
 
-use Lang;
 use Backend\Classes\WidgetBase;
+use Illuminate\Support\Facades\Lang;
 
 /**
  * Search Widget

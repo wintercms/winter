@@ -2,7 +2,7 @@
 
 return [
     'auth' => [
-        'title' => 'Administrationsområde'
+        'title' => 'Administrationsområde',
     ],
     'field' => [
         'invalid_type' => 'Felaktig fälttyp använd :type.',
@@ -63,8 +63,8 @@ return [
         'widget_title_error' => 'En widgets titel är tvingande.',
         'status' => [
             'widget_title_default' => 'Systemstatus',
-            'update_available' => '{0} uppdateringar tillgängliga!|{1} uppdatering tillgänglig!|[2,Inf] uppdateringar tillgängliga!'
-        ]
+            'update_available' => '{0} uppdateringar tillgängliga!|{1} uppdatering tillgänglig!|[2,Inf] uppdateringar tillgängliga!',
+        ],
     ],
     'user' => [
         'name' => 'Administratör',
@@ -105,11 +105,11 @@ return [
             'new' => 'Ny administratörsgrupp',
             'delete_confirm' => 'Vill du verkligen radera denna administratörsgrupp?',
             'return' => 'Återgå till grupplistan',
-            'users_count' => 'Användare'
+            'users_count' => 'Användare',
         ],
         'preferences' => [
             'not_authenticated' => 'Det finns ingen autentiserad användare att ladda eller spara inställningar för',
-        ]
+        ],
     ],
     'list' => [
         'default_title' => 'Lista',
@@ -144,7 +144,7 @@ return [
         'upload_file' => 'Ladda upp fil',
         'upload_error' => 'Fel vid uppladdning',
         'remove_confirm' => 'Är du säker?',
-        'remove_file' => 'Radera fil'
+        'remove_file' => 'Radera fil',
     ],
     'form' => [
         'create_title' => "Skapa :name",
@@ -195,7 +195,7 @@ return [
         'insert_row' => 'Lägg till rad',
         'delete_row' => 'Radera rad',
         'concurrency_file_changed_title' => 'Filen var ändrad',
-        'concurrency_file_changed_description' => "Filen du redigerar har ändrats av en annan användare. Du kan antingen ladda om sidan och förlora dina ändringar eller skriva över filen med dina ändringar."
+        'concurrency_file_changed_description' => "Filen du redigerar har ändrats av en annan användare. Du kan antingen ladda om sidan och förlora dina ändringar eller skriva över filen med dina ändringar.",
     ],
     'relation' => [
         'missing_config' => "Relationsbeteendet har ingen konfiguration för ': config '.",
@@ -247,7 +247,7 @@ return [
         'tips' => 'Systemkonfigurationstips',
         'tips_description' => 'Det finns problem som du behöver åtgärda för att konfigurera systemet ordentligt.',
         'permissions'  => 'Katalogen :name eller dess underkataloger är inte skrivbara av PHP. Väligen ändra dess motsvarande behörigheter för web-servern i denna katalogen.',
-        'extension' => 'PHP-tillägget: Namnet är inte installerat. Vänligen installera och aktivera det biblioteket.'
+        'extension' => 'PHP-tillägget: Namnet är inte installerat. Vänligen installera och aktivera det biblioteket.',
     ],
     'editor' => [
         'menu_label' => 'Kodnings preferenser',
@@ -261,19 +261,19 @@ return [
         'auto_closing' => 'Stäng taggar och specialtecken automatiskt',
         'show_invisibles' => 'Visa dolda tecken',
         'show_gutter' => 'Visa ränna',
-        'theme' => 'Färgschema'
+        'theme' => 'Färgschema',
     ],
     'tooltips' => [
-        'preview_website' => 'Förhandsgranska websidan'
+        'preview_website' => 'Förhandsgranska websidan',
     ],
     'mysettings' => [
         'menu_label' => 'Mina inställningar',
-        'menu_description' => 'Inställningar rörande ditt administrationskonto'
+        'menu_description' => 'Inställningar rörande ditt administrationskonto',
     ],
     'myaccount' => [
         'menu_label' => 'Mitt konto',
         'menu_description' => 'Uppdatera dina kontouppgifter såsom namn, e-postadress och lösenord.',
-        'menu_keywords' => 'säkerhets inloggning'
+        'menu_keywords' => 'säkerhets inloggning',
     ],
     'branding' => [
         'menu_label' => 'Anpassa back-end',
@@ -290,13 +290,13 @@ return [
         'secondary_color' => 'Sekundär color',
         'accent_color' => 'Accent color',
         'styles' => 'Formatmallar',
-        'custom_stylesheet' => 'Anpassad formatmall'
+        'custom_stylesheet' => 'Anpassad formatmall',
     ],
     'backend_preferences' => [
         'menu_label' => 'Back-end preferenser',
         'menu_description' => 'Hantera dina kontoinställningar såsom önskat språk.',
         'locale' => 'Språk',
-        'locale_comment' => 'Välj önskat språk.'
+        'locale_comment' => 'Välj önskat språk.',
     ],
     'access_log' => [
         'hint' => 'Denna logg visar en lista över lyckade inloggningsförsök till administratrationen. Registret behålls i :days dagar.',
@@ -307,16 +307,16 @@ return [
         'ip_address' => 'IP adress',
         'first_name' => 'Förnamn',
         'last_name' => 'Efternamn',
-        'email' => 'E-post'
+        'email' => 'E-post',
     ],
     'filter' => [
-      'all' => 'alla'
+      'all' => 'alla',
     ],
     'permissions' => [
-        'manage_media' => 'Hantera media'
+        'manage_media' => 'Hantera media',
     ],
     'mediafinder' => [
-        'default_prompt' => 'Klicka på %s knappen för att hitta ett mediaföremål'
+        'default_prompt' => 'Klicka på %s knappen för att hitta ett mediaföremål',
     ],
     'media' => [
         'menu_label' => 'Media',
@@ -379,5 +379,5 @@ return [
         'rename_new_name' => 'Nytt namn',
         'move_please_select' => 'Var god välj',
         'move_button' => 'Flytta',
-    ]
+    ],
 ];

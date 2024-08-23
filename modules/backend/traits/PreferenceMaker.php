@@ -2,8 +2,8 @@
 
 namespace Backend\Traits;
 
-use Str;
 use Backend\Models\UserPreference;
+use Winter\Storm\Support\Str;
 
 /**
  * Preference Maker Trait

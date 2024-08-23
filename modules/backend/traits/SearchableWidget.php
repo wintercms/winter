@@ -2,7 +2,7 @@
 
 namespace Backend\Traits;
 
-use Str;
+use Winter\Storm\Support\Str;
 
 /**
  * Searchable Widget Trait

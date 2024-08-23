@@ -2,12 +2,12 @@
 
 namespace Cms\Models;
 
-use Lang;
-use Model;
 use Cms\Classes\Theme as CmsTheme;
-use System\Classes\CombineAssets;
 use Exception;
+use Illuminate\Support\Facades\Lang;
+use System\Classes\CombineAssets;
 use System\Models\File;
+use Winter\Storm\Database\Model;
 
 /**
  * Customization data used by a theme

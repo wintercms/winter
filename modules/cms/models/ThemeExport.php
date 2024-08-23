@@ -2,13 +2,13 @@
 
 namespace Cms\Models;
 
-use File;
-use Model;
-use Response;
-use ApplicationException;
-use Winter\Storm\Filesystem\Zip;
 use Cms\Classes\Theme as CmsTheme;
 use Exception;
+use Illuminate\Support\Facades\Response;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Filesystem\Zip;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Theme export model
@@ -53,7 +53,7 @@ class ThemeExport extends Model
             'layouts'  => true,
             'partials' => true,
             'content'  => true,
-        ]
+        ],
     ];
 
     /**

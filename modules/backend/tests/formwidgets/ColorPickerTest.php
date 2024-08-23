@@ -30,7 +30,7 @@ class ColorPickerTest extends PluginTestCase
     public function testRgbSaveValue(): void
     {
         $widget = $this->makeWidget([
-            'formats' => 'rgb'
+            'formats' => 'rgb',
         ]);
 
         // Config specifies only rgb
@@ -49,7 +49,7 @@ class ColorPickerTest extends PluginTestCase
     public function testCmykSaveValue(): void
     {
         $widget = $this->makeWidget([
-            'formats' => 'cmyk'
+            'formats' => 'cmyk',
         ]);
 
         // Config specifies only cmyk
@@ -68,7 +68,7 @@ class ColorPickerTest extends PluginTestCase
     public function testHslaSaveValue(): void
     {
         $widget = $this->makeWidget([
-            'formats' => 'hsl'
+            'formats' => 'hsl',
         ]);
 
         // Config specifies only hsl
@@ -89,7 +89,7 @@ class ColorPickerTest extends PluginTestCase
     public function testAllSaveValue(): void
     {
         $widget = $this->makeWidget([
-            'formats' => 'all'
+            'formats' => 'all',
         ]);
 
         // Config allows for any valid format
@@ -112,7 +112,7 @@ class ColorPickerTest extends PluginTestCase
     public function testAllowCustomSaveValue(): void
     {
         $widget = $this->makeWidget([
-            'formats' => 'custom'
+            'formats' => 'custom',
         ]);
 
         // Config allows for any format

@@ -1,9 +1,9 @@
 <?php
 
-use Winter\Storm\Database\Updates\Migration;
 use Carbon\Carbon;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
+use Winter\Storm\Database\Updates\Migration;
 
 return new class extends Migration
 {

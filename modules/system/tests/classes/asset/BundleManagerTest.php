@@ -26,12 +26,12 @@ class BundleManagerTest extends TestCase
         $defaultBundles = $this->bundleManager->getBundles();
         $this->bundleManager->registerBundles([
             'winter1js' => [
-                'winter1js' => 'v1.0.0'
-            ]
+                'winter1js' => 'v1.0.0',
+            ],
         ]);
 
         $this->bundleManager->registerBundle('winter2js', [
-            'winter2js' => 'v1.0.0'
+            'winter2js' => 'v1.0.0',
         ]);
 
         $bundles = $this->bundleManager->getBundles();
@@ -53,8 +53,8 @@ class BundleManagerTest extends TestCase
         // Register a new bundle
         $this->bundleManager->registerBundles([
             'winterjs' => [
-                'winterjs' => 'v1.0.0'
-            ]
+                'winterjs' => 'v1.0.0',
+            ],
         ]);
         // Grab the current bundles
         $bundles = $this->bundleManager->getBundles();
@@ -131,7 +131,7 @@ class BundleManagerTest extends TestCase
             'a' => 'v0.1.2',
             'mix' => [
                 'b' => 'v0.1.3',
-            ]
+            ],
         ]);
 
         // Validate the testing bundle works with compiler dependent packages
@@ -214,8 +214,8 @@ class BundleManagerTest extends TestCase
                     'test-package' => 'v0.1.2',
                     'vite' => [
                         'vite-package' => 'v0.1.3',
-                    ]
-                ]
+                    ],
+                ],
             ]);
         });
 

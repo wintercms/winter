@@ -2,10 +2,10 @@
 
 namespace Backend\Behaviors;
 
-use Lang;
-use Backend;
-use ApplicationException;
 use Backend\Classes\ControllerBehavior;
+use Backend\Facades\Backend;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Used for reordering and sorting records.

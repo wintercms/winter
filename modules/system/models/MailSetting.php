@@ -2,8 +2,8 @@
 
 namespace System\Models;
 
-use App;
-use Model;
+use Illuminate\Support\Facades\App;
+use Winter\Storm\Database\Model;
 
 /**
  * Mail settings
@@ -24,7 +24,7 @@ class MailSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**
@@ -42,7 +42,7 @@ class MailSetting extends Model
      */
     public $rules = [
         'sender_name'  => 'required',
-        'sender_email' => 'required|email'
+        'sender_email' => 'required|email',
     ];
 
     /**

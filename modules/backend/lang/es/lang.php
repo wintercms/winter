@@ -3,26 +3,26 @@
 return [
     'auth' => [
         'title' => 'Area de Administración',
-        'invalid_login' => 'Los datos ingresados no concuerdan con nuestros registros. Por favor verifique e intente nuevamente.'
+        'invalid_login' => 'Los datos ingresados no concuerdan con nuestros registros. Por favor verifique e intente nuevamente.',
     ],
     'field' => [
         'invalid_type' => 'El tipo de campo utilizado es inválido :type.',
-        'options_method_not_exists' => 'El modelo clase: model debe definir un método: method() opciones recurrentes para el ":field" desde campo.'
+        'options_method_not_exists' => 'El modelo clase: model debe definir un método: method() opciones recurrentes para el ":field" desde campo.',
     ],
     'widget' => [
         'not_registered' => "La clase del modulo ':name' no ha sido registrada",
-        'not_bound' => "El módulo con la clase ':name' no se ha unido al controlador"
+        'not_bound' => "El módulo con la clase ':name' no se ha unido al controlador",
     ],
     'page' => [
         'untitled' => 'Sin título',
         'access_denied' => [
             'label' => 'Acceso denegado',
             'help' => 'No tiene permisos necesarios para ver esta página.',
-            'cms_link' => 'Volver al panel de administración'
+            'cms_link' => 'Volver al panel de administración',
         ],
     ],
     'partial' => [
-        'not_found_name' => "El parcial ':name' no se encuentra."
+        'not_found_name' => "El parcial ':name' no se encuentra.",
     ],
     'account' => [
         'sign_out' => 'Desconectarse',
@@ -44,7 +44,7 @@ return [
         'apply' => 'Aplicar',
         'cancel' => 'Cancelar',
         'delete' => 'Borrar',
-        'ok' => 'OK'
+        'ok' => 'OK',
     ],
     'dashboard' => [
         'menu_label' => 'Escritorio',
@@ -81,7 +81,7 @@ return [
             'core_build' => 'Versión del sistema',
             'event_log' => 'Registro de eventos',
             'request_log' => 'Registro de peticiones',
-            'app_birthday' => 'En línea desde'
+            'app_birthday' => 'En línea desde',
         ],
         'welcome' => [
             'widget_title_default' => 'Bienvenido',
@@ -90,8 +90,8 @@ return [
             'first_sign_in' => 'Esta es la primera vez que ha iniciado sesión.',
             'last_sign_in' => 'Su última sesión fue',
             'view_access_logs' => 'Ver los registros de acceso',
-            'nice_message' => '¡Que tengas un gran día!'
-        ]
+            'nice_message' => '¡Que tengas un gran día!',
+        ],
     ],
     'user' => [
         'name' => 'Administrador',
@@ -134,11 +134,11 @@ return [
             'new' => 'Nuevo Grupo',
             'delete_confirm' => '¿Eliminar este grupo de administradores?',
             'return' => 'Volver a la lista de grupos',
-            'users_count' => 'Usuarios'
+            'users_count' => 'Usuarios',
         ],
         'preferences' => [
             'not_authenticated' => 'No existe un usuario autenticado para cargar o guardar las preferencias para.',
-        ]
+        ],
     ],
     'list' => [
         'default_title' => 'Lista',
@@ -167,7 +167,7 @@ return [
         'delete_selected_confirm' => '¿Borrar los registros seleccionados?',
         'delete_selected_success' => 'Eliminados los registros seleccionados.',
         'column_switch_true' => 'Sí',
-        'column_switch_false' => 'No'
+        'column_switch_false' => 'No',
     ],
     'fileupload' => [
         'attachment' => 'Adjunto',
@@ -179,7 +179,7 @@ return [
         'upload_file' => 'Subir archivo',
         'upload_error' => 'Error al subir.',
         'remove_confirm' => '¿Está seguro?',
-        'remove_file' => 'Eliminar archivo'
+        'remove_file' => 'Eliminar archivo',
     ],
     'form' => [
         'create_title' => 'Nuevo :name',
@@ -235,10 +235,10 @@ return [
         'delete_row' => 'Borrar Fila',
         'concurrency_file_changed_title' => 'Archivo ha cambiado',
         'concurrency_file_changed_description' => "El archivo que está editando ha sido cambiado en el disco por otro usuario. Usted puede volver a cargar el archivo y perder los cambios o sobreescribir el archivo en el disco.",
-        'return_to_list' => 'Volver a listado'
+        'return_to_list' => 'Volver a listado',
     ],
     'recordfinder' => [
-        'find_record' => 'Buscar Registro'
+        'find_record' => 'Buscar Registro',
     ],
     'relation' => [
         'missing_config' => "Relación de comportamiento no tiene ninguna configuración para ':config'.",
@@ -271,11 +271,11 @@ return [
         'link_name' => 'Vincular :name',
         'unlink' => 'Desvincular',
         'unlink_name' => 'Desvincular :name',
-        'unlink_confirm' => '¿Está usted seguro?'
+        'unlink_confirm' => '¿Está usted seguro?',
     ],
     'reorder' => [
         'default_title' => 'Reordenar registros',
-        'no_records' => 'No existen registros disponibles para ordenar.'
+        'no_records' => 'No existen registros disponibles para ordenar.',
     ],
     'model' => [
         'name' => 'Modelo',
@@ -284,13 +284,13 @@ return [
         'missing_relation' => "Modelo ':class' no contiene una definición para ':relation'.",
         'missing_method' => "Modelo ':class' no contiene un método ':method'.",
         'invalid_class' => "Modelo :model utilizado en :class no es váildo, este debería heredar la clase del \Model.",
-        'mass_assignment_failed' => "Asignación masiva falló para el atributo del Modelo ':attribute'."
+        'mass_assignment_failed' => "Asignación masiva falló para el atributo del Modelo ':attribute'.",
     ],
     'warnings' => [
         'tips' => 'Consejos de configuración del sistema',
         'tips_description' => 'Hay problemas que necesitan de su atención para configurar el sistema correctamente.',
         'permissions' => 'Directorio :name o los subdirectorios no se puede escribir por PHP. Por favor establecer los permisos correctos para el servidor web en este directorio.',
-        'extension' => 'La extensión PHP :name no está instalada. Por favor instalar esta librería y activar la extensión.'
+        'extension' => 'La extensión PHP :name no está instalada. Por favor instalar esta librería y activar la extensión.',
     ],
     'editor' => [
         'menu_label' => 'Preferencias del Editor',
@@ -336,19 +336,19 @@ return [
         'no_wrap' => 'No envuelva las etiquetas',
         'no_wrap_comment' => 'La lista de etiquetas que no deben estar envueltas dentro de etiquetas de bloque.',
         'remove_tags' => 'Quitar etiquetas',
-        'remove_tags_comment' => 'La lista de etiquetas que se eliminan junto con su contenido.'
+        'remove_tags_comment' => 'La lista de etiquetas que se eliminan junto con su contenido.',
     ],
     'tooltips' => [
-        'preview_website' => 'Vista previa del sitio'
+        'preview_website' => 'Vista previa del sitio',
     ],
     'mysettings' => [
         'menu_label' => 'Mis configuraciones',
-        'menu_description' => 'Configuraciones relacionadas con su cuenta'
+        'menu_description' => 'Configuraciones relacionadas con su cuenta',
     ],
     'myaccount' => [
         'menu_label' => 'Mi Cuenta',
         'menu_description' => 'Actualice la información de su cuenta, como nombre, dirección de correo electrónico y contraseña.',
-        'menu_keywords' => 'Inicio de sesión de seguridad'
+        'menu_keywords' => 'Inicio de sesión de seguridad',
     ],
     'branding' => [
         'menu_label' => 'Personalizar back-end',
@@ -370,7 +370,7 @@ return [
         'menu_mode' => 'Estilo de Menú',
         'menu_mode_inline' => 'Inline',
         'menu_mode_tile' => 'Mosaicos',
-        'menu_mode_collapsed' => 'Colapsado'
+        'menu_mode_collapsed' => 'Colapsado',
     ],
     'backend_preferences' => [
         'menu_label' => 'Preferencias del panel de administración',
@@ -380,7 +380,7 @@ return [
         'timezone' => 'Zona horaria',
         'timezone_comment' => 'Ajustar las fechas mostradas a esta zona horaria.',
         'locale' => 'Idioma',
-        'locale_comment' => 'Seleccione su localización deseada para el uso del idioma.'
+        'locale_comment' => 'Seleccione su localización deseada para el uso del idioma.',
     ],
     'access_log' => [
         'hint' => 'Este registro muestra la lista de ingresos al panel de administración. Los registros se mantienen por un total de :days días.',
@@ -391,13 +391,13 @@ return [
         'ip_address' => 'IP',
         'first_name' => 'Nombre',
         'last_name' => 'Apellido',
-        'email' => 'Correo'
+        'email' => 'Correo',
     ],
     'filter' => [
         'all' => 'todo',
         'options_method_not_exists' => "La clase de modelo :model debe definir un método :method() para regresar opciones para el filtro ':filter'.",
         'date_all' => 'todo el período',
-        'number_all' => 'todos los números'
+        'number_all' => 'todos los números',
     ],
     'import_export' => [
         'upload_csv_file' => '1. Subir un archivo CSV',
@@ -468,11 +468,11 @@ return [
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtic)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
-        'manage_media' => 'Subir y gestionar contenidos multimedia - imágenes, vídeos, sonidos y documentos'
+        'manage_media' => 'Subir y gestionar contenidos multimedia - imágenes, vídeos, sonidos y documentos',
     ],
     'mediafinder' => [
         'label' => 'Buscador de multimedia',

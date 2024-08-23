@@ -3,8 +3,8 @@
 namespace System\Console\Asset;
 
 use Symfony\Component\Process\Process;
-use System\Classes\Asset\PackageManager;
 use System\Classes\Asset\PackageJson;
+use System\Classes\Asset\PackageManager;
 use Winter\Storm\Console\Command;
 
 class NpmRun extends Command
@@ -33,7 +33,7 @@ class NpmRun extends Command
      * @var array List of commands that this command replaces (aliases)
      */
     protected $replaces = [
-        'mix:run'
+        'mix:run',
     ];
 
     /**

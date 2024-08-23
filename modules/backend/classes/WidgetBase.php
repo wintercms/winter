@@ -2,9 +2,9 @@
 
 namespace Backend\Classes;
 
-use Winter\Storm\Html\Helper as HtmlHelper;
-use Winter\Storm\Extension\Extendable;
 use stdClass;
+use Winter\Storm\Extension\Extendable;
+use Winter\Storm\Html\Helper as HtmlHelper;
 
 /**
  * Widget base class.

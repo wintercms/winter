@@ -2,26 +2,26 @@
 
 return [
     'auth' => [
-        'title' => 'Area Administrasi'
+        'title' => 'Area Administrasi',
     ],
     'field' => [
         'invalid_type' => 'Jenis medan tidak valid digunakan :type.',
-        'options_method_not_exists' => "Kelas model :model harus menentukan metode :method() yang mengembalikan opsi untuk borang medan ':field'."
+        'options_method_not_exists' => "Kelas model :model harus menentukan metode :method() yang mengembalikan opsi untuk borang medan ':field'.",
     ],
     'widget' => [
         'not_registered' => "Kelas gawit bernama ':name' belum terdaftar",
-        'not_bound' => "Gawit dengan kelas bernama ':name' belum terikat pada controller"
+        'not_bound' => "Gawit dengan kelas bernama ':name' belum terikat pada controller",
     ],
     'page' => [
         'untitled' => 'Tak Berjudul',
         'access_denied' => [
             'label' => 'Akses ditolak',
             'help' => "Anda tidak memiliki izin untuk melihat laman ini.",
-            'cms_link' => 'Kembali ke back-end'
-        ]
+            'cms_link' => 'Kembali ke back-end',
+        ],
     ],
     'partial' => [
-        'not_found' => "Potongan ':name' tidak ditemukan."
+        'not_found' => "Potongan ':name' tidak ditemukan.",
     ],
     'account' => [
         'sign_out' => 'Keluar',
@@ -43,7 +43,7 @@ return [
         'apply' => 'Terapkan',
         'cancel' => 'Urung',
         'delete' => 'Hapus',
-        'ok' => 'OK'
+        'ok' => 'OK',
     ],
     'dashboard' => [
         'menu_label' => 'Dasbor',
@@ -63,8 +63,8 @@ return [
         'widget_title_error' => 'Tajuk gawit diperlukan.',
         'status' => [
             'widget_title_default' => 'Status sistem',
-            'update_available' => '{0} pembaruan tersedia!|{1} pembaruan tersedia!|[2,Inf] pembaruan tersedia!'
-        ]
+            'update_available' => '{0} pembaruan tersedia!|{1} pembaruan tersedia!|[2,Inf] pembaruan tersedia!',
+        ],
     ],
     'user' => [
         'name' => 'Administrator',
@@ -106,8 +106,8 @@ return [
             'return' => 'Kembali ke senarai grup',
         ],
         'preferences' => [
-            'not_authenticated' => 'Tidak ada pengguna berotentikasi untuk memuat atau menyimpan pengaturan.'
-        ]
+            'not_authenticated' => 'Tidak ada pengguna berotentikasi untuk memuat atau menyimpan pengaturan.',
+        ],
     ],
     'list' => [
         'default_title' => 'Senarai',
@@ -136,7 +136,7 @@ return [
         'attachment' => 'Lampiran',
         'help' => 'Tambah judul dan jabaran untuk lampiran ini.',
         'title_label' => 'Judul',
-        'description_label' => 'Jabaran'
+        'description_label' => 'Jabaran',
     ],
     'form' => [
         'create_title' => ':name Baru',
@@ -185,7 +185,7 @@ return [
         'insert_row' => 'Sisipkan Baris',
         'delete_row' => 'Hapus Baris',
         'concurrency_file_changed_title' => 'Berkas telah diubah',
-        'concurrency_file_changed_description' => "Berkas yang Anda sunting telah diubah pada diska oleh pengguna lain. Anda dapat memuat ulang berkas dan kehilangan perubahan yang telah Anda buat atau menimpa berkas pada diska."
+        'concurrency_file_changed_description' => "Berkas yang Anda sunting telah diubah pada diska oleh pengguna lain. Anda dapat memuat ulang berkas dan kehilangan perubahan yang telah Anda buat atau menimpa berkas pada diska.",
     ],
     'relation' => [
         'missing_config' => "Behavior hubungan tidak memiliki pengaturan untuk ':config'.",
@@ -227,13 +227,13 @@ return [
         'missing_relation' => "Model ':class' tidak berisi tentuan untuk ':relation'.",
         'missing_method' => "Model ':class' tidak berisi metode ':method'.",
         'invalid_class' => "Model :model yang digunakan pada :class tidak valid, model harus turunan kelas \Model.",
-        'mass_assignment_failed' => "Penetapan masal gagal untuk atribut Model ':attribute'."
+        'mass_assignment_failed' => "Penetapan masal gagal untuk atribut Model ':attribute'.",
     ],
     'warnings' => [
         'tips' => 'Kiat pengaturan sistem',
         'tips_description' => 'Ada masalah yang perlu Anda perhatikan untuk mengatur sistem dengan tepat.',
         'permissions'  => 'Direktori :name atau direktori di bawahnya tidak dapat ditulis oleh PHP. Silakan atur hak akses webserver yang sesuai pada direktori ini.',
-        'extension' => 'Ekstensi PHP :name tidak terpasang. Silakan pasang pustaka ini dan aktifkan ekstensi.'
+        'extension' => 'Ekstensi PHP :name tidak terpasang. Silakan pasang pustaka ini dan aktifkan ekstensi.',
     ],
     'editor' => [
         'menu_label' => 'Penyesuaian Penyunting Kode',
@@ -246,19 +246,19 @@ return [
         'highlight_active_line' => 'Sorot baris aktif',
         'show_invisibles' => 'Tampilkan karakter tak terlihat',
         'show_gutter' => 'Tampilkan parit',
-        'theme' => 'Skema warna'
+        'theme' => 'Skema warna',
     ],
     'tooltips' => [
-        'preview_website' => 'Tinjau website'
+        'preview_website' => 'Tinjau website',
     ],
     'mysettings' => [
         'menu_label' => 'Pengaturanku',
-        'menu_description' => 'Pengaturan yang berkaitan dengan akun administrasi Anda'
+        'menu_description' => 'Pengaturan yang berkaitan dengan akun administrasi Anda',
     ],
     'myaccount' => [
         'menu_label' => 'Akunku',
         'menu_description' => 'Perbarui rincian akun Anda seperti nama, alamat surel dan sandi lewat.',
-        'menu_keywords' => 'security login'
+        'menu_keywords' => 'security login',
     ],
     'branding' => [
         'menu_label' => 'Penyesuaian back-end',
@@ -275,13 +275,13 @@ return [
         'secondary_color' => 'Sekunder color',
         'accent_color' => 'Accent color',
         'styles' => 'Gaya',
-        'custom_stylesheet' => 'Lembar gaya ubah suai'
+        'custom_stylesheet' => 'Lembar gaya ubah suai',
     ],
     'backend_preferences' => [
         'menu_label' => 'Penyesuaian Back-end',
         'menu_description' => 'Kelola penyesuaian akun Anda seperti bahasa yang diinginkan.',
         'locale' => 'Bahasa',
-        'locale_comment' => 'Pilih bahasa lokal yang ingin digunakan.'
+        'locale_comment' => 'Pilih bahasa lokal yang ingin digunakan.',
     ],
     'access_log' => [
         'hint' => 'Catatan ini menampilkan senarai percobaan masuk yang berhasil oleh administrator. Rekam akan disimpan selama :days hari.',
@@ -292,15 +292,15 @@ return [
         'ip_address' => 'Alamat IP',
         'first_name' => 'Nama depan',
         'last_name' => 'Nama belakang',
-        'email' => 'Surel'
+        'email' => 'Surel',
     ],
     'filter' => [
-      'all' => 'semua'
+      'all' => 'semua',
     ],
     'media' => [
         'rename_popup_title' => 'Ganti nama',
         'rename_new_name' => 'Nama baru',
         'move_please_select' => 'silakan pilih',
         'move_button' => 'Pindahkan',
-    ]
+    ],
 ];

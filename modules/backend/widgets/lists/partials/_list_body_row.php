@@ -12,7 +12,7 @@ $treeLevelClass = $showTree ? 'list-tree-level-' . $treeLevel : '';
         <?= $this->makePartial('list_body_tree', [
             'record' => $record,
             'expanded' => $expanded,
-            'childCount' => $record->getChildCount()
+            'childCount' => $record->getChildCount(),
         ]) ?>
     <?php endif ?>
 

@@ -10,7 +10,7 @@ class MainMenu extends ComponentBase
     {
         return [
             'name' => 'Menu Dummy Component',
-            'description' => 'Displays a really cool menu.'
+            'description' => 'Displays a really cool menu.',
         ];
     }
 

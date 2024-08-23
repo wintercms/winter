@@ -2,8 +2,8 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Database\Tester\Models\NullablePost;
+use System\Tests\Bootstrap\PluginTestCase;
 
 class NullableModelTest extends PluginTestCase
 {

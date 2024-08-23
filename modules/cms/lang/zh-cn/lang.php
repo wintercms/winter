@@ -20,19 +20,19 @@ return [
             'maintenance' => '维护',
             'manage_themes' => '管理主题',
             'customize_theme' => '自定义主题',
-        ]
+        ],
     ],
     'theme' => [
         'not_found_name' => "未找到主题 ':name'",
         'by_author' => '作者 :name',
         'active' => [
             'not_set' => '未设置活动主题',
-            'not_found' => '无法找到活动主题'
+            'not_found' => '无法找到活动主题',
         ],
         'edit' => [
             'not_set' => '未设置编辑主题.',
             'not_found' => '无法找到编辑主题',
-            'not_match' => "您所尝试访问的对象不属于正在编辑的主题。请重载页面。"
+            'not_match' => "您所尝试访问的对象不属于正在编辑的主题。请重载页面。",
         ],
         'settings_menu' => '前端主题',
         'settings_menu_description' => '选择一个活动主题以预览。',
@@ -105,11 +105,11 @@ return [
         'not_found_name' => "无法找到页面 ':name'",
         'not_found' => [
             'label' => '无法找到页面',
-            'help' => '无法找到所请求的页面'
+            'help' => '无法找到所请求的页面',
         ],
         'custom_error' => [
             'label' => '页面错误',
-            'help' => "很抱歉，发生了错误导致页面不能显示."
+            'help' => "很抱歉，发生了错误导致页面不能显示.",
         ],
         'menu_label' => '页面',
         'unsaved_label' => '未保存页面',
@@ -122,7 +122,7 @@ return [
         'cms_page' => 'CMS 页面',
         'title' => '页面标题',
         'url' => '页面URL',
-        'file_name' => '页面文件名'
+        'file_name' => '页面文件名',
     ],
     'layout' => [
         'not_found_name' => "布局 ':name' 找不到",
@@ -131,7 +131,7 @@ return [
         'no_list_records' => '找不到布局',
         'new' => '新布局',
         'delete_confirm_multiple' => '您真的想要删除选中的布局?',
-        'delete_confirm_single' => '您真的想要删除这个布局?'
+        'delete_confirm_single' => '您真的想要删除这个布局?',
     ],
     'partial' => [
         'not_found_name' => "部件 ':name' 找不到.",
@@ -141,7 +141,7 @@ return [
         'no_list_records' => '无法找到部件',
         'delete_confirm_multiple' => '您真的想要删除选择的部件?',
         'delete_confirm_single' => '您真的想要删除这个部件?',
-        'new' => '新部件'
+        'new' => '新部件',
     ],
     'content' => [
         'not_found_name' => "无法找到内容文件 ':name'",
@@ -150,18 +150,18 @@ return [
         'no_list_records' => '无法找到内容文件',
         'delete_confirm_multiple' => '您真的想要删除选中的文件或目录吗?',
         'delete_confirm_single' => '您真的想要删除这个内容文件?',
-        'new' => '新内容文件'
+        'new' => '新内容文件',
     ],
     'ajax_handler' => [
         'invalid_name' => '非法 AJAX 处理器: :name.',
-        'not_found' => "无法找到 AJAX 处理器 ':name' "
+        'not_found' => "无法找到 AJAX 处理器 ':name' ",
     ],
     'cms' => [
-        'menu_label' => '内容管理系统'
+        'menu_label' => '内容管理系统',
     ],
     'sidebar' => [
         'add' => '增加',
-        'search' => '搜索...'
+        'search' => '搜索...',
     ],
     'editor' => [
         'settings' => '设置',
@@ -233,7 +233,7 @@ return [
         'error_deleting_directory' => '删除原始目录 :dir 错误',
         'no_list_records' => '资源文件为空',
         'delete_confirm' => '确定删除选中的文件或文件夹?',
-        'path' => '路径'
+        'path' => '路径',
     ],
     'component' => [
         'menu_label' => '组件',
@@ -245,7 +245,7 @@ return [
         'invalid_request' => '组件数据非法，无法保存',
         'no_records' => '无法找到找不到',
         'not_found' => "无法找到组件 ':name'",
-        'method_not_found' => "组件 ':name' 中无方法 ':method'."
+        'method_not_found' => "组件 ':name' 中无方法 ':method'.",
     ],
     'template' => [
         'invalid_type' => '未知模板类型.',
@@ -253,7 +253,7 @@ return [
         'saved' => '模板保存成功.',
         'no_list_records' => '模板文件为空',
         'delete_confirm' => '确认删除选中的模板?',
-        'order_by' => '排序方式'
+        'order_by' => '排序方式',
     ],
     'permissions' => [
         'name' => 'CMS',

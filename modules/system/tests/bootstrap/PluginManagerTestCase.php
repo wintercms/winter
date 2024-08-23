@@ -2,10 +2,10 @@
 
 namespace System\Tests\Bootstrap;
 
+use ReflectionClass;
+use System\Classes\PluginManager;
 use System\Classes\UpdateManager;
 use System\Classes\VersionManager;
-use System\Classes\PluginManager;
-use ReflectionClass;
 use Winter\Storm\Database\Model as ActiveRecord;
 
 class PluginManagerTestCase extends TestCase

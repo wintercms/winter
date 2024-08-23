@@ -45,21 +45,21 @@ return [
     'alert' => [
         'confirm_button_text' => 'OK',
         'cancel_button_text' => 'Zrušiť',
-        'widget_remove_confirm' => 'Skutočne zmazať tento widget?'
+        'widget_remove_confirm' => 'Skutočne zmazať tento widget?',
     ],
     'datepicker' => [
         'previousMonth' => 'Predchádzajúci mesiac',
         'nextMonth' => 'Nasledujúci mesiac',
         'months' => ['Január', 'Február', 'Marec', 'Apríl', 'Máj', 'Jún', 'Júl', 'August', 'September', 'Október', 'November', 'December'],
         'weekdays' => ['Nedeľa', 'Pondelok', 'Utorok', 'Streda', 'Štvrtok', 'Piatok', 'Sobota'],
-        'weekdaysShort' => ['Ne', 'Po', 'Ut', 'St', 'Št', 'Pi', 'So']
+        'weekdaysShort' => ['Ne', 'Po', 'Ut', 'St', 'Št', 'Pi', 'So'],
     ],
     'colorpicker' => [
         'choose' => 'Ok',
     ],
     'filter' => [
         'group' => [
-            'all' => 'všetko'
+            'all' => 'všetko',
         ],
         'dates' => [
             'all' => 'všetko',
@@ -67,15 +67,15 @@ return [
             'reset_button_text'  => 'Zrušiť',
             'date_placeholder' => 'Dátum',
             'after_placeholder' => 'Po',
-            'before_placeholder' => 'Pred'
+            'before_placeholder' => 'Pred',
         ],
         'numbers' => [
             'all' => 'all',
             'filter_button_text' => 'Filter',
             'reset_button_text'  => 'Zrušiť',
             'min_placeholder' => 'Min',
-            'max_placeholder' => 'Max'
-        ]
+            'max_placeholder' => 'Max',
+        ],
     ],
     'eventlog' => [
         'show_stacktrace' => 'Zobraziť stacktrace',
@@ -90,7 +90,7 @@ return [
             'openWith' => 'Otvoriť v',
             'remember_choice' => 'Zapamätať si vybranú voľbu pre túto reláciu',
             'open' => 'Otvoriť',
-            'cancel' => 'Zrušiť'
-        ]
-    ]
+            'cancel' => 'Zrušiť',
+        ],
+    ],
 ];

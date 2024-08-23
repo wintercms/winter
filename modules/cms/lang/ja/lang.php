@@ -19,7 +19,7 @@ return [
             'maintenance' => 'メンテナンスモード',
             'manage_themes' => 'テーマの管理',
             'customize_theme' => 'テーマのカスタマイズ',
-        ]
+        ],
     ],
     'theme' => [
         'not_found_name' => 'テーマ":name"が見つかりませんでした。',

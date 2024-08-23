@@ -10,7 +10,7 @@ class Archive extends ComponentBase
     {
         return [
             'name' => 'Blog Archive Dummy Component',
-            'description' => 'Displays an archive of blog posts.'
+            'description' => 'Displays an archive of blog posts.',
         ];
     }
 
@@ -19,12 +19,12 @@ class Archive extends ComponentBase
         return [
             'posts-per-page' => [
                  'description' => 'This will set the posts to display per page',
-                 'default' => 10
+                 'default' => 10,
             ],
             'page-number-param' => [
                 'description' => 'The router parameter for getting the pagination page number',
-                'default' => 'pageNum'
-            ]
+                'default' => 'pageNum',
+            ],
         ];
     }
 
@@ -32,7 +32,7 @@ class Archive extends ComponentBase
     {
         return [
             ['title' => 'Lorum ipsum', 'content' => 'Post Content #1'],
-            ['title' => 'La Playa Nudista', 'content' => 'Second Post Content']
+            ['title' => 'La Playa Nudista', 'content' => 'Second Post Content'],
         ];
     }
 

@@ -2,15 +2,15 @@
 
 namespace System\Classes;
 
-use Str;
-use File;
-use Yaml;
-use Backend;
-use ReflectionClass;
-use SystemException;
+use Backend\Facades\Backend;
 use Composer\Semver\Semver;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider as ServiceProviderBase;
+use ReflectionClass;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Yaml;
+use Winter\Storm\Support\Str;
 
 /**
  * Plugin base class

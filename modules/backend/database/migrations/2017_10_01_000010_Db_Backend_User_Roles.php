@@ -85,7 +85,7 @@ class DbBackendUserRoles extends Migration
                 $roles[$group->id] = Db::table('backend_user_roles')->insertGetId([
                     'name' => $group->name,
                     'description' => $group->description,
-                    'permissions' => $group->permissions ?? null
+                    'permissions' => $group->permissions ?? null,
                 ]);
             } catch (Exception $ex) {
             }
@@ -108,7 +108,7 @@ class DbBackendUserRoles extends Migration
 
             if (!isset($found[$userId])) {
                 Db::table('backend_users')->where('id', $userId)->update([
-                    'role_id' => $roleId
+                    'role_id' => $roleId,
                 ]);
             }
 
@@ -154,7 +154,7 @@ class DbBackendUserRoles extends Migration
             $newPerms = array_merge($permissions, $currentPerms);
 
             Db::table('backend_users')->where('id', $userId)->update([
-                'permissions' => json_encode($newPerms)
+                'permissions' => json_encode($newPerms),
             ]);
         } catch (Exception $ex) {
         }

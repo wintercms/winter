@@ -2,10 +2,10 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\CmsException;
 use Cms\Classes\Router;
 use Cms\Classes\Theme;
+use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Exception\SystemException;
 
 class CmsExceptionTest extends TestCase

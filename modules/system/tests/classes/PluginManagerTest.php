@@ -2,9 +2,9 @@
 
 namespace System\Tests\Classes;
 
-use System\Tests\Bootstrap\PluginManagerTestCase;
-use System\Classes\PluginManager;
 use System\Classes\PluginBase;
+use System\Classes\PluginManager;
+use System\Tests\Bootstrap\PluginManagerTestCase;
 
 class PluginManagerTest extends PluginManagerTestCase
 {

@@ -2,12 +2,12 @@
 
 namespace Cms\Classes;
 
-use File;
-use Lang;
 use Cms\Contracts\CmsObject as CmsObjectContract;
 use Cms\Helpers\File as FileHelper;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Extension\Extendable;
-use ApplicationException;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * The CMS component partial class. These objects are read-only.
@@ -164,7 +164,7 @@ class ComponentPartial extends Extendable implements CmsObjectContract
     {
         if (!FileHelper::validatePath($fileName, $this->maxNesting)) {
             throw new ApplicationException(Lang::get('cms::lang.cms_object.invalid_file', [
-                'name' => $fileName
+                'name' => $fileName,
             ]));
         }
 

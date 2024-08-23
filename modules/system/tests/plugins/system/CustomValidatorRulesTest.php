@@ -3,7 +3,7 @@
 namespace System\Tests\Plugins\System;
 
 use System\Tests\Bootstrap\PluginTestCase;
-use Validator;
+use Winter\Storm\Support\Facades\Validator;
 
 class CustomValidatorRulesTest extends PluginTestCase
 {
@@ -20,15 +20,15 @@ class CustomValidatorRulesTest extends PluginTestCase
     public function testValidationUsingClosure()
     {
         $validData = [
-            'company' => 'ACME'
+            'company' => 'ACME',
         ];
 
         $invalidData = [
-            'company' => 'Acme'
+            'company' => 'Acme',
         ];
 
         $rules = [
-            'company' => 'uppercase'
+            'company' => 'uppercase',
         ];
 
         $validationWithValidData = Validator::make($validData, $rules);
@@ -41,15 +41,15 @@ class CustomValidatorRulesTest extends PluginTestCase
     public function testValidationUsingRuleObject()
     {
         $validData = [
-            'name' => 'bob'
+            'name' => 'bob',
         ];
 
         $invalidData = [
-            'name' => 'karen'
+            'name' => 'karen',
         ];
 
         $rules = [
-            'name' => 'be_like_bob'
+            'name' => 'be_like_bob',
         ];
 
         $validationWithValidData = Validator::make($validData, $rules);

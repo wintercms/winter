@@ -2,11 +2,11 @@
 
 namespace Cms\Classes;
 
-use File;
+use Throwable;
 use Twig\Error\Error as TwigError;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Halcyon\Processors\SectionParser;
-use Throwable;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * The CMS exception class.
@@ -30,7 +30,7 @@ class CmsException extends ApplicationException
         100 => 'General',
         200 => 'INI Settings',
         300 => 'PHP Content',
-        400 => 'Twig Template'
+        400 => 'Twig Template',
     ];
 
     /**

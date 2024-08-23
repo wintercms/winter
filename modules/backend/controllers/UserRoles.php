@@ -2,10 +2,10 @@
 
 namespace Backend\Controllers;
 
-use View;
-use Response;
-use BackendMenu;
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
 use System\Classes\SettingsManager;
 
 /**
