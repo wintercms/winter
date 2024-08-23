@@ -1,8 +1,6 @@
 <?php
-
-    use Backend\Models\BrandSetting;
-    use Backend\Models\EditorSetting;
-
+use Backend\Models\BrandSetting;
+use Backend\Models\EditorSetting;
 ?>
 <?php if (BrandSetting::isConfigured() || BrandSetting::isBaseConfigured()): ?>
     <style>
