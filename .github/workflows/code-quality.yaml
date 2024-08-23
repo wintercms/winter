@@ -29,7 +29,9 @@ jobs:
         with:
           php-version: 8.0
           extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
-          tools: phpcs
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --no-scripts
 
       - name: Run code quality checks (on push)
         if: github.event_name == 'push'
