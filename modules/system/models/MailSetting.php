@@ -1,4 +1,6 @@
-<?php namespace System\Models;
+<?php
+
+namespace System\Models;
 
 use App;
 use Model;
@@ -98,8 +100,7 @@ class MailSetting extends Model
                 if ($settings->smtp_authorization) {
                     $config->set('mail.mailers.smtp.username', $settings->smtp_user);
                     $config->set('mail.mailers.smtp.password', $settings->smtp_password);
-                }
-                else {
+                } else {
                     $config->set('mail.mailers.smtp.username', null);
                     $config->set('mail.mailers.smtp.password', null);
                 }

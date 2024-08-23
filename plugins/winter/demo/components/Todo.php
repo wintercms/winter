@@ -1,4 +1,6 @@
-<?php namespace Winter\Demo\Components;
+<?php
+
+namespace Winter\Demo\Components;
 
 use Flash;
 use ApplicationException;
@@ -6,7 +8,6 @@ use Cms\Classes\ComponentBase;
 
 class Todo extends ComponentBase
 {
-
     public function componentDetails()
     {
         return [

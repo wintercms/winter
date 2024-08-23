@@ -1,4 +1,6 @@
-<?php namespace System\Classes;
+<?php
+
+namespace System\Classes;
 
 use Lang;
 use Config;
@@ -27,7 +29,7 @@ class SystemController extends ControllerBase
     {
         try {
             if (!strpos($name, '-')) {
-                return Response::make('/* '.e(Lang::get('system::lang.combiner.not_found', ['name' => $name])).' */', 404);
+                return Response::make('/* ' . e(Lang::get('system::lang.combiner.not_found', ['name' => $name])) . ' */', 404);
             }
 
             $parts = explode('-', $name);
@@ -38,7 +40,7 @@ class SystemController extends ControllerBase
 
             return $combiner->getContents($cacheId);
         } catch (Exception $ex) {
-            return Response::make('/* '.e($ex->getMessage()).' */', 500);
+            return Response::make('/* ' . e($ex->getMessage()) . ' */', 500);
         }
     }
 

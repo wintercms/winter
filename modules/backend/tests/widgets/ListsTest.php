@@ -12,7 +12,7 @@ class ListsTest extends PluginTestCase
 {
     public function testRestrictedColumnWithUserWithNoPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user);
 
         $list = $this->restrictedListsFixture();
@@ -28,7 +28,7 @@ class ListsTest extends PluginTestCase
 
     public function testRestrictedColumnWithUserWithWrongPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.wrong_permission', true));
 
         $list = $this->restrictedListsFixture();
@@ -44,7 +44,7 @@ class ListsTest extends PluginTestCase
 
     public function testRestrictedColumnWithUserWithRightPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.access_field', true));
 
         $list = $this->restrictedListsFixture();
@@ -56,11 +56,11 @@ class ListsTest extends PluginTestCase
 
     public function testRestrictedColumnWithUserWithRightWildcardPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.access_field', true));
 
         $list = new Lists(null, [
-            'model' => new User,
+            'model' => new User(),
             'arrayName' => 'array',
             'columns' => [
                 'id' => [
@@ -82,7 +82,7 @@ class ListsTest extends PluginTestCase
 
     public function testRestrictedColumnWithSuperuser()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->asSuperUser());
 
         $list = $this->restrictedListsFixture();
@@ -94,7 +94,7 @@ class ListsTest extends PluginTestCase
 
     public function testRestrictedColumnSinglePermissionWithUserWithWrongPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.wrong_permission', true));
 
         $list = $this->restrictedListsFixture(true);
@@ -110,7 +110,7 @@ class ListsTest extends PluginTestCase
 
     public function testRestrictedColumnSinglePermissionWithUserWithRightPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.access_field', true));
 
         $list = $this->restrictedListsFixture(true);
@@ -123,7 +123,7 @@ class ListsTest extends PluginTestCase
     protected function restrictedListsFixture(bool $singlePermission = false)
     {
         return new Lists(null, [
-            'model' => new User,
+            'model' => new User(),
             'arrayName' => 'array',
             'columns' => [
                 'id' => [

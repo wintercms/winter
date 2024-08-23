@@ -1,4 +1,6 @@
-<?php namespace DependencyTest\WrongCase;
+<?php
+
+namespace DependencyTest\WrongCase;
 
 use System\Classes\PluginBase;
 

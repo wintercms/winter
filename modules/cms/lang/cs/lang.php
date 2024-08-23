@@ -7,7 +7,7 @@ return [
         'file_already_exists' => "Soubor ':name' již existuje.",
         'error_saving' => "Chyba ukládání souboru ':name'. Zkontrolujte práva k zápisu.",
         'error_creating_directory' => 'Chyba vytváření složky :name. Zkontrolujte práva k zápisu.',
-        'invalid_file_extension'=>'Chybná přípona souboru: :invalid. Povolené přípony jsou: :allowed.',
+        'invalid_file_extension' => 'Chybná přípona souboru: :invalid. Povolené přípony jsou: :allowed.',
         'error_deleting' => "Chyba mazání souboru s šablonou ':name'. Zkontrolujte práva k zápisu.",
         'delete_success' => 'Šablony úspěšně smazány: :count.',
         'file_name_required' => 'Je nutno vyplnit Název souboru.',
@@ -244,7 +244,7 @@ return [
     'template' => [
         'invalid_type' => 'Neznámý typ šablony.',
         'not_found' => 'Požadovaná šablona nebyla nalezena.',
-        'saved'=> 'Šablona byla úspěšně uložena.',
+        'saved' => 'Šablona byla úspěšně uložena.',
         'no_list_records' => 'Žádné záznamy nebyly nalezeny',
         'delete_confirm' => 'Smazat vybraná témata?',
         'order_by' => 'Řadit podle'

@@ -1,4 +1,6 @@
-<?php namespace Database\Tester\Updates;
+<?php
+
+namespace Database\Tester\Updates;
 
 use Schema;
 use Winter\Storm\Database\Updates\Migration;

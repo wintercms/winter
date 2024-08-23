@@ -1,4 +1,6 @@
-<?php namespace Database\Tester\Models;
+<?php
+
+namespace Database\Tester\Models;
 
 use Model;
 
@@ -19,7 +21,7 @@ class Category extends Model
 
     public function getCustomNameAttribute()
     {
-        return $this->name.' (#'.$this->id.')';
+        return $this->name . ' (#' . $this->id . ')';
     }
 }
 

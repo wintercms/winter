@@ -1,4 +1,6 @@
-<?php namespace System\Classes;
+<?php
+
+namespace System\Classes;
 
 use File;
 use Yaml;
@@ -64,7 +66,7 @@ class VersionManager
 
     protected function init()
     {
-        $this->updater = new Updater;
+        $this->updater = new Updater();
         $this->pluginManager = PluginManager::instance();
     }
 
@@ -374,7 +376,7 @@ class VersionManager
         }
 
         $versionFile = $this->getVersionFile($code);
-        $versionInfo = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
+        $versionInfo = Yaml::withProcessor(new VersionYamlProcessor(), function ($yaml) use ($versionFile) {
             return $yaml->parseFile($versionFile);
         });
 
@@ -455,12 +457,12 @@ class VersionManager
             Db::table('system_plugin_versions')->insert([
                 'code'       => $code,
                 'version'    => $version,
-                'created_at' => new Carbon
+                'created_at' => new Carbon()
             ]);
         } elseif ($version && $currentVersion) {
             Db::table('system_plugin_versions')->where('code', $code)->update([
                 'version'    => $version,
-                'created_at' => new Carbon
+                'created_at' => new Carbon()
             ]);
         } elseif ($currentVersion) {
             Db::table('system_plugin_versions')->where('code', $code)->delete();
@@ -479,7 +481,7 @@ class VersionManager
             'type'       => self::HISTORY_TYPE_COMMENT,
             'version'    => $version,
             'detail'     => $comment,
-            'created_at' => new Carbon
+            'created_at' => new Carbon()
         ]);
     }
 
@@ -517,7 +519,7 @@ class VersionManager
             'type'       => self::HISTORY_TYPE_SCRIPT,
             'version'    => $version,
             'detail'     => $script,
-            'created_at' => new Carbon
+            'created_at' => new Carbon()
         ]);
     }
 
@@ -664,8 +666,7 @@ class VersionManager
             $scripts = array_values(array_filter($details, function ($detail) use ($fileNamePattern) {
                 return preg_match($fileNamePattern, $detail);
             }));
-        }
-        else {
+        } else {
             $comments = (array)$details;
             $scripts = [];
         }

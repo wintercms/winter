@@ -7,10 +7,9 @@ use Cms\Classes\PartialStack;
 
 class PartialStackTest extends TestCase
 {
-
     public function testStackPartials()
     {
-        $stack = new PartialStack;
+        $stack = new PartialStack();
 
         /*
          * Stack em up
@@ -55,7 +54,7 @@ class PartialStackTest extends TestCase
 
     public function testEmptyStack()
     {
-        $stack = new PartialStack;
+        $stack = new PartialStack();
         $this->assertNull($stack->getComponent('xxx'));
     }
 }

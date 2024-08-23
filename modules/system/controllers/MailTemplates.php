@@ -1,4 +1,6 @@
-<?php namespace System\Controllers;
+<?php
+
+namespace System\Controllers;
 
 use Mail;
 use Flash;
@@ -72,8 +74,7 @@ class MailTemplates extends Controller
             Mail::sendTo([$user->email => $user->full_name], $model->code);
 
             Flash::success(trans('system::lang.mail_templates.test_success'));
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             Flash::error($ex->getMessage());
         }
     }

@@ -1,4 +1,6 @@
-<?php namespace Backend\FormWidgets;
+<?php
+
+namespace Backend\FormWidgets;
 
 use Backend\Models\Preference as BackendPreference;
 use Backend\Classes\FormWidgetBase;

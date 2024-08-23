@@ -1,4 +1,6 @@
-<?php namespace Backend\FormWidgets;
+<?php
+
+namespace Backend\FormWidgets;
 
 use Lang;
 use ApplicationException;
@@ -192,7 +194,7 @@ class RecordFinder extends FormWidgetBase
         }
 
         $this->prepareVars();
-        return ['#'.$this->getId('container') => $this->makePartial('recordfinder')];
+        return ['#' . $this->getId('container') => $this->makePartial('recordfinder')];
     }
 
     public function onClearRecord()
@@ -205,7 +207,7 @@ class RecordFinder extends FormWidgetBase
         }
 
         $this->prepareVars();
-        return ['#'.$this->getId('container') => $this->makePartial('recordfinder')];
+        return ['#' . $this->getId('container') => $this->makePartial('recordfinder')];
     }
 
     /**
@@ -320,7 +322,7 @@ class RecordFinder extends FormWidgetBase
         if ($this->useRelation) {
             $model = $this->getRelationModel();
         } else {
-            $model = new $this->modelClass;
+            $model = new $this->modelClass();
         }
         return $model;
     }
@@ -346,13 +348,11 @@ class RecordFinder extends FormWidgetBase
             $widget->bindEvent('list.extendQueryBefore', function ($query) use ($sqlConditions) {
                 $query->whereRaw($sqlConditions);
             });
-        }
-        elseif ($scopeMethod = $this->scope) {
+        } elseif ($scopeMethod = $this->scope) {
             $widget->bindEvent('list.extendQueryBefore', function ($query) use ($scopeMethod) {
                 $query->$scopeMethod($this->model);
             });
-        }
-        else {
+        } else {
             if ($this->useRelation) {
                 $widget->bindEvent('list.extendQueryBefore', function ($query) {
                     $this->getRelationObject()->addDefinedConstraintsToQuery($query);

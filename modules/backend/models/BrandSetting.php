@@ -1,4 +1,6 @@
-<?php namespace Backend\Models;
+<?php
+
+namespace Backend\Models;
 
 use App;
 use Backend;
@@ -188,8 +190,7 @@ class BrandSetting extends Model
         try {
             $customCss = self::compileCss();
             Cache::forever($cacheKey, $customCss);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $customCss = '/* ' . $ex->getMessage() . ' */';
         }
 
@@ -206,7 +207,7 @@ class BrandSetting extends Model
         $accentColor = self::get('accent_color', self::ACCENT_COLOR);
 
         $parser->ModifyVars([
-            'logo-image'      => "'".self::getLogo()."'",
+            'logo-image'      => "'" . self::getLogo() . "'",
             'brand-primary'   => $primaryColor,
             'brand-secondary' => $secondaryColor,
             'brand-accent'    => $accentColor,

@@ -1,4 +1,6 @@
-<?php namespace System\Classes;
+<?php
+
+namespace System\Classes;
 
 use Db;
 use App;

@@ -1,4 +1,6 @@
-<?php namespace Backend\Classes;
+<?php
+
+namespace Backend\Classes;
 
 use Winter\Storm\Html\Helper as HtmlHelper;
 
@@ -11,7 +13,6 @@ use Winter\Storm\Html\Helper as HtmlHelper;
  */
 abstract class FormWidgetBase extends WidgetBase
 {
-
     //
     // Configurable properties
     //

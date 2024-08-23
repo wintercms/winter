@@ -1,4 +1,6 @@
-<?php namespace Cms\Classes;
+<?php
+
+namespace Cms\Classes;
 
 use File;
 use Lang;
@@ -123,8 +125,8 @@ class CodeParser
     */
     protected function rebuild($path)
     {
-        $uniqueName = str_replace('.', '', uniqid('', true)).'_'.md5(mt_rand());
-        $className = 'Cms'.$uniqueName.'Class';
+        $uniqueName = str_replace('.', '', uniqid('', true)) . '_' . md5(mt_rand());
+        $className = 'Cms' . $uniqueName . 'Class';
 
         $body = $this->object->code;
         $body = preg_replace('/^\s*function/m', 'public function', $body);
@@ -136,22 +138,22 @@ class CodeParser
 
         $parentClass = $this->object->getCodeClassParent();
         if ($parentClass !== null) {
-            $parentClass = ' extends '.$parentClass;
+            $parentClass = ' extends ' . $parentClass;
         }
 
-        $fileContents = '<?php '.PHP_EOL;
+        $fileContents = '<?php ' . PHP_EOL;
 
         foreach ($namespaces[0] as $namespace) {
             // Only allow compound or aliased use statements
             if (str_contains($namespace, '\\') || str_contains($namespace, ' as ')) {
-                $fileContents .= trim($namespace).PHP_EOL;
+                $fileContents .= trim($namespace) . PHP_EOL;
             }
         }
 
-        $fileContents .= 'class '.$className.$parentClass.PHP_EOL;
-        $fileContents .= '{'.PHP_EOL;
-        $fileContents .= trim($body).PHP_EOL;
-        $fileContents .= '}'.PHP_EOL;
+        $fileContents .= 'class ' . $className . $parentClass . PHP_EOL;
+        $fileContents .= '{' . PHP_EOL;
+        $fileContents .= trim($body) . PHP_EOL;
+        $fileContents .= '}' . PHP_EOL;
 
         $this->validate($fileContents);
 
@@ -295,7 +297,7 @@ class CodeParser
      */
     protected function validate($php)
     {
-        eval('?>'.$php);
+        eval('?>' . $php);
     }
 
     /**
@@ -326,14 +328,14 @@ class CodeParser
         $tmpFile = tempnam(dirname($path), basename($path));
 
         if (@file_put_contents($tmpFile, $content) === false) {
-            throw new SystemException(Lang::get('system::lang.file.create_fail', ['name'=>$tmpFile]));
+            throw new SystemException(Lang::get('system::lang.file.create_fail', ['name' => $tmpFile]));
         }
 
         while (!@rename($tmpFile, $path)) {
             usleep(rand(50000, 200000));
 
             if ($count++ > 10) {
-                throw new SystemException(Lang::get('system::lang.file.create_fail', ['name'=>$path]));
+                throw new SystemException(Lang::get('system::lang.file.create_fail', ['name' => $path]));
             }
         }
 
@@ -352,8 +354,7 @@ class CodeParser
 
             if (function_exists('opcache_invalidate') && $opcache_enabled) {
                 opcache_invalidate($path, true);
-            }
-            elseif (function_exists('apc_compile_file')) {
+            } elseif (function_exists('apc_compile_file')) {
                 apc_compile_file($path);
             }
         }
@@ -368,7 +369,7 @@ class CodeParser
 
         if (is_dir($dir)) {
             if (!is_writable($dir)) {
-                throw new SystemException(Lang::get('system::lang.directory.create_fail', ['name'=>$dir]));
+                throw new SystemException(Lang::get('system::lang.directory.create_fail', ['name' => $dir]));
             }
 
             return;
@@ -378,7 +379,7 @@ class CodeParser
             usleep(rand(50000, 200000));
 
             if ($count++ > 10) {
-                throw new SystemException(Lang::get('system::lang.directory.create_fail', ['name'=>$dir]));
+                throw new SystemException(Lang::get('system::lang.directory.create_fail', ['name' => $dir]));
             }
         }
 

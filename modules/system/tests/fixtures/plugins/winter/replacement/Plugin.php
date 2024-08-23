@@ -1,4 +1,6 @@
-<?php namespace Winter\Replacement;
+<?php
+
+namespace Winter\Replacement;
 
 use System\Classes\PluginBase;
 

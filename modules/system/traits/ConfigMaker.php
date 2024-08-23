@@ -1,4 +1,6 @@
-<?php namespace System\Traits;
+<?php
+
+namespace System\Traits;
 
 use Yaml;
 use File;
@@ -17,7 +19,6 @@ use Config;
  */
 trait ConfigMaker
 {
-
     /**
      * @var string Specifies a path to the config directory.
      */
@@ -35,26 +36,17 @@ trait ConfigMaker
             $configFile = [];
         }
 
-        /*
-         * Config already made
-         */
         if (is_object($configFile)) {
+            // Config already made
             $config = $configFile;
-        }
-        /*
-         * Embedded config
-         */
-        elseif (is_array($configFile)) {
+        } elseif (is_array($configFile)) {
+            // Embedded config
             $config = $this->makeConfigFromArray($configFile);
-        }
-        /*
-         * Process config from file contents
-         */
-        else {
+        } else {
+            // Process config from file contents
             if (isset($this->controller) && method_exists($this->controller, 'getConfigPath')) {
                 $configFile = $this->controller->getConfigPath($configFile);
-            }
-            else {
+            } else {
                 $configFile = $this->getConfigPath($configFile);
             }
 
@@ -117,7 +109,7 @@ trait ConfigMaker
      */
     public function makeConfigFromArray($configArray = [])
     {
-        $object = new stdClass;
+        $object = new stdClass();
 
         if (!is_array($configArray)) {
             return $object;
@@ -150,7 +142,8 @@ trait ConfigMaker
 
         $fileName = File::symbolizePath($fileName);
 
-        if (File::isLocalPath($fileName) ||
+        if (
+            File::isLocalPath($fileName) ||
             (!Config::get('cms.restrictBaseDir', true) && realpath($fileName) !== false)
         ) {
             return $fileName;

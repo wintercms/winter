@@ -1,4 +1,6 @@
-<?php namespace Winter\Tester;
+<?php
+
+namespace Winter\Tester;
 
 use System\Classes\PluginBase;
 

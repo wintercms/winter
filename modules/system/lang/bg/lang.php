@@ -1,4 +1,5 @@
 <?php
+
 return [
     'app' => [
         'name' => 'Winter CMS',

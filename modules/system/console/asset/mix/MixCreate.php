@@ -1,4 +1,6 @@
-<?php namespace System\Console\Asset\Mix;
+<?php
+
+namespace System\Console\Asset\Mix;
 
 use System\Console\Asset\AssetCreate;
 

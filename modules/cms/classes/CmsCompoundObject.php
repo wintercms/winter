@@ -1,4 +1,6 @@
-<?php namespace Cms\Classes;
+<?php
+
+namespace Cms\Classes;
 
 use App;
 use Ini;
@@ -272,12 +274,11 @@ class CmsCompoundObject extends CmsObject
      */
     public function getComponentProperties($componentName)
     {
-        $key = md5($this->theme->getPath()).'component-properties';
+        $key = md5($this->theme->getPath()) . 'component-properties';
 
         if (self::$objectComponentPropertyMap !== null) {
             $objectComponentMap = self::$objectComponentPropertyMap;
-        }
-        else {
+        } else {
             $cached = Cache::get($key, false);
             $unserialized = $cached ? @unserialize(@base64_decode($cached)) : false;
             $objectComponentMap = $unserialized ?: [];
@@ -300,8 +301,7 @@ class CmsCompoundObject extends CmsObject
 
         if (!isset($this->settings['components'])) {
             $objectComponentMap[$objectCode] = [];
-        }
-        else {
+        } else {
             foreach ($this->settings['components'] as $name => $settings) {
                 $nameParts = explode(' ', $name);
                 if (count($nameParts) > 1) {
@@ -342,7 +342,7 @@ class CmsCompoundObject extends CmsObject
      */
     public static function clearCache($theme)
     {
-        $key = md5($theme->getPath()).'component-properties';
+        $key = md5($theme->getPath()) . 'component-properties';
         Cache::forget($key);
     }
 

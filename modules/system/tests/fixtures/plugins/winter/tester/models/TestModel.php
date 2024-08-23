@@ -1,4 +1,6 @@
-<?php namespace Winter\Tester\Models;
+<?php
+
+namespace Winter\Tester\Models;
 
 use Model;
 

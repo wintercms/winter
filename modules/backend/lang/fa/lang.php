@@ -1,4 +1,5 @@
 <?php
+
 return [
     'auth' => [
         'title' => 'بخش مدیریت',
@@ -386,11 +387,11 @@ return [
         'auto_closing' => 'نشانه ها و کاراکترهای خاص بصورت خودکار بسته شوند',
         'show_invisibles' => 'نمایش کاراکتر های مخفی',
         'show_gutter' => 'نمایش نشانگر',
-        'basic_autocompletion'=> 'تکمیل خودکار عمومی (Ctrl + Space)',
-        'live_autocompletion'=> 'تکمیل خودکار زنده',
-        'enable_snippets'=> 'فعال سازی قطعه کد ها (Tab)',
-        'display_indent_guides'=> 'نمایش راهنمای تو رفتگی',
-        'show_print_margin'=> 'نمایش حاشیه چاپ',
+        'basic_autocompletion' => 'تکمیل خودکار عمومی (Ctrl + Space)',
+        'live_autocompletion' => 'تکمیل خودکار زنده',
+        'enable_snippets' => 'فعال سازی قطعه کد ها (Tab)',
+        'display_indent_guides' => 'نمایش راهنمای تو رفتگی',
+        'show_print_margin' => 'نمایش حاشیه چاپ',
         'mode_off' => 'خاموش',
         'mode_fluid' => 'سیال',
         '40_characters' => '40 کاراکتر',

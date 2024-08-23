@@ -1,4 +1,6 @@
-<?php namespace Cms\Models;
+<?php
+
+namespace Cms\Models;
 
 use File;
 use Model;
@@ -105,20 +107,20 @@ class ThemeImport extends Model
             }
 
             $themePath = $this->theme->getPath();
-            $tempPath = temp_path() . '/'.uniqid('oc');
+            $tempPath = temp_path() . '/' . uniqid('oc');
             $zipName = uniqid('oc');
-            $zipPath = temp_path().'/'.$zipName;
+            $zipPath = temp_path() . '/' . $zipName;
 
             File::put($zipPath, $file->getContents());
 
             if (!File::makeDirectory($tempPath)) {
-                throw new ApplicationException('Unable to create directory '.$tempPath);
+                throw new ApplicationException('Unable to create directory ' . $tempPath);
             }
 
             Zip::extract($zipPath, $tempPath);
 
-            if (File::isDirectory($tempPath.'/meta')) {
-                $this->copyDirectory($tempPath.'/meta', $themePath.'/meta');
+            if (File::isDirectory($tempPath . '/meta')) {
+                $this->copyDirectory($tempPath . '/meta', $themePath . '/meta');
             }
 
             foreach ($this->folders as $folder) {
@@ -126,14 +128,13 @@ class ThemeImport extends Model
                     continue;
                 }
 
-                $this->copyDirectory($tempPath.'/'.$folder, $themePath.'/'.$folder);
+                $this->copyDirectory($tempPath . '/' . $folder, $themePath . '/' . $folder);
             }
 
             File::deleteDirectory($tempPath);
             File::delete($zipPath);
             $file->delete();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             if (!empty($tempPath) && File::isDirectory($tempPath)) {
                 File::deleteDirectory($tempPath);
             }
@@ -174,7 +175,7 @@ class ThemeImport extends Model
         $items = new FilesystemIterator($directory, $options);
 
         foreach ($items as $item) {
-            $target = $destination.'/'.$item->getBasename();
+            $target = $destination . '/' . $item->getBasename();
 
             if ($item->isDir()) {
                 $path = $item->getPathname();
@@ -182,8 +183,7 @@ class ThemeImport extends Model
                 if (!$this->copyDirectory($path, $target)) {
                     return false;
                 }
-            }
-            else {
+            } else {
                 // Do not overwrite existing files
                 if (File::isFile($target)) {
                     continue;

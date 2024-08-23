@@ -12,7 +12,7 @@
 */
 
 $app = new Winter\Storm\Foundation\Application(
-    realpath(__DIR__.'/../')
+    realpath(__DIR__ . '/../')
 );
 
 /*

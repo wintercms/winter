@@ -1,4 +1,6 @@
-<?php namespace Backend\Console;
+<?php
+
+namespace Backend\Console;
 
 use Backend\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

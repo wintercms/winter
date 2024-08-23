@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use Winter\Storm\Console\Command;
 use System\Classes\PluginManager;

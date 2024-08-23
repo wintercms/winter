@@ -1,4 +1,6 @@
-<?php namespace Backend\Controllers;
+<?php
+
+namespace Backend\Controllers;
 
 use BackendMenu;
 use Backend\Classes\Controller;

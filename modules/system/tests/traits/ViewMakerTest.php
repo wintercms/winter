@@ -25,7 +25,7 @@ class ViewMakerTest extends TestCase
         return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->createApplication();
         $this->stub = new ViewMakerStub();

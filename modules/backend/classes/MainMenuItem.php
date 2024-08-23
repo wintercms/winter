@@ -1,4 +1,6 @@
-<?php namespace Backend\Classes;
+<?php
+
+namespace Backend\Classes;
 
 use Winter\Storm\Exception\SystemException;
 

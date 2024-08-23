@@ -7,7 +7,7 @@ return [
         'file_already_exists' => 'Filen ":name" finns redan',
         'error_saving' => 'Ett fel inträffade när ":name" skulle sparas',
         'error_creating_directory' => 'Ett fel inträffade när mappen :name skulle skapas',
-        'invalid_file_extension'=>'Felaktig filändelse: :invalid. Tillåtna filändelser är: :allowed.',
+        'invalid_file_extension' => 'Felaktig filändelse: :invalid. Tillåtna filändelser är: :allowed.',
         'error_deleting' => 'Det gick inte att radera mallfilen: ":name".',
         'delete_success' => 'Mallarna är nu raderade: :count.',
         'file_name_required' => 'Filnamnsfältet är obligatoriskt.'
@@ -224,7 +224,7 @@ return [
     'template' => [
         'invalid_type' => "Felaktig malltyp",
         'not_found' => "Den angivna mallen kunde ej hittas",
-        'saved'=> "Mallen har sparats"
+        'saved' => "Mallen har sparats"
     ],
     'permissions' => [
         'name' => 'Cms',

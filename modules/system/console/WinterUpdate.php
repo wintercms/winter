@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use Str;
 use Illuminate\Console\Command;

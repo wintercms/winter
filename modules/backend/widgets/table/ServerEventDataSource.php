@@ -1,4 +1,6 @@
-<?php namespace Backend\Widgets\Table;
+<?php
+
+namespace Backend\Widgets\Table;
 
 /**
  * The server-event data source for the Table widget.

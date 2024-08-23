@@ -1,4 +1,5 @@
 <?php
+
 return [
     'cms_object' => [
         'invalid_file' => 'Neplatný názov súboru: :name. Názvy súboru môžu obsahovať iba alfanumerické symboly, podtržítka, pomlčky a bodky. Príklady správnych názvov súborov: stranka.htm, stranka, priecinok/stranka',

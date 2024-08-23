@@ -15,7 +15,7 @@ class CheckboxTest extends PluginTestCase
         parent::setUp();
 
         $this->form = new Form(null, [
-            'model' => new Model,
+            'model' => new Model(),
             'arrayName' => 'array',
             'fields' => [
                 'unchecked' => [
@@ -34,7 +34,7 @@ class CheckboxTest extends PluginTestCase
                 ],
             ],
         ]);
-        
+
         $this->form->render();
     }
 

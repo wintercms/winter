@@ -7,7 +7,7 @@ return [
         'file_already_exists' => 'O ficheiro ":name" já existe.',
         'error_saving' => 'Erro ao guardar ficheiro ":name". Verifique as permissões de escrita.',
         'error_creating_directory' => 'Erro ao criar a diretória :name. Verifique as permissões de escrita.',
-        'invalid_file_extension'=>'Extensão de ficheiro inválida: :invalid. Extensões válidas: :allowed.',
+        'invalid_file_extension' => 'Extensão de ficheiro inválida: :invalid. Extensões válidas: :allowed.',
         'error_deleting' => 'Erro ao apagar o ficheiro de modelo ":name". Verifique as permissões de escrita.',
         'delete_success' => 'Modelos excluídos com sucesso: :count.',
         'file_name_required' => 'O campo de nome do ficheiro é necessário.',
@@ -241,7 +241,7 @@ return [
     'template' => [
         'invalid_type' => 'Tipo de modelo desconhecido.',
         'not_found' => 'O modelo solicitado não foi encontrado.',
-        'saved'=> 'O modelo foi salvo com sucesso.',
+        'saved' => 'O modelo foi salvo com sucesso.',
         'no_list_records' => 'Não foram encontrados registos',
         'delete_confirm' => 'Apagar modelos selecionados?',
         'order_by' => 'Ordenar por'

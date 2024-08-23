@@ -1,4 +1,6 @@
-<?php namespace Backend\FormWidgets;
+<?php
+
+namespace Backend\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
 use Backend\Widgets\Form;

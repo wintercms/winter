@@ -1,4 +1,6 @@
-<?php namespace Cms\Classes;
+<?php
+
+namespace Cms\Classes;
 
 use File;
 use Lang;
@@ -162,16 +164,16 @@ class Asset extends Extendable
         if (File::isFile($fullPath) && $this->originalFileName !== $this->fileName) {
             throw new ApplicationException(Lang::get(
                 'cms::lang.cms_object.file_already_exists',
-                ['name'=>$this->fileName]
+                ['name' => $this->fileName]
             ));
         }
 
-        $dirPath = $this->theme->getPath().'/'.$this->dirName;
+        $dirPath = $this->theme->getPath() . '/' . $this->dirName;
         if (!file_exists($dirPath) || !is_dir($dirPath)) {
             if (!File::makeDirectory($dirPath, 0777, true, true)) {
                 throw new ApplicationException(Lang::get(
                     'cms::lang.cms_object.error_creating_directory',
-                    ['name'=>$dirPath]
+                    ['name' => $dirPath]
                 ));
             }
         }
@@ -182,7 +184,7 @@ class Asset extends Extendable
             if (!is_dir($dirPath) && !File::makeDirectory($dirPath, 0777, true, true)) {
                 throw new ApplicationException(Lang::get(
                     'cms::lang.cms_object.error_creating_directory',
-                    ['name'=>$dirPath]
+                    ['name' => $dirPath]
                 ));
             }
         }
@@ -191,7 +193,7 @@ class Asset extends Extendable
         if (@File::put($fullPath, $this->content) === false) {
             throw new ApplicationException(Lang::get(
                 'cms::lang.cms_object.error_saving',
-                ['name'=>$this->fileName]
+                ['name' => $this->fileName]
             ));
         }
 

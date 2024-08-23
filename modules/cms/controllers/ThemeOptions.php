@@ -1,4 +1,6 @@
-<?php namespace Cms\Controllers;
+<?php
+
+namespace Cms\Controllers;
 
 use Backend;
 use BackendMenu;
@@ -53,8 +55,7 @@ class ThemeOptions extends Controller
             $this->asExtension('FormController')->update($model->id);
 
             $this->vars['hasCustomData'] = $this->hasThemeData($dirName);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
     }
@@ -78,7 +79,7 @@ class ThemeOptions extends Controller
         $model = $this->getThemeData($this->getDirName($dirName));
         $model->delete();
 
-        return Backend::redirect('cms/themeoptions/update/'.$dirName);
+        return Backend::redirect('cms/themeoptions/update/' . $dirName);
     }
 
     /**

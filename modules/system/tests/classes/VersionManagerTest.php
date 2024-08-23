@@ -7,8 +7,7 @@ use System\Classes\VersionManager;
 
 class VersionManagerTest extends TestCase
 {
-
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

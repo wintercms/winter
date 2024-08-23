@@ -1,4 +1,6 @@
-<?php namespace System\Twig;
+<?php
+
+namespace System\Twig;
 
 use System\Twig\Loader as TwigLoader;
 use Twig\Environment as TwigEnvironment;

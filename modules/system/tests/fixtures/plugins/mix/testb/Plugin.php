@@ -1,4 +1,6 @@
-<?php namespace Mix\TestB;
+<?php
+
+namespace Mix\TestB;
 
 use System\Classes\PluginBase;
 

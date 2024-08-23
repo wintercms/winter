@@ -88,7 +88,7 @@ class WinterEnvTest extends TestCase
         $this->app->useEnvironmentPath(storage_path('temp/tests/env'));
 
         // Re-load configuration
-        $configBootstrap = new LoadConfiguration;
+        $configBootstrap = new LoadConfiguration();
         $configBootstrap->bootstrap($this->app);
     }
 
@@ -120,7 +120,7 @@ class WinterEnvTest extends TestCase
         }
 
         // Re-load configuration
-        $configBootstrap = new LoadConfiguration;
+        $configBootstrap = new LoadConfiguration();
         $configBootstrap->bootstrap($this->app);
     }
 }

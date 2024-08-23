@@ -1,4 +1,6 @@
-<?php namespace Backend\Traits;
+<?php
+
+namespace Backend\Traits;
 
 use Lang;
 use Request;
@@ -66,11 +68,10 @@ trait InspectableContainer
             $propertyMethodName .= ucfirst($part);
         }
 
-        $methodName = 'get'.$propertyMethodName.'Options';
+        $methodName = 'get' . $propertyMethodName . 'Options';
         if (method_exists($obj, $methodName)) {
             $options = $obj->$methodName();
-        }
-        else {
+        } else {
             $options = $obj->getPropertyOptions($property);
         }
 

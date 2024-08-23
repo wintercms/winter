@@ -1,4 +1,6 @@
-<?php namespace Cms\Helpers;
+<?php
+
+namespace Cms\Helpers;
 
 use Config;
 use File as Filesystem;

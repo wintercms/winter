@@ -11,7 +11,7 @@ use Model;
 
 class HasManyThroughModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

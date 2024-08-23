@@ -1,4 +1,6 @@
-<?php namespace Cms\Widgets;
+<?php
+
+namespace Cms\Widgets;
 
 use App;
 use Str;

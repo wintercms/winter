@@ -1,4 +1,6 @@
-<?php namespace System\Classes;
+<?php
+
+namespace System\Classes;
 
 /**
  * Composer manager
@@ -30,7 +32,7 @@ class ComposerManager
 
     public function init()
     {
-        $this->loader = include base_path() .'/vendor/autoload.php';
+        $this->loader = include base_path() . '/vendor/autoload.php';
         $this->preloadPools();
     }
 
@@ -45,7 +47,7 @@ class ComposerManager
     protected function preloadIncludeFilesPool()
     {
         $result = [];
-        $vendorPath = base_path() .'/vendor';
+        $vendorPath = base_path() . '/vendor';
 
         if (file_exists($file = $vendorPath . '/composer/autoload_files.php')) {
             $includeFiles = require $file;

@@ -1,4 +1,6 @@
-<?php namespace Database\Tester\Models;
+<?php
+
+namespace Database\Tester\Models;
 
 use Model;
 

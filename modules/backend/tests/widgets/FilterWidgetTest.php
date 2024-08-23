@@ -12,7 +12,7 @@ class FilterWidgetTest extends PluginTestCase
 {
     public function testRestrictedScopeWithUserWithNoPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user);
 
         $filter = $this->restrictedFilterFixture();
@@ -28,7 +28,7 @@ class FilterWidgetTest extends PluginTestCase
 
     public function testRestrictedScopeWithUserWithWrongPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.wrong_permission', true));
 
         $filter = $this->restrictedFilterFixture();
@@ -44,7 +44,7 @@ class FilterWidgetTest extends PluginTestCase
 
     public function testRestrictedScopeWithUserWithRightPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.access_field', true));
 
         $filter = $this->restrictedFilterFixture();
@@ -56,11 +56,11 @@ class FilterWidgetTest extends PluginTestCase
 
     public function testRestrictedScopeWithUserWithRightWildcardPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.access_field', true));
 
         $filter = new Filter(null, [
-            'model' => new User,
+            'model' => new User(),
             'arrayName' => 'array',
             'scopes' => [
                 'id' => [
@@ -82,7 +82,7 @@ class FilterWidgetTest extends PluginTestCase
 
     public function testRestrictedScopeWithSuperuser()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->asSuperUser());
 
         $filter = $this->restrictedFilterFixture();
@@ -94,7 +94,7 @@ class FilterWidgetTest extends PluginTestCase
 
     public function testRestrictedScopeSinglePermissionWithUserWithWrongPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.wrong_permission', true));
 
         $filter = $this->restrictedFilterFixture(true);
@@ -110,7 +110,7 @@ class FilterWidgetTest extends PluginTestCase
 
     public function testRestrictedScopeSinglePermissionWithUserWithRightPermissions()
     {
-        $user = new UserFixture;
+        $user = new UserFixture();
         $this->actingAs($user->withPermission('test.access_field', true));
 
         $filter = $this->restrictedFilterFixture(true);
@@ -123,7 +123,7 @@ class FilterWidgetTest extends PluginTestCase
     protected function restrictedFilterFixture(bool $singlePermission = false)
     {
         return new Filter(null, [
-            'model' => new User,
+            'model' => new User(),
             'arrayName' => 'array',
             'scopes' => [
                 'id' => [

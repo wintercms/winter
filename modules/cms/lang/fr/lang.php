@@ -260,10 +260,10 @@ return [
     'template' => [
         'invalid_type' => 'Type de modèle inconnu.',
         'not_found' => 'Le modèle est introuvable.',
-        'saved'=> 'Le modèle a été sauvegardé avec succès.',
+        'saved' => 'Le modèle a été sauvegardé avec succès.',
         'no_list_records' => 'Aucun enregistrement trouvé',
         'delete_confirm' => 'Supprimer les modèles sélectionnés ?',
-        'order_by' =>'Trier par'
+        'order_by' => 'Trier par'
     ],
     'permissions' => [
         'name' => 'CMS',

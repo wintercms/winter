@@ -7,7 +7,7 @@ use Database\Tester\Models\ValidationPost;
 
 class ValidationModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

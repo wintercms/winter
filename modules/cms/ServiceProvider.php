@@ -1,4 +1,6 @@
-<?php namespace Cms;
+<?php
+
+namespace Cms;
 
 use Backend;
 use Backend\Classes\WidgetManager;
@@ -121,10 +123,10 @@ class ServiceProvider extends ModuleServiceProvider
                 );
             }
 
-            $twig = MarkupManager::makeBaseTwigEnvironment(new CmsTwigLoader, $options);
-            $twig->addExtension(new CmsTwigExtension);
+            $twig = MarkupManager::makeBaseTwigEnvironment(new CmsTwigLoader(), $options);
+            $twig->addExtension(new CmsTwigExtension());
             if ($isDebugMode) {
-                $twig->addExtension(new DebugExtension);
+                $twig->addExtension(new DebugExtension());
             }
 
             return $twig;

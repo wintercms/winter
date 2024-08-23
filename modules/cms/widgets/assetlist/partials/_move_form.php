@@ -1,8 +1,8 @@
 <?= Form::open([
-    'data-request'=>$this->getEventHandler('onMove'),
-    'data-request-success'=>"\$(this).trigger('close.oc.popup')",
-    'data-stripe-load-indicator'=>1,
-    'id'=>'asset-move-popup-form'
+    'data-request' => $this->getEventHandler('onMove'),
+    'data-request-success' => "\$(this).trigger('close.oc.popup')",
+    'data-stripe-load-indicator' => 1,
+    'id' => 'asset-move-popup-form'
 ]) ?>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="popup">&times;</button>

@@ -1,4 +1,6 @@
-<?php namespace System\Traits;
+<?php
+
+namespace System\Traits;
 
 use File;
 use Lang;
@@ -221,7 +223,8 @@ trait ViewMaker
      */
     public function makeFileContents(string $filePath, array $extraParams = []): string
     {
-        if (!strlen($filePath) ||
+        if (
+            !strlen($filePath) ||
             !File::isFile($filePath) ||
             (!File::isLocalPath($filePath) && Config::get('cms.restrictBaseDir', true))
         ) {
@@ -245,8 +248,7 @@ trait ViewMaker
         // an exception is thrown. This prevents any partial views from leaking.
         try {
             include $filePath;
-        }
-        catch (Throwable $e) {
+        } catch (Throwable $e) {
             $this->handleViewException($e, $obLevel);
         }
 

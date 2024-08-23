@@ -1,4 +1,6 @@
-<?php namespace Cms\Models;
+<?php
+
+namespace Cms\Models;
 
 use Lang;
 use Model;
@@ -76,8 +78,7 @@ class ThemeData extends Model
     {
         try {
             CombineAssets::resetCache();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
         }
     }
 
@@ -95,8 +96,7 @@ class ThemeData extends Model
 
         try {
             $themeData = self::firstOrCreate(['theme' => $dirName]);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             // Database failed
             $themeData = new self(['theme' => $dirName]);
         }

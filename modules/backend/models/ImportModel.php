@@ -1,4 +1,6 @@
-<?php namespace Backend\Models;
+<?php
+
+namespace Backend\Models;
 
 use Backend\Behaviors\ImportExportController\TranscodeFilter;
 use Str;
@@ -134,7 +136,7 @@ abstract class ImportModel extends Model
         }
 
         // Create reader statement
-        $stmt = (new CsvStatement)
+        $stmt = (new CsvStatement())
             ->where(function (array $row) {
                 // Filter out empty rows
                 return count($row) > 1 || reset($row) !== null;
@@ -185,7 +187,7 @@ abstract class ImportModel extends Model
         $newData = [];
 
         foreach ($data as $_value) {
-            $newData[] = str_replace('\\'.$delimeter, $delimeter, $_value);
+            $newData[] = str_replace('\\' . $delimeter, $delimeter, $_value);
         }
 
         return $newData;
@@ -240,7 +242,7 @@ abstract class ImportModel extends Model
         ];
 
         $translated = array_map(function ($option) {
-            return Lang::get('backend::lang.import_export.encodings.'.Str::slug($option, '_'));
+            return Lang::get('backend::lang.import_export.encodings.' . Str::slug($option, '_'));
         }, $options);
 
         return array_combine($options, $translated);

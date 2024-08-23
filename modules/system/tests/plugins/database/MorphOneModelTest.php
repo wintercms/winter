@@ -10,7 +10,7 @@ use Model;
 
 class MorphOneModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

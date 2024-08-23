@@ -1,4 +1,6 @@
-<?php namespace System\Models;
+<?php
+
+namespace System\Models;
 
 use Lang;
 use Model;
@@ -98,12 +100,14 @@ class PluginVersion extends Model
             $activeFlags = $manager->getPluginFlags($pluginObj);
             if (!empty($activeFlags)) {
                 foreach ($activeFlags as $flag => $enabled) {
-                    if (in_array($flag, [
+                    if (
+                        in_array($flag, [
                         PluginManager::DISABLED_MISSING,
                         PluginManager::DISABLED_REPLACED,
                         PluginManager::DISABLED_REPLACEMENT_FAILED,
                         PluginManager::DISABLED_MISSING_DEPENDENCIES,
-                    ])) {
+                        ])
+                    ) {
                         $this->disabledBySystem = true;
                     }
 
@@ -112,8 +116,7 @@ class PluginVersion extends Model
                     }
                 }
             }
-        }
-        else {
+        } else {
             $this->name = $this->code;
             $this->description = Lang::get('system::lang.plugins.unknown_plugin');
             $this->orphaned = true;

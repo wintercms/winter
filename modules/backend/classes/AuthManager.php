@@ -1,4 +1,6 @@
-<?php namespace Backend\Classes;
+<?php
+
+namespace Backend\Classes;
 
 use Config;
 use System\Classes\PluginManager;
@@ -236,7 +238,7 @@ class AuthManager extends StormAuthManager
      */
     protected function validateUserModel($user)
     {
-        if ( ! $user instanceof $this->userModel) {
+        if (!$user instanceof $this->userModel) {
             return false;
         }
 
@@ -266,8 +268,7 @@ class AuthManager extends StormAuthManager
                     foreach ((array) $permission->roles as $_role) {
                         $this->permissionRoles[$_role][$permission->code] = 1;
                     }
-                }
-                else {
+                } else {
                     $this->permissionRoles['*'][$permission->code] = 1;
                 }
             }

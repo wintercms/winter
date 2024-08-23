@@ -7,7 +7,7 @@ return [
         'file_already_exists' => '이미 ":name"이 존재합니다.',
         'error_saving' => '":name" 파일 저장 오류',
         'error_creating_directory' => ':name 디렉토리 작성 오류',
-        'invalid_file_extension'=>'올바르지 않은 파일 확장자: :invalid. 허가된 확장자는 :allowed 입니다.',
+        'invalid_file_extension' => '올바르지 않은 파일 확장자: :invalid. 허가된 확장자는 :allowed 입니다.',
         'error_deleting' => '":name" 파일 삭제 오류',
         'delete_success' => ':count 개의 템플릿을 삭제했습니다.',
         'file_name_required' => '파일명 필드가 필요합니다.',
@@ -242,7 +242,7 @@ return [
     'template' => [
         'invalid_type' => "알수없는 템플릿 타입",
         'not_found' => "요청한 템플릿이 없습니다.",
-        'saved'=> "템플릿을 저장합니다.",
+        'saved' => "템플릿을 저장합니다.",
         'no_list_records' => '템플릿을 찾을 수 없습니다',
         'delete_confirm' => '선택한 템플릿을 삭제하시겠습니까?',
         'order_by' => '정렬방법'

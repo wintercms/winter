@@ -1,4 +1,6 @@
-<?php namespace Cms\Classes;
+<?php
+
+namespace Cms\Classes;
 
 use App;
 use ApplicationException;
@@ -67,7 +69,7 @@ class Theme extends CmsObject
      */
     public static function load($dirName, $file = null): self
     {
-        $theme = new static;
+        $theme = new static();
         $theme->setDirName($dirName);
         $theme->registerHalcyonDatasource();
         if (App::runningInBackend()) {
@@ -482,13 +484,12 @@ class Theme extends CmsObject
 
             if (File::isLocalPath($fileName)) {
                 $path = $fileName;
-            }
-            else {
-                $path = $this->getPath().'/'.$result;
+            } else {
+                $path = $this->getPath() . '/' . $result;
             }
 
             if (!File::exists($path)) {
-                throw new ApplicationException('Path does not exist: '.$path);
+                throw new ApplicationException('Path does not exist: ' . $path);
             }
 
             $result = Yaml::parseFile($path);
@@ -508,7 +509,7 @@ class Theme extends CmsObject
             $values = $values + (array) $this->getConfig();
         }
 
-        $path = $this->getPath().'/theme.yaml';
+        $path = $this->getPath() . '/theme.yaml';
         if (!File::exists($path)) {
             throw new ApplicationException('Path does not exist: ' . $path);
         }

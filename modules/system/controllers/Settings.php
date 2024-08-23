@@ -1,4 +1,6 @@
-<?php namespace System\Controllers;
+<?php
+
+namespace System\Controllers;
 
 use Mail;
 use Lang;
@@ -69,7 +71,7 @@ class Settings extends Controller
 
     public function update($author, $plugin, $code = null)
     {
-        SettingsManager::setContext($author.'.'.$plugin, $code);
+        SettingsManager::setContext($author . '.' . $plugin, $code);
 
         $this->vars['parentLink'] = Backend::url('system/settings');
         $this->vars['parentLabel'] = Lang::get('system::lang.settings.menu_label');
@@ -88,8 +90,7 @@ class Settings extends Controller
 
             $model = $this->createModel($item);
             $this->initWidgets($model);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
     }
@@ -149,7 +150,7 @@ class Settings extends Controller
 
         Flash::success(Lang::get('backend::lang.form.reset_success'));
 
-        return Backend::redirect('system/settings/update/'.$author.'/'.$plugin.'/'.$code);
+        return Backend::redirect('system/settings/update/' . $author . '/' . $plugin . '/' . $code);
     }
 
     /**

@@ -1,4 +1,6 @@
-<?php namespace System\Models;
+<?php
+
+namespace System\Models;
 
 use View;
 use Model;
@@ -99,7 +101,7 @@ class MailLayout extends Model
         $layout = self::whereCode($code)->first();
 
         if (!$layout && View::exists($code)) {
-            $layout = new self;
+            $layout = new self();
             $layout->code = $code;
             $layout->fillFromView($code);
         }
@@ -123,7 +125,7 @@ class MailLayout extends Model
                 continue;
             }
 
-            $layout = new static;
+            $layout = new static();
             $layout->code = $code;
             $layout->is_locked = true;
             $layout->fillFromView($path);
@@ -147,7 +149,7 @@ class MailLayout extends Model
         }
 
         if (!$definition = array_get($definitions, $code)) {
-            throw new ApplicationException('Unable to find a registered layout with code: '.$code);
+            throw new ApplicationException('Unable to find a registered layout with code: ' . $code);
         }
 
         $this->fillFromView($definition);

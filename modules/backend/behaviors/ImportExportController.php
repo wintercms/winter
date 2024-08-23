@@ -1,4 +1,6 @@
-<?php namespace Backend\Behaviors;
+<?php
+
+namespace Backend\Behaviors;
 
 use Str;
 use Lang;
@@ -208,14 +210,12 @@ class ImportExportController extends ControllerBehavior
 
             $this->vars['importResults'] = $model->getResultStats();
             $this->vars['returnUrl'] = $this->getRedirectUrlForType('import');
-        }
-        catch (MassAssignmentException $ex) {
+        } catch (MassAssignmentException $ex) {
             $this->controller->handleError(new ApplicationException(Lang::get(
                 'backend::lang.model.mass_assignment_failed',
                 ['attribute' => $ex->getMessage()]
             )));
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->controller->handleError($ex);
         }
 
@@ -228,8 +228,7 @@ class ImportExportController extends ControllerBehavior
     {
         try {
             $this->checkRequiredImportColumns();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->controller->handleError($ex);
         }
 
@@ -329,7 +328,7 @@ class ImportExportController extends ControllerBehavior
 
         if (!post('first_row_titles')) {
             array_walk($firstRow, function (&$value, $key) {
-                $value = 'Column #'.($key + 1);
+                $value = 'Column #' . ($key + 1);
             });
         }
 
@@ -447,19 +446,17 @@ class ImportExportController extends ControllerBehavior
             $reference = $model->export($columns, $exportOptions);
             $fileUrl = $this->controller->actionUrl(
                 'download',
-                $reference.'/'.$this->exportFileName
+                $reference . '/' . $this->exportFileName
             );
 
             $this->vars['fileUrl'] = $fileUrl;
             $this->vars['returnUrl'] = $this->getRedirectUrlForType('export');
-        }
-        catch (MassAssignmentException $ex) {
+        } catch (MassAssignmentException $ex) {
             $this->controller->handleError(new ApplicationException(Lang::get(
                 'backend::lang.model.mass_assignment_failed',
                 ['attribute' => $ex->getMessage()]
             )));
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->controller->handleError($ex);
         }
 
@@ -583,8 +580,7 @@ class ImportExportController extends ControllerBehavior
 
         if (is_array($useList)) {
             $listDefinition = array_get($useList, 'definition');
-        }
-        else {
+        } else {
             $listDefinition = $useList;
         }
 
@@ -620,7 +616,7 @@ class ImportExportController extends ControllerBehavior
         /*
          * Prepare CSV
          */
-        $csv = CsvWriter::createFromFileObject(new SplTempFileObject);
+        $csv = CsvWriter::createFromFileObject(new SplTempFileObject());
         $csv->setOutputBOM(CsvWriter::BOM_UTF8);
         $csv->setDelimiter($options['delimiter']);
         $csv->setEnclosure($options['enclosure']);
@@ -687,7 +683,7 @@ class ImportExportController extends ControllerBehavior
      */
     public function importExportMakePartial($partial, $params = [])
     {
-        $contents = $this->controller->makePartial('import_export_'.$partial, $params + $this->vars, false);
+        $contents = $this->controller->makePartial('import_export_' . $partial, $params + $this->vars, false);
 
         if (!$contents) {
             $contents = $this->makePartial($partial, $params);
@@ -704,7 +700,7 @@ class ImportExportController extends ControllerBehavior
     protected function checkPermissionsForType($type)
     {
         if (
-            ($permissions = $this->getConfig($type.'[permissions]')) &&
+            ($permissions = $this->getConfig($type . '[permissions]')) &&
             (!BackendAuth::getUser()->hasAnyAccess((array) $permissions))
         ) {
             return Response::make(View::make('backend::access_denied'), 403);
@@ -717,11 +713,11 @@ class ImportExportController extends ControllerBehavior
             return null;
         }
 
-        if ($fieldConfig = $this->getConfig($type.'[form]')) {
+        if ($fieldConfig = $this->getConfig($type . '[form]')) {
             $widgetConfig = $this->makeConfig($fieldConfig);
             $widgetConfig->model = $this->getModelForType($type);
-            $widgetConfig->alias = $type.'OptionsForm';
-            $widgetConfig->arrayName = ucfirst($type).'Options';
+            $widgetConfig->alias = $type . 'OptionsForm';
+            $widgetConfig->arrayName = ucfirst($type) . 'Options';
 
             return $this->makeWidget('Backend\Widgets\Form', $widgetConfig);
         }
@@ -731,20 +727,20 @@ class ImportExportController extends ControllerBehavior
 
     protected function getModelForType($type)
     {
-        $cacheProperty = $type.'Model';
+        $cacheProperty = $type . 'Model';
 
         if ($this->{$cacheProperty} !== null) {
             return $this->{$cacheProperty};
         }
 
-        $modelClass = $this->getConfig($type.'[modelClass]');
+        $modelClass = $this->getConfig($type . '[modelClass]');
         if (!$modelClass) {
             throw new ApplicationException(Lang::get('backend::lang.import_export.missing_model_class_error', [
                 'type' => $type
             ]));
         }
 
-        return $this->{$cacheProperty} = new $modelClass;
+        return $this->{$cacheProperty} = new $modelClass();
     }
 
     protected function makeListColumns($config)
@@ -759,8 +755,7 @@ class ImportExportController extends ControllerBehavior
         foreach ($config->columns as $attribute => $column) {
             if (is_array($column)) {
                 $result[$attribute] = array_get($column, 'label', $attribute);
-            }
-            else {
+            } else {
                 $result[$attribute] = $column ?: $attribute;
             }
         }
@@ -770,7 +765,7 @@ class ImportExportController extends ControllerBehavior
 
     protected function getRedirectUrlForType($type)
     {
-        $redirect = $this->getConfig($type.'[redirect]');
+        $redirect = $this->getConfig($type . '[redirect]');
 
         if ($redirect !== null) {
             return $redirect ? Backend::url($redirect) : 'javascript:;';

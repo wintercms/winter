@@ -1,5 +1,5 @@
 <?= Form::ajax($this->getEventHandler('onApplyName'), [
-    'success' => "\$el.trigger('close.oc.popup'); \$('#".$listId."').trigger('mediarefresh');",
+    'success' => "\$el.trigger('close.oc.popup'); \$('#" . $listId . "').trigger('mediarefresh');",
     'data-stripe-load-indicator' => 1,
     'id' => 'media-rename-popup-form'
 ]) ?>

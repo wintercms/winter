@@ -156,8 +156,7 @@ class Relation extends FormWidgetBase
                 $nameFrom = 'selection';
                 $selectColumn = $usesTree ? '*' : $relationModel->getKeyName();
                 $result = $query->select($selectColumn, Db::raw($this->sqlSelect . ' AS ' . $nameFrom));
-            }
-            else {
+            } else {
                 $nameFrom = $this->nameFrom;
                 $result = $query->getQuery()->get();
             }

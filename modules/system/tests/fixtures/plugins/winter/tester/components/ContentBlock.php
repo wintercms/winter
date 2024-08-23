@@ -1,4 +1,6 @@
-<?php namespace Winter\Tester\Components;
+<?php
+
+namespace Winter\Tester\Components;
 
 use Cms\Classes\ComponentBase;
 
@@ -15,7 +17,7 @@ class ContentBlock extends ComponentBase
     public function onRender()
     {
         if ($output = $this->property('output')) {
-            return 'Custom output: '.$output;
+            return 'Custom output: ' . $output;
         }
 
         return 'Pass';

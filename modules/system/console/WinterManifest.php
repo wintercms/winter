@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use ApplicationException;
 use Http;
@@ -159,7 +161,7 @@ class WinterManifest extends \Illuminate\Console\Command
             if (is_dir($buildDir . $build . '/')) {
                 $this->info('  - Already extracted.');
             } else {
-                $zip = new ZipArchive;
+                $zip = new ZipArchive();
                 if ($zip->open($buildDir . 'build-' . $build . '.zip')) {
                     $rootFolder = substr($zip->statIndex(0)['name'], 0, -1);
 

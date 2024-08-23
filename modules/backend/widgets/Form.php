@@ -1,4 +1,6 @@
-<?php namespace Backend\Widgets;
+<?php
+
+namespace Backend\Widgets;
 
 use ApplicationException;
 use Backend\Classes\FormField;
@@ -287,7 +289,7 @@ class Form extends WidgetBase
         if (!$this->model) {
             throw new ApplicationException(Lang::get(
                 'backend::lang.form.missing_model',
-                ['class'=>get_class($this->controller)]
+                ['class' => get_class($this->controller)]
             ));
         }
 
@@ -416,7 +418,7 @@ class Form extends WidgetBase
          * Update the whole form
          */
         if (empty($result)) {
-            $result = ['#'.$this->getId() => $this->makePartial('form')];
+            $result = ['#' . $this->getId() => $this->makePartial('form')];
         }
 
         /**
@@ -656,11 +658,9 @@ class Form extends WidgetBase
         ) {
             if ($this->allTabs->secondary->hasFields()) {
                 $this->allTabs->secondary->stretch = true;
-            }
-            elseif ($this->allTabs->primary->hasFields()) {
+            } elseif ($this->allTabs->primary->hasFields()) {
                 $this->allTabs->primary->stretch = true;
-            }
-            else {
+            } else {
                 $this->allTabs->outside->stretch = true;
             }
         }
@@ -694,8 +694,7 @@ class Form extends WidgetBase
             if (strtolower($field->span) === 'auto') {
                 if ($prevSpan === 'left') {
                     $field->span = 'right';
-                }
-                else {
+                } else {
                     $field->span = 'left';
                 }
             }
@@ -838,21 +837,15 @@ class Form extends WidgetBase
         $field->arrayName = $this->arrayName;
         $field->idPrefix = $this->getId();
 
-        /*
-         * Simple field type
-         */
         if (is_string($config)) {
+            // Simple field type
             if ($this->isFormWidget($config) !== false) {
                 $field->displayAs('widget', ['widget' => $config]);
-            }
-            else {
+            } else {
                 $field->displayAs($config);
             }
-        }
-        /*
-         * Defined field type
-         */
-        else {
+        } else {
+            // Defined field type
             $fieldType = $config['type'] ?? null;
             if (!is_string($fieldType) && $fieldType !== null) {
                 throw new ApplicationException(Lang::get(
@@ -1220,8 +1213,10 @@ class Form extends WidgetBase
         foreach ($this->formWidgets as $field => $widget) {
             $parts = HtmlHelper::nameToArray($field);
 
-            if ((isset($widget->config->disabled) && $widget->config->disabled)
-                || (isset($widget->config->hidden) && $widget->config->hidden)) {
+            if (
+                (isset($widget->config->disabled) && $widget->config->disabled)
+                || (isset($widget->config->hidden) && $widget->config->hidden)
+            ) {
                 continue;
             }
 
@@ -1299,24 +1294,21 @@ class Form extends WidgetBase
             $fieldOptions = call_user_func($fieldOptions, $this, $field);
         }
 
-        /*
-         * Refer to the model method or any of its behaviors
-         */
         if (!is_array($fieldOptions) && !$fieldOptions) {
+            // Refer to the model method or any of its behaviors
             try {
                 list($model, $attribute) = $field->resolveModelAttribute($this->model, $field->fieldName);
                 if (!$model) {
                     throw new Exception();
                 }
-            }
-            catch (Exception $ex) {
+            } catch (Exception $ex) {
                 throw new ApplicationException(Lang::get('backend::lang.field.options_method_invalid_model', [
                     'model' => get_class($this->model),
                     'field' => $field->fieldName
                 ]));
             }
 
-            $methodName = 'get'.studly_case($attribute).'Options';
+            $methodName = 'get' . studly_case($attribute) . 'Options';
             if (
                 !$this->objectMethodExists($model, $methodName) &&
                 !$this->objectMethodExists($model, 'getDropdownOptions')
@@ -1330,15 +1322,12 @@ class Form extends WidgetBase
 
             if ($this->objectMethodExists($model, $methodName)) {
                 $fieldOptions = $model->$methodName($field->value, $this->data);
-            }
-            else {
+            } else {
                 $fieldOptions = $model->getDropdownOptions($attribute, $field->value, $this->data);
             }
-        }
-        /*
-         * Field options are an explicit method reference
-         */
-        elseif (is_string($fieldOptions)) {
+        } elseif (is_string($fieldOptions)) {
+            // Field options are an explicit method reference
+
             // \Path\To\Class::staticMethodOptions
             if (str_contains($fieldOptions, '::')) {
                 $options = explode('::', $fieldOptions);

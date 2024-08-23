@@ -1,4 +1,6 @@
-<?php namespace Cms\ReportWidgets;
+<?php
+
+namespace Cms\ReportWidgets;
 
 use Lang;
 use BackendAuth;
@@ -28,8 +30,7 @@ class ActiveTheme extends ReportWidgetBase
     {
         try {
             $this->loadData();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->vars['error'] = $ex->getMessage();
         }
 
@@ -60,7 +61,7 @@ class ActiveTheme extends ReportWidgetBase
     protected function loadData()
     {
         if (!$theme = Theme::getActiveTheme()) {
-            throw new ApplicationException(Lang::get('cms::lang.theme.not_found_name', ['name'=>Theme::getActiveThemeCode()]));
+            throw new ApplicationException(Lang::get('cms::lang.theme.not_found_name', ['name' => Theme::getActiveThemeCode()]));
         }
 
         $this->vars['theme'] = $theme;

@@ -1,4 +1,6 @@
-<?php namespace Cms\Classes;
+<?php
+
+namespace Cms\Classes;
 
 use Lang;
 use File;
@@ -231,8 +233,7 @@ class Router
         $cacheable = Config::get('cms.enableRoutesCache');
         if ($cacheable) {
             $cached = Cache::get($key, false);
-        }
-        else {
+        } else {
             $cached = false;
         }
 
@@ -322,7 +323,7 @@ class Router
      */
     protected function getCacheKey($keyName)
     {
-        return md5($this->theme->getPath()).$keyName.Lang::getLocale();
+        return md5($this->theme->getPath()) . $keyName . Lang::getLocale();
     }
 
     /**
@@ -345,7 +346,8 @@ class Router
         $key = $this->getUrlListCacheKey();
         $urlList = Cache::get($key, false);
 
-        if ($urlList
+        if (
+            $urlList
             && ($urlList = @unserialize(@base64_decode($urlList)))
             && is_array($urlList)
             && array_key_exists($url, $urlList)

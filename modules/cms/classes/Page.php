@@ -1,4 +1,6 @@
-<?php namespace Cms\Classes;
+<?php
+
+namespace Cms\Classes;
 
 use Lang;
 use BackendAuth;
@@ -126,7 +128,7 @@ class Page extends CmsCompoundObject
          * assuming that the method is called not during the front-end
          * request processing.
          */
-        $controller = Controller::getController() ?: new Controller;
+        $controller = Controller::getController() ?: new Controller();
 
         return $controller->pageUrl($page, $params, true);
     }
@@ -201,7 +203,7 @@ class Page extends CmsCompoundObject
                 return null;
             }
 
-            $controller = Controller::getController() ?: new Controller;
+            $controller = Controller::getController() ?: new Controller();
             $pageUrl = $controller->pageUrl($item->reference, [], false);
 
             $result = [];

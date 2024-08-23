@@ -1,4 +1,6 @@
-<?php namespace Backend;
+<?php
+
+namespace Backend;
 
 use Backend;
 use BackendMenu;

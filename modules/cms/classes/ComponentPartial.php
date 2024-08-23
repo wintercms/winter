@@ -1,4 +1,6 @@
-<?php namespace Cms\Classes;
+<?php
+
+namespace Cms\Classes;
 
 use File;
 use Lang;
@@ -147,7 +149,7 @@ class ComponentPartial extends Extendable implements CmsObjectContract
         $partial = new static($component);
         $filePath = $partial->getFilePath($fileName);
         if (!strlen(File::extension($filePath))) {
-            $filePath .= '.'.$partial->getDefaultExtension();
+            $filePath .= '.' . $partial->getDefaultExtension();
         }
 
         return File::isFile($filePath);
@@ -167,7 +169,7 @@ class ComponentPartial extends Extendable implements CmsObjectContract
         }
 
         if (!strlen(File::extension($fileName))) {
-            $fileName .= '.'.$this->defaultExtension;
+            $fileName .= '.' . $this->defaultExtension;
         }
 
         return $fileName;
@@ -244,14 +246,14 @@ class ComponentPartial extends Extendable implements CmsObjectContract
         }
 
         $component = $this->component;
-        $path = $component->getPath().'/'.$fileName;
+        $path = $component->getPath() . '/' . $fileName;
 
         /*
          * Check the shared "/partials" directory for the partial
          */
         if (!File::isFile($path)) {
-            $sharedDir = dirname($component->getPath()).'/partials';
-            $sharedPath = $sharedDir.'/'.$fileName;
+            $sharedDir = dirname($component->getPath()) . '/partials';
+            $sharedPath = $sharedDir . '/' . $fileName;
             if (File::isFile($sharedPath)) {
                 return $sharedPath;
             }

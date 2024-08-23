@@ -11,7 +11,7 @@ class ExampleTraitClass
 
     public function __construct()
     {
-        $this->controller = new Controller;
+        $this->controller = new Controller();
     }
 }
 
@@ -49,9 +49,9 @@ class WidgetMakerTest extends TestCase
 
     public function testMakeWidget()
     {
-        $manager = new ExampleTraitClass;
+        $manager = new ExampleTraitClass();
 
-        $controller = new Controller;
+        $controller = new Controller();
         $widget = $manager->makeWidget('Backend\Widgets\Search');
         $this->assertInstanceOf('Backend\Widgets\Search', $widget);
         $this->assertInstanceOf('Backend\Classes\Controller', $widget->getController());

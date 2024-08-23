@@ -34,7 +34,7 @@ namespace Backend\Tests\Widgets
     {
         public function testRestrictedFieldWithUserWithNoPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user);
 
             $form = $this->restrictedFormFixture();
@@ -45,7 +45,7 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldWithUserWithWrongPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->withPermission('test.wrong_permission', true));
 
             $form = $this->restrictedFormFixture();
@@ -56,7 +56,7 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldWithUserWithRightPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->withPermission('test.access_field', true));
 
             $form = $this->restrictedFormFixture();
@@ -67,11 +67,11 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldWithUserWithRightWildcardPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->withPermission('test.access_field', true));
 
             $form = new Form(null, [
-                'model' => new FormTestModel,
+                'model' => new FormTestModel(),
                 'arrayName' => 'array',
                 'fields' => [
                     'testField' => [
@@ -92,7 +92,7 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldWithSuperuser()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->asSuperUser());
 
             $form = $this->restrictedFormFixture();
@@ -103,7 +103,7 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldSinglePermissionWithUserWithWrongPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->withPermission('test.wrong_permission', true));
 
             $form = $this->restrictedFormFixture(true);
@@ -114,7 +114,7 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldSinglePermissionWithUserWithRightPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->withPermission('test.access_field', true));
 
             $form = $this->restrictedFormFixture(true);
@@ -126,7 +126,7 @@ namespace Backend\Tests\Widgets
         public function testCheckboxlistTrigger()
         {
             $form = new Form(null, [
-                'model' => new FormTestModel,
+                'model' => new FormTestModel(),
                 'arrayName' => 'array',
                 'fields' => [
                     'trigger' => [
@@ -155,7 +155,7 @@ namespace Backend\Tests\Widgets
         public function testOptionsGeneration()
         {
             $form = new Form(null, [
-                'model' => new FormTestModel,
+                'model' => new FormTestModel(),
                 'arrayName' => 'array',
                 'fields' => [
                     'static_method_options' => [
@@ -210,7 +210,7 @@ namespace Backend\Tests\Widgets
         protected function restrictedFormFixture(bool $singlePermission = false)
         {
             return new Form(null, [
-                'model' => new FormTestModel,
+                'model' => new FormTestModel(),
                 'arrayName' => 'array',
                 'fields' => [
                     'testField' => [

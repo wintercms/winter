@@ -1,4 +1,6 @@
-<?php namespace Cms\Components;
+<?php
+
+namespace Cms\Components;
 
 use File;
 use Cms\Classes\ComponentBase;
@@ -148,28 +150,28 @@ class Resources extends ComponentBase
 
     protected function prefixJs($value)
     {
-        return $this->jsDir.'/'.trim($value);
+        return $this->jsDir . '/' . trim($value);
     }
 
     protected function prefixCss($value)
     {
-        return $this->cssDir.'/'.trim($value);
+        return $this->cssDir . '/' . trim($value);
     }
 
     protected function prefixLess($value)
     {
-        return $this->lessDir.'/'.trim($value);
+        return $this->lessDir . '/' . trim($value);
     }
 
     protected function prefixSass($value)
     {
-        return $this->sassDir.'/'.trim($value);
+        return $this->sassDir . '/' . trim($value);
     }
 
     protected function guessAssetDirectory(array $possible, $default = null)
     {
         foreach ($possible as $option) {
-            if (File::isDirectory($this->assetPath.'/'.$option)) {
+            if (File::isDirectory($this->assetPath . '/' . $option)) {
                 return $option;
             }
         }
@@ -179,12 +181,12 @@ class Resources extends ComponentBase
 
     protected function guessAssetPath()
     {
-        $baseTheme = themes_path().'/'.$this->getTheme()->getDirName();
+        $baseTheme = themes_path() . '/' . $this->getTheme()->getDirName();
 
-        if (File::isDirectory($baseTheme.'/assets')) {
-            return $baseTheme.'/assets';
+        if (File::isDirectory($baseTheme . '/assets')) {
+            return $baseTheme . '/assets';
         }
 
-        return $baseTheme.'/resources';
+        return $baseTheme . '/resources';
     }
 }

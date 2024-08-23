@@ -7,7 +7,7 @@ return [
         'file_already_exists' => "文件 ':name' 已存在.",
         'error_saving' => "保存文件 ':name' 错误。请检查写权限。",
         'error_creating_directory' => '创建文件夹 :name 错误。请检查写权限。',
-        'invalid_file_extension'=>'非法文件扩展名: :invalid. 允许的扩展名: :allowed.',
+        'invalid_file_extension' => '非法文件扩展名: :invalid. 允许的扩展名: :allowed.',
         'error_deleting' => "删除模板文件 ':name' 错误. 请检查写权限.",
         'delete_success' => '成功删除模板: :count.',
         'file_name_required' => '需要文件名字段.',
@@ -250,7 +250,7 @@ return [
     'template' => [
         'invalid_type' => '未知模板类型.',
         'not_found' => '无法找到所请求的模板',
-        'saved'=> '模板保存成功.',
+        'saved' => '模板保存成功.',
         'no_list_records' => '模板文件为空',
         'delete_confirm' => '确认删除选中的模板?',
         'order_by' => '排序方式'

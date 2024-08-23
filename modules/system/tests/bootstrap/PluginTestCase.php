@@ -142,7 +142,7 @@ abstract class PluginTestCase extends TestCase
 
         // First time seeing this plugin, load it up
         if ($firstLoad) {
-            $namespace = '\\'.str_replace('.', '\\', $code);
+            $namespace = '\\' . str_replace('.', '\\', $code);
             $path = array_get(
                 array_change_key_case($manager->getPluginNamespaces(), CASE_LOWER),
                 strtolower($namespace)

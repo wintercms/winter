@@ -87,8 +87,7 @@ class DbBackendUserRoles extends Migration
                     'description' => $group->description,
                     'permissions' => $group->permissions ?? null
                 ]);
-            }
-            catch (Exception $ex) {
+            } catch (Exception $ex) {
             }
 
             $permissions[$group->id] = $group->permissions ?? null;
@@ -130,8 +129,7 @@ class DbBackendUserRoles extends Migration
                 try {
                     $perms = json_decode($permString, true);
                     $userPerms = array_merge($userPerms, $perms);
-                }
-                catch (Exception $ex) {
+                } catch (Exception $ex) {
                 }
             }
 
@@ -158,8 +156,7 @@ class DbBackendUserRoles extends Migration
             Db::table('backend_users')->where('id', $userId)->update([
                 'permissions' => json_encode($newPerms)
             ]);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
         }
     }
 }

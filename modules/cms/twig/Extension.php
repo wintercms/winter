@@ -1,4 +1,6 @@
-<?php namespace Cms\Twig;
+<?php
+
+namespace Cms\Twig;
 
 use Block;
 use Cms\Classes\Controller;
@@ -77,18 +79,18 @@ class Extension extends TwigExtension
     public function getTokenParsers(): array
     {
         return [
-            new PageTokenParser,
-            new PartialTokenParser,
-            new ContentTokenParser,
-            new PutTokenParser,
-            new PlaceholderTokenParser,
-            new DefaultTokenParser,
-            new FrameworkTokenParser,
-            new SnowboardTokenParser,
-            new ComponentTokenParser,
-            new FlashTokenParser,
-            new ScriptsTokenParser,
-            new StylesTokenParser,
+            new PageTokenParser(),
+            new PartialTokenParser(),
+            new ContentTokenParser(),
+            new PutTokenParser(),
+            new PlaceholderTokenParser(),
+            new DefaultTokenParser(),
+            new FrameworkTokenParser(),
+            new SnowboardTokenParser(),
+            new ComponentTokenParser(),
+            new FlashTokenParser(),
+            new ScriptsTokenParser(),
+            new StylesTokenParser(),
         ];
     }
 

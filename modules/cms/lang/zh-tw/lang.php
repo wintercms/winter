@@ -7,7 +7,7 @@ return [
         'file_already_exists' => "檔案 ':name' 已經存在.",
         'error_saving' => "保存檔案 ':name' 錯誤. 請檢查寫權限.",
         'error_creating_directory' => '建立檔案夾 :name 錯誤. 請檢查寫權限.',
-        'invalid_file_extension'=>'不合法的檔案擴展: :invalid. 允許的擴展: :allowed.',
+        'invalid_file_extension' => '不合法的檔案擴展: :invalid. 允許的擴展: :allowed.',
         'error_deleting' => "刪除模板檔案 ':name' 錯誤. 請檢查寫權限.",
         'delete_success' => '模板成功刪除: :count.',
         'file_name_required' => '需要檔案名字串.'
@@ -227,7 +227,7 @@ return [
     'template' => [
         'invalid_type' => '未知模板類型.',
         'not_found' => '請求模板找不到.',
-        'saved'=> '模板保存成功.'
+        'saved' => '模板保存成功.'
     ],
     'permissions' => [
         'name' => 'Cms',

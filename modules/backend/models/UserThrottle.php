@@ -1,4 +1,6 @@
-<?php namespace Backend\Models;
+<?php
+
+namespace Backend\Models;
 
 use Config;
 use Winter\Storm\Auth\Models\Throttle as ThrottleBase;

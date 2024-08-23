@@ -8,7 +8,6 @@ use Cms\Classes\Theme;
 
 class ContentTest extends TestCase
 {
-
     public function testMarkdownContent()
     {
         $theme = Theme::load('test');

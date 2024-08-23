@@ -7,7 +7,7 @@ return [
         'file_already_exists' => 'Arquivo ":name" já existe.',
         'error_saving' => 'Erro ao salvar arquivo ":name". Verifique as permissões de escrita.',
         'error_creating_directory' => 'Erro ao criar o diretório :name. Verifique as permissões de escrita.',
-        'invalid_file_extension'=>'Extensão de arquivo inválida: :invalid. Extensões válidas: :allowed.',
+        'invalid_file_extension' => 'Extensão de arquivo inválida: :invalid. Extensões válidas: :allowed.',
         'error_deleting' => 'Erro ao excluir o arquivo de modelo ":name". Verifique as permissões de escrita.',
         'delete_success' => 'Modelos excluídos com sucesso: :count.',
         'file_name_required' => 'O campo de Nome do Arquivo é necessário.',
@@ -253,7 +253,7 @@ return [
     'template' => [
         'invalid_type' => 'Tipo de modelo desconhecido.',
         'not_found' => 'O modelo solicitado não foi encontrado.',
-        'saved'=> 'O modelo foi salvo com sucesso.',
+        'saved' => 'O modelo foi salvo com sucesso.',
         'no_list_records' => 'Nenhum registro foi encontrado',
         'delete_confirm' => 'Excluir modelos selecionados?',
         'order_by' => 'Ordenar por'

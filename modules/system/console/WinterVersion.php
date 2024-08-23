@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use System\Classes\UpdateManager;
 
@@ -59,7 +61,7 @@ class WinterVersion extends \Winter\Storm\Console\Command
 
         if (!$build['confident']) {
             $this->warn('*** We could not accurately determine your Winter CMS build due to the number of modifications. The closest detected build is Winter CMS build ' . $build['build'] . '.');
-        } else if ($build['modified']) {
+        } elseif ($build['modified']) {
             $this->info('*** Detected a modified version of Winter CMS build ' . $build['build'] . '.');
         } else {
             $this->info('*** Detected Winter CMS build ' . $build['build'] . '.');

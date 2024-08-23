@@ -1,4 +1,6 @@
-<?php namespace System\Twig;
+<?php
+
+namespace System\Twig;
 
 use App;
 use Exception;
@@ -95,8 +97,7 @@ class Loader implements TwigLoaderInterface
         try {
             $this->findTemplate($name);
             return true;
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             return false;
         }
     }

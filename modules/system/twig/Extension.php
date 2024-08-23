@@ -1,4 +1,6 @@
-<?php namespace System\Twig;
+<?php
+
+namespace System\Twig;
 
 use Url;
 use System\Classes\ImageResizer;
@@ -85,8 +87,8 @@ class Extension extends TwigExtension
     public function getTokenParsers()
     {
         $parsers = [
-            new SpacelessTokenParser,
-            new FilterTokenParser,
+            new SpacelessTokenParser(),
+            new FilterTokenParser(),
         ];
 
         /*

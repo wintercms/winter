@@ -1,4 +1,6 @@
-<?php namespace System\Classes;
+<?php
+
+namespace System\Classes;
 
 use ApplicationException;
 use Config;
@@ -149,7 +151,7 @@ class FileManifest
      */
     protected function findFiles(string $basePath): array
     {
-        $datasource = new FileDatasource($basePath, new Filesystem);
+        $datasource = new FileDatasource($basePath, new Filesystem());
 
         $files = array_map(function ($path) use ($basePath) {
             return $basePath . '/' . $path;

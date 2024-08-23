@@ -1,4 +1,6 @@
-<?php namespace System\Twig;
+<?php
+
+namespace System\Twig;
 
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
@@ -42,7 +44,7 @@ class MailPartialNode extends TwigNode
         }
 
         for ($i = 1; $i < count($this->getNode('nodes')); $i++) {
-            $compiler->write("\$context['__system_partial_params']['".$this->getAttribute('names')[$i-1]."'] = ");
+            $compiler->write("\$context['__system_partial_params']['" . $this->getAttribute('names')[$i - 1] . "'] = ");
             $compiler->subcompile($this->getNode('nodes')->getNode($i));
             $compiler->write(";\n");
         }

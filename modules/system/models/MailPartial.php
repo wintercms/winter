@@ -1,4 +1,6 @@
-<?php namespace System\Models;
+<?php
+
+namespace System\Models;
 
 use View;
 use Model;
@@ -64,14 +66,13 @@ class MailPartial extends Model
     {
         try {
             if (!$template = self::whereCode($code)->first()) {
-                $template = new self;
+                $template = new self();
                 $template->code = $code;
                 $template->fillFromCode($code);
             }
 
             return $template;
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             return null;
         }
     }
@@ -102,7 +103,7 @@ class MailPartial extends Model
         }
 
         foreach ($newPartials as $code => $path) {
-            $partial = new static;
+            $partial = new static();
             $partial->code = $code;
             $partial->is_custom = 0;
             $partial->fillFromView($path);
@@ -125,7 +126,7 @@ class MailPartial extends Model
         }
 
         if (!$definition = array_get($definitions, $code)) {
-            throw new ApplicationException('Unable to find a registered partial with code: '.$code);
+            throw new ApplicationException('Unable to find a registered partial with code: ' . $code);
         }
 
         $this->fillFromView($definition);

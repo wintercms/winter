@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use File;
 use Winter\Storm\Console\Command;
@@ -55,10 +57,12 @@ class PluginRemove extends Command
             $confirmQuestion = sprintf('This will remove the database tables and files for the "%s" plugin.', $pluginName);
         }
 
-        if (!$this->confirmWithInput(
-            $confirmQuestion,
-            $pluginName
-        )) {
+        if (
+            !$this->confirmWithInput(
+                $confirmQuestion,
+                $pluginName
+            )
+        ) {
             return 1;
         }
 

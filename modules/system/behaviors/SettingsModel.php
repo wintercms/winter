@@ -1,4 +1,6 @@
-<?php namespace System\Behaviors;
+<?php
+
+namespace System\Behaviors;
 
 use App;
 use Artisan;
@@ -277,7 +279,7 @@ class SettingsModel extends ModelBehavior
      */
     protected function getCacheKey()
     {
-        return 'system::settings.'.$this->recordCode;
+        return 'system::settings.' . $this->recordCode;
     }
 
     /**

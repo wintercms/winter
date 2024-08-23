@@ -8,7 +8,7 @@ use System\Classes\CombineAssets;
 
 class CombineAssetsTest extends TestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -96,7 +96,7 @@ class CombineAssetsTest extends TestCase
         self::setProtectedProperty($combiner, 'localPath', $samplePath);
 
         $value = self::callProtectedMethod($combiner, 'getCacheKey', [$sampleResources]);
-        $this->assertEquals(md5($samplePath.implode('|', $sampleResources)), $value);
+        $this->assertEquals(md5($samplePath . implode('|', $sampleResources)), $value);
     }
 
     public function testResetCache()

@@ -1,4 +1,6 @@
-<?php namespace Cms\Classes;
+<?php
+
+namespace Cms\Classes;
 
 use Str;
 use Lang;
@@ -93,7 +95,7 @@ abstract class ComponentBase extends Extendable
 
         $className = Str::normalizeClassName(get_called_class());
         $this->dirName = strtolower(str_replace('\\', '/', $className));
-        $this->assetPath = Config::get('cms.pluginsPath', '/plugins').dirname(dirname($this->dirName));
+        $this->assetPath = Config::get('cms.pluginsPath', '/plugins') . dirname(dirname($this->dirName));
 
         parent::__construct();
     }
@@ -312,8 +314,7 @@ abstract class ComponentBase extends Extendable
     {
         try {
             return parent::__call($method, $parameters);
-        }
-        catch (BadMethodCallException $ex) {
+        } catch (BadMethodCallException $ex) {
         }
 
         if (isset($this->controller) && method_exists($this->controller, $method)) {

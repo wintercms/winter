@@ -1,4 +1,6 @@
-<?php namespace System\Classes;
+<?php
+
+namespace System\Classes;
 
 use App;
 use Markdown;
@@ -55,7 +57,7 @@ class MailManager
      */
     public function addRawContentToMailer($message, $content, $data)
     {
-        $template = new MailTemplate;
+        $template = new MailTemplate();
 
         $template->fillFromContent($content);
 
@@ -83,8 +85,7 @@ class MailManager
 
         if (isset($this->templateCache[$code])) {
             $template = $this->templateCache[$code];
-        }
-        else {
+        } else {
             $this->templateCache[$code] = $template = MailTemplate::findOrMakeTemplate($code);
         }
 
@@ -193,7 +194,7 @@ class MailManager
         }
 
         if (!$disableAutoInlineCss) {
-            $html = (new CssToInlineStyles)->convert($html, $css);
+            $html = (new CssToInlineStyles())->convert($html, $css);
         }
 
         return $html;
@@ -242,13 +243,12 @@ class MailManager
     public function renderPartial($code, array $params = [])
     {
         if (!$partial = MailPartial::findOrMakePartial($code)) {
-            return '<!-- Missing partial: '.$code.' -->';
+            return '<!-- Missing partial: ' . $code . ' -->';
         }
 
         if ($this->isHtmlRenderMode) {
             $content = $partial->content_html;
-        }
-        else {
+        } else {
             $content = $partial->content_text ?: $partial->content_html;
         }
 

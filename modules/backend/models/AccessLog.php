@@ -1,4 +1,6 @@
-<?php namespace Backend\Models;
+<?php
+
+namespace Backend\Models;
 
 use Model;
 use Request;
@@ -30,7 +32,7 @@ class AccessLog extends Model
      */
     public static function add($user)
     {
-        $record = new static;
+        $record = new static();
         $record->user = $user;
         $record->ip_address = Request::getClientIp();
         $record->save();

@@ -1,4 +1,6 @@
-<?php namespace Backend\Traits;
+<?php
+
+namespace Backend\Traits;
 
 use Lang;
 use ApplicationException;
@@ -25,8 +27,7 @@ trait FormModelWidget
     {
         try {
             return $this->formField->resolveModelAttribute($this->model, $attribute);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             throw new ApplicationException(Lang::get('backend::lang.model.missing_relation', [
                 'class' => get_class($this->model),
                 'relation' => $attribute

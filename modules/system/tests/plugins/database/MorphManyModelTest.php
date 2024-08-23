@@ -12,7 +12,7 @@ use Model;
 
 class MorphManyModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

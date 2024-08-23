@@ -1,4 +1,6 @@
-<?php namespace Cms\Twig;
+<?php
+
+namespace Cms\Twig;
 
 use Event;
 use Twig\Source as TwigSource;

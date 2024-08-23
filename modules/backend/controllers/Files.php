@@ -1,4 +1,6 @@
-<?php namespace Backend\Controllers;
+<?php
+
+namespace Backend\Controllers;
 
 use View;
 use Cache;
@@ -30,8 +32,7 @@ class Files extends Controller
     {
         try {
             return $this->findFileObject($code)->output('inline', true);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
         }
 
         return Response::make(View::make('backend::404'), 404);
@@ -49,8 +50,7 @@ class Files extends Controller
                 compact('mode', 'extension'),
                 true
             );
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
         }
 
         return Response::make(View::make('backend::404'), 404);

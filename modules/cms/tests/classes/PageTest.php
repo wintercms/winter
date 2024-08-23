@@ -12,7 +12,7 @@ class PageTest extends TestCase
     public function testResolveMenuItem()
     {
         $theme = Theme::load('test');
-        $controller = new Controller;
+        $controller = new Controller();
 
         $item = (object) [
             'type' => 'cms-page',

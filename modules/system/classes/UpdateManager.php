@@ -1,4 +1,6 @@
-<?php namespace System\Classes;
+<?php
+
+namespace System\Classes;
 
 use App;
 use Url;
@@ -228,7 +230,8 @@ class UpdateManager
         /*
          * Retry period not passed, skipping.
          */
-        if (!$force
+        if (
+            !$force
             && ($retryTimestamp = Parameter::get('system::update.retry'))
             && Carbon::createFromTimeStamp($retryTimestamp)->isFuture()
         ) {
@@ -468,7 +471,7 @@ class UpdateManager
         $this->out(sprintf('<info>Migrating %s module...</info>', $module), true);
         $this->out('', true);
 
-        $this->migrator->run(base_path() . '/modules/'.strtolower($module).'/database/migrations');
+        $this->migrator->run(base_path() . '/modules/' . strtolower($module) . '/database/migrations');
 
         return $this;
     }
@@ -608,7 +611,8 @@ class UpdateManager
         /*
          * Remove the plugin database and version
          */
-        if (!($plugin = $this->pluginManager->findByIdentifier($name))
+        if (
+            !($plugin = $this->pluginManager->findByIdentifier($name))
             && $this->versionManager->purgePlugin($name)
         ) {
             $this->write(Info::class, sprintf('%s purged from database', $name));

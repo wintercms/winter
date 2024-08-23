@@ -1,4 +1,6 @@
-<?php namespace Backend\Traits;
+<?php
+
+namespace Backend\Traits;
 
 use Str;
 use Backend\Models\UserPreference;

@@ -7,7 +7,7 @@ return [
         'file_already_exists' => 'Archivo ":name" ya existe.',
         'error_saving' => 'Error guardando archivo ":name". Por favor revisar los permisos de escritura.',
         'error_creating_directory' => 'Error creando el directorio :name. Por favor revisar los permisos de escritura.',
-        'invalid_file_extension'=>'Extensión de archivo inválida: :invalid. Las extensiones permitidas son: :allowed.',
+        'invalid_file_extension' => 'Extensión de archivo inválida: :invalid. Las extensiones permitidas son: :allowed.',
         'error_deleting' => 'Error borrando el archivo template ":name". Por favor revisar los permisos de escritura.',
         'delete_success' => 'Los templates fueron borrados exitosamente: :count.',
         'file_name_required' => 'Falta el nombre del campo del archivo.'
@@ -153,7 +153,7 @@ return [
     'template' => [
         'invalid_type' => "Tipo de plantilla Desconocido.",
         'not_found' => "No se encontró la plantilla solicitada.",
-        'saved'=> "La plantilla se ha guardado correctamente."
+        'saved' => "La plantilla se ha guardado correctamente."
     ],
     'permissions' => [
         'manage_content' => 'Gestionar contenido',

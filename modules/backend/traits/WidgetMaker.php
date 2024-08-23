@@ -1,4 +1,6 @@
-<?php namespace Backend\Traits;
+<?php
+
+namespace Backend\Traits;
 
 use Lang;
 use Backend\Classes\FormField;
@@ -65,8 +67,7 @@ trait WidgetMaker
                 array_get($fieldConfig, 'label')
             );
             $formField->displayAs('widget', $fieldConfig);
-        }
-        else {
+        } else {
             $formField = $fieldConfig;
         }
 

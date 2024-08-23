@@ -1,4 +1,6 @@
-<?php namespace Cms\Widgets;
+<?php
+
+namespace Cms\Widgets;
 
 use Str;
 use File;
@@ -16,10 +18,10 @@ use Backend\Classes\WidgetBase;
  */
 class TemplateList extends WidgetBase
 {
-    const SORTING_FILENAME = 'fileName';
-
     use \Backend\Traits\SelectableWidget;
     use \Backend\Traits\CollapsableWidget;
+
+    const SORTING_FILENAME = 'fileName';
 
     protected $searchTerm = false;
 
@@ -93,7 +95,7 @@ class TemplateList extends WidgetBase
             $this->resetSelection();
         }
 
-        $configFile = 'config_' . snake_case($alias) .'.yaml';
+        $configFile = 'config_' . snake_case($alias) . '.yaml';
         $config = $this->makeConfig($configFile);
 
         foreach ($config as $field => $value) {
@@ -144,7 +146,7 @@ class TemplateList extends WidgetBase
         $this->setSortingProperty(Input::get('sortProperty'));
 
         $result = $this->updateList();
-        $result['#'.$this->getId('sorting-options')] = $this->makePartial('sorting-options');
+        $result['#' . $this->getId('sorting-options')] = $this->makePartial('sorting-options');
 
         return $result;
     }
@@ -196,8 +198,7 @@ class TemplateList extends WidgetBase
                     $filteredItems[] = $item;
                 }
             }
-        }
-        else {
+        } else {
             $filteredItems = $items;
         }
 
@@ -221,8 +222,7 @@ class TemplateList extends WidgetBase
                 }
 
                 $foundGroups[$group]->items[] = $itemData;
-            }
-            else {
+            } else {
                 $result[] = $itemData;
             }
         }
@@ -308,15 +308,15 @@ class TemplateList extends WidgetBase
     protected function getItemDragValue($item)
     {
         if ($item instanceof \Cms\Classes\Partial) {
-            return "{% partial '".$item->getBaseFileName()."' %}";
+            return "{% partial '" . $item->getBaseFileName() . "' %}";
         }
 
         if ($item instanceof \Cms\Classes\Content) {
-            return "{% content '".$item->getBaseFileName()."' %}";
+            return "{% content '" . $item->getBaseFileName() . "' %}";
         }
 
         if ($item instanceof \Cms\Classes\Page) {
-            return "{{ '".$item->getBaseFileName()."'|page }}";
+            return "{{ '" . $item->getBaseFileName() . "'|page }}";
         }
 
         return '';
@@ -347,7 +347,7 @@ class TemplateList extends WidgetBase
     protected function updateList()
     {
         return [
-            '#'.$this->getId('template-list') => $this->makePartial('items', ['items' => $this->getData()])
+            '#' . $this->getId('template-list') => $this->makePartial('items', ['items' => $this->getData()])
         ];
     }
 
@@ -394,7 +394,7 @@ class TemplateList extends WidgetBase
 
     protected function getThemeSessionKey($prefix)
     {
-        return $prefix.$this->theme->getDirName();
+        return $prefix . $this->theme->getDirName();
     }
 
     protected function getSortingProperty()

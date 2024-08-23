@@ -1,4 +1,6 @@
-<?php namespace Cms\Traits;
+<?php
+
+namespace Cms\Traits;
 
 use File;
 use Cache;
@@ -144,7 +146,7 @@ trait UrlMaker
         /*
          * Cache
          */
-        $key = 'urlMaker'.$this->urlComponentName.crc32(get_class($this));
+        $key = 'urlMaker' . $this->urlComponentName . crc32(get_class($this));
 
         $cached = Cache::get($key, false);
         if ($cached !== false && ($cached = @unserialize($cached)) !== false) {
@@ -203,7 +205,7 @@ trait UrlMaker
      */
     protected function makeUrl()
     {
-        $controller = Controller::getController() ?: new Controller;
+        $controller = Controller::getController() ?: new Controller();
 
         return $controller->pageUrl($this->getUrlPageName(), $this->getUrlParams());
     }

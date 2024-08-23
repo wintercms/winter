@@ -1,4 +1,6 @@
-<?php namespace System\ReportWidgets;
+<?php
+
+namespace System\ReportWidgets;
 
 use Lang;
 use Config;
@@ -33,8 +35,7 @@ class Status extends ReportWidgetBase
     {
         try {
             $this->loadData();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->vars['error'] = $ex->getMessage();
         }
 
@@ -152,7 +153,7 @@ class Status extends ReportWidgetBase
         foreach ($writablePaths as $path) {
             if (!is_writable($path)) {
                 $warnings[] = [
-                    'message' => Lang::get('backend::lang.warnings.permissions', ['name' => '<strong>'.$path.'</strong>'])
+                    'message' => Lang::get('backend::lang.warnings.permissions', ['name' => '<strong>' . $path . '</strong>'])
                 ];
             }
         }
@@ -160,7 +161,7 @@ class Status extends ReportWidgetBase
         foreach ($requiredExtensions as $extension => $installed) {
             if (!$installed) {
                 $warnings[] = [
-                    'message' => Lang::get('backend::lang.warnings.extension', ['name' => '<strong>'.$extension.'</strong>']),
+                    'message' => Lang::get('backend::lang.warnings.extension', ['name' => '<strong>' . $extension . '</strong>']),
                     'fixUrl' => 'https://wintercms.com/docs/v1.2/docs/setup/installation#minimum-system-requirements',
                 ];
             }

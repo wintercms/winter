@@ -7,7 +7,7 @@ return [
         'file_already_exists' => "Berkas ':name' sudah ada.",
         'error_saving' => "Galat menyimpan berkas ':name'. Silakan periksa izin tulis.",
         'error_creating_directory' => 'Galat membuat direktori :name. Silakan periksa izin tulis.',
-        'invalid_file_extension'=>'Ekstensi berkas: :invalid tidak valid. Ekstensi yang diperbolehkan: :allowed.',
+        'invalid_file_extension' => 'Ekstensi berkas: :invalid tidak valid. Ekstensi yang diperbolehkan: :allowed.',
         'error_deleting' => "Galat menghapus berkas acuan ':name'. Silakan periksa izin tulis.",
         'delete_success' => 'Acuan: :count berhasil dihapus.',
         'file_name_required' => 'Bidang nama berkas diperlukan.'
@@ -171,7 +171,7 @@ return [
     'template' => [
         'invalid_type' => 'Jenis acuan tidak diketahui.',
         'not_found' => 'Acuan yang diminta tidak ditemukan.',
-        'saved'=> 'Acuan berhasil disimpan.'
+        'saved' => 'Acuan berhasil disimpan.'
     ],
     'permissions' => [
         'name' => 'Cms',

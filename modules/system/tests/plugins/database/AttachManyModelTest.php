@@ -9,7 +9,7 @@ use Model;
 
 class AttachManyModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

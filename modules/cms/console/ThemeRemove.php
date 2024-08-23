@@ -1,4 +1,6 @@
-<?php namespace Cms\Console;
+<?php
+
+namespace Cms\Console;
 
 use Cms\Classes\Theme;
 use Cms\Classes\ThemeManager;

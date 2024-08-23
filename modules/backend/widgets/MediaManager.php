@@ -1,4 +1,6 @@
-<?php namespace Backend\Widgets;
+<?php
+
+namespace Backend\Widgets;
 
 use Str;
 use Lang;
@@ -854,8 +856,7 @@ class MediaManager extends WidgetBase
 
         if (!$searchMode) {
             $this->vars['items'] = $this->listFolderItems($folder, $filter, ['by' => $sortBy, 'direction' => $sortDirection]);
-        }
-        else {
+        } else {
             $this->vars['items'] = $this->findFiles($searchTerm, $filter, ['by' => $sortBy, 'direction' => $sortDirection]);
         }
 
@@ -926,13 +927,15 @@ class MediaManager extends WidgetBase
      */
     protected function setFilter(string $filter): void
     {
-        if (!in_array($filter, [
+        if (
+            !in_array($filter, [
             self::FILTER_ALL,
             MediaLibraryItem::FILE_TYPE_IMAGE,
             MediaLibraryItem::FILE_TYPE_AUDIO,
             MediaLibraryItem::FILE_TYPE_DOCUMENT,
             MediaLibraryItem::FILE_TYPE_VIDEO
-        ])) {
+            ])
+        ) {
             throw new ApplicationException('Invalid input data');
         }
 
@@ -988,11 +991,13 @@ class MediaManager extends WidgetBase
      */
     protected function setSortBy(string $sortBy): void
     {
-        if (!in_array($sortBy, [
+        if (
+            !in_array($sortBy, [
             MediaLibrary::SORT_BY_TITLE,
             MediaLibrary::SORT_BY_SIZE,
             MediaLibrary::SORT_BY_MODIFIED
-        ])) {
+            ])
+        ) {
             throw new ApplicationException('Invalid input data');
         }
 
@@ -1017,10 +1022,12 @@ class MediaManager extends WidgetBase
      */
     protected function setSortDirection($sortDirection): void
     {
-        if (!in_array($sortDirection, [
+        if (
+            !in_array($sortDirection, [
             MediaLibrary::SORT_DIRECTION_ASC,
             MediaLibrary::SORT_DIRECTION_DESC
-        ])) {
+            ])
+        ) {
             throw new ApplicationException('Invalid input data');
         }
 
@@ -1077,11 +1084,13 @@ class MediaManager extends WidgetBase
      */
     protected function setSelectionParams($selectionMode, $selectionWidth, $selectionHeight): void
     {
-        if (!in_array($selectionMode, [
+        if (
+            !in_array($selectionMode, [
             self::SELECTION_MODE_NORMAL,
             self::SELECTION_MODE_FIXED_RATIO,
             self::SELECTION_MODE_FIXED_SIZE
-        ])) {
+            ])
+        ) {
             throw new ApplicationException('Invalid input data');
         }
 
@@ -1151,9 +1160,9 @@ class MediaManager extends WidgetBase
         while (count($path) > 0) {
             $folder = array_pop($path);
 
-            $result[$folder] = implode('/', $path).'/'.$folder;
+            $result[$folder] = implode('/', $path) . '/' . $folder;
             if (substr($result[$folder], 0, 1) != '/') {
-                $result[$folder] = '/'.$result[$folder];
+                $result[$folder] = '/' . $result[$folder];
             }
         }
 
@@ -1167,11 +1176,13 @@ class MediaManager extends WidgetBase
      */
     protected function setViewMode(string $viewMode): void
     {
-        if (!in_array($viewMode, [
+        if (
+            !in_array($viewMode, [
             self::VIEW_MODE_GRID,
             self::VIEW_MODE_LIST,
             self::VIEW_MODE_TILES
-        ])) {
+            ])
+        ) {
             throw new ApplicationException('Invalid input data');
         }
 
@@ -1223,7 +1234,7 @@ class MediaManager extends WidgetBase
      */
     protected function getPlaceholderId($item)
     {
-        return 'placeholder'.md5($item->path.'-'.$item->lastModified.uniqid(microtime()));
+        return 'placeholder' . md5($item->path . '-' . $item->lastModified . uniqid(microtime()));
     }
 
     /**

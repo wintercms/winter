@@ -1,4 +1,6 @@
-<?php namespace Cms\Console;
+<?php
+
+namespace Cms\Console;
 
 use Cms\Classes\Theme;
 use Event;
@@ -150,7 +152,7 @@ class ThemeSync extends Command
             }
 
             foreach ($result as $modelClass) {
-                $modelObj = new $modelClass;
+                $modelObj = new $modelClass();
 
                 if ($modelObj instanceof \Winter\Storm\Halcyon\Model) {
                     $validModels[] = $modelObj;
@@ -199,8 +201,7 @@ class ThemeSync extends Command
             $progress->finish();
             $this->info('');
             $this->info(sprintf('The theme %s has been successfully synced from the %s to the %s.', $themeName, $source, $target));
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->error($ex->getMessage());
         }
     }
@@ -217,7 +218,7 @@ class ThemeSync extends Command
     protected function getModelForPath($path, $modelClass, $theme)
     {
         return $this->datasource->usingSource($this->source, function () use ($path, $modelClass, $theme) {
-            $modelObj = new $modelClass;
+            $modelObj = new $modelClass();
 
             $entity = $modelClass::load(
                 $theme,

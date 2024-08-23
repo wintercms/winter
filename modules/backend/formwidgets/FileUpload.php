@@ -1,4 +1,6 @@
-<?php namespace Backend\FormWidgets;
+<?php
+
+namespace Backend\FormWidgets;
 
 use Db;
 use Input;
@@ -314,7 +316,7 @@ class FileUpload extends FormWidgetBase
             }
 
             if ($includeDot) {
-                $value = '.'.$value;
+                $value = '.' . $value;
             }
 
             return $value;
@@ -389,8 +391,7 @@ class FileUpload extends FormWidgetBase
             }
 
             throw new ApplicationException('Unable to find file, it may no longer exist');
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             return json_encode(['error' => $ex->getMessage()]);
         }
     }
@@ -433,7 +434,7 @@ class FileUpload extends FormWidgetBase
                     throw new ApplicationException('File missing from request');
                 }
 
-                $validationRules = ['max:'.$file::getMaxFilesize()];
+                $validationRules = ['max:' . $file::getMaxFilesize()];
                 $data = Input::file('file_data');
 
                 if (!$data->isValid()) {
@@ -441,11 +442,11 @@ class FileUpload extends FormWidgetBase
                 }
 
                 if ($fileTypes = $this->getAcceptedFileTypes()) {
-                    $validationRules[] = 'extensions:'.$fileTypes;
+                    $validationRules[] = 'extensions:' . $fileTypes;
                 }
 
                 if ($this->mimeTypes) {
-                    $validationRules[] = 'mimes:'.$this->mimeTypes;
+                    $validationRules[] = 'mimes:' . $this->mimeTypes;
                 }
 
                 $validation = Validator::make(
@@ -468,8 +469,7 @@ class FileUpload extends FormWidgetBase
             $parent = $fileRelation->getParent();
             if ($this->attachOnUpload && $parent && $parent->exists) {
                 $fileRelation->add($file);
-            }
-            else {
+            } else {
                 $fileRelation->add($file, $this->sessionKey);
             }
 
@@ -482,8 +482,7 @@ class FileUpload extends FormWidgetBase
             ];
 
             $response = Response::make($result, 200);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $response = Response::make($ex->getMessage(), 400);
         }
 

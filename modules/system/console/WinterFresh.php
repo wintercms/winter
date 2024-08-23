@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use File;
 use Artisan;
@@ -50,13 +52,13 @@ class WinterFresh extends Command
         $themeRemoved = false;
         $pluginRemoved = false;
 
-        $demoThemePath = themes_path().'/demo';
+        $demoThemePath = themes_path() . '/demo';
         if (File::exists($demoThemePath)) {
             File::deleteDirectory($demoThemePath);
             $themeRemoved = true;
         }
 
-        $demoPluginPath = plugins_path().'/winter/demo';
+        $demoPluginPath = plugins_path() . '/winter/demo';
         if (File::exists($demoPluginPath)) {
             Artisan::call('plugin:remove', ['plugin' => 'Winter.Demo', '--force' => true]);
             $pluginRemoved = true;

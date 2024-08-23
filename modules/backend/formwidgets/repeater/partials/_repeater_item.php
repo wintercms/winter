@@ -3,7 +3,7 @@
     $itemTitle = $useGroups ? $this->getGroupTitle($groupCode) : null;
 ?>
 <li
-    <?= $itemTitle ? 'data-collapse-title="'.e(trans($itemTitle)).'"' : '' ?>
+    <?= $itemTitle ? 'data-collapse-title="' . e(trans($itemTitle)) . '"' : '' ?>
     class="field-repeater-item"
     <?php if ($mode === 'grid'): ?>
     style="min-height: <?= $rowHeight ?>px"

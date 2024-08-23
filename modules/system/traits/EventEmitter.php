@@ -1,4 +1,6 @@
-<?php namespace System\Traits;
+<?php
+
+namespace System\Traits;
 
 use Event;
 
@@ -84,7 +86,7 @@ trait EventEmitter
         array_unshift($params, $this);
 
         if ($result = Event::fire($event, $params)) {
-            return implode(PHP_EOL.PHP_EOL, (array) $result);
+            return implode(PHP_EOL . PHP_EOL, (array) $result);
         }
 
         return '';

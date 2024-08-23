@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use InvalidArgumentException;
 use Winter\Storm\Console\Command;
@@ -53,10 +55,12 @@ class PluginRollback extends Command
             $confirmQuestion = "This will completely rollback $pluginName. This may result in potential data loss.";
         }
 
-        if (!$this->confirmWithInput(
-            $confirmQuestion,
-            $pluginName
-        )) {
+        if (
+            !$this->confirmWithInput(
+                $confirmQuestion,
+                $pluginName
+            )
+        ) {
             return 1;
         }
 

@@ -1,4 +1,6 @@
-<?php namespace Backend\Traits;
+<?php
+
+namespace Backend\Traits;
 
 use ApplicationException;
 use Event;
@@ -166,7 +168,7 @@ trait UploadableWidget
          * Convert uppcare case file extensions to lower case
          */
         $extension = strtolower($extension);
-        $fileName = File::name($fileName).'.'.$extension;
+        $fileName = File::name($fileName) . '.' . $extension;
 
         /*
          * File name contains non-latin characters, attempt to slug the value
@@ -236,13 +238,13 @@ trait UploadableWidget
 
         // Convert all dashes/underscores into separator
         $flip = $separator = '-';
-        $title = preg_replace('!['.preg_quote($flip).']+!u', $separator, $title);
+        $title = preg_replace('![' . preg_quote($flip) . ']+!u', $separator, $title);
 
         // Remove all characters that are not the separator, letters, numbers, whitespace or @.
-        $title = preg_replace('![^'.preg_quote($separator).'\pL\pN\s@]+!u', '', mb_strtolower($title));
+        $title = preg_replace('![^' . preg_quote($separator) . '\pL\pN\s@]+!u', '', mb_strtolower($title));
 
         // Replace all separator characters and whitespace by a single separator
-        $title = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $title);
+        $title = preg_replace('![' . preg_quote($separator) . '\s]+!u', $separator, $title);
 
         return trim($title, $separator);
     }

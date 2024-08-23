@@ -1,4 +1,6 @@
-<?php namespace DependencyTest\Acme;
+<?php
+
+namespace DependencyTest\Acme;
 
 use Backend;
 use Backend\Models\UserRole;

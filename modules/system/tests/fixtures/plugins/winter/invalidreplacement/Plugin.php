@@ -1,4 +1,6 @@
-<?php namespace Winter\InvalidReplacement;
+<?php
+
+namespace Winter\InvalidReplacement;
 
 use System\Classes\PluginBase;
 

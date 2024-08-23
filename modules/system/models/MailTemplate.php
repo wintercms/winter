@@ -1,4 +1,6 @@
-<?php namespace System\Models;
+<?php
+
+namespace System\Models;
 
 use View;
 use Model;
@@ -198,7 +200,7 @@ class MailTemplate extends Model
         $template = self::whereCode($code)->first();
 
         if (!$template && View::exists($code)) {
-            $template = new self;
+            $template = new self();
             $template->code = $code;
             $template->fillFromView($code);
         }

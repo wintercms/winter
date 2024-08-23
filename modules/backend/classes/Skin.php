@@ -1,4 +1,6 @@
-<?php namespace Backend\Classes;
+<?php
+
+namespace Backend\Classes;
 
 use File;
 use Config;
@@ -92,7 +94,7 @@ abstract class Skin
      */
     public function getLayoutPaths()
     {
-        return [$this->skinPath.'/layouts', $this->defaultSkinPath.'/layouts'];
+        return [$this->skinPath . '/layouts', $this->defaultSkinPath . '/layouts'];
     }
 
     /**

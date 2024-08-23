@@ -194,7 +194,7 @@ class CmsCompoundObjectTest extends TestCase
 
     public function testUndefinedProperty()
     {
-        $obj = new TestCmsCompoundObject;
+        $obj = new TestCmsCompoundObject();
         $this->assertNull($obj->something);
     }
 

@@ -1,4 +1,6 @@
-<?php namespace System\Controllers;
+<?php
+
+namespace System\Controllers;
 
 use ApplicationException;
 use Backend;
@@ -112,8 +114,7 @@ class Updates extends Controller
             $this->vars['activeTab'] = $tab ?: 'plugins';
             $this->vars['installedPlugins'] = $this->getInstalledPlugins();
             $this->vars['installedThemes'] = $this->getInstalledThemes();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
     }
@@ -153,8 +154,7 @@ class Updates extends Controller
                 $this->vars['pluginAuthor'] = array_get($details, 'author');
                 $this->vars['pluginIcon'] = array_get($details, 'icon', 'icon-leaf');
                 $this->vars['pluginHomepage'] = array_get($details, 'homepage');
-            }
-            else {
+            } else {
                 throw new ApplicationException(Lang::get('system::lang.updates.plugin_not_found'));
             }
 
@@ -172,8 +172,7 @@ class Updates extends Controller
             $this->vars['changelog'] = $changelog;
             $this->vars['upgrades'] = $upgrades;
             $this->vars['licence'] = $licence;
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
     }
@@ -182,11 +181,11 @@ class Updates extends Controller
     {
         $contents = null;
         foreach ($filenames as $file) {
-            if (!File::exists($path . '/'.$file)) {
+            if (!File::exists($path . '/' . $file)) {
                 continue;
             }
 
-            $contents = File::get($path . '/'.$file);
+            $contents = File::get($path . '/' . $file);
 
             /*
              * Parse markdown, clean HTML, remove first H1 tag
@@ -352,8 +351,7 @@ class Updates extends Controller
             $this->vars['hasImportantUpdates'] = array_get($result, 'hasImportantUpdates', false);
             $this->vars['pluginList'] = array_get($result, 'plugins', []);
             $this->vars['themeList'] = array_get($result, 'themes', []);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
 
@@ -401,7 +399,7 @@ class Updates extends Controller
                 }
 
                 $isImportant = $hasImportantUpdates = true;
-                $detailsUrl = Backend::url('system/updates/details/'.PluginVersion::makeSlug($code).'/upgrades').'?fetch=1';
+                $detailsUrl = Backend::url('system/updates/details/' . PluginVersion::makeSlug($code) . '/upgrades') . '?fetch=1';
                 $description = str_replace('!!!', '', $description);
                 $result['plugins'][$code]['updates'][$version] = [$description, $detailsUrl];
             }
@@ -474,8 +472,7 @@ class Updates extends Controller
             ];
 
             $this->vars['updateSteps'] = $updateSteps;
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
 
@@ -506,8 +503,7 @@ class Updates extends Controller
                 }
 
                 $plugins = array_combine($pluginCodes, $plugins);
-            }
-            else {
+            } else {
                 $plugins = [];
             }
 
@@ -522,8 +518,7 @@ class Updates extends Controller
                 }
 
                 $themes = array_combine($themeCodes, $themes);
-            }
-            else {
+            } else {
                 $themes = [];
             }
 
@@ -541,7 +536,7 @@ class Updates extends Controller
                 $pluginAction = $pluginActions[$_code];
 
                 if (!$pluginAction) {
-                    throw new ApplicationException('Please select an action for plugin '. $code);
+                    throw new ApplicationException('Please select an action for plugin ' . $code);
                 }
 
                 if ($pluginAction != 'confirm') {
@@ -569,8 +564,7 @@ class Updates extends Controller
             ];
 
             $this->vars['updateSteps'] = $updateSteps;
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
 
@@ -694,8 +688,7 @@ class Updates extends Controller
             ]);
 
             return $this->onForceUpdate(false);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
             return $this->makePartial('project_form');
         }
@@ -732,8 +725,7 @@ class Updates extends Controller
             }
 
             $this->vars['changelog'] = $changelog;
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
 
@@ -782,8 +774,7 @@ class Updates extends Controller
             $this->vars['updateSteps'] = $updateSteps;
 
             return $this->makePartial('execute');
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
             return $this->makePartial('plugin_form');
         }
@@ -809,7 +800,8 @@ class Updates extends Controller
      */
     public function onBulkAction()
     {
-        if (($bulkAction = post('action')) &&
+        if (
+            ($bulkAction = post('action')) &&
             ($checkedIds = post('checked')) &&
             is_array($checkedIds) &&
             count($checkedIds)
@@ -903,8 +895,7 @@ class Updates extends Controller
             $this->vars['updateSteps'] = $updateSteps;
 
             return $this->makePartial('execute');
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
             return $this->makePartial('theme_form');
         }

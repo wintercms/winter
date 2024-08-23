@@ -1,4 +1,6 @@
-<?php namespace System\Controllers;
+<?php
+
+namespace System\Controllers;
 
 use Lang;
 use File;
@@ -98,10 +100,10 @@ class MailBrandSettings extends Controller
             'texts' => Lang::get('system::lang.mail_brand.sample_template')
         ];
 
-        $layout = new MailLayout;
+        $layout = new MailLayout();
         $layout->fillFromCode('default');
 
-        $template = new MailTemplate;
+        $template = new MailTemplate();
         $template->layout = $layout;
         $template->content_html = File::get(base_path('modules/system/models/mailbrandsetting/sample_template.php'));
 

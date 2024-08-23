@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use Backend\Database\Seeds\SeedSetupAdmin;
 use Config;
@@ -56,7 +58,7 @@ class WinterInstall extends Command
     {
         parent::__construct();
 
-        $this->configWriter = new ConfigWriter;
+        $this->configWriter = new ConfigWriter();
     }
 
     /**
@@ -87,8 +89,7 @@ class WinterInstall extends Command
             $this->setupEncryptionKey();
             $this->setupAdvancedValues();
             $chosenToInstall = $this->askToInstallPlugins();
-        }
-        else {
+        } else {
             $this->setupEncryptionKey(true);
         }
 
@@ -135,7 +136,7 @@ class WinterInstall extends Command
         // app.locale
         $defaultLocale = Config::get('app.locale');
         try {
-            $availableLocales = (new \Backend\Models\Preference)->getLocaleOptions();
+            $availableLocales = (new \Backend\Models\Preference())->getLocaleOptions();
             $localesByName = [];
             $i = $defaultLocaleIndex = 0;
             foreach ($availableLocales as $locale => $name) {
@@ -158,7 +159,7 @@ class WinterInstall extends Command
         // cms.backendTimezone
         $defaultTimezone = Config::get('cms.backendTimezone');
         try {
-            $availableTimezones = (new \Backend\Models\Preference)->getTimezoneOptions();
+            $availableTimezones = (new \Backend\Models\Preference())->getTimezoneOptions();
             $longestTimezone = max(array_map('strlen', $availableTimezones));
             $padTo = $longestTimezone - 13 + 1; // (UTC +10:00)
             $timezonesByName = [];
@@ -230,8 +231,7 @@ class WinterInstall extends Command
 
         if ($force) {
             $key = $randomKey;
-        }
-        else {
+        } else {
             $this->line(sprintf('Enter a new value of %s characters, or press ENTER to use the generated key', $keyLength));
 
             while (!$validKey) {
@@ -287,14 +287,14 @@ class WinterInstall extends Command
 
         $driver = array_get($typeMap, $type, 'sqlite');
 
-        $method = 'setupDatabase'.Str::studly($driver);
+        $method = 'setupDatabase' . Str::studly($driver);
 
         $newConfig = $this->$method();
 
         $this->writeToConfig('database', ['default' => $driver]);
 
         foreach ($newConfig as $config => $value) {
-            $this->writeToConfig('database', ['connections.'.$driver.'.'.$config => $value]);
+            $this->writeToConfig('database', ['connections.' . $driver . '.' . $config => $value]);
         }
     }
 
@@ -331,10 +331,9 @@ class WinterInstall extends Command
                     mkdir($directory, 0777, true);
                 }
 
-                new PDO('sqlite:'.$filename);
+                new PDO('sqlite:' . $filename);
             }
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->error($ex->getMessage());
             $this->setupDatabaseSqlite();
         }
@@ -383,8 +382,7 @@ class WinterInstall extends Command
                 ->setNotesOutput($this->output)
                 ->update()
             ;
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->error($ex->getMessage());
             $this->setupDatabaseConfig();
             $this->setupMigrateDatabase();
@@ -439,7 +437,7 @@ class WinterInstall extends Command
         $configFile = $this->getConfigFile($file);
 
         foreach ($values as $key => $value) {
-            Config::set($file.'.'.$key, $value);
+            Config::set($file . '.' . $key, $value);
         }
 
         $this->configWriter->toFile($configFile, $values);
@@ -452,11 +450,11 @@ class WinterInstall extends Command
      */
     protected function getConfigFile($name = 'app')
     {
-        $env = $this->option('env') ? $this->option('env').'/' : '';
+        $env = $this->option('env') ? $this->option('env') . '/' : '';
 
         $name .= '.php';
 
-        $contents = File::get($path = $this->laravel['path.config']."/{$env}{$name}");
+        $contents = File::get($path = $this->laravel['path.config'] . "/{$env}{$name}");
 
         return $path;
     }

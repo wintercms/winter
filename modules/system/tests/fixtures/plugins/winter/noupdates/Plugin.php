@@ -1,4 +1,6 @@
-<?php namespace Winter\NoUpdates;
+<?php
+
+namespace Winter\NoUpdates;
 
 use System\Classes\PluginBase;
 

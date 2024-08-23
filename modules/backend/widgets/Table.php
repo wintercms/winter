@@ -1,4 +1,6 @@
-<?php namespace Backend\Widgets;
+<?php
+
+namespace Backend\Widgets;
 
 use Config;
 use Backend;

@@ -1,4 +1,6 @@
-<?php namespace Cms\Contracts;
+<?php
+
+namespace Cms\Contracts;
 
 interface CmsObject
 {

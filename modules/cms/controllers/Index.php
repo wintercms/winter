@@ -1,4 +1,6 @@
-<?php namespace Cms\Controllers;
+<?php
+
+namespace Cms\Controllers;
 
 use Url;
 use Lang;
@@ -107,8 +109,7 @@ class Index extends Controller
             new ComponentList($this, 'componentList');
 
             new AssetList($this, 'assetList');
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
     }
@@ -134,7 +135,7 @@ class Index extends Controller
 
         $this->bodyClass = 'compact-container';
         $this->pageTitle = 'cms::lang.cms.menu_label';
-        $this->pageTitleTemplate = '%s '.Lang::get($this->pageTitle);
+        $this->pageTitleTemplate = '%s ' . Lang::get($this->pageTitle);
 
         if (Request::ajax() && Request::input('formWidgetAlias')) {
             $this->bindFormWidgetToController();
@@ -159,7 +160,7 @@ class Index extends Controller
         $this->vars['canReset'] = $this->canResetTemplate($template);
 
         if ($type === 'page') {
-            $router = new StormRouter;
+            $router = new StormRouter();
             $this->vars['pageUrl'] = $router->urlFromPattern($template->url);
         }
 
@@ -202,8 +203,7 @@ class Index extends Controller
         foreach ($fields as $field) {
             if (array_key_exists($field, $saveData)) {
                 $templateData[$field] = $saveData[$field];
-            }
-            elseif (array_key_exists($field, $postData)) {
+            } elseif (array_key_exists($field, $postData)) {
                 $templateData[$field] = $postData[$field];
             }
         }
@@ -310,8 +310,7 @@ class Index extends Controller
                     $deleted[] = $path;
                 }
             }
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $error = $ex->getMessage();
         }
 
@@ -516,7 +515,8 @@ class Index extends Controller
 
         $result = false;
 
-        if (Config::get('app.debug', false) &&
+        if (
+            Config::get('app.debug', false) &&
             Theme::databaseLayerEnabled() &&
             $this->getThemeDatasource()->sourceHasModel('database', $template)
         ) {
@@ -654,7 +654,7 @@ class Index extends Controller
         if ($type === 'partial' || $type === 'layout' || $type === 'content' || $type === 'asset') {
             $result = in_array($type, ['asset', 'content']) ? $template->getFileName() : $template->getBaseFileName();
             if (!$result) {
-                $result = Lang::get('cms::lang.'.$type.'.new');
+                $result = Lang::get('cms::lang.' . $type . '.new');
             }
 
             return $result;
@@ -722,7 +722,7 @@ class Index extends Controller
         }
 
         $widgetConfig->model = $template;
-        $widgetConfig->alias = $alias ?: 'form'.studly_case($type).md5($template->exists ? $template->getFileName() : uniqid());
+        $widgetConfig->alias = $alias ?: 'form' . studly_case($type) . md5($template->exists ? $template->getFileName() : uniqid());
 
         return $this->makeWidget('Backend\Widgets\Form', $widgetConfig);
     }

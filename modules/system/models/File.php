@@ -1,4 +1,6 @@
-<?php namespace System\Models;
+<?php
+
+namespace System\Models;
 
 use Url;
 use Config;
@@ -66,8 +68,7 @@ class File extends FileBase
 
         if ($this->isPublic()) {
             $uploadsPath .= '/public';
-        }
-        else {
+        } else {
             $uploadsPath .= '/protected';
         }
 

@@ -1,4 +1,6 @@
-<?php namespace Backend\Classes;
+<?php
+
+namespace Backend\Classes;
 
 use Winter\Storm\Html\Helper as HtmlHelper;
 use Winter\Storm\Extension\Extendable;
@@ -113,7 +115,7 @@ abstract class WidgetBase extends Extendable
     public function bindToController()
     {
         if ($this->controller->widget === null) {
-            $this->controller->widget = new stdClass;
+            $this->controller->widget = new stdClass();
         }
 
         $this->controller->widget->{$this->alias} = $this;

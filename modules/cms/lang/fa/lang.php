@@ -1,4 +1,5 @@
 <?php
+
 return [
     'cms_object' => [
         'invalid_file' => 'نام :name برای فایل نام معتبر است. نام فایل میتواند شامل کاراکتر انگلیسی ، خط تیره و نقطه باشد. بعنوان مثال page.htm، page و subdirectory/page',
@@ -6,7 +7,7 @@ return [
         'file_already_exists' => 'فایلی با نام ":name" موجود است.',
         'error_saving' => 'خطا در ذخیره فایل ":name". لطفا سطح دسترسی ها را بررسی نمایید.',
         'error_creating_directory' => 'خطا در ایجاد پوشه ی :name. لطفا سطح دسترسی ها را بررسی نمایید.',
-        'invalid_file_extension'=>'پسوند :invalid برای فایل نا معتبر است. پسوند های معتبر عبارتند از: :allowed.',
+        'invalid_file_extension' => 'پسوند :invalid برای فایل نا معتبر است. پسوند های معتبر عبارتند از: :allowed.',
         'error_deleting' => 'خطا در خذف فایل ":name". لطفا سطح دسترسی ها را بررسی نمایید.',
         'delete_success' => 'تعداد :count فایل با موفقیت حذف شد.',
         'file_name_required' => 'نام فایل را وارد نمایید.',
@@ -259,7 +260,7 @@ return [
     'template' => [
         'invalid_type' => "نوع قالب معتبر نمی باشد.",
         'not_found' => "قالب درخواست شده یافت نشد.",
-        'saved'=> "قالب با موفقیت ذخیره شد.",
+        'saved' => "قالب با موفقیت ذخیره شد.",
         'no_list_records' => 'موردی یافت نشد',
         'delete_confirm' => 'آیا از حذف قالب های انتخاب شده اطمینان دارید؟',
         'order_by' => 'مرتب سازی با'

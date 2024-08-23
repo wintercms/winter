@@ -1,4 +1,6 @@
-<?php namespace Cms\Twig;
+<?php
+
+namespace Cms\Twig;
 
 use Twig\Template as TwigTemplate;
 use Twig\Extension\AbstractExtension as TwigExtension;
@@ -87,22 +89,18 @@ class DebugExtension extends TwigExtension
             }
 
             $result .= $this->dump($vars, static::PAGE_CAPTION);
-        }
-        else {
+        } else {
             $this->variablePrefix = false;
             for ($i = 2; $i < $count; $i++) {
                 $var = func_get_arg($i);
 
                 if ($var instanceof ComponentBase) {
                     $caption = [static::COMPONENT_CAPTION, get_class($var)];
-                }
-                elseif (is_array($var)) {
+                } elseif (is_array($var)) {
                     $caption = static::ARRAY_CAPTION;
-                }
-                elseif (is_object($var)) {
+                } elseif (is_object($var)) {
                     $caption = [static::OBJECT_CAPTION, get_class($var)];
-                }
-                else {
+                } else {
                     $caption = [static::OBJECT_CAPTION, gettype($var)];
                 }
 
@@ -127,11 +125,9 @@ class DebugExtension extends TwigExtension
         if (!is_array($variables)) {
             if ($variables instanceof Paginator) {
                 $variables = $this->paginatorToArray($variables);
-            }
-            elseif (is_object($variables)) {
+            } elseif (is_object($variables)) {
                 $variables = $this->objectToArray($variables);
-            }
-            else {
+            } else {
                 $variables = [$variables];
             }
         }
@@ -169,11 +165,11 @@ class DebugExtension extends TwigExtension
         $output = [];
         $output[] = '<thead>';
         $output[] = '<tr>';
-        $output[] = '<th colspan="3" style="'.$this->getHeaderCss().'">';
+        $output[] = '<th colspan="3" style="' . $this->getHeaderCss() . '">';
         $output[] = $caption;
 
         if (isset($subcaption)) {
-            $output[] = '<div style="'.$this->getSubheaderCss().'">'.$subcaption.'</div>';
+            $output[] = '<div style="' . $this->getSubheaderCss() . '">' . $subcaption . '</div>';
         }
 
         $output[] = '</th>';
@@ -194,12 +190,12 @@ class DebugExtension extends TwigExtension
         $css = $this->getDataCss($variable);
         $output = [];
         $output[] = '<tr>';
-        $output[] = '<td style="'.$css.';cursor:pointer" onclick="'.$this->evalToggleDumpOnClick().'">'.$this->evalKeyLabel($key).'</td>';
-        $output[] = '<td style="'.$css.'">'.$this->evalVarLabel($variable).'</td>';
-        $output[] = '<td style="'.$css.'">'.$this->evalVarDesc($variable, $key).'</td>';
+        $output[] = '<td style="' . $css . ';cursor:pointer" onclick="' . $this->evalToggleDumpOnClick() . '">' . $this->evalKeyLabel($key) . '</td>';
+        $output[] = '<td style="' . $css . '">' . $this->evalVarLabel($variable) . '</td>';
+        $output[] = '<td style="' . $css . '">' . $this->evalVarDesc($variable, $key) . '</td>';
         $output[] = '</tr>';
         $output[] = '<tr>';
-        $output[] = '<td colspan="3">'.$this->evalVarDump($variable).'</td>';
+        $output[] = '<td colspan="3">' . $this->evalVarDump($variable) . '</td>';
         $output[] = '</tr>';
         return implode(PHP_EOL, $output);
     }
@@ -222,8 +218,8 @@ class DebugExtension extends TwigExtension
      */
     protected function evalVarDump($variable)
     {
-        $dumper = new HtmlDumper;
-        $cloner = new VarCloner;
+        $dumper = new HtmlDumper();
+        $cloner = new VarCloner();
 
         $output = '<div style="display:none">';
         $output .= $dumper->dump($cloner->cloneVar($variable), true);
@@ -241,15 +237,12 @@ class DebugExtension extends TwigExtension
     {
         if ($this->variablePrefix === true) {
             $output = '{{ <span>%s</span> }}';
-        }
-        elseif (is_array($this->variablePrefix)) {
+        } elseif (is_array($this->variablePrefix)) {
             $prefix = implode('.', $this->variablePrefix);
-            $output = '{{ <span>'.$prefix.'.%s</span> }}';
-        }
-        elseif ($this->variablePrefix) {
-            $output = '{{ <span>'.$this->variablePrefix.'.%s</span> }}';
-        }
-        else {
+            $output = '{{ <span>' . $prefix . '.%s</span> }}';
+        } elseif ($this->variablePrefix) {
+            $output = '{{ <span>' . $this->variablePrefix . '.%s</span> }}';
+        } else {
             $output = '%s';
         }
 
@@ -269,7 +262,7 @@ class DebugExtension extends TwigExtension
                 return $this->evalObjLabel($variable);
 
             case 'array':
-                return $type . '('.count($variable).')';
+                return $type . '(' . count($variable) . ')';
 
             default:
                 return $type;
@@ -303,18 +296,15 @@ class DebugExtension extends TwigExtension
 
         if ($variable instanceof ComponentBase) {
             $label = '<strong>Component</strong>';
-        }
-        elseif ($variable instanceof Collection) {
-            $label = 'Collection('.$variable->count().')';
-        }
-        elseif ($variable instanceof Paginator) {
-            $label = 'Paged Collection('.$variable->count().')';
-        }
-        elseif ($variable instanceof Model) {
+        } elseif ($variable instanceof Collection) {
+            $label = 'Collection(' . $variable->count() . ')';
+        } elseif ($variable instanceof Paginator) {
+            $label = 'Paged Collection(' . $variable->count() . ')';
+        } elseif ($variable instanceof Model) {
             $label = 'Model';
         }
 
-        return '<abbr title="'.e($class).'">'.$label.'</abbr>';
+        return '<abbr title="' . e($class) . '">' . $label . '</abbr>';
     }
 
     /**
@@ -370,7 +360,7 @@ class DebugExtension extends TwigExtension
     {
         $output = [];
         foreach ($variable as $key => $value) {
-            $output[] = '<abbr title="'.e(gettype($value)).'">'.$key.'</abbr>';
+            $output[] = '<abbr title="' . e(gettype($value)) . '">' . $key . '</abbr>';
         }
 
         return implode(', ', $output);
@@ -386,7 +376,7 @@ class DebugExtension extends TwigExtension
         $output = [];
         if ($variable instanceof ComponentBase) {
             $details = $variable->componentDetails();
-            $output[] = '<abbr title="'.array_get($details, 'description').'">';
+            $output[] = '<abbr title="' . array_get($details, 'description') . '">';
             $output[] = array_get($details, 'name');
             $output[] = '</abbr>';
         }
@@ -462,7 +452,7 @@ class DebugExtension extends TwigExtension
                 continue; // Magic/hidden method
             }
             $name .= '()';
-            $methods[$name] = '___METHOD___|'.$name;
+            $methods[$name] = '___METHOD___|' . $name;
             $this->commentMap[$name] = $this->evalDocBlock($method);
         }
 

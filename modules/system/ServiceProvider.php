@@ -1,4 +1,6 @@
-<?php namespace System;
+<?php
+
+namespace System;
 
 use Backend;
 use Backend\Classes\WidgetManager;
@@ -129,11 +131,11 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerSingletons()
     {
         $this->app->singleton('cms.helper', function () {
-            return new \Cms\Helpers\Cms;
+            return new \Cms\Helpers\Cms();
         });
 
         $this->app->singleton('backend.helper', function () {
-            return new \Backend\Helpers\Backend;
+            return new \Backend\Helpers\Backend();
         });
 
         $this->app->singleton('backend.menu', function () {
@@ -170,7 +172,8 @@ class ServiceProvider extends ModuleServiceProvider
         }
 
         // CLI
-        if ($this->app->runningInConsole()
+        if (
+            $this->app->runningInConsole()
             && (
                 // Protected command
                 count(array_intersect($commands, Request::server('argv', []))) > 0
@@ -342,7 +345,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerErrorHandler()
     {
         Event::listen('exception.beforeRender', function ($exception, $httpCode, $request) {
-            $handler = new ErrorHandler;
+            $handler = new ErrorHandler();
             return $handler->handleException($exception);
         });
     }
@@ -373,7 +376,7 @@ class ServiceProvider extends ModuleServiceProvider
         // Register Mailer Twig environment
         $this->app->singleton('twig.environment.mailer', function ($app) {
             $twig = MarkupManager::makeBaseTwigEnvironment();
-            $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
+            $twig->addTokenParser(new \System\Twig\MailPartialTokenParser());
             return $twig;
         });
 

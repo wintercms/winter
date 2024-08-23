@@ -1,4 +1,6 @@
-<?php namespace Backend\Models;
+<?php
+
+namespace Backend\Models;
 
 use App;
 use Lang;
@@ -80,8 +82,7 @@ class Preference extends Model
     {
         if (Session::has('locale')) {
             App::setLocale(Session::get('locale'));
-        }
-        elseif (
+        } elseif (
             ($user = BackendAuth::getUser()) &&
             ($locale = static::get('locale'))
         ) {
@@ -98,8 +99,7 @@ class Preference extends Model
     {
         if (Session::has('fallback_locale')) {
             Lang::setFallback(Session::get('fallback_locale'));
-        }
-        elseif (
+        } elseif (
             ($user = BackendAuth::getUser()) &&
             ($locale = static::get('fallback_locale'))
         ) {

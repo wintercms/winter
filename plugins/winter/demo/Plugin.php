@@ -1,14 +1,15 @@
-<?php namespace Winter\Demo;
+<?php
 
 /**
  * The plugin.php file (called the plugin initialization script) defines the plugin information class.
  */
 
+namespace Winter\Demo;
+
 use System\Classes\PluginBase;
 
 class Plugin extends PluginBase
 {
-
     public function pluginDetails()
     {
         return [

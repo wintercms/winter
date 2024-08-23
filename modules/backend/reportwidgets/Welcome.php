@@ -1,4 +1,6 @@
-<?php namespace Backend\ReportWidgets;
+<?php
+
+namespace Backend\ReportWidgets;
 
 use BackendAuth;
 use Backend\Models\AccessLog;
@@ -26,8 +28,7 @@ class Welcome extends ReportWidgetBase
     {
         try {
             $this->loadData();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->vars['error'] = $ex->getMessage();
         }
 

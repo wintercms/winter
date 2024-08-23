@@ -6,7 +6,6 @@ use System\Classes\UpdateManager;
 use System\Classes\VersionManager;
 use System\Classes\PluginManager;
 use ReflectionClass;
-
 use Winter\Storm\Database\Model as ActiveRecord;
 
 class PluginManagerTestCase extends TestCase
@@ -40,7 +39,7 @@ class PluginManagerTestCase extends TestCase
      * Perform test case set up.
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         /*
          * Force reload of Winter singletons
@@ -69,7 +68,7 @@ class PluginManagerTestCase extends TestCase
      * Flush event listeners and collect garbage.
      * @return void
      */
-    public function tearDown() : void
+    public function tearDown(): void
     {
         $this->flushModelEventListeners();
         parent::tearDown();

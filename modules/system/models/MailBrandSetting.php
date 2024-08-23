@@ -1,4 +1,6 @@
-<?php namespace System\Models;
+<?php
+
+namespace System\Models;
 
 use App;
 use Str;
@@ -72,7 +74,7 @@ class MailBrandSetting extends Model
         $vars = static::getCssVars();
 
         foreach ($vars as $var => $default) {
-            $this->{$var} = $config->get('brand.mail.'.Str::studly($var), $default);
+            $this->{$var} = $config->get('brand.mail.' . Str::studly($var), $default);
         }
     }
 
@@ -96,8 +98,7 @@ class MailBrandSetting extends Model
         try {
             $customCss = self::compileCss();
             Cache::forever($cacheKey, $customCss);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $customCss = '/* ' . $ex->getMessage() . ' */';
         }
 

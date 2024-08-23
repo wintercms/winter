@@ -3,7 +3,6 @@
 namespace System\Tests\Classes;
 
 use ReflectionClass;
-
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Exception\ApplicationException;
 use System\Classes\FileManifest;

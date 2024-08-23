@@ -1,4 +1,6 @@
-<?php namespace System\Controllers;
+<?php
+
+namespace System\Controllers;
 
 use App;
 use Lang;
@@ -63,8 +65,7 @@ class EventLogs extends Controller
             }
 
             Flash::success(Lang::get('backend::lang.list.delete_selected_success'));
-        }
-        else {
+        } else {
             Flash::error(Lang::get('backend::lang.list.delete_selected_empty'));
         }
 

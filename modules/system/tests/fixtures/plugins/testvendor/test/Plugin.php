@@ -1,4 +1,6 @@
-<?php namespace TestVendor\Test;
+<?php
+
+namespace TestVendor\Test;
 
 use System\Classes\PluginBase;
 

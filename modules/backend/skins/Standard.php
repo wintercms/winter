@@ -1,4 +1,6 @@
-<?php namespace Backend\Skins;
+<?php
+
+namespace Backend\Skins;
 
 use File;
 use Backend\Classes\Skin;
@@ -15,7 +17,6 @@ use Winter\Storm\Router\Helper as RouterHelper;
 
 class Standard extends Skin
 {
-
     /**
      * @inheritDoc
      */
@@ -52,6 +53,6 @@ class Standard extends Skin
      */
     public function getLayoutPaths()
     {
-        return [$this->skinPath.'/layouts'];
+        return [$this->skinPath . '/layouts'];
     }
 }

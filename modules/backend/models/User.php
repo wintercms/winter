@@ -1,4 +1,6 @@
-<?php namespace Backend\Models;
+<?php
+
+namespace Backend\Models;
 
 use Mail;
 use Event;
@@ -104,8 +106,7 @@ class User extends UserBase
     {
         if (is_string($options)) {
             $options = ['default' => $options];
-        }
-        elseif (!is_array($options)) {
+        } elseif (!is_array($options)) {
             $options = [];
         }
 
@@ -118,8 +119,8 @@ class User extends UserBase
 
         return '//www.gravatar.com/avatar/' .
             md5(strtolower(trim($this->email))) .
-            '?s='. $size .
-            '&d='. urlencode($default);
+            '?s=' . $size .
+            '&d=' . urlencode($default);
     }
 
     /**

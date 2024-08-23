@@ -31,14 +31,13 @@ class ExampleExportModel extends ExportModel
 
 class ExportModelTest extends TestCase
 {
-
     //
     // Tests
     //
 
     public function testEncodeArrayValue()
     {
-        $model = new ExampleExportModel;
+        $model = new ExampleExportModel();
         $data = ['foo', 'bar'];
         $result = self::callProtectedMethod($model, 'encodeArrayValue', [$data]);
         $this->assertEquals('foo|bar', $result);
@@ -54,7 +53,7 @@ class ExportModelTest extends TestCase
 
     public function testDownload()
     {
-        $model = new ExampleExportModel;
+        $model = new ExampleExportModel();
 
         $csvName = $model->export(['foo' => 'title', 'bar' => 'title2'], []);
 

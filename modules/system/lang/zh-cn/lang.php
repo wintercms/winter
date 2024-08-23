@@ -323,7 +323,7 @@ return [
         'referer' => '来源',
         'url' => 'URL',
         'status_code' => '状态',
-        'preview_title'=> '预览事件日志'
+        'preview_title' => '预览事件日志'
     ],
     'permissions' => [
         'name' => '系统',

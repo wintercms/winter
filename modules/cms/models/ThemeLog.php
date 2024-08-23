@@ -1,4 +1,6 @@
-<?php namespace Cms\Models;
+<?php
+
+namespace Cms\Models;
 
 use BackendAuth;
 use Cms\Classes\Theme;
@@ -75,11 +77,11 @@ class ThemeLog extends Model
             return null;
         }
 
-        $record = new self;
+        $record = new self();
         $record->type = $type;
         $record->theme = Theme::getEditThemeCode();
-        $record->template = $isDelete ? '' : $dirName.'/'.$templateName;
-        $record->old_template = $oldTemplateName ? $dirName.'/'.$oldTemplateName : '';
+        $record->template = $isDelete ? '' : $dirName . '/' . $templateName;
+        $record->old_template = $oldTemplateName ? $dirName . '/' . $oldTemplateName : '';
         $record->content = $isDelete ? '' : $newContent;
         $record->old_content = $oldContent;
 

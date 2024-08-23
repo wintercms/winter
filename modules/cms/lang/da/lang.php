@@ -7,7 +7,7 @@ return [
         'file_already_exists' => "Filen ':name' eksisterer allerede.",
         'error_saving' => "Fejl under geming af filen ':name'. Kontroller venligst skriverettigheder.",
         'error_creating_directory' => 'Fejl ved opretning af mappe :name. Kontroller venligst skriverettigheder.',
-        'invalid_file_extension'=>'Ugyldig filendelse: :invalid. Tilladte endelser: :allowed.',
+        'invalid_file_extension' => 'Ugyldig filendelse: :invalid. Tilladte endelser: :allowed.',
         'error_deleting' => "Fejl under sletning af skabelonfil ':name'. Kontroller venligst skriverettigheder.",
         'delete_success' => 'Slettede skabeloner: :count.',
         'file_name_required' => 'Filnavnet er påkrævet.',
@@ -231,7 +231,7 @@ return [
     'template' => [
         'invalid_type' => 'Ukendt skabelontype.',
         'not_found' => 'Skabelon kunne ikke findes.',
-        'saved'=> 'Skabelon blev gemt.'
+        'saved' => 'Skabelon blev gemt.'
     ],
     'permissions' => [
         'name' => 'CMS',

@@ -1,4 +1,6 @@
-<?php namespace DependencyTest\Found;
+<?php
+
+namespace DependencyTest\Found;
 
 use System\Classes\PluginBase;
 

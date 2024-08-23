@@ -1,4 +1,6 @@
-<?php namespace Backend\Helpers\Exception;
+<?php
+
+namespace Backend\Helpers\Exception;
 
 use ApplicationException;
 

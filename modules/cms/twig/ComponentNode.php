@@ -1,4 +1,6 @@
-<?php namespace Cms\Twig;
+<?php
+
+namespace Cms\Twig;
 
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
@@ -28,7 +30,7 @@ class ComponentNode extends TwigNode
         $compiler->write("\$context['__cms_component_params'] = [];\n");
 
         for ($i = 1; $i < count($this->getNode('nodes')); $i++) {
-            $compiler->write("\$context['__cms_component_params']['".$this->getAttribute('names')[$i-1]."'] = ");
+            $compiler->write("\$context['__cms_component_params']['" . $this->getAttribute('names')[$i - 1] . "'] = ");
             $compiler->subcompile($this->getNode('nodes')->getNode($i));
             $compiler->write(";\n");
         }

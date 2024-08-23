@@ -1,14 +1,12 @@
 <?xml version="1.0"?>
 <ruleset name="Winter CMS">
     <description>The coding standard for Winter CMS.</description>
-    <rule ref="PSR2">
+    <rule ref="PSR12">
         <!--
         Exceptions to the PSR-2 guidelines as per our Developer Guide:
-        https://wintercms.com/help/guidelines/developer#psr-exceptions
+        https://wintercms.com/docs/v1.2/docs/architecture/developer-guide#exceptions-to-the-standard
         -->
         <exclude name="PSR1.Methods.CamelCapsMethodName.NotCamelCaps" />
-        <exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace" />
-        <exclude name="PSR2.ControlStructures.ControlStructureSpacing.SpacingAfterOpenBrace" />
 
         <!--  We're not enforcing a line length limit -->
         <exclude name="Generic.Files.LineLength" />
@@ -18,6 +16,13 @@
         <!-- We use 0 spaces before the colon for short (alternative) tags -->
         <properties>
             <property name="requiredSpacesBeforeColon" value="0" />
+        </properties>
+    </rule>
+
+    <rule ref="Generic.Formatting.SpaceAfterNot">
+        <!-- We do not allow a space after a logical NOT operator (ie. `if (! $this->exists) {` will be a code smell)-->
+        <properties>
+            <property name="spacing" value="0" />
         </properties>
     </rule>
 
@@ -125,10 +130,11 @@
     <file>config/</file>
     <file>modules/</file>
     <file>plugins/winter/demo/</file>
-    <file>tests/</file>
 
     <!-- Ignore vendor files -->
     <exclude-pattern>*/vendor/*</exclude-pattern>
+    <!-- Ignore manifest test fixtures -->
+    <exclude-pattern>modules/system/tests/fixtures/manifest/*</exclude-pattern>
     <!-- Ignore this view file as fixing the issues in here will break the template -->
     <exclude-pattern>modules/system/views/exception.php</exclude-pattern>
     <!-- Ignore this view file as PHPCS wants line 8 to have 44 spaces instead of 12, clearly insane -->

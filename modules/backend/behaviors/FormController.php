@@ -1,4 +1,6 @@
-<?php namespace Backend\Behaviors;
+<?php
+
+namespace Backend\Behaviors;
 
 use Db;
 use Str;
@@ -218,8 +220,7 @@ class FormController extends ControllerBehavior
             $model = $this->controller->formExtendModel($model) ?: $model;
 
             $this->initForm($model);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->controller->handleError($ex);
         }
     }
@@ -287,8 +288,7 @@ class FormController extends ControllerBehavior
 
             $model = $this->controller->formFindModelObject($recordId);
             $this->initForm($model);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->controller->handleError($ex);
         }
     }
@@ -384,8 +384,7 @@ class FormController extends ControllerBehavior
 
             $model = $this->controller->formFindModelObject($recordId);
             $this->initForm($model);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->controller->handleError($ex);
         }
     }
@@ -451,7 +450,7 @@ class FormController extends ControllerBehavior
     protected function createModel()
     {
         $class = $this->config->modelClass;
-        return new $class;
+        return new $class();
     }
 
     /**

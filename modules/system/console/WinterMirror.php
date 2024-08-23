@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use File;
 use Event;
@@ -146,9 +148,9 @@ class WinterMirror extends Command
     {
         $this->output->writeln(sprintf('<info> - Mirroring: %s</info>', $file));
 
-        $src = base_path().'/'.$file;
+        $src = base_path() . '/' . $file;
 
-        $dest = $this->getDestinationPath().'/'.$file;
+        $dest = $this->getDestinationPath() . '/' . $file;
 
         if (!File::isFile($src) || File::isFile($dest)) {
             return false;
@@ -161,9 +163,9 @@ class WinterMirror extends Command
     {
         $this->output->writeln(sprintf('<info> - Mirroring: %s</info>', $directory));
 
-        $src = base_path().'/'.$directory;
+        $src = base_path() . '/' . $directory;
 
-        $dest = $this->getDestinationPath().'/'.$directory;
+        $dest = $this->getDestinationPath() . '/' . $directory;
 
         if (!File::isDirectory($src) || File::isDirectory($dest)) {
             return false;
@@ -184,14 +186,14 @@ class WinterMirror extends Command
 
         list($start, $end) = explode('*', $wildcard, 2);
 
-        $startDir = base_path().'/'.$start;
+        $startDir = base_path() . '/' . $start;
 
         if (!File::isDirectory($startDir)) {
             return false;
         }
 
         foreach (File::directories($startDir) as $directory) {
-            $this->mirrorWildcard($start.basename($directory).$end);
+            $this->mirrorWildcard($start . basename($directory) . $end);
         }
     }
 

@@ -1,4 +1,6 @@
-<?php namespace System\Models;
+<?php
+
+namespace System\Models;
 
 use App;
 use Exception;
@@ -42,7 +44,7 @@ class EventLog extends Model
      */
     public static function add(string $message, string $level = 'info', ?array $details = null): self
     {
-        $record = new static;
+        $record = new static();
         $record->message = $message;
         $record->level = $level;
 
@@ -52,8 +54,7 @@ class EventLog extends Model
 
         try {
             $record->save();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
         }
 
         return $record;

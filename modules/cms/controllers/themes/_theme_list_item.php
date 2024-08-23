@@ -8,7 +8,7 @@
 <div class="layout-cell min-height theme-description">
     <h3><?= e($theme->getConfigValue('name', $theme->getDirName())) ?></h3>
     <?php if (strlen($author)): ?>
-        <p class="author"><?= trans('cms::lang.theme.by_author', ['name' => '<a href="'.e($theme->getConfigValue('homepage', '#')).'">'.e($author).'</a>']) ?></p>
+        <p class="author"><?= trans('cms::lang.theme.by_author', ['name' => '<a href="' . e($theme->getConfigValue('homepage', '#')) . '">' . e($author) . '</a>']) ?></p>
     <?php endif ?>
     <p class="description">
         <?= e($theme->getConfigValue('description', 'The theme description is not provided.')) ?>
@@ -36,7 +36,7 @@
         <?php endif ?>
         <?php if ($theme->hasCustomData()): ?>
             <a
-                href="<?= Backend::url('cms/themeoptions/update/'.$theme->getDirName()) ?>"
+                href="<?= Backend::url('cms/themeoptions/update/' . $theme->getDirName()) ?>"
                 class="btn btn-secondary<?= $theme->isActiveTheme() === false ? ' disabled' : '' ?>">
                 <i class="icon-paint-brush"></i>
                 <?= e(trans('cms::lang.theme.customize_button')) ?>

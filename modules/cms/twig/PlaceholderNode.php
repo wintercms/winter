@@ -1,4 +1,6 @@
-<?php namespace Cms\Twig;
+<?php
+
+namespace Cms\Twig;
 
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
@@ -33,11 +35,11 @@ class PlaceholderNode extends TwigNode
     public function compile(TwigCompiler $compiler)
     {
         $hasBody = $this->hasNode('default');
-        $varId = '__placeholder_'.$this->getAttribute('name').'_default_contents';
+        $varId = '__placeholder_' . $this->getAttribute('name') . '_default_contents';
         $compiler
             ->addDebugInfo($this)
             ->write("\$context[")
-            ->raw("'".$varId."'")
+            ->raw("'" . $varId . "'")
             ->raw("] = null;");
 
         if ($hasBody) {
@@ -46,7 +48,7 @@ class PlaceholderNode extends TwigNode
                 ->write('ob_start();')
                 ->subcompile($this->getNode('default'))
                 ->write("\$context[")
-                ->raw("'".$varId."'")
+                ->raw("'" . $varId . "'")
                 ->raw("] = ob_get_clean();");
         }
 
@@ -55,29 +57,27 @@ class PlaceholderNode extends TwigNode
         $compiler->addDebugInfo($this);
         if (!$isText) {
             $compiler->write("echo \$this->env->getExtension('Cms\Twig\Extension')->displayBlock(");
-        }
-        else {
+        } else {
             $compiler->write("echo twig_escape_filter(\$this->env, \$this->env->getExtension('Cms\Twig\Extension')->displayBlock(");
         }
 
         $compiler
-            ->raw("'".$this->getAttribute('name')."', ")
+            ->raw("'" . $this->getAttribute('name') . "', ")
             ->raw("\$context[")
-            ->raw("'".$varId."'")
+            ->raw("'" . $varId . "'")
             ->raw("]")
             ->raw(")");
 
         if (!$isText) {
             $compiler->raw(";\n");
-        }
-        else {
+        } else {
             $compiler->raw(");\n");
         }
 
         $compiler
             ->addDebugInfo($this)
             ->write("unset(\$context[")
-            ->raw("'".$varId."'")
+            ->raw("'" . $varId . "'")
             ->raw("]);");
     }
 }

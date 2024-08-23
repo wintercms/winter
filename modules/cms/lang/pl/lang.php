@@ -232,7 +232,7 @@ return [
     'template' => [
         'invalid_type' => 'Nieznany typ szablonu.',
         'not_found' => 'Szablon nie został znaleziony.',
-        'saved'=> 'Szablon został zapisany pomyślnie.'
+        'saved' => 'Szablon został zapisany pomyślnie.'
     ],
     'permissions' => [
         'name' => 'Cms',

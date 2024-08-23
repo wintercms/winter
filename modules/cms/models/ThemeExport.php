@@ -1,4 +1,6 @@
-<?php namespace Cms\Models;
+<?php
+
+namespace Cms\Models;
 
 use File;
 use Model;
@@ -93,33 +95,32 @@ class ThemeExport extends Model
 
         try {
             $themePath = $this->theme->getPath();
-            $tempPath = temp_path() . '/'.uniqid('oc');
+            $tempPath = temp_path() . '/' . uniqid('oc');
             $zipName = uniqid('oc');
-            $zipPath = temp_path().'/'.$zipName;
+            $zipPath = temp_path() . '/' . $zipName;
 
             if (!File::makeDirectory($tempPath)) {
-                throw new ApplicationException('Unable to create directory '.$tempPath);
+                throw new ApplicationException('Unable to create directory ' . $tempPath);
             }
 
             if (!File::makeDirectory($metaPath = $tempPath . '/meta')) {
-                throw new ApplicationException('Unable to create directory '.$metaPath);
+                throw new ApplicationException('Unable to create directory ' . $metaPath);
             }
 
-            File::copy($themePath.'/theme.yaml', $tempPath.'/theme.yaml');
-            File::copyDirectory($themePath.'/meta', $metaPath);
+            File::copy($themePath . '/theme.yaml', $tempPath . '/theme.yaml');
+            File::copyDirectory($themePath . '/meta', $metaPath);
 
             foreach ($this->folders as $folder) {
                 if (!array_key_exists($folder, $this->getFoldersOptions())) {
                     continue;
                 }
 
-                File::copyDirectory($themePath.'/'.$folder, $tempPath.'/'.$folder);
+                File::copyDirectory($themePath . '/' . $folder, $tempPath . '/' . $folder);
             }
 
             Zip::make($zipPath, $tempPath);
             File::deleteDirectory($tempPath);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             if (strlen($tempPath) && File::isDirectory($tempPath)) {
                 File::deleteDirectory($tempPath);
             }

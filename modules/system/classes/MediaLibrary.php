@@ -132,8 +132,7 @@ class MediaLibrary
 
         if (array_key_exists($fullFolderPath, $cached)) {
             $folderContents = $cached[$fullFolderPath];
-        }
-        else {
+        } else {
             $folderContents = $this->scanFolderContents($fullFolderPath);
 
             $cached[$fullFolderPath] = $folderContents;
@@ -158,8 +157,7 @@ class MediaLibrary
 
         if (!$ignoreFolders) {
             $folderContents = array_merge($folderContents['folders'], $folderContents['files']);
-        }
-        else {
+        } else {
             $folderContents = $folderContents['files'];
         }
 
@@ -186,8 +184,7 @@ class MediaLibrary
             foreach ($folderContents as $item) {
                 if ($item->type == MediaLibraryItem::TYPE_FOLDER) {
                     $findInFolder($item->path);
-                }
-                elseif ($this->pathMatchesSearch($item->path, $words)) {
+                } elseif ($this->pathMatchesSearch($item->path, $words)) {
                     $result[] = $item;
                 }
             }
@@ -384,7 +381,7 @@ class MediaLibrary
             $folderContents = $this->scanFolderContents($fullSrcPath);
 
             foreach ($folderContents['folders'] as $dirInfo) {
-                if (!$copyDirectory($dirInfo->path, $destPath.'/'.basename($dirInfo->path))) {
+                if (!$copyDirectory($dirInfo->path, $destPath . '/' . basename($dirInfo->path))) {
                     return false;
                 }
             }
@@ -392,7 +389,7 @@ class MediaLibrary
             foreach ($folderContents['files'] as $fileInfo) {
                 $fullFileSrcPath = $this->getMediaPath($fileInfo->path);
 
-                if (!$disk->copy($fullFileSrcPath, $fullDestPath.'/'.basename($fileInfo->path))) {
+                if (!$disk->copy($fullFileSrcPath, $fullDestPath . '/' . basename($fileInfo->path))) {
                     return false;
                 }
             }
@@ -422,8 +419,7 @@ class MediaLibrary
             }
 
             $this->deleteFolder($originalPath);
-        }
-        else {
+        } else {
             // If there's a risk that the directory name was updated
             // by changing the letter case - swap source and destination
             // using a temporary directory with random name.
@@ -480,7 +476,7 @@ class MediaLibrary
     public static function validatePath($path, $normalizeOnly = false)
     {
         $path = str_replace('\\', '/', $path);
-        $path = '/'.trim($path, '/');
+        $path = '/' . trim($path, '/');
 
         if ($normalizeOnly) {
             return $path;
@@ -515,19 +511,19 @@ class MediaLibrary
         $regexDot = preg_quote('.', '#');
         $regex = [
             // Beginning of path
-            '(^'.$regexDot.'+?'.$regexDirectorySeparator.')',
+            '(^' . $regexDot . '+?' . $regexDirectorySeparator . ')',
 
             // Middle of path
-            '('.$regexDirectorySeparator.$regexDot.'+?'.$regexDirectorySeparator.')',
+            '(' . $regexDirectorySeparator . $regexDot . '+?' . $regexDirectorySeparator . ')',
 
             // End of path
-            '('.$regexDirectorySeparator.$regexDot.'+?$)',
+            '(' . $regexDirectorySeparator . $regexDot . '+?$)',
         ];
 
         /*
          * Validate invalid paths
          */
-        $regex = '#'.implode('|', $regex).'#';
+        $regex = '#' . implode('|', $regex) . '#';
         if (preg_match($regex, $path) !== 0 || strpos($path, '://') !== false) {
             throw new ApplicationException(Lang::get('system::lang.media.invalid_path', compact('path')));
         }
@@ -570,7 +566,7 @@ class MediaLibrary
      */
     public function getMediaPath($path)
     {
-        return $this->storageFolder.$path;
+        return $this->storageFolder . $path;
     }
 
     /**
@@ -603,7 +599,7 @@ class MediaLibrary
         }
 
         foreach ($this->ignorePatterns as $pattern) {
-            if (preg_match('/'.$pattern.'/', $baseName)) {
+            if (preg_match('/' . $pattern . '/', $baseName)) {
                 return false;
             }
         }
@@ -825,11 +821,11 @@ class MediaLibrary
     {
         $temporaryDirBaseName = time();
 
-        $tmpPath = $location.'/tmp-'.$temporaryDirBaseName;
+        $tmpPath = $location . '/tmp-' . $temporaryDirBaseName;
 
         while ($this->folderExists($tmpPath)) {
             $temporaryDirBaseName++;
-            $tmpPath = $location.'/tmp-'.$temporaryDirBaseName;
+            $tmpPath = $location . '/tmp-' . $temporaryDirBaseName;
         }
 
         return $tmpPath;

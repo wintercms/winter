@@ -17,7 +17,7 @@ $allowCustom = $field->getConfig('allowCustom', false);
         name="<?= $field->getName() ?>"
         class="form-control custom-select <?= $useSearch ? '' : 'select-no-search' ?> <?= $allowCustom ? 'select-modifiable' : '' ?>"
         <?= $field->getAttributes() ?>
-        <?= $field->placeholder ? 'data-placeholder="'.e(trans($field->placeholder)).'"' : '' ?>
+        <?= $field->placeholder ? 'data-placeholder="' . e(trans($field->placeholder)) . '"' : '' ?>
         >
         <?php if ($emptyOption): ?>
             <option value=""><?= e(trans($emptyOption)) ?></option>

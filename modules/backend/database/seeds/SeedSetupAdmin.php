@@ -1,4 +1,6 @@
-<?php namespace Backend\Database\Seeds;
+<?php
+
+namespace Backend\Database\Seeds;
 
 use Seeder;
 use Backend\Models\User;

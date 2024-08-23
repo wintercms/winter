@@ -1,4 +1,6 @@
-<?php namespace System\Classes;
+<?php
+
+namespace System\Classes;
 
 use App;
 use Url;
@@ -133,23 +135,23 @@ class CombineAssets
         /*
          * Register JavaScript filters
          */
-        $this->registerFilter('js', new JavascriptImporter);
+        $this->registerFilter('js', new JavascriptImporter());
 
         /*
          * Register CSS filters
          */
-        $this->registerFilter('css', new CssImportFilter);
-        $this->registerFilter(['css', 'less', 'scss'], new CssRewriteFilter);
+        $this->registerFilter('css', new CssImportFilter());
+        $this->registerFilter(['css', 'less', 'scss'], new CssRewriteFilter());
 
-        $this->registerFilter('less', new LessCompiler);
-        $this->registerFilter('scss', new ScssCompiler);
+        $this->registerFilter('less', new LessCompiler());
+        $this->registerFilter('scss', new ScssCompiler());
 
         /*
          * Minification filters
          */
         if ($this->useMinify) {
-            $this->registerFilter('js', new JavaScriptMinifierFilter);
-            $this->registerFilter(['css', 'less', 'scss'], new StylesheetMinifyFilter);
+            $this->registerFilter('js', new JavaScriptMinifierFilter());
+            $this->registerFilter(['css', 'less', 'scss'], new StylesheetMinifyFilter());
         }
 
         /*
@@ -227,13 +229,13 @@ class CombineAssets
         // Prefix all assets
         if ($localPath) {
             if (substr($localPath, -1) !== '/') {
-                $localPath = $localPath.'/';
+                $localPath = $localPath . '/';
             }
             $assets = array_map(function ($asset) use ($localPath) {
                 if (substr($asset, 0, 1) === '@') {
                     return $asset;
                 }
-                return $localPath.$asset;
+                return $localPath . $asset;
             }, $assets);
         }
 
@@ -257,7 +259,7 @@ class CombineAssets
     {
         $cacheInfo = $this->getCache($cacheKey);
         if (!$cacheInfo) {
-            return Response::make('/* '.e(Lang::get('system::lang.combiner.not_found', ['name' => $cacheKey])).' */', 404);
+            return Response::make('/* ' . e(Lang::get('system::lang.combiner.not_found', ['name' => $cacheKey])) . ' */', 404);
         }
 
         $this->localPath = $cacheInfo['path'];
@@ -343,8 +345,7 @@ class CombineAssets
         if (count($combineCss) > count($combineJs)) {
             $extension = 'css';
             $assets = $combineCss;
-        }
-        else {
+        } else {
             $extension = 'js';
             $assets = $combineJs;
         }
@@ -378,7 +379,7 @@ class CombineAssets
     protected function prepareRequest(array $assets, $localPath = null)
     {
         if (substr($localPath, -1) != '/') {
-            $localPath = $localPath.'/';
+            $localPath = $localPath . '/';
         }
 
         $this->localPath = $localPath;
@@ -400,13 +401,12 @@ class CombineAssets
             if ($this->useDeepHashing) {
                 $factory = new AssetFactory($this->localPath);
                 $lastMod = $factory->getLastModified($combiner);
-            }
-            else {
+            } else {
                 $lastMod = $combiner->getLastModified();
             }
 
             $cacheInfo = [
-                'version'   => $cacheKey.'-'.$lastMod,
+                'version'   => $cacheKey . '-' . $lastMod,
                 'etag'      => $cacheKey,
                 'lastMod'   => $lastMod,
                 'files'     => $assets,
@@ -530,7 +530,7 @@ class CombineAssets
             return Url::action($combineAction, [$outputFilename], false);
         }
 
-        return '/combine/'.$outputFilename;
+        return '/combine/' . $outputFilename;
     }
 
     /**
@@ -547,14 +547,14 @@ class CombineAssets
     {
         if ($path === null) {
             $baseUri = substr(Request::getBaseUrl(), strlen(Request::getBasePath()));
-            $path = $baseUri.'/combine';
+            $path = $baseUri . '/combine';
         }
 
         if (strpos($path, '/') === 0) {
             $path = substr($path, 1);
         }
 
-        $path = str_replace('.', '-', $path).'/';
+        $path = str_replace('.', '-', $path) . '/';
         return $path;
     }
 
@@ -620,8 +620,7 @@ class CombineAssets
     {
         if ($extension === null) {
             $this->filters = [];
-        }
-        else {
+        } else {
             $this->filters[$extension] = [];
         }
 
@@ -677,17 +676,16 @@ class CombineAssets
             $preprocessors = array_diff(self::$cssExtensions, ['css']);
 
             if (in_array($extension, $preprocessors)) {
-                $cssPath = $path.'/../css';
+                $cssPath = $path . '/../css';
                 if (
                     in_array(strtolower(basename($path)), $preprocessors) &&
                     File::isDirectory(File::symbolizePath($cssPath))
                 ) {
                     $path = $cssPath;
                 }
-                $destination = $path.'/'.$file.'.css';
-            }
-            else {
-                $destination = $path.'/'.$file.'-min.'.$extension;
+                $destination = $path . '/' . $file . '.css';
+            } else {
+                $destination = $path . '/' . $file . '-min.' . $extension;
             }
         }
 
@@ -751,8 +749,7 @@ class CombineAssets
     {
         if ($extension === null) {
             $this->aliases = [];
-        }
-        else {
+        } else {
             $this->aliases[$extension] = [];
         }
 
@@ -790,7 +787,7 @@ class CombineAssets
      */
     protected function putCache($cacheKey, array $cacheInfo)
     {
-        $cacheKey = 'combiner.'.$cacheKey;
+        $cacheKey = 'combiner.' . $cacheKey;
 
         if (Cache::has($cacheKey)) {
             return false;
@@ -810,7 +807,7 @@ class CombineAssets
      */
     protected function getCache($cacheKey)
     {
-        $cacheKey = 'combiner.'.$cacheKey;
+        $cacheKey = 'combiner.' . $cacheKey;
 
         if (!Cache::has($cacheKey)) {
             return false;

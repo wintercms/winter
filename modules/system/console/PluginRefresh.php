@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
@@ -41,10 +43,12 @@ class PluginRefresh extends Command
     {
         $pluginName = $this->getPluginIdentifier();
 
-        if (!$this->confirmWithInput(
-            "This will completely remove and reinstall $pluginName. This may result in potential data loss.",
-            $pluginName
-        )) {
+        if (
+            !$this->confirmWithInput(
+                "This will completely remove and reinstall $pluginName. This may result in potential data loss.",
+                $pluginName
+            )
+        ) {
             return 1;
         }
 

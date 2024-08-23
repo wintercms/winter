@@ -38,7 +38,7 @@ class CoreLangTest extends TestCase
         foreach ($modules as $module) {
             foreach ($locales as $locale) {
                 foreach ($files as $file) {
-                    $srcPath = base_path() . '/modules/'.$module.'/lang/'.$locale.'/'.$file;
+                    $srcPath = base_path() . '/modules/' . $module . '/lang/' . $locale . '/' . $file;
                     if (!file_exists($srcPath)) {
                         continue;
                     }

@@ -1,4 +1,6 @@
-<?php namespace Cms\Classes;
+<?php
+
+namespace Cms\Classes;
 
 use ApplicationException;
 
@@ -100,11 +102,11 @@ class MediaViewHelper
     {
         switch ($type) {
             case 'video':
-                return '<video src="'.e($src).'" controls preload="metadata"></video>';
+                return '<video src="' . e($src) . '" controls preload="metadata"></video>';
             break;
 
             case 'audio':
-                return '<audio src="'.e($src).'" controls preload="metadata"></audio>';
+                return '<audio src="' . e($src) . '" controls preload="metadata"></audio>';
             break;
         }
     }

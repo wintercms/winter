@@ -24,7 +24,7 @@
                         <input type="hidden" name="component_properties[]" data-inspector-values value="<?= e($component->propertyValues) ?>">
                         <input type="hidden" data-inspector-config value="<?= e($component->propertyConfig) ?>">
                         <input type="hidden" data-inspector-class value="<?= $component->className ?>">
-                        <input type="hidden" data-component-icon value="<?= 'wn-'.e($component->pluginIcon) ?>">
+                        <input type="hidden" data-component-icon value="<?= 'wn-' . e($component->pluginIcon) ?>">
                         <input type="hidden" data-component-default-alias value="<?= e($component->alias) ?>">
                         <input type="hidden" data-component-name value="<?= e($component->name) ?>">
                         <input type="hidden" name="component_names[]" value="">

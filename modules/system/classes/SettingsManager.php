@@ -1,4 +1,6 @@
-<?php namespace System\Classes;
+<?php
+
+namespace System\Classes;
 
 use Event;
 use Backend;
@@ -300,8 +302,7 @@ class SettingsManager
                 list($author, $plugin) = explode('.', $owner);
                 $uri[] = strtolower($author);
                 $uri[] = strtolower($plugin);
-            }
-            else {
+            } else {
                 $uri[] = strtolower($owner);
             }
 
@@ -412,6 +413,6 @@ class SettingsManager
      */
     protected function makeItemKey($owner, $code)
     {
-        return strtoupper($this->aliases[strtolower($owner)] ?? $owner).'.'.strtoupper($code);
+        return strtoupper($this->aliases[strtolower($owner)] ?? $owner) . '.' . strtoupper($code);
     }
 }

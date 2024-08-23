@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
@@ -47,10 +49,12 @@ class WinterDown extends Command
      */
     public function handle(): int
     {
-        if (!$this->confirmWithInput(
-            "This will completely delete all database tables in use with your Winter installation.",
-            "DELETE"
-        )) {
+        if (
+            !$this->confirmWithInput(
+                "This will completely delete all database tables in use with your Winter installation.",
+                "DELETE"
+            )
+        ) {
             return 1;
         }
 

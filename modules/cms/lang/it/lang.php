@@ -7,7 +7,7 @@ return [
         'file_already_exists' => "File ':name' già esistente.",
         'error_saving' => "Errore nel salvataggio del file ':name'. Verifica le autorizzazioni di scrittura.",
         'error_creating_directory' => 'Errore nella creazione della cartella :name. Verifica le autorizzazioni di scrittura.',
-        'invalid_file_extension'=>'Estensione del file non valida: :invalid. Le estensioni consentite sono: :allowed.',
+        'invalid_file_extension' => 'Estensione del file non valida: :invalid. Le estensioni consentite sono: :allowed.',
         'error_deleting' => "Errore nella cancellazione del file ':name'. Verifica le autorizzazioni di scrittura.",
         'delete_success' => 'Template eliminati correttamente: :count.',
         'file_name_required' => 'Il campo Nome file è obbligatorio.',
@@ -231,7 +231,7 @@ return [
     'template' => [
         'invalid_type' => 'Tipo di template sconosciuto.',
         'not_found' => 'Il template richiesto non è stato trovato.',
-        'saved'=> 'Il template è stato salvato con successo'
+        'saved' => 'Il template è stato salvato con successo'
     ],
     'permissions' => [
         'name' => 'Cms',

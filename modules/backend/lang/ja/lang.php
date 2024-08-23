@@ -38,7 +38,7 @@ return [
         'not_found_name' => "':name'パーシャルは見つかりません。",
         'invalid_name' => "無効なパーシャル名: :name",
     ],
-    'ajax_handler' =>[
+    'ajax_handler' => [
         'invalid_name' => "無効なAJAXハンドラ名: :name",
         'not_found' => "AJAXハンドラ ':name' が見つかりませんでした。",
     ],

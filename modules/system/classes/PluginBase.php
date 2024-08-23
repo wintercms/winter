@@ -1,4 +1,6 @@
-<?php namespace System\Classes;
+<?php
+
+namespace System\Classes;
 
 use Str;
 use File;
@@ -63,8 +65,8 @@ class PluginBase extends ServiceProviderBase
     {
         $thisClass = get_class($this);
 
-        $configuration = $this->getConfigurationFromYaml(sprintf('Plugin configuration file plugin.yaml is not '.
-            'found for the plugin class %s. Create the file or override pluginDetails() '.
+        $configuration = $this->getConfigurationFromYaml(sprintf('Plugin configuration file plugin.yaml is not ' .
+            'found for the plugin class %s. Create the file or override pluginDetails() ' .
             'method in the plugin class.', $thisClass));
 
         if (!array_key_exists('plugin', $configuration)) {
@@ -302,7 +304,7 @@ class PluginBase extends ServiceProviderBase
      */
     public function registerConsoleCommand($key, $command)
     {
-        $key = 'command.'.$key;
+        $key = 'command.' . $key;
         $this->app->singleton($key, $command);
         $this->commands($key);
     }
@@ -321,7 +323,7 @@ class PluginBase extends ServiceProviderBase
         }
 
         $reflection = new ReflectionClass(get_class($this));
-        $yamlFilePath = dirname($reflection->getFileName()).'/plugin.yaml';
+        $yamlFilePath = dirname($reflection->getFileName()) . '/plugin.yaml';
 
         if (!file_exists($yamlFilePath)) {
             if ($exceptionMessage) {
@@ -329,8 +331,7 @@ class PluginBase extends ServiceProviderBase
             }
 
             $this->loadedYamlConfiguration = [];
-        }
-        else {
+        } else {
             $this->loadedYamlConfiguration = Yaml::parseFile($yamlFilePath);
             if (!is_array($this->loadedYamlConfiguration)) {
                 throw new SystemException(sprintf('Invalid format of the plugin configuration file: %s. The file should define an array.', $yamlFilePath));
@@ -450,7 +451,7 @@ class PluginBase extends ServiceProviderBase
             return [];
         }
 
-        $updates = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
+        $updates = Yaml::withProcessor(new VersionYamlProcessor(), function ($yaml) use ($versionFile) {
             return (array) $yaml->parseFile($versionFile);
         });
 

@@ -9,7 +9,7 @@ use DateTime;
 
 class RevisionableModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -55,7 +55,7 @@ class RevisionableModelTest extends PluginTestCase
             'slug' => 'hello-world',
             'description' => 'Good day, Commander',
             'is_published' => true,
-            'published_at' => new DateTime
+            'published_at' => new DateTime()
         ]);
 
         $this->assertEquals(0, $post->revision_history()->count());
@@ -86,7 +86,7 @@ class RevisionableModelTest extends PluginTestCase
             'slug' => 'hello-world',
             'description' => 'Good day, Commander',
             'is_published' => true,
-            'published_at' => new DateTime
+            'published_at' => new DateTime()
         ]);
 
         $this->assertEquals(0, $post->revision_history()->count());

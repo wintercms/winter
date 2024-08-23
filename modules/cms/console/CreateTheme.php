@@ -1,4 +1,6 @@
-<?php namespace Cms\Console;
+<?php
+
+namespace Cms\Console;
 
 use InvalidArgumentException;
 use Winter\Storm\Scaffold\GeneratorCommand;

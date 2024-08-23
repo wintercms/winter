@@ -1,4 +1,6 @@
-<?php namespace Cms\Twig;
+<?php
+
+namespace Cms\Twig;
 
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;

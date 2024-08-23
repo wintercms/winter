@@ -1,4 +1,6 @@
-<?php namespace Cms\Twig;
+<?php
+
+namespace Cms\Twig;
 
 use Twig\Node\Node as TwigNode;
 use Twig\Token as TwigToken;
@@ -40,8 +42,7 @@ class PlaceholderTokenParser extends TwigTokenParser
 
             $body = $this->parser->subparse([$this, 'decidePlaceholderEnd'], true);
             $stream->expect(TwigToken::BLOCK_END_TYPE);
-        }
-        else {
+        } else {
             $params = $this->loadParams($stream);
         }
 

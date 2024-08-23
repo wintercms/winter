@@ -1,4 +1,6 @@
-<?php namespace Backend\Classes;
+<?php
+
+namespace Backend\Classes;
 
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
@@ -201,10 +203,10 @@ class ListColumn
     {
         $id = 'column';
 
-        $id .= '-'.$this->columnName;
+        $id .= '-' . $this->columnName;
 
         if ($suffix) {
-            $id .= '-'.$suffix;
+            $id .= '-' . $suffix;
         }
 
         return HtmlHelper::nameToId($id);
@@ -266,8 +268,7 @@ class ListColumn
         foreach ($keyParts as $key) {
             if ($result instanceof Model && $result->hasRelation($key)) {
                 $result = $result->{$key};
-            }
-            else {
+            } else {
                 if (is_array($result) && array_key_exists($key, $result)) {
                     $result = $result[$key];
                 } elseif (!isset($result->{$key})) {

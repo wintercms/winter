@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Helper\TableSeparator;
@@ -47,8 +49,8 @@ class PluginList extends Command
             $rows[] = [
                 $plugin->code,
                 $plugin->version,
-                (!$plugin->is_frozen) ? '<info>Yes</info>': '<fg=red>No</>',
-                (!$plugin->is_disabled) ? '<info>Yes</info>': '<fg=red>No</>',
+                (!$plugin->is_frozen) ? '<info>Yes</info>' : '<fg=red>No</>',
+                (!$plugin->is_disabled) ? '<info>Yes</info>' : '<fg=red>No</>',
             ];
         }
 

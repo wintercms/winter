@@ -1,4 +1,6 @@
-<?php namespace Backend\Widgets;
+<?php
+
+namespace Backend\Widgets;
 
 use File;
 use Lang;
@@ -86,8 +88,7 @@ class ReportContainer extends WidgetBase
             $path = $controller->getConfigPath($configuration);
             if (File::isFile($path)) {
                 $configuration = $this->makeConfig($path);
-            }
-            else {
+            } else {
                 $configuration = [];
             }
         }
@@ -141,7 +142,7 @@ class ReportContainer extends WidgetBase
 
         Flash::success(Lang::get('backend::lang.dashboard.reset_layout_success'));
 
-        return ['#'.$this->getId('container-list') => $this->makePartial('widget_list')];
+        return ['#' . $this->getId('container-list') => $this->makePartial('widget_list')];
     }
 
     public function onMakeLayoutDefault()
@@ -168,7 +169,7 @@ class ReportContainer extends WidgetBase
         $this->saveWidgetProperties($alias, $widget->getProperties());
 
         return [
-            '#'.$alias => $widget->render()
+            '#' . $alias => $widget->render()
         ];
     }
 
@@ -183,7 +184,7 @@ class ReportContainer extends WidgetBase
     {
         $sizes = [];
         for ($i = 1; $i <= 12; $i++) {
-            $sizes[$i] = $i < 12 ? $i : $i.' (' . Lang::get('backend::lang.dashboard.full_width') . ')';
+            $sizes[$i] = $i < 12 ? $i : $i . ' (' . Lang::get('backend::lang.dashboard.full_width') . ')';
         }
 
         $this->vars['sizes'] = $sizes;
@@ -213,7 +214,7 @@ class ReportContainer extends WidgetBase
         $widgetInfo = $this->addWidget($widget, $size);
 
         return [
-            '@#'.$this->getId('container-list') => $this->makePartial('widget', [
+            '@#' . $this->getId('container-list') => $this->makePartial('widget', [
                 'widget'      => $widget,
                 'widgetAlias' => $widgetInfo['alias'],
                 'sortOrder'   => $widgetInfo['sortOrder']
@@ -232,9 +233,8 @@ class ReportContainer extends WidgetBase
         $num = count($widgets);
         do {
             $num++;
-            $alias = 'report_container_'.$this->context.'_'.$num;
-        }
-        while (array_key_exists($alias, $widgets));
+            $alias = 'report_container_' . $this->context . '_' . $num;
+        } while (array_key_exists($alias, $widgets));
 
         // Ensure that the widget's alias is correctly set for this request
         $widget->alias = $alias;
@@ -503,11 +503,11 @@ class ReportContainer extends WidgetBase
 
     protected function getUserPreferencesKey()
     {
-        return 'backend::reportwidgets.'.$this->context;
+        return 'backend::reportwidgets.' . $this->context;
     }
 
     protected function getSystemParametersKey()
     {
-        return 'backend::reportwidgets.default.'.$this->context;
+        return 'backend::reportwidgets.default.' . $this->context;
     }
 }

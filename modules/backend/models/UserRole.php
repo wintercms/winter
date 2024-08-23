@@ -1,4 +1,6 @@
-<?php namespace Backend\Models;
+<?php
+
+namespace Backend\Models;
 
 use Backend\Classes\AuthManager;
 use Winter\Storm\Auth\Models\Role as RoleBase;
@@ -73,10 +75,12 @@ class UserRole extends RoleBase
         }
 
         // Winter default system roles
-        if ($this->is_system || in_array($this->code, [
+        if (
+            $this->is_system || in_array($this->code, [
             self::CODE_DEVELOPER,
             self::CODE_PUBLISHER
-        ])) {
+            ])
+        ) {
             return true;
         }
 
