@@ -259,7 +259,7 @@
                     return $textInput.val()
             }
         } else {
-            var $disabledTextInput = $('.text-field:first > .form-control', $target)
+            var $disabledTextInput = $('.form-control', $target)
             if ($disabledTextInput.length) {
                 return $disabledTextInput.text()
             }
