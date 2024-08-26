@@ -4,6 +4,7 @@ namespace Backend\Classes;
 
 use BackedEnum;
 use Html;
+use Lang;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
 use Winter\Storm\Support\Str;
@@ -234,6 +235,9 @@ class FormField
                 $callable = $this->options;
                 return $callable();
             }
+            elseif (is_array($options = Lang::get($this->options))) {
+                return $options;
+            }
 
             return [];
         }
@@ -241,6 +245,24 @@ class FormField
         $this->options = $value;
 
         return $this;
+    }
+
+    /**
+     * Returns the label(s) associated with a field value(s) for the field options
+     */
+    public function valueLabel(): string|array
+    {
+        $defaultLabel = '';
+
+        if (!($options = $this->options()) || is_null($this->value)) {
+            return $defaultLabel;
+        }
+
+        if (is_array($this->value)) {
+            return array_map(fn($value) => array_get($options, $value, $defaultLabel), $this->value);
+        } else {
+            return array_get($options, $this->value, $defaultLabel);
+        }
     }
 
     /**
