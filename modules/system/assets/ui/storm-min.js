@@ -1954,7 +1954,8 @@ var selectOptions={templateResult:formatSelectOption,templateSelection:formatSel
 $('select.custom-select').each(function(){var $element=$(this),extraOptions={dropdownCssClass:'',containerCssClass:''}
 if($element.data('select2')!=null){return true;}$element.attr('data-disposable','data-disposable')
 $element.one('dispose-control',function(){if($element.data('select2')){$element.select2('destroy')}})
-if($element.hasClass('select-no-search')){extraOptions.minimumResultsForSearch=Infinity}if($element.hasClass('select-no-dropdown')){extraOptions.dropdownCssClass+=' select-no-dropdown'
+if($element.hasClass('select-no-search')){extraOptions.minimumResultsForSearch=Infinity}if($element.hasClass('select-modifiable')){extraOptions.tags=true;extraOptions.createTag=function(params){var term=$.trim(params.term);if(term===''){return null;}return{id:term,text:term,newTag:true};}
+extraOptions.templateResult=function(state){if(!state.id){return state.text;}var icon=state.newTag?'<i class="icon-plus"></i> ':'';return $('<span>'+icon+state.text+'</span>');}}if($element.hasClass('select-no-dropdown')){extraOptions.dropdownCssClass+=' select-no-dropdown'
 extraOptions.containerCssClass+=' select-no-dropdown'}if($element.hasClass('select-hide-selected')){extraOptions.dropdownCssClass+=' select-hide-selected'}var source=$element.data('handler');if(source){extraOptions.ajax={transport:function(params,success,failure){var $request=$element.request(source,{data:params.data})
 $request.done(success)
 $request.fail(failure)
@@ -2199,7 +2200,9 @@ if(this.options.size)modalDialog.addClass('size-'+this.options.size)
 if(this.options.adaptiveHeight)modalDialog.addClass('adaptive-height')
 if(this.options.cssClass)modalDialog.addClass(this.options.cssClass)
 if(this.options.zIndex!==null)modal.css('z-index',this.options.zIndex+20)
-return modal.append(modalDialog.append(modalContent))}
+if(this.options.allowDismiss){modal.on('mousedown',function(e){const target=e.target;if(target.classList.contains('control-popup')){modal.hide()
+$('.popup-backdrop').remove()
+$(document.body).removeClass('modal-open')}});}return modal.append(modalDialog.append(modalContent))}
 Popup.prototype.setContent=function(contents){this.$content.html(contents)
 this.setLoading(false)
 this.show()
@@ -2815,7 +2818,7 @@ return this}}(window.jQuery);+function($){"use strict";var Tab=function(element,
 this.$tabsContainer=$('.nav-tabs:first',$el)
 this.$pagesContainer=$('.tab-content:first',$el)
 this.tabId='tabs'+$el.parents().length+Math.round(Math.random()*1000);if(this.options.closable!==undefined&&this.options.closable!==false)$el.attr('data-closable','')
-var self=this;setTimeout(function(){self.init()},300)}
+this.init()}
 Tab.prototype.init=function(){var self=this;this.options.slidable=this.options.slidable!==undefined&&this.options.slidable!==false
 $('> li',this.$tabsContainer).each(function(index){self.initTab(this)})
 this.$el.on('close.oc.tab',function(ev,data){ev.preventDefault()
