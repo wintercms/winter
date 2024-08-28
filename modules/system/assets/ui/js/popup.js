@@ -216,7 +216,7 @@
             modal.css('z-index', this.options.zIndex + 20)
         
         if (this.options.allowDismiss) {
-            modal.on('click', function(e) {
+            modal.on('mousedown', function(e) {
                 const target = e.target;
                 if (target.classList.contains('control-popup')) {
                     modal.hide()
