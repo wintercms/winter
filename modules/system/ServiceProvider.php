@@ -316,6 +316,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('winter.version', \System\Console\WinterVersion::class);
         $this->registerConsoleCommand('winter.manifest', \System\Console\WinterManifest::class);
         $this->registerConsoleCommand('winter.test', \System\Console\WinterTest::class);
+        $this->registerConsoleCommand('winter.sniff', \System\Console\WinterSniff::class);
 
         $this->registerConsoleCommand('plugin.install', \System\Console\PluginInstall::class);
         $this->registerConsoleCommand('plugin.remove', \System\Console\PluginRemove::class);
