@@ -259,7 +259,7 @@ class FormField
         }
 
         if (is_array($this->value)) {
-            return array_map(fn($value) => array_get($options, $value, $defaultLabel), $this->value);
+            return array_map(fn ($value) => array_get($options, $value, $defaultLabel), $this->value);
         } else {
             return array_get($options, $this->value, $defaultLabel);
         }
