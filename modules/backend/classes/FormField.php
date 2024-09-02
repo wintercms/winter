@@ -234,8 +234,7 @@ class FormField
             elseif (is_callable($this->options)) {
                 $callable = $this->options;
                 return $callable();
-            }
-            elseif (is_string($this->options) && is_array($options = Lang::get($this->options))) {
+            } elseif (is_string($this->options) && is_array($options = Lang::get($this->options))) {
                 return $options;
             }
 
