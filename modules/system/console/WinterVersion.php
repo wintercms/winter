@@ -101,7 +101,7 @@ class WinterVersion extends \Winter\Storm\Console\Command
                 $this->line('');
                 $this->info('Files removed:');
 
-                foreach (array_keys($build['changes']['removed']) as $file) {
+                foreach ($build['changes']['removed'] as $file) {
                     $this->line(' - ' . $file);
                 }
             }
