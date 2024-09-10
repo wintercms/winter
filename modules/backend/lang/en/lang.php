@@ -666,4 +666,12 @@ return [
         'move_please_select' => 'please select',
         'move_button' => 'Move',
     ],
+    'workbench' => [
+        'validation' => [
+            'section_model_class_required' => 'A model class must be defined as a string for section ":section" under the "modelClass" key.',
+            'section_nav_array' => 'Navigation must be configured as an array for section ":section" under the "nav" key.',
+            'section_nav_icon_string' => 'A valid navigation icon must be specified as a string for section ":section".',
+            'section_nav_iconSvg_string' => 'A valid navigation icon SVG path must be specified as a string for section ":section".',
+        ],
+    ],
 ];

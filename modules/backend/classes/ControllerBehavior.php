@@ -84,7 +84,7 @@ class ControllerBehavior extends ExtensionBase
      * Safe accessor for configuration values.
      * @param string $name Config name, supports array names like "field[key]"
      * @param mixed $default Default value if nothing is found
-     * @return string
+     * @return string|array
      */
     public function getConfig($name = null, $default = null)
     {
