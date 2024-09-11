@@ -11,6 +11,7 @@ use Backend\Classes\WidgetBase;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Classes\MediaLibraryItem;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Media Manager widget.
@@ -570,6 +571,8 @@ class MediaManager extends WidgetBase
         $originalPath = MediaLibrary::validatePath($originalPath);
         $newPath = dirname($originalPath) . '/' . $newName;
         $type = Input::get('type');
+
+        $newPath = $this->preventPathOverwrite($originalPath, $newPath, $type);
 
         $library = MediaLibrary::instance();
 
@@ -1591,5 +1594,32 @@ class MediaManager extends WidgetBase
     {
         // User preferences should persist across controller usages for the MediaManager
         return "backend::widgets.media_manager." . strtolower($this->getId());
+    }
+
+    /**
+     * Check if file or folder already exists, then return an incremented name to prevent overwriting
+     *
+     * @param string $originalPath
+     * @param string $newPath
+     * @param string $type
+     *
+     * @todo Maybe the overwriting behavior can be config based
+     */
+    protected function preventPathOverwrite($originalPath, $newPath, $type): string
+    {
+        $library = MediaLibrary::instance();
+
+        if ($library->exists($newPath)) {
+            if ($type == MediaLibraryItem::TYPE_FILE) {
+                $newName = $library->generateIncrementedFileName($originalPath);
+            } else {
+                $newName = $library->generateIncrementedFolderName($originalPath);
+            }
+            $newPath = dirname($originalPath) . '/' . $newName;
+
+            Flash::info(Lang::get('backend::lang.media.'. $type .'_exists_autorename', ['name' => $newName]));
+        }
+
+        return $newPath;
     }
 }
