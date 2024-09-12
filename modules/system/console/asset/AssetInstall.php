@@ -8,6 +8,7 @@ use Symfony\Component\Process\Process;
 use System\Classes\Asset\PackageJson;
 use System\Classes\Asset\PackageManager;
 use System\Classes\PluginManager;
+use System\Console\Asset\Exceptions\PackageNotFoundException;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\File;
@@ -194,14 +195,36 @@ abstract class AssetInstall extends Command
 
     protected function processPackages(array $registeredPackages, PackageJson $packageJson): PackageJson
     {
-        // Process each package
+        // Check if the user requested a specific package for install
+        $requestedPackage = strtolower($this->argument('assetPackage'));
+        $foundRequestedPackage = !$requestedPackage;
+
+        if (!$foundRequestedPackage) {
+            foreach ($registeredPackages as $name => $package) {
+                if ($requestedPackage === $name) {
+                    $foundRequestedPackage = true;
+                }
+            }
+
+            // We did not find the package, exit
+            if (!$foundRequestedPackage) {
+                throw new PackageNotFoundException(sprintf(
+                    'The requested package `%s` could not be found. Try %s:config or check if the package is ignored.',
+                    $this->argument('assetPackage'),
+                    $this->assetType
+                ));
+            }
+        }
+
+        // Process each found package
         foreach ($registeredPackages as $name => $package) {
             // Normalize package path across OS types
             $packagePath = Str::replace(DIRECTORY_SEPARATOR, '/', $package['path']);
             // Add the package path to the instance's package.json->workspaces->packages property if not present
             if (!$packageJson->hasWorkspace($packagePath) && !$packageJson->hasIgnoredPackage($packagePath)) {
                 if (
-                    $this->confirm(
+                    $requestedPackage === $name
+                    || $this->confirm(
                         sprintf(
                             "Detected %s (%s), should it be added to your package.json?",
                             $name,
@@ -242,7 +265,7 @@ abstract class AssetInstall extends Command
      */
     protected function installPackageDeps(): int
     {
-        $command = $this->argument('npmArgs') ?? [];
+        $command = [];
         array_unshift($command, 'npm', $this->npmCommand);
 
         $process = new Process($command, base_path(), null, null, null);

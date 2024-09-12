@@ -13,7 +13,7 @@ class MixInstall extends AssetInstall
      * @var string The name and signature of this command.
      */
     protected $signature = 'mix:install
-        {npmArgs?* : Arguments to pass through to the "npm" binary}
+        {assetPackage? : The asset package name to install}
         {--npm= : Defines a custom path to the "npm" binary}
         {--p|package=* : Defines one or more packages to install}';
 
