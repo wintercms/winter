@@ -2,6 +2,7 @@
 
 namespace System\Console\Asset\Npm;
 
+use System\Console\Asset\Exceptions\PackageNotRegisteredException;
 use System\Console\Asset\NpmCommand;
 
 class NpmUpdate extends NpmCommand
@@ -33,9 +34,14 @@ class NpmUpdate extends NpmCommand
 
     public function handle(): int
     {
-        [$package, $packageJson] = $this->getPackage();
-
         $command = ($this->argument('npmArgs')) ?? [];
+
+        try {
+            [$package, $packageJson] = $this->getPackage();
+        } catch (PackageNotRegisteredException $e) {
+            array_unshift($command, $this->argument('package'));
+        }
+
         if (count($command)) {
             array_unshift($command, 'npm', 'update', '--');
         } else {

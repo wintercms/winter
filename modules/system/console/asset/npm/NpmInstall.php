@@ -2,6 +2,7 @@
 
 namespace System\console\asset\npm;
 
+use System\Console\Asset\Exceptions\PackageNotRegisteredException;
 use System\Console\Asset\NpmCommand;
 
 class NpmInstall extends NpmCommand
@@ -22,7 +23,8 @@ class NpmInstall extends NpmCommand
     protected $signature = 'npm:install
         {package? : The package name to add configuration for}
         {npmArgs?* : Arguments to pass through to the "npm" binary}
-        {--npm= : Defines a custom path to the "npm" binary}';
+        {--npm= : Defines a custom path to the "npm" binary}
+        {--d|dev : Install packages in devDependencies}';
 
     /**
      * @inheritDoc
@@ -33,15 +35,19 @@ class NpmInstall extends NpmCommand
 
     public function handle(): int
     {
-        [$package, $packageJson] = $this->getPackage();
-
         $command = ($this->argument('npmArgs')) ?? [];
 
-        if (!$command) {
-            return 0;
+        try {
+            [$package, $packageJson] = $this->getPackage();
+        } catch (PackageNotRegisteredException $e) {
+            array_unshift($command, $this->argument('package'));
         }
 
         array_unshift($command, 'npm', 'install');
+
+        if ($this->option('dev')) {
+            $command[] = '--save-dev';
+        }
 
         return $this->npmRun($command, $package['path'] ?? '');
     }
