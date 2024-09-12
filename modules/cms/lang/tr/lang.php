@@ -7,7 +7,7 @@ return [
         'file_already_exists' => '":name" isimli dosya mevcut.',
         'error_saving' => '":name" kaydedilirken hatayla oluştu.',
         'error_creating_directory' => ':name klasörü oluşturulurken hata oluştu',
-        'invalid_file_extension'=>'Hatalı dosya uzantısı: :invalid. İzin verilen uzantılar: :allowed.',
+        'invalid_file_extension' => 'Hatalı dosya uzantısı: :invalid. İzin verilen uzantılar: :allowed.',
         'error_deleting' => '":name" şablon dosyası silinirken hatayla karşılaşıldı.',
         'delete_success' => ':count şablon başarıyla silindi.',
         'file_name_required' => 'Dosya adı alanı gereklidir.',
@@ -267,7 +267,7 @@ return [
     'template' => [
         'invalid_type' => "Hatalı şablon tipi.",
         'not_found' => "İstenilen şablon bulunamadı.",
-        'saved'=> "Şablon başarıyla kaydedildi.",
+        'saved' => "Şablon başarıyla kaydedildi.",
         'no_list_records' => 'Kayıt bulunamadı',
         'delete_confirm' => 'Seçilen şablonlar silinsin mi?',
         'order_by' => 'Sırala',

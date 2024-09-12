@@ -13,7 +13,7 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
         $index = 0;
         foreach ($fieldOptions as $value => $option):
             $index++;
-            $checkboxId = 'checkbox_'.$field->getId().'_'.$index;
+            $checkboxId = 'checkbox_' . $field->getId() . '_' . $index;
             if (!in_array($value, $checkedValues)) {
                 continue;
             }
@@ -77,7 +77,7 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
             $index = 0;
             foreach ($fieldOptions as $value => $option):
                 $index++;
-                $checkboxId = 'checkbox_'.$field->getId().'_'.$index;
+                $checkboxId = 'checkbox_' . $field->getId() . '_' . $index;
                 if (!is_array($option)) {
                     $option = [$option];
                 }

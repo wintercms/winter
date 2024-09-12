@@ -1,14 +1,16 @@
-<?php namespace Backend\Models;
+<?php
 
-use App;
-use Lang;
-use Model;
-use Config;
-use Session;
-use BackendAuth;
-use DirectoryIterator;
+namespace Backend\Models;
+
+use Backend\Facades\BackendAuth;
 use DateTime;
 use DateTimeZone;
+use DirectoryIterator;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
+use Session;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Backend preferences for the backend user
@@ -26,7 +28,7 @@ class Preference extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \Backend\Behaviors\UserPreferencesModel::class
+        \Backend\Behaviors\UserPreferencesModel::class,
     ];
 
     /**
@@ -80,8 +82,7 @@ class Preference extends Model
     {
         if (Session::has('locale')) {
             App::setLocale(Session::get('locale'));
-        }
-        elseif (
+        } elseif (
             ($user = BackendAuth::getUser()) &&
             ($locale = static::get('locale'))
         ) {
@@ -98,8 +99,7 @@ class Preference extends Model
     {
         if (Session::has('fallback_locale')) {
             Lang::setFallback(Session::get('fallback_locale'));
-        }
-        elseif (
+        } elseif (
             ($user = BackendAuth::getUser()) &&
             ($locale = static::get('fallback_locale'))
         ) {
@@ -246,7 +246,7 @@ class Preference extends Model
 
             $tempTimezones[] = [
                 'offset' => (int) $currentTimezone->getOffset($utcTime),
-                'identifier' => $timezoneIdentifier
+                'identifier' => $timezoneIdentifier,
             ];
         }
 

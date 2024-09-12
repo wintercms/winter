@@ -1,4 +1,6 @@
-<?php namespace Backend\Classes;
+<?php
+
+namespace Backend\Classes;
 
 use Winter\Storm\Html\Helper as HtmlHelper;
 
@@ -153,10 +155,10 @@ class FilterScope
     public function getId($suffix = null)
     {
         $id = 'scope';
-        $id .= '-'.$this->scopeName;
+        $id .= '-' . $this->scopeName;
 
         if ($suffix) {
-            $id .= '-'.$suffix;
+            $id .= '-' . $suffix;
         }
 
         if ($this->idPrefix) {

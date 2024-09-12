@@ -1,32 +1,34 @@
-<?php namespace Cms\Controllers;
+<?php
 
-use Url;
-use Lang;
-use Flash;
-use Config;
-use Event;
-use Request;
-use Exception;
-use BackendMenu;
-use Cms\Widgets\AssetList;
-use Cms\Widgets\TemplateList;
-use Cms\Widgets\ComponentList;
-use Cms\Classes\Page;
-use Cms\Classes\Theme;
-use Cms\Classes\Router;
-use Cms\Classes\Layout;
-use Cms\Classes\Partial;
-use Cms\Classes\Content;
-use Cms\Classes\CmsObject;
+namespace Cms\Controllers;
+
+use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
+use Cms\Classes\Asset;
 use Cms\Classes\CmsCompoundObject;
+use Cms\Classes\CmsObject;
 use Cms\Classes\ComponentManager;
 use Cms\Classes\ComponentPartial;
+use Cms\Classes\Content;
+use Cms\Classes\Layout;
+use Cms\Classes\Page;
+use Cms\Classes\Partial;
+use Cms\Classes\Router;
+use Cms\Classes\Theme;
 use Cms\Helpers\Cms as CmsHelpers;
-use Backend\Classes\Controller;
+use Cms\Widgets\AssetList;
+use Cms\Widgets\ComponentList;
+use Cms\Widgets\TemplateList;
+use Exception;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
 use System\Helpers\DateTime;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Router\Router as StormRouter;
-use ApplicationException;
-use Cms\Classes\Asset;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * CMS index
@@ -51,7 +53,7 @@ class Index extends Controller
         'cms.manage_assets',
         'cms.manage_pages',
         'cms.manage_layouts',
-        'cms.manage_partials'
+        'cms.manage_partials',
     ];
 
     /**
@@ -107,8 +109,7 @@ class Index extends Controller
             new ComponentList($this, 'componentList');
 
             new AssetList($this, 'assetList');
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
     }
@@ -134,7 +135,7 @@ class Index extends Controller
 
         $this->bodyClass = 'compact-container';
         $this->pageTitle = 'cms::lang.cms.menu_label';
-        $this->pageTitleTemplate = '%s '.Lang::get($this->pageTitle);
+        $this->pageTitleTemplate = '%s ' . Lang::get($this->pageTitle);
 
         if (Request::ajax() && Request::input('formWidgetAlias')) {
             $this->bindFormWidgetToController();
@@ -159,7 +160,7 @@ class Index extends Controller
         $this->vars['canReset'] = $this->canResetTemplate($template);
 
         if ($type === 'page') {
-            $router = new StormRouter;
+            $router = new StormRouter();
             $this->vars['pageUrl'] = $router->urlFromPattern($template->url);
         }
 
@@ -169,8 +170,8 @@ class Index extends Controller
                 'form'          => $widget,
                 'templateType'  => $type,
                 'templateTheme' => $this->theme->getDirName(),
-                'templateMtime' => $template->mtime
-            ])
+                'templateMtime' => $template->mtime,
+            ]),
         ];
     }
 
@@ -202,8 +203,7 @@ class Index extends Controller
         foreach ($fields as $field) {
             if (array_key_exists($field, $saveData)) {
                 $templateData[$field] = $saveData[$field];
-            }
-            elseif (array_key_exists($field, $postData)) {
+            } elseif (array_key_exists($field, $postData)) {
                 $templateData[$field] = $postData[$field];
             }
         }
@@ -285,8 +285,8 @@ class Index extends Controller
                 'form'          => $widget,
                 'templateType'  => $type,
                 'templateTheme' => $this->theme->getDirName(),
-                'templateMtime' => null
-            ])
+                'templateMtime' => null,
+            ]),
         ];
     }
 
@@ -310,8 +310,7 @@ class Index extends Controller
                     $deleted[] = $path;
                 }
             }
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $error = $ex->getMessage();
         }
 
@@ -337,7 +336,7 @@ class Index extends Controller
         return [
             'deleted' => $deleted,
             'error'   => $error,
-            'theme'   => Request::input('theme')
+            'theme'   => Request::input('theme'),
         ];
     }
 
@@ -369,7 +368,7 @@ class Index extends Controller
 
         $page = Page::inTheme($this->theme);
         return [
-            'layouts' => $page->getLayoutOptions()
+            'layouts' => $page->getLayoutOptions(),
         ];
     }
 
@@ -475,7 +474,7 @@ class Index extends Controller
         $result = [
             'templatePath'  => $template->fileName,
             'templateMtime' => $template->mtime,
-            'tabTitle'      => $this->getTabTitle($type, $template)
+            'tabTitle'      => $this->getTabTitle($type, $template),
         ];
 
         if ($type === 'page') {
@@ -516,7 +515,8 @@ class Index extends Controller
 
         $result = false;
 
-        if (Config::get('app.debug', false) &&
+        if (
+            Config::get('app.debug', false) &&
             Theme::databaseLayerEnabled() &&
             $this->getThemeDatasource()->sourceHasModel('database', $template)
         ) {
@@ -572,7 +572,7 @@ class Index extends Controller
             'partial' => Partial::class,
             'layout'  => Layout::class,
             'content' => Content::class,
-            'asset'   => Asset::class
+            'asset'   => Asset::class,
         ];
 
         if (!array_key_exists($type, $types)) {
@@ -654,7 +654,7 @@ class Index extends Controller
         if ($type === 'partial' || $type === 'layout' || $type === 'content' || $type === 'asset') {
             $result = in_array($type, ['asset', 'content']) ? $template->getFileName() : $template->getBaseFileName();
             if (!$result) {
-                $result = Lang::get('cms::lang.'.$type.'.new');
+                $result = Lang::get('cms::lang.' . $type . '.new');
             }
 
             return $result;
@@ -677,7 +677,7 @@ class Index extends Controller
             'partial' => '~/modules/cms/classes/partial/fields.yaml',
             'layout'  => '~/modules/cms/classes/layout/fields.yaml',
             'content' => '~/modules/cms/classes/content/fields.yaml',
-            'asset'   => '~/modules/cms/classes/asset/fields.yaml'
+            'asset'   => '~/modules/cms/classes/asset/fields.yaml',
         ];
 
         if (!array_key_exists($type, $formConfigs)) {
@@ -722,7 +722,7 @@ class Index extends Controller
         }
 
         $widgetConfig->model = $template;
-        $widgetConfig->alias = $alias ?: 'form'.studly_case($type).md5($template->exists ? $template->getFileName() : uniqid());
+        $widgetConfig->alias = $alias ?: 'form' . studly_case($type) . md5($template->exists ? $template->getFileName() : uniqid());
 
         return $this->makeWidget('Backend\Widgets\Form', $widgetConfig);
     }
@@ -838,7 +838,7 @@ class Index extends Controller
                 $found = [
                     'name' => ltrim($name, '@'),
                     'alias' => $alias,
-                    'properties' => $properties
+                    'properties' => $properties,
                 ];
                 break;
             }

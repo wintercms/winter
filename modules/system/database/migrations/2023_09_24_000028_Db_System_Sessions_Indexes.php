@@ -1,8 +1,5 @@
 <?php
 
-use Winter\Storm\Database\Schema\Blueprint;
-use Winter\Storm\Support\Str;
-
 return new class extends \Winter\Storm\Database\Updates\Migration
 {
     public function up()

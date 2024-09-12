@@ -56,12 +56,12 @@ return [
         'nextMonth' => 'Næste Måned',
         'months' => ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'],
         'weekdays' => ['Søndag', 'Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag'],
-        'weekdaysShort' => ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør']
+        'weekdaysShort' => ['Søn', 'Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør'],
     ],
 
     'filter' => [
         'group' => [
-            'all' => 'Alle'
+            'all' => 'Alle',
         ],
         'dates' => [
             'all' => 'alle',
@@ -69,8 +69,8 @@ return [
             'reset_button_text'  => 'Nulstil',
             'date_placeholder' => 'Dato',
             'after_placeholder' => 'Efter',
-            'before_placeholder' => 'Før'
-        ]
+            'before_placeholder' => 'Før',
+        ],
     ],
 
     'eventlog' => [
@@ -86,7 +86,7 @@ return [
             'openWith' => 'Åben med',
             'remember_choice' => 'Husk valgte mulighed for denne session',
             'open' => 'Åben',
-            'cancel' => 'Fortryd'
-        ]
-    ]
+            'cancel' => 'Fortryd',
+        ],
+    ],
 ];

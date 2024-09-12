@@ -1,4 +1,6 @@
-<?php namespace Winter\Tester\Classes;
+<?php
+
+namespace Winter\Tester\Classes;
 
 class Users
 {

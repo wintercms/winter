@@ -1,7 +1,9 @@
-<?php namespace Backend\Behaviors;
+<?php
 
-use System\Behaviors\SettingsModel;
+namespace Backend\Behaviors;
+
 use Backend\Models\UserPreference;
+use System\Behaviors\SettingsModel;
 
 /**
  * User Preferences model extension, identical to System\Behaviors\SettingsModel
@@ -112,6 +114,6 @@ class UserPreferencesModel extends SettingsModel
     {
         $item = UserPreference::forUser();
         $userId = $item->userContext ? $item->userContext->id : 0;
-        return $this->recordCode.'-userpreference-'.$userId;
+        return $this->recordCode . '-userpreference-' . $userId;
     }
 }

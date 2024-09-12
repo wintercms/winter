@@ -7,27 +7,27 @@ return [
         'file_already_exists' => "檔案 ':name' 已經存在.",
         'error_saving' => "保存檔案 ':name' 錯誤. 請檢查寫權限.",
         'error_creating_directory' => '建立檔案夾 :name 錯誤. 請檢查寫權限.',
-        'invalid_file_extension'=>'不合法的檔案擴展: :invalid. 允許的擴展: :allowed.',
+        'invalid_file_extension' => '不合法的檔案擴展: :invalid. 允許的擴展: :allowed.',
         'error_deleting' => "刪除模板檔案 ':name' 錯誤. 請檢查寫權限.",
         'delete_success' => '模板成功刪除: :count.',
-        'file_name_required' => '需要檔案名字串.'
+        'file_name_required' => '需要檔案名字串.',
     ],
     'dashboard' => [
         'active_theme' => [
             'online' => '在線',
             'maintenance' => '維護中',
-        ]
+        ],
     ],
     'theme' => [
         'not_found_name' => "主題 ':name' 沒找到.",
         'active' => [
             'not_set' => '活動主題沒設定.',
-            'not_found' => '活動主題找不到.'
+            'not_found' => '活動主題找不到.',
         ],
         'edit' => [
             'not_set' => '編輯主題沒設定.',
             'not_found' => '編輯主題沒找到.',
-            'not_match' => "您嘗試訪問的對象不屬於正在編輯的主題. 請重載頁面."
+            'not_match' => "您嘗試訪問的對象不屬於正在編輯的主題. 請重載頁面.",
         ],
         'settings_menu' => '前端主題',
         'settings_menu_description' => '預覽安裝的主題, 選擇一個活動主題.',
@@ -91,17 +91,17 @@ return [
         'settings_menu' => '維護模式',
         'settings_menu_description' => '設定維護模式頁面和開關設定.',
         'is_enabled' => '啟用維護模式',
-        'is_enabled_comment' => '當啟用時, 網站訪問者會看到下述頁面.'
+        'is_enabled_comment' => '當啟用時, 網站訪問者會看到下述頁面.',
     ],
     'page' => [
         'not_found_name' => "頁面 ':name' 找不到",
         'not_found' => [
             'label' => '頁面找不到',
-            'help' => '請求的頁面找不到.'
+            'help' => '請求的頁面找不到.',
         ],
         'custom_error' => [
             'label' => '頁面錯誤',
-            'help' => "很抱歉, 有一些地方發生了錯誤導致頁面不能顯示."
+            'help' => "很抱歉, 有一些地方發生了錯誤導致頁面不能顯示.",
         ],
         'menu_label' => '頁面',
         'unsaved_label' => '未保存頁面',
@@ -122,7 +122,7 @@ return [
         'no_list_records' => '找不到佈局',
         'new' => '新佈局',
         'delete_confirm_multiple' => '您真的想要刪除選取的佈局?',
-        'delete_confirm_single' => '您真的想要刪除這個佈局?'
+        'delete_confirm_single' => '您真的想要刪除這個佈局?',
     ],
     'partial' => [
         'not_found_name' => "部件 ':name' 找不到.",
@@ -132,7 +132,7 @@ return [
         'no_list_records' => '找不到部件',
         'delete_confirm_multiple' => '您真的想要刪除選擇的部件?',
         'delete_confirm_single' => '您真的想要刪除這個部件?',
-        'new' => '新部件'
+        'new' => '新部件',
     ],
     'content' => [
         'not_found_name' => "內容檔案 ':name' 找不到.",
@@ -141,18 +141,18 @@ return [
         'no_list_records' => '找不到內容檔案',
         'delete_confirm_multiple' => '您真的想要刪除選取的檔案或目錄嗎?',
         'delete_confirm_single' => '您真的想要刪除這個內容檔案?',
-        'new' => '新內容檔案'
+        'new' => '新內容檔案',
     ],
     'ajax_handler' => [
         'invalid_name' => '不合法的 AJAX 處理器: :name.',
-        'not_found' => " AJAX 處理器 ':name' 找不到."
+        'not_found' => " AJAX 處理器 ':name' 找不到.",
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => '增加',
-        'search' => '搜尋...'
+        'search' => '搜尋...',
     ],
     'editor' => [
         'settings' => '設定',
@@ -210,7 +210,7 @@ return [
         'error_moving_file' => '移動檔案 :file 錯誤',
         'error_moving_directory' => '移動目錄 :dir 錯誤',
         'error_deleting_directory' => '刪除原始目錄 :dir 錯誤',
-        'path' => '路徑'
+        'path' => '路徑',
     ],
     'component' => [
         'menu_label' => '組件',
@@ -222,12 +222,12 @@ return [
         'invalid_request' => '模板不能保存, 因為非法組件數據.',
         'no_records' => '找不到組件',
         'not_found' => "組件 ':name' 找不到.",
-        'method_not_found' => "組件 ':name' 不包含方法 ':method'."
+        'method_not_found' => "組件 ':name' 不包含方法 ':method'.",
     ],
     'template' => [
         'invalid_type' => '未知模板類型.',
         'not_found' => '請求模板找不到.',
-        'saved'=> '模板保存成功.'
+        'saved' => '模板保存成功.',
     ],
     'permissions' => [
         'name' => 'Cms',
@@ -236,6 +236,6 @@ return [
         'manage_pages' => '管理頁面',
         'manage_layouts' => '管理佈局',
         'manage_partials' => '管理部件',
-        'manage_themes' => '管理主題'
+        'manage_themes' => '管理主題',
     ],
 ];

@@ -30,7 +30,7 @@
                     data-control="delete-template"
                     data-confirmation="<?= e(trans($this->deleteConfirmation)) ?>"
                     data-trigger-action="show"
-                    data-trigger="<?= '#'.$this->getId('template-list') ?> input[type=checkbox]"
+                    data-trigger="<?= '#' . $this->getId('template-list') ?> input[type=checkbox]"
                     data-trigger-condition="checked"></button>
             </div>
         </div>
@@ -42,7 +42,7 @@
                 data-track-input
                 data-load-indicator
                 data-load-indicator-opaque
-                data-request-success="$('<?= '#'.$this->getId('delete-button') ?>').trigger('oc.triggerOn.update')"
+                data-request-success="$('<?= '#' . $this->getId('delete-button') ?>').trigger('oc.triggerOn.update')"
                 data-request="<?= $this->getEventHandler('onSearch') ?>"
             />
         </div>

@@ -46,21 +46,21 @@ return [
     'alert' => [
         'confirm_button_text' => 'تایید',
         'cancel_button_text' => 'انصراف',
-        'widget_remove_confirm' => 'این ابزارک حذف شود؟'
+        'widget_remove_confirm' => 'این ابزارک حذف شود؟',
     ],
     'datepicker' => [
         'previousMonth' => 'ماه قبل',
         'nextMonth' => 'ماه بعد',
         'months' => ['فروردین', 'اردیبهشت', 'خرداد', 'تیر', 'مرداد', 'شهریور', 'مهر', 'آبان', 'آذر', 'دی', 'بهمن', 'اسفند'],
         'weekdays' => ['یکشنبه', 'دوشنبه', 'سه شنبه', 'چهارشنبه', 'پنج شنبه', 'جمعه', 'شنبه'],
-        'weekdaysShort' => ['ی', 'د', 'س', 'چ', 'پ', 'ج', 'ش']
+        'weekdaysShort' => ['ی', 'د', 'س', 'چ', 'پ', 'ج', 'ش'],
     ],
     'colorpicker' => [
         'choose' => 'تایید',
     ],
     'filter' => [
         'group' => [
-            'all' => 'همه'
+            'all' => 'همه',
         ],
         'scopes' => [
             'apply_button_text' => 'اعمال',
@@ -72,15 +72,15 @@ return [
             'reset_button_text'  => 'بازنشانی',
             'date_placeholder' => 'تاریخ',
             'after_placeholder' => 'بعد از',
-            'before_placeholder' => 'قبل از'
+            'before_placeholder' => 'قبل از',
         ],
         'numbers' => [
             'all' => 'همه',
             'filter_button_text' => 'فیلتر',
             'reset_button_text'  => 'بازنشانی',
             'min_placeholder' => 'کم',
-            'max_placeholder' => 'زیاد'
-        ]
+            'max_placeholder' => 'زیاد',
+        ],
     ],
     'eventlog' => [
         'show_stacktrace' => 'نمایش روند اجرا',
@@ -95,7 +95,7 @@ return [
             'openWith' => 'باز کردن توسط',
             'remember_choice' => 'گزینه انتخاب شده را به خاطر داشته باش',
             'open' => 'باز کردن',
-            'cancel' => 'انصراف'
-        ]
-    ]
+            'cancel' => 'انصراف',
+        ],
+    ],
 ];

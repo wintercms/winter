@@ -9,7 +9,7 @@
                data-load-indicator
                data-load-indicator-opaque
                size="<?= $size ?>"
-               value="<?= isset($value) ? e($value):''; ?>"
+               value="<?= isset($value) ? e($value) : ''; ?>"
                class="form-control"/>
     </label>
 </div>

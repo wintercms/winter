@@ -1,7 +1,9 @@
-<?php namespace Backend\Models;
+<?php
 
-use Config;
+namespace Backend\Models;
+
 use Winter\Storm\Auth\Models\Throttle as ThrottleBase;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Administrator throttling model
@@ -20,7 +22,7 @@ class UserThrottle extends ThrottleBase
      * @var array Relations
      */
     public $belongsTo = [
-        'user' => User::class
+        'user' => User::class,
     ];
 
     /**

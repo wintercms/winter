@@ -1,10 +1,12 @@
-<?php namespace System\Models;
+<?php
 
-use Url;
-use Config;
+namespace System\Models;
+
+use Backend\Controllers\Files;
+use Illuminate\Support\Facades\URL;
 use Storage;
 use Winter\Storm\Database\Attach\File as FileBase;
-use Backend\Controllers\Files;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * File attachment model
@@ -66,8 +68,7 @@ class File extends FileBase
 
         if ($this->isPublic()) {
             $uploadsPath .= '/public';
-        }
-        else {
+        } else {
             $uploadsPath .= '/protected';
         }
 

@@ -1,13 +1,15 @@
-<?php namespace Backend\Models;
+<?php
 
-use File;
-use Lang;
-use Model;
-use Response;
-use League\Csv\Writer as CsvWriter;
+namespace Backend\Models;
+
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Response;
 use League\Csv\EscapeFormula as CsvEscapeFormula;
-use ApplicationException;
+use League\Csv\Writer as CsvWriter;
 use SplTempFileObject;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Model used for exporting data
@@ -87,7 +89,7 @@ abstract class ExportModel extends Model
             'fileName' => 'export.csv',
             'delimiter' => null,
             'enclosure' => null,
-            'escape' => null
+            'escape' => null,
         ];
 
         $options = array_merge($defaultOptions, $options);
@@ -96,7 +98,7 @@ abstract class ExportModel extends Model
         /*
          * Prepare CSV
          */
-        $csv = CsvWriter::createFromFileObject(new SplTempFileObject);
+        $csv = CsvWriter::createFromFileObject(new SplTempFileObject());
 
         $csv->setOutputBOM(CsvWriter::BOM_UTF8);
 
@@ -141,7 +143,7 @@ abstract class ExportModel extends Model
          * Save for download
          */
         $csvName = uniqid('oc');
-        $csvPath = temp_path().'/'.$csvName;
+        $csvPath = temp_path() . '/' . $csvName;
         $output = $csv->__toString();
 
         File::put($csvPath, $output);
@@ -197,7 +199,7 @@ abstract class ExportModel extends Model
             if (is_array($value)) {
                 $newData[] = 'Array';
             } else {
-                $newData[] = str_replace($delimeter, '\\'.$delimeter, $value);
+                $newData[] = str_replace($delimeter, '\\' . $delimeter, $value);
             }
         }
 

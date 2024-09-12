@@ -1,11 +1,13 @@
-<?php namespace Cms\Models;
+<?php
 
-use Lang;
-use Model;
+namespace Cms\Models;
+
 use Cms\Classes\Theme as CmsTheme;
-use System\Classes\CombineAssets;
 use Exception;
+use Illuminate\Support\Facades\Lang;
+use System\Classes\CombineAssets;
 use System\Models\File;
+use Winter\Storm\Database\Model;
 
 /**
  * Customization data used by a theme
@@ -76,8 +78,7 @@ class ThemeData extends Model
     {
         try {
             CombineAssets::resetCache();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
         }
     }
 
@@ -95,8 +96,7 @@ class ThemeData extends Model
 
         try {
             $themeData = self::firstOrCreate(['theme' => $dirName]);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             // Database failed
             $themeData = new self(['theme' => $dirName]);
         }

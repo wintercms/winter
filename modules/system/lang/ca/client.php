@@ -47,21 +47,21 @@ return [
     'alert' => [
         'confirm_button_text' => 'OK',
         'cancel_button_text' => 'Cancel·lar',
-        'widget_remove_confirm' => 'Eliminar aquest widget?'
+        'widget_remove_confirm' => 'Eliminar aquest widget?',
     ],
     'datepicker' => [
         'previousMonth' => 'Mes anterior',
         'nextMonth' => 'Mes següent',
         'months' => ['Gener', 'Febrer', 'Març', 'Abril', 'Maig', 'Juny', 'Juliol', 'Agost', 'Setembre', 'Octubre', 'Novembre', 'Desembre'],
         'weekdays' => ['Diumenge', 'Dilluns', 'Dimarts', 'Dimecres', 'Dijous', 'Divendres', 'Dissabte'],
-        'weekdaysShort' => ['Dg', 'Dl', 'Dm', 'Dx', 'Dj', 'Dv', 'Ds']
+        'weekdaysShort' => ['Dg', 'Dl', 'Dm', 'Dx', 'Dj', 'Dv', 'Ds'],
     ],
     'colorpicker' => [
         'choose' => 'Ok',
     ],
     'filter' => [
         'group' => [
-            'all' => 'tots'
+            'all' => 'tots',
         ],
         'dates' => [
             'all' => 'tots',
@@ -69,15 +69,15 @@ return [
             'reset_button_text'  => 'Reiniciar',
             'date_placeholder' => 'Data',
             'after_placeholder' => 'Després',
-            'before_placeholder' => 'Abans'
+            'before_placeholder' => 'Abans',
         ],
         'numbers' => [
             'all' => 'tots',
             'filter_button_text' => 'Filtrar',
             'reset_button_text'  => 'Reiniciar',
             'min_placeholder' => 'Mín',
-            'max_placeholder' => 'Màx'
-        ]
+            'max_placeholder' => 'Màx',
+        ],
 
     ],
     'eventlog' => [
@@ -93,7 +93,7 @@ return [
             'openWith' => 'Obrir amb',
             'remember_choice' => "Recordar l'opció seleccionada durant aquesta sessió",
             'open' => 'Obrir',
-            'cancel' => 'Cancel·lar'
-        ]
-    ]
+            'cancel' => 'Cancel·lar',
+        ],
+    ],
 ];

@@ -57,7 +57,7 @@ return [
             'label' => 'ชื่อปลั๊กอิน',
             'help' => 'ตั้งชื่อปลั๊กอินตามรหัสที่ไม่ซ้ำใคร เช่น Winter.Blog',
         ],
-        'by_author' => 'โดย :name'
+        'by_author' => 'โดย :name',
     ],
     'plugins' => [
         'manage' => 'จัดการปลั๊กอิน',

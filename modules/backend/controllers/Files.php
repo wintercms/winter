@@ -1,15 +1,17 @@
-<?php namespace Backend\Controllers;
+<?php
 
-use View;
-use Cache;
-use Config;
-use Backend;
-use Response;
-use System\Models\File as FileModel;
+namespace Backend\Controllers;
+
 use Backend\Classes\Controller;
-use ApplicationException;
+use Backend\Facades\Backend;
 use Exception;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
 use RuntimeException;
+use System\Models\File as FileModel;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Backend files controller
@@ -30,8 +32,7 @@ class Files extends Controller
     {
         try {
             return $this->findFileObject($code)->output('inline', true);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
         }
 
         return Response::make(View::make('backend::404'), 404);
@@ -49,8 +50,7 @@ class Files extends Controller
                 compact('mode', 'extension'),
                 true
             );
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
         }
 
         return Response::make(View::make('backend::404'), 404);

@@ -2,13 +2,13 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\CodeParser;
 use Cms\Classes\ComponentManager;
 use Cms\Classes\Controller;
 use Cms\Classes\Layout;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
+use System\Tests\Bootstrap\TestCase;
 
 class ComponentManagerTest extends TestCase
 {

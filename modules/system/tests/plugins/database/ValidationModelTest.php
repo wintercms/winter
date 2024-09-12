@@ -2,12 +2,12 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Database\Tester\Models\ValidationPost;
+use System\Tests\Bootstrap\PluginTestCase;
 
 class ValidationModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -23,7 +23,7 @@ class ValidationModelTest extends PluginTestCase
         $post = ValidationPost::create([
             'title' => 'This is a new post',
             'slug' => 'post-1',
-            'description' => 'Testing...'
+            'description' => 'Testing...',
         ]);
 
         $this->assertNotFalse($post);
@@ -31,7 +31,7 @@ class ValidationModelTest extends PluginTestCase
         $post2 = ValidationPost::create([
             'title' => 'this is another post with the same slug',
             'slug' => 'post-1',
-            'description' => 'testing....'
+            'description' => 'testing....',
         ]);
     }
 }

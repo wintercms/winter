@@ -1,11 +1,13 @@
-<?php namespace Cms\Models;
+<?php
 
-use Model;
+namespace Cms\Models;
+
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
-use Winter\Storm\Support\Arr;
 use Symfony\Component\HttpFoundation\IpUtils;
-use ApplicationException;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Arr;
 
 /**
  * Maintenance mode settings
@@ -21,7 +23,7 @@ class MaintenanceSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**
@@ -86,8 +88,7 @@ class MaintenanceSetting extends Model
             && ($cmsPage = array_get($themeMap, $theme->getDirName()))
         ) {
             $this->cms_page = $cmsPage;
-        }
-        else {
+        } else {
             $this->is_enabled = false;
         }
     }

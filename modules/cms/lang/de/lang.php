@@ -32,7 +32,7 @@ return [
         'edit' => [
             'not_set' => 'Themenverwaltung nicht definiert.',
             'not_found' => 'Themenverwaltung nicht gefunden.',
-            'not_match' => 'Das Objekt, das Sie anzupassen versuchen gehört nicht zum zu bearbeitenden Theme. Bitte laden Sie die Seite erneut.'
+            'not_match' => 'Das Objekt, das Sie anzupassen versuchen gehört nicht zum zu bearbeitenden Theme. Bitte laden Sie die Seite erneut.',
         ],
         'settings_menu' => 'Frontend Theme',
         'settings_menu_description' => 'Verwalten und passen Sie das Frontend-Theme an.',
@@ -138,7 +138,7 @@ return [
         'no_list_records' => 'Keine Layouts gefunden',
         'new' => 'Neues Layout',
         'delete_confirm_multiple' => 'Wollen Sie die ausgewählten Layouts wirklich löschen?',
-        'delete_confirm_single' => 'Wollen Sie das ausgewählte Layout wirklich löschen?'
+        'delete_confirm_single' => 'Wollen Sie das ausgewählte Layout wirklich löschen?',
     ],
     'partial' => [
         'not_found_name' => 'Das Partial ":name" wurde nicht gefunden.',
@@ -148,7 +148,7 @@ return [
         'no_list_records' => 'Keine Partials gefunden',
         'delete_confirm_multiple' => 'Wollen Sie die ausgewählten Partials wirklich löschen?',
         'delete_confirm_single' => 'Wollen Sie das ausgewählte Partial wirklich löschen?',
-        'new' => 'Neues Partial'
+        'new' => 'Neues Partial',
     ],
     'content' => [
         'not_found_name' => 'Die Inhaltsdatei ":name" wurde nicht gefunden.',
@@ -157,18 +157,18 @@ return [
         'no_list_records' => 'Keine Inhaltsdateien gefunden',
         'delete_confirm_multiple' => 'Wollen Sie die ausgewählten Inhalte und Verzeichnisse wirklich löschen?',
         'delete_confirm_single' => 'Wollen Sie diese Inhaltsdatei wirklich löschen?',
-        'new' => 'Neue Inhaltsdatei'
+        'new' => 'Neue Inhaltsdatei',
     ],
     'ajax_handler' => [
         'invalid_name' => 'Ungültiger Name für AJAX Handler: :name.',
         'not_found' => 'AJAX-Handler ":name" wurde nicht gefunden.',
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => 'Hinzufügen',
-        'search' => 'Suchen...'
+        'search' => 'Suchen...',
     ],
     'editor' => [
         'settings' => 'Einstellungen',
@@ -240,7 +240,7 @@ return [
         'error_deleting_directory' => 'Fehler beim Löschen des Originalverzeichnisses :dir',
         'no_list_records' => 'Keine Dateien gefunden',
         'delete_confirm' => 'Ausgewählte Dateien oder Verzeichnisse löschen?',
-        'path' => 'Pfad'
+        'path' => 'Pfad',
     ],
     'component' => [
         'menu_label' => 'Komponenten',

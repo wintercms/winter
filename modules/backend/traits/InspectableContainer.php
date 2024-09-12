@@ -1,8 +1,10 @@
-<?php namespace Backend\Traits;
+<?php
 
-use Lang;
-use Request;
-use ApplicationException;
+namespace Backend\Traits;
+
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Inspectable Container Trait
@@ -66,11 +68,10 @@ trait InspectableContainer
             $propertyMethodName .= ucfirst($part);
         }
 
-        $methodName = 'get'.$propertyMethodName.'Options';
+        $methodName = 'get' . $propertyMethodName . 'Options';
         if (method_exists($obj, $methodName)) {
             $options = $obj->$methodName();
-        }
-        else {
+        } else {
             $options = $obj->getPropertyOptions($property);
         }
 
@@ -83,7 +84,7 @@ trait InspectableContainer
         }
 
         return [
-            'options' => $optionsArray
+            'options' => $optionsArray,
         ];
     }
 }

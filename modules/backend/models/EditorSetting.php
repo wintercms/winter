@@ -1,10 +1,12 @@
-<?php namespace Backend\Models;
+<?php
 
-use File;
-use Cache;
-use Model;
-use Less_Parser;
+namespace Backend\Models;
+
 use Exception;
+use Illuminate\Support\Facades\Cache;
+use Less_Parser;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Editor settings that affect all users
@@ -21,7 +23,7 @@ class EditorSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**
@@ -119,7 +121,7 @@ class EditorSetting extends Model
         $this->html_no_wrap_tags = $this->defaultHtmlNoWrapTags;
         $this->html_remove_tags = $this->defaultHtmlRemoveTags;
         $this->html_line_breaker_tags = $this->defaultHtmlLineBreakerTags;
-        $this->html_custom_styles = File::get(base_path().'/modules/backend/models/editorsetting/default_styles.less');
+        $this->html_custom_styles = File::get(base_path() . '/modules/backend/models/editorsetting/default_styles.less');
         $this->html_style_image = $this->makeStylesForTable($this->defaultHtmlStyleImage);
         $this->html_style_link = $this->makeStylesForTable($this->defaultHtmlStyleLink);
         $this->html_style_paragraph = $this->makeStylesForTable($this->defaultHtmlStyleParagraph);
@@ -169,7 +171,7 @@ class EditorSetting extends Model
             if (array_has($value, ['class_name', 'class_label'])) {
                 return [
                     array_get($value, 'class_name'),
-                    array_get($value, 'class_label')
+                    array_get($value, 'class_label'),
                 ];
             }
         });
@@ -185,7 +187,7 @@ class EditorSetting extends Model
             if (array_has($value, ['format_tag', 'format_label'])) {
                 return [
                     array_get($value, 'format_tag'),
-                    array_get($value, 'format_label')
+                    array_get($value, 'format_label'),
                 ];
             }
         });
@@ -223,7 +225,7 @@ class EditorSetting extends Model
 
     public function getDefaultValue($attribute)
     {
-        $property = 'default'.studly_case($attribute);
+        $property = 'default' . studly_case($attribute);
 
         return $this->$property;
     }
@@ -249,8 +251,7 @@ class EditorSetting extends Model
         try {
             $customCss = self::compileCss();
             Cache::forever($cacheKey, $customCss);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $customCss = '/* ' . $ex->getMessage() . ' */';
         }
 

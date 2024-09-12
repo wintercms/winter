@@ -1,7 +1,9 @@
-<?php namespace System\Models;
+<?php
 
-use App;
-use Model;
+namespace System\Models;
+
+use Illuminate\Support\Facades\App;
+use Winter\Storm\Database\Model;
 
 /**
  * Mail settings
@@ -22,7 +24,7 @@ class MailSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**
@@ -40,7 +42,7 @@ class MailSetting extends Model
      */
     public $rules = [
         'sender_name'  => 'required',
-        'sender_email' => 'required|email'
+        'sender_email' => 'required|email',
     ];
 
     /**
@@ -98,8 +100,7 @@ class MailSetting extends Model
                 if ($settings->smtp_authorization) {
                     $config->set('mail.mailers.smtp.username', $settings->smtp_user);
                     $config->set('mail.mailers.smtp.password', $settings->smtp_password);
-                }
-                else {
+                } else {
                     $config->set('mail.mailers.smtp.username', null);
                     $config->set('mail.mailers.smtp.password', null);
                 }

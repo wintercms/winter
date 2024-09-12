@@ -1,7 +1,9 @@
-<?php namespace Backend\FormWidgets;
+<?php
+
+namespace Backend\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
-use BackendAuth;
+use Backend\Facades\BackendAuth;
 
 /**
  * User/group permission editor
@@ -149,19 +151,20 @@ class PermissionEditor extends FormWidgetBase
 
         foreach ($permissions as $tab => $permissionsArray) {
             foreach ($permissionsArray as $index => $permission) {
-                if (!$this->user->hasAccess($permission->code) ||
+                if (
+                    !$this->user->hasAccess($permission->code) ||
                     (
                         is_array($this->availablePermissions) &&
                         !in_array($permission->code, $this->availablePermissions)
-                    )) {
+                    )
+                ) {
                     unset($permissionsArray[$index]);
                 }
             }
 
             if (empty($permissionsArray)) {
                 unset($permissions[$tab]);
-            }
-            else {
+            } else {
                 $permissions[$tab] = $permissionsArray;
             }
         }

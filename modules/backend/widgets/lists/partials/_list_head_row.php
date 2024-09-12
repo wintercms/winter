@@ -20,7 +20,7 @@
                 <?php if ($column->width): ?>
                     style="width: <?= $column->width ?>"
                 <?php endif ?>
-                class="<?= $this->sortColumn==$column->columnName?'sort-'.$this->sortDirection.' active':'sort-desc' ?> list-cell-name-<?= $column->getName() ?> list-cell-type-<?= $column->type ?> <?= $column->getAlignClass() ?> <?= $column->headCssClass ?>"
+                class="<?= $this->sortColumn == $column->columnName ? 'sort-' . $this->sortDirection . ' active' : 'sort-desc' ?> list-cell-name-<?= $column->getName() ?> list-cell-type-<?= $column->type ?> <?= $column->getAlignClass() ?> <?= $column->headCssClass ?>"
                 >
                 <a
                     href="javascript:;"

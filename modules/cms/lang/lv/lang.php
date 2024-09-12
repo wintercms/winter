@@ -20,7 +20,7 @@ return [
             'maintenance' => 'Uzturēšanas režīmā',
             'manage_themes' => 'Pārvaldīt tēmas',
             'customize_theme' => 'Pielāgot tēmu',
-        ]
+        ],
     ],
     'theme' => [
         'not_found_name' => "Tēma ':name' netika atrasta.",

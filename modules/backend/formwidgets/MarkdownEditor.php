@@ -1,9 +1,11 @@
-<?php namespace Backend\FormWidgets;
+<?php
 
-use Html;
-use Markdown;
-use BackendAuth;
+namespace Backend\FormWidgets;
+
 use Backend\Classes\FormWidgetBase;
+use Backend\Facades\BackendAuth;
+use Winter\Storm\Support\Facades\Html;
+use Winter\Storm\Support\Facades\Markdown;
 
 /**
  * Code Editor
@@ -134,7 +136,7 @@ class MarkdownEditor extends FormWidgetBase
         }
 
         return [
-            'preview' => $previewHtml
+            'preview' => $previewHtml,
         ];
     }
 }

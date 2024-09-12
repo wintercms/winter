@@ -2,26 +2,26 @@
 
 return [
     'auth' => [
-        'title' => '管理介面'
+        'title' => '管理介面',
     ],
     'field' => [
         'invalid_type' => '錯誤的字串類型 :type',
-        'options_method_not_exists' => "模型 :model 必須定義一個返回 ':field' 表單字串選項的方法 :method()。"
+        'options_method_not_exists' => "模型 :model 必須定義一個返回 ':field' 表單字串選項的方法 :method()。",
     ],
     'widget' => [
         'not_registered' => "元件 ':name' 還沒註冊",
-        'not_bound' => "元件 ':name' 沒綁到控制器"
+        'not_bound' => "元件 ':name' 沒綁到控制器",
     ],
     'page' => [
         'untitled' => '未命名',
         'access_denied' => [
             'label' => '拒絕訪問',
             'help' => "您沒有訪問這個頁面需要的權限.",
-            'cms_link' => '返回管理介面'
-        ]
+            'cms_link' => '返回管理介面',
+        ],
     ],
     'partial' => [
-        'not_found_name' => "元件 ':name' 找不到."
+        'not_found_name' => "元件 ':name' 找不到.",
     ],
     'account' => [
         'sign_out' => '登出',
@@ -43,7 +43,7 @@ return [
         'apply' => '套用',
         'cancel' => '取消',
         'delete' => '刪除',
-        'ok' => 'OK'
+        'ok' => 'OK',
     ],
     'dashboard' => [
         'menu_label' => '儀表板',
@@ -70,8 +70,8 @@ return [
         'make_default_success' => '已設定此版面為預設。',
         'status' => [
             'widget_title_default' => '系統狀態',
-            'update_available' => '{0} 更新可用!|{1} 更新可用!|[2,Inf] 更新可用!'
-        ]
+            'update_available' => '{0} 更新可用!|{1} 更新可用!|[2,Inf] 更新可用!',
+        ],
     ],
     'user' => [
         'name' => '管理員',
@@ -114,8 +114,8 @@ return [
             'return' => '返回群組列表',
         ],
         'preferences' => [
-            'not_authenticated' => '沒有認證使用者載入或儲存設定'
-        ]
+            'not_authenticated' => '沒有認證使用者載入或儲存設定',
+        ],
     ],
     'list' => [
         'default_title' => '列表',
@@ -144,7 +144,7 @@ return [
         'attachment' => '附件',
         'help' => '給附件新增標題和描述',
         'title_label' => '標題',
-        'description_label' => '描述'
+        'description_label' => '描述',
     ],
     'form' => [
         'create_title' => '新 :name',
@@ -193,7 +193,7 @@ return [
         'insert_row' => '插入行',
         'delete_row' => '刪除行',
         'concurrency_file_changed_title' => '檔案異動',
-        'concurrency_file_changed_description' => "您正在編輯的檔案正在被其他使用者修改. 您可以重新載入或覆蓋硬碟上的檔案."
+        'concurrency_file_changed_description' => "您正在編輯的檔案正在被其他使用者修改. 您可以重新載入或覆蓋硬碟上的檔案.",
     ],
     'relation' => [
         'missing_config' => "關聯沒有':config'的設定檔案.",
@@ -235,13 +235,13 @@ return [
         'missing_relation' => "Model ':class' 不包含 ':relation'.",
         'missing_method' => "Model ':class' 不包含 ':method'.",
         'invalid_class' => "Model :model 在 :class 中是錯誤的, 必須繼承 \\Model class.",
-        'mass_assignment_failed' => "針對Model屬性':attribute'的大量賦值失敗."
+        'mass_assignment_failed' => "針對Model屬性':attribute'的大量賦值失敗.",
     ],
     'warnings' => [
         'tips' => '系統設定技巧',
         'tips_description' => '您需要注意那些issue, 以使系統設定正確',
         'permissions'  => '目錄 :name 或子目錄對PHP不可寫. 請對這個目錄上的webserver設定正確的權限',
-        'extension' => 'PHP外掛 :name 沒安裝. 請安裝這個庫並且啟用外掛'
+        'extension' => 'PHP外掛 :name 沒安裝. 請安裝這個庫並且啟用外掛',
     ],
     'editor' => [
         'menu_label' => '代碼編輯器選項',
@@ -254,19 +254,19 @@ return [
         'highlight_active_line' => '醒目顯示操作中的行',
         'show_invisibles' => '顯示隱藏字元',
         'show_gutter' => '顯示gutter',
-        'theme' => '色彩主題'
+        'theme' => '色彩主題',
     ],
     'tooltips' => [
-        'preview_website' => '預覽網站'
+        'preview_website' => '預覽網站',
     ],
     'mysettings' => [
         'menu_label' => '我的設定',
-        'menu_description' => '設定涉及到您的管理帳號'
+        'menu_description' => '設定涉及到您的管理帳號',
     ],
     'myaccount' => [
         'menu_label' => '我的帳號',
         'menu_description' => '更新您的帳號細節, 例如名字, 郵件地址和密碼',
-        'menu_keywords' => '安全登入'
+        'menu_keywords' => '安全登入',
     ],
     'branding' => [
         'menu_label' => '自訂管理介面',
@@ -283,13 +283,13 @@ return [
         'secondary_color' => '次要 color',
         'accent_color' => 'Accent color',
         'styles' => '樣式',
-        'custom_stylesheet' => '自訂樣式'
+        'custom_stylesheet' => '自訂樣式',
     ],
     'backend_preferences' => [
         'menu_label' => '管理介面設定',
         'menu_description' => '管理您的管理介面設定, 例如希望使用的語言。',
         'locale' => '語言',
-        'locale_comment' => '選擇您希望使用的本地語言。'
+        'locale_comment' => '選擇您希望使用的本地語言。',
     ],
     'access_log' => [
         'hint' => '這個log顯示了管理員成功登入的訊息. 記錄保持:days天。',
@@ -300,7 +300,7 @@ return [
         'ip_address' => 'IP地址',
         'first_name' => '名',
         'last_name' => '姓',
-        'email' => 'Email'
+        'email' => 'Email',
     ],
     'filter' => [
         'all' => '全部',
@@ -308,11 +308,11 @@ return [
         'number_all' => '全部數目',
     ],
     'permissions' => [
-        'manage_media' => 'Upload and manage media contents - images, videos, sounds, documents'
+        'manage_media' => 'Upload and manage media contents - images, videos, sounds, documents',
     ],
     'mediafinder' => [
         'label' => 'Media Finder',
-        'default_prompt' => 'Click the %s button to find a media item'
+        'default_prompt' => 'Click the %s button to find a media item',
     ],
     'media' => [
         'menu_label' => '媒體',
@@ -378,5 +378,5 @@ return [
         'rename_new_name' => '新名稱',
         'move_please_select' => '請選擇',
         'move_button' => '移動',
-    ]
+    ],
 ];

@@ -1,6 +1,8 @@
-<?php namespace Cms\Classes;
+<?php
 
-use ApplicationException;
+namespace Cms\Classes;
+
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Helper class for processing video and audio tags inserted by the Media Manager.
@@ -42,7 +44,7 @@ class MediaViewHelper
 
         $tagDefinitions = [
             'audio' => '/data\-audio\s*=\s*"([^"]+)"/',
-            'video' => '/data\-video\s*=\s*"([^"]+)"/'
+            'video' => '/data\-video\s*=\s*"([^"]+)"/',
         ];
 
         if (preg_match_all('/\<figure\s+[^\>]+\>[^\<]*\<\/figure\>/i', $html, $matches)) {
@@ -53,7 +55,7 @@ class MediaViewHelper
                         $result[] = [
                             'declaration' => $mediaDeclaration,
                             'type' => $type,
-                            'src' => $nameMatch[1]
+                            'src' => $nameMatch[1],
                         ];
                     }
                 }
@@ -100,11 +102,11 @@ class MediaViewHelper
     {
         switch ($type) {
             case 'video':
-                return '<video src="'.e($src).'" controls preload="metadata"></video>';
+                return '<video src="' . e($src) . '" controls preload="metadata"></video>';
             break;
 
             case 'audio':
-                return '<audio src="'.e($src).'" controls preload="metadata"></audio>';
+                return '<audio src="' . e($src) . '" controls preload="metadata"></audio>';
             break;
         }
     }

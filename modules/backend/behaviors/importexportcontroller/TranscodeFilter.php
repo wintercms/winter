@@ -1,4 +1,6 @@
-<?php namespace Backend\Behaviors\ImportExportController;
+<?php
+
+namespace Backend\Behaviors\ImportExportController;
 
 use php_user_filter;
 

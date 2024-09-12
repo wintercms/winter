@@ -1,12 +1,12 @@
-<?php namespace System\Console;
+<?php
 
-use File;
+namespace System\Console;
+
 use InvalidArgumentException;
 use System\Classes\VersionManager;
-use System\Console\BaseScaffoldCommand;
 use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\Yaml;
 use Winter\Storm\Support\Str;
-use Yaml;
 
 /**
  * Scaffolds a new migration file
@@ -152,7 +152,7 @@ class CreateMigration extends BaseScaffoldCommand
         if (empty($table) && !empty($model)) {
             $modelClass = "\\{$author}\\{$plugin}\Models\\{$model}";
             if (class_exists($modelClass)) {
-                $table = (new $modelClass)->getTable();
+                $table = (new $modelClass())->getTable();
             } else {
                 throw new InvalidArgumentException("The model [{$modelClass}] does not exist.");
             }
@@ -245,7 +245,8 @@ class CreateMigration extends BaseScaffoldCommand
 
                 $type = $config['type'] ?? 'text';
 
-                if (str_starts_with($field, '_')
+                if (
+                    str_starts_with($field, '_')
                     || $field === $model->getKeyName()
                     || str_contains($field, '[')
                     || in_array($type, ['fileupload', 'relation', 'relationmanager', 'repeater', 'section', 'hint'])
@@ -305,7 +306,7 @@ class CreateMigration extends BaseScaffoldCommand
     /**
      * Maps model fields config to DB Schema column types.
      */
-    protected function mapFieldType(string $fieldName, array $fieldConfig, ?Model $model = null) : array
+    protected function mapFieldType(string $fieldName, array $fieldConfig, ?Model $model = null): array
     {
         switch ($fieldConfig['type'] ?? 'text') {
             case 'checkbox':

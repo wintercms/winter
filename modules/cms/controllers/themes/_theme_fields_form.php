@@ -1,6 +1,6 @@
 <?= Form::ajax('onSaveFields', [
     'id' => 'themeFieldsForm',
-    'data-popup-load-indicator' => true
+    'data-popup-load-indicator' => true,
 ]) ?>
 
     <input type="hidden" name="theme" value="<?= $themeDir ?>" />

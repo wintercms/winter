@@ -1,6 +1,8 @@
-<?php namespace System\Traits;
+<?php
 
-use Event;
+namespace System\Traits;
+
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * Adds system event related features to any class.
@@ -84,7 +86,7 @@ trait EventEmitter
         array_unshift($params, $this);
 
         if ($result = Event::fire($event, $params)) {
-            return implode(PHP_EOL.PHP_EOL, (array) $result);
+            return implode(PHP_EOL . PHP_EOL, (array) $result);
         }
 
         return '';

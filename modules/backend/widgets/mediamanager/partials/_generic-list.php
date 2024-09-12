@@ -32,7 +32,7 @@
                 data-folder="<?= e(dirname($item->path)) ?>"
                 tabindex="0"
             >
-                <?= $this->makePartial('item-icon', ['itemType'=>$itemType, 'item'=>$item]) ?>
+                <?= $this->makePartial('item-icon', ['itemType' => $itemType, 'item' => $item]) ?>
 
                 <div class="info">
                     <h4 title="<?= e(basename($item->path)) ?>">

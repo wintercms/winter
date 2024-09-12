@@ -38,7 +38,7 @@ class ViteCompileTest extends TestCase
         $this->artisan('vite:compile', [
             'theme-vitetest',
             '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
-            '--silent' => true
+            '--silent' => true,
         ])->assertExitCode(0);
 
         $manifestPath = $this->themePath . '/public/build/manifest.json';
@@ -75,7 +75,7 @@ class ViteCompileTest extends TestCase
         $this->artisan('vite:compile', [
             'theme-vitetest',
             '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
-            '--disable-tty' => true
+            '--disable-tty' => true,
         ])
             ->expectsOutputToContain('Could not resolve entry module "assets/css/theme.css".')
             ->assertExitCode(1);
@@ -98,7 +98,7 @@ class ViteCompileTest extends TestCase
         $this->artisan('vite:compile', [
             'theme-vitetest',
             '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
-            '--disable-tty' => true
+            '--disable-tty' => true,
         ])
             ->expectsOutputToContain('[WARNING] Expected "}" to go with "{" [css-syntax-error]')
             ->assertExitCode(0);

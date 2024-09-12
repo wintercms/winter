@@ -5,11 +5,11 @@
         <?php if ($type === 'update'): ?>
             <?= $this->relationMakePartial('button_update', [
                 'relationManageId' => $relationViewModel->getKey(),
-                'text' => $text
+                'text' => $text,
             ]) ?>
         <?php else: ?>
             <?= $this->relationMakePartial('button_' . $type, [
-                'text' => $text
+                'text' => $text,
             ]) ?>
         <?php endif ?>
 

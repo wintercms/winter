@@ -1,10 +1,12 @@
-<?php namespace System\Twig;
+<?php
+
+namespace System\Twig;
 
 use Twig\Markup;
-use Twig\Template;
-use Twig\Sandbox\SecurityPolicyInterface;
 use Twig\Sandbox\SecurityNotAllowedMethodError;
 use Twig\Sandbox\SecurityNotAllowedPropertyError;
+use Twig\Sandbox\SecurityPolicyInterface;
+use Twig\Template;
 
 /**
  * SecurityPolicy globally blocks accessibility of certain methods and properties.

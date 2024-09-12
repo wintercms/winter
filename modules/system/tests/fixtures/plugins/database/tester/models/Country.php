@@ -1,10 +1,11 @@
-<?php namespace Database\Tester\Models;
+<?php
 
-use Model;
+namespace Database\Tester\Models;
+
+use Winter\Storm\Database\Model;
 
 class Country extends Model
 {
-
     /**
      * @var string The database table used by the model.
      */
@@ -25,7 +26,7 @@ class Country extends Model
         'posts' => [
             'Database\Tester\Models\Post',
             'through' => 'Database\Tester\Models\Author',
-        ]
+        ],
     ];
 }
 

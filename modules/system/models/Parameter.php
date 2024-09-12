@@ -1,7 +1,9 @@
-<?php namespace System\Models;
+<?php
 
-use App;
-use Cache;
+namespace System\Models;
+
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Winter\Storm\Database\Model;
 
 /**
@@ -79,7 +81,7 @@ class Parameter extends Model
 
         $record = static::findRecord($key);
         if (!$record) {
-            $record = new static;
+            $record = new static();
             list($namespace, $group, $item) = $record->parseKey($key);
             $record->namespace = $namespace;
             $record->group = $group;
@@ -117,7 +119,7 @@ class Parameter extends Model
      */
     public static function findRecord($key)
     {
-        $record = new static;
+        $record = new static();
 
         list($namespace, $group, $item) = $record->parseKey($key);
 

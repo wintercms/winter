@@ -1,8 +1,10 @@
-<?php namespace Backend\Traits;
+<?php
 
-use Lang;
+namespace Backend\Traits;
+
 use Backend\Classes\FormField;
-use SystemException;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\SystemException;
 
 /**
  * Widget Maker Trait
@@ -29,7 +31,7 @@ trait WidgetMaker
 
         if (!class_exists($class)) {
             throw new SystemException(Lang::get('backend::lang.widget.not_registered', [
-                'name' => $class
+                'name' => $class,
             ]));
         }
 
@@ -51,7 +53,7 @@ trait WidgetMaker
 
         if (!class_exists($class)) {
             throw new SystemException(Lang::get('backend::lang.widget.not_registered', [
-                'name' => $class
+                'name' => $class,
             ]));
         }
 
@@ -65,8 +67,7 @@ trait WidgetMaker
                 array_get($fieldConfig, 'label')
             );
             $formField->displayAs('widget', $fieldConfig);
-        }
-        else {
+        } else {
             $formField = $fieldConfig;
         }
 

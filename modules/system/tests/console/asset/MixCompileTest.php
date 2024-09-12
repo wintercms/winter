@@ -2,8 +2,8 @@
 
 namespace System\Tests\Console\Asset;
 
-use Winter\Storm\Support\Facades\File;
 use System\Tests\Bootstrap\TestCase;
+use Winter\Storm\Support\Facades\File;
 
 class MixCompileTest extends TestCase
 {
@@ -26,7 +26,7 @@ class MixCompileTest extends TestCase
     {
         $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-ac.json',
-            '--silent' => true
+            '--silent' => true,
         ])->assertExitCode(0);
 
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
@@ -37,7 +37,7 @@ class MixCompileTest extends TestCase
     {
         $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
-            '--disable-tty' => true
+            '--disable-tty' => true,
         ])
             ->expectsOutputToContain('Error: Can\'t resolve \'some-missing-package\'')
             ->assertExitCode(1);
@@ -52,7 +52,7 @@ class MixCompileTest extends TestCase
         $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
             '--package' => 'mix.testa',
-            '--silent' => true
+            '--silent' => true,
         ])->assertExitCode(0);
 
         $this->assertFileExists(base_path('modules/system/tests/fixtures/plugins/mix/testa/assets/dist/app.js'));
@@ -65,7 +65,7 @@ class MixCompileTest extends TestCase
         $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
             '--package' => 'mix.testb',
-            '--disable-tty' => true
+            '--disable-tty' => true,
         ])
             ->expectsOutputToContain('Error: Can\'t resolve \'some-missing-package\'')
             ->assertExitCode(1);
@@ -80,7 +80,7 @@ class MixCompileTest extends TestCase
         $this->artisan($this->command, [
             '--manifest' => 'modules/system/tests/fixtures/npm/package-abc.json',
             '--stop-on-error' => true,
-            '--disable-tty' => true
+            '--disable-tty' => true,
         ])
             ->expectsOutputToContain('Error: Can\'t resolve \'some-missing-package\'')
             ->assertExitCode(1);

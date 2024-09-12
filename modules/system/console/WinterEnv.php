@@ -1,8 +1,10 @@
-<?php namespace System\Console;
+<?php
 
-use App;
-use Winter\Storm\Parse\EnvFile;
+namespace System\Console;
+
+use Illuminate\Support\Facades\App;
 use Winter\Storm\Console\Command;
+use Winter\Storm\Parse\EnvFile;
 use Winter\Storm\Parse\PHP\ArrayFile;
 
 /**

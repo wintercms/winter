@@ -34,11 +34,11 @@ class PackageManager
      */
     protected array $compilableConfigs = [
         'mix' => [
-            'configFile' => 'winter.mix.js'
+            'configFile' => 'winter.mix.js',
         ],
         'vite' => [
-            'configFile' => 'vite.config.mjs'
-        ]
+            'configFile' => 'vite.config.mjs',
+        ],
     ];
 
     /**

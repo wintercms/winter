@@ -1,11 +1,13 @@
-<?php namespace System\Controllers;
+<?php
 
-use Lang;
-use Flash;
-use BackendMenu;
+namespace System\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
+use Illuminate\Support\Facades\Lang;
 use System\Classes\SettingsManager;
 use System\Models\RequestLog;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Request Logs controller
@@ -62,8 +64,7 @@ class RequestLogs extends Controller
             }
 
             Flash::success(Lang::get('backend::lang.list.delete_selected_success'));
-        }
-        else {
+        } else {
             Flash::error(Lang::get('backend::lang.list.delete_selected_empty'));
         }
 

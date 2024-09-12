@@ -1,8 +1,10 @@
-<?php namespace Cms\Classes;
+<?php
 
-use Lang;
-use BackendAuth;
-use ApplicationException;
+namespace Cms\Classes;
+
+use Backend\Facades\BackendAuth;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
@@ -31,7 +33,7 @@ class Page extends CmsCompoundObject
         'meta_description',
         'markup',
         'settings',
-        'code'
+        'code',
     ];
 
     /**
@@ -45,7 +47,7 @@ class Page extends CmsCompoundObject
      */
     public $rules = [
         'title' => 'required',
-        'url'   => ['required', 'regex:/^\/[a-z0-9\/\:_\-\*\[\]\+\?\|\.\^\\\$]*$/i']
+        'url'   => ['required', 'regex:/^\/[a-z0-9\/\:_\-\*\[\]\+\?\|\.\^\\\$]*$/i'],
     ];
 
     /**
@@ -126,7 +128,7 @@ class Page extends CmsCompoundObject
          * assuming that the method is called not during the front-end
          * request processing.
          */
-        $controller = Controller::getController() ?: new Controller;
+        $controller = Controller::getController() ?: new Controller();
 
         return $controller->pageUrl($page, $params, true);
     }
@@ -164,7 +166,7 @@ class Page extends CmsCompoundObject
             $result = [
                 'references'   => $references,
                 'nesting'      => false,
-                'dynamicItems' => false
+                'dynamicItems' => false,
             ];
         }
 
@@ -201,7 +203,7 @@ class Page extends CmsCompoundObject
                 return null;
             }
 
-            $controller = Controller::getController() ?: new Controller;
+            $controller = Controller::getController() ?: new Controller();
             $pageUrl = $controller->pageUrl($item->reference, [], false);
 
             $result = [];

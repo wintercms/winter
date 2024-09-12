@@ -25,7 +25,7 @@ class ViewMakerTest extends TestCase
         return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->createApplication();
         $this->stub = new ViewMakerStub();
@@ -107,7 +107,7 @@ class ViewMakerTest extends TestCase
                 'field' => (object) [
                     'label' => 'label',
                     'comment' => 'comment',
-                    'commentHtml' => false
+                    'commentHtml' => false,
                 ],
             ]);
             $this->assertEquals($expected, trim($contents));

@@ -1,7 +1,9 @@
-<?php namespace System\Console;
+<?php
 
-use Winter\Storm\Console\Command;
+namespace System\Console;
+
 use System\Classes\UpdateManager;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to tear down the database.
@@ -47,10 +49,12 @@ class WinterDown extends Command
      */
     public function handle(): int
     {
-        if (!$this->confirmWithInput(
-            "This will completely delete all database tables in use with your Winter installation.",
-            "DELETE"
-        )) {
+        if (
+            !$this->confirmWithInput(
+                "This will completely delete all database tables in use with your Winter installation.",
+                "DELETE"
+            )
+        ) {
             return 1;
         }
 

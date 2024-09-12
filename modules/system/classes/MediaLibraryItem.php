@@ -1,9 +1,11 @@
-<?php namespace System\Classes;
+<?php
 
-use File;
-use Config;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+namespace System\Classes;
+
 use Carbon\Carbon;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Represents a file or folder in the Media Library.

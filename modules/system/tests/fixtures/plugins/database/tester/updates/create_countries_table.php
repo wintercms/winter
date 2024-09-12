@@ -1,7 +1,9 @@
-<?php namespace Database\Tester\Updates;
+<?php
 
-use Schema;
+namespace Database\Tester\Updates;
+
 use Winter\Storm\Database\Updates\Migration;
+use Winter\Storm\Support\Facades\Schema;
 
 class CreateCountriesTable extends Migration
 {

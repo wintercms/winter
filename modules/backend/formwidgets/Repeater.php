@@ -1,8 +1,10 @@
-<?php namespace Backend\FormWidgets;
+<?php
 
-use Lang;
-use ApplicationException;
+namespace Backend\FormWidgets;
+
 use Backend\Classes\FormWidgetBase;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Repeater Form Widget
@@ -327,7 +329,7 @@ class Repeater extends FormWidgetBase
         $config->model = $this->model;
         $config->data = $this->getValueFromIndex($index);
         $config->alias = $this->alias . 'Form' . $index;
-        $config->arrayName = $this->getFieldName().'['.$index.']';
+        $config->arrayName = $this->getFieldName() . '[' . $index . ']';
         $config->isNested = true;
         if (self::$onAddItemCalled || $this->minItems > 0) {
             $config->enableDefaults = true;
@@ -338,7 +340,7 @@ class Repeater extends FormWidgetBase
         $widget->bindToController();
 
         $this->indexMeta[$index] = [
-            'groupCode' => $groupCode
+            'groupCode' => $groupCode,
         ];
 
         return $this->formWidgets[$index] = $widget;
@@ -380,7 +382,7 @@ class Repeater extends FormWidgetBase
 
         return [
             $addItemContainer => '',
-            $itemContainer => $this->makePartial('repeater_item') . $this->makePartial('repeater_add_item')
+            $itemContainer => $this->makePartial('repeater_item') . $this->makePartial('repeater_add_item'),
         ];
     }
 
@@ -446,7 +448,7 @@ class Repeater extends FormWidgetBase
         if ($this->alias === $widgetName) {
             // This repeater has made the AJAX request
             self::$onAddItemCalled = true;
-        } else if (strpos($widgetName, $this->alias . 'Form') === 0) {
+        } elseif (strpos($widgetName, $this->alias . 'Form') === 0) {
             // A child repeater has made the AJAX request
 
             // Get index from AJAX handler
@@ -473,7 +475,7 @@ class Repeater extends FormWidgetBase
             return null;
         }
 
-        $fields = array_get($this->groupDefinitions, $code.'.fields');
+        $fields = array_get($this->groupDefinitions, $code . '.fields');
 
         if (!$fields) {
             return null;
@@ -505,7 +507,7 @@ class Repeater extends FormWidgetBase
                 'name' => array_get($config, 'name'),
                 'icon' => array_get($config, 'icon', 'icon-square-o'),
                 'description' => array_get($config, 'description'),
-                'fields' => array_get($config, 'fields')
+                'fields' => array_get($config, 'fields'),
             ];
         }
 
@@ -520,7 +522,7 @@ class Repeater extends FormWidgetBase
      */
     public function getGroupCodeFromIndex($index)
     {
-        return array_get($this->indexMeta, $index.'.groupCode');
+        return array_get($this->indexMeta, $index . '.groupCode');
     }
 
     /**
@@ -530,6 +532,6 @@ class Repeater extends FormWidgetBase
      */
     public function getGroupTitle($groupCode)
     {
-        return array_get($this->groupDefinitions, $groupCode.'.name');
+        return array_get($this->groupDefinitions, $groupCode . '.name');
     }
 }

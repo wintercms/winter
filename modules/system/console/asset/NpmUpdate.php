@@ -2,8 +2,6 @@
 
 namespace System\Console\Asset;
 
-use System\Console\Asset\AssetInstall;
-
 class NpmUpdate extends AssetInstall
 {
     /**
@@ -41,6 +39,6 @@ class NpmUpdate extends AssetInstall
      * @inheritDoc
      */
     public $replaces = [
-        'mix:update'
+        'mix:update',
     ];
 }

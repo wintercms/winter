@@ -1,12 +1,14 @@
-<?php namespace System\Classes;
+<?php
 
-use App;
-use Markdown;
+namespace System\Classes;
+
+use Illuminate\Support\Facades\App;
+use System\Helpers\View as ViewHelper;
+use System\Models\MailBrandSetting;
 use System\Models\MailPartial;
 use System\Models\MailTemplate;
-use System\Models\MailBrandSetting;
-use System\Helpers\View as ViewHelper;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
+use Winter\Storm\Support\Facades\Markdown;
 
 /**
  * This class manages Mail sending functions
@@ -55,7 +57,7 @@ class MailManager
      */
     public function addRawContentToMailer($message, $content, $data)
     {
-        $template = new MailTemplate;
+        $template = new MailTemplate();
 
         $template->fillFromContent($content);
 
@@ -83,8 +85,7 @@ class MailManager
 
         if (isset($this->templateCache[$code])) {
             $template = $this->templateCache[$code];
-        }
-        else {
+        } else {
             $this->templateCache[$code] = $template = MailTemplate::findOrMakeTemplate($code);
         }
 
@@ -126,7 +127,7 @@ class MailManager
         }
 
         $data += [
-            'subject' => $symfonyMessage->getSubject()
+            'subject' => $symfonyMessage->getSubject(),
         ];
 
         if (!$plainOnly) {
@@ -193,7 +194,7 @@ class MailManager
         }
 
         if (!$disableAutoInlineCss) {
-            $html = (new CssToInlineStyles)->convert($html, $css);
+            $html = (new CssToInlineStyles())->convert($html, $css);
         }
 
         return $html;
@@ -232,7 +233,7 @@ class MailManager
 
         if ($template->layout) {
             $text = $this->renderTwig($template->layout->content_text, [
-                'content' => $text
+                'content' => $text,
             ] + (array) $data);
         }
 
@@ -242,13 +243,12 @@ class MailManager
     public function renderPartial($code, array $params = [])
     {
         if (!$partial = MailPartial::findOrMakePartial($code)) {
-            return '<!-- Missing partial: '.$code.' -->';
+            return '<!-- Missing partial: ' . $code . ' -->';
         }
 
         if ($this->isHtmlRenderMode) {
             $content = $partial->content_html;
-        }
-        else {
+        } else {
             $content = $partial->content_text ?: $partial->content_html;
         }
 

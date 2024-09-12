@@ -1,4 +1,6 @@
-<?php namespace Cms\Twig;
+<?php
+
+namespace Cms\Twig;
 
 use Twig\Node\Node as TwigNode;
 use Twig\Token as TwigToken;
@@ -26,8 +28,7 @@ class FlashTokenParser extends TwigTokenParser
 
         if ($token = $stream->nextIf(TwigToken::NAME_TYPE)) {
             $name = $token->getValue();
-        }
-        else {
+        } else {
             $name = 'all';
         }
         $stream->expect(TwigToken::BLOCK_END_TYPE);

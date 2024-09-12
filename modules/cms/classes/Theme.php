@@ -1,22 +1,24 @@
-<?php namespace Cms\Classes;
+<?php
 
-use App;
-use ApplicationException;
-use Cache;
+namespace Cms\Classes;
+
 use Cms\Models\ThemeData;
-use Config;
 use DirectoryIterator;
-use Event;
 use Exception;
-use File;
-use Lang;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\URL;
 use System\Models\Parameter;
-use SystemException;
-use Url;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 use Winter\Storm\Halcyon\Datasource\DbDatasource;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;
-use Yaml;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Yaml;
 
 /**
  * This class represents the CMS theme.
@@ -67,7 +69,7 @@ class Theme extends CmsObject
      */
     public static function load($dirName, $file = null): self
     {
-        $theme = new static;
+        $theme = new static();
         $theme->setDirName($dirName);
         $theme->registerHalcyonDatasource();
         if (App::runningInBackend()) {
@@ -345,7 +347,7 @@ class Theme extends CmsObject
 
         // Attempt to load the theme's config file from whatever datasources are available.
         $sources = [
-            'filesystem' => new FileDatasource(themes_path($this->getDirName()), App::make('files'))
+            'filesystem' => new FileDatasource(themes_path($this->getDirName()), App::make('files')),
         ];
         if (static::databaseLayerEnabled()) {
             $sources['database'] = new DbDatasource($this->getDirName(), 'cms_theme_templates');
@@ -482,13 +484,12 @@ class Theme extends CmsObject
 
             if (File::isLocalPath($fileName)) {
                 $path = $fileName;
-            }
-            else {
-                $path = $this->getPath().'/'.$result;
+            } else {
+                $path = $this->getPath() . '/' . $result;
             }
 
             if (!File::exists($path)) {
-                throw new ApplicationException('Path does not exist: '.$path);
+                throw new ApplicationException('Path does not exist: ' . $path);
             }
 
             $result = Yaml::parseFile($path);
@@ -508,7 +509,7 @@ class Theme extends CmsObject
             $values = $values + (array) $this->getConfig();
         }
 
-        $path = $this->getPath().'/theme.yaml';
+        $path = $this->getPath() . '/theme.yaml';
         if (!File::exists($path)) {
             throw new ApplicationException('Path does not exist: ' . $path);
         }

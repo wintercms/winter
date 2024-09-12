@@ -2,9 +2,9 @@
 
 namespace Cms\Classes;
 
-use ApplicationException;
-use Cache;
 use Exception;
+use Illuminate\Support\Facades\Cache;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Halcyon\Datasource\Datasource;
 use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 use Winter\Storm\Halcyon\Exception\DeleteFileException;
@@ -67,7 +67,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
 
         $this->populateCache();
 
-        $this->postProcessor = new Processor;
+        $this->postProcessor = new Processor();
     }
 
     /**
@@ -471,8 +471,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
             } else {
                 $success = $this->getActiveDatasource()->delete($dirName, $fileName, $extension);
             }
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             // Only attempt to do an insert-delete when not force deleting the record
             if (!$this->forceDeleting) {
                 // Check to see if this is a valid path to delete
@@ -488,7 +487,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
                     // Perform the deletion on the newly inserted record
                     $success = $this->delete($dirName, $fileName, $extension);
                 } else {
-                    throw (new DeleteFileException)->setInvalidPath($path);
+                    throw (new DeleteFileException())->setInvalidPath($path);
                 }
             }
         }

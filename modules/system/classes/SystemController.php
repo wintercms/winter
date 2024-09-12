@@ -1,12 +1,13 @@
-<?php namespace System\Classes;
+<?php
 
-use Lang;
-use Config;
-use Response;
+namespace System\Classes;
+
 use Exception;
-use SystemException;
-use ApplicationException;
 use Illuminate\Routing\Controller as ControllerBase;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Response;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * The is the master controller for system related routing.
@@ -27,7 +28,7 @@ class SystemController extends ControllerBase
     {
         try {
             if (!strpos($name, '-')) {
-                return Response::make('/* '.e(Lang::get('system::lang.combiner.not_found', ['name' => $name])).' */', 404);
+                return Response::make('/* ' . e(Lang::get('system::lang.combiner.not_found', ['name' => $name])) . ' */', 404);
             }
 
             $parts = explode('-', $name);
@@ -38,7 +39,7 @@ class SystemController extends ControllerBase
 
             return $combiner->getContents($cacheId);
         } catch (Exception $ex) {
-            return Response::make('/* '.e($ex->getMessage()).' */', 500);
+            return Response::make('/* ' . e($ex->getMessage()) . ' */', 500);
         }
     }
 

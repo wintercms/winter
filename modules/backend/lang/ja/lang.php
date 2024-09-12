@@ -38,7 +38,7 @@ return [
         'not_found_name' => "':name'パーシャルは見つかりません。",
         'invalid_name' => "無効なパーシャル名: :name",
     ],
-    'ajax_handler' =>[
+    'ajax_handler' => [
         'invalid_name' => "無効なAJAXハンドラ名: :name",
         'not_found' => "AJAXハンドラ ':name' が見つかりませんでした。",
     ],
@@ -501,10 +501,10 @@ return [
         'email' => 'メール',
     ],
     'filter' => [
-      'all' => 'すべて',
-      'options_method_not_exists' => "モデルクラス :model は ':filter' フィルタのオプションを返すメソッド :method() を定義する必要があります。",
-      'date_all' => '全期間',
-      'number_all' => '全数',
+        'all' => 'すべて',
+        'options_method_not_exists' => "モデルクラス :model は ':filter' フィルタのオプションを返すメソッド :method() を定義する必要があります。",
+        'date_all' => '全期間',
+        'number_all' => '全数',
     ],
     'import_export' => [
         'upload_csv_file' => '1.CSVファイルをアップロードする',
@@ -632,7 +632,7 @@ return [
         'folder_or_file_exist' => '指定された名前のフォルダまたはファイルはすでに存在しています',
         'move_empty' => '移動するアイテムを選択してください。',
         'move_popup_title' => 'ファイルまたはフォルダの移動',
-         'move_popup_title' => 'ファイルまたはフォルダの移動',
+        'move_popup_title' => 'ファイルまたはフォルダの移動',
         'move_destination' => '移動先フォルダ',
         'please_select_move_dest' => '保存先フォルダを選択してください',
         'move_dest_src_match' => '他の保存先フォルダを選択してください',
@@ -656,5 +656,5 @@ return [
         'rename_new_name' => '新しい名前',
         'move_please_select' => '選択してください',
         'move_button' => '移動',
-    ]
+    ],
 ];

@@ -1,11 +1,13 @@
-<?php namespace System\Behaviors;
+<?php
 
-use App;
-use Artisan;
-use Cache;
-use Log;
+namespace System\Behaviors;
+
 use Exception;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 use System\Classes\ModelBehavior;
 
 /**
@@ -277,7 +279,7 @@ class SettingsModel extends ModelBehavior
      */
     protected function getCacheKey()
     {
-        return 'system::settings.'.$this->recordCode;
+        return 'system::settings.' . $this->recordCode;
     }
 
     /**

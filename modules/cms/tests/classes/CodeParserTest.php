@@ -2,7 +2,6 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\CodeParser;
 use Cms\Classes\Controller;
 use Cms\Classes\Layout;
@@ -10,8 +9,9 @@ use Cms\Classes\LayoutCode;
 use Cms\Classes\Page;
 use Cms\Classes\PageCode;
 use Cms\Classes\Theme;
-use File;
 use ReflectionClass;
+use System\Tests\Bootstrap\TestCase;
+use Winter\Storm\Support\Facades\File;
 
 class CodeParserTest extends TestCase
 {

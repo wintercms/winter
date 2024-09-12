@@ -1,6 +1,8 @@
-<?php namespace Cms\Classes;
+<?php
 
-use Yaml;
+namespace Cms\Classes;
+
+use Winter\Storm\Support\Facades\Yaml;
 
 /**
  * The CMS meta file class, used for interacting with YAML files within the Halcyon datasources

@@ -1,8 +1,10 @@
-<?php namespace Backend\Classes;
+<?php
 
-use IteratorAggregate;
-use ArrayIterator;
+namespace Backend\Classes;
+
 use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
 use Traversable;
 
 /**

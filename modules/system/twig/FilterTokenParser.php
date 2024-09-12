@@ -1,4 +1,6 @@
-<?php namespace System\Twig;
+<?php
+
+namespace System\Twig;
 
 use Twig\Node\BlockNode;
 use Twig\Node\Expression\BlockReferenceExpression;

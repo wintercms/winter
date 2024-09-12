@@ -1,9 +1,11 @@
-<?php namespace System\Classes;
+<?php
 
-use Event;
-use Backend;
-use BackendAuth;
-use SystemException;
+namespace System\Classes;
+
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * Manages the system settings.
@@ -76,7 +78,7 @@ class SettingsManager
         'permissions' => [],
         'order'       => 500,
         'context'     => 'system',
-        'keywords'    => null
+        'keywords'    => null,
     ];
 
     /**
@@ -287,7 +289,7 @@ class SettingsManager
 
         $item = array_merge(self::$itemDefaults, array_merge($definition, [
             'code' => $code,
-            'owner' => $owner
+            'owner' => $owner,
         ]));
 
         /*
@@ -300,8 +302,7 @@ class SettingsManager
                 list($author, $plugin) = explode('.', $owner);
                 $uri[] = strtolower($author);
                 $uri[] = strtolower($plugin);
-            }
-            else {
+            } else {
                 $uri[] = strtolower($owner);
             }
 
@@ -412,6 +413,6 @@ class SettingsManager
      */
     protected function makeItemKey($owner, $code)
     {
-        return strtoupper($this->aliases[strtolower($owner)] ?? $owner).'.'.strtoupper($code);
+        return strtoupper($this->aliases[strtolower($owner)] ?? $owner) . '.' . strtoupper($code);
     }
 }

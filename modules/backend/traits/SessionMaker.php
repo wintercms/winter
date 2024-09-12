@@ -1,7 +1,9 @@
-<?php namespace Backend\Traits;
+<?php
 
-use Str;
+namespace Backend\Traits;
+
 use Session;
+use Winter\Storm\Support\Str;
 
 /**
  * Session Maker Trait

@@ -1,12 +1,13 @@
-<?php namespace System\Traits;
+<?php
 
-use Crypt;
-use Config;
-use Request;
-use Session;
+namespace System\Traits;
+
 use Carbon\Carbon;
-use Symfony\Component\HttpFoundation\Response as BaseResponse;
+use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Request;
+use Session;
 use Symfony\Component\HttpFoundation\Cookie;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Security Controller Trait

@@ -1,9 +1,11 @@
-<?php namespace System\Helpers;
+<?php
 
-use App;
-use File;
+namespace System\Helpers;
+
 use Cache as CacheFacade;
-use Config;
+use Illuminate\Support\Facades\App;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 class Cache
 {
@@ -36,7 +38,7 @@ class Cache
      */
     public function clearCombiner()
     {
-        $path = storage_path().'/cms/combiner';
+        $path = storage_path() . '/cms/combiner';
         if (!is_dir($path)) {
             return;
         }
@@ -50,11 +52,11 @@ class Cache
      */
     public function clearCache()
     {
-        $path = storage_path().'/cms/cache';
+        $path = storage_path() . '/cms/cache';
         if (!is_dir($path)) {
             return;
         }
-        foreach (File::directories(storage_path().'/cms/cache') as $directory) {
+        foreach (File::directories(storage_path() . '/cms/cache') as $directory) {
             File::deleteDirectory($directory);
         }
     }
@@ -64,11 +66,11 @@ class Cache
      */
     public function clearTwig()
     {
-        $path = storage_path().'/cms/twig';
+        $path = storage_path() . '/cms/twig';
         if (!is_dir($path)) {
             return;
         }
-        foreach (File::directories(storage_path().'/cms/twig') as $directory) {
+        foreach (File::directories(storage_path() . '/cms/twig') as $directory) {
             File::deleteDirectory($directory);
         }
     }

@@ -2,9 +2,9 @@
 
 namespace System\Tests;
 
-use Db;
-use Log;
+use Illuminate\Support\Facades\Log;
 use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Support\Facades\DB;
 
 class ServiceProviderTest extends PluginTestCase
 {

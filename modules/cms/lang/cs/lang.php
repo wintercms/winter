@@ -7,11 +7,11 @@ return [
         'file_already_exists' => "Soubor ':name' již existuje.",
         'error_saving' => "Chyba ukládání souboru ':name'. Zkontrolujte práva k zápisu.",
         'error_creating_directory' => 'Chyba vytváření složky :name. Zkontrolujte práva k zápisu.',
-        'invalid_file_extension'=>'Chybná přípona souboru: :invalid. Povolené přípony jsou: :allowed.',
+        'invalid_file_extension' => 'Chybná přípona souboru: :invalid. Povolené přípony jsou: :allowed.',
         'error_deleting' => "Chyba mazání souboru s šablonou ':name'. Zkontrolujte práva k zápisu.",
         'delete_success' => 'Šablony úspěšně smazány: :count.',
         'file_name_required' => 'Je nutno vyplnit Název souboru.',
-        'safe_mode_enabled' => 'Bezpěčný režim (safe mode) je aktivní.'
+        'safe_mode_enabled' => 'Bezpěčný režim (safe mode) je aktivní.',
 
     ],
     'dashboard' => [
@@ -20,20 +20,20 @@ return [
             'online' => 'Online',
             'maintenance' => 'Probíhá údržba',
             'manage_themes' => 'Spravovat témata vzhledu',
-            'customize_theme' => 'Upravit téma vzhledu'
-        ]
+            'customize_theme' => 'Upravit téma vzhledu',
+        ],
     ],
     'theme' => [
         'not_found_name' => "Téma ':name' nebylo nalezeno.",
         'by_author' => 'Vytvořil :name',
         'active' => [
             'not_set' => 'Aktivní téma nebylo nastaveno.',
-            'not_found' => 'Aktivní téma nebylo nalezeno.'
+            'not_found' => 'Aktivní téma nebylo nalezeno.',
         ],
         'edit' => [
             'not_set' => 'Editované téma nebylo uloženo.',
             'not_found' => 'Editované téma nebylo nalezeno.',
-            'not_match' => "Objekt který chcete právě zobrazit nepatří do téma, které nyní editujete. Prosím obnovte stránku."
+            'not_match' => "Objekt který chcete právě zobrazit nepatří do téma, které nyní editujete. Prosím obnovte stránku.",
         ],
         'settings_menu' => 'Témata vzhledu',
         'settings_menu_description' => 'Náhledy instalovaných témat a výběr aktivního téma.',
@@ -100,18 +100,18 @@ return [
         'settings_menu_description' => 'Nastavte stránku režimu údržby a její nastavení.',
         'is_enabled' => 'Aktivovat režim údržby',
         'is_enabled_comment' => 'Pokud je režim údržby aktivní, uživatelé uvidí stránku vybranou níže.',
-        'hint' => 'Režim údržby zobrazí stránku údržby návštěvníkům, kteří nejsou přihlášeni do administrace.'
+        'hint' => 'Režim údržby zobrazí stránku údržby návštěvníkům, kteří nejsou přihlášeni do administrace.',
 
     ],
     'page' => [
         'not_found_name' => "Stránka ':name' nebyla nalezena",
         'not_found' => [
             'label' => 'Stránka nenalezena',
-            'help' => 'Požadovaná stránka nebyla nalezena.'
+            'help' => 'Požadovaná stránka nebyla nalezena.',
         ],
         'custom_error' => [
             'label' => 'Chyba stránky',
-            'help' => "Omlouváme se, ale požadovaná stránka nelze zobrazit z důvodu nějaké chyby."
+            'help' => "Omlouváme se, ale požadovaná stránka nelze zobrazit z důvodu nějaké chyby.",
         ],
         'menu_label' => 'Stránky',
         'unsaved_label' => 'Neuložené stránky',
@@ -124,7 +124,7 @@ return [
         'cms_page' => 'CMS stránka',
         'title' => 'Název stránky',
         'url' => 'URL stránky',
-        'file_name' => 'Název souboru stránky'
+        'file_name' => 'Název souboru stránky',
     ],
     'layout' => [
         'not_found_name' => "Layout ':name' nebyl nalezen",
@@ -133,7 +133,7 @@ return [
         'no_list_records' => 'Žádné layouty nebyly nalezeny',
         'new' => 'Nový layout',
         'delete_confirm_multiple' => 'Opravdu chcete odstranit vybrané layouty?',
-        'delete_confirm_single' => 'Opravdu chcete odstranit tento layout?'
+        'delete_confirm_single' => 'Opravdu chcete odstranit tento layout?',
     ],
     'partial' => [
         'not_found_name' => "Dílčí šablona ':name' nebyla nalezena.",
@@ -143,7 +143,7 @@ return [
         'no_list_records' => 'Žádné dílčí šablony',
         'delete_confirm_multiple' => 'Opravdu chcete smazat tyto dílčí šablony?',
         'delete_confirm_single' => 'Opravdu chcete smazat tuto dílčí šablonu?',
-        'new' => 'Nová šablona'
+        'new' => 'Nová šablona',
     ],
     'content' => [
         'not_found_name' => "Obsahový soubor ':name' nebyl nalezen.",
@@ -152,18 +152,18 @@ return [
         'no_list_records' => 'Žádné obsahové soubory',
         'delete_confirm_multiple' => 'Opravdu chcete smazat tyto obsahové soubory nebo složky?',
         'delete_confirm_single' => 'Opravdu chcete smazat tento obsahový soubor?',
-        'new' => 'Žádný obsahový soubor'
+        'new' => 'Žádný obsahový soubor',
     ],
     'ajax_handler' => [
         'invalid_name' => 'Neplatný název AJAX handleru: :name.',
-        'not_found' => "AJAX handler ':name' nebyl nalezen."
+        'not_found' => "AJAX handler ':name' nebyl nalezen.",
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => 'Přidat',
-        'search' => 'Hledat...'
+        'search' => 'Hledat...',
     ],
     'editor' => [
         'settings' => 'Nastavení',
@@ -187,7 +187,7 @@ return [
         'open_searchbox' => 'Otevřít box hledávání',
         'close_searchbox'  => 'Zavřít box hledání',
         'open_replacebox' => 'Otevřít box nahrazování',
-        'close_replacebox'  => 'Zavřít box nahrazování'
+        'close_replacebox'  => 'Zavřít box nahrazování',
     ],
     'asset' => [
         'menu_label' => 'Soubory',
@@ -227,7 +227,7 @@ return [
         'error_deleting_directory' => 'Chyba přesunu původní složky :dir',
         'no_list_records' => 'Žádné soubory nebyly nalezeny',
         'delete_confirm' => 'Opravdu chcete smazat vybrané soubory nebo adresáře?',
-        'path' => 'Cesta'
+        'path' => 'Cesta',
     ],
     'component' => [
         'menu_label' => 'Komponenty',
@@ -239,15 +239,15 @@ return [
         'invalid_request' => 'Šablona nemohla být uložena, protože jedna z komponent nemá správně vyplněná data.',
         'no_records' => 'Žádná komponenta',
         'not_found' => "Komponenta ':name' nebyla nalezena.",
-        'method_not_found' => "Komponenta ':name' nemá metodu ':method'."
+        'method_not_found' => "Komponenta ':name' nemá metodu ':method'.",
     ],
     'template' => [
         'invalid_type' => 'Neznámý typ šablony.',
         'not_found' => 'Požadovaná šablona nebyla nalezena.',
-        'saved'=> 'Šablona byla úspěšně uložena.',
+        'saved' => 'Šablona byla úspěšně uložena.',
         'no_list_records' => 'Žádné záznamy nebyly nalezeny',
         'delete_confirm' => 'Smazat vybraná témata?',
-        'order_by' => 'Řadit podle'
+        'order_by' => 'Řadit podle',
     ],
     'permissions' => [
         'name' => 'Cms',

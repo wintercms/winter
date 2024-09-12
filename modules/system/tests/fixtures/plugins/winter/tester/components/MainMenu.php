@@ -1,4 +1,6 @@
-<?php namespace Winter\Tester\Components;
+<?php
+
+namespace Winter\Tester\Components;
 
 use Cms\Classes\ComponentBase;
 
@@ -8,7 +10,7 @@ class MainMenu extends ComponentBase
     {
         return [
             'name' => 'Menu Dummy Component',
-            'description' => 'Displays a really cool menu.'
+            'description' => 'Displays a really cool menu.',
         ];
     }
 

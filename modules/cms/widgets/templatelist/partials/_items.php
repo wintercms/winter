@@ -5,12 +5,12 @@
                 <?php if ($item->items): ?>
                     <li class="group" data-status="<?= $this->getCollapseStatus($item->title, false) ? 'expanded' : 'collapsed' ?>">
                         <h4><a href="javascript:;"><?= e($item->title) ?></a></h4>
-                        <?= $this->makePartial('items', ['items'=>$item->items, 'nested'=>true]) ?>
+                        <?= $this->makePartial('items', ['items' => $item->items, 'nested' => true]) ?>
                     </li>
                 <?php endif ?>
             <?php else: ?>
                 <?php
-                $dataId = $this->itemType.'-'.$this->theme->getDirName().'-'.$item->fileName;
+                $dataId = $this->itemType . '-' . $this->theme->getDirName() . '-' . $item->fileName;
                 ?>
                 <li
                     class="item"

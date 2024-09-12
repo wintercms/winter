@@ -1,12 +1,14 @@
-<?php namespace Cms\Twig;
+<?php
 
-use Block;
+namespace Cms\Twig;
+
 use Cms\Classes\Controller;
-use Event;
 use System\Classes\Asset\Vite;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
+use Winter\Storm\Support\Facades\Block;
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * The CMS Twig extension class implements the basic CMS Twig functions and filters.
@@ -77,18 +79,18 @@ class Extension extends TwigExtension
     public function getTokenParsers(): array
     {
         return [
-            new PageTokenParser,
-            new PartialTokenParser,
-            new ContentTokenParser,
-            new PutTokenParser,
-            new PlaceholderTokenParser,
-            new DefaultTokenParser,
-            new FrameworkTokenParser,
-            new SnowboardTokenParser,
-            new ComponentTokenParser,
-            new FlashTokenParser,
-            new ScriptsTokenParser,
-            new StylesTokenParser,
+            new PageTokenParser(),
+            new PartialTokenParser(),
+            new ContentTokenParser(),
+            new PutTokenParser(),
+            new PlaceholderTokenParser(),
+            new DefaultTokenParser(),
+            new FrameworkTokenParser(),
+            new SnowboardTokenParser(),
+            new ComponentTokenParser(),
+            new FlashTokenParser(),
+            new ScriptsTokenParser(),
+            new StylesTokenParser(),
         ];
     }
 

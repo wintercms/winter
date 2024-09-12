@@ -30,7 +30,7 @@
             Url::asset('modules/system/assets/ui/storm-min.js'),
             Backend::skinAsset('assets/js/winter-min.js'),
             Url::asset('modules/backend/assets/js/auth/auth.js'),
-            Url::asset('modules/system/assets/js/lang/lang.'.App::getLocale().'.js'),
+            Url::asset('modules/system/assets/js/lang/lang.' . App::getLocale() . '.js'),
         ];
         foreach ($scripts as $script) {
             $this->addJs($script, [

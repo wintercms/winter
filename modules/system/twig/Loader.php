@@ -1,12 +1,14 @@
-<?php namespace System\Twig;
+<?php
 
-use App;
+namespace System\Twig;
+
 use Exception;
-use File;
+use Illuminate\Support\Facades\App;
 use InvalidArgumentException;
-use Twig\Source as TwigSource;
 use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface as TwigLoaderInterface;
+use Twig\Source as TwigSource;
+use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Str;
 
 /**
@@ -95,8 +97,7 @@ class Loader implements TwigLoaderInterface
         try {
             $this->findTemplate($name);
             return true;
-        }
-        catch (Exception $exception) {
+        } catch (Exception $exception) {
             return false;
         }
     }

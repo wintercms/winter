@@ -1,12 +1,14 @@
-<?php namespace System\Models;
+<?php
 
-use App;
-use Str;
-use Model;
-use Cache;
-use Less_Parser;
+namespace System\Models;
+
 use Exception;
 use File as FileHelper;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Less_Parser;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Str;
 
 /**
  * Mail brand settings
@@ -23,7 +25,7 @@ class MailBrandSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**
@@ -72,7 +74,7 @@ class MailBrandSetting extends Model
         $vars = static::getCssVars();
 
         foreach ($vars as $var => $default) {
-            $this->{$var} = $config->get('brand.mail.'.Str::studly($var), $default);
+            $this->{$var} = $config->get('brand.mail.' . Str::studly($var), $default);
         }
     }
 
@@ -96,8 +98,7 @@ class MailBrandSetting extends Model
         try {
             $customCss = self::compileCss();
             Cache::forever($cacheKey, $customCss);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $customCss = '/* ' . $ex->getMessage() . ' */';
         }
 

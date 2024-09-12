@@ -11,7 +11,7 @@ return [
         'error_deleting' => 'Error eliminando el archivo de plantilla ":name". Por favor, revisa los permisos de escritura.',
         'delete_success' => 'Las plantillas fueron eliminadas satisfactoriamente: :count.',
         'file_name_required' => 'El campo Nombre es obligatorio.',
-        'safe_mode_enabled' => 'El modo seguro está activado actualmente.'
+        'safe_mode_enabled' => 'El modo seguro está activado actualmente.',
     ],
     'dashboard' => [
         'active_theme' => [
@@ -19,19 +19,19 @@ return [
             'online' => 'en línea',
             'maintenance' => 'en mantenimiento',
             'manage_themes' => 'Gestionar temas',
-            'customize_theme' => 'Personalizar tema'
-        ]
+            'customize_theme' => 'Personalizar tema',
+        ],
     ],
     'theme' => [
         'not_found_name' => "El tema ':name' no se encuentra.",
         'active' => [
             'not_set' => 'El tema activo no se ha establecido.',
-            'not_found' => 'El tema activo no se encuentra.'
+            'not_found' => 'El tema activo no se encuentra.',
         ],
         'edit' => [
             'not_set' => 'El tema de edición no se ha establecido.',
             'not_found' => 'El tema de edición no se encuentra.',
-            'not_match' => 'El objeto que está intentando acceder no pertenece al tema que se está editando. Porfavor recarga la página.'
+            'not_match' => 'El objeto que está intentando acceder no pertenece al tema que se está editando. Porfavor recarga la página.',
         ],
         'settings_menu' => 'Tema para el Front-end',
         'settings_menu_description' => 'Previsualiza la lista de temas instalados y selecciona un tema activo.',
@@ -91,24 +91,24 @@ return [
         'dir_name_taken' => 'Este directorio ya existe.',
         'find_more_themes' => 'Buscar nuevos temas',
         'saving' => 'Guardando tema...',
-        'return' => 'Volver a la lista de temas'
+        'return' => 'Volver a la lista de temas',
     ],
     'maintenance' => [
         'settings_menu' => 'Modo de mantenimiento',
         'settings_menu_description' => 'Configura la página del modo de mantenimiento y cambia su configuración',
         'is_enabled' => 'Activar el modo de mantenimiento',
         'is_enabled_comment' => 'Selecciona la página para mostrar cuando el modo de mantenimiento esté activado.',
-        'hint' => 'El modo de mantenimiento mostrará la página de mantenimiento a los visitantes que no estén conectados en el área de back-end.'
+        'hint' => 'El modo de mantenimiento mostrará la página de mantenimiento a los visitantes que no estén conectados en el área de back-end.',
     ],
     'page' => [
         'not_found_name' => "La página ':name' no se encuentra",
         'not_found' => [
             'label' => 'Página no encontrada',
-            'help' => 'La página solicitada no se encuentra.'
+            'help' => 'La página solicitada no se encuentra.',
         ],
         'custom_error' => [
             'label' => 'Error en la página',
-            'help' => 'Lo sentimos, pero algo salió mal y la página no se puede mostrar.'
+            'help' => 'Lo sentimos, pero algo salió mal y la página no se puede mostrar.',
         ],
         'menu_label' => 'Páginas',
         'unsaved_label' => 'Página(s) sin guardar',
@@ -121,7 +121,7 @@ return [
         'cms_page' => 'Página de CMS',
         'title' => 'Título de página',
         'url' => 'URL de página',
-        'file_name' => 'Nombre de archivo de página'
+        'file_name' => 'Nombre de archivo de página',
     ],
     'layout' => [
         'not_found_name' => "El diseño ':name' no se encuentra",
@@ -130,7 +130,7 @@ return [
         'no_list_records' => 'No se encuentran diseños',
         'new' => 'Nuevo diseño',
         'delete_confirm_multiple' => '¿Deseas eliminar los diseños seleccionados?',
-        'delete_confirm_single' => '¿Deseas eliminar este diseño?'
+        'delete_confirm_single' => '¿Deseas eliminar este diseño?',
     ],
     'partial' => [
         'not_found_name' => "El nombre de parcial ':name' no se encuentra.",
@@ -140,7 +140,7 @@ return [
         'no_list_records' => 'No se encontraron parciales',
         'delete_confirm_multiple' => '¿Deseas eliminar los parciales seleccionados?',
         'delete_confirm_single' => '¿Deseas eliminar este parcial?',
-        'new' => 'Nuevo parcial'
+        'new' => 'Nuevo parcial',
     ],
     'content' => [
         'not_found_name' => "El archivo de contenido ':name' no se encuentra.",
@@ -149,18 +149,18 @@ return [
         'no_list_records' => 'No se encuentran archivos de contenido',
         'delete_confirm_multiple' => '¿Deseas eliminar los archivos o directorios de contenido seleccionados?',
         'delete_confirm_single' => '¿Deseas eliminar este archivo de contenido?',
-        'new' => 'Nuevo archivo de contenido'
+        'new' => 'Nuevo archivo de contenido',
     ],
     'ajax_handler' => [
         'invalid_name' => 'Manejador de AJAX inválido: :name.',
-        'not_found' => "El manejador de AJAX ':name' no se encuentra."
+        'not_found' => "El manejador de AJAX ':name' no se encuentra.",
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => 'Agregar',
-        'search' => 'Buscar...'
+        'search' => 'Buscar...',
     ],
     'editor' => [
         'settings' => 'Configuración',
@@ -184,7 +184,7 @@ return [
         'open_searchbox' => 'Abrir caja de búsqueda',
         'close_searchbox' => 'Cerrar caja de búsqueda',
         'open_replacebox' => 'Abrir caja de reemplazo',
-        'close_replacebox'  => 'Cerrar caja de reemplazo'
+        'close_replacebox'  => 'Cerrar caja de reemplazo',
     ],
     'asset' => [
         'menu_label' => 'Recursos',
@@ -224,7 +224,7 @@ return [
         'error_deleting_directory' => 'Error borrando el directorio original :dir',
         'no_list_records' => 'No se encontraron archivos',
         'delete_confirm' => '¿Deseas eliminar los archivos o directorios seleccionados?',
-        'path' => 'Ruta'
+        'path' => 'Ruta',
     ],
     'component' => [
         'menu_label' => 'Componentes',
@@ -236,7 +236,7 @@ return [
         'invalid_request' => 'La plantilla no puede ser guardada porque tiene datos de componente inválidos.',
         'no_records' => 'No se encontraron componentes',
         'not_found' => "El componente ':name' no se encuentra.",
-        'method_not_found' => "El componente ':name' no contiene un método ':method'."
+        'method_not_found' => "El componente ':name' no contiene un método ':method'.",
     ],
     'template' => [
         'invalid_type' => 'Tipo de plantilla desconocido.',
@@ -244,7 +244,7 @@ return [
         'saved' => 'La plantilla se guardó correctamente.',
         'no_list_records' => 'No se encontraron registros',
         'delete_confirm' => '¿Deseas eliminar las plantillas seleccionadas?',
-        'order_by' => 'Ordenar por'
+        'order_by' => 'Ordenar por',
     ],
     'permissions' => [
         'name' => 'CMS',

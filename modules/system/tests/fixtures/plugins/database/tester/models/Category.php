@@ -1,6 +1,8 @@
-<?php namespace Database\Tester\Models;
+<?php
 
-use Model;
+namespace Database\Tester\Models;
+
+use Winter\Storm\Database\Model;
 
 class Category extends Model
 {
@@ -13,13 +15,13 @@ class Category extends Model
         'posts' => [
             'Database\Tester\Models\Post',
             'table' => 'database_tester_categories_posts',
-            'pivot' => ['category_name', 'post_name']
-        ]
+            'pivot' => ['category_name', 'post_name'],
+        ],
     ];
 
     public function getCustomNameAttribute()
     {
-        return $this->name.' (#'.$this->id.')';
+        return $this->name . ' (#' . $this->id . ')';
     }
 }
 

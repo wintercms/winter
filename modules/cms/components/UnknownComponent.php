@@ -1,4 +1,6 @@
-<?php namespace Cms\Components;
+<?php
+
+namespace Cms\Components;
 
 use Cms\Classes\ComponentBase;
 
@@ -28,7 +30,7 @@ class UnknownComponent extends ComponentBase
     {
         return [
             'name'        => 'Unknown component',
-            'description' => $this->errorMessage
+            'description' => $this->errorMessage,
         ];
     }
 }

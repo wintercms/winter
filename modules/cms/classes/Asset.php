@@ -1,14 +1,16 @@
-<?php namespace Cms\Classes;
+<?php
 
-use File;
-use Lang;
-use Config;
-use Request;
-use ApplicationException;
-use ValidationException;
+namespace Cms\Classes;
+
 use Cms\Helpers\File as FileHelper;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Extension\Extendable;
 use Winter\Storm\Filesystem\PathResolver;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * The CMS theme asset file class.
@@ -53,7 +55,7 @@ class Asset extends Extendable
      */
     protected $fillable = [
         'fileName',
-        'content'
+        'content',
     ];
 
     /**
@@ -162,16 +164,16 @@ class Asset extends Extendable
         if (File::isFile($fullPath) && $this->originalFileName !== $this->fileName) {
             throw new ApplicationException(Lang::get(
                 'cms::lang.cms_object.file_already_exists',
-                ['name'=>$this->fileName]
+                ['name' => $this->fileName]
             ));
         }
 
-        $dirPath = $this->theme->getPath().'/'.$this->dirName;
+        $dirPath = $this->theme->getPath() . '/' . $this->dirName;
         if (!file_exists($dirPath) || !is_dir($dirPath)) {
             if (!File::makeDirectory($dirPath, 0777, true, true)) {
                 throw new ApplicationException(Lang::get(
                     'cms::lang.cms_object.error_creating_directory',
-                    ['name'=>$dirPath]
+                    ['name' => $dirPath]
                 ));
             }
         }
@@ -182,7 +184,7 @@ class Asset extends Extendable
             if (!is_dir($dirPath) && !File::makeDirectory($dirPath, 0777, true, true)) {
                 throw new ApplicationException(Lang::get(
                     'cms::lang.cms_object.error_creating_directory',
-                    ['name'=>$dirPath]
+                    ['name' => $dirPath]
                 ));
             }
         }
@@ -191,7 +193,7 @@ class Asset extends Extendable
         if (@File::put($fullPath, $this->content) === false) {
             throw new ApplicationException(Lang::get(
                 'cms::lang.cms_object.error_saving',
-                ['name'=>$this->fileName]
+                ['name' => $this->fileName]
             ));
         }
 
@@ -243,8 +245,8 @@ class Asset extends Extendable
             throw new ValidationException(['fileName' =>
                 Lang::get('cms::lang.cms_object.file_name_required', [
                     'allowed' => implode(', ', $this->allowedExtensions),
-                    'invalid' => pathinfo($fileName, PATHINFO_EXTENSION)
-                ])
+                    'invalid' => pathinfo($fileName, PATHINFO_EXTENSION),
+                ]),
             ]);
         }
 
@@ -252,16 +254,16 @@ class Asset extends Extendable
             throw new ValidationException(['fileName' =>
                 Lang::get('cms::lang.cms_object.invalid_file_extension', [
                     'allowed' => implode(', ', $this->allowedExtensions),
-                    'invalid' => pathinfo($fileName, PATHINFO_EXTENSION)
-                ])
+                    'invalid' => pathinfo($fileName, PATHINFO_EXTENSION),
+                ]),
             ]);
         }
 
         if (!FileHelper::validatePath($fileName, null)) {
             throw new ValidationException(['fileName' =>
                 Lang::get('cms::lang.cms_object.invalid_file', [
-                    'name' => $fileName
-                ])
+                    'name' => $fileName,
+                ]),
             ]);
         }
     }

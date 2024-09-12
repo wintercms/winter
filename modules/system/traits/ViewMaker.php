@@ -1,11 +1,13 @@
-<?php namespace System\Traits;
+<?php
 
-use File;
-use Lang;
-use Block;
-use SystemException;
+namespace System\Traits;
+
+use Illuminate\Support\Facades\Lang;
 use Throwable;
-use Config;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Block;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * View Maker Trait
@@ -221,7 +223,8 @@ trait ViewMaker
      */
     public function makeFileContents(string $filePath, array $extraParams = []): string
     {
-        if (!strlen($filePath) ||
+        if (
+            !strlen($filePath) ||
             !File::isFile($filePath) ||
             (!File::isLocalPath($filePath) && Config::get('cms.restrictBaseDir', true))
         ) {
@@ -245,8 +248,7 @@ trait ViewMaker
         // an exception is thrown. This prevents any partial views from leaking.
         try {
             include $filePath;
-        }
-        catch (Throwable $e) {
+        } catch (Throwable $e) {
             $this->handleViewException($e, $obLevel);
         }
 

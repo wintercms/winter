@@ -1,6 +1,6 @@
 <?= Form::ajax('onCreate', [
     'id' => 'themeCreateForm',
-    'data-popup-load-indicator' => true
+    'data-popup-load-indicator' => true,
 ]) ?>
 
     <div class="modal-header">

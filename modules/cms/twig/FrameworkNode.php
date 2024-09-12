@@ -1,10 +1,12 @@
-<?php namespace Cms\Twig;
+<?php
 
-use System\Models\Parameter;
+namespace Cms\Twig;
+
+use Illuminate\Support\Facades\URL;
 use System\Classes\CombineAssets;
-use Twig\Node\Node as TwigNode;
+use System\Models\Parameter;
 use Twig\Compiler as TwigCompiler;
-use Url;
+use Twig\Node\Node as TwigNode;
 
 /**
  * Represents a "framework" node
@@ -33,7 +35,7 @@ class FrameworkNode extends TwigNode
 
         $compiler
             ->addDebugInfo($this)
-            ->write("\$_minify = ".CombineAssets::class."::instance()->useMinify;" . PHP_EOL);
+            ->write("\$_minify = " . CombineAssets::class . "::instance()->useMinify;" . PHP_EOL);
 
         $basePath = rtrim(Url::asset(''), '/');
 
@@ -52,8 +54,7 @@ class FrameworkNode extends TwigNode
                 ->write("}" . PHP_EOL)
                 ->write("echo '<link rel=\"stylesheet\" property=\"stylesheet\" href=\"{$basePath}/modules/system/assets/css/framework.extras'.(\$_minify ? '-min' : '').'.css$cacheBust\">'.PHP_EOL;" . PHP_EOL)
             ;
-        }
-        else {
+        } else {
             $compiler->write("echo '<script src=\"{$basePath}/modules/system/assets/js/framework'.(\$_minify ? '-min' : '').'.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL);
         }
 

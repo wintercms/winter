@@ -1,4 +1,6 @@
-<?php namespace Cms\Classes;
+<?php
+
+namespace Cms\Classes;
 
 /**
  * Manager class for stacking nested partials and keeping track
@@ -30,7 +32,7 @@ class PartialStack
         }
 
         $this->activePartial = [
-            'components' => []
+            'components' => [],
         ];
     }
 
@@ -49,7 +51,7 @@ class PartialStack
     {
         array_push($this->activePartial['components'], [
             'name' => $alias,
-            'obj' => $componentObj
+            'obj' => $componentObj,
         ]);
     }
 

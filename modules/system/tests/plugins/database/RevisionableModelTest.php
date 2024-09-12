@@ -2,14 +2,14 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Carbon\Carbon;
 use Database\Tester\Models\RevisionablePost;
 use DateTime;
+use System\Tests\Bootstrap\PluginTestCase;
 
 class RevisionableModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -55,7 +55,7 @@ class RevisionableModelTest extends PluginTestCase
             'slug' => 'hello-world',
             'description' => 'Good day, Commander',
             'is_published' => true,
-            'published_at' => new DateTime
+            'published_at' => new DateTime(),
         ]);
 
         $this->assertEquals(0, $post->revision_history()->count());
@@ -75,7 +75,7 @@ class RevisionableModelTest extends PluginTestCase
             'slug',
             'description',
             'is_published',
-            'published_at'
+            'published_at',
         ], $history->lists('field'));
     }
 
@@ -86,7 +86,7 @@ class RevisionableModelTest extends PluginTestCase
             'slug' => 'hello-world',
             'description' => 'Good day, Commander',
             'is_published' => true,
-            'published_at' => new DateTime
+            'published_at' => new DateTime(),
         ]);
 
         $this->assertEquals(0, $post->revision_history()->count());
@@ -127,7 +127,7 @@ class RevisionableModelTest extends PluginTestCase
     {
         $post = RevisionablePost::create([
             'title' => 'Hello World!',
-            'published_at' => Carbon::now()
+            'published_at' => Carbon::now(),
         ]);
         $this->assertEquals(0, $post->revision_history()->count());
 

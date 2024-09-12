@@ -1,12 +1,14 @@
-<?php namespace Cms\Widgets;
+<?php
 
-use App;
-use Str;
-use Lang;
-use Input;
-use System\Classes\PluginManager;
-use Cms\Classes\ComponentHelpers;
+namespace Cms\Widgets;
+
 use Backend\Classes\WidgetBase;
+use Cms\Classes\ComponentHelpers;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
+use System\Classes\PluginManager;
+use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Str;
 
 /**
  * Component list widget.
@@ -37,7 +39,7 @@ class ComponentList extends WidgetBase
     public function render()
     {
         return $this->makePartial('body', [
-            'data' => $this->getData()
+            'data' => $this->getData(),
         ]);
     }
 
@@ -108,7 +110,7 @@ class ComponentList extends WidgetBase
                     'alias'          => $alias,
                     'name'           => $componentInfo->duplicateAlias
                         ? $componentInfo->className
-                        : $componentInfo->alias
+                        : $componentInfo->alias,
                 ];
 
                 if ($searchWords && !$this->itemMatchesSearch($searchWords, $item)) {
@@ -121,7 +123,7 @@ class ComponentList extends WidgetBase
                         'description' => $pluginDescription,
                         'pluginClass' => $pluginClass,
                         'icon'        => $pluginIcon,
-                        'items'       => []
+                        'items'       => [],
                     ];
 
                     $items[$pluginClass] = $group;
@@ -171,7 +173,7 @@ class ComponentList extends WidgetBase
                     'className'      => $className,
                     'alias'          => $alias,
                     'duplicateAlias' => $duplicateAlias,
-                    'pluginClass'    => get_class($plugin)
+                    'pluginClass'    => get_class($plugin),
                 ];
             }
         }
@@ -207,8 +209,8 @@ class ComponentList extends WidgetBase
     {
         return [
             '#' . $this->getId('component-list') => $this->makePartial('items', [
-                'items' => $this->getData()
-            ])
+                'items' => $this->getData(),
+            ]),
         ];
     }
 

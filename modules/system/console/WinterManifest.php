@@ -1,10 +1,12 @@
-<?php namespace System\Console;
+<?php
 
-use ApplicationException;
-use Http;
-use ZipArchive;
+namespace System\Console;
+
 use System\Classes\FileManifest;
 use System\Classes\SourceManifest;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\Http;
+use ZipArchive;
 
 /**
  * Console command to generate a release/tag manifest for Winter CMS version checks.
@@ -118,7 +120,7 @@ class WinterManifest extends \Illuminate\Console\Command
                 if ($versionInt >= $minBuild && $versionInt <= $maxBuild) {
                     $sourceBuilds[] = [
                         'version' => $version,
-                        'download' => $build->zipball_url
+                        'download' => $build->zipball_url,
                     ];
                 }
             }
@@ -159,7 +161,7 @@ class WinterManifest extends \Illuminate\Console\Command
             if (is_dir($buildDir . $build . '/')) {
                 $this->info('  - Already extracted.');
             } else {
-                $zip = new ZipArchive;
+                $zip = new ZipArchive();
                 if ($zip->open($buildDir . 'build-' . $build . '.zip')) {
                     $rootFolder = substr($zip->statIndex(0)['name'], 0, -1);
 

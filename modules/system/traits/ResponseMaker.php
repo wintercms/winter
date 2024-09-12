@@ -1,8 +1,10 @@
-<?php namespace System\Traits;
+<?php
 
-use Response;
-use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+namespace System\Traits;
+
+use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 /**
  * Response Maker Trait
@@ -73,7 +75,7 @@ trait ResponseMaker
     public function setResponseHeader($key, $values, $replace = true)
     {
         if ($this->responseHeaderBag === null) {
-            $this->responseHeaderBag = new ResponseHeaderBag;
+            $this->responseHeaderBag = new ResponseHeaderBag();
         }
 
         $this->responseHeaderBag->set($key, $values, $replace);
@@ -90,7 +92,7 @@ trait ResponseMaker
     public function setResponseCookie($cookie)
     {
         if ($this->responseHeaderBag === null) {
-            $this->responseHeaderBag = new ResponseHeaderBag;
+            $this->responseHeaderBag = new ResponseHeaderBag();
         }
 
         if (is_string($cookie) && function_exists('cookie')) {

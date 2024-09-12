@@ -1,8 +1,10 @@
-<?php namespace Cms\Components;
+<?php
 
-use File;
+namespace Cms\Components;
+
 use Cms\Classes\ComponentBase;
 use System\Classes\CombineAssets;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Resources component
@@ -50,32 +52,32 @@ class Resources extends ComponentBase
                 'title'             => 'JavaScript',
                 'description'       => 'JavaScript file(s) in the assets/js folder',
                 'type'              => 'stringList',
-                'showExternalParam' => false
+                'showExternalParam' => false,
             ],
             'less' => [
                 'title'             => 'LESS',
                 'description'       => 'LESS file(s) in the assets/less folder',
                 'type'              => 'stringList',
-                'showExternalParam' => false
+                'showExternalParam' => false,
             ],
             'sass' => [
                 'title'             => 'SASS',
                 'description'       => 'SASS file(s) in the assets/sass folder',
                 'type'              => 'stringList',
-                'showExternalParam' => false
+                'showExternalParam' => false,
             ],
             'css' => [
                 'title'             => 'CSS',
                 'description'       => 'Stylesheet file(s) in the assets/css folder',
                 'type'              => 'stringList',
-                'showExternalParam' => false
+                'showExternalParam' => false,
             ],
             'vars' => [
                 'title'             => 'Variables',
                 'description'       => 'Page variables name(s) and value(s)',
                 'type'              => 'dictionary',
-                'showExternalParam' => false
-            ]
+                'showExternalParam' => false,
+            ],
         ];
     }
 
@@ -148,28 +150,28 @@ class Resources extends ComponentBase
 
     protected function prefixJs($value)
     {
-        return $this->jsDir.'/'.trim($value);
+        return $this->jsDir . '/' . trim($value);
     }
 
     protected function prefixCss($value)
     {
-        return $this->cssDir.'/'.trim($value);
+        return $this->cssDir . '/' . trim($value);
     }
 
     protected function prefixLess($value)
     {
-        return $this->lessDir.'/'.trim($value);
+        return $this->lessDir . '/' . trim($value);
     }
 
     protected function prefixSass($value)
     {
-        return $this->sassDir.'/'.trim($value);
+        return $this->sassDir . '/' . trim($value);
     }
 
     protected function guessAssetDirectory(array $possible, $default = null)
     {
         foreach ($possible as $option) {
-            if (File::isDirectory($this->assetPath.'/'.$option)) {
+            if (File::isDirectory($this->assetPath . '/' . $option)) {
                 return $option;
             }
         }
@@ -179,12 +181,12 @@ class Resources extends ComponentBase
 
     protected function guessAssetPath()
     {
-        $baseTheme = themes_path().'/'.$this->getTheme()->getDirName();
+        $baseTheme = themes_path() . '/' . $this->getTheme()->getDirName();
 
-        if (File::isDirectory($baseTheme.'/assets')) {
-            return $baseTheme.'/assets';
+        if (File::isDirectory($baseTheme . '/assets')) {
+            return $baseTheme . '/assets';
         }
 
-        return $baseTheme.'/resources';
+        return $baseTheme . '/resources';
     }
 }

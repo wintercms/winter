@@ -1,8 +1,10 @@
-<?php namespace Cms\FormWidgets;
+<?php
+
+namespace Cms\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
-use Cms\Classes\ComponentManager;
 use Cms\Classes\ComponentHelpers;
+use Cms\Classes\ComponentManager;
 use Cms\Components\SoftComponent;
 use Cms\Components\UnknownComponent;
 use Exception;
@@ -55,8 +57,7 @@ class Components extends FormWidgetBase
                         $componentObj->pluginIcon = $pluginDetails['icon'];
                     }
                 }
-            }
-            catch (Exception $ex) {
+            } catch (Exception $ex) {
                 if (starts_with($name, '@')) {
                     $componentObj = new SoftComponent($properties);
                     $componentObj->name = $name;

@@ -3,8 +3,8 @@
 namespace Backend\Tests\FormWidgets;
 
 use Backend\Widgets\Form;
-use Winter\Storm\Database\Model;
 use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Database\Model;
 
 class CheckboxTest extends PluginTestCase
 {
@@ -15,7 +15,7 @@ class CheckboxTest extends PluginTestCase
         parent::setUp();
 
         $this->form = new Form(null, [
-            'model' => new Model,
+            'model' => new Model(),
             'arrayName' => 'array',
             'fields' => [
                 'unchecked' => [
@@ -34,7 +34,7 @@ class CheckboxTest extends PluginTestCase
                 ],
             ],
         ]);
-        
+
         $this->form->render();
     }
 

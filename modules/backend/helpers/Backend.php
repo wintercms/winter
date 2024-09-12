@@ -1,16 +1,18 @@
-<?php namespace Backend\Helpers;
+<?php
 
-use Url;
-use File;
-use Html;
-use Config;
-use Request;
-use Redirect;
-use Exception;
-use Winter\Storm\Router\Helper as RouterHelper;
-use System\Helpers\DateTime as DateTimeHelper;
+namespace Backend\Helpers;
+
 use Backend\Classes\Skin;
 use Backend\Helpers\Exception\DecompileException;
+use Exception;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\URL;
+use System\Helpers\DateTime as DateTimeHelper;
+use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Html;
 
 /**
  * Backend Helper
@@ -150,8 +152,7 @@ class Backend
 
         if ($jsFormat !== null) {
             $format = $jsFormat;
-        }
-        else {
+        } else {
             $format = DateTimeHelper::momentFormat($format);
         }
 
@@ -166,18 +167,15 @@ class Backend
 
         if ($timeTense) {
             $attributes['data-time-tense'] = 1;
-        }
-        elseif ($timeSince) {
+        } elseif ($timeSince) {
             $attributes['data-time-since'] = 1;
-        }
-        elseif ($format) {
+        } elseif ($format) {
             $attributes['data-format'] = $format;
-        }
-        elseif ($formatAlias) {
+        } elseif ($formatAlias) {
             $attributes['data-format-alias'] = $formatAlias;
         }
 
-        return '<time'.Html::attributes($attributes).'>'.e($defaultValue).'</time>'.PHP_EOL;
+        return '<time' . Html::attributes($attributes) . '>' . e($defaultValue) . '</time>' . PHP_EOL;
     }
 
     /**

@@ -1,13 +1,14 @@
-<?php namespace System\Classes;
+<?php
 
-use View;
-use Config;
-use Cms\Classes\Theme;
-use Cms\Classes\Router;
+namespace System\Classes;
+
 use Cms\Classes\Controller as CmsController;
-use Winter\Storm\Exception\ErrorHandler as ErrorHandlerBase;
-use Winter\Storm\Exception\SystemException;
+use Cms\Classes\Router;
+use Cms\Classes\Theme;
+use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\Response;
+use Winter\Storm\Exception\ErrorHandler as ErrorHandlerBase;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * System Error Handler, this class handles application exception events.
@@ -76,7 +77,7 @@ class ErrorHandler extends ErrorHandlerBase
     public function handleDetailedError($exception)
     {
         // Ensure System view path is registered
-        View::addNamespace('system', base_path().'/modules/system/views');
+        View::addNamespace('system', base_path() . '/modules/system/views');
 
         return View::make('system::exception', ['exception' => $exception]);
     }

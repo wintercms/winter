@@ -1,23 +1,25 @@
-<?php namespace System\Classes;
+<?php
 
-use App;
-use Url;
-use File;
-use Lang;
-use Http;
-use Cache;
-use Schema;
-use Config;
-use Exception;
-use ApplicationException;
-use Cms\Classes\ThemeManager;
-use System\Models\Parameter;
-use System\Models\PluginVersion;
-use System\Helpers\Cache as CacheHelper;
-use Winter\Storm\Filesystem\Zip;
+namespace System\Classes;
+
 use Carbon\Carbon;
+use Cms\Classes\ThemeManager;
+use Exception;
 use Illuminate\Console\View\Components\Error;
 use Illuminate\Console\View\Components\Info;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\URL;
+use System\Helpers\Cache as CacheHelper;
+use System\Models\Parameter;
+use System\Models\PluginVersion;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Filesystem\Zip;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Http;
+use Winter\Storm\Support\Facades\Schema;
 
 /**
  * Update manager
@@ -192,7 +194,7 @@ class UpdateManager
             foreach ($this->pluginManager->getReplacementMap() as $alias => $plugin) {
                 if ($this->pluginManager->getActiveReplacementMap($alias)) {
                     $this->addMessage($plugin, Lang::get('system::lang.updates.update_warnings_plugin_replace_cli', [
-                        'alias' => '<info>' . $alias . '</info>'
+                        'alias' => '<info>' . $alias . '</info>',
                     ]));
                 }
             }
@@ -228,7 +230,8 @@ class UpdateManager
         /*
          * Retry period not passed, skipping.
          */
-        if (!$force
+        if (
+            !$force
             && ($retryTimestamp = Parameter::get('system::update.retry'))
             && Carbon::createFromTimeStamp($retryTimestamp)->isFuture()
         ) {
@@ -276,7 +279,7 @@ class UpdateManager
             'plugins' => serialize($versions),
             'themes'  => serialize($themes),
             'build'   => $build,
-            'force'   => $force
+            'force'   => $force,
         ];
 
         $result = $this->requestServerData('core/update', $params);
@@ -468,7 +471,7 @@ class UpdateManager
         $this->out(sprintf('<info>Migrating %s module...</info>', $module), true);
         $this->out('', true);
 
-        $this->migrator->run(base_path() . '/modules/'.strtolower($module).'/database/migrations');
+        $this->migrator->run(base_path() . '/modules/' . strtolower($module) . '/database/migrations');
 
         return $this;
     }
@@ -608,7 +611,8 @@ class UpdateManager
         /*
          * Remove the plugin database and version
          */
-        if (!($plugin = $this->pluginManager->findByIdentifier($name))
+        if (
+            !($plugin = $this->pluginManager->findByIdentifier($name))
             && $this->versionManager->purgePlugin($name)
         ) {
             $this->write(Info::class, sprintf('%s purged from database', $name));
@@ -650,7 +654,7 @@ class UpdateManager
         $fileCode = $name . $hash;
         $this->requestServerFile('plugin/get', $fileCode, $hash, [
             'name'         => $name,
-            'installation' => $installation ? 1 : 0
+            'installation' => $installation ? 1 : 0,
         ]);
     }
 

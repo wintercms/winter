@@ -2,7 +2,7 @@
     <li class="item separator"></li>
 <?php endif ?>
 
-<li class="item <?= 'width-'.$widget->property('ocWidgetWidth') ?> <?= $widget->property('ocWidgetNewRow') ? 'new-line' : null ?>">
+<li class="item <?= 'width-' . $widget->property('ocWidgetWidth') ?> <?= $widget->property('ocWidgetNewRow') ? 'new-line' : null ?>">
     <div class="content">
         <div class="drag-handle"></div>
 

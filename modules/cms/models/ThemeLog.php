@@ -1,10 +1,12 @@
-<?php namespace Cms\Models;
+<?php
 
-use BackendAuth;
+namespace Cms\Models;
+
+use Backend\Facades\BackendAuth;
 use Cms\Classes\Theme;
 use Exception;
-use Model;
 use System\Models\LogSetting;
+use Winter\Storm\Database\Model;
 use Winter\Storm\Halcyon\Model as HalcyonModel;
 
 /**
@@ -28,7 +30,7 @@ class ThemeLog extends Model
      * @var array Relations
      */
     public $belongsTo = [
-        'user' => \Backend\Models\User::class
+        'user' => \Backend\Models\User::class,
     ];
 
     protected $themeCache;
@@ -75,11 +77,11 @@ class ThemeLog extends Model
             return null;
         }
 
-        $record = new self;
+        $record = new self();
         $record->type = $type;
         $record->theme = Theme::getEditThemeCode();
-        $record->template = $isDelete ? '' : $dirName.'/'.$templateName;
-        $record->old_template = $oldTemplateName ? $dirName.'/'.$oldTemplateName : '';
+        $record->template = $isDelete ? '' : $dirName . '/' . $templateName;
+        $record->old_template = $oldTemplateName ? $dirName . '/' . $oldTemplateName : '';
         $record->content = $isDelete ? '' : $newContent;
         $record->old_content = $oldContent;
 
@@ -113,7 +115,7 @@ class ThemeLog extends Model
         return [
             self::TYPE_CREATE => 'cms::lang.theme_log.type_create',
             self::TYPE_UPDATE => 'cms::lang.theme_log.type_update',
-            self::TYPE_DELETE => 'cms::lang.theme_log.type_delete'
+            self::TYPE_DELETE => 'cms::lang.theme_log.type_delete',
         ];
     }
 

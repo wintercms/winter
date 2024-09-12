@@ -1,8 +1,10 @@
-<?php namespace Backend\ReportWidgets;
+<?php
 
-use BackendAuth;
-use Backend\Models\AccessLog;
+namespace Backend\ReportWidgets;
+
 use Backend\Classes\ReportWidgetBase;
+use Backend\Facades\BackendAuth;
+use Backend\Models\AccessLog;
 use Backend\Models\BrandSetting;
 use Exception;
 
@@ -26,8 +28,7 @@ class Welcome extends ReportWidgetBase
     {
         try {
             $this->loadData();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->vars['error'] = $ex->getMessage();
         }
 
@@ -43,7 +44,7 @@ class Welcome extends ReportWidgetBase
                 'type'              => 'string',
                 'validationPattern' => '^.+$',
                 'validationMessage' => 'backend::lang.dashboard.widget_title_error',
-            ]
+            ],
         ];
     }
 

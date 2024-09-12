@@ -2,8 +2,8 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Cms\Classes\AutoDatasource;
+use System\Tests\Bootstrap\PluginTestCase;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Halcyon\Datasource\DbDatasource;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;
@@ -44,21 +44,21 @@ class AutoDatasourceTest extends PluginTestCase
             'source' => 'test',
             'path' => 'partials/page-partial.htm',
             'content' => 'AutoDatasource partials/page-partial.htm',
-            'file_size' => 40
+            'file_size' => 40,
         ]);
 
         $this->fixtures[] = CmsThemeTemplateFixture::create([
             'source' => 'test',
             'path' => 'partials/testpost/default.htm',
             'content' => 'AutoDatasource partials/testpost/default.htm',
-            'file_size' => 44
+            'file_size' => 44,
         ]);
 
         $this->fixtures[] = CmsThemeTemplateFixture::create([
             'source' => 'test',
             'path' => 'partials/subdir/test.htm',
             'content' => 'AutoDatasource partials/subdir/test.htm',
-            'file_size' => 39
+            'file_size' => 39,
         ]);
 
         $this->fixtures[] = CmsThemeTemplateFixture::create([
@@ -66,7 +66,7 @@ class AutoDatasourceTest extends PluginTestCase
             'path' => 'partials/nesting/level2.htm',
             'content' => 'AutoDatasource partials/nesting/level2.htm',
             'file_size' => 42,
-            'deleted_at' => '2019-01-01 00:00:00'
+            'deleted_at' => '2019-01-01 00:00:00',
         ]);
 
         // Create AutoDatasource

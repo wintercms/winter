@@ -1,7 +1,9 @@
-<?php namespace Cms\Twig;
+<?php
 
-use Twig\Node\Node as TwigNode;
+namespace Cms\Twig;
+
 use Twig\Compiler as TwigCompiler;
+use Twig\Node\Node as TwigNode;
 
 /**
  * Represents a partial node
@@ -28,7 +30,7 @@ class PartialNode extends TwigNode
         $compiler->write("\$context['__cms_partial_params'] = [];\n");
 
         for ($i = 1; $i < count($this->getNode('nodes')); $i++) {
-            $compiler->write("\$context['__cms_partial_params']['".$this->getAttribute('names')[$i-1]."'] = ");
+            $compiler->write("\$context['__cms_partial_params']['" . $this->getAttribute('names')[$i - 1] . "'] = ");
             $compiler->subcompile($this->getNode('nodes')->getNode($i));
             $compiler->write(";\n");
         }

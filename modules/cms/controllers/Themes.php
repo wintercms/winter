@@ -1,25 +1,27 @@
-<?php namespace Cms\Controllers;
+<?php
 
-use ApplicationException;
-use Artisan;
-use Backend;
+namespace Cms\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
 use Backend\Models\BrandSetting;
 use Backend\Widgets\Form;
-use BackendMenu;
 use Cms\Classes\Theme as CmsTheme;
 use Cms\Classes\ThemeManager;
 use Cms\Helpers\Cms as CmsHelper;
 use Cms\Models\ThemeExport;
 use Cms\Models\ThemeImport;
 use Exception;
-use File;
-use Flash;
-use Lang;
-use Redirect;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 use System\Classes\SettingsManager;
-use Url;
-use ValidationException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\ValidationException;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Flash;
 use Winter\Storm\Support\Str;
 
 /**
@@ -79,7 +81,7 @@ class Themes extends Controller
         CmsTheme::setActiveTheme(post('theme'));
 
         return [
-            '#theme-list' => $this->makePartial('theme_list')
+            '#theme-list' => $this->makePartial('theme_list'),
         ];
     }
 
@@ -110,13 +112,13 @@ class Themes extends Controller
         $widget = $this->makeFieldsFormWidget($theme);
         $theme->writeConfig($widget->getSaveData());
 
-        return ['#themeListItem-'.$theme->getId() => $this->makePartial('theme_list_item', ['theme' => $theme])];
+        return ['#themeListItem-' . $theme->getId() => $this->makePartial('theme_list_item', ['theme' => $theme])];
     }
 
     protected function makeFieldsFormWidget($theme)
     {
         $widgetConfig = $this->makeConfig('~/modules/cms/classes/theme/fields.yaml');
-        $widgetConfig->alias = 'form'.studly_case($theme->getDirName());
+        $widgetConfig->alias = 'form' . studly_case($theme->getDirName());
         $widgetConfig->model = $theme;
         $widgetConfig->data = $theme->getConfig();
         $widgetConfig->data['dir_name'] = $theme->getDirName();
@@ -160,18 +162,18 @@ class Themes extends Controller
         switch ($data['scaffold']) {
             case 'empty':
                 File::makeDirectory($destinationPath);
-                File::makeDirectory($destinationPath.'/assets');
-                File::makeDirectory($destinationPath.'/content');
-                File::makeDirectory($destinationPath.'/layouts');
-                File::makeDirectory($destinationPath.'/pages');
-                File::makeDirectory($destinationPath.'/partials');
-                File::put($destinationPath.'/theme.yaml', '');
+                File::makeDirectory($destinationPath . '/assets');
+                File::makeDirectory($destinationPath . '/content');
+                File::makeDirectory($destinationPath . '/layouts');
+                File::makeDirectory($destinationPath . '/pages');
+                File::makeDirectory($destinationPath . '/partials');
+                File::put($destinationPath . '/theme.yaml', '');
                 break;
             default:
                 try {
                     Artisan::call('create:theme', [
                         'theme' => $newDirName,
-                        'scaffold' => $data['scaffold']
+                        'scaffold' => $data['scaffold'],
                     ]);
                 } catch (\Exception $ex) {
                     throw new ApplicationException($ex->getMessage());
@@ -190,7 +192,7 @@ class Themes extends Controller
 
     protected function makeCreateFormWidget()
     {
-        $theme = new CmsTheme;
+        $theme = new CmsTheme();
         $theme->setDirName('newtheme');
         $widgetConfig = $this->makeConfig('~/modules/cms/classes/theme/fields.yaml');
         $widgetConfig->alias = 'formCreateTheme';
@@ -231,7 +233,7 @@ class Themes extends Controller
         $theme = $this->findThemeObject();
         $newDirName = trim(post('new_dir_name'));
         $sourcePath = $theme->getPath();
-        $destinationPath = themes_path().'/'.$newDirName;
+        $destinationPath = themes_path() . '/' . $newDirName;
 
         if (!preg_match('/^[a-z0-9\_\-]+$/i', $newDirName)) {
             throw new ValidationException(['new_dir_name' => Lang::get('cms::lang.theme.dir_name_invalid')]);
@@ -268,10 +270,10 @@ class Themes extends Controller
         $theme = $this->findThemeObject();
         $widget = $this->makeExportFormWidget($theme);
 
-        $model = new ThemeExport;
+        $model = new ThemeExport();
         $file = $model->export($theme, $widget->getSaveData());
 
-        return Backend::redirect('cms/themes/download/'.$file.'/'.$theme->getDirName().'.zip');
+        return Backend::redirect('cms/themes/download/' . $file . '/' . $theme->getDirName() . '.zip');
     }
 
     public function download($name, $outputName = null)
@@ -279,8 +281,7 @@ class Themes extends Controller
         try {
             $this->pageTitle = 'Download theme export archive';
             return ThemeExport::download($name, $outputName);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
     }
@@ -288,8 +289,8 @@ class Themes extends Controller
     protected function makeExportFormWidget($theme)
     {
         $widgetConfig = $this->makeConfig('~/modules/cms/models/themeexport/fields.yaml');
-        $widgetConfig->alias = 'form'.studly_case($theme->getDirName());
-        $widgetConfig->model = new ThemeExport;
+        $widgetConfig->alias = 'form' . studly_case($theme->getDirName());
+        $widgetConfig->model = new ThemeExport();
         $widgetConfig->model->theme = $theme;
         $widgetConfig->arrayName = 'ThemeExport';
 
@@ -322,7 +323,7 @@ class Themes extends Controller
         $theme = $this->findThemeObject();
         $widget = $this->makeImportFormWidget($theme);
 
-        $model = new ThemeImport;
+        $model = new ThemeImport();
         $model->import($theme, $widget->getSaveData(), $widget->getSessionKey());
 
         Flash::success(Lang::get('cms::lang.theme.import_theme_success'));
@@ -332,8 +333,8 @@ class Themes extends Controller
     protected function makeImportFormWidget($theme)
     {
         $widgetConfig = $this->makeConfig('~/modules/cms/models/themeimport/fields.yaml');
-        $widgetConfig->alias = 'form'.studly_case($theme->getDirName());
-        $widgetConfig->model = new ThemeImport;
+        $widgetConfig->alias = 'form' . studly_case($theme->getDirName());
+        $widgetConfig->model = new ThemeImport();
         $widgetConfig->model->theme = $theme;
         $widgetConfig->arrayName = 'ThemeImport';
 

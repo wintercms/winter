@@ -49,7 +49,7 @@ if (Config::get('develop.decompileBackendAssets', false)) {
     $scripts = array_merge($scripts, [Backend::skinAsset('assets/js/winter-min.js')]);
 }
 $scripts = array_merge($scripts, [
-    Url::asset('modules/system/assets/js/lang/lang.'.App::getLocale().'.js'),
+    Url::asset('modules/system/assets/js/lang/lang.' . App::getLocale() . '.js'),
     Backend::skinAsset('assets/js/winter.flyout.js'),
     Backend::skinAsset('assets/js/winter.tabformexpandcontrols.js'),
 ]);

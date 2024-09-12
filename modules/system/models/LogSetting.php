@@ -1,6 +1,8 @@
-<?php namespace System\Models;
+<?php
 
-use Model;
+namespace System\Models;
+
+use Winter\Storm\Database\Model;
 
 /**
  * System log settings
@@ -16,7 +18,7 @@ class LogSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**

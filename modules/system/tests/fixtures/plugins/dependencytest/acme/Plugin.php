@@ -1,7 +1,7 @@
-<?php namespace DependencyTest\Acme;
+<?php
 
-use Backend;
-use Backend\Models\UserRole;
+namespace DependencyTest\Acme;
+
 use System\Classes\PluginBase;
 
 /**
@@ -22,7 +22,7 @@ class Plugin extends PluginBase
             'name' => 'ACME',
             'description' => 'This is a test plugin that will be used to check dependencies are loaded first.',
             'author' => 'Eric Pfeiffer',
-            'icon' => 'icon-leaf'
+            'icon' => 'icon-leaf',
         ];
     }
 }

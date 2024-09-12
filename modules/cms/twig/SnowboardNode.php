@@ -1,11 +1,13 @@
-<?php namespace Cms\Twig;
+<?php
 
-use Config;
+namespace Cms\Twig;
+
+use Illuminate\Support\Facades\URL;
 use System\Classes\CombineAssets;
 use System\Models\Parameter;
 use Twig\Compiler as TwigCompiler;
 use Twig\Node\Node as TwigNode;
-use Url;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Represents a "snowboard" node
@@ -38,7 +40,7 @@ class SnowboardNode extends TwigNode
 
         $compiler
             ->addDebugInfo($this)
-            ->write("\$_minify = ".CombineAssets::class."::instance()->useMinify;" . PHP_EOL);
+            ->write("\$_minify = " . CombineAssets::class . "::instance()->useMinify;" . PHP_EOL);
 
         $moduleMap = [
             'base' => (Config::get('develop.debugSnowboard', false) === true)

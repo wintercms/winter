@@ -1,8 +1,10 @@
-<?php namespace Backend\Classes;
+<?php
 
-use File;
-use Config;
+namespace Backend\Classes;
+
 use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Skin Base class
@@ -92,7 +94,7 @@ abstract class Skin
      */
     public function getLayoutPaths()
     {
-        return [$this->skinPath.'/layouts', $this->defaultSkinPath.'/layouts'];
+        return [$this->skinPath . '/layouts', $this->defaultSkinPath . '/layouts'];
     }
 
     /**

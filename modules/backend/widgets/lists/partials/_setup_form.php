@@ -16,14 +16,14 @@
                                 name="column_order[]"
                                 value="<?= e($column->columnName) ?>" />
                             <input
-                                id="<?= $this->getId('setupCheckbox-'.$column->columnName) ?>"
+                                id="<?= $this->getId('setupCheckbox-' . $column->columnName) ?>"
                                 name="visible_columns[]"
                                 value="<?= e($column->columnName) ?>"
                                 <?= $column->invisible ? '' : 'checked="checked"' ?>
                                 type="checkbox" />
                             <label
                                 class="choice"
-                                for="<?= $this->getId('setupCheckbox-'.$column->columnName) ?>">
+                                for="<?= $this->getId('setupCheckbox-' . $column->columnName) ?>">
                                     <?= e(trans($column->label)) ?>
                             </label>
                         </div>

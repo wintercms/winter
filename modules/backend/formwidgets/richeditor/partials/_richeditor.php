@@ -4,7 +4,7 @@
 <?php else: ?>
     <div
         id="<?= $this->getId() ?>"
-        class="field-richeditor size-<?= $size ?> <?= $stretch?'layout-relative stretch':'' ?>"
+        class="field-richeditor size-<?= $size ?> <?= $stretch ? 'layout-relative stretch' : '' ?>"
         <?php if ($fullPage): ?>
             data-fullpage="true"
         <?php endif ?>

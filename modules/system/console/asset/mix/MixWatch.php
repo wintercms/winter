@@ -30,7 +30,7 @@ class MixWatch extends MixCompile
      * @var array List of commands that this command replaces (aliases)
      */
     protected $replaces = [
-        'mix:dev'
+        'mix:dev',
     ];
 
     /**

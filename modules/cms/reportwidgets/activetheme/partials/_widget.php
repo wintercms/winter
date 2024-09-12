@@ -34,7 +34,7 @@
         <?php endif ?>
         <?php if ($canConfig && $theme->hasCustomData()): ?>
             <li>
-                <a href="<?= Backend::url('cms/themeoptions/update/'.$theme->getDirName()) ?>">
+                <a href="<?= Backend::url('cms/themeoptions/update/' . $theme->getDirName()) ?>">
                     <?= e(trans('cms::lang.dashboard.active_theme.customize_theme')) ?>
                 </a>
             </li>

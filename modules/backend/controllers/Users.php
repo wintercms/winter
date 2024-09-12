@@ -1,16 +1,18 @@
-<?php namespace Backend\Controllers;
+<?php
 
-use Mail;
-use Lang;
-use Flash;
-use Backend;
-use Redirect;
-use Response;
-use BackendMenu;
-use BackendAuth;
-use Backend\Models\UserGroup;
+namespace Backend\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Backend\Facades\BackendMenu;
+use Backend\Models\UserGroup;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use System\Classes\SettingsManager;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Mail;
 
 /**
  * Backend user controller
@@ -229,9 +231,9 @@ class Users extends Controller
                 'trigger' => [
                     'action' => 'disable',
                     'field' => 'is_superuser',
-                    'condition' => 'checked'
-                ]
-            ]
+                    'condition' => 'checked',
+                ],
+            ],
         ];
     }
 

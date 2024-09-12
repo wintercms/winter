@@ -54,7 +54,7 @@ return [
         'nextMonth' => 'Nākamais mēnesis',
         'months' => ['Janvāris', 'Februāris', 'Marts', 'Aprīlis', 'Maijs', 'Jūnijs', 'Jūlijs', 'Augusts', 'Septembris', 'Oktobris', 'Novembris', 'Decembris'],
         'weekdays' => ['Svētdiena', 'Pirmdiena', 'Otrdiena', 'Trešdiena', 'Ceturtdiena', 'Piektdiena', 'Sestdiena'],
-        'weekdaysShort' => ['Sv', 'P', 'O', 'T', 'C', 'Pk', 'S']
+        'weekdaysShort' => ['Sv', 'P', 'O', 'T', 'C', 'Pk', 'S'],
     ],
     'colorpicker' => [
         'last_color' => 'Lietot iepriekš izvēlēto krāsu',

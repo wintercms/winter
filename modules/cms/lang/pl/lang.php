@@ -19,18 +19,18 @@ return [
             'online' => 'Online',
             'maintenance' => 'W konserwacji',
             'manage_themes' => 'Zarządzaj motywami',
-        ]
+        ],
     ],
     'theme' => [
         'not_found_name' => "Motyw ':name' nie został odnaleziony.",
         'active' => [
             'not_set' => 'Brak aktywnego motywu.',
-            'not_found' => 'Aktywny motyw nie został odnaleziony.'
+            'not_found' => 'Aktywny motyw nie został odnaleziony.',
         ],
         'edit' => [
             'not_set' => 'Edytowany motyw nie jest ustawiony.',
             'not_found' => 'Edytowany motyw nie został znaleziony.',
-            'not_match' => "Obiekt który próbujesz edytować nie należy do wybranego motywu. Proszę przeładować stronę."
+            'not_match' => "Obiekt który próbujesz edytować nie należy do wybranego motywu. Proszę przeładować stronę.",
         ],
         'settings_menu' => 'Motyw strony',
         'settings_menu_description' => 'Zobacz listę zainstalowanych motywów i wybierz, który aktywować.',
@@ -101,11 +101,11 @@ return [
         'not_found_name' => "Strona ':name' nie została znaleziona",
         'not_found' => [
             'label' => 'Nie znaleziono strony',
-            'help' => 'Żądana strona nie została znaleziona.'
+            'help' => 'Żądana strona nie została znaleziona.',
         ],
         'custom_error' => [
             'label' => 'Błąd strony',
-            'help' => "Bardzo przepraszamy, jednak coś poszło nie tak i strona nie może zostać wyświetlona."
+            'help' => "Bardzo przepraszamy, jednak coś poszło nie tak i strona nie może zostać wyświetlona.",
         ],
         'menu_label' => 'Strony',
         'unsaved_label' => 'Niezapisane strony',
@@ -114,7 +114,7 @@ return [
         'invalid_url' => 'Nieprawidłowy format URL. Powinien rozpoczynać się od ukośnika (/) i może zawierać cyfry, znaki oraz następujące symbole: ._-[]:?|/+*^$',
         'delete_confirm_multiple' => 'Czy na pewno chcesz usunąć zaznaczone strony?',
         'delete_confirm_single' => 'Czy na pewno chcesz usunąć tę stronę?',
-        'no_layout' => '-- brak układu --'
+        'no_layout' => '-- brak układu --',
     ],
     'layout' => [
         'not_found_name' => "Nie znaleziono układu ':name'",
@@ -123,7 +123,7 @@ return [
         'no_list_records' => 'Nie znaleziono układów',
         'new' => 'Nowy układ',
         'delete_confirm_multiple' => 'Czy na pewno chcesz usunąć zaznaczone układy?',
-        'delete_confirm_single' => 'Czy na pewno chcesz usunąć ten układ?'
+        'delete_confirm_single' => 'Czy na pewno chcesz usunąć ten układ?',
     ],
     'partial' => [
         'not_found_name' => "Fragment ':name' nie został znaleziony.",
@@ -133,7 +133,7 @@ return [
         'no_list_records' => 'Nie znaleziono fragmentów',
         'delete_confirm_multiple' => 'Czy na pewno chcesz usunąć zaznaczone fragmenty?',
         'delete_confirm_single' => 'Czy na pewno chcesz usunąć ten fragment?',
-        'new' => 'Nowy fragment'
+        'new' => 'Nowy fragment',
     ],
     'content' => [
         'not_found_name' => "Plik treści ':name' nie został znaleziony.",
@@ -142,18 +142,18 @@ return [
         'no_list_records' => 'Nie znaleziono plików treści',
         'delete_confirm_multiple' => 'Czy na pewno chcesz usunąć zaznaczone pliki treści?',
         'delete_confirm_single' => 'Czy na pewno chcesz usunąć ten plik treści?',
-        'new' => 'Nowy plik treści'
+        'new' => 'Nowy plik treści',
     ],
     'ajax_handler' => [
         'invalid_name' => 'Nieprawidłowa nazwa handlera AJAX: :name.',
-        'not_found' => "Handler AJAX ':name' nie został znaleziony."
+        'not_found' => "Handler AJAX ':name' nie został znaleziony.",
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => 'Dodaj',
-        'search' => 'Szukaj...'
+        'search' => 'Szukaj...',
     ],
     'editor' => [
         'settings' => 'Ustawienia',
@@ -177,7 +177,7 @@ return [
         'open_searchbox' => 'Otwórz wyszukiwanie',
         'close_searchbox'  => 'Zamknij wyszukiwanie',
         'open_replacebox' => 'Otwórz zamienianie tekstu',
-        'close_replacebox'  => 'Zamknij zamienianie tekstu'
+        'close_replacebox'  => 'Zamknij zamienianie tekstu',
     ],
     'asset' => [
         'menu_label' => 'Zasoby',
@@ -215,7 +215,7 @@ return [
         'error_moving_file' => 'Błąd przy przenoszeniu pliku :file',
         'error_moving_directory' => 'Błąd przy przenoszeniu folderu :dir',
         'error_deleting_directory' => 'Błąd przy usuwaniu oryginalnego folderu :dir',
-        'path' => 'Ścieżka'
+        'path' => 'Ścieżka',
     ],
     'component' => [
         'menu_label' => 'Komponenty',
@@ -227,12 +227,12 @@ return [
         'invalid_request' => 'The template cannot be saved because of invalid component data.',
         'no_records' => 'Nie znaleziono komponentów',
         'not_found' => "Komponent ':name' nie został znaleziony.",
-        'method_not_found' => "Komponent ':name' nie zawiera metody ':method'."
+        'method_not_found' => "Komponent ':name' nie zawiera metody ':method'.",
     ],
     'template' => [
         'invalid_type' => 'Nieznany typ szablonu.',
         'not_found' => 'Szablon nie został znaleziony.',
-        'saved'=> 'Szablon został zapisany pomyślnie.'
+        'saved' => 'Szablon został zapisany pomyślnie.',
     ],
     'permissions' => [
         'name' => 'Cms',

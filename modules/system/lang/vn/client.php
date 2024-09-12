@@ -47,21 +47,21 @@ return [
     'alert' => [
         'confirm_button_text' => 'Đồng ý',
         'cancel_button_text' => 'Bỏ qua',
-        'widget_remove_confirm' => 'Đồng ý xóa widget này?'
+        'widget_remove_confirm' => 'Đồng ý xóa widget này?',
     ],
     'datepicker' => [
         'previousMonth' => 'Tháng trước',
         'nextMonth' => 'Tháng tiếp theo',
         'months' => ['Tháng giêng', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
         'weekdays' => ['Chủ nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'],
-        'weekdaysShort' => ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7']
+        'weekdaysShort' => ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
     ],
     'colorpicker' => [
         'choose' => 'Chọn',
     ],
     'filter' => [
         'group' => [
-            'all' => 'tất cả'
+            'all' => 'tất cả',
         ],
         'dates' => [
             'all' => 'tất cả',
@@ -69,15 +69,15 @@ return [
             'reset_button_text'  => 'Reset',
             'date_placeholder' => 'Ngày',
             'after_placeholder' => 'Sau ngày',
-            'before_placeholder' => 'Trước ngày'
+            'before_placeholder' => 'Trước ngày',
         ],
         'numbers' => [
             'all' => 'all',
             'filter_button_text' => 'Lọc',
             'reset_button_text'  => 'Reset',
             'min_placeholder' => 'Nhỏ nhất',
-            'max_placeholder' => 'Lớn nhất'
-        ]
+            'max_placeholder' => 'Lớn nhất',
+        ],
 
     ],
     'eventlog' => [
@@ -93,7 +93,7 @@ return [
             'openWith' => 'Mở bằng',
             'remember_choice' => 'Nhớ lựa chọn này cho các lần tiếp theo',
             'open' => 'Mở ra',
-            'cancel' => 'Bỏ qua'
-        ]
-    ]
+            'cancel' => 'Bỏ qua',
+        ],
+    ],
 ];

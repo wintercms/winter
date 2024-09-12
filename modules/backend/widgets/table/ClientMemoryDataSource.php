@@ -1,4 +1,6 @@
-<?php namespace Backend\Widgets\Table;
+<?php
+
+namespace Backend\Widgets\Table;
 
 /**
  * The client-memory data source for the Table widget.

@@ -9,7 +9,7 @@
             <div class="welcome-message">
                 <?php if ($lastSeen): ?>
                     <p>
-                        <?= e(trans('backend::lang.dashboard.welcome.welcome_back_name', ['app'=>$appName, 'name'=>$user->first_name])) ?>
+                        <?= e(trans('backend::lang.dashboard.welcome.welcome_back_name', ['app' => $appName, 'name' => $user->first_name])) ?>
                         <?= e(trans('backend::lang.dashboard.welcome.last_sign_in')) ?>
                     </p>
                     <p>
@@ -22,7 +22,7 @@
                     <?php endif ?>
                 <?php else: ?>
                     <p>
-                        <?= e(trans('backend::lang.dashboard.welcome.welcome_to_name', ['app'=>$appName, 'name'=>$user->first_name])) ?>
+                        <?= e(trans('backend::lang.dashboard.welcome.welcome_to_name', ['app' => $appName, 'name' => $user->first_name])) ?>
                     </p>
                     <p>
                         <?= e(trans('backend::lang.dashboard.welcome.first_sign_in')) ?>

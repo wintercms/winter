@@ -1,9 +1,10 @@
-<?php namespace Backend\FormWidgets;
+<?php
+
+namespace Backend\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
-use File;
-use Url;
-use Yaml;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Yaml;
 
 /**
  * Icon picker

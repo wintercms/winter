@@ -32,7 +32,7 @@ class ViteWatch extends ViteCompile
      * @var array List of commands that this command replaces (aliases)
      */
     protected $replaces = [
-        'vite:dev'
+        'vite:dev',
     ];
 
     /**

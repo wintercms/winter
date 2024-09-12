@@ -1,15 +1,17 @@
-<?php namespace Cms\Classes;
+<?php
 
-use App;
-use Ini;
-use Lang;
-use Cache;
-use Config;
+namespace Cms\Classes;
+
 use Cms\Components\ViewBag;
 use Cms\Helpers\Cms as CmsHelpers;
-use Winter\Storm\Halcyon\Processors\SectionParser;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
 use Twig\Source as TwigSource;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Halcyon\Processors\SectionParser;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Ini;
 
 /**
  * This is a base class for CMS objects that have multiple sections - pages, partials and layouts.
@@ -32,7 +34,7 @@ class CmsCompoundObject extends CmsObject
      * to their own array inside the 'components' key.
      */
     public $settings = [
-        'components' => []
+        'components' => [],
     ];
 
     /**
@@ -47,7 +49,7 @@ class CmsCompoundObject extends CmsObject
     protected $fillable = [
         'markup',
         'settings',
-        'code'
+        'code',
     ];
 
     /**
@@ -60,7 +62,7 @@ class CmsCompoundObject extends CmsObject
         'where',
         'sortBy',
         'whereComponent',
-        'withComponent'
+        'withComponent',
     ];
 
     /**
@@ -272,12 +274,11 @@ class CmsCompoundObject extends CmsObject
      */
     public function getComponentProperties($componentName)
     {
-        $key = md5($this->theme->getPath()).'component-properties';
+        $key = md5($this->theme->getPath()) . 'component-properties';
 
         if (self::$objectComponentPropertyMap !== null) {
             $objectComponentMap = self::$objectComponentPropertyMap;
-        }
-        else {
+        } else {
             $cached = Cache::get($key, false);
             $unserialized = $cached ? @unserialize(@base64_decode($cached)) : false;
             $objectComponentMap = $unserialized ?: [];
@@ -300,8 +301,7 @@ class CmsCompoundObject extends CmsObject
 
         if (!isset($this->settings['components'])) {
             $objectComponentMap[$objectCode] = [];
-        }
-        else {
+        } else {
             foreach ($this->settings['components'] as $name => $settings) {
                 $nameParts = explode(' ', $name);
                 if (count($nameParts) > 1) {
@@ -342,7 +342,7 @@ class CmsCompoundObject extends CmsObject
      */
     public static function clearCache($theme)
     {
-        $key = md5($theme->getPath()).'component-properties';
+        $key = md5($theme->getPath()) . 'component-properties';
         Cache::forget($key);
     }
 

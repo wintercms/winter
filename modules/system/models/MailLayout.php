@@ -1,11 +1,13 @@
-<?php namespace System\Models;
+<?php
 
-use View;
-use Model;
+namespace System\Models;
+
+use Illuminate\Support\Facades\View;
 use System\Classes\MailManager;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Mail\MailParser;
-use ApplicationException;
-use File as FileHelper;
+use Winter\Storm\Support\Facades\File as FileHelper;
 
 /**
  * Mail layout
@@ -45,7 +47,7 @@ class MailLayout extends Model
      * @var array Options array
      */
     protected $jsonable = [
-        'options'
+        'options',
     ];
 
     public static $codeCache;
@@ -99,7 +101,7 @@ class MailLayout extends Model
         $layout = self::whereCode($code)->first();
 
         if (!$layout && View::exists($code)) {
-            $layout = new self;
+            $layout = new self();
             $layout->code = $code;
             $layout->fillFromView($code);
         }
@@ -123,7 +125,7 @@ class MailLayout extends Model
                 continue;
             }
 
-            $layout = new static;
+            $layout = new static();
             $layout->code = $code;
             $layout->is_locked = true;
             $layout->fillFromView($path);
@@ -147,7 +149,7 @@ class MailLayout extends Model
         }
 
         if (!$definition = array_get($definitions, $code)) {
-            throw new ApplicationException('Unable to find a registered layout with code: '.$code);
+            throw new ApplicationException('Unable to find a registered layout with code: ' . $code);
         }
 
         $this->fillFromView($definition);

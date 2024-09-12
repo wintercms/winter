@@ -1,9 +1,9 @@
 <div class="field-repeater"
     data-control="fieldrepeater"
-    <?= $titleFrom ? 'data-title-from="'.$titleFrom.'"' : '' ?>
-    <?= $minItems ? 'data-min-items="'.$minItems.'"' : '' ?>
-    <?= $maxItems ? 'data-max-items="'.$maxItems.'"' : '' ?>
-    <?= $style ? 'data-style="'.$style.'"' : '' ?>
+    <?= $titleFrom ? 'data-title-from="' . $titleFrom . '"' : '' ?>
+    <?= $minItems ? 'data-min-items="' . $minItems . '"' : '' ?>
+    <?= $maxItems ? 'data-max-items="' . $maxItems . '"' : '' ?>
+    <?= $style ? 'data-style="' . $style . '"' : '' ?>
     data-mode="<?= $mode ?>"
     <?php if ($mode === 'grid'): ?>
     data-columns="<?= $columns ?>"

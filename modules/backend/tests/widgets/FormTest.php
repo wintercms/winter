@@ -2,10 +2,10 @@
 
 namespace Backend\Tests\Widgets
 {
-    use System\Tests\Bootstrap\PluginTestCase;
-    use Winter\Storm\Database\Model;
     use Backend\Tests\Fixtures\Models\UserFixture;
     use Backend\Widgets\Form;
+    use System\Tests\Bootstrap\PluginTestCase;
+    use Winter\Storm\Database\Model;
 
     class FormTestModel extends Model
     {
@@ -34,7 +34,7 @@ namespace Backend\Tests\Widgets
     {
         public function testRestrictedFieldWithUserWithNoPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user);
 
             $form = $this->restrictedFormFixture();
@@ -45,7 +45,7 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldWithUserWithWrongPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->withPermission('test.wrong_permission', true));
 
             $form = $this->restrictedFormFixture();
@@ -56,7 +56,7 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldWithUserWithRightPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->withPermission('test.access_field', true));
 
             $form = $this->restrictedFormFixture();
@@ -67,23 +67,23 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldWithUserWithRightWildcardPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->withPermission('test.access_field', true));
 
             $form = new Form(null, [
-                'model' => new FormTestModel,
+                'model' => new FormTestModel(),
                 'arrayName' => 'array',
                 'fields' => [
                     'testField' => [
                         'type' => 'text',
-                        'label' => 'Test 1'
+                        'label' => 'Test 1',
                     ],
                     'testRestricted' => [
                         'type' => 'text',
                         'label' => 'Test 2',
-                        'permission' => 'test.*'
-                    ]
-                ]
+                        'permission' => 'test.*',
+                    ],
+                ],
             ]);
 
             $form->render();
@@ -92,7 +92,7 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldWithSuperuser()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->asSuperUser());
 
             $form = $this->restrictedFormFixture();
@@ -103,7 +103,7 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldSinglePermissionWithUserWithWrongPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->withPermission('test.wrong_permission', true));
 
             $form = $this->restrictedFormFixture(true);
@@ -114,7 +114,7 @@ namespace Backend\Tests\Widgets
 
         public function testRestrictedFieldSinglePermissionWithUserWithRightPermissions()
         {
-            $user = new UserFixture;
+            $user = new UserFixture();
             $this->actingAs($user->withPermission('test.access_field', true));
 
             $form = $this->restrictedFormFixture(true);
@@ -126,24 +126,24 @@ namespace Backend\Tests\Widgets
         public function testCheckboxlistTrigger()
         {
             $form = new Form(null, [
-                'model' => new FormTestModel,
+                'model' => new FormTestModel(),
                 'arrayName' => 'array',
                 'fields' => [
                     'trigger' => [
                         'type' => 'checkboxlist',
                         'options' => [
-                            '1' => 'Value One'
-                        ]
+                            '1' => 'Value One',
+                        ],
                     ],
                     'triggered' => [
                         'type' => 'text',
                         'trigger' => [
                             'field' => 'trigger[]',
                             'action' => 'show',
-                            'condition' => 'value[1]'
-                        ]
-                    ]
-                ]
+                            'condition' => 'value[1]',
+                        ],
+                    ],
+                ],
             ]);
 
             $form->render();
@@ -155,7 +155,7 @@ namespace Backend\Tests\Widgets
         public function testOptionsGeneration()
         {
             $form = new Form(null, [
-                'model' => new FormTestModel,
+                'model' => new FormTestModel(),
                 'arrayName' => 'array',
                 'fields' => [
                     'static_method_options' => [
@@ -197,7 +197,7 @@ namespace Backend\Tests\Widgets
                         'type' => 'dropdown',
                         'expect' => ['dropdown', 'options'],
                     ],
-                ]
+                ],
             ]);
 
             $form->render();
@@ -210,21 +210,21 @@ namespace Backend\Tests\Widgets
         protected function restrictedFormFixture(bool $singlePermission = false)
         {
             return new Form(null, [
-                'model' => new FormTestModel,
+                'model' => new FormTestModel(),
                 'arrayName' => 'array',
                 'fields' => [
                     'testField' => [
                         'type' => 'text',
-                        'label' => 'Test 1'
+                        'label' => 'Test 1',
                     ],
                     'testRestricted' => [
                         'type' => 'text',
                         'label' => 'Test 2',
                         'permissions' => ($singlePermission) ? 'test.access_field' : [
-                            'test.access_field'
-                        ]
-                    ]
-                ]
+                            'test.access_field',
+                        ],
+                    ],
+                ],
             ]);
         }
     }

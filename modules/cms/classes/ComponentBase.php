@@ -1,10 +1,12 @@
-<?php namespace Cms\Classes;
+<?php
 
-use Str;
-use Lang;
-use Config;
-use Winter\Storm\Extension\Extendable;
+namespace Cms\Classes;
+
 use BadMethodCallException;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Extension\Extendable;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Str;
 
 /**
  * Component base class
@@ -93,7 +95,7 @@ abstract class ComponentBase extends Extendable
 
         $className = Str::normalizeClassName(get_called_class());
         $this->dirName = strtolower(str_replace('\\', '/', $className));
-        $this->assetPath = Config::get('cms.pluginsPath', '/plugins').dirname(dirname($this->dirName));
+        $this->assetPath = Config::get('cms.pluginsPath', '/plugins') . dirname(dirname($this->dirName));
 
         parent::__construct();
     }
@@ -312,8 +314,7 @@ abstract class ComponentBase extends Extendable
     {
         try {
             return parent::__call($method, $parameters);
-        }
-        catch (BadMethodCallException $ex) {
+        } catch (BadMethodCallException $ex) {
         }
 
         if (isset($this->controller) && method_exists($this->controller, $method)) {
@@ -322,7 +323,7 @@ abstract class ComponentBase extends Extendable
 
         throw new BadMethodCallException(Lang::get('cms::lang.component.method_not_found', [
             'name' => get_class($this),
-            'method' => $method
+            'method' => $method,
         ]));
     }
 

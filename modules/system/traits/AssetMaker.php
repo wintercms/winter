@@ -2,9 +2,9 @@
 
 namespace System\Traits;
 
+use System\Classes\Asset\Vite;
 use System\Classes\CombineAssets;
 use System\Classes\PluginManager;
-use System\Classes\Asset\Vite;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
 use Winter\Storm\Exception\SystemException;
@@ -66,7 +66,7 @@ trait AssetMaker
                 $attributes = Html::attributes(array_merge(
                     [
                         'rel'  => 'stylesheet',
-                        'href' => $this->getAssetEntryBuildPath($asset)
+                        'href' => $this->getAssetEntryBuildPath($asset),
                     ],
                     array_except($asset['attributes'], $reserved)
                 ));
@@ -82,7 +82,7 @@ trait AssetMaker
                         'rel'   => 'alternate',
                         'href'  => $this->getAssetEntryBuildPath($asset),
                         'title' => 'RSS',
-                        'type'  => 'application/rss+xml'
+                        'type'  => 'application/rss+xml',
                     ],
                     array_except($asset['attributes'], $reserved)
                 ));
@@ -95,7 +95,7 @@ trait AssetMaker
             foreach ($this->orderAssets($this->assets['js']) as $asset) {
                 $attributes = Html::attributes(array_merge(
                     [
-                        'src' => $this->getAssetEntryBuildPath($asset)
+                        'src' => $this->getAssetEntryBuildPath($asset),
                     ],
                     array_except($asset['attributes'], $reserved)
                 ));
@@ -218,7 +218,7 @@ trait AssetMaker
         }
 
         $this->addAsset('vite', $package, [
-            'entrypoints' => $entrypoints
+            'entrypoints' => $entrypoints,
         ]);
     }
 

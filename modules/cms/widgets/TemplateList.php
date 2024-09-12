@@ -1,11 +1,13 @@
-<?php namespace Cms\Widgets;
+<?php
 
-use Str;
-use File;
-use Input;
-use Request;
-use Cms\Classes\Theme;
+namespace Cms\Widgets;
+
 use Backend\Classes\WidgetBase;
+use Cms\Classes\Theme;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Str;
 
 /**
  * Template list widget.
@@ -16,10 +18,10 @@ use Backend\Classes\WidgetBase;
  */
 class TemplateList extends WidgetBase
 {
-    const SORTING_FILENAME = 'fileName';
-
     use \Backend\Traits\SelectableWidget;
     use \Backend\Traits\CollapsableWidget;
+
+    const SORTING_FILENAME = 'fileName';
 
     protected $searchTerm = false;
 
@@ -93,7 +95,7 @@ class TemplateList extends WidgetBase
             $this->resetSelection();
         }
 
-        $configFile = 'config_' . snake_case($alias) .'.yaml';
+        $configFile = 'config_' . snake_case($alias) . '.yaml';
         $config = $this->makeConfig($configFile);
 
         foreach ($config as $field => $value) {
@@ -116,7 +118,7 @@ class TemplateList extends WidgetBase
         $this->vars['toolbarClass'] = $toolbarClass;
 
         return $this->makePartial('body', [
-            'data' => $this->getData()
+            'data' => $this->getData(),
         ]);
     }
 
@@ -144,7 +146,7 @@ class TemplateList extends WidgetBase
         $this->setSortingProperty(Input::get('sortProperty'));
 
         $result = $this->updateList();
-        $result['#'.$this->getId('sorting-options')] = $this->makePartial('sorting-options');
+        $result['#' . $this->getId('sorting-options')] = $this->makePartial('sorting-options');
 
         return $result;
     }
@@ -196,8 +198,7 @@ class TemplateList extends WidgetBase
                     $filteredItems[] = $item;
                 }
             }
-        }
-        else {
+        } else {
             $filteredItems = $items;
         }
 
@@ -214,15 +215,14 @@ class TemplateList extends WidgetBase
                 if (!array_key_exists($group, $foundGroups)) {
                     $newGroup = (object)[
                         'title' => $group,
-                        'items' => []
+                        'items' => [],
                     ];
 
                     $foundGroups[$group] = $newGroup;
                 }
 
                 $foundGroups[$group]->items[] = $itemData;
-            }
-            else {
+            } else {
                 $result[] = $itemData;
             }
         }
@@ -295,7 +295,7 @@ class TemplateList extends WidgetBase
             'fileName'     => $item->getFileName(),
             'description'  => $description,
             'descriptions' => $descriptions,
-            'dragValue'    => $this->getItemDragValue($item)
+            'dragValue'    => $this->getItemDragValue($item),
         ];
 
         foreach ($this->sortingProperties as $property => $name) {
@@ -308,15 +308,15 @@ class TemplateList extends WidgetBase
     protected function getItemDragValue($item)
     {
         if ($item instanceof \Cms\Classes\Partial) {
-            return "{% partial '".$item->getBaseFileName()."' %}";
+            return "{% partial '" . $item->getBaseFileName() . "' %}";
         }
 
         if ($item instanceof \Cms\Classes\Content) {
-            return "{% content '".$item->getBaseFileName()."' %}";
+            return "{% content '" . $item->getBaseFileName() . "' %}";
         }
 
         if ($item instanceof \Cms\Classes\Page) {
-            return "{{ '".$item->getBaseFileName()."'|page }}";
+            return "{{ '" . $item->getBaseFileName() . "'|page }}";
         }
 
         return '';
@@ -347,7 +347,7 @@ class TemplateList extends WidgetBase
     protected function updateList()
     {
         return [
-            '#'.$this->getId('template-list') => $this->makePartial('items', ['items' => $this->getData()])
+            '#' . $this->getId('template-list') => $this->makePartial('items', ['items' => $this->getData()]),
         ];
     }
 
@@ -394,7 +394,7 @@ class TemplateList extends WidgetBase
 
     protected function getThemeSessionKey($prefix)
     {
-        return $prefix.$this->theme->getDirName();
+        return $prefix . $this->theme->getDirName();
     }
 
     protected function getSortingProperty()

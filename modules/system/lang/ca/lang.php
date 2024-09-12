@@ -3,16 +3,16 @@
 return [
     'app' => [
         'name' => 'Winter CMS',
-        'tagline' => 'Tornant als bàsics'
+        'tagline' => 'Tornant als bàsics',
     ],
     'directory' => [
-        'create_fail' => 'No es pot crear el directori: :name'
+        'create_fail' => 'No es pot crear el directori: :name',
     ],
     'file' => [
-        'create_fail' => "No es pot crear l'arxiu: :name"
+        'create_fail' => "No es pot crear l'arxiu: :name",
     ],
     'combiner' => [
-        'not_found' => "L'arxiu de combinació ':name' no s'ha trobat."
+        'not_found' => "L'arxiu de combinació ':name' no s'ha trobat.",
     ],
     'system' => [
         'name' => 'Sistema',
@@ -31,15 +31,15 @@ return [
             'events' => 'Esdeveniments',
             'customers' => 'Clients',
             'my_settings' => 'Les meves opcions',
-            'notifications' => 'Notificacions'
-        ]
+            'notifications' => 'Notificacions',
+        ],
     ],
     'theme' => [
         'label' => 'Tema',
         'unnamed' => 'Tema sense nom',
         'name' => [
             'label' => 'Nom del tema',
-            'help' => 'Anomena el tema amb el seu codi únic. Per exemple, Winter.Vanilla'
+            'help' => 'Anomena el tema amb el seu codi únic. Per exemple, Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -48,14 +48,14 @@ return [
         'installed' => 'Temes instal·lats',
         'no_themes' => 'No hi ha temes instal·lats des del mercat.',
         'recommended' => 'Recomanats',
-        'remove_confirm' => 'Estàs segur que vols eliminar aquest tema?'
+        'remove_confirm' => 'Estàs segur que vols eliminar aquest tema?',
     ],
     'plugin' => [
         'label' => 'Plugin',
         'unnamed' => 'Plugin sense nom',
         'name' => [
             'label' => 'Nom del plugin',
-            'help' => 'Anomena el tema amb el seu codi únic. Per exemple, Winter.Blog'
+            'help' => 'Anomena el tema amb el seu codi únic. Per exemple, Winter.Blog',
         ],
         'by_author' => 'Per :name',
     ],
@@ -104,10 +104,10 @@ return [
         'id' => [
             'label' => 'ID de projecte',
             'help' => 'Com trobar la teva ID de projecte',
-            'missing' => 'Si us plau indica una ID de projecte.'
+            'missing' => 'Si us plau indica una ID de projecte.',
         ],
         'detach_confirm' => 'Estàs segur que vols desvincular aquest projecte?',
-        'unbind_success' => 'El projecte ha estat desvinculat.'
+        'unbind_success' => 'El projecte ha estat desvinculat.',
     ],
     'settings' => [
         'menu_label' => 'Opcions',
@@ -115,7 +115,7 @@ return [
         'missing_model' => "La pàgina d'opcions no té una definició de Model.",
         'update_success' => 'Opcions de :name actualitzades',
         'return' => 'Tornar a les opcions del sistema',
-        'search' => 'Cercar'
+        'search' => 'Cercar',
     ],
     'mail' => [
         'log_file' => 'Arxiu de registre',
@@ -174,7 +174,7 @@ return [
         'deleting' => 'Eliminant plantilla...',
         'deleting_layout' => 'Eliminant disposició...',
         'sending' => 'Enviant missatge de prova...',
-        'return' => 'Tornar a la llista de plantilles'
+        'return' => 'Tornar a la llista de plantilles',
     ],
     'mail_brand' => [
         'menu_label' => 'Branding del correu',
@@ -188,7 +188,7 @@ return [
                 'description' => 'Descripció',
                 'price' => 'Preu',
                 'centered' => 'Centrat',
-                'right_aligned' => 'Alineat a la dreta'
+                'right_aligned' => 'Alineat a la dreta',
             ],
             'buttons' => [
                 'primary' => 'Botó primari',
@@ -199,7 +199,7 @@ return [
             'more' => 'Una mica més de text',
             'promotion' => 'Codi de cupó: WINTER',
             'subcopy' => "Això és un subcopy de l'email",
-            'thanks' => 'Gràcies'
+            'thanks' => 'Gràcies',
         ],
         'fields' => [
             '_section_background' => 'Fons',
@@ -225,7 +225,7 @@ return [
             'panel_bg' => 'Fons del panell',
             'promotion_bg' => 'Fons de la promoció',
             'promotion_border_color' => 'Color de la vora de la promoció',
-        ]
+        ],
     ],
     'install' => [
         'project_label' => 'Vincular a projecte',
@@ -234,7 +234,7 @@ return [
         'missing_plugin_name' => 'Si us plau indica un nom de plugin per a instal·lar.',
         'missing_theme_name' => 'Si us plau indica un nom de tema per a instal·lar.',
         'install_completing' => "Finalitzant el procès d'instal·lació",
-        'install_success' => 'Plugin instal·lat correctament'
+        'install_success' => 'Plugin instal·lat correctament',
     ],
     'updates' => [
         'title' => 'Gestionar actualitzacions',
@@ -274,17 +274,17 @@ return [
         'force_label' => 'Forçar actualització',
         'found' => [
             'label' => "S'han trobat noves actualitzacions!",
-            'help' => "Clica 'Actualitzar software' per començar el procès d'actualització."
+            'help' => "Clica 'Actualitzar software' per començar el procès d'actualització.",
         ],
         'none' => [
             'label' => 'No hi ha actualitzacions',
-            'help' => "No s'han trobat noves actualitzacions."
+            'help' => "No s'han trobat noves actualitzacions.",
         ],
         'important_action' => [
             'empty' => 'Seleccionar acció',
             'confirm' => 'Confirmar actualització',
             'skip' => 'Saltar aquesta actualització (només aquest cop)',
-            'ignore' => 'Saltar aquesta actualització (sempre)'
+            'ignore' => 'Saltar aquesta actualització (sempre)',
         ],
         'important_action_required' => 'Acció requerida',
         'important_view_guide' => "Veure la guia d'actualització",
@@ -301,7 +301,7 @@ return [
         'details_licence' => 'Llicència',
         'details_licence_missing' => "No s'ha proveït llicència.",
         'details_current_version' => 'Versió actual',
-        'details_author' => 'Autor'
+        'details_author' => 'Autor',
     ],
     'server' => [
         'connect_error' => 'Error connectant al servidor.',
@@ -309,17 +309,17 @@ return [
         'response_invalid' => 'Resposta invàlida del servidor.',
         'response_empty' => 'Resposta buida del servidor.',
         'file_error' => 'El servidor no ha pogut proporcionar el paquet.',
-        'file_corrupt' => "L'arxiu del servidor està corrupte."
+        'file_corrupt' => "L'arxiu del servidor està corrupte.",
     ],
     'behavior' => [
-        'missing_property' => 'La classe :class ha de definir la propietat $:property utilitzada pel comportament :behavior.'
+        'missing_property' => 'La classe :class ha de definir la propietat $:property utilitzada pel comportament :behavior.',
     ],
     'config' => [
         'not_found' => "No ha estat possible trobar l'arxiu de configuració :file definit per :location.",
-        'required' => "La configuració utilitzada a :location ha de proporcionar un valor ':property'."
+        'required' => "La configuració utilitzada a :location ha de proporcionar un valor ':property'.",
     ],
     'zip' => [
-        'extract_failed' => "No ha estat possible extreure el fitxer de core ':file'."
+        'extract_failed' => "No ha estat possible extreure el fitxer de core ':file'.",
     ],
     'event_log' => [
         'hint' => "Aquest registre mostra una llista d'errors potencials que ocorren a l'aplicació, com ara excepcions o informació de depuració.",
@@ -334,7 +334,7 @@ return [
         'created_at' => 'Data i hora',
         'message' => 'Missatge',
         'level' => 'Nivell',
-        'preview_title' => 'Esdeveniment'
+        'preview_title' => 'Esdeveniment',
     ],
     'request_log' => [
         'hint' => "Aquest registre mostra una llista de peticions de navegador que podrien requerir atenció. Per exemple, si un visitant obre una pàgina de CMS que no es pot trobar, es crea un registre amb l'estat 404.",
@@ -350,7 +350,7 @@ return [
         'referer' => 'Referers',
         'url' => 'URL',
         'status_code' => 'Estat',
-        'preview_title' => 'Petició'
+        'preview_title' => 'Petició',
     ],
     'permissions' => [
         'name' => 'Sistema',
@@ -363,7 +363,7 @@ return [
         'manage_preferences' => 'Gestionar preferències del panell',
         'manage_editor' => "Gestionar preferències de l'editor de codi",
         'view_the_dashboard' => "Veure l'escriptori",
-        'manage_branding' => 'Personalitzar el panell'
+        'manage_branding' => 'Personalitzar el panell',
     ],
     'log' => [
         'menu_label' => 'Opcions de registre',

@@ -1,16 +1,18 @@
-<?php namespace Backend\Behaviors;
+<?php
 
-use Db;
-use Str;
-use Lang;
-use Flash;
-use Event;
-use Redirect;
-use Backend;
+namespace Backend\Behaviors;
+
 use Backend\Classes\ControllerBehavior;
-use Winter\Storm\Router\Helper as RouterHelper;
-use ApplicationException;
+use Backend\Facades\Backend;
 use Exception;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Str;
 
 /**
  * Adds features for working with backend forms. This behavior
@@ -218,8 +220,7 @@ class FormController extends ControllerBehavior
             $model = $this->controller->formExtendModel($model) ?: $model;
 
             $this->initForm($model);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->controller->handleError($ex);
         }
     }
@@ -287,8 +288,7 @@ class FormController extends ControllerBehavior
 
             $model = $this->controller->formFindModelObject($recordId);
             $this->initForm($model);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->controller->handleError($ex);
         }
     }
@@ -384,8 +384,7 @@ class FormController extends ControllerBehavior
 
             $model = $this->controller->formFindModelObject($recordId);
             $this->initForm($model);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->controller->handleError($ex);
         }
     }
@@ -451,7 +450,7 @@ class FormController extends ControllerBehavior
     protected function createModel()
     {
         $class = $this->config->modelClass;
-        return new $class;
+        return new $class();
     }
 
     /**
@@ -532,7 +531,7 @@ class FormController extends ControllerBehavior
     {
         $name = $this->getConfig($name, $default);
         $vars = [
-            'name' => Lang::get($this->getConfig('name', 'backend::lang.model.name'))
+            'name' => Lang::get($this->getConfig('name', 'backend::lang.model.name')),
         ];
         $vars = array_merge($vars, $extras);
         return Lang::get($name, $vars);
@@ -779,7 +778,7 @@ class FormController extends ControllerBehavior
 
         if (!$result) {
             throw new ApplicationException($this->getLang('not-found-message', 'backend::lang.form.not_found', [
-                'class' => get_class($model), 'id' => $recordId
+                'class' => get_class($model), 'id' => $recordId,
             ]));
         }
 

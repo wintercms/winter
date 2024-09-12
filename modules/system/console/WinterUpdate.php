@@ -1,9 +1,11 @@
-<?php namespace System\Console;
+<?php
 
-use Str;
+namespace System\Console;
+
 use Illuminate\Console\Command;
-use System\Classes\UpdateManager;
 use Symfony\Component\Console\Input\InputOption;
+use System\Classes\UpdateManager;
+use Winter\Storm\Support\Str;
 
 /**
  * Console command to perform a system update.

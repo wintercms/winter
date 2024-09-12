@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<ruleset name="{{ plugin_code }}">
+    <description>Coding style for {{ plugin }}.</description>
+
+    <!-- Import Winter CMS code style ruleset -->
+    <rule ref="./phpcs.base.xml" />
+
+    <arg name="extensions" value="php" />
+    <arg name="colors" />
+</ruleset>

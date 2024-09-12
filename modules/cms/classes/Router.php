@@ -1,12 +1,14 @@
-<?php namespace Cms\Classes;
+<?php
 
-use Lang;
-use File;
-use Cache;
-use Config;
-use Event;
-use Winter\Storm\Router\Router as StormRouter;
+namespace Cms\Classes;
+
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Router\Router as StormRouter;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * The router parses page URL patterns and finds pages by URLs.
@@ -231,8 +233,7 @@ class Router
         $cacheable = Config::get('cms.enableRoutesCache');
         if ($cacheable) {
             $cached = Cache::get($key, false);
-        }
-        else {
+        } else {
             $cached = false;
         }
 
@@ -322,7 +323,7 @@ class Router
      */
     protected function getCacheKey($keyName)
     {
-        return md5($this->theme->getPath()).$keyName.Lang::getLocale();
+        return md5($this->theme->getPath()) . $keyName . Lang::getLocale();
     }
 
     /**
@@ -345,7 +346,8 @@ class Router
         $key = $this->getUrlListCacheKey();
         $urlList = Cache::get($key, false);
 
-        if ($urlList
+        if (
+            $urlList
             && ($urlList = @unserialize(@base64_decode($urlList)))
             && is_array($urlList)
             && array_key_exists($url, $urlList)

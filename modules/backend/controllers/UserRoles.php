@@ -1,9 +1,11 @@
-<?php namespace Backend\Controllers;
+<?php
 
-use View;
-use Response;
-use BackendMenu;
+namespace Backend\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
 use System\Classes\SettingsManager;
 
 /**

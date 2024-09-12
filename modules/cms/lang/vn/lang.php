@@ -11,7 +11,7 @@ return [
         'error_deleting' => "Không thể xóa template file ':name'. Vui lòng kiểm tra write permission.",
         'delete_success' => 'Đã xóa template: :count.',
         'file_name_required' => 'Tên file là bắt buộc.',
-        'safe_mode_enabled' => 'Safe mode đã được bật.'
+        'safe_mode_enabled' => 'Safe mode đã được bật.',
     ],
     'dashboard' => [
         'active_theme' => [
@@ -19,20 +19,20 @@ return [
             'online' => 'Trực tuyến',
             'maintenance' => 'Đang bảo trì',
             'manage_themes' => 'Quản lý giao diện',
-            'customize_theme' => 'Tùy chỉnh giao diện'
-        ]
+            'customize_theme' => 'Tùy chỉnh giao diện',
+        ],
     ],
     'theme' => [
         'not_found_name' => "Giao diện ':name' không tồn tại",
         'by_author' => 'Tạo bởi :name',
         'active' => [
             'not_set' => 'Giao diện đang kích hoạt chưa được cài đặt.',
-            'not_found' => 'Không tìm thấy giao diện đang kích hoạt.'
+            'not_found' => 'Không tìm thấy giao diện đang kích hoạt.',
         ],
         'edit' => [
             'not_set' => 'Giao diện chưa được cài đặt.',
             'not_found' => 'Không tìm thấy giao diện.',
-            'not_match' => "Giao diện này đang trong chế độ chỉnh sửa. Vui lòng tải lại trang"
+            'not_match' => "Giao diện này đang trong chế độ chỉnh sửa. Vui lòng tải lại trang",
         ],
         'settings_menu' => 'Giao diện website',
         'settings_menu_description' => 'Cấu hình giao diện website và các tùy chỉnh',
@@ -92,24 +92,24 @@ return [
         'dir_name_taken' => 'Đường dẫn này đã tồn tại.',
         'find_more_themes' => 'Tìm kiếm giao diện',
         'saving' => 'Đang lưu giao diện...',
-        'return' => 'Quay lại trang quản lý giao diện'
+        'return' => 'Quay lại trang quản lý giao diện',
     ],
     'maintenance' => [
         'settings_menu' => 'Chế độ bảo trì',
         'settings_menu_description' => 'Bật chế độ bảo trì và chỉ định trang sẽ hiển thị ở chế độ bảo trì.',
         'is_enabled' => 'Bật chế độ bảo trì',
         'is_enabled_comment' => 'Chọn trang sẽ hiển thị ở chế độ bảo trì.',
-        'hint' => 'Chế độ bảo trì sẽ hiển thị trang bảo trì đối với khách truy cập trang'
+        'hint' => 'Chế độ bảo trì sẽ hiển thị trang bảo trì đối với khách truy cập trang',
     ],
     'page' => [
         'not_found_name' => "Trang ':name' không tồn tại",
         'not_found' => [
             'label' => 'Trang không tồn tại',
-            'help' => 'Không tìm thấy trang bạn yêu cầu.'
+            'help' => 'Không tìm thấy trang bạn yêu cầu.',
         ],
         'custom_error' => [
             'label' => 'Lỗi trang',
-            'help' => "Có lỗi xảy ra khiến trang này không thể hiển thị"
+            'help' => "Có lỗi xảy ra khiến trang này không thể hiển thị",
         ],
         'menu_label' => 'Danh sách trang',
         'unsaved_label' => 'Trang chưa được lưu',
@@ -122,7 +122,7 @@ return [
         'cms_page' => 'CMS page',
         'title' => 'Tiêu đề trang',
         'url' => 'URL trang',
-        'file_name' => 'Tên file của trang'
+        'file_name' => 'Tên file của trang',
     ],
     'layout' => [
         'not_found_name' => "Mẫu giao diện ':name' không tìm thấy",
@@ -131,7 +131,7 @@ return [
         'no_list_records' => 'Không tìm thấy mẫu giao diện nào',
         'new' => 'Mẫu giao diện mới',
         'delete_confirm_multiple' => 'Xóa các mẫu giao diện đã chọn?',
-        'delete_confirm_single' => 'Xóa mẫu giao diện này?'
+        'delete_confirm_single' => 'Xóa mẫu giao diện này?',
     ],
     'partial' => [
         'not_found_name' => "Không tìm thấy partial ':name'.",
@@ -141,7 +141,7 @@ return [
         'no_list_records' => 'Không tìm thấy partial nào',
         'delete_confirm_multiple' => 'Xóa các Partital đã chọn?',
         'delete_confirm_single' => 'Xóa partial này?',
-        'new' => 'Partital mới'
+        'new' => 'Partital mới',
     ],
     'content' => [
         'not_found_name' => "Không tìm thấy tệp tin nội dung ':name'.",
@@ -150,18 +150,18 @@ return [
         'no_list_records' => 'Không tìm thấy tệp tin nội dung nào',
         'delete_confirm_multiple' => 'Xóa các tệp tin nội dung hoặc đường dẫn đã chọn?',
         'delete_confirm_single' => 'Xóa tệp tin nội dung này?',
-        'new' => 'Tẹo tệp mới'
+        'new' => 'Tẹo tệp mới',
     ],
     'ajax_handler' => [
         'invalid_name' => 'Tên AJAX handler không hợp lệ: :name.',
-        'not_found' => "Không tìm thấy AJAX handler ':name'"
+        'not_found' => "Không tìm thấy AJAX handler ':name'",
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => 'Thêm mới',
-        'search' => 'Tìm kiếm...'
+        'search' => 'Tìm kiếm...',
     ],
     'editor' => [
         'settings' => 'Cài đặt',
@@ -185,7 +185,7 @@ return [
         'open_searchbox' => 'Mở hộp tìm kiếm',
         'close_searchbox'  => 'Đóng hộp tìm kiếm',
         'open_replacebox' => 'Mở hộp Replace',
-        'close_replacebox'  => 'Đóng hộp Replace'
+        'close_replacebox'  => 'Đóng hộp Replace',
     ],
     'asset' => [
         'menu_label' => 'Assets',
@@ -225,7 +225,7 @@ return [
         'error_deleting_directory' => 'Lỗi xóa thư mục gốc :dir',
         'no_list_records' => 'Không tìm thấy tệp tin nào',
         'delete_confirm' => 'Xóa các tệp tin hoặc thư mục đã chọn?',
-        'path' => 'Path'
+        'path' => 'Path',
     ],
     'component' => [
         'menu_label' => 'Components',
@@ -237,7 +237,7 @@ return [
         'invalid_request' => 'Không thể lưu template vì chứa component không hợp lệ.',
         'no_records' => 'Không tìm thấy components nào',
         'not_found' => "Component ':name' không tồn tại.",
-        'method_not_found' => "Component ':name' không có method ':method'."
+        'method_not_found' => "Component ':name' không có method ':method'.",
     ],
     'template' => [
         'invalid_type' => 'Không xác định được định dạng template.',
@@ -245,7 +245,7 @@ return [
         'saved' => 'Đã lưu template.',
         'no_list_records' => 'Không có kết quả',
         'delete_confirm' => 'Xóa các template đã chọn?',
-        'order_by' => 'Order by'
+        'order_by' => 'Order by',
     ],
     'permissions' => [
         'name' => 'CMS',

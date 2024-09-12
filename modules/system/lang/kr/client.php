@@ -47,18 +47,18 @@ return [
     'alert' => [
         'confirm_button_text' => '확인',
         'cancel_button_text' => '취소',
-        'widget_remove_confirm' => '이 위젯을 삭제하시겠습니까?'
+        'widget_remove_confirm' => '이 위젯을 삭제하시겠습니까?',
     ],
     'datepicker' => [
         'previousMonth' => '지난 달',
         'nextMonth' => '다음 달',
         'months' => ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'],
         'weekdays' => ['일요일', '월요일', '화요일', '수요일', '목요일', '금요일', '토요일'],
-        'weekdaysShort' => ['일', '월', '화', '수', '목', '금', '토']
+        'weekdaysShort' => ['일', '월', '화', '수', '목', '금', '토'],
     ],
     'filter' => [
         'group' => [
-            'all' => '전체'
+            'all' => '전체',
         ],
         'dates' => [
             'all' => '전체',
@@ -66,8 +66,8 @@ return [
             'reset_button_text'  => '재설정',
             'date_placeholder' => '날짜',
             'after_placeholder' => '이후',
-            'before_placeholder' => '이전'
-        ]
+            'before_placeholder' => '이전',
+        ],
     ],
     'eventlog' => [
         'show_stacktrace' => '스택 추적 보기',
@@ -82,7 +82,7 @@ return [
             'openWith' => '같이 열기',
             'remember_choice' => '이 세션의 옵션을 기억',
             'open' => '열기',
-            'cancel' => '취소'
-        ]
-    ]
+            'cancel' => '취소',
+        ],
+    ],
 ];

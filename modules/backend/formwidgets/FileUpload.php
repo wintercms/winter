@@ -1,18 +1,19 @@
-<?php namespace Backend\FormWidgets;
+<?php
 
-use Db;
-use Input;
-use Event;
-use Request;
-use Response;
-use Validator;
-use Backend\Widgets\Form;
+namespace Backend\FormWidgets;
+
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
-use ApplicationException;
-use ValidationException;
+use Backend\Widgets\Form;
 use Exception;
+use Illuminate\Support\Facades\Response;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\ValidationException;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Facades\Validator;
 
 /**
  * File upload field
@@ -70,7 +71,7 @@ class FileUpload extends FormWidgetBase
      */
     public $thumbOptions = [
         'mode'      => 'crop',
-        'extension' => 'auto'
+        'extension' => 'auto',
     ];
 
     /**
@@ -314,7 +315,7 @@ class FileUpload extends FormWidgetBase
             }
 
             if ($includeDot) {
-                $value = '.'.$value;
+                $value = '.' . $value;
             }
 
             return $value;
@@ -389,8 +390,7 @@ class FileUpload extends FormWidgetBase
             }
 
             throw new ApplicationException('Unable to find file, it may no longer exist');
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             return json_encode(['error' => $ex->getMessage()]);
         }
     }
@@ -433,7 +433,7 @@ class FileUpload extends FormWidgetBase
                     throw new ApplicationException('File missing from request');
                 }
 
-                $validationRules = ['max:'.$file::getMaxFilesize()];
+                $validationRules = ['max:' . $file::getMaxFilesize()];
                 $data = Input::file('file_data');
 
                 if (!$data->isValid()) {
@@ -441,11 +441,11 @@ class FileUpload extends FormWidgetBase
                 }
 
                 if ($fileTypes = $this->getAcceptedFileTypes()) {
-                    $validationRules[] = 'extensions:'.$fileTypes;
+                    $validationRules[] = 'extensions:' . $fileTypes;
                 }
 
                 if ($this->mimeTypes) {
-                    $validationRules[] = 'mimes:'.$this->mimeTypes;
+                    $validationRules[] = 'mimes:' . $this->mimeTypes;
                 }
 
                 $validation = Validator::make(
@@ -468,8 +468,7 @@ class FileUpload extends FormWidgetBase
             $parent = $fileRelation->getParent();
             if ($this->attachOnUpload && $parent && $parent->exists) {
                 $fileRelation->add($file);
-            }
-            else {
+            } else {
                 $fileRelation->add($file, $this->sessionKey);
             }
 
@@ -478,12 +477,11 @@ class FileUpload extends FormWidgetBase
             $result = [
                 'id' => $file->id,
                 'thumb' => $file->thumbUrl,
-                'path' => $file->pathUrl
+                'path' => $file->pathUrl,
             ];
 
             $response = Response::make($result, 200);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $response = Response::make($ex->getMessage(), 400);
         }
 

@@ -1,7 +1,9 @@
-<?php namespace Backend\Widgets;
+<?php
 
-use Lang;
+namespace Backend\Widgets;
+
 use Backend\Classes\WidgetBase;
+use Illuminate\Support\Facades\Lang;
 
 /**
  * Search Widget
