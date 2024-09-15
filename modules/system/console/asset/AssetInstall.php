@@ -8,6 +8,8 @@ use Symfony\Component\Process\Process;
 use System\Classes\Asset\PackageJson;
 use System\Classes\Asset\PackageManager;
 use System\Classes\PluginManager;
+use System\Console\Asset\Exceptions\PackageIgnoredException;
+use System\console\asset\exceptions\PackageNotConfiguredException;
 use System\Console\Asset\Exceptions\PackageNotFoundException;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\Config;
@@ -128,39 +130,34 @@ abstract class AssetInstall extends Command
                     continue;
                 }
 
-                // Check if package could be a module (but explicitly ignore core Winter modules)
-                if (Str::startsWith($package, 'module-') && !in_array($package, ['system', 'backend', 'cms'])) {
-                    $compilableAssets->registerPackage(
-                        $package,
-                        base_path('modules/' . Str::after($package, 'module-') . '/' . $this->configFile),
-                        $this->assetType
-                    );
-                    continue;
-                }
-
-                // Check if package could be a theme
-                if (
-                    $cmsEnabled
-                    && Str::startsWith($package, 'theme-')
-                    && Theme::exists(Str::after($package, 'theme-'))
-                ) {
-                    $theme = Theme::load(Str::after($package, 'theme-'));
-                    $compilableAssets->registerPackage(
-                        $package,
-                        $theme->getPath() . '/' . $this->configFile,
-                        $this->assetType
-                    );
-                    continue;
-                }
-
-                // Check if a package could be a plugin
-                if (PluginManager::instance()->exists($package)) {
-                    $compilableAssets->registerPackage(
-                        $package,
-                        PluginManager::instance()->getPluginPath($package) . '/' . $this->configFile,
-                        $this->assetType
-                    );
-                    continue;
+                switch (PackageManager::instance()->getPackageTypeFromName($package)) {
+                    case PackageManager::TYPE_MODULE:
+                        $compilableAssets->registerPackage(
+                            $package,
+                            base_path('modules/' . Str::after($package, 'module-') . '/' . $this->configFile),
+                            $this->assetType
+                        );
+                        break;
+                    case PackageManager::TYPE_THEME:
+                        $theme = Theme::load(Str::after($package, 'theme-'));
+                        $compilableAssets->registerPackage(
+                            $package,
+                            $theme->getPath() . '/' . $this->configFile,
+                            $this->assetType
+                        );
+                        break;
+                    case PackageManager::TYPE_PLUGIN:
+                        $compilableAssets->registerPackage(
+                            $package,
+                            PluginManager::instance()->getPluginPath($package) . '/' . $this->configFile,
+                            $this->assetType
+                        );
+                        break;
+                    case null:
+                        throw new PackageNotFoundException(sprintf(
+                            'The package `%s` does not exist.',
+                            $package
+                        ));
                 }
             }
 
@@ -197,67 +194,103 @@ abstract class AssetInstall extends Command
     {
         // Check if the user requested a specific package for install
         $requestedPackage = strtolower($this->argument('assetPackage'));
-        $foundRequestedPackage = !$requestedPackage;
 
-        if (!$foundRequestedPackage) {
-            foreach ($registeredPackages as $name => $package) {
-                if ($requestedPackage === $name) {
-                    $foundRequestedPackage = true;
-                }
-            }
-
+        if ($requestedPackage) {
             // We did not find the package, exit
-            if (!$foundRequestedPackage) {
+            if (!isset($registeredPackages[$requestedPackage])) {
+                if ($detected = PackageManager::instance()->getPackage($requestedPackage)) {
+                    switch (count($detected)) {
+                        case 1:
+                            if ($detected[0]['type'] !== $this->assetType) {
+                                throw new PackageNotConfiguredException(sprintf(
+                                    'The requested package `%s` is only configured for %s. Run `php artisan %s:create %1$s`',
+                                    $this->argument('assetPackage'),
+                                    $detected[0]['type'],
+                                    $this->assetType
+                                ));
+                            }
+
+                            if ($detected[0]['ignored']) {
+                                throw new PackageIgnoredException(sprintf(
+                                    'The requested package `%s` is ignored, remove it from package.json to continue',
+                                    $this->argument('assetPackage'),
+                                ));
+                            }
+                            break;
+                        case 2:
+                        default:
+                            if (($detected[0]['ignored'] ?? false) || ($detected[1]['ignored'] ?? false)) {
+                                throw new PackageIgnoredException(sprintf(
+                                    'The requested package `%s` is ignored, remove it from package.json to continue',
+                                    $this->argument('assetPackage'),
+                                ));
+                            }
+                            break;
+                    }
+                }
+
                 throw new PackageNotFoundException(sprintf(
-                    'The requested package `%s` could not be found. Try %s:config or check if the package is ignored.',
+                    'The requested package `%s` could not be found.',
                     $this->argument('assetPackage'),
-                    $this->assetType
                 ));
             }
+
+            $this->processPackage($packageJson, $requestedPackage, $registeredPackages[$requestedPackage], true);
+
+            return $packageJson;
         }
 
         // Process each found package
         foreach ($registeredPackages as $name => $package) {
-            // Normalize package path across OS types
-            $packagePath = Str::replace(DIRECTORY_SEPARATOR, '/', $package['path']);
-            // Add the package path to the instance's package.json->workspaces->packages property if not present
-            if (!$packageJson->hasWorkspace($packagePath) && !$packageJson->hasIgnoredPackage($packagePath)) {
-                if (
-                    $requestedPackage === $name
-                    || $this->confirm(
-                        sprintf(
-                            "Detected %s (%s), should it be added to your package.json?",
-                            $name,
-                            $packagePath
-                        ),
-                        true
-                    )
-                ) {
-                    $packageJson->addWorkspace($packagePath);
-                    $this->info(sprintf(
-                        'Adding %s (%s) to the workspaces.packages property in package.json',
-                        $name,
-                        $packagePath
-                    ));
-                } else {
-                    $packageJson->addIgnoredPackage($packagePath);
-                    $this->warn(
-                        sprintf('Ignoring %s (%s)', $name, $packagePath)
-                    );
-                }
-            }
-
-            // Detect missing config files and install them
-            if (!File::exists($package['config'])) {
-                $this->info(sprintf(
-                    'No config file found for %s, you should run %s:config',
-                    $name,
-                    $this->assetType
-                ));
-            }
+            $this->processPackage($packageJson, $name, $package);
         }
 
         return $packageJson;
+    }
+
+    protected function processPackage(PackageJson $packageJson, string $name, array $package, bool $force = false): bool
+    {
+        // Normalize package path across OS types
+        $packagePath = Str::replace(DIRECTORY_SEPARATOR, '/', $package['path']);
+        // Add the package path to the instance's package.json->workspaces->packages property if not present
+        if (!$packageJson->hasWorkspace($packagePath) && !$packageJson->hasIgnoredPackage($packagePath)) {
+            if (
+                $force
+                || $this->confirm(
+                    sprintf(
+                        "Detected %s (%s), should it be added to your package.json?",
+                        $name,
+                        $packagePath
+                    ),
+                    true
+                )
+            ) {
+                $packageJson->addWorkspace($packagePath);
+                $this->info(sprintf(
+                    'Adding %s (%s) to the workspaces.packages property in package.json',
+                    $name,
+                    $packagePath
+                ));
+            } else {
+                $packageJson->addIgnoredPackage($packagePath);
+                $this->warn(
+                    sprintf('Ignoring %s (%s)', $name, $packagePath)
+                );
+            }
+        }
+
+        // Detect missing config files and install them
+        if (!File::exists($package['config'])) {
+            $this->info(sprintf(
+                'No config file found for %s, you should run %s:config',
+                $name,
+                $this->assetType
+            ));
+
+            return false;
+        }
+
+        return true;
     }
 
     /**

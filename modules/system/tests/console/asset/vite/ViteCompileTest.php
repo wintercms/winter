@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Tests\Console\Asset;
+namespace System\Tests\Console\Asset\Vite;
 
 use System\Classes\Asset\PackageManager;
 use System\Tests\Bootstrap\TestCase;

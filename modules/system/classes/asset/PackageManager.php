@@ -24,6 +24,10 @@ class PackageManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
 
+    public const TYPE_THEME = 'theme';
+    public const TYPE_MODULE = 'module';
+    public const TYPE_PLUGIN = 'plugin';
+
     /**
      * The filename that stores the package definition.
      */
@@ -239,10 +243,10 @@ class PackageManager
     public function getPackage(string $name, bool $includeIgnored = false): array
     {
         $results = [];
-        foreach ($this->packages ?? [] as $packages) {
+        foreach ($this->packages ?? [] as $type => $packages) {
             foreach ($packages as $packageName => $config) {
                 if (($name === $packageName) && (!$config['ignored'] || $includeIgnored)) {
-                    $results[] = $config;
+                    $results[] = $config + ['type' => $type];
                 }
             }
         }
@@ -328,6 +332,30 @@ class PackageManager
             'config' => $config,
             'ignored' => $this->isPackageIgnored($path),
         ];
+    }
+
+    public function getPackageTypeFromName(string $package): ?string
+    {
+        // Check if package could be a module
+        if (Str::startsWith($package, 'module-') && !in_array($package, ['system', 'backend', 'cms'])) {
+            return static::TYPE_MODULE;
+        }
+
+        // Check if package could be a theme
+        if (
+            in_array('Cms', Config::get('cms.loadModules'))
+            && Str::startsWith($package, 'theme-')
+            && Theme::exists(Str::after($package, 'theme-'))
+        ) {
+            return static::TYPE_THEME;
+        }
+
+        // Check if a package could be a plugin
+        if (PluginManager::instance()->exists($package)) {
+            return static::TYPE_PLUGIN;
+        }
+
+        return null;
     }
 
     /**
