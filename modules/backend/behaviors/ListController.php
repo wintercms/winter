@@ -233,7 +233,7 @@ class ListController extends ControllerBehavior
          * Prepare the filter widget (optional)
          */
         if (isset($listConfig->filter)) {
-            $filterConfig = $this->makeConfig($listConfig->filter ?? []);
+            $filterConfig = $this->makeConfig($listConfig->filter);
 
             $widget->cssClasses[] = 'list-flush';
 
