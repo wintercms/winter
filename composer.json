@@ -35,7 +35,6 @@
         "winter/wn-backend-module": "dev-wip-laravel-11",
         "winter/wn-cms-module": "dev-wip-laravel-11",
         "laravel/framework": "^11.0",
-        "twig/twig": "^3.14",
         "wikimedia/composer-merge-plugin": "~2.1.0"
     },
     "require-dev": {
