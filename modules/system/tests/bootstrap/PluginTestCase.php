@@ -9,6 +9,7 @@ use Exception;
 use ReflectionClass;
 use Backend\Classes\AuthManager;
 use Backend\Tests\Concerns\InteractsWithAuthentication;
+use Mockery\MockInterface;
 use System\Classes\PluginBase;
 use System\Classes\PluginManager;
 use System\Classes\UpdateManager;
@@ -209,7 +210,8 @@ abstract class PluginTestCase extends TestCase
             if (
                 !$reflectClass->isInstantiable() ||
                 !$reflectClass->isSubclassOf('Winter\Storm\Database\Model') ||
-                $reflectClass->isSubclassOf('Winter\Storm\Database\Pivot')
+                $reflectClass->isSubclassOf('Winter\Storm\Database\Pivot') ||
+                in_array(MockInterface::class, $reflectClass->getInterfaceNames())
             ) {
                 continue;
             }

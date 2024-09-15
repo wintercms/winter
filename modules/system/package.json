@@ -27,6 +27,7 @@
         "test": "jest --config tests/js/jest.config.js tests/js/cases"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^6.5.2",
         "js-cookie": "^3.0.1"
     },
     "devDependencies": {

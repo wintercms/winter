@@ -225,34 +225,10 @@ a.oc-loading, button.oc-loading, span.oc-loading {
 .infinite-class (@index, @val) when (@index < 101) {
     @tmpSelector: ~"@{index}%";
     @{tmpSelector} { transform: translateX(-@val); }
-    .infinite-class(@index + 10, @val - @val / 2);
+    .infinite-class((@index + 10), (@val - (@val / 2)));
 }
 
-@-moz-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-webkit-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-o-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-ms-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
 @keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-moz-keyframes oc-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-webkit-keyframes oc-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-o-keyframes oc-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-ms-keyframes oc-infinite-loader {
     .infinite-class(@start, @startVal);
 }
 @keyframes oc-infinite-loader {

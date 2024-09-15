@@ -35,7 +35,6 @@ return [
 
     'mailers' => [
         'smtp' => [
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
             'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
             'password' => env('MAIL_PASSWORD'),
             'port' => env('MAIL_PORT', 587),

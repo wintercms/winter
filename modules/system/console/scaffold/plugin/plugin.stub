@@ -48,7 +48,7 @@ class Plugin extends PluginBase
         return []; // Remove this line to activate
 
         return [
-            '{{ plugin_namespace }}\Components\MyComponent' => 'myComponent',
+            \{{ plugin_namespace }}\Components\MyComponent::class => 'myComponent',
         ];
     }
 

@@ -1,0 +1,87 @@
+const basePath = '%base%';
+const { assertSupportedNodeVersion } = require(basePath + '/node_modules/laravel-mix/src/Engine');
+
+module.exports = async () => {
+    assertSupportedNodeVersion();
+
+    const mix = require(basePath + '/node_modules/laravel-mix/src/Mix').primary;
+
+    mix.listen('init', function (_mix) {
+        // Setup Winter path aliases
+        _mix._api.alias({
+            '$': '%pluginsPath%',
+            '~': '%appPath%',
+        });
+        // disable notifications if not in watch
+        %notificationInject%
+        // define options
+        _mix._api.options({
+            processCssUrls: false,
+            clearConsole: false,
+            cssNano: {
+                discardComments: {removeAll: true},
+            }
+        });
+        // enable source maps for dev builds
+        if (!_mix._api.inProduction()) {
+            _mix._api.webpackConfig({
+                devtool: 'inline-source-map'
+            });
+            _mix._api.sourceMaps();
+        }
+
+        // Disable default manifest, allow for custom manifest
+        if (_mix.config.manifest === 'mix-manifest.json') {
+            mix.manifest.refresh = _ => void 0;
+        } else {
+            if (_mix.config.manifest === true) {
+                _mix.config.manifest = 'mix-manifest.json';
+            }
+        }
+    });
+
+    // override default mix output
+    mix.listen("loading-plugins", function (plugins) {
+        plugins.forEach(function (plugin, index) {
+            switch (plugin.constructor.name) {
+                case "BuildOutputPlugin":
+                    plugins[index].apply = function (compiler) {
+                        compiler.hooks.done.tap('BuildOutputPlugin', stats => {
+                            if (stats.hasErrors()) {
+                                return false;
+                            }
+
+                            if (this.options.clearConsole) {
+                                this.clearConsole();
+                            }
+
+                            let data = stats.toJson({
+                                assets: true,
+                                builtAt: true,
+                                hash: true,
+                                performance: true,
+                                relatedAssets: this.options.showRelated
+                            });
+
+                            if (data.assets.length && !%silent%) {
+                                console.log(this.statsTable(data));
+                            }
+                        });
+                    };
+                    break;
+                case "WebpackBarPlugin":
+                    if (%silent% || %noProgress%) {
+                        plugins[index].apply = _ => void 0;
+                    }
+                    break;
+            }
+        });
+    });
+
+    require('%mixConfigPath%');
+
+    await mix.installDependencies();
+    await mix.init();
+
+    return mix.build();
+};
