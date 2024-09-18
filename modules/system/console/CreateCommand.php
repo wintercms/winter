@@ -58,7 +58,7 @@ class CreateCommand extends BaseScaffoldCommand
 
         // More strict than the base Symfony validateName()
         // method, make a PR if it's a problem for you
-        if (preg_match('/^[a-z]++(:[a-z]++)*$/', $command) !== 1) {
+        if (preg_match('/^[\w]++(:[\w]++)*$/', $command) !== 1) {
             throw new InvalidArgumentException(sprintf('Command name "%s" is invalid.', $command));
         }
 
