@@ -43,10 +43,12 @@ abstract class NpmCommand extends Command
             null
         );
 
-        try {
-            $process->setTty(true);
-        } catch (\Throwable $e) {
-            // This will fail on unsupported systems
+        if (!$this->option('disable-tty') && !$this->option('silent')) {
+            try {
+                $process->setTty(true);
+            } catch (\Throwable $e) {
+                // This will fail on unsupported systems
+            }
         }
 
         return $process->run(function ($status, $stdout) {

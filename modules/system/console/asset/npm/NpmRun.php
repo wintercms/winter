@@ -19,7 +19,8 @@ class NpmRun extends NpmCommand
         {script : The name of the script to run, as defined in the package.json "scripts" config.}
         {additionalArgs?* : Arguments to pass through to the script being run.}
         {--f|production : Runs the script in "production" mode.}
-        {--s|silent : Silent mode.}';
+        {--s|silent : Silent mode.}
+        {--disable-tty : Disable tty mode}';
 
     /**
      * @var string The console command description.
@@ -49,7 +50,9 @@ class NpmRun extends NpmCommand
             return 1;
         }
 
-        $this->info(sprintf('Running script "%s" in package "%s"', $script, $this->argument('package')));
+        if (!$this->option('silent')) {
+            $this->info(sprintf('Running script "%s" in package "%s"', $script, $this->argument('package')));
+        }
 
         $command = ($this->argument('additionalArgs')) ?? [];
         if (count($command)) {

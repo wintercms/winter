@@ -21,9 +21,12 @@ class NpmUpdate extends NpmCommand
      * @inheritDoc
      */
     protected $signature = 'npm:update
-        {package? : The package name to add configuration for}
-        {npmArgs?* : Arguments to pass through to the "npm" binary}
-        {--npm= : Defines a custom path to the "npm" binary}';
+        {package? : The package name to add configuration for.}
+        {npmArgs?* : Arguments to pass through to the "npm" binary.}
+        {--npm= : Defines a custom path to the "npm" binary.}
+        {--a|save : Tell npm to update package.json.}
+        {--s|silent : Silent mode.}
+        {--disable-tty : Disable tty mode}';
 
     /**
      * @inheritDoc
@@ -42,11 +45,17 @@ class NpmUpdate extends NpmCommand
             array_unshift($command, $this->argument('package'));
         }
 
-        if (count($command)) {
-            array_unshift($command, 'npm', 'update', '--');
-        } else {
-            array_unshift($command, 'npm', 'update');
+        $args = ['npm', 'update'];
+
+        if ($this->option('save')) {
+            $args[] = '--save';
         }
+
+        if (count($command)) {
+            $args[] = '--';
+        }
+
+        array_unshift($command, ...$args);
 
         return $this->npmRun($command, $package['path'] ?? '');
     }
