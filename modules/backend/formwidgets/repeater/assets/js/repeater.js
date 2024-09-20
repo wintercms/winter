@@ -172,7 +172,7 @@
 
         if (this.options.maxItems && this.options.maxItems > 0) {
             var repeatedItems = this.$el.find('> .field-repeater-items > .field-repeater-item').length,
-                $addItemBtn = this.$el.find('> .field-repeater-add-item')
+                $addItemBtn = this.$el.find('> .field-repeater-items > .field-repeater-add-item')
 
             $addItemBtn.toggle(repeatedItems < this.options.maxItems)
         }
