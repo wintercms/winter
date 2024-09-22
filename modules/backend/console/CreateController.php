@@ -22,6 +22,7 @@ class CreateController extends BaseScaffoldCommand
         {controller : The name of the controller to generate. <info>(eg: Posts)</info>}
         {--force : Overwrite existing files with generated files.}
         {--model= : Defines the model name to use. If not provided, the singular name of the controller is used.}
+        {--sidebar : Create stubs for form-with-sidebar layout}
         {--uninspiring : Disable inspirational quotes}
     ';
 
@@ -44,14 +45,11 @@ class CreateController extends BaseScaffoldCommand
      * @var array A mapping of stub to generated file.
      */
     protected $stubs = [
-        'scaffold/controller/_list_toolbar.stub' => 'controllers/{{lower_name}}/_list_toolbar.php',
-        'scaffold/controller/config_form.stub'   => 'controllers/{{lower_name}}/config_form.yaml',
-        'scaffold/controller/config_list.stub'   => 'controllers/{{lower_name}}/config_list.yaml',
-        'scaffold/controller/create.stub'        => 'controllers/{{lower_name}}/create.php',
-        'scaffold/controller/index.stub'         => 'controllers/{{lower_name}}/index.php',
-        'scaffold/controller/preview.stub'       => 'controllers/{{lower_name}}/preview.php',
-        'scaffold/controller/update.stub'        => 'controllers/{{lower_name}}/update.php',
-        'scaffold/controller/controller.stub'    => 'controllers/{{studly_name}}.php',
+        'scaffold/controller/_list_toolbar.stub'   => 'controllers/{{lower_name}}/_list_toolbar.php',
+        'scaffold/controller/config_form.stub'     => 'controllers/{{lower_name}}/config_form.yaml',
+        'scaffold/controller/config_list.stub'     => 'controllers/{{lower_name}}/config_list.yaml',
+        'scaffold/controller/index.stub'           => 'controllers/{{lower_name}}/index.php',
+        'scaffold/controller/controller.stub'      => 'controllers/{{studly_name}}.php',
     ];
 
     /**
@@ -69,6 +67,16 @@ class CreateController extends BaseScaffoldCommand
             $model = Str::singular($vars['name']);
         }
         $vars['model'] = $model;
+
+        $vars['body_class'] = $this->option('sidebar') ? 'compact-container' : '';
+
+        $suffix = '';
+        if ($this->option('sidebar')) {
+            $suffix = '-sidebar';
+        }
+        $this->stubs["scaffold/controller/create{$suffix}.stub"] = 'controllers/{{lower_name}}/create.php';
+        $this->stubs["scaffold/controller/update{$suffix}.stub"] = 'controllers/{{lower_name}}/update.php';
+        $this->stubs["scaffold/controller/preview{$suffix}.stub"] = 'controllers/{{lower_name}}/preview.php';
 
         return $vars;
     }
