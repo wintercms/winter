@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * {{ name }} Factory
- {% if model %}
+{% if model %}
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\{{ plugin_namespace }}\Models\{{ model }}>
- {% endif %}
+{% endif %}
  */
 class {{ studly_name }} extends Factory
 {
