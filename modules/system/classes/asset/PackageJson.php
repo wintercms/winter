@@ -28,11 +28,10 @@ class PackageJson
         protected ?string $path = null
     ) {
         if (File::exists($this->path)) {
-            $raw = File::get($this->path);
-            if (!json_validate($raw)) {
+            $this->data = json_decode(File::get($this->path), JSON_OBJECT_AS_ARRAY);
+            if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \JsonException('The contents of the file "' . $this->path . '" is not valid json.');
             }
-            $this->data = json_decode($raw, JSON_OBJECT_AS_ARRAY);
         }
     }
 
