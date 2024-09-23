@@ -22,11 +22,11 @@ class ViteCompileTest extends TestCase
             $this->markTestSkipped('This test requires the vite package to be installed');
         }
 
-        $this->themePath = base_path('modules/system/tests/fixtures/themes/vitetest');
+        $this->themePath = base_path('modules/system/tests/fixtures/themes/assettest');
 
         // Add our testing theme because it won't be auto discovered
         PackageManager::instance()->registerPackage(
-            'theme-vitetest',
+            'theme-assettest',
             $this->themePath . '/vite.config.mjs',
             'vite'
         );
@@ -36,7 +36,7 @@ class ViteCompileTest extends TestCase
     {
         // Run the vite:compile command
         $this->artisan('vite:compile', [
-            'theme-vitetest',
+            'theme-assettest',
             '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
             '--silent' => true
         ])->assertExitCode(0);
@@ -73,7 +73,7 @@ class ViteCompileTest extends TestCase
 
         // Run the vite:compile command
         $this->artisan('vite:compile', [
-            'theme-vitetest',
+            'theme-assettest',
             '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
             '--disable-tty' => true
         ])
@@ -96,7 +96,7 @@ class ViteCompileTest extends TestCase
 
         // Run the vite:compile command
         $this->artisan('vite:compile', [
-            'theme-vitetest',
+            'theme-assettest',
             '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
             '--disable-tty' => true
         ])
@@ -112,7 +112,7 @@ class ViteCompileTest extends TestCase
 
     public function tearDown(): void
     {
-        File::deleteDirectory('modules/system/tests/fixtures/themes/vitetest/public');
+        File::deleteDirectory('modules/system/tests/fixtures/themes/assettest/public');
         parent::tearDown();
     }
 }
