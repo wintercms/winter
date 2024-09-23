@@ -13,4 +13,6 @@ assets/vendor
 # Ignore test fixtures
 tests/js
 tests/fixtures/themes/test/assets/js
-tests/fixtures/themes/assettest/assets/javascript
+tests/fixtures/themes/npmtest
+tests/fixtures/themes/assettest
+tests/fixtures/plugins/mix
