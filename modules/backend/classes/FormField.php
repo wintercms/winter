@@ -247,6 +247,7 @@ class FormField
     }
 
     /**
+<<<<<<< Updated upstream
      * Returns the label(s) associated with a field value(s) for the field options
      */
     public function valueLabel(): string|array
@@ -265,6 +266,8 @@ class FormField
     }
 
     /**
+=======
+>>>>>>> Stashed changes
      * Specifies a field control rendering mode. Supported modes are:
      * - text - creates a text field. Default for varchar column types.
      * - textarea - creates a textarea control. Default for text column types.
