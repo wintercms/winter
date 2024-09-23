@@ -230,8 +230,7 @@ class FormField
         if ($value === null) {
             if (is_array($this->options)) {
                 return $this->options;
-            }
-            elseif (is_callable($this->options)) {
+            } elseif (is_callable($this->options)) {
                 $callable = $this->options;
                 return $callable();
             } elseif (is_string($this->options) && is_array($options = Lang::get($this->options))) {
@@ -437,9 +436,8 @@ class FormField
         // Field is required, so add the "required" attribute
         if ($position === 'field' && $this->required && (!isset($result['required']) || $result['required'])) {
             $result['required'] = '';
-        }
-        // The "required" attribute is set and falsy, so unset it
-        elseif ($position === 'field' && isset($result['required']) && !$result['required']) {
+        } elseif ($position === 'field' && isset($result['required']) && !$result['required']) {
+            // The "required" attribute is set and falsy, so unset it
             unset($result['required']);
         }
 
