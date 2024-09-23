@@ -4,10 +4,13 @@ namespace System\Tests\Console\Asset\Npm;
 
 use System\Classes\Asset\PackageManager;
 use System\Tests\Bootstrap\TestCase;
+use System\Tests\Console\Asset\NpmTestTrait;
 use Winter\Storm\Support\Facades\File;
 
 class NpmInstallTest extends TestCase
 {
+    use NpmTestTrait;
+
     protected string $themePath;
     protected string $jsonPath;
     protected string $lockPath;
@@ -184,16 +187,6 @@ class NpmInstallTest extends TestCase
             $this->assertDirectoryExists($this->themePath . '/node_modules/is-odd');
             $this->assertDirectoryExists($this->themePath . '/node_modules/is-even');
         });
-    }
-
-    /**
-     * Helper to run test logic and handle restoring package.json file after
-     */
-    protected function withPackageJsonRestore(callable $callback): void
-    {
-        copy($this->jsonPath, $this->backupPath);
-        $callback();
-        rename($this->backupPath, $this->jsonPath);
     }
 
     /**
