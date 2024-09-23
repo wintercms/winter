@@ -2,6 +2,7 @@
 
 namespace System\Console\Asset;
 
+use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\Process;
 use System\Classes\Asset\PackageJson;
 use System\Classes\Asset\PackageManager;
@@ -46,6 +47,12 @@ abstract class NpmCommand extends Command
         if (!$this->option('disable-tty') && !$this->option('silent')) {
             try {
                 $process->setTty(true);
+            } catch (ProcessSignaledException $e) {
+                if (extension_loaded('pcntl') && $e->getSignal() !== SIGINT) {
+                    throw $e;
+                }
+
+                return 1;
             } catch (\Throwable $e) {
                 // This will fail on unsupported systems
             }
