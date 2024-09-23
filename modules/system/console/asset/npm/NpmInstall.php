@@ -28,13 +28,6 @@ class NpmInstall extends NpmCommand
         {--s|silent : Silent mode.}
         {--disable-tty : Disable tty mode}';
 
-    /**
-     * @inheritDoc
-     */
-    public $replaces = [
-        'mix:update'
-    ];
-
     public function handle(): int
     {
         $command = ($this->argument('npmArgs')) ?? [];
