@@ -31,7 +31,7 @@ class PackageManager
     /**
      * The filename that stores the package definition.
      */
-    protected string $packageJson = 'package.json';
+    protected PackageJson $packageJson;
 
     /**
      * @var array<string, array<string, string>> List of package types and registration methods
@@ -60,6 +60,8 @@ class PackageManager
      */
     public function init(): void
     {
+        $this->setPackageJsonPath(base_path('package.json'));
+
         $packagePaths = [];
 
         /*
@@ -187,12 +189,14 @@ class PackageManager
     /**
      * Calls the deferred callbacks.
      */
-    public function fireCallbacks(): void
+    public function fireCallbacks(): static
     {
         // Call callbacks
         foreach (static::$callbacks as $callback) {
             $callback($this);
         }
+
+        return $this;
     }
 
     /**
@@ -209,6 +213,10 @@ class PackageManager
     public function getPackages(string $type, bool $includeIgnored = false): array
     {
         $packages = $this->packages[$type] ?? [];
+
+        foreach ($packages as $index => $package) {
+            $packages[$index]['ignored'] = $this->isPackageIgnored($package['path']);
+        }
 
         ksort($packages);
 
@@ -227,9 +235,13 @@ class PackageManager
     public function hasPackage(string $name, bool $includeIgnored = false): bool
     {
         foreach ($this->packages ?? [] as $packages) {
-            foreach ($packages as $packageName => $config) {
-                if (($name === $packageName) && (!$config['ignored'] || $includeIgnored)) {
-                    return true;
+            foreach ($packages as $packageName => $package) {
+                if ($name === $packageName) {
+                    if ((!$this->isPackageIgnored($package['path']) || $includeIgnored)) {
+                        return true;
+                    }
+
+                    return false;
                 }
             }
         }
@@ -244,9 +256,11 @@ class PackageManager
     {
         $results = [];
         foreach ($this->packages ?? [] as $type => $packages) {
-            foreach ($packages as $packageName => $config) {
-                if (($name === $packageName) && (!$config['ignored'] || $includeIgnored)) {
-                    $results[] = $config + ['type' => $type];
+            foreach ($packages as $packageName => $package) {
+                if (($name === $packageName)) {
+                    if (!$this->isPackageIgnored($package['path']) || $includeIgnored) {
+                        $results[] = $package + ['type' => $type];
+                    }
                 }
             }
         }
@@ -310,7 +324,7 @@ class PackageManager
             ));
         }
 
-        $package = "$path/{$this->packageJson}";
+        $package = $path . '/package.json';
         $config = $path . DIRECTORY_SEPARATOR . $configFile;
 
         // Check for any existing package that already registers the given compilable config path
@@ -329,8 +343,7 @@ class PackageManager
         $this->packages[$type][$name] = [
             'path' => $path,
             'package' => $package,
-            'config' => $config,
-            'ignored' => $this->isPackageIgnored($path),
+            'config' => $config
         ];
     }
 
@@ -358,6 +371,12 @@ class PackageManager
         return null;
     }
 
+    public function setPackageJsonPath(string $packageJsonPath): static
+    {
+        $this->packageJson = new PackageJson($packageJsonPath);
+        return $this;
+    }
+
     /**
      * Returns the registration method for a compiler type
      */
@@ -371,8 +390,6 @@ class PackageManager
      */
     protected function isPackageIgnored(string $packagePath): bool
     {
-        // Load the main package.json for the project
-        $packageJson = new PackageJson(base_path($this->packageJson));
-        return $packageJson->hasIgnoredPackage($packagePath);
+        return $this->packageJson->hasIgnoredPackage($packagePath);
     }
 }
