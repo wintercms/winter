@@ -19,7 +19,7 @@ class PackageJson
     /**
      * The contents of the package.json being modified
      */
-    protected array $data;
+    protected array $data = [];
 
     /**
      * Create a new instance with optional path, loads file if file already exists
@@ -27,9 +27,13 @@ class PackageJson
     public function __construct(
         protected ?string $path = null
     ) {
-        $this->data = File::exists($this->path)
-            ? json_decode(File::get($this->path), JSON_OBJECT_AS_ARRAY)
-            : [];
+        if (File::exists($this->path)) {
+            $raw = File::get($this->path);
+            if (!json_validate($raw)) {
+                throw new \JsonException('The contents of the file "' . $this->path . '" is not valid json.');
+            }
+            $this->data = json_decode($raw, JSON_OBJECT_AS_ARRAY);
+        }
     }
 
     /**
