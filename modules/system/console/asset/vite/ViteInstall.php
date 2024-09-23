@@ -15,9 +15,11 @@ class ViteInstall extends AssetInstall
      * @var string The name and signature of this command.
      */
     protected $signature = 'vite:install
-        {assetPackage? : The asset package name to install}
-        {--npm= : Defines a custom path to the "npm" binary}
-        {--p|package=* : Defines one or more packages to install}';
+        {assetPackage?* : The asset package name to install.}
+        {--no-install : Tells Winter not to run npm install after config update.}
+        {--npm= : Defines a custom path to the "npm" binary.}
+        {--d|disable-tty : Disable tty mode.}
+        {--p|package-json= : Defines a custom path to "package.json" file. Must be above the workspace path.}';
 
     /**
      * @var string The console command description.
@@ -37,7 +39,7 @@ class ViteInstall extends AssetInstall
     /**
      * The required packages for this compiler
      */
-    protected array $requiredPackages = [
+    protected array $requiredDependencies = [
         'vite' => '^5.2.11',
         'laravel-vite-plugin' => '^1.0.4',
     ];
