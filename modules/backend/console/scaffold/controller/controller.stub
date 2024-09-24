@@ -24,6 +24,6 @@ class {{ studly_name }} extends Controller
     {% if sidebar %}
 
         $this->bodyClass = 'compact-container';
-    {% endif %}
+    {% endif -%}
     }
 }
