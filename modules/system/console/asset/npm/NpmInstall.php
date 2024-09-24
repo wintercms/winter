@@ -1,6 +1,6 @@
 <?php
 
-namespace System\console\asset\npm;
+namespace System\Console\Asset\Npm;
 
 use System\Console\Asset\Exceptions\PackageNotRegisteredException;
 use System\Console\Asset\NpmCommand;
