@@ -6,19 +6,16 @@ module.exports = async () => {
 
     const mix = require(basePath + '/node_modules/laravel-mix/src/Mix').primary;
 
-    // disable manifest
-    mix.manifest.refresh = _ => void 0
-
-    mix.listen('init', function (mix) {
+    mix.listen('init', function (_mix) {
         // Setup Winter path aliases
-        mix._api.alias({
+        _mix._api.alias({
             '$': '%pluginsPath%',
             '~': '%appPath%',
         });
         // disable notifications if not in watch
         %notificationInject%
         // define options
-        mix._api.options({
+        _mix._api.options({
             processCssUrls: false,
             clearConsole: false,
             cssNano: {
@@ -26,11 +23,20 @@ module.exports = async () => {
             }
         });
         // enable source maps for dev builds
-        if (!mix._api.inProduction()) {
-            mix._api.webpackConfig({
+        if (!_mix._api.inProduction()) {
+            _mix._api.webpackConfig({
                 devtool: 'inline-source-map'
             });
-            mix._api.sourceMaps();
+            _mix._api.sourceMaps();
+        }
+
+        // Disable default manifest, allow for custom manifest
+        if (_mix.config.manifest === 'mix-manifest.json') {
+            mix.manifest.refresh = _ => void 0;
+        } else {
+            if (_mix.config.manifest === true) {
+                _mix.config.manifest = 'mix-manifest.json';
+            }
         }
     });
 

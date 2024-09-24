@@ -1,10 +1,10 @@
 <?php
 
-namespace System\Console;
+namespace System\Console\Asset;
 
 use Symfony\Component\Process\Process;
-use System\Classes\CompilableAssets;
-use System\Classes\PackageJson;
+use System\Classes\Asset\PackageManager;
+use System\Classes\Asset\PackageJson;
 use Winter\Storm\Console\Command;
 
 class NpmRun extends Command
@@ -41,7 +41,7 @@ class NpmRun extends Command
      */
     public function handle(): int
     {
-        $compilableAssets = CompilableAssets::instance();
+        $compilableAssets = PackageManager::instance();
         $compilableAssets->fireCallbacks();
 
         $name = $this->argument('package');

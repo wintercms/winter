@@ -1,12 +1,12 @@
 <?php
 
-namespace System\Tests\Console;
+namespace System\Tests\Console\Asset;
 
 use System\Classes\PluginManager;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Support\Facades\File;
 
-class MixConfigTest extends TestCase
+class MixCreateTest extends TestCase
 {
     protected string $testPlugin = 'Winter.Sample';
 
@@ -19,8 +19,9 @@ class MixConfigTest extends TestCase
         $this->assertFileNotExists($configPath);
 
         // Run the config command to generate the vite config
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
+            '--no-stubs' => true,
         ])
             ->doesntExpectOutput('winter.mix.js already exists, overwrite?')
             ->assertExitCode(0);
@@ -42,8 +43,9 @@ class MixConfigTest extends TestCase
         File::put($configPath, 'testing');
 
         // Check that refusing to overwrite does not replace file contents
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
+            '--no-stubs' => true,
         ])
             ->expectsQuestion('winter.mix.js already exists, overwrite?', false)
             ->assertExitCode(0);
@@ -52,8 +54,9 @@ class MixConfigTest extends TestCase
         $this->assertNotEquals($fixture, File::get($configPath));
 
         // Run command confirming to overwrite file contents works
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
+            '--no-stubs' => true,
         ])
             ->expectsQuestion('winter.mix.js already exists, overwrite?', true)
             ->assertExitCode(0);
@@ -72,9 +75,10 @@ class MixConfigTest extends TestCase
         $this->assertFileNotExists($configPath);
 
         // Run the config command to generate the vite config
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
-            '--tailwind' => true
+            '--tailwind' => true,
+            '--no-stubs' => true,
         ])
             ->assertExitCode(0);
 
@@ -100,9 +104,10 @@ class MixConfigTest extends TestCase
         $this->assertFileNotExists($configPath);
 
         // Run the config command to generate the vite config with vue
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
-            '--vue' => true
+            '--vue' => true,
+            '--no-stubs' => true,
         ])
             ->assertExitCode(0);
 
@@ -127,10 +132,11 @@ class MixConfigTest extends TestCase
         $this->assertFileNotExists($configPath);
 
         // Run the config command to generate the vite config with vue
-        $this->artisan('mix:config', [
+        $this->artisan('mix:create', [
             'packageName' => $this->testPlugin,
             '--tailwind' => true,
-            '--vue' => true
+            '--vue' => true,
+            '--no-stubs' => true,
         ])
             ->assertExitCode(0);
 

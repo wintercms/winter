@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Classes;
+namespace System\Classes\Asset;
 
 use Cms\Classes\Theme;
 use System\Classes\PluginManager;
@@ -11,16 +11,16 @@ use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Str;
 
 /**
- * Compilable assets using for Node.js compilation and processing.
+ * Package manager.
  *
- * This works similar to the `System\Classes\CombineAssets` class in that it allows modules, plugins and themes to
- * register configurations that will be passed on to Node.js based compilers for processing.
+ * This class manages compilable asset "packages" registered by modules, plugins, and themes that
+ * provide configurations for Node.js based compilers (e.g. mix or vite) to process.
  *
  * @package winter\wn-system-module
  * @author Jack Wilkinson <me@jackwilky.com>
  * @copyright Winter CMS Maintainers
  */
-class CompilableAssets
+class PackageManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
 
@@ -258,7 +258,7 @@ class CompilableAssets
      * The name of the package is an alias that can be used to reference this package in other methods within this
      * class.
      *
-     * By default, the `CompilableAssets` class will look for a `package.json` file for Node dependencies, and a config
+     * By default, the `PackageManager` class will look for a `package.json` file for Node dependencies, and a config
      * file for the compilable configuration
      *
      * @param string $name The name of the package being registered

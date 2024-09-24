@@ -5,8 +5,8 @@ namespace System\Console\Asset;
 use Cms\Classes\Theme;
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\Process;
-use System\Classes\CompilableAssets;
-use System\Classes\PackageJson;
+use System\Classes\Asset\PackageJson;
+use System\Classes\Asset\PackageManager;
 use System\Classes\PluginManager;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\Config;
@@ -34,7 +34,7 @@ abstract class AssetInstall extends Command
     protected string $npmCommand = 'install';
 
     /**
-     * Type of asset to be installed, @see CompilableAssets
+     * Type of asset to be installed, @see PackageManager
      */
     protected string $assetType;
 
@@ -44,9 +44,9 @@ abstract class AssetInstall extends Command
     protected string $configFile;
 
     /**
-     * The packages required for asset compilation
+     * The required packages for this compiler
      */
-    protected array $packages;
+    protected array $requiredPackages = [];
 
     /**
      * Execute the console command.
@@ -101,7 +101,7 @@ abstract class AssetInstall extends Command
 
     protected function getRequestedAndRegisteredPackages(): array
     {
-        $compilableAssets = CompilableAssets::instance();
+        $compilableAssets = PackageManager::instance();
         $compilableAssets->fireCallbacks();
 
         $registeredPackages = $compilableAssets->getPackages($this->assetType);
@@ -180,7 +180,7 @@ abstract class AssetInstall extends Command
     protected function validateRequirePackagesPresent(PackageJson $packageJson): PackageJson
     {
         // Check to see if required packages are already present as a dependency
-        foreach ($this->packages as $package => $version) {
+        foreach ($this->requiredPackages as $package => $version) {
             if (
                 !$packageJson->hasDependency($package)
                 && $this->confirm($package . ' was not found as a dependency in package.json, would you like to add it?', true)
