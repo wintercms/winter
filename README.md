@@ -87,6 +87,10 @@ Winter CMS development is financially supported by the generosity of the followi
 
 ### Organizations
 
+[![Route4Me logo, Route Planning and Route Mapping](https://raw.githubusercontent.com/wintercms/winter/develop/.github/assets/sponsor-route4me.png)](https://route4me.com/?utm_source=wintercms)
+
+Route4Me is a [Premium Sponsor to the Winter CMS Open Collective](https://opencollective.com/wintercms).
+
 [![Froala logo](https://froala.com/wp-content/uploads/2019/10/froala.svg)](https://froala.com/wysiwyg-editor/)
 
 Froala provides a perpetual, Enterprise license to Winter CMS which allows us and our users to use the Froala WYSIWYG Editor in Winter CMS powered projects.
