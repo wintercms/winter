@@ -67,13 +67,13 @@ class CreateController extends BaseScaffoldCommand
             $model = Str::singular($vars['name']);
         }
         $vars['model'] = $model;
-        $vars['body_class'] = $this->option('sidebar') ? 'compact-container' : '';
+        $vars['sidebar'] = $this->option('sidebar');
 
-        $suffix = $this->option('sidebar') ? '-sidebar' : '';
+        $layout = $this->option('sidebar') ? 'sidebar' : 'standard';
 
-        $this->stubs["scaffold/controller/create{$suffix}.stub"] = 'controllers/{{lower_name}}/create.php';
-        $this->stubs["scaffold/controller/update{$suffix}.stub"] = 'controllers/{{lower_name}}/update.php';
-        $this->stubs["scaffold/controller/preview{$suffix}.stub"] = 'controllers/{{lower_name}}/preview.php';
+        $this->stubs["scaffold/controller/{$layout}/create.stub"] = 'controllers/{{lower_name}}/create.php';
+        $this->stubs["scaffold/controller/{$layout}/update.stub"] = 'controllers/{{lower_name}}/update.php';
+        $this->stubs["scaffold/controller/{$layout}/preview.stub"] = 'controllers/{{lower_name}}/preview.php';
 
         return $vars;
     }
