@@ -2,7 +2,9 @@
 
 namespace System\Console\Asset\Exceptions;
 
-class PackageIgnoredException extends \InvalidArgumentException
+use Winter\Storm\Exception\SystemException;
+
+class PackageIgnoredException extends SystemException
 {
 
 }

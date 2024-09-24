@@ -2,7 +2,9 @@
 
 namespace System\Console\Asset\Exceptions;
 
-class PackageNotConfiguredException extends \InvalidArgumentException
+use Winter\Storm\Exception\SystemException;
+
+class PackageNotConfiguredException extends SystemException
 {
 
 }
