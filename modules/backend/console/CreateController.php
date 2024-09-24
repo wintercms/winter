@@ -45,11 +45,11 @@ class CreateController extends BaseScaffoldCommand
      * @var array A mapping of stub to generated file.
      */
     protected $stubs = [
-        'scaffold/controller/_list_toolbar.stub'   => 'controllers/{{lower_name}}/_list_toolbar.php',
-        'scaffold/controller/config_form.stub'     => 'controllers/{{lower_name}}/config_form.yaml',
-        'scaffold/controller/config_list.stub'     => 'controllers/{{lower_name}}/config_list.yaml',
-        'scaffold/controller/index.stub'           => 'controllers/{{lower_name}}/index.php',
-        'scaffold/controller/controller.stub'      => 'controllers/{{studly_name}}.php',
+        'scaffold/controller/_list_toolbar.stub' => 'controllers/{{lower_name}}/_list_toolbar.php',
+        'scaffold/controller/config_form.stub'   => 'controllers/{{lower_name}}/config_form.yaml',
+        'scaffold/controller/config_list.stub'   => 'controllers/{{lower_name}}/config_list.yaml',
+        'scaffold/controller/index.stub'         => 'controllers/{{lower_name}}/index.php',
+        'scaffold/controller/controller.stub'    => 'controllers/{{studly_name}}.php',
     ];
 
     /**
