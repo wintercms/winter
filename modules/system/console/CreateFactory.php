@@ -50,7 +50,6 @@ class CreateFactory extends BaseScaffoldCommand
         'scaffold/factory/factory.stub' => 'database/factories/{{studly_name}}.php',
     ];
 
-
     protected function processVars($vars): array
     {
         $vars = parent::processVars($vars);
