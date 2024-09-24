@@ -3,15 +3,12 @@
 namespace System\Tests\Console\Asset\Mix;
 
 use System\Classes\Asset\PackageManager;
-use System\Console\Asset\Exceptions\PackageNotFoundException;
 use System\Tests\Bootstrap\TestCase;
-use System\Tests\Console\Asset\NpmTestTrait;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Support\Facades\File;
 
 class MixInstallTest extends TestCase
 {
-    use NpmTestTrait;
-
     protected string $fixturePath;
     protected string $jsonPath;
     protected string $lockPath;
@@ -29,7 +26,7 @@ class MixInstallTest extends TestCase
         $this->fixturePath = base_path('modules/system/tests');
         $this->jsonPath = $this->fixturePath . '/package.json';
         $this->lockPath = $this->fixturePath . '/package-lock.json';
-        $this->backupPath = $this->fixturePath . '/package.backup.json';
+        $this->backupPath = $this->fixturePath . '/package-testing.json';
 
         // Add our testing theme because it won't be auto discovered
         PackageManager::instance()->registerPackage(
@@ -42,6 +39,17 @@ class MixInstallTest extends TestCase
             base_path('modules/system/tests/fixtures/themes/npmtest/winter.mix.js'),
             'mix'
         );
+    }
+
+    public function testMixInstallMissingPackageJson(): void
+    {
+        $this->artisan('mix:install', [
+            'assetPackage' => ['theme-assettest'],
+            '--package-json' => '/some/file',
+            '--no-install' => true
+        ])
+            ->expectsOutputToContain('The supplied --package-json path does not exist.')
+            ->assertExitCode(1);
     }
 
     public function testMixInstallSinglePackage(): void
@@ -95,14 +103,16 @@ class MixInstallTest extends TestCase
     public function testMixInstallMissingPackage(): void
     {
         // We should receive an exception for a missing package
-        $this->expectException(PackageNotFoundException::class);
+        $this->withPackageJsonRestore(function () {
+            $this->expectException(SystemException::class);
 
-        $this->artisan('mix:install', [
-            'assetPackage' => ['theme-assettest2'],
-            '--package-json' => $this->jsonPath,
-            '--no-install' => true
-        ])
-            ->assertExitCode(1);
+            $this->artisan('mix:install', [
+                'assetPackage' => ['theme-assettest2'],
+                '--package-json' => $this->jsonPath,
+                '--no-install' => true
+            ])
+                ->assertExitCode(1);
+        });
     }
 
     public function testMixInstallRelativePath(): void
@@ -176,6 +186,16 @@ class MixInstallTest extends TestCase
             $this->assertDirectoryExists($this->fixturePath . '/node_modules');
             $this->assertDirectoryExists($this->fixturePath . '/node_modules/laravel-mix');
         });
+    }
+
+    /**
+     * Helper to run test logic and handle restoring package.json file after
+     */
+    protected function withPackageJsonRestore(callable $callback): void
+    {
+        File::copy($this->backupPath, $this->jsonPath);
+        $callback();
+        File::delete($this->jsonPath);
     }
 
     public function tearDown(): void

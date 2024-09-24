@@ -5,13 +5,10 @@ namespace System\Tests\Console\Asset\Vite;
 use System\Classes\Asset\PackageManager;
 use System\Console\Asset\Exceptions\PackageNotFoundException;
 use System\Tests\Bootstrap\TestCase;
-use System\Tests\Console\Asset\NpmTestTrait;
 use Winter\Storm\Support\Facades\File;
 
 class ViteInstallTest extends TestCase
 {
-    use NpmTestTrait;
-
     protected string $jsonPath;
     protected string $lockPath;
     protected string $backupPath;
@@ -28,7 +25,7 @@ class ViteInstallTest extends TestCase
         $this->fixturePath = base_path('modules/system/tests');
         $this->jsonPath = $this->fixturePath . '/package.json';
         $this->lockPath = $this->fixturePath . '/package-lock.json';
-        $this->backupPath = $this->fixturePath . '/package.backup.json';
+        $this->backupPath = $this->fixturePath . '/package-testing.json';
 
         // Add our testing theme because it won't be auto discovered
         PackageManager::instance()->registerPackage(
@@ -41,6 +38,17 @@ class ViteInstallTest extends TestCase
             base_path('modules/system/tests/fixtures/themes/npmtest/vite.config.mjs'),
             'vite'
         );
+    }
+
+    public function testViteInstallMissingPackageJson(): void
+    {
+        $this->artisan('vite:install', [
+            'assetPackage' => ['theme-assettest'],
+            '--package-json' => '/some/file',
+            '--no-install' => true
+        ])
+            ->expectsOutputToContain('The supplied --package-json path does not exist.')
+            ->assertExitCode(1);
     }
 
     public function testViteInstallSinglePackage(): void
@@ -98,14 +106,16 @@ class ViteInstallTest extends TestCase
     public function testViteInstallMissingPackage(): void
     {
         // We should receive an exception for a missing package
-        $this->expectException(PackageNotFoundException::class);
+        $this->withPackageJsonRestore(function () {
+            $this->expectException(PackageNotFoundException::class);
 
-        $this->artisan('vite:install', [
-            'assetPackage' => ['theme-assettest2'],
-            '--package-json' => $this->jsonPath,
-            '--no-install' => true
-        ])
-            ->assertExitCode(1);
+            $this->artisan('vite:install', [
+                'assetPackage' => ['theme-assettest2'],
+                '--package-json' => $this->jsonPath,
+                '--no-install' => true
+            ])
+                ->assertExitCode(1);
+        });
     }
 
     public function testViteInstallRelativePath(): void
@@ -184,6 +194,16 @@ class ViteInstallTest extends TestCase
             $this->assertDirectoryExists($this->fixturePath . '/node_modules/vite');
             $this->assertDirectoryExists($this->fixturePath . '/node_modules/laravel-vite-plugin');
         });
+    }
+
+    /**
+     * Helper to run test logic and handle restoring package.json file after
+     */
+    protected function withPackageJsonRestore(callable $callback): void
+    {
+        File::copy($this->backupPath, $this->jsonPath);
+        $callback();
+        File::delete($this->jsonPath);
     }
 
     public function tearDown(): void
