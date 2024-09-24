@@ -315,6 +315,17 @@ class PackageManager
             ));
         }
 
+        $package = $path . '/package.json';
+        $config = $path . DIRECTORY_SEPARATOR . $configFile;
+
+        if (!File::exists($config)) {
+            throw new SystemException(sprintf(
+                'Cannot register "%s" as a compilable package; the config file "%s" does not exist.',
+                $name,
+                $config
+            ));
+        }
+
         // Check for any existing packages already registered under the provided name
         if (isset($this->packages[$name])) {
             throw new SystemException(sprintf(
@@ -323,9 +334,6 @@ class PackageManager
                 $this->packages[$name]['config']
             ));
         }
-
-        $package = $path . '/package.json';
-        $config = $path . DIRECTORY_SEPARATOR . $configFile;
 
         // Check for any existing package that already registers the given compilable config path
         foreach ($this->packages[$type] ?? [] as $packageName => $settings) {
