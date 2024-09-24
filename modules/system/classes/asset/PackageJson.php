@@ -23,15 +23,19 @@ class PackageJson
 
     /**
      * Create a new instance with optional path, loads file if file already exists
+     * @throws \JsonException
      */
     public function __construct(
         protected ?string $path = null
     ) {
         if (File::exists($this->path)) {
-            $this->data = json_decode(File::get($this->path), JSON_OBJECT_AS_ARRAY);
+            // Test the json to insure it's valid
+            $json = json_decode(File::get($this->path), JSON_OBJECT_AS_ARRAY);
             if (json_last_error() !== JSON_ERROR_NONE) {
                 throw new \JsonException('The contents of the file "' . $this->path . '" is not valid json.');
             }
+
+            $this->data = $json;
         }
     }
 
