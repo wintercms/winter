@@ -911,14 +911,12 @@ class MediaLibrary
         $pathInfos = pathinfo($path);
         $dirName = dirname($this->getMediaPath($path));
 
-        $sameFilesInFolder = Arr::map(array_filter(
+        $sameFilesInFolder = Arr::map(
             $this->getStorageDisk()->files($dirName),
-            function ($file) use ($pathInfos) {
-                return preg_match('/'. $pathInfos['filename'] .'(_(\d*))?\.'. $pathInfos['extension'] .'$/U', $file);
+            function ($value) use ($dirName) {
+                return str_replace($dirName .'/', '', '/'. $value);
             }
-        ), function ($value) use ($dirName) {
-            return str_replace($dirName .'/', '', '/'. $value);
-        });
+        );
 
         return File::unique($pathInfos['basename'], $sameFilesInFolder);
     }
