@@ -15,6 +15,7 @@ class CreateJob extends BaseScaffoldCommand
     protected $signature = 'create:job
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {name : The name of the job class to generate. <info>(eg: ImportPosts)</info>}
+        {--b|batchable : Generates a batchable queue job.}
         {--s|sync : Generates a non-queueable job.}
         {--f|force : Overwrite existing files with generated files.}
         {--uninspiring : Disable inspirational quotes}
@@ -44,6 +45,9 @@ class CreateJob extends BaseScaffoldCommand
         'sync' => [
             'scaffold/job/job.stub' => 'jobs/{{studly_name}}.php',
         ],
+        'batched' => [
+            'scaffold/job/job.batched.stub' => 'jobs/{{studly_name}}.php',
+        ],
         'queued' => [
             'scaffold/job/job.queued.stub' => 'jobs/{{studly_name}}.php',
         ],
@@ -56,6 +60,8 @@ class CreateJob extends BaseScaffoldCommand
     {
         if ($this->option('sync')) {
             $this->stubs = $this->jobStubs['sync'];
+        } elseif ($this->option('batchable')) {
+            $this->stubs = $this->jobStubs['batched'];
         } else {
             $this->stubs = $this->jobStubs['queued'];
         }
