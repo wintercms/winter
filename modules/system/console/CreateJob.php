@@ -40,8 +40,13 @@ class CreateJob extends BaseScaffoldCommand
     /**
      * @var array A mapping of stubs to generated files.
      */
-    protected $stubs = [
-        'scaffold/job/job.queued.stub' => 'jobs/{{studly_name}}.php',
+    protected $jobStubs = [
+        'sync' => [
+            'scaffold/job/job.stub' => 'jobs/{{studly_name}}.php',
+        ],
+        'queued' => [
+            'scaffold/job/job.queued.stub' => 'jobs/{{studly_name}}.php',
+        ],
     ];
 
     /**
@@ -50,7 +55,9 @@ class CreateJob extends BaseScaffoldCommand
     public function prepareVars(): array
     {
         if ($this->option('sync')) {
-            $this->stubs['scaffold/job/job.stub'] = 'jobs/{{studly_name}}.php';
+            $this->stubs = $this->jobStubs['sync'];
+        } else {
+            $this->stubs = $this->jobStubs['queued'];
         }
 
         return parent::prepareVars();
