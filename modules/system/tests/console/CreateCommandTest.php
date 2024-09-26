@@ -13,7 +13,6 @@ class CreateCommandTest extends TestCase
         parent::setUp();
 
         $this->app->setPluginsPath(base_path() . '/modules/system/tests/fixtures/plugins/');
-
     }
 
     public function testCreatingCommand()
