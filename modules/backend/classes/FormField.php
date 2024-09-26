@@ -3,8 +3,8 @@
 namespace Backend\Classes;
 
 use BackedEnum;
-use Html;
-use Lang;
+use Winter\Storm\Support\Facades\Html;
+use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
 use Winter\Storm\Support\Str;
