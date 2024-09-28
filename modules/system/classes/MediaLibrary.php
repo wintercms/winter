@@ -908,17 +908,14 @@ class MediaLibrary
      */
     public function generateIncrementedFileName($path): string
     {
-        $pathInfos = pathinfo($path);
-        $dirName = dirname($this->getMediaPath($path));
-
-        $sameFilesInFolder = Arr::map(
-            $this->getStorageDisk()->files($dirName),
-            function ($value) use ($dirName) {
-                return str_replace($dirName .'/', '', '/'. $value);
+        $filesInFolder = Arr::map(
+            $this->getStorageDisk()->files(dirname($this->getMediaPath($path))),
+            function ($path) {
+                return basename($path);
             }
         );
 
-        return File::unique($pathInfos['basename'], $sameFilesInFolder);
+        return File::unique(basename($path), $filesInFolder);
     }
 
     /**
@@ -930,17 +927,13 @@ class MediaLibrary
      */
     public function generateIncrementedFolderName($path)
     {
-        $dirName = dirname($this->getMediaPath($path));
-
-        $sameFolders = Arr::map(array_filter(
+        $foldersInFolder = Arr::map(
             $this->getStorageDisk()->directories(dirname($this->getMediaPath($path))),
-            function ($folder) use ($path) {
-                return preg_match('/'. basename($path) .'(_(\d*))?$/U', $folder);
+            function ($value) {
+                return basename($value);
             }
-        ), function ($value) use ($dirName) {
-            return str_replace($dirName .'/', '', '/'. $value);
-        });
+        );
 
-        return Str::unique(basename($path), $sameFolders);
+        return Str::unique(basename($path), $foldersInFolder);
     }
 }
