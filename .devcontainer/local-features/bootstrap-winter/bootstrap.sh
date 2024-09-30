@@ -42,8 +42,3 @@ git update-index --assume-unchanged composer.json
 git restore config
 
 cp ${PWD}/.devcontainer/.vscode/launch.json ${PWD}/.vscode/launch.json
-
-if [ "${CODESPACES}" = "true" ]; then
-    echo "### Make web port public"
-    gh codespace ports visibility 8080:public -c ${CODESPACE_NAME}
-fi
