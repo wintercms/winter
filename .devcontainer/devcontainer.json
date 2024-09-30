@@ -15,22 +15,27 @@
             "userGid": "1000",
             "upgradePackages": "true"
         },
-        "./local-features/apache-config": "latest",
         "ghcr.io/devcontainers/features/node:1": {
             "version": "22"
         },
-        "ghcr.io/devcontainers/features/git:1": {
-            "version": "latest",
-            "ppa": "false"
-        },
-        "ghcr.io/devcontainers/features/github-cli:1": {}
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "./local-features/apache-config": "latest",
+        // Comment the following feature if you wish to bootstrap and configure Winter manually (ie. you wish to use this for your own project)
+        "./local-features/bootstrap-winter": "latest"
     },
     "overrideFeatureInstallOrder": [
         "ghcr.io/devcontainers/features/common-utils"
     ],
-    "postCreateCommand": "sh ./.devcontainer/create-command.sh",
-    "postStartCommand": "service apache2 start",
+    "containerEnv": {
+        "DB_CONNECTION": "sqlite",
+        "DB_DATABASE": "${containerWorkspaceFolder}/storage/database.sqlite"
+    },
+    "postStartCommand": "sudo rm -rf /var/www/html && sudo ln -s ${containerWorkspaceFolder} /var/www/html && service apache2 start",
     "portsAttributes": {
+        "80": {
+            "onAutoForward": "ignore"
+        },
         "8080": {
             "label": "Preview Winter installation",
             "onAutoForward": "openPreview"

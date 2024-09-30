@@ -1,5 +1,5 @@
 <?php
-$composer = json_decode(file_get_contents(dirname(__DIR__) . '/composer.json'), true);
+$composer = json_decode(file_get_contents(dirname(dirname(dirname(__DIR__))) . '/composer.json'), true);
 
 // Install Winter Test plugin
 if (
@@ -30,6 +30,6 @@ if (
 }
 
 file_put_contents(
-    dirname(__DIR__) . '/composer.json',
-    json_encode($composer, JSON_PRETTY_PRINT | JSON_NUMERIC_CHECK)
+    dirname(dirname(dirname(__DIR__))) . '/composer.json',
+    json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
 );
