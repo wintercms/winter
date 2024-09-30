@@ -19,7 +19,6 @@
             "version": "22"
         },
         "ghcr.io/devcontainers/features/git:1": {},
-        "ghcr.io/devcontainers/features/github-cli:1": {},
         "./local-features/apache-config": "latest",
         // Comment the following feature if you wish to bootstrap and configure Winter manually (ie. you wish to use this for your own project)
         "./local-features/bootstrap-winter": "latest"
@@ -33,9 +32,6 @@
     },
     "postStartCommand": "sudo rm -rf /var/www/html && sudo ln -s ${containerWorkspaceFolder} /var/www/html && service apache2 start",
     "portsAttributes": {
-        "80": {
-            "onAutoForward": "ignore"
-        },
         "8080": {
             "label": "Preview Winter installation",
             "onAutoForward": "openPreview"
@@ -48,7 +44,8 @@
     "customizations": {
         "vscode": {
             "settings": {
-                "php.validate.executablePath": "/usr/local/bin/php"
+                "php.validate.executablePath": "/usr/local/bin/php",
+                "phpcs.executablePath": "${containerWorkspaceFolder}/vendor/bin/phpcs"
             },
             "extensions": [
                 "xdebug.php-debug",
@@ -56,6 +53,11 @@
                 "shevaua.phpcs",
                 "swordev.phpstan",
                 "wintercms.winter-cms"
+            ]
+        },
+        "codespaces": {
+            "openFiles": [
+                ".devcontainer/README.md"
             ]
         }
     },
