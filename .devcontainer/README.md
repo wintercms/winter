@@ -21,7 +21,7 @@ When this environment is built, the Apache 2 service is automatically started, w
 
 XDebug is enabled by default, and allows you to quickly use step debugging. It will be available in the **Debug** tab of VSCode or similar screen in other IDEs.
 
-By default, when using the `bootstrap-winter` feature, changes to certain folders and locations will be ignored by Git to keep the change list clean. This includes the `plugins` and `themes` folders, and `composer.json` in the root folder. If you wish to use this environment for your own projects, it is recommended that you do not use this feature. Please see the **Using in your own projects** section below for using this environment outside of Winter development.
+By default, when using the `bootstrap-winter` feature, changes to certain folders and locations will be ignored by Git to keep the change list clean. This includes the `plugins` and `themes` folders, the `config/app.php` file and the `composer.json` file in the root folder. If you wish to use this environment for your own projects, it is recommended that you do not use this feature. Please see the **Using in your own projects** section below for using this environment outside of Winter development.
 
 ## Environment platform
 

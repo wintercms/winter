@@ -32,6 +32,7 @@
         "DB_DATABASE": "${containerWorkspaceFolder}/storage/database.sqlite"
     },
     "postStartCommand": "sudo rm -rf /var/www/html && sudo ln -s ${containerWorkspaceFolder} /var/www/html && service apache2 start",
+    "forwardPorts": [8080],
     "portsAttributes": {
         "8080": {
             "label": "Preview Winter installation",
