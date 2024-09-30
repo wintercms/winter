@@ -24,6 +24,7 @@ sftp-config.json
 nbproject
 .idea
 .vscode
+!.devcontainer/.vscode
 _ide_helper.php
 
 # Other ignores
