@@ -10,6 +10,11 @@ if [ ! -f "${PWD}/.env" ]; then
     echo "### Generating .env files"
     php artisan winter:env -q
     php artisan key:generate -q
+
+    if [ "${CODESPACES}" = "true" ]; then
+        echo "### Updating .env file for Codespaces"
+        sed -i "s/APP_URL=\"http:\/\/localhost\"/APP_URL=\"https:\/\/${CODESPACE_NAME}.app.github.dev\"/g" .env
+    fi
 fi
 
 if [ "${DB_CONNECTION}" = "sqlite" ] && [ "${DB_DATABASE}" = "${PWD}/storage/database.sqlite" ] && [ ! -f "${PWD}/storage/database.sqlite" ]; then
@@ -37,3 +42,8 @@ git update-index --assume-unchanged composer.json
 git restore config
 
 cp ${PWD}/.devcontainer/.vscode/launch.json ${PWD}/.vscode/launch.json
+
+if [ "${CODESPACES}" = "true" ]; then
+    echo "### Make web port public"
+    gh codespace ports visibility 8080:public -c ${CODESPACE_NAME}
+fi
