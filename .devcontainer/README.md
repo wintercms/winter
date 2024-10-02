@@ -29,9 +29,9 @@ The following software is installed in this environment.
 
 - Apache 2.4
 - PHP 8.3 with the following extensions:
-    - `intl`
-    - `gd`
-    - `xdebug`
+  - `intl`
+  - `gd`
+  - `xdebug`
 - Composer
 - NodeJS 22 (including `npm`)
 - Git
@@ -60,3 +60,11 @@ If this feature is disabled, you must bootstrap your project manually. This incl
 You may view the `.devcontainer/local-features/bootstrap-winter/bootstrap.sh` file to see how we bootstrap Winter, and run these commands manually. You will only need to do this once per project container.
 
 If you wish to mount your own volumes, use your own databases or any other complex usages, please review the [Docker documentation](https://docs.docker.com/) to set this up on the container.
+
+## Troubleshooting
+
+### Preview website missing styles / assets on Codespaces
+
+By default, ports that are forwarded in Codespaces are private by default. While we have tried to fix this automatically in the Winter bootstrap process by making the port public through the GitHub CLI, it unfortunately is not consistently applied.
+
+If you find that your preview website is missing assets or styling, open the **Ports** tab by opening the Action Palette in Codespaces (`F1`) and using the **View: Toggle Ports** action. Right click on the **Preview Winter installation** port, right click on it and choose **Port Visiblity -> Public**. This should resolve the issue.
