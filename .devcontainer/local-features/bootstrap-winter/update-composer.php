@@ -31,6 +31,6 @@ if (
 }
 
 file_put_contents(
-    dirname(dirname(dirname(__DIR__))) . '/composer.json',
+    $composerPath,
     json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
 );
