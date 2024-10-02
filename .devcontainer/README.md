@@ -42,7 +42,7 @@ You may use this development environment for your own projects, making it a grea
 
 You may disable this feature by modifying the `.devcontainer/devcontainer.json` file before running the container and commenting out the feature:
 
-```json
+```json5
         "ghcr.io/devcontainers/features/git:1": {},
         "./local-features/apache-config": "latest",
         // Comment the following feature if you wish to bootstrap and configure Winter manually (ie. you wish to use this for your own project)
