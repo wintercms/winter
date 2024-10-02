@@ -1,5 +1,6 @@
 <?php
-$composer = json_decode(file_get_contents(dirname(dirname(dirname(__DIR__))) . '/composer.json'), true);
+$composerPath = dirname(__DIR__, 3) . '/composer.json';
+$composer = json_decode(file_get_contents($composerPath), true);
 
 // Install Winter Test plugin
 if (
