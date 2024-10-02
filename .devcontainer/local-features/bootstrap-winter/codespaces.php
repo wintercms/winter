@@ -1,6 +1,6 @@
 <?php
 
-$root = dirname(dirname(dirname(__DIR__)));
+$root = dirname(__DIR__, 3);
 
 require_once $root . '/vendor/autoload.php';
 
