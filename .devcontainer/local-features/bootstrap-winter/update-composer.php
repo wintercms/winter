@@ -2,32 +2,18 @@
 $composerPath = dirname(__DIR__, 3) . '/composer.json';
 $composer = json_decode(file_get_contents($composerPath), true);
 
-// Install Winter Test plugin
-if (
-    !in_array('winter/wn-test-plugin', array_keys($composer['require']))
-) {
-    $composer['require']['winter/wn-test-plugin'] = 'dev-main';
-}
+$packages = [
+    'winter/wn-test-plugin' => 'dev-main',
+    'winter/wn-blog-plugin' => 'dev-main',
+    'winter/wn-blog-plugin' => 'dev-main',
+    'winter/wn-workshop-theme' => 'dev-main',
+];
 
-// Install Winter Blog plugin
-if (
-    !in_array('winter/wn-blog-plugin', array_keys($composer['require']))
-) {
-    $composer['require']['winter/wn-blog-plugin'] = 'dev-main';
-}
-
-// Install Winter Pages plugin
-if (
-    !in_array('winter/wn-pages-plugin', array_keys($composer['require']))
-) {
-    $composer['require']['winter/wn-pages-plugin'] = 'dev-main';
-}
-
-// Install Workshop theme
-if (
-    !in_array('winter/wn-workshop-theme', array_keys($composer['require']))
-) {
-    $composer['require']['winter/wn-workshop-theme'] = 'dev-main';
+// Install Winter packages
+foreach ($packages as $package => $version) {
+    if (!in_array($package, array_keys($composer['require']))) {
+        $composer['require'][$package] = $version;
+    }
 }
 
 file_put_contents(
