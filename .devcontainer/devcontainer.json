@@ -1,0 +1,67 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/debian
+{
+    "name": "Winter on PHP 8.3",
+    "build": {
+        "dockerfile": "./Dockerfile",
+        "context": "."
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": "true",
+            "configureZshAsDefaultShell": true,
+            "username": "vscode",
+            "userUid": "1000",
+            "userGid": "1000",
+            "upgradePackages": "true"
+        },
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "22"
+        },
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "./local-features/apache-config": "latest",
+        // Comment the following feature if you wish to bootstrap and configure Winter manually (ie. you wish to use this for your own project)
+        "./local-features/bootstrap-winter": "latest"
+    },
+    "overrideFeatureInstallOrder": [
+        "ghcr.io/devcontainers/features/common-utils"
+    ],
+    "containerEnv": {
+        "DB_CONNECTION": "sqlite",
+        "DB_DATABASE": "${containerWorkspaceFolder}/storage/database.sqlite"
+    },
+    "postStartCommand": "sudo rm -rf /var/www/html && sudo ln -s ${containerWorkspaceFolder} /var/www/html && service apache2 start",
+    "forwardPorts": [8080],
+    "portsAttributes": {
+        "8080": {
+            "label": "Preview Winter installation",
+            "onAutoForward": "openPreview"
+        },
+        "9003": {
+            "label": "Xdebug",
+            "onAutoForward": "notify"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "php.validate.executablePath": "/usr/local/bin/php",
+                "phpcs.executablePath": "${containerWorkspaceFolder}/vendor/bin/phpcs"
+            },
+            "extensions": [
+                "xdebug.php-debug",
+                "bmewburn.vscode-intelephense-client",
+                "shevaua.phpcs",
+                "swordev.phpstan",
+                "wintercms.winter-cms"
+            ]
+        },
+        "codespaces": {
+            "openFiles": [
+                ".devcontainer/README.md"
+            ]
+        }
+    },
+    "remoteUser": "vscode"
+}
