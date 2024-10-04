@@ -125,6 +125,11 @@ abstract class AssetInstall extends Command
         return 0;
     }
 
+    /**
+     * Returns all packages registered by the system filtered by requestedPackages if defined
+     * @throws PackageNotFoundException
+     * @throws \Winter\Storm\Exception\SystemException
+     */
     protected function getRegisteredPackages(array $requestedPackages = []): array
     {
         $packageManager = $this->getPackageManager();
@@ -193,6 +198,10 @@ abstract class AssetInstall extends Command
         return $registeredPackages;
     }
 
+    /**
+     * Checks if the package.json of a package has the dependencies required for this command and asks the user if
+     * they want to install them if not present.
+     */
     protected function validateRequireDependenciesPresent(PackageJson $packageJson): PackageJson
     {
         // Check to see if required packages are already present as a dependency
@@ -208,6 +217,12 @@ abstract class AssetInstall extends Command
         return $packageJson;
     }
 
+    /**
+     * Validates if the packages passed can be installed and if possible, installs them.
+     * @throws PackageIgnoredException
+     * @throws PackageNotConfiguredException
+     * @throws PackageNotFoundException
+     */
     protected function processPackages(array $registeredPackages, PackageJson $packageJson): PackageJson
     {
         // Check if the user requested a specific package for install
@@ -267,6 +282,9 @@ abstract class AssetInstall extends Command
         return $packageJson;
     }
 
+    /**
+     * Adds a package to the project workspace or mark it as ignored based on user input
+     */
     protected function processPackage(PackageJson $packageJson, string $name, array $package, bool $force = false): bool
     {
         // Normalize package path across OS types
@@ -366,6 +384,9 @@ abstract class AssetInstall extends Command
         }
     }
 
+    /**
+     * Returns the root package.json as a PackageManager object
+     */
     protected function getPackageManager(): PackageManager
     {
         // Flush the instance

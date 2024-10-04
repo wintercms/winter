@@ -3,7 +3,7 @@
 namespace System\Console\Asset\Npm;
 
 use System\Console\Asset\Exceptions\PackageNotRegisteredException;
-use System\Console\Asset\NpmCommand;
+use System\Console\Asset\Npm\NpmCommand;
 
 class NpmUpdate extends NpmCommand
 {
@@ -35,6 +35,9 @@ class NpmUpdate extends NpmCommand
         'mix:update'
     ];
 
+    /**
+     * Execute the console command.
+     */
     public function handle(): int
     {
         $command = ($this->argument('npmArgs')) ?? [];

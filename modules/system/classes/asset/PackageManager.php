@@ -355,6 +355,9 @@ class PackageManager
         ];
     }
 
+    /**
+     * Returns an expected package type from its name
+     */
     public function getPackageTypeFromName(string $package): ?string
     {
         // Check if package could be a module
@@ -379,6 +382,9 @@ class PackageManager
         return null;
     }
 
+    /**
+     * Set the package.json file path used for checking if packages are in workspaces or ignored
+     */
     public function setPackageJsonPath(string $packageJsonPath): static
     {
         $this->packageJson = new PackageJson($packageJsonPath);

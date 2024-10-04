@@ -1,9 +1,9 @@
 <?php
 
-namespace System\console\asset\npm;
+namespace System\Console\Asset\Npm;
 
 use System\Console\Asset\Exceptions\PackageNotRegisteredException;
-use System\Console\Asset\NpmCommand;
+use System\Console\Asset\Npm\NpmCommand;
 
 class NpmInstall extends NpmCommand
 {
@@ -28,6 +28,9 @@ class NpmInstall extends NpmCommand
         {--s|silent : Silent mode.}
         {--disable-tty : Disable tty mode}';
 
+    /**
+     * Execute the console command.
+     */
     public function handle(): int
     {
         $command = ($this->argument('npmArgs')) ?? [];

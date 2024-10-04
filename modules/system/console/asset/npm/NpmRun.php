@@ -2,7 +2,7 @@
 
 namespace System\Console\Asset\Npm;
 
-use System\Console\Asset\NpmCommand;
+use System\Console\Asset\Npm\NpmCommand;
 
 class NpmRun extends NpmCommand
 {

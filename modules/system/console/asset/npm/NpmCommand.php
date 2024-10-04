@@ -1,6 +1,6 @@
 <?php
 
-namespace System\Console\Asset;
+namespace System\Console\Asset\Npm;
 
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\Process;
@@ -11,6 +11,11 @@ use Winter\Storm\Console\Command;
 
 abstract class NpmCommand extends Command
 {
+    /**
+     * Gets a package config and its PackageJson file based on the `package` argument.
+     * @throws PackageNotRegisteredException
+     * @throws \JsonException
+     */
     protected function getPackage(): ?array
     {
         $compilableAssets = PackageManager::instance();
@@ -34,6 +39,9 @@ abstract class NpmCommand extends Command
         return [$package, $packageJson];
     }
 
+    /**
+     * Starts a npm process with the command and cwd provided
+     */
     protected function npmRun(array $command, string $path): int
     {
         $process = new Process(
@@ -65,6 +73,9 @@ abstract class NpmCommand extends Command
         });
     }
 
+    /**
+     * Get the env env to provide to node
+     */
     protected function getNodeEnv(): string
     {
         if (!$this->hasOption('production')) {
