@@ -9,7 +9,7 @@ use System\Classes\Asset\PackageJson;
 use System\Classes\Asset\PackageManager;
 use System\Classes\PluginManager;
 use System\Console\Asset\Exceptions\PackageIgnoredException;
-use System\console\asset\exceptions\PackageNotConfiguredException;
+use System\Console\Asset\Exceptions\PackageNotConfiguredException;
 use System\Console\Asset\Exceptions\PackageNotFoundException;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\Config;
