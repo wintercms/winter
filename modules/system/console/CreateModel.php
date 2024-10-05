@@ -21,6 +21,7 @@ class CreateModel extends BaseScaffoldCommand
         {--a|all : Generate a controller, migration, & seeder for the model}
         {--c|controller : Create a new controller for the model}
         {--s|seed : Create a new seeder for the model}
+        {--F|factory : Create a new factory for the model}
         {--p|pivot : Indicates if the generated model should be a custom intermediate table model}
         {--no-migration : Don\'t create a migration file for the model}
         {--uninspiring : Disable inspirational quotes}
@@ -71,6 +72,7 @@ class CreateModel extends BaseScaffoldCommand
         if ($this->option('all')) {
             $this->input->setOption('controller', true);
             $this->input->setOption('seed', true);
+            $this->input->setOption('factory', true);
         }
 
         if ($this->option('controller')) {
@@ -83,6 +85,10 @@ class CreateModel extends BaseScaffoldCommand
 
         if (!$this->option('no-migration')) {
             $this->createMigration();
+        }
+
+        if ($this->option('factory')) {
+            $this->createFactory();
         }
     }
 
@@ -149,6 +155,20 @@ class CreateModel extends BaseScaffoldCommand
         $this->call('create:controller', [
             'plugin'  => $this->getPluginIdentifier(),
             'controller' => Str::plural($this->argument('model')),
+            '--model' => $this->getNameInput(),
+            '--force' => $this->option('force'),
+            '--uninspiring' => $this->option('uninspiring'),
+        ]);
+    }
+
+    /**
+     * Create a factory class for the model.
+     */
+    public function createFactory(): void
+    {
+        $this->call('create:factory', [
+            'plugin'  => $this->getPluginIdentifier(),
+            'factory' => "{$this->getNameInput()}Factory",
             '--model' => $this->getNameInput(),
             '--force' => $this->option('force'),
             '--uninspiring' => $this->option('uninspiring'),
