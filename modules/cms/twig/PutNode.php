@@ -1,5 +1,6 @@
 <?php namespace Cms\Twig;
 
+use Twig\Attribute\YieldReady;
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
 
@@ -9,6 +10,7 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class PutNode extends TwigNode
 {
     public function __construct(TwigNode $body, $name, $endType, $lineno, $tag = 'put')
@@ -25,7 +27,7 @@ class PutNode extends TwigNode
     {
         $compiler
             ->addDebugInfo($this)
-            ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->startBlock(")
+            ->write("yield \$this->env->getExtension('Cms\Twig\Extension')->startBlock(")
             ->raw("'".$this->getAttribute('name')."'")
             ->write(");\n")
         ;
@@ -36,7 +38,7 @@ class PutNode extends TwigNode
 
         $compiler
             ->addDebugInfo($this)
-            ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->endBlock(")
+            ->write("yield \$this->env->getExtension('Cms\Twig\Extension')->endBlock(")
             ->raw($isOverwrite ? 'false' : 'true')
             ->write(");\n")
         ;

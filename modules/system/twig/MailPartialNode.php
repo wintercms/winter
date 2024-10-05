@@ -1,5 +1,6 @@
 <?php namespace System\Twig;
 
+use Twig\Attribute\YieldReady;
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
 
@@ -9,6 +10,7 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class MailPartialNode extends TwigNode
 {
     public function __construct(TwigNode $nodes, $paramNames, $body, $lineno, $tag = 'partial')
@@ -48,7 +50,7 @@ class MailPartialNode extends TwigNode
         }
 
         $compiler
-            ->write("echo \System\Classes\MailManager::instance()->renderPartial(")
+            ->write("yield \System\Classes\MailManager::instance()->renderPartial(")
             ->subcompile($this->getNode('nodes')->getNode(0))
             ->write(", \$context['__system_partial_params']")
             ->write(");\n")
