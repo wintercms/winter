@@ -1,13 +1,13 @@
 <?php namespace Backend\Widgets;
 
-use Config;
-use Backend;
 use Lang;
 use Input;
+use Config;
+use Backend;
 use Request;
+use SystemException;
 use Backend\Classes\WidgetBase;
 use Winter\Storm\Html\Helper as HtmlHelper;
-use SystemException;
 
 /**
  * Table Widget.
@@ -64,6 +64,16 @@ class Table extends WidgetBase
         $this->fieldName = $this->getConfig('fieldName', $this->alias);
 
         $this->recordsKeyFrom = $this->getConfig('keyFrom', 'id');
+
+        // Validate limits
+        if (!empty($this->getConfig('maxItems')) && (int) $this->getConfig('minItems', 1) > (int) $this->getConfig('maxItems')) {
+            throw new SystemException(
+                sprintf(
+                    'The mininum item limit must be less than or equal to the maximum item limit for the "%s" datatable.',
+                    $this->fieldName
+                )
+            );
+        }
 
         $dataSourceClass = $this->getConfig('dataSource');
         if (!strlen($dataSourceClass)) {
@@ -131,6 +141,8 @@ class Table extends WidgetBase
         $this->vars['deleting'] = $this->getConfig('deleting', true);
         $this->vars['toolbar'] = $this->getConfig('toolbar', true);
         $this->vars['height'] = $this->getConfig('height', false) ?: 'false';
+        $this->vars['minItems'] = (int) $this->getConfig('minItems', 1);
+        $this->vars['maxItems'] = (int) $this->getConfig('maxItems');
         $this->vars['dynamicHeight'] = $this->getConfig('dynamicHeight', false) ?: 'false';
 
         $this->vars['btnAddRowLabel'] = Lang::get($this->getConfig('btnAddRowLabel', 'backend::lang.form.insert_row'));
