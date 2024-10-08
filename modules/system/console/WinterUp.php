@@ -1,6 +1,7 @@
 <?php namespace System\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\Isolatable;
 use System\Classes\UpdateManager;
 
 /**
@@ -11,7 +12,7 @@ use System\Classes\UpdateManager;
  * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
-class WinterUp extends Command
+class WinterUp extends Command implements Isolatable
 {
     /**
      * The console command name.
