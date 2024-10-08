@@ -53,6 +53,14 @@
         this.$el.on('click', '> ul > li > .repeater-item-collapse .repeater-item-collapse-one', this.proxy(this.toggleCollapse))
         this.$el.on('click', '> .field-repeater-items > .field-repeater-add-item > [data-repeater-add-group]', this.proxy(this.clickAddGroupButton))
 
+        this.$el.find('> ul > li > .repeater-item-collapsed-title')
+            .css({'cursor': 'pointer', 'width': '100%'})
+            .on('click', this.proxy(this.toggleCollapse))
+
+        this.$el.find('> ul > li > .field-repeater-form > .form-group > label')
+            .css({'cursor': 'pointer', 'width': '100%'})
+            .on('click', this.proxy(this.toggleCollapse))
+
         this.$el.one('dispose-control', this.proxy(this.dispose))
 
         this.togglePrompt()
@@ -67,6 +75,8 @@
         this.$el.off('ajaxDone', '> .field-repeater-items > .field-repeater-item > .repeater-item-remove > [data-repeater-remove]', this.proxy(this.onRemoveItemSuccess))
         this.$el.off('ajaxDone', '> .field-repeater-items > .field-repeater-add-item > [data-repeater-add]', this.proxy(this.onAddItemSuccess))
         this.$el.off('click', '> ul > li > .repeater-item-collapse .repeater-item-collapse-one', this.proxy(this.toggleCollapse))
+        this.$el.off('click', '> ul > li > .repeater-item-collapsed-title', this.proxy(this.toggleCollapse))
+        this.$el.off('click', '> ul > li > .field-repeater-form > .form-group > label', this.proxy(this.toggleCollapse))
         this.$el.off('click', '> .field-repeater-items > .field-repeater-add-item > [data-repeater-add-group]', this.proxy(this.clickAddGroupButton))
 
         this.$el.off('dispose-control', this.proxy(this.dispose))
