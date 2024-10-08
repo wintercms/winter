@@ -21,7 +21,7 @@ class TagList extends FormWidgetBase
     //
 
     /**
-     * @var string Tag separator: space, comma.
+     * @var string Tag separator: space, comma, semicolon.
      */
     public $separator = 'comma';
 
@@ -123,23 +123,22 @@ class TagList extends FormWidgetBase
      * Returns an array suitable for saving against a relation (array of keys).
      * This method also creates non-existent tags.
      */
-    protected function hydrateRelationSaveValue($names): ?array
+    protected function hydrateRelationSaveValue($items): ?array
     {
-        if (!$names) {
-            return $names;
+        if (empty($items)) {
+            return [];
         }
 
-        if (!is_array($names)) {
-            $names = [$names];
+        if (!is_array($items)) {
+            $items = [$items];
         }
 
         $relationModel = $this->getRelationModel();
         $existingTags = $relationModel
-            ->whereIn($this->nameFrom, $names)
-            ->lists($this->nameFrom, $relationModel->getKeyName())
-        ;
+            ->whereIn(($this->useKey) ? $relationModel->getKeyName() : $this->nameFrom, $items)
+            ->lists($this->nameFrom, $relationModel->getKeyName());
 
-        $newTags = $this->customTags ? array_diff($names, $existingTags) : [];
+        $newTags = $this->customTags ? array_diff($items, $existingTags) : [];
 
         foreach ($newTags as $newTag) {
             $newModel = new $relationModel;
@@ -159,7 +158,24 @@ class TagList extends FormWidgetBase
         $value = parent::getLoadValue();
 
         if ($this->mode === static::MODE_RELATION) {
-            return $this->getRelationObject()->lists($this->nameFrom);
+            // Load default if necessary
+            if (!$this->model->exists) {
+                $default = $this->formField->getDefaultFromData($this->data ?: $this->model);
+
+                if (!is_null($default)) {
+                    return ($this->useKey)
+                        ? $this->getRelationModel()->whereIn($this->getRelationModel()->getKeyName(), $default)->lists($this->getRelationModel()->getKeyName())
+                        : $this->getRelationModel()->whereIn($this->nameFrom, $default)->lists($this->nameFrom);
+                }
+            }
+
+            if (empty($value)) {
+                return [];
+            }
+
+            return $this->getRelationModel()->whereIn($this->getRelationModel()->getKeyName(), $value)->lists(($this->useKey)
+                 ? $this->getRelationModel()->getKeyName()
+                 : $this->nameFrom);
         }
 
         return $this->mode === static::MODE_STRING
@@ -183,7 +199,7 @@ class TagList extends FormWidgetBase
                 // by joining its pivot table. Remove all joins from the query.
                 $query->getQuery()->getQuery()->joins = [];
 
-                return $query->lists($this->nameFrom);
+                return $query->lists($this->nameFrom, ($this->useKey) ? $this->getRelationModel()->getKeyName() : null);
             });
         }
 
@@ -214,10 +230,12 @@ class TagList extends FormWidgetBase
     protected function getSeparatorCharacter()
     {
         switch (strtolower($this->separator)) {
-            case 'comma':
-                return ',';
+            case 'semicolon':
+                return ';';
             case 'space':
                 return ' ';
+            default:
+                return ',';
         }
     }
 }
