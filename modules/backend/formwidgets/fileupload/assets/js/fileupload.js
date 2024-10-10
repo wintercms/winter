@@ -48,7 +48,19 @@
         }
 
         this.$el.one('dispose-control', this.proxy(this.dispose))
-        this.$uploadButton = $('.upload-button', this.$el)
+
+        this.$clickableElements = []
+
+        const uploadButtonEl = $('.upload-button', this.$el).get(0)
+        if (uploadButtonEl) {
+            this.$clickableElements.push(uploadButtonEl)
+        }
+
+        const uploadEmptyMessageEl = $('div.upload-empty-message', this.$el).get(0)
+        if (uploadEmptyMessageEl) {
+            this.$clickableElements.push(uploadEmptyMessageEl)
+        }
+
         this.$filesContainer = $('.upload-files-container', this.$el)
         this.uploaderOptions = {}
 
@@ -79,7 +91,7 @@
         this.$el.removeData('oc.fileUpload')
 
         this.$el = null
-        this.$uploadButton = null
+        this.$clickableElements = null
         this.$filesContainer = null
         this.uploaderOptions = null
 
@@ -98,7 +110,7 @@
         this.uploaderOptions = {
             url: this.options.url,
             paramName: this.options.paramName,
-            clickable: this.$uploadButton.get(0),
+            clickable: this.$clickableElements,
             previewsContainer: this.$filesContainer.get(0),
             maxFiles: !this.options.isMulti ? 1 : null,
             maxFilesize: this.options.maxFilesize,
