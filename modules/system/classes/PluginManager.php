@@ -10,10 +10,12 @@ use View;
 use Cache;
 use Config;
 use Schema;
+use Storage;
 use SystemException;
 use FilesystemIterator;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use System\Classes\Packager\Composer;
 use System\Models\PluginVersion;
 use Winter\Storm\Foundation\Application;
 use Winter\Storm\Support\ClassLoader;
@@ -62,6 +64,11 @@ class PluginManager
     protected $pluginFlags = [];
 
     /**
+     * @var array Array of packages installed via composer
+     */
+    protected $composerPackages = [];
+
+    /**
      * @var PluginVersion[] Local cache of loaded PluginVersion records keyed by plugin code
      */
     protected $pluginRecords = [];
@@ -108,6 +115,9 @@ class PluginManager
     {
         $this->app = App::make('app');
 
+        // Load the packages registered via composer
+        $this->loadComposer();
+
         // Load the plugins from the filesystem and sort them by dependencies
         $this->loadPlugins();
 
@@ -117,6 +127,35 @@ class PluginManager
 
         // Register plugin replacements
         $this->registerPluginReplacements();
+    }
+
+    public function loadComposer(): array
+    {
+        return $this->composerPackages = Cache::rememberForever(Composer::COMPOSER_CACHE_KEY, function () {
+            $packageFile = Storage::path('../framework/packages.json');
+            if (!is_file($packageFile)) {
+                return [];
+            }
+            $packages = [];
+            $installed = json_decode(file_get_contents($packageFile), JSON_OBJECT_AS_ARRAY);
+            foreach ($installed as $package) {
+                switch ($package['type']) {
+                    case 'winter-plugin':
+                        $packages['plugins'][$package['path']] = $package;
+                        break;
+                    case 'winter-module':
+                        $packages['modules'][$package['path']] = $package;
+                        break;
+                    case 'winter-theme':
+                        $packages['themes'][$package['path']] = $package;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return $packages;
+        });
     }
 
     /**
@@ -179,6 +218,8 @@ class PluginManager
 
         $this->plugins[$lowerClassId] = $pluginObj;
         $this->normalizedMap[$lowerClassId] = $classId;
+
+        $pluginObj->setComposerPackage($this->composerPackages['plugins'][$path] ?? null);
 
         $replaces = $pluginObj->getReplaces();
         if ($replaces) {
@@ -469,6 +510,17 @@ class PluginManager
         }
 
         return $this->plugins[$identifier] ?? null;
+    }
+
+    public function findByComposerPackage(string $identifier): ?PluginBase
+    {
+        foreach ($this->getAllPlugins() as $plugin) {
+            if ($plugin->getComposerPackageName() === $identifier) {
+                return $plugin;
+            }
+        }
+
+        return null;
     }
 
     /**

@@ -1,6 +1,7 @@
 <?php namespace System\Console;
 
 use File;
+use System\Classes\Packager\Composer;
 use Winter\Storm\Console\Command;
 use System\Classes\UpdateManager;
 use System\Classes\PluginManager;
@@ -68,6 +69,17 @@ class PluginRemove extends Command
             */
             $manager = UpdateManager::instance()->setNotesOutput($this->output);
             $manager->rollbackPlugin($pluginName);
+        }
+
+        $plugin = $pluginManager->findByIdentifier($pluginName);
+
+        /**
+         * Uninstall composer package
+         */
+        if ($package = $plugin->getComposerPackageName()) {
+            $this->output->writeln(sprintf('<info>Removing composer package: %s</info>', $package));
+            $this->output->write(Composer::remove($package) . PHP_EOL);
+            return 0;
         }
 
         /*
