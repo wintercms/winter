@@ -1,8 +1,13 @@
 <?php namespace System\Traits;
 
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 use Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
+use System\Classes\EventStream;
 
 /**
  * Response Maker Trait
@@ -132,5 +137,20 @@ trait ResponseMaker
         }
 
         return $contents;
+    }
+
+    public function withEventStream(string $id, callable $callback, array $data = [], float $tick = 1.0): void
+    {
+        $eventStream = EventStream::load($id);
+
+        if (is_null($eventStream)) {
+            return;
+        }
+
+        $callback($eventStream);
+
+        if (!$eventStream->isClosed()) {
+            $eventStream->close();
+        }
     }
 }

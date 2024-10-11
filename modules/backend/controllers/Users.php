@@ -7,9 +7,10 @@ use Backend;
 use Redirect;
 use Response;
 use BackendMenu;
-use BackendAuth;
+use Backend\Facades\BackendAuth;
 use Backend\Models\UserGroup;
 use Backend\Classes\Controller;
+use System\Classes\EventStream;
 use System\Classes\SettingsManager;
 
 /**
@@ -259,5 +260,32 @@ class Users extends Controller
         Flash::success(Lang::get('backend::lang.account.manual_password_reset_success'));
 
         return Redirect::refresh();
+    }
+
+    public function eventregister()
+    {
+        $eventStream = new EventStream();
+        $eventStream->register();
+
+        die($eventStream->getId());
+    }
+
+    public function eventtest(string $id)
+    {
+        $this->withEventStream($id, function (EventStream $stream) {
+            $i = 0;
+
+            while (true) {
+                ++$i;
+                if ($i === 25) {
+                    break;
+                }
+
+                if (random_int(1, 3) === 3) {
+                    $stream->set('time', time());
+                }
+                sleep(1);
+            }
+        });
     }
 }
