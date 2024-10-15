@@ -14,9 +14,12 @@ use System\Classes\UpdateManager;
 class WinterUp extends Command
 {
     /**
-     * The console command name.
+     * The name and signature of the console command.
+     *
+     * @var string
      */
-    protected $name = 'winter:up';
+    protected $signature = 'winter:up
+                            {--seed : Included for compatibility with Laravel default signature, no effect at this time}';
 
     /**
      * The console command description.
