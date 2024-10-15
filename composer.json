@@ -47,7 +47,8 @@
     },
     "scripts": {
         "post-create-project-cmd": [
-            "@php artisan key:generate"
+            "@php artisan winter:install",
+            "@php artisan winter:env"
         ],
         "post-update-cmd": [
             "@php artisan winter:version",
