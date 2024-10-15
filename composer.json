@@ -48,7 +48,8 @@
     "scripts": {
         "post-create-project-cmd": [
             "@php artisan winter:install",
-            "@php artisan winter:env"
+            "@php artisan winter:env",
+            "@php artisan winter:mirror public --relative"
         ],
         "post-update-cmd": [
             "@php artisan winter:version",
