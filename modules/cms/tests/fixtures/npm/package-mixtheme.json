@@ -1,0 +1,11 @@
+{
+    "type": "module",
+    "workspaces": {
+        "packages": [
+            "modules/cms/tests/fixtures/themes/mixtest"
+        ]
+    },
+    "devDependencies": {
+        "laravel-mix": "^6.0.41"
+    }
+}
