@@ -5,12 +5,14 @@ namespace System\Classes;
 use ApplicationException;
 use Cache;
 use Config;
+use File;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Lang;
 use Storage;
 use SystemException;
 use Url;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Arr;
 use Winter\Storm\Support\Str;
 use Winter\Storm\Support\Svg;
 
@@ -332,6 +334,68 @@ class MediaLibrary
         $path = self::validatePath($path);
         $fullPath = $this->getMediaPath($path);
         return $this->getStorageDisk()->put($fullPath, $contents);
+    }
+
+    /**
+     * Duplicates files from the Library.
+     *
+     * @param array $paths A list of file paths relative to the Library root to duplicate.
+     */
+    public function duplicateFiles($paths)
+    {
+        $duplicateFiles = function ($paths) {
+            foreach ($paths as $path) {
+                $path = self::validatePath($path);
+                // $fullSrcPath = $this->getMediaPath($path);
+                $destPath = dirname($path) .'/'. $this->generateIncrementedFileName($path);
+
+                if (!$this->copyFile($path, $destPath)) {
+                    return false;
+                }
+            }
+
+            return true;
+        };
+
+        return $duplicateFiles($paths);
+    }
+
+    /**
+     * Duplicates a folder from the Library.
+     * @param array $path Specifies the folder path relative to the Library root.
+     */
+    public function duplicateFolder($path)
+    {
+        $originalPath = self::validatePath($path);
+        $newPath = dirname($path) .'/'. $this->generateIncrementedFolderName($originalPath);
+
+        return $this->copyFolder($originalPath, $newPath);
+    }
+
+    /**
+     * Copy a file to another location.
+     * @param string $oldPath Specifies the original path of the file.
+     * @param string $newPath Specifies the new path of the file.
+     * @return boolean
+     */
+    public function copyFile($oldPath, $newPath, $isRename = false)
+    {
+        $oldPath = self::validatePath($oldPath);
+        $fullOldPath = $this->getMediaPath($oldPath);
+
+        $newPath = self::validatePath($newPath);
+        $fullNewPath = $this->getMediaPath($newPath);
+
+        // If the file extension is changed to SVG, ensure that it has been sanitized
+        $oldExt = pathinfo($oldPath, PATHINFO_EXTENSION);
+        $newExt = pathinfo($newPath, PATHINFO_EXTENSION);
+        if ($oldExt !== $newExt && strtolower($newExt) === 'svg') {
+            $contents = $this->getStorageDisk()->get($fullOldPath);
+            $contents = Svg::sanitize($contents);
+            return $this->getStorageDisk()->put($fullNewPath, $contents);
+        }
+
+        return $this->getStorageDisk()->copy($fullOldPath, $fullNewPath);
     }
 
     /**
@@ -833,5 +897,43 @@ class MediaLibrary
         }
 
         return $tmpPath;
+    }
+
+    /**
+     * Generates a incremental file name based
+     * on the existing files in the same folder.
+     *
+     * @param string $path Specifies a file path to check.
+     * @return string The generated file name.
+     */
+    public function generateIncrementedFileName($path): string
+    {
+        $filesInFolder = Arr::map(
+            $this->getStorageDisk()->files(dirname($this->getMediaPath($path))),
+            function ($path) {
+                return basename($path);
+            }
+        );
+
+        return File::unique(basename($path), $filesInFolder);
+    }
+
+    /**
+     * Generates a incremental folder name based
+     * on the existing folders in the same folder.
+     *
+     * @param string $path Specifies a folder path to check.
+     * @return string The generated folder name.
+     */
+    public function generateIncrementedFolderName($path)
+    {
+        $foldersInFolder = Arr::map(
+            $this->getStorageDisk()->directories(dirname($this->getMediaPath($path))),
+            function ($value) {
+                return basename($value);
+            }
+        );
+
+        return Str::unique(basename($path), $foldersInFolder);
     }
 }
