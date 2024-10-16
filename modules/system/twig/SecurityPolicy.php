@@ -1,35 +1,94 @@
 <?php namespace System\Twig;
 
+use Cms\Classes\Controller;
+use Cms\Classes\Theme;
+use Illuminate\Database\Eloquent\Model as DbModel;
 use Twig\Markup;
 use Twig\Template;
 use Twig\Sandbox\SecurityPolicyInterface;
 use Twig\Sandbox\SecurityNotAllowedMethodError;
 use Twig\Sandbox\SecurityNotAllowedPropertyError;
+use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
+use Winter\Storm\Halcyon\Model as HalcyonModel;
 
 /**
  * SecurityPolicy globally blocks accessibility of certain methods and properties.
  *
  * @package winter\wn-system-module
- * @author Alexey Bobkov, Samuel Georges, Luke Towers
+ * @author Alexey Bobkov, Samuel Georges, Luke Towers, Ben Thomson
  */
 final class SecurityPolicy implements SecurityPolicyInterface
 {
     /**
-     * @var array List of forbidden methods.
+     * @var array<string, string[]> List of forbidden methods, grouped by applicable instance.
      */
     protected $blockedMethods = [
-        // \Winter\Storm\Extension\ExtendableTrait
-        'addDynamicMethod',
-        'addDynamicProperty',
+        '*' => [
+            // Prevent accessing Twig itself
+            'getTwig',
+            // Prevent extensions of any objects
+            'addDynamicMethod',
+            'addDynamicProperty',
+            'extendClassWith',
+            'getClassExtension',
+            'extendableSet',
+            // Prevent binding to events
+            'bindEvent',
+            'bindEventOnce',
+        ],
+        // Prevent some controller methods
+        Controller::class => [
+            'runPage',
+            'renderPage',
+            'getLoader',
+        ],
+        // Prevent model data modification
+        DbModel::class => [
+            'fill',
+            'setAttribute',
+            'setRawAttributes',
+            'save',
+            'push',
+            'update',
+            'delete',
+            'forceDelete',
+        ],
+        HalcyonModel::class => [
+            'fill',
+            'setAttribute',
+            'setRawAttributes',
+            'setSettingsAttribute',
+            'setFileNameAttribute',
+            'save',
+            'push',
+            'update',
+            'delete',
+            'forceDelete',
+        ],
+        DatasourceInterface::class => [
+            'insert',
+            'update',
+            'delete',
+            'forceDelete',
+            'write',
+            'usingSource',
+            'pushToSource',
+            'removeFromSource',
+        ],
+        Theme::class => [
+            'setDirName',
+            'registerHalcyonDatasource',
+            'getDatasource'
+        ],
+    ];
 
-        // \Winter\Storm\Support\Traits\Emitter
-        'bindEvent',
-        'bindEventOnce',
-
-        // Eloquent & Halcyon data modification
-        'insert',
-        'update',
-        'delete',
+    /**
+     * @var array<string, string[]> List of forbidden properties, grouped by applicable instance.
+     */
+    protected $blockedProperties = [
+        Theme::class => [
+            'datasource',
+        ],
     ];
 
     /**
@@ -37,8 +96,12 @@ final class SecurityPolicy implements SecurityPolicyInterface
      */
     public function __construct()
     {
-        foreach ($this->blockedMethods as $i => $m) {
-            $this->blockedMethods[$i] = strtolower($m);
+        foreach ($this->blockedMethods as $type => $methods) {
+            $this->blockedMethods[$type] = array_map('strtolower', $methods);
+        }
+
+        foreach ($this->blockedProperties as $type => $properties) {
+            $this->blockedProperties[$type] = array_map('strtolower', $properties);
         }
     }
 
@@ -65,6 +128,19 @@ final class SecurityPolicy implements SecurityPolicyInterface
      */
     public function checkPropertyAllowed($obj, $property)
     {
+        // No need to check Twig internal objects
+        if ($obj instanceof Template || $obj instanceof Markup) {
+            return;
+        }
+
+        $property = strtolower($property);
+
+        foreach ($this->blockedProperties as $type => $properties) {
+            if ($obj instanceof $type && in_array($property, $properties)) {
+                $class = get_class($obj);
+                throw new SecurityNotAllowedPropertyError(sprintf('Getting "%s" property in a "%s" object is blocked.', $property, $class), $class, $property);
+            }
+        }
     }
 
     /**
@@ -81,10 +157,20 @@ final class SecurityPolicy implements SecurityPolicyInterface
             return;
         }
 
-        $blockedMethod = strtolower($method);
-        if (in_array($blockedMethod, $this->blockedMethods)) {
+        $method = strtolower($method);
+
+        if (
+            in_array($method, $this->blockedMethods['*'])
+        ) {
             $class = get_class($obj);
             throw new SecurityNotAllowedMethodError(sprintf('Calling "%s" method on a "%s" object is blocked.', $method, $class), $class, $method);
+        }
+
+        foreach ($this->blockedMethods as $type => $methods) {
+            if ($obj instanceof $type && in_array($method, $methods)) {
+                $class = get_class($obj);
+                throw new SecurityNotAllowedMethodError(sprintf('Calling "%s" method on a "%s" object is blocked.', $method, $class), $class, $method);
+            }
         }
     }
 }

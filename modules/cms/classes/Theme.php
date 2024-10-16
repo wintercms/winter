@@ -1,22 +1,24 @@
-<?php namespace Cms\Classes;
+<?php
 
-use App;
-use Url;
-use File;
-use Yaml;
-use Lang;
-use Cache;
-use Event;
-use Config;
-use Exception;
-use SystemException;
-use DirectoryIterator;
-use ApplicationException;
+namespace Cms\Classes;
+
 use Cms\Models\ThemeData;
+use DirectoryIterator;
+use Exception;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
 use System\Models\Parameter;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 use Winter\Storm\Halcyon\Datasource\DbDatasource;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;
-use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Url;
+use Winter\Storm\Support\Facades\Yaml;
 
 /**
  * This class represents the CMS theme.
@@ -582,6 +584,11 @@ class Theme
      */
     public function __get($name)
     {
+        if (in_array(strtolower($name), ['id', 'path', 'dirname', 'config', 'formconfig', 'previewimageurl'])) {
+            $method = 'get'. ucfirst($name);
+            return $this->$method();
+        }
+
         if ($this->hasCustomData()) {
             return $this->getCustomData()->{$name};
         }
@@ -596,6 +603,10 @@ class Theme
      */
     public function __isset($key)
     {
+        if (in_array(strtolower($key), ['id', 'path', 'dirname', 'config', 'formconfig', 'previewimageurl'])) {
+            return true;
+        }
+
         if ($this->hasCustomData()) {
             $theme = $this->getCustomData();
             return $theme->offsetExists($key);
