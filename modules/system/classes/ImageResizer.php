@@ -1,16 +1,18 @@
-<?php namespace System\Classes;
+<?php
 
-use Url;
-use Crypt;
+namespace System\Classes;
+
 use Cache;
-use Event;
 use Config;
-use Storage;
+use Crypt;
+use Event;
 use Exception;
-use SystemException;
 use File as FileHelper;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Storage;
 use System\Models\File as SystemFileModel;
+use SystemException;
+use Url;
 use Winter\Storm\Database\Attach\File as FileModel;
 use Winter\Storm\Database\Attach\Resizer as DefaultResizer;
 
@@ -43,6 +45,11 @@ use Winter\Storm\Database\Attach\Resizer as DefaultResizer;
  */
 class ImageResizer
 {
+    /**
+     * The name of the storage disk used by this class.
+     */
+    public const DISK = 'resized';
+
     /**
      * The cache key prefix for resizer configs
      */
@@ -154,12 +161,12 @@ class ImageResizer
                 'path' => rtrim(config('cms.pluginsPath', '/plugins'), '/'),
             ],
             'resized' => [
-                'disk' => config('cms.storage.resized.disk', 'local'),
+                'disk' => static::DISK,
                 'folder' => config('cms.storage.resized.folder', 'resized'),
                 'path' => rtrim(config('cms.storage.resized.path', '/storage/app/resized'), '/'),
             ],
             'media' => [
-                'disk' => config('cms.storage.media.disk', 'local'),
+                'disk' => MediaLibrary::DISK,
                 'folder' => config('cms.storage.media.folder', 'media'),
                 'path' => rtrim(config('cms.storage.media.path', '/storage/app/media'), '/'),
             ],
@@ -169,9 +176,9 @@ class ImageResizer
                 'path' => '/modules',
             ],
             'filemodel' => [
-                'disk' => config('cms.storage.uploads.disk', 'local'),
+                'disk' => SystemFileModel::DISK,
                 'folder' => config('cms.storage.uploads.folder', 'uploads'),
-                'path' => rtrim(config('cms.storage.uploads.path', '/storage/app/uploads'), '/'),
+                'path' => rtrim((new SystemFileModel)->getPublicPath(), '/'),
             ],
         ];
 
