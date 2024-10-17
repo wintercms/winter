@@ -296,6 +296,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('create.job', \System\Console\CreateJob::class);
         $this->registerConsoleCommand('create.migration', \System\Console\CreateMigration::class);
         $this->registerConsoleCommand('create.model', \System\Console\CreateModel::class);
+        $this->registerConsoleCommand('create.factory', \System\Console\CreateFactory::class);
         $this->registerConsoleCommand('create.plugin', \System\Console\CreatePlugin::class);
         $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
         $this->registerConsoleCommand('create.test', \System\Console\CreateTest::class);

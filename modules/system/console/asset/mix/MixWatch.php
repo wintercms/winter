@@ -60,7 +60,7 @@ class MixWatch extends MixCompile
     public function handleCleanup(): void
     {
         $this->newLine();
-        $this->info('Cleaning up: ' . $this->getPackagePath(base_path($this->watchingFilePath)));
+        $this->info('Cleaning up: ' . $this->getPackagePath($this->watchingFilePath));
         $this->afterExecution(base_path($this->watchingFilePath));
     }
 }
