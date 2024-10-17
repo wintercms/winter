@@ -394,25 +394,73 @@ class RelationController extends ControllerBehavior
 
         /*
          * View widget
+         *
+         * @event relation.extendViewWidget
+         * Called when the relation viewWidget is created
+         *
+         * Example usage:
+         *
+         *     $controller->bindEvent('relation.extendViewWidget', function (\Backend\Widgets\Lists|\Backend\Widgets\Form $widget, string $field, \Winter\Storm\Database\Model $model) {
+         *         if ($field === 'myRelationField') {
+         *             $widget->model->bindEvent('list.extendColumns', function ($widget) {
+         *                 $widget->addColumns([
+         *                      'myNewColumn' => ['label' => 'My New Column'],
+         *                 ]);
+         *             });
+         *         }
+         *     });
          */
         if ($this->viewWidget = $this->makeViewWidget()) {
-            $this->controller->relationExtendViewWidget($this->viewWidget, $this->field, $this->model);
+            $this->controller->bindEvent('relation.extendViewWidget', [$this->controller, 'relationExtendViewWidget']);
+            $this->controller->fireEvent('relation.extendViewWidget', [$this->viewWidget, $this->field, $this->model], halt:true);
             $this->viewWidget->bindToController();
         }
 
         /*
          * Manage widget
+         *
+         * @event relation.extendManageWidget
+         * Called when the relation manageWidget is created
+         *
+         * Example usage:
+         *
+         *     $controller->bindEvent('relation.extendManageWidget', function (\Backend\Widgets\Lists|\Backend\Widgets\Form $widget, string $field, \Winter\Storm\Database\Model $model) {
+         *         if ($field === 'myRelationField') {
+         *             $widget->model->bindEvent('model.form.filterFields', function ($widget, $fields, $context) {
+         *                 if (isset($fields->myFormField)) {
+         *                     $fields->myFormField->hidden = true;
+         *                 }
+         *             });
+         *         }
+         *     });
          */
         if ($this->manageWidget = $this->makeManageWidget()) {
-            $this->controller->relationExtendManageWidget($this->manageWidget, $this->field, $this->model);
+            $this->controller->bindEvent('relation.extendManageWidget', [$this->controller, 'relationExtendManageWidget']);
+            $this->controller->fireEvent('relation.extendManageWidget', [$this->manageWidget, $this->field, $this->model], halt:true);
             $this->manageWidget->bindToController();
         }
 
         /*
          * Pivot widget
+         *
+         * @event relation.extendPivotWidget
+         * Called when the relation pivotWidget is created
+         *
+         * Example usage:
+         *
+         *     $controller->bindEvent('relation.extendPivotWidget', function (\Backend\Widgets\Form $widget, string $field, \Winter\Storm\Database\Model $model) {
+         *         if ($field === 'myRelationField') {
+         *             $widget->model->bindEvent('form.extendFields', function ($widget) {
+         *                 $widget->addFields([
+         *                     'myNewPivotField' => ['label' => 'My New Pivot Field'],
+         *                 ]);
+         *             });
+         *         }
+         *     });
          */
         if ($this->manageMode === 'pivot' && $this->pivotWidget = $this->makePivotWidget()) {
-            $this->controller->relationExtendPivotWidget($this->pivotWidget, $this->field, $this->model);
+            $this->controller->bindEvent('relation.extendPivotWidget', [$this->controller, 'relationExtendPivotWidget']);
+            $this->controller->fireEvent('relation.extendPivotWidget', [$this->pivotWidget, $this->field, $this->model], halt:true);
             $this->pivotWidget->bindToController();
         }
     }
