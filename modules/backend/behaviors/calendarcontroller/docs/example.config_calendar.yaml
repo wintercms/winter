@@ -1,0 +1,69 @@
+# ===================================
+#  Calendar Behavior Config
+# ===================================
+
+# Model to use for getting the records to display on the calendar
+modelClass: Author\Plugin\Models\Event
+
+# Search columns
+# Used for configuration of additional columns to search by
+searchList: $/author/plugin/models/event/columns.yaml
+
+# Record URL
+recordUrl: author/plugins/events/update/:event_id
+
+
+# Record on click
+# @see custom.calendar.js sample
+# data is a plain object with the following properties:
+#   startDate: is a JS Date Object
+#   endDate: is a JS Date Object, may be null
+#   event: A standard JavaScript object that FullCalendar uses to store information about a calendar event, including id, title, start, end
+#   eventEl: The HTML element for this event
+# recordOnClick: $.wn.eventController.onEventClick(:data, :startDate, :endDate, :event, :eventEl)
+
+# Triggered when the user clicks on a date or a time
+# data is a plain object with the following properties
+# date: is the a JS Date Object for the clicked day/time.
+# dateStr: An ISO8601 string representation of the date
+# allDay: true or false
+# dayEl: An HTML element that represents the whole-day that was clicked on.
+# event: The native JavaScript event with low-level information such as click coordinates.
+# view: The current view @see https://fullcalendar.io/docs/v4/view-object
+onClickDate: $.wn.availabilitySlotController.onClickDate(:data, :date, :dateStr, :allDay,  :dayEl, :event, :view)
+
+# The property to use as the title displayed on the calendar
+recordTitle: name
+
+# The property to use as the start time for the record
+recordStart: start_time
+
+# The property to use as the end time for the record
+recordEnd: end_time
+
+# The property to use as the background color displayed on the record, , '' = the default background color in the calendar.less
+recordColor: event_color
+
+# The property to use as the content of the tooltip for the record
+recordTooltip: [recordTitle]
+
+# Available display modes to be supported in this instance
+availableDisplayModes: [month, week, day, list]
+
+# Flag for whether calendar is read only or editable
+previewMode: true
+
+# load one month of records at a time, ensure they stay loaded between month pages
+
+# Toolbar widget configuration
+toolbar:
+    # Partial for toolbar buttons
+    buttons: calendar_toolbar
+
+    # Search widget configuration
+    search:
+        prompt: backend::lang.list.search_prompt
+filter: calendar_filter.yaml
+
+# when filter gets applied, clear the client's cache of events, essentially start them over
+# if they had just loaded this page / month with the current filters applied
