@@ -1,0 +1,6 @@
+fields:
+    uploaded_package:
+        type: fileupload
+        span: full
+        mode: file
+        fileTypes: zip
