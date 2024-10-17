@@ -7,6 +7,7 @@ use Log;
 use Exception;
 use Illuminate\Database\QueryException;
 use System\Classes\ModelBehavior;
+use Winter\Storm\Database\Model;
 
 /**
  * Settings model extension
@@ -65,7 +66,7 @@ class SettingsModel extends ModelBehavior
         $this->model->bindEvent('model.afterFetch', [$this, 'afterModelFetch']);
         $this->model->bindEvent('model.beforeSave', [$this, 'beforeModelSave']);
         $this->model->bindEvent('model.afterSave', [$this, 'afterModelSave']);
-        $this->model->bindEvent('model.setAttribute', [$this, 'setSettingsValue']);
+        $this->model->bindEvent('model.setAttribute', [$this, 'syncModelAttribute']);
         $this->model->bindEvent('model.saveInternal', [$this, 'saveModelInternal']);
 
         /*
@@ -81,7 +82,7 @@ class SettingsModel extends ModelBehavior
     /**
      * Create an instance of the settings model, intended as a static method
      */
-    public function instance()
+    public function instance(): Model
     {
         if (isset(self::$instances[$this->recordCode])) {
             return self::$instances[$this->recordCode];
@@ -89,6 +90,7 @@ class SettingsModel extends ModelBehavior
 
         if (!$item = $this->getSettingsRecord()) {
             $this->model->initSettingsData();
+            $this->afterModelFetch();
             $item = $this->model;
         }
 
@@ -184,6 +186,14 @@ class SettingsModel extends ModelBehavior
     }
 
     /**
+     * Sync the provided attribute into the settings value
+     */
+    protected function syncModelAttribute($key)
+    {
+        $this->setSettingsValue($key, $this->model->getAttribute($key));
+    }
+
+    /**
      * Default values to set for this model, override
      */
     public function initSettingsData()
@@ -235,6 +245,8 @@ class SettingsModel extends ModelBehavior
         } catch (Exception $e) {
             Log::warning($e->getMessage());
         }
+
+        $this->afterModelFetch();
     }
 
     /**
