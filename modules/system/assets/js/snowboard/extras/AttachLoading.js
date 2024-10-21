@@ -38,10 +38,12 @@ export default class AttachLoading extends Singleton {
             if (loadElements.length > 0) {
                 loadElements.forEach((element) => {
                     element.classList.add(this.getLoadingClass(element));
+                    element.disabled = true;
                 });
             }
         } else if (request.element.dataset.attachLoading !== undefined) {
             request.element.classList.add(this.getLoadingClass(request.element));
+            request.element.disabled = true;
         }
     }
 
@@ -55,10 +57,12 @@ export default class AttachLoading extends Singleton {
             if (loadElements.length > 0) {
                 loadElements.forEach((element) => {
                     element.classList.remove(this.getLoadingClass(element));
+                    element.disabled = false;
                 });
             }
         } else if (request.element.dataset.attachLoading !== undefined) {
             request.element.classList.remove(this.getLoadingClass(request.element));
+            request.element.disabled = false;
         }
     }
 
