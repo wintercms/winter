@@ -15,6 +15,10 @@ import { delegate } from 'jquery-events-to-dom-events';
  * @author Ben Thomson <git@alfreido.com>
  */
 export default class Handler extends Snowboard.Singleton {
+    construct() {
+        this.requests = [];
+    }
+
     /**
      * Event listeners.
      *
@@ -46,6 +50,42 @@ export default class Handler extends Snowboard.Singleton {
 
         // Add "render" event for backwards compatibility
         window.jQuery(document).trigger('render');
+
+        // Add global events for AJAX queries and route them to the Snowboard global events and
+        // necessary UI functionality
+        delegate('ajaxPromise', ['event', 'context']);
+        delegate('ajaxDone', ['event', 'context', 'data']);
+        delegate('ajaxRedirected', ['event']);
+        delegate('ajaxFail', ['event', 'context', 'textStatus']);
+
+        document.addEventListener('$ajaxPromise', (event) => {
+            this.requests[event.target] = Promise.withResolvers();
+            this.snowboard.globalEvent('ajaxStart', this.requests[event.target].promise, {
+                element: event.target,
+                options: {},
+            });
+        });
+        document.addEventListener('$ajaxDone', (event) => {
+            this.requests[event.target].resolve(event.detail.data);
+            this.snowboard.globalEvent('ajaxDone', event.detail.data, {
+                element: event.target,
+                options: {},
+            });
+        });
+        document.addEventListener('$ajaxRedirected', (event) => {
+            this.requests[event.target].resolve();
+            this.snowboard.globalEvent('ajaxDone', event.detail.data, {
+                element: event.target,
+                options: {},
+            });
+        });
+        document.addEventListener('$ajaxFail', (event) => {
+            this.requests[event.target].reject(event.detail.textStatus);
+            this.snowboard.globalEvent('ajaxDone', event.detail.data, {
+                element: event.target,
+                options: {},
+            });
+        });
     }
 
     /**
