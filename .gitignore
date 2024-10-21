@@ -10,6 +10,7 @@ composer.lock
 selenium.php
 /bootstrap/compiled.php
 .phpunit.result.cache
+.phpunit.cache
 
 # Hosting ignores
 php_errors.log
@@ -26,6 +27,7 @@ nbproject
 .vscode
 !.devcontainer/.vscode
 _ide_helper.php
+*.code-workspace
 
 # Other ignores
 .DS_Store

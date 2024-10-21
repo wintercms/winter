@@ -302,7 +302,7 @@ class ControllerTest extends TestCase
         $requestMock = $this
             ->getMockBuilder('Illuminate\Http\Request')
             ->disableOriginalConstructor()
-            ->setMethods(['ajax', 'method', 'header'])
+            ->onlyMethods(['ajax', 'method', 'header'])
             ->getMock();
 
         $map = [

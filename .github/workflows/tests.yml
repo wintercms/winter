@@ -18,7 +18,7 @@ jobs:
     name: ${{ matrix.operatingSystem }} / JavaScript
     env:
       nodeVersion: 16
-      phpVersion: '8.0'
+      phpVersion: '8.2'
       extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
       key: winter-cms-cache-develop
     steps:
@@ -58,7 +58,7 @@ jobs:
 
       - name: Switch library dependency (develop)
         if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
-        run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.2"
+        run: php ./.github/workflows/utilities/library-switcher "dev-wip-laravel-11 as 1.2"
 
       - name: Switch library dependency (1.2)
         if: github.head_ref == '1.2' || github.ref == 'refs/heads/1.2' || github.base_ref == '1.2'
@@ -96,7 +96,7 @@ jobs:
       max-parallel: 8
       matrix:
         operatingSystem: [ubuntu-latest, windows-latest]
-        phpVersion: ['8.0', '8.1', '8.2', '8.3']
+        phpVersion: ['8.2', '8.3']
       fail-fast: false
     runs-on: ${{ matrix.operatingSystem }}
     name: ${{ matrix.operatingSystem }} / PHP ${{ matrix.phpVersion }}
@@ -135,7 +135,7 @@ jobs:
 
       - name: Switch library dependency (develop)
         if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
-        run: php ./.github/workflows/utilities/library-switcher "dev-develop as 1.2"
+        run: php ./.github/workflows/utilities/library-switcher "dev-wip-laravel-11 as 1.2"
 
       - name: Switch library dependency (1.0)
         if: github.head_ref == '1.0' || github.ref == 'refs/heads/1.0' || github.base_ref == '1.0'
@@ -170,10 +170,6 @@ jobs:
 
       - name: Run post-update Composer scripts
         run: php artisan package:discover
-
-      - name: Setup problem matchers for PHPUnit
-        if: matrix.phpVersion == '8.1'
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
       - name: Run Linting and Tests
         run: |
