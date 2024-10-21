@@ -1290,9 +1290,9 @@ getData=function(row){return popup.data[row];};popup.getRow=function(){return se
     z-index: 2;\
 }\
 .ace_editor.ace_autocomplete .ace_scroller {\
-    background: none;\
-    border: none;\
-    box-shadow: none;\
+   background: none;\
+   border: none;\
+   box-shadow: none;\
 }\
 .ace_rightAlignedText {\
     color: gray;\

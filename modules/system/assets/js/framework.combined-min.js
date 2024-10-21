@@ -128,9 +128,6 @@ $oldMessages.remove()}else{$container.text(errorMsg)}}$this.one('ajaxError',func
 $(document).on('ajaxPromise','[data-request][data-request-validate]',function(){var $this=$(this).closest('form')
 $('[data-validate-for]',$this).removeClass('visible')
 $('[data-validate-error]',$this).removeClass('visible')})
-$(document).on('ajaxPromise','[data-request]',function(){var $target=$(this)
-if($target.data('attach-loading')!==undefined){$target.addClass(LOADER_CLASS).prop('disabled',true)}if($target.is('form')){$('[data-attach-loading]',$target).addClass(LOADER_CLASS).prop('disabled',true)}}).on('ajaxFail ajaxDone ajaxRedirected','[data-request]',function(){var $target=$(this)
-if($target.data('attach-loading')!==undefined){$target.removeClass(LOADER_CLASS).prop('disabled',false)}if($target.is('form')){$('[data-attach-loading]',$target).removeClass(LOADER_CLASS).prop('disabled',false)}})
 var StripeLoadIndicator=function(){var self=this
 this.counter=0
 this.indicator=$('<div/>').addClass('stripe-loading-indicator loaded').append($('<div />').addClass('stripe')).append($('<div />').addClass('stripe-loaded'))
