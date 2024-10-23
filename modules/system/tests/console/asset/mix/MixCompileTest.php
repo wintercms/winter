@@ -1,9 +1,9 @@
 <?php
 
-namespace System\Tests\Console\Asset;
+namespace System\Tests\Console\Asset\Mix;
 
-use Winter\Storm\Support\Facades\File;
 use System\Tests\Bootstrap\TestCase;
+use Winter\Storm\Support\Facades\File;
 
 class MixCompileTest extends TestCase
 {

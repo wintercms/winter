@@ -24,10 +24,14 @@ class PackageManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
 
+    public const TYPE_THEME = 'theme';
+    public const TYPE_MODULE = 'module';
+    public const TYPE_PLUGIN = 'plugin';
+
     /**
      * The filename that stores the package definition.
      */
-    protected string $packageJson = 'package.json';
+    protected PackageJson $packageJson;
 
     /**
      * @var array<string, array<string, string>> List of package types and registration methods
@@ -56,6 +60,8 @@ class PackageManager
      */
     public function init(): void
     {
+        $this->setPackageJsonPath(base_path('package.json'));
+
         $packagePaths = [];
 
         /*
@@ -183,12 +189,14 @@ class PackageManager
     /**
      * Calls the deferred callbacks.
      */
-    public function fireCallbacks(): void
+    public function fireCallbacks(): static
     {
         // Call callbacks
         foreach (static::$callbacks as $callback) {
             $callback($this);
         }
+
+        return $this;
     }
 
     /**
@@ -205,6 +213,10 @@ class PackageManager
     public function getPackages(string $type, bool $includeIgnored = false): array
     {
         $packages = $this->packages[$type] ?? [];
+
+        foreach ($packages as $index => $package) {
+            $packages[$index]['ignored'] = $this->isPackageIgnored($package['path']);
+        }
 
         ksort($packages);
 
@@ -223,9 +235,13 @@ class PackageManager
     public function hasPackage(string $name, bool $includeIgnored = false): bool
     {
         foreach ($this->packages ?? [] as $packages) {
-            foreach ($packages as $packageName => $config) {
-                if (($name === $packageName) && (!$config['ignored'] || $includeIgnored)) {
-                    return true;
+            foreach ($packages as $packageName => $package) {
+                if ($name === $packageName) {
+                    if ((!$this->isPackageIgnored($package['path']) || $includeIgnored)) {
+                        return true;
+                    }
+
+                    return false;
                 }
             }
         }
@@ -239,10 +255,12 @@ class PackageManager
     public function getPackage(string $name, bool $includeIgnored = false): array
     {
         $results = [];
-        foreach ($this->packages ?? [] as $packages) {
-            foreach ($packages as $packageName => $config) {
-                if (($name === $packageName) && (!$config['ignored'] || $includeIgnored)) {
-                    $results[] = $config;
+        foreach ($this->packages ?? [] as $type => $packages) {
+            foreach ($packages as $packageName => $package) {
+                if (($name === $packageName)) {
+                    if (!$this->isPackageIgnored($package['path']) || $includeIgnored) {
+                        $results[] = $package + ['type' => $type];
+                    }
                 }
             }
         }
@@ -297,6 +315,17 @@ class PackageManager
             ));
         }
 
+        $package = $path . '/package.json';
+        $config = $path . DIRECTORY_SEPARATOR . $configFile;
+
+        if (!File::exists($config)) {
+            throw new SystemException(sprintf(
+                'Cannot register "%s" as a compilable package; the config file "%s" does not exist.',
+                $name,
+                $config
+            ));
+        }
+
         // Check for any existing packages already registered under the provided name
         if (isset($this->packages[$name])) {
             throw new SystemException(sprintf(
@@ -305,9 +334,6 @@ class PackageManager
                 $this->packages[$name]['config']
             ));
         }
-
-        $package = "$path/{$this->packageJson}";
-        $config = $path . DIRECTORY_SEPARATOR . $configFile;
 
         // Check for any existing package that already registers the given compilable config path
         foreach ($this->packages[$type] ?? [] as $packageName => $settings) {
@@ -325,9 +351,44 @@ class PackageManager
         $this->packages[$type][$name] = [
             'path' => $path,
             'package' => $package,
-            'config' => $config,
-            'ignored' => $this->isPackageIgnored($path),
+            'config' => $config
         ];
+    }
+
+    /**
+     * Returns an expected package type from its name
+     */
+    public function getPackageTypeFromName(string $package): ?string
+    {
+        // Check if package could be a module
+        if (Str::startsWith($package, 'module-') && !in_array($package, ['system', 'backend', 'cms'])) {
+            return static::TYPE_MODULE;
+        }
+
+        // Check if package could be a theme
+        if (
+            in_array('Cms', Config::get('cms.loadModules'))
+            && Str::startsWith($package, 'theme-')
+            && Theme::exists(Str::after($package, 'theme-'))
+        ) {
+            return static::TYPE_THEME;
+        }
+
+        // Check if a package could be a plugin
+        if (PluginManager::instance()->exists($package)) {
+            return static::TYPE_PLUGIN;
+        }
+
+        return null;
+    }
+
+    /**
+     * Set the package.json file path used for checking if packages are in workspaces or ignored
+     */
+    public function setPackageJsonPath(string $packageJsonPath): static
+    {
+        $this->packageJson = new PackageJson($packageJsonPath);
+        return $this;
     }
 
     /**
@@ -343,8 +404,6 @@ class PackageManager
      */
     protected function isPackageIgnored(string $packagePath): bool
     {
-        // Load the main package.json for the project
-        $packageJson = new PackageJson(base_path($this->packageJson));
-        return $packageJson->hasIgnoredPackage($packagePath);
+        return $this->packageJson->hasIgnoredPackage($packagePath);
     }
 }
