@@ -49,7 +49,9 @@
         content: null,
         size: null,
         adaptiveHeight: false,
-        zIndex: null
+        zIndex: null,
+        cssClass: null,
+        allowDismiss: false
     }
 
     Popup.prototype.init = function(){
@@ -207,8 +209,22 @@
         if (this.options.adaptiveHeight)
             modalDialog.addClass('adaptive-height')
 
+        if (this.options.cssClass)
+            modalDialog.addClass(this.options.cssClass)
+
         if (this.options.zIndex !== null)
             modal.css('z-index', this.options.zIndex + 20)
+        
+        if (this.options.allowDismiss) {
+            modal.on('mousedown', function(e) {
+                const target = e.target;
+                if (target.classList.contains('control-popup')) {
+                    modal.hide()
+                    $('.popup-backdrop').remove()
+                    $(document.body).removeClass('modal-open')
+                }
+            });
+        }
 
         return modal.append(modalDialog.append(modalContent))
     }

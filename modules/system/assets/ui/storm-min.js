@@ -2154,7 +2154,7 @@ this.initEvents()
 this.init()}
 Popup.prototype=Object.create(BaseProto)
 Popup.prototype.constructor=Popup
-Popup.DEFAULTS={ajax:null,handler:null,keyboard:true,extraData:{},content:null,size:null,adaptiveHeight:false,zIndex:null}
+Popup.DEFAULTS={ajax:null,handler:null,keyboard:true,extraData:{},content:null,size:null,adaptiveHeight:false,zIndex:null,cssClass:null,allowDismiss:false}
 Popup.prototype.init=function(){var self=this
 if(self.isOpen)return
 this.setBackdrop(true)
@@ -2198,8 +2198,11 @@ BaseProto.dispose.call(this)}
 Popup.prototype.createPopupContainer=function(){var modal=$('<div />').prop({class:'control-popup modal fade',role:'dialog',tabindex:-1}),modalDialog=$('<div />').addClass('modal-dialog'),modalContent=$('<div />').addClass('modal-content')
 if(this.options.size)modalDialog.addClass('size-'+this.options.size)
 if(this.options.adaptiveHeight)modalDialog.addClass('adaptive-height')
+if(this.options.cssClass)modalDialog.addClass(this.options.cssClass)
 if(this.options.zIndex!==null)modal.css('z-index',this.options.zIndex+20)
-return modal.append(modalDialog.append(modalContent))}
+if(this.options.allowDismiss){modal.on('mousedown',function(e){const target=e.target;if(target.classList.contains('control-popup')){modal.hide()
+$('.popup-backdrop').remove()
+$(document.body).removeClass('modal-open')}});}return modal.append(modalDialog.append(modalContent))}
 Popup.prototype.setContent=function(contents){this.$content.html(contents)
 this.setLoading(false)
 this.show()
