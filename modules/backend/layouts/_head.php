@@ -30,6 +30,7 @@ $scripts = [
     Backend::skinAsset('assets/js/vendor/jquery.min.js'),
     Backend::skinAsset('assets/js/vendor/jquery-migrate.min.js'),
     Url::asset('modules/system/assets/js/framework.js'),
+    Url::asset('modules/system/assets/js/framework.extras.js'),
     Url::asset('modules/system/assets/js/build/manifest.js'),
     Url::asset('modules/system/assets/js/snowboard/build/snowboard.vendor.js'),
     Url::asset(
