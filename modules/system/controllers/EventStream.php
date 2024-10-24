@@ -42,7 +42,7 @@ class EventStream extends Controller
                     break;
                 }
 
-                echo $eventStream;
+                echo $eventStream->streamEvent();
 
                 if (ob_get_level() > 0) {
                     ob_flush();
@@ -50,7 +50,7 @@ class EventStream extends Controller
 
                 flush();
 
-                $eventStream->tick();
+                // $eventStream->tick();
 
                 if (connection_aborted()) {
                     break;

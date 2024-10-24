@@ -16,12 +16,13 @@ use Illuminate\Support\Facades\Cache;
  */
 class EventStream
 {
+    protected ?string $pendingEvent = null;
+
+    protected bool $closed = false;
+
     public function __construct(
         protected string $id = '',
         protected array $data = [],
-        protected string $event = 'start',
-        protected bool $closed = false,
-        protected bool $changed = true,
         protected float $ticks = 1.0,
     ) {
     }
@@ -43,14 +44,11 @@ class EventStream
             return null;
         }
 
-        $data = Cache::get($id);
+        $data = (array) Cache::get($id);
 
         return new static(
             id: $id,
             data: $data['data'],
-            event: $data['event'],
-            closed: $data['closed'],
-            changed: $data['changed'],
             ticks: $data['ticks'],
         );
     }
@@ -65,79 +63,33 @@ class EventStream
         return $this->ticks;
     }
 
+    public function getSignature(): string
+    {
+        return hash('sha256', ($this->pendingEvent ?? 'ping') . '|' . json_encode($this->data));
+    }
+
     public function set(string|array $key, mixed $value = null): void
     {
         if (is_array($key)) {
-            $this->data = array_merge($this->data, $key);
+            $this->data = array_filter(array_replace($this->data, $key));
+        } elseif (is_null($value)) {
+            unset($this->data[$key]);
         } else {
             $this->data[$key] = $value;
         }
 
-        $this->event = 'update';
-        $this->changed = true;
         $this->saveEvent();
     }
 
-    public function tick(): void
-    {
-        $this->event = 'ping';
-        $this->changed = false;
-        $this->saveEvent();
-    }
-
-    public function reconnect(): void
-    {
-        if ($this->closed) {
-            return;
-        }
-        $this->event = 'reconnect';
-        $this->closeStream();
-    }
-
-    public function close(): void
-    {
-        if ($this->closed) {
-            return;
-        }
-
-        $this->event = 'close';
-        $this->closeStream();
-    }
-
-    public function isClosed(): bool
-    {
-        return $this->closed;
-    }
-
-    protected function closeStream(): void
-    {
-        $this->closed = true;
-        $this->saveEvent();
-    }
-
-    protected function saveEvent(int $ttl = 5): void
-    {
-        var_dump(Cache::set($this->id, [
-            'event' => $this->event,
-            'data' => $this->data,
-            'changed' => $this->changed,
-            'closed' => $this->closed,
-            'ticks' => $this->ticks,
-        ], now()->addSeconds($ttl)));
-    }
-
-    protected function generateId(): string
-    {
-        $id = '';
-        for ($i = 0; $i < 32; ++$i) {
-            $id .= substr('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', random_int(0, 61), 1);
-        }
-        return $id;
-    }
-
-    public function streamEvent(): string
+    public function doStream(string $signature): string
     {
         $data = Cache::get($this->id);
+
+        if ($data['signature'] !== $signature) {
+            if ($data['closed']) {
+                return $this->writeStream('closed');
+            }
+        }
 
         if ($data['closed']) {
             return '';
@@ -152,6 +104,70 @@ class EventStream
             $eventData['contents'] = $data['data'];
         }
 
+
+    }
+
+    public function reconnect(): void
+    {
+        if ($this->closed) {
+            return;
+        }
+        $this->pendingEvent = 'reconnect';
+        $this->saveEvent();
+    }
+
+    public function close(): void
+    {
+        if ($this->closed) {
+            return;
+        }
+
+        $this->pendingEvent = 'close';
+        $this->saveEvent();
+    }
+
+    public function isClosed(): bool
+    {
+        return $this->closed || ($this->pendingEvent === 'reconnect');
+    }
+
+    protected function saveEvent(int $ttl = 5): void
+    {
+        Cache::set($this->id, [
+            'data' => $this->data,
+            'pendingEvent' => $this->pendingEvent,
+            'signature' => $this->getSignature(),
+            'closed' => $this->closed,
+            'ticks' => $this->ticks,
+        ], now()->addSeconds($ttl));
+    }
+
+    protected function generateId(): string
+    {
+        $id = '';
+        for ($i = 0; $i < 32; ++$i) {
+            $id .= substr('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', random_int(0, 61), 1);
+        }
+        return $id;
+    }
+
+    protected function getStreamData(): array
+    {
+        if (!Cache::has($this->getId())) {
+            return [
+                'data' => [],
+                'pendingEvent' => null,
+                'signature' => null,
+                'closed' => true,
+                'tick' => 1.0
+            ];
+        }
+
+        return (array) Cache::get($this->getId());
+    }
+
+    protected function writeStream(string $event)
+    {
         $contents = 'event: ' . $data['event'] . PHP_EOL;
         if (count($eventData)) {
             $contents .= 'data: ' . json_encode($eventData) . PHP_EOL;
