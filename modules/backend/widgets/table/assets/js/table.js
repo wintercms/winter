@@ -72,10 +72,6 @@
         this.toolbarClickHandler = this.onToolbarClick.bind(this)
 
         if (this.options.postback && this.options.clientDataSourceClass == 'client') {
-            if (!this.options.postbackHandlerName) {
-                var formHandler = this.$el.closest('form').data('request')
-                this.options.postbackHandlerName = formHandler || 'onSave'
-            }
             this.formSubmitHandler = this.onFormSubmit.bind(this)
         }
 
@@ -803,20 +799,18 @@
     }
 
     Table.prototype.onFormSubmit = function(ev, data) {
-        if (data.handler == this.options.postbackHandlerName) {
-            this.unfocusTable()
+        this.unfocusTable()
 
-            if (!this.validate()) {
-                ev.preventDefault()
-                return
-            }
-
-            var fieldName = this.options.fieldName.indexOf('[') > -1
-                ? this.options.fieldName + '[TableData]'
-                : this.options.fieldName + 'TableData'
-
-            data.options.data[fieldName] = this.dataSource.getAllData()
+        if (!this.validate()) {
+            ev.preventDefault()
+            return
         }
+
+        var fieldName = this.options.fieldName.indexOf('[') > -1
+            ? this.options.fieldName + '[TableData]'
+            : this.options.fieldName + 'TableData'
+
+        data.options.data[fieldName] = this.dataSource.getAllData()
     }
 
     Table.prototype.onToolbarClick = function(ev) {
