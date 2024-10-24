@@ -34,7 +34,7 @@ class CmsController extends ControllerBase
      * Finds and serves the request using the primary controller.
      * @param string $url Specifies the requested page URL.
      * If the parameter is omitted, the current URL used.
-     * @return string Returns the processed page content.
+     * @return BaseResponse Returns the response to the provided URL
      */
     public function run($url = '/')
     {
