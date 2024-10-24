@@ -290,7 +290,12 @@ class RecordFinder extends FormWidgetBase
             return null;
         }
 
-        return $this->relationModel->{$this->descriptionFrom};
+        // Convert array-like notation to dot notation
+        if (preg_match('/\[(.*?)\]/', $this->relationModel, $matches)) {
+            $this->descriptionFrom = str_replace(['[', ']'], ['.', ''], $this->descriptionFrom);
+        }
+
+        return data_get($this->relationModel, $this->descriptionFrom);
     }
 
     public function onFindRecord()
