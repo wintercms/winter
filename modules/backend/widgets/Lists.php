@@ -1147,8 +1147,9 @@ class Lists extends WidgetBase
     {
         $value = $this->getColumnValueRaw($record, $column);
 
-        if (method_exists($this, 'eval'. studly_case($column->type) .'TypeValue')) {
-            $value = $this->{'eval'. studly_case($column->type) .'TypeValue'}($record, $column, $value);
+        $customMethod = 'eval'. studly_case($column->type) .'TypeValue';
+        if ($this->methodExists($customMethod)) {
+            $value = $this->{$customMethod}($record, $column, $value);
         }
         else {
             $value = $this->evalCustomListType($column->type, $record, $column, $value);

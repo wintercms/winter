@@ -3,7 +3,7 @@
 return [
     'auth' => [
         'title' => 'Zone d\'administration',
-        'invalid_login' => 'L\'utilisateur saisi ne correspond à aucun utilisateur enregistré. Merci de vérifier votre saisie et de réessayer.'
+        'invalid_login' => 'Les détails saisis ne correspondent à aucun de nos enregistrements. Merci de vérifier et de réessayer.'
     ],
     'field' => [
         'invalid_type' => 'Type de champ invalide :type.',

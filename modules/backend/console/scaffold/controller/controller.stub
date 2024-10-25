@@ -21,5 +21,9 @@ class {{ studly_name }} extends Controller
         parent::__construct();
 
         BackendMenu::setContext('{{ plugin_code }}', '{{ lower_plugin }}', '{{ lower_name }}');
+    {% if sidebar %}
+
+        $this->bodyClass = 'compact-container';
+    {% endif -%}
     }
 }
