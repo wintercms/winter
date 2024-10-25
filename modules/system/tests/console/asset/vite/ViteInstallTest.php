@@ -3,8 +3,8 @@
 namespace System\Tests\Console\Asset\Vite;
 
 use System\Classes\Asset\PackageManager;
-use System\Console\Asset\Exceptions\PackageNotFoundException;
 use System\Tests\Bootstrap\TestCase;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Support\Facades\File;
 
 class ViteInstallTest extends TestCase
@@ -107,7 +107,8 @@ class ViteInstallTest extends TestCase
     {
         // We should receive an exception for a missing package
         $this->withPackageJsonRestore(function () {
-            $this->expectException(PackageNotFoundException::class);
+            $this->expectException(SystemException::class);
+            $this->expectExceptionMessage('PackageNotFoundException: The package `theme-assettest2` does not exist.');
 
             $this->artisan('vite:install', [
                 'assetPackage' => ['theme-assettest2'],
@@ -142,6 +143,7 @@ class ViteInstallTest extends TestCase
                     'modules/system/tests/fixtures/themes/assettest'
                 ]
             ];
+
             File::put($this->jsonPath, json_encode($packageJson, JSON_PRETTY_PRINT));
 
             $this->artisan('vite:install', [

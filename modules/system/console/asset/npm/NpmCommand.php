@@ -6,14 +6,14 @@ use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\Process;
 use System\Classes\Asset\PackageJson;
 use System\Classes\Asset\PackageManager;
-use System\Console\Asset\Exceptions\PackageNotRegisteredException;
 use Winter\Storm\Console\Command;
+use Winter\Storm\Exception\SystemException;
 
 abstract class NpmCommand extends Command
 {
     /**
      * Gets a package config and its PackageJson file based on the `package` argument.
-     * @throws PackageNotRegisteredException
+     * @throws SystemException
      * @throws \JsonException
      */
     protected function getPackage(): ?array
@@ -28,7 +28,7 @@ abstract class NpmCommand extends Command
         }
 
         if (!$compilableAssets->hasPackage($name, true)) {
-            throw new PackageNotRegisteredException(sprintf('Package "%s" is not a registered package.', $name));
+            throw new SystemException(sprintf('Package "%s" is not a registered package.', $name));
         }
 
         $package = $compilableAssets->getPackage($name, true)[0] ?? [];

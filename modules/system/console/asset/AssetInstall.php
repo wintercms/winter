@@ -8,10 +8,8 @@ use Symfony\Component\Process\Process;
 use System\Classes\Asset\PackageJson;
 use System\Classes\Asset\PackageManager;
 use System\Classes\PluginManager;
-use System\Console\Asset\Exceptions\PackageIgnoredException;
-use System\Console\Asset\Exceptions\PackageNotConfiguredException;
-use System\Console\Asset\Exceptions\PackageNotFoundException;
 use Winter\Storm\Console\Command;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Str;
@@ -127,8 +125,7 @@ abstract class AssetInstall extends Command
 
     /**
      * Returns all packages registered by the system filtered by requestedPackages if defined
-     * @throws PackageNotFoundException
-     * @throws \Winter\Storm\Exception\SystemException
+     * @throws SystemException
      */
     protected function getRegisteredPackages(array $requestedPackages = []): array
     {
@@ -177,8 +174,8 @@ abstract class AssetInstall extends Command
                         );
                         break;
                     case null:
-                        throw new PackageNotFoundException(sprintf(
-                            'The package `%s` does not exist.',
+                        throw new SystemException(sprintf(
+                            'PackageNotFoundException: The package `%s` does not exist.',
                             $package
                         ));
                 }
@@ -219,8 +216,7 @@ abstract class AssetInstall extends Command
 
     /**
      * Validates if the packages passed can be installed and if possible, installs them.
-     * @throws PackageIgnoredException
-     * @throws PackageNotConfiguredException
+     * @throws SystemException
      * @throws PackageNotFoundException
      */
     protected function processPackages(array $registeredPackages, PackageJson $packageJson): PackageJson
@@ -235,8 +231,8 @@ abstract class AssetInstall extends Command
                         switch (count($detected)) {
                             case 1:
                                 if ($detected[0]['type'] !== $this->assetType) {
-                                    throw new PackageNotConfiguredException(sprintf(
-                                        'The requested package `%s` is only configured for %s. Run `php artisan %s:create %1$s`',
+                                    throw new SystemException(sprintf(
+                                        'PackageNotConfiguredException: The requested package `%s` is only configured for %s. Run `php artisan %s:create %1$s`',
                                         $requestedPackage,
                                         $detected[0]['type'],
                                         $this->assetType
@@ -244,8 +240,8 @@ abstract class AssetInstall extends Command
                                 }
 
                                 if ($detected[0]['ignored']) {
-                                    throw new PackageIgnoredException(sprintf(
-                                        'The requested package `%s` is ignored, remove it from package.json to continue',
+                                    throw new SystemException(sprintf(
+                                        'PackageIgnoredException: The requested package `%s` is ignored, remove it from package.json to continue',
                                         $requestedPackage,
                                     ));
                                 }
@@ -253,8 +249,8 @@ abstract class AssetInstall extends Command
                             case 2:
                             default:
                                 if (($detected[0]['ignored'] ?? false) || ($detected[1]['ignored'] ?? false)) {
-                                    throw new PackageIgnoredException(sprintf(
-                                        'The requested package `%s` is ignored, remove it from package.json to continue',
+                                    throw new SystemException(sprintf(
+                                        'PackageIgnoredException: The requested package `%s` is ignored, remove it from package.json to continue',
                                         $requestedPackage,
                                     ));
                                 }
@@ -262,8 +258,8 @@ abstract class AssetInstall extends Command
                         }
                     }
 
-                    throw new PackageNotFoundException(sprintf(
-                        'The requested package `%s` could not be found.',
+                    throw new SystemException(sprintf(
+                        'PackageNotFoundException: The requested package `%s` could not be found.',
                         $requestedPackage,
                     ));
                 }

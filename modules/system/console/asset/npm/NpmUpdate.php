@@ -2,8 +2,8 @@
 
 namespace System\Console\Asset\Npm;
 
-use System\Console\Asset\Exceptions\PackageNotRegisteredException;
 use System\Console\Asset\Npm\NpmCommand;
+use Winter\Storm\Exception\SystemException;
 
 class NpmUpdate extends NpmCommand
 {
@@ -44,7 +44,10 @@ class NpmUpdate extends NpmCommand
 
         try {
             [$package, $packageJson] = $this->getPackage();
-        } catch (PackageNotRegisteredException $e) {
+        } catch (SystemException $e) {
+            if (!str_contains($e->getMessage(), 'is not a registered package.')) {
+                throw $e;
+            }
             array_unshift($command, $this->argument('package'));
         }
 
