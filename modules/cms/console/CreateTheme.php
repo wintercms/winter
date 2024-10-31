@@ -2,6 +2,7 @@
 
 use InvalidArgumentException;
 use Winter\Storm\Scaffold\GeneratorCommand;
+use Illuminate\Support\Facades\Artisan;
 
 class CreateTheme extends GeneratorCommand
 {
@@ -78,6 +79,70 @@ class CreateTheme extends GeneratorCommand
     ];
 
     /**
+     * Execute the console command.
+     */
+    public function handle()
+    {
+        // Originale Theme-Erstellung
+        $result = parent::handle();
+
+        // Theme-Code definieren
+        $themeCode = 'theme-' . $this->getNameInput();
+
+        // Wenn Tailwind gewählt wurde
+        if ($this->argument('scaffold') === 'tailwind') {
+            $this->info('Tailwind CSS wurde gewählt. Installiere notwendige Abhängigkeiten...');
+
+            try {
+                // Mix installieren mit automatischen Antworten
+                $descriptorspec = array(
+                    0 => array("pipe", "r"),  // stdin
+                    1 => array("pipe", "w"),  // stdout
+                    2 => array("pipe", "w")   // stderr
+                );
+                
+                $process = proc_open('php artisan mix:install', $descriptorspec, $pipes, base_path());
+                
+                if (is_resource($process)) {
+                    // Alle "yes" Antworten senden
+                    fwrite($pipes[0], "yes\n");
+                    fwrite($pipes[0], "yes\n");
+                    fwrite($pipes[0], "yes\n");
+                    fwrite($pipes[0], "yes\n");
+                    fclose($pipes[0]);
+                    
+                    // Output lesen
+                    $output = stream_get_contents($pipes[1]);
+                    $this->info($output);
+                    
+                    // Fehler lesen
+                    $errors = stream_get_contents($pipes[2]);
+                    fclose($pipes[1]);
+                    fclose($pipes[2]);
+                    
+                    proc_close($process);
+                }
+
+                // Assets kompilieren
+                $this->info('Kompiliere Assets...');
+                Artisan::call('mix:compile', [
+                    '-p' => $themeCode,
+                    '--production' => true
+                ]);
+                $this->info('Tailwind CSS wurde erfolgreich installiert und kompiliert.');
+
+            } catch (\Exception $e) {
+                $this->error('Mix-Installation fehlgeschlagen: ' . $e->getMessage());
+                $this->info('Bitte führen Sie folgende Befehle manuell aus:');
+                $this->info('php artisan mix:install');
+                $this->info('php artisan mix:compile -p ' . $themeCode . ' --production');
+            }
+        }
+
+        return $result;
+    }
+
+    /**
      * Get the desired class name from the input.
      */
     protected function getNameInput(): string
@@ -90,7 +155,7 @@ class CreateTheme extends GeneratorCommand
      */
     protected function prepareVars(): array
     {
-        $scaffold = $this->argument('scaffold') ?? 'tailwind';
+        $scaffold = $this->argument('scaffold') ?? 'less';
         $validOptions = $this->suggestScaffoldValues();
         if (!in_array($scaffold, $validOptions)) {
             throw new InvalidArgumentException("$scaffold is not an available theme scaffold type (Available types: " . implode(', ', $validOptions) . ')');
