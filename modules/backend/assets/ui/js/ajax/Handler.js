@@ -9,8 +9,8 @@ import { delegate } from 'jquery-events-to-dom-events';
  *
  * Functions:
  *  - Adds the "render" jQuery event to Snowboard requests that widgets use to initialise.
- *  - Hooks into the main jQuery AJAX workflow events of the original AJAX framework (`ajaxPromise` at the beginning 
- *     of an AJAX request, `ajaxDone`/`ajaxRedirected`/`ajaxFail` at the end of the beginning of an AJAX requests) 
+ *  - Hooks into the main jQuery AJAX workflow events of the original AJAX framework (`ajaxPromise` at the beginning
+ *     of an AJAX request, `ajaxDone`/`ajaxRedirected`/`ajaxFail` at the end of the beginning of an AJAX requests)
  *     and simulates comparable Snowboard events to allow Snowboard functionality that acts on AJAX events to
  *     to function in the Backend (Flash messages, loader bar)
  *  - Ensures the CSRF token is included in requests.
