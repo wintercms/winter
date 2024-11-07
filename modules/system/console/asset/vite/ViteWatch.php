@@ -58,17 +58,6 @@ class ViteWatch extends ViteCompile
     }
 
     /**
-     * Create the public dir if required
-     */
-    protected function beforeExecution(string $configPath): void
-    {
-        $publicDir = dirname($configPath) . '/public';
-        if (!File::exists($publicDir)) {
-            File::makeDirectory($publicDir);
-        }
-    }
-
-    /**
      * Handle the cleanup of this command if a termination signal is received
      */
     public function handleCleanup(): void
