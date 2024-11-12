@@ -446,9 +446,20 @@ export default class Trigger extends PluginBase {
                         eventName,
                         priority: Number(trigger.get('priority')),
                         event: () => {
+                            let chainedElements = null;
+
                             this.executeActions(
                                 trigger,
-                                trigger.get('conditionCallbacks').every((condition) => condition()),
+                                trigger.get('conditionCallbacks').every((condition) => {
+                                    const met = condition(chainedElements);
+
+                                    if (met === false) {
+                                        return false;
+                                    }
+
+                                    chainedElements = met;
+                                    return true;
+                                }),
                             );
                         },
                     };
@@ -521,25 +532,36 @@ export default class Trigger extends PluginBase {
             this.addEvent(element, trigger, 'input');
         });
 
-        return () => {
-            const elementValues = new Set();
+        return (chainedElements = null) => {
+            const elementValues = new Map();
+            const testElements = chainedElements ?? supportedElements;
 
-            supportedElements.forEach((element) => {
+            testElements.forEach((element) => {
                 if (element.matches('input[type=checkbox], input[type=radio]')) {
                     if (element.checked) {
-                        elementValues.add(element.value);
+                        elementValues.add(element, element.value);
                     }
                     return;
                 }
 
-                elementValues.add(element.value);
+                elementValues.add(element, element.value);
             });
 
+            // Check if condition is met
+            let met = false;
+
             if (all) {
-                return values.every((value) => elementValues.has(value));
+                met = values.every((value) => elementValues.values().has(value));
             }
 
-            return values.some((value) => elementValues.has(value));
+            met = values.some((value) => elementValues.values().has(value));
+
+            if (!met) {
+                return false;
+            }
+
+            // Return only elements who met the condition
+            return Array.from(elementValues.entries().filter(([, value]) => values.includes(value)).keys());
         };
     }
 
@@ -572,10 +594,11 @@ export default class Trigger extends PluginBase {
             this.addEvent(element, trigger, 'input');
         });
 
-        return () => {
+        return (chainedElements = null) => {
             const elementValues = new Set();
+            const testElements = chainedElements ?? supportedElements;
 
-            supportedElements.forEach((element) => {
+            testElements.forEach((element) => {
                 if (element.matches('input[type=checkbox], input[type=radio]')) {
                     if (element.checked) {
                         elementValues.add(element);
@@ -588,7 +611,13 @@ export default class Trigger extends PluginBase {
                 }
             });
 
-            return elementValues.size === 0;
+            const met = elementValues.size === 0;
+
+            if (!met) {
+                return false;
+            }
+
+            return Array.from(testElements.keys().filter((element) => !elementValues.has(element)));
         };
     }
 
@@ -614,17 +643,22 @@ export default class Trigger extends PluginBase {
             this.addEvent(element, trigger, 'click');
         });
 
-        return () => {
+        return (chainedElements = null) => {
             const elementValues = new Set();
+            const testElements = chainedElements ?? supportedElements;
 
-            supportedElements.forEach((element) => {
+            testElements.forEach((element) => {
                 if (checked === element.checked) {
                     elementValues.add(element);
                 }
             });
 
             if (atLeast === 'all') {
-                return elementValues.size === supportedElements.size;
+                if (elementValues.size === testElements.size) {
+                    return Array.from(elementValues);
+                }
+
+                return false;
             }
 
             const atLeastCount = (atLeast !== undefined && Math.floor(atLeast) > 0)
@@ -634,12 +668,16 @@ export default class Trigger extends PluginBase {
                 ? Math.floor(atMost)
                 : supportedElements.size;
 
-            return elementValues.size >= atLeastCount && elementValues.size <= atMostCount;
+            if (elementValues.size >= atLeastCount && elementValues.size <= atMostCount) {
+                return Array.from(elementValues);
+            }
+
+            return false;
         };
     }
 
     /**
-     * Creates a trigger that fires when a target element(s) is focused or blurred.
+     * Creates a trigger that fires when a target element(s) is focused.
      *
      * @param {TriggerEntity} trigger
      */
@@ -656,7 +694,17 @@ export default class Trigger extends PluginBase {
             this.addEvent(element, trigger, 'blur');
         });
 
-        return Array.from(supportedElements).some((element) => document.activeElement === element);
+        return (chainedElements = null) => {
+            const testElements = chainedElements ?? supportedElements;
+
+            const focusedElement = Array.from(testElements).find((element) => document.activeElement === element);
+
+            if (focusedElement) {
+                return [focusedElement];
+            }
+
+            return false;
+        };
     }
 
     /**
@@ -681,8 +729,11 @@ export default class Trigger extends PluginBase {
             this.addEvent(element, trigger, 'blur');
         });
 
-        return Array.from(supportedElements).every(
-            (element) => {
+        return (chainedElements = null) => {
+            const matchedElements = new Set();
+            const testElements = chainedElements ?? supportedElements;
+
+            testElements.forEach((element) => {
                 let within = false;
 
                 document.querySelectorAll(selector).forEach((parent) => {
@@ -694,9 +745,17 @@ export default class Trigger extends PluginBase {
                     }
                 });
 
-                return within === isWithin;
-            },
-        );
+                if (within === isWithin) {
+                    matchedElements.add(element);
+                }
+            });
+
+            if (matchedElements.size !== testElements.length) {
+                return false;
+            }
+
+            return Array.from(matchedElements);
+        };
     }
 
     /**
