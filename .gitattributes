@@ -3,9 +3,8 @@
 *.md diff=markdown
 *.php diff=php
 
+/.devcontainer export-ignore
 /.github export-ignore
-/.gitpod export-ignore
 .gitattributes export-ignore
-.gitpod.yml export-ignore
 CHANGELOG.md export-ignore
 /package.json export-ignore

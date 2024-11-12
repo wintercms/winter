@@ -35,6 +35,15 @@ class PackageJsonTest extends TestCase
     }
 
     /**
+     * Test loading a corrupted package.json file correctly errors
+     */
+    public function testLoadCorruptFile(): void
+    {
+        $this->expectException(\JsonException::class);
+        new PackageJson(__DIR__ . '/../../fixtures/npm/package-corrupt.json');
+    }
+
+    /**
      * Test creating an instance with non-existing file
      */
     public function testNewFile(): void

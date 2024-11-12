@@ -2,17 +2,16 @@
 
 use Backend;
 use Backend\Classes\WidgetManager;
+use Backend\Facades\BackendAuth;
+use Backend\Facades\BackendMenu;
 use Backend\Models\UserRole;
-use BackendAuth;
-use BackendMenu;
-use Config;
 use DateInterval;
-use Event;
 use Illuminate\Foundation\Vite as LaravelVite;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Schema;
-use Markdown;
-use Request;
+use Illuminate\Support\Facades\View;
 use System\Classes\CombineAssets;
 use System\Classes\ErrorHandler;
 use System\Classes\MailManager;
@@ -24,13 +23,14 @@ use System\Helpers\DateTime;
 use System\Models\EventLog;
 use System\Models\MailSetting;
 use System\Twig\Engine as TwigEngine;
-use SystemException;
 use Twig\Environment;
 use Twig\Extension\CoreExtension;
-use Validator;
-use View;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Router\Helper as RouterHelper;
 use Winter\Storm\Support\ClassLoader;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Markdown;
+use Winter\Storm\Support\Facades\Validator;
 use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
@@ -296,6 +296,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('create.job', \System\Console\CreateJob::class);
         $this->registerConsoleCommand('create.migration', \System\Console\CreateMigration::class);
         $this->registerConsoleCommand('create.model', \System\Console\CreateModel::class);
+        $this->registerConsoleCommand('create.factory', \System\Console\CreateFactory::class);
         $this->registerConsoleCommand('create.plugin', \System\Console\CreatePlugin::class);
         $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
         $this->registerConsoleCommand('create.test', \System\Console\CreateTest::class);
@@ -332,8 +333,9 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('vite.list', Console\Asset\Vite\ViteList::class);
         $this->registerConsoleCommand('vite.watch', Console\Asset\Vite\ViteWatch::class);
 
-        $this->registerConsoleCommand('npm.run', Console\Asset\NpmRun::class);
-        $this->registerConsoleCommand('npm.update', Console\Asset\NpmUpdate::class);
+        $this->registerConsoleCommand('npm.run', Console\Asset\Npm\NpmRun::class);
+        $this->registerConsoleCommand('npm.install', Console\Asset\Npm\NpmInstall::class);
+        $this->registerConsoleCommand('npm.update', Console\Asset\Npm\NpmUpdate::class);
     }
 
     /*

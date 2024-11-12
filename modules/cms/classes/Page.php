@@ -185,7 +185,7 @@ class Page extends CmsCompoundObject
      *
      * @param \Winter\Sitemap\Classes\DefinitionItem|\Winter\Pages\Classes\MenuItem $item Specifies the menu item.
      */
-    public static function resolveMenuItem(object $item, string $url, Theme $theme): ?array
+    public static function resolveMenuItem(object $item, string $url, Theme $theme, bool $routePersistence = false): ?array
     {
         $result = null;
 
@@ -202,7 +202,7 @@ class Page extends CmsCompoundObject
             }
 
             $controller = Controller::getController() ?: new Controller;
-            $pageUrl = $controller->pageUrl($item->reference, [], false);
+            $pageUrl = $controller->pageUrl($item->reference, [], $routePersistence);
 
             $result = [];
             $result['url'] = $pageUrl;

@@ -81,14 +81,8 @@ class Table extends WidgetBase
         $this->dataSource = new $dataSourceClass($this->recordsKeyFrom);
 
         if (Request::method() == 'POST' && $this->isClientDataSource()) {
-            if (strpos($this->fieldName, '[') === false) {
-                $requestDataField = $this->fieldName . 'TableData';
-            } else {
-                $requestDataField = $this->fieldName . '[TableData]';
-            }
-
             // Use dot notation for request data field
-            $requestDataField = implode('.', HtmlHelper::nameToArray($requestDataField));
+            $requestDataField = implode('.', HtmlHelper::nameToArray($this->fieldName));
 
             if (Request::exists($requestDataField)) {
                 // Load data into the client memory data source on POST

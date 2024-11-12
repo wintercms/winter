@@ -20,7 +20,9 @@ use System\Models\File as FileModel;
  *
  * Currently supported commands:
  *
+ * - purge resized: Deletes all files in the resized directory.
  * - purge thumbs: Deletes all thumbnail files in the uploads directory.
+ * - purge uploads: Deletes files in the uploads directory that do not exist in the "system_files" table.
  * - git pull: Perform "git pull" on all plugins and themes.
  * - compile assets: Compile registered Language, LESS and JS files.
  * - compile js: Compile registered JS files only.
@@ -250,6 +252,28 @@ class WinterUtil extends Command
 
             $this->comment($locale.'/'.basename($srcPath));
             $this->comment(sprintf(' -> %s', $publicDest));
+        }
+    }
+
+    protected function utilPurgeResized()
+    {
+        if (!$this->confirmToProceed('This will PERMANENTLY DELETE all files in the resized directory.')) {
+            return;
+        }
+
+        $resizedDisk = Config::get('cms.storage.resized.disk', 'local');
+        $resizedFolder = Config::get('cms.storage.resized.folder', 'resized');
+
+        $totalCount = count(Storage::disk($resizedDisk)->allFiles($resizedFolder));
+
+        foreach (Storage::disk($resizedDisk)->directories($resizedFolder, false) as $directory) {
+            Storage::disk($resizedDisk)->deleteDirectory($directory);
+        }
+
+        if ($totalCount > 0) {
+            $this->comment(sprintf('Successfully deleted %d file(s)', $totalCount));
+        } else {
+            $this->comment('No files found to purge.');
         }
     }
 

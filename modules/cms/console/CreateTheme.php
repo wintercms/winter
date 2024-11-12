@@ -90,7 +90,7 @@ class CreateTheme extends GeneratorCommand
      */
     protected function prepareVars(): array
     {
-        $scaffold = $this->argument('scaffold') ?? 'less';
+        $scaffold = $this->argument('scaffold') ?? 'tailwind';
         $validOptions = $this->suggestScaffoldValues();
         if (!in_array($scaffold, $validOptions)) {
             throw new InvalidArgumentException("$scaffold is not an available theme scaffold type (Available types: " . implode(', ', $validOptions) . ')');

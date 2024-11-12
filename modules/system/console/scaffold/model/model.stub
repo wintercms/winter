@@ -2,7 +2,7 @@
 
 namespace {{ plugin_namespace }}\Models;
 
-use Model;
+use Winter\Storm\Database\Model;
 
 /**
  * {{ name }} Model
