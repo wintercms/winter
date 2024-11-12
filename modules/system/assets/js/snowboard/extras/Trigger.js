@@ -256,22 +256,22 @@ export default class Trigger extends PluginBase {
             }];
         }
 
-        let [name] = command.split(':', 2);
-        const [, parameters] = command.split(':', 2);
+        const [, name, parameters] = command.match(/^([a-zA-Z]+):(.*)$/);
+        let finalName = name;
         let oneWay = false;
 
         if (
             name.includes('.oneway')
             && (name.startsWith('do') || name.startsWith('action'))
         ) {
-            name = command.replace('.oneway', '');
+            finalName = command.replace('.oneway', '');
             oneWay = true;
         }
 
         if (!parameters.includes(',')) {
             return [{
-                name,
-                parameters: [parameters],
+                name: finalName,
+                parameters: [parameters.replace(/^['"]|['"]$/g, '').replace(/\\(['"])/, '$1').trim()],
                 oneWay,
             }];
         }
@@ -281,7 +281,7 @@ export default class Trigger extends PluginBase {
             .map((splitValue) => splitValue.replace(/\|\|\|/g, ',').replace(/^['"]|['"]$/g, '').replace(/\\(['"])/, '$1').trim());
 
         return [{
-            name,
+            name: finalName,
             parameters: splitValues,
             oneWay,
         }];
