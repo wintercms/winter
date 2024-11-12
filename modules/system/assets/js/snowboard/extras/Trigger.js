@@ -539,29 +539,25 @@ export default class Trigger extends PluginBase {
             testElements.forEach((element) => {
                 if (element.matches('input[type=checkbox], input[type=radio]')) {
                     if (element.checked) {
-                        elementValues.add(element, element.value);
+                        elementValues.set(element, element.value);
                     }
                     return;
                 }
 
-                elementValues.add(element, element.value);
+                elementValues.set(element, element.value);
             });
 
             // Check if condition is met
-            let met = false;
-
-            if (all) {
-                met = values.every((value) => elementValues.values().has(value));
-            }
-
-            met = values.some((value) => elementValues.values().has(value));
+            const met = (all)
+                ? values.every((value) => elementValues.values().find((elementValue) => elementValue === value))
+                : values.some((value) => elementValues.values().find((elementValue) => elementValue === value));
 
             if (!met) {
                 return false;
             }
 
             // Return only elements who met the condition
-            return Array.from(elementValues.entries().filter(([, value]) => values.includes(value)).keys());
+            return Array.from(elementValues.entries().filter(([, value]) => values.includes(value)).map(([, element]) => element));
         };
     }
 
