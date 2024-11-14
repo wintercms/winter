@@ -8,6 +8,15 @@
     </a>
     <a
         href="javascript:;"
+        data-handler="onClearLog"
+        data-control="popup"
+        data-size="huge"
+        data-attach-loading
+        class="btn btn-default wn-icon-filter-circle-xmark">
+        <?= e(trans('system::lang.event_log.delete_filtered_link')) ?>
+    </a>
+    <a
+        href="javascript:;"
         data-request="onEmptyLog"
         data-request-confirm="<?= e(trans('backend::lang.list.delete_selected_confirm')) ?>"
         data-load-indicator="<?= e(trans('system::lang.event_log.empty_loading')) ?>"
