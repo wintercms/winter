@@ -30,7 +30,7 @@
                 class="btn btn-success hidden"
                 data-request="onClearLogDelete"
                 data-request-confirm="<?= e(trans('system::lang.event_log.delete_filtered_confirm')) ?>"
-                data-dismiss="popup"
+                data-request-success="$(this).trigger('close.oc.popup');"
                 data-stripe-load-indicator>
                 <?= e(trans('system::lang.event_log.delete_filtered_link')) ?>
             </button>
@@ -66,25 +66,22 @@
             };
         }
 
-        $('#deleteFiltered input:not(:button)').each(function () {
-            this.defaultValue = this.value;
+        var $inputMessage = $('#deleteFiltered :input[name="message"]');
+        $inputMessage.defaultValue = $inputMessage.val();
 
-            if (this.type == 'text') {
-                $(this).keyup(delay(function (e) {
-                    if (e.target.value != e.target.defaultValue) {
-                        e.target.defaultValue = this.value;
-                        refreshResults();
-                    }
-                }, 750));
-            } else {
-                $(this).on('change', function() {
-                    setTimeout(
-                        refreshResults(),
-                        1000
-                    )
-                });
+        // Monitor change on message field
+        $inputMessage.keyup(delay(function (e) {
+            if (e.target.value != e.target.defaultValue) {
+                e.target.defaultValue = this.value;
+                refreshResults();
             }
+        }, 750));
 
-        });
+        // Monitor change on datepicker fields
+        $('#deleteFiltered').on('change.oc.formwidget', delay(function (e) {
+            if (e.target.name != 'message') {
+                refreshResults();
+            }
+        }, 400));
     })
 </script>
