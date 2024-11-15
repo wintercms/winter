@@ -34,3 +34,34 @@ package-lock.json
 
 # Ignore generated public directory from `winter:mirror public`
 public
+composer.json
+plugins/winter/debugbar/.gitignore
+plugins/winter/debugbar/icon.png
+plugins/winter/debugbar/LICENSE
+plugins/winter/debugbar/Plugin.php
+plugins/winter/debugbar/README.md
+plugins/winter/debugbar/assets/css/debugbar.css
+plugins/winter/debugbar/assets/less/debugbar.less
+plugins/winter/debugbar/assets/less/vendor.less
+plugins/winter/debugbar/classes/JavascriptRenderer.php
+plugins/winter/debugbar/classes/ServiceProvider.php
+plugins/winter/debugbar/classes/WinterDebugbar.php
+plugins/winter/debugbar/collectors/BackendCollector.php
+plugins/winter/debugbar/collectors/CmsCollector.php
+plugins/winter/debugbar/collectors/ComponentsCollector.php
+plugins/winter/debugbar/collectors/ModelsCollector.php
+plugins/winter/debugbar/config/config.php
+plugins/winter/debugbar/lang/en/lang.php
+plugins/winter/debugbar/lang/ru/lang.php
+plugins/winter/debugbar/lang/sl/lang.php
+plugins/winter/debugbar/middleware/InjectDebugbar.php
+plugins/winter/debugbar/middleware/InterpretsAjaxExceptions.php
+plugins/winter/debugbar/screenshots/collapsed.png
+plugins/winter/debugbar/screenshots/expanded-queries.png
+plugins/winter/debugbar/screenshots/expanded-timeline.png
+plugins/winter/debugbar/twig/extension/Debug.php
+plugins/winter/debugbar/twig/extension/Dump.php
+plugins/winter/debugbar/twig/extension/Stopwatch.php
+plugins/winter/debugbar/twig/node/StopwatchNode.php
+plugins/winter/debugbar/twig/tokenparser/StopwatchTokenParser.php
+plugins/winter/debugbar/updates/version.yaml

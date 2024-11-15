@@ -100,7 +100,11 @@ class EventLogs extends Controller
         }
 
         $events = EventLog
-            ::when($message, fn ($q) => $q->where('message', 'like', '%' . $message . '%'))
+            ::when($message, fn ($q) => $q->where('message', 'like', '%' . str_replace(
+                ['\\', '%', '_'],
+                ['\\\\', '\\%', '\\_'],
+                $message
+            ) . '%'))
             ->when($dateStart, fn ($q) => $q->where('created_at', '>=', $dateStart))
             ->when($dateEnd, fn ($q) => $q->where('created_at', '<=', $dateEnd))
             ->orderBy('created_at', 'desc')
@@ -140,7 +144,11 @@ class EventLogs extends Controller
         $eventLog = new EventLog;
 
         $eventLog = EventLog
-            ::when($message, fn ($q) => $q->where('message', 'like', '%' . $message . '%'))
+            ::when($message, fn ($q) => $q->where('message', 'like', '%' . str_replace(
+                ['\\', '%', '_'],
+                ['\\\\', '\\%', '\\_'],
+                $message
+            ) . '%'))
             ->when($dateStart, fn ($q) => $q->where('created_at', '>=', $dateStart))
             ->when($dateEnd, fn ($q) => $q->where('created_at', '<=', $dateEnd));
 
