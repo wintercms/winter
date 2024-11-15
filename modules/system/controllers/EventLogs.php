@@ -150,6 +150,7 @@ class EventLogs extends Controller
 
         Flash::success(Lang::get('system::lang.event_log.delete_filtered_success', [
             'what' => strtolower(Str::plural(Lang::get('system::lang.event_log.preview_title'), $events->count())),
+            'count' => $events->count(),
         ]));
         return $this->listRefresh();
     }

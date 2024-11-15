@@ -403,9 +403,9 @@ return [
         'delete_filtered_date_end' => 'Ending date',
         'delete_filtered_link' => 'Delete filtered events',
         'delete_filtered_search' => 'Messages containing',
-        'delete_filtered_success' => 'Filtered :what deleted',
+        'delete_filtered_success' => ':count :what successfully deleted',
         'delete_filtered_search_comment' => 'select all event log messages containing the following text',
-        'delete_filtered_results' => '<b>:count</b> :what log matching your criteria',
+        'delete_filtered_results' => '<b>:count</b> :what matching your criteria',
     ],
     'request_log' => [
         'hint' => 'This log displays a list of browser requests that may require attention. For example, if a visitor opens a CMS page that cannot be found, a record is created with the status code 404.',
