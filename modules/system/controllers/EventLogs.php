@@ -127,7 +127,6 @@ class EventLogs extends Controller
                 'count' => $events->count(),
             ])
         ];
-
     }
 
     /**
