@@ -1,15 +1,13 @@
 <?php namespace System\Controllers;
 
 use App;
-use BackendMenu;
 use Backend\Classes\Controller;
-use Flash;
-
+use Backend\Facades\BackendMenu;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Str;
-
-use Lang;
 use System\Classes\SettingsManager;
 use System\Models\EventLog;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Event Logs controller
