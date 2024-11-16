@@ -12,8 +12,15 @@
 
             <?= $formWidget->render(); ?>
 
-            <div id="deleteFilteredResults" class="form-group span-full"></div>
-            <div id="deleteFilteredList" class="form-group span-full"></div>
+            <div class="loading-indicator-container">
+                <div class="loading-indicator hidden">
+                    <span></span>
+                    <div><?= e(trans('system::lang.event_log.delete_filtered_loading')) ?></div>
+                </div>
+
+                <div id="deleteFilteredResults" class="form-group span-full"></div>
+                <div id="deleteFilteredList" class="form-group span-full"></div>
+            </div>
 
         </div>
 
@@ -41,7 +48,17 @@
 
 <script>
     $('#deleteFilteredPopup').on('popupComplete', function() {
+
+        var $loadingIndicator = $('#deleteFilteredPopup .loading-indicator-container .loading-indicator');
+        var $resultsInfos = $('#deleteFilteredResults');
+        var $resultsList = $('#deleteFilteredList');
+
+        var $inputMessage = $('#deleteFiltered :input[name="message"]');
+        $inputMessage.defaultValue = $inputMessage.val();
+
         function refreshResults () {
+            showLoadingIndicator();
+
             Snowboard.request('#deleteFiltered', 'onClearLogInfos', {
                 success: (data) => {
                     const total = data.total;
@@ -51,9 +68,26 @@
                     } else {
                         $('#deleteFiltered button[data-name="submit"]').addClass('hidden');
                     }
+
+                    hideLoadingIndicator();
+                },
+                error: (data) => {
+                    hideLoadingIndicator()
                 },
             });
         };
+
+        function showLoadingIndicator () {
+            $loadingIndicator.removeClass('hidden');
+            $resultsInfos.addClass('hidden');
+            $resultsList.addClass('hidden');
+        }
+
+        function hideLoadingIndicator () {
+            $loadingIndicator.addClass('hidden');
+            $resultsInfos.removeClass('hidden');
+            $resultsList.removeClass('hidden');
+        }
 
         function delay(callback, ms) {
             var timer = 0;
@@ -66,9 +100,6 @@
             };
         }
 
-        var $inputMessage = $('#deleteFiltered :input[name="message"]');
-        $inputMessage.defaultValue = $inputMessage.val();
-
         // Monitor change on message field
         $inputMessage.keyup(delay(function (e) {
             if (e.target.value != e.target.defaultValue) {
@@ -78,7 +109,7 @@
         }, 750));
 
         // Monitor change on datepicker fields
-        $('#deleteFiltered').on('change.oc.formwidget', delay(function (e) {
+        $('#deleteFiltered').on('change.oc.formwidget', '.field-datepicker', delay(function (e) {
             if (e.target.name != 'message') {
                 refreshResults();
             }

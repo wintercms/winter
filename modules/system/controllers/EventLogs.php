@@ -127,7 +127,7 @@ class EventLogs extends Controller
             'total' => $events->count(),
             '#deleteFilteredList' => $controlList->render(),
             '#deleteFilteredResults' => Lang::get('system::lang.event_log.delete_filtered_results', [
-                'what' => strtolower(Str::plural(Lang::get('system::lang.event_log.preview_title'), $events->count())),
+                'what' => mb_strtolower(Str::plural(Lang::get('system::lang.event_log.preview_title'), $events->count())),
                 'count' => $events->count(),
             ])
         ];
@@ -156,7 +156,7 @@ class EventLogs extends Controller
         $eventLog->delete();
 
         Flash::success(Lang::get('system::lang.event_log.delete_filtered_success', [
-            'what' => strtolower(Str::plural(Lang::get('system::lang.event_log.preview_title'), $events->count())),
+            'what' => mb_strtolower(Str::plural(Lang::get('system::lang.event_log.preview_title'), $events->count())),
             'count' => $events->count(),
         ]));
         return $this->listRefresh();

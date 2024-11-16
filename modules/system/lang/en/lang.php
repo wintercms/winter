@@ -402,6 +402,7 @@ return [
         'delete_filtered_date_start' => 'Starting date',
         'delete_filtered_date_end' => 'Ending date',
         'delete_filtered_link' => 'Delete filtered events',
+        'delete_filtered_loading' => 'Search for events matching your criteria',
         'delete_filtered_search' => 'Messages containing',
         'delete_filtered_success' => ':count :what successfully deleted',
         'delete_filtered_search_comment' => 'select all event log messages containing the following text',

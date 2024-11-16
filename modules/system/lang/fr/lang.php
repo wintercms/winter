@@ -356,6 +356,7 @@ return [
         'delete_filtered_date_start' => 'Depuis le',
         'delete_filtered_date_end' => 'Jusqu\'au',
         'delete_filtered_link' => 'Supprimer des évènements',
+        'delete_filtered_loading' => 'Recherche des évènements correspondant à vos critères',
         'delete_filtered_search' => 'Message contenant',
         'delete_filtered_success' => ':count :what supprimés avec succès',
         'delete_filtered_search_comment' => 'sélectionner tous les messages du journal des événements contenant le texte suivant',
