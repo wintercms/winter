@@ -36,6 +36,11 @@ class CreateTheme extends GeneratorCommand
     protected $nameFrom = 'theme';
 
     /**
+     * @var string The scaffold that we are building
+     */
+    protected string $scaffold;
+
+    /**
      * @var array Available theme scaffolds and their types
      */
     protected $themeScaffolds = [
@@ -68,12 +73,9 @@ class CreateTheme extends GeneratorCommand
             'scaffold/theme/tailwind/partials/site/header.stub' => 'partials/site/header.htm',
             'scaffold/theme/tailwind/partials/site/footer.stub' => 'partials/site/footer.htm',
             'scaffold/theme/tailwind/.gitignore.stub' => '.gitignore',
-            'scaffold/theme/tailwind/package.stub' => 'package.json',
             'scaffold/theme/tailwind/README.stub' => 'README.md',
-            'scaffold/theme/tailwind/tailwind.config.stub' => 'tailwind.config.js',
             'scaffold/theme/tailwind/theme.stub' => 'theme.yaml',
             'scaffold/theme/tailwind/version.stub' => 'version.yaml',
-            'scaffold/theme/tailwind/winter.mix.stub' => 'winter.mix.js',
         ],
     ];
 
@@ -90,12 +92,13 @@ class CreateTheme extends GeneratorCommand
      */
     protected function prepareVars(): array
     {
-        $scaffold = $this->argument('scaffold') ?? 'tailwind';
+        $this->scaffold = $this->argument('scaffold') ?? 'tailwind';
+
         $validOptions = $this->suggestScaffoldValues();
-        if (!in_array($scaffold, $validOptions)) {
-            throw new InvalidArgumentException("$scaffold is not an available theme scaffold type (Available types: " . implode(', ', $validOptions) . ')');
+        if (!in_array($this->scaffold, $validOptions)) {
+            throw new InvalidArgumentException("$this->scaffold is not an available theme scaffold type (Available types: " . implode(', ', $validOptions) . ')');
         }
-        $this->stubs = $this->themeScaffolds[$scaffold];
+        $this->stubs = $this->themeScaffolds[$this->scaffold];
 
         return [
             'code' => $this->getNameInput(),
@@ -145,5 +148,40 @@ class CreateTheme extends GeneratorCommand
         $this->makeDirectory($destinationFile);
 
         $this->files->put($destinationFile, $destinationContent);
+    }
+
+    public function makeStubs(): void
+    {
+        parent::makeStubs();
+
+        if ($this->scaffold === 'tailwind') {
+            // Set up the vite config files
+            $this->call('vite:create', [
+                'packageName' => 'theme-' . $this->getNameInput(),
+                '--no-interaction' => true,
+                '--force' => true,
+                '--silent' => true,
+                '--tailwind' => true
+            ]);
+
+            $this->info('Installing NPM dependencies...');
+
+            // Ensure all require packages are available for the new theme and add the new theme to our npm workspaces
+            $this->call('vite:install', [
+                'assetPackage' => ['theme-' . $this->getNameInput()],
+                '--no-interaction' => true,
+                '--silent' => true,
+                '--disable-tty' => true
+            ]);
+
+            $this->info('Compiling your theme...');
+
+            // Run an initial compile to ensure styles are available for first load
+            $this->call('vite:compile', [
+                '--package' => ['theme-' . $this->getNameInput()],
+                '--no-interaction' => true,
+                '--silent' => true,
+            ]);
+        }
     }
 }
