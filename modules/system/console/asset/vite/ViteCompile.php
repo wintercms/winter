@@ -18,7 +18,7 @@ class ViteCompile extends AssetCompile
     protected $signature = 'vite:compile
         {viteArgs?* : Arguments to pass through to the Vite CLI}
         {--f|production : Runs compilation in "production" mode}
-        {--s|silent : Silent mode}
+        {--s|silent : Enables silent mode, no output will be shown.}
         {--d|disable-tty : Disable tty mode}
         {--e|stop-on-error : Exit once an error is encountered}
         {--m|manifest= : Defines package.json to use for compile}

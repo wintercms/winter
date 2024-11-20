@@ -91,8 +91,10 @@ abstract class AssetCreate extends Command
         $verb = File::exists($packageJson->getPath()) ? 'updated' : 'generated';
         $packageJson->save();
 
-        $this->warn("File $verb: " . str_after($packageJson->getPath(), base_path()));
-        $this->info(ucfirst($this->assetType) . ' configuration complete.');
+        if (!$this->option('silent')) {
+            $this->warn("File $verb: " . str_after($packageJson->getPath(), base_path()));
+            $this->info(ucfirst($this->assetType) . ' configuration complete.');
+        }
 
         $this->afterExecution();
 
@@ -215,7 +217,9 @@ abstract class AssetCreate extends Command
 
         $result = File::put($path, $content);
 
-        $this->warn('File generated: ' . str_after($path, base_path()));
+        if (!$this->option('silent')) {
+            $this->warn('File generated: ' . str_after($path, base_path()));
+        }
 
         return $result;
     }
