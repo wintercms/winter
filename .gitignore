@@ -34,3 +34,4 @@ package-lock.json
 
 # Ignore generated public directory from `winter:mirror public`
 public
+.env.backup
