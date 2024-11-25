@@ -59,10 +59,6 @@ class CreateTheme extends GeneratorCommand
             'scaffold/theme/less/version.stub' => 'version.yaml',
         ],
         'tailwind' => [
-            'scaffold/theme/tailwind/assets/src/css/base.stub' => 'assets/src/css/base.css',
-            'scaffold/theme/tailwind/assets/src/css/custom.stub' => 'assets/src/css/custom.css',
-            'scaffold/theme/tailwind/assets/src/css/theme.stub' => 'assets/src/css/theme.css',
-            'scaffold/theme/tailwind/assets/src/js/theme.stub' => 'assets/src/js/theme.js',
             'scaffold/theme/tailwind/lang/en/lang.stub' => 'lang/en/lang.php',
             'scaffold/theme/tailwind/layouts/default.stub' => 'layouts/default.htm',
             'scaffold/theme/tailwind/pages/404.stub' => 'pages/404.htm',
