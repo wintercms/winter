@@ -336,6 +336,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('npm.run', Console\Asset\Npm\NpmRun::class);
         $this->registerConsoleCommand('npm.install', Console\Asset\Npm\NpmInstall::class);
         $this->registerConsoleCommand('npm.update', Console\Asset\Npm\NpmUpdate::class);
+        $this->registerConsoleCommand('npm.version', Console\Asset\Npm\NpmVersion::class);
     }
 
     /*
