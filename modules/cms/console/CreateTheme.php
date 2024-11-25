@@ -1,6 +1,8 @@
 <?php namespace Cms\Console;
 
 use InvalidArgumentException;
+use System\Classes\Asset\PackageManager;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Scaffold\GeneratorCommand;
 
 class CreateTheme extends GeneratorCommand
@@ -151,33 +153,65 @@ class CreateTheme extends GeneratorCommand
         parent::makeStubs();
 
         if ($this->scaffold === 'tailwind') {
+            // @TODO: allow support for mix here
+            $this->tailwindPostCreate('vite');
+        }
+    }
+
+    protected function tailwindPostCreate(string $processor): void
+    {
+        if ($this->call('npm:version', ['--silent' => true, '--compatible' => true]) !== 0) {
+            throw new SystemException(sprintf(
+                'NPM is not installed or is outdated, please ensure NPM >= v7.0 is available and then manually set up %s.',
+                $processor
+            ));
+        }
+
+        $commands = [
             // Set up the vite config files
-            $this->call('vite:create', [
-                'packageName' => 'theme-' . $this->getNameInput(),
-                '--no-interaction' => true,
-                '--force' => true,
-                '--silent' => true,
-                '--tailwind' => true
-            ]);
-
-            $this->info('Installing NPM dependencies...');
-
+            $processor . ':create' => [
+                'message' => 'Generating ' . $processor . ' + tailwind config...',
+                'args' => [
+                    'packageName' => 'theme-' . $this->getNameInput(),
+                    '--no-interaction' => true,
+                    '--force' => true,
+                    '--silent' => true,
+                    '--tailwind' => true
+                ]
+            ],
             // Ensure all require packages are available for the new theme and add the new theme to our npm workspaces
-            $this->call('vite:install', [
-                'assetPackage' => ['theme-' . $this->getNameInput()],
-                '--no-interaction' => true,
-                '--silent' => true,
-                '--disable-tty' => true
-            ]);
-
-            $this->info('Compiling your theme...');
-
+            $processor . ':install' => [
+                'message' => 'Installing NPM dependencies...',
+                'args' => [
+                    'assetPackage' => ['theme-' . $this->getNameInput()],
+                    '--no-interaction' => true,
+                    '--silent' => false,
+                    '--disable-tty' => true
+                ]
+            ],
             // Run an initial compile to ensure styles are available for first load
-            $this->call('vite:compile', [
-                '--package' => ['theme-' . $this->getNameInput()],
-                '--no-interaction' => true,
-                '--silent' => true,
-            ]);
+            $processor . ':compile' => [
+                'message' => 'Compiling your theme...',
+                'args' => [
+                    '--package' => ['theme-' . $this->getNameInput()],
+                    '--no-interaction' => true,
+                    '--silent' => true,
+                ]
+            ]
+        ];
+
+        foreach ($commands as $command => $data) {
+            $this->info($data['message']);
+
+            // Handle commands throwing errors
+            if ($this->call($command, $data['args']) !== 0) {
+                throw new SystemException(sprintf('Post create command `%s` failed, please review manually.', $command));
+            }
+
+            // Force PackageManger to reset available packages
+            if ($command === $processor . ':create') {
+                PackageManager::forgetInstance();
+            }
         }
     }
 }
