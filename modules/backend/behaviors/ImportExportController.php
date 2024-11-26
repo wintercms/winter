@@ -611,7 +611,7 @@ class ImportExportController extends ControllerBehavior
             'delimiter' => $this->getConfig('defaultFormatOptions[delimiter]', ','),
             'enclosure' => $this->getConfig('defaultFormatOptions[enclosure]', '"'),
             'escape' => $this->getConfig('defaultFormatOptions[escape]', '\\'),
-            'useEscapeFormula' => $this->getConfig('defaultFormatOptions[useEscapeFormula]', True),
+            'useEscapeFormula' => $this->getConfig('defaultFormatOptions[useEscapeFormula]', true),
         ];
 
         $options = array_merge($defaultOptions, $options);
