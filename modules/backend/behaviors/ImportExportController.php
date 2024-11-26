@@ -611,6 +611,7 @@ class ImportExportController extends ControllerBehavior
             'delimiter' => $this->getConfig('defaultFormatOptions[delimiter]', ','),
             'enclosure' => $this->getConfig('defaultFormatOptions[enclosure]', '"'),
             'escape' => $this->getConfig('defaultFormatOptions[escape]', '\\'),
+            'useEscapeFormula' => $this->getConfig('defaultFormatOptions[useEscapeFormula]', True),
         ];
 
         $options = array_merge($defaultOptions, $options);
@@ -625,7 +626,10 @@ class ImportExportController extends ControllerBehavior
         $csv->setDelimiter($options['delimiter']);
         $csv->setEnclosure($options['enclosure']);
         $csv->setEscape($options['escape']);
-        $csv->addFormatter(new CsvEscapeFormula());
+
+        if ($options['useEscapeFormula']) {
+            $csv->addFormatter(new CsvEscapeFormula());
+        }
 
         /*
          * Add headers

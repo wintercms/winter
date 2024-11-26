@@ -84,10 +84,11 @@ abstract class ExportModel extends Model
         $defaultOptions = [
             'firstRowTitles' => true,
             'useOutput' => false,
+            'useEscapeFormula' => true,
             'fileName' => 'export.csv',
             'delimiter' => null,
             'enclosure' => null,
-            'escape' => null
+            'escape' => null,
         ];
 
         $options = array_merge($defaultOptions, $options);
@@ -112,7 +113,9 @@ abstract class ExportModel extends Model
             $csv->setEscape($options['escape']);
         }
 
-        $csv->addFormatter(new CsvEscapeFormula());
+        if ($options['useEscapeFormula']) {
+            $csv->addFormatter(new CsvEscapeFormula());
+        }
 
         /*
          * Add headers
