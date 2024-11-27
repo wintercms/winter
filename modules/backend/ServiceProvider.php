@@ -12,10 +12,8 @@ use System\Classes\CombineAssets;
 use System\Classes\MailManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
-use Winter\Storm\Auth\Models\User as UserBase;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\Flash;
-use Winter\Storm\Support\Facades\Mail;
 use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
