@@ -171,7 +171,7 @@ class User extends UserBase
             }
         }
         // Log the sign in event
-        AccessLog::add($user);
+        AccessLog::add($this);
     }
 
     /**
