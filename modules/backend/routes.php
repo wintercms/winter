@@ -20,7 +20,7 @@ Event::listen('system.route', function () {
     Event::fire('backend.beforeRoute');
 
     /*
-     * Other pages
+     * Entry point
      */
     Route::group([
         'middleware' => ['web'],
@@ -28,11 +28,6 @@ Event::listen('system.route', function () {
     ], function () {
         Route::any('{slug?}', 'Backend\Classes\BackendController@run')->where('slug', '(.*)?');
     });
-
-    /*
-     * Entry point
-     */
-    Route::any(Config::get('cms.backendUri', 'backend'), 'Backend\Classes\BackendController@run')->middleware('web');
 
     /**
      * @event backend.route
