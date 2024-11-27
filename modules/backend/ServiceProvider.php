@@ -33,6 +33,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerMailer();
         $this->registerAssetBundles();
         $this->registerBackendPermissions();
+        $this->registerBackendUserEvents();
 
         /*
          * Backend specific
@@ -53,20 +54,6 @@ class ServiceProvider extends ModuleServiceProvider
     public function boot()
     {
         parent::boot('backend');
-
-        Event::listen('backend.user.login', function (\Backend\Models\User $user) {
-            $runMigrationsOnLogin = (bool) Config::get('cms.runMigrationsOnLogin', Config::get('app.debug', false));
-            if ($runMigrationsOnLogin) {
-                try {
-                    // Load version updates
-                    UpdateManager::instance()->update();
-                } catch (Exception $e) {
-                    Flash::error($e->getMessage());
-                }
-            }
-            // Log the sign in event
-            AccessLog::add($user);
-        });
     }
 
     /**
@@ -226,6 +213,28 @@ class ServiceProvider extends ModuleServiceProvider
                 ],
             ]);
             $manager->registerPermissionOwnerAlias('Winter.Backend', 'October.Backend');
+        });
+    }
+
+    /**
+     * Register the backend user events
+     */
+    protected function registerBackendUserEvents()
+    {
+        Event::listen('backend.user.login', function (\Backend\Models\User $user) {
+            // @TODO: Deprecate this, and only run migrations when it makes sense
+            $runMigrationsOnLogin = (bool) Config::get('cms.runMigrationsOnLogin', Config::get('app.debug', false));
+            if ($runMigrationsOnLogin) {
+                try {
+                    // Load version updates
+                    UpdateManager::instance()->update();
+                } catch (Exception $e) {
+                    Flash::error($e->getMessage());
+                }
+            }
+
+            // Log the sign in event
+            AccessLog::add($user);
         });
     }
 
