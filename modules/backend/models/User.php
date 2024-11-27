@@ -1,10 +1,15 @@
 <?php namespace Backend\Models;
 
-use Mail;
-use Event;
-use Backend;
-use BackendAuth;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Backend\Models\AccessLog;
+use Exception;
+use Illuminate\Support\Facades\Event;
+use System\Classes\UpdateManager;
 use Winter\Storm\Auth\Models\User as UserBase;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Mail;
 
 /**
  * Administrator user model
@@ -155,6 +160,18 @@ class User extends UserBase
          *
          */
         Event::fire('backend.user.login', [$this]);
+
+        $runMigrationsOnLogin = (bool) Config::get('cms.runMigrationsOnLogin', Config::get('app.debug', false));
+        if ($runMigrationsOnLogin) {
+            try {
+                // Load version updates
+                UpdateManager::instance()->update();
+            } catch (Exception $e) {
+                Flash::error($e->getMessage());
+            }
+        }
+        // Log the sign in event
+        AccessLog::add($user);
     }
 
     /**
