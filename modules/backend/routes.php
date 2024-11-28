@@ -20,7 +20,7 @@ Event::listen('system.route', function () {
     Event::fire('backend.beforeRoute');
 
     /*
-     * Entry point
+     * Route everything to `Backend\Classes\BackendController`, which itself acts as a router for the Backend.
      */
     Route::group([
         'middleware' => ['web'],
