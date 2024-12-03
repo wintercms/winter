@@ -43,6 +43,11 @@ class ListColumn
     public $sortable = true;
 
     /**
+     * @var bool Specifies if this column can be summed.
+     */
+    public $summable = true;
+
+    /**
      * @var bool If set to false, disables the default click behavior when the column is clicked.
      */
     public $clickable = true;
@@ -151,6 +156,9 @@ class ListColumn
         }
         if (isset($config['sortable'])) {
             $this->sortable = $config['sortable'];
+        }
+        if (isset($config['summable'])) {
+            $this->summable = $config['summable'];
         }
         if (isset($config['clickable'])) {
             $this->clickable = $config['clickable'];
