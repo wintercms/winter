@@ -1,17 +1,17 @@
 <?php namespace Backend\Widgets;
 
-use Lang;
-use Form as FormHelper;
-use Backend\Classes\FormTabs;
+use ApplicationException;
 use Backend\Classes\FormField;
+use Backend\Classes\FormTabs;
+use Backend\Classes\FormWidgetBase;
 use Backend\Classes\WidgetBase;
 use Backend\Classes\WidgetManager;
-use Backend\Classes\FormWidgetBase;
+use BackendAuth;
+use Exception;
+use Form as FormHelper;
+use Lang;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
-use ApplicationException;
-use Exception;
-use BackendAuth;
 
 /**
  * Form Widget
@@ -354,7 +354,7 @@ class Form extends WidgetBase
     public function onRefresh()
     {
         $result = [];
-        $saveData = $this->getSaveData(true);
+        $saveData = $this->getSaveData();
 
         /**
          * @event backend.form.beforeRefresh
@@ -1172,10 +1172,9 @@ class Form extends WidgetBase
     /**
      * Returns post data from a submitted form.
      */
-    public function getSaveData(bool $includeAllFields = false): array
+    public function getSaveData(): array
     {
         $this->defineFormFields();
-        $this->applyFiltersFromModel();
 
         $result = [];
 
@@ -1194,7 +1193,7 @@ class Form extends WidgetBase
             /*
              * Disabled and hidden should be omitted from data set
              */
-            if (!$includeAllFields && ($field->disabled || $field->hidden)) {
+            if ($field->disabled || $field->hidden) {
                 continue;
             }
 
@@ -1225,7 +1224,17 @@ class Form extends WidgetBase
                 continue;
             }
 
-            $widgetValue = $widget->getSaveValue($this->dataArrayGet($result, $parts));
+            // Exclude fields that didn't provide any value
+            $fieldValue = $this->dataArrayGet($result, $parts, FormField::NO_SAVE_DATA);
+            if ($fieldValue === FormField::NO_SAVE_DATA) {
+                continue;
+            }
+
+            // Exclude fields where the widget returns NO_SAVE_DATA
+            $widgetValue = $widget->getSaveValue($fieldValue);
+            if ($widgetValue === FormField::NO_SAVE_DATA) {
+                continue;
+            }
             $this->dataArraySet($result, $parts, $widgetValue);
         }
 

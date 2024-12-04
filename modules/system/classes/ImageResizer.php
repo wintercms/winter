@@ -748,7 +748,7 @@ class ImageResizer
             }
         }
 
-        if (!$disk || !$path || !$selectedSource || (!in_array(strtolower(FileHelper::extension($path)), ['jpg', 'jpeg', 'png', 'webp', 'gif']))) {
+        if (!$disk || !$path || !$selectedSource || (!in_array(strtolower(FileHelper::extension($path)), ['jpg', 'jpeg', 'png', 'webp', 'gif', 'avif']))) {
             if (is_object($image)) {
                 $image = get_class($image);
             }

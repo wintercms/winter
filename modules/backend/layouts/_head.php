@@ -1,7 +1,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0, minimal-ui">
 <meta name="robots" content="noindex">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="app-timezone" content="<?= e(Config::get('app.timezone')) ?>">
 <meta name="backend-base-path" content="<?= Backend::baseUrl() ?>">
 <meta name="backend-timezone" content="<?= e(Backend\Models\Preference::get('timezone')) ?>">
@@ -12,14 +12,18 @@
     <?= e(trans($this->pageTitle)) ?> | <?= e(Backend\Models\BrandSetting::get('app_name')) ?>
 </title>
 <?php
-$coreBuild = System\Models\Parameter::get('system::core.build', 1);
-
 // Styles
 $styles = [
     Url::asset('modules/system/assets/ui/storm.css'),
     Url::asset('modules/system/assets/ui/icons.css'),
     Backend::skinAsset('assets/css/winter.css'),
 ];
+foreach ($styles as $style) {
+    $this->addCss($style, [
+        'build' => 'core',
+        'order' => 1,
+    ]);
+}
 
 // Scripts
 $scripts = [
@@ -49,17 +53,13 @@ $scripts = array_merge($scripts, [
     Backend::skinAsset('assets/js/winter.flyout.js'),
     Backend::skinAsset('assets/js/winter.tabformexpandcontrols.js'),
 ]);
+foreach ($scripts as $script) {
+    $this->addJs($script, [
+        'build' => 'core',
+        'order' => 1,
+    ]);
+}
 ?>
-
-<?php foreach ($styles as $style): ?>
-    <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="stylesheet" importance="high">
-    <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="preload" as="style" importance="high">
-<?php endforeach; ?>
-
-<?php foreach ($scripts as $script): ?>
-    <script data-cfasync="false" src="<?= $script . '?v=' . $coreBuild; ?>" importance="high"></script>
-    <link href="<?= $script . '?v=' . $coreBuild; ?>" rel="preload" as="script" importance="high">
-<?php endforeach; ?>
 
 <?php if (!Config::get('cms.enableBackendServiceWorkers', false)): ?>
     <script>

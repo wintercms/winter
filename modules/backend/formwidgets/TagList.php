@@ -1,7 +1,9 @@
-<?php namespace Backend\FormWidgets;
+<?php
+
+namespace Backend\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
-use Winter\Storm\Database\Relations\Relation as RelationBase;
+use Illuminate\Database\Eloquent\Relations\Relation as RelationBase;
 
 /**
  * Tag List Form Widget
@@ -125,6 +127,10 @@ class TagList extends FormWidgetBase
     {
         if (!$names) {
             return $names;
+        }
+
+        if (!is_array($names)) {
+            $names = [$names];
         }
 
         $relationModel = $this->getRelationModel();

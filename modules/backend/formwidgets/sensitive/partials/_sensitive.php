@@ -15,10 +15,9 @@
                 value="<?= ($hasValue) ? $hiddenPlaceholder : '' ?>"
                 placeholder="<?= e(trans($this->formField->placeholder)) ?>"
                 class="form-control"
-                <?php if ($this->previewMode): ?>
-                    disabled="disabled"
-                <?php endif ?>
-                autocomplete="off"
+                <?= $this->previewMode ? 'disabled="disabled"' : '' ?>
+                <?= $this->formField->hasAttribute('autocomplete') ? '' : 'autocomplete="new-password"' ?>
+                <?= $this->formField->getAttributes() ?>
                 data-input
             />
             <?php if ($allowCopy): ?>

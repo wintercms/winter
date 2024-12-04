@@ -16,10 +16,21 @@ class {{ studly_name }} extends Controller
         \Backend\Behaviors\ListController::class,
     ];
 
+    /**
+     * @var array Permissions required to view this page.
+     */
+    protected $requiredPermissions = [
+        '{{ lower_author }}.{{ lower_plugin }}.{{ lower_name }}.manage_all',
+    ];
+
     public function __construct()
     {
         parent::__construct();
 
         BackendMenu::setContext('{{ plugin_code }}', '{{ lower_plugin }}', '{{ lower_name }}');
+    {% if sidebar %}
+
+        $this->bodyClass = 'compact-container';
+    {% endif -%}
     }
 }

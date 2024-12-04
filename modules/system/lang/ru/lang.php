@@ -390,7 +390,7 @@ return [
         'menu_description' => 'Просмотр системного журнала событий.',
         'empty_link' => 'Очистить журнал событий',
         'empty_loading'=> 'Очищение журнала событий...',
-        'empty_success'=> 'Успешное очищение журнала событий.',
+        'empty_success'=> 'Журнал событий очищен',
         'return_link'=> 'Вернуться в журнал событий',
         'id' => 'ID',
         'id_label' => 'ID события',
@@ -464,5 +464,11 @@ return [
     'pagination' => [
         'previous' => 'Предыдущий',
         'next' => 'Следующий',
+    ],
+    'datetime' => [
+        'today' => 'Сегодня',
+        'yesterday' => 'Вчера',
+        'tomorrow' => 'Завтра',
+        'at' => ':date в :time',
     ],
 ];
