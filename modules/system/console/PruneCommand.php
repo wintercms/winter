@@ -63,7 +63,7 @@ class PruneCommand extends BasePruneCommand
          * Example usage:
          *
          *     Event::listen('system.console.model.prune.findModels', function () {
-         *         return collect(['example model' => '\System\Models\File']);
+         *         return ['example model' => '\System\Models\File'];
          *     });
          *
          */
