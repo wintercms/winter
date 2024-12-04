@@ -31,9 +31,7 @@ class PruneCommand extends BasePruneCommand
                     return in_array($model, $except);
                 });
             })->filter(function ($model) {
-                return $this->isPrunable($model);
-            })->filter(function ($model) {
-                return class_exists($model);
+                return class_exists($model) && $this->isPrunable($model);
             })->values();
     }
 
