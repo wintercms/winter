@@ -122,7 +122,11 @@ class WinterEnv extends Command
                     $dbConfig = $this->dbConfig()[$default] ?? [];
 
                     foreach ($dbConfig as $dbEnvKey => $dbConfigKey) {
-                        $env->set($dbEnvKey, config(join('.', [$config, 'connections', $default, $dbConfigKey])));
+                        $value = config(join('.', [$config, 'connections', $default, $dbConfigKey]));
+                        if ($dbEnvKey === 'DB_DATABASE' && PHP_OS_FAMILY === 'Windows' && str_contains($value, '\\')) {
+                            $value = str_replace('\\', '\\\\', $value);
+                        }
+                        $env->set($dbEnvKey, $value);
                     }
                 }
 
