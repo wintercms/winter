@@ -123,6 +123,7 @@ class WinterEnv extends Command
 
                     foreach ($dbConfig as $dbEnvKey => $dbConfigKey) {
                         $value = config(join('.', [$config, 'connections', $default, $dbConfigKey]));
+                        // Fix for https://github.com/wintercms/winter/issues/1242#issuecomment-2515344385
                         if ($dbEnvKey === 'DB_DATABASE' && PHP_OS_FAMILY === 'Windows' && str_contains($value, '\\')) {
                             $value = str_replace('\\', '\\\\', $value);
                         }
