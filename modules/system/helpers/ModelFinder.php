@@ -16,13 +16,13 @@ class ModelFinder
     public static function findModels(): array
     {
         $models = [];
-        $models[] = static::findCoreModels();
+        $models[] = static::findModuleModels();
         $models[] = static::findActivePluginsModels();
 
         return collect($models)->flatten()->all();
     }
 
-    public static function findCoreModels(): array
+    public static function findModuleModels(): array
     {
         $modulesPath = base_path() . '/modules';
 
