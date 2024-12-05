@@ -17,6 +17,7 @@ class MixInstall extends AssetInstall
         {--no-install : Tells Winter not to run npm install after config update.}
         {--npm= : Defines a custom path to the "npm" binary.}
         {--d|disable-tty : Disable tty mode.}
+        {--s|silent : Enables silent mode, no output will be shown.}
         {--p|package-json= : Defines a custom path to "package.json" file. Must be above the workspace path.}';
 
     /**

@@ -1,6 +1,9 @@
 <div class="control-list list-scrollable" data-control="listwidget">
     <table class="table data" data-control="rowlink">
         <thead>
+            <?php if ($showTotals): ?>
+                <?= $this->makePartial('list_totals') ?>
+            <?php endif; ?>
             <?= $this->makePartial('list_head_row') ?>
         </thead>
         <tbody>
@@ -14,6 +17,11 @@
                 </tr>
             <?php endif ?>
         </tbody>
+        <?php if ($showTotals): ?>
+            <tfoot>
+                <?= $this->makePartial('list_totals') ?>
+            </tfoot>
+        <?php endif; ?>
     </table>
     <?php if ($showPagination): ?>
         <div class="list-footer">

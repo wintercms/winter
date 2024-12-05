@@ -310,6 +310,7 @@ return [
         'return_to_list' => 'Retourner à la liste'
     ],
     'recordfinder' => [
+        'default_prompt' => 'Cliquer sur %s pour chercher un enregistrement',
         'find_record' => 'Trouver un enregistrement',
         'invalid_model_class' => "La classe du modèle \":modelClass\" fournie pour le recordfinder n'est pas valide.",
         'cancel' => 'Annuler',

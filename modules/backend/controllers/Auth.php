@@ -4,13 +4,11 @@ use ApplicationException;
 use Backend;
 use BackendAuth;
 use Backend\Classes\Controller;
-use Backend\Models\AccessLog;
 use Config;
 use Exception;
 use Flash;
 use Mail;
 use Request;
-use System\Classes\UpdateManager;
 use ValidationException;
 use Validator;
 use Winter\Storm\Foundation\Http\Middleware\CheckForTrustedHost;
@@ -93,20 +91,6 @@ class Auth extends Controller
             'login' => post('login'),
             'password' => post('password')
         ], $remember);
-
-        $runMigrationsOnLogin = (bool) Config::get('cms.runMigrationsOnLogin', Config::get('app.debug', false));
-
-        if ($runMigrationsOnLogin) {
-            try {
-                // Load version updates
-                UpdateManager::instance()->update();
-            } catch (Exception $ex) {
-                Flash::error($ex->getMessage());
-            }
-        }
-
-        // Log the sign in event
-        AccessLog::add($user);
 
         // Redirect to the intended page after successful sign in
         return Backend::redirectIntended('backend');

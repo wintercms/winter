@@ -369,7 +369,9 @@ abstract class AssetInstall extends Command
 
         try {
             return $process->run(function ($status, $stdout) {
-                $this->getOutput()->write($stdout);
+                if (!$this->option('silent')) {
+                    $this->getOutput()->write($stdout);
+                }
             });
         } catch (ProcessSignaledException $e) {
             if (extension_loaded('pcntl') && $e->getSignal() !== SIGINT) {

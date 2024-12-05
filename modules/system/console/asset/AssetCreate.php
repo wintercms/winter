@@ -64,8 +64,12 @@ abstract class AssetCreate extends Command
         $packages = $compilableAssets->getPackages($this->assetType, true);
 
         if (
+            // We have the package already
             isset($packages[$package])
-            && !$this->confirm('Package `' . $package . '` has already been configured, are you sure you wish to continue?')
+            // If the user has requested `force` & `no-interaction` then we do not ask for confirmation and continue
+            && !($this->option('force') && $this->option('no-interaction'))
+            // If the user has forced but with interaction, then we do not ask for confirmation, else we do
+            && !($this->option('force') || $this->confirm('Package `' . $package . '` has already been configured, are you sure you wish to continue?'))
         ) {
             return 0;
         }
@@ -87,8 +91,10 @@ abstract class AssetCreate extends Command
         $verb = File::exists($packageJson->getPath()) ? 'updated' : 'generated';
         $packageJson->save();
 
-        $this->warn("File $verb: " . str_after($packageJson->getPath(), base_path()));
-        $this->info(ucfirst($this->assetType) . ' configuration complete.');
+        if (!$this->option('silent')) {
+            $this->warn("File $verb: " . str_after($packageJson->getPath(), base_path()));
+            $this->info(ucfirst($this->assetType) . ' configuration complete.');
+        }
 
         $this->afterExecution();
 
@@ -196,13 +202,24 @@ abstract class AssetCreate extends Command
      */
     protected function writeFile(string $path, string $content): int
     {
-        if (File::exists($path) && !$this->confirm(sprintf('%s already exists, overwrite?', basename($path)))) {
+        if (
+            // If forced, ignore file existing and overwrite
+            (!$this->option('force') && File::exists($path))
+            && (
+                // If no interaction requested, then skip the confirm check and return
+                $this->option('no-interaction')
+                // else ask the user if they want overwriting
+                || !$this->confirm(sprintf('%s already exists, overwrite?', basename($path)))
+            )
+        ) {
             return 0;
         }
 
         $result = File::put($path, $content);
 
-        $this->warn('File generated: ' . str_after($path, base_path()));
+        if (!$this->option('silent')) {
+            $this->warn('File generated: ' . str_after($path, base_path()));
+        }
 
         return $result;
     }

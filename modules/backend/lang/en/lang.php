@@ -312,6 +312,7 @@ return [
     ],
     'recordfinder' => [
         'find_record' => 'Find Record',
+        'default_prompt' => 'Click the %s button to find a record',
         'invalid_model_class' => 'The provided model class ":modelClass" for the recordfinder is invalid',
         'cancel' => 'Cancel',
     ],
