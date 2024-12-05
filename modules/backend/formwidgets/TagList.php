@@ -133,8 +133,7 @@ class TagList extends FormWidgetBase
             $names = [$names];
         }
 
-        list($model, $attribute) = $this->resolveModelAttribute($this->formField->fieldName);
-        $relation = $model->{$attribute}();
+        $relation = $this->getRelationObject();
         $relationModel = $this->getRelationModel();
 
         $existingTags = $relation->lists($this->nameFrom, $relationModel->getKeyName());
