@@ -133,19 +133,26 @@ class TagList extends FormWidgetBase
             $names = [$names];
         }
 
+        list($model, $attribute) = $this->resolveModelAttribute($this->formField->fieldName);
+        $relation = $model->{$attribute}();
         $relationModel = $this->getRelationModel();
-        $existingTags = $relationModel
-            ->whereIn($this->nameFrom, $names)
-            ->lists($this->nameFrom, $relationModel->getKeyName())
-        ;
+
+        $existingTags = $relation->lists($this->nameFrom, $relationModel->getKeyName());
 
         $newTags = $this->customTags ? array_diff($names, $existingTags) : [];
+        $deletedTags = $this->customTags ? array_diff($existingTags, $names) : [];
 
         foreach ($newTags as $newTag) {
-            $newModel = new $relationModel;
-            $newModel->{$this->nameFrom} = $newTag;
-            $newModel->save();
+            $newModel = $relation->create([$this->nameFrom => $newTag]);
             $existingTags[$newModel->getKey()] = $newTag;
+        }
+
+        if ($deletedTags) {
+            $deletedKeys = array_keys($deletedTags);
+            $relation->whereIn($relationModel->getKeyName(), $deletedKeys)->delete();
+            foreach ($deletedTags as $id) {
+                unset($existingTags[$id]);
+            }
         }
 
         return array_keys($existingTags);
