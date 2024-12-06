@@ -1227,6 +1227,10 @@ class Form extends WidgetBase
             // Exclude fields that didn't provide any value
             $fieldValue = $this->dataArrayGet($result, $parts, FormField::NO_SAVE_DATA);
             if ($fieldValue === FormField::NO_SAVE_DATA) {
+                if ($widget->getConfig('type') === 'taglist' && $widget->getConfig('mode') === 'relation') {
+                    // let the TagList remove its relation items
+                    $widget->getSaveValue(array());
+                }
                 continue;
             }
 
