@@ -2,7 +2,7 @@
     "type": "module",
     "workspaces": {
         "packages": [
-            "modules/system/tests/fixtures/themes/vitetest"
+            "modules/system/tests/fixtures/themes/assettest"
         ]
     },
     "devDependencies": {

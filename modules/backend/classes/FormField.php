@@ -3,6 +3,7 @@
 namespace Backend\Classes;
 
 use BackedEnum;
+use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
 use Winter\Storm\Support\Facades\Html;
@@ -232,6 +233,8 @@ class FormField
             } elseif (is_callable($this->options)) {
                 $callable = $this->options;
                 return $callable();
+            } elseif (is_string($this->options) && is_array($options = Lang::get($this->options))) {
+                return $options;
             }
 
             return [];
@@ -432,6 +435,7 @@ class FormField
         if ($position === 'field' && $this->required && (!isset($result['required']) || $result['required'])) {
             $result['required'] = '';
         } elseif ($position === 'field' && isset($result['required']) && !$result['required']) {
+            // The "required" attribute is set and falsy, so unset it
             unset($result['required']);
         }
 

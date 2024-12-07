@@ -338,7 +338,7 @@ class WinterInstall extends Command
             $this->setupDatabaseSqlite();
         }
 
-        return ['database' => $filename];
+        return ['database' => Str::after($filename, base_path() . DIRECTORY_SEPARATOR)];
     }
 
     protected function setupDatabaseSqlsrv()

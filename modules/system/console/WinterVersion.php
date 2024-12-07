@@ -28,6 +28,7 @@ class WinterVersion extends \Winter\Storm\Console\Command
      */
     protected $signature = 'winter:version
         {--changes : Include the list of changes between this install and the expected files for the detected build.}
+        {--o|only-version : Return only the build version number.}
     ';
 
     /**
@@ -48,15 +49,24 @@ class WinterVersion extends \Winter\Storm\Console\Command
      */
     public function handle()
     {
-        $this->comment('*** Detecting Winter CMS build...');
+        if (!$this->option('only-version')) {
+            $this->comment('*** Detecting Winter CMS build...');
+        }
 
         if (!$this->laravel->hasDatabase()) {
             $build = UpdateManager::instance()->getBuildNumberManually($this->option('changes'));
 
             // Skip setting the build number if no database is detected to set it within
-            $this->comment('*** No database detected - skipping setting the build number.');
+            if (!$this->option('only-version')) {
+                $this->comment('*** No database detected - skipping setting the build number.');
+            }
         } else {
             $build = UpdateManager::instance()->setBuildNumberManually($this->option('changes'));
+        }
+
+        if ($this->option('only-version')) {
+            $this->line($build['build']);
+            return 0;
         }
 
         if (!$build['confident']) {
@@ -93,7 +103,7 @@ class WinterVersion extends \Winter\Storm\Console\Command
                 $this->line('');
                 $this->info('Files removed:');
 
-                foreach (array_keys($build['changes']['removed']) as $file) {
+                foreach ($build['changes']['removed'] as $file) {
                     $this->line(' - ' . $file);
                 }
             }

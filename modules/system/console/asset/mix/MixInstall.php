@@ -15,9 +15,12 @@ class MixInstall extends AssetInstall
      * @var string The name and signature of this command.
      */
     protected $signature = 'mix:install
-        {npmArgs?* : Arguments to pass through to the "npm" binary}
-        {--npm= : Defines a custom path to the "npm" binary}
-        {--p|package=* : Defines one or more packages to install}';
+        {assetPackage?* : The asset package name to install.}
+        {--no-install : Tells Winter not to run npm install after config update.}
+        {--npm= : Defines a custom path to the "npm" binary.}
+        {--d|disable-tty : Disable tty mode.}
+        {--s|silent : Enables silent mode, no output will be shown.}
+        {--p|package-json= : Defines a custom path to "package.json" file. Must be above the workspace path.}';
 
     /**
      * @var string The console command description.
@@ -37,7 +40,7 @@ class MixInstall extends AssetInstall
     /**
      * The required packages for this compiler
      */
-    protected array $requiredPackages = [
+    protected array $requiredDependencies = [
         'laravel-mix' => '^6.0.41',
     ];
 }

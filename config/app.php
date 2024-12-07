@@ -197,6 +197,19 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Scheduler Timezone
+    |--------------------------------------------------------------------------
+    |
+    | This property specifies the default timezone for your application's
+    | scheduled tasks. You can set it independently of the application's
+    | default timezone to ensure that schedules run at the desired local time.
+    |
+    */
+
+    'schedule_timezone' => 'UTC',
+
+    /*
+    |--------------------------------------------------------------------------
     | Application Locale Configuration
     |--------------------------------------------------------------------------
     |

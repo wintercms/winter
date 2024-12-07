@@ -138,7 +138,7 @@
 .field-fileupload.style-file-single .upload-button{position:absolute;top:50%;margin-top:-44px;height:88px;background:transparent;right:-2px;color:#595959}
 .field-fileupload.style-file-single .upload-button i{font-size:14px}
 .field-fileupload.style-file-single .upload-button:hover{color:#333}
-.field-fileupload.style-file-single .upload-empty-message{padding:8px 0 8px 11px;font-size:14px}
+.field-fileupload.style-file-single .upload-empty-message{padding:8px 0 8px 11px;font-size:14px;cursor:pointer}
 .field-fileupload.style-file-single.is-populated .upload-empty-message{display:none}
 .field-fileupload.style-file-single .upload-object{display:block;width:100%;padding:7px 0 9px 0}
 .field-fileupload.style-file-single .upload-object .icon-container{position:absolute;top:0;left:0;width:15px;padding:0 5px;margin:8px 0 0 7px;text-align:center}

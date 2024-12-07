@@ -147,7 +147,10 @@ abstract class AssetCompile extends Command
             return 1;
         }
 
-        $this->info(sprintf('Watching package "%s" for changes', $name));
+        if (!$this->option('silent')) {
+            $this->info(sprintf('Watching package "%s" for changes', $name));
+        }
+
         $this->watchingFilePath = $relativeConfigPath;
 
         if ($this->executeProcess(base_path($relativeConfigPath)) !== 0) {
