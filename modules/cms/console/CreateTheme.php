@@ -178,8 +178,8 @@ class CreateTheme extends GeneratorCommand
                     '--no-interaction' => true,
                     '--force' => true,
                     '--silent' => true,
-                    '--tailwind' => true
-                ]
+                    '--tailwind' => true,
+                ],
             ],
             // Ensure all require packages are available for the new theme and add the new theme to our npm workspaces
             $processor . ':install' => [
@@ -188,8 +188,8 @@ class CreateTheme extends GeneratorCommand
                     'assetPackage' => ['theme-' . $this->getNameInput()],
                     '--no-interaction' => true,
                     '--silent' => false,
-                    '--disable-tty' => true
-                ]
+                    '--disable-tty' => true,
+                ],
             ],
             // Run an initial compile to ensure styles are available for first load
             $processor . ':compile' => [
@@ -198,8 +198,8 @@ class CreateTheme extends GeneratorCommand
                     '--package' => ['theme-' . $this->getNameInput()],
                     '--no-interaction' => true,
                     '--silent' => true,
-                ]
-            ]
+                ],
+            ],
         ];
 
         foreach ($commands as $command => $data) {

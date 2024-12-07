@@ -684,7 +684,7 @@ class Theme extends CmsObject
     public function __get($name)
     {
         if (in_array(strtolower($name), ['id', 'path', 'dirname', 'config', 'formconfig', 'previewimageurl'])) {
-            $method = 'get'. ucfirst($name);
+            $method = 'get' . ucfirst($name);
             return $this->$method();
         }
 

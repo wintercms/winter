@@ -7,11 +7,11 @@ use Cms\Classes\Theme;
 use Illuminate\Database\Eloquent\Model as DbModel;
 use Twig\Markup;
 use Twig\Sandbox\SecurityNotAllowedFunctionError;
-use Twig\Template;
-use Twig\Sandbox\SecurityPolicyInterface;
 use Twig\Sandbox\SecurityNotAllowedMethodError;
 use Twig\Sandbox\SecurityNotAllowedPropertyError;
 use Twig\Sandbox\SecurityNotAllowedTagError;
+use Twig\Sandbox\SecurityPolicyInterface;
+use Twig\Template;
 use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 use Winter\Storm\Halcyon\Model as HalcyonModel;
 
@@ -86,7 +86,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
         Theme::class => [
             'setDirName',
             'registerHalcyonDatasource',
-            'getDatasource'
+            'getDatasource',
         ],
     ];
 

@@ -2,8 +2,6 @@
 
 namespace System\Console\Asset\Vite;
 
-use Winter\Storm\Support\Facades\File;
-
 class ViteWatch extends ViteCompile
 {
     /**

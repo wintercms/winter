@@ -203,7 +203,7 @@ class Page extends CmsCompoundObject
                 return null;
             }
 
-            $controller = Controller::getController() ?: new Controller;
+            $controller = Controller::getController() ?: new Controller();
             $pageUrl = $controller->pageUrl($item->reference, [], $routePersistence);
 
             $result = [];

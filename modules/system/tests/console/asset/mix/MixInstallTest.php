@@ -46,7 +46,7 @@ class MixInstallTest extends TestCase
         $this->artisan('mix:install', [
             'assetPackage' => ['theme-assettest'],
             '--package-json' => '/some/file',
-            '--no-install' => true
+            '--no-install' => true,
         ])
             ->expectsOutputToContain('The supplied --package-json path does not exist.')
             ->assertExitCode(1);
@@ -58,7 +58,7 @@ class MixInstallTest extends TestCase
             $this->artisan('mix:install', [
                 'assetPackage' => ['theme-assettest'],
                 '--package-json' => $this->jsonPath,
-                '--no-install' => true
+                '--no-install' => true,
             ])
                 ->expectsQuestion('laravel-mix was not found as a dependency in package.json, would you like to add it?', true)
                 ->expectsOutput('Adding theme-assettest (modules/system/tests/fixtures/themes/assettest) to the workspaces.packages property in package.json')
@@ -81,7 +81,7 @@ class MixInstallTest extends TestCase
             $this->artisan('mix:install', [
                 'assetPackage' => ['theme-assettest', 'theme-npmtest'],
                 '--package-json' => $this->jsonPath,
-                '--no-install' => true
+                '--no-install' => true,
             ])
                 ->expectsQuestion('laravel-mix was not found as a dependency in package.json, would you like to add it?', true)
                 ->expectsOutput('Adding theme-assettest (modules/system/tests/fixtures/themes/assettest) to the workspaces.packages property in package.json')
@@ -109,7 +109,7 @@ class MixInstallTest extends TestCase
             $this->artisan('mix:install', [
                 'assetPackage' => ['theme-assettest2'],
                 '--package-json' => $this->jsonPath,
-                '--no-install' => true
+                '--no-install' => true,
             ])
                 ->assertExitCode(1);
         });
@@ -121,7 +121,7 @@ class MixInstallTest extends TestCase
             $this->artisan('mix:install', [
                 'assetPackage' => ['theme-assettest'],
                 '--package-json' => 'modules/system/tests/package.json',
-                '--no-install' => true
+                '--no-install' => true,
             ])
                 ->expectsQuestion('laravel-mix was not found as a dependency in package.json, would you like to add it?', true)
                 ->expectsOutput('Adding theme-assettest (modules/system/tests/fixtures/themes/assettest) to the workspaces.packages property in package.json')
@@ -135,15 +135,15 @@ class MixInstallTest extends TestCase
             $packageJson = json_decode(File::get($this->jsonPath), JSON_OBJECT_AS_ARRAY);
             $packageJson['workspaces'] = [
                 'ignoredPackages' => [
-                    'modules/system/tests/fixtures/themes/assettest'
-                ]
+                    'modules/system/tests/fixtures/themes/assettest',
+                ],
             ];
             File::put($this->jsonPath, json_encode($packageJson, JSON_PRETTY_PRINT));
 
             $this->artisan('mix:install', [
                 'assetPackage' => ['theme-assettest'],
                 '--package-json' => $this->jsonPath,
-                '--no-install' => true
+                '--no-install' => true,
             ])
                 ->expectsQuestion('laravel-mix was not found as a dependency in package.json, would you like to add it?', false)
                 ->expectsOutput('The requested package theme-assettest (modules/system/tests/fixtures/themes/assettest) is ignored, remove it from package.json to continue.')
@@ -165,7 +165,7 @@ class MixInstallTest extends TestCase
             $this->artisan('mix:install', [
                 'assetPackage' => ['theme-assettest'],
                 '--package-json' => $this->jsonPath,
-                '--disable-tty' => true
+                '--disable-tty' => true,
             ])
                 ->expectsQuestion('laravel-mix was not found as a dependency in package.json, would you like to add it?', true)
                 ->expectsOutput('Adding theme-assettest (modules/system/tests/fixtures/themes/assettest) to the workspaces.packages property in package.json')

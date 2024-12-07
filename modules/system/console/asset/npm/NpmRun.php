@@ -2,8 +2,6 @@
 
 namespace System\Console\Asset\Npm;
 
-use System\Console\Asset\Npm\NpmCommand;
-
 class NpmRun extends NpmCommand
 {
     /**
@@ -31,7 +29,7 @@ class NpmRun extends NpmCommand
      * @var array List of commands that this command replaces (aliases)
      */
     protected $replaces = [
-        'mix:run'
+        'mix:run',
     ];
 
     /**

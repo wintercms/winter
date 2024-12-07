@@ -3,7 +3,6 @@
 namespace System\Console\Asset\Npm;
 
 use Symfony\Component\Process\Process;
-use System\Console\Asset\Npm\NpmCommand;
 
 class NpmVersion extends NpmCommand
 {

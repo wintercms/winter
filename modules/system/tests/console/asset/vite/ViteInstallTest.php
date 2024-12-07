@@ -9,6 +9,7 @@ use Winter\Storm\Support\Facades\File;
 
 class ViteInstallTest extends TestCase
 {
+    protected string $fixturePath;
     protected string $jsonPath;
     protected string $lockPath;
     protected string $backupPath;
@@ -45,7 +46,7 @@ class ViteInstallTest extends TestCase
         $this->artisan('vite:install', [
             'assetPackage' => ['theme-assettest'],
             '--package-json' => '/some/file',
-            '--no-install' => true
+            '--no-install' => true,
         ])
             ->expectsOutputToContain('The supplied --package-json path does not exist.')
             ->assertExitCode(1);
@@ -57,7 +58,7 @@ class ViteInstallTest extends TestCase
             $this->artisan('vite:install', [
                 'assetPackage' => ['theme-assettest'],
                 '--package-json' => $this->jsonPath,
-                '--no-install' => true
+                '--no-install' => true,
             ])
                 ->expectsQuestion('vite was not found as a dependency in package.json, would you like to add it?', true)
                 ->expectsQuestion('laravel-vite-plugin was not found as a dependency in package.json, would you like to add it?', true)
@@ -82,7 +83,7 @@ class ViteInstallTest extends TestCase
             $this->artisan('vite:install', [
                 'assetPackage' => ['theme-assettest', 'theme-npmtest'],
                 '--package-json' => $this->jsonPath,
-                '--no-install' => true
+                '--no-install' => true,
             ])
                 ->expectsQuestion('vite was not found as a dependency in package.json, would you like to add it?', true)
                 ->expectsQuestion('laravel-vite-plugin was not found as a dependency in package.json, would you like to add it?', true)
@@ -113,7 +114,7 @@ class ViteInstallTest extends TestCase
             $this->artisan('vite:install', [
                 'assetPackage' => ['theme-assettest2'],
                 '--package-json' => $this->jsonPath,
-                '--no-install' => true
+                '--no-install' => true,
             ])
                 ->assertExitCode(1);
         });
@@ -125,7 +126,7 @@ class ViteInstallTest extends TestCase
             $this->artisan('vite:install', [
                 'assetPackage' => ['theme-assettest'],
                 '--package-json' => 'modules/system/tests/package.json',
-                '--no-install' => true
+                '--no-install' => true,
             ])
                 ->expectsQuestion('vite was not found as a dependency in package.json, would you like to add it?', true)
                 ->expectsQuestion('laravel-vite-plugin was not found as a dependency in package.json, would you like to add it?', true)
@@ -140,8 +141,8 @@ class ViteInstallTest extends TestCase
             $packageJson = json_decode(File::get($this->jsonPath), JSON_OBJECT_AS_ARRAY);
             $packageJson['workspaces'] = [
                 'ignoredPackages' => [
-                    'modules/system/tests/fixtures/themes/assettest'
-                ]
+                    'modules/system/tests/fixtures/themes/assettest',
+                ],
             ];
 
             File::put($this->jsonPath, json_encode($packageJson, JSON_PRETTY_PRINT));
@@ -149,7 +150,7 @@ class ViteInstallTest extends TestCase
             $this->artisan('vite:install', [
                 'assetPackage' => ['theme-assettest'],
                 '--package-json' => $this->jsonPath,
-                '--no-install' => true
+                '--no-install' => true,
             ])
                 ->expectsQuestion('vite was not found as a dependency in package.json, would you like to add it?', false)
                 ->expectsQuestion('laravel-vite-plugin was not found as a dependency in package.json, would you like to add it?', false)
@@ -172,7 +173,7 @@ class ViteInstallTest extends TestCase
             $this->artisan('vite:install', [
                 'assetPackage' => ['theme-assettest'],
                 '--package-json' => $this->jsonPath,
-                '--disable-tty' => true
+                '--disable-tty' => true,
             ])
                 ->expectsQuestion('vite was not found as a dependency in package.json, would you like to add it?', true)
                 ->expectsQuestion('laravel-vite-plugin was not found as a dependency in package.json, would you like to add it?', true)

@@ -351,7 +351,7 @@ class PackageManager
         $this->packages[$type][$name] = [
             'path' => $path,
             'package' => $package,
-            'config' => $config
+            'config' => $config,
         ];
     }
 

@@ -56,7 +56,7 @@ class NpmInstallTest extends TestCase
             $this->artisan('npm:install', [
                 'package' => 'theme-npmtest',
                 'npmArgs' => ['is-odd'],
-                '--disable-tty' => true
+                '--disable-tty' => true,
             ])
                 ->assertExitCode(0);
 
@@ -92,7 +92,7 @@ class NpmInstallTest extends TestCase
             $this->artisan('npm:install', [
                 'package' => 'theme-npmtest',
                 'npmArgs' => ['is-odd', 'is-even'],
-                '--disable-tty' => true
+                '--disable-tty' => true,
             ])
                 ->assertExitCode(0);
 
@@ -132,7 +132,7 @@ class NpmInstallTest extends TestCase
                 'package' => 'theme-npmtest',
                 'npmArgs' => ['is-odd'],
                 '--dev' => true,
-                '--disable-tty' => true
+                '--disable-tty' => true,
             ])
                 ->assertExitCode(0);
 
@@ -169,7 +169,7 @@ class NpmInstallTest extends TestCase
                 'package' => 'theme-npmtest',
                 'npmArgs' => ['is-odd', 'is-even'],
                 '--dev' => true,
-                '--disable-tty' => true
+                '--disable-tty' => true,
             ])
                 ->assertExitCode(0);
 
