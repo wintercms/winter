@@ -39,6 +39,7 @@ class WinterSniff extends BaseScaffoldCommand
         {?--c|config= : Path to a custom PHPCS configuration XML file}
         {?--p|plugin= : Checks the coding style of a plugin}
         {?--e|no-warnings : Ignore warnings and only show errors}
+        {--fix : Automatically fix detected errors where able by use of the phpcbf command}
         {?--s|summary : Display a summary of the results}
     ';
 
@@ -48,6 +49,7 @@ class WinterSniff extends BaseScaffoldCommand
 
     protected $replaces = [
         'winter:phpcs',
+        'sniff',
     ];
 
 
@@ -203,10 +205,11 @@ class WinterSniff extends BaseScaffoldCommand
      */
     protected function findPhpCsExecutable(): ?string
     {
+        $binFile = $this->option('fix') ? 'phpcbf' : 'phpcs';
         return (new ExecutableFinder())
             ->find(
-                'phpcs',
-                base_path('vendor/bin/phpcs'),
+                $binFile,
+                base_path("vendor/bin/$binFile"),
                 [
                     base_path('vendor'),
                 ]
