@@ -46,16 +46,10 @@ class WinterSniff extends BaseScaffoldCommand
         'scaffold/phpcs/phpcs.xml.stub' => 'phpcs.xml',
     ];
 
-    /**
-     * Create a new command instance.
-     */
-    public function __construct()
-    {
-        parent::__construct();
+    protected $replaces = [
+        'winter:phpcs',
+    ];
 
-        // Register aliases for backwards compatibility with October
-        $this->setAliases(['winter:phpcs']);
-    }
 
     /**
      * Execute the console command.
