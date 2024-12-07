@@ -2,11 +2,11 @@
 
 namespace System\Console;
 
-use Illuminate\Console\Command;
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 use System\Classes\PluginManager;
+use Winter\Storm\Console\Command;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\PathResolver;
 use Winter\Storm\Support\Facades\Config;
@@ -51,6 +51,10 @@ class WinterTest extends Command
      * @var ?string Path to phpunit binary
      */
     protected $phpUnitExec = null;
+
+    protected $replaces = [
+        'test',
+    ];
 
     /**
      * Create a new command instance.
