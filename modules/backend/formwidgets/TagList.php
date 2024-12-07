@@ -4,6 +4,8 @@ namespace Backend\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
 use Illuminate\Database\Eloquent\Relations\Relation as RelationBase;
+use Winter\Storm\Database\Relations\BelongsToMany;
+use Winter\Storm\Database\Relations\MorphToMany;
 
 /**
  * Tag List Form Widget
@@ -132,19 +134,32 @@ class TagList extends FormWidgetBase
         $relation = $this->getRelationObject();
         $relationModel = $this->getRelationModel();
 
-        $existingTags = $relation->lists($this->nameFrom, $relationModel->getKeyName());
+        $keyName = $relationModel->getKeyName();
+        $pivot = in_array(get_class($relation), [BelongsToMany::class, MorphToMany::class]);
+
+        if ($pivot) {
+            $existingTags = $relationModel->whereIn($this->nameFrom, $names)->lists($this->nameFrom, $keyName);
+        } else {
+            $existingTags = $relation->lists($this->nameFrom, $keyName);
+        }
 
         $newTags = $this->customTags ? array_diff($names, $existingTags) : [];
         $deletedTags = $this->customTags ? array_diff($existingTags, $names) : [];
 
         foreach ($newTags as $newTag) {
-            $newModel = $relation->create([$this->nameFrom => $newTag]);
+            if ($pivot) {
+                $newModel = new $relationModel;
+                $newModel->{$this->nameFrom} = $newTag;
+                $newModel->save();
+            } else {
+                $newModel = $relation->create([$this->nameFrom => $newTag]);
+            }
             $existingTags[$newModel->getKey()] = $newTag;
         }
 
-        if ($deletedTags) {
+        if (!$pivot && $deletedTags) {
             $deletedKeys = array_keys($deletedTags);
-            $relation->whereIn($relationModel->getKeyName(), $deletedKeys)->delete();
+            $relation->whereIn($keyName, $deletedKeys)->delete();
             foreach ($deletedTags as $id) {
                 unset($existingTags[$id]);
             }
