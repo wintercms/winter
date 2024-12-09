@@ -8,6 +8,7 @@ import PluginBase from '../abstracts/PluginBase';
  * @property {string|undefined} parent The parent element with which to limit the trigger scope.
  * @property {string|number} priority The priority of the trigger event.
  * @property {HTMLElement[]} elements The target elements that this trigger applies to.
+ * @property {boolean} reverse If this is a reverse trigger. The trigger element(s) become the targets and the condition is applied to the target elements.
  * @property {Function[]} conditionCallbacks The condition callbacks for this trigger.
  * @property {Map<HTMLElement, Set<string>>} elementEvents The events registered on the target elements.
  */
@@ -84,6 +85,8 @@ export default class Trigger extends PluginBase {
      *
      * Trigger data attributes must be in the format `data-trigger-[name]-[parameter]` for multiple
      * triggers, or `data-trigger-[parameter]` for single triggers.
+     * 
+     * The main parameter defines the element to watch for the trigger.
      *
      * Supported parameters are:
      *  - `condition` or `where`: The condition that must be met for the trigger to fire.
@@ -116,7 +119,7 @@ export default class Trigger extends PluginBase {
             let triggerType = null;
 
             if (
-                ['trigger', 'condition', 'action', 'parent', 'when', 'closest'].indexOf(triggerParts[1]) !== -1
+                ['trigger', 'condition', 'action', 'parent', 'when', 'closest', 'do', 'action', 'reverse'].indexOf(triggerParts[1]) !== -1
                 && (triggerParts[1] !== 'closest' || (triggerParts[1] === 'closest' && triggerParts[2] === 'parent'))
             ) {
                 // Support original trigger format
@@ -144,6 +147,9 @@ export default class Trigger extends PluginBase {
                     case 'priority':
                         triggerType = 'priority';
                         break;
+                    case 'reverse':
+                        triggerType = 'reverse';
+                        break;
                     default:
                         triggerType = 'trigger';
                         break;
@@ -153,7 +159,12 @@ export default class Trigger extends PluginBase {
             if (!this.triggers.has(triggerName)) {
                 this.triggers.set(triggerName, new Map());
             }
-            this.triggers.get(triggerName).set(triggerType, dataset[key]);
+
+            if (triggerType === 'reverse') {
+                this.triggers.get(triggerName).set('reverse', true);
+            } else {
+                this.triggers.get(triggerName).set(triggerType, dataset[key]);
+            }
 
             // Remove trigger data attribute after parsing
             delete dataset[key];
@@ -312,6 +323,7 @@ export default class Trigger extends PluginBase {
      */
     hasValidConditions(trigger) {
         return this.parseCommand(trigger.get('condition')).every((condition) => [
+            'click',
             'checked',
             'unchecked',
             'empty',
@@ -875,6 +887,19 @@ export default class Trigger extends PluginBase {
                             : action.parameters,
                     );
                     break;
+                case 'attr':
+                case 'attrOf':
+                    this.actionAttribute(
+                        trigger,
+                        conditionMet,
+                        (action.name === 'classOf')
+                            ? Array.from(this.element.querySelectorAll(action.parameters[0]))
+                            : [this.element],
+                        ...(action.name === 'classOf')
+                            ? action.parameters.slice(1)
+                            : action.parameters,
+                    );
+                    break;
                 default:
             }
         });
@@ -1007,6 +1032,38 @@ export default class Trigger extends PluginBase {
                 conditionMet,
                 cssClass,
                 unmetCssClass,
+            });
+        });
+    }
+
+    /**
+     * Sets the attribute of a trigger element or a child element(s) within.
+     *
+     * If the unmet attribute value is not defined, the original attribute value will be used, or
+     * in the case where the attribute did not exist, the attribute will be removed.
+     */
+    actionAttribute(trigger, conditionMet, elements, attributeName, attributeValue, unmetAttributeValue = undefined) {
+        elements.forEach((element) => {
+            if (element.dataset[`original-${attributeName}`] === undefined) {
+                element.dataset[`original-${attributeName}`] = element.getAttribute(attributeName) ?? '';
+            }
+
+            if (conditionMet) {
+                element.setAttribute(attributeName, attributeValue);
+            } else if (unmetAttributeValue !== undefined) {
+                element.setAttribute(attributeName, unmetAttributeValue);
+            } else if (element.dataset[`original-${attributeName}`] !== '') {
+                element.setAttribute(attributeName, element.dataset[`original-${attributeName}`]);
+            } else {
+                element.removeAttribute(attributeName);
+            }
+
+            this.afterAction(trigger, element, {
+                action: 'class',
+                conditionMet,
+                attributeName,
+                attributeValue,
+                unmetAttributeValue,
             });
         });
     }
