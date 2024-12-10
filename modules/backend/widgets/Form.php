@@ -1227,11 +1227,7 @@ class Form extends WidgetBase
             // Exclude fields that didn't provide any value
             $fieldValue = $this->dataArrayGet($result, $parts, FormField::NO_SAVE_DATA);
             if ($fieldValue === FormField::NO_SAVE_DATA) {
-                if ($widget->getConfig('type') === 'taglist') {
-                    $fieldValue = [];
-                } else {
-                    continue;
-                }
+                continue;
             }
 
             // Exclude fields where the widget returns NO_SAVE_DATA

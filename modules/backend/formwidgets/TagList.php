@@ -131,6 +131,8 @@ class TagList extends FormWidgetBase
             $names = [$names];
         }
 
+        $names = array_filter($names);
+
         $relation = $this->getRelationObject();
         $relationModel = $this->getRelationModel();
 

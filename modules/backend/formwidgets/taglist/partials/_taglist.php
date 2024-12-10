@@ -33,6 +33,7 @@ foreach ($availableOptions as $key => $option) {
             value="<?= $field->value ?>">
     <?php endif ?>
 <?php else: ?>
+    <input type="hidden" name="<?= $field->getName() ?>[]">
     <select
         id="<?= $field->getId() ?>"
         name="<?= $field->getName() ?>[]"
