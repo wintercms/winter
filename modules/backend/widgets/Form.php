@@ -1228,7 +1228,7 @@ class Form extends WidgetBase
             $fieldValue = $this->dataArrayGet($result, $parts, FormField::NO_SAVE_DATA);
             if ($fieldValue === FormField::NO_SAVE_DATA) {
                 if ($widget->getConfig('type') === 'taglist') {
-                    $fieldValue = in_array($widget->getConfig('mode'), ['array','relation']) ? [] : '';
+                    $fieldValue = [];
                 } else {
                     continue;
                 }
