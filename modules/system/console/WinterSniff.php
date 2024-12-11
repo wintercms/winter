@@ -248,7 +248,7 @@ class WinterSniff extends BaseScaffoldCommand
     {
         $args = [
             $phpCs,
-            '-d',
+            '-dp',
             'memory_limit=512M',
             '--basepath=' . $this->getBasePath(),
             '--standard=' . $configFile,
