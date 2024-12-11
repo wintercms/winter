@@ -25,17 +25,17 @@ class MediaManager extends WidgetBase
     use \Backend\Traits\UploadableWidget;
     use \Backend\Traits\PreferenceMaker;
 
-    const FOLDER_ROOT = '/';
+    public const FOLDER_ROOT = '/';
 
-    const VIEW_MODE_GRID = 'grid';
-    const VIEW_MODE_LIST = 'list';
-    const VIEW_MODE_TILES = 'tiles';
+    public const VIEW_MODE_GRID = 'grid';
+    public const VIEW_MODE_LIST = 'list';
+    public const VIEW_MODE_TILES = 'tiles';
 
-    const SELECTION_MODE_NORMAL = 'normal';
-    const SELECTION_MODE_FIXED_RATIO = 'fixed-ratio';
-    const SELECTION_MODE_FIXED_SIZE = 'fixed-size';
+    public const SELECTION_MODE_NORMAL = 'normal';
+    public const SELECTION_MODE_FIXED_RATIO = 'fixed-ratio';
+    public const SELECTION_MODE_FIXED_SIZE = 'fixed-size';
 
-    const FILTER_ALL = 'all';
+    public const FILTER_ALL = 'all';
 
     /**
      * @var boolean Determines whether the widget is in readonly mode or not.

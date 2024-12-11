@@ -12,7 +12,7 @@ use Winter\Storm\Auth\Models\Group as GroupBase;
  */
 class UserGroup extends GroupBase
 {
-    const CODE_OWNERS = 'owners';
+    public const CODE_OWNERS = 'owners';
 
     /**
      * @var string The database table used by the model.

@@ -46,17 +46,17 @@ class FormController extends ControllerBehavior
     /**
      * @var string Default context for "create" pages.
      */
-    const CONTEXT_CREATE = 'create';
+    public const CONTEXT_CREATE = 'create';
 
     /**
      * @var string Default context for "update" pages.
      */
-    const CONTEXT_UPDATE = 'update';
+    public const CONTEXT_UPDATE = 'update';
 
     /**
      * @var string Default context for "preview" pages.
      */
-    const CONTEXT_PREVIEW = 'preview';
+    public const CONTEXT_PREVIEW = 'preview';
 
     /**
      * @var \Backend\Classes\Controller|FormController Reference to the back end controller.

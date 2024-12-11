@@ -60,8 +60,8 @@ class Theme extends CmsObject
      */
     protected $defaultExtension = 'yaml';
 
-    const ACTIVE_KEY = 'cms::theme.active';
-    const EDIT_KEY = 'cms::theme.edit';
+    public const ACTIVE_KEY = 'cms::theme.active';
+    public const EDIT_KEY = 'cms::theme.edit';
 
     /**
      * Loads the theme.

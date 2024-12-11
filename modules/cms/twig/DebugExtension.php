@@ -15,10 +15,10 @@ use Winter\Storm\Database\Model;
 
 class DebugExtension extends TwigExtension
 {
-    const PAGE_CAPTION = 'Page variables';
-    const ARRAY_CAPTION = 'Array variables';
-    const OBJECT_CAPTION = 'Object variables';
-    const COMPONENT_CAPTION = 'Component variables';
+    public const PAGE_CAPTION = 'Page variables';
+    public const ARRAY_CAPTION = 'Array variables';
+    public const OBJECT_CAPTION = 'Object variables';
+    public const COMPONENT_CAPTION = 'Component variables';
 
     /**
      * @var integer Helper for rendering table row styles.

@@ -35,17 +35,17 @@ class RelationController extends ControllerBehavior
     /**
      * @var const Postback parameter for the active relationship field.
      */
-    const PARAM_FIELD = '_relation_field';
+    public const PARAM_FIELD = '_relation_field';
 
     /**
      * @var const Postback parameter for the active management mode.
      */
-    const PARAM_MODE = '_relation_mode';
+    public const PARAM_MODE = '_relation_mode';
 
     /**
      * @var const Postback parameter for read only mode.
      */
-    const PARAM_EXTRA_CONFIG = '_relation_extra_config';
+    public const PARAM_EXTRA_CONFIG = '_relation_extra_config';
 
     /**
      * @var Backend\Widgets\Search Reference to the search widget object.

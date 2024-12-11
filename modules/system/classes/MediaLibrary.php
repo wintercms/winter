@@ -25,11 +25,11 @@ class MediaLibrary
 {
     use \Winter\Storm\Support\Traits\Singleton;
 
-    const SORT_BY_TITLE = 'title';
-    const SORT_BY_SIZE = 'size';
-    const SORT_BY_MODIFIED = 'modified';
-    const SORT_DIRECTION_ASC = 'asc';
-    const SORT_DIRECTION_DESC = 'desc';
+    public const SORT_BY_TITLE = 'title';
+    public const SORT_BY_SIZE = 'size';
+    public const SORT_BY_MODIFIED = 'modified';
+    public const SORT_DIRECTION_ASC = 'asc';
+    public const SORT_DIRECTION_DESC = 'desc';
 
     /**
      * @var string Cache key

@@ -8,10 +8,10 @@ use System\Tests\Bootstrap\PluginManagerTestCase;
 
 class PluginManagerTest extends PluginManagerTestCase
 {
-    const INSTALLED_PLUGIN_COUNT = 17;
-    const ENABLED_PLUGIN_COUNT = 14;
-    const PLUGIN_NAMESPACE_COUNT = 18;
-    const PLUGIN_VENDOR_COUNT = 5;
+    public const INSTALLED_PLUGIN_COUNT = 17;
+    public const ENABLED_PLUGIN_COUNT = 14;
+    public const PLUGIN_NAMESPACE_COUNT = 18;
+    public const PLUGIN_VENDOR_COUNT = 5;
 
     //
     // Tests

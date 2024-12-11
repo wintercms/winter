@@ -15,10 +15,10 @@ class MailSetting extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
-    const MODE_LOG       = 'log';
-    const MODE_MAIL      = 'mail';
-    const MODE_SENDMAIL  = 'sendmail';
-    const MODE_SMTP      = 'smtp';
+    public const MODE_LOG       = 'log';
+    public const MODE_MAIL      = 'mail';
+    public const MODE_SENDMAIL  = 'sendmail';
+    public const MODE_SMTP      = 'smtp';
 
     /**
      * @var array Behaviors implemented by this model.

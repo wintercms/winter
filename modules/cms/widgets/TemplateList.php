@@ -21,7 +21,7 @@ class TemplateList extends WidgetBase
     use \Backend\Traits\SelectableWidget;
     use \Backend\Traits\CollapsableWidget;
 
-    const SORTING_FILENAME = 'fileName';
+    public const SORTING_FILENAME = 'fileName';
 
     protected $searchTerm = false;
 

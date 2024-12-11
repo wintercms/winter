@@ -22,7 +22,7 @@ class Preference extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
-    const DEFAULT_THEME = 'twilight';
+    public const DEFAULT_THEME = 'twilight';
 
     /**
      * @var array Behaviors implemented by this model.

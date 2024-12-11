@@ -18,7 +18,7 @@ use Winter\Storm\Exception\ApplicationException;
 class ColorPicker extends FormWidgetBase
 {
     // All color formats supported
-    const ALL_FORMATS = ['cmyk', 'hex', 'hsl', 'rgb'];
+    public const ALL_FORMATS = ['cmyk', 'hex', 'hsl', 'rgb'];
 
     //
     // Configurable properties

@@ -12,9 +12,9 @@ class TagList extends FormWidgetBase
 {
     use \Backend\Traits\FormModelWidget;
 
-    const MODE_ARRAY = 'array';
-    const MODE_STRING = 'string';
-    const MODE_RELATION = 'relation';
+    public const MODE_ARRAY = 'array';
+    public const MODE_STRING = 'string';
+    public const MODE_RELATION = 'relation';
 
     //
     // Configurable properties

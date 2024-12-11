@@ -52,13 +52,13 @@ class BrandSetting extends Model
      */
     public $cacheKey = 'backend::brand.custom_css';
 
-    const PRIMARY_COLOR   = '#34495e'; // Wet Asphalt
-    const SECONDARY_COLOR = '#e67e22'; // Pumpkin
-    const ACCENT_COLOR    = '#3498db'; // Peter River
+    public const PRIMARY_COLOR   = '#34495e'; // Wet Asphalt
+    public const SECONDARY_COLOR = '#e67e22'; // Pumpkin
+    public const ACCENT_COLOR    = '#3498db'; // Peter River
 
-    const INLINE_MENU   = 'inline';
-    const TILE_MENU     = 'tile';
-    const COLLAPSE_MENU = 'collapse';
+    public const INLINE_MENU   = 'inline';
+    public const TILE_MENU     = 'tile';
+    public const COLLAPSE_MENU = 'collapse';
 
     /**
      * Validation rules

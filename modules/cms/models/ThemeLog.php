@@ -17,9 +17,9 @@ use Winter\Storm\Halcyon\Model as HalcyonModel;
  */
 class ThemeLog extends Model
 {
-    const TYPE_CREATE = 'create';
-    const TYPE_UPDATE = 'update';
-    const TYPE_DELETE = 'delete';
+    public const TYPE_CREATE = 'create';
+    public const TYPE_UPDATE = 'update';
+    public const TYPE_DELETE = 'delete';
 
     /**
      * @var string The database table used by the model.

@@ -26,13 +26,13 @@ class VersionManager
     /**
      * Value when no updates are found.
      */
-    const NO_VERSION_VALUE = 0;
+    public const NO_VERSION_VALUE = 0;
 
     /**
      * Morph types for history table.
      */
-    const HISTORY_TYPE_COMMENT = 'comment';
-    const HISTORY_TYPE_SCRIPT = 'script';
+    public const HISTORY_TYPE_COMMENT = 'comment';
+    public const HISTORY_TYPE_SCRIPT = 'script';
 
     /**
      * @var \Illuminate\Console\OutputStyle

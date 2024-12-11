@@ -24,9 +24,9 @@ class MarkupManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
 
-    const EXTENSION_FILTER = 'filters';
-    const EXTENSION_FUNCTION = 'functions';
-    const EXTENSION_TOKEN_PARSER = 'tokens';
+    public const EXTENSION_FILTER = 'filters';
+    public const EXTENSION_FUNCTION = 'functions';
+    public const EXTENSION_TOKEN_PARSER = 'tokens';
 
     /**
      * @var array Cache of registration callbacks.

@@ -13,8 +13,8 @@ use Winter\Storm\Auth\Models\Role as RoleBase;
  */
 class UserRole extends RoleBase
 {
-    const CODE_DEVELOPER = 'developer';
-    const CODE_PUBLISHER = 'publisher';
+    public const CODE_DEVELOPER = 'developer';
+    public const CODE_PUBLISHER = 'publisher';
 
     /**
      * @var string The database table used by the model.

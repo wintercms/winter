@@ -6,7 +6,7 @@ use Symfony\Component\Process\Process;
 
 class NpmVersion extends NpmCommand
 {
-    const NPM_MINIMUM_SUPPORTED_VERSION = '7.0';
+    public const NPM_MINIMUM_SUPPORTED_VERSION = '7.0';
 
     /**
      * @var string|null The default command name for lazy loading.

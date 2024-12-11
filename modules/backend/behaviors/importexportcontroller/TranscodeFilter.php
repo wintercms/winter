@@ -13,7 +13,7 @@ stream_filter_register(TranscodeFilter::FILTER_NAME . "*", TranscodeFilter::clas
  */
 class TranscodeFilter extends php_user_filter
 {
-    const FILTER_NAME = 'winter.csv.transcode.';
+    public const FILTER_NAME = 'winter.csv.transcode.';
 
     protected $encodingFrom = 'auto';
 

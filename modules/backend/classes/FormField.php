@@ -21,12 +21,12 @@ class FormField
     /**
      * @var int Value returned when the form field should not contribute any save data.
      */
-    const NO_SAVE_DATA = -1;
+    public const NO_SAVE_DATA = -1;
 
     /**
      * @var string A special character in yaml config files to indicate a field higher in hierarchy
      */
-    const HIERARCHY_UP = '^';
+    public const HIERARCHY_UP = '^';
 
     /**
      * @var string Form field name.
