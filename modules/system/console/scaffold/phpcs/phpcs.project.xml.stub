@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<ruleset name="MyWinterProject">
+    <description>The coding standard for this project, powered by Winter CMS.</description>
+
+    <!-- Import Winter CMS core code style ruleset -->
+    <rule ref="./modules/system/phpcs.base.xml" />
+
+    <arg name="extensions" value="php" />
+    <arg name="colors" />
+
+    <file>config/</file>
+    <!-- <file>plugins/myauthor/*</file> -->
+
+    <!-- Ignore vendor files -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+</ruleset>

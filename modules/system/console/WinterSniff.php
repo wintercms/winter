@@ -165,12 +165,12 @@ class WinterSniff extends BaseScaffoldCommand
                 'plugin' => $this->getPluginIdentifier(),
                 'plugin_code' => str_replace('.', '_', $this->getPluginIdentifier()),
             ];
-            $this->makeStub('scaffold/phpcs/phpcs.xml.stub');
+            $this->makeStub('scaffold/phpcs/phpcs.plugin.xml.stub');
             return;
         }
 
         File::copy(
-            __DIR__ . '/scaffold/phpcs/phpcs.core.xml.stub',
+            __DIR__ . '/scaffold/phpcs/phpcs.project.xml.stub',
             $this->option('config') ?? base_path('phpcs.xml')
         );
     }

@@ -3,7 +3,7 @@
     <description>Coding style for {{ plugin }}.</description>
 
     <!-- Import Winter CMS code style ruleset -->
-    <rule ref="./phpcs.base.xml" />
+    <rule ref="../../../modules/system/phpcs.base.xml" />
 
     <arg name="extensions" value="php" />
     <arg name="colors" />
