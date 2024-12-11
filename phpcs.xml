@@ -8,7 +8,6 @@
     <arg name="extensions" value="php" />
     <arg name="colors" />
 
-    <file>bootstrap/</file>
     <file>config/</file>
     <file>modules/</file>
     <file>plugins/winter/demo/</file>

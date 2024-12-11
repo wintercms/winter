@@ -6,10 +6,6 @@ use Backend\Models\ExportModel;
 use Illuminate\Http\Request;
 use System\Tests\Bootstrap\TestCase;
 
-if (!class_exists('Model')) {
-    class_alias('Winter\Storm\Database\Model', 'Model');
-}
-
 class ExampleExportModel extends ExportModel
 {
     public function exportData($columns, $sessionKey = null)

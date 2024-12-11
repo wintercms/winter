@@ -6,10 +6,6 @@ use Backend\Models\ImportModel;
 use System\Models\File as FileModel;
 use System\Tests\Bootstrap\PluginTestCase;
 
-if (!class_exists('Model')) {
-    class_alias('Winter\Storm\Database\Model', 'Model');
-}
-
 class ExampleImportModel extends ImportModel
 {
     public $rules = [];

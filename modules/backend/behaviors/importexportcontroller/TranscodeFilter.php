@@ -4,7 +4,9 @@ namespace Backend\Behaviors\ImportExportController;
 
 use php_user_filter;
 
+// phpcs:disable
 stream_filter_register(TranscodeFilter::FILTER_NAME . "*", TranscodeFilter::class);
+// phpcs:enable
 
 /**
  * Transcode stream filter.
