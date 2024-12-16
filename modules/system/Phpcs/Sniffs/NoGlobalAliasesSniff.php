@@ -64,12 +64,6 @@ class NoGlobalAliasesSniff implements Sniff
         // Normalize the use statement and remove "as" aliases
         $useStatement = trim(preg_replace('/\s+as\s+\w+$/i', '', $useStatement));
 
-        // $phpcsFile->addError(
-        //     $useStatement . var_export(isset($this->aliases[$useStatement]), true),
-        //     $stackPtr,
-        //     'NoGlobalAliases'
-        // );
-
         // Check if the use statement matches a key in the aliases
         foreach ($this->aliases as $alias => $fullyQualifiedName) {
             if ($useStatement === $alias) {

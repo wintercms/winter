@@ -7,11 +7,11 @@ use PHP_CodeSniffer\Tests\Standards\AbstractSniffUnitTest;
 class NoGlobalAliasesSniffTest extends AbstractSniffUnitTest
 {
     /**
-     * Returns the lines where errors should occur.
+     * Returns the lines where warnings should occur.
      *
-     * @return array<int, int> Line numbers as keys, number of errors as values.
+     * @return array<int, int> Line numbers as keys, number of warnings as values.
      */
-    public function getErrorList(): array
+    public function getWarningList(): array
     {
         return [
             3 => 1, // Global alias Config
@@ -25,11 +25,11 @@ class NoGlobalAliasesSniffTest extends AbstractSniffUnitTest
     }
 
     /**
-     * Returns the lines where warnings should occur.
+     * Returns the lines where errors should occur.
      *
-     * @return array<int, int> Line numbers as keys, number of warnings as values.
+     * @return array<int, int> Line numbers as keys, number of errors as values.
      */
-    public function getWarningList(): array
+    public function getErrorList(): array
     {
         return [];
     }
