@@ -3,12 +3,12 @@
 namespace Backend\Behaviors;
 
 use Backend\Classes\ControllerBehavior;
-use Form as FormHelper;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Request;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\Form as FormHelper;
 
 /**
  * Uses a combination of lists and forms for managing Model relations.

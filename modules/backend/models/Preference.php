@@ -8,7 +8,7 @@ use DateTimeZone;
 use DirectoryIterator;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Lang;
-use Session;
+use Illuminate\Support\Facades\Session;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\Config;
 

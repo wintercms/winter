@@ -9,11 +9,11 @@ use Backend\Classes\WidgetBase;
 use Backend\Classes\WidgetManager;
 use Backend\Facades\BackendAuth;
 use Exception;
-use Form as FormHelper;
 use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Html\Helper as HtmlHelper;
+use Winter\Storm\Support\Facades\Form as FormHelper;
 
 /**
  * Form Widget

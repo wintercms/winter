@@ -2,8 +2,8 @@
 
 namespace System\Helpers;
 
-use Cache as CacheFacade;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache as CacheFacade;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\File;
 

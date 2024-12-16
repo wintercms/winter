@@ -2,7 +2,7 @@
 
 namespace System\Helpers;
 
-use View as ViewFacade;
+use Illuminate\Support\Facades\View as ViewFacade;
 
 /**
  * This helper class is used to extract basic variables

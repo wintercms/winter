@@ -2,7 +2,7 @@
 
 namespace Backend\Traits;
 
-use Session;
+use Illuminate\Support\Facades\Session;
 use Winter\Storm\Support\Str;
 
 /**

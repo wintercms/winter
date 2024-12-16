@@ -5,7 +5,7 @@ namespace System\Traits;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Request;
-use Session;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Cookie;
 use Winter\Storm\Support\Facades\Config;
 
