@@ -41,6 +41,7 @@ class WinterSniff extends BaseScaffoldCommand
         {?--e|no-warnings : Ignore warnings and only show errors}
         {--fix : Automatically fix detected errors where able by use of the phpcbf command}
         {?--s|summary : Display a summary of the results}
+        {?--parallel= : The number of files to be checked simultaneously. Defaults to 1 (no parallel processing). If enabled, this option only takes effect if the PHP PCNTL (Process Control) extension is available.}
     ';
 
     protected $stubs = [
@@ -260,6 +261,10 @@ class WinterSniff extends BaseScaffoldCommand
 
         if ($this->option('summary')) {
             $args[] = '--report=summary';
+        }
+
+        if ($this->option('parallel')) {
+            $args[] = '--parallel=' . (int) $this->option('parallel');
         }
 
         $args = array_merge(
