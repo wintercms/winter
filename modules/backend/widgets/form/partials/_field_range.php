@@ -28,7 +28,7 @@
     <span style="position: absolute; transform: translateX(-50%)"></span>
     <script>
         (() => {
-            public const input = document.getElementById("<?= $field->getId() ?>");
+            const input = document.getElementById("<?= $field->getId() ?>");
             input.addEventListener("input", function () {
                 this.nextElementSibling.innerHTML = this.value;
                 var pos = ((this.value - <?= $min ?>) / (<?= $max ?> - <?= $min ?>) * 100);
