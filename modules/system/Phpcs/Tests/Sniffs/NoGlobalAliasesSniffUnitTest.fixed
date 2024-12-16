@@ -1,0 +1,12 @@
+<?php
+
+use Winter\Storm\Support\Facades\Config as MyConfig;
+use Illuminate\Support\Facades\Lang as MyLang;
+use Winter\Storm\Support\Facades\URL;
+use Winter\Storm\Support\Arr;
+use Winter\Storm\Support\Facades\Yaml;
+
+class Example
+{
+    use Config;
+}

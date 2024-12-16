@@ -181,4 +181,6 @@
             <property name="searchAnnotations" value="true" />
         </properties>
     </rule>
+    <!-- Don't allow importing global aliases -->
+    <rule ref="./modules/system/Phpcs/Sniffs/NoGlobalAliasesSniff.php"/>
 </ruleset>

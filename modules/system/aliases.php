@@ -17,9 +17,9 @@ return [
     'Cookie'       => Illuminate\Support\Facades\Cookie::class,
     'Crypt'        => Illuminate\Support\Facades\Crypt::class,
     'Date'         => Illuminate\Support\Facades\Date::class,
-    'DB'           => Illuminate\Support\Facades\DB::class,
+    // 'DB'        => Illuminate\Support\Facades\DB::class,           // Replaced by Winter
     'Eloquent'     => Illuminate\Database\Eloquent\Model::class,
-    'Event'        => Illuminate\Support\Facades\Event::class,
+    // 'Event'     => Illuminate\Support\Facades\Event::class,        // Replaced by Winter
     // 'File'      => Illuminate\Support\Facades\File::class,         // Replaced by Winter
     // 'Gate'      => Illuminate\Support\Facades\Gate::class,         // Currently unsupported in Winter
     'Hash'         => Illuminate\Support\Facades\Hash::class,
@@ -41,7 +41,7 @@ return [
     'Session'      => Illuminate\Support\Facades\Session::class,
     'Storage'      => Illuminate\Support\Facades\Storage::class,
     // 'Str'       => Illuminate\Support\Str::class,                  // Replaced by Winter
-    'URL'          => Illuminate\Support\Facades\URL::class,
+    // 'URL'       => Illuminate\Support\Facades\URL::class,       // Replaced by Winter
     // 'Validator' => Illuminate\Support\Facades\Validator::class,    // Replaced by Winter
     'View'         => Illuminate\Support\Facades\View::class,
 
@@ -56,8 +56,10 @@ return [
     'BackendMenu'          => Backend\Facades\BackendMenu::class,
     'Block'                => Winter\Storm\Support\Facades\Block::class,
     'Cms'                  => Cms\Facades\Cms::class,
+    'DB'                   => Winter\Storm\Support\Facades\DB::class,
     'Config'               => Winter\Storm\Support\Facades\Config::class,
     'DbDongle'             => Winter\Storm\Support\Facades\DbDongle::class,
+    'Event'                => Winter\Storm\Support\Facades\Event::class,
     'File'                 => Winter\Storm\Support\Facades\File::class,
     'Flash'                => Winter\Storm\Support\Facades\Flash::class,
     'Form'                 => Winter\Storm\Support\Facades\Form::class,
@@ -71,8 +73,10 @@ return [
     'Schema'               => Winter\Storm\Support\Facades\Schema::class,
     'Seeder'               => Winter\Storm\Database\Updates\Seeder::class,
     'Str'                  => Winter\Storm\Support\Str::class,
+    'Svg'                  => Winter\Storm\Support\Facades\Svg::class,
     'SystemException'      => Winter\Storm\Exception\SystemException::class,
     'Twig'                 => Winter\Storm\Support\Facades\Twig::class,
+    'URL'                  => Winter\Storm\Support\Facades\Url::class,
     'ValidationException'  => Winter\Storm\Exception\ValidationException::class,
     'Validator'            => Winter\Storm\Support\Facades\Validator::class,
     'Yaml'                 => Winter\Storm\Support\Facades\Yaml::class,
@@ -80,8 +84,8 @@ return [
     /*
      * Backwards compatibility aliases
      */
-    'Db'             => Illuminate\Support\Facades\DB::class,
-    'Url'            => Illuminate\Support\Facades\URL::class,
+    'Db'             => Winter\Storm\Support\Facades\DB::class,
+    'Url'            => Winter\Storm\Support\Facades\URL::class,
     'TestCase'       => System\Tests\Bootstrap\TestCase::class,
     'PluginTestCase' => System\Tests\Bootstrap\PluginTestCase::class,
 
