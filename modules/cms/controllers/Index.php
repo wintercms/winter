@@ -22,13 +22,13 @@ use Cms\Widgets\TemplateList;
 use Exception;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\URL;
 use System\Helpers\DateTime;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Router\Router as StormRouter;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Url;
 
 /**
  * CMS index

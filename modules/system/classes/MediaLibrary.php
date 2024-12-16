@@ -6,11 +6,11 @@ use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\Str;
 use Winter\Storm\Support\Svg;
 

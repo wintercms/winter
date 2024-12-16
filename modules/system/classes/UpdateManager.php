@@ -10,7 +10,6 @@ use Illuminate\Console\View\Components\Info;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\URL;
 use System\Helpers\Cache as CacheHelper;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
@@ -20,6 +19,7 @@ use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Http;
 use Winter\Storm\Support\Facades\Schema;
+use Winter\Storm\Support\Facades\Url;
 
 /**
  * Update manager

@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 use System\Helpers\Cache as CacheHelper;
 use Winter\Storm\Parse\Assetic\Cache\FilesystemCache;
 use Winter\Storm\Parse\Assetic\Filter\JavascriptImporter;
@@ -26,6 +25,7 @@ use Winter\Storm\Parse\Assetic\Filter\ScssCompiler;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Url;
 
 /**
  * Combiner class used for combining JavaScript and StyleSheet files.

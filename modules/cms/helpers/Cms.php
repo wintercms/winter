@@ -3,8 +3,8 @@
 namespace Cms\Helpers;
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\URL;
 use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Url;
 
 /**
  * CMS Helper

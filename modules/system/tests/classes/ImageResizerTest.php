@@ -6,7 +6,6 @@ use Backend\Facades\Backend;
 use Cms\Classes\Controller as CmsController;
 use Cms\Classes\Theme;
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
-use Illuminate\Support\Facades\URL;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Models\File as FileModel;
@@ -14,6 +13,7 @@ use System\Tests\Bootstrap\PluginTestCase;
 use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Url;
 
 class ImageResizerTest extends PluginTestCase
 {

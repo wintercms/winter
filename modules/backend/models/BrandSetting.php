@@ -7,11 +7,11 @@ use Exception;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
-use Illuminate\Support\Facades\URL;
 use Less_Parser;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Url;
 
 /**
  * Brand settings that affect all users

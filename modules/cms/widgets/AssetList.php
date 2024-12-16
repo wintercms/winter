@@ -10,7 +10,6 @@ use Exception;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\URL;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -18,6 +17,7 @@ use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\Str;
 
 /**

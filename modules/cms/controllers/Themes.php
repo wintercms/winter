@@ -16,12 +16,12 @@ use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\URL;
 use System\Classes\SettingsManager;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\Str;
 
 /**

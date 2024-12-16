@@ -41,7 +41,7 @@ return [
     'Session'      => Illuminate\Support\Facades\Session::class,
     'Storage'      => Illuminate\Support\Facades\Storage::class,
     // 'Str'       => Illuminate\Support\Str::class,                  // Replaced by Winter
-    // 'URL'       => Illuminate\Support\Facades\URL::class,       // Replaced by Winter
+    // 'URL'       => Illuminate\Support\Facades\URL::class,          // Replaced by Winter
     // 'Validator' => Illuminate\Support\Facades\Validator::class,    // Replaced by Winter
     'View'         => Illuminate\Support\Facades\View::class,
 
@@ -85,7 +85,7 @@ return [
      * Backwards compatibility aliases
      */
     'Db'             => Winter\Storm\Support\Facades\DB::class,
-    'Url'            => Winter\Storm\Support\Facades\URL::class,
+    'Url'            => Winter\Storm\Support\Facades\Url::class,
     'TestCase'       => System\Tests\Bootstrap\TestCase::class,
     'PluginTestCase' => System\Tests\Bootstrap\PluginTestCase::class,
 
