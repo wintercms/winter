@@ -11,7 +11,7 @@ use System\Classes\PluginManager;
 /**
  * Console command to check code style and formatting issues.
  *
- * If a plugin is provided, this command will search for a `phpcs.xml file inside the plugin's directory. If not found,
+ * If a plugin is provided, this command will search for a `phpcs.xml` file inside the plugin's directory. If not found,
  * the user will be prompted to create one if they wish.
  */
 class WinterSniff extends BaseScaffoldCommand
