@@ -1,7 +1,9 @@
-<?php namespace {{ plugin_namespace }}\Controllers;
+<?php
 
-use BackendMenu;
+namespace {{ plugin_namespace }}\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
 
 /**
  * {{ title_name }} Backend Controller
