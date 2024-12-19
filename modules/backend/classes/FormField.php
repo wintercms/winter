@@ -19,9 +19,9 @@ use Winter\Storm\Support\Str;
 class FormField
 {
     /**
-     * @var int Value returned when the form field should not contribute any save data.
+     * @var string Value returned when the form field should not contribute any save data.
      */
-    const NO_SAVE_DATA = -1;
+    const NO_SAVE_DATA = "\0";
 
     /**
      * @var string A special character in yaml config files to indicate a field higher in hierarchy

@@ -1,6 +1,6 @@
 <?php
 $selectedValues = is_array($selectedValues) ? $selectedValues : [];
-$availableOptions = $useKey ? $fieldOptions : array_unique(array_merge($selectedValues, $fieldOptions));
+$availableOptions = $fieldOptions;
 $displayOnlyOptions = [];
 
 foreach ($availableOptions as $key => $option) {
@@ -19,20 +19,11 @@ foreach ($availableOptions as $key => $option) {
             <li class="taglist__item"><?= e(trans($option)) ?></li>
         <?php endforeach ?>
     </ul>
-    <?php if (is_array($field->value)): ?>
-        <?php foreach ($displayOnlyOptions as $option): ?>
-        <input
-            type="hidden"
-            name="<?= $field->getName() ?>[]"
-            value="<?= $option ?>">
-        <?php endforeach ?>
-    <?php else: ?>
-        <input
-            type="hidden"
-            name="<?= $field->getName() ?>"
-            value="<?= $field->value ?>">
-    <?php endif ?>
 <?php else: ?>
+    <input
+        type="hidden"
+        name="<?= $field->getName() ?>"
+        value="">
     <select
         id="<?= $field->getId() ?>"
         name="<?= $field->getName() ?>[]"
