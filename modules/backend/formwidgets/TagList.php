@@ -110,6 +110,10 @@ class TagList extends FormWidgetBase
      */
     public function getSaveValue($value)
     {
+        if (is_array($value)) {
+            $value = array_filter($value);
+        }
+
         if ($this->mode === static::MODE_RELATION) {
             return $this->hydrateRelationSaveValue($value);
         }
@@ -130,8 +134,6 @@ class TagList extends FormWidgetBase
         if (!is_array($names)) {
             $names = [$names];
         }
-
-        $names = array_filter($names);
 
         $relation = $this->getRelationObject();
         $relationModel = $this->getRelationModel();
