@@ -10,7 +10,6 @@ use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Str;
 
-
 /**
  * Model used for importing data
  *
