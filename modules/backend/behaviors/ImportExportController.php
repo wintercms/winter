@@ -322,7 +322,7 @@ class ImportExportController extends ControllerBehavior
 
     protected function getImportFileColumns()
     {
-        if (! $path = $this->getImportFilePath()) {
+        if (!$path = $this->getImportFilePath()) {
             return null;
         }
 
