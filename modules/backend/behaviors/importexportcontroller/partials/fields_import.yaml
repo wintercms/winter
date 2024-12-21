@@ -12,7 +12,7 @@ fields:
         type: fileupload
         mode: file
         span: left
-        fileTypes: csv
+        fileTypes: csv, xls, xlsx, ods
         useCaption: false
 
     format_preset:
@@ -22,6 +22,7 @@ fields:
         options:
             standard: backend::lang.import_export.standard_format
             custom: backend::lang.import_export.custom_format
+            excel: backend::lang.import_export.excel_format
         span: right
 
     format_delimiter:

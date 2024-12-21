@@ -1,11 +1,15 @@
 <?php namespace Backend\Models;
 
 use Backend\Behaviors\ImportExportController\TranscodeFilter;
-use Str;
-use Lang;
-use Model;
+use Illuminate\Support\Facades\Lang;
 use League\Csv\Reader as CsvReader;
 use League\Csv\Statement as CsvStatement;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\IReader;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Str;
+
 
 /**
  * Model used for importing data
@@ -104,6 +108,17 @@ abstract class ImportModel extends Model
 
         $options = array_merge($defaultOptions, $options);
 
+        $fileFormat = post('format_preset');
+
+        return match ($fileFormat) {
+            'standard', 'custom' => $this->processImportDataAsCsv($filePath, $matches, $options),
+            'excel' => $this->processImportDataFromSpreadsheet($filePath, $matches, $options),
+            default => throw new ApplicationException('Unsupported file format'),
+        };
+    }
+
+    protected function processImportDataAsCsv(string $filePath, array $matches, array $options): array
+    {
         /*
          * Read CSV
          */
@@ -148,6 +163,29 @@ abstract class ImportModel extends Model
         $contents = $stmt->process($reader);
         foreach ($contents as $row) {
             $result[] = $this->processImportRow($row, $matches);
+        }
+
+        return $result;
+    }
+
+    protected function processImportDataFromSpreadsheet(string $filePath, array $matches, array $options): array
+    {
+        $spreadsheet = IOFactory::load($filePath, IReader::READ_DATA_ONLY, [
+            IOFactory::READER_XLSX,
+            IOFactory::READER_XLS,
+            IOFactory::READER_ODS,
+        ]);
+
+        $sheet = $spreadsheet->getActiveSheet();
+
+        $sheetData = $sheet->toArray();
+        if ($options['firstRowTitles']) {
+            $sheetData = array_slice($sheetData, 1);
+        }
+
+        $result = [];
+        foreach ($sheetData as $rowData) {
+            $result[] = $this->processImportRow($rowData, $matches);
         }
 
         return $result;

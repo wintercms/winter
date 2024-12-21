@@ -1,21 +1,24 @@
 <?php namespace Backend\Behaviors;
 
-use Str;
-use Lang;
-use View;
-use Response;
-use Backend;
-use BackendAuth;
-use Backend\Classes\ControllerBehavior;
-use Backend\Behaviors\ImportExportController\TranscodeFilter;
-use Illuminate\Database\Eloquent\MassAssignmentException;
-use League\Csv\Reader as CsvReader;
-use League\Csv\Writer as CsvWriter;
-use League\Csv\EscapeFormula as CsvEscapeFormula;
-use League\Csv\Statement as CsvStatement;
 use ApplicationException;
-use SplTempFileObject;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Backend\Behaviors\ImportExportController\TranscodeFilter;
+use Backend\Classes\ControllerBehavior;
 use Exception;
+use Illuminate\Database\Eloquent\MassAssignmentException;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
+use League\Csv\EscapeFormula as CsvEscapeFormula;
+use League\Csv\Reader as CsvReader;
+use League\Csv\Statement as CsvStatement;
+use League\Csv\Writer as CsvWriter;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Reader\IReader;
+use SplTempFileObject;
+use Winter\Storm\Support\Str;
+
 
 /**
  * Adds features for importing and exporting data.
@@ -320,10 +323,21 @@ class ImportExportController extends ControllerBehavior
 
     protected function getImportFileColumns()
     {
-        if (!$path = $this->getImportFilePath()) {
+        if (! $path = $this->getImportFilePath()) {
             return null;
         }
 
+        $fileFormat = post('format_preset');
+
+        return match ($fileFormat) {
+            'standard', 'custom' => $this->getImportFileColumnsFromCsv($path),
+            'excel' => $this->getImportFileColumnsFromSpreadsheet($path),
+            default => throw new ApplicationException('Unsupported file format'),
+        };
+    }
+
+    protected function getImportFileColumnsFromCsv(string $path)
+    {
         $reader = $this->createCsvReader($path);
         $firstRow = $reader->fetchOne(0);
 
@@ -341,6 +355,20 @@ class ImportExportController extends ControllerBehavior
         }
 
         return $firstRow;
+    }
+
+    protected function getImportFileColumnsFromSpreadsheet(string $path)
+    {
+        $spreadsheet = IOFactory::load($path, IReader::READ_DATA_ONLY, [
+            IOFactory::READER_XLSX,
+            IOFactory::READER_XLS,
+            IOFactory::READER_ODS,
+        ]);
+
+        $sheet = $spreadsheet->getActiveSheet();
+        $data = $sheet->toArray();
+
+        return $data[0];
     }
 
     /**
