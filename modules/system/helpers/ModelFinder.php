@@ -26,7 +26,7 @@ class ModelFinder
     {
         $modulesPath = base_path() . '/modules';
 
-        $models = collect(Finder::create()->in($modulesPath)->notPath('/tests/')->files()->name('/^[A-Z]{1}.+\.php$/'))
+        $models = collect(Finder::create()->in($modulesPath)->path('/models/')->notPath('/tests/')->files()->name('/^[A-Z]{1}.+\.php$/'))
             ->map(function ($model) use ($modulesPath) {
                 $modelPath = str_replace(['/', '.php'], ['\\', ''], Str::after($model->getRealPath(), realpath($modulesPath).DIRECTORY_SEPARATOR));
                 return ucwords($modelPath, '\\');
