@@ -110,11 +110,17 @@ class TagList extends FormWidgetBase
      */
     public function getSaveValue($value)
     {
+        if (!is_array($value)) {
+            $value = [$value];
+        }
+
+        $value = array_filter($value);
+
         if ($this->mode === static::MODE_RELATION) {
             return $this->hydrateRelationSaveValue($value);
         }
 
-        if (is_array($value) && $this->mode === static::MODE_STRING) {
+        if ($this->mode === static::MODE_STRING) {
             return implode($this->getSeparatorCharacter(), $value);
         }
 
@@ -125,14 +131,8 @@ class TagList extends FormWidgetBase
      * Returns an array suitable for saving against a relation (array of keys).
      * This method also creates non-existent tags.
      */
-    protected function hydrateRelationSaveValue($names): ?array
+    protected function hydrateRelationSaveValue(array $names): ?array
     {
-        if (!is_array($names)) {
-            $names = [$names];
-        }
-
-        $names = array_filter($names);
-
         $relation = $this->getRelationObject();
         $relationModel = $this->getRelationModel();
 

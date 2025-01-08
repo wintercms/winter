@@ -29,7 +29,7 @@ foreach ($availableOptions as $key => $option) {
     <?php else: ?>
         <input
             type="hidden"
-            name="<?= $field->getName() ?>"
+            name="<?= $field->getName() ?>[]"
             value="<?= $field->value ?>">
     <?php endif ?>
 <?php else: ?>
