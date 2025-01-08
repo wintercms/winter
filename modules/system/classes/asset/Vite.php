@@ -27,7 +27,7 @@ class Vite extends LaravelVite
         // Normalise the package name
         $package = strtolower($package);
 
-        if (!($compilableAssetPackage = PackageManager::instance()->getPackages('vite')[$package] ?? null)) {
+        if (!($compilableAssetPackage = PackageManager::instance()->getPackages('vite', true)[$package] ?? null)) {
             throw new SystemException('Unable to resolve package: ' . $package);
         }
 
