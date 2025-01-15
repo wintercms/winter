@@ -458,13 +458,25 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
             return null;
         }
 
+        // Get the plugin object from its code
+        $plugin = $this->findByIdentifier($code);
+
         // Rollback plugin
         if (!$noRollback) {
             $this->rollback($code);
         }
 
+        // If the plugin was installed via composer, remove it
+        if ($composerPackage = $plugin->getComposerPackageName()) {
+            $this->renderComponent(
+                Info::class,
+                sprintf('Removing plugin: %s (%s) via composer', $code, $composerPackage)
+            );
+            Composer::remove($composerPackage);
+        }
+
         // Delete from file system
-        if ($pluginPath = self::instance()->getPluginPath($code)) {
+        if (($pluginPath = $plugin->getPluginPath()) && File::exists($pluginPath)) {
             if (!$preserveFiles) {
                 File::deleteDirectory($pluginPath);
             }
