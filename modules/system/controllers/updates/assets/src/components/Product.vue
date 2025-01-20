@@ -1,24 +1,23 @@
 <template>
     <div class="product-card p-2 mb-1">
         <div class="product-body">
-            <div class="product-row relative">
+            <div class="product-row">
                 <div class="product-image">
                     <img :src="product.icon" :alt="product.name">
                 </div>
-                <div class="product-description">
-                    <div>
-                        <p class="product-name">{{product.name}}</p>
-                        <p>{{product.description}}</p>
-                    </div>
+                <div>
+                    <p class="product-name">{{product.name}}</p>
+                    <p>{{product.description}}</p>
                 </div>
-                <div class="absolute">
-                    <button v-if="!product.installed && !installing"
-                            class="btn btn-info"
-                            @click="install()"
-                    >Install</button>
-                    <div v-if="installing" class="installing"></div>
-                    <p v-if="product.installed" class="text-muted">This {{type}} is installed.</p>
-                </div>
+            </div>
+
+            <div class="install-container">
+                <button v-if="!product.installed && !installing"
+                        class="btn btn-info"
+                        @click="install()"
+                >Install</button>
+                <div v-if="installing" class="installing"></div>
+                <p v-if="product.installed" class="text-muted">This {{type}} is installed.</p>
             </div>
         </div>
         <div class="product-footer">
@@ -60,58 +59,14 @@ export default {
                     package: this.product.package
                 },
                 success: (response) => {
-                    $.popup({
-                        size: 'installer-popup',
-                        content: `
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title">Installing ${this.product.name}</h4>
-                            </div>
-                            <div class="modal-body"></div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Blue Pill</button>
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">Red Pill</button>
-                            </div>
-                        `
-                    });
+                    this.$parent.displayInstall(response.install_key);
 
-                    const popup = document.querySelector('.size-installer-popup .modal-body');
-
-                    const prepareMessage = (str) => {
-                        return `<div class="install-message">${
-                            str.split("\n").filter((line) => line.indexOf('FINISHED:') === 0 ? false : !!line).map((line) => {
-                                ['INFO', 'ERROR'].forEach((status) => {
-                                    if (line.indexOf(status) === 0) {
-                                        line = `
-                                            <div class="message-line">
-                                                <span class="message-${status.toLowerCase()}">${status}</span> <pre>${line.substring(status.length + 1)}</pre>
-                                            </div>
-                                        `;
-                                    }
-                                });
-
-                                return line;
-                            }).join("\n")
-                        }</div>`;
-                    };
-
-                    const checkStatus = () => {
-                        this.$request('onInstallProductStatus', {
-                            data: {
-                                install_key: response.install_key
-                            },
-                            success: (statusResponse) => {
-                                popup.innerHTML = prepareMessage(statusResponse.data);
-
-                                if (!statusResponse.done) {
-                                    return setTimeout(checkStatus, 500);
-                                }
-
-                                this.installing = false;
-                            }
-                        })
-                    };
-                    checkStatus();
+                    let store = [];
+                    if (localStorage.winterInstalling) {
+                        store = JSON.parse(localStorage.winterInstalling);
+                    }
+                    store.push(response.install_key);
+                    localStorage.winterInstalling = JSON.stringify(store);
                 }
             });
         }
@@ -122,7 +77,7 @@ export default {
 .product-card {
     flex: 1 1 500px;
     box-sizing: border-box;
-    margin: 1rem .25em;
+    margin: 1.5em .5em;
 }
 
 @media screen and (min-width: 40em) {
@@ -142,7 +97,7 @@ export default {
     text-wrap: wrap;
 }
 .product-body {
-    border: 2px solid #cdcdcd;
+    border: 2px solid #eaeaea;
     border-bottom: 0;
     border-top-right-radius: 4px;
     border-top-left-radius: 4px;
@@ -151,23 +106,11 @@ export default {
     align-items: stretch;
     min-height: 82%;
     text-wrap: wrap;
-}
-.product-description {
-    margin-left: 10px;
-}
-.product-body .relative {
     position: relative;
-    display: block;
-    text-wrap: wrap;
-}
-.product-body .absolute {
-    position: absolute;
-    right: 5px;
-    top: 5px;
 }
 .product-footer {
-    background: #ececec;
-    border: 2px solid #cdcdcd;
+    background: #f9f9f9;
+    border: 2px solid #eaeaea;
     border-top: 0;
     border-bottom-right-radius: 4px;
     border-bottom-left-radius: 4px;
@@ -175,12 +118,6 @@ export default {
     display: flex;
     justify-content: space-between;
     gap: 15px;
-}
-.product-image {
-    width: 35%;
-    border-radius: 6px;
-    margin: 10px;
-    overflow: hidden;
 }
 .product-image img {
     width: -webkit-fill-available;
@@ -190,7 +127,17 @@ export default {
 }
 .product-row {
     display: flex;
+    justify-content: left;
     align-self: stretch;
+    gap: 25px;
+    flex-wrap: nowrap;
+}
+.product-image {
+    width: 20%;
+}
+.product-row .product-image img {
+    min-width: 100%;
+    border-radius: 6px;
 }
 .product-footer-item {
     display: flex;
@@ -199,21 +146,34 @@ export default {
     color: white;
     padding: 6px;
     border-radius: 6px;
+    cursor: pointer;
 }
 .product-footer .stars .product-badge {
     background: #f0ad4e;
+    opacity: 0.7;
 }
 .product-footer .downloads .product-badge {
     background: #183638;
+    opacity: 0.7;
 }
 .product-footer .github .product-badge {
     background: #010409;
+    opacity: 0.7;
 }
 .product-footer .packagist .product-badge {
     background: #f28d1a;
+    opacity: 0.7;
+}
+.product-footer .product-badge:hover {
+    opacity: 1;
 }
 .product-footer .stars, .product-footer .github {
     margin-right: 7px;
+}
+.install-container {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
 }
 .installing:after {
     content: ' ';
@@ -228,7 +188,7 @@ export default {
     margin: 0;
 }
 .install-message span, .install-message pre {
-    display: inline;
+    margin: auto;
     text-wrap: wrap;
 }
 .install-message .message-info {
@@ -247,5 +207,11 @@ export default {
 }
 .message-line {
     margin-bottom: 5px;
+}
+.message-done {
+    color: #ead707;
+}
+.message-version {
+    color: #04a3a8;
 }
 </style>
