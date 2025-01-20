@@ -497,31 +497,46 @@ class MarketPlaceApi
 
     public function getProducts(): array
     {
-        return Cache::remember(static::PRODUCT_FETCH_CACHE_KEY, Carbon::now()->addMinutes(5), function () {
+        $packages = Cache::remember(static::PRODUCT_FETCH_CACHE_KEY, Carbon::now()->addMinutes(15), function () {
             return [
                 'plugins' => $this->getPackageType('winter-plugin'),
                 'themes' => $this->getPackageType('winter-theme'),
             ];
         });
-    }
 
-    protected function getPackageType(string $type): array
-    {
+        // @TODO: This should only validate the installed status of extensions, the rest should come from the api.
+
         $installed = Composer::getWinterPackageNames();
 
-        $packages = array_map(function (array $package) use ($installed) {
-            // This is scuffed, store the composer name as "package"
-            $package['package'] = $package['name'];
-            // Then guess a winter name from the package name (this will need to be handled by the market)
-            $package['name'] = implode('.', array_map(function (string $str) {
-                return str_replace(' ', '', ucwords(str_replace(['wn-', '-plugin', '-'], ['', '', ' '], $str)));
-            }, explode('/', $package['name'])));
-            // Check if the package is installed, should probably happen somewhere else
-            $package['installed'] = in_array($package['package'], $installed);
-            // Grab the package image, for now this will do
-            $package['icon'] = 'https://picsum.photos/200?a=' . md5($package['name']);
-            return $package;
-        }, Composer::listPackages($type));
+        foreach ($packages as $type => $packageCategories) {
+            foreach ($packageCategories as $category => $packageList) {
+                $packages[$type][$category] = array_map(function (array $package) use ($installed) {
+                    // This is scuffed, store the composer name as "package"
+                    $package['package'] = $package['name'];
+                    // Then guess a winter name from the package name (this will need to be handled by the market)
+                    $package['name'] = implode('.', array_map(function (string $str) {
+                        return str_replace(' ', '', ucwords(str_replace(['wn-', '-plugin', '-'], ['', '', ' '], $str)));
+                    }, explode('/', $package['name'])));
+                    // Check if the package is installed, should probably happen somewhere else
+                    $package['installed'] = in_array($package['package'], $installed);
+                    // Grab the package image, for now this will do
+                    $package['icon'] = 'https://picsum.photos/200?a=' . md5($package['name']);
+                    return $package;
+                }, $packageList);
+            }
+        }
+
+        return $packages;
+    }
+
+    /**
+     * @TODO: This whole function should be provided by the marketplace api
+     * @param string $type
+     * @return array
+     */
+    protected function getPackageType(string $type): array
+    {
+        $packages = Composer::listPackages($type);
 
         usort($packages, function ($a, $b) {
             return $b['favers'] <=> $a['favers'];
@@ -530,7 +545,7 @@ class MarketPlaceApi
         $popular = array_slice($packages, 0, 9);
 
         usort($packages, function ($a, $b) {
-            return str_starts_with($b['package'], 'winter/');
+            return str_starts_with($b['name'], 'winter/');
         });
 
         $featured = array_slice($packages, 0, 9);
