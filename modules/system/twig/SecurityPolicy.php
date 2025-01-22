@@ -129,7 +129,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
 
         foreach ($properties as $property) {
             foreach ($this->{$property} as $type => $values) {
-                $this->{$property} = array_map('strtolower', $values);
+                $this->{$property}[$type] = array_map('strtolower', $values);
             }
         }
     }
