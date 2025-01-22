@@ -24,6 +24,15 @@ class SecurityPolicyTest extends TestCase
         ');
     }
 
+    public function testAllowedMethods()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+
+        $this->renderTwigInCmsController('
+            {{ this.session.put("key", "value") }}
+        ');
+    }
+
     public function testCannotGetTwigLoaderFromCmsController()
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
