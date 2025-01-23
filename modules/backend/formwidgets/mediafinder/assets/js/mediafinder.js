@@ -61,6 +61,7 @@
         }
 
         this.$el.on('click', '.find-button', this.proxy(this.onClickFindButton))
+        this.$el.on('click', '.find-empty-message', this.proxy(this.onClickFindButton)).css({'cursor':'pointer'})
         this.$el.on('click', '.find-remove-button', this.proxy(this.onClickRemoveButton))
 
         this.$findValue = $('[data-find-value]', this.$el)
