@@ -33,17 +33,18 @@ class FlashNode extends TwigNode
         if ($attrib == 'all') {
             $compiler
                 ->addDebugInfo($this)
-                ->write('foreach (Flash::getMessages() as $type => $messages) {'.PHP_EOL)
+                ->write('foreach (Flash::getMessages() as $type => $messages) {' . PHP_EOL)
                 ->indent()
-                    ->write('foreach ($messages as $message) {'.PHP_EOL)
+                    ->write('foreach ($messages as $message) {' . PHP_EOL)
                     ->indent()
                         ->write('$context["type"] = $type;')
                         ->write('$context["message"] = $message;')
                         ->subcompile($this->getNode('body'))
                     ->outdent()
-                    ->write('}'.PHP_EOL)
+                    ->write('}' . PHP_EOL)
                 ->outdent()
-                ->write('}'.PHP_EOL)
+                ->write('}' . PHP_EOL)
+                ->write('Flash::purge();' . PHP_EOL)
             ;
         }
         else {
@@ -54,12 +55,12 @@ class FlashNode extends TwigNode
                 ->write(';')
                 ->write('foreach (Flash::')
                 ->raw($attrib)
-                ->write('() as $message) {'.PHP_EOL)
+                ->write('() as $message) {' . PHP_EOL)
                 ->indent()
                     ->write('$context["message"] = $message;')
                     ->subcompile($this->getNode('body'))
                 ->outdent()
-                ->write('}'.PHP_EOL)
+                ->write('}' . PHP_EOL)
             ;
         }
 
