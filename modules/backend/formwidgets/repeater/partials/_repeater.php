@@ -15,7 +15,7 @@
     <?php endif; ?>
 >
     <?php if (!$this->previewMode): ?>
-        <input type="hidden" name="<?= $field->getName(); ?>">
+        <input type="hidden" name="<?= $this->getFieldName(); ?>">
     <?php endif ?>
 
     <ul id="<?= $this->getId('items') ?>" class="field-repeater-items">
