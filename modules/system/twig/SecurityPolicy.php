@@ -61,6 +61,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'update',
             'delete',
             'forceDelete',
+            'getQuery',
         ],
         HalcyonModel::class => [
             'fill',
@@ -73,6 +74,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'update',
             'delete',
             'forceDelete',
+            'getQuery',
         ],
         DatasourceInterface::class => [
             'insert',
@@ -96,14 +98,11 @@ final class SecurityPolicy implements SecurityPolicyInterface
      */
     protected $allowedMethods = [
         SessionManager::class => [
-            'all',
-            'only',
-            'exists',
-            'missing',
-            'has',
+            'put',
             'get',
-            'hasOldInput',
-            'getOldInput',
+            'has',
+            'forget',
+            'flush',
         ],
     ];
 
