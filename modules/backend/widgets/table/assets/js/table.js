@@ -72,6 +72,13 @@
         this.toolbarClickHandler = this.onToolbarClick.bind(this)
 
         if (this.options.postback && this.options.clientDataSourceClass == 'client') {
+            if (!this.options.postbackHandlerName) {
+                var formHandler = this.$el.closest('form').data('request')
+                this.options.postbackHandlerName = [formHandler || 'onSave']
+            } else if (typeof this.options.postbackHandlerName === 'string') {
+              this.options.postbackHandlerName = this.options.postbackHandlerName.split(',')
+            }
+
             this.formSubmitHandler = this.onFormSubmit.bind(this)
         }
 
@@ -799,9 +806,9 @@
     }
 
     Table.prototype.onFormSubmit = function(ev, data) {
-        if (!this.options.postbackHandlerName || data.handler == this.options.postbackHandlerName) {
+        if (this.options.postbackHandlerName.indexOf(data.handler) > -1) {
             this.unfocusTable()
-    
+
             if (!this.validate()) {
                 ev.preventDefault()
                 return
@@ -1111,7 +1118,7 @@
         recordsPerPage: false,
         data: null,
         postback: true,
-        postbackHandlerName: null,
+        postbackHandlerName: [],
         adding: true,
         deleting: true,
         toolbar: true,
