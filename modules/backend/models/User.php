@@ -1,10 +1,10 @@
 <?php namespace Backend\Models;
 
-use Mail;
-use Event;
-use Backend;
-use BackendAuth;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Illuminate\Support\Facades\Event;
 use Winter\Storm\Auth\Models\User as UserBase;
+use Winter\Storm\Support\Facades\Mail;
 
 /**
  * Administrator user model
@@ -46,7 +46,7 @@ class User extends UserBase
      * Relations
      */
     public $belongsToMany = [
-        'groups' => [UserGroup::class, 'table' => 'backend_users_groups']
+        'groups' => [UserGroup::class, 'table' => 'backend_users_groups', 'softDelete' => true]
     ];
 
     public $belongsTo = [
@@ -61,6 +61,11 @@ class User extends UserBase
      * Purge attributes from data set.
      */
     protected $purgeable = ['password_confirmation', 'send_invite'];
+
+    /**
+     * @var array List of attribute names which are json encoded and decoded from the database.
+     */
+    protected $jsonable = ['permissions', 'metadata'];
 
     /**
      * @var string Login attribute

@@ -2,7 +2,6 @@
 
 use Url;
 use Config;
-use File as FileHelper;
 use Storage;
 use Winter\Storm\Database\Attach\File as FileBase;
 use Backend\Controllers\Files;
@@ -56,14 +55,6 @@ class File extends FileBase
         }
 
         return $url;
-    }
-
-    /**
-     * If working with local storage, determine the absolute local path.
-     */
-    protected function getLocalRootPath()
-    {
-        return Config::get('filesystems.disks.local.root', storage_path('app'));
     }
 
     /**

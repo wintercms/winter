@@ -185,11 +185,6 @@ return [
         'smtp_username' => 'Username',
         'smtp_password' => 'Password',
         'smtp_port' => 'SMTP port',
-        'smtp_ssl' => 'SSL connection required',
-        'smtp_encryption' => 'SMTP encryption protocol',
-        'smtp_encryption_none' => 'No encryption',
-        'smtp_encryption_tls' => 'TLS',
-        'smtp_encryption_ssl' => 'SSL',
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail path',
         'sendmail_path_comment' => 'Please specify the path of the sendmail program.',
@@ -449,7 +444,7 @@ return [
     ],
     'media' => [
         'invalid_path' => "Invalid file path specified: ':path'.",
-        'folder_size_items' => 'item(s)',
+        'folder_size_items' => 'item|items',
     ],
     'page' => [
         'custom_error' => [
@@ -469,5 +464,11 @@ return [
     'pagination' => [
         'previous' => 'Previous',
         'next' => 'Next',
+    ],
+    'datetime' => [
+        'today' => 'Today',
+        'yesterday' => 'Yesterday',
+        'tomorrow' => 'Tomorrow',
+        'at' => ':date at :time',
     ],
 ];

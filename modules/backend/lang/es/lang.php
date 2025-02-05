@@ -486,7 +486,7 @@ return [
         'add_folder' => 'Nueva carpeta',
         'search' => 'Buscar',
         'display' => 'Mostrar',
-        'filter_everything' => 'Todo',
+        'filter_all' => 'Todo',
         'filter_images' => 'Imágenes',
         'filter_video' => 'Vídeo',
         'filter_audio' => 'Audio',

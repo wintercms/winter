@@ -1,10 +1,12 @@
+import Singleton from '../abstracts/Singleton';
+
 /**
  * Embeds the "extras" stylesheet into the page, if it is not loaded through the theme.
  *
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class StylesheetLoader extends Snowboard.Singleton {
+export default class StylesheetLoader extends Singleton {
     /**
      * Defines listeners.
      *
@@ -29,7 +31,7 @@ export default class StylesheetLoader extends Snowboard.Singleton {
         if (!stylesLoaded) {
             const stylesheet = document.createElement('link');
             stylesheet.setAttribute('rel', 'stylesheet');
-            stylesheet.setAttribute('href', this.snowboard.url().to('/modules/system/assets/css/snowboard.extras.css'));
+            stylesheet.setAttribute('href', this.snowboard.url().asset('/modules/system/assets/css/snowboard.extras.css'));
             document.head.appendChild(stylesheet);
         }
     }

@@ -57,7 +57,10 @@ return [
         'weekdaysShort' => ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
     ],
     'colorpicker' => [
-        'choose' => 'Ok',
+        'last_color' => 'Utiliser la couleur sélectionnée précédemment',
+        'aria_palette' => 'Zone de sélection des couleurs',
+        'aria_hue' => 'Curseur de sélection de la teinte',
+        'aria_opacity' => "Curseur de sélection de l'opacité",
     ],
     'filter' => [
         'group' => [

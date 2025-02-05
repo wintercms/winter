@@ -1,7 +1,9 @@
 <?php namespace Cms\Console;
 
-use Winter\Storm\Scaffold\GeneratorCommand;
 use InvalidArgumentException;
+use System\Classes\Asset\PackageManager;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Scaffold\GeneratorCommand;
 
 class CreateTheme extends GeneratorCommand
 {
@@ -16,7 +18,9 @@ class CreateTheme extends GeneratorCommand
     protected $signature = 'create:theme
         {theme : The name of the theme to create. <info>(eg: MyTheme)</info>}
         {scaffold? : The base theme scaffold to use <info>(eg: less, tailwind)</info>}
-        {--f|force : Overwrite existing files with generated files.}';
+        {--f|force : Overwrite existing files with generated files.}
+        {--uninspiring : Disable inspirational quotes}
+    ';
 
     /**
      * @var string The console command description.
@@ -32,6 +36,11 @@ class CreateTheme extends GeneratorCommand
      * @var string The argument that the generated class name comes from
      */
     protected $nameFrom = 'theme';
+
+    /**
+     * @var string The scaffold that we are building
+     */
+    protected string $scaffold;
 
     /**
      * @var array Available theme scaffolds and their types
@@ -52,10 +61,6 @@ class CreateTheme extends GeneratorCommand
             'scaffold/theme/less/version.stub' => 'version.yaml',
         ],
         'tailwind' => [
-            'scaffold/theme/tailwind/assets/src/css/base.stub' => 'assets/src/css/base.css',
-            'scaffold/theme/tailwind/assets/src/css/custom.stub' => 'assets/src/css/custom.css',
-            'scaffold/theme/tailwind/assets/src/css/theme.stub' => 'assets/src/css/theme.css',
-            'scaffold/theme/tailwind/assets/src/js/theme.stub' => 'assets/src/js/theme.js',
             'scaffold/theme/tailwind/lang/en/lang.stub' => 'lang/en/lang.php',
             'scaffold/theme/tailwind/layouts/default.stub' => 'layouts/default.htm',
             'scaffold/theme/tailwind/pages/404.stub' => 'pages/404.htm',
@@ -66,12 +71,9 @@ class CreateTheme extends GeneratorCommand
             'scaffold/theme/tailwind/partials/site/header.stub' => 'partials/site/header.htm',
             'scaffold/theme/tailwind/partials/site/footer.stub' => 'partials/site/footer.htm',
             'scaffold/theme/tailwind/.gitignore.stub' => '.gitignore',
-            'scaffold/theme/tailwind/package.stub' => 'package.json',
             'scaffold/theme/tailwind/README.stub' => 'README.md',
-            'scaffold/theme/tailwind/tailwind.config.stub' => 'tailwind.config.js',
             'scaffold/theme/tailwind/theme.stub' => 'theme.yaml',
             'scaffold/theme/tailwind/version.stub' => 'version.yaml',
-            'scaffold/theme/tailwind/winter.mix.stub' => 'winter.mix.js',
         ],
     ];
 
@@ -88,12 +90,13 @@ class CreateTheme extends GeneratorCommand
      */
     protected function prepareVars(): array
     {
-        $scaffold = $this->argument('scaffold') ?? 'less';
+        $this->scaffold = $this->argument('scaffold') ?? 'tailwind';
+
         $validOptions = $this->suggestScaffoldValues();
-        if (!in_array($scaffold, $validOptions)) {
-            throw new InvalidArgumentException("$scaffold is not an available theme scaffold type (Available types: " . implode(', ', $validOptions) . ')');
+        if (!in_array($this->scaffold, $validOptions)) {
+            throw new InvalidArgumentException("$this->scaffold is not an available theme scaffold type (Available types: " . implode(', ', $validOptions) . ')');
         }
-        $this->stubs = $this->themeScaffolds[$scaffold];
+        $this->stubs = $this->themeScaffolds[$this->scaffold];
 
         return [
             'code' => $this->getNameInput(),
@@ -143,5 +146,72 @@ class CreateTheme extends GeneratorCommand
         $this->makeDirectory($destinationFile);
 
         $this->files->put($destinationFile, $destinationContent);
+    }
+
+    public function makeStubs(): void
+    {
+        parent::makeStubs();
+
+        if ($this->scaffold === 'tailwind') {
+            // @TODO: allow support for mix here
+            $this->tailwindPostCreate('vite');
+        }
+    }
+
+    protected function tailwindPostCreate(string $processor): void
+    {
+        if ($this->call('npm:version', ['--silent' => true, '--compatible' => true]) !== 0) {
+            throw new SystemException(sprintf(
+                'NPM is not installed or is outdated, please ensure NPM >= v7.0 is available and then manually set up %s.',
+                $processor
+            ));
+        }
+
+        $commands = [
+            // Set up the vite config files
+            $processor . ':create' => [
+                'message' => 'Generating ' . $processor . ' + tailwind config...',
+                'args' => [
+                    'packageName' => 'theme-' . $this->getNameInput(),
+                    '--no-interaction' => true,
+                    '--force' => true,
+                    '--silent' => true,
+                    '--tailwind' => true
+                ]
+            ],
+            // Ensure all require packages are available for the new theme and add the new theme to our npm workspaces
+            $processor . ':install' => [
+                'message' => 'Installing NPM dependencies...',
+                'args' => [
+                    'assetPackage' => ['theme-' . $this->getNameInput()],
+                    '--no-interaction' => true,
+                    '--silent' => false,
+                    '--disable-tty' => true
+                ]
+            ],
+            // Run an initial compile to ensure styles are available for first load
+            $processor . ':compile' => [
+                'message' => 'Compiling your theme...',
+                'args' => [
+                    '--package' => ['theme-' . $this->getNameInput()],
+                    '--no-interaction' => true,
+                    '--silent' => true,
+                ]
+            ]
+        ];
+
+        foreach ($commands as $command => $data) {
+            $this->info($data['message']);
+
+            // Handle commands throwing errors
+            if ($this->call($command, $data['args']) !== 0) {
+                throw new SystemException(sprintf('Post create command `%s` failed, please review manually.', $command));
+            }
+
+            // Force PackageManger to reset available packages
+            if ($command === $processor . ':create') {
+                PackageManager::forgetInstance();
+            }
+        }
     }
 }

@@ -185,11 +185,6 @@ return [
         'smtp_username' => 'SMTP логін',
         'smtp_password' => 'SMTP пароль',
         'smtp_port' => 'SMTP порт',
-        'smtp_ssl' => 'Використовувати SSL',
-        'smtp_encryption' => 'Протокол шифрування для SMTP',
-        'smtp_encryption_none' => 'Без шифрування',
-        'smtp_encryption_tls' => 'TLS',
-        'smtp_encryption_ssl' => 'SSL',
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail шлях',
         'sendmail_path_comment' => 'Будь ласка, вкажіть шлях до sendmail.',
@@ -449,7 +444,7 @@ return [
     ],
     'media' => [
         'invalid_path' => 'Вказано неприпустимий шлях до файлу: ":path".',
-        'folder_size_items' => 'Об\'єктів',
+        'folder_size_items' => 'елемент|елементи|елементів',
     ],
     'page' => [
         'custom_error' => [

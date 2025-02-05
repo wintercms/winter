@@ -1,17 +1,16 @@
 <?php namespace Backend\Traits;
 
-use Str;
-use File;
-use Lang;
+use ApplicationException;
 use Event;
-use Config;
-use Storage;
+use File;
+use Illuminate\Filesystem\FilesystemAdapter;
+use Lang;
 use Request;
 use Response;
-use ApplicationException;
+use Str;
 use System\Classes\MediaLibrary;
-use Illuminate\Filesystem\FilesystemAdapter;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Svg;
 
 /**
  * Uploadable Widget Trait
@@ -123,6 +122,11 @@ trait UploadableWidget
                 : $uploadedFile->getRealPath();
 
             $filePath = $this->uploadableGetUploadPath($fileName);
+
+            // Filter SVG files
+            if (pathinfo($filePath, PATHINFO_EXTENSION) === 'svg') {
+                file_put_contents($sourcePath, Svg::extract($sourcePath));
+            }
 
             $this->uploadableGetDisk()->put($filePath, File::get($sourcePath));
 

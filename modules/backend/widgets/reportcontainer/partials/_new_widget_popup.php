@@ -21,7 +21,6 @@
         <div class="form-group">
             <label><?= e(trans('backend::lang.dashboard.widget_width')) ?></label>
             <select class="form-control custom-select" name="size">
-                <option></option>
                 <?php foreach ($sizes as $size => $name):?>
                     <option value="<?= e($size) ?>" <?= $size == 12 ? 'selected' : null ?>><?= e($name) ?></option>
                 <?php endforeach ?>

@@ -14,6 +14,8 @@ class ThemeTest extends TestCase
         parent::setUp();
 
         Config::set('cms.activeTheme', 'test');
+        Config::set('cms.themesPath', '/modules/cms/tests/fixtures/themes');
+
         Event::flush('cms.theme.getActiveTheme');
         Theme::resetCache();
     }
@@ -91,5 +93,33 @@ class ThemeTest extends TestCase
         $activeTheme = Theme::getActiveTheme();
         $this->assertNotNull($activeTheme);
         $this->assertEquals('apitest', $activeTheme->getDirName());
+    }
+
+    public function testChildThemeConfig()
+    {
+        Config::set('cms.activeTheme', 'childtest');
+
+        $theme = Theme::getActiveTheme();
+        $config = $theme->getConfig();
+
+        $this->assertArrayHasKey('parent', $config);
+        $this->assertEquals('test', $config['parent']);
+    }
+
+    public function testChildThemeAssetUrl()
+    {
+        Config::set('cms.activeTheme', 'childtest');
+
+        $theme = Theme::getActiveTheme();
+
+        $this->assertStringContainsString(
+            'modules/cms/tests/fixtures/themes/test/assets/css/style1.css',
+            $theme->assetUrl('assets/css/style1.css')
+        );
+
+        $this->assertStringContainsString(
+            'modules/cms/tests/fixtures/themes/childtest/assets/css/style2.css',
+            $theme->assetUrl('assets/css/style2.css')
+        );
     }
 }

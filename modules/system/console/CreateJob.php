@@ -15,8 +15,11 @@ class CreateJob extends BaseScaffoldCommand
     protected $signature = 'create:job
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {name : The name of the job class to generate. <info>(eg: ImportPosts)</info>}
-        {--s|sync : Overwrite existing files with generated files.}
-        {--f|force : Overwrite existing files with generated files.}';
+        {--b|batchable : Generates a batchable queue job.}
+        {--s|sync : Generates a non-queueable job.}
+        {--f|force : Overwrite existing files with generated files.}
+        {--uninspiring : Disable inspirational quotes}
+    ';
 
     /**
      * @var string The console command description.
@@ -38,8 +41,16 @@ class CreateJob extends BaseScaffoldCommand
     /**
      * @var array A mapping of stubs to generated files.
      */
-    protected $stubs = [
-        'scaffold/job/job.queued.stub' => 'jobs/{{studly_name}}.php',
+    protected $jobStubs = [
+        'sync' => [
+            'scaffold/job/job.stub' => 'jobs/{{studly_name}}.php',
+        ],
+        'batched' => [
+            'scaffold/job/job.batched.stub' => 'jobs/{{studly_name}}.php',
+        ],
+        'queued' => [
+            'scaffold/job/job.queued.stub' => 'jobs/{{studly_name}}.php',
+        ],
     ];
 
     /**
@@ -48,7 +59,11 @@ class CreateJob extends BaseScaffoldCommand
     public function prepareVars(): array
     {
         if ($this->option('sync')) {
-            $this->stubs['scaffold/job/job.stub'] = 'jobs/{{studly_name}}.php';
+            $this->stubs = $this->jobStubs['sync'];
+        } elseif ($this->option('batchable')) {
+            $this->stubs = $this->jobStubs['batched'];
+        } else {
+            $this->stubs = $this->jobStubs['queued'];
         }
 
         return parent::prepareVars();

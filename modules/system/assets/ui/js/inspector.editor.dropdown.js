@@ -313,6 +313,11 @@
             $form = $(this.getSelect()).closest('form'),
             dependents = this.inspector.findDependentProperties(this.propertyDefinition.property)
 
+        if (this.inspector.options.parentContainer) {
+            // get parent container data values instead (ref. objectlist editor)
+            data = this.inspector.options.parentContainer.getValues()
+        }
+
         if (currentValue === undefined) {
             currentValue = this.propertyDefinition.default
         }
@@ -382,7 +387,7 @@
 
         for (var i = 0, len = this.propertyDefinition.depends.length; i < len; i++) {
             var property = this.propertyDefinition.depends[i],
-                value = this.inspector.getPropertyValue(property)
+                value = this.getRootSurface().getPropertyValue(property)
 
             if (value === undefined) {
                 value = '';

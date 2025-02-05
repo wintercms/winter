@@ -11,6 +11,7 @@ return [
         'options_method_not_exists' => "Modeļa klasei :model jābūt definētai metodei :method(), kas atgriež vērtības ':field' formas laukam.",
         'options_static_method_invalid_value' => "Statiskā metode ':method()' klasē :class neatgrieza derīgu vērtību masīvu.",
         'colors_method_not_exists' => "Modeļa klasei :model jābūt definētai metodei :method(), kas atgriež html krāsas HEX formāta kodus ':field' formas laukam.",
+        'colors_invalid_input' => 'Norādītā krāsas vērtība nav derīga, lūdzu, mēģiniet vēlreiz.',
     ],
     'widget' => [
         'not_registered' => "Logrīka klases nosaukums ':name' nav reģistrēts",
@@ -75,6 +76,10 @@ return [
         'cancel' => 'Atcelt',
         'delete' => 'Dzēst',
         'ok' => 'Labi',
+        'sending' => 'Sūta...',
+        'password_reset_email' => 'Nosūtīt paroles atiest. e-pastu',
+        'manual_password_reset_confirm' => 'Vai esat pārliecināts, ka vēlaties nostūtīt paroles atiestatīšanas e-pastu šim lietotājam?',
+        'manual_password_reset_success' => 'Lietotājam tika nosūtīts e-pasts ar instrukcijām kā veikt paroles atiestatīšanu.',
     ],
     'dashboard' => [
         'menu_label' => 'Mērinstrumentu panelis',
@@ -315,6 +320,7 @@ return [
         'select_page' => 'Izvēlieties lapu...',
     ],
     'relation' => [
+        'missing_behavior' => 'Laukam ":field" nepieciešams, lai ":controller" kontrolierī būtu ieviesta "RelationController" uzvedība.',
         'missing_config' => "Relācijas uzvedībai nav norādīta konfigurācija ':config'.",
         'missing_definition' => "Relācijas uzvedība nesatur definīciju laukam ':field'.",
         'missing_model' => 'Relācijas uzvedībai klasē :class nav definēts modelis.',
@@ -323,6 +329,7 @@ return [
         'relationwidget_unsupported_type' => 'Relāciju logrīks neatbalsta relāciju veidu ":type".',
         'help' => 'Noklikšķiniet uz vienuma, lai pievienotu',
         'related_data' => 'Saistītie :name dati',
+        'refresh' => 'Atsvaidzināt',
         'add' => 'Pievienot',
         'add_selected' => 'Pievienot izvēlētos',
         'add_a_new' => 'Pievienot jaunu :name',
@@ -596,7 +603,7 @@ return [
         'add_folder' => 'Pievienot mapi',
         'search' => 'Meklēt',
         'display' => 'Attēlot',
-        'filter_everything' => 'Visi',
+        'filter_all' => 'Visi',
         'filter_images' => 'Attēli',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',

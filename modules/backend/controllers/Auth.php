@@ -1,18 +1,16 @@
 <?php namespace Backend\Controllers;
 
-use Mail;
-use Flash;
-use Backend;
-use Request;
-use Validator;
-use BackendAuth;
-use Backend\Models\AccessLog;
-use Backend\Classes\Controller;
-use System\Classes\UpdateManager;
 use ApplicationException;
-use ValidationException;
-use Exception;
+use Backend;
+use BackendAuth;
+use Backend\Classes\Controller;
 use Config;
+use Exception;
+use Flash;
+use Mail;
+use Request;
+use ValidationException;
+use Validator;
 use Winter\Storm\Foundation\Http\Middleware\CheckForTrustedHost;
 
 /**
@@ -52,6 +50,10 @@ class Auth extends Controller
      */
     public function signin()
     {
+        if (BackendAuth::user()) {
+            return Backend::redirect('backend');
+        }
+
         $this->bodyClass = 'signin';
 
         // Clear Cache and any previous data to fix invalid security token issue
@@ -89,20 +91,6 @@ class Auth extends Controller
             'login' => post('login'),
             'password' => post('password')
         ], $remember);
-
-        $runMigrationsOnLogin = (bool) Config::get('cms.runMigrationsOnLogin', Config::get('app.debug', false));
-
-        if ($runMigrationsOnLogin) {
-            try {
-                // Load version updates
-                UpdateManager::instance()->update();
-            } catch (Exception $ex) {
-                Flash::error($ex->getMessage());
-            }
-        }
-
-        // Log the sign in event
-        AccessLog::add($user);
 
         // Redirect to the intended page after successful sign in
         return Backend::redirectIntended('backend');

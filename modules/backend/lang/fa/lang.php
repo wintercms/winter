@@ -595,7 +595,7 @@ return [
         'add_folder' => 'پوشه جدید',
         'search' => 'جستجو',
         'display' => 'نمایش',
-        'filter_everything' => 'همه',
+        'filter_all' => 'همه',
         'filter_images' => 'تصاویر',
         'filter_video' => 'ویدیو',
         'filter_audio' => 'صوتی',

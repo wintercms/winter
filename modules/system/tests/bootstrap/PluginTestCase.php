@@ -9,6 +9,7 @@ use Exception;
 use ReflectionClass;
 use Backend\Classes\AuthManager;
 use Backend\Tests\Concerns\InteractsWithAuthentication;
+use Mockery\MockInterface;
 use System\Classes\PluginBase;
 use System\Classes\PluginManager;
 use System\Classes\UpdateManager;
@@ -141,8 +142,11 @@ abstract class PluginTestCase extends TestCase
 
         // First time seeing this plugin, load it up
         if ($firstLoad) {
-            $namespace = '\\'.str_replace('.', '\\', strtolower($code));
-            $path = array_get($manager->getPluginNamespaces(), $namespace);
+            $namespace = '\\'.str_replace('.', '\\', $code);
+            $path = array_get(
+                array_change_key_case($manager->getPluginNamespaces(), CASE_LOWER),
+                strtolower($namespace)
+            );
 
             if (!$path) {
                 if (!$throw) {
@@ -206,7 +210,8 @@ abstract class PluginTestCase extends TestCase
             if (
                 !$reflectClass->isInstantiable() ||
                 !$reflectClass->isSubclassOf('Winter\Storm\Database\Model') ||
-                $reflectClass->isSubclassOf('Winter\Storm\Database\Pivot')
+                $reflectClass->isSubclassOf('Winter\Storm\Database\Pivot') ||
+                in_array(MockInterface::class, $reflectClass->getInterfaceNames())
             ) {
                 continue;
             }

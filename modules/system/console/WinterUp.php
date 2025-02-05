@@ -1,6 +1,7 @@
 <?php namespace System\Console;
 
 use Illuminate\Console\Command;
+use Illuminate\Contracts\Console\Isolatable;
 use System\Classes\UpdateManager;
 
 /**
@@ -11,12 +12,15 @@ use System\Classes\UpdateManager;
  * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
  */
-class WinterUp extends Command
+class WinterUp extends Command implements Isolatable
 {
     /**
-     * The console command name.
+     * The name and signature of the console command.
+     *
+     * @var string
      */
-    protected $name = 'winter:up';
+    protected $signature = 'winter:up
+                            {--seed : Included for compatibility with Laravel default signature, no effect at this time}';
 
     /**
      * The console command description.

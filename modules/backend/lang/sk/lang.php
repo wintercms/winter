@@ -8,7 +8,9 @@ return [
     'field' => [
         'invalid_type' => 'Bol použitý zlý typ :type.',
         'options_method_invalid_model' => "Vlastnosť ':field' nezodpovedá platnému modelu. Skúste špecifikovať metódu možností pre triedu modelu :model explicitne.",
-        'options_method_not_exists' => "Trieda modelu :model musí implementovať metódu :method(), ktorá vracia možnosti pre formulárové pole ':field'."
+        'options_method_not_exists' => "Trieda modelu :model musí implementovať metódu :method(), ktorá vracia možnosti pre formulárové pole ':field'.",
+        'options_static_method_invalid_value' => "Statická metóda ':method()' triedy :class nevracia platné pole možností.",
+        'colors_method_not_exists' => "Trieda modelu :model musí definovať metódu :method() vracajúcu html HEX kódy farieb pre pole ':field' formulára.",
     ],
     'widget' => [
         'not_registered' => "Trieda widget s menom ':name' nie je registrovaná",
@@ -33,9 +35,24 @@ return [
         ],
     ],
     'partial' => [
-        'not_found_name' => "Čiastočná šablóna ':name' nebola nájdená."
+        'not_found_name' => "Čiastočná šablóna ':name' nebola nájdená.",
+        'invalid_name' => 'Neplatný názov šablóny: :name.',
+    ],
+    'ajax_handler' => [
+        'invalid_name' => 'Neplatný názov AJAX handlera: :name.',
+        'not_found' => "AJAX handler ':name' nebol nájdený.",
     ],
     'account' => [
+        'impersonate' => 'Vydať sa za používateľa',
+        'impersonate_confirm' => 'Naozaj chcete odcudziť identitu tohto používateľa? Do pôvodného stavu sa môžete vrátiť odhlásením.',
+        'impersonate_success' => 'Teraz sa vydávate za tohto používateľa',
+        'impersonate_working' => 'Prepnutie dočasnej identity...',
+        'impersonating' => 'Ste dočasne prihlásený ako :impersonatee. Logy vás stále dokážu identifikovať ako :impersonator',
+        'stop_impersonating' => 'Zrušiť dočasné prepnutie identity',
+        'unsuspend' => 'Zrušiť pozastavenie',
+        'unsuspend_confirm' => 'Naozaj chcete zrušiť pozastavenie tohto používateľa?',
+        'unsuspend_success' => 'Pozastavenie používateľa bolo zrušené.',
+        'unsuspend_working' => 'Prebieha zrušenie pozastavenia...',
         'signed_in_as' => 'Prihlásený ako :full_name',
         'sign_out' => 'Odhlásiť',
         'login' => 'Prihlásiť sa',
@@ -57,7 +74,11 @@ return [
         'apply' => 'Použiť',
         'cancel' => 'Zrušiť',
         'delete' => 'Zmazať',
-        'ok' => 'OK'
+        'ok' => 'OK',
+        'sending' => 'Odosielam...',
+        'password_reset_email' => 'Odoslať e-mail na obnovenie hesla',
+        'manual_password_reset_confirm' => 'Naozaj chcete tomuto používateľovi poslať e-mail na obnovenie hesla?',
+        'manual_password_reset_success' => 'Používateľovi bol odoslaný e-mail s pokynmi na obnovenie hesla.',
     ],
     'dashboard' => [
         'menu_label' => 'Hlavný panel',
@@ -141,6 +162,8 @@ return [
         'last_login' => 'Posledné prihlásenie',
         'created_at' => 'Vytvorený',
         'updated_at' => 'Aktualizovaný',
+        'deleted_at' => 'Odstránený o',
+        'show_deleted' => 'Zobraziť odstránených',
         'group' => [
             'name' => 'Skupina',
             'name_field' => 'Meno',
@@ -173,7 +196,9 @@ return [
         ],
         'preferences' => [
             'not_authenticated' => 'Nebol nájdený žiadny prihlásený užívateľ pre načítanie alebo uloženie nastavení.'
-        ]
+        ],
+        'trashed_hint_title' => 'Konto bolo vymazané',
+        'trashed_hint_desc' => 'Tento účet bol odstránený a nebude možné sa pod neho prihlásiť. Ak ho chcete obnoviť, kliknite na ikonu obnovenia používateľa vpravo dole',
     ],
     'list' => [
         'default_title' => 'Zoznam',
@@ -218,6 +243,11 @@ return [
         'remove_confirm' => 'Ste si istý?',
         'remove_file' => 'Odstrániť súbor'
     ],
+    'repeater' => [
+        'add_new_item' => 'Pridať novú položku',
+        'min_items_failed' => ':name potrebuje minimálne :min položiek, zadaných bolo iba :items položiek',
+        'max_items_failed' => ':name povoluje maximálne :max položiek, zadaných bolo :items položiek',
+    ],
     'form' => [
         'create_title' => 'Nový :name',
         'update_title' => 'Upraviť :name',
@@ -225,6 +255,7 @@ return [
         'create_success' => ':name bol vytvorený',
         'update_success' => ':name bol upravený',
         'delete_success' => ':name bol zmazaný',
+        'restore_success' => ':name bol obnovený',
         'reset_success' => 'Úspešne obnovené',
         'missing_id' => 'Musíte uviesť ID záznamu.',
         'missing_model' => 'Správanie formulára použité v :class nemá definovaný model.',
@@ -244,6 +275,9 @@ return [
         'confirm_delete' => 'Zmazať záznam?',
         'confirm_delete_multiple' => 'SKutočne zmazať vybrané záznamy?',
         'deleting_name' => 'Mazanie :name...',
+        'restore' => 'Restore',
+        'restoring' => 'Obnovujem...',
+        'confirm_restore' => 'Chcete obnoviť tento záznam?',
         'reset_default' => 'Obnoviť predvolené',
         'resetting' => 'Obnova',
         'resetting_name' => 'Obnova :name',
@@ -277,6 +311,7 @@ return [
     ],
     'recordfinder' => [
         'find_record' => 'Nájsť záznam',
+        'invalid_model_class' => 'Trieda modelu ":modelClass" pre recordfinder je neplatná',
         'cancel' => 'Zrušiť',
     ],
     'pagelist' => [
@@ -289,6 +324,7 @@ return [
         'missing_model' => 'Správanie relácie použité v :class nemá definovaný žiadny model.',
         'invalid_action_single' => 'Táto akcia nemôže byť vykonaná na jednoduchej relácií.',
         'invalid_action_multi' => 'Táto akcia nemôže byť vykonaná na viacnásobnej relácií.',
+        'relationwidget_unsupported_type' => 'Vzťah ":type" nieje podporovaný pre tento Relation widget.',
         'help' => 'Pre pridanie kliknite na položku',
         'related_data' => 'Súvisiace dáta pre :name',
         'add' => 'Pridať',
@@ -335,10 +371,14 @@ return [
         'permissions'  => 'Do adresára :name alebo jeho podadresárov sa nedá zapisovať z PHP. Prosím nastavte správne oprávnenia tomuto adresáru.',
         'extension' => 'PHP rozšírenie :name nie je nainštalované. Prosím nainštalujte túto knižnicu a aktivujte rozšírenie.',
         'plugin_missing' => 'Plugin :name je vyžadovaný ale nie je nainštalovaný. Prosím nainštaujte tento plugin.',
+        'debug' => 'Režim ladenia je povolený. Toto sa neodporúča pre produkčné inštalácie',
+        'decompileBackendAssets' => 'Assety pre backend sú dekompilované. Toto sa neodporúča pre produkčné inštalácie.',
+        'default_backend_user' => 'Našiel sa užívateľ s továrenskými atribútmi (admin / admin@domain.tld). Zmeňte ich meno a / alebo e-mailovú adresu, aby ste pomohli chrániť systém.',
     ],
     'editor' => [
         'menu_label' => 'Nastavenia editora kódu',
         'menu_description' => 'Upraviť globálne nastavenia editora, napríklad veľkosť písma a farebnú schému.',
+        'preview' => 'Náhľad',
         'font_size' => 'Veľkosť písma',
         'tab_size' => 'Počet znakov odsadenia',
         'use_hard_tabs' => 'Odsadenia tabulatorom',
@@ -373,16 +413,30 @@ return [
         'label' => 'Popis',
         'class_name' => 'Názov triedy',
         'markup_tags' => 'Značky',
+        'markup_tag' => 'Značka',
         'allowed_empty_tags' => 'Povolené prázdne značky',
         'allowed_empty_tags_comment' => 'Zoznam značiek, ktoré nie sú odstránené v prípade, že nemajú žiadny obsah.',
         'allowed_tags' => 'Povolené značky',
         'allowed_tags_comment' => 'Zoznam povelných značiek.',
+        'allowed_attributes' => 'Povolené atribúty',
+        'allowed_attributes_comment' => 'Zoznam povolených atribútov',
         'no_wrap' => 'Nezabaľovať tieto značky',
         'no_wrap_comment' => 'Zoznam značiek, ktoré by nemali byť zabalené vnútri blokových značiek.',
         'remove_tags' => 'Odstrániť značky',
         'remove_tags_comment' => 'Zoznam značiek, ktoré sú odstránené spolu s ich obsahom.',
+        'line_breaker_tags' => 'Značky oddelovača riadkov',
+        'line_breaker_tags_comment' => 'Zoznam značiek, ktoré sa používajú na umiestnenie prvku oddelovača riadkov.',
+        'toolbar_options' => 'Možnosti panela nástrojov',
         'toolbar_buttons' => 'Tlačítka na paneli nástrojov',
         'toolbar_buttons_comment' => 'Predvolené tlačítka, ktoré budú zobrazené na paneli nástrojov textového editoru.',
+        'toolbar_buttons_preset' => 'Vložte prednastavenú konfiguráciu tlačidiel panela s nástrojmi:',
+        'toolbar_buttons_presets' => [
+            'default' => 'Prednastavená',
+            'minimal' => 'Minimálna',
+            'full' => 'Plná',
+        ],
+        'paragraph_formats' => 'Formát odseku',
+        'paragraph_formats_comment' => 'Možnosti, ktoré sa zobrazia v rozbaľovacej ponuke Formát odseku.',
     ],
     'tooltips' => [
         'preview_website' => 'Náhľad stránok'
@@ -402,11 +456,18 @@ return [
         'brand' => 'Značka',
         'logo' => 'Logo',
         'logo_description' => 'Nahrajte vlastné logo, ktoré bude použité v administrácií.',
+        'favicon' => 'Favicon',
+        'favicon_description' => 'Nahrať vlastnú favicon pre backend',
         'app_name' => 'Meno aplikácie',
         'app_name_description' => 'Toto meno se zobrazí v úvodnej lište stránok.',
         'app_tagline' => 'Motto aplikácie',
         'app_tagline_description' => 'Toto motto se zobrazí na prihlasovacej stránke administrácie.',
         'colors' => 'Farby',
+        'branding_colors' => 'Farby značiek',
+        'branding_colors_comment' => 'Tieto farby sa použijú v celom používateľskom rozhraní Backend, aby zodpovedali vašej značke.',
+        'default_colors' => 'Predvolené farby',
+        'default_colors_comment' => 'Tieto farby budú k dispozícii ako vzorky na všetkých výberoch farieb, pokiaľ nebudú prepísané.',
+        'add_default_color' => 'Pridať predvolenú farbu',
         'primary_color' => 'Primárna farba',
         'secondary_color' => 'Sekundárna farba',
         'accent_color' => 'Farba zvýraznenia',
@@ -415,6 +476,7 @@ return [
         'navigation' => 'Navigácia',
         'menu_mode' => 'Štýl menu',
         'menu_mode_inline' => 'V riadku',
+        'menu_mode_inline_no_icons' => 'V riadku (žiadne ikony)',
         'menu_mode_tile' => 'Dlaždice',
         'menu_mode_collapsed' => 'Zbalené'
     ],
@@ -432,7 +494,9 @@ return [
         'hint' => 'Tento záznam zobrazuje zoznam úspešných administrátorských prihlásení. Záznamy sú uchovávané po dobu :days dní.',
         'menu_label' => 'Záznam prihlásení',
         'menu_description' => 'Zobraziť zoznam úspešných prihlásení do administrácie.',
+        'id' => 'ID',
         'created_at' => 'Čas a dátum',
+        'type' => 'Typ',
         'login' => 'Login',
         'ip_address' => 'IP adresa',
         'first_name' => 'Meno',
@@ -514,16 +578,19 @@ return [
             'iso_8859_13' => 'ISO-8859-13 (Latin-7, Baltic Rim)',
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtic)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
+            'windows_1250' => 'Windows-1250 (CP1250, Central and Eastern European)',
             'windows_1251' => 'Windows-1251 (CP1251)',
             'windows_1252' => 'Windows-1252 (CP1252)'
         ]
     ],
     'permissions' => [
-        'manage_media' => 'Nahrávanie a správa mediálneho obsahu - obrázkov, videí, zvukov, dokumentov'
+        'manage_media' => 'Nahrávanie a správa mediálneho obsahu - obrázkov, videí, zvukov, dokumentov',
+        'allow_unsafe_markdown' => 'Povoliť nezabezpečený Markdown editor (Môže obsahovať Javascript)',
     ],
     'mediafinder' => [
         'label' => 'Vyhľadávač médií',
-        'default_prompt' => 'Kliknite na tlačítko %s pre hľadanie súboru'
+        'default_prompt' => 'Kliknite na tlačítko %s pre hľadanie súboru',
+        'no_image' => 'Nebol nájdený žiadny obrázok',
     ],
     'media' => [
         'menu_label' => 'Médiá',
@@ -533,7 +600,7 @@ return [
         'add_folder' => 'Pridať priečinok',
         'search' => 'Hľadať',
         'display' => 'Zobraziť',
-        'filter_everything' => 'Všetko',
+        'filter_all' => 'Všetko',
         'filter_images' => 'Obrázky',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',

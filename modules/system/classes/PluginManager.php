@@ -150,6 +150,8 @@ class PluginManager
         $className = $namespace . '\Plugin';
         $classPath = $path . '/Plugin.php';
 
+        $this->app->make(ClassLoader::class)->autoloadPackage($namespace, $path);
+
         try {
             // Autoloader failed?
             if (!class_exists($className)) {
@@ -660,8 +662,7 @@ class PluginManager
 
         // Check the database for disabled plugins
         if (
-            $this->app->hasDatabase()
-            && Schema::hasTable('system_plugin_versions')
+            $this->app->hasDatabaseTable('system_plugin_versions')
         ) {
             $userDisabled = Db::table('system_plugin_versions')->where('is_disabled', 1)->lists('code') ?? [];
             foreach ($userDisabled as $code) {

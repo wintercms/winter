@@ -1,9 +1,13 @@
-<?php namespace Backend\Classes;
+<?php
 
-use Str;
-use Html;
+namespace Backend\Classes;
+
+use BackedEnum;
+use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
+use Winter\Storm\Support\Facades\Html;
+use Winter\Storm\Support\Str;
 
 /**
  * Form Field definition
@@ -226,10 +230,11 @@ class FormField
         if ($value === null) {
             if (is_array($this->options)) {
                 return $this->options;
-            }
-            elseif (is_callable($this->options)) {
+            } elseif (is_callable($this->options)) {
                 $callable = $this->options;
                 return $callable();
+            } elseif (is_string($this->options) && is_array($options = Lang::get($this->options))) {
+                return $options;
             }
 
             return [];
@@ -370,7 +375,10 @@ class FormField
             return false;
         }
 
-        return (string) $value === (string) $this->value;
+        $value = ($value instanceof BackedEnum) ? $value->value : $value;
+        $currentValue = ($this->value instanceof BackedEnum) ? $this->value->value : $this->value;
+
+        return (string) $value === (string) $currentValue;
     }
 
     /**
@@ -428,9 +436,8 @@ class FormField
         // Field is required, so add the "required" attribute
         if ($position === 'field' && $this->required && (!isset($result['required']) || $result['required'])) {
             $result['required'] = '';
-        }
-        // The "required" attribute is set and falsy, so unset it
-        elseif ($position === 'field' && isset($result['required']) && !$result['required']) {
+        } elseif ($position === 'field' && isset($result['required']) && !$result['required']) {
+            // The "required" attribute is set and falsy, so unset it
             unset($result['required']);
         }
 
@@ -700,23 +707,24 @@ class FormField
             if ($result instanceof Model && $result->hasRelation($key)) {
                 if ($key == $lastField) {
                     $result = $result->getRelationValue($key) ?: $default;
-                }
-                else {
+                } else {
                     $result = $result->{$key};
                 }
-            }
-            elseif (is_array($result)) {
+            } elseif (is_array($result)) {
                 if (!array_key_exists($key, $result)) {
                     return $default;
                 }
                 $result = $result[$key];
-            }
-            else {
+            } else {
                 if (!isset($result->{$key})) {
                     return $default;
                 }
                 $result = $result->{$key};
             }
+        }
+
+        if ($result instanceof BackedEnum) {
+            $result = $result->value;
         }
 
         return $result;

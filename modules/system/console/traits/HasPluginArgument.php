@@ -1,6 +1,7 @@
 <?php namespace System\Console\Traits;
 
 use InvalidArgumentException;
+use System\Classes\PluginBase;
 use System\Classes\PluginManager;
 
 /**
@@ -65,5 +66,14 @@ trait HasPluginArgument
         }
 
         return $pluginName;
+    }
+
+    /**
+     * Get the plugin instance for the input.
+     * @throws InvalidArgumentException if the provided plugin name is invalid
+     */
+    public function getPlugin($identifier = null): ?PluginBase
+    {
+        return PluginManager::instance()->findByIdentifier($this->getPluginIdentifier($identifier));
     }
 }

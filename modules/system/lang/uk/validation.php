@@ -4,41 +4,78 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Validation Language Lines
+    | Мовні рядки для валідації
     |--------------------------------------------------------------------------
     |
-    | The following language lines contain the default error messages used by
-    | the validator class. Some of these rules have multiple versions such
-    | such as the size rules. Feel free to tweak each of these messages.
+    | Наступні мовні рядки містять стандартні повідомлення про помилки, що використовуються
+    | класом валідатора. Деякі з цих правил мають кілька версій, наприклад
+    | для правила size. Не соромтеся тут налаштовувати кожне з цих повідомлень.
     |
     */
 
     "accepted"         => "Ви повинні прийняти :attribute.",
     "active_url"       => "Поле :attribute недійсний URL.",
     "after"            => "Поле :attribute має бути датою після :date.",
+    'after_or_equal'   => 'Поле :attribute має бути датою після або рівною :date.',
     "alpha"            => "Поле :attribute може містити тільки літери.",
     "alpha_dash"       => "Поле :attribute може містити тільки букви, цифри і дефіс.",
     "alpha_num"        => "Поле :attribute може містити тільки букви і цифри.",
     "array"            => "Поле :attribute має бути масивом.",
     "before"           => "Поле :attribute має бути датою перед :date.",
+    'before_or_equal'  => 'Поле :attribute має бути датою перед або рівною :date.',
     "between"          => [
         "numeric" => "Поле :attribute має бути між :min и :max.",
         "file"    => "Размер :attribute повинен бути від :min до :max Килобайт.",
         "string"  => "Длина :attribute повинна бути від :min до :max символов.",
         "array"   => "Поле :attribute має містити :min - :max элементов.",
     ],
+    'boolean'          => 'Поле :attribute має бути true або false.',
     "confirmed"        => "Поле :attribute не збігається з підтвердженням.",
     "date"             => "Поле :attribute не є датою.",
+    'date_equals'      => 'Поле :attribute має бути датою рівною :date.',
     "date_format"      => "Поле :attribute не відповідає формату :format.",
     "different"        => "Поля :attribute та :other повинні відрізнятися.",
     "digits"           => "Довжина цифрового поля :attribute повинна бути :digits.",
     "digits_between"   => "Довжина цифрового поля :attribute повинна бути між :min та :max.",
+    'dimensions'       => ':attribute має неприпустимі розміри зображення.',
+    'distinct'         => 'Поле :attribute має значення що повторюється.',
     "email"            => "Поле :attribute має хибний формат.",
+    'ends_with'        => 'Поле :attribute має закінчуватися одним із значень: :values.',
     "exists"           => "Вибране значення для :attribute вже існує.",
+    'file'             => ':attribute має бути файлом.',
+    'filled'           => 'Поле :attribute має мати значення.',
+    'gt'               => [
+        'numeric' => 'Поле :attribute має бути більше ніж :value.',
+        'file'    => 'Файл :attribute повинен бути більшим за :value кілобайт.',
+        'string'  => 'Поле :attribute має бути більше :value символів.',
+        'array'   => 'Поле :attribute повинне містити більше :value елементів.',
+    ],
+    'gte'              => [
+        'numeric' => 'Поле :attribute має бути більше або одно :value.',
+        'file'    => 'Файл :attribute повинен бути більшим або дорівнює :value кілобайт.',
+        'string'  => 'Поле :attribute має бути більше або дорівнювати :value символів.',
+        'array'   => 'Поле :attribute повинне містити :value елементів або більше.',
+    ],
     "image"            => "Поле :attribute має бути зображенням.",
     "in"               => "Вибране значення для :attribute помилково.",
+    'in_array'         => 'Поле :attribute не існує в :other.',
     "integer"          => "Поле :attribute має бути цілим числом.",
     "ip"               => "Поле :attribute має бути дійсним IP-адресою.",
+    'ipv4'             => 'Поле :attribute має бути IPv4 адресою.',
+    'ipv6'             => 'Поле :attribute має бути IPv6 адресою.',
+    'json'             => 'Поле :attribute має бути рядком JSON.',
+    'lt'               => [
+        'numeric' => 'Поле :attribute має бути менше :value.',
+        'file'    => 'Файл :attribute має бути меншим за :value кілобайт.',
+        'string'  => 'Поле :attribute має бути менше :value символів.',
+        'array'   => 'Поле :attribute повинне містити менше :value елементів.',
+    ],
+    'lte'              => [
+        'numeric' => 'Поле :attribute має бути меншим або одно :value.',
+        'file'    => 'Файл :attribute повинен бути меншим або дорівнює :value кілобайт.',
+        'string'  => 'Поле :attribute має бути меншим або одно :value символів.',
+        'array'   => 'Поле :attribute не повинно містити більше ніж :value елементів.',
+    ],
     "max"              => [
         "numeric" => "Поле :attribute має бути не більше :max.",
         "file"    => "Поле :attribute має бути не більше :max кілобайт.",
@@ -46,7 +83,7 @@ return [
         "array"   => "Поле :attribute має містити не більше :max елементів.",
     ],
     "mimes"            => "Поле :attribute має бути файлом одного з типів: :values.",
-    "extensions"       => "Поле :attribute повинен мати одне з розширень: :values.",
+    'mimetypes'        => 'Поле :attribute повинно мати одне з розширень: :values.',
     "min"              => [
         "numeric" => "Поле :attribute має бути не менше :min.",
         "file"    => "Поле :attribute має бути не менше :min кілобайт.",
@@ -54,12 +91,17 @@ return [
         "array"   => "Поле :attribute має містити не менше :min елементів.",
     ],
     "not_in"           => "Вибране значення для :attribute помилково.",
+    'not_regex'        => 'Поле :attribute має хибний формат.',
     "numeric"          => "Поле :attribute має бути числом.",
+    'present'          => 'Поле :attribute має бути присутнім.',
     "regex"            => "Поле :attribute має хибний формат.",
     "required"         => "Поле :attribute обов'язкове для заповнення.",
     "required_if"      => "Поле :attribute обов'язково для заповнення, коли :other дорівнює :value.",
+    'required_unless'  => "Поле :attribute обов'язково якщо :other немає серед :values.",
     "required_with"    => "Поле :attribute обов'язково для заповнення, коли :values вказано.",
+    'required_with_all' => "Поле :attribute обов'язково для заповнення коли одне з :values є.",
     "required_without" => "Поле :attribute обов'язково для заповнення, коли :values не вказано.",
+    'required_without_all' => "Поле :attribute обов'язково для заповнення коли немає жодного з :values.",
     "same"             => "Значення :attribute має збігатися з :other.",
     "size"             => [
         "numeric" => "Поле :attribute повинно бути :size.",
@@ -67,30 +109,39 @@ return [
         "string"  => "Поле :attribute має бути довжиною :size символів.",
         "array"   => "Кількість елементів в поле :attribute повинно бути :size.",
     ],
+    'starts_with'      => 'Поле :attribute має починатися одним із значень: :values.',
+    'string'           => 'Поле :attribute має бути рядком.',
+    'timezone'         => ':attribute має бути дійсною часовою зоною.',
     "unique"           => "Таке значення поля :attribute вже існує.",
+    'uploaded'         => ':attribute не вдалося завантажити.',
     "url"              => "Поле :attribute має хибний формат.",
+    'uuid'             => 'Поле :attribute має бути дійсним UUID.',
 
     /*
     |--------------------------------------------------------------------------
-    | Custom Validation Language Lines
+    | Користувальницькі мовні рядки для валідації
     |--------------------------------------------------------------------------
     |
-    | Here you may specify custom validation messages for attributes using the
-    | convention "attribute.rule" to name the lines. This makes it quick to
-    | specify a specific custom language line for a given attribute rule.
+    | Тут Ви можете вказати власні повідомлення для атрибутів, використовуючи
+    | угоду назви рядків "attribute.rule". Це дозволяє легко вказати
+    | повідомлення для заданого правила атрибута.
     |
     */
 
-    'custom' => [],
+    'custom' => [
+        'attribute-name' => [
+            'rule-name' => 'custom-message',
+        ],
+    ],
 
     /*
     |--------------------------------------------------------------------------
-    | Custom Validation Attributes
+    | Власні назви атрибутів
     |--------------------------------------------------------------------------
     |
-    | The following language lines are used to swap attribute place-holders
-    | with something more reader friendly such as E-Mail Address instead
-    | of "email". This simply helps us make messages a little cleaner.
+    | Наступні рядки використовуються для заміни програмних імен елементів користувальницького
+    | інтерфейсу на легкочитані. Наприклад, замість імені поля "email" у повідомленнях
+    | виводитиметься "електронна адреса". Це просто допомагає нам зробити повідомлення трохи чистішими.
     |
     */
 

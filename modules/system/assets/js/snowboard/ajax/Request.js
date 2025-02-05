@@ -1,3 +1,5 @@
+import PluginBase from '../abstracts/PluginBase';
+
 /**
  * Request plugin.
  *
@@ -6,11 +8,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-if (window.Snowboard === undefined) {
-    throw new Error('Snowboard must be loaded in order to use the Request plugin.');
-}
-
-class Request extends Snowboard.PluginBase {
+export default class Request extends PluginBase {
     /**
      * Constructor.
      *
@@ -303,7 +301,7 @@ class Request extends Snowboard.PluginBase {
         return new Promise((resolve, reject) => {
             if (typeof this.options.beforeUpdate === 'function') {
                 if (this.options.beforeUpdate.apply(this, [response]) === false) {
-                    reject();
+                    resolve();
                     return;
                 }
             }
@@ -352,7 +350,7 @@ class Request extends Snowboard.PluginBase {
                     );
                 },
                 () => {
-                    reject();
+                    resolve();
                 },
             );
         });
@@ -503,12 +501,14 @@ class Request extends Snowboard.PluginBase {
         if (error instanceof Error) {
             this.processErrorMessage(error.message);
         } else {
+            let skipError = false;
+
             // Process validation errors
             if (error.X_WINTER_ERROR_FIELDS) {
-                this.processValidationErrors(error.X_WINTER_ERROR_FIELDS);
+                skipError = this.processValidationErrors(error.X_WINTER_ERROR_FIELDS);
             }
 
-            if (error.X_WINTER_ERROR_MESSAGE) {
+            if (error.X_WINTER_ERROR_MESSAGE && !skipError) {
                 this.processErrorMessage(error.X_WINTER_ERROR_MESSAGE);
             }
         }
@@ -626,12 +626,16 @@ class Request extends Snowboard.PluginBase {
     processValidationErrors(fields) {
         if (typeof this.options.handleValidationErrors === 'function') {
             if (this.options.handleValidationErrors.apply(this, [this.form, fields]) === false) {
-                return;
+                return true;
             }
         }
 
         // Allow plugins to cancel the validation errors being handled
-        this.snowboard.globalEvent('ajaxValidationErrors', this.form, fields, this);
+        if (this.snowboard.globalEvent('ajaxValidationErrors', this.form, fields, this) === false) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -790,16 +794,48 @@ class Request extends Snowboard.PluginBase {
 
     get data() {
         const data = (typeof this.options.data === 'object') ? this.options.data : {};
-
         const formData = new FormData(this.form || undefined);
+
         if (Object.keys(data).length > 0) {
-            Object.entries(data).forEach((entry) => {
-                const [key, value] = entry;
-                formData.append(key, value);
-            });
+            this.createFormData(formData, data);
         }
 
         return formData;
+    }
+
+    /**
+     * Recursively adds data to a FormData object.
+     *
+     * This method is used internally to recursively add data to a FormData object, ensuring that
+     * objects and arrays are correctly prefixed and added as POST data.
+     *
+     * @param {FormData} formData
+     * @param {Object} data
+     * @param {string} prefix
+     * @returns {void}
+     */
+    createFormData(formData, data, prefix = '') {
+        if (typeof data !== 'object') {
+            formData.append(prefix, data);
+            return;
+        }
+
+        if (Array.isArray(data) && prefix !== '') {
+            data.forEach((item) => {
+                this.createFormData(formData, item, `${prefix}[]`);
+            });
+            return;
+        }
+
+        Object.entries(data).forEach((entry) => {
+            const [key, value] = entry;
+
+            this.createFormData(
+                formData,
+                value,
+                (prefix !== '') ? `${prefix}[${key}]` : key,
+            );
+        });
     }
 
     get confirm() {
@@ -847,5 +883,3 @@ class Request extends Snowboard.PluginBase {
         return /^(?:\w+:{2})?on[A-Z0-9]/.test(name);
     }
 }
-
-Snowboard.addPlugin('request', Request);

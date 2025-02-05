@@ -597,7 +597,7 @@ return [
         'add_folder' => 'フォルダの追加',
         'search' => '検索',
         'display' => '表示',
-        'filter_everything' => 'すべて',
+        'filter_all' => 'すべて',
         'filter_images' => '画像',
         'filter_video' => 'ビデオ',
         'filter_audio' => 'オーディオ',

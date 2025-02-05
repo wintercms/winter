@@ -454,7 +454,7 @@ return [
         'add_folder' => 'เพิ่มโฟลเดอร์',
         'search' => 'ค้นหา',
         'display' => 'แสดงผล',
-        'filter_everything' => 'ทุกอย่าง',
+        'filter_all' => 'ทุกอย่าง',
         'filter_images' => 'รูปภาพ',
         'filter_video' => 'วิดีโอ',
         'filter_audio' => 'เสียง',

@@ -1,13 +1,15 @@
-<?php namespace Cms\Classes;
+<?php
 
+namespace Cms\Classes;
+
+use ApplicationException;
 use Cache;
 use Exception;
-use ApplicationException;
+use Winter\Storm\Halcyon\Datasource\Datasource;
+use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
+use Winter\Storm\Halcyon\Exception\DeleteFileException;
 use Winter\Storm\Halcyon\Model;
 use Winter\Storm\Halcyon\Processors\Processor;
-use Winter\Storm\Halcyon\Datasource\Datasource;
-use Winter\Storm\Halcyon\Exception\DeleteFileException;
-use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 
 /**
  * Datasource that loads from other data sources automatically
@@ -21,6 +23,11 @@ class AutoDatasource extends Datasource implements DatasourceInterface
      * @var array The available datasource instances
      */
     protected $datasources = [];
+
+    /**
+     * @var string The cache key to use for this datasource instance
+     */
+    protected $cacheKey = 'halcyon-datastore-auto';
 
     /**
      * @var array Local cache of paths available in the datasources
@@ -48,9 +55,13 @@ class AutoDatasource extends Datasource implements DatasourceInterface
      * @param array $datasources Array of datasources to utilize. Lower indexes = higher priority ['datasourceName' => $datasource]
      * @return void
      */
-    public function __construct(array $datasources)
+    public function __construct(array $datasources, ?string $cacheKey = null)
     {
         $this->datasources = $datasources;
+
+        if ($cacheKey) {
+            $this->cacheKey = $cacheKey;
+        }
 
         $this->activeDatasourceKey = array_keys($datasources)[0];
 
@@ -60,15 +71,51 @@ class AutoDatasource extends Datasource implements DatasourceInterface
     }
 
     /**
+     * Append a datasource to the end of the list of datasources
+     */
+    public function appendDatasource(string $key, DatasourceInterface $datasource): void
+    {
+        $this->datasources[$key] = $datasource;
+        $this->pathCache[] = Cache::rememberForever($datasource->getPathsCacheKey(), function () use ($datasource) {
+            return $datasource->getAvailablePaths();
+        });
+    }
+
+    /**
+     * Prepend a datasource to the beginning of the list of datasources
+     */
+    public function prependDatasource(string $key, DatasourceInterface $datasource): void
+    {
+        $this->datasources = array_prepend($this->datasources, $datasource, $key);
+        $this->pathCache = array_prepend($this->pathCache, Cache::rememberForever($datasource->getPathsCacheKey(), function () use ($datasource) {
+            return $datasource->getAvailablePaths();
+        }), $key);
+    }
+
+    /**
+     * Returns the in memory path cache map
+     */
+    public function getPathCache(): array
+    {
+        return $this->pathCache;
+    }
+
+    /**
      * Populate the local cache of paths available in each datasource
      *
      * @param boolean $refresh Default false, set to true to force the cache to be rebuilt
-     * @return void
      */
-    public function populateCache($refresh = false)
+    public function populateCache(bool $refresh = false): void
     {
         $pathCache = [];
         foreach ($this->datasources as $datasource) {
+            // Allow AutoDatasource instances to handle their own internal caching
+            if ($datasource instanceof AutoDatasource) {
+                $datasource->populateCache($refresh);
+                $pathCache[] = array_merge(...array_reverse($datasource->getPathCache()));
+                continue;
+            }
+
             // Remove any existing cache data
             if ($refresh && $this->allowCacheRefreshes) {
                 Cache::forget($datasource->getPathsCacheKey());
@@ -84,12 +131,8 @@ class AutoDatasource extends Datasource implements DatasourceInterface
 
     /**
      * Check to see if the specified datasource has the provided Halcyon Model
-     *
-     * @param string $source The string key of the datasource to check
-     * @param Model $model The Halcyon Model to check for
-     * @return boolean
      */
-    public function sourceHasModel(string $source, Model $model)
+    public function sourceHasModel(string $source, Model $model): bool
     {
         if (!$model->exists) {
             return false;
@@ -117,11 +160,8 @@ class AutoDatasource extends Datasource implements DatasourceInterface
 
     /**
      * Get the available paths for the specified datasource key
-     *
-     * @param string $source The string key of the datasource to check
-     * @return void
      */
-    public function getSourcePaths(string $source)
+    public function getSourcePaths(string $source): array
     {
         $result = [];
 
@@ -140,11 +180,9 @@ class AutoDatasource extends Datasource implements DatasourceInterface
     /**
      * Forces all operations in a provided closure to run within a selected datasource.
      *
-     * @param string $source
-     * @param \Closure $closure
-     * @return mixed
+     * @throws ApplicationException if the provided datasource key doesn't exist
      */
-    public function usingSource(string $source, \Closure $closure)
+    public function usingSource(string $source, \Closure $closure): mixed
     {
         if (!array_key_exists($source, $this->datasources)) {
             throw new ApplicationException('Invalid datasource specified.');
@@ -167,12 +205,8 @@ class AutoDatasource extends Datasource implements DatasourceInterface
 
     /**
      * Push the provided model to the specified datasource
-     *
-     * @param Model $model The Halcyon Model to push
-     * @param string $source The string key of the datasource to use
-     * @return void
      */
-    public function pushToSource(Model $model, string $source)
+    public function pushToSource(Model $model, string $source): void
     {
         $this->usingSource($source, function () use ($model) {
             $datasource = $this->getActiveDatasource();
@@ -191,12 +225,8 @@ class AutoDatasource extends Datasource implements DatasourceInterface
 
     /**
      * Remove the provided model from the specified datasource
-     *
-     * @param Model $model The Halcyon model to remove
-     * @param string $source The string key of the datasource to use
-     * @return void
      */
-    public function removeFromSource(Model $model, string $source)
+    public function removeFromSource(Model $model, string $source): void
     {
         $this->usingSource($source, function () use ($model) {
             $datasource = $this->getActiveDatasource();
@@ -212,11 +242,8 @@ class AutoDatasource extends Datasource implements DatasourceInterface
 
     /**
      * Get the appropriate datasource for the provided path
-     *
-     * @param string $path
-     * @return Datasource
      */
-    protected function getDatasourceForPath(string $path)
+    protected function getDatasourceForPath(string $path): DatasourceInterface
     {
         // Always return the active datasource when singleDatasourceMode is enabled
         if ($this->singleDatasourceMode) {
@@ -259,7 +286,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
      *                      ];
      * @return array $paths ["$dirName/path/1.md", "$dirName/path/2.md"]
      */
-    protected function getValidPaths(string $dirName, array $options = [])
+    protected function getValidPaths(string $dirName, array $options = []): array
     {
         // Initialize result set
         $paths = [];
@@ -301,23 +328,16 @@ class AutoDatasource extends Datasource implements DatasourceInterface
 
     /**
      * Helper to make file path.
-     *
-     * @param string $dirName
-     * @param string $fileName
-     * @param string $extension
-     * @return string
      */
-    protected function makeFilePath(string $dirName, string $fileName, string $extension)
+    protected function makeFilePath(string $dirName, string $fileName, string $extension): string
     {
-        return $dirName . '/' . $fileName . '.' . $extension;
+        return ltrim($dirName . '/' . $fileName . '.' . $extension, '/');
     }
 
     /**
      * Get the datasource for use with CRUD operations
-     *
-     * @return DatasourceInterface
      */
-    protected function getActiveDatasource()
+    protected function getActiveDatasource(): DatasourceInterface
     {
         return $this->datasources[$this->activeDatasourceKey];
     }
@@ -507,7 +527,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
      */
     public function getPathsCacheKey(): string
     {
-        return 'halcyon-datastore-auto';
+        return $this->cacheKey;
     }
 
     /**

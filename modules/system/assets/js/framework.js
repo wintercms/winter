@@ -140,7 +140,13 @@ if (window.jQuery.request !== undefined) {
 
             // Initialize the FormData object with the merged parent form data
             $.each(requestParentData, function (key) {
-                requestData.append(key, this)
+                if (Array.isArray(this)) {
+                    for (let i = 0; i < this.length; i++) {
+                        requestData.append(key, this[i])
+                    }
+                } else {
+                    requestData.append(key, this)
+                }
             })
 
             // Attach file data if the request element is a file input

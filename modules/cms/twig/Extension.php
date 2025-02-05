@@ -1,11 +1,12 @@
 <?php namespace Cms\Twig;
 
 use Block;
+use Cms\Classes\Controller;
 use Event;
+use System\Classes\Asset\Vite;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
-use Cms\Classes\Controller;
 
 /**
  * The CMS Twig extension class implements the basic CMS Twig functions and filters.
@@ -51,6 +52,7 @@ class Extension extends TwigExtension
             new TwigSimpleFunction('content', [$this, 'contentFunction'], $options),
             new TwigSimpleFunction('component', [$this, 'componentFunction'], $options),
             new TwigSimpleFunction('placeholder', [$this, 'placeholderFunction'], ['is_safe' => ['html']]),
+            new TwigSimpleFunction('vite', [$this, 'viteFunction'], $options),
         ];
     }
 
@@ -101,7 +103,7 @@ class Extension extends TwigExtension
     /**
      * Renders the requested partial with the provided parameters. Optionally throw an exception if the partial cannot be found
      */
-    public function partialFunction(string $name, array $parameters = [], bool $throwException = false): string
+    public function partialFunction(string $name, array $parameters = [], bool $throwException = false): string|bool
     {
         return $this->controller->renderPartial($name, $parameters, $throwException);
     }
@@ -109,9 +111,9 @@ class Extension extends TwigExtension
     /**
      * Renders the requested content file.
      */
-    public function contentFunction(string $name, array $parameters = []): string
+    public function contentFunction(string $name, array $parameters = [], bool $throwException = false): string|bool
     {
-        return $this->controller->renderContent($name, $parameters);
+        return $this->controller->renderContent($name, $parameters, $throwException);
     }
 
     /**
@@ -164,6 +166,14 @@ class Extension extends TwigExtension
     public function themeFilter($url): string
     {
         return $this->controller->themeUrl($url);
+    }
+
+    /**
+     * Generates Vite tags via Laravel's Vite Object.
+     */
+    public function viteFunction(array $entrypoints, string $package): \Illuminate\Support\HtmlString
+    {
+        return Vite::tags($entrypoints, $package);
     }
 
     /**

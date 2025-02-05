@@ -1,17 +1,16 @@
 <?php namespace System\Classes;
 
-use Str;
-use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
-use Twig\TwigFilter as TwigSimpleFilter;
-use Twig\TwigFunction as TwigSimpleFunction;
+use System\Twig\Extension as SystemTwigExtension;
+use System\Twig\Loader as SystemTwigLoader;
+use System\Twig\SecurityPolicy as TwigSecurityPolicy;
 use Twig\Environment as TwigEnvironment;
 use Twig\Extension\SandboxExtension;
 use Twig\Loader\LoaderInterface;
-use System\Twig\Loader as SystemTwigLoader;
-use System\Twig\Extension as SystemTwigExtension;
-use System\Twig\SecurityPolicy as TwigSecurityPolicy;
-
-use ApplicationException;
+use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
+use Twig\TwigFilter as TwigSimpleFilter;
+use Twig\TwigFunction as TwigSimpleFunction;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Str;
 
 /**
  * This class manages Twig functions, token parsers and filters.
@@ -255,7 +254,7 @@ class MarkupManager
             }
 
             if (!is_callable($callable)) {
-                throw new ApplicationException(sprintf('The markup function for %s is not callable.', $name));
+                throw new SystemException(sprintf('The markup function (%s) for %s is not callable.', json_encode($callable), $name));
             }
 
             $functions[] = new TwigSimpleFunction($name, $callable, $options);
@@ -304,7 +303,7 @@ class MarkupManager
             }
 
             if (!is_callable($callable)) {
-                throw new ApplicationException(sprintf('The markup filter for %s is not callable.', $name));
+                throw new SystemException(sprintf('The markup filter (%s) for %s is not callable.', json_encode($callable), $name));
             }
 
             $filters[] = new TwigSimpleFilter($name, $callable, $options);

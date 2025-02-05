@@ -162,7 +162,7 @@ class CombineAssets
         $this->registerAlias('framework.extras', '~/modules/system/assets/css/framework.extras.css');
         $this->registerAlias('framework.extras.css', '~/modules/system/assets/css/framework.extras.css');
 
-        $snowboardBase = (Config::get('develop.debugSnowboard', Config::get('app.debug', false)) === true)
+        $snowboardBase = (Config::get('develop.debugSnowboard', false) === true)
             ? 'snowboard.base.debug.js'
             : 'snowboard.base.js';
         $this->registerAlias('snowboard.base', '~/modules/system/assets/js/snowboard/build/' . $snowboardBase);
@@ -277,7 +277,7 @@ class CombineAssets
          */
         $response = Response::make();
         $response->header('Content-Type', $mime);
-        $response->header('Cache-Control', 'private, max-age=604800');
+        $response->header('Cache-Control', 'private, max-age=31536000');
         $response->setLastModified(new DateTime($lastModifiedTime));
         $response->setEtag($etag);
         $response->setPublic();

@@ -1,3 +1,5 @@
+import PluginBase from '../abstracts/PluginBase';
+
 /**
  * Data configuration provider.
  *
@@ -7,16 +9,16 @@
  * @copyright 2022 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class DataConfig extends Snowboard.PluginBase {
+export default class DataConfig extends PluginBase {
     /**
      * Constructor.
      *
-     * @param {Snowboard.PluginBase} instance
+     * @param {PluginBase} instance
      * @param {HTMLElement} element
      * @param {Object} localConfig
      */
     construct(instance, element, localConfig) {
-        if (instance instanceof Snowboard.PluginBase === false) {
+        if (instance instanceof PluginBase === false) {
             throw new Error('You must provide a Snowboard plugin to enable data configuration');
         }
         if (element instanceof HTMLElement === false) {

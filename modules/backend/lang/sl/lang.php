@@ -586,7 +586,7 @@ return [
         'add_folder'                 => 'Dodaj mapo',
         'search'                     => 'Iskanje',
         'display'                    => 'Prikaz',
-        'filter_everything'          => 'Vse',
+        'filter_all'          => 'Vse',
         'filter_images'              => 'Slike',
         'filter_video'               => 'Video',
         'filter_audio'               => 'Audio',

@@ -525,7 +525,7 @@ return [
         'add_folder' => 'Lisää kansio',
         'search' => 'Etsi',
         'display' => 'Näytä',
-        'filter_everything' => 'Kaikki',
+        'filter_all' => 'Kaikki',
         'filter_images' => 'Kuvat',
         'filter_video' => 'Videot',
         'filter_audio' => 'Audio',

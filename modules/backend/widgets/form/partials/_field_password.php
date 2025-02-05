@@ -9,7 +9,7 @@
         value=""
         placeholder="<?= e(trans($field->placeholder)) ?>"
         class="form-control"
-        autocomplete="off"
+        <?= $field->hasAttribute('autocomplete') ? '' : 'autocomplete="new-password"' ?>
         <?= $field->hasAttribute('maxlength') ? '' : 'maxlength="255"' ?>
         <?= $field->getAttributes() ?>
     />

@@ -1,6 +1,8 @@
-<?php namespace {{ plugin_namespace }}\Models;
+<?php
 
-use Model;
+namespace {{ plugin_namespace }}\Models;
+
+use Winter\Storm\Database\Model;
 
 /**
  * {{ name }} Model

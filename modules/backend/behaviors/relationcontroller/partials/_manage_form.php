@@ -25,26 +25,7 @@
             </div>
 
             <div class="modal-footer">
-                <?php if ($this->readOnly): ?>
-                    <button
-                        type="button"
-                        class="btn btn-default"
-                        data-dismiss="popup">
-                        <?= e(trans('backend::lang.relation.close')) ?>
-                    </button>
-                <?php else: ?>
-                    <button
-                        type="submit"
-                        class="btn btn-primary">
-                        <?= e(trans('backend::lang.relation.update')) ?>
-                    </button>
-                    <button
-                        type="button"
-                        class="btn btn-default"
-                        data-dismiss="popup">
-                        <?= e(trans('backend::lang.relation.cancel')) ?>
-                    </button>
-                <?php endif ?>
+                <?= $this->relationMakePartial('manage_form_footer_update') ?>
             </div>
 
         <?= Form::close() ?>
@@ -74,17 +55,7 @@
 
             </div>
             <div class="modal-footer">
-                <button
-                    type="submit"
-                    class="btn btn-primary">
-                    <?= e(trans('backend::lang.relation.create')) ?>
-                </button>
-                <button
-                    type="button"
-                    class="btn btn-default"
-                    data-dismiss="popup">
-                    <?= e(trans('backend::lang.relation.cancel')) ?>
-                </button>
+                <?= $this->relationMakePartial('manage_form_footer_create') ?>
             </div>
         <?= Form::close() ?>
 

@@ -19,7 +19,9 @@ class CreateFormWidget extends BaseScaffoldCommand
     protected $signature = 'create:formwidget
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {widget : The name of the form widget to generate. <info>(eg: PostList)</info>}
-        {--force : Overwrite existing files with generated files.}';
+        {--force : Overwrite existing files with generated files.}
+        {--uninspiring : Disable inspirational quotes}
+    ';
 
     /**
      * The console command description.

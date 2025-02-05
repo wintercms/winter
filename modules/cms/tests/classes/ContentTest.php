@@ -15,7 +15,7 @@ class ContentTest extends TestCase
         $content = Content::load($theme, 'markdown-content.md');
 
         $this->assertEquals('Be brave, be **bold**, live *italic*', $content->markup);
-        $this->assertEquals('<p>Be brave, be <strong>bold</strong>, live <em>italic</em></p>', $content->parsedMarkup);
+        $this->assertEquals("<p>Be brave, be <strong>bold</strong>, live <em>italic</em></p>\n", $content->parsedMarkup);
     }
 
     public function testTextContent()

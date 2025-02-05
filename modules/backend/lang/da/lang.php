@@ -489,7 +489,7 @@ return [
         'add_folder' => 'Tilføj mappe',
         'search' => 'Søg',
         'display' => 'Vis',
-        'filter_everything' => 'Alt',
+        'filter_all' => 'Alt',
         'filter_images' => 'Billeder',
         'filter_video' => 'Video',
         'filter_audio' => 'Lyd',

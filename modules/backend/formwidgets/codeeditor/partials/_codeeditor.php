@@ -24,6 +24,7 @@
         data-read-only="<?= $readOnly ? 'true' : 'false' ?>"
         data-language="<?= $language ?>"
         data-margin="<?= $margin ?>"
+        data-scroll-past-end="<?= $scrollPastEnd ?>"
         data-vendor-path="<?= Url::asset('/modules/backend/formwidgets/codeeditor/assets/vendor/ace') ?>"
         <?= $this->formField->getAttributes() ?>>
         <div class="editor-toolbar">

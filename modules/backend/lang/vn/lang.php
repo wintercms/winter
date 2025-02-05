@@ -526,7 +526,7 @@ return [
         'add_folder' => 'Thêm folder',
         'search' => 'Tìm kiếm',
         'display' => 'Hiển thị',
-        'filter_everything' => 'Mọi thứ',
+        'filter_all' => 'Mọi thứ',
         'filter_images' => 'Images',
         'filter_video' => 'Video',
         'filter_audio' => 'Audio',

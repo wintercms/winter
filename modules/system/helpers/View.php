@@ -37,4 +37,14 @@ class View
 
         return static::$globalVarCache = $vars;
     }
+
+    /**
+     * Clears the static cache for global variables.
+     *
+     * @return void
+     */
+    public static function clearVarCache()
+    {
+        static::$globalVarCache = null;
+    }
 }

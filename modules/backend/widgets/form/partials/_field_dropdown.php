@@ -2,6 +2,7 @@
 $fieldOptions = $field->options();
 $useSearch = $field->getConfig('showSearch', true);
 $emptyOption = $field->getConfig('emptyOption', $field->placeholder);
+$allowCustom = $field->getConfig('allowCustom', false);
 ?>
 
 <!-- Dropdown -->
@@ -9,17 +10,12 @@ $emptyOption = $field->getConfig('emptyOption', $field->placeholder);
     <div class="form-control" <?= $field->readOnly ? 'disabled="disabled"' : ''; ?>>
         <?= (isset($fieldOptions[$field->value])) ? e(trans($fieldOptions[$field->value])) : '' ?>
     </div>
-    <?php if ($field->readOnly): ?>
-        <input
-             type="hidden"
-             name="<?= $field->getName() ?>"
-             value="<?= $field->value ?>">
-    <?php endif; ?>
+    <input type="hidden" name="<?= $field->getName() ?>" value="<?= $field->value ?>">
 <?php else: ?>
     <select
         id="<?= $field->getId() ?>"
         name="<?= $field->getName() ?>"
-        class="form-control custom-select <?= $useSearch ? '' : 'select-no-search' ?>"
+        class="form-control custom-select <?= $useSearch ? '' : 'select-no-search' ?> <?= $allowCustom ? 'select-modifiable' : '' ?>"
         <?= $field->getAttributes() ?>
         <?= $field->placeholder ? 'data-placeholder="'.e(trans($field->placeholder)).'"' : '' ?>
         >

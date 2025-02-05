@@ -1,33 +1,37 @@
 <?php namespace System;
 
-use Db;
-use App;
-use View;
-use Event;
-use Config;
 use Backend;
-use Request;
-use Validator;
-use BackendMenu;
-use BackendAuth;
-use SystemException;
+use Backend\Classes\WidgetManager;
+use Backend\Facades\BackendAuth;
+use Backend\Facades\BackendMenu;
 use Backend\Models\UserRole;
-use System\Classes\MailManager;
+use DateInterval;
+use Illuminate\Foundation\Vite as LaravelVite;
+use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
+use System\Classes\CombineAssets;
 use System\Classes\ErrorHandler;
+use System\Classes\MailManager;
 use System\Classes\MarkupManager;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
-use System\Twig\Engine as TwigEngine;
+use System\Helpers\DateTime;
 use System\Models\EventLog;
 use System\Models\MailSetting;
-use System\Classes\CombineAssets;
-use Backend\Classes\WidgetManager;
-use Winter\Storm\Support\ModuleServiceProvider;
+use System\Twig\Engine as TwigEngine;
+use Twig\Environment;
+use Twig\Extension\CoreExtension;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Router\Helper as RouterHelper;
-use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Schema;
-use System\Classes\MixAssets;
+use Winter\Storm\Support\ClassLoader;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Markdown;
+use Winter\Storm\Support\Facades\Validator;
+use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
 {
@@ -38,6 +42,16 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function register()
     {
+        parent::register();
+
+        $modules = Config::get('cms.loadModules', []);
+        $classLoader = $this->app->make(ClassLoader::class);
+        foreach ($modules as $module) {
+            if (strtolower(trim($module)) != 'system') {
+                $classLoader->autoloadPackage($module . '\\', "modules/" . strtolower($module) . '/');
+            }
+        }
+
         $this->registerSingletons();
         $this->registerPrivilegedActions();
 
@@ -59,19 +73,20 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register other module providers
          */
-        foreach (Config::get('cms.loadModules', []) as $module) {
+        foreach ($modules as $module) {
             if (strtolower(trim($module)) != 'system') {
-                App::register('\\' . $module . '\ServiceProvider');
+                $this->app->register('\\' . $module . '\ServiceProvider');
             }
         }
+
+        $this->registerBackendPermissions();
 
         /*
          * Backend specific
          */
-        if (App::runningInBackend()) {
+        if ($this->app->runningInBackend()) {
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
-            $this->registerBackendPermissions();
             $this->registerBackendSettings();
         }
     }
@@ -113,21 +128,24 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerSingletons()
     {
-        App::singleton('cms.helper', function () {
+        $this->app->singleton('cms.helper', function () {
             return new \Cms\Helpers\Cms;
         });
 
-        App::singleton('backend.helper', function () {
+        $this->app->singleton('backend.helper', function () {
             return new \Backend\Helpers\Backend;
         });
 
-        App::singleton('backend.menu', function () {
+        $this->app->singleton('backend.menu', function () {
             return \Backend\Classes\NavigationManager::instance();
         });
 
-        App::singleton('backend.auth', function () {
+        $this->app->singleton('backend.auth', function () {
             return \Backend\Classes\AuthManager::instance();
         });
+
+        // Register the Laravel Vite singleton
+        $this->app->singleton(LaravelVite::class, \System\Classes\Asset\Vite::class);
     }
 
     /**
@@ -138,9 +156,7 @@ class ServiceProvider extends ModuleServiceProvider
         $requests = ['/combine/', '@/system/updates', '@/system/install', '@/backend/auth'];
         $commands = ['migrate', 'winter:up', 'winter:update', 'winter:env', 'winter:version', 'winter:manifest'];
 
-        /*
-         * Requests
-         */
+        // Requests
         $path = RouterHelper::normalizeUrl(Request::path());
         $backendUri = RouterHelper::normalizeUrl(Config::get('cms.backendUri', 'backend'));
         foreach ($requests as $request) {
@@ -153,10 +169,20 @@ class ServiceProvider extends ModuleServiceProvider
             }
         }
 
-        /*
-         * CLI
-         */
-        if (App::runningInConsole() && count(array_intersect($commands, Request::server('argv', []))) > 0) {
+        // CLI
+        if ($this->app->runningInConsole()
+            && (
+                // Protected command
+                count(array_intersect($commands, Request::server('argv', []))) > 0
+
+                // Database configured but not initialized yet
+                // @see octobercms/october#3208
+                || (
+                    $this->app->hasDatabase()
+                    && !Schema::hasTable(UpdateManager::instance()->getMigrationTableName())
+                )
+            )
+        ) {
             PluginManager::$noInit = true;
         }
     }
@@ -181,8 +207,24 @@ class ServiceProvider extends ModuleServiceProvider
                 'route'          => 'route',
                 'secure_url'     => 'secure_url',
                 'secure_asset'   => 'secure_asset',
+                'date'           => [function (Environment $env, $value = null, $timezone = null) {
+                    if (!($value instanceof DateInterval)) {
+                        $value = DateTime::makeCarbon($value)->toDateTime();
+                    }
+
+                    if (is_null($value) || $value === 'now') {
+                        if (is_null($value)) {
+                            $value = 'now';
+                        }
+
+                        return DateTime::makeCarbon(new \DateTime($value, false !== $timezone ? $timezone : $env->getExtension(CoreExtension::class)->getTimezone()));
+                    }
+
+                    return twig_date_converter($env, $value, $timezone);
+                }, 'options' => ['needs_environment' => true]],
 
                 // Classes
+                'array_*'        => ['Arr', '*'],
                 'str_*'          => ['Str', '*'],
                 'url_*'          => ['Url', '*'],
                 'html_*'         => ['Html', '*'],
@@ -201,9 +243,22 @@ class ServiceProvider extends ModuleServiceProvider
                 'studly'         => ['Str', 'studly'],
                 'trans'          => ['Lang', 'get'],
                 'transchoice'    => ['Lang', 'choice'],
-                'md'             => ['Markdown', 'parse'],
-                'md_safe'        => ['Markdown', 'parseSafe'],
-                'md_line'        => ['Markdown', 'parseLine'],
+                'date'           => [function (Environment $env, $value, $format = null, $timezone = null) {
+                    if (!($value instanceof DateInterval)) {
+                        $value = DateTime::makeCarbon($value)->toDateTime();
+                    }
+
+                    return twig_date_format_filter($env, $value, $format, $timezone);
+                }, 'options' => ['needs_environment' => true]],
+                'md'             => function ($value) {
+                    return (is_string($value) && $value !== '') ? Markdown::parse($value) : '';
+                },
+                'md_safe'        => function ($value) {
+                    return (is_string($value) && $value !== '') ? Markdown::parseSafe($value) : '';
+                },
+                'md_line'        => function ($value) {
+                    return (is_string($value) && $value !== '') ? Markdown::parseLine($value) : '';
+                },
                 'time_since'     => ['System\Helpers\DateTime', 'timeSince'],
                 'time_tense'     => ['System\Helpers\DateTime', 'timeTense'],
             ]);
@@ -219,11 +274,6 @@ class ServiceProvider extends ModuleServiceProvider
          * Allow plugins to use the scheduler
          */
         Event::listen('console.schedule', function ($schedule) {
-            // Fix initial system migration with plugins that use settings for scheduling - see #3208
-            if (App::hasDatabase() && !Schema::hasTable(UpdateManager::instance()->getMigrationTableName())) {
-                return;
-            }
-
             $plugins = PluginManager::instance()->getPlugins();
             foreach ($plugins as $plugin) {
                 if (method_exists($plugin, 'registerSchedule')) {
@@ -246,8 +296,10 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('create.job', \System\Console\CreateJob::class);
         $this->registerConsoleCommand('create.migration', \System\Console\CreateMigration::class);
         $this->registerConsoleCommand('create.model', \System\Console\CreateModel::class);
+        $this->registerConsoleCommand('create.factory', \System\Console\CreateFactory::class);
         $this->registerConsoleCommand('create.plugin', \System\Console\CreatePlugin::class);
         $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
+        $this->registerConsoleCommand('create.test', \System\Console\CreateTest::class);
 
         $this->registerConsoleCommand('winter.up', \System\Console\WinterUp::class);
         $this->registerConsoleCommand('winter.down', \System\Console\WinterDown::class);
@@ -269,12 +321,22 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('plugin.rollback', \System\Console\PluginRollback::class);
         $this->registerConsoleCommand('plugin.list', \System\Console\PluginList::class);
 
-        $this->registerConsoleCommand('mix.install', \System\Console\MixInstall::class);
-        $this->registerConsoleCommand('mix.update', \System\Console\MixUpdate::class);
-        $this->registerConsoleCommand('mix.list', \System\Console\MixList::class);
-        $this->registerConsoleCommand('mix.compile', \System\Console\MixCompile::class);
-        $this->registerConsoleCommand('mix.watch', \System\Console\MixWatch::class);
-        $this->registerConsoleCommand('mix.run', \System\Console\MixRun::class);
+        $this->registerConsoleCommand('mix.compile', Console\Asset\Mix\MixCompile::class);
+        $this->registerConsoleCommand('mix.config', Console\Asset\Mix\MixCreate::class);
+        $this->registerConsoleCommand('mix.install', Console\Asset\Mix\MixInstall::class);
+        $this->registerConsoleCommand('mix.list', Console\Asset\Mix\MixList::class);
+        $this->registerConsoleCommand('mix.watch', Console\Asset\Mix\MixWatch::class);
+
+        $this->registerConsoleCommand('vite.compile', Console\Asset\Vite\ViteCompile::class);
+        $this->registerConsoleCommand('vite.config', Console\Asset\Vite\ViteCreate::class);
+        $this->registerConsoleCommand('vite.install', Console\Asset\Vite\ViteInstall::class);
+        $this->registerConsoleCommand('vite.list', Console\Asset\Vite\ViteList::class);
+        $this->registerConsoleCommand('vite.watch', Console\Asset\Vite\ViteWatch::class);
+
+        $this->registerConsoleCommand('npm.run', Console\Asset\Npm\NpmRun::class);
+        $this->registerConsoleCommand('npm.install', Console\Asset\Npm\NpmInstall::class);
+        $this->registerConsoleCommand('npm.update', Console\Asset\Npm\NpmUpdate::class);
+        $this->registerConsoleCommand('npm.version', Console\Asset\Npm\NpmVersion::class);
     }
 
     /*
@@ -295,7 +357,8 @@ class ServiceProvider extends ModuleServiceProvider
     {
         Event::listen(\Illuminate\Log\Events\MessageLogged::class, function ($event) {
             if (EventLog::useLogging()) {
-                EventLog::add($event->message, $event->level);
+                $details = $event->context ?? null;
+                EventLog::add($event->message, $event->level, $details);
             }
         });
     }
@@ -306,20 +369,20 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerTwigParser()
     {
         // Register System Twig environment
-        App::singleton('twig.environment', function ($app) {
+        $this->app->singleton('twig.environment', function ($app) {
             return MarkupManager::makeBaseTwigEnvironment();
         });
 
         // Register Mailer Twig environment
-        App::singleton('twig.environment.mailer', function ($app) {
+        $this->app->singleton('twig.environment.mailer', function ($app) {
             $twig = MarkupManager::makeBaseTwigEnvironment();
             $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
             return $twig;
         });
 
         // Register .htm extension for Twig views
-        App::make('view')->addExtension('htm', 'twig', function () {
-            return new TwigEngine(App::make('twig.environment'));
+        $this->app->make('view')->addExtension('htm', 'twig', function () {
+            return new TwigEngine($this->app->make('twig.environment'));
         });
     }
 
@@ -552,14 +615,9 @@ class ServiceProvider extends ModuleServiceProvider
          * Register asset bundles
          */
         CombineAssets::registerCallback(function ($combiner) {
-            $combiner->registerBundle('~/modules/system/assets/less/styles.less');
-            $combiner->registerBundle('~/modules/system/assets/ui/storm.less');
             $combiner->registerBundle('~/modules/system/assets/ui/storm.js');
-            $combiner->registerBundle('~/modules/system/assets/ui/icons.less');
             $combiner->registerBundle('~/modules/system/assets/js/framework.js');
             $combiner->registerBundle('~/modules/system/assets/js/framework.combined.js');
-            $combiner->registerBundle('~/modules/system/assets/less/framework.extras.less');
-            $combiner->registerBundle('~/modules/system/assets/less/snowboard.extras.less');
         });
     }
 

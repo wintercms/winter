@@ -1,3 +1,5 @@
+import Singleton from '../abstracts/Singleton';
+
 /**
  * Asset Loader.
  *
@@ -17,7 +19,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class AssetLoader extends window.Snowboard.Singleton {
+export default class AssetLoader extends Singleton {
     /**
      * Event listeners.
      *
@@ -27,6 +29,17 @@ export default class AssetLoader extends window.Snowboard.Singleton {
         return {
             ajaxLoadAssets: 'load',
         };
+    }
+
+    /**
+     * Dependencies.
+     *
+     * @returns {Array}
+     */
+    dependencies() {
+        return [
+            'url',
+        ];
     }
 
     /**
@@ -93,6 +106,9 @@ export default class AssetLoader extends window.Snowboard.Singleton {
      */
     loadScript(script) {
         return new Promise((resolve, reject) => {
+            // Resolve script URL
+            script = this.snowboard.url().asset(script);
+
             // Check that script is not already loaded
             const loaded = document.querySelector(`script[src="${script}"]`);
             if (loaded) {
@@ -121,11 +137,14 @@ export default class AssetLoader extends window.Snowboard.Singleton {
      *
      * The stylesheet will be appended before the closing `</head>` tag.
      *
-     * @param {String} script
+     * @param {String} style
      * @returns {Promise}
      */
     loadStyle(style) {
         return new Promise((resolve, reject) => {
+            // Resolve style URL
+            style = this.snowboard.url().asset(style);
+
             // Check that stylesheet is not already loaded
             const loaded = document.querySelector(`link[rel="stylesheet"][href="${style}"]`);
             if (loaded) {
@@ -159,6 +178,9 @@ export default class AssetLoader extends window.Snowboard.Singleton {
      */
     loadImage(image) {
         return new Promise((resolve, reject) => {
+            // Resolve script URL
+            image = this.snowboard.url().asset(image);
+
             const img = new Image();
             img.addEventListener('load', () => {
                 this.snowboard.globalEvent('assetLoader.loaded', 'image', image, img);

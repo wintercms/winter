@@ -95,7 +95,6 @@ return [
         'smtp_username' => 'Nama pengguna',
         'smtp_password' => 'Sandi lewat',
         'smtp_port' => 'Porta SMTP',
-        'smtp_ssl' => 'Koneksi SSL diperlukan',
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Jalur Sendmail',
         'sendmail_path_comment' => 'Silakan tentukan jalur ke program sendmail.',

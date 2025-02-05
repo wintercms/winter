@@ -587,7 +587,7 @@ return [
         'add_folder' => 'Map toevoegen',
         'search' => 'Zoeken',
         'display' => 'Weergeven',
-        'filter_everything' => 'Alles',
+        'filter_all' => 'Alles',
         'filter_images' => 'Afbeeldingen',
         'filter_video' => 'Video\'s',
         'filter_audio' => 'Audio',

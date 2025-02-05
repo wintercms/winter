@@ -12,6 +12,7 @@
         <?php endif ?>
     "
     data-control="mediafinder"
+    data-mediafinder-mode="image"
     data-thumbnail-width="<?= $imageWidth ?: '0' ?>"
     data-thumbnail-height="<?= $imageHeight ?: '0' ?>"
     <?= $field->getAttributes() ?>

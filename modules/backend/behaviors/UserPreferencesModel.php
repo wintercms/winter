@@ -51,7 +51,7 @@ class UserPreferencesModel extends SettingsModel
     /**
      * Checks if the model has been set up previously, intended as a static method
      */
-    public function isConfigured()
+    public function isConfigured(): bool
     {
         return $this->getSettingsRecord() !== null;
     }
