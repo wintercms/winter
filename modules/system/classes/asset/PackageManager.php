@@ -281,19 +281,19 @@ class PackageManager
      * file for the compilable configuration
      *
      * @param string $name The name of the package being registered
-     * @param string $relativePath The path relative to the project root to the compilable JS configuration file. If there is a related package.json file
+     * @param string $path The path to the compilable JS configuration file (it must be inside of the base_path()). If there is a related package.json file
      *                     then it is required to be present in the same directory as the config file
      * @param string $type The type of compilable
      * @throws SystemException
      */
-    public function registerPackage(string $name, string $relativePath, string $type = 'mix'): void
+    public function registerPackage(string $name, string $path, string $type = 'mix'): void
     {
-        // Symbolize the relativePath
-        $relativePath = File::symbolizePath($relativePath);
+        // Symbolize the path
+        $path = File::symbolizePath($path);
 
         // Normalize the arguments
         $name = strtolower($name);
-        $resolvedPath = PathResolver::resolve($relativePath);
+        $resolvedPath = PathResolver::resolve($path);
         $pinfo = pathinfo($resolvedPath);
         $relativePath = Str::after($pinfo['dirname'], base_path() . DIRECTORY_SEPARATOR);
         $configFile = $pinfo['basename'];
