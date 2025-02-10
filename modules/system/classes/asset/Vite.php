@@ -24,6 +24,17 @@ class Vite extends LaravelVite
             throw new \InvalidArgumentException('A package must be passed');
         }
 
+        $compilableAssetPackage = static::resolvePackage($package);
+
+        $this->useHotFile(base_path($compilableAssetPackage['path'] . '/assets/dist/hot'));
+        return parent::__invoke($entrypoints, $compilableAssetPackage['path'] . '/assets/dist');
+    }
+
+    /**
+     * @throws SystemException if the package could not be found
+     */
+    protected static function resolvePackage(string $package): array
+    {
         // Normalise the package name
         $package = strtolower($package);
 
@@ -31,8 +42,7 @@ class Vite extends LaravelVite
             throw new SystemException('Unable to resolve package: ' . $package);
         }
 
-        $this->useHotFile(base_path($compilableAssetPackage['path'] . '/assets/dist/hot'));
-        return parent::__invoke($entrypoints, $compilableAssetPackage['path'] . '/assets/dist');
+        return $compilableAssetPackage;
     }
 
     /**
@@ -46,5 +56,21 @@ class Vite extends LaravelVite
     public static function tags(array|string $entrypoints, string $package): HtmlString
     {
         return App::make(\Illuminate\Foundation\Vite::class)($entrypoints, $package);
+    }
+
+    /**
+     * Helper method to generate Vite React Refresh tag.
+     *
+     * @param string $package The package name of the plugin or theme
+     *
+     * @throws SystemException
+     */
+    public static function reactRefreshTag(string $package): ?HtmlString
+    {
+        $compilableAssetPackage = static::resolvePackage($package);
+        return App::make(\Illuminate\Foundation\Vite::class)
+            ->useHotFile(base_path($compilableAssetPackage['path'] . '/assets/dist/hot'))
+            ->useBuildDirectory($compilableAssetPackage['path'] . '/assets/dist')
+            ->reactRefresh();
     }
 }

@@ -215,6 +215,7 @@ abstract class AssetCreate extends Command
             return 0;
         }
 
+        File::ensureDirectoryExists(pathinfo($path, PATHINFO_DIRNAME));
         $result = File::put($path, $content);
 
         if (!$this->option('silent')) {
