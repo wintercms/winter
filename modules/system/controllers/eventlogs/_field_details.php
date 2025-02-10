@@ -169,11 +169,13 @@ function getOrderedExceptionList(array $value): array
                             <span class="item"><?= $exception['file'] ?></span>
                             at line <span class="item"><?= $exception['line'] ?></span>
                         </div>
-                        <div class="snippet-preview-container">
-                            <div class="snippet-preview">
-                                <?= makeSnippet($exception['snippet'], $exception['line']) ?>
+                        <?php if ($exception['snippet']): ?>
+                            <div class="snippet-preview-container">
+                                <div class="snippet-preview">
+                                    <?= makeSnippet($exception['snippet'], $exception['line']) ?>
+                                </div>
                             </div>
-                        </div>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -193,11 +195,13 @@ function getOrderedExceptionList(array $value): array
                                         <span class="app-icon">In App</span>
                                     <?php endif; ?>
                                 </div>
-                                <div class="snippet-preview-container <?= $frame['in_app'] ? 'unfolded' : 'folded' ?>">
-                                    <div class="snippet-preview">
-                                        <?= makeSnippet($frame['snippet'], $frame['line']) ?>
+                                <?php if ($frame['snippet']): ?>
+                                    <div class="snippet-preview-container <?= $frame['in_app'] ? 'unfolded' : 'folded' ?>">
+                                        <div class="snippet-preview">
+                                            <?= makeSnippet($frame['snippet'], $frame['line']) ?>
+                                        </div>
                                     </div>
-                                </div>
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -214,7 +218,7 @@ function getOrderedExceptionList(array $value): array
     (() => {
         document.querySelectorAll('.trace-frame').forEach((frame) => {
             frame.querySelector('.label').addEventListener('click', () => {
-                frame.querySelector('div.snippet-preview-container').classList.toggle('folded');
+                frame.querySelector('div.snippet-preview-container')?.classList.toggle('folded');
             });
         });
         window.addEventListener('load', () => {
