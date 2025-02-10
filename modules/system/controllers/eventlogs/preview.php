@@ -26,6 +26,12 @@
 
     <div class="layout-item stretch layout-column">
         <?= $this->formRenderPreview() ?>
+
+        <p>
+            <a href="<?= Backend::url('system/eventlogs') ?>" class="btn btn-default wn-icon-chevron-left">
+                <?= e(trans('system::lang.event_log.return_link')) ?>
+            </a>
+        </p>
     </div>
 
 <?php else: ?>
@@ -33,9 +39,3 @@
     <p class="flash-message static error"><?= e(trans($this->fatalError)) ?></p>
 
 <?php endif ?>
-
-<p>
-    <a href="<?= Backend::url('system/eventlogs') ?>" class="btn btn-default wn-icon-chevron-left">
-        <?= e(trans('system::lang.event_log.return_link')) ?>
-    </a>
-</p>
