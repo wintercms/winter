@@ -3,6 +3,7 @@
 namespace System\Classes\Asset;
 
 use Cms\Classes\Theme;
+use InvalidArgumentException;
 use System\Classes\PluginManager;
 use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Filesystem\PathResolver;
@@ -280,7 +281,7 @@ class PackageManager
      * file for the compilable configuration
      *
      * @param string $name The name of the package being registered
-     * @param string $path The path to the compilable JS configuration file. If there is a related package.json file
+     * @param string $path The path to the compilable JS configuration file (it must be inside of the base_path()). If there is a related package.json file
      *                     then it is required to be present in the same directory as the config file
      * @param string $type The type of compilable
      * @throws SystemException
@@ -294,7 +295,7 @@ class PackageManager
         $name = strtolower($name);
         $resolvedPath = PathResolver::resolve($path);
         $pinfo = pathinfo($resolvedPath);
-        $path = Str::after($pinfo['dirname'], base_path() . DIRECTORY_SEPARATOR);
+        $relativePath = Str::after($pinfo['dirname'], base_path() . DIRECTORY_SEPARATOR);
         $configFile = $pinfo['basename'];
 
         // Require $configFile to be a JS file
@@ -307,16 +308,16 @@ class PackageManager
         }
 
         // Check that the package path exists
-        if (!File::exists(base_path($path))) {
-            throw new SystemException(sprintf(
+        if (!File::exists(base_path($relativePath))) {
+            throw new InvalidArgumentException(sprintf(
                 'Cannot register "%s" as a compilable package; the "%s" path does not exist.',
                 $name,
-                $path
+                base_path($relativePath)
             ));
         }
 
-        $package = $path . '/package.json';
-        $config = $path . DIRECTORY_SEPARATOR . $configFile;
+        $package = $relativePath . '/package.json';
+        $config = $relativePath . DIRECTORY_SEPARATOR . $configFile;
 
         if (!File::exists(base_path($config))) {
             throw new SystemException(sprintf(
@@ -349,7 +350,7 @@ class PackageManager
 
         // Register the package
         $this->packages[$type][$name] = [
-            'path' => $path,
+            'path' => $relativePath,
             'package' => $package,
             'config' => $config
         ];
