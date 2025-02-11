@@ -14,7 +14,11 @@ function phpSyntaxHighlight(string $str): string
     $regexes = [
         'control' => '/\b(for|foreach|while|class |extends|yield from|yield|echo|fn|implements|try|catch|finally|throw|new|instanceof|function|return|unset|static|public|protected|private|count|global|if|else|else if|intval|int|array)\b/',
         'bool' => '/(\bnull\b|\btrue\b|\bfalse\b)/',
-        'string' => '/(&#039;[\w\\\\\/]*&#039;|&quot;[\w\\\\\/]*&quot;)/',
+        'string' => [
+            'pattern' => '/(\066[^\066]*\066|\065[^\065]*\065)/',
+            'before' => fn ($s) => str_replace('&#039;', "\066", str_replace('&quot;', "\065", $s)),
+            'after' => fn ($s) => str_replace("\066", '&#039;', str_replace("\065", '&quot;', $s)),
+        ],
         'number' => [
             'pattern' => '/(=\(\s)?(\d+)(?=(\s|;|,|\)|=))/',
             'replace' => '$2',
@@ -186,11 +190,14 @@ function getOrderedExceptionList(array $value): array
         font-style: italic;
     }
     .trace-frame .label  .app-icon{
-        background: #a4e9ff;
+        background: #73b2d0;
+        color: #e9f3fa;
         border-radius: 6px;
+        font-size: 0.8em;
         padding: 3px;
+        font-weight: bold;
         float: right;
-        margin-top: -5px;
+        margin-top: -2px;
     }
     .trace-frame .folded {
         display: none;
