@@ -3,24 +3,57 @@ if (!isset($value['logVersion']) || $value['logVersion'] !== 2) {
     return;
 }
 
-function phpHighlight(string $str): string
+/**
+ * Highlights a line of php code with php syntax highlighting
+ *
+ * @param string $str
+ * @return string
+ */
+function phpSyntaxHighlight(string $str): string
 {
-    $transform = [
-        'control' => '/\b(for|foreach|while|class|extends|implements|try|catch|finally|function|return|unset|static|public|protected|private|count|global|if|else|else if|intval|int|array)\b/',
+    $regexes = [
+        'control' => '/\b(for|foreach|while|class |extends|yield from|yield|echo|fn|implements|try|catch|finally|throw|new|instanceof|function|return|unset|static|public|protected|private|count|global|if|else|else if|intval|int|array)\b/',
         'bool' => '/(\bnull\b|\btrue\b|\bfalse\b)/',
-        'string' => '/(&#039;\w*&#039;)/',
+        'string' => '/(&#039;[\w\\\\\/]*&#039;|&quot;[\w\\\\\/]*&quot;)/',
+        'number' => [
+            'pattern' => '/(=\(\s)?(\d+)(?=(\s|;|,|\)|=))/',
+            'replace' => '$2',
+            'before' => fn ($s) => str_replace('&#039;', '\'', $s),
+            'after' => fn ($s) => str_replace('\'', '&#039;', $s),
+        ],
         'bracket' => '/(\(|\)|\[|\]|\{|\})/',
         'variable' => '/(\$[a-z]\w*)/',
-        'operator' => '/( \! | \!\= | \!== | = | == | === | > | >= | < | <= | and | or )/',
     ];
 
-    foreach ($transform as $label => $regex) {
-        $str = preg_replace($regex, '<span class="' . $label . '">$1</span>', $str);
+    if (preg_match('/(^\s*?\*|^\s*?\*\/|^\s*?\/\*|^\s*?\/\/|^\s*?#)/', $str)) {
+        return sprintf('<span class="comment">%s</span>', $str);
+    }
+
+    foreach ($regexes as $label => $regex) {
+        if (is_string($regex)) {
+            $str = preg_replace($regex, '<span class="' . $label . '">$1</span>', $str);
+            continue;
+        }
+
+        $str = preg_replace(
+            $regex['pattern'],
+            sprintf('<span class="%s">%s</span>', $label, $regex['replace'] ?? '$1'),
+            isset($regex['before']) ? $regex['before']($str) : $str
+        );
+
+        $str = isset($regex['after']) ? $regex['after']($str) : $str;
     }
 
     return $str;
 }
 
+/**
+ * Converts an array of lines into a html snippet of code
+ *
+ * @param array $snippet
+ * @param int|null $highlight
+ * @return string
+ */
 function makeSnippet(array $snippet, ?int $highlight = null): string
 {
     return implode(
@@ -28,12 +61,11 @@ function makeSnippet(array $snippet, ?int $highlight = null): string
         array_reduce(
             array_keys($snippet),
             function (array $carry, $key) use ($snippet, $highlight) {
-                $line = $key + 1;
                 $carry[] = sprintf(
                     '<div class="preview-line%s"><span class="line-number">%s</span>: %s</div>',
-                    ($line === $highlight ? ' highlight' : ''),
-                    $line,
-                    phpHighlight(e($snippet[$key], true))
+                    ($key + 1 === $highlight ? ' highlight' : ''),
+                    $key + 1,
+                    phpSyntaxHighlight(e($snippet[$key], true))
                 );
                 return $carry;
             },
@@ -42,6 +74,12 @@ function makeSnippet(array $snippet, ?int $highlight = null): string
     );
 }
 
+/**
+ * Gets all exceptions in the stack and returns them bottom up
+ *
+ * @param array $value
+ * @return array
+ */
 function getOrderedExceptionList(array $value): array
 {
     $exceptions = [$value];
@@ -107,10 +145,12 @@ function getOrderedExceptionList(array $value): array
     }
     div.snippet-preview span.bracket { color: #343434; }
     div.snippet-preview span.variable { color: #d3542f; }
-    div.snippet-preview span.operator { color: #055c9b; }
-    div.snippet-preview span.control { color: #8e09e1; }
+    div.snippet-preview span.control { color: #7109e1; }
     div.snippet-preview span.string { color: #6a8d00; }
-    div.snippet-preview span.bool { color: #096ee1; }
+    div.snippet-preview span.number { color: #006ac0; }
+    div.snippet-preview span.html { color: #cba604; }
+    div.snippet-preview span.bool { color: #e1095c; }
+    div.snippet-preview span.comment { color: #8c8c8c; }
     .trace-title {
         margin: 15px auto;
         display: block;
