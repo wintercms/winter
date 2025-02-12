@@ -12,7 +12,7 @@ if (!isset($value['logVersion']) || $value['logVersion'] !== 2) {
 function phpSyntaxHighlight(string $str): string
 {
     $regexes = [
-        'control' => '/\b(for|foreach|while|class |extends|yield from|yield|echo|fn|implements|try|catch|finally|throw|new|instanceof|function|return|unset|static|public|protected|private|count|global|if|else|else if|intval|int|array)\b/',
+        'control' => '/\b(for|foreach|while|class |extends|yield from|yield|echo|fn|implements|try|catch|finally|throw|new|instanceof|parent|function|return|unset|static|public|protected|private|count|global|if|else|else if|intval|int|array)\b/',
         'bool' => '/(\bnull\b|\btrue\b|\bfalse\b)/',
         'string' => [
             'pattern' => '/(\221[^\221]*\221|\222[^\222]*\222)/',
