@@ -377,6 +377,113 @@ function getOrderedExceptionList(array $value): array
 </div>
 
 <script>
+    const EDITORS = {
+        vscode: { scheme: 'vscode://file/%file:%line', name: 'VS Code (vscode://)' },
+        phpstorm: { scheme: 'phpstorm://open?file=%file&line=%line', name: 'PhpStorm (phpstorm://)' },
+        subl: { scheme: 'subl://open?url=file://%file&line=%line', name: 'Sublime (subl://)' },
+        txmt: { scheme: 'txmt://open/?url=file://%file&line=%line', name: 'TextMate (txmt://)' },
+        mvim: { scheme: 'mvim://open/?url=file://%file&line=%line', name: 'MacVim (mvim://)' },
+        editor: { scheme: 'editor://open/?file=%file&line=%line', name: 'Custom (editor://)' }
+    };
+
+    const REGEX = {
+        editor: /idelink:\/\/([^#]+)&([0-9]+)?/
+    };
+
+    let LINKER_POPUP_CONTENT = null;
+
+    function openWithEditor(link) {
+        const matches = link.match(REGEX.editor);
+
+        const open = function(value) {
+            const editorScheme = EDITORS[value].scheme
+                .replace(/%file/, matches[1])
+                .replace(/%line/, matches[2]);
+            window.open(link.replace(REGEX.editor, editorScheme), '_self');
+        };
+
+        console.log(matches);
+
+        if (matches) {
+            if (sessionStorage && sessionStorage.getItem('wn-exception-beautifier-editor')) {
+                open(sessionStorage.getItem('wn-exception-beautifier-editor'));
+            } else {
+                // Create and display the popup if not already created
+                if (!LINKER_POPUP_CONTENT) {
+                    const title = 'Select an Editor';
+                    const description = 'Choose an editor to open the file:';
+                    const openWith = 'Open with:';
+                    const rememberChoice = 'Remember choice for next time';
+                    const open = 'Open';
+                    const cancel = 'Cancel';
+                    const popup = document.createElement('div');
+                    popup.innerHTML = `
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">${title}</h4>
+                        </div>
+                        <div class="modal-body">
+                            <p>${description}</p>
+                            <div class="form-group">
+                                <label class="control-label">${openWith}:</label>
+                                <select class="form-control" name="select-exception-link-editor"></select>
+                            </div>
+                            <div class="checkbox custom-checkbox">
+                                <input name="checkbox" value="1" type="checkbox" id="editor-remember-choice" />
+                                <label for="editor-remember-choice">${rememberChoice}</label>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-action="submit" data-dismiss="modal">${open}</button>
+                            <button type="button" class="btn btn-default" data-dismiss="popup">${cancel}</button>
+                        </div>
+                    `;
+
+                    const select = popup.querySelector('select');
+                    for (let key in EDITORS) {
+                        if (EDITORS.hasOwnProperty(key)) {
+                            const option = document.createElement('option');
+                            option.value = key;
+                            option.textContent = EDITORS[key].name;
+                            select.appendChild(option);
+                        }
+                    }
+
+                    LINKER_POPUP_CONTENT = popup.outerHTML;
+                }
+
+                const modal = document.createElement('div');
+                modal.innerHTML = LINKER_POPUP_CONTENT;
+                document.body.appendChild(modal);
+
+                const popup = modal.querySelector('.modal-body');
+                const select = popup.querySelector('select');
+                const submitBtn = modal.querySelector('[data-action="submit"]');
+                const rememberCheckbox = modal.querySelector('#editor-remember-choice');
+
+                submitBtn.addEventListener('click', function() {
+                    if (rememberCheckbox.checked && sessionStorage) {
+                        sessionStorage.setItem('wn-exception-beautifier-editor', select.value);
+                    }
+                    open(select.value);
+                    document.body.removeChild(modal);
+                });
+
+                modal.querySelector('[data-dismiss="popup"]').addEventListener('click', function() {
+                    document.body.removeChild(modal);
+                });
+            }
+        }
+    }
+
+    function formatFilePath(path, line) {
+        return `<a href="javascript:" data-href="idelink://${encodeURIComponent(rewritePath(path))}&${line}">${path}</a>`;
+    }
+
+    function rewritePath(path) {
+        return path.replace(/\\/g, '/');
+    }
+
     (() => {
         document.querySelectorAll('.trace-frame').forEach((frame) => {
             frame.querySelector('.label').addEventListener('click', () => {
