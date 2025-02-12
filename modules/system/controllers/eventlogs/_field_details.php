@@ -252,7 +252,7 @@ function getOrderedExceptionList(array $value): array
 <div id="winter-log-viewer">
     <div class="formatted">
         <div>
-            <?php if ($value['environment']['context'] === 'web'): ?>
+            <?php if (strtolower($value['environment']['context']) === 'web'): ?>
                 <table class="table table-responsive">
                     <tbody>
                         <tr>
