@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputOption;
 use System\Classes\Asset\BundleManager;
 use System\Classes\Asset\PackageJson;
 use System\Classes\Asset\PackageManager;
+use System\Classes\Extensions\ModuleManager;
 use System\Classes\Extensions\PluginManager;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\File;
@@ -16,6 +17,7 @@ abstract class AssetCreate extends Command
 {
     protected const TYPE_THEME = 'theme';
     protected const TYPE_PLUGIN = 'plugin';
+    protected const TYPE_MODULE = 'module';
 
     /**
      * @var string The console command description.
@@ -109,6 +111,17 @@ abstract class AssetCreate extends Command
         if (str_starts_with($package, 'theme-')) {
             if (($theme = Theme::load(str_after($package, 'theme-'))) && File::exists($theme->getPath())) {
                 return [$theme->getPath(), static::TYPE_THEME];
+            }
+
+            return [null, null];
+        }
+
+        if (str_starts_with($package, 'module-')) {
+            if (
+                ($module = ModuleManager::instance()->get(str_after($package, 'module-')))
+                && File::exists($module->getPath())
+            ) {
+                return [$module->getPath(), static::TYPE_MODULE];
             }
 
             return [null, null];
