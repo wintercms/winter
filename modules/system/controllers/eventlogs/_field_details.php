@@ -15,9 +15,9 @@ function phpSyntaxHighlight(string $str): string
         'control' => '/\b(for|foreach|while|class |extends|yield from|yield|echo|fn|implements|try|catch|finally|throw|new|instanceof|function|return|unset|static|public|protected|private|count|global|if|else|else if|intval|int|array)\b/',
         'bool' => '/(\bnull\b|\btrue\b|\bfalse\b)/',
         'string' => [
-            'pattern' => '/(\066[^\066]*\066|\065[^\065]*\065)/',
-            'before' => fn ($s) => str_replace('&#039;', "\066", str_replace('&quot;', "\065", $s)),
-            'after' => fn ($s) => str_replace("\066", '&#039;', str_replace("\065", '&quot;', $s)),
+            'pattern' => '/(\221[^\221]*\221|\222[^\222]*\222)/',
+            'before' => fn ($s) => str_replace('&#039;', "\221", str_replace('&quot;', "\222", $s)),
+            'after' => fn ($s) => str_replace("\221", '&#039;', str_replace("\222", '&quot;', $s)),
         ],
         'number' => [
             'pattern' => '/(=\(\s)?(\d+)(?=(\s|;|,|\)|=))/',
@@ -88,8 +88,7 @@ function getOrderedExceptionList(array $value): array
 {
     $exceptions = [$value];
     $current = $value;
-    while (isset($current['previous']) && $current['previous']) {
-        $current = $current['previous'];
+    while (isset($current['previous']) && ($current = $current['previous'])) {
         $exceptions[] = $current;
     }
 
@@ -100,11 +99,52 @@ function getOrderedExceptionList(array $value): array
     div.plugin-exception-beautifier  span.beautifier-message-container {
         display: none;
     }
-    #winter-log-viewer h1 {
-        margin-top: 0;
+    #winter-log-viewer {
+        background: #fff;
+        margin: -20px;
+        padding: 20px;
     }
-    #winter-log-viewer .exception:not(:first-child) {
-        margin-top: 25px;
+    #winter-log-viewer h1 {
+        margin-top: 20px;
+    }
+    #winter-log-viewer .btn[disabled] {
+        color: #fff;
+        font-weight: bold;
+        user-select: auto;
+    }
+    #winter-log-viewer .btn.btn-secondary[disabled] {
+        color: #000;
+        font-weight: normal;
+    }
+    #winter-log-viewer table.table tr:first-child td, #winter-log-viewer table.table tr:first-child th {
+        border-top: 0;
+    }
+    #winter-log-viewer table.table tr td {
+        font-family: monospace;
+    }
+    #winter-log-viewer .input-group.select-container {
+        position: absolute;
+        right: 0;
+    }
+    #winter-log-viewer .input-group.select-container .select2-container--default {
+        width: auto;
+    }
+    #winter-log-viewer .input-group.select-container .select2-container--default .select2-selection {
+        padding-right: 30px;
+    }
+    #winter-log-viewer .exception-list {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    #winter-log-viewer .exception-list.reverse {
+        flex-direction: column-reverse;
+    }
+    #winter-log-viewer .exception-list .exception {
+        width: 100%;
+    }
+    #winter-log-viewer .btn-group:not(:last-of-type) {
+        margin-right: 5px;
     }
     p.message-log {
         font-family: monospace;
@@ -158,7 +198,12 @@ function getOrderedExceptionList(array $value): array
     .trace-title {
         margin: 15px auto;
         display: block;
+        font-size: 1.2em;
         font-weight: bold;
+    }
+    .trace-title small {
+        font-size: 0.85em;
+        font-weight: normal;
     }
     .trace {
         border: 1px solid #dcdcdc;
@@ -184,6 +229,7 @@ function getOrderedExceptionList(array $value): array
         cursor: pointer;
         width: 100%;
         font-size: 0.95em;
+        word-break: break-word;
     }
     .trace-frame .label .item {
         font-weight: bold;
@@ -205,59 +251,120 @@ function getOrderedExceptionList(array $value): array
 </style>
 <div id="winter-log-viewer">
     <div class="formatted">
-        <?php foreach (getOrderedExceptionList($value) as $index => $exception): ?>
-            <div class="exception">
-                <h1><?= $exception['type'] ?></h1>
-                <p class="message-log"><?= $exception['message'] ?></p>
+        <div>
+            <?php if ($value['environment']['context'] === 'web'): ?>
+                <table class="table table-responsive">
+                    <tbody>
+                        <tr>
+                            <th>HTTP Method</th>
+                            <td><?= $value['environment']['method'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>Url</th>
+                            <td><?= $value['environment']['url'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>User Agent</th>
+                            <td><?= $value['environment']['userAgent'] ?></td>
+                        </tr>
+                        <tr>
+                            <th>Client IP</th>
+                            <td><?= $value['environment']['ip'] ?></td>
+                        </tr>
+                    </tbody>
+                </table>
+            <?php endif; ?>
 
-                <div>
-                    <div class="trace-frame">
-                        <div class="label">
-                            <span class="item"><?= $exception['file'] ?></span>
-                            at line <span class="item"><?= $exception['line'] ?></span>
-                        </div>
-                        <?php if ($exception['snippet']): ?>
-                            <div class="snippet-preview-container">
-                                <div class="snippet-preview">
-                                    <?= makeSnippet($exception['snippet'], $exception['line']) ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-                    </div>
-                </div>
-
-                <div>
-                    <span class="trace-title">Stack Trace</span>
-                    <div class="trace">
-                        <?php foreach ($exception['trace'] as $traceIndex => $frame): ?>
-                            <div class="trace-frame">
-                                <div class="label">
-                                    <span class="item">#<?= $traceIndex ?> <?= $frame['file'] ?></span>
-                                    in <span class="item"><?= $frame['class'] && !str_contains($frame['function'], '{') ? $frame['class'] . '::' : '' ?><?= $frame['function'] ?></span>
-                                    at line <span class="item"><?= $frame['line'] ?></span>
-                                    <?php if ($frame['arguments']): ?>
-                                        with argument<?= count($frame['arguments']) > 1 ? 's' : '' ?>: (<span class="item"><?= implode('</span>, <span class="item">', $frame['arguments']) ?></span>)
-                                    <?php endif; ?>
-                                    <?php if ($frame['in_app']): ?>
-                                        <span class="app-icon">In App</span>
-                                    <?php endif; ?>
-                                </div>
-                                <?php if ($frame['snippet']): ?>
-                                    <div class="snippet-preview-container <?= $frame['in_app'] ? 'unfolded' : 'folded' ?>">
-                                        <div class="snippet-preview">
-                                            <?= makeSnippet($frame['snippet'], $frame['line']) ?>
-                                        </div>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" disabled class="btn btn-sm btn-secondary">Context</button>
+                <button type="button" disabled class="btn btn-sm btn-primary"><?= $value['environment']['context'] ?></button>
             </div>
-        <?php endforeach; ?>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" disabled class="btn btn-sm btn-secondary">Environment</button>
+                <button type="button" disabled class="btn btn-sm btn-primary"><?= $value['environment']['env'] ?></button>
+            </div>
+            <div class="btn-group" role="group" aria-label="Basic example">
+                <button type="button" disabled class="btn btn-sm btn-secondary">Testing</button>
+                <button type="button" disabled class="btn btn-sm btn-primary"><?= $value['environment']['testing'] ? 'true' : 'false' ?></button>
+            </div>
+
+            <hr>
+
+            <?php if ($value['exception']['previous']): ?>
+                <div class="select-container input-group mb-3">
+                    <select class="custom-select" id="exception-sort-order">
+                        <option selected value="old">Oldest first</option>
+                        <option value="new">Newest first</option>
+                    </select>
+                </div>
+            <?php endif; ?>
+        </div>
+        <div class="exception-list">
+            <?php foreach (getOrderedExceptionList($value['exception']) as $index => $exception): ?>
+                <div class="exception">
+                    <h1><?= $exception['type'] ?></h1>
+                    <p class="message-log"><?= $exception['message'] ?></p>
+
+                    <div>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" disabled class="btn btn-sm btn-secondary">Exception</button>
+                            <button type="button" disabled class="btn btn-sm btn-primary">#<?= $index ?></button>
+                        </div>
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" disabled class="btn btn-sm btn-secondary">Code</button>
+                            <button type="button" disabled class="btn btn-sm btn-primary"><?= $exception['code'] ?></button>
+                        </div>
+                    </div>
+
+                    <div class="trace">
+                        <div class="trace-frame">
+                            <div class="label">
+                                <span class="item"><?= $exception['file'] ?></span>
+                                at line <span class="item"><?= $exception['line'] ?></span>
+                            </div>
+                            <?php if ($exception['snippet']): ?>
+                                <div class="snippet-preview-container">
+                                    <div class="snippet-preview">
+                                        <?= makeSnippet($exception['snippet'], $exception['line']) ?>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+
+                    <div>
+                        <span class="trace-title">Stack Trace <small>(<?= count($exception['trace']) ?> frames)</small></span>
+                        <div class="trace">
+                            <?php foreach ($exception['trace'] as $traceIndex => $frame): ?>
+                                <div class="trace-frame">
+                                    <div class="label">
+                                        <span class="item">#<?= $traceIndex ?> <?= $frame['file'] ?></span>
+                                        in <span class="item"><?= $frame['class'] && !str_contains($frame['function'], '{') ? $frame['class'] . '::' : '' ?><?= $frame['function'] ?></span>
+                                        at line <span class="item"><?= $frame['line'] ?></span>
+                                        <?php if ($frame['arguments']): ?>
+                                            with argument<?= count($frame['arguments']) > 1 ? 's' : '' ?>: (<span class="item"><?= implode('</span>, <span class="item">', $frame['arguments']) ?></span>)
+                                        <?php endif; ?>
+                                        <?php if ($frame['in_app']): ?>
+                                            <span class="app-icon">In App</span>
+                                        <?php endif; ?>
+                                    </div>
+                                    <?php if ($frame['snippet']): ?>
+                                        <div class="snippet-preview-container <?= $frame['in_app'] ? 'unfolded' : 'folded' ?>">
+                                            <div class="snippet-preview">
+                                                <?= makeSnippet($frame['snippet'], $frame['line']) ?>
+                                            </div>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
     </div>
     <div class="raw" style="display: none">
-        <pre class="beautifier-raw-content"><?= $value['stringTrace'] ?></pre>
+        <pre class="beautifier-raw-content"><?= $value['exception']['stringTrace'] ?></pre>
     </div>
 </div>
 
@@ -276,6 +383,10 @@ function getOrderedExceptionList(array $value): array
             document.querySelector('.plugin-exception-beautifier a[href="#beautifier-tab-raw"]').addEventListener('click', () => {
                 document.querySelector('#winter-log-viewer .formatted').style.display = "none";
                 document.querySelector('#winter-log-viewer .raw').style.display = "block";
+            });
+            // jQuery to tie in with select2
+            $("select#exception-sort-order").on('change', (e) => {
+                document.querySelector('#winter-log-viewer .exception-list').classList[e.target.value === 'old' ? 'remove' : 'add']('reverse');
             });
         });
     })();
