@@ -248,6 +248,14 @@ function getOrderedExceptionList(array $value): array
     .trace-frame .folded {
         display: none;
     }
+    /* The following are fixes for the TailwindUI plugin */
+    #winter-log-viewer hr {
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+    #winter-log-viewer h1 {
+        font-size: 36px;
+    }
 </style>
 <div id="winter-log-viewer">
     <div class="formatted">
