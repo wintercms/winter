@@ -55,6 +55,7 @@
 
 </div>
 
+<!--
 <script type="text/template" data-partial="theme/suggestion">
     <div class="product">
         <a
@@ -70,3 +71,4 @@
         </a>
     </div>
 </script>
+-->

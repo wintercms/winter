@@ -24,7 +24,7 @@
                 </a>
             </li>
         </ul>
-        <div class="tab-content">
+        <div id="updates-app" class="tab-content">
             <div class="tab-pane <?= $activeTab == 'plugins' ? 'active' : '' ?>">
                 <div class="padded-container">
                     <?= $this->makePartial('install_plugins') ?>

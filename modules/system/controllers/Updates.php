@@ -59,7 +59,10 @@ class Updates extends Controller
         parent::__construct();
 
         // New
-        $this->addJs('/modules/system/controllers/updates/assets/dist/updates.js', 'core');
+        $this->addVite([
+            'controllers/updates/assets/src/updates.js',
+            'controllers/updates/assets/src/updates.css'
+        ], 'module-system');
         // Old
         $this->addJs('/modules/system/assets/js/updates/updates.js', 'core');
         $this->addCss('/modules/system/assets/css/updates/updates.css', 'core');
