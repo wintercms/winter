@@ -153,11 +153,15 @@ class CodeParser
         $fileContents .= trim($body).PHP_EOL;
         $fileContents .= '}'.PHP_EOL;
 
-        $this->validate($fileContents);
-
         $this->makeDirectorySafe(dirname($path));
 
         $this->writeContentSafe($path, $fileContents);
+
+        // Attempt to load the generated code file to ensure any errors are thrown
+        // before the file is cached
+        if (!class_exists($className)) {
+            require_once $path;
+        }
 
         return $className;
     }
@@ -288,15 +292,6 @@ class CodeParser
     //
     // Helpers
     //
-
-    /**
-     * Evaluates PHP content in order to detect syntax errors.
-     * The method handles PHP errors and throws exceptions.
-     */
-    protected function validate($php)
-    {
-        eval('?>'.$php);
-    }
 
     /**
      * Extracts the class name from a cache file
