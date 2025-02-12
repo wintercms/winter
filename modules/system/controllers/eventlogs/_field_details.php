@@ -58,16 +58,17 @@ function phpSyntaxHighlight(string $str): string
  * @param int|null $highlight
  * @return string
  */
-function makeSnippet(array $snippet, ?int $highlight = null): string
+function makeSnippet(array $snippet, string $file, ?int $highlight = null): string
 {
     return implode(
         "\n",
         array_reduce(
             array_keys($snippet),
-            function (array $carry, $key) use ($snippet, $highlight) {
+            function (array $carry, $key) use ($snippet, $file, $highlight) {
                 $carry[] = sprintf(
-                    '<div class="preview-line%s"><span class="line-number">%s</span>: %s</div>',
+                    '<div class="preview-line%s"><span class="line-number" data-idelink="idelink://%s&%3$d"">%3$d</span>: %4$s</div>',
                     ($key + 1 === $highlight ? ' highlight' : ''),
+                    urlencode(str_replace('\\', '/', $file)),
                     $key + 1,
                     phpSyntaxHighlight(e($snippet[$key], true))
                 );
@@ -184,6 +185,9 @@ function getOrderedExceptionList(array $value): array
         padding: 5px 10px;
         margin: -5px 0;
     }
+    div.snippet-preview div.preview-line span.line-number {
+        cursor: pointer;
+    }
     div.snippet-preview div.preview-line.highlight span.line-number {
         color: red;
     }
@@ -269,7 +273,11 @@ function getOrderedExceptionList(array $value): array
                         </tr>
                         <tr>
                             <th>Url</th>
-                            <td><?= $value['environment']['url'] ?></td>
+                            <td>
+                                <a href="<?= $value['environment']['url'] ?>" target="_blank" rel="noopener">
+                                    <?= $value['environment']['url'] ?>
+                                </a>
+                            </td>
                         </tr>
                         <tr>
                             <th>User Agent</th>
@@ -333,7 +341,7 @@ function getOrderedExceptionList(array $value): array
                             <?php if ($exception['snippet']): ?>
                                 <div class="snippet-preview-container">
                                     <div class="snippet-preview">
-                                        <?= makeSnippet($exception['snippet'], $exception['line']) ?>
+                                        <?= makeSnippet($exception['snippet'], $exception['file'], $exception['line']) ?>
                                     </div>
                                 </div>
                             <?php endif; ?>
@@ -359,7 +367,7 @@ function getOrderedExceptionList(array $value): array
                                     <?php if ($frame['snippet']): ?>
                                         <div class="snippet-preview-container <?= $frame['in_app'] ? 'unfolded' : 'folded' ?>">
                                             <div class="snippet-preview">
-                                                <?= makeSnippet($frame['snippet'], $frame['line']) ?>
+                                                <?= makeSnippet($frame['snippet'], $frame['file'], $frame['line']) ?>
                                             </div>
                                         </div>
                                     <?php endif; ?>
@@ -377,113 +385,6 @@ function getOrderedExceptionList(array $value): array
 </div>
 
 <script>
-    const EDITORS = {
-        vscode: { scheme: 'vscode://file/%file:%line', name: 'VS Code (vscode://)' },
-        phpstorm: { scheme: 'phpstorm://open?file=%file&line=%line', name: 'PhpStorm (phpstorm://)' },
-        subl: { scheme: 'subl://open?url=file://%file&line=%line', name: 'Sublime (subl://)' },
-        txmt: { scheme: 'txmt://open/?url=file://%file&line=%line', name: 'TextMate (txmt://)' },
-        mvim: { scheme: 'mvim://open/?url=file://%file&line=%line', name: 'MacVim (mvim://)' },
-        editor: { scheme: 'editor://open/?file=%file&line=%line', name: 'Custom (editor://)' }
-    };
-
-    const REGEX = {
-        editor: /idelink:\/\/([^#]+)&([0-9]+)?/
-    };
-
-    let LINKER_POPUP_CONTENT = null;
-
-    function openWithEditor(link) {
-        const matches = link.match(REGEX.editor);
-
-        const open = function(value) {
-            const editorScheme = EDITORS[value].scheme
-                .replace(/%file/, matches[1])
-                .replace(/%line/, matches[2]);
-            window.open(link.replace(REGEX.editor, editorScheme), '_self');
-        };
-
-        console.log(matches);
-
-        if (matches) {
-            if (sessionStorage && sessionStorage.getItem('wn-exception-beautifier-editor')) {
-                open(sessionStorage.getItem('wn-exception-beautifier-editor'));
-            } else {
-                // Create and display the popup if not already created
-                if (!LINKER_POPUP_CONTENT) {
-                    const title = 'Select an Editor';
-                    const description = 'Choose an editor to open the file:';
-                    const openWith = 'Open with:';
-                    const rememberChoice = 'Remember choice for next time';
-                    const open = 'Open';
-                    const cancel = 'Cancel';
-                    const popup = document.createElement('div');
-                    popup.innerHTML = `
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">${title}</h4>
-                        </div>
-                        <div class="modal-body">
-                            <p>${description}</p>
-                            <div class="form-group">
-                                <label class="control-label">${openWith}:</label>
-                                <select class="form-control" name="select-exception-link-editor"></select>
-                            </div>
-                            <div class="checkbox custom-checkbox">
-                                <input name="checkbox" value="1" type="checkbox" id="editor-remember-choice" />
-                                <label for="editor-remember-choice">${rememberChoice}</label>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-action="submit" data-dismiss="modal">${open}</button>
-                            <button type="button" class="btn btn-default" data-dismiss="popup">${cancel}</button>
-                        </div>
-                    `;
-
-                    const select = popup.querySelector('select');
-                    for (let key in EDITORS) {
-                        if (EDITORS.hasOwnProperty(key)) {
-                            const option = document.createElement('option');
-                            option.value = key;
-                            option.textContent = EDITORS[key].name;
-                            select.appendChild(option);
-                        }
-                    }
-
-                    LINKER_POPUP_CONTENT = popup.outerHTML;
-                }
-
-                const modal = document.createElement('div');
-                modal.innerHTML = LINKER_POPUP_CONTENT;
-                document.body.appendChild(modal);
-
-                const popup = modal.querySelector('.modal-body');
-                const select = popup.querySelector('select');
-                const submitBtn = modal.querySelector('[data-action="submit"]');
-                const rememberCheckbox = modal.querySelector('#editor-remember-choice');
-
-                submitBtn.addEventListener('click', function() {
-                    if (rememberCheckbox.checked && sessionStorage) {
-                        sessionStorage.setItem('wn-exception-beautifier-editor', select.value);
-                    }
-                    open(select.value);
-                    document.body.removeChild(modal);
-                });
-
-                modal.querySelector('[data-dismiss="popup"]').addEventListener('click', function() {
-                    document.body.removeChild(modal);
-                });
-            }
-        }
-    }
-
-    function formatFilePath(path, line) {
-        return `<a href="javascript:" data-href="idelink://${encodeURIComponent(rewritePath(path))}&${line}">${path}</a>`;
-    }
-
-    function rewritePath(path) {
-        return path.replace(/\\/g, '/');
-    }
-
     (() => {
         document.querySelectorAll('.trace-frame').forEach((frame) => {
             frame.querySelector('.label').addEventListener('click', () => {
@@ -503,6 +404,102 @@ function getOrderedExceptionList(array $value): array
             $("select#exception-sort-order").on('change', (e) => {
                 document.querySelector('#winter-log-viewer .exception-list').classList[e.target.value === 'old' ? 'remove' : 'add']('reverse');
             });
+
+            // Luke made me do it
+            // Script to load files in editors
+            (() => {
+                const editors = {
+                    vscode: { scheme: 'vscode://file/%file:%line', name: 'VS Code (vscode://)' },
+                    phpstorm: { scheme: 'phpstorm://open?file=%file&line=%line', name: 'PhpStorm (phpstorm://)' },
+                    subl: { scheme: 'subl://open?url=file://%file&line=%line', name: 'Sublime (subl://)' },
+                    txmt: { scheme: 'txmt://open/?url=file://%file&line=%line', name: 'TextMate (txmt://)' },
+                    mvim: { scheme: 'mvim://open/?url=file://%file&line=%line', name: 'MacVim (mvim://)' },
+                    editor: { scheme: 'editor://open/?file=%file&line=%line', name: 'Custom (editor://)' }
+                };
+
+                const ideLinkRegex = /idelink:\/\/([^#]+)&([0-9]+)?/;
+
+                function openWithEditor(link) {
+                    const matches = link.match(ideLinkRegex);
+
+                    const open = function(value) {
+                        const editorScheme = editors[value].scheme
+                            .replace(/%file/, matches[1])
+                            .replace(/%line/, matches[2]);
+                        window.open(link.replace(ideLinkRegex, editorScheme), '_self');
+                    };
+
+                    if (!matches) {
+                        return;
+                    }
+
+                    if (sessionStorage && sessionStorage.getItem('wn-exception-beautifier-editor')) {
+                        open(sessionStorage.getItem('wn-exception-beautifier-editor'));
+                        return;
+                    }
+
+                    const title = 'Select an Editor';
+                    const description = 'Choose an editor to open the file:';
+                    const openWith = 'Open with:';
+                    const rememberChoice = 'Remember choice for next time';
+                    const openString = 'Open';
+                    const cancel = 'Cancel';
+
+                    $.popup({
+                        size: 'large idelink-popup',
+                        content: `
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title">${title}</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>${description}</p>
+                                <div class="form-group">
+                                    <label class="control-label">${openWith}:</label>
+                                    <select class="form-control" name="select-exception-link-editor"></select>
+                                </div>
+                                <div class="checkbox custom-checkbox">
+                                    <input name="checkbox" value="1" type="checkbox" id="editor-remember-choice" />
+                                    <label for="editor-remember-choice">${rememberChoice}</label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-primary" data-action="submit" data-dismiss="modal">${openString}</button>
+                                <button type="button" class="btn btn-default" data-dismiss="popup">${cancel}</button>
+                            </div>
+                        `,
+                    });
+
+                    const popup = document.querySelector('.idelink-popup');
+                    const select = popup.querySelector('select');
+
+                    Object.entries(editors).forEach(([name, editor]) => {
+                        const option = document.createElement('option');
+                        option.value = name;
+                        option.textContent = editor.name;
+                        select.appendChild(option);
+                    });
+
+                    const submitBtn = popup.querySelector('[data-action="submit"]');
+                    const closeBtn = popup.querySelector('[data-dismiss="popup"]');
+                    const rememberCheckbox = popup.querySelector('#editor-remember-choice');
+
+                    submitBtn.addEventListener('click', function() {
+                        if (rememberCheckbox.checked && sessionStorage) {
+                            sessionStorage.setItem('wn-exception-beautifier-editor', select.value);
+                        }
+                        open(select.value);
+                        closeBtn.click();
+                        popup.remove();
+                    });
+                }
+
+                document.querySelectorAll('div.snippet-preview div.preview-line span.line-number[data-idelink]').forEach((lineNumber) => {
+                    lineNumber.addEventListener('click', () => {
+                        openWithEditor(lineNumber.dataset.idelink);
+                    })
+                });
+            })();
         });
     })();
 </script>
