@@ -89,6 +89,7 @@ return [
     ],
     'themes' => [
         'install' => 'Install themes',
+        'upload' => 'Upload Theme',
         'search' => 'Search themes to install...',
         'installed' => 'Installed themes',
         'no_themes' => 'There are no themes installed from the marketplace.',
