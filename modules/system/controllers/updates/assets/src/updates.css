@@ -1,2 +1,12 @@
 @config "./tailwind.config.js";
 @import "tailwindcss";
+
+#layout-canvas, #layout-body .layout-row,.nav.nav-tabs{
+    background: #fff;
+}
+#layout-body .layout-row, #layout-body .layout-row .padded-container {
+    background: #f9f9f9;
+}
+.control-tabs.content-tabs > ul.nav-tabs li.active a {
+    background: #f9f9f9;
+}

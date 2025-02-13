@@ -16,7 +16,7 @@
                     <i class="icon loading" style="display: none"></i>
                 </div>
             </div>
-            <div class="w-full flex justify-center">
+            <div class="w-full flex justify-center my-2">
                 <div class="btn-group" role="group" aria-label="...">
                     <button type="button"
                             :class="`btn btn-${active === 'popular' ? 'primary' : 'default'}`"
@@ -39,7 +39,7 @@
                 </button>
             </div>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
             <Product v-for="plugin in activePlugins" :product="plugin" type="plugin"></Product>
         </div>
 </template>
@@ -69,6 +69,13 @@ export default {
             },
             set(value) {
                 this.active = value;
+            }
+        }
+    },
+    watch: {
+        filter: function (value) {
+            if (!value) {
+                this.active = 'popular';
             }
         }
     },
