@@ -24,7 +24,7 @@
         </div>
     </div>
 
-    <div class="layout-item stretch layout-column">
+    <div class="layout-item stretch layout-column" style="padding-bottom: 1em;">
         <?= $this->formRenderPreview() ?>
 
         <p>

@@ -66,7 +66,7 @@ function makeSnippet(array $snippet, string $file, ?int $highlight = null): stri
             array_keys($snippet),
             function (array $carry, $key) use ($snippet, $file, $highlight) {
                 $carry[] = sprintf(
-                    '<div class="preview-line%s"><span class="line-number" data-idelink="idelink://%s&%3$d"">%3$d</span>: %4$s</div>',
+                    '<div class="preview-line%s"><span class="line-number" data-idelink="idelink://%s&%3$d""><span class="icon wn-icon-file-pen"></span>%3$d</span>: %4$s</div>',
                     ($key + 1 === $highlight ? ' highlight' : ''),
                     urlencode(str_replace('\\', '/', $file)),
                     $key + 1,
@@ -187,6 +187,16 @@ function getOrderedExceptionList(array $value): array
     }
     div.snippet-preview div.preview-line span.line-number {
         cursor: pointer;
+        position: relative;
+    }
+    div.snippet-preview div.preview-line span.line-number .icon {
+        opacity: 0;
+        position: absolute;
+        left: calc(100% + 1em);
+        transition: opacity linear .2s;
+    }
+    div.snippet-preview div.preview-line:hover span.line-number .icon {
+        opacity: 1;
     }
     div.snippet-preview div.preview-line.highlight span.line-number {
         color: red;
@@ -275,7 +285,7 @@ function getOrderedExceptionList(array $value): array
                             <th>Url</th>
                             <td>
                                 <a href="<?= $value['environment']['url'] ?>" target="_blank" rel="noopener">
-                                    <?= $value['environment']['url'] ?>
+                                    <span class="wn-icon-link"></span><?= $value['environment']['url'] ?>
                                 </a>
                             </td>
                         </tr>
