@@ -301,15 +301,21 @@ function getOrderedExceptionList(array $value): array
                 </table>
             <?php endif; ?>
 
-            <div class="btn-group" role="group" aria-label="Basic example">
+            <div class="btn-group" role="group" aria-label="Exception context">
                 <button type="button" disabled class="btn btn-sm btn-secondary">Context</button>
                 <button type="button" disabled class="btn btn-sm btn-primary"><?= $value['environment']['context'] ?></button>
             </div>
-            <div class="btn-group" role="group" aria-label="Basic example">
+            <div class="btn-group" role="group" aria-label="Exception APP_ENV">
                 <button type="button" disabled class="btn btn-sm btn-secondary">Environment</button>
                 <button type="button" disabled class="btn btn-sm btn-primary"><?= $value['environment']['env'] ?></button>
             </div>
-            <div class="btn-group" role="group" aria-label="Basic example">
+            <?php if (strtolower($value['environment']['context']) === 'web'): ?>
+                <div class="btn-group" role="group" aria-label="Exception encountered in Backend">
+                    <button type="button" disabled class="btn btn-sm btn-secondary">Backend</button>
+                    <button type="button" disabled class="btn btn-sm btn-primary"><?= $value['environment']['backend'] ? 'true' : 'false' ?></button>
+                </div>
+            <?php endif; ?>
+            <div class="btn-group" role="group" aria-label="Exception encountered in unit test">
                 <button type="button" disabled class="btn btn-sm btn-secondary">Testing</button>
                 <button type="button" disabled class="btn btn-sm btn-primary"><?= $value['environment']['testing'] ? 'true' : 'false' ?></button>
             </div>
@@ -332,11 +338,11 @@ function getOrderedExceptionList(array $value): array
                     <p class="message-log"><?= $exception['message'] ?></p>
 
                     <div>
-                        <div class="btn-group" role="group" aria-label="Basic example">
+                        <div class="btn-group" role="group" aria-label="Exception index">
                             <button type="button" disabled class="btn btn-sm btn-secondary">Exception</button>
                             <button type="button" disabled class="btn btn-sm btn-primary">#<?= $index ?></button>
                         </div>
-                        <div class="btn-group" role="group" aria-label="Basic example">
+                        <div class="btn-group" role="group" aria-label="Exception code">
                             <button type="button" disabled class="btn btn-sm btn-secondary">Code</button>
                             <button type="button" disabled class="btn btn-sm btn-primary"><?= $exception['code'] ?></button>
                         </div>
