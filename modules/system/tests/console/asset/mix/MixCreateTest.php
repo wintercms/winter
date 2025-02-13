@@ -94,6 +94,66 @@ class MixCreateTest extends TestCase
         $this->assertTrue(isset($json->devDependencies->tailwindcss));
     }
 
+    public function testConfigReact(): void
+    {
+        $path = PluginManager::instance()->findByIdentifier($this->testPlugin)->getPluginPath();
+        $configPath = $path . '/winter.mix.js';
+        $packageJson = $path . '/package.json';
+
+        // Check file does not exist
+        $this->assertFileNotExists($configPath);
+
+        // Run the config command to generate the vite config with react
+        $this->artisan('mix:create', [
+            'packageName' => $this->testPlugin,
+            '--react' => true,
+            '--no-stubs' => true,
+        ])
+            ->assertExitCode(0);
+
+        // Check files are created correctly
+        $this->assertFileExists($configPath);
+        $this->assertFileExists($packageJson);
+
+        // Get the contents of the package.json
+        $json = json_decode(File::get($packageJson));
+
+        // Check react is required
+        $this->assertTrue(isset($json->devDependencies->react));
+    }
+
+    public function testConfigTailwindReact(): void
+    {
+        $path = PluginManager::instance()->findByIdentifier($this->testPlugin)->getPluginPath();
+        $configPath = $path . '/winter.mix.js';
+        $packageJson = $path . '/package.json';
+
+        // Check file does not exist
+        $this->assertFileNotExists($configPath);
+
+        // Run the config command to generate the vite config with react
+        $this->artisan('mix:create', [
+            'packageName' => $this->testPlugin,
+            '--tailwind' => true,
+            '--react' => true,
+            '--no-stubs' => true,
+        ])
+            ->assertExitCode(0);
+
+        // Check files are created correctly
+        $this->assertFileExists($configPath);
+        $this->assertFileExists($packageJson);
+        $this->assertFileExists($path . '/tailwind.config.js');
+        $this->assertFileExists($path . '/postcss.config.mjs');
+
+        // Get the contents of the package.json
+        $json = json_decode(File::get($packageJson));
+
+        // Check tailwind & react are required
+        $this->assertTrue(isset($json->devDependencies->tailwindcss));
+        $this->assertTrue(isset($json->devDependencies->react));
+    }
+
     public function testConfigVue(): void
     {
         $path = PluginManager::instance()->findByIdentifier($this->testPlugin)->getPluginPath();

@@ -313,7 +313,7 @@ abstract class AssetInstall extends Command
                 $force
                 || $this->confirm(
                     sprintf(
-                        "Detected %s (%s), should it be added to your package.json?",
+                        "Detected %s (%s), would you like to add it to package.json to include it in your project workspace? Answer no to ignore it.",
                         $name,
                         $packagePath
                     ),

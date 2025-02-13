@@ -41,7 +41,7 @@ class ViteInstall extends AssetInstall
      * The required packages for this compiler
      */
     protected array $requiredDependencies = [
-        'vite' => '^5.2.11',
-        'laravel-vite-plugin' => '^1.0.4',
+        'vite' => '^6.0.0',
+        'laravel-vite-plugin' => '^1.1.0',
     ];
 }
