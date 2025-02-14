@@ -12,7 +12,7 @@ if (!isset($value['logVersion']) || $value['logVersion'] !== 2) {
 function phpSyntaxHighlight(string $str): string
 {
     $regexes = [
-        'control' => '/\b(for|foreach|while|class |extends|yield from|yield|echo|fn|implements|try|catch|finally|throw|new|instanceof|parent|function|return|unset|static|public|protected|private|count|global|if|else|else if|intval|int|array)\b/',
+        'control' => '/\b(for|foreach|while|class |extends|yield from|yield|echo|fn|implements|try|catch|finally|throw|new|instanceof| parent|final|function|return|unset|static|public|protected|private|count|global|if|else|else if|intval|int|array)\b/',
         'bool' => '/(\bnull\b|\btrue\b|\bfalse\b)/',
         'string' => [
             'pattern' => '/(\221[^\221]*\221|\222[^\222]*\222)/',
@@ -278,45 +278,45 @@ function getOrderedExceptionList(array $value): array
                 <table class="table table-responsive">
                     <tbody>
                         <tr>
-                            <th>HTTP Method</th>
-                            <td><?= $value['environment']['method'] ?></td>
+                            <th><?= e(trans('system::lang.event_log.details.http_method')) ?></th>
+                            <td><?= e($value['environment']['method']) ?></td>
                         </tr>
                         <tr>
-                            <th>Url</th>
+                            <th><?= e(trans('system::lang.event_log.details.url')) ?></th>
                             <td>
-                                <a href="<?= $value['environment']['url'] ?>" target="_blank" rel="noopener">
-                                    <span class="wn-icon-link"></span><?= $value['environment']['url'] ?>
+                                <a href="<?= e($value['environment']['url']) ?>" target="_blank" rel="noopener">
+                                    <span class="wn-icon-link"></span><?= e($value['environment']['url']) ?>
                                 </a>
                             </td>
                         </tr>
                         <tr>
-                            <th>User Agent</th>
-                            <td><?= $value['environment']['userAgent'] ?></td>
+                            <th><?= e(trans('system::lang.event_log.details.user_agent')) ?></th>
+                            <td><?= e($value['environment']['userAgent']) ?></td>
                         </tr>
                         <tr>
-                            <th>Client IP</th>
-                            <td><?= $value['environment']['ip'] ?></td>
+                            <th><?= e(trans('system::lang.event_log.details.client_ip')) ?></th>
+                            <td><?= e($value['environment']['ip']) ?></td>
                         </tr>
                     </tbody>
                 </table>
             <?php endif; ?>
 
-            <div class="btn-group" role="group" aria-label="Exception context">
-                <button type="button" disabled class="btn btn-sm btn-secondary">Context</button>
-                <button type="button" disabled class="btn btn-sm btn-primary"><?= $value['environment']['context'] ?></button>
+            <div class="btn-group" role="group" title="<?= e(trans('system::lang.event_log.details.exception_context')) ?>">
+                <button type="button" disabled class="btn btn-sm btn-secondary"><?= e(trans('system::lang.event_log.details.context')) ?></button>
+                <button type="button" disabled class="btn btn-sm btn-primary"><?= e($value['environment']['context']) ?></button>
             </div>
-            <div class="btn-group" role="group" aria-label="Exception APP_ENV">
-                <button type="button" disabled class="btn btn-sm btn-secondary">Environment</button>
-                <button type="button" disabled class="btn btn-sm btn-primary"><?= $value['environment']['env'] ?></button>
+            <div class="btn-group" role="group" title="<?= e(trans('system::lang.event_log.details.exception_app_env')) ?>">
+                <button type="button" disabled class="btn btn-sm btn-secondary"><?= e(trans('system::lang.event_log.details.environment')) ?></button>
+                <button type="button" disabled class="btn btn-sm btn-primary"><?= e($value['environment']['env']) ?></button>
             </div>
             <?php if (strtolower($value['environment']['context']) === 'web'): ?>
-                <div class="btn-group" role="group" aria-label="Exception encountered in Backend">
-                    <button type="button" disabled class="btn btn-sm btn-secondary">Backend</button>
+                <div class="btn-group" role="group" title="<?= e(trans('system::lang.event_log.details.exception_encountered_backend')) ?>">
+                    <button type="button" disabled class="btn btn-sm btn-secondary"><?= e(trans('system::lang.event_log.details.backend')) ?></button>
                     <button type="button" disabled class="btn btn-sm btn-primary"><?= $value['environment']['backend'] ? 'true' : 'false' ?></button>
                 </div>
             <?php endif; ?>
-            <div class="btn-group" role="group" aria-label="Exception encountered in unit test">
-                <button type="button" disabled class="btn btn-sm btn-secondary">Testing</button>
+            <div class="btn-group" role="group" title="<?= e(trans('system::lang.event_log.details.exception_encountered_unit_test')) ?>">
+                <button type="button" disabled class="btn btn-sm btn-secondary"><?= e(trans('system::lang.event_log.details.testing')) ?></button>
                 <button type="button" disabled class="btn btn-sm btn-primary"><?= $value['environment']['testing'] ? 'true' : 'false' ?></button>
             </div>
 
@@ -325,8 +325,8 @@ function getOrderedExceptionList(array $value): array
             <?php if ($value['exception']['previous']): ?>
                 <div class="select-container input-group mb-3">
                     <select class="custom-select" id="exception-sort-order">
-                        <option selected value="old">Oldest first</option>
-                        <option value="new">Newest first</option>
+                        <option selected value="old"><?= e(trans('system::lang.event_log.details.oldest_first')) ?></option>
+                        <option value="new"><?= e(trans('system::lang.event_log.details.newest_first')) ?></option>
                     </select>
                 </div>
             <?php endif; ?>
@@ -334,25 +334,25 @@ function getOrderedExceptionList(array $value): array
         <div class="exception-list">
             <?php foreach (getOrderedExceptionList($value['exception']) as $index => $exception): ?>
                 <div class="exception">
-                    <h1><?= $exception['type'] ?></h1>
-                    <p class="message-log"><?= $exception['message'] ?></p>
+                    <h1><?= e($exception['type']) ?></h1>
+                    <p class="message-log"><?= e($exception['message']) ?></p>
 
                     <div>
-                        <div class="btn-group" role="group" aria-label="Exception index">
-                            <button type="button" disabled class="btn btn-sm btn-secondary">Exception</button>
-                            <button type="button" disabled class="btn btn-sm btn-primary">#<?= $index ?></button>
+                        <div class="btn-group" role="group" title="<?= e(trans('system::lang.event_log.details.exception_index')) ?>">
+                            <button type="button" disabled class="btn btn-sm btn-secondary"><?= e(trans('system::lang.event_log.details.exception')) ?></button>
+                            <button type="button" disabled class="btn btn-sm btn-primary">#<?= e($index) ?></button>
                         </div>
-                        <div class="btn-group" role="group" aria-label="Exception code">
-                            <button type="button" disabled class="btn btn-sm btn-secondary">Code</button>
-                            <button type="button" disabled class="btn btn-sm btn-primary"><?= $exception['code'] ?></button>
+                        <div class="btn-group" role="group" title="<?= e(trans('system::lang.event_log.details.exception_code')) ?>">
+                            <button type="button" disabled class="btn btn-sm btn-secondary"><?= e(trans('system::lang.event_log.details.code')) ?></button>
+                            <button type="button" disabled class="btn btn-sm btn-primary"><?= e($exception['code']) ?></button>
                         </div>
                     </div>
 
                     <div class="trace">
                         <div class="trace-frame">
                             <div class="label">
-                                <span class="item"><?= $exception['file'] ?></span>
-                                at line <span class="item"><?= $exception['line'] ?></span>
+                                <span class="item"><?= e($exception['file']) ?></span>
+                                at line <span class="item"><?= e($exception['line']) ?></span>
                             </div>
                             <?php if ($exception['snippet']): ?>
                                 <div class="snippet-preview-container">
@@ -365,19 +365,21 @@ function getOrderedExceptionList(array $value): array
                     </div>
 
                     <div>
-                        <span class="trace-title">Stack Trace <small>(<?= count($exception['trace']) ?> frames)</small></span>
+                        <span class="trace-title"><?= trans('system::lang.event_log.details.stack_trace', ['count' => e(count($exception['trace']))]) ?></span>
                         <div class="trace">
                             <?php foreach ($exception['trace'] as $traceIndex => $frame): ?>
                                 <div class="trace-frame">
                                     <div class="label">
-                                        <span class="item">#<?= $traceIndex ?> <?= $frame['file'] ?></span>
-                                        in <span class="item"><?= $frame['class'] && !str_contains($frame['function'], '{') ? $frame['class'] . '::' : '' ?><?= $frame['function'] ?></span>
-                                        at line <span class="item"><?= $frame['line'] ?></span>
+                                        <span class="item">#<?= e($traceIndex) ?> <?= e($frame['file']) ?></span>
+                                        in <span class="item"><?= $frame['class'] && !str_contains($frame['function'], '{') ? e($frame['class']) . '::' : '' ?><?= e($frame['function']) ?></span>
+                                        <?php if ($frame['line']): ?>
+                                            at line <span class="item"><?= e($frame['line']) ?></span>
+                                        <?php endif; ?>
                                         <?php if ($frame['arguments']): ?>
-                                            with argument<?= count($frame['arguments']) > 1 ? 's' : '' ?>: (<span class="item"><?= implode('</span>, <span class="item">', $frame['arguments']) ?></span>)
+                                            with argument<?= count($frame['arguments']) > 1 ? 's' : '' ?>: (<span class="item"><?= implode('</span>, <span class="item">', array_map('e', $frame['arguments'])) ?></span>)
                                         <?php endif; ?>
                                         <?php if ($frame['in_app']): ?>
-                                            <span class="app-icon">In App</span>
+                                            <span class="app-icon"><?= e(trans('system::lang.event_log.details.in_app')) ?></span>
                                         <?php endif; ?>
                                     </div>
                                     <?php if ($frame['snippet']): ?>
@@ -396,7 +398,7 @@ function getOrderedExceptionList(array $value): array
         </div>
     </div>
     <div class="raw" style="display: none">
-        <pre class="beautifier-raw-content"><?= $value['exception']['stringTrace'] ?></pre>
+        <pre class="beautifier-raw-content"><?= e($value['exception']['stringTrace']) ?></pre>
     </div>
 </div>
 
