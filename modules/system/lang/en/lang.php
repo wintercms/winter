@@ -419,7 +419,7 @@ return [
             'code' => 'Code',
             'stack_trace' => 'Stack Trace <small>(:count frames)</small>',
             'in_app' => 'In App',
-        ]
+        ],
     ],
     'request_log' => [
         'hint' => 'This log displays a list of browser requests that may require attention. For example, if a visitor opens a CMS page that cannot be found, a record is created with the status code 404.',
