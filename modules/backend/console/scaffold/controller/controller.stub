@@ -1,6 +1,5 @@
 <?php namespace {{ plugin_namespace }}\Controllers;
 
-use BackendMenu;
 use Backend\Classes\Controller;
 
 /**
@@ -23,14 +22,26 @@ class {{ studly_name }} extends Controller
         '{{ lower_author }}.{{ lower_plugin }}.{{ lower_name }}.manage_all',
     ];
 
-    public function __construct()
-    {
-        parent::__construct();
+    /**
+     * @var string Plugin author's name specified by the extending controller class in order to properly set the backend context
+     */
+    protected $author = '{{ studly_author }}';
 
-        BackendMenu::setContext('{{ plugin_code }}', '{{ lower_plugin }}', '{{ lower_name }}');
-    {% if sidebar %}
+    /**
+     * @var string Plugin's name specified by the extending controller class in order to properly set the backend context
+     */
+    protected $plugin = '{{ studly_plugin }}';
 
-        $this->bodyClass = 'compact-container';
-    {% endif -%}
-    }
+    /**
+     * @var ?string Side menu item code specified by the extending controller class in order to properly set the backend context
+     */
+    protected $sideMenuItemCode = '{{ lower_name }}';
+
+{% if sidebar %}
+    /**
+     * @var string Body class property used for customising the layout on a controller basis.
+     */
+    public $bodyClass = 'compact-container';
+{% endif -%}
+
 }

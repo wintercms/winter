@@ -8,6 +8,7 @@ use Flash;
 use Config;
 use Request;
 use Backend;
+use BackendMenu;
 use Redirect;
 use Response;
 use Exception;
@@ -116,6 +117,21 @@ class Controller extends ControllerBase
     protected $guarded = [];
 
     /**
+     * @var string Plugin author's name specified by the extending controller class in order to properly set the backend context
+     */
+    protected $author;
+
+    /**
+     * @var string Plugin's name specified by the extending controller class in order to properly set the backend context
+     */
+    protected $plugin;
+
+    /**
+     * @var ?string Side menu item code specified by the extending controller class in order to properly set the backend context
+     */
+    protected $sideMenuItemCode = null;
+
+    /**
      * Constructor.
      */
     public function __construct()
@@ -159,6 +175,8 @@ class Controller extends ControllerBase
         }
 
         $this->extendableConstruct();
+
+        BackendMenu::setContext("$this->author.$this->plugin", strtolower($this->plugin), $this->sideMenuItemCode);
     }
 
     public function __get($name)
