@@ -36,7 +36,7 @@ $formConfig = $formController->getConfig();
                     <?= e(trans('backend::lang.form.create_and_close')); ?>
                 </button>
                 <span class="btn-text">
-                    or <a href="<?= Backend::url('jaxwilko/test/tests') ?>"><?= e(trans('backend::lang.form.cancel')); ?></a>
+                    or <a href="<?= Backend::url($formConfig->defaultRedirect) ?>"><?= e(trans('backend::lang.form.cancel')); ?></a>
                 </span>
             </div>
         </div>
