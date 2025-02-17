@@ -11,9 +11,7 @@ $formConfig = $formController->getConfig();
 <?php Block::endPut() ?>
 
 <?php if (!$this->fatalError): ?>
-
     <?= Form::open(['class' => 'layout']) ?>
-
         <div class="layout-row">
             <?= $this->formRender() ?>
         </div>
@@ -50,12 +48,8 @@ $formConfig = $formController->getConfig();
                 </span>
             </div>
         </div>
-
     <?= Form::close() ?>
-
 <?php else: ?>
-
     <p class="flash-message static error"><?= e($this->fatalError) ?></p>
     <p><a href="<?= Backend::url($formConfig->defaultRedirect) ?>" class="btn btn-default"><?= e(trans('backend::lang.form.return_to_list')); ?></a></p>
-
 <?php endif ?>
