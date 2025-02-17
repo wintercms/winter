@@ -106,6 +106,11 @@ class FormController extends ControllerBehavior
          */
         $this->config = $this->makeConfig($controller->formConfig ?: $this->formConfig, $this->requiredConfig);
         $this->config->modelClass = Str::normalizeClassName($this->config->modelClass);
+
+        /*
+         * Set default view path
+         */
+        $this->controller->appendViewPath($this->guessViewPath());
     }
 
     /**
