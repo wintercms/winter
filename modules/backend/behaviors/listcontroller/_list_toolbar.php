@@ -5,7 +5,7 @@ $listConfig = $listController->getConfig();
 
 <div data-control="toolbar">
     <a
-        href="<?= url()->current() . '/create' ?>"
+        href="<?= $this->actionUrl('create') ?>"
         class="btn btn-primary wn-icon-plus">
         <?= e(trans('backend::lang.form.create_title', ['name' => trans(\Winter\Storm\Support\Str::before($listConfig->title, '_plural'))])); ?>
     </a>
