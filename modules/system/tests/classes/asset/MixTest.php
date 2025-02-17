@@ -3,7 +3,9 @@
 namespace System\Tests\Classes\Asset;
 
 use Cms\Classes\Theme;
+use Exception;
 use System\Classes\Asset\Mix;
+use System\Classes\Asset\PackageManager;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\Event;
@@ -60,13 +62,13 @@ class MixTest extends TestCase
 
     public function testThrowsExceptionWhenMixManifestIsMissing(): void
     {
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage('The Mix manifest does not exist');
 
-        Mix::mix('assets/dist/foo.css');
+        app(Mix::class)(['assets/dist/foo.css'], 'theme-mixtest');
     }
 
-    public function testGeneratesAssetUrls(): void
+    public function testMixWithJsOnly(): void
     {
         $this->artisan('mix:compile', [
             'theme-mixtest',
@@ -74,38 +76,56 @@ class MixTest extends TestCase
             '--disable-tty' => true,
         ])->assertExitCode(0);
 
-        $theme = Theme::getActiveTheme();
+        $package = PackageManager::instance()->getPackage('theme-mixtest')[0];
 
-        $this->assertFileExists($theme->getPath($theme->getDirName() . '/mix-manifest.json'));
+        $manifest = json_decode(file_get_contents($package['path'].'/mix-manifest.json'), true);
 
-        $manifest = json_decode(file_get_contents($theme->getPath($theme->getDirName() . '/mix-manifest.json')), true);
+        $mixFileUrl = collect($manifest)->firstWhere(fn ($value, $key) => $key === '/assets/dist/js/theme.js');
+        $mixFileUrl = Url::asset($package['path'] . $mixFileUrl);
 
-        foreach ($manifest as $key => $value) {
-            $mixAssetUrl = Mix::mix($key);
+        $result = app(Mix::class)(['assets/dist/js/theme.js'], 'theme-mixtest');
 
-            $this->assertStringStartsWith(
-                Url::asset(Config::get('cms.themesPath', '/themes') . '/' . $theme->getDirName()),
-                $mixAssetUrl
-            );
-        }
+        $this->assertStringEndsWith('<script src="'.$mixFileUrl.'"></script>', $result->toHtml());
+    }
+
+    public function testMixWithCssAndJs(): void
+    {
+        $this->artisan('mix:compile', [
+            'theme-mixtest',
+            '--manifest' => 'modules/system/tests/fixtures/npm/package-mixtest.json',
+            '--disable-tty' => true,
+        ])->assertExitCode(0);
+
+        $package = PackageManager::instance()->getPackage('theme-mixtest')[0];
+
+        $manifest = collect(json_decode(file_get_contents($package['path'].'/mix-manifest.json'), true))
+            ->map(fn ($value, $key) => Url::asset($package['path'].$value));
+
+        $result = app(Mix::class)(['assets/dist/css/theme.css', 'assets/dist/js/theme.js'], 'theme-mixtest');
+
+        $this->assertStringEndsWith(
+            '<link rel="stylesheet" href="'.$manifest['/assets/dist/css/theme.css'].'" />'
+            .'<script src="'.$manifest['/assets/dist/js/theme.js'].'"></script>',
+            $result->toHtml()
+        );
     }
 
     public function testThemeCanOverrideMixManifestPath(): void
     {
-        $theme = Theme::getActiveTheme();
-
         Event::listen('cms.theme.extendConfig', function ($dirName, &$config) {
             $config['mix_manifest_path'] = 'assets/dist';
         });
 
+        $package = PackageManager::instance()->getPackage('theme-mixtest')[0];
+
         rename(
-            $theme->getPath($theme->getDirName() . '/winter.mix.js'),
-            $theme->getPath($theme->getDirName() . '/winter.mix.js.bak')
+            $package['path'] . '/winter.mix.js',
+            $package['path'] . '/winter.mix.js.bak'
         );
 
         copy(
-            $theme->getPath($theme->getDirName() . '/winter.mix-manifest-override.js'),
-            $theme->getPath($theme->getDirName() . '/winter.mix.js')
+            $package['path'] . '/winter.mix-manifest-override.js',
+            $package['path'] . '/winter.mix.js'
         );
 
         try {
@@ -115,27 +135,27 @@ class MixTest extends TestCase
                 '--disable-tty' => true,
             ])->assertExitCode(0);
 
-            $this->assertFileExists($theme->getPath($theme->getDirName() . '/assets/dist/mix-manifest.json'));
+            $this->assertFileExists($package['path'] . '/assets/dist/mix-manifest.json');
 
-            $manifest = json_decode(file_get_contents($theme->getPath($theme->getDirName() . '/assets/dist/mix-manifest.json')), true);
+            $manifest = json_decode(file_get_contents($package['path'] . '/assets/dist/mix-manifest.json'), true);
 
             foreach ($manifest as $key => $value) {
-                $this->assertStringContainsString($key, (string) Mix::mix($key));
+                $this->assertStringContainsString($key, (string) app(Mix::class)($key, 'theme-mixtest', 'assets/dist/mix-manifest.json'));
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         } finally {
             rename(
-                $theme->getPath($theme->getDirName() . '/winter.mix.js.bak'),
-                $theme->getPath($theme->getDirName() . '/winter.mix.js')
+                $package['path'] . '/winter.mix.js.bak',
+                $package['path'] . '/winter.mix.js'
             );
         }
     }
 
-    public function testThrowsAnExceptionForInvalidMixFileWhenDebugIsEnabled()
+    public function testThrowsAnExceptionForInvalidMixFile()
     {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Unable to locate Mix file: /assets/dist/foo.css');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unable to locate file in Mix manifest: /assets/dist/foo.css');
 
         $this->artisan('mix:compile', [
             'theme-mixtest',
@@ -143,19 +163,6 @@ class MixTest extends TestCase
             '--disable-tty' => true,
         ])->assertExitCode(0);
 
-        Mix::mix('assets/dist/foo.css');
-    }
-
-    public function testDoesNotThrowAnExceptionForInvalidMixFileWhenDebugIsDisabled(): void
-    {
-        Config::set('app.debug', false);
-
-        $this->artisan('mix:compile', [
-            'theme-mixtest',
-            '--manifest' => 'modules/system/tests/fixtures/npm/package-mixtest.json',
-            '--disable-tty' => true,
-        ])->assertExitCode(0);
-
-        $this->assertEquals('/assets/dist/foo.css', Mix::mix('assets/dist/foo.css'));
+        app(Mix::class)('assets/dist/foo.css', 'theme-mixtest');
     }
 }

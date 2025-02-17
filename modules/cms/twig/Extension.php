@@ -54,6 +54,7 @@ class Extension extends TwigExtension
             new TwigSimpleFunction('component', [$this, 'componentFunction'], $options),
             new TwigSimpleFunction('placeholder', [$this, 'placeholderFunction'], ['is_safe' => ['html']]),
             new TwigSimpleFunction('vite', [$this, 'viteFunction'], $options),
+            new TwigSimpleFunction('mix', [$this, 'mixFunction'], $options),
         ];
     }
 
@@ -69,7 +70,6 @@ class Extension extends TwigExtension
         return [
             new TwigSimpleFilter('page', [$this, 'pageFilter'], $options),
             new TwigSimpleFilter('theme', [$this, 'themeFilter'], $options),
-            new TwigSimpleFilter('mix', [Mix::class, 'mix'], $options),
         ];
     }
 
@@ -176,6 +176,11 @@ class Extension extends TwigExtension
     public function viteFunction(array $entrypoints, string $package): \Illuminate\Support\HtmlString
     {
         return Vite::tags($entrypoints, $package);
+    }
+
+    public function mixFunction(array|string $paths, string $package, ?string $manifestPath = null): \Illuminate\Support\HtmlString|string
+    {
+        return Mix::tags($paths, $package, $manifestPath);
     }
 
     /**

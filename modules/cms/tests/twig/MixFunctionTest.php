@@ -11,8 +11,10 @@ use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Twig;
 
-class MixFilterTest extends TestCase
+class MixFunctionTest extends TestCase
 {
+    protected string $themeName = 'mixtest';
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -28,9 +30,9 @@ class MixFilterTest extends TestCase
         $this->originalThemesPath = Config::get('cms.themesPath');
         Config::set('cms.themesPath', '/modules/cms/tests/fixtures/themes');
 
-        $this->themePath = base_path('modules/cms/tests/fixtures/themes/mixtest');
+        $this->themePath = base_path("modules/cms/tests/fixtures/themes/$this->themeName");
 
-        Config::set('cms.activeTheme', 'mixtest');
+        Config::set('cms.activeTheme', $this->themeName);
 
         Event::flush('cms.theme.getActiveTheme');
         Theme::resetCache();
@@ -38,8 +40,8 @@ class MixFilterTest extends TestCase
 
     protected function tearDown(): void
     {
-        File::deleteDirectory('modules/cms/tests/fixtures/themes/mixtest/assets/dist');
-        File::delete('modules/cms/tests/fixtures/themes/mixtest/mix-manifest.json');
+        File::deleteDirectory("modules/cms/tests/fixtures/themes/$this->themeName/assets/dist");
+        File::delete("modules/cms/tests/fixtures/themes/$this->themeName/mix-manifest.json");
 
         Config::set('cms.themesPath', $this->originalThemesPath);
 
@@ -49,9 +51,10 @@ class MixFilterTest extends TestCase
     public function testGeneratesAssetUrl(): void
     {
         $theme = Theme::getActiveTheme();
+        $packageName = "theme-$this->themeName";
 
         $this->artisan('mix:compile', [
-            'theme-mixtest',
+            $packageName,
             '--manifest' => 'modules/cms/tests/fixtures/npm/package-mixtheme.json',
             '--disable-tty' => true,
         ])->assertExitCode(0);
@@ -66,7 +69,7 @@ class MixFilterTest extends TestCase
         $this->app->make('twig.environment')
             ->addExtension($extension);
 
-        $contents = Twig::parse("{{ 'assets/dist/css/theme.css' | mix }}");
+        $contents = Twig::parse("{{ mix(['assets/dist/css/theme.css'], '$packageName') }}");
 
         $this->assertStringContainsString('/assets/dist/css/theme.css?id=', $contents);
     }
