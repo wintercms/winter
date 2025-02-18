@@ -518,6 +518,8 @@ return [
         'number_all' => 'all numbers',
     ],
     'import_export' => [
+        'export' => 'Export',
+        'import' => 'Import',
         'upload_csv_file' => '1. Upload a CSV file',
         'import_file' => 'Import file',
         'row' => 'Row :row',
