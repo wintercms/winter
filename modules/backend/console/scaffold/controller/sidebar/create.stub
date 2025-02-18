@@ -1,8 +1,5 @@
 <?php Block::put('breadcrumb') ?>
-    <ul>
-        <li><a href="<?= Backend::url('{{ controller_url }}') ?>"><?= e(trans('{{ model_lang_key }}.label_plural')) ?></a></li>
-        <li><?= e(trans($this->pageTitle)) ?></li>
-    </ul>
+    <?= $this->makeLayoutPartial('breadcrumb') ?>
 <?php Block::endPut() ?>
 
 <?php if (!$this->fatalError): ?>
