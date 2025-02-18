@@ -95,7 +95,7 @@ class Controller extends ControllerBase
     /**
      * @var string Body class property used for customising the layout on a controller basis.
      */
-    public $bodyClass;
+    public $bodyClass = '';
 
     /**
      * @var array Default methods which cannot be called as actions.
