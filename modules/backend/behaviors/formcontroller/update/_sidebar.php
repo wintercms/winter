@@ -3,7 +3,6 @@
 <?php Block::endPut() ?>
 
 <?php if (!$this->fatalError): ?>
-
     <?php Block::put('form-contents') ?>
         <div class="layout">
 
@@ -49,7 +48,6 @@
             <?= $this->makeLayout('form-with-sidebar') ?>
         <?= Form::close() ?>
     <?php Block::endPut() ?>
-
 <?php else: ?>
     <div class="control-breadcrumb">
         <?= Block::placeholder('breadcrumb') ?>
