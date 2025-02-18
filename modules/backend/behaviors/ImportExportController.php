@@ -138,6 +138,11 @@ class ImportExportController extends ControllerBehavior
         if ($this->exportOptionsFormWidget = $this->makeExportOptionsFormWidget()) {
             $this->exportOptionsFormWidget->bindToController();
         }
+
+        /*
+         * Set default view path
+         */
+        $this->controller->appendViewPath($this->guessViewPath());
     }
 
     //
