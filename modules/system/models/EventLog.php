@@ -40,7 +40,7 @@ class EventLog extends Model
     /**
      * Creates a log record
      */
-    public static function add(string $message, string $level = 'info', ?string $details = null): self
+    public static function add(string $message, string $level = 'info', ?array $details = null): self
     {
         $record = new static;
         $record->message = $message;

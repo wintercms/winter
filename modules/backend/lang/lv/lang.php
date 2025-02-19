@@ -11,6 +11,7 @@ return [
         'options_method_not_exists' => "Modeļa klasei :model jābūt definētai metodei :method(), kas atgriež vērtības ':field' formas laukam.",
         'options_static_method_invalid_value' => "Statiskā metode ':method()' klasē :class neatgrieza derīgu vērtību masīvu.",
         'colors_method_not_exists' => "Modeļa klasei :model jābūt definētai metodei :method(), kas atgriež html krāsas HEX formāta kodus ':field' formas laukam.",
+        'colors_invalid_input' => 'Norādītā krāsas vērtība nav derīga, lūdzu, mēģiniet vēlreiz.',
     ],
     'widget' => [
         'not_registered' => "Logrīka klases nosaukums ':name' nav reģistrēts",
@@ -319,6 +320,7 @@ return [
         'select_page' => 'Izvēlieties lapu...',
     ],
     'relation' => [
+        'missing_behavior' => 'Laukam ":field" nepieciešams, lai ":controller" kontrolierī būtu ieviesta "RelationController" uzvedība.',
         'missing_config' => "Relācijas uzvedībai nav norādīta konfigurācija ':config'.",
         'missing_definition' => "Relācijas uzvedība nesatur definīciju laukam ':field'.",
         'missing_model' => 'Relācijas uzvedībai klasē :class nav definēts modelis.',
@@ -327,6 +329,7 @@ return [
         'relationwidget_unsupported_type' => 'Relāciju logrīks neatbalsta relāciju veidu ":type".',
         'help' => 'Noklikšķiniet uz vienuma, lai pievienotu',
         'related_data' => 'Saistītie :name dati',
+        'refresh' => 'Atsvaidzināt',
         'add' => 'Pievienot',
         'add_selected' => 'Pievienot izvēlētos',
         'add_a_new' => 'Pievienot jaunu :name',

@@ -45,6 +45,7 @@
     <?php if ($showSetup): ?>
         <th class="list-setup">
             <a href="javascript:;"
+                id="<?= $this->getId('setupButton') ?>"
                 title="<?= e(trans('backend::lang.list.setup_title')) ?>"
                 data-control="popup"
                 data-handler="<?= $this->getEventHandler('onLoadSetup') ?>"></a>

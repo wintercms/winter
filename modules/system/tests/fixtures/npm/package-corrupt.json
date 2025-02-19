@@ -1,0 +1,8 @@
+{
+    "workspaces": {
+        "packages": [
+            "plugins/winter/demo",
+            "themes/demo"
+        ]
+    },
+    "dependencies":

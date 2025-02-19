@@ -1,4 +1,4 @@
-<?= Form::open() ?>
+<?= Form::open(['data-request-parent' => '#' . $this->getId('setupButton')]) ?>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="popup">&times;</button>
         <h4 class="modal-title"><?= e(trans('backend::lang.list.setup_title')) ?></h4>

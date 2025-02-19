@@ -665,9 +665,11 @@ class RelationController extends ControllerBehavior
             $config = $this->makeConfigForMode('view', 'list');
             $config->model = $this->relationModel;
             $config->alias = $this->alias . 'ViewList';
+            $config->showSetup = $this->getConfig('view[showSetup]', true);
             $config->showSorting = $this->getConfig('view[showSorting]', true);
             $config->defaultSort = $this->getConfig('view[defaultSort]');
             $config->recordsPerPage = $this->getConfig('view[recordsPerPage]');
+            $config->showPageNumbers = $this->getConfig('view[showPageNumbers]', true);
             $config->showCheckboxes = $this->getConfig('view[showCheckboxes]', !$this->readOnly);
             $config->recordUrl = $this->getConfig('view[recordUrl]');
             $config->customViewPath = $this->getConfig('view[customViewPath]');
@@ -814,11 +816,12 @@ class RelationController extends ControllerBehavior
             $config = $this->makeConfigForMode('manage', 'list');
             $config->model = $this->relationModel;
             $config->alias = $this->alias . 'ManageList';
-            $config->showSetup = false;
+            $config->showSetup = $this->getConfig('manage[showSetup]', !$isPivot);
             $config->showCheckboxes = $this->getConfig('manage[showCheckboxes]', !$isPivot);
             $config->showSorting = $this->getConfig('manage[showSorting]', !$isPivot);
             $config->defaultSort = $this->getConfig('manage[defaultSort]');
             $config->recordsPerPage = $this->getConfig('manage[recordsPerPage]');
+            $config->showPageNumbers = $this->getConfig('manage[showPageNumbers]', true);
             $config->noRecordsMessage = $this->getConfig('manage[noRecordsMessage]');
 
             if ($this->viewMode === 'single') {

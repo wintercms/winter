@@ -39,7 +39,7 @@
                         class="upload-remove-button"
                         data-request="<?= $this->getEventHandler('onRemoveAttachment') ?>"
                         data-request-confirm="<?= e(trans('backend::lang.fileupload.remove_confirm')) ?>"
-                        data-request-data="file_id: <?= $singleFile->id ?>"
+                        data-request-data="file_id: '<?= $singleFile->id ?>'"
                         ><i class="icon-times"></i></a>
                 </div>
             </div>

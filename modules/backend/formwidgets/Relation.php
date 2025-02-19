@@ -1,10 +1,12 @@
-<?php namespace Backend\FormWidgets;
+<?php
+
+namespace Backend\FormWidgets;
 
 use Db;
+use Lang;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
-use Lang;
-use Winter\Storm\Database\Relations\Relation as RelationBase;
+use Illuminate\Database\Eloquent\Relations\Relation as RelationBase;
 use Winter\Storm\Exception\SystemException;
 
 /**

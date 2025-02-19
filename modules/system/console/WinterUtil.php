@@ -4,6 +4,7 @@ use Lang;
 use File;
 use Config;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use System\Classes\UpdateManager;
@@ -19,7 +20,9 @@ use System\Models\File as FileModel;
  *
  * Currently supported commands:
  *
+ * - purge resized: Deletes all files in the resized directory.
  * - purge thumbs: Deletes all thumbnail files in the uploads directory.
+ * - purge uploads: Deletes files in the uploads directory that do not exist in the "system_files" table.
  * - git pull: Perform "git pull" on all plugins and themes.
  * - compile assets: Compile registered Language, LESS and JS files.
  * - compile js: Compile registered JS files only.
@@ -96,7 +99,7 @@ class WinterUtil extends Command
     protected function getArguments()
     {
         return [
-            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info "https://wintercms.com/docs/console/commands#winter-util-command".'],
+            ['name', InputArgument::IS_ARRAY, 'The utility command to perform, For more info, see "https://wintercms.com/docs/v1.2/docs/console/utilities#utility-runner".'],
         ];
     }
 
@@ -252,6 +255,28 @@ class WinterUtil extends Command
         }
     }
 
+    protected function utilPurgeResized()
+    {
+        if (!$this->confirmToProceed('This will PERMANENTLY DELETE all files in the resized directory.')) {
+            return;
+        }
+
+        $resizedDisk = Config::get('cms.storage.resized.disk', 'local');
+        $resizedFolder = Config::get('cms.storage.resized.folder', 'resized');
+
+        $totalCount = count(Storage::disk($resizedDisk)->allFiles($resizedFolder));
+
+        foreach (Storage::disk($resizedDisk)->directories($resizedFolder, false) as $directory) {
+            Storage::disk($resizedDisk)->deleteDirectory($directory);
+        }
+
+        if ($totalCount > 0) {
+            $this->comment(sprintf('Successfully deleted %d file(s)', $totalCount));
+        } else {
+            $this->comment('No files found to purge.');
+        }
+    }
+
     protected function utilPurgeThumbs()
     {
         if (!$this->confirmToProceed('This will PERMANENTLY DELETE all thumbs in the uploads directory.')) {
@@ -299,59 +324,44 @@ class WinterUtil extends Command
         }
 
         $uploadsDisk = Config::get('cms.storage.uploads.disk', 'local');
-        if ($uploadsDisk !== 'local') {
-            $this->error("Purging uploads is only supported on the 'local' disk, current uploads disk is $uploadsDisk");
-            return;
-        }
+
+        $uploadsFolder = Config::get('cms.storage.uploads.folder', 'uploads');
 
         $totalCount = 0;
+
         $validFiles = FileModel::pluck('disk_name')->all();
-        $uploadsPath = Config::get('filesystems.disks.local.root', storage_path('app')) . '/' . Config::get('cms.storage.uploads.folder', 'uploads');
 
-        // Recursive function to scan the directory for files and ensure they exist in system_files.
-        $purgeFunc = function ($targetDir) use (&$purgeFunc, &$totalCount, $uploadsPath, $validFiles) {
-            if ($files = File::glob($targetDir.'/*')) {
-                if ($dirs = File::directories($targetDir)) {
-                    foreach ($dirs as $dir) {
-                        $purgeFunc($dir);
+        foreach (Storage::disk($uploadsDisk)->allFiles($uploadsFolder) as $filePath) {
+            $fileName = basename($filePath);
 
-                        if (File::isDirectoryEmpty($dir) && is_writeable($dir)) {
-                            rmdir($dir);
-                            $this->info('Removed folder: '. str_replace($uploadsPath, '', $dir));
-                        }
-                    }
-                }
-
-                foreach ($files as $file) {
-                    if (!is_file($file)) {
-                        continue;
-                    }
-
-                    // Skip .gitignore files
-                    if ($file === '.gitignore') {
-                        continue;
-                    }
-
-                    // Skip files unable to be purged
-                    if (!is_writeable($file)) {
-                        $this->warn('Unable to purge file: ' . str_replace($uploadsPath, '', $file));
-                        continue;
-                    }
-
-                    // Skip valid files
-                    if (in_array(basename($file), $validFiles)) {
-                        $this->warn('Skipped file in use: '. str_replace($uploadsPath, '', $file));
-                        continue;
-                    }
-
-                    unlink($file);
-                    $this->info('Purged: '. str_replace($uploadsPath, '', $file));
-                    $totalCount++;
-                }
+            // Skip .gitignore files
+            if ($fileName === '.gitignore') {
+                continue;
             }
-        };
-
-        $purgeFunc($uploadsPath);
+            // Purge invalid files
+            if (!in_array($fileName, $validFiles)) {
+                // Purge invalid upload file
+                Storage::disk($uploadsDisk)->delete($filePath);
+                $this->info('Purged: ' . $filePath);
+                // Purge parent directories
+                $currentDir = dirname($filePath);
+                while ($currentDir !== $uploadsFolder) {
+                    // Get parent directory children
+                    $children = Storage::disk($uploadsDisk)->directories($currentDir);
+                    // Parent directory is empty
+                    if (count($children) === 0) {
+                        Storage::disk($uploadsDisk)->deleteDirectory($currentDir);
+                        $this->info('Removed folder: ' . $currentDir);
+                    } else {
+                        // Parent directory is not empty
+                        // stop the iteration
+                        break;
+                    }
+                    $currentDir = dirname($currentDir);
+                }
+                $totalCount++;
+            }
+        }
 
         if ($totalCount > 0) {
             $this->comment(sprintf('Successfully deleted %d invalid file(s), leaving %d valid files', $totalCount, count($validFiles)));
