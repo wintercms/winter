@@ -1,8 +1,22 @@
+
+
+// Importing file while using 
+// @import "../../../../../system/assets/ui/less/button.variables.less";
+
 @calendar_default_color: #0594CD;
 
 .calendar-container {
-    margin:10px;
-    padding: 0;
+
+    // --fc-button-text-color: @btn-primary-color;
+    // --fc-button-bg-color: @btn-primary-bg;
+    // --fc-button-border-color: @btn-primary-border;
+    // --fc-button-hover-bg-color: lighter(@btn-primary-bg, 15%);
+    // --fc-button-hover-border-color: #1a252f;
+    // --fc-button-active-bg-color: #1a252f;
+    // --fc-button-active-border-color: #151e27;
+    --fc-list-event-hover-bg-color: darken(@calendar_default_color, 15%);
+
+    padding: 0 20px 1px;
     font-size: 15px;
 
     .loading-indicator{
@@ -10,7 +24,7 @@
     }
 
     .calendar-control{
-        max-width: 1000px;
+        // max-width: 1000px;
         margin: 0 auto;
 
         button {
@@ -22,6 +36,7 @@
 
         .fc-event {
             background-color: @calendar_default_color;
+            color: #FFFFFF;
         }
 
     }

@@ -54,15 +54,32 @@ class CalendarController extends ControllerBehavior
     protected array $requiredConfig = ['modelClass', 'searchList'];
 
     /**
+     * @var array Visible actions in context of the controller
+     */
+    protected $actions = ['calendar'];
+
+    /**
+     * @var mixed Configuration for this behaviour
+     */
+    public $calendarConfig = 'config_calendar.yaml';
+
+    /**
      * Behavior constructor
      */
     public function __construct(\Backend\Classes\Controller $controller)
     {
         parent::__construct($controller);
 
+        /*
+        * Build configuration
+        */
+        $config = $controller->calendarConfig ?: $this->calendarConfig;
+        $this->setConfig($config, $this->requiredConfig);
+
+
         // Build the configuration
-        $this->config = $this->makeConfig($controller->calendarConfig, $this->requiredConfig);
-        $this->config->modelClass = Str::normalizeClassName($this->config->modelClass);
+        // $this->config = $this->makeConfig($controller->calendarConfig, $this->requiredConfig);
+        // $this->config->modelClass = Str::normalizeClassName($this->config->modelClass);
     }
 
     /**
@@ -72,7 +89,7 @@ class CalendarController extends ControllerBehavior
     {
         $this->controller->pageTitle = $this->controller->pageTitle ? : Lang::get($this->getConfig(
             'title',
-            'luketowers.calendarwidget::lang.behaviors.calendar.title'
+            'backend::lang.calendar.title'
         ));
         $this->controller->bodyClass = 'slim-container';
         $this->makeCalendar();
