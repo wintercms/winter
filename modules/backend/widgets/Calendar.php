@@ -112,12 +112,12 @@ class Calendar extends WidgetBase
      * Available display modes for fullcalendar.js widget
      */
     protected array $fullCalendarModes = [
-            // 'year' => 'multiMonthYear',
-            'month' => 'dayGridMonth',
-            'week'  => 'timeGridWeek',
-            'day'   => 'timeGridDay',
-            'list'  => 'listMonth'
-        ];
+        // 'year' => 'multiMonthYear',
+        'month' => 'dayGridMonth',
+        'week'  => 'timeGridWeek',
+        'day'   => 'timeGridDay',
+        'list'  => 'listMonth'
+    ];
 
     /**
      * Collection of functions to apply to each list query.
