@@ -1,22 +1,25 @@
-<?php namespace Cms\Classes;
+<?php
 
-use App;
-use ApplicationException;
-use Cache;
+namespace Cms\Classes;
+
 use Cms\Models\ThemeData;
-use Config;
 use DirectoryIterator;
-use Event;
 use Exception;
-use File;
-use Lang;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
 use System\Models\Parameter;
-use SystemException;
-use Url;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 use Winter\Storm\Halcyon\Datasource\DbDatasource;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;
-use Yaml;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Url;
+use Winter\Storm\Support\Facades\Yaml;
+use Winter\Storm\Support\Str;
 
 /**
  * This class represents the CMS theme.
@@ -356,7 +359,7 @@ class Theme extends CmsObject
             return $this->configCache = [];
         }
 
-        $config = Yaml::parse($data['content']);
+        $config = Yaml::parse($data['content']) ?: [];
 
         /**
          * @event cms.theme.extendConfig
@@ -400,7 +403,7 @@ class Theme extends CmsObject
          *          array_set($config, 'tabs.fields.header_color', [
          *              'label'           => 'Header Colour',
          *              'type'            => 'colorpicker',
-         *              'availableColors' => [#34495e, #708598, #3498db],
+         *              'availableColors' => [#103141, #708598, #6cc551],
          *              'assetVar'        => 'header-bg',
          *              'tab'             => 'Global'
          *          ]);
@@ -419,7 +422,8 @@ class Theme extends CmsObject
     public function assetUrl(?string $path): string
     {
         $expiresAt = now()->addMinutes(Config::get('cms.urlCacheTtl', 10));
-        return Cache::remember("winter.cms.{$this->dirName}.assetUrl.$path", $expiresAt, function () use ($path) {
+        $key = sprintf('winter.cms.%s.assetUrl.%s.%s', $this->dirName, request()->getSchemeAndHttpHost(), $path);
+        return Cache::remember($key, $expiresAt, function () use ($path) {
             // Handle symbolized paths
             if ($path && File::isPathSymbol($path)) {
                 return Url::asset(File::localToPublic(File::symbolizePath($path)));
@@ -681,6 +685,11 @@ class Theme extends CmsObject
      */
     public function __get($name)
     {
+        if (in_array(strtolower($name), ['id', 'path', 'dirname', 'config', 'formconfig', 'previewimageurl'])) {
+            $method = 'get'. ucfirst($name);
+            return $this->$method();
+        }
+
         if ($this->hasCustomData()) {
             return $this->getCustomData()->{$name};
         }
@@ -693,6 +702,10 @@ class Theme extends CmsObject
      */
     public function __isset($key)
     {
+        if (in_array(strtolower($key), ['id', 'path', 'dirname', 'config', 'formconfig', 'previewimageurl'])) {
+            return true;
+        }
+
         if ($this->hasCustomData()) {
             $theme = $this->getCustomData();
             return $theme->offsetExists($key);

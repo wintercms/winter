@@ -127,12 +127,12 @@ class SettingsModel extends ModelBehavior
             $query = $query->remember($this->cacheTtl, $this->getCacheKey());
         }
 
+        $record = null;
         try {
             $record = $query->first();
         } catch (QueryException $ex) {
             // SQLSTATE[42S02]: Base table or view not found - migrations haven't run yet
             if ($ex->getCode() === '42S02') {
-                $record = null;
                 traceLog($ex);
             }
         }

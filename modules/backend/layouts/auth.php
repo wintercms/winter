@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
         <meta name="robots" content="noindex">
-        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
         <meta name="backend-base-path" content="<?= Backend::baseUrl() ?>">
         <meta name="csrf-token" content="<?= csrf_token() ?>">
         <link rel="icon" type="image/png" href="<?= e(Backend\Models\BrandSetting::getFavicon()) ?>">
@@ -17,6 +17,12 @@
             Url::asset('modules/system/assets/ui/icons.css'),
             Backend::skinAsset('assets/css/winter.css'),
         ];
+        foreach ($styles as $style) {
+            $this->addCss($style, [
+                'build' => 'core',
+                'order' => 1,
+            ]);
+        }
         $scripts = [
             Backend::skinAsset('assets/js/vendor/jquery.min.js'),
             Backend::skinAsset('assets/js/vendor/jquery-migrate.min.js'),
@@ -26,17 +32,13 @@
             Url::asset('modules/backend/assets/js/auth/auth.js'),
             Url::asset('modules/system/assets/js/lang/lang.'.App::getLocale().'.js'),
         ];
+        foreach ($scripts as $script) {
+            $this->addJs($script, [
+                'build' => 'core',
+                'order' => 1,
+            ]);
+        }
         ?>
-
-        <?php foreach ($styles as $style): ?>
-            <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="stylesheet" importance="high">
-            <link href="<?= $style . '?v=' . $coreBuild; ?>" rel="preload" as="style" importance="high">
-        <?php endforeach; ?>
-
-        <?php foreach ($scripts as $script): ?>
-            <script data-cfasync="false" src="<?= $script . '?v=' . $coreBuild; ?>" importance="high"></script>
-            <link href="<?= $script . '?v=' . $coreBuild; ?>" rel="preload" as="script" importance="high">
-        <?php endforeach; ?>
 
         <?php if (!Config::get('cms.enableBackendServiceWorkers', false)): ?>
             <script>

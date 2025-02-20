@@ -2,7 +2,6 @@
     <p class="flash-message static error">
         <?= e($error); ?></p>
     </p>
-    <?php return; ?>
 <?php endif; ?>
 <?php if ($this->previewMode): ?>
     <div class="form-control"><?= Backend::dateTime($value, [
@@ -11,7 +10,6 @@
         'defaultValue' => $value
     ]) ?></div>
 <?php else: ?>
-
     <div
         id="<?= $this->getId() ?>"
         class="field-datepicker"

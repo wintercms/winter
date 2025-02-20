@@ -67,7 +67,7 @@ body.oc-loading, body.oc-loading * {
 
 @color-flash-success-bg:                     #8da85e;
 @color-flash-error-bg:                       #cc3300;
-@color-flash-warning-bg:                     #f0ad4e;
+@color-flash-warning-bg:                     @brand-warning;
 @color-flash-info-bg:                        #5fb6f5;
 @color-flash-text:                           #ffffff;
 
@@ -224,34 +224,10 @@ a.oc-loading, button.oc-loading, span.oc-loading {
 .infinite-class (@index, @val) when (@index < 101) {
     @tmpSelector: ~"@{index}%";
     @{tmpSelector} { transform: translateX(-@val); }
-    .infinite-class(@index + 10, @val - @val / 2);
+    .infinite-class((@index + 10), (@val - (@val / 2)));
 }
 
-@-moz-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-webkit-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-o-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-ms-keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
 @keyframes wn-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-moz-keyframes oc-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-webkit-keyframes oc-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-o-keyframes oc-infinite-loader {
-    .infinite-class(@start, @startVal);
-}
-@-ms-keyframes oc-infinite-loader {
     .infinite-class(@start, @startVal);
 }
 @keyframes oc-infinite-loader {

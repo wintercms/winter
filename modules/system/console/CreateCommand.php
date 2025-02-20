@@ -58,7 +58,8 @@ class CreateCommand extends BaseScaffoldCommand
 
         // More strict than the base Symfony validateName()
         // method, make a PR if it's a problem for you
-        if (preg_match('/^[a-z]++(:[a-z]++)*$/', $command) !== 1) {
+        // Plugin and command names can contain a number, but they can't start with it.
+        if (preg_match('/^[a-z][\w]++(:[a-z][\w]++)*$/', $command) !== 1) {
             throw new InvalidArgumentException(sprintf('Command name "%s" is invalid.', $command));
         }
 

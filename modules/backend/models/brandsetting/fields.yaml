@@ -1,8 +1,8 @@
 # ===================================
 #  Field Definitions
 # ===================================
-# Light palette: [#1abc9c, #2ecc71, #3498db, #9b59b6, #34495e, #f1c40f, #e67e22, #e74c3c, #ecf0f1, #95a5a6]
-# Dark palette:  [#16a085, #27ae60, #2980b9, #8e44ad, #2b3e50, #f39c12, #d35400, #c0392b, #bdc3c7, #7f8c8d]
+# Light palette: [#1abc9c, #6cc551, #b1dbef, #2da7c7, #b281c5, #103141, #f8e095, #de8754, #b33f32, #95a5a6]
+# Dark palette:  [#16a085, #52a838, #88c9e7, #227f96, #7b4e8e, #081821, #dcb22d, #d66829, #ab2a1c, #7f8c8d]
 
 tabs:
     fields:
@@ -51,7 +51,7 @@ tabs:
             span: storm
             cssClass: row col-lg-4
             tab: backend::lang.branding.colors
-            availableColors: ['#16a085', '#27ae60', '#2980b9', '#8e44ad', '#34495e', '#f39c12', '#d35400', '#c0392b', '#7f8c8d', '#4f5458']
+            availableColors: ['#16a085', '#52a838', '#88c9e7', '#2da7c7', '#7b4e8e', '#081821', '#dcb22d', '#d66829', '#ab2a1c', '#7f8c8d']
 
         secondary_color:
             label: backend::lang.branding.secondary_color
@@ -59,7 +59,7 @@ tabs:
             span: storm
             cssClass: row col-lg-4
             tab: backend::lang.branding.colors
-            availableColors: ['#16a085', '#27ae60', '#3498db', '#9b59b6', '#34495e', '#f39c12', '#e67e22', '#e74c3c', '#708598', '#4f5458']
+            availableColors: ['#16a085', '#52a838', '#88c9e7', '#2da7c7', '#7b4e8e', '#081821', '#dcb22d', '#d66829', '#ab2a1c', '#7f8c8d']
 
         accent_color:
             label: backend::lang.branding.accent_color
@@ -67,7 +67,7 @@ tabs:
             span: storm
             cssClass: row col-lg-4
             tab: backend::lang.branding.colors
-            availableColors: ['#16a085', '#27ae60', '#3498db', '#9b59b6', '#34495e', '#f1c40f', '#e67e22', '#e74c3c', '#ecf0f1', '#95a5a6']
+            availableColors: ['#16a085', '#6cc551', '#88c9e7', '#2da7c7', '#7b4e8e', '#081821', '#dcb22d', '#d66829', '#ab2a1c', '#7f8c8d']
 
         _default_colors:
             label: backend::lang.branding.default_colors
@@ -92,8 +92,7 @@ tabs:
                         allowCustom: true
                         allowAlpha: true
                         formats: all
-            span: storm
-            cssClass: row col-lg-4
+            span: full
 
         menu_mode:
             label: backend::lang.branding.menu_mode

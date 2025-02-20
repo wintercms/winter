@@ -44,6 +44,8 @@
 
 // Call animation for the active one
 .progress.active .progress-bar {
+    #gradient.striped(rgba(255,255,255,.15); -45deg);
+    background-size: 40px 40px;
     .animation(progress-bar-stripes 2s linear infinite);
 }
 
@@ -71,12 +73,12 @@
 
 // WebKit
 @-webkit-keyframes progress-bar-stripes {
-    from  { background-position: 40px 0; }
-    to    { background-position: 0 0; }
+    from  { background-position: 0 0; }
+    to    { background-position: 40px 0; }
 }
 
 // Spec and IE10+
 @keyframes progress-bar-stripes {
-    from  { background-position: 40px 0; }
-    to    { background-position: 0 0; }
+    from  { background-position: 0 0; }
+    to    { background-position: 40px 0; }
 }

@@ -123,7 +123,6 @@ return [
         'smtp_username' => '用户名',
         'smtp_password' => '密码',
         'smtp_port' => 'SMTP 端口',
-        'smtp_ssl' => '需要SSL连接',
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail 路径',
         'sendmail_path_comment' => '请确认 Sendmail 路径.',
