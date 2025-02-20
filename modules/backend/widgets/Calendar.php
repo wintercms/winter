@@ -90,7 +90,7 @@ class Calendar extends WidgetBase
     public array $availableDisplayModes = [];
 
     /**
-     * Initial calendar view,  either mont, week, day or list
+     * Initial calendar view, one of month, week, day, list
      */
     public ?string $initialView = 'month';
 
