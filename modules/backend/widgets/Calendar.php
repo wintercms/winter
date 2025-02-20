@@ -109,6 +109,17 @@ class Calendar extends WidgetBase
     //
 
     /**
+     * Available display modes for fullcalendar.js widget
+     */
+    protected array $fullCalendarModes = [
+            // 'year' => 'multiMonthYear',
+            'month' => 'dayGridMonth',
+            'week'  => 'timeGridWeek',
+            'day'   => 'timeGridDay',
+            'list'  => 'listMonth'
+        ];
+
+    /**
      * Collection of functions to apply to each list query.
      */
     protected array $filterCallbacks = [];
@@ -251,16 +262,11 @@ class Calendar extends WidgetBase
      */
     protected function getInitialView(): string
     {
-        $fullCalendarModes = [
-            'month' => 'dayGridMonth',
-            'week'  => 'timeGridWeek',
-            'day'   => 'timeGridDay',
-            'list'  => 'listMonth'
-        ];
-
-        if (!empty($fullCalendarModes[$this->initialView])) {
-            return $fullCalendarModes[$this->initialView];
+        if (!empty($this->fullCalendarModes[$this->initialView])) {
+            return $this->fullCalendarModes[$this->initialView];
         }
+
+        return 'dayGridMonth';
     }
 
     /**
@@ -273,19 +279,13 @@ class Calendar extends WidgetBase
             $this->availableDisplayModes = [$this->availableDisplayModes];
         }
 
-        $fullCalendarModes = [
-            'month' => 'dayGridMonth',
-            'week'  => 'timeGridWeek',
-            'day'   => 'timeGridDay',
-            'list'  => 'listMonth'
-        ];
-
         $selectedModes = [];
         foreach ($this->availableDisplayModes as $mode) {
-            if (!empty($fullCalendarModes[$mode])) {
-                $selectedModes[] = $fullCalendarModes[$mode];
+            if (!empty($this->fullCalendarModes[$mode])) {
+                $selectedModes[] = $this->fullCalendarModes[$mode];
             }
         }
+
         return implode(',', $selectedModes);
     }
 

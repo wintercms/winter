@@ -75,11 +75,6 @@ class CalendarController extends ControllerBehavior
         */
         $config = $controller->calendarConfig ?: $this->calendarConfig;
         $this->setConfig($config, $this->requiredConfig);
-
-
-        // Build the configuration
-        // $this->config = $this->makeConfig($controller->calendarConfig, $this->requiredConfig);
-        // $this->config->modelClass = Str::normalizeClassName($this->config->modelClass);
     }
 
     /**
