@@ -93,11 +93,6 @@ class ListController extends ControllerBehavior
          * Build configuration
          */
         $this->setConfig($this->listDefinitions[$this->primaryDefinition], $this->requiredConfig);
-
-        /*
-         * Set default view path
-         */
-        $this->controller->appendViewPath($this->guessViewPath());
     }
 
     /**

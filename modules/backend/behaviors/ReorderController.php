@@ -91,11 +91,6 @@ class ReorderController extends ControllerBehavior
          * Populate from config
          */
         $this->nameFrom = $this->getConfig('nameFrom', $this->nameFrom);
-
-        /*
-         * Set default view path
-         */
-        $this->controller->appendViewPath($this->guessViewPath());
     }
 
     //
