@@ -85,6 +85,11 @@ class Calendar extends WidgetBase
     public string|array $recordTooltip = '';
 
     /**
+     * Calendar widget theme color for buttons ('' for default, primary or secondary)
+     */
+    public string $calendarTheme = '';
+
+    /**
      * Display modes to allow ['month', 'week', 'day', 'list']
      */
     public array $availableDisplayModes = [];
@@ -100,7 +105,7 @@ class Calendar extends WidgetBase
     public ?int $firstDay = 0;
 
     /**
-     * Calendar of CSS classes to apply to the Calendar container element
+     * Array of CSS classes to apply to the Calendar container element
      */
     public array $cssClasses = [];
 
@@ -168,6 +173,7 @@ class Calendar extends WidgetBase
             'recordTooltip',
             'previewMode',
             'searchList',
+            'calendarTheme',
             'availableDisplayModes',
             'initialView',
             'firstDay',
@@ -218,7 +224,8 @@ class Calendar extends WidgetBase
         $this->addJs('vendor/fullcalendar/index.global.min.js', '6.1.15');
         $this->addJs('vendor/fullcalendar/locales-all.global.min.js', '6.1.15');
 
-        $this->addCss(['less/calendar.less'], 'Winter.Core');
+        // $this->addCss(['less/calendar.less'], 'Winter.Core');
+        $this->addCss('css/calendar.css', 'Winter.Core');
         $this->addJs('js/calendar.cache.js', 'Winter.Core');
         $this->addJs('js/calendar.js', 'Winter.Core');
     }
@@ -228,6 +235,10 @@ class Calendar extends WidgetBase
      */
     public function prepareVars()
     {
+        if (!empty($this->calendarTheme)) {
+            $this->cssClasses[] = $this->calendarTheme;
+        }
+
         $this->vars['availableDisplayModes'] = $this->getDisplayModes();
         $this->vars['initialView'] = $this->getInitialView();
         $this->vars['firstDay'] = $this->firstDay;
@@ -254,8 +265,6 @@ class Calendar extends WidgetBase
 
         return $this->model;
     }
-
-
 
     /**
      * Get the fullcalendar.js initial view to be used
@@ -897,7 +906,7 @@ class Calendar extends WidgetBase
     }
 
 
-     /**
+    /**
      * Event handler for refreshing the calendar.
      * The search widget will call onRefresh
      * @see CalendarController->initToolbar
