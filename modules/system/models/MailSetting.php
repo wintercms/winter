@@ -13,6 +13,7 @@ class MailSetting extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
+    const MODE_FAILOVER  = 'failover';
     const MODE_LOG       = 'log';
     const MODE_MAIL      = 'mail';
     const MODE_SENDMAIL  = 'sendmail';
@@ -72,9 +73,16 @@ class MailSetting extends Model
         $this->smtp_authorization = !!strlen($this->smtp_user);
     }
 
+    public function getFailoverMailersOptions()
+    {
+        $config = App::make('config');
+        return array_keys($config->get('mail.mailers'));
+    }
+
     public function getSendModeOptions()
     {
         return [
+            static::MODE_FAILOVER => 'system::lang.mail.failover',
             static::MODE_LOG      => 'system::lang.mail.log_file',
             static::MODE_MAIL     => 'system::lang.mail.php_mail',
             static::MODE_SENDMAIL => 'system::lang.mail.sendmail',
@@ -91,6 +99,10 @@ class MailSetting extends Model
         $config->set('mail.from.address', $settings->sender_email);
 
         switch ($settings->send_mode) {
+            case self::MODE_FAILOVER:
+                $config->set('mail.mailers.failover.mailers', explode(',', $settings->failover_mailers) ?? ['log']);
+                break;
+
             case self::MODE_SMTP:
                 $config->set('mail.mailers.smtp.host', $settings->smtp_address);
                 $config->set('mail.mailers.smtp.port', $settings->smtp_port);

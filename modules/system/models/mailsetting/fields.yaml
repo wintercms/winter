@@ -80,6 +80,14 @@ tabs:
                 field: send_mode
                 condition: value[sendmail]
 
+        failover_mailers:
+            label: system::lang.mail.failover_mailers
+            placeholder: system::lang.mail.failover_mailers_placeholer
+            type: taglist
+            options: getFailoverMailersOptions
+            customTags: false
+            tab: system::lang.mail.general
+
         _send_test:
             type: partial
             path: ~/modules/system/models/mailsetting/_send_test_button.php
