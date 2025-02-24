@@ -100,7 +100,7 @@ class MailSetting extends Model
 
         switch ($settings->send_mode) {
             case self::MODE_FAILOVER:
-                $config->set('mail.mailers.failover.mailers', explode(',', $settings->failover_mailers) ?? ['log']);
+                $config->set('mail.mailers.failover.mailers', explode(',', $settings->failover_mailers));
                 break;
 
             case self::MODE_SMTP:
