@@ -75,8 +75,9 @@ class MailSetting extends Model
 
     public function getFailoverMailersOptions()
     {
-        $config = App::make('config');
-        return array_keys($config->get('mail.mailers'));
+        $mailers = App::make('config')->get('mail.mailers');
+        unset($mailers['failover']);
+        return array_keys($mailers);
     }
 
     public function getSendModeOptions()
