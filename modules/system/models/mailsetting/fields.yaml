@@ -87,6 +87,10 @@ tabs:
             options: getFailoverMailersOptions
             customTags: false
             tab: system::lang.mail.general
+            trigger:
+                action: show
+                field: send_mode
+                condition: value[failover]
 
         _send_test:
             type: partial
