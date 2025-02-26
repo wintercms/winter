@@ -356,9 +356,23 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerLogging()
     {
         Event::listen(\Illuminate\Log\Events\MessageLogged::class, function ($event) {
+            if (!EventLog::useLogging()) {
+                return;
+            }
+
+            $details = $event->context ?? null;
+
+            // This allows for preventing db logging in cases where we don't want all log messages logged to the DB.
+            if (isset($details['skipDatabaseLog']) && $details['skipDatabaseLog']) {
+                return;
+            }
+
+            EventLog::add($event->message, $event->level, $details);
+        });
+
+        Event::listen('exception.report', function (\Throwable $throwable) {
             if (EventLog::useLogging()) {
-                $details = $event->context ?? null;
-                EventLog::add($event->message, $event->level, $details);
+                EventLog::addException($throwable);
             }
         });
     }
