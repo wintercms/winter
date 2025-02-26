@@ -238,7 +238,7 @@ class Lists extends WidgetBase
         }
 
         if ($this->customViewPath) {
-            $this->addViewPath($this->customViewPath);
+            $this->prependViewPath($this->customViewPath);
         }
 
         $this->validateModel();

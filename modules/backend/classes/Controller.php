@@ -671,7 +671,7 @@ class Controller extends ControllerBase
      */
     protected function runAjaxHandlerForWidget($widget, $handler)
     {
-        $this->addViewPath($widget->getViewPaths());
+        $this->prependViewPath($widget->getViewPaths());
 
         $result = call_user_func_array([$widget, $handler], array_values($this->params));
 
