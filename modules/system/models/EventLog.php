@@ -107,12 +107,8 @@ class EventLog extends Model
         return Str::limit($matches[1] ?? '', 500);
     }
 
-
     /**
      * Constructs the details array for logging
-     *
-     * @param Throwable $throwable
-     * @return array
      */
     public function getDetails(Throwable $throwable): array
     {
@@ -125,11 +121,8 @@ class EventLog extends Model
 
     /**
      * Convert a throwable into an array of data for logging
-     *
-     * @param Throwable $throwable
-     * @return array
      */
-    protected function exceptionToArray(\Throwable $throwable): array
+    protected function exceptionToArray(Throwable $throwable): array
     {
         return [
             'type' => $throwable::class,
@@ -149,8 +142,6 @@ class EventLog extends Model
     /**
      * Generate an array trace with extra data not provided by the default trace
      *
-     * @param array $trace
-     * @return array
      * @throws \ReflectionException
      */
     protected function exceptionTraceToArray(array $trace): array
@@ -211,10 +202,6 @@ class EventLog extends Model
 
     /**
      * Get the code snippet referenced in a trace
-     *
-     * @param string $file
-     * @param int $line
-     * @return array
      */
     protected function getSnippet(string $file, int $line): array
     {
@@ -238,8 +225,6 @@ class EventLog extends Model
 
     /**
      * Get environment details to record with the exception
-     *
-     * @return array
      */
     protected function getEnviromentInfo(): array
     {
@@ -265,9 +250,6 @@ class EventLog extends Model
 
     /**
      * Helper to work out if a file should be considered "In App" or not
-     *
-     * @param string $file
-     * @return bool
      */
     protected function isInAppError(string $file): bool
     {
@@ -275,6 +257,6 @@ class EventLog extends Model
             return false;
         }
 
-        return !\Winter\Storm\Support\Str::startsWith($file, base_path('vendor')) && !Str::startsWith($file, base_path('modules'));
+        return !Str::startsWith($file, base_path('vendor')) && !Str::startsWith($file, base_path('modules'));
     }
 }
