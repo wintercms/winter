@@ -1,23 +1,25 @@
-<?php namespace System\Classes;
+<?php
 
-use Db;
-use App;
-use Str;
-use Log;
-use File;
-use Lang;
-use View;
-use Cache;
-use Config;
-use Schema;
-use SystemException;
+namespace System\Classes;
+
+use Backend\Classes\NavigationManager;
 use FilesystemIterator;
-use RecursiveIteratorIterator;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\View;
 use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 use System\Models\PluginVersion;
+use SystemException;
 use Winter\Storm\Foundation\Application;
 use Winter\Storm\Support\ClassLoader;
-use Backend\Classes\NavigationManager;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Str;
 
 /**
  * Plugin manager
@@ -256,8 +258,15 @@ class PluginManager
             return;
         }
 
-        foreach ($this->plugins as $pluginId => $plugin) {
-            $this->registerPlugin($plugin, $pluginId);
+        try {
+            foreach ($this->plugins as $pluginId => $plugin) {
+                $this->registerPlugin($plugin, $pluginId);
+            }
+        } catch (QueryException $ex) {
+            // SQLSTATE[42S02]: Base table or view not found - migrations haven't run yet
+            if ($ex->getCode() === '42S02') {
+                Log::error("$pluginId cannot be registered, missing database content. Try running migrations. Error: " . $ex->getMessage());
+            }
         }
 
         // Ensure that route attributes are properly loaded
@@ -372,8 +381,15 @@ class PluginManager
             return;
         }
 
-        foreach ($this->plugins as $plugin) {
-            $this->bootPlugin($plugin);
+        try {
+            foreach ($this->plugins as $pluginId => $plugin) {
+                $this->bootPlugin($plugin);
+            }
+        } catch (QueryException $ex) {
+            // SQLSTATE[42S02]: Base table or view not found - migrations haven't run yet
+            if ($ex->getCode() === '42S02') {
+                Log::error("$pluginId cannot be booted, missing database content. Try running migrations. Error: " . $ex->getMessage());
+            }
         }
 
         $this->booted = true;
@@ -664,7 +680,7 @@ class PluginManager
         if (
             $this->app->hasDatabaseTable('system_plugin_versions')
         ) {
-            $userDisabled = Db::table('system_plugin_versions')->where('is_disabled', 1)->lists('code') ?? [];
+            $userDisabled = DB::table('system_plugin_versions')->where('is_disabled', 1)->lists('code') ?? [];
             foreach ($userDisabled as $code) {
                 $this->flagPlugin($code, static::DISABLED_BY_USER);
             }
