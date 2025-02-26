@@ -22,15 +22,12 @@ class {{ studly_name }} extends Controller
     protected $requiredPermissions = [
         '{{ lower_author }}.{{ lower_plugin }}.{{ lower_name }}.manage_all',
     ];
+{% if sidebar %}
 
     public function __construct()
     {
         parent::__construct();
-
-        BackendMenu::setContext('{{ plugin_code }}', '{{ lower_plugin }}', '{{ lower_name }}');
-    {% if sidebar %}
-
         $this->bodyClass = 'compact-container';
-    {% endif -%}
     }
+{% endif -%}
 }

@@ -2,16 +2,17 @@
 
 namespace Backend\Classes;
 
-use Lang;
-use View;
-use Flash;
-use Config;
-use Request;
-use Backend;
-use Redirect;
-use Response;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\View;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Config;
+use Illuminate\Support\Facades\Request;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use Exception;
-use BackendAuth;
+use Backend\Facades\BackendAuth;
 use Backend\Models\UserPreference;
 use Backend\Models\Preference as BackendPreference;
 use Backend\Widgets\MediaManager;
@@ -200,6 +201,26 @@ class Controller extends ControllerBase
     }
 
     /**
+     * Set the navigation context based on the current action & parameters
+     */
+    protected function setNavigationContext(?string $action = null, array $params = []): void
+    {
+        $context = BackendMenu::getContext();
+
+        // @TODO: Support detecting module controllers as well
+        $currentClass = explode('\\', get_class($this));
+        $author = $currentClass[0];
+        $plugin = $currentClass[1];
+        $controller = $currentClass[count($currentClass) - 1];
+
+        $owner = $context->owner ?? "$author.$plugin";
+        $mainMenuCode = $context->mainMenuCode ?? strtolower($plugin);
+        $sideMenuCode = $context->sideMenuCode ?? strtolower($controller);
+
+        BackendMenu::setContext($owner, $mainMenuCode, $sideMenuCode);
+    }
+
+    /**
      * Execute the controller action.
      * @param string $action The action name.
      * @param array $params Routing parameters to pass to the action.
@@ -280,6 +301,11 @@ class Controller extends ControllerBase
          */
         BackendPreference::setAppLocale();
         BackendPreference::setAppFallbackLocale();
+
+        /*
+         * Set the navigation context
+         */
+        $this->setNavigationContext($action, $params);
 
         /*
          * Execute AJAX event
