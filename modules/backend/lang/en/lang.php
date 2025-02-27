@@ -252,6 +252,7 @@ return [
     'form' => [
         'create_title' => 'New :name',
         'update_title' => 'Edit :name',
+        'preview' => 'Preview',
         'preview_title' => 'Preview :name',
         'create_success' => ':name created',
         'update_success' => ':name updated',

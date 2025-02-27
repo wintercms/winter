@@ -5,7 +5,6 @@
 <?php if (!$this->fatalError): ?>
     <?php Block::put('form-contents') ?>
         <div class="layout">
-
             <div class="layout-row">
                 <?= $this->formRenderOutsideFields() ?>
                 <?= $this->formRenderPrimaryTabs() ?>
@@ -35,7 +34,6 @@
                     </span>
                 </div>
             </div>
-
         </div>
     <?php Block::endPut() ?>
 
@@ -44,7 +42,11 @@
     <?php Block::endPut() ?>
 
     <?php Block::put('body') ?>
-        <?= Form::open(['class'=>'layout stretch']) ?>
+        <?= Form::open([
+            'class' => 'layout stretch',
+            'data-change-monitor' => 'true',
+            'data-window-close-confirm' => 'true',
+        ]) ?>
             <?= $this->makeLayout('form-with-sidebar') ?>
         <?= Form::close() ?>
     <?php Block::endPut() ?>

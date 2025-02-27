@@ -1,18 +1,48 @@
 <div class="form-buttons loading-indicator-container">
+    <!-- Save -->
     <a
-        type="submit"
+        href="javascript:;"
+        class="btn btn-primary wn-icon-check save"
         data-request="onSave"
-        data-hotkey="ctrl+s, cmd+s"
+        data-load-indicator="<?= e(trans('backend::lang.form.saving')) ?>"
+        data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
         data-request-data="redirect:0"
-        data-load-indicator="<?= e(trans('backend::lang.form.saving')); ?>"
-        class="btn btn-primary wn-icon-check save">
-        <?= e(trans('backend::lang.form.save')); ?>
+        data-hotkey="ctrl+s, cmd+s"
+    >
+        <?= e(trans('backend::lang.form.save')) ?>
     </a>
+
+    <!-- Save and Close -->
     <a
-        type="button"
-        class="btn btn-default wn-icon-trash-o delete"
-        data-request="onDelete"
-        data-load-indicator="<?= e(trans('backend::lang.form.deleting')); ?>"
-        data-request-confirm="<?= e(trans('backend::lang.form.confirm_delete')); ?>">
+        href="javascript:;"
+        class="btn btn-primary wn-icon-check save"
+        data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
+        data-request="onSave"
+        data-load-indicator="<?= e(trans('backend::lang.form.saving')) ?>"
+    >
+        <?= e(trans('backend::lang.form.save_and_close')) ?>
     </a>
+
+    <?php if ($formModel->url): ?>
+        <!-- Preview -->
+        <a
+            href="<?= e($formModel->url) ?>"
+            target="_blank"
+            class="btn btn-primary wn-icon-crosshairs"
+            data-control="preview-button"
+        >
+            <?= e(trans('backend::lang.form.save_and_close')) ?>
+        </a>
+    <?php endif ?>
+
+    <!-- Delete -->
+    <button
+        type="button"
+        class="btn btn-default empty wn-icon-trash-o"
+        data-request="onDelete"
+        title="<?= e(trans('backend::lang.form.delete')); ?>"
+        data-load-indicator="<?= e(trans('backend::lang.form.deleting')); ?>"
+        data-request-confirm="<?= e(trans('backend::lang.form.confirm_delete')); ?>"
+        data-control="delete-button"
+    ></button>
 </div>

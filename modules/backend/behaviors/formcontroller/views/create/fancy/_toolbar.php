@@ -1,11 +1,13 @@
 <div class="form-buttons loading-indicator-container">
+    <!-- Save -->
     <a
-        type="submit"
+        href="javascript:;"
+        class="btn btn-primary wn-icon-check save"
         data-request="onSave"
+        data-load-indicator="<?= e(trans('backend::lang.form.saving')) ?>"
+        data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
         data-hotkey="ctrl+s, cmd+s"
-        data-request-data="redirect:0"
-        data-load-indicator="<?= e(trans('backend::lang.form.creating')); ?>"
-        class="btn btn-primary wn-icon-check save">
-        <?= e(trans('backend::lang.form.create')); ?>
+    >
+        <?= e(trans('backend::lang.form.save')) ?>
     </a>
 </div>
