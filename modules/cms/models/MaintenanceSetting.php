@@ -100,6 +100,6 @@ class MaintenanceSetting extends Model
      */
     public static function isAllowedIp(string $ip): bool
     {
-        return IpUtils::checkIp($ip, Arr::pluck(static::get('allowed_ips', []), 'ip'));
+        return IpUtils::checkIp($ip, Arr::pluck(static::get('allowed_ips', []) ?? [], 'ip'));
     }
 }
