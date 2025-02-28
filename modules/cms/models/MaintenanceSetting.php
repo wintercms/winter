@@ -82,7 +82,7 @@ class MaintenanceSetting extends Model
     {
         if (
             ($theme = Theme::getEditTheme())
-            && ($themeMap = array_get($this->attributes, 'theme_map'))
+            && ($themeMap = array_get($this->value, 'theme_map'))
             && ($cmsPage = array_get($themeMap, $theme->getDirName()))
         ) {
             $this->cms_page = $cmsPage;
