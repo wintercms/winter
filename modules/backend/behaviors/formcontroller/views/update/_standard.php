@@ -12,7 +12,7 @@
             <?= $this->formRender() ?>
         </div>
 
-        <div class="form-buttons">
+        <div class="form-buttons p-t">
             <div class="loading-indicator-container">
                 <button
                     type="button"
