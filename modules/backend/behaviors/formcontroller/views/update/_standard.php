@@ -45,7 +45,7 @@
                     data-request-confirm="<?= e(trans('backend::lang.form.confirm_delete')); ?>">
                 </button>
                 <span class="btn-text">
-                    or <a href="<?= Backend::url($formConfig->defaultRedirect) ?>"><?= e(trans('backend::lang.form.cancel')); ?></a>
+                    <?= e(trans('backend::lang.form.or')) ?> <a href="<?= Backend::url($formConfig->defaultRedirect) ?>"><?= e(trans('backend::lang.form.cancel')); ?></a>
                 </span>
             </div>
         </div>
