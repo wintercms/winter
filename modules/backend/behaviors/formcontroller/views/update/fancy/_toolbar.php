@@ -42,6 +42,7 @@
         data-request="onDelete"
         title="<?= e(trans('backend::lang.form.delete')); ?>"
         data-load-indicator="<?= e(trans('backend::lang.form.deleting')); ?>"
+        data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
         data-request-confirm="<?= e(trans('backend::lang.form.confirm_delete')); ?>"
         data-control="delete-button"
     ></button>

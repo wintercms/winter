@@ -29,6 +29,7 @@
                         data-request-data="close:1"
                         data-hotkey="ctrl+enter, cmd+enter"
                         data-load-indicator="<?= e(trans('backend::lang.form.saving')); ?>"
+                        data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
                         class="btn btn-default"
                     >
                         <?= e(trans('backend::lang.form.save_and_close')); ?>

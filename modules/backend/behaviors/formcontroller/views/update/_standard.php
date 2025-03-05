@@ -31,6 +31,7 @@
                     data-request-data="close:1"
                     data-hotkey="ctrl+enter, cmd+enter"
                     data-load-indicator="<?= e(trans('backend::lang.form.saving')); ?>"
+                    data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
                     class="btn btn-default"
                 >
                     <?= e(trans('backend::lang.form.save_and_close')); ?>
@@ -40,6 +41,7 @@
                     class="wn-icon-trash-o btn-icon danger pull-right"
                     data-request="onDelete"
                     data-load-indicator="<?= e(trans('backend::lang.form.deleting_name', ['name' => trans($formConfig->name)])); ?>"
+                    data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
                     data-request-confirm="<?= e(trans('backend::lang.form.confirm_delete')); ?>">
                 </button>
                 <span class="btn-text">
