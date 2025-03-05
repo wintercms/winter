@@ -36,7 +36,7 @@ $loadingText = $field->config['loading'] ?? '';
 $icon = $field->config['icon'] ?? '';
 ?>
 <div class="loading-indicator-container">
-    <?php if ($field->path) : ?>
+    <?php if ($field->path): ?>
         <?= $this->controller->makePartial($field->path, [
             'formWidget' => $this,
             'formModel'  => $formModel,
@@ -57,7 +57,7 @@ $icon = $field->config['icon'] ?? '';
             'loading'    => $loadingText,
             'icon'       => $icon,
         ]) ?>
-    <?php else : ?>
+    <?php else: ?>
         <<?= e($element); ?>
             class="<?= e($classes); ?>"
             data-load-indicator<?= !empty($loadingText) ? '="' . e(trans($loadingText)) . '"' : ''; ?>
