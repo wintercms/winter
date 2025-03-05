@@ -4,6 +4,7 @@
         href="javascript:;"
         class="btn btn-primary wn-icon-check save"
         data-request="onSave"
+        data-browser-validate
         data-load-indicator="<?= e(trans('backend::lang.form.saving')) ?>"
         data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
         data-request-data="redirect:0"
@@ -18,6 +19,7 @@
         class="btn btn-primary wn-icon-check save"
         data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
         data-request="onSave"
+        data-browser-validate
         data-load-indicator="<?= e(trans('backend::lang.form.saving')) ?>"
     >
         <?= e(trans('backend::lang.form.save_and_close')) ?>

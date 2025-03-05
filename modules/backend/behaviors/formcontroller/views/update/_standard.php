@@ -17,6 +17,7 @@
                 <button
                     type="button"
                     data-request="onSave"
+                    data-browser-validate
                     data-load-indicator="<?= e(trans('backend::lang.form.saving')) ?>"
                     data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
                     data-request-data="redirect:0"
@@ -28,6 +29,7 @@
                 <button
                     type="button"
                     data-request="onSave"
+                    data-browser-validate
                     data-request-data="close:1"
                     data-hotkey="ctrl+enter, cmd+enter"
                     data-load-indicator="<?= e(trans('backend::lang.form.saving')); ?>"
