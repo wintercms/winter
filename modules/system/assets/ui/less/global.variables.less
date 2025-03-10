@@ -6,7 +6,7 @@
 @body-bg:               #f9f9f9;
 
 @text-color:            @gray-dark;
-@link-color:            #0181b9;
+@link-color:            @brand-secondary;
 @link-hover-color:      darken(@link-color, 30%);
 
 @link-hover-decoration: underline;
@@ -98,13 +98,20 @@
 //
 // Colors
 // --------------------------------------------------
-@brand-primary:          #34495e;
-@brand-secondary:        #e67e22;
-@brand-accent:           #3498db;
-@brand-success:          #31ac5f;
-@brand-info:             #5bc0de;
-@brand-warning:          #f0ad4e;
-@brand-danger:           #ab2a1c;
+@brand-primary:          #103141;
+@brand-secondary:        #2da7c7;
+@brand-accent:           #6cc551;
+@brand-primary-lighter:  lighten(@brand-primary, 5%);
+@brand-secondary-lighter:lighten(@brand-secondary, 5%);
+@brand-accent-lighter:   lighten(@brand-accent, 5%);
+@brand-primary-darker:   darken(@brand-primary, 5%);
+@brand-secondary-darker: darken(@brand-secondary, 5%);
+@brand-accent-darker:    darken(@brand-accent, 5%);
+
+@brand-success:          #52a838;
+@brand-info:             #48b9d5;
+@brand-warning:          #de8754;
+@brand-danger:           #e01346;
 
 @color-text-title:       #405261;
 @color-text-description: #8f8f8f;
@@ -139,7 +146,7 @@
 // Highlights
 // --------------------------------------------------
 
-@highlight-hover-bg: mix(white, @brand-accent, 13%);
+@highlight-hover-bg: mix(white, @brand-secondary, 13%);
 @highlight-hover-text: #fff;
 
 @highlight-active-bg: @brand-accent;

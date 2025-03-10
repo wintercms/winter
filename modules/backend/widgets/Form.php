@@ -253,10 +253,7 @@ class Form extends WidgetBase
             $field = $this->allFields[$field];
         }
 
-        if (!isset($options['useContainer'])) {
-            $options['useContainer'] = true;
-        }
-        $targetPartial = $options['useContainer'] ? 'field-container' : 'field';
+        $targetPartial = ($options['useContainer'] ?? true) ? 'field-container' : 'field';
 
         return $this->makePartial($targetPartial, ['field' => $field]);
     }
@@ -711,7 +708,7 @@ class Form extends WidgetBase
      * @param string $addToArea
      * @return void
      */
-    public function addFields(array $fields, $addToArea = null)
+    public function addFields(array $fields, $addToArea = '')
     {
         foreach ($fields as $name => $config) {
             // Check if user has permissions to show this field

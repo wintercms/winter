@@ -17,7 +17,7 @@ class MixWatch extends MixCompile
         {webpackArgs?* : Arguments to pass through to the Webpack CLI}
         {--f|production : Runs compilation in "production" mode}
         {--m|manifest= : Defines package.json to use for compile}
-        {--s|silent : Silent mode}
+        {--s|silent : Enables silent mode, no output will be shown.}
         {--d|disable-tty : Disable tty mode}
         {--no-progress : Do not show mix progress}';
 

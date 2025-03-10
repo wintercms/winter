@@ -24,6 +24,45 @@ class SecurityPolicyTest extends TestCase
         ');
     }
 
+    public function testAllowedMethods()
+    {
+        // put, get
+        $value = trim($this->renderTwigInCmsController('
+            {{ this.session.put("test", "value") }}
+            {{ this.session.get("test", "default") }}
+        '));
+        $this->assertEquals("value", $value);
+
+        // has
+        $value = trim($this->renderTwigInCmsController('
+            {{ this.session.put("test", "value") }}
+            {% if this.session.has("test") %}success{% else %}failure{% endif %}
+        '));
+        $this->assertEquals("success", $value);
+
+        // forget
+        $value = trim($this->renderTwigInCmsController('
+            {{ this.session.put("test", "value") }}
+            {{ this.session.forget("test") }}
+            {% if this.session.has("test") %}failure{% else %}success{% endif %}
+        '));
+        $this->assertEquals("success", $value);
+
+        // flush
+        $value = trim($this->renderTwigInCmsController('
+            {{ this.session.put("test", "value") }}
+            {{ this.session.flush() }}
+            {% if this.session.has("test") %}failure{% else %}success{% endif %}
+        '));
+        $this->assertEquals("success", $value);
+
+        // Test all other methods blocked
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {{ this.session.driver }}
+        ');
+    }
+
     public function testCannotGetTwigLoaderFromCmsController()
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
@@ -84,6 +123,17 @@ class SecurityPolicyTest extends TestCase
             'model' => $model,
         ]));
         $this->assertEquals('value', $result);
+    }
+
+    public function testCannotAccessModelQuery()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+
+        $this->renderTwigInCmsController('
+            {{ dump(model.getQuery) }}
+        ', [
+            'model' => new \Winter\Storm\Database\Model(),
+        ]);
     }
 
     public function testCannotFillAModel()
@@ -258,12 +308,11 @@ class SecurityPolicyTest extends TestCase
         $controller = new Controller();
         $twig = $controller->getTwig();
         $template = $twig->createTemplate($source, 'test.case');
+
         return $twig->render($template, [
-            'this' => [
-                'controller' => $controller,
-                'page' => new Page(),
-                'theme' => new Theme()
-            ],
+            'this' => array_merge($controller->getControllerGlobalVars(), [
+                'theme' => new Theme(),
+            ]),
         ] + $vars);
     }
 }

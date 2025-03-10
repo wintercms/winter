@@ -1,13 +1,19 @@
 <?php namespace Backend;
 
-use Backend;
-use BackendMenu;
-use BackendAuth;
-use Backend\Models\UserRole;
 use Backend\Classes\WidgetManager;
-use System\Classes\MailManager;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Backend\Facades\BackendMenu;
+use Backend\Models\AccessLog;
+use Backend\Models\UserRole;
+use Exception;
+use Illuminate\Support\Facades\Event;
 use System\Classes\CombineAssets;
+use System\Classes\MailManager;
 use System\Classes\SettingsManager;
+use System\Classes\UpdateManager;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Flash;
 use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
@@ -25,6 +31,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerMailer();
         $this->registerAssetBundles();
         $this->registerBackendPermissions();
+        $this->registerBackendUserEvents();
 
         /*
          * Backend specific
@@ -204,6 +211,28 @@ class ServiceProvider extends ModuleServiceProvider
                 ],
             ]);
             $manager->registerPermissionOwnerAlias('Winter.Backend', 'October.Backend');
+        });
+    }
+
+    /**
+     * Register the backend user events
+     */
+    protected function registerBackendUserEvents()
+    {
+        Event::listen('backend.user.login', function (\Backend\Models\User $user) {
+            // @TODO: Deprecate this, and only run migrations when it makes sense
+            $runMigrationsOnLogin = (bool) Config::get('cms.runMigrationsOnLogin', Config::get('app.debug', false));
+            if ($runMigrationsOnLogin) {
+                try {
+                    // Load version updates
+                    UpdateManager::instance()->update();
+                } catch (Exception $e) {
+                    Flash::error($e->getMessage());
+                }
+            }
+
+            // Log the sign in event
+            AccessLog::add($user);
         });
     }
 

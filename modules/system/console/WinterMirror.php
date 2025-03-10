@@ -197,7 +197,7 @@ class WinterMirror extends Command
 
     protected function mirror($src, $dest)
     {
-        if ($this->option('relative')) {
+        if ($this->option('relative') && PHP_OS_FAMILY !== 'Windows') {
             $src = $this->getRelativePath($dest, $src);
 
             if (strpos($src, '../') === 0) {
@@ -205,7 +205,7 @@ class WinterMirror extends Command
             }
         }
 
-        symlink($src, $dest);
+        File::link($src, $dest);
     }
 
     protected function getDestinationPath()

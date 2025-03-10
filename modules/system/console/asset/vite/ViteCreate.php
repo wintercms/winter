@@ -16,7 +16,9 @@ class ViteCreate extends AssetCreate
      */
     protected $signature = 'vite:create
         {packageName : The package name to add configuration for}
-        {--no-stubs : Disable stub file generation}';
+        {--no-stubs : Disable stub file generation}
+        {--s|silent : Enables silent mode, no output will be shown.}
+        {--f|force : Force file overwrites}';
 
     /**
      * @var array List of commands that this command replaces (aliases)
@@ -40,9 +42,19 @@ class ViteCreate extends AssetCreate
      */
     public function afterExecution(): void
     {
+        if ($this->option('silent')) {
+            return;
+        }
+
         $packageName = $this->makePackageName($this->argument('packageName'));
         $this->output->writeln('');
         $this->info('Add the following to your twig to enable asset loading:');
+        if ($this->option('react')) {
+            $this->output->writeln(sprintf(
+                '<fg=blue>{{ viteReactRefresh(\'%1$s\') }}</>',
+                strtolower($this->argument('packageName'))
+            ));
+        }
         $this->output->writeln(sprintf(
             '<fg=blue>{{ vite([\'assets/src/css/%1$s.css\', \'assets/src/js/%1$s.js\'], \'%2$s\') }}</>',
             $packageName,
