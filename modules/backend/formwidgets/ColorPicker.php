@@ -64,7 +64,7 @@ class ColorPicker extends FormWidgetBase
      */
     protected array $validationPatterns = [
         'cmyk' => '/^cmyk\((\d{1,2}\.?\d{0,2}%,? ?){4}\)$/',
-        'hex' => '/^#[\w\d]{6}$/',
+        'hex' => '/^#[\w\d]{6,8}$/',
         'hsl' => '/^hsla\((\d{1,3}\.?\d{0,2}%?, ?){3}\d\.?\d{0,2}?\)$/',
         'rgb' => '/^rgba\((\d{1,3}\.?\d{0,2}, ?){3}\d\.?\d{0,2}?\)$/',
     ];

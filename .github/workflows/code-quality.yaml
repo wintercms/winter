@@ -27,7 +27,7 @@ jobs:
       - name: Install PHP and PHP Code Sniffer
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: 8.2
           extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
           tools: phpcs
 

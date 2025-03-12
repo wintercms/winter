@@ -6,6 +6,7 @@ use Backend\Classes\NavigationManager;
 use FilesystemIterator;
 use Illuminate\Console\View\Components\Error;
 use Illuminate\Console\View\Components\Info;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
@@ -652,8 +653,15 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
             return;
         }
 
-        foreach ($this->plugins as $pluginId => $plugin) {
-            $this->registerPlugin($plugin, $pluginId);
+        try {
+            foreach ($this->plugins as $pluginId => $plugin) {
+                $this->registerPlugin($plugin, $pluginId);
+            }
+        } catch (QueryException $ex) {
+            // SQLSTATE[42S02]: Base table or view not found - migrations haven't run yet
+            if ($ex->getCode() === '42S02') {
+                Log::error("$pluginId cannot be registered, missing database content. Try running migrations. Error: " . $ex->getMessage());
+            }
         }
 
         // Ensure that route attributes are properly loaded
@@ -768,8 +776,15 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
             return;
         }
 
-        foreach ($this->plugins as $plugin) {
-            $this->bootPlugin($plugin);
+        try {
+            foreach ($this->plugins as $pluginId => $plugin) {
+                $this->bootPlugin($plugin);
+            }
+        } catch (QueryException $ex) {
+            // SQLSTATE[42S02]: Base table or view not found - migrations haven't run yet
+            if ($ex->getCode() === '42S02') {
+                Log::error("$pluginId cannot be booted, missing database content. Try running migrations. Error: " . $ex->getMessage());
+            }
         }
 
         $this->booted = true;
