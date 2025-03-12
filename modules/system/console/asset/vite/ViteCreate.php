@@ -49,6 +49,12 @@ class ViteCreate extends AssetCreate
         $packageName = $this->makePackageName($this->argument('packageName'));
         $this->output->writeln('');
         $this->info('Add the following to your twig to enable asset loading:');
+        if ($this->option('react')) {
+            $this->output->writeln(sprintf(
+                '<fg=blue>{{ viteReactRefresh(\'%1$s\') }}</>',
+                strtolower($this->argument('packageName'))
+            ));
+        }
         $this->output->writeln(sprintf(
             '<fg=blue>{{ vite([\'assets/src/css/%1$s.css\', \'assets/src/js/%1$s.js\'], \'%2$s\') }}</>',
             $packageName,

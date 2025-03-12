@@ -403,7 +403,7 @@ class Theme extends CmsObject
          *          array_set($config, 'tabs.fields.header_color', [
          *              'label'           => 'Header Colour',
          *              'type'            => 'colorpicker',
-         *              'availableColors' => [#34495e, #708598, #3498db],
+         *              'availableColors' => [#103141, #708598, #6cc551],
          *              'assetVar'        => 'header-bg',
          *              'tab'             => 'Global'
          *          ]);
