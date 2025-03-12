@@ -70,6 +70,11 @@ class Calendar extends WidgetBase
     public string $recordEnd = 'end_at';
 
     /**
+     * The model property to use as all day long event for the record
+     */
+    public string $recordAllDay = 'all_day';
+
+    /**
      * The model property to use to show the background color of this record, '' = the default background color in the calendar.less
      */
     public ?string $recordColor = null;
@@ -80,18 +85,44 @@ class Calendar extends WidgetBase
     public string|array $recordTooltip = '';
 
     /**
+     * Calendar widget theme color for buttons ('' for default, primary or secondary)
+     */
+    public string $calendarTheme = '';
+
+    /**
      * Display modes to allow ['month', 'week', 'day', 'list']
      */
     public array $availableDisplayModes = [];
 
     /**
-     * Calendar of CSS classes to apply to the Calendar container element
+     * Initial calendar view, one of month, week, day, list
+     */
+    public ?string $initialView = 'month';
+
+    /**
+     * First day of week, 0=Sun, 1=Mon ...
+     */
+    public ?int $firstDay = 0;
+
+    /**
+     * Array of CSS classes to apply to the Calendar container element
      */
     public array $cssClasses = [];
 
     //
     // INTERNAL
     //
+
+    /**
+     * Available display modes for fullcalendar.js widget
+     */
+    protected array $fullCalendarModes = [
+        // 'year' => 'multiMonthYear',
+        'month' => 'dayGridMonth',
+        'week'  => 'timeGridWeek',
+        'day'   => 'timeGridDay',
+        'list'  => 'listMonth'
+    ];
 
     /**
      * Collection of functions to apply to each list query.
@@ -129,6 +160,7 @@ class Calendar extends WidgetBase
     public function init()
     {
         $this->fillFromConfig([
+            // 'model',
             'columns',
             'recordUrl',
             'recordOnClick',
@@ -136,11 +168,15 @@ class Calendar extends WidgetBase
             'recordTitle',
             'recordStart',
             'recordEnd',
+            'recordAllDay',
             'recordColor',
             'recordTooltip',
             'previewMode',
             'searchList',
+            'calendarTheme',
             'availableDisplayModes',
+            'initialView',
+            'firstDay',
         ]);
 
         // Initialize the search columns
@@ -153,7 +189,13 @@ class Calendar extends WidgetBase
         }
         $this->searchColumns = $columns;
 
-        $this->calendarVisibleColumns = [$this->recordTitle, $this->recordStart, $this->recordEnd];
+        $this->calendarVisibleColumns = [
+            $this->recordTitle,
+            $this->recordStart,
+            $this->recordEnd,
+        ];
+
+        // $this->validateModel();
     }
 
     /**
@@ -179,23 +221,11 @@ class Calendar extends WidgetBase
      */
     protected function loadAssets()
     {
-        $this->addCss(['packages/core/main.min.css', 'packages/list/main.min.css', 'packages/daygrid/main.min.css', 'packages/timegrid/main.min.css'], '4.1.0');
-        $this->addCss(['less/calendar.less'], 'Winter.Core');
+        $this->addJs('vendor/fullcalendar/index.global.min.js', '6.1.15');
+        $this->addJs('vendor/fullcalendar/locales-all.global.min.js', '6.1.15');
 
-        //Tooltip
-        $this->addJs('packages/vendor/popper.min.js', '4.1.0');
-        $this->addJs('packages/vendor/tooltip.min.js', '4.1.0');
-
-        //Calendar
-        $this->addJs('packages/core/main.min.js', '4.1.0');
-        $this->addJs('packages/list/main.min.js', '4.1.0');
-        $this->addJs('packages/daygrid/main.min.js', '4.1.0');
-        $this->addJs('packages/timegrid/main.min.js', '4.1.0');
-        $this->addJs('packages/interaction/main.min.js', '4.1.0');
-
-        // @see https://fullcalendar.io/docs/v4/timeZone
-        $this->addJs('packages/moment-timezone/main.min.js', '4.1.0');
-
+        // $this->addCss(['less/calendar.less'], 'Winter.Core');
+        $this->addCss('css/calendar.css', 'Winter.Core');
         $this->addJs('js/calendar.cache.js', 'Winter.Core');
         $this->addJs('js/calendar.js', 'Winter.Core');
     }
@@ -205,33 +235,66 @@ class Calendar extends WidgetBase
      */
     public function prepareVars()
     {
+        if (!empty($this->calendarTheme)) {
+            $this->cssClasses[] = $this->calendarTheme;
+        }
+
         $this->vars['availableDisplayModes'] = $this->getDisplayModes();
+        $this->vars['initialView'] = $this->getInitialView();
+        $this->vars['firstDay'] = $this->firstDay;
         $this->vars['cssClasses'] = implode(' ', $this->cssClasses);
+    }
+
+    /**
+     * Validate the supplied form model.
+     *
+     * @return mixed
+     */
+    protected function validateModel()
+    {
+        if (!$this->model) {
+            throw new ApplicationException(Lang::get(
+                'backend::lang.form.missing_model',
+                ['class'=>get_class($this->controller)]
+            ));
+        }
+
+        $this->data = isset($this->data)
+            ? (object) $this->data
+            : $this->model;
+
+        return $this->model;
+    }
+
+    /**
+     * Get the fullcalendar.js initial view to be used
+     */
+    protected function getInitialView(): string
+    {
+        if (!empty($this->fullCalendarModes[$this->initialView])) {
+            return $this->fullCalendarModes[$this->initialView];
+        }
+
+        return 'dayGridMonth';
     }
 
     /**
      * Get the fullcalendar.js display modes to be used
      */
-    protected function getDisplayModes(): array
+    protected function getDisplayModes(): string
     {
         // Convert our display modes to FullCalendar display modes
         if (!is_array($this->availableDisplayModes)) {
             $this->availableDisplayModes = [$this->availableDisplayModes];
         }
 
-        $fullCalendarModes = [
-            'month' => 'dayGridMonth',
-            'week'  => 'timeGridWeek',
-            'day'   => 'timeGridDay',
-            'list'  => 'listMonth'
-        ];
-
         $selectedModes = [];
         foreach ($this->availableDisplayModes as $mode) {
-            if (!empty($fullCalendarModes[$mode])) {
-                $selectedModes[] = $fullCalendarModes[$mode];
+            if (!empty($this->fullCalendarModes[$mode])) {
+                $selectedModes[] = $this->fullCalendarModes[$mode];
             }
         }
+
         return implode(',', $selectedModes);
     }
 
@@ -624,7 +687,8 @@ class Calendar extends WidgetBase
      * @param QueryBuilder $query
      * @return string md5
      */
-    protected function getCacheKey($query){
+    protected function getCacheKey($query)
+    {
         $bindings = array_map(function ($binding) {
             return (string)$binding;
         }, $query->getBindings());
@@ -673,7 +737,6 @@ class Calendar extends WidgetBase
             $records = $event;
         }
 
-
         $events = [];
 
         $timeZone = new DateTimeZone(Config::get('app.timezone','UTC'));
@@ -699,7 +762,7 @@ class Calendar extends WidgetBase
                 'title'  => $record->{$this->recordTitle},
                 'start'  => $record->{$this->recordStart},
                 'end'    => $record->{$this->recordEnd},
-                'allDay' => (bool) $record->allDay,
+                'allDay' => (bool) $record->{$this->recordAllDay},
                 'color'  => empty($this->recordColor) ? '' : $record->{$this->recordColor},
                 'tooltip' => $tooltip
             ], $timeZone);
@@ -843,7 +906,7 @@ class Calendar extends WidgetBase
     }
 
 
-     /**
+    /**
      * Event handler for refreshing the calendar.
      * The search widget will call onRefresh
      * @see CalendarController->initToolbar

@@ -1,6 +1,8 @@
 <div
-    class="calendar-container"
+    class="calendar-container <?= $cssClasses ?>"
     data-control="calendar"
+    data-first-day = '<?= $firstDay; ?>'
+    data-initial-view = '<?= $initialView; ?>'
     data-display-modes = '<?= $availableDisplayModes; ?>'
     data-alias="<?= $this->alias; ?>"
     data-click-date="<?= $this->onClickDate ?>"

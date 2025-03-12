@@ -9,7 +9,7 @@
         this.$el = $(element);
         this.calendarControl =  null;
         this.$loadContainer = this.$el.find('.loading-indicator-container:first');
-        this.firstDay = 0;
+        this.firstDay = options.firstDay;
 
         this.calendarCache = new CalendarCache(this.makeEventHandler('onRefreshEvents'), this.firstDay);
         const self = this;
@@ -31,6 +31,7 @@
 
     Calendar.DEFAULTS = {
         alias: null,
+        initialView: 'dayGridMonth',
         displayModes: 'dayGridMonth',
         editable: false,
         clickDate: null,
@@ -44,16 +45,15 @@
 
         this.$el.on('dispose-control', this.proxy(this.dispose));
         $(document).on('ajaxComplete', this.proxy(this.onFilterUpdate));
-        $(document).on('oc.beforeRequest', this.proxy(this.beforeFilterRequestSend));
-
+        $(document).on('wn.beforeRequest', this.proxy(this.beforeFilterRequestSend));
     };
 
     Calendar.prototype.dispose = function () {
         this.calendarCache.dispose();
         $(document).off('ajaxComplete', this.proxy(this.onFilterUpdate));
         this.$el.off('dispose-control', this.proxy(this.dispose));
-        $(document).off('oc.beforeRequest', this.proxy(this.beforeFilterRequestSend));
-        this.$el.removeData('oc.calendar');
+        $(document).off('wn.beforeRequest', this.proxy(this.beforeFilterRequestSend));
+        this.$el.removeData('wn.calendar');
 
         this.$el = null
         this.options = null
@@ -67,30 +67,47 @@
     Calendar.prototype.initCalendarControl = function(){
         const $calendar = this.$el.find('.calendar-control');
         const self = this;
+        const locale = $('meta[name="backend-locale"]').attr('content');
         const timezone = $('meta[name="backend-timezone"]').attr('content');
         const container = document.querySelector(".calendar-container");
 
         this.calendarControl = new FullCalendar.Calendar($calendar[0], {
-            plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list', 'momentTimezone'],
-            header: {
-                left: 'prev,next today',
-                center: 'title',
-                right: this.options.displayModes
-            },
+            // Configuration
+            initialView: this.options.initialView,
+            firstDay: this.firstDay,
             timeZone: timezone,
-            navLinks: true, // can click day/week names to navigate views
+            locale: locale,
 
+            // Toolbar
+            headerToolbar: {
+                start: 'prev,next today',
+                center: 'title',
+                end: this.options.displayModes
+            },
+
+            // Date Nav Links
+            navLinks: true, // Determines if day names and week names are clickable.
+
+            // Week Numbers
             weekNumbers: true,
             weekNumbersWithinDays: true,
 
+            // Event Dragging & Resizing
             editable: this.options.editable,
-            eventLimit: true, // allow "more" link when too many events
 
-            firstDay: this.firstDay,
+            //  Event Display
+            eventDisplay: 'block', // render single-day timed events as solid filled rectangle
             eventTimeFormat: {
                 hour: '2-digit',
                 minute: '2-digit',
             },
+
+            // Event Popover
+            dayMaxEventRows: true, // allow "more" link when too many events
+            dayMaxEvents: true, // when too many events in a day, show the popover
+
+
+            // Events
             eventClick: function (info) {
                 self.onEventClick(info);
             },
@@ -251,9 +268,9 @@
             result
         this.each(function () {
             var $this = $(this)
-            var data = $this.data('oc.calendar')
+            var data = $this.data('wn.calendar')
             var options = $.extend({}, Calendar.DEFAULTS, $this.data(), typeof option == 'object' && option)
-            if (!data) $this.data('oc.calendar', (data = new Calendar(this, options)))
+            if (!data) $this.data('wn.calendar', (data = new Calendar(this, options)))
             if (typeof option == 'string') result = data[option].apply(data, args)
             if (typeof result != 'undefined') return false
         })
