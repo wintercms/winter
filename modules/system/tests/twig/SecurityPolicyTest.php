@@ -3,7 +3,6 @@
 namespace System\Tests\Twig;
 
 use Cms\Classes\Controller;
-use Cms\Classes\Page;
 use Cms\Classes\Theme;
 use System\Tests\Bootstrap\TestCase;
 use Twig\Environment;
@@ -135,11 +134,14 @@ class SecurityPolicyTest extends TestCase
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
 
-        $this->renderTwigInCmsController('
-            {{ dump(model.getQuery) }}
-        ', [
-            'model' => new \Winter\Storm\Database\Model(),
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {{ dump(model.getQuery) }}
+            ',
+            [
+                'model' => new \Winter\Storm\Database\Model(),
+            ]
+        );
     }
 
     public function testCannotFillAModel()
