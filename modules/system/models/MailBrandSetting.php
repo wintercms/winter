@@ -45,13 +45,13 @@ class MailBrandSetting extends Model
 
     public const WHITE_COLOR = '#fff';
     public const BODY_BG = '#f5f8fa';
-    public const PRIMARY_BG = '#3498db';
-    public const POSITIVE_BG = '#31ac5f';
-    public const NEGATIVE_BG = '#ab2a1c';
+    public const PRIMARY_BG = '#d66829';
+    public const POSITIVE_BG = '#52a838';
+    public const NEGATIVE_BG = '#e01346';
     public const HEADER_COLOR = '#bbbfc3';
     public const HEADING_COLOR = '#2f3133';
     public const TEXT_COLOR = '#74787e';
-    public const LINK_COLOR = '#0181b9';
+    public const LINK_COLOR = '#2da7c7';
     public const FOOTER_COLOR = '#aeaeae';
     public const BORDER_COLOR = '#edeff2';
     public const PROMOTION_BORDER_COLOR = '#9ba2ab';

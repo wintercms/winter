@@ -48,6 +48,13 @@ class WinterTest extends Command
     protected $description = 'Run tests for the Winter CMS core or an existing plugin.';
 
     /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'test',
+    ];
+
+    /**
      * @var ?string Path to phpunit binary
      */
     protected $phpUnitExec = null;

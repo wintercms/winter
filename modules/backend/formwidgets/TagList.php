@@ -114,7 +114,7 @@ class TagList extends FormWidgetBase
             $value = [$value];
         }
 
-        $value = array_filter($value);
+        $value = array_values(array_filter($value));
 
         if ($this->mode === static::MODE_RELATION) {
             return $this->hydrateRelationSaveValue($value);

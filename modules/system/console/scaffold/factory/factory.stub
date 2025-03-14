@@ -2,10 +2,11 @@
 
 namespace {{ plugin_namespace }}\Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
+use Winter\Storm\Database\Factories\Factory;
 
 /**
  * {{ name }} Factory
+ *
 {% if model %}
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\{{ plugin_namespace }}\Models\{{ model }}>
 {% endif %}

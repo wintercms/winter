@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use System\Classes\ModelBehavior;
+use Winter\Storm\Database\Model;
 
 /**
  * Settings model extension
@@ -114,14 +115,27 @@ class SettingsModel extends ModelBehavior
      */
     public function isConfigured(): bool
     {
-        return App::hasDatabase() && $this->getSettingsRecord() !== null;
+        if (!App::hasDatabase()) {
+            return false;
+        }
+
+        $record = null;
+        try {
+            $record = $this->getSettingsRecord();
+        } catch (QueryException $ex) {
+            // SQLSTATE[42S02]: Base table or view not found - migrations haven't run yet
+            if ($ex->getCode() !== '42S02') {
+                Log::error($ex, ['skipDatabaseLog' => true]);
+            }
+        }
+
+        return $record !== null;
     }
 
     /**
      * Returns the raw Model record that stores the settings.
-     * @return Model
      */
-    public function getSettingsRecord()
+    public function getSettingsRecord(): ?Model
     {
         $query = $this->model->where('item', $this->recordCode);
 
@@ -129,15 +143,7 @@ class SettingsModel extends ModelBehavior
             $query = $query->remember($this->cacheTtl, $this->getCacheKey());
         }
 
-        $record = null;
-        try {
-            $record = $query->first();
-        } catch (QueryException $ex) {
-            // SQLSTATE[42S02]: Base table or view not found - migrations haven't run yet
-            if ($ex->getCode() === '42S02') {
-                traceLog($ex);
-            }
-        }
+        $record = $query->first();
 
         return $record ?: null;
     }

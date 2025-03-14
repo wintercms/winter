@@ -207,7 +207,7 @@ class WinterMirror extends Command
             }
         }
 
-        symlink($src, $dest);
+        File::link($src, $dest);
     }
 
     protected function getDestinationPath()
