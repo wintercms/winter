@@ -1,5 +1,7 @@
 <?php
 
+namespace System\Models;
+
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
