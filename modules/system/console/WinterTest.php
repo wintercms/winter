@@ -59,10 +59,6 @@ class WinterTest extends Command
      */
     protected $phpUnitExec = null;
 
-    protected $replaces = [
-        'test',
-    ];
-
     /**
      * Create a new command instance.
      *
