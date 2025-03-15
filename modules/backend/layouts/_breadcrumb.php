@@ -12,7 +12,7 @@ if ($settingsContext) {
 <?php if ($menu): ?>
 <ul>
     <li><a href="<?= $menu->url ?>"><?= e(trans($menu->label)) ?></a></li>
-    <?php if ($sideMenu): ?>
+    <?php if ($sideMenu && $sideMenu->url !== $menu->url): ?>
         <li><a href="<?= $sideMenu->url ?>"><?= e(trans($sideMenu->label)) ?></a></li>
     <?php elseif ($settingsItem): ?>
         <li><a href="<?= $settingsItem->url ?>"><?= e(trans($settingsItem->label)) ?></a></li>
