@@ -36,6 +36,16 @@
                     >
                         <?= e(trans('backend::lang.form.save_and_close')); ?>
                     </button>
+                    <button
+                        type="button"
+                        data-request="onDelete"
+                        data-load-indicator="<?= e(trans('backend::lang.form.deleting_name', ['name' => trans($formConfig->name)])); ?>"
+                        data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
+                        data-request-confirm="<?= e(trans('backend::lang.form.confirm_delete')); ?>"
+                        class="wn-icon-trash-o btn-icon danger pull-right"
+                    >
+                    </button>
+
                     <span class="btn-text">
                         <?= e(trans('backend::lang.form.or')) ?> <a href="<?= Backend::url($formConfig->defaultRedirect) ?>"><?= e(trans('backend::lang.form.cancel')); ?></a>
                     </span>
