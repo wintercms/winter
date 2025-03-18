@@ -258,7 +258,9 @@ class Repeater extends FormWidgetBase
      */
     protected function processItems()
     {
-        $currentValue = $this->getLoadValue();
+        $currentValue = ($this->loaded === true)
+            ? post($this->formField->getName())
+            : $this->getLoadValue();
 
         // Detect when a child widget is trying to run an AJAX handler
         // outside of the form element that contains all the repeater
@@ -342,18 +344,15 @@ class Repeater extends FormWidgetBase
         return $this->formWidgets[$index] = $widget;
     }
 
-    public function getLoadValue()
-    {
-        return ($this->loaded === true) ? post($this->formField->getName()) : parent::getLoadValue();
-    }
-
     /**
      * Returns the data at a given index.
      * @param int $index
      */
     protected function getValueFromIndex($index)
     {
-        $value = $this->getLoadValue();
+        $value = ($this->loaded === true)
+            ? post($this->formField->getName())
+            : $this->getLoadValue();
 
         if (!is_array($value)) {
             $value = [];
@@ -407,10 +406,18 @@ class Repeater extends FormWidgetBase
      */
     protected function getNextIndex()
     {
-        $data = $this->getLoadValue();
+        if ($this->loaded === true) {
+            $data = post($this->formField->getName());
 
-        if (is_array($data)) {
-            return count($data);
+            if (is_array($data) && count($data)) {
+                return (max(array_keys($data)) + 1);
+            }
+        } else {
+            $data = $this->getLoadValue();
+
+            if (is_array($data)) {
+                return count($data);
+            }
         }
 
         return 0;
