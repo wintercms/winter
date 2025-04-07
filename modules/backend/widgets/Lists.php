@@ -1511,10 +1511,11 @@ class Lists extends WidgetBase
             'defaultValue' => $value,
             'format' => $column->format,
             'formatAlias' => 'dateLongMin',
+            'ignoreTimezone' => true,
         ];
 
-        if (!empty($column->config['ignoreTimezone'])) {
-            $options['ignoreTimezone'] = true;
+        if (isset($column->config['ignoreTimezone'])) {
+            $options['ignoreTimezone'] = $column->config['ignoreTimezone'];
         }
 
         return Backend::dateTime($dateTime, $options);
