@@ -14,11 +14,6 @@ use Winter\Storm\Database\Attach\File as FileBase;
 class File extends FileBase
 {
     /**
-     * The name of the storage disk used by this class.
-     */
-    public const DISK = 'uploads';
-
-    /**
      * @var string The database table used by the model.
      */
     protected $table = 'system_files';
