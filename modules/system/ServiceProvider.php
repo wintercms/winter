@@ -30,6 +30,7 @@ use Winter\Storm\Router\Helper as RouterHelper;
 use Winter\Storm\Support\ClassLoader;
 use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\Markdown;
+use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\Facades\Validator;
 use Winter\Storm\Support\ModuleServiceProvider;
 
@@ -98,12 +99,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function boot()
     {
-        // Fix use of Storage::url() for local disks that haven't been configured correctly
-        foreach (Config::get('filesystems.disks') as $key => $config) {
-            if ($config['driver'] === 'local' && ends_with($config['root'], '/storage/app') && empty($config['url'])) {
-                Config::set("filesystems.disks.$key.url", '/storage/app');
-            }
-        }
+        $this->validateFilesystemConfig();
 
         /*
          * Set a default samesite config value for invalid values
@@ -121,6 +117,77 @@ class ServiceProvider extends ModuleServiceProvider
         PluginManager::instance()->bootAll();
 
         parent::boot('system');
+    }
+
+    /**
+     * Repair issues with the storage disks configuration
+     */
+    protected function validateFilesystemConfig()
+    {
+        // Fix use of Storage::url() for local disks that haven't been configured correctly
+        foreach (Config::get('filesystems.disks') as $key => $config) {
+            if ($config['driver'] === 'local' && ends_with($config['root'], '/storage/app') && empty($config['url'])) {
+                Config::set("filesystems.disks.$key.url", '/storage/app');
+            }
+        }
+
+        // Polyfill the core storage disks if they are not defined
+        $systemDisks = [
+            'uploads-public' => 'uploads',
+            'uploads-protected' => 'uploads',
+            'media' => 'media',
+            'resized' => 'resized',
+        ];
+        foreach ($systemDisks as $realDisk => $pseudoDisk) {
+            $oldConfig = Config::get("cms.storage.$pseudoDisk");
+            if (!Config::get("filesystems.disks.$realDisk") && !empty($oldConfig)) {
+                $newConfig = [
+                    'driver' => 'scoped',
+                    'disk' => $oldConfig['disk'],
+                    'prefix' => $oldConfig['folder'],
+                    'url' => $oldConfig['path'],
+                ];
+                if (!empty($oldConfig['temporaryUrlTTL'])) {
+                    $newConfig['temporaryUrlTTL'] = $oldConfig['temporaryUrlTTL'];
+                }
+                Config::set("filesystems.disks.$realDisk", $newConfig);
+            }
+        }
+
+        // Inject the core internal storage disks
+        $internalDisks = [
+            'system' => [
+                'driver' => 'local',
+                'root' => base_path(),
+                'url' => Url::to(''),
+            ],
+            'modules' => [
+                'driver' => 'scoped',
+                'disk' => 'system',
+                'prefix' => 'modules',
+            ],
+            'plugins' => [
+                'driver' => 'scoped',
+                'disk' => 'system',
+                'prefix' => Config::get('cms.pluginsPathLocal', 'plugins'),
+            ],
+            'themes' => [
+                'driver' => 'scoped',
+                'disk' => 'system',
+                'prefix' => Config::get('cms.themesPathLocal', 'themes'),
+            ],
+        ];
+
+        if (!empty(Config::get('cms.pluginsPath'))) {
+            $internalDisks['plugins']['url'] = Config::get('cms.pluginsPath');
+        }
+        if (!empty(Config::get('cms.themesPath'))) {
+            $internalDisks['themes']['url'] = Config::get('cms.themesPath');
+        }
+
+        foreach ($internalDisks as $disk => $config) {
+            Config::set("filesystems.disks.$disk", $config);
+        }
     }
 
     /**

@@ -1,16 +1,18 @@
-<?php namespace System\Classes;
+<?php
 
-use Url;
-use Crypt;
+namespace System\Classes;
+
 use Cache;
-use Event;
 use Config;
-use Storage;
+use Crypt;
+use Event;
 use Exception;
-use SystemException;
 use File as FileHelper;
 use Illuminate\Filesystem\FilesystemAdapter;
+use Storage;
 use System\Models\File as SystemFileModel;
+use SystemException;
+use Url;
 use Winter\Storm\Database\Attach\File as FileModel;
 use Winter\Storm\Database\Attach\Resizer as DefaultResizer;
 
@@ -142,38 +144,38 @@ class ImageResizer
             return static::$availableSources;
         }
 
+        $fileModel = new SystemFileModel;
+
         $sources = [
             'themes' => [
                 'disk' => 'system',
                 'folder' => config('cms.themesPathLocal', base_path('themes')),
-                'path' => rtrim(config('cms.themesPath', '/themes'), '/'),
             ],
             'plugins' => [
                 'disk' => 'system',
                 'folder' => config('cms.pluginsPathLocal', base_path('plugins')),
-                'path' => rtrim(config('cms.pluginsPath', '/plugins'), '/'),
             ],
             'resized' => [
-                'disk' => config('cms.storage.resized.disk', 'local'),
+                'disk' => static::getDefaultDiskName(),
                 'folder' => config('cms.storage.resized.folder', 'resized'),
-                'path' => rtrim(config('cms.storage.resized.path', '/storage/app/resized'), '/'),
             ],
             'media' => [
-                'disk' => config('cms.storage.media.disk', 'local'),
+                'disk' => MediaLibrary::instance()->getStorageDiskName(),
                 'folder' => config('cms.storage.media.folder', 'media'),
-                'path' => rtrim(config('cms.storage.media.path', '/storage/app/media'), '/'),
             ],
             'modules' => [
                 'disk' => 'system',
                 'folder' => base_path('modules'),
-                'path' => '/modules',
             ],
             'filemodel' => [
-                'disk' => config('cms.storage.uploads.disk', 'local'),
+                'disk' => $fileModel->getDiskName(),
                 'folder' => config('cms.storage.uploads.folder', 'uploads'),
-                'path' => rtrim(config('cms.storage.uploads.path', '/storage/app/uploads'), '/'),
+                'path' => rtrim($fileModel->getPublicPath(), '/'),
             ],
         ];
+
+        // @TODO: Continue refactoring image resizer source / disk handling from here. Ideally we can remove
+        // all usage of "folders" and "paths" and just iterate over the available storage disks instead
 
         /**
          * @event system.resizer.getAvailableSources
@@ -191,6 +193,13 @@ class ImageResizer
          *
          */
         Event::fire('system.resizer.getAvailableSources', [&$sources]);
+
+        // Auto set the URL
+        foreach ($sources as $source => $details) {
+            if (empty($details['path'])) {
+                $sources[$source]['path'] = rtrim(Storage::disk($details['disk'])->url(''), '/');
+            }
+        }
 
         return static::$availableSources = $sources;
     }
@@ -495,11 +504,19 @@ class ImageResizer
     }
 
     /**
+     * Get the name of the default disk used to store processed images
+     */
+    public static function getDefaultDiskName(): string
+    {
+        return 'resized';
+    }
+
+    /**
      * Get the default disk used to store processed images
      */
     public static function getDefaultDisk(): \Illuminate\Contracts\Filesystem\Filesystem
     {
-        return Storage::disk(Config::get('cms.storage.resized.disk', 'local'));
+        return Storage::disk(static::getDefaultDiskName());
     }
 
     /**
@@ -653,16 +670,6 @@ class ImageResizer
 
             // Handle disks that couldn't be serialized
             if (is_string($disk)) {
-                // Handle disks of type "system" (the local file system the application is running on)
-                if ($disk === 'system') {
-                    Config::set('filesystems.disks.system', [
-                        'driver' => 'local',
-                        'root' => base_path(),
-                    ]);
-                    // Regenerate the path relative to the newly defined "system" disk
-                    $path = str_after($path, static::normalizePath(base_path()) . '/');
-                }
-
                 $disk = Storage::disk($disk);
             }
 
@@ -722,16 +729,6 @@ class ImageResizer
 
                     // Generate a path relative to the selected disk
                     $path = static::normalizePath($details['folder']) . '/' . str_after($relativePath, $sourcePath . '/');
-
-                    // Handle disks of type "system" (the local file system the application is running on)
-                    if ($details['disk'] === 'system') {
-                        Config::set('filesystems.disks.system', [
-                            'driver' => 'local',
-                            'root' => base_path(),
-                        ]);
-                        // Regenerate the path relative to the newly defined "system" disk
-                        $path = str_after($path, static::normalizePath(base_path()) . '/');
-                    }
 
                     $disk = Storage::disk($details['disk']);
 

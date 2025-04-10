@@ -780,11 +780,18 @@ class MediaLibrary
     }
 
     /**
+     * Get the name of the storage disk used
+     */
+    public function getStorageDiskName(): string
+    {
+        return 'media';
+    }
+
+    /**
      * Initializes and returns the Media Library disk.
      * This method should always be used instead of trying to access the
      * $storageDisk property directly as initializing the disc requires
      * communicating with the remote storage.
-     * @return mixed Returns the storage disk object.
      */
     public function getStorageDisk(): FilesystemAdapter
     {
@@ -792,9 +799,7 @@ class MediaLibrary
             return $this->storageDisk;
         }
 
-        return $this->storageDisk = Storage::disk(
-            Config::get('cms.storage.media.disk', 'local')
-        );
+        return $this->storageDisk = Storage::disk($this->getStorageDiskName());
     }
 
     /**
