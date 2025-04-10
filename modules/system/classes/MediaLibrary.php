@@ -25,11 +25,6 @@ class MediaLibrary
 {
     use \Winter\Storm\Support\Traits\Singleton;
 
-    /**
-     * The name of the storage disk used by this class.
-     */
-    public const DISK = 'media';
-
     const SORT_BY_TITLE = 'title';
     const SORT_BY_SIZE = 'size';
     const SORT_BY_MODIFIED = 'modified';
@@ -785,6 +780,14 @@ class MediaLibrary
     }
 
     /**
+     * Get the name of the storage disk used
+     */
+    public function getStorageDiskName(): string
+    {
+        return 'media';
+    }
+
+    /**
      * Initializes and returns the Media Library disk.
      * This method should always be used instead of trying to access the
      * $storageDisk property directly as initializing the disc requires
@@ -796,7 +799,7 @@ class MediaLibrary
             return $this->storageDisk;
         }
 
-        return $this->storageDisk = Storage::disk(static::DISK);
+        return $this->storageDisk = Storage::disk($this->getStorageDiskName());
     }
 
     /**

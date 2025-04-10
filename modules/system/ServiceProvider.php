@@ -30,6 +30,7 @@ use Winter\Storm\Router\Helper as RouterHelper;
 use Winter\Storm\Support\ClassLoader;
 use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\Markdown;
+use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\Facades\Validator;
 use Winter\Storm\Support\ModuleServiceProvider;
 
@@ -130,7 +131,7 @@ class ServiceProvider extends ModuleServiceProvider
             }
         }
 
-        // Polyfill the system disks if they are not defined
+        // Polyfill the core storage disks if they are not defined
         $systemDisks = [
             'uploads-public' => 'uploads',
             'uploads-protected' => 'uploads',
@@ -151,6 +152,41 @@ class ServiceProvider extends ModuleServiceProvider
                 }
                 Config::set("filesystems.disks.$realDisk", $newConfig);
             }
+        }
+
+        // Inject the core internal storage disks
+        $internalDisks = [
+            'system' => [
+                'driver' => 'local',
+                'root' => base_path(),
+                'url' => Url::to(''),
+            ],
+            'modules' => [
+                'driver' => 'scoped',
+                'disk' => 'system',
+                'prefix' => 'modules',
+            ],
+            'plugins' => [
+                'driver' => 'scoped',
+                'disk' => 'system',
+                'prefix' => Config::get('cms.pluginsPathLocal', 'plugins'),
+            ],
+            'themes' => [
+                'driver' => 'scoped',
+                'disk' => 'system',
+                'prefix' => Config::get('cms.themesPathLocal', 'themes'),
+            ],
+        ];
+
+        if (!empty(Config::get('cms.pluginsPath'))) {
+            $internalDisks['plugins']['url'] = Config::get('cms.pluginsPath');
+        }
+        if (!empty(Config::get('cms.themesPath'))) {
+            $internalDisks['themes']['url'] = Config::get('cms.themesPath');
+        }
+
+        foreach ($internalDisks as $disk => $config) {
+            Config::set("filesystems.disks.$disk", $config);
         }
     }
 

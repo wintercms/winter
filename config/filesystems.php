@@ -29,8 +29,11 @@ return [
     | NOTE: s3's stream_uploads option requires the Winter.DriverAWS plugin
     | to be installed and enabled.
     |
-    | There are 4 reserved disk names in Winter CMS, if not configured they will
+    | There are 5 reserved disk names in Winter CMS, if not configured they will
     | be dynamically injected by the System module:
+    |
+    | "system", "modules", "themes", & "plugins": All automatically injected by the
+    | System ServiceProvider for internal usage.
     |
     | - "uploads-public" & "uploads-protected": Used by the \System\Models\File model
     | for storing file uploads. Paths are automatically prefixed with "public" on
