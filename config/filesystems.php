@@ -29,35 +29,19 @@ return [
     | NOTE: s3's stream_uploads option requires the Winter.DriverAWS plugin
     | to be installed and enabled.
     |
+    | There are 4 reserved disk names in Winter CMS, if not configured they will
+    | be dynamically injected by the System module:
+    |
+    | - "uploads-public" & "uploads-protected": Used by the \System\Models\File model
+    | for storing file uploads. Paths are automatically prefixed with "public" on
+    | the uploads-public disk and "protected" on the uploads-protected disk
+    |
+    | - "media": The default disk used by the \System\Classes\MediaLibrary
+    |
+    | - "resized": The disk used by the \System\Classes\ImageResizer
     */
 
     'disks' => [
-
-        // The "uploads" disk is used by the System module to store uploaded files (System\Models\File).
-        'uploads' => [
-            'driver' => 'scoped',
-            'disk' => 'local',
-            'prefix' => 'uploads',
-            'visibility' => 'public',
-            'temporaryUrlTTL' => 3600,
-        ],
-
-        // The "media" disk is used by the System module's MediaLibrary to store media files.
-        'media' => [
-            'driver' => 'scoped',
-            'disk' => 'local',
-            'prefix' => 'media',
-            'visibility' => 'public',
-        ],
-
-        // The "resized" disk is used by the System module's ImageResizer to store resized images.
-        'resized' => [
-            'driver' => 'scoped',
-            'disk' => 'local',
-            'prefix' => 'uploads',
-            'visibility' => 'public',
-        ],
-
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
@@ -74,6 +58,33 @@ return [
             'stream_uploads' => env('AWS_S3_STREAM_UPLOADS', false),
             'url' => env('AWS_URL'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+        ],
+        'uploads-public' => [
+            'driver' => 'scoped',
+            'disk' => 'local',
+            'visibility' => 'public',
+            'prefix' => 'uploads',
+        ],
+        'uploads-protected' => [
+            'driver' => 'scoped',
+            'disk' => 'local',
+            'visibility' => 'private',
+            'temporaryUrlTTL' => 3600,
+            'prefix' => 'uploads',
+        ],
+        'media' => [
+            'driver' => 'scoped',
+            'disk' => 'local',
+            'visibility' => 'public',
+            'prefix' => 'media',
+
+        ],
+        'resized' => [
+            'driver' => 'scoped',
+            'disk' => 'local',
+            'visibility' => 'public',
+            'prefix' => 'uploads',
+
         ],
     ],
 ];

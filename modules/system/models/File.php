@@ -19,6 +19,14 @@ class File extends FileBase
     protected $table = 'system_files';
 
     /**
+     * Returns the name of the storage disk the file is stored on
+     */
+    public function getDiskName(): string
+    {
+        return $this->isPublic() ? 'uploads-public' : 'uploads-protected';
+    }
+
+    /**
      * {@inheritDoc}
      */
     public function getThumb($width, $height, $options = [])

@@ -98,30 +98,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function boot()
     {
-        // Fix use of Storage::url() for local disks that haven't been configured correctly
-        foreach (Config::get('filesystems.disks') as $key => $config) {
-            if ($config['driver'] === 'local' && ends_with($config['root'], '/storage/app') && empty($config['url'])) {
-                Config::set("filesystems.disks.$key.url", '/storage/app');
-            }
-        }
-
-        // Polyfill the system disks if they are not defined
-        $systemDisks = ['uploads', 'media', 'resized'];
-        foreach ($systemDisks as $disk) {
-            $oldConfig = Config::get("cms.storage.$disk");
-            if (!Config::get("filesystems.disks.$disk") && !empty($oldConfig)) {
-                $newConfig = [
-                    'driver' => 'scoped',
-                    'disk' => $oldConfig['disk'],
-                    'prefix' => $oldConfig['folder'],
-                    'url' => $oldConfig['path'],
-                ];
-                if (!empty($oldConfig['tempoaryUrlTTL'])) {
-                    $newConfig['temporaryUrlTTL'] = $oldConfig['tempoaryUrlTTL'];
-                }
-                Config::set("filesystems.disks.$disk", $newConfig);
-            }
-        }
+        $this->validateFilesystemConfig();
 
         /*
          * Set a default samesite config value for invalid values
@@ -139,6 +116,42 @@ class ServiceProvider extends ModuleServiceProvider
         PluginManager::instance()->bootAll();
 
         parent::boot('system');
+    }
+
+    /**
+     * Repair issues with the storage disks configuration
+     */
+    protected function validateFilesystemConfig()
+    {
+        // Fix use of Storage::url() for local disks that haven't been configured correctly
+        foreach (Config::get('filesystems.disks') as $key => $config) {
+            if ($config['driver'] === 'local' && ends_with($config['root'], '/storage/app') && empty($config['url'])) {
+                Config::set("filesystems.disks.$key.url", '/storage/app');
+            }
+        }
+
+        // Polyfill the system disks if they are not defined
+        $systemDisks = [
+            'uploads-public' => 'uploads',
+            'uploads-protected' => 'uploads',
+            'media' => 'media',
+            'resized' => 'resized',
+        ];
+        foreach ($systemDisks as $realDisk => $pseudoDisk) {
+            $oldConfig = Config::get("cms.storage.$pseudoDisk");
+            if (!Config::get("filesystems.disks.$realDisk") && !empty($oldConfig)) {
+                $newConfig = [
+                    'driver' => 'scoped',
+                    'disk' => $oldConfig['disk'],
+                    'prefix' => $oldConfig['folder'],
+                    'url' => $oldConfig['path'],
+                ];
+                if (!empty($oldConfig['temporaryUrlTTL'])) {
+                    $newConfig['temporaryUrlTTL'] = $oldConfig['temporaryUrlTTL'];
+                }
+                Config::set("filesystems.disks.$realDisk", $newConfig);
+            }
+        }
     }
 
     /**
