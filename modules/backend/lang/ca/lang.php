@@ -537,7 +537,7 @@ return [
         'add_folder' => 'Afegir carpeta',
         'search' => 'Cercar',
         'display' => 'Mostrar',
-        'filter_everything' => 'Tot',
+        'filter_all' => 'Tot',
         'filter_images' => 'Imatges',
         'filter_video' => 'Vídeo',
         'filter_audio' => 'Àudio',

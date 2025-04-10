@@ -15,7 +15,9 @@ class CreateSettings extends BaseScaffoldCommand
     protected $signature = 'create:settings
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {settings? : The name of the settings model to generate. <info>(eg: BlogSettings)</info>}
-        {--f|force : Overwrite existing files with generated files.}';
+        {--f|force : Overwrite existing files with generated files.}
+        {--uninspiring : Disable inspirational quotes}
+    ';
 
     /**
      * @var string The console command description.

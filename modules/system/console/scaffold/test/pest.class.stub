@@ -1,0 +1,13 @@
+<?php
+
+use {{ tested_class_full }};
+
+beforeEach(function () {
+    $this->instance = $this->app->make({{ tested_class }}::class);
+});
+
+{% for method in public_methods %}
+it('the {{ method }} method does something', function () {
+    // $this->assertTrue(method_exists($this->instance, '{{ method }}'));
+});
+{% endfor %}

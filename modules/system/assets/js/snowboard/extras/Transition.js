@@ -1,3 +1,5 @@
+import PluginBase from '../abstracts/PluginBase';
+
 /**
  * Provides transition support for elements.
  *
@@ -21,7 +23,7 @@
  * @copyright 2021 Winter.
  * @author Ben Thomson <git@alfreido.com>
  */
-export default class Transition extends Snowboard.PluginBase {
+export default class Transition extends PluginBase {
     /**
      * Constructor.
      *

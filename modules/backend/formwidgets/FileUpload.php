@@ -518,7 +518,7 @@ class FileUpload extends FormWidgetBase
     {
         $size = ini_get('upload_max_filesize');
         if (preg_match('/^([\d\.]+)([KMG])$/i', $size, $match)) {
-            $pos = array_search($match[2], ['K', 'M', 'G']);
+            $pos = array_search(strtoupper($match[2]), ['K', 'M', 'G']);
             if ($pos !== false) {
                 $size = $match[1] * pow(1024, $pos + 1);
             }

@@ -11,7 +11,9 @@ import Singleton from '../abstracts/Singleton';
 export default class Url extends Singleton {
     construct() {
         this.foundBaseUrl = null;
+        this.foundAssetUrl = null;
         this.baseUrl();
+        this.assetUrl();
     }
 
     /**
@@ -23,7 +25,7 @@ export default class Url extends Singleton {
      * @returns {string}
      */
     to(url) {
-        const urlRegex = /[-a-z0-9_+:]+:\/\/[-a-z0-9@:%._+~#=]{1,256}\.[a-z0-9()]{1,6}\b([-a-z0-9()@:%_+.~#?&//=]*)/i;
+        const urlRegex = /^(?:[^:]+:\/\/)[-a-z0-9@:%._+~#=]{1,256}\b([-a-z0-9()@:%_+.~#?&//=]*)/i;
 
         if (url.match(urlRegex)) {
             return url;
@@ -32,6 +34,26 @@ export default class Url extends Singleton {
         const theUrl = url.replace(/^\/+/, '');
 
         return `${this.baseUrl()}${theUrl}`;
+    }
+
+    /**
+     * Gets an Asset URL based on a relative path.
+     *
+     * If an absolute URL is provided, it will be returned unchanged.
+     *
+     * @param {string} url
+     * @returns {string}
+     */
+    asset(url) {
+        const urlRegex = /^(?:[^:]+:\/\/)[-a-z0-9@:%._+~#=]{1,256}\b([-a-z0-9()@:%_+.~#?&//=]*)/i;
+
+        if (url.match(urlRegex)) {
+            return url;
+        }
+
+        const theUrl = url.replace(/^\/+/, '');
+
+        return `${this.assetUrl()}${theUrl}`;
     }
 
     /**
@@ -75,6 +97,46 @@ export default class Url extends Singleton {
     }
 
     /**
+     * Helper method to get the asset URL of this install.
+     *
+     * This determines the base URL from three sources, in order:
+     *  - If Snowboard is loaded via the `{% snowboard %}` tag, it will retrieve the asset URL that
+     * is automatically included there.
+     *  - If a `<link rel="asset_url" href="https://example.com">` tag is available, it will use the URL specified in the link tag.
+     *  - Finally, it will take a guess from the current location. This will likely not work for sites
+     * that reside in subdirectories.
+     *
+     * The asset URL will always contain a trailing backslash.
+     *
+     * @returns {string}
+     */
+    assetUrl() {
+        if (this.foundAssetUrl !== null) {
+            return this.foundAssetUrl;
+        }
+
+        if (document.querySelector('script[data-module="snowboard-base"]') !== null) {
+            this.foundAssetUrl = this.validateBaseUrl(document.querySelector('script[data-module="snowboard-base"]').dataset.assetUrl);
+            return this.foundAssetUrl;
+        }
+
+        if (document.querySelector('link[rel="asset_url"]') !== null) {
+            this.foundAssetUrl = this.validateBaseUrl(document.querySelector('link[rel="asset_url"]').getAttribute('href'));
+            return this.foundAssetUrl;
+        }
+
+        const urlParts = [
+            window.location.protocol,
+            '//',
+            window.location.host,
+            '/',
+        ];
+        this.foundAssetUrl = urlParts.join('');
+
+        return this.foundAssetUrl;
+    }
+
+    /**
      * Validates the base URL, ensuring it is a HTTP/HTTPs URL.
      *
      * If the Snowboard script or <base> tag on the page use a different type of URL, this will fail with
@@ -83,7 +145,7 @@ export default class Url extends Singleton {
      * @param {string} url
      * @returns {string}
      */
-     validateBaseUrl(url) {
+    validateBaseUrl(url) {
         const urlRegex = /^(([^:/?#]+):)?(\/\/([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?/i;
         const urlParts = urlRegex.exec(url);
         const protocol = urlParts[2];

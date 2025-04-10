@@ -63,6 +63,11 @@ class CodeEditor extends FormWidgetBase
     public $margin = 0;
 
     /**
+     * @var float Number of screen heights to allow scrolling past the end of the document
+     */
+    public $scrollPastEnd = 0;
+
+    /**
      * @var string Ace Editor theme to use.
      */
     public $theme = 'twilight';
@@ -132,6 +137,7 @@ class CodeEditor extends FormWidgetBase
             'tabSize',
             'fontSize',
             'margin',
+            'scrollPastEnd',
             'theme',
             'showInvisibles',
             'highlightActiveLine',
@@ -169,6 +175,7 @@ class CodeEditor extends FormWidgetBase
         $this->vars['showGutter'] = $this->showGutter;
         $this->vars['language'] = $this->language;
         $this->vars['margin'] = $this->margin;
+        $this->vars['scrollPastEnd'] = $this->scrollPastEnd;
         $this->vars['stretch'] = $this->formField->stretch;
         $this->vars['size'] = $this->formField->size;
         $this->vars['readOnly'] = $this->readOnly;

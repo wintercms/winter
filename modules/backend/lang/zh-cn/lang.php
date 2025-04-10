@@ -557,7 +557,7 @@ return [
         'add_folder' => '增加文件夹',
         'search' => '搜索',
         'display' => '显示',
-        'filter_everything' => '所有',
+        'filter_all' => '所有',
         'filter_images' => '图片',
         'filter_video' => '视频',
         'filter_audio' => '音频',

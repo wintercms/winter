@@ -5,6 +5,7 @@ use Lang;
 use Cache;
 use Config;
 use SystemException;
+use Winter\Storm\Support\Str;
 
 /**
  * Parses the PHP code section of CMS objects.
@@ -152,11 +153,15 @@ class CodeParser
         $fileContents .= trim($body).PHP_EOL;
         $fileContents .= '}'.PHP_EOL;
 
-        $this->validate($fileContents);
-
         $this->makeDirectorySafe(dirname($path));
 
         $this->writeContentSafe($path, $fileContents);
+
+        // Attempt to load the generated code file to ensure any errors are thrown
+        // before the file is cached
+        if (!class_exists($className)) {
+            require_once $path;
+        }
 
         return $className;
     }
@@ -233,18 +238,22 @@ class CodeParser
 
     /**
      * Returns path to the cached parsed file
-     * @return string
      */
-    protected function getCacheFilePath()
+    protected function getCacheFilePath(): string
     {
-        $hash = md5($this->filePath);
-        $result = storage_path().'/cms/cache/';
-        $result .= substr($hash, 0, 2).'/';
-        $result .= substr($hash, 2, 2).'/';
-        $result .= basename($this->filePath);
-        $result .= '.php';
+        $pathSegments = [
+            storage_path('cms' . DIRECTORY_SEPARATOR . 'cache'),
+            trim(
+                Str::after(
+                    pathinfo($this->filePath, PATHINFO_DIRNAME),
+                    base_path()
+                ),
+                DIRECTORY_SEPARATOR
+            ),
+            basename($this->filePath) . '.php',
+        ];
 
-        return $result;
+        return implode(DIRECTORY_SEPARATOR, $pathSegments);
     }
 
     /**
@@ -283,15 +292,6 @@ class CodeParser
     //
     // Helpers
     //
-
-    /**
-     * Evaluates PHP content in order to detect syntax errors.
-     * The method handles PHP errors and throws exceptions.
-     */
-    protected function validate($php)
-    {
-        eval('?>'.$php);
-    }
 
     /**
      * Extracts the class name from a cache file

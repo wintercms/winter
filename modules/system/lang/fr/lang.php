@@ -12,11 +12,6 @@ return [
     'file' => [
         'create_fail' => "Impossible de créer le fichier : :name",
     ],
-    'page' => [
-        'invalid_token' => [
-            'label' => 'La clé de sécurité est invalide',
-        ],
-    ],
     'combiner' => [
         'not_found' => "Le fichier combiné ':name' est introuvable.",
     ],
@@ -122,6 +117,9 @@ return [
         'not_found' => 'Les paramètres spécifiés sont introuvables.',
         'missing_model' => 'La page de réglages nécessite la définition d\'un Model.',
         'update_success' => 'Les réglages pour :name ont étés mis à jour avec succès.',
+        'test_subject' => 'Test du driver de courrier',
+        'test_content' => "Il s'agit d'un e-mail de test pour confirmer que les paramètres de messagerie fournis fonctionnent.",
+        'test_confirm' => "Cela permettra de sauvegarder votre configuration actuelle et d'envoyer un e-mail de test à :email.",
         'return' => 'Retourner à la page des réglages du système',
         'search' => 'Rechercher'
     ],
@@ -141,11 +139,6 @@ return [
         'smtp_username' => 'Identifiant',
         'smtp_password' => 'Mot de passe',
         'smtp_port' => 'Port SMTP',
-        'smtp_ssl' => 'Connexion SSL requise',
-        'smtp_encryption' => 'Protocole de sécurisation des échanges SMTP',
-        'smtp_encryption_none' => 'Aucun cryptage',
-        'smtp_encryption_tls' => 'TLS',
-        'smtp_encryption_ssl' => 'SSL',
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Chemin vers Sendmail',
         'sendmail_path_comment' => 'Saisir le chemin du programme sendmail.',

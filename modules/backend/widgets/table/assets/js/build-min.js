@@ -207,8 +207,8 @@ return}for(var i=0,len=this.options.columns.length;i<len;i++){var column=this.op
 if(this.cellProcessors[column].onKeyDown(ev)===false){return}}if(this.navigation.onKeydown(ev)===false){return}if(this.search.onKeydown(ev)===false){return}}
 Table.prototype.onFormSubmit=function(ev,data){if(data.handler==this.options.postbackHandlerName){this.unfocusTable()
 if(!this.validate()){ev.preventDefault()
-return}var fieldName=this.options.fieldName.indexOf('[')>-1?this.options.fieldName+'[TableData]':this.options.fieldName+'TableData'
-data.options.data[fieldName]=this.dataSource.getAllData()}}
+return}
+data.options.data[this.options.fieldName]=this.dataSource.getAllData()}}
 Table.prototype.onToolbarClick=function(ev){var target=this.getEventTarget(ev),cmd=target.getAttribute('data-cmd')
 if(!cmd){return}switch(cmd){case'record-add':case'record-add-below':this.addRecord('below')
 break

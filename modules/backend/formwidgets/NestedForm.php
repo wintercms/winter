@@ -18,7 +18,7 @@ class NestedForm extends FormWidgetBase
     protected $defaultAlias = 'nestedform';
 
     /**
-     * @var [] Form configuration
+     * @var array Form configuration
      */
     public $form;
 

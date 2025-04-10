@@ -1,0 +1,10 @@
+url = '/shared-variable-override'
+==
+<?php
+function onStart() {
+    $this['winterStatus'] = 'Is Coming';
+}
+==
+<p>Winter {{ winterStatus }}</p>
+
+<p>{{ this.page.url }}</p>

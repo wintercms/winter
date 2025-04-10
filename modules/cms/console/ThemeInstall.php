@@ -1,12 +1,10 @@
 <?php namespace Cms\Console;
 
-use File;
 use Cms\Classes\Theme;
 use Cms\Classes\ThemeManager;
+use File;
 use System\Classes\UpdateManager;
-use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Exception;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to install a new theme.
@@ -23,6 +21,14 @@ class ThemeInstall extends Command
      * @var string
      */
     protected $name = 'theme:install';
+
+    /**
+     * @var string The name and signature of this command.
+     */
+    protected $signature = 'theme:install
+        {name : The name of the theme. <info>(eg: AuthorName.ThemeName)</info>}
+        {dirName? : Destination directory name for the theme installation.}
+    ';
 
     /**
      * The console command description.
@@ -120,17 +126,5 @@ class ThemeInstall extends Command
     protected function themeCodeToDir($themeCode)
     {
         return strtolower(str_replace('.', '-', $themeCode));
-    }
-
-    /**
-     * Get the console command arguments.
-     * @return array
-     */
-    protected function getArguments()
-    {
-        return [
-            ['name', InputArgument::REQUIRED, 'The name of the theme. Eg: AuthorName.ThemeName'],
-            ['dirName', InputArgument::OPTIONAL, 'Destination directory name for the theme installation.'],
-        ];
     }
 }

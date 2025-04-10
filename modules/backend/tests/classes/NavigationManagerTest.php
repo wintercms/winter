@@ -26,14 +26,14 @@ class NavigationManagerTest extends TestCase
         $this->assertArrayHasKey('WINTER.TEST.DASHBOARD', $items);
 
         $item = $items['WINTER.TEST.DASHBOARD'];
-        $this->assertObjectHasAttribute('code', $item);
-        $this->assertObjectHasAttribute('label', $item);
-        $this->assertObjectHasAttribute('icon', $item);
-        $this->assertObjectHasAttribute('url', $item);
-        $this->assertObjectHasAttribute('owner', $item);
-        $this->assertObjectHasAttribute('order', $item);
-        $this->assertObjectHasAttribute('permissions', $item);
-        $this->assertObjectHasAttribute('sideMenu', $item);
+        $this->assertObjectHasProperty('code', $item);
+        $this->assertObjectHasProperty('label', $item);
+        $this->assertObjectHasProperty('icon', $item);
+        $this->assertObjectHasProperty('url', $item);
+        $this->assertObjectHasProperty('owner', $item);
+        $this->assertObjectHasProperty('order', $item);
+        $this->assertObjectHasProperty('permissions', $item);
+        $this->assertObjectHasProperty('sideMenu', $item);
 
         $this->assertEquals('dashboard', $item->code);
         $this->assertEquals('Dashboard', $item->label);
@@ -66,17 +66,17 @@ class NavigationManagerTest extends TestCase
         $this->assertArrayHasKey('categories', $items);
 
         $this->assertIsObject($items['posts']);
-        $this->assertObjectHasAttribute('code', $items['posts']);
-        $this->assertObjectHasAttribute('owner', $items['posts']);
+        $this->assertObjectHasProperty('code', $items['posts']);
+        $this->assertObjectHasProperty('owner', $items['posts']);
         $this->assertEquals('posts', $items['posts']->code);
         $this->assertEquals('Winter.Tester', $items['posts']->owner);
 
-        $this->assertObjectHasAttribute('permissions', $items['posts']);
+        $this->assertObjectHasProperty('permissions', $items['posts']);
         $this->assertIsArray($items['posts']->permissions);
         $this->assertCount(1, $items['posts']->permissions);
 
-        $this->assertObjectHasAttribute('order', $items['posts']);
-        $this->assertObjectHasAttribute('order', $items['categories']);
+        $this->assertObjectHasProperty('order', $items['posts']);
+        $this->assertObjectHasProperty('order', $items['categories']);
         $this->assertEquals(100, $items['posts']->order);
         $this->assertEquals(200, $items['categories']->order);
     }
@@ -195,15 +195,15 @@ class NavigationManagerTest extends TestCase
         $this->assertArrayHasKey('foo', $items);
 
         $this->assertIsObject($items['foo']);
-        $this->assertObjectHasAttribute('code', $items['foo']);
-        $this->assertObjectHasAttribute('owner', $items['foo']);
-        $this->assertObjectHasAttribute('order', $items['foo']);
+        $this->assertObjectHasProperty('code', $items['foo']);
+        $this->assertObjectHasProperty('owner', $items['foo']);
+        $this->assertObjectHasProperty('order', $items['foo']);
 
         $this->assertEquals(-1, $items['foo']->order);
         $this->assertEquals('foo', $items['foo']->code);
         $this->assertEquals('Winter.Tester', $items['foo']->owner);
 
-        $this->assertObjectHasAttribute('permissions', $items['foo']);
+        $this->assertObjectHasProperty('permissions', $items['foo']);
         $this->assertIsArray($items['foo']->permissions);
         $this->assertCount(2, $items['foo']->permissions);
         $this->assertContains('winter.tester.access_foo', $items['foo']->permissions);
@@ -236,15 +236,15 @@ class NavigationManagerTest extends TestCase
         $this->assertArrayHasKey('foo', $items);
 
         $this->assertTrue(is_object($items['foo']));
-        $this->assertObjectHasAttribute('code', $items['foo']);
-        $this->assertObjectHasAttribute('owner', $items['foo']);
-        $this->assertObjectHasAttribute('order', $items['foo']);
+        $this->assertObjectHasProperty('code', $items['foo']);
+        $this->assertObjectHasProperty('owner', $items['foo']);
+        $this->assertObjectHasProperty('order', $items['foo']);
 
         $this->assertEquals(-1, $items['foo']->order);
         $this->assertEquals('foo', $items['foo']->code);
         $this->assertEquals('Winter.Tester', $items['foo']->owner);
 
-        $this->assertObjectHasAttribute('permissions', $items['foo']);
+        $this->assertObjectHasProperty('permissions', $items['foo']);
         $this->assertTrue(is_array($items['foo']->permissions));
         $this->assertCount(2, $items['foo']->permissions);
         $this->assertContains('winter.tester.access_foo', $items['foo']->permissions);

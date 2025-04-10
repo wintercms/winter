@@ -3,14 +3,14 @@
 <ul class="nav nav-stacked selector-group">
     <li
         role="presentation"
-        <?php if ($currentFilter == Backend\Widgets\MediaManager::FILTER_EVERYTHING): ?>
+        <?php if ($currentFilter == Backend\Widgets\MediaManager::FILTER_ALL): ?>
             class="active"
         <?php endif ?>
     >
-        <a href="#" data-command="set-filter" data-filter="<?= Backend\Widgets\MediaManager::FILTER_EVERYTHING ?>">
+        <a href="#" data-command="set-filter" data-filter="<?= Backend\Widgets\MediaManager::FILTER_ALL ?>">
             <i class="icon-recycle"></i>
 
-            <?= e(trans('backend::lang.media.filter_everything')) ?>
+            <?= e(trans('backend::lang.media.filter_all')) ?>
         </a>
     </li>
     <li

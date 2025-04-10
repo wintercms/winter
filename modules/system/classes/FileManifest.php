@@ -166,7 +166,7 @@ class FileManifest
      */
     protected function getFilename(string $file): string
     {
-        return str_replace($this->root, '', $file);
+        return substr($file, strlen($this->root));
     }
 
     /**

@@ -383,7 +383,7 @@ return [
         'add_folder' => 'Добави папка',
         'search' => 'Търсене',
         'display' => 'Показване',
-        'filter_everything' => 'Всичко',
+        'filter_all' => 'Всичко',
         'filter_images' => 'Изображения',
         'filter_video' => 'Видео',
         'filter_audio' => 'Аудио',

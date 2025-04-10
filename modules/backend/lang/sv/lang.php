@@ -326,7 +326,7 @@ return [
         'add_folder' => 'Ny mapp',
         'search' => 'Sök',
         'display' => 'Visa',
-        'filter_everything' => 'Allt',
+        'filter_all' => 'Allt',
         'filter_images' => 'Bilder',
         'filter_video' => 'Videor',
         'filter_audio' => 'Ljud',

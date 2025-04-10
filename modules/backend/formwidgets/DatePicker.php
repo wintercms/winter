@@ -127,16 +127,16 @@ class DatePicker extends FormWidgetBase
             $value = DateTimeHelper::makeCarbon($value, false);
 
             if (!($value instanceof Carbon)) {
-                throw new ApplicationException(sprintf('"%s" is not a valid date / time value.', $value));
+                $this->vars['error'] = (sprintf('"%s" is not a valid date / time value.', $value));
+            } else {
+                if ($this->mode === 'date' && !$this->ignoreTimezone) {
+                    $backendTimeZone = \Backend\Models\Preference::get('timezone');
+                    $value->setTimezone($backendTimeZone);
+                    $value->setTime(0, 0, 0);
+                    $value->setTimezone(Config::get('app.timezone'));
+                }
+                $value = $value->toDateTimeString();
             }
-
-            if ($this->mode === 'date' && !$this->ignoreTimezone) {
-                $backendTimeZone = \Backend\Models\Preference::get('timezone');
-                $value->setTimezone($backendTimeZone);
-                $value->setTime(0, 0, 0);
-                $value->setTimezone(Config::get('app.timezone'));
-            }
-            $value = $value->toDateTimeString();
         }
 
         // Disable the datepicker visually when readOnly is enabled

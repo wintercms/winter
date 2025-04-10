@@ -19,7 +19,9 @@ class CreateComponent extends BaseScaffoldCommand
     protected $signature = 'create:component
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {component : The name of the component to generate. <info>(eg: Posts)</info>}
-        {--force : Overwrite existing files with generated files.}';
+        {--force : Overwrite existing files with generated files.}
+        {--uninspiring : Disable inspirational quotes}
+    ';
 
     /**
      * The console command description.

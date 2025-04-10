@@ -39,7 +39,7 @@ return [
     "digits_between"       => "Длина цифрового поля :attribute должна быть между :min и :max.",
     'dimensions'           => ':attribute имеет недопустимые размеры изображения.',
     'distinct'             => 'Поле :attribute имеет повторяющееся значение.',
-    "email"                => "Поле :attribute имеет ошибочный формат.",
+    "email"                => "Поле :attribute должно быть адресом электронной почты.",
     'ends_with'            => 'Поле :attribute должно заканчиваться одним из значений: :values.',
     "exists"               => "Выбранное значение для :attribute отсутствует.",
     'file'                 => ':attribute должен быть файлом.',

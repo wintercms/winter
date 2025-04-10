@@ -1,13 +1,14 @@
 <?php namespace System\Console;
 
 use Config;
-use Illuminate\Console\Command;
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
 use System\Classes\PluginManager;
+use Winter\Storm\Console\Command;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\PathResolver;
+use Winter\Storm\Support\Str;
 
 /**
  * Console command to run tests for plugins and modules.
@@ -45,6 +46,13 @@ class WinterTest extends Command
     protected $description = 'Run tests for the Winter CMS core or an existing plugin.';
 
     /**
+     * @var array List of commands that this command replaces (aliases)
+     */
+    protected $replaces = [
+        'test',
+    ];
+
+    /**
      * @var ?string Path to phpunit binary
      */
     protected $phpUnitExec = null;
@@ -63,6 +71,14 @@ class WinterTest extends Command
          * @see https://github.com/nunomaduro/collision/blob/stable/src/Adapters/Laravel/Commands/TestCommand.php
          */
         $this->ignoreValidationErrors();
+    }
+
+    /**
+     * Determines if Pest is being used.
+     */
+    protected function usingPest(): bool
+    {
+        return class_exists(\Pest\Laravel\PestServiceProvider::class);
     }
 
     /**
@@ -135,8 +151,9 @@ class WinterTest extends Command
     {
         // Find and bind the phpunit executable
         if (!$this->phpUnitExec) {
+            $bin = $this->usingPest() ? 'pest' : 'phpunit';
             $this->phpUnitExec = (new ExecutableFinder())
-                ->find('phpunit', base_path('vendor/bin/phpunit'), [base_path('vendor')]);
+                ->find($bin, base_path("vendor/bin/$bin"), [base_path('vendor')]);
         }
 
         // Resolve the configuration path based on the current working directory
@@ -163,8 +180,19 @@ class WinterTest extends Command
             ));
         }
 
+        $testDirectory = Str::after(dirname($config), base_path() . DIRECTORY_SEPARATOR) . '/tests';
+
+        $generatedArgs = [
+            $this->phpUnitExec,
+            '--configuration=' . $config,
+            '--bootstrap=' . $bootstrapPath,
+        ];
+        if ($this->usingPest()) {
+            $generatedArgs[] = '--test-directory=' . $testDirectory;
+        }
+
         $process = new Process(
-            array_merge([$this->phpUnitExec, '--configuration=' . $config, '--bootstrap=' . $bootstrapPath], $args),
+            array_merge($generatedArgs, $args),
             base_path(),
             [
                 'APP_ENV' => 'testing',

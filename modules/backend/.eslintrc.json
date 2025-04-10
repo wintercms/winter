@@ -10,6 +10,15 @@
         "airbnb-base",
         "plugin:vue/vue3-recommended"
     ],
+    "ignorePatterns": [
+        "assets/js",
+        "assets/vendor",
+        "behaviors/**/*.js",
+        "controllers/**/*.js",
+        "formwidgets/**/*.js",
+        "reportwidgets/**/*.js",
+        "widgets/**/*.js"
+    ],
     "rules": {
         "class-methods-use-this": ["off"],
         "indent": ["error", 4, {

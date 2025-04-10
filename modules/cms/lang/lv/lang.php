@@ -93,6 +93,13 @@ return [
         'find_more_themes' => 'Atrast citas tēmas',
         'saving' => 'Saglabā tēmu...',
         'return' => 'Atgriezties tēmu sarakstā',
+        'default_description' => 'Pielāgotā tēma, kas ģenerēta priekš :url',
+        'scaffold' => [
+            'label' => 'Tēmas sagatave',
+            'empty' => 'Tukša',
+            'less' => 'Pamata (LESS)',
+            'tailwind' => 'Tailwind CSS',
+        ],
     ],
     'maintenance' => [
         'settings_menu' => 'Uzturēšanas režīms',

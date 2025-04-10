@@ -1,1 +1,10 @@
 * text=auto
+
+*.md diff=markdown
+*.php diff=php
+
+/.devcontainer export-ignore
+/.github export-ignore
+.gitattributes export-ignore
+CHANGELOG.md export-ignore
+/package.json export-ignore

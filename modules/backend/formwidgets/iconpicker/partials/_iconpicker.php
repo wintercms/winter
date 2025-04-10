@@ -11,6 +11,7 @@
          data-prop-value="<?= $icon ?>"
          data-name="<?= $field->getFieldName() ?>"
          data-alias="<?= $field->alias ?>"
+         data-event-handler="<?= $this->getEventHandler('onLoadIconLibrary') ?>"
     >
         <div class="input-group">
             <span class="input-group-addon" style="cursor: pointer">

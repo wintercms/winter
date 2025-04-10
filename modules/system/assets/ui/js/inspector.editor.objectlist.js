@@ -301,11 +301,12 @@
             options = {
                 enableExternalParameterEditor: false,
                 onChange: this.proxy(this.onInspectorDataChange),
-                inspectorClass: this.inspector.options.inspectorClass
+                inspectorClass: this.inspector.options.inspectorClass,
+                parentContainer: this.getRootSurface(),
             }
 
         this.currentRowInspector = new $.wn.inspector.surface(inspectorContainer, properties, values,
-            $.wn.inspector.helpers.generateElementUniqueId(inspectorContainer), options)
+            $.wn.inspector.helpers.generateElementUniqueId(inspectorContainer), options, null, null, this.propertyDefinition.property)
     }
 
     ObjectListEditor.prototype.disposeInspector = function() {

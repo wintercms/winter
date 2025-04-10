@@ -7,7 +7,12 @@
         <p><?= e(trans('backend::lang.warnings.tips_description')) ?></p>
         <ul>
             <?php foreach ($warnings as $warning): ?>
-                <li><?= $warning ?></li>
+                <li>
+                    <?= $warning['message'] ?>
+                    <?php if (isset($warning['fixUrl'])): ?>
+                        (<a href="<?= $warning['fixUrl'] ?>" target="winter-fix"><?= e(trans('backend::lang.warnings.how_to_fix')) ?></a>)
+                    <?php endif ?>
+                </li>
             <?php endforeach ?>
         </ul>
     <?php else: ?>
