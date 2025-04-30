@@ -2,6 +2,7 @@
 
 namespace System\Traits;
 
+use System\Classes\Asset\AssetContainer;
 use System\Classes\CombineAssets;
 use System\Classes\PluginManager;
 use System\Classes\Asset\Vite;
@@ -25,7 +26,7 @@ trait AssetMaker
     /**
      * Collection of assets to display in the layout.
      */
-    protected array $assets = ['js' => [], 'css' => [], 'rss' => [], 'vite' => []];
+    protected AssetContainer $assets;
 
     /**
      * @var string Specifies a path to the asset directory.
@@ -44,7 +45,7 @@ trait AssetMaker
      */
     public function flushAssets(): void
     {
-        $this->assets = ['js' => [], 'css' => [], 'rss' => [], 'vite' => []];
+        $this->assets = new AssetContainer();
     }
 
     /**
@@ -56,6 +57,11 @@ trait AssetMaker
         if ($type != null) {
             $type = strtolower($type);
         }
+
+        if (!isset($this->assets)) {
+            $this->flushAssets();
+        }
+
         $result = null;
         $reserved = ['build', 'order'];
 
@@ -227,6 +233,10 @@ trait AssetMaker
      */
     protected function addAsset(string $type, string $path, array $attributes): void
     {
+        if (!isset($this->assets)) {
+            $this->flushAssets();
+        }
+
         if (!in_array($path, $this->assets[$type])) {
             /**
              * @event system.assets.beforeAddAsset
@@ -289,6 +299,26 @@ trait AssetMaker
         }
         $assetPath = !empty($localPath) ? $localPath : $this->assetPath;
         return Url::to(CombineAssets::combine($assets, $assetPath));
+    }
+
+    /**
+     * Returns this objects asset container
+     */
+    public function getAssetContainer(): AssetContainer
+    {
+        if (!isset($this->assets)) {
+            $this->flushAssets();
+        }
+
+        return $this->assets;
+    }
+
+    /**
+     * Set the asset container
+     */
+    public function setAssetContainer(AssetContainer $assets): void
+    {
+        $this->assets = $assets;
     }
 
     /**

@@ -1494,6 +1494,7 @@ class Controller
         }
 
         $this->setComponentPropertiesFromParams($componentObj);
+        $componentObj->setAssetContainer($this->getAssetContainer());
         $componentObj->init();
 
         return $componentObj;
