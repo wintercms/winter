@@ -2,27 +2,57 @@
 
 namespace System\Classes\Asset;
 
-class AssetContainer implements \ArrayAccess
+class AssetContainer extends \ArrayIterator
 {
     protected array $assets = ['js' => [], 'css' => [], 'rss' => [], 'vite' => []];
 
-    public function offsetExists(mixed $offset): bool
+    public function offsetExists(mixed $key): bool
     {
-        return isset($this->assets[$offset]);
+        return isset($this->assets[$key]);
     }
 
-    public function &offsetGet(mixed $offset): mixed
+    public function &offsetGet(mixed $key): mixed
     {
-        return $this->assets[$offset];
+        return $this->assets[$key];
     }
 
-    public function offsetSet(mixed $offset, mixed $value): void
+    public function offsetSet(mixed $key, mixed $value): void
     {
-        $this->assets[$offset] = $value;
+        $this->assets[$key] = $value;
     }
 
-    public function offsetUnset(mixed $offset): void
+    public function offsetUnset(mixed $key): void
     {
-        unset($this->assets[$offset]);
+        unset($this->assets[$key]);
+    }
+
+    public function current(): mixed
+    {
+        return current($this->assets);
+    }
+
+    public function next(): void
+    {
+        next($this->assets);
+    }
+
+    public function key(): mixed
+    {
+        return key($this->assets);
+    }
+
+    public function valid(): bool
+    {
+        return isset($this->assets[key($this->assets)]);
+    }
+
+    public function rewind(): void
+    {
+        reset($this->assets);
+    }
+
+    public function count(): int
+    {
+        return count($this->assets);
     }
 }
