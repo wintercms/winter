@@ -418,7 +418,7 @@ trait AssetMaker
      */
     protected function removeDuplicates(): void
     {
-        foreach ($this->assets as $type => &$collection) {
+        foreach ($this->assets as $type => $collection) {
             $pathCache = [];
             foreach ($collection as $key => $asset) {
                 if (!$path = array_get($asset, 'path')) {
@@ -426,7 +426,7 @@ trait AssetMaker
                 }
 
                 if (isset($pathCache[$path])) {
-                    array_forget($collection, $key);
+                    unset($this->assets[$type][$key]);
                     continue;
                 }
 
