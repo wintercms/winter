@@ -217,6 +217,10 @@ trait AssetMaker
             $package = $plugin->getPluginIdentifier();
         }
 
+        if (isset($this->controller)) {
+            $this->controller->addVite($entrypoints, $package);
+        }
+
         $this->addAsset('vite', $package, [
             'entrypoints' => $entrypoints
         ]);
