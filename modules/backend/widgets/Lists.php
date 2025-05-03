@@ -812,7 +812,13 @@ class Lists extends WidgetBase
         }
 
         $url = RouterHelper::replaceParameters($record, $this->recordUrl);
-        return Backend::url($url);
+
+        // Allow external or relative URLs
+        if (!Str::startsWith($url, ['http', '/'])) {
+            $url = Backend::url($url);
+        }
+
+        return $url;
     }
 
     /**
