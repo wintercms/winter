@@ -1777,6 +1777,22 @@ class Lists extends WidgetBase
     }
 
     /**
+     * Sets the column and direction to sort the list by.
+     * Use the $persist flag to control whether or not the parameters are stored in the session. Defaults to true.
+     */
+    public function setSort(string $column, string $direction = 'asc', bool $persist = true)
+    {
+        $this->sortColumn = $column;
+        $this->sortDirection = $direction;
+        if ($persist) {
+            $this->putSession('sort', [
+                'column' => $this->sortColumn,
+                'direction' => $this->sortDirection,
+            ]);
+        }
+    }
+
+    /**
      * Returns the current sorting column, saved in a session or cached.
      */
     public function getSortColumn()
