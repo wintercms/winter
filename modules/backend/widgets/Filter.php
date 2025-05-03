@@ -185,6 +185,12 @@ class Filter extends WidgetBase
                 $params['size'] = array_get($scope->config, 'size', 10);
 
                 break;
+
+            case 'button-group':
+            case 'dropdown':
+                $params['value'] = $scope->value;
+
+                break;
         }
 
         return $this->makePartial('scope_'.$scope->type, $params);
@@ -229,6 +235,11 @@ class Filter extends WidgetBase
                 $data = json_decode(post('options'), true);
                 $active = $this->optionsFromAjax($data ?: null);
                 $this->setScopeValue($scope, $active);
+                break;
+
+            case 'button-group':
+            case 'dropdown':
+                $this->setScopeValue($scope, post('value') ?: null);
                 break;
 
             case 'checkbox':
