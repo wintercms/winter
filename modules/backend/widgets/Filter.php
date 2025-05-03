@@ -1,15 +1,17 @@
-<?php namespace Backend\Widgets;
+<?php
 
-use Db;
-use Str;
-use Lang;
-use Backend;
-use DbDongle;
-use Carbon\Carbon;
-use Backend\Classes\WidgetBase;
+namespace Backend\Widgets;
+
 use Backend\Classes\FilterScope;
-use ApplicationException;
-use BackendAuth;
+use Backend\Classes\WidgetBase;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\DbDongle;
+use Winter\Storm\Support\Str;
 
 /**
  * Filter Widget
@@ -850,7 +852,7 @@ class Filter extends WidgetBase
                  */
                 if ($scopeConditions = $scope->conditions) {
                     $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
-                        ':value' => Db::getPdo()->quote($scope->value),
+                        ':value' => DB::getPdo()->quote($scope->value),
                     ])));
                 }
 
@@ -884,11 +886,11 @@ class Filter extends WidgetBase
 
                     if (is_array($value)) {
                         $filtered = implode(',', array_build($value, function ($key, $_value) {
-                            return [$key, Db::getPdo()->quote($_value)];
+                            return [$key, DB::getPdo()->quote($_value)];
                         }));
                     }
                     else {
-                        $filtered = Db::getPdo()->quote($value);
+                        $filtered = DB::getPdo()->quote($value);
                     }
 
                     $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [':filtered' => $filtered])));

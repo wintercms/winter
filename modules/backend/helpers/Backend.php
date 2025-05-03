@@ -1,16 +1,18 @@
-<?php namespace Backend\Helpers;
+<?php
 
-use Url;
-use File;
-use Html;
-use Config;
-use Request;
-use Redirect;
-use Exception;
-use Winter\Storm\Router\Helper as RouterHelper;
-use System\Helpers\DateTime as DateTimeHelper;
+namespace Backend\Helpers;
+
 use Backend\Classes\Skin;
 use Backend\Helpers\Exception\DecompileException;
+use Exception;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
+use System\Helpers\DateTime as DateTimeHelper;
+use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Html;
+use Winter\Storm\Support\Facades\Url;
 
 /**
  * Backend Helper

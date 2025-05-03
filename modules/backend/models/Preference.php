@@ -1,14 +1,16 @@
-<?php namespace Backend\Models;
+<?php
 
-use App;
-use Lang;
-use Model;
-use Config;
-use Session;
-use BackendAuth;
-use DirectoryIterator;
+namespace Backend\Models;
+
+use Backend\Facades\BackendAuth;
 use DateTime;
 use DateTimeZone;
+use DirectoryIterator;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Session;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Backend preferences for the backend user
