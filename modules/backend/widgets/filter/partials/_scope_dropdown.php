@@ -1,14 +1,14 @@
 <?php
-    $required = $scope->config['required'] ?? false;
-    $emptyOption = $scope->config['emptyOption'] ?? $scope->label ?? Lang::get('backend::lang.form.select_placeholder');
-    $hasEmpty = !$required && $emptyOption;
-    $selectedValue = $scope->value ?? null;
+$required = $scope->config['required'] ?? false;
+$emptyOption = $scope->config['emptyOption'] ?? $scope->label ?? Lang::get('backend::lang.form.select_placeholder');
+$hasEmpty = !$required && $emptyOption;
+$selectedValue = $scope->value ?? null;
 
-    // If required and no default, preselect first option
-    if ($required && $selectedValue === null && !empty($scope->options)) {
-        reset($scope->options);
-        $selectedValue = key($scope->options);
-    }
+// If required and no default, preselect first option
+if ($required && $selectedValue === null && !empty($scope->options)) {
+    reset($scope->options);
+    $selectedValue = key($scope->options);
+}
 ?>
 <div class="filter-scope dropdown" data-scope-name="<?= e($scope->scopeName) ?>">
     <select
