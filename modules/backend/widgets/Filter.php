@@ -189,6 +189,16 @@ class Filter extends WidgetBase
             case 'button-group':
             case 'dropdown':
                 $params['value'] = $scope->value;
+                $options = $scope->options;
+                $model = $this->scopeModels[$scope->scopeName];
+
+                if (is_string($options)) {
+                    if ($model->methodExists($options)) {
+                        $scope->options = $model->$options();
+                    } elseif (is_array($options = Lang::get($options))) {
+                        $scope->options = $options;
+                    }
+                }
 
                 break;
         }
