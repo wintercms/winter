@@ -189,15 +189,8 @@ class Filter extends WidgetBase
             case 'button-group':
             case 'dropdown':
                 $params['value'] = $scope->value;
-                $options = $scope->options;
-                $model = $this->scopeModels[$scope->scopeName];
-
-                if (is_string($options)) {
-                    if ($model->methodExists($options)) {
-                        $scope->options = $model->$options();
-                    } elseif (is_array($options = Lang::get($options))) {
-                        $scope->options = $options;
-                    }
+                if (is_array($options = $this->getOptionsFromArray($scope))) {
+                    $scope->options = $options;
                 }
 
                 break;
@@ -489,18 +482,25 @@ class Filter extends WidgetBase
             $model = $this->scopeModels[$scope->scopeName];
             $methodName = $options;
 
-            if (!$model->methodExists($methodName)) {
-                throw new ApplicationException(Lang::get('backend::lang.filter.options_method_not_exists', [
-                    'model'  => get_class($model),
-                    'method' => $methodName,
-                    'filter' => $scope->scopeName
-                ]));
-            }
-
-            if (!empty($scope->dependsOn)) {
-                $options = $model->$methodName($this->getScopes());
+            if (str_contains($methodName, '::')) {
+                $options = Lang::get($methodName);
+                if (!is_array($options)) {
+                    $options = [];
+                }
             } else {
-                $options = $model->$methodName();
+                if (!$model->methodExists($methodName)) {
+                    throw new ApplicationException(Lang::get('backend::lang.filter.options_method_not_exists', [
+                        'model'  => get_class($model),
+                        'method' => $methodName,
+                        'filter' => $scope->scopeName
+                    ]));
+                }
+
+                if (!empty($scope->dependsOn)) {
+                    $options = $model->$methodName($this->getScopes());
+                } else {
+                    $options = $model->$methodName();
+                }
             }
         }
         elseif (!is_array($options)) {
