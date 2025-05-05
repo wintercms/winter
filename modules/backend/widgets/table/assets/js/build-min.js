@@ -20,7 +20,7 @@ this.keydownHandler=this.onKeydown.bind(this)
 this.documentClickHandler=this.onDocumentClick.bind(this)
 this.toolbarClickHandler=this.onToolbarClick.bind(this)
 if(this.options.postback&&this.options.clientDataSourceClass=='client'){if(!this.options.postbackHandlerName){var formHandler=this.$el.closest('form').data('request')
-this.options.postbackHandlerName=formHandler||'onSave'}this.formSubmitHandler=this.onFormSubmit.bind(this)}this.navigation=null
+this.options.postbackHandlerName=[formHandler||'onSave']}else if(typeof this.options.postbackHandlerName==='string'){this.options.postbackHandlerName=this.options.postbackHandlerName.split(',')}this.formSubmitHandler=this.onFormSubmit.bind(this)}this.navigation=null
 this.search=null
 this.recordsAddedOrDeleted=0
 this.disposeBound=this.dispose.bind(this)
@@ -205,7 +205,7 @@ return}if((ev.key==='d'||ev.key==='D')&&ev.altKey&&this.options.deleting){this.d
 this.stopEvent(ev)
 return}for(var i=0,len=this.options.columns.length;i<len;i++){var column=this.options.columns[i].key
 if(this.cellProcessors[column].onKeyDown(ev)===false){return}}if(this.navigation.onKeydown(ev)===false){return}if(this.search.onKeydown(ev)===false){return}}
-Table.prototype.onFormSubmit=function(ev,data){if(data.handler==this.options.postbackHandlerName){this.unfocusTable()
+Table.prototype.onFormSubmit=function(ev,data){if(this.options.postbackHandlerName.indexOf(data.handler)>-1){this.unfocusTable()
 if(!this.validate()){ev.preventDefault()
 return}data.options.data[this.options.fieldName]=this.dataSource.getAllData()}}
 Table.prototype.onToolbarClick=function(ev){var target=this.getEventTarget(ev),cmd=target.getAttribute('data-cmd')
@@ -282,7 +282,7 @@ if(dataContainer.value!=value){dataContainer.value=value
 this.markCellRowDirty(cellElement)
 this.notifyRowProcessorsOnChange(cellElement)
 if(suppressEvents===undefined||!suppressEvents){this.$el.trigger('oc.tableCellChanged',[this.getCellColumnName(cellElement),value,this.getCellRowIndex(cellElement)])}}}
-Table.DEFAULTS={clientDataSourceClass:'client',keyColumn:'id',recordsPerPage:false,data:null,postback:true,postbackHandlerName:null,adding:true,deleting:true,toolbar:true,searching:false,rowSorting:false,height:false,dynamicHeight:false}
+Table.DEFAULTS={clientDataSourceClass:'client',keyColumn:'id',recordsPerPage:false,data:null,postback:true,postbackHandlerName:[],adding:true,deleting:true,toolbar:true,searching:false,rowSorting:false,height:false,dynamicHeight:false}
 var old=$.fn.table
 $.fn.table=function(option){var args=Array.prototype.slice.call(arguments,1),result=undefined
 this.each(function(){var $this=$(this)
@@ -715,16 +715,7 @@ AutocompleteProcessor.prototype.prepareItems=function(items){var result={}
 if($.isArray(items)){for(var i=0,len=items.length;i<len;i++){result[items[i]]=items[i]}}else{result=items}return result}
 AutocompleteProcessor.prototype.removeAutocomplete=function(){var input=this.getInput()
 $(input).autocomplete('destroy')}
-$.wn.table.processor.autocomplete=AutocompleteProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined){throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");}if($.wn.table.processor===undefined){throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");}const Base=$.wn.table.processor.base;const BaseProto=Base.prototype;const InspectorProcessor=function(tableObj,columnName,columnConfiguration){$(document).on('hiding.oc.inspector',this.onInspectorHidden.bind(this));this.inspector=null;Base.call(this,tableObj,columnName,columnConfiguration);}
-InspectorProcessor.prototype=Object.create(BaseProto);InspectorProcessor.prototype.constructor=InspectorProcessor;InspectorProcessor.prototype.dispose=function(){BaseProto.dispose.call(this);$(document).off('hiding.oc.inspector',this.onInspectorHidden.bind(this));}
-InspectorProcessor.prototype.renderCell=function(value,cellContentContainer){this.createViewContainer(cellContentContainer,value);if(this.columnConfiguration.readonly||this.columnConfiguration.readOnly){cellContentContainer.classList.add('readonly');cellContentContainer.setAttribute('tabindex',0);}}
-InspectorProcessor.prototype.onFocus=function(cellElement,isClick){if(this.activeCell===cellElement)return
-this.activeCell=cellElement
-if(!this.columnConfiguration.readonly&&!this.columnConfiguration.readOnly&&isClick){this.buildEditor(cellElement,this.getCellContentContainer(cellElement))}else{this.getCellContentContainer(cellElement).focus()}}
-InspectorProcessor.prototype.onUnfocus=function(){if(!this.activeCell){return;}this.showViewContainer(this.activeCell);this.activeCell=null;}
-InspectorProcessor.prototype.buildEditor=function(cellElement,cellContentContainer){this.hideViewContainer(this.activeCell);this.inspector=document.createElement('div');this.inspector.setAttribute('class','inspector-input');this.inspector.setAttribute('data-inspectable','true');this.inspector.setAttribute('data-inspector-title',this.columnConfiguration.inspectorTitle??this.columnConfiguration.title);this.inspector.setAttribute('data-inspector-offset-y','0');if(this.columnConfiguration.description){this.inspector.setAttribute('data-inspector-description',this.columnConfiguration.description);}this.inspector.setAttribute('data-inspector-config',this.getInspectorConfiguration());cellContentContainer.appendChild(this.inspector);window.setTimeout(()=>{this.inspector.click();},50);}
-InspectorProcessor.prototype.getInspectorConfiguration=function(){if(Array.isArray(this.columnConfiguration.properties)){return JSON.stringify(this.columnConfiguration.properties);}else if(typeof this.columnConfiguration.properties!=='object'){throw new Error('The properties configuration must be an object or an array.');}const config=[];Object.entries(this.columnConfiguration.properties).forEach(([key,value])=>{const settings=value;settings.property=key;config.push(settings);});return JSON.stringify(config);}
-InspectorProcessor.prototype.onInspectorHidden=function(ev,data){if(!this.inspector||ev.target!==this.inspector){return;}this.tableObj.setCellValue(this.activeCell,data.values);};$.wn.table.processor.inspector=InspectorProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)$.wn.table.validator={}
+$.wn.table.processor.autocomplete=AutocompleteProcessor;}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.validator===undefined)$.wn.table.validator={}
 var Base=function(options){this.options=options}
 Base.prototype.validate=function(value,rowData){if(this.options.requiredWith!==undefined&&!this.rowHasValue(this.options.requiredWith,rowData))return
 return this.validateValue(value,rowData)}
