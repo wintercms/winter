@@ -86,7 +86,7 @@
         this.getRecords(offset, count, onSuccess)
     }
 
-        /*
+    /*
      * Identical to getRecords except using a search query.
      */
     Client.prototype.searchRecords = function(query, offset, count, onSuccess) {
