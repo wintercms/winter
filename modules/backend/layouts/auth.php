@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
         <meta name="robots" content="noindex">
-        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="mobile-web-app-capable" content="yes">
         <meta name="backend-base-path" content="<?= Backend::baseUrl() ?>">
         <meta name="csrf-token" content="<?= csrf_token() ?>">
         <link rel="icon" type="image/png" href="<?= e(Backend\Models\BrandSetting::getFavicon()) ?>">

@@ -109,7 +109,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * This method is used by the CMS in the runtime. If the cache is not found, it is created.
      * @param \Cms\Classes\Theme $theme Specifies the theme the object belongs to.
      * @param string $fileName Specifies the file name, with the extension.
-     * @return mixed Returns a CMS object instance or null if the object wasn't found.
+     * @return static|null Returns a CMS object instance or null if the object wasn't found.
      */
     public static function loadCached($theme, $fileName)
     {
@@ -185,7 +185,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
     /**
      * Prepares the theme datasource for the model.
      * @param \Cms\Classes\Theme $theme Specifies a parent theme.
-     * @return $this
+     * @return static
      */
     public static function inTheme($theme)
     {

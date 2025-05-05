@@ -1,10 +1,10 @@
 <?php namespace Backend\Models;
 
-use Mail;
-use Event;
-use Backend;
-use BackendAuth;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Illuminate\Support\Facades\Event;
 use Winter\Storm\Auth\Models\User as UserBase;
+use Winter\Storm\Support\Facades\Mail;
 
 /**
  * Administrator user model

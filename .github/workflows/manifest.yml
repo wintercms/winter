@@ -11,7 +11,7 @@ jobs:
     name: Update manifest
     runs-on: ubuntu-latest
     env:
-      phpVersion: '8.1'
+      phpVersion: '8.2'
       extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
       key: winter-cms-cache-develop
     steps:

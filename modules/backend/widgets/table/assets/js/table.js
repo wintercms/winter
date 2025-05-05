@@ -74,8 +74,11 @@
         if (this.options.postback && this.options.clientDataSourceClass == 'client') {
             if (!this.options.postbackHandlerName) {
                 var formHandler = this.$el.closest('form').data('request')
-                this.options.postbackHandlerName = formHandler || 'onSave'
+                this.options.postbackHandlerName = [formHandler || 'onSave']
+            } else if (typeof this.options.postbackHandlerName === 'string') {
+              this.options.postbackHandlerName = this.options.postbackHandlerName.split(',')
             }
+
             this.formSubmitHandler = this.onFormSubmit.bind(this)
         }
 
@@ -803,7 +806,7 @@
     }
 
     Table.prototype.onFormSubmit = function(ev, data) {
-        if (data.handler == this.options.postbackHandlerName) {
+        if (this.options.postbackHandlerName.indexOf(data.handler) > -1) {
             this.unfocusTable()
 
             if (!this.validate()) {
@@ -811,11 +814,7 @@
                 return
             }
 
-            var fieldName = this.options.fieldName.indexOf('[') > -1
-                ? this.options.fieldName + '[TableData]'
-                : this.options.fieldName + 'TableData'
-
-            data.options.data[fieldName] = this.dataSource.getAllData()
+            data.options.data[this.options.fieldName] = this.dataSource.getAllData()
         }
     }
 
@@ -1119,7 +1118,7 @@
         recordsPerPage: false,
         data: null,
         postback: true,
-        postbackHandlerName: null,
+        postbackHandlerName: [],
         adding: true,
         deleting: true,
         toolbar: true,

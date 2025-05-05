@@ -23,11 +23,36 @@ table.table.data {
                 line-height: 14px;
                 display: inline-block;
                 margin-left: 6px;
-                vertical-align: baseline;
+                vertical-align: text-top;
                 .opacity(.4);
                 .icon(@icon);
             }
             &:hover:after { .opacity(.8); }
+        }
+    }
+
+    .table-totals {
+        background-color: #f2f2f2;
+
+        span {
+            display: block;
+            color: @color-list-text-head;
+        }
+
+        td {
+            border: 0;
+        }
+    }
+    thead .table-totals span {
+        text-align: center;
+        padding: 6.5px 7.5px;
+    }
+    tfoot .table-totals {
+        td {
+            border-top: 2px solid @color-list-border;
+        }
+        span {
+            text-align: right;
         }
     }
 
@@ -51,6 +76,7 @@ table.table.data {
             text-transform: uppercase;
             font-size: @font-size-base - 3;
             white-space: nowrap;
+            .list-head-icon(@angle-right);
 
             > a, > span {
                 display: block;

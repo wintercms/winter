@@ -1,6 +1,6 @@
 @import "../../../../../backend/assets/less/core/boot.less";
 
-@color-media-list-hover-bg: mix(white, @brand-accent, 13%);
+@color-media-list-hover-bg: mix(white, @brand-secondary, 13%);
 
 .media-selected-tiles() {
     .icon-container {
@@ -50,8 +50,8 @@ div[data-control="media-manager"] {
         height: @size;
         top: 50%;
         left: 50%;
-        margin-top: -@size/2;
-        margin-left: -@size/2;
+        margin-top: -(@size / 2);
+        margin-left: -(@size / 2);
     }
 
     audio, video {

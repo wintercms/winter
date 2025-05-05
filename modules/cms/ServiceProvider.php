@@ -2,27 +2,30 @@
 
 use Backend;
 use Backend\Classes\WidgetManager;
+use Backend\Facades\BackendAuth;
+use Backend\Facades\BackendMenu;
 use Backend\Models\UserRole;
-use BackendAuth;
-use BackendMenu;
+use Cms\Classes\CmsController;
 use Cms\Classes\CmsObject;
 use Cms\Classes\ComponentManager;
 use Cms\Classes\Page as CmsPage;
+use Cms\Classes\Router;
 use Cms\Classes\Theme;
 use Cms\Models\ThemeData;
 use Cms\Models\ThemeLog;
 use Cms\Twig\DebugExtension;
 use Cms\Twig\Extension as CmsTwigExtension;
 use Cms\Twig\Loader as CmsTwigLoader;
-use Config;
-use Event;
-use File;
-use Lang;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use System\Classes\CombineAssets;
 use System\Classes\MarkupManager;
 use System\Classes\SettingsManager;
 use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
-use Url;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\ModuleServiceProvider;
 
 class ServiceProvider extends ModuleServiceProvider
@@ -37,6 +40,7 @@ class ServiceProvider extends ModuleServiceProvider
         parent::register();
 
         $this->registerConsole();
+        $this->registerErrorHandler();
         $this->registerTwigParser();
         $this->registerAssetBundles();
         $this->registerComponents();
@@ -82,6 +86,34 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('theme.list', \Cms\Console\ThemeList::class);
         $this->registerConsoleCommand('theme.use', \Cms\Console\ThemeUse::class);
         $this->registerConsoleCommand('theme.sync', \Cms\Console\ThemeSync::class);
+    }
+
+    /**
+     * Error handling for abort() errors
+     */
+    protected function registerErrorHandler()
+    {
+        $this->app->error(function (HttpExceptionInterface $exception, $code, $fromConsole) {
+            $theme = Theme::getActiveTheme();
+            $controller = new CmsController($theme);
+            if ($code === 404) {
+                return Response::make($controller->run('/404')->original, 404, []);
+            }
+
+            if (!Config::get('app.debug', false)) {
+                $router = new Router($theme);
+                // Use the default view if no "/error" URL is found.
+                if (!$router->findByUrl('/error')) {
+                    $result = View::make('cms::error');
+                } else {
+                    // Route to the CMS error page.
+                    $controller = new CmsController($theme);
+                    $result = $controller->run('/error')->original;
+                }
+
+                return Response::make($result, $code, []);
+            }
+        });
     }
 
     /*

@@ -253,10 +253,7 @@ class Form extends WidgetBase
             $field = $this->allFields[$field];
         }
 
-        if (!isset($options['useContainer'])) {
-            $options['useContainer'] = true;
-        }
-        $targetPartial = $options['useContainer'] ? 'field-container' : 'field';
+        $targetPartial = ($options['useContainer'] ?? true) ? 'field-container' : 'field';
 
         return $this->makePartial($targetPartial, ['field' => $field]);
     }
@@ -354,7 +351,7 @@ class Form extends WidgetBase
     public function onRefresh()
     {
         $result = [];
-        $saveData = $this->getSaveData(true);
+        $saveData = $this->getSaveData();
 
         /**
          * @event backend.form.beforeRefresh
@@ -711,7 +708,7 @@ class Form extends WidgetBase
      * @param string $addToArea
      * @return void
      */
-    public function addFields(array $fields, $addToArea = null)
+    public function addFields(array $fields, $addToArea = '')
     {
         foreach ($fields as $name => $config) {
             // Check if user has permissions to show this field
@@ -1172,10 +1169,9 @@ class Form extends WidgetBase
     /**
      * Returns post data from a submitted form.
      */
-    public function getSaveData(bool $includeAllFields = false): array
+    public function getSaveData(): array
     {
         $this->defineFormFields();
-        $this->applyFiltersFromModel();
 
         $result = [];
 
@@ -1194,7 +1190,7 @@ class Form extends WidgetBase
             /*
              * Disabled and hidden should be omitted from data set
              */
-            if (!$includeAllFields && ($field->disabled || $field->hidden)) {
+            if ($field->disabled || $field->hidden) {
                 continue;
             }
 

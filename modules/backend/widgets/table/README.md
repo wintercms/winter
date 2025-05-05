@@ -76,7 +76,7 @@ The options below are listed in the JavaScript notation. Corresponding data attr
 - `rowSorting` - enables the drag & drop row sorting. The sorting cannot be used with the pagination (`recordsPerPage` is not `null` or `false`).
 - `keyColumn` - specifies the name of the key column. The default value is **id**.
 - `postback` - post the client-memory data source data to the server automatically when the parent form gets submitted. The default value is `true`. The option is used only with client-memory data sources. When enabled, the data source data  is available in the widget's server-side data source: `$table->getDataSource()->getRecords();` The data postback occurs only of the request handler name matches the `postbackHandlerName` option value.
-- `postbackHandlerName` - AJAX data handler name for the automatic data postback. The data will be posted only when the AJAX request posts data matching this handler name. The default value is **onSave**.
+- `postbackHandlerName` - comma seperated list of AJAX data handler names for the automatic data postback. The data will be posted only when the AJAX request posts data matching one of this handler names. The default value is **onSave**.
 - `adding` - determines whether users can add new records. Default value is **true**.
 - `deleting` - determines whether users can delete records. Default value is **true**.
 - `toolbar` - determines whether the toolbar is visible. The default value is **true**.
@@ -185,7 +185,7 @@ The widget is configured with YAML file. Required parameters:
 * `dataSource` - The data source class. Should specify the full qualified data source class name or alias. See the data source aliases below.
 * `keyFrom` - name of the key column. The default value is **id**.
 * `recordsPerPage` - number of records per page. If not specified, the pagination will be disabled.
-* `postbackHandlerName` - AJAX data handler name for the automatic data postback. The data will be posted only when the AJAX requests posts data to this handler. The default value is **onSave**. This parameter is applicable only with client-memory data sources.
+* `postbackHandlerName` - comma seperated list of AJAX data handler names for the automatic data postback. The data will be posted only when the AJAX requests posts data to one of this handlers. The default value is **onSave**. This parameter is applicable only with client-memory data sources.
 * `adding` - indicates if record deleting is allowed, default is **true**.
 * `deleting` - indicates if record deleting is allowed, default is **true**.
 * `toolbar` - specifies if the toolbar should be visible, default is **true**.

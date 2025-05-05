@@ -15,11 +15,11 @@ class ViteWatch extends ViteCompile
      * @var string The name and signature of this command.
      */
     protected $signature = 'vite:watch
-        {package : Defines the package to watch for changes}
+        {package : The package to watch for changes (ex. author.plugin, theme-code, etc)}
         {viteArgs?* : Arguments to pass through to the Webpack CLI}
         {--f|production : Runs compilation in "production" mode}
         {--m|manifest= : Defines package.json to use for compile}
-        {--s|silent : Silent mode}
+        {--s|silent : Enables silent mode, no output will be shown.}
         {--d|disable-tty : Disable tty mode}
         {--no-progress : Do not show mix progress}';
 
@@ -55,17 +55,6 @@ class ViteWatch extends ViteCompile
         $command[] = '--host';
 
         return array_values($command);
-    }
-
-    /**
-     * Create the public dir if required
-     */
-    protected function beforeExecution(string $configPath): void
-    {
-        $publicDir = dirname($configPath) . '/public';
-        if (!File::exists($publicDir)) {
-            File::makeDirectory($publicDir);
-        }
     }
 
     /**

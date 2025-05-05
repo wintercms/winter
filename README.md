@@ -11,8 +11,6 @@ No matter how large or small your project is, Winter provides a rich development
 [![License](https://img.shields.io/github/license/wintercms/winter?label=open%20source&style=flat-square)](https://packagist.org/packages/wintercms/winter)
 [![Discord](https://img.shields.io/badge/discord-join-purple?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/D5MFSPH6Ux)
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/wintercms/winter)
-
 ## Installing Winter
 
 Winter can be installed in several ways for both new users and experienced developers - see our [Installation page](https://wintercms.com/install) for more information.
@@ -88,6 +86,10 @@ In order to ensure that the Winter community is welcoming to all, please review 
 Winter CMS development is financially supported by the generosity of the following sponsors:
 
 ### Organizations
+
+[![Route4Me logo, Route Planning and Route Mapping](https://raw.githubusercontent.com/wintercms/winter/develop/.github/assets/sponsor-route4me.png)](https://route4me.com/?utm_source=wintercms)
+
+Route4Me is a [Premium Sponsor to the Winter CMS Open Collective](https://opencollective.com/wintercms).
 
 [![Froala logo](https://froala.com/wp-content/uploads/2019/10/froala.svg)](https://froala.com/wysiwyg-editor/)
 
