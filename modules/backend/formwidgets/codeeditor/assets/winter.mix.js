@@ -49,6 +49,7 @@ mix
                     'bracketMatching',
                     'caretOperations',
                     'clipboard',
+                    'codelens',
                     'colorPicker',
                     'comment',
                     'contextmenu',

@@ -24,14 +24,9 @@ import constrainedEditor from 'constrained-editor-plugin';
             this.events = this.snowboard['backend.ui.eventHandler'](this, 'backend.formwidget.codeeditor');
             this.alias = this.config.get('alias');
             this.model = null;
-            this.valueListener = null;
-            this.positionListener = null;
-            this.selectionListener = null;
             this.resizeListener = false;
             this.visibilityListener = false;
             this.clickListener = false;
-            this.editorMouseDownListener = null;
-            this.editorMouseUpListener = null;
             this.clickStartedInEditor = false;
             this.editor = null;
             this.container = this.element.querySelector('.editor-container');
@@ -56,6 +51,7 @@ import constrainedEditor from 'constrained-editor-plugin';
             };
             this.keybindings = [];
             this.customLineNumbering = null;
+            this.disposables = [];
 
             this.observeElement();
         }
@@ -156,29 +152,15 @@ import constrainedEditor from 'constrained-editor-plugin';
          * and preventing slowdown of the browser.
          */
         dispose() {
-            if (this.valueListener) {
-                this.valueListener.dispose();
-                this.valueListener = null;
-            }
-            if (this.positionListener) {
-                this.positionListener.dispose();
-                this.positionListener = null;
-            }
-            if (this.selectionListener) {
-                this.selectionListener.dispose();
-                this.selectionListener = null;
+            if (this.disposables.length > 0) {
+                this.disposables.forEach((disposable) => {
+                    disposable.dispose();
+                });
+                this.disposables = [];
             }
             if (this.resizeListener) {
                 window.removeEventListener('resize', this.callbacks.resize);
                 this.resizeListener = false;
-            }
-            if (this.editorMouseUpListener) {
-                this.editorMouseUpListener.dispose();
-                this.editorMouseUpListener = null;
-            }
-            if (this.editorMouseDownListener) {
-                this.editorMouseDownListener.dispose();
-                this.editorMouseDownListener = null;
             }
             if (this.editor) {
                 this.editor.dispose();
@@ -251,12 +233,13 @@ import constrainedEditor from 'constrained-editor-plugin';
         getConfigOptions() {
             const options = {
                 automaticLayout: true,
+                'bracketPairColorization.enabled': this.config.get('bracketColors'),
                 colorDecorators: this.config.get('showColors'),
                 detectIndentation: false,
                 folding: this.config.get('codeFolding'),
                 fontSize: this.config.get('fontSize'),
                 guides: {
-                    bracketPairs: this.config.get('bracketColors'),
+                    bracketPairs: this.config.get('bracketColors') ? 'active' : false,
                     bracketPairsHorizontal: this.config.get('bracketColors') ? 'active' : false,
                     indentation: this.config.get('displayIndentGuides'),
                 },
@@ -349,27 +332,27 @@ import constrainedEditor from 'constrained-editor-plugin';
         attachListeners() {
             this.model = this.editor.getModel();
 
-            this.valueListener = this.model.onDidChangeContent(() => {
+            this.disposables.push(this.model.onDidChangeContent(() => {
                 this.valueBag.value = this.model.getValue();
                 this.events.fire('input', this.valueBag.value, this, this.editor);
-            });
+            }));
 
-            this.positionListener = this.editor.onDidChangeCursorPosition((event) => {
+            this.disposables.push(this.editor.onDidChangeCursorPosition((event) => {
                 this.updatePosition(event.position);
                 this.events.fire('position', event);
-            });
+            }));
 
-            this.selectionListener = this.editor.onDidChangeCursorSelection((event) => {
+            this.disposables.push(this.editor.onDidChangeCursorSelection((event) => {
                 this.events.fire('selection', event);
-            });
-            this.editorMouseDownListener = this.editor.onMouseDown(() => {
+            }));
+            this.disposables.push(this.editor.onMouseDown(() => {
                 this.clickStartedInEditor = true;
-            });
-            this.editorMouseUpListener = this.editor.onMouseUp(() => {
+            }));
+            this.disposables.push(this.editor.onMouseUp(() => {
                 setTimeout(() => {
                     this.clickStartedInEditor = false;
                 }, 20);
-            });
+            }));
             document.addEventListener('click', this.callbacks.click, {
                 capture: true,
             });
@@ -557,25 +540,60 @@ import constrainedEditor from 'constrained-editor-plugin';
         /**
          * Finds and replaces a single match in the editor content.
          *
-         * @param {String|RegExp} search
+         * @param {String|RegExp|monaco.Range} search
          * @param {String} replace
          * @param {Boolean} matchCase
          * @returns {monaco.editor.FindMatch|null}
          */
-        replace(search, replace, matchCase) {
+        replace(search, replace, matchCase, align = true) {
+            if (typeof search !== 'string' && !(search instanceof RegExp)) {
+                return this.model.pushEditOperations(
+                    [monaco.Selection.fromRange(search)],
+                    [
+                        {
+                            forceMoveMarkers: false,
+                            range: new monaco.Range(search.startLineNumber, search.startColumn, search.endLineNumber, search.endColumn),
+                            text: (align) ? this.alignText(replace, search.startColumn) : replace,
+                        },
+                    ],
+                );
+            }
+
             const found = this.find(search, matchCase);
 
             if (!found) {
                 return;
             }
 
-            this.model.pushEditOperations(this.editor.getSelections(), [
-                {
-                    forceMoveMarkers: false,
-                    range: new monaco.Range(found.range.startLineNumber, found.range.startColumn, found.range.endLineNumber, found.range.endColumn),
-                    text: replace,
-                },
-            ]);
+            return this.model.pushEditOperations(
+                this.editor.getSelections(),
+                [
+                    {
+                        forceMoveMarkers: false,
+                        range: new monaco.Range(found.range.startLineNumber, found.range.startColumn, found.range.endLineNumber, found.range.endColumn),
+                        text: (align) ? this.alignText(replace, search.startColumn) : replace,
+                    },
+                ],
+            );
+        }
+
+        /**
+         * Aligns the text to the given column.
+         * 
+         * Any line breaks in the text will have additional spaces added to the start of the line
+         * to ensure that it aligns with the original column.
+         * 
+         * @param {String} text
+         * @param {Number} column
+         */
+        alignText(text, column) {
+            const lines = text.split('\n');
+            return lines.map((line, index) => {
+                if (index === 0) {
+                    return line;
+                }
+                return `${' '.repeat(column - 1)}${line}`;
+            }).join('\n');
         }
 
         /**
@@ -1269,6 +1287,25 @@ import constrainedEditor from 'constrained-editor-plugin';
             }
 
             this.clickStartedInEditor = false;
+        }
+
+        /**
+         * Wrapper method to add a code lens provider.
+         * 
+         * @param {(model: monaco.editor.ITextModel, token: monaco.CancellationToken) => Promise<monaco.languages.CodeLens[]>} provider
+         * @param {(model: monaco.editor.ITextModel, codeLens: monaco.languages.CodeLens, token: monaco.CancellationToken) => Promise<monaco.languages.CodeLens>} resolver
+         */
+        addCodeLens(language, provider, resolver = null) {
+            this.disposables.push(
+                monaco.languages.registerCodeLensProvider(language, {
+                    provideCodeLenses: (model, token) => {
+                        return provider(model, token);
+                    },
+                    resolveCodeLens: (model, codeLens, token) => {
+                        return resolver(model, codeLens, token) ?? codeLens;
+                    },
+                })
+            );
         }
     }
 

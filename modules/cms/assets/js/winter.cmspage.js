@@ -267,22 +267,70 @@
     }
 
     CmsPage.prototype.onCodeEditorCreate = function (widget, editor) {
-        if (widget.config.get('language') !== 'php') {
-            return;
-        }
+        const $form = $(widget.element.closest('form'));
 
-        // If no PHP tag is available, add it and hide it from the editor. Otherwise, hide the PHP tag.
-        let match = widget.find(/<\?php\s*/, false);
-        if (!match) {
-            widget.setValue('<?php\n' + widget.getValue());
-            match = widget.find(/<\?php\s*/, false);
-
+        if (widget.config.get('language') === 'php') {
+            // If no PHP tag is available, add it and hide it from the editor. Otherwise, hide the PHP tag.
+            let match = widget.find(/<\?php\s*/, false);
             if (!match) {
-                return;
+                widget.setValue('<?php\n' + widget.getValue());
+                match = widget.find(/<\?php\s*/, false);
+
+                if (!match) {
+                    return;
+                }
             }
+
+            widget.fromLine(2);
         }
 
-        widget.fromLine(2);
+        // Add codelens and action to customise component templates
+        const templateCommand = editor.addCommand(
+            0,
+            function (command, range, name) {
+                $form.request('onExpandMarkupToken', {
+                    data: {
+                        tokenType: 'component',
+                        tokenName: name,
+                    },
+                    success: function (data) {
+                        if (data.result) {
+                            console.log(widget.replace(range, data.result));
+                        }
+                    },
+                });
+            },
+        );
+
+        widget.addCodeLens(
+            'twig',
+            function (model, token) {
+                // Find component tags
+                const lenses = [];
+                const matches = model.findMatches('\\{%\\scomponent\\s[\'"]([^\'"]+)[\'"][^%]*\\s%\\}', true, true, false, null, true);
+
+                matches.forEach((match) => {
+                    const name = match.matches[1] ?? 'unknown';
+                    lenses.push({
+                        range: match.range,
+                        id: 'component-' + name + '-lens',
+                        command: {
+                            title: 'Customize template',
+                            id: templateCommand,
+                            arguments: [match.range, name]
+                        },
+                    });
+                });
+
+                return {
+                    lenses: lenses,
+                    dispose: function () {
+                    }
+                }
+            }
+        );
+
+        console.log('Done');
     }
 
     CmsPage.prototype.onAfterAllTabsClosed = function(ev) {
