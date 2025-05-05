@@ -708,7 +708,7 @@ class Form extends WidgetBase
      * @param string $addToArea
      * @return void
      */
-    public function addFields(array $fields, $addToArea = null)
+    public function addFields(array $fields, $addToArea = '')
     {
         foreach ($fields as $name => $config) {
             // Check if user has permissions to show this field

@@ -10,12 +10,15 @@ if ($this->previewMode || $field->readOnly) {
     data-control="recordfinder"
     data-refresh-handler="<?= $this->getEventHandler('onRefresh') ?>"
     data-data-locker="#<?= $field->getId() ?>">
-    <span class="form-control" style="cursor:pointer"
+    <span class="form-control"
             <?= $previewMode ? 'disabled="disabled"' : '' ?>
+        <?php if (!$previewMode): ?>
+            style="cursor:pointer"
             data-control="popup"
             data-size="huge"
             data-handler="<?= $this->getEventHandler('onFindRecord') ?>"
             data-request-data="recordfinder_flag: 1"
+        <?php endif ?>
     >
         <?php if ($value): ?>
             <span class="primary"><?= e($nameValue) ?: 'Undefined' ?></span>

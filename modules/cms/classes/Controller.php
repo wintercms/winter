@@ -309,15 +309,7 @@ class Controller
         /*
          * The 'this' variable is reserved for default variables.
          */
-        $this->getTwig()->addGlobal('this', [
-            'page'        => $this->page,
-            'layout'      => $this->layout,
-            'theme'       => $this->theme,
-            'param'       => $this->router->getParameters(),
-            'controller'  => $this,
-            'environment' => App::environment(),
-            'session'     => App::make('session'),
-        ]);
+        $this->getTwig()->addGlobal('this', $this->getControllerGlobalVars());
 
         /*
          * Add global vars defined by View::share() into Twig, only if they have yet to be specified.
@@ -1247,6 +1239,22 @@ class Controller
     public function getTwig()
     {
         return $this->twig;
+    }
+
+    /**
+     * Returns the globals to be provided to twig
+     */
+    public function getControllerGlobalVars()
+    {
+        return [
+            'page'        => $this->page ?? new Page(),
+            'layout'      => $this->layout ?? new Layout(),
+            'theme'       => $this->theme,
+            'param'       => $this->router->getParameters(),
+            'controller'  => $this,
+            'environment' => App::environment(),
+            'session'     => App::make('session'),
+        ];
     }
 
     /**
