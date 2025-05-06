@@ -695,7 +695,7 @@ class Controller
                  * Validate the handler name
                  */
                 if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
-                    throw new SystemException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name'=>$handler]));
+                    throw new SystemException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name'=>$handler]), 400);
                 }
 
                 /*
@@ -706,7 +706,7 @@ class Controller
 
                     foreach ($partialList as $partial) {
                         if (!preg_match('/^(?:\w+\:{2}|@)?[a-z0-9\_\-\.\/]+$/i', $partial)) {
-                            throw new SystemException(Lang::get('cms::lang.partial.invalid_name', ['name'=>$partial]));
+                            throw new SystemException(Lang::get('cms::lang.partial.invalid_name', ['name'=>$partial]), 400);
                         }
                     }
                 }
