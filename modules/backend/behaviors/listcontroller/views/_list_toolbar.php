@@ -10,7 +10,7 @@ $listConfig = $listController->getConfig();
         <?= e(trans('backend::lang.form.create_title', ['name' => trans(\Winter\Storm\Support\Str::before($listConfig->title, '_plural'))])); ?>
     </a>
 
-  <?php if (isset($listConfig->showCheckboxes) && $listConfig->showCheckboxes != false) : ?>
+  <?php if (isset($listConfig->showCheckboxes) && $listConfig->showCheckboxes != false): ?>
     <button
         class="btn btn-danger wn-icon-trash-o"
         disabled="disabled"
