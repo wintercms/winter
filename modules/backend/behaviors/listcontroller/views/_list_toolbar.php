@@ -10,6 +10,7 @@ $listConfig = $listController->getConfig();
         <?= e(trans('backend::lang.form.create_title', ['name' => trans(\Winter\Storm\Support\Str::before($listConfig->title, '_plural'))])); ?>
     </a>
 
+  <?php if (isset($listConfig->showCheckboxes) && $listConfig->showCheckboxes != false) : ?>
     <button
         class="btn btn-danger wn-icon-trash-o"
         disabled="disabled"
@@ -23,4 +24,5 @@ $listConfig = $listController->getConfig();
         data-stripe-load-indicator>
         <?= e(trans('backend::lang.list.delete_selected')); ?>
     </button>
+  <?php endif ?>
 </div>
