@@ -886,4 +886,21 @@ class FormController extends ControllerBehavior
             call_user_func_array($callback, [$widget, $widget->model, $widget->getContext()]);
         });
     }
+
+    /**
+     * Controller accessor for making partials within this behavior.
+     * @param string $partial
+     * @param array $params
+     * @return string Partial contents
+     */
+    public function formMakePartial($partial, $params = [])
+    {
+        $contents = $this->controller->makePartial('form_'.$this->context.'_'.$partial, $params + $this->vars, false);
+        if (!$contents) {
+            $contents = $this->controller->makePartial($partial, $params);
+        }
+
+        return $contents;
+    }
+
 }

@@ -11,7 +11,7 @@
             </div>
 
             <div class="form-buttons p-t">
-                <?= $this->makePartial('form_toolbar', ['formConfig' => $formConfig]) ?>
+                <?= $this->formMakePartial('toolbar', ['formConfig' => $formConfig]) ?>
             </div>
         </div>
     <?php Block::endPut() ?>
