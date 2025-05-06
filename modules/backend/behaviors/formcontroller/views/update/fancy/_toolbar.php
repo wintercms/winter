@@ -37,6 +37,8 @@
         </a>
     <?php endif ?>
 
+    <a class="btn btn-default" href="<?= $this->actionUrl('') ?>"><?= e(trans('backend::lang.form.cancel')); ?></a>
+
     <!-- Delete -->
     <button
         type="button"
