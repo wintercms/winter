@@ -855,7 +855,11 @@ class Index extends Controller
     {
         $alias = Request::input('formWidgetAlias');
         $type = Request::input('templateType');
-        $object = $this->loadTemplate($type, Request::input('templatePath'));
+        if (!empty(Request::input('templatePath'))) {
+            $object = $this->loadTemplate($type, Request::input('templatePath'));
+        } else {
+            $object = $this->createTemplate($type);
+        }
         $widget = $this->makeTemplateFormWidget($type, $object, $alias);
 
         $widget->bindToController();
