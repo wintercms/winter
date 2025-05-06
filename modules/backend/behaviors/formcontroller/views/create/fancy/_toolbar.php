@@ -11,4 +11,6 @@
     >
         <?= e(trans('backend::lang.form.save')) ?>
     </a>
+
+    <a class="btn btn-default" href="<?= $this->actionUrl('') ?>"><?= e(trans('backend::lang.form.cancel')); ?></a>
 </div>
