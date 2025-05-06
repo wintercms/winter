@@ -473,6 +473,10 @@ class FormController extends ControllerBehavior
             return Redirect::refresh();
         }
 
+        if (post('new', false)) {
+            return Redirect::to($this->controller->actionUrl('create'));
+        }
+
         if (post('redirect', true)) {
             $redirectUrl = $this->controller->formGetRedirectUrl($context, $model);
         }

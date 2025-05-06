@@ -13,7 +13,7 @@
         </div>
 
         <div class="form-buttons p-t">
-            <?= $this->makePartial('form_create_toolbar', ['formConfig' => $formConfig]) ?>
+            <?= $this->makePartial('form_toolbar', ['formConfig' => $formConfig]) ?>
         </div>
     <?= Form::close() ?>
 <?php else: ?>

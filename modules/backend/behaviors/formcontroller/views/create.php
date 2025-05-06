@@ -19,6 +19,7 @@ $this->bodyClass = match ($layout) {
 
 // Define layout mode view path for inclusion
 $this->appendViewPath(sprintf('%s/create/%s', __DIR__, $layout));
+$this->appendViewPath(sprintf('%s/create', __DIR__));
 
 // Render the form layout
 echo $this->makePartial(sprintf('create/%s.php', $layout), [

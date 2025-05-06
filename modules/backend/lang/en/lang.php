@@ -265,6 +265,7 @@ return [
         'not_found' => 'Form record with an ID of :id could not be found.',
         'action_confirm' => 'Are you sure?',
         'create' => 'Create',
+        'create_and_new' => 'Create and new',
         'create_and_close' => 'Create and close',
         'creating' => 'Creating...',
         'creating_name' => 'Creating :name...',
