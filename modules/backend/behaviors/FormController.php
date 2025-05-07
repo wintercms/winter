@@ -191,7 +191,9 @@ class FormController extends ControllerBehavior
     protected function prepareVars($model)
     {
         $this->controller->vars['formModel'] = $model;
+        $this->controller->vars['formConfig'] = $this->getConfig();
         $this->controller->vars['formContext'] = $this->formGetContext();
+        $this->controller->vars['formController'] = $this;
         $this->controller->vars['formRecordName'] = Lang::get($this->getConfig('name', 'backend::lang.model.name'));
     }
 
@@ -897,7 +899,7 @@ class FormController extends ControllerBehavior
     {
         $contents = $this->controller->makePartial('form_'.$this->context.'_'.$partial, $params + $this->vars, false);
         if (!$contents) {
-            $contents = $this->controller->makePartial($partial, $params);
+            $contents = $this->makePartial($partial, $params);
         }
 
         return $contents;

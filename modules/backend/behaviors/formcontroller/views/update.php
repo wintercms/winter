@@ -1,9 +1,5 @@
 <?php
 
-// Get the form controller and config
-$formController = $this->getClassExtension(\Backend\Behaviors\FormController::class);
-$formConfig = $formController->getConfig();
-
 // Decide which layout we should be rendering
 $layout = $this->formLayout ?? $formConfig->formLayout ?? null;
 if (!in_array($layout, ['standard', 'sidebar', 'fancy'])) {
@@ -22,7 +18,4 @@ $this->appendViewPath(sprintf('%s/update/%s', __DIR__, $layout));
 $this->appendViewPath(sprintf('%s/update', __DIR__));
 
 // Render the form layout
-echo $this->makePartial(sprintf('update/%s.php', $layout), [
-    'formController' => $formController,
-    'formConfig' => $formConfig,
-]);
+echo $this->makePartial(sprintf('update/%s.php', $layout));
