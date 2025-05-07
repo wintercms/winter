@@ -1,8 +1,5 @@
 <?php
 
-// Get the form controller and config
-$formController = $this->getClassExtension(\Backend\Behaviors\FormController::class);
-$formConfig = $formController->getConfig();
 
 // Decide which layout we should be rendering
 $layout = $this->formLayout ?? $formConfig->formLayout ?? null;
@@ -21,7 +18,4 @@ $this->bodyClass = match ($layout) {
 $this->appendViewPath(sprintf('%s/preview/%s', __DIR__, $layout));
 
 // Render the form layout
-echo $this->makePartial(sprintf('preview/%s.php', $layout), [
-    'formController' => $formController,
-    'formConfig' => $formConfig,
-]);
+echo $this->makePartial(sprintf('preview/%s.php', $layout));

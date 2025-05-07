@@ -15,7 +15,6 @@ $this->bodyClass .= match ($layout) {
 
 // Define layout mode view path for inclusion
 $this->appendViewPath(sprintf('%s/update/%s', __DIR__, $layout));
-$this->appendViewPath(sprintf('%s/update', __DIR__));
 
 // Render the form layout
 echo $this->makePartial(sprintf('update/%s.php', $layout));
