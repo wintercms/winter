@@ -23,7 +23,7 @@ table.table.data {
                 line-height: 14px;
                 display: inline-block;
                 margin-left: 6px;
-                vertical-align: baseline;
+                vertical-align: text-top;
                 .opacity(.4);
                 .icon(@icon);
             }
@@ -76,6 +76,7 @@ table.table.data {
             text-transform: uppercase;
             font-size: @font-size-base - 3;
             white-space: nowrap;
+            .list-head-icon(@angle-right);
 
             > a, > span {
                 display: block;

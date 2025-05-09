@@ -73,6 +73,24 @@
         return this.tableObj.options.searching
     }
 
+    Search.prototype.getSearchableColumns = function() {
+        const columns = [];
+
+        this.tableObj.options.columns.forEach(function(column) {
+            if (column.type === 'checkbox') {
+                return;
+            }
+
+            if (!column.searchable) {
+                return;
+            }
+
+            columns.push(column.key);
+        });
+
+        return columns;
+    }
+
     Search.prototype.performSearch = function(query, onSuccess) {
         var isDirty = this.activeQuery != query
 
