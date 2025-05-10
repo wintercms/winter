@@ -32,7 +32,7 @@ $listConfig = $listController->getConfig();
     <?php if ($this->isClassExtendedWith(\Backend\Behaviors\ReorderController::class)): ?>
         <a
             href="<?= $this->actionUrl('reorder') ?>"
-            class="btn btn-default wn-icon-sitemap">
+            class="btn btn-default wn-icon-bars">
             <?= e(trans('backend::lang.reorder.reorder_title', ['name' => trans($listConfig->title)])); ?>
         </a>
     <?php endif ?>
