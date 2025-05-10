@@ -1488,7 +1488,20 @@ this.$el.on('hide.oc.popover','a.filter-scope',function(){var $scope=$(this)
 self.pushOptions(self.activeScopeName)
 self.activeScopeName=null
 self.$activeScope=null
-setTimeout(function(){$scope.removeClass('filter-scope-open')},200)})}
+setTimeout(function(){$scope.removeClass('filter-scope-open')},200)})
+this.$el.on('click','.filter-scope.button-group button',function(e){var $button=$(e.target),$scope=$button.closest('.filter-scope'),scopeName=$scope.data('scope-name'),scopeValue=$button.data('scope-value'),isActive=$button.hasClass('btn-primary'),isRequired=$scope.data('scope-required')===true||$scope.data('scope-required')==='true'
+if(!isRequired&&isActive){$button.removeClass('btn-primary').addClass('btn-default')
+scopeValue=null}else{$scope.find('button').removeClass('btn-primary').addClass('btn-default')
+$button.removeClass('btn-default').addClass('btn-primary')}this.scopeValues[scopeName]=scopeValue
+if(this.options.updateHandler){var data={scopeName:scopeName,value:scopeValue}
+$.wn.stripeLoadIndicator.show()
+this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(function(){$scope.trigger('change.oc.filterScope')})}}.bind(this))
+this.$el.on('change','.filter-scope.dropdown select',function(e){var $select=$(e.target),$scope=$select.closest('.filter-scope'),scopeName=$scope.data('scope-name'),scopeValue=$select.val()
+this.scopeValues[scopeName]=scopeValue
+if(this.options.updateHandler){var data={scopeName:scopeName,value:scopeValue}
+$.wn.stripeLoadIndicator.show()
+this.$el.request(this.options.updateHandler,{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(function(){$scope.trigger('change.oc.filterScope')
+$scope.toggleClass('active',!!scopeValue)})}}.bind(this))}
 FilterWidget.prototype.bindDependants=function(){if(!$('[data-scope-depends]',this.$el).length){return}var self=this,scopeMap={},scopeElements=this.$el.find('.filter-scope')
 scopeElements.filter('[data-scope-depends]').each(function(){var name=$(this).data('scope-name'),depends=$(this).data('scope-depends')
 $.each(depends,function(index,depend){if(!scopeMap[depend]){scopeMap[depend]={scopes:[]}}scopeMap[depend].scopes.push(name)})})
