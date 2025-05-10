@@ -360,6 +360,7 @@ return [
     ],
     'reorder' => [
         'default_title' => 'Reorder records',
+        'reorder_title' => 'Reorder :name',
         'no_records' => 'There are no records available to sort.',
     ],
     'model' => [
