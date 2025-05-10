@@ -891,11 +891,8 @@ class FormController extends ControllerBehavior
 
     /**
      * Controller accessor for making partials within this behavior.
-     * @param string $partial
-     * @param array $params
-     * @return string Partial contents
      */
-    public function formMakePartial($partial, $params = [])
+    public function formMakePartial(string $partial, array $params = []): string
     {
         $contents = $this->controller->makePartial('form_' . $this->context . '_' . $partial, $params + $this->vars, false);
         if (!$contents) {
