@@ -4,11 +4,13 @@ $listConfig = $listController->getConfig();
 ?>
 
 <div data-control="toolbar">
-    <a
-        href="<?= $this->actionUrl('create') ?>"
-        class="btn btn-primary wn-icon-plus">
-        <?= e(trans('backend::lang.form.create_title', ['name' => trans(\Winter\Storm\Support\Str::before($listConfig->title, '_plural'))])); ?>
-    </a>
+    <?php if ($this->isClassExtendedWith(\Backend\Behaviors\FormController::class)): ?>
+        <a
+            href="<?= $this->actionUrl('create') ?>"
+            class="btn btn-primary wn-icon-plus">
+            <?= e(trans('backend::lang.form.create_title', ['name' => trans(\Winter\Storm\Support\Str::before($listConfig->title, '_plural'))])); ?>
+        </a>
+    <?php endif ?>
 
     <?php if (isset($listConfig->showCheckboxes) && $listConfig->showCheckboxes != false): ?>
         <button
@@ -28,7 +30,9 @@ $listConfig = $listController->getConfig();
     <?php endif ?>
 
     <?php if ($this->isClassExtendedWith(\Backend\Behaviors\ReorderController::class)): ?>
-        <a href="<?= $this->actionUrl('reorder') ?>" class="btn btn-default wn-icon-sitemap">
+        <a
+            href="<?= $this->actionUrl('reorder') ?>"
+            class="btn btn-default wn-icon-sitemap">
             <?= e(trans('backend::lang.reorder.reorder_title', ['name' => trans($listConfig->title)])); ?>
         </a>
     <?php endif ?>
