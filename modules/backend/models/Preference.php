@@ -59,7 +59,7 @@ class Preference extends Model
         $this->editor_font_size = $config->get('editor.font_size', 12);
         $this->editor_word_wrap = $config->get('editor.word_wrap', 'fluid');
         $this->editor_code_folding = $config->get('editor.code_folding', 'manual');
-        // @deprecated v1.2.2
+        // @deprecated v1.3.0
         $this->editor_enable_folding = $config->get('editor.enable_folding', $config->get('editor.code_folding', 'manual') !== 'manual');
         $this->editor_tab_size = $config->get('editor.tab_size', 4);
         $this->editor_theme = $config->get('editor.theme', static::DEFAULT_THEME);
