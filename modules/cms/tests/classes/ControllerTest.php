@@ -96,6 +96,22 @@ class ControllerTest extends TestCase
         $this->assertTrue(in_array('style2.css', $files));
     }
 
+    public function testThemeCombineAssetsInDifferentThemes(): void
+    {
+        $themeA = Theme::load('test');
+        $controllerA = new Controller($themeA);
+
+        $themeB = Theme::load('childtest');
+        $controllerB = new Controller($themeB);
+
+        // Generate a url for the same file in both themes.
+        // Because the files are different, the urls should be too.
+        $this->assertNotEquals(
+            $controllerA->themeUrl(['assets/css/style2.css']),
+            $controllerB->themeUrl(['assets/css/style2.css']),
+        );
+    }
+
     public function testPageUrl()
     {
         $theme = Theme::load('test');
