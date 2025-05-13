@@ -1392,7 +1392,7 @@ class Controller
         $parentTheme = $this->getTheme()->getConfig()['parent'] ?? false;
         $themesPath = themes_path();
 
-        $cacheKey = __METHOD__ . '.' . md5(json_encode($url));
+        $cacheKey = __METHOD__ . '.' . $themeDir . '.' . md5(json_encode($url));
 
         if (!($assets = Cache::get($cacheKey))) {
             $assets = [];
