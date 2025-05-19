@@ -76,7 +76,6 @@ table.table.data {
             text-transform: uppercase;
             font-size: @font-size-base - 3;
             white-space: nowrap;
-            .list-head-icon(@angle-right);
 
             > a, > span {
                 display: block;
@@ -86,6 +85,7 @@ table.table.data {
                 &:hover { color: @color-list-text-active; }
             }
 
+            &.sortable { .list-head-icon(@angle-right); }
             &.sort-desc { .list-head-icon(@angle-down); }
             &.sort-asc { .list-head-icon(@angle-up); }
 
