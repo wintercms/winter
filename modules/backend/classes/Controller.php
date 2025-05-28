@@ -269,7 +269,7 @@ class Controller extends ControllerBase
              * Check access groups against the page definition
              */
             if ($this->requiredPermissions && !$this->user->hasAnyAccess($this->requiredPermissions)) {
-                return Response::make(View::make('backend::access_denied'), 403);
+                abort(403);
             }
         }
 

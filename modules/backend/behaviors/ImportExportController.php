@@ -10,7 +10,6 @@ use Exception;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\View;
 use League\Csv\EscapeFormula as CsvEscapeFormula;
 use League\Csv\Reader as CsvReader;
 use League\Csv\Statement as CsvStatement;
@@ -149,7 +148,7 @@ class ImportExportController extends ControllerBehavior
     public function import()
     {
         if (!$this->userHasAccess('import')) {
-            return Response::make(View::make('backend::access_denied'), 403);
+            abort(403);
         }
 
         $this->addJs('js/winter.import.js', 'core');
@@ -164,7 +163,7 @@ class ImportExportController extends ControllerBehavior
     public function export()
     {
         if (!$this->userHasAccess('export')) {
-            return Response::make(View::make('backend::access_denied'), 403);
+            abort(403);
         }
 
         if ($response = $this->checkUseListExportMode()) {
