@@ -83,29 +83,21 @@ In order to ensure that the Winter community is welcoming to all, please review 
 
 ## Sponsors
 
-Winter CMS development is financially supported by the generosity of the following sponsors:
+Winter CMS development is financially supported by the generosity of the following sponsors. If you would like to have your name, company and link added to this list and support open-source development, feel free to make a donation to our [Open Collective](https://opencollective.com/wintercms).
 
 ### Organizations
 
-[![Route4Me logo, Route Planning and Route Mapping](https://raw.githubusercontent.com/wintercms/winter/develop/.github/assets/sponsor-route4me.png)](https://route4me.com/?utm_source=wintercms)
-
-Route4Me is a [Premium Sponsor to the Winter CMS Open Collective](https://opencollective.com/wintercms).
-
-[![Froala logo](https://froala.com/wp-content/uploads/2019/10/froala.svg)](https://froala.com/wysiwyg-editor/)
+<a href="https://froala.com/wysiwyg-editor/" target="_blank">
+    <img src="https://froala.com/wp-content/uploads/2019/10/froala.svg" alt="Froala logo" width="300">
+</a>
 
 Froala provides a perpetual, Enterprise license to Winter CMS which allows us and our users to use the Froala WYSIWYG Editor in Winter CMS powered projects.
-
-Big thanks to our sponsors on OpenCollective:
-
-- [FrogeHost](https://froge.host/?utm_source=wintercms)
 
 ### Individuals
 
 Big thanks to our sponsors on OpenCollective:
 
 - Orville
-
-If you would like to have your name, company and link added to this list and support open-source development, feel free to make a donation to our [Open Collective](https://opencollective.com/wintercms).
 
 ## License
 
