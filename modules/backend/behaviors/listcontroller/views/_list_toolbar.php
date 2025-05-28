@@ -36,4 +36,24 @@ $listConfig = $listController->getConfig();
             <?= e(trans('backend::lang.reorder.reorder_title', ['name' => trans($listConfig->title)])); ?>
         </a>
     <?php endif ?>
+
+    <?php if ($this->isClassExtendedWith(\Backend\Behaviors\ImportExportController::class)): ?>
+        <div class="btn-group">
+            <?php $importExport = $this->asExtension(\Backend\Behaviors\ImportExportController::class); ?>
+            <?php if ($importExport->userHasAccess('export')): ?>
+                <a
+                    href="<?= $this->actionUrl('export') ?>"
+                    class="btn btn-default wn-icon-download">
+                    <?= e(trans('backend::lang.import_export.export')) ?>
+                </a>
+            <?php endif ?>
+            <?php if ($importExport->userHasAccess('import')): ?>
+                <a
+                    href="<?= $this->actionUrl('import') ?>"
+                    class="btn btn-default wn-icon-upload">
+                    <?= e(trans('backend::lang.import_export.import')) ?>
+                </a>
+            <?php endif ?>
+        </div>
+    <?php endif ?>
 </div>
