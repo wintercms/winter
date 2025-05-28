@@ -2,6 +2,7 @@
 
 namespace Backend\Classes;
 
+use Backend\Facades\BackendAuth;
 use Closure;
 use Illuminate\Routing\Controller as ControllerBase;
 use Illuminate\Support\Facades\App;
@@ -129,7 +130,7 @@ class BackendController extends ControllerBase
         ) {
             $this->cmsHandling = true;
             $response = App::make('Cms\Classes\Controller')->run($url);
-            if ($response->getStatusCode() !== 404) {
+            if ($response->getStatusCode() !== 404 || !BackendAuth::check()) {
                 return $response;
             }
         }
