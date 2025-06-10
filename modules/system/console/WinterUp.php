@@ -18,6 +18,7 @@ use System\Classes\UpdateManager;
 class WinterUp extends Command implements Isolatable
 {
     use ConfirmableTrait;
+
     /**
      * The name and signature of the console command.
      *
