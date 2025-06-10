@@ -399,6 +399,27 @@ trait AssetMaker
                     continue;
                 }
 
+                if ($type === 'vite') {
+                    // If handling vite, ensure that each entrypoint is considered it's own path within a package
+                    foreach ($asset['attributes']['entrypoints'] ?? [] as $index => $entrypoint) {
+                        $vitePath = $path . '|' . $entrypoint;
+                        // If we detect a duplicate, remove it
+                        if (isset($pathCache[$vitePath])) {
+                            array_forget($collection[$key]['attributes']['entrypoints'], $index);
+                            // If all entry points have been removed from an asset, then remove it
+                            if (empty($collection[$key]['attributes']['entrypoints'])) {
+                                unset($collection[$key]);
+                            }
+
+                            continue;
+                        }
+
+                        $pathCache[$vitePath] = true;
+                    }
+
+                    continue;
+                }
+
                 if (isset($pathCache[$path])) {
                     array_forget($collection, $key);
                     continue;
