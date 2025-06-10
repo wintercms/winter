@@ -50,7 +50,7 @@ class WinterUp extends Command implements Isolatable
      */
     public function handle()
     {
-        if (! $this->confirmToProceed()) {
+        if (!$this->confirmToProceed()) {
             return 1;
         }
 
