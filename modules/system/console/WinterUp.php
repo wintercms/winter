@@ -25,7 +25,7 @@ class WinterUp extends Command implements Isolatable
      */
     protected $signature = 'winter:up
         {--seed : Included for compatibility with Laravel default signature, no effect at this time}
-        {--force : Included for compatibility with Laravel default signature, force the operation to run when in production}
+        {--force : Force the operation to run when in production}
     ';
 
     /**
