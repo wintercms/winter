@@ -20,7 +20,7 @@ class MediaLibraryTest extends TestCase
         parent::tearDown();
     }
 
-    public function invalidPathsProvider()
+    public static function invalidPathsProvider()
     {
         return [
             ['./file'],
@@ -36,7 +36,7 @@ class MediaLibraryTest extends TestCase
         ];
     }
 
-    public function validPathsProvider()
+    public static function validPathsProvider()
     {
         return [
             ['file'],
