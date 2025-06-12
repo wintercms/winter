@@ -15,7 +15,7 @@ class ViteWatch extends ViteCompile
      * @var string The name and signature of this command.
      */
     protected $signature = 'vite:watch
-        {package : Defines the package to watch for changes}
+        {package : The package to watch for changes (ex. author.plugin, theme-code, etc)}
         {viteArgs?* : Arguments to pass through to the Webpack CLI}
         {--f|production : Runs compilation in "production" mode}
         {--m|manifest= : Defines package.json to use for compile}

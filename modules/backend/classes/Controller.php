@@ -2,26 +2,26 @@
 
 namespace Backend\Classes;
 
-use Lang;
-use View;
-use Flash;
-use Config;
-use Request;
-use Backend;
-use Redirect;
-use Response;
-use Exception;
-use BackendAuth;
-use Backend\Models\UserPreference;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
 use Backend\Models\Preference as BackendPreference;
+use Backend\Models\UserPreference;
 use Backend\Widgets\MediaManager;
-use Winter\Storm\Exception\AjaxException;
-use Winter\Storm\Exception\SystemException;
-use Winter\Storm\Exception\ValidationException;
-use Winter\Storm\Exception\ApplicationException;
+use Exception;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller as ControllerBase;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
+use Winter\Storm\Exception\AjaxException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Exception\ValidationException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * The Backend base controller class, used by Backend controllers.
@@ -53,7 +53,7 @@ class Controller extends ControllerBase
     protected $user;
 
     /**
-     * @var array Collection of WidgetBase objects used on this page.
+     * @var object Collection of WidgetBase objects used on this page.
      */
     public $widget;
 
