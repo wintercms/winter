@@ -19,10 +19,19 @@ use Winter\Storm\Parse\PHP\ArrayFile;
 class WinterEnv extends Command
 {
     use \Illuminate\Console\ConfirmableTrait;
+
     /**
      * The console command name.
      */
     protected $name = 'winter:env';
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'winter:env
+                            {--force : Force the operation to run when in production}';
 
     /**
      * The console command description.
