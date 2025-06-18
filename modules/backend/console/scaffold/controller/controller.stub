@@ -26,10 +26,29 @@ class {{ studly_name }} extends Controller
     ];
 {% if sidebar %}
 
-    public function __construct()
-    {
-        parent::__construct();
-        $this->bodyClass = 'compact-container';
-    }
+    /**
+     * @var string The form layout to use. One of standard, sidebar, fancy
+     */
+    protected $formLayout = 'sidebar';
+{% if stubs %}
+
+    /**
+     * @var string Classes to be added to the body element
+     */
+    public $bodyClass = 'compact-container';
+{% endif -%}
+{% elseif fancy %}
+
+    /**
+     * @var string The form layout to use. One of standard, sidebar, fancy
+     */
+    protected $formLayout = 'fancy';
+{% if stubs %}
+
+    /**
+     * @var string Classes to be added to the body element
+     */
+    public $bodyClass = 'fancy-layout compact-container breadcrumb-flush breadcrumb-fancy';
+{% endif -%}
 {% endif -%}
 }
