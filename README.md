@@ -87,6 +87,12 @@ Winter CMS development is financially supported by the generosity of the followi
 
 ### Organizations
 
+<a href="https://laravel.com/?ref=wintercms" target="_blank">
+    <img src="https://raw.githubusercontent.com/laravel/art/refs/heads/master/logo-type/5%20svg/3%20RGB/1%20Full%20Color/laravel-logotype-rgb-red.svg" alt="Laravel logo" width="300">
+</a>
+
+Laravel provides [Laravel Vapor](https://vapor.laravel.com/?ref=wintercms) to the Winter CMS project which is used to power the serverless PHP hosting used for our [main website and documentation](https://wintercms.com/). 
+
 <a href="https://froala.com/wysiwyg-editor/" target="_blank">
     <img src="https://froala.com/wp-content/uploads/2019/10/froala.svg" alt="Froala logo" width="300">
 </a>

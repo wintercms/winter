@@ -647,6 +647,7 @@ body.compact-container .layout .layout-container{padding:0 !important}
 body.slim-container .layout.layout-container,
 body.slim-container .layout .layout-container{padding-left:0 !important;padding-right:0 !important}
 @media (max-width:768px){.layout .hide-on-small{display:none}.layout.responsive-sidebar>.layout-cell:first-child{display:table-footer-group;height:auto}.layout.responsive-sidebar>.layout-cell:first-child .control-breadcrumb{display:none}.layout.responsive-sidebar>.layout-cell:last-child{display:table-header-group;width:auto;height:auto}.layout.responsive-sidebar>.layout-cell:last-child .layout-absolute{position:static}}
+@supports (-moz-appearance:none){a:focus:not(:focus-visible){outline:none}}
 .flex-layout-column{display:-webkit-box;display:-webkit-flex;display:-moz-flex;display:-ms-flexbox;display:-ms-flex;display:flex;-webkit-flex-direction:column;-moz-flex-direction:column;-webkit-box-orient:vertical;-ms-flex-direction:column;flex-direction:column}
 .flex-layout-column.full-height-strict{height:100%}
 .flex-layout-column.absolute{position:absolute !important}
