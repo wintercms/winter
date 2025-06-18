@@ -11,7 +11,7 @@
             data-hotkey="ctrl+shift+s, cmd+shift+s"
             data-load-indicator="<?= e(trans('backend::lang.form.creating_name', ['name' => trans($modelName)])); ?>"
             data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
-            class="btn btn-primary">
+            class="btn btn-primary wn-icon-plus">
             <?= e(trans('backend::lang.form.create_and_new')); ?>
         </button>
         <button
@@ -21,7 +21,7 @@
             data-hotkey="ctrl+s, cmd+s"
             data-load-indicator="<?= e(trans('backend::lang.form.creating_name', ['name' => trans($modelName)])); ?>"
             data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
-            class="btn btn-primary">
+            class="btn btn-primary wn-icon-save">
             <?= e(trans('backend::lang.form.create')); ?>
         </button>
         <button
@@ -32,7 +32,7 @@
             data-hotkey="ctrl+enter, cmd+enter"
             data-load-indicator="<?= e(trans('backend::lang.form.creating_name', ['name' => trans($modelName)])); ?>"
             data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
-            class="btn btn-default">
+            class="btn btn-default wn-icon-check">
             <?= e(trans('backend::lang.form.create_and_close')); ?>
         </button>
         <span class="btn-text">
@@ -49,7 +49,7 @@
             data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
             data-request-data="redirect:0"
             data-hotkey="ctrl+s, cmd+s"
-            class="btn btn-primary"
+            class="btn btn-primary wn-icon-save"
         >
             <?= e(trans('backend::lang.form.save')); ?>
         </button>
@@ -61,7 +61,7 @@
             data-hotkey="ctrl+enter, cmd+enter"
             data-load-indicator="<?= e(trans('backend::lang.form.saving')); ?>"
             data-request-before-update="$el.trigger('unchange.oc.changeMonitor')"
-            class="btn btn-default"
+            class="btn btn-default wn-icon-check"
         >
             <?= e(trans('backend::lang.form.save_and_close')); ?>
         </button>
