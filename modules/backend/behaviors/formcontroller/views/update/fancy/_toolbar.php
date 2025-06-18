@@ -2,7 +2,7 @@
     <!-- Save -->
     <a
         href="javascript:;"
-        class="btn btn-primary wn-icon-check save"
+        class="btn btn-primary wn-icon-save save"
         data-request="onSave"
         data-browser-validate
         data-load-indicator="<?= e(trans('backend::lang.form.saving')) ?>"
@@ -37,7 +37,7 @@
         </a>
     <?php endif ?>
 
-    <a class="btn btn-default" href="<?= $this->actionUrl('') ?>"><?= e(trans('backend::lang.form.cancel')); ?></a>
+    <a class="btn btn-default wn-icon-ban" href="<?= $this->actionUrl('') ?>"><?= e(trans('backend::lang.form.cancel')); ?></a>
 
     <!-- Delete -->
     <button
