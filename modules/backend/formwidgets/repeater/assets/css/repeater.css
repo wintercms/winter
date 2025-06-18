@@ -2,7 +2,7 @@
 .field-repeater .field-repeater-items{counter-reset:repeater-index-counter}
 .field-repeater ul.field-repeater-items,
 .field-repeater li.field-repeater-item{padding:0;margin:0;list-style:none}
-.field-repeater ul.field-repeater-items>li.dragged{opacity:.7;position:absolute;padding-top:15px;padding-right:15px;z-index:2000;background-color:#f9f9f9;border:1px dashed #dbdee0}
+.field-repeater ul.field-repeater-items>li.dragged{opacity:0.7;position:absolute;padding-top:15px;padding-right:15px;z-index:2000;background-color:#f9f9f9;border:1px dashed #dbdee0}
 .field-repeater ul.field-repeater-items>li.dragged .repeater-item-remove{opacity:0}
 .field-repeater ul.field-repeater-items>li.dragged .repeater-item-collapsed-title{top:5px}
 .field-repeater ul.field-repeater-items>li.placeholder{display:block;position:relative;height:25px;margin-bottom:5px}
