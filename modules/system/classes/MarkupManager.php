@@ -228,16 +228,25 @@ class MarkupManager
 
         foreach ($this->listFunctions() as $name => $callable) {
             $options = [];
-            if (is_array($callable) && isset($callable['options'])) {
-                $options = $callable['options'];
-                $callable = $callable['callable'] ?? $callable[0];
+            if (is_array($callable)) {
+                // Handle options
+                if (isset($callable['options'])) {
+                    $options = $callable['options'];
 
-                if (isset($options['is_safe']) && !is_array($options['is_safe'])) {
-                    if (is_string($options['is_safe'])) {
-                        $options['is_safe'] = [$options['is_safe']];
-                    } else {
-                        $options['is_safe'] = [];
+                    if (isset($options['is_safe']) && !is_array($options['is_safe'])) {
+                        if (is_string($options['is_safe'])) {
+                            $options['is_safe'] = [$options['is_safe']];
+                        } else {
+                            $options['is_safe'] = [];
+                        }
                     }
+                }
+
+                // Normalize callable
+                if (!empty($callable['callable']) && is_callable($callable['callable'])) {
+                    $callable = $callable['callable'];
+                } elseif (!empty($callable[0]) && is_callable($callable[0])) {
+                    $callable = $callable[0];
                 }
             }
             $options = array_merge($defaultOptions, $options);
