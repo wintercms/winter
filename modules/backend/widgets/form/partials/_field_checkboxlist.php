@@ -3,10 +3,10 @@ $nameFrom = $this->nameFrom;
 $fieldOptions = $field->options();
 $checkedValues = (array) $field->value;
 $readOnly = $this->previewMode || $field->readOnly || $field->disabled;
-$quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
 $displayTree = $field->getConfig('displayTree', false);
 $quickTreeActions = $displayTree ? $field->getConfig('quickTreeActions', false) : false;
 $isScrollable = count($fieldOptions) > 10 || $displayTree;
+$quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
 ?>
 <!-- Checkbox List -->
 <?php if ($readOnly && $field->value): ?>
@@ -23,8 +23,7 @@ $isScrollable = count($fieldOptions) > 10 || $displayTree;
             if (!is_array($option)) {
                 $option = [$option];
             }
-        ?>
-
+            ?>
             <div class="checkbox custom-checkbox">
                 <input
                     type="checkbox"
@@ -91,7 +90,7 @@ $isScrollable = count($fieldOptions) > 10 || $displayTree;
                 value="0" />
 
             <?php
-            if ($displayTree) :
+            if ($displayTree):
                 $index = 1;
 
                 function renderCheckboxLine(
@@ -102,7 +101,7 @@ $isScrollable = count($fieldOptions) > 10 || $displayTree;
                     bool $readOnly,
                     int &$index
                 ) {
-                    foreach ($fieldOptions as $value => $option) :
+                    foreach ($fieldOptions as $value => $option):
                         $index++;
                         $checkboxId = 'checkbox_'. $field->getId() .'_'. $index;
 
@@ -128,15 +127,13 @@ $isScrollable = count($fieldOptions) > 10 || $displayTree;
                                     </label>
                                 </div>
 
-                                <?php if (count($children) > 0) : ?>
+                                <?php if (count($children) > 0): ?>
                                     <a href="javascript:;" class="checkboxlist-item-toggle">
                                         <i class="icon-chevron-right"></i>
                                     </a>
                                     <div class="checkboxlist-children">
                                         <div id="<?= $checkboxId ?>_children">
-                                            <?php
-                                            e(renderCheckboxLine($field, $checkedValues, $children, $nameFrom, $readOnly, $index));
-                                    ?>
+                                            <?php e(renderCheckboxLine($field, $checkedValues, $children, $nameFrom, $readOnly, $index)); ?>
                                         </div>
                                     </div>
                                 <?php endif ?>
@@ -146,7 +143,7 @@ $isScrollable = count($fieldOptions) > 10 || $displayTree;
                 }
 
                 renderCheckboxLine($field, $checkedValues, $fieldOptions, $nameFrom, $readOnly, $index);
-            else :
+            else:
                 $index = 0;
                 foreach ($fieldOptions as $value => $option):
                     $index++;
