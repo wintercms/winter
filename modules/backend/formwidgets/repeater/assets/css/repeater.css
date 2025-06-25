@@ -2,7 +2,7 @@
 .field-repeater .field-repeater-items{counter-reset:repeater-index-counter}
 .field-repeater ul.field-repeater-items,
 .field-repeater li.field-repeater-item{padding:0;margin:0;list-style:none}
-.field-repeater ul.field-repeater-items>li.dragged{opacity:.7;position:absolute;padding-top:15px;padding-right:15px;z-index:2000;background-color:#f9f9f9;border:1px dashed #dbdee0}
+.field-repeater ul.field-repeater-items>li.dragged{opacity:0.7;position:absolute;padding-top:15px;padding-right:15px;z-index:2000;background-color:#f9f9f9;border:1px dashed #dbdee0}
 .field-repeater ul.field-repeater-items>li.dragged .repeater-item-remove{opacity:0}
 .field-repeater ul.field-repeater-items>li.dragged .repeater-item-collapsed-title{top:5px}
 .field-repeater ul.field-repeater-items>li.placeholder{display:block;position:relative;height:25px;margin-bottom:5px}
@@ -44,12 +44,12 @@
 .field-repeater .field-repeater-add-item:before{color:#bdc3c7;font-family:"Font Awesome 6 Free";font-weight:900;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-style:normal;font-variant:normal;text-rendering:auto;content:"\2b";font-size:16px;position:absolute;left:-23px;top:-11px}
 .field-repeater .field-repeater-add-item>a{color:#bdc3c7;text-align:center;display:block;text-decoration:none;padding:13px 15px;text-transform:uppercase;font-weight:600;font-size:12px}
 .field-repeater .field-repeater-add-item:hover,
-.field-repeater .field-repeater-add-item:focus{background-color:#4ea5e0;border-color:transparent}
+.field-repeater .field-repeater-add-item:focus{background-color:#48b2ce;border-color:transparent}
 .field-repeater .field-repeater-add-item:hover:before,
 .field-repeater .field-repeater-add-item:focus:before{color:#999}
 .field-repeater .field-repeater-add-item:hover>a,
 .field-repeater .field-repeater-add-item:focus>a{color:#fff}
-.field-repeater .field-repeater-add-item:active{background:#3498db;border-color:transparent}
+.field-repeater .field-repeater-add-item:active{background:#6cc551;border-color:transparent}
 .field-repeater .field-repeater-add-item:active>a{color:#fff}
 .field-repeater .field-repeater-add-item.in-progress{border-color:#e0e0e0 !important;background:transparent !important}
 .field-repeater[data-mode="grid"]>ul.field-repeater-items{display:grid;gap:20px}

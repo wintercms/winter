@@ -2,15 +2,15 @@
 .permissioneditor.control-disabled .permissions-overlay{position:absolute;left:0;top:0;width:100%;height:100%;background:rgba(255,255,255,0.01);cursor:not-allowed}
 .permissioneditor.control-disabled table{opacity:0.5;filter:alpha(opacity=50)}
 .permissioneditor table{width:100%}
-.permissioneditor table th{padding:30px 4px 8px 4px;color:#2a3e51;font-weight:normal;border-bottom:1px solid #dbe1e3}
+.permissioneditor table th{padding:30px 4px 8px 4px;color:#2A3E51;font-weight:normal;border-bottom:1px solid #DBE1E3}
 .permissioneditor table th.tab{font-size:13px}
 .permissioneditor table th.permission-type{text-transform:uppercase;font-size:11px;text-align:center;cursor:pointer}
-.permissioneditor table td{padding:10px 4px;vertical-align:top;border-bottom:1px solid #ecf0f1;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+.permissioneditor table td{padding:10px 4px;vertical-align:top;border-bottom:1px solid #ECF0F1;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
 .permissioneditor table td.permission-value{text-align:center}
 .permissioneditor table td.permission-name{font-size:13px;cursor:pointer;color:#777}
 .permissioneditor table td p.comment{margin-top:5px;margin-bottom:0}
 .permissioneditor table td p.comment:empty{display:none}
-.permissioneditor table tr:hover td{background:#4ea5e0}
+.permissioneditor table tr:hover td{background:#48b2ce}
 .permissioneditor table tr:hover td.permission-name{color:#fff !important}
 .permissioneditor table th:first-child,
 .permissioneditor table td:first-child{padding-left:20px}

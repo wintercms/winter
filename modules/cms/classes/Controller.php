@@ -309,15 +309,7 @@ class Controller
         /*
          * The 'this' variable is reserved for default variables.
          */
-        $this->getTwig()->addGlobal('this', [
-            'page'        => $this->page,
-            'layout'      => $this->layout,
-            'theme'       => $this->theme,
-            'param'       => $this->router->getParameters(),
-            'controller'  => $this,
-            'environment' => App::environment(),
-            'session'     => App::make('session'),
-        ]);
+        $this->getTwig()->addGlobal('this', $this->getControllerGlobalVars());
 
         /*
          * Add global vars defined by View::share() into Twig, only if they have yet to be specified.
@@ -703,7 +695,7 @@ class Controller
                  * Validate the handler name
                  */
                 if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
-                    throw new SystemException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name'=>$handler]));
+                    throw new SystemException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name'=>$handler]), 400);
                 }
 
                 /*
@@ -714,7 +706,7 @@ class Controller
 
                     foreach ($partialList as $partial) {
                         if (!preg_match('/^(?:\w+\:{2}|@)?[a-z0-9\_\-\.\/]+$/i', $partial)) {
-                            throw new SystemException(Lang::get('cms::lang.partial.invalid_name', ['name'=>$partial]));
+                            throw new SystemException(Lang::get('cms::lang.partial.invalid_name', ['name'=>$partial]), 400);
                         }
                     }
                 }
@@ -1247,6 +1239,22 @@ class Controller
     public function getTwig()
     {
         return $this->twig;
+    }
+
+    /**
+     * Returns the globals to be provided to twig
+     */
+    public function getControllerGlobalVars()
+    {
+        return [
+            'page'        => $this->page ?? new Page(),
+            'layout'      => $this->layout ?? new Layout(),
+            'theme'       => $this->theme,
+            'param'       => $this->router->getParameters(),
+            'controller'  => $this,
+            'environment' => App::environment(),
+            'session'     => App::make('session'),
+        ];
     }
 
     /**

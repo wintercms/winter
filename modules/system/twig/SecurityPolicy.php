@@ -5,15 +5,16 @@ namespace System\Twig;
 use Cms\Classes\Controller;
 use Cms\Classes\Theme;
 use Illuminate\Database\Eloquent\Model as DbModel;
-use Winter\Storm\Halcyon\Model as HalcyonModel;
+use Illuminate\Session\SessionManager;
 use Twig\Markup;
 use Twig\Sandbox\SecurityNotAllowedFunctionError;
-use Twig\Template;
-use Twig\Sandbox\SecurityPolicyInterface;
 use Twig\Sandbox\SecurityNotAllowedMethodError;
 use Twig\Sandbox\SecurityNotAllowedPropertyError;
 use Twig\Sandbox\SecurityNotAllowedTagError;
+use Twig\Sandbox\SecurityPolicyInterface;
+use Twig\Template;
 use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
+use Winter\Storm\Halcyon\Model as HalcyonModel;
 
 /**
  * SecurityPolicy globally blocks accessibility of certain methods and properties.
@@ -60,6 +61,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'update',
             'delete',
             'forceDelete',
+            'getQuery',
         ],
         HalcyonModel::class => [
             'fill',
@@ -72,6 +74,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'update',
             'delete',
             'forceDelete',
+            'getQuery',
         ],
         DatasourceInterface::class => [
             'insert',
@@ -91,6 +94,20 @@ final class SecurityPolicy implements SecurityPolicyInterface
     ];
 
     /**
+     * @var array<string, string[]> List of allowed methods, grouped by applicable instance.
+     */
+    protected $allowedMethods = [
+        SessionManager::class => [
+            'put',
+            'get',
+            'has',
+            'forget',
+            'flush',
+            'pull',
+        ],
+    ];
+
+    /**
      * @var array<string, string[]> List of forbidden properties, grouped by applicable instance.
      */
     protected $blockedProperties = [
@@ -104,12 +121,16 @@ final class SecurityPolicy implements SecurityPolicyInterface
      */
     public function __construct()
     {
-        foreach ($this->blockedMethods as $type => $methods) {
-            $this->blockedMethods[$type] = array_map('strtolower', $methods);
-        }
+        $properties = [
+            'blockedMethods',
+            'allowedMethods',
+            'blockedProperties',
+        ];
 
-        foreach ($this->blockedProperties as $type => $properties) {
-            $this->blockedProperties[$type] = array_map('strtolower', $properties);
+        foreach ($properties as $property) {
+            foreach ($this->{$property} as $type => $values) {
+                $this->{$property}[$type] = array_map('strtolower', $values);
+            }
         }
     }
 
@@ -172,6 +193,13 @@ final class SecurityPolicy implements SecurityPolicyInterface
         ) {
             $class = get_class($obj);
             throw new SecurityNotAllowedMethodError(sprintf('Calling "%s" method on a "%s" object is blocked.', $method, $class), $class, $method);
+        }
+
+        foreach ($this->allowedMethods as $type => $methods) {
+            if ($obj instanceof $type && !in_array($method, $methods)) {
+                $class = get_class($obj);
+                throw new SecurityNotAllowedMethodError(sprintf('Calling "%s" method on a "%s" object is blocked.', $method, $class), $class, $method);
+            }
         }
 
         foreach ($this->blockedMethods as $type => $methods) {

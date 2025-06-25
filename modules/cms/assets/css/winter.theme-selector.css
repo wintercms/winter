@@ -29,5 +29,5 @@
 .theme-selector-layout .create-new-theme,
 .theme-selector-layout .find-more-themes{background:#ecf0f1;color:#2b3e50;text-decoration:none;display:block;padding:20px;-webkit-border-radius:4px;-moz-border-radius:4px;border-radius:4px}
 .theme-selector-layout .create-new-theme:hover,
-.theme-selector-layout .find-more-themes:hover{background:#0181b9;color:white}
-@media (max-width:768px){.theme-selector-layout .layout-cell,.theme-selector-layout .layout-row{display:block !important;width:auto !important;height:auto !important}.theme-selector-layout .theme-thumbnail img{width:100%}.theme-selector-layout .layout-row.links .theme-thumbnail{background:transparent;padding:0}}
+.theme-selector-layout .find-more-themes:hover{background:#2da7c7;color:white}
+@media (max-width:768px){.theme-selector-layout .layout-cell,.theme-selector-layout .layout-row{display:block!important;width:auto!important;height:auto!important}.theme-selector-layout .theme-thumbnail img{width:100%}.theme-selector-layout .layout-row.links .theme-thumbnail{background:transparent;padding:0}}

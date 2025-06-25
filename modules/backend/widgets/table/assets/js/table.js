@@ -74,8 +74,11 @@
         if (this.options.postback && this.options.clientDataSourceClass == 'client') {
             if (!this.options.postbackHandlerName) {
                 var formHandler = this.$el.closest('form').data('request')
-                this.options.postbackHandlerName = formHandler || 'onSave'
+                this.options.postbackHandlerName = [formHandler || 'onSave']
+            } else if (typeof this.options.postbackHandlerName === 'string') {
+              this.options.postbackHandlerName = this.options.postbackHandlerName.split(',')
             }
+
             this.formSubmitHandler = this.onFormSubmit.bind(this)
         }
 
@@ -237,7 +240,7 @@
     }
 
     Table.prototype.buildToolbar = function() {
-        if (!this.options.adding && !this.options.deleting) {
+        if (!this.options.adding && !this.options.deleting && !this.options.searching) {
             return
         }
 
@@ -245,8 +248,7 @@
 
         if (!this.options.adding) {
             $('[data-cmd^="record-add"]', this.toolbar).remove()
-        }
-        else {
+        } else {
             if (this.navigation.paginationEnabled() || !this.options.rowSorting) {
                 // When the pagination is enabled, or sorting is disabled,
                 // new records can only be added to the bottom of the
@@ -803,7 +805,7 @@
     }
 
     Table.prototype.onFormSubmit = function(ev, data) {
-        if (data.handler == this.options.postbackHandlerName) {
+        if (this.options.postbackHandlerName.indexOf(data.handler) > -1) {
             this.unfocusTable()
 
             if (!this.validate()) {
@@ -1115,7 +1117,7 @@
         recordsPerPage: false,
         data: null,
         postback: true,
-        postbackHandlerName: null,
+        postbackHandlerName: [],
         adding: true,
         deleting: true,
         toolbar: true,

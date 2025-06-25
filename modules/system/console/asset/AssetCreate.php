@@ -14,8 +14,9 @@ use Winter\Storm\Support\Facades\File;
 
 abstract class AssetCreate extends Command
 {
-    protected const TYPE_THEME = 'theme';
+    protected const TYPE_MODULE = 'module';
     protected const TYPE_PLUGIN = 'plugin';
+    protected const TYPE_THEME = 'theme';
 
     /**
      * @var string The console command description.
@@ -109,6 +110,17 @@ abstract class AssetCreate extends Command
         if (str_starts_with($package, 'theme-')) {
             if (($theme = Theme::load(str_after($package, 'theme-'))) && File::exists($theme->getPath())) {
                 return [$theme->getPath(), static::TYPE_THEME];
+            }
+
+            return [null, null];
+        }
+
+        if (str_starts_with($package, 'module-')) {
+            if (
+                ($modulePath = base_path('modules') . '/' . str_after($package, 'module-'))
+                && File::exists($modulePath)
+            ) {
+                return [$modulePath, static::TYPE_MODULE];
             }
 
             return [null, null];
@@ -215,6 +227,7 @@ abstract class AssetCreate extends Command
             return 0;
         }
 
+        File::ensureDirectoryExists(pathinfo($path, PATHINFO_DIRNAME));
         $result = File::put($path, $content);
 
         if (!$this->option('silent')) {
