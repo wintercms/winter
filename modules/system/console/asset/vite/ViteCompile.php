@@ -62,7 +62,6 @@ class ViteCompile extends AssetCompile
             $basePath . sprintf('%1$snode_modules%1$s.bin%1$svite', DIRECTORY_SEPARATOR),
             'build',
             $this->option('silent') ? '--logLevel=silent' : '',
-            '--base=' . Str::after($this->getPackagePath($configPath), base_path())
         );
 
         return $command;
