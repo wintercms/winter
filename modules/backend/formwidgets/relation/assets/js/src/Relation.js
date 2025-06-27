@@ -206,7 +206,7 @@ import '../../less/relation.less';
 
             openedLevel.addEventListener("transitionend", () => {
                 $('[data-control=scrollbar]').data('oc.scrollbar').update();
-            });
+            }, {once: true});
         }
 
         /**
