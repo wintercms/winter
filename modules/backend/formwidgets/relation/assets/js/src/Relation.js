@@ -108,11 +108,19 @@ import '../../less/relation.less';
          * Makes all nodes of the tree expanded.
          */
         onExpandAll() {
-            this.items.forEach((item) => {
-                this.openLevel(item);
+            const openPromise = new Promise((resolve, reject) => {
+                let animatedNodes = this.getExpandableNodes();
+
+                animatedNodes.forEach((item) => {
+                    this.openLevel(item);
+                });
+
+                resolve([].slice.call(animatedNodes).pop());
             });
 
-            this.updateScollBar();
+            openPromise.then((el) => {
+                this.updateScollBar(el);
+            });
         }
 
         /**
@@ -121,11 +129,19 @@ import '../../less/relation.less';
          * Makes all nodes of the tree collapsed.
          */
         onCollapseAll() {
-            this.items.forEach((item) => {
-                this.closeLevel(item);
+            const closePromise = new Promise((resolve, reject) => {
+                let animatedNodes = this.getOpenedNodes();
+
+                animatedNodes.forEach((item) => {
+                    this.closeLevel(item);
+                });
+
+                resolve([].slice.call(animatedNodes).pop());
             });
 
-            this.updateScollBar();
+            closePromise.then((el) => {
+                this.updateScollBar(el);
+            });
         }
 
         /**
@@ -136,15 +152,19 @@ import '../../less/relation.less';
         onExpandChecked() {
             this.onCollapseAll();
 
-            let checked = Array.prototype.filter.call(this.items, function (level) {
-                return level.matches(':has(input:checked)');
+            const selectedPromise = new Promise((resolve, reject) => {
+                let animatedNodes = this.getCheckedNodes();
+
+                animatedNodes.forEach((item) => {
+                    this.openLevel(item);
+                });
+
+                resolve([].slice.call(animatedNodes).pop());
             });
 
-            checked.forEach((item) => {
-                this.openLevel(item);
+            selectedPromise.then((el) => {
+                this.updateScollBar(el);
             });
-
-            this.updateScollBar();
         }
 
         /**
@@ -155,26 +175,71 @@ import '../../less/relation.less';
          * @param {HTMLElement} el
          */
         onToggle(el) {
-            let parent = el.target.parentElement;
+            const tooglePromise = new Promise((resolve, reject) => {
+                let parent = el.target.parentElement;
 
-            if (parent.classList.contains('open')) {
-                this.closeLevel(parent);
-            } else {
-                this.openLevel(parent);
-            }
+                if (parent.classList.contains('open')) {
+                    this.closeLevel(parent);
+                } else {
+                    this.openLevel(parent);
+                }
 
-            this.updateScollBar();
+                resolve(parent);
+            });
+
+            tooglePromise.then((parent) => {
+                this.updateScollBar(parent);
+            });
         }
 
         /**
          * Update the sidebar height
+         *
+         * @param {HTMLElement} el The last animated node of the tree
          */
-        updateScollBar() {
-            // Update scrollbar height
-            // Set a timer for .55s, waiting for the css animation to complete
-            setTimeout(function (sidebar) {
+        updateScollBar(el) {
+            if (el === undefined) {
+                return;
+            }
+
+            let openedLevel = el.classList.contains("checkboxlist-children") ? el : el.querySelector('.checkboxlist-children');
+
+            openedLevel.addEventListener("transitionend", () => {
                 $('[data-control=scrollbar]').data('oc.scrollbar').update();
-            }, 550);
+            });
+        }
+
+        /**
+         * Filter treeview nodes to get only those who have childs
+         *
+         * @returns {Array}
+         */
+        getExpandableNodes() {
+            return Array.prototype.filter.call(this.items, function (level) {
+                return level.matches(':has(.checkboxlist-children)');
+            });
+        }
+
+        /**
+         * Filter treeview nodes to get only opened ones
+         *
+         * @returns {Array}
+         */
+        getOpenedNodes() {
+            return Array.prototype.filter.call(this.items, function (level) {
+                return level.classList.contains("open")
+            });
+        }
+
+        /**
+         * Filter treeview nodes to get only those containing checked checkboxes
+         *
+         * @returns {Array}
+         */
+        getCheckedNodes() {
+            return Array.prototype.filter.call(this.getExpandableNodes(), function (level) {
+                return level.matches(':has(input:checked)');
+            });
         }
     }
 

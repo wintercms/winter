@@ -1,6 +1,11 @@
 @import "../../../../assets/less/core/boot.less";
 
 
+.checkboxlist-item {
+
+
+}
+
 div[data-control="relation"] {
 
     // Top widget controls
@@ -22,13 +27,9 @@ div[data-control="relation"] {
             margin-bottom: 10px;
             margin-top: 15px;
 
-            & ~ .checkboxlist-item {
-                margin-top: 0;
-            }
-
             .checkboxlist-item-toggle .icon-chevron-right {
                 display: block;
-                transition: transform 0.25s ease-in-out;
+                transition: transform 0.15s ease-in-out;
             }
 
             &:has(.checkboxlist-item).open {
@@ -37,13 +38,6 @@ div[data-control="relation"] {
                 > .checkboxlist-item-toggle .icon-chevron-right {
                     transform: rotate(90deg);
                 }
-            }
-
-            .checkboxlist-item .checkboxlist-item {
-                --background-padding: 20px;
-
-                margin-left: 10px;
-                padding-left: 10px;
             }
 
 
@@ -66,7 +60,7 @@ div[data-control="relation"] {
             width: 100%;
             display: grid;
             grid-template-rows: 0fr;
-            transition: grid-template-rows 0.5s ease-in-out;
+            transition: grid-template-rows 0.2s ease-in-out;
 
             &.open {
                 grid-template-rows: 1fr;
@@ -75,5 +69,16 @@ div[data-control="relation"] {
                 overflow: hidden;
             }
         }
+    }
+
+    .checkboxlist-item .checkboxlist-item {
+        --background-padding: 20px;
+
+        margin-left: 10px;
+        padding-left: 10px;
+    }
+
+    .checkboxlist-item ~ .checkboxlist-item {
+        margin-top: 0;
     }
 }

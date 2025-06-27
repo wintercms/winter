@@ -308,7 +308,10 @@ return [
         'delete_row' => 'Supprimer une ligne',
         'concurrency_file_changed_title' => 'Le fichier a été modifié',
         'concurrency_file_changed_description' => 'Un autre utilisateur a modifié ce fichier sur le disque. Vous pouvez ou recharger le fichier depuis le disque, mais vous perdrez vos modifications, ou écraser le fichier sur le disque.',
-        'return_to_list' => 'Retourner à la liste'
+        'return_to_list' => 'Retourner à la liste',
+        'expand_all' => 'Tout ouvrir',
+        'collapse_all' => 'Tout fermer',
+        'expand_checked' => 'Ouvrir la sélection',
     ],
     'recordfinder' => [
         'default_prompt' => 'Cliquer sur %s pour chercher un enregistrement',

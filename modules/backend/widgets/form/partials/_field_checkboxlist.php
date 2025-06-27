@@ -63,13 +63,13 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
                 <!-- Quick tree actions -->
                 <div>
                     <a href="javascript:;" data-field-checkboxlist-expand-all>
-                        <i class="icon-plus-square-o"></i> <?= e(trans('hounddd.enhancedrelation::lang.form.expand_all')) ?>
+                        <i class="icon-plus-square-o"></i> <?= e(trans('backend::lang.form.expand_all')) ?>
                     </a>
                     <a href="javascript:;" data-field-checkboxlist-expand-checked>
-                        <i class="icon-check-square-o"></i> <?= e(trans('hounddd.enhancedrelation::lang.form.expand_checked')) ?>
+                        <i class="icon-check-square-o"></i> <?= e(trans('backend::lang.form.expand_checked')) ?>
                     </a>
                     <a href="javascript:;" data-field-checkboxlist-collapse-all>
-                        <i class="icon-minus-square-o"></i> <?= e(trans('hounddd.enhancedrelation::lang.form.collapse_all')) ?>
+                        <i class="icon-minus-square-o"></i> <?= e(trans('backend::lang.form.collapse_all')) ?>
                     </a>
                 </div>
                 <?php endif ?>
