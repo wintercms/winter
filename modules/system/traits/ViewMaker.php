@@ -43,8 +43,11 @@ trait ViewMaker
 
     /**
      * Prepends a path on the available view path locations.
+     *
+     * @param array|string $path
+     * @return void
      */
-    public function addViewPath(string|array $path): void
+    public function prependViewPath(array|string $path): void
     {
         $this->viewPath = (array) $this->viewPath;
 
@@ -53,6 +56,33 @@ trait ViewMaker
         } else {
             array_unshift($this->viewPath, $path);
         }
+    }
+
+    /**
+     * Append a path on the available view path locations.
+     *
+     * @param array|string $path
+     * @return void
+     */
+    public function appendViewPath(array|string $path): void
+    {
+        $this->viewPath = (array) $this->viewPath;
+
+        if (is_array($path)) {
+            $this->viewPath = array_merge($this->viewPath, $path);
+        } else {
+            $this->viewPath[] = $path;
+        }
+    }
+
+    /**
+     * Prepends a path on the available view path locations.
+     *
+     * @deprecated Use prependViewPath()
+     */
+    public function addViewPath(string|array $path): void
+    {
+        $this->prependViewPath($path);
     }
 
     /**

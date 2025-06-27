@@ -89,18 +89,19 @@ abstract class BaseScaffoldCommand extends GeneratorCommand
             . DIRECTORY_SEPARATOR
             . 'lang.php'
         );
+
         if (!file_exists($langFilePath)) {
             $this->makeDirectory($langFilePath);
-            $comment = 'File generated: ' . str_replace(base_path(), '', $langFilePath);
+            $comment = '<fg=green>File generated:</> ' . str_replace(base_path(), '', $langFilePath);
         } else {
-            $comment = 'File updated: ' . str_replace(base_path(), '', $langFilePath);
+            $comment = '<fg=yellow>File updated:</> ' . str_replace(base_path(), '', $langFilePath);
         }
 
         // Store the localization messages to the determined file path
         ArrayFile::open($langFilePath)->set($langKeys)->write();
 
         // Inform the user
-        $this->comment($comment);
+        $this->output->writeLn($comment);
     }
 
     /**

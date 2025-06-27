@@ -4,6 +4,7 @@ namespace Backend\Classes;
 
 use Backend\Facades\Backend;
 use Backend\Facades\BackendAuth;
+use Backend\Facades\BackendMenu;
 use Backend\Models\Preference as BackendPreference;
 use Backend\Models\UserPreference;
 use Backend\Widgets\MediaManager;
@@ -95,7 +96,7 @@ class Controller extends ControllerBase
     /**
      * @var string Body class property used for customising the layout on a controller basis.
      */
-    public $bodyClass;
+    public $bodyClass = '';
 
     /**
      * @var array Default methods which cannot be called as actions.
@@ -200,6 +201,26 @@ class Controller extends ControllerBase
     }
 
     /**
+     * Set the navigation context based on the current action & parameters
+     */
+    protected function setNavigationContext(?string $action = null, array $params = []): void
+    {
+        $context = BackendMenu::getContext();
+
+        // @TODO: Support detecting module controllers as well
+        $currentClass = explode('\\', get_class($this));
+        $author = $currentClass[0];
+        $plugin = $currentClass[1];
+        $controller = $currentClass[count($currentClass) - 1];
+
+        $owner = $context->owner ?? "$author.$plugin";
+        $mainMenuCode = $context->mainMenuCode ?? strtolower($plugin);
+        $sideMenuCode = $context->sideMenuCode ?? strtolower($controller);
+
+        BackendMenu::setContext($owner, $mainMenuCode, $sideMenuCode);
+    }
+
+    /**
      * Execute the controller action.
      * @param string $action The action name.
      * @param array $params Routing parameters to pass to the action.
@@ -248,7 +269,7 @@ class Controller extends ControllerBase
              * Check access groups against the page definition
              */
             if ($this->requiredPermissions && !$this->user->hasAnyAccess($this->requiredPermissions)) {
-                return Response::make(View::make('backend::access_denied'), 403);
+                abort(403);
             }
         }
 
@@ -280,6 +301,11 @@ class Controller extends ControllerBase
          */
         BackendPreference::setAppLocale();
         BackendPreference::setAppFallbackLocale();
+
+        /*
+         * Set the navigation context
+         */
+        $this->setNavigationContext($action, $params);
 
         /*
          * Execute AJAX event
@@ -671,7 +697,7 @@ class Controller extends ControllerBase
      */
     protected function runAjaxHandlerForWidget($widget, $handler)
     {
-        $this->addViewPath($widget->getViewPaths());
+        $this->prependViewPath($widget->getViewPaths());
 
         $result = call_user_func_array([$widget, $handler], array_values($this->params));
 

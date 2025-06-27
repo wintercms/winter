@@ -39,6 +39,8 @@ class Users extends Controller
      */
     public $bodyClass = 'compact-container';
 
+    public $formLayout = 'sidebar';
+
     /**
      * Constructor.
      */
