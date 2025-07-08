@@ -785,7 +785,7 @@ class Lists extends WidgetBase
         $currentPageNumber = intval($currentPageNumber);
 
         if ($currentPageNumber > 1) {
-            $count = $query->count();
+            $count = $query->toBase()->getCountForPagination();
 
             // If the current page number is higher than the amount of available pages, go to the last available page
             if ($count <= (($currentPageNumber - 1) * $this->recordsPerPage)) {
