@@ -126,15 +126,16 @@ abstract class AssetCompile extends Command
 
         $packages = $compilableAssets->getPackages($type);
         $name = $this->argument('package');
+        $nameLower = strtolower($name);
 
-        if (!in_array($name, array_keys($packages))) {
+        if (!in_array($nameLower, array_keys($packages))) {
             $this->error(
                 sprintf('Package "%s" is not a registered package.', $name)
             );
             return 1;
         }
 
-        $package = $packages[$name];
+        $package = $packages[$nameLower];
 
         $relativeConfigPath = $package['config'];
         if (!$this->isPackageWithinWorkspace($relativeConfigPath)) {
