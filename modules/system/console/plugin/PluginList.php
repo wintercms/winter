@@ -49,7 +49,7 @@ class PluginList extends Command
             $rows[] = [
                 $plugin->code,
                 $plugin->version,
-                $manager->findByIdentifier($plugin->code)->getComposerPackageName(),
+                $manager->findByIdentifier($plugin->code)?->getComposerPackageName(),
                 (!$plugin->is_frozen) ? '<info>Yes</info>': '<fg=red>No</>',
                 (!$plugin->is_disabled) ? '<info>Yes</info>': '<fg=red>No</>',
             ];

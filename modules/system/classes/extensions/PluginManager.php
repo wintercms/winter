@@ -286,7 +286,7 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
         if (!$plugins) {
             if (!($resolved = $this->resolve($extension))) {
                 throw new ApplicationException(
-                    'Unable to resolve plugin: ' . is_string($extension) ? $extension : $extension->getIdentifier()
+                    'Unable to resolve plugin: ' . (is_string($extension) ? $extension : $extension->getIdentifier())
                 );
             }
             $plugins = [$resolved->getIdentifier() => $resolved];
