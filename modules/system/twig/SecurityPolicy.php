@@ -103,6 +103,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'has',
             'forget',
             'flush',
+            'pull',
         ],
     ];
 

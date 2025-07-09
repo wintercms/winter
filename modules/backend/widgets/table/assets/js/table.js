@@ -240,7 +240,7 @@
     }
 
     Table.prototype.buildToolbar = function() {
-        if (!this.options.adding && !this.options.deleting) {
+        if (!this.options.adding && !this.options.deleting && !this.options.searching) {
             return
         }
 
@@ -248,8 +248,7 @@
 
         if (!this.options.adding) {
             $('[data-cmd^="record-add"]', this.toolbar).remove()
-        }
-        else {
+        } else {
             if (this.navigation.paginationEnabled() || !this.options.rowSorting) {
                 // When the pagination is enabled, or sorting is disabled,
                 // new records can only be added to the bottom of the

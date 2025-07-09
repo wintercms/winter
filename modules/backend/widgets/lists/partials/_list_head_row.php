@@ -1,5 +1,5 @@
 <tr>
-    <?php if ($showCheckboxes): ?>
+    <?php if ($showCheckboxes && count($records)): ?>
         <th class="list-checkbox">
             <div class="checkbox custom-checkbox nolabel">
                 <input type="checkbox" id="<?= $this->getId('checkboxAll') ?>" />
@@ -20,7 +20,7 @@
                 <?php if ($column->width): ?>
                     style="width: <?= $column->width ?>"
                 <?php endif ?>
-                class="<?= $this->sortColumn==$column->columnName?'sort-'.$this->sortDirection.' active':'sort-desc' ?> list-cell-name-<?= $column->getName() ?> list-cell-type-<?= $column->type ?> <?= $column->getAlignClass() ?> <?= $column->headCssClass ?>"
+                class="sortable <?= $this->sortColumn==$column->columnName?'sort-'.$this->sortDirection.' active':'' ?> list-cell-name-<?= $column->getName() ?> list-cell-type-<?= $column->type ?> <?= $column->getAlignClass() ?> <?= $column->headCssClass ?>"
                 >
                 <a
                     href="javascript:;"

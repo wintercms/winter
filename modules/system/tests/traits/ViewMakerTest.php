@@ -47,9 +47,9 @@ class ViewMakerTest extends TestCase
             $this->normalizePath($path)
         );
 
-        // Test addViewPath() & getViewPaths()
+        // Test prependViewPath() & getViewPaths()
         $overridePath = "~/{$this->relativePath}override";
-        $this->stub->addViewPath($overridePath);
+        $this->stub->prependViewPath($overridePath);
         $this->assertEquals(
             [
                 $this->normalizePath($overridePath),

@@ -191,7 +191,9 @@ class FormController extends ControllerBehavior
     protected function prepareVars($model)
     {
         $this->controller->vars['formModel'] = $model;
+        $this->controller->vars['formConfig'] = $this->getConfig();
         $this->controller->vars['formContext'] = $this->formGetContext();
+        $this->controller->vars['formController'] = $this;
         $this->controller->vars['formRecordName'] = Lang::get($this->getConfig('name', 'backend::lang.model.name'));
     }
 
@@ -471,6 +473,10 @@ class FormController extends ControllerBehavior
 
         if (post('refresh', false)) {
             return Redirect::refresh();
+        }
+
+        if (post('new', false)) {
+            return Redirect::to($this->controller->actionUrl('create'));
         }
 
         if (post('redirect', true)) {
@@ -881,5 +887,21 @@ class FormController extends ControllerBehavior
             }
             call_user_func_array($callback, [$widget, $widget->model, $widget->getContext()]);
         });
+    }
+
+    /**
+     * Controller accessor for making partials within this behavior.
+     */
+    public function formMakePartial(string $partial, array $params = []): string
+    {
+        $contents = $this->controller->makePartial('form_' . $this->context . '_' . $partial, $params + $this->vars, false);
+        if (!$contents) {
+            $contents = $this->controller->makePartial('form_' . $partial, $params + $this->vars, false);
+        }
+        if (!$contents) {
+            $contents = $this->makePartial($partial, $params);
+        }
+
+        return $contents;
     }
 }

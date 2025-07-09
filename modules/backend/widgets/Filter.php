@@ -1,15 +1,17 @@
-<?php namespace Backend\Widgets;
+<?php
 
-use Db;
-use Str;
-use Lang;
-use Backend;
-use DbDongle;
-use Carbon\Carbon;
-use Backend\Classes\WidgetBase;
+namespace Backend\Widgets;
+
 use Backend\Classes\FilterScope;
-use ApplicationException;
-use BackendAuth;
+use Backend\Classes\WidgetBase;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\DbDongle;
+use Winter\Storm\Support\Str;
 
 /**
  * Filter Widget
@@ -183,6 +185,15 @@ class Filter extends WidgetBase
                 $params['size'] = array_get($scope->config, 'size', 10);
 
                 break;
+
+            case 'button-group':
+            case 'dropdown':
+                $params['value'] = $scope->value;
+                if (is_array($options = $this->getOptionsFromArray($scope))) {
+                    $scope->options = $options;
+                }
+
+                break;
         }
 
         return $this->makePartial('scope_'.$scope->type, $params);
@@ -227,6 +238,11 @@ class Filter extends WidgetBase
                 $data = json_decode(post('options'), true);
                 $active = $this->optionsFromAjax($data ?: null);
                 $this->setScopeValue($scope, $active);
+                break;
+
+            case 'button-group':
+            case 'dropdown':
+                $this->setScopeValue($scope, post('value') ?: null);
                 break;
 
             case 'checkbox':
@@ -466,18 +482,25 @@ class Filter extends WidgetBase
             $model = $this->scopeModels[$scope->scopeName];
             $methodName = $options;
 
-            if (!$model->methodExists($methodName)) {
-                throw new ApplicationException(Lang::get('backend::lang.filter.options_method_not_exists', [
-                    'model'  => get_class($model),
-                    'method' => $methodName,
-                    'filter' => $scope->scopeName
-                ]));
-            }
-
-            if (!empty($scope->dependsOn)) {
-                $options = $model->$methodName($this->getScopes());
+            if (str_contains($methodName, '::')) {
+                $options = Lang::get($methodName);
+                if (!is_array($options)) {
+                    $options = [];
+                }
             } else {
-                $options = $model->$methodName();
+                if (!$model->methodExists($methodName)) {
+                    throw new ApplicationException(Lang::get('backend::lang.filter.options_method_not_exists', [
+                        'model'  => get_class($model),
+                        'method' => $methodName,
+                        'filter' => $scope->scopeName
+                    ]));
+                }
+
+                if (!empty($scope->dependsOn)) {
+                    $options = $model->$methodName($this->getScopes());
+                } else {
+                    $options = $model->$methodName();
+                }
             }
         }
         elseif (!is_array($options)) {
@@ -850,7 +873,7 @@ class Filter extends WidgetBase
                  */
                 if ($scopeConditions = $scope->conditions) {
                     $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
-                        ':value' => Db::getPdo()->quote($scope->value),
+                        ':value' => DB::getPdo()->quote($scope->value),
                     ])));
                 }
 
@@ -884,11 +907,11 @@ class Filter extends WidgetBase
 
                     if (is_array($value)) {
                         $filtered = implode(',', array_build($value, function ($key, $_value) {
-                            return [$key, Db::getPdo()->quote($_value)];
+                            return [$key, DB::getPdo()->quote($_value)];
                         }));
                     }
                     else {
-                        $filtered = Db::getPdo()->quote($value);
+                        $filtered = DB::getPdo()->quote($value);
                     }
 
                     $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [':filtered' => $filtered])));
