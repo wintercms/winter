@@ -35,6 +35,6 @@
     </div>
     <div class="padded-container">
         <p class="flash-message static error"><?= e(trans($this->fatalError)) ?></p>
-        <p><a href="<?= Backend::url($formConfig->defaultRedirect) ?>" class="btn btn-default"><?= e(trans('backend::lang.form.return_to_list')); ?></a></p>
+        <p><a href="<?= isset($formConfig) ? Backend::url($formConfig->defaultRedirect) : 'javascript:history.back()' ?>" class="btn btn-default"><?= e(trans('backend::lang.form.return_to_list')); ?></a></p>
     </div>
 <?php endif ?>
