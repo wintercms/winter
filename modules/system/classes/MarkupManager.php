@@ -34,7 +34,7 @@ class MarkupManager
     /**
      * @var array Globally registered extension items
      */
-    protected $items;
+    protected $items = [];
 
     /**
      * @var \System\Classes\PluginManager
@@ -122,10 +122,6 @@ class MarkupManager
      */
     public function registerExtensions(string $type, array $definitions): void
     {
-        if ($this->items === null) {
-            $this->items = [];
-        }
-
         if (!array_key_exists($type, $this->items)) {
             $this->items[$type] = [];
         }
@@ -174,17 +170,11 @@ class MarkupManager
      */
     public function listExtensions($type)
     {
-        $results = [];
-
-        if ($this->items === null) {
+        if ($this->items === []) {
             $this->loadExtensions();
         }
 
-        if (isset($this->items[$type]) && is_array($this->items[$type])) {
-            $results = $this->items[$type];
-        }
-
-        return $results;
+        return is_array($this->items[$type] ?? null) ? $this->items[$type] : [];
     }
 
     /**
@@ -216,7 +206,7 @@ class MarkupManager
 
     /**
      * Makes a set of Twig functions for use in a twig extension.
-     * @param  array $functions Current collection
+     * @param array $functions Current collection
      * @return array
      */
     public function makeTwigFunctions($functions = [])
@@ -228,28 +218,12 @@ class MarkupManager
 
         foreach ($this->listFunctions() as $name => $callable) {
             $options = [];
-            if (is_array($callable)) {
-                // Handle options
-                if (isset($callable['options'])) {
-                    $options = $callable['options'];
-
-                    if (isset($options['is_safe']) && !is_array($options['is_safe'])) {
-                        if (is_string($options['is_safe'])) {
-                            $options['is_safe'] = [$options['is_safe']];
-                        } else {
-                            $options['is_safe'] = [];
-                        }
-                    }
-                }
-
-                // Normalize callable
-                if (!empty($callable['callable']) && is_callable($callable['callable'])) {
-                    $callable = $callable['callable'];
-                } elseif (!empty($callable[0]) && is_callable($callable[0])) {
-                    $callable = $callable[0];
-                }
+            if (is_array($callable) && isset($callable['options'])) {
+                $options = $this->normalizeOptions($callable['options'], $defaultOptions);
+            } else {
+                $options = $defaultOptions;
             }
-            $options = array_merge($defaultOptions, $options);
+            $callable = $this->normalizeCallable($callable);
 
             /*
              * Handle a wildcard function
@@ -274,7 +248,7 @@ class MarkupManager
 
     /**
      * Makes a set of Twig filters for use in a twig extension.
-     * @param  array $filters Current collection
+     * @param array $filters Current collection
      * @return array
      */
     public function makeTwigFilters($filters = [])
@@ -286,28 +260,12 @@ class MarkupManager
 
         foreach ($this->listFilters() as $name => $callable) {
             $options = [];
-            if (is_array($callable)) {
-                // Handle options
-                if (isset($callable['options'])) {
-                    $options = $callable['options'];
-
-                    if (isset($options['is_safe']) && !is_array($options['is_safe'])) {
-                        if (is_string($options['is_safe'])) {
-                            $options['is_safe'] = [$options['is_safe']];
-                        } else {
-                            $options['is_safe'] = [];
-                        }
-                    }
-                }
-
-                // Normalize callable
-                if (!empty($callable['callable']) && is_callable($callable['callable'])) {
-                    $callable = $callable['callable'];
-                } elseif (!empty($callable[0]) && is_callable($callable[0])) {
-                    $callable = $callable[0];
-                }
+            if (is_array($callable) && isset($callable['options'])) {
+                $options = $this->normalizeOptions($callable['options'], $defaultOptions);
+            } else {
+                $options = $defaultOptions;
             }
-            $options = array_merge($defaultOptions, $options);
+            $callable = $this->normalizeCallable($callable);
 
             /*
              * Handle a wildcard filter
@@ -332,7 +290,7 @@ class MarkupManager
 
     /**
      * Makes a set of Twig token parsers for use in a twig extension.
-     * @param  array $parsers Current collection
+     * @param array $parsers Current collection
      * @return array
      */
     public function makeTwigTokenParsers($parsers = [])
@@ -356,8 +314,8 @@ class MarkupManager
     /**
      * Tests if a callable type contains a wildcard, also acts as a
      * utility to replace the wildcard with a string.
-     * @param  callable  $callable
-     * @param  string|bool $replaceWith
+     * @param callable $callable
+     * @param string|bool $replaceWith
      * @return mixed
      */
     protected function isWildCallable($callable, $replaceWith = false)
@@ -391,5 +349,36 @@ class MarkupManager
         }
 
         return $isWild;
+    }
+
+    /**
+     * Normalize a callable definition.
+     * @param mixed $callable
+     * @return callable
+     */
+    private function normalizeCallable($callable)
+    {
+        if (is_array($callable)) {
+            if (!empty($callable['callable']) && is_callable($callable['callable'])) {
+                return $callable['callable'];
+            } elseif (!empty($callable[0]) && is_callable($callable[0])) {
+                return $callable[0];
+            }
+        }
+        return $callable;
+    }
+
+    /**
+     * Normalize options for Twig extension definitions.
+     * @param array $options
+     * @param array $defaultOptions
+     * @return array
+     */
+    private function normalizeOptions($options, $defaultOptions)
+    {
+        if (isset($options['is_safe']) && !is_array($options['is_safe'])) {
+            $options['is_safe'] = is_string($options['is_safe']) ? [$options['is_safe']] : [];
+        }
+        return array_merge($defaultOptions, $options);
     }
 }
