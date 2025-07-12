@@ -165,10 +165,10 @@ class MarkupManager
 
     /**
      * Returns a list of the registered Twig extensions of a type.
-     * @param $type string The Twig extension type
+     * @param string $type The Twig extension type
      * @return array
      */
-    public function listExtensions($type)
+    public function listExtensions(string $type): array
     {
         if ($this->items === []) {
             $this->loadExtensions();
@@ -181,7 +181,7 @@ class MarkupManager
      * Returns a list of the registered Twig filters.
      * @return array
      */
-    public function listFilters()
+    public function listFilters(): array
     {
         return $this->listExtensions(self::EXTENSION_FILTER);
     }
@@ -190,7 +190,7 @@ class MarkupManager
      * Returns a list of the registered Twig functions.
      * @return array
      */
-    public function listFunctions()
+    public function listFunctions(): array
     {
         return $this->listExtensions(self::EXTENSION_FUNCTION);
     }
@@ -199,7 +199,7 @@ class MarkupManager
      * Returns a list of the registered Twig token parsers.
      * @return array
      */
-    public function listTokenParsers()
+    public function listTokenParsers(): array
     {
         return $this->listExtensions(self::EXTENSION_TOKEN_PARSER);
     }
@@ -209,12 +209,9 @@ class MarkupManager
      * @param array $functions Current collection
      * @return array
      */
-    public function makeTwigFunctions($functions = [])
+    public function makeTwigFunctions(array $functions = []): array
     {
         $defaultOptions = ['is_safe' => ['html']];
-        if (!is_array($functions)) {
-            $functions = [];
-        }
 
         foreach ($this->listFunctions() as $name => $callable) {
             $options = [];
@@ -223,6 +220,7 @@ class MarkupManager
             } else {
                 $options = $defaultOptions;
             }
+
             $callable = $this->normalizeCallable($callable);
 
             /*
@@ -251,12 +249,9 @@ class MarkupManager
      * @param array $filters Current collection
      * @return array
      */
-    public function makeTwigFilters($filters = [])
+    public function makeTwigFilters(array $filters = []): array
     {
         $defaultOptions = ['is_safe' => ['html']];
-        if (!is_array($filters)) {
-            $filters = [];
-        }
 
         foreach ($this->listFilters() as $name => $callable) {
             $options = [];
@@ -265,6 +260,7 @@ class MarkupManager
             } else {
                 $options = $defaultOptions;
             }
+
             $callable = $this->normalizeCallable($callable);
 
             /*
@@ -293,13 +289,10 @@ class MarkupManager
      * @param array $parsers Current collection
      * @return array
      */
-    public function makeTwigTokenParsers($parsers = [])
+    public function makeTwigTokenParsers(array $parsers = []): array
     {
-        if (!is_array($parsers)) {
-            $parsers = [];
-        }
-
         $extraParsers = $this->listTokenParsers();
+
         foreach ($extraParsers as $obj) {
             if (!$obj instanceof TwigTokenParser) {
                 continue;
@@ -365,6 +358,7 @@ class MarkupManager
                 return $callable[0];
             }
         }
+
         return $callable;
     }
 
@@ -374,11 +368,12 @@ class MarkupManager
      * @param array $defaultOptions
      * @return array
      */
-    private function normalizeOptions($options, $defaultOptions)
+    private function normalizeOptions(array $options, array $defaultOptions): array
     {
         if (isset($options['is_safe']) && !is_array($options['is_safe'])) {
             $options['is_safe'] = is_string($options['is_safe']) ? [$options['is_safe']] : [];
         }
+
         return array_merge($defaultOptions, $options);
     }
 }
