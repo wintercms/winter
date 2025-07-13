@@ -815,6 +815,10 @@ export default class Request extends PluginBase {
      * @returns {void}
      */
     createFormData(formData, data, prefix = '') {
+        if (data === null || data === undefined) {
+            return;
+        }
+
         if (typeof data !== 'object') {
             formData.append(prefix, data);
             return;
