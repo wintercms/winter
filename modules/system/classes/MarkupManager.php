@@ -211,37 +211,12 @@ class MarkupManager
      */
     public function makeTwigFunctions(array $functions = []): array
     {
-        $defaultOptions = ['is_safe' => ['html']];
-
-        foreach ($this->listFunctions() as $name => $callable) {
-            $options = [];
-            if (is_array($callable) && isset($callable['options'])) {
-                $options = $this->normalizeOptions($callable['options'], $defaultOptions);
-            } else {
-                $options = $defaultOptions;
-            }
-
-            $callable = $this->normalizeCallable($callable);
-
-            /*
-             * Handle a wildcard function
-             */
-            if (strpos($name, '*') !== false && $this->isWildCallable($callable)) {
-                $callable = function ($name) use ($callable) {
-                    $arguments = array_slice(func_get_args(), 1);
-                    $method = $this->isWildCallable($callable, Str::camel($name));
-                    return call_user_func_array($method, $arguments);
-                };
-            }
-
-            if (!is_callable($callable)) {
-                throw new SystemException(sprintf('The markup function (%s) for %s is not callable.', json_encode($callable), $name));
-            }
-
-            $functions[] = new TwigSimpleFunction($name, $callable, $options);
-        }
-
-        return $functions;
+        return $this->makeTwigCallable(
+            $this->listFunctions(),
+            TwigSimpleFunction::class,
+            ['is_safe' => ['html']],
+            $functions
+        );
     }
 
     /**
@@ -251,37 +226,12 @@ class MarkupManager
      */
     public function makeTwigFilters(array $filters = []): array
     {
-        $defaultOptions = ['is_safe' => ['html']];
-
-        foreach ($this->listFilters() as $name => $callable) {
-            $options = [];
-            if (is_array($callable) && isset($callable['options'])) {
-                $options = $this->normalizeOptions($callable['options'], $defaultOptions);
-            } else {
-                $options = $defaultOptions;
-            }
-
-            $callable = $this->normalizeCallable($callable);
-
-            /*
-             * Handle a wildcard filter
-             */
-            if (strpos($name, '*') !== false && $this->isWildCallable($callable)) {
-                $callable = function ($name) use ($callable) {
-                    $arguments = array_slice(func_get_args(), 1);
-                    $method = $this->isWildCallable($callable, Str::camel($name));
-                    return call_user_func_array($method, $arguments);
-                };
-            }
-
-            if (!is_callable($callable)) {
-                throw new SystemException(sprintf('The markup filter (%s) for %s is not callable.', json_encode($callable), $name));
-            }
-
-            $filters[] = new TwigSimpleFilter($name, $callable, $options);
-        }
-
-        return $filters;
+        return $this->makeTwigCallable(
+            $this->listFilters(),
+            TwigSimpleFilter::class,
+            ['is_safe' => ['html']],
+            $filters
+        );
     }
 
     /**
@@ -342,6 +292,46 @@ class MarkupManager
         }
 
         return $isWild;
+    }
+
+    /**
+     * Shared logic for creating Twig callable (functions/filters).
+     * @param array $definitions
+     * @param string $twigClass
+     * @param array $defaultOptions
+     * @param array $collection
+     * @return array
+     */
+    private function makeTwigCallable(array $definitions, string $twigClass, array $defaultOptions, array $collection = []): array
+    {
+        foreach ($definitions as $name => $callable) {
+            $options = $defaultOptions;
+            if (is_array($callable) && isset($callable['options'])) {
+                $options = $this->normalizeOptions($callable['options'], $defaultOptions);
+            }
+            $callable = $this->normalizeCallable($callable);
+
+            // Handle wildcard
+            if (strpos($name, '*') !== false && $this->isWildCallable($callable)) {
+                $callable = function ($name) use ($callable) {
+                    $arguments = array_slice(func_get_args(), 1);
+                    $method = $this->isWildCallable($callable, Str::camel($name));
+                    return call_user_func_array($method, $arguments);
+                };
+            }
+
+            if (!is_callable($callable)) {
+                throw new SystemException(sprintf(
+                    'The markup %s (%s) for %s is not callable.',
+                    strtolower(class_basename($twigClass)),
+                    json_encode($callable),
+                    $name
+                ));
+            }
+
+            $collection[] = new $twigClass($name, $callable, $options);
+        }
+        return $collection;
     }
 
     /**
