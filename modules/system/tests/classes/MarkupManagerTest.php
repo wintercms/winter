@@ -15,10 +15,6 @@ class MarkupManagerTest extends TestCase
     protected $testCallableDataWithOptions;
 
     private const OPTIONS = ['is_safe_callback' => ['html']];
-    private const EMPTY_FUNCTION_MESSAGE = 'The markup function ([]) for emptyCallable is not callable.';
-    private const INVALID_FUNCTION_MESSAGE = 'The markup function ({"callable":"not_a_callable"}) for invalidCallable is not callable.';
-    private const EMPTY_FILTER_MESSAGE = 'The markup filter ([]) for emptyCallable is not callable.';
-    private const INVALID_FILTER_MESSAGE = 'The markup filter ({"callable":"not_a_callable"}) for invalidCallable is not callable.';
 
     public function setUp() : void
     {
@@ -48,6 +44,19 @@ class MarkupManagerTest extends TestCase
                 'options' => $options
             ],
         ];
+    }
+
+    /**
+     * Generates a not-callable error message.
+     *
+     * @param string $type     Either 'function' or 'filter'
+     * @param string $details  The details string (e.g., '[]' or '{"callable":"not_a_callable"}')
+     * @param string $name     The name of the callable
+     * @return string
+     */
+    public static function notCallableExceptionMessage(string $type, string $details, string $name): string
+    {
+        return sprintf('The markup %s (%s) for %s is not callable.', $type, $details, $name);
     }
 
     private function registerAndGetTwigFunctions(array $functions)
@@ -190,7 +199,7 @@ class MarkupManagerTest extends TestCase
     public function testMakeTwigFunctionsHandlesEmptyCallableArray()
     {
         $this->expectException(SystemException::class);
-        $this->expectExceptionMessage(self::EMPTY_FUNCTION_MESSAGE);
+        $this->expectExceptionMessage(self::notCallableExceptionMessage(TwigFunction::class, '[]', 'emptyCallable'));
 
         $this->manager->registerFunctions([
             'emptyCallable' => []
@@ -202,7 +211,7 @@ class MarkupManagerTest extends TestCase
     public function testMakeTwigFiltersHandlesEmptyCallableArray()
     {
         $this->expectException(SystemException::class);
-        $this->expectExceptionMessage(self::EMPTY_FILTER_MESSAGE);
+        $this->expectExceptionMessage(self::notCallableExceptionMessage(TwigFilter::class, '[]', 'emptyCallable'));
 
         $this->manager->registerFilters([
             'emptyCallable' => []
@@ -214,7 +223,7 @@ class MarkupManagerTest extends TestCase
     public function testMakeTwigFunctionsHandlesInvalidCallable()
     {
         $this->expectException(SystemException::class);
-        $this->expectExceptionMessage(self::INVALID_FUNCTION_MESSAGE);
+        $this->expectExceptionMessage(self::notCallable(TwigFunction::class, '{"callable":"not_a_callable"}', 'invalidCallable'));
 
         $this->manager->registerFunctions([
             'invalidCallable' => [
@@ -228,7 +237,7 @@ class MarkupManagerTest extends TestCase
     public function testMakeTwigFiltersHandlesInvalidCallable()
     {
         $this->expectException(SystemException::class);
-        $this->expectExceptionMessage(self::INVALID_FILTER_MESSAGE);
+        $this->expectExceptionMessage(self::notCallable(TwigFilter::class, '{"callable":"not_a_callable"}', 'invalidCallable'));
 
         $this->manager->registerFilters([
             'invalidCallable' => [
