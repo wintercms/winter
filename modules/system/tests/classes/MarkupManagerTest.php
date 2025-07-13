@@ -59,6 +59,32 @@ class MarkupManagerTest extends TestCase
         return sprintf('The markup %s (%s) for %s is not callable.', $type, $details, $name);
     }
 
+    private function expectExceptionForEmptyCallable(string $type)
+    {
+        $this->expectException(SystemException::class);
+        $this->expectExceptionMessage(self::notCallableExceptionMessage($type, '[]', 'emptyCallable'));
+        if ($type === TwigFunction::class) {
+            $this->manager->registerFunctions(['emptyCallable' => []]);
+            self::callProtectedMethod($this->manager, 'makeTwigFunctions', []);
+        } else {
+            $this->manager->registerFilters(['emptyCallable' => []]);
+            self::callProtectedMethod($this->manager, 'makeTwigFilters', []);
+        }
+    }
+
+    private function expectExceptionForInvalidCallable(string $type)
+    {
+        $this->expectException(SystemException::class);
+        $this->expectExceptionMessage(self::notCallableExceptionMessage($type, '{"callable":"not_a_callable"}', 'invalidCallable'));
+        if ($type === TwigFunction::class) {
+            $this->manager->registerFunctions(['invalidCallable' => ['callable' => 'not_a_callable']]);
+            self::callProtectedMethod($this->manager, 'makeTwigFunctions', []);
+        } else {
+            $this->manager->registerFilters(['invalidCallable' => ['callable' => 'not_a_callable']]);
+            self::callProtectedMethod($this->manager, 'makeTwigFilters', []);
+        }
+    }
+
     private function registerAndGetTwigFunctions(array $functions)
     {
         $this->manager->registerFunctions($functions);
@@ -71,26 +97,11 @@ class MarkupManagerTest extends TestCase
         return self::callProtectedMethod($this->manager, 'makeTwigFilters', []);
     }
 
-    private function assertAllTwigFunctions(array $functions, string $message = '')
+    private function assertAllTwigInstances(array $items, string $class, string $message = '')
     {
-        $this->assertIsArray($functions);
-        $this->assertNotEmpty($functions);
-        $this->assertContainsOnlyInstancesOf(
-            TwigFunction::class,
-            $functions,
-            $message ?: "All elements must be TwigFunction instances"
-        );
-    }
-
-    private function assertAllTwigFilters(array $filters, string $message = '')
-    {
-        $this->assertIsArray($filters);
-        $this->assertNotEmpty($filters);
-        $this->assertContainsOnlyInstancesOf(
-            TwigFilter::class,
-            $filters,
-            $message ?: "All elements must be TwigFunction instances"
-        );
+        $this->assertIsArray($items);
+        $this->assertNotEmpty($items);
+        $this->assertContainsOnlyInstancesOf($class, $items, $message ?: "All elements must be instances of $class");
     }
 
     //
@@ -102,19 +113,17 @@ class MarkupManagerTest extends TestCase
         /*
          * Negatives
          */
-        $callable = 'something';
-        $result = self::callProtectedMethod($this->manager, 'isWildCallable', [$callable]);
-        $this->assertFalse($result);
-
-        $callable = ['Form', 'open'];
-        $result = self::callProtectedMethod($this->manager, 'isWildCallable', [$callable]);
-        $this->assertFalse($result);
-
-        $callable = function () {
-            return 'O, Hai!';
-        };
-        $result = self::callProtectedMethod($this->manager, 'isWildCallable', [$callable]);
-        $this->assertFalse($result);
+        $negatives = [
+            'something',
+            ['Form', 'open'],
+            function () {
+                return 'O, Hai!';
+            },
+        ];
+        foreach ($negatives as $callable) {
+            $result = self::callProtectedMethod($this->manager, 'isWildCallable', [$callable]);
+            $this->assertFalse($result);
+        }
 
         /*
          * String
@@ -122,7 +131,6 @@ class MarkupManagerTest extends TestCase
         $callable = 'something_*';
         $result = self::callProtectedMethod($this->manager, 'isWildCallable', [$callable]);
         $this->assertTrue($result);
-
         $result = self::callProtectedMethod($this->manager, 'isWildCallable', [$callable, 'delicious']);
         $this->assertEquals('something_delicious', $result);
 
@@ -163,20 +171,19 @@ class MarkupManagerTest extends TestCase
     public function testMakeTwigFunctionsHandlesCallableArrayWithOptions()
     {
         $functions = $this->registerAndGetTwigFunctions($this->testCallableDataWithOptions);
-        $this->assertAllTwigFunctions($functions);
+        $this->assertAllTwigInstances($functions, TwigFunction::class);
     }
 
     public function testMakeTwigFiltersHandlesCallableArrayWithOptions()
     {
         $filters = $this->registerAndGetTwigFilters($this->testCallableDataWithOptions);
-        $this->assertAllTwigFilters($filters);
+        $this->assertAllTwigInstances($filters, TwigFilter::class);
     }
 
     public function testMakeTwigFunctionsAppliesDefaultOptions()
     {
         $functions = $this->registerAndGetTwigFunctions($this->testCallableData);
-        $this->assertAllTwigFunctions($functions);
-
+        $this->assertAllTwigInstances($functions, TwigFunction::class);
         foreach ($functions as $function) {
             $options = self::getProtectedProperty($function, 'options');
             $this->assertArrayHasKey('is_safe', $options);
@@ -187,8 +194,7 @@ class MarkupManagerTest extends TestCase
     public function testMakeTwigFiltersAppliesDefaultOptions()
     {
         $filters = $this->registerAndGetTwigFilters($this->testCallableData);
-        $this->assertAllTwigFilters($filters);
-
+        $this->assertAllTwigInstances($filters, TwigFilter::class);
         foreach ($filters as $filter) {
             $options = self::getProtectedProperty($filter, 'options');
             $this->assertArrayHasKey('is_safe', $options);
@@ -198,53 +204,21 @@ class MarkupManagerTest extends TestCase
 
     public function testMakeTwigFunctionsHandlesEmptyCallableArray()
     {
-        $this->expectException(SystemException::class);
-        $this->expectExceptionMessage(self::notCallableExceptionMessage(TwigFunction::class, '[]', 'emptyCallable'));
-
-        $this->manager->registerFunctions([
-            'emptyCallable' => []
-        ]);
-
-        self::callProtectedMethod($this->manager, 'makeTwigFunctions', []);
+        $this->expectExceptionForEmptyCallable(TwigFunction::class);
     }
 
     public function testMakeTwigFiltersHandlesEmptyCallableArray()
     {
-        $this->expectException(SystemException::class);
-        $this->expectExceptionMessage(self::notCallableExceptionMessage(TwigFilter::class, '[]', 'emptyCallable'));
-
-        $this->manager->registerFilters([
-            'emptyCallable' => []
-        ]);
-
-        self::callProtectedMethod($this->manager, 'makeTwigFilters', []);
+        $this->expectExceptionForEmptyCallable(TwigFilter::class);
     }
 
     public function testMakeTwigFunctionsHandlesInvalidCallable()
     {
-        $this->expectException(SystemException::class);
-        $this->expectExceptionMessage(self::notCallableExceptionMessage(TwigFunction::class, '{"callable":"not_a_callable"}', 'invalidCallable'));
-
-        $this->manager->registerFunctions([
-            'invalidCallable' => [
-                'callable' => 'not_a_callable'
-            ]
-        ]);
-
-        self::callProtectedMethod($this->manager, 'makeTwigFunctions', []);
+        $this->expectExceptionForInvalidCallable(TwigFunction::class);
     }
 
     public function testMakeTwigFiltersHandlesInvalidCallable()
     {
-        $this->expectException(SystemException::class);
-        $this->expectExceptionMessage(self::notCallableExceptionMessage(TwigFilter::class, '{"callable":"not_a_callable"}', 'invalidCallable'));
-
-        $this->manager->registerFilters([
-            'invalidCallable' => [
-                'callable' => 'not_a_callable'
-            ]
-        ]);
-
-        self::callProtectedMethod($this->manager, 'makeTwigFilters', []);
+        $this->expectExceptionForInvalidCallable(TwigFilter::class);
     }
 }
