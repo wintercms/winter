@@ -323,7 +323,7 @@ class MarkupManager
             if (!is_callable($callable)) {
                 throw new SystemException(sprintf(
                     'The markup %s (%s) for %s is not callable.',
-                    strtolower(class_basename($twigClass)),
+                    $twigClass,
                     json_encode($callable),
                     $name
                 ));
