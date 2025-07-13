@@ -223,7 +223,7 @@ class MarkupManagerTest extends TestCase
     public function testMakeTwigFunctionsHandlesInvalidCallable()
     {
         $this->expectException(SystemException::class);
-        $this->expectExceptionMessage(self::notCallable(TwigFunction::class, '{"callable":"not_a_callable"}', 'invalidCallable'));
+        $this->expectExceptionMessage(self::notCallableExceptionMessage(TwigFunction::class, '{"callable":"not_a_callable"}', 'invalidCallable'));
 
         $this->manager->registerFunctions([
             'invalidCallable' => [
@@ -237,7 +237,7 @@ class MarkupManagerTest extends TestCase
     public function testMakeTwigFiltersHandlesInvalidCallable()
     {
         $this->expectException(SystemException::class);
-        $this->expectExceptionMessage(self::notCallable(TwigFilter::class, '{"callable":"not_a_callable"}', 'invalidCallable'));
+        $this->expectExceptionMessage(self::notCallableExceptionMessage(TwigFilter::class, '{"callable":"not_a_callable"}', 'invalidCallable'));
 
         $this->manager->registerFilters([
             'invalidCallable' => [
