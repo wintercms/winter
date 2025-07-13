@@ -267,9 +267,8 @@ class MarkupManager
 
         if (is_string($callable) && strpos($callable, '*') !== false) {
             $isWild = $replaceWith ? str_replace('*', $replaceWith, $callable) : true;
-        }
-
-        if (is_array($callable)) {
+        } elseif (is_array($callable)) {
+            // Check first element of array
             if (is_string($callable[0]) && strpos($callable[0], '*') !== false) {
                 if ($replaceWith) {
                     $isWild = $callable;
@@ -280,7 +279,8 @@ class MarkupManager
                 }
             }
 
-            if (!empty($callable[1]) && strpos($callable[1], '*') !== false) {
+            // Check second element of array if it exists
+            if (!empty($callable[1]) && is_string($callable[1]) && strpos($callable[1], '*') !== false) {
                 if ($replaceWith) {
                     $isWild = $isWild ?: $callable;
                     $isWild[1] = str_replace('*', $replaceWith, $callable[1]);
