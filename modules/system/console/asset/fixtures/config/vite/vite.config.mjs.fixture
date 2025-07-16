@@ -1,14 +1,17 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 
+const defaultOutDir = 'assets/dist';
+
 export default defineConfig({
+    base: `${process.env.VITE_BASE}/${defaultOutDir}`,
     build: {
-        outDir: 'assets/dist',
+        outDir: defaultOutDir,
         assetsDir: '',
     },
     plugins: [
         laravel({
-            publicDirectory: 'assets/dist',
+            publicDirectory: defaultOutDir,
             input: [
                 'assets/src/css/{{packageName}}.css',
                 'assets/src/js/{{packageName}}.js',
