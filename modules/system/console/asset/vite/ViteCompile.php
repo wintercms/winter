@@ -66,4 +66,14 @@ class ViteCompile extends AssetCompile
 
         return $command;
     }
+
+    /**
+     * Return values to append to the command env
+     */
+    protected function createCommandEnv(string $configPath): array
+    {
+        return [
+            'VITE_BASE' => Str::after($this->getPackagePath($configPath), base_path()),
+        ];
+    }
 }
