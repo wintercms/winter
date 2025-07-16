@@ -347,7 +347,7 @@ class WinterUtil extends Command
                 $currentDir = dirname($filePath);
                 while ($currentDir !== $uploadsFolder) {
                     // Get parent directory children
-                    $children = Storage::disk($uploadsDisk)->directories($currentDir);
+                    $children = Storage::disk($uploadsDisk)->allFiles($currentDir);
                     // Parent directory is empty
                     if (count($children) === 0) {
                         Storage::disk($uploadsDisk)->deleteDirectory($currentDir);
