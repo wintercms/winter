@@ -1,23 +1,38 @@
 <div>
 
     <!-- Search -->
-    <form
-        role="form"
-        id="installPluginsForm"
-        data-handler="onInstallPlugin"
-        onsubmit="$.wn.installProcess.searchSubmit(this); return false">
-        <div class="product-search">
-            <input
-                name="code"
-                id="pluginSearchInput"
-                class="product-search-input search-input-lg typeahead"
-                placeholder="<?= e(trans('system::lang.plugins.search')) ?>"
-                data-search-type="plugins"
-                />
-            <i class="icon icon-search"></i>
-            <i class="icon loading" style="display: none"></i>
+    <div class="row">
+        <div class="col-md-9">
+            <form
+                role="form"
+                id="installPluginsForm"
+                data-handler="onInstallPlugin"
+                onsubmit="$.wn.installProcess.searchSubmit(this); return false">
+                <div class="product-search">
+                    <input
+                        name="code"
+                        id="pluginSearchInput"
+                        class="product-search-input search-input-lg typeahead"
+                        placeholder="<?= e(trans('system::lang.plugins.search')) ?>"
+                        data-search-type="plugins"
+                        />
+                    <i class="icon icon-search"></i>
+                    <i class="icon loading" style="display: none"></i>
+                </div>
+            </form>
         </div>
-    </form>
+        <div class="col-md-3">
+            <button
+                type="button"
+                data-control="popup"
+                data-handler="onLoadPluginUploader"
+                tabindex="-1"
+                class="btn btn-success wn-icon-file-arrow-up"
+            >
+                <?= e(trans('system::lang.plugins.upload')) ?>
+            </a>
+        </div>
+    </div>
 
     <div class="row">
 

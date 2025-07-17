@@ -1,8 +1,10 @@
-<?php namespace System\Models;
+<?php
 
-use Lang;
-use Model;
+namespace System\Models;
+
+use Illuminate\Support\Facades\Lang;
 use System\Classes\PluginManager;
+use Winter\Storm\Database\Model;
 
 /**
  * Stores information about current plugin versions.

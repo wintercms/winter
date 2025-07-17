@@ -4,7 +4,6 @@ namespace System\Classes;
 
 use Backend\Classes\NavigationManager;
 use FilesystemIterator;
-use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +13,7 @@ use Illuminate\Support\Facades\View;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use System\Models\PluginVersion;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Foundation\Application;
 use Winter\Storm\Support\ClassLoader;
 use Winter\Storm\Support\Facades\Config;
