@@ -52,9 +52,15 @@ import '../../less/relation.less';
          * Attaches event listeners for several interactions.
          */
         attachEvents() {
-            this.expandAllControl.addEventListener('click', this.events.expandAll);
-            this.collapseAllControl.addEventListener('click', this.events.collapseAll);
-            this.expandCheckedControl.addEventListener('click', this.events.expandChecked);
+            if (this.expandAllControl) {
+                this.expandAllControl.addEventListener('click', this.events.expandAll);
+            }
+            if (this.collapseAllControl) {
+                this.collapseAllControl.addEventListener('click', this.events.collapseAll);
+            }
+            if (this.expandCheckedControl) {
+                this.expandCheckedControl.addEventListener('click', this.events.expandChecked);
+            }
 
             this.toggles.forEach((toggle) => {
                 toggle.addEventListener('click', this.events.toggle)
