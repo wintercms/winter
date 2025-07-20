@@ -7,7 +7,6 @@ use Exception;
 use File;
 use Illuminate\Encryption\Encrypter;
 use PDO;
-use Schema;
 use Str;
 use Symfony\Component\Console\Input\InputOption;
 use System\Classes\UpdateManager;
