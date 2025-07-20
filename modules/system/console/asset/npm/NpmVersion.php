@@ -19,7 +19,6 @@ class NpmVersion extends NpmCommand
      */
     protected $signature = 'npm:version
         {--c|compatible : Report compatible version via exit code.}
-        {--s|silent : Silent mode.}
         {--disable-tty : Disable tty mode}';
 
     /**
