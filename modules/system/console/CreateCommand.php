@@ -17,6 +17,7 @@ class CreateCommand extends BaseScaffoldCommand
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {name : The name of the command to generate. <info>(eg: ImportPosts)</info>}
         {--command= : The terminal command that should be assigned. <info>(eg: blog:importposts)</info>}
+        {--description= : The command description displayed in help.}
         {--f|force : Overwrite existing files with generated files.}
         {--uninspiring : Disable inspirational quotes}
     ';
@@ -55,11 +56,13 @@ class CreateCommand extends BaseScaffoldCommand
         $author = array_pop($parts);
         $name = $this->getNameInput();
         $command = trim($this->option('command') ?? strtolower("{$plugin}:{$name}"));
+        $description = trim($this->option('description') ?? 'No description provided yet...');
 
         // More strict than the base Symfony validateName()
         // method, make a PR if it's a problem for you
-        // Plugin and command names can contain a number, but they can't start with it.
-        if (preg_match('/^[a-z][\w]++(:[a-z][\w]++)*$/', $command) !== 1) {
+        //  - Plugin and command names can contain a number, but they can't start with it.
+        //  - Command name can contain a dash (-), but it can't start with it.
+        if (preg_match('/^[a-z][\w]++(:[a-z][\w\-]++)*$/', $command) !== 1) {
             throw new InvalidArgumentException(sprintf('Command name "%s" is invalid.', $command));
         }
 
@@ -68,6 +71,7 @@ class CreateCommand extends BaseScaffoldCommand
             'command' => $command,
             'author' => $author,
             'plugin' => $plugin,
+            'description' => $description,
         ];
     }
 }

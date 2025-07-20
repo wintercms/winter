@@ -94,6 +94,10 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerErrorHandler()
     {
         $this->app->error(function (HttpExceptionInterface $exception, $code, $fromConsole) {
+            if ($this->app->runningInBackend() && BackendAuth::check()) {
+                return;
+            }
+
             $theme = Theme::getActiveTheme();
             $controller = new CmsController($theme);
             if ($code === 404) {

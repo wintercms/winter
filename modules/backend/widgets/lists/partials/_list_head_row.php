@@ -1,5 +1,5 @@
 <tr>
-    <?php if ($showCheckboxes): ?>
+    <?php if ($showCheckboxes && count($records)): ?>
         <th class="list-checkbox">
             <div class="checkbox custom-checkbox nolabel">
                 <input type="checkbox" id="<?= $this->getId('checkboxAll') ?>" />
