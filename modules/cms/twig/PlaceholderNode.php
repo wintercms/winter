@@ -1,5 +1,6 @@
 <?php namespace Cms\Twig;
 
+use Twig\Attribute\YieldReady;
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
 
@@ -9,6 +10,7 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class PlaceholderNode extends TwigNode
 {
     public function __construct($name, $paramValues, $body, $lineno, $tag = 'placeholder')
@@ -54,10 +56,10 @@ class PlaceholderNode extends TwigNode
 
         $compiler->addDebugInfo($this);
         if (!$isText) {
-            $compiler->write("echo \$this->env->getExtension('Cms\Twig\Extension')->displayBlock(");
+            $compiler->write("yield \$this->env->getExtension('Cms\Twig\Extension')->displayBlock(");
         }
         else {
-            $compiler->write("echo twig_escape_filter(\$this->env, \$this->env->getExtension('Cms\Twig\Extension')->displayBlock(");
+            $compiler->write("yield twig_escape_filter(\$this->env, \$this->env->getExtension('Cms\Twig\Extension')->displayBlock(");
         }
 
         $compiler

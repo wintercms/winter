@@ -1,5 +1,6 @@
 <?php namespace System\Twig;
 
+use Twig\Attribute\YieldReady;
 use Twig\Compiler;
 use Twig\Node\Node;
 use Twig\Node\NodeOutputInterface;
@@ -13,6 +14,7 @@ use Twig\Node\NodeOutputInterface;
  *
  * @author Fabien Potencier <fabien@symfony.com>
  */
+#[YieldReady]
 class SpacelessNode extends Node implements NodeOutputInterface
 {
     public function __construct(Node $body, int $lineno, string $tag = 'spaceless')
@@ -25,14 +27,8 @@ class SpacelessNode extends Node implements NodeOutputInterface
         $compiler
             ->addDebugInfo($this)
         ;
-        if ($compiler->getEnvironment()->isDebug()) {
-            $compiler->write("ob_start();\n");
-        } else {
-            $compiler->write("ob_start(function () { return ''; });\n");
-        }
         $compiler
-            ->subcompile($this->getNode('body'))
-            ->write("echo trim(preg_replace('/>\s+</', '><', ob_get_clean()));\n")
+            ->write(sprintf("yield trim(preg_replace('/>\s+</', '><', '%s'));\n", $this->getNode('body')->getAttribute('data')))
         ;
     }
 }

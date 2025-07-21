@@ -1,5 +1,6 @@
 <?php namespace Cms\Twig;
 
+use Twig\Attribute\YieldReady;
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
 
@@ -9,6 +10,7 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class ContentNode extends TwigNode
 {
     public function __construct(TwigNode $nodes, $paramNames, $lineno, $tag = 'content')
@@ -36,7 +38,7 @@ class ContentNode extends TwigNode
         }
 
         $compiler
-            ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->contentFunction(")
+            ->write("yield \$this->env->getExtension('Cms\Twig\Extension')->contentFunction(")
             ->subcompile($this->getNode('nodes')->getNode(0))
             ->write(", \$context['__cms_content_params']")
             ->write(", true")

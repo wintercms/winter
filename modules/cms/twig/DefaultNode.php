@@ -1,5 +1,6 @@
 <?php namespace Cms\Twig;
 
+use Twig\Attribute\YieldReady;
 use Twig\Node\Node as TwigNode;
 use Twig\Compiler as TwigCompiler;
 
@@ -9,6 +10,7 @@ use Twig\Compiler as TwigCompiler;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
+#[YieldReady]
 class DefaultNode extends TwigNode
 {
     public function __construct($lineno, $tag = 'default')
@@ -25,7 +27,7 @@ class DefaultNode extends TwigNode
     {
         $compiler
             ->addDebugInfo($this)
-            ->write("echo '<!-- X_WINTER_DEFAULT_BLOCK_CONTENT -->';\n")
+            ->write("yield '<!-- X_WINTER_DEFAULT_BLOCK_CONTENT -->';\n")
         ;
     }
 }

@@ -10,9 +10,9 @@ final class SpacelessTokenParser extends AbstractTokenParser
         $stream = $this->parser->getStream();
         $lineno = $token->getLine();
 
-        $stream->expect(/* Token::BLOCK_END_TYPE */ 3);
+        $stream->expect(Token::BLOCK_END_TYPE);
         $body = $this->parser->subparse([$this, 'decideSpacelessEnd'], true);
-        $stream->expect(/* Token::BLOCK_END_TYPE */ 3);
+        $stream->expect(Token::BLOCK_END_TYPE);
 
         return new SpacelessNode($body, $lineno, $this->getTag());
     }
