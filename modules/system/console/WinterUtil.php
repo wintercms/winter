@@ -119,7 +119,6 @@ class WinterUtil extends Command
             ['debug', null, InputOption::VALUE_NONE, 'Run the operation in debug / development mode.'],
             ['projectId', null, InputOption::VALUE_REQUIRED, 'Specify a projectId for set project'],
             ['missing-files', null, InputOption::VALUE_NONE, 'Purge system_files records for missing storage files'],
-            ['include-icons', null, InputOption::VALUE_NONE, 'Include icons.less when compiling LESS files'],
         ];
     }
 
