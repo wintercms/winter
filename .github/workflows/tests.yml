@@ -7,7 +7,6 @@ on:
       - develop
   pull_request:
 
-
 concurrency:
   group: tests-${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
@@ -22,10 +21,7 @@ jobs:
     runs-on: ${{ matrix.operatingSystem }}
     name: ${{ matrix.operatingSystem }} / JavaScript
     env:
-      nodeVersion: 16
-      phpVersion: '8.2'
-      extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
-      key: winter-cms-cache-develop
+      GITHUB_TOKEN: ${{ secrets.COMPOSER_GITHUB_TOKEN }}
     steps:
       - name: Checkout changes
         uses: actions/checkout@v4
@@ -33,14 +29,13 @@ jobs:
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ env.phpVersion }}
-          extensions: ${{ env.extensions }}
-          github-token: ${{ secrets.COMPOSER_GITHUB_TOKEN }}
+          php-version: 8.2
+          extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
 
       - name: Install Node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.nodeVersion }}
+          node-version: 16
 
       - name: Switch library dependency (develop)
         if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
@@ -76,8 +71,7 @@ jobs:
     runs-on: ${{ matrix.operatingSystem }}
     name: ${{ matrix.operatingSystem }} / PHP ${{ matrix.phpVersion }}
     env:
-      extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
-      key: winter-cms-cache-develop
+      GITHUB_TOKEN: ${{ secrets.COMPOSER_GITHUB_TOKEN }}
     steps:
       - name: Checkout changes
         uses: actions/checkout@v4
@@ -86,8 +80,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.phpVersion }}
-          extensions: ${{ env.extensions }}
-          github-token: ${{ secrets.COMPOSER_GITHUB_TOKEN }}
+          extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
 
       - name: Switch library dependency (develop)
         if: github.ref == 'refs/heads/develop' || github.base_ref == 'develop'
