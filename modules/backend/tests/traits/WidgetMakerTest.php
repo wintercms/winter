@@ -9,6 +9,8 @@ class ExampleTraitClass
 {
     use \Backend\Traits\WidgetMaker;
 
+    protected Controller $controller;
+
     public function __construct()
     {
         $this->controller = new Controller;
@@ -35,8 +37,9 @@ class WidgetMakerTest extends TestCase
     {
         parent::setUp();
 
-        $traitName = 'Backend\Traits\WidgetMaker';
-        $this->traitObject = $this->getObjectForTrait($traitName);
+        $this->traitObject = new class {
+            use \Backend\Traits\WidgetMaker;
+        };
     }
 
     public function testTraitObject()
