@@ -2,6 +2,7 @@
 
 namespace System\Tests\Console\Asset\Mix;
 
+use Illuminate\Foundation\Bootstrap\HandleExceptions;
 use System\Classes\Asset\PackageManager;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Exception\SystemException;
@@ -207,6 +208,8 @@ class MixInstallTest extends TestCase
         if (File::exists($this->lockPath)) {
             File::delete($this->lockPath);
         }
+
+        HandleExceptions::flushState();
 
         parent::tearDown();
     }

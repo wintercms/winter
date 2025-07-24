@@ -2,6 +2,7 @@
 
 namespace System\Tests\Console\Asset\Mix;
 
+use Illuminate\Foundation\Bootstrap\HandleExceptions;
 use System\Classes\PluginManager;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Support\Facades\File;
@@ -230,5 +231,7 @@ class MixCreateTest extends TestCase
                 File::delete($file);
             }
         }
+
+        HandleExceptions::flushState();
     }
 }

@@ -2,10 +2,10 @@
 
 namespace System\Tests\Classes;
 
+use System\Classes\FileManifest;
+use System\Classes\SourceManifest;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Argon\Argon;
-use System\Classes\SourceManifest;
-use System\Classes\FileManifest;
 
 class SourceManifestTest extends TestCase
 {
@@ -53,6 +53,7 @@ class SourceManifestTest extends TestCase
     {
         Argon::setTestNow();
         $this->deleteManifest();
+        parent::tearDown();
     }
 
     public function testCreateManifest()

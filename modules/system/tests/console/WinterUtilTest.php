@@ -2,6 +2,7 @@
 
 namespace System\Tests\Console;
 
+use Illuminate\Foundation\Bootstrap\HandleExceptions;
 use System\Tests\Bootstrap\TestCase;
 
 class WinterUtilTest extends TestCase
@@ -94,5 +95,7 @@ class WinterUtilTest extends TestCase
         }
 
         $this->artisan('winter:util compile lang')->execute();
+
+        HandleExceptions::flushState();
     }
 }
