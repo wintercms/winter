@@ -28,6 +28,9 @@ jobs:
           php-version: ${{ env.phpVersion }}
           extensions: ${{ env.extensions }}
 
+      - name: Configure Composer GitHub token
+        run: composer config --global --auth github-oauth.github.com ${{ secrets.COMPOSER_GITHUB_TOKEN }}
+
       - name: Install Composer dependencies
         run: composer install --no-interaction --no-progress --no-scripts
 
