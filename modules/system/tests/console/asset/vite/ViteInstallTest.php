@@ -12,6 +12,7 @@ class ViteInstallTest extends TestCase
     protected string $jsonPath;
     protected string $lockPath;
     protected string $backupPath;
+    protected string $fixturePath;
 
     public function setUp(): void
     {

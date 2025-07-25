@@ -2,13 +2,16 @@
 
 namespace System\Tests\Console;
 
-use File;
-use Illuminate\Database\Schema\Blueprint;
-use Schema;
 use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Schema;
 
 class CreateMigrationTest extends PluginTestCase
 {
+    protected ?string $versionFile = null;
+    protected ?string $versionFolder = null;
+    protected ?string $table = null;
+
     public function setUp(): void
     {
         parent::setUp();

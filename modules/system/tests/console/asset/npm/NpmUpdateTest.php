@@ -2,7 +2,6 @@
 
 namespace System\tests\console\asset\npm;
 
-use Illuminate\Foundation\Bootstrap\HandleExceptions;
 use System\Classes\Asset\PackageManager;
 use System\Tests\Bootstrap\TestCase;
 use System\Tests\Console\Asset\NpmTestTrait;
@@ -99,8 +98,6 @@ class NpmUpdateTest extends TestCase
                 File::delete($path);
             }
         }
-
-        HandleExceptions::flushState();
 
         parent::tearDown();
     }
