@@ -215,10 +215,6 @@ class Repeater extends FormWidgetBase
      */
     public function getSaveValue($value)
     {
-        if (empty($value)) {
-            return [];
-        }
-
         return $this->processSaveValue($value);
     }
 
