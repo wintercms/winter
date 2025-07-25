@@ -2,8 +2,11 @@
 
 namespace System\Tests\Bootstrap;
 
-use ReflectionClass;
+use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Foundation\Application;
 use PHPUnit\Framework\Assert;
+use ReflectionClass;
 
 class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {
@@ -23,6 +26,29 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
 
         // Set random encryption key
         $app['config']->set('app.key', bin2hex(random_bytes(16)));
+
+        // Override the Kernel call method to prevent symfony shell verbosity breaking scripts.
+        // @see: https://github.com/symfony/symfony/pull/53632
+        // @see: https://github.com/symfony/symfony/pull/24425
+        $app->bind(Kernel::class, function (Application $app) {
+            return new class($app, $app->make(Dispatcher::class)) extends \Winter\Storm\Foundation\Console\Kernel
+            {
+                public function call($command, array $parameters = [], $outputBuffer = null)
+                {
+                    $result = parent::call($command, $parameters, $outputBuffer);
+
+                    $shellVerbosity = 0;
+
+                    if (\function_exists('putenv')) {
+                        @putenv('SHELL_VERBOSITY=' . $shellVerbosity);
+                    }
+
+                    $_ENV['SHELL_VERBOSITY'] = $_SERVER['SHELL_VERBOSITY'] = $shellVerbosity;
+
+                    return $result;
+                }
+            };
+        });
 
         return $app;
     }
