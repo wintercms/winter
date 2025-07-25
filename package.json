@@ -1,6 +1,8 @@
 {
     "devDependencies": {
-        "laravel-mix": "^6.0.41"
+        "laravel-mix": "^6.0.41",
+        "vite": "^6.0.0",
+        "laravel-vite-plugin": "^1.1.0"
     },
     "workspaces": {
         "packages": [
