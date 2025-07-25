@@ -1,7 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createApp } from 'vue';
 import PluginMarket from './components/PluginMarket.vue';
-import ThemeMarket from './components/ThemeMarket.vue';
+import ThemeMarket from './components/PluginMarket.vue';
 import { winterRequestPlugin } from './utils/winter-request';
 
 const onReady = (callback) => {
