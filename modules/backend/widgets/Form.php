@@ -9,6 +9,7 @@ use Backend\Classes\WidgetManager;
 use BackendAuth;
 use Exception;
 use Form as FormHelper;
+use Illuminate\Support\Str;
 use Lang;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
@@ -1224,7 +1225,14 @@ class Form extends WidgetBase
             // Exclude fields that didn't provide any value
             $fieldValue = $this->dataArrayGet($result, $parts, FormField::NO_SAVE_DATA);
             if ($fieldValue === FormField::NO_SAVE_DATA) {
-                continue;
+                // Check if the widget was loaded but submitted no data
+                $loadedFlagKey = 'form' . Str::studly($field) . '_loaded';
+                if (post($loadedFlagKey)) {
+                    // Widget form was loaded but no data submitted - treat as empty
+                    $fieldValue = null;
+                } else {
+                    continue;
+                }
             }
 
             // Exclude fields where the widget returns NO_SAVE_DATA
