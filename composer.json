@@ -30,9 +30,9 @@
     },
     "require": {
         "php": ">=8.1",
-        "winter/storm": "dev-wip/support-uploading-packages-update-manager-changes as 1.2",
-        "winter/wn-system-module": "dev-develop",
-        "winter/wn-backend-module": "dev-develop",
+        "winter/storm": "dev-wip/support-uploading-packages-update-manager-changes as 1.2.8",
+        "winter/wn-system-module": "dev-wip/support-uploading-packages-update-manager-changes as 1.2.8",
+        "winter/wn-backend-module": "dev-wip/support-uploading-packages-update-manager-changes as 1.2.8",
         "winter/wn-cms-module": "dev-develop",
         "laravel/framework": "^9.1",
         "wikimedia/composer-merge-plugin": "~2.1.0"
