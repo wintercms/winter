@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    backupGlobals="false"
-    backupStaticProperties="false"
     bootstrap="./modules/system/tests/bootstrap/app.php"
     cacheDirectory=".phpunit.result.cache"
     colors="true"
-    processIsolation="false"
-    stopOnFailure="false"
     xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
 >
   <testsuites>

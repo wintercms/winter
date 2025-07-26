@@ -85,55 +85,26 @@ class TestCase extends \Illuminate\Foundation\Testing\TestCase
     }
 
     /**
-     * Stub for `assertFileNotExists` to allow compatibility with both PHPUnit 8 and 9.
-     *
-     * @param string $filename
-     * @param string $message
-     * @return void
+     * Stub for `assertFileNotExists`
      */
     public static function assertFileNotExists(string $filename, string $message = ''): void
     {
-        if (method_exists(Assert::class, 'assertFileDoesNotExist')) {
-            Assert::assertFileDoesNotExist($filename, $message);
-            return;
-        }
-
-        Assert::assertFileNotExists($filename, $message);
+        Assert::assertFileDoesNotExist($filename, $message);
     }
 
     /**
-     * Stub for `assertRegExp` to allow compatibility with both PHPUnit 8 and 9.
-     *
-     * @param string $pattern
-     * @param string $string
-     * @param string $message
-     * @return void
+     * Stub for `assertRegExp`
      */
     public static function assertRegExp(string $pattern, string $string, string $message = ''): void
     {
-        if (method_exists(Assert::class, 'assertMatchesRegularExpression')) {
-            Assert::assertMatchesRegularExpression($pattern, $string, $message);
-            return;
-        }
-
-        Assert::assertRegExp($pattern, $string, $message);
+        Assert::assertMatchesRegularExpression($pattern, $string, $message);
     }
 
     /**
-     * Stub for `assertObjectHasAttribute` to allow compatibility with both PHPUnit 9 and 10.
-     *
-     * @param string $propertyName
-     * @param object $object
-     * @param string $message
-     * @return void
+     * Stub for `assertObjectHasAttribute`
      */
     public static function assertObjectHasAttribute(string $propertyName, $object, string $message = ''): void
     {
-        if (method_exists(Assert::class, 'assertObjectHasProperty')) {
-            Assert::assertObjectHasProperty($propertyName, $object, $message);
-            return;
-        }
-
-        Assert::assertObjectHasAttribute($propertyName, $object, $message);
+        Assert::assertObjectHasProperty($propertyName, $object, $message);
     }
 }
