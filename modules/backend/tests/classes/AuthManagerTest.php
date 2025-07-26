@@ -3,7 +3,6 @@
 namespace Backend\Tests\Classes;
 
 use Backend\Classes\AuthManager;
-use Illuminate\Foundation\Bootstrap\HandleExceptions;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Exception\SystemException;
 
@@ -45,7 +44,7 @@ class AuthManagerTest extends TestCase
     public function tearDown(): void
     {
         AuthManager::forgetInstance();
-        HandleExceptions::flushState();
+        parent::tearDown();
     }
 
     public function testListPermissions()
