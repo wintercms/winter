@@ -80,7 +80,7 @@
                 </div>
             </div>
             <div class="mt-8 w-full">
-                <div class="w-full flex flex-col lg:flex-row items-center gap-4 justify-between flex-grow flex-shrink basis-auto transition-all duration-300">
+                <div class="w-full flex flex-col lg:flex-row flex-wrap items-center gap-4 justify-between flex-grow flex-shrink basis-auto transition-all duration-300">
                     <div>
                         <span :class="`${results.length || 'invisible'} block text-center lg:text-left min-w-[250px]`">
                             Showing <strong>{{ showingFromProduct }}</strong>
@@ -104,8 +104,8 @@
                             <option :value="Number.MAX_SAFE_INTEGER">All</option>
                         </select>
                     </div>
+                    <Pagination v-model:page="page" :items="results.length" :per-page="perPage"></Pagination>
                 </div>
-                <Pagination v-model:page="page" :items="results.length" :per-page="perPage"></Pagination>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 mb-10">
                     <Product v-for="product in pageProducts" :product="product" :type="this.mode"></Product>
                 </div>

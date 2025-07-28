@@ -1,5 +1,5 @@
 <template>
-    <ul v-if="items && items > perPage" class="inline-flex min-w-1/3 col-span-full justify-end gap-3 !mb-0">
+    <ul v-if="items && items > perPage" class="inline-flex min-w-1/3 col-span-full mx-auto xl:mx-0 lg:justify-end gap-3 !mb-0">
         <li>
             <button :class="`${hasBack || '!text-gray-400/70 bg-blue-100/90 cursor-default'} size-12 bg-blue-100 transition-all duration-300 rounded-2xl items-center flex justify-center`"
                     v-on:click="$emit('update:page', Math.max(page - 1, 1))"
