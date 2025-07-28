@@ -104,6 +104,9 @@ class WinterTest extends Command
         foreach (['module', 'plugin'] as $type) {
             if ($this->option($type)) {
                 foreach ($this->option($type) as $target) {
+                    if (empty($target)) {
+                        continue;
+                    }
                     $target = strtolower($target);
                     if (!isset($configs[$type . 's'][$target])) {
                         throw new ApplicationException(sprintf(
@@ -126,7 +129,14 @@ class WinterTest extends Command
         }
 
         // default to running all defined configs found
-        foreach (['modules', 'plugins'] as $type) {
+        $types = [
+            'modules' => count($this->option('module')),
+            'plugins' => count($this->option('plugin')),
+        ];
+        foreach ($types as $type => $count) {
+            if (!$count) {
+                continue;
+            }
             foreach ($configs[$type] as $name => $config) {
                 $this->info(
                     $type === 'plugins'
