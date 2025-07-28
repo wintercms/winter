@@ -1,7 +1,17 @@
-@config "./tailwind.config.js";
 @import "tailwindcss";
 
-#layout-canvas, #layout-body .layout-row,.nav.nav-tabs{
+@config "./tailwind.config.js";
+
+@layer utilities {
+    .w-full-storm-fix {
+        @apply w-full;
+    }
+    .hidden-storm-fix {
+        @apply hidden;
+    }
+}
+
+#layout-canvas, #layout-body .layout-row, .nav.nav-tabs{
     background: #fff;
 }
 #layout-body .layout-row, #layout-body .layout-row .padded-container {
@@ -10,3 +20,4 @@
 .control-tabs.content-tabs > ul.nav-tabs li.active a {
     background: #f9f9f9;
 }
+

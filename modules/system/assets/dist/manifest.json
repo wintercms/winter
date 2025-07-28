@@ -1,0 +1,13 @@
+{
+  "controllers/updates/assets/src/updates.css": {
+    "file": "assets/updates-ZUxyZL27.css",
+    "src": "controllers/updates/assets/src/updates.css",
+    "isEntry": true
+  },
+  "controllers/updates/assets/src/updates.js": {
+    "file": "assets/updates-CegCpbLo.js",
+    "name": "updates",
+    "src": "controllers/updates/assets/src/updates.js",
+    "isEntry": true
+  }
+}

@@ -1,6 +1,7 @@
 <div class="updates-app">
-    <theme-market
+    <market-place
         search-string="<?= e(trans('system::lang.themes.search')) ?>"
         upload-string="<?= e(trans('system::lang.themes.upload')) ?>"
-    ></theme-market>
+        mode="theme"
+    ></market-place>
 </div>

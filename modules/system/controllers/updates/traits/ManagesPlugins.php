@@ -121,17 +121,10 @@ trait ManagesPlugins
         return $plugins;
     }
 
-    public function onGetMarketplacePlugins(): array
+    public function onGetMarketplaceListings(): array
     {
         return [
-            'result' => MarketPlaceApi::instance()->getProducts()['plugins']
-        ];
-    }
-
-    public function onGetMarketplaceThemes(): array
-    {
-        return [
-            'result' => MarketPlaceApi::instance()->getProducts()['themes']
+            'result' => MarketPlaceApi::instance()->getListing()
         ];
     }
 

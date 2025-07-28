@@ -495,35 +495,46 @@ class MarketPlaceApi
     /// @TODO: Move this to the marketplace api
     ////////////////////////////////////////////////
 
-    public function getProducts(): array
+    public function getPackagesFromBazaar(): array
     {
-        $packages = Cache::remember(static::PRODUCT_FETCH_CACHE_KEY, Carbon::now()->addMinutes(15), function () {
-            return [
-                'plugins' => $this->getPackageType('winter-plugin'),
-                'themes' => $this->getPackageType('winter-theme'),
-            ];
-        });
+        // @TODO: Remove, this allows for demo without public api
+        if (file_exists(__DIR__ . '/package-list.json') && !env('UPDATE_SERVER')) {
+            return json_decode(file_get_contents(__DIR__ . '/package-list.json'), JSON_OBJECT_AS_ARRAY);
+        }
 
-        // @TODO: This should only validate the installed status of extensions, the rest should come from the api.
+        $result = Http::get($this->createServerUrl('v1/packages/list'));
 
-        $installed = Composer::getWinterPackageNames();
+        if ($result->code !== 200) {
+            throw new ApplicationException('Bad things have happened');
+        }
 
-        foreach ($packages as $type => $packageCategories) {
-            foreach ($packageCategories as $category => $packageList) {
-                $packages[$type][$category] = array_map(function (array $package) use ($installed) {
-                    // This is scuffed, store the composer name as "package"
-                    $package['package'] = $package['name'];
-                    // Then guess a winter name from the package name (this will need to be handled by the market)
-                    $package['name'] = implode('.', array_map(function (string $str) {
-                        return str_replace(' ', '', ucwords(str_replace(['wn-', '-plugin', '-'], ['', '', ' '], $str)));
-                    }, explode('/', $package['name'])));
-                    // Check if the package is installed, should probably happen somewhere else
-                    $package['installed'] = in_array($package['package'], $installed);
-                    // Grab the package image, for now this will do
-                    $package['icon'] = 'https://picsum.photos/200?a=' . md5($package['name']);
-                    return $package;
-                }, $packageList);
-            }
+        return json_decode($result->body, JSON_OBJECT_AS_ARRAY);
+    }
+
+    public function getListing(): array
+    {
+
+//        $packages = Cache::remember(
+//            static::PRODUCT_FETCH_CACHE_KEY,
+//            Carbon::now()->addMinutes(15),
+//            fn () => $this->getPackagesFromBazaar()
+//        );
+        // @TODO: Caching
+        $packages = $this->getPackagesFromBazaar();
+
+        $installed = Composer::getWinterPackagesWithVersion();
+
+        foreach ($packages['products'] as $type => $products) {
+            $packages['products'][$type] = array_map(function (array $package) use ($installed) {
+                $package['installed'] = isset($installed[$package['composer_package']]);
+                $package['installed_version'] = $package['installed']
+                    ? $installed[$package['composer_package']]['version']
+                    : null;
+                $package['installed_ref'] = $package['installed']
+                    ? $installed[$package['composer_package']]['ref']
+                    : null;
+                return $package;
+            }, $products);
         }
 
         return $packages;

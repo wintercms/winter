@@ -10,4 +10,7 @@ export default {
     corePlugins: {
         preflight: false,
     },
+    fontFamily: {
+        sans: ['Rubik'],
+    },
 };

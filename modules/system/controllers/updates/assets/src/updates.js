@@ -1,8 +1,7 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { createApp } from 'vue';
-import PluginMarket from './components/PluginMarket.vue';
-import ThemeMarket from './components/ThemeMarket.vue';
-import { winterRequestPlugin } from './utils/winter-request';
+import MarketPlace from './components/MarketPlace.vue';
+import {request, winterRequestPlugin} from './utils/winter-request';
 
 const onReady = (callback) => {
     if (document.readyState === 'complete') {
@@ -17,10 +16,15 @@ onReady(() => {
 
     const app = createApp({
         ...element.dataset,
-        components: { PluginMarket, ThemeMarket },
+        components: { MarketPlace },
     });
 
-    app.use(winterRequestPlugin);
+    app.use({
+        install(app) {
+            app.request = (handler, options) => Snowboard.request(handler, options);
+            app.config.globalProperties.$request = (handler, options) => Snowboard.request(handler, options);
+        },
+    });
 
     app.mount(element);
 });

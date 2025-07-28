@@ -1,7 +1,7 @@
 <div class="updates-app">
-    <plugin-market
+    <market-place
         search-string="<?= e(trans('system::lang.plugins.search')) ?>"
         upload-string="<?= e(trans('system::lang.plugins.upload')) ?>"
-    ></plugin-market>
+        mode="plugin"
+    ></market-place>
 </div>
-

@@ -1,38 +1,86 @@
 <template>
-    <div class="flex flex-col flex-grow">
-        <div class="flex flex-grow border border-gray-200 border-b-0 rounded-t-lg bg-white p-6">
-            <div class="flex w-full min-h-50 break-words">
-                <div class="w-2/7">
-                    <img :src="product.icon" :alt="product.name" class="rounded-md">
+    <div class="flex flex-col gap-4 bg-white p-4 shadow-sm rounded-3xl">
+        <div>
+            <div v-if="product.banner_image" class="bg-blue-100 rounded-3xl overflow-hidden aspect-video shadow-md">
+                <img :src="product.banner_image" :alt="`${product.name} Banner Image`" class="aspect-video">
+            </div>
+            <div v-else-if="product.image" class="bg-blue-100 rounded-3xl overflow-hidden aspect-video flex h-full justify-center">
+                <div class="rounded-3xl w-1/2 overflow-hidden m-auto">
+                    <img :src="product.image" :alt="`${product.name} Logo`" class="aspect-square">
                 </div>
-                <div class="pl-6 w-5/7 max-w-5/7 h-full">
-                    <p class="text-4xl text-blue-500">{{product.name}}</p>
-                    <p>{{product.description}}</p>
+            </div>
+            <div v-else class="bg-blue-100 rounded-3xl overflow-hidden aspect-video flex h-full justify-center">
+                <div class="flex rounded-3xl size-64 bg-blue-400 text-6xl items-center select-none cursor-default m-auto aspect-square">
+                    <span class="m-auto">{{product.name.substring(0, 1)}}</span>
                 </div>
             </div>
         </div>
-        <div class="flex justify-between border border-gray-200 border-t-0 rounded-b-lg p-6 bg-white">
-            <div class="my-auto">
-                <a :href="product.repository" target="_blank" rel="noopener" class="!text-gray-900 !no-underline">
-                    <div :title="`${numberFormat(product.favers)} GitHub Stars`" class="bg-yellow-400/20 hover:bg-yellow-400/40 border border-yellow-500 inline p-2 mr-1 rounded-xl">
-                        <span class="product-badge"><i class="icon-star"></i></span>
-                        {{counterNumber(product.favers)}}
-                    </div>
+        <div class="flex justify-between w-full mt-2">
+            <div>
+                <!-- @TODO: Add tippy -->
+                <a :href="product.repository_url"
+                   target="_blank"
+                   rel="noopener"
+                   :title="`${numberFormat(product.stars)} GitHub Stars`"
+                   class="group !no-underline text-2xl transition-all duration-300"
+                >
+                    <span class="text-gray-500 group-hover:text-gray-600"><i class="icon-star transition-all duration-300 group-hover:text-yellow-400 text-yellow-400/85 mr-1"></i> {{counterNumber(product.stars)}}</span>
                 </a>
-                <a :href="product.url" target="_blank" rel="noopener" class="!text-gray-900 !no-underline">
-                    <div :title="`${numberFormat(product.downloads)} Packagist Downloads`" class="bg-orange-400/20 hover:bg-orange-400/40 border border-orange-500 inline p-2 mx-1 rounded-xl">
-                        <span class="product-badge"><i class="icon-download"></i></span>
-                        {{counterNumber(product.downloads)}}
-                    </div>
+
+                <a :href="product.packagist_url"
+                   target="_blank"
+                   rel="noopener"
+                   :title="`${numberFormat(product.downloads)} Packagist Downloads`"
+                   class="group ml-6 !no-underline text-2xl transition-all duration-300"
+                >
+                    <span class="text-gray-500 group-hover:text-gray-600"><i class="icon-download transition-all duration-300 group-hover:text-orange-500 text-orange-500/85 mr-1"></i> {{counterNumber(product.downloads)}}</span>
                 </a>
             </div>
-            <div class="flex-inline text-right">
-                <button v-if="!product.installed && !installing"
-                        class="btn btn-info"
-                        @click="install()"
-                >Install</button>
+            <div>
+                <i v-if="product.translate_support"
+                    class="icon-language transition-all duration-300 hover:text-gray-900 hover:bg-blue-300 text-gray-700 bg-blue-200 p-3 rounded-full"
+                   title="Supports Translations!"
+                ></i>
+            </div>
+        </div>
+        <div>
+            <strong class="text-3xl">{{product.name}}</strong>
+        </div>
+        <div>
+            <strong class="text-gray-600 font-thin" v-html="product.description"></strong>
+        </div>
+        <div class="flex justify-between mt-auto">
+            <div class="flex flex-row">
+                <div class="rounded-full overflow-hidden aspect-square size-16">
+                    <img :src="product.author.image">
+                </div>
+                <div class="flex flex-col ml-3">
+                    <small>Author</small>
+                    <strong>{{product.author.name}}</strong>
+                </div>
+            </div>
+            <div>
+                <button v-if="!product.installed && !installing && product.price < 1"
+                        class="btn btn-outline-success rounded-3xl"
+                        v-on:click="install()"
+                >
+                    <i class="icon-download"></i> Install
+                </button>
+                <button v-else-if="!product.installed && !installing && product.price > 1"
+                        class="btn btn-outline-warning rounded-3xl"
+                        v-on:click="purchase()"
+                >
+                    <i class="icon-credit-card"></i> Purchase
+                </button>
+
                 <div v-if="installing" class="installing"></div>
-                <i v-if="product.installed" class="icon-check-circle-o text-green-400 text-4xl" :title="`This ${type} is installed.`"></i>
+
+                <a v-if="product.installed"
+                   :href="window.location.href.replace('/install', `/details/${product.code.toLowerCase().replace('.', '-')}`)"
+                   class="btn btn-outline-info"
+                >
+                    <i class="icon-eye"></i>  Details
+                </a>
             </div>
         </div>
     </div>
@@ -45,6 +93,13 @@ export default {
     data: () => {
         return {
             installing: false
+        }
+    },
+    computed: {
+        window: {
+            get() {
+                return window;
+            }
         }
     },
     methods: {
@@ -68,6 +123,9 @@ export default {
                     localStorage.winterInstalling = JSON.stringify(store);
                 }
             });
+        },
+        purchase() {
+            window.alert('TODO');
         }
     }
 };

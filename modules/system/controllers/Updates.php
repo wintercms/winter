@@ -103,7 +103,7 @@ class Updates extends Controller
             $this->bodyClass = 'compact-container breadcrumb-flush';
             $this->pageTitle = 'system::lang.plugins.install_products';
 
-            $this->addJs('/modules/system/assets/js/updates/install.js', 'core');
+//            $this->addJs('/modules/system/assets/js/updates/install.js', 'core');
             $this->addCss('/modules/system/assets/css/updates/install.css', 'core');
 
             $this->vars['activeTab'] = $tab ?: 'plugins';
