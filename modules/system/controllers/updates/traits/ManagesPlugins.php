@@ -332,7 +332,7 @@ trait ManagesPlugins
     public function onRemovePlugin(): RedirectResponse
     {
         if ($pluginCode = post('code')) {
-            PluginManager::instance()->deletePlugin($pluginCode);
+            PluginManager::instance()->uninstall($pluginCode);
             Flash::success(Lang::get('system::lang.plugins.remove_success'));
         }
 
