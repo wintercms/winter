@@ -288,7 +288,7 @@ export default {
                 stars: (a, b) => b.stars - a.stars,
             }[this.sort]);
         },
-        installPopup(installKey) {
+        installPopup(installKey, product) {
             // eslint-disable-next-line no-undef
             $.popup({
                 size: 'large updates-app installer-popup',
@@ -343,6 +343,12 @@ export default {
                         const store = JSON.parse(localStorage.winterInstalling);
                         store.splice(store.indexOf(installKey), 1);
                         localStorage.winterInstalling = JSON.stringify(store);
+
+                        // This is a little hack to fix the UI post install without reload.
+                        product.installing = false;
+                        product.product.installed = true;
+                        product.product.installed_ref = 'just-installed';
+                        product.product.latest_ref = 'just-installed';
 
                         return null;
                     },

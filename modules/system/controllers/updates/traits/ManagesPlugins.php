@@ -3,6 +3,7 @@
 namespace System\Controllers\Updates\Traits;
 
 use Backend\Widgets\Form;
+use Cms\Classes\ThemeManager;
 use Exception;
 use Illuminate\Console\OutputStyle;
 use Illuminate\Http\RedirectResponse;
@@ -246,15 +247,19 @@ trait ManagesPlugins
      *
      * @throws ApplicationException If validation fails or the plugin cannot be installed
      */
-    public function onInstallPlugin(): array
+    public function onInstallPackage(): array
     {
         if (!$code = trim(post('package'))) {
-            throw new ApplicationException(Lang::get('system::lang.install.missing_plugin_name'));
+            throw new ApplicationException(Lang::get('system::lang.install.missing_package_name'));
+        }
+
+        if (!($type = trim(post('type'))) || !in_array($type, ['plugin', 'theme', 'module'])) {
+            throw new ApplicationException(Lang::get('system::lang.install.invalid_package_type'));
         }
 
         $key = base64_encode($this->cachePrefix . Session::getId() . md5(time() . $code));
 
-        App::terminating(function () use ($code, $key) {
+        App::terminating(function () use ($code, $type, $key) {
             $output = new class extends BufferedOutput {
                 protected string $key;
 
@@ -271,13 +276,28 @@ trait ManagesPlugins
 
             $output->setKey($key);
 
-            PluginManager::instance()->setOutput(new OutputStyle(new ArrayInput([]), $output));
+            switch ($type) {
+                case 'plugin':
+                    PluginManager::instance()->setOutput(new OutputStyle(new ArrayInput([]), $output));
+                    break;
+                case 'theme':
+                    ThemeManager::instance()->setOutput(new OutputStyle(new ArrayInput([]), $output));
+                    break;
+            }
 
             try {
-                $response = (new ComposerSource(ExtensionSource::TYPE_PLUGIN, composerPackage: $code))
-                    ->install();
+                $response = (new ComposerSource(match ($type) {
+                    'plugin' => ExtensionSource::TYPE_PLUGIN,
+                    'theme' => ExtensionSource::TYPE_THEME,
+                    'module' => ExtensionSource::TYPE_MODULE,
+                }, composerPackage: $code))->install();
             } catch (\Throwable $e) {
                 $response = null;
+                Cache::put($key, Cache::get($key, '') . 'ERROR: ' . implode(PHP_EOL, [
+                    $e->getMessage(),
+                    $e->getFile() . '@' . $e->getLine(),
+                    $e->getTraceAsString(),
+                ]));
             } finally {
                 Cache::put($key, Cache::get($key, '') . 'FINISHED:' . ($response ? 'SUCCESS' : 'FAILED'));
             }
