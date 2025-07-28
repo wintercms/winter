@@ -51,7 +51,7 @@ trait AssetMaker
      * Outputs `<link>` and `<script>` tags to load assets previously added
      * with addJs, addCss, & addRss method calls depending on the provided $type
      */
-    public function makeAssets(string $type = null): ?string
+    public function makeAssets(?string $type = null): ?string
     {
         if ($type != null) {
             $type = strtolower($type);

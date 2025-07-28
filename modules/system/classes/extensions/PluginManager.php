@@ -1128,7 +1128,7 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
     /**
      * Returns the actively replaced plugins defined in $this->activeReplacementMap
      */
-    public function getActiveReplacementMap(PluginBase|string $plugin = null): array|string|null
+    public function getActiveReplacementMap(PluginBase|string|null $plugin = null): array|string|null
     {
         if ($plugin) {
             return $this->normalizedMap[

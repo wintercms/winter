@@ -30,6 +30,7 @@ _ide_helper.php
 # Other ignores
 .DS_Store
 package-lock.json
+.phpunit.cache
 /node_modules
 
 # Ignore generated public directory from `winter:mirror public`
