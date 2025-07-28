@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div v-else class="bg-blue-100 rounded-3xl overflow-hidden aspect-video flex h-full justify-center">
-                <div class="flex rounded-3xl size-64 bg-blue-400 text-6xl items-center select-none cursor-default m-auto aspect-square">
+                <div class="flex rounded-3xl size-38 bg-blue-400 text-6xl items-center select-none cursor-default m-auto aspect-square">
                     <span class="m-auto">{{product.name.substring(0, 1)}}</span>
                 </div>
             </div>

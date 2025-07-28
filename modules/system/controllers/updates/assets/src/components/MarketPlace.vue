@@ -50,7 +50,7 @@
                 </ul>
             </div>
         </div>
-        <div v-if="loaded" class="flex flex-row gap-6">
+        <div v-if="loaded" class="flex flex-row gap-6 max-w-[1325px] mx-auto">
             <div class="hidden-storm-fix xl:flex flex-col min-w-[225px] p-1">
                 <strong class="text-3xl pb-4">Categories</strong>
                 <ul>
