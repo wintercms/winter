@@ -104,7 +104,7 @@
                             <option :value="Number.MAX_SAFE_INTEGER">All</option>
                         </select>
                     </div>
-                    <Pagination v-model:page="page" :items="results.length" :per-page="perPage"></Pagination>
+                    <Pagination v-model:page="page" :items="results.length" :per-page="perPage" :element-count="9"></Pagination>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 mb-10">
                     <Product v-for="product in pageProducts" :product="product" :type="this.mode"></Product>

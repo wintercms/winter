@@ -28,7 +28,7 @@
 </template>
 <script>
 export default {
-    props: ['page', 'items', 'perPage'],
+    props: ['page', 'items', 'perPage', 'elementCount'],
     computed: {
         hasBack: {
             get() {
@@ -51,7 +51,6 @@ export default {
                     return null;
                 }
 
-                const totalSegments = 9;
                 const pages = [];
                 const current = this.page;
                 const last = this.lastPage;
@@ -86,15 +85,15 @@ export default {
 
                 pages.push(last);
 
-                if (pages.length < totalSegments) {
+                if (pages.length < this.elementCount) {
                     if (pages[pages.length - 2] === last - 1) {
-                        for (let i = last - 2; pages.length < totalSegments && i > 3; i--) {
+                        for (let i = last - 2; pages.length < this.elementCount && i > 3; i--) {
                             if (!pages.includes(i)) {
                                 pages.splice(2, 0, i);
                             }
                         }
                     } else {
-                        for (let i = 2; pages.length < totalSegments && i < last; i++) {
+                        for (let i = 2; pages.length < this.elementCount && i < last; i++) {
                             if (!pages.includes(i)) {
                                 let back = 2 + (pages[pages.length - 1] === '...' ? 1 : 0);
                                 pages.splice(pages.length - back, 0, i);
