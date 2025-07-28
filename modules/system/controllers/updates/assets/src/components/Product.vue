@@ -2,10 +2,10 @@
     <div class="flex flex-col gap-4 bg-white p-4 shadow-sm rounded-3xl">
         <div class="relative">
             <div v-if="product.installed && product.installed_ref !== product.latest_ref"
-                 class="group flex flex-row absolute right-3 top-3 bg-yellow-100 text-orange-300 rounded-full py-2 px-3 cursor-pointer gap-0 hover:gap-4 transition-[width] duration-300 items-center align-center"
+                 class="group flex flex-row absolute right-3 top-3 bg-yellow-100 text-orange-400/80 rounded-full py-2 px-3 cursor-pointer gap-0 hover:gap-4 transition-[width] ease-in-out duration-300 items-center align-center overflow-hidden"
             >
-                <span class="opacity-0 w-6 group-hover:flex group-hover:pr-9 group-hover:opacity-100 group-hover:w-full duration-300 text-nowrap">Update available</span>
-                <i class="absolute right-3 icon icon-circle-exclamation justify-self-end !mt-[-1px]"></i>
+                <span class="opacity-0 w-6 group-hover:flex group-hover:pr-9 group-hover:opacity-100 group-hover:w-50 duration-300 text-nowrap">Update available</span>
+                <i class="absolute size-6 right-0 pr-3 icon icon-circle-exclamation bg-yellow-100 p-1 justify-self-end !mt-[-1px]"></i>
             </div>
 
             <div v-if="product.banner_image" class="bg-blue-100 rounded-3xl overflow-hidden aspect-video shadow-md">
