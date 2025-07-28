@@ -379,8 +379,8 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
             if ($plugin->getComposerPackageName()) {
                 if (isset($composerUpdates[$plugin->getComposerPackageName()])) {
                     $updates[$plugin->getPluginIdentifier()] = [
-                        'from' => $composerUpdates[$plugin->getComposerPackageName()][0],
-                        'to' => $composerUpdates[$plugin->getComposerPackageName()][1],
+                        'package_name' => $plugin->getComposerPackageName(),
+                        ...$composerUpdates[$plugin->getComposerPackageName()],
                     ];
                 }
                 continue;

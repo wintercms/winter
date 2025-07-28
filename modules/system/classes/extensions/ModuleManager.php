@@ -258,8 +258,8 @@ class ModuleManager extends ExtensionManager implements ExtensionManagerInterfac
             }
 
             $updates[$module->getIdentifier()] = [
-                'from' => $composerUpdates[$module->getComposerPackageName()][0],
-                'to' => $composerUpdates[$module->getComposerPackageName()][1],
+                'package_name' => $module->getComposerPackageName(),
+                ...$composerUpdates[$module->getComposerPackageName()],
             ];
         }
 

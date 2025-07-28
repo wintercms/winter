@@ -227,46 +227,21 @@ class Updates extends Controller
     public function onCheckForUpdates(): array
     {
         try {
-            $updates = UpdateManager::instance()->availableUpdates();
+            $this->vars['updates'] = UpdateManager::instance()->availableUpdates();
 
-            $this->vars['core'] = $updates['modules'] ? [
-                'updates' => $updates['modules'],
-                'isImportant' => true
-            ] : false;
+            $this->vars['hasImportantUpdates'] = !!count($this->vars['updates']['modules']);
 
-            $this->vars['pluginList'] = $updates['plugins']
-                ? array_reduce(array_keys($updates['plugins']), function (array $carry, string $code) use ($updates) {
-                    $carry[$code] = array_merge(PluginManager::instance()->get($code)->pluginDetails(), [
-                        'isImportant' => false,
-                        'old_version' => $updates['plugins'][$code]['from'],
-                        'new_version' => $updates['plugins'][$code]['to'],
-                    ]);
-                    return $carry;
-                }, [])
-                : false;
-
-            $this->vars['themeList'] = $updates['themes']
-                ? array_reduce(array_keys($updates['themes']), function (array $carry, string $code) use ($updates) {
-                    $theme = ThemeManager::instance()->get($code);
-                    $carry[$code] = [
-                        'name' => $theme['name'],
-                        'isImportant' => false,
-                        'old_version' => $updates['themes'][$code]['from'],
-                        'new_version' => $updates['themes'][$code]['to'],
-                    ];
-                    return $carry;
-                }, [])
-                : false;
-
-            $this->vars['hasImportantUpdates'] = !!count($updates['modules']);
-
-            $this->vars['hasUpdates'] = $this->vars['core'] || $this->vars['pluginList'] || $this->vars['themeList'];
+            $this->vars['hasUpdates'] = $this->vars['updates']['modules']
+                || $this->vars['updates']['plugins']
+                || $this->vars['updates']['themes'];
         }
         catch (Exception $ex) {
             $this->handleError($ex);
         }
 
-        return ['#updateContainer' => $this->makePartial('update_list')];
+        return [
+            '#updateContainer' => $this->makePartial('update_list')
+        ];
     }
 
     /**
