@@ -20,4 +20,6 @@
 .control-tabs.content-tabs > ul.nav-tabs li.active a {
     background: #f9f9f9;
 }
-
+.updates-app .modal-content {
+    @apply rounded-3xl shadow-sm;
+}

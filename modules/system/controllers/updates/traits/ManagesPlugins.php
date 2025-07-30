@@ -322,6 +322,7 @@ trait ManagesPlugins
 
         return [
             'done' => !$data || str_contains($data, 'FINISHED:SUCCESS') || str_contains($data, 'FINISHED:FAILED'),
+            'success' => str_contains($data, 'FINISHED:SUCCESS'),
             'data' => $data
         ];
     }

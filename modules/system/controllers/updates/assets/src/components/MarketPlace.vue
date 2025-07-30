@@ -126,8 +126,9 @@
     </div>
 </template>
 <script>
-import Pagination from "~system/controllers/updates/assets/src/components/Pagination.vue";
+import Pagination from "./Pagination.vue";
 import Product from "./Product.vue";
+import { prepareMessage } from "../utils/message";
 
 export default {
     components: {Pagination, Product},
@@ -294,13 +295,12 @@ export default {
             }[this.sort]);
         },
         installPopup(installKey, product) {
-            // eslint-disable-next-line no-undef
-            $.popup({
-                size: 'large updates-app installer-popup',
+            this.$popup({
+                size: 'large updates-app installer-popup font-sans',
                 content: `
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Installing...</h4>
+                        <h4 class="modal-title">Installing <strong>${product.product.name}</strong> by <strong>${product.product.author.name}</strong></h4>
                     </div>
                     <div class="modal-body"></div>
                     <div class="modal-footer">
@@ -310,28 +310,6 @@ export default {
             });
 
             const popup = document.querySelector('.installer-popup .modal-body');
-            const prepareMessage = (str) => `<div class="p-2 mb-2 rounded bg-gray-800 text-gray-100">${
-                str.split('\n').filter((line) => (line.indexOf('FINISHED:') === 0 ? false : !!line)).map((entry) => {
-                    let line = entry;
-                    ['INFO', 'ERROR'].forEach((status) => {
-                        if (line.indexOf(status) === 0) {
-                            line = `<span class="${status === 'INFO' ? 'text-green-500' : 'text-red-500'}">${status}</span> ${line.substring(status.length + 1)}`;
-                        }
-                    });
-
-                    let search = line.match(/^[\d].*: /);
-                    if (search) {
-                        line = `<span class="text-blue-400">${search[0].replace(':', '').trim()}</span>:${line.substring(search[0].length + 1)}`;
-                    }
-
-                    search = line.match(/\.*?[\d][\w]*DONE$/);
-                    if (search) {
-                        line = `${line.substring(0, line.length - search[0].length)} <span class="text-yellow-600">${search[0].match(/\.*?[\d][\w]*DONE$/)[0].replace(/\.*/, '').replace('DONE', '')}</span>`;
-                    }
-
-                    return `<pre>${line}</pre>`;
-                }).join('\n')
-            }</div>`;
 
             const checkStatus = () => {
                 this.$request('onInstallProductStatus', {
@@ -351,9 +329,14 @@ export default {
 
                         // This is a little hack to fix the UI post install without reload.
                         product.installing = false;
-                        product.product.installed = true;
-                        product.product.installed_ref = 'just-installed';
-                        product.product.latest_ref = 'just-installed';
+                        if (statusResponse.success) {
+                            product.product.installed = true;
+                            product.product.installed_ref = 'just-installed';
+                            product.product.latest_ref = 'just-installed';
+                        } else {
+                            product.product.failedInstall = true;
+                        }
+
 
                         return null;
                     },

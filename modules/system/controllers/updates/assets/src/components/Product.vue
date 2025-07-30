@@ -5,7 +5,7 @@
                  class="group flex flex-row absolute right-3 top-3 bg-yellow-100 text-orange-400/80 rounded-full py-2 px-3 cursor-pointer gap-0 hover:gap-4 transition-[width] ease-in-out duration-300 items-center align-center overflow-hidden"
             >
                 <span class="opacity-0 w-6 group-hover:flex group-hover:pr-9 group-hover:opacity-100 group-hover:w-50 duration-300 text-nowrap">Update available</span>
-                <i class="absolute size-6 right-0 pr-3 icon icon-circle-exclamation bg-yellow-100 p-1 justify-self-end !mt-[-1px]"></i>
+                <i class="absolute size-6 right-0 pr-3 icon icon-circle-exclamation bg-yellow-100 p-1 justify-self-end"></i>
             </div>
 
             <div v-if="product.banner_image" class="bg-blue-100 rounded-3xl overflow-hidden aspect-video shadow-md">
@@ -28,7 +28,7 @@
                 <a :href="product.repository_url"
                    target="_blank"
                    rel="noopener"
-                   :title="`${numberFormat(product.stars)} GitHub Stars`"
+                   v-tippy="`${numberFormat(product.stars)} GitHub Stars`"
                    class="group !no-underline text-2xl transition-all duration-300"
                 >
                     <span class="text-gray-500 group-hover:text-gray-600"><i class="icon-star transition-all duration-300 group-hover:text-yellow-400 text-yellow-400/85 mr-1"></i> {{counterNumber(product.stars)}}</span>
@@ -37,7 +37,7 @@
                 <a :href="product.packagist_url"
                    target="_blank"
                    rel="noopener"
-                   :title="`${numberFormat(product.downloads)} Packagist Downloads`"
+                   v-tippy="`${numberFormat(product.downloads)} Packagist Downloads`"
                    class="group ml-6 !no-underline text-2xl transition-all duration-300"
                 >
                     <span class="text-gray-500 group-hover:text-gray-600"><i class="icon-download transition-all duration-300 group-hover:text-orange-500 text-orange-500/85 mr-1"></i> {{counterNumber(product.downloads)}}</span>
@@ -45,8 +45,8 @@
             </div>
             <div>
                 <i v-if="product.translate_support"
-                    class="icon-language transition-all duration-300 hover:text-gray-900 hover:bg-blue-300 text-gray-700 bg-blue-200 p-3 rounded-full"
-                   title="Supports Translations!"
+                   class="icon-language transition-all duration-300 hover:text-gray-900 hover:bg-blue-300 text-gray-700 bg-blue-200 p-3 rounded-full"
+                   v-tippy="`Supports Translations!`"
                 ></i>
             </div>
         </div>
@@ -66,7 +66,12 @@
                     <strong>{{product.author.name}}</strong>
                 </div>
             </div>
-            <div>
+            <div v-if="product.failedInstall">
+                <div class="flex h-full items-center mt-1 mr-2">
+                    <i class="icon icon-times size-10 text-4xl text-red-400"></i>
+                </div>
+            </div>
+            <div v-else>
                 <button v-if="!product.installed && !installing && product.price < 1"
                         class="btn btn-outline-success rounded-3xl"
                         v-on:click="install()"
