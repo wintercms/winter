@@ -109,6 +109,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 mb-10">
                     <Product v-for="product in pageProducts" :product="product" :type="this.mode"></Product>
                 </div>
+                <div class="flex items-center mb-10">
+                    <div class="mx-auto">
+                        <Pagination v-model:page="page" :items="results.length" :per-page="perPage" :element-count="9"></Pagination>
+                    </div>
+                </div>
             </div>
         </div>
         <div v-else class="flex flex-col w-full h-64 justify-center items-center">
