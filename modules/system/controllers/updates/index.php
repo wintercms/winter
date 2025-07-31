@@ -2,7 +2,7 @@
     <div class="bg-blue-100 shadow-sm mb-4">
         <div class="flex flex-row gap-4 max-w-[1325px] bg-white mx-auto font-sans">
             <div class="w-full">
-                <div class="flex flex-wrap gap-8 bg-blue-100 py-12 px-2">
+                <div class="flex flex-wrap gap-8 bg-blue-100 py-12 px-10">
                     <div class="title-value w-full-storm-fix sm:w-1/3 lg:w-2/8 bg-white p-6 rounded-3xl border border-blue-200 shadow-sm">
                         <h4><?= e(trans('system::lang.project.name')) ?></h4>
                         <?php if ($projectId): ?>
@@ -80,127 +80,127 @@
             <?php endif ?>
         </div>
     </div>
-    <div class="w-full bg-white py-6 px-8 -my-4">
-        <div data-control="toolbar" class="mx-6">
-            <a
-                href="javascript:;"
-                class="btn btn-outline-primary wn-icon-refresh"
-                data-control="popup"
-                data-handler="onLoadUpdates">
-                <?= e(trans('system::lang.updates.check_label')) ?>
-            </a>
-            <a
-                href="<?= Backend::url('system/updates/install') ?>"
-                class="btn btn-outline-success wn-icon-plus">
-                <?= e(trans('system::lang.plugins.install')) ?>
-            </a>
-            <div class="btn-group dropdown dropdown-fixed">
-                <button
-                    data-primary-button
-                    type="button"
-                    class="btn btn-default wn-icon-caret-down dropdown-toggle"
-                    data-toggle="dropdown"
-                    data-trigger-action="enable"
-                    data-trigger=".control-list .list-checkbox input[type=checkbox]"
-                    data-trigger-condition="checked"
-                    data-request-success="$(this).prop('disabled', true).next().prop('disabled', true)">
-                    <?= e(trans('system::lang.plugins.select_label')) ?>
-                </button>
 
-                <ul class="dropdown-menu" data-dropdown-title="<?= e(trans('system::lang.plugins.bulk_actions_label')) ?>">
-                    <li>
-                        <a href="javascript:;" class="wn-icon-pause"
-                           data-request="onBulkAction"
-                           onclick="$(this).data('request-data', {
-                                action: 'freeze',
-                                checked: $('.control-list').listWidget('getChecked')
-                            })"
-                           data-request-update="list_manage_toolbar: '#plugin-toolbar'"
-                           data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.freeze'))])) ?>"
-                           data-stripe-load-indicator>
-                            <?= e(trans('system::lang.plugins.freeze_label')) ?>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;" class="wn-icon-play"
-                           data-request="onBulkAction"
-                           onclick="$(this).data('request-data', {
-                                action: 'unfreeze',
-                                checked: $('.control-list').listWidget('getChecked')
-                            })"
-                           data-request-update="list_manage_toolbar: '#plugin-toolbar'"
-                           data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.unfreeze'))])) ?>"
-                           data-stripe-load-indicator>
-                            <?= e(trans('system::lang.plugins.unfreeze_label')) ?>
-                        </a>
-                    </li>
-                    <li role="separator" class="divider"></li>
-                    <li>
-                        <a href="javascript:;" class="wn-icon-ban"
-                           data-request="onBulkAction"
-                           onclick="$(this).data('request-data', {
-                                action: 'disable',
-                                checked: $('.control-list').listWidget('getChecked')
-                            })"
-                           data-request-update="list_manage_toolbar: '#plugin-toolbar'"
-                           data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.disable'))])) ?>"
-                           data-stripe-load-indicator>
-                            <?= e(trans('system::lang.plugins.disable_label')) ?>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="javascript:;" class="wn-icon-check"
-                           data-request="onBulkAction"
-                           onclick="$(this).data('request-data', {
-                                action: 'enable',
-                                checked: $('.control-list').listWidget('getChecked')
-                            })"
-                           data-request-update="list_manage_toolbar: '#plugin-toolbar'"
-                           data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.enable'))])) ?>"
-                           data-stripe-load-indicator>
-                            <?= e(trans('system::lang.plugins.enable_label')) ?>
-                        </a>
-                    </li>
-                    <?php if (\Config::get('app.debug', false) && \BackendAuth::getUser()->is_superuser): ?>
-                        <li role="separator" class="divider"></li>
-                        <li>
-                            <a href="javascript:;" class="wn-icon-bomb"
-                               data-request="onBulkAction"
-                               onclick="$(this).data('request-data', {
-                                    action: 'refresh',
+    <div class="w-full flex">
+        <div class="w-full m-8 p-4 bg-white border border-blue-200 rounded-3xl shadow-sm">
+            <div class="w-full pb-6 pt-4 px-4">
+                <div class="flex flex-col lg:flex-row gap-4">
+                    <a
+                        href="javascript:;"
+                        class="btn btn-outline-primary wn-icon-refresh"
+                        data-control="popup"
+                        data-handler="onLoadUpdates">
+                        <?= e(trans('system::lang.updates.check_label')) ?>
+                    </a>
+                    <a
+                        href="<?= Backend::url('system/updates/install') ?>"
+                        class="btn btn-outline-success wn-icon-plus">
+                        <?= e(trans('system::lang.plugins.install')) ?>
+                    </a>
+                    <div class="btn-group dropdown dropdown-fixed w-full-storm-fix lg:w-auto">
+                        <button
+                            data-primary-button
+                            type="button"
+                            class="btn btn-default wn-icon-caret-down dropdown-toggle"
+                            data-toggle="dropdown"
+                            data-trigger-action="enable"
+                            data-trigger=".control-list .list-checkbox input[type=checkbox]"
+                            data-trigger-condition="checked"
+                            data-request-success="$(this).prop('disabled', true).next().prop('disabled', true)">
+                            <?= e(trans('system::lang.plugins.select_label')) ?>
+                        </button>
+
+                        <ul class="dropdown-menu" data-dropdown-title="<?= e(trans('system::lang.plugins.bulk_actions_label')) ?>">
+                            <li>
+                                <a href="javascript:;" class="wn-icon-pause"
+                                   data-request="onBulkAction"
+                                   onclick="$(this).data('request-data', {
+                                    action: 'freeze',
                                     checked: $('.control-list').listWidget('getChecked')
                                 })"
-                               data-request-update="list_manage_toolbar: '#plugin-toolbar'"
-                               data-request-confirm="<?= e(trans('system::lang.plugins.refresh_confirm')) ?>"
-                               data-stripe-load-indicator>
-                                <?= e(trans('system::lang.plugins.refresh_label')) ?>
-                            </a>
-                        </li>
-                    <?php endif; ?>
-                </ul>
+                                   data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.freeze'))])) ?>"
+                                   data-stripe-load-indicator>
+                                    <?= e(trans('system::lang.plugins.freeze_label')) ?>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" class="wn-icon-play"
+                                   data-request="onBulkAction"
+                                   onclick="$(this).data('request-data', {
+                                    action: 'unfreeze',
+                                    checked: $('.control-list').listWidget('getChecked')
+                                })"
+                                   data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.unfreeze'))])) ?>"
+                                   data-stripe-load-indicator>
+                                    <?= e(trans('system::lang.plugins.unfreeze_label')) ?>
+                                </a>
+                            </li>
+                            <li role="separator" class="divider"></li>
+                            <li>
+                                <a href="javascript:;" class="wn-icon-ban"
+                                   data-request="onBulkAction"
+                                   onclick="$(this).data('request-data', {
+                                    action: 'disable',
+                                    checked: $('.control-list').listWidget('getChecked')
+                                })"
+                                   data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.disable'))])) ?>"
+                                   data-stripe-load-indicator>
+                                    <?= e(trans('system::lang.plugins.disable_label')) ?>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:;" class="wn-icon-check"
+                                   data-request="onBulkAction"
+                                   onclick="$(this).data('request-data', {
+                                    action: 'enable',
+                                    checked: $('.control-list').listWidget('getChecked')
+                                })"
+                                   data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.enable'))])) ?>"
+                                   data-stripe-load-indicator>
+                                    <?= e(trans('system::lang.plugins.enable_label')) ?>
+                                </a>
+                            </li>
+                            <?php if (\Config::get('app.debug', false) && \BackendAuth::getUser()->is_superuser): ?>
+                                <li role="separator" class="divider"></li>
+                                <li>
+                                    <a href="javascript:;" class="wn-icon-bomb"
+                                       data-request="onBulkAction"
+                                       onclick="$(this).data('request-data', {
+                                        action: 'refresh',
+                                        checked: $('.control-list').listWidget('getChecked')
+                                    })"
+                                       data-request-confirm="<?= e(trans('system::lang.plugins.refresh_confirm')) ?>"
+                                       data-stripe-load-indicator>
+                                        <?= e(trans('system::lang.plugins.refresh_label')) ?>
+                                    </a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
+                    </div>
+                    <div class="btn-group">
+                        <button
+                            class="btn btn-danger wn-icon-trash-o"
+                            disabled="disabled"
+                            data-request="onBulkAction"
+                            onclick="$(this).data('request-data', {
+                            action: 'remove',
+                            checked: $('.control-list').listWidget('getChecked')
+                        })"
+                            data-request-confirm="<?= e(trans('system::lang.plugins.remove_confirm')) ?>"
+                            data-trigger-action="enable"
+                            data-trigger=".control-list .list-checkbox input[type=checkbox]"
+                            data-trigger-condition="checked"
+                            data-request-success="$(this).closest('.btn-group').find('button').prop('disabled', true)"
+                            data-stripe-load-indicator>
+                            <?= e(trans('system::lang.plugins.remove')) ?>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <div class="btn-group">
-                <button
-                    class="btn btn-danger wn-icon-trash-o"
-                    disabled="disabled"
-                    data-request="onBulkAction"
-                    onclick="$(this).data('request-data', {
-                        action: 'remove',
-                        checked: $('.control-list').listWidget('getChecked')
-                    })"
-                    data-request-update="list_manage_toolbar: '#plugin-toolbar'"
-                    data-request-confirm="<?= e(trans('system::lang.plugins.remove_confirm')) ?>"
-                    data-trigger-action="enable"
-                    data-trigger=".control-list .list-checkbox input[type=checkbox]"
-                    data-trigger-condition="checked"
-                    data-request-success="$(this).closest('.btn-group').find('button').prop('disabled', true)"
-                    data-stripe-load-indicator>
-                    <?= e(trans('system::lang.plugins.remove')) ?>
-                </button>
+            <?php // @TODO: Fix ?>
+            <div class="table-fancy">
+                <?php $str = $this->listRender(); echo str_replace('data-control="rowlink"', '', $str); ?>
             </div>
         </div>
-    </div>
-    <div class="w-full mt-4">
-        <?= $this->listRender(); ?>
     </div>
 </div>

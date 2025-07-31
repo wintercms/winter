@@ -7,3 +7,5 @@ list: ~/modules/system/models/pluginversion/columns.yaml
 modelClass: System\Models\PluginVersion
 noRecordsMessage: backend::lang.list.no_records
 showCheckboxes: true
+recordUrl: null
+recordOnClick: false

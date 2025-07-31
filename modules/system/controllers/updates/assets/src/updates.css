@@ -23,3 +23,22 @@
 .updates-app .modal-content {
     @apply rounded-3xl shadow-sm;
 }
+
+.updates-app .table-fancy {
+    table.table.data {
+        @apply !border-blue-200;
+    }
+    table.table.data thead tr th {
+        @apply border-0
+    }
+    table.table.data thead th {
+        @apply !border-t-0 !border-b-1 !border-blue-200
+    }
+    table.table.data {
+        @apply !border-b-0
+    }
+    table.table.data .list-checkbox {
+        @apply !border-r-blue-200;
+    }
+}
+

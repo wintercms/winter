@@ -34,16 +34,6 @@ trait ManagesPlugins
 {
     public string $cachePrefix = 'winter-x-install-';
 
-    /**
-     * Plugin manage controller
-     */
-    public function manage(): void
-    {
-        $this->pageTitle = 'system::lang.plugins.manage';
-        PluginManager::instance()->clearFlagCache();
-        $this->asExtension('ListController')->index();
-    }
-
     public function details($urlCode = null, $tab = null): void
     {
         try {
