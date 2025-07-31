@@ -312,6 +312,8 @@ return [
         'plugin_author' => 'Author',
         'plugin_not_found' => 'Plugin not found',
         'plugin_version_not_found' => 'Plugin version not found',
+        'plugin_details' => 'Plugin Details',
+        'plugin_view_details' => 'View',
         'core_current_build' => 'Current build',
         'core_view_changelog' => 'View Changelog',
         'core_build' => 'Build :build',

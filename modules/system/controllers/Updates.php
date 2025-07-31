@@ -45,8 +45,7 @@ class Updates extends Controller
      * @var array `ListController` configuration.
      */
     public $listConfig = [
-        'list' => 'config_list.yaml',
-        'manage' => 'config_manage_list.yaml'
+        'list' => 'config_list.yaml'
     ];
 
     /**
@@ -86,6 +85,7 @@ class Updates extends Controller
         $this->vars['projectOwner'] = Parameter::get('system::project.owner');
         $this->vars['pluginsActiveCount'] = PluginVersion::applyEnabled()->count();
         $this->vars['pluginsCount'] = PluginVersion::count();
+        $this->vars['plugins'] = PluginVersion::all();
         $this->asExtension('ListController')->index();
     }
 

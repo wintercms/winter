@@ -5,6 +5,7 @@ export default {
     important: '.updates-app',
     content: [
         './components/**/*.{vue}',
+        '../../../**/*.php'
     ],
     plugins: [forms],
     corePlugins: {
