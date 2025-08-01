@@ -1246,6 +1246,14 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
      */
     public function freezePlugin(PluginBase|string $plugin): void
     {
+        if (!$plugin instanceof PluginVersion) {
+            $plugin = $this->get($plugin);
+        }
+
+        if ($package = $plugin->getComposerPackage()) {
+            Composer::setPackageRequirement($package['name'], $package['versions'][0] ?? '*');
+        }
+
         $record = $this->getPluginRecord($plugin);
         $record->is_frozen = true;
         $record->save();
@@ -1256,6 +1264,17 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
      */
     public function unfreezePlugin(PluginBase|string $plugin): void
     {
+        if (!$plugin instanceof PluginVersion) {
+            $plugin = $this->get($plugin);
+        }
+
+        if ($package = $plugin->getComposerPackage()) {
+            Composer::setPackageRequirement(
+                $package['name'],
+                Composer::require($package['name'], dryRun: true, returnRequired: true)
+            );
+        }
+
         $record = $this->getPluginRecord($plugin);
         $record->is_frozen = false;
         $record->save();
