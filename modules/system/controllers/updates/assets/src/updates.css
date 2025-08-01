@@ -34,6 +34,9 @@
     table.table.data thead th {
         @apply !border-t-0 !border-b-1 !border-blue-200
     }
+    table.table.data thead th:first-child {
+        @apply border-r-1;
+    }
     table.table.data {
         @apply !border-b-0
     }
