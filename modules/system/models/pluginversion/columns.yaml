@@ -7,6 +7,7 @@ columns:
     name:
         label: system::lang.updates.plugin_name
         sortable: false
+        type: partial
 
     description:
         label: system::lang.updates.plugin_description
@@ -15,6 +16,8 @@ columns:
     version:
         label: system::lang.updates.plugin_version
         sortable: false
+        type: partial
+        path: version
 
     author:
         label: system::lang.updates.plugin_author

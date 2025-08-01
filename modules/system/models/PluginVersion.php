@@ -71,6 +71,8 @@ class PluginVersion extends Model
      */
     public $homepage;
 
+    public $latest;
+
     /**
      * The accessors to append to the model's array form.
      * @var array

@@ -305,6 +305,8 @@ return [
         'return_link' => 'Return to system updates',
         'check_label' => 'Check for updates',
         'retry_label' => 'Try again',
+        'plugin_management' => 'Plugin Management',
+        'plugin_management_description' => 'Manage your installed plugins and their settings.',
         'plugin_name' => 'Name',
         'plugin_code' => 'Code',
         'plugin_description' => 'Description',

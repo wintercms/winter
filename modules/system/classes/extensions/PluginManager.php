@@ -380,6 +380,7 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
                 if (isset($composerUpdates[$plugin->getComposerPackageName()])) {
                     $updates[$plugin->getPluginIdentifier()] = [
                         'package_name' => $plugin->getComposerPackageName(),
+                        'icon' => $plugin->pluginDetails()['icon'] ?? 'icon-puzzle-piece',
                         ...$composerUpdates[$plugin->getComposerPackageName()],
                     ];
                 }
