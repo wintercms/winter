@@ -112,6 +112,7 @@ class ModuleManager extends ExtensionManager implements ExtensionManagerInterfac
                     ));
 
                     Preserver::instance()->store($extension);
+                    // @TODO: Make this not dry run
                     $update = Composer::update(dryRun: true, package: $composerPackage);
 
                     $versions = $update->getUpgraded()[$composerPackage] ?? null;
