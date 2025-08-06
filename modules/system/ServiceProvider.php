@@ -101,7 +101,7 @@ class ServiceProvider extends ModuleServiceProvider implements WinterExtension
          */
         if ($this->app->runningInConsole()) {
             Command::extend(function (Command $command) {
-                $command->bindEvent('beforeRun', function () use ($command) {
+                $command->bindEvent('command.beforeRun', function () use ($command) {
                     ModuleManager::instance()->setOutput($command->getOutput());
                     PluginManager::instance()->setOutput($command->getOutput());
                 });
