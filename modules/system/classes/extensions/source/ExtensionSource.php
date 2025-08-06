@@ -129,6 +129,7 @@ class ExtensionSource
 
                 $manager->renderComponent(Info::class, 'Composer require complete.');
 
+                // @TODO: Handle other return types better
                 $path = Composer::show(package: $this->composerPackage)->getPath();
                 $this->path = $this->relativePath($path);
                 $this->source = static::SOURCE_LOCAL;
