@@ -20,7 +20,8 @@ class WinterUp extends Command implements Isolatable
      * @var string
      */
     protected $signature = 'winter:up
-                            {--seed : Included for compatibility with Laravel default signature, no effect at this time}';
+                            {--seed : Included for compatibility with Laravel default signature, no effect at this time}
+                            {--connection= : The database connection to use}';
 
     /**
      * The console command description.
@@ -47,6 +48,7 @@ class WinterUp extends Command implements Isolatable
 
         UpdateManager::instance()
             ->setNotesOutput($this->output)
+            ->setConnection($this->option('connection'))
             ->update();
     }
 }
