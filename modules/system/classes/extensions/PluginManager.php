@@ -1271,7 +1271,7 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
         if ($package = $plugin->getComposerPackage()) {
             Composer::setPackageRequirement(
                 $package['name'],
-                Composer::require($package['name'], dryRun: true, returnRequired: true)
+                Composer::getLatestSupportedVersion(package: $package['name'])
             );
         }
 
