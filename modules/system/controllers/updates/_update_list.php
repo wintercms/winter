@@ -34,7 +34,7 @@
         </button>
     </div>
 <?php else: ?>
-    <div class="modal-body">
+    <div class="modal-body updates-app">
         <p>
             <strong><?= e(trans('system::lang.updates.found.label')) ?></strong>
             <?= e(trans('system::lang.updates.found.help')) ?>
@@ -61,11 +61,14 @@
                         </div>
                         <dl>
                             <?php foreach ($updates['modules'] as $module => $versions): ?>
-                                <dt><strong><?= e($module) ?></strong></dt>
-                                <dd class="w-full">
-                                    <span class="mark"><?= e(rtrim($versions['from'], '.0')) ?></span>
+                                <dt class="block w-full">
+                                    <strong><?= e($module) ?></strong>
+                                </dt>
+                                <dd class="flex items-center font-mono gap-4">
+
+                                    <span class="bg-gray-200 rounded-full px-3 pt-2 pb-1 text-2xl"><?= e(rtrim($versions['from'], '.0')) ?></span>
                                     <i class="icon icon-arrow-right"></i>
-                                    <span class="mark">
+                                    <span class="bg-blue-200 rounded-full px-3 pt-2 pb-1 text-2xl">
                                         <?= e(rtrim($versions['to'], '.0')) ?>
                                         <small style="font-family: monospace;">(<?= e(substr($versions['ref'] ?? '', 0, 7)) ?>)</small>
                                     </span>
@@ -109,19 +112,28 @@
                                 </div>
                             <?php endif ?>
                             <h5>
-                                <i class="<?= e($plugin['icon'] ?? 'icon-puzzle-piece') ?>"></i>
+                                <i class="<?= e($versions['icon'] ?? 'icon-puzzle-piece') ?>"></i>
                                 <?= e($plugin) ?>
                             </h5>
                         </div>
-                        <dl>
-                            <dt><strong><?= e($plugin) ?></strong></dt>
-                            <dd class="w-full">
-                                <span class="mark"><?= e(rtrim($versions['from'], '.0')) ?></span>
+                        <dl class="flex justify-between items-center">
+                            <dd class="flex items-center font-mono gap-4">
+                                <span class="bg-gray-200 rounded-full px-3 pt-2 pb-1 text-2xl"><?= e(rtrim($versions['from'], '.0')) ?></span>
+
                                 <i class="icon icon-arrow-right"></i>
-                                <span class="mark">
+
+                                <span class="bg-blue-200 rounded-full px-3 pt-2 pb-1 text-2xl">
                                     <?= e(rtrim($versions['to'], '.0')) ?>
                                     <small style="font-family: monospace;">(<?= e(substr($versions['ref'] ?? '', 0, 7)) ?>)</small>
                                 </span>
+                            </dd>
+                            <dd>
+                                <div>
+                                    <div class="checkbox custom-checkbox nolabel">
+                                        <input type="checkbox" name="checked[]" id="updates-checkbox-<?= $plugin ?>" value="2" autocomplete="off">
+                                        <label for="updates-checkbox-<?= $plugin ?>">Check</label>
+                                    </div>
+                                </div>
                             </dd>
                         </dl>
 
@@ -158,14 +170,6 @@
         </button>
     </div>
     <?php /* @TODO: Move this */ ?>
-    <style>
-        .mark {
-            background: #0a53be;
-            color: white;
-            padding: 3px;
-            border-radius: 3px;
-        }
-    </style>
 <?php endif ?>
 
 
