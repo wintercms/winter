@@ -23,7 +23,6 @@ use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use System\Classes\CombineAssets;
 use Winter\Storm\Console\Command;
-use Winter\Storm\Foundation\Extension\WinterExtension;
 use System\Classes\MarkupManager;
 use System\Classes\SettingsManager;
 use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
@@ -31,7 +30,7 @@ use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\ModuleServiceProvider;
 
-class ServiceProvider extends ModuleServiceProvider implements WinterExtension
+class ServiceProvider extends ModuleServiceProvider
 {
     /**
      * Register the service provider.

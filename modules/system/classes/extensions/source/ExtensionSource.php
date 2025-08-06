@@ -9,7 +9,6 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\File;
 use System\Classes\Core\MarketPlaceApi;
 use System\Classes\Extensions\ExtensionManager;
-use System\Classes\Extensions\ExtensionManagerInterface;
 use System\Classes\Extensions\ModuleManager;
 use System\Classes\Extensions\PluginManager;
 use Winter\Storm\Foundation\Extension\WinterExtension;

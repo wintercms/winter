@@ -6,6 +6,10 @@ use System\Classes\Extensions\Source\ExtensionSource;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Foundation\Extension\WinterExtension;
 
+/**
+ * @TODO: Move this into the ExtensionManager abstract class instead and make the specific
+ * extension managers use more specific typehints than the WinterExtension interface
+ */
 interface ExtensionManagerInterface
 {
     /**

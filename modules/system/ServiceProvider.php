@@ -31,7 +31,6 @@ use Twig\Environment;
 use Twig\Extension\CoreExtension;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Exception\SystemException;
-use Winter\Storm\Foundation\Extension\WinterExtension;
 use Winter\Storm\Router\Helper as RouterHelper;
 use Winter\Storm\Support\ClassLoader;
 use Winter\Storm\Support\Facades\Event;
@@ -39,7 +38,7 @@ use Winter\Storm\Support\Facades\Markdown;
 use Winter\Storm\Support\Facades\Validator;
 use Winter\Storm\Support\ModuleServiceProvider;
 
-class ServiceProvider extends ModuleServiceProvider implements WinterExtension
+class ServiceProvider extends ModuleServiceProvider
 {
     /**
      * Register the service provider.

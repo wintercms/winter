@@ -12,12 +12,11 @@ use System\Classes\CombineAssets;
 use System\Classes\MailManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
-use Winter\Storm\Foundation\Extension\WinterExtension;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\Flash;
 use Winter\Storm\Support\ModuleServiceProvider;
 
-class ServiceProvider extends ModuleServiceProvider implements WinterExtension
+class ServiceProvider extends ModuleServiceProvider
 {
     /**
      * Register the service provider.

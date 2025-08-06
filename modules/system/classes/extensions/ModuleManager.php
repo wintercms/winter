@@ -9,7 +9,6 @@ use Illuminate\Console\View\Components\Warn;
 use Illuminate\Database\Migrations\DatabaseMigrationRepository;
 use Illuminate\Database\Migrations\Migrator;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\File;
 use System\Classes\Extensions\Source\ExtensionSource;
 use System\Classes\UpdateManager;
 use System\Helpers\Cache as CacheHelper;
