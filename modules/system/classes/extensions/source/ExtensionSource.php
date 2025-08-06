@@ -130,8 +130,8 @@ class ExtensionSource
 
                 $manager->renderComponent(Info::class, 'Composer require complete.');
 
-                $info = Composer::info($this->composerPackage);
-                $this->path = $this->relativePath($info['path']);
+                $path = Composer::show(package: $this->composerPackage)->getPath();
+                $this->path = $this->relativePath($path);
                 $this->source = static::SOURCE_LOCAL;
                 break;
             case static::SOURCE_MARKET:
@@ -231,12 +231,12 @@ class ExtensionSource
         switch ($this->source) {
             case static::SOURCE_COMPOSER:
                 try {
-                    $info = Composer::info($this->composerPackage);
+                    $path = Composer::show(package: $this->composerPackage)->getPath();
                 } catch (CommandException $e) {
                     return static::STATUS_UNINSTALLED;
                 }
 
-                $this->path = $this->relativePath($info['path']);
+                $this->path = $this->relativePath($path);
 
                 if (!$this->getExtensionManager()->isInstalled($this)) {
                     return static::STATUS_UNPACKED;
