@@ -98,11 +98,11 @@ class UpdateManager
      * @throws ApplicationException
      * @throws SystemException
      */
-    public function update(): static
+    public function update(bool $migrationsOnly = true): static
     {
-        ModuleManager::instance()->update();
-        PluginManager::instance()->update();
-        ThemeManager::instance()->update();
+        ModuleManager::instance()->update(migrationsOnly: $migrationsOnly);
+        PluginManager::instance()->update(migrationsOnly: $migrationsOnly);
+        ThemeManager::instance()->update(migrationsOnly: $migrationsOnly);
 
         return $this;
     }
