@@ -259,6 +259,7 @@ return [
         'not_found' => 'Het formulier met record ID :id is niet gevonden.',
         'action_confirm' => 'Weet je het zeker?',
         'create' => 'Maken',
+        'create_and_new' => 'Maken en nieuw',
         'create_and_close' => 'Maken en sluiten',
         'creating' => 'Maken...',
         'creating_name' => ':name maken...',

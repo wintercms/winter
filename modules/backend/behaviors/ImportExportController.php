@@ -10,7 +10,6 @@ use Exception;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\View;
 use League\Csv\EscapeFormula as CsvEscapeFormula;
 use League\Csv\Reader as CsvReader;
 use League\Csv\Statement as CsvStatement;
@@ -148,8 +147,8 @@ class ImportExportController extends ControllerBehavior
 
     public function import()
     {
-        if ($response = $this->checkPermissionsForType('import')) {
-            return $response;
+        if (!$this->userHasAccess('import')) {
+            abort(403);
         }
 
         $this->addJs('js/winter.import.js', 'core');
@@ -163,8 +162,8 @@ class ImportExportController extends ControllerBehavior
 
     public function export()
     {
-        if ($response = $this->checkPermissionsForType('export')) {
-            return $response;
+        if (!$this->userHasAccess('export')) {
+            abort(403);
         }
 
         if ($response = $this->checkUseListExportMode()) {
@@ -693,18 +692,18 @@ class ImportExportController extends ControllerBehavior
     }
 
     /**
-     * Checks to see if the import/export is controlled by permissions
-     * and if the logged in user has permissions.
-     * @return \View
+     * Check if the current user has access to the provided import/export action
      */
-    protected function checkPermissionsForType($type)
+    public function userHasAccess(string $type): bool
     {
         if (
             ($permissions = $this->getConfig($type . '[permissions]')) &&
             (!BackendAuth::getUser()->hasAnyAccess((array) $permissions))
         ) {
-            return Response::make(View::make('backend::access_denied'), 403);
+            return false;
         }
+
+        return true;
     }
 
     protected function makeOptionsFormWidgetForType($type)

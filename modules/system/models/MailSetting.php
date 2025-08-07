@@ -15,10 +15,11 @@ class MailSetting extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
-    public const MODE_LOG       = 'log';
-    public const MODE_MAIL      = 'mail';
-    public const MODE_SENDMAIL  = 'sendmail';
-    public const MODE_SMTP      = 'smtp';
+    public const MODE_FAILOVER = 'failover';
+    public const MODE_LOG      = 'log';
+    public const MODE_MAIL     = 'mail';
+    public const MODE_SENDMAIL = 'sendmail';
+    public const MODE_SMTP     = 'smtp';
 
     /**
      * @var array Behaviors implemented by this model.
@@ -41,6 +42,7 @@ class MailSetting extends Model
      * Validation rules
      */
     public $rules = [
+        'failover_mailers' => 'required_if:send_mode,'.self::MODE_FAILOVER,
         'sender_name'  => 'required',
         'sender_email' => 'required|email',
     ];
@@ -72,11 +74,18 @@ class MailSetting extends Model
         $this->smtp_user = array_get($mailers['smtp'], 'username');
         $this->smtp_password = array_get($mailers['smtp'], 'password');
         $this->smtp_authorization = !!strlen($this->smtp_user);
+        $this->failover_mailers = implode(',', $config->get('mail.mailers.failover.mailers', []));
+    }
+
+    public function getFailoverMailersOptions()
+    {
+        return collect(App::make('config')->get('mail.mailers'))->except('failover')->keys()->all();
     }
 
     public function getSendModeOptions()
     {
         return [
+            static::MODE_FAILOVER => 'system::lang.mail.failover',
             static::MODE_LOG      => 'system::lang.mail.log_file',
             static::MODE_MAIL     => 'system::lang.mail.php_mail',
             static::MODE_SENDMAIL => 'system::lang.mail.sendmail',
@@ -93,6 +102,10 @@ class MailSetting extends Model
         $config->set('mail.from.address', $settings->sender_email);
 
         switch ($settings->send_mode) {
+            case self::MODE_FAILOVER:
+                $config->set('mail.mailers.failover.mailers', explode(',', $settings->failover_mailers));
+                break;
+
             case self::MODE_SMTP:
                 $config->set('mail.mailers.smtp.host', $settings->smtp_address);
                 $config->set('mail.mailers.smtp.port', $settings->smtp_port);
@@ -117,7 +130,7 @@ class MailSetting extends Model
      *
      * We use this to show smtp credential fields only for smtp mode and when smtp authorization is required.
      *
-     * @param array $fields
+     * @param object $fields
      * @param string|null $context
      * @return void
      */

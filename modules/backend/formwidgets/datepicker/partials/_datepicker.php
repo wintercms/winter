@@ -2,6 +2,20 @@
     <p class="flash-message static error">
         <?= e($error); ?></p>
     </p>
+
+    <?php if ($this->previewMode): ?>
+        <span class="form-control"><?= $value ? e($value) : '&nbsp;' ?></span>
+    <?php else: ?>
+        <input
+            type="text"
+            name="<?= $field->getName() ?>"
+            id="<?= $field->getId() ?>"
+            value="<?= e($value) ?>"
+            class="form-control"
+            autocomplete="off"
+        />
+    <?php endif ?>
+    <?php return; ?>
 <?php endif; ?>
 <?php if ($this->previewMode): ?>
     <div class="form-control"><?= Backend::dateTime($value, [

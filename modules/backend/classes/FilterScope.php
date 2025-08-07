@@ -39,7 +39,7 @@ class FilterScope
     public $label;
 
     /**
-     * @var string Filter scope value.
+     * @var mixed Filter scope value.
      */
     public $value;
 

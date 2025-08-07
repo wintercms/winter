@@ -45,8 +45,11 @@ trait ViewMaker
 
     /**
      * Prepends a path on the available view path locations.
+     *
+     * @param array|string $path
+     * @return void
      */
-    public function addViewPath(string|array $path): void
+    public function prependViewPath(array|string $path): void
     {
         $this->viewPath = (array) $this->viewPath;
 
@@ -55,6 +58,33 @@ trait ViewMaker
         } else {
             array_unshift($this->viewPath, $path);
         }
+    }
+
+    /**
+     * Append a path on the available view path locations.
+     *
+     * @param array|string $path
+     * @return void
+     */
+    public function appendViewPath(array|string $path): void
+    {
+        $this->viewPath = (array) $this->viewPath;
+
+        if (is_array($path)) {
+            $this->viewPath = array_merge($this->viewPath, $path);
+        } else {
+            $this->viewPath[] = $path;
+        }
+    }
+
+    /**
+     * Prepends a path on the available view path locations.
+     *
+     * @deprecated Use prependViewPath()
+     */
+    public function addViewPath(string|array $path): void
+    {
+        $this->prependViewPath($path);
     }
 
     /**
@@ -104,7 +134,7 @@ trait ViewMaker
     /**
      * Renders supplied contents inside a layout.
      */
-    public function makeViewContent(string $contents, string $layout = null): string
+    public function makeViewContent(string $contents, ?string $layout = null): string
     {
         if ($this->suppressLayout || $this->layout == '') {
             return $contents;
@@ -120,7 +150,7 @@ trait ViewMaker
      * Render a layout, defaulting to the layout propery specified on the class
      * @return string|bool The layout contents, or false.
      */
-    public function makeLayout(string $name = null, array $params = [], bool $throwException = true): string|bool
+    public function makeLayout(?string $name = null, array $params = [], bool $throwException = true): string|bool
     {
         $layout = $name ?? $this->layout;
         if ($layout == '') {
@@ -160,7 +190,7 @@ trait ViewMaker
      *
      * If the fileName cannot be found it will be returned unmodified.
      */
-    public function getViewPath(string $fileName, string|array $viewPaths = null): string
+    public function getViewPath(string $fileName, string|array|null $viewPaths = null): string
     {
         $input = $fileName;
         $allowedExtensions = ['php', 'htm'];

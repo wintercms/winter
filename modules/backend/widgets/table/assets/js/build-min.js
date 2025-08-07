@@ -20,7 +20,7 @@ this.keydownHandler=this.onKeydown.bind(this)
 this.documentClickHandler=this.onDocumentClick.bind(this)
 this.toolbarClickHandler=this.onToolbarClick.bind(this)
 if(this.options.postback&&this.options.clientDataSourceClass=='client'){if(!this.options.postbackHandlerName){var formHandler=this.$el.closest('form').data('request')
-this.options.postbackHandlerName=formHandler||'onSave'}this.formSubmitHandler=this.onFormSubmit.bind(this)}this.navigation=null
+this.options.postbackHandlerName=[formHandler||'onSave']}else if(typeof this.options.postbackHandlerName==='string'){this.options.postbackHandlerName=this.options.postbackHandlerName.split(',')}this.formSubmitHandler=this.onFormSubmit.bind(this)}this.navigation=null
 this.search=null
 this.recordsAddedOrDeleted=0
 this.disposeBound=this.dispose.bind(this)
@@ -63,7 +63,7 @@ this.tableContainer.setAttribute('class','table-container')
 if(this.options.toolbar){this.buildToolbar()}this.tableContainer.appendChild(this.buildHeaderTable())
 this.el.insertBefore(this.tableContainer,this.el.children[0])
 if(!this.options.height){this.dataTableContainer=this.tableContainer}else{this.dataTableContainer=this.buildScrollbar()}this.updateDataTable()}
-Table.prototype.buildToolbar=function(){if(!this.options.adding&&!this.options.deleting){return}this.toolbar=$($('[data-table-toolbar]',this.el).html()).appendTo(this.tableContainer).get(0)
+Table.prototype.buildToolbar=function(){if(!this.options.adding&&!this.options.deleting&&!this.options.searching){return}this.toolbar=$($('[data-table-toolbar]',this.el).html()).appendTo(this.tableContainer).get(0)
 if(!this.options.adding){$('[data-cmd^="record-add"]',this.toolbar).remove()}else{if(this.navigation.paginationEnabled()||!this.options.rowSorting){$('[data-cmd=record-add-below], [data-cmd=record-add-above]',this.toolbar).remove()}else{$('[data-cmd=record-add]',this.toolbar).remove()}}if(!this.options.deleting){$('[data-cmd="record-delete"]',this.toolbar).remove()}}
 Table.prototype.buildScrollbar=function(){var scrollbar=document.createElement('div'),scrollbarContent=document.createElement('div')
 scrollbar.setAttribute('class','control-scrollbar')
@@ -205,10 +205,9 @@ return}if((ev.key==='d'||ev.key==='D')&&ev.altKey&&this.options.deleting){this.d
 this.stopEvent(ev)
 return}for(var i=0,len=this.options.columns.length;i<len;i++){var column=this.options.columns[i].key
 if(this.cellProcessors[column].onKeyDown(ev)===false){return}}if(this.navigation.onKeydown(ev)===false){return}if(this.search.onKeydown(ev)===false){return}}
-Table.prototype.onFormSubmit=function(ev,data){if(data.handler==this.options.postbackHandlerName){this.unfocusTable()
+Table.prototype.onFormSubmit=function(ev,data){if(this.options.postbackHandlerName.indexOf(data.handler)>-1){this.unfocusTable()
 if(!this.validate()){ev.preventDefault()
-return}
-data.options.data[this.options.fieldName]=this.dataSource.getAllData()}}
+return}data.options.data[this.options.fieldName]=this.dataSource.getAllData()}}
 Table.prototype.onToolbarClick=function(ev){var target=this.getEventTarget(ev),cmd=target.getAttribute('data-cmd')
 if(!cmd){return}switch(cmd){case'record-add':case'record-add-below':this.addRecord('below')
 break
@@ -283,7 +282,7 @@ if(dataContainer.value!=value){dataContainer.value=value
 this.markCellRowDirty(cellElement)
 this.notifyRowProcessorsOnChange(cellElement)
 if(suppressEvents===undefined||!suppressEvents){this.$el.trigger('oc.tableCellChanged',[this.getCellColumnName(cellElement),value,this.getCellRowIndex(cellElement)])}}}
-Table.DEFAULTS={clientDataSourceClass:'client',keyColumn:'id',recordsPerPage:false,data:null,postback:true,postbackHandlerName:null,adding:true,deleting:true,toolbar:true,searching:false,rowSorting:false,height:false,dynamicHeight:false}
+Table.DEFAULTS={clientDataSourceClass:'client',keyColumn:'id',recordsPerPage:false,data:null,postback:true,postbackHandlerName:[],adding:true,deleting:true,toolbar:true,searching:false,rowSorting:false,height:false,dynamicHeight:false}
 var old=$.fn.table
 $.fn.table=function(option){var args=Array.prototype.slice.call(arguments,1),result=undefined
 this.each(function(){var $this=$(this)
@@ -303,7 +302,7 @@ this.pageIndex=0
 this.pageCount=0
 this.init()};Navigation.prototype.init=function(){}
 Navigation.prototype.dispose=function(){this.tableObj=null}
-Navigation.prototype.paginationEnabled=function(){return this.tableObj.options.recordsPerPage!=null&&this.tableObj.options.recordsPerPage!=false}
+Navigation.prototype.paginationEnabled=function(){return this.tableObj.options.recordsPerPage>0;}
 Navigation.prototype.getPageFirstRowOffset=function(){return this.pageIndex*this.tableObj.options.recordsPerPage}
 Navigation.prototype.buildPagination=function(recordCount){if(!this.paginationEnabled())return
 var paginationContainer=this.tableObj.getElement().querySelector('.pagination'),newPaginationContainer=false,curRecordCount=0
@@ -412,6 +411,7 @@ this.searchInput=$('.table-search-input',this.searchForm).get(0)}}
 Search.prototype.getQuery=function(){return $.trim(this.activeQuery)}
 Search.prototype.hasQuery=function(){return this.searchEnabled()&&$.trim(this.activeQuery).length>0}
 Search.prototype.searchEnabled=function(){return this.tableObj.options.searching}
+Search.prototype.getSearchableColumns=function(){const columns=[];this.tableObj.options.columns.forEach(function(column){if(column.type==='checkbox'){return;}if(!column.searchable){return;}columns.push(column.key);});return columns;}
 Search.prototype.performSearch=function(query,onSuccess){var isDirty=this.activeQuery!=query
 this.activeQuery=query
 if(isDirty){this.tableObj.updateDataTable(onSuccess)}}
@@ -440,6 +440,7 @@ Client.prototype.getRecords=function(offset,count,onSuccess){if(!count){onSucces
 Client.prototype.createRecord=function(recordData,placement,relativeToKey,offset,count,onSuccess){if(placement==='bottom'){this.data.push(recordData)}else if(placement=='above'||placement=='below'){var recordIndex=this.getIndexOfKey(relativeToKey)
 if(placement=='below')recordIndex++
 this.data.splice(recordIndex,0,recordData)}this.getRecords(offset,count,onSuccess)}
+Client.prototype.searchRecords=function(query,offset,count,onSuccess){const searchFields=this.tableObj.search.getSearchableColumns();const matched=this.data.filter(function(record){for(let i=0;i<searchFields.length;i++){const value=record[searchFields[i]];if(value===undefined){continue;}if(value.toString().toLowerCase().includes(query.toLowerCase())){return true;}}return false;});if(matched.length===0){onSuccess([]);return;}if(!count){onSuccess(matched,matched.length);}else{onSuccess(matched.slice(offset,offset+count),matched.length);}}
 Client.prototype.updateRecord=function(key,recordData){var recordIndex=this.getIndexOfKey(key)
 if(recordIndex!==-1){recordData[this.tableObj.options.keyColumn]=key
 this.data[recordIndex]=recordData}else{throw new Error('Record with they key '+key+' is not found in the data set')}}
@@ -507,16 +508,14 @@ this.validators.push(validator)}}
 Base.prototype.validate=function(value,rowData){for(var i=0,len=this.validators.length;i<len;i++){var message=this.validators[i].validate(value,rowData)
 if(message!==undefined)return message}}
 $.wn.table.processor.base=Base}(window.jQuery);+function($){"use strict";if($.wn.table===undefined)throw new Error("The $.wn.table namespace is not defined. Make sure that the table.js script is loaded.");if($.wn.table.processor===undefined)throw new Error("The $.wn.table.processor namespace is not defined. Make sure that the table.processor.base.js script is loaded.");var Base=$.wn.table.processor.base,BaseProto=Base.prototype
-var StringProcessor=function(tableObj,columnName,columnConfiguration){this.focusTimeoutHandler=this.onFocusTimeout.bind(this)
-Base.call(this,tableObj,columnName,columnConfiguration)}
+var StringProcessor=function(tableObj,columnName,columnConfiguration){Base.call(this,tableObj,columnName,columnConfiguration)}
 StringProcessor.prototype=Object.create(BaseProto)
 StringProcessor.prototype.constructor=StringProcessor
-StringProcessor.prototype.dispose=function(){BaseProto.dispose.call(this)
-this.focusTimeoutHandler=null}
-StringProcessor.prototype.renderCell=function(value,cellContentContainer){this.createViewContainer(cellContentContainer,value)}
+StringProcessor.prototype.dispose=function(){BaseProto.dispose.call(this)}
+StringProcessor.prototype.renderCell=function(value,cellContentContainer){this.createViewContainer(cellContentContainer,value);if(this.columnConfiguration.readonly||this.columnConfiguration.readOnly){cellContentContainer.classList.add('readonly');cellContentContainer.setAttribute('tabindex',0);}}
 StringProcessor.prototype.onFocus=function(cellElement,isClick){if(this.activeCell===cellElement)return
 this.activeCell=cellElement
-this.buildEditor(cellElement,this.getCellContentContainer(cellElement))}
+if(!this.columnConfiguration.readonly&&!this.columnConfiguration.readOnly){this.buildEditor(cellElement,this.getCellContentContainer(cellElement))}else{this.getCellContentContainer(cellElement).focus()}}
 StringProcessor.prototype.onUnfocus=function(){if(!this.activeCell)return
 var editor=this.activeCell.querySelector('.string-input')
 if(editor){this.tableObj.setCellValue(this.activeCell,editor.value)
@@ -528,9 +527,8 @@ var input=document.createElement('input')
 input.setAttribute('type','text')
 input.setAttribute('class','string-input')
 input.value=this.tableObj.getCellValue(cellElement)
-if(this.columnConfiguration.readOnly){input.setAttribute('readonly',true)}cellContentContainer.appendChild(input)
-this.setCaretPosition(input,0)
-window.setTimeout(this.focusTimeoutHandler,0)}
+cellContentContainer.appendChild(input)
+input.focus();this.setCaretPosition(input,0);}
 StringProcessor.prototype.keyNavigationAllowed=function(ev,direction){if(direction!='left'&&direction!='right')return true
 if(!this.activeCell)return true
 var editor=this.activeCell.querySelector('.string-input')
@@ -541,11 +539,6 @@ if(direction=='right')return caretPosition==editor.value.length
 return true}
 StringProcessor.prototype.onRowValueChanged=function(columnName,cellElement){if(columnName!=this.columnName){return}var value=this.tableObj.getCellValue(cellElement)
 this.setViewContainerValue(cellElement,value)}
-StringProcessor.prototype.onFocusTimeout=function(){if(!this.activeCell)return
-var editor=this.activeCell.querySelector('.string-input')
-if(!editor)return
-editor.focus()
-this.setCaretPosition(editor,0)}
 StringProcessor.prototype.getCaretPosition=function(input){if(document.selection){var selection=document.selection.createRange()
 selection.moveStart('character',-input.value.length)
 return selection.text.length}if(input.selectionStart!==undefined)return input.selectionStart
@@ -565,10 +558,11 @@ CheckboxProcessor.prototype.isCellFocusable=function(){return false}
 CheckboxProcessor.prototype.renderCell=function(value,cellContentContainer){var checkbox=document.createElement('div')
 checkbox.setAttribute('data-checkbox-element','true')
 checkbox.setAttribute('tabindex','0')
-if(value&&value!=0&&value!="false"){checkbox.setAttribute('class','checked')}cellContentContainer.appendChild(checkbox)}
+if(value&&value!=0&&value!="false"){checkbox.setAttribute('class','checked')}cellContentContainer.appendChild(checkbox)
+if(this.columnConfiguration.readonly||this.columnConfiguration.readOnly){cellContentContainer.classList.add('readonly');}}
 CheckboxProcessor.prototype.onFocus=function(cellElement,isClick){cellElement.querySelector('div[data-checkbox-element]').focus()}
 CheckboxProcessor.prototype.onKeyDown=function(ev){if(ev.key==='(Space character)'||ev.key==='Spacebar'||ev.key===' ')this.onClick(ev)}
-CheckboxProcessor.prototype.onClick=function(ev){var target=this.tableObj.getEventTarget(ev,'DIV')
+CheckboxProcessor.prototype.onClick=function(ev){if(this.columnConfiguration.readonly||this.columnConfiguration.readOnly){return}var target=this.tableObj.getEventTarget(ev,'DIV')
 if(target.getAttribute('data-checkbox-element')){var container=this.getCheckboxContainerNode(target)
 if(container.getAttribute('data-column')!==this.columnName){return}this.changeState(target)
 $(ev.target).trigger('change')}}
@@ -601,14 +595,15 @@ BaseProto.dispose.call(this)}
 DropdownProcessor.prototype.unregisterListHandlers=function(){if(this.itemListElement){this.itemListElement.removeEventListener('click',this.itemClickHandler)
 this.itemListElement.removeEventListener('keydown',this.itemKeyDownHandler)
 this.itemListElement.removeEventListener('mousemove',this.itemMouseMoveHandler)}}
-DropdownProcessor.prototype.renderCell=function(value,cellContentContainer){var viewContainer=this.createViewContainer(cellContentContainer,'...')
+DropdownProcessor.prototype.renderCell=function(value,cellContentContainer){let viewContainer;if(this.columnConfiguration.readonly||this.columnConfiguration.readOnly){viewContainer=this.createViewContainer(cellContentContainer,value)
+cellContentContainer.classList.add('readonly');cellContentContainer.setAttribute('tabindex',0);return;}viewContainer=this.createViewContainer(cellContentContainer,'...')
 this.fetchOptions(cellContentContainer.parentNode,function renderCellFetchOptions(options){if(options[value]!==undefined)viewContainer.textContent=options[value]
 cellContentContainer.setAttribute('tabindex',0)})}
 DropdownProcessor.prototype.onFocus=function(cellElement,isClick){if(this.activeCell===cellElement){this.showDropdown()
 return}this.activeCell=cellElement
-var cellContentContainer=this.getCellContentContainer(cellElement)
+if(!this.columnConfiguration.readonly&&!this.columnConfiguration.readOnly){var cellContentContainer=this.getCellContentContainer(cellElement)
 this.buildEditor(cellElement,cellContentContainer,isClick)
-if(!isClick)cellContentContainer.focus()}
+if(!isClick){cellContentContainer.focus()}}else{this.getCellContentContainer(cellElement).focus()}}
 DropdownProcessor.prototype.onUnfocus=function(){if(!this.activeCell)return
 this.unregisterListHandlers()
 this.hideDropdown()

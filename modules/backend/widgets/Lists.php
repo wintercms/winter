@@ -238,7 +238,7 @@ class Lists extends WidgetBase
         }
 
         if ($this->customViewPath) {
-            $this->addViewPath($this->customViewPath);
+            $this->prependViewPath($this->customViewPath);
         }
 
         $this->validateModel();
@@ -799,7 +799,13 @@ class Lists extends WidgetBase
         }
 
         $url = RouterHelper::replaceParameters($record, $this->recordUrl);
-        return Backend::url($url);
+
+        // Allow external or relative URLs
+        if (!Str::startsWith($url, ['http', '/'])) {
+            $url = Backend::url($url);
+        }
+
+        return $url;
     }
 
     /**
@@ -1728,6 +1734,22 @@ class Lists extends WidgetBase
             $this->putSession('sort', $sortOptions);
 
             return $result;
+        }
+    }
+
+    /**
+     * Sets the column and direction to sort the list by.
+     * Use the $persist flag to control whether or not the parameters are stored in the session. Defaults to true.
+     */
+    public function setSort(string $column, string $direction = 'asc', bool $persist = true)
+    {
+        $this->sortColumn = $column;
+        $this->sortDirection = $direction;
+        if ($persist) {
+            $this->putSession('sort', [
+                'column' => $this->sortColumn,
+                'direction' => $this->sortDirection,
+            ]);
         }
     }
 

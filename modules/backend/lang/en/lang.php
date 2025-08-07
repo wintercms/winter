@@ -252,6 +252,7 @@ return [
     'form' => [
         'create_title' => 'New :name',
         'update_title' => 'Edit :name',
+        'preview' => 'Preview',
         'preview_title' => 'Preview :name',
         'create_success' => ':name created',
         'update_success' => ':name updated',
@@ -264,6 +265,7 @@ return [
         'not_found' => 'Form record with an ID of :id could not be found.',
         'action_confirm' => 'Are you sure?',
         'create' => 'Create',
+        'create_and_new' => 'Create and new',
         'create_and_close' => 'Create and close',
         'creating' => 'Creating...',
         'creating_name' => 'Creating :name...',
@@ -358,6 +360,7 @@ return [
     ],
     'reorder' => [
         'default_title' => 'Reorder records',
+        'reorder_title' => 'Reorder :name',
         'no_records' => 'There are no records available to sort.',
     ],
     'model' => [
@@ -518,6 +521,8 @@ return [
         'number_all' => 'all numbers',
     ],
     'import_export' => [
+        'export' => 'Export',
+        'import' => 'Import',
         'upload_csv_file' => '1. Upload a CSV file',
         'import_file' => 'Import file',
         'row' => 'Row :row',

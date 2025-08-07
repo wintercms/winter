@@ -2,12 +2,15 @@
 
 namespace Backend\Classes;
 
+use Backend\Facades\BackendAuth;
 use Closure;
 use Illuminate\Routing\Controller as ControllerBase;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use System\Classes\PluginManager;
 use Winter\Storm\Router\Helper as RouterHelper;
 use Winter\Storm\Support\Facades\Config;
@@ -126,10 +129,13 @@ class BackendController extends ControllerBase
             class_exists('\Cms\Classes\Controller')
         ) {
             $this->cmsHandling = true;
-            return App::make('Cms\Classes\Controller')->run($url);
-        } else {
-            return Response::make(View::make('backend::404'), 404);
+            $response = App::make('Cms\Classes\Controller')->run($url);
+            if ($response->getStatusCode() !== 404 || !BackendAuth::check()) {
+                return $response;
+            }
         }
+
+        return Response::make(View::make('backend::404'), 404);
     }
 
     /**
@@ -144,8 +150,17 @@ class BackendController extends ControllerBase
     {
         // Handle NotFoundHttpExceptions in the backend (usually triggered by abort(404))
         Event::listen('exception.beforeRender', function ($exception, $httpCode, $request) {
-            if (!$this->cmsHandling && $exception instanceof \Symfony\Component\HttpKernel\Exception\NotFoundHttpException) {
+            if ($this->cmsHandling) {
+                return;
+            }
+
+            if ($exception instanceof NotFoundHttpException) {
                 return View::make('backend::404');
+            } elseif (
+                $exception instanceof HttpException
+                && $exception->getStatusCode() === 403
+            ) {
+                return View::make('backend::access_denied');
             }
         }, 1);
 

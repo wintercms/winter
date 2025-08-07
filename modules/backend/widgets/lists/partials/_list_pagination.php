@@ -1,5 +1,5 @@
 <div class="loading-indicator-container size-small pull-right">
-    <div class="control-pagination">
+    <div class="control-pagination loading-indicator-container">
         <span class="page-iteration">
             <?= e(trans('backend::lang.list.pagination', ['from' => $pageFrom, 'to' => $pageTo, 'total' => $recordTotal])) ?>
         </span>
@@ -30,16 +30,19 @@
                     class="page-back"
                     title="<?= e(trans('backend::lang.list.prev_page')) ?>"></span>
             <?php endif ?>
-            <select
+            <input
+                type="number"
                 name="page"
-                class="form-control input-sm custom-select select-no-search"
+                value="<?= $pageCurrent ?>"
+                min="1"
+                step="1"
+                max="<?= $pageLast ?>"
+                class="form-control input-sm"
                 data-request="<?= $this->getEventHandler('onPaginate') ?>"
+                data-track-input
                 data-load-indicator="<?= e(trans('backend::lang.list.loading')) ?>"
-                autocomplete="off">
-                <?php for ($i = 1; $i <= $pageLast; $i++): ?>
-                    <option value="<?= $i ?>" <?= $i === $pageCurrent ? 'selected' : '' ?>><?= $i ?></option>
-                <?php endfor ?>
-            </select>
+                autocomplete="off"
+                style="width: auto; padding-left: 5px; padding-right: 0; display: inline; text-align: center;" />
             <?php if ($pageLast > $pageCurrent): ?>
                 <a
                     href="javascript:;"

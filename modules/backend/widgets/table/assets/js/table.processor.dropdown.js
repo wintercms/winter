@@ -77,7 +77,17 @@
      * Renders the cell in the normal (no edit) mode
      */
     DropdownProcessor.prototype.renderCell = function(value, cellContentContainer) {
-        var viewContainer = this.createViewContainer(cellContentContainer, '...')
+        let viewContainer;
+
+        if (this.columnConfiguration.readonly || this.columnConfiguration.readOnly) {
+            viewContainer = this.createViewContainer(cellContentContainer, value)
+
+            cellContentContainer.classList.add('readonly');
+            cellContentContainer.setAttribute('tabindex', 0);
+            return;
+        }
+
+        viewContainer = this.createViewContainer(cellContentContainer, '...')
 
         this.fetchOptions(cellContentContainer.parentNode, function renderCellFetchOptions(options) {
             if (options[value] !== undefined)
@@ -98,11 +108,16 @@
         }
 
         this.activeCell = cellElement
-        var cellContentContainer = this.getCellContentContainer(cellElement)
-        this.buildEditor(cellElement, cellContentContainer, isClick)
+        if (!this.columnConfiguration.readonly && !this.columnConfiguration.readOnly) {
+            var cellContentContainer = this.getCellContentContainer(cellElement)
+            this.buildEditor(cellElement, cellContentContainer, isClick)
 
-        if (!isClick)
-            cellContentContainer.focus()
+            if (!isClick) {
+                cellContentContainer.focus()
+            }
+        } else {
+            this.getCellContentContainer(cellElement).focus()
+        }
     }
 
     /*

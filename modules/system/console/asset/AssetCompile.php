@@ -126,15 +126,16 @@ abstract class AssetCompile extends Command
 
         $packages = $compilableAssets->getPackages($type);
         $name = $this->argument('package');
+        $nameLower = strtolower($name);
 
-        if (!in_array($name, array_keys($packages))) {
+        if (!in_array($nameLower, array_keys($packages))) {
             $this->error(
                 sprintf('Package "%s" is not a registered package.', $name)
             );
             return 1;
         }
 
-        $package = $packages[$name];
+        $package = $packages[$nameLower];
 
         $relativeConfigPath = $package['config'];
         if (!$this->isPackageWithinWorkspace($relativeConfigPath)) {
@@ -208,11 +209,15 @@ abstract class AssetCompile extends Command
     {
         $this->beforeExecution($configPath);
         $command = $this->createCommand($configPath);
+        $commandEnv = $this->createCommandEnv($configPath);
 
         $process = new Process(
             $command,
             $this->getPackagePath($configPath),
-            ['NODE_ENV' => $this->option('production', false) ? 'production' : 'development'],
+            [
+                'NODE_ENV' => $this->option('production', false) ? 'production' : 'development',
+                ...$commandEnv
+            ],
             null,
             null
         );
@@ -256,4 +261,12 @@ abstract class AssetCompile extends Command
      * Create the command array to create a Process object with
      */
     abstract protected function createCommand(string $configPath): array;
+
+    /**
+     * Return values to append to the command env
+     */
+    protected function createCommandEnv(string $configPath): array
+    {
+        return [];
+    }
 }

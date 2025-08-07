@@ -4,8 +4,6 @@ namespace Backend\Controllers;
 
 use Backend\Classes\Controller;
 use Backend\Facades\BackendMenu;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\View;
 use System\Classes\SettingsManager;
 
 /**
@@ -46,7 +44,7 @@ class UserRoles extends Controller
          */
         $this->bindEvent('page.beforeDisplay', function () {
             if (!$this->user->isSuperUser()) {
-                return Response::make(View::make('backend::access_denied'), 403);
+                abort(403);
             }
         });
     }
