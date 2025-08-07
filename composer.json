@@ -81,7 +81,8 @@
     "config": {
         "allow-plugins": {
             "composer/installers": true,
-            "wikimedia/composer-merge-plugin": true
+            "wikimedia/composer-merge-plugin": true,
+            "php-http/discovery": true
         }
     }
 }

@@ -21,7 +21,6 @@ use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\Facades\Yaml;
-use Winter\Storm\Support\Str;
 use Winter\Storm\Support\Traits\HasComposerPackage;
 
 /**
@@ -725,6 +724,7 @@ class Theme extends CmsObject implements WinterExtension
     public function getVersion(): string
     {
         // TODO: Implement extensionVersion() method.
+        return '';
     }
 
     public function getIdentifier(): string

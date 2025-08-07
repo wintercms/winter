@@ -215,9 +215,11 @@
                             </div>
                         </div>
                     </div>
-                    <?php // @TODO: Fix ?>
                     <div class="table-fancy">
-                        <?php $str = $this->listRender(); echo str_replace('data-control="rowlink"', '', $str); ?>
+                        <?php
+                            // @TODO: Fix
+                            echo str_replace('data-control="rowlink"', '', $this->listRender());
+                        ?>
                     </div>
                 </div>
             </div>
