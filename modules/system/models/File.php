@@ -3,7 +3,6 @@
 namespace System\Models;
 
 use Backend\Controllers\Files;
-use Illuminate\Support\Facades\Storage;
 use Winter\Storm\Database\Attach\File as FileBase;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\Url;

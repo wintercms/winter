@@ -42,7 +42,7 @@ class MailSetting extends Model
      * Validation rules
      */
     public $rules = [
-        'failover_mailers' => 'required_if:send_mode,'.self::MODE_FAILOVER,
+        'failover_mailers' => 'required_if:send_mode,' . self::MODE_FAILOVER,
         'sender_name'  => 'required',
         'sender_email' => 'required|email',
     ];

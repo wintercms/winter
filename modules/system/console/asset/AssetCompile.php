@@ -216,7 +216,7 @@ abstract class AssetCompile extends Command
             $this->getPackagePath($configPath),
             [
                 'NODE_ENV' => $this->option('production', false) ? 'production' : 'development',
-                ...$commandEnv
+                ...$commandEnv,
             ],
             null,
             null

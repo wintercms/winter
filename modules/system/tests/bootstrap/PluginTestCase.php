@@ -81,7 +81,7 @@ abstract class PluginTestCase extends TestCase
         parent::setUp();
 
         // Reset loaded routes
-        $this->app['router']->setRoutes(new \Illuminate\Routing\RouteCollection);
+        $this->app['router']->setRoutes(new \Illuminate\Routing\RouteCollection());
 
         // Run all migrations
         Artisan::call('winter:up');

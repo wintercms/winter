@@ -487,7 +487,7 @@ class Filter extends WidgetBase
                     throw new ApplicationException(Lang::get('backend::lang.filter.options_method_not_exists', [
                         'model'  => get_class($model),
                         'method' => $methodName,
-                        'filter' => $scope->scopeName
+                        'filter' => $scope->scopeName,
                     ]));
                 }
 
