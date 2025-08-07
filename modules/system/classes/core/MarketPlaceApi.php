@@ -539,36 +539,4 @@ class MarketPlaceApi
 
         return $packages;
     }
-
-    /**
-     * @TODO: This whole function should be provided by the marketplace api
-     * @param string $type
-     * @return array
-     */
-    protected function getPackageType(string $type): array
-    {
-        $packages = Composer::listPackages($type);
-
-        usort($packages, function ($a, $b) {
-            return $b['favers'] <=> $a['favers'];
-        });
-
-        $popular = array_slice($packages, 0, 9);
-
-        usort($packages, function ($a, $b) {
-            return str_starts_with($b['name'], 'winter/');
-        });
-
-        $featured = array_slice($packages, 0, 9);
-
-        usort($packages, function ($a, $b) {
-            return $b['downloads'] <=> $a['downloads'];
-        });
-
-        return [
-            'popular' => $popular,
-            'featured' => $featured,
-            'all' => $packages
-        ];
-    }
 }
