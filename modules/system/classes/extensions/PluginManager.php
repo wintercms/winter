@@ -316,7 +316,7 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
 
                     Preserver::instance()->store($plugin);
                     // @TODO: Make this not dry run
-                    $update = Composer::update(dryRun: true, package: $composerPackage);
+                    $update = Composer::update(dryRun: true, package: $composerPackage, withAllDependencies: true);
 
                     ($versions = $update->getUpgraded()[$composerPackage] ?? null)
                         ? $this->renderComponent(Info::class, sprintf(

@@ -112,7 +112,7 @@ class ModuleManager extends ExtensionManager implements ExtensionManagerInterfac
 
                     Preserver::instance()->store($extension);
                     // @TODO: Make this not dry run
-                    $update = Composer::update(dryRun: true, package: $composerPackage);
+                    $update = Composer::update(dryRun: true, package: $composerPackage, withAllDependencies: true);
 
                     $versions = $update->getUpgraded()[$composerPackage] ?? null;
 
@@ -126,7 +126,7 @@ class ModuleManager extends ExtensionManager implements ExtensionManagerInterfac
             }
         }
 
-        foreach ($modules as $module) {
+        foreach ($modules as $module => $extension) {
             $this->output->info(sprintf('Migrating %s module...', $module));
             $this->migrator->run(base_path() . '/modules/' . strtolower($module) . '/database/migrations');
 
@@ -170,7 +170,7 @@ class ModuleManager extends ExtensionManager implements ExtensionManagerInterfac
         $modules = $this->getModuleList($extension);
 
         $paths = [];
-        foreach ($modules as $module) {
+        foreach ($modules as $module => $extension) {
             $paths[] = base_path() . '/modules/' . strtolower($module) . '/database/migrations';
         }
 
