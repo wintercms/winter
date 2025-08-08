@@ -11,12 +11,9 @@ use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use System\Classes\Core\MarketPlaceApi;
 use System\Classes\Extensions\PluginManager;
 use System\Classes\Extensions\Source\ComposerSource;
@@ -196,7 +193,8 @@ trait ManagesPlugins
 
             $manager = UpdateManager::instance();
 
-            $result = $manager->installUploadedPlugin(Storage::disk('temp')->path($localPath));
+            // @TODO: Implement
+            // $result = $manager->installUploadedPlugin(Storage::disk('temp')->path($localPath));
 
             if (!isset($result['code']) || !isset($result['hash'])) {
                 throw new ApplicationException(Lang::get('system::lang.server.response_invalid'));
@@ -333,7 +331,7 @@ trait ManagesPlugins
     /**
      * Perform a bulk action on the provided plugins
      */
-    public function onBulkAction(): RedirectResponse
+    public function onBulkAction(): array
     {
         if (($bulkAction = post('action')) &&
             ($checkedIds = post('checked')) &&
@@ -384,6 +382,6 @@ trait ManagesPlugins
         }
 
         Flash::success(Lang::get("system::lang.plugins.{$bulkAction}_success"));
-        return redirect()->refresh();
+        return $this->listRefresh();
     }
 }

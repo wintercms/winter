@@ -576,8 +576,6 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
         $this->plugins[$lowerClassId] = $pluginObj;
         $this->normalizedMap[$lowerClassId] = $classId;
 
-        $pluginObj->setComposerPackage(Composer::getPackageInfoByPath($path));
-
         $replaces = $pluginObj->getReplaces();
         if ($replaces) {
             foreach ($replaces as $replace) {
@@ -1250,8 +1248,13 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
             $plugin = $this->get($plugin);
         }
 
-        if ($package = $plugin->getComposerPackage()) {
-            Composer::setPackageRequirement($package['name'], $package['versions'][0] ?? '*');
+        if ($package = $plugin->getComposerPackageName()) {
+            $version = $plugin->getComposerPackageVersion();
+            if (empty($version)) {
+                throw new ApplicationException("Unable to determine package version for $package");
+            }
+
+            Composer::pin($package['name'], $version);
         }
 
         $record = $this->getPluginRecord($plugin);
@@ -1268,11 +1271,8 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
             $plugin = $this->get($plugin);
         }
 
-        if ($package = $plugin->getComposerPackage()) {
-            Composer::setPackageRequirement(
-                $package['name'],
-                Composer::getLatestSupportedVersion(package: $package['name'])
-            );
+        if ($package = $plugin->getComposerPackageName()) {
+            Composer::pin($package);
         }
 
         $record = $this->getPluginRecord($plugin);

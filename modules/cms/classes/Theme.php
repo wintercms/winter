@@ -82,8 +82,6 @@ class Theme extends CmsObject implements WinterExtension
             $theme->registerBackendLocalization();
         }
 
-        $theme->setComposerPackage(Composer::getPackageInfoByPath($theme->getPath()));
-
         return $theme;
     }
 
