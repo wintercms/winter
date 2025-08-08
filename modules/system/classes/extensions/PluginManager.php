@@ -1263,7 +1263,7 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
                 throw new ApplicationException("Unable to determine package version for $package");
             }
 
-            Composer::pin($package['name'], $version);
+            Composer::pin($package, $version);
         }
 
         $record = $this->getPluginRecord($plugin);
