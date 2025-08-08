@@ -427,6 +427,11 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
             return $plugin;
         }
 
+        if (!$plugin) {
+            $this->renderComponent(Info::class, sprintf('%s was not found', $code));
+            return null;
+        }
+
         if ($targetVersion && !$this->versionManager->hasDatabaseVersion($plugin, $targetVersion)) {
             throw new ApplicationException(Lang::get('system::lang.updates.plugin_version_not_found'));
         }
@@ -460,12 +465,16 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
             return null;
         }
 
-        // Get the plugin object from its code
-        $plugin = $this->findByIdentifier($code);
-
         // Rollback plugin
         if (!$noRollback) {
             $this->rollback($code);
+        }
+
+        // Get the plugin object from its code
+        $plugin = $this->findByIdentifier($code);
+        if (!$plugin) {
+            $this->renderComponent(Info::class, 'Unable to access plugin object: <fg=red>' . $code . '</>');
+            return true;
         }
 
         // If the plugin was installed via composer, remove it
