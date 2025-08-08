@@ -1273,6 +1273,10 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
 
     /**
      * "Unfreezes" the provided plugin, allowing for updates to be performed
+     * @TODO: Will prevent future plugins from being installed if the version has been updated in composer.json
+     * but the composer update hasn't been run yet as there's now a mismatch between the lock and the composer.json
+     * file. We could either solve by making unfreezing auto update at the same time, or by making install plugins
+     * pass -W (with all depdencies); which we might need to allow anyways?
      */
     public function unfreezePlugin(PluginBase|string $plugin): void
     {
