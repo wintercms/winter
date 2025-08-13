@@ -1,15 +1,17 @@
-<?php namespace Backend\Traits;
+<?php
 
-use ApplicationException;
-use Event;
-use File;
+namespace Backend\Traits;
+
 use Illuminate\Filesystem\FilesystemAdapter;
-use Lang;
-use Request;
-use Response;
-use Str;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
 use System\Classes\MediaLibrary;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Str;
 use Winter\Storm\Support\Svg;
 
 /**
@@ -151,7 +153,7 @@ trait UploadableWidget
 
             $response = Response::make([
                 'link' => $this->uploadableGetUploadUrl($filePath),
-                'result' => 'success'
+                'result' => 'success',
             ]);
         } catch (\Exception $ex) {
             throw new ApplicationException($ex->getMessage());
@@ -166,7 +168,7 @@ trait UploadableWidget
          * Convert uppcare case file extensions to lower case
          */
         $extension = strtolower($extension);
-        $fileName = File::name($fileName).'.'.$extension;
+        $fileName = File::name($fileName) . '.' . $extension;
 
         /*
          * File name contains non-latin characters, attempt to slug the value
@@ -236,13 +238,13 @@ trait UploadableWidget
 
         // Convert all dashes/underscores into separator
         $flip = $separator = '-';
-        $title = preg_replace('!['.preg_quote($flip).']+!u', $separator, $title);
+        $title = preg_replace('![' . preg_quote($flip) . ']+!u', $separator, $title);
 
         // Remove all characters that are not the separator, letters, numbers, whitespace or @.
-        $title = preg_replace('![^'.preg_quote($separator).'\pL\pN\s@]+!u', '', mb_strtolower($title));
+        $title = preg_replace('![^' . preg_quote($separator) . '\pL\pN\s@]+!u', '', mb_strtolower($title));
 
         // Replace all separator characters and whitespace by a single separator
-        $title = preg_replace('!['.preg_quote($separator).'\s]+!u', $separator, $title);
+        $title = preg_replace('![' . preg_quote($separator) . '\s]+!u', $separator, $title);
 
         return trim($title, $separator);
     }

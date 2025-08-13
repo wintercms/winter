@@ -1,8 +1,10 @@
-<?php namespace Backend\Classes;
+<?php
 
-use IteratorAggregate;
-use ArrayIterator;
+namespace Backend\Classes;
+
 use ArrayAccess;
+use ArrayIterator;
+use IteratorAggregate;
 use Traversable;
 
 /**
@@ -14,9 +16,9 @@ use Traversable;
  */
 class FormTabs implements IteratorAggregate, ArrayAccess
 {
-    const SECTION_OUTSIDE = 'outside';
-    const SECTION_PRIMARY = 'primary';
-    const SECTION_SECONDARY = 'secondary';
+    public const SECTION_OUTSIDE = 'outside';
+    public const SECTION_PRIMARY = 'primary';
+    public const SECTION_SECONDARY = 'secondary';
 
     /**
      * @var string Specifies the form section these tabs belong to.

@@ -22,13 +22,13 @@ class Preference extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
-    const DEFAULT_THEME = 'twilight';
+    public const DEFAULT_THEME = 'twilight';
 
     /**
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \Backend\Behaviors\UserPreferencesModel::class
+        \Backend\Behaviors\UserPreferencesModel::class,
     ];
 
     /**
@@ -82,8 +82,7 @@ class Preference extends Model
     {
         if (Session::has('locale')) {
             App::setLocale(Session::get('locale'));
-        }
-        elseif (
+        } elseif (
             ($user = BackendAuth::getUser()) &&
             ($locale = static::get('locale'))
         ) {
@@ -100,8 +99,7 @@ class Preference extends Model
     {
         if (Session::has('fallback_locale')) {
             Lang::setFallback(Session::get('fallback_locale'));
-        }
-        elseif (
+        } elseif (
             ($user = BackendAuth::getUser()) &&
             ($locale = static::get('fallback_locale'))
         ) {
@@ -248,7 +246,7 @@ class Preference extends Model
 
             $tempTimezones[] = [
                 'offset' => (int) $currentTimezone->getOffset($utcTime),
-                'identifier' => $timezoneIdentifier
+                'identifier' => $timezoneIdentifier,
             ];
         }
 

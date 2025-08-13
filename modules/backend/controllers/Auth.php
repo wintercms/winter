@@ -1,17 +1,19 @@
-<?php namespace Backend\Controllers;
+<?php
 
-use ApplicationException;
-use Backend;
-use BackendAuth;
+namespace Backend\Controllers;
+
 use Backend\Classes\Controller;
-use Config;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
 use Exception;
-use Flash;
-use Mail;
-use Request;
-use ValidationException;
-use Validator;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Foundation\Http\Middleware\CheckForTrustedHost;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Mail;
+use Winter\Storm\Support\Facades\Validator;
 
 /**
  * Authentication controller
@@ -74,7 +76,7 @@ class Auth extends Controller
     {
         $rules = [
             'login'    => 'required|between:2,255',
-            'password' => 'required|between:4,255'
+            'password' => 'required|between:4,255',
         ];
 
         $validation = Validator::make(post(), $rules);
@@ -89,7 +91,7 @@ class Auth extends Controller
         // Authenticate user
         $user = BackendAuth::authenticate([
             'login' => post('login'),
-            'password' => post('password')
+            'password' => post('password'),
         ], $remember);
 
         // Redirect to the intended page after successful sign in
@@ -151,7 +153,7 @@ class Auth extends Controller
         }
 
         $rules = [
-            'login' => 'required|between:2,255'
+            'login' => 'required|between:2,255',
         ];
 
         $validation = Validator::make(post(), $rules);
@@ -213,7 +215,7 @@ class Auth extends Controller
         }
 
         $rules = [
-            'password' => 'required|between:4,255'
+            'password' => 'required|between:4,255',
         ];
 
         $validation = Validator::make(post(), $rules);

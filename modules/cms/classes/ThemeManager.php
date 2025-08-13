@@ -1,9 +1,11 @@
-<?php namespace Cms\Classes;
+<?php
 
-use File;
-use ApplicationException;
-use System\Models\Parameter;
+namespace Cms\Classes;
+
 use Cms\Classes\Theme as CmsTheme;
+use System\Models\Parameter;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Theme manager

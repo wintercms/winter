@@ -14,9 +14,9 @@ class TagList extends FormWidgetBase
 {
     use \Backend\Traits\FormModelWidget;
 
-    const MODE_ARRAY = 'array';
-    const MODE_STRING = 'string';
-    const MODE_RELATION = 'relation';
+    public const MODE_ARRAY = 'array';
+    public const MODE_STRING = 'string';
+    public const MODE_RELATION = 'relation';
 
     //
     // Configurable properties
@@ -78,7 +78,7 @@ class TagList extends FormWidgetBase
             'mode',
             'nameFrom',
             'useKey',
-            'placeholder'
+            'placeholder',
         ]);
     }
 
@@ -150,7 +150,7 @@ class TagList extends FormWidgetBase
 
         foreach ($newTags as $newTag) {
             if ($pivot) {
-                $newModel = new $relationModel;
+                $newModel = new $relationModel();
                 $newModel->{$this->nameFrom} = $newTag;
                 $newModel->save();
             } else {

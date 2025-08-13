@@ -89,7 +89,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
         Theme::class => [
             'setDirName',
             'registerHalcyonDatasource',
-            'getDatasource'
+            'getDatasource',
         ],
     ];
 

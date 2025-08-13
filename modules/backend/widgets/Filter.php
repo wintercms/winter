@@ -112,7 +112,8 @@ class Filter extends WidgetBase
 
                 break;
             case 'daterange':
-                if ($scope->value && is_array($scope->value) && count($scope->value) === 2 &&
+                if (
+                    $scope->value && is_array($scope->value) && count($scope->value) === 2 &&
                     $scope->value[0] && $scope->value[0] instanceof Carbon &&
                     $scope->value[1] && $scope->value[1] instanceof Carbon
                 ) {
@@ -122,8 +123,7 @@ class Filter extends WidgetBase
                     if (strcasecmp($after, '0000-01-01 00:00:00') > 0) {
                         $params['afterStr'] = Backend::dateTime($scope->value[0], ['formatAlias' => 'dateMin']);
                         $params['after']    = $after;
-                    }
-                    else {
+                    } else {
                         $params['afterStr'] = '-∞';
                         $params['after']    = null;
                     }
@@ -131,8 +131,7 @@ class Filter extends WidgetBase
                     if (strcasecmp($before, '2999-12-31 23:59:59') < 0) {
                         $params['beforeStr'] = Backend::dateTime($scope->value[1], ['formatAlias' => 'dateMin']);
                         $params['before']    = $before;
-                    }
-                    else {
+                    } else {
                         $params['beforeStr'] = '∞';
                         $params['before']    = null;
                     }
@@ -196,7 +195,7 @@ class Filter extends WidgetBase
                 break;
         }
 
-        return $this->makePartial('scope_'.$scope->type, $params);
+        return $this->makePartial('scope_' . $scope->type, $params);
     }
 
     /**
@@ -261,8 +260,7 @@ class Filter extends WidgetBase
 
                 if (!empty($dates)) {
                     list($date) = $dates;
-                }
-                else {
+                } else {
                     $date = null;
                 }
 
@@ -277,8 +275,7 @@ class Filter extends WidgetBase
                     list($after, $before) = $dates;
 
                     $dates = [$after, $before];
-                }
-                else {
+                } else {
                     $dates = null;
                 }
 
@@ -291,8 +288,7 @@ class Filter extends WidgetBase
 
                 if (!empty($numbers)) {
                     list($number) = $numbers;
-                }
-                else {
+                } else {
                     $number = null;
                 }
 
@@ -307,8 +303,7 @@ class Filter extends WidgetBase
                     list($min, $max) = $numbers;
 
                     $numbers = [$min, $max];
-                }
-                else {
+                } else {
                     $numbers = null;
                 }
 
@@ -356,7 +351,7 @@ class Filter extends WidgetBase
             'options' => [
                 'available' => $this->optionsToAjax($available),
                 'active'    => $this->optionsToAjax($active),
-            ]
+            ],
         ];
     }
 
@@ -492,7 +487,7 @@ class Filter extends WidgetBase
                     throw new ApplicationException(Lang::get('backend::lang.filter.options_method_not_exists', [
                         'model'  => get_class($model),
                         'method' => $methodName,
-                        'filter' => $scope->scopeName
+                        'filter' => $scope->scopeName,
                     ]));
                 }
 
@@ -502,8 +497,7 @@ class Filter extends WidgetBase
                     $options = $model->$methodName();
                 }
             }
-        }
-        elseif (!is_array($options)) {
+        } elseif (!is_array($options)) {
             $options = [];
         }
 
@@ -660,7 +654,7 @@ class Filter extends WidgetBase
              */
             if (isset($config['modelClass'])) {
                 $class = $config['modelClass'];
-                $model = new $class;
+                $model = new $class();
                 $this->scopeModels[$name] = $model;
             }
 
@@ -775,20 +769,13 @@ class Filter extends WidgetBase
                 if ($scope->value instanceof Carbon) {
                     $value = $scope->value;
 
-                    /*
-                     * Condition
-                     */
                     if ($scopeConditions = $scope->conditions) {
                         $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
                             ':filtered' => $value->format('Y-m-d'),
                             ':after'    => $value->format('Y-m-d H:i:s'),
-                            ':before'   => $value->copy()->addDay()->addMinutes(-1)->format('Y-m-d H:i:s')
+                            ':before'   => $value->copy()->addDay()->addMinutes(-1)->format('Y-m-d H:i:s'),
                         ])));
-                    }
-                    /*
-                     * Scope
-                     */
-                    elseif ($scopeMethod = $scope->scope) {
+                    } elseif ($scopeMethod = $scope->scope) {
                         $query->$scopeMethod($value);
                     }
                 }
@@ -800,21 +787,14 @@ class Filter extends WidgetBase
                     list($after, $before) = array_values($scope->value);
 
                     if ($after && $after instanceof Carbon && $before && $before instanceof Carbon) {
-                        /*
-                         * Condition
-                         */
                         if ($scopeConditions = $scope->conditions) {
                             $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
                                 ':afterDate'  => $after->format('Y-m-d'),
                                 ':after'      => $after->format('Y-m-d H:i:s'),
                                 ':beforeDate' => $before->format('Y-m-d'),
-                                ':before'     => $before->format('Y-m-d H:i:s')
+                                ':before'     => $before->format('Y-m-d H:i:s'),
                             ])));
-                        }
-                        /*
-                         * Scope
-                         */
-                        elseif ($scopeMethod = $scope->scope) {
+                        } elseif ($scopeMethod = $scope->scope) {
                             $query->$scopeMethod($after, $before);
                         }
                     }
@@ -824,18 +804,11 @@ class Filter extends WidgetBase
 
             case 'number':
                 if (is_numeric($scope->value)) {
-                    /*
-                     * Condition
-                     */
                     if ($scopeConditions = $scope->conditions) {
                         $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
                             ':filtered' => $scope->value,
                         ])));
-                    }
-                    /*
-                     * Scope
-                     */
-                    elseif ($scopeMethod = $scope->scope) {
+                    } elseif ($scopeMethod = $scope->scope) {
                         $query->$scopeMethod($scope->value);
                     }
                 }
@@ -847,19 +820,12 @@ class Filter extends WidgetBase
                     list($min, $max) = array_values($scope->value);
 
                     if (isset($min) || isset($max)) {
-                        /*
-                         * Condition
-                         */
                         if ($scopeConditions = $scope->conditions) {
                             $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
                                 ':min'  => $min === null ? -2147483647 : $min,
-                                ':max'  => $max === null ? 2147483647 : $max
+                                ':max'  => $max === null ? 2147483647 : $max,
                             ])));
-                        }
-                        /*
-                         * Scope
-                         */
-                        elseif ($scopeMethod = $scope->scope) {
+                        } elseif ($scopeMethod = $scope->scope) {
                             $query->$scopeMethod($min, $max);
                         }
                     }
@@ -868,19 +834,11 @@ class Filter extends WidgetBase
                 break;
 
             case 'text':
-                /*
-                 * Condition
-                 */
                 if ($scopeConditions = $scope->conditions) {
                     $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
                         ':value' => DB::getPdo()->quote($scope->value),
                     ])));
-                }
-
-                /*
-                 * Scope
-                 */
-                elseif ($scopeMethod = $scope->scope) {
+                } elseif ($scopeMethod = $scope->scope) {
                     $query->$scopeMethod($scope->value);
                 }
 
@@ -893,9 +851,6 @@ class Filter extends WidgetBase
                     break;
                 }
 
-                /*
-                 * Condition
-                 */
                 if ($scopeConditions = $scope->conditions) {
                     /*
                      * Switch scope: multiple conditions, value either 1 or 2
@@ -909,17 +864,12 @@ class Filter extends WidgetBase
                         $filtered = implode(',', array_build($value, function ($key, $_value) {
                             return [$key, DB::getPdo()->quote($_value)];
                         }));
-                    }
-                    else {
-                        $filtered = DB::getPdo()->quote($value);
+                    } else {
+                        $filtered = Db::getPdo()->quote($value);
                     }
 
                     $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [':filtered' => $filtered])));
-                }
-                /*
-                 * Scope
-                 */
-                elseif ($scopeMethod = $scope->scope) {
+                } elseif ($scopeMethod = $scope->scope) {
                     $query->$scopeMethod($value);
                 }
 
@@ -942,7 +892,7 @@ class Filter extends WidgetBase
             $scope = $this->getScope($scope);
         }
 
-        $cacheKey = 'scope-'.$scope->scopeName;
+        $cacheKey = 'scope-' . $scope->scopeName;
         return $this->getSession($cacheKey, $default);
     }
 
@@ -955,7 +905,7 @@ class Filter extends WidgetBase
             $scope = $this->getScope($scope);
         }
 
-        $cacheKey = 'scope-'.$scope->scopeName;
+        $cacheKey = 'scope-' . $scope->scopeName;
         $this->putSession($cacheKey, $value);
 
         $scope->value = $value;

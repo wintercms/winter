@@ -2,13 +2,12 @@
 
 namespace System\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use System\Classes\VersionManager;
+use System\Tests\Bootstrap\TestCase;
 
 class VersionManagerTest extends TestCase
 {
-
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -163,21 +162,21 @@ class VersionManagerTest extends TestCase
             [
                 'A single update comment string',
                 [
-                    'A single update comment string'
+                    'A single update comment string',
                 ],
-                []
+                [],
             ],
             [
                 [
                     'A classic update comment string followed by script',
-                    'update_script.php'
+                    'update_script.php',
                 ],
                 [
-                    'A classic update comment string followed by script'
+                    'A classic update comment string followed by script',
                 ],
                 [
-                    'update_script.php'
-                ]
+                    'update_script.php',
+                ],
             ],
             [
                 [
@@ -185,11 +184,11 @@ class VersionManagerTest extends TestCase
                     'An update comment string after the script',
                 ],
                 [
-                    'An update comment string after the script'
+                    'An update comment string after the script',
                 ],
                 [
-                    'scripts_can_go_first.php'
-                ]
+                    'scripts_can_go_first.php',
+                ],
             ],
             [
                 [
@@ -198,12 +197,12 @@ class VersionManagerTest extends TestCase
                     'scripts_can_go_anywhere.php',
                 ],
                 [
-                    'An update comment string after the script'
+                    'An update comment string after the script',
                 ],
                 [
                     'scripts_can_go_first.php',
-                    'scripts_can_go_anywhere.php'
-                ]
+                    'scripts_can_go_anywhere.php',
+                ],
             ],
             [
                 [
@@ -214,12 +213,12 @@ class VersionManagerTest extends TestCase
                 ],
                 [
                     'The first update comment',
-                    'The second update comment'
+                    'The second update comment',
                 ],
                 [
                     'scripts_can_go_first.php',
-                    'scripts_can_go_anywhere.php'
-                ]
+                    'scripts_can_go_anywhere.php',
+                ],
             ],
             [
                 [
@@ -230,12 +229,12 @@ class VersionManagerTest extends TestCase
                 ],
                 [
                     'The first update comment',
-                    'The second update comment'
+                    'The second update comment',
                 ],
                 [
                     'file.name.with.dots.php',
-                    '1.0.2.scripts_can_go_anywhere.php'
-                ]
+                    '1.0.2.scripts_can_go_anywhere.php',
+                ],
             ],
             [
                 [
@@ -246,13 +245,13 @@ class VersionManagerTest extends TestCase
                 ],
                 [
                     'The first update comment',
-                    'The second update comment'
+                    'The second update comment',
                 ],
                 [
                     'subdirectory/file.name.with.dots.php',
-                    'subdirectory\1.0.2.scripts_can_go_anywhere.php'
-                ]
-            ]
+                    'subdirectory\1.0.2.scripts_can_go_anywhere.php',
+                ],
+            ],
         ];
     }
 }

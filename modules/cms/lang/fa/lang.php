@@ -1,4 +1,5 @@
 <?php
+
 return [
     'cms_object' => [
         'invalid_file' => 'نام :name برای فایل نام معتبر است. نام فایل میتواند شامل کاراکتر انگلیسی ، خط تیره و نقطه باشد. بعنوان مثال page.htm، page و subdirectory/page',
@@ -6,7 +7,7 @@ return [
         'file_already_exists' => 'فایلی با نام ":name" موجود است.',
         'error_saving' => 'خطا در ذخیره فایل ":name". لطفا سطح دسترسی ها را بررسی نمایید.',
         'error_creating_directory' => 'خطا در ایجاد پوشه ی :name. لطفا سطح دسترسی ها را بررسی نمایید.',
-        'invalid_file_extension'=>'پسوند :invalid برای فایل نا معتبر است. پسوند های معتبر عبارتند از: :allowed.',
+        'invalid_file_extension' => 'پسوند :invalid برای فایل نا معتبر است. پسوند های معتبر عبارتند از: :allowed.',
         'error_deleting' => 'خطا در خذف فایل ":name". لطفا سطح دسترسی ها را بررسی نمایید.',
         'delete_success' => 'تعداد :count فایل با موفقیت حذف شد.',
         'file_name_required' => 'نام فایل را وارد نمایید.',
@@ -18,8 +19,8 @@ return [
             'online' => 'برخط',
             'maintenance' => 'در حال به روز رسانی',
             'manage_themes' => 'مدیریت قالب ها',
-            'customize_theme' => 'سفارشی سازی قالب'
-        ]
+            'customize_theme' => 'سفارشی سازی قالب',
+        ],
     ],
     'theme' => [
         'not_found_name' => "یافتن قالبی با نام  ':name یافت نشد.'",
@@ -31,7 +32,7 @@ return [
         'edit' => [
             'not_set' => "قالب ویرایش مشخص نشده است.",
             'not_found' => "قالب ویرایش یافت نشد.",
-            'not_match' => "شی مورد نظر شما در قالبی که ویرایش می کنید یافت نشد. لطفا صفحه را مجددا بارگذاری نمایید."
+            'not_match' => "شی مورد نظر شما در قالبی که ویرایش می کنید یافت نشد. لطفا صفحه را مجددا بارگذاری نمایید.",
         ],
         'settings_menu' => 'قالب نمایشی',
         'settings_menu_description' => 'پیش نمایش قالب های موجود و انتخاب قالب فعال.',
@@ -128,7 +129,7 @@ return [
         'cms_page' => 'صفحات مدیریت محتوی',
         'title' => 'عنوان صفحه',
         'url' => 'آدرس صفحه',
-        'file_name' => 'نام فایل'
+        'file_name' => 'نام فایل',
     ],
     'layout' => [
         'not_found_name' => "طرح بندی ی ':name' یافت نشد",
@@ -137,7 +138,7 @@ return [
         'no_list_records' => 'طرح بندی یافت نشد',
         'new' => 'طرح بندی جدید',
         'delete_confirm_multiple' => 'آیا از حذف طرح بندی های انتخاب شده اطمینان دارید؟',
-        'delete_confirm_single' => 'آیا از حذف این طرح بندی اطمینان دارید؟'
+        'delete_confirm_single' => 'آیا از حذف این طرح بندی اطمینان دارید؟',
     ],
     'partial' => [
         'not_found_name' => "بخشی با نام ':name' یافت نشد.",
@@ -147,7 +148,7 @@ return [
         'no_list_records' => 'بخشی وجود ندارد',
         'delete_confirm_multiple' => 'آیا از حذف بخش های انتخاب شده اطمینان دارید؟',
         'delete_confirm_single' => 'آیا از حذف این بخش بندی اطمینان دارید؟',
-        'new' => 'بخش بندی جدید'
+        'new' => 'بخش بندی جدید',
     ],
     'content' => [
         'not_found_name' => "فایل محتوای ':name' یافت نشد.",
@@ -156,18 +157,18 @@ return [
         'no_list_records' => 'هیچ فایل محتوایی وجود ندارد',
         'delete_confirm_multiple' => 'آیا از حذف فایل ها و یا پوشه های انتخاب شده اطمینان دارید؟',
         'delete_confirm_single' => 'آیا از حذف این فایل اطمینان دارید؟',
-        'new' => 'فایل محتوی جدید'
+        'new' => 'فایل محتوی جدید',
     ],
     'ajax_handler' => [
         'invalid_name' => "نام کنترل کننده آژاکس نا معتبر است: :name.",
         'not_found' => "کنترل کننده آژاکس ':name' یافت نشد.",
     ],
     'cms' => [
-        'menu_label' => "مدیریت محتوی"
+        'menu_label' => "مدیریت محتوی",
     ],
     'sidebar' => [
         'add' => 'افزودن',
-        'search' => 'جستجو...'
+        'search' => 'جستجو...',
     ],
     'editor' => [
         'settings' => 'تنظیمات',
@@ -188,7 +189,7 @@ return [
         'hidden_comment' => 'صفحات مخفی فقط برای کاربران وارد شده به سیستم نمایش داده می شود.',
         'enter_fullscreen' => 'حالت تمام صفحه',
         'exit_fullscreen' => 'خروج از حالت تمام صفحه',
-         'open_searchbox' => 'نمایش جستجو',
+        'open_searchbox' => 'نمایش جستجو',
         'close_searchbox'  => 'بستن جستجو',
         'open_replacebox' => 'نمایش جایگزینی',
         'close_replacebox'  => 'بستن جایگزینی',
@@ -239,7 +240,7 @@ return [
         'error_deleting_directory' => 'خطایی در حذف :dir رخ داده است',
         'no_list_records' => 'فایلی وجود ندارد',
         'delete_confirm' => 'آیا از حذف فایل ها یا پوشه های انتخاب شده اطمینان دارید؟',
-        'path' => 'محل قرار گیری'
+        'path' => 'محل قرار گیری',
     ],
     'component' => [
         'menu_label' => "ابزارها",
@@ -259,10 +260,10 @@ return [
     'template' => [
         'invalid_type' => "نوع قالب معتبر نمی باشد.",
         'not_found' => "قالب درخواست شده یافت نشد.",
-        'saved'=> "قالب با موفقیت ذخیره شد.",
+        'saved' => "قالب با موفقیت ذخیره شد.",
         'no_list_records' => 'موردی یافت نشد',
         'delete_confirm' => 'آیا از حذف قالب های انتخاب شده اطمینان دارید؟',
-        'order_by' => 'مرتب سازی با'
+        'order_by' => 'مرتب سازی با',
     ],
     'permissions' => [
         'name' => 'مدیریت محتوی',

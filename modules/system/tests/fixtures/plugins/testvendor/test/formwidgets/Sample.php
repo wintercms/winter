@@ -1,4 +1,6 @@
-<?php namespace TestVendor\Test\FormWidgets;
+<?php
+
+namespace TestVendor\Test\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
 

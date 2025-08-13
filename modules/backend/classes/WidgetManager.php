@@ -1,10 +1,12 @@
-<?php namespace Backend\Classes;
+<?php
 
-use Str;
-use BackendAuth;
-use SystemException;
+namespace Backend\Classes;
+
+use Backend\Facades\BackendAuth;
 use System\Classes\PluginManager;
-use Event;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Str;
 
 /**
  * Widget manager

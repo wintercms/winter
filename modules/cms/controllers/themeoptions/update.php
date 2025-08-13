@@ -8,7 +8,7 @@
 <?php if (!$this->fatalError): ?>
 
     <?php if ($hasCustomData): ?>
-        <?= Form::open(['class'=>'layout']) ?>
+        <?= Form::open(['class' => 'layout']) ?>
 
             <div class="layout-row">
                 <?= $this->formRender() ?>

@@ -142,7 +142,7 @@ return [
         'remove_success' => 'Ștergere cu succes a plugin-urilor selectate.',
         'replace' => [
             'multi_install_error' => 'Înlocuirea mai multor plugin-uri este în prezent neacceptată',
-        ]
+        ],
     ],
     'project' => [
         'name' => 'Proiect',
@@ -164,7 +164,7 @@ return [
         'missing_model' => 'Pe pagina de setări lipsește o definiție a modelului.',
         'update_success' => 'Setările pentru :name au fost actualizate.',
         'return' => 'Întoarcere la setările sistemului.',
-        'search' => 'Căutare'
+        'search' => 'Căutare',
     ],
     'mail' => [
         'log_file' => 'Fișier jurnal',

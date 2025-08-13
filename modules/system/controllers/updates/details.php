@@ -36,28 +36,28 @@
             <li class="<?= $activeTab == 'readme' ? 'active' : '' ?>">
                 <a
                     href="#readme"
-                    data-tab-url="<?= Backend::url('system/updates/details/'.$urlCode.'/readme') ?>">
+                    data-tab-url="<?= Backend::url('system/updates/details/' . $urlCode . '/readme') ?>">
                     <?= e(trans('system::lang.updates.details_readme')) ?>
                 </a>
             </li>
             <li class="<?= $activeTab == 'changelog' ? 'active' : '' ?>">
                 <a
                     href="#changelog"
-                    data-tab-url="<?= Backend::url('system/updates/details/'.$urlCode.'/changelog') ?>">
+                    data-tab-url="<?= Backend::url('system/updates/details/' . $urlCode . '/changelog') ?>">
                     <?= e(trans('system::lang.updates.details_changelog')) ?>
                 </a>
             </li>
             <li class="<?= $activeTab == 'upgrades' ? 'active' : '' ?>">
                 <a
                     href="#upgrades"
-                    data-tab-url="<?= Backend::url('system/updates/details/'.$urlCode.'/upgrades') ?>">
+                    data-tab-url="<?= Backend::url('system/updates/details/' . $urlCode . '/upgrades') ?>">
                     <?= e(trans('system::lang.updates.details_upgrades')) ?>
                 </a>
             </li>
             <li class="<?= $activeTab == 'licence' ? 'active' : '' ?>">
                 <a
                     href="#licence"
-                    data-tab-url="<?= Backend::url('system/updates/details/'.$urlCode.'/licence') ?>">
+                    data-tab-url="<?= Backend::url('system/updates/details/' . $urlCode . '/licence') ?>">
                     <?= e(trans('system::lang.updates.details_licence')) ?>
                 </a>
             </li>
@@ -78,7 +78,7 @@
                         <dl>
                             <?php foreach ($changelog as $version => $comments): ?>
                                 <?php foreach ($comments as $index => $comment): ?>
-                                    <dt><?= !$index ? e($version): '' ?></dt>
+                                    <dt><?= !$index ? e($version) : '' ?></dt>
                                     <dd><?= e($comment) ?></dd>
                                 <?php endforeach; ?>
                             <?php endforeach; ?>

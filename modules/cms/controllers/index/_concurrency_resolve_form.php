@@ -1,4 +1,4 @@
-<?= Form::open(['onsubmit'=>'return false']) ?>
+<?= Form::open(['onsubmit' => 'return false']) ?>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="popup">&times;</button>
         <h4 class="modal-title"><?= e(trans('backend::lang.form.concurrency_file_changed_title')) ?></h4>

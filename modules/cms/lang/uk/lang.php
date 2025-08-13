@@ -303,5 +303,5 @@ return [
         'template_updated' => 'Шаблон було оновлено',
         'template_created' => 'Шаблон був створений',
         'template_deleted' => 'Шаблон був видалений',
-    ]
+    ],
 ];

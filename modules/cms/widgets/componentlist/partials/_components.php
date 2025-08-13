@@ -5,7 +5,7 @@
             data-control="filelist"
             data-group-status-handler="<?= $this->getEventHandler('onSetCollapseStatus') ?>"
             id="<?= $this->getId('component-list') ?>">
-            <?= $this->makePartial('items', ['items'=>$data]) ?>
+            <?= $this->makePartial('items', ['items' => $data]) ?>
         </div>
     </div>
 </div>

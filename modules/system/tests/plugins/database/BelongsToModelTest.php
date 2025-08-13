@@ -2,14 +2,14 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
-use Database\Tester\Models\Post;
 use Database\Tester\Models\Author;
-use Model;
+use Database\Tester\Models\Post;
+use System\Tests\Bootstrap\PluginTestCase;
+use Winter\Storm\Database\Model;
 
 class BelongsToModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 

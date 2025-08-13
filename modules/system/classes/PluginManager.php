@@ -7,17 +7,17 @@ use FilesystemIterator;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\View;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use System\Models\PluginVersion;
-use SystemException;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Foundation\Application;
 use Winter\Storm\Support\ClassLoader;
 use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\DB;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Str;
 
@@ -171,7 +171,7 @@ class PluginManager
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
-                'trace' => $e->getTraceAsString()
+                'trace' => $e->getTraceAsString(),
             ]);
             return null;
         }

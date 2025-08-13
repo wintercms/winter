@@ -1,11 +1,13 @@
-<?php namespace Cms\Twig;
+<?php
 
-use Event;
-use Twig\Source as TwigSource;
-use Twig\Loader\LoaderInterface as TwigLoaderInterface;
+namespace Cms\Twig;
+
+use Cms\Classes\Partial as CmsPartial;
 use Cms\Contracts\CmsObject;
 use System\Twig\Loader as LoaderBase;
-use Cms\Classes\Partial as CmsPartial;
+use Twig\Loader\LoaderInterface as TwigLoaderInterface;
+use Twig\Source as TwigSource;
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * This class implements a Twig template loader for the CMS.

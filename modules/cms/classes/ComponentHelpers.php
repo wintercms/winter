@@ -1,6 +1,8 @@
-<?php namespace Cms\Classes;
+<?php
 
-use Lang;
+namespace Cms\Classes;
+
+use Illuminate\Support\Facades\Lang;
 
 /**
  * Defines some component helpers for the CMS UI.
@@ -30,7 +32,7 @@ class ComponentHelpers
                 'validationPattern'     => '^(@)?[a-zA-Z]+[0-9a-z\_]*$',
                 'validationMessage'     => Lang::get('cms::lang.component.validation_message'),
                 'required'              => true,
-                'showExternalParam'     => false
+                'showExternalParam'     => false,
             ];
             $result[] = $property;
         }
@@ -42,7 +44,7 @@ class ComponentHelpers
                     'property'              => $name,
                     'title'                 => array_get($params, 'title', $name),
                     'type'                  => array_get($params, 'type', 'string'),
-                    'showExternalParam'     => array_get($params, 'showExternalParam', true)
+                    'showExternalParam'     => array_get($params, 'showExternalParam', true),
                 ];
 
                 foreach ($params as $name => $value) {
@@ -65,8 +67,7 @@ class ComponentHelpers
                         array_walk($property[$name], function (&$_value, $key) {
                             $_value = Lang::get($_value);
                         });
-                    }
-                    else {
+                    } else {
                         $property[$name] = Lang::get($value);
                     }
                 }

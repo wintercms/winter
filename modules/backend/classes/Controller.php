@@ -108,7 +108,7 @@ class Controller extends ControllerBase
         'getId',
         'setStatusCode',
         'handleError',
-        'makeHintPartial'
+        'makeHintPartial',
     ];
 
     /**
@@ -307,29 +307,19 @@ class Controller extends ControllerBase
          */
         $this->setNavigationContext($action, $params);
 
-        /*
-         * Execute AJAX event
-         */
         if ($ajaxResponse = $this->execAjaxHandlers()) {
+            // Execute AJAX event
             $result = $ajaxResponse;
-        }
-
-        /*
-         * Execute postback handler
-         */
-        elseif (
+        } elseif (
             ($handler = post('_handler')) &&
             $this->verifyCsrfToken() &&
             ($handlerResponse = $this->runAjaxHandler($handler)) &&
             $handlerResponse !== true
         ) {
+            // Execute AJAX handler
             $result = $handlerResponse;
-        }
-
-        /*
-         * Execute page action
-         */
-        else {
+        } else {
+            // Execute page action
             $result = $this->execPageAction($action, $params);
         }
 
@@ -394,9 +384,9 @@ class Controller extends ControllerBase
         $uriPath = dirname(dirname(strtolower(str_replace('\\', '/', $class))));
         $controllerName = strtolower(class_basename($class));
 
-        $url = $uriPath.'/'.$controllerName.'/'.$action;
+        $url = $uriPath . '/' . $controllerName . '/' . $action;
         if ($path) {
-            $url .= '/'.$path;
+            $url .= '/' . $path;
         }
 
         return Backend::url($url);
@@ -488,7 +478,7 @@ class Controller extends ControllerBase
                  * Validate the handler name
                  */
                 if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
-                    throw new SystemException(Lang::get('backend::lang.ajax_handler.invalid_name', ['name'=>$handler]));
+                    throw new SystemException(Lang::get('backend::lang.ajax_handler.invalid_name', ['name' => $handler]));
                 }
 
                 /*
@@ -499,11 +489,10 @@ class Controller extends ControllerBase
 
                     foreach ($partialList as $partial) {
                         if (!preg_match('/^(?!.*\/\/)[a-z0-9\_][a-z0-9\_\-\/]*$/i', $partial)) {
-                            throw new SystemException(Lang::get('backend::lang.partial.invalid_name', ['name'=>$partial]));
+                            throw new SystemException(Lang::get('backend::lang.partial.invalid_name', ['name' => $partial]));
                         }
                     }
-                }
-                else {
+                } else {
                     $partialList = [];
                 }
 
@@ -513,7 +502,7 @@ class Controller extends ControllerBase
                  * Execute the handler
                  */
                 if (!$result = $this->runAjaxHandler($handler)) {
-                    throw new SystemException(Lang::get('backend::lang.ajax_handler.not_found', ['name'=>$handler]));
+                    throw new SystemException(Lang::get('backend::lang.ajax_handler.not_found', ['name' => $handler]));
                 }
 
                 /*
@@ -530,11 +519,8 @@ class Controller extends ControllerBase
                 if ($result instanceof RedirectResponse) {
                     $responseContents['X_WINTER_REDIRECT'] = $result->getTargetUrl();
                     $result = null;
-                }
-                /*
-                 * No redirect is used, look for any flash messages
-                 */
-                elseif (Flash::check()) {
+                } elseif (Flash::check()) {
+                    // No redirect is used, look for any flash messages
                     $responseContents['#layout-flash-messages'] = $this->makeLayoutPartial('flash_messages');
                 }
 
@@ -552,17 +538,14 @@ class Controller extends ControllerBase
                  */
                 if (is_array($result)) {
                     $responseContents = array_merge($responseContents, $result);
-                }
-                elseif (is_string($result)) {
+                } elseif (is_string($result)) {
                     $responseContents['result'] = $result;
-                }
-                elseif (is_object($result)) {
+                } elseif (is_object($result)) {
                     return $result;
                 }
 
                 return Response::make()->setContent($responseContents);
-            }
-            catch (ValidationException $ex) {
+            } catch (ValidationException $ex) {
                 /*
                  * Handle validation error gracefully
                  */
@@ -571,11 +554,9 @@ class Controller extends ControllerBase
                 $responseContents['#layout-flash-messages'] = $this->makeLayoutPartial('flash_messages');
                 $responseContents['X_WINTER_ERROR_FIELDS'] = $ex->getFields();
                 throw new AjaxException($responseContents);
-            }
-            catch (MassAssignmentException $ex) {
+            } catch (MassAssignmentException $ex) {
                 throw new ApplicationException(Lang::get('backend::lang.model.mass_assignment_failed', ['attribute' => $ex->getMessage()]));
-            }
-            catch (Exception $ex) {
+            } catch (Exception $ex) {
                 throw $ex;
             }
         }
@@ -639,15 +620,14 @@ class Controller extends ControllerBase
             }
 
             if (!isset($this->widget->{$widgetName})) {
-                throw new SystemException(Lang::get('backend::lang.widget.not_bound', ['name'=>$widgetName]));
+                throw new SystemException(Lang::get('backend::lang.widget.not_bound', ['name' => $widgetName]));
             }
 
             if (($widget = $this->widget->{$widgetName}) && $widget->methodExists($handlerName)) {
                 $result = $this->runAjaxHandlerForWidget($widget, $handlerName);
                 return $result ?: true;
             }
-        }
-        else {
+        } else {
             /*
              * Process page specific handler (index_onSomething)
              */
@@ -755,7 +735,7 @@ class Controller extends ControllerBase
             'hintName'    => $name,
             'hintPartial' => $partial,
             'hintContent' => array_get($params, 'content'),
-            'hintParams'  => $params
+            'hintParams'  => $params,
         ] + $params);
     }
 

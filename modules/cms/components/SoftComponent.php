@@ -1,4 +1,6 @@
-<?php namespace Cms\Components;
+<?php
+
+namespace Cms\Components;
 
 use Cms\Classes\ComponentBase;
 
@@ -27,7 +29,7 @@ class SoftComponent extends ComponentBase
     {
         return [
             'name'        => 'cms::lang.component.soft_component',
-            'description' => 'cms::lang.component.soft_component_description'
+            'description' => 'cms::lang.component.soft_component_description',
         ];
     }
 }

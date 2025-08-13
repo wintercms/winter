@@ -1,17 +1,19 @@
-<?php namespace System\Controllers;
+<?php
 
-use Mail;
-use Lang;
-use Flash;
-use Config;
-use Request;
-use Backend;
-use BackendMenu;
-use System\Classes\SettingsManager;
-use System\Behaviors\SettingsModel;
+namespace System\Controllers;
+
 use Backend\Classes\Controller;
-use ApplicationException;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
 use Exception;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use System\Behaviors\SettingsModel;
+use System\Classes\SettingsManager;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Mail;
 
 /**
  * Settings controller
@@ -69,7 +71,7 @@ class Settings extends Controller
 
     public function update($author, $plugin, $code = null)
     {
-        SettingsManager::setContext($author.'.'.$plugin, $code);
+        SettingsManager::setContext($author . '.' . $plugin, $code);
 
         $this->vars['parentLink'] = Backend::url('system/settings');
         $this->vars['parentLabel'] = Lang::get('system::lang.settings.menu_label');
@@ -88,8 +90,7 @@ class Settings extends Controller
 
             $model = $this->createModel($item);
             $this->initWidgets($model);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
     }
@@ -149,7 +150,7 @@ class Settings extends Controller
 
         Flash::success(Lang::get('backend::lang.form.reset_success'));
 
-        return Backend::redirect('system/settings/update/'.$author.'/'.$plugin.'/'.$code);
+        return Backend::redirect('system/settings/update/' . $author . '/' . $plugin . '/' . $code);
     }
 
     /**

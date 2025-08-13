@@ -1,9 +1,11 @@
-<?php namespace System\Classes;
+<?php
 
-use Event;
-use Backend;
-use BackendAuth;
-use SystemException;
+namespace System\Classes;
+
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * Manages the system settings.
@@ -19,20 +21,20 @@ class SettingsManager
     /**
      * Allocated category types
      */
-    const CATEGORY_CMS = 'system::lang.system.categories.cms';
-    const CATEGORY_MISC = 'system::lang.system.categories.misc';
-    const CATEGORY_MAIL = 'system::lang.system.categories.mail';
-    const CATEGORY_LOGS = 'system::lang.system.categories.logs';
-    const CATEGORY_SHOP = 'system::lang.system.categories.shop';
-    const CATEGORY_TEAM = 'system::lang.system.categories.team';
-    const CATEGORY_USERS = 'system::lang.system.categories.users';
-    const CATEGORY_SOCIAL = 'system::lang.system.categories.social';
-    const CATEGORY_SYSTEM = 'system::lang.system.categories.system';
-    const CATEGORY_EVENTS = 'system::lang.system.categories.events';
-    const CATEGORY_BACKEND = 'system::lang.system.categories.backend';
-    const CATEGORY_CUSTOMERS = 'system::lang.system.categories.customers';
-    const CATEGORY_MYSETTINGS = 'system::lang.system.categories.my_settings';
-    const CATEGORY_NOTIFICATIONS = 'system::lang.system.categories.notifications';
+    public const CATEGORY_CMS = 'system::lang.system.categories.cms';
+    public const CATEGORY_MISC = 'system::lang.system.categories.misc';
+    public const CATEGORY_MAIL = 'system::lang.system.categories.mail';
+    public const CATEGORY_LOGS = 'system::lang.system.categories.logs';
+    public const CATEGORY_SHOP = 'system::lang.system.categories.shop';
+    public const CATEGORY_TEAM = 'system::lang.system.categories.team';
+    public const CATEGORY_USERS = 'system::lang.system.categories.users';
+    public const CATEGORY_SOCIAL = 'system::lang.system.categories.social';
+    public const CATEGORY_SYSTEM = 'system::lang.system.categories.system';
+    public const CATEGORY_EVENTS = 'system::lang.system.categories.events';
+    public const CATEGORY_BACKEND = 'system::lang.system.categories.backend';
+    public const CATEGORY_CUSTOMERS = 'system::lang.system.categories.customers';
+    public const CATEGORY_MYSETTINGS = 'system::lang.system.categories.my_settings';
+    public const CATEGORY_NOTIFICATIONS = 'system::lang.system.categories.notifications';
 
     /**
      * @var array Cache of registration callbacks.
@@ -76,7 +78,7 @@ class SettingsManager
         'permissions' => [],
         'order'       => 500,
         'context'     => 'system',
-        'keywords'    => null
+        'keywords'    => null,
     ];
 
     /**
@@ -287,7 +289,7 @@ class SettingsManager
 
         $item = array_merge(self::$itemDefaults, array_merge($definition, [
             'code' => $code,
-            'owner' => $owner
+            'owner' => $owner,
         ]));
 
         /*
@@ -300,8 +302,7 @@ class SettingsManager
                 list($author, $plugin) = explode('.', $owner);
                 $uri[] = strtolower($author);
                 $uri[] = strtolower($plugin);
-            }
-            else {
+            } else {
                 $uri[] = strtolower($owner);
             }
 
@@ -412,6 +413,6 @@ class SettingsManager
      */
     protected function makeItemKey($owner, $code)
     {
-        return strtoupper($this->aliases[strtolower($owner)] ?? $owner).'.'.strtoupper($code);
+        return strtoupper($this->aliases[strtolower($owner)] ?? $owner) . '.' . strtoupper($code);
     }
 }

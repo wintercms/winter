@@ -1,4 +1,6 @@
-<?php namespace Backend\Widgets;
+<?php
+
+namespace Backend\Widgets;
 
 use Backend\Classes\WidgetBase;
 
@@ -60,8 +62,7 @@ class Toolbar extends WidgetBase
         if (isset($this->search)) {
             if (is_string($this->search)) {
                 $searchConfig = $this->makeConfig(['partial' => $this->search]);
-            }
-            else {
+            } else {
                 $searchConfig = $this->makeConfig($this->search);
             }
 

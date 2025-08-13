@@ -2,9 +2,9 @@
 
 namespace {{ plugin_namespace }}\Tests\Unit;
 
-use {{ plugin_namespace }}\Plugin;
 use System\Classes\PluginBase;
 use System\Tests\Bootstrap\PluginTestCase;
+use {{ plugin_namespace }}\Plugin;
 
 class PluginTest extends PluginTestCase
 {

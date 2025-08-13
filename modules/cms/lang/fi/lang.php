@@ -11,7 +11,7 @@ return [
         'error_deleting' => "Virhe poistaessa teemaa ':name'. Tarkista kirjoitusoikeudet.",
         'delete_success' => 'Poistetut teemat: :count.',
         'file_name_required' => 'Tiedoston nimi -kenttä on vaadittu.',
-        'safe_mode_enabled' => 'Turvatila on käytössä.'
+        'safe_mode_enabled' => 'Turvatila on käytössä.',
     ],
     'dashboard' => [
         'active_theme' => [
@@ -19,20 +19,20 @@ return [
             'online' => 'Online',
             'maintenance' => 'Ylläpitotila',
             'manage_themes' => 'Hallitse teemoja',
-            'customize_theme' => 'Kustomoi teema'
-        ]
+            'customize_theme' => 'Kustomoi teema',
+        ],
     ],
     'theme' => [
         'not_found_name' => "Teemaa ':name' ei löydy.",
         'by_author' => 'Tekijä: :name',
         'active' => [
             'not_set' => 'Aktiivista teemaa ei ole asetettu.',
-            'not_found' => 'Aktiivista teemaa ei löytynyt.'
+            'not_found' => 'Aktiivista teemaa ei löytynyt.',
         ],
         'edit' => [
             'not_set' => 'Muokattavaa teemaa ei ole asetettu.',
             'not_found' => 'Muokattavaa teemaa ei löydy.',
-            'not_match' => 'Objektia, jota yrität muokata, ei kuulu muokattavaan teemaan. Päivitä sivu uudelleen.'
+            'not_match' => 'Objektia, jota yrität muokata, ei kuulu muokattavaan teemaan. Päivitä sivu uudelleen.',
         ],
         'settings_menu' => 'Sivuston teema',
         'settings_menu_description' => 'Esikatsele luettelo asennetuista teemoista ja valitse aktiivinen teema.',
@@ -92,24 +92,24 @@ return [
         'dir_name_taken' => 'Haluttu teemakansio on jo olemassa.',
         'find_more_themes' => 'Etsi lisää teemoja',
         'saving' => 'Tallennetaan teemaa...',
-        'return' => 'Palaa teemalistaan'
+        'return' => 'Palaa teemalistaan',
     ],
     'maintenance' => [
         'settings_menu' => 'Ylläpitotila',
         'settings_menu_description' => 'Muokkaa huoltotilan sivua ja valitse asetus.',
         'is_enabled' => 'Ota huoltotila käyttöön',
         'is_enabled_comment' => 'Valitse sivu näytettäväksi kun huoltotila on käytössä.',
-        'hint' => 'Huoltotila näyttää huoltosivun vierailijoille, jotka eivät ole kirjautuneena hallintapaneeliin.'
+        'hint' => 'Huoltotila näyttää huoltosivun vierailijoille, jotka eivät ole kirjautuneena hallintapaneeliin.',
     ],
     'page' => [
         'not_found_name' => "Sivua ':name' ei löytynyt",
         'not_found' => [
             'label' => 'Sivua ei löytynyt',
-            'help' => 'Haettua sivua ei löydy.'
+            'help' => 'Haettua sivua ei löydy.',
         ],
         'custom_error' => [
             'label' => 'Sivuvirhe',
-            'help' => "Olemme pahoillamme, mutta joku meni vikaan ja sivua ei voida näyttää."
+            'help' => "Olemme pahoillamme, mutta joku meni vikaan ja sivua ei voida näyttää.",
         ],
         'menu_label' => 'Sivut',
         'unsaved_label' => 'Tallenntamattomat sivu(t)',
@@ -122,7 +122,7 @@ return [
         'cms_page' => 'CMS-sivu',
         'title' => 'Sivun nimi',
         'url' => 'Sivun URL-osoite',
-        'file_name' => 'Sivun tiedostonimi'
+        'file_name' => 'Sivun tiedostonimi',
     ],
     'layout' => [
         'not_found_name' => "Ulkoasua ':name' ei löytynyt",
@@ -131,7 +131,7 @@ return [
         'no_list_records' => 'Ei ulkoasuja',
         'new' => 'Uusi ulkoasu',
         'delete_confirm_multiple' => 'Poista valitut ulkoasut?',
-        'delete_confirm_single' => 'Poista tämä ulkoasu?'
+        'delete_confirm_single' => 'Poista tämä ulkoasu?',
     ],
     'partial' => [
         'not_found_name' => "Osiota ':name' ei löydy.",
@@ -141,7 +141,7 @@ return [
         'no_list_records' => 'Osioita ei löydy',
         'delete_confirm_multiple' => 'Poista valitut osiot?',
         'delete_confirm_single' => 'Poista tämä osio?',
-        'new' => 'Uusio osio'
+        'new' => 'Uusio osio',
     ],
     'content' => [
         'not_found_name' => "Sisältötiedostoa ':name' ei löydy.",
@@ -150,18 +150,18 @@ return [
         'no_list_records' => 'Sisältötiedostoja ei löydy',
         'delete_confirm_multiple' => 'Poista valitut sisältötiedostot tai hakemistot?',
         'delete_confirm_single' => 'Poista tämä sisältötiedosto?',
-        'new' => 'Uusi sisältötiedosto'
+        'new' => 'Uusi sisältötiedosto',
     ],
     'ajax_handler' => [
         'invalid_name' => 'Ajax käsittelijän nimi: :name ei ole kelvollinen.',
-        'not_found' => "AJAX käsittelijää ':name' ei löydy."
+        'not_found' => "AJAX käsittelijää ':name' ei löydy.",
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => 'Lisää',
-        'search' => 'Etsi...'
+        'search' => 'Etsi...',
     ],
     'editor' => [
         'settings' => 'Asetukset',
@@ -185,7 +185,7 @@ return [
         'open_searchbox' => 'Avaa haku',
         'close_searchbox'  => 'Sulje haku',
         'open_replacebox' => 'Avaa korvaa',
-        'close_replacebox'  => 'Sulje korvaa'
+        'close_replacebox'  => 'Sulje korvaa',
     ],
     'asset' => [
         'menu_label' => 'Aineistot',
@@ -225,7 +225,7 @@ return [
         'error_deleting_directory' => 'Virhe poistettaessa alkuperäinen kansio :dir',
         'no_list_records' => 'Tiedostoja ei löytynyt',
         'delete_confirm' => 'Poista valitut tiedostot ja/tai kansiot?',
-        'path' => 'Polku'
+        'path' => 'Polku',
     ],
     'component' => [
         'menu_label' => 'Komponentit',
@@ -237,7 +237,7 @@ return [
         'invalid_request' => 'Mallia ei voida tallentaa koska komponentin tiedot eivät ole kelvollisia.',
         'no_records' => 'Komponentteja ei löytynyt',
         'not_found' => "Komponenttia ':name' ei löydy.",
-        'method_not_found' => "Komponentti ':name' ei sisällä metodia ':method'."
+        'method_not_found' => "Komponentti ':name' ei sisällä metodia ':method'.",
     ],
     'template' => [
         'invalid_type' => 'Tuntematon teeman tyyppi.',
@@ -245,7 +245,7 @@ return [
         'saved' => 'Teema tallennettu.',
         'no_list_records' => 'Tietueita ei löytynyt',
         'delete_confirm' => 'Poista valitut teemat?',
-        'order_by' => 'Järjestä'
+        'order_by' => 'Järjestä',
     ],
     'permissions' => [
         'name' => 'CMS',
@@ -255,7 +255,7 @@ return [
         'manage_layouts' => 'Luo, muokkaa ja poista sivuston ulkoasuja',
         'manage_partials' => 'Luo, muokkaa ja poista CMS-järjestelmän osioita',
         'manage_themes' => 'Ota käyttöön ja poista käytöstä CMS-järjestelmän teemoja',
-        'manage_media' => 'Siirrä ja hallinnoi mediatiedostoja - kuvia, videoita, ääniä, dokumentteja'
+        'manage_media' => 'Siirrä ja hallinnoi mediatiedostoja - kuvia, videoita, ääniä, dokumentteja',
     ],
     'theme_log' => [
         'hint' => 'Tämä loki näyttää muutokset teemaan järjestelmänvalvojilta hallintapaneelissa.',

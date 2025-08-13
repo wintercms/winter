@@ -1,7 +1,9 @@
-<?php namespace Cms\Twig;
+<?php
 
-use Twig\Node\Node as TwigNode;
+namespace Cms\Twig;
+
 use Twig\Compiler as TwigCompiler;
+use Twig\Node\Node as TwigNode;
 
 /**
  * Represents a "styles" node

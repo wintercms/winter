@@ -3,7 +3,7 @@
     data-refresh-handler="<?= $this->getEventHandler('onRefresh') ?>"
     class="layout-row"
     role="form"
-    id="<?= $this->getId($renderSection.'Container') ?>">
+    id="<?= $this->getId($renderSection . 'Container') ?>">
 
     <?php if ($renderSection == 'outside'): ?>
         <?= $this->makePartial('section', ['tabs' => $outsideTabs]) ?>

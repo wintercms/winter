@@ -1,4 +1,6 @@
-<?php namespace Cms\Console;
+<?php
+
+namespace Cms\Console;
 
 use System\Console\BaseScaffoldCommand;
 

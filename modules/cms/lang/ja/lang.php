@@ -7,7 +7,7 @@ return [
         'file_already_exists' => '":name"ファイルは既に存在しています。',
         'error_saving' => '":name"ファイル保存エラー',
         'error_creating_directory' => ':nameディレクトリー作成エラー',
-        'invalid_file_extension'=>'正しくないファイル拡張子：:invalid。許されている拡張子は、:allowedです。',
+        'invalid_file_extension' => '正しくないファイル拡張子：:invalid。許されている拡張子は、:allowedです。',
         'error_deleting' => '":name"一時ファイル削除エラー',
         'delete_success' => ':count個のテンプレートを削除しました。',
         'file_name_required' => 'ファイル名フィールドが必要です。',
@@ -19,7 +19,7 @@ return [
             'maintenance' => 'メンテナンスモード',
             'manage_themes' => 'テーマの管理',
             'customize_theme' => 'テーマのカスタマイズ',
-        ]
+        ],
     ],
     'theme' => [
         'not_found_name' => 'テーマ":name"が見つかりませんでした。',
@@ -259,7 +259,7 @@ return [
     'template' => [
         'invalid_type' => '未知のテンプレートタイプ。',
         'not_found' => 'リクエストされたテンプレートが見つかりません。',
-        'saved'=> 'テンプレートを保存しました。',
+        'saved' => 'テンプレートを保存しました。',
         'no_list_records' => 'レコードが見つかりません',
         'delete_confirm' => '選択したテンプレートを削除しますか？',
         'order_by' => 'Order by',

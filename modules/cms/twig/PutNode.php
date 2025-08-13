@@ -1,7 +1,9 @@
-<?php namespace Cms\Twig;
+<?php
 
-use Twig\Node\Node as TwigNode;
+namespace Cms\Twig;
+
 use Twig\Compiler as TwigCompiler;
+use Twig\Node\Node as TwigNode;
 
 /**
  * Represents a put node
@@ -26,7 +28,7 @@ class PutNode extends TwigNode
         $compiler
             ->addDebugInfo($this)
             ->write("echo \$this->env->getExtension('Cms\Twig\Extension')->startBlock(")
-            ->raw("'".$this->getAttribute('name')."'")
+            ->raw("'" . $this->getAttribute('name') . "'")
             ->write(");\n")
         ;
 

@@ -1,6 +1,8 @@
-<?php namespace Cms\Classes;
+<?php
 
-use ApplicationException;
+namespace Cms\Classes;
+
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Support\Collection as CollectionBase;
 
 /**

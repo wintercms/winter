@@ -1,11 +1,13 @@
-<?php namespace Cms\Traits;
+<?php
 
-use File;
-use Cache;
-use Config;
-use Cms\Classes\Page;
+namespace Cms\Traits;
+
 use Cms\Classes\Controller;
-use ApplicationException;
+use Cms\Classes\Page;
+use Illuminate\Support\Facades\Cache;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * URL Maker Trait
@@ -144,7 +146,7 @@ trait UrlMaker
         /*
          * Cache
          */
-        $key = 'urlMaker'.$this->urlComponentName.crc32(get_class($this));
+        $key = 'urlMaker' . $this->urlComponentName . crc32(get_class($this));
 
         $cached = Cache::get($key, false);
         if ($cached !== false && ($cached = @unserialize($cached)) !== false) {
@@ -187,7 +189,7 @@ trait UrlMaker
         $cached = [
             'path'     => $filePath,
             'fileName' => $baseFileName,
-            'mtime'    => @File::lastModified($filePath)
+            'mtime'    => @File::lastModified($filePath),
         ];
 
         $expiresAt = now()->addMinutes(Config::get('cms.parsedPageCacheTTL', 1440));
@@ -203,7 +205,7 @@ trait UrlMaker
      */
     protected function makeUrl()
     {
-        $controller = Controller::getController() ?: new Controller;
+        $controller = Controller::getController() ?: new Controller();
 
         return $controller->pageUrl($this->getUrlPageName(), $this->getUrlParams());
     }

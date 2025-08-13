@@ -1,10 +1,12 @@
-<?php namespace Cms\Console;
+<?php
+
+namespace Cms\Console;
 
 use Cms\Classes\Theme;
 use Cms\Classes\ThemeManager;
-use File;
 use System\Classes\UpdateManager;
 use Winter\Storm\Console\Command;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Console command to install a new theme.
@@ -76,7 +78,7 @@ class ThemeInstall extends Command
             $fields = ['Name', 'Description', 'Author', 'URL', ''];
 
             $this->info(sprintf(
-                implode(': %s'.PHP_EOL, $fields),
+                implode(': %s' . PHP_EOL, $fields),
                 $themeDetails['code'],
                 $themeDetails['description'],
                 $themeDetails['author'],
@@ -100,7 +102,7 @@ class ThemeInstall extends Command
                  * Move downloaded theme to a new directory.
                  * Basically we're renaming it.
                  */
-                File::move(themes_path().'/'.$dirName, themes_path().'/'.$argDirName);
+                File::move(themes_path() . '/' . $dirName, themes_path() . '/' . $argDirName);
 
                 /*
                  * Let's make sure to unflag the 'old' theme as

@@ -2,8 +2,8 @@
 
 namespace Backend\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Backend\Classes\WidgetManager;
+use System\Tests\Bootstrap\TestCase;
 
 class WidgetManagerTest extends TestCase
 {
@@ -21,7 +21,7 @@ class WidgetManagerTest extends TestCase
         $manager = WidgetManager::instance();
         $manager->registerReportWidget('Acme\Fake\ReportWidget\HelloWorld', [
             'name' => 'Hello World Test',
-            'context' => 'dashboard'
+            'context' => 'dashboard',
         ]);
         $widgets = $manager->listReportWidgets();
 
@@ -33,11 +33,11 @@ class WidgetManagerTest extends TestCase
         $manager = WidgetManager::instance();
         $manager->registerReportWidget('Acme\Fake\ReportWidget\HelloWorld', [
             'name' => 'Hello World Test',
-            'context' => 'dashboard'
+            'context' => 'dashboard',
         ]);
         $manager->registerReportWidget('Acme\Fake\ReportWidget\ByeWorld', [
             'name' => 'Hello World Bye',
-            'context' => 'dashboard'
+            'context' => 'dashboard',
         ]);
 
         $manager->removeReportWidget('Acme\Fake\ReportWidget\ByeWorld');

@@ -1,7 +1,6 @@
-<?php namespace Cms\Helpers;
+<?php
 
-use Config;
-use File as Filesystem;
+namespace Cms\Helpers;
 
 /**
  * Defines some file-system helpers for the CMS system.

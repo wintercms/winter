@@ -2,12 +2,12 @@
 
 namespace Cms\Tests\Classes;
 
-use Cms;
-use Request;
-use System\Tests\Bootstrap\TestCase;
-use Cms\Classes\Theme;
 use Cms\Classes\Controller;
+use Cms\Classes\Theme;
+use Cms\Facades\Cms;
+use Illuminate\Support\Facades\Request;
 use System\Helpers\View;
+use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Halcyon\Model;
 use Winter\Storm\Support\Facades\Config;
 

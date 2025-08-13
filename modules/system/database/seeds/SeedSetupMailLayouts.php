@@ -1,7 +1,9 @@
-<?php namespace System\Database\Seeds;
+<?php
 
-use Seeder;
+namespace System\Database\Seeds;
+
 use System\Models\MailLayout;
+use Winter\Storm\Database\Updates\Seeder;
 
 class SeedSetupMailLayouts extends Seeder
 {

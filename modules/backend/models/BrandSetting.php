@@ -1,15 +1,17 @@
-<?php namespace Backend\Models;
+<?php
 
-use App;
-use Backend;
-use Url;
-use File;
-use Lang;
-use Model;
-use Cache;
-use Config;
-use Less_Parser;
+namespace Backend\Models;
+
+use Backend\Facades\Backend;
 use Exception;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
+use Less_Parser;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Url;
 
 /**
  * Brand settings that affect all users
@@ -27,7 +29,7 @@ class BrandSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**
@@ -42,7 +44,7 @@ class BrandSetting extends Model
 
     public $attachOne = [
         'favicon' => \System\Models\File::class,
-        'logo' => \System\Models\File::class
+        'logo' => \System\Models\File::class,
     ];
 
     /**
@@ -50,13 +52,13 @@ class BrandSetting extends Model
      */
     public $cacheKey = 'backend::brand.custom_css';
 
-    const PRIMARY_COLOR   = '#103141'; // Elephant
-    const SECONDARY_COLOR = '#2da7c7'; // Winter
-    const ACCENT_COLOR    = '#6cc551'; // Shaded Green
+    public const PRIMARY_COLOR   = '#103141'; // Elephant
+    public const SECONDARY_COLOR = '#2da7c7'; // Winter
+    public const ACCENT_COLOR    = '#6cc551'; // Shaded Green
 
-    const INLINE_MENU   = 'inline';
-    const TILE_MENU     = 'tile';
-    const COLLAPSE_MENU = 'collapse';
+    public const INLINE_MENU   = 'inline';
+    public const TILE_MENU     = 'tile';
+    public const COLLAPSE_MENU = 'collapse';
 
     /**
      * Validation rules
@@ -188,8 +190,7 @@ class BrandSetting extends Model
         try {
             $customCss = self::compileCss();
             Cache::forever($cacheKey, $customCss);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $customCss = '/* ' . $ex->getMessage() . ' */';
         }
 
@@ -206,7 +207,7 @@ class BrandSetting extends Model
         $accentColor = self::get('accent_color', self::ACCENT_COLOR);
 
         $parser->ModifyVars([
-            'logo-image'      => "'".self::getLogo()."'",
+            'logo-image'      => "'" . self::getLogo() . "'",
             'brand-primary'   => $primaryColor,
             'brand-secondary' => $secondaryColor,
             'brand-accent'    => $accentColor,

@@ -2,15 +2,14 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\PartialStack;
+use System\Tests\Bootstrap\TestCase;
 
 class PartialStackTest extends TestCase
 {
-
     public function testStackPartials()
     {
-        $stack = new PartialStack;
+        $stack = new PartialStack();
 
         /*
          * Stack em up
@@ -55,7 +54,7 @@ class PartialStackTest extends TestCase
 
     public function testEmptyStack()
     {
-        $stack = new PartialStack;
+        $stack = new PartialStack();
         $this->assertNull($stack->getComponent('xxx'));
     }
 }

@@ -1,7 +1,9 @@
-<?php namespace System\Models;
+<?php
 
-use App;
-use Model;
+namespace System\Models;
+
+use Illuminate\Support\Facades\App;
+use Winter\Storm\Database\Model;
 
 /**
  * Mail settings
@@ -13,17 +15,17 @@ class MailSetting extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
-    const MODE_FAILOVER  = 'failover';
-    const MODE_LOG       = 'log';
-    const MODE_MAIL      = 'mail';
-    const MODE_SENDMAIL  = 'sendmail';
-    const MODE_SMTP      = 'smtp';
+    public const MODE_FAILOVER = 'failover';
+    public const MODE_LOG      = 'log';
+    public const MODE_MAIL     = 'mail';
+    public const MODE_SENDMAIL = 'sendmail';
+    public const MODE_SMTP     = 'smtp';
 
     /**
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**
@@ -40,9 +42,9 @@ class MailSetting extends Model
      * Validation rules
      */
     public $rules = [
-        'failover_mailers' => 'required_if:send_mode,'.self::MODE_FAILOVER,
+        'failover_mailers' => 'required_if:send_mode,' . self::MODE_FAILOVER,
         'sender_name'  => 'required',
-        'sender_email' => 'required|email'
+        'sender_email' => 'required|email',
     ];
 
     /**
@@ -111,8 +113,7 @@ class MailSetting extends Model
                 if ($settings->smtp_authorization) {
                     $config->set('mail.mailers.smtp.username', $settings->smtp_user);
                     $config->set('mail.mailers.smtp.password', $settings->smtp_password);
-                }
-                else {
+                } else {
                     $config->set('mail.mailers.smtp.username', null);
                     $config->set('mail.mailers.smtp.password', null);
                 }
@@ -129,7 +130,7 @@ class MailSetting extends Model
      *
      * We use this to show smtp credential fields only for smtp mode and when smtp authorization is required.
      *
-     * @param array $fields
+     * @param object $fields
      * @param string|null $context
      * @return void
      */

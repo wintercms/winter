@@ -2,8 +2,8 @@
 
 namespace System\Tests\Bootstrap;
 
-use ReflectionClass;
 use PHPUnit\Framework\Assert;
+use ReflectionClass;
 
 class TestCase extends \Illuminate\Foundation\Testing\TestCase
 {

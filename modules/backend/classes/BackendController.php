@@ -208,16 +208,18 @@ class BackendController extends ControllerBase
         $controller = $params[1] ?? 'index';
         self::$action = $action = isset($params[2]) ? $this->parseAction($params[2]) : 'index';
         self::$params = $controllerParams = array_slice($params, 3);
-        $controllerClass = '\\'.$module.'\Controllers\\'.$controller;
-        if ($controllerObj = $this->findController(
-            $controllerClass,
-            $action,
-            base_path().'/modules'
-        )) {
+        $controllerClass = '\\' . $module . '\Controllers\\' . $controller;
+        if (
+            $controllerObj = $this->findController(
+                $controllerClass,
+                $action,
+                base_path() . '/modules'
+            )
+        ) {
             return [
                 'controller' => $controllerObj,
                 'action' => $action,
-                'params' => $controllerParams
+                'params' => $controllerParams,
             ];
         }
 
@@ -235,16 +237,18 @@ class BackendController extends ControllerBase
             $controller = $params[2] ?? 'index';
             self::$action = $action = isset($params[3]) ? $this->parseAction($params[3]) : 'index';
             self::$params = $controllerParams = array_slice($params, 4);
-            $controllerClass = '\\'.$author.'\\'.$plugin.'\Controllers\\'.$controller;
-            if ($controllerObj = $this->findController(
-                $controllerClass,
-                $action,
-                plugins_path()
-            )) {
+            $controllerClass = '\\' . $author . '\\' . $plugin . '\Controllers\\' . $controller;
+            if (
+                $controllerObj = $this->findController(
+                    $controllerClass,
+                    $action,
+                    plugins_path()
+                )
+            ) {
                 return [
                     'controller' => $controllerObj,
                     'action' => $action,
-                    'params' => $controllerParams
+                    'params' => $controllerParams,
                 ];
             }
         }
@@ -271,7 +275,7 @@ class BackendController extends ControllerBase
          */
         if (!class_exists($controller)) {
             $controller = Str::normalizeClassName($controller);
-            $controllerFile = $inPath.strtolower(str_replace('\\', '/', $controller)) . '.php';
+            $controllerFile = $inPath . strtolower(str_replace('\\', '/', $controller)) . '.php';
             if ($controllerFile = File::existsInsensitive($controllerFile)) {
                 include_once $controllerFile;
             }

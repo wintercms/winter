@@ -12,7 +12,7 @@ if ($tabs->stretch) {
     <?php if ($tabs->suppressTabs): ?>
 
         <div
-            id="<?= $this->getId($type.'Tabs') ?>"
+            id="<?= $this->getId($type . 'Tabs') ?>"
             class="form-tabless-fields <?= $tabs->cssClass ?>">
             <?= $this->makePartial('form_fields', ['fields' => $tabs]) ?>
         </div>
@@ -20,7 +20,7 @@ if ($tabs->stretch) {
     <?php else: ?>
 
         <div
-            id="<?= $this->getId($type.'Tabs') ?>"
+            id="<?= $this->getId($type . 'Tabs') ?>"
             class="control-tabs <?= $type ?>-tabs layout <?= $tabs->cssClass ?>"
             data-control="tab">
             <?= $this->makePartial('form_tabs', ['tabs' => $tabs]) ?>

@@ -1,8 +1,8 @@
 <?php
 
+use Backend\Models\User as AdminModel;
 use Winter\Storm\Database\Schema\Blueprint;
 use Winter\Storm\Database\Updates\Migration;
-use Backend\Models\User as AdminModel;
 
 class DbBackendAddSuperuserFlag extends Migration
 {

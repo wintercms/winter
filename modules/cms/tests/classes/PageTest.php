@@ -2,17 +2,17 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Controller;
 use Cms\Classes\Page;
 use Cms\Classes\Theme;
+use System\Tests\Bootstrap\TestCase;
 
 class PageTest extends TestCase
 {
     public function testResolveMenuItem()
     {
         $theme = Theme::load('test');
-        $controller = new Controller;
+        $controller = new Controller();
 
         $item = (object) [
             'type' => 'cms-page',

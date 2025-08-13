@@ -97,6 +97,6 @@ return [
             'remember_choice' => 'Ricorda l\'opzione selezionata per questa sessione',
             'open' => 'Apri',
             'cancel' => 'Annulla',
-        ]
-    ]
+        ],
+    ],
 ];

@@ -15,7 +15,7 @@
                 <!-- Extension text node -->
                 <text class="file-icon-extension" x="43%" y="170px" dominant-baseline="middle" text-anchor="middle"><?= strtoupper($extension) ?></text>
             </svg>
-        <?php else :?>
+        <?php else: ?>
             <i class="<?= $itemIconClass ?>"></i>
         <?php endif ?>
     </div>

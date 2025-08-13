@@ -1,4 +1,6 @@
-<?php namespace System\Models;
+<?php
+
+namespace System\Models;
 
 use Winter\Storm\Database\Models\Revision as RevisionBase;
 

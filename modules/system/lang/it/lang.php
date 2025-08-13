@@ -35,14 +35,14 @@ return [
             'events' => 'Eventi',
             'customers' => 'Clienti',
             'my_settings' => 'Impostazioni personali',
-        ]
+        ],
     ],
     'theme' => [
         'label' => 'Tema',
         'unnamed' => 'Tema senza nome',
         'name' => [
             'label' => 'Nome tema',
-            'help' => 'Cerca il tema tramite il suo codice univoco. Ad esempio, Winter.Vanilla'
+            'help' => 'Cerca il tema tramite il suo codice univoco. Ad esempio, Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -51,15 +51,15 @@ return [
         'installed' => 'Temi installati',
         'no_themes' => 'Non ci sono temi installati dal marketplace.',
         'recommended' => 'Raccomandati',
-        'remove_confirm' => 'Sei sicuro di voler rimuovere questo tema?'
+        'remove_confirm' => 'Sei sicuro di voler rimuovere questo tema?',
     ],
     'plugin' => [
         'label' => 'Plugin',
         'unnamed' => 'Plugin senza nome',
         'name' => [
             'label' => 'Nome del plugin',
-            'help' => 'Cerca il plugin tramite il suo codice univoco. Ad esempio, Winter.Blog'
-        ]
+            'help' => 'Cerca il plugin tramite il suo codice univoco. Ad esempio, Winter.Blog',
+        ],
     ],
     'plugins' => [
         'manage' => 'Gestisci plugin',
@@ -107,7 +107,7 @@ return [
         'missing_model' => 'La pagine delle impostazioni non ha nessun modello associato.',
         'update_success' => 'Le impostazioni per :name sono state aggiornate con successo.',
         'return' => 'Ritorna alle impostazioni di sistema',
-        'search' => 'Cerca'
+        'search' => 'Cerca',
     ],
     'mail' => [
         'log_file' => 'File di log',
@@ -316,7 +316,7 @@ return [
         'created_at' => 'Data e ora',
         'message' => 'Messaggio',
         'level' => 'Livello',
-        'preview_title' => 'Evento'
+        'preview_title' => 'Evento',
     ],
     'request_log' => [
         'hint' => 'Questo registro visualizza un elenco delle richieste del browser che possono richiedere attenzione. Ad esempio, se un visitatore apre una pagina del CMS che non può essere trovata, viene creato un record con il codice di errore 404.',
@@ -332,7 +332,7 @@ return [
         'referer' => 'Provenienza',
         'url' => 'URL',
         'status_code' => 'Codice di stato',
-        'preview_title' => 'Richiesta'
+        'preview_title' => 'Richiesta',
     ],
     'permissions' => [
         'name' => 'Sistema',

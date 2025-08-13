@@ -1,4 +1,5 @@
 <?php
+
 $icon = null;
 
 if ($record->is_disabled) {
@@ -11,6 +12,6 @@ if ($record->is_disabled) {
     $icon = 'lock';
 }
 ?>
-<span class="<?= $icon ? 'wn-icon-'.$icon : '' ?>">
+<span class="<?= $icon ? 'wn-icon-' . $icon : '' ?>">
     <?= $value ?>
 </span>

@@ -2,7 +2,6 @@
 
 namespace System\Console\Asset\Npm;
 
-use System\Console\Asset\Npm\NpmCommand;
 use Winter\Storm\Exception\SystemException;
 
 class NpmInstall extends NpmCommand

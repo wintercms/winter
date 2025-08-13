@@ -2,13 +2,13 @@
 
 return [
     'auth' => [
-        'title' => 'لوحة الإدارة'
+        'title' => 'لوحة الإدارة',
     ],
     'page' => [
         'access_denied' => [
             'label' => 'ممنوع الوصول',
             'help' => "ليس لديك الصلاحيات لعرض هذه الصفحة.",
-            'cms_link' => 'عودة للوحة الإدارة'
+            'cms_link' => 'عودة للوحة الإدارة',
         ],
     ],
     'account' => [
@@ -48,7 +48,7 @@ return [
             'last_sign_in' => 'آخر تسجيل دخول لك كان في',
             'view_access_logs' => 'عرض سجلات الدخول',
             'nice_message' => 'نتمنى لك يوماً سعيداً!',
-        ]
+        ],
     ],
     'list' => [
         'default_title' => 'القائمة',
@@ -60,7 +60,7 @@ return [
         'delete_selected_confirm' => 'هل أنت متأكد من حذف السجلات المحددة؟',
         'delete_selected_success' => 'حذف السجلات المحددة.',
         'column_switch_true' => 'نعم',
-        'column_switch_false' => 'لا'
+        'column_switch_false' => 'لا',
     ],
     'form' => [
         'action_confirm' => 'هل أنت متأكد؟',
@@ -133,11 +133,11 @@ return [
         'link_name' => 'ربط :name',
         'unlink' => 'إلغاء ربط',
         'unlink_name' => 'إلغاء ربط :name',
-        'unlink_confirm' => 'هل أنت متأكد؟'
+        'unlink_confirm' => 'هل أنت متأكد؟',
     ],
     'reorder' => [
         'default_title' => 'إعادة الترتيب',
-        'no_records' => 'ليس هناك سجلات لإعادة ترتيبها.'
+        'no_records' => 'ليس هناك سجلات لإعادة ترتيبها.',
     ],
     'myaccount' => [
         'menu_label' => 'حسابي',

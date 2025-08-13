@@ -1,6 +1,8 @@
-<?php namespace Backend\Traits;
+<?php
 
-use Str;
+namespace Backend\Traits;
+
+use Winter\Storm\Support\Str;
 
 /**
  * Searchable Widget Trait

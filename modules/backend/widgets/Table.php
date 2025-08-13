@@ -1,13 +1,15 @@
-<?php namespace Backend\Widgets;
+<?php
 
-use Config;
-use Backend;
-use Lang;
-use Input;
-use Request;
+namespace Backend\Widgets;
+
 use Backend\Classes\WidgetBase;
+use Backend\Facades\Backend;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Html\Helper as HtmlHelper;
-use SystemException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Input;
 
 /**
  * Table Widget.
@@ -51,7 +53,7 @@ class Table extends WidgetBase
 
     protected $dataSourceAliases = [
         'client' => '\Backend\Widgets\Table\ClientMemoryDataSource',
-        'server' => '\Backend\Widgets\Table\ServerEventDataSource'
+        'server' => '\Backend\Widgets\Table\ServerEventDataSource',
     ];
 
     /**
@@ -225,7 +227,7 @@ class Table extends WidgetBase
 
         return [
             'records' => $this->dataSource->getRecords(post('offset'), $count),
-            'count' => $this->dataSource->getCount()
+            'count' => $this->dataSource->getCount(),
         ];
     }
 
@@ -247,7 +249,7 @@ class Table extends WidgetBase
 
         return [
             'records' => $this->dataSource->searchRecords(post('query'), post('offset'), $count),
-            'count' => $this->dataSource->getCount()
+            'count' => $this->dataSource->getCount(),
         ];
     }
 
@@ -299,7 +301,7 @@ class Table extends WidgetBase
         }
 
         return [
-            'options' => $options
+            'options' => $options,
         ];
     }
 
@@ -316,7 +318,7 @@ class Table extends WidgetBase
         }
 
         return [
-            'options' => $options
+            'options' => $options,
         ];
     }
 }

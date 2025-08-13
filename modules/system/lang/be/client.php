@@ -47,18 +47,18 @@ return [
     'alert' => [
         'confirm_button_text' => "Добра",
         'cancel_button_text' => "Адмена",
-        'widget_remove_confirm' => 'Remove this widget?'
+        'widget_remove_confirm' => 'Remove this widget?',
     ],
     'datepicker' => [
         'previousMonth' => "Папярэдні месяц",
         'nextMonth' => "Наступны месяц",
         'months' => ["Студзень", "Люты", "Сакавік", "Красавік", "Травень", "Чэрвень", "Ліпень", "Жнівень", "Верасень", "Кастрычнік", "Лістапад", "Снежань"],
         'weekdays' => ["Нядзеля", "Панядзелак", "Аўторак", "Серада", "Чацвер", "Пятніца", "Субота"],
-        'weekdaysShort' => ["Нд", "Пн", "Аўт", "Ср", "Чацв", "Пн", "Сб"]
+        'weekdaysShort' => ["Нд", "Пн", "Аўт", "Ср", "Чацв", "Пн", "Сб"],
     ],
     'filter' => [
         'group' => [
-            'all' => "ўсе"
+            'all' => "ўсе",
         ],
         'dates' => [
             'all' => "ўсе",
@@ -66,8 +66,8 @@ return [
             'reset_button_text'  => "Скінуць",
             'date_placeholder' => "Дата",
             'after_placeholder' => "Папярэдняя",
-            'before_placeholder' => "Наступная"
-        ]
+            'before_placeholder' => "Наступная",
+        ],
     ],
     'eventlog' => [
         'show_stacktrace' => "Паказаць трасіроўку стэка",
@@ -82,7 +82,7 @@ return [
             'openWith' => "Адчыніць з дапамогай",
             'remember_choice' => "Запомніць абраны варыянт для гэтай сесіі",
             'open' => "Адчыніць",
-            'cancel' => "Адмяніць"
-        ]
-    ]
+            'cancel' => "Адмяніць",
+        ],
+    ],
 ];

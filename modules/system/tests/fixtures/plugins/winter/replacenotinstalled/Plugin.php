@@ -13,8 +13,8 @@ class Plugin extends PluginBase
             'description' => 'Sample plugin used by unit tests.',
             'author' => 'Alexey Bobkov, Samuel Georges',
             'replaces' => [
-                'Winter.NotInstalled' => '>=1.0.3'
-            ]
+                'Winter.NotInstalled' => '>=1.0.3',
+            ],
         ];
     }
 }

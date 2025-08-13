@@ -1,7 +1,7 @@
 <?= Form::ajax('onExport', [
     'id' => 'themeExportForm',
     'data-popup-load-indicator' => true,
-    'data-request-success' => 'closeExportThemePopup()'
+    'data-request-success' => 'closeExportThemePopup()',
 ]) ?>
 
     <input type="hidden" name="theme" value="<?= $themeDir ?>" />

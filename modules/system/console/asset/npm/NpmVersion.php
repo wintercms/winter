@@ -3,11 +3,10 @@
 namespace System\Console\Asset\Npm;
 
 use Symfony\Component\Process\Process;
-use System\Console\Asset\Npm\NpmCommand;
 
 class NpmVersion extends NpmCommand
 {
-    const NPM_MINIMUM_SUPPORTED_VERSION = '7.0';
+    public const NPM_MINIMUM_SUPPORTED_VERSION = '7.0';
 
     /**
      * @var string|null The default command name for lazy loading.

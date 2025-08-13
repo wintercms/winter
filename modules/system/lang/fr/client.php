@@ -47,14 +47,14 @@ return [
     'alert' => [
         'confirm_button_text' => 'OK',
         'cancel_button_text' => 'Annuler',
-        'widget_remove_confirm' => 'Retirer ce widget ?'
+        'widget_remove_confirm' => 'Retirer ce widget ?',
     ],
     'datepicker' => [
         'previousMonth' => 'Mois précédent',
         'nextMonth'  => 'Mois suivant',
         'months' => ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'],
         'weekdays' => ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'],
-        'weekdaysShort' => ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']
+        'weekdaysShort' => ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'],
     ],
     'colorpicker' => [
         'last_color' => 'Utiliser la couleur sélectionnée précédemment',
@@ -64,11 +64,11 @@ return [
     ],
     'filter' => [
         'group' => [
-            'all' => 'tous'
+            'all' => 'tous',
         ],
         'scopes' => [
             'apply_button_text' => 'Appliquer',
-            'clear_button_text'  => 'Annuler'
+            'clear_button_text'  => 'Annuler',
         ],
         'dates' => [
             'all' => 'toute la période',
@@ -83,8 +83,8 @@ return [
             'filter_button_text' => 'Filtres',
             'reset_button_text'  => 'Réinitialiser',
             'min_placeholder' => 'Min',
-            'max_placeholder' => 'Max'
-        ]
+            'max_placeholder' => 'Max',
+        ],
     ],
     'eventlog' => [
         'show_stacktrace' => 'Afficher la pile d\'exécution',
@@ -99,7 +99,7 @@ return [
             'openWith' => 'Ouvrir avec',
             'remember_choice' => 'Se souvenir de la sélection pour la durée de la session dans ce navigateur',
             'open' => 'Ouvrir',
-            'cancel' => 'Annuler'
-        ]
-    ]
+            'cancel' => 'Annuler',
+        ],
+    ],
 ];

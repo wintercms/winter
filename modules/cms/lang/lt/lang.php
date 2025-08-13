@@ -11,26 +11,26 @@ return [
         'error_deleting' => "Nepavyko ištrinti šablono ':name'. Patikrinkite katalogo įrašymo nustatymus serveryje.",
         'delete_success' => 'Ištrinta šablonų: :count.',
         'file_name_required' => 'Failko pavadinimo laukelis yra būtinas.',
-        'safe_mode_enabled' => 'Saugusis režimas šiuo metu įjungtas.'
+        'safe_mode_enabled' => 'Saugusis režimas šiuo metu įjungtas.',
     ],
     'dashboard' => [
         'active_theme' => [
             'widget_title_default' => 'Tinklalapis',
             'online' => 'Įjungtas',
             'maintenance' => 'Aptarnavimo režime',
-            'manage_themes' => 'Tvarkyti dizainus'
-        ]
+            'manage_themes' => 'Tvarkyti dizainus',
+        ],
     ],
     'theme' => [
         'not_found_name' => "Dizainas ':name' nerastas.",
         'active' => [
             'not_set' => 'Aktyvusis dizainas yra nenustatytas.',
-            'not_found' => 'Aktyvusis dizainas nerastas.'
+            'not_found' => 'Aktyvusis dizainas nerastas.',
         ],
         'edit' => [
             'not_set' => 'Redaguojamas dizainas nenustatytas.',
             'not_found' => 'Redaguojamas dizainas nerastas.',
-            'not_match' => "Objektas, kurį bandote prieiti nepriklauso redaguojamam dizainui. Perkraukite puslapį."
+            'not_match' => "Objektas, kurį bandote prieiti nepriklauso redaguojamam dizainui. Perkraukite puslapį.",
         ],
         'settings_menu' => 'Svetainės dizainas',
         'settings_menu_description' => 'Peržiūrėkite įdiegtų dizainų sąrašą ir pasirinkite aktyvųjį dizainą.',
@@ -90,24 +90,24 @@ return [
         'dir_name_taken' => 'Norimo dizaino direktorija jau egzistuoja.',
         'find_more_themes' => 'Raskite daugiau dizainų',
         'saving' => 'Išsaugome dizainą...',
-        'return' => 'Grįžti į dizainų sąrašą'
+        'return' => 'Grįžti į dizainų sąrašą',
     ],
     'maintenance' => [
         'settings_menu' => 'Aptarnavimo režimas',
         'settings_menu_description' => 'Konfigūruokite aptarnavimo režimo puslapį bei perjunkite režimo statusą.',
         'is_enabled' => 'Įjungti aptarnavimo režimą',
         'is_enabled_comment' => 'Parinkite kurį puslapį rodysite lankytojams aptarnavimo režimo metu.',
-        'hint' => 'Aptarnavimo režimo metu lankytojams, kurie nėra prisijungę į administracinę zoną, bus rodomas Jūsų nustatytas puslapis.'
+        'hint' => 'Aptarnavimo režimo metu lankytojams, kurie nėra prisijungę į administracinę zoną, bus rodomas Jūsų nustatytas puslapis.',
     ],
     'page' => [
         'not_found_name' => "Puslapis ':name' nerastas",
         'not_found' => [
             'label' => 'Puslapis nerstas',
-            'help' => 'Negalime rasti užklaustojo puslapio.'
+            'help' => 'Negalime rasti užklaustojo puslapio.',
         ],
         'custom_error' => [
             'label' => 'Puslapio klaida',
-            'help' => "Atsiprašome, tačiau dėl galimų klaidų užklaustojo puslapio rodyti nepavyko."
+            'help' => "Atsiprašome, tačiau dėl galimų klaidų užklaustojo puslapio rodyti nepavyko.",
         ],
         'menu_label' => 'Puslapiai',
         'unsaved_label' => 'Neišsaugoti puslapiai',
@@ -120,7 +120,7 @@ return [
         'cms_page' => 'CMS puslapis',
         'title' => 'Puslapio pavadinimas',
         'url' => 'Puslapio URL',
-        'file_name' => 'Puslapio failo pavadinimas'
+        'file_name' => 'Puslapio failo pavadinimas',
     ],
     'layout' => [
         'not_found_name' => "Šablonas ':name' nerastas",
@@ -129,7 +129,7 @@ return [
         'no_list_records' => 'Šablonų nėra',
         'new' => 'Naujas šablonas',
         'delete_confirm_multiple' => 'Trinti pasirinktus šablonus?',
-        'delete_confirm_single' => 'Trinti šį šabloną?'
+        'delete_confirm_single' => 'Trinti šį šabloną?',
     ],
     'partial' => [
         'not_found_name' => "Priedėlis ':name' nerastas.",
@@ -139,7 +139,7 @@ return [
         'no_list_records' => 'Priedėlių nėra',
         'delete_confirm_multiple' => 'Trinti pasirinktus priedėlius?',
         'delete_confirm_single' => 'Trinti šį priedėlį?',
-        'new' => 'Naujas priedėlis'
+        'new' => 'Naujas priedėlis',
     ],
     'content' => [
         'not_found_name' => "Turinio failas ':name' nerastas.",
@@ -148,18 +148,18 @@ return [
         'no_list_records' => 'Turinio failų nėra',
         'delete_confirm_multiple' => 'Trinti pasirinktus turinio failus ar direktorijas?',
         'delete_confirm_single' => 'Trinti šį turinio failą?',
-        'new' => 'Nauajs turinio failas'
+        'new' => 'Nauajs turinio failas',
     ],
     'ajax_handler' => [
         'invalid_name' => 'Netinkamas AJAX tvarkiklis pavadinimas: :name.',
-        'not_found' => "AJAX tvarkiklis ':name' nerastas."
+        'not_found' => "AJAX tvarkiklis ':name' nerastas.",
     ],
     'cms' => [
-        'menu_label' => 'CMS'
+        'menu_label' => 'CMS',
     ],
     'sidebar' => [
         'add' => 'Pridėti',
-        'search' => 'Ieškoti...'
+        'search' => 'Ieškoti...',
     ],
     'editor' => [
         'settings' => 'Nustatymai',
@@ -183,7 +183,7 @@ return [
         'open_searchbox' => 'Atidaryti paieškos laukelį',
         'close_searchbox'  => 'Uždaryti paieškos laukelį',
         'open_replacebox' => 'Atidaryti pakeitimo laukelį',
-        'close_replacebox'  => 'Uždaryti pakeitimo laukelį'
+        'close_replacebox'  => 'Uždaryti pakeitimo laukelį',
     ],
     'asset' => [
         'menu_label' => 'Aktyvai',
@@ -223,7 +223,7 @@ return [
         'error_deleting_directory' => 'Klaida trinant pirminę direktoriją :dir',
         'no_list_records' => 'Failų nėra',
         'delete_confirm' => 'Trinti pasirinktus failus ar direktorijas?',
-        'path' => 'Kelias'
+        'path' => 'Kelias',
     ],
     'component' => [
         'menu_label' => 'Komponentai',
@@ -235,7 +235,7 @@ return [
         'invalid_request' => 'Šablono išsaugoti nepavyko dėl netinkamų komponento savybių.',
         'no_records' => 'Komponentų nėra',
         'not_found' => "Komponento ':name' neradome.",
-        'method_not_found' => "Komponente ':name' nėra metodo ':method'."
+        'method_not_found' => "Komponente ':name' nėra metodo ':method'.",
     ],
     'template' => [
         'invalid_type' => 'Nežinomas šablono tipas.',
@@ -243,7 +243,7 @@ return [
         'saved' => 'Šablonas išsaugotas.',
         'no_list_records' => 'Įrašų nėra',
         'delete_confirm' => 'Ištrinti pasirinktus šablonus?',
-        'order_by' => 'Rūšiuoti pagal'
+        'order_by' => 'Rūšiuoti pagal',
     ],
     'permissions' => [
         'name' => 'CMS',

@@ -1,4 +1,5 @@
 <?php
+
 /* Greek Language Updated on 2015-07-06 v1.01 */
 return [
 
@@ -69,7 +70,7 @@ return [
     ],
     "unique"           => "Η :attribute έχει ήδη χρησιμοποιηθεί.",
     "url"              => "Η :attribute είναι μη έγκυρη.",
-    
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

@@ -1,7 +1,9 @@
-<?php namespace System;
+<?php
 
-use Backend;
+namespace System;
+
 use Backend\Classes\WidgetManager;
+use Backend\Facades\Backend;
 use Backend\Facades\BackendAuth;
 use Backend\Facades\BackendMenu;
 use Backend\Models\UserRole;
@@ -129,11 +131,11 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerSingletons()
     {
         $this->app->singleton('cms.helper', function () {
-            return new \Cms\Helpers\Cms;
+            return new \Cms\Helpers\Cms();
         });
 
         $this->app->singleton('backend.helper', function () {
-            return new \Backend\Helpers\Backend;
+            return new \Backend\Helpers\Backend();
         });
 
         $this->app->singleton('backend.menu', function () {
@@ -175,7 +177,8 @@ class ServiceProvider extends ModuleServiceProvider
         }
 
         // CLI
-        if ($this->app->runningInConsole()
+        if (
+            $this->app->runningInConsole()
             && (
                 // Protected command
                 count(array_intersect($commands, Request::server('argv', []))) > 0
@@ -226,7 +229,8 @@ class ServiceProvider extends ModuleServiceProvider
                     }
 
                     return twig_date_converter($env, $value, $timezone);
-                }, 'options' => ['needs_environment' => true]],
+                }, 'options' => ['needs_environment' => true],
+                ],
 
                 // Classes
                 'array_*'        => ['Arr', '*'],
@@ -234,7 +238,7 @@ class ServiceProvider extends ModuleServiceProvider
                 'url_*'          => ['Url', '*'],
                 'html_*'         => ['Html', '*'],
                 'form_*'         => ['Form', '*'],
-                'form_macro'     => ['Form', '__call']
+                'form_macro'     => ['Form', '__call'],
             ]);
 
             $manager->registerFilters([
@@ -254,7 +258,8 @@ class ServiceProvider extends ModuleServiceProvider
                     }
 
                     return twig_date_format_filter($env, $value, $format, $timezone);
-                }, 'options' => ['needs_environment' => true]],
+                }, 'options' => ['needs_environment' => true],
+                ],
                 'md'             => function ($value) {
                     return (is_string($value) && $value !== '') ? Markdown::parse($value) : '';
                 },
@@ -317,6 +322,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('winter.version', \System\Console\WinterVersion::class);
         $this->registerConsoleCommand('winter.manifest', \System\Console\WinterManifest::class);
         $this->registerConsoleCommand('winter.test', \System\Console\WinterTest::class);
+        $this->registerConsoleCommand('winter.sniff', \System\Console\WinterSniff::class);
 
         $this->registerConsoleCommand('plugin.install', \System\Console\PluginInstall::class);
         $this->registerConsoleCommand('plugin.remove', \System\Console\PluginRemove::class);
@@ -350,7 +356,7 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerErrorHandler()
     {
         Event::listen('exception.beforeRender', function ($exception, $httpCode, $request) {
-            $handler = new ErrorHandler;
+            $handler = new ErrorHandler();
             return $handler->handleException($exception);
         });
     }
@@ -395,7 +401,7 @@ class ServiceProvider extends ModuleServiceProvider
         // Register Mailer Twig environment
         $this->app->singleton('twig.environment.mailer', function ($app) {
             $twig = MarkupManager::makeBaseTwigEnvironment();
-            $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
+            $twig->addTokenParser(new \System\Twig\MailPartialTokenParser());
             return $twig;
         });
 
@@ -462,8 +468,8 @@ class ServiceProvider extends ModuleServiceProvider
                     'iconSvg'     => 'modules/system/assets/images/cog-icon.svg',
                     'url'         => Backend::url('system/settings'),
                     'permissions' => [],
-                    'order'       => 1000
-                ]
+                    'order'       => 1000,
+                ],
             ]);
             $manager->registerOwnerAlias('Winter.System', 'October.System');
         });
@@ -498,7 +504,7 @@ class ServiceProvider extends ModuleServiceProvider
         WidgetManager::instance()->registerReportWidgets(function ($manager) {
             $manager->registerReportWidget(\System\ReportWidgets\Status::class, [
                 'label'   => 'backend::lang.dashboard.status.widget_title_default',
-                'context' => 'dashboard'
+                'context' => 'dashboard',
             ]);
         });
     }
@@ -553,7 +559,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'icon'        => 'icon-cloud-download',
                     'url'         => Backend::url('system/updates'),
                     'permissions' => ['system.manage_updates'],
-                    'order'       => 300
+                    'order'       => 300,
                 ],
                 'administrators' => [
                     'label'       => 'backend::lang.user.menu_label',
@@ -562,7 +568,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'icon'        => 'icon-users',
                     'url'         => Backend::url('backend/users'),
                     'permissions' => ['backend.manage_users'],
-                    'order'       => 400
+                    'order'       => 400,
                 ],
                 'mail_templates' => [
                     'label'       => 'system::lang.mail_templates.menu_label',
@@ -571,7 +577,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'icon'        => 'icon-envelope-square',
                     'url'         => Backend::url('system/mailtemplates'),
                     'permissions' => ['system.manage_mail_templates'],
-                    'order'       => 610
+                    'order'       => 610,
                 ],
                 'mail_settings' => [
                     'label'       => 'system::lang.mail.menu_label',
@@ -580,7 +586,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'icon'        => 'icon-envelope',
                     'class'       => 'System\Models\MailSetting',
                     'permissions' => ['system.manage_mail_settings'],
-                    'order'       => 620
+                    'order'       => 620,
                 ],
                 'mail_brand_settings' => [
                     'label'       => 'system::lang.mail_brand.menu_label',
@@ -589,7 +595,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'icon'        => 'icon-paint-brush',
                     'url'         => Backend::url('system/mailbrandsettings'),
                     'permissions' => ['system.manage_mail_templates'],
-                    'order'       => 630
+                    'order'       => 630,
                 ],
                 'event_logs' => [
                     'label'       => 'system::lang.event_log.menu_label',
@@ -599,7 +605,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'url'         => Backend::url('system/eventlogs'),
                     'permissions' => ['system.access_logs'],
                     'order'       => 900,
-                    'keywords'    => 'error exception'
+                    'keywords'    => 'error exception',
                 ],
                 'request_logs' => [
                     'label'       => 'system::lang.request_log.menu_label',
@@ -609,7 +615,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'url'         => Backend::url('system/requestlogs'),
                     'permissions' => ['system.access_logs'],
                     'order'       => 910,
-                    'keywords'    => '404 error'
+                    'keywords'    => '404 error',
                 ],
                 'log_settings' => [
                     'label'       => 'system::lang.log.menu_label',
@@ -618,7 +624,7 @@ class ServiceProvider extends ModuleServiceProvider
                     'icon'        => 'icon-dot-circle-o',
                     'class'       => 'System\Models\LogSetting',
                     'permissions' => ['system.manage_logs'],
-                    'order'       => 990
+                    'order'       => 990,
                 ],
             ]);
             $manager->registerOwnerAlias('Winter.System', 'October.System');

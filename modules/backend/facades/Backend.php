@@ -1,4 +1,6 @@
-<?php namespace Backend\Facades;
+<?php
+
+namespace Backend\Facades;
 
 use Winter\Storm\Support\Facade;
 

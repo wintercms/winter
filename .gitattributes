@@ -8,3 +8,4 @@
 .gitattributes export-ignore
 CHANGELOG.md export-ignore
 /package.json export-ignore
+phpcs.xml export-ignore

@@ -1,4 +1,6 @@
-<?php namespace Winter\Tester\Rules;
+<?php
+
+namespace Winter\Tester\Rules;
 
 use Winter\Storm\Validation\Rule;
 

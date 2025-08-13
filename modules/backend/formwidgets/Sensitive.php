@@ -1,4 +1,6 @@
-<?php namespace Backend\FormWidgets;
+<?php
+
+namespace Backend\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
 
@@ -90,7 +92,7 @@ class Sensitive extends FormWidgetBase
     public function onShowValue()
     {
         return [
-            'value' => $this->getLoadValue()
+            'value' => $this->getLoadValue(),
         ];
     }
 

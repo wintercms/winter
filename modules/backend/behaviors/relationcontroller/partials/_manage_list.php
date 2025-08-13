@@ -3,7 +3,7 @@
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="popup">&times;</button>
             <h4 class="modal-title"><?= e(trans($relationManageTitle, [
-                'name' => trans($relationLabel)
+                'name' => trans($relationLabel),
             ])) ?></h4>
         </div>
 

@@ -2,9 +2,9 @@
 
 namespace System\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Illuminate\Filesystem\FilesystemAdapter;
 use System\Classes\MediaLibrary;
+use System\Tests\Bootstrap\TestCase;
 
 class MediaLibraryTest extends TestCase
 {
@@ -113,8 +113,8 @@ class MediaLibraryTest extends TestCase
                 '/media/hidden/sub1/deep1',
                 '/media/hidden/sub2',
                 '/media/hidden but not really',
-                '/media/name'
-            ]
+                '/media/name',
+            ],
         ]);
 
         $this->app['config']->set('cms.storage.media.folder', 'media');
@@ -133,13 +133,15 @@ class MediaLibraryTest extends TestCase
         config(['filesystems.disks.test_local' => [
             'driver' => 'local',
             'root'   => storage_path('app'),
-        ]]);
+        ],
+        ]);
 
         config(['cms.storage.media' => [
             'disk'   => 'test_local',
             'folder' => 'media',
             'path'   => '/storage/app/media',
-        ]]);
+        ],
+        ]);
     }
 
     protected function copyMedia()

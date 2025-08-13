@@ -3,13 +3,13 @@
 return [
     'app' => [
         'name' => 'Winter CMS',
-        'tagline' => 'Návrat ke kořenům'
+        'tagline' => 'Návrat ke kořenům',
     ],
     'directory' => [
-        'create_fail' => 'Nelze vytvořit složku: :name'
+        'create_fail' => 'Nelze vytvořit složku: :name',
     ],
     'file' => [
-        'create_fail' => 'Nelze vytvořit soubor: :name'
+        'create_fail' => 'Nelze vytvořit soubor: :name',
     ],
     'page' => [
         'invalid_token' => [
@@ -17,7 +17,7 @@ return [
         ],
     ],
     'combiner' => [
-        'not_found' => "Slučující soubor ':name' nebyl nalezen."
+        'not_found' => "Slučující soubor ':name' nebyl nalezen.",
     ],
     'system' => [
         'name' => 'Systém',
@@ -36,15 +36,15 @@ return [
             'events' => 'Události',
             'customers' => 'Zákazníci',
             'my_settings' => 'Moje nastavení',
-            'notifications' => 'Oznámení'
-        ]
+            'notifications' => 'Oznámení',
+        ],
     ],
     'theme' => [
         'label' => 'Téma',
         'unnamed' => 'Téma bez názvu',
         'name' => [
             'label' => 'Název téma',
-            'help' => 'Název téma podle jeho unikátního názvu, například Winter.Vanilla'
+            'help' => 'Název téma podle jeho unikátního názvu, například Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -53,16 +53,16 @@ return [
         'installed' => 'Instalované téma',
         'no_themes' => 'Žádné téma instalované z tržiště.',
         'recommended' => 'Doporučené',
-        'remove_confirm' => 'Opravdu chcete odstranit toto téma?'
+        'remove_confirm' => 'Opravdu chcete odstranit toto téma?',
     ],
     'plugin' => [
         'label' => 'Pluginy',
         'unnamed' => 'Plugin bez jména',
         'name' => [
             'label' => 'Název pluginu',
-            'help' => 'Pojmenujte plugin unikátním kódem, například Winter.Blog'
+            'help' => 'Pojmenujte plugin unikátním kódem, například Winter.Blog',
         ],
-        'by_author' => 'Vytvořil :name'
+        'by_author' => 'Vytvořil :name',
     ],
     'plugins' => [
         'manage' => 'Správa pluginů',
@@ -88,7 +88,7 @@ return [
         'disable_confirm' => 'Jste si jistí?',
         'disable_success' => 'Pluginy úspěšně deaktivovány.',
         'enable_success' => 'Pluginy úspěšně aktivovány.',
-        'unknown_plugin' => 'Plugin odstraněn ze systému.'
+        'unknown_plugin' => 'Plugin odstraněn ze systému.',
     ],
     'project' => [
         'name' => 'Projekt',
@@ -99,10 +99,10 @@ return [
         'id' => [
             'label' => 'Projekt ID',
             'help' => 'Jak zjistím svoje Projektové ID',
-            'missing' => 'Zadejte vaše Projektové ID.'
+            'missing' => 'Zadejte vaše Projektové ID.',
         ],
         'detach_confirm' => 'Jste si jistí, že chcete odpojit váš projekt?',
-        'unbind_success' => 'Projekt byl úspěšně odpojen.'
+        'unbind_success' => 'Projekt byl úspěšně odpojen.',
     ],
     'settings' => [
         'menu_label' => 'Nastavení',
@@ -110,7 +110,7 @@ return [
         'missing_model' => 'Stránka s nastavením vyžaduje definovat Model.',
         'update_success' => 'Nastavení pro :name byla úspěšně uložena.',
         'return' => 'Zpět do systémového nastavení',
-        'search' => 'Hledat'
+        'search' => 'Hledat',
     ],
     'mail' => [
         'log_file' => 'Soubor protokolu',
@@ -182,7 +182,7 @@ return [
         'missing_plugin_name' => 'Zadejte prosím jméno pluginu které chcete instalovat.',
         'missing_theme_name' => 'Zadejte prosím jméno téma které chcete instalovat.',
         'install_completing' => 'Dokončování instalace',
-        'install_success' => 'Plugin byl úspěšně nainstalován.'
+        'install_success' => 'Plugin byl úspěšně nainstalován.',
     ],
     'updates' => [
         'title' => 'Správa aktualizací',
@@ -221,11 +221,11 @@ return [
         'force_label' => 'Vynutit aktualizaci',
         'found' => [
             'label' => 'Nová aktualizace nalezeny!',
-            'help' => 'Klikněte na Instalovat aktualizace pro spuštění aktualizace.'
+            'help' => 'Klikněte na Instalovat aktualizace pro spuštění aktualizace.',
         ],
         'none' => [
             'label' => 'Žádné aktualizace',
-            'help' => 'Nebyly nalezeny žádné aktualizace.'
+            'help' => 'Nebyly nalezeny žádné aktualizace.',
         ],
         'important_action' => [
             'empty' => 'Vyberte akci',
@@ -256,17 +256,17 @@ return [
         'response_invalid' => 'Špatná odpověď ze serveru.',
         'response_empty' => 'Prázdná odpověď ze serveru.',
         'file_error' => 'Chyba stahování balíčku ze serveru.',
-        'file_corrupt' => 'Soubor stažený ze serveru je chybný.'
+        'file_corrupt' => 'Soubor stažený ze serveru je chybný.',
     ],
     'behavior' => [
-        'missing_property' => 'Třída :class musí definovat parametr $:property použitý v třídě chování :behavior.'
+        'missing_property' => 'Třída :class musí definovat parametr $:property použitý v třídě chování :behavior.',
     ],
     'config' => [
         'not_found' => 'Nepovedlo se najít konfigurační soubor :file, který je definován pro :location.',
-        'required' => "Konfigurace použitá v :location musí obsahovat hodnotu ':property'."
+        'required' => "Konfigurace použitá v :location musí obsahovat hodnotu ':property'.",
     ],
     'zip' => [
-        'extract_failed' => "Nepovedlo se rozbalit soubor ':file'."
+        'extract_failed' => "Nepovedlo se rozbalit soubor ':file'.",
     ],
     'event_log' => [
         'hint' => 'Záznam potencionálních chyb v aplikaci, jako třeba vyjímky, nebo ladící informace.',
@@ -280,7 +280,7 @@ return [
         'id_label' => 'ID události',
         'created_at' => 'Datum a čas',
         'message' => 'Zpráva',
-        'level' => 'Úroveň'
+        'level' => 'Úroveň',
     ],
     'request_log' => [
         'hint' => 'Tento záznam obsahuje požadavky na vaše stránky, které vyžadují pozornost, například stránky které nebylo možné najít, nebo vrací chybový kód 404.',
@@ -295,7 +295,7 @@ return [
         'count' => 'Počítadlo',
         'referer' => 'Odkaz',
         'url' => 'URL',
-        'status_code' => 'Status'
+        'status_code' => 'Status',
     ],
     'permissions' => [
         'name' => 'Systém',
@@ -308,7 +308,7 @@ return [
         'manage_preferences' => 'Správa nastavení administrace',
         'manage_editor' => 'Správa nastavení editoru kódu',
         'view_the_dashboard' => 'Zobrazit plochu',
-        'manage_branding' => 'Nastavení administrace'
+        'manage_branding' => 'Nastavení administrace',
     ],
     'log' => [
         'menu_label' => 'Nastavení protokolů',

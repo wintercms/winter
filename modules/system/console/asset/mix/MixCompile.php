@@ -35,7 +35,7 @@ class MixCompile extends AssetCompile
      * @var array List of commands that this command replaces (aliases)
      */
     protected $replaces = [
-        'mix:build'
+        'mix:build',
     ];
 
     /**
@@ -84,7 +84,7 @@ class MixCompile extends AssetCompile
             '%pluginsPath%' => addslashes(plugins_path()),
             '%appPath%' => addslashes(base_path()),
             '%silent%' => (int) $this->option('silent'),
-            '%noProgress%' => (int) $this->option('no-progress')
+            '%noProgress%' => (int) $this->option('no-progress'),
         ], $fixture);
 
         File::put($this->getJsConfigPath($configPath), $config);

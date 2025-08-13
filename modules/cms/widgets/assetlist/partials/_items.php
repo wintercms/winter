@@ -11,7 +11,7 @@ if (($upPath = $this->getUpPath()) !== null && !$searchMode):
     <?php if ($items): ?>
         <ul class="list">
             <?php foreach ($items as $item):
-                $dataId = 'asset-'.$this->theme->getDirName().'-'.ltrim($item->path, '/');
+                $dataId = 'asset-' . $this->theme->getDirName() . '-' . ltrim($item->path, '/');
                 ?>
                 <li
                     class="<?= $item->type ?>"
@@ -45,7 +45,7 @@ if (($upPath = $this->getUpPath()) !== null && !$searchMode):
 
                     <input type="hidden" name="file[<?= e($item->path) ?>]" value="0"/>
                     <div class="checkbox custom-checkbox nolabel">
-                        <?php $cbId = 'cb'.md5($item->path) ?>
+                        <?php $cbId = 'cb' . md5($item->path) ?>
                         <input
                             id="<?= $cbId ?>"
                             type="checkbox"

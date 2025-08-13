@@ -55,7 +55,7 @@ class NpmUpdateTest extends TestCase
             // Update the contents of package.json to include a package at an old patch
             $packageJson = json_decode(File::get($this->jsonPath), JSON_OBJECT_AS_ARRAY);
             $packageJson['dependencies'] = [
-                'is-odd' => '^3.0.0'
+                'is-odd' => '^3.0.0',
             ];
             File::put($this->jsonPath, json_encode($packageJson, JSON_PRETTY_PRINT));
 
@@ -63,7 +63,7 @@ class NpmUpdateTest extends TestCase
             $this->artisan('npm:update', [
                 'package' => 'theme-npmtest',
                 '--save' => true,
-                '--disable-tty' => true
+                '--disable-tty' => true,
             ])
                 ->assertExitCode(0);
 

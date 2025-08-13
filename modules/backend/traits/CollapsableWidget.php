@@ -1,4 +1,6 @@
-<?php namespace Backend\Traits;
+<?php
+
+namespace Backend\Traits;
 
 /**
  * Collapsable Widget Trait
@@ -96,7 +98,7 @@ trait CollapsableWidget
      */
     public function onGroupStatusUpdate()
     {
-        traceLog('onGroupStatusUpdate is deprecated. Please update onSetCollapseStatus instead. Class: '.get_class($this));
+        traceLog('onGroupStatusUpdate is deprecated. Please update onSetCollapseStatus instead. Class: ' . get_class($this));
         $this->onSetCollapseStatus();
     }
 
@@ -105,7 +107,7 @@ trait CollapsableWidget
      */
     protected function getGroupStatuses()
     {
-        traceLog('getGroupStatuses is deprecated. Please update getCollapseStatuses instead. Class: '.get_class($this));
+        traceLog('getGroupStatuses is deprecated. Please update getCollapseStatuses instead. Class: ' . get_class($this));
         return $this->getCollapseStatuses();
     }
 
@@ -114,7 +116,7 @@ trait CollapsableWidget
      */
     protected function setGroupStatus($group, $status)
     {
-        traceLog('setGroupStatus is deprecated. Please update setCollapseStatus instead. Class: '.get_class($this));
+        traceLog('setGroupStatus is deprecated. Please update setCollapseStatus instead. Class: ' . get_class($this));
         return $this->setCollapseStatus($group, $status);
     }
 
@@ -123,7 +125,7 @@ trait CollapsableWidget
      */
     protected function getGroupStatus($group, $default = true)
     {
-        traceLog('getGroupStatus is deprecated. Please update getCollapseStatus instead. Class: '.get_class($this));
+        traceLog('getGroupStatus is deprecated. Please update getCollapseStatus instead. Class: ' . get_class($this));
         return $this->getCollapseStatus($group, $default);
     }
 }

@@ -28,7 +28,7 @@
                 <div class="dropdown hide"
                     id="<?= $this->getId('tools-button') ?>"
                     data-trigger-action="show"
-                    data-trigger="<?= '#'.$this->getId('asset-list') ?> input[type=checkbox]"
+                    data-trigger="<?= '#' . $this->getId('asset-list') ?> input[type=checkbox]"
                     data-trigger-condition="checked">
                     <button type="button" class="btn btn-default empty wn-icon-wrench last"
                         data-toggle="dropdown"
@@ -69,7 +69,7 @@
                 data-track-input
                 data-load-indicator
                 data-load-indicator-opaque
-                data-request-success="$('<?= '#'.$this->getId('tools-button') ?>').trigger('oc.triggerOn.update')"
+                data-request-success="$('<?= '#' . $this->getId('tools-button') ?>').trigger('oc.triggerOn.update')"
                 data-request="<?= $this->getEventHandler('onSearch') ?>"
             />
         </div>

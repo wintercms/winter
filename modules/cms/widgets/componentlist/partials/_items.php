@@ -7,7 +7,7 @@
                 <i class="<?= e($item->icon) ?>"></i>
                 <span class="description"><?= e(trans($item->description)) ?></span>
             </div>
-            <?= $this->makePartial('component_list', ['components'=>$item->items]) ?>
+            <?= $this->makePartial('component_list', ['components' => $item->items]) ?>
         </li>
     <?php endforeach ?>
     </ul>

@@ -1,9 +1,11 @@
-<?php namespace Backend\Classes;
+<?php
 
-use Config;
+namespace Backend\Classes;
+
 use System\Classes\PluginManager;
 use Winter\Storm\Auth\Manager as StormAuthManager;
 use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Back-end authentication manager.
@@ -34,7 +36,7 @@ class AuthManager extends StormAuthManager
         'label'   => null,
         'comment' => null,
         'roles'   => null,
-        'order'   => 500
+        'order'   => 500,
     ];
 
     /**
@@ -105,7 +107,7 @@ class AuthManager extends StormAuthManager
         foreach ($definitions as $code => $definition) {
             $permission = (object) array_merge(self::$permissionDefaults, array_merge($definition, [
                 'code' => $code,
-                'owner' => $owner
+                'owner' => $owner,
             ]));
 
             $this->permissions[] = $permission;
@@ -236,7 +238,7 @@ class AuthManager extends StormAuthManager
      */
     protected function validateUserModel($user)
     {
-        if ( ! $user instanceof $this->userModel) {
+        if (!$user instanceof $this->userModel) {
             return false;
         }
 
@@ -266,8 +268,7 @@ class AuthManager extends StormAuthManager
                     foreach ((array) $permission->roles as $_role) {
                         $this->permissionRoles[$_role][$permission->code] = 1;
                     }
-                }
-                else {
+                } else {
                     $this->permissionRoles['*'][$permission->code] = 1;
                 }
             }

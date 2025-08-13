@@ -19,7 +19,6 @@ use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\Facades\Yaml;
-use Winter\Storm\Support\Str;
 
 /**
  * This class represents the CMS theme.
@@ -61,8 +60,8 @@ class Theme extends CmsObject
      */
     protected $defaultExtension = 'yaml';
 
-    const ACTIVE_KEY = 'cms::theme.active';
-    const EDIT_KEY = 'cms::theme.edit';
+    public const ACTIVE_KEY = 'cms::theme.active';
+    public const EDIT_KEY = 'cms::theme.edit';
 
     /**
      * Loads the theme.
@@ -70,7 +69,7 @@ class Theme extends CmsObject
      */
     public static function load($dirName, $file = null): self
     {
-        $theme = new static;
+        $theme = new static();
         $theme->setDirName($dirName);
         $theme->registerHalcyonDatasource();
         if (App::runningInBackend()) {
@@ -348,7 +347,7 @@ class Theme extends CmsObject
 
         // Attempt to load the theme's config file from whatever datasources are available.
         $sources = [
-            'filesystem' => new FileDatasource(themes_path($this->getDirName()), App::make('files'))
+            'filesystem' => new FileDatasource(themes_path($this->getDirName()), App::make('files')),
         ];
         if (static::databaseLayerEnabled()) {
             $sources['database'] = new DbDatasource($this->getDirName(), 'cms_theme_templates');
@@ -485,13 +484,12 @@ class Theme extends CmsObject
 
             if (File::isLocalPath($fileName)) {
                 $path = $fileName;
-            }
-            else {
-                $path = $this->getPath().'/'.$result;
+            } else {
+                $path = $this->getPath() . '/' . $result;
             }
 
             if (!File::exists($path)) {
-                throw new ApplicationException('Path does not exist: '.$path);
+                throw new ApplicationException('Path does not exist: ' . $path);
             }
 
             $result = Yaml::parseFile($path);
@@ -511,7 +509,7 @@ class Theme extends CmsObject
             $values = $values + (array) $this->getConfig();
         }
 
-        $path = $this->getPath().'/theme.yaml';
+        $path = $this->getPath() . '/theme.yaml';
         if (!File::exists($path)) {
             throw new ApplicationException('Path does not exist: ' . $path);
         }
@@ -686,7 +684,7 @@ class Theme extends CmsObject
     public function __get($name)
     {
         if (in_array(strtolower($name), ['id', 'path', 'dirname', 'config', 'formconfig', 'previewimageurl'])) {
-            $method = 'get'. ucfirst($name);
+            $method = 'get' . ucfirst($name);
             return $this->$method();
         }
 

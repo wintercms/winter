@@ -3,12 +3,12 @@
     <?= Form::ajax('onRelationManagePivotUpdate', [
         'data' => ['_relation_field' => $relationField, 'manage_id' => $relationManageId],
         'data-request-success' => "$.wn.relationBehavior.changed('" . e($relationField) . "', 'updated')",
-        'data-popup-load-indicator' => true
+        'data-popup-load-indicator' => true,
     ]) ?>
 
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="popup">&times;</button>
-            <h4 class="modal-title"><?= e(trans('backend::lang.relation.related_data', ['name'=>trans($relationLabel)])) ?></h4>
+            <h4 class="modal-title"><?= e(trans('backend::lang.relation.related_data', ['name' => trans($relationLabel)])) ?></h4>
         </div>
         <div class="modal-body">
             <?= $relationPivotWidget->render(['preview' => $this->readOnly]) ?>
@@ -24,12 +24,12 @@
     <?= Form::ajax('onRelationManagePivotCreate', [
         'data' => ['_relation_field' => $relationField, 'foreign_id' => $foreignId],
         'data-request-success' => "$.wn.relationBehavior.changed('" . e($relationField) . "', 'created')",
-        'data-popup-load-indicator' => true
+        'data-popup-load-indicator' => true,
     ]) ?>
 
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="popup">&times;</button>
-            <h4 class="modal-title"><?= e(trans('backend::lang.relation.related_data', ['name'=>trans($relationLabel)])) ?></h4>
+            <h4 class="modal-title"><?= e(trans('backend::lang.relation.related_data', ['name' => trans($relationLabel)])) ?></h4>
         </div>
         <div class="modal-body">
             <?= $relationPivotWidget->render() ?>

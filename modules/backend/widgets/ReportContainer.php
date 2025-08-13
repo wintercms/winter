@@ -1,15 +1,17 @@
-<?php namespace Backend\Widgets;
+<?php
 
-use File;
-use Lang;
-use Flash;
-use Request;
-use BackendAuth;
+namespace Backend\Widgets;
+
 use Backend\Classes\WidgetBase;
 use Backend\Classes\WidgetManager;
+use Backend\Facades\BackendAuth;
 use Backend\Models\UserPreference;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
 use System\Models\Parameter as SystemParameters;
-use ApplicationException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Report Container Widget
@@ -86,8 +88,7 @@ class ReportContainer extends WidgetBase
             $path = $controller->getConfigPath($configuration);
             if (File::isFile($path)) {
                 $configuration = $this->makeConfig($path);
-            }
-            else {
+            } else {
                 $configuration = [];
             }
         }
@@ -141,7 +142,7 @@ class ReportContainer extends WidgetBase
 
         Flash::success(Lang::get('backend::lang.dashboard.reset_layout_success'));
 
-        return ['#'.$this->getId('container-list') => $this->makePartial('widget_list')];
+        return ['#' . $this->getId('container-list') => $this->makePartial('widget_list')];
     }
 
     public function onMakeLayoutDefault()
@@ -168,7 +169,7 @@ class ReportContainer extends WidgetBase
         $this->saveWidgetProperties($alias, $widget->getProperties());
 
         return [
-            '#'.$alias => $widget->render()
+            '#' . $alias => $widget->render(),
         ];
     }
 
@@ -183,7 +184,7 @@ class ReportContainer extends WidgetBase
     {
         $sizes = [];
         for ($i = 1; $i <= 12; $i++) {
-            $sizes[$i] = $i < 12 ? $i : $i.' (' . Lang::get('backend::lang.dashboard.full_width') . ')';
+            $sizes[$i] = $i < 12 ? $i : $i . ' (' . Lang::get('backend::lang.dashboard.full_width') . ')';
         }
 
         $this->vars['sizes'] = $sizes;
@@ -213,11 +214,11 @@ class ReportContainer extends WidgetBase
         $widgetInfo = $this->addWidget($widget, $size);
 
         return [
-            '@#'.$this->getId('container-list') => $this->makePartial('widget', [
+            '@#' . $this->getId('container-list') => $this->makePartial('widget', [
                 'widget'      => $widget,
                 'widgetAlias' => $widgetInfo['alias'],
-                'sortOrder'   => $widgetInfo['sortOrder']
-            ])
+                'sortOrder'   => $widgetInfo['sortOrder'],
+            ]),
         ];
     }
 
@@ -232,9 +233,8 @@ class ReportContainer extends WidgetBase
         $num = count($widgets);
         do {
             $num++;
-            $alias = 'report_container_'.$this->context.'_'.$num;
-        }
-        while (array_key_exists($alias, $widgets));
+            $alias = 'report_container_' . $this->context . '_' . $num;
+        } while (array_key_exists($alias, $widgets));
 
         // Ensure that the widget's alias is correctly set for this request
         $widget->alias = $alias;
@@ -251,14 +251,14 @@ class ReportContainer extends WidgetBase
         $widgets[$alias] = [
             'class'         => get_class($widget),
             'configuration' => $widget->getProperties(),
-            'sortOrder'     => $sortOrder
+            'sortOrder'     => $sortOrder,
         ];
 
         $this->setWidgetsToUserPreferences($widgets);
 
         return [
             'alias'     => $alias,
-            'sortOrder' => $widgets[$alias]['sortOrder']
+            'sortOrder' => $widgets[$alias]['sortOrder'],
         ];
     }
 
@@ -409,8 +409,8 @@ class ReportContainer extends WidgetBase
                 9  => '9 ' . Lang::choice('backend::lang.dashboard.columns', 9),
                 10 => '10 ' . Lang::choice('backend::lang.dashboard.columns', 10),
                 11 => '11 ' . Lang::choice('backend::lang.dashboard.columns', 11),
-                12 => '12 ' . Lang::choice('backend::lang.dashboard.columns', 12)
-            ]
+                12 => '12 ' . Lang::choice('backend::lang.dashboard.columns', 12),
+            ],
         ];
         $result[] = $property;
 
@@ -418,7 +418,7 @@ class ReportContainer extends WidgetBase
             'property'    => 'ocWidgetNewRow',
             'title'       => Lang::get('backend::lang.dashboard.widget_new_row_label'),
             'description' => Lang::get('backend::lang.dashboard.widget_new_row_description'),
-            'type'        => 'checkbox'
+            'type'        => 'checkbox',
         ];
 
         $result[] = $property;
@@ -426,7 +426,7 @@ class ReportContainer extends WidgetBase
             $property = [
                 'property' => $name,
                 'title'    => isset($params['title']) ? Lang::get($params['title']) : $name,
-                'type'     => $params['type'] ?? 'string'
+                'type'     => $params['type'] ?? 'string',
             ];
 
             foreach ($params as $name => $value) {
@@ -503,11 +503,11 @@ class ReportContainer extends WidgetBase
 
     protected function getUserPreferencesKey()
     {
-        return 'backend::reportwidgets.'.$this->context;
+        return 'backend::reportwidgets.' . $this->context;
     }
 
     protected function getSystemParametersKey()
     {
-        return 'backend::reportwidgets.default.'.$this->context;
+        return 'backend::reportwidgets.default.' . $this->context;
     }
 }

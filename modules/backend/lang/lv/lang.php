@@ -366,7 +366,7 @@ return [
         'missing_relation' => "Modelis ':class' nesatur definīciju ':relation'.",
         'missing_method' => "Modelis ':class' nesatur metodi ':method'.",
         'invalid_class' => "Klasē :class lietotais modelis :model nav derīgs, modelim jāpārmanto \Model klase.",
-        'mass_assignment_failed' => "Masveida vērtību piešķiršana neizdevās modeļa atribūtam ':attribute'."
+        'mass_assignment_failed' => "Masveida vērtību piešķiršana neizdevās modeļa atribūtam ':attribute'.",
     ],
     'warnings' => [
         'tips' => 'Sistēmas konfigurācijas padomi',
@@ -396,9 +396,9 @@ return [
         'show_gutter' => 'Rādīt līniju numurus',
         'basic_autocompletion' => 'Pamata automātiskā pabeigšana (Ctrl + Space)',
         'live_autocompletion' => 'Reāllaika automātiskā pabeigšana',
-        'enable_snippets'=> 'Ieslēgt koda fragmentus (Tab)',
-        'display_indent_guides'=> 'Rādīt atkāpju vadlīnijas',
-        'show_print_margin'=> 'Rādīt drukas piemali',
+        'enable_snippets' => 'Ieslēgt koda fragmentus (Tab)',
+        'display_indent_guides' => 'Rādīt atkāpju vadlīnijas',
+        'show_print_margin' => 'Rādīt drukas piemali',
         'mode_off' => 'Izslēgta',
         'mode_fluid' => 'Plūstoša',
         '40_characters' => '40 simboli',

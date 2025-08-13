@@ -31,7 +31,7 @@
                             </div>
                             <dl>
                                 <?php foreach (array_get($core, 'updates', []) as $build => $description): ?>
-                                    <dt><?= e(trans('system::lang.updates.core_build', ['build'=>$build])) ?></dt>
+                                    <dt><?= e(trans('system::lang.updates.core_build', ['build' => $build])) ?></dt>
                                     <?php if (is_array($description)): ?>
                                         <dd>
                                             <span class="important-update-label">
@@ -48,7 +48,7 @@
                                     <?php endif ?>
                                 <?php endforeach ?>
                                 <?php if ($core['old_build']): ?>
-                                    <dt class="text-muted"><?= e(trans('system::lang.updates.core_build', ['build'=>$core['old_build']])) ?></dt>
+                                    <dt class="text-muted"><?= e(trans('system::lang.updates.core_build', ['build' => $core['old_build']])) ?></dt>
                                     <dd class="text-muted"><?= e(trans('system::lang.updates.core_current_build')) ?></dd>
                                 <?php endif ?>
                             </dl>

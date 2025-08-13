@@ -1,10 +1,12 @@
-<?php namespace Backend\Traits;
+<?php
 
-use Lang;
-use ApplicationException;
+namespace Backend\Traits;
+
 use Exception;
+use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Database\Relations\Relation;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Form Model Widget Trait
@@ -25,11 +27,10 @@ trait FormModelWidget
     {
         try {
             return $this->formField->resolveModelAttribute($this->model, $attribute);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             throw new ApplicationException(Lang::get('backend::lang.model.missing_relation', [
                 'class' => get_class($this->model),
-                'relation' => $attribute
+                'relation' => $attribute,
             ]));
         }
     }
@@ -45,14 +46,14 @@ trait FormModelWidget
         if (!$model) {
             throw new ApplicationException(Lang::get('backend::lang.model.missing_relation', [
                 'class' => get_class($this->model),
-                'relation' => $this->valueFrom
+                'relation' => $this->valueFrom,
             ]));
         }
 
         if (!$model->hasRelation($attribute)) {
             throw new ApplicationException(Lang::get('backend::lang.model.missing_relation', [
                 'class' => get_class($model),
-                'relation' => $attribute
+                'relation' => $attribute,
             ]));
         }
 
@@ -71,14 +72,14 @@ trait FormModelWidget
         if (!$model) {
             throw new ApplicationException(Lang::get('backend::lang.model.missing_relation', [
                 'class' => get_class($this->model),
-                'relation' => $this->valueFrom
+                'relation' => $this->valueFrom,
             ]));
         }
 
         if (!$model->hasRelation($attribute)) {
             throw new ApplicationException(Lang::get('backend::lang.model.missing_relation', [
                 'class' => get_class($model),
-                'relation' => $attribute
+                'relation' => $attribute,
             ]));
         }
 

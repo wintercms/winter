@@ -35,7 +35,7 @@
         <?= Form::ajax('onRelationManageCreate', [
             'data-popup-load-indicator' => true,
             'data-request-success' => "$.wn.relationBehavior.changed('" . e($relationField) . "', 'created')",
-            'sessionKey' => $newSessionKey
+            'sessionKey' => $newSessionKey,
         ]) ?>
 
             <!-- Passable fields -->

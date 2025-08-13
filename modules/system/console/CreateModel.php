@@ -1,7 +1,8 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use Winter\Storm\Support\Str;
-use System\Console\BaseScaffoldCommand;
 
 class CreateModel extends BaseScaffoldCommand
 {

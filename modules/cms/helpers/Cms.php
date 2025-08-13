@@ -1,8 +1,10 @@
-<?php namespace Cms\Helpers;
+<?php
 
-use Url;
-use Route;
-use Config;
+namespace Cms\Helpers;
+
+use Illuminate\Support\Facades\Route;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Url;
 
 /**
  * CMS Helper

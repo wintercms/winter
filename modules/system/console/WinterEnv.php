@@ -2,9 +2,9 @@
 
 namespace System\Console;
 
-use App;
-use Winter\Storm\Parse\EnvFile;
+use Illuminate\Support\Facades\App;
 use Winter\Storm\Console\Command;
+use Winter\Storm\Parse\EnvFile;
 use Winter\Storm\Parse\PHP\ArrayFile;
 
 /**

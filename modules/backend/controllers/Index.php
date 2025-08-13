@@ -1,10 +1,12 @@
-<?php namespace Backend\Controllers;
+<?php
 
-use Backend;
-use Redirect;
-use BackendMenu;
+namespace Backend\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
 use Backend\Widgets\ReportContainer;
+use Illuminate\Support\Facades\Redirect;
 
 /**
  * Dashboard controller

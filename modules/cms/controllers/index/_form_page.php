@@ -2,7 +2,7 @@
         'class' => 'layout',
         'data-change-monitor' => 'true',
         'data-window-close-confirm' => e(trans('backend::lang.form.confirm_tab_close')),
-        'data-inspector-external-parameters' => true
+        'data-inspector-external-parameters' => true,
 ]) ?>
     <?= $form->render() ?>
 

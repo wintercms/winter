@@ -1,4 +1,6 @@
-<?php namespace System\Console\Traits;
+<?php
+
+namespace System\Console\Traits;
 
 use InvalidArgumentException;
 use System\Classes\PluginBase;

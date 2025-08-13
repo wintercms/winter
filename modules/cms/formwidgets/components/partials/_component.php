@@ -1,6 +1,6 @@
 <div class="layout-cell <?= e($component->componentCssClass) ?> <?= $component->isHidden ? 'hidden' : null ?>">
     <div
-        class="<?= 'wn-'.$component->pluginIcon ?> layout-relative"
+        class="<?= 'wn-' . $component->pluginIcon ?> layout-relative"
         <?php if ($component->inspectorEnabled): ?>
             data-inspectable
         <?php endif ?>

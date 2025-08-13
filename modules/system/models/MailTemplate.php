@@ -1,10 +1,12 @@
-<?php namespace System\Models;
+<?php
 
-use View;
-use Model;
+namespace System\Models;
+
+use Illuminate\Support\Facades\View;
 use System\Classes\MailManager;
+use Winter\Storm\Database\Model;
 use Winter\Storm\Mail\MailParser;
-use File as FileHelper;
+use Winter\Storm\Support\Facades\File as FileHelper;
 
 /**
  * Mail template
@@ -42,7 +44,7 @@ class MailTemplate extends Model
     ];
 
     public $belongsTo = [
-        'layout' => MailLayout::class
+        'layout' => MailLayout::class,
     ];
 
     /**
@@ -198,7 +200,7 @@ class MailTemplate extends Model
         $template = self::whereCode($code)->first();
 
         if (!$template && View::exists($code)) {
-            $template = new self;
+            $template = new self();
             $template->code = $code;
             $template->fillFromView($code);
         }

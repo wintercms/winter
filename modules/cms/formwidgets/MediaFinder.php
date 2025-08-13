@@ -1,4 +1,6 @@
-<?php namespace Cms\FormWidgets;
+<?php
+
+namespace Cms\FormWidgets;
 
 use Backend\FormWidgets\MediaFinder as BackendMediaFinder;
 

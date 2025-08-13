@@ -191,7 +191,7 @@ return [
             'users_count' => 'Utilizatori',
         ],
         'preferences' => [
-            'not_authenticated' => 'Nu există niciun utilizator autentificat pentru care să se încarce sau să se salveze preferințe.'
+            'not_authenticated' => 'Nu există niciun utilizator autentificat pentru care să se încarce sau să se salveze preferințe.',
         ],
         'trashed_hint_title' => 'Acest cont a fost șters',
         'trashed_hint_desc' => 'Acest cont a fost șters și nu se va mai putea conecta. Pentru a-l restabili, faceți clic pe pictograma din dreapta jos de restaurare a utilizatorului',
@@ -433,7 +433,7 @@ return [
         'paragraph_formats_comment' => 'Opțiunile care vor apărea în câmpul derulant Format paragraf.',
     ],
     'tooltips' => [
-        'preview_website' => 'Previzualizare site'
+        'preview_website' => 'Previzualizare site',
     ],
     'mysettings' => [
         'menu_label' => 'Setările mele',
@@ -442,7 +442,7 @@ return [
     'myaccount' => [
         'menu_label' => 'Contul meu',
         'menu_description' => 'Actualizați datele contului, precum nume, adresa de email și parola.',
-        'menu_keywords' => 'securitate autentificare'
+        'menu_keywords' => 'securitate autentificare',
     ],
     'branding' => [
         'menu_label' => 'Personalizați back-end-ul',

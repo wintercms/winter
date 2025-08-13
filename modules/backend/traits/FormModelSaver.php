@@ -1,8 +1,10 @@
-<?php namespace Backend\Traits;
+<?php
 
-use Str;
+namespace Backend\Traits;
+
 use Backend\Classes\FormField;
 use Winter\Storm\Halcyon\Model as HalcyonModel;
+use Winter\Storm\Support\Str;
 
 /**
  * Implements special logic for processing form data, typically from from postback, and
@@ -77,8 +79,7 @@ trait FormModelSaver
                     $model->{$attribute} = $model->{$attribute}()->getRelated();
                 }
                 $this->setModelAttributes($model->{$attribute}, $value);
-            }
-            elseif ($value !== FormField::NO_SAVE_DATA) {
+            } elseif ($value !== FormField::NO_SAVE_DATA) {
                 if (Str::startsWith($attribute, '_')) {
                     $attributesToPurge[] = $attribute;
                 }
@@ -112,8 +113,7 @@ trait FormModelSaver
          */
         if (method_exists($model, 'getPurgeableAttributes')) {
             $model->addPurgeable($attributesToPurge);
-        }
-        else {
+        } else {
             $model->bindEventOnce('model.saveInternal', function () use ($model, $attributesToPurge) {
                 foreach ($attributesToPurge as $attribute) {
                     unset($model->attributes[$attribute]);

@@ -25,7 +25,7 @@ return [
         "numeric" => "El campo :attribute debe tener estar entre :min y :max.",
         "file"    => "El campo :attribute debe ocupar entre :min y :max kilobytes.",
         "string"  => "El campo :attribute debe tener entre :min y :max caracteres.",
-        "array"   => "El campo :attribute debe tener entre :min y :max elementos."
+        "array"   => "El campo :attribute debe tener entre :min y :max elementos.",
     ],
     "confirmed"        => "La confirmación del campo:attribute es incorrecta.",
     "date"             => "El campo :attribute no es una fecha válida.",
@@ -43,7 +43,7 @@ return [
         "numeric" => "El campo :attribute no debe ser mayor que :max.",
         "file"    => "El campo :attribute no debe ocupar más de :max kilobytes.",
         "string"  => "El campo :attribute no debe tener más de :max caracteres.",
-        "array"   => "El campo :attribute no debe tener más de :max elementos."
+        "array"   => "El campo :attribute no debe tener más de :max elementos.",
     ],
     "mimes"            => "El campo :attribute debe ser un archivo del tipo: :values.",
     "extensions"       => "El campo :attribute debe tener una extensión de: :values.",
@@ -51,7 +51,7 @@ return [
         "numeric" => "El campo :attribute debe ser :min o más.",
         "file"    => "El campo :attribute debe ocupar :min kilobytes o más.",
         "string"  => "El campo :attribute debe tener :min caracteres o más.",
-        "array"   => "El campo :attribute debe tener :min elementos o más."
+        "array"   => "El campo :attribute debe tener :min elementos o más.",
     ],
     "not_in"           => "El campo :attribute es incorrecto.",
     "numeric"          => "El campo :attribute debe ser un número.",
@@ -65,7 +65,7 @@ return [
         "numeric" => "El campo :attribute debe ser :size.",
         "file"    => "El campo :attribute debe ocupar :size kilobytes.",
         "string"  => "El campo :attribute debe tener :size caracteres.",
-        "array"   => "El campo :attribute debe contener :size elementos."
+        "array"   => "El campo :attribute debe contener :size elementos.",
     ],
     "unique"           => "El campo :attribute ya ha sido tomado.",
     "url"              => "El campo :attribute tiene un formato incorrecto.",
@@ -94,6 +94,6 @@ return [
     |
     */
 
-    'attributes' => []
+    'attributes' => [],
 
 ];

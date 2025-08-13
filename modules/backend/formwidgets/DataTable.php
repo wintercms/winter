@@ -1,10 +1,12 @@
-<?php namespace Backend\FormWidgets;
+<?php
 
-use Lang;
-use Backend\Widgets\Table;
+namespace Backend\FormWidgets;
+
 use Backend\Classes\FormWidgetBase;
+use Backend\Widgets\Table;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Html\Helper as HtmlHelper;
-use ApplicationException;
 
 /**
  * Data Table
@@ -184,7 +186,7 @@ class DataTable extends FormWidgetBase
                     'backend::lang.model.missing_method',
                     [
                         'class' => get_class($this->model),
-                        'method' => 'getDataTableOptions'
+                        'method' => 'getDataTableOptions',
                     ]
                 )
             );

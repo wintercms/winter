@@ -56,12 +56,12 @@ return [
         'nextMonth' => '下一个月',
         'months' => ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
         'weekdays' => ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-        'weekdaysShort' => ['日', '一', '二', '三', '四', '五', '六']
+        'weekdaysShort' => ['日', '一', '二', '三', '四', '五', '六'],
     ],
 
     'filter' => [
         'group' => [
-            'all' => '全部'
+            'all' => '全部',
         ],
         'dates' => [
             'all' => '全部',
@@ -69,8 +69,8 @@ return [
             'reset_button_text'  => '重置',
             'date_placeholder' => '日期',
             'after_placeholder' => 'After',
-            'before_placeholder' => 'Before'
-        ]
+            'before_placeholder' => 'Before',
+        ],
     ],
 
     'eventlog' => [
@@ -86,7 +86,7 @@ return [
             'openWith' => 'Open with',
             'remember_choice' => '记住选择',
             'open' => '打开',
-            'cancel' => '取消'
-        ]
-    ]
+            'cancel' => '取消',
+        ],
+    ],
 ];

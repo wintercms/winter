@@ -32,7 +32,7 @@ return [
         'edit' => [
             'not_set' => "Tema de editare nu este setată.",
             'not_found' => "Tema de editare nu a fost gasită.",
-            'not_match' => "Obiectul pe care încercați să-l accesați nu aparține temei care este în curs de editare. Vă rugăm să reîncărcați pagina."
+            'not_match' => "Obiectul pe care încercați să-l accesați nu aparține temei care este în curs de editare. Vă rugăm să reîncărcați pagina.",
         ],
         'settings_menu' => 'Tema front-end',
         'settings_menu_description' => 'Gestionați tema front-end și opțiunile de personalizare.',
@@ -131,7 +131,7 @@ return [
         'no_list_records' => 'Nu au fost găsite machete',
         'new' => 'Machetă nouă',
         'delete_confirm_multiple' => 'Vreți să ștergeți machetele selectate?',
-        'delete_confirm_single' => 'Vreți să ștergeți macheta selectată?'
+        'delete_confirm_single' => 'Vreți să ștergeți macheta selectată?',
     ],
     'partial' => [
         'not_found_name' => "Parțialul ':name' nu a fost gasit.",
@@ -141,7 +141,7 @@ return [
         'no_list_records' => 'Nu au fost găsite parțiale',
         'delete_confirm_multiple' => 'Vreți să ștergeți partialele selectate?',
         'delete_confirm_single' => 'Vreți să ștergeți acest parțial?',
-        'new' => 'Parțial nou'
+        'new' => 'Parțial nou',
     ],
     'content' => [
         'not_found_name' => "Fișierul de conținut ':name' nu a fost găsit.",
@@ -157,11 +157,11 @@ return [
         'not_found' => "Funcția AJAX ':name' nu a fost gasită.",
     ],
     'cms' => [
-        'menu_label' => "CMS"
+        'menu_label' => "CMS",
     ],
     'sidebar' => [
         'add' => 'Adăugare',
-        'search' => 'Căutare...'
+        'search' => 'Căutare...',
     ],
     'editor' => [
         'settings' => 'Setări',

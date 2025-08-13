@@ -2,9 +2,9 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Layout;
 use Cms\Classes\Page;
+use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Halcyon\Model;
 
 class CmsObjectQueryTest extends TestCase

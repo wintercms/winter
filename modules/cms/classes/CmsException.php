@@ -1,10 +1,12 @@
-<?php namespace Cms\Classes;
+<?php
 
-use File;
+namespace Cms\Classes;
+
+use Throwable;
 use Twig\Error\Error as TwigError;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Halcyon\Processors\SectionParser;
-use Throwable;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * The CMS exception class.
@@ -28,7 +30,7 @@ class CmsException extends ApplicationException
         100 => 'General',
         200 => 'INI Settings',
         300 => 'PHP Content',
-        400 => 'Twig Template'
+        400 => 'Twig Template',
     ];
 
     /**
@@ -164,8 +166,7 @@ class CmsException extends ApplicationException
         /*
          * Errors occurring the PHP code base class (Cms\Classes\CodeBase)
          */
-        }
-        else {
+        } else {
             $trace = $exception->getTrace();
             if (isset($trace[1]['class'])) {
                 $class = $trace[1]['class'];

@@ -1,4 +1,6 @@
-<?php namespace Cms\Components;
+<?php
+
+namespace Cms\Components;
 
 use Cms\Classes\ComponentBase;
 
@@ -23,7 +25,7 @@ class ViewBag extends ComponentBase
     {
         return [
             'name'        => 'viewBag',
-            'description' => 'Stores custom template properties.'
+            'description' => 'Stores custom template properties.',
         ];
     }
 
@@ -74,7 +76,7 @@ class ViewBag extends ComponentBase
         foreach ($this->properties as $name => $value) {
             $result[$name] = [
                 'title' => $name,
-                'type' => 'string'
+                'type' => 'string',
             ];
         }
 

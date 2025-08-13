@@ -1,11 +1,13 @@
-<?php namespace DependencyTest\WrongCase;
+<?php
+
+namespace DependencyTest\WrongCase;
 
 use System\Classes\PluginBase;
 
 class Plugin extends PluginBase
 {
     public $require = [
-        'Dependencytest.dependency'
+        'Dependencytest.dependency',
     ];
 
     public function pluginDetails()
@@ -13,7 +15,7 @@ class Plugin extends PluginBase
         return [
             'name' => 'Dependency Test - Wrong Case',
             'description' => 'This is a test plugin with a dependency that exists, but is using the wrong letter case.',
-            'author' => 'Ben Thomson'
+            'author' => 'Ben Thomson',
         ];
     }
 }

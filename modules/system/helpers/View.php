@@ -1,6 +1,8 @@
-<?php namespace System\Helpers;
+<?php
 
-use View as ViewFacade;
+namespace System\Helpers;
+
+use Illuminate\Support\Facades\View as ViewFacade;
 
 /**
  * This helper class is used to extract basic variables

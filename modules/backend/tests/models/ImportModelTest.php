@@ -2,13 +2,9 @@
 
 namespace Backend\Tests\Models;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Backend\Models\ImportModel;
 use System\Models\File as FileModel;
-
-if (!class_exists('Model')) {
-    class_alias('Winter\Storm\Database\Model', 'Model');
-}
+use System\Tests\Bootstrap\PluginTestCase;
 
 class ExampleImportModel extends ImportModel
 {
@@ -22,14 +18,13 @@ class ExampleImportModel extends ImportModel
 
 class ImportModelTest extends PluginTestCase
 {
-
     //
     // Tests
     //
 
     public function testDecodeArrayValue()
     {
-        $model = new ExampleImportModel;
+        $model = new ExampleImportModel();
         $data = 'foo|bar';
         $result = self::callProtectedMethod($model, 'decodeArrayValue', [$data]);
         $this->assertEquals(['foo', 'bar'], $result);
@@ -45,16 +40,16 @@ class ImportModelTest extends PluginTestCase
 
     public function testGetImportFilePath()
     {
-        $model = new ExampleImportModel;
+        $model = new ExampleImportModel();
         $sessionKey = uniqid('session_key', true);
 
         $file1 = FileModel::create([
-            'data' => base_path().'/modules/backend/tests/fixtures/reference/file1.txt',
+            'data' => base_path() . '/modules/backend/tests/fixtures/reference/file1.txt',
             'is_public' => false,
         ]);
 
         $file2 = FileModel::create([
-            'data' => base_path().'/modules/backend/tests/fixtures/reference/file2.txt',
+            'data' => base_path() . '/modules/backend/tests/fixtures/reference/file2.txt',
             'is_public' => false,
         ]);
 

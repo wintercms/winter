@@ -1,10 +1,11 @@
-<?php namespace Database\Tester\Models;
+<?php
 
-use Model;
+namespace Database\Tester\Models;
+
+use Winter\Storm\Database\Model;
 
 class Phone extends Model
 {
-
     /**
      * @var string The database table used by the model.
      */

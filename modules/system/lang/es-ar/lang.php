@@ -18,18 +18,18 @@ return [
         'name' => 'Sistema',
         'menu_label' => 'Sistema',
         'categories' => [
-        'cms' => 'CMS',
-        'misc' => 'Miscelánea',
-        'logs' => 'Registros',
-        'mail' => 'Correo',
-        'shop' => 'Comprar',
-        'team' => 'Equipo',
-        'users' => 'Usuarios',
-        'system' => 'Sistema',
-        'social' => 'Social',
-        'events' => 'Eventos',
-        'customers' => 'Clientes',
-        'my_settings' => 'Mis configuraciones',
+            'cms' => 'CMS',
+            'misc' => 'Miscelánea',
+            'logs' => 'Registros',
+            'mail' => 'Correo',
+            'shop' => 'Comprar',
+            'team' => 'Equipo',
+            'users' => 'Usuarios',
+            'system' => 'Sistema',
+            'social' => 'Social',
+            'events' => 'Eventos',
+            'customers' => 'Clientes',
+            'my_settings' => 'Mis configuraciones',
         ],
     ],
     'plugin' => [
@@ -76,7 +76,7 @@ return [
         'missing_model' => 'La página de configuración no encuentra una definición de modelo.',
         'update_success' => 'Los ajustes para :name han sido actualizados correctamente.',
         'return' => 'Regresar a la configuración del sistema',
-        'search' => 'Buscar'
+        'search' => 'Buscar',
     ],
     'mail' => [
         'menu_label' => 'Administrar Correo',
@@ -118,7 +118,7 @@ return [
         'content_text' => 'Texto plano',
         'test_send' => 'Enviar mensaje de prueba',
         'test_success' => 'El mensaje de prueba ha sido enviado con éxito.',
-        'return' => 'Volver a la lista de plantilla'
+        'return' => 'Volver a la lista de plantilla',
     ],
     'install' => [
         'project_label' => 'Adjuntar al proyecto',
@@ -217,6 +217,6 @@ return [
         'manage_software_updates' => 'Gestionar actualización de software',
         'manage_mail_templates' => 'Gestionar plantillas de correo',
         'manage_other_administrators' => 'Gestionar otros administradores',
-        'view_the_dashboard' => 'Ver el Tablero'
-    ]
+        'view_the_dashboard' => 'Ver el Tablero',
+    ],
 ];

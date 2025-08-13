@@ -1,4 +1,6 @@
-<?php namespace Backend\Widgets\Table;
+<?php
+
+namespace Backend\Widgets\Table;
 
 /**
  * Base class for the Table widget data sources.

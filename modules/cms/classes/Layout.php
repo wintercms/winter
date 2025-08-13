@@ -1,4 +1,6 @@
-<?php namespace Cms\Classes;
+<?php
+
+namespace Cms\Classes;
 
 /**
  * The CMS layout class.
@@ -11,7 +13,7 @@ class Layout extends CmsCompoundObject
     /**
      * Fallback layout name.
      */
-    const FALLBACK_FILE_NAME = 'fallback';
+    public const FALLBACK_FILE_NAME = 'fallback';
 
     /**
      * @var string The container name associated with the model, eg: pages.

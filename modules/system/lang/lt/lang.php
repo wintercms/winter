@@ -3,7 +3,7 @@
 return [
     'app' => [
         'name' => 'Winter CMS',
-        'tagline' => 'Puiki pradžia!'
+        'tagline' => 'Puiki pradžia!',
     ],
     'locale' => [
         'be' => 'Беларуская',
@@ -40,13 +40,13 @@ return [
         'tr' => 'Türk',
         'zh-cn' => '简体中文',
         'zh-tw' => '繁體中文',
-        'vn' => 'Tiếng việt'
+        'vn' => 'Tiếng việt',
     ],
     'directory' => [
-        'create_fail' => 'Negalime sukurti direktorijos: :name'
+        'create_fail' => 'Negalime sukurti direktorijos: :name',
     ],
     'file' => [
-        'create_fail' => 'Negalime sukurti failo: :name'
+        'create_fail' => 'Negalime sukurti failo: :name',
     ],
     'page' => [
         'invalid_token' => [
@@ -54,7 +54,7 @@ return [
         ],
     ],
     'combiner' => [
-        'not_found' => "Bendrintojo failas ':name' nerastas."
+        'not_found' => "Bendrintojo failas ':name' nerastas.",
     ],
     'system' => [
         'name' => 'Sistema',
@@ -71,15 +71,15 @@ return [
             'social' => 'Social',
             'events' => 'Įvykiai',
             'customers' => 'Klientai',
-            'my_settings' => 'Mano nustatymai'
-        ]
+            'my_settings' => 'Mano nustatymai',
+        ],
     ],
     'theme' => [
         'label' => 'Dizainas',
         'unnamed' => 'Neužvardintas dizainas',
         'name' => [
             'label' => 'Dizaino pavadinimas',
-            'help' => 'Užvardinkite dizainą unikaliu kodu. Pavyzdžiui, Winter.Vanilla'
+            'help' => 'Užvardinkite dizainą unikaliu kodu. Pavyzdžiui, Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -88,15 +88,15 @@ return [
         'installed' => 'Įdiegti dizainai',
         'no_themes' => 'Kolkas įdiegtų dizainų iš viešosios saugyklos nėra.',
         'recommended' => 'Rekomenduojama',
-        'remove_confirm' => 'Ar tikrai norite pašalinti šį dizainą?'
+        'remove_confirm' => 'Ar tikrai norite pašalinti šį dizainą?',
     ],
     'plugin' => [
         'label' => 'Įskiepiai',
         'unnamed' => 'Neužvardintas įskiepis',
         'name' => [
             'label' => 'Įskiepio pavadinimas',
-            'help' => 'Užvardinkite įskiepį unikaliu kodu. Pavyzdžiui, Winter.Blog'
-        ]
+            'help' => 'Užvardinkite įskiepį unikaliu kodu. Pavyzdžiui, Winter.Blog',
+        ],
     ],
     'plugins' => [
         'manage' => 'Tvarkyti įskiepius',
@@ -122,7 +122,7 @@ return [
         'disable_confirm' => 'Ar tikrai?',
         'disable_success' => 'Sėkmingai išjungėme šiuos įskiepius.',
         'enable_success' => 'Sėkmingai ijungėme šiuos įskiepius.',
-        'unknown_plugin' => 'Įskiepis buvo pašalintas iš failų sistemos.'
+        'unknown_plugin' => 'Įskiepis buvo pašalintas iš failų sistemos.',
     ],
     'project' => [
         'name' => 'Projektas',
@@ -133,10 +133,10 @@ return [
         'id' => [
             'label' => 'Projekto ID',
             'help' => 'Kaip rasti Projekto ID',
-            'missing' => 'Prašome nurodyti Projekto ID, kurį norite naudoti.'
+            'missing' => 'Prašome nurodyti Projekto ID, kurį norite naudoti.',
         ],
         'detach_confirm' => 'Ar tikrai norite atjungti Projektą?',
-        'unbind_success' => 'Projektas buvo sėkmingai atjungtas.'
+        'unbind_success' => 'Projektas buvo sėkmingai atjungtas.',
     ],
     'settings' => [
         'menu_label' => 'Nustatymai',
@@ -144,7 +144,7 @@ return [
         'missing_model' => 'Nustatymų puslapiui trūksta Modelio aprašo.',
         'update_success' => ':name nustatymai atnaujinti',
         'return' => 'Grįžti į sistemos nustatymus',
-        'search' => 'Ieškoti'
+        'search' => 'Ieškoti',
     ],
     'mail' => [
         'log_file' => 'Registro failas',
@@ -199,7 +199,7 @@ return [
         'deleting' => 'Šablonas trinamas...',
         'deleting_layout' => 'Išvaizda trinama...',
         'sending' => 'Siunčiamas bandomasis laiškas...',
-        'return' => 'Grįžti į šablonų sąrašą'
+        'return' => 'Grįžti į šablonų sąrašą',
     ],
     'install' => [
         'project_label' => 'Prisegti prie Projekto',
@@ -208,7 +208,7 @@ return [
         'missing_plugin_name' => 'Nurodykite instaliuojamo Įskiepio pavadinimą.',
         'missing_theme_name' => 'Nurodykite instaliuojamo Dizaino pavadinimą.',
         'install_completing' => 'Užbaigiamas diegimo procesas',
-        'install_success' => 'Įskiepis įdiegtas sėkmingai'
+        'install_success' => 'Įskiepis įdiegtas sėkmingai',
     ],
     'updates' => [
         'title' => 'Tvarkyti Naujinimus',
@@ -247,17 +247,17 @@ return [
         'force_label' => 'Naujinti priverstinai',
         'found' => [
             'label' => 'Yra atnaujinimų!',
-            'help' => 'Spauskite Atnaujinti programą, kad pradėtumėte atnaujinimo procesą.'
+            'help' => 'Spauskite Atnaujinti programą, kad pradėtumėte atnaujinimo procesą.',
         ],
         'none' => [
             'label' => 'Naujinimų nėra',
-            'help' => 'Naujų papildymų neradome.'
+            'help' => 'Naujų papildymų neradome.',
         ],
         'important_action' => [
             'empty' => 'Pasirinkite veiksmą',
             'confirm' => 'Patvirtinti atnaujinimą',
             'skip' => 'Praleisti šį įskiepį (tik šįkart)',
-            'ignore' => 'Praleisti šį įskiepį (visada)'
+            'ignore' => 'Praleisti šį įskiepį (visada)',
         ],
         'important_action_required' => 'Reikalingas veiksmas',
         'important_view_guide' => 'Žiūrėkite papildymo gidą',
@@ -273,7 +273,7 @@ return [
         'details_licence' => 'Licencija',
         'details_licence_missing' => 'Licencija nepateikta.',
         'details_current_version' => 'Dabartinė versija',
-        'details_author' => 'Autorius'
+        'details_author' => 'Autorius',
     ],
     'server' => [
         'connect_error' => 'Nepavyko prisijungti prie serverio.',
@@ -281,17 +281,17 @@ return [
         'response_invalid' => 'Netinkamas serverio atsakymas.',
         'response_empty' => 'Tuščias serverio atsakymas.',
         'file_error' => 'Serveriui nepavyko pateikti paketo.',
-        'file_corrupt' => 'Failas iš serverio yra sugadintas.'
+        'file_corrupt' => 'Failas iš serverio yra sugadintas.',
     ],
     'behavior' => [
-        'missing_property' => 'Klasė :class turi nurodyti ypatybę $:property naudojamą :behavior funkcionalumo.'
+        'missing_property' => 'Klasė :class turi nurodyti ypatybę $:property naudojamą :behavior funkcionalumo.',
     ],
     'config' => [
         'not_found' => 'Nepavyko rasti konfigūracijos failo :file nurodyto vietai :location.',
-        'required' => "Konfigūracija naudojama :location turi pateikti reikšmę ':property'."
+        'required' => "Konfigūracija naudojama :location turi pateikti reikšmę ':property'.",
     ],
     'zip' => [
-        'extract_failed' => "Nepavyko išskleisti šakninio failo ':file'."
+        'extract_failed' => "Nepavyko išskleisti šakninio failo ':file'.",
     ],
     'event_log' => [
         'hint' => 'Šis registras rodo potencialių klaidų, kurios atsirado programoje, sąrašą. Išimtinos klaidos ir taisymo informacija.',
@@ -306,7 +306,7 @@ return [
         'created_at' => 'Data ir Laikas',
         'message' => 'Žinutė',
         'level' => 'Lygis',
-        'preview_title' => 'Įvykis'
+        'preview_title' => 'Įvykis',
     ],
     'request_log' => [
         'hint' => 'Šis registras rodo naršyklės užklausų, kurios galimai reikalauja peržiūros, sąrašą. Pavyzdžiui jeigu lankytojas atidaro turinio puslapį, kuris neegzistuoja - tokiu atveju yra sukuriamas įrašas su statuso kodu 404.',
@@ -322,7 +322,7 @@ return [
         'referer' => 'Siuntėjai',
         'url' => 'URL',
         'status_code' => 'Statusas',
-        'preview_title' => 'Užklausa'
+        'preview_title' => 'Užklausa',
     ],
     'permissions' => [
         'name' => 'Sistema',
@@ -335,7 +335,7 @@ return [
         'manage_preferences' => 'Tvarkyti posistemės nustatymus',
         'manage_editor' => 'Tvarkyti kodo redaktoriaus nustatymus',
         'view_the_dashboard' => 'Skydelis',
-        'manage_branding' => 'Redaguoti posistemę'
+        'manage_branding' => 'Redaguoti posistemę',
     ],
     'media' => [
         'invalid_path' => "Nurodytas netinkamas kelias: ':path'.",

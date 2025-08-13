@@ -1,9 +1,11 @@
-<?php namespace Backend\FormWidgets;
+<?php
 
-use BackendAuth;
+namespace Backend\FormWidgets;
+
 use Backend\Classes\FormField;
-use System\Classes\MediaLibrary;
 use Backend\Classes\FormWidgetBase;
+use Backend\Facades\BackendAuth;
+use System\Classes\MediaLibrary;
 
 /**
  * Media Finder
@@ -61,12 +63,13 @@ class MediaFinder extends FormWidgetBase
             'mode',
             'prompt',
             'imageWidth',
-            'imageHeight'
+            'imageHeight',
         ]);
 
         $user = BackendAuth::getUser();
 
-        if ($this->formField->disabled
+        if (
+            $this->formField->disabled
             || $this->formField->readOnly
             || !$user
             || !$user->hasAccess('media.manage_media')

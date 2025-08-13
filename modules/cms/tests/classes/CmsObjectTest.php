@@ -2,9 +2,9 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\CmsObject;
 use Cms\Classes\Theme;
+use System\Tests\Bootstrap\TestCase;
 
 class TestCmsObject extends CmsObject
 {
@@ -132,7 +132,7 @@ class CmsObjectTest extends TestCase
         $obj = TestCmsObject::inTheme($theme);
         $obj->fill([
             'fileName' => 'mytestobj',
-            'content' => $testContents
+            'content' => $testContents,
         ]);
 
         $this->assertEquals($testContents, $obj->getContent());
@@ -147,7 +147,7 @@ class CmsObjectTest extends TestCase
         $obj = TestCmsObject::inTheme($theme);
         $obj->fill([
             'something' => 'mytestobj',
-            'content' => $testContents
+            'content' => $testContents,
         ]);
 
         $this->assertNull($obj->something);
@@ -163,7 +163,7 @@ class CmsObjectTest extends TestCase
         $testContents = 'mytestcontent';
         $obj = TestCmsObject::inTheme($theme);
         $obj->fill([
-            'fileName' => '@name'
+            'fileName' => '@name',
         ]);
         $obj->save();
     }
@@ -178,7 +178,7 @@ class CmsObjectTest extends TestCase
         $testContents = 'mytestcontent';
         $obj = TestCmsObject::inTheme($theme);
         $obj->fill([
-            'fileName' => '../somefile'
+            'fileName' => '../somefile',
         ]);
         $obj->save();
     }
@@ -193,7 +193,7 @@ class CmsObjectTest extends TestCase
         $testContents = 'mytestcontent';
         $obj = TestCmsObject::inTheme($theme);
         $obj->fill([
-            'fileName' => '/somefile'
+            'fileName' => '/somefile',
         ]);
         $obj->save();
     }
@@ -208,7 +208,7 @@ class CmsObjectTest extends TestCase
         $testContents = 'mytestcontent';
         $obj = TestCmsObject::inTheme($theme);
         $obj->fill([
-            'fileName' => ' '
+            'fileName' => ' ',
         ]);
         $obj->save();
     }
@@ -228,7 +228,7 @@ class CmsObjectTest extends TestCase
         $obj = TestCmsObject::inTheme($theme);
         $obj->fill([
             'fileName' => 'mytestobj',
-            'content' => $testContents
+            'content' => $testContents,
         ]);
         $obj->save();
 
@@ -256,7 +256,7 @@ class CmsObjectTest extends TestCase
         $this->assertEquals($testContents, $obj->getContent());
 
         $obj->fill([
-            'fileName' => 'anotherobj'
+            'fileName' => 'anotherobj',
         ]);
         $obj->save();
 
@@ -280,7 +280,7 @@ class CmsObjectTest extends TestCase
 
         $obj->fill([
             'fileName' => 'anotherobj',
-            'content' => $testContents
+            'content' => $testContents,
         ]);
         $obj->save();
 
@@ -333,7 +333,7 @@ class CmsObjectTest extends TestCase
         $obj = TestCmsObject::inTheme($theme);
         $obj->fill([
             'fileName' => 'testsubdir/mytestobj.htm',
-            'content' => $testContents
+            'content' => $testContents,
         ]);
         $obj->save();
 

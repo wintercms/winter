@@ -11,7 +11,7 @@ require $baseDir . '/bootstrap/autoload.php';
  * Fallback autoloader
  */
 $loader = new Winter\Storm\Support\ClassLoader(
-    new Winter\Storm\Filesystem\Filesystem,
+    new Winter\Storm\Filesystem\Filesystem(),
     $baseDir,
     $baseDir . '/storage/framework/classes.php'
 );

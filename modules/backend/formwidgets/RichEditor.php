@@ -1,15 +1,17 @@
-<?php namespace Backend\FormWidgets;
+<?php
 
-use App;
-use File;
-use Lang;
-use Event;
-use Config;
-use Request;
-use Backend;
-use BackendAuth;
-use Backend\Models\EditorSetting;
+namespace Backend\FormWidgets;
+
 use Backend\Classes\FormWidgetBase;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Backend\Models\EditorSetting;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Rich Editor
@@ -155,7 +157,7 @@ class RichEditor extends FormWidgetBase
         $this->addJs('/modules/backend/formwidgets/codeeditor/assets/js/build-min.js', 'core');
 
         if ($lang = $this->getValidEditorLang()) {
-            $this->addJs('vendor/froala/js/languages/'.$lang.'.js', 'core');
+            $this->addJs('vendor/froala/js/languages/' . $lang . '.js', 'core');
         }
     }
 
@@ -173,7 +175,7 @@ class RichEditor extends FormWidgetBase
         }
 
         $locale = str_replace('-', '_', strtolower($locale));
-        $path = base_path('modules/backend/formwidgets/richeditor/assets/vendor/froala/js/languages/'.$locale.'.js');
+        $path = base_path('modules/backend/formwidgets/richeditor/assets/vendor/froala/js/languages/' . $locale . '.js');
 
         return File::exists($path) ? $locale : false;
     }

@@ -2,8 +2,6 @@
 
 namespace System\Console\Asset\Vite;
 
-use Winter\Storm\Support\Facades\File;
-
 class ViteWatch extends ViteCompile
 {
     /**
@@ -32,7 +30,7 @@ class ViteWatch extends ViteCompile
      * @var array List of commands that this command replaces (aliases)
      */
     protected $replaces = [
-        'vite:dev'
+        'vite:dev',
     ];
 
     /**

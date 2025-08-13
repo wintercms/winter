@@ -47,18 +47,18 @@ return [
     'alert' => [
         'confirm_button_text' => 'GERAI',
         'cancel_button_text' => 'Atšaukti',
-        'widget_remove_confirm' => 'Pašalinti šį valdiklį?'
+        'widget_remove_confirm' => 'Pašalinti šį valdiklį?',
     ],
     'datepicker' => [
         'previousMonth' => 'Ankstenis mėnuo',
         'nextMonth' => 'Sekantis Mėnuo',
         'months' => ['Sausis', 'Vasaris', 'Kovas', 'Balandis', 'Gegužė', 'Birželis', 'Liepa', 'Rugpjūtis', 'Rugsėjis', 'Spalis', 'Lapkritis', 'Gruodis'],
         'weekdays' => ['Sekmadienis', 'Pirmadienis', 'Antradienis', 'Trečiadienis', 'Ketvirtadienis', 'Penktadienis', 'Šeštadienis'],
-        'weekdaysShort' => ['Sek', 'Pir', 'Ant', 'Tre', 'Ket', 'Pen', 'šeš']
+        'weekdaysShort' => ['Sek', 'Pir', 'Ant', 'Tre', 'Ket', 'Pen', 'šeš'],
     ],
     'filter' => [
         'group' => [
-            'all' => 'visos'
+            'all' => 'visos',
         ],
         'dates' => [
             'all' => 'visos',
@@ -66,8 +66,8 @@ return [
             'reset_button_text'  => 'Atstatyti',
             'date_placeholder' => 'Data',
             'after_placeholder' => 'Po',
-            'before_placeholder' => 'Prieš'
-        ]
+            'before_placeholder' => 'Prieš',
+        ],
     ],
     'eventlog' => [
         'show_stacktrace' => 'Rodyti išklotinę',
@@ -82,7 +82,7 @@ return [
             'openWith' => 'Atidaryti su',
             'remember_choice' => 'Atsiminti pasirinktą parinktį šiai sesijai',
             'open' => 'Atidaryti',
-            'cancel' => 'Atšaukti'
-        ]
-    ]
+            'cancel' => 'Atšaukti',
+        ],
+    ],
 ];

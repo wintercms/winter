@@ -1,4 +1,6 @@
-<?php namespace Backend\Console;
+<?php
+
+namespace Backend\Console;
 
 use System\Console\BaseScaffoldCommand;
 use Winter\Storm\Support\Str;

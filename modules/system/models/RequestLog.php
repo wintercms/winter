@@ -1,8 +1,10 @@
-<?php namespace System\Models;
+<?php
 
-use App;
-use Model;
-use Request;
+namespace System\Models;
+
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Database\Model;
 
 /**
  * Model for logging 404 errors
@@ -55,8 +57,7 @@ class RequestLog extends Model
         if (!$record->exists) {
             $record->count = 1;
             $record->save();
-        }
-        else {
+        } else {
             $record->increment('count');
         }
 

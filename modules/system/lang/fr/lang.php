@@ -31,14 +31,14 @@ return [
             'events' => 'Évènements',
             'customers' => 'Clients',
             'my_settings' => 'Mes réglages',
-        ]
+        ],
     ],
     'theme' => [
         'label' => 'Thème',
         'unnamed' => 'Thème sans nom',
         'name' => [
             'label' => 'Nom du thème',
-            'help' => 'Nommer le thème avec un nom de code unique. Par exemple, Winter.Vanilla'
+            'help' => 'Nommer le thème avec un nom de code unique. Par exemple, Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -47,7 +47,7 @@ return [
         'installed' => 'Thèmes installés',
         'no_themes' => 'Il n\'y a aucun thème installé depuis le Marketplace.',
         'recommended' => 'Recommandé',
-        'remove_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer ce thème ?'
+        'remove_confirm' => 'Êtes-vous sûr(e) de vouloir supprimer ce thème ?',
     ],
     'plugin' => [
         'label' => 'Plugin',
@@ -121,7 +121,7 @@ return [
         'test_content' => "Il s'agit d'un e-mail de test pour confirmer que les paramètres de messagerie fournis fonctionnent.",
         'test_confirm' => "Cela permettra de sauvegarder votre configuration actuelle et d'envoyer un e-mail de test à :email.",
         'return' => 'Retourner à la page des réglages du système',
-        'search' => 'Rechercher'
+        'search' => 'Rechercher',
     ],
     'mail' => [
         'log_file' => 'Fichier journal',
@@ -183,7 +183,7 @@ return [
         'sending' => 'Envoi du message de test en cours…',
         'return' => 'Retour à la liste des modèles.',
         'options' => 'Options',
-        'disable_auto_inline_css' => 'Désactiver le CSS automatique en ligne'
+        'disable_auto_inline_css' => 'Désactiver le CSS automatique en ligne',
     ],
     'mail_brand' => [
         'menu_label' => 'Personnalisation des courriels',
@@ -197,7 +197,7 @@ return [
                 'description' => 'Description',
                 'price' => 'Prix',
                 'centered' => 'Centré',
-                'right_aligned' => 'Aligné à droite'
+                'right_aligned' => 'Aligné à droite',
             ],
             'buttons' => [
                 'primary' => 'Bouton principal',
@@ -208,7 +208,7 @@ return [
             'more' => 'Un peu plus de texte',
             'promotion' => 'Code de réduction: WINTER',
             'subcopy' => 'Ceci est le pré copyright de votre courriel',
-            'thanks' => 'Merci'
+            'thanks' => 'Merci',
         ],
         'fields' => [
             '_section_background' => 'Arrière-plan',
@@ -234,7 +234,7 @@ return [
             'panel_bg' => 'Arrière-plan du panneau',
             'promotion_bg' => 'Arrière-plan de la promotion',
             'promotion_border_color' => 'Couleur de la bordure de la promotion',
-        ]
+        ],
     ],
     'install' => [
         'project_label' => 'Attacher un projet',
@@ -367,7 +367,7 @@ return [
         'referer' => 'Référents',
         'url' => 'Adresse URL',
         'status_code' => 'Statut',
-        'preview_title' => 'Requête'
+        'preview_title' => 'Requête',
     ],
     'permissions' => [
         'name' => 'Système',
@@ -383,7 +383,7 @@ return [
         'manage_own_editor' => 'Gérer les préférences personnelles de l\'éditeur de code',
         'view_the_dashboard' => 'Voir le tableau de bord',
         'manage_default_dashboard' => 'Gérer le tableau de bord par défaut',
-        'manage_branding' => 'Personnaliser l\'interface d\'administration'
+        'manage_branding' => 'Personnaliser l\'interface d\'administration',
     ],
     'log' => [
         'menu_label' => 'Paramètres du journal',

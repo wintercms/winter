@@ -2,7 +2,7 @@
 <div class="layout-row" id="asset-list-container" data-alias="<?= $this->alias ?>">
     <div class="layout-cell">
         <div class="layout-relative">
-           <?= $this->makePartial('files', ['data'=>$data]) ?>
+           <?= $this->makePartial('files', ['data' => $data]) ?>
         </div>
     </div>
 </div>

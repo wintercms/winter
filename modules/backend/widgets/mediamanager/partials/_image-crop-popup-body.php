@@ -1,4 +1,4 @@
-<?= Form::open(['class'=>'layout', 'onsubmit'=>'return false']) ?>
+<?= Form::open(['class' => 'layout', 'onsubmit' => 'return false']) ?>
     <div class="layout-row min-size">
         <?= $this->makePartial('crop-toolbar') ?>
     </div>

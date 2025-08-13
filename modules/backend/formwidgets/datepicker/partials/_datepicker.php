@@ -21,7 +21,7 @@
     <div class="form-control"><?= Backend::dateTime($value, [
         'format' => $format,
         'formatAlias' => $formatAlias,
-        'defaultValue' => $value
+        'defaultValue' => $value,
     ]) ?></div>
 <?php else: ?>
     <div

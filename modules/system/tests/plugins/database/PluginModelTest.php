@@ -2,12 +2,12 @@
 
 namespace System\Tests\Plugins\Database;
 
-use System\Tests\Bootstrap\PluginTestCase;
 use Database\Tester\Models\Post;
+use System\Tests\Bootstrap\PluginTestCase;
 
 class PluginModelTest extends PluginTestCase
 {
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -19,7 +19,7 @@ class PluginModelTest extends PluginTestCase
     public function testCreateFirstPost()
     {
         Post::truncate();
-        $post = new Post;
+        $post = new Post();
         $post->title = "First post";
         $post->description = "Yay!!";
         $post->save();

@@ -2,10 +2,10 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Theme;
-use Config;
-use Event;
+use System\Tests\Bootstrap\TestCase;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Event;
 
 class ThemeTest extends TestCase
 {

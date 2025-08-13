@@ -1,9 +1,11 @@
-<?php namespace Cms\Twig;
+<?php
 
+namespace Cms\Twig;
+
+use Twig\Error\SyntaxError as TwigErrorSyntax;
 use Twig\Node\Node as TwigNode;
 use Twig\Token as TwigToken;
 use Twig\TokenParser\AbstractTokenParser as TwigTokenParser;
-use Twig\Error\SyntaxError as TwigErrorSyntax;
 
 /**
  * Parser for the `{% placeholder %}` Twig tag.
@@ -40,8 +42,7 @@ class PlaceholderTokenParser extends TwigTokenParser
 
             $body = $this->parser->subparse([$this, 'decidePlaceholderEnd'], true);
             $stream->expect(TwigToken::BLOCK_END_TYPE);
-        }
-        else {
+        } else {
             $params = $this->loadParams($stream);
         }
 

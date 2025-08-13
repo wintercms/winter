@@ -1,4 +1,6 @@
-<?php namespace Cms\Controllers;
+<?php
+
+namespace Cms\Controllers;
 
 use Backend\Controllers\Media as MediaController;
 

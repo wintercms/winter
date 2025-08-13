@@ -76,15 +76,15 @@ return [
             'events' => 'رویداد ها',
             'customers' => 'مشتریان',
             'my_settings' => 'تنظیمات من',
-            'notifications' => 'اطلاعیه ها'
-        ]
+            'notifications' => 'اطلاعیه ها',
+        ],
     ],
     'theme' => [
         'label' => 'قالب',
         'unnamed' => 'قالب بدون نام',
         'name' => [
             'label' => 'نام قالب',
-            'help' => 'یک اسم یکتا برای نام قالب برای مثال Winter.Vanilla'
+            'help' => 'یک اسم یکتا برای نام قالب برای مثال Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -102,7 +102,7 @@ return [
             'label' => 'نام افزونه',
             'help' => 'یک اسم یکتا برای نام افزونه برای مثال: Winter.Blog',
         ],
-        'by_author' => 'توسط :name'
+        'by_author' => 'توسط :name',
     ],
     'plugins' => [
         'manage' => 'مدیریت افزونه ها',
@@ -141,8 +141,8 @@ return [
         'remove_confirm' => 'آیا از حذف این افزونه اطمینان دارید؟',
         'remove_success' => "افزونه ها با موفقیت از سیستم حذف شدند.",
         'replace' => [
-            'multi_install_error' => 'جایگزینی چندین افزونه در حال حاضر پشتیبانی نمی شود'
-        ]
+            'multi_install_error' => 'جایگزینی چندین افزونه در حال حاضر پشتیبانی نمی شود',
+        ],
     ],
     'project' => [
         'name' => 'پروژه',
@@ -164,7 +164,7 @@ return [
         'missing_model' => 'صفحه تنظیمات شامل یک مدل تعریف نشده می باشد.',
         'update_success' => 'تنظیمات برای :name با موفقیت تغییر یافت.',
         'return' => 'بازگشت به تنظیمات سیستم',
-        'search' => 'جستجو'
+        'search' => 'جستجو',
     ],
     'mail' => [
         'log_file' => 'فایل گزارش',
@@ -239,7 +239,7 @@ return [
                 'description' => 'توضیحات',
                 'price' => 'قیمت',
                 'centered' => 'وسط چین',
-                'right_aligned' => 'راست چین'
+                'right_aligned' => 'راست چین',
             ],
             'buttons' => [
                 'primary' => 'دکمه اصلی',
@@ -250,7 +250,7 @@ return [
             'more' => 'متن اضافی',
             'promotion' => 'کد کپن تخفیف: WINTER',
             'subcopy' => 'این یک کپی از پست الکترونیکی می باشد.',
-            'thanks' => 'با تشکر'
+            'thanks' => 'با تشکر',
         ],
         'fields' => [
             '_section_background' => 'پس زمینه',
@@ -276,7 +276,7 @@ return [
             'panel_bg' => 'پس رمینه پنل',
             'promotion_bg' => 'پس زمینه شاخص',
             'promotion_border_color' => 'رنگ حاشیه شاخص',
-        ]
+        ],
     ],
     'install' => [
         'project_label' => 'ضمیمه کردن به نرم افزار',
@@ -337,7 +337,7 @@ return [
         ],
         'none' => [
             'label' => 'شما از آخرین نسخه استفاده می کنید',
-            'help' => 'هیچ به روز رسانی یافت نشد.'
+            'help' => 'هیچ به روز رسانی یافت نشد.',
         ],
         'important_action' => [
             'empty' => 'اقدام مورد نظر را انتخاب کنید',
@@ -393,7 +393,7 @@ return [
         'created_at' => 'ساعت و تاریخ',
         'message' => 'پیغام',
         'level' => 'مرحله',
-        'preview_title' => 'اتفاق'
+        'preview_title' => 'اتفاق',
     ],
     'request_log' => [
         'hint' => 'این گزارش درخواستهایی از طرف مرورگر را که نیاز به بررسی دارند را نمایش می دهد. به عنوان مثال اگر بازدید کنند صفحه ای را که موجود نیست درخواست کند، یک گزینه با کد وضعیت 404 ایجاد می شود.',
@@ -409,7 +409,7 @@ return [
         'referer' => 'منتقل شده از',
         'url' => 'آدرس',
         'status_code' => 'وضعیت',
-        'preview_title' => 'درخواست'
+        'preview_title' => 'درخواست',
     ],
     'permissions' => [
         'name' => 'سیستم',
@@ -425,7 +425,7 @@ return [
         'manage_own_editor' => 'مدیریت تنظیمات ویژه ویرایشگر کد شخصی',
         'view_the_dashboard' => 'نمایش صفحه مدیریت',
         'manage_default_dashboard' => 'مدیریت داشبورد',
-        'manage_branding' => 'شخصی سازی قسمت مدیریت'
+        'manage_branding' => 'شخصی سازی قسمت مدیریت',
     ],
     'log' => [
         'menu_label' => 'تنظیمات وقایع',

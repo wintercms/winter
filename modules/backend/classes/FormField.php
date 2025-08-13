@@ -21,12 +21,12 @@ class FormField
     /**
      * @var int Value returned when the form field should not contribute any save data.
      */
-    const NO_SAVE_DATA = -1;
+    public const NO_SAVE_DATA = -1;
 
     /**
      * @var string A special character in yaml config files to indicate a field higher in hierarchy
      */
-    const HIERARCHY_UP = '^';
+    public const HIERARCHY_UP = '^';
 
     /**
      * @var string Form field name.
@@ -337,8 +337,7 @@ class FormField
 
         if (isset($config['valueFrom'])) {
             $this->valueFrom = $config['valueFrom'];
-        }
-        else {
+        } else {
             $this->valueFrom = $this->fieldName;
         }
 
@@ -433,7 +432,6 @@ class FormField
         $result = array_get($this->attributes, $position, []);
         $result = $this->filterAttributes($result, $position);
 
-        // Field is required, so add the "required" attribute
         if ($position === 'field' && $this->required && (!isset($result['required']) || $result['required'])) {
             $result['required'] = '';
         } elseif ($position === 'field' && isset($result['required']) && !$result['required']) {
@@ -517,17 +515,16 @@ class FormField
 
         // Final compilation
         if ($this->arrayName) {
-            $fullTriggerField = $triggerForm.'['.implode('][', HtmlHelper::nameToArray($triggerField)).']'.$triggerMulti;
-        }
-        else {
-            $fullTriggerField = $triggerField.$triggerMulti;
+            $fullTriggerField = $triggerForm . '[' . implode('][', HtmlHelper::nameToArray($triggerField)) . ']' . $triggerMulti;
+        } else {
+            $fullTriggerField = $triggerField . $triggerMulti;
         }
 
         $newAttributes = [
-            'data-trigger' => '[name="'.$fullTriggerField.'"]',
+            'data-trigger' => '[name="' . $fullTriggerField . '"]',
             'data-trigger-action' => $triggerAction,
             'data-trigger-condition' => $triggerCondition,
-            'data-trigger-closest-parent' => 'form, div[data-control="formwidget"]'
+            'data-trigger-closest-parent' => 'form, div[data-control="formwidget"]',
         ];
 
         return $attributes + $newAttributes;
@@ -553,16 +550,15 @@ class FormField
         $presetType = array_get($this->preset, 'type');
 
         if ($this->arrayName) {
-            $fullPresetField = $this->arrayName.'['.implode('][', HtmlHelper::nameToArray($presetField)).']';
-        }
-        else {
+            $fullPresetField = $this->arrayName . '[' . implode('][', HtmlHelper::nameToArray($presetField)) . ']';
+        } else {
             $fullPresetField = $presetField;
         }
 
         $newAttributes = [
-            'data-input-preset' => '[name="'.$fullPresetField.'"]',
+            'data-input-preset' => '[name="' . $fullPresetField . '"]',
             'data-input-preset-type' => $presetType,
-            'data-input-preset-closest-parent' => 'form'
+            'data-input-preset-closest-parent' => 'form',
         ];
 
         if ($prefixInput = array_get($this->preset, 'prefixInput')) {
@@ -584,7 +580,7 @@ class FormField
         }
 
         if ($arrayName) {
-            return $arrayName.'['.implode('][', HtmlHelper::nameToArray($this->fieldName)).']';
+            return $arrayName . '[' . implode('][', HtmlHelper::nameToArray($this->fieldName)) . ']';
         }
 
         return $this->fieldName;
@@ -599,13 +595,13 @@ class FormField
     {
         $id = 'field';
         if ($this->arrayName) {
-            $id .= '-'.$this->arrayName;
+            $id .= '-' . $this->arrayName;
         }
 
-        $id .= '-'.$this->fieldName;
+        $id .= '-' . $this->fieldName;
 
         if ($suffix) {
-            $id .= '-'.$suffix;
+            $id .= '-' . $suffix;
         }
 
         if ($this->idPrefix) {

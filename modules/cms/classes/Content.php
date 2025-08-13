@@ -1,7 +1,9 @@
-<?php namespace Cms\Classes;
+<?php
 
-use File;
-use Markdown;
+namespace Cms\Classes;
+
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Markdown;
 
 /**
  * The CMS content file class.

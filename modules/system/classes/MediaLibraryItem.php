@@ -1,9 +1,11 @@
-<?php namespace System\Classes;
+<?php
 
-use File;
-use Config;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+namespace System\Classes;
+
 use Carbon\Carbon;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Represents a file or folder in the Media Library.
@@ -13,13 +15,13 @@ use Carbon\Carbon;
  */
 class MediaLibraryItem
 {
-    const TYPE_FILE = 'file';
-    const TYPE_FOLDER = 'folder';
+    public const TYPE_FILE = 'file';
+    public const TYPE_FOLDER = 'folder';
 
-    const FILE_TYPE_IMAGE = 'image';
-    const FILE_TYPE_VIDEO = 'video';
-    const FILE_TYPE_AUDIO = 'audio';
-    const FILE_TYPE_DOCUMENT = 'document';
+    public const FILE_TYPE_IMAGE = 'image';
+    public const FILE_TYPE_VIDEO = 'video';
+    public const FILE_TYPE_AUDIO = 'audio';
+    public const FILE_TYPE_DOCUMENT = 'document';
 
     /**
      * @var string Specifies the item path relative to the Library root.

@@ -1,4 +1,6 @@
-<?php namespace System\Models;
+<?php
+
+namespace System\Models;
 
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\App;
@@ -76,7 +78,7 @@ class Parameter extends Model
 
         $record = static::findRecord($key);
         if (!$record) {
-            $record = new static;
+            $record = new static();
             list($namespace, $group, $item) = $record->parseKey($key);
             $record->namespace = $namespace;
             $record->group = $group;
@@ -124,7 +126,7 @@ class Parameter extends Model
             return null;
         }
 
-        $record = new static;
+        $record = new static();
 
         list($namespace, $group, $item) = $record->parseKey($key);
 

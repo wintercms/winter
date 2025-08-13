@@ -1,8 +1,10 @@
-<?php namespace System\Console;
+<?php
 
-use Winter\Storm\Console\Command;
-use System\Classes\UpdateManager;
+namespace System\Console;
+
 use System\Classes\PluginManager;
+use System\Classes\UpdateManager;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to install a new plugin.

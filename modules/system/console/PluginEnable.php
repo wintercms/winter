@@ -1,8 +1,9 @@
-<?php namespace System\Console;
+<?php
 
-use Winter\Storm\Console\Command;
+namespace System\Console;
+
 use System\Classes\PluginManager;
-use System\Models\PluginVersion;
+use Winter\Storm\Console\Command;
 
 /**
  * Console command to enable a plugin.

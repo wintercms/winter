@@ -3,7 +3,6 @@
 namespace System\Tests\Twig;
 
 use Cms\Classes\Controller;
-use Cms\Classes\Page;
 use Cms\Classes\Theme;
 use System\Tests\Bootstrap\TestCase;
 use Twig\Environment;
@@ -104,11 +103,14 @@ class SecurityPolicyTest extends TestCase
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
 
-        $this->renderTwigInCmsController('
-            {% set modelTest = model.setAttribute("test", "value") %}
-        ', [
-            'model' => new \Winter\Storm\Database\Model(),
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {% set modelTest = model.setAttribute("test", "value") %}
+            ',
+            [
+                'model' => new \Winter\Storm\Database\Model(),
+            ]
+        );
     }
 
     public function testCanReadFromAModel()
@@ -116,12 +118,15 @@ class SecurityPolicyTest extends TestCase
         $model = new \Winter\Storm\Database\Model();
         $model->test = 'value';
 
-        $result = trim($this->renderTwigInCmsController('
-            {% set modelTest = model.getAttribute("test") %}
-            {{- modelTest -}}
-        ', [
-            'model' => $model,
-        ]));
+        $result = trim($this->renderTwigInCmsController(
+            '
+                {% set modelTest = model.getAttribute("test") %}
+                {{- modelTest -}}
+            ',
+            [
+                'model' => $model,
+            ]
+        ));
         $this->assertEquals('value', $result);
     }
 
@@ -129,11 +134,14 @@ class SecurityPolicyTest extends TestCase
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
 
-        $this->renderTwigInCmsController('
-            {{ dump(model.getQuery) }}
-        ', [
-            'model' => new \Winter\Storm\Database\Model(),
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {{ dump(model.getQuery) }}
+            ',
+            [
+                'model' => new \Winter\Storm\Database\Model(),
+            ]
+        );
     }
 
     public function testCannotFillAModel()
@@ -145,11 +153,14 @@ class SecurityPolicyTest extends TestCase
             $model->addFillable('test');
             $model->test = 'value';
 
-            $this->renderTwigInCmsController('
-                {% set modelTest = model.fill({ test: \'value2\' }) %}
-            ', [
-                'model' => new \Winter\Storm\Database\Model(),
-            ]);
+            $this->renderTwigInCmsController(
+                '
+                    {% set modelTest = model.fill({ test: \'value2\' }) %}
+                ',
+                [
+                    'model' => new \Winter\Storm\Database\Model(),
+                ]
+            );
         } catch (\Twig\Sandbox\SecurityNotAllowedMethodError $e) {
             // Ensure value hasn't changed
             $this->assertEquals('value', $model->test);
@@ -161,22 +172,28 @@ class SecurityPolicyTest extends TestCase
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
 
-        $this->renderTwigInCmsController('
-            {% set modelTest = model.save() %}
-        ', [
-            'model' => new \Winter\Storm\Database\Model(),
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {% set modelTest = model.save() %}
+            ',
+            [
+                'model' => new \Winter\Storm\Database\Model(),
+            ]
+        );
     }
 
     public function testCannotPushAModel()
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
 
-        $this->renderTwigInCmsController('
-            {% set modelTest = model.push() %}
-        ', [
-            'model' => new \Winter\Storm\Database\Model(),
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {% set modelTest = model.push() %}
+            ',
+            [
+                'model' => new \Winter\Storm\Database\Model(),
+            ]
+        );
     }
 
     public function testCannotUpdateAModel()
@@ -187,44 +204,56 @@ class SecurityPolicyTest extends TestCase
         $model->addFillable('test');
         $model->test = 'value';
 
-        $this->renderTwigInCmsController('
-            {% set modelTest = model.update({ test: \'value2\' }) %}
-        ', [
-            'model' => $model,
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {% set modelTest = model.update({ test: \'value2\' }) %}
+            ',
+            [
+                'model' => $model,
+            ]
+        );
     }
 
     public function testCannotDeleteAModel()
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
 
-        $this->renderTwigInCmsController('
-            {% set modelTest = model.delete() %}
-        ', [
-            'model' => new \Winter\Storm\Database\Model(),
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {% set modelTest = model.delete() %}
+            ',
+            [
+                'model' => new \Winter\Storm\Database\Model(),
+            ]
+        );
     }
 
     public function testCannotForceDeleteAModel()
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
 
-        $this->renderTwigInCmsController('
-            {% set modelTest = model.forceDelete() %}
-        ', [
-            'model' => new \Winter\Storm\Database\Model(),
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {% set modelTest = model.forceDelete() %}
+            ',
+            [
+                'model' => new \Winter\Storm\Database\Model(),
+            ]
+        );
     }
 
     public function testCannotExtendAModelWithABehaviour()
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
 
-        $this->renderTwigInCmsController('
-            {% set model = model.extendClassWith("Winter\Storm\Database\Behaviors\Encryptable") %}
-        ', [
-            'model' => new \Winter\Storm\Database\Model(),
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {% set model = model.extendClassWith("Winter\Storm\Database\Behaviors\Encryptable") %}
+            ',
+            [
+                'model' => new \Winter\Storm\Database\Model(),
+            ]
+        );
     }
 
     public function testExtendingModelBeforePassingIntoTwigShouldStillWork()
@@ -234,11 +263,14 @@ class SecurityPolicyTest extends TestCase
             return 'foo';
         });
 
-        $result = trim($this->renderTwigInCmsController('
-            {{- model.foo() -}}
-        ', [
-            'model' => $model,
-        ]));
+        $result = trim($this->renderTwigInCmsController(
+            '
+                {{- model.foo() -}}
+            ',
+            [
+                'model' => $model,
+            ]
+        ));
         $this->assertEquals('foo', $result);
     }
 
@@ -256,42 +288,51 @@ class SecurityPolicyTest extends TestCase
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
 
-        $this->renderTwigInCmsController('
-            {% set datasource = datasource.delete() %}
-        ', [
-            'datasource' => new FileDatasource(
-                base_path('modules/system/tests/fixtures/themes/test'),
-                new Filesystem()
-            ),
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {% set datasource = datasource.delete() %}
+            ',
+            [
+                'datasource' => new FileDatasource(
+                    base_path('modules/system/tests/fixtures/themes/test'),
+                    new Filesystem()
+                ),
+            ]
+        );
     }
 
     public function testCannotInsertInDatasource()
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
 
-        $this->renderTwigInCmsController('
-            {% set datasource = datasource.insert() %}
-        ', [
-            'datasource' => new FileDatasource(
-                base_path('modules/system/tests/fixtures/themes/test'),
-                new Filesystem()
-            ),
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {% set datasource = datasource.insert() %}
+            ',
+            [
+                'datasource' => new FileDatasource(
+                    base_path('modules/system/tests/fixtures/themes/test'),
+                    new Filesystem()
+                ),
+            ]
+        );
     }
 
     public function testCannotUpdateInDatasource()
     {
         $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
 
-        $this->renderTwigInCmsController('
-            {% set datasource = datasource.update() %}
-        ', [
-            'datasource' => new FileDatasource(
-                base_path('modules/system/tests/fixtures/themes/test'),
-                new Filesystem()
-            ),
-        ]);
+        $this->renderTwigInCmsController(
+            '
+                {% set datasource = datasource.update() %}
+            ',
+            [
+                'datasource' => new FileDatasource(
+                    base_path('modules/system/tests/fixtures/themes/test'),
+                    new Filesystem()
+                ),
+            ]
+        );
     }
 
     public function testCannotChangeThemeDirectory()

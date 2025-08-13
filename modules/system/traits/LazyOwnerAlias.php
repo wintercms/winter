@@ -1,4 +1,6 @@
-<?php namespace System\Traits;
+<?php
+
+namespace System\Traits;
 
 /**
  * Lazy Owner Alias

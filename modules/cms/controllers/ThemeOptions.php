@@ -1,13 +1,15 @@
-<?php namespace Cms\Controllers;
+<?php
 
-use Backend;
-use BackendMenu;
-use ApplicationException;
-use Cms\Models\ThemeData;
-use Cms\Classes\Theme as CmsTheme;
-use System\Classes\SettingsManager;
+namespace Cms\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
+use Cms\Classes\Theme as CmsTheme;
+use Cms\Models\ThemeData;
 use Exception;
+use System\Classes\SettingsManager;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Theme customization controller
@@ -53,8 +55,7 @@ class ThemeOptions extends Controller
             $this->asExtension('FormController')->update($model->id);
 
             $this->vars['hasCustomData'] = $this->hasThemeData($dirName);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
     }
@@ -78,7 +79,7 @@ class ThemeOptions extends Controller
         $model = $this->getThemeData($this->getDirName($dirName));
         $model->delete();
 
-        return Backend::redirect('cms/themeoptions/update/'.$dirName);
+        return Backend::redirect('cms/themeoptions/update/' . $dirName);
     }
 
     /**

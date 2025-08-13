@@ -1,4 +1,4 @@
-<?= Form::open(['class'=>'layout-relative dashboard-container']) ?>
+<?= Form::open(['class' => 'layout-relative dashboard-container']) ?>
     <div id="dashReportContainer" class="report-container loading">
         <!-- Loading -->
         <div class="loading-indicator-container">

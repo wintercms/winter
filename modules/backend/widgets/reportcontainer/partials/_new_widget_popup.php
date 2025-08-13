@@ -1,7 +1,7 @@
 <?= Form::open([
     'data-request' => $this->getEventHandler('onAddWidget'),
     'data-request-success' => "\$(this).trigger('close.oc.popup'); \$(window).trigger('oc.reportWidgetAdded')",
-    'data-popup-load-indicator' => 1
+    'data-popup-load-indicator' => 1,
 ]) ?>
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="popup">&times;</button>

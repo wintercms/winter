@@ -1,7 +1,9 @@
-<?php namespace System\Controllers;
+<?php
 
-use BackendMenu;
+namespace System\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
 use System\Classes\SettingsManager;
 
 /**

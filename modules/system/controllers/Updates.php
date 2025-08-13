@@ -1,23 +1,25 @@
-<?php namespace System\Controllers;
+<?php
 
-use ApplicationException;
-use Backend;
+namespace System\Controllers;
+
 use Backend\Classes\Controller;
-use BackendMenu;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
 use Cms\Classes\ThemeManager;
 use Exception;
-use File;
-use Flash;
-use Html;
-use Lang;
-use Markdown;
-use Redirect;
-use Response;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
 use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Html;
+use Winter\Storm\Support\Facades\Markdown;
 
 /**
  * Updates controller
@@ -40,7 +42,7 @@ class Updates extends Controller
      */
     public $listConfig = [
         'list' => 'config_list.yaml',
-        'manage' => 'config_manage_list.yaml'
+        'manage' => 'config_manage_list.yaml',
     ];
 
     /**
@@ -112,8 +114,7 @@ class Updates extends Controller
             $this->vars['activeTab'] = $tab ?: 'plugins';
             $this->vars['installedPlugins'] = $this->getInstalledPlugins();
             $this->vars['installedThemes'] = $this->getInstalledThemes();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
     }
@@ -153,8 +154,7 @@ class Updates extends Controller
                 $this->vars['pluginAuthor'] = array_get($details, 'author');
                 $this->vars['pluginIcon'] = array_get($details, 'icon', 'icon-leaf');
                 $this->vars['pluginHomepage'] = array_get($details, 'homepage');
-            }
-            else {
+            } else {
                 throw new ApplicationException(Lang::get('system::lang.updates.plugin_not_found'));
             }
 
@@ -172,8 +172,7 @@ class Updates extends Controller
             $this->vars['changelog'] = $changelog;
             $this->vars['upgrades'] = $upgrades;
             $this->vars['licence'] = $licence;
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
     }
@@ -182,11 +181,11 @@ class Updates extends Controller
     {
         $contents = null;
         foreach ($filenames as $file) {
-            if (!File::exists($path . '/'.$file)) {
+            if (!File::exists($path . '/' . $file)) {
                 continue;
             }
 
-            $contents = File::get($path . '/'.$file);
+            $contents = File::get($path . '/' . $file);
 
             /*
              * Parse markdown, clean HTML, remove first H1 tag
@@ -212,7 +211,7 @@ class Updates extends Controller
             foreach ($plugin as $missingPluginCode) {
                 $warnings[] = Lang::get('system::lang.updates.update_warnings_plugin_missing', [
                     'code' => '<strong>' . $missingPluginCode . '</strong>',
-                    'parent_code' => '<strong>' . $pluginCode . '</strong>'
+                    'parent_code' => '<strong>' . $pluginCode . '</strong>',
                 ]);
             }
         }
@@ -223,7 +222,7 @@ class Updates extends Controller
             if (PluginManager::instance()->getActiveReplacementMap($alias)) {
                 $warnings[] = Lang::get('system::lang.updates.update_warnings_plugin_replace', [
                     'plugin' => '<strong>' . $plugin . '</strong>',
-                    'alias' => '<strong>' . $alias . '</strong>'
+                    'alias' => '<strong>' . $alias . '</strong>',
                 ]);
             }
         }
@@ -352,8 +351,7 @@ class Updates extends Controller
             $this->vars['hasImportantUpdates'] = array_get($result, 'hasImportantUpdates', false);
             $this->vars['pluginList'] = array_get($result, 'plugins', []);
             $this->vars['themeList'] = array_get($result, 'themes', []);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
 
@@ -401,7 +399,7 @@ class Updates extends Controller
                 }
 
                 $isImportant = $hasImportantUpdates = true;
-                $detailsUrl = Backend::url('system/updates/details/'.PluginVersion::makeSlug($code).'/upgrades').'?fetch=1';
+                $detailsUrl = Backend::url('system/updates/details/' . PluginVersion::makeSlug($code) . '/upgrades') . '?fetch=1';
                 $description = str_replace('!!!', '', $description);
                 $result['plugins'][$code]['updates'][$version] = [$description, $detailsUrl];
             }
@@ -474,8 +472,7 @@ class Updates extends Controller
             ];
 
             $this->vars['updateSteps'] = $updateSteps;
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
 
@@ -506,8 +503,7 @@ class Updates extends Controller
                 }
 
                 $plugins = array_combine($pluginCodes, $plugins);
-            }
-            else {
+            } else {
                 $plugins = [];
             }
 
@@ -522,8 +518,7 @@ class Updates extends Controller
                 }
 
                 $themes = array_combine($themeCodes, $themes);
-            }
-            else {
+            } else {
                 $themes = [];
             }
 
@@ -541,7 +536,7 @@ class Updates extends Controller
                 $pluginAction = $pluginActions[$_code];
 
                 if (!$pluginAction) {
-                    throw new ApplicationException('Please select an action for plugin '. $code);
+                    throw new ApplicationException('Please select an action for plugin ' . $code);
                 }
 
                 if ($pluginAction != 'confirm') {
@@ -550,7 +545,7 @@ class Updates extends Controller
 
                 if ($pluginAction == 'ignore') {
                     PluginVersion::whereCode($code)->update([
-                        'is_frozen' => true
+                        'is_frozen' => true,
                     ]);
                 }
             }
@@ -569,8 +564,7 @@ class Updates extends Controller
             ];
 
             $this->vars['updateSteps'] = $updateSteps;
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
 
@@ -601,7 +595,7 @@ class Updates extends Controller
             $updateSteps[] = [
                 'code'  => 'downloadCore',
                 'label' => Lang::get('system::lang.updates.core_downloading'),
-                'hash'  => $coreHash
+                'hash'  => $coreHash,
             ];
         }
 
@@ -610,7 +604,7 @@ class Updates extends Controller
                 'code'  => 'downloadTheme',
                 'label' => Lang::get('system::lang.updates.theme_downloading', compact('name')),
                 'name'  => $name,
-                'hash'  => $hash
+                'hash'  => $hash,
             ];
         }
 
@@ -620,7 +614,7 @@ class Updates extends Controller
                 'label' => Lang::get('system::lang.updates.plugin_downloading', compact('name')),
                 'name'  => $name,
                 'hash'  => $hash,
-                'install' => $isInstallationRequest ? 1 : 0
+                'install' => $isInstallationRequest ? 1 : 0,
             ];
         }
 
@@ -630,14 +624,14 @@ class Updates extends Controller
         if ($coreHash) {
             $updateSteps[] = [
                 'code'  => 'extractCore',
-                'label' => Lang::get('system::lang.updates.core_extracting')
+                'label' => Lang::get('system::lang.updates.core_extracting'),
             ];
 
             $updateSteps[] = [
                 'code'  => 'setBuild',
                 'label' => Lang::get('system::lang.updates.core_set_build'),
                 'hash'  => $coreHash,
-                'build' => $coreBuild
+                'build' => $coreBuild,
             ];
         }
 
@@ -646,7 +640,7 @@ class Updates extends Controller
                 'code' => 'extractTheme',
                 'label' => Lang::get('system::lang.updates.theme_extracting', compact('name')),
                 'name' => $name,
-                'hash' => $hash
+                'hash' => $hash,
             ];
         }
 
@@ -655,7 +649,7 @@ class Updates extends Controller
                 'code' => 'extractPlugin',
                 'label' => Lang::get('system::lang.updates.plugin_extracting', compact('name')),
                 'name' => $name,
-                'hash' => $hash
+                'hash' => $hash,
             ];
         }
 
@@ -694,8 +688,7 @@ class Updates extends Controller
             ]);
 
             return $this->onForceUpdate(false);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
             return $this->makePartial('project_form');
         }
@@ -732,8 +725,7 @@ class Updates extends Controller
             }
 
             $this->vars['changelog'] = $changelog;
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
         }
 
@@ -782,8 +774,7 @@ class Updates extends Controller
             $this->vars['updateSteps'] = $updateSteps;
 
             return $this->makePartial('execute');
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
             return $this->makePartial('plugin_form');
         }
@@ -809,7 +800,8 @@ class Updates extends Controller
      */
     public function onBulkAction()
     {
-        if (($bulkAction = post('action')) &&
+        if (
+            ($bulkAction = post('action')) &&
             ($checkedIds = post('checked')) &&
             is_array($checkedIds) &&
             count($checkedIds)
@@ -903,8 +895,7 @@ class Updates extends Controller
             $this->vars['updateSteps'] = $updateSteps;
 
             return $this->makePartial('execute');
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $this->handleError($ex);
             return $this->makePartial('theme_form');
         }

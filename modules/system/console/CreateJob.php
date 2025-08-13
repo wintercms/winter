@@ -1,6 +1,6 @@
-<?php namespace System\Console;
+<?php
 
-use System\Console\BaseScaffoldCommand;
+namespace System\Console;
 
 class CreateJob extends BaseScaffoldCommand
 {

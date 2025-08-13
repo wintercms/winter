@@ -30,7 +30,7 @@ if (!count($files)) {
 }
 
 // Run all changed files through the PHPCS code sniffer and generate a CSV report
-$csv = shell_exec('phpcs --colors -nq --report="csv" --extensions="php" ' . implode(' ', $files));
+$csv = shell_exec('./vendor/bin/phpcs --colors -nq --report="csv" --extensions="php" ' . implode(' ', $files));
 $lines = array_map(function ($row) {
     return array_map(function ($column) {
         return trim($column, '"');

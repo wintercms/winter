@@ -2,7 +2,7 @@
     <?php
     $type = !empty($type) ? $type : 'info';
     $cssClasses = ['callout fade in'];
-    $cssClasses[] = 'callout-'.$type;
+    $cssClasses[] = 'callout-' . $type;
     if (empty($icon)) {
         $cssClasses[] = 'no-icon';
     }

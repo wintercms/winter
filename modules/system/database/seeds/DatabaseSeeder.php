@@ -1,11 +1,12 @@
-<?php namespace System\Database\Seeds;
+<?php
 
-use Seeder;
-use Eloquent;
+namespace System\Database\Seeds;
+
+use Illuminate\Database\Eloquent\Model as Eloquent;
+use Winter\Storm\Database\Updates\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-
     /**
      * Run the database seeds.
      *

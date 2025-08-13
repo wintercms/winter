@@ -435,7 +435,7 @@ return [
         'paragraph_formats_comment' => 'Die Optionen, welche in der Dropdown-Liste für Absatzformatierungen angezeigt werden.',
     ],
     'tooltips' => [
-        'preview_website' => 'Vorschau der Webseite'
+        'preview_website' => 'Vorschau der Webseite',
     ],
     'mysettings' => [
         'menu_label' => 'Meine Einstellungen',
@@ -500,10 +500,10 @@ return [
         'email' => 'E-Mail',
     ],
     'filter' => [
-      'all' => 'Alle',
-      'options_method_not_exists' => 'Die Modelklasse :model muss eine Methode :method() definiert haben, welche die Optionen für den Filter ":filter" zurückgibt.',
-      'date_all' => 'Ganzen Zeitraum',
-      'number_all' => 'Alle Zahlen',
+        'all' => 'Alle',
+        'options_method_not_exists' => 'Die Modelklasse :model muss eine Methode :method() definiert haben, welche die Optionen für den Filter ":filter" zurückgibt.',
+        'date_all' => 'Ganzen Zeitraum',
+        'number_all' => 'Alle Zahlen',
     ],
     'import_export' => [
         'upload_csv_file' => '1. CSV-Datei hochladen',

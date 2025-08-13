@@ -1,8 +1,12 @@
-<?php namespace Backend\Behaviors\ImportExportController;
+<?php
+
+namespace Backend\Behaviors\ImportExportController;
 
 use php_user_filter;
 
+// phpcs:disable
 stream_filter_register(TranscodeFilter::FILTER_NAME . "*", TranscodeFilter::class);
+// phpcs:enable
 
 /**
  * Transcode stream filter.
@@ -11,7 +15,7 @@ stream_filter_register(TranscodeFilter::FILTER_NAME . "*", TranscodeFilter::clas
  */
 class TranscodeFilter extends php_user_filter
 {
-    const FILTER_NAME = 'winter.csv.transcode.';
+    public const FILTER_NAME = 'winter.csv.transcode.';
 
     protected $encodingFrom = 'auto';
 

@@ -1,4 +1,6 @@
-<?php namespace Winter\Original;
+<?php
+
+namespace Winter\Original;
 
 use System\Classes\PluginBase;
 
@@ -9,7 +11,7 @@ class Plugin extends PluginBase
         return [
             'name' => 'Winter Sample Plugin',
             'description' => 'Sample plugin used by unit tests.',
-            'author' => 'Alexey Bobkov, Samuel Georges'
+            'author' => 'Alexey Bobkov, Samuel Georges',
         ];
     }
 }

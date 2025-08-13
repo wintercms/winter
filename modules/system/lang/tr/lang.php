@@ -102,7 +102,7 @@ return [
             'label' => 'Eklenti Adı',
             'help' => 'Eklenti adı eşsiz olmalıdır. Örneğin, Winter.Blog',
         ],
-        'by_author' => ':name ile filtrele'
+        'by_author' => ':name ile filtrele',
     ],
     'plugins' => [
         'manage' => 'Eklentileri yönet',

@@ -1,7 +1,9 @@
-<?php namespace Backend\Models;
+<?php
 
-use Model;
-use Request;
+namespace Backend\Models;
+
+use Illuminate\Support\Facades\Request;
+use Winter\Storm\Database\Model;
 
 /**
  * Model for logging access to the back-end
@@ -20,7 +22,7 @@ class AccessLog extends Model
      * @var array Relations
      */
     public $belongsTo = [
-        'user' => User::class
+        'user' => User::class,
     ];
 
     /**
@@ -30,7 +32,7 @@ class AccessLog extends Model
      */
     public static function add($user)
     {
-        $record = new static;
+        $record = new static();
         $record->user = $user;
         $record->ip_address = Request::getClientIp();
         $record->save();

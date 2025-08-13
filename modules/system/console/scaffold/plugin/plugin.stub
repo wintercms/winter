@@ -20,7 +20,7 @@ class Plugin extends PluginBase
             'name'        => '{{ plugin_id }}::lang.plugin.name',
             'description' => '{{ plugin_id }}::lang.plugin.description',
             'author'      => '{{ author }}',
-            'icon'        => 'icon-leaf'
+            'icon'        => 'icon-leaf',
         ];
     }
 
@@ -29,7 +29,6 @@ class Plugin extends PluginBase
      */
     public function register(): void
     {
-
     }
 
     /**
@@ -37,7 +36,6 @@ class Plugin extends PluginBase
      */
     public function boot(): void
     {
-
     }
 
     /**

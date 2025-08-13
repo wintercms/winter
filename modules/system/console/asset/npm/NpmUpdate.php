@@ -2,7 +2,6 @@
 
 namespace System\Console\Asset\Npm;
 
-use System\Console\Asset\Npm\NpmCommand;
 use Winter\Storm\Exception\SystemException;
 
 class NpmUpdate extends NpmCommand
@@ -32,7 +31,7 @@ class NpmUpdate extends NpmCommand
      * @inheritDoc
      */
     public $replaces = [
-        'mix:update'
+        'mix:update',
     ];
 
     /**

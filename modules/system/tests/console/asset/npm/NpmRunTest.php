@@ -32,7 +32,7 @@ class NpmRunTest extends TestCase
         $this->artisan('npm:run', [
             'package' => 'theme-npmtest',
             'script' => 'testScript',
-            '--disable-tty' => true
+            '--disable-tty' => true,
         ])
             ->expectsOutputToContain('> echo "Winter says $((1+2))"')
             ->expectsOutputToContain('Winter says 3')
@@ -47,7 +47,7 @@ class NpmRunTest extends TestCase
         $this->artisan('npm:run', [
             'package' => 'theme-npmtest',
             'script' => 'testMissingScript',
-            '--disable-tty' => true
+            '--disable-tty' => true,
         ])
             ->expectsOutputToContain('Script "testMissingScript" is not defined in package "theme-npmtest"')
             ->assertExitCode(1);

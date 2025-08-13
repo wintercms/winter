@@ -1,7 +1,9 @@
-<?php namespace Cms\Twig;
+<?php
 
-use Twig\Node\Node as TwigNode;
+namespace Cms\Twig;
+
 use Twig\Compiler as TwigCompiler;
+use Twig\Node\Node as TwigNode;
 
 /**
  * Represents a flash node
@@ -33,16 +35,15 @@ class FlashNode extends TwigNode
         if ($attrib == 'all') {
             $compiler
                 ->addDebugInfo($this)
-                ->write('foreach (Flash::all() as $type => $message) {'.PHP_EOL)
+                ->write('foreach (Flash::all() as $type => $message) {' . PHP_EOL)
                 ->indent()
                     ->write('$context["type"] = $type;')
                     ->write('$context["message"] = $message;')
                     ->subcompile($this->getNode('body'))
                 ->outdent()
-                ->write('}'.PHP_EOL)
+                ->write('}' . PHP_EOL)
             ;
-        }
-        else {
+        } else {
             $compiler
                 ->addDebugInfo($this)
                 ->write('$context["type"] = ')
@@ -50,12 +51,12 @@ class FlashNode extends TwigNode
                 ->write(';')
                 ->write('foreach (Flash::')
                 ->raw($attrib)
-                ->write('() as $message) {'.PHP_EOL)
+                ->write('() as $message) {' . PHP_EOL)
                 ->indent()
                     ->write('$context["message"] = $message;')
                     ->subcompile($this->getNode('body'))
                 ->outdent()
-                ->write('}'.PHP_EOL)
+                ->write('}' . PHP_EOL)
             ;
         }
 

@@ -1,4 +1,5 @@
 <?php
+
 /* Greek Language Updated on 2016-07-16 v1.06 */
 return [
     'auth' => [
@@ -95,7 +96,7 @@ return [
             'last_sign_in' => 'Η τελευταία σύνδεση σας ήταν',
             'view_access_logs' => 'Προβολή του αρχείου καταγραφής προσβάσεων',
             'nice_message' => 'Να έχετε μια υπέροχη ημέρα!',
-        ]
+        ],
     ],
     'user' => [
         'name' => 'Διαχειριστής',
@@ -142,7 +143,7 @@ return [
         ],
         'preferences' => [
             'not_authenticated' => 'Δεν υπάρχει κανένας πιστοποιημένος χρήστης για να φορτωθούν ή να σωθούν οι ρυθμίσεις του.' ,
-        ]
+        ],
     ],
     'list' => [
         'default_title' => 'Λίστα',
@@ -171,7 +172,7 @@ return [
         'delete_selected_confirm' => 'Να διαγραφούν οι επιλεγμένες εγγραφές;',
         'delete_selected_success' => 'Διαγραφή επιλεγμένων εγγραφών.',
         'column_switch_true' => 'Ναι',
-        'column_switch_false' => 'Όχι'
+        'column_switch_false' => 'Όχι',
     ],
     'fileupload' => [
         'attachment' => 'Επισύναψη',
@@ -315,11 +316,11 @@ return [
         'auto_closing' => 'Automatically close tags',
         'show_invisibles' => 'Show invisible characters',
         'show_gutter' => 'Show gutter',
-        'basic_autocompletion'=> 'Basic Autocompletion (Ctrl + Space)',
-        'live_autocompletion'=> 'Live Autocompletion',
-        'enable_snippets'=> 'Enable code snippets (Tab)',
-        'display_indent_guides'=> 'Show indent guides',
-        'show_print_margin'=> 'Show print margin',
+        'basic_autocompletion' => 'Basic Autocompletion (Ctrl + Space)',
+        'live_autocompletion' => 'Live Autocompletion',
+        'enable_snippets' => 'Enable code snippets (Tab)',
+        'display_indent_guides' => 'Show indent guides',
+        'show_print_margin' => 'Show print margin',
         'mode_off' => 'Off',
         'mode_fluid' => 'Fluid',
         '40_characters' => '40 Characters',
@@ -344,7 +345,7 @@ return [
         'no_wrap' => 'Do not wrap tags',
         'no_wrap_comment' => 'The list of tags that should not be wrapped inside block tags.',
         'remove_tags' => 'Remove tags',
-        'remove_tags_comment' => 'The list of tags that are removed together with their content.'
+        'remove_tags_comment' => 'The list of tags that are removed together with their content.',
 
 
     ],
@@ -477,15 +478,15 @@ return [
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtic)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Western European revision with euro sign)',
             'windows_1251' => 'Windows-1251 (CP1251)',
-            'windows_1252' => 'Windows-1252 (CP1252)'
-        ]
+            'windows_1252' => 'Windows-1252 (CP1252)',
+        ],
     ],
     'permissions' => [
-        'manage_media' => 'Ανέβασμα και διαχείριση περιεχομένου μέσων - εικόνων, βίντεο, ήχων, εγγράφων,//Upload and manage media contents - images, videos, sounds, documents'
+        'manage_media' => 'Ανέβασμα και διαχείριση περιεχομένου μέσων - εικόνων, βίντεο, ήχων, εγγράφων,//Upload and manage media contents - images, videos, sounds, documents',
     ],
     'mediafinder' => [
         'label' => 'Media Finder',
-        'default_prompt' => 'Click the %s button to find a media item'
+        'default_prompt' => 'Click the %s button to find a media item',
     ],
     'media' => [
         'menu_label' => 'Μέσα',
@@ -550,5 +551,5 @@ return [
         'rename_new_name' => 'Νέο όνομα',
         'move_please_select' => 'παρακαλούμε επιλέξτε',
         'move_button' => 'Μετακίνηση',
-    ]
+    ],
 ];

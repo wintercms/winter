@@ -1,11 +1,12 @@
-<?php namespace Database\Tester\Updates;
+<?php
 
-use Schema;
+namespace Database\Tester\Updates;
+
 use Winter\Storm\Database\Updates\Migration;
+use Winter\Storm\Support\Facades\Schema;
 
 class CreatePostsTable extends Migration
 {
-
     public function up()
     {
         Schema::create('database_tester_posts', function ($table) {

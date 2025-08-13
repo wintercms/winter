@@ -1,11 +1,13 @@
-<?php namespace Cms\Controllers;
+<?php
 
-use Lang;
-use Flash;
-use BackendMenu;
+namespace Cms\Controllers;
+
 use Backend\Classes\Controller;
-use System\Classes\SettingsManager;
+use Backend\Facades\BackendMenu;
 use Cms\Models\ThemeLog;
+use Illuminate\Support\Facades\Lang;
+use System\Classes\SettingsManager;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Request Logs controller
@@ -62,8 +64,7 @@ class ThemeLogs extends Controller
             }
 
             Flash::success(Lang::get('backend::lang.list.delete_selected_success'));
-        }
-        else {
+        } else {
             Flash::error(Lang::get('backend::lang.list.delete_selected_empty'));
         }
 

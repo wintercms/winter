@@ -1,20 +1,22 @@
-<?php namespace System\Console;
+<?php
 
-use Lang;
-use File;
-use Config;
+namespace System\Console;
+
 use DirectoryIterator;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File as Filesystem;
+use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Storage;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use System\Classes\UpdateManager;
+use Symfony\Component\Console\Input\InputOption;
 use System\Classes\CombineAssets;
-use System\Models\Parameter;
+use System\Classes\UpdateManager;
 use System\Models\File as FileModel;
+use System\Models\Parameter;
 use Winter\Storm\Filesystem\Zip;
 use Winter\Storm\Network\Http as NetworkHttp;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Http;
 
 /**
@@ -70,11 +72,11 @@ class WinterUtil extends Command
     public function handle()
     {
         $command = implode(' ', (array) $this->argument('name'));
-        $method = 'util'.studly_case($command);
+        $method = 'util' . studly_case($command);
 
         $methods = preg_grep('/^util/', get_class_methods(get_called_class()));
         $list = array_map(function ($item) {
-            return "winter:".snake_case($item, " ");
+            return "winter:" . snake_case($item, " ");
         }, $methods);
 
         if (!$this->argument('name')) {
@@ -199,7 +201,7 @@ class WinterUtil extends Command
             if (is_dir(storage_path('temp/fontawesome'))) {
                 $this->rimraf(storage_path('temp/fontawesome'));
             }
-            
+
             Zip::extract(storage_path('temp/fontawesome.zip'), storage_path('temp/fontawesome'));
             Filesystem::delete(storage_path('temp/fontawesome.zip'));
 
@@ -260,7 +262,7 @@ class WinterUtil extends Command
              * Generate messages
              */
             $fallbackPath = base_path() . '/modules/system/lang/en/client.php';
-            $srcPath = base_path() . '/modules/system/lang/'.$locale.'/client.php';
+            $srcPath = base_path() . '/modules/system/lang/' . $locale . '/client.php';
 
             $messages = require $fallbackPath;
 
@@ -274,7 +276,7 @@ class WinterUtil extends Command
             $overrides = [];
             $parentOverrides = [];
 
-            $overridePath = base_path() . '/lang/'.$locale.'/system/client.php';
+            $overridePath = base_path() . '/lang/' . $locale . '/system/client.php';
             if (File::isFile($overridePath)) {
                 $overrides = require $overridePath;
             }
@@ -282,7 +284,7 @@ class WinterUtil extends Command
             if (str_contains($locale, '-')) {
                 list($parentLocale, $country) = explode('-', $locale);
 
-                $parentOverridePath = base_path() . '/lang/'.$parentLocale.'/system/client.php';
+                $parentOverridePath = base_path() . '/lang/' . $parentLocale . '/system/client.php';
                 if (File::isFile($parentOverridePath)) {
                     $parentOverrides = require $parentOverridePath;
                 }
@@ -293,7 +295,7 @@ class WinterUtil extends Command
             /*
              * Compile from stub and save file
              */
-            $destPath = base_path() . '/modules/system/assets/js/lang/lang.'.$locale.'.js';
+            $destPath = base_path() . '/modules/system/assets/js/lang/lang.' . $locale . '.js';
 
             $contents = str_replace(
                 ['{{locale}}', '{{messages}}'],
@@ -304,9 +306,9 @@ class WinterUtil extends Command
             /*
              * Include the moment localization data
              */
-            $momentPath = base_path() . '/modules/system/assets/ui/vendor/moment/locale/'.$locale.'.js';
+            $momentPath = base_path() . '/modules/system/assets/ui/vendor/moment/locale/' . $locale . '.js';
             if (File::exists($momentPath)) {
-                $contents .= PHP_EOL.PHP_EOL.File::get($momentPath).PHP_EOL;
+                $contents .= PHP_EOL . PHP_EOL . File::get($momentPath) . PHP_EOL;
             }
 
             File::put($destPath, $contents);
@@ -316,7 +318,7 @@ class WinterUtil extends Command
              */
             $publicDest = File::localToPublic(realpath(dirname($destPath))) . '/' . basename($destPath);
 
-            $this->comment($locale.'/'.basename($srcPath));
+            $this->comment($locale . '/' . basename($srcPath));
             $this->comment(sprintf(' -> %s', $publicDest));
         }
     }
@@ -358,9 +360,9 @@ class WinterUtil extends Command
          * with "thumb_" and repeat itself on directories.
          */
         $purgeFunc = function ($targetDir) use (&$purgeFunc, &$totalCount) {
-            if ($files = File::glob($targetDir.'/thumb_*')) {
+            if ($files = File::glob($targetDir . '/thumb_*')) {
                 foreach ($files as $file) {
-                    $this->info('Purged: '. basename($file));
+                    $this->info('Purged: ' . basename($file));
                     $totalCount++;
                     @unlink($file);
                 }
@@ -377,8 +379,7 @@ class WinterUtil extends Command
 
         if ($totalCount > 0) {
             $this->comment(sprintf('Successfully deleted %s thumbs', $totalCount));
-        }
-        else {
+        } else {
             $this->comment('No thumbs found to delete');
         }
     }
@@ -483,25 +484,25 @@ class WinterUtil extends Command
     {
         foreach (File::directories(plugins_path()) as $authorDir) {
             foreach (File::directories($authorDir) as $pluginDir) {
-                if (!File::exists($pluginDir.'/.git')) {
+                if (!File::exists($pluginDir . '/.git')) {
                     continue;
                 }
 
                 $exec = 'cd ' . $pluginDir . ' && ';
                 $exec .= 'git pull 2>&1';
-                echo 'Updating plugin: '. basename(dirname($pluginDir)) .'.'. basename($pluginDir) . PHP_EOL;
+                echo 'Updating plugin: ' . basename(dirname($pluginDir)) . '.' . basename($pluginDir) . PHP_EOL;
                 echo shell_exec($exec);
             }
         }
 
         foreach (File::directories(themes_path()) as $themeDir) {
-            if (!File::exists($themeDir.'/.git')) {
+            if (!File::exists($themeDir . '/.git')) {
                 continue;
             }
 
             $exec = 'cd ' . $themeDir . ' && ';
             $exec .= 'git pull 2>&1';
-            echo 'Updating theme: '. basename($themeDir) . PHP_EOL;
+            echo 'Updating theme: ' . basename($themeDir) . PHP_EOL;
             echo shell_exec($exec);
         }
     }

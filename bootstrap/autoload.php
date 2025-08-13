@@ -13,10 +13,10 @@ define('LARAVEL_START', microtime(true));
 |
 */
 
-$helperPath = __DIR__.'/../vendor/winter/storm/src/Support/helpers.php';
+$helperPath = __DIR__ . '/../vendor/winter/storm/src/Support/helpers.php';
 
 if (!file_exists($helperPath)) {
-    echo 'Missing vendor files, try running "composer install" or use the Wizard installer.'.PHP_EOL;
+    echo 'Missing vendor files, try running "composer install" or use the Wizard installer.' . PHP_EOL;
     exit(1);
 }
 
@@ -34,4 +34,4 @@ require $helperPath;
 |
 */
 
-require __DIR__.'/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';

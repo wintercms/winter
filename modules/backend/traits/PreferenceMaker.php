@@ -1,7 +1,9 @@
-<?php namespace Backend\Traits;
+<?php
 
-use Str;
+namespace Backend\Traits;
+
 use Backend\Models\UserPreference;
+use Winter\Storm\Support\Str;
 
 /**
  * Preference Maker Trait

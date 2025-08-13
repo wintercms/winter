@@ -1,9 +1,11 @@
-<?php namespace System\Classes;
+<?php
 
-use ApplicationException;
-use Config;
+namespace System\Classes;
+
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\Filesystem;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Stores the file manifest for this Winter CMS installation.
@@ -149,7 +151,7 @@ class FileManifest
      */
     protected function findFiles(string $basePath): array
     {
-        $datasource = new FileDatasource($basePath, new Filesystem);
+        $datasource = new FileDatasource($basePath, new Filesystem());
 
         $files = array_map(function ($path) use ($basePath) {
             return $basePath . '/' . $path;

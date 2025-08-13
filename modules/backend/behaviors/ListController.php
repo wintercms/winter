@@ -85,8 +85,7 @@ class ListController extends ControllerBehavior
         if (is_array($config)) {
             $this->listDefinitions = $config;
             $this->primaryDefinition = key($this->listDefinitions);
-        }
-        else {
+        } else {
             $this->listDefinitions = ['list' => $config];
             $this->primaryDefinition = 'list';
         }
@@ -126,7 +125,7 @@ class ListController extends ControllerBehavior
          * Create the model
          */
         $class = $listConfig->modelClass;
-        $model = new $class;
+        $model = new $class();
         $model = $this->controller->listExtendModel($model, $definition);
 
         /*
@@ -327,7 +326,7 @@ class ListController extends ControllerBehavior
          * Create the model
          */
         $class = $listConfig->modelClass;
-        $model = new $class;
+        $model = new $class();
         $model = $this->controller->listExtendModel($model, $definition);
 
         /*
@@ -354,8 +353,7 @@ class ListController extends ControllerBehavior
                     ? $listConfig->deleteMessage
                     : 'backend::lang.list.delete_selected_success'
             ));
-        }
-        else {
+        } else {
             Flash::error(Lang::get(
                 (!empty($listConfig->noRecordsDeletedMessage))
                     ? $listConfig->noRecordsDeletedMessage
@@ -409,7 +407,7 @@ class ListController extends ControllerBehavior
      */
     public function listMakePartial($partial, $params = [])
     {
-        $contents = $this->controller->makePartial('list_'.$partial, $params + $this->vars, false);
+        $contents = $this->controller->makePartial('list_' . $partial, $params + $this->vars, false);
         if (!$contents) {
             $contents = $this->makePartial($partial, $params);
         }

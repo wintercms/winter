@@ -1,8 +1,10 @@
-<?php namespace Backend\Skins;
+<?php
 
-use File;
+namespace Backend\Skins;
+
 use Backend\Classes\Skin;
 use Winter\Storm\Router\Helper as RouterHelper;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Standard skin information file.
@@ -15,7 +17,6 @@ use Winter\Storm\Router\Helper as RouterHelper;
 
 class Standard extends Skin
 {
-
     /**
      * @inheritDoc
      */
@@ -31,7 +32,7 @@ class Standard extends Skin
     public function skinDetails()
     {
         return [
-            'name' => 'Default Skin'
+            'name' => 'Default Skin',
         ];
     }
 
@@ -52,6 +53,6 @@ class Standard extends Skin
      */
     public function getLayoutPaths()
     {
-        return [$this->skinPath.'/layouts'];
+        return [$this->skinPath . '/layouts'];
     }
 }

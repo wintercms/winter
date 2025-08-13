@@ -3,13 +3,13 @@
 return [
     'app' => [
         'name' => 'Winter CMS',
-        'tagline' => 'Volviendo a lo básico'
+        'tagline' => 'Volviendo a lo básico',
     ],
     'directory' => [
-        'create_fail' => 'No es posible crear el directorio: :name'
+        'create_fail' => 'No es posible crear el directorio: :name',
     ],
     'file' => [
-        'create_fail' => 'No es posible crear el archivo: :name'
+        'create_fail' => 'No es posible crear el archivo: :name',
     ],
     'page' => [
         'invalid_token' => [
@@ -17,7 +17,7 @@ return [
         ],
     ],
     'combiner' => [
-        'not_found' => "El archivo combinador ':name' no se encuentra."
+        'not_found' => "El archivo combinador ':name' no se encuentra.",
     ],
     'system' => [
         'name' => 'Sistema',
@@ -35,15 +35,15 @@ return [
             'events' => 'Eventos',
             'customers' => 'Clientes',
             'my_settings' => 'Mis Configuraciones',
-            'notifications' => 'Notificaciones'
-        ]
+            'notifications' => 'Notificaciones',
+        ],
     ],
     'theme' => [
         'label' => 'Tema',
         'unnamed' => 'Tema sin nombre',
         'name' => [
             'label' => 'Nombre Tema',
-            'help' => 'Nombre del tema por su código único. Por ejemplo, Winter.Vanilla'
+            'help' => 'Nombre del tema por su código único. Por ejemplo, Winter.Vanilla',
         ],
     ],
     'themes' => [
@@ -52,7 +52,7 @@ return [
         'installed' => 'Temas Instalados',
         'no_themes' => 'No hay temas instalados desde el mercado.',
         'recommended' => 'Recomendado',
-        'remove_confirm' => '¿Seguro que quieres eliminar este tema?'
+        'remove_confirm' => '¿Seguro que quieres eliminar este tema?',
     ],
     'plugin' => [
         'label' => 'Plugin',
@@ -60,7 +60,7 @@ return [
         'name' => [
             'label' => 'Nombre del Plugin',
             'help' => 'Nombra el plugin por su código único. por ejemplo, Winter.Blog',
-        ]
+        ],
     ],
     'plugins' => [
         'manage' => 'Gestionar plugins',
@@ -165,7 +165,7 @@ return [
         'sending' => 'Enviando mensaje de prueba...',
         'return' => 'Volver a lista de plantillas',
         'options' => 'Opciones',
-        'disable_auto_inline_css' => 'Deshabilitar CSS en línea automático'
+        'disable_auto_inline_css' => 'Deshabilitar CSS en línea automático',
     ],
     'mail_brand' => [
         'menu_label' => 'Branding de Correo',
@@ -179,7 +179,7 @@ return [
                 'description' => 'Descripción',
                 'price' => 'Precio',
                 'centered' => 'Centrado',
-                'right_aligned' => 'Alineado-A-La-Derecha'
+                'right_aligned' => 'Alineado-A-La-Derecha',
             ],
             'buttons' => [
                 'primary' => 'Botón Principal',
@@ -190,7 +190,7 @@ return [
             'more' => 'Algo más de texto',
             'promotion' => 'Código de cupón: WINTER',
             'subcopy' => 'Este es el subcopy del correo',
-            'thanks' => 'Gracias'
+            'thanks' => 'Gracias',
         ],
         'fields' => [
             '_section_background' => 'Fondo',
@@ -216,7 +216,7 @@ return [
             'panel_bg' => 'Fondo del Panel',
             'promotion_bg' => 'Fondo de Promoción',
             'promotion_border_color' => 'Color del borde de Promoción',
-        ]
+        ],
     ],
     'install' => [
         'project_label' => 'Adjuntar al proyecto',
@@ -225,7 +225,7 @@ return [
         'missing_plugin_name' => 'Por favor, especifique un nombre de Plugin para instalar',
         'missing_theme_name' => 'Por favor especifique un nombre de Theme a instalar.',
         'install_completing' => 'Finalizó el proceso de instalación',
-        'install_success' => 'El plugin se ha instalado correctamente.'
+        'install_success' => 'El plugin se ha instalado correctamente.',
     ],
     'updates' => [
         'title' => 'Administrar actualizaciones',
@@ -292,7 +292,7 @@ return [
         'details_licence' => 'Licencia',
         'details_licence_missing' => 'No hay licencia proporcionada.',
         'details_current_version' => 'Versión actual',
-        'details_author' => 'Autor'
+        'details_author' => 'Autor',
     ],
     'server' => [
         'connect_error' => 'Error al conectar con el servidor.',
@@ -325,7 +325,7 @@ return [
         'created_at' => 'Fecha y Hora',
         'message' => 'Mensaje',
         'level' => 'Nivel',
-        'preview_title' => 'Evento'
+        'preview_title' => 'Evento',
     ],
     'request_log' => [
         'hint' => 'Este registro muestra una lista de las peticiones del navegador que pueden requerir atención. Por ejemplo, si un usuario abre una página que no se puede encontrar, se crea un registro con el código de estado 404.',
@@ -341,7 +341,7 @@ return [
         'referer' => 'Referencia',
         'url' => 'URL',
         'status_code' => 'Estado',
-        'preview_title' => 'Petición'
+        'preview_title' => 'Petición',
     ],
     'permissions' => [
         'name' => 'Sistema',
@@ -354,7 +354,7 @@ return [
         'manage_preferences' => 'Gestionar preferencias back-end',
         'manage_editor' => 'Gestionar preferencias editor código',
         'view_the_dashboard' => 'Ver el Escritorio',
-        'manage_branding' => 'Perzonalizar el back-end'
+        'manage_branding' => 'Perzonalizar el back-end',
     ],
     'log' => [
         'menu_label' => 'Configuración de Logs',

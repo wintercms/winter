@@ -18,7 +18,7 @@
                 href="javascript:;"
                 class="page-back"
                 data-request="<?= $this->getEventHandler('onPaginate') ?>"
-                data-request-data="page: <?= $pageCurrent-1 ?>"
+                data-request-data="page: <?= $pageCurrent - 1 ?>"
                 data-load-indicator="<?= e(trans('backend::lang.list.loading')) ?>"
                 title="<?= e(trans('backend::lang.list.prev_page')) ?>"></a>
         <?php else: ?>
@@ -37,7 +37,7 @@
             <a
                 href="javascript:;"
                 class="page-next"
-                data-request-data="page: <?= $pageCurrent+1 ?>"
+                data-request-data="page: <?= $pageCurrent + 1 ?>"
                 data-request="<?= $this->getEventHandler('onPaginate') ?>"
                 data-load-indicator="<?= e(trans('backend::lang.list.loading')) ?>"
                 title="<?= e(trans('backend::lang.list.next_page')) ?>"></a>

@@ -2,10 +2,10 @@
 
 namespace Cms\Tests\Classes;
 
-use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Router;
 use Cms\Classes\Theme;
 use ReflectionClass;
+use System\Tests\Bootstrap\TestCase;
 
 class RouterTest extends TestCase
 {

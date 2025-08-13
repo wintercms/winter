@@ -1,4 +1,6 @@
-<?php namespace System\Classes;
+<?php
+
+namespace System\Classes;
 
 use System\Twig\Extension as SystemTwigExtension;
 use System\Twig\Loader as SystemTwigLoader;
@@ -22,9 +24,9 @@ class MarkupManager
 {
     use \Winter\Storm\Support\Traits\Singleton;
 
-    const EXTENSION_FILTER = 'filters';
-    const EXTENSION_FUNCTION = 'functions';
-    const EXTENSION_TOKEN_PARSER = 'tokens';
+    public const EXTENSION_FILTER = 'filters';
+    public const EXTENSION_FUNCTION = 'functions';
+    public const EXTENSION_TOKEN_PARSER = 'tokens';
 
     /**
      * @var array Cache of registration callbacks.
@@ -63,8 +65,8 @@ class MarkupManager
         ], $options);
 
         $twig = new TwigEnvironment($loader, $options);
-        $twig->addExtension(new SystemTwigExtension);
-        $twig->addExtension(new SandboxExtension(new TwigSecurityPolicy, true));
+        $twig->addExtension(new SystemTwigExtension());
+        $twig->addExtension(new SandboxExtension(new TwigSecurityPolicy(), true));
         return $twig;
     }
 
@@ -355,8 +357,7 @@ class MarkupManager
                 if ($replaceWith) {
                     $isWild = $callable;
                     $isWild[0] = str_replace('*', $replaceWith, $callable[0]);
-                }
-                else {
+                } else {
                     $isWild = true;
                 }
             }
@@ -365,8 +366,7 @@ class MarkupManager
                 if ($replaceWith) {
                     $isWild = $isWild ?: $callable;
                     $isWild[1] = str_replace('*', $replaceWith, $callable[1]);
-                }
-                else {
+                } else {
                     $isWild = true;
                 }
             }

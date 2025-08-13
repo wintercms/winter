@@ -27,7 +27,7 @@ class UserFixture extends User
             'created_at' => '2019-09-27 12:00:00',
             'updated_at' => '2019-09-27 12:00:00',
             'deleted_at' => null,
-            'is_superuser' => false
+            'is_superuser' => false,
         ]);
     }
 
@@ -51,7 +51,7 @@ class UserFixture extends User
 
         if (is_string($permission)) {
             $permission = [
-                $permission => (int) $granted
+                $permission => (int) $granted,
             ];
         }
 

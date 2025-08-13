@@ -1,12 +1,14 @@
-<?php namespace System\Controllers;
+<?php
 
-use App;
-use Lang;
-use Flash;
-use BackendMenu;
+namespace System\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Lang;
 use System\Classes\SettingsManager;
 use System\Models\EventLog;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Event Logs controller
@@ -63,8 +65,7 @@ class EventLogs extends Controller
             }
 
             Flash::success(Lang::get('backend::lang.list.delete_selected_success'));
-        }
-        else {
+        } else {
             Flash::error(Lang::get('backend::lang.list.delete_selected_empty'));
         }
 

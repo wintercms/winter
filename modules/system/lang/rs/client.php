@@ -54,7 +54,7 @@ return [
         'nextMonth' => 'Sledeći mesec',
         'months' => ['Januar', 'Februar', 'Mart', 'April', 'Maj', 'Juni', 'Juli', 'Avgust', 'Septembar', 'Oktobar', 'Novembar', 'Decembar'],
         'weekdays' => ['Nedelja', 'Ponedeljak', 'Utorak', 'Sreda', 'Četvrtak', 'Petak', 'Subota'],
-        'weekdaysShort' => ['Ned', 'Pon', 'Uto', 'Sre', 'Čet', 'Pet', 'Sub']
+        'weekdaysShort' => ['Ned', 'Pon', 'Uto', 'Sre', 'Čet', 'Pet', 'Sub'],
     ],
     'colorpicker' => [
         'choose' => 'Ok',

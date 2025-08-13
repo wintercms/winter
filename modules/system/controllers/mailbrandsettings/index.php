@@ -48,7 +48,7 @@
     <?php Block::endPut() ?>
 
     <?php Block::put('body') ?>
-        <?= Form::open(['id' => 'brandSettingsForm', 'class'=>'layout stretch']) ?>
+        <?= Form::open(['id' => 'brandSettingsForm', 'class' => 'layout stretch']) ?>
             <?= $this->makeLayout('form-with-sidebar') ?>
         <?= Form::close() ?>
     <?php Block::endPut() ?>

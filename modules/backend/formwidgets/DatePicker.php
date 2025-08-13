@@ -1,11 +1,13 @@
-<?php namespace Backend\FormWidgets;
+<?php
 
-use Config;
-use Carbon\Carbon;
+namespace Backend\FormWidgets;
+
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
+use Carbon\Carbon;
 use System\Helpers\DateTime as DateTimeHelper;
 use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Date picker
@@ -196,11 +198,9 @@ class DatePicker extends FormWidgetBase
 
         if ($this->mode == 'time') {
             return 'time';
-        }
-        elseif ($this->mode == 'date') {
+        } elseif ($this->mode == 'date') {
             return 'dateLong';
-        }
-        else {
+        } else {
             return 'dateTimeLong';
         }
     }

@@ -1,30 +1,32 @@
-<?php namespace Cms\Classes;
+<?php
 
-use Cms;
-use Url;
-use App;
-use View;
-use File;
-use Lang;
-use Log;
-use Flash;
-use Cache;
-use Config;
-use Session;
-use Request;
-use Response;
-use Exception;
-use SystemException;
-use BackendAuth;
-use Twig\Environment as TwigEnvironment;
+namespace Cms\Classes;
+
+use Backend\Facades\BackendAuth;
+use Cms\Facades\Cms;
 use Cms\Models\MaintenanceSetting;
-use System\Models\RequestLog;
-use System\Helpers\View as ViewHelper;
+use Exception;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\View;
 use System\Classes\CombineAssets;
+use System\Helpers\View as ViewHelper;
+use System\Models\RequestLog;
+use Twig\Environment as TwigEnvironment;
 use Winter\Storm\Exception\AjaxException;
+use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Parse\Bracket as TextParser;
-use Illuminate\Http\RedirectResponse;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Url;
 
 /**
  * The CMS controller class.
@@ -117,7 +119,7 @@ class Controller
 
         $this->assetPath = Config::get('cms.themesPath', '/themes') . '/' . $this->theme->getDirName();
         $this->router = new Router($this->theme);
-        $this->partialStack = new PartialStack;
+        $this->partialStack = new PartialStack();
         $this->initTwigEnvironment();
 
         self::$instance = $this;
@@ -276,7 +278,7 @@ class Controller
         $controller->getRouter()->setParameters($parameters);
 
         if (($page = Page::load($theme, $pageFile)) === null) {
-            throw new SystemException(Lang::get('cms::lang.page.not_found_name', ['name'=>$pageFile]));
+            throw new SystemException(Lang::get('cms::lang.page.not_found_name', ['name' => $pageFile]));
         }
 
         return $controller->runPage($page, false);
@@ -299,9 +301,8 @@ class Controller
          */
         if (!$page->layout) {
             $layout = Layout::initFallback($this->theme);
-        }
-        elseif (($layout = Layout::loadCached($this->theme, $page->layout)) === null) {
-            throw new SystemException(Lang::get('cms::lang.layout.not_found_name', ['name'=>$page->layout]));
+        } elseif (($layout = Layout::loadCached($this->theme, $page->layout)) === null) {
+            throw new SystemException(Lang::get('cms::lang.layout.not_found_name', ['name' => $page->layout]));
         }
 
         $this->layout = $layout;
@@ -329,7 +330,7 @@ class Controller
          */
         $this->vars['errors'] = (Config::get('session.driver') && Session::has('errors'))
             ? Session::get('errors')
-            : new \Illuminate\Support\ViewErrorBag;
+            : new \Illuminate\Support\ViewErrorBag();
 
         /*
          * Handle AJAX requests and execute the life cycle functions
@@ -419,8 +420,7 @@ class Controller
          */
         if ($event = $this->fireSystemEvent('cms.page.beforeRenderPage', [$page])) {
             $this->pageContents = $event;
-        }
-        else {
+        } else {
             /*
              * Render the page
              */
@@ -695,7 +695,7 @@ class Controller
                  * Validate the handler name
                  */
                 if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
-                    throw new SystemException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name'=>$handler]), 400);
+                    throw new SystemException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name' => $handler]), 400);
                 }
 
                 /*
@@ -706,11 +706,10 @@ class Controller
 
                     foreach ($partialList as $partial) {
                         if (!preg_match('/^(?:\w+\:{2}|@)?[a-z0-9\_\-\.\/]+$/i', $partial)) {
-                            throw new SystemException(Lang::get('cms::lang.partial.invalid_name', ['name'=>$partial]), 400);
+                            throw new SystemException(Lang::get('cms::lang.partial.invalid_name', ['name' => $partial]), 400);
                         }
                     }
-                }
-                else {
+                } else {
                     $partialList = [];
                 }
 
@@ -720,7 +719,7 @@ class Controller
                  * Execute the handler
                  */
                 if (!$result = $this->runAjaxHandler($handler)) {
-                    throw new SystemException(Lang::get('cms::lang.ajax_handler.not_found', ['name'=>$handler]));
+                    throw new SystemException(Lang::get('cms::lang.ajax_handler.not_found', ['name' => $handler]));
                 }
 
                 /*
@@ -737,11 +736,8 @@ class Controller
                 if ($result instanceof RedirectResponse) {
                     $responseContents['X_WINTER_REDIRECT'] = $result->getTargetUrl();
                     $result = null;
-                }
-                /*
-                 * No redirect is used, look for any flash messages
-                 */
-                elseif (Request::header('X_WINTER_REQUEST_FLASH') && Flash::check()) {
+                } elseif (Request::header('X_WINTER_REQUEST_FLASH') && Flash::check()) {
+                    // No redirect is used, look for any flash messages
                     $responseContents['X_WINTER_FLASH_MESSAGES'] = Flash::all();
                 }
 
@@ -752,25 +748,21 @@ class Controller
                  */
                 if (is_array($result)) {
                     $responseContents = array_merge($responseContents, $result);
-                }
-                elseif (is_string($result)) {
+                } elseif (is_string($result)) {
                     $responseContents['result'] = $result;
-                }
-                elseif (is_object($result)) {
+                } elseif (is_object($result)) {
                     return $result;
                 }
 
                 return Response::make($responseContents, $this->statusCode);
-            }
-            catch (ValidationException $ex) {
+            } catch (ValidationException $ex) {
                 /*
                  * Handle validation errors
                  */
                 $responseContents['X_WINTER_ERROR_FIELDS'] = $ex->getFields();
                 $responseContents['X_WINTER_ERROR_MESSAGE'] = $ex->getMessage();
                 throw new AjaxException($responseContents);
-            }
-            catch (Exception $ex) {
+            } catch (Exception $ex) {
                 throw $ex;
             }
         }
@@ -819,10 +811,8 @@ class Controller
             return $event;
         }
 
-        /*
-         * Process Component handler
-         */
         if (strpos($handler, '::')) {
+            // Process Component handler
             list($componentName, $handlerName) = explode('::', $handler);
             $componentObj = $this->findComponentByName($componentName);
 
@@ -831,11 +821,8 @@ class Controller
                 $result = $componentObj->runAjaxHandler($handlerName);
                 return $result ?: true;
             }
-        }
-        /*
-         * Process code section handler
-         */
-        else {
+        } else {
+            // Process code section handler
             if (method_exists($this->pageObj, $handler)) {
                 $result = $this->pageObj->$handler();
                 return $result ?: true;
@@ -943,34 +930,23 @@ class Controller
          */
         if ($event = $this->fireSystemEvent('cms.page.beforeRenderPartial', [$name])) {
             $partial = $event;
-        }
-        /*
-         * Process Component partial
-         */
-        elseif (strpos($name, '::') !== false) {
+        } elseif (strpos($name, '::') !== false) {
+            // Process Component partial
             list($componentAlias, $partialName) = explode('::', $name);
 
-            /*
-             * Component alias not supplied
-             */
             if (!strlen($componentAlias)) {
                 if ($this->componentContext !== null) {
                     $componentObj = $this->componentContext;
-                }
-                elseif (($componentObj = $this->findComponentByPartial($partialName)) === null) {
+                } elseif (($componentObj = $this->findComponentByPartial($partialName)) === null) {
                     if ($throwException) {
-                        throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$partialName]));
+                        throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name' => $partialName]));
                     }
 
                     return false;
                 }
-            }
-            /*
-             * Component alias is supplied
-             */
-            elseif (($componentObj = $this->findComponentByName($componentAlias)) === null) {
+            } elseif (($componentObj = $this->findComponentByName($componentAlias)) === null) {
                 if ($throwException) {
-                    throw new SystemException(Lang::get('cms::lang.component.not_found', ['name'=>$componentAlias]));
+                    throw new SystemException(Lang::get('cms::lang.component.not_found', ['name' => $componentAlias]));
                 }
 
                 return false;
@@ -993,7 +969,7 @@ class Controller
 
             if ($partial === null) {
                 if ($throwException) {
-                    throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$name]));
+                    throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name' => $name]));
                 }
 
                 return false;
@@ -1003,13 +979,9 @@ class Controller
              * Set context for self access
              */
             $this->vars['__SELF__'] = $componentObj;
-        }
-        /*
-         * Process theme partial
-         */
-        elseif (($partial = Partial::loadCached($this->theme, $name)) === null) {
+        } elseif (($partial = Partial::loadCached($this->theme, $name)) === null) {
             if ($throwException) {
-                throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name'=>$name]));
+                throw new SystemException(Lang::get('cms::lang.partial.not_found_name', ['name' => $name]));
             }
 
             return false;
@@ -1037,7 +1009,7 @@ class Controller
                     : [$component, $component];
 
                 if (!$componentObj = $manager->makeComponent($name, $this->pageObj, $properties)) {
-                    throw new SystemException(Lang::get('cms::lang.component.not_found', ['name'=>$name]));
+                    throw new SystemException(Lang::get('cms::lang.component.not_found', ['name' => $name]));
                 }
 
                 $componentObj->alias = $alias;
@@ -1131,11 +1103,7 @@ class Controller
          */
         if ($event = $this->fireSystemEvent('cms.page.beforeRenderContent', [$name])) {
             $content = $event;
-        }
-        /*
-         * Load content from theme
-         */
-        elseif (($content = Content::loadCached($this->theme, $name)) === null) {
+        } elseif (($content = Content::loadCached($this->theme, $name)) === null) {
             if ($throwException) {
                 throw new SystemException(Lang::get('cms::lang.content.not_found_name', ['name' => $name]));
             } else {
@@ -1203,7 +1171,7 @@ class Controller
         }
 
         if (!$result) {
-            $result = $this->renderPartial($name.'::default', [], false);
+            $result = $this->renderPartial($name . '::default', [], false);
         }
 
         $this->componentContext = $previousContext;
@@ -1397,7 +1365,7 @@ class Controller
         if (!($assets = Cache::get($cacheKey))) {
             $assets = [];
             $sources = [
-                $themesPath . '/' . $themeDir
+                $themesPath . '/' . $themeDir,
             ];
 
             if ($parentTheme) {
@@ -1599,8 +1567,7 @@ class Controller
                 if (substr($paramName, 0, 1) == ':') {
                     $routeParamName = substr($paramName, 1);
                     $newPropertyValue = $routerParameters[$routeParamName] ?? null;
-                }
-                else {
+                } else {
                     $newPropertyValue = array_get($parameters, $paramName, null);
                 }
 

@@ -1,12 +1,14 @@
-<?php namespace System\Models;
+<?php
 
-use App;
-use Str;
-use Model;
-use Cache;
-use Less_Parser;
+namespace System\Models;
+
 use Exception;
-use File as FileHelper;
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
+use Less_Parser;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\File as FileHelper;
+use Winter\Storm\Support\Str;
 
 /**
  * Mail brand settings
@@ -23,7 +25,7 @@ class MailBrandSetting extends Model
      * @var array Behaviors implemented by this model.
      */
     public $implement = [
-        \System\Behaviors\SettingsModel::class
+        \System\Behaviors\SettingsModel::class,
     ];
 
     /**
@@ -41,18 +43,18 @@ class MailBrandSetting extends Model
      */
     public $cacheKey = 'system::mailbrand.custom_css';
 
-    const WHITE_COLOR = '#fff';
-    const BODY_BG = '#f5f8fa';
-    const PRIMARY_BG = '#d66829';
-    const POSITIVE_BG = '#52a838';
-    const NEGATIVE_BG = '#e01346';
-    const HEADER_COLOR = '#bbbfc3';
-    const HEADING_COLOR = '#2f3133';
-    const TEXT_COLOR = '#74787e';
-    const LINK_COLOR = '#2da7c7';
-    const FOOTER_COLOR = '#aeaeae';
-    const BORDER_COLOR = '#edeff2';
-    const PROMOTION_BORDER_COLOR = '#9ba2ab';
+    public const WHITE_COLOR = '#fff';
+    public const BODY_BG = '#f5f8fa';
+    public const PRIMARY_BG = '#d66829';
+    public const POSITIVE_BG = '#52a838';
+    public const NEGATIVE_BG = '#e01346';
+    public const HEADER_COLOR = '#bbbfc3';
+    public const HEADING_COLOR = '#2f3133';
+    public const TEXT_COLOR = '#74787e';
+    public const LINK_COLOR = '#2da7c7';
+    public const FOOTER_COLOR = '#aeaeae';
+    public const BORDER_COLOR = '#edeff2';
+    public const PROMOTION_BORDER_COLOR = '#9ba2ab';
 
     /**
      * Validation rules
@@ -72,7 +74,7 @@ class MailBrandSetting extends Model
         $vars = static::getCssVars();
 
         foreach ($vars as $var => $default) {
-            $this->{$var} = $config->get('brand.mail.'.Str::studly($var), $default);
+            $this->{$var} = $config->get('brand.mail.' . Str::studly($var), $default);
         }
     }
 
@@ -96,8 +98,7 @@ class MailBrandSetting extends Model
         try {
             $customCss = self::compileCss();
             Cache::forever($cacheKey, $customCss);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $customCss = '/* ' . $ex->getMessage() . ' */';
         }
 

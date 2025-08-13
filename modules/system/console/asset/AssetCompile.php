@@ -3,8 +3,8 @@
 namespace System\Console\Asset;
 
 use Symfony\Component\Process\Process;
-use System\Classes\Asset\PackageManager;
 use System\Classes\Asset\PackageJson;
+use System\Classes\Asset\PackageManager;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Str;
@@ -216,7 +216,7 @@ abstract class AssetCompile extends Command
             $this->getPackagePath($configPath),
             [
                 'NODE_ENV' => $this->option('production', false) ? 'production' : 'development',
-                ...$commandEnv
+                ...$commandEnv,
             ],
             null,
             null

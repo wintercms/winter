@@ -1,9 +1,10 @@
-<?php namespace System\Models;
+<?php
+
+namespace System\Models;
 
 use Exception;
-use Illuminate\Support\Facades\App;
-use Throwable;
 use ReflectionClass;
+use Throwable;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Str;
 
@@ -47,7 +48,7 @@ class EventLog extends Model
      */
     public static function add(string $message, string $level = 'info', ?array $details = null): static
     {
-        $record = new static;
+        $record = new static();
         $record->message = $message;
         $record->level = $level;
 
@@ -57,8 +58,7 @@ class EventLog extends Model
 
         try {
             $record->save();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
         }
 
         return $record;
@@ -69,15 +69,14 @@ class EventLog extends Model
      */
     public static function addException(Throwable $throwable, string $level = 'error'): static
     {
-        $record = new static;
+        $record = new static();
         $record->message = $throwable->getMessage();
         $record->level = $level;
         $record->details = $record->getDetails($throwable);
 
         try {
             $record->save();
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
         }
 
         return $record;
