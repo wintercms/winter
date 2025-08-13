@@ -2,8 +2,8 @@
 
 namespace System;
 
-use Backend;
 use Backend\Classes\WidgetManager;
+use Backend\Facades\Backend;
 use Backend\Facades\BackendAuth;
 use Backend\Facades\BackendMenu;
 use Backend\Models\UserRole;
@@ -163,10 +163,6 @@ class ServiceProvider extends ModuleServiceProvider
 
         // Register the Laravel Vite singleton
         $this->app->singleton(LaravelVite::class, \System\Classes\Asset\Vite::class);
-
-        // @TODO: Document
-        $this->app->bind(SourceManifest::class, SourceManifest::class);
-        $this->app->bind(FileManifest::class, FileManifest::class);
     }
 
     /**
@@ -358,9 +354,6 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('npm.install', Console\Asset\Npm\NpmInstall::class);
         $this->registerConsoleCommand('npm.update', Console\Asset\Npm\NpmUpdate::class);
         $this->registerConsoleCommand('npm.version', Console\Asset\Npm\NpmVersion::class);
-
-        // @TODO: remove
-        $this->registerConsoleCommand('jax.test', Console\JaxTest::class);
     }
 
     /*

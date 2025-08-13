@@ -1,9 +1,11 @@
-<?php namespace System\Classes;
+<?php
 
-use ApplicationException;
-use Config;
+namespace System\Classes;
+
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\Filesystem;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Stores the file manifest for this Winter CMS installation.
@@ -54,7 +56,7 @@ class FileManifest
     /**
      * Constructor.
      */
-    public function __construct(string $root = null, array $modules = null)
+    public function __construct(?string $root = null, ?array $modules = null)
     {
         $this->setRoot($root ?? base_path());
         $this->setModules($modules ?? Config::get('cms.loadModules', ['System', 'Backend', 'Cms']));

@@ -1,7 +1,9 @@
-<?php namespace System\Models;
+<?php
 
-use App;
-use Model;
+namespace System\Models;
+
+use Illuminate\Support\Facades\App;
+use Winter\Storm\Database\Model;
 
 /**
  * Mail settings
@@ -116,7 +118,7 @@ class MailSetting extends Model
      *
      * We use this to show smtp credential fields only for smtp mode and when smtp authorization is required.
      *
-     * @param array $fields
+     * @param object $fields
      * @param string|null $context
      * @return void
      */

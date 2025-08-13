@@ -1,9 +1,11 @@
-<?php namespace System\Classes;
+<?php
 
-use Http;
-use Config;
-use ApplicationException;
+namespace System\Classes;
+
 use Winter\Storm\Argon\Argon;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Http;
 
 /**
  * Reads and stores the Winter CMS source manifest information.
@@ -43,7 +45,7 @@ class SourceManifest
     /**
      * Constructor
      */
-    public function __construct(string $source = null, string $forks = null, bool $autoload = true)
+    public function __construct(?string $source = null, ?string $forks = null, bool $autoload = true)
     {
         $this->setSource($source ?? Config::get(
             'cms.sourceManifestUrl',

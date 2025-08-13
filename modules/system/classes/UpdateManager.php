@@ -5,7 +5,6 @@ namespace System\Classes;
 use Carbon\Carbon;
 use Cms\Classes\ThemeManager;
 use Exception;
-use Illuminate\Support\Facades\App;
 use System\Classes\Extensions\ModuleManager;
 use System\Classes\Extensions\PluginManager;
 use System\Models\Parameter;
@@ -134,8 +133,11 @@ class UpdateManager
      */
     public function getBuildNumberManually(bool $detailed = false): array
     {
+        $source = new SourceManifest();
+        $manifest = new FileManifest();
+
         // Find build by comparing with source manifest
-        return App::make(SourceManifest::class)->compare(App::make(FileManifest::class), $detailed);
+        return $source->compare($manifest, $detailed);
     }
 
     /**
