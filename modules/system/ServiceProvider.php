@@ -161,7 +161,7 @@ class ServiceProvider extends ModuleServiceProvider
 
         // Register the Laravel Vite singleton
         $this->app->singleton(LaravelVite::class, \System\Classes\Asset\Vite::class);
-        
+
         // Shutup extensions that expect Laravel's auth system to be present
         $this->app->singleton(\Illuminate\Contracts\Auth\Access\Gate::class, function ($app) {
             return new \Illuminate\Auth\Access\Gate($app, fn (): null => null);
@@ -312,51 +312,48 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register console commands
          */
-        $this->registerConsoleCommand('create.command', Console\Create\CreateCommand::class);
-        $this->registerConsoleCommand('create.job', Console\Create\CreateJob::class);
-        $this->registerConsoleCommand('create.migration', Console\Create\CreateMigration::class);
-        $this->registerConsoleCommand('create.model', Console\Create\CreateModel::class);
-        $this->registerConsoleCommand('create.factory', Console\Create\CreateFactory::class);
-        $this->registerConsoleCommand('create.plugin', Console\Create\CreatePlugin::class);
-        $this->registerConsoleCommand('create.settings', Console\Create\CreateSettings::class);
-        $this->registerConsoleCommand('create.test', Console\Create\CreateTest::class);
-
-        $this->registerConsoleCommand('winter.up', Console\WinterUp::class);
-        $this->registerConsoleCommand('winter.down', Console\WinterDown::class);
-        $this->registerConsoleCommand('winter.update', Console\WinterUpdate::class);
-        $this->registerConsoleCommand('winter.util', Console\WinterUtil::class);
-        $this->registerConsoleCommand('winter.mirror', Console\WinterMirror::class);
-        $this->registerConsoleCommand('winter.fresh', Console\WinterFresh::class);
-        $this->registerConsoleCommand('winter.env', Console\WinterEnv::class);
-        $this->registerConsoleCommand('winter.install', Console\WinterInstall::class);
-        $this->registerConsoleCommand('winter.version', Console\WinterVersion::class);
-        $this->registerConsoleCommand('winter.manifest', Console\WinterManifest::class);
-        $this->registerConsoleCommand('winter.test', Console\WinterTest::class);
-
-        $this->registerConsoleCommand('plugin.install', Console\Plugin\PluginInstall::class);
-        $this->registerConsoleCommand('plugin.remove', Console\Plugin\PluginRemove::class);
-        $this->registerConsoleCommand('plugin.disable', Console\Plugin\PluginDisable::class);
-        $this->registerConsoleCommand('plugin.enable', Console\Plugin\PluginEnable::class);
-        $this->registerConsoleCommand('plugin.refresh', Console\Plugin\PluginRefresh::class);
-        $this->registerConsoleCommand('plugin.rollback', Console\Plugin\PluginRollback::class);
-        $this->registerConsoleCommand('plugin.list', Console\Plugin\PluginList::class);
-
-        $this->registerConsoleCommand('mix.compile', Console\Asset\Mix\MixCompile::class);
-        $this->registerConsoleCommand('mix.config', Console\Asset\Mix\MixCreate::class);
-        $this->registerConsoleCommand('mix.install', Console\Asset\Mix\MixInstall::class);
-        $this->registerConsoleCommand('mix.list', Console\Asset\Mix\MixList::class);
-        $this->registerConsoleCommand('mix.watch', Console\Asset\Mix\MixWatch::class);
-
-        $this->registerConsoleCommand('vite.compile', Console\Asset\Vite\ViteCompile::class);
-        $this->registerConsoleCommand('vite.config', Console\Asset\Vite\ViteCreate::class);
-        $this->registerConsoleCommand('vite.install', Console\Asset\Vite\ViteInstall::class);
-        $this->registerConsoleCommand('vite.list', Console\Asset\Vite\ViteList::class);
-        $this->registerConsoleCommand('vite.watch', Console\Asset\Vite\ViteWatch::class);
-
-        $this->registerConsoleCommand('npm.run', Console\Asset\Npm\NpmRun::class);
-        $this->registerConsoleCommand('npm.install', Console\Asset\Npm\NpmInstall::class);
-        $this->registerConsoleCommand('npm.update', Console\Asset\Npm\NpmUpdate::class);
-        $this->registerConsoleCommand('npm.version', Console\Asset\Npm\NpmVersion::class);
+        $this->commands([
+            Console\Create\CreateCommand::class,
+            Console\Create\CreateJob::class,
+            Console\Create\CreateMigration::class,
+            Console\Create\CreateModel::class,
+            Console\Create\CreateFactory::class,
+            Console\Create\CreatePlugin::class,
+            Console\Create\CreateSettings::class,
+            Console\Create\CreateTest::class,
+            Console\WinterUp::class,
+            Console\WinterDown::class,
+            Console\WinterUpdate::class,
+            Console\WinterUtil::class,
+            Console\WinterMirror::class,
+            Console\WinterFresh::class,
+            Console\WinterEnv::class,
+            Console\WinterInstall::class,
+            Console\WinterVersion::class,
+            Console\WinterManifest::class,
+            Console\WinterTest::class,
+            Console\Plugin\PluginInstall::class,
+            Console\Plugin\PluginRemove::class,
+            Console\Plugin\PluginDisable::class,
+            Console\Plugin\PluginEnable::class,
+            Console\Plugin\PluginRefresh::class,
+            Console\Plugin\PluginRollback::class,
+            Console\Plugin\PluginList::class,
+            Console\Asset\Mix\MixCompile::class,
+            Console\Asset\Mix\MixCreate::class,
+            Console\Asset\Mix\MixInstall::class,
+            Console\Asset\Mix\MixList::class,
+            Console\Asset\Mix\MixWatch::class,
+            Console\Asset\Vite\ViteCompile::class,
+            Console\Asset\Vite\ViteCreate::class,
+            Console\Asset\Vite\ViteInstall::class,
+            Console\Asset\Vite\ViteList::class,
+            Console\Asset\Vite\ViteWatch::class,
+            Console\Asset\Npm\NpmRun::class,
+            Console\Asset\Npm\NpmInstall::class,
+            Console\Asset\Npm\NpmUpdate::class,
+            Console\Asset\Npm\NpmVersion::class,
+        ]);
     }
 
     /*

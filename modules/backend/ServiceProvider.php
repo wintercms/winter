@@ -1,4 +1,6 @@
-<?php namespace Backend;
+<?php
+
+namespace Backend;
 
 use Backend\Classes\WidgetManager;
 use Backend\Facades\Backend;
@@ -59,11 +61,13 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerConsole()
     {
-        $this->registerConsoleCommand('create.controller', \Backend\Console\CreateController::class);
-        $this->registerConsoleCommand('create.formwidget', \Backend\Console\CreateFormWidget::class);
-        $this->registerConsoleCommand('create.reportwidget', \Backend\Console\CreateReportWidget::class);
-        $this->registerConsoleCommand('user.create', \Backend\Console\UserCreate::class);
-        $this->registerConsoleCommand('winter.passwd', \Backend\Console\WinterPasswd::class);
+        $this->commands([
+            \Backend\Console\CreateController::class,
+            \Backend\Console\CreateFormWidget::class,
+            \Backend\Console\CreateReportWidget::class,
+            \Backend\Console\UserCreate::class,
+            \Backend\Console\WinterPasswd::class,
+        ]);
     }
 
     /**

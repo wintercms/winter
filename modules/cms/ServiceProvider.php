@@ -1,7 +1,9 @@
-<?php namespace Cms;
+<?php
 
-use Backend;
+namespace Cms;
+
 use Backend\Classes\WidgetManager;
+use Backend\Facades\Backend;
 use Backend\Facades\BackendAuth;
 use Backend\Facades\BackendMenu;
 use Backend\Models\UserRole;
@@ -22,10 +24,10 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use System\Classes\CombineAssets;
-use Winter\Storm\Console\Command;
 use System\Classes\MarkupManager;
 use System\Classes\SettingsManager;
 use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
+use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\ModuleServiceProvider;
@@ -91,14 +93,15 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerConsole()
     {
-        $this->registerConsoleCommand('create.component', \Cms\Console\CreateComponent::class);
-        $this->registerConsoleCommand('create.theme', \Cms\Console\CreateTheme::class);
-
-        $this->registerConsoleCommand('theme.install', \Cms\Console\ThemeInstall::class);
-        $this->registerConsoleCommand('theme.remove', \Cms\Console\ThemeRemove::class);
-        $this->registerConsoleCommand('theme.list', \Cms\Console\ThemeList::class);
-        $this->registerConsoleCommand('theme.use', \Cms\Console\ThemeUse::class);
-        $this->registerConsoleCommand('theme.sync', \Cms\Console\ThemeSync::class);
+        $this->commands([
+            \Cms\Console\CreateComponent::class,
+            \Cms\Console\CreateTheme::class,
+            \Cms\Console\ThemeInstall::class,
+            \Cms\Console\ThemeRemove::class,
+            \Cms\Console\ThemeList::class,
+            \Cms\Console\ThemeUse::class,
+            \Cms\Console\ThemeSync::class,
+        ]);
     }
 
     /**
