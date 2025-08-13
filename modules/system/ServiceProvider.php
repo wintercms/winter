@@ -164,7 +164,7 @@ class ServiceProvider extends ModuleServiceProvider
 
         // Shutup extensions that expect Laravel's auth system to be present
         $this->app->singleton(\Illuminate\Contracts\Auth\Access\Gate::class, function ($app) {
-            return new \Illuminate\Auth\Access\Gate($app, fn (): null => null);
+            return new \Illuminate\Auth\Access\Gate($app, fn () => null);
         });
     }
 
