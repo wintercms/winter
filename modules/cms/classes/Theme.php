@@ -8,6 +8,7 @@ use Exception;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
+use System\Classes\Extensions\Traits\HasVersionFile;
 use Winter\Storm\Foundation\Extension\WinterExtension;
 use System\Models\Parameter;
 use Winter\Storm\Exception\ApplicationException;
@@ -15,7 +16,6 @@ use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 use Winter\Storm\Halcyon\Datasource\DbDatasource;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;
-use Winter\Storm\Packager\Composer;
 use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\File;
@@ -34,6 +34,7 @@ use Winter\Storm\Support\Traits\HasComposerPackage;
 class Theme extends CmsObject implements WinterExtension
 {
     use HasComposerPackage;
+    use HasVersionFile;
 
     /**
      * @var string Specifies the theme directory name.
@@ -64,6 +65,11 @@ class Theme extends CmsObject implements WinterExtension
      * @var string Default file extension.
      */
     protected $defaultExtension = 'yaml';
+
+    /**
+     * @var string The version of this theme as reported by version.yaml, access with getVersion()
+     */
+    protected $version;
 
     const ACTIVE_KEY = 'cms::theme.active';
     const EDIT_KEY = 'cms::theme.edit';
@@ -721,8 +727,19 @@ class Theme extends CmsObject implements WinterExtension
 
     public function getVersion(): string
     {
-        // TODO: Implement extensionVersion() method.
-        return '';
+        if (isset($this->version)) {
+            return $this->version;
+        }
+
+        $versions = $this->getVersionsFromYaml(
+            versionFile: $this->getPath() . DIRECTORY_SEPARATOR . 'version.yaml',
+            includeScripts: false
+        );
+        if (empty($versions)) {
+            return $this->version = '0';
+        }
+
+        return $this->version = trim(key(array_slice($versions, -1, 1)));
     }
 
     public function getIdentifier(): string

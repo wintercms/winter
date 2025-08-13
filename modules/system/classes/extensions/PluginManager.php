@@ -1498,7 +1498,7 @@ class PluginManager extends ExtensionManager implements ExtensionManagerInterfac
         if ($extension instanceof ExtensionSource) {
             return $this->getNormalizedIdentifier($extension->getCode());
         }
-        if ($extension instanceof WinterExtension) {
+        if ($extension instanceof PluginBase) {
             return $extension->getPluginIdentifier();
         }
 

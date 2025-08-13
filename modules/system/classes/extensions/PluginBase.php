@@ -7,7 +7,7 @@ use Composer\Semver\Semver;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\ServiceProvider as ServiceProviderBase;
 use ReflectionClass;
-use System\Classes\VersionYamlProcessor;
+use System\Classes\Extensions\Traits\HasVersionFile;
 use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Foundation\Application;
 use Winter\Storm\Foundation\Extension\WinterExtension;
@@ -27,6 +27,7 @@ use Winter\Storm\Support\Traits\HasComposerPackage;
 abstract class PluginBase extends ServiceProviderBase implements WinterExtension
 {
     use HasComposerPackage;
+    use HasVersionFile;
 
     /**
      * @var Application The application instance.
@@ -464,35 +465,8 @@ abstract class PluginBase extends ServiceProviderBase implements WinterExtension
     {
         $path = $this->getPluginPath();
         $versionFile = $path . '/updates/version.yaml';
-        if (!File::isFile($versionFile)) {
-            return [];
-        }
 
-        $updates = Yaml::withProcessor(new VersionYamlProcessor, function ($yaml) use ($versionFile) {
-            return (array) $yaml->parseFile($versionFile);
-        });
-
-        uksort($updates, function ($a, $b) {
-            return version_compare($a, $b);
-        });
-
-        $versions = [];
-        foreach ($updates as $version => $details) {
-            if (!is_array($details)) {
-                $details = [$details];
-            }
-
-            if (!$includeScripts) {
-                // Filter out valid update scripts
-                $details = array_values(array_filter($details, function ($string) use ($path) {
-                    return !Str::endsWith($string, '.php') || !File::exists($path . '/updates/' . $string);
-                }));
-            }
-
-            $versions[$version] = $details;
-        }
-
-        return $versions;
+        return $this->getVersionsFromYaml($versionFile, $includeScripts);
     }
 
     /**
