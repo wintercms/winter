@@ -3,24 +3,17 @@
 namespace System\Tests\Console\Asset\Vite;
 
 use System\Classes\Asset\PackageManager;
-use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Support\Facades\File;
 
-class ViteCompileTest extends TestCase
+class ViteCompileTest extends BaseViteTestCase
 {
+    protected string $viteVersion;
+
     protected string $themePath;
 
     public function setUp(): void
     {
         parent::setUp();
-
-        if (!File::exists(base_path('node_modules'))) {
-            $this->markTestSkipped('This test requires node_modules to be installed');
-        }
-
-        if (!File::exists(base_path('node_modules/.bin/vite'))) {
-            $this->markTestSkipped('This test requires the vite package to be installed');
-        }
 
         $this->themePath = base_path('modules/system/tests/fixtures/themes/assettest');
 
@@ -94,17 +87,33 @@ class ViteCompileTest extends TestCase
 
         File::put($this->themePath . '/assets/css/theme.css', 'h1 {color:');
 
-        // Run the vite:compile command
-        $this->artisan('vite:compile', [
-            'theme-assettest',
-            '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
-            '--disable-tty' => true
-        ])
-            ->expectsOutputToContain('[WARNING] Expected "}" to go with "{" [css-syntax-error]')
-            ->assertExitCode(0);
+        // It looks like around vite 6.2 (this is a guess as I could not find it in their change log) they updated
+        // something which causes failed compilations to throw errors...
+        // To support both the older style of warnings and the new style of errors, we can do a version check to
+        // insure the installed version acts as we'd expect
+        if (version_compare($this->viteVersion, '6.2.0', '>')) {
+            $this->artisan('vite:compile', [
+                'theme-assettest',
+                '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
+                '--disable-tty' => true
+            ])
+                ->expectsOutputToContain('assettest/assets/css/theme.css:1:1: Unclosed block')
+                ->assertExitCode(1);
 
-        // Validate the manifest was not written
-        $this->assertFileExists($this->themePath . '/public/build/manifest.json');
+            // Validate the manifest was not written
+            $this->assertFileNotExists($this->themePath . '/public/build/manifest.json');
+        } else {
+            $this->artisan('vite:compile', [
+                'theme-assettest',
+                '--manifest' => 'modules/system/tests/fixtures/npm/package-vitetheme.json',
+                '--disable-tty' => true
+            ])
+                ->expectsOutputToContain('[WARNING] Expected "}" to go with "{" [css-syntax-error]')
+                ->assertExitCode(0);
+
+            // Validate the manifest was written
+            $this->assertFileExists($this->themePath . '/public/build/manifest.json');
+        }
 
         // Put the css file back
         File::put($this->themePath . '/assets/css/theme.css', $contents);
