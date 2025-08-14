@@ -74,9 +74,16 @@ abstract class PluginTestCase extends TestCase
      */
     public function setUp(): void
     {
-        // Reload the plugin and update manager singletons
+        // Flush the plugin and update manager singletons
         PluginManager::forgetInstance();
         UpdateManager::forgetInstance();
+
+        // Force a new app with global container
+        $app = $this->createApplication();
+
+        // Provide the new app to instances to save lookup time
+        PluginManager::instance($app);
+        UpdateManager::instance($app);
 
         parent::setUp();
 
