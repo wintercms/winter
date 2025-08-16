@@ -173,6 +173,10 @@
                 extraOptions.allowClear = true
             }
 
+            if ($element.hasClass('select-no-clearable')) {
+                extraOptions.allowClear = false
+            }
+
             $element.select2($.extend({}, selectOptions, extraOptions))
         })
     })
