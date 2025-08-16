@@ -3,6 +3,7 @@ $fieldOptions = $field->options();
 $useSearch = $field->getConfig('showSearch', true);
 $emptyOption = $field->getConfig('emptyOption', $field->placeholder);
 $allowCustom = $field->getConfig('allowCustom', false);
+$allowClear = $field->getConfig('allowClear', true);
 ?>
 
 <!-- Dropdown -->
@@ -15,7 +16,7 @@ $allowCustom = $field->getConfig('allowCustom', false);
     <select
         id="<?= $field->getId() ?>"
         name="<?= $field->getName() ?>"
-        class="form-control custom-select <?= $useSearch ? '' : 'select-no-search' ?> <?= $allowCustom ? 'select-modifiable' : '' ?>"
+        class="form-control custom-select <?= $useSearch ? '' : 'select-no-search' ?> <?= $allowCustom ? 'select-modifiable' : '' ?> <?= !$allowClear ? 'select-no-clearable' : '' ?>"
         <?= $field->getAttributes() ?>
         <?= $field->placeholder ? 'data-placeholder="'.e(trans($field->placeholder)).'"' : '' ?>
         >
