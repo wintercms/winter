@@ -36,6 +36,11 @@ class FileUpload extends FormWidgetBase
     //
 
     /**
+     * @var string Icon class to use for the upload button.
+     */
+    public $iconClass;
+
+    /**
      * @var string Prompt text to display for the upload button.
      */
     public $prompt;
@@ -105,6 +110,7 @@ class FileUpload extends FormWidgetBase
         $this->maxFilesize = $this->getUploadMaxFilesize();
 
         $this->fillFromConfig([
+            'iconClass',
             'prompt',
             'imageWidth',
             'imageHeight',
@@ -160,6 +166,7 @@ class FileUpload extends FormWidgetBase
         $this->vars['cssDimensions'] = $this->getCssDimensions();
         $this->vars['cssBlockDimensions'] = $this->getCssDimensions('block');
         $this->vars['useCaption'] = $this->useCaption;
+        $this->vars['iconClass'] = $this->iconClass ?? 'icon-upload';
         $this->vars['prompt'] = $this->getPromptText();
     }
 
