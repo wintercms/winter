@@ -17,7 +17,7 @@
 
     <!-- Upload Button -->
     <button type="button" class="btn btn-default upload-button">
-        <i class="<?= $iconClass ?>"></i>
+        <i class="<?= e($iconClass) ?>"></i>
     </button>
 
     <!-- Existing file -->
