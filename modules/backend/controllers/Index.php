@@ -6,6 +6,8 @@ use BackendMenu;
 use Backend\Classes\Controller;
 use Backend\Widgets\ReportContainer;
 
+use Winter\Storm\Support\Arr;
+
 /**
  * Dashboard controller
  *
@@ -75,7 +77,7 @@ class Index extends Controller
             $true = function () {
                 return true;
             };
-            if ($first = array_first(BackendMenu::listMainMenuItems(), $true)) {
+            if ($first = Arr::first(BackendMenu::listMainMenuItems(), $true)) {
                 return Redirect::intended($first->url);
             }
             return Backend::redirect('backend/users/myaccount');
