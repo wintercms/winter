@@ -613,13 +613,7 @@ class RelationController extends ControllerBehavior
         $useSearch = $this->viewMode === 'multi' && $this->getConfig('view[showSearch]');
 
         if ($useSearch) {
-            $searchConfig = $this->getConfig('view[search]');
-            $toolbarConfig->search = [
-                'prompt' => array_get($searchConfig, 'prompt', 'backend::lang.list.search_prompt'),
-                'mode' => array_get($searchConfig, 'mode', 'all'),
-                'scope' => array_get($searchConfig, 'scope'),
-                'searchOnEnter' => array_get($searchConfig, 'searchOnEnter', false),
-            ];
+            $toolbarConfig->search = $this->getSearchConfig('view[search]');
         }
 
         /*
@@ -635,21 +629,28 @@ class RelationController extends ControllerBehavior
         return $toolbarWidget;
     }
 
+    protected function getSearchConfig($key)
+    {
+        $config = $this->getConfig($key);
+        $searchConfig = $this->makeConfig();
+
+        $searchConfig->prompt = array_get($config, 'prompt', 'backend::lang.list.search_prompt');
+        $searchConfig->mode = array_get($config, 'mode', 'all');
+        $searchConfig->scope = array_get($config, 'scope');
+        $searchConfig->searchOnEnter = array_get($config, 'searchOnEnter', false);
+
+        return $searchConfig;
+    }
+
     protected function makeSearchWidget()
     {
         if (!$this->getConfig('manage[showSearch]')) {
             return null;
         }
 
-        $config = $this->makeConfig();
-        $searchConfig = $this->getConfig('view[search]');
-
+        $config = $this->getSearchConfig('manage[search]');
         $config->alias = $this->alias . 'ManageSearch';
         $config->growable = false;
-        $config->prompt = array_get($searchConfig, 'prompt', 'backend::lang.list.search_prompt');
-        $config->mode = array_get($searchConfig, 'mode', 'all');
-        $config->scope = array_get($searchConfig, 'scope');
-        $config->searchOnEnter = array_get($searchConfig, 'searchOnEnter', false);
 
         $widget = $this->makeWidget('Backend\Widgets\Search', $config);
         $widget->cssClasses[] = 'recordfinder-search';
