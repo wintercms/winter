@@ -211,7 +211,7 @@ class MarkupManager
      */
     public function makeTwigFunctions(array $functions = []): array
     {
-        return $this->makeTwigCallable(
+        return $this->makeTwigCallables(
             $this->listFunctions(),
             TwigSimpleFunction::class,
             ['is_safe' => ['html']],
@@ -226,7 +226,7 @@ class MarkupManager
      */
     public function makeTwigFilters(array $filters = []): array
     {
-        return $this->makeTwigCallable(
+        return $this->makeTwigCallables(
             $this->listFilters(),
             TwigSimpleFilter::class,
             ['is_safe' => ['html']],
@@ -302,7 +302,7 @@ class MarkupManager
      * @param array $collection
      * @return array
      */
-    private function makeTwigCallable(array $definitions, string $twigClass, array $defaultOptions, array $collection = []): array
+    private function makeTwigCallables(array $definitions, string $twigClass, array $defaultOptions, array $collection = []): array
     {
         foreach ($definitions as $name => $callable) {
             $options = $defaultOptions;
