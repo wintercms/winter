@@ -146,6 +146,11 @@ class ServiceProvider extends ModuleServiceProvider
 
         // Register the Laravel Vite singleton
         $this->app->singleton(LaravelVite::class, \System\Classes\Asset\Vite::class);
+        
+        // Shutup extensions that expect Laravel's auth system to be present
+        $this->app->singleton(\Illuminate\Contracts\Auth\Access\Gate::class, function ($app) {
+            return new \Illuminate\Auth\Access\Gate($app, fn () => null);
+        });
     }
 
     /**
@@ -336,6 +341,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('npm.run', Console\Asset\Npm\NpmRun::class);
         $this->registerConsoleCommand('npm.install', Console\Asset\Npm\NpmInstall::class);
         $this->registerConsoleCommand('npm.update', Console\Asset\Npm\NpmUpdate::class);
+        $this->registerConsoleCommand('npm.version', Console\Asset\Npm\NpmVersion::class);
     }
 
     /*
@@ -355,9 +361,23 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerLogging()
     {
         Event::listen(\Illuminate\Log\Events\MessageLogged::class, function ($event) {
+            if (!EventLog::useLogging()) {
+                return;
+            }
+
+            $details = $event->context ?? null;
+
+            // This allows for preventing db logging in cases where we don't want all log messages logged to the DB.
+            if (isset($details['skipDatabaseLog']) && $details['skipDatabaseLog']) {
+                return;
+            }
+
+            EventLog::add($event->message, $event->level, $details);
+        });
+
+        Event::listen('exception.report', function (\Throwable $throwable) {
             if (EventLog::useLogging()) {
-                $details = $event->context ?? null;
-                EventLog::add($event->message, $event->level, $details);
+                EventLog::addException($throwable);
             }
         });
     }

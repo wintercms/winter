@@ -80,7 +80,7 @@ class FormTabs implements IteratorAggregate, ArrayAccess
     public function __construct($section, $config = [])
     {
         $this->section = strtolower($section) ?: $this->section;
-        $this->config = $this->evalConfig($config);
+        $this->evalConfig($config);
 
         if ($this->section == self::SECTION_OUTSIDE) {
             $this->suppressTabs = true;
@@ -89,10 +89,8 @@ class FormTabs implements IteratorAggregate, ArrayAccess
 
     /**
      * Process options and apply them to this object.
-     * @param array $config
-     * @return array
      */
-    protected function evalConfig($config)
+    protected function evalConfig(array $config): void
     {
         if (array_key_exists('defaultTab', $config)) {
             $this->defaultTab = $config['defaultTab'];

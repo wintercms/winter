@@ -215,18 +215,18 @@ class Repeater extends FormWidgetBase
      */
     public function getSaveValue($value)
     {
-        return (array) $this->processSaveValue($value);
+        return $this->processSaveValue($value);
     }
 
     /**
      * Splices in some meta data (group and index values) to the dataset.
      * @param array $value
-     * @return array
+     * @return array|null
      */
     protected function processSaveValue($value)
     {
         if (!is_array($value) || !$value) {
-            return $value;
+            return null;
         }
 
         if ($this->minItems && count($value) < $this->minItems) {

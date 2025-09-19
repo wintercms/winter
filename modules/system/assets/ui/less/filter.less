@@ -16,7 +16,7 @@
 @color-filter-text:                          rgba(0,0,0,.6);
 @color-filter-text-active:                   #000000;
 @color-filter-items-bg:                      #fafafa;
-@color-filter-items-bg-hover:                #4da7e8;
+@color-filter-items-bg-hover:                @brand-secondary;
 
 //
 // Filters
@@ -129,6 +129,82 @@
                 top: -2px;
                 right: 7px;
                 left: auto;
+            }
+        }
+
+        &.button-group {
+            display: inline-flex;
+            border: 2px solid @brand-primary;
+            border-radius: 4px;
+            overflow: hidden;
+            padding: 0;
+            margin: 5px 0;
+            vertical-align: baseline;
+
+            &:after {
+                content: "";
+            }
+
+            button {
+                flex: 1;
+                margin: 0;
+                border: none;
+                border-right: 2px solid @brand-primary;
+                border-radius: 0;
+                background: @color-filter-bg;
+                color: @color-filter-text;
+                font-size: @font-size-base - 1;
+                font-weight: 600;
+                padding: 3px 10px;
+                line-height: 1.5;
+                transition: background-color 0.2s ease, color 0.2s ease;
+
+                &:last-child {
+                    border-right: none;
+                }
+
+                &.btn-primary {
+                    background: @brand-primary;
+                    color: #fff;
+                }
+
+                &:hover:not(.btn-primary) {
+                    background: lighten(@brand-primary, 5%);
+                    color: #fff;
+                }
+            }
+        }
+
+        &.dropdown {
+            padding: 0 0 0 10px;
+            vertical-align: middle;
+
+            &:after {
+                content: "";
+            }
+
+            .select2-container--default {
+                display: inline-block;
+                vertical-align: text-bottom;
+
+                .select2-selection__clear {
+                    float: none;
+                    margin-right: 3px;
+                }
+
+                .select2-selection--single {
+                    height: 1em;
+                    line-height: 1;
+                    box-sizing: content-box;
+
+                    .select2-selection__placeholder {
+                        margin-right: 5px;
+                    }
+
+                    .select2-selection__arrow {
+                        right: 10px;
+                    }
+                }
             }
         }
 

@@ -437,10 +437,6 @@ body.fancy-layout .master-tabs.control-tabs,
             }
         }
 
-        .tab-collapse-icon.primary {
-            color: #808c8d;
-        }
-
         &.primary-collapsed {
             .tab-collapse-icon.primary {
                 color: white;
@@ -495,6 +491,10 @@ body.fancy-layout .master-tabs.control-tabs,
         text-transform: uppercase;
         color: @color-fancy-form-label;
         margin-bottom: 0;
+    }
+
+    .form-control[disabled] {
+        background-color: rgba(29, 29, 29, 0.11) !important;
     }
 
     input[type=text] {

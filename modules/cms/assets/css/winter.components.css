@@ -3,10 +3,10 @@
 div.control-componentlist div.components div.layout-cell{font-size:11px;cursor:pointer;background:#fff;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
 .draggable-component-item:hover,
 .component-list .components div.layout-cell:hover,
-div.control-componentlist div.components div.layout-cell:hover{background:#3498db}
+div.control-componentlist div.components div.layout-cell:hover{background:#6cc551}
 .draggable-component-item>div,
 .component-list .components div.layout-cell>div,
-div.control-componentlist div.components div.layout-cell>div{white-space:normal;color:#475354;position:relative;border-right:1px solid #ecf0f1}
+div.control-componentlist div.components div.layout-cell>div{white-space:normal;color:#475354;position:relative;border-right:1px solid #ECF0F1}
 .draggable-component-item>div:before,
 .component-list .components div.layout-cell>div:before,
 div.control-componentlist div.components div.layout-cell>div:before{position:absolute;font-size:16px;left:15px;top:7px;opacity:0.7;filter:alpha(opacity=70)}
@@ -21,7 +21,7 @@ div.control-componentlist div.components div.layout-cell>div:hover:before{opacit
 div.control-componentlist div.components div.layout-cell>div:after{position:absolute;font-size:37px;top:1px;z-index:50;color:#fff;text-shadow:0 0 1px #475354;width:12px;overflow:hidden;text-indent:-25px;right:-12px;font-family:"Font Awesome 6 Free";font-weight:900;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-style:normal;font-variant:normal;text-rendering:auto;content:"\f12e"}
 .draggable-component-item>div:hover:after,
 .component-list .components div.layout-cell>div:hover:after,
-div.control-componentlist div.components div.layout-cell>div:hover:after{text-shadow:none;color:#3498db}
+div.control-componentlist div.components div.layout-cell>div:hover:after{text-shadow:none;color:#6cc551}
 .draggable-component-item>div span,
 .component-list .components div.layout-cell>div span,
 div.control-componentlist div.components div.layout-cell>div span{display:block}
@@ -42,12 +42,12 @@ div.control-componentlist div.components div.layout-cell.placeholder>div:before,
 div.control-componentlist div.components div.layout-cell.placeholder>div:after{color:#e0e0e0 !important;text-shadow:none !important}
 [data-field-name="components"] + .control-tabs.primary-tabs{margin-top:-10px}
 div.control-componentlist{position:relative;padding:0;-webkit-transition:all 0.3s ease;transition:all 0.3s ease}
-div.control-componentlist.droppable{background-color:#f0b37e}
+div.control-componentlist.droppable{background-color:#79cbe1}
 div.control-componentlist.has-components{padding:0 20px 20px}
 div.control-componentlist div.layout{width:auto}
-div.control-componentlist div.components div.layout-cell.error-component{background:#ab2a1c}
+div.control-componentlist div.components div.layout-cell.error-component{background:#e01346}
 div.control-componentlist div.components div.layout-cell.error-component>div{color:#fff}
-div.control-componentlist div.components div.layout-cell.error-component>div:after{color:#ab2a1c}
+div.control-componentlist div.components div.layout-cell.error-component>div:after{color:#e01346}
 div.control-componentlist div.components div.layout-cell.warning-component{background:#ffc107}
 div.control-componentlist div.components div.layout-cell.warning-component>div{color:#343a40}
 div.control-componentlist div.components div.layout-cell.warning-component>div:after{color:#ffc107}
@@ -73,13 +73,13 @@ div.control-componentlist div.components div.layout-cell.adding>div{-webkit-tran
 .draggable-component-item{opacity:0.6;filter:alpha(opacity=60)}
 .draggable-component-item span.alias{display:none}
 .draggable-component-item a.remove{display:none}
-.component-list .components div.layout div.layout-row div.layout-cell{border-top:1px solid #ecf0f1}
+.component-list .components div.layout div.layout-row div.layout-cell{border-top:1px solid #ECF0F1}
 .component-list .components div.layout div.layout-row div.layout-cell span.alias{display:none}
 .component-list .components div.layout div.layout-row div.layout-cell a.remove{display:none}
 .component-list .components div.layout div.layout-row div.layout-cell:last-child>div{border-right:none}
 .component-list .components div.layout div.layout-row div.layout-cell:last-child>div:after{display:none}
 .component-list .components div.layout div.layout-row div.layout-cell>div:before{position:absolute;font-size:37px;top:1px;z-index:50;color:#fff;text-shadow:0 0 1px #475354;width:12px;overflow:hidden;text-indent:-25px;right:-12px;font-family:"Font Awesome 6 Free";font-weight:900;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-style:normal;font-variant:normal;text-rendering:auto;content:"\f12e";-webkit-transform:rotate(-90deg);-ms-transform:rotate(-90deg);transform:rotate(-90deg);opacity:1;filter:alpha(opacity=100);left:auto;top:-17px;right:15px}
-.component-list .components div.layout div.layout-row div.layout-cell>div:hover:before{text-shadow:none;color:#3498db}
+.component-list .components div.layout div.layout-row div.layout-cell>div:hover:before{text-shadow:none;color:#6cc551}
 .component-list .components div.layout div.layout-row:first-child div.layout-cell>div:before{display:none}
 .component-list .components div.layout.single div.layout-row>div.layout-cell>div{border-right:none}
 .component-list .components div.layout.single div.layout-row>div.layout-cell>div:before{display:block;right:55.5%}
