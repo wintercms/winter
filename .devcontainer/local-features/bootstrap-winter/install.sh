@@ -2,4 +2,7 @@
 
 set -e
 
+# Install Xdebug extension
+install-php-extensions xdebug
+
 echo "Done"
