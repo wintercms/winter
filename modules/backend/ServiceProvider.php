@@ -1,4 +1,6 @@
-<?php namespace Backend;
+<?php
+
+namespace Backend;
 
 use Backend\Classes\WidgetManager;
 use Backend\Facades\Backend;
@@ -258,7 +260,6 @@ class ServiceProvider extends ModuleServiceProvider
             $manager->registerFormWidget(\Backend\FormWidgets\RichEditor::class, 'richeditor');
             $manager->registerFormWidget(\Backend\FormWidgets\Sensitive::class, 'sensitive');
             $manager->registerFormWidget(\Backend\FormWidgets\TagList::class, 'taglist');
-            $manager->registerFormWidget(\Backend\FormWidgets\TimePicker::class, 'timepicker');
         });
     }
 
