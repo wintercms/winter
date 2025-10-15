@@ -16,6 +16,11 @@ foreach ($packages as $package => $version) {
     }
 }
 
+// Change Merge plugin config
+$composer['extra']['merge-plugin']['include'] = [
+    'plugins/*/*/composer.json',
+];
+
 file_put_contents(
     $composerPath,
     json_encode($composer, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)

@@ -5,6 +5,7 @@
 <?php if (!$this->fatalError): ?>
     <div class="layout fancy-layout">
         <?= Form::open([
+            'id' => $this->formGetId(),
             'class' => 'layout',
             'data-change-monitor' => 'true',
             'data-window-close-confirm' => 'true',

@@ -170,6 +170,9 @@ return [
         'search' => 'Search',
     ],
     'mail' => [
+        'failover' => 'Failover',
+        'failover_mailers' => 'Failover transports to use',
+        'failover_mailers_placeholer' => 'Pick transports to use',
         'log_file' => 'Log file',
         'menu_label' => 'Mail configuration',
         'menu_description' => 'Manage email configuration.',

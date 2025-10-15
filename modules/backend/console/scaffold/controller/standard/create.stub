@@ -3,7 +3,10 @@
 <?php Block::endPut() ?>
 
 <?php if (!$this->fatalError): ?>
-    <?= Form::open(['class' => 'layout']) ?>
+    <?= Form::open([
+        'id' => $this->formGetId(),
+        'class' => 'layout'],
+    ) ?>
         <div class="layout-row">
             <?= $this->formRender() ?>
         </div>
