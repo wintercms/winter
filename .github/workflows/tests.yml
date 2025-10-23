@@ -104,7 +104,7 @@ jobs:
       key: winter-cms-cache-develop
     steps:
       - name: Checkout changes
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup extension cache
         id: extcache
