@@ -161,7 +161,7 @@ class WinterUtil extends Command
         ) {
             $this->comment('Downloading Font Awesome icons...');
 
-            $releases = Http::get('https://api.github.com/repos/FortAwesome/Font-Awesome/releases/latest', function (NetworkHttp $http) {
+            $releases = Http::get('https://api.github.com/repos/FortAwesome/Font-Awesome/releases/191042913', function (NetworkHttp $http) {
                 $http->header('Accept', 'application/json');
                 $http->header('User-Agent', 'Winter CMS');
             });
