@@ -63,7 +63,9 @@ class MarkupManager
         ], $options);
 
         $twig = new TwigEnvironment($loader, $options);
-        $twig->addExtension(new SystemTwigExtension);
+
+        SystemTwigExtension::addExtensionToTwig($twig);
+
         $twig->addExtension(new SandboxExtension(new TwigSecurityPolicy, true));
         return $twig;
     }

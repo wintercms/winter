@@ -1,12 +1,14 @@
 <?php namespace System\Twig;
 
-use Url;
 use System\Classes\ImageResizer;
-use System\Classes\MediaLibrary;
 use System\Classes\MarkupManager;
+use System\Classes\MediaLibrary;
+use Twig\Environment as TwigEnvironment;
+use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
-use Twig\Extension\AbstractExtension as TwigExtension;
+use Url;
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * The System Twig extension class implements common Twig functions and filters.
@@ -27,6 +29,27 @@ class Extension extends TwigExtension
     public function __construct()
     {
         $this->markupManager = MarkupManager::instance();
+    }
+
+    /**
+     * Registers this extension with the Twig environment and dispatches an event.
+     */
+    public static function addExtensionToTwig(TwigEnvironment $twig)
+    {
+        $twig->addExtension(new static);
+
+        /**
+         * @event system.extendTwig
+         * Provides an opportunity to extend the Twig environment used by the system
+         *
+         * Example usage:
+         *
+         *     Event::listen('system.extendTwig', function ((Twig\Environment) $twig) {
+         *         $twig->addExtension(new \Twig\Extension\StringLoaderExtension);
+         *     });
+         *
+         */
+        Event::fire('system.extendTwig', [$twig]);
     }
 
     /**

@@ -158,7 +158,9 @@ class ServiceProvider extends ModuleServiceProvider
             }
 
             $twig = MarkupManager::makeBaseTwigEnvironment(new CmsTwigLoader, $options);
-            $twig->addExtension(new CmsTwigExtension);
+
+            CmsTwigExtension::addExtensionToTwig($twig);
+
             if ($isDebugMode) {
                 $twig->addExtension(new DebugExtension);
             }

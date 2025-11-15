@@ -2,11 +2,11 @@
 
 use Block;
 use Cms\Classes\Controller;
-use Event;
 use System\Classes\Asset\Vite;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
 use Twig\TwigFunction as TwigSimpleFunction;
+use Winter\Storm\Support\Facades\Event;
 
 /**
  * The CMS Twig extension class implements the basic CMS Twig functions and filters.
@@ -19,7 +19,15 @@ class Extension extends TwigExtension
     /**
      * The instanciated CMS controller
      */
-    protected Controller $controller;
+    protected ?Controller $controller;
+
+    /**
+     * __construct the extension instance.
+     */
+    public function __construct(?Controller $controller = null)
+    {
+        $this->controller = $controller;
+    }
 
     /**
      * Sets the CMS controller instance
@@ -35,6 +43,27 @@ class Extension extends TwigExtension
     public function getController(): Controller
     {
         return $this->controller;
+    }
+
+    /**
+     * Registers this extension with the Twig environment and dispatches an event.
+     */
+    public static function addExtensionToTwig(\Twig\Environment $twig, ?Controller $controller = null)
+    {
+        $twig->addExtension(new static($controller));
+
+        /**
+         * @event cms.extendTwig
+         * Provides an opportunity to extend the Twig environment used by the cms
+         *
+         * Example usage:
+         *
+         *     Event::listen('cms.extendTwig', function ((Twig\Environment) $twig) {
+         *         $twig->addExtension(new \Twig\Extension\StringLoaderExtension);
+         *     });
+         *
+         */
+        Event::fire('cms.extendTwig', [$twig]);
     }
 
     /**
