@@ -128,10 +128,10 @@ class WinterTest extends Command
             return $exitCode;
         }
 
-        // default to running all defined configs found
+        // default to running all defined configs found, run all tests if no options provided
         $types = [
-            'modules' => count($this->option('module')),
-            'plugins' => count($this->option('plugin')),
+            'modules' => count($this->option('module')) + !$this->option('plugin'),
+            'plugins' => count($this->option('plugin')) + !$this->option('module'),
         ];
         foreach ($types as $type => $count) {
             if (!$count) {
