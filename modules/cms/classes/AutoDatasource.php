@@ -124,7 +124,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
         $this->pathCache = $pathCache;
     }
 
-    protected function fetchPathCache($datasource): array
+    protected function fetchPathCache(DatasourceInterface $datasource): array
     {
         $pathCache = [];
         if (Config::get('app.debug', false)) {
