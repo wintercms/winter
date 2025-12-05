@@ -38,6 +38,7 @@ class WinterMirror extends Command
         'robots.txt',
         'humans.txt',
         'sitemap.xml',
+        'llms.txt',
     ];
 
     /**
