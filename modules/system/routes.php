@@ -1,5 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Winter\Storm\Support\Facades\Event;
+
+Route::livewire('/counter', \System\Livewire\Counter::class);
+
 /**
  * Register System routes before all user routes.
  */
