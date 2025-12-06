@@ -9,6 +9,7 @@ $fieldOptions = $field->options();
     </div>
     <input type="hidden" name="<?= $field->getName() ?>" value="<?= $field->value ?>">
 <?php else:
+    $emptyOption = $field->getConfig('emptyOption', $field->placeholder);
     $options = $field->getAttributes(htmlBuild:false);
     $options['id'] = $field->getId();
     $options['class'] = 'form-control custom-select';
@@ -18,12 +19,12 @@ $fieldOptions = $field->options();
     if ($field->getConfig('allowCustom', false)) {
         $options['class'] .= ' select-modifiable';
     }
-    if ($emptyOption = $field->getConfig('emptyOption', $field->placeholder)) {
+    if ($emptyOption) {
         $options['emptyOption'] = e(trans($emptyOption));
     }
     if ($field->placeholder) {
         $options['data-placeholder'] = e(trans($field->placeholder));
     }
-?>
+    ?>
     <?= Form::select(name:$field->getName(), list:$fieldOptions, selected:$field->value, options:$options) ?>
 <?php endif ?>
