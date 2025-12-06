@@ -13,7 +13,7 @@ $fieldOptions = $field->options();
     $options = $field->getAttributes(htmlBuild:false);
     $options['id'] = $field->getId();
     $options['class'] = 'form-control custom-select';
-    if ($field->getConfig('showSearch', true)) {
+    if ($field->getConfig('showSearch', true) === false) {
         $options['class'] .= ' select-no-search';
     }
     if ($field->getConfig('allowCustom', false)) {
