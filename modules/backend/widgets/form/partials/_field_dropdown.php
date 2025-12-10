@@ -26,5 +26,10 @@ $fieldOptions = $field->options();
         $options['data-placeholder'] = e(trans($field->placeholder));
     }
     ?>
-    <?= Form::select(name:$field->getName(), list:$fieldOptions, selected:$field->value, options:$options) ?>
+    <?= Form::select(
+        name: $field->getName(),
+        list: $fieldOptions,
+        selected: $field->value,
+        options: $options
+    ) ?>
 <?php endif ?>
