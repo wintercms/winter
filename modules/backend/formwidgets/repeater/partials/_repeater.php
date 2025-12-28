@@ -42,8 +42,10 @@
         </div>
         <div class="repeater-group-search-container" style="padding: 10px 15px; border-bottom: 1px solid #e0e0e0;">
             <div style="position: relative;">
+                <label for="repeater-group-search-<?= $this->getId() ?>" class="sr-only">Search items</label>
                 <i class="icon-search" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #999; pointer-events: none; z-index: 10;"></i>
                 <input type="text"
+                    id="repeater-group-search-<?= $this->getId() ?>"
                     class="form-control repeater-group-search"
                     placeholder="Search items..."
                     autocomplete="off"
@@ -69,7 +71,7 @@
                                     data-request="<?= $this->getEventHandler('onAddItem') ?>"
                                     data-request-data="_repeater_group: '<?= $item['code'] ?>'"
                                     style="display: flex; height: 100%; align-items: center; gap: 16px; padding: 12px 12px 12px 16px; border: 1px solid #e0e0e0; border-radius: 4px; text-decoration: none; color: inherit; transition: all 0.2s;">
-                                    <i class="<?= $item['icon'] ?>" style="width: 1em; text: center; font-size: 24px; color: #666; margin-top: 2px; flex-shrink: 0;"></i>
+                                    <i class="<?= $item['icon'] ?>" style="width: 1em; text-align: center; font-size: 24px; color: #666; margin-top: 2px; flex-shrink: 0;"></i>
                                     <div style="flex: 1; min-width: 0;">
                                         <span class="title" style="font-weight: 600; font-size: 13px; display: block; margin-bottom: 2px;"><?= e(trans($item['name'])) ?></span>
                                         <span class="description" style="font-size: 11px; color: #999; display: block; line-height: 1.3;"><?= e(trans($item['description'])) ?></span>
