@@ -1057,7 +1057,12 @@ import constrainedEditor from 'constrained-editor-plugin';
                         this.fullscreen = true;
                         fullscreen.classList.add('active');
                         this.element.addEventListener('fullscreenchange', this.callbacks.fullScreenChange);
-                        this.refresh();
+                        // Use Monaco's layout() instead of refresh() to avoid disposing the editor
+                        if (this.editor) {
+                            window.requestAnimationFrame(() => {
+                                this.editor.layout();
+                            });
+                        }
                     });
                 } else {
                     document.exitFullscreen();
@@ -1075,7 +1080,13 @@ import constrainedEditor from 'constrained-editor-plugin';
                     this.statusBar.querySelector('[data-full-screen]').classList.remove('active');
                 }
                 this.element.removeEventListener('fullscreenchange', this.callbacks.fullScreenChange);
-                this.refresh();
+                // Use Monaco's layout() instead of refresh() to avoid disposing the editor
+                // Monaco has automaticLayout: true, but we need to trigger it for fullscreen transitions
+                if (this.editor) {
+                    window.requestAnimationFrame(() => {
+                        this.editor.layout();
+                    });
+                }
             }
         }
 
@@ -1083,7 +1094,11 @@ import constrainedEditor from 'constrained-editor-plugin';
          * Tracks a resize event from the browser window.
          */
         onResize() {
-            this.refresh();
+            // Use Monaco's layout() instead of refresh() for better performance
+            // Monaco has automaticLayout: true, but manual triggers help in some edge cases
+            if (this.editor) {
+                this.editor.layout();
+            }
         }
 
         /**
