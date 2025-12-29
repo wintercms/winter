@@ -68,6 +68,9 @@ class ControllerBehavior extends ExtensionBase
         if (is_array($this->actions)) {
             $this->hideAction(array_diff(get_class_methods(get_class($this)), $this->actions));
         }
+
+        // Include this behavior's default views in the controller's view paths
+        $this->controller->appendViewPath($this->guessViewPath('/views'));
     }
 
     /**

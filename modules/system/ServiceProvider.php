@@ -146,6 +146,11 @@ class ServiceProvider extends ModuleServiceProvider
 
         // Register the Laravel Vite singleton
         $this->app->singleton(LaravelVite::class, \System\Classes\Asset\Vite::class);
+        
+        // Shutup extensions that expect Laravel's auth system to be present
+        $this->app->singleton(\Illuminate\Contracts\Auth\Access\Gate::class, function ($app) {
+            return new \Illuminate\Auth\Access\Gate($app, fn () => null);
+        });
     }
 
     /**

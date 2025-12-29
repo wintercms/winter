@@ -202,7 +202,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * @param  array  $options
      * @return bool
      */
-    public function save(array $options = null)
+    public function save(?array $options = null)
     {
         try {
             parent::save($options);

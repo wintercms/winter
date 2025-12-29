@@ -169,6 +169,70 @@
             // Second click closes the filter scope
             setTimeout(function() { $scope.removeClass('filter-scope-open') }, 200)
         })
+
+        // Setup click handler on type: button-group scopes
+        this.$el.on('click', '.filter-scope.button-group button', function (e) {
+            var $button = $(e.target),
+                $scope = $button.closest('.filter-scope'),
+                scopeName = $scope.data('scope-name'),
+                scopeValue = $button.data('scope-value'),
+                isActive = $button.hasClass('btn-primary'),
+                isRequired = $scope.data('scope-required') === true || $scope.data('scope-required') === 'true'
+
+            if (!isRequired && isActive) {
+                $button.removeClass('btn-primary').addClass('btn-default')
+                scopeValue = null
+            } else {
+                $scope.find('button').removeClass('btn-primary').addClass('btn-default')
+                $button.removeClass('btn-default').addClass('btn-primary')
+            }
+
+            // Track selected value
+            this.scopeValues[scopeName] = scopeValue
+
+            if (this.options.updateHandler) {
+                var data = {
+                    scopeName: scopeName,
+                    value: scopeValue
+                }
+
+                $.wn.stripeLoadIndicator.show()
+                this.$el.request(this.options.updateHandler, {
+                    data: data
+                }).always(function () {
+                    $.wn.stripeLoadIndicator.hide()
+                }).done(function () {
+                    $scope.trigger('change.oc.filterScope')
+                })
+            }
+        }.bind(this))
+
+        // Setup change handler on type: dropdown scopes
+        this.$el.on('change', '.filter-scope.dropdown select', function (e) {
+            var $select = $(e.target),
+                $scope = $select.closest('.filter-scope'),
+                scopeName = $scope.data('scope-name'),
+                scopeValue = $select.val()
+
+            this.scopeValues[scopeName] = scopeValue
+
+            if (this.options.updateHandler) {
+                var data = {
+                    scopeName: scopeName,
+                    value: scopeValue
+                }
+
+                $.wn.stripeLoadIndicator.show()
+                this.$el.request(this.options.updateHandler, {
+                    data: data
+                }).always(function () {
+                    $.wn.stripeLoadIndicator.hide()
+                }).done(function () {
+                    $scope.trigger('change.oc.filterScope')
+                    $scope.toggleClass('active', !!scopeValue)
+                })
+            }
+        }.bind(this))
     }
 
     /*
@@ -647,4 +711,3 @@
     })
 
 }(window.jQuery);
-

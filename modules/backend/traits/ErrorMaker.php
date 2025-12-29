@@ -1,6 +1,9 @@
 <?php namespace Backend\Traits;
 
+use Exception;
 use System\Classes\ErrorHandler;
+use System\Models\EventLog;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Error Maker Trait
@@ -37,6 +40,13 @@ trait ErrorMaker
      */
     public function handleError($exception)
     {
+        if (
+            $exception instanceof Exception
+            && !($exception instanceof ApplicationException)
+        ) {
+            EventLog::addException($exception);
+        }
+
         $errorMessage = ErrorHandler::getDetailedMessage($exception);
         $this->fatalError = $errorMessage;
         $this->vars['fatalError'] = $errorMessage;

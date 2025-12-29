@@ -220,3 +220,15 @@ body.slim-container {
         }
     }
 }
+
+//
+// Browser specific
+//
+
+// Remove focus outline for mouse clicks, keep for keyboard navigation
+@supports (-moz-appearance: none) {
+    a:focus:not(:focus-visible) {
+        outline: none;
+    }
+}
+
