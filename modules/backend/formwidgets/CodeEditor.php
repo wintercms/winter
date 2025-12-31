@@ -70,7 +70,7 @@ class CodeEditor extends FormWidgetBase
     public $scrollPastEnd = 0;
 
     /**
-     * @var string Ace Editor theme to use.
+     * @var string Editor theme to use.
      */
     public $theme = 'twilight';
 

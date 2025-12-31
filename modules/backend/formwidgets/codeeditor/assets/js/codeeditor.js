@@ -699,6 +699,64 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
         }
 
         /**
+         * Converts a JSON theme (VS Code/Monaco format) into a theme config for Monaco.
+         *
+         * @param {String} jsonContent
+         * @returns {Object}
+         */
+        convertJsonTheme(jsonContent) {
+            const theme = JSON.parse(jsonContent);
+
+            // Monaco theme format
+            const monacoTheme = {
+                base: theme.type === 'light' ? 'vs' : 'vs-dark',
+                inherit: true,
+                rules: [],
+                colors: {},
+            };
+
+            // Map token colors from the JSON theme
+            if (theme.tokenColors && Array.isArray(theme.tokenColors)) {
+                theme.tokenColors.forEach((tokenColor) => {
+                    if (!tokenColor.scope) {
+                        return;
+                    }
+
+                    const scopes = Array.isArray(tokenColor.scope)
+                        ? tokenColor.scope
+                        : tokenColor.scope.split(',').map((s) => s.trim());
+
+                    scopes.forEach((scope) => {
+                        const rule = { token: scope };
+
+                        if (tokenColor.settings) {
+                            if (tokenColor.settings.foreground) {
+                                rule.foreground = tokenColor.settings.foreground.replace('#', '');
+                            }
+                            if (tokenColor.settings.background) {
+                                rule.background = tokenColor.settings.background.replace('#', '');
+                            }
+                            if (tokenColor.settings.fontStyle) {
+                                rule.fontStyle = tokenColor.settings.fontStyle;
+                            }
+                        }
+
+                        monacoTheme.rules.push(rule);
+                    });
+                });
+            }
+
+            // Map UI colors
+            if (theme.colors) {
+                Object.keys(theme.colors).forEach((key) => {
+                    monacoTheme.colors[key] = theme.colors[key];
+                });
+            }
+
+            return monacoTheme;
+        }
+
+        /**
          * Converts a Textmate theme plist (XML) document into a theme config that Monaco supports.
          *
          * Based off the implementation at https://github.com/brijeshb42/monaco-themes.
@@ -1019,64 +1077,6 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
             });
 
             return splitScopes;
-        }
-
-        /**
-         * Converts a JSON theme (VS Code/Monaco format) into a theme config for Monaco.
-         *
-         * @param {String} jsonContent
-         * @returns {Object}
-         */
-        convertJsonTheme(jsonContent) {
-            const theme = JSON.parse(jsonContent);
-
-            // Monaco theme format
-            const monacoTheme = {
-                base: theme.type === 'light' ? 'vs' : 'vs-dark',
-                inherit: true,
-                rules: [],
-                colors: {},
-            };
-
-            // Map token colors from the JSON theme
-            if (theme.tokenColors && Array.isArray(theme.tokenColors)) {
-                theme.tokenColors.forEach((tokenColor) => {
-                    if (!tokenColor.scope) {
-                        return;
-                    }
-
-                    const scopes = Array.isArray(tokenColor.scope)
-                        ? tokenColor.scope
-                        : tokenColor.scope.split(',').map((s) => s.trim());
-
-                    scopes.forEach((scope) => {
-                        const rule = { token: scope };
-
-                        if (tokenColor.settings) {
-                            if (tokenColor.settings.foreground) {
-                                rule.foreground = tokenColor.settings.foreground.replace('#', '');
-                            }
-                            if (tokenColor.settings.background) {
-                                rule.background = tokenColor.settings.background.replace('#', '');
-                            }
-                            if (tokenColor.settings.fontStyle) {
-                                rule.fontStyle = tokenColor.settings.fontStyle;
-                            }
-                        }
-
-                        monacoTheme.rules.push(rule);
-                    });
-                });
-            }
-
-            // Map UI colors
-            if (theme.colors) {
-                Object.keys(theme.colors).forEach((key) => {
-                    monacoTheme.colors[key] = theme.colors[key];
-                });
-            }
-
-            return monacoTheme;
         }
 
         /**
