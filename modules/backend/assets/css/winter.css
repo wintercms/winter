@@ -1021,7 +1021,8 @@ body.fancy-layout .master-tabs.control-tabs>.tab-content>.tab-pane.padded-pane,
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li.active a>span.title{background-color:white}
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li.active a>span.title:before,
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li.active a>span.title:after{display:block}
-.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed .tab-collapse-icon.primary{color:white}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs .tab-collapse-icon.primary{color:#000}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed .tab-collapse-icon.primary{color:#fff}
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs{background:#2da7c7}
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs>li a{color:white}
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs>li a>span.title:before,
