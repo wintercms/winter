@@ -199,7 +199,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
         createEditor() {
             // Configure Monaco worker paths for Mix/Webpack build
             // eslint-disable-next-line
-            __webpack_public_path__ = this.snowboard.url().to('/modules/backend/formwidgets/codeeditor/assets/');
+            __webpack_public_path__ = this.snowboard.url().asset('/modules/backend/formwidgets/codeeditor/assets/');
 
             // Force a specific height on the container - stops Monaco from indefinitely trying
             // to resize if the container has a fluid height
