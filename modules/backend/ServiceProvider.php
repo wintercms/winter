@@ -32,7 +32,6 @@ class ServiceProvider extends ModuleServiceProvider
 
         $this->registerConsole();
         $this->registerMailer();
-        $this->registerAssetBundles();
         $this->registerBackendPermissions();
         $this->registerBackendUserEvents();
 
@@ -54,6 +53,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function boot()
     {
+        $this->registerAssetBundles();
         parent::boot('backend');
     }
 
