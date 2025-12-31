@@ -19,18 +19,6 @@ tabs:
             type: dropdown
             span: left
 
-        _editor_preview:
-            type: codeeditor
-            label: backend::lang.editor.preview
-            tab: backend::lang.backend_preferences.code_editor
-            size: giant
-
-        _editor_preview_lang:
-            type: partial
-            label: false
-            tab: backend::lang.backend_preferences.code_editor
-            path: field_editor_preview_lang
-
         editor_theme:
             label: backend::lang.editor.theme
             tab: backend::lang.backend_preferences.code_editor
@@ -40,13 +28,8 @@ tabs:
         editor_word_wrap:
             label: backend::lang.editor.word_wrap
             tab: backend::lang.backend_preferences.code_editor
-            type: dropdown
+            type: balloon-selector
             span: auto
-            options:
-                off: backend::lang.editor.mode_off
-                40: backend::lang.editor.40_characters
-                80: backend::lang.editor.80_characters
-                fluid: backend::lang.editor.mode_fluid
 
         editor_font_size:
             label: backend::lang.editor.font_size
@@ -140,3 +123,14 @@ tabs:
             tab: backend::lang.backend_preferences.code_editor
             type: checkbox
             span: auto
+
+        _editor_preview_lang:
+            type: partial
+            tab: backend::lang.backend_preferences.code_editor
+            path: field_editor_preview_lang
+
+        _editor_preview:
+            type: codeeditor
+            tab: backend::lang.backend_preferences.code_editor
+            size: giant
+            span: full

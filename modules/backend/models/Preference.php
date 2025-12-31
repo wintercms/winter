@@ -276,19 +276,25 @@ class Preference extends Model
 
     /**
      * Returns the theme options for the backend editor.
-     * @return array
+     * Supports both legacy tmTheme (XML) and modern JSON theme formats.
      */
-    public function getEditorThemeOptions()
+    public function getEditorThemeOptions(): array
     {
         $themeDir = new DirectoryIterator('modules/backend/formwidgets/codeeditor/assets/themes/');
         $themes = [];
 
         // Iterate through the themes
         foreach ($themeDir as $node) {
-            // If this file is a theme (starting by "theme-")
-            if ($node->isFile() && $node->getExtension() === 'tmTheme') {
-                $themeId = $node->getBasename('.tmTheme');
-                $themeName = ucwords(str_replace("_", " ", $themeId));
+            if (!$node->isFile()) {
+                continue;
+            }
+
+            $extension = $node->getExtension();
+
+            // Support both tmTheme (legacy) and JSON (modern) formats
+            if ($extension === 'tmTheme' || $extension === 'json') {
+                $themeId = $node->getBasename('.' . $extension);
+                $themeName = ucwords(str_replace(['_', '-'], ' ', $themeId));
 
                 // Add the values to the themes array
                 if ($themeId != static::DEFAULT_THEME) {
@@ -300,5 +306,18 @@ class Preference extends Model
         // Sort the theme alphabetically, and push the default theme
         asort($themes);
         return [static::DEFAULT_THEME => ucwords(static::DEFAULT_THEME)] + $themes;
+    }
+
+    /**
+     * Returns the word wrap options for the backend editor.
+     */
+    public function getEditorWordWrapOptions(): array
+    {
+        return [
+            'off' => Lang::get('backend::lang.editor.mode_off'),
+            '40' => Lang::get('backend::lang.editor.40_characters'),
+            '80' => Lang::get('backend::lang.editor.80_characters'),
+            'fluid' => Lang::get('backend::lang.editor.mode_fluid'),
+        ];
     }
 }

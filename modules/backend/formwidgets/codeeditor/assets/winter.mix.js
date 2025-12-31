@@ -17,7 +17,7 @@ mix
 
     // Compile editor
     .js(
-        'js/index.js',
+        'js/codeeditor.js',
         'js/build/codeeditor.bundle.js',
     )
     .less(

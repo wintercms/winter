@@ -1,5 +1,5 @@
-<p class="help-block" style="margin-top: -15px">
-    Preview language:
+<p class="help-block" style="margin-bottom: -15px">
+    <?= e(trans('backend::lang.editor.preview')) ?>:
     <a href="#" data-switch-lang="css">CSS</a> |
     <a href="#" data-switch-lang="html">HTML</a> |
     <a href="#" data-switch-lang="javascript">JavaScript</a> |

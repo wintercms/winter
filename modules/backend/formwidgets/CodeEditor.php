@@ -1,9 +1,9 @@
 <?php namespace Backend\FormWidgets;
 
-use File;
-use Backend\Models\Preference as BackendPreference;
 use Backend\Classes\FormWidgetBase;
+use Backend\Models\Preference as BackendPreference;
 use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Code Editor
@@ -200,6 +200,7 @@ class CodeEditor extends FormWidgetBase
 
     /**
      * Loads a theme via AJAX.
+     * Supports both tmTheme (XML) and JSON formats.
      */
     public function onLoadTheme()
     {
@@ -212,13 +213,25 @@ class CodeEditor extends FormWidgetBase
             throw new ApplicationException('Invalid theme name');
         }
 
-        $themePath = __DIR__ . '/codeeditor/assets/themes/' . $theme . '.tmTheme';
+        $themeDir = __DIR__ . '/codeeditor/assets/themes/';
 
-        if (!File::exists($themePath)) {
-            throw new ApplicationException(sprintf('Theme "%s" not found', $theme));
+        // Try JSON format first (modern), then fall back to tmTheme (legacy)
+        $jsonPath = $themeDir . $theme . '.json';
+        $tmThemePath = $themeDir . $theme . '.tmTheme';
+
+        if (File::exists($jsonPath)) {
+            return [
+                'format' => 'json',
+                'data' => File::get($jsonPath),
+            ];
+        } elseif (File::exists($tmThemePath)) {
+            return [
+                'format' => 'tmTheme',
+                'data' => File::get($tmThemePath),
+            ];
         }
 
-        return File::get($themePath);
+        throw new ApplicationException(sprintf('Theme "%s" not found', $theme));
     }
 
     /**

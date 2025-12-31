@@ -1,6 +1,6 @@
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { parse as parseXml } from 'fast-plist';
 import constrainedEditor from 'constrained-editor-plugin';
+import { parse as parseXml } from 'fast-plist';
+import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
 ((Snowboard) => {
     /**
@@ -197,7 +197,7 @@ import constrainedEditor from 'constrained-editor-plugin';
          * Creates a Monaco editor instance in the given element.
          */
         createEditor() {
-            // This is needed to ensure the language chunks are loaded from the correct location
+            // Configure Monaco worker paths for Mix/Webpack build
             // eslint-disable-next-line
             __webpack_public_path__ = this.snowboard.url().to('/modules/backend/formwidgets/codeeditor/assets/');
 
@@ -270,7 +270,7 @@ import constrainedEditor from 'constrained-editor-plugin';
                     ? 'configuredByTheme'
                     : false,
                 tabSize: this.config.get('tabSize'),
-                theme: this.config.get('theme'),
+                theme: this.config.get('themeVs'),
                 value: this.valueBag.value,
             };
 
@@ -579,10 +579,10 @@ import constrainedEditor from 'constrained-editor-plugin';
 
         /**
          * Aligns the text to the given column.
-         * 
+         *
          * Any line breaks in the text will have additional spaces added to the start of the line
          * to ensure that it aligns with the original column.
-         * 
+         *
          * @param {String} text
          * @param {Number} column
          */
@@ -631,6 +631,7 @@ import constrainedEditor from 'constrained-editor-plugin';
             if (newTheme === 'vs') {
                 monaco.editor.setTheme('vs');
                 this.setConfig('theme', 'vs');
+                this.setConfig('themeVs', 'vs');
                 this.updateStatusBarColor({
                     colors: {
                         'editor.foreground': '#000000',
@@ -643,6 +644,7 @@ import constrainedEditor from 'constrained-editor-plugin';
             if (newTheme === 'vs-dark') {
                 monaco.editor.setTheme('vs-dark');
                 this.setConfig('theme', 'vs-dark');
+                this.setConfig('themeVs', 'vs-dark');
                 this.updateStatusBarColor({
                     colors: {
                         'editor.foreground': '#d4d4d4',
@@ -658,21 +660,32 @@ import constrainedEditor from 'constrained-editor-plugin';
                     (this.alias) ? `${this.alias}::onLoadTheme` : 'onLoadTheme',
                     {
                         data: {
-                            theme: theme || this.config.get('theme'),
+                            theme: newTheme,
                         },
                         success: (data) => {
-                            if (data.result) {
-                                const themeData = this.convertTmTheme(data.result);
+                            if (data.format && data.data) {
+                                let themeData;
+
+                                // Handle both JSON and tmTheme formats
+                                if (data.format === 'json') {
+                                    // JSON theme - parse and use directly with Monaco
+                                    themeData = this.convertJsonTheme(data.data);
+                                } else {
+                                    // tmTheme - convert from TextMate XML format
+                                    themeData = this.convertTmTheme(data.data);
+                                }
+
                                 this.cachedThemes[newTheme] = themeData;
 
                                 monaco.editor.defineTheme(newThemeVS, themeData);
                                 monaco.editor.setTheme(newThemeVS);
-                                this.setConfig('theme', newThemeVS);
+                                this.setConfig('theme', newTheme);
+                                this.setConfig('themeVs', newThemeVS);
                                 this.updateStatusBarColor(themeData);
                             }
                         },
                         error: () => {
-                            console.log(`Unable to load theme "${newTheme}"`);
+                            // Theme loading failed - silently fall back to default theme
                         },
                     },
                 );
@@ -680,7 +693,8 @@ import constrainedEditor from 'constrained-editor-plugin';
             }
 
             monaco.editor.setTheme(newThemeVS);
-            this.setConfig('theme', newThemeVS);
+            this.setConfig('theme', newTheme);
+            this.setConfig('themeVs', newThemeVS);
             this.updateStatusBarColor(this.cachedThemes[newTheme]);
         }
 
@@ -847,7 +861,8 @@ import constrainedEditor from 'constrained-editor-plugin';
                 return color;
             }
             if (!color.match(/^#(..)(..)(..)(..)$/)) {
-                console.error("can't parse color", color);
+                // Invalid color format - return original color
+                return color;
             }
             const rgba = color.match(/^#(..)(..)(..)(..)$/).slice(1).map((c) => parseInt(c, 16));
             rgba[3] = (rgba[3] / 0xFF).toPrecision(2);
@@ -1004,6 +1019,64 @@ import constrainedEditor from 'constrained-editor-plugin';
             });
 
             return splitScopes;
+        }
+
+        /**
+         * Converts a JSON theme (VS Code/Monaco format) into a theme config for Monaco.
+         *
+         * @param {String} jsonContent
+         * @returns {Object}
+         */
+        convertJsonTheme(jsonContent) {
+            const theme = JSON.parse(jsonContent);
+
+            // Monaco theme format
+            const monacoTheme = {
+                base: theme.type === 'light' ? 'vs' : 'vs-dark',
+                inherit: true,
+                rules: [],
+                colors: {},
+            };
+
+            // Map token colors from the JSON theme
+            if (theme.tokenColors && Array.isArray(theme.tokenColors)) {
+                theme.tokenColors.forEach((tokenColor) => {
+                    if (!tokenColor.scope) {
+                        return;
+                    }
+
+                    const scopes = Array.isArray(tokenColor.scope)
+                        ? tokenColor.scope
+                        : tokenColor.scope.split(',').map((s) => s.trim());
+
+                    scopes.forEach((scope) => {
+                        const rule = { token: scope };
+
+                        if (tokenColor.settings) {
+                            if (tokenColor.settings.foreground) {
+                                rule.foreground = tokenColor.settings.foreground.replace('#', '');
+                            }
+                            if (tokenColor.settings.background) {
+                                rule.background = tokenColor.settings.background.replace('#', '');
+                            }
+                            if (tokenColor.settings.fontStyle) {
+                                rule.fontStyle = tokenColor.settings.fontStyle;
+                            }
+                        }
+
+                        monacoTheme.rules.push(rule);
+                    });
+                });
+            }
+
+            // Map UI colors
+            if (theme.colors) {
+                Object.keys(theme.colors).forEach((key) => {
+                    monacoTheme.colors[key] = theme.colors[key];
+                });
+            }
+
+            return monacoTheme;
         }
 
         /**
@@ -1248,7 +1321,7 @@ import constrainedEditor from 'constrained-editor-plugin';
                 } else if (keyCode.startsWith('Shift+Alt+')) {
                     keyBinding.key = keyCode.replace('Shift+Alt+', '');
                     keyBinding.shift = true;
-                    keyBinding.ctrl = true;
+                    keyBinding.alt = true;
                 } else if (keyCode.startsWith('Ctrl+')) {
                     keyBinding.key = keyCode.replace('Ctrl+', '');
                     keyBinding.ctrl = true;
@@ -1306,7 +1379,7 @@ import constrainedEditor from 'constrained-editor-plugin';
 
         /**
          * Wrapper method to add a code lens provider.
-         * 
+         *
          * @param {(model: monaco.editor.ITextModel, token: monaco.CancellationToken) => Promise<monaco.languages.CodeLens[]>} provider
          * @param {(model: monaco.editor.ITextModel, codeLens: monaco.languages.CodeLens, token: monaco.CancellationToken) => Promise<monaco.languages.CodeLens>} resolver
          */
