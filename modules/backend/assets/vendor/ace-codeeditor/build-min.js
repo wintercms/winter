@@ -2308,7 +2308,7 @@ if($.oc===undefined)$.oc=$.wn
 $.wn.codeEditorExtensionModes={'htm':'html','html':'html','md':'markdown','txt':'plain_text','js':'javascript','less':'less','scss':'scss','sass':'sass','css':'css'}
 $.fn.codeEditor.noConflict=function(){$.fn.codeEditor=old
 return this}
-$(document).render(function(){$('[data-control="codeeditor"]').codeEditor()});+function(exports){if(exports.ace&&typeof exports.ace.require=='function'){var emmetExt=exports.ace.require('ace/ext/emmet')
+$(document).render(function(){$('[data-control="ace-codeeditor"]').codeEditor()});+function(exports){if(exports.ace&&typeof exports.ace.require=='function'){var emmetExt=exports.ace.require('ace/ext/emmet')
 if(emmetExt&&emmetExt.AceEmmetEditor&&emmetExt.AceEmmetEditor.prototype.getSyntax){var coreGetSyntax=emmetExt.AceEmmetEditor.prototype.getSyntax
 emmetExt.AceEmmetEditor.prototype.getSyntax=function(){var $syntax=$.proxy(coreGetSyntax,this)()
 return $syntax=='twig'?'html':$syntax};}}}(window)}(window.jQuery);

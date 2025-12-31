@@ -444,7 +444,7 @@
     // CODEEDITOR DATA-API
     // ===============
     $(document).render(function () {
-        $('[data-control="codeeditor"]').codeEditor()
+        $('[data-control="ace-codeeditor"]').codeEditor()
     });
 
     // FIX EMMET HTML WHEN SYNTAX IS TWIG
