@@ -152,7 +152,7 @@ class RichEditor extends FormWidgetBase
             $this->addJs('js/build-plugins-min.js', 'core');
         }
 
-        $this->addJs('/modules/backend/formwidgets/codeeditor/assets/js/build-min.js', 'core');
+        $this->addJs('/modules/backend/assets/vendor/ace-codeeditor/build-min.js', 'core');
 
         if ($lang = $this->getValidEditorLang()) {
             $this->addJs('vendor/froala/js/languages/'.$lang.'.js', 'core');
