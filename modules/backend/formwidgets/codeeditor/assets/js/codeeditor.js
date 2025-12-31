@@ -1,3 +1,12 @@
+// Set webpack public path BEFORE importing Monaco
+// CRITICAL: Must happen before any imports to configure chunk loading correctly
+// This fixes Monaco initialization in AJAX-loaded popups (Winter Builder, repeaters, etc.)
+// Set to assets root - webpack will append js/build/codeeditor.bundle/ based on output config
+// eslint-disable-next-line
+__webpack_public_path__ = (function() {
+    return window.Snowboard.url().asset('/modules/backend/formwidgets/codeeditor/assets/');
+})();
+
 import constrainedEditor from 'constrained-editor-plugin';
 import { parse as parseXml } from 'fast-plist';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
@@ -197,9 +206,6 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
          * Creates a Monaco editor instance in the given element.
          */
         createEditor() {
-            // Configure Monaco worker paths for Mix/Webpack build
-            // eslint-disable-next-line
-            __webpack_public_path__ = this.snowboard.url().asset('/modules/backend/formwidgets/codeeditor/assets/');
 
             // Force a specific height on the container - stops Monaco from indefinitely trying
             // to resize if the container has a fluid height
