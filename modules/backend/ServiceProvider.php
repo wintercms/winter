@@ -91,13 +91,12 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/backend/assets/less/winter.less');
             $combiner->registerBundle('~/modules/backend/assets/js/winter.js');
             $combiner->registerBundle('~/modules/backend/widgets/table/assets/js/build.js');
+            $combiner->registerBundle('~/modules/backend/assets/vendor/ace-codeeditor/build.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/js/mediamanager-browser.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/less/mediamanager.less');
             $combiner->registerBundle('~/modules/backend/widgets/reportcontainer/assets/less/reportcontainer.less');
             $combiner->registerBundle('~/modules/backend/widgets/table/assets/less/table.less');
-            $combiner->registerBundle('~/modules/backend/formwidgets/codeeditor/assets/less/codeeditor.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/repeater/assets/less/repeater.less');
-            $combiner->registerBundle('~/modules/backend/formwidgets/codeeditor/assets/js/build.js');
             $combiner->registerBundle('~/modules/backend/formwidgets/fileupload/assets/less/fileupload.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/nestedform/assets/less/nestedform.less');
             $combiner->registerBundle('~/modules/backend/formwidgets/richeditor/assets/js/build-plugins.js');

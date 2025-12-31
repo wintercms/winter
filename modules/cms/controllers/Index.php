@@ -128,10 +128,6 @@ class Index extends Controller
         $this->addJs('/modules/cms/assets/js/winter.tokenexpander.js', 'core');
         $this->addCss('/modules/cms/assets/css/winter.components.css', 'core');
 
-        // Preload the code editor class as it could be needed
-        // before it loads dynamically.
-        $this->addJs('/modules/backend/formwidgets/codeeditor/assets/js/build-min.js', 'core');
-
         $this->bodyClass = 'compact-container';
         $this->pageTitle = 'cms::lang.cms.menu_label';
         $this->pageTitleTemplate = '%s '.Lang::get($this->pageTitle);
