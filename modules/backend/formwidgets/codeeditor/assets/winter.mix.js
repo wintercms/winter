@@ -85,6 +85,6 @@ mix
     .after(() => {
         // Remove inline CSS calls to the codicon font
         const bundle = fs.readFileSync('js/build/codeeditor.bundle.js', 'utf8');
-        newBundle = bundle.replace(/\\n\\n@font-face \{[^\}]+codicon[^\}]+}\\n\\n/g, '\\n\\n');
+        newBundle = bundle.replace(/@font-face[^{]*\{(?:[^{}]|{[^}]*})*?codicon[^}]*?\}/g, '');
         fs.writeFileSync('js/build/codeeditor.bundle.js', newBundle);
     });
