@@ -64,6 +64,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
             this.config = this.snowboard.dataConfig(this, element);
             this.events = this.snowboard['backend.ui.eventHandler'](this, 'backend.formwidget.codeeditor');
             this.alias = this.config.get('alias');
+            this.monaco = monaco;  // Expose Monaco for accessing constants like MarkerSeverity
             this.model = null;
             this.resizeListener = false;
             this.visibilityListener = false;
@@ -449,6 +450,72 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
          */
         focus() {
             this.editor.focus();
+        }
+
+        /**
+         * Sets markers (error/warning/info indicators) in the editor.
+         *
+         * Markers appear as icons in the gutter, squiggly underlines, and hover tooltips.
+         * Multiple sources can add markers to the same editor without conflicts.
+         *
+         * @param {String} sourceId Unique identifier for the marker source (e.g., 'typescript', 'eslint')
+         * @param {Array} markers Array of marker objects with position, message, severity
+         *
+         * Example:
+         * wrapper.setMarkers('myPlugin', [{
+         *     startLineNumber: 5,
+         *     startColumn: 1,
+         *     endLineNumber: 5,
+         *     endColumn: Number.MAX_VALUE,
+         *     message: 'Warning message',
+         *     severity: monaco.MarkerSeverity.Warning
+         * }]);
+         *
+         * Clear markers: wrapper.setMarkers('myPlugin', []);
+         */
+        setMarkers(sourceId, markers) {
+            monaco.editor.setModelMarkers(this.editor.getModel(), sourceId, markers);
+        }
+
+        /**
+         * Sets decorations (visual highlights without error semantics) in the editor.
+         *
+         * Unlike markers, decorations don't show as errors/warnings - just visual highlights.
+         * Perfect for highlighting new content, diff views, or informational indicators.
+         * Decorations can have background colors, custom CSS classes, and gutter indicators
+         * without the squiggly underlines that markers have.
+         *
+         * @param {String} sourceId Unique identifier for this decoration source
+         * @param {Array} decorations Array of decoration objects
+         *
+         * Example:
+         * wrapper.setDecorations('myHighlight', [{
+         *     range: new monaco.Range(5, 1, 5, Number.MAX_VALUE),
+         *     options: {
+         *         isWholeLine: true,
+         *         className: 'myLineHighlight',              // CSS class for text
+         *         linesDecorationsClassName: 'myGutterIcon', // CSS class for gutter
+         *         inlineClassName: 'myInlineStyle',          // Inline text decoration
+         *         glyphMarginClassName: 'myGlyphIcon'        // Glyph margin icon (far left)
+         *     }
+         * }]);
+         *
+         * Clear decorations: wrapper.setDecorations('myHighlight', []);
+         */
+        setDecorations(sourceId, decorations) {
+            // Initialize decoration tracking if not already done
+            if (!this._decorationIds) {
+                this._decorationIds = {};
+            }
+
+            // Get previous decoration IDs for this source (to replace them)
+            const oldIds = this._decorationIds[sourceId] || [];
+
+            // Apply new decorations and get their IDs
+            const newIds = this.editor.deltaDecorations(oldIds, decorations);
+
+            // Store new IDs for future updates/clearing
+            this._decorationIds[sourceId] = newIds;
         }
 
         /**
