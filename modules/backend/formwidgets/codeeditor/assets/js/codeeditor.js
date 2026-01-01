@@ -1,11 +1,43 @@
-// Set webpack public path BEFORE importing Monaco
-// CRITICAL: Must happen before any imports to configure chunk loading correctly
-// This fixes Monaco initialization in AJAX-loaded popups (Winter Builder, repeaters, etc.)
-// Set to assets root - webpack will append js/build/codeeditor.bundle/ based on output config
-// eslint-disable-next-line
-__webpack_public_path__ = (function() {
-    return window.Snowboard.url().asset('/modules/backend/formwidgets/codeeditor/assets/');
-})();
+// Set webpack's public path dynamically to respect Winter's assetURL configuration
+// This ensures code-split chunks (lazy-loaded language modules) load from the correct domain
+// Without this, chunks load from APP_URL instead of assetURL (breaking CDN/subdirectory setups)
+__webpack_public_path__ = window.Snowboard.url().asset('/modules/backend/formwidgets/codeeditor/assets/');
+
+// Configure Monaco Environment BEFORE imports
+// Supports both same-origin (dev) and cross-origin (CDN/Lambda) scenarios
+// Fixes "Cannot read properties of null (reading 'webpackChunk')" in production builds
+window.MonacoEnvironment = {
+    getWorkerUrl: function (moduleId, label) {
+        const basePath = window.Snowboard.url().asset('/modules/backend/formwidgets/codeeditor/assets/');
+        const workerPaths = {
+            'editorWorkerService': 'js/build/editor.worker.js',
+            'typescript': 'js/build/ts.worker.js',
+            'javascript': 'js/build/ts.worker.js',
+            'css': 'js/build/css.worker.js',
+            'less': 'js/build/css.worker.js',
+            'scss': 'js/build/css.worker.js',
+            'html': 'js/build/html.worker.js',
+            'handlebars': 'js/build/html.worker.js',
+            'razor': 'js/build/html.worker.js',
+            'json': 'js/build/json.worker.js'
+        };
+
+        const workerPath = workerPaths[label] || workerPaths['editorWorkerService'];
+        const workerUrl = basePath + workerPath;
+
+        // Cross-origin detection and blob URL wrapping for CDN/Lambda scenarios
+        const urlObj = new URL(workerUrl, window.location.href);
+        if (urlObj.origin !== window.location.origin) {
+            // Cross-origin: create blob URL wrapper
+            const script = `importScripts('${workerUrl}');`;
+            const blob = new Blob([script], { type: 'application/javascript' });
+            return URL.createObjectURL(blob);
+        }
+
+        // Same-origin: direct load
+        return workerUrl;
+    }
+};
 
 import constrainedEditor from 'constrained-editor-plugin';
 import { parse as parseXml } from 'fast-plist';

@@ -83,8 +83,28 @@ mix
     })
 
     .after(() => {
+        const { execSync } = require('child_process');
+        let bundle = fs.readFileSync('js/build/codeeditor.bundle.js', 'utf8');
+
         // Remove inline CSS calls to the codicon font
-        const bundle = fs.readFileSync('js/build/codeeditor.bundle.js', 'utf8');
-        newBundle = bundle.replace(/@font-face[^{]*\{(?:[^{}]|{[^}]*})*?codicon[^}]*?\}/g, '');
-        fs.writeFileSync('js/build/codeeditor.bundle.js', newBundle);
+        bundle = bundle.replace(/@font-face[^{]*\{(?:[^{}]|{[^}]*})*?codicon[^}]*?\}/g, '');
+
+        // Remove Monaco plugin's MonacoEnvironment assignment to prevent timing issues
+        // This allows our runtime window.MonacoEnvironment from codeeditor.js to be used exclusively
+        // The plugin's version uses hardcoded webpack publicPath which breaks CDN/subdirectory support
+        // Pattern: ...}),self.MonacoEnvironment=(...});var
+        // Replace: ,self.MonacoEnvironment=(...}); with just ;
+        // Result: ...});var (valid JavaScript with proper statement terminator)
+        const monacoEnvStart = bundle.indexOf(',self.MonacoEnvironment=');
+        if (monacoEnvStart !== -1) {
+            const afterStart = bundle.substring(monacoEnvStart);
+            const monacoEnvEnd = afterStart.indexOf('});var');
+            if (monacoEnvEnd !== -1) {
+                // Replace the pattern with semicolon to maintain statement terminator
+                // +3 to skip past '});' (3 characters)
+                bundle = bundle.substring(0, monacoEnvStart) + ';' + bundle.substring(monacoEnvStart + monacoEnvEnd + 3);
+            }
+        }
+
+        fs.writeFileSync('js/build/codeeditor.bundle.js', bundle);
     });
