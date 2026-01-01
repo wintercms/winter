@@ -246,6 +246,12 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
             this.editor = monaco.editor.create(this.element.querySelector('.editor-container'), this.getConfigOptions());
 
+            // Backward compatibility: Set jQuery data for legacy Builder plugin code
+            // Builder's JavaScript expects `.data('oc.codeEditor').editor` to access the editor
+            if (window.jQuery) {
+                window.jQuery(this.element).data('oc.codeEditor', this);
+            }
+
             this.attachListeners();
             this.loadTheme();
             this.updateLanguage();
