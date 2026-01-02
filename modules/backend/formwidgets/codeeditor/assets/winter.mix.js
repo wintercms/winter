@@ -1,7 +1,6 @@
 /* eslint-disable */
 const mix = require('laravel-mix');
 const fs = require('fs');
-const IgnorePlugin = require('webpack/lib/IgnorePlugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 require('laravel-mix-polyfill');
 /* eslint-enable */
