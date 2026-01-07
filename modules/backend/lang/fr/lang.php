@@ -3,7 +3,7 @@
 return [
     'auth' => [
         'title' => 'Zone d\'administration',
-        'invalid_login' => 'L\'utilisateur saisi ne correspond à aucun utilisateur enregistré. Merci de vérifier votre saisie et de réessayer.'
+        'invalid_login' => 'Les détails saisis ne correspondent à aucun de nos enregistrements. Merci de vérifier et de réessayer.'
     ],
     'field' => [
         'invalid_type' => 'Type de champ invalide :type.',
@@ -55,7 +55,7 @@ return [
         'unsuspend_working' => 'Réactivation...',
         'signed_in_as' => 'Connecté en tant que :full_name',
         'sign_out' => 'Déconnexion',
-        'login' => 'OK',
+        'login' => 'Connexion',
         'reset' => 'Réinitialiser',
         'restore' => 'Restaurer',
         'login_placeholder' => 'identifiant',
@@ -263,6 +263,7 @@ return [
         'not_found' => 'Aucun enregistrement de formulaire ne correspond à l\'ID :id.',
         'action_confirm' => 'Confirmer l\'action ?',
         'create' => 'Créer',
+        'create_and_new' => 'Créer et nouveau',
         'create_and_close' => 'Créer et fermer',
         'creating' => 'Création en cours…',
         'creating_name' => 'Création d\'un(e) :name en cours…',
@@ -310,6 +311,7 @@ return [
         'return_to_list' => 'Retourner à la liste'
     ],
     'recordfinder' => [
+        'default_prompt' => 'Cliquer sur %s pour chercher un enregistrement',
         'find_record' => 'Trouver un enregistrement',
         'invalid_model_class' => "La classe du modèle \":modelClass\" fournie pour le recordfinder n'est pas valide.",
         'cancel' => 'Annuler',

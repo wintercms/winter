@@ -1,0 +1,27 @@
+<?php
+
+namespace {{ plugin_namespace }}\Database\Factories;
+
+use Winter\Storm\Database\Factories\Factory;
+
+/**
+ * {{ name }} Factory
+ *
+{% if model %}
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\{{ plugin_namespace }}\Models\{{ model }}>
+{% endif %}
+ */
+class {{ studly_name }} extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition()
+    {
+        return [
+            //
+        ];
+    }
+}

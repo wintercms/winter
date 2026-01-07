@@ -9,10 +9,7 @@ No matter how large or small your project is, Winter provides a rich development
 [![Version](https://img.shields.io/github/v/release/wintercms/winter?sort=semver&style=flat-square)](https://github.com/wintercms/winter/releases)
 [![Tests](https://img.shields.io/github/actions/workflow/status/wintercms/winter/tests.yml?branch=develop&label=tests&style=flat-square)](https://github.com/wintercms/winter/actions)
 [![License](https://img.shields.io/github/license/wintercms/winter?label=open%20source&style=flat-square)](https://packagist.org/packages/wintercms/winter)
-[![Discord](https://img.shields.io/discord/816852513684193281?label=discord&style=flat-square)](https://discord.gg/D5MFSPH6Ux)
-[![RINGER](https://www.ringerhq.com/images/get-support-on-ringer.svg)](https://www.ringerhq.com/i/wintercms/winter)
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/wintercms/winter)
+[![Discord](https://img.shields.io/badge/discord-join-purple?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/D5MFSPH6Ux)
 
 ## Installing Winter
 
@@ -86,25 +83,27 @@ In order to ensure that the Winter community is welcoming to all, please review 
 
 ## Sponsors
 
-Winter CMS development is financially supported by the generosity of the following sponsors:
+Winter CMS development is financially supported by the generosity of the following sponsors. If you would like to have your name, company and link added to this list and support open-source development, feel free to make a donation to our [Open Collective](https://opencollective.com/wintercms).
 
 ### Organizations
 
-[![Froala logo](https://froala.com/wp-content/uploads/2019/10/froala.svg)](https://froala.com/wysiwyg-editor/)
+<a href="https://laravel.com/?ref=wintercms" target="_blank">
+    <img src="https://raw.githubusercontent.com/laravel/art/refs/heads/master/logo-type/5%20svg/3%20RGB/1%20Full%20Color/laravel-logotype-rgb-red.svg" alt="Laravel logo" width="300">
+</a>
+
+Laravel provides [Laravel Vapor](https://vapor.laravel.com/?ref=wintercms) to the Winter CMS project which is used to power the serverless PHP hosting used for our [main website and documentation](https://wintercms.com/). 
+
+<a href="https://froala.com/wysiwyg-editor/" target="_blank">
+    <img src="https://froala.com/wp-content/uploads/2019/10/froala.svg" alt="Froala logo" width="300">
+</a>
 
 Froala provides a perpetual, Enterprise license to Winter CMS which allows us and our users to use the Froala WYSIWYG Editor in Winter CMS powered projects.
-
-Big thanks to our sponsors on OpenCollective:
-
-- [FrogeHost](https://froge.host/?utm_source=wintercms)
 
 ### Individuals
 
 Big thanks to our sponsors on OpenCollective:
 
 - Orville
-
-If you would like to have your name, company and link added to this list and support open-source development, feel free to make a donation to our [Open Collective](https://opencollective.com/wintercms).
 
 ## License
 

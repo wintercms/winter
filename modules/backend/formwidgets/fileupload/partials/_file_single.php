@@ -17,7 +17,7 @@
 
     <!-- Upload Button -->
     <button type="button" class="btn btn-default upload-button">
-        <i class="icon-upload"></i>
+        <i class="<?= e($iconClass) ?>"></i>
     </button>
 
     <!-- Existing file -->
@@ -39,7 +39,7 @@
                         class="upload-remove-button"
                         data-request="<?= $this->getEventHandler('onRemoveAttachment') ?>"
                         data-request-confirm="<?= e(trans('backend::lang.fileupload.remove_confirm')) ?>"
-                        data-request-data="file_id: <?= $singleFile->id ?>"
+                        data-request-data="file_id: '<?= $singleFile->id ?>'"
                         ><i class="icon-times"></i></a>
                 </div>
             </div>

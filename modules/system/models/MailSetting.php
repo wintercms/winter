@@ -13,6 +13,7 @@ class MailSetting extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
+    const MODE_FAILOVER  = 'failover';
     const MODE_LOG       = 'log';
     const MODE_MAIL      = 'mail';
     const MODE_SENDMAIL  = 'sendmail';
@@ -39,6 +40,7 @@ class MailSetting extends Model
      * Validation rules
      */
     public $rules = [
+        'failover_mailers' => 'required_if:send_mode,'.self::MODE_FAILOVER,
         'sender_name'  => 'required',
         'sender_email' => 'required|email'
     ];
@@ -58,9 +60,9 @@ class MailSetting extends Model
                 'port' => $config->get('mail.port', 587),
                 'username' => $config->get('mail.username'),
                 'password' => $config->get('mail.password'),
-                'encryption' => $config->get('mail.encryption'),
             ],
         ]);
+
         $this->send_mode = $config->get('mail.default', static::MODE_MAIL);
         $this->sender_name = $config->get('mail.from.name', 'Your Site');
         $this->sender_email = $config->get('mail.from.address', 'admin@example.com');
@@ -70,12 +72,18 @@ class MailSetting extends Model
         $this->smtp_user = array_get($mailers['smtp'], 'username');
         $this->smtp_password = array_get($mailers['smtp'], 'password');
         $this->smtp_authorization = !!strlen($this->smtp_user);
-        $this->smtp_encryption = array_get($mailers['smtp'], 'encryption');
+        $this->failover_mailers = implode(',', $config->get('mail.mailers.failover.mailers', []));
+    }
+
+    public function getFailoverMailersOptions()
+    {
+        return collect(App::make('config')->get('mail.mailers'))->except('failover')->keys()->all();
     }
 
     public function getSendModeOptions()
     {
         return [
+            static::MODE_FAILOVER => 'system::lang.mail.failover',
             static::MODE_LOG      => 'system::lang.mail.log_file',
             static::MODE_MAIL     => 'system::lang.mail.php_mail',
             static::MODE_SENDMAIL => 'system::lang.mail.sendmail',
@@ -92,9 +100,14 @@ class MailSetting extends Model
         $config->set('mail.from.address', $settings->sender_email);
 
         switch ($settings->send_mode) {
+            case self::MODE_FAILOVER:
+                $config->set('mail.mailers.failover.mailers', explode(',', $settings->failover_mailers));
+                break;
+
             case self::MODE_SMTP:
                 $config->set('mail.mailers.smtp.host', $settings->smtp_address);
                 $config->set('mail.mailers.smtp.port', $settings->smtp_port);
+                $config->set('mail.mailers.smtp.encryption', $settings->smtp_port === 465 ? 'tls' : null);
                 if ($settings->smtp_authorization) {
                     $config->set('mail.mailers.smtp.username', $settings->smtp_user);
                     $config->set('mail.mailers.smtp.password', $settings->smtp_password);
@@ -102,12 +115,6 @@ class MailSetting extends Model
                 else {
                     $config->set('mail.mailers.smtp.username', null);
                     $config->set('mail.mailers.smtp.password', null);
-                }
-                if ($settings->smtp_encryption) {
-                    $config->set('mail.mailers.smtp.encryption', $settings->smtp_encryption);
-                }
-                else {
-                    $config->set('mail.mailers.smtp.encryption', null);
                 }
                 break;
 
@@ -118,22 +125,9 @@ class MailSetting extends Model
     }
 
     /**
-     * @return array smtp_encryption options values
-     */
-    public function getSmtpEncryptionOptions()
-    {
-        return [
-            '' => 'system::lang.mail.smtp_encryption_none',
-            'tls' => 'system::lang.mail.smtp_encryption_tls',
-            'ssl' => 'system::lang.mail.smtp_encryption_ssl',
-        ];
-    }
-
-    /**
      * Filter fields callback.
      *
-     * We use this to automatically set the SMTP port to the encryption type's corresponding port, if it was originally
-     * using a default port.
+     * We use this to show smtp credential fields only for smtp mode and when smtp authorization is required.
      *
      * @param array $fields
      * @param string|null $context
@@ -141,23 +135,13 @@ class MailSetting extends Model
      */
     public function filterFields($fields, $context = null)
     {
-        if (in_array($fields->smtp_port->value ?? 25, [25, 465, 587])) {
-            switch ($fields->smtp_encryption->value ?? '') {
-                case 'tls':
-                    $fields->smtp_port->value = 587;
-                    break;
-                case 'ssl':
-                    $fields->smtp_port->value = 465;
-                    break;
-                case '':
-                default:
-                    $fields->smtp_port->value = 25;
-                    break;
-            }
+        $hideAuth = $fields->send_mode->value !== 'smtp' || !$fields->smtp_authorization->value;
+
+        if (isset($fields->smtp_user)) {
+            $fields->smtp_user->hidden = $hideAuth;
         }
-        if (!$fields->smtp_authorization->value) {
-            $fields->smtp_user->hidden = true;
-            $fields->smtp_password->hidden = true;
+        if (isset($fields->smtp_password)) {
+            $fields->smtp_password->hidden = $hideAuth;
         }
     }
 }

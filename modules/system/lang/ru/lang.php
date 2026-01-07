@@ -185,11 +185,6 @@ return [
         'smtp_username' => 'SMTP логин',
         'smtp_password' => 'SMTP пароль',
         'smtp_port' => 'SMTP порт',
-        'smtp_ssl' => 'Использовать SSL',
-        'smtp_encryption' => 'Протокол шифрования для SMTP',
-        'smtp_encryption_none' => 'Без шифрования',
-        'smtp_encryption_tls' => 'TLS',
-        'smtp_encryption_ssl' => 'SSL',
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Путь к Sendmail',
         'sendmail_path_comment' => 'Пожалуйста, укажите путь к sendmail.',
@@ -395,7 +390,7 @@ return [
         'menu_description' => 'Просмотр системного журнала событий.',
         'empty_link' => 'Очистить журнал событий',
         'empty_loading'=> 'Очищение журнала событий...',
-        'empty_success'=> 'Успешное очищение журнала событий.',
+        'empty_success'=> 'Журнал событий очищен',
         'return_link'=> 'Вернуться в журнал событий',
         'id' => 'ID',
         'id_label' => 'ID события',
@@ -469,5 +464,11 @@ return [
     'pagination' => [
         'previous' => 'Предыдущий',
         'next' => 'Следующий',
+    ],
+    'datetime' => [
+        'today' => 'Сегодня',
+        'yesterday' => 'Вчера',
+        'tomorrow' => 'Завтра',
+        'at' => ':date в :time',
     ],
 ];

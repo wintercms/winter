@@ -53,6 +53,10 @@
         }
 
         cellContentContainer.appendChild(checkbox)
+
+        if (this.columnConfiguration.readonly || this.columnConfiguration.readOnly) {
+            cellContentContainer.classList.add('readonly');
+        }
     }
 
     /*
@@ -77,6 +81,10 @@
      * for all processors.
      */
     CheckboxProcessor.prototype.onClick = function(ev) {
+        if (this.columnConfiguration.readonly || this.columnConfiguration.readOnly) {
+            return
+        }
+
         var target = this.tableObj.getEventTarget(ev, 'DIV')
 
         if (target.getAttribute('data-checkbox-element')) {

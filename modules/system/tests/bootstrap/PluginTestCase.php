@@ -9,6 +9,7 @@ use Exception;
 use ReflectionClass;
 use Backend\Classes\AuthManager;
 use Backend\Tests\Concerns\InteractsWithAuthentication;
+use Mockery\MockInterface;
 use System\Classes\PluginBase;
 use System\Classes\PluginManager;
 use System\Classes\UpdateManager;
@@ -79,6 +80,9 @@ abstract class PluginTestCase extends TestCase
 
         parent::setUp();
 
+        // Reset loaded routes
+        $this->app['router']->setRoutes(new \Illuminate\Routing\RouteCollection);
+
         // Run all migrations
         Artisan::call('winter:up');
 
@@ -89,6 +93,11 @@ abstract class PluginTestCase extends TestCase
         $pluginCode = $this->guessPluginCode();
         if (!is_null($pluginCode)) {
             $this->instantiatePlugin($pluginCode, false);
+        }
+
+        // Reload module routes
+        foreach (Config::get('cms.loadModules', []) as $module) {
+            include base_path("modules/" . strtolower($module) . "/routes.php");
         }
 
         // Disable mailing
@@ -209,7 +218,8 @@ abstract class PluginTestCase extends TestCase
             if (
                 !$reflectClass->isInstantiable() ||
                 !$reflectClass->isSubclassOf('Winter\Storm\Database\Model') ||
-                $reflectClass->isSubclassOf('Winter\Storm\Database\Pivot')
+                $reflectClass->isSubclassOf('Winter\Storm\Database\Pivot') ||
+                in_array(MockInterface::class, $reflectClass->getInterfaceNames())
             ) {
                 continue;
             }

@@ -1,0 +1,12 @@
+{
+    "type": "module",
+    "workspaces": {
+        "packages": [
+            "modules/system/tests/fixtures/themes/assettest"
+        ]
+    },
+    "devDependencies": {
+        "laravel-vite-plugin": "^1.0.2",
+        "vite": "^5.2.11"
+    }
+}

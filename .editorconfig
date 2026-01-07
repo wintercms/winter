@@ -11,5 +11,5 @@ insert_final_newline = true
 indent_style = space
 indent_size = 4
 
-[.github/workflows/**.{yml,yaml}]
+[**/.github/workflows/**.{yml,yaml}]
 indent_size = 2

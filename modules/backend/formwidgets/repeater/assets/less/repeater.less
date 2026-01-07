@@ -321,3 +321,122 @@
         }
     }
 }
+
+//
+// Grouped Repeater Palette
+//
+
+.repeater-group-search-container {
+    padding: 10px 15px;
+    border-bottom: 1px solid #e0e0e0;
+
+    > div {
+        position: relative;
+    }
+
+    .icon-search {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #999;
+        pointer-events: none;
+        z-index: 10;
+    }
+
+    .repeater-group-search {
+        padding-left: 32px;
+        padding-right: 32px;
+        width: 100%;
+    }
+
+    .repeater-group-search-clear {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        padding: 4px 6px;
+        cursor: pointer;
+        display: none;
+        z-index: 10;
+        color: #999;
+
+        i {
+            font-size: 14px;
+        }
+
+        &:hover {
+            color: #666;
+        }
+    }
+}
+
+.repeater-group-no-results {
+    display: none;
+    padding: 20px;
+    text-align: center;
+    color: #999;
+}
+
+.repeater-group-items-container {
+    min-width: 500px;
+    max-width: 800px;
+}
+
+.repeater-group-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 8px;
+    padding: 15px;
+
+    .repeater-group-item {
+        a {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 12px 12px 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: @border-radius-base;
+            text-decoration: none;
+            color: inherit;
+            transition: all 0.2s;
+
+            i {
+                width: 1em;
+                text-align: center;
+                font-size: 24px;
+                color: #666;
+                margin-top: 2px;
+                flex-shrink: 0;
+            }
+
+            > div {
+                flex: 1;
+                min-width: 0;
+
+                .title {
+                    font-weight: 600;
+                    font-size: 13px;
+                    display: block;
+                    margin-bottom: 2px;
+                }
+
+                .description {
+                    font-size: 11px;
+                    color: #999;
+                    display: block;
+                    line-height: 1.3;
+                }
+            }
+
+            &:hover {
+                border-color: @link-color;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                transform: translateY(-2px);
+            }
+        }
+    }
+}

@@ -2,7 +2,7 @@
 
 namespace {{ plugin_namespace }};
 
-use Backend;
+use Backend\Facades\Backend;
 use Backend\Models\UserRole;
 use System\Classes\PluginBase;
 
@@ -48,7 +48,7 @@ class Plugin extends PluginBase
         return []; // Remove this line to activate
 
         return [
-            '{{ plugin_namespace }}\Components\MyComponent' => 'myComponent',
+            \{{ plugin_namespace }}\Components\MyComponent::class => 'myComponent',
         ];
     }
 

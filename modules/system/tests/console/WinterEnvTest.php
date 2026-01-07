@@ -4,9 +4,6 @@ namespace System\Tests\Console;
 
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Foundation\Bootstrap\LoadConfiguration;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Output\BufferedOutput;
-use System\Console\WinterEnv;
 
 class WinterEnvTest extends TestCase
 {
@@ -28,15 +25,8 @@ class WinterEnvTest extends TestCase
 
     public function testCommand()
     {
-        $output = new BufferedOutput();
-        $command = new WinterEnv();
-        $command->setLaravel($this->app);
-        $result = $command->run(new ArrayInput([]), $output);
-
-        // Ensure that the command actually succeeded
-        if ($result !== 0) {
-            throw new \Exception("Command failed: \r\n" . $output->fetch());
-        }
+        $this->artisan('winter:env')
+            ->assertExitCode(0);
 
         // Check environment file
         $envFile = file_get_contents($this->app->environmentFilePath());

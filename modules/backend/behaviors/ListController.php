@@ -1,10 +1,12 @@
-<?php namespace Backend\Behaviors;
+<?php
 
-use Lang;
-use Event;
-use Flash;
-use ApplicationException;
+namespace Backend\Behaviors;
+
 use Backend\Classes\ControllerBehavior;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Adds features for working with backend lists.
@@ -235,39 +237,37 @@ class ListController extends ControllerBehavior
         if (isset($listConfig->filter)) {
             $filterConfig = $this->makeConfig($listConfig->filter);
 
-            if (!empty($filterConfig->scopes)) {
-                $widget->cssClasses[] = 'list-flush';
+            $widget->cssClasses[] = 'list-flush';
 
-                $filterConfig->alias = $widget->alias . 'Filter';
-                $filterWidget = $this->makeWidget(\Backend\Widgets\Filter::class, $filterConfig);
-                $filterWidget->bindToController();
+            $filterConfig->alias = $widget->alias . 'Filter';
+            $filterWidget = $this->makeWidget(\Backend\Widgets\Filter::class, $filterConfig);
+            $filterWidget->bindToController();
 
-                /*
-                * Filter the list when the scopes are changed
-                */
-                $filterWidget->bindEvent('filter.update', function () use ($widget, $filterWidget) {
-                    return $widget->onFilter();
-                });
+            /*
+            * Filter the list when the scopes are changed
+            */
+            $filterWidget->bindEvent('filter.update', function () use ($widget, $filterWidget) {
+                return $widget->onFilter();
+            });
 
-                /*
-                * Filter Widget with extensibility
-                */
-                $filterWidget->bindEvent('filter.extendScopes', function () use ($filterWidget) {
-                    $this->controller->listFilterExtendScopes($filterWidget);
-                });
+            /*
+            * Filter Widget with extensibility
+            */
+            $filterWidget->bindEvent('filter.extendScopes', function () use ($filterWidget) {
+                $this->controller->listFilterExtendScopes($filterWidget);
+            });
 
-                /*
-                * Extend the query of the list of options
-                */
-                $filterWidget->bindEvent('filter.extendQuery', function ($query, $scope) {
-                    $this->controller->listFilterExtendQuery($query, $scope);
-                });
+            /*
+            * Extend the query of the list of options
+            */
+            $filterWidget->bindEvent('filter.extendQuery', function ($query, $scope) {
+                $this->controller->listFilterExtendQuery($query, $scope);
+            });
 
-                // Apply predefined filter values
-                $widget->addFilter([$filterWidget, 'applyAllScopesToQuery']);
+            // Apply predefined filter values
+            $widget->addFilter([$filterWidget, 'applyAllScopesToQuery']);
 
-                $this->filterWidgets[$definition] = $filterWidget;
-            }
+            $this->filterWidgets[$definition] = $filterWidget;
         }
 
         return $widget;

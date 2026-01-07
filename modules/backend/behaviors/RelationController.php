@@ -613,9 +613,7 @@ class RelationController extends ControllerBehavior
         $useSearch = $this->viewMode === 'multi' && $this->getConfig('view[showSearch]');
 
         if ($useSearch) {
-            $toolbarConfig->search = [
-                'prompt' => 'backend::lang.list.search_prompt'
-            ];
+            $toolbarConfig->search = $this->getSearchConfig('view[search]');
         }
 
         /*
@@ -631,16 +629,29 @@ class RelationController extends ControllerBehavior
         return $toolbarWidget;
     }
 
+    protected function getSearchConfig($key)
+    {
+        $config = $this->getConfig($key);
+        $searchConfig = $this->makeConfig();
+
+        $searchConfig->prompt = array_get($config, 'prompt', 'backend::lang.list.search_prompt');
+        $searchConfig->mode = array_get($config, 'mode', 'all');
+        $searchConfig->scope = array_get($config, 'scope');
+        $searchConfig->searchOnEnter = array_get($config, 'searchOnEnter', false);
+
+        return $searchConfig;
+    }
+
     protected function makeSearchWidget()
     {
         if (!$this->getConfig('manage[showSearch]')) {
             return null;
         }
 
-        $config = $this->makeConfig();
+        $config = $this->getSearchConfig('manage[search]');
         $config->alias = $this->alias . 'ManageSearch';
         $config->growable = false;
-        $config->prompt = 'backend::lang.list.search_prompt';
+
         $widget = $this->makeWidget('Backend\Widgets\Search', $config);
         $widget->cssClasses[] = 'recordfinder-search';
 
@@ -669,6 +680,7 @@ class RelationController extends ControllerBehavior
             $config->showSorting = $this->getConfig('view[showSorting]', true);
             $config->defaultSort = $this->getConfig('view[defaultSort]');
             $config->recordsPerPage = $this->getConfig('view[recordsPerPage]');
+            $config->showPageNumbers = $this->getConfig('view[showPageNumbers]', true);
             $config->showCheckboxes = $this->getConfig('view[showCheckboxes]', !$this->readOnly);
             $config->recordUrl = $this->getConfig('view[recordUrl]');
             $config->customViewPath = $this->getConfig('view[customViewPath]');
@@ -765,6 +777,11 @@ class RelationController extends ControllerBehavior
                     return $widget->onRefresh();
                 });
 
+                $widget->setSearchOptions([
+                    'mode' => $searchWidget->mode,
+                    'scope' => $searchWidget->scope,
+                ]);
+
                 /*
                  * Persist the search term across AJAX requests only
                  */
@@ -826,6 +843,7 @@ class RelationController extends ControllerBehavior
             $config->showSorting = $this->getConfig('manage[showSorting]', !$isPivot);
             $config->defaultSort = $this->getConfig('manage[defaultSort]');
             $config->recordsPerPage = $this->getConfig('manage[recordsPerPage]');
+            $config->showPageNumbers = $this->getConfig('manage[showPageNumbers]', true);
             $config->noRecordsMessage = $this->getConfig('manage[noRecordsMessage]');
 
             if ($this->viewMode === 'single') {
@@ -881,6 +899,11 @@ class RelationController extends ControllerBehavior
                     $widget->setSearchTerm($this->searchWidget->getActiveTerm());
                     return $widget->onRefresh();
                 });
+
+                $widget->setSearchOptions([
+                    'mode' => $this->searchWidget->mode,
+                    'scope' => $this->searchWidget->scope,
+                ]);
 
                 /*
                  * Persist the search term across AJAX requests only

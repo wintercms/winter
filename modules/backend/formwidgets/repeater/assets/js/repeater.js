@@ -53,6 +53,14 @@
         this.$el.on('click', '> ul > li > .repeater-item-collapse .repeater-item-collapse-one', this.proxy(this.toggleCollapse))
         this.$el.on('click', '> .field-repeater-items > .field-repeater-add-item > [data-repeater-add-group]', this.proxy(this.clickAddGroupButton))
 
+        this.$el.find('> ul > li > .repeater-item-collapsed-title')
+            .css({'cursor': 'pointer', 'width': '100%'})
+            .on('click', this.proxy(this.toggleCollapse))
+
+        this.$el.find('> ul > li > .field-repeater-form > .form-group > label')
+            .css({'cursor': 'pointer', 'width': '100%'})
+            .on('click', this.proxy(this.toggleCollapse))
+
         this.$el.one('dispose-control', this.proxy(this.dispose))
 
         this.togglePrompt()
@@ -67,6 +75,8 @@
         this.$el.off('ajaxDone', '> .field-repeater-items > .field-repeater-item > .repeater-item-remove > [data-repeater-remove]', this.proxy(this.onRemoveItemSuccess))
         this.$el.off('ajaxDone', '> .field-repeater-items > .field-repeater-add-item > [data-repeater-add]', this.proxy(this.onAddItemSuccess))
         this.$el.off('click', '> ul > li > .repeater-item-collapse .repeater-item-collapse-one', this.proxy(this.toggleCollapse))
+        this.$el.off('click', '> ul > li > .repeater-item-collapsed-title', this.proxy(this.toggleCollapse))
+        this.$el.off('click', '> ul > li > .field-repeater-form > .form-group > label', this.proxy(this.toggleCollapse))
         this.$el.off('click', '> .field-repeater-items > .field-repeater-add-item > [data-repeater-add-group]', this.proxy(this.clickAddGroupButton))
 
         this.$el.off('dispose-control', this.proxy(this.dispose))
@@ -129,6 +139,78 @@
             })
 
         $('[data-repeater-add]', $container).data('request-form', $form)
+
+        // Setup search functionality
+        var $searchInput = $('.repeater-group-search', $container)
+        var $clearButton = $('.repeater-group-search-clear', $container)
+        var $noResults = $('.repeater-group-no-results', $container)
+        var $itemsContainer = $('.repeater-group-items-container', $container)
+        var $listItems = $('.repeater-group-item', $container)
+
+        // Add hover effects to grid items
+        $listItems.on('mouseenter', 'a', function() {
+            $(this).css({
+                'border-color': '#3498db',
+                'box-shadow': '0 2px 8px rgba(0,0,0,0.1)',
+                'transform': 'translateY(-2px)'
+            })
+        }).on('mouseleave', 'a', function() {
+            $(this).css({
+                'border-color': '#e0e0e0',
+                'box-shadow': 'none',
+                'transform': 'translateY(0)'
+            })
+        })
+
+        $searchInput.on('input', function() {
+            var searchTerm = $(this).val().toLowerCase().trim()
+
+            // Show/hide clear button
+            $clearButton.toggle(searchTerm.length > 0)
+
+            if (searchTerm === '') {
+                // Show all items
+                $listItems.show()
+                $noResults.hide()
+                $itemsContainer.show()
+                return
+            }
+
+            var visibleCount = 0
+
+            // Filter items
+            $listItems.each(function() {
+                var $item = $(this)
+                var title = $('.title', $item).text().toLowerCase()
+                var description = $('.description', $item).text().toLowerCase()
+
+                if (title.indexOf(searchTerm) !== -1 || description.indexOf(searchTerm) !== -1) {
+                    $item.show()
+                    visibleCount++
+                } else {
+                    $item.hide()
+                }
+            })
+
+            // Show/hide no results message and adjust container height
+            if (visibleCount === 0) {
+                $noResults.show()
+                $itemsContainer.hide()
+            } else {
+                $noResults.hide()
+                $itemsContainer.show()
+            }
+        })
+
+        // Clear search functionality
+        $clearButton.on('click', function() {
+            $searchInput.val('').trigger('input').focus()
+        })
+
+        // Focus search input when popover opens
+        setTimeout(function() {
+            $searchInput.focus()
+        }, 100)
     }
 
     Repeater.prototype.onRemoveItemSuccess = function(ev) {
@@ -172,7 +254,7 @@
 
         if (this.options.maxItems && this.options.maxItems > 0) {
             var repeatedItems = this.$el.find('> .field-repeater-items > .field-repeater-item').length,
-                $addItemBtn = this.$el.find('> .field-repeater-add-item')
+                $addItemBtn = this.$el.find('> .field-repeater-items > .field-repeater-add-item')
 
             $addItemBtn.toggle(repeatedItems < this.options.maxItems)
         }
@@ -248,16 +330,18 @@
             $target = $item
         }
 
-        var $textInput = $('input[type=text]:first, select:first', $target).first()
+        var $textInput = $('input[type=text]:first, select:first, ul:first', $target).first()
         if ($textInput.length) {
             switch($textInput.prop("tagName")) {
                 case 'SELECT':
                     return $textInput.find('option:selected').text()
+                case 'UL':
+                    return $textInput.find('li.active').text()
                 default:
                     return $textInput.val()
             }
         } else {
-            var $disabledTextInput = $('.text-field:first > .form-control', $target)
+            var $disabledTextInput = $('.form-control:first', $target)
             if ($disabledTextInput.length) {
                 return $disabledTextInput.text()
             }

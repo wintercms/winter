@@ -53,11 +53,11 @@
     .button-variant(@btn-default-color; @btn-default-bg; @btn-default-border; @btn-primary-bg; @btn-primary-bg);
 }
 .btn-primary {
-    .button-variant(@btn-primary-color; lighten(@btn-primary-bg, 5%); @btn-primary-border; @btn-primary-bg; @btn-primary-bg);
+    .button-variant(@btn-primary-color; @btn-primary-bg; @btn-primary-border; @btn-primary-bg; @btn-primary-bg);
     font-weight: 500;
 }
 .btn-secondary {
-    .button-variant(#000; lighten(@btn-secondary-bg, 5%); @btn-secondary-border; @btn-secondary-bg; @btn-secondary-bg);
+    .button-variant(#000; @btn-secondary-bg; @btn-secondary-border; @btn-secondary-bg; @btn-secondary-bg);
     color: @btn-secondary-color;
 }
 // Success appears as green

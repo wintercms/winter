@@ -4,8 +4,8 @@ namespace Backend\FormWidgets;
 
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
-use Lang;
-use SystemException;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\SystemException;
 
 class RelationManager extends FormWidgetBase
 {
@@ -17,17 +17,17 @@ class RelationManager extends FormWidgetBase
     /**
      * Disables the ability to add, update, delete or create relations.
      */
-    protected bool $readOnly = false;
+    protected ?bool $readOnly = null;
 
     /**
      * Path to controller action to open a record.
      */
-    protected string $recordUrl = '';
+    protected ?string $recordUrl = null;
 
     /**
      * Custom JavaScript code to execute when clicking on a record.
      */
-    protected string $recordOnClick = '';
+    protected ?string $recordOnClick = null;
 
     /**
      * Relation name if different from the field name.
@@ -43,7 +43,7 @@ class RelationManager extends FormWidgetBase
             'relation',
         ]);
 
-        if (!isset($this->readOnly)) {
+        if (!isset($this->readOnly) && $this->config->previewMode) {
             $this->readOnly = $this->config->previewMode;
         }
     }
@@ -58,12 +58,17 @@ class RelationManager extends FormWidgetBase
             throw new SystemException($error);
         }
 
-        $options = [
-            'readOnly' => $this->readOnly,
-            'recordUrl' => $this->recordUrl,
-        ];
+        $options = [];
 
-        if ($this->recordOnClick) {
+        if (!is_null($this->readOnly)) {
+            $options['readOnly'] = $this->readOnly;
+        }
+
+        if (!is_null($this->recordUrl)) {
+            $options['recordUrl'] = $this->recordUrl;
+        }
+
+        if (!is_null($this->recordOnClick)) {
             $options['recordOnClick'] = $this->recordOnClick;
         }
 

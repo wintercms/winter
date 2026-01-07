@@ -77,7 +77,7 @@ return [
             'customers' => 'Klienti',
             'my_settings' => 'Mani iestatījumi',
             'notifications' => 'Paziņojumi',
-        ]
+        ],
     ],
     'theme' => [
         'label' => 'Tēma',
@@ -185,11 +185,6 @@ return [
         'smtp_username' => 'Lietotājvārds',
         'smtp_password' => 'Parole',
         'smtp_port' => 'SMTP ports',
-        'smtp_ssl' => 'Nepieciešams SSL savienojums',
-        'smtp_encryption' => 'SMTP šifrēšanas protokols',
-        'smtp_encryption_none' => 'Bez šifrēšanas',
-        'smtp_encryption_tls' => 'TLS',
-        'smtp_encryption_ssl' => 'SSL',
         'sendmail' => 'Sendmail',
         'sendmail_path' => 'Sendmail ceļš',
         'sendmail_path_comment' => 'Lūdzu, norādiet ceļu uz sendmail programmu.',
@@ -469,5 +464,11 @@ return [
     'pagination' => [
         'previous' => 'Iepriekšējie',
         'next' => 'Nākamie',
+    ],
+    'datetime' => [
+        'today' => 'Šodien',
+        'yesterday' => 'Vakar',
+        'tomorrow' => 'Rīt',
+        'at' => ':date plkst. :time',
     ],
 ];

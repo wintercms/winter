@@ -1,17 +1,17 @@
 <?php namespace Backend\Widgets;
 
-use Lang;
-use Form as FormHelper;
-use Backend\Classes\FormTabs;
+use ApplicationException;
 use Backend\Classes\FormField;
+use Backend\Classes\FormTabs;
+use Backend\Classes\FormWidgetBase;
 use Backend\Classes\WidgetBase;
 use Backend\Classes\WidgetManager;
-use Backend\Classes\FormWidgetBase;
+use BackendAuth;
+use Exception;
+use Form as FormHelper;
+use Lang;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Html\Helper as HtmlHelper;
-use ApplicationException;
-use Exception;
-use BackendAuth;
 
 /**
  * Form Widget
@@ -253,10 +253,7 @@ class Form extends WidgetBase
             $field = $this->allFields[$field];
         }
 
-        if (!isset($options['useContainer'])) {
-            $options['useContainer'] = true;
-        }
-        $targetPartial = $options['useContainer'] ? 'field-container' : 'field';
+        $targetPartial = ($options['useContainer'] ?? true) ? 'field-container' : 'field';
 
         return $this->makePartial($targetPartial, ['field' => $field]);
     }
@@ -711,7 +708,7 @@ class Form extends WidgetBase
      * @param string $addToArea
      * @return void
      */
-    public function addFields(array $fields, $addToArea = null)
+    public function addFields(array $fields, $addToArea = '')
     {
         foreach ($fields as $name => $config) {
             // Check if user has permissions to show this field
@@ -1171,13 +1168,10 @@ class Form extends WidgetBase
 
     /**
      * Returns post data from a submitted form.
-     *
-     * @return array
      */
-    public function getSaveData()
+    public function getSaveData(): array
     {
         $this->defineFormFields();
-        $this->applyFiltersFromModel();
 
         $result = [];
 
@@ -1227,7 +1221,17 @@ class Form extends WidgetBase
                 continue;
             }
 
-            $widgetValue = $widget->getSaveValue($this->dataArrayGet($result, $parts));
+            // Exclude fields that didn't provide any value
+            $fieldValue = $this->dataArrayGet($result, $parts, FormField::NO_SAVE_DATA);
+            if ($fieldValue === FormField::NO_SAVE_DATA) {
+                continue;
+            }
+
+            // Exclude fields where the widget returns NO_SAVE_DATA
+            $widgetValue = $widget->getSaveValue($fieldValue);
+            if ($widgetValue === FormField::NO_SAVE_DATA) {
+                continue;
+            }
             $this->dataArraySet($result, $parts, $widgetValue);
         }
 
