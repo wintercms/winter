@@ -139,7 +139,7 @@ modules/backend/formwidgets/codeeditor/
 │   ├── fonts/
 │   │   └── codicon.ttf - Monaco icons font
 │   ├── js/
-│   │   ├── index.js - Main Monaco integration
+│   │   ├── codeeditor.js - Main Monaco integration
 │   │   └── build/
 │   │       ├── codeeditor.bundle.js - Main bundle (19 MB)
 │   │       ├── css.worker.js - CSS language worker
@@ -194,35 +194,24 @@ Workers are loaded asynchronously and run in separate threads for better perform
 
 ### Theme System
 
-Supports two theme formats:
+Themes are loaded directly as static assets via HTTP fetch (no PHP handler required). Theme preference values include the file extension (e.g., `twilight.tmTheme`, `one-dark-pro.json`).
 
-#### 1. TextMate Themes (.tmTheme)
-Legacy XML-based themes used by Ace Editor. Converted to Monaco format at runtime using `fast-plist` library.
+#### Supported Formats
 
-```php
-// CodeEditor.php
-public function onLoadTheme() {
-    // Loads .tmTheme files and returns XML content
-    return ['format' => 'tmTheme', 'data' => $xml];
-}
-```
+**1. TextMate Themes (.tmTheme)**
+Legacy XML-based themes. Converted to Monaco format at runtime using `fast-plist` library.
 
-#### 2. JSON Themes (.json)
-Modern VS Code theme format. Loaded directly without conversion.
-
-```php
-// CodeEditor.php
-public function onLoadTheme() {
-    // Loads .json files and returns JSON content
-    return ['format' => 'json', 'data' => $json];
-}
-```
+**2. JSON Themes (.json)**
+Modern VS Code theme format. Parsed and mapped to Monaco's theme structure.
 
 ```javascript
-// index.js
-convertJsonTheme(jsonContent) {
-    // Converts VS Code JSON theme to Monaco theme
-    // Maps tokenColors and UI colors
+// codeeditor.js - Themes loaded via static fetch
+async fetchTheme(themeName) {
+    // Theme name includes extension (e.g., "twilight.tmTheme", "one-dark-pro.json")
+    // Legacy values without extension default to .tmTheme
+    const basePath = window.Snowboard.url().asset('/modules/backend/formwidgets/codeeditor/assets/themes/');
+    const response = await fetch(`${basePath}${themeName}`);
+    // Format determined from file extension
 }
 ```
 
