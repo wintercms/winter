@@ -2,8 +2,6 @@
 
 use Backend\Classes\FormWidgetBase;
 use Backend\Models\Preference as BackendPreference;
-use Winter\Storm\Exception\ApplicationException;
-use Winter\Storm\Support\Facades\File;
 
 /**
  * Code Editor
@@ -196,42 +194,6 @@ class CodeEditor extends FormWidgetBase
         // Double encode when escaping
         $this->vars['value'] = htmlentities($this->getLoadValue(), ENT_QUOTES, 'UTF-8', true);
         $this->vars['name'] = $this->getFieldName();
-    }
-
-    /**
-     * Loads a theme via AJAX.
-     * Supports both tmTheme (XML) and JSON formats.
-     */
-    public function onLoadTheme()
-    {
-        $theme = post('theme');
-
-        if (empty($theme)) {
-            throw new ApplicationException('No theme specified');
-        }
-        if (!preg_match('/^[a-z\-\_]+$/i', $theme)) {
-            throw new ApplicationException('Invalid theme name');
-        }
-
-        $themeDir = __DIR__ . '/codeeditor/assets/themes/';
-
-        // Try JSON format first (modern), then fall back to tmTheme (legacy)
-        $jsonPath = $themeDir . $theme . '.json';
-        $tmThemePath = $themeDir . $theme . '.tmTheme';
-
-        if (File::exists($jsonPath)) {
-            return [
-                'format' => 'json',
-                'data' => File::get($jsonPath),
-            ];
-        } elseif (File::exists($tmThemePath)) {
-            return [
-                'format' => 'tmTheme',
-                'data' => File::get($tmThemePath),
-            ];
-        }
-
-        throw new ApplicationException(sprintf('Theme "%s" not found', $theme));
     }
 
     /**

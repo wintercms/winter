@@ -1,9 +1,23 @@
 /* eslint-disable */
 const mix = require('laravel-mix');
 const fs = require('fs');
+const path = require('path');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 require('laravel-mix-polyfill');
 /* eslint-enable */
+
+// Clean js/build directory before compiling
+const buildDir = path.join(__dirname, 'js/build');
+if (fs.existsSync(buildDir)) {
+    fs.readdirSync(buildDir).forEach((file) => {
+        const filePath = path.join(buildDir, file);
+        if (fs.statSync(filePath).isDirectory()) {
+            fs.rmSync(filePath, { recursive: true });
+        } else {
+            fs.unlinkSync(filePath);
+        }
+    });
+}
 
 mix.setPublicPath(__dirname);
 
@@ -82,7 +96,6 @@ mix
     })
 
     .after(() => {
-        const { execSync } = require('child_process');
         let bundle = fs.readFileSync('js/build/codeeditor.bundle.js', 'utf8');
 
         // Remove inline CSS calls to the codicon font

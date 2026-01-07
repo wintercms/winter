@@ -22,7 +22,7 @@ class Preference extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
-    const DEFAULT_THEME = 'twilight';
+    const DEFAULT_THEME = 'twilight.tmTheme';
 
     /**
      * @var array Behaviors implemented by this model.
@@ -293,8 +293,11 @@ class Preference extends Model
 
             // Support both tmTheme (legacy) and JSON (modern) formats
             if ($extension === 'tmTheme' || $extension === 'json') {
-                $themeId = $node->getBasename('.' . $extension);
-                $themeName = ucwords(str_replace(['_', '-'], ' ', $themeId));
+                // Theme ID includes the file extension (e.g., "twilight.tmTheme", "one-dark-pro.json")
+                $themeId = $node->getBasename();
+                // Display name strips the extension for user-friendly presentation
+                $themeNameBase = $node->getBasename('.' . $extension);
+                $themeName = ucwords(str_replace(['_', '-'], ' ', $themeNameBase));
 
                 // Add the values to the themes array
                 if ($themeId != static::DEFAULT_THEME) {
@@ -305,7 +308,9 @@ class Preference extends Model
 
         // Sort the theme alphabetically, and push the default theme
         asort($themes);
-        return [static::DEFAULT_THEME => ucwords(static::DEFAULT_THEME)] + $themes;
+        // Strip extension from default theme for display name
+        $defaultThemeName = ucwords(str_replace(['_', '-'], ' ', pathinfo(static::DEFAULT_THEME, PATHINFO_FILENAME)));
+        return [static::DEFAULT_THEME => $defaultThemeName] + $themes;
     }
 
     /**

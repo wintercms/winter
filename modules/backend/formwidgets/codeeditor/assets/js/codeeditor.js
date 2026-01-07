@@ -766,40 +766,28 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
             }
 
             if (!this.cachedThemes[newTheme]) {
-                this.snowboard.request(
-                    this.element,
-                    (this.alias) ? `${this.alias}::onLoadTheme` : 'onLoadTheme',
-                    {
-                        data: {
-                            theme: newTheme,
-                        },
-                        success: (data) => {
-                            if (data.format && data.data) {
-                                let themeData;
+                this.fetchTheme(newTheme).then(({ format, data }) => {
+                    let themeData;
 
-                                // Handle both JSON and tmTheme formats
-                                if (data.format === 'json') {
-                                    // JSON theme - parse and use directly with Monaco
-                                    themeData = this.convertJsonTheme(data.data);
-                                } else {
-                                    // tmTheme - convert from TextMate XML format
-                                    themeData = this.convertTmTheme(data.data);
-                                }
+                    // Handle both JSON and tmTheme formats
+                    if (format === 'json') {
+                        // JSON theme - parse and use directly with Monaco
+                        themeData = this.convertJsonTheme(data);
+                    } else {
+                        // tmTheme - convert from TextMate XML format
+                        themeData = this.convertTmTheme(data);
+                    }
 
-                                this.cachedThemes[newTheme] = themeData;
+                    this.cachedThemes[newTheme] = themeData;
 
-                                monaco.editor.defineTheme(newThemeVS, themeData);
-                                monaco.editor.setTheme(newThemeVS);
-                                this.setConfig('theme', newTheme);
-                                this.setConfig('themeVs', newThemeVS);
-                                this.updateStatusBarColor(themeData);
-                            }
-                        },
-                        error: () => {
-                            // Theme loading failed - silently fall back to default theme
-                        },
-                    },
-                );
+                    monaco.editor.defineTheme(newThemeVS, themeData);
+                    monaco.editor.setTheme(newThemeVS);
+                    this.setConfig('theme', newTheme);
+                    this.setConfig('themeVs', newThemeVS);
+                    this.updateStatusBarColor(themeData);
+                }).catch(() => {
+                    // Theme loading failed - silently fall back to default theme
+                });
                 return;
             }
 
@@ -807,6 +795,36 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
             this.setConfig('theme', newTheme);
             this.setConfig('themeVs', newThemeVS);
             this.updateStatusBarColor(this.cachedThemes[newTheme]);
+        }
+
+        /**
+         * Fetches a theme file directly from the themes directory.
+         *
+         * @param {String} themeName Theme filename (e.g., "twilight.tmTheme" or "one-dark-pro.json")
+         * @returns {Promise<{format: string, data: string}>}
+         */
+        async fetchTheme(themeName) {
+            // Handle legacy values without extension - default to .tmTheme
+            let themeFile = themeName;
+            if (!themeName.includes('.')) {
+                themeFile = `${themeName}.tmTheme`;
+            }
+
+            // Determine format from file extension
+            const isJson = themeFile.endsWith('.json');
+            const format = isJson ? 'json' : 'tmTheme';
+
+            // Construct URL using the same pattern as worker URLs
+            const basePath = window.Snowboard.url().asset('/modules/backend/formwidgets/codeeditor/assets/themes/');
+            const url = `${basePath}${themeFile}`;
+
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Theme "${themeName}" not found`);
+            }
+
+            const data = await response.text();
+            return { format, data };
         }
 
         /**
