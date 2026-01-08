@@ -1221,6 +1221,23 @@ class Form extends WidgetBase
                 continue;
             }
 
+            // get nested widget fields that should be saved to the model
+            if (method_exists($widget, 'getFormFields')) {
+                foreach ($widget->getFormFields() as $field) {
+                    $parts = HtmlHelper::nameToArray($field->fieldName);
+                    if (($value = $this->dataArrayGet($data, $parts)) !== null) {
+                        /*
+                         * Number fields should be converted to integers
+                         */
+                        if ($field->type === 'number') {
+                            $value = !strlen(trim($value)) ? null : (float) $value;
+                        }
+
+                        $this->dataArraySet($result, $parts, $value);
+                    }
+                }
+            }
+
             // Exclude fields that didn't provide any value
             $fieldValue = $this->dataArrayGet($result, $parts, FormField::NO_SAVE_DATA);
             if ($fieldValue === FormField::NO_SAVE_DATA) {
