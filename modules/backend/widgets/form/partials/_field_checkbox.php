@@ -5,6 +5,7 @@
         name="<?= $field->getName() ?>"
         value="0"
         <?= $this->previewMode ? 'disabled="disabled"' : '' ?>>
+
     <input
         type="checkbox"
         id="<?= $field->getId() ?>"
@@ -14,10 +15,13 @@
         <?= $field->isSelected() ? 'checked="checked"' : '' ?>
         <?= $field->getAttributes() ?>>
 
-    <label for="<?= $field->getId() ?>">
-        <?= e(trans($field->label)) ?>
+    <label for="<?= $field->getId() ?>" class="<?= $field->showLabels ? 'show-labels' : '' ?>">
+        <?php if (!$field->showLabels): ?>
+            <?= e(trans($field->label)) ?>
+        <?php endif ?>
     </label>
-    <?php if ($field->comment): ?>
+
+    <?php if (!$field->showLabels and $field->comment): ?>
         <p class="help-block"><?= $field->commentHtml ? trans($field->comment) : e(trans($field->comment)) ?></p>
     <?php endif ?>
 </div>
