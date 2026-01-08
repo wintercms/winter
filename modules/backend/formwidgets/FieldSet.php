@@ -23,6 +23,8 @@ class FieldSet extends FormWidgetBase
      */
     public $form;
 
+    public $showLabels = false;
+
     /**
      * @var Form form widget reference
      */

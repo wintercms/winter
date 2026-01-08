@@ -1,8 +1,8 @@
-<?php $placeholder = object_get($this->config, 'placeholder'); ?>
+<?php $label = object_get($this->config, 'label'); ?>
 
 <fieldset class="fieldset">
-    <?php if ($placeholder): ?>
-        <legend><?= trans($placeholder) ?></legend>
+    <?php if ($label): ?>
+        <legend><?= trans($label) ?></legend>
     <?php endif ?>
 
     <?= $this->formWidget->render() ?>
