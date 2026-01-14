@@ -246,7 +246,6 @@
         $componentListFormGroup.removeClass()
         $componentListFormGroup.addClass('layout-row min-size')
         this.updateComponentListClass(data.pane)
-        this.updateFormEditorMode(data.pane, true)
 
         var $form = $('form', data.pane),
             self = this
@@ -379,8 +378,6 @@
             if (templateType == 'layout')
                 this.updateLayouts(element)
         }
-
-        this.updateFormEditorMode($(element).closest('.tab-pane'), false)
 
         if (context.handler == 'onSave' && (!data['X_WINTER_ERROR_FIELDS'] && !data['X_WINTER_ERROR_MESSAGE'])) {
             $(element).trigger('unchange.oc.changeMonitor')
@@ -594,39 +591,6 @@
 
         $primaryTabContainer.toggleClass('component-area', hasComponents)
         $componentList.toggleClass('has-components', hasComponents)
-    }
-
-    CmsPage.prototype.updateFormEditorMode = function(pane, initialization) {
-        var $contentTypeElement = $('[data-toolbar-type]', pane)
-        if ($contentTypeElement.length == 0)
-            return
-
-        if ($contentTypeElement.data('toolbar-type') != 'content')
-            return
-
-        var fileName = $('input[name=fileName]', pane).val(),
-            parts = fileName.split('.'),
-            extension = 'txt',
-            mode = 'plain_text',
-            modes = $.wn.codeEditorExtensionModes,
-            editor = pane.querySelector('[data-control="codeeditor"]').getWidget()
-
-        if (parts.length >= 2)
-            extension = parts.pop().toLowerCase()
-
-        if (modes[extension] !== undefined)
-            mode = modes[extension];
-
-        var setEditorMode = function() {
-            window.setTimeout(function(){
-                editor.data('oc.codeEditor').editor.getSession().setMode({path: 'ace/mode/'+mode})
-            }, 200)
-        }
-
-        if (initialization)
-            editor.on('oc.codeEditorReady', setEditorMode)
-        else
-            setEditorMode()
     }
 
     CmsPage.prototype.updateModifiedCounter = function() {
