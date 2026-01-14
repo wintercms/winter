@@ -91,9 +91,9 @@ class FormField
     public $span = 'full';
 
     /**
-     * @var string Specifies a size. Possible values: tiny, small, large, huge, giant.
+     * @var string|int Specifies a size. Possible values for textarea: tiny, small, large, huge, giant.
      */
-    public $size = 'large';
+    public $size;
 
     /**
      * @var string Specifies contextual visibility of this form field.
@@ -211,7 +211,7 @@ class FormField
     }
 
     /**
-     * Sets a side of the field on a form.
+     * Sets the size of the field on a form.
      * @param string $value Specifies a size. Possible values: tiny, small, large, huge, giant
      */
     public function size($value = 'large')
@@ -259,6 +259,11 @@ class FormField
      */
     public function displayAs($type, $config = [])
     {
+        if (in_array($type, ['textarea', 'widget'])) {
+            // defaults to 'large'
+            $this->size = 'large';
+        }
+
         $this->type = strtolower($type) ?: $this->type;
         $this->config = $this->evalConfig($config);
 
