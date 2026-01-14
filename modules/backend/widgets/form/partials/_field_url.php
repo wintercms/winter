@@ -27,14 +27,14 @@ $listId = $hasOptions ? $field->getId() . '-list' : null;
             name="<?= $field->getName() ?>"
             id="<?= $field->getId() ?>"
             value="<?= e($field->value) ?>"
-            placeholder="<?= e(trans($field->placeholder)) ?>"
             class="form-control"
-            <?= $field->getAttributes() ?>
-            <?= isset($field->autocomplete) ? 'autocomplete="' . e($field->autocomplete) . '"' : '' ?>
-            <?= isset($field->maxlength) ? 'maxlength="' . e($field->maxlength) . '"' : '' ?>
-            <?= isset($field->minlength) ? 'minlength="' . e($field->minlength) . '"' : '' ?>
-            <?= isset($field->pattern) ? 'pattern="' . e($field->pattern) . '"' : '' ?>
+            <?= isset($field->autocomplete) && is_string($field->autocomplete) ? 'autocomplete="' . e($field->autocomplete) . '"' : '' ?>
+            <?= isset($field->maxlength) && is_numeric($field->maxlength) ? 'maxlength="' . e($field->maxlength) . '"' : '' ?>
+            <?= isset($field->minlength) && is_numeric($field->minlength) ? 'minlength="' . e($field->minlength) . '"' : '' ?>
+            <?= isset($field->pattern) && is_string($field->pattern) ? 'pattern="' . e($field->pattern) . '"' : '' ?>
+            <?= isset($field->placeholder) && is_string($field->placeholder) ? 'placeholder="' . e($field->placeholder) . '"' : '' ?>
             <?= isset($field->size) && is_numeric($field->size) ? 'size="' . e($field->size) . '"' : '' ?>
+            <?= $field->getAttributes() ?>
             <?= $listId ? 'list="' . e($listId) . '"' : '' ?>
         />
         <?php if ($hasOptions): ?>
