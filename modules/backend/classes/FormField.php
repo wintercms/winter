@@ -281,18 +281,18 @@ class FormField
          */
         $applyConfigValues = [
             'commentHtml',
-            'placeholder',
-            'dependsOn',
-            'required',
-            'readOnly',
-            'disabled',
-            'cssClass',
-            'stretch',
             'context',
+            'cssClass',
+            'dependsOn',
+            'disabled',
             'hidden',
-            'trigger',
-            'preset',
             'path',
+            'placeholder',
+            'preset',
+            'readOnly',
+            'required',
+            'stretch',
+            'trigger',
         ];
 
         foreach ($applyConfigValues as $value) {
@@ -728,5 +728,32 @@ class FormField
         }
 
         return $result;
+    }
+
+    /**
+      * Implements the getter functionality.
+      * @param  string  $name
+      */
+    public function __get($name)
+    {
+        if (array_key_exists($name, $this->config)) {
+            return array_get($this->config, $name);
+        }
+        if (property_exists($this, $name)) {
+            return $this->{$name};
+        }
+        return null;
+    }
+
+    /**
+      * Determine if an attribute exists on the object.
+      * @param  string  $name
+      */
+    public function __isset($name)
+    {
+        if (array_key_exists($name, $this->config)) {
+            return true;
+        }
+        return property_exists($this, $name) && !is_null($this->{$name});
     }
 }
