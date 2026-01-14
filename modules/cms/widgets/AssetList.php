@@ -1,22 +1,25 @@
-<?php namespace Cms\Widgets;
+<?php
 
-use Str;
-use Url;
-use File;
-use Lang;
-use Input;
-use Request;
-use Response;
-use Cms\Classes\Theme;
-use Cms\Classes\Asset;
+namespace Cms\Widgets;
+
 use Backend\Classes\WidgetBase;
-use ApplicationException;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
+use Cms\Classes\Asset;
+use Cms\Classes\Theme;
 use DirectoryIterator;
 use Exception;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Facades\Url;
+use Winter\Storm\Support\Str;
+use Winter\Storm\Support\Svg;
 
 /**
  * CMS asset list widget.
@@ -642,7 +645,10 @@ class AssetList extends WidgetBase
         $fileName = null;
 
         try {
-            $uploadedFile = Input::file('file_data');
+            /**
+             * @var \Illuminate\Http\UploadedFile
+             */
+            $uploadedFile = Request::file('file_data');
 
             if (!is_object($uploadedFile)) {
                 return;
@@ -678,10 +684,14 @@ class AssetList extends WidgetBase
                 ));
             }
 
+            if (File::extension($fileName) === 'svg') {
+                File::put($uploadedFile->getRealPath(), Svg::extract($uploadedFile->getRealPath()));
+            }
+
             /*
              * Accept the uploaded file
              */
-            $uploadedFile = $uploadedFile->move($this->getCurrentPath(), $uploadedFile->getClientOriginalName());
+            $uploadedFile = $uploadedFile->move($this->getCurrentPath(), $fileName);
 
             File::chmod($uploadedFile->getRealPath());
 
