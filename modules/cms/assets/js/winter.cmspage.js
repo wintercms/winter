@@ -293,7 +293,7 @@
                     },
                     success: function (data) {
                         if (data.result) {
-                            console.log(widget.replace(range, data.result));
+                            widget.replace(range, data.result)
                         }
                     },
                 });
@@ -327,8 +327,6 @@
                 }
             }
         );
-
-        console.log('Done');
     }
 
     CmsPage.prototype.onAfterAllTabsClosed = function(ev) {
