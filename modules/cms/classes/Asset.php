@@ -108,11 +108,8 @@ class Asset extends Extendable
 
     /**
      * Find a single template by its file name.
-     *
-     * @param  string $fileName
-     * @return mixed|static
      */
-    public function find($fileName)
+    public function find(string $fileName): ?static
     {
         $filePath = $this->getFilePath($fileName);
 
