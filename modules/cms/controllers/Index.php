@@ -684,23 +684,19 @@ class Index extends Controller
             array_set($widgetConfig->secondaryTabs, 'fields.markup.type', $type);
         }
 
-        $lang = 'php';
-        if (array_get($widgetConfig->secondaryTabs, 'fields.markup.type') === 'codeeditor') {
-            switch ($ext) {
-                case 'htm':
-                    $lang = 'twig';
-                    break;
-                case 'html':
-                    $lang = 'html';
-                    break;
-                case 'css':
-                    $lang = 'css';
-                    break;
-                case 'js':
-                case 'json':
-                    $lang = 'javascript';
-                    break;
-            }
+        $codeField = ($template instanceof Asset) ? 'content' : 'markup';
+
+        $lang = match ($ext) {
+            'htm' => 'twig',
+            'html' => 'html',
+            'css' => 'css',
+            'js', 'json' => 'javascript',
+            'txt' => 'txt',
+            default => 'php',
+        };
+
+        if (array_get($widgetConfig->secondaryTabs, "fields.$codeField.type") === 'codeeditor') {
+            array_set($widgetConfig->secondaryTabs, "fields.$codeField.language", $lang);
         }
 
         $widgetConfig->model = $template;
