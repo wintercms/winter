@@ -131,7 +131,7 @@ This architecture balances modern features where they matter most (code editing)
 
 ### Architecture
 
-```
+```text
 modules/backend/formwidgets/codeeditor/
 ├── assets/
 │   ├── css/
