@@ -30,15 +30,12 @@ $listId = $hasOptions ? $field->getId() . '-list' : null;
             placeholder="<?= e(trans($field->placeholder)) ?>"
             class="form-control"
             <?= $field->getAttributes() ?>
+            <?= isset($field->autocomplete) ? 'autocomplete="' . e($field->autocomplete) . '"' : '' ?>
             <?= isset($field->maxlength) ? 'maxlength="' . e($field->maxlength) . '"' : '' ?>
             <?= isset($field->minlength) ? 'minlength="' . e($field->minlength) . '"' : '' ?>
             <?= isset($field->pattern) ? 'pattern="' . e($field->pattern) . '"' : '' ?>
-            <?= isset($field->size) ? 'size="' . e($field->size) . '"' : '' ?>
+            <?= isset($field->size) && is_numeric($field->size) ? 'size="' . e($field->size) . '"' : '' ?>
             <?= $listId ? 'list="' . e($listId) . '"' : '' ?>
-            <?= isset($field->autocomplete) ? 'autocomplete="' . e($field->autocomplete) . '"' : '' ?>
-            <?= isset($field->required) && $field->required ? 'required' : '' ?>
-            <?= isset($field->readonly) && $field->readonly ? 'readonly' : '' ?>
-            <?= isset($field->disabled) && $field->disabled ? 'disabled' : '' ?>
         />
         <?php if ($hasOptions): ?>
             <datalist id="<?= e($listId) ?>">
