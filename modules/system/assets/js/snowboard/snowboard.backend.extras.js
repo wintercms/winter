@@ -5,6 +5,7 @@ import StripeLoader from './extras/StripeLoader';
 import StylesheetLoader from './extras/StylesheetLoader';
 import AssetLoader from './extras/AssetLoader';
 import DataConfig from './extras/DataConfig';
+import Trigger from './extras/Trigger';
 
 if (window.Snowboard === undefined) {
     throw new Error('Snowboard must be loaded in order to use the extra plugins.');
@@ -18,4 +19,5 @@ if (window.Snowboard === undefined) {
     Snowboard.addPlugin('flash', Flash);
     Snowboard.addPlugin('attachLoading', AttachLoading);
     Snowboard.addPlugin('stripeLoader', StripeLoader);
+    Snowboard.addPlugin('trigger', Trigger);
 })(window.Snowboard);

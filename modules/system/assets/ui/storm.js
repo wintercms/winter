@@ -57,7 +57,6 @@
 =require js/input.monitor.js
 =require js/input.hotkey.js
 =require js/input.preset.js
-=require js/input.trigger.js
 =require js/drag.value.js
 =require js/drag.sort.js
 =require js/drag.scroll.js
