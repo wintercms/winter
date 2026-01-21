@@ -267,18 +267,22 @@
         const $form = $(widget.element.closest('form'));
 
         if (widget.config.get('language') === 'php') {
-            // If no PHP tag is available, add it and hide it from the editor. Otherwise, hide the PHP tag.
-            let match = widget.find(/<\?php\s*/, false);
-            if (!match) {
-                widget.setValue('<?php\n' + widget.getValue());
-                match = widget.find(/<\?php\s*/, false);
+            let value = widget.getValue();
 
-                if (!match) {
-                    return;
-                }
+            // If no PHP tag at the start, prepend one
+            if (!/^<\?php\s*/.test(value)) {
+                widget.setValue('<?php\n' + value);
             }
 
-            widget.fromLine(2);
+            // Verify the editor has at least 2 lines before hiding line 1
+            const lineCount = widget.getModel().getLineCount();
+            if (lineCount >= 2) {
+                // Only hide line 1 if it contains just the PHP open tag
+                const firstLine = widget.getModel().getLineContent(1);
+                if (/^<\?php\s*$/.test(firstLine)) {
+                    widget.fromLine(2);
+                }
+            }
         }
 
         // Add codelens and action to customise component templates
