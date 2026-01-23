@@ -327,7 +327,7 @@
                 selector = 'input, select:first, ul:first'
             }
         }
-        if (!$target.length) {
+        if (!$target || !$target.length) {
             $target = $item
         }
 
