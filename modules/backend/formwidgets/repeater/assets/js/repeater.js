@@ -330,7 +330,7 @@
             $target = $item
         }
 
-        var $textInput = $('input[type=text]:first, select:first, ul:first', $target).first()
+        var $textInput = $('input:first, select:first, ul:first', $target).first()
         if ($textInput.length) {
             switch($textInput.prop("tagName")) {
                 case 'SELECT':
