@@ -22,7 +22,7 @@ class Preference extends Model
 {
     use \Winter\Storm\Database\Traits\Validation;
 
-    const DEFAULT_THEME = 'twilight';
+    const DEFAULT_THEME = 'twilight.tmTheme';
 
     /**
      * @var array Behaviors implemented by this model.
@@ -61,6 +61,8 @@ class Preference extends Model
         $this->editor_font_size = $config->get('editor.font_size', 12);
         $this->editor_word_wrap = $config->get('editor.word_wrap', 'fluid');
         $this->editor_code_folding = $config->get('editor.code_folding', 'manual');
+        // @deprecated v1.3.0
+        $this->editor_enable_folding = $config->get('editor.enable_folding', $config->get('editor.code_folding', 'manual') !== 'manual');
         $this->editor_tab_size = $config->get('editor.tab_size', 4);
         $this->editor_theme = $config->get('editor.theme', static::DEFAULT_THEME);
         $this->editor_show_invisibles = $config->get('editor.show_invisibles', false);
@@ -72,6 +74,9 @@ class Preference extends Model
         $this->editor_enable_snippets = $config->get('editor.enable_snippets', false);
         $this->editor_display_indent_guides = $config->get('editor.display_indent_guides', false);
         $this->editor_show_print_margin = $config->get('editor.show_print_margin', false);
+        $this->editor_show_minimap = $config->get('editor.show_minimap', true);
+        $this->editor_bracket_colors = $config->get('editor.bracket_colors', false);
+        $this->editor_show_colors = $config->get('editor.show_colors', true);
     }
 
     /**
@@ -271,20 +276,28 @@ class Preference extends Model
 
     /**
      * Returns the theme options for the backend editor.
-     * @return array
+     * Supports both legacy tmTheme (XML) and modern JSON theme formats.
      */
-    public function getEditorThemeOptions()
+    public function getEditorThemeOptions(): array
     {
-        $themeDir = new DirectoryIterator("modules/backend/formwidgets/codeeditor/assets/vendor/ace/");
+        $themeDir = new DirectoryIterator('modules/backend/formwidgets/codeeditor/assets/themes/');
         $themes = [];
 
         // Iterate through the themes
         foreach ($themeDir as $node) {
-            // If this file is a theme (starting by "theme-")
-            if (!$node->isDir() && substr($node->getFileName(), 0, 6) == 'theme-') {
-                // Remove the theme- prefix and the .js suffix, create an user friendly and capitalized name
-                $themeId = substr($node->getFileName(), 6, -3);
-                $themeName = ucwords(str_replace("_", " ", $themeId));
+            if (!$node->isFile()) {
+                continue;
+            }
+
+            $extension = $node->getExtension();
+
+            // Support both tmTheme (legacy) and JSON (modern) formats
+            if ($extension === 'tmTheme' || $extension === 'json') {
+                // Theme ID includes the file extension (e.g., "twilight.tmTheme", "one-dark-pro.json")
+                $themeId = $node->getBasename();
+                // Display name strips the extension for user-friendly presentation
+                $themeNameBase = $node->getBasename('.' . $extension);
+                $themeName = ucwords(str_replace(['_', '-'], ' ', $themeNameBase));
 
                 // Add the values to the themes array
                 if ($themeId != static::DEFAULT_THEME) {
@@ -295,6 +308,21 @@ class Preference extends Model
 
         // Sort the theme alphabetically, and push the default theme
         asort($themes);
-        return [static::DEFAULT_THEME => ucwords(static::DEFAULT_THEME)] + $themes;
+        // Strip extension from default theme for display name
+        $defaultThemeName = ucwords(str_replace(['_', '-'], ' ', pathinfo(static::DEFAULT_THEME, PATHINFO_FILENAME)));
+        return [static::DEFAULT_THEME => $defaultThemeName] + $themes;
+    }
+
+    /**
+     * Returns the word wrap options for the backend editor.
+     */
+    public function getEditorWordWrapOptions(): array
+    {
+        return [
+            'off' => Lang::get('backend::lang.editor.mode_off'),
+            '40' => Lang::get('backend::lang.editor.40_characters'),
+            '80' => Lang::get('backend::lang.editor.80_characters'),
+            'fluid' => Lang::get('backend::lang.editor.mode_fluid'),
+        ];
     }
 }

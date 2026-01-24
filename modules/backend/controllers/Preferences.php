@@ -1,12 +1,14 @@
 <?php namespace Backend\Controllers;
 
-use Lang;
-use Flash;
-use Backend;
-use BackendMenu;
 use Backend\Classes\Controller;
-use System\Classes\SettingsManager;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
 use Backend\Models\Preference as PreferenceModel;
+use Illuminate\Support\Facades\Lang;
+use System\Classes\SettingsManager;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\File;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Editor Settings controller
@@ -33,8 +35,6 @@ class Preferences extends Controller
     {
         parent::__construct();
 
-        $this->addCss('/modules/backend/formwidgets/codeeditor/assets/css/codeeditor.css', 'core');
-        $this->addJs('/modules/backend/formwidgets/codeeditor/assets/js/build-min.js', 'core');
         $this->addJs('/modules/backend/assets/js/preferences/preferences.js', 'core');
 
         BackendMenu::setContext('Winter.System', 'system', 'mysettings');
