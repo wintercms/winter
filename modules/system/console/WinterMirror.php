@@ -33,11 +33,13 @@ class WinterMirror extends Command
      */
     protected $files = [
         '.htaccess',
+        '.user.ini',
         'index.php',
         'favicon.ico',
         'robots.txt',
         'humans.txt',
         'sitemap.xml',
+        'llms.txt',
     ];
 
     /**

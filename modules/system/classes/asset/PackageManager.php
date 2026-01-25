@@ -339,6 +339,10 @@ class PackageManager
         // Check for any existing package that already registers the given compilable config path
         foreach ($this->packages[$type] ?? [] as $packageName => $settings) {
             if ($settings['config'] === $config) {
+                // If the package name is the same, we'll just discard the repeated registration
+                if ($packageName === $name) {
+                    return;
+                }
                 throw new SystemException(sprintf(
                     'Cannot register "%s" (%s) as a compilable package; it has already been registered as %s.',
                     $name,

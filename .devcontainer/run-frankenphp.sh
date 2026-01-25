@@ -11,6 +11,11 @@ sudo chown -R $USER_ID:$GROUP_ID /data/caddy
 sudo touch /var/log/frankenphp.log
 sudo chown $USER_ID:$GROUP_ID /var/log/frankenphp.log
 
+# If debugging is enabled, disable Opcache so changes are reflected immediately
+if [ "${APP_DEBUG}" = "true" ] || [ "${APP_DEBUG}" = "1" ]; then
+    sudo sed -i 's/opcache.enable = On/opcache.enable = Off/' /usr/local/etc/php/conf.d/winter.ini
+fi
+
 # Run server in background
 if [ "${CODESPACES}" = "true" ]; then
     # Ensure environment variables are set correctly for Codespaces

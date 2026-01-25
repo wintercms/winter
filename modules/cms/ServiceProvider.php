@@ -42,7 +42,6 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsole();
         $this->registerErrorHandler();
         $this->registerTwigParser();
-        $this->registerAssetBundles();
         $this->registerComponents();
         $this->registerThemeLogging();
         $this->registerCombinerEvents();
@@ -67,6 +66,8 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function boot()
     {
+        $this->registerAssetBundles();
+
         parent::boot('cms');
 
         $this->bootMenuItemEvents();
