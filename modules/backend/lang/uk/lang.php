@@ -10,7 +10,7 @@ return [
         'options_method_invalid_model' => "Атрибут ':field' не відповідає допустимій моделі. Спробуйте явно вказати метод параметрів для класу :model .",
         'options_method_not_exists' => "Клас моделі :model повинен містити метод :method(), що повертає опції для поля ':field'.",
         'options_static_method_invalid_value' => "Статичний метод ':method()' в :class не повернув допустимий масив параметрів.",
-        'colors_method_not_exists' => "Класс моделі :model повинен мати метод :method(), що повертає HTML колір в HEX для поля форми ':field'.",
+        'colors_method_not_exists' => "Клас моделі :model повинен мати метод :method(), що повертає HTML колір в HEX для поля форми ':field'.",
     ],
     'widget' => [
         'not_registered' => "Клас віджету ':name' не зареєстровано",
