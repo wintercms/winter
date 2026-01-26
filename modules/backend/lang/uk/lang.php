@@ -51,7 +51,7 @@ return [
         'stop_impersonating' => 'Зупинити імперсонацію',
         'unsuspend' => 'Припинено',
         'unsuspend_confirm' => 'Ви впевнені, що хочете призупинити цього користувача?',
-        'unsuspend_success' => 'Користувач був призупинений.',
+        'unsuspend_success' => 'Користувача відновлено.',
         'unsuspend_working' => 'Призупинення...',
         'signed_in_as' => 'Виконано вхід як :full_name',
         'sign_out' => 'Вийти',
