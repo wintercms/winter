@@ -1,4 +1,4 @@
-<!-- URL -->
+<!-- Tel (Phone) -->
 <?php
 $fieldOptions = $field->options();
 $hasOptions = is_array($fieldOptions) && count($fieldOptions);
