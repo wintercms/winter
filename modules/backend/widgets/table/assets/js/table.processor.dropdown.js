@@ -139,7 +139,7 @@
     DropdownProcessor.prototype.buildEditor = function(cellElement, cellContentContainer, isClick) {
         // Create the select control
         var currentValue = this.tableObj.getCellValue(cellElement),
-            containerPosition = this.getAbsolutePosition(cellContentContainer)
+            containerPosition = this.getAbsolutePosition(cellContentContainer),
             self = this
 
         this.itemListElement = document.createElement('div')

@@ -7,6 +7,10 @@ on:
       - develop
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   frontendTests:
     strategy:
@@ -22,11 +26,6 @@ jobs:
       extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
       key: winter-cms-cache-develop
     steps:
-      - name: Cancel previous incomplete runs
-        uses: styfle/cancel-workflow-action@0.8.0
-        with:
-          access_token: ${{ github.token }}
-
       - name: Checkout changes
         uses: actions/checkout@v3
 
@@ -104,13 +103,8 @@ jobs:
       extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
       key: winter-cms-cache-develop
     steps:
-      - name: Cancel previous incomplete runs
-        uses: styfle/cancel-workflow-action@0.8.0
-        with:
-          access_token: ${{ github.token }}
-
       - name: Checkout changes
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup extension cache
         id: extcache

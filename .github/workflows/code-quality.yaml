@@ -9,16 +9,15 @@ on:
       - 1.2
       - develop
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   codeQuality:
     runs-on: ubuntu-latest
     name: PHP
     steps:
-      - name: Cancel previous incomplete runs
-        uses: styfle/cancel-workflow-action@0.8.0
-        with:
-          access_token: ${{ github.token }}
-
       - name: Checkout changes
         uses: actions/checkout@v2
         with:
