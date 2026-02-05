@@ -12,7 +12,7 @@ use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Lang;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
-use System\Classes\PluginManager;
+use System\Classes\Extensions\PluginManager;
 use System\Helpers\DateTime as DateTimeHelper;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Exception\ApplicationException;

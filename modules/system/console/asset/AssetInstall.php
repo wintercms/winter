@@ -7,7 +7,7 @@ use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\Process;
 use System\Classes\Asset\PackageJson;
 use System\Classes\Asset\PackageManager;
-use System\Classes\PluginManager;
+use System\Classes\Extensions\PluginManager;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Support\Facades\Config;

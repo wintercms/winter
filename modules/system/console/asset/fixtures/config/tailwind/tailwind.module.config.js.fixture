@@ -1,0 +1,16 @@
+import defaultTheme from 'tailwindcss/defaultTheme';
+import forms from '@tailwindcss/forms';
+
+/** @type {import('tailwindcss').Config} */
+export default {
+    content: [
+        './controllers/**/*.{htm,php}',
+        './formwidgets/**/*.{htm,php}',
+        './layouts/**/*.{htm,php}',
+        './partials/**/*.{htm,php}',
+        './reportwidgets/**/*.{htm,php}',
+        './views/**/*.{htm,php}',
+        './widgets/**/*.{htm,php}',
+    ],
+    plugins: [forms],
+};

@@ -8,6 +8,8 @@ use Exception;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
+use System\Classes\Extensions\Traits\HasVersionFile;
+use Winter\Storm\Foundation\Extension\WinterExtension;
 use System\Models\Parameter;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Exception\SystemException;
@@ -19,7 +21,7 @@ use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\File;
 use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\Facades\Yaml;
-use Winter\Storm\Support\Str;
+use Winter\Storm\Support\Traits\HasComposerPackage;
 
 /**
  * This class represents the CMS theme.
@@ -29,8 +31,11 @@ use Winter\Storm\Support\Str;
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
  */
-class Theme extends CmsObject
+class Theme extends CmsObject implements WinterExtension
 {
+    use HasComposerPackage;
+    use HasVersionFile;
+
     /**
      * @var string Specifies the theme directory name.
      */
@@ -61,6 +66,11 @@ class Theme extends CmsObject
      */
     protected $defaultExtension = 'yaml';
 
+    /**
+     * @var string The version of this theme as reported by version.yaml, access with getVersion()
+     */
+    protected $version;
+
     const ACTIVE_KEY = 'cms::theme.active';
     const EDIT_KEY = 'cms::theme.edit';
 
@@ -72,6 +82,7 @@ class Theme extends CmsObject
         $theme = new static;
         $theme->setDirName($dirName);
         $theme->registerHalcyonDatasource();
+
         if (App::runningInBackend()) {
             $theme->registerBackendLocalization();
         }
@@ -711,5 +722,27 @@ class Theme extends CmsObject
         }
 
         return false;
+    }
+
+    public function getVersion(): string
+    {
+        if (isset($this->version)) {
+            return $this->version;
+        }
+
+        $versions = $this->getVersionsFromYaml(
+            versionFile: $this->getPath() . DIRECTORY_SEPARATOR . 'version.yaml',
+            includeScripts: false
+        );
+        if (empty($versions)) {
+            return $this->version = '0';
+        }
+
+        return $this->version = trim(key(array_slice($versions, -1, 1)));
+    }
+
+    public function getIdentifier(): string
+    {
+        return $this->getId();
     }
 }

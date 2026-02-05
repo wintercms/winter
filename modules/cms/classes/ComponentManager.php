@@ -1,9 +1,9 @@
 <?php namespace Cms\Classes;
 
-use Str;
-use System\Classes\PluginManager;
-use SystemException;
 use Illuminate\Support\Facades\App;
+use Str;
+use System\Classes\Extensions\PluginManager;
+use SystemException;
 
 /**
  * Component manager

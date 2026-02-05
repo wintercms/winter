@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\File as Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use System\Classes\UpdateManager;
+use System\Classes\Core\MarketPlaceApi;
 use System\Classes\CombineAssets;
 use System\Models\Parameter;
 use System\Models\File as FileModel;
@@ -515,8 +515,7 @@ class WinterUtil extends Command
             return;
         }
 
-        $manager = UpdateManager::instance();
-        $result = $manager->requestProjectDetails($projectId);
+        $result = MarketPlaceApi::instance()->request(MarketPlaceApi::REQUEST_PROJECT_DETAIL, $projectId);
 
         Parameter::set([
             'system::project.id'    => $projectId,

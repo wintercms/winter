@@ -59,7 +59,7 @@ php artisan plugin:refresh Acme.Blog
 > **Note:** If your plugin uses [configuration files](../plugin/settings#file-configuration), then you will need to run `System\Classes\PluginManager::instance()->registerAll(true);` in the `setUp` method of your tests. Below is an example of a base test case class that should be used if you need to test your plugin working with other plugins instead of in isolation.
 
 ```php
-use System\Classes\PluginManager;
+use System\Classes\Extensions\PluginManager;
 use System\Tests\Bootstrap\PluginTestCase;
 
 class BaseTestCase extends PluginTestCase

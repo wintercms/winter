@@ -1,17 +1,17 @@
 <?php namespace System\ReportWidgets;
 
-use Lang;
-use Config;
-use BackendAuth;
-use System\Models\Parameter;
-use System\Models\LogSetting;
-use System\Classes\UpdateManager;
-use System\Classes\PluginManager;
 use Backend\Classes\ReportWidgetBase;
 use Backend\Models\User;
-use System\Models\EventLog;
-use System\Models\RequestLog;
+use BackendAuth;
+use Config;
 use Exception;
+use Lang;
+use System\Classes\Extensions\PluginManager;
+use System\Classes\UpdateManager;
+use System\Models\EventLog;
+use System\Models\LogSetting;
+use System\Models\Parameter;
+use System\Models\RequestLog;
 
 /**
  * System status report widget.

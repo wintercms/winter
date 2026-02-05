@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@config "./tailwind.config.js";
+
+@layer utilities {
+    .w-full-storm-fix {
+        @apply w-full;
+    }
+    .hidden-storm-fix {
+        @apply hidden;
+    }
+}
+
+#layout-canvas, #layout-body .layout-row, .nav.nav-tabs{
+    background: #fff;
+}
+#layout-body .layout-row, #layout-body .layout-row .padded-container {
+    background: #f9f9f9;
+}
+.control-tabs.content-tabs > ul.nav-tabs li.active a {
+    background: #f9f9f9;
+}
+.updates-app .modal-content {
+    @apply rounded-3xl shadow-sm;
+}
+
+.updates-app .table-fancy {
+    table.table.data {
+        @apply !border-blue-200;
+    }
+    table.table.data thead tr th {
+        @apply border-0
+    }
+    table.table.data thead th {
+        @apply !border-t-0 !border-b-1 !border-blue-200
+    }
+    table.table.data thead th:first-child {
+        @apply border-r-1;
+    }
+    table.table.data {
+        @apply !border-b-0
+    }
+    table.table.data .list-checkbox {
+        @apply !border-r-blue-200;
+    }
+}
+

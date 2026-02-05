@@ -1,5 +1,6 @@
 <?php namespace System\Classes;
 
+use System\Classes\Extensions\PluginManager;
 use System\Twig\Extension as SystemTwigExtension;
 use System\Twig\Loader as SystemTwigLoader;
 use System\Twig\SecurityPolicy as TwigSecurityPolicy;
@@ -37,7 +38,7 @@ class MarkupManager
     protected $items;
 
     /**
-     * @var \System\Classes\PluginManager
+     * @var \System\Classes\Extensions\PluginManager
      */
     protected $pluginManager;
 

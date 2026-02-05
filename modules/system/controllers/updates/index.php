@@ -1,76 +1,233 @@
-<div class="scoreboard">
-    <div data-control="toolbar">
-        <div class="scoreboard-item title-value">
-            <h4><?= e(trans('system::lang.project.name')) ?></h4>
-            <?php if ($projectId): ?>
-                <p class="wn-icon-chain"><?= $projectName ?></p>
-                <p class="description">
-                    <?= e(trans('system::lang.project.owner_label')) ?>: <?= $projectOwner ?>
-                    (<a
-                        href="javascript:;"
-                        data-request-confirm="<?= e(trans('system::lang.project.detach_confirm')) ?>"
-                        data-request="onDetachProject"
-                        data-stripe-load-indicator><?= e(trans('system::lang.project.detach')) ?></a>)
-                </p>
-            <?php else: ?>
-                <p class="wn-icon-chain-broken"><?= e(trans('system::lang.project.none')) ?></p>
-                <p class="description">
-                    <a
-                        href="javascript:;"
-                        data-control="popup"
-                        data-handler="onLoadProjectForm">
-                        <?= e(trans('system::lang.project.attach')) ?>
-                    </a>
-                </p>
-            <?php endif ?>
-        </div>
-        <div class="scoreboard-item title-value">
-            <h4><?= e(trans('system::lang.updates.plugins')) ?></h4>
-            <p><?= $pluginsCount ?></p>
-            <p class="description">
-                <?= e(trans('system::lang.updates.disabled')) ?>: <?= $pluginsCount - $pluginsActiveCount ?>
-            </p>
-        </div>
-        <?php if ($coreBuild): ?>
-            <div class="scoreboard-item title-value">
-                <h4><?= e(trans('system::lang.updates.core_current_build')) ?></h4>
-                <?php if ($coreBuildModified): ?>
-                    <p
-                        class="oc-icon-exclamation-circle"
-                        data-toggle="tooltip"
-                        data-placement="bottom"
-                        title="This build has been modified"
-                    >
-                        <?= $coreBuild ?>
-                    </p>
-                <?php else: ?>
-                    <p><?= $coreBuild ?></p>
-                <?php endif; ?>
+<div class="updates-app">
+    <div class="flex flex-layout-column gap-4 max-w-[1325px] mx-auto font-sans">
+        <div class="w-full px-8">
+            <div class="flex flex-wrap gap-8 mt-8 py-10">
+                <div class="title-value flex justify-between w-full-storm-fix lg:w-1/3 xl:w-2/8 bg-white p-8 rounded-3xl border border-blue-200 shadow-sm group">
+                    <div>
+                        <h4><?= e(trans('system::lang.project.name')) ?></h4>
+                        <?php if ($projectId): ?>
+                            <p class="wn-icon-chain"><?= $projectName ?></p>
+                            <p class="description">
+                                <?= e(trans('system::lang.project.owner_label')) ?>: <?= $projectOwner ?>
+                                (<a
+                                    href="javascript:;"
+                                    data-request-confirm="<?= e(trans('system::lang.project.detach_confirm')) ?>"
+                                    data-request="onDetachProject"
+                                    data-stripe-load-indicator><?= e(trans('system::lang.project.detach')) ?></a>)
+                            </p>
+                        <?php else: ?>
+                            <p class="wn-icon-chain-broken"><?= e(trans('system::lang.project.none')) ?></p>
+                            <p class="description">
+                                <a
+                                    href="javascript:;"
+                                    data-control="popup"
+                                    data-handler="onLoadProjectForm">
+                                    <?= e(trans('system::lang.project.attach')) ?>
+                                </a>
+                            </p>
+                        <?php endif ?>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="icon icon-folder text-4xl bg-orange-500 text-white shadow p-6 rounded-3xl transition-transform duration-150 group-hover:scale-105"></i>
+                    </div>
+                </div>
+                <div class="title-value flex justify-between w-full-storm-fix lg:w-1/3 xl:w-2/8 bg-white p-8 rounded-3xl border border-blue-200 shadow-sm group">
+                    <div>
+                        <h4><?= e(trans('system::lang.updates.plugins')) ?></h4>
+                        <p><?= $pluginsCount ?></p>
+                        <p class="description">
+                            <?= e(trans('system::lang.updates.disabled')) ?>: <?= $pluginsCount - $pluginsActiveCount ?>
+                        </p>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="icon icon-puzzle-piece text-4xl bg-blue-500 text-white shadow p-6 rounded-3xl transition-transform duration-150 group-hover:scale-105"></i>
+                    </div>
+                </div>
+                <?php if ($coreBuild): ?>
+                    <div class="title-value flex justify-between w-full-storm-fix lg:w-1/3 xl:w-2/8 bg-white p-8 rounded-3xl border border-blue-200 shadow-sm group">
+                        <div>
+                            <h4><?= e(trans('system::lang.updates.core_current_build')) ?></h4>
+                            <?php if ($coreBuildModified): ?>
+                                <p
+                                    class="oc-icon-exclamation-circle"
+                                    data-toggle="tooltip"
+                                    data-placement="left"
+                                    title="This build has been modified"
+                                >
+                                    <?= $coreBuild ?>
+                                </p>
+                            <?php else: ?>
+                                <p><?= $coreBuild ?></p>
+                            <?php endif; ?>
 
-                <p class="description">
-                    <a
-                        href="javascript:;"
-                        data-control="popup"
-                        data-handler="onLoadChangelog">
-                        <?= e(trans('system::lang.updates.core_view_changelog')) ?>
-                    </a>
-                </p>
+                            <p class="description">
+                                <a
+                                    href="javascript:;"
+                                    data-control="popup"
+                                    data-handler="onLoadChangelog">
+                                    <?= e(trans('system::lang.updates.core_view_changelog')) ?>
+                                </a>
+                            </p>
+                        </div>
+                        <div class="flex items-center">
+                            <i class="icon icon-code-branch text-4xl bg-green-500 text-white shadow p-6 rounded-3xl transition-all duration-150 group-hover:scale-105 group-hover:shadow-md "></i>
+                        </div>
+                    </div>
+                <?php endif ?>
             </div>
-        <?php endif ?>
+
+            <?php if (count($warnings)): ?>
+                <div class="w-full">
+                    <div class="scoreboard">
+                        <div class="callout fade in callout-danger no-icon">
+                            <div class="header">
+                                <h3><?= e(trans('system::lang.updates.update_warnings_title')) ?></h3>
+                                <ul>
+                                    <?php foreach ($warnings as $warning): ?>
+                                        <li><?= $warning ?></li>
+                                    <?php endforeach ?>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <?php endif ?>
+
+            <div class="w-full flex">
+                <div class="w-full my-8 p-4 bg-white border border-blue-200 rounded-3xl shadow-sm">
+                    <div class="flex flex-wrap flex-col md:flex-row justify-between items-center border-b border-blue-200">
+                        <div class="px-4">
+                            <h2 class="!my-2 px-1 !text-4xl"><?= e(trans('system::lang.updates.plugin_management')) ?></h2>
+                            <p class="px-1 pt-2 text-gray-600"><?= e(trans('system::lang.updates.plugin_management_description')) ?></p>
+                        </div>
+                        <div class="pb-6 pt-4 px-4">
+                            <div class="flex flex-col lg:flex-row gap-4">
+                                <a
+                                    href="javascript:;"
+                                    class="btn btn-outline-primary wn-icon-refresh"
+                                    data-control="popup"
+                                    data-handler="onLoadUpdates">
+                                    <?= e(trans('system::lang.updates.check_label')) ?>
+                                </a>
+                                <a
+                                    href="<?= Backend::url('system/updates/install') ?>"
+                                    class="btn btn-outline-success wn-icon-plus">
+                                    <?= e(trans('system::lang.plugins.install')) ?>
+                                </a>
+                                <div class="btn-group dropdown dropdown-fixed w-full-storm-fix lg:w-auto">
+                                    <button
+                                        data-primary-button
+                                        type="button"
+                                        class="btn btn-default wn-icon-caret-down dropdown-toggle"
+                                        data-toggle="dropdown"
+                                        data-trigger-action="enable"
+                                        data-trigger=".control-list .list-checkbox input[type=checkbox]"
+                                        data-trigger-condition="checked"
+                                        data-request-success="$(this).prop('disabled', true).next().prop('disabled', true)">
+                                        <?= e(trans('system::lang.plugins.select_label')) ?>
+                                    </button>
+
+                                    <ul class="dropdown-menu" data-dropdown-title="<?= e(trans('system::lang.plugins.bulk_actions_label')) ?>">
+                                        <li>
+                                            <a href="javascript:;" class="wn-icon-pause"
+                                               data-request="onBulkAction"
+                                               onclick="$(this).data('request-data', {
+                                                action: 'freeze',
+                                                checked: $('.control-list').listWidget('getChecked')
+                                            })"
+                                               data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.freeze'))])) ?>"
+                                               data-stripe-load-indicator>
+                                                <?= e(trans('system::lang.plugins.freeze_label')) ?>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;" class="wn-icon-play"
+                                               data-request="onBulkAction"
+                                               onclick="$(this).data('request-data', {
+                                                action: 'unfreeze',
+                                                checked: $('.control-list').listWidget('getChecked')
+                                            })"
+                                               data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.unfreeze'))])) ?>"
+                                               data-stripe-load-indicator>
+                                                <?= e(trans('system::lang.plugins.unfreeze_label')) ?>
+                                            </a>
+                                        </li>
+                                        <li role="separator" class="divider"></li>
+                                        <li>
+                                            <a href="javascript:;" class="wn-icon-ban"
+                                               data-request="onBulkAction"
+                                               onclick="$(this).data('request-data', {
+                                                action: 'disable',
+                                                checked: $('.control-list').listWidget('getChecked')
+                                            })"
+                                               data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.disable'))])) ?>"
+                                               data-stripe-load-indicator>
+                                                <?= e(trans('system::lang.plugins.disable_label')) ?>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;" class="wn-icon-check"
+                                               data-request="onBulkAction"
+                                               onclick="$(this).data('request-data', {
+                                                action: 'enable',
+                                                checked: $('.control-list').listWidget('getChecked')
+                                            })"
+                                               data-request-confirm="<?= e(trans('system::lang.plugins.action_confirm', ['action' => e(trans('system::lang.plugins.enable'))])) ?>"
+                                               data-stripe-load-indicator>
+                                                <?= e(trans('system::lang.plugins.enable_label')) ?>
+                                            </a>
+                                        </li>
+                                        <?php if (\Config::get('app.debug', false) && \BackendAuth::getUser()->is_superuser): ?>
+                                            <li role="separator" class="divider"></li>
+                                            <li>
+                                                <a href="javascript:;" class="wn-icon-bomb"
+                                                   data-request="onBulkAction"
+                                                   onclick="$(this).data('request-data', {
+                                                    action: 'refresh',
+                                                    checked: $('.control-list').listWidget('getChecked')
+                                                })"
+                                                   data-request-confirm="<?= e(trans('system::lang.plugins.refresh_confirm')) ?>"
+                                                   data-stripe-load-indicator>
+                                                    <?= e(trans('system::lang.plugins.refresh_label')) ?>
+                                                </a>
+                                            </li>
+                                        <?php endif; ?>
+                                    </ul>
+                                </div>
+                                <div class="btn-group">
+                                    <button
+                                        class="btn btn-danger wn-icon-trash-o"
+                                        disabled="disabled"
+                                        data-request="onBulkAction"
+                                        onclick="$(this).data('request-data', {
+                                        action: 'remove',
+                                        checked: $('.control-list').listWidget('getChecked')
+                                    })"
+                                        data-request-confirm="<?= e(trans('system::lang.plugins.remove_confirm')) ?>"
+                                        data-trigger-action="enable"
+                                        data-trigger=".control-list .list-checkbox input[type=checkbox]"
+                                        data-trigger-condition="checked"
+                                        data-request-success="$(this).closest('.btn-group').find('button').prop('disabled', true)"
+                                        data-stripe-load-indicator>
+                                        <?= e(trans('system::lang.plugins.remove')) ?>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-fancy">
+                        <?php
+                            // @TODO: Fix
+                            echo str_replace('data-control="rowlink"', '', $this->listRender());
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<?php if (count($warnings)): ?>
-    <div class="scoreboard">
-        <div class="callout fade in callout-danger no-icon">
-            <div class="header">
-                <h3><?= e(trans('system::lang.updates.update_warnings_title')) ?></h3>
-                <ul>
-                    <?php foreach ($warnings as $warning): ?>
-                        <li><?= $warning ?></li>
-                    <?php endforeach ?>
-                </ul>
-            </div>
-        </div>
-    </div>
-<?php endif ?>
-<?= $this->listRender() ?>
+<style>
+    #layout-body {
+        padding-top: 0;
+    }
+</style>

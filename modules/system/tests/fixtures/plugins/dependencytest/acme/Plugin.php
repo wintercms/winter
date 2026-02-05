@@ -1,8 +1,6 @@
 <?php namespace DependencyTest\Acme;
 
-use Backend;
-use Backend\Models\UserRole;
-use System\Classes\PluginBase;
+use System\Classes\Extensions\PluginBase;
 
 /**
  * Acme Plugin Information File

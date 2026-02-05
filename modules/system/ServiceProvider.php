@@ -1,7 +1,9 @@
-<?php namespace System;
+<?php
 
-use Backend;
+namespace System;
+
 use Backend\Classes\WidgetManager;
+use Backend\Facades\Backend;
 use Backend\Facades\BackendAuth;
 use Backend\Facades\BackendMenu;
 use Backend\Models\UserRole;
@@ -10,13 +12,13 @@ use Illuminate\Foundation\Vite as LaravelVite;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use System\Classes\CombineAssets;
 use System\Classes\ErrorHandler;
+use System\Classes\Extensions\ModuleManager;
+use System\Classes\Extensions\PluginManager;
 use System\Classes\MailManager;
 use System\Classes\MarkupManager;
-use System\Classes\PluginManager;
 use System\Classes\SettingsManager;
 use System\Classes\UpdateManager;
 use System\Helpers\DateTime;
@@ -25,6 +27,7 @@ use System\Models\MailSetting;
 use System\Twig\Engine as TwigEngine;
 use Twig\Environment;
 use Twig\Extension\CoreExtension;
+use Winter\Storm\Console\Command;
 use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Router\Helper as RouterHelper;
 use Winter\Storm\Support\ClassLoader;
@@ -40,7 +43,7 @@ class ServiceProvider extends ModuleServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         parent::register();
 
@@ -87,6 +90,18 @@ class ServiceProvider extends ModuleServiceProvider
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
             $this->registerBackendSettings();
+        }
+
+        /*
+         * Console specific
+         */
+        if ($this->app->runningInConsole()) {
+            Command::extend(function (Command $command) {
+                $command->bindEvent('command.beforeRun', function () use ($command) {
+                    ModuleManager::instance()->setOutput($command->getOutput());
+                    PluginManager::instance()->setOutput($command->getOutput());
+                });
+            });
         }
     }
 
@@ -185,7 +200,7 @@ class ServiceProvider extends ModuleServiceProvider
                 // @see octobercms/october#3208
                 || (
                     $this->app->hasDatabase()
-                    && !Schema::hasTable(UpdateManager::instance()->getMigrationTableName())
+                    && !UpdateManager::instance()->isSystemSetup()
                 )
             )
         ) {
@@ -298,51 +313,48 @@ class ServiceProvider extends ModuleServiceProvider
         /*
          * Register console commands
          */
-        $this->registerConsoleCommand('create.command', \System\Console\CreateCommand::class);
-        $this->registerConsoleCommand('create.job', \System\Console\CreateJob::class);
-        $this->registerConsoleCommand('create.migration', \System\Console\CreateMigration::class);
-        $this->registerConsoleCommand('create.model', \System\Console\CreateModel::class);
-        $this->registerConsoleCommand('create.factory', \System\Console\CreateFactory::class);
-        $this->registerConsoleCommand('create.plugin', \System\Console\CreatePlugin::class);
-        $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
-        $this->registerConsoleCommand('create.test', \System\Console\CreateTest::class);
-
-        $this->registerConsoleCommand('winter.up', \System\Console\WinterUp::class);
-        $this->registerConsoleCommand('winter.down', \System\Console\WinterDown::class);
-        $this->registerConsoleCommand('winter.update', \System\Console\WinterUpdate::class);
-        $this->registerConsoleCommand('winter.util', \System\Console\WinterUtil::class);
-        $this->registerConsoleCommand('winter.mirror', \System\Console\WinterMirror::class);
-        $this->registerConsoleCommand('winter.fresh', \System\Console\WinterFresh::class);
-        $this->registerConsoleCommand('winter.env', \System\Console\WinterEnv::class);
-        $this->registerConsoleCommand('winter.install', \System\Console\WinterInstall::class);
-        $this->registerConsoleCommand('winter.version', \System\Console\WinterVersion::class);
-        $this->registerConsoleCommand('winter.manifest', \System\Console\WinterManifest::class);
-        $this->registerConsoleCommand('winter.test', \System\Console\WinterTest::class);
-
-        $this->registerConsoleCommand('plugin.install', \System\Console\PluginInstall::class);
-        $this->registerConsoleCommand('plugin.remove', \System\Console\PluginRemove::class);
-        $this->registerConsoleCommand('plugin.disable', \System\Console\PluginDisable::class);
-        $this->registerConsoleCommand('plugin.enable', \System\Console\PluginEnable::class);
-        $this->registerConsoleCommand('plugin.refresh', \System\Console\PluginRefresh::class);
-        $this->registerConsoleCommand('plugin.rollback', \System\Console\PluginRollback::class);
-        $this->registerConsoleCommand('plugin.list', \System\Console\PluginList::class);
-
-        $this->registerConsoleCommand('mix.compile', Console\Asset\Mix\MixCompile::class);
-        $this->registerConsoleCommand('mix.config', Console\Asset\Mix\MixCreate::class);
-        $this->registerConsoleCommand('mix.install', Console\Asset\Mix\MixInstall::class);
-        $this->registerConsoleCommand('mix.list', Console\Asset\Mix\MixList::class);
-        $this->registerConsoleCommand('mix.watch', Console\Asset\Mix\MixWatch::class);
-
-        $this->registerConsoleCommand('vite.compile', Console\Asset\Vite\ViteCompile::class);
-        $this->registerConsoleCommand('vite.config', Console\Asset\Vite\ViteCreate::class);
-        $this->registerConsoleCommand('vite.install', Console\Asset\Vite\ViteInstall::class);
-        $this->registerConsoleCommand('vite.list', Console\Asset\Vite\ViteList::class);
-        $this->registerConsoleCommand('vite.watch', Console\Asset\Vite\ViteWatch::class);
-
-        $this->registerConsoleCommand('npm.run', Console\Asset\Npm\NpmRun::class);
-        $this->registerConsoleCommand('npm.install', Console\Asset\Npm\NpmInstall::class);
-        $this->registerConsoleCommand('npm.update', Console\Asset\Npm\NpmUpdate::class);
-        $this->registerConsoleCommand('npm.version', Console\Asset\Npm\NpmVersion::class);
+        $this->commands([
+            Console\Create\CreateCommand::class,
+            Console\Create\CreateJob::class,
+            Console\Create\CreateMigration::class,
+            Console\Create\CreateModel::class,
+            Console\Create\CreateFactory::class,
+            Console\Create\CreatePlugin::class,
+            Console\Create\CreateSettings::class,
+            Console\Create\CreateTest::class,
+            Console\WinterUp::class,
+            Console\WinterDown::class,
+            Console\WinterUpdate::class,
+            Console\WinterUtil::class,
+            Console\WinterMirror::class,
+            Console\WinterFresh::class,
+            Console\WinterEnv::class,
+            Console\WinterInstall::class,
+            Console\WinterVersion::class,
+            Console\WinterManifest::class,
+            Console\WinterTest::class,
+            Console\Plugin\PluginInstall::class,
+            Console\Plugin\PluginRemove::class,
+            Console\Plugin\PluginDisable::class,
+            Console\Plugin\PluginEnable::class,
+            Console\Plugin\PluginRefresh::class,
+            Console\Plugin\PluginRollback::class,
+            Console\Plugin\PluginList::class,
+            Console\Asset\Mix\MixCompile::class,
+            Console\Asset\Mix\MixCreate::class,
+            Console\Asset\Mix\MixInstall::class,
+            Console\Asset\Mix\MixList::class,
+            Console\Asset\Mix\MixWatch::class,
+            Console\Asset\Vite\ViteCompile::class,
+            Console\Asset\Vite\ViteCreate::class,
+            Console\Asset\Vite\ViteInstall::class,
+            Console\Asset\Vite\ViteList::class,
+            Console\Asset\Vite\ViteWatch::class,
+            Console\Asset\Npm\NpmRun::class,
+            Console\Asset\Npm\NpmInstall::class,
+            Console\Asset\Npm\NpmUpdate::class,
+            Console\Asset\Npm\NpmVersion::class,
+        ]);
     }
 
     /*

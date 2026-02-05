@@ -2,10 +2,11 @@
 
 use App;
 use Markdown;
+use System\Classes\Extensions\PluginManager;
+use System\Helpers\View as ViewHelper;
+use System\Models\MailBrandSetting;
 use System\Models\MailPartial;
 use System\Models\MailTemplate;
-use System\Models\MailBrandSetting;
-use System\Helpers\View as ViewHelper;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
 /**

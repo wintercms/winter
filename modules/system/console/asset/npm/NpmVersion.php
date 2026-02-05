@@ -25,7 +25,7 @@ class NpmVersion extends NpmCommand
     /**
      * @var string The console command description.
      */
-    protected $description = 'Runs a script in a given package.';
+    protected $description = 'Reports the installed version of NPM.';
 
     /**
      * Execute the console command.

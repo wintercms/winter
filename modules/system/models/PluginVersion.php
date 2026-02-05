@@ -1,8 +1,10 @@
-<?php namespace System\Models;
+<?php
 
-use Lang;
-use Model;
-use System\Classes\PluginManager;
+namespace System\Models;
+
+use Illuminate\Support\Facades\Lang;
+use System\Classes\Extensions\PluginManager;
+use Winter\Storm\Database\Model;
 
 /**
  * Stores information about current plugin versions.
@@ -68,6 +70,8 @@ class PluginVersion extends Model
      * @var string Plugin homepage, sourced from plugin details
      */
     public $homepage;
+
+    public $latest;
 
     /**
      * The accessors to append to the model's array form.

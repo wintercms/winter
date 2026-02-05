@@ -78,6 +78,13 @@ mix
         './assets/js/snowboard/build/snowboard.extras.js',
     )
 
+    .js(
+        './controllers/updates/assets/src/updates.js',
+        './controllers/updates/assets/dist/updates.js',
+    )
+
+    .vue()
+
     // Polyfill for all targeted browsers
     .polyfill({
         enabled: mix.inProduction(),

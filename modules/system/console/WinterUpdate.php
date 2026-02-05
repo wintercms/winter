@@ -44,7 +44,7 @@ class WinterUpdate extends Command
     public function handle()
     {
         $this->output->writeln('<info>Updating Winter...</info>');
-        $manager = UpdateManager::instance()->setNotesOutput($this->output);
+        $manager = UpdateManager::instance();
         $forceUpdate = $this->option('force');
 
         /*

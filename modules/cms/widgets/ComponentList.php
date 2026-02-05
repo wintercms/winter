@@ -1,12 +1,12 @@
 <?php namespace Cms\Widgets;
 
 use App;
-use Str;
-use Lang;
-use Input;
-use System\Classes\PluginManager;
-use Cms\Classes\ComponentHelpers;
 use Backend\Classes\WidgetBase;
+use Cms\Classes\ComponentHelpers;
+use Input;
+use Lang;
+use Str;
+use System\Classes\Extensions\PluginManager;
 
 /**
  * Component list widget.

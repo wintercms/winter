@@ -1,8 +1,8 @@
 <?php namespace System\Console\Traits;
 
 use InvalidArgumentException;
-use System\Classes\PluginBase;
-use System\Classes\PluginManager;
+use System\Classes\Extensions\PluginBase;
+use System\Classes\Extensions\PluginManager;
 
 /**
  * Console Command Trait that provides autocompletion for the "plugin" argument

@@ -1,7 +1,9 @@
-<?php namespace Cms;
+<?php
 
-use Backend;
+namespace Cms;
+
 use Backend\Classes\WidgetManager;
+use Backend\Facades\Backend;
 use Backend\Facades\BackendAuth;
 use Backend\Facades\BackendMenu;
 use Backend\Models\UserRole;
@@ -11,6 +13,7 @@ use Cms\Classes\ComponentManager;
 use Cms\Classes\Page as CmsPage;
 use Cms\Classes\Router;
 use Cms\Classes\Theme;
+use Cms\Classes\ThemeManager;
 use Cms\Models\ThemeData;
 use Cms\Models\ThemeLog;
 use Cms\Twig\DebugExtension;
@@ -24,6 +27,7 @@ use System\Classes\CombineAssets;
 use System\Classes\MarkupManager;
 use System\Classes\SettingsManager;
 use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
+use Winter\Storm\Console\Command;
 use Winter\Storm\Support\Facades\Event;
 use Winter\Storm\Support\Facades\Url;
 use Winter\Storm\Support\ModuleServiceProvider;
@@ -57,6 +61,17 @@ class ServiceProvider extends ModuleServiceProvider
             $this->registerBackendWidgets();
             $this->registerBackendSettings();
         }
+
+        /*
+         * Console specific
+         */
+        if ($this->app->runningInConsole()) {
+            Command::extend(function (Command $command) {
+                $command->bindEvent('command.beforeRun', function () use ($command) {
+                    ThemeManager::instance()->setOutput($command->getOutput());
+                });
+            });
+        }
     }
 
     /**
@@ -79,14 +94,15 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerConsole()
     {
-        $this->registerConsoleCommand('create.component', \Cms\Console\CreateComponent::class);
-        $this->registerConsoleCommand('create.theme', \Cms\Console\CreateTheme::class);
-
-        $this->registerConsoleCommand('theme.install', \Cms\Console\ThemeInstall::class);
-        $this->registerConsoleCommand('theme.remove', \Cms\Console\ThemeRemove::class);
-        $this->registerConsoleCommand('theme.list', \Cms\Console\ThemeList::class);
-        $this->registerConsoleCommand('theme.use', \Cms\Console\ThemeUse::class);
-        $this->registerConsoleCommand('theme.sync', \Cms\Console\ThemeSync::class);
+        $this->commands([
+            \Cms\Console\CreateComponent::class,
+            \Cms\Console\CreateTheme::class,
+            \Cms\Console\ThemeInstall::class,
+            \Cms\Console\ThemeRemove::class,
+            \Cms\Console\ThemeList::class,
+            \Cms\Console\ThemeUse::class,
+            \Cms\Console\ThemeSync::class,
+        ]);
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php namespace Winter\Sample;
 
-use System\Classes\PluginBase;
+use System\Classes\Extensions\PluginBase;
 
 class Plugin extends PluginBase
 {

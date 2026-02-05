@@ -2,11 +2,13 @@
 
 namespace System\Tests\Bootstrap;
 
-use System\Classes\UpdateManager;
-use System\Classes\VersionManager;
-use System\Classes\PluginManager;
+use Illuminate\Console\OutputStyle;
 use ReflectionClass;
-
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+use System\Classes\Extensions\PluginManager;
+use System\Classes\Extensions\PluginVersionManager;
+use System\Classes\UpdateManager;
 use Winter\Storm\Database\Model as ActiveRecord;
 
 class PluginManagerTestCase extends TestCase
@@ -49,9 +51,12 @@ class PluginManagerTestCase extends TestCase
         UpdateManager::forgetInstance();
 
         // Forces plugin migrations to be run again on every test
-        VersionManager::forgetInstance();
+//        PluginVersionManager::forgetInstance();
 
-        $this->output = new \Symfony\Component\Console\Output\BufferedOutput();
+        $this->output = new OutputStyle(
+            new ArrayInput([]),
+            new BufferedOutput()
+        );
 
         parent::setUp();
 
@@ -83,7 +88,6 @@ class PluginManagerTestCase extends TestCase
     protected function runWinterUpCommand()
     {
         UpdateManager::instance()
-            ->setNotesOutput($this->output)
             ->update();
     }
 

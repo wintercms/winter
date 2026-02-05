@@ -36,6 +36,11 @@
         "@babel/preset-env": "^7.16.4",
         "@babel/register": "^7.16.0",
         "@babel/runtime": "^7.16.3",
+        "@tailwindcss/forms": "^0.5.3",
+        "@tailwindcss/typography": "^0.5.2",
+        "@tailwindcss/postcss": "^4.0.3",
+        "@tailwindcss/vite": "^4.0.3",
+        "@vitejs/plugin-vue": "^5.0.5",
         "babel-plugin-module-resolver": "^5.0.0",
         "eslint": "^8.6.0",
         "eslint-config-airbnb-base": "^15.0.0",
@@ -44,6 +49,9 @@
         "jest": "^27.4.3",
         "jsdom": "^18.1.1",
         "laravel-mix": "^6.0.34",
-        "laravel-mix-polyfill": "^3.0.1"
+        "laravel-mix-polyfill": "^3.0.1",
+        "tailwindcss": "^4.0.2",
+        "vue": "^3.4.0",
+        "vue-tippy": "^6.0.0"
     }
 }

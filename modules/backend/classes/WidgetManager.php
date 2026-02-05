@@ -1,10 +1,10 @@
 <?php namespace Backend\Classes;
 
-use Str;
 use BackendAuth;
-use SystemException;
-use System\Classes\PluginManager;
 use Event;
+use Str;
+use System\Classes\Extensions\PluginManager;
+use SystemException;
 
 /**
  * Widget manager

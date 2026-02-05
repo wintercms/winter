@@ -1,8 +1,9 @@
 <?php namespace System\Classes;
 
-use Event;
 use Backend;
 use BackendAuth;
+use Event;
+use System\Classes\Extensions\PluginManager;
 use SystemException;
 
 /**

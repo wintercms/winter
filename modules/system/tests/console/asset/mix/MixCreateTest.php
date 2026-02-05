@@ -2,7 +2,7 @@
 
 namespace System\Tests\Console\Asset\Mix;
 
-use System\Classes\PluginManager;
+use System\Classes\Extensions\PluginManager;
 use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Support\Facades\File;
 

@@ -2,9 +2,9 @@
 
 namespace System\Traits;
 
-use System\Classes\CombineAssets;
-use System\Classes\PluginManager;
 use System\Classes\Asset\Vite;
+use System\Classes\CombineAssets;
+use System\Classes\Extensions\PluginManager;
 use System\Models\Parameter;
 use System\Models\PluginVersion;
 use Winter\Storm\Exception\SystemException;

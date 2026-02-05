@@ -1,7 +1,7 @@
 <?php namespace Backend\Classes;
 
 use Config;
-use System\Classes\PluginManager;
+use System\Classes\Extensions\PluginManager;
 use Winter\Storm\Auth\Manager as StormAuthManager;
 use Winter\Storm\Exception\SystemException;
 

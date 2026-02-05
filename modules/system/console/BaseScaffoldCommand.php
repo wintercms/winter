@@ -3,6 +3,7 @@
 use InvalidArgumentException;
 use Winter\Storm\Parse\PHP\ArrayFile;
 use Winter\Storm\Scaffold\GeneratorCommand;
+use function Termwind\render;
 
 abstract class BaseScaffoldCommand extends GeneratorCommand
 {
@@ -90,18 +91,26 @@ abstract class BaseScaffoldCommand extends GeneratorCommand
             . 'lang.php'
         );
 
+        $relativeFile = str_replace(base_path(), '', $langFilePath);
+        $mode = 'updated';
+
         if (!file_exists($langFilePath)) {
             $this->makeDirectory($langFilePath);
-            $comment = '<fg=green>File generated:</> ' . str_replace(base_path(), '', $langFilePath);
-        } else {
-            $comment = '<fg=yellow>File updated:</> ' . str_replace(base_path(), '', $langFilePath);
+            $mode = 'generated';
         }
 
         // Store the localization messages to the determined file path
         ArrayFile::open($langFilePath)->set($langKeys)->write();
 
         // Inform the user
-        $this->output->writeLn($comment);
+        render(<<<HTML
+            <div class="mx-2">
+                <div class="px-1 bg-yellow-600">File $mode</div>
+                <em class="ml-1">
+                    $relativeFile
+                </em>
+            </div>
+        HTML);
     }
 
     /**

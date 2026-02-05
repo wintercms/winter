@@ -1,12 +1,12 @@
 <?php namespace Backend\Classes;
 
-use Event;
 use BackendAuth;
-use System\Classes\PluginManager;
-use Validator;
-use SystemException;
-use Log;
 use Config;
+use Event;
+use Log;
+use System\Classes\Extensions\PluginManager;
+use SystemException;
+use Validator;
 
 /**
  * Manages the backend navigation.

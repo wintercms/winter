@@ -4,7 +4,7 @@
  * The plugin.php file (called the plugin initialization script) defines the plugin information class.
  */
 
-use System\Classes\PluginBase;
+use System\Classes\Extensions\PluginBase;
 
 class Plugin extends PluginBase
 {

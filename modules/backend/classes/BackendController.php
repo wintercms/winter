@@ -120,7 +120,7 @@ class BackendController extends ControllerBase
      * Pass unhandled URLs to the CMS Controller, if it exists
      *
      * @param string $url
-     * @return Response
+     * @return \Illuminate\Http\Response
      */
     protected function passToCmsController($url)
     {

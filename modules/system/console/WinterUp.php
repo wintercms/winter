@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use Illuminate\Console\Command;
 use Illuminate\Contracts\Console\Isolatable;
@@ -46,7 +48,6 @@ class WinterUp extends Command implements Isolatable
         $this->output->writeln('<info>Migrating application and plugins...</info>');
 
         UpdateManager::instance()
-            ->setNotesOutput($this->output)
-            ->update();
+            ->update(migrationsOnly: true);
     }
 }

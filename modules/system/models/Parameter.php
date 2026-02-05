@@ -61,7 +61,7 @@ class Parameter extends Model
 
     /**
      * Stores a setting value to the database.
-     * @param string|array $key Specifies the setting key value, for example 'system:updates.check'
+     * @param string|array $key Specifies the setting key value, for example 'system:updates.check'. Also supports associative array of keys and values
      * @param mixed $value The setting value to store, serializable.
      * @return true
      */

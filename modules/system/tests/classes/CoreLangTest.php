@@ -3,7 +3,6 @@
 namespace System\Tests\Classes;
 
 use System\Tests\Bootstrap\TestCase;
-use System\Classes\PluginManager;
 use Validator;
 
 class CoreLangTest extends TestCase

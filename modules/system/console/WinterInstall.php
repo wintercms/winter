@@ -380,7 +380,6 @@ class WinterInstall extends Command
             Db::purge();
 
             UpdateManager::instance()
-                ->setNotesOutput($this->output)
                 ->update()
             ;
         }

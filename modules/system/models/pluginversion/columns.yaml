@@ -7,6 +7,7 @@ columns:
     name:
         label: system::lang.updates.plugin_name
         sortable: false
+        type: partial
 
     description:
         label: system::lang.updates.plugin_description
@@ -15,7 +16,28 @@ columns:
     version:
         label: system::lang.updates.plugin_version
         sortable: false
+        type: partial
+        path: version
 
     author:
         label: system::lang.updates.plugin_author
+        sortable: false
+
+    is_unfrozen:
+        label: system::lang.plugins.unfrozen
+        type: partial
+        path: is_unfrozen
+        sortable: false
+
+    is_enabled:
+        label: system::lang.plugins.enabled
+        type: partial
+        path: is_enabled
+        sortable: false
+
+    open_link:
+        label: system::lang.updates.plugin_details
+        type: partial
+        path: open_link
+        valueFrom: slug
         sortable: false

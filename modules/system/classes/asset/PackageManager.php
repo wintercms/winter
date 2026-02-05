@@ -4,7 +4,7 @@ namespace System\Classes\Asset;
 
 use Cms\Classes\Theme;
 use InvalidArgumentException;
-use System\Classes\PluginManager;
+use System\Classes\Extensions\PluginManager;
 use Winter\Storm\Exception\SystemException;
 use Winter\Storm\Filesystem\PathResolver;
 use Winter\Storm\Support\Facades\Config;

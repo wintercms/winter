@@ -3,6 +3,7 @@
 use Cms\Classes\Theme;
 use Cms\Classes\ThemeManager;
 use File;
+use System\Classes\Core\MarketPlaceApi;
 use System\Classes\UpdateManager;
 use Winter\Storm\Console\Command;
 
@@ -63,7 +64,7 @@ class ThemeInstall extends Command
             $themeManager = ThemeManager::instance();
             $updateManager = UpdateManager::instance();
 
-            $themeDetails = $updateManager->requestThemeDetails($themeName);
+            $themeDetails = MarketPlaceApi::instance()->request(MarketPlaceApi::REQUEST_THEME_DETAIL, $themeName);
 
             if ($themeManager->isInstalled($themeDetails['code'])) {
                 return $this->error(sprintf('The theme %s is already installed.', $themeDetails['code']));

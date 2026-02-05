@@ -2,8 +2,8 @@
 
 namespace System\Tests\Classes;
 
+use System\Classes\Extensions\PluginManager;
 use System\Tests\Bootstrap\TestCase;
-use System\Classes\VersionManager;
 
 class VersionManagerTest extends TestCase
 {
@@ -23,7 +23,7 @@ class VersionManagerTest extends TestCase
 
     public function testGetLatestFileVersion()
     {
-        $manager = VersionManager::instance();
+        $manager = PluginManager::instance()->versionManager();
         $result = self::callProtectedMethod($manager, 'getLatestFileVersion', ['\Winter\\Tester']);
 
         $this->assertNotNull($result);
@@ -32,7 +32,7 @@ class VersionManagerTest extends TestCase
 
     public function testGetFileVersions()
     {
-        $manager = VersionManager::instance();
+        $manager = PluginManager::instance()->versionManager();
         $result = self::callProtectedMethod($manager, 'getFileVersions', ['\Winter\\Tester']);
 
         $this->assertCount(13, $result);
@@ -101,7 +101,7 @@ class VersionManagerTest extends TestCase
 
     public function testGetNewFileVersions()
     {
-        $manager = VersionManager::instance();
+        $manager = PluginManager::instance()->versionManager();
         $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester', '1.0.3']);
 
         $this->assertCount(10, $result);
@@ -119,7 +119,7 @@ class VersionManagerTest extends TestCase
         /*
          * When at version 0, should return everything
          */
-        $manager = VersionManager::instance();
+        $manager = PluginManager::instance()->versionManager();
         $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester']);
 
         $this->assertCount(13, $result);
@@ -147,7 +147,7 @@ class VersionManagerTest extends TestCase
      */
     public function testExtractScriptsAndComments($versionInfo, $expectedComments, $expectedScripts)
     {
-        $manager = VersionManager::instance();
+        $manager = PluginManager::instance()->versionManager();
         list($comments, $scripts) = self::callProtectedMethod($manager, 'extractScriptsAndComments', [$versionInfo]);
 
         $this->assertIsArray($comments);

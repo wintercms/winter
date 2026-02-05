@@ -2,18 +2,18 @@
 
 namespace System\Tests\Bootstrap;
 
-use Mail;
-use Config;
-use Artisan;
-use Exception;
-use ReflectionClass;
 use Backend\Classes\AuthManager;
 use Backend\Tests\Concerns\InteractsWithAuthentication;
+use Exception;
+use Illuminate\Support\Facades\Artisan;
 use Mockery\MockInterface;
-use System\Classes\PluginBase;
-use System\Classes\PluginManager;
+use ReflectionClass;
+use System\Classes\Extensions\PluginBase;
+use System\Classes\Extensions\PluginManager;
 use System\Classes\UpdateManager;
 use Winter\Storm\Database\Model as BaseModel;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Mail;
 
 /**
  * Plugin test case.
@@ -74,9 +74,16 @@ abstract class PluginTestCase extends TestCase
      */
     public function setUp(): void
     {
-        // Reload the plugin and update manager singletons
+        // Flush the plugin and update manager singletons
         PluginManager::forgetInstance();
         UpdateManager::forgetInstance();
+
+        // Force a new app with global container
+        $app = $this->createApplication();
+
+        // Provide the new app to instances to save lookup time
+        PluginManager::instance($app);
+        UpdateManager::instance($app);
 
         parent::setUp();
 
