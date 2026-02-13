@@ -43,6 +43,16 @@ import constrainedEditor from 'constrained-editor-plugin';
 import { parse as parseXml } from 'fast-plist';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
+// Fix: Twig tokenizer doesn't handle <script type="module"> (https://github.com/wintercms/winter/issues/1449)
+// Monaco's HTML tokenizer explicitly maps type="module" to text/javascript,
+// but the Twig tokenizer uses a generic capture that passes the raw type value
+// as a language ID. "module" isn't a valid language ID, causing a nullLanguage error.
+import { language as twigLanguage } from 'monaco-editor/esm/vs/basic-languages/twig/twig';
+twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
+    [/"module"/, { token: 'attribute.value.html', switchTo: '@scriptWithCustomType.text/javascript' }],
+    [/'module'/, { token: 'attribute.value.html', switchTo: '@scriptWithCustomType.text/javascript' }],
+);
+
 ((Snowboard) => {
     /**
      * Code editor widget.

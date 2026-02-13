@@ -691,6 +691,8 @@ class Index extends Controller
             'html' => 'html',
             'css' => 'css',
             'js', 'json' => 'javascript',
+            'less' => 'less',
+            'sass', 'scss' => 'scss',
             'txt' => 'txt',
             default => 'php',
         };

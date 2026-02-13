@@ -1,5 +1,8 @@
 <?php
 $fieldOptions = $field->options();
+if ($fieldOptions instanceof Illuminate\Support\Collection) {
+    $fieldOptions = $fieldOptions->all();
+}
 ?>
 
 <!-- Dropdown -->
@@ -24,6 +27,11 @@ $fieldOptions = $field->options();
     }
     if ($field->placeholder) {
         $options['data-placeholder'] = e(trans($field->placeholder));
+    }
+    foreach ($fieldOptions as $key => &$value) {
+        if (is_string($value) && str_contains($value, '::')) {
+            $value = e(trans($value));
+        }
     }
     ?>
     <?= Form::select(
