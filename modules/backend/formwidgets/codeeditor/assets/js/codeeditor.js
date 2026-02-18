@@ -43,6 +43,16 @@ import constrainedEditor from 'constrained-editor-plugin';
 import { parse as parseXml } from 'fast-plist';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
 
+// Fix: Twig tokenizer doesn't handle <script type="module"> (https://github.com/wintercms/winter/issues/1449)
+// Monaco's HTML tokenizer explicitly maps type="module" to text/javascript,
+// but the Twig tokenizer uses a generic capture that passes the raw type value
+// as a language ID. "module" isn't a valid language ID, causing a nullLanguage error.
+import { language as twigLanguage } from 'monaco-editor/esm/vs/basic-languages/twig/twig';
+twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
+    [/"module"/, { token: 'attribute.value.html', switchTo: '@scriptWithCustomType.text/javascript' }],
+    [/'module'/, { token: 'attribute.value.html', switchTo: '@scriptWithCustomType.text/javascript' }],
+);
+
 ((Snowboard) => {
     /**
      * Code editor widget.
@@ -81,6 +91,7 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
             this.fullscreen = false;
             this.cachedThemes = {};
             this.resizeThrottle = null;
+            this.savedState = null;
             this.callbacks = {
                 fullScreenChange: () => this.onFullScreenChange(),
                 resize: () => {
@@ -183,7 +194,8 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
                 this.visibilityListener = false;
             }
             if (this.clickListener) {
-                document.removeEventListener('click', this.callbacks.click);
+                document.removeEventListener('click', this.callbacks.click, { capture: true });
+                this.clickListener = false;
             }
         }
 
@@ -194,6 +206,11 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
          * and preventing slowdown of the browser.
          */
         dispose() {
+            if (this.editor) {
+                this.savedState = {
+                    position: this.editor.getPosition(),
+                };
+            }
             if (this.disposables.length > 0) {
                 this.disposables.forEach((disposable) => {
                     disposable.dispose();
@@ -204,11 +221,15 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
                 window.removeEventListener('resize', this.callbacks.resize);
                 this.resizeListener = false;
             }
+            if (this.model) {
+                this.model.dispose();
+                this.model = null;
+            }
             if (this.editor) {
                 this.editor.dispose();
                 this.editor = null;
             }
-            this.events.fire('dispose', this, this.editor);
+            this.events.fire('dispose', this);
         }
 
         /**
@@ -239,6 +260,11 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
          * Creates a Monaco editor instance in the given element.
          */
         createEditor() {
+            // Guard against creating a duplicate editor (both onObserve and onVisibilityChange
+            // can trigger creation simultaneously)
+            if (this.editor) {
+                return;
+            }
 
             // Force a specific height on the container - stops Monaco from indefinitely trying
             // to resize if the container has a fluid height
@@ -258,6 +284,15 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
             this.updateLanguage();
             this.enableStatusBarActions();
             this.registerKeyBindings();
+
+            // Restore cursor position and scroll state from before the editor was disposed
+            if (this.savedState) {
+                if (this.savedState.position) {
+                    this.editor.setPosition(this.savedState.position);
+                    this.editor.revealPositionInCenter(this.savedState.position);
+                }
+                this.savedState = null;
+            }
 
             this.events.fire('create', this, this.editor);
         }
@@ -398,9 +433,12 @@ import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
                     this.clickStartedInEditor = false;
                 }, 20);
             }));
-            document.addEventListener('click', this.callbacks.click, {
-                capture: true,
-            });
+            if (!this.clickListener) {
+                document.addEventListener('click', this.callbacks.click, {
+                    capture: true,
+                });
+                this.clickListener = true;
+            }
 
             window.addEventListener('resize', this.callbacks.resize);
             this.resizeListener = true;

@@ -167,7 +167,7 @@ modules/backend/formwidgets/codeeditor/
 
 #### Build Command
 ```bash
-php artisan mix:compile --package=module-backend.formwidgets.codeeditor -p
+php artisan mix:compile --package=module-backend.formwidgets.codeeditor -f
 ```
 
 #### Build Configuration

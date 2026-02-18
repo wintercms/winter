@@ -57,6 +57,10 @@ class User extends UserBase
         'avatar' => \System\Models\File::class
     ];
 
+    public $hasMany = [
+        'throttle' => [UserThrottle::class, 'key' => 'user_id']
+    ];
+
     /**
      * Purge attributes from data set.
      */

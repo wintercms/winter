@@ -1,5 +1,8 @@
 <?php
-    $fieldOptions = $field->options();
+$fieldOptions = $field->options();
+if ($fieldOptions instanceof Illuminate\Support\Collection) {
+    $fieldOptions = $fieldOptions->all();
+}
 ?>
 
 <!-- Dropdown -->
