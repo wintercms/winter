@@ -66,7 +66,6 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerTwigParser();
         $this->registerMailer();
         $this->registerMarkupTags();
-        $this->registerAssetBundles();
         $this->registerValidator();
         $this->registerGlobalViewVars();
 
@@ -115,6 +114,8 @@ class ServiceProvider extends ModuleServiceProvider
         Paginator::useBootstrapThree();
         Paginator::defaultSimpleView('system::pagination.simple-default');
 
+        $this->registerAssetBundles();
+
         /*
          * Boot plugins
          */
@@ -146,6 +147,11 @@ class ServiceProvider extends ModuleServiceProvider
 
         // Register the Laravel Vite singleton
         $this->app->singleton(LaravelVite::class, \System\Classes\Asset\Vite::class);
+
+        // Shutup extensions that expect Laravel's auth system to be present
+        $this->app->singleton(\Illuminate\Contracts\Auth\Access\Gate::class, function ($app) {
+            return new \Illuminate\Auth\Access\Gate($app, fn () => null);
+        });
     }
 
     /**

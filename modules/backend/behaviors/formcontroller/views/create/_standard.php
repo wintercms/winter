@@ -4,6 +4,7 @@
 
 <?php if (!$this->fatalError): ?>
     <?= Form::open([
+        'id' => $this->formGetId(),
         'class' => 'layout',
         'data-change-monitor' => 'true',
         'data-window-close-confirm' => 'true',

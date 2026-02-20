@@ -19,7 +19,7 @@ this.clickHandler=this.onClick.bind(this)
 this.keydownHandler=this.onKeydown.bind(this)
 this.documentClickHandler=this.onDocumentClick.bind(this)
 this.toolbarClickHandler=this.onToolbarClick.bind(this)
-if(this.options.postback&&this.options.clientDataSourceClass=='client'){if(!this.options.postbackHandlerName){var formHandler=this.$el.closest('form').data('request')
+if(this.options.postback&&this.options.clientDataSourceClass=='client'){if(!this.options.postbackHandlerName.length){var formHandler=this.$el.closest('form').data('request')
 this.options.postbackHandlerName=[formHandler||'onSave']}else if(typeof this.options.postbackHandlerName==='string'){this.options.postbackHandlerName=this.options.postbackHandlerName.split(',')}this.formSubmitHandler=this.onFormSubmit.bind(this)}this.navigation=null
 this.search=null
 this.recordsAddedOrDeleted=0
@@ -609,8 +609,7 @@ this.unregisterListHandlers()
 this.hideDropdown()
 this.itemListElement=null
 this.activeCell=null}
-DropdownProcessor.prototype.buildEditor=function(cellElement,cellContentContainer,isClick){var currentValue=this.tableObj.getCellValue(cellElement),containerPosition=this.getAbsolutePosition(cellContentContainer)
-self=this
+DropdownProcessor.prototype.buildEditor=function(cellElement,cellContentContainer,isClick){var currentValue=this.tableObj.getCellValue(cellElement),containerPosition=this.getAbsolutePosition(cellContentContainer),self=this
 this.itemListElement=document.createElement('div')
 this.itemListElement.addEventListener('click',this.itemClickHandler)
 this.itemListElement.addEventListener('keydown',this.itemKeyDownHandler)

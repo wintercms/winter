@@ -10,6 +10,7 @@ use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 use Winter\Storm\Halcyon\Exception\DeleteFileException;
 use Winter\Storm\Halcyon\Model;
 use Winter\Storm\Halcyon\Processors\Processor;
+use Winter\Storm\Support\Facades\Config;
 
 /**
  * Datasource that loads from other data sources automatically
@@ -76,9 +77,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
     public function appendDatasource(string $key, DatasourceInterface $datasource): void
     {
         $this->datasources[$key] = $datasource;
-        $this->pathCache[] = Cache::rememberForever($datasource->getPathsCacheKey(), function () use ($datasource) {
-            return $datasource->getAvailablePaths();
-        });
+        $this->pathCache[] = $this->fetchPathCache($datasource);
     }
 
     /**
@@ -87,9 +86,7 @@ class AutoDatasource extends Datasource implements DatasourceInterface
     public function prependDatasource(string $key, DatasourceInterface $datasource): void
     {
         $this->datasources = array_prepend($this->datasources, $datasource, $key);
-        $this->pathCache = array_prepend($this->pathCache, Cache::rememberForever($datasource->getPathsCacheKey(), function () use ($datasource) {
-            return $datasource->getAvailablePaths();
-        }), $key);
+        $this->pathCache = array_prepend($this->pathCache, $this->fetchPathCache($datasource), $key);
     }
 
     /**
@@ -122,11 +119,22 @@ class AutoDatasource extends Datasource implements DatasourceInterface
             }
 
             // Load the cache
-            $pathCache[] = Cache::rememberForever($datasource->getPathsCacheKey(), function () use ($datasource) {
+            $pathCache[] = $this->fetchPathCache($datasource);
+        }
+        $this->pathCache = $pathCache;
+    }
+
+    protected function fetchPathCache(DatasourceInterface $datasource): array
+    {
+        $pathCache = [];
+        if (Config::get('app.debug', false)) {
+            $pathCache = $datasource->getAvailablePaths();
+        } else {
+            $pathCache = Cache::rememberForever($datasource->getPathsCacheKey(), function () use ($datasource) {
                 return $datasource->getAvailablePaths();
             });
         }
-        $this->pathCache = $pathCache;
+        return $pathCache;
     }
 
     /**

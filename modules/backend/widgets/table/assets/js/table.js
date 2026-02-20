@@ -72,7 +72,7 @@
         this.toolbarClickHandler = this.onToolbarClick.bind(this)
 
         if (this.options.postback && this.options.clientDataSourceClass == 'client') {
-            if (!this.options.postbackHandlerName) {
+            if (!this.options.postbackHandlerName.length) {
                 var formHandler = this.$el.closest('form').data('request')
                 this.options.postbackHandlerName = [formHandler || 'onSave']
             } else if (typeof this.options.postbackHandlerName === 'string') {

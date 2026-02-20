@@ -22,6 +22,7 @@
 
     <?php Block::put('body') ?>
         <?= Form::open([
+            'id' => $this->formGetId(),
             'class' => 'layout stretch',
             'data-change-monitor' => 'true',
             'data-window-close-confirm' => 'true',

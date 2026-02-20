@@ -952,109 +952,110 @@ body.fancy-layout .master-tabs.control-tabs>.tab-content>.tab-pane,
 .master-tabs.control-tabs.fancy-layout>.tab-content>.tab-pane{padding:0}
 body.fancy-layout .master-tabs.control-tabs>.tab-content>.tab-pane.padded-pane,
 .master-tabs.control-tabs.fancy-layout>.tab-content>.tab-pane.padded-pane{padding:20px 20px 0 20px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs.master-area>div>ul.nav-tabs,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs.master-area>div>ul.nav-tabs{-webkit-transition:background-color 0.5s;transition:background-color 0.5s;background:#2da7c7}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs{background:#7F8C8D;margin-left:0!important;margin-right:0!important}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs:before,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs:before{display:none}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li{background:transparent;border-right:none;margin-right:-8px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li:first-child,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li:first-child{margin-left:-5px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a{background:transparent;border:none;padding:12px 16px 0;font-size:14px;font-weight:400;color:#95a5a6}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title{background:#d5d9d8;border-top:none;padding:5px 5px 3px 5px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title:before,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title:after,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title:after{background:#d5d9d8;border-width:0;top:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title:before,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title:before{left:-20px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title:after,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title:after{right:-20px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title span,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title span{border-width:0;vertical-align:top}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li.active a,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li.active a{color:#808c8d}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li.active a:before,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li.active a:before{display:none}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li.active a span.title,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li.active a span.title{background:#fafafa}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li.active a span.title:before,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li.active a span.title:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li.active a span.title:after,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li.active a span.title:after{background:#fafafa}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>.tab-content>.tab-pane,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>.tab-content>.tab-pane{padding:20px 20px 0 20px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs>.tab-content>.tab-pane.pane-compact,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>.tab-content>.tab-pane.pane-compact{padding:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs.collapsed,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs.collapsed{display:none}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.primary-tabs.has-tabs>div.tab-content,
-*:not(.nested-form)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs.has-tabs>div.tab-content{background:#f9f9f9}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs:before{left:5px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs:after{right:5px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs{background:#475354}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs>li{border-right:none;padding-right:0;margin-right:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs>li a{background:transparent;border:none;padding:12px 10px 13px 10px;font-size:14px;font-weight:normal;line-height:14px;color:#919898}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs>li a span span{overflow:visible;border-top:none;margin-top:0;padding-top:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs>li:first-child{padding-left:15px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs>li.active a{color:#fff}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs .tab-collapse-icon{position:absolute;display:block;text-decoration:none;outline:none;opacity:0.6;filter:alpha(opacity=60);-webkit-transition:all 0.3s;transition:all 0.3s;font-size:12px;color:#fff;right:11px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs .tab-collapse-icon:hover{text-decoration:none;opacity:1;filter:alpha(opacity=100)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs .tab-collapse-icon.primary{color:#fff;top:12px;right:11px;bottom:auto;z-index:100;-webkit-transform:scale(1,-1);-moz-transform:scale(1,-1);-ms-transform:scale(1,-1);-o-transform:scale(1,-1);transform:scale(1,-1)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs .tab-collapse-icon.primary i{position:relative;display:block}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.primary-collapsed .tab-collapse-icon.primary{-webkit-transform:scale(1,1);-moz-transform:scale(1,1);-ms-transform:scale(1,1);-o-transform:scale(1,1);transform:scale(1,1)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs{background:#f9f9f9}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li{margin-left:-19px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li:first-child{margin-left:0;padding-left:8px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a{padding:8px 16px 0 16px;font-weight:400;height:36px;color:#2b3e50;opacity:0.6;filter:alpha(opacity=60)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title{position:relative;display:inline-block;padding:8px 5px 9px 5px;font-size:14px;z-index:100;height:27px!important;background-color:transparent}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title:after{content:' ';position:absolute;background-color:white;width:15px;height:28px;top:0;z-index:100;display:none}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title:before{left:-11px;-webkit-border-radius:8px 0 0 0;-moz-border-radius:8px 0 0 0;border-radius:8px 0 0 0;-webkit-transform:skewX(-20deg);-ms-transform:skewX(-20deg);transform:skewX(-20deg)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title:after{right:-11px;-webkit-border-radius:0 8px 0 0;-moz-border-radius:0 8px 0 0;border-radius:0 8px 0 0;-webkit-transform:skewX(20deg);-ms-transform:skewX(20deg);transform:skewX(20deg)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title span{height:18px;font-size:14px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li.active a{opacity:1;filter:alpha(opacity=100)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li.active a>span.title{background-color:white}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li.active a>span.title:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li.active a>span.title:after{display:block}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed .tab-collapse-icon.primary{color:white}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs{background:#2da7c7}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs>li a{color:white}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs>li a>span.title:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs>li a>span.title:after{background-color:white}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs>li.active a{color:#2b3e50}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs.has-tabs>div.tab-content{background:#f9f9f9}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs>.tab-content>.tab-pane{padding:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-tabs>.tab-content>.tab-pane.padded-pane{padding:20px 20px 0 20px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields{position:relative;background:#2da7c7;padding:18px 23px 0 23px;-webkit-transition:all 0.5s;transition:all 0.5s}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields:after{content:" ";display:table}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields:after{clear:both}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields label{text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-control[disabled]{background-color:rgba(29,29,29,0.11) !important}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields input[type=text]{background:transparent;border:none;color:#fff;font-size:35px;font-weight:100;height:auto;padding:0;-webkit-box-shadow:none;box-shadow:none}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields input[type=text]::-moz-placeholder{color:rgba(255,255,255,0.5);opacity:1}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields input[type=text]:-ms-input-placeholder{color:rgba(255,255,255,0.5)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields input[type=text]::-webkit-input-placeholder{color:rgba(255,255,255,0.5)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields input[type=text]:focus,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields input[type=text]:hover{background-color:rgba(255,255,255,0.1)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-group{padding-bottom:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-group.is-required>label:after{display:none}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .tab-collapse-icon{position:absolute;display:block;text-decoration:none;outline:none;opacity:0.6;filter:alpha(opacity=60);-webkit-transition:all 0.3s;transition:all 0.3s;font-size:12px;color:#fff;right:11px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .tab-collapse-icon:hover{text-decoration:none;opacity:1;filter:alpha(opacity=100)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .tab-collapse-icon.primary{color:#fff;top:12px;right:11px;bottom:auto;z-index:100;-webkit-transform:scale(1,-1);-moz-transform:scale(1,-1);-ms-transform:scale(1,-1);-o-transform:scale(1,-1);transform:scale(1,-1)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .tab-collapse-icon.primary i{position:relative;display:block}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .tab-collapse-icon.tabless{top:14px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields.collapsed{padding:5px 23px 0 10px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields.collapsed .tab-collapse-icon.tabless{-webkit-transform:scale(1,-1);-moz-transform:scale(1,-1);-ms-transform:scale(1,-1);-o-transform:scale(1,-1);transform:scale(1,-1)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields.collapsed .form-group:not(.collapse-visible){display:none}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields.collapsed .form-buttons{margin-left:10px;padding-bottom:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .loading-indicator-container .loading-indicator{background-color:#2da7c7;padding:0 0 0 30px;color:rgba(255,255,255,0.5);margin-top:1px;height:90%;font-size:12px;line-height:100%}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .loading-indicator-container .loading-indicator>span{left:-10px;top:18px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs.master-area>div>ul.nav-tabs,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs.master-area>div>ul.nav-tabs{-webkit-transition:background-color 0.5s;transition:background-color 0.5s;background:#2da7c7}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs{background:#7F8C8D;margin-left:0!important;margin-right:0!important}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs:before,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs:before{display:none}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li{background:transparent;border-right:none;margin-right:-8px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li:first-child,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li:first-child{margin-left:-5px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a{background:transparent;border:none;padding:12px 16px 0;font-size:14px;font-weight:400;color:#95a5a6}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title{background:#d5d9d8;border-top:none;padding:5px 5px 3px 5px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title:before,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title:after,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title:after{background:#d5d9d8;border-width:0;top:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title:before,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title:before{left:-20px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title:after,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title:after{right:-20px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li a span.title span,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li a span.title span{border-width:0;vertical-align:top}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li.active a,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li.active a{color:#808c8d}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li.active a:before,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li.active a:before{display:none}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li.active a span.title,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li.active a span.title{background:#fafafa}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li.active a span.title:before,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li.active a span.title:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>div>ul.nav-tabs>li.active a span.title:after,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>div>ul.nav-tabs>li.active a span.title:after{background:#fafafa}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>.tab-content>.tab-pane,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>.tab-content>.tab-pane{padding:20px 20px 0 20px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs>.tab-content>.tab-pane.pane-compact,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs>.tab-content>.tab-pane.pane-compact{padding:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs.collapsed,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs.collapsed{display:none}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.primary-tabs.has-tabs>div.tab-content,
+*:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.fancy-layout.primary-tabs.has-tabs>div.tab-content{background:#f9f9f9}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs:before{left:5px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs:after{right:5px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs{background:#475354}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs>li{border-right:none;padding-right:0;margin-right:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs>li a{background:transparent;border:none;padding:12px 10px 13px 10px;font-size:14px;font-weight:normal;line-height:14px;color:#919898}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs>li a span span{overflow:visible;border-top:none;margin-top:0;padding-top:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs>li:first-child{padding-left:15px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs>div>ul.nav-tabs>li.active a{color:#fff}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs .tab-collapse-icon{position:absolute;display:block;text-decoration:none;outline:none;opacity:0.6;filter:alpha(opacity=60);-webkit-transition:all 0.3s;transition:all 0.3s;font-size:12px;color:#fff;right:11px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs .tab-collapse-icon:hover{text-decoration:none;opacity:1;filter:alpha(opacity=100)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs .tab-collapse-icon.primary{color:#fff;top:12px;right:11px;bottom:auto;z-index:100;-webkit-transform:scale(1,-1);-moz-transform:scale(1,-1);-ms-transform:scale(1,-1);-o-transform:scale(1,-1);transform:scale(1,-1)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs .tab-collapse-icon.primary i{position:relative;display:block}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.primary-collapsed .tab-collapse-icon.primary{-webkit-transform:scale(1,1);-moz-transform:scale(1,1);-ms-transform:scale(1,1);-o-transform:scale(1,1);transform:scale(1,1)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs{background:#f9f9f9}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li{margin-left:-19px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li:first-child{margin-left:0;padding-left:8px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a{padding:8px 16px 0 16px;font-weight:400;height:36px;color:#2b3e50;opacity:0.6;filter:alpha(opacity=60)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title{position:relative;display:inline-block;padding:8px 5px 9px 5px;font-size:14px;z-index:100;height:27px!important;background-color:transparent}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title:after{content:' ';position:absolute;background-color:white;width:15px;height:28px;top:0;z-index:100;display:none}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title:before{left:-11px;-webkit-border-radius:8px 0 0 0;-moz-border-radius:8px 0 0 0;border-radius:8px 0 0 0;-webkit-transform:skewX(-20deg);-ms-transform:skewX(-20deg);transform:skewX(-20deg)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title:after{right:-11px;-webkit-border-radius:0 8px 0 0;-moz-border-radius:0 8px 0 0;border-radius:0 8px 0 0;-webkit-transform:skewX(20deg);-ms-transform:skewX(20deg);transform:skewX(20deg)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li a>span.title span{height:18px;font-size:14px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li.active a{opacity:1;filter:alpha(opacity=100)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li.active a>span.title{background-color:white}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li.active a>span.title:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs>div>ul.nav-tabs>li.active a>span.title:after{display:block}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs .tab-collapse-icon.primary{color:#000}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed .tab-collapse-icon.primary{color:#fff}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs{background:#2da7c7}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs>li a{color:white}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs>li a>span.title:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs>li a>span.title:after{background-color:white}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.secondary-content-tabs.primary-collapsed>div>ul.nav-tabs>li.active a{color:#2b3e50}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs.has-tabs>div.tab-content{background:#f9f9f9}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs>.tab-content>.tab-pane{padding:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-tabs>.tab-content>.tab-pane.padded-pane{padding:20px 20px 0 20px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields{position:relative;background:#2da7c7;padding:18px 23px 0 23px;-webkit-transition:all 0.5s;transition:all 0.5s}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields:after{content:" ";display:table}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields:after{clear:both}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields label{text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-control[disabled]{background-color:rgba(29,29,29,0.11) !important}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields input[type=text]{background:transparent;border:none;color:#fff;font-size:35px;font-weight:100;height:auto;padding:0;-webkit-box-shadow:none;box-shadow:none}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields input[type=text]::-moz-placeholder{color:rgba(255,255,255,0.5);opacity:1}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields input[type=text]:-ms-input-placeholder{color:rgba(255,255,255,0.5)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields input[type=text]::-webkit-input-placeholder{color:rgba(255,255,255,0.5)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields input[type=text]:focus,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields input[type=text]:hover{background-color:rgba(255,255,255,0.1)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-group{padding-bottom:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-group.is-required>label:after{display:none}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .tab-collapse-icon{position:absolute;display:block;text-decoration:none;outline:none;opacity:0.6;filter:alpha(opacity=60);-webkit-transition:all 0.3s;transition:all 0.3s;font-size:12px;color:#fff;right:11px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .tab-collapse-icon:hover{text-decoration:none;opacity:1;filter:alpha(opacity=100)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .tab-collapse-icon.primary{color:#fff;top:12px;right:11px;bottom:auto;z-index:100;-webkit-transform:scale(1,-1);-moz-transform:scale(1,-1);-ms-transform:scale(1,-1);-o-transform:scale(1,-1);transform:scale(1,-1)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .tab-collapse-icon.primary i{position:relative;display:block}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .tab-collapse-icon.tabless{top:14px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields.collapsed{padding:5px 23px 0 10px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields.collapsed .tab-collapse-icon.tabless{-webkit-transform:scale(1,-1);-moz-transform:scale(1,-1);-ms-transform:scale(1,-1);-o-transform:scale(1,-1);transform:scale(1,-1)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields.collapsed .form-group:not(.collapse-visible){display:none}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields.collapsed .form-buttons{margin-left:10px;padding-bottom:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .loading-indicator-container .loading-indicator{background-color:#2da7c7;padding:0 0 0 30px;color:rgba(255,255,255,0.5);margin-top:1px;height:90%;font-size:12px;line-height:100%}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .loading-indicator-container .loading-indicator>span{left:-10px;top:18px}
 body.breadcrumb-fancy .control-breadcrumb,
 .control-breadcrumb.breadcrumb-fancy{margin-bottom:0;background-color:#1198bc}
 body.breadcrumb-fancy .control-breadcrumb li,
@@ -1071,33 +1072,33 @@ body.breadcrumb-fancy .control-breadcrumb li:last-child,
 .control-breadcrumb.breadcrumb-fancy li:last-child{background-color:#1198bc}
 body.breadcrumb-fancy .control-breadcrumb li:last-child:before,
 .control-breadcrumb.breadcrumb-fancy li:last-child:before{opacity:1;border-left-color:#1198bc}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized),
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized){-webkit-transition:all 0.5s;transition:all 0.5s;padding-top:14px;padding-bottom:5px}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn{padding:0;margin-right:5px;margin-top:-6px;margin-right:30px;background:transparent;color:#fff;font-weight:normal;-webkit-box-shadow:none;box-shadow:none;opacity:0.5;filter:alpha(opacity=50);-webkit-transition:all 0.3s ease;transition:all 0.3s ease}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn:hover,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn:hover{opacity:1;filter:alpha(opacity=100)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn:last-child,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn:last-child{margin-right:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class^="wn-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class^="wn-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class*=" wn-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class*=" wn-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class^="oc-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class^="oc-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class*=" oc-icon-"]:before,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class*=" oc-icon-"]:before{opacity:1}
-.fancy-layout form[class$="-data-changed"] *:not(.nested-form)>.form-widget>.layout-row>.control-tabs .btn.save{opacity:1;filter:alpha(opacity=100)}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-codeeditor{border:none !important;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-codeeditor .editor-code{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor{border:none;border-left:1px solid #d1d6d9 !important}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor .fr-toolbar,
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor .fr-wrapper{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;border-top-right-radius:0;border-top-left-radius:0}
-.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs.secondary-content-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor .fr-toolbar{background:white}
-body.side-panel-not-fixed .fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor,
-body.side-panel-not-fixed.fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor{border-left:none}
-html.cssanimations .fancy-layout *:not(.nested-form)>.form-widget>.layout-row>.form-tabless-fields .loading-indicator-container .loading-indicator>span{-webkit-animation:spin 1s linear infinite;animation:spin 1s linear infinite;background-image:url('../../../system/assets/ui/images/loader-white.svg');background-size:20px 20px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized),
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized){-webkit-transition:all 0.5s;transition:all 0.5s;padding-top:14px;padding-bottom:5px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn{padding:0;margin-right:5px;margin-top:-6px;margin-right:30px;background:transparent;color:#fff;font-weight:normal;-webkit-box-shadow:none;box-shadow:none;opacity:0.5;filter:alpha(opacity=50);-webkit-transition:all 0.3s ease;transition:all 0.3s ease}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn:hover,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn:hover{opacity:1;filter:alpha(opacity=100)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn:last-child,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn:last-child{margin-right:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class^="wn-icon-"]:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class^="wn-icon-"]:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class*=" wn-icon-"]:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class*=" wn-icon-"]:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class^="oc-icon-"]:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class^="oc-icon-"]:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class*=" oc-icon-"]:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class*=" oc-icon-"]:before{opacity:1}
+.fancy-layout form[class$="-data-changed"] *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .btn.save{opacity:1;filter:alpha(opacity=100)}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-codeeditor{border:none !important;-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-codeeditor .editor-code{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor{border:none;border-left:1px solid #d1d6d9 !important}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor .fr-toolbar,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor .fr-wrapper{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;border-top-right-radius:0;border-top-left-radius:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs.secondary-content-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor .fr-toolbar{background:white}
+body.side-panel-not-fixed .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor,
+body.side-panel-not-fixed.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs>.tab-content>.tab-pane>.form-group>.field-richeditor{border-left:none}
+html.cssanimations .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .loading-indicator-container .loading-indicator>span{-webkit-animation:spin 1s linear infinite;animation:spin 1s linear infinite;background-image:url('../../../system/assets/ui/images/loader-white.svg');background-size:20px 20px}
 .flyout-container>.flyout{overflow:hidden;width:0;left:0!important;-webkit-transition:width 0.1s;transition:width 0.1s}
 .flyout-overlay{width:100%;height:100%;top:0;z-index:5000;position:absolute;background-color:rgba(0,0,0,0);-webkit-transition:background-color 0.3s;transition:background-color 0.3s}
 .flyout-toggle{position:absolute;top:20px;left:0;width:23px;height:25px;background:#2b3e50;cursor:pointer;border-bottom-right-radius:4px;border-top-right-radius:4px;color:#bdc3c7;font-size:10px}

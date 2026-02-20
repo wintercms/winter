@@ -33,7 +33,7 @@
             class="btn btn-primary wn-icon-crosshairs"
             data-control="preview-button"
         >
-            <?= e(trans('backend::lang.form.save_and_close')) ?>
+            <?= e(trans('backend::lang.form.preview')) ?>
         </a>
     <?php endif ?>
 

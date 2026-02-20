@@ -139,6 +139,78 @@
             })
 
         $('[data-repeater-add]', $container).data('request-form', $form)
+
+        // Setup search functionality
+        var $searchInput = $('.repeater-group-search', $container)
+        var $clearButton = $('.repeater-group-search-clear', $container)
+        var $noResults = $('.repeater-group-no-results', $container)
+        var $itemsContainer = $('.repeater-group-items-container', $container)
+        var $listItems = $('.repeater-group-item', $container)
+
+        // Add hover effects to grid items
+        $listItems.on('mouseenter', 'a', function() {
+            $(this).css({
+                'border-color': '#3498db',
+                'box-shadow': '0 2px 8px rgba(0,0,0,0.1)',
+                'transform': 'translateY(-2px)'
+            })
+        }).on('mouseleave', 'a', function() {
+            $(this).css({
+                'border-color': '#e0e0e0',
+                'box-shadow': 'none',
+                'transform': 'translateY(0)'
+            })
+        })
+
+        $searchInput.on('input', function() {
+            var searchTerm = $(this).val().toLowerCase().trim()
+
+            // Show/hide clear button
+            $clearButton.toggle(searchTerm.length > 0)
+
+            if (searchTerm === '') {
+                // Show all items
+                $listItems.show()
+                $noResults.hide()
+                $itemsContainer.show()
+                return
+            }
+
+            var visibleCount = 0
+
+            // Filter items
+            $listItems.each(function() {
+                var $item = $(this)
+                var title = $('.title', $item).text().toLowerCase()
+                var description = $('.description', $item).text().toLowerCase()
+
+                if (title.indexOf(searchTerm) !== -1 || description.indexOf(searchTerm) !== -1) {
+                    $item.show()
+                    visibleCount++
+                } else {
+                    $item.hide()
+                }
+            })
+
+            // Show/hide no results message and adjust container height
+            if (visibleCount === 0) {
+                $noResults.show()
+                $itemsContainer.hide()
+            } else {
+                $noResults.hide()
+                $itemsContainer.show()
+            }
+        })
+
+        // Clear search functionality
+        $clearButton.on('click', function() {
+            $searchInput.val('').trigger('input').focus()
+        })
+
+        // Focus search input when popover opens
+        setTimeout(function() {
+            $searchInput.focus()
+        }, 100)
     }
 
     Repeater.prototype.onRemoveItemSuccess = function(ev) {
@@ -242,7 +314,8 @@
     Repeater.prototype.getCollapseTitle = function($item) {
         var $target,
             defaultText = '',
-            explicitText = $item.data('collapse-title')
+            explicitText = $item.data('collapse-title'),
+            selector = 'input[type=text], select:first, ul:first'
 
         if (explicitText) {
             return explicitText
@@ -250,15 +323,15 @@
 
         if (this.options.titleFrom) {
             $target = $('[data-field-name="'+this.options.titleFrom+'"]', $item)
-            if (!$target.length) {
-                $target = $item
+            if ($target.length) {
+                selector = 'input, select:first, ul:first'
             }
         }
-        else {
+        if (!$target || !$target.length) {
             $target = $item
         }
 
-        var $textInput = $('input[type=text]:first, select:first, ul:first', $target).first()
+        var $textInput = $(selector, $target).first()
         if ($textInput.length) {
             switch($textInput.prop("tagName")) {
                 case 'SELECT':

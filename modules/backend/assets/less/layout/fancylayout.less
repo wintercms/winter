@@ -186,8 +186,8 @@ body.fancy-layout .master-tabs.control-tabs,
 }
 
 // Primary Tabs
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs.primary-tabs,
-*:not(.nested-form) > .form-widget > .layout-row > .control-tabs.fancy-layout.primary-tabs {
+.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs.primary-tabs,
+*:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs.fancy-layout.primary-tabs {
     &.master-area {
         > div > ul.nav-tabs {
             .transition(background-color 0.5s);
@@ -286,7 +286,7 @@ body.fancy-layout .master-tabs.control-tabs,
 }
 
 // Secondary tabs
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs.secondary-tabs {
+.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs.secondary-tabs {
     // Target horizontal scroll indicators
     &:before {
         left: 5px;
@@ -437,9 +437,13 @@ body.fancy-layout .master-tabs.control-tabs,
             }
         }
 
+        .tab-collapse-icon.primary {
+            color: #000000;
+        }
+
         &.primary-collapsed {
             .tab-collapse-icon.primary {
-                color: white;
+                color: @color-fancy-master-tabs-active-text;
             }
 
             > div > ul.nav-tabs {
@@ -480,7 +484,7 @@ body.fancy-layout .master-tabs.control-tabs,
 }
 
 // Tabless (outside) fields
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .form-tabless-fields {
+.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .form-tabless-fields {
     .clearfix();
     position: relative;
     background: @color-fancy-form-tabless-fields-bg;
@@ -641,8 +645,8 @@ body.breadcrumb-fancy .control-breadcrumb,
 // --- FORM BUTTONS
 //
 
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs .form-buttons:not(.normalized),
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .form-tabless-fields  .form-buttons:not(.normalized) {
+.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs .form-buttons:not(.normalized),
+.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .form-tabless-fields  .form-buttons:not(.normalized) {
     .transition(all 0.5s);
     padding-top: 14px;
     padding-bottom: 5px;
@@ -679,7 +683,7 @@ body.breadcrumb-fancy .control-breadcrumb,
     }
 }
 
-.fancy-layout form[class$="-data-changed"] *:not(.nested-form) > .form-widget > .layout-row > .control-tabs .btn.save {
+.fancy-layout form[class$="-data-changed"] *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs .btn.save {
     .opacity(1);
 }
 
@@ -688,7 +692,7 @@ body.breadcrumb-fancy .control-breadcrumb,
 //
 
 // Code editor
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-codeeditor {
+.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-codeeditor {
     border: none !important;
     .border-radius(0);
 
@@ -698,7 +702,7 @@ body.breadcrumb-fancy .control-breadcrumb,
 }
 
 // Rich editor
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-richeditor {
+.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-richeditor {
     border: none;
     border-left: 1px solid @color-form-field-border !important;
 
@@ -709,20 +713,20 @@ body.breadcrumb-fancy .control-breadcrumb,
 }
 
 // Rich editor in a secondary content tab
-.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs.secondary-content-tabs > .tab-content > .tab-pane > .form-group >  .field-richeditor {
+.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs.secondary-content-tabs > .tab-content > .tab-pane > .form-group >  .field-richeditor {
     .fr-toolbar {
         background: white;
     }
 }
 
 // Rich editor when the side panel is not fixed
-body.side-panel-not-fixed .fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-richeditor,
-body.side-panel-not-fixed.fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-richeditor {
+body.side-panel-not-fixed .fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-richeditor,
+body.side-panel-not-fixed.fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs > .tab-content > .tab-pane > .form-group > .field-richeditor {
     border-left: none;
 }
 
 // Loading indicator
-html.cssanimations .fancy-layout *:not(.nested-form) > .form-widget > .layout-row > .form-tabless-fields .loading-indicator-container .loading-indicator > span {
+html.cssanimations .fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .form-tabless-fields .loading-indicator-container .loading-indicator > span {
     .animation(spin 1s linear infinite);
     background-image: url('../../../system/assets/ui/images/loader-white.svg');
     background-size: 20px 20px;

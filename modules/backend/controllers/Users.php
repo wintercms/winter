@@ -1,16 +1,22 @@
-<?php namespace Backend\Controllers;
+<?php
 
-use Mail;
-use Lang;
-use Flash;
-use Backend;
-use Redirect;
-use Response;
-use BackendMenu;
-use BackendAuth;
-use Backend\Models\UserGroup;
+namespace Backend\Controllers;
+
+use Backend\Behaviors\FormController;
+use Backend\Behaviors\ListController;
+use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Backend\Facades\BackendMenu;
+use Backend\Models\UserGroup;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
 use System\Classes\SettingsManager;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Mail;
 
 /**
  * Backend user controller
@@ -25,8 +31,9 @@ class Users extends Controller
      * @var array Extensions implemented by this controller.
      */
     public $implement = [
-        \Backend\Behaviors\FormController::class,
-        \Backend\Behaviors\ListController::class,
+        FormController::class,
+        ListController::class,
+        RelationController::class,
     ];
 
     /**
@@ -97,6 +104,18 @@ class Users extends Controller
 
         // Ensure soft-deleted records can still be managed
         $query->withTrashed();
+    }
+
+    /**
+     * Before creating a new user, generate password if auto-generate is enabled
+     */
+    public function formBeforeCreate($model)
+    {
+        if (post('User._auto_generate_password')) {
+            $password = Str::random(22);
+            $model->password = $password;
+            $model->password_confirmation = $password;
+        }
     }
 
     /**

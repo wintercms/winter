@@ -36,6 +36,11 @@ class FileUpload extends FormWidgetBase
     //
 
     /**
+     * @var string Icon class to use for the upload button.
+     */
+    public $iconClass;
+
+    /**
      * @var string Prompt text to display for the upload button.
      */
     public $prompt;
@@ -105,6 +110,7 @@ class FileUpload extends FormWidgetBase
         $this->maxFilesize = $this->getUploadMaxFilesize();
 
         $this->fillFromConfig([
+            'iconClass',
             'prompt',
             'imageWidth',
             'imageHeight',
@@ -115,6 +121,8 @@ class FileUpload extends FormWidgetBase
             'useCaption',
             'attachOnUpload',
         ]);
+
+        $this->iconClass = $this->iconClass ?? 'icon-upload';
 
         if ($this->formField->disabled) {
             $this->previewMode = true;
@@ -160,6 +168,7 @@ class FileUpload extends FormWidgetBase
         $this->vars['cssDimensions'] = $this->getCssDimensions();
         $this->vars['cssBlockDimensions'] = $this->getCssDimensions('block');
         $this->vars['useCaption'] = $this->useCaption;
+        $this->vars['iconClass'] = $this->iconClass;
         $this->vars['prompt'] = $this->getPromptText();
     }
 
@@ -247,7 +256,8 @@ class FileUpload extends FormWidgetBase
                 : 'backend::lang.fileupload.default_prompt';
         }
 
-        return str_replace('%s', '<i class="icon-upload"></i>', e(trans($this->prompt)));
+        $uploadIconStr = sprintf('<i class="%s"></i>', $this->iconClass);
+        return str_replace('%s', $uploadIconStr, e(trans($this->prompt)));
     }
 
     /**

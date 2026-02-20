@@ -97,9 +97,8 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * @param mixed $theme Specifies the theme the object belongs to.
      * @param string $fileName Specifies the file name, with the extension.
      * The file name can contain only alphanumeric symbols, dashes and dots.
-     * @return mixed Returns a CMS object instance or null if the object wasn't found.
      */
-    public static function load($theme, $fileName)
+    public static function load($theme, $fileName): ?static
     {
         return static::inTheme($theme)->find($fileName);
     }
@@ -111,7 +110,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * @param string $fileName Specifies the file name, with the extension.
      * @return static|null Returns a CMS object instance or null if the object wasn't found.
      */
-    public static function loadCached($theme, $fileName)
+    public static function loadCached($theme, $fileName): ?static
     {
         return static::inTheme($theme)
             ->remember(Config::get('cms.parsedPageCacheTTL', 1440))
@@ -202,7 +201,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * @param  array  $options
      * @return bool
      */
-    public function save(array $options = null)
+    public function save(?array $options = null)
     {
         try {
             parent::save($options);
