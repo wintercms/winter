@@ -16,36 +16,36 @@
 
     background: @panel-bg;
     @media (prefers-color-scheme: dark) {
-      background: @panel-bg-dark;
+        background: @panel-bg-dark;
     }
 
     & > legend {
-      border: none;
-      margin: 0;
-      padding-inline: 1rem;
-      width: fit-content;
-      font-size: 18px;
-      color: inherit;
+        border: none;
+        margin: 0;
+        padding-inline: 1rem;
+        width: fit-content;
+        font-size: 18px;
+        color: inherit;
     }
     .control-tabs.primary-tabs {
         .nav-tabs {
             margin: 0;
             > li.active > a:before {
-              background-color: @panel-bg;
-              border-color: @panel-bg;
-              @media (prefers-color-scheme: dark) {
-                background-color: @panel-bg-dark;
-                border-color: @panel-bg-dark;
-              }
+                background-color: @panel-bg;
+                border-color: @panel-bg;
+                @media (prefers-color-scheme: dark) {
+                    background-color: @panel-bg-dark;
+                    border-color: @panel-bg-dark;
+                }
             }
 
             > li > a > span.title {
-              &:before, &:after {
-                background-color: @panel-bg;
-                @media (prefers-color-scheme: dark) {
-                  background-color: @panel-bg-dark;
+                &:before, &:after {
+                    background-color: @panel-bg;
+                    @media (prefers-color-scheme: dark) {
+                        background-color: @panel-bg-dark;
+                    }
                 }
-              }
             }
         }
     }
