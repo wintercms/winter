@@ -122,11 +122,7 @@ class FormController extends ControllerBehavior
      */
     public function initForm($model, $context = null)
     {
-        if ($context !== null) {
-            $this->context = $context;
-        }
-
-        $context = $this->formGetContext();
+        $context = $this->context = $context ?? $this->formGetContext();
 
         /*
          * Each page can supply a unique form definition, if desired
@@ -440,7 +436,7 @@ class FormController extends ControllerBehavior
      */
     public function formGetContext()
     {
-        return post('form_context', $this->context);
+        return $this->context;
     }
 
     /**
