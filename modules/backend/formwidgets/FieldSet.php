@@ -23,7 +23,6 @@ class FieldSet extends FormWidgetBase
      */
     public $form;
 
-
     /**
      * @var bool Determines if this form field should display comments and labels.
      */
