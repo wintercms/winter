@@ -71,9 +71,15 @@ import '../../less/relation.less';
          * Destructor.
          */
         destruct() {
-            this.expandAllControl.removeEventListener('click', this.events.expandAll);
-            this.collapseAllControl.removeEventListener('click', this.events.collapseAll);
-            this.expandCheckedControl.removeEventListener('click', this.events.expandChecked);
+            if (this.expandAllControl) {
+                this.expandAllControl.removeEventListener('click', this.events.expandAll);
+            }
+            if (this.collapseAllControl) {
+                this.collapseAllControl.removeEventListener('click', this.events.collapseAll);
+            }
+            if (this.expandCheckedControl) {
+                this.expandCheckedControl.removeEventListener('click', this.events.expandChecked);
+            }
 
             this.toggles.forEach((toggle) => {
                 toggle.removeEventListener('click', this.events.toggle)
@@ -125,7 +131,7 @@ import '../../less/relation.less';
             });
 
             openPromise.then((el) => {
-                this.updateScollBar(el);
+                this.updateScrollBar(el);
             });
         }
 
@@ -146,7 +152,7 @@ import '../../less/relation.less';
             });
 
             closePromise.then((el) => {
-                this.updateScollBar(el);
+                this.updateScrollBar(el);
             });
         }
 
@@ -169,7 +175,7 @@ import '../../less/relation.less';
             });
 
             selectedPromise.then((el) => {
-                this.updateScollBar(el);
+                this.updateScrollBar(el);
             });
         }
 
@@ -194,7 +200,7 @@ import '../../less/relation.less';
             });
 
             tooglePromise.then((parent) => {
-                this.updateScollBar(parent);
+                this.updateScrollBar(parent);
             });
         }
 
@@ -203,12 +209,16 @@ import '../../less/relation.less';
          *
          * @param {HTMLElement} el The last animated node of the tree
          */
-        updateScollBar(el) {
+        updateScrollBar(el) {
             if (el === undefined) {
                 return;
             }
 
             let openedLevel = el.classList.contains("checkboxlist-children") ? el : el.querySelector('.checkboxlist-children');
+
+            if (!openedLevel) {
+                return;
+            }
 
             openedLevel.addEventListener("transitionend", () => {
                 $('[data-control=scrollbar]').data('oc.scrollbar').update();

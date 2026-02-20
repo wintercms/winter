@@ -1,0 +1,55 @@
+div[data-control="relation"] .field-checkboxlist .checkboxlist-controls > div:nth-child(even) {
+  margin-left: auto;
+  margin-right: 0;
+}
+div[data-control="relation"] .checkboxlist-item {
+  --background-padding: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: start;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+  margin-top: 15px;
+}
+div[data-control="relation"] .checkboxlist-item .checkboxlist-item-toggle .icon-chevron-right {
+  display: block;
+  transition: transform 0.15s ease-in-out;
+}
+div[data-control="relation"] .checkboxlist-item:has(.checkboxlist-item).open {
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0) calc(var(--background-padding) - 1px), rgba(0, 0, 0, 0.25) var(--background-padding), rgba(0, 0, 0, 0) calc(var(--background-padding) + 1px));
+}
+div[data-control="relation"] .checkboxlist-item:has(.checkboxlist-item).open > .checkboxlist-item-toggle .icon-chevron-right {
+  transform: rotate(90deg);
+}
+div[data-control="relation"] .checkboxlist-item .custom-checkbox {
+  flex-grow: 1;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+div[data-control="relation"] .checkboxlist-item-toggle {
+  margin: 0 calc(1rem + 15px) 0 1rem;
+}
+div[data-control="relation"] .checkboxlist-item-toggle .icon-chevron-right {
+  pointer-events: none;
+}
+div[data-control="relation"] .checkboxlist-children {
+  width: 100%;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.2s ease-in-out;
+}
+div[data-control="relation"] .checkboxlist-children.open {
+  grid-template-rows: 1fr;
+}
+div[data-control="relation"] .checkboxlist-children > div {
+  overflow: hidden;
+}
+div[data-control="relation"] .checkboxlist-item .checkboxlist-item {
+  --background-padding: 20px;
+  margin-left: 10px;
+  padding-left: 10px;
+}
+div[data-control="relation"] .checkboxlist-item ~ .checkboxlist-item {
+  margin-top: 0;
+}

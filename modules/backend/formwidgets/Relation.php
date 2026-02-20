@@ -181,12 +181,12 @@ class Relation extends FormWidgetBase
                 ? $relationObject->getOtherKey()
                 : $relationModel->getKeyName();
 
-            $field->options = $usesTree
-                ? $result->listsNested($nameFrom, $primaryKeyName)
-                : $result->lists($nameFrom, $primaryKeyName);
-
             if ($usesTree) {
                 if ($this->displayTree) {
+                    if ($this->sqlSelect) {
+                        $result = $result->getQuery()->get();
+                    }
+
                     $field->options = $result->toNestedArray($nameFrom, $primaryKeyName);
                 } else {
                     $field->options = $result->listsNested($nameFrom, $primaryKeyName);

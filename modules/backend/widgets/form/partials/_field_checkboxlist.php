@@ -1,5 +1,4 @@
 <?php
-$nameFrom = $this->nameFrom;
 $fieldOptions = $field->options();
 $checkedValues = (array) $field->value;
 $readOnly = $this->previewMode || $field->readOnly || $field->disabled;
@@ -93,14 +92,13 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
             if ($displayTree):
                 $index = 1;
 
-                function renderCheckboxLine(
+                $renderCheckboxLine = function (
                     $field,
                     array $checkedValues,
                     array $fieldOptions,
-                    string $nameFrom,
                     bool $readOnly,
                     int &$index
-                ) {
+                ) use (&$renderCheckboxLine) {
                     foreach ($fieldOptions as $value => $option):
                         $index++;
                         $checkboxId = 'checkbox_'. $field->getId() .'_'. $index;
@@ -123,7 +121,7 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
                                         <?= in_array($value, $checkedValues) ? 'checked="checked"' : '' ?>>
 
                                     <label for="<?= $checkboxId ?>">
-                                        <?= e(trans($option[$nameFrom])) ?>
+                                        <?= e(trans(reset($option))) ?>
                                     </label>
                                 </div>
 
@@ -133,24 +131,26 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
                                     </a>
                                     <div class="checkboxlist-children">
                                         <div id="<?= $checkboxId ?>_children">
-                                            <?php e(renderCheckboxLine($field, $checkedValues, $children, $nameFrom, $readOnly, $index)); ?>
+                                            <?php $renderCheckboxLine($field, $checkedValues, $children, $readOnly, $index); ?>
                                         </div>
                                     </div>
                                 <?php endif ?>
                             </div>
                             <?php
                     endforeach;
-                }
+                };
 
-                renderCheckboxLine($field, $checkedValues, $fieldOptions, $nameFrom, $readOnly, $index);
+                $renderCheckboxLine($field, $checkedValues, $fieldOptions, $readOnly, $index);
             else:
                 $index = 0;
+                // debug($fieldOptions);
                 foreach ($fieldOptions as $value => $option):
                     $index++;
                     $checkboxId = 'checkbox_'.$field->getId().'_'.$index;
                     if (!is_array($option)) {
                         $option = [$option];
                     }
+                    // debug($option);
                     ?>
                     <div class="checkbox custom-checkbox">
                         <input
