@@ -2,7 +2,7 @@
 
 <fieldset class="fieldset">
     <?php if ($label): ?>
-        <legend><?= trans($label) ?></legend>
+        <legend><?= e(trans($label)) ?></legend>
     <?php endif ?>
 
     <?= $this->formWidget->render(['section' => 'outside']) ?>
