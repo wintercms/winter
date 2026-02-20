@@ -5,5 +5,5 @@
         <legend><?= trans($label) ?></legend>
     <?php endif ?>
 
-    <?= $this->formWidget->render() ?>
+    <?= $this->formWidget->render(['section' => 'outside']) ?>
 </fieldset>

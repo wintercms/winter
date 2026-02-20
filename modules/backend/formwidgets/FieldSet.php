@@ -64,9 +64,12 @@ class FieldSet extends FormWidgetBase
         $this->addCss('css/fieldset.css', 'core');
     }
 
-    public function getFormFields()
+    /**
+     * return the internal formwidget's outside fields
+     */
+    public function getFormFields(): array
     {
-        return $this->formWidget->getFields();
+        return $this->formWidget->fields;
     }
 
     /**
