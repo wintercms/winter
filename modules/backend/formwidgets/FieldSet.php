@@ -66,11 +66,11 @@ class FieldSet extends FormWidgetBase
     }
 
     /**
-     * return the internal formwidget's outside fields
+     * return the internal formwidget's fields
      */
     public function getFormFields(): array
     {
-        return $this->formWidget->fields;
+        return $this->formWidget->getFields();
     }
 
     /**
