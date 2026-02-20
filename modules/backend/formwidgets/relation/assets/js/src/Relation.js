@@ -221,7 +221,10 @@ import '../../less/relation.less';
             }
 
             openedLevel.addEventListener("transitionend", () => {
-                $('[data-control=scrollbar]').data('oc.scrollbar').update();
+                const scrollbarEl = this.element.querySelector('[data-control=scrollbar]');
+                if (scrollbarEl) {
+                    $(scrollbarEl).data('oc.scrollbar')?.update();
+                }
             }, {once: true});
         }
 

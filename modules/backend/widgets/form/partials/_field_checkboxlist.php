@@ -89,8 +89,8 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
                 value="0" />
 
             <?php
+            $index = 0;
             if ($displayTree):
-                $index = 1;
 
                 $renderCheckboxLine = function (
                     $field,
@@ -142,15 +142,12 @@ $quickselectEnabled = $field->getConfig('quickselect', $isScrollable);
 
                 $renderCheckboxLine($field, $checkedValues, $fieldOptions, $readOnly, $index);
             else:
-                $index = 0;
-                // debug($fieldOptions);
                 foreach ($fieldOptions as $value => $option):
                     $index++;
                     $checkboxId = 'checkbox_'.$field->getId().'_'.$index;
                     if (!is_array($option)) {
                         $option = [$option];
                     }
-                    // debug($option);
                     ?>
                     <div class="checkbox custom-checkbox">
                         <input
