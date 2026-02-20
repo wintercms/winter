@@ -741,7 +741,7 @@ class FormField
       */
     public function __get($name)
     {
-        if (array_key_exists($name, $this->config)) {
+        if (is_array($this->config) && array_key_exists($name, $this->config)) {
             return array_get($this->config, $name);
         }
         if (property_exists($this, $name)) {
@@ -756,7 +756,7 @@ class FormField
       */
     public function __isset($name)
     {
-        if (array_key_exists($name, $this->config)) {
+        if (is_array($this->config) && array_key_exists($name, $this->config)) {
             return true;
         }
         return property_exists($this, $name) && !is_null($this->{$name});

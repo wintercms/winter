@@ -32,7 +32,7 @@ $listId = $hasOptions ? $field->getId() . '-list' : null;
             <?= isset($field->maxlength) && is_numeric($field->maxlength) ? 'maxlength="' . e($field->maxlength) . '"' : '' ?>
             <?= isset($field->minlength) && is_numeric($field->minlength) ? 'minlength="' . e($field->minlength) . '"' : '' ?>
             <?= isset($field->pattern) && is_string($field->pattern) ? 'pattern="' . e($field->pattern) . '"' : '' ?>
-            <?= isset($field->placeholder) && is_string($field->placeholder) ? 'placeholder="' . e($field->placeholder) . '"' : '' ?>
+            <?= isset($field->placeholder) && is_string($field->placeholder) ? 'placeholder="' . e(trans($field->placeholder)) . '"' : '' ?>
             <?= isset($field->size) && is_numeric($field->size) ? 'size="' . e($field->size) . '"' : '' ?>
             <?= $field->getAttributes() ?>
             <?= $listId ? 'list="' . e($listId) . '"' : '' ?>
