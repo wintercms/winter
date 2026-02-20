@@ -1,4 +1,4 @@
-<!-- URL -->
+<!-- Tel (Phone) -->
 <?php
 $fieldOptions = $field->options();
 $hasOptions = is_array($fieldOptions) && count($fieldOptions);
@@ -6,12 +6,12 @@ $listId = $hasOptions ? $field->getId() . '-list' : null;
 ?>
 <div class="input-group static">
     <span class="input-group-addon">
-        <i class="empty wn-icon-link"></i>
+        <i class="empty wn-icon-phone"></i>
     </span>
     <?php if ($this->previewMode): ?>
         <?php if ($field->value): ?>
             <a
-                href="<?= e($field->value) ?>"
+                href="tel:<?= e($field->value) ?>"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="form-control"
@@ -23,9 +23,9 @@ $listId = $hasOptions ? $field->getId() . '-list' : null;
         <?php endif ?>
     <?php else: ?>
         <input
-            type="url"
-            name="<?= $field->getName() ?>"
+            type="tel"
             id="<?= $field->getId() ?>"
+            name="<?= $field->getName() ?>"
             value="<?= e($field->value) ?>"
             class="form-control"
             <?= isset($field->autocomplete) && is_string($field->autocomplete) ? 'autocomplete="' . e($field->autocomplete) . '"' : '' ?>
