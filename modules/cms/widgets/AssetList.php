@@ -234,6 +234,13 @@ class AssetList extends WidgetBase
             throw new ApplicationException(Lang::get('cms::lang.asset.already_exists'));
         }
 
+        // Sanitize content if the file is being renamed to an SVG extension
+        $newExt = strtolower(File::extension($newName));
+        $oldExt = strtolower(File::extension(basename($originalPath)));
+        if ($newExt === 'svg' && $oldExt !== $newExt) {
+            File::put($originalFullPath, Svg::sanitize(File::get($originalFullPath)));
+        }
+
         if (!@rename($originalFullPath, $newFullPath)) {
             throw new ApplicationException(Lang::get('cms::lang.asset.error_renaming'));
         }
@@ -684,7 +691,7 @@ class AssetList extends WidgetBase
                 ));
             }
 
-            if (File::extension($fileName) === 'svg') {
+            if (strtolower(File::extension($fileName)) === 'svg') {
                 File::put($uploadedFile->getRealPath(), Svg::extract($uploadedFile->getRealPath()));
             }
 
