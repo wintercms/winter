@@ -91,6 +91,7 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
             this.fullscreen = false;
             this.cachedThemes = {};
             this.resizeThrottle = null;
+            this.savedState = null;
             this.callbacks = {
                 fullScreenChange: () => this.onFullScreenChange(),
                 resize: () => {
@@ -193,7 +194,8 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
                 this.visibilityListener = false;
             }
             if (this.clickListener) {
-                document.removeEventListener('click', this.callbacks.click);
+                document.removeEventListener('click', this.callbacks.click, { capture: true });
+                this.clickListener = false;
             }
         }
 
@@ -204,6 +206,11 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
          * and preventing slowdown of the browser.
          */
         dispose() {
+            if (this.editor) {
+                this.savedState = {
+                    position: this.editor.getPosition(),
+                };
+            }
             if (this.disposables.length > 0) {
                 this.disposables.forEach((disposable) => {
                     disposable.dispose();
@@ -214,11 +221,15 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
                 window.removeEventListener('resize', this.callbacks.resize);
                 this.resizeListener = false;
             }
+            if (this.model) {
+                this.model.dispose();
+                this.model = null;
+            }
             if (this.editor) {
                 this.editor.dispose();
                 this.editor = null;
             }
-            this.events.fire('dispose', this, this.editor);
+            this.events.fire('dispose', this);
         }
 
         /**
@@ -249,6 +260,11 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
          * Creates a Monaco editor instance in the given element.
          */
         createEditor() {
+            // Guard against creating a duplicate editor (both onObserve and onVisibilityChange
+            // can trigger creation simultaneously)
+            if (this.editor) {
+                return;
+            }
 
             // Force a specific height on the container - stops Monaco from indefinitely trying
             // to resize if the container has a fluid height
@@ -268,6 +284,15 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
             this.updateLanguage();
             this.enableStatusBarActions();
             this.registerKeyBindings();
+
+            // Restore cursor position and scroll state from before the editor was disposed
+            if (this.savedState) {
+                if (this.savedState.position) {
+                    this.editor.setPosition(this.savedState.position);
+                    this.editor.revealPositionInCenter(this.savedState.position);
+                }
+                this.savedState = null;
+            }
 
             this.events.fire('create', this, this.editor);
         }
@@ -408,9 +433,12 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
                     this.clickStartedInEditor = false;
                 }, 20);
             }));
-            document.addEventListener('click', this.callbacks.click, {
-                capture: true,
-            });
+            if (!this.clickListener) {
+                document.addEventListener('click', this.callbacks.click, {
+                    capture: true,
+                });
+                this.clickListener = true;
+            }
 
             window.addEventListener('resize', this.callbacks.resize);
             this.resizeListener = true;

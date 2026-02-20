@@ -112,7 +112,7 @@ class ServiceProvider extends ModuleServiceProvider
             }
         });
 
-        PackageManager::instance()->registerCallback(function ($mix) {
+        PackageManager::registerCallback(function ($mix) {
             $mix->registerPackage('module-backend.formwidgets.codeeditor', '~/modules/backend/formwidgets/codeeditor/assets/winter.mix.js');
         });
     }
