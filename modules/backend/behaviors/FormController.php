@@ -122,11 +122,7 @@ class FormController extends ControllerBehavior
      */
     public function initForm($model, $context = null)
     {
-        if ($context !== null) {
-            $this->context = $context;
-        }
-
-        $context = $this->formGetContext();
+        $context = $this->context = $context ?? $this->formGetContext();
 
         /*
          * Each page can supply a unique form definition, if desired
@@ -432,15 +428,13 @@ class FormController extends ControllerBehavior
     }
 
     /**
-     * Returns the active form context, either obtained from the postback
-     * variable called `form_context` or detected from the configuration,
-     * or routing parameters.
+     * Returns the active form context detected from the configuration or routing parameters.
      *
      * @return string
      */
     public function formGetContext()
     {
-        return post('form_context', $this->context);
+        return $this->context;
     }
 
     /**

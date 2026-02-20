@@ -160,6 +160,9 @@ return [
         'updated_at' => 'Updated at',
         'deleted_at' => 'Deleted at',
         'show_deleted' => 'Show deleted',
+        'self_escalation_denied' => 'You cannot modify your own role, permissions, or superuser status.',
+        'superuser_grant_denied' => 'Only superusers can grant superuser status or modify other superuser accounts.',
+        'manage_users_denied' => 'You do not have permission to manage other administrators.',
         'group' => [
             'name' => 'Group',
             'name_field' => 'Name',

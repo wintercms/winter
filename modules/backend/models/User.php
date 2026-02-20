@@ -3,8 +3,10 @@
 use Mail;
 use Event;
 use Backend;
-use BackendAuth;
+use Backend\Facades\BackendAuth;
+use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Auth\Models\User as UserBase;
+use Winter\Storm\Exception\ApplicationException;
 
 /**
  * Administrator user model
@@ -115,6 +117,36 @@ class User extends UserBase
             md5(strtolower(trim($this->email))) .
             '?s='. $size .
             '&d='. urlencode($default);
+    }
+
+    /**
+     * Before save event — enforce authorization rules to prevent privilege escalation.
+     * @return void
+     */
+    public function beforeSave()
+    {
+        $actor = BackendAuth::getUser();
+        $isCurrentUser = $this->exists && $actor && $actor->getKey() === $this->getKey();
+
+        // No authenticated user (CLI, artisan, queue, seeders) — allow everything
+        if (!$actor) {
+            return;
+        }
+
+        // Rule 1: Self-escalation — users cannot modify their own role, superuser status, or permissions
+        if ($isCurrentUser && $this->isDirty(['role_id', 'is_superuser', 'permissions'])) {
+            throw new ApplicationException(Lang::get('backend::lang.user.self_escalation_denied'));
+        }
+
+        // Rule 2: Must have backend.manage_users to manage other users
+        if (!$isCurrentUser && !$actor->hasAccess('backend.manage_users')) {
+            throw new ApplicationException(Lang::get('backend::lang.user.manage_users_denied'));
+        }
+
+        // Rule 3: Only superusers can grant superuser status or edit existing superusers
+        if (!$actor->isSuperUser() && ($this->is_superuser || $this->getOriginal('is_superuser'))) {
+            throw new ApplicationException(Lang::get('backend::lang.user.superuser_grant_denied'));
+        }
     }
 
     /**
