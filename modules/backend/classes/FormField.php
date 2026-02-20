@@ -91,9 +91,9 @@ class FormField
     public $span = 'full';
 
     /**
-     * @var string Specifies a size. Possible values: tiny, small, large, huge, giant.
+     * @var string|int Specifies a size. Possible values for textarea: tiny, small, large, huge, giant.
      */
-    public $size = 'large';
+    public $size;
 
     /**
      * @var string Specifies contextual visibility of this form field.
@@ -211,7 +211,7 @@ class FormField
     }
 
     /**
-     * Sets a side of the field on a form.
+     * Sets the size of the field on a form.
      * @param string $value Specifies a size. Possible values: tiny, small, large, huge, giant
      */
     public function size($value = 'large')
@@ -259,6 +259,11 @@ class FormField
      */
     public function displayAs($type, $config = [])
     {
+        if (in_array($type, ['textarea', 'widget'])) {
+            // defaults to 'large'
+            $this->size = 'large';
+        }
+
         $this->type = strtolower($type) ?: $this->type;
         $this->config = $this->evalConfig($config);
 
@@ -281,18 +286,18 @@ class FormField
          */
         $applyConfigValues = [
             'commentHtml',
-            'placeholder',
-            'dependsOn',
-            'required',
-            'readOnly',
-            'disabled',
-            'cssClass',
-            'stretch',
             'context',
+            'cssClass',
+            'dependsOn',
+            'disabled',
             'hidden',
-            'trigger',
-            'preset',
             'path',
+            'placeholder',
+            'preset',
+            'readOnly',
+            'required',
+            'stretch',
+            'trigger',
         ];
 
         foreach ($applyConfigValues as $value) {
@@ -728,5 +733,32 @@ class FormField
         }
 
         return $result;
+    }
+
+    /**
+      * Implements the getter functionality.
+      * @param  string  $name
+      */
+    public function __get($name)
+    {
+        if (is_array($this->config) && array_key_exists($name, $this->config)) {
+            return array_get($this->config, $name);
+        }
+        if (property_exists($this, $name)) {
+            return $this->{$name};
+        }
+        return null;
+    }
+
+    /**
+      * Determine if an attribute exists on the object.
+      * @param  string  $name
+      */
+    public function __isset($name)
+    {
+        if (is_array($this->config) && array_key_exists($name, $this->config)) {
+            return true;
+        }
+        return property_exists($this, $name) && !is_null($this->{$name});
     }
 }

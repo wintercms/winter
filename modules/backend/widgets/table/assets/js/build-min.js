@@ -609,8 +609,7 @@ this.unregisterListHandlers()
 this.hideDropdown()
 this.itemListElement=null
 this.activeCell=null}
-DropdownProcessor.prototype.buildEditor=function(cellElement,cellContentContainer,isClick){var currentValue=this.tableObj.getCellValue(cellElement),containerPosition=this.getAbsolutePosition(cellContentContainer)
-self=this
+DropdownProcessor.prototype.buildEditor=function(cellElement,cellContentContainer,isClick){var currentValue=this.tableObj.getCellValue(cellElement),containerPosition=this.getAbsolutePosition(cellContentContainer),self=this
 this.itemListElement=document.createElement('div')
 this.itemListElement.addEventListener('click',this.itemClickHandler)
 this.itemListElement.addEventListener('keydown',this.itemKeyDownHandler)
