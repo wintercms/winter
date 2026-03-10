@@ -102,6 +102,6 @@ class FieldSet extends FormWidgetBase
      */
     public function getSaveValue($value)
     {
-        return $this->formWidget->getSaveValue($value);
+        return FormField::NO_SAVE_DATA;
     }
 }
