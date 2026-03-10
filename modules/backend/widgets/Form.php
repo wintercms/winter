@@ -1227,13 +1227,14 @@ class Form extends WidgetBase
                 foreach ($widget->getFormFields() as $field) {
                     $parts = HtmlHelper::nameToArray($field->fieldName);
                     if (($value = $this->dataArrayGet($data, $parts)) !== null) {
-                        if ($field->type === 'number') {
-                            $value = !strlen(trim($value)) ? null : (float) $value;
+                        switch ($field->type) {
+                            case 'number':
+                                $value = !strlen(trim($value)) ? null : (float) $value;
+                                break;
+                            case 'widget':
+                                $value = $widget->getFormWidget($field->fieldName)->getSaveValue($value);
+                                break;
                         }
-                        if ($field->type === 'widget') {
-                            $value = $widget->getFormWidget($field->fieldName)->getSaveValue($value);
-                        }
-
                         $this->dataArraySet($result, $parts, $value);
                     }
                 }
