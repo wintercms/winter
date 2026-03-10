@@ -3,6 +3,7 @@
 namespace Backend\FormWidgets;
 
 use ApplicationException;
+use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use Backend\Widgets\Form;
 
@@ -71,14 +72,15 @@ class FieldSet extends FormWidgetBase
      */
     public function getFormFields(): array
     {
-        $fields = $this->formWidget->getFields();
+        return $this->formWidget->getFields();
+    }
 
-        foreach ($fields as $field) {
-            if ($this->model->hasRelation($field->fieldName)) {
-                throw new ApplicationException(trans('backend::lang.fieldset.relation-not-supported', ['field' => $field->fieldName]));
-            }
-        }
-        return $fields;
+    /**
+     * return an internal formwidget's formWidget
+     */
+    public function getFormWidget($field): FormWidgetBase
+    {
+        return $this->formWidget->getFormWidget($field);
     }
 
     /**
@@ -93,5 +95,13 @@ class FieldSet extends FormWidgetBase
     public function prepareVars()
     {
         $this->formWidget->previewMode = $this->previewMode;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getSaveValue($value)
+    {
+        return $this->formWidget->getSaveValue($value);
     }
 }
