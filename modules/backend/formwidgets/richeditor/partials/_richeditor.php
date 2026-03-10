@@ -60,7 +60,7 @@
         <?php endif ?>
         data-links-handler="<?= $this->getEventHandler('onLoadPageLinksForm') ?>"
         data-upload-handler="<?= $this->getEventHandler('onUpload') ?>"
-        data-ace-vendor-path="<?= Url::asset('/modules/backend/formwidgets/codeeditor/assets/vendor/ace') ?>"
+        data-ace-vendor-path="<?= Url::asset('/modules/backend/assets/vendor/ace') ?>"
         data-control="richeditor"
         <?= $field->getAttributes() ?>
     >

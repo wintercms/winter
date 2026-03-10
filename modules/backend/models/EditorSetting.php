@@ -1,10 +1,12 @@
-<?php namespace Backend\Models;
+<?php
 
-use File;
-use Cache;
-use Model;
-use Less_Parser;
+namespace Backend\Models;
+
 use Exception;
+use Illuminate\Support\Facades\Cache;
+use Less_Parser;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Editor settings that affect all users
@@ -251,7 +253,7 @@ class EditorSetting extends Model
             Cache::forever($cacheKey, $customCss);
         }
         catch (Exception $ex) {
-            $customCss = '/* ' . $ex->getMessage() . ' */';
+            $customCss = '/* ' . e($ex->getMessage()) . ' */';
         }
 
         return $customCss;

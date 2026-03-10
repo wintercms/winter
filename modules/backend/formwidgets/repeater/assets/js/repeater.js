@@ -314,7 +314,8 @@
     Repeater.prototype.getCollapseTitle = function($item) {
         var $target,
             defaultText = '',
-            explicitText = $item.data('collapse-title')
+            explicitText = $item.data('collapse-title'),
+            selector = 'input[type=text], select:first, ul:first'
 
         if (explicitText) {
             return explicitText
@@ -322,15 +323,15 @@
 
         if (this.options.titleFrom) {
             $target = $('[data-field-name="'+this.options.titleFrom+'"]', $item)
-            if (!$target.length) {
-                $target = $item
+            if ($target.length) {
+                selector = 'input, select:first, ul:first'
             }
         }
-        else {
+        if (!$target || !$target.length) {
             $target = $item
         }
 
-        var $textInput = $('input[type=text]:first, select:first, ul:first', $target).first()
+        var $textInput = $(selector, $target).first()
         if ($textInput.length) {
             switch($textInput.prop("tagName")) {
                 case 'SELECT':

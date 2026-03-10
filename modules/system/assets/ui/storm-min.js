@@ -2552,12 +2552,13 @@ if(!el)return
 if(el.isContentEditable||(el.tagName.toLowerCase()=='input'&&el.type=='text'||el.tagName.toLowerCase()=='textarea')){this.lastElement=el}}
 DragValue.prototype.handleClick=function(event){if(!this.lastElement)return
 var $el=$(this.lastElement)
-if($el.hasClass('ace_text-input'))return this.handleClickCodeEditor(event,$el)
+if($el.closest('[data-control=codeeditor]').length)return this.handleClickCodeEditor(event,$el)
 if(this.lastElement.isContentEditable)return this.handleClickContentEditable()
 this.insertAtCaret(this.lastElement,this.textValue)}
 DragValue.prototype.handleClickCodeEditor=function(event,$el){var $editorArea=$el.closest('[data-control=codeeditor]')
 if(!$editorArea.length)return
-$editorArea.codeEditor('getEditorObject').insert(this.textValue)}
+var wrapper=$editorArea.data('oc.codeEditor')
+if(wrapper&&wrapper.insert){wrapper.insert(this.textValue)}}
 DragValue.prototype.handleClickContentEditable=function(){var sel,range,html;if(window.getSelection){sel=window.getSelection();if(sel.getRangeAt&&sel.rangeCount){range=sel.getRangeAt(0);range.deleteContents();range.insertNode(document.createTextNode(this.textValue));}}else if(document.selection&&document.selection.createRange){document.selection.createRange().text=this.textValue;}}
 DragValue.prototype.insertAtCaret=function(el,insertValue){if(document.selection){el.focus()
 var sel=document.selection.createRange()

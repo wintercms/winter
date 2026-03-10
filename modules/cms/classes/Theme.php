@@ -66,9 +66,8 @@ class Theme extends CmsObject
 
     /**
      * Loads the theme.
-     * @return self
      */
-    public static function load($dirName, $file = null): self
+    public static function load($dirName, $file = null): ?static
     {
         $theme = new static;
         $theme->setDirName($dirName);
