@@ -57,7 +57,7 @@ class FieldSet extends FormWidgetBase
         $config->arrayName = $this->getParentForm()->arrayName;
         $config->isNested = true;
 
-        $this->formWidget = $widget = $this->makeWidget(Form::class, $config);
+        $widget = $this->formWidget = $this->makeWidget(Form::class, $config);
         $widget->previewMode = $this->previewMode;
         $widget->bindToController();
     }
