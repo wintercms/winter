@@ -244,6 +244,9 @@ return [
         'column_switch_true' => 'Yes',
         'column_switch_false' => 'No',
     ],
+    'fieldset' => [
+        'relation-not-supported' => ':field: model relation fields are not supported by the fieldset formwidget',
+    ],
     'fileupload' => [
         'attachment' => 'Attachment',
         'help' => 'Add a title and description for this attachment.',
