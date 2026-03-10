@@ -75,7 +75,7 @@ class FieldSet extends FormWidgetBase
 
         foreach ($fields as $field) {
             if ($this->model->hasRelation($field->fieldName)) {
-                throw new ApplicationException(trans('backend::lang.fieldset.relation-not-supported',['field' => $field->fieldName]));
+                throw new ApplicationException(trans('backend::lang.fieldset.relation-not-supported', ['field' => $field->fieldName]));
             }
         }
         return $fields;
