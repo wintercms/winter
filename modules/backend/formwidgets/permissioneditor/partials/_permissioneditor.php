@@ -56,7 +56,14 @@
                     <td class="permission-name">
                         <?= e(trans($permission->label)) ?>
                         <?php if ($permission->comment): ?>
-                            <span class="text-info wn-icon-circle-info" data-toggle="tooltip" title="<?= e(trans($permission->comment)) ?>"></span>
+                            <span
+                                class="text-info wn-icon-circle-info"
+                                data-toggle="tooltip"
+                                title="<?= e(trans($permission->comment)) ?>"
+                                tabindex="0"
+                                role="img"
+                                aria-label="<?= e(trans($permission->comment)) ?>"
+                            ></span>
                         <?php endif; ?>
                     </td>
 
