@@ -612,7 +612,8 @@ return [
     ],
     'permissions' => [
         'manage_media' => 'Upload and manage media contents - images, videos, sounds, documents',
-        'allow_unsafe_markdown' => 'Use unsafe Markdown (Can include Javascript)',
+        'allow_unsafe_markdown' => 'Allow unsafe Markdown',
+        'allow_unsafe_markdown_comment' => 'Allowing unsafe Markdown will allow HTML tags, including JavaScript, in Markdown content. This can be a security risk if given to an untrusted user.',
     ],
     'mediafinder' => [
         'label' => 'Media Finder',

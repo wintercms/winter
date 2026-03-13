@@ -1,9 +1,9 @@
 <div class="permissioneditor <?= $this->previewMode ? 'control-disabled' : '' ?>" <?= $field->getAttributes() ?>>
     <table>
         <?php
-            $firstTab = true;
-            $globalIndex = 0;
-            $checkboxMode = !($this->mode === 'radio');
+        $firstTab = true;
+        $globalIndex = 0;
+        $checkboxMode = !($this->mode === 'radio');
         ?>
         <?php foreach ($permissions as $tab => $tabPermissions): ?>
             <tr class="section">
@@ -20,7 +20,7 @@
             </tr>
 
             <?php
-                $lastIndex = count($tabPermissions) - 1;
+            $lastIndex = count($tabPermissions) - 1;
             ?>
             <?php foreach ($tabPermissions as $index => $permission): ?>
 
@@ -55,13 +55,15 @@
 
                     <td class="permission-name">
                         <?= e(trans($permission->label)) ?>
-                        <p class="comment"><?= e(trans($permission->comment)) ?></p>
+                        <?php if ($permission->comment): ?>
+                            <span class="text-info wn-icon-circle-info" data-toggle="tooltip" title="<?= e(trans($permission->comment)) ?>"></span>
+                        <?php endif; ?>
                     </td>
 
                     <?php if ($this->mode === 'radio'): ?>
                         <td class="permission-value">
                             <div class="radio custom-radio">
-                                 <input
+                                <input
                                     id="<?= $allowId ?>"
                                     name="<?= e($baseFieldName) ?>[<?= e($permission->code) ?>]"
                                     value="1"
@@ -75,7 +77,7 @@
                         </td>
                         <td class="permission-value">
                             <div class="radio custom-radio">
-                                 <input
+                                <input
                                     id="<?= $inheritId ?>"
                                     name="<?= e($baseFieldName) ?>[<?= e($permission->code) ?>]"
                                     value="0"
@@ -88,7 +90,7 @@
                         </td>
                         <td class="permission-value">
                             <div class="radio custom-radio">
-                                 <input
+                                <input
                                     id="<?= $denyId ?>"
                                     name="<?= e($baseFieldName) ?>[<?= e($permission->code) ?>]"
                                     value="-1"
@@ -123,7 +125,7 @@
                     <?php else: ?>
                         <td class="permission-value">
                             <div class="checkbox custom-checkbox">
-                                 <input
+                                <input
                                     id="<?= $allowId ?>"
                                     name="<?= e($baseFieldName) ?>[<?= e($permission->code) ?>]"
                                     value="1"

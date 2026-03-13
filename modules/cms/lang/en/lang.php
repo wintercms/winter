@@ -277,9 +277,13 @@ return [
         'manage_content' => 'Manage website content files',
         'manage_assets' => 'Manage website assets - images, JavaScript files, CSS files',
         'manage_pages' => 'Create, modify and delete website pages',
+        'manage_pages_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s page content files, including PHP code if enabled.',
         'manage_layouts' => 'Create, modify and delete CMS layouts',
+        'manage_layouts_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s layout files, including PHP code if enabled.',
         'manage_partials' => 'Create, modify and delete CMS partials',
+        'manage_partials_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s partial files, including PHP code if enabled.',
         'manage_themes' => 'Activate, deactivate and configure CMS themes',
+        'manage_themes_comment' => 'This permission should only be given to trusted users, as it allows the user to change the theme or delete it entirely.',
         'manage_theme_options' => 'Configure customization options for the active theme',
     ],
     'theme_log' => [
