@@ -615,7 +615,8 @@ return [
     ],
     'permissions' => [
         'manage_media' => 'Завантаження та керування медіаконтентом - зображеннями, відео, звуками, документами',
-        'allow_unsafe_markdown' => 'Використовувати небезпечний Markdown (може включати Javascript)',
+        'allow_unsafe_markdown' => 'Дозволити небезпечний Markdown',
+        'allow_unsafe_markdown_comment' => 'Дозвіл небезпечного Markdown дозволить використання HTML-тегів, включаючи JavaScript, у вмісті Markdown. Це може становити ризик для безпеки, якщо надати його ненадійному користувачеві.',
     ],
     'mediafinder' => [
         'label' => 'Пошук медіа',
