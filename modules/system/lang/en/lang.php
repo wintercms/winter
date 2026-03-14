@@ -448,7 +448,7 @@ return [
         'manage_mail_templates' => 'Manage mail templates',
         'manage_mail_settings' => 'Manage mail settings',
         'manage_other_administrators' => 'Manage other administrators',
-        'manage_other_administrators_comment' => 'Allows the user to create, update and delete other administrator accounts. This permission should only be given to trusted users.',
+        'manage_other_administrators_comment' => 'Allows the user to create, update, and delete other administrator accounts. This permission should only be given to trusted users.',
         'impersonate_users' => 'Impersonate users',
         'impersonate_users_comment' => 'Allows the user to impersonate other users at their level of access. This permission should only be given to trusted users.',
         'manage_preferences' => 'Manage backend preferences',
