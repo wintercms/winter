@@ -283,7 +283,7 @@ return [
         'manage_partials' => 'Create, modify and delete CMS partials',
         'manage_partials_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s partial files, including PHP code if enabled.',
         'manage_themes' => 'Activate, deactivate and configure CMS themes',
-        'manage_themes_comment' => 'This permission should only be given to trusted users, as it allows the user to change the theme or delete it entirely.',
+        'manage_themes_comment' => 'This permission should only be given to trusted users, as it allows the user to add new themes, change the existing theme, or delete themes entirely.',
         'manage_theme_options' => 'Configure customization options for the active theme',
     ],
     'theme_log' => [
