@@ -4,7 +4,9 @@
     <img src="https://github.com/wintercms/winter/raw/develop/.github/assets/Github%20Banner.png?raw=true" alt="Winter CMS Logo" width="100%" style="max-width: 600px" />
 </p>
 
-This development environment container sets up a fully-functional installation of Winter CMS, running on Apache 2 with PHP 8.3, and makes it simple to start working with Winter CMS in VSCode, PHPStorm and online code-editing suites such as GitHub Codespaces.
+This development environment container sets up a fully-functional installation of Winter CMS, built on [FrankenPHP](https://frankenphp.dev/) with PHP 8.4. It makes it simple to start working with Winter CMS in VSCode, PHPStorm and online code-editing suites such as GitHub Codespaces.
+
+This image is based on the official [Winter CMS Docker image](https://github.com/wintercms/docker) and inherits all its features. For detailed configuration options, see the [Docker image README](https://github.com/wintercms/docker/blob/main/README.md).
 
 If you opted to use the `bootstrap-winter` feature, which is enabled by default, Winter CMS will be automatically configured and an administrator account will be generated with the credentials **admin / admin** for you to quickly sign in. It is recommended once you have done so that you change this password immediately.
 
@@ -17,7 +19,7 @@ The following plugins and themes will be installed automatically with this featu
 
 ## Using this environment
 
-When this environment is built, the Apache 2 service is automatically started, with the root folder of the Winter project being used. A preview of the website will be opened immediately - if you do not see this, you can open the **Ports** tab in VSCode to view the URL generated for viewing the project.
+When this environment is built, FrankenPHP is automatically started, with the root folder of the Winter project being used. A preview of the website will be opened immediately - if you do not see this, you can open the **Ports** tab in VSCode to view the URL generated for viewing the project.
 
 XDebug is enabled by default, and allows you to quickly use step debugging. It will be available in the **Debug** tab of VSCode or similar screen in other IDEs.
 
@@ -27,13 +29,13 @@ By default, when using the `bootstrap-winter` feature, changes to certain folder
 
 The following software is installed in this environment.
 
-- Apache 2.4
-- PHP 8.3 with the following extensions:
+- FrankenPHP (Caddy)
+- PHP 8.4 with the following extensions:
   - `intl`
   - `gd`
   - `xdebug`
 - Composer
-- NodeJS 22 (including `npm`)
+- NodeJS 24 (including `npm`)
 - Git
 
 ## Using in your own projects
@@ -43,12 +45,12 @@ You may use this development environment for your own projects, making it a grea
 You may disable this feature by modifying the `.devcontainer/devcontainer.json` file before running the container and commenting out the feature:
 
 ```json5
-        "ghcr.io/devcontainers/features/git:1": {},
-        "./local-features/apache-config": "latest",
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
         // Comment the following feature if you wish to bootstrap and configure Winter manually (ie. you wish to use this for your own project)
-        //"./local-features/bootstrap-winter": "latest"
+        "./local-features/bootstrap-winter": "latest"
     },
-    "overrideFeatureInstallOrder": [
 ```
 
 If this feature is disabled, you must bootstrap your project manually. This includes:
@@ -59,7 +61,7 @@ If this feature is disabled, you must bootstrap your project manually. This incl
 
 You may view the `.devcontainer/local-features/bootstrap-winter/bootstrap.sh` file to see how we bootstrap Winter, and run these commands manually. You will only need to do this once per project container.
 
-If you wish to mount your own volumes, use your own databases or any other complex usages, please review the [Docker documentation](https://docs.docker.com/) to set this up on the container.
+If you wish to mount your own volumes, use your own databases or any other complex usages, please review the [Winter Docker image documentation](https://github.com/wintercms/docker/blob/main/README.md#persisting-data) or the [FrankenPHP environment variables](https://frankenphp.dev/docs/config/#environment-variables) for configuration options.
 
 ## Troubleshooting
 
