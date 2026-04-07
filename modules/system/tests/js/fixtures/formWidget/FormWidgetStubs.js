@@ -15,13 +15,21 @@ jQuery.fn.render = function (fn) {
     fn();
 };
 
-// $.fn.request() - stub that synchronously invokes the success callback
+/*
+ * $.fn.request() - stub that mimics WinterCMS's AJAX framework contract.
+ *
+ * Returns a resolved jQuery Deferred with .done()/.fail()/.always() and a
+ * .success() alias (matching the WinterCMS framework.js Request class).
+ * The deferred resolves immediately since there is no real network I/O.
+ */
 jQuery.fn.request = function (handler, options) {
     var deferred = jQuery.Deferred();
+
     deferred.success = function (fn) {
-        fn();
-        return deferred;
+        return deferred.done(fn);
     };
+
+    deferred.resolve();
     return deferred;
 };
 
