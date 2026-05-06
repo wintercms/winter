@@ -483,14 +483,13 @@ trait AssetMaker
 
     protected function getAssetType(string $asset): ?string
     {
-        if (str_ends_with($asset, '.js')) {
-            return 'js';
-        }
+        $path = strtolower(parse_url($asset, PHP_URL_PATH) ?? $asset);
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
 
-        if (str_ends_with($asset, '.css')) {
-            return 'css';
-        }
-
-        return null;
+        return match ($ext) {
+            'js', 'mjs', 'cjs', 'ts', 'tsx', 'jsx', 'vue', 'svelte' => 'js',
+            'css', 'scss', 'sass', 'less', 'styl', 'stylus', 'pcss', 'postcss' => 'css',
+            default => null,
+        };
     }
 }
