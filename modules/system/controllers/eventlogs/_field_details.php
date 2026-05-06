@@ -3,7 +3,7 @@ if (!isset($value['logVersion']) || $value['logVersion'] !== 2) {
     if ($value ?? false) {
         printf(
             '<h4>DETAILS</h4><pre style="background: #fff; padding: 10px; border: 1px solid #ddd;">%s</pre>',
-            print_r($value, true)
+            e(print_r($value, true))
         );
     }
     return;
