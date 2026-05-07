@@ -183,9 +183,8 @@ class AssetMakerTest extends TestCase
             'foo.txt' => null,
             'foo' => null,
             'js' => null,
-            // str_ends_with is case-sensitive; the helper only matches lowercase extensions.
-            'foo.JS' => null,
-            'foo.CSS' => null,
+            'foo.JS' => 'js',
+            'foo.CSS' => 'css',
         ];
 
         foreach ($cases as $input => $expected) {
