@@ -1,7 +1,6 @@
 <div class="permissioneditor <?= $this->previewMode ? 'control-disabled' : '' ?>" <?= $field->getAttributes() ?>>
     <table>
         <?php
-        $firstTab = true;
         $globalIndex = 0;
         $checkboxMode = !($this->mode === 'radio');
         ?>
@@ -9,11 +8,11 @@
             <tr class="section">
                 <th class="tab"><?= e(trans($tab)) ?></th>
 
-                <th class="permission-type"><?= $firstTab ? e(trans('backend::lang.user.allow')) : '' ?></th>
+                <th class="permission-type" title="<?= e(trans('backend::lang.user.permissions_toggle_section_allow')) ?>"><?= e(trans('backend::lang.user.allow')) ?></th>
 
                 <?php if ($this->mode === 'radio'): ?>
-                    <th class="permission-type"><?= $firstTab ? e(trans('backend::lang.user.inherit')) : '' ?></th>
-                    <th class="permission-type"><?= $firstTab ? e(trans('backend::lang.user.deny')) : '' ?></th>
+                    <th class="permission-type" title="<?= e(trans('backend::lang.user.permissions_toggle_section_inherit')) ?>"><?= e(trans('backend::lang.user.inherit')) ?></th>
+                    <th class="permission-type" title="<?= e(trans('backend::lang.user.permissions_toggle_section_deny')) ?>"><?= e(trans('backend::lang.user.deny')) ?></th>
                 <?php endif; ?>
 
                 <th></th>
@@ -148,8 +147,6 @@
                     <td></td>
                 </tr>
             <?php endforeach ?>
-
-            <?php $firstTab = false; ?>
         <?php endforeach ?>
     </table>
     <div class="permissions-overlay"></div>
