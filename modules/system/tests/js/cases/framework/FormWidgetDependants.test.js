@@ -6,7 +6,7 @@ describe('Form Widget dependsOn', function () {
     /**
      * Build a FakeDom with jQuery, WinterCMS foundation, stubs, and the form widget.
      * The FormWidgetStubs fixture provides minimal implementations of ocJSON,
-     * $.fn.render, $.fn.request (synchronous success), and $.fn.loadIndicator.
+     * $.fn.render, $.fn.request (synchronous success), and $.fn.loadIndicator
      */
     function buildDom(html) {
         return FakeDom
