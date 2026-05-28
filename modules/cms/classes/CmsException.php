@@ -42,7 +42,7 @@ class CmsException extends ApplicationException
      * Error 400: Mask the exception as Twig content.
      * @param Throwable $previous Previous exception.
      */
-    public function __construct($message = null, $code = 100, Throwable $previous = null)
+    public function __construct($message = null, $code = 100, ?Throwable $previous = null)
     {
         if ($message instanceof CmsCompoundObject || $message instanceof ComponentPartial) {
             $this->compoundObject = $message;

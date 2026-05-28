@@ -1586,7 +1586,7 @@ class Controller
      * @param ComponentBase $component
      * @return void
      */
-    public function setComponentContext(ComponentBase $component = null)
+    public function setComponentContext(?ComponentBase $component = null)
     {
         $this->componentContext = $component;
     }
