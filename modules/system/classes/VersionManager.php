@@ -8,6 +8,7 @@ use Illuminate\Console\View\Components\Error;
 use Illuminate\Console\View\Components\Info;
 use Illuminate\Console\View\Components\Task;
 use Winter\Storm\Database\Updater;
+use Winter\Storm\Support\Arr;
 
 /**
  * Version manager
@@ -715,9 +716,9 @@ class VersionManager
     {
         $code = $this->pluginManager->getIdentifier($plugin);
         $histories = $this->getDatabaseHistory($code);
-        $lastHistory = array_last(array_where($histories, function ($history) {
+        $lastHistory = Arr::last($histories, function ($history) {
             return $history->type === self::HISTORY_TYPE_COMMENT;
-        }));
+        });
         return $lastHistory ? $lastHistory->detail : '';
     }
 }
