@@ -254,17 +254,17 @@ class FormField
      * - checkbox - creates a single checkbox.
      * - checkboxlist - creates a checkbox list.
      * - switch - creates a switch field.
-     * @param string $type Specifies a render mode as described above
+     * @param string|null $type Specifies a render mode as described above
      * @param array $config A list of render mode specific config.
      */
-    public function displayAs($type, $config = [])
+    public function displayAs(?string $type, $config = [])
     {
         if (in_array($type, ['textarea', 'widget'])) {
             // defaults to 'large'
             $this->size = 'large';
         }
 
-        $this->type = strtolower($type) ?: $this->type;
+        $this->type = strtolower($type ?? '') ?: $this->type;
         $this->config = $this->evalConfig($config);
 
         return $this;

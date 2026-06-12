@@ -101,12 +101,12 @@ class FilterScope
      * Specifies a scope control rendering mode. Supported modes are:
      * - group - filter by a group of IDs. Default.
      * - checkbox - filter by a simple toggle switch.
-     * @param string $type Specifies a render mode as described above
+     * @param string|null $type Specifies a render mode as described above
      * @param array $config A list of render mode specific config.
      */
-    public function displayAs($type, $config = [])
+    public function displayAs(?string $type, $config = [])
     {
-        $this->type = strtolower($type) ?: $this->type;
+        $this->type = strtolower($type ?? '') ?: $this->type;
         $this->config = $this->evalConfig($config);
         return $this;
     }

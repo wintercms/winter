@@ -126,11 +126,11 @@ class ListColumn
      * Specifies a list column rendering mode. Supported modes are:
      * - text - text column, aligned left
      * - number - numeric column, aligned right
-     * @param string $type Specifies a render mode as described above
+     * @param string|null $type Specifies a render mode as described above
      */
-    public function displayAs($type, $config)
+    public function displayAs(?string $type, $config)
     {
-        $this->type = strtolower($type) ?: $this->type;
+        $this->type = strtolower($type ?? '') ?: $this->type;
         $this->config = $this->evalConfig($config);
         return $this;
     }
