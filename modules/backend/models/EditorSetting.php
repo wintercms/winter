@@ -256,7 +256,7 @@ class EditorSetting extends Model
             $customCss = '/* ' . e($ex->getMessage()) . ' */';
         }
 
-        return $customCss;
+        return strip_tags($customCss);
     }
 
     public static function compileCss()

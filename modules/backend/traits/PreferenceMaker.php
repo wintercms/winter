@@ -42,7 +42,7 @@ trait PreferenceMaker
      * @param mixed $default A default value to use when value is not found.
      * @return mixed
      */
-    public function getUserPreference(string $key = null, $default = null)
+    public function getUserPreference(?string $key = null, $default = null)
     {
         $preferences = $this->getUserPreferences();
 

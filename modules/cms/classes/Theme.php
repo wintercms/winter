@@ -93,9 +93,14 @@ class Theme extends CmsObject
 
     /**
      * Sets the theme directory name.
+     * @throws ApplicationException if the directory name is invalid.
      */
     public function setDirName(string $dirName): void
     {
+        if (!static::isValidDirName($dirName)) {
+            throw new ApplicationException(Lang::get('cms::lang.theme.dir_name_invalid'));
+        }
+
         $this->dirName = $dirName;
     }
 
@@ -105,6 +110,14 @@ class Theme extends CmsObject
     public function getDirName(): string
     {
         return $this->dirName;
+    }
+
+    /**
+     * Determines if the given directory name is valid.
+     */
+    public static function isValidDirName(string $dirName): bool
+    {
+        return (bool) preg_match('/^[a-z0-9\_\-]+$/i', $dirName);
     }
 
     /**
@@ -237,9 +250,14 @@ class Theme extends CmsObject
     /**
      * Sets the active theme in the database.
      * The active theme code is stored in the database and overrides the configuration cms.activeTheme parameter.
+     * @throws ApplicationException if the directory name is invalid.
      */
     public static function setActiveTheme(string $code): void
     {
+        if (!static::isValidDirName($code)) {
+            throw new ApplicationException(Lang::get('cms::lang.theme.dir_name_invalid'));
+        }
+
         self::resetCache();
 
         Parameter::set(self::ACTIVE_KEY, $code);

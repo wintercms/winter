@@ -19,6 +19,7 @@ window.MonacoEnvironment = {
             'html': 'js/build/html.worker.js',
             'handlebars': 'js/build/html.worker.js',
             'razor': 'js/build/html.worker.js',
+            'twig': 'js/build/html.worker.js',
             'json': 'js/build/json.worker.js'
         };
 
@@ -42,6 +43,7 @@ window.MonacoEnvironment = {
 import constrainedEditor from 'constrained-editor-plugin';
 import { parse as parseXml } from 'fast-plist';
 import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
+import { registerHTMLLanguageService } from 'monaco-editor/esm/vs/language/html/monaco.contribution';
 
 // Fix: Twig tokenizer doesn't handle <script type="module"> (https://github.com/wintercms/winter/issues/1449)
 // Monaco's HTML tokenizer explicitly maps type="module" to text/javascript,
@@ -52,6 +54,24 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
     [/"module"/, { token: 'attribute.value.html', switchTo: '@scriptWithCustomType.text/javascript' }],
     [/'module'/, { token: 'attribute.value.html', switchTo: '@scriptWithCustomType.text/javascript' }],
 );
+
+// Register twig with the HTML language service for tag matching (<div> ↔ </div>).
+// Only documentHighlights is enabled — diagnostics/formatting disabled since the
+// HTML parser doesn't understand {% %} / {{ }} syntax.
+registerHTMLLanguageService('twig', undefined, {
+    documentHighlights: true,
+    completionItems: false,
+    hovers: false,
+    documentSymbols: false,
+    links: false,
+    rename: false,
+    colors: false,
+    foldingRanges: false,
+    selectionRanges: false,
+    diagnostics: false,
+    documentFormattingEdits: false,
+    documentRangeFormattingEdits: false,
+});
 
 ((Snowboard) => {
     /**
@@ -92,6 +112,7 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
             this.cachedThemes = {};
             this.resizeThrottle = null;
             this.savedState = null;
+            this.dropHandlers = null;
             this.callbacks = {
                 fullScreenChange: () => this.onFullScreenChange(),
                 resize: () => {
@@ -186,6 +207,11 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
          */
         destruct() {
             this.dispose();
+            // If model survived dispose (preserved for reuse), clean it up now
+            if (this.savedState && this.savedState.model) {
+                this.savedState.model.dispose();
+                this.savedState = null;
+            }
             if (this.elementObserver) {
                 this.elementObserver.disconnect();
             }
@@ -208,7 +234,8 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
         dispose() {
             if (this.editor) {
                 this.savedState = {
-                    position: this.editor.getPosition(),
+                    view: this.editor.saveViewState(),
+                    model: this.model,
                 };
             }
             if (this.disposables.length > 0) {
@@ -221,10 +248,14 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
                 window.removeEventListener('resize', this.callbacks.resize);
                 this.resizeListener = false;
             }
-            if (this.model) {
-                this.model.dispose();
-                this.model = null;
+            if (this.dropHandlers) {
+                this.dropHandlers.editorDom.removeEventListener('dragover', this.dropHandlers.onDragOver);
+                this.dropHandlers.editorDom.removeEventListener('drop', this.dropHandlers.onDrop);
+                this.dropHandlers = null;
             }
+            // The model was created externally via createModel(), so editor.dispose()
+            // will NOT auto-dispose it — the undo stack is preserved for reuse
+            this.model = null;
             if (this.editor) {
                 this.editor.dispose();
                 this.editor = null;
@@ -271,7 +302,21 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
             this.container.style.height = null;
             this.container.style.height = Math.round(Number(getComputedStyle(this.container).height.replace('px', ''))) + 'px';
 
-            this.editor = monaco.editor.create(this.element.querySelector('.editor-container'), this.getConfigOptions());
+            const options = this.getConfigOptions();
+
+            // Reuse preserved model (keeps undo stack) or create a new one externally.
+            // Models created via createModel() survive editor.dispose(), unlike models
+            // created implicitly by passing `value` to monaco.editor.create().
+            if (this.savedState && this.savedState.model) {
+                options.model = this.savedState.model;
+            } else {
+                options.model = monaco.editor.createModel(
+                    this.valueBag.value,
+                    this.config.get('language'),
+                );
+            }
+
+            this.editor = monaco.editor.create(this.element.querySelector('.editor-container'), options);
 
             // Backward compatibility: Set jQuery data for legacy Builder plugin code
             // Builder's JavaScript expects `.data('oc.codeEditor').editor` to access the editor
@@ -280,16 +325,17 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
             }
 
             this.attachListeners();
+            this.attachDropHandler();
             this.loadTheme();
             this.updateLanguage();
             this.enableStatusBarActions();
             this.registerKeyBindings();
+            this.registerDefaultKeyBindings();
 
-            // Restore cursor position and scroll state from before the editor was disposed
+            // Restore full view state (cursor, scroll, selections, folds) from before the editor was disposed
             if (this.savedState) {
-                if (this.savedState.position) {
-                    this.editor.setPosition(this.savedState.position);
-                    this.editor.revealPositionInCenter(this.savedState.position);
+                if (this.savedState.view) {
+                    this.editor.restoreViewState(this.savedState.view);
                 }
                 this.savedState = null;
             }
@@ -331,7 +377,7 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
                 minimap: {
                     enabled: this.config.get('showMinimap'),
                 },
-                occurrencesHighlight: this.config.get('showOccurrences'),
+                occurrencesHighlight: this.config.get('showOccurrences') ? 'singleFile' : 'off',
                 quickSuggestions: this.config.get('showSuggestions'),
                 renderLineHighlight: this.getLineHighlightOption(),
                 renderWhitespace: this.config.get('showInvisibles') ? 'all' : 'selection',
@@ -351,7 +397,6 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
                     : false,
                 tabSize: this.config.get('tabSize'),
                 theme: this.config.get('themeVs'),
-                value: this.valueBag.value,
             };
 
             if (this.config.get('wordWrap') === 'fluid') {
@@ -447,6 +492,44 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
                 document.addEventListener('visibilitychange', this.callbacks.visibilityChange);
                 this.visibilityListener = true;
             }
+        }
+
+        /**
+         * Attaches drag-and-drop handlers so external text (e.g. partials, assets)
+         * can be dropped into the editor.
+         */
+        attachDropHandler() {
+            const editorDom = this.editor.getDomNode();
+            if (!editorDom) return;
+
+            const onDragOver = (event) => {
+                if (event.dataTransfer && event.dataTransfer.types.includes('text/plain')) {
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = 'copy';
+                    const target = this.editor.getTargetAtClientPoint(event.clientX, event.clientY);
+                    if (target && target.position) {
+                        this.editor.setPosition(target.position);
+                    }
+                }
+            };
+
+            const onDrop = (event) => {
+                const text = event.dataTransfer?.getData('text/plain');
+                if (!text) return;
+                event.preventDefault();
+                event.stopPropagation();
+
+                const target = this.editor.getTargetAtClientPoint(event.clientX, event.clientY);
+                if (target && target.position) {
+                    this.editor.setPosition(target.position);
+                    this.editor.focus();
+                    this.insert(text);
+                }
+            };
+
+            editorDom.addEventListener('dragover', onDragOver);
+            editorDom.addEventListener('drop', onDrop);
+            this.dropHandlers = { editorDom, onDragOver, onDrop };
         }
 
         /**
@@ -934,6 +1017,16 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
         convertTmTheme(content) {
             const themeData = parseXml(content);
             const globalColors = this.mapGlobalColors(themeData.settings.shift().settings);
+
+            if (themeData.gutterSettings) {
+                if (themeData.gutterSettings.background) {
+                    globalColors['editorGutter.background'] = this.parseColor(themeData.gutterSettings.background);
+                }
+                if (themeData.gutterSettings.foreground) {
+                    globalColors['editorLineNumber.foreground'] = this.parseColor(themeData.gutterSettings.foreground);
+                }
+            }
+
             const scopes = [
                 {
                     token: '',
@@ -1139,13 +1232,15 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
                 number: ['constant.numeric', 'constant.number', 'string.number'],
                 regexp: ['string.regexp'],
                 tag: ['meta.tag', 'entity.name.tag'],
+                'tag.css': ['keyword'],
                 metatag: ['meta.tag', 'declaration.tag', 'constant.language', 'entity.name.tag'],
                 annotation: ['meta.embedded', 'meta.annotation', 'string.annotation', 'comment.block', 'comment.line'],
                 attribute: ['entity.other.attribute-name', 'support.type.property-name'],
-                identifier: ['entity.name.function', 'meta.tag', 'declaration.tag', 'constant.language', 'entity.name.tag', 'support.type'],
+                identifier: ['entity.name.function'],
                 type: ['support.type', 'support.function'],
                 operator: ['support.constant', 'constant.numeric', 'constant.number', 'string.number', 'support'],
                 'attribute.name': ['support.type', 'support.constant', 'entity.other.attribute-name', 'support.type.property-name'],
+                'attribute.name.html': ['entity.other.attribute-name.html', 'entity.other.attribute-name'],
                 'attribute.value.html': ['string.quoted.double.html', 'string.quoted.single.html', 'string.quoted.double', 'string.quoted.single', 'string'],
                 'attribute.value.unit': ['keyword.unit', 'support.unit', 'keyword', 'support', 'number', 'string.number', 'constant.numeric', 'constant.number'],
                 'attribute.value.number': ['number', 'string.number', 'constant.numeric', 'constant.number'],
@@ -1278,6 +1373,7 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
             }
             this.statusBar.style.color = foreground;
             this.statusBar.style.backgroundColor = background;
+            this.container.style.backgroundColor = background;
         }
 
         /**
@@ -1533,6 +1629,64 @@ twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
 
                 this.editor.addCommand(binding, item.callback);
             });
+        }
+
+        /**
+         * Registers default keybindings that replicate legacy Ace editor shortcuts.
+         */
+        registerDefaultKeyBindings() {
+            // Ctrl+Shift+D: Duplicate line(s) or selection (Ace legacy)
+            /* eslint-disable no-bitwise */
+            this.editor.addCommand(
+                monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyD,
+                () => {
+                    const selection = this.editor.getSelection();
+                    const model = this.editor.getModel();
+                    const startLine = selection.startLineNumber;
+                    const endLine = selection.endLineNumber;
+                    const endCol = model.getLineMaxColumn(endLine);
+                    const text = model.getValueInRange(
+                        new monaco.Range(startLine, 1, endLine, endCol),
+                    );
+                    const lineCount = endLine - startLine + 1;
+
+                    model.pushEditOperations(
+                        [selection],
+                        [{
+                            range: new monaco.Range(endLine, endCol, endLine, endCol),
+                            text: '\n' + text,
+                        }],
+                        () => [new monaco.Selection(
+                            startLine + lineCount,
+                            selection.startColumn,
+                            endLine + lineCount,
+                            selection.endColumn,
+                        )],
+                    );
+                },
+            );
+
+            // Ctrl+Shift+F: Toggle fullscreen (Ace legacy)
+            this.editor.addCommand(
+                monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.KeyF,
+                () => {
+                    if (!this.fullscreen) {
+                        this.element.requestFullscreen({ navigationUI: 'hide' }).then(() => {
+                            this.fullscreen = true;
+                            if (this.statusBar) {
+                                this.statusBar.querySelector('[data-full-screen]').classList.add('active');
+                            }
+                            this.element.addEventListener('fullscreenchange', this.callbacks.fullScreenChange);
+                            if (this.editor) {
+                                window.requestAnimationFrame(() => this.editor.layout());
+                            }
+                        });
+                    } else {
+                        document.exitFullscreen();
+                    }
+                },
+            );
+            /* eslint-enable no-bitwise */
         }
 
         checkEditorClick(event) {

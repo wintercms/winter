@@ -61,9 +61,12 @@
             }
 
             $editor = widgets.getWidget($editorArea.get(0));
+            if (!$editor || !$editor.getEditor()) return;
             $editor.getEditor().focus();
             editorPos = $editor.getEditor().onMouseMove((event) => {
-                $editor.getEditor().setPosition(event.target.position);
+                if (event.target && event.target.position) {
+                    $editor.getEditor().setPosition(event.target.position);
+                }
             });
         }
 
@@ -173,7 +176,7 @@
                 $el.click()
 
                 // Can only attach to page or layouts
-                if ($componentList.length && $editor) {
+                if ($componentList.length && $editor && $editor.getEditor()) {
                     // Inject {% component %} tag
                     var alias = $('input[name="component_aliases[]"]', $el).val()
                     $editor.insert("{% component '" + alias + "' %}")

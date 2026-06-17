@@ -422,7 +422,7 @@ class ListController extends ControllerBehavior
      *
      * @return array The list element selector as the key, and the list contents are the value.
      */
-    public function listRefresh(string $definition = null)
+    public function listRefresh(?string $definition = null)
     {
         if (!count($this->listWidgets)) {
             $this->makeLists();
@@ -439,7 +439,7 @@ class ListController extends ControllerBehavior
      * Returns the widget used by this behavior.
      * @return \Backend\Classes\WidgetBase
      */
-    public function listGetWidget(string $definition = null)
+    public function listGetWidget(?string $definition = null)
     {
         if (!$definition) {
             $definition = $this->primaryDefinition;
@@ -452,7 +452,7 @@ class ListController extends ControllerBehavior
      * Returns the configuration used by this behavior.
      * @return stdClass
      */
-    public function listGetConfig(string $definition = null)
+    public function listGetConfig(?string $definition = null)
     {
         if (!$definition) {
             $definition = $this->primaryDefinition;

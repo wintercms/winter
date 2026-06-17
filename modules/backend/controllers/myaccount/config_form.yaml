@@ -1,0 +1,12 @@
+# ===================================
+#  Form Behavior Config
+# ===================================
+
+name: backend::lang.user.name
+form: ~/modules/backend/models/user/fields.yaml
+modelClass: Backend\Models\User
+defaultRedirect: backend/myaccount
+
+update:
+    redirect: backend/myaccount
+    redirectClose: backend/myaccount

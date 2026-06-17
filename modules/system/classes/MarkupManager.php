@@ -52,7 +52,7 @@ class MarkupManager
     /**
      * Make an instance of the base TwigEnvironment to extend further
      */
-    public static function makeBaseTwigEnvironment(LoaderInterface $loader = null, array $options = []): TwigEnvironment
+    public static function makeBaseTwigEnvironment(?LoaderInterface $loader = null, array $options = []): TwigEnvironment
     {
         if (!$loader) {
             $loader = new SystemTwigLoader();

@@ -129,32 +129,70 @@ class User extends UserBase
     }
 
     /**
+     * Determine whether the given user (or the currently authenticated user)
+     * is authorized to manage this user record.
+     *
+     * Returns true when no user is provided and no user is authenticated (CLI/queue),
+     * or when the user has `backend.manage_users` and (if this record is a superuser)
+     * the user is also a superuser.
+     */
+    public function canBeManagedByUser(?User $user = null): bool
+    {
+        $user = $user ?? BackendAuth::getUser();
+
+        if (!$user) {
+            return true;
+        }
+
+        if (!$user->hasAccess('backend.manage_users')) {
+            return false;
+        }
+
+        if (!$user->isSuperUser() && ($this->is_superuser || $this->getOriginal('is_superuser'))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Before save event — enforce authorization rules to prevent privilege escalation.
-     * @return void
      */
     public function beforeSave()
     {
         $actor = BackendAuth::getUser();
-        $isCurrentUser = $this->exists && $actor && $actor->getKey() === $this->getKey();
-
-        // No authenticated user (CLI, artisan, queue, seeders) — allow everything
         if (!$actor) {
             return;
         }
 
-        // Rule 1: Self-escalation — users cannot modify their own role, superuser status, or permissions
+        $isCurrentUser = $this->exists && $actor->getKey() === $this->getKey();
+
         if ($isCurrentUser && $this->isDirty(['role_id', 'is_superuser', 'permissions'])) {
             throw new AuthorizationException(Lang::get('backend::lang.user.self_escalation_denied'));
         }
 
-        // Rule 2: Must have backend.manage_users to manage other users
-        if (!$isCurrentUser && !$actor->hasAccess('backend.manage_users')) {
-            throw new AuthorizationException(Lang::get('backend::lang.user.manage_users_denied'));
+        if (!$isCurrentUser && !$this->canBeManagedByUser($actor)) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
         }
+    }
 
-        // Rule 3: Only superusers can grant superuser status or edit existing superusers
-        if (!$actor->isSuperUser() && ($this->is_superuser || $this->getOriginal('is_superuser'))) {
-            throw new AuthorizationException(Lang::get('backend::lang.user.superuser_grant_denied'));
+    /**
+     * Before delete event — enforce authorization rules.
+     */
+    public function beforeDelete()
+    {
+        if (!$this->canBeManagedByUser()) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
+        }
+    }
+
+    /**
+     * Before restore event — enforce authorization rules.
+     */
+    public function beforeRestore()
+    {
+        if (!$this->canBeManagedByUser()) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
         }
     }
 
@@ -244,11 +282,35 @@ class User extends UserBase
 
     /**
      * Remove the suspension on this user.
-     * @return void
+     *
+     * @throws AuthorizationException if the current user lacks permission
      */
     public function unsuspend()
     {
+        if (!$this->canBeManagedByUser()) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
+        }
+
         BackendAuth::findThrottleByUserId($this->id)->unsuspend();
+    }
+
+    /**
+     * Get a reset password code for this user.
+     *
+     * When called by an authenticated user targeting a different account,
+     * the actor must have `backend.manage_users` permission.
+     * Self-service resets (Auth controller restore flow) are allowed.
+     *
+     * @throws AuthorizationException if the current user lacks permission
+     */
+    public function getResetPasswordCode()
+    {
+        $actor = BackendAuth::getUser();
+        if ($actor && $actor->getKey() !== $this->getKey() && !$this->canBeManagedByUser($actor)) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
+        }
+
+        return parent::getResetPasswordCode();
     }
 
     //
