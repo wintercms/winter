@@ -153,6 +153,7 @@ class ListController extends ControllerBehavior
             'showTree',
             'treeExpanded',
             'customViewPath',
+            'sortable',
         ];
 
         foreach ($configFieldsToTransfer as $field) {
@@ -165,6 +166,25 @@ class ListController extends ControllerBehavior
          * List Widget with extensibility
          */
         $widget = $this->makeWidget(\Backend\Widgets\Lists::class, $columnConfig);
+
+        /*
+         * Drag-and-drop reordering - requires the model to use the Sortable trait.
+         */
+        if (!empty($listConfig->sortable)) {
+            if (!in_array(\Winter\Storm\Database\Traits\Sortable::class, class_uses_recursive($model))) {
+                throw new ApplicationException(sprintf(
+                    'To use "sortable" on a list, the model "%s" must use the %s trait.',
+                    get_class($model),
+                    \Winter\Storm\Database\Traits\Sortable::class
+                ));
+            }
+
+            $widget->sortOrderColumn = $model->getSortOrderColumn();
+
+            $widget->bindEvent('list.reorder', function ($ids, $orders) use ($model) {
+                $model->setSortableOrder($ids, $orders);
+            });
+        }
 
         $widget->bindEvent('list.extendColumnsBefore', function () use ($widget) {
             $this->controller->listExtendColumnsBefore($widget);

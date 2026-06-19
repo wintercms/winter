@@ -3,7 +3,12 @@ $expanded = $showTree ? $this->isTreeNodeExpanded($record) : null;
 $childRecords = $showTree ? $record->getChildren() : null;
 $treeLevelClass = $showTree ? 'list-tree-level-'.$treeLevel : '';
 ?>
-<tr class="<?= $treeLevelClass ?> <?= $this->getRowClass($record) ?>">
+<tr class="<?= $treeLevelClass ?> <?= $this->getRowClass($record) ?>"
+    data-record-id="<?= e($record->getKey()) ?>"
+    <?php if (!empty($sortable)): ?>
+        data-record-sort-order="<?= e($this->getRecordSortOrder($record)) ?>"
+    <?php endif ?>
+>
     <?php if ($showCheckboxes): ?>
         <?= $this->makePartial('list_body_checkbox', ['record' => $record]) ?>
     <?php endif ?>
@@ -14,6 +19,12 @@ $treeLevelClass = $showTree ? 'list-tree-level-'.$treeLevel : '';
             'expanded' => $expanded,
             'childCount' => $record->getChildCount()
         ]) ?>
+    <?php endif ?>
+
+    <?php if (!empty($sortable)): ?>
+        <td class="list-cell-sort-handle nolink">
+            <a href="javascript:;" class="list-sort-handle drag-handle" title="<?= e(trans('backend::lang.list.sort_drag_title')) ?>"><i class="icon-bars"></i></a>
+        </td>
     <?php endif ?>
 
     <?php $index = $url = 0; foreach ($columns as $key => $column): ?>

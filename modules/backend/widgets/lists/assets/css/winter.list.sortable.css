@@ -1,0 +1,41 @@
+/*
+ * Drag-and-drop reordering styles for the list widget.
+ */
+.control-list .list-sort-handle-column,
+.control-list .list-cell-sort-handle {
+    width: 28px;
+    text-align: center;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+.control-list .list-sort-handle {
+    cursor: move;
+    cursor: grab;
+    color: #ccc;
+    display: inline-block;
+    line-height: 1;
+    text-decoration: none;
+}
+
+.control-list tr:hover .list-sort-handle {
+    color: #999;
+}
+
+.control-list .list-sort-handle:active {
+    cursor: grabbing;
+}
+
+.control-list .list-sortable-ghost {
+    opacity: 0.5;
+    background: #f0f7fd;
+}
+
+.control-list .list-sortable-chosen {
+    background: #f7f9fa;
+}
+
+.control-list[data-sortable="true"] tbody tr {
+    /* Avoid text selection while dragging rows */
+    user-select: none;
+}
