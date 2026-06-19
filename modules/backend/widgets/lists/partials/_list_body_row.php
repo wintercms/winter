@@ -23,7 +23,7 @@ $treeLevelClass = $showTree ? 'list-tree-level-'.$treeLevel : '';
 
     <?php if (!empty($sortable)): ?>
         <td class="list-cell-sort-handle nolink">
-            <a href="javascript:;" class="list-sort-handle drag-handle" title="<?= e(trans('backend::lang.list.sort_drag_title')) ?>"><i class="icon-bars"></i></a>
+            <span class="list-sort-handle" title="<?= e(trans('backend::lang.list.sort_drag_title')) ?>"><i class="icon-bars"></i></span>
         </td>
     <?php endif ?>
 

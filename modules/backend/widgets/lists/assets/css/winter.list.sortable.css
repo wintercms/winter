@@ -7,27 +7,32 @@
     text-align: center;
 }
 
-/* The whole handle cell is the drag target (SortableJS handle is the cell),
-   so the grab affordance and hit area cover the entire cell, not just the icon. */
-.control-list .list-cell-sort-handle {
+/* The whole handle cell is the drag target (SortableJS handle is the cell), so
+   the grab affordance and hit area cover the entire cell, not just the icon.
+   The second selector is specific enough to override rowlink's
+   "tr.rowlink td.nolink { cursor: auto }" rule, which would otherwise reset the
+   cursor on this (intentionally) non-link cell when the list rows are clickable. */
+.control-list .list-cell-sort-handle,
+.control-list tr.rowlink td.list-cell-sort-handle.nolink {
     cursor: move;
     cursor: grab;
 }
 
-.control-list .list-cell-sort-handle:active {
+.control-list .list-cell-sort-handle:active,
+.control-list tr.rowlink td.list-cell-sort-handle.nolink:active {
     cursor: grabbing;
 }
 
 .control-list .list-sort-handle {
     display: inline-block;
-    color: #ccc;
+    color: #666;
     line-height: 1;
     text-decoration: none;
     cursor: inherit;
 }
 
 .control-list tr:hover .list-sort-handle {
-    color: #999;
+    color: #333;
 }
 
 .control-list .list-sortable-ghost {
