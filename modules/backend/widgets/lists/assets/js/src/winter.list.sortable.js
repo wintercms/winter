@@ -1,22 +1,15 @@
+import Sortable from 'sortablejs';
+
 /*
  * List widget drag-and-drop reordering.
  *
- * Minimal, additive enhancement layered on top of the existing list widget. When a list is
- * rendered with `data-sortable="true"`, SortableJS is initialised on its <tbody> using the
- * per-row drag handle. On drop the new record order is posted to the list's reorder handler,
- * which persists the order and re-renders the list.
- *
- * The record ids are collected in their new DOM order and assigned sequential 1..N sort
- * order values. Because sortable lists show every record (pagination is disabled), a simple
- * positional numbering is unambiguous and also handles freshly added (deferred) records that
- * do not yet have a stored sort order.
+ * Additive enhancement on top of the existing list widget. When a list is rendered with
+ * `data-sortable="true"`, SortableJS is initialised on its <tbody> using the per-row drag
+ * handle cell. On drop, the record ids in their new DOM order are posted to the list's reorder
+ * handler, which assigns the sort order values server-side (by position) and re-renders.
  */
-+function ($) {
+(function ($) {
     "use strict";
-
-    if (typeof window.Sortable === 'undefined') {
-        return;
-    }
 
     function collectIds(tbody) {
         return Array.prototype.map.call(
@@ -51,28 +44,30 @@
             }
         });
 
-        tbody.wnListSortable = window.Sortable.create(tbody, {
+        tbody.wnListSortable = Sortable.create(tbody, {
             handle: '.list-cell-sort-handle',
             draggable: 'tr',
             filter: '.no-data',
             animation: 150,
             ghostClass: 'list-sortable-ghost',
             chosenClass: 'list-sortable-chosen',
-            onEnd: function () {
-                var ids = collectIds(tbody);
-                var orders = ids.map(function (id, index) {
-                    return index + 1;
-                });
+            onEnd: function (event) {
+                // Nothing changed if the row was dropped back in its original position.
+                if (event.oldIndex === event.newIndex) {
+                    return;
+                }
 
-                // The request is fired programmatically (not from a [data-request]
-                // element), so show the stripe load indicator manually for feedback.
+                // The request is fired programmatically (not from a [data-request] element),
+                // so show the stripe load indicator manually for feedback.
                 var indicator = ($.wn && $.wn.stripeLoadIndicator) || ($.oc && $.oc.stripeLoadIndicator);
                 if (indicator) {
                     indicator.show();
                 }
 
+                // Only the record ids (in their new order) are sent; the server assigns the
+                // sort order values by position.
                 $list.request(handler, {
-                    data: { record_ids: ids, sort_orders: orders }
+                    data: { record_ids: collectIds(tbody) }
                 }).always(function () {
                     if (indicator) {
                         indicator.hide();
@@ -91,4 +86,4 @@
 
     // Re-initialise after the list partial is replaced by an AJAX update (e.g. onRefresh).
     $(document).on('render', initAll);
-}(window.jQuery);
+})(window.jQuery);

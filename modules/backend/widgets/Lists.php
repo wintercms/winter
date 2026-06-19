@@ -279,8 +279,7 @@ class Lists extends WidgetBase
 
         // loadAssets() runs before init()/fillFromConfig(), so read the raw config value.
         if ($this->getConfig('sortable', false)) {
-            $this->addJs('js/lib/sortable.min.js', 'core');
-            $this->addJs('js/winter.list.sortable.js', 'core');
+            $this->addJs('js/dist/winter.list.sortable.js', 'core');
             $this->addCss('css/winter.list.sortable.css', 'core');
         }
     }
@@ -394,9 +393,9 @@ class Lists extends WidgetBase
     /**
      * Event handler for drag-and-drop reordering of records.
      *
-     * Receives the record ids in their new order and the original sort order values
-     * (reassigned 1:1 to the new positions), validates that all ids are within the
-     * current query scope, then fires the `list.reorder` event for behaviors to persist.
+     * Receives the record ids in their new order and validates that all ids are within the
+     * current query scope, then fires the `list.reorder` event with sequential 1..N sort
+     * order values (assigned server-side by position) for behaviors to persist.
      */
     public function onReorder()
     {
@@ -405,28 +404,27 @@ class Lists extends WidgetBase
         }
 
         $ids = post('record_ids');
-        $orders = post('sort_orders');
 
         if (!is_array($ids) || !count($ids)) {
             return;
-        }
-
-        $orders = array_map('intval', (array) $orders);
-
-        if (count($ids) !== count($orders)) {
-            throw new ApplicationException('Mismatched record ids and sort orders.');
         }
 
         /*
          * Security: only permit reordering records that are visible within the current
          * query scope. This prevents a crafted request from reordering arbitrary records.
          */
-        $allowed = array_map('strval', $this->prepareQuery()->pluck($this->model->getQualifiedKeyName())->all());
+        $allowed = array_flip(array_map('strval', $this->prepareQuery()->pluck($this->model->getQualifiedKeyName())->all()));
         foreach ($ids as $id) {
-            if (!in_array((string) $id, $allowed, true)) {
+            if (!isset($allowed[(string) $id])) {
                 throw new ApplicationException('One or more records are not available for reordering.');
             }
         }
+
+        /*
+         * Sort orders are assigned server-side by position; the list always reorders
+         * positionally, so we never trust client-supplied order values.
+         */
+        $orders = range(1, count($ids));
 
         /**
          * @event backend.list.reorder

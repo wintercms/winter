@@ -118,7 +118,7 @@ class ListsSortableTest extends PluginTestCase
         $this->assertNull($list->getRecordSortOrder($record));
     }
 
-    public function testOnReorderFiresEventWithIdsAndOrders()
+    public function testOnReorderGeneratesSequentialOrdersServerSide()
     {
         $records = $this->seedRecords();
         $ids = [$records[2]->id, $records[0]->id, $records[1]->id];
@@ -130,7 +130,9 @@ class ListsSortableTest extends PluginTestCase
             $captured = [$eventIds, $eventOrders];
         });
 
-        $this->postRequest(['record_ids' => $ids, 'sort_orders' => [1, 2, 3]]);
+        // The client sends only the record ids in their new order; the server assigns the
+        // sort order values 1..N by position.
+        $this->postRequest(['record_ids' => $ids]);
         $list->onReorder();
 
         $this->assertNotNull($captured, 'list.reorder event should have fired');
@@ -145,7 +147,7 @@ class ListsSortableTest extends PluginTestCase
         $list = $this->makeList();
 
         // 99999 is not a seeded record id.
-        $this->postRequest(['record_ids' => [$records[0]->id, 99999], 'sort_orders' => [1, 2]]);
+        $this->postRequest(['record_ids' => [$records[0]->id, 99999]]);
 
         $this->expectException(ApplicationException::class);
         $list->onReorder();
@@ -154,7 +156,7 @@ class ListsSortableTest extends PluginTestCase
     public function testOnReorderThrowsWhenNotSortable()
     {
         $list = $this->makeList(['sortable' => false]);
-        $this->postRequest(['record_ids' => [1], 'sort_orders' => [1]]);
+        $this->postRequest(['record_ids' => [1]]);
 
         $this->expectException(ApplicationException::class);
         $list->onReorder();

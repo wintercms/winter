@@ -797,6 +797,25 @@ class RelationController extends ControllerBehavior
                     ));
                 }
 
+                /*
+                 * Drag-and-drop reordering presents every record in a single fixed order, so it
+                 * cannot coexist with features that show a partial or re-ordered view. Reject
+                 * those combinations up front rather than silently producing a wrong order.
+                 */
+                $conflicts = array_keys(array_filter([
+                    'showSearch'     => $this->getConfig('view[showSearch]'),
+                    'filter'         => $this->getConfig('view[filter]'),
+                    'recordsPerPage' => $this->getConfig('view[recordsPerPage]'),
+                    'defaultSort'    => $this->getConfig('view[defaultSort]'),
+                ]));
+                if ($conflicts) {
+                    throw new ApplicationException(sprintf(
+                        'The "%s" relation cannot combine "sortable" with: %s. Drag-and-drop reordering requires the whole relation in a fixed order. Remove these options, or use the ReorderController for a dedicated reordering page.',
+                        $this->relationName,
+                        implode(', ', $conflicts)
+                    ));
+                }
+
                 $config->sortable = true;
                 $config->sortOrderColumn = 'pivot[' . $this->model->getRelationSortOrderColumn($this->relationName) . ']';
             }

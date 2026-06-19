@@ -179,6 +179,25 @@ class ListController extends ControllerBehavior
                 ));
             }
 
+            /*
+             * Drag-and-drop reordering presents every record in a single fixed order, so it
+             * cannot coexist with features that show a partial or re-ordered view. Reject those
+             * combinations up front rather than silently producing a wrong order.
+             */
+            $toolbar = $listConfig->toolbar ?? null;
+            $conflicts = array_keys(array_filter([
+                'toolbar search' => is_array($toolbar) && !empty($toolbar['search']),
+                'filter'         => $listConfig->filter ?? null,
+                'recordsPerPage' => $listConfig->recordsPerPage ?? null,
+                'defaultSort'    => $listConfig->defaultSort ?? null,
+            ]));
+            if ($conflicts) {
+                throw new ApplicationException(sprintf(
+                    'A "sortable" list cannot also use: %s. Drag-and-drop reordering requires the whole list in a fixed order. Remove these options, or use the ReorderController for a dedicated reordering page.',
+                    implode(', ', $conflicts)
+                ));
+            }
+
             $widget->sortOrderColumn = $model->getSortOrderColumn();
 
             $widget->bindEvent('list.reorder', function ($ids, $orders) use ($model) {
