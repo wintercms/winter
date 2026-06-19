@@ -52,7 +52,7 @@
         });
 
         tbody.wnListSortable = window.Sortable.create(tbody, {
-            handle: '.list-sort-handle',
+            handle: '.list-cell-sort-handle',
             draggable: 'tr',
             filter: '.no-data',
             animation: 150,

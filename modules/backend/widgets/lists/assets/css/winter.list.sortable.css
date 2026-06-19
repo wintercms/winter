@@ -5,25 +5,29 @@
 .control-list .list-cell-sort-handle {
     width: 28px;
     text-align: center;
-    padding-left: 4px;
-    padding-right: 4px;
+}
+
+/* The whole handle cell is the drag target (SortableJS handle is the cell),
+   so the grab affordance and hit area cover the entire cell, not just the icon. */
+.control-list .list-cell-sort-handle {
+    cursor: move;
+    cursor: grab;
+}
+
+.control-list .list-cell-sort-handle:active {
+    cursor: grabbing;
 }
 
 .control-list .list-sort-handle {
-    cursor: move;
-    cursor: grab;
-    color: #ccc;
     display: inline-block;
+    color: #ccc;
     line-height: 1;
     text-decoration: none;
+    cursor: inherit;
 }
 
 .control-list tr:hover .list-sort-handle {
     color: #999;
-}
-
-.control-list .list-sort-handle:active {
-    cursor: grabbing;
 }
 
 .control-list .list-sortable-ghost {
