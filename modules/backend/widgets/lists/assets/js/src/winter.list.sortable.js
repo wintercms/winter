@@ -44,6 +44,8 @@ import Sortable from 'sortablejs';
             }
         });
 
+        var reorderInFlight = false;
+
         tbody.wnListSortable = Sortable.create(tbody, {
             handle: '.list-cell-sort-handle',
             draggable: 'tr',
@@ -57,6 +59,13 @@ import Sortable from 'sortablejs';
                     return;
                 }
 
+                // Ignore further drops until the current reorder has been persisted and the
+                // list re-rendered, so overlapping requests can't race and persist a stale order.
+                if (reorderInFlight) {
+                    return;
+                }
+                reorderInFlight = true;
+
                 // The request is fired programmatically (not from a [data-request] element),
                 // so show the stripe load indicator manually for feedback.
                 var indicator = ($.wn && $.wn.stripeLoadIndicator) || ($.oc && $.oc.stripeLoadIndicator);
@@ -69,6 +78,7 @@ import Sortable from 'sortablejs';
                 $list.request(handler, {
                     data: { record_ids: collectIds(tbody) }
                 }).always(function () {
+                    reorderInFlight = false;
                     if (indicator) {
                         indicator.hide();
                     }

@@ -622,12 +622,13 @@ class RelationController extends ControllerBehavior
         }
 
         foreach ($records as $record) {
-            if ($record->pivot && array_key_exists($record->getKey(), $map)) {
+            if (array_key_exists($record->getKey(), $map)) {
                 $record->pivot->{$column} = $map[$record->getKey()];
             }
         }
 
         return $records->sortBy(function ($record) use ($column) {
+            // Deferred records not yet assigned an order sort to the end.
             return $record->pivot->{$column} ?? PHP_INT_MAX;
         })->values();
     }
