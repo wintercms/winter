@@ -40,6 +40,17 @@
 
         var $list = $(listEl);
 
+        // SortableJS dispatches a native "change" event on the list root (the tbody) while
+        // an item is being dragged. Stop it bubbling to the surrounding form's change monitor
+        // so reordering — which persists immediately — does not flag the form as having
+        // unsaved changes. Real form-field changes (target = input/select/textarea) are left
+        // untouched.
+        tbody.addEventListener('change', function (event) {
+            if (event.target === tbody) {
+                event.stopPropagation();
+            }
+        });
+
         tbody.wnListSortable = window.Sortable.create(tbody, {
             handle: '.list-sort-handle',
             draggable: 'tr',
