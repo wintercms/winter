@@ -5,9 +5,6 @@ $treeLevelClass = $showTree ? 'list-tree-level-'.$treeLevel : '';
 ?>
 <tr class="<?= $treeLevelClass ?> <?= $this->getRowClass($record) ?>"
     data-record-id="<?= e($record->getKey()) ?>"
-    <?php if (!empty($sortable)): ?>
-        data-record-sort-order="<?= e($this->getRecordSortOrder($record)) ?>"
-    <?php endif ?>
 >
     <?php if ($showCheckboxes): ?>
         <?= $this->makePartial('list_body_checkbox', ['record' => $record]) ?>

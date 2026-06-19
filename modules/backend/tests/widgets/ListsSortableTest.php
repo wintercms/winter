@@ -34,7 +34,6 @@ class ListsSortableTest extends PluginTestCase
             'alias' => 'testlist',
             'arrayName' => 'array',
             'sortable' => true,
-            'sortOrderColumn' => 'sort_order',
             'columns' => [
                 'name' => ['type' => 'text', 'label' => 'Name'],
                 'label' => ['type' => 'text', 'label' => 'Label'],
@@ -89,33 +88,6 @@ class ListsSortableTest extends PluginTestCase
             $method->invoke($sortable),
             'Sortable list should reserve one extra column for the drag handle'
         );
-    }
-
-    public function testGetRecordSortOrderReadsDirectColumn()
-    {
-        $list = $this->makeList();
-        $record = new SortableFixture(['sort_order' => 7]);
-
-        $this->assertSame(7, (int) $list->getRecordSortOrder($record));
-    }
-
-    public function testGetRecordSortOrderReadsPivotPath()
-    {
-        $list = $this->makeList(['sortOrderColumn' => 'pivot[sort_order]']);
-
-        $record = new \stdClass();
-        $record->pivot = new \stdClass();
-        $record->pivot->sort_order = 4;
-
-        $this->assertSame(4, (int) $list->getRecordSortOrder($record));
-    }
-
-    public function testGetRecordSortOrderReturnsNullWhenMissing()
-    {
-        $list = $this->makeList(['sortOrderColumn' => 'pivot[sort_order]']);
-        $record = new SortableFixture(['sort_order' => 7]); // no pivot relation
-
-        $this->assertNull($list->getRecordSortOrder($record));
     }
 
     public function testOnReorderGeneratesSequentialOrdersServerSide()

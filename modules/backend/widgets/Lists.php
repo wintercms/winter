@@ -111,13 +111,6 @@ class Lists extends WidgetBase
     public $sortable = false;
 
     /**
-     * @var string|null Column path used to read the sort order value from each record,
-     * e.g. "sort_order" (model lists) or "pivot[sort_order]" (relation lists). Set by the
-     * controlling behavior; the widget itself has no knowledge of relations or parent models.
-     */
-    public $sortOrderColumn = null;
-
-    /**
      * @var bool|string Display pagination when limiting records per page.
      */
     public $showPagination = 'auto';
@@ -239,7 +232,6 @@ class Lists extends WidgetBase
             'showPagination',
             'customViewPath',
             'sortable',
-            'sortOrderColumn',
         ]);
 
         /*
@@ -439,34 +431,6 @@ class Lists extends WidgetBase
         $this->fireSystemEvent('backend.list.reorder', [$ids, $orders]);
 
         return $this->onRefresh();
-    }
-
-    /**
-     * Reads the sort order value from a record using the configured sortOrderColumn path
-     * (e.g. "sort_order" or "pivot[sort_order]"). Returns null when not available.
-     */
-    public function getRecordSortOrder($record)
-    {
-        if (!$this->sortOrderColumn) {
-            return null;
-        }
-
-        $value = $record;
-        foreach (HtmlHelper::nameToArray($this->sortOrderColumn) as $part) {
-            if (is_array($value)) {
-                $value = $value[$part] ?? null;
-            } elseif (is_object($value)) {
-                $value = $value->{$part} ?? null;
-            } else {
-                return null;
-            }
-
-            if ($value === null) {
-                return null;
-            }
-        }
-
-        return $value;
     }
 
     /**

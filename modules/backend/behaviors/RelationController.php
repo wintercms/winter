@@ -818,7 +818,6 @@ class RelationController extends ControllerBehavior
                 }
 
                 $config->sortable = true;
-                $config->sortOrderColumn = 'pivot[' . $this->model->getRelationSortOrderColumn($this->relationName) . ']';
             }
 
             $widget = $this->makeWidget('Backend\Widgets\Lists', $config);

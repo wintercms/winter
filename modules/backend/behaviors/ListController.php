@@ -198,8 +198,6 @@ class ListController extends ControllerBehavior
                 ));
             }
 
-            $widget->sortOrderColumn = $model->getSortOrderColumn();
-
             $widget->bindEvent('list.reorder', function ($ids, $orders) use ($model) {
                 $model->setSortableOrder($ids, $orders);
             });
