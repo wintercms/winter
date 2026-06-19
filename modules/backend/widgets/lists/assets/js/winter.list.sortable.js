@@ -52,8 +52,20 @@
                 var orders = ids.map(function (id, index) {
                     return index + 1;
                 });
+
+                // The request is fired programmatically (not from a [data-request]
+                // element), so show the stripe load indicator manually for feedback.
+                var indicator = ($.wn && $.wn.stripeLoadIndicator) || ($.oc && $.oc.stripeLoadIndicator);
+                if (indicator) {
+                    indicator.show();
+                }
+
                 $list.request(handler, {
                     data: { record_ids: ids, sort_orders: orders }
+                }).always(function () {
+                    if (indicator) {
+                        indicator.hide();
+                    }
                 });
             }
         });
