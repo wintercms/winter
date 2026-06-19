@@ -236,6 +236,7 @@ return [
         'loading' => 'Loading...',
         'setup_title' => 'List setup',
         'setup_help' => 'Use checkboxes to select columns you want to see in the list. You can change position of columns by dragging them up or down.',
+        'sort_drag_title' => 'Drag to reorder',
         'records_per_page' => 'Records per page',
         'records_per_page_help' => 'Select the number of records per page to display. Please note that high number of records on a single page can reduce performance.',
         'check' => 'Check',
