@@ -373,6 +373,10 @@ class ImageResizerTest extends PluginTestCase
         Config::set('cms.linkPolicy', 'detect');
         $url = $imageResizer->getResizedUrl();
         $this->assertTrue(starts_with($url, Config::get('cms.storage.resized.path', '/storage/tests/app/resized')));
+
+        // test dots' double-decoding
+        // @see https://github.com/wintercms/winter/pull/1493
+        $this->assertTrue(ends_with($url, '.png'));
     }
 
     public function testGetResizerUrl()
@@ -390,6 +394,10 @@ class ImageResizerTest extends PluginTestCase
         Config::set('cms.linkPolicy', 'detect');
         $url = $imageResizer->getResizerUrl();
         $this->assertTrue(starts_with($url, '/resizer/'));
+
+        // test dots' double-encoding
+        // @see https://github.com/wintercms/winter/pull/1493
+        $this->assertTrue(ends_with($url, '%252Epng'));
     }
 
     protected function setUpStorage()
