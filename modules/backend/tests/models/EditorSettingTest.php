@@ -62,4 +62,28 @@ class EditorSettingTest extends PluginTestCase
         $this->assertStringContainsString('font-weight', $renderedCss);
         $this->assertDoesNotMatchRegularExpression('/<[a-z\/!]/', $renderedCss);
     }
+
+    /**
+     * Regression for GHSA-58fp-mcx6-7qf9. A user-supplied `@import (inline)`
+     * directive in `html_custom_styles` must not be able to disclose server files.
+     */
+    public function testRenderCssBlocksImportAttack()
+    {
+        $tmpSecret = tempnam(sys_get_temp_dir(), 'editorsetting-leak-canary-');
+        file_put_contents($tmpSecret, "APP_KEY=do-not-leak-via-editorsetting\n");
+
+        try {
+            EditorSetting::set('html_custom_styles', '@import (inline) "' . $tmpSecret . '";');
+
+            \System\Behaviors\SettingsModel::clearInternalCache();
+            \Illuminate\Support\Facades\Cache::forget(EditorSetting::instance()->cacheKey);
+
+            $renderedCss = EditorSetting::renderCss();
+
+            $this->assertStringNotContainsString('APP_KEY', $renderedCss);
+            $this->assertStringNotContainsString('do-not-leak-via-editorsetting', $renderedCss);
+        } finally {
+            @unlink($tmpSecret);
+        }
+    }
 }

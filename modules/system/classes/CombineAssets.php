@@ -141,7 +141,20 @@ class CombineAssets
         $this->registerFilter('css', new CssImportFilter);
         $this->registerFilter(['css', 'less', 'scss'], new CssRewriteFilter);
 
-        $this->registerFilter('less', new LessCompiler);
+        // Constrain @import resolution to known asset trees. Without these
+        // explicit roots, `@import (inline) "<path>"` in a writable .less file
+        // would disclose any server-readable file. The asset's own source root
+        // is always allowed implicitly; this list adds the cross-tree roots
+        // that legitimate themes/plugins actually use (e.g. a plugin importing
+        // a module .less, or a theme importing its own ../vendor). See
+        // GHSA-58fp-mcx6-7qf9.
+        $lessCompiler = new LessCompiler;
+        $lessCompiler->setAllowedImportRoots([
+            themes_path(),
+            plugins_path(),
+            base_path('modules'),
+        ]);
+        $this->registerFilter('less', $lessCompiler);
         $this->registerFilter('scss', new ScssCompiler);
 
         /*

@@ -62,4 +62,28 @@ class BrandSettingTest extends PluginTestCase
         $this->assertStringContainsString('font-size', $renderedCss);
         $this->assertDoesNotMatchRegularExpression('/<[a-z\/!]/', $renderedCss);
     }
+
+    /**
+     * Regression for GHSA-58fp-mcx6-7qf9. A user-supplied `@import (inline)`
+     * directive in `custom_css` must not be able to disclose server files.
+     */
+    public function testRenderCssBlocksImportAttack()
+    {
+        $tmpSecret = tempnam(sys_get_temp_dir(), 'brandsetting-leak-canary-');
+        file_put_contents($tmpSecret, "APP_KEY=do-not-leak-via-brandsetting\n");
+
+        try {
+            BrandSetting::set('custom_css', '@import (inline) "' . $tmpSecret . '";');
+
+            \System\Behaviors\SettingsModel::clearInternalCache();
+            \Illuminate\Support\Facades\Cache::forget(BrandSetting::instance()->cacheKey);
+
+            $renderedCss = BrandSetting::renderCss();
+
+            $this->assertStringNotContainsString('APP_KEY', $renderedCss);
+            $this->assertStringNotContainsString('do-not-leak-via-brandsetting', $renderedCss);
+        } finally {
+            @unlink($tmpSecret);
+        }
+    }
 }
