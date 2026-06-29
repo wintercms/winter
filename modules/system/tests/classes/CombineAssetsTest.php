@@ -215,5 +215,4 @@ class CombineAssetsTest extends TestCase
             @unlink($dest);
         }
     }
-
 }
