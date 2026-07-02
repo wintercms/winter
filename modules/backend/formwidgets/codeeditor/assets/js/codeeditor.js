@@ -455,6 +455,10 @@ registerHTMLLanguageService('twig', undefined, {
          *  - A visibility change listener
          */
         attachListeners() {
+            // Prevent jQuery from capturing keyup events via event bubbling
+            const editorNode = this.editor.getDomNode();
+            editorNode.addEventListener('keyup', (e) => e.stopPropagation(), true);
+
             this.model = this.editor.getModel();
 
             this.disposables.push(this.model.onDidChangeContent(() => {
