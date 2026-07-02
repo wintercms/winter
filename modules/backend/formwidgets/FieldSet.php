@@ -42,14 +42,14 @@ class FieldSet extends FormWidgetBase
     public function init()
     {
         $this->fillFromConfig([
-            'form',
+            'fields',
         ]);
 
         if ($this->formField->disabled) {
             $this->previewMode = true;
         }
 
-        $config = $this->makeConfig($this->form);
+        $config = $this->makeConfig(['fields' => $this->fields]);
         $config->model = $this->model;
         $config->data = $this->getLoadValue();
         $config->alias = $this->alias . $this->defaultAlias;
