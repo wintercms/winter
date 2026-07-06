@@ -390,12 +390,20 @@ class RelationController extends ControllerBehavior
      */
     public function initRelation($model, $field = null)
     {
+        // No field given explicitly - fall back to whatever was
+        // posted, if anything.
         if ($field == null) {
             $field = post(self::PARAM_FIELD);
         }
 
         $this->config = $this->originalConfig;
 
+        // The fallback above didn't find one either: nothing was
+        // explicitly passed, and none was posted. There's genuinely no
+        // field to resolve here - no relation type to detect, no
+        // widgets to build - so store whatever partial state we have
+        // and return early rather than proceeding into logic that
+        // assumes a field is present.
         if ($field == null) {
             $this->model = $model;
             $this->field = $field;
