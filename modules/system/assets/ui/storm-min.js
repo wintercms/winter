@@ -2134,7 +2134,7 @@ this.$modal.on('click.dismiss.popup','[data-dismiss="popup"]',$.proxy(this.hide,
 this.triggerEvent('popupShow')
 this.triggerEvent('show.oc.popup')
 this.$dialog.css('transform','inherit')
-if(stackDepth>0){this.$dialog.css({top:(stackDepth*Popup.STACK_OFFSET)+'px',left:(stackDepth*Popup.STACK_OFFSET)+'px'})}}
+this.$dialog.css({top:stackDepth>0?(stackDepth*Popup.STACK_OFFSET)+'px':'',left:stackDepth>0?(stackDepth*Popup.STACK_OFFSET)+'px':''})}
 Popup.prototype.hide=function(){if(!this.isOpen)return
 this.triggerEvent('popupHide')
 this.triggerEvent('hide.oc.popup')
