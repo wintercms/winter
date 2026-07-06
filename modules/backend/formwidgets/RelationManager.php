@@ -74,6 +74,20 @@ class RelationManager extends FormWidgetBase
 
         $relation = $this->relation ?: $this->formField->fieldName;
 
+        // Explicitly binds the controller's relation context to THIS
+        // widget's own model/field pair before rendering. Needed for a
+        // nested relation manager (one rendered inside another relation
+        // manager's own manage form): without this, relationRender()'s
+        // own internal validateField() check would lazily call
+        // initRelation() using $this->model - RelationController's own,
+        // currently-active model, which for a nested field is still
+        // whatever the OUTER field left it as, not this widget's own
+        // bound model. Harmless and idempotent for a root-level field
+        // (the widget's model and the controller's current model are
+        // already the same one), so this applies at any depth
+        // uniformly, with no special-casing needed here.
+        $this->controller->initRelation($this->model, $relation);
+
         return $this->controller->relationRender($relation, $options);
     }
 

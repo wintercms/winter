@@ -197,6 +197,48 @@ class RelationController extends ControllerBehavior
     protected $foreignId;
 
     /**
+     * @var string Fully-qualified bracket path identifying the CURRENT
+     * field at any nesting depth, e.g. "items[5][taxes]" - a relation
+     * manager rendered inside another relation manager's own manage
+     * form. Bracket syntax mirrors the array-style naming already used
+     * for nested fields elsewhere (e.g. `author[name]`, a repeater's
+     * `repeaterField[0][subfield]`). An id sits between each relation
+     * name because a hasMany/belongsToMany hop is ambiguous without
+     * one - "the taxes of item #5" needs to say WHICH item, unlike a
+     * hasOne/belongsTo hop. Equal to $field for an unnested relation.
+     */
+    protected $nestedField = '';
+
+    /**
+     * @var \Winter\Storm\Database\Model The true root model this
+     * controller/page was booted with, captured once per request.
+     * Needed to walk a bracket path from the top when a nested field
+     * is being resolved from a fresh request rather than an ambient,
+     * same-request render (see resolveNestedContext()).
+     */
+    protected $rootModel;
+
+    /**
+     * @var array LIFO stack of ambient bracket paths, e.g. ["items[5]"].
+     * Pushed in relationMakePartial() right before a manage form/pivot
+     * partial renders, popped right after. Whatever's on top when a
+     * nested field's initRelation() runs during that render IS its
+     * parent context - no parsing needed, since the model handed in is
+     * already the widget's own bound model.
+     */
+    protected $nestingStack = [];
+
+    /**
+     * @var array Session key cache, keyed by $nestedField. $sessionKey
+     * above is a single shared property - whichever field is resolved
+     * first in a request sets it, and the check in
+     * relationGetSessionKey() would otherwise hand that SAME stale key
+     * back to every subsequently-resolved field in the same request,
+     * rather than generating its own. See relationGetSessionKey().
+     */
+    protected $sessionKeysByField = [];
+
+    /**
      * @var mixed Configuration for this behaviour
      */
     public $relationConfig = 'config_relation.yaml';
@@ -240,6 +282,22 @@ class RelationController extends ControllerBehavior
      */
     protected function validateField($field = null)
     {
+        // Falling back to post(PARAM_FIELD) unconditionally assumes
+        // that value unambiguously identifies "the" active field -
+        // several methods call validateField() this way with no field
+        // at all (relationRenderToolbar(), relationRenderView(),
+        // relationRefresh()). Once a field has already been resolved
+        // this request, prefer it: the raw POST value can still be a
+        // full bracket path (e.g. "items[15][taxes]", the qualified
+        // value the request originally targeted) even after
+        // $this->field has already been narrowed down to the bare leaf
+        // ("taxes") by an earlier initRelation() call in the same
+        // request - triggering a redundant, wasteful re-resolution for
+        // no benefit.
+        if ($field === null && $this->field) {
+            $field = $this->field;
+        }
+
         $field = $field ?: post(self::PARAM_FIELD);
 
         if ($field && $field != $this->field) {
@@ -262,7 +320,27 @@ class RelationController extends ControllerBehavior
         $this->vars['relationManageId'] = $this->manageId;
         $this->vars['relationLabel'] = $this->config->label ?: $this->field;
         $this->vars['relationManageTitle'] = $this->manageTitle;
-        $this->vars['relationField'] = $this->field;
+
+        // A single value drives the container's own
+        // `data-request-data="_relation_field: ..."` attribute (which
+        // every button inherits automatically - Winter's AJAX
+        // framework merges data-request-data from ancestor elements),
+        // and the manage form's own hidden `_relation_field` input.
+        // Using the fully-qualified path for a nested field is enough
+        // on its own to make both correct, with no separate
+        // per-mechanism patching needed.
+        $this->vars['relationField'] = $this->isNestedField() ? $this->nestedField : $this->field;
+
+        // Always the bare field name, even when nested - used
+        // specifically by $.wn.relationBehavior.changed(...) (the
+        // Delete/Unlink/Remove button partials), which matches against
+        // `[data-field-name="..."]` selectors that form field wrappers
+        // set to the bare name. relationField above can't serve this
+        // purpose once qualified: a wrapper for a nested field's own
+        // "taxes" widget has data-field-name="taxes", never the
+        // qualified path.
+        $this->vars['relationFieldName'] = $this->field;
+
         $this->vars['relationType'] = $this->relationType;
         $this->vars['relationSearchWidget'] = $this->searchWidget;
         $this->vars['relationManageFilterWidget'] = $this->manageFilterWidget;
@@ -317,12 +395,17 @@ class RelationController extends ControllerBehavior
         }
 
         $this->config = $this->originalConfig;
-        $this->model = $model;
-        $this->field = $field;
 
         if ($field == null) {
+            $this->model = $model;
+            $this->field = $field;
             return;
         }
+
+        [$model, $field, $isAmbient] = $this->resolveNestedContext($model, $field);
+
+        $this->model = $model;
+        $this->field = $field;
 
         if (!$this->model) {
             throw new ApplicationException(Lang::get('backend::lang.relation.missing_model', [
@@ -336,6 +419,8 @@ class RelationController extends ControllerBehavior
                 'class' => get_class($this->controller),
             ]));
         }
+
+        $this->aliasNestedConfig($field);
 
         if (!$this->getConfig($field)) {
             throw new ApplicationException(Lang::get('backend::lang.relation.missing_definition', compact('field')));
@@ -357,8 +442,15 @@ class RelationController extends ControllerBehavior
         $this->relationObject = $this->model->{$field}();
         $this->relationModel = $this->relationObject->getRelated();
 
-        $this->manageId = post('manage_id');
-        $this->foreignId = post('foreign_id');
+        // manage_id/foreign_id are single global POST values with no
+        // per-field scoping - meaningless (or actively wrong) for a
+        // nested field in certain situations, since stock's own JS
+        // keeps one shared hidden input for each regardless of which
+        // container/field is actually involved. See
+        // shouldSuppressManageId()/shouldSuppressForeignId() for
+        // exactly when each is suppressed and why they differ.
+        $this->manageId = $this->shouldSuppressManageId($isAmbient) ? null : post('manage_id');
+        $this->foreignId = $this->shouldSuppressForeignId($isAmbient) ? null : post('foreign_id');
         $this->readOnly = $this->getConfig('readOnly');
         $this->deferredBinding = $this->getConfig('deferredBinding') || !$this->model->exists;
         $this->viewMode = $this->evalViewMode();
@@ -416,6 +508,354 @@ class RelationController extends ControllerBehavior
             $this->controller->relationExtendPivotWidget($this->pivotWidget, $this->field, $this->model);
             $this->pivotWidget->bindToController();
         }
+    }
+
+    /**
+     * @return bool Whether the CURRENT field is nested inside another
+     * relation manager's own manage form, at any depth.
+     */
+    protected function isNestedField()
+    {
+        return strpos($this->nestedField, '[') !== false;
+    }
+
+    /**
+     * Resolves $model/$field into the actual model + leaf field name
+     * initRelation() should operate on, setting $this->nestedField
+     * (and $this->rootModel, on the first call this request) as a side
+     * effect. Three cases:
+     *
+     *  a) AMBIENT - the nesting stack is non-empty, meaning a manage
+     *     form is actively rendering right now (see
+     *     relationMakePartial()) and this field is nested directly
+     *     under whatever's on top of it. $model is trusted as-is - it's
+     *     the widget's own bound model.
+     *  b) RECONSTRUCTED - $field is already a bracket path (e.g.
+     *     "items[5][taxes]"), walked from the root to find the actual
+     *     model. This is the common case for anything other than an
+     *     ambient render: prepareVars() makes the container's
+     *     data-request-data, every button that inherits it, and the
+     *     manage form's own hidden field all carry the fully-qualified
+     *     path for a nested field, so post(PARAM_FIELD) already has
+     *     everything needed here.
+     *  c) ROOT - a plain field, empty stack: unchanged stock behaviour.
+     *
+     * If $model is null (the common case for a field that's nested -
+     * see resolveFallbackRootModel()'s own docblock for why) and no
+     * fallback can be found either, returns null for the model so the
+     * caller's own existing "missing model" check reports it exactly
+     * as it would have before nesting existed.
+     *
+     * @return array [$model, $field, $isAmbient]
+     */
+    protected function resolveNestedContext($model, $field)
+    {
+        if ($model === null) {
+            $model = $this->resolveFallbackRootModel();
+        }
+
+        if ($model === null) {
+            return [null, $field, false];
+        }
+
+        if ($this->rootModel === null) {
+            $this->rootModel = $model;
+        }
+
+        $ambientPath = end($this->nestingStack) ?: null;
+
+        if ($ambientPath !== null) {
+            $this->nestedField = $ambientPath . '[' . $field . ']';
+            return [$model, $field, true];
+        }
+
+        if (strpos($field, '[') !== false) {
+            $this->nestedField = $field;
+            [$hops, $leafField] = $this->parseBracketField($field);
+            return [$this->resolveModelForHops($this->rootModel, $hops), $leafField, false];
+        }
+
+        $this->nestedField = $field;
+        return [$model, $field, false];
+    }
+
+    /**
+     * Recovers the root model when initRelation() is invoked (e.g. from
+     * an AJAX handler like onRelationButtonCreate) without a widget
+     * having rendered first to prime $this->model.
+     *
+     * This is the common case for a NESTED field specifically: a
+     * root-level relation field is always pre-initialized during the
+     * controller's own page action (FormController builds the entire
+     * form widget tree - including every relationmanager-type field
+     * widget, each of which calls initRelation() itself - before any
+     * AJAX handler runs), so $this->model is already set by the time a
+     * handler needs it. A nested field (e.g. "taxes" on an Item) is
+     * only ever rendered inside a popup that's built separately, later,
+     * INSIDE the handler itself (relationMakePartial('manage_form') ->
+     * $this->manageWidget->render()) - it never goes through that
+     * pre-initialization, so $this->model is genuinely null the first
+     * time such a field needs resolving.
+     *
+     * Tries the conventional FormController accessor. If a controller
+     * loads its record some other way, this is the one place to adjust.
+     */
+    protected function resolveFallbackRootModel()
+    {
+        if (method_exists($this->controller, 'formGetModel')) {
+            return $this->controller->formGetModel();
+        }
+
+        if ($this->controller->isClassExtendedWith(\Backend\Behaviors\FormController::class)) {
+            return $this->controller->asExtension(\Backend\Behaviors\FormController::class)->formGetModel();
+        }
+
+        return null;
+    }
+
+    /**
+     * Parse "items[5][taxes][2][adjustments]" into:
+     *   hops:  [['items', '5'], ['taxes', '2']]
+     *   leaf:  'adjustments'
+     */
+    protected function parseBracketField($field)
+    {
+        preg_match('/^([^\[]+)((?:\[[^\]]*\])+)$/', $field, $matches);
+
+        if (!$matches) {
+            throw new ApplicationException("Malformed nested relation field: \"{$field}\"");
+        }
+
+        preg_match_all('/\[([^\]]*)\]/', $matches[2], $segMatches);
+        $segments = array_merge([$matches[1]], $segMatches[1]);
+
+        $leafField = array_pop($segments);
+
+        $hops = [];
+        for ($i = 0; $i < count($segments); $i += 2) {
+            $hops[] = [$segments[$i], $segments[$i + 1] ?? null];
+        }
+
+        return [$hops, $leafField];
+    }
+
+    /**
+     * Walk hops like [['items','5'], ['taxes','2']] from $root, one
+     * relation call per hop. A non-numeric or missing id means an
+     * unsaved record still sitting in a deferred-binding session - a
+     * fresh instance stands in for it.
+     *
+     * Uses hasRelation() rather than method_exists(): Winter/October's
+     * conventional relation declaration style - `public $hasMany =
+     * ['items' => Item::class]` - resolves dynamically via __call()
+     * magic, not as a real PHP method, so method_exists() would
+     * incorrectly reject it.
+     */
+    protected function resolveModelForHops($root, $hops)
+    {
+        $model = $root;
+
+        foreach ($hops as [$relationName, $id]) {
+            $isValidRelation = method_exists($model, 'hasRelation')
+                ? $model->hasRelation($relationName)
+                : method_exists($model, $relationName);
+
+            if (!$isValidRelation) {
+                throw new ApplicationException(
+                    "Unknown relation \"{$relationName}\" while resolving nested field \"{$this->nestedField}\""
+                );
+            }
+
+            $related = $model->{$relationName}()->getRelated();
+
+            $model = is_numeric($id)
+                ? ($related->newQuery()->find($id) ?: $related->newInstance())
+                : $related->newInstance();
+        }
+
+        return $model;
+    }
+
+    /**
+     * Config is keyed by the id-stripped bracket path (e.g.
+     * "items[taxes]"), but config lookup elsewhere in this class uses
+     * the bare leaf field name ("taxes"). Alias the bare name onto the
+     * qualified block in $this->originalConfig before it's consulted -
+     * the one stable place holding every field's definition at once
+     * ($this->config gets overwritten per-field on every
+     * initRelation() call).
+     */
+    protected function aliasNestedConfig($leafField)
+    {
+        if (!$this->isNestedField()) {
+            return;
+        }
+
+        $configKey = $this->getNestedConfigKey($this->nestedField);
+
+        if ($configKey === $leafField) {
+            return;
+        }
+
+        if (is_array($this->originalConfig)) {
+            if (!array_key_exists($configKey, $this->originalConfig)) {
+                throw new ApplicationException(
+                    "No relation config entry found for \"{$configKey}\" ".
+                    "(needed for nested field \"{$this->nestedField}\")."
+                );
+            }
+            $this->originalConfig[$leafField] = $this->originalConfig[$configKey];
+            return;
+        }
+
+        if (is_object($this->originalConfig)) {
+            if (!isset($this->originalConfig->{$configKey})) {
+                throw new ApplicationException(
+                    "No relation config entry found for \"{$configKey}\" ".
+                    "(needed for nested field \"{$this->nestedField}\")."
+                );
+            }
+            $this->originalConfig->{$leafField} = $this->originalConfig->{$configKey};
+            return;
+        }
+
+        throw new ApplicationException(
+            'Unrecognised $this->originalConfig type: ' . gettype($this->originalConfig)
+        );
+    }
+
+    /**
+     * "items[5][taxes]" -> "items[taxes]" (drop every id segment).
+     *
+     * For a RECURSIVE relation (the same field name appearing more
+     * than once in the chain - e.g. items[1][items][9][items], an
+     * item's own sub-item's own sub-item), naively concatenating every
+     * occurrence produces a key ("items[items][items]") that grows
+     * without bound as recursion goes deeper, which could never match
+     * a finite config file - a recursive relation's schema is defined
+     * ONCE and reused at every depth, not once per level.
+     *
+     * The same collapse is needed even when the repeat ISN'T at the
+     * very end - e.g. items[1][items][2][taxes] (a sub-item's own
+     * taxes) produces segments ['items','items','taxes']: the
+     * repeated pair is at the START, followed by a genuinely different
+     * leaf. That still needs to resolve to "items[taxes]", since a
+     * sub-item's taxes relation is identical in shape to a root-level
+     * item's - reusing the SAME config entry regardless of how deep
+     * the item itself was reached, not a new one per depth.
+     *
+     * Finds and collapses ANY adjacent duplicate pair (not just a
+     * trailing one) down to a single occurrence, retrying until an
+     * existing config key is found or nothing more can be collapsed
+     * (falling back to the fully-expanded key so the caller's own
+     * "not found" error still reports something meaningful).
+     */
+    protected function getNestedConfigKey($field)
+    {
+        [$hops, $leafField] = $this->parseBracketField($field);
+
+        $segments = array_map(function ($hop) {
+            return $hop[0];
+        }, $hops);
+        $segments[] = $leafField;
+
+        while (true) {
+            $key = $segments[0];
+            for ($i = 1; $i < count($segments); $i++) {
+                $key .= '[' . $segments[$i] . ']';
+            }
+
+            if ($this->nestedConfigKeyExists($key)) {
+                return $key;
+            }
+
+            $collapsedAny = false;
+
+            for ($i = 1; $i < count($segments); $i++) {
+                if ($segments[$i] === $segments[$i - 1]) {
+                    array_splice($segments, $i, 1);
+                    $collapsedAny = true;
+                    break;
+                }
+            }
+
+            if (!$collapsedAny) {
+                return $key;
+            }
+        }
+    }
+
+    /**
+     * Existence check used by getNestedConfigKey()'s collapse loop -
+     * separate from aliasNestedConfig()'s own check, since that one
+     * needs to throw a clear error on genuine failure, while this one
+     * just needs a yes/no to decide whether to keep collapsing.
+     */
+    protected function nestedConfigKeyExists($key)
+    {
+        if (is_array($this->originalConfig)) {
+            return array_key_exists($key, $this->originalConfig);
+        }
+
+        if (is_object($this->originalConfig)) {
+            return isset($this->originalConfig->{$key});
+        }
+
+        return false;
+    }
+
+    /**
+     * Resolves the id to use for a manage-form popup's own hop in the
+     * ambient stack - i.e. which specific record it pertains to, so
+     * nested fields under it can compute their own path.
+     *
+     * $this->manageId covers the common case (editing an existing
+     * record, or a plain create with no id yet). For a belongsToMany
+     * pivot link being created against an ALREADY-EXISTING foreign
+     * record (manageId absent, foreignId present - the popup is
+     * pre-populated with that record's data before the link itself is
+     * saved, per makePivotWidget()), $this->foreignId is what actually
+     * identifies the record; falling through to 'new' would
+     * incorrectly treat it as having no identity at all. foreignId can
+     * arrive as an array (makePivotWidget() itself casts it that way),
+     * hence reset().
+     */
+    protected function resolveHopId()
+    {
+        if ($this->manageId) {
+            return $this->manageId;
+        }
+
+        if ($this->foreignId) {
+            return is_array($this->foreignId) ? reset($this->foreignId) : $this->foreignId;
+        }
+
+        return 'new';
+    }
+
+    /**
+     * manage_id is never legitimate for a genuine create/add action (a
+     * "Create" should never have a pre-existing id, but stock's JS
+     * keeps one shared hidden input regardless of which container is
+     * involved), and never THIS field's own value when ambient (a side
+     * effect of rendering the PARENT's form, not what the request
+     * targets).
+     */
+    protected function shouldSuppressManageId($isAmbient)
+    {
+        return $isAmbient || in_array($this->eventTarget, ['button-create', 'button-add']);
+    }
+
+    /**
+     * foreign_id is only suppressed when ambient - unlike manage_id,
+     * it's legitimately needed for a genuine, direct pivot "Add" action
+     * (makePivotWidget() uses it to pre-populate the form with an
+     * already-existing foreign record); suppressing it there would
+     * break real pivot-add flows, not just stale leakage.
+     */
+    protected function shouldSuppressForeignId($isAmbient)
+    {
+        return $isAmbient;
     }
 
     /**
@@ -516,12 +956,38 @@ class RelationController extends ControllerBehavior
      */
     public function relationMakePartial($partial, $params = [])
     {
-        $contents = $this->controller->makePartial('relation_'.$partial, $params + $this->vars, false);
-        if (!$contents) {
-            $contents = $this->makePartial($partial, $params);
+        if ($partial !== 'manage_form' && $partial !== 'manage_pivot') {
+            $contents = $this->controller->makePartial('relation_'.$partial, $params + $this->vars, false);
+            if (!$contents) {
+                $contents = $this->makePartial($partial, $params);
+            }
+
+            return $contents;
         }
 
-        return $contents;
+        // 'manage_form' (create/update popups) and 'manage_pivot'
+        // (belongsToMany with a `pivot` config block) both render a
+        // real Backend\Widgets\Form that could itself contain a
+        // further nested relation field - pushing/popping the ambient
+        // path here is what lets initRelation() recognise such a field
+        // by its position in this stack, rather than needing to
+        // reconstruct it from scratch. 'manage_list' is deliberately
+        // excluded: a plain link/unlink picker only ever renders list
+        // columns, never a full model form.
+        $hop = $this->nestedField . '[' . $this->resolveHopId() . ']';
+
+        array_push($this->nestingStack, $hop);
+
+        try {
+            $contents = $this->controller->makePartial('relation_'.$partial, $params + $this->vars, false);
+            if (!$contents) {
+                $contents = $this->makePartial($partial, $params);
+            }
+
+            return $contents;
+        } finally {
+            array_pop($this->nestingStack);
+        }
     }
 
     /**
@@ -540,6 +1006,14 @@ class RelationController extends ControllerBehavior
             $id .= '-' . $suffix;
         }
 
+        // Two instances of the same field name at different tree
+        // positions (e.g. "taxes" under two different items) would
+        // otherwise collide on DOM id - suffixed with a hash of the
+        // full bracket path, distinct per position.
+        if ($this->isNestedField()) {
+            $id .= '-' . substr(md5($this->nestedField), 0, 8);
+        }
+
         return $this->controller->getId($id);
     }
 
@@ -548,19 +1022,39 @@ class RelationController extends ControllerBehavior
      */
     public function relationGetSessionKey($force = false)
     {
-        if ($this->sessionKey && !$force) {
-            return $this->sessionKey;
+        if (!$this->isNestedField()) {
+            // Unmodified stock behaviour.
+            if ($this->sessionKey && !$force) {
+                return $this->sessionKey;
+            }
+
+            if (post('_relation_session_key')) {
+                return $this->sessionKey = post('_relation_session_key');
+            }
+
+            if (post('_session_key')) {
+                return $this->sessionKey = post('_session_key');
+            }
+
+            return $this->sessionKey = FormHelper::getSessionKey();
         }
 
-        if (post('_relation_session_key')) {
-            return $this->sessionKey = post('_relation_session_key');
+        // $this->sessionKey is a single shared property - whichever
+        // field is resolved first in a request sets it, and the stock
+        // logic above would otherwise hand that SAME stale key back to
+        // every subsequently-resolved field in the request, rather
+        // than generating its own. Cached per $nestedField instead.
+        if (isset($this->sessionKeysByField[$this->nestedField]) && !$force) {
+            return $this->sessionKey = $this->sessionKeysByField[$this->nestedField];
         }
 
-        if (post('_session_key')) {
-            return $this->sessionKey = post('_session_key');
+        if ($posted = (post('_relation_session_key') ?: post('_session_key'))) {
+            return $this->sessionKey = $this->sessionKeysByField[$this->nestedField] = $posted;
         }
 
-        return $this->sessionKey = FormHelper::getSessionKey();
+        $key = FormHelper::getSessionKey() . '.' . substr(md5($this->nestedField), 0, 12);
+
+        return $this->sessionKey = $this->sessionKeysByField[$this->nestedField] = $key;
     }
 
     /**
@@ -1853,7 +2347,17 @@ class RelationController extends ControllerBehavior
      */
     protected function evalManageMode()
     {
-        if ($mode = post(self::PARAM_MODE)) {
+        // `_relation_mode` is a single global POST value with no
+        // per-field scoping. Trusting it unconditionally means a stale
+        // mode from an OUTER field (e.g. "form", correctly describing
+        // an open Item popup) can force itself onto a completely
+        // different action on a NESTED field (e.g. deleting a Tax),
+        // triggering a manage-widget lookup against an unrelated id.
+        // Ignored for nested fields - the switches below determine the
+        // right mode fresh from $this->eventTarget/$this->relationType
+        // regardless, so there's no legitimate case where a nested
+        // field needs the outer field's posted mode honoured.
+        if (!$this->isNestedField() && $mode = post(self::PARAM_MODE)) {
             return $mode;
         }
 
