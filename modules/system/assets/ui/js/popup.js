@@ -328,12 +328,10 @@
         // https://github.com/twbs/bootstrap/issues/15856
         this.$dialog.css('transform', 'inherit')
 
-        if (stackDepth > 0) {
-            this.$dialog.css({
-                top: (stackDepth * Popup.STACK_OFFSET) + 'px',
-                left: (stackDepth * Popup.STACK_OFFSET) + 'px'
-            })
-        }
+        this.$dialog.css({
+            top: stackDepth > 0 ? (stackDepth * Popup.STACK_OFFSET) + 'px' : '',
+            left: stackDepth > 0 ? (stackDepth * Popup.STACK_OFFSET) + 'px' : ''
+        })
     }
 
     Popup.prototype.hide = function() {
