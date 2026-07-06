@@ -666,10 +666,21 @@ class RelationController extends ControllerBehavior
                 );
             }
 
-            $related = $model->{$relationName}()->getRelated();
+            $relation = $model->{$relationName}();
+            $related = $relation->getRelated();
 
+            // find() on the RELATION instance itself, not a bare
+            // newQuery() against the related model's blank instance -
+            // the latter is unscoped and would resolve ANY record with
+            // a matching id anywhere in the table, not only one that's
+            // actually a child of $model via this relation. A crafted
+            // "items[999][taxes]" where item 999 belongs to a
+            // completely different parent would otherwise still
+            // resolve successfully, silently bypassing the relation's
+            // own constraint (the parent foreign key for hasMany, the
+            // pivot join for belongsToMany).
             $model = is_numeric($id)
-                ? ($related->newQuery()->find($id) ?: $related->newInstance())
+                ? ($relation->find($id) ?: $related->newInstance())
                 : $related->newInstance();
         }
 

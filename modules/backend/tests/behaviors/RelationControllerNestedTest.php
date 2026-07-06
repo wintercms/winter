@@ -551,6 +551,75 @@ class RelationControllerNestedTest extends PluginTestCase
         $this->assertEquals('items[taxes]', $key);
     }
 
+    /**
+     * Regression for a real, flagged security/correctness issue:
+     * resolveModelForHops() previously resolved a hop id via a bare,
+     * unscoped find() against the related model's WHOLE TABLE, rather
+     * than through the relation itself. That meant a crafted nested
+     * field referencing an id belonging to a completely different
+     * parent's record - e.g. another Order's Item - would still
+     * resolve successfully, silently bypassing the relation's own
+     * constraint entirely (the parent foreign key for hasMany, the
+     * pivot join for belongsToMany). Scoping the lookup through
+     * $model->{$relationName}()->find($id) instead means a hop can
+     * only ever resolve to a record that's genuinely reachable via
+     * that specific relation from that specific parent.
+     */
+    public function testResolveModelForHopsCannotCrossIntoADifferentParentsRecord()
+    {
+        $orderA = RelationTestOrder::create(['name' => 'Order A']);
+        RelationTestItem::create(['order_id' => $orderA->id, 'name' => 'Item in Order A']);
+
+        $orderB = RelationTestOrder::create(['name' => 'Order B']);
+        $itemInOrderB = RelationTestItem::create(['order_id' => $orderB->id, 'name' => 'Item in Order B']);
+
+        $controller = $this->makeController($orderA);
+        $behavior = $controller->asExtension(RelationController::class);
+
+        // A hop crafted to reference Order B's item, while resolving
+        // against Order A as the root - a perfectly valid id within
+        // the items table as a whole, but not a child of Order A.
+        $result = $this->invokeProtectedMethod($behavior, 'resolveModelForHops', [
+            $orderA,
+            [['items', (string) $itemInOrderB->id]],
+        ]);
+
+        $this->assertInstanceOf(RelationTestItem::class, $result);
+        $this->assertFalse(
+            $result->exists,
+            'A hop id belonging to a DIFFERENT parent must not resolve to that record - it should fall back to a blank instance instead'
+        );
+        $this->assertNotEquals(
+            $itemInOrderB->id,
+            $result->id,
+            'The resolved model must never carry the cross-parent record\'s identity'
+        );
+    }
+
+    /**
+     * Companion positive-path check for the fix above: a hop id that
+     * DOES legitimately belong to the current parent must still
+     * resolve correctly - this is about correctly SCOPING the lookup,
+     * not breaking it for the ordinary case.
+     */
+    public function testResolveModelForHopsStillResolvesLegitimateChild()
+    {
+        $order = RelationTestOrder::create(['name' => 'Order 1']);
+        $item = RelationTestItem::create(['order_id' => $order->id, 'name' => 'Item A']);
+
+        $controller = $this->makeController($order);
+        $behavior = $controller->asExtension(RelationController::class);
+
+        $result = $this->invokeProtectedMethod($behavior, 'resolveModelForHops', [
+            $order,
+            [['items', (string) $item->id]],
+        ]);
+
+        $this->assertInstanceOf(RelationTestItem::class, $result);
+        $this->assertTrue($result->exists);
+        $this->assertEquals($item->id, $result->id);
+    }
+
     // -----------------------------------------------------------------
     // Regression: validateField() must prefer an already-active field
     // over stale POST data, since relationRenderToolbar()/
