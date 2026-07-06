@@ -2054,6 +2054,7 @@ this.init()}
 Popup.prototype=Object.create(BaseProto)
 Popup.prototype.constructor=Popup
 Popup.DEFAULTS={ajax:null,handler:null,keyboard:true,extraData:{},content:null,size:null,adaptiveHeight:false,zIndex:null}
+Popup.STACK_OFFSET=40
 Popup.prototype.init=function(){var self=this
 if(self.isOpen)return
 this.setBackdrop(true)
@@ -2127,11 +2128,13 @@ Popup.prototype.triggerEvent=function(eventName,params){if(!params){params=[this
 this.$el.trigger(eventObject,params)
 if(this.firstDiv){this.firstDiv.trigger(eventObject,params)}}
 Popup.prototype.reload=function(){this.init()}
-Popup.prototype.show=function(){this.$modal.modal('show')
+Popup.prototype.show=function(){var stackDepth=$('.control-popup.in').length
+this.$modal.modal('show')
 this.$modal.on('click.dismiss.popup','[data-dismiss="popup"]',$.proxy(this.hide,this))
 this.triggerEvent('popupShow')
 this.triggerEvent('show.oc.popup')
-this.$dialog.css('transform','inherit')}
+this.$dialog.css('transform','inherit')
+if(stackDepth>0){this.$dialog.css({top:(stackDepth*Popup.STACK_OFFSET)+'px',left:(stackDepth*Popup.STACK_OFFSET)+'px'})}}
 Popup.prototype.hide=function(){if(!this.isOpen)return
 this.triggerEvent('popupHide')
 this.triggerEvent('hide.oc.popup')
