@@ -715,7 +715,13 @@ class RelationController extends ControllerBehavior
                     "(needed for nested field \"{$this->nestedField}\")."
                 );
             }
-            $this->originalConfig[$leafField] = $this->originalConfig[$configKey];
+
+            // Arrays are value types in PHP - $this->config was
+            // already an independent copy the moment it was assigned
+            // from $this->originalConfig at the top of initRelation(),
+            // so mutating it here can never leak back into
+            // originalConfig.
+            $this->config[$leafField] = $this->originalConfig[$configKey];
             return;
         }
 
@@ -726,7 +732,22 @@ class RelationController extends ControllerBehavior
                     "(needed for nested field \"{$this->nestedField}\")."
                 );
             }
-            $this->originalConfig->{$leafField} = $this->originalConfig->{$configKey};
+
+            // Objects are reference types - at this exact point (right
+            // after initRelation()'s own `$this->config =
+            // $this->originalConfig;`), $this->config and
+            // $this->originalConfig are literally the SAME instance,
+            // not yet narrowed to a single field's config. Mutating
+            // $this->config directly here would mutate originalConfig
+            // too, and since originalConfig is never reset/recreated
+            // after construction, that alias would persist for the
+            // REST OF THE REQUEST - a later initRelation() call for a
+            // genuinely root-level field that happens to share this
+            // bare name would then incorrectly inherit this nested
+            // field's config instead of its own. Cloning first keeps
+            // the alias scoped to this call only.
+            $this->config = clone $this->originalConfig;
+            $this->config->{$leafField} = $this->originalConfig->{$configKey};
             return;
         }
 

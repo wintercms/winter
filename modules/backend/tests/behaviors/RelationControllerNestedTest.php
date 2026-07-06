@@ -14,11 +14,19 @@ use Winter\Storm\Database\Model;
  * Self-contained fixture models for nested relation testing.
  *
  * Order -(items, hasMany)-> Item -(taxes, belongsToMany)-> Tax
- *                            |
- *                            `-(items, hasMany, self-referencing)-> Item
+ *   |                        |
+ *   |                        `-(items, hasMany, self-referencing)-> Item
+ *   `-(taxes, hasMany)-> Tax
  *
  * The self-referencing relation on Item is what exercises recursion:
  * the same field name ("items") appears at two different depths.
+ *
+ * Order's OWN "taxes" is deliberately a completely different relation
+ * (hasMany via order_id, not belongsToMany via the pivot) that just
+ * happens to share the same bare name as Item's nested "taxes" - this
+ * is what exercises aliasNestedConfig()'s config-leak fix: resolving
+ * the nested field must never corrupt the root-level field's config,
+ * even when both share a name.
  */
 class RelationTestOrder extends Model
 {
@@ -28,6 +36,7 @@ class RelationTestOrder extends Model
 
     public $hasMany = [
         'items' => [RelationTestItem::class, 'key' => 'order_id'],
+        'taxes' => [RelationTestTax::class, 'key' => 'order_id'],
     ];
 
     public static function migrateUp(): void
@@ -109,6 +118,10 @@ class RelationTestTax extends Model
     protected $guarded = [];
     public $timestamps = false;
 
+    public $belongsTo = [
+        'order' => [RelationTestOrder::class, 'key' => 'order_id'],
+    ];
+
     public $belongsToMany = [
         'items' => [
             RelationTestItem::class,
@@ -126,6 +139,7 @@ class RelationTestTax extends Model
 
         Schema::create('backend_test_relation_taxes', function ($table) {
             $table->increments('id');
+            $table->unsignedInteger('order_id')->nullable();
             $table->string('label')->nullable();
             $table->integer('rate')->nullable();
         });
@@ -171,6 +185,24 @@ class RelationTestController extends BackendController
                     // posts an already-qualified bracket path and only
                     // exercises case (b) reconstruction.
                     'taxes' => ['label' => 'Taxes', 'type' => 'relationmanager'],
+                ]],
+            ],
+        ],
+        // Root-level "taxes" - a completely different relation
+        // (Order's own hasMany, not Item's belongsToMany) that just
+        // happens to share the same bare field name as items[taxes]
+        // below. Label is deliberately distinct, so a test can detect
+        // whether resolving the NESTED "taxes" ever corrupts THIS
+        // entry's config (see aliasNestedConfig()'s config-leak fix).
+        'taxes' => [
+            'label' => 'Order-level Taxes',
+            'view' => [
+                'list' => ['columns' => ['label' => ['label' => 'Label']]],
+            ],
+            'manage' => [
+                'form' => ['fields' => [
+                    'label' => ['label' => 'Label', 'type' => 'text'],
+                    'rate' => ['label' => 'Rate', 'type' => 'number'],
                 ]],
             ],
         ],
@@ -618,6 +650,71 @@ class RelationControllerNestedTest extends PluginTestCase
         $this->assertInstanceOf(RelationTestItem::class, $result);
         $this->assertTrue($result->exists);
         $this->assertEquals($item->id, $result->id);
+    }
+
+    /**
+     * Regression for a config-mutation bug flagged during code review:
+     * aliasNestedConfig() previously mutated $this->originalConfig
+     * directly to alias a nested field's config onto its bare leaf
+     * name. Since originalConfig is the SAME object $this->config is
+     * reset FROM at the top of every initRelation() call - and is
+     * itself never reset again after construction - that alias
+     * persisted for the rest of the request. A LATER initRelation()
+     * call for a genuinely root-level field sharing the same bare name
+     * ("taxes" here: Order's own hasMany, completely separate from
+     * Item's nested belongsToMany) would then incorrectly inherit the
+     * nested field's config instead of its own.
+     */
+    public function testResolvingNestedFieldDoesNotCorruptRootLevelFieldOfSameName()
+    {
+        $order = RelationTestOrder::create(['name' => 'Order 1']);
+        $item = RelationTestItem::create(['order_id' => $order->id, 'name' => 'Item A']);
+
+        $controller = $this->makeController($order);
+        $behavior = $controller->asExtension(RelationController::class);
+
+        // Resolve the NESTED "taxes" field first - this is what
+        // previously mutated originalConfig, since aliasNestedConfig()
+        // needs to alias "items[taxes]" onto the bare "taxes" key for
+        // the nested resolution to find its own config at all.
+        $controller->initRelation($order, "items[{$item->id}][taxes]");
+
+        // THEN resolve the genuinely root-level "taxes" field, within
+        // the SAME behavior instance - simulating both being active
+        // within one request, the same way "items" and "taxes" already
+        // are elsewhere in this file.
+        $controller->initRelation($order, 'taxes');
+
+        $config = $this->readProtectedProperty($behavior, 'config');
+
+        $this->assertEquals(
+            'Order-level Taxes',
+            $config->label,
+            'Resolving the nested "taxes" field must not corrupt the root-level "taxes" field\'s own config'
+        );
+    }
+
+    /**
+     * Companion check for the opposite order - resolving the root-level
+     * field first was never actually broken (aliasNestedConfig() only
+     * ever runs for a nested field in the first place), but confirms
+     * the fix doesn't accidentally introduce a problem in that
+     * direction either.
+     */
+    public function testResolvingRootLevelFieldFirstDoesNotAffectLaterNestedResolution()
+    {
+        $order = RelationTestOrder::create(['name' => 'Order 1']);
+        $item = RelationTestItem::create(['order_id' => $order->id, 'name' => 'Item A']);
+
+        $controller = $this->makeController($order);
+        $behavior = $controller->asExtension(RelationController::class);
+
+        $controller->initRelation($order, 'taxes');
+        $controller->initRelation($order, "items[{$item->id}][taxes]");
+
+        $config = $this->readProtectedProperty($behavior, 'config');
+
+        $this->assertEquals('Taxes', $config->label);
     }
 
     // -----------------------------------------------------------------
