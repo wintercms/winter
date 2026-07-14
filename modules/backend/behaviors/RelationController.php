@@ -1243,11 +1243,9 @@ class RelationController extends ControllerBehavior
          */
         if ($this->viewMode === 'multi') {
             if (($checkedIds = post('checked')) && is_array($checkedIds)) {
-                foreach ($checkedIds as $relationId) {
-                    if (!$obj = $this->relationModel->find($relationId)) {
-                        continue;
-                    }
-
+                $foreignKeyName = $this->relationModel->getKeyName();
+                $objects = $this->relationModel->whereIn($foreignKeyName, $checkedIds)->get();
+                foreach ($objects as $obj) {
                     $obj->delete();
                 }
             }

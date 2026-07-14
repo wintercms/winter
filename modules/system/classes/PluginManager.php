@@ -980,10 +980,33 @@ class PluginManager
         ksort($this->plugins);
 
         /*
+         * Pre-calculate and resolve dependencies for all plugins once
+         */
+        $dependenciesMap = [];
+        foreach ($this->plugins as $code => $plugin) {
+            $depends = $this->getDependencies($plugin);
+
+            $depends = array_map(function ($depend) {
+                $depend = $this->getNormalizedIdentifier($depend, true);
+
+                if (isset($this->replacementMap[$depend])) {
+                    return $this->replacementMap[$depend];
+                }
+
+                return $depend;
+            }, $depends);
+
+            $dependenciesMap[$code] = array_filter($depends, function ($pluginCode) {
+                return isset($this->plugins[$pluginCode]);
+            });
+        }
+
+        /*
          * Canvas the dependency tree
          */
         $checklist = $this->plugins;
         $result = [];
+        $resultKeys = []; // O(1) Zend Hash Table lookup
 
         $loopCount = 0;
         while (count($checklist)) {
@@ -992,47 +1015,18 @@ class PluginManager
             }
 
             foreach ($checklist as $code => $plugin) {
-                /*
-                 * Get dependencies and remove any aliens, replacing any dependencies which have been superceded
-                 * by another plugin.
-                 */
-                $depends = $this->getDependencies($plugin);
+                $depends = $dependenciesMap[$code];
 
-                $depends = array_map(function ($depend) {
-                    $depend = $this->getNormalizedIdentifier($depend, true);
-
-                    if (isset($this->replacementMap[$depend])) {
-                        return $this->replacementMap[$depend];
+                if ($depends) {
+                    foreach ($depends as $depend) {
+                        if (!isset($resultKeys[$depend])) {
+                            continue 2;
+                        }
                     }
-
-                    return $depend;
-                }, $depends);
-
-                $depends = array_filter($depends, function ($pluginCode) {
-                    return isset($this->plugins[$pluginCode]);
-                });
-
-                /*
-                 * No dependencies
-                 */
-                if (!$depends) {
-                    array_push($result, $code);
-                    unset($checklist[$code]);
-                    continue;
                 }
 
-                /*
-                 * Find dependencies that have not been checked
-                 */
-                $depends = array_diff($depends, $result);
-                if (count($depends) > 0) {
-                    continue;
-                }
-
-                /*
-                 * All dependencies are checked
-                 */
                 array_push($result, $code);
+                $resultKeys[$code] = true;
                 unset($checklist[$code]);
             }
         }
