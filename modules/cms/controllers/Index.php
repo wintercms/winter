@@ -93,32 +93,32 @@ class Index extends Controller
 
             $this->theme = $theme;
 
-            if ($this->user->hasAccess('cms.manage_pages')) {
+            if ($this->user?->hasAccess('cms.manage_pages')) {
                 new TemplateList($this, 'pageList', function () use ($theme) {
                     return Page::listInTheme($theme, true);
                 });
             }
 
-            if ($this->user->hasAccess('cms.manage_partials')) {
+            if ($this->user?->hasAccess('cms.manage_partials')) {
                 new TemplateList($this, 'partialList', function () use ($theme) {
                     return Partial::listInTheme($theme, true);
                 });
             }
 
-            if ($this->user->hasAccess('cms.manage_layouts')) {
+            if ($this->user?->hasAccess('cms.manage_layouts')) {
                 new TemplateList($this, 'layoutList', function () use ($theme) {
                     return Layout::listInTheme($theme, true);
                 });
             }
 
-            if ($this->user->hasAccess('cms.manage_content')) {
+            if ($this->user?->hasAccess('cms.manage_content')) {
                 new TemplateList($this, 'contentList', function () use ($theme) {
                     return Content::listInTheme($theme, true);
                 });
             }
 
             if (
-                $this->user->hasAccess([
+                $this->user?->hasAccess([
                     'cms.manage_pages',
                     'cms.manage_partials',
                     'cms.manage_layouts',
@@ -127,7 +127,7 @@ class Index extends Controller
                 new ComponentList($this, 'componentList');
             }
 
-            if ($this->user->hasAccess('cms.manage_assets')) {
+            if ($this->user?->hasAccess('cms.manage_assets')) {
                 new AssetList($this, 'assetList');
             }
         }
@@ -600,7 +600,7 @@ class Index extends Controller
     {
         $this->resolveTypeClassName($type);
 
-        if (!$this->user->hasAccess($this->getRelevantPermissionForType($type))) {
+        if (!$this->user?->hasAccess($this->getRelevantPermissionForType($type))) {
             throw new AuthorizationException(Lang::get('cms::lang.template.type_not_permitted', [
                 'type' => str_plural($type),
                 'permission' => $this->getRelevantPermissionForType($type),
