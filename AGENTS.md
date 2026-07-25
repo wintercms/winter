@@ -75,6 +75,13 @@ Storm depends on Laravel + Symfony pieces. It must **not** depend on Winter modu
 - Generic filesystem, path, parser, network primitives live in `vendor/winter/storm/`.
 - When a Storm class needs a *policy* that's CMS-specific (e.g. "which directories count as theme asset roots"), expose a public setter on the Storm class and have the module-level caller supply the policy. Don't reach into module-level constants from Storm.
 
+## Autoloading & file placement
+
+Modules and plugins are autoloaded by `Winter\Storm\Support\ClassLoader` (see `ClassLoader::load()`), **not** plain PSR-4. Its convention: the namespace's **directory segments are lower-cased** to form the path, while the class file keeps its proper PascalCase name. So `System\Twig\SecurityPolicy\SafeCollection` resolves to `modules/system/twig/securitypolicy/SafeCollection.php` — note the lowercase `securitypolicy/` directory.
+
+- **New sub-namespace directories must be lowercase on disk**, even though the namespace segment stays PascalCase: `System\Twig\Node` → `modules/system/twig/node/`, not `Node/`. The file name keeps its PascalCase and must match the class name exactly.
+- This only bites on case-sensitive filesystems: a capitalized directory works on macOS/Windows (case-insensitive) and passes local tests, then fails Linux CI with `Class "…" not found`. **If Windows CI is green but every Ubuntu job fails to find a class, suspect a directory-case mismatch.**
+
 ## Tests
 
 - Backend/CMS/system tests usually extend `System\Tests\Bootstrap\PluginTestCase` (boots Laravel, plugins, auth) or `System\Tests\Bootstrap\TestCase` (boots the framework but not plugins).
