@@ -1682,24 +1682,45 @@ class RelationController extends ControllerBehavior
     /**
      * Saves the models prepared from a pivot form submission.
      *
-     * Models that already exist and have no changed attributes are skipped. `prepareModelsToSave()`
+     * Models that already exist and have nothing pending are skipped. `prepareModelsToSave()`
      * always queues the related model, so a submission containing nothing but pivot data would
      * otherwise trigger that model's save events - including authorization guards such as
-     * `Backend\Models\User::beforeSave()`. Their deferred bindings are still committed so that
-     * relation widgets on the pivot form continue to work.
+     * `Backend\Models\User::beforeSave()`.
+     *
+     * A model with deferred bindings is never skipped, even when its own attributes are clean:
+     * committing those bindings is a change to the model's relations, so it must go through the
+     * normal save pipeline and be authorized like any other.
      */
     protected function relationSavePivotModels(array $modelsToSave): void
     {
         $sessionKey = $this->pivotWidget->getSessionKey();
 
         foreach ($modelsToSave as $modelToSave) {
-            if ($modelToSave->exists && !$modelToSave->isDirty()) {
-                $modelToSave->commitDeferred($sessionKey);
+            if (
+                $modelToSave->exists
+                && !$modelToSave->isDirty()
+                && !$this->relationHasDeferredBindings($modelToSave, $sessionKey)
+            ) {
                 continue;
             }
 
             $modelToSave->save(null, $sessionKey);
         }
+    }
+
+    /**
+     * Returns whether the model has any deferred bindings pending for the given session key.
+     */
+    protected function relationHasDeferredBindings($model, string $sessionKey): bool
+    {
+        $binding = new DeferredBinding;
+
+        $binding->setConnection($model->getConnectionName());
+
+        return $binding
+            ->where('master_type', get_class($model))
+            ->where('session_key', $sessionKey)
+            ->exists();
     }
 
     /**

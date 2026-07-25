@@ -84,7 +84,7 @@ class RelationControllerPivotTest extends PluginTestCase
     {
         return $this->fixture->users()
             ->where('backend_users.id', $this->targetUser->id)
-            ->first();
+            ->firstOrFail();
     }
 
     /**
@@ -202,7 +202,7 @@ class RelationControllerPivotTest extends PluginTestCase
      * Skipping the save must not drop pending relation work. A deferred binding leaves the
      * owning model clean, so it would be lost if the model were simply passed over.
      */
-    public function testDeferredBindingsAreCommittedForSkippedModels(): void
+    public function testDeferredBindingsAreCommittedForOtherwiseCleanModels(): void
     {
         $this->actingAs((new UserFixture)->withPermission('backend.manage_users', true));
 
@@ -222,5 +222,29 @@ class RelationControllerPivotTest extends PluginTestCase
 
         $this->assertEquals(1, $hydrated->groups()->count(), 'The deferred binding was committed');
         $this->assertEquals(1, $this->getPivotValue());
+    }
+
+    /**
+     * Skipping the save must not become an authorization bypass. A deferred binding leaves the
+     * owning model clean, so a naive skip would commit relation changes - such as adding a user
+     * to a group, which carries permissions - without ever consulting `User::beforeSave()`.
+     */
+    public function testDeferredBindingsAreStillAuthorizedForOtherwiseCleanModels(): void
+    {
+        $this->actingAs((new UserFixture)->withPermission('backend.manage_users', false));
+
+        $hydrated = $this->getHydratedRelatedUser();
+
+        $group = UserGroup::create([
+            'name' => 'Test Group',
+            'code' => 'test-group',
+        ]);
+        $hydrated->groups()->add($group, 'pivottestsessionkey');
+
+        $this->assertFalse($hydrated->isDirty(), 'The deferred binding leaves the user clean');
+
+        $this->expectException(AuthorizationException::class);
+
+        $this->savePivotForm($hydrated, ['pivot' => ['is_default' => true]]);
     }
 }
