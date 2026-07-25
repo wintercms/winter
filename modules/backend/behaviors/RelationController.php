@@ -1569,10 +1569,9 @@ class RelationController extends ControllerBehavior
             $hydratedModels = $this->relationObject->whereIn($foreignKeyName, $foreignIds)->get();
 
             foreach ($hydratedModels as $hydratedModel) {
-                $modelsToSave = $this->prepareModelsToSave($hydratedModel, $saveData);
-                foreach ($modelsToSave as $modelToSave) {
-                    $modelToSave->save(null, $this->pivotWidget->getSessionKey());
-                }
+                $this->relationSavePivotModels(
+                    $this->prepareModelsToSave($hydratedModel, $saveData)
+                );
             }
         });
 
@@ -1583,14 +1582,17 @@ class RelationController extends ControllerBehavior
     {
         $this->beforeAjax();
 
-        $foreignKeyName = $this->relationModel->getQualifiedKeyName();
         $hydratedModel = $this->pivotWidget->model;
         $saveData = $this->pivotWidget->getSaveData();
 
-        $modelsToSave = $this->prepareModelsToSave($hydratedModel, $saveData);
-        foreach ($modelsToSave as $modelToSave) {
-            $modelToSave->save(null, $this->pivotWidget->getSessionKey());
-        }
+        /*
+         * If any of the models fail to save, abort the whole update
+         */
+        Db::transaction(function () use ($hydratedModel, $saveData) {
+            $this->relationSavePivotModels(
+                $this->prepareModelsToSave($hydratedModel, $saveData)
+            );
+        });
 
         return ['#'.$this->relationGetId('view') => $this->relationRenderView()];
     }
@@ -1676,6 +1678,29 @@ class RelationController extends ControllerBehavior
     //
     // Helpers
     //
+
+    /**
+     * Saves the models prepared from a pivot form submission.
+     *
+     * Models that already exist and have no changed attributes are skipped. `prepareModelsToSave()`
+     * always queues the related model, so a submission containing nothing but pivot data would
+     * otherwise trigger that model's save events - including authorization guards such as
+     * `Backend\Models\User::beforeSave()`. Their deferred bindings are still committed so that
+     * relation widgets on the pivot form continue to work.
+     */
+    protected function relationSavePivotModels(array $modelsToSave): void
+    {
+        $sessionKey = $this->pivotWidget->getSessionKey();
+
+        foreach ($modelsToSave as $modelToSave) {
+            if ($modelToSave->exists && !$modelToSave->isDirty()) {
+                $modelToSave->commitDeferred($sessionKey);
+                continue;
+            }
+
+            $modelToSave->save(null, $sessionKey);
+        }
+    }
 
     /**
      * Returns the existing record IDs for the relation.
