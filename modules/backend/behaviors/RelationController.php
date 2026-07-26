@@ -1583,14 +1583,18 @@ class RelationController extends ControllerBehavior
     {
         $this->beforeAjax();
 
-        $foreignKeyName = $this->relationModel->getQualifiedKeyName();
         $hydratedModel = $this->pivotWidget->model;
         $saveData = $this->pivotWidget->getSaveData();
 
-        $modelsToSave = $this->prepareModelsToSave($hydratedModel, $saveData);
-        foreach ($modelsToSave as $modelToSave) {
-            $modelToSave->save(null, $this->pivotWidget->getSessionKey());
-        }
+        /*
+         * If any of the models fail to save, abort the whole update
+         */
+        Db::transaction(function () use ($hydratedModel, $saveData) {
+            $modelsToSave = $this->prepareModelsToSave($hydratedModel, $saveData);
+            foreach ($modelsToSave as $modelToSave) {
+                $modelToSave->save(null, $this->pivotWidget->getSessionKey());
+            }
+        });
 
         return ['#'.$this->relationGetId('view') => $this->relationRenderView()];
     }
