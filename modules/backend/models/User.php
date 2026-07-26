@@ -78,6 +78,15 @@ class User extends UserBase
      */
     public static $loginAttribute = 'login';
 
+    /**
+     * @var array<string> Relations on this model that require `backend.manage_users`
+     * to change on another user's record. Deliberately limited to the relations this
+     * model owns: authorization semantics for plugin-added relations belong to the
+     * plugin, which can append to this list or bind its own guard to the
+     * `model.relation.*` events.
+     */
+    public array $permissionGuardedRelations = ['groups', 'avatar', 'throttle'];
+
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
@@ -218,18 +227,22 @@ class User extends UserBase
     }
 
     /**
-     * Enforce authorization rules for a change to one of this record's relations
-     * (group membership, avatar, etc.).
+     * Enforce authorization rules for a change to one of this record's relations.
      *
-     * Changes to your own record's relations are allowed: groups do not carry
-     * permissions out of the box, so they are not an escalation vector. Plugins
-     * that hang authorization semantics on a relation can bind a stricter guard
-     * to the same `model.relation.*` events.
+     * Only the relations listed in $permissionGuardedRelations are guarded, so
+     * plugin-added relations (e.g. records that reference a user) behave normally.
+     *
+     * Changes to your own record's guarded relations are allowed: groups do not
+     * carry permissions out of the box, so they are not an escalation vector.
      *
      * @throws AuthorizationException if the current user lacks permission
      */
     protected function authorizeRelationChange(string $relationName): void
     {
+        if (!in_array($relationName, $this->permissionGuardedRelations)) {
+            return;
+        }
+
         $actor = BackendAuth::getUser();
         if (!$actor) {
             return;

@@ -260,6 +260,24 @@ class UserAuthorizationTest extends PluginTestCase
         $this->targetUser->save();
     }
 
+    public function testPluginAddedRelationIsNotGuarded(): void
+    {
+        $group = $this->makeGroup();
+
+        // Simulate a plugin-added relation on the user model; only the relations
+        // core owns (listed in $permissionGuardedRelations) require the permission
+        $this->targetUser->belongsToMany['memberships'] = [
+            UserGroup::class,
+            'table' => 'backend_users_groups',
+        ];
+
+        $actor = new UserFixture;
+        $this->actingAs($actor);
+
+        $this->targetUser->memberships()->add($group);
+        $this->assertEquals(1, $this->targetUser->memberships()->count());
+    }
+
     public function testSelfGroupChangeAllowed(): void
     {
         $group = $this->makeGroup();
