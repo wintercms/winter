@@ -373,10 +373,6 @@ class ImageResizerTest extends PluginTestCase
         Config::set('cms.linkPolicy', 'detect');
         $url = $imageResizer->getResizedUrl();
         $this->assertTrue(starts_with($url, Config::get('cms.storage.resized.path', '/storage/tests/app/resized')));
-
-        // test dots' double-decoding
-        // @see https://github.com/wintercms/winter/pull/1493
-        $this->assertTrue(ends_with($url, '.png'));
     }
 
     public function testGetResizerUrl()
@@ -398,6 +394,17 @@ class ImageResizerTest extends PluginTestCase
         // test dots' double-encoding
         // @see https://github.com/wintercms/winter/pull/1493
         $this->assertTrue(ends_with($url, '%252Epng'));
+
+        // Verify the encoded URL round-trips through the resizer route's decoding and
+        // signature verification. A fresh instance is required as the identifier is
+        // cached on first generation and the link policy has changed since then. The
+        // router decodes the parameter once before it reaches getValidResizedUrl().
+        $imageResizer = new ImageResizer((new CmsController())->themeUrl('assets/images/winter.png'));
+        [$identifier, $encodedUrl] = array_slice(explode('/', $imageResizer->getResizerUrl()), 2);
+        $this->assertSame(
+            $imageResizer->getResizedUrl(),
+            ImageResizer::getValidResizedUrl($identifier, rawurldecode($encodedUrl))
+        );
     }
 
     protected function setUpStorage()
