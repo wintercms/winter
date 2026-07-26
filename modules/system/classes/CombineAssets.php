@@ -18,7 +18,9 @@ use Assetic\Filter\CssImportFilter;
 use Assetic\Filter\CssRewriteFilter;
 use Assetic\Filter\JavaScriptMinifierFilter;
 use Assetic\Filter\StylesheetMinifyFilter;
+use Winter\Storm\Filesystem\PathResolver;
 use Winter\Storm\Parse\Assetic\Cache\FilesystemCache;
+use Winter\Storm\Parse\Assetic\Filter\ImportGuard;
 use Winter\Storm\Parse\Assetic\Filter\LessCompiler;
 use Winter\Storm\Parse\Assetic\Filter\ScssCompiler;
 use Winter\Storm\Parse\Assetic\Filter\JavascriptImporter;
@@ -130,30 +132,44 @@ class CombineAssets
             $this->useDeepHashing = Config::get('app.debug', false);
         }
 
+        // Constrain asset import directives to known asset trees. Without these
+        // explicit roots, a writable asset could disclose arbitrary server-readable
+        // files: `@import (inline) "<path>"` in a .less file (GHSA-58fp-mcx6-7qf9),
+        // `=include ../../../.env` in a .js file (GHSA-2223-f22x-24cq), or an
+        // `@import` traversal in a .css file. The asset's own source directory is
+        // always allowed implicitly; this list adds the cross-tree roots that
+        // legitimate themes/plugins/modules actually import from (e.g. a plugin
+        // importing a module asset, or a theme importing its own ../vendor).
+        $allowedImportRoots = [
+            themes_path(),
+            plugins_path(),
+            base_path('modules'),
+        ];
+
         /*
          * Register JavaScript filters
          */
-        $this->registerFilter('js', new JavascriptImporter);
+        $jsImporter = new JavascriptImporter;
+        $jsImporter->setAllowedImportRoots($allowedImportRoots);
+        $this->registerFilter('js', $jsImporter);
 
         /*
          * Register CSS filters
          */
-        $this->registerFilter('css', new CssImportFilter);
+        $cssImportFilter = new CssImportFilter;
+        // Assetic's CssImportFilter resolves `@import` targets relative to the source
+        // with `..` traversal allowed; confine the resolved path to the allowed roots.
+        $cssImportFilter->setImportValidator(function ($path) use ($allowedImportRoots) {
+            $resolved = PathResolver::resolve($path);
+
+            return $resolved !== false
+                && ImportGuard::isAllowed($resolved, null, $allowedImportRoots);
+        });
+        $this->registerFilter('css', $cssImportFilter);
         $this->registerFilter(['css', 'less', 'scss'], new CssRewriteFilter);
 
-        // Constrain @import resolution to known asset trees. Without these
-        // explicit roots, `@import (inline) "<path>"` in a writable .less file
-        // would disclose any server-readable file. The asset's own source root
-        // is always allowed implicitly; this list adds the cross-tree roots
-        // that legitimate themes/plugins actually use (e.g. a plugin importing
-        // a module .less, or a theme importing its own ../vendor). See
-        // GHSA-58fp-mcx6-7qf9.
         $lessCompiler = new LessCompiler;
-        $lessCompiler->setAllowedImportRoots([
-            themes_path(),
-            plugins_path(),
-            base_path('modules'),
-        ]);
+        $lessCompiler->setAllowedImportRoots($allowedImportRoots);
         $this->registerFilter('less', $lessCompiler);
         $this->registerFilter('scss', new ScssCompiler);
 
