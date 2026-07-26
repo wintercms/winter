@@ -1569,9 +1569,10 @@ class RelationController extends ControllerBehavior
             $hydratedModels = $this->relationObject->whereIn($foreignKeyName, $foreignIds)->get();
 
             foreach ($hydratedModels as $hydratedModel) {
-                $this->relationSavePivotModels(
-                    $this->prepareModelsToSave($hydratedModel, $saveData)
-                );
+                $modelsToSave = $this->prepareModelsToSave($hydratedModel, $saveData);
+                foreach ($modelsToSave as $modelToSave) {
+                    $modelToSave->save(null, $this->pivotWidget->getSessionKey());
+                }
             }
         });
 
@@ -1589,9 +1590,10 @@ class RelationController extends ControllerBehavior
          * If any of the models fail to save, abort the whole update
          */
         Db::transaction(function () use ($hydratedModel, $saveData) {
-            $this->relationSavePivotModels(
-                $this->prepareModelsToSave($hydratedModel, $saveData)
-            );
+            $modelsToSave = $this->prepareModelsToSave($hydratedModel, $saveData);
+            foreach ($modelsToSave as $modelToSave) {
+                $modelToSave->save(null, $this->pivotWidget->getSessionKey());
+            }
         });
 
         return ['#'.$this->relationGetId('view') => $this->relationRenderView()];
@@ -1678,50 +1680,6 @@ class RelationController extends ControllerBehavior
     //
     // Helpers
     //
-
-    /**
-     * Saves the models prepared from a pivot form submission.
-     *
-     * Models that already exist and have nothing pending are skipped. `prepareModelsToSave()`
-     * always queues the related model, so a submission containing nothing but pivot data would
-     * otherwise trigger that model's save events - including authorization guards such as
-     * `Backend\Models\User::beforeSave()`.
-     *
-     * A model with deferred bindings is never skipped, even when its own attributes are clean:
-     * committing those bindings is a change to the model's relations, so it must go through the
-     * normal save pipeline and be authorized like any other.
-     */
-    protected function relationSavePivotModels(array $modelsToSave): void
-    {
-        $sessionKey = $this->pivotWidget->getSessionKey();
-
-        foreach ($modelsToSave as $modelToSave) {
-            if (
-                $modelToSave->exists
-                && !$modelToSave->isDirty()
-                && !$this->relationHasDeferredBindings($modelToSave, $sessionKey)
-            ) {
-                continue;
-            }
-
-            $modelToSave->save(null, $sessionKey);
-        }
-    }
-
-    /**
-     * Returns whether the model has any deferred bindings pending for the given session key.
-     */
-    protected function relationHasDeferredBindings($model, string $sessionKey): bool
-    {
-        $binding = new DeferredBinding;
-
-        $binding->setConnection($model->getConnectionName());
-
-        return $binding
-            ->where('master_type', get_class($model))
-            ->where('session_key', $sessionKey)
-            ->exists();
-    }
 
     /**
      * Returns the existing record IDs for the relation.

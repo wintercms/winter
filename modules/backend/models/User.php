@@ -78,6 +78,23 @@ class User extends UserBase
      */
     public static $loginAttribute = 'login';
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // Guard relation writes at the point they actually happen: direct
+        // attach()/detach(), deferred binding commits and queued relation
+        // syncs all funnel through these relation events.
+        $guard = function (string $relationName) {
+            $this->authorizeRelationChange($relationName);
+        };
+
+        $this->bindEvent('model.relation.beforeAttach', $guard);
+        $this->bindEvent('model.relation.beforeDetach', $guard);
+        $this->bindEvent('model.relation.beforeAdd', $guard);
+        $this->bindEvent('model.relation.beforeRemove', $guard);
+    }
+
     /**
      * @return string Returns the user's full name.
      */
@@ -156,9 +173,33 @@ class User extends UserBase
     }
 
     /**
-     * Before save event — enforce authorization rules to prevent privilege escalation.
+     * Before create event — enforce authorization rules to prevent privilege escalation.
      */
-    public function beforeSave()
+    public function beforeCreate()
+    {
+        $this->authorizeChange();
+    }
+
+    /**
+     * Before update event — enforce authorization rules to prevent privilege escalation.
+     *
+     * Bound to update rather than save so that a save with nothing to write (e.g. a
+     * pivot form submission re-saving an untouched related record) requires no
+     * permission: the update event only fires when attributes have actually changed,
+     * after purgeable attributes have been stripped. Relation writes (group
+     * membership, avatar) are guarded separately by authorizeRelationChange().
+     */
+    public function beforeUpdate()
+    {
+        $this->authorizeChange();
+    }
+
+    /**
+     * Enforce authorization rules for a change to this record's attributes.
+     *
+     * @throws AuthorizationException if the current user lacks permission
+     */
+    protected function authorizeChange(): void
     {
         $actor = BackendAuth::getUser();
         if (!$actor) {
@@ -170,6 +211,31 @@ class User extends UserBase
         if ($isCurrentUser && $this->isDirty(['role_id', 'is_superuser', 'permissions'])) {
             throw new AuthorizationException(Lang::get('backend::lang.user.self_escalation_denied'));
         }
+
+        if (!$isCurrentUser && !$this->canBeManagedByUser($actor)) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
+        }
+    }
+
+    /**
+     * Enforce authorization rules for a change to one of this record's relations
+     * (group membership, avatar, etc.).
+     *
+     * Changes to your own record's relations are allowed: groups do not carry
+     * permissions out of the box, so they are not an escalation vector. Plugins
+     * that hang authorization semantics on a relation can bind a stricter guard
+     * to the same `model.relation.*` events.
+     *
+     * @throws AuthorizationException if the current user lacks permission
+     */
+    protected function authorizeRelationChange(string $relationName): void
+    {
+        $actor = BackendAuth::getUser();
+        if (!$actor) {
+            return;
+        }
+
+        $isCurrentUser = $this->exists && $actor->getKey() === $this->getKey();
 
         if (!$isCurrentUser && !$this->canBeManagedByUser($actor)) {
             throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));

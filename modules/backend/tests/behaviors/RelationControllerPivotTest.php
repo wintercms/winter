@@ -16,12 +16,20 @@ use Winter\Storm\Database\Model;
  * Regression coverage for wintercms/winter#1464.
  *
  * `prepareModelsToSave()` always queues the related model, so a pivot form submission that
- * contains nothing but pivot data used to save the related model too. For a belongsToMany
- * relation to `Backend\Models\User` that no-op save tripped `User::beforeSave()`, locking
- * operators without `backend.manage_users` out of editing pivot data entirely.
+ * contains nothing but pivot data saves the related model too. For a belongsToMany relation
+ * to `Backend\Models\User` that no-op save used to trip the authorization guard in
+ * `User::beforeSave()`, locking operators without `backend.manage_users` out of editing
+ * pivot data entirely.
+ *
+ * The fix moves the guard onto the events that correspond to actual writes — create/update
+ * for attributes, the `model.relation.*` events for relation changes — so the pivot handlers
+ * can save every prepared model unconditionally: a save with nothing to write is authorized
+ * for anyone, while any real change is still guarded at the point it happens.
  */
 class RelationControllerPivotTest extends PluginTestCase
 {
+    protected const SESSION_KEY = 'pivottestsessionkey';
+
     protected User $targetUser;
     protected PivotRelationFixture $fixture;
     protected RelationController $behavior;
@@ -48,7 +56,7 @@ class RelationControllerPivotTest extends PluginTestCase
         $this->fixture = PivotRelationFixture::create(['name' => 'Test Fixture']);
         $this->fixture->users()->add($this->targetUser, null, ['is_default' => false]);
 
-        $this->behavior = $this->makeBehavior();
+        $this->behavior = (new \ReflectionClass(RelationController::class))->newInstanceWithoutConstructor();
     }
 
     public function tearDown(): void
@@ -56,24 +64,6 @@ class RelationControllerPivotTest extends PluginTestCase
         PivotRelationFixture::migrateDown();
 
         parent::tearDown();
-    }
-
-    /**
-     * Builds the behavior without its controller, then supplies the only collaborator
-     * `relationSavePivotModels()` uses: the pivot widget's session key.
-     */
-    protected function makeBehavior(): RelationController
-    {
-        $behavior = (new \ReflectionClass(RelationController::class))->newInstanceWithoutConstructor();
-
-        static::setProtectedProperty($behavior, 'pivotWidget', new class {
-            public function getSessionKey(): string
-            {
-                return 'pivottestsessionkey';
-            }
-        });
-
-        return $behavior;
     }
 
     /**
@@ -88,7 +78,8 @@ class RelationControllerPivotTest extends PluginTestCase
     }
 
     /**
-     * Runs the production sequence used by both pivot handlers.
+     * Runs the production sequence used by both pivot handlers: prepare the models
+     * from the submitted data, then save each one under the pivot session key.
      */
     protected function savePivotForm(User $hydratedModel, array $saveData): void
     {
@@ -98,7 +89,9 @@ class RelationControllerPivotTest extends PluginTestCase
             [$hydratedModel, $saveData]
         );
 
-        static::callProtectedMethod($this->behavior, 'relationSavePivotModels', [$modelsToSave]);
+        foreach ($modelsToSave as $modelToSave) {
+            $modelToSave->save(null, static::SESSION_KEY);
+        }
     }
 
     protected function getPivotValue()
@@ -110,8 +103,8 @@ class RelationControllerPivotTest extends PluginTestCase
 
     /**
      * The related model is queued for saving even when the form only submitted pivot data.
-     * This is the underlying cause and is expected — the fix is in what gets saved, not
-     * in what gets queued.
+     * This is expected — a save with nothing to write is harmless now that authorization
+     * happens on the actual write events.
      */
     public function testPrepareModelsToSaveQueuesTheRelatedModelForPivotOnlyData(): void
     {
@@ -167,7 +160,7 @@ class RelationControllerPivotTest extends PluginTestCase
 
     /**
      * A pivot form may also edit fields on the related model. Those changes must still be
-     * written — the fix only skips models that nothing changed.
+     * written.
      */
     public function testRelatedModelIsStillSavedWhenItsOwnFieldsAreEdited(): void
     {
@@ -183,8 +176,7 @@ class RelationControllerPivotTest extends PluginTestCase
     }
 
     /**
-     * The fix must not become an authorization bypass: editing the related model's own
-     * fields without the permission is still refused.
+     * Editing the related model's own fields without the permission is still refused.
      */
     public function testRelatedModelSaveIsStillAuthorizedWhenItsOwnFieldsAreEdited(): void
     {
@@ -199,8 +191,52 @@ class RelationControllerPivotTest extends PluginTestCase
     }
 
     /**
-     * Skipping the save must not drop pending relation work. A deferred binding leaves the
-     * owning model clean, so it would be lost if the model were simply passed over.
+     * A relation field on the related model (saved via `setSimpleValue()`, e.g. a
+     * checkboxlist bound to `groups`) leaves the model's attributes clean and is applied
+     * as a queued sync during the save. The unconditional save must carry it through.
+     */
+    public function testRelatedModelRelationFieldIsStillApplied(): void
+    {
+        $this->actingAs((new UserFixture)->withPermission('backend.manage_users', true));
+
+        $group = UserGroup::create([
+            'name' => 'Test Group',
+            'code' => 'test-group',
+        ]);
+
+        $this->savePivotForm($this->getHydratedRelatedUser(), [
+            'groups' => [$group->id],
+            'pivot' => ['is_default' => true],
+        ]);
+
+        $this->assertEquals(1, $this->targetUser->groups()->count(), 'The queued relation sync was applied');
+        $this->assertEquals(1, $this->getPivotValue());
+    }
+
+    /**
+     * The same queued relation sync is refused without the permission: the guard fires on
+     * the relation write itself, even though the model's attributes are clean.
+     */
+    public function testRelatedModelRelationFieldIsStillAuthorized(): void
+    {
+        $group = UserGroup::create([
+            'name' => 'Test Group',
+            'code' => 'test-group',
+        ]);
+
+        $this->actingAs((new UserFixture)->withPermission('backend.manage_users', false));
+
+        $this->expectException(AuthorizationException::class);
+
+        $this->savePivotForm($this->getHydratedRelatedUser(), [
+            'groups' => [$group->id],
+            'pivot' => ['is_default' => true],
+        ]);
+    }
+
+    /**
+     * A deferred binding leaves the owning model clean; committing it during the save must
+     * still work when the operator is authorized.
      */
     public function testDeferredBindingsAreCommittedForOtherwiseCleanModels(): void
     {
@@ -208,12 +244,12 @@ class RelationControllerPivotTest extends PluginTestCase
 
         $hydrated = $this->getHydratedRelatedUser();
 
-        // Bind a group to the untouched user under the pivot widget's session key
+        // Bind a group to the untouched user under the pivot session key
         $group = UserGroup::create([
             'name' => 'Test Group',
             'code' => 'test-group',
         ]);
-        $hydrated->groups()->add($group, 'pivottestsessionkey');
+        $hydrated->groups()->add($group, static::SESSION_KEY);
 
         $this->assertFalse($hydrated->isDirty(), 'The deferred binding leaves the user clean');
         $this->assertEquals(0, $hydrated->groups()->count(), 'Nothing committed yet');
@@ -225,23 +261,23 @@ class RelationControllerPivotTest extends PluginTestCase
     }
 
     /**
-     * Skipping the save must not become an authorization bypass. A deferred binding leaves the
-     * owning model clean, so a naive skip would commit relation changes - such as adding a user
-     * to a group, which carries permissions - without ever consulting `User::beforeSave()`.
+     * Committing a deferred binding is a relation change to another user's record and must
+     * still be refused without the permission, even though the owning model's attributes
+     * are clean.
      */
     public function testDeferredBindingsAreStillAuthorizedForOtherwiseCleanModels(): void
     {
-        $this->actingAs((new UserFixture)->withPermission('backend.manage_users', false));
-
         $hydrated = $this->getHydratedRelatedUser();
 
         $group = UserGroup::create([
             'name' => 'Test Group',
             'code' => 'test-group',
         ]);
-        $hydrated->groups()->add($group, 'pivottestsessionkey');
+        $hydrated->groups()->add($group, static::SESSION_KEY);
 
         $this->assertFalse($hydrated->isDirty(), 'The deferred binding leaves the user clean');
+
+        $this->actingAs((new UserFixture)->withPermission('backend.manage_users', false));
 
         $this->expectException(AuthorizationException::class);
 
