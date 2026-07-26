@@ -20,7 +20,6 @@ use Assetic\Filter\JavaScriptMinifierFilter;
 use Assetic\Filter\StylesheetMinifyFilter;
 use Winter\Storm\Filesystem\PathResolver;
 use Winter\Storm\Parse\Assetic\Cache\FilesystemCache;
-use Winter\Storm\Parse\Assetic\Filter\ImportGuard;
 use Winter\Storm\Parse\Assetic\Filter\LessCompiler;
 use Winter\Storm\Parse\Assetic\Filter\ScssCompiler;
 use Winter\Storm\Parse\Assetic\Filter\JavascriptImporter;
@@ -163,7 +162,7 @@ class CombineAssets
             $resolved = PathResolver::resolve($path);
 
             return $resolved !== false
-                && ImportGuard::isAllowed($resolved, null, $allowedImportRoots);
+                && PathResolver::withinAny($resolved, $allowedImportRoots);
         });
         $this->registerFilter('css', $cssImportFilter);
         $this->registerFilter(['css', 'less', 'scss'], new CssRewriteFilter);
