@@ -54,7 +54,7 @@ return [
     ],
     'datepicker' => [
         'previousMonth' => 'Vorige maand',
-        'nextMonth' => 'Volgende maan',
+        'nextMonth' => 'Volgende maand',
         'months' => ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'],
         'weekdays' => ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'],
         'weekdaysShort' => ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za']
