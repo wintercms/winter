@@ -77,7 +77,7 @@ return [
         ],
         'numbers' => [
             'all' => 'todas',
-            'filter_button_text' => 'Filtar',
+            'filter_button_text' => 'Filtrar',
             'reset_button_text'  => 'Reiniciar',
             'min_placeholder' => 'Min',
             'max_placeholder' => 'Max'
