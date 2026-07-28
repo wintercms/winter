@@ -42,6 +42,14 @@
                 font-size: @font-size-base - 3;
                 text-align: center;
                 cursor: pointer;
+                user-select: none;
+                border-radius: 2px;
+                transition: background-color 0.15s ease, color 0.15s ease;
+
+                &:hover {
+                    background-color: @color-list-hover-bg;
+                    color: #ffffff;
+                }
             }
         }
 

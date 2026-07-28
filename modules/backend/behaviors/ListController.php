@@ -153,6 +153,7 @@ class ListController extends ControllerBehavior
             'showTree',
             'treeExpanded',
             'customViewPath',
+            'sortable',
         ];
 
         foreach ($configFieldsToTransfer as $field) {
@@ -165,6 +166,42 @@ class ListController extends ControllerBehavior
          * List Widget with extensibility
          */
         $widget = $this->makeWidget(\Backend\Widgets\Lists::class, $columnConfig);
+
+        /*
+         * Drag-and-drop reordering - requires the model to use the Sortable trait.
+         */
+        if (!empty($listConfig->sortable)) {
+            if (!in_array(\Winter\Storm\Database\Traits\Sortable::class, class_uses_recursive($model))) {
+                throw new ApplicationException(sprintf(
+                    'To use "sortable" on a list, the model "%s" must use the %s trait.',
+                    get_class($model),
+                    \Winter\Storm\Database\Traits\Sortable::class
+                ));
+            }
+
+            /*
+             * Drag-and-drop reordering presents every record in a single fixed order, so it
+             * cannot coexist with features that show a partial or re-ordered view. Reject those
+             * combinations up front rather than silently producing a wrong order.
+             */
+            $toolbar = $listConfig->toolbar ?? null;
+            $conflicts = array_keys(array_filter([
+                'toolbar search' => is_array($toolbar) && !empty($toolbar['search']),
+                'filter'         => $listConfig->filter ?? null,
+                'recordsPerPage' => $listConfig->recordsPerPage ?? null,
+                'defaultSort'    => $listConfig->defaultSort ?? null,
+            ]));
+            if ($conflicts) {
+                throw new ApplicationException(sprintf(
+                    'A "sortable" list cannot also use: %s. Drag-and-drop reordering requires the whole list in a fixed order. Remove these options, or use the ReorderController for a dedicated reordering page.',
+                    implode(', ', $conflicts)
+                ));
+            }
+
+            $widget->bindEvent('list.reorder', function ($ids, $orders) use ($model) {
+                $model->setSortableOrder($ids, $orders);
+            });
+        }
 
         $widget->bindEvent('list.extendColumnsBefore', function () use ($widget) {
             $this->controller->listExtendColumnsBefore($widget);
@@ -422,7 +459,7 @@ class ListController extends ControllerBehavior
      *
      * @return array The list element selector as the key, and the list contents are the value.
      */
-    public function listRefresh(string $definition = null)
+    public function listRefresh(?string $definition = null)
     {
         if (!count($this->listWidgets)) {
             $this->makeLists();
@@ -439,7 +476,7 @@ class ListController extends ControllerBehavior
      * Returns the widget used by this behavior.
      * @return \Backend\Classes\WidgetBase
      */
-    public function listGetWidget(string $definition = null)
+    public function listGetWidget(?string $definition = null)
     {
         if (!$definition) {
             $definition = $this->primaryDefinition;
@@ -452,7 +489,7 @@ class ListController extends ControllerBehavior
      * Returns the configuration used by this behavior.
      * @return stdClass
      */
-    public function listGetConfig(string $definition = null)
+    public function listGetConfig(?string $definition = null)
     {
         if (!$definition) {
             $definition = $this->primaryDefinition;

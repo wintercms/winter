@@ -1,6 +1,6 @@
 /*
  * DragComponents plugin
- * 
+ *
  * Data attributes:
  * - data-control="dragcomponents" - enables the plugin on an element
  * - data-option="value" - an option with a value
@@ -8,7 +8,7 @@
  * JavaScript API:
  * $('a#someElement').dragComponents({ option: 'value' })
  *
- * Dependences: 
+ * Dependences:
  * - Some other plugin (filename.js)
  */
 
@@ -23,6 +23,7 @@
         this.$el       = $(element)
 
         var $el = this.$el,
+            widgets = Snowboard['backend.ui.widgetHandler'](),
             $clone,
             $editorArea,
             $editor,
@@ -55,15 +56,17 @@
             $el.addClass(self.options.placeholderClass)
             $clone.show()
             $editorArea = $('#cms-master-tabs > div.tab-content > .tab-pane.active [data-control="codeeditor"]')
-            if (!$editorArea.length) return
+            if (!$editorArea.length) {
+                return
+            }
 
-            $editor = $editorArea.codeEditor('getEditorObject')
-            $editor.focus()
-
-            $editor.on('mousemove', function (event) {
-               editorPos = event.getDocumentPosition()
-               $editor.clearSelection()
-               $editor.moveCursorToPosition(editorPos)
+            $editor = widgets.getWidget($editorArea.get(0));
+            if (!$editor || !$editor.getEditor()) return;
+            $editor.getEditor().focus();
+            editorPos = $editor.getEditor().onMouseMove((event) => {
+                if (event.target && event.target.position) {
+                    $editor.getEditor().setPosition(event.target.position);
+                }
             });
         }
 
@@ -173,7 +176,7 @@
                 $el.click()
 
                 // Can only attach to page or layouts
-                if ($componentList.length && $editor) {
+                if ($componentList.length && $editor && $editor.getEditor()) {
                     // Inject {% component %} tag
                     var alias = $('input[name="component_aliases[]"]', $el).val()
                     $editor.insert("{% component '" + alias + "' %}")
@@ -185,9 +188,8 @@
                 $el.click()
             }
 
-            if ($editor) {
-                $editor.removeAllListeners('mousemove')
-                $editor.blur()
+            if (editorPos) {
+                editorPos.dispose();
             }
 
             if ($componentList.length) {

@@ -80,6 +80,9 @@ class SystemController extends ControllerBase
             throw $ex;
         }
 
-        return redirect()->to($resizedUrl);
+        // Redirect permanently as a resizer URL can only ever target the resized URL
+        // embedded and signed within it, and crawlers should index the resized URL
+        // rather than the temporary resizer URL
+        return redirect()->to($resizedUrl, 301);
     }
 }

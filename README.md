@@ -51,6 +51,7 @@ The development of Winter is lead by [Luke Towers](https://luketowers.ca/), alon
     <td align="center"><a href="https://github.com/bennothommo"><img src="https://avatars.githubusercontent.com/u/15900351?v=3" width="100px;" alt="Ben Thomson"/><br /><sub><b>Ben Thomson</b></sub></a></td>
     <td align="center"><a href="https://github.com/mjauvin"><img src="https://avatars.githubusercontent.com/u/2013630?v=3" width="100px;" alt="Marc Jauvin"/><br /><sub><b>Marc Jauvin</b></sub></a></td>
     <td align="center"><a href="https://github.com/jaxwilko"><img src="https://avatars.githubusercontent.com/u/31214002?v=4" width="100px;" alt="Jack Wilkinson"/><br /><sub><b>Jack Wilkinson</b></sub></a></td>
+    <td align="center"><a href="https://github.com/damsfx"><img src="https://cdn.wintercms.com/media/coins/headshots/19.jpg" width="100px;" alt="Damien Mathieu"/><br /><sub><b>Damien Mathieu</b></sub></a></td>
   </tr>
 </table>
 

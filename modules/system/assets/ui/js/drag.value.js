@@ -92,7 +92,7 @@
 
         var $el = $(this.lastElement)
 
-        if ($el.hasClass('ace_text-input'))
+        if ($el.closest('[data-control=codeeditor]').length)
             return this.handleClickCodeEditor(event, $el)
 
         if (this.lastElement.isContentEditable)
@@ -105,7 +105,10 @@
         var $editorArea = $el.closest('[data-control=codeeditor]')
         if (!$editorArea.length) return
 
-        $editorArea.codeEditor('getEditorObject').insert(this.textValue)
+        var wrapper = $editorArea.data('oc.codeEditor')
+        if (wrapper && wrapper.insert) {
+            wrapper.insert(this.textValue)
+        }
     }
 
     DragValue.prototype.handleClickContentEditable = function() {

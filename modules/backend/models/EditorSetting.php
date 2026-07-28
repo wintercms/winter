@@ -1,10 +1,13 @@
-<?php namespace Backend\Models;
+<?php
 
-use File;
-use Cache;
-use Model;
-use Less_Parser;
+namespace Backend\Models;
+
 use Exception;
+use Illuminate\Support\Facades\Cache;
+use Less_Parser;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Parse\Assetic\Filter\LessImportResolver;
+use Winter\Storm\Support\Facades\File;
 
 /**
  * Editor settings that affect all users
@@ -251,15 +254,22 @@ class EditorSetting extends Model
             Cache::forever($cacheKey, $customCss);
         }
         catch (Exception $ex) {
-            $customCss = '/* ' . $ex->getMessage() . ' */';
+            $customCss = '/* ' . e($ex->getMessage()) . ' */';
         }
 
-        return $customCss;
+        return strip_tags($customCss);
     }
 
     public static function compileCss()
     {
         $parser = new Less_Parser(['compress' => true]);
+
+        // Refuse every @import directive. There is no bundled .less file to
+        // import here, and the admin-supplied html_custom_styles field has no
+        // legitimate use for @import. Without this gate, an @import (inline)
+        // directive in user CSS would disclose server files via the
+        // wikimedia/less.php raw-path fallback. See GHSA-58fp-mcx6-7qf9.
+        $parser->SetImportDirs(['' => LessImportResolver::makeResolver([], null)]);
 
         $customStyles = '.fr-view {';
         $customStyles .= self::get('html_custom_styles');

@@ -1,16 +1,22 @@
-<?php namespace Backend\Controllers;
+<?php
 
-use Mail;
-use Lang;
-use Flash;
-use Backend;
-use Redirect;
-use Response;
-use BackendMenu;
-use BackendAuth;
-use Backend\Models\UserGroup;
+namespace Backend\Controllers;
+
+use Backend\Behaviors\FormController;
+use Backend\Behaviors\ListController;
+use Backend\Behaviors\RelationController;
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Backend\Facades\BackendMenu;
+use Backend\Models\UserGroup;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Str;
 use System\Classes\SettingsManager;
+use Winter\Storm\Support\Facades\Flash;
+use Winter\Storm\Support\Facades\Mail;
 
 /**
  * Backend user controller
@@ -25,8 +31,9 @@ class Users extends Controller
      * @var array Extensions implemented by this controller.
      */
     public $implement = [
-        \Backend\Behaviors\FormController::class,
-        \Backend\Behaviors\ListController::class,
+        FormController::class,
+        ListController::class,
+        RelationController::class,
     ];
 
     /**
@@ -47,10 +54,6 @@ class Users extends Controller
     public function __construct()
     {
         parent::__construct();
-
-        if ($this->action == 'myaccount') {
-            $this->requiredPermissions = null;
-        }
 
         BackendMenu::setContext('Winter.System', 'system', 'users');
         SettingsManager::setContext('Winter.System', 'administrators');
@@ -100,13 +103,25 @@ class Users extends Controller
     }
 
     /**
+     * Before creating a new user, generate password if auto-generate is enabled
+     */
+    public function formBeforeCreate($model)
+    {
+        if (post('User._auto_generate_password')) {
+            $password = Str::random(22);
+            $model->password = $password;
+            $model->password_confirmation = $password;
+        }
+    }
+
+    /**
      * Update controller
      */
     public function update($recordId, $context = null)
     {
-        // Users cannot edit themselves, only use My Settings
+        // Users cannot edit themselves, only use My Account
         if ($context != 'myaccount' && $recordId == $this->user->id) {
-            return Backend::redirect('backend/users/myaccount');
+            return Backend::redirect('backend/myaccount');
         }
 
         return $this->asExtension('FormController')->update($recordId, $context);
@@ -139,7 +154,7 @@ class Users extends Controller
 
         Flash::success(Lang::get('backend::lang.account.impersonate_success'));
 
-        return Backend::redirect('backend/users/myaccount');
+        return Backend::redirect('backend/myaccount');
     }
 
     /**
@@ -157,33 +172,11 @@ class Users extends Controller
     }
 
     /**
-     * My Settings controller
+     * Backward compatibility redirect to the new MyAccount controller.
      */
     public function myaccount()
     {
-        SettingsManager::setContext('Winter.Backend', 'myaccount');
-
-        $this->pageTitle = 'backend::lang.myaccount.menu_label';
-        return $this->update($this->user->id, 'myaccount');
-    }
-
-    /**
-     * Proxy update onSave event
-     */
-    public function myaccount_onSave()
-    {
-        $result = $this->asExtension('FormController')->update_onSave($this->user->id, 'myaccount');
-
-        /*
-         * If the password or login name has been updated, reauthenticate the user
-         */
-        $loginChanged = $this->user->login != post('User[login]');
-        $passwordChanged = strlen(post('User[password]'));
-        if ($loginChanged || $passwordChanged) {
-            BackendAuth::login($this->user->reload(), true);
-        }
-
-        return $result;
+        return Backend::redirect('backend/myaccount');
     }
 
     /**

@@ -11,6 +11,7 @@
 <title data-title-template="<?= empty($this->pageTitleTemplate) ? '%s' : e($this->pageTitleTemplate) ?> | <?= e(Backend\Models\BrandSetting::get('app_name')) ?>">
     <?= e(trans($this->pageTitle)) ?> | <?= e(Backend\Models\BrandSetting::get('app_name')) ?>
 </title>
+<link rel="asset_url" href="<?=  e(Url::asset('')); ?>">
 <?php
 // Styles
 $styles = [
