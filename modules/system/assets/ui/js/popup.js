@@ -214,16 +214,27 @@
 
         if (this.options.zIndex !== null)
             modal.css('z-index', this.options.zIndex + 20)
-        
+
         if (this.options.allowDismiss) {
+            var self = this
             modal.on('mousedown', function(e) {
-                const target = e.target;
-                if (target.classList.contains('control-popup')) {
-                    modal.hide()
-                    $('.popup-backdrop').remove()
-                    $(document.body).removeClass('modal-open')
+                // Only dismiss when the click starts on the modal itself,
+                // i.e. the area next to the dialog. Using mousedown instead
+                // of click so that a drag-select released outside the dialog
+                // does not dismiss the popup.
+                if (e.target !== modal.get(0)) {
+                    return
                 }
-            });
+
+                // Keep the popup open if it contains unsaved changes,
+                // tracked by the change monitor (data-change-monitor)
+                if (modal.find('.oc-data-changed').length) {
+                    self.setShake()
+                    return
+                }
+
+                self.hide()
+            })
         }
 
         return modal.append(modalDialog.append(modalContent))

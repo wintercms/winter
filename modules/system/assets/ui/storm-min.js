@@ -2099,9 +2099,9 @@ if(this.options.size)modalDialog.addClass('size-'+this.options.size)
 if(this.options.adaptiveHeight)modalDialog.addClass('adaptive-height')
 if(this.options.cssClass)modalDialog.addClass(this.options.cssClass)
 if(this.options.zIndex!==null)modal.css('z-index',this.options.zIndex+20)
-if(this.options.allowDismiss){modal.on('mousedown',function(e){const target=e.target;if(target.classList.contains('control-popup')){modal.hide()
-$('.popup-backdrop').remove()
-$(document.body).removeClass('modal-open')}});}return modal.append(modalDialog.append(modalContent))}
+if(this.options.allowDismiss){var self=this
+modal.on('mousedown',function(e){if(e.target!==modal.get(0)){return}if(modal.find('.oc-data-changed').length){self.setShake()
+return}self.hide()})}return modal.append(modalDialog.append(modalContent))}
 Popup.prototype.setContent=function(contents){this.$content.html(contents)
 this.setLoading(false)
 this.show()

@@ -756,18 +756,15 @@ class RelationController extends ControllerBehavior
             $config->recordUrl = $this->getConfig('view[recordUrl]');
             $config->customViewPath = $this->getConfig('view[customViewPath]');
             $config->noRecordsMessage = $this->getConfig('view[noRecordsMessage]');
-            $config->size = $this->getConfig('manage[size]');
-            $config->cssClass = $this->getConfig('manage[cssClass]');
-            $config->allowDismiss = $this->getConfig('manage[allowDismiss]');
 
             $defaultOnClick = sprintf(
-                "$.wn.relationBehavior.clickViewListRecord(':%s', '%s', '%s', '%s', '%s', '%s')",
+                "$.wn.relationBehavior.clickViewListRecord(':%s', '%s', '%s', %s, %s, %s)",
                 $this->relationModel->getKeyName(),
                 $this->relationGetId(),
                 $this->relationGetSessionKey(),
-                $config->size,
-                $config->cssClass,
-                $config->allowDismiss
+                json_encode($this->getConfig('manage[size]', 'huge')),
+                json_encode($this->getConfig('manage[popupClass]')),
+                json_encode((bool) $this->getConfig('manage[allowDismiss]', false))
             );
 
             if ($config->recordUrl) {
