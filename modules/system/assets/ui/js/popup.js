@@ -230,6 +230,13 @@
                 // tracked by the change monitor (data-change-monitor)
                 if (modal.find('.oc-data-changed').length) {
                     self.setShake()
+                    $.wn.flashMsg({
+                        text: $.wn.lang !== undefined
+                            ? $.wn.lang.get('popup.unsaved_changes', 'The popup contains unsaved changes.')
+                            : 'The popup contains unsaved changes.',
+                        class: 'warning',
+                        interval: 3
+                    })
                     return
                 }
 

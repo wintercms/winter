@@ -2101,6 +2101,7 @@ if(this.options.cssClass)modalDialog.addClass(this.options.cssClass)
 if(this.options.zIndex!==null)modal.css('z-index',this.options.zIndex+20)
 if(this.options.allowDismiss){var self=this
 modal.on('mousedown',function(e){if(e.target!==modal.get(0)){return}if(modal.find('.oc-data-changed').length){self.setShake()
+$.wn.flashMsg({text:$.wn.lang!==undefined?$.wn.lang.get('popup.unsaved_changes','The popup contains unsaved changes.'):'The popup contains unsaved changes.',class:'warning',interval:3})
 return}self.hide()})}return modal.append(modalDialog.append(modalContent))}
 Popup.prototype.setContent=function(contents){this.$content.html(contents)
 this.setLoading(false)

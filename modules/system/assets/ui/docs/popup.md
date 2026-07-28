@@ -143,7 +143,7 @@ The partial for your rendered popup should follow this structure:
 - `data-size="large"` - Popup size, available sizes: `giant`, `huge`, `large`, `small`, `tiny`, `adaptive` (will scale to fit the window)
 - `data-adaptive-height="false"` - Allow the popup to fill the height of the screen
 - `data-css-class="my-custom-popup"` - Custom CSS class(es) to apply to the popup dialog
-- `data-allow-dismiss="true"` - Allow the popup to be dismissed by clicking the backdrop area next to it. The popup stays open if it contains unsaved changes tracked by the [change monitor](input-monitor.md)
+- `data-allow-dismiss="true"` - Allow the popup to be dismissed by clicking the backdrop area next to it. If the popup contains unsaved changes tracked by the [change monitor](input-monitor.md), it stays open, shakes and shows a warning flash message instead
 
 ### JavaScript API
 

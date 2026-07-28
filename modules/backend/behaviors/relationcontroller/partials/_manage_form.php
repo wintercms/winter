@@ -5,6 +5,7 @@
             'data-popup-load-indicator' => true,
             'sessionKey' => $newSessionKey,
             'data-request-success' => "$.wn.relationBehavior.changed('" . e($relationField) . "', 'updated')",
+            'data-change-monitor' => $relationAllowDismiss ? 'true' : null,
         ]) ?>
 
             <!-- Passable fields -->
@@ -35,7 +36,8 @@
         <?= Form::ajax('onRelationManageCreate', [
             'data-popup-load-indicator' => true,
             'data-request-success' => "$.wn.relationBehavior.changed('" . e($relationField) . "', 'created')",
-            'sessionKey' => $newSessionKey
+            'sessionKey' => $newSessionKey,
+            'data-change-monitor' => $relationAllowDismiss ? 'true' : null,
         ]) ?>
 
             <!-- Passable fields -->

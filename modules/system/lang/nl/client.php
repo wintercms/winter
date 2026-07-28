@@ -49,6 +49,9 @@ return [
         'cancel_button_text' => 'Annuleren',
         'widget_remove_confirm' => 'Deze widget verwijderen?'
     ],
+    'popup' => [
+        'unsaved_changes' => 'De popup bevat niet-opgeslagen wijzigingen.',
+    ],
     'datepicker' => [
         'previousMonth' => 'Vorige maand',
         'nextMonth' => 'Volgende maan',

@@ -262,6 +262,7 @@ class RelationController extends ControllerBehavior
         $this->vars['relationManageId'] = $this->manageId;
         $this->vars['relationLabel'] = $this->config->label ?: $this->field;
         $this->vars['relationManageTitle'] = $this->manageTitle;
+        $this->vars['relationAllowDismiss'] = (bool) $this->getConfig('manage[allowDismiss]', false);
         $this->vars['relationField'] = $this->field;
         $this->vars['relationType'] = $this->relationType;
         $this->vars['relationSearchWidget'] = $this->searchWidget;
