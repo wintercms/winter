@@ -22,11 +22,6 @@ class FieldSet extends FormWidgetBase
     protected $defaultAlias = 'fieldset';
 
     /**
-     * @var array Form configuration
-     */
-    public $form;
-
-    /**
      * @var array Field configuration
      */
     public $fields;
