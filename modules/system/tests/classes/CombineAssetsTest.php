@@ -169,6 +169,85 @@ class CombineAssetsTest extends TestCase
         }
     }
 
+    /**
+     * Regression for GHSA-2223-f22x-24cq. A writable theme `.js` asset containing
+     * `=include ../../../.env` must not disclose server files through the combiner,
+     * whose output is served unauthenticated via the `combine/{file}` route.
+     */
+    public function testJavascriptImporterBlocksTraversalImport()
+    {
+        $themeDir = $this->makeTempThemeDir();
+        // A real `.js` secret outside the theme subtree (but under base_path so
+        // Assetic's FileAsset root check passes). It escapes via `..` traversal but
+        // lands outside every allowed import root, so it must not be inlined.
+        $secretPath = dirname($themeDir) . '/js-secret-' . bin2hex(random_bytes(4)) . '.js';
+        file_put_contents($secretPath, 'var LEAK = "combine-leak-canary";');
+        file_put_contents(
+            $themeDir . '/assets/poc.js',
+            "/*\n=include ../../" . basename($secretPath) . "\n*/\n"
+        );
+
+        try {
+            $js = $this->compileJsTo($themeDir, 'assets/poc.js');
+            $this->assertStringNotContainsString('combine-leak-canary', $js);
+        } finally {
+            @unlink($secretPath);
+            \File::deleteDirectory($themeDir);
+        }
+    }
+
+    /**
+     * The `.js`-only extension gate must block disclosure of non-JS files (e.g.
+     * `.env`) before any path resolution, even inside an otherwise reachable tree.
+     */
+    public function testJavascriptImporterBlocksDisallowedExtension()
+    {
+        $themeDir = $this->makeTempThemeDir();
+        $secretPath = dirname($themeDir) . '/js-secret-' . bin2hex(random_bytes(4)) . '.env';
+        file_put_contents($secretPath, "APP_KEY=combine-leak-canary\n");
+        file_put_contents(
+            $themeDir . '/assets/poc.js',
+            "/*\n=include ../../" . basename($secretPath) . "\n*/\n"
+        );
+
+        try {
+            $js = $this->compileJsTo($themeDir, 'assets/poc.js');
+            $this->assertStringNotContainsString('combine-leak-canary', $js);
+        } finally {
+            @unlink($secretPath);
+            \File::deleteDirectory($themeDir);
+        }
+    }
+
+    /**
+     * Legitimate same-tree `=include partial.js` must still resolve, otherwise the
+     * hardening would break every asset that composes its own bundle.
+     */
+    public function testJavascriptImporterAllowsSameTreeInclude()
+    {
+        $themeDir = $this->makeTempThemeDir();
+        file_put_contents($themeDir . '/assets/partial.js', 'var PARTIAL = "partial-marker";');
+        file_put_contents($themeDir . '/assets/main.js', "/*\n=include partial.js\n*/\nvar MAIN = 1;");
+
+        try {
+            $js = $this->compileJsTo($themeDir, 'assets/main.js');
+            $this->assertStringContainsString('partial-marker', $js);
+        } finally {
+            \File::deleteDirectory($themeDir);
+        }
+    }
+
+    protected function compileJsTo(string $themeDir, string $relativeAsset): string
+    {
+        $dest = sys_get_temp_dir() . '/winter-combine-out-' . bin2hex(random_bytes(4)) . '.js';
+        try {
+            CombineAssets::instance()->combineToFile([$relativeAsset], $dest, $themeDir);
+            return file_get_contents($dest) ?: '';
+        } finally {
+            @unlink($dest);
+        }
+    }
+
     /** @var string */
     protected $lastSecretPath = '';
 

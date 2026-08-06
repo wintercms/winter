@@ -332,12 +332,14 @@ class ServiceProvider extends ModuleServiceProvider
                 'cms.manage_content' => [
                     'label' => 'cms::lang.permissions.manage_content',
                     'tab' => 'cms::lang.permissions.name',
+                    'comment' => 'cms::lang.permissions.manage_content_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_assets' => [
                     'label' => 'cms::lang.permissions.manage_assets',
                     'tab' => 'cms::lang.permissions.name',
+                    'comment' => 'cms::lang.permissions.manage_assets_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
