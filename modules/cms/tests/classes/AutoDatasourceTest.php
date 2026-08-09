@@ -2,11 +2,14 @@
 
 namespace Cms\Tests\Classes;
 
+use Exception;
 use System\Tests\Bootstrap\PluginTestCase;
 use Cms\Classes\AutoDatasource;
+use Winter\Storm\Database\MemoryCache;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Halcyon\Datasource\DbDatasource;
 use Winter\Storm\Halcyon\Datasource\FileDatasource;
+use Winter\Storm\Support\Facades\DB;
 
 class CmsThemeTemplateFixture extends Model
 {
@@ -58,7 +61,8 @@ class AutoDatasourceTest extends PluginTestCase
             'source' => 'test',
             'path' => 'partials/subdir/test.htm',
             'content' => 'AutoDatasource partials/subdir/test.htm',
-            'file_size' => 39
+            'file_size' => 39,
+            'updated_at' => '2019-06-01 12:00:00'
         ]);
 
         $this->fixtures[] = CmsThemeTemplateFixture::create([
@@ -117,5 +121,94 @@ class AutoDatasourceTest extends PluginTestCase
 
         // One filesystem partial should be marked deleted in database
         $this->assertArrayNotHasKey('nesting/level2.htm', $results);
+    }
+
+    public function testPathCacheValueShapes()
+    {
+        $pathCache = self::getProtectedProperty($this->datasource, 'pathCache');
+
+        // Database records report their last modified time, deleted records report false
+        $this->assertIsInt($pathCache[0]['partials/subdir/test.htm']);
+        $this->assertEquals(
+            strtotime('2019-06-01 12:00:00'),
+            $pathCache[0]['partials/subdir/test.htm']
+        );
+        $this->assertFalse($pathCache[0]['partials/nesting/level2.htm']);
+
+        // Filesystem records continue to report true so that their mtime is resolved live
+        $this->assertTrue($pathCache[1]['partials/layout-partial.htm']);
+    }
+
+    public function testLastModifiedIsServedFromPathCacheWithoutQuerying()
+    {
+        // The duplicate query cache would otherwise mask a query issued by this call
+        MemoryCache::instance()->flush();
+
+        DB::connection()->flushQueryLog();
+        DB::connection()->enableQueryLog();
+
+        $mtime = $this->datasource->lastModified('partials', 'subdir/test', 'htm');
+
+        $queries = DB::connection()->getQueryLog();
+        DB::connection()->disableQueryLog();
+
+        $this->assertEquals(strtotime('2019-06-01 12:00:00'), $mtime);
+        $this->assertCount(0, $queries, 'lastModified() should not query the database');
+    }
+
+    public function testLastModifiedFallsBackToFilesystemDatasource()
+    {
+        $path = base_path('modules/system/tests/fixtures/themes/test/partials/layout-partial.htm');
+
+        $this->assertEquals(
+            filemtime($path),
+            $this->datasource->lastModified('partials', 'layout-partial', 'htm')
+        );
+    }
+
+    public function testLastModifiedIsStableForNullUpdatedAt()
+    {
+        $this->fixtures[] = CmsThemeTemplateFixture::create([
+            'source' => 'test',
+            'path' => 'partials/no-timestamp.htm',
+            'content' => 'AutoDatasource partials/no-timestamp.htm',
+            'file_size' => 40,
+            'updated_at' => null,
+        ]);
+
+        $this->datasource->populateCache(true);
+
+        $pathCache = self::getProtectedProperty($this->datasource, 'pathCache');
+        $cached = $pathCache[0]['partials/no-timestamp.htm'];
+
+        // Records without an updated_at previously resolved to "now" on every call, which
+        // busted the Halcyon cache on every request. The value is now resolved once, when
+        // the path cache is built, and stays fixed until the path cache is rebuilt.
+        $this->assertIsInt($cached);
+        $this->assertEquals($cached, $this->datasource->lastModified('partials', 'no-timestamp', 'htm'));
+    }
+
+    public function testLastModifiedThrowsForDeletedPath()
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('partials/nesting/level2.htm is deleted');
+
+        $this->datasource->lastModified('partials', 'nesting/level2', 'htm');
+    }
+
+    public function testLastModifiedReflectsUpdatesMadeThroughTheDatasource()
+    {
+        $before = $this->datasource->lastModified('partials', 'subdir/test', 'htm');
+
+        $this->datasource->update('partials', 'subdir/test', 'htm', 'Updated content');
+
+        $after = $this->datasource->lastModified('partials', 'subdir/test', 'htm');
+
+        // Editing a template must take effect immediately, without clearing the cache
+        $this->assertGreaterThan($before, $after);
+        $this->assertEquals(
+            'Updated content',
+            $this->datasource->selectOne('partials', 'subdir/test', 'htm')['content']
+        );
     }
 }
