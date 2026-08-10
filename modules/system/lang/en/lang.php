@@ -448,13 +448,16 @@ return [
         'manage_mail_templates' => 'Manage mail templates',
         'manage_mail_settings' => 'Manage mail settings',
         'manage_other_administrators' => 'Manage other administrators',
+        'manage_other_administrators_comment' => 'Allows the user to create, update, and delete other administrator accounts. This permission should only be given to trusted users.',
         'impersonate_users' => 'Impersonate users',
+        'impersonate_users_comment' => 'Allows the user to impersonate other users at their level of access. This permission should only be given to trusted users.',
         'manage_preferences' => 'Manage backend preferences',
         'manage_editor' => 'Manage global code editor preferences',
         'manage_own_editor' => 'Manage personal code editor preferences',
         'view_the_dashboard' => 'View the dashboard',
         'manage_default_dashboard' => 'Manage the default dashboard',
         'manage_branding' => 'Customize the back-end',
+        'manage_branding_comment' => 'This permission allows the user to customize the back-end appearance, including custom CSS content. This may be a security risk if given to an untrusted user.'
     ],
     'log' => [
         'menu_label' => 'Log settings',

@@ -77,7 +77,7 @@ class Index extends Controller
             if ($first = Arr::first(BackendMenu::listMainMenuItems())) {
                 return Redirect::intended($first->url);
             }
-            return Backend::redirect('backend/users/myaccount');
+            return Backend::redirect('backend/myaccount');
         }
     }
 }

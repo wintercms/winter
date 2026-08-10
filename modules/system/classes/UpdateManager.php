@@ -622,6 +622,11 @@ class UpdateManager
             return $this;
         }
 
+        if (!$plugin) {
+            $this->write(Error::class, sprintf('Unable to find plugin %s', $name));
+            return $this;
+        }
+
         if ($stopOnVersion && !$this->versionManager->hasDatabaseVersion($plugin, $stopOnVersion)) {
             throw new ApplicationException(Lang::get('system::lang.updates.plugin_version_not_found'));
         }

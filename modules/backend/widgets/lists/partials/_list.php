@@ -1,4 +1,9 @@
-<div class="control-list list-scrollable" data-control="listwidget">
+<div class="control-list list-scrollable" data-control="listwidget"
+    <?php if ($sortable): ?>
+        data-sortable="true"
+        data-reorder-handler="<?= e($reorderHandler) ?>"
+    <?php endif ?>
+>
     <table class="table data" data-control="rowlink">
         <thead>
             <?php if ($showTotals): ?>

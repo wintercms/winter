@@ -104,6 +104,13 @@ class Lists extends WidgetBase
     public $treeExpanded = false;
 
     /**
+     * @var bool Enable drag-and-drop reordering of records. Requires the model to use the
+     * Sortable trait (model lists) or HasSortableRelations (relation lists). When enabled,
+     * column header sorting and pagination are disabled and a drag handle column is shown.
+     */
+    public $sortable = false;
+
+    /**
      * @var bool|string Display pagination when limiting records per page.
      */
     public $showPagination = 'auto';
@@ -224,6 +231,7 @@ class Lists extends WidgetBase
             'treeExpanded',
             'showPagination',
             'customViewPath',
+            'sortable',
         ]);
 
         /*
@@ -235,6 +243,15 @@ class Lists extends WidgetBase
 
         if ($this->showPagination == 'auto') {
             $this->showPagination = $this->recordsPerPage && $this->recordsPerPage > 0;
+        }
+
+        /*
+         * Drag-and-drop reordering shows every record in its stored order. Disable column
+         * header sorting and pagination so the model/relation order is always presented.
+         */
+        if ($this->sortable) {
+            $this->showSorting = false;
+            $this->showPagination = false;
         }
 
         if ($this->customViewPath) {
@@ -251,6 +268,12 @@ class Lists extends WidgetBase
     protected function loadAssets()
     {
         $this->addJs('js/winter.list.js', 'core');
+
+        // loadAssets() runs before init()/fillFromConfig(), so read the raw config value.
+        if ($this->getConfig('sortable', false)) {
+            $this->addJs('js/dist/winter.list.sortable.js', 'core');
+            $this->addCss('css/winter.list.sortable.css', 'core');
+        }
     }
 
     /**
@@ -281,6 +304,8 @@ class Lists extends WidgetBase
         $this->vars['sortDirection'] = $this->sortDirection;
         $this->vars['showTree'] = $this->showTree;
         $this->vars['treeLevel'] = 0;
+        $this->vars['sortable'] = $this->sortable;
+        $this->vars['reorderHandler'] = $this->sortable ? $this->getEventHandler('onReorder') : null;
 
         if ($this->showPagination) {
             $this->vars['pageCurrent'] = $records->currentPage();
@@ -355,6 +380,57 @@ class Lists extends WidgetBase
     {
         $this->prepareVars();
         return ['#'.$this->getId() => $this->makePartial('list')];
+    }
+
+    /**
+     * Event handler for drag-and-drop reordering of records.
+     *
+     * Receives the record ids in their new order and validates that all ids are within the
+     * current query scope, then fires the `list.reorder` event with sequential 1..N sort
+     * order values (assigned server-side by position) for behaviors to persist.
+     */
+    public function onReorder()
+    {
+        if (!$this->sortable) {
+            throw new ApplicationException('Reordering is not enabled for this list.');
+        }
+
+        $ids = post('record_ids');
+
+        if (!is_array($ids) || !count($ids)) {
+            return;
+        }
+
+        /*
+         * Security: only permit reordering records that are visible within the current
+         * query scope. This prevents a crafted request from reordering arbitrary records.
+         */
+        $allowed = array_flip(array_map('strval', $this->prepareQuery()->pluck($this->model->getQualifiedKeyName())->all()));
+        foreach ($ids as $id) {
+            if (!isset($allowed[(string) $id])) {
+                throw new ApplicationException('One or more records are not available for reordering.');
+            }
+        }
+
+        /*
+         * Sort orders are assigned server-side by position; the list always reorders
+         * positionally, so we never trust client-supplied order values.
+         */
+        $orders = range(1, count($ids));
+
+        /**
+         * @event backend.list.reorder
+         * Called when records are reordered via drag-and-drop. Receives the record ids in
+         * their new order and the sort order values to assign to each.
+         *
+         *     $listWidget->bindEvent('list.reorder', function ($ids, $orders) {
+         *         $model->setSortableOrder($ids, $orders);
+         *     });
+         *
+         */
+        $this->fireSystemEvent('backend.list.reorder', [$ids, $orders]);
+
+        return $this->onRefresh();
     }
 
     /**
@@ -1037,6 +1113,18 @@ class Lists extends WidgetBase
             $this->allColumns = array_merge($orderedDefinitions, $this->allColumns);
         }
 
+        /*
+         * When drag-and-drop reordering is enabled, disable sorting on every column so
+         * getSortColumn() returns false. This keeps the widget from applying its own
+         * orderBy() and preserves the model/relation's stored sort order (it also stops
+         * RelationController from clearing the relation order when a sort column is set).
+         */
+        if ($this->sortable) {
+            foreach ($this->allColumns as $column) {
+                $column->sortable = false;
+            }
+        }
+
         return $this->allColumns;
     }
 
@@ -1137,6 +1225,10 @@ class Lists extends WidgetBase
         }
 
         if ($this->showTree) {
+            $total++;
+        }
+
+        if ($this->sortable) {
             $total++;
         }
 
