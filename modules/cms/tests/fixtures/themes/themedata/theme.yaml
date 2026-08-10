@@ -1,0 +1,9 @@
+name: ThemeData Test
+description: Theme with customization fields, used to test Cms\Models\ThemeData
+
+form:
+    fields:
+        site_name:
+            label: Site name
+            type: text
+            default: Winter
