@@ -181,9 +181,12 @@ class AutoDatasourceTest extends PluginTestCase
         $pathCache = self::getProtectedProperty($this->datasource, 'pathCache');
         $cached = $pathCache[0]['partials/no-timestamp.htm'];
 
-        // Records without an updated_at previously resolved to "now" on every call, which
-        // busted the Halcyon cache on every request. The value is now resolved once, when
-        // the path cache is built, and stays fixed until the path cache is rebuilt.
+        // updated_at is nullable, and Carbon::parse(null) resolves to "now". The value is
+        // resolved once, when the path cache is built, so lastModified() reports it
+        // consistently rather than returning a different result on every call.
+        // Note this does not make the Halcyon cache usable for such records: selectOne()
+        // still resolves their mtime live, so the two disagree and the cache is busted on
+        // every request. That is pre-existing and not addressed here.
         $this->assertIsInt($cached);
         $this->assertEquals($cached, $this->datasource->lastModified('partials', 'no-timestamp', 'htm'));
     }
