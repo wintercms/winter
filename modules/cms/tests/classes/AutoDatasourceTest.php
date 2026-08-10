@@ -191,6 +191,32 @@ class AutoDatasourceTest extends PluginTestCase
         $this->assertEquals($cached, $this->datasource->lastModified('partials', 'no-timestamp', 'htm'));
     }
 
+    public function testRecordsWithAnEpochTimestampRemainAvailable()
+    {
+        $this->fixtures[] = CmsThemeTemplateFixture::create([
+            'source' => 'test',
+            'path' => 'partials/epoch.htm',
+            'content' => 'AutoDatasource partials/epoch.htm',
+            'file_size' => 33,
+            'updated_at' => '1970-01-01 00:00:00',
+        ]);
+
+        $this->datasource->populateCache(true);
+
+        // The path cache carries modification times, but every consumer of it tests the
+        // value for truthiness. A timestamp of 0 must therefore not be stored as-is, or
+        // this live record would read as deleted and disappear.
+        $listed = collect($this->datasource->select('partials', ['columns' => ['fileName']]))
+            ->pluck('fileName')
+            ->all();
+
+        $this->assertContains('epoch.htm', $listed);
+        $this->assertSame(
+            'AutoDatasource partials/epoch.htm',
+            $this->datasource->selectOne('partials', 'epoch', 'htm')['content']
+        );
+    }
+
     public function testLastModifiedThrowsForDeletedPath()
     {
         $this->expectException(Exception::class);
