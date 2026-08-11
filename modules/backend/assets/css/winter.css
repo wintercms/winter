@@ -1106,3 +1106,13 @@ html.cssanimations .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widg
 .flyout-toggle:hover i{color:#fff}
 body.flyout-visible{overflow:hidden}
 body.flyout-visible .flyout-overlay{background-color:rgba(0,0,0,0.3)}
+/* Record navigation (formcontroller/partials/_record_navigation.php) */
+.control-breadcrumb{position:relative}
+.form-record-nav{position:absolute;top:0;bottom:0;right:20px;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;gap:9px;font-size:12px}
+.form-record-nav .form-record-nav-position{color:#5a6b7b;font-weight:600;letter-spacing:.3px;white-space:nowrap}
+.form-record-nav .form-record-nav-group{display:-webkit-inline-box;display:-webkit-inline-flex;display:-ms-inline-flexbox;display:inline-flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;background:rgba(255,255,255,.55);border:1px solid rgba(0,0,0,.09);border-radius:6px;overflow:hidden;box-shadow:0 1px 1px rgba(0,0,0,.03)}
+.form-record-nav .form-record-nav-btn{display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;-webkit-box-pack:center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;width:28px;height:24px;color:#5a6b7b;text-decoration:none;-webkit-transition:background-color .12s ease,color .12s ease;transition:background-color .12s ease,color .12s ease}
+.form-record-nav .form-record-nav-btn+.form-record-nav-btn{border-left:1px solid rgba(0,0,0,.09)}
+.form-record-nav .form-record-nav-btn:not(.is-disabled):hover{background-color:#fff;color:#1f2d3d}
+.form-record-nav .form-record-nav-btn.is-disabled{color:#b6bfc7;cursor:default}
+.form-record-nav .form-record-nav-btn svg{display:block}
