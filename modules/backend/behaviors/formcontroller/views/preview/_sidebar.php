@@ -1,5 +1,6 @@
 <?php Block::put('breadcrumb') ?>
     <?= $this->makeLayoutPartial('breadcrumb') ?>
+    <?= $this->formRenderRecordNavigation() ?>
 <?php Block::endPut() ?>
 
 <?php if (!$this->fatalError): ?>
