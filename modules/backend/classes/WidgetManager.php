@@ -94,6 +94,21 @@ class WidgetManager
     }
 
     /**
+     * Discard the widget state derived from the previous operation.
+     *
+     * listReportWidgets() unsets entries the authenticated user lacks permission for directly from
+     * the cached list, and the list is only rebuilt when it is null. A user without permission for
+     * a widget therefore removed it for every later user the worker served.
+     *
+     * Form widgets are left alone: that list is registration metadata and is not filtered per user.
+     * Both callback registries are preserved so the lists can be rebuilt.
+     */
+    public function resetWorkerState(): void
+    {
+        $this->reportWidgets = null;
+    }
+
+    /**
      * Registers a single form widget.
      * @param string $className Widget class name.
      * @param array $widgetInfo Registration information, can contain a `code` key.

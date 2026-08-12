@@ -151,6 +151,23 @@ class MailManager
     //
 
     /**
+     * Discard the mail state derived from the previous operation.
+     *
+     * The template cache holds database-backed template models, which go stale as soon as a mail
+     * template is edited. The HTML render mode is toggled around a single render and is not
+     * exception-safe, so a throw mid-render would otherwise leave the shared manager rendering in
+     * the wrong mode for every later operation.
+     *
+     * Registration callbacks and the registered template, partial and layout maps are built once
+     * per worker and are deliberately preserved.
+     */
+    public function resetWorkerState(): void
+    {
+        $this->templateCache = [];
+        $this->isHtmlRenderMode = false;
+    }
+
+    /**
      * Render the Markdown template into HTML.
      *
      * @param  string  $content

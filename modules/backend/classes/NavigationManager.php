@@ -62,6 +62,23 @@ class NavigationManager
     }
 
     /**
+     * Discard the navigation state derived from the previous operation.
+     *
+     * loadItems() filters the menu by the authenticated user's permissions and stores the filtered
+     * result, so without this the first user a worker serves would decide the menu for every later
+     * user. Registration callbacks and owner aliases are built once per worker and are deliberately
+     * preserved; dropping them would leave the worker with no navigation at all.
+     */
+    public function resetWorkerState(): void
+    {
+        $this->items = null;
+        $this->quickActions = null;
+        $this->contextOwner = null;
+        $this->contextMainMenuItemCode = null;
+        $this->contextSideMenuItemCode = null;
+    }
+
+    /**
      * Loads the menu items from modules and plugins
      * @return void
      * @throws SystemException

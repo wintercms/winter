@@ -74,6 +74,18 @@ class ComponentManager
     }
 
     /**
+     * Discard the component details derived from the previous operation.
+     *
+     * The details cache holds localised strings and plugin-derived metadata resolved for a
+     * particular request. The code, class and plugin maps are registration data built once per
+     * worker and are deliberately preserved.
+     */
+    public function resetWorkerState(): void
+    {
+        $this->detailsCache = null;
+    }
+
+    /**
      * Manually registers a component for consideration. Usage:
      *
      *     ComponentManager::registerComponents(function ($manager) {

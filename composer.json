@@ -37,6 +37,9 @@
         "laravel/framework": "^12.0",
         "wikimedia/composer-merge-plugin": "~2.1.0"
     },
+    "suggest": {
+        "laravel/octane": "Required to serve Winter from a persistent worker (FrankenPHP, Swoole or RoadRunner)."
+    },
     "require-dev": {
         "phpunit/phpunit": "^11.0",
         "mockery/mockery": "^1.4.4",
