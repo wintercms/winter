@@ -173,6 +173,7 @@ class ServiceProvider extends ModuleServiceProvider
                 'backend.manage_default_dashboard' => [
                     'label' => 'system::lang.permissions.manage_default_dashboard',
                     'tab'   => 'system::lang.permissions.name',
+                    'comment' => 'system::lang.permissions.manage_default_dashboard_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.manage_users' => [
@@ -195,6 +196,7 @@ class ServiceProvider extends ModuleServiceProvider
                 'backend.manage_editor' => [
                     'label' => 'system::lang.permissions.manage_editor',
                     'tab'   => 'system::lang.permissions.name',
+                    'comment' => 'system::lang.permissions.manage_editor_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                 ],
                 'backend.manage_own_editor' => [
