@@ -4,13 +4,6 @@ on:
   push:
     tags:
       - "v[0-9]+.[0-9]+.[0-9]+"
-  # TODO: Temporary, for testing against the Docker repo - remove once verified
-  workflow_dispatch:
-    inputs:
-      version:
-        description: The Winter version to update the Docker image to, ie. v1.2.14
-        required: true
-        type: string
 
 concurrency:
   group: docker-${{ github.workflow }}-${{ github.ref }}
@@ -21,16 +14,8 @@ jobs:
     name: Update Docker image
     runs-on: ubuntu-latest
     env:
-      version: ${{ inputs.version || github.ref_name }}
+      version: ${{ github.ref_name }}
     steps:
-      # TODO: Temporary, only necessary for the manual trigger - remove once verified
-      - name: Validate version
-        run: |
-          if ! echo "$version" | grep -qE "^v[0-9]+\.[0-9]+\.[0-9]+$"; then
-            echo "\"$version\" is not a valid Winter version" >&2
-            exit 1
-          fi
-
       - name: Checkout changes
         uses: actions/checkout@v4
         with:
