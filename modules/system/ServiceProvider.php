@@ -53,7 +53,6 @@ class ServiceProvider extends ModuleServiceProvider
         }
 
         $this->registerSingletons();
-        $this->registerOctane();
         $this->registerPrivilegedActions();
 
         /*
@@ -166,49 +165,6 @@ class ServiceProvider extends ModuleServiceProvider
         $this->app->singleton(\Illuminate\Contracts\Auth\Access\Gate::class, function ($app) {
             return new \Illuminate\Auth\Access\Gate($app, fn () => null);
         });
-    }
-
-    /**
-     * Register Laravel Octane's service provider when the package is installed.
-     *
-     * Winter disables Laravel's package auto-discovery by default (`app.loadDiscoveredPackages`),
-     * so an installed `laravel/octane` would otherwise never register its provider. Without it the
-     * `octane` binding is missing and Octane's own ApplicationGateway fails on every request, so
-     * this registration is a hard prerequisite for worker mode rather than a convenience.
-     *
-     * Registering the provider is inert under PHP-FPM: it binds services and reads configuration
-     * but dispatches no events, because Octane's events are only fired by an Octane worker.
-     */
-    protected function registerOctane(): void
-    {
-        if (!class_exists(\Laravel\Octane\OctaneServiceProvider::class)) {
-            return;
-        }
-
-        $this->app->register(\Laravel\Octane\OctaneServiceProvider::class);
-
-        /*
-         * Attach Winter's reset to the start of every operation, appended after Octane's own
-         * listeners so the new request, application and configuration have already been injected.
-         *
-         * The reset deliberately runs at the start rather than the end. An exception that escapes
-         * the HTTP kernel skips ApplicationGateway::terminate(), so RequestTerminated — and every
-         * listener registered against Octane's OperationTerminated contract — never fires. Cleaning
-         * up on the way in is the only boundary that also holds after a failed operation.
-         *
-         * WorkerErrorOccurred is included so a failed operation is cleaned up promptly rather than
-         * leaving the worker dirty until the next request arrives.
-         */
-        $listener = \System\Classes\Octane\ResetsRequestState::class;
-
-        foreach ([
-            \Laravel\Octane\Events\RequestReceived::class,
-            \Laravel\Octane\Events\TaskReceived::class,
-            \Laravel\Octane\Events\TickReceived::class,
-            \Laravel\Octane\Events\WorkerErrorOccurred::class,
-        ] as $event) {
-            $this->app->make('events')->listen($event, [$listener, 'handle']);
-        }
     }
 
     /**
