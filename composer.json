@@ -37,9 +37,6 @@
         "laravel/framework": "^12.0",
         "wikimedia/composer-merge-plugin": "~2.1.0"
     },
-    "suggest": {
-        "winter/wn-octane-plugin": "Serves Winter from a persistent worker (FrankenPHP, Swoole or RoadRunner) via Laravel Octane."
-    },
     "require-dev": {
         "phpunit/phpunit": "^11.0",
         "mockery/mockery": "^1.4.4",
