@@ -306,9 +306,12 @@ class ImageResizer
                 $origWidth = $size[0];
                 $origHeight = $size[1];
             }
-            @unlink($tempPath);
         } catch (\Exception $ex) {
             // Ignore failures to read source dimensions
+        } finally {
+            if (isset($tempPath)) {
+                @unlink($tempPath);
+            }
         }
 
         return ['width' => $origWidth, 'height' => $origHeight];
