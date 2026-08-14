@@ -25,12 +25,6 @@ parameters:
 			path: modules/cms/classes/Asset.php
 
 		-
-			message: '#^Result of method Cms\\Classes\\CodeParser\:\:handleCorruptCache\(\) \(void\) is used\.$#'
-			identifier: method.void
-			count: 1
-			path: modules/cms/classes/CodeParser.php
-
-		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
 			identifier: new.static
 			count: 2

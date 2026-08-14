@@ -3,34 +3,24 @@
 /*
  * Analysis bootstrap for PHPStan.
  *
- * Two things need registering that a plain composer autoload does not provide:
- *
- * - The modules follow Winter's class loader convention (StudlyCase namespaces over lowercase
- *   directories) rather than composer PSR-4, so a matching autoloader is registered here. PHPStan
- *   only needs it to load classes referenced indirectly, such as alias targets; the module code
- *   itself is discovered through the scanDirectories setting.
- * - Winter registers global class aliases (Model, BackendAuth, and friends) while the application
- *   boots, and module code references the aliases directly. The same alias map is registered here.
+ * The modules are loaded through Winter's own class loader rather than composer, so the same
+ * loader is registered here, mirroring modules/system/tests/bootstrap/app.php. Winter also
+ * registers global class aliases (Model, BackendAuth, and friends) while the application boots,
+ * and module code references the aliases directly, so the alias map is registered as well.
  */
 require __DIR__ . '/vendor/autoload.php';
 
-spl_autoload_register(function (string $class): void {
-    foreach (['System' => 'system', 'Backend' => 'backend', 'Cms' => 'cms'] as $prefix => $directory) {
-        if (str_starts_with($class, $prefix . '\\')) {
-            $parts = explode('\\', substr($class, strlen($prefix) + 1));
-            $file = array_pop($parts) . '.php';
-            $path = __DIR__ . '/modules/' . $directory
-                . '/' . strtolower(implode('/', $parts))
-                . ($parts === [] ? '' : '/') . $file;
+$classLoader = new Winter\Storm\Support\ClassLoader(
+    new Winter\Storm\Filesystem\Filesystem(),
+    __DIR__,
+    __DIR__ . '/storage/framework/classes.php'
+);
 
-            if (is_file($path)) {
-                require_once $path;
-            }
+$classLoader->register();
 
-            return;
-        }
-    }
-});
+foreach (glob(__DIR__ . '/modules/*', GLOB_ONLYDIR) as $modulePath) {
+    $classLoader->autoloadPackage(basename($modulePath), $modulePath);
+}
 
 Illuminate\Foundation\AliasLoader::getInstance(
     require __DIR__ . '/modules/system/aliases.php'

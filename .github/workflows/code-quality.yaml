@@ -42,7 +42,7 @@ jobs:
     name: PHPStan
     steps:
       - name: Checkout changes
-        uses: actions/checkout@v2
+        uses: actions/checkout@v7
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
@@ -59,7 +59,7 @@ jobs:
           git clean -fd
 
       - name: Run static analysis
-        run: vendor/bin/phpstan analyse --no-progress
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=2G
   codeQualityJS:
     runs-on: ubuntu-latest
     name: JavaScript
