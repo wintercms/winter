@@ -279,6 +279,8 @@ class ImageResizer
 
         $origWidth = 0;
         $origHeight = 0;
+        $localPathForExif = null;
+        $tempPath = null;
 
         try {
             if (!$disk->exists($path)) {
@@ -289,22 +291,34 @@ class ImageResizer
                 $localPath = $disk->getPathPrefix() . $path;
                 $size = @getimagesize($localPath);
                 if ($size !== false) {
-                    return ['width' => $size[0], 'height' => $size[1]];
+                    $origWidth = $size[0];
+                    $origHeight = $size[1];
+                    $localPathForExif = $localPath;
+                }
+            } else {
+                $tempDir = temp_path() . '/resizer';
+                $tempPath = $tempDir . '/' . uniqid() . '.' . FileHelper::extension($path);
+
+                if (!FileHelper::isDirectory($tempDir)) {
+                    FileHelper::makeDirectory($tempDir, 0777, true, true);
+                }
+
+                FileHelper::put($tempPath, $disk->get($path));
+                $size = @getimagesize($tempPath);
+                if ($size !== false) {
+                    $origWidth = $size[0];
+                    $origHeight = $size[1];
+                    $localPathForExif = $tempPath;
                 }
             }
 
-            $tempDir = temp_path() . '/resizer';
-            $tempPath = $tempDir . '/' . uniqid() . '.' . FileHelper::extension($path);
-
-            if (!FileHelper::isDirectory($tempDir)) {
-                FileHelper::makeDirectory($tempDir, 0777, true, true);
-            }
-
-            FileHelper::put($tempPath, $disk->get($path));
-            $size = @getimagesize($tempPath);
-            if ($size !== false) {
-                $origWidth = $size[0];
-                $origHeight = $size[1];
+            if ($localPathForExif && function_exists('exif_read_data')) {
+                $exif = @exif_read_data($localPathForExif);
+                if (!empty($exif['Orientation']) && in_array($exif['Orientation'], [1, 3, 6, 8], true)) {
+                    if (in_array($exif['Orientation'], [6, 8], true)) {
+                        [$origWidth, $origHeight] = [$origHeight, $origWidth];
+                    }
+                }
             }
         } catch (\Exception $ex) {
             // Ignore failures to read source dimensions
@@ -1052,12 +1066,16 @@ class ImageResizer
             $origHeight = $sourceDimensions['height'];
 
             if ($origWidth <= 0 || $origHeight <= 0) {
+                // Don't cache failed reads; return fallback directly without caching
+                // so transient errors (network blip, temp file issue) don't become permanent.
                 return ['width' => $config['width'], 'height' => $config['height']];
             }
 
+            // Cache successful reads forever since source image dimensions don't change
             Cache::forever($sourceCacheKey, ['width' => $origWidth, 'height' => $origHeight]);
         }
 
+        // If we have valid source dimensions, compute and cache the result forever
         return Cache::rememberForever($dimensionsCacheKey, function () use ($config, $origWidth, $origHeight) {
             return static::calculateResizedDimensions(
                 $origWidth,
@@ -1103,23 +1121,22 @@ class ImageResizer
             return ['width' => $reqWidth, 'height' => $reqHeight];
         }
 
+        if ($reqWidth <= 0 && $reqHeight <= 0) {
+            return ['width' => $origWidth, 'height' => $origHeight];
+        } elseif ($reqWidth <= 0) {
+            $ratio = $origWidth / $origHeight;
+            return ['width' => (int) ($reqHeight * $ratio), 'height' => $reqHeight];
+        } elseif ($reqHeight <= 0) {
+            $ratio = $origHeight / $origWidth;
+            return ['width' => $reqWidth, 'height' => (int) ($reqWidth * $ratio)];
+        }
+
         switch ($mode) {
             case 'exact':
                 return ['width' => $reqWidth, 'height' => $reqHeight];
 
             case 'crop':
-                if ($reqWidth <= 0 || $reqHeight <= 0) {
-                    return ['width' => $origWidth, 'height' => $origHeight];
-                }
-
-                $heightRatio = $origHeight / $reqHeight;
-                $widthRatio  = $origWidth / $reqWidth;
-                $optimalRatio = $heightRatio < $widthRatio ? $heightRatio : $widthRatio;
-
-                return [
-                    'width' => (int) round($origWidth / $optimalRatio),
-                    'height' => (int) round($origHeight / $optimalRatio),
-                ];
+                return ['width' => $reqWidth, 'height' => $reqHeight];
 
             case 'fit':
                 $ratioW = $reqWidth / $origWidth;
@@ -1146,32 +1163,32 @@ class ImageResizer
 
             case 'auto':
             default:
-                if ($reqWidth > 0 && $reqHeight > 0) {
-                    if ($origHeight < $origWidth) {
-                        $optimalHeight = (int) round($origHeight * ($reqWidth / $origWidth));
-                        return ['width' => $reqWidth, 'height' => $optimalHeight];
-                    } elseif ($origHeight > $origWidth) {
-                        $optimalWidth = (int) round($origWidth * ($reqHeight / $origHeight));
-                        return ['width' => $optimalWidth, 'height' => $reqHeight];
-                    } else {
-                        if ($reqHeight < $reqWidth) {
-                            $optimalHeight = (int) round($origHeight * ($reqWidth / $origWidth));
-                            return ['width' => $reqWidth, 'height' => $optimalHeight];
-                        } elseif ($reqHeight > $reqWidth) {
-                            $optimalWidth = (int) round($origWidth * ($reqHeight / $origHeight));
-                            return ['width' => $optimalWidth, 'height' => $reqHeight];
-                        } else {
-                            return ['width' => $reqWidth, 'height' => $reqHeight];
-                        }
-                    }
-                } elseif ($reqWidth > 0) {
-                    $optimalHeight = (int) round($origHeight * ($reqWidth / $origWidth));
+                if ($reqWidth <= 1 && $reqHeight <= 1) {
+                    return ['width' => $origWidth, 'height' => $origHeight];
+                } elseif ($reqWidth <= 1) {
+                    $ratio = $origWidth / $origHeight;
+                    return ['width' => (int) ($reqHeight * $ratio), 'height' => $reqHeight];
+                } elseif ($reqHeight <= 1) {
+                    $ratio = $origHeight / $origWidth;
+                    return ['width' => $reqWidth, 'height' => (int) ($reqWidth * $ratio)];
+                }
+
+                if ($origHeight < $origWidth) {
+                    $optimalHeight = (int) ($origHeight * ($reqWidth / $origWidth));
                     return ['width' => $reqWidth, 'height' => $optimalHeight];
-                } elseif ($reqHeight > 0) {
-                    $optimalWidth = (int) round($origWidth * ($reqHeight / $origHeight));
+                } elseif ($origHeight > $origWidth) {
+                    $optimalWidth = (int) ($origWidth * ($reqHeight / $origHeight));
                     return ['width' => $optimalWidth, 'height' => $reqHeight];
                 } else {
-                    return ['width' => $origWidth, 'height' => $origHeight];
+                    if ($reqHeight < $reqWidth) {
+                        $optimalHeight = (int) ($origHeight * ($reqWidth / $origWidth));
+                        return ['width' => $reqWidth, 'height' => $optimalHeight];
+                    } elseif ($reqHeight > $reqWidth) {
+                        $optimalWidth = (int) ($origWidth * ($reqHeight / $origHeight));
+                        return ['width' => $optimalWidth, 'height' => $reqHeight];
+                    } else {
+                        return ['width' => $reqWidth, 'height' => $reqHeight];
+                    }
                 }
         }
     }
