@@ -905,6 +905,7 @@ class ImageResizer
         // since the browser will "steal" the configuration with the first request it makes
         // if we pull the configuration data out immediately.
         Cache::forget($cacheKey);
+        Cache::forget($cacheKey . '.dimensions');
 
         return $resizer;
     }
@@ -1031,11 +1032,11 @@ class ImageResizer
         $cacheKey = static::CACHE_PREFIX . $identifier . '.dimensions';
 
         return Cache::rememberForever($cacheKey, function () use ($identifier) {
-            $config = Cache::get(static::CACHE_PREFIX . $identifier);
+        $config = Cache::get(static::CACHE_PREFIX . $identifier);
 
-            if (empty($config) || !isset($config['width'], $config['height'], $config['options']['mode'])) {
-                return ['width' => 0, 'height' => 0];
-            }
+        if (empty($config) || !isset($config['width'], $config['height'], $config['options']['mode'])) {
+            return ['width' => 0, 'height' => 0];
+        }
 
             $sourceDimensions = static::readSourceDimensions(
                 $config['image']['disk'],
