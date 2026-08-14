@@ -1093,6 +1093,10 @@ class ImageResizer
                 return ['width' => $reqWidth, 'height' => $reqHeight];
 
             case 'crop':
+                if ($reqWidth <= 0 || $reqHeight <= 0) {
+                    return ['width' => $origWidth, 'height' => $origHeight];
+                }
+
                 $heightRatio = $origHeight / $reqHeight;
                 $widthRatio  = $origWidth / $reqWidth;
                 $optimalRatio = $heightRatio < $widthRatio ? $heightRatio : $widthRatio;
