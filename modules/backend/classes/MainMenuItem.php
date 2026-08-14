@@ -6,6 +6,8 @@ use Winter\Storm\Exception\SystemException;
  * Class MainMenuItem
  *
  * @package Backend\Classes
+ *
+ * @phpstan-consistent-constructor
  */
 class MainMenuItem
 {
