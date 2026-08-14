@@ -526,6 +526,32 @@ class ImageResizerTest extends PluginTestCase
         $this->assertSame(100, $dimensions['height']);
     }
 
+    public function testFilterGetDimensionsFromAbsoluteResizerUrl()
+    {
+        if (!in_array('Cms', Config::get('cms.loadModules', []))) {
+            $this->markTestSkipped('The CMS module is not active.');
+        }
+
+        $this->setUpStorage();
+        $this->copyMedia();
+
+        Config::set('cms.linkPolicy', 'force');
+
+        $imageResizer = new ImageResizer(
+            URL::to(MediaLibrary::url('winter.png')),
+            100,
+            100
+        );
+        $resizerUrl = $imageResizer->getResizerUrl();
+
+        $this->assertStringStartsWith('http', $resizerUrl);
+
+        $dimensions = ImageResizer::filterGetDimensions($resizerUrl);
+
+        $this->assertSame(100, $dimensions['width']);
+        $this->assertSame(100, $dimensions['height']);
+    }
+
     protected function setUpStorage()
     {
         $this->app->useStoragePath(base_path('storage/temp'));

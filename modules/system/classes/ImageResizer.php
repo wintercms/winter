@@ -975,8 +975,11 @@ class ImageResizer
         try {
             $resizer = new static($image);
         } catch (\SystemException $ex) {
-            if (is_string($image) && str_starts_with($image, '/resizer/')) {
-                return static::getDimensionsFromResizerUrl($image);
+            if (is_string($image)) {
+                $path = parse_url($image, PHP_URL_PATH);
+                if ($path && str_starts_with($path, '/resizer/')) {
+                    return static::getDimensionsFromResizerUrl($image);
+                }
             }
             return ['width' => 0, 'height' => 0];
         }
