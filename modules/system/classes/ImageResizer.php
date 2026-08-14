@@ -906,6 +906,7 @@ class ImageResizer
         // if we pull the configuration data out immediately.
         Cache::forget($cacheKey);
         Cache::forget($cacheKey . '.dimensions');
+        Cache::forget($cacheKey . '.source');
 
         return $resizer;
     }
@@ -1029,14 +1030,20 @@ class ImageResizer
      */
     protected static function computeCachedDimensions(string $identifier): array
     {
-        $cacheKey = static::CACHE_PREFIX . $identifier . '.dimensions';
         $config = Cache::get(static::CACHE_PREFIX . $identifier);
 
         if (empty($config) || !isset($config['width'], $config['height'], $config['options']['mode'])) {
             return ['width' => 0, 'height' => 0];
         }
 
-        return Cache::rememberForever($cacheKey, function () use ($config) {
+        $sourceCacheKey = static::CACHE_PREFIX . $identifier . '.source';
+        $dimensionsCacheKey = static::CACHE_PREFIX . $identifier . '.dimensions';
+
+        $cachedSource = Cache::get($sourceCacheKey);
+        if ($cachedSource !== null) {
+            $origWidth = $cachedSource['width'];
+            $origHeight = $cachedSource['height'];
+        } else {
             $sourceDimensions = static::readSourceDimensions(
                 $config['image']['disk'],
                 $config['image']['path']
@@ -1044,6 +1051,14 @@ class ImageResizer
             $origWidth = $sourceDimensions['width'];
             $origHeight = $sourceDimensions['height'];
 
+            if ($origWidth <= 0 || $origHeight <= 0) {
+                return ['width' => $config['width'], 'height' => $config['height']];
+            }
+
+            Cache::forever($sourceCacheKey, ['width' => $origWidth, 'height' => $origHeight]);
+        }
+
+        return Cache::rememberForever($dimensionsCacheKey, function () use ($config, $origWidth, $origHeight) {
             return static::calculateResizedDimensions(
                 $origWidth,
                 $origHeight,
