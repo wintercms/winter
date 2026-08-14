@@ -1,0 +1,73 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: modules/backend/classes/MainMenuItem.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: modules/backend/classes/QuickActionItem.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: modules/backend/classes/SideMenuItem.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 2
+			path: modules/cms/classes/Asset.php
+
+		-
+			message: '#^Result of method Cms\\Classes\\CodeParser\:\:handleCorruptCache\(\) \(void\) is used\.$#'
+			identifier: method.void
+			count: 1
+			path: modules/cms/classes/CodeParser.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 2
+			path: modules/cms/classes/ComponentPartial.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 1
+			path: modules/cms/classes/Controller.php
+
+		-
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
+			count: 3
+			path: modules/system/classes/ImageResizer.php
+
+		-
+			message: '#^Call to an undefined method System\\Classes\\Asset\\BundleManager\:\:argument\(\)\.$#'
+			identifier: method.notFound
+			count: 2
+			path: modules/system/classes/asset/BundleManager.php
+
+		-
+			message: '#^Call to an undefined method System\\Classes\\Asset\\BundleManager\:\:getFixture\(\)\.$#'
+			identifier: method.notFound
+			count: 7
+			path: modules/system/classes/asset/BundleManager.php
+
+		-
+			message: '#^Call to an undefined method System\\Classes\\Asset\\BundleManager\:\:option\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: modules/system/classes/asset/BundleManager.php
+
+		-
+			message: '#^Call to an undefined method System\\Classes\\Asset\\BundleManager\:\:writeFile\(\)\.$#'
+			identifier: method.notFound
+			count: 4
+			path: modules/system/classes/asset/BundleManager.php

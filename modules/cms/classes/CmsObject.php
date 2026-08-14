@@ -199,7 +199,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
      * Save the object to the theme.
      *
      * @param  array  $options
-     * @return bool
+     * @return void
      */
     public function save(?array $options = null)
     {
