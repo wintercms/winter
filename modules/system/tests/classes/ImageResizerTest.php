@@ -5,6 +5,7 @@ namespace System\Tests\Classes;
 use Backend\Facades\Backend;
 use Cms\Classes\Controller as CmsController;
 use Cms\Classes\Theme;
+use Cache;
 use Config;
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use Event;
@@ -41,6 +42,8 @@ class ImageResizerTest extends PluginTestCase
         Config::set('cms.themesPath', $this->originalThemesPath);
 
         ImageResizer::flushAvailableSources();
+        Cache::flush();
+
         parent::tearDown();
     }
 
@@ -434,6 +437,93 @@ class ImageResizerTest extends PluginTestCase
 
         // Clean up the generated image
         Storage::disk('test_local')->deleteDirectory('resized');
+    }
+
+    public function testCalculateResizedDimensionsMatchesDefaultResizer()
+    {
+        if (!in_array('Cms', Config::get('cms.loadModules', []))) {
+            $this->markTestSkipped('The CMS module is not active.');
+        }
+
+        $imagePath = base_path('modules/system/tests/fixtures/plugins/database/tester/assets/images/avatar.png');
+
+        $resizer = new \Winter\Storm\Database\Attach\Resizer($imagePath);
+        $modes = ['exact', 'portrait', 'landscape', 'auto', 'fit', 'crop'];
+        $reqWidth = 200;
+        $reqHeight = 150;
+
+        $stormGetDimensions = new \ReflectionMethod($resizer, 'getDimensions');
+        $stormGetDimensions->setAccessible(true);
+        $stormWidth = new \ReflectionProperty($resizer, 'width');
+        $stormWidth->setAccessible(true);
+        $stormHeight = new \ReflectionProperty($resizer, 'height');
+        $stormHeight->setAccessible(true);
+        $winterMethod = new \ReflectionMethod(ImageResizer::class, 'calculateResizedDimensions');
+        $winterMethod->setAccessible(true);
+
+        foreach ($modes as $mode) {
+            $resizer->setOptions(['mode' => $mode]);
+            $expected = $stormGetDimensions->invoke($resizer, $reqWidth, $reqHeight);
+            $expected = ['width' => (int) $expected[0], 'height' => (int) $expected[1]];
+
+            $calculated = $winterMethod->invoke(
+                null,
+                $stormWidth->getValue($resizer),
+                $stormHeight->getValue($resizer),
+                $reqWidth,
+                $reqHeight,
+                $mode
+            );
+
+            $this->assertSame($expected, $calculated, "Mode $mode output should match DefaultResizer");
+        }
+    }
+
+    public function testFilterGetDimensionsReturnsFallbackForMissingImage()
+    {
+        $this->assertSame(['width' => 0, 'height' => 0], ImageResizer::filterGetDimensions(
+            '/plugins/database/tester/assets/images/MISSING.png'
+        ));
+    }
+
+    public function testFilterGetDimensionsReturnsOriginalWhenNoResizeRequested()
+    {
+        if (!in_array('Cms', Config::get('cms.loadModules', []))) {
+            $this->markTestSkipped('The CMS module is not active.');
+        }
+
+        $this->setUpStorage();
+        $this->copyMedia();
+
+        $url = URL::to(MediaLibrary::url('winter.png'));
+        $dimensions = ImageResizer::filterGetDimensions($url);
+
+        $this->assertSame(310, $dimensions['width']);
+        $this->assertSame(310, $dimensions['height']);
+    }
+
+    public function testFilterGetDimensionsFromResizerUrl()
+    {
+        if (!in_array('Cms', Config::get('cms.loadModules', []))) {
+            $this->markTestSkipped('The CMS module is not active.');
+        }
+
+        $this->setUpStorage();
+        $this->copyMedia();
+
+        $imageResizer = new ImageResizer(
+            URL::to(MediaLibrary::url('winter.png')),
+            100,
+            100
+        );
+        $resizerUrl = $imageResizer->getResizerUrl();
+
+        $this->assertStringStartsWith('/resizer/', $resizerUrl);
+
+        $dimensions = ImageResizer::filterGetDimensions($resizerUrl);
+
+        $this->assertSame(100, $dimensions['width']);
+        $this->assertSame(100, $dimensions['height']);
     }
 
     protected function setUpStorage()
