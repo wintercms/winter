@@ -59,9 +59,7 @@ jobs:
           git clean -fd
 
       - name: Run static analysis
-        run: |
-          wget -q -O phpstan.phar https://github.com/phpstan/phpstan/releases/latest/download/phpstan.phar
-          php phpstan.phar analyse --no-progress
+        run: vendor/bin/phpstan analyse --no-progress
   codeQualityJS:
     runs-on: ubuntu-latest
     name: JavaScript

@@ -1,4 +1,5 @@
 includes:
+    - vendor/larastan/larastan/extension.neon
     - phpstan-baseline.neon
 
 parameters:
@@ -15,3 +16,4 @@ parameters:
     scanDirectories:
         - modules
     treatPhpDocTypesAsCertain: false
+    disableSchemaScan: true

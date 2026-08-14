@@ -614,7 +614,7 @@ class VersionManager
     protected function write($component, ...$arguments)
     {
         if ($this->notesOutput !== null) {
-            with(new $component($this->notesOutput))->render(...$arguments);
+            (new $component($this->notesOutput))->render(...$arguments);
         }
 
         return $this;
