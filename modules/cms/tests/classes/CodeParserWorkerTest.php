@@ -53,7 +53,7 @@ class CodeParserWorkerTest extends TestCase
         $this->assertNotSame(
             $first,
             $second,
-            'Each rebuild generates a random class name, so the two must differ — otherwise this test '
+            'Each rebuild generates a random class name, so the two must differ, otherwise this test '
             . 'would pass for the wrong reason.'
         );
         $this->assertTrue(
