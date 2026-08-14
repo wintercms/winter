@@ -3,6 +3,7 @@
 namespace Backend\Tests\Classes;
 
 use Backend\Controllers\Auth;
+use Backend\Tests\Fixtures\Controllers\PostbackTestController;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use Illuminate\Support\Facades\Request;
 use System\Tests\Bootstrap\PluginTestCase;
@@ -142,6 +143,105 @@ class ControllerPostbackTest extends PluginTestCase
         $this->expectException(SystemException::class);
         $this->expectExceptionMessage('Invalid AJAX handler name: generatePermissionsField.');
         $controller->run('signin');
+    }
+
+    public function testPostbackWithoutAResponseStillRendersThePage(): void
+    {
+        $this->actingAs((new UserFixture)->asSuperUser());
+        Config::set('cms.enableCsrfProtection', false);
+
+        $controller = new PostbackTestController;
+        Request::swap($this->configPostbackRequestMock('onNoop'));
+
+        $response = $controller->run('index');
+        $content = is_object($response) && method_exists($response, 'getContent')
+            ? $response->getContent()
+            : (string) $response;
+
+        $this->assertStringContainsString(
+            'POSTBACK_FIXTURE_INDEX',
+            $content,
+            'A postback whose handler returns no response must still render the action page.'
+        );
+        $this->assertSame(1, $controller->handlerRuns, 'the handler must run exactly once');
+        $this->assertSame(1, $controller->actionRuns, 'the action must run exactly once');
+    }
+
+    public function testWidgetPostbackDoesNotRunTheActionTwice(): void
+    {
+        $this->actingAs((new UserFixture)->asSuperUser());
+        Config::set('cms.enableCsrfProtection', false);
+
+        $controller = new PostbackTestController;
+        Request::swap($this->configPostbackRequestMock('postbackwidget::onWidgetNoop'));
+
+        $caught = null;
+
+        try {
+            $controller->run('index');
+        }
+        catch (SystemException $ex) {
+            $caught = $ex;
+        }
+
+        $this->assertSame(
+            1,
+            $controller->actionRuns,
+            'widget handler dispatch already ran the action; it must not run again'
+        );
+        $this->assertSame(1, $controller->widget->postbackwidget->handlerRuns, 'the widget handler must run exactly once');
+        $this->assertInstanceOf(SystemException::class, $caught, 'the unrenderable postback must fail visibly');
+        $this->assertStringContainsString('produced no response', $caught->getMessage());
+    }
+
+    public function testMissingHandlerDiscoveryDoesNotRunTheActionTwice(): void
+    {
+        $this->actingAs((new UserFixture)->asSuperUser());
+        Config::set('cms.enableCsrfProtection', false);
+
+        $controller = new PostbackTestController;
+        Request::swap($this->configPostbackRequestMock('onNotDefinedAnywhere'));
+
+        $caught = null;
+
+        try {
+            $controller->run('index');
+        }
+        catch (SystemException $ex) {
+            $caught = $ex;
+        }
+
+        $this->assertSame(
+            1,
+            $controller->actionRuns,
+            'handler discovery already ran the action while searching widgets; it must not run again'
+        );
+        $this->assertInstanceOf(SystemException::class, $caught, 'the unrenderable postback must fail visibly');
+    }
+
+    public function testHandlerNamingTheActionItselfDoesNotRunTwice(): void
+    {
+        $this->actingAs((new UserFixture)->asSuperUser());
+        Config::set('cms.enableCsrfProtection', false);
+
+        $controller = new PostbackTestController;
+        Request::swap($this->configPostbackRequestMock('onSelfHandled'));
+
+        $caught = null;
+
+        try {
+            $controller->run('onSelfHandled');
+        }
+        catch (SystemException $ex) {
+            $caught = $ex;
+        }
+
+        $this->assertSame(
+            1,
+            $controller->actionRuns,
+            'the handler already ran the method; the page action must not run it again'
+        );
+        $this->assertInstanceOf(SystemException::class, $caught, 'the unrenderable postback must fail visibly');
     }
 
     public function testPostbackPathRejectsActionPrefixedHandler(): void

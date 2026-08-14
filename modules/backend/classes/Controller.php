@@ -64,6 +64,11 @@ class Controller extends ControllerBase
     public $suppressView = false;
 
     /**
+     * @var bool Whether the page action has been executed during this request.
+     */
+    protected $actionExecuted = false;
+
+    /**
      * @var array Routed parameters.
      */
     protected $params;
@@ -307,6 +312,8 @@ class Controller extends ControllerBase
          */
         $this->setNavigationContext($action, $params);
 
+        $result = null;
+
         /*
          * Execute AJAX event
          */
@@ -328,6 +335,23 @@ class Controller extends ControllerBase
                 $handlerResponse !== true
             ) {
                 $result = $handlerResponse;
+            }
+            elseif (!$this->actionExecuted && strtolower($handler) !== strtolower($action)) {
+                // The handler produced no response and the action has not run, so render
+                // the page as a normal request would. Previously this errored on an
+                // undefined variable.
+                $result = $this->execPageAction($action, $params);
+            }
+            else {
+                // The action already ran while dispatching the handler: through widget or
+                // handler discovery with its view suppressed, or because the handler names
+                // the action itself. Running it again would repeat its side effects, and
+                // its result was not retained, so fail visibly as this path always has,
+                // with a message in place of an undefined variable error.
+                throw new SystemException(sprintf(
+                    'The %s postback handler produced no response.',
+                    $handler
+                ));
             }
         }
 
@@ -429,6 +453,8 @@ class Controller extends ControllerBase
      */
     protected function execPageAction($actionName, $parameters)
     {
+        $this->actionExecuted = true;
+
         $result = null;
 
         if (!$this->actionExists($actionName)) {
