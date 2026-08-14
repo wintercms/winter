@@ -28,6 +28,7 @@ nbproject
 !.devcontainer/.vscode
 _ide_helper.php
 *.code-workspace
+.zed
 
 # Other ignores
 .DS_Store

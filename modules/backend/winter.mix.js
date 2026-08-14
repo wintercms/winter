@@ -49,6 +49,12 @@ mix
         './formwidgets/sensitive/assets/js/dist/sensitive.js',
     )
 
+    // Compile the list widget drag-and-drop reordering bundle (includes SortableJS)
+    .js(
+        './widgets/lists/assets/js/src/winter.list.sortable.js',
+        './widgets/lists/assets/js/dist/winter.list.sortable.js',
+    )
+
     // Compile pages
     .js(
         './assets/ui/js/pages/Preferences.js',
