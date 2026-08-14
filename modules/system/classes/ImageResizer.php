@@ -1030,14 +1030,13 @@ class ImageResizer
     protected static function computeCachedDimensions(string $identifier): array
     {
         $cacheKey = static::CACHE_PREFIX . $identifier . '.dimensions';
-
-        return Cache::rememberForever($cacheKey, function () use ($identifier) {
         $config = Cache::get(static::CACHE_PREFIX . $identifier);
 
         if (empty($config) || !isset($config['width'], $config['height'], $config['options']['mode'])) {
             return ['width' => 0, 'height' => 0];
         }
 
+        return Cache::rememberForever($cacheKey, function () use ($config) {
             $sourceDimensions = static::readSourceDimensions(
                 $config['image']['disk'],
                 $config['image']['path']
