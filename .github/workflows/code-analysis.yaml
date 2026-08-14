@@ -1,0 +1,50 @@
+name: Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 1.0
+      - 1.1
+      - 1.2
+      - develop
+
+concurrency:
+  group: phpstan-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  codeAnalysis:
+    runs-on: ubuntu-latest
+    name: Code Analysis
+    env:
+      extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
+    steps:
+      - name: Checkout changes
+        uses: actions/checkout@v7
+
+      - name: Install PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: ${{ env.extensions }}
+          coverage: none
+
+      - name: Configure Composer GitHub token
+        run: composer config --global --auth github-oauth.github.com ${{ secrets.COMPOSER_GITHUB_TOKEN }}
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction --no-progress --no-scripts
+
+      # composer/installers places the module packages into modules/, which clobbers the
+      # checked-out module changes; restore the working tree the same way tests.yml does.
+      - name: Reset modules
+        run: |
+          git reset --hard
+          git clean -fd
+
+      - name: Clear phpstan cache
+        run: vendor/bin/phpstan clear-result-cache
+
+      - name: Analyse code
+        run: vendor/bin/phpstan analyse --memory-limit=2G --no-progress
