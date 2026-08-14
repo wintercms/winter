@@ -41,7 +41,7 @@ class BackendController extends ControllerBase
     public $implement;
 
     /**
-     * @var string Allows early access to page action.
+     * @var string|null Allows early access to page action.
      */
     public static $action;
 
