@@ -490,6 +490,8 @@ class AutoDatasource extends Datasource implements DatasourceInterface
      */
     public function delete(string $dirName, string $fileName, string $extension): bool
     {
+        $success = false;
+
         try {
             // Delete from only the active datasource
             if ($this->forceDeleting) {

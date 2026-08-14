@@ -20,6 +20,12 @@ use Winter\Storm\Support\Facades\Url;
  * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
  * @author Winter CMS
+ *
+ * @mixin \System\Behaviors\SettingsModel
+ * @method static static instance()
+ * @method static bool isConfigured()
+ * @method static mixed get(string $key, mixed $default = null)
+ * @method static void resetDefault()
  */
 class BrandSetting extends Model
 {

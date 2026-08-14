@@ -10,6 +10,8 @@ use Winter\Storm\Filesystem\Definitions as FileDefinitions;
  *
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
+ *
+ * @method static \Winter\Storm\Halcyon\Builder sortBy(string $column, string $direction = 'asc')
  */
 class Page extends CmsCompoundObject
 {

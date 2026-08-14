@@ -8,6 +8,12 @@ use Model;
  *
  * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
+ *
+ * @mixin \System\Behaviors\SettingsModel
+ * @method static static instance()
+ * @method static bool isConfigured()
+ * @method static mixed get(string $key, mixed $default = null)
+ * @method static void resetDefault()
  */
 class MailSetting extends Model
 {

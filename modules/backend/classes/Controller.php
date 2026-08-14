@@ -307,6 +307,8 @@ class Controller extends ControllerBase
          */
         $this->setNavigationContext($action, $params);
 
+        $result = null;
+
         /*
          * Execute AJAX event
          */

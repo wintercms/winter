@@ -9,10 +9,38 @@ parameters:
         - modules/backend/models
         - modules/cms/classes
         - modules/cms/models
-    level: 0
+    level: 1
     bootstrapFiles:
         - phpstan-bootstrap.php
     scanDirectories:
         - modules
+    excludePaths:
+        # View partials inside model directories; templates, not classes
+        - modules/*/models/*/*
+    universalObjectCratesClasses:
+        # Model attributes are database columns and settings values resolved through magic
+        # accessors; typing them per model is the level-2+ ratchet, not a level-1 gate
+        - Winter\Storm\Database\Model
+        - Winter\Storm\Halcyon\Model
+    stubFiles:
+        - phpstan-stubs/EventFacade.stub
     treatPhpDocTypesAsCertain: false
     disableSchemaScan: true
+    ignoreErrors:
+        # The SettingsModel behavior provides get($key, $default), reached through Winter's
+        # static extendable dispatch; larastan resolves model statics to the query builder
+        # first, whose get($columns) has a different arity, and that resolution outranks a
+        # per-class @method annotation when the names collide.
+        -
+            message: '#^Static method Winter\\Storm\\Database\\Builder\:\:get\(\) invoked with 2 parameters#'
+            paths:
+                - modules/backend/models/BrandSetting.php
+                - modules/cms/classes/Controller.php
+                - modules/cms/models/MaintenanceSetting.php
+                - modules/system/models/MailBrandSetting.php
+        # parent::resetDefault() lands on the SettingsModel behavior through Extendable's
+        # __call dispatch, which static analysis cannot follow through the parent reference.
+        -
+            message: '#^Call to an undefined static method Winter\\Storm\\Database\\Model\:\:resetDefault\(\)#'
+            paths:
+                - modules/backend/models/Preference.php

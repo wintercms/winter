@@ -258,6 +258,8 @@ class PluginManager
             return;
         }
 
+        $pluginId = null;
+
         try {
             foreach ($this->plugins as $pluginId => $plugin) {
                 $this->registerPlugin($plugin, $pluginId);
@@ -330,7 +332,7 @@ class PluginManager
          */
         $configPath = $pluginPath . '/config';
         if (File::isDirectory($configPath)) {
-            Config::package($pluginNamespace, $configPath, $pluginNamespace);
+            Config::package($pluginNamespace, $configPath);
         }
 
         /*
@@ -380,6 +382,8 @@ class PluginManager
         if ($this->booted && !$force) {
             return;
         }
+
+        $pluginId = null;
 
         try {
             foreach ($this->plugins as $pluginId => $plugin) {

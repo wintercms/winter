@@ -13,6 +13,8 @@ use Exception;
  *
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
+ *
+ * @method \Winter\Storm\Database\Relations\AttachOne uploaded_file()
  */
 class ThemeImport extends Model
 {

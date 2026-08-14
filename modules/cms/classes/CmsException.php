@@ -67,6 +67,8 @@ class CmsException extends ApplicationException
      */
     public function processCompoundObject(Throwable $exception)
     {
+        $result = false;
+
         switch ($this->code) {
             case 200:
                 $result = $this->processIni($exception);

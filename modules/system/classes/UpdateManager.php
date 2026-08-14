@@ -424,7 +424,7 @@ class UpdateManager
     public function getBuildNumberManually($detailed = false)
     {
         $source = new SourceManifest();
-        $manifest = new FileManifest(null, null, true);
+        $manifest = new FileManifest();
 
         // Find build by comparing with source manifest
         return $source->compare($manifest, $detailed);
@@ -853,6 +853,8 @@ class UpdateManager
         $build = Parameter::get('system::core.build');
 
         // Determine branch
+        $branch = null;
+
         if (!is_null($build)) {
             $branch = explode('.', $build);
             array_pop($branch);

@@ -14,6 +14,12 @@ use Winter\Storm\Support\Facades\File;
  *
  * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
+ *
+ * @mixin \System\Behaviors\SettingsModel
+ * @method static static instance()
+ * @method static bool isConfigured()
+ * @method static mixed get(string $key, mixed $default = null)
+ * @method static void resetDefault()
  */
 class EditorSetting extends Model
 {

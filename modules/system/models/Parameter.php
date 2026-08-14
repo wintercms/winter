@@ -12,6 +12,8 @@ use Winter\Storm\Database\Model;
  *
  * @package winter\wn-system-module
  * @author Alexey Bobkov, Samuel Georges
+ *
+ * @method static \Winter\Storm\Database\Builder applyKey(string $key)
  */
 class Parameter extends Model
 {

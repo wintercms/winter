@@ -695,6 +695,8 @@ class MediaLibrary
             } elseif ($content['type'] === 'dir') {
                 $type = MediaLibraryItem::TYPE_FOLDER;
                 $key = 'folders';
+            } else {
+                continue;
             }
 
             $libraryItem = $this->initLibraryItem($content, $type);

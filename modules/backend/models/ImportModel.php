@@ -12,6 +12,8 @@ use League\Csv\Statement as CsvStatement;
  *
  * @package winter\wn-backend-module
  * @author Alexey Bobkov, Samuel Georges
+ *
+ * @method \Winter\Storm\Database\Relations\AttachOne import_file()
  */
 abstract class ImportModel extends Model
 {

@@ -1,0 +1,13 @@
+<?php
+
+namespace Winter\Storm\Support\Facades;
+
+/**
+ * Storm's event dispatcher accepts a listener priority, which the facade's resolved
+ * signature (Laravel's two-parameter listen) does not reflect.
+ *
+ * @method static void listen(mixed $events, mixed $listener = null, int $priority = 0)
+ */
+class Event extends \Illuminate\Support\Facades\Facade
+{
+}

@@ -75,7 +75,7 @@ class BundleManager
                 );
             });
 
-            $manager->registerSetupHandler('react', function (string $packagePath, string $packageType) use ($manager) {
+            $manager->registerSetupHandler('react', function (string $packagePath, string $packageType) {
                 if ($this->option('no-stubs')) {
                     return;
                 }
