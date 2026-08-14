@@ -51,7 +51,12 @@ jobs:
           extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
 
       - name: Install Composer dependencies
-        run: composer install --no-interaction --no-progress
+        run: composer install --no-interaction --no-progress --no-scripts
+
+      - name: Reset modules
+        run: |
+          git reset --hard
+          git clean -fd
 
       - name: Run static analysis
         run: |
