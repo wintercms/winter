@@ -4,9 +4,6 @@ on:
   pull_request:
   push:
     branches:
-      - 1.0
-      - 1.1
-      - 1.2
       - wip/1.3
       - develop
 
