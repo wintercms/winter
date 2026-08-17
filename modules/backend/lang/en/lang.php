@@ -246,6 +246,8 @@ return [
         'delete_selected_success' => 'Deleted selected records.',
         'column_switch_true' => 'Yes',
         'column_switch_false' => 'No',
+        'sortable_requirements' => 'To use "sortable" on a list, the model ":model" must use the :trait trait.',
+        'sortable_conflicts' => 'A "sortable" list cannot also use: :conflicts. Drag-and-drop reordering requires the whole list in a fixed order. Remove these options, or use the ReorderController for a dedicated reordering page.',
     ],
     'fileupload' => [
         'attachment' => 'Attachment',

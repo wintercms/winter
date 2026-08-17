@@ -172,11 +172,10 @@ class ListController extends ControllerBehavior
          */
         if (!empty($listConfig->sortable)) {
             if (!in_array(\Winter\Storm\Database\Traits\Sortable::class, class_uses_recursive($model))) {
-                throw new ApplicationException(sprintf(
-                    'To use "sortable" on a list, the model "%s" must use the %s trait.',
-                    get_class($model),
-                    \Winter\Storm\Database\Traits\Sortable::class
-                ));
+                throw new ApplicationException(Lang::get('backend::lang.lists.sortable_requirements', [
+                    'model' => get_class($model),
+                    trait' => \Winter\Storm\Database\Traits\Sortable::class,
+                ]));
             }
 
             /*
@@ -192,10 +191,9 @@ class ListController extends ControllerBehavior
                 'defaultSort'    => $listConfig->defaultSort ?? null,
             ]));
             if ($conflicts) {
-                throw new ApplicationException(sprintf(
-                    'A "sortable" list cannot also use: %s. Drag-and-drop reordering requires the whole list in a fixed order. Remove these options, or use the ReorderController for a dedicated reordering page.',
-                    implode(', ', $conflicts)
-                ));
+                throw new ApplicationException(Lang::get('backend::lang.lists.sortable_conflicts', [
+                    'conflicts' => implode(', ', $conflicts),
+                ]));
             }
 
             $widget->bindEvent('list.reorder', function ($ids, $orders) use ($model) {
