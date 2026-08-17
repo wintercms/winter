@@ -790,12 +790,11 @@ class RelationController extends ControllerBehavior
                     !in_array(\Winter\Storm\Database\Traits\HasSortableRelations::class, class_uses_recursive($this->model))
                     || !$this->model->isSortableRelation($this->relationName)
                 ) {
-                    throw new ApplicationException(sprintf(
-                        'To use "sortable" on the "%s" relation, the model "%s" must use the %s trait and declare the relation in $sortableRelations.',
-                        $this->relationName,
-                        get_class($this->model),
-                        \Winter\Storm\Database\Traits\HasSortableRelations::class
-                    ));
+                    throw new ApplicationException(Lang::get('backend::lang.relation.sortable_requirements', [
+                        'relation' => $this->relationName,
+                        'model' => get_class($this->model),
+                        'trait' => \Winter\Storm\Database\Traits\HasSortableRelations::class,
+                    ]));
                 }
 
                 /*
@@ -810,11 +809,10 @@ class RelationController extends ControllerBehavior
                     'defaultSort'    => $this->getConfig('view[defaultSort]'),
                 ]));
                 if ($conflicts) {
-                    throw new ApplicationException(sprintf(
-                        'The "%s" relation cannot combine "sortable" with: %s. Drag-and-drop reordering requires the whole relation in a fixed order. Remove these options, or use the ReorderController for a dedicated reordering page.',
-                        $this->relationName,
-                        implode(', ', $conflicts)
-                    ));
+                    throw new ApplicationException(Lang::get('backend::lang.relation.sortable_conflicts', [
+                        'relation' => $this->relationName,
+                        'conflicts' => implode(', ', $conflicts),
+                    ]));
                 }
 
                 $config->sortable = true;
