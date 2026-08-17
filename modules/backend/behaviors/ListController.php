@@ -186,8 +186,6 @@ class ListController extends ControllerBehavior
              */
             $toolbar = $listConfig->toolbar ?? null;
             $conflicts = array_keys(array_filter([
-                'toolbar search' => is_array($toolbar) && !empty($toolbar['search']),
-                'filter'         => $listConfig->filter ?? null,
                 'recordsPerPage' => $listConfig->recordsPerPage ?? null,
                 'defaultSort'    => $listConfig->defaultSort ?? null,
             ]));

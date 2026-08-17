@@ -804,8 +804,6 @@ class RelationController extends ControllerBehavior
                  * those combinations up front rather than silently producing a wrong order.
                  */
                 $conflicts = array_keys(array_filter([
-                    'showSearch'     => $this->getConfig('view[showSearch]'),
-                    'filter'         => $this->getConfig('view[filter]'),
                     'recordsPerPage' => $this->getConfig('view[recordsPerPage]'),
                     'defaultSort'    => $this->getConfig('view[defaultSort]'),
                 ]));
