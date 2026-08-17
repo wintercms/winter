@@ -174,7 +174,7 @@ class ListController extends ControllerBehavior
             if (!in_array(\Winter\Storm\Database\Traits\Sortable::class, class_uses_recursive($model))) {
                 throw new ApplicationException(Lang::get('backend::lang.lists.sortable_requirements', [
                     'model' => get_class($model),
-                    trait' => \Winter\Storm\Database\Traits\Sortable::class,
+                    'trait' => \Winter\Storm\Database\Traits\Sortable::class,
                 ]));
             }
 
