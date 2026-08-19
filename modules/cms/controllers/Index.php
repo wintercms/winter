@@ -24,6 +24,7 @@ use Exception;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\Facades\Request;
 use System\Helpers\DateTime;
+use Winter\Storm\Auth\AuthorizationException;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Halcyon\Datasource\DatasourceInterface;
 use Winter\Storm\Router\Router as StormRouter;
@@ -92,25 +93,43 @@ class Index extends Controller
 
             $this->theme = $theme;
 
-            new TemplateList($this, 'pageList', function () use ($theme) {
-                return Page::listInTheme($theme, true);
-            });
+            if ($this->user?->hasAccess('cms.manage_pages')) {
+                new TemplateList($this, 'pageList', function () use ($theme) {
+                    return Page::listInTheme($theme, true);
+                });
+            }
 
-            new TemplateList($this, 'partialList', function () use ($theme) {
-                return Partial::listInTheme($theme, true);
-            });
+            if ($this->user?->hasAccess('cms.manage_partials')) {
+                new TemplateList($this, 'partialList', function () use ($theme) {
+                    return Partial::listInTheme($theme, true);
+                });
+            }
 
-            new TemplateList($this, 'layoutList', function () use ($theme) {
-                return Layout::listInTheme($theme, true);
-            });
+            if ($this->user?->hasAccess('cms.manage_layouts')) {
+                new TemplateList($this, 'layoutList', function () use ($theme) {
+                    return Layout::listInTheme($theme, true);
+                });
+            }
 
-            new TemplateList($this, 'contentList', function () use ($theme) {
-                return Content::listInTheme($theme, true);
-            });
+            if ($this->user?->hasAccess('cms.manage_content')) {
+                new TemplateList($this, 'contentList', function () use ($theme) {
+                    return Content::listInTheme($theme, true);
+                });
+            }
 
-            new ComponentList($this, 'componentList');
+            if (
+                $this->user?->hasAccess([
+                    'cms.manage_pages',
+                    'cms.manage_partials',
+                    'cms.manage_layouts',
+                ], false)
+            ) {
+                new ComponentList($this, 'componentList');
+            }
 
-            new AssetList($this, 'assetList');
+            if ($this->user?->hasAccess('cms.manage_assets')) {
+                new AssetList($this, 'assetList');
+            }
         }
         catch (Exception $ex) {
             $this->handleError($ex);
@@ -148,6 +167,8 @@ class Index extends Controller
         $this->validateRequestTheme();
 
         $type = Request::input('type');
+        $this->validateRequestType($type);
+
         $template = $this->loadTemplate($type, Request::input('path'));
         $widget = $this->makeTemplateFormWidget($type, $template);
 
@@ -179,7 +200,10 @@ class Index extends Controller
     public function onSave(): array
     {
         $this->validateRequestTheme();
+
         $type = Request::input('templateType');
+        $this->validateRequestType($type);
+
         $templatePath = trim(Request::input('templatePath'));
         $template = $templatePath ? $this->loadTemplate($type, $templatePath) : $this->createTemplate($type);
         $formWidget = $this->makeTemplateFormWidget($type, $template);
@@ -263,6 +287,8 @@ class Index extends Controller
     public function onCreateTemplate(): array
     {
         $type = Request::input('type');
+        $this->validateRequestType($type);
+
         $template = $this->createTemplate($type);
 
         if ($type === 'asset') {
@@ -294,6 +320,8 @@ class Index extends Controller
         $this->validateRequestTheme();
 
         $type = Request::input('type');
+        $this->validateRequestType($type);
+
         $templates = Request::input('template');
         $error = null;
         $deleted = [];
@@ -344,6 +372,7 @@ class Index extends Controller
         $this->validateRequestTheme();
 
         $type = Request::input('templateType');
+        $this->validateRequestType($type);
 
         $this->loadTemplate($type, trim(Request::input('templatePath')))->delete();
 
@@ -415,7 +444,10 @@ class Index extends Controller
     public function onCommit(): array
     {
         $this->validateRequestTheme();
+
         $type = Request::input('templateType');
+        $this->validateRequestType($type);
+
         $template = $this->loadTemplate($type, trim(Request::input('templatePath')));
 
         if ($this->canCommitTemplate($template)) {
@@ -439,7 +471,10 @@ class Index extends Controller
     public function onReset(): array
     {
         $this->validateRequestTheme();
+
         $type = Request::input('templateType');
+        $this->validateRequestType($type);
+
         $template = $this->loadTemplate($type, trim(Request::input('templatePath')));
 
         if ($this->canResetTemplate($template)) {
@@ -556,6 +591,38 @@ class Index extends Controller
     }
 
     /**
+     * Validates that the given request type is a valid type, and that the user has the relevant
+     * permission to access it.
+     *
+     * @throws AuthorizationException if the user doesn't have permission to access the type
+     */
+    protected function validateRequestType(string $type): void
+    {
+        $this->resolveTypeClassName($type);
+
+        if (!$this->user?->hasAccess($this->getRelevantPermissionForType($type))) {
+            throw new AuthorizationException(Lang::get('cms::lang.template.type_not_permitted', [
+                'type' => str_plural($type),
+                'permission' => $this->getRelevantPermissionForType($type),
+            ]));
+        }
+    }
+
+    /**
+     * Gets the relevant permission required for a specific template type.
+     */
+    protected function getRelevantPermissionForType(string $type): string
+    {
+        return match ($type) {
+            'page' => 'cms.manage_pages',
+            'partial' => 'cms.manage_partials',
+            'layout' => 'cms.manage_layouts',
+            'content' => 'cms.manage_content',
+            'asset' => 'cms.manage_assets',
+        };
+    }
+
+    /**
      * Resolves a template type to its class name
      */
     protected function resolveTypeClassName(string $type): string
@@ -654,6 +721,8 @@ class Index extends Controller
      */
     protected function makeTemplateFormWidget(string $type, CmsObject|Asset $template, ?string $alias = null): Form
     {
+        $this->validateRequestType($type);
+
         $formConfigs = [
             'page'    => '~/modules/cms/classes/page/fields.yaml',
             'partial' => '~/modules/cms/classes/partial/fields.yaml',
@@ -687,7 +756,7 @@ class Index extends Controller
         $codeField = ($template instanceof Asset) ? 'content' : 'markup';
 
         $lang = match ($ext) {
-            'htm' => 'twig',
+            '', 'htm' => 'twig',
             'html' => 'html',
             'css' => 'css',
             'js', 'json' => 'javascript',

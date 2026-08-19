@@ -563,6 +563,8 @@ class Theme extends CmsObject
         self::$activeThemeCache = false;
         self::$editThemeCache = false;
 
+        ThemeData::flushCache();
+
         // Sometimes it may be desired to only clear the local cache of the active / edit themes instead of the persistent cache
         if (!$memoryOnly) {
             Cache::forget(self::ACTIVE_KEY);
