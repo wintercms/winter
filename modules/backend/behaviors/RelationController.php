@@ -6,6 +6,7 @@ use Request;
 use Form as FormHelper;
 use Backend\Classes\ControllerBehavior;
 use Winter\Storm\Database\Model;
+use Winter\Storm\Database\Models\DeferredBinding;
 use ApplicationException;
 
 /**
@@ -562,6 +563,76 @@ class RelationController extends ControllerBehavior
         return $this->sessionKey = FormHelper::getSessionKey();
     }
 
+    /**
+     * Present a sortable relation's records in their stored order while operating in
+     * deferred mode.
+     *
+     * When the relation is deferred, withDeferred() builds the query in "orphan" mode and
+     * cannot order by (or even surface) the pivot sort column. The sort order therefore has
+     * to be resolved in PHP from the deferred_bindings pivot_data (which overrides any
+     * already-committed pivot rows), written onto each record's in-memory pivot, and the
+     * collection re-sorted. This keeps the Lists widget completely relation-agnostic - it
+     * just reads the pivot[sort_order] path as usual.
+     */
+    protected function applyDeferredRelationOrder($records)
+    {
+        if (!$this->deferredBinding || !$this->model->isSortableRelation($this->relationName)) {
+            return $records;
+        }
+
+        $column = $this->model->getRelationSortOrderColumn($this->relationName);
+        $sessionKey = $this->relationGetSessionKey();
+        $map = [];
+
+        /*
+         * Committed pivot rows (none when the parent record does not yet exist).
+         */
+        if ($this->model->exists) {
+            $relation = $this->model->{$this->relationName}();
+            $query = Db::table($relation->getTable())
+                ->where($relation->getForeignPivotKeyName(), $this->model->getKey());
+
+            // Constrain morphToMany pivots by the parent morph type.
+            if (method_exists($relation, 'getMorphType') && method_exists($relation, 'getMorphClass')) {
+                $query->where($relation->getMorphType(), $relation->getMorphClass());
+            }
+
+            $map = $query
+                ->pluck($column, $relation->getRelatedPivotKeyName())
+                ->map(function ($value) {
+                    return (int) $value;
+                })
+                ->all();
+        }
+
+        /*
+         * Deferred "bind" rows override the committed order.
+         */
+        $bindings = DeferredBinding::where('master_type', get_class($this->model))
+            ->where('master_field', $this->relationName)
+            ->where('session_key', $sessionKey)
+            ->where('is_bind', 1)
+            ->get();
+
+        foreach ($bindings as $binding) {
+            $pivotData = $binding->pivot_data ?: [];
+            if (array_key_exists($column, $pivotData)) {
+                $map[$binding->slave_id] = (int) $pivotData[$column];
+            }
+        }
+
+        foreach ($records as $record) {
+            if (array_key_exists($record->getKey(), $map)) {
+                $record->pivot->{$column} = $map[$record->getKey()];
+            }
+        }
+
+        return $records->sortBy(function ($record) use ($column) {
+            // Deferred records not yet assigned an order sort to the end.
+            return $record->pivot->{$column} ?? PHP_INT_MAX;
+        })->values();
+    }
+
     //
     // Widgets
     //
@@ -709,7 +780,61 @@ class RelationController extends ControllerBehavior
                 $config->noRecordsMessage = $emptyMessage;
             }
 
+            /*
+             * Drag-and-drop reordering - requires the parent model to use the
+             * HasSortableRelations trait and to declare this relation in $sortableRelations.
+             */
+            $sortable = $this->getConfig('view[sortable]', false);
+            if ($sortable) {
+                if (
+                    !in_array(\Winter\Storm\Database\Traits\HasSortableRelations::class, class_uses_recursive($this->model))
+                    || !$this->model->isSortableRelation($this->relationName)
+                ) {
+                    throw new ApplicationException(sprintf(
+                        'To use "sortable" on the "%s" relation, the model "%s" must use the %s trait and declare the relation in $sortableRelations.',
+                        $this->relationName,
+                        get_class($this->model),
+                        \Winter\Storm\Database\Traits\HasSortableRelations::class
+                    ));
+                }
+
+                /*
+                 * Drag-and-drop reordering presents every record in a single fixed order, so it
+                 * cannot coexist with features that show a partial or re-ordered view. Reject
+                 * those combinations up front rather than silently producing a wrong order.
+                 */
+                $conflicts = array_keys(array_filter([
+                    'showSearch'     => $this->getConfig('view[showSearch]'),
+                    'filter'         => $this->getConfig('view[filter]'),
+                    'recordsPerPage' => $this->getConfig('view[recordsPerPage]'),
+                    'defaultSort'    => $this->getConfig('view[defaultSort]'),
+                ]));
+                if ($conflicts) {
+                    throw new ApplicationException(sprintf(
+                        'The "%s" relation cannot combine "sortable" with: %s. Drag-and-drop reordering requires the whole relation in a fixed order. Remove these options, or use the ReorderController for a dedicated reordering page.',
+                        $this->relationName,
+                        implode(', ', $conflicts)
+                    ));
+                }
+
+                $config->sortable = true;
+            }
+
             $widget = $this->makeWidget('Backend\Widgets\Lists', $config);
+
+            /*
+             * Persist reordering and, in deferred mode, present records in their dragged order.
+             */
+            if ($sortable) {
+                $widget->bindEvent('list.reorder', function ($ids, $orders) {
+                    $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey() : null;
+                    $this->model->setRelationOrder($this->relationName, $ids, $orders, $sessionKey);
+                });
+
+                $widget->bindEvent('list.extendRecords', function ($records) {
+                    return $this->applyDeferredRelationOrder($records);
+                });
+            }
 
             /*
              * Apply defined constraints
@@ -756,6 +881,17 @@ class RelationController extends ControllerBehavior
                     || $this->relationType === 'morphedByMany'
                 ) {
                     $this->relationObject->setQuery($query->getQuery());
+
+                    /*
+                     * In deferred mode withDeferred() builds the query in "orphan" mode with no
+                     * pivot join, so the relation's pivot-based order clause is invalid SQL.
+                     * Sortable relations are ordered in PHP instead (applyDeferredRelationOrder()).
+                     */
+                    if ($sessionKey && $this->getConfig('view[sortable]', false)) {
+                        $query->reorder();
+                        $this->relationObject->reorder();
+                    }
+
                     return $this->relationObject;
                 }
             });
@@ -1447,14 +1583,18 @@ class RelationController extends ControllerBehavior
     {
         $this->beforeAjax();
 
-        $foreignKeyName = $this->relationModel->getQualifiedKeyName();
         $hydratedModel = $this->pivotWidget->model;
         $saveData = $this->pivotWidget->getSaveData();
 
-        $modelsToSave = $this->prepareModelsToSave($hydratedModel, $saveData);
-        foreach ($modelsToSave as $modelToSave) {
-            $modelToSave->save(null, $this->pivotWidget->getSessionKey());
-        }
+        /*
+         * If any of the models fail to save, abort the whole update
+         */
+        Db::transaction(function () use ($hydratedModel, $saveData) {
+            $modelsToSave = $this->prepareModelsToSave($hydratedModel, $saveData);
+            foreach ($modelsToSave as $modelToSave) {
+                $modelToSave->save(null, $this->pivotWidget->getSessionKey());
+            }
+        });
 
         return ['#'.$this->relationGetId('view') => $this->relationRenderView()];
     }

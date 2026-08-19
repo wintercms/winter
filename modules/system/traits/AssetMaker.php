@@ -73,6 +73,17 @@ trait AssetMaker
 
                 $result .= '<link' . $attributes . '>' . PHP_EOL;
             }
+
+            foreach ($this->assets['vite'] as $asset) {
+                $asset['attributes']['entrypoints'] = array_filter(
+                    $asset['attributes']['entrypoints'],
+                    fn ($entrypoint) => $this->getAssetType($entrypoint) === 'css'
+                );
+
+                if ($asset['attributes']['entrypoints']) {
+                    $result .= Vite::tags($asset['attributes']['entrypoints'], $asset['path']);
+                }
+            }
         }
 
         if ($type == null || $type == 'rss') {
@@ -102,9 +113,20 @@ trait AssetMaker
 
                 $result .= '<script' . $attributes . '></script>' . PHP_EOL;
             }
+
+            foreach ($this->assets['vite'] as $asset) {
+                $asset['attributes']['entrypoints'] = array_filter(
+                    $asset['attributes']['entrypoints'],
+                    fn ($entrypoint) => $this->getAssetType($entrypoint) === 'js'
+                );
+
+                if ($asset['attributes']['entrypoints']) {
+                    $result .= Vite::tags($asset['attributes']['entrypoints'], $asset['path']);
+                }
+            }
         }
 
-        if ($type == null || $type == 'vite') {
+        if ($type == 'vite') {
             foreach ($this->assets['vite'] as $asset) {
                 $result .= Vite::tags($asset['attributes']['entrypoints'], $asset['path']);
             }
@@ -457,5 +479,17 @@ trait AssetMaker
         );
 
         return $sortedAssets;
+    }
+
+    protected function getAssetType(string $asset): ?string
+    {
+        $path = strtolower(parse_url($asset, PHP_URL_PATH) ?? $asset);
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+
+        return match ($ext) {
+            'js', 'mjs', 'cjs', 'ts', 'tsx', 'jsx', 'vue', 'svelte' => 'js',
+            'css', 'scss', 'sass', 'less', 'styl', 'stylus', 'pcss', 'postcss' => 'css',
+            default => null,
+        };
     }
 }

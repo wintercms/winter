@@ -7,11 +7,11 @@
     <key>gutterSettings</key>
     <dict>
         <key>background</key>
-        <string>#2F2F31</string>
+        <string>#232323</string>
         <key>divider</key>
         <string>#414143</string>
         <key>foreground</key>
-        <string>#8F8F8F</string>
+        <string>#E2E2E2</string>
         <key>selectionBackground</key>
         <string>#414143</string>
         <key>selectionBorder</key>
@@ -29,7 +29,7 @@
             <key>settings</key>
             <dict>
                 <key>background</key>
-                <string>#181818</string>
+                <string>#141414</string>
                 <key>caret</key>
                 <string>#A7A7A7</string>
                 <key>foreground</key>
@@ -290,6 +290,19 @@
                 <string></string>
                 <key>foreground</key>
                 <string>#DAD085</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>name</key>
+            <string>♦ Support.type</string>
+            <key>scope</key>
+            <string>support.type</string>
+            <key>settings</key>
+            <dict>
+                <key>fontStyle</key>
+                <string></string>
+                <key>foreground</key>
+                <string>#9B859D</string>
             </dict>
         </dict>
         <dict>
