@@ -1,18 +1,20 @@
-<?php namespace Backend\Widgets;
+<?php
 
-use ApplicationException;
+namespace Backend\Widgets;
+
 use Backend\Classes\FormField;
 use Backend\Classes\FormTabs;
 use Backend\Classes\FormWidgetBase;
 use Backend\Classes\WidgetBase;
 use Backend\Classes\WidgetManager;
+use Backend\Facades\BackendAuth;
 use Backend\FormWidgets\FieldSet;
-use BackendAuth;
 use Exception;
-use Form as FormHelper;
-use Lang;
+use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Html\Helper as HtmlHelper;
+use Winter\Storm\Support\Facades\Form as FormHelper;
 
 /**
  * Form Widget
@@ -1222,21 +1224,12 @@ class Form extends WidgetBase
                 continue;
             }
 
-            // get nested widget fields that should be saved to the model
+            // Fieldsets don't save a value of their own; their nested fields are saved
+            // to the model as if they were defined at this form's level. Delegating to
+            // the nested form's getSaveData() reuses all of its per-field processing.
             if ($widget instanceof FieldSet) {
-                foreach ($widget->getFormFields() as $field) {
-                    $parts = HtmlHelper::nameToArray($field->fieldName);
-                    if (($value = $this->dataArrayGet($data, $parts)) !== null) {
-                        switch ($field->type) {
-                            case 'number':
-                                $value = !strlen(trim($value)) ? null : (float) $value;
-                                break;
-                            case 'widget':
-                                $value = $widget->getFormWidget($field->fieldName)->getSaveValue($value);
-                                break;
-                        }
-                        $this->dataArraySet($result, $parts, $value);
-                    }
+                foreach ($widget->getSaveData() as $key => $value) {
+                    $this->dataArraySet($result, HtmlHelper::nameToArray($key), $value);
                 }
                 continue;
             }
@@ -1439,8 +1432,8 @@ class Form extends WidgetBase
      *
      * @param array $array
      * @param array $parts
-     * @param null $default
-     * @return array|null
+     * @param mixed $default
+     * @return mixed
      */
     protected function dataArrayGet(array $array, array $parts, $default = null)
     {

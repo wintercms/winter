@@ -2,7 +2,6 @@
 
 namespace Backend\FormWidgets;
 
-use ApplicationException;
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
 use Backend\Widgets\Form;
@@ -68,19 +67,15 @@ class FieldSet extends FormWidgetBase
     }
 
     /**
-     * return the internal formwidget's fields
+     * Returns the save data for the nested fields, to be merged into the parent
+     * form's data as if these fields were defined at that level. Reusing the nested
+     * form's getSaveData() ensures number casting, widget getSaveValue() handling,
+     * NO_SAVE_DATA exclusion and disabled/hidden skipping all behave identically to
+     * a regular field.
      */
-    public function getFormFields(): array
+    public function getSaveData(): array
     {
-        return $this->formWidget->getFields();
-    }
-
-    /**
-     * return an internal formwidget's formWidget
-     */
-    public function getFormWidget($field): FormWidgetBase
-    {
-        return $this->formWidget->getFormWidget($field);
+        return $this->formWidget->getSaveData();
     }
 
     /**
