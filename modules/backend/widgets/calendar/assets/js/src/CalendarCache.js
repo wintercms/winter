@@ -1,16 +1,25 @@
-/*jshint esversion: 6 */
+/*
+ * Month-window client cache for the Calendar widget.
+ *
+ * Caches fetched events per month keyed by the server-provided `cacheKey` (an MD5 of the base
+ * query) and only refetches on cache-miss / filter change. Ported from the original Storm
+ * implementation; the only behavioural change is that AJAX now goes through an injected
+ * `requestFn` (wired to Snowboard's request layer) instead of the global jQuery `$.request`.
+ */
 const daysOfMonth = 42; // 6 weeks per month
 const secondsOfDay = 86400;
 
-class CalendarCache {
+export default class CalendarCache {
     /**
-     *
-     * @param int firstDay the first day of week, 0 = sunday ...
-     * @param int capcity the default month data stored
+     * @param {string} methodName the AJAX handler used to fetch events (alias::onRefreshEvents)
+     * @param {function} requestFn (handler, options) => void - issues the AJAX request
+     * @param {int} firstDay the first day of week, 0 = sunday ...
+     * @param {int} capcity the default month data stored
      */
-    constructor(methodName, firstDay = 0, capcity = 12) {
+    constructor(methodName, requestFn, firstDay = 0, capcity = 12) {
         this.clearCache();
 
+        this.requestFn = requestFn;
         this.firstDay = firstDay;
         this.capcity = capcity;
         this._hideIndicatorCallback = null;
@@ -31,7 +40,6 @@ class CalendarCache {
     get showIndicatorCallback() {
         return this._showIndicatorCallback;
     }
-
 
     isEmpty() {
         return this.length === 0;
@@ -170,7 +178,6 @@ class CalendarCache {
         if (this.hideIndicatorCallback) this.hideIndicatorCallback();
     }
 
-
     /**
      * Click the next button will load one more next month data
      * Click the previous button will load one more previous month data
@@ -197,13 +204,13 @@ class CalendarCache {
         if (events !== null) return;
         const self = this;
 
-        $.request(this.methodName, {
+        this.requestFn(this.methodName, {
             data: monthData,
-            success: function (data, textStatus, jqXHR) {
+            success: function (data) {
                 self.saveCache(monthData, data);
             },
-            error: function (jqXHR, textStatus, error) {
-                this.error(jqXHR, textStatus, error);
+            error: function () {
+                self.hideIndicator();
             }
         });
     }
@@ -286,18 +293,16 @@ class CalendarCache {
         };
 
         const self = this;
-        $.request(this.methodName, {
+        this.requestFn(this.methodName, {
             data: monthData,
-            success: function (data, textStatus, jqXHR) {
+            success: function (data) {
                 self.saveFirstThreeMonthsData(data, [previousMonthData, currentMonthData, nextMonthData], onSuccessCallback);
             },
-            error: function (jqXHR, textStatus, error) {
+            error: function () {
                 self.hideIndicator();
-                this.error(jqXHR, textStatus, error);
                 onErrorCallback();
             }
         });
-
     }
 
     requestEvents(requestData, onSuccessCallback = () => {}, onErrorCallback = () => {}) {
@@ -321,9 +326,9 @@ class CalendarCache {
 
         const self = this;
 
-        $.request(this.methodName, {
+        this.requestFn(this.methodName, {
             data: monthData,
-            success: function (data, textStatus, jqXHR) {
+            success: function (data) {
                 const events = data.events;
                 self.hideIndicator();
                 // the events is whole month data
@@ -331,9 +336,8 @@ class CalendarCache {
                 onSuccessCallback(events);
                 self.eagerRequest(monthData);
             },
-            error: function (jqXHR, textStatus, error) {
+            error: function () {
                 self.hideIndicator();
-                this.error(jqXHR, textStatus, error);
                 onErrorCallback();
             }
         });

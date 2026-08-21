@@ -7,7 +7,7 @@
     data-timezone = '<?= e($timezone); ?>'
     data-alias="<?= $this->alias; ?>"
     data-click-date="<?= $this->onClickDate ?>"
-    data-editable="<?= !$this->previewMode; ?>"
+    data-editable="<?= $this->previewMode ? 'false' : 'true'; ?>"
 >
     <div class="calendar-control loading-indicator-container indicator-center"></div>
 </div>

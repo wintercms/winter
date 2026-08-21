@@ -249,8 +249,7 @@ class Calendar extends WidgetBase
 
         // $this->addCss(['less/calendar.less'], 'Winter.Core');
         $this->addCss('css/calendar.css', 'Winter.Core');
-        $this->addJs('js/calendar.cache.js', 'Winter.Core');
-        $this->addJs('js/calendar.js', 'Winter.Core');
+        $this->addJs('js/dist/calendar.js', 'core');
     }
 
     /**
