@@ -288,4 +288,52 @@ class CalendarWidgetTest extends PluginTestCase
         $this->assertContains('injected', $titles);
         $this->assertContains('inside', $titles);
     }
+
+    public function testExtendQueryEventsReceiveTheVisibleWindow()
+    {
+        $this->seedEvent('inside', '2026-03-10 09:00:00', '2026-03-10 10:00:00');
+
+        $widget = $this->makeCalendarWidget();
+        $received = [];
+        $widget->bindEvent('calendar.extendQueryBefore', function ($query, $startTime, $endTime) use (&$received) {
+            $received['before'] = [$startTime, $endTime];
+        });
+        $widget->bindEvent('calendar.extendQuery', function ($query, $startTime, $endTime) use (&$received) {
+            $received['query'] = [$startTime, $endTime];
+        });
+
+        $widget->getRecords($this->windowStart, $this->windowEnd);
+
+        $this->assertSame([$this->windowStart, $this->windowEnd], $received['before']);
+        $this->assertSame([$this->windowStart, $this->windowEnd], $received['query']);
+    }
+
+    public function testRecurrenceAwareQueryUsingTheWindowTimes()
+    {
+        $this->seedEvent('before', '2026-02-10 09:00:00', '2026-02-10 10:00:00');
+        $this->seedEvent('inside', '2026-03-10 09:00:00', '2026-03-10 10:00:00');
+        $this->seedEvent('recurring', '2026-01-01 09:00:00', '2026-01-01 10:00:00', ['rrule' => 'FREQ=MONTHLY']);
+
+        $widget = $this->makeCalendarWidget();
+
+        // The efficient server-side recurrence pattern the window times enable: replace the
+        // built-in filter with one that keeps rows intersecting the window OR recurring masters.
+        $widget->bindEvent('calendar.extendQueryBefore', function ($query, $startTime, $endTime) use ($widget) {
+            $widget->setApplyDateRangeFilter(false);
+            $start = Carbon::createFromTimestamp($startTime);
+            $end = Carbon::createFromTimestamp($endTime);
+            $query->where(function ($q) use ($start, $end) {
+                $q->whereNotNull('rrule')
+                  ->orWhere(function ($inner) use ($start, $end) {
+                      $inner->where('end_at', '>=', $start)->where('start_at', '<', $end);
+                  });
+            });
+        });
+
+        $titles = $this->titlesFrom($widget->getRecords($this->windowStart, $this->windowEnd));
+        sort($titles);
+
+        // 'before' is dropped (outside window, not recurring); 'inside' and the 'recurring' master survive.
+        $this->assertSame(['inside', 'recurring'], $titles);
+    }
 }

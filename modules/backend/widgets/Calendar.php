@@ -525,20 +525,24 @@ class Calendar extends WidgetBase
          * @event backend.calendar.extendQueryBefore
          * Provides an opportunity to modify the `$query` object before the Calendar widget applies its scopes to it.
          *
+         * The visible calendar window (Unix timestamps, `0` when unbounded) is also passed so
+         * listeners can apply a recurrence-aware constraint - typically alongside
+         * `$calendarWidget->setApplyDateRangeFilter(false)` to replace the built-in window filter.
+         *
          * Example usage:
          *
-         *     Event::listen('backend.calendar.extendQueryBefore', function($calendarWidget, $query) {
+         *     Event::listen('backend.calendar.extendQueryBefore', function($calendarWidget, $query, $startTime, $endTime) {
          *         $query->whereNull('deleted_at');
          *     });
          *
          * Or
          *
-         *     $calendarWidget->bindEvent('calendar.extendQueryBefore', function ($query) {
+         *     $calendarWidget->bindEvent('calendar.extendQueryBefore', function ($query, $startTime, $endTime) {
          *         $query->whereNull('deleted_at');
          *     });
          *
          */
-        $this->fireSystemEvent('backend.calendar.extendQueryBefore', [$query]);
+        $this->fireSystemEvent('backend.calendar.extendQueryBefore', [$query, $startTime, $endTime]);
 
         /*
          * Prepare searchable column names
@@ -689,21 +693,24 @@ class Calendar extends WidgetBase
          * @event backend.calendar.extendQuery
          * Provides an opportunity to modify and / or return the `$query` object after the Calendar widget has applied its scopes to it and before it's used to get the records.
          *
+         * The visible calendar window (Unix timestamps, `0` when unbounded) is also passed so
+         * listeners can apply a recurrence-aware window constraint of their own.
+         *
          * Example usage:
          *
-         *     Event::listen('backend.calendar.extendQuery', function($calendarWidget, $query) {
+         *     Event::listen('backend.calendar.extendQuery', function($calendarWidget, $query, $startTime, $endTime) {
          *         $newQuery = MyModel::newQuery();
          *         return $newQuery;
          *     });
          *
          * Or
          *
-         *     $calendarWidget->bindEvent('calendar.extendQuery', function ($query) {
+         *     $calendarWidget->bindEvent('calendar.extendQuery', function ($query, $startTime, $endTime) {
          *         $query->whereNull('deleted_at');
          *     });
          *
          */
-        if ($event = $this->fireSystemEvent('backend.calendar.extendQuery', [$query])) {
+        if ($event = $this->fireSystemEvent('backend.calendar.extendQuery', [$query, $startTime, $endTime])) {
             return $event;
         }
         return $query;

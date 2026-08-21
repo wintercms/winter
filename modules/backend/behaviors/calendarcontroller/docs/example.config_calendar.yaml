@@ -93,6 +93,9 @@ filter: calendar_filter.yaml
 #     listener) so recurring master rows survive the query, then expand them into concrete
 #     occurrences for the window in a backend.calendar.extendRecords listener. Keeping the
 #     window constraint out of the base query also keeps the client-side month cache key stable.
+#     The extendQueryBefore / extendQuery events receive the visible window ($startTime,
+#     $endTime as Unix timestamps) so you can add a recurrence-aware constraint that still keeps
+#     non-recurring rows efficient, e.g. "rows intersecting the window OR rows with an rrule".
 
 # ===================================
 #  Click handlers
