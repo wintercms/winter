@@ -32,12 +32,14 @@ import CalendarCache from './CalendarCache';
             this.cache.showIndicatorCallback = () => this.showIndicator();
             this.cache.hideIndicatorCallback = () => this.hideIndicator();
 
-            // Bridge to the Storm-based search/filter widgets, which still emit jQuery AJAX events.
+            // Bridge to the Storm-based search/filter widgets, which still drive the calendar
+            // through the framework's jQuery AJAX lifecycle events. `oc.beforeRequest` lets us
+            // inject the current month window into the search/filter request, and `ajaxSuccess`
+            // (fired by the framework as [context, data, ...]) delivers the onRefresh payload.
             this.onBeforeRequest = (ev, context) => this.beforeFilterRequestSend(ev, context);
-            this.onAjaxComplete = (ev, context, responseData, textStatus, jqXHR) =>
-                this.onFilterUpdate(ev, context, responseData, textStatus, jqXHR);
-            $(document).on('wn.beforeRequest', this.onBeforeRequest);
-            $(document).on('ajaxComplete', this.onAjaxComplete);
+            this.onAjaxSuccess = (...args) => this.onFilterUpdate(...args);
+            $(document).on('oc.beforeRequest', this.onBeforeRequest);
+            $(document).on('ajaxSuccess', this.onAjaxSuccess);
 
             this.initCalendarControl();
         }
@@ -58,8 +60,8 @@ import CalendarCache from './CalendarCache';
         }
 
         destruct() {
-            $(document).off('wn.beforeRequest', this.onBeforeRequest);
-            $(document).off('ajaxComplete', this.onAjaxComplete);
+            $(document).off('oc.beforeRequest', this.onBeforeRequest);
+            $(document).off('ajaxSuccess', this.onAjaxSuccess);
 
             this.disposeCalendarControl();
 
@@ -164,6 +166,9 @@ import CalendarCache from './CalendarCache';
             const monthRequestData = this.cache.getLastMonthRequestData();
             if (monthRequestData === null) return;
 
+            if (!context.options.data) {
+                context.options.data = {};
+            }
             context.options.data.calendar_time = monthRequestData;
         }
 
@@ -259,24 +264,31 @@ import CalendarCache from './CalendarCache';
             });
         }
 
-        onFilterUpdate(event, context, responseData) {
-            const data = responseData.responseJSON;
-            if (data && Object.prototype.hasOwnProperty.call(data, 'id')
-                && Object.prototype.hasOwnProperty.call(data, 'events')
-                && Object.prototype.hasOwnProperty.call(data, 'method')) {
-                if (data.id === 'calendar' && data.method === 'onRefresh') {
-                    this.clearEvents();
-                    const requestData = {
-                        startTime: data.startTime,
-                        endTime: data.endTime
-                    };
-                    this.cache.saveCache(requestData, data);
-                    // clear the previous request time
-                    this.cache.setLastRequestTime(0);
-                    this.cache.eagerRequest(requestData);
-                    this.addEvents(data.events);
-                }
+        onFilterUpdate(...args) {
+            // The framework fires this on the widget element that made the request (search or
+            // filter) and it bubbles to the document. Scan the arguments for the onRefresh
+            // payload rather than relying on a fixed position, since the native jQuery global
+            // ajax events share the same name with a different signature.
+            const data = args.find((arg) => arg
+                && typeof arg === 'object'
+                && arg.id === 'calendar'
+                && arg.method === 'onRefresh'
+                && Array.isArray(arg.events));
+
+            if (!data) {
+                return;
             }
+
+            this.clearEvents();
+            const requestData = {
+                startTime: data.startTime,
+                endTime: data.endTime
+            };
+            this.cache.saveCache(requestData, data);
+            // clear the previous request time
+            this.cache.setLastRequestTime(0);
+            this.cache.eagerRequest(requestData);
+            this.addEvents(data.events);
         }
     }
 

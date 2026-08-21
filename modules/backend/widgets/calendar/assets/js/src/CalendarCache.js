@@ -113,17 +113,26 @@ export default class CalendarCache {
      * @param Array requestData
      */
     getMonthRequestData(requestData) {
+        // FullCalendar reports its timestamps in the calendar's timezone. Compute day-of-week
+        // and month boundaries in that same frame - UTC when the calendar runs in UTC, otherwise
+        // the browser's local zone - so the month window is not shifted by the offset between the
+        // browser timezone and the calendar timezone.
+        const utc = requestData.timeZone === 'UTC';
         const startDate = new Date(requestData.startTime * 1000);
+        const dayOfWeek = utc ? startDate.getUTCDay() : startDate.getDay();
 
-        if (startDate.getDay() === this.firstDay && (requestData.endTime - requestData.startTime) === daysOfMonth * secondsOfDay) {
+        if (dayOfWeek === this.firstDay && (requestData.endTime - requestData.startTime) === daysOfMonth * secondsOfDay) {
             return requestData;
         }
-        let firstDayOfMonth = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
-        let daysDiff = firstDayOfMonth.getDay() - this.firstDay;
+        let firstDayOfMonth = utc
+            ? new Date(Date.UTC(startDate.getUTCFullYear(), startDate.getUTCMonth(), 1))
+            : new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+        const firstDayOfMonthDow = utc ? firstDayOfMonth.getUTCDay() : firstDayOfMonth.getDay();
+        let daysDiff = firstDayOfMonthDow - this.firstDay;
         let monthData;
         if (daysDiff !== 0) {
             // need to get the first day of week , eg: 2018-12-30 is the first day of jan, 2019
-            if (daysDiff < 0) daysDiff = firstDayOfMonth.getDay() + this.firstDay;
+            if (daysDiff < 0) daysDiff = firstDayOfMonthDow + this.firstDay;
             let firstDayOfMonthTime = firstDayOfMonth.getTime() / 1000 - secondsOfDay * daysDiff;
             monthData = {
                 startTime: firstDayOfMonthTime,
@@ -228,7 +237,8 @@ export default class CalendarCache {
         for (let index in allEvents) {
             const event = allEvents[index];
             const eventStartTime = Date.parse(event.start) / 1000;
-            const eventEndTime = Date.parse(event.end) / 1000;
+            // Point events (no end) are treated as ending at their start so they are not dropped.
+            const eventEndTime = event.end ? Date.parse(event.end) / 1000 : eventStartTime;
             if (eventEndTime >= prevoiousMonthData.startTime &&
                 eventStartTime < prevoiousMonthData.endTime) {
                 previousEvents.push(event);
