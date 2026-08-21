@@ -203,4 +203,89 @@ class CalendarWidgetTest extends PluginTestCase
         $utcEvent = $utc->getRecords($this->windowStart, $this->windowEnd)['events'][0];
         $this->assertSame('2026-03-10T09:00:00+00:00', $utcEvent['start']);
     }
+
+    public function testCacheKeyIsStableAcrossWindows()
+    {
+        $this->seedEvent('inside', '2026-03-10 09:00:00', '2026-03-10 10:00:00');
+
+        $widget = $this->makeCalendarWidget();
+
+        // The cache key is derived from the base query only (not the visible window), so the
+        // client can key its per-month cache by it and reuse it as the user pages months.
+        $march = $widget->getRecords($this->windowStart, $this->windowEnd)['cacheKey'];
+        $april = $widget->getRecords(
+            Carbon::parse('2026-04-01 00:00:00', 'UTC')->timestamp,
+            Carbon::parse('2026-05-01 00:00:00', 'UTC')->timestamp
+        )['cacheKey'];
+
+        $this->assertNotEmpty($march);
+        $this->assertSame($march, $april);
+    }
+
+    public function testCacheKeyChangesWhenTheQueryChanges()
+    {
+        $this->seedEvent('inside', '2026-03-10 09:00:00', '2026-03-10 10:00:00');
+
+        $baseline = $this->makeCalendarWidget()->getRecords($this->windowStart, $this->windowEnd)['cacheKey'];
+
+        $constrained = $this->makeCalendarWidget();
+        $constrained->bindEvent('calendar.extendQueryBefore', function ($query) {
+            $query->where('color', '#ff0000');
+        });
+        $constrainedKey = $constrained->getRecords($this->windowStart, $this->windowEnd)['cacheKey'];
+
+        $this->assertNotSame($baseline, $constrainedKey);
+    }
+
+    public function testAllExtensionEventsFireInOrder()
+    {
+        $this->seedEvent('inside', '2026-03-10 09:00:00', '2026-03-10 10:00:00');
+
+        $widget = $this->makeCalendarWidget();
+
+        $fired = [];
+        $widget->bindEvent('calendar.extendQueryBefore', function () use (&$fired) {
+            $fired[] = 'extendQueryBefore';
+        });
+        $widget->bindEvent('calendar.extendQuery', function () use (&$fired) {
+            $fired[] = 'extendQuery';
+        });
+        $widget->bindEvent('calendar.extendRecords', function () use (&$fired) {
+            $fired[] = 'extendRecords';
+        });
+        $widget->bindEvent('calendar.extendEvents', function () use (&$fired) {
+            $fired[] = 'extendEvents';
+        });
+
+        $widget->getRecords($this->windowStart, $this->windowEnd);
+
+        $this->assertSame(['extendQueryBefore', 'extendQuery', 'extendRecords', 'extendEvents'], $fired);
+    }
+
+    public function testExtendQueryCanReplaceTheQuery()
+    {
+        $this->seedEvent('inside', '2026-03-10 09:00:00', '2026-03-10 10:00:00');
+
+        $widget = $this->makeCalendarWidget();
+        $widget->bindEvent('calendar.extendQuery', function ($query) {
+            return $query->whereRaw('1 = 0');
+        });
+
+        $this->assertCount(0, $widget->getRecords($this->windowStart, $this->windowEnd)['events']);
+    }
+
+    public function testExtendEventsCanMutateOutput()
+    {
+        $this->seedEvent('inside', '2026-03-10 09:00:00', '2026-03-10 10:00:00');
+
+        $widget = $this->makeCalendarWidget();
+        $widget->bindEvent('calendar.extendEvents', function (&$events) {
+            $events[] = ['title' => 'injected', 'start' => '2026-03-15'];
+            return $events;
+        });
+
+        $titles = $this->titlesFrom($widget->getRecords($this->windowStart, $this->windowEnd));
+        $this->assertContains('injected', $titles);
+        $this->assertContains('inside', $titles);
+    }
 }
