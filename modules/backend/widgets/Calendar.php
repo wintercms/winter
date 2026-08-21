@@ -394,7 +394,9 @@ class Calendar extends WidgetBase
      */
     protected function getSearchableColumns()
     {
-        if ($this->searchableColumns != null) return $this->searchableColumns;
+        if ($this->searchableColumns != null) {
+            return $this->searchableColumns;
+        }
         $searchable = [];
 
         foreach ($this->searchColumns as $column) {
@@ -410,18 +412,22 @@ class Calendar extends WidgetBase
 
     protected function getVisibleRelationColumns()
     {
-        if ($this->visibleColumns != null) return $this->visibleColumns;
+        if ($this->visibleColumns != null) {
+            return $this->visibleColumns;
+        }
 
         $defaultColumnNames = $this->calendarVisibleColumns;
         $searchableColumns = $this->getSearchableColumns();
         $searchableColumnNames = [];
-        foreach($searchableColumns  as $column) $searchableColumnNames[] = $column->columnName;
+        foreach ($searchableColumns as $column) {
+            $searchableColumnNames[] = $column->columnName;
+        }
 
         $visibleColumns = array_unique(array_merge($defaultColumnNames, $searchableColumnNames));
 
         $this->visibleColumns = [];
-        foreach ($this->searchColumns as $name => $column){
-            if(in_array($name , $visibleColumns )){
+        foreach ($this->searchColumns as $name => $column) {
+            if (in_array($name, $visibleColumns)) {
                 $this->visibleColumns[$name] = $column;
             }
         }
@@ -578,7 +584,6 @@ class Calendar extends WidgetBase
         }
         $visibleColumns = $this->getVisibleRelationColumns();
         foreach ($visibleColumns as $column) {
-
             // If useRelationCount is enabled, eager load the count of the relation into $relation_count
             if ($column->relation && @$column->config['useRelationCount']) {
                 $query->withCount($column->relation);
@@ -628,7 +633,6 @@ class Calendar extends WidgetBase
                     }
                 }
             }
-
         });
 
         /*
@@ -645,7 +649,6 @@ class Calendar extends WidgetBase
              * Relation column
              */
             if (isset($column->relation)) {
-
                 // @todo Find a way...
                 $relationType = $this->model->getRelationType($column->relation);
                 if ($relationType == 'morphTo') {
@@ -787,7 +790,7 @@ class Calendar extends WidgetBase
      * @param integer $endTime unixTimestamp, the current calendar month endTime, eg: 1549778400
      * @return array ['events'=> [ {url, title, start, end}], 'cacheKey'=> 'MD5 String']
      */
-    public function getRecords($startTime = 0 , $endTime = 0)
+    public function getRecords($startTime = 0, $endTime = 0)
     {
         $query = $this->prepareQuery($startTime, $endTime);
         $cacheKey = $this->getCacheKey($query);
@@ -838,7 +841,7 @@ class Calendar extends WidgetBase
             } else {
                 if (is_array($this->recordTooltip)) {
                     $tooltip = '';
-                    foreach ($this->recordTooltip as $item){
+                    foreach ($this->recordTooltip as $item) {
                         $keyName = $this->{$item};
                         $tooltip .= $record->{$keyName} . ' ';
                     }
@@ -908,7 +911,7 @@ class Calendar extends WidgetBase
             'timeZone' => $timeZone
         ];
 
-        if ($this->isFilteredByDateRange()){
+        if ($this->isFilteredByDateRange()) {
             $startTime = 0;
             $endTime = 0;
         }
@@ -952,11 +955,13 @@ class Calendar extends WidgetBase
      */
     protected function isFilteredByDateRange()
     {
-        if ($this->filterWidget === null) return false;
+        if ($this->filterWidget === null) {
+            return false;
+        }
 
         $filterScopes = $this->filterWidget->getScopes();
 
-        if (!empty($filterScopes)){
+        if (!empty($filterScopes)) {
             foreach ($filterScopes as $scope) {
                 if ($scope->type === 'daterange' && !empty($scope->value)) {
                     return true;
@@ -971,14 +976,19 @@ class Calendar extends WidgetBase
          */
         $scopes = $this->filterWidget->scopes;
 
-        if (empty($scopes)) return false;
+        if (empty($scopes)) {
+            return false;
+        }
 
-        foreach($scopes as $scopeName => $scopeConfig)
-        {
-            if ($scopeConfig['type'] !== 'daterange') continue;
+        foreach ($scopes as $scopeName => $scopeConfig) {
+            if ($scopeConfig['type'] !== 'daterange') {
+                continue;
+            }
             $cacheKey = 'scope-' . $scopeName;
             $value = $this->filterWidget->getSession($cacheKey, null);
-            if (!empty($value)) return true;
+            if (!empty($value)) {
+                return true;
+            }
         }
 
         return false;
@@ -1006,9 +1016,9 @@ class Calendar extends WidgetBase
     {
         $startTime = 0;
         $endTime = 0;
-        if (!$this->isFilteredByDateRange()){
+        if (!$this->isFilteredByDateRange()) {
             $dateData = $this->getMonthStartEndTime();
-            if(!empty($dateData)){
+            if (!empty($dateData)) {
                 $startTime = $dateData['startTime'];
                 $endTime = $dateData['endTime'];
             }
@@ -1039,4 +1049,3 @@ class Calendar extends WidgetBase
         $this->filterCallbacks[] = $filter;
     }
 }
-

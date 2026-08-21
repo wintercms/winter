@@ -179,7 +179,6 @@ class CalendarController extends ControllerBehavior
         $widget->addFilter([$filterWidget, 'applyAllScopesToQuery']);
         $this->filterWidget = $filterWidget;
         $widget->filterWidget = $this->filterWidget;
-
     }
 
     /**
@@ -202,7 +201,7 @@ class CalendarController extends ControllerBehavior
             throw new ApplicationException(Lang::get('backend::lang.calendar.behavior_not_ready'));
         }
 
-        if (!empty($options['readOnly']) || !empty($options['disabled'])){
+        if (!empty($options['readOnly']) || !empty($options['disabled'])) {
             $this->calendarWidget->previewMode = true;
         }
 
