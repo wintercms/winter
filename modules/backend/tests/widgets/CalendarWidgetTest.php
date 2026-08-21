@@ -113,6 +113,19 @@ class CalendarWidgetTest extends PluginTestCase
         $this->assertCount(2, $widget->getRecords()['events']);
     }
 
+    public function testDateRangeFilterKeepsPointEventsWithoutAnEnd()
+    {
+        // A point event (no end) whose start is inside the window must survive the filter...
+        $this->seedEvent('point-inside', '2026-03-10 09:00:00', null);
+        // ...while one before the window is still excluded.
+        $this->seedEvent('point-before', '2026-02-10 09:00:00', null);
+
+        $widget = $this->makeCalendarWidget();
+        $titles = $this->titlesFrom($widget->getRecords($this->windowStart, $this->windowEnd));
+
+        $this->assertSame(['point-inside'], $titles);
+    }
+
     public function testDateRangeFilterCanBeDisabledViaConfig()
     {
         $this->seedEvent('inside', '2026-03-10 09:00:00', '2026-03-10 10:00:00');

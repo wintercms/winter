@@ -754,7 +754,9 @@ class Calendar extends WidgetBase
      * Constrains the query to records that intersect the visible calendar window.
      *
      * A record is considered visible when it ends on or after the window start and starts
-     * before the window end. Timestamps are Unix timestamps as provided by FullCalendar.
+     * before the window end. Records without an end (point events) are treated as ending at
+     * their start, so they are not dropped when their start falls within the window. Timestamps
+     * are Unix timestamps as provided by FullCalendar.
      *
      * @param integer $startTime unixTimestamp, the current calendar window startTime, eg: 1546149600
      * @param integer $endTime unixTimestamp, the current calendar window endTime, eg: 1549778400
@@ -763,7 +765,14 @@ class Calendar extends WidgetBase
     {
         $query->where(function ($innerQuery) use ($startTime, $endTime) {
             if ($startTime > 0) {
-                $innerQuery->whereRaw($this->recordEnd . ' >= ?', [Carbon::createFromTimestamp($startTime)]);
+                $start = Carbon::createFromTimestamp($startTime);
+                $innerQuery->where(function ($endQuery) use ($start) {
+                    $endQuery->whereRaw($this->recordEnd . ' >= ?', [$start])
+                        ->orWhere(function ($pointQuery) use ($start) {
+                            $pointQuery->whereRaw($this->recordEnd . ' is null')
+                                ->whereRaw($this->recordStart . ' >= ?', [$start]);
+                        });
+                });
             }
             if ($endTime > 0) {
                 $innerQuery->whereRaw($this->recordStart . ' < ?', [Carbon::createFromTimestamp($endTime)]);
