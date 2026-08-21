@@ -1,7 +1,5 @@
 <?php namespace System\Console;
 
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Helper\TableSeparator;
 use System\Models\PluginVersion;
 use Winter\Storm\Console\Command;
 
@@ -43,7 +41,7 @@ class PluginList extends Command
         }
 
         $rows = [];
-        foreach ($allPlugins as $plugin) {
+        foreach ($allPlugins->sortBy('code') as $plugin) {
             $rows[] = [
                 $plugin->code,
                 $plugin->version,

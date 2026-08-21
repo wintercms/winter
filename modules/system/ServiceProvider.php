@@ -307,6 +307,11 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsoleCommand('create.settings', \System\Console\CreateSettings::class);
         $this->registerConsoleCommand('create.test', \System\Console\CreateTest::class);
 
+        $this->app->singleton(Console\VendorPublish::class, function ($app) {
+            return new Console\VendorPublish($app['files']);
+        });
+        $this->commands(Console\VendorPublish::class);
+
         $this->registerConsoleCommand('winter.up', \System\Console\WinterUp::class);
         $this->registerConsoleCommand('winter.down', \System\Console\WinterDown::class);
         $this->registerConsoleCommand('winter.update', \System\Console\WinterUpdate::class);
