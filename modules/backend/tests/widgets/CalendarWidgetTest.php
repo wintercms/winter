@@ -5,6 +5,7 @@ namespace Backend\Tests\Widgets;
 use Backend\Tests\Fixtures\Models\CalendarEventFixture;
 use Backend\Widgets\Calendar;
 use Carbon\Carbon;
+use Config;
 use System\Tests\Bootstrap\PluginTestCase;
 use Winter\Storm\Database\Model;
 
@@ -178,5 +179,28 @@ class CalendarWidgetTest extends PluginTestCase
         $this->assertCount(1, $result['events']);
         $this->assertSame('recurring', $result['events'][0]['title']);
         $this->assertStringStartsWith('2026-03-10', $result['events'][0]['start']);
+    }
+
+    public function testTimezoneDefaultsToApplicationTimezone()
+    {
+        Config::set('app.timezone', 'America/Toronto');
+
+        $widget = $this->makeCalendarWidget();
+
+        $this->assertSame('America/Toronto', $widget->getTimezone());
+    }
+
+    public function testTimezoneConfigControlsEventOutputOffset()
+    {
+        $this->seedEvent('meeting', '2026-03-10 09:00:00', '2026-03-10 10:00:00');
+
+        // Tokyo has no DST, so the offset is unambiguous.
+        $tokyo = $this->makeCalendarWidget(['timezone' => 'Asia/Tokyo']);
+        $tokyoEvent = $tokyo->getRecords($this->windowStart, $this->windowEnd)['events'][0];
+        $this->assertSame('2026-03-10T09:00:00+09:00', $tokyoEvent['start']);
+
+        $utc = $this->makeCalendarWidget(['timezone' => 'UTC']);
+        $utcEvent = $utc->getRecords($this->windowStart, $this->windowEnd)['events'][0];
+        $this->assertSame('2026-03-10T09:00:00+00:00', $utcEvent['start']);
     }
 }

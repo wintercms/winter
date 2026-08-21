@@ -116,6 +116,16 @@ class Calendar extends WidgetBase
     public bool $applyDateRangeFilter = true;
 
     /**
+     * Timezone used when rendering event start/end times.
+     *
+     * Event times are emitted as offset-qualified ISO-8601 strings computed in this timezone,
+     * and the value is surfaced to the frontend so FullCalendar buckets events into the same
+     * zone. Defaults to the application timezone (`app.timezone`). Accepts any valid PHP
+     * timezone identifier (e.g. 'UTC', 'America/New_York').
+     */
+    public string $timezone = '';
+
+    /**
      * Array of CSS classes to apply to the Calendar container element
      */
     public array $cssClasses = [];
@@ -189,6 +199,7 @@ class Calendar extends WidgetBase
             'initialView',
             'firstDay',
             'applyDateRangeFilter',
+            'timezone',
         ]);
 
         // Initialize the search columns
@@ -254,7 +265,17 @@ class Calendar extends WidgetBase
         $this->vars['availableDisplayModes'] = $this->getDisplayModes();
         $this->vars['initialView'] = $this->getInitialView();
         $this->vars['firstDay'] = $this->firstDay;
+        $this->vars['timezone'] = $this->getTimezone();
         $this->vars['cssClasses'] = implode(' ', $this->cssClasses);
+    }
+
+    /**
+     * Returns the timezone identifier used for rendering event times, falling back to the
+     * application timezone when one has not been explicitly configured.
+     */
+    public function getTimezone(): string
+    {
+        return $this->timezone !== '' ? $this->timezone : Config::get('app.timezone', 'UTC');
     }
 
     /**
@@ -794,7 +815,7 @@ class Calendar extends WidgetBase
 
         $events = [];
 
-        $timeZone = new DateTimeZone(Config::get('app.timezone','UTC'));
+        $timeZone = new DateTimeZone($this->getTimezone());
 
         foreach ($records as $record) {
             if (empty($this->recordTooltip)) {

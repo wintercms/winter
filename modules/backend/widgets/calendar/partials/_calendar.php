@@ -4,6 +4,7 @@
     data-first-day = '<?= $firstDay; ?>'
     data-initial-view = '<?= $initialView; ?>'
     data-display-modes = '<?= $availableDisplayModes; ?>'
+    data-timezone = '<?= e($timezone); ?>'
     data-alias="<?= $this->alias; ?>"
     data-click-date="<?= $this->onClickDate ?>"
     data-editable="<?= !$this->previewMode; ?>"
