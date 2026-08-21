@@ -105,6 +105,17 @@ class Calendar extends WidgetBase
     public ?int $firstDay = 0;
 
     /**
+     * Apply the built-in visible-window date-range filter to the query in getRecords().
+     *
+     * The filter keeps month views efficient by only fetching records that intersect the
+     * visible window. Consumers that expand recurring events server-side in the
+     * `backend.calendar.extendRecords` event need master rows that start outside the window
+     * to survive the query, so they can disable this filter (via config or
+     * setApplyDateRangeFilter()) and apply their own window-aware constraint instead.
+     */
+    public bool $applyDateRangeFilter = true;
+
+    /**
      * Array of CSS classes to apply to the Calendar container element
      */
     public array $cssClasses = [];
@@ -177,6 +188,7 @@ class Calendar extends WidgetBase
             'availableDisplayModes',
             'initialView',
             'firstDay',
+            'applyDateRangeFilter',
         ]);
 
         // Initialize the search columns
@@ -699,6 +711,40 @@ class Calendar extends WidgetBase
     }
 
     /**
+     * Sets whether the built-in visible-window date-range filter is applied in getRecords().
+     *
+     * Intended to be called from `backend.calendar.extendQueryBefore` /
+     * `backend.calendar.extendQuery` listeners that expand recurring events server-side and
+     * need master rows outside the visible window to survive the query.
+     */
+    public function setApplyDateRangeFilter(bool $apply): static
+    {
+        $this->applyDateRangeFilter = $apply;
+        return $this;
+    }
+
+    /**
+     * Constrains the query to records that intersect the visible calendar window.
+     *
+     * A record is considered visible when it ends on or after the window start and starts
+     * before the window end. Timestamps are Unix timestamps as provided by FullCalendar.
+     *
+     * @param integer $startTime unixTimestamp, the current calendar window startTime, eg: 1546149600
+     * @param integer $endTime unixTimestamp, the current calendar window endTime, eg: 1549778400
+     */
+    protected function applyDateRangeToQuery($query, $startTime = 0, $endTime = 0): void
+    {
+        $query->where(function ($innerQuery) use ($startTime, $endTime) {
+            if ($startTime > 0) {
+                $innerQuery->whereRaw($this->recordEnd . ' >= ?', [Carbon::createFromTimestamp($startTime)]);
+            }
+            if ($endTime > 0) {
+                $innerQuery->whereRaw($this->recordStart . ' < ?', [Carbon::createFromTimestamp($endTime)]);
+            }
+        });
+    }
+
+    /**
      *
      *
      * @param integer $startTime unixTimestamp, the current calendar month startTime, eg: 1546149600
@@ -710,14 +756,23 @@ class Calendar extends WidgetBase
         $query = $this->prepareQuery($startTime, $endTime);
         $cacheKey = $this->getCacheKey($query);
 
-        /**
-         * The $startTime and $endTime are from calendar month, should be ignore
+        /*
+         * Constrain records to the visible calendar window at the database level.
+         *
+         * This is applied *after* getCacheKey() (so the client-side cache key stays stable
+         * across months) but *before* the `backend.calendar.extendRecords` event fires below.
+         * That ordering matters for recurring events: a master row whose base start date falls
+         * outside the visible window would otherwise be filtered out before a consumer could
+         * expand its occurrences into the window in `extendRecords`.
+         *
+         * Consumers that expand recurrence server-side can disable this built-in filter -
+         * either through the `applyDateRangeFilter` config option or by calling
+         * `$calendarWidget->setApplyDateRangeFilter(false)` from a
+         * `backend.calendar.extendQueryBefore` / `backend.calendar.extendQuery` listener - and
+         * apply their own window-aware constraint instead.
          */
-        if ($startTime > 0 ||  $endTime > 0){
-            $query->where(function ($innerQuery) use ($startTime, $endTime) {
-                if ($startTime > 0) $innerQuery->whereRaw($this->recordEnd .' >= ?', [Carbon::createFromTimestamp($startTime)]);
-                if ($endTime > 0) $innerQuery->whereRaw($this->recordStart . ' < ?', [Carbon::createFromTimestamp($endTime)]);
-            });
+        if ($this->applyDateRangeFilter && ($startTime > 0 || $endTime > 0)) {
+            $this->applyDateRangeToQuery($query, $startTime, $endTime);
         }
 
         $records = $query->get();
