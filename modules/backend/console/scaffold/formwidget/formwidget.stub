@@ -1,4 +1,6 @@
-<?php namespace {{studly_author}}\{{studly_plugin}}\FormWidgets;
+<?php
+
+namespace {{studly_author}}\{{studly_plugin}}\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
 

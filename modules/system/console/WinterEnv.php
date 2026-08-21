@@ -1,4 +1,6 @@
-<?php namespace System\Console;
+<?php
+
+namespace System\Console;
 
 use App;
 use Winter\Storm\Parse\EnvFile;
@@ -16,10 +18,20 @@ use Winter\Storm\Parse\PHP\ArrayFile;
  */
 class WinterEnv extends Command
 {
+    use \Illuminate\Console\ConfirmableTrait;
+
     /**
      * The console command name.
      */
     protected $name = 'winter:env';
+
+    /**
+     * The name and signature of the console command.
+     *
+     * @var string
+     */
+    protected $signature = 'winter:env
+                            {--force : Force the operation to run when in production}';
 
     /**
      * The console command description.
@@ -55,8 +67,12 @@ class WinterEnv extends Command
     public function handle(): int
     {
         if (
-            file_exists($this->laravel->environmentFilePath())
-            && !$this->confirmToProceed()
+            !$this->confirmToProceed(
+                'The .env file already exists. Proceeding may overwrite some values!',
+                function () {
+                    return file_exists($this->laravel->environmentFilePath()) && $this->getLaravel()->environment() === 'production';
+                }
+            )
         ) {
             return 1;
         }
@@ -67,34 +83,6 @@ class WinterEnv extends Command
         $this->info('.env configuration file has been created.');
 
         return 0;
-    }
-
-    /**
-     * Confirm before proceeding with the action.
-     *
-     * This method only asks for confirmation in production.
-     *
-     * @param  string  $warning
-     * @param  \Closure|bool|null  $callback
-     * @return bool
-     */
-    public function confirmToProceed($warning = 'Application In Production!', $callback = null)
-    {
-        if ($this->hasOption('force') && $this->option('force')) {
-            return true;
-        }
-
-        $this->alert('The .env file already exists. Proceeding may overwrite some values!');
-
-        $confirmed = $this->confirm('Do you really wish to run this command?');
-
-        if (!$confirmed) {
-            $this->comment('Command Canceled!');
-
-            return false;
-        }
-
-        return true;
     }
 
     /**

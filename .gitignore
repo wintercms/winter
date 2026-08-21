@@ -1,5 +1,5 @@
 # Composer ignores
-/vendor
+vendor
 composer.phar
 composer.lock
 
@@ -26,11 +26,13 @@ nbproject
 .vscode
 !.devcontainer/.vscode
 _ide_helper.php
+.zed
 
 # Other ignores
 .DS_Store
 package-lock.json
-/node_modules
+.phpunit.cache
+node_modules
 
 # Ignore generated public directory from `winter:mirror public`
 public

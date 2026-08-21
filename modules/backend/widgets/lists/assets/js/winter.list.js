@@ -67,6 +67,26 @@
                 $el.closest('tr').removeClass('active')
             }
         })
+
+        this.lastChecked = null
+
+        body.on('click', '.list-checkbox input[type="checkbox"]', (e) => {
+            const current = e.currentTarget
+
+            if (this.lastChecked && e.shiftKey) {
+                const checkboxes = $('.list-checkbox input[type="checkbox"]', body)
+                const start = checkboxes.index(current)
+                const end = checkboxes.index(this.lastChecked)
+
+                checkboxes
+                    .slice(Math.min(start, end), Math.max(start, end) + 1)
+                    .each(function () {
+                        $(this).prop('checked', current.checked).trigger('change')
+                    })
+            }
+
+            this.lastChecked = current
+        })
     }
 
     ListWidget.prototype.getChecked = function() {

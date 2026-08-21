@@ -2,26 +2,27 @@
 
 namespace Backend\Classes;
 
-use Lang;
-use View;
-use Flash;
-use Config;
-use Request;
-use Backend;
-use Redirect;
-use Response;
-use Exception;
-use BackendAuth;
-use Backend\Models\UserPreference;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Backend\Facades\BackendMenu;
 use Backend\Models\Preference as BackendPreference;
+use Backend\Models\UserPreference;
 use Backend\Widgets\MediaManager;
-use Winter\Storm\Exception\AjaxException;
-use Winter\Storm\Exception\SystemException;
-use Winter\Storm\Exception\ValidationException;
-use Winter\Storm\Exception\ApplicationException;
+use Exception;
 use Illuminate\Database\Eloquent\MassAssignmentException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Routing\Controller as ControllerBase;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\View;
+use Winter\Storm\Exception\AjaxException;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Exception\ValidationException;
+use Winter\Storm\Support\Facades\Config;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * The Backend base controller class, used by Backend controllers.
@@ -53,7 +54,7 @@ class Controller extends ControllerBase
     protected $user;
 
     /**
-     * @var array Collection of WidgetBase objects used on this page.
+     * @var object Collection of WidgetBase objects used on this page.
      */
     public $widget;
 
@@ -95,7 +96,7 @@ class Controller extends ControllerBase
     /**
      * @var string Body class property used for customising the layout on a controller basis.
      */
-    public $bodyClass;
+    public $bodyClass = '';
 
     /**
      * @var array Default methods which cannot be called as actions.
@@ -200,6 +201,26 @@ class Controller extends ControllerBase
     }
 
     /**
+     * Set the navigation context based on the current action & parameters
+     */
+    protected function setNavigationContext(?string $action = null, array $params = []): void
+    {
+        $context = BackendMenu::getContext();
+
+        // @TODO: Support detecting module controllers as well
+        $currentClass = explode('\\', get_class($this));
+        $author = $currentClass[0];
+        $plugin = $currentClass[1];
+        $controller = $currentClass[count($currentClass) - 1];
+
+        $owner = $context->owner ?? "$author.$plugin";
+        $mainMenuCode = $context->mainMenuCode ?? strtolower($plugin);
+        $sideMenuCode = $context->sideMenuCode ?? strtolower($controller);
+
+        BackendMenu::setContext($owner, $mainMenuCode, $sideMenuCode);
+    }
+
+    /**
      * Execute the controller action.
      * @param string $action The action name.
      * @param array $params Routing parameters to pass to the action.
@@ -248,7 +269,7 @@ class Controller extends ControllerBase
              * Check access groups against the page definition
              */
             if ($this->requiredPermissions && !$this->user->hasAnyAccess($this->requiredPermissions)) {
-                return Response::make(View::make('backend::access_denied'), 403);
+                abort(403);
             }
         }
 
@@ -282,6 +303,11 @@ class Controller extends ControllerBase
         BackendPreference::setAppFallbackLocale();
 
         /*
+         * Set the navigation context
+         */
+        $this->setNavigationContext($action, $params);
+
+        /*
          * Execute AJAX event
          */
         if ($ajaxResponse = $this->execAjaxHandlers()) {
@@ -293,11 +319,16 @@ class Controller extends ControllerBase
          */
         elseif (
             ($handler = post('_handler')) &&
-            $this->verifyCsrfToken() &&
-            ($handlerResponse = $this->runAjaxHandler($handler)) &&
-            $handlerResponse !== true
+            $this->verifyCsrfToken()
         ) {
-            $result = $handlerResponse;
+            $this->validateHandlerName($handler);
+
+            if (
+                ($handlerResponse = $this->runAjaxHandler($handler)) &&
+                $handlerResponse !== true
+            ) {
+                $result = $handlerResponse;
+            }
         }
 
         /*
@@ -338,10 +369,28 @@ class Controller extends ControllerBase
 
         if ($ownMethod) {
             $methodInfo = new \ReflectionMethod($this, $name);
+
+            /*
+             * Only allow lowercase actions. Compare the resolved method name rather than the
+             * requested one - PHP method names are case-insensitive, so a lowercased URL
+             * segment would otherwise pass this check and still resolve to the mixed-case
+             * method (eg. "index_onemptylog" reaching index_onEmptyLog()).
+             */
+            if (strtolower($methodInfo->getName()) !== $methodInfo->getName()) {
+                return false;
+            }
+
             $public = $methodInfo->isPublic();
             if ($public) {
                 return true;
             }
+        }
+        /*
+         * Extension methods are resolved through a case-sensitive lookup, so the requested
+         * name is already the canonical one.
+         */
+        elseif (strtolower($name) !== $name) {
+            return false;
         }
 
         if ($internal && (($ownMethod && $methodInfo->isProtected()) || !$ownMethod)) {
@@ -451,6 +500,18 @@ class Controller extends ControllerBase
     }
 
     /**
+     * Validates the AJAX handler name follows the expected format.
+     *
+     * @throws \Winter\Storm\Exception\SystemException if the handler name is invalid
+     */
+    protected function validateHandlerName(string $handler): void
+    {
+        if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
+            throw new SystemException(Lang::get('backend::lang.ajax_handler.invalid_name', ['name' => $handler]));
+        }
+    }
+
+    /**
      * This method is used internally.
      * Invokes a controller event handler and loads the supplied partials.
      */
@@ -461,9 +522,7 @@ class Controller extends ControllerBase
                 /*
                  * Validate the handler name
                  */
-                if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
-                    throw new SystemException(Lang::get('backend::lang.ajax_handler.invalid_name', ['name'=>$handler]));
-                }
+                $this->validateHandlerName($handler);
 
                 /*
                  * Validate the handler partial list
@@ -671,7 +730,7 @@ class Controller extends ControllerBase
      */
     protected function runAjaxHandlerForWidget($widget, $handler)
     {
-        $this->addViewPath($widget->getViewPaths());
+        $this->prependViewPath($widget->getViewPaths());
 
         $result = call_user_func_array([$widget, $handler], array_values($this->params));
 

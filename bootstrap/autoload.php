@@ -16,6 +16,7 @@ define('LARAVEL_START', microtime(true));
 $helperPath = __DIR__.'/../vendor/winter/storm/src/Support/helpers.php';
 
 if (!file_exists($helperPath)) {
+    header('HTTP/1.0 500 Internal Server Error');
     echo 'Missing vendor files, try running "composer install" or use the Wizard installer.'.PHP_EOL;
     exit(1);
 }

@@ -1,0 +1,22 @@
+<?php Block::put('breadcrumb') ?>
+    <?= $this->makeLayoutPartial('breadcrumb') ?>
+    <?= $this->formRenderRecordNavigation() ?>
+<?php Block::endPut() ?>
+
+<?php if (!$this->fatalError): ?>
+    <div class="layout fancy-layout">
+        <?= Form::open([
+            'id' => $this->formGetId(),
+            'class' => 'layout',
+            'data-change-monitor' => 'true',
+            'data-window-close-confirm' => 'true',
+        ]) ?>
+            <div class="layout-row">
+                <?= $this->formRender() ?>
+            </div>
+        <?= Form::close() ?>
+    </div>
+<?php else: ?>
+    <p class="flash-message static error"><?= e($this->fatalError) ?></p>
+    <p><a href="<?= isset($formConfig) ? Backend::url($formConfig->defaultRedirect) : 'javascript:history.back()' ?>" class="btn btn-default"><?= e(trans('backend::lang.form.return_to_list')); ?></a></p>
+<?php endif ?>

@@ -44,16 +44,16 @@
 .control-assetlist ul li.active a.link:after{position:absolute;height:100%;width:4px;left:0;top:0;background:#2da7c7;display:block;content:' '}
 .control-assetlist ul li div.controls{position:absolute;right:45px;top:10px}
 .control-assetlist ul li div.controls .dropdown{width:14px;height:21px}
-.control-assetlist ul li div.controls .dropdown.open a.control{display:block !important}
+.control-assetlist ul li div.controls .dropdown.open a.control{display:block!important}
 .control-assetlist ul li div.controls .dropdown.open a.control:before{visibility:visible;display:block}
 .control-assetlist ul li div.controls a.control{color:#405261;font-size:14px;visibility:hidden;overflow:hidden;width:14px;height:21px;display:none;text-decoration:none;cursor:pointer;opacity:0.5;filter:alpha(opacity=50)}
 .control-assetlist ul li div.controls a.control:before{visibility:visible;display:block;margin-right:0}
 .control-assetlist ul li div.controls a.control:hover{opacity:1;filter:alpha(opacity=100)}
 .control-assetlist ul li:hover{background:#ddd}
 .control-assetlist ul li:hover div.controls,
-.control-assetlist ul li:hover a.control{display:block !important}
+.control-assetlist ul li:hover a.control{display:block!important}
 .control-assetlist ul li:hover div.controls>a.control,
-.control-assetlist ul li:hover a.control>a.control{display:block !important}
+.control-assetlist ul li:hover a.control>a.control{display:block!important}
 .control-assetlist ul li .checkbox{position:absolute;top:-5px;right:-5px}
 .control-assetlist ul li .checkbox label{margin-right:0}
 .control-assetlist ul li .checkbox label:before{border-color:#ccc}

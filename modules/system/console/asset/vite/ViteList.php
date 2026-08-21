@@ -1,6 +1,6 @@
 <?php
 
-namespace System\console\asset\vite;
+namespace System\Console\Asset\Vite;
 
 use System\Console\Asset\AssetList;
 

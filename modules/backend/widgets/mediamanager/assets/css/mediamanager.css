@@ -61,7 +61,7 @@ div[data-control="media-manager"] .media-list.list li .icon-container{border-rig
 div[data-control="media-manager"] .media-list.list li .icon-container img{max-height:75px}
 div[data-control="media-manager"] .media-list.list li .icon-container i{font-size:35px}
 div[data-control="media-manager"] .media-list.list li .icon-container svg{max-height:44px}
-div[data-control="media-manager"] .media-list.list li .icon-container.image{border-right:1px solid #ecf0f1!important}
+div[data-control="media-manager"] .media-list.list li .icon-container.image{border-right:1px solid #ecf0f1 !important}
 div[data-control="media-manager"] .media-list.list li .icon-container p.thumbnail-error-message{display:none}
 div[data-control="media-manager"] .media-list.list .icon-wrapper{width:75px}
 div[data-control="media-manager"] .media-list.list li .info{margin-left:90px}
@@ -129,12 +129,12 @@ div[data-control="media-manager"] .upload-progress h5{margin:0 0 10px 0;font-siz
 div[data-control="media-manager"] .upload-progress h5 span{display:inline-block;margin-left:10px;color:#95a5a6;font-size:15px}
 div[data-control="media-manager"] .upload-progress .progress-controls{padding-right:30px;position:relative}
 div[data-control="media-manager"] .upload-progress .progress-controls .controls{position:absolute;right:0;bottom:0}
-div[data-control="media-manager"] .upload-progress .progress-controls .controls a{display:block;position:relative;top:7px;right:3px;color:#95a5a6;font-size:16px;cursor:pointer !important}
+div[data-control="media-manager"] .upload-progress .progress-controls .controls a{display:block;position:relative;top:7px;right:3px;color:#95a5a6;font-size:16px;cursor:pointer!important}
 div[data-control="media-manager"] .upload-progress .progress-controls .controls a:hover{text-decoration:none;color:#2da7c7}
 div[data-control="media-manager"] .dz-preview{display:none}
 div[data-control="media-manager"] button[data-command="toggle-sidebar"].sidebar-hidden{-webkit-transform:rotate(180deg) translate(0,0);-ms-transform:rotate(180deg) translate(0,0);transform:rotate(180deg) translate(0,0)}
 [data-control="media-manager-crop-tool"] .image_area{position:absolute;width:100%;height:100%;overflow:auto}
-[data-control="media-manager-crop-tool"] .image_area .jcrop-holder{background-color:transparent !important}
+[data-control="media-manager-crop-tool"] .image_area .jcrop-holder{background-color:transparent!important}
 [data-control="media-manager-crop-tool"] img{cursor:crosshair;display:block}
 [data-control="media-manager-crop-tool"].has-rulers .ruler-container .layout-relative{overflow:hidden}
 [data-control="media-manager-crop-tool"].has-rulers .ruler-container.horizontal .layout-cell{height:20px}
@@ -165,5 +165,5 @@ body:not(.no-select) div[data-control="media-manager"] .media-list.list li:hover
 body:not(.no-select) div[data-control="media-manager"] .media-list li:hover h4 a{display:block}
 @media (max-width:1280px){div[data-control="media-manager"] .media-list.list li{width:230px}}
 @media (max-width:1024px){div[data-control="media-manager"] .media-list.list li{display:block;width:auto}}
-@media (max-width:768px){div[data-control="media-manager"] [data-control="preview-sidebar"],div[data-control="media-manager"] [data-command="toggle-sidebar"]{display:none !important}div[data-control="media-manager"] .media-list.list{padding:0}div[data-control="media-manager"] .media-list.list li{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;margin:0;border-right:none;border-left:none;border-bottom:none}}
-@media (max-width:480px){div[data-control="media-manager"] [data-control="left-sidebar"]{display:none !important}}
+@media (max-width:768px){div[data-control="media-manager"] [data-control="preview-sidebar"],div[data-control="media-manager"] [data-command="toggle-sidebar"]{display:none!important}div[data-control="media-manager"] .media-list.list{padding:0}div[data-control="media-manager"] .media-list.list li{-webkit-border-radius:0;-moz-border-radius:0;border-radius:0;margin:0;border-right:none;border-left:none;border-bottom:none}}
+@media (max-width:480px){div[data-control="media-manager"] [data-control="left-sidebar"]{display:none!important}}

@@ -303,6 +303,220 @@ class SecurityPolicyTest extends TestCase
         ');
     }
 
+    //
+    // GHSA-8cfw-pcwh-v63w — bypasses of the CVE-2024-54149 patch, and adjacent vectors
+    //
+
+    public function testCannotSaveQuietlyAModel()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = model.saveQuietly() %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    public function testCannotForceFillAModel()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = model.forceFill({ is_admin: 1 }) %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    public function testCannotDestroyAModel()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = model.destroy(1) %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    // Reaches the Query Builder through the Model's __call forwarding (blocked via the chain)
+    public function testCannotIncrementAModelViaForwarderChain()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = model.increment("price", 99999) %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    // callable-typed builder method reached via the chain — would execute a string callable
+    public function testCannotCallWhenExecutorOnModel()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = model.when(1, "phpinfo") %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    public function testCannotCallEachExecutorOnModel()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = model.each("phpinfo") %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    public function testCannotGetConnectionResolverFromModel()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set r = model.getConnectionResolver() %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    // The DatabaseManager (ConnectionResolverInterface) forwards any method to a live Connection
+    public function testCannotRunArbitrarySqlViaConnectionResolver()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set rows = resolver.select("SELECT 1") %}
+        ', ['resolver' => app('db')]);
+    }
+
+    // extend() runs an arbitrary callable bound to the model — a direct RCE primitive
+    public function testCannotExecuteCallableViaExtend()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = model.extend("phpinfo") %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    public function testCannotRunCallableViaUnguarded()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = model.unguarded("phpinfo") %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    // Deferred callable-injection via the extension callback registrars
+    public function testCannotRegisterExtendCallbackOnModel()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = model.extendableExtendCallback("phpinfo") %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    public function testCannotRepointAModelTable()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = model.setTable("backend_users") %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    // RCE PoC: writing PHP into the current page/layout code section via the Halcyon Builder
+    public function testCannotUpdateViaHalcyonBuilder()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = this.page.newQuery().update({ code: "<?php echo 1; ?>" }) %}
+        ');
+    }
+
+    public function testCannotUpdateALayoutModel()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = this.layout.update({ code: "x" }) %}
+        ');
+    }
+
+    public function testCannotWriteThemeConfig()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = this.theme.writeConfig({ foo: "bar" }) %}
+        ');
+    }
+
+    public function testCannotRunNestedPageCycleFromController()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = this.controller.run("/") %}
+        ');
+    }
+
+    public function testCannotFireSystemEventFromController()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = this.controller.fireSystemEvent("test.event", []) %}
+        ');
+    }
+
+    public function testCannotUseSourceFunction()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedFunctionError::class);
+        $this->renderTwigInCmsController('
+            {{ source("backend::index") }}
+        ');
+    }
+
+    public function testCannotUseConstantFunction()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedFunctionError::class);
+        $this->renderTwigInCmsController('
+            {{ constant("PHP_VERSION") }}
+        ');
+    }
+
+    // Regression guard: the custom GetAttrNode must still enforce the policy (forward $sandboxed)
+    public function testCustomAttributeNodeStillEnforcesPolicy()
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController('
+            {% set _ = model.save() %}
+        ', ['model' => new \Winter\Storm\Database\Model()]);
+    }
+
+    //
+    // SafeCollection — higher-order callable arguments are neutralised, reads still work
+    //
+
+    // filter("is_numeric") would keep only numeric items; stripped to filter(null) it only drops
+    // falsy values, so all three truthy strings survive — proving the callable was neutralised.
+    public function testSafeCollectionStripsMethodCallback()
+    {
+        $result = trim($this->renderTwigInCmsController(
+            '{{- items.filter("is_numeric").count() -}}',
+            ['items' => collect(['1', 'a', '2'])]
+        ));
+        $this->assertEquals('3', $result);
+    }
+
+    // The built-in attribute() function compiles to an ANY_CALL and must be cast as well.
+    public function testSafeCollectionStripsViaAttributeFunction()
+    {
+        $result = trim($this->renderTwigInCmsController(
+            '{{- attribute(items, "filter", ["is_numeric"]).count() -}}',
+            ['items' => collect(['1', 'a', '2'])]
+        ));
+        $this->assertEquals('3', $result);
+    }
+
+    public function testSafeCollectionRemainsIterable()
+    {
+        $result = trim($this->renderTwigInCmsController(
+            '{% for i in items.filter("is_numeric") %}{{ i }}{% endfor %}',
+            ['items' => collect(['1', 'a', '2'])]
+        ));
+        $this->assertEquals('1a2', $result);
+    }
+
+    public function testTwigMapFilterFormStillWorks()
+    {
+        $result = trim($this->renderTwigInCmsController(
+            '{{- items|map(v => v ~ "!")|join(",") -}}',
+            ['items' => collect(['a', 'b'])]
+        ));
+        $this->assertEquals('a!,b!', $result);
+    }
+
     protected function renderTwigInCmsController(string $source, array $vars = [])
     {
         $controller = new Controller();

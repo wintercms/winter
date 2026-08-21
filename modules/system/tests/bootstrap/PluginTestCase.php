@@ -80,6 +80,9 @@ abstract class PluginTestCase extends TestCase
 
         parent::setUp();
 
+        // Reset loaded routes
+        $this->app['router']->setRoutes(new \Illuminate\Routing\RouteCollection);
+
         // Run all migrations
         Artisan::call('winter:up');
 
@@ -90,6 +93,11 @@ abstract class PluginTestCase extends TestCase
         $pluginCode = $this->guessPluginCode();
         if (!is_null($pluginCode)) {
             $this->instantiatePlugin($pluginCode, false);
+        }
+
+        // Reload module routes
+        foreach (Config::get('cms.loadModules', []) as $module) {
+            include base_path("modules/" . strtolower($module) . "/routes.php");
         }
 
         // Disable mailing

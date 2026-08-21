@@ -603,7 +603,7 @@ class UpdateManager
      * @param string $stopOnVersion If this parameter is specified, the process stops once the provided version number is reached
      * @return self
      */
-    public function rollbackPlugin(string $name, string $stopOnVersion = null)
+    public function rollbackPlugin(string $name, ?string $stopOnVersion = null)
     {
         /*
          * Remove the plugin database and version
@@ -612,6 +612,11 @@ class UpdateManager
             && $this->versionManager->purgePlugin($name)
         ) {
             $this->write(Info::class, sprintf('%s purged from database', $name));
+            return $this;
+        }
+
+        if (!$plugin) {
+            $this->write(Error::class, sprintf('Unable to find plugin %s', $name));
             return $this;
         }
 

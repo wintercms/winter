@@ -20,9 +20,10 @@ class CreateController extends BaseScaffoldCommand
     protected $signature = 'create:controller
         {plugin : The name of the plugin. <info>(eg: Winter.Blog)</info>}
         {controller : The name of the controller to generate. <info>(eg: Posts)</info>}
+        {--stubs : Create view files for local overwrites.}
         {--force : Overwrite existing files with generated files.}
         {--model= : Defines the model name to use. If not provided, the singular name of the controller is used.}
-        {--sidebar : Create stubs for form-with-sidebar layout}
+        {--l|layout=standard : Set the formLayout to use (standard, sidebar, fancy)}
         {--uninspiring : Disable inspirational quotes}
     ';
 
@@ -42,13 +43,16 @@ class CreateController extends BaseScaffoldCommand
     protected $nameFrom = 'controller';
 
     /**
+     * @var bool Allows the process to continue if an existing file is detected
+     */
+    protected bool $throwOverwriteException = false;
+
+    /**
      * @var array A mapping of stub to generated file.
      */
     protected $stubs = [
-        'scaffold/controller/_list_toolbar.stub' => 'controllers/{{lower_name}}/_list_toolbar.php',
         'scaffold/controller/config_form.stub'   => 'controllers/{{lower_name}}/config_form.yaml',
         'scaffold/controller/config_list.stub'   => 'controllers/{{lower_name}}/config_list.yaml',
-        'scaffold/controller/index.stub'         => 'controllers/{{lower_name}}/index.php',
         'scaffold/controller/controller.stub'    => 'controllers/{{studly_name}}.php',
     ];
 
@@ -58,6 +62,7 @@ class CreateController extends BaseScaffoldCommand
     protected function prepareVars(): array
     {
         $vars = parent::prepareVars();
+        $layout = $this->option('layout');
         /*
          * Determine the model name to use,
          * either supplied or singular from the controller name.
@@ -67,13 +72,21 @@ class CreateController extends BaseScaffoldCommand
             $model = Str::singular($vars['name']);
         }
         $vars['model'] = $model;
-        $vars['sidebar'] = $this->option('sidebar');
+        $vars['sidebar'] = $layout === 'sidebar';
+        $vars['fancy'] = $layout === 'fancy';
+        $vars['stubs'] = $this->option('stubs');
 
-        $layout = $this->option('sidebar') ? 'sidebar' : 'standard';
+        if ($this->option('stubs')) {
+            $this->stubs['scaffold/controller/index.stub'] = 'controllers/{{lower_name}}/index.php';
+            $this->stubs['scaffold/controller/_list_toolbar.stub'] = 'controllers/{{lower_name}}/_list_toolbar.php';
+            $this->stubs["scaffold/controller/{$layout}/create.stub"] = 'controllers/{{lower_name}}/create.php';
+            $this->stubs["scaffold/controller/{$layout}/update.stub"] = 'controllers/{{lower_name}}/update.php';
+            $this->stubs["scaffold/controller/{$layout}/preview.stub"] = 'controllers/{{lower_name}}/preview.php';
 
-        $this->stubs["scaffold/controller/{$layout}/create.stub"] = 'controllers/{{lower_name}}/create.php';
-        $this->stubs["scaffold/controller/{$layout}/update.stub"] = 'controllers/{{lower_name}}/update.php';
-        $this->stubs["scaffold/controller/{$layout}/preview.stub"] = 'controllers/{{lower_name}}/preview.php';
+            if ($layout === 'fancy') {
+                $this->stubs['scaffold/controller/fancy/_toolbar.stub'] = 'controllers/{{lower_name}}/_toolbar.php';
+            }
+        }
 
         return $vars;
     }

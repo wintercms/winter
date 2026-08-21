@@ -51,6 +51,7 @@ The development of Winter is lead by [Luke Towers](https://luketowers.ca/), alon
     <td align="center"><a href="https://github.com/bennothommo"><img src="https://avatars.githubusercontent.com/u/15900351?v=3" width="100px;" alt="Ben Thomson"/><br /><sub><b>Ben Thomson</b></sub></a></td>
     <td align="center"><a href="https://github.com/mjauvin"><img src="https://avatars.githubusercontent.com/u/2013630?v=3" width="100px;" alt="Marc Jauvin"/><br /><sub><b>Marc Jauvin</b></sub></a></td>
     <td align="center"><a href="https://github.com/jaxwilko"><img src="https://avatars.githubusercontent.com/u/31214002?v=4" width="100px;" alt="Jack Wilkinson"/><br /><sub><b>Jack Wilkinson</b></sub></a></td>
+    <td align="center"><a href="https://github.com/damsfx"><img src="https://cdn.wintercms.com/media/coins/headshots/19.jpg" width="100px;" alt="Damien Mathieu"/><br /><sub><b>Damien Mathieu</b></sub></a></td>
   </tr>
 </table>
 
@@ -83,29 +84,27 @@ In order to ensure that the Winter community is welcoming to all, please review 
 
 ## Sponsors
 
-Winter CMS development is financially supported by the generosity of the following sponsors:
+Winter CMS development is financially supported by the generosity of the following sponsors. If you would like to have your name, company and link added to this list and support open-source development, feel free to make a donation to our [Open Collective](https://opencollective.com/wintercms).
 
 ### Organizations
 
-[![Route4Me logo, Route Planning and Route Mapping](https://raw.githubusercontent.com/wintercms/winter/develop/.github/assets/sponsor-route4me.png)](https://route4me.com/?utm_source=wintercms)
+<a href="https://laravel.com/?ref=wintercms" target="_blank">
+    <img src="https://raw.githubusercontent.com/laravel/art/refs/heads/master/logo-type/5%20svg/3%20RGB/1%20Full%20Color/laravel-logotype-rgb-red.svg" alt="Laravel logo" width="300">
+</a>
 
-Route4Me is a [Premium Sponsor to the Winter CMS Open Collective](https://opencollective.com/wintercms).
+Laravel provides [Laravel Vapor](https://vapor.laravel.com/?ref=wintercms) to the Winter CMS project which is used to power the serverless PHP hosting used for our [main website and documentation](https://wintercms.com/). 
 
-[![Froala logo](https://froala.com/wp-content/uploads/2019/10/froala.svg)](https://froala.com/wysiwyg-editor/)
+<a href="https://froala.com/wysiwyg-editor/" target="_blank">
+    <img src="https://froala.com/wp-content/uploads/2019/10/froala.svg" alt="Froala logo" width="300">
+</a>
 
 Froala provides a perpetual, Enterprise license to Winter CMS which allows us and our users to use the Froala WYSIWYG Editor in Winter CMS powered projects.
-
-Big thanks to our sponsors on OpenCollective:
-
-- [FrogeHost](https://froge.host/?utm_source=wintercms)
 
 ### Individuals
 
 Big thanks to our sponsors on OpenCollective:
 
 - Orville
-
-If you would like to have your name, company and link added to this list and support open-source development, feel free to make a donation to our [Open Collective](https://opencollective.com/wintercms).
 
 ## License
 

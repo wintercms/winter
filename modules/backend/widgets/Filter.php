@@ -1,15 +1,17 @@
-<?php namespace Backend\Widgets;
+<?php
 
-use Db;
-use Str;
-use Lang;
-use Backend;
-use DbDongle;
-use Carbon\Carbon;
-use Backend\Classes\WidgetBase;
+namespace Backend\Widgets;
+
 use Backend\Classes\FilterScope;
-use ApplicationException;
-use BackendAuth;
+use Backend\Classes\WidgetBase;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\DbDongle;
+use Winter\Storm\Support\Str;
 
 /**
  * Filter Widget
@@ -183,6 +185,15 @@ class Filter extends WidgetBase
                 $params['size'] = array_get($scope->config, 'size', 10);
 
                 break;
+
+            case 'button-group':
+            case 'dropdown':
+                $params['value'] = $scope->value;
+                if (is_array($options = $this->getOptionsFromArray($scope))) {
+                    $scope->options = $options;
+                }
+
+                break;
         }
 
         return $this->makePartial('scope_'.$scope->type, $params);
@@ -227,6 +238,11 @@ class Filter extends WidgetBase
                 $data = json_decode(post('options'), true);
                 $active = $this->optionsFromAjax($data ?: null);
                 $this->setScopeValue($scope, $active);
+                break;
+
+            case 'button-group':
+            case 'dropdown':
+                $this->setScopeValue($scope, post('value') ?: null);
                 break;
 
             case 'checkbox':
@@ -466,18 +482,25 @@ class Filter extends WidgetBase
             $model = $this->scopeModels[$scope->scopeName];
             $methodName = $options;
 
-            if (!$model->methodExists($methodName)) {
-                throw new ApplicationException(Lang::get('backend::lang.filter.options_method_not_exists', [
-                    'model'  => get_class($model),
-                    'method' => $methodName,
-                    'filter' => $scope->scopeName
-                ]));
-            }
-
-            if (!empty($scope->dependsOn)) {
-                $options = $model->$methodName($this->getScopes());
+            if (str_contains($methodName, '::')) {
+                $options = Lang::get($methodName);
+                if (!is_array($options)) {
+                    $options = [];
+                }
             } else {
-                $options = $model->$methodName();
+                if (!$model->methodExists($methodName)) {
+                    throw new ApplicationException(Lang::get('backend::lang.filter.options_method_not_exists', [
+                        'model'  => get_class($model),
+                        'method' => $methodName,
+                        'filter' => $scope->scopeName
+                    ]));
+                }
+
+                if (!empty($scope->dependsOn)) {
+                    $options = $model->$methodName($this->getScopes());
+                } else {
+                    $options = $model->$methodName();
+                }
             }
         }
         elseif (!is_array($options)) {
@@ -756,11 +779,13 @@ class Filter extends WidgetBase
                      * Condition
                      */
                     if ($scopeConditions = $scope->conditions) {
-                        $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
-                            ':filtered' => $value->format('Y-m-d'),
-                            ':after'    => $value->format('Y-m-d H:i:s'),
-                            ':before'   => $value->copy()->addDay()->addMinutes(-1)->format('Y-m-d H:i:s')
-                        ])));
+                        [$sql, $bindings] = $this->processConditionBindings($scopeConditions, [
+                            'filtered' => $value->format('Y-m-d'),
+                            'after'    => $value->format('Y-m-d H:i:s'),
+                            'before'   => $value->copy()->addDay()->addMinutes(-1)->format('Y-m-d H:i:s'),
+                        ]);
+
+                        $query->whereRaw(DbDongle::parse($sql), $bindings);
                     }
                     /*
                      * Scope
@@ -781,12 +806,14 @@ class Filter extends WidgetBase
                          * Condition
                          */
                         if ($scopeConditions = $scope->conditions) {
-                            $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
-                                ':afterDate'  => $after->format('Y-m-d'),
-                                ':after'      => $after->format('Y-m-d H:i:s'),
-                                ':beforeDate' => $before->format('Y-m-d'),
-                                ':before'     => $before->format('Y-m-d H:i:s')
-                            ])));
+                            [$sql, $bindings] = $this->processConditionBindings($scopeConditions, [
+                                'afterDate'  => $after->format('Y-m-d'),
+                                'after'      => $after->format('Y-m-d H:i:s'),
+                                'beforeDate' => $before->format('Y-m-d'),
+                                'before'     => $before->format('Y-m-d H:i:s'),
+                            ]);
+
+                            $query->whereRaw(DbDongle::parse($sql), $bindings);
                         }
                         /*
                          * Scope
@@ -805,9 +832,11 @@ class Filter extends WidgetBase
                      * Condition
                      */
                     if ($scopeConditions = $scope->conditions) {
-                        $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
-                            ':filtered' => $scope->value,
-                        ])));
+                        [$sql, $bindings] = $this->processConditionBindings($scopeConditions, [
+                            'filtered' => (float) $scope->value,
+                        ]);
+
+                        $query->whereRaw(DbDongle::parse($sql), $bindings);
                     }
                     /*
                      * Scope
@@ -828,10 +857,12 @@ class Filter extends WidgetBase
                          * Condition
                          */
                         if ($scopeConditions = $scope->conditions) {
-                            $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
-                                ':min'  => $min === null ? -2147483647 : $min,
-                                ':max'  => $max === null ? 2147483647 : $max
-                            ])));
+                            [$sql, $bindings] = $this->processConditionBindings($scopeConditions, [
+                                'min' => $min === null ? -2147483647 : (float) $min,
+                                'max' => $max === null ? 2147483647 : (float) $max,
+                            ]);
+
+                            $query->whereRaw(DbDongle::parse($sql), $bindings);
                         }
                         /*
                          * Scope
@@ -850,7 +881,7 @@ class Filter extends WidgetBase
                  */
                 if ($scopeConditions = $scope->conditions) {
                     $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [
-                        ':value' => Db::getPdo()->quote($scope->value),
+                        ':value' => DB::getPdo()->quote($scope->value),
                     ])));
                 }
 
@@ -884,11 +915,11 @@ class Filter extends WidgetBase
 
                     if (is_array($value)) {
                         $filtered = implode(',', array_build($value, function ($key, $_value) {
-                            return [$key, Db::getPdo()->quote($_value)];
+                            return [$key, DB::getPdo()->quote($_value)];
                         }));
                     }
                     else {
-                        $filtered = Db::getPdo()->quote($value);
+                        $filtered = DB::getPdo()->quote($value);
                     }
 
                     $query->whereRaw(DbDongle::parse(strtr($scopeConditions, [':filtered' => $filtered])));
@@ -1071,15 +1102,16 @@ class Filter extends WidgetBase
     protected function numbersFromAjax($ajaxNumbers)
     {
         $numbers = [];
-        $numberRegex = '/\d/';
 
         if (!empty($ajaxNumbers)) {
-            if (!is_array($ajaxNumbers) && preg_match($numberRegex, $ajaxNumbers)) {
-                $numbers = [$ajaxNumbers];
+            if (!is_array($ajaxNumbers)) {
+                if (is_numeric($ajaxNumbers)) {
+                    $numbers = [(float) $ajaxNumbers];
+                }
             } else {
-                foreach ($ajaxNumbers as $i => $number) {
-                    if (preg_match($numberRegex, $number)) {
-                        $numbers[] = $number;
+                foreach ($ajaxNumbers as $number) {
+                    if (is_numeric($number)) {
+                        $numbers[] = (float) $number;
                     } else {
                         $numbers[] = null;
                     }
@@ -1088,6 +1120,37 @@ class Filter extends WidgetBase
         }
 
         return $numbers;
+    }
+
+    /**
+     * Converts named :placeholder parameters in a conditions string to
+     * positional ? parameters and returns the modified SQL along with an
+     * ordered bindings array. Only placeholders present in the provided
+     * named bindings are replaced; unknown placeholders are left as-is.
+     *
+     * Laravel's query builder does not support named PDO parameters in
+     * whereRaw(), so this conversion is required.
+     *
+     * @return array{string, array}  [processedSql, orderedBindings]
+     */
+    protected function processConditionBindings(string $conditions, array $namedBindings): array
+    {
+        $orderedBindings = [];
+
+        // Match ':placeholder' (quoted) or :placeholder (unquoted).
+        // Existing plugin configs may wrap placeholders in SQL quotes
+        // (e.g. "expenses >= ':min'"), which must be stripped so PDO
+        // sees a real ? parameter instead of a quoted literal '?'.
+        $processedSql = preg_replace_callback("/(?:':(\\w+)'|:(\\w+))/", function ($matches) use ($namedBindings, &$orderedBindings) {
+            $name = $matches[1] !== '' ? $matches[1] : $matches[2];
+            if (array_key_exists($name, $namedBindings)) {
+                $orderedBindings[] = $namedBindings[$name];
+                return '?';
+            }
+            return $matches[0];
+        }, $conditions);
+
+        return [$processedSql, $orderedBindings];
     }
 
     /**

@@ -2,7 +2,7 @@
 
 namespace {{ plugin_namespace }};
 
-use Backend;
+use Backend\Facades\Backend;
 use Backend\Models\UserRole;
 use System\Classes\PluginBase;
 

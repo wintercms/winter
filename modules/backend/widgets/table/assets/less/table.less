@@ -6,6 +6,9 @@
 
 @table-active-border: #e0e0e0;
 @table-inactive-border: #e0e0e0;
+@table-odd-row: #ffffff;
+@table-even-row: #fafafa;
+@table-disabled-field: #f7f7f7;
 
 .control-table {
     .table-container {
@@ -17,6 +20,10 @@
         &:last-child {
             margin-bottom: 0;
         }
+    }
+
+    &:not([data-records-per-page="false"]) .table-container {
+        .border-bottom-radius(0);
     }
 
     &.active .table-container {
@@ -88,6 +95,11 @@
             .content-container {
                 position: relative;
                 padding: 1px;
+                outline: none;
+
+                &.readonly {
+                    background: @table-disabled-field;
+                }
             }
 
             &.active {
@@ -119,7 +131,7 @@
         }
 
         tr {
-            background-color: white;
+            background-color: @table-odd-row;
 
             &.error {
                 background-color: #fbecec!important;
@@ -138,7 +150,7 @@
         }
 
         tr:nth-child(2n) {
-            background-color: #fbfbfb;
+            background-color: @table-even-row;
         }
     }
 
@@ -176,6 +188,7 @@
     .toolbar {
         background: white;
         border-bottom: 1px solid @table-inactive-border;
+        .clearfix();
 
         a.btn {
             color: #323e50;
@@ -191,7 +204,7 @@
 
         .table-search {
             float: right;
-            margin: 3px 3px 0 0;
+            margin: 3px 3px 3px 0;
 
             .table-search-input {
                 height: auto;
@@ -227,29 +240,43 @@
     }
 
     .pagination {
+        margin: -15px 0 15px;
+        padding: 7px 10px;
+        background: white;
+        border: 1px solid @table-inactive-border;
+        border-top: none;
+        .border-bottom-radius(4px);
+
         ul {
             padding: 0;
-            margin-bottom: 15px;
+            margin: 0;
 
             li {
                 list-style: none;
-                padding: 4px 6px;
-                .border-radius(2px);
+
                 display: inline-block;
                 margin-right: 5px;
                 font-size: 12px;
-                background: #ecf0f1;
                 line-height: 100%;
 
                 a {
+                    display: inline-block;
                     text-decoration: none;
                     color: #95a5a6;
+                    padding: 4px 6px;
+                    background: #ecf0f1;
+                    .border-radius(2px);
+                    outline: none;
+                    line-height: 100%;
                 }
 
-                &.active {
-                    background: @brand-accent;
+                a:focus-visible {
+                    outline: auto;
+                }
 
-                    a {color: #ffffff;}
+                &.active a {
+                    background: @brand-accent;
+                    color: #ffffff;
                 }
             }
         }
@@ -340,7 +367,7 @@ ul.table-widget-autocomplete {
             border-radius: @border-radius-base;
             background-color: #FFFFFF;
             border: 1px solid @color-custom-input-border;
-            margin: 5px 5px 5px 10px;
+            margin: 6px 5px 6px 10px;
             cursor: pointer;
 
             .user-select(none);
@@ -376,8 +403,6 @@ ul.table-widget-autocomplete {
 
 .control-table {
     td[data-column-type=dropdown] {
-        .user-select(none);
-
         .dropdown-arrow() {
             .icon(@angle-down);
             font-size: 13px;
@@ -388,17 +413,21 @@ ul.table-widget-autocomplete {
             right: 10px;
         }
 
-        [data-view-container] {
-            padding-right: 20px;
-            position: relative;
-            cursor: pointer;
+        .content-container:not(.readonly) {
+            .user-select(none);
 
-            &:after {
-                .dropdown-arrow();
-            }
+            [data-view-container] {
+                padding-right: 20px;
+                position: relative;
+                cursor: pointer;
 
-            &:hover:after {
-                color: @link-color;
+                &:after {
+                    .dropdown-arrow();
+                }
+
+                &:hover:after {
+                    color: @link-color;
+                }
             }
         }
 
@@ -407,10 +436,6 @@ ul.table-widget-autocomplete {
             [data-view-container]:after {
                 .icon(@angle-up);
             }
-        }
-
-        .content-container {
-            outline: none;
         }
     }
 }

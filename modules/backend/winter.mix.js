@@ -27,12 +27,15 @@ mix
         ],
         to: './assets/ui/js/build/vendor.js',
     })
+    .vue({ version: 3 })
 
     // Compile Snowboard assets for the Backend
     .js(
         './assets/ui/js/index.js',
         './assets/ui/js/build/backend.js',
     )
+
+    // Compile widgets for Backend
     .js(
         './formwidgets/colorpicker/assets/js/src/ColorPicker.js',
         './formwidgets/colorpicker/assets/js/dist/colorpicker.js',
@@ -44,6 +47,18 @@ mix
     .js(
         './formwidgets/sensitive/assets/js/src/Sensitive.js',
         './formwidgets/sensitive/assets/js/dist/sensitive.js',
+    )
+
+    // Compile the list widget drag-and-drop reordering bundle (includes SortableJS)
+    .js(
+        './widgets/lists/assets/js/src/winter.list.sortable.js',
+        './widgets/lists/assets/js/dist/winter.list.sortable.js',
+    )
+
+    // Compile pages
+    .js(
+        './assets/ui/js/pages/Preferences.js',
+        './assets/js/preferences/preferences.js',
     )
 
     // Polyfill for all targeted browsers

@@ -1,21 +1,25 @@
-<?php namespace Backend\Behaviors;
+<?php
 
-use Str;
-use Lang;
-use View;
-use Response;
-use Backend;
-use BackendAuth;
-use Backend\Classes\ControllerBehavior;
+namespace Backend\Behaviors;
+
 use Backend\Behaviors\ImportExportController\TranscodeFilter;
-use Illuminate\Database\Eloquent\MassAssignmentException;
-use League\Csv\Reader as CsvReader;
-use League\Csv\Writer as CsvWriter;
-use League\Csv\EscapeFormula as CsvEscapeFormula;
-use League\Csv\Statement as CsvStatement;
-use ApplicationException;
-use SplTempFileObject;
+use Backend\Classes\Controller;
+use Backend\Classes\ControllerBehavior;
+use Backend\Classes\WidgetBase;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendAuth;
 use Exception;
+use Illuminate\Database\Eloquent\MassAssignmentException;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Response;
+use League\Csv\EscapeFormula as CsvEscapeFormula;
+use League\Csv\Reader as CsvReader;
+use League\Csv\Statement as CsvStatement;
+use League\Csv\Writer as CsvWriter;
+use SplTempFileObject;
+use Winter\Storm\Database\Model;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Support\Str;
 
 /**
  * Adds features for importing and exporting data.
@@ -58,12 +62,12 @@ class ImportExportController extends ControllerBehavior
     public $importColumns;
 
     /**
-     * @var Backend\Classes\WidgetBase Reference to the widget used for uploading import file.
+     * @var WidgetBase Reference to the widget used for uploading import file.
      */
     protected $importUploadFormWidget;
 
     /**
-     * @var Backend\Classes\WidgetBase Reference to the widget used for specifying import options.
+     * @var WidgetBase Reference to the widget used for specifying import options.
      */
     protected $importOptionsFormWidget;
 
@@ -83,12 +87,12 @@ class ImportExportController extends ControllerBehavior
     protected $exportFileName = 'export.csv';
 
     /**
-     * @var Backend\Classes\WidgetBase Reference to the widget used for standard export options.
+     * @var WidgetBase Reference to the widget used for standard export options.
      */
     protected $exportFormatFormWidget;
 
     /**
-     * @var Backend\Classes\WidgetBase Reference to the widget used for custom export options.
+     * @var WidgetBase Reference to the widget used for custom export options.
      */
     protected $exportOptionsFormWidget;
 
@@ -99,7 +103,7 @@ class ImportExportController extends ControllerBehavior
 
     /**
      * Behavior constructor
-     * @param Backend\Classes\Controller $controller
+     * @param Controller $controller
      */
     public function __construct($controller)
     {
@@ -146,8 +150,8 @@ class ImportExportController extends ControllerBehavior
 
     public function import()
     {
-        if ($response = $this->checkPermissionsForType('import')) {
-            return $response;
+        if (!$this->userHasAccess('import')) {
+            abort(403);
         }
 
         $this->addJs('js/winter.import.js', 'core');
@@ -161,8 +165,8 @@ class ImportExportController extends ControllerBehavior
 
     public function export()
     {
-        if ($response = $this->checkPermissionsForType('export')) {
-            return $response;
+        if (!$this->userHasAccess('export')) {
+            abort(403);
         }
 
         if ($response = $this->checkUseListExportMode()) {
@@ -180,6 +184,10 @@ class ImportExportController extends ControllerBehavior
 
     public function download($name, $outputName = null)
     {
+        if (!$this->userHasAccess('export')) {
+            abort(403);
+        }
+
         $this->controller->pageTitle = $this->controller->pageTitle
             ?: Lang::get($this->getConfig('export[title]', 'Export records'));
 
@@ -192,6 +200,10 @@ class ImportExportController extends ControllerBehavior
 
     public function onImport()
     {
+        if (!$this->userHasAccess('import')) {
+            abort(403);
+        }
+
         try {
             $model = $this->importGetModel();
             $matches = post('column_match', []);
@@ -226,6 +238,10 @@ class ImportExportController extends ControllerBehavior
 
     public function onImportLoadForm()
     {
+        if (!$this->userHasAccess('import')) {
+            abort(403);
+        }
+
         try {
             $this->checkRequiredImportColumns();
         }
@@ -238,6 +254,10 @@ class ImportExportController extends ControllerBehavior
 
     public function onImportLoadColumnSampleForm()
     {
+        if (!$this->userHasAccess('import')) {
+            abort(403);
+        }
+
         if (($columnId = post('file_column_id', false)) === false) {
             throw new ApplicationException(Lang::get('backend::lang.import_export.missing_column_id_error'));
         }
@@ -433,6 +453,10 @@ class ImportExportController extends ControllerBehavior
 
     public function onExport()
     {
+        if (!$this->userHasAccess('export')) {
+            abort(403);
+        }
+
         try {
             $model = $this->exportGetModel();
             $columns = $this->processExportColumnsFromPost();
@@ -468,6 +492,10 @@ class ImportExportController extends ControllerBehavior
 
     public function onExportLoadForm()
     {
+        if (!$this->userHasAccess('export')) {
+            abort(403);
+        }
+
         return $this->importExportMakePartial('export_form');
     }
 
@@ -697,18 +725,18 @@ class ImportExportController extends ControllerBehavior
     }
 
     /**
-     * Checks to see if the import/export is controlled by permissions
-     * and if the logged in user has permissions.
-     * @return \View
+     * Check if the current user has access to the provided import/export action
      */
-    protected function checkPermissionsForType($type)
+    public function userHasAccess(string $type): bool
     {
         if (
             ($permissions = $this->getConfig($type.'[permissions]')) &&
             (!BackendAuth::getUser()->hasAnyAccess((array) $permissions))
         ) {
-            return Response::make(View::make('backend::access_denied'), 403);
+            return false;
         }
+
+        return true;
     }
 
     protected function makeOptionsFormWidgetForType($type)

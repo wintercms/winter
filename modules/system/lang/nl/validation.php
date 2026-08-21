@@ -59,7 +59,7 @@ return [
     'image'                => ':attribute moet een afbeelding zijn.',
     'in'                   => ':attribute is ongeldig.',
     'in_array'             => ':attribute bestaat niet in :other.',
-    'integer'              => ':attribute moet een getal zijn.',
+    'integer'              => ':attribute moet een geheel getal zijn.',
     'ip'                   => ':attribute moet een geldig IP-adres zijn.',
     'ipv4'                 => ':attribute moet een geldig IPv4-adres zijn.',
     'ipv6'                 => ':attribute moet een geldig IPv6-adres zijn.',

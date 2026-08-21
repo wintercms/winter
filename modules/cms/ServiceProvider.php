@@ -1,4 +1,6 @@
-<?php namespace Cms;
+<?php
+
+namespace Cms;
 
 use Backend;
 use Backend\Classes\WidgetManager;
@@ -42,7 +44,6 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerConsole();
         $this->registerErrorHandler();
         $this->registerTwigParser();
-        $this->registerAssetBundles();
         $this->registerComponents();
         $this->registerThemeLogging();
         $this->registerCombinerEvents();
@@ -67,6 +68,8 @@ class ServiceProvider extends ModuleServiceProvider
      */
     public function boot()
     {
+        $this->registerAssetBundles();
+
         parent::boot('cms');
 
         $this->bootMenuItemEvents();
@@ -94,6 +97,10 @@ class ServiceProvider extends ModuleServiceProvider
     protected function registerErrorHandler()
     {
         $this->app->error(function (HttpExceptionInterface $exception, $code, $fromConsole) {
+            if ($this->app->runningInBackend() && BackendAuth::check()) {
+                return;
+            }
+
             $theme = Theme::getActiveTheme();
             $controller = new CmsController($theme);
             if ($code === 404) {
@@ -325,36 +332,42 @@ class ServiceProvider extends ModuleServiceProvider
                 'cms.manage_content' => [
                     'label' => 'cms::lang.permissions.manage_content',
                     'tab' => 'cms::lang.permissions.name',
+                    'comment' => 'cms::lang.permissions.manage_content_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_assets' => [
                     'label' => 'cms::lang.permissions.manage_assets',
                     'tab' => 'cms::lang.permissions.name',
+                    'comment' => 'cms::lang.permissions.manage_assets_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_pages' => [
                     'label' => 'cms::lang.permissions.manage_pages',
                     'tab' => 'cms::lang.permissions.name',
+                    'comment' => 'cms::lang.permissions.manage_pages_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_layouts' => [
                     'label' => 'cms::lang.permissions.manage_layouts',
                     'tab' => 'cms::lang.permissions.name',
+                    'comment' => 'cms::lang.permissions.manage_layouts_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_partials' => [
                     'label' => 'cms::lang.permissions.manage_partials',
                     'tab' => 'cms::lang.permissions.name',
+                    'comment' => 'cms::lang.permissions.manage_partials_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],
                 'cms.manage_themes' => [
                     'label' => 'cms::lang.permissions.manage_themes',
                     'tab' => 'cms::lang.permissions.name',
+                    'comment' => 'cms::lang.permissions.manage_themes_comment',
                     'roles' => [UserRole::CODE_DEVELOPER],
                     'order' => 100
                 ],

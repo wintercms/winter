@@ -1,9 +1,9 @@
-<?php namespace Backend\Controllers;
+<?php
 
-use View;
-use Response;
-use BackendMenu;
+namespace Backend\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
 use System\Classes\SettingsManager;
 
 /**
@@ -44,7 +44,7 @@ class UserRoles extends Controller
          */
         $this->bindEvent('page.beforeDisplay', function () {
             if (!$this->user->isSuperUser()) {
-                return Response::make(View::make('backend::access_denied'), 403);
+                abort(403);
             }
         });
     }

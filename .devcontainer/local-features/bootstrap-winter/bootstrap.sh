@@ -2,9 +2,11 @@
 
 set -e
 
-echo "### Updating Composer dependencies"
-php ${PWD}/.devcontainer/local-features/bootstrap-winter/update-composer.php
-composer update --no-interaction --no-scripts --no-audit
+if [ ! -d "${PWD}/vendor" ] && [ ! -f "${PWD}/composer.lock" ]; then
+    echo "### Updating Composer dependencies"
+    php ${PWD}/.devcontainer/local-features/bootstrap-winter/update-composer.php
+    composer update --no-interaction --no-scripts --no-audit
+fi
 
 if [ ! -f "${PWD}/.env" ]; then
     echo "### Generating .env file"
@@ -21,13 +23,13 @@ fi
 echo "### Run migrations"
 php artisan migrate
 
+echo "### Set theme"
+php artisan theme:use workshop
+
 if [ "${SETUP_ADMIN}" = true ]; then
     echo "### Setup admin"
     php artisan winter:passwd admin admin
 fi
-
-echo "### Switch theme"
-php artisan theme:use workshop
 
 echo "### Ignoring files in Git"
 echo "plugins/*" >> "${PWD}/.git/info/exclude"
@@ -38,9 +40,12 @@ git restore config
 
 cp ${PWD}/.devcontainer/.vscode/launch.json ${PWD}/.vscode/launch.json
 
+echo "### Mirror site to public directory"
+php artisan winter:mirror public
+
 if [ "${CODESPACES}" = "true" ]; then
     echo "### Configure for Codespaces"
     php ${PWD}/.devcontainer/local-features/bootstrap-winter/codespaces.php
     git update-index --assume-unchanged config/app.php
-    gh codespace ports visibility 8080:public -c $CODESPACE_NAME
+    gh codespace ports visibility 8000:public -c $CODESPACE_NAME
 fi

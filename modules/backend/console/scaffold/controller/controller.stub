@@ -1,7 +1,9 @@
-<?php namespace {{ plugin_namespace }}\Controllers;
+<?php
 
-use BackendMenu;
+namespace {{ plugin_namespace }}\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\BackendMenu;
 
 /**
  * {{ title_name }} Backend Controller
@@ -22,15 +24,31 @@ class {{ studly_name }} extends Controller
     protected $requiredPermissions = [
         '{{ lower_author }}.{{ lower_plugin }}.{{ lower_name }}.manage_all',
     ];
+{% if sidebar %}
 
-    public function __construct()
-    {
-        parent::__construct();
+    /**
+     * @var string The form layout to use. One of standard, sidebar, fancy
+     */
+    protected $formLayout = 'sidebar';
+{% if stubs %}
 
-        BackendMenu::setContext('{{ plugin_code }}', '{{ lower_plugin }}', '{{ lower_name }}');
-    {% if sidebar %}
+    /**
+     * @var string Classes to be added to the body element
+     */
+    public $bodyClass = 'compact-container';
+{% endif -%}
+{% elseif fancy %}
 
-        $this->bodyClass = 'compact-container';
-    {% endif -%}
-    }
+    /**
+     * @var string The form layout to use. One of standard, sidebar, fancy
+     */
+    protected $formLayout = 'fancy';
+{% if stubs %}
+
+    /**
+     * @var string Classes to be added to the body element
+     */
+    public $bodyClass = 'fancy-layout compact-container breadcrumb-flush breadcrumb-fancy';
+{% endif -%}
+{% endif -%}
 }

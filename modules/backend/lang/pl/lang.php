@@ -253,6 +253,7 @@
         'not_found' => 'Rekord formularza o ID :id nie został znaleziony.',
         'action_confirm' => 'Czy jesteś pewny?',
         'create' => 'Stwórz',
+        'create_and_new' => 'Utwórz i nowe',
         'create_and_close' => 'Stwórz i zamknij',
         'creating' => 'Tworzenie...',
         'creating_name' => 'Tworzenie :name...',

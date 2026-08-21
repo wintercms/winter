@@ -1,18 +1,20 @@
-<?php namespace Backend\FormWidgets;
+<?php
 
-use Db;
-use Input;
-use Event;
-use Request;
-use Response;
-use Validator;
-use Backend\Widgets\Form;
+namespace Backend\FormWidgets;
+
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
-use Winter\Storm\Filesystem\Definitions as FileDefinitions;
-use ApplicationException;
-use ValidationException;
+use Backend\Widgets\Form;
 use Exception;
+use Illuminate\Support\Facades\Response;
+use System\Models\File;
+use Winter\Storm\Exception\ApplicationException;
+use Winter\Storm\Exception\ValidationException;
+use Winter\Storm\Filesystem\Definitions as FileDefinitions;
+use Winter\Storm\Support\Facades\DB;
+use Winter\Storm\Support\Facades\Event;
+use Winter\Storm\Support\Facades\Input;
+use Winter\Storm\Support\Facades\Validator;
 
 /**
  * File upload field
@@ -34,6 +36,11 @@ class FileUpload extends FormWidgetBase
     //
     // Configurable properties
     //
+
+    /**
+     * @var string Icon class to use for the upload button.
+     */
+    public $iconClass;
 
     /**
      * @var string Prompt text to display for the upload button.
@@ -93,7 +100,7 @@ class FileUpload extends FormWidgetBase
     protected $defaultAlias = 'fileupload';
 
     /**
-     * @var Backend\Widgets\Form The embedded form for modifying the properties of the selected file
+     * @var Form The embedded form for modifying the properties of the selected file
      */
     protected $configFormWidget;
 
@@ -105,6 +112,7 @@ class FileUpload extends FormWidgetBase
         $this->maxFilesize = $this->getUploadMaxFilesize();
 
         $this->fillFromConfig([
+            'iconClass',
             'prompt',
             'imageWidth',
             'imageHeight',
@@ -115,6 +123,8 @@ class FileUpload extends FormWidgetBase
             'useCaption',
             'attachOnUpload',
         ]);
+
+        $this->iconClass = $this->iconClass ?? 'icon-upload';
 
         if ($this->formField->disabled) {
             $this->previewMode = true;
@@ -160,20 +170,28 @@ class FileUpload extends FormWidgetBase
         $this->vars['cssDimensions'] = $this->getCssDimensions();
         $this->vars['cssBlockDimensions'] = $this->getCssDimensions('block');
         $this->vars['useCaption'] = $this->useCaption;
+        $this->vars['iconClass'] = $this->iconClass;
         $this->vars['prompt'] = $this->getPromptText();
     }
 
     /**
      * Get the file record for this request, returns false if none available
      *
-     * @return System\Models\File|false
+     * @return File|false
      */
     protected function getFileRecord()
     {
         $record = false;
 
         if (!empty(post('file_id'))) {
-            $record = $this->getRelationModel()->find(post('file_id')) ?: false;
+            // Scope the lookup to this widget's own relation (including any files
+            // bound via the current deferred-binding session) so that an
+            // attacker-controlled file_id cannot reference an arbitrary
+            // System\Models\File record belonging to another model. See
+            // GHSA-3277-h8g9-qj5f.
+            $record = $this->getRelationObject()
+                ->withDeferred($this->sessionKey)
+                ->find(post('file_id')) ?: false;
         }
 
         return $record;
@@ -247,7 +265,8 @@ class FileUpload extends FormWidgetBase
                 : 'backend::lang.fileupload.default_prompt';
         }
 
-        return str_replace('%s', '<i class="icon-upload"></i>', e(trans($this->prompt)));
+        $uploadIconStr = sprintf('<i class="%s"></i>', $this->iconClass);
+        return str_replace('%s', $uploadIconStr, e(trans($this->prompt)));
     }
 
     /**
@@ -341,11 +360,25 @@ class FileUpload extends FormWidgetBase
     public function onSortAttachments(): void
     {
         if ($sortData = post('sortOrder')) {
+            // Only reorder files that actually belong to this widget's relation
+            // (including the current deferred-binding session), never arbitrary
+            // System\Models\File rows referenced by a posted id. See
+            // GHSA-3277-h8g9-qj5f.
+            $keyName = $this->getRelationModel()->getKeyName();
+            $validIds = $this->getRelationObject()
+                ->withDeferred($this->sessionKey)
+                ->pluck($keyName)
+                ->all();
+
+            $sortData = array_intersect_key($sortData, array_flip($validIds));
+            if (empty($sortData)) {
+                return;
+            }
+
             $ids = array_keys($sortData);
             $orders = array_values($sortData);
 
-            $fileModel = $this->getRelationModel();
-            $fileModel->setSortableOrder($ids, $orders);
+            $this->getRelationModel()->setSortableOrder($ids, $orders);
         }
     }
 

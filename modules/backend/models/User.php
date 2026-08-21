@@ -3,6 +3,8 @@
 use Backend\Facades\Backend;
 use Backend\Facades\BackendAuth;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Lang;
+use Winter\Storm\Auth\AuthorizationException;
 use Winter\Storm\Auth\Models\User as UserBase;
 use Winter\Storm\Support\Facades\Mail;
 
@@ -57,6 +59,10 @@ class User extends UserBase
         'avatar' => \System\Models\File::class
     ];
 
+    public $hasMany = [
+        'throttle' => [UserThrottle::class, 'key' => 'user_id']
+    ];
+
     /**
      * Purge attributes from data set.
      */
@@ -71,6 +77,32 @@ class User extends UserBase
      * @var string Login attribute
      */
     public static $loginAttribute = 'login';
+
+    /**
+     * @var array<string> Relations on this model that require `backend.manage_users`
+     * to change on another user's record. Deliberately limited to the relations this
+     * model owns: authorization semantics for plugin-added relations belong to the
+     * plugin, which can append to this list or bind its own guard to the
+     * `model.relation.*` events.
+     */
+    public array $permissionGuardedRelations = ['groups', 'avatar', 'throttle'];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // Guard relation writes at the point they actually happen: direct
+        // attach()/detach(), deferred binding commits and queued relation
+        // syncs all funnel through these relation events.
+        $guard = function (string $relationName) {
+            $this->authorizeRelationChange($relationName);
+        };
+
+        $this->bindEvent('model.relation.beforeAttach', $guard);
+        $this->bindEvent('model.relation.beforeDetach', $guard);
+        $this->bindEvent('model.relation.beforeAdd', $guard);
+        $this->bindEvent('model.relation.beforeRemove', $guard);
+    }
 
     /**
      * @return string Returns the user's full name.
@@ -120,6 +152,127 @@ class User extends UserBase
             md5(strtolower(trim($this->email))) .
             '?s='. $size .
             '&d='. urlencode($default);
+    }
+
+    /**
+     * Determine whether the given user (or the currently authenticated user)
+     * is authorized to manage this user record.
+     *
+     * Returns true when no user is provided and no user is authenticated (CLI/queue),
+     * or when the user has `backend.manage_users` and (if this record is a superuser)
+     * the user is also a superuser.
+     */
+    public function canBeManagedByUser(?User $user = null): bool
+    {
+        $user = $user ?? BackendAuth::getUser();
+
+        if (!$user) {
+            return true;
+        }
+
+        if (!$user->hasAccess('backend.manage_users')) {
+            return false;
+        }
+
+        if (!$user->isSuperUser() && ($this->is_superuser || $this->getOriginal('is_superuser'))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Before create event — enforce authorization rules to prevent privilege escalation.
+     */
+    public function beforeCreate()
+    {
+        $this->authorizeChange();
+    }
+
+    /**
+     * Before update event — enforce authorization rules to prevent privilege escalation.
+     *
+     * Bound to update rather than save so that a save with nothing to write (e.g. a
+     * pivot form submission re-saving an untouched related record) requires no
+     * permission: the update event only fires when attributes have actually changed,
+     * after purgeable attributes have been stripped. Relation writes (group
+     * membership, avatar) are guarded separately by authorizeRelationChange().
+     */
+    public function beforeUpdate()
+    {
+        $this->authorizeChange();
+    }
+
+    /**
+     * Enforce authorization rules for a change to this record's attributes.
+     *
+     * @throws AuthorizationException if the current user lacks permission
+     */
+    protected function authorizeChange(): void
+    {
+        $actor = BackendAuth::getUser();
+        if (!$actor) {
+            return;
+        }
+
+        $isCurrentUser = $this->exists && $actor->getKey() === $this->getKey();
+
+        if ($isCurrentUser && $this->isDirty(['role_id', 'is_superuser', 'permissions'])) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.self_escalation_denied'));
+        }
+
+        if (!$isCurrentUser && !$this->canBeManagedByUser($actor)) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
+        }
+    }
+
+    /**
+     * Enforce authorization rules for a change to one of this record's relations.
+     *
+     * Only the relations listed in $permissionGuardedRelations are guarded, so
+     * plugin-added relations (e.g. records that reference a user) behave normally.
+     *
+     * Changes to your own record's guarded relations are allowed: groups do not
+     * carry permissions out of the box, so they are not an escalation vector.
+     *
+     * @throws AuthorizationException if the current user lacks permission
+     */
+    protected function authorizeRelationChange(string $relationName): void
+    {
+        if (!in_array($relationName, $this->permissionGuardedRelations)) {
+            return;
+        }
+
+        $actor = BackendAuth::getUser();
+        if (!$actor) {
+            return;
+        }
+
+        $isCurrentUser = $this->exists && $actor->getKey() === $this->getKey();
+
+        if (!$isCurrentUser && !$this->canBeManagedByUser($actor)) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
+        }
+    }
+
+    /**
+     * Before delete event — enforce authorization rules.
+     */
+    public function beforeDelete()
+    {
+        if (!$this->canBeManagedByUser()) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
+        }
+    }
+
+    /**
+     * Before restore event — enforce authorization rules.
+     */
+    public function beforeRestore()
+    {
+        if (!$this->canBeManagedByUser()) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
+        }
     }
 
     /**
@@ -208,11 +361,35 @@ class User extends UserBase
 
     /**
      * Remove the suspension on this user.
-     * @return void
+     *
+     * @throws AuthorizationException if the current user lacks permission
      */
     public function unsuspend()
     {
+        if (!$this->canBeManagedByUser()) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
+        }
+
         BackendAuth::findThrottleByUserId($this->id)->unsuspend();
+    }
+
+    /**
+     * Get a reset password code for this user.
+     *
+     * When called by an authenticated user targeting a different account,
+     * the actor must have `backend.manage_users` permission.
+     * Self-service resets (Auth controller restore flow) are allowed.
+     *
+     * @throws AuthorizationException if the current user lacks permission
+     */
+    public function getResetPasswordCode()
+    {
+        $actor = BackendAuth::getUser();
+        if ($actor && $actor->getKey() !== $this->getKey() && !$this->canBeManagedByUser($actor)) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
+        }
+
+        return parent::getResetPasswordCode();
     }
 
     //
@@ -221,7 +398,7 @@ class User extends UserBase
 
     /**
      * Returns an array of merged permissions based on the user's individual permissions
-     * and their group permissions filtering out any permissions the impersonator doesn't
+     * and their role permissions filtering out any permissions the impersonator doesn't
      * have access to (if the current user is being impersonated)
      *
      * @return array

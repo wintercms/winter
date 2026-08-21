@@ -22,12 +22,6 @@
 
     var StringProcessor = function(tableObj, columnName, columnConfiguration) {
         //
-        // State properties
-        //
-
-        this.focusTimeoutHandler = this.onFocusTimeout.bind(this)
-
-        //
         // Parent constructor
         //
 
@@ -39,14 +33,18 @@
 
     StringProcessor.prototype.dispose = function() {
         BaseProto.dispose.call(this)
-        this.focusTimeoutHandler = null
     }
 
     /*
      * Renders the cell in the normal (no edit) mode
      */
     StringProcessor.prototype.renderCell = function(value, cellContentContainer) {
-        this.createViewContainer(cellContentContainer, value)
+        this.createViewContainer(cellContentContainer, value);
+
+        if (this.columnConfiguration.readonly || this.columnConfiguration.readOnly) {
+            cellContentContainer.classList.add('readonly');
+            cellContentContainer.setAttribute('tabindex', 0);
+        }
     }
 
     /*
@@ -58,7 +56,11 @@
             return
 
         this.activeCell = cellElement
-        this.buildEditor(cellElement, this.getCellContentContainer(cellElement))
+        if (!this.columnConfiguration.readonly && !this.columnConfiguration.readOnly) {
+            this.buildEditor(cellElement, this.getCellContentContainer(cellElement))
+        } else {
+            this.getCellContentContainer(cellElement).focus()
+        }
     }
 
     /*
@@ -92,17 +94,10 @@
         input.setAttribute('class', 'string-input')
         input.value = this.tableObj.getCellValue(cellElement)
 
-        if (this.columnConfiguration.readOnly) {
-            input.setAttribute('readonly', true)
-        }
-
         cellContentContainer.appendChild(input)
 
-        this.setCaretPosition(input, 0)
-
-        // Focus the element in the next frame.
-        // http://stackoverflow.com/questions/779379/why-is-settimeoutfn-0-sometimes-useful
-        window.setTimeout(this.focusTimeoutHandler, 0)
+        input.focus();
+        this.setCaretPosition(input, 0);
     }
 
     /*
@@ -144,18 +139,6 @@
         var value = this.tableObj.getCellValue(cellElement)
 
         this.setViewContainerValue(cellElement, value)
-    }
-
-    StringProcessor.prototype.onFocusTimeout = function() {
-        if (!this.activeCell)
-            return
-
-        var editor = this.activeCell.querySelector('.string-input')
-        if (!editor)
-            return
-
-        editor.focus()
-        this.setCaretPosition(editor, 0)
     }
 
     StringProcessor.prototype.getCaretPosition = function(input) {
