@@ -137,10 +137,21 @@ class PackageManager
                 }
             }
 
-            // Search plugins for compilable packages to autoregister
-            $plugins = PluginManager::instance()->getPlugins();
-            foreach ($plugins as $plugin) {
-                $path = $plugin->getPluginPath() . '/' . $config['configFile'];
+            // Search plugins for compilable packages to autoregister. Use the in-project
+            // plugin path (which honours symlinks under the plugins directory) rather than
+            // getPluginPath()'s realpath, so packages inside symlinked plugins register and
+            // are served from a web-accessible location under base_path().
+            $pluginManager = PluginManager::instance();
+            $inProjectPluginPaths = [];
+            foreach ($pluginManager->getVendorAndPluginNames() as $vendorName => $vendorPlugins) {
+                foreach ($vendorPlugins as $pluginName => $pluginPath) {
+                    $inProjectPluginPaths[strtolower($vendorName . '.' . $pluginName)] = $pluginPath;
+                }
+            }
+            foreach ($pluginManager->getPlugins() as $plugin) {
+                $pluginPath = $inProjectPluginPaths[strtolower($plugin->getPluginIdentifier())]
+                    ?? $plugin->getPluginPath();
+                $path = $pluginPath . '/' . $config['configFile'];
                 if (File::exists($path)) {
                     $packagePaths[$type][$plugin->getPluginIdentifier()] = $path;
                 }
@@ -293,10 +304,25 @@ class PackageManager
 
         // Normalize the arguments
         $name = strtolower($name);
+        $base = base_path() . DIRECTORY_SEPARATOR;
         $resolvedPath = PathResolver::resolve($path);
         $pinfo = pathinfo($resolvedPath);
-        $relativePath = Str::after($pinfo['dirname'], base_path() . DIRECTORY_SEPARATOR);
+        $relativePath = Str::after($pinfo['dirname'], $base);
         $configFile = $pinfo['basename'];
+
+        // PathResolver::resolve() canonicalises symlinks, so a plugin or theme that is
+        // symlinked into the project resolves to a realpath outside base_path() — which is
+        // neither registerable nor web-servable. When the resolved path has escaped the
+        // project but the original (symbolized) path is inside it, keep the in-project
+        // location so the package registers and its compiled assets serve from a
+        // web-accessible path.
+        if (!str_starts_with($pinfo['dirname'] . DIRECTORY_SEPARATOR, $base)) {
+            $symbolized = pathinfo($path);
+            if (str_starts_with($symbolized['dirname'] . DIRECTORY_SEPARATOR, $base)) {
+                $relativePath = Str::after($symbolized['dirname'], $base);
+                $configFile = $symbolized['basename'];
+            }
+        }
 
         // Require $configFile to be a JS file
         $extension = File::extension($configFile);
