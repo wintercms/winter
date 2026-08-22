@@ -639,6 +639,38 @@ body.breadcrumb-fancy .control-breadcrumb,
             }
         }
     }
+
+    // Record navigation (controls/record-navigation.less) sits in this breadcrumb.
+    // Its default colours are tuned for the light regular-layout breadcrumb; on the
+    // dark fancy breadcrumb they read as low-contrast, so switch to light-on-dark.
+    .form-record-nav {
+        .form-record-nav-position {
+            color: rgba(255, 255, 255, .8);
+        }
+
+        .form-record-nav-group {
+            background: rgba(255, 255, 255, .15);
+            border-color: rgba(255, 255, 255, .25);
+            box-shadow: none;
+        }
+
+        .form-record-nav-btn {
+            color: rgba(255, 255, 255, .8);
+
+            & + .form-record-nav-btn {
+                border-left-color: rgba(255, 255, 255, .25);
+            }
+
+            &:not(.is-disabled):hover {
+                background-color: rgba(255, 255, 255, .28);
+                color: #fff;
+            }
+
+            &.is-disabled {
+                color: rgba(255, 255, 255, .35);
+            }
+        }
+    }
 }
 
 //
@@ -670,6 +702,31 @@ body.breadcrumb-fancy .control-breadcrumb,
 
         &:last-child {
             margin-right: 0;
+        }
+
+        // Delete: a destructive action kept inline with the save/cancel group so it
+        // stays discoverable, but coloured as a danger action. The core fancy toolbar
+        // renders it icon-only; surface its title as a visible "Delete" label so it's
+        // easy to find. The confirmation dialog guards against accidental clicks.
+        &[data-control="delete-button"] {
+            float: right;
+            margin-right: 0;
+            color: #e6584b;
+            opacity: 1;
+
+            &:before {
+                opacity: 1;
+            }
+
+            &:after {
+                content: attr(title);
+                margin-left: 7px;
+            }
+
+            &:hover {
+                color: #ff7367;
+                opacity: 1;
+            }
         }
 
         &[class^="wn-icon-"],
