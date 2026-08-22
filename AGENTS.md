@@ -88,6 +88,16 @@ Modules and plugins are autoloaded by `Winter\Storm\Support\ClassLoader` (see `C
 - Fixtures that flow through `Assetic\Asset\FileAsset` (e.g. `CombineAssets::combineToFile()`) must live under `base_path()`. `sys_get_temp_dir()` will fail with "source is not in the root directory". Use `base_path('storage/framework/cache/<unique>')` for temp dirs and clean up with `\File::deleteDirectory()` in `tearDown()`.
 - A failing test that doesn't reproduce on a fresh clone is almost always a stale local `vendor/`. Run `composer update` in Storm (`~/Repositories/WinterCMS/Core/storm` or wherever you check it out) before claiming "environment issue".
 
+## Code style (phpcs) — run it before pushing
+
+CI runs a **PHP code-quality** check (the fast `PHP` job, ~15s) that fails the whole PR on style violations, separate from the test matrix. Run the exact same check locally on your changed files before pushing — it's instant and saves a CI round-trip:
+
+```
+vendor/bin/phpcs -nq --report=full --extensions=php <changed .php files>
+```
+
+(CI's `.github/workflows/utilities/phpcs-pr` runs `phpcs` against just the files changed vs. the base branch, using the repo-root `phpcs.xml` ruleset.) The sniff that bites templates: **alternative-syntax control blocks must span multiple lines** — `<?php if ($x): ?>attr="…"<?php endif ?>` on one line fails ("Newline required after opening brace" / "Closing brace must be on a line by itself"); put the `if:`, body, and `endif` on their own lines (see `modules/backend/formwidgets/fileupload/partials/_file_single.php`).
+
 ## Working across Winter core + Storm
 
 When a change touches both, work in the actual local checkouts (e.g. `~/Repositories/WinterCMS/Core/storm` and `~/Repositories/WinterCMS/Core/winter`) on parallel branches, and symlink `vendor/winter/storm` to the local Storm checkout so changes are visible in the live install. Avoid `/tmp` worktrees — the user can't test what they can't see.
