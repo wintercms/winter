@@ -93,3 +93,19 @@ Modules and plugins are autoloaded by `Winter\Storm\Support\ClassLoader` (see `C
 When a change touches both, work in the actual local checkouts (e.g. `~/Repositories/WinterCMS/Core/storm` and `~/Repositories/WinterCMS/Core/winter`) on parallel branches, and symlink `vendor/winter/storm` to the local Storm checkout so changes are visible in the live install. Avoid `/tmp` worktrees — the user can't test what they can't see.
 
 Open both PRs concurrently; the maintainer handles merge order and Storm release tagging. The Winter core PR's `composer.json` constraint bump waits for the Storm tag.
+
+## Developing with symlinked plugins
+
+Plugins are commonly symlinked into `plugins/<author>/<name>` to develop them from their own checkout. Three things bite, in order of how much time they waste:
+
+- **Assets 404 until mirrored.** When the docroot is a `public/` mirror, module/plugin assets are served from symlinks under `public/`. After adding or symlinking a plugin, run `php artisan winter:mirror public --relative` (then `php artisan winter:up` to migrate). Skip it and the plugin's assets 404 — and because a browser ORB-blocks a cross-origin script that comes back as `text/html` (the 404 page), **JS-driven UIs render blank with no console error**. If a plugin "loads but its editor/widget/builder area is empty", check the network tab for 404'd assets before suspecting the code.
+- **Vite builds can't resolve the workspace's `node_modules`.** `vite:compile <Plugin>` loads the plugin's `vite.config.mjs` from the symlink's *real* path, so Node resolves `node_modules` upward from there and misses the project install (`@vitejs/plugin-vue`, `laravel-vite-plugin`, …). Bridge it with `ln -s <project>/node_modules <plugin-real-path>/node_modules` (gitignored), then `vite:install <Plugin>` / `vite:compile <Plugin>`. Commit the regenerated `assets/dist/`, not the generated `package-lock.json`.
+- **PackageManager once dropped symlinked packages entirely.** The asset `PackageManager` resolved each package to its realpath (outside `base_path()`), so Vite/Mix packages in symlinked plugins failed to register and never served. Fixed in `modules/system/classes/asset/PackageManager.php` (`registerPackage()` keeps the in-project path when a symlink resolves outside the project). Prefer `PathResolver::within()` / `PathResolver::resolve()` over hand-rolled `str_starts_with`/`realpath` when touching that path logic.
+
+## Never hand-edit compiled CSS
+
+The `*.css` under `modules/*/assets/css/` (e.g. `modules/backend/assets/css/winter.css`) are **build artifacts** compiled from the LESS under `modules/*/assets/less/`. Edit the `.less` source and recompile — never patch the `.css` directly, or the next compile silently reverts you and reviewers can't trace the change to a source.
+
+- Recompile with `php artisan winter:util compile less`.
+- **Caveat:** that command recompiles *every* registered LESS package, including symlinked plugins. Some plugins ship a `.css` that concatenates vendored third-party CSS (e.g. a datepicker) which their `.less` does not reproduce — recompiling **truncates** those files. After a compile, `git status` the plugin repos and revert any clobbered vendored CSS (`git checkout -- assets/css/<file>.css`).
+- Compiled output tracks the local `browserslist`; a stale one (the "caniuse-lite is N months old" warning) drifts vendor prefixes vs. the committed baseline. Run `npx update-browserslist-db@latest` if you need the diff to stay minimal.
