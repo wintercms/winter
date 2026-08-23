@@ -136,3 +136,10 @@ The `*.css` under `modules/*/assets/css/` (e.g. `modules/backend/assets/css/wint
 - Recompile with `php artisan winter:util compile less`.
 - **Caveat:** that command recompiles *every* registered LESS package, including symlinked plugins. Some plugins ship a `.css` that concatenates vendored third-party CSS (e.g. a datepicker) which their `.less` does not reproduce — recompiling **truncates** those files. After a compile, `git status` the plugin repos and revert any clobbered vendored CSS (`git checkout -- assets/css/<file>.css`).
 - Compiled output tracks the local `browserslist`; a stale one (the "caniuse-lite is N months old" warning) drifts vendor prefixes vs. the committed baseline. Run `npx update-browserslist-db@latest` if you need the diff to stay minimal.
+
+## Backend skins (default vs TailwindUI)
+
+The backend renders under a skin set by `cms.backendSkin` (default `Backend\Skins\Standard`). The **Winter.TailwindUI** plugin overrides it to its own skin in `boot()` (`Config::set('cms.backendSkin', …)`), restyling the whole backend — so a widget can look right under one skin and broken under the other (missing buttons, wrong spacing).
+
+- Toggle it with the plugin: `art plugin:disable winter.tailwindui` / `art plugin:enable winter.tailwindui` (`art` = `php artisan`). Disabling drops back to the default Standard skin.
+- When adjusting a **core** widget's styling (e.g. the `iconpicker` modal), do the first pass with **TailwindUI disabled** so you're tuning the core/default baseline, then re-enable it and fix whatever the skin layers on top (buttons not visible, etc.). Core style changes live in `modules/*/assets/less/**` — recompile with `winter:util compile less` (see "Never hand-edit compiled CSS").
