@@ -544,6 +544,15 @@ div.control-scrollpad[data-direction=horizontal]>.scrollpad-scrollbar .drag-hand
 .svg-icon-container.svg-active-effects:hover img.svg-icon,
 .svg-icon-container.svg-active-effects.active img.svg-icon{-webkit-filter:none;filter:none;opacity:1;filter:alpha(opacity=100)}
 html.svg .svg-icon-container i.svg-replace{display:none}
+.control-breadcrumb{position:relative}
+.form-record-nav{position:absolute;top:0;bottom:0;right:20px;display:flex;align-items:center;gap:9px;font-size:12px}
+.form-record-nav .form-record-nav-position{color:#5a6b7b;font-weight:600;letter-spacing:0.3px;white-space:nowrap}
+.form-record-nav .form-record-nav-group{display:inline-flex;align-items:center;background:rgba(255,255,255,0.55);border:1px solid rgba(0,0,0,0.09);border-radius:6px;overflow:hidden;box-shadow:0 1px 1px rgba(0,0,0,0.03)}
+.form-record-nav .form-record-nav-btn{display:flex;align-items:center;justify-content:center;width:28px;height:24px;color:#5a6b7b;text-decoration:none;transition:background-color 0.12s ease,color 0.12s ease}
+.form-record-nav .form-record-nav-btn + .form-record-nav-btn{border-left:1px solid rgba(0,0,0,0.09)}
+.form-record-nav .form-record-nav-btn:not(.is-disabled):hover{background-color:#fff;color:#1f2d3d}
+.form-record-nav .form-record-nav-btn.is-disabled{color:#b6bfc7;cursor:default}
+.form-record-nav .form-record-nav-btn svg{display:block}
 @-webkit-keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 .fadeIn{-webkit-animation-name:fadeIn;animation-name:fadeIn}
@@ -1072,6 +1081,18 @@ body.breadcrumb-fancy .control-breadcrumb li:last-child,
 .control-breadcrumb.breadcrumb-fancy li:last-child{background-color:#1198bc}
 body.breadcrumb-fancy .control-breadcrumb li:last-child:before,
 .control-breadcrumb.breadcrumb-fancy li:last-child:before{opacity:1;border-left-color:#1198bc}
+body.breadcrumb-fancy .control-breadcrumb .form-record-nav .form-record-nav-position,
+.control-breadcrumb.breadcrumb-fancy .form-record-nav .form-record-nav-position{color:rgba(255,255,255,0.8)}
+body.breadcrumb-fancy .control-breadcrumb .form-record-nav .form-record-nav-group,
+.control-breadcrumb.breadcrumb-fancy .form-record-nav .form-record-nav-group{background:rgba(255,255,255,0.15);border-color:rgba(255,255,255,0.25);box-shadow:none}
+body.breadcrumb-fancy .control-breadcrumb .form-record-nav .form-record-nav-btn,
+.control-breadcrumb.breadcrumb-fancy .form-record-nav .form-record-nav-btn{color:rgba(255,255,255,0.8)}
+body.breadcrumb-fancy .control-breadcrumb .form-record-nav .form-record-nav-btn + .form-record-nav-btn,
+.control-breadcrumb.breadcrumb-fancy .form-record-nav .form-record-nav-btn + .form-record-nav-btn{border-left-color:rgba(255,255,255,0.25)}
+body.breadcrumb-fancy .control-breadcrumb .form-record-nav .form-record-nav-btn:not(.is-disabled):hover,
+.control-breadcrumb.breadcrumb-fancy .form-record-nav .form-record-nav-btn:not(.is-disabled):hover{background-color:rgba(255,255,255,0.28);color:#fff}
+body.breadcrumb-fancy .control-breadcrumb .form-record-nav .form-record-nav-btn.is-disabled,
+.control-breadcrumb.breadcrumb-fancy .form-record-nav .form-record-nav-btn.is-disabled{color:rgba(255,255,255,0.35)}
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized),
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized){-webkit-transition:all 0.5s;transition:all 0.5s;padding-top:14px;padding-bottom:5px}
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn,
@@ -1080,6 +1101,14 @@ body.breadcrumb-fancy .control-breadcrumb li:last-child:before,
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn:hover{opacity:1;filter:alpha(opacity=100)}
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn:last-child,
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn:last-child{margin-right:0}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[data-control="delete-button"],
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[data-control="delete-button"]{float:right;margin:-9px 0 0 0;padding:5px 11px;border-radius:4px;background-color:#a5382c;color:#fff;opacity:1;line-height:1}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[data-control="delete-button"]:before,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[data-control="delete-button"]:before{opacity:1}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[data-control="delete-button"]:after,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[data-control="delete-button"]:after{content:attr(title);margin-left:6px}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[data-control="delete-button"]:hover,
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[data-control="delete-button"]:hover{background-color:#bc4436;color:#fff;opacity:1}
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class^="wn-icon-"]:before,
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class^="wn-icon-"]:before,
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class*=" wn-icon-"]:before,

@@ -326,6 +326,9 @@ return [
         'concurrency_file_changed_title' => 'File was changed',
         'concurrency_file_changed_description' => "The file you're editing has been changed on disk by another user. You can either reload the file and lose your changes or override the file on the disk.",
         'return_to_list' => 'Return to the list',
+        'record_navigation' => 'Record navigation',
+        'previous_record' => 'Previous record',
+        'next_record' => 'Next record',
     ],
     'recordfinder' => [
         'find_record' => 'Find Record',

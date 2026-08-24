@@ -1519,8 +1519,16 @@ class Lists extends WidgetBase
         }
 
         if ($image) {
+            // filterGetUrl() returns the value it was given when the image cannot be
+            // resolved, so the result may still be the record's raw value.
             $imageUrl = ImageResizer::filterGetUrl($image, $width, $height, $options);
-            return "<img src='$imageUrl' width='$width' height='$height' />";
+
+            return sprintf(
+                "<img src='%s' width='%s' height='%s' />",
+                e($imageUrl),
+                e($width),
+                e($height)
+            );
         }
     }
 

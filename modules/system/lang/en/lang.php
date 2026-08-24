@@ -453,9 +453,11 @@ return [
         'impersonate_users_comment' => 'Allows the user to impersonate other users at their level of access. This permission should only be given to trusted users.',
         'manage_preferences' => 'Manage backend preferences',
         'manage_editor' => 'Manage global code editor preferences',
+        'manage_editor_comment' => 'This permission allows the user to customize the global code editor preferences, including custom CSS content that is rendered in the back-end. This may be a security risk if given to an untrusted user.',
         'manage_own_editor' => 'Manage personal code editor preferences',
         'view_the_dashboard' => 'View the dashboard',
         'manage_default_dashboard' => 'Manage the default dashboard',
+        'manage_default_dashboard_comment' => 'This permission allows the user to change the default dashboard, including report widget configuration, that is shown to all other back-end users. This may be a security risk if given to an untrusted user.',
         'manage_branding' => 'Customize the back-end',
         'manage_branding_comment' => 'This permission allows the user to customize the back-end appearance, including custom CSS content. This may be a security risk if given to an untrusted user.'
     ],
