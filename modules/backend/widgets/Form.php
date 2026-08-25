@@ -74,6 +74,15 @@ class Form extends WidgetBase
      */
     public $isNested = false;
 
+    /**
+     * @var bool Used to flag that this nested form shares the data scope of its parent
+     * form; ie. its fields resolve against the same model attributes and array name as
+     * if they had been defined on the parent form directly. Only relevant when
+     * $isNested is true. Used by the fieldset form widget, which nests fields visually
+     * without introducing a new data scope.
+     */
+    public $sharesParentScope = false;
+
     //
     // Object properties
     //
@@ -138,6 +147,7 @@ class Form extends WidgetBase
             'context',
             'arrayName',
             'isNested',
+            'sharesParentScope',
         ]);
 
         $this->widgetManager = WidgetManager::instance();
@@ -881,8 +891,9 @@ class Form extends WidgetBase
          * Check model if field is required
          */
         if ($field->required === null && $this->model && method_exists($this->model, 'isAttributeRequired')) {
-            // Check nested fields
-            if ($this->isNested) {
+            // Check nested fields, unless the nested form shares its parent's data
+            // scope, in which case the attribute name needs no prefixing
+            if ($this->isNested && !$this->sharesParentScope) {
                 // Get the current attribute level
                 $nameArray = HtmlHelper::nameToArray($this->arrayName);
                 unset($nameArray[0]);

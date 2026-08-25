@@ -54,7 +54,10 @@ class FieldSet extends FormWidgetBase
         $config->alias = $this->alias . $this->defaultAlias;
         // set arrayName from parent form to save fields to the model
         $config->arrayName = $this->getParentForm()->arrayName;
+        // the fields are nested visually only; they resolve against the parent
+        // form's model and array name, exactly as if defined on the parent form
         $config->isNested = true;
+        $config->sharesParentScope = true;
 
         $widget = $this->formWidget = $this->makeWidget(Form::class, $config);
         $widget->previewMode = $this->previewMode;
