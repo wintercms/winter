@@ -75,13 +75,14 @@ class Form extends WidgetBase
     public $isNested = false;
 
     /**
-     * @var bool Used to flag that this nested form shares the data scope of its parent
-     * form; ie. its fields resolve against the same model attributes and array name as
-     * if they had been defined on the parent form directly. Only relevant when
-     * $isNested is true. Used by the fieldset form widget, which nests fields visually
-     * without introducing a new data scope.
+     * @var bool Used to flag that this nested form introduces no data scope of its own,
+     * so that its fields resolve against the model's own attributes exactly as if they
+     * had been defined on the form it is nested in. Only meaningful when $isNested is
+     * true. Set by the fieldset form widget, which groups fields visually; a fieldset
+     * nested inside a repeater or nested form leaves this false, since the scope it
+     * inherits there is that form's data rather than the model's attributes.
      */
-    public $sharesParentScope = false;
+    public $sharesModelScope = false;
 
     //
     // Object properties
@@ -147,7 +148,7 @@ class Form extends WidgetBase
             'context',
             'arrayName',
             'isNested',
-            'sharesParentScope',
+            'sharesModelScope',
         ]);
 
         $this->widgetManager = WidgetManager::instance();
@@ -891,9 +892,8 @@ class Form extends WidgetBase
          * Check model if field is required
          */
         if ($field->required === null && $this->model && method_exists($this->model, 'isAttributeRequired')) {
-            // Check nested fields, unless the nested form shares its parent's data
-            // scope, in which case the attribute name needs no prefixing
-            if ($this->isNested && !$this->sharesParentScope) {
+            // Check nested fields
+            if ($this->isNested) {
                 // Get the current attribute level
                 $nameArray = HtmlHelper::nameToArray($this->arrayName);
                 unset($nameArray[0]);
@@ -905,8 +905,12 @@ class Form extends WidgetBase
                     }
                 }
 
-                // Recombine names for full attribute name in rules array
-                $attrName = implode('.', $nameArray) . ".{$attrName}";
+                // Recombine names for full attribute name in rules array. A nested form
+                // that introduces no data scope of its own (ie. the fieldset widget, which
+                // inherits its parent's array name) leaves nothing to prefix with.
+                if ($prefix = implode('.', $nameArray)) {
+                    $attrName = "{$prefix}.{$attrName}";
+                }
             }
 
             $field->required = $this->model->isAttributeRequired($attrName);
