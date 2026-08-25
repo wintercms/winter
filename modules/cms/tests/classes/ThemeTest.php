@@ -125,7 +125,7 @@ class ThemeTest extends TestCase
         );
     }
 
-    public function dirNameValidityProvider(): array
+    public static function dirNameValidityProvider(): array
     {
         return [
             // Valid names

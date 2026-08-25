@@ -94,5 +94,7 @@ class WinterUtilTest extends TestCase
         }
 
         $this->artisan('winter:util compile lang')->execute();
+
+        parent::tearDown();
     }
 }

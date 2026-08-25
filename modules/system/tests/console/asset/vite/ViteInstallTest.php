@@ -12,20 +12,21 @@ class ViteInstallTest extends TestCase
     protected string $jsonPath;
     protected string $lockPath;
     protected string $backupPath;
+    protected string $fixturePath;
 
     public function setUp(): void
     {
         parent::setUp();
-
-        if (!File::exists(base_path('node_modules'))) {
-            $this->markTestSkipped('This test requires node_modules to be installed');
-        }
 
         // Define some helpful paths
         $this->fixturePath = base_path('modules/system/tests');
         $this->jsonPath = $this->fixturePath . '/package.json';
         $this->lockPath = $this->fixturePath . '/package-lock.json';
         $this->backupPath = $this->fixturePath . '/package-testing.json';
+
+        if (!File::exists(base_path('node_modules'))) {
+            $this->markTestSkipped('This test requires node_modules to be installed');
+        }
 
         // Add our testing theme because it won't be auto discovered
         PackageManager::instance()->registerPackage(

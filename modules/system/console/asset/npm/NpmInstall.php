@@ -25,7 +25,6 @@ class NpmInstall extends NpmCommand
         {npmArgs?* : Arguments to pass through to the "npm" binary}
         {--npm= : Defines a custom path to the "npm" binary}
         {--d|dev : Install packages in devDependencies}
-        {--s|silent : Silent mode.}
         {--disable-tty : Disable tty mode}';
 
     /**

@@ -5,6 +5,7 @@ namespace Cms\Tests\Classes;
 use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\CmsObject;
 use Cms\Classes\Theme;
+use PHPUnit\Framework\Attributes\Depends;
 
 class TestCmsObject extends CmsObject
 {
@@ -236,9 +237,7 @@ class CmsObjectTest extends TestCase
         $this->assertEquals($testContents, file_get_contents($destFilePath));
     }
 
-    /**
-     * @depends testSave
-     */
+    #[Depends('testSave')]
     public function testRename()
     {
         $theme = Theme::load('apitest');
@@ -265,9 +264,7 @@ class CmsObjectTest extends TestCase
         $this->assertEquals($testContents, file_get_contents($destFilePath));
     }
 
-    /**
-     * @depends testRename
-     */
+    #[Depends('testRename')]
     public function testSaveSameName()
     {
         $theme = Theme::load('apitest');
@@ -288,9 +285,7 @@ class CmsObjectTest extends TestCase
         $this->assertEquals($testContents, file_get_contents($filePath));
     }
 
-    /**
-     * @depends testRename
-     */
+    #[Depends('testRename')]
     public function testRenameToExistingFile()
     {
         $this->expectException(\Winter\Storm\Exception\ApplicationException::class);

@@ -6,6 +6,8 @@ use BackendMenu;
 use Backend\Classes\Controller;
 use Backend\Widgets\ReportContainer;
 
+use Winter\Storm\Support\Arr;
+
 /**
  * Dashboard controller
  *
@@ -72,7 +74,7 @@ class Index extends Controller
     protected function checkPermissionRedirect()
     {
         if (!$this->user->hasAccess('backend.access_dashboard')) {
-            if ($first = array_first(BackendMenu::listMainMenuItems())) {
+            if ($first = Arr::first(BackendMenu::listMainMenuItems())) {
                 return Redirect::intended($first->url);
             }
             return Backend::redirect('backend/myaccount');

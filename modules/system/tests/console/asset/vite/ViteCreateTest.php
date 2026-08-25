@@ -230,5 +230,7 @@ class ViteCreateTest extends TestCase
                 File::delete($file);
             }
         }
+
+        parent::tearDown();
     }
 }
