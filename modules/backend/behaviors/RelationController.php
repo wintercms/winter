@@ -536,8 +536,13 @@ class RelationController extends ControllerBehavior
      *  a) AMBIENT - the nesting stack is non-empty, meaning a manage
      *     form is actively rendering right now (see
      *     relationMakePartial()) and this field is nested directly
-     *     under whatever's on top of it. $model is trusted as-is - it's
-     *     the widget's own bound model.
+     *     under whatever's on top of it. $model canNOT be trusted
+     *     here: initRelation() is reached as
+     *     relationRender() -> validateField() -> initRelation($this->model),
+     *     and $this->model is the record of the ENCLOSING relation,
+     *     not of the manage form actually rendering. Those coincide at
+     *     one level of nesting and diverge at two, so the parent is
+     *     walked from the root exactly as in (b).
      *  b) RECONSTRUCTED - $field is already a bracket path (e.g.
      *     "items[5][taxes]"), walked from the root to find the actual
      *     model. This is the common case for anything other than an
@@ -574,7 +579,9 @@ class RelationController extends ControllerBehavior
 
         if ($ambientPath !== null) {
             $this->nestedField = $ambientPath . '[' . $field . ']';
-            return [$model, $field, true];
+            [$hops] = $this->parseBracketField($this->nestedField);
+
+            return [$this->resolveModelForHops($this->rootModel, $hops), $field, true];
         }
 
         if (strpos($field, '[') !== false) {
