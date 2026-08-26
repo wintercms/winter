@@ -7,6 +7,15 @@
 // @brand-accent
 //
 
+// Expose the brand palette as CSS custom properties so the whole backend — and
+// dark mode via color-mix() — can derive from a single live source that these
+// branding settings drive. Injected after the static winter.css, so it wins.
+:root {
+    --brand-primary: @brand-primary;
+    --brand-secondary: @brand-secondary;
+    --brand-accent: @brand-accent;
+}
+
 .br-p     { color: @brand-primary; }
 .br-s     { color: @brand-secondary; }
 .br-a     { color: @brand-accent; }
