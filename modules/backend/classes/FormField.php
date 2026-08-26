@@ -257,7 +257,7 @@ class FormField
      * @param string $type Specifies a render mode as described above
      * @param array $config A list of render mode specific config.
      */
-    public function displayAs($type, $config = [])
+    public function displayAs(string $type, $config = [])
     {
         if (in_array($type, ['textarea', 'widget'])) {
             // defaults to 'large'
