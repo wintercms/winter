@@ -35,7 +35,7 @@ class MarkupManager
     /**
      * @var array Globally registered extension items
      */
-    protected $items;
+    protected $items = [];
 
     /**
      * @var \System\Classes\PluginManager
@@ -124,10 +124,6 @@ class MarkupManager
      */
     public function registerExtensions(string $type, array $definitions): void
     {
-        if ($this->items === null) {
-            $this->items = [];
-        }
-
         if (!array_key_exists($type, $this->items)) {
             $this->items[$type] = [];
         }
@@ -171,29 +167,23 @@ class MarkupManager
 
     /**
      * Returns a list of the registered Twig extensions of a type.
-     * @param $type string The Twig extension type
+     * @param string $type The Twig extension type
      * @return array
      */
-    public function listExtensions($type)
+    public function listExtensions(string $type): array
     {
-        $results = [];
-
-        if ($this->items === null) {
+        if ($this->items === []) {
             $this->loadExtensions();
         }
 
-        if (isset($this->items[$type]) && is_array($this->items[$type])) {
-            $results = $this->items[$type];
-        }
-
-        return $results;
+        return is_array($this->items[$type] ?? null) ? $this->items[$type] : [];
     }
 
     /**
      * Returns a list of the registered Twig filters.
      * @return array
      */
-    public function listFilters()
+    public function listFilters(): array
     {
         return $this->listExtensions(self::EXTENSION_FILTER);
     }
@@ -202,7 +192,7 @@ class MarkupManager
      * Returns a list of the registered Twig functions.
      * @return array
      */
-    public function listFunctions()
+    public function listFunctions(): array
     {
         return $this->listExtensions(self::EXTENSION_FUNCTION);
     }
@@ -211,121 +201,50 @@ class MarkupManager
      * Returns a list of the registered Twig token parsers.
      * @return array
      */
-    public function listTokenParsers()
+    public function listTokenParsers(): array
     {
         return $this->listExtensions(self::EXTENSION_TOKEN_PARSER);
     }
 
     /**
      * Makes a set of Twig functions for use in a twig extension.
-     * @param  array $functions Current collection
+     * @param array $functions Current collection
      * @return array
      */
-    public function makeTwigFunctions($functions = [])
+    public function makeTwigFunctions(array $functions = []): array
     {
-        $defaultOptions = ['is_safe' => ['html']];
-        if (!is_array($functions)) {
-            $functions = [];
-        }
-
-        foreach ($this->listFunctions() as $name => $callable) {
-            $options = [];
-            if (is_array($callable) && isset($callable['options'])) {
-                $options = $callable['options'];
-                $callable = $callable['callable'] ?? $callable[0];
-
-                if (isset($options['is_safe']) && !is_array($options['is_safe'])) {
-                    if (is_string($options['is_safe'])) {
-                        $options['is_safe'] = [$options['is_safe']];
-                    } else {
-                        $options['is_safe'] = [];
-                    }
-                }
-            }
-            $options = array_merge($defaultOptions, $options);
-
-            /*
-             * Handle a wildcard function
-             */
-            if (strpos($name, '*') !== false && $this->isWildCallable($callable)) {
-                $callable = function ($name) use ($callable) {
-                    $arguments = array_slice(func_get_args(), 1);
-                    $method = $this->isWildCallable($callable, Str::camel($name));
-                    return call_user_func_array($method, $arguments);
-                };
-            }
-
-            if (!is_callable($callable)) {
-                throw new SystemException(sprintf('The markup function (%s) for %s is not callable.', json_encode($callable), $name));
-            }
-
-            $functions[] = new TwigSimpleFunction($name, $callable, $options);
-        }
-
-        return $functions;
+        return $this->makeTwigCallables(
+            $this->listFunctions(),
+            TwigSimpleFunction::class,
+            ['is_safe' => ['html']],
+            $functions
+        );
     }
 
     /**
      * Makes a set of Twig filters for use in a twig extension.
-     * @param  array $filters Current collection
+     * @param array $filters Current collection
      * @return array
      */
-    public function makeTwigFilters($filters = [])
+    public function makeTwigFilters(array $filters = []): array
     {
-        $defaultOptions = ['is_safe' => ['html']];
-        if (!is_array($filters)) {
-            $filters = [];
-        }
-
-        foreach ($this->listFilters() as $name => $callable) {
-            $options = [];
-            if (is_array($callable) && isset($callable['options'])) {
-                $options = $callable['options'];
-                $callable = $callable['callable'] ?? $callable[0];
-
-                if (isset($options['is_safe']) && !is_array($options['is_safe'])) {
-                    if (is_string($options['is_safe'])) {
-                        $options['is_safe'] = [$options['is_safe']];
-                    } else {
-                        $options['is_safe'] = [];
-                    }
-                }
-            }
-            $options = array_merge($defaultOptions, $options);
-
-            /*
-             * Handle a wildcard function
-             */
-            if (strpos($name, '*') !== false && $this->isWildCallable($callable)) {
-                $callable = function ($name) use ($callable) {
-                    $arguments = array_slice(func_get_args(), 1);
-                    $method = $this->isWildCallable($callable, Str::camel($name));
-                    return call_user_func_array($method, $arguments);
-                };
-            }
-
-            if (!is_callable($callable)) {
-                throw new SystemException(sprintf('The markup filter (%s) for %s is not callable.', json_encode($callable), $name));
-            }
-
-            $filters[] = new TwigSimpleFilter($name, $callable, $options);
-        }
-
-        return $filters;
+        return $this->makeTwigCallables(
+            $this->listFilters(),
+            TwigSimpleFilter::class,
+            ['is_safe' => ['html']],
+            $filters
+        );
     }
 
     /**
      * Makes a set of Twig token parsers for use in a twig extension.
-     * @param  array $parsers Current collection
+     * @param array $parsers Current collection
      * @return array
      */
-    public function makeTwigTokenParsers($parsers = [])
+    public function makeTwigTokenParsers(array $parsers = []): array
     {
-        if (!is_array($parsers)) {
-            $parsers = [];
-        }
-
         $extraParsers = $this->listTokenParsers();
+
         foreach ($extraParsers as $obj) {
             if (!$obj instanceof TwigTokenParser) {
                 continue;
@@ -340,8 +259,8 @@ class MarkupManager
     /**
      * Tests if a callable type contains a wildcard, also acts as a
      * utility to replace the wildcard with a string.
-     * @param  callable  $callable
-     * @param  string|bool $replaceWith
+     * @param callable $callable
+     * @param string|bool $replaceWith
      * @return mixed
      */
     protected function isWildCallable($callable, $replaceWith = false)
@@ -350,9 +269,8 @@ class MarkupManager
 
         if (is_string($callable) && strpos($callable, '*') !== false) {
             $isWild = $replaceWith ? str_replace('*', $replaceWith, $callable) : true;
-        }
-
-        if (is_array($callable)) {
+        } elseif (is_array($callable)) {
+            // Check first element of array
             if (is_string($callable[0]) && strpos($callable[0], '*') !== false) {
                 if ($replaceWith) {
                     $isWild = $callable;
@@ -363,7 +281,8 @@ class MarkupManager
                 }
             }
 
-            if (!empty($callable[1]) && strpos($callable[1], '*') !== false) {
+            // Check second element of array if it exists
+            if (!empty($callable[1]) && is_string($callable[1]) && strpos($callable[1], '*') !== false) {
                 if ($replaceWith) {
                     $isWild = $isWild ?: $callable;
                     $isWild[1] = str_replace('*', $replaceWith, $callable[1]);
@@ -375,5 +294,78 @@ class MarkupManager
         }
 
         return $isWild;
+    }
+
+    /**
+     * Shared logic for creating Twig callable (functions/filters).
+     * @param array $definitions
+     * @param string $twigClass
+     * @param array $defaultOptions
+     * @param array $collection
+     * @return array
+     */
+    private function makeTwigCallables(array $definitions, string $twigClass, array $defaultOptions, array $collection = []): array
+    {
+        foreach ($definitions as $name => $callable) {
+            $options = $defaultOptions;
+            if (is_array($callable) && isset($callable['options'])) {
+                $options = $this->normalizeOptions($callable['options'], $defaultOptions);
+            }
+            $callable = $this->normalizeCallable($callable);
+
+            // Handle wildcard
+            if (strpos($name, '*') !== false && $this->isWildCallable($callable)) {
+                $callable = function ($name) use ($callable) {
+                    $arguments = array_slice(func_get_args(), 1);
+                    $method = $this->isWildCallable($callable, Str::camel($name));
+                    return call_user_func_array($method, $arguments);
+                };
+            }
+
+            if (!is_callable($callable)) {
+                throw new SystemException(sprintf(
+                    'The markup %s (%s) for %s is not callable.',
+                    $twigClass,
+                    json_encode($callable),
+                    $name
+                ));
+            }
+
+            $collection[] = new $twigClass($name, $callable, $options);
+        }
+        return $collection;
+    }
+
+    /**
+     * Normalize a callable definition.
+     * @param mixed $callable
+     * @return callable
+     */
+    private function normalizeCallable($callable)
+    {
+        if (is_array($callable)) {
+            if (!empty($callable['callable']) && is_callable($callable['callable'])) {
+                return $callable['callable'];
+            } elseif (!empty($callable[0]) && is_callable($callable[0])) {
+                return $callable[0];
+            }
+        }
+
+        return $callable;
+    }
+
+    /**
+     * Normalize options for Twig extension definitions.
+     * @param array $options
+     * @param array $defaultOptions
+     * @return array
+     */
+    private function normalizeOptions(array $options, array $defaultOptions): array
+    {
+        if (isset($options['is_safe']) && !is_array($options['is_safe'])) {
+            $options['is_safe'] = is_string($options['is_safe']) ? [$options['is_safe']] : [];
+        }
+
+        return array_merge($defaultOptions, $options);
     }
 }
