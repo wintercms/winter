@@ -1,0 +1,9 @@
+.calendar-container{--fc-event-bg-color:#0594CD;--fc-event-border-color:#035e82;--fc-list-event-hover-bg-color:#d3f2fe;--fc-button-text-color:#FFF;--fc-button-bg-color:#656d79;--fc-button-border-color:#656d79;--fc-button-hover-bg-color:#2896b2;--fc-button-hover-border-color:#2896b2;--fc-button-active-bg-color:#2896b2;--fc-button-active-border-color:#2896b2;padding:0 20px 1px;font-size:15px}
+.calendar-container.primary{--fc-button-text-color:#fff;--fc-button-bg-color:#2896b2;--fc-button-border-color:#24849d;--fc-button-hover-bg-color:#2896b2;--fc-button-hover-border-color:#2896b2;--fc-button-active-bg-color:#2896b2;--fc-button-active-border-color:#2896b2}
+.calendar-container.secondary{--fc-button-text-color:#405261;--fc-button-bg-color:#e1e2e4;--fc-button-border-color:#d4d5d8;--fc-button-hover-bg-color:#e1e2e4;--fc-button-hover-border-color:#e1e2e4;--fc-button-active-bg-color:#e1e2e4;--fc-button-active-border-color:#e1e2e4}
+.calendar-container .loading-indicator{background-color:rgba(0,0,0,0.02)}
+.calendar-container .calendar-control{margin:0 auto}
+.calendar-container .calendar-tooltip{position:absolute;z-index:9999;color:black;width:150px;border-radius:3px;box-shadow:0 0 2px rgba(0,0,0,0.5);text-align:center}
+.calendar-container .calendar-tooltip[x-placement^="top"]{margin-bottom:5px}
+.calendar-container .calendar-tooltip[x-placement^="top"] .tooltip-arrow{border-width:5px 5px 0 5px;border-left-color:transparent;border-right-color:transparent;border-bottom-color:transparent;bottom:-5px;left:calc(50% - 5px);margin-top:0;margin-bottom:0}
+.calendar-container .calendar-tooltip .tooltip-arrow{width:0;height:0;border-style:solid;position:absolute;margin:5px;border-color:#34495e}

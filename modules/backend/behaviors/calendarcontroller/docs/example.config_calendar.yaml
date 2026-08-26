@@ -1,0 +1,122 @@
+# ===================================
+#  Calendar Behavior Config
+# ===================================
+
+# Model to use for getting the records to display on the calendar
+modelClass: Author\Plugin\Models\Event
+
+# Calendar Title
+title: 'backend::lang.calendar.title'
+
+# Search columns
+# Used for configuration of additional columns to search by (columns.yaml format)
+searchList: $/author/plugin/models/event/columns.yaml
+
+# Record URL
+# Link opened when an event is clicked. Replace :id with the record id.
+recordUrl: author/plugin/events/update/:id
+
+# Record property used as the title displayed on the calendar
+recordTitle: name
+
+# Record property used as the start time
+recordStart: start_at
+
+# Record property used as the end time
+recordEnd: end_at
+
+# Record property used as all day long event
+recordAllDay: all_day
+
+# Record property used as the background color for the event
+# '' = the default background color defined by the calendar styles
+recordColor: event_color
+
+# Record property (or array of config keys) used as the content of the tooltip
+recordTooltip: [recordTitle]
+
+# Calendar widget theme color for buttons ('' for default, primary or secondary)
+calendarTheme:
+
+# Available display modes to be supported in this instance
+availableDisplayModes: [month, week, day, list]
+
+# Default view for calendar widget (month, week, day or list)
+initialView: month
+
+# First day of week, 0=Sun, 1=Mon ...
+firstDay: 0
+
+# Timezone used when rendering event times.
+# Event start/end values are emitted as offset-qualified ISO-8601 strings computed in this
+# timezone, and the value is passed to the frontend so FullCalendar buckets events into the
+# same zone. Defaults to the application timezone (app.timezone) when omitted.
+# timezone: America/New_York
+
+# Whether the widget applies its built-in visible-window date-range filter (default true).
+# Leave enabled for regular (non-recurring) records - it keeps month views efficient by only
+# fetching records that intersect the visible window. See "Recurring events" below for when to
+# disable it.
+applyDateRangeFilter: true
+
+# Flag for whether calendar is read only or editable
+previewMode: true
+
+# Toolbar widget configuration
+toolbar:
+    # Partial for toolbar buttons
+    buttons: calendar_toolbar
+
+    # Search widget configuration
+    search:
+        prompt: backend::lang.list.search_prompt
+
+# The filter config file for the controller
+# When a filter is applied the client's event cache is cleared and reloaded for the current
+# window with the new filters applied.
+filter: calendar_filter.yaml
+
+# ===================================
+#  Recurring events
+# ===================================
+# The widget filters records to the visible window at the database level *before* the
+# backend.calendar.extendRecords event fires. A recurring master row whose base start date
+# falls outside the window would therefore be dropped before you could expand it. There are
+# two supported patterns:
+#
+# (a) Client-side expansion - emit an `rrule` property on the event objects (in
+#     backend.calendar.extendEvents) and let FullCalendar's rrule plugin expand occurrences in
+#     the browser. Simplest for consumers.
+#
+# (b) Server-side expansion (recommended default) - set `applyDateRangeFilter: false` (or call
+#     $calendarWidget->setApplyDateRangeFilter(false) from a backend.calendar.extendQueryBefore
+#     listener) so recurring master rows survive the query, then expand them into concrete
+#     occurrences for the window in a backend.calendar.extendRecords listener. Keeping the
+#     window constraint out of the base query also keeps the client-side month cache key stable.
+#     The extendQueryBefore / extendQuery events receive the visible window ($startTime,
+#     $endTime as Unix timestamps) so you can add a recurrence-aware constraint that still keeps
+#     non-recurring rows efficient, e.g. "rows intersecting the window OR rows with an rrule".
+
+# ===================================
+#  Click handlers
+# ===================================
+# Record on click
+# @see example.custom.calendar.js for a sample controller implementation.
+# The handler receives the following arguments:
+#   data:      a plain object { startDate, endDate, event, eventEl }
+#   startDate: a JS Date object
+#   endDate:   a JS Date object, may be null
+#   event:     the FullCalendar event object (id, title, start, end, ...)
+#   eventEl:   the HTML element for this event
+# recordOnClick: $.wn.eventCalendar.onEventClick(:data, :startDate, :endDate, :event, :eventEl)
+
+# Triggered when the user clicks on a date or a time.
+# The handler receives the following arguments:
+#   data:    a plain object { date, dateStr, allDay, dayEl, event, view }
+#   date:    a JS Date object for the clicked day/time
+#   dateStr: an ISO-8601 string representation of the date
+#   allDay:  true or false
+#   dayEl:   the HTML element representing the clicked day
+#   event:   the native JS event (click coordinates, etc.)
+#   view:    the current view @see https://fullcalendar.io/docs/view-object
+onClickDate: $.wn.eventCalendar.onClickDate(:data, :date, :dateStr, :allDay, :dayEl, :event, :view)
