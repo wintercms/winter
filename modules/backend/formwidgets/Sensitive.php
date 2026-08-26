@@ -1,6 +1,7 @@
 <?php namespace Backend\FormWidgets;
 
 use Backend\Classes\FormWidgetBase;
+use Winter\Storm\Html\Helper as HtmlHelper;
 
 /**
  * Sensitive widget.
@@ -92,6 +93,28 @@ class Sensitive extends FormWidgetBase
         return [
             'value' => $this->getLoadValue()
         ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getLoadValue()
+    {
+        if ($this->formField->value !== null && $this->formField->value != $this->hiddenPlaceholder) {
+            return $this->formField->value;
+        }
+
+        $parts = HtmlHelper::nameToArray($this->getFieldName());
+        array_shift($parts); // remove Model name
+        $fieldName = array_shift($parts);
+
+        $value = $this->model->getAttribute($fieldName);
+
+        if (count($parts) && is_array($value)) {
+            $value = array_get($value, implode('.', $parts));
+        }
+
+        return $value;
     }
 
     /**
