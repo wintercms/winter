@@ -137,15 +137,18 @@ class PackageManager
                 }
             }
 
-            // Search plugins for compilable packages to autoregister. Use the in-project
-            // plugin path (which honours symlinks under the plugins directory) rather than
-            // getPluginPath()'s realpath, so packages inside symlinked plugins register and
-            // are served from a web-accessible location under base_path().
+            // Search plugins for compilable packages to autoregister. When symlinked
+            // packages are supported, prefer the in-project plugin path (which honours
+            // symlinks under the plugins directory) over getPluginPath()'s realpath, so
+            // packages inside symlinked plugins register and are served from a
+            // web-accessible location under base_path().
             $pluginManager = PluginManager::instance();
             $inProjectPluginPaths = [];
-            foreach ($pluginManager->getVendorAndPluginNames() as $vendorName => $vendorPlugins) {
-                foreach ($vendorPlugins as $pluginName => $pluginPath) {
-                    $inProjectPluginPaths[strtolower($vendorName . '.' . $pluginName)] = $pluginPath;
+            if ($this->supportsSymlinkedPackages()) {
+                foreach ($pluginManager->getVendorAndPluginNames() as $vendorName => $vendorPlugins) {
+                    foreach ($vendorPlugins as $pluginName => $pluginPath) {
+                        $inProjectPluginPaths[strtolower($vendorName . '.' . $pluginName)] = $pluginPath;
+                    }
                 }
             }
             foreach ($pluginManager->getPlugins() as $plugin) {
@@ -281,6 +284,19 @@ class PackageManager
     }
 
     /**
+     * Whether packages provided by symlinked plugins & themes should keep their in-project
+     * path instead of the realpath that the symlink resolves to.
+     *
+     * Symlinking individual plugins or themes into a project requires
+     * "develop.allowDeepSymlinks", so the symlink handling is gated behind it and standard
+     * installs keep the original realpath behaviour.
+     */
+    protected function supportsSymlinkedPackages(): bool
+    {
+        return (bool) Config::get('develop.allowDeepSymlinks', false);
+    }
+
+    /**
      * Registers an entity as a package for compilation.
      *
      * Entities can include plugins, components, themes, modules and much more.
@@ -316,7 +332,10 @@ class PackageManager
         // project but the original (symbolized) path is inside it, keep the in-project
         // location so the package registers and its compiled assets serve from a
         // web-accessible path.
-        if (!str_starts_with($pinfo['dirname'] . DIRECTORY_SEPARATOR, $base)) {
+        if (
+            $this->supportsSymlinkedPackages()
+            && !str_starts_with($pinfo['dirname'] . DIRECTORY_SEPARATOR, $base)
+        ) {
             $symbolized = pathinfo($path);
             if (str_starts_with($symbolized['dirname'] . DIRECTORY_SEPARATOR, $base)) {
                 $relativePath = Str::after($symbolized['dirname'], $base);
