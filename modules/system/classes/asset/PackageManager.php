@@ -336,7 +336,10 @@ class PackageManager
             $this->supportsSymlinkedPackages()
             && !str_starts_with($pinfo['dirname'] . DIRECTORY_SEPARATOR, $base)
         ) {
-            $symbolized = pathinfo($path);
+            // Standardize the separators first - unlike $resolvedPath, $path carries
+            // whatever separators the caller supplied, and the stored path must use the
+            // platform separator consistently for both branches.
+            $symbolized = pathinfo(PathResolver::standardize($path));
             if (str_starts_with($symbolized['dirname'] . DIRECTORY_SEPARATOR, $base)) {
                 $relativePath = Str::after($symbolized['dirname'], $base);
                 $configFile = $symbolized['basename'];
