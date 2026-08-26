@@ -246,6 +246,8 @@ return [
         'delete_selected_success' => 'Deleted selected records.',
         'column_switch_true' => 'Yes',
         'column_switch_false' => 'No',
+        'sortable_requirements' => 'To use "sortable" on a list, the model ":model" must use the :trait trait.',
+        'sortable_conflicts' => 'A "sortable" list cannot also use: :conflicts. Drag-and-drop reordering requires the whole list in a fixed order. Remove these options, or use the ReorderController for a dedicated reordering page.',
     ],
     'fileupload' => [
         'attachment' => 'Attachment',
@@ -372,6 +374,8 @@ return [
         'delete_confirm' => 'Are you sure?',
         'link' => 'Link',
         'link_name' => 'Link :name',
+        'sortable_requirements' => 'To use "sortable" on the ":relation" relation, the model ":model" must use the :trait trait and declare the relation in $sortableRelations.',
+        'sortable_conflicts' => 'The ":relation" relation cannot combine "sortable" with: :conflicts. Drag-and-drop reordering requires the whole relation in a fixed order. Remove these options, or use the ReorderController for a dedicated reordering page.',
         'unlink' => 'Unlink',
         'unlink_name' => 'Unlink :name',
         'unlink_confirm' => 'Are you sure?',
