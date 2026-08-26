@@ -258,6 +258,80 @@ class ImageResizer
     }
 
     /**
+     * Read the source image dimensions from the given disk and path.
+     *
+     * Returns ['width' => 0, 'height' => 0] when the file is missing,
+     * unreadable, or the dimensions cannot be determined.
+     *
+     * For local disks the file is read directly to avoid unnecessary I/O.
+     * Remote disks (S3, FTP, etc.) are downloaded to a temporary file first
+     * because getimagesize() requires a local path.
+     *
+     * @param FilesystemAdapter|string $disk
+     * @param string $path Path to the image on the disk
+     * @return array
+     */
+    protected static function readSourceDimensions(FilesystemAdapter|string $disk, string $path): array
+    {
+        if (is_string($disk)) {
+            $disk = Storage::disk($disk);
+        }
+
+        $origWidth = 0;
+        $origHeight = 0;
+        $localPathForExif = null;
+        $tempPath = null;
+
+        try {
+            if (!$disk->exists($path)) {
+                return ['width' => 0, 'height' => 0];
+            }
+
+            if (FileHelper::isLocalDisk($disk)) {
+                $localPath = $disk->getPathPrefix() . $path;
+                $size = @getimagesize($localPath);
+                if ($size !== false) {
+                    $origWidth = $size[0];
+                    $origHeight = $size[1];
+                    $localPathForExif = $localPath;
+                }
+            } else {
+                $tempDir = temp_path() . '/resizer';
+                $tempPath = $tempDir . '/' . uniqid() . '.' . FileHelper::extension($path);
+
+                if (!FileHelper::isDirectory($tempDir)) {
+                    FileHelper::makeDirectory($tempDir, 0777, true, true);
+                }
+
+                FileHelper::put($tempPath, $disk->get($path));
+                $size = @getimagesize($tempPath);
+                if ($size !== false) {
+                    $origWidth = $size[0];
+                    $origHeight = $size[1];
+                    $localPathForExif = $tempPath;
+                }
+            }
+
+            if ($localPathForExif && function_exists('exif_read_data')) {
+                $exif = @exif_read_data($localPathForExif);
+                if (!empty($exif['Orientation']) && in_array($exif['Orientation'], [1, 3, 6, 8], true)) {
+                    if (in_array($exif['Orientation'], [6, 8], true)) {
+                        [$origWidth, $origHeight] = [$origHeight, $origWidth];
+                    }
+                }
+            }
+        } catch (\Exception $ex) {
+            // Ignore failures to read source dimensions
+        } finally {
+            if (isset($tempPath)) {
+                @unlink($tempPath);
+            }
+        }
+
+        return ['width' => $origWidth, 'height' => $origHeight];
+    }
+
+    /**
      * Process the resize request
      */
     public function resize(): void
@@ -845,6 +919,8 @@ class ImageResizer
         // since the browser will "steal" the configuration with the first request it makes
         // if we pull the configuration data out immediately.
         Cache::forget($cacheKey);
+        Cache::forget($cacheKey . '.dimensions');
+        Cache::forget($cacheKey . '.source');
 
         return $resizer;
     }
@@ -912,27 +988,208 @@ class ImageResizer
      */
     public static function filterGetDimensions($image): array
     {
-        $resizer = new static($image);
+        try {
+            $resizer = new static($image);
+        } catch (\SystemException $ex) {
+            if (is_string($image)) {
+                $path = parse_url($image, PHP_URL_PATH);
+                if ($path && str_starts_with($path, '/resizer/')) {
+                    return static::getDimensionsFromResizerUrl($image);
+                }
+            }
+            return ['width' => 0, 'height' => 0];
+        }
 
-        return Cache::rememberForever(static::CACHE_PREFIX . 'dimensions.' . $resizer->getIdentifier(), function () use ($resizer) {
-            // Prepare the local file for assessment
-            $tempPath = $resizer->getLocalTempPath();
-            $dimensions = [];
+        $identifier = $resizer->getIdentifier();
+        $configCacheKey = static::CACHE_PREFIX . $identifier;
 
-            // Attempt to get the image size
-            try {
-                $size = getimagesize($tempPath);
-                $dimensions['width'] = $size[0];
-                $dimensions['height'] = $size[1];
-            } catch (\Exception $ex) {
-                @unlink($tempPath);
-                throw $ex;
+        if (!Cache::has($configCacheKey)) {
+            Cache::put($configCacheKey, $resizer->getConfig());
+        }
+
+        return static::computeCachedDimensions($identifier);
+    }
+
+    /**
+     * Extract dimensions from a /resizer/* URL by reading the cached
+     * resizer configuration and, if possible, the source file.
+     *
+     * @param string $url The /resizer/* URL
+     * @return array
+     */
+    protected static function getDimensionsFromResizerUrl(string $url): array
+    {
+        $path = parse_url($url, PHP_URL_PATH);
+        $segments = explode('/', ltrim($path, '/'));
+
+        if (count($segments) < 3 || $segments[0] !== 'resizer') {
+            return ['width' => 0, 'height' => 0];
+        }
+
+        $identifier = $segments[1];
+
+        if (!static::isValidIdentifier($identifier)) {
+            return ['width' => 0, 'height' => 0];
+        }
+
+        return static::computeCachedDimensions($identifier);
+    }
+
+    /**
+     * Compute and cache the output dimensions for a resizer configuration
+     * identified by its cache key suffix.
+     *
+     * @param string $identifier The resizer identifier
+     * @return array
+     */
+    protected static function computeCachedDimensions(string $identifier): array
+    {
+        $config = Cache::get(static::CACHE_PREFIX . $identifier);
+
+        if (empty($config) || !isset($config['width'], $config['height'], $config['options']['mode'])) {
+            return ['width' => 0, 'height' => 0];
+        }
+
+        $sourceCacheKey = static::CACHE_PREFIX . $identifier . '.source';
+        $dimensionsCacheKey = static::CACHE_PREFIX . $identifier . '.dimensions';
+
+        $cachedSource = Cache::get($sourceCacheKey);
+        if ($cachedSource !== null) {
+            $origWidth = $cachedSource['width'];
+            $origHeight = $cachedSource['height'];
+        } else {
+            $sourceDimensions = static::readSourceDimensions(
+                $config['image']['disk'],
+                $config['image']['path']
+            );
+            $origWidth = $sourceDimensions['width'];
+            $origHeight = $sourceDimensions['height'];
+
+            if ($origWidth <= 0 || $origHeight <= 0) {
+                // Don't cache failed reads; return fallback directly without caching
+                // so transient errors (network blip, temp file issue) don't become permanent.
+                return ['width' => $config['width'], 'height' => $config['height']];
             }
 
-            // Cleanup afterwards
-            @unlink($tempPath);
+            // Cache successful reads forever since source image dimensions don't change
+            Cache::forever($sourceCacheKey, ['width' => $origWidth, 'height' => $origHeight]);
+        }
 
-            return $dimensions;
+        // If we have valid source dimensions, compute and cache the result forever
+        return Cache::rememberForever($dimensionsCacheKey, function () use ($config, $origWidth, $origHeight) {
+            return static::calculateResizedDimensions(
+                $origWidth,
+                $origHeight,
+                $config['width'],
+                $config['height'],
+                $config['options']['mode']
+            );
         });
+    }
+
+    /**
+     * Calculate the expected output dimensions for a resize operation.
+     *
+     * This method intentionally duplicates the aspect-ratio math from
+     * \Winter\Storm\Database\Attach\Resizer::getDimensions() rather than
+     * delegating to it. Reasons:
+     *
+     * - getDimensions() is protected in Storm; making it public would be a
+     *   BC surface expansion that Storm maintainers may not accept.
+     * - Calling Resizer::open() allocates GD resources solely to read
+     *   dimensions, which is wasteful when getimagesize() is sufficient.
+     * - The formulas are stable arithmetic that has not changed in years.
+     *
+     * If Storm's math ever diverges, a single integration test comparing
+     * both implementations will catch the drift.
+     *
+     * @param int $origWidth  Original image width (0 if unknown)
+     * @param int $origHeight Original image height (0 if unknown)
+     * @param int $reqWidth   Requested output width
+     * @param int $reqHeight  Requested output height
+     * @param string $mode    Resize mode: exact, portrait, landscape, auto, fit, crop
+     * @return array
+     */
+    protected static function calculateResizedDimensions(
+        int $origWidth,
+        int $origHeight,
+        int $reqWidth,
+        int $reqHeight,
+        string $mode
+    ): array {
+        if ($origWidth <= 0 || $origHeight <= 0) {
+            return ['width' => $reqWidth, 'height' => $reqHeight];
+        }
+
+        if ($reqWidth <= 0 && $reqHeight <= 0) {
+            return ['width' => $origWidth, 'height' => $origHeight];
+        } elseif ($reqWidth <= 0) {
+            $ratio = $origWidth / $origHeight;
+            return ['width' => (int) ($reqHeight * $ratio), 'height' => $reqHeight];
+        } elseif ($reqHeight <= 0) {
+            $ratio = $origHeight / $origWidth;
+            return ['width' => $reqWidth, 'height' => (int) ($reqWidth * $ratio)];
+        }
+
+        switch ($mode) {
+            case 'exact':
+                return ['width' => $reqWidth, 'height' => $reqHeight];
+
+            case 'crop':
+                return ['width' => $reqWidth, 'height' => $reqHeight];
+
+            case 'fit':
+                $ratioW = $reqWidth / $origWidth;
+                $ratioH = $reqHeight / $origHeight;
+                $effectiveRatio = min($ratioW, $ratioH);
+                return [
+                    'width' => (int) round($origWidth * $effectiveRatio),
+                    'height' => (int) round($origHeight * $effectiveRatio),
+                ];
+
+            case 'portrait':
+                $ratio = $origWidth / $origHeight;
+                return [
+                    'width' => (int) round($reqHeight * $ratio),
+                    'height' => $reqHeight,
+                ];
+
+            case 'landscape':
+                $ratio = $origHeight / $origWidth;
+                return [
+                    'width' => $reqWidth,
+                    'height' => (int) round($reqWidth * $ratio),
+                ];
+
+            case 'auto':
+            default:
+                if ($reqWidth <= 1 && $reqHeight <= 1) {
+                    return ['width' => $origWidth, 'height' => $origHeight];
+                } elseif ($reqWidth <= 1) {
+                    $ratio = $origWidth / $origHeight;
+                    return ['width' => (int) ($reqHeight * $ratio), 'height' => $reqHeight];
+                } elseif ($reqHeight <= 1) {
+                    $ratio = $origHeight / $origWidth;
+                    return ['width' => $reqWidth, 'height' => (int) ($reqWidth * $ratio)];
+                }
+
+                if ($origHeight < $origWidth) {
+                    $optimalHeight = (int) ($origHeight * ($reqWidth / $origWidth));
+                    return ['width' => $reqWidth, 'height' => $optimalHeight];
+                } elseif ($origHeight > $origWidth) {
+                    $optimalWidth = (int) ($origWidth * ($reqHeight / $origHeight));
+                    return ['width' => $optimalWidth, 'height' => $reqHeight];
+                } else {
+                    if ($reqHeight < $reqWidth) {
+                        $optimalHeight = (int) ($origHeight * ($reqWidth / $origWidth));
+                        return ['width' => $reqWidth, 'height' => $optimalHeight];
+                    } elseif ($reqHeight > $reqWidth) {
+                        $optimalWidth = (int) ($origWidth * ($reqHeight / $origHeight));
+                        return ['width' => $optimalWidth, 'height' => $reqHeight];
+                    } else {
+                        return ['width' => $reqWidth, 'height' => $reqHeight];
+                    }
+                }
+        }
     }
 }
