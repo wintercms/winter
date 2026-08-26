@@ -49,9 +49,12 @@ return [
         'cancel_button_text' => 'Annuleren',
         'widget_remove_confirm' => 'Deze widget verwijderen?'
     ],
+    'popup' => [
+        'unsaved_changes' => 'De popup bevat niet-opgeslagen wijzigingen.',
+    ],
     'datepicker' => [
         'previousMonth' => 'Vorige maand',
-        'nextMonth' => 'Volgende maan',
+        'nextMonth' => 'Volgende maand',
         'months' => ['Januari', 'Februari', 'Maart', 'April', 'Mei', 'Juni', 'Juli', 'Augustus', 'September', 'Oktober', 'November', 'December'],
         'weekdays' => ['Zondag', 'Maandag', 'Dinsdag', 'Woensdag', 'Donderdag', 'Vrijdag', 'Zaterdag'],
         'weekdaysShort' => ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za']

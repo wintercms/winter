@@ -29,7 +29,7 @@ return [
         'video' => "Відэа",
         'image' => "Выява",
         'link' => "Спасылка",
-        'horizontalrule' => "Insert Horizontal Rul",
+        'horizontalrule' => "Insert Horizontal Rule",
         'fullscreen' => "Поўны экран",
         'preview' => "Прадпрагляд",
     ],

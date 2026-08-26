@@ -262,6 +262,7 @@ class RelationController extends ControllerBehavior
         $this->vars['relationManageId'] = $this->manageId;
         $this->vars['relationLabel'] = $this->config->label ?: $this->field;
         $this->vars['relationManageTitle'] = $this->manageTitle;
+        $this->vars['relationAllowDismiss'] = (bool) $this->getConfig('manage[allowDismiss]', false);
         $this->vars['relationField'] = $this->field;
         $this->vars['relationType'] = $this->relationType;
         $this->vars['relationSearchWidget'] = $this->searchWidget;
@@ -758,10 +759,13 @@ class RelationController extends ControllerBehavior
             $config->noRecordsMessage = $this->getConfig('view[noRecordsMessage]');
 
             $defaultOnClick = sprintf(
-                "$.wn.relationBehavior.clickViewListRecord(':%s', '%s', '%s')",
+                "$.wn.relationBehavior.clickViewListRecord(':%s', '%s', '%s', %s, %s, %s)",
                 $this->relationModel->getKeyName(),
                 $this->relationGetId(),
-                $this->relationGetSessionKey()
+                $this->relationGetSessionKey(),
+                json_encode($this->getConfig('manage[size]', 'huge')),
+                json_encode($this->getConfig('manage[popupClass]')),
+                json_encode((bool) $this->getConfig('manage[allowDismiss]', false))
             );
 
             if ($config->recordUrl) {

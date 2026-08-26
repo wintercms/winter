@@ -24,7 +24,7 @@ return [
         'header6' => 'Nagłówek 6',
         'bold' => 'Pogrubienie',
         'italic' => 'Kursywa',
-        'unorderedlist' => '"Lista nieuporządkowana',
+        'unorderedlist' => 'Lista nieuporządkowana',
         'orderedlist' => 'Uporządkowana lista',
         'video' => 'Wideo',
         'image' => 'Obrazek',

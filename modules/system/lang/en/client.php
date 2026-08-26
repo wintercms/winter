@@ -49,6 +49,9 @@ return [
         'cancel_button_text' => 'Cancel',
         'widget_remove_confirm' => 'Remove this widget?',
     ],
+    'popup' => [
+        'unsaved_changes' => 'The popup contains unsaved changes.',
+    ],
     'datepicker' => [
         'previousMonth' => 'Previous Month',
         'nextMonth' => 'Next Month',
