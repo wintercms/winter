@@ -43,7 +43,7 @@ class PackageManagerTest extends TestCase
         $package = PackageManager::instance()->getPackages('vite')['test-inproject'] ?? null;
 
         $this->assertNotNull($package);
-        $this->assertSame($relative, $package['path']);
+        $this->assertSame($this->platformPath($relative), $package['path']);
     }
 
     /**
@@ -64,7 +64,7 @@ class PackageManagerTest extends TestCase
                 $package = PackageManager::instance()->getPackages('vite')[$name] ?? null;
 
                 $this->assertNotNull($package);
-                $this->assertSame($relative, $package['path']);
+                $this->assertSame($this->platformPath($relative), $package['path']);
             });
         }
     }
@@ -90,7 +90,7 @@ class PackageManagerTest extends TestCase
 
             $this->assertNotNull($package);
             // The stored path is the in-project symlink location, not the realpath.
-            $this->assertSame($linkRelative, $package['path']);
+            $this->assertSame($this->platformPath($linkRelative), $package['path']);
             $this->assertStringNotContainsString(
                 basename(realpath(sys_get_temp_dir())),
                 $package['path']
@@ -132,6 +132,17 @@ class PackageManagerTest extends TestCase
             base_path('this/path/does/not/exist') . '/vite.config.mjs',
             'vite'
         );
+    }
+
+    /**
+     * PackageManager stores package paths using the platform's directory separator, and
+     * consumers normalise them at the point of use (see AssetInstall::processPackage()).
+     * Expectations are written with forward slashes, so convert them before comparing to
+     * keep the assertions valid on Windows.
+     */
+    protected function platformPath(string $path): string
+    {
+        return str_replace('/', DIRECTORY_SEPARATOR, $path);
     }
 
     /**
