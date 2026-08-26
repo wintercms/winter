@@ -919,6 +919,57 @@ class RelationControllerNestedTest extends PluginTestCase
     }
 
     /**
+     * Two levels of ambient nesting - an Item's manage form rendering
+     * a sub-item's manage form, which itself renders a relation field.
+     *
+     * The model RelationManager hands initRelation() is always
+     * $this->model, i.e. the record of the ENCLOSING relation. At one
+     * level of nesting that IS the parent, so trusting it works. At
+     * two it is the grandparent, and trusting it resolves the leaf
+     * relation against the wrong ancestor - in the real world a
+     * BadMethodCallException, since the grandparent's class usually
+     * has no such relation at all.
+     */
+    public function testAmbientFieldTwoLevelsDeepResolvesInnermostAncestorNotEnclosingRecord()
+    {
+        $order = RelationTestOrder::create(['name' => 'Order 1']);
+        $itemA = RelationTestItem::create(['order_id' => $order->id, 'name' => 'Item A']);
+        $subItem = RelationTestItem::create(['parent_item_id' => $itemA->id, 'name' => 'Sub A1']);
+
+        $controller = $this->makeController($order);
+        $behavior = $controller->asExtension(RelationController::class);
+        $controller->initRelation($order, 'items');
+
+        // Item A's manage form is rendering; its sub-items field
+        // resolves ambiently against it.
+        $this->pushNestingStack($behavior, "items[{$itemA->id}]");
+        $controller->initRelation($itemA, 'items');
+
+        // The sub-item's own manage form is now rendering INSIDE Item
+        // A's, and a relation field within it resolves ambiently.
+        $this->pushNestingStack($behavior, "items[{$itemA->id}][items][{$subItem->id}]");
+
+        // Item A, not the sub-item: exactly what
+        // validateField() -> initRelation($this->model) passes here.
+        $controller->initRelation($itemA, 'taxes');
+
+        $this->popNestingStack($behavior);
+        $this->popNestingStack($behavior);
+
+        $this->assertEquals(
+            "items[{$itemA->id}][items][{$subItem->id}][taxes]",
+            $this->readProtectedProperty($behavior, 'nestedField'),
+            'Two levels of ambient nesting should qualify the field against the whole stack path'
+        );
+
+        $this->assertEquals(
+            $subItem->id,
+            $this->readProtectedProperty($behavior, 'model')->id,
+            'A field nested two levels deep must resolve against the innermost ancestor, not the enclosing record'
+        );
+    }
+
+    /**
      * Narrower test for relationMakePartial() specifically - confirms
      * it actually pushes before rendering and pops after, regardless
      * of whether the render call inside it succeeds (it has its own
