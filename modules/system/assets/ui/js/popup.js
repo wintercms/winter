@@ -52,6 +52,11 @@
         zIndex: null
     }
 
+    // Pixels shifted down and right per already-open popup when a new
+    // one is shown, so stacked popups cascade visually instead of
+    // landing exactly on top of one another. See show().
+    Popup.STACK_OFFSET = 40
+
     Popup.prototype.init = function(){
         var self = this
 
@@ -304,6 +309,15 @@
     }
 
     Popup.prototype.show = function() {
+        // Cascade stacked popups with a visible offset, so it's clear
+        // at a glance that a popup is nested on top of another rather
+        // than a fresh, unrelated dialog. Depth is simply how many
+        // OTHER popups are already open when this one shows - counted
+        // before triggering Bootstrap's own show, so this one is never
+        // counted against itself regardless of how quickly Bootstrap
+        // applies its own .in class.
+        var stackDepth = $('.control-popup.in').length
+
         this.$modal.modal('show')
 
         this.$modal.on('click.dismiss.popup', '[data-dismiss="popup"]', $.proxy(this.hide, this))
@@ -313,6 +327,11 @@
         // Fixes an issue where the Modal makes `position: fixed` elements relative to itself
         // https://github.com/twbs/bootstrap/issues/15856
         this.$dialog.css('transform', 'inherit')
+
+        this.$dialog.css({
+            top: stackDepth > 0 ? (stackDepth * Popup.STACK_OFFSET) + 'px' : '',
+            left: stackDepth > 0 ? (stackDepth * Popup.STACK_OFFSET) + 'px' : ''
+        })
     }
 
     Popup.prototype.hide = function() {
