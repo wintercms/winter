@@ -732,7 +732,8 @@
             paramName: 'file_data',
             timeout: 0,
             headers: {},
-            createImageThumbnails: false
+            createImageThumbnails: false,
+            maxFilesize: this.options.maxFilesize,
             // fallback: implement method that would set a flag that the uploader is not supported by the browser
         }
 
@@ -837,7 +838,7 @@
     MediaManager.prototype.uploadError = function(file, message) {
         this.updateUploadBar('error', 'progress-bar progress-bar-danger');
 
-        if (file.xhr.status === 413) {
+        if (file?.xhr?.status === 413) {
             message = 'Server rejected the file because it was too large, try increasing post_max_size';
         }
         if (!message) {
@@ -1309,7 +1310,8 @@
         selectSingleImage: 'Please select a single image.',
         selectionNotImage: 'The selected item is not an image.',
         bottomToolbar: false,
-        cropAndInsertButton: false
+        cropAndInsertButton: false,
+        maxFileSize: 0,
     }
 
     var old = $.fn.mediaManager

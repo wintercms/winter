@@ -62,6 +62,7 @@ class MediaManager extends WidgetBase
     {
         $this->alias = $alias;
         $this->readOnly = $readOnly;
+        $this->validateMediaFileName = Config::get('cms.storage.media.validateMediaFileName', true);
 
         parent::__construct($controller, []);
     }
@@ -108,6 +109,32 @@ class MediaManager extends WidgetBase
     //
     // AJAX handlers
     //
+
+    /**
+     * Process file uploads submitted via AJAX
+     *
+     * @throws ApplicationException If the file "file_data" wasn't detected in the request or if the file failed to pass validation / security checks
+     */
+    public function onUpload(): ?\Illuminate\Http\Response
+    {
+        ini_set('memory_limit', Config::get('cms.storage.media.memoryLimit', ini_get('memory_limit')));
+
+        if ($this->readOnly) {
+            return null;
+        }
+
+        /**
+         * @event backend.widgets.uploadable.onUpload
+         * Provides an opportunity to process the file upload using custom logic.
+         *
+         * Example usage ()
+         */
+        if ($result = Event::fire('backend.widgets.uploadable.onUpload', [$this], true)) {
+            return $result;
+        }
+
+        return $this->onUploadDirect();
+    }
 
     /**
      * Perform a search with the query specified in the request ("search")
