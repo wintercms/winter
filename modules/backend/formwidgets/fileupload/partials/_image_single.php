@@ -30,7 +30,11 @@
         <?php if ($singleFile): ?>
             <div class="upload-object is-success" data-id="<?= $singleFile->id ?>" data-path="<?= $singleFile->pathUrl ?>">
                 <div class="icon-container image">
-                    <img src="<?= $singleFile->thumbUrl ?>" alt="" />
+                    <?php if ($singleFile->content_type === 'application/pdf'): ?>
+                        <iframe src="<?= $singleFile->thumbUrl ?>"></iframe>
+                    <?php else: ?>
+                        <img src="<?= $singleFile->thumbUrl ?>" alt="" />
+                    <?php endif ?>
                 </div>
                 <div class="info">
                     <h4 class="filename">
