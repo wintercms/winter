@@ -651,10 +651,6 @@ class Lists extends WidgetBase
                     $joinQuery->whereRaw(DbDongle::parse($column->config['conditions']));
                 }
 
-                if ($limit) {
-                    $joinQuery->limit($column->config['limit']);
-                }
-
                 $joinSql = $joinQuery->toSql();
 
                 $selects[] = DB::raw("(" . $joinSql . ") as " . $alias);
