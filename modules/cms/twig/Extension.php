@@ -3,6 +3,7 @@
 use Block;
 use Cms\Classes\Controller;
 use Event;
+use System\Classes\Asset\Mix;
 use System\Classes\Asset\Vite;
 use Twig\Extension\AbstractExtension as TwigExtension;
 use Twig\TwigFilter as TwigSimpleFilter;
@@ -54,6 +55,7 @@ class Extension extends TwigExtension
             new TwigSimpleFunction('placeholder', [$this, 'placeholderFunction'], ['is_safe' => ['html']]),
             new TwigSimpleFunction('viteReactRefresh', [$this, 'viteReactRefreshFunction'], $options),
             new TwigSimpleFunction('vite', [$this, 'viteFunction'], $options),
+            new TwigSimpleFunction('mix', [$this, 'mixFunction'], $options),
         ];
     }
 
@@ -183,6 +185,11 @@ class Extension extends TwigExtension
     public function viteReactRefreshFunction(string $package, ?string $buildDirectory = null): ?\Illuminate\Support\HtmlString
     {
         return Vite::reactRefreshTag($package, $buildDirectory);
+    }
+
+    public function mixFunction(array|string $paths, string $package, ?string $manifestPath = null): \Illuminate\Support\HtmlString|string
+    {
+        return Mix::tags($paths, $package, $manifestPath);
     }
 
     /**
