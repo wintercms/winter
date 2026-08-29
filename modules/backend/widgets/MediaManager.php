@@ -11,6 +11,7 @@ use Backend\Classes\WidgetBase;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Classes\MediaLibraryItem;
+use Winter\Storm\Support\Facades\Flash;
 
 /**
  * Media Manager widget.
@@ -513,6 +514,224 @@ class MediaManager extends WidgetBase
 
         $library->resetCache();
 
+        $this->prepareVars();
+
+        return [
+            '#' . $this->getId('item-list') => $this->makePartial('item-list')
+        ];
+    }
+
+    /**
+     * Render the duplicate popup for the provided "path" from the request
+     */
+    public function onLoadDuplicatePopup(): string
+    {
+        $this->abortIfReadOnly();
+
+        $path = Input::get('path');
+        $type = Input::get('type');
+        $path = MediaLibrary::validatePath($path);
+        $suggestedName = '';
+
+        $library = MediaLibrary::instance();
+
+        if ($type == MediaLibraryItem::TYPE_FILE) {
+            $suggestedName = $library->generateIncrementedFileName($path);
+        } else {
+            $suggestedName = $library->generateIncrementedFolderName($path);
+        }
+
+        $this->vars['originalPath'] = $path;
+        $this->vars['newName'] = $suggestedName;
+        $this->vars['type'] = $type;
+
+        return $this->makePartial('duplicate-form');
+    }
+
+    /**
+     * Duplicate the provided path from the request ("originalPath") to the new name ("name")
+     *
+     * @throws ApplicationException if the new name is invalid
+     */
+    public function onDuplicateItem(): array
+    {
+        $this->abortIfReadOnly();
+
+        $newName = Input::get('newName');
+        if (!strlen($newName)) {
+            throw new ApplicationException(Lang::get('cms::lang.asset.name_cant_be_empty'));
+        }
+
+        if (!$this->validateFileName($newName)) {
+            throw new ApplicationException(Lang::get('cms::lang.asset.invalid_name'));
+        }
+
+
+        $originalPath = Input::get('originalPath');
+        $originalPath = MediaLibrary::validatePath($originalPath);
+        $newPath = dirname($originalPath) . '/' . $newName;
+        $type = Input::get('type');
+
+        $newPath = $this->preventPathOverwrite($originalPath, $newPath, $type);
+
+        $library = MediaLibrary::instance();
+
+        if ($type == MediaLibraryItem::TYPE_FILE) {
+            /*
+             * Validate extension
+             */
+            if (!$this->validateFileType($newName)) {
+                throw new ApplicationException(Lang::get('backend::lang.media.type_blocked'));
+            }
+
+            /*
+             * Duplicate single file
+             */
+            $library->copyFile($originalPath, $newPath);
+
+            /**
+             * @event media.file.duplicate
+             * Called after a file is duplicated
+             *
+             * Example usage:
+             *
+             *     Event::listen('media.file.duplicate', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $originalPath, (string) $newPath) {
+             *         \Log::info($originalPath . " was duplicated to " . $path);
+             *     });
+             *
+             * Or
+             *
+             *     $mediaWidget->bindEvent('file.duplicate', function ((string) $originalPath, (string) $newPath) {
+             *         \Log::info($originalPath . " was duplicated to " . $path);
+             *     });
+             *
+             */
+            $this->fireSystemEvent('media.file.duplicate', [$originalPath, $newPath]);
+        } else {
+            /*
+             * Duplicate single folder
+             */
+            $library->copyFolder($originalPath, $newPath);
+
+            /**
+             * @event media.folder.duplicate
+             * Called after a folder is duplicated
+             *
+             * Example usage:
+             *
+             *     Event::listen('media.folder.duplicate', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $originalPath, (string) $newPath) {
+             *         \Log::info($originalPath . " was duplicated to " . $path);
+             *     });
+             *
+             * Or
+             *
+             *     $mediaWidget->bindEvent('folder.duplicate', function ((string) $originalPath, (string) $newPath) {
+             *         \Log::info($originalPath . " was duplicated to " . $path);
+             *     });
+             *
+             */
+            $this->fireSystemEvent('media.folder.duplicate', [$originalPath, $newPath]);
+        }
+
+        $library->resetCache();
+        $this->prepareVars();
+
+        return [
+            '#' . $this->getId('item-list') => $this->makePartial('item-list')
+        ];
+    }
+
+    /**
+     * Duplicate the selected files or folders without prompting the user
+     * The new name will be generated in an incremented sequence
+     *
+     * @throws ApplicationException if the input data is invalid
+     */
+    public function onDuplicateItems(): array
+    {
+        $this->abortIfReadOnly();
+
+        $paths = Input::get('paths');
+
+        if (!is_array($paths)) {
+            throw new ApplicationException('Invalid input data');
+        }
+
+        $library = MediaLibrary::instance();
+
+        $filesToDuplicate = [];
+        foreach ($paths as $pathInfo) {
+            $path = array_get($pathInfo, 'path');
+            $type = array_get($pathInfo, 'type');
+
+            if (!$path || !$type) {
+                throw new ApplicationException('Invalid input data');
+            }
+
+            if ($type === MediaLibraryItem::TYPE_FILE) {
+                /*
+                 * Add to bulk collection
+                 */
+                $filesToDuplicate[] = $path;
+            } elseif ($type === MediaLibraryItem::TYPE_FOLDER) {
+                /*
+                 * Duplicate single folder
+                 */
+                $library->duplicateFolder($path);
+
+                /**
+                 * @event media.folder.duplicate
+                 * Called after a folder is duplicated
+                 *
+                 * Example usage:
+                 *
+                 *     Event::listen('media.folder.duplicate', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $path) {
+                 *         \Log::info($path . " was duplicated");
+                 *     });
+                 *
+                 * Or
+                 *
+                 *     $mediaWidget->bindEvent('folder.duplicate', function ((string) $path) {
+                 *         \Log::info($path . " was duplicated");
+                 *     });
+                 *
+                 */
+                $this->fireSystemEvent('media.folder.duplicate', [$path]);
+            }
+        }
+
+        if (count($filesToDuplicate) > 0) {
+            /*
+             * Duplicate collection of files
+             */
+            $library->duplicateFiles($filesToDuplicate);
+
+            /*
+             * Extensibility
+             */
+            foreach ($filesToDuplicate as $path) {
+                /**
+                 * @event media.file.duplicate
+                 * Called after a file is duplicated
+                 *
+                 * Example usage:
+                 *
+                 *     Event::listen('media.file.duplicate', function ((\Backend\Widgets\MediaManager) $mediaWidget, (string) $path) {
+                 *         \Log::info($path . " was duplicated");
+                 *     });
+                 *
+                 * Or
+                 *
+                 *     $mediaWidget->bindEvent('file.duplicate', function ((string) $path) {
+                 *         \Log::info($path . " was duplicated");
+                 *     });
+                 *
+                 */
+                $this->fireSystemEvent('media.file.duplicate', [$path]);
+            }
+        }
+
+        $library->resetCache();
         $this->prepareVars();
 
         return [
@@ -1375,5 +1594,32 @@ class MediaManager extends WidgetBase
     {
         // User preferences should persist across controller usages for the MediaManager
         return "backend::widgets.media_manager." . strtolower($this->getId());
+    }
+
+    /**
+     * Check if file or folder already exists, then return an incremented name to prevent overwriting
+     *
+     * @param string $originalPath
+     * @param string $newPath
+     * @param string $type
+     *
+     * @todo Maybe the overwriting behavior can be config based
+     */
+    protected function preventPathOverwrite($originalPath, $newPath, $type): string
+    {
+        $library = MediaLibrary::instance();
+
+        if ($library->exists($newPath)) {
+            if ($type == MediaLibraryItem::TYPE_FILE) {
+                $newName = $library->generateIncrementedFileName($originalPath);
+            } else {
+                $newName = $library->generateIncrementedFolderName($originalPath);
+            }
+            $newPath = dirname($originalPath) . '/' . $newName;
+
+            Flash::info(Lang::get('backend::lang.media.'. $type .'_exists_autorename', ['name' => $newName]));
+        }
+
+        return $newPath;
     }
 }

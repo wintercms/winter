@@ -64,6 +64,8 @@ this.$el.on('input','[data-control="search"]',this.proxy(this.onSearchChanged))
 this.$el.on('mediarefresh',this.proxy(this.refresh))
 this.$el.on('shown.oc.popup','[data-command="create-folder"]',this.proxy(this.onFolderPopupShown))
 this.$el.on('hidden.oc.popup','[data-command="create-folder"]',this.proxy(this.onFolderPopupHidden))
+this.$el.on('shown.oc.popup','[data-command="duplicate"]',this.proxy(this.onDuplicatePopupShown))
+this.$el.on('hidden.oc.popup','[data-command="duplicate"]',this.proxy(this.onDuplicatePopupHidden))
 this.$el.on('shown.oc.popup','[data-command="move"]',this.proxy(this.onMovePopupShown))
 this.$el.on('hidden.oc.popup','[data-command="move"]',this.proxy(this.onMovePopupHidden))
 this.$el.on('keydown',this.proxy(this.onKeyDown))
@@ -77,6 +79,8 @@ this.$el.off('change','[data-control="sorting"]',this.proxy(this.onSortingChange
 this.$el.off('keyup','[data-control="search"]',this.proxy(this.onSearchChanged))
 this.$el.off('shown.oc.popup','[data-command="create-folder"]',this.proxy(this.onFolderPopupShown))
 this.$el.off('hidden.oc.popup','[data-command="create-folder"]',this.proxy(this.onFolderPopupHidden))
+this.$el.off('shown.oc.popup','[data-command="duplicate"]',this.proxy(this.onDuplicatePopupShown))
+this.$el.off('hidden.oc.popup','[data-command="duplicate"]',this.proxy(this.onDuplicatePopupHidden))
 this.$el.off('shown.oc.popup','[data-command="move"]',this.proxy(this.onMovePopupShown))
 this.$el.off('hidden.oc.popup','[data-command="move"]',this.proxy(this.onMovePopupHidden))
 this.$el.off('keydown',this.proxy(this.onKeyDown))
@@ -100,8 +104,9 @@ MediaManager.prototype.selectItem=function(node,expandSelection){if(!expandSelec
 for(var i=0,len=items.length;i<len;i++){items[i].setAttribute('class','')}node.setAttribute('class','selected')}else{if(node.getAttribute('class')=='selected')node.setAttribute('class','')
 else node.setAttribute('class','selected')}node.focus()
 this.clearSelectTimer()
-if(this.isPreviewSidebarVisible()){this.selectTimer=setTimeout(this.proxy(this.updateSidebarPreview),100)}if(node.hasAttribute('data-root')&&!expandSelection){this.toggleMoveAndDelete(true)}else{this.toggleMoveAndDelete(false)}if(expandSelection){this.unselectRoot()}}
-MediaManager.prototype.toggleMoveAndDelete=function(value){$('[data-command=delete]',this.$el).prop('disabled',value)
+if(this.isPreviewSidebarVisible()){this.selectTimer=setTimeout(this.proxy(this.updateSidebarPreview),100)}if(node.hasAttribute('data-root')&&!expandSelection){this.toggleMoveDuplicateDelete(true)}else{this.toggleMoveDuplicateDelete(false)}if(expandSelection){this.unselectRoot()}}
+MediaManager.prototype.toggleMoveDuplicateDelete=function(value){$('[data-command=delete]',this.$el).prop('disabled',value)
+$('[data-command=duplicate]',this.$el).prop('disabled',value)
 $('[data-command=move]',this.$el).prop('disabled',value)}
 MediaManager.prototype.unselectRoot=function(){var rootItem=this.$el.get(0).querySelector('[data-type="media-item"][data-root].selected')
 if(rootItem)rootItem.setAttribute('class','')}
@@ -283,6 +288,24 @@ ev.preventDefault()
 return false}
 MediaManager.prototype.folderCreated=function(){this.$el.find('button[data-command="create-folder"]').popup('hide')
 this.afterNavigate()}
+MediaManager.prototype.duplicateItems=function(ev){var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
+if(!items.length){$.wn.alert(this.options.duplicateEmpty)
+return}if(items.length>1){$.wn.confirm(this.options.duplicateMultipleConfirm,this.proxy(this.duplicateMultipleConfirmation))}else{var data={path:items[0].getAttribute('data-path'),type:items[0].getAttribute('data-item-type')}
+$(ev.target).popup({handler:this.options.alias+'::onLoadDuplicatePopup',extraData:data,zIndex:1200})}}
+MediaManager.prototype.duplicateMultipleConfirmation=function(confirmed){if(!confirmed)return
+var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected'),paths=[]
+for(var i=0,len=items.length;i<len;i++){if(items[i].hasAttribute('data-root')){continue;}paths.push({'path':items[i].getAttribute('data-path'),'type':items[i].getAttribute('data-item-type')})}var data={paths:paths}
+$.wn.stripeLoadIndicator.show()
+this.$form.request(this.options.alias+'::onDuplicateItems',{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(this.proxy(this.afterNavigate))}
+MediaManager.prototype.onDuplicatePopupShown=function(ev,button,popup){$(popup).on('submit.media','form',this.proxy(this.onDuplicateItemSubmit))}
+MediaManager.prototype.onDuplicateItemSubmit=function(ev){var item=this.$el.get(0).querySelector('[data-type="media-item"].selected'),data={newName:$(ev.target).find('input[name=newName]').val(),originalPath:$(ev.target).find('input[name=originalPath]').val(),type:$(ev.target).find('input[name=type]').val()}
+$.wn.stripeLoadIndicator.show()
+this.$form.request(this.options.alias+'::onDuplicateItem',{data:data}).always(function(){$.wn.stripeLoadIndicator.hide()}).done(this.proxy(this.itemDuplicated))
+ev.preventDefault()
+return false}
+MediaManager.prototype.onDuplicatePopupHidden=function(ev,button,popup){$(popup).off('.media','form')}
+MediaManager.prototype.itemDuplicated=function(){this.$el.find('button[data-command="duplicate"]').popup('hide')
+this.afterNavigate()}
 MediaManager.prototype.moveItems=function(ev){var items=this.$el.get(0).querySelectorAll('[data-type="media-item"].selected')
 if(!items.length){$.wn.alert(this.options.moveEmpty)
 return}var data={exclude:[],path:this.$el.find('[data-type="current-folder"]').val()}
@@ -310,6 +333,7 @@ break;case'close-uploader':this.hideUploadUi()
 break;case'set-filter':this.setFilter($(ev.currentTarget).data('filter'))
 break;case'delete':this.deleteItems()
 break;case'create-folder':this.createFolder(ev)
+break;case'duplicate':this.duplicateItems(ev)
 break;case'move':this.moveItems(ev)
 break;case'toggle-sidebar':this.toggleSidebar(ev)
 break;case'popup-command':var popupCommand=$(ev.currentTarget).data('popup-command')
@@ -362,7 +386,7 @@ break;case'ArrowLeft':case'ArrowUp':this.selectRelative(false,ev.shiftKey)
 eventHandled=true
 break;}if(eventHandled){ev.preventDefault()
 ev.stopPropagation()}}
-MediaManager.DEFAULTS={url:window.location,uploadHandler:null,alias:'',deleteEmpty:'Please select files to delete.',deleteConfirm:'Delete the selected file(s)?',moveEmpty:'Please select files to move.',selectSingleImage:'Please select a single image.',selectionNotImage:'The selected item is not an image.',bottomToolbar:false,cropAndInsertButton:false}
+MediaManager.DEFAULTS={url:window.location,uploadHandler:null,alias:'',duplicateEmpty:'Please select an item to duplicate.',duplicateMultipleConfirm:'Multiple items selected, they will be duplicated with generated names. Are you sure?',deleteEmpty:'Please select files to delete.',deleteConfirm:'Delete the selected file(s)?',moveEmpty:'Please select files to move.',selectSingleImage:'Please select a single image.',selectionNotImage:'The selected item is not an image.',bottomToolbar:false,cropAndInsertButton:false}
 var old=$.fn.mediaManager
 $.fn.mediaManager=function(option){var args=Array.prototype.slice.call(arguments,1),result=undefined
 this.each(function(){var $this=$(this)

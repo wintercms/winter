@@ -14,6 +14,7 @@
                 <?php if (!$this->readOnly): ?>
                     <div class="btn-group offset-right">
                         <button type="button" class="btn btn-default wn-icon-reply-all" data-command="move"><?= e(trans('backend::lang.media.move')) ?></button>
+                        <button type="button" class="btn btn-default wn-icon-clone" data-command="duplicate"><?= e(trans('backend::lang.media.duplicate')) ?></button>
                         <button type="button" class="btn btn-default wn-icon-trash" data-command="delete"><?= e(trans('backend::lang.media.delete')) ?></button>
                     </div>
                 <?php endif; ?>
