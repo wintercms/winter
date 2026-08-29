@@ -129,6 +129,18 @@ class UpdateManager
     }
 
     /**
+     * Sets the database connection to use for migrations.
+     * @param string $connection
+     * @return self
+     */
+    public function setConnection($connection)
+    {
+        $this->migrator->setConnection($connection);
+
+        return $this;
+    }
+
+    /**
      * Creates the migration table and updates
      * @return self
      */
