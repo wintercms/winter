@@ -734,6 +734,51 @@ class Lists extends WidgetBase
     }
 
     /**
+     * Returns the primary key of every record in the list, in the list's current
+     * order, honouring the active search, filters and sorting.
+     *
+     * Only the key is read: `prepareQuery()` selects every visible column, so on
+     * a list carrying `useRelationCount` or custom `select:` columns each row
+     * would evaluate a correlated subquery whose value is then thrown away. The
+     * select list is reduced to the key unless the active sort resolves against
+     * one of its aliases, since ORDER BY relies on those being selected.
+     *
+     * @return array<int, mixed>
+     */
+    public function getRecordKeys(): array
+    {
+        $query = $this->prepareQuery();
+        $keyName = $this->model->getQualifiedKeyName();
+
+        if (!$this->sortsBySelectedExpression()) {
+            $baseQuery = $query->getQuery();
+            $baseQuery->columns = [$keyName];
+
+            // The select bindings belong to the expressions just discarded.
+            $baseQuery->bindings['select'] = [];
+        }
+
+        return $query->pluck($keyName)->all();
+    }
+
+    /**
+     * Determines whether the active sort refers to a column that exists only as
+     * an alias in the select list, which is the case for columns using
+     * `select:` or `useRelationCount`, as well as related columns sorted by
+     * `valueFrom`.
+     */
+    protected function sortsBySelectedExpression(): bool
+    {
+        if ($this->showTree || !($sortColumn = $this->getSortColumn())) {
+            return false;
+        }
+
+        $column = array_get($this->allColumns, $sortColumn);
+
+        return $column && (isset($column->sqlSelect) || isset($column->relation));
+    }
+
+    /**
      * Calculate the totals for the summable columns
      */
     protected function calculateTotalSums(array $columns): array

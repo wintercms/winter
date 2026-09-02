@@ -687,11 +687,11 @@ class FormController extends ControllerBehavior
      * Resolves the position of the current record within the controller's list
      * and the neighboring record keys used for previous/next navigation.
      *
-     * The sibling set comes from the ListController's prepared query, so it
+     * The sibling set comes from the ListController's list widget, so it
      * reflects the active filters, search and sorting exactly as the user left
-     * the list. Ordered keys are read with a single portable `pluck` and the
-     * position is resolved in PHP — no driver-specific SQL — so it behaves
-     * identically across every database Winter supports.
+     * the list. Ordered keys are read with a single portable, key-only query
+     * and the position is resolved in PHP — no driver-specific SQL — so it
+     * behaves identically across every database Winter supports.
      *
      * @param \Winter\Storm\Database\Model|null $model
      * @return array{previous: mixed, next: mixed, current: int|null, total: int}|null
@@ -717,9 +717,7 @@ class FormController extends ControllerBehavior
             return null;
         }
 
-        $keys = $listWidget->prepareQuery()->pluck($model->getQualifiedKeyName())->all();
-
-        return static::resolveRecordPosition($keys, $model->getKey());
+        return static::resolveRecordPosition($listWidget->getRecordKeys(), $model->getKey());
     }
 
     /**
