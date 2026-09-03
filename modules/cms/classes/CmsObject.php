@@ -204,7 +204,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
     public function save(?array $options = null)
     {
         try {
-            parent::save($options);
+            return parent::save($options);
         }
         catch (Exception $ex) {
             $this->throwHalcyonSaveException($ex);
@@ -322,6 +322,7 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
     /**
      * Converts an exception type thrown by Halcyon to a native CMS exception.
      * @param Exception $ex
+     * @return never
      */
     protected function throwHalcyonSaveException(Exception $ex)
     {

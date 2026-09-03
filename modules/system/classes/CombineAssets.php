@@ -521,7 +521,7 @@ class CombineAssets
     /**
      * Returns a deep hash on filters that support it.
      * @param array $assets List of asset files.
-     * @return void
+     * @return string
      */
     protected function getDeepHashFromAssets($assets)
     {

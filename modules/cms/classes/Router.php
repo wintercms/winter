@@ -72,7 +72,7 @@ class Router
     /**
      * Finds a page by its URL. Returns the page object and sets the $parameters property.
      * @param string $url The requested URL string.
-     * @return \Cms\Classes\Page Returns \Cms\Classes\Page object or null if the page cannot be found.
+     * @return \Cms\Classes\Page|null Returns \Cms\Classes\Page object or null if the page cannot be found.
      */
     public function findByUrl($url)
     {
@@ -275,7 +275,7 @@ class Router
     /**
      * Sets the current routing parameters.
      * @param  array $parameters
-     * @return array
+     * @return void
      */
     public function setParameters(array $parameters)
     {

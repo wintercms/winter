@@ -261,6 +261,10 @@ class BundleManager
 
     /**
      * Registers a single bundle setup handler.
+     *
+     * The handler runs bound to the asset command invoking it, through Closure::call().
+     *
+     * @param-closure-this \System\Console\Asset\AssetCreate $closure
      */
     public function registerSetupHandler(string $name, Closure $closure): static
     {
@@ -271,6 +275,10 @@ class BundleManager
 
     /**
      * Registers a single bundle scaffold handler.
+     *
+     * The handler runs bound to the asset command invoking it, through Closure::call().
+     *
+     * @param-closure-this \System\Console\Asset\AssetCreate $closure
      */
     public function registerScaffoldHandler(string $name, Closure $closure): static
     {
