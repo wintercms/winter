@@ -157,10 +157,27 @@ class CodeParser
 
         $this->writeContentSafe($path, $fileContents);
 
-        // Attempt to load the generated code file to ensure any errors are thrown
-        // before the file is cached
+        /*
+         * Attempt to load the generated code file to ensure any errors are thrown before the file is
+         * cached.
+         *
+         * require, not require_once. require_once keys on the path, and the path is deterministic
+         * while $className above is freshly random for every rebuild. In a process that serves more
+         * than one request — an application server worker — the path has usually been included
+         * already, so require_once would silently do nothing and leave the new class undeclared:
+         *
+         *   Error: Class "Cms<hash>Class" not found  in CodeParser.php
+         *     Cms\Classes\CodeParser->source()
+         *     Cms\Classes\Controller->initCustomObjects()
+         *
+         * That also disabled the recovery in handleCorruptCache(), whose whole purpose is to rebuild
+         * after finding the cache unusable — it rebuilt, then could not load what it had rebuilt.
+         *
+         * Re-including cannot redeclare anything: the class name is unique to this rebuild, so it
+         * cannot already be defined, and this file declares only that one class.
+         */
         if (!class_exists($className)) {
-            require_once $path;
+            require $path;
         }
 
         return $className;
