@@ -1159,7 +1159,7 @@ class Form extends WidgetBase
     protected function showFieldLabels($field)
     {
         if (in_array($field->type, ['checkbox', 'switch', 'section'])) {
-            return false;
+            return $field->showLabels ?? false;
         }
 
         if ($field->type === 'widget') {
