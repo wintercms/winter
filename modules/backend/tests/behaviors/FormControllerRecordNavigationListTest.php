@@ -158,7 +158,7 @@ class FormControllerRecordNavigationListTest extends PluginTestCase
 
         $this->assertNotNull($navigation['current'], 'the archive list contains this record');
         $this->assertSame(
-            User::count(),
+            User::query()->count(),
             $navigation['total'],
             'the total should come from the archive list, not the filtered primary one'
         );
