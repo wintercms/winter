@@ -668,11 +668,14 @@ class FormController extends ControllerBehavior
      * default), the controller also implements the ListController behavior, and
      * an existing record is being viewed.
      *
+     * Resolved through the controller so that `formGetRecordNavigation()` can be
+     * overridden there, as with the other extension points on this behavior.
+     *
      * @return string HTML markup (empty string when navigation is unavailable)
      */
     public function formRenderRecordNavigation(): string
     {
-        $navigation = $this->formGetRecordNavigation();
+        $navigation = $this->controller->formGetRecordNavigation();
         if ($navigation === null || $navigation['current'] === null) {
             return '';
         }
@@ -693,12 +696,26 @@ class FormController extends ControllerBehavior
      * position is resolved in PHP — no driver-specific SQL — so it behaves
      * identically across every database Winter supports.
      *
+     * `recordNavigation` accepts `false` to disable navigation, or the name of a
+     * list definition to navigate that list instead of the primary one, and may be
+     * set per form context. A controller whose primary list is filtered to a subset
+     * -- an open queue, say -- can then still offer navigation on a context that
+     * views records outside it:
+     *
+     *     preview:
+     *         recordNavigation: archive
+     *
      * @param \Winter\Storm\Database\Model|null $model
      * @return array{previous: mixed, next: mixed, current: int|null, total: int}|null
      */
     public function formGetRecordNavigation($model = null): ?array
     {
-        if (!$this->getConfig('recordNavigation', true)) {
+        $navigation = $this->getConfig(
+            "{$this->context}[recordNavigation]",
+            $this->getConfig('recordNavigation', true)
+        );
+
+        if (!$navigation) {
             return null;
         }
 
@@ -712,7 +729,9 @@ class FormController extends ControllerBehavior
         }
 
         $this->controller->makeLists();
-        $listWidget = $this->controller->listGetWidget();
+        $listWidget = $this->controller->listGetWidget(
+            is_string($navigation) ? $navigation : null
+        );
         if (!$listWidget) {
             return null;
         }
