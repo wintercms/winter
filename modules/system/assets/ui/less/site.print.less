@@ -3,11 +3,18 @@
 // --------------------------------------------------
 // Source: https://github.com/h5bp/html5-boilerplate/blob/master/css/main.css
 
+// NOTE: nothing in this file is tokenised, deliberately. Print output must not
+// follow the active screen theme -- these rules also force backgrounds
+// transparent, so a dark theme redefining the tokens would print near-white
+// ink onto white paper.
 @media print {
 
   * {
     text-shadow: none !important;
-    color: var(--wn-text-strong, #000) !important; // Black prints faster: h5bp.com/s
+    // Deliberately NOT a token. This reset also forces backgrounds transparent, so
+    // the text colour must stay independent of the active screen theme -- a dark
+    // theme redefining the token would print near-white text onto white paper.
+    color: #000 !important; // Black prints faster: h5bp.com/s
     background: transparent !important;
     box-shadow: none !important;
   }
@@ -33,7 +40,7 @@
 
   pre,
   blockquote {
-    border: 1px solid var(--wn-border-strong, #999);
+    border: 1px solid #999;
     page-break-inside: avoid;
   }
 
@@ -65,7 +72,7 @@
   // Chrome (OSX) fix for https://github.com/twbs/bootstrap/issues/11245
   // Once fixed, we can just straight up remove this.
   select {
-    background: var(--wn-surface-raised, #fff) !important;
+    background: #fff !important;
   }
 
   // Bootstrap components
@@ -75,17 +82,17 @@
   .table {
     td,
     th {
-      background-color: var(--wn-surface-raised, #fff) !important;
+      background-color: #fff !important;
     }
   }
   .btn,
   .dropup > .btn {
     > .caret {
-      border-top-color: var(--wn-border-dark, #000) !important;
+      border-top-color: #000 !important;
     }
   }
   .label {
-    border: 1px solid var(--wn-border-dark, #000);
+    border: 1px solid #000;
   }
 
   .table {
@@ -94,7 +101,7 @@
   .table-bordered {
     th,
     td {
-      border: 1px solid var(--wn-border-focus, #ddd) !important;
+      border: 1px solid #ddd !important;
     }
   }
 

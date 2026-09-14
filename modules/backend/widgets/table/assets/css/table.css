@@ -21,11 +21,11 @@
 .control-table table.data td.active .content-container:before{width:1px;bottom:-2px}
 .control-table table.data td.active .content-container:after{right:-2px;height:1px}
 .control-table table.data tr{background-color:var(--wn-table-odd-row,#fff)}
-.control-table table.data tr.error{background-color:var(--wn-surface-hover,#fbecec) !important}
-.control-table table.data tr.error td.active.error{border-color:var(--wn-table-border,#ec0000) !important}
-.control-table table.data tr.error td.active.error .content-container{border-color:var(--wn-table-border,#ec0000) !important}
+.control-table table.data tr.error{background-color:var(--wn-surface-error,#fbecec) !important}
+.control-table table.data tr.error td.active.error{border-color:var(--wn-table-error,#ec0000) !important}
+.control-table table.data tr.error td.active.error .content-container{border-color:var(--wn-table-error,#ec0000) !important}
 .control-table table.data tr.error td.active.error .content-container:before,
-.control-table table.data tr.error td.active.error .content-container:after{background-color:var(--wn-table-border,#ec0000) !important}
+.control-table table.data tr.error td.active.error .content-container:after{background-color:var(--wn-table-error,#ec0000) !important}
 .control-table table.data tr:nth-child(2n){background-color:var(--wn-table-even-row,#fafafa)}
 .control-table table.data tr:first-child td{border-top:none}
 .control-table table.data tr:last-child td{border-bottom:none}

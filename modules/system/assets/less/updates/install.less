@@ -251,7 +251,10 @@
     width: 100%;
     margin-top: 0;
     background-color: var(--wn-surface-raised, #fff);
-    border: 1px solid var(--wn-border, #ccc);
+    // The rgba() line below unconditionally overrides this one -- it is the legacy
+    // no-rgba fallback, which every supported browser skips. Tokenising it would
+    // create a token that can never take effect, so it stays literal.
+    border: 1px solid #ccc;
     border: 1px solid rgba(0, 0, 0, 0.2);
     .border-radius(3px);
     .box-shadow(0 5px 10px rgba(0,0,0,.2));

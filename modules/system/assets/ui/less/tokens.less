@@ -32,16 +32,12 @@
     --wn-text-faint: #d1dbe0;  // was #dddddd — text · faint
     --wn-border-strong: #91a6b8;  // was #999999 — border · strong
     --wn-border-inverse: #ffffff;  // border · inverse
-    --wn-border-dark: #050f14;  // was #222222 — border · dark
     --wn-icon-muted: #a3b6c0;  // was #95a5a6 — icon · muted
     --wn-icon-strong: #445a6b;  // was #555555 — icon · strong
     --wn-surface-mid: #91a6b8;  // was #999999 — surface · mid
 
     /* Identity colours — value preserved, named from its LESS variable */
     --wn-balloon-control-active-bg: #da5700;  // was @color-balloon-control-active-bg
-    --wn-blockquote-level1-color: #5e35b1;  // was @blockquote-level1-color
-    --wn-blockquote-level2-color: #00bcd4;  // was @blockquote-level2-color
-    --wn-blockquote-level3-color: #43a047;  // was @blockquote-level3-color
     --wn-callout-danger-content-bg: #f8d6d5;  // was @callout-danger-content-bg
     --wn-callout-danger-header-bg: #f6b5b2;  // was @callout-danger-header-bg
     --wn-callout-danger-icon: #9f5551;  // was @callout-danger-icon
@@ -161,14 +157,12 @@
     --wn-panels-misc: #e8eaeb;  // panels.less &:before
     --wn-repeater-border: #e0e0e0;  // repeater.less &.in-progress
     --wn-repeater-text: #d35714;  // repeater.less &:before
-    --wn-richeditor-border: #2581b8;  // richeditor.less &:focus, &.inspector-open
     --wn-selector-group-border: #e6802b;  // selector-group.less &.active
     --wn-site-normalize-bg: #ffff00;  // site.normalize.less mark
     --wn-snowboard-extras-misc: #ffffff;  // snowboard.extras.less .stripe, .stripe-loaded
     --wn-styles-bg: #7b8892;  // styles.less th, th
     --wn-sweet-alert-animations-border: #f8d486;  // sweet-alert-animations.less @-webkit-keyframes pulseWarning
     --wn-sweet-alert-animations-border-2: #f8bb86;  // sweet-alert-animations.less @-webkit-keyframes pulseWarning
-    --wn-table-border: #ec0000;  // table.less td.active.error
     --wn-theme-selector-misc: #bdc3c7;  // winter.theme-selector.less &:after
     --wn-theme-selector-text: #f1a84e;  // winter.theme-selector.less &.icon-star
     --wn-toolbar-text: #c03f31;  // toolbar.less .btn.oc-autumn-button
@@ -182,6 +176,10 @@
     /* Focus indicators — chosen by the backdrop they sit on */
     --wn-focus-on-dark: #ffffff;  // ring/bar on dark surfaces (fancy master tab strip)
     --wn-focus-on-light: #103141;  // ring/bar on light or brand surfaces; white only reaches 2.8:1 on the brand cyan
+
+    /* Inline colours — value preserved, named from source file + role */
+    --wn-surface-error: #fbecec;  // table error row background
+    --wn-table-error: #ec0000;  // table error cell border/background
 }
 
 // Derived at runtime. Guarded so that where the feature is missing the
