@@ -727,7 +727,10 @@ body.breadcrumb-fancy .control-breadcrumb,
                 opacity: 1;
             }
 
-            &:after {
+            // Only label the button when a title is actually present. The CMS toolbar
+            // renders this button icon-only with no title, where an empty :after would
+            // still contribute its margin as dead space to the right of the icon.
+            &[title]:not([title=""]):after {
                 content: attr(title);
                 margin-left: 6px;
             }
