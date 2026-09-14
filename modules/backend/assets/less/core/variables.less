@@ -93,9 +93,11 @@
 @color-filelist-hero-active-bg:              @highlight-active-bg;
 @color-filelist-hero-active-text:            @highlight-active-text;
 
-@color-fancy-master-tabs-bg:                 @brand-secondary-darker;
+@color-fancy-master-tabs-bg:                 var(--wn-fancy-tab-bg, #1e6e83);
 @color-fancy-master-tabs-active-text:        var(--wn-text-inverse, #ffffff);
-@color-fancy-master-tabs-inactive-text:      rgba(255, 255, 255, .35);
+@color-fancy-master-tabs-inactive-text:      rgba(255, 255, 255, .8);
+@color-fancy-tab-focus:                      var(--wn-focus-on-dark, #ffffff);
+@color-fancy-btn-focus:                      var(--wn-focus-on-light, #103141);
 @color-fancy-master-panel-bg:                @brand-secondary-darker;
 
 @color-fancy-secondary-tabs-bg:              var(--wn-surface-selected, #475354);
@@ -113,7 +115,7 @@
 @color-fancy-form-text:                      var(--wn-text-inverse, #ffffff);
 @color-fancy-form-text-selection:            @brand-secondary-darker;
 @color-fancy-form-placeholder:               rgba(255, 255, 255, .5);
-@color-fancy-form-inactive-tab:              #2c9cb9;
+@color-fancy-form-inactive-tab:              var(--wn-fancy-tab-inactive, #2589a3);
 
 @color-sortable-caret:                       var(--wn-text-secondary, #999999);
 @color-sortable-active:                      @brand-secondary;

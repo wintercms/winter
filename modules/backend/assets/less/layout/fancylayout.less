@@ -61,6 +61,24 @@ body.fancy-layout .master-tabs.control-tabs,
                     padding: 6px 0 0 24px!important;
                     overflow: visible;
 
+                    // Keyboard focus. The visible tab is not the anchor's box: it is
+                    // span.title plus two pseudo-elements skewed +/-20deg hanging off
+                    // either end, so a UA outline on the anchor draws a rectangle that
+                    // cuts through the angled ends. Suppress it and light up the three
+                    // pieces that actually form the shape -- an inset bar inherits each
+                    // piece's transform, so the indicator follows the skew.
+                    // Never show the UA ring on these: it is a rectangle drawn
+                    // around the anchor, which cuts through the tab's angled ends.
+                    // Suppressed for mouse focus too, where no indicator is wanted.
+                    &:focus { outline: none; }
+
+                    &:focus-visible {
+                        > span.title {
+                            &, &:before, &:after {
+                                box-shadow: inset 0 3px 0 0 @color-fancy-tab-focus;
+                            }
+                        }
+                    }
 
                     > span.title {
                         position: relative;
@@ -701,6 +719,19 @@ body.breadcrumb-fancy .control-breadcrumb,
             .opacity(1);
         }
 
+        // These buttons are transparent, text-only and have their box-shadow
+        // removed, so nothing indicated keyboard focus at all. Restore both the
+        // full opacity a hover gets and a ring that reads on the tab strip.
+        // .btn carries a global `outline: none !important`, so an outline here can
+        // never win no matter how specific. Draw the ring with box-shadow instead,
+        // which that rule does not touch.
+        &:focus-visible {
+            .opacity(1);
+            // Dark ring, not white: these sit on the brand strip, where white only
+            // reaches 2.8:1 -- under the 3:1 WCAG 1.4.11 wants for a focus indicator.
+            box-shadow: 0 0 0 2px @color-fancy-btn-focus;
+            border-radius: 2px;
+        }
 
         &:last-child {
             margin-right: 0;

@@ -178,4 +178,17 @@
 
     /* Neutral scale — snapped to the design system (these CHANGE colours) */
     --wn-surface-accent: #e8edef;  // was #ecf0f1 — indigo-0 — list/media zebra, a stronger tier than the table stripe
+
+    /* Focus indicators — chosen by the backdrop they sit on */
+    --wn-focus-on-dark: #ffffff;  // ring/bar on dark surfaces (fancy master tab strip)
+    --wn-focus-on-light: #103141;  // ring/bar on light or brand surfaces; white only reaches 2.8:1 on the brand cyan
+}
+
+// Derived at runtime. Guarded so that where the feature is missing the
+// token stays undefined and each use site falls back to its literal.
+@supports (color: color-mix(in srgb, red 50%, black)) {
+    :root {
+        --wn-fancy-tab-inactive: color-mix(in srgb, var(--brand-secondary, #2da7c7) 82%, black);  // fancy-layout inactive tab; was a hardcoded #2c9cb9 that did not track the brand
+        --wn-fancy-tab-bg: color-mix(in srgb, var(--brand-secondary, #2da7c7) 66%, black);  // fancy-layout tab strip background; was darken(@brand-secondary, 5%)
+    }
 }

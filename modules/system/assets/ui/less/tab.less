@@ -19,6 +19,7 @@
 @color-tab-active-border:                    var(--wn-border, #d0d0d0);
 @color-tab-bg:                               var(--wn-surface-raised, #ffffff);
 @color-tab-active-marker:                    var(--wn-tab-active-marker, #ec8017);
+@color-tab-focus:                            var(--wn-focus-on-light, #103141);
 @color-tab-content-active-bg:                var(--wn-surface-raised, #ffffff);
 @color-tab-content-border:                   var(--wn-border-subtle, #e3e5e7);
 
@@ -91,6 +92,17 @@
                 color: @color-tab-inactive-text;
                 font-weight: 400;
 
+                // A tab is 2-3px taller than the strip, and that overhang is what makes
+                // the active tab merge into the panel below. The strip is
+                // `overflow: hidden`, which still makes it a SCROLL CONTAINER, so
+                // focusing a tab made the browser scroll the overhang into view: every
+                // tab jumped up and stayed there, because the offset survives blur.
+                // A negative scroll-margin shrinks the box the browser tries to reveal,
+                // so it treats the tab as already visible. Purely a scroll-into-view
+                // hint -- paints nothing, changes no layout. (`overflow: clip` is not
+                // an option: the strip must stay horizontally scrollable for
+                // drag.scroll.js, and clip beside a scrolling axis reverts to hidden.)
+                scroll-margin-bottom: -4px;
 
                 overflow: hidden;
 
@@ -282,6 +294,23 @@
                     background: transparent;
                     overflow: visible;
 
+                    // Keyboard focus. The visible tab is not the anchor's box: it is
+                    // span.title plus two skewed pseudo-elements hanging off either
+                    // end, so the UA outline draws a rectangle straight through the
+                    // angled corners. Replace it with an inset bar on the three pieces
+                    // that form the shape -- drawn pre-transform, so it follows the skew.
+                    // Never show the UA ring on these: it is a rectangle drawn
+                    // around the anchor, which cuts through the tab's angled ends.
+                    // Suppressed for mouse focus too, where no indicator is wanted.
+                    &:focus { outline: none; }
+
+                    &:focus-visible {
+                        > span.title {
+                            &, &:before, &:after {
+                                box-shadow: inset 0 3px 0 0 @color-tab-focus;
+                            }
+                        }
+                    }
 
                     > span.title {
                         position: relative;
