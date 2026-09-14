@@ -4,11 +4,11 @@
  * General control styling
  */
 
-@table-active-border: #e0e0e0;
-@table-inactive-border: #e0e0e0;
-@table-odd-row: #ffffff;
-@table-even-row: #fafafa;
-@table-disabled-field: #f7f7f7;
+@table-active-border: var(--wn-border-focus, #e0e0e0);
+@table-inactive-border: var(--wn-border-focus, #e0e0e0);
+@table-odd-row: var(--wn-table-odd-row, #ffffff);
+@table-even-row: var(--wn-table-even-row, #fafafa);
+@table-disabled-field: var(--wn-table-disabled-field, #f7f7f7);
 
 .control-table {
     .table-container {
@@ -38,7 +38,7 @@
         td, th {
             padding: 0;
             font-size: 13px;
-            color: #555555;
+            color: var(--wn-text, #555555);
         }
 
         [data-view-container] {
@@ -67,9 +67,9 @@
             font-weight: normal;
             text-transform: uppercase;
             font-size: @font-size-base - 3;
-            color: #333333;
+            color: var(--wn-text-link, #333333);
             background: white;
-            border-right: 1px solid #ecf0f1;
+            border-right: 1px solid var(--wn-border-subtle, #ecf0f1);
             [data-view-container] {
                 padding-bottom: 6px;
             }
@@ -90,7 +90,7 @@
 
     table.data {
         td {
-            border: 1px solid #ecf0f1;
+            border: 1px solid var(--wn-border-subtle, #ecf0f1);
 
             .content-container {
                 position: relative;
@@ -134,15 +134,15 @@
             background-color: @table-odd-row;
 
             &.error {
-                background-color: #fbecec!important;
+                background-color: var(--wn-surface-hover, #fbecec)!important;
 
                 td.active.error {
-                    border-color: #ec0000!important;
+                    border-color: var(--wn-table-border, #ec0000)!important;
 
                     .content-container {
-                        border-color: #ec0000!important;
+                        border-color: var(--wn-table-border, #ec0000)!important;
                         &:before, &:after {
-                            background-color: #ec0000!important;
+                            background-color: var(--wn-table-border, #ec0000)!important;
                         }
                     }
                 }
@@ -180,7 +180,7 @@
 
         table.data {
             tr:last-child td {
-                border-bottom: 1px solid #ecf0f1;
+                border-bottom: 1px solid var(--wn-border-subtle, #ecf0f1);
             }
         }
     }
@@ -191,7 +191,7 @@
         .clearfix();
 
         a.btn {
-            color: #323e50;
+            color: var(--wn-text-heading, #323e50);
             padding: 8px 10px;
             .opacity(0.5);
             .box-shadow(none) !important;
@@ -262,9 +262,9 @@
                 a {
                     display: inline-block;
                     text-decoration: none;
-                    color: #95a5a6;
+                    color: var(--wn-text-secondary, #95a5a6);
                     padding: 4px 6px;
-                    background: #ecf0f1;
+                    background: var(--wn-surface-hover, #ecf0f1);
                     .border-radius(2px);
                     outline: none;
                     line-height: 100%;
@@ -276,7 +276,7 @@
 
                 &.active a {
                     background: @brand-accent;
-                    color: #ffffff;
+                    color: var(--wn-text-inverse, #ffffff);
                 }
             }
         }
@@ -346,8 +346,8 @@ ul.table-widget-autocomplete {
     background: white;
     font-size: 13px;
     margin-top: 0;
-    border: 1px solid #808c8d;
-    border-top: 1px solid #ecf0f1;
+    border: 1px solid var(--wn-border-strong, #808c8d);
+    border-top: 1px solid var(--wn-border-subtle, #ecf0f1);
     .border-bottom-radius(4px);
 
     li a {
@@ -365,7 +365,7 @@ ul.table-widget-autocomplete {
             width: 16px;
             height: 16px;
             border-radius: @border-radius-base;
-            background-color: #FFFFFF;
+            background-color: var(--wn-surface-raised, #FFFFFF);
             border: 1px solid @color-custom-input-border;
             margin: 6px 5px 6px 10px;
             cursor: pointer;
@@ -407,7 +407,7 @@ ul.table-widget-autocomplete {
             .icon(@angle-down);
             font-size: 13px;
             line-height: 100%;
-            color: #95a5a6;
+            color: var(--wn-icon-muted, #95a5a6);
             position: absolute;
             top: 8px;
             right: 10px;
@@ -486,7 +486,7 @@ html.cssanimations {
     .border-bottom-radius(4px);
 
     ul {
-        border-top: 1px solid #ecf0f1;
+        border-top: 1px solid var(--wn-border-subtle, #ecf0f1);
         padding: 0;
         margin: 0;
         max-height: 200px;
@@ -496,7 +496,7 @@ html.cssanimations {
     li {
         list-style: none;
         font-size: 13px;
-        color: #555555;
+        color: var(--wn-text, #555555);
         padding: 5px 10px;
         cursor: pointer;
         outline: none;

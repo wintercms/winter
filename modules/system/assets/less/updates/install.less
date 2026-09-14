@@ -3,7 +3,7 @@
 .product-list-empty {
     padding: 5px 0;
     font-size: 16px;
-    color: #999;
+    color: var(--wn-text-secondary, #999);
 }
 
 .product-list {
@@ -39,7 +39,7 @@
     li {
         list-style: none;
         position: relative;
-        border-bottom: 1px solid #E6E9E9;
+        border-bottom: 1px solid var(--wn-border-subtle, #E6E9E9);
         margin-bottom: 10px;
         padding-bottom: 10px;
         overflow: hidden;
@@ -56,13 +56,13 @@
             p {
                 padding: 0;
                 margin: 3px 0 0 0;
-                color: #808C8D;
+                color: var(--wn-text-secondary, #808C8D);
             }
         }
         h4 {
             padding: 5px 0 0;
             margin: 0;
-            color: #C03F31;
+            color: var(--wn-install-text, #C03F31);
             font-weight: 400;
         }
     }
@@ -76,8 +76,8 @@
         padding: 0;
         margin: 0 10px 10px 0;
         list-style: none;
-        border: 1px solid #E6E9E9;
-        background: #fff;
+        border: 1px solid var(--wn-border-subtle, #E6E9E9);
+        background: var(--wn-surface-raised, #fff);
         position: relative;
         .border-radius(3px);
         .transition(border .2s linear);
@@ -103,7 +103,7 @@
         p {
             padding: 0;
             margin: 0;
-            color: #999;
+            color: var(--wn-text-secondary, #999);
             text-transform: uppercase;
             font-size: 12px;
         }
@@ -139,7 +139,7 @@
         h5 {
             margin: 0 0 3px;
             font-size: 14px;
-            color: #C03F31;
+            color: var(--wn-install-text, #C03F31);
             font-weight: 400;
         }
         p {
@@ -147,20 +147,20 @@
         }
     }
     a {
-        color: #777;
-        background: #fff;
+        color: var(--wn-text, #777);
+        background: var(--wn-surface-raised, #fff);
         padding: 5px;
         text-decoration: none;
         display: block;
         overflow: hidden;
-        border-bottom: 1px solid #E6E9E9;
+        border-bottom: 1px solid var(--wn-border-subtle, #E6E9E9);
     }
     a:hover {
-        color: #333;
-        background: #f9f9f9;
+        color: var(--wn-text-link, #333);
+        background: var(--wn-surface-canvas, #f9f9f9);
         .image:after {
             content: "+";
-            color: #999;
+            color: var(--wn-text-secondary, #999);
             font-size: 32px;
             display: block;
             width: 40px;
@@ -229,29 +229,29 @@
     padding: 8px 12px;
     font-size: 24px;
     line-height: 30px;
-    border: 1px solid #024e6a;
+    border: 1px solid var(--wn-install-border, #024e6a);
     .border-radius(3px);
     outline: none;
 }
 .typeahead {
-    background-color: #fff;
-    border-color: #e0e0e0;
+    background-color: var(--wn-surface-raised, #fff);
+    border-color: var(--wn-border-focus, #e0e0e0);
 }
 .tt-input {
     font-weight: 200;
 }
 .tt-input:focus {
-    border-color: #E6E9E9;
+    border-color: var(--wn-border-subtle, #E6E9E9);
 }
 .tt-hint {
-    color: #999;
+    color: var(--wn-text-secondary, #999);
     font-weight: 200;
 }
 .tt-dropdown-menu {
     width: 100%;
     margin-top: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
+    background-color: var(--wn-surface-raised, #fff);
+    border: 1px solid var(--wn-border, #ccc);
     border: 1px solid rgba(0, 0, 0, 0.2);
     .border-radius(3px);
     .box-shadow(0 5px 10px rgba(0,0,0,.2));
@@ -261,7 +261,7 @@
     line-height: 18px;
     + .tt-suggestion {
         font-size: 14px;
-        border-top: 1px solid #ccc;
+        border-top: 1px solid var(--wn-border, #ccc);
     }
 }
 .tt-suggestions {
@@ -286,12 +286,12 @@
 .tt-suggestion.tt-cursor {
     cursor: pointer;
     .product-details {
-        color: #333;
-        background: #f9f9f9;
-        border-color: #f0f0f0;
+        color: var(--wn-text-link, #333);
+        background: var(--wn-surface-canvas, #f9f9f9);
+        border-color: var(--wn-border-subtle, #f0f0f0);
         .product-image:after {
             content: "+";
-            color: #999;
+            color: var(--wn-text-secondary, #999);
             font-size: 38px;
             display: block;
             width: 45px;

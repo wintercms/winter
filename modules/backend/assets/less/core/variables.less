@@ -14,127 +14,127 @@
 // Colors
 // --------------------------------------------------
 
-@color-border:                               #cccccc;
-@color-border-light:                         #e1e1e1;
+@color-border:                               var(--wn-border, #cccccc);
+@color-border-light:                         var(--wn-border-subtle, #e1e1e1);
 
-@color-mainmenu:                             #151515;
+@color-mainmenu:                             var(--wn-text-strong, #151515);
 @color-mainmenu-inactive:                    rgba(255,255,255,.6);
-@color-mainmenu-active:                      #ffffff;
-@color-mainmenu-active-bg:                   #262626;
-@color-mainmenu-collapsed:                   #000000;
+@color-mainmenu-active:                      var(--wn-text-inverse, #ffffff);
+@color-mainmenu-active-bg:                   var(--wn-mainmenu-active-bg, #262626);
+@color-mainmenu-collapsed:                   var(--wn-text-strong, #000000);
 
-@color-accountmenu-bg:                       #f9f9f9;
-@color-accountmenu-text:                     #666666;
-@color-accountmenu-divider:                  #e0e0e0;
+@color-accountmenu-bg:                       var(--wn-surface-canvas, #f9f9f9);
+@color-accountmenu-text:                     var(--wn-text, #666666);
+@color-accountmenu-divider:                  var(--wn-border-focus, #e0e0e0);
 
 @color-footer:                               rgba(255,255,255,.8);
-@color-footer-border:                        #dfdfdf;
+@color-footer-border:                        var(--wn-border-focus, #dfdfdf);
 @color-footer-text:                          #666666;
 
-@color-sidebarnav-active-text:               #ffffff;
-@color-sidebarnav-active-icon:               #ffffff;
+@color-sidebarnav-active-text:               var(--wn-text-inverse, #ffffff);
+@color-sidebarnav-active-icon:               var(--wn-text-inverse, #ffffff);
 @color-sidebarnav-inactive-text:             rgba(255,255,255,.6);
 @color-sidebarnav-inactive-icon:             rgba(255,255,255,.6);
-@color-sidebarnav-counter-bg:                #d9350f;
-@color-sidebarnav-counter-text:              #ffffff;
+@color-sidebarnav-counter-bg:                var(--wn-sidebarnav-counter-bg, #d9350f);
+@color-sidebarnav-counter-text:              var(--wn-text-inverse, #ffffff);
 
-@color-sidebarnav-tree-group:                #ecf0f1;
+@color-sidebarnav-tree-group:                var(--wn-text-inverse, #ecf0f1);
 @color-sidebarnav-tree-group-bg:             rgba(0,0,0,.15);
-@color-sidebarnav-tree-inactive-header:      #ffffff;
+@color-sidebarnav-tree-inactive-header:      var(--wn-text-inverse, #ffffff);
 @color-sidebarnav-tree-inactive-desc:        rgba(255,255,255,.6);
-@color-sidebarnav-tree-inactive-text:        #ffffff;
-@color-sidebarnav-tree-active-header:        #ffffff;
+@color-sidebarnav-tree-inactive-text:        var(--wn-text-inverse, #ffffff);
+@color-sidebarnav-tree-active-header:        var(--wn-text-inverse, #ffffff);
 @color-sidebarnav-tree-inactive-bg:          transparent;
 @color-sidebarnav-tree-active-text:          rgba(255,255,255,.91);
 @color-sidebarnav-tree-active-marker:        @brand-secondary;
-@color-sidebarnav-back-link-bg:              #2b3e50;
-@color-sidebarnav-back-link-text:            #bdc3c7;
+@color-sidebarnav-back-link-bg:              var(--wn-surface-chrome, #2b3e50);
+@color-sidebarnav-back-link-text:            var(--wn-text-muted, #bdc3c7);
 
 @color-scrollbar-track:                      transparent;
 @color-scrollbar-thumb:                      rgba(0,0,0,.35);
-@color-scrollpanel-border:                   #efefef;
-@color-scrollpanel-fix-button:               #aaaaaa;
-@color-scrollpanel-fix-button-light:         #eeeeee;
-@color-scroll-indicator:                     #bbbbbb;
+@color-scrollpanel-border:                   var(--wn-border-subtle, #efefef);
+@color-scrollpanel-fix-button:               var(--wn-text-muted, #aaaaaa);
+@color-scrollpanel-fix-button-light:         var(--wn-text-inverse, #eeeeee);
+@color-scroll-indicator:                     var(--wn-text-muted, #bbbbbb);
 
 @color-panel-light:                          #ECF0F1;
 
 @color-outer-muted-text:                     rgba(255,255,255,.44);
-@color-outer-heading:                        #feffff;
-@color-outer-description:                    #999999;
-@color-outer-bg:                             #2b3e50;
+@color-outer-heading:                        var(--wn-text-inverse, #feffff);
+@color-outer-description:                    var(--wn-text-secondary, #999999);
+@color-outer-bg:                             var(--wn-surface-chrome, #2b3e50);
 @color-outer-header:                         @body-bg;
-@color-outer-form-label:                     #666666;
+@color-outer-form-label:                     var(--wn-text, #666666);
 
-@color-breadcrumb-text-active:               #9da3a7;
-@color-breadcrumb-text:                      #9B9B9B;
-@color-breadcrumb-background:                #2b343d;
+@color-breadcrumb-text-active:               var(--wn-text-secondary, #9da3a7);
+@color-breadcrumb-text:                      var(--wn-text-secondary, #9B9B9B);
+@color-breadcrumb-background:                var(--wn-surface-chrome, #2b343d);
 
 @color-custom-input-icon:                    #666666;
 @color-custom-input-border:                  #999999;
 
-@color-input-sidebar-control:                #C4C4C4;
+@color-input-sidebar-control:                var(--wn-text-muted, #C4C4C4);
 
-@color-switch-input-bg:                      #f6f6f6;
-@color-switch-input-on:                      #8da85e;
-@color-switch-input-off:                     #cc3300;
+@color-switch-input-bg:                      var(--wn-surface-hover, #f6f6f6);
+@color-switch-input-on:                      var(--wn-switch-input-on, #8da85e);
+@color-switch-input-off:                     var(--wn-switch-input-off, #cc3300);
 
-@color-custom-select-border:                 #b2b9be;
-@color-custom-select-bg:                     #f6f6f6;
-@color-custom-select-bg-hover:               #4da7e8;
+@color-custom-select-border:                 var(--wn-border-input, #b2b9be);
+@color-custom-select-bg:                     var(--wn-surface-hover, #f6f6f6);
+@color-custom-select-bg-hover:               var(--wn-custom-select-bg-hover, #4da7e8);
 
-@color-filelist-norecords-text:              #666666;
-@color-filelist-norecords-bg:                #eeeeee;
-@color-filelist-cb-border:                   #cccccc;
-@color-filelist-title-hero:                  #2b3e50;
-@color-filelist-hero-item-bg:                #ffffff;
+@color-filelist-norecords-text:              var(--wn-text, #666666);
+@color-filelist-norecords-bg:                var(--wn-surface-hover, #eeeeee);
+@color-filelist-cb-border:                   var(--wn-border, #cccccc);
+@color-filelist-title-hero:                  var(--wn-text-heading, #2b3e50);
+@color-filelist-hero-item-bg:                var(--wn-surface-raised, #ffffff);
 @color-filelist-hero-hover-bg:               @highlight-hover-bg;
 @color-filelist-hero-hover-text:             @highlight-hover-text;
 @color-filelist-hero-active-bg:              @highlight-active-bg;
 @color-filelist-hero-active-text:            @highlight-active-text;
 
 @color-fancy-master-tabs-bg:                 @brand-secondary-darker;
-@color-fancy-master-tabs-active-text:        #ffffff;
+@color-fancy-master-tabs-active-text:        var(--wn-text-inverse, #ffffff);
 @color-fancy-master-tabs-inactive-text:      rgba(255, 255, 255, .35);
 @color-fancy-master-panel-bg:                @brand-secondary-darker;
 
-@color-fancy-secondary-tabs-bg:              #475354;
-@color-fancy-secondary-tabs-active-text:     #ffffff;
-@color-fancy-secondary-tabs-inactive-text:   #919898;
+@color-fancy-secondary-tabs-bg:              var(--wn-surface-selected, #475354);
+@color-fancy-secondary-tabs-active-text:     var(--wn-text-inverse, #ffffff);
+@color-fancy-secondary-tabs-inactive-text:   var(--wn-text-secondary, #919898);
 
-@color-fancy-primary-tabs-bg:                #7F8C8D;
-@color-fancy-primary-tabs-inactive-text:     #95a5a6;
-@color-fancy-primary-tabs-active-text:       #808c8d;
-@color-fancy-primary-tabs-active-bg:         #fafafa;
-@color-fancy-primary-tabs-inactive-bg:       #d5d9d8;
+@color-fancy-primary-tabs-bg:                var(--wn-surface-mid, #7F8C8D);
+@color-fancy-primary-tabs-inactive-text:     var(--wn-text-secondary, #95a5a6);
+@color-fancy-primary-tabs-active-text:       var(--wn-text-secondary, #808c8d);
+@color-fancy-primary-tabs-active-bg:         var(--wn-surface-canvas, #fafafa);
+@color-fancy-primary-tabs-inactive-bg:       var(--wn-surface-overlay, #d5d9d8);
 
 @color-fancy-form-tabless-fields-bg:         @brand-secondary;
 @color-fancy-form-label:                     rgba(255, 255, 255, .5);
-@color-fancy-form-text:                      #ffffff;
+@color-fancy-form-text:                      var(--wn-text-inverse, #ffffff);
 @color-fancy-form-text-selection:            @brand-secondary-darker;
 @color-fancy-form-placeholder:               rgba(255, 255, 255, .5);
 @color-fancy-form-inactive-tab:              #2c9cb9;
 
-@color-sortable-caret:                       #999999;
+@color-sortable-caret:                       var(--wn-text-secondary, #999999);
 @color-sortable-active:                      @brand-secondary;
 
-@color-report-widget-title:                  #7e8c8d;
-@color-report-widget-control-inactive:       #b6b6b6;
+@color-report-widget-title:                  var(--wn-text-secondary, #7e8c8d);
+@color-report-widget-control-inactive:       var(--wn-text-muted, #b6b6b6);
 @color-report-widget-description:            @color-report-widget-title;
 @color-report-widget-link:                   @color-report-widget-title;
 
-@color-treeview-item-bg:                     #ffffff;
-@color-treeview-item-title:                  #2b3e50;
-@color-treeview-item-comment:                #95a5a6;
-@color-treeview-control:                     #bdc3c7;
+@color-treeview-item-bg:                     var(--wn-surface-raised, #ffffff);
+@color-treeview-item-title:                  var(--wn-text-heading, #2b3e50);
+@color-treeview-item-comment:                var(--wn-text-secondary, #95a5a6);
+@color-treeview-control:                     var(--wn-text-muted, #bdc3c7);
 @color-treeview-hover-bg:                    @highlight-hover-bg;
 @color-treeview-hover-text:                  @highlight-hover-text;
 @color-treeview-active-bg:                   @highlight-active-bg;
 @color-treeview-active-text:                 @highlight-active-text;
-@color-treeview-item-active-comment:         #8f8f8f;
-@color-treeview-submenu-text:                #ffffff;
-@color-treeview-light-submenu-bg:            #2581b8;
-@color-treeview-light-submenu-border:        #328ec8;
+@color-treeview-item-active-comment:         var(--wn-text-secondary, #8f8f8f);
+@color-treeview-submenu-text:                var(--wn-text-inverse, #ffffff);
+@color-treeview-light-submenu-bg:            var(--wn-treeview-light-submenu-bg, #2581b8);
+@color-treeview-light-submenu-border:        var(--wn-treeview-light-submenu-border, #328ec8);
 
 //
 // Sizes

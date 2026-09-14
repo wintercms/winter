@@ -7,7 +7,7 @@
 
   * {
     text-shadow: none !important;
-    color: #000 !important; // Black prints faster: h5bp.com/s
+    color: var(--wn-text-strong, #000) !important; // Black prints faster: h5bp.com/s
     background: transparent !important;
     box-shadow: none !important;
   }
@@ -33,7 +33,7 @@
 
   pre,
   blockquote {
-    border: 1px solid #999;
+    border: 1px solid var(--wn-border-strong, #999);
     page-break-inside: avoid;
   }
 
@@ -65,7 +65,7 @@
   // Chrome (OSX) fix for https://github.com/twbs/bootstrap/issues/11245
   // Once fixed, we can just straight up remove this.
   select {
-    background: #fff !important;
+    background: var(--wn-surface-raised, #fff) !important;
   }
 
   // Bootstrap components
@@ -75,17 +75,17 @@
   .table {
     td,
     th {
-      background-color: #fff !important;
+      background-color: var(--wn-surface-raised, #fff) !important;
     }
   }
   .btn,
   .dropup > .btn {
     > .caret {
-      border-top-color: #000 !important;
+      border-top-color: var(--wn-border-dark, #000) !important;
     }
   }
   .label {
-    border: 1px solid #000;
+    border: 1px solid var(--wn-border-dark, #000);
   }
 
   .table {
@@ -94,7 +94,7 @@
   .table-bordered {
     th,
     td {
-      border: 1px solid #ddd !important;
+      border: 1px solid var(--wn-border-focus, #ddd) !important;
     }
   }
 

@@ -61,6 +61,7 @@ body.fancy-layout .master-tabs.control-tabs,
                     padding: 6px 0 0 24px!important;
                     overflow: visible;
 
+
                     > span.title {
                         position: relative;
                         display: inline-block;
@@ -382,7 +383,7 @@ body.fancy-layout .master-tabs.control-tabs,
                     padding: 8px 16px 0 16px;
                     font-weight: 400;
                     height: 36px;
-                    color: #2b3e50;
+                    color: var(--wn-text-heading, #2b3e50);
                     .opacity(0.6);
 
                     > span.title {
@@ -438,7 +439,7 @@ body.fancy-layout .master-tabs.control-tabs,
         }
 
         .tab-collapse-icon.primary {
-            color: #000000;
+            color: var(--wn-fancylayout-text, #000000);
         }
 
         &.primary-collapsed {
@@ -461,7 +462,7 @@ body.fancy-layout .master-tabs.control-tabs,
                     }
 
                     &.active a {
-                        color: #2b3e50;
+                        color: var(--wn-text-heading, #2b3e50);
                     }
                 }
             }
@@ -663,7 +664,7 @@ body.breadcrumb-fancy .control-breadcrumb,
 
             &:not(.is-disabled):hover {
                 background-color: rgba(255, 255, 255, .28);
-                color: #fff;
+                color: var(--wn-text-inverse, #fff);
             }
 
             &.is-disabled {
@@ -700,6 +701,7 @@ body.breadcrumb-fancy .control-breadcrumb,
             .opacity(1);
         }
 
+
         &:last-child {
             margin-right: 0;
         }
@@ -718,8 +720,8 @@ body.breadcrumb-fancy .control-breadcrumb,
             // Solid deep brick, clearly darker than the teal toolbar so the pill
             // separates by value first (a brighter or semi-transparent red sits at
             // the teal's lightness and either vibrates or muddies to grey).
-            background-color: #a5382c;
-            color: #fff;
+            background-color: var(--wn-fancylayout-bg, #a5382c);
+            color: var(--wn-text-inverse, #fff);
             opacity: 1;
             line-height: 1;
 

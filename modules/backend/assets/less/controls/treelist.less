@@ -12,7 +12,7 @@
             margin: 0;
             margin-left: 15px;
             padding-left: 15px;
-            border-left: 1px solid #dbdee0;
+            border-left: 1px solid var(--wn-border-focus, #dbdee0);
         }
     }
 
@@ -31,7 +31,7 @@
             display: block;
 
             &:before {
-                color: #bdc3c7;
+                color: var(--wn-text-muted, #bdc3c7);
                 .icon(@circle);
                 font-size: 6px;
                 position: absolute;
@@ -43,7 +43,7 @@
                 display: inline-block;
                 padding: 7px 0 7px 10px;
                 text-decoration: none;
-                color: #bdc3c7;
+                color: var(--wn-text-muted, #bdc3c7);
                 &:hover {
                     color: @color-list-hover-bg;
                 }
@@ -82,7 +82,7 @@
                 display: block;
                 position: absolute;
                 .icon(@chevron-left);
-                color: #d35714;
+                color: var(--wn-treelist-text, #d35714);
                 left: -10px;
                 top: 8px;
                 z-index: 2000;

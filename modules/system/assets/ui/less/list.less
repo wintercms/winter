@@ -32,7 +32,7 @@ table.table.data {
     }
 
     .table-totals {
-        background-color: #f2f2f2;
+        background-color: var(--wn-surface-hover, #f2f2f2);
 
         span {
             display: block;
@@ -210,31 +210,31 @@ table.table.data {
 
         tr.frozen {
             td, th, td a, th a {
-                color: #337ab7;
+                color: var(--wn-list-text, #337ab7);
             }
         }
 
         tr.processing {
             td, th, td a, th a {
-                color: #666666;
+                color: var(--wn-text, #666666);
             }
         }
 
         tr.negative {
             td, th, td a, th a {
-                color: #b2341c;
+                color: var(--wn-list-text-2, #b2341c);
             }
         }
 
         tr.positive {
             td, th, td a, th a {
-                color: #278731;
+                color: var(--wn-list-text-3, #278731);
             }
         }
 
         tr.disabled, tr.deleted {
             td, th, td a, th a {
-                color: #888888;
+                color: var(--wn-text-secondary, #888888);
             }
         }
 
@@ -246,7 +246,7 @@ table.table.data {
 
         tr.safe, tr.special {
             td, th, td a, th a {
-                color: #98a7a8;
+                color: var(--wn-text-secondary, #98a7a8);
             }
         }
 
@@ -280,7 +280,7 @@ table.table.data {
                 display: inline-block;
                 margin-right: 7px;
                 font-size: 15px;
-                color: #95a5a6;
+                color: var(--wn-icon-muted, #95a5a6);
                 position: relative;
                 top: 1px;
             }
@@ -349,7 +349,7 @@ table.table.data {
         height: 15px;
         text-align: center;
         border-radius: @border-radius-base;
-        color: #fff;
+        color: var(--wn-text-inverse, #fff);
 
         > i {
             position: relative;
@@ -518,7 +518,7 @@ table.table.data {
             width: 48px;
             a {
                 display: block;
-                color: #000000;
+                color: var(--wn-text-strong, #000000);
                 &:before {
                     font-size: 14px;
                     line-height: 14px;
@@ -611,7 +611,7 @@ table.table.data {
         margin-top: 0;
         height: 40px;
         padding: 13px 10px;
-        background: #fff;
+        background: var(--wn-surface-raised, #fff);
         top: 1px;
     }
 

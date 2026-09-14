@@ -9,11 +9,11 @@
 // Flash Messages
 // --------------------------------------------------
 
-@color-flash-success-bg:                     #8da85e;
-@color-flash-error-bg:                       #cc3300;
+@color-flash-success-bg:                     var(--wn-flashmessage-flash-success-bg, #8da85e);
+@color-flash-error-bg:                       var(--wn-flashmessage-flash-error-bg, #cc3300);
 @color-flash-warning-bg:                     @brand-warning;
-@color-flash-info-bg:                        #5fb6f5;
-@color-flash-text:                           #ffffff;
+@color-flash-info-bg:                        var(--wn-flashmessage-flash-info-bg, #5fb6f5);
+@color-flash-text:                           var(--wn-flash-text, #ffffff);
 
 #layout-canvas {
     .flash-message{ display: none; }

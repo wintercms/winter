@@ -9,7 +9,7 @@ body.oc-loading, body.oc-loading * {
     cursor: wait !important;
 }
 
-@stripe-loader-color: #0090c0;
+@stripe-loader-color: var(--wn-stripe-loader-color, #0090c0);
 @stripe-loader-height: 5px;
 
 .stripe-loading-indicator {
@@ -28,7 +28,7 @@ body.oc-loading, body.oc-loading * {
         display: block;
         background: @stripe-loader-color;
         position: absolute;
-        .box-shadow(~"inset 0 1px 1px -1px #FFF, inset 0 -1px 1px -1px #FFF");
+        .box-shadow(~"inset 0 1px 1px -1px var(--wn-framework-extras-misc, #FFF), inset 0 -1px 1px -1px #FFF");
     }
 
     .stripe {
@@ -65,11 +65,11 @@ body.oc-loading, body.oc-loading * {
 // Flash Messages
 // --------------------------------------------------
 
-@color-flash-success-bg:                     #8da85e;
-@color-flash-error-bg:                       #cc3300;
+@color-flash-success-bg:                     var(--wn-framework-flash-success-bg, #8da85e);
+@color-flash-error-bg:                       var(--wn-framework-flash-error-bg, #cc3300);
 @color-flash-warning-bg:                     @brand-warning;
-@color-flash-info-bg:                        #5fb6f5;
-@color-flash-text:                           #ffffff;
+@color-flash-info-bg:                        var(--wn-framework-flash-info-bg, #5fb6f5);
+@color-flash-text:                           var(--wn-flash-text, #ffffff);
 
 body > p.flash-message {
     position: fixed;

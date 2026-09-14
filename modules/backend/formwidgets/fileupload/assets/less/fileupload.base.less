@@ -2,7 +2,7 @@
     background: @fileupload-object-active-bg !important;
 
     i, p.size {
-        color: #ecf0f1;
+        color: var(--wn-text-inverse, #ecf0f1);
     }
 
     h4 {
@@ -29,7 +29,7 @@
         height: 100%;
         line-height: @fileupload-progress-bar-height;
         color: @fileupload-progress-bar-color;
-        background-color: #5fb6f5;
+        background-color: var(--wn-fileupload-base-bg, #5fb6f5);
         .box-shadow(none);
         .transition(width .6s ease);
     }
@@ -37,9 +37,9 @@
 
 .uploader-block-button() {
     display: block;
-    border: 2px dashed #BDC3C7;
+    border: 2px dashed var(--wn-fileupload-base-border, #BDC3C7);
     background-clip: content-box;
-    background-color: #F9F9F9;
+    background-color: var(--wn-fileupload-base-bg-2, #F9F9F9);
     position: relative;
     outline: none;
 
@@ -59,7 +59,7 @@
             height: 22px;
             width: 22px;
             line-height: 22px;
-            color: #BDC3C7;
+            color: var(--wn-text-muted, #BDC3C7);
         }
 
         &.large-icon {
@@ -140,7 +140,7 @@
             opacity: .6;
 
             i {
-                color: #95a5a6;
+                color: var(--wn-text-secondary, #95a5a6);
                 display: inline-block;
             }
 
@@ -159,7 +159,7 @@
 
         h4 {
             font-size: 13px;
-            color: #2A3E51;
+            color: var(--wn-text-heading, #2A3E51);
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -181,7 +181,7 @@
 
         p.size {
             font-size: 12px;
-            color: #95a5a6;
+            color: var(--wn-text-secondary, #95a5a6);
             strong { font-weight: 400; }
         }
 
@@ -198,7 +198,7 @@
         .info h4 a,
         .meta a.upload-remove-button,
         .meta a.drag-handle {
-            color: #2b3e50;
+            color: var(--wn-text-heading, #2b3e50);
             display: none;
             font-size: 13px;
             text-decoration: none;
@@ -252,7 +252,7 @@
                 color: @brand-danger;
                 margin-top: -20px;
                 margin-left: -20px;
-                text-shadow: 2px 2px 0 #fff;
+                text-shadow: 2px 2px 0 var(--wn-fileupload-base-shadow, #fff);
             }
         }
 
@@ -321,7 +321,7 @@
 
         .upload-placeholder {
             position: relative;
-            border: 1px dotted #e0e0e0 !important;
+            border: 1px dotted var(--wn-border-focus, #e0e0e0) !important;
         }
 
         .upload-object.dragged {
@@ -369,19 +369,19 @@
     .fileupload-url-button{
         padding-left: 0;
          > i {
-            color: #666;
+            color: var(--wn-text, #666);
         }
     }
 
     .file-upload-modal-image-header {
         // Photoshop transparent background
         // Based on: http://lea.verou.me/css3patterns/#checkerboard
-        background-color: #FEFEFE;
-        background-image: -webkit-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -webkit-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
-        background-image: -moz-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -moz-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
-        background-image: -o-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -o-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
-        background-image: -ms-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -ms-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
-        background-image: linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+        background-color: var(--wn-surface-raised, #FEFEFE);
+        background-image: -webkit-linear-gradient(45deg, var(--wn-surface-overlay, #CBCBCB) 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -webkit-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+        background-image: -moz-linear-gradient(45deg, var(--wn-surface-overlay, #CBCBCB) 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -moz-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+        background-image: -o-linear-gradient(45deg, var(--wn-surface-overlay, #CBCBCB) 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -o-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+        background-image: -ms-linear-gradient(45deg, var(--wn-surface-overlay, #CBCBCB) 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), -ms-linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
+        background-image: linear-gradient(45deg, var(--wn-surface-overlay, #CBCBCB) 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB), linear-gradient(45deg, #CBCBCB 25%, transparent 25%, transparent 75%, #CBCBCB 75%, #CBCBCB);
         -webkit-background-size: 20px 20px;
         -moz-background-size: 20px 20px;
         background-size: 20px 20px;
@@ -396,7 +396,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background: #BDC3C7;
+            background: var(--wn-surface-overlay, #BDC3C7);
             opacity: .7;
             height: 24px;
             width: 22px;

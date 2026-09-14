@@ -11,16 +11,16 @@
 
 @import "tab.base.less";
 
-@color-scroll-indicator:                     #bbbbbb;
+@color-scroll-indicator:                     var(--wn-text-muted, #bbbbbb);
 
-@color-tab-border:                           #e0e0e0;
-@color-tab-inactive-text:                    #bbbbbb;
+@color-tab-border:                           var(--wn-border-focus, #e0e0e0);
+@color-tab-inactive-text:                    var(--wn-text-muted, #bbbbbb);
 @color-tab-active-text:                      @color-text-title;
-@color-tab-active-border:                    #d0d0d0;
-@color-tab-bg:                               #ffffff;
-@color-tab-active-marker:                    #ec8017;
-@color-tab-content-active-bg:                #ffffff;
-@color-tab-content-border:                   #e3e5e7;
+@color-tab-active-border:                    var(--wn-border, #d0d0d0);
+@color-tab-bg:                               var(--wn-surface-raised, #ffffff);
+@color-tab-active-marker:                    var(--wn-tab-active-marker, #ec8017);
+@color-tab-content-active-bg:                var(--wn-surface-raised, #ffffff);
+@color-tab-content-border:                   var(--wn-border-subtle, #e3e5e7);
 
 @nav-link-padding:                          10px 15px;
 @nav-link-hover-bg:                         @gray-lighter;
@@ -28,17 +28,17 @@
 @nav-disabled-link-color:                   @gray-light;
 @nav-disabled-link-hover-color:             @gray-light;
 
-@nav-open-link-hover-color:                 #fff;
+@nav-open-link-hover-color:                 var(--wn-text-inverse, #fff);
 
-@nav-tabs-border-color:                     #ddd;
+@nav-tabs-border-color:                     var(--wn-border-focus, #ddd);
 
 @nav-tabs-link-hover-border-color:          @gray-lighter;
 
 @nav-tabs-active-link-hover-bg:             @body-bg;
 @nav-tabs-active-link-hover-color:          @gray;
-@nav-tabs-active-link-hover-border-color:   #ddd;
+@nav-tabs-active-link-hover-border-color:   var(--wn-border-focus, #ddd);
 
-@nav-tabs-justified-link-border-color:            #ddd;
+@nav-tabs-justified-link-border-color:            var(--wn-border-focus, #ddd);
 @nav-tabs-justified-active-link-border-color:     @body-bg;
 
 @nav-pills-border-radius:                   @border-radius-base;
@@ -67,6 +67,7 @@
         white-space: nowrap;
         font-size: 0;
         overflow: hidden;
+
         border-bottom: none;
         vertical-align: bottom;
         > li {
@@ -89,6 +90,7 @@
                 padding: 0 0 10px 0;
                 color: @color-tab-inactive-text;
                 font-weight: 400;
+
 
                 overflow: hidden;
 
@@ -280,6 +282,7 @@
                     background: transparent;
                     overflow: visible;
 
+
                     > span.title {
                         position: relative;
                         display: inline-block;
@@ -331,7 +334,7 @@
 
                     > span.title {
                         z-index: @zindex-tab + 2;
-                        border-top-color: #d6d6d6;
+                        border-top-color: var(--wn-border-focus, #d6d6d6);
 
                         &:before, &:after{
                             border-color: @color-tab-active-border;
