@@ -11,7 +11,7 @@
 // --------------------------------------------------
 
 @color-popover-bg:                           var(--wn-surface-raised, #ffffff);
-@color-popover-border:                       rgba(0,0,0,.15);
+@color-popover-border:                       rgba(var(--wn-scrim-dark, 0, 0, 0), .15);
 @color-popover-head-bg:                      var(--wn-surface-canvas, #f9f9f9);
 @color-popover-head-text:                    var(--wn-text-heading, #2a3e51);
 @color-popover-danger-bg:                    @brand-danger;
@@ -245,7 +245,7 @@ div.control-popover {
         .popover-head {
             color: var(--wn-text-inverse, #fff);
             background-color: @color-popover-danger-bg;
-            border-bottom: 2px solid rgba(255,255,255,.15);
+            border-bottom: 2px solid rgba(var(--wn-scrim-light, 255, 255, 255), .15);
 
             .close {
                 color: var(--wn-text-inverse, #fff);

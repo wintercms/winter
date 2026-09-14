@@ -180,6 +180,10 @@
     /* Inline colours — value preserved, named from source file + role */
     --wn-surface-error: #fbecec;  // table error row background
     --wn-table-error: #ec0000;  // table error cell border/background
+
+    /* Scrims — channel triplets, alpha stays at the call site */
+    --wn-scrim-dark: 0, 0, 0;  // shadows/overlays: rgba(var(--wn-scrim-dark), .2)
+    --wn-scrim-light: 255, 255, 255;  // highlights: rgba(var(--wn-scrim-light), .6)
 }
 
 // Derived at runtime. Guarded so that where the feature is missing the

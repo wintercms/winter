@@ -1,7 +1,7 @@
 .finder-block-button() {
     display: block;
     float: left;
-    border: 2px dotted rgba(0,0,0,.1);
+    border: 2px dotted rgba(var(--wn-scrim-dark, 0, 0, 0), .1);
     position: relative;
     outline: none;
 
@@ -21,26 +21,26 @@
             height: 22px;
             width: 22px;
             line-height: 22px;
-            color: rgba(0,0,0,.1);
+            color: rgba(var(--wn-scrim-dark, 0, 0, 0), .1);
         }
     }
 
     &:hover {
-        border: 2px dotted rgba(0,0,0,.2);
+        border: 2px dotted rgba(var(--wn-scrim-dark, 0, 0, 0), .2);
 
         .find-button-icon:before {
             color: @brand-success;
-            color: rgba(0,0,0,.2);
+            color: rgba(var(--wn-scrim-dark, 0, 0, 0), .2);
         }
     }
 
     &:focus {
-        border: 2px solid rgba(0,0,0,.3);
+        border: 2px solid rgba(var(--wn-scrim-dark, 0, 0, 0), .3);
         background: transparent;
 
         .find-button-icon:before {
             color: @brand-success;
-            color: rgba(0,0,0,.2);
+            color: rgba(var(--wn-scrim-dark, 0, 0, 0), .2);
         }
     }
 }
