@@ -44,7 +44,7 @@ body.fancy-layout .master-tabs.control-tabs,
                     i {
                         top: 4px;
                         right: 1px;
-                        color: rgba(var(--wn-scrim-light, 255, 255, 255), 0.3) !important;
+                        color: rgba(255, 255, 255, 0.3) !important;
                         font-style: normal;
                         font-weight: bold;
                         font-size: 16px;
@@ -532,7 +532,7 @@ body.fancy-layout .master-tabs.control-tabs,
         .box-shadow(none);
 
         &:focus, &:hover {
-            background-color: rgba(var(--wn-scrim-light, 255, 255, 255), 0.1);
+            background-color: rgba(255, 255, 255, 0.1);
         }
     }
 
@@ -629,7 +629,7 @@ body.breadcrumb-fancy .control-breadcrumb,
 
     li {
         background-color: mix(black, saturate(@color-fancy-form-tabless-fields-bg, 20%), 31%);
-        color: rgba(var(--wn-scrim-light, 255, 255, 255), .5);
+        color: rgba(255,255,255, .5);
 
         a {
             opacity: .5;
@@ -664,29 +664,29 @@ body.breadcrumb-fancy .control-breadcrumb,
     // dark fancy breadcrumb they read as low-contrast, so switch to light-on-dark.
     .form-record-nav {
         .form-record-nav-position {
-            color: rgba(var(--wn-scrim-light, 255, 255, 255), .8);
+            color: rgba(255, 255, 255, .8);
         }
 
         .form-record-nav-group {
-            background: rgba(var(--wn-scrim-light, 255, 255, 255), .15);
-            border-color: rgba(var(--wn-scrim-light, 255, 255, 255), .25);
+            background: rgba(255, 255, 255, .15);
+            border-color: rgba(255, 255, 255, .25);
             box-shadow: none;
         }
 
         .form-record-nav-btn {
-            color: rgba(var(--wn-scrim-light, 255, 255, 255), .8);
+            color: rgba(255, 255, 255, .8);
 
             & + .form-record-nav-btn {
-                border-left-color: rgba(var(--wn-scrim-light, 255, 255, 255), .25);
+                border-left-color: rgba(255, 255, 255, .25);
             }
 
             &:not(.is-disabled):hover {
-                background-color: rgba(var(--wn-scrim-light, 255, 255, 255), .28);
+                background-color: rgba(255, 255, 255, .28);
                 color: var(--wn-text-inverse, #fff);
             }
 
             &.is-disabled {
-                color: rgba(var(--wn-scrim-light, 255, 255, 255), .35);
+                color: rgba(255, 255, 255, .35);
             }
         }
     }

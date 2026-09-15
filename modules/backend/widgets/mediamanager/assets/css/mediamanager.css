@@ -123,7 +123,7 @@ div[data-control="media-manager"] table.table tr:hover div.item-title{padding-ri
 div[data-control="media-manager"] table.table tr:hover div.item-title a{display:block}
 div[data-control="media-manager"] table.table tr[data-item-type=folder] i.icon-folder{color:#48b2ce}
 div[data-control="media-manager"] table.table tr:focus{outline:none}
-div[data-control="media-manager"] div[data-control="selection-marker"]{position:absolute;z-index:250;border:1px dashed var(--wn-border-strong,#95a5a6);background:rgba(var(--wn-scrim-dark,0,0,0),0.1)}
+div[data-control="media-manager"] div[data-control="selection-marker"]{position:absolute;z-index:250;border:1px dashed var(--wn-border-strong,#95a5a6);background:rgba(0,0,0,0.1)}
 div[data-control="media-manager"] .upload-progress{background:var(--wn-surface-canvas,#f9f9f9);padding:0 20px}
 div[data-control="media-manager"] .upload-progress h5{margin:0 0 10px 0;font-size:13px;color:var(--wn-text-heading,#2b3e50);font-weight:600}
 div[data-control="media-manager"] .upload-progress h5 span{display:inline-block;margin-left:10px;color:var(--wn-text-secondary,#95a5a6);font-size:15px}

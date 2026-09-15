@@ -50,7 +50,7 @@
     border: 1px solid @modal-content-fallback-border-color; //old browsers fallback (ie8 etc)
     border: 1px solid @modal-content-border-color;
     .border-radius(@border-radius-large);
-    .box-shadow(0 3px 9px rgba(var(--wn-scrim-dark, 0, 0, 0), .5));
+    .box-shadow(0 3px 9px rgba(0,0,0,.5));
     background-clip: padding-box;
     // Remove focus outline from opened modal
     outline: none;
@@ -126,7 +126,7 @@
         margin: 80px auto 30px auto; // The top margin is increased to avoid overlapping with flash messages
     }
     .modal-content {
-        .box-shadow(0 5px 15px rgba(var(--wn-scrim-dark, 0, 0, 0), .5));
+        .box-shadow(0 5px 15px rgba(0,0,0,.5));
     }
 
     // Modal sizes

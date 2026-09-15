@@ -39,7 +39,7 @@
         flex-shrink: 0;
         padding: 2px 8px;
         z-index: @zindex-form;
-        background: rgba(var(--wn-scrim-dark, 0, 0, 0), .8);
+        background: rgba(0,0,0,.8);
 
         &::before {
             content: '';
@@ -49,11 +49,11 @@
             width: 100%;
             height: 100%;
             z-index: 9;
-            background: rgba(var(--wn-scrim-dark, 0, 0, 0), 0.08);
+            background: rgba(0, 0, 0, 0.08);
         }
 
         &.is-dark::before {
-            background: rgba(var(--wn-scrim-light, 255, 255, 255), 0.08);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         > div {

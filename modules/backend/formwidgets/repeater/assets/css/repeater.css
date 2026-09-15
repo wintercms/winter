@@ -7,7 +7,7 @@
 .field-repeater ul.field-repeater-items>li.dragged .repeater-item-collapsed-title{top:5px}
 .field-repeater ul.field-repeater-items>li.placeholder{display:block;position:relative;height:25px;margin-bottom:5px}
 .field-repeater ul.field-repeater-items>li.placeholder:before{display:block;position:absolute;font-family:"Font Awesome 6 Free";font-weight:900;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-style:normal;font-variant:normal;text-rendering:auto;content:"\f054";color:var(--wn-repeater-text,#d35714);left:-10px;top:8px;z-index:2000}
-.field-repeater li.field-repeater-item{position:relative;margin:0 0 1em 1em !important;padding:1.5em 1.25em 0 1.25em !important;background:var(--wn-surface-hover,#f5f5f5);border:1px solid #d1d6d9;border-radius:3px;box-shadow:inset 0 1px 0 rgba(209,214,217,0.25),0 1px 0 rgba(var(--wn-scrim-light,255,255,255),.5);min-height:30px}
+.field-repeater li.field-repeater-item{position:relative;margin:0 0 1em 1em !important;padding:1.5em 1.25em 0 1.25em !important;background:var(--wn-surface-hover,#f5f5f5);border:1px solid #d1d6d9;border-radius:3px;box-shadow:inset 0 1px 0 rgba(209,214,217,0.25),0 1px 0 rgba(255,255,255,.5);min-height:30px}
 .field-repeater li.field-repeater-item:before{color:var(--wn-text-muted,#bdc3c7);font-family:"Font Awesome 6 Free";font-weight:900;-moz-osx-font-smoothing:grayscale;-webkit-font-smoothing:antialiased;font-style:normal;font-variant:normal;text-rendering:auto;content:"\f111";font-size:8px;position:absolute;left:-18px;top:-2px}
 .field-repeater li.field-repeater-item:after{counter-increment:repeater-index-counter;content:counter(repeater-index-counter);display:block;position:absolute;font-size:12px;left:-27px;color:var(--wn-text-muted,#bdc3c7);top:10px;width:24px;text-align:center}
 .field-repeater li.field-repeater-item.collapsed .field-repeater-form{display:none}
@@ -82,4 +82,4 @@
 .repeater-group-grid .repeater-group-item a>div{flex:1;min-width:0}
 .repeater-group-grid .repeater-group-item a>div .title{font-weight:600;font-size:13px;display:block;margin-bottom:2px}
 .repeater-group-grid .repeater-group-item a>div .description{font-size:11px;color:var(--wn-text-secondary,#999);display:block;line-height:1.3}
-.repeater-group-grid .repeater-group-item a:hover{border-color:#2da7c7;box-shadow:0 2px 8px rgba(var(--wn-scrim-dark,0,0,0),0.1);transform:translateY(-2px)}
+.repeater-group-grid .repeater-group-item a:hover{border-color:#2da7c7;box-shadow:0 2px 8px rgba(0,0,0,0.1);transform:translateY(-2px)}

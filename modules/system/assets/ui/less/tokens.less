@@ -1,10 +1,7 @@
-//
 // Winter core colour tokens.
-//
 // Every core colour resolves through this block, so dark mode and theming can
 // redefine these rather than overriding each rule that uses them. Each entry is
 // annotated with the literal it replaced.
-//
 :root {
 
     /* Neutral scale — snapped to the design system (these CHANGE colours) */
@@ -180,10 +177,6 @@
     /* Inline colours — value preserved, named from source file + role */
     --wn-surface-error: #fbecec;  // table error row background
     --wn-table-error: #ec0000;  // table error cell border/background
-
-    /* Scrims — channel triplets, alpha stays at the call site */
-    --wn-scrim-dark: 0, 0, 0;  // shadows/overlays: rgba(var(--wn-scrim-dark), .2)
-    --wn-scrim-light: 255, 255, 255;  // highlights: rgba(var(--wn-scrim-light), .6)
 }
 
 // Derived at runtime. Guarded so that where the feature is missing the

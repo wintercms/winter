@@ -208,7 +208,7 @@
         right: 15px;
         font-size: 24px;
         margin-top: -20px;
-        color: rgba(var(--wn-scrim-dark, 0, 0, 0), .35);
+        color: rgba(0,0,0,.35);
     }
 
     > i.icon.loading {
@@ -255,9 +255,9 @@
     // no-rgba fallback, which every supported browser skips. Tokenising it would
     // create a token that can never take effect, so it stays literal.
     border: 1px solid #ccc;
-    border: 1px solid rgba(var(--wn-scrim-dark, 0, 0, 0), 0.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     .border-radius(3px);
-    .box-shadow(0 5px 10px rgba(var(--wn-scrim-dark, 0, 0, 0), .2));
+    .box-shadow(0 5px 10px rgba(0,0,0,.2));
 }
 .tt-suggestion {
     font-size: 14px;

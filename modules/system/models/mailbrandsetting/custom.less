@@ -223,7 +223,10 @@ img {
 
 .button {
     border-radius: 3px;
-    box-shadow: 0 2px 3px rgba(var(--wn-scrim-dark, 0, 0, 0), 0.16);
+    // Not tokenised: this stylesheet is rendered into email, where :root custom
+    // properties never reach, and a client that does not understand var() discards
+    // the whole declaration rather than using the fallback inside it.
+    box-shadow: 0 2px 3px rgba(0, 0, 0, 0.16);
     color: @button-text-color;
     display: inline-block;
     text-decoration: none;

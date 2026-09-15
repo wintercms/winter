@@ -1,5 +1,5 @@
 .permissioneditor{position:relative;margin:0 -20px}
-.permissioneditor.control-disabled .permissions-overlay{position:absolute;left:0;top:0;width:100%;height:100%;background:rgba(var(--wn-scrim-light,255,255,255),0.01);cursor:not-allowed}
+.permissioneditor.control-disabled .permissions-overlay{position:absolute;left:0;top:0;width:100%;height:100%;background:rgba(255,255,255,0.01);cursor:not-allowed}
 .permissioneditor.control-disabled table{opacity:0.5;filter:alpha(opacity=50)}
 .permissioneditor table{width:100%}
 .permissioneditor table th{padding:30px 4px 8px 4px;color:var(--wn-text-heading,#2A3E51);font-weight:normal;border-bottom:1px solid var(--wn-border-focus,#DBE1E3)}

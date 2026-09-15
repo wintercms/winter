@@ -13,8 +13,8 @@
 .import-behavior ul li.dragged {
   position: absolute;
   z-index: 2000;
-  -webkit-box-shadow: 0 3px 6px rgba(var(--wn-scrim-dark, 0, 0, 0), 0.075);
-  box-shadow: 0 3px 6px rgba(var(--wn-scrim-dark, 0, 0, 0), 0.075);
+  -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.075);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.075);
 }
 .import-behavior .import-file-columns,
 .import-behavior .import-db-columns {
@@ -143,7 +143,7 @@
   padding: 8px;
   padding-left: 28px;
   content: attr(data-empty-text);
-  color: rgba(var(--wn-scrim-dark, 0, 0, 0), 0.5);
+  color: rgba(0, 0, 0, 0.5);
 }
 .import-behavior .import-column-bindings > ul > li .column-icon {
   color: var(--wn-icon-strong, #595959);
