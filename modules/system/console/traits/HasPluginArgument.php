@@ -3,6 +3,11 @@
 use InvalidArgumentException;
 use System\Classes\PluginBase;
 use System\Classes\PluginManager;
+use Throwable;
+use Winter\Storm\Support\Arr;
+
+use function Laravel\Prompts\search;
+use function Laravel\Prompts\select;
 
 /**
  * Console Command Trait that provides autocompletion for the "plugin" argument
@@ -21,6 +26,8 @@ trait HasPluginArgument
      * @var bool Validate the provided plugin input against the PluginManager, default true.
      */
     // protected $validatePluginInput = true;
+
+    protected ?PluginBase $plugin = null;
 
     /**
      * Return available plugins for autocompletion of the "plugin" argument
@@ -45,7 +52,33 @@ trait HasPluginArgument
             }
         }
 
-        return $plugins;
+        return Arr::sort($plugins);
+    }
+
+    /**
+     * Prompt for which provider or tag to publish.
+     */
+    protected function promptForPlugin(): ?string
+    {
+        $choices = $this->suggestPluginValues();
+
+        $choice = windows_os()
+            ? select(
+                "Which plugin would you like to select?",
+                $choices,
+                scroll: 15,
+            )
+            : search(
+                label: "Which plugin would you like to select?",
+                placeholder: 'Search...',
+                options: fn ($search) => array_values(array_filter(
+                    $choices,
+                    fn ($choice) => str_contains(strtolower($choice), strtolower($search))
+                )),
+                scroll: 15,
+            );
+
+        return $choice;
     }
 
     /**
@@ -55,7 +88,7 @@ trait HasPluginArgument
     public function getPluginIdentifier($identifier = null): string
     {
         $pluginManager = PluginManager::instance();
-        $pluginName = $identifier ?? $this->argument('plugin');
+        $pluginName = $identifier ?? $this->argument('plugin') ?? $this->promptForPlugin();
         $pluginName = $pluginManager->normalizeIdentifier($pluginName);
 
         if (
@@ -75,5 +108,25 @@ trait HasPluginArgument
     public function getPlugin($identifier = null): ?PluginBase
     {
         return PluginManager::instance()->findByIdentifier($this->getPluginIdentifier($identifier));
+    }
+
+    /**
+     * Validates that the provided plugin can be accessed
+     *
+     * @throws InvalidArgumentException if it cannot be
+     */
+    public function validateProvidedPlugin()
+    {
+        if (!$this->plugin) {
+            try {
+                $this->plugin = $this->getPlugin();
+            } catch (Throwable $e) {
+                throw new InvalidArgumentException(sprintf(
+                    'Provided plugin "%s" failed to load: %s',
+                    $this->argument('plugin'),
+                    $e->getMessage()
+                ));
+            }
+        }
     }
 }
