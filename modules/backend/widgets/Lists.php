@@ -89,6 +89,19 @@ class Lists extends WidgetBase
     public $showCheckboxes = false;
 
     /**
+     * @var bool Offer "select all records matching the current query" when the list has more
+     * matches than fit on the current page. Requires showCheckboxes, and requires the list's
+     * bulk action handlers to resolve their records through the selection API - see
+     * Backend\Behaviors\ListController::listGetSelectionQuery().
+     *
+     * The selection is validated by fingerprinting the query, so the query's bindings have to
+     * be stable between requests. A scope that binds a moving value - `where('expires_at', '>',
+     * now())`, say - produces a different fingerprint every second, and every selection made
+     * against it is rejected as stale.
+     */
+    public $selectAllMatching = false;
+
+    /**
      * @var bool Display the list set up used for column visibility and ordering.
      */
     public $showSetup = false;
@@ -226,6 +239,7 @@ class Lists extends WidgetBase
             'showSorting',
             'defaultSort',
             'showCheckboxes',
+            'selectAllMatching',
             'showSetup',
             'showTree',
             'treeExpanded',
@@ -323,6 +337,29 @@ class Lists extends WidgetBase
         } else {
             $this->vars['recordTotal'] = $records->count();
             $this->vars['pageCurrent'] = 1;
+        }
+
+        /*
+         * Whole-query selection is only offered when the list actually holds more matches
+         * than the page shows. Under simplePaginate() there is no total - that is the point
+         * of it - so the offer is made from the page position instead, and the banner uses
+         * strings that do not quote a count.
+         */
+        $hasUnseenRecords = $this->showPageNumbers
+            ? ($this->vars['recordTotal'] ?? 0) > $records->count()
+            : (($this->vars['hasMorePages'] ?? false) || $this->vars['pageCurrent'] > 1);
+
+        $this->vars['showSelectAll'] = $showSelectAll = (bool) (
+            $this->selectAllMatching
+            && $this->showCheckboxes
+            && !$this->showTree
+            && $records->count()
+            && $hasUnseenRecords
+        );
+
+        if ($showSelectAll) {
+            $this->vars['selectionTotal'] = $this->showPageNumbers ? $this->vars['recordTotal'] : null;
+            $this->vars['selectionFingerprint'] = $this->getSelectionFingerprint();
         }
 
         // Disable showTotals if there are no records to display
@@ -731,6 +768,117 @@ class Lists extends WidgetBase
         }
 
         return $query;
+    }
+
+    /**
+     * Returns a fingerprint of the records the list currently matches - the search term,
+     * filter scopes and any query extensions, but neither the ordering nor the visible
+     * columns, which change the presentation and not the set.
+     *
+     * "Select all matching" resolves its records from session state, and that session is
+     * shared between browser tabs. The fingerprint travels with the selection so a handler
+     * can prove the query it is about to act on is still the one the user was shown, instead
+     * of silently acting on a set that was redefined in another tab.
+     *
+     * This builds the query again rather than reusing the one the records came from, which is
+     * what calculateTotalSums() does too: the query getRecords() used has had the paginator's
+     * limit and offset applied to it, and a fingerprint that moved with the page would defeat
+     * the point. Query extension listeners therefore run once more per render, for lists that
+     * offer whole-query selection.
+     */
+    public function getSelectionFingerprint(): string
+    {
+        return $this->fingerprintQuery($this->prepareQuery());
+    }
+
+    /**
+     * Fingerprints the records a query matches, ignoring how they are presented.
+     */
+    protected function fingerprintQuery($query): string
+    {
+        /*
+         * toBase() applies the model's global scopes - so a withTrashed() filter scope is
+         * visible here - and returns the underlying query builder. Clone it, because the
+         * caller keeps using the query this was derived from.
+         */
+        $base = clone $query->toBase();
+
+        /*
+         * Ordering and the select list are presentation: the sort column does not change
+         * which records match, and the select list varies with the column visibility saved
+         * by the list setup popup. reorder() drops the orders along with their bindings; the
+         * select list has to be dropped with its own bindings, which relation columns add. A
+         * WHERE clause cannot reference a select alias, so membership is unaffected.
+         */
+        $base->reorder();
+        $base->columns = null;
+        $base->bindings['select'] = [];
+
+        return md5($base->toSql() . serialize($base->getBindings()));
+    }
+
+    /**
+     * Returns a query restricted to the records the user has selected.
+     *
+     * Both modes resolve through prepareQuery(), so the active search, filters and query
+     * extensions always apply: explicitly checked ids outside the current query are dropped,
+     * and "all matching" is the prepared query itself - the client never supplies the set.
+     *
+     * The query is returned unordered, because a selection is a set. Callers doing bulk work
+     * should chunk it rather than materialising every key.
+     *
+     * @throws ApplicationException if the list does not offer whole-query selection, or no
+     * longer matches the selection that was made.
+     */
+    public function getSelectionQuery()
+    {
+        $query = $this->prepareQuery()->reorder();
+
+        if (!post('checked_all')) {
+            $checked = post('checked');
+
+            return $query->whereIn(
+                $this->model->getQualifiedKeyName(),
+                is_array($checked) ? $checked : []
+            );
+        }
+
+        /*
+         * checked_all is a client-supplied flag and the fingerprint is not a secret, so the
+         * list's own configuration is what decides whether this mode is available at all.
+         */
+        if (!$this->selectAllMatching || !$this->showCheckboxes || $this->showTree) {
+            throw new ApplicationException(Lang::get('backend::lang.list.selection_all_not_supported'));
+        }
+
+        if (post('checked_fingerprint') !== $this->fingerprintQuery($query)) {
+            throw new ApplicationException(Lang::get('backend::lang.list.selection_stale'));
+        }
+
+        return $query;
+    }
+
+    /**
+     * Returns the keys of the records the user has selected.
+     *
+     * Prefer getSelectionQuery() for bulk work: a whole-query selection can be arbitrarily
+     * large, and the query can be chunked while an array of keys cannot.
+     */
+    public function getSelectedKeys(): array
+    {
+        /*
+         * prepareQuery() selects `table.*` plus a sub-select per relation column, and pluck()
+         * keeps a select list that is already set - so plucking the query as it stands would
+         * load every matching row in full to read one column off each. Strip the select list,
+         * and the bindings that belong to it or a polymorphic relation column would leave an
+         * orphan binding behind, and let pluck() select the key alone.
+         */
+        return $this->getSelectionQuery()
+            ->toBase()
+            ->cloneWithout(['columns'])
+            ->cloneWithoutBindings(['select'])
+            ->pluck($this->model->getQualifiedKeyName())
+            ->all();
     }
 
     /**

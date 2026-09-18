@@ -150,6 +150,7 @@ class ListController extends ControllerBehavior
             'showSorting',
             'showSetup',
             'showCheckboxes',
+            'selectAllMatching',
             'showTree',
             'treeExpanded',
             'customViewPath',
@@ -347,50 +348,38 @@ class ListController extends ControllerBehavior
         $listConfig = $this->controller->listGetConfig($definition);
 
         /*
-         * Validate checked identifiers
+         * Resolve the selection: either the explicitly checked records, or every record
+         * matching the list's active search and filters. Either way the set is resolved from
+         * the list's own query, so it can never reach outside what the list shows.
          */
-        $checkedIds = post('checked');
-
-        if (!$checkedIds || !is_array($checkedIds) || !count($checkedIds)) {
-            Flash::error(Lang::get(
-                (!empty($listConfig->noRecordsDeletedMessage))
-                    ? $listConfig->noRecordsDeletedMessage
-                    : 'backend::lang.list.delete_selected_empty'
-            ));
-            return $this->controller->listRefresh();
-        }
+        $query = $this->controller->listGetSelectionQuery($definition);
+        $model = $query->getModel();
+        $count = 0;
 
         /*
-         * Create the model
+         * Chunked by key so a whole-query selection of any size stays within memory, and
+         * deleted one record at a time so model events and cascades still run.
+         *
+         * The selection query is unordered on purpose: chunkById() pages with `key > last`
+         * but keeps any other ORDER BY in place, and that combination silently skips records.
+         * The key is qualified because a filter scope may have joined another table, and
+         * aliased because the value is read back off the model.
          */
-        $class = $listConfig->modelClass;
-        $model = new $class;
-        $model = $this->controller->listExtendModel($model, $definition);
-
-        /*
-         * Create the query
-         */
-        $query = $model->newQuery();
-        $this->controller->listExtendQueryBefore($query, $definition);
-
-        $query->whereIn($model->getKeyName(), $checkedIds);
-        $this->controller->listExtendQuery($query, $definition);
-
-        /*
-         * Delete records
-         */
-        $records = $query->get();
-
-        if ($records->count()) {
+        $query->chunkById(500, function ($records) use (&$count) {
             foreach ($records as $record) {
-                $record->delete();
+                // A vetoing beforeDelete returns false, and that record is still there.
+                if ($record->delete() !== false) {
+                    $count++;
+                }
             }
+        }, $model->getQualifiedKeyName(), $model->getKeyName());
 
-            Flash::success(Lang::get(
-                (!empty($listConfig->deleteMessage))
-                    ? $listConfig->deleteMessage
-                    : 'backend::lang.list.delete_selected_success'
-            ));
+        if ($count) {
+            Flash::success(
+                !empty($listConfig->deleteMessage)
+                    ? Lang::get($listConfig->deleteMessage, ['count' => $count])
+                    : Lang::choice('backend::lang.list.delete_selected_success_count', $count, ['count' => $count])
+            );
         }
         else {
             Flash::error(Lang::get(
@@ -483,6 +472,62 @@ class ListController extends ControllerBehavior
         }
 
         return array_get($this->listWidgets, $definition);
+    }
+
+    /**
+     * Returns a query restricted to the records the user has selected in the list.
+     *
+     * This is what a bulk action handler should resolve its records from, in place of
+     * post('checked'): it applies the list's active search, filters and query extensions, and
+     * it honours a "select all records matching this query" selection, which never sends the
+     * individual ids. Chunk it rather than materialising the keys - the selection can be the
+     * whole table.
+     *
+     *     $this->listGetSelectionQuery()->chunkById(500, function ($records) {
+     *         foreach ($records as $record) {
+     *             // ...
+     *         }
+     *     });
+     *
+     * @throws ApplicationException if the definition is unknown, the list does not offer
+     * whole-query selection, or the list no longer matches the selection that was made.
+     */
+    public function listGetSelectionQuery(?string $definition = null)
+    {
+        return $this->listGetSelectionWidget($definition)->getSelectionQuery();
+    }
+
+    /**
+     * Returns the keys of the records the user has selected in the list.
+     *
+     * The drop-in replacement for post('checked'). Prefer listGetSelectionQuery() when the
+     * action iterates records, since a whole-query selection can be arbitrarily large.
+     */
+    public function listGetSelectedIds(?string $definition = null): array
+    {
+        return $this->listGetSelectionWidget($definition)->getSelectedKeys();
+    }
+
+    /**
+     * Returns the list widget a selection is being resolved against, building the widgets
+     * first when the handler did not run the index action.
+     *
+     * @throws ApplicationException when the posted definition names no list.
+     */
+    protected function listGetSelectionWidget(?string $definition)
+    {
+        if (!count($this->listWidgets)) {
+            $this->makeLists();
+        }
+
+        if (!$widget = $this->listGetWidget($definition)) {
+            throw new ApplicationException(Lang::get(
+                'backend::lang.list.missing_parent_definition',
+                compact('definition')
+            ));
+        }
+
+        return $widget;
     }
 
     /**

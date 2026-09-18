@@ -11,6 +11,9 @@ recordsPerPage: 30
 showSetup: true
 showCheckboxes: true
 
+# Offer "select all records matching the current filters" past the first page
+selectAllMatching: true
+
 toolbar:
     buttons: list_toolbar
     search:

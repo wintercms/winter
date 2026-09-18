@@ -753,6 +753,13 @@ class RelationController extends ControllerBehavior
             $config->recordsPerPage = $this->getConfig('view[recordsPerPage]');
             $config->showPageNumbers = $this->getConfig('view[showPageNumbers]', true);
             $config->showCheckboxes = $this->getConfig('view[showCheckboxes]', !$this->readOnly);
+            /*
+             * Whole-query selection is not available on relation lists: the relation handlers
+             * resolve their records from post('checked'), and relationRefresh() replaces the
+             * element the selection state lives on, so the banner would promise records that
+             * no action would touch.
+             */
+            $config->selectAllMatching = false;
             $config->recordUrl = $this->getConfig('view[recordUrl]');
             $config->customViewPath = $this->getConfig('view[customViewPath]');
             $config->noRecordsMessage = $this->getConfig('view[noRecordsMessage]');
@@ -970,6 +977,13 @@ class RelationController extends ControllerBehavior
             $config->alias = $this->alias . 'ManageList';
             $config->showSetup = $this->getConfig('manage[showSetup]', !$isPivot);
             $config->showCheckboxes = $this->getConfig('manage[showCheckboxes]', !$isPivot);
+            /*
+             * Whole-query selection is not available on relation lists: the relation handlers
+             * resolve their records from post('checked'), and relationRefresh() replaces the
+             * element the selection state lives on, so the banner would promise records that
+             * no action would touch.
+             */
+            $config->selectAllMatching = false;
             $config->showSorting = $this->getConfig('manage[showSorting]', !$isPivot);
             $config->defaultSort = $this->getConfig('manage[defaultSort]');
             $config->recordsPerPage = $this->getConfig('manage[recordsPerPage]');
