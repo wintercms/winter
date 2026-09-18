@@ -91,6 +91,26 @@ class SelectionDefaultController extends SelectionController
     }
 }
 
+/**
+ * A filter scope or query extension may join one-to-many, which returns several rows for the
+ * same record. Nothing stops a list from doing it, so the delete must still act once per
+ * record.
+ */
+class SelectionJoinedController extends SelectionController
+{
+    public function listExtendQuery($query, $definition = null)
+    {
+        $query
+            ->where('backend_test_selection_fixtures.category', 'alpha')
+            ->leftJoin(
+                'backend_test_selection_fixtures as duplicates',
+                'duplicates.category',
+                '=',
+                'backend_test_selection_fixtures.category'
+            );
+    }
+}
+
 class ListControllerSelectionTest extends PluginTestCase
 {
     public function setUp(): void
@@ -162,6 +182,29 @@ class ListControllerSelectionTest extends PluginTestCase
         (new SelectionController)->index_onDelete();
 
         $this->assertSame(0, ListSelectionFixture::count());
+    }
+
+    public function testAJoinedQueryDeletesEachRecordOnce(): void
+    {
+        $deleting = [];
+        ListSelectionFixture::deleting(function ($record) use (&$deleting) {
+            $deleting[] = $record->getKey();
+        });
+
+        $controller = new SelectionJoinedController;
+        $controller->makeLists();
+
+        $this->postRequest([
+            'checked_all' => 1,
+            'checked_fingerprint' => $controller->listGetWidget()->getSelectionFingerprint(),
+        ]);
+
+        (new SelectionJoinedController)->index_onDelete();
+
+        // 15 alpha records joined to 15 rows each: 225 rows, still 15 records to delete.
+        $this->assertSame(0, ListSelectionFixture::where('category', 'alpha')->count());
+        $this->assertCount(15, $deleting, 'each record should be deleted once, not once per joined row');
+        $this->assertStringContainsString('15', Flash::get('success')[0] ?? '');
     }
 
     public function testStaleFingerprintDeletesNothing(): void

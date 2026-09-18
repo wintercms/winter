@@ -807,12 +807,19 @@ class Lists extends WidgetBase
          * Ordering and the select list are presentation: the sort column does not change
          * which records match, and the select list varies with the column visibility saved
          * by the list setup popup. reorder() drops the orders along with their bindings; the
-         * select list has to be dropped with its own bindings, which relation columns add. A
-         * WHERE clause cannot reference a select alias, so membership is unaffected.
+         * select list has to be dropped with its own bindings, which relation columns add.
+         *
+         * A WHERE clause cannot reference a select alias, but a HAVING added by a query
+         * extension can - and then the select list does decide which records match, so it
+         * stays in the hash. That errs towards clearing a selection the list can no longer
+         * describe, which is the safe direction.
          */
         $base->reorder();
-        $base->columns = null;
-        $base->bindings['select'] = [];
+
+        if (empty($base->havings)) {
+            $base->columns = null;
+            $base->bindings['select'] = [];
+        }
 
         return md5($base->toSql() . serialize($base->getBindings()));
     }
@@ -838,7 +845,9 @@ class Lists extends WidgetBase
             $checked = post('checked');
 
             return $query->whereIn(
-                $this->model->getQualifiedKeyName(),
+                // From the query's own model, not the widget's: the extendQuery event may
+                // have returned a replacement query, whose table is the one being filtered.
+                $query->getModel()->getQualifiedKeyName(),
                 is_array($checked) ? $checked : []
             );
         }
@@ -859,7 +868,7 @@ class Lists extends WidgetBase
     }
 
     /**
-     * Returns the keys of the records the user has selected.
+     * Returns the keys of the records the user has selected, each one once.
      *
      * Prefer getSelectionQuery() for bulk work: a whole-query selection can be arbitrarily
      * large, and the query can be chunked while an array of keys cannot.
@@ -873,11 +882,17 @@ class Lists extends WidgetBase
          * and the bindings that belong to it or a polymorphic relation column would leave an
          * orphan binding behind, and let pluck() select the key alone.
          */
-        return $this->getSelectionQuery()
+        $query = $this->getSelectionQuery();
+
+        return $query
             ->toBase()
             ->cloneWithout(['columns'])
             ->cloneWithoutBindings(['select'])
-            ->pluck($this->model->getQualifiedKeyName())
+            ->pluck($query->getModel()->getQualifiedKeyName())
+            // A query extension or filter scope may join one-to-many, which returns the same
+            // record once per joined row.
+            ->unique()
+            ->values()
             ->all();
     }
 

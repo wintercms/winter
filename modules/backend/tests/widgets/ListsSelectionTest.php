@@ -3,6 +3,7 @@
 namespace Backend\Tests\Widgets;
 
 use Backend\Tests\Fixtures\Models\ListSelectionFixture;
+use Backend\Tests\Fixtures\Models\SortableFixture;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use Backend\Widgets\Lists;
 use Illuminate\Http\Request as HttpRequest;
@@ -248,6 +249,60 @@ class ListsSelectionTest extends PluginTestCase
         $this->assertEqualsCanonicalizing($checked, $list->getSelectedKeys());
     }
 
+    public function testSelectedKeysAreUniqueThroughAOneToManyJoin(): void
+    {
+        // A filter scope may join one-to-many, which returns each record once per joined row.
+        $list = $this->makeList();
+        $list->addFilter(function ($query) {
+            $query
+                ->where('backend_test_selection_fixtures.category', 'alpha')
+                ->leftJoin(
+                    'backend_test_selection_fixtures as duplicates',
+                    'duplicates.category',
+                    '=',
+                    'backend_test_selection_fixtures.category'
+                );
+        });
+
+        $this->postRequest([
+            'checked_all' => 1,
+            'checked_fingerprint' => $list->getSelectionFingerprint(),
+        ]);
+
+        $keys = $list->getSelectedKeys();
+
+        // 15 records joined to 15 rows each: 225 rows, 15 records.
+        $this->assertSame(225, $list->getSelectionQuery()->count());
+        $this->assertCount(15, $keys);
+        $this->assertSame($keys, array_unique($keys));
+    }
+
+    public function testTheKeyComesFromTheQueryThatReplacedThePreparedOne(): void
+    {
+        /*
+         * The backend.list.extendQuery event may return a replacement query, and its docblock
+         * shows one built from a different model. Qualifying the key with the widget's own
+         * model would then filter on a table the query does not select from.
+         */
+        SortableFixture::migrateUp();
+
+        try {
+            $list = $this->makeList();
+            $list->bindEvent('list.extendQuery', function () {
+                return SortableFixture::query();
+            });
+
+            $this->postRequest(['checked' => [1]]);
+
+            $this->assertStringContainsString(
+                'backend_test_sortable_fixtures"."id" in',
+                $list->getSelectionQuery()->toSql()
+            );
+        } finally {
+            SortableFixture::migrateDown();
+        }
+    }
+
     //
     // Fingerprint
     //
@@ -287,6 +342,29 @@ class ListsSelectionTest extends PluginTestCase
 
         // Hiding a column through the list setup popup changes the select list, not the set.
         $this->assertSame($computed->getSelectionFingerprint(), $plain->getSelectionFingerprint());
+    }
+
+    public function testFingerprintKeepsTheSelectListWhenAHavingDependsOnIt(): void
+    {
+        /*
+         * A WHERE cannot reference a select alias, so the select list is normally presentation
+         * and is left out of the hash. A HAVING added by a query extension can reference one,
+         * and then two lists that select different expressions under the same alias match
+         * different records - which the fingerprint has to notice.
+         */
+        $fingerprintFor = function (string $select) {
+            $list = $this->makeList(['columns' => [
+                'name' => ['type' => 'text', 'label' => 'Name', 'select' => $select],
+            ]]);
+
+            $list->addFilter(function ($query) {
+                $query->groupBy('backend_test_selection_fixtures.id')->havingRaw('name is not null');
+            });
+
+            return $list->getSelectionFingerprint();
+        };
+
+        $this->assertNotSame($fingerprintFor('length(name)'), $fingerprintFor('length(category)'));
     }
 
     public function testFingerprintChangesWithSearchTerm(): void

@@ -366,7 +366,21 @@ class ListController extends ControllerBehavior
          * aliased because the value is read back off the model.
          */
         $query->chunkById(500, function ($records) use (&$count) {
+            /*
+             * A filter scope or query extension may join one-to-many, which returns the same
+             * record once per joined row. Deleting it again would fire its model events a
+             * second time and count it twice; chunkById() pages with `key > last`, so the
+             * duplicates of a key that straddles a chunk boundary are dropped with it.
+             */
+            $deleted = [];
+
             foreach ($records as $record) {
+                if (isset($deleted[$record->getKey()])) {
+                    continue;
+                }
+
+                $deleted[$record->getKey()] = true;
+
                 // A vetoing beforeDelete returns false, and that record is still there.
                 if ($record->delete() !== false) {
                     $count++;

@@ -190,18 +190,19 @@
     }
 
     /*
-     * Returns what the user has selected: the visible checked ids, and whether the selection
-     * is every record matching the current query. Bulk actions that post `checked` through
-     * the framework's request pipeline get the whole-query fields injected for them (see the
-     * ajaxSetup handler below); this is for callers that build a request themselves.
+     * Returns what the user has selected, keyed the way the server reads it, so the result can
+     * be posted as request data directly: the visible checked ids, and whether the selection
+     * is every record matching the current query. Bulk actions that post `checked` through the
+     * framework's request pipeline get these injected for them (see the ajaxSetup handler
+     * below); this is for callers that build a request themselves.
      */
     ListWidget.prototype.getSelection = function() {
         var fingerprint = this.$widget.data('listSelectAll')
 
         return {
             checked: this.getChecked(),
-            all: fingerprint ? 1 : 0,
-            fingerprint: fingerprint || null
+            checked_all: fingerprint ? 1 : 0,
+            checked_fingerprint: fingerprint || null
         }
     }
 
@@ -292,11 +293,22 @@
 
         /*
          * The button that fires a bulk action lives in the toolbar, outside the list, so it
-         * cannot be traced back to a widget. Only a list in "all matching" mode carries
-         * state, and two of those sharing one button is not a real arrangement.
+         * cannot be traced back to a widget by position. A controller can render several list
+         * definitions, and the request says which one it acts on, so match that against the
+         * list's own definition: a request for one list must never carry another's selection.
+         *
+         * Without a definition the server resolves the primary list, so fall back to the only
+         * list holding a selection - which is every single-list page.
          */
         var $widget = $('.list-widget').filter(function() {
-            return !!$(this).data('listSelectAll')
+            var $candidate = $(this)
+
+            if (!$candidate.data('listSelectAll')) {
+                return false
+            }
+
+            return !data.definition
+                || String($candidate.data('listDefinition')) === String(data.definition)
         }).first()
 
         if (!$widget.length) {
