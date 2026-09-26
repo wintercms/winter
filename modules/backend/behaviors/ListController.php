@@ -476,11 +476,16 @@ class ListController extends ControllerBehavior
     }
 
     /**
-     * Returns the widget used by this behavior.
-     * @return \Backend\Classes\WidgetBase
+     * Returns the widget used by this behavior, building the widgets first when the current
+     * request did not run the index action (e.g. an AJAX handler).
+     * @return \Backend\Classes\WidgetBase|null Null when the definition names no list.
      */
     public function listGetWidget(?string $definition = null)
     {
+        if (!count($this->listWidgets)) {
+            $this->makeLists();
+        }
+
         if (!$definition) {
             $definition = $this->primaryDefinition;
         }
@@ -508,7 +513,11 @@ class ListController extends ControllerBehavior
      */
     public function listGetSelectionQuery(?string $definition = null)
     {
-        return $this->listGetSelectionWidget($definition)->getSelectionQuery();
+        $widget = $this->listGetWidget($definition) ?? throw new ApplicationException(
+            Lang::get('backend::lang.list.missing_parent_definition', compact('definition'))
+        );
+
+        return $widget->getSelectionQuery();
     }
 
     /**
@@ -517,31 +526,13 @@ class ListController extends ControllerBehavior
      * The drop-in replacement for post('checked'). Prefer listGetSelectionQuery() when the
      * action iterates records, since a whole-query selection can be arbitrarily large.
      */
-    public function listGetSelectedIds(?string $definition = null): array
+    public function listGetSelectedKeys(?string $definition = null): array
     {
-        return $this->listGetSelectionWidget($definition)->getSelectedKeys();
-    }
+        $widget = $this->listGetWidget($definition) ?? throw new ApplicationException(
+            Lang::get('backend::lang.list.missing_parent_definition', compact('definition'))
+        );
 
-    /**
-     * Returns the list widget a selection is being resolved against, building the widgets
-     * first when the handler did not run the index action.
-     *
-     * @throws ApplicationException when the posted definition names no list.
-     */
-    protected function listGetSelectionWidget(?string $definition)
-    {
-        if (!count($this->listWidgets)) {
-            $this->makeLists();
-        }
-
-        if (!$widget = $this->listGetWidget($definition)) {
-            throw new ApplicationException(Lang::get(
-                'backend::lang.list.missing_parent_definition',
-                compact('definition')
-            ));
-        }
-
-        return $widget;
+        return $widget->getSelectedKeys();
     }
 
     /**

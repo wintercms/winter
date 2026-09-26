@@ -146,7 +146,6 @@ class ListControllerSelectionTest extends PluginTestCase
     protected function fingerprint(?string $definition = null): string
     {
         $controller = new SelectionController;
-        $controller->makeLists();
 
         return $controller->listGetWidget($definition)->getSelectionFingerprint();
     }
@@ -192,7 +191,6 @@ class ListControllerSelectionTest extends PluginTestCase
         });
 
         $controller = new SelectionJoinedController;
-        $controller->makeLists();
 
         $this->postRequest([
             'checked_all' => 1,
@@ -227,7 +225,6 @@ class ListControllerSelectionTest extends PluginTestCase
     public function testWholeQuerySelectionIsRefusedWhenTheListDoesNotOfferIt(): void
     {
         $controller = new SelectionDefaultController;
-        $controller->makeLists();
 
         $this->postRequest([
             'checked_all' => 1,
@@ -296,7 +293,7 @@ class ListControllerSelectionTest extends PluginTestCase
         // without going through the handler that validates it first.
         $this->postRequest(['checked' => [1]]);
 
-        foreach (['listGetSelectionQuery', 'listGetSelectedIds'] as $method) {
+        foreach (['listGetSelectionQuery', 'listGetSelectedKeys'] as $method) {
             try {
                 (new SelectionController)->$method('nope');
                 $this->fail($method . '() should reject an unknown definition');
@@ -348,13 +345,11 @@ class ListControllerSelectionTest extends PluginTestCase
         // The behavior copies a fixed whitelist of keys into the widget config, so a list
         // option that is not in it silently does nothing.
         $enabled = new SelectionController;
-        $enabled->makeLists();
         $widget = $enabled->listGetWidget();
         $widget->render();
         $this->assertTrue($widget->vars['showSelectAll']);
 
         $default = new SelectionDefaultController;
-        $default->makeLists();
         $widget = $default->listGetWidget();
         $widget->render();
         $this->assertFalse($widget->vars['showSelectAll'], 'the feature is opt-in');
