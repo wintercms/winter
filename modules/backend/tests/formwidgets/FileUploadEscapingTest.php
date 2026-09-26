@@ -135,6 +135,14 @@ class FileUploadEscapingTest extends PluginTestCase
      */
     public function testFieldEscapesPathUrl(): void
     {
+        if (DIRECTORY_SEPARATOR === '\\') {
+            $this->markTestSkipped(
+                'Windows rejects a file name containing a quote, so this upload cannot be stored there and '
+                . 'the URL it asserts on cannot arise. testFieldEscapesThumbUrl covers the same partials '
+                . 'from a stored record on every platform.'
+            );
+        }
+
         $single = $this->upload('avatar', self::UNSAFE_EXTENSION, ['mode' => 'file']);
 
         $this->assertStringContainsString(
