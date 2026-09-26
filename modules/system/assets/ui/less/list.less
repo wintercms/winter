@@ -552,6 +552,36 @@ table.table.data {
     }
 }
 
+//
+// Whole-query selection banner
+//
+
+.list-selection {
+    display: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    color: @color-list-selection-text;
+    background-color: @color-list-selection-bg;
+    border-bottom: 1px solid @color-list-selection-border;
+
+    &.is-page,
+    &.is-all { display: block; }
+
+    // Only the half that matches the current selection state is shown.
+    > span { display: none; }
+    &.is-page > .list-selection-page { display: inline; }
+    &.is-all > .list-selection-all { display: inline; }
+
+    a {
+        color: @color-list-selection-text;
+        text-decoration: underline;
+        cursor: pointer;
+
+        &:hover,
+        &:focus { color: darken(@color-list-selection-text, 20%); }
+    }
+}
+
 .list-footer {
     padding: 10px 15px;
 
