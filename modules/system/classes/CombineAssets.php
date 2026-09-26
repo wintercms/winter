@@ -135,7 +135,7 @@ class CombineAssets
         // explicit roots, a writable asset could disclose arbitrary server-readable
         // files: `@import (inline) "<path>"` in a .less file (GHSA-58fp-mcx6-7qf9),
         // `=include ../../../.env` in a .js file (GHSA-2223-f22x-24cq), or an
-        // `@import` traversal in a .css file. The asset's own source directory is
+        // `@import` traversal in a .scss or .css file. The asset's own source directory is
         // always allowed implicitly; this list adds the cross-tree roots that
         // legitimate themes/plugins/modules actually import from (e.g. a plugin
         // importing a module asset, or a theme importing its own ../vendor).
@@ -170,7 +170,10 @@ class CombineAssets
         $lessCompiler = new LessCompiler;
         $lessCompiler->setAllowedImportRoots($allowedImportRoots);
         $this->registerFilter('less', $lessCompiler);
-        $this->registerFilter('scss', new ScssCompiler);
+
+        $scssCompiler = new ScssCompiler;
+        $scssCompiler->setAllowedImportRoots($allowedImportRoots);
+        $this->registerFilter('scss', $scssCompiler);
 
         /*
          * Minification filters

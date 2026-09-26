@@ -237,6 +237,89 @@ class CombineAssetsTest extends TestCase
         }
     }
 
+    /**
+     * SCSS `@import` resolution must stay within the allowed import roots, the same
+     * as the LESS and JavaScript importers above.
+     */
+    public function testScssCompilerBlocksRelativeTraversalImport()
+    {
+        $themeDir = $this->makeTempThemeDir();
+        $secretPath = dirname($themeDir) . '/scss-secret-' . bin2hex(random_bytes(4)) . '.scss';
+        file_put_contents($secretPath, '.leak { content: "combine-leak-canary"; }');
+        file_put_contents(
+            $themeDir . '/assets/poc.scss',
+            '@import "../../' . basename($secretPath, '.scss') . '"; .x { color: red; }'
+        );
+
+        try {
+            $css = $this->compileScssTo($themeDir, 'assets/poc.scss');
+            $this->assertStringNotContainsString('combine-leak-canary', $css);
+        } finally {
+            @unlink($secretPath);
+            \File::deleteDirectory($themeDir);
+        }
+    }
+
+    /**
+     * Legitimate same-tree `@import "partial"` must still resolve, including a
+     * partial that imports another partial of its own.
+     */
+    public function testScssCompilerAllowsLegitimatePartial()
+    {
+        $themeDir = $this->makeTempThemeDir();
+        mkdir($themeDir . '/assets/sub', 0777, true);
+        file_put_contents($themeDir . '/assets/sub/_deep.scss', '.deep-marker { color: purple; }');
+        file_put_contents($themeDir . '/assets/_partial.scss', '@import "sub/deep"; .partial-marker { color: orange; }');
+        file_put_contents($themeDir . '/assets/main.scss', '@import "partial"; .main-marker { color: blue; }');
+
+        try {
+            $css = $this->compileScssTo($themeDir, 'assets/main.scss');
+            $this->assertStringContainsString('deep-marker', $css);
+            $this->assertStringContainsString('partial-marker', $css);
+            $this->assertStringContainsString('main-marker', $css);
+        } finally {
+            \File::deleteDirectory($themeDir);
+        }
+    }
+
+    /**
+     * Imports from outside the asset's own directory must keep working when they
+     * land in one of the roots CombineAssets allows (themes, plugins, modules).
+     */
+    public function testScssCompilerAllowsImportFromAllowedRoot()
+    {
+        $themeDir = $this->makeTempThemeDir();
+        $sharedDir = themes_path('scss-import-root-test-' . bin2hex(random_bytes(4)));
+        mkdir($sharedDir, 0777, true);
+        file_put_contents($sharedDir . '/_shared.scss', '.shared-marker { color: green; }');
+        // SCSS string literals treat a backslash as an escape, so use forward slashes
+        // for the absolute path on Windows.
+        file_put_contents(
+            $themeDir . '/assets/main.scss',
+            '@import "' . str_replace('\\', '/', $sharedDir) . '/shared"; .main-marker { color: blue; }'
+        );
+
+        try {
+            $css = $this->compileScssTo($themeDir, 'assets/main.scss');
+            $this->assertStringContainsString('shared-marker', $css);
+            $this->assertStringContainsString('main-marker', $css);
+        } finally {
+            \File::deleteDirectory($sharedDir);
+            \File::deleteDirectory($themeDir);
+        }
+    }
+
+    protected function compileScssTo(string $themeDir, string $relativeAsset): string
+    {
+        $dest = sys_get_temp_dir() . '/winter-combine-out-' . bin2hex(random_bytes(4)) . '.css';
+        try {
+            CombineAssets::instance()->combineToFile([$relativeAsset], $dest, $themeDir);
+            return file_get_contents($dest) ?: '';
+        } finally {
+            @unlink($dest);
+        }
+    }
+
     protected function compileJsTo(string $themeDir, string $relativeAsset): string
     {
         $dest = sys_get_temp_dir() . '/winter-combine-out-' . bin2hex(random_bytes(4)) . '.js';
