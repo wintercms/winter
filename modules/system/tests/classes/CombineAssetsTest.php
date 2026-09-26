@@ -555,9 +555,12 @@ class CombineAssetsTest extends TestCase
         $secretPath = tempnam(sys_get_temp_dir(), 'wn-sec-');
         file_put_contents($secretPath, "APP_KEY=combine-leak-canary\n");
 
+        // Forward slashes on Windows too: Assetic splits a `scheme://` import on `/` to
+        // find its host and path, and a backslashed path has neither.
+        $urlPath = str_replace('\\', '/', $secretPath);
         $poc = str_replace(
             ['%SECRET%', '%SECRET_RELATIVE%'],
-            [$secretPath, ltrim($secretPath, '/')],
+            [$urlPath, ltrim($urlPath, '/')],
             $pocTemplate
         );
         file_put_contents($themeDir . '/assets/poc.css', $poc);
