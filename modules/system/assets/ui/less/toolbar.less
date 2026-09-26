@@ -124,7 +124,7 @@ html.mobile {
     top: 0;
     bottom: 0;
     margin: auto;
-    background-color: #fff;
+    background-color: var(--wn-surface-raised, #fff);
     height: 28px;
 
     > i {
@@ -196,7 +196,7 @@ html.mobile {
             &.disabled,
             &[disabled] {
                 opacity: 1;
-                color: #bdbdbd;
+                color: var(--wn-text-muted, #bdbdbd);
                 cursor: default;
                 background: transparent;
             }
@@ -220,7 +220,7 @@ html.mobile {
         }
 
         .btn.oc-autumn-button {
-            color: #c03f31;
+            color: var(--wn-toolbar-text, #c03f31);
 
             &:hover {
                 color: @color-toolbar-editor-btn-hover !important;
@@ -239,7 +239,7 @@ html.mobile {
         }
 
         &.separator {
-            border-bottom: 1px solid #ecf0f1;
+            border-bottom: 1px solid var(--wn-border-subtle, #ecf0f1);
         }
 
         .toolbar-item {

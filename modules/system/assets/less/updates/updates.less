@@ -6,16 +6,16 @@
 
 .control-updatelist {
 
-    border: 1px solid #ccc;
+    border: 1px solid var(--wn-border, #ccc);
     margin-bottom: @line-height-computed;
 
     .update-item {
 
-        border-bottom: 1px solid #ccc;
+        border-bottom: 1px solid var(--wn-border, #ccc);
 
         .item-header {
-            background-color: #f5f5f5;
-            border-bottom: 1px solid #ccc;
+            background-color: var(--wn-surface-hover, #f5f5f5);
+            border-bottom: 1px solid var(--wn-border, #ccc);
             padding: 0 10px;
 
             h5 {
@@ -54,7 +54,7 @@
                 padding: 5px 0;
                 line-height: 20px;
                 &.text-muted {
-                    color: #999 !important;
+                    color: var(--wn-text-secondary, #999) !important;
                 }
             }
 
@@ -63,19 +63,19 @@
                 clear: left;
                 font-size: 14px;
                 font-weight: 400;
-                color: #2b3e50;
+                color: var(--wn-text-heading, #2b3e50);
             }
             dd {
                 width: 85%;
                 font-size: 12px;
-                color: #455152;
+                color: var(--wn-text-link, #455152);
             }
 
             .important-update-label {
                 position: relative;
                 top: -1px;
-                background-color: #e01346;
-                color: #fff;
+                background-color: var(--wn-updates-bg, #e01346);
+                color: var(--wn-text-inverse, #fff);
                 display: inline-block;
                 padding: .2em .6em .3em;
                 font-size: 75%;
