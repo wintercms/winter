@@ -8,6 +8,7 @@ use Cms\Classes\Theme;
 use Config;
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use Event;
+use File;
 use Storage;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
@@ -436,6 +437,132 @@ class ImageResizerTest extends PluginTestCase
         Storage::disk('test_local')->deleteDirectory('resized');
     }
 
+    /**
+     * The disk path built for a matched source must stay inside that source's folder.
+     *
+     * @dataProvider containedSourcePathProvider
+     */
+    public function testRefusesPathsOutsideTheMatchedSource(string $url)
+    {
+        $this->setUpStorage();
+        $this->copyMedia();
+        $this->copyOutOfRootImage();
+
+        // The target resolves to an existing, readable file on the media source's own
+        // disk, so only the containment check can refuse it
+        $this->assertTrue(
+            Storage::disk('test_local')->exists('media/../uploads/protected/abc/hidden.png')
+        );
+
+        $this->expectException(SystemException::class);
+        ImageResizer::normalizeImage($url);
+    }
+
+    public function containedSourcePathProvider(): array
+    {
+        return [
+            'relative segment' => ['/storage/temp/app/media/../uploads/protected/abc/hidden.png'],
+            'encoded segment' => ['/storage/temp/app/media/%2e%2e/uploads/protected/abc/hidden.png'],
+            'encoded separator' => ['/storage/temp/app/media/..%2Fuploads/protected/abc/hidden.png'],
+            'double encoded segment' => ['/storage/temp/app/media/%252e%252e/uploads/protected/abc/hidden.png'],
+            'backslash separators' => ['/storage/temp/app/media\\..\\uploads/protected/abc/hidden.png'],
+            'nested segments' => ['/storage/temp/app/media/nested/../../uploads/protected/abc/hidden.png'],
+            'dot and relative segments' => ['/storage/temp/app/media/./../uploads/protected/abc/hidden.png'],
+            'trailing space in segment' => ['/storage/temp/app/media/.. /../uploads/protected/abc/hidden.png'],
+            'scheme prefixed' => ['file:///storage/temp/app/media/../uploads/protected/abc/hidden.png'],
+            'protocol relative' => ['//localhost/storage/temp/app/media/../uploads/protected/abc/hidden.png'],
+            'local file system source' => ['/modules/../storage/temp/app/uploads/protected/abc/hidden.png'],
+            'local file system source, nested' => ['/modules/system/tests/fixtures/../../../../storage/temp/app/uploads/protected/abc/hidden.png'],
+            'differently cased source folder' => ['/storage/temp/app/MEDIA/../uploads/protected/abc/hidden.png'],
+            'source folder name prefix' => ['/storage/temp/app/media-archive/../uploads/protected/abc/hidden.png'],
+        ];
+    }
+
+    /**
+     * A relative segment is refused whether or not it would have resolved back inside the
+     * matched source folder. The remainder is handed to a disk that is not necessarily a
+     * local one, and each filesystem adapter resolves relative segments its own way, so
+     * the path that reaches the disk is kept free of them entirely. This mirrors the media
+     * library's own path validation, which refuses the segment outright as well.
+     */
+    public function testRefusesARelativeSegmentThatWouldHaveStayedInsideTheSource()
+    {
+        $this->setUpStorage();
+        $this->copyMedia();
+
+        File::makeDirectory(storage_path('app/media/nested folder'), 0777, true, true);
+        File::copy(
+            base_path('modules/system/tests/fixtures/media/winter.png'),
+            storage_path('app/media/nested folder/winter.png')
+        );
+
+        // The local adapter resolves this one back inside the media folder, so only the
+        // containment check refuses it
+        $this->assertTrue(
+            Storage::disk('test_local')->exists('media/nested folder/../winter.png')
+        );
+
+        $this->expectException(SystemException::class);
+        ImageResizer::normalizeImage('/storage/temp/app/media/nested folder/../winter.png');
+    }
+
+    /**
+     * The containment check must not refuse the paths it is guarding.
+     */
+    public function testAcceptsPathsInsideTheMatchedSource()
+    {
+        $this->setUpStorage();
+        $this->copyMedia();
+
+        File::makeDirectory(storage_path('app/media/nested folder'), 0777, true, true);
+        File::copy(
+            base_path('modules/system/tests/fixtures/media/winter.png'),
+            storage_path('app/media/nested folder/winter.png')
+        );
+        File::copy(
+            base_path('modules/system/tests/fixtures/media/winter.png'),
+            storage_path('app/media/wîntér ünicode.png')
+        );
+
+        $expected = [
+            'winter.png' => 'media/winter.png',
+            // Media item names may contain spaces, dots and non-latin characters
+            'winter space.png' => 'media/winter space.png',
+            'wîntér ünicode.png' => 'media/wîntér ünicode.png',
+            // Media items may live in nested folders
+            'nested folder/winter.png' => 'media/nested folder/winter.png',
+            // A current directory segment cannot leave the source folder
+            './winter.png' => 'media/./winter.png',
+        ];
+
+        foreach ($expected as $mediaPath => $diskPath) {
+            $image = ImageResizer::normalizeImage(MediaLibrary::url($mediaPath));
+
+            $this->assertEquals('media', $image['source'], $mediaPath);
+            $this->assertEquals($diskPath, $image['path'], $mediaPath);
+        }
+
+        // Sources backed by the local file system resolve the same way
+        $image = ImageResizer::normalizeImage('/modules/system/tests/fixtures/media/winter.png');
+
+        $this->assertEquals('modules', $image['source']);
+        $this->assertEquals('modules/system/tests/fixtures/media/winter.png', $image['path']);
+    }
+
+    protected function copyOutOfRootImage()
+    {
+        $uploadPath = storage_path('app/uploads/protected/abc');
+
+        if (!is_dir($uploadPath)) {
+            mkdir($uploadPath, 0777, true);
+        }
+
+        copy(
+            base_path('modules/system/tests/fixtures/media/winter.png'),
+            $uploadPath . DIRECTORY_SEPARATOR . 'hidden.png'
+        );
+    }
+
     protected function setUpStorage()
     {
         $this->app->useStoragePath(base_path('storage/temp'));
@@ -472,11 +599,8 @@ class ImageResizerTest extends PluginTestCase
             return;
         }
 
-        foreach (glob(storage_path('app/media/*')) as $file) {
-            unlink($file);
-        }
-
-        rmdir(storage_path('app/media'));
+        File::deleteDirectory(storage_path('app/media'));
+        File::deleteDirectory(storage_path('app/uploads'));
         rmdir(storage_path('app'));
     }
 }
