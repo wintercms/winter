@@ -215,7 +215,13 @@
             $preview.data('id', response.id)
             $preview.data('path', response.path)
             $('.upload-remove-button', $preview).data('request-data', { file_id: response.id })
-            $img.attr('src', response.thumb)
+
+            if (response.icon) {
+                $img.replaceWith(response.icon)
+            }
+            else {
+                $img.attr('src', response.thumb)
+            }
         }
 
         this.triggerChange();

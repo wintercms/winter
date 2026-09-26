@@ -105,6 +105,11 @@ class FileUpload extends FormWidgetBase
     protected $configFormWidget;
 
     /**
+     * @var array Extensions of image files that browsers can display, other files are shown with a file icon.
+     */
+    protected $displayableImageExtensions = ['avif', 'bmp', 'gif', 'ico', 'jpeg', 'jpg', 'png', 'svg', 'webp'];
+
+    /**
      * @inheritDoc
      */
     public function init()
@@ -511,6 +516,7 @@ class FileUpload extends FormWidgetBase
             $result = [
                 'id' => $file->id,
                 'thumb' => $file->thumbUrl,
+                'icon' => $this->makeFileIcon($file),
                 'path' => $file->pathUrl
             ];
 
@@ -541,6 +547,23 @@ class FileUpload extends FormWidgetBase
         $file->thumbUrl = $thumb;
 
         return $file;
+    }
+
+    /**
+     * Renders a file extension icon for files that cannot be displayed as an image,
+     * returns null for image files.
+     */
+    protected function makeFileIcon($file): ?string
+    {
+        $extension = strtolower($file->getExtension());
+
+        if (in_array($extension, $this->displayableImageExtensions)) {
+            return null;
+        }
+
+        return $this->makePartial('~/modules/backend/partials/_file_icon.php', [
+            'extension' => $extension,
+        ]);
     }
 
     /**

@@ -1,3 +1,36 @@
+.file-icon{fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;display:inline-block}
+.file-icon-extension{font-family:'ArialMT','Arial',sans-serif;font-size:4em;font-weight:900;fill:#fff}
+.file-icon-label{fill:#576D7E;fill-rule:nonzero}
+.file-icon-css,
+.file-icon-less,
+.file-icon-scss{fill:#B73FD9}
+.file-icon-html,
+.file-icon-xml{fill:#EA9B47}
+.file-icon-js,
+.file-icon-json{fill:#A9A9A9}
+.file-icon-pdf{fill:#E30713}
+.file-icon-txt{fill:#248BD0}
+.file-icon-ai{fill:#F29200}
+.file-icon-eps{fill:#F9B234}
+.file-icon-psd{fill:#2DAAE2}
+.file-icon-ttf,
+.file-icon-otf,
+.file-icon-woff,
+.file-icon-woff2{fill:#C4CA10}
+.file-icon-doc,
+.file-icon-docx,
+.file-icon-rtf,
+.file-icon-odt{fill:#0F70B7}
+.file-icon-csv,
+.file-icon-ods,
+.file-icon-xls,
+.file-icon-xlsx{fill:#3BAA34}
+.file-icon-odp,
+.file-icon-ppt,
+.file-icon-pptx{fill:#D04526}
+.file-icon-rar,
+.file-icon-tar,
+.file-icon-zip{fill:#363A56}
 .field-fileupload .upload-object{-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;position:relative;outline:none;overflow:hidden;display:inline-block;vertical-align:top}
 .field-fileupload .upload-object img{width:100%;height:100%}
 .field-fileupload .upload-object .icon-container{display:table;opacity:0.6}
@@ -65,6 +98,7 @@
 .field-fileupload.style-image-multi .upload-object .progress-bar .upload-progress{float:left;width:0%;height:100%;line-height:5px;color:#fff;background-color:#5fb6f5;-webkit-box-shadow:none;box-shadow:none;-webkit-transition:width 0.6s ease;transition:width 0.6s ease}
 .field-fileupload.style-image-multi .upload-object .icon-container{border-right:1px solid #f6f8f9;float:left;overflow:hidden;width:75px;height:75px;display:flex;align-items:center;justify-content:center}
 .field-fileupload.style-image-multi .upload-object .icon-container i{font-size:35px}
+.field-fileupload.style-image-multi .upload-object .icon-container .file-icon{width:44px;height:44px}
 .field-fileupload.style-image-multi .upload-object .icon-container.image img{border-bottom-left-radius:3px;border-top-left-radius:3px;width:auto;height:auto;max-height:100%}
 .field-fileupload.style-image-multi .upload-object .info{margin-left:90px}
 .field-fileupload.style-image-multi .upload-object .info h4{padding-right:15px}
@@ -97,6 +131,7 @@
 .field-fileupload.style-image-single .upload-object{padding-bottom:66px}
 .field-fileupload.style-image-single .upload-object .icon-container{border:1px solid #f6f8f9;background:rgba(255,255,255,0.5)}
 .field-fileupload.style-image-single .upload-object .icon-container.image img{-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;display:block;max-width:100%;height:auto;min-height:100px;min-width:100px}
+.field-fileupload.style-image-single .upload-object .icon-container .file-icon{display:block;width:100px;height:100px}
 .field-fileupload.style-image-single .upload-object .progress-bar{display:block;width:100%;overflow:hidden;height:5px;background-color:#f5f5f5;border-radius:3px;-webkit-box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);box-shadow:inset 0 1px 2px rgba(0,0,0,0.1);position:absolute;bottom:10px;left:0}
 .field-fileupload.style-image-single .upload-object .progress-bar .upload-progress{float:left;width:0%;height:100%;line-height:5px;color:#fff;background-color:#5fb6f5;-webkit-box-shadow:none;box-shadow:none;-webkit-transition:width 0.6s ease;transition:width 0.6s ease}
 .field-fileupload.style-image-single .upload-object .info{position:absolute;left:0;right:0;bottom:0;height:66px}
