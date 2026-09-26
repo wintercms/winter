@@ -10,6 +10,7 @@ use Route;
 use Config;
 use Request;
 use Response;
+use Str;
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\AssetCache;
 use Assetic\Asset\AssetCollection;
@@ -158,7 +159,14 @@ class CombineAssets
         $cssImportFilter = new CssImportFilter;
         // Assetic's CssImportFilter resolves `@import` targets relative to the source
         // with `..` traversal allowed; confine the resolved path to the allowed roots.
+        // Targets it would load as a URL instead (anything with a scheme, or a
+        // protocol-relative `//`) are not paths the root check can judge, so they are
+        // refused and left in the output for the browser to resolve.
         $cssImportFilter->setImportValidator(function ($path) use ($allowedImportRoots) {
+            if (Str::contains($path, '://') || Str::startsWith($path, '//')) {
+                return false;
+            }
+
             $resolved = PathResolver::resolve($path);
 
             return $resolved !== false

@@ -54,8 +54,8 @@ class ColorPicker extends FormWidgetBase
 
     /**
      * @var string|array Color format(s) to allow for the resulting color value. Specify "all" as a string to allow all
-     * formats.
-     * Allowed values: 'cmyk', 'hex', 'hsl', 'rgb', 'all'
+     * formats, or "custom" to accept the value as-is without format validation.
+     * Allowed values: 'cmyk', 'hex', 'hsl', 'rgb', 'all', 'custom'
      */
     public $formats = 'hex';
 
@@ -258,29 +258,21 @@ class ColorPicker extends FormWidgetBase
             return null;
         }
 
-        switch (is_array($this->formats) ? 'all' : $this->formats) {
-            case 'cmyk':
-            case 'hex':
-            case 'hsl':
-            case 'rgb':
-                if (!preg_match($this->validationPatterns[$this->formats], $value)) {
-                    throw new ApplicationException(Lang::get('backend::lang.field.colors_invalid_input'));
-                }
-                break;
-            case 'all':
-                $valid = false;
-                foreach ($this->validationPatterns as $pattern) {
-                    if (preg_match($pattern, $value)) {
-                        $valid = true;
-                        break;
-                    }
-                }
-                if (!$valid) {
-                    throw new ApplicationException(Lang::get('backend::lang.field.colors_invalid_input'));
-                }
-                break;
+        // "custom" is the explicit opt-out of format validation, for fields that
+        // store something the built-in patterns cannot express.
+        if ($this->formats === 'custom') {
+            return $value;
         }
 
-        return $value;
+        // Validate against the same normalised format list the field renders with, so a
+        // `formats` value that names no known format falls back to "hex" rather than
+        // accepting anything.
+        foreach ($this->getFormats() as $format) {
+            if (preg_match($this->validationPatterns[$format], $value)) {
+                return $value;
+            }
+        }
+
+        throw new ApplicationException(Lang::get('backend::lang.field.colors_invalid_input'));
     }
 }
