@@ -1118,7 +1118,7 @@ body.breadcrumb-fancy .control-breadcrumb .form-record-nav .form-record-nav-btn.
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[data-control="delete-button"][title]:not([title=""]):after,
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[data-control="delete-button"][title]:not([title=""]):after{content:attr(title);margin-left:6px}
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[data-control="delete-button"]:hover,
-.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[data-control="delete-button"]:hover{background-color:#bc4436;color:#fff;opacity:1}
+.fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[data-control="delete-button"]:hover{background-color:var(--wn-fancylayout-bg-hover,#bc4436);color:var(--wn-text-inverse,#fff);opacity:1}
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class^="wn-icon-"]:before,
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.form-tabless-fields .form-buttons:not(.normalized) .btn[class^="wn-icon-"]:before,
 .fancy-layout *:not(.nested-form):not(.modal-body)>.form-widget>.layout-row>.control-tabs .form-buttons:not(.normalized) .btn[class*=" wn-icon-"]:before,
