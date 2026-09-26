@@ -104,12 +104,6 @@ div.control-componentlist div.components div.layout-cell {
     }
 }
 
-// Reduce the double standard padding, since the tabs have padding
-// at the top and the components field has padding at the bottom.
-[data-field-name="components"] + .control-tabs.primary-tabs {
-    margin-top: -(@padding-standard / 2);
-}
-
 div.control-componentlist {
     position: relative;
     padding: 0;
@@ -119,8 +113,11 @@ div.control-componentlist {
         background-color: lighten(@color-component-list-bg, 20%);
     }
 
+    // Only half the standard padding at the bottom: the tabs that follow already
+    // have padding at the top. Trimmed here rather than by pulling the tabs up, which
+    // with no components would drag them over the bottom of the header toolbar.
     &.has-components {
-        padding: 0 @padding-standard @padding-standard;
+        padding: 0 @padding-standard (@padding-standard / 2);
     }
 
     div.layout {

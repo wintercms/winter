@@ -520,19 +520,22 @@ body.fancy-layout .master-tabs.control-tabs,
         background-color: rgba(29, 29, 29, 0.11) !important;
     }
 
+    // A faint fill at rest so these read as fields before they are focused, not
+    // as loose heading text on the brand strip; hover and focus deepen it.
     input[type=text] {
-        background: transparent;
+        background: rgba(255, 255, 255, 0.1);
         border: none;
+        border-radius: 6px;
         color: @color-fancy-form-text;
         font-size: 35px;
         font-weight: 100;
         height: auto;
-        padding: 0;
+        padding: 0 10px;
         .placeholder(@color-fancy-form-placeholder);
         .box-shadow(none);
 
         &:focus, &:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.2);
         }
     }
 
@@ -698,43 +701,42 @@ body.breadcrumb-fancy .control-breadcrumb,
 
 .fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs .form-buttons:not(.normalized),
 .fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .form-tabless-fields  .form-buttons:not(.normalized) {
+    // Flex so the text buttons, the "or Cancel" text and the padded delete button
+    // share one centre line instead of each being nudged into place with margins.
+    display: flex;
+    align-items: center;
     .transition(all 0.5s);
-    padding-top: 14px;
-    padding-bottom: 5px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 
     .btn {
-        padding: 0;
-        margin-right: 5px;
-        margin-top: -6px;
-        margin-right: 30px;
+        padding: 5px 15px;
+        margin: 0 8px 0 0;
+        border: 1px solid transparent;
+        border-radius: 6px;
         background: transparent;
         color: @color-fancy-master-tabs-active-text;
         font-weight: normal;
+        line-height: 20px;
         .box-shadow(none);
-
-        .opacity(0.5);
         .transition(all 0.3s ease);
 
-        &:hover {
-            .opacity(1);
-        }
-
-        // These buttons are transparent, text-only and have their box-shadow
-        // removed, so nothing indicated keyboard focus at all. Restore both the
-        // full opacity a hover gets and a ring that reads on the tab strip.
-        // .btn carries a global `outline: none !important`, so an outline here can
-        // never win no matter how specific. Draw the ring with box-shadow instead,
-        // which that rule does not touch.
+        // These buttons are transparent with their box-shadow removed, so nothing
+        // indicated keyboard focus at all. .btn carries a global `outline: none
+        // !important`, so an outline here can never win no matter how specific.
+        // Draw the ring with box-shadow instead, which that rule does not touch.
         &:focus-visible {
-            .opacity(1);
             // Dark ring, not white: these sit on the brand strip, where white only
             // reaches 2.8:1 -- under the 3:1 WCAG 1.4.11 wants for a focus indicator.
             box-shadow: 0 0 0 2px @color-fancy-btn-focus;
-            border-radius: 2px;
         }
 
         &:last-child {
             margin-right: 0;
+        }
+
+        &:hover {
+            border-color: @color-fancy-master-tabs-active-text;
         }
 
         // Delete: a destructive action kept inline with the save/cancel group so it
@@ -742,18 +744,18 @@ body.breadcrumb-fancy .control-breadcrumb,
         // renders it icon-only; surface its title as a visible "Delete" label so it's
         // easy to find. The confirmation dialog guards against accidental clicks.
         &[data-control="delete-button"] {
-            float: right;
-            // The other fancy buttons are text-only with margin-top:-6px; this padded
-            // button is taller, so pull it up to keep its centre aligned with theirs.
-            margin: -9px 0 0 0;
+            // Pushed to the far end of the flex row. `order` moves it after anything
+            // that follows it in the markup (e.g. the last-modified icon, whose tooltip
+            // opens to the right and would run off-screen at the row's end).
+            order: 1;
+            margin-left: auto;
+            margin-right: 0;
             padding: 5px 11px;
-            border-radius: 4px;
             // Solid deep brick, clearly darker than the teal toolbar so the pill
             // separates by value first (a brighter or semi-transparent red sits at
             // the teal's lightness and either vibrates or muddies to grey).
             background-color: var(--wn-fancylayout-bg, #a5382c);
             color: var(--wn-text-inverse, #fff);
-            opacity: 1;
             line-height: 1;
 
             &:before {
@@ -770,8 +772,8 @@ body.breadcrumb-fancy .control-breadcrumb,
 
             &:hover {
                 background-color: var(--wn-fancylayout-bg-hover, #bc4436);
+                border-color: transparent;
                 color: var(--wn-text-inverse, #fff);
-                opacity: 1;
             }
         }
 
@@ -784,10 +786,28 @@ body.breadcrumb-fancy .control-breadcrumb,
             }
         }
     }
-}
 
-.fancy-layout form[class$="-data-changed"] *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs .btn.save {
-    .opacity(1);
+    // A status icon (e.g. last modified) rather than an action, so no button box.
+    span.btn {
+        padding: 0;
+
+        &:hover {
+            border-color: transparent;
+        }
+    }
+
+    .btn-text {
+        padding: 0;
+        color: @color-fancy-master-tabs-active-text;
+
+        a {
+            color: @color-fancy-master-tabs-active-text;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
 }
 
 //

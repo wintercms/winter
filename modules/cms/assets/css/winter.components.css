@@ -40,10 +40,9 @@ div.control-componentlist div.components div.layout-cell.placeholder>div:before,
 .draggable-component-item.placeholder>div:after,
 .component-list .components div.layout-cell.placeholder>div:after,
 div.control-componentlist div.components div.layout-cell.placeholder>div:after{color:var(--wn-text-faint,#e0e0e0) !important;text-shadow:none !important}
-[data-field-name="components"] + .control-tabs.primary-tabs{margin-top:-10px}
 div.control-componentlist{position:relative;padding:0;-webkit-transition:all 0.3s ease;transition:all 0.3s ease}
 div.control-componentlist.droppable{background-color:#79cbe1}
-div.control-componentlist.has-components{padding:0 20px 20px}
+div.control-componentlist.has-components{padding:0 20px 10px}
 div.control-componentlist div.layout{width:auto}
 div.control-componentlist div.components div.layout-cell.error-component{background:#e01346}
 div.control-componentlist div.components div.layout-cell.error-component>div{color:var(--wn-text-inverse,#fff)}
