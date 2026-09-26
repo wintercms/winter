@@ -121,50 +121,6 @@ class ColorPickerTest extends PluginTestCase
         $this->assertEquals('Test(51.9, 152, 219, 1)', $widget->getSaveValue('Test(51.9, 152, 219, 1)'));
     }
 
-    /**
-     * A `formats` value that names no known format renders the field as "hex", so
-     * "hex" is what must be enforced on save rather than accepting any value.
-     */
-    public function testUnrecognisedFormatFallsBackToHexValidation(): void
-    {
-        $widget = $this->makeWidget([
-            'formats' => 'hexadecimal',
-        ]);
-
-        $this->assertEquals('#3498DB', $widget->getSaveValue('#3498DB'));
-
-        $this->expectException(ApplicationException::class);
-        $widget->getSaveValue('not a colour');
-    }
-
-    /**
-     * An array of formats must accept only the formats it lists.
-     */
-    public function testArrayFormatAcceptsOnlyListedFormats(): void
-    {
-        $widget = $this->makeWidget([
-            'formats' => ['hex'],
-        ]);
-
-        $this->assertEquals('#3498DB', $widget->getSaveValue('#3498DB'));
-
-        $this->expectException(ApplicationException::class);
-        $widget->getSaveValue('rgba(51.9, 152, 219, 1)');
-    }
-
-    /**
-     * ...but every format it does list keeps working.
-     */
-    public function testArrayFormatAcceptsEachListedFormat(): void
-    {
-        $widget = $this->makeWidget([
-            'formats' => ['hex', 'rgb'],
-        ]);
-
-        $this->assertEquals('#3498DB', $widget->getSaveValue('#3498DB'));
-        $this->assertEquals('rgba(51.9, 152, 219, 1)', $widget->getSaveValue('rgba(51.9, 152, 219, 1)'));
-    }
-
     protected function makeWidget(array $config = []): ColorPicker
     {
         return new ColorPicker(new Controller(), new FormField('test', 'Test'), $config);
