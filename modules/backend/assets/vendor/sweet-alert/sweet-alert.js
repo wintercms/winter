@@ -268,21 +268,25 @@
     // Mouse interactions
     var onButtonEvent = function(e) {
 
+      // Ignore presses while the modal is closing, so the callback is never skipped
+      if (!hasClass(modal, 'visible')) {
+        return;
+      }
+
       var target = e.target || e.srcElement,
           targetedConfirm    = (target.className.indexOf('confirm') > -1),
-          modalIsVisible     = hasClass(modal, 'visible'),
           doneFunctionExists = (params.doneFunction && modal.getAttribute('data-has-done-function') === 'true');
 
       switch (e.type) {
         case ("click"):
-          if (targetedConfirm && doneFunctionExists && modalIsVisible) { // Clicked "confirm"
+          if (targetedConfirm && doneFunctionExists) { // Clicked "confirm"
 
             params.doneFunction(true);
 
             if (params.closeOnConfirm) {
               closeModal();
             }
-          } else if (doneFunctionExists && modalIsVisible) { // Clicked "cancel"
+          } else if (doneFunctionExists) { // Clicked "cancel"
 
             // Check if callback function expects a parameter (to track cancel actions)
             var functionAsStr          = String(params.doneFunction).replace(/\s/g, '');
@@ -661,14 +665,11 @@
     show(modal);
     addClass(modal, 'showSweetAlert');
     removeClass(modal, 'hideSweetAlert');
+    addClass(modal, 'visible');
 
     previousActiveElement = document.activeElement;
     var $okButton = modal.querySelector('button.confirm');
     $okButton.focus();
-
-    setTimeout(function() {
-      addClass(modal, 'visible');
-    }, 500);
 
     var timer = modal.getAttribute('data-timer');
     if (timer !== "null" && timer !== "") {
