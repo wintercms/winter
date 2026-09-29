@@ -93,13 +93,27 @@ class CreateMigration extends BaseScaffoldCommand
 
         // Identify the version to insert these changes into
         $versions = $plugin->getPluginVersions();
+        $normalizedVersion = VersionManager::normalizeVersionKey($this->vars['version']);
 
-        // Deduce the convention from the most recent version, since a file may mix prefixed
-        // and unprefixed keys. With no versions to inspect (missing or empty file) there is no
-        // convention to follow, so default to the documented one: unprefixed keys, with the 'v'
-        // retained only in the migration directory name.
-        $usesV = $versions && Str::startsWith((string) array_key_last($versions), 'v');
-        $version = $usesV ? $this->vars['version'] : Str::after($this->vars['version'], 'v');
+        // Reuse an existing key for the requested version when there is one. VersionManager
+        // normalizes keys, so adding a second, differently prefixed key for a version that
+        // already exists would collide there and silently drop one of the two.
+        $version = null;
+        foreach (array_keys($versions) as $key) {
+            if (VersionManager::normalizeVersionKey((string) $key) === $normalizedVersion) {
+                $version = $key;
+                break;
+            }
+        }
+
+        if ($version === null) {
+            // A new version. Deduce the convention from the most recent version, since a file
+            // may mix prefixed and unprefixed keys. With no versions to inspect (missing or
+            // empty file) there is no convention to follow, so default to the documented one:
+            // unprefixed keys, with the 'v' retained only in the migration directory name.
+            $usesV = $versions && Str::startsWith((string) array_key_last($versions), 'v');
+            $version = $usesV ? $this->vars['version'] : Str::after($this->vars['version'], 'v');
+        }
 
         // Insert these changes into the identified version
         $changes = array_merge($versions[$version] ?? [], $changes);
