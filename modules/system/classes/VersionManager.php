@@ -398,10 +398,26 @@ class VersionManager
 
     /**
      * Normalize a version identifier by removing the optional 'v' prefix
+     *
+     * Version keys are not guaranteed to be strings: a version.yaml parsed by the YAML processor
+     * can yield integer or float keys (eg. `1:` and `10.3`). The parameter type hint coerces
+     * those, as this file does not declare strict_types.
+     *
+     * This is the single implementation of the rule. The static counterpart exists so that
+     * callers such as PluginBase can normalize without resolving the singleton, whose
+     * initialization depends on PluginManager and would recurse back into plugin loading.
+     */
+    public static function normalizeVersionKey(string $version): string
+    {
+        return ltrim($version, 'v');
+    }
+
+    /**
+     * Normalize a version identifier by removing the optional 'v' prefix
      */
     protected function normalizeVersion(string $version): string
     {
-        return ltrim($version, 'v');
+        return self::normalizeVersionKey($version);
     }
 
     /**

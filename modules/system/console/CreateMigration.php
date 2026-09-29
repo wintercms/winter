@@ -93,8 +93,12 @@ class CreateMigration extends BaseScaffoldCommand
 
         // Identify the version to insert these changes into
         $versions = $plugin->getPluginVersions();
-        $firstVersion = array_keys($versions)[0];
-        $usesV = Str::startsWith($firstVersion, 'v');
+
+        // Deduce the convention from the most recent version, since a file may mix prefixed
+        // and unprefixed keys. With no versions to inspect (missing or empty file) there is no
+        // convention to follow, so default to the documented one: unprefixed keys, with the 'v'
+        // retained only in the migration directory name.
+        $usesV = $versions && Str::startsWith((string) array_key_last($versions), 'v');
         $version = $usesV ? $this->vars['version'] : Str::after($this->vars['version'], 'v');
 
         // Insert these changes into the identified version
