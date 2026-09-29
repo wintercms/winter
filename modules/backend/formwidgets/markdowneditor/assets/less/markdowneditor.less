@@ -1,10 +1,10 @@
 @import "../../../../assets/less/core/boot.less";
 
-@color-markdowneditor-toolbar:                   #dddddd;
-@color-markdowneditor-toolbar-btn-color:         #404040;
-@color-markdowneditor-toolbar-btn-bg-hover:      #999999;
-@color-markdowneditor-toolbar-btn-bg-active:     #404040;
-@color-markdowneditor-toolbar-btn-color-hover:   #ffffff;
+@color-markdowneditor-toolbar:                   var(--wn-text-faint, #dddddd);
+@color-markdowneditor-toolbar-btn-color:         var(--wn-text-link, #404040);
+@color-markdowneditor-toolbar-btn-bg-hover:      var(--wn-surface-mid, #999999);
+@color-markdowneditor-toolbar-btn-bg-active:     var(--wn-surface-selected, #404040);
+@color-markdowneditor-toolbar-btn-color-hover:   var(--wn-text-inverse, #ffffff);
 
 @markdowneditor-toolbar-height: 40px;
 
@@ -12,7 +12,7 @@
     width: 100%;
     position: relative;
     border: 1px solid @color-form-field-border;
-    background: #fff;
+    background: var(--wn-surface-raised, #fff);
 
     textarea { .opacity(0); }
     .transition(@input-transition);
@@ -110,7 +110,7 @@
             width: 50%;
 
             .editor-code {
-                border-right: 2px solid #808C8D;
+                border-right: 2px solid var(--wn-border-strong, #808C8D);
             }
         }
     }
@@ -181,15 +181,15 @@
             .toolbar-item {
                 .btn {
                     cursor: not-allowed;
-                    color: #bdbdbd;
+                    color: var(--wn-text-muted, #bdbdbd);
                     &:hover {
                         background-color: transparent;
-                        color: #bdbdbd;
+                        color: var(--wn-text-muted, #bdbdbd);
                     }
                 }
                 .btn.wn-autumn-button,
                 .btn.oc-autumn-button {
-                    color: #bdbdbd!important;
+                    color: var(--wn-text-muted, #bdbdbd)!important;
                 }
             }
         }
@@ -200,7 +200,7 @@
 // Default theme
 
 .field-markdowneditor .editor-preview {
-    color: #515c5d;
+    color: var(--wn-text, #515c5d);
     font-family: "Helvetica", sans-serif;
     line-height: 180%;
 

@@ -14,6 +14,10 @@
         </th>
     <?php endif ?>
 
+    <?php if (!empty($sortable)): ?>
+        <th class="list-sort-handle-column"><span></span></th>
+    <?php endif ?>
+
     <?php foreach ($columns as $key => $column): ?>
         <?php if ($showSorting && $column->sortable): ?>
             <th

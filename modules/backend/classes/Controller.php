@@ -369,10 +369,28 @@ class Controller extends ControllerBase
 
         if ($ownMethod) {
             $methodInfo = new \ReflectionMethod($this, $name);
+
+            /*
+             * Only allow lowercase actions. Compare the resolved method name rather than the
+             * requested one - PHP method names are case-insensitive, so a lowercased URL
+             * segment would otherwise pass this check and still resolve to the mixed-case
+             * method (eg. "index_onemptylog" reaching index_onEmptyLog()).
+             */
+            if (strtolower($methodInfo->getName()) !== $methodInfo->getName()) {
+                return false;
+            }
+
             $public = $methodInfo->isPublic();
             if ($public) {
                 return true;
             }
+        }
+        /*
+         * Extension methods are resolved through a case-sensitive lookup, so the requested
+         * name is already the canonical one.
+         */
+        elseif (strtolower($name) !== $name) {
+            return false;
         }
 
         if ($internal && (($ownMethod && $methodInfo->isProtected()) || !$ownMethod)) {

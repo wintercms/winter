@@ -287,7 +287,7 @@
                         top: 50%;
                         transform: translateY(-50%);
                         font-size: 22px;
-                        color: #b7c0c2;
+                        color: var(--wn-icon, #b7c0c2);
                     }
 
                     &:hover {
@@ -371,7 +371,7 @@
 
                 &.separator {
                     position: relative;
-                    border-bottom: 1px solid #95a5a6;
+                    border-bottom: 1px solid var(--wn-border-strong, #95a5a6);
                     padding: 12px 15px 13px 15px;
 
                     &:before {
@@ -384,14 +384,14 @@
 
                     &:after {
                         z-index: 30;
-                        .triangle(down, 17px, 9px, #95a5a6);
+                        .triangle(down, 17px, 9px, var(--wn-filelist-misc, #95a5a6));
                         position: absolute;
                         left: 14px;
                         bottom: -9px;
                     }
 
                     h5 {
-                        color: #2b3e50;
+                        color: var(--wn-text-heading, #2b3e50);
                         font-size: @font-size-base;
                         margin: 0;
                         font-weight: normal;

@@ -8,6 +8,7 @@ use Cms\Classes\Theme;
 use Config;
 use DMS\PHPUnitExtensions\ArraySubset\ArraySubsetAsserts;
 use Event;
+use Storage;
 use System\Classes\ImageResizer;
 use System\Classes\MediaLibrary;
 use System\Models\File as FileModel;
@@ -390,6 +391,49 @@ class ImageResizerTest extends PluginTestCase
         Config::set('cms.linkPolicy', 'detect');
         $url = $imageResizer->getResizerUrl();
         $this->assertTrue(starts_with($url, '/resizer/'));
+
+        // test dots' double-encoding
+        // @see https://github.com/wintercms/winter/pull/1493
+        $this->assertTrue(ends_with($url, '%252Epng'));
+
+        // Verify the encoded URL round-trips through the resizer route's decoding and
+        // signature verification. A fresh instance is required as the identifier is
+        // cached on first generation and the link policy has changed since then. The
+        // router decodes the parameter once before it reaches getValidResizedUrl().
+        $imageResizer = new ImageResizer((new CmsController())->themeUrl('assets/images/winter.png'));
+        [$identifier, $encodedUrl] = array_slice(explode('/', $imageResizer->getResizerUrl()), 2);
+        $this->assertSame(
+            $imageResizer->getResizedUrl(),
+            ImageResizer::getValidResizedUrl($identifier, rawurldecode($encodedUrl))
+        );
+    }
+
+    public function testResizerRedirect()
+    {
+        if (!in_array('Cms', Config::get('cms.loadModules', []))) {
+            $this->markTestSkipped('The CMS module is not active.');
+        }
+
+        $this->setUpStorage();
+        $this->copyMedia();
+        Config::set('cms.storage.resized', [
+            'disk'   => 'test_local',
+            'folder' => 'resized',
+            'path'   => '/storage/temp/app/resized',
+        ]);
+
+        $imageResizer = new ImageResizer((new CmsController())->themeUrl('assets/images/winter.png'), 50, 50);
+
+        // The resizer route responds with a permanent redirect as a resizer URL can
+        // only ever target the resized URL embedded and signed within it, and this
+        // also exercises the full round-trip of the double-encoded URL parameter
+        // through the actual router
+        $response = $this->get($imageResizer->getResizerUrl());
+        $response->assertStatus(301);
+        $response->assertRedirect($imageResizer->getResizedUrl());
+
+        // Clean up the generated image
+        Storage::disk('test_local')->deleteDirectory('resized');
     }
 
     protected function setUpStorage()

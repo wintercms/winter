@@ -1,6 +1,7 @@
 <?php namespace System\Classes;
 
 use System\Twig\Extension as SystemTwigExtension;
+use System\Twig\GetAttrAdjuster;
 use System\Twig\Loader as SystemTwigLoader;
 use System\Twig\SecurityPolicy as TwigSecurityPolicy;
 use Twig\Environment as TwigEnvironment;
@@ -65,6 +66,7 @@ class MarkupManager
         $twig = new TwigEnvironment($loader, $options);
         $twig->addExtension(new SystemTwigExtension);
         $twig->addExtension(new SandboxExtension(new TwigSecurityPolicy, true));
+        $twig->addNodeVisitor(new GetAttrAdjuster);
         return $twig;
     }
 

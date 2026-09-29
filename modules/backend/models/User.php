@@ -79,6 +79,32 @@ class User extends UserBase
     public static $loginAttribute = 'login';
 
     /**
+     * @var array<string> Relations on this model that require `backend.manage_users`
+     * to change on another user's record. Deliberately limited to the relations this
+     * model owns: authorization semantics for plugin-added relations belong to the
+     * plugin, which can append to this list or bind its own guard to the
+     * `model.relation.*` events.
+     */
+    public array $permissionGuardedRelations = ['groups', 'avatar', 'throttle'];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        // Guard relation writes at the point they actually happen: direct
+        // attach()/detach(), deferred binding commits and queued relation
+        // syncs all funnel through these relation events.
+        $guard = function (string $relationName) {
+            $this->authorizeRelationChange($relationName);
+        };
+
+        $this->bindEvent('model.relation.beforeAttach', $guard);
+        $this->bindEvent('model.relation.beforeDetach', $guard);
+        $this->bindEvent('model.relation.beforeAdd', $guard);
+        $this->bindEvent('model.relation.beforeRemove', $guard);
+    }
+
+    /**
      * @return string Returns the user's full name.
      */
     public function getFullNameAttribute()
@@ -156,9 +182,33 @@ class User extends UserBase
     }
 
     /**
-     * Before save event — enforce authorization rules to prevent privilege escalation.
+     * Before create event — enforce authorization rules to prevent privilege escalation.
      */
-    public function beforeSave()
+    public function beforeCreate()
+    {
+        $this->authorizeChange();
+    }
+
+    /**
+     * Before update event — enforce authorization rules to prevent privilege escalation.
+     *
+     * Bound to update rather than save so that a save with nothing to write (e.g. a
+     * pivot form submission re-saving an untouched related record) requires no
+     * permission: the update event only fires when attributes have actually changed,
+     * after purgeable attributes have been stripped. Relation writes (group
+     * membership, avatar) are guarded separately by authorizeRelationChange().
+     */
+    public function beforeUpdate()
+    {
+        $this->authorizeChange();
+    }
+
+    /**
+     * Enforce authorization rules for a change to this record's attributes.
+     *
+     * @throws AuthorizationException if the current user lacks permission
+     */
+    protected function authorizeChange(): void
     {
         $actor = BackendAuth::getUser();
         if (!$actor) {
@@ -170,6 +220,35 @@ class User extends UserBase
         if ($isCurrentUser && $this->isDirty(['role_id', 'is_superuser', 'permissions'])) {
             throw new AuthorizationException(Lang::get('backend::lang.user.self_escalation_denied'));
         }
+
+        if (!$isCurrentUser && !$this->canBeManagedByUser($actor)) {
+            throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
+        }
+    }
+
+    /**
+     * Enforce authorization rules for a change to one of this record's relations.
+     *
+     * Only the relations listed in $permissionGuardedRelations are guarded, so
+     * plugin-added relations (e.g. records that reference a user) behave normally.
+     *
+     * Changes to your own record's guarded relations are allowed: groups do not
+     * carry permissions out of the box, so they are not an escalation vector.
+     *
+     * @throws AuthorizationException if the current user lacks permission
+     */
+    protected function authorizeRelationChange(string $relationName): void
+    {
+        if (!in_array($relationName, $this->permissionGuardedRelations)) {
+            return;
+        }
+
+        $actor = BackendAuth::getUser();
+        if (!$actor) {
+            return;
+        }
+
+        $isCurrentUser = $this->exists && $actor->getKey() === $this->getKey();
 
         if (!$isCurrentUser && !$this->canBeManagedByUser($actor)) {
             throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));

@@ -15,7 +15,7 @@
     padding: 1px;
     text-align: left;
     white-space: normal;
-    background-color: #fff;
+    background-color: var(--wn-surface-raised, #fff);
     background-clip: padding-box;
 
     &.top {
@@ -37,8 +37,8 @@
         font-size: 14px;
         font-weight: normal;
         line-height: 18px;
-        background-color: #f7f7f7;
-        border-bottom: 1px solid #ebebeb;
+        background-color: var(--wn-surface-canvas, #f7f7f7);
+        border-bottom: 1px solid var(--wn-border-subtle, #ebebeb);
         border-radius: 5px 5px 0 0;
     }
     .popover-content {
@@ -80,7 +80,7 @@
         bottom: -11px;
         left: 50%;
         margin-left: -11px;
-        border-top-color: #999;
+        border-top-color: var(--wn-border-strong, #999);
         border-top-color: rgba(0, 0, 0, .25);
         border-bottom-width: 0;
     }
@@ -88,14 +88,14 @@
         bottom: 1px;
         margin-left: -10px;
         content: " ";
-        border-top-color: #fff;
+        border-top-color: var(--wn-border-inverse, #fff);
         border-bottom-width: 0;
     }
     &.right > .arrow {
         top: 50%;
         left: -11px;
         margin-top: -11px;
-        border-right-color: #999;
+        border-right-color: var(--wn-border-strong, #999);
         border-right-color: rgba(0, 0, 0, .25);
         border-left-width: 0;
     }
@@ -103,7 +103,7 @@
         bottom: -10px;
         left: 1px;
         content: " ";
-        border-right-color: #fff;
+        border-right-color: var(--wn-border-inverse, #fff);
         border-left-width: 0;
     }
     &.bottom > .arrow {
@@ -111,7 +111,7 @@
         left: 50%;
         margin-left: -11px;
         border-top-width: 0;
-        border-bottom-color: #999;
+        border-bottom-color: var(--wn-border-strong, #999);
         border-bottom-color: rgba(0, 0, 0, .25);
     }
     &.bottom > .arrow:after {
@@ -119,14 +119,14 @@
         margin-left: -10px;
         content: " ";
         border-top-width: 0;
-        border-bottom-color: #fff;
+        border-bottom-color: var(--wn-border-inverse, #fff);
     }
     &.left > .arrow {
         top: 50%;
         right: -11px;
         margin-top: -11px;
         border-right-width: 0;
-        border-left-color: #999;
+        border-left-color: var(--wn-border-strong, #999);
         border-left-color: rgba(0, 0, 0, .25);
     }
     &.left > .arrow:after {
@@ -134,7 +134,7 @@
         bottom: -10px;
         content: " ";
         border-right-width: 0;
-        border-left-color: #fff;
+        border-left-color: var(--wn-border-inverse, #fff);
     }
     */
 }
@@ -166,8 +166,8 @@
 
 .clockpicker-popover {
     .popover-title {
-        background-color: #fff;
-        color: #999;
+        background-color: var(--wn-surface-raised, #fff);
+        color: var(--wn-text-secondary, #999);
         font-size: 24px;
         font-weight: bold;
         line-height: 30px;
@@ -177,7 +177,7 @@
         }
     }
     .popover-content {
-        background-color: #f8f8f8;
+        background-color: var(--wn-surface-canvas, #f8f8f8);
         padding: 12px;
         &:last-child {
             border-bottom-left-radius: 5px;
@@ -187,8 +187,8 @@
 }
 
 .clockpicker-plate {
-    background-color: #fff;
-    border: 1px solid #ccc;
+    background-color: var(--wn-surface-raised, #fff);
+    border: 1px solid var(--wn-border, #ccc);
     border-radius: 50%;
     width: 200px;
     height: 200px;
@@ -217,7 +217,7 @@
 
 .clockpicker-tick {
     border-radius: 50%;
-    color: #666;
+    color: var(--wn-text, #666);
     line-height: 26px;
     text-align: center;
     width: 26px;

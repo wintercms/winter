@@ -8,8 +8,8 @@
 
     .theme-thumbnail {
         width: 288px;
-        background: #ecf0f1;
-        border-top: 1px solid #e3e7e9;
+        background: var(--wn-surface-hover, #ecf0f1);
+        border-top: 1px solid var(--wn-border-subtle, #e3e7e9);
 
         img {
             .opacity(0.6);
@@ -18,7 +18,7 @@
     }
 
     .theme-description {
-        border-top: 1px solid #f2f3f4;
+        border-top: 1px solid var(--wn-border-subtle, #f2f3f4);
 
         h3, p {
             .opacity(0.6);
@@ -27,18 +27,18 @@
         h3 {
             margin: 0 0 25px 0;
             font-size: 28px;
-            color: #2b3e50;
+            color: var(--wn-text-heading, #2b3e50);
             display: inline-block;
         }
 
         p.author {
             font-size: 13px;
             display: inline-block;
-            color: #808c8d;
+            color: var(--wn-text-secondary, #808c8d);
         }
 
         p.description {
-            color: #2b3e50;
+            color: var(--wn-text-heading, #2b3e50);
             font-size: 14px;
             line-height: 180%;
             margin-bottom: 30px;
@@ -52,7 +52,7 @@
                 top: 1px;
 
                 &.icon-star {
-                    color: #f1a84e;
+                    color: var(--wn-theme-selector-text, #f1a84e);
                 }
             }
 
@@ -64,15 +64,15 @@
 
     .layout-row.active {
         .theme-thumbnail {
-            background: #bdc3c7;
-            border-top-color: #bdc3c7;
+            background: var(--wn-surface-overlay, #bdc3c7);
+            border-top-color: var(--wn-border-input, #bdc3c7);
        }
 
        .thumbnail-container {
             position: relative;
 
             &:after {
-                .triangle(right, 15px, 28px, #bdc3c7);
+                .triangle(right, 15px, 28px, var(--wn-theme-selector-misc, #bdc3c7));
                 position: absolute;
                 right: -35px;
                 top: 50%;
@@ -104,10 +104,10 @@
 
         &.links {
             .theme-thumbnail {
-                border-bottom: 1px solid #e3e7e9;
+                border-bottom: 1px solid var(--wn-border-subtle, #e3e7e9);
             }
             .theme-description {
-                border-bottom: 1px solid #f2f3f4;
+                border-bottom: 1px solid var(--wn-border-subtle, #f2f3f4);
             }
         }
     }
@@ -118,8 +118,8 @@
 
     .create-new-theme,
     .find-more-themes {
-        background: #ecf0f1;
-        color: #2b3e50;
+        background: var(--wn-surface-hover, #ecf0f1);
+        color: var(--wn-text-heading, #2b3e50);
         text-decoration: none;
         display: block;
         padding: 20px;

@@ -276,7 +276,9 @@ return [
     'permissions' => [
         'name' => 'CMS',
         'manage_content' => 'Manage website content files',
+        'manage_content_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s content files.',
         'manage_assets' => 'Manage website assets - images, JavaScript files, CSS files',
+        'manage_assets_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s asset files, which are combined and served publicly.',
         'manage_pages' => 'Create, modify and delete website pages',
         'manage_pages_comment' => 'This permission should only be given to trusted users, as it allows direct access to the theme\'s page content files, including PHP code if enabled.',
         'manage_layouts' => 'Create, modify and delete CMS layouts',

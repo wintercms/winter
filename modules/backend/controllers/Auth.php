@@ -224,7 +224,7 @@ class Auth extends Controller
         $code = post('code');
         $user = BackendAuth::findUserById(post('id'));
 
-        if (!$user->checkResetPasswordCode($code)) {
+        if (!$user || !$user->checkResetPasswordCode($code)) {
             throw new ApplicationException(trans('backend::lang.account.reset_error'));
         }
 

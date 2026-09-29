@@ -4,6 +4,7 @@ namespace Backend\Tests\Models;
 
 use Backend\Facades\BackendAuth;
 use Backend\Models\User;
+use Backend\Models\UserGroup;
 use Backend\Tests\Fixtures\Models\UserFixture;
 use System\Tests\Bootstrap\PluginTestCase;
 use Winter\Storm\Auth\AuthorizationException;
@@ -92,10 +93,10 @@ class UserAuthorizationTest extends PluginTestCase
     }
 
     //
-    // beforeSave()
+    // beforeCreate() / beforeUpdate()
     //
 
-    public function testBeforeSaveAllowsCliContext(): void
+    public function testUpdateAllowsCliContext(): void
     {
         BackendAuth::logout();
         $this->targetUser->first_name = 'Updated';
@@ -103,7 +104,7 @@ class UserAuthorizationTest extends PluginTestCase
         $this->assertEquals('Updated', $this->targetUser->first_name);
     }
 
-    public function testBeforeSaveAllowsSelfNonEscalatingChanges(): void
+    public function testUpdateAllowsSelfNonEscalatingChanges(): void
     {
         $this->actingAs($this->targetUser);
         $this->targetUser->first_name = 'NewName';
@@ -111,7 +112,7 @@ class UserAuthorizationTest extends PluginTestCase
         $this->assertEquals('NewName', $this->targetUser->first_name);
     }
 
-    public function testBeforeSaveBlocksSelfEscalation(): void
+    public function testUpdateBlocksSelfEscalation(): void
     {
         $this->actingAs($this->targetUser);
         $this->targetUser->is_superuser = true;
@@ -120,7 +121,7 @@ class UserAuthorizationTest extends PluginTestCase
         $this->targetUser->save();
     }
 
-    public function testBeforeSaveBlocksUnauthorizedUserModifyingOthers(): void
+    public function testUpdateBlocksUnauthorizedUserModifyingOthers(): void
     {
         $actor = new UserFixture;
         $this->actingAs($actor);
@@ -130,7 +131,7 @@ class UserAuthorizationTest extends PluginTestCase
         $this->targetUser->save();
     }
 
-    public function testBeforeSaveAllowsManageUsersActorModifyingOthers(): void
+    public function testUpdateAllowsManageUsersActorModifyingOthers(): void
     {
         $actor = (new UserFixture)->withPermission('backend.manage_users', true);
         $this->actingAs($actor);
@@ -140,7 +141,39 @@ class UserAuthorizationTest extends PluginTestCase
         $this->assertEquals('AdminUpdated', $this->targetUser->first_name);
     }
 
-    public function testBeforeSaveBlocksNonSuperuserModifyingSuperuser(): void
+    public function testSaveWithNoChangesRequiresNoPermission(): void
+    {
+        $actor = new UserFixture;
+        $this->actingAs($actor);
+
+        // The guard fires on create/update, which only happen when there is
+        // something to write — a no-op save is allowed for anyone (#1464)
+        try {
+            $this->targetUser->save();
+        } catch (AuthorizationException $e) {
+            $this->fail('Should not throw AuthorizationException for a save with no changes');
+        }
+        $this->assertTrue(true);
+    }
+
+    public function testCreateBlocksUnauthorizedUser(): void
+    {
+        $actor = new UserFixture;
+        $this->actingAs($actor);
+
+        $user = new User;
+        $user->first_name = 'New';
+        $user->last_name = 'User';
+        $user->login = 'newuser';
+        $user->email = 'new@test.com';
+        $user->password = 'TestPassword1';
+        $user->password_confirmation = 'TestPassword1';
+
+        $this->expectException(AuthorizationException::class);
+        $user->save();
+    }
+
+    public function testUpdateBlocksNonSuperuserModifyingSuperuser(): void
     {
         // Make the target a superuser via direct DB update to bypass model events
         $this->targetUser->newQuery()->where('id', $this->targetUser->id)->update(['is_superuser' => true]);
@@ -156,7 +189,7 @@ class UserAuthorizationTest extends PluginTestCase
         $superTarget->save();
     }
 
-    public function testBeforeSaveSuperuserCanModifyAnyone(): void
+    public function testUpdateSuperuserCanModifyAnyone(): void
     {
         $actor = (new UserFixture)->asSuperUser();
         $this->actingAs($actor);
@@ -164,6 +197,97 @@ class UserAuthorizationTest extends PluginTestCase
         $this->targetUser->first_name = 'SuperUpdated';
         $this->targetUser->save();
         $this->assertEquals('SuperUpdated', $this->targetUser->first_name);
+    }
+
+    //
+    // Group membership (model.relation.* guard)
+    //
+
+    protected function makeGroup(): UserGroup
+    {
+        return UserGroup::create([
+            'name' => 'Test Group',
+            'code' => 'test-group',
+        ]);
+    }
+
+    public function testGroupAttachAllowsManageUsersActor(): void
+    {
+        $group = $this->makeGroup();
+
+        $actor = (new UserFixture)->withPermission('backend.manage_users', true);
+        $this->actingAs($actor);
+
+        $this->targetUser->groups()->add($group);
+        $this->assertEquals(1, $this->targetUser->groups()->count());
+    }
+
+    public function testGroupAttachBlocksUnauthorizedUser(): void
+    {
+        $group = $this->makeGroup();
+
+        $actor = new UserFixture;
+        $this->actingAs($actor);
+
+        $this->expectException(AuthorizationException::class);
+        $this->targetUser->groups()->add($group);
+    }
+
+    public function testGroupDetachBlocksUnauthorizedUser(): void
+    {
+        $group = $this->makeGroup();
+        $this->targetUser->groups()->add($group);
+
+        $actor = new UserFixture;
+        $this->actingAs($actor);
+
+        $this->expectException(AuthorizationException::class);
+        $this->targetUser->groups()->remove($group);
+    }
+
+    public function testGroupSyncAssignmentBlocksUnauthorizedUser(): void
+    {
+        $group = $this->makeGroup();
+
+        $actor = new UserFixture;
+        $this->actingAs($actor);
+
+        // Assigning a relation value queues a sync that runs during save without
+        // dirtying any attributes — the relation guard must still catch it
+        $this->targetUser->groups = [$group->id];
+
+        $this->expectException(AuthorizationException::class);
+        $this->targetUser->save();
+    }
+
+    public function testPluginAddedRelationIsNotGuarded(): void
+    {
+        $group = $this->makeGroup();
+
+        // Simulate a plugin-added relation on the user model; only the relations
+        // core owns (listed in $permissionGuardedRelations) require the permission
+        $this->targetUser->belongsToMany['memberships'] = [
+            UserGroup::class,
+            'table' => 'backend_users_groups',
+        ];
+
+        $actor = new UserFixture;
+        $this->actingAs($actor);
+
+        $this->targetUser->memberships()->add($group);
+        $this->assertEquals(1, $this->targetUser->memberships()->count());
+    }
+
+    public function testSelfGroupChangeAllowed(): void
+    {
+        $group = $this->makeGroup();
+
+        $this->actingAs($this->targetUser);
+
+        // Groups carry no permissions out of the box, so changing your own
+        // membership is not an escalation vector and needs no permission
+        $this->targetUser->groups()->add($group);
+        $this->assertEquals(1, $this->targetUser->groups()->count());
     }
 
     //

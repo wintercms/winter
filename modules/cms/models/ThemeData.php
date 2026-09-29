@@ -4,6 +4,7 @@ namespace Cms\Models;
 
 use Cms\Classes\Theme as CmsTheme;
 use Exception;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Lang;
 use System\Classes\CombineAssets;
 use System\Models\File;
@@ -55,6 +56,11 @@ class ThemeData extends Model
     protected static $instances = [];
 
     /**
+     * @var int The number of minutes the theme data is cached for.
+     */
+    protected static $cacheTtl = 1440;
+
+    /**
      * Before saving the model, strip dynamic attributes applied from config.
      * @return void
      */
@@ -76,11 +82,43 @@ class ThemeData extends Model
      */
     public function afterSave()
     {
+        static::flushCache($this->theme);
+
         try {
             CombineAssets::resetCache();
         }
         catch (Exception $ex) {
         }
+    }
+
+    /**
+     * Clear the cache after deleting so that the record isn't served from the cache.
+     */
+    public function afterDelete()
+    {
+        static::flushCache($this->theme);
+    }
+
+    /**
+     * Returns the cache key used to store the data for the provided theme directory.
+     */
+    public static function getCacheKey(string $dirName): string
+    {
+        return 'cms::theme.data.' . $dirName;
+    }
+
+    /**
+     * Removes both the persistent and in memory cache of the provided theme directory's data.
+     */
+    public static function flushCache(?string $dirName = null): void
+    {
+        if (is_null($dirName)) {
+            self::$instances = [];
+            return;
+        }
+
+        Cache::forget(static::getCacheKey($dirName));
+        unset(self::$instances[$dirName]);
     }
 
     /**
@@ -96,7 +134,11 @@ class ThemeData extends Model
         }
 
         try {
-            $themeData = self::firstOrCreate(['theme' => $dirName]);
+            // The record is cached rather than queried on every request; it is invalidated
+            // by afterSave() / afterDelete(), which also covers the initial creation below.
+            $themeData = self::where('theme', $dirName)
+                ->remember(self::$cacheTtl, self::getCacheKey($dirName))
+                ->first() ?: self::create(['theme' => $dirName]);
         }
         catch (Exception $ex) {
             // Database failed

@@ -4,6 +4,7 @@ namespace Cms\Tests\Classes;
 
 use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Theme;
+use Cms\Models\ThemeData;
 use Config;
 use Event;
 use Winter\Storm\Exception\ApplicationException;
@@ -162,5 +163,15 @@ class ThemeTest extends TestCase
         $this->expectException(ApplicationException::class);
 
         Theme::load('../../etc');
+    }
+
+    public function testResetCacheClearsThemeData()
+    {
+        $themeData = new ThemeData(['theme' => 'test']);
+        self::setProtectedProperty($themeData, 'instances', ['test' => $themeData]);
+
+        Theme::resetCache();
+
+        $this->assertEmpty(self::getProtectedProperty($themeData, 'instances'));
     }
 }

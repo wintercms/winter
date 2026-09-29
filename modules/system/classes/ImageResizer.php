@@ -583,6 +583,9 @@ class ImageResizer
         // Slashes in URL params have to be double encoded to survive Laravel's router
         // @see https://github.com/octobercms/october/issues/3592#issuecomment-671017380
         $resizedUrl = rawurlencode(rawurlencode($this->getResizedUrl()));
+        // Double-encode dots (rawurlencode() skips them) to avoid issues in certain NGINX
+        // configurations where dots may trigger asset-serving rules, resulting in 404 errors
+        $resizedUrl = str_replace('.', '%252E', $resizedUrl);
 
         // Get the current configuration's identifier
         $identifier = $this->getIdentifier();

@@ -150,9 +150,11 @@ class ListController extends ControllerBehavior
             'showSorting',
             'showSetup',
             'showCheckboxes',
+            'selectAllMatching',
             'showTree',
             'treeExpanded',
             'customViewPath',
+            'sortable',
         ];
 
         foreach ($configFieldsToTransfer as $field) {
@@ -165,6 +167,42 @@ class ListController extends ControllerBehavior
          * List Widget with extensibility
          */
         $widget = $this->makeWidget(\Backend\Widgets\Lists::class, $columnConfig);
+
+        /*
+         * Drag-and-drop reordering - requires the model to use the Sortable trait.
+         */
+        if (!empty($listConfig->sortable)) {
+            if (!in_array(\Winter\Storm\Database\Traits\Sortable::class, class_uses_recursive($model))) {
+                throw new ApplicationException(sprintf(
+                    'To use "sortable" on a list, the model "%s" must use the %s trait.',
+                    get_class($model),
+                    \Winter\Storm\Database\Traits\Sortable::class
+                ));
+            }
+
+            /*
+             * Drag-and-drop reordering presents every record in a single fixed order, so it
+             * cannot coexist with features that show a partial or re-ordered view. Reject those
+             * combinations up front rather than silently producing a wrong order.
+             */
+            $toolbar = $listConfig->toolbar ?? null;
+            $conflicts = array_keys(array_filter([
+                'toolbar search' => is_array($toolbar) && !empty($toolbar['search']),
+                'filter'         => $listConfig->filter ?? null,
+                'recordsPerPage' => $listConfig->recordsPerPage ?? null,
+                'defaultSort'    => $listConfig->defaultSort ?? null,
+            ]));
+            if ($conflicts) {
+                throw new ApplicationException(sprintf(
+                    'A "sortable" list cannot also use: %s. Drag-and-drop reordering requires the whole list in a fixed order. Remove these options, or use the ReorderController for a dedicated reordering page.',
+                    implode(', ', $conflicts)
+                ));
+            }
+
+            $widget->bindEvent('list.reorder', function ($ids, $orders) use ($model) {
+                $model->setSortableOrder($ids, $orders);
+            });
+        }
 
         $widget->bindEvent('list.extendColumnsBefore', function () use ($widget) {
             $this->controller->listExtendColumnsBefore($widget);
@@ -310,50 +348,52 @@ class ListController extends ControllerBehavior
         $listConfig = $this->controller->listGetConfig($definition);
 
         /*
-         * Validate checked identifiers
+         * Resolve the selection: either the explicitly checked records, or every record
+         * matching the list's active search and filters. Either way the set is resolved from
+         * the list's own query, so it can never reach outside what the list shows.
          */
-        $checkedIds = post('checked');
-
-        if (!$checkedIds || !is_array($checkedIds) || !count($checkedIds)) {
-            Flash::error(Lang::get(
-                (!empty($listConfig->noRecordsDeletedMessage))
-                    ? $listConfig->noRecordsDeletedMessage
-                    : 'backend::lang.list.delete_selected_empty'
-            ));
-            return $this->controller->listRefresh();
-        }
+        $query = $this->controller->listGetSelectionQuery($definition);
+        $model = $query->getModel();
+        $count = 0;
 
         /*
-         * Create the model
+         * Chunked by key so a whole-query selection of any size stays within memory, and
+         * deleted one record at a time so model events and cascades still run.
+         *
+         * The selection query is unordered on purpose: chunkById() pages with `key > last`
+         * but keeps any other ORDER BY in place, and that combination silently skips records.
+         * The key is qualified because a filter scope may have joined another table, and
+         * aliased because the value is read back off the model.
          */
-        $class = $listConfig->modelClass;
-        $model = new $class;
-        $model = $this->controller->listExtendModel($model, $definition);
+        $query->chunkById(500, function ($records) use (&$count) {
+            /*
+             * A filter scope or query extension may join one-to-many, which returns the same
+             * record once per joined row. Deleting it again would fire its model events a
+             * second time and count it twice; chunkById() pages with `key > last`, so the
+             * duplicates of a key that straddles a chunk boundary are dropped with it.
+             */
+            $deleted = [];
 
-        /*
-         * Create the query
-         */
-        $query = $model->newQuery();
-        $this->controller->listExtendQueryBefore($query, $definition);
-
-        $query->whereIn($model->getKeyName(), $checkedIds);
-        $this->controller->listExtendQuery($query, $definition);
-
-        /*
-         * Delete records
-         */
-        $records = $query->get();
-
-        if ($records->count()) {
             foreach ($records as $record) {
-                $record->delete();
-            }
+                if (isset($deleted[$record->getKey()])) {
+                    continue;
+                }
 
-            Flash::success(Lang::get(
-                (!empty($listConfig->deleteMessage))
-                    ? $listConfig->deleteMessage
-                    : 'backend::lang.list.delete_selected_success'
-            ));
+                $deleted[$record->getKey()] = true;
+
+                // A vetoing beforeDelete returns false, and that record is still there.
+                if ($record->delete() !== false) {
+                    $count++;
+                }
+            }
+        }, $model->getQualifiedKeyName(), $model->getKeyName());
+
+        if ($count) {
+            Flash::success(
+                !empty($listConfig->deleteMessage)
+                    ? Lang::get($listConfig->deleteMessage, ['count' => $count])
+                    : Lang::choice('backend::lang.list.delete_selected_success_count', $count, ['count' => $count])
+            );
         }
         else {
             Flash::error(Lang::get(
@@ -436,16 +476,63 @@ class ListController extends ControllerBehavior
     }
 
     /**
-     * Returns the widget used by this behavior.
-     * @return \Backend\Classes\WidgetBase
+     * Returns the widget used by this behavior, building the widgets first when the current
+     * request did not run the index action (e.g. an AJAX handler).
+     * @return \Backend\Classes\WidgetBase|null Null when the definition names no list.
      */
     public function listGetWidget(?string $definition = null)
     {
+        if (!count($this->listWidgets)) {
+            $this->makeLists();
+        }
+
         if (!$definition) {
             $definition = $this->primaryDefinition;
         }
 
         return array_get($this->listWidgets, $definition);
+    }
+
+    /**
+     * Returns a query restricted to the records the user has selected in the list.
+     *
+     * This is what a bulk action handler should resolve its records from, in place of
+     * post('checked'): it applies the list's active search, filters and query extensions, and
+     * it honours a "select all records matching this query" selection, which never sends the
+     * individual ids. Chunk it rather than materialising the keys - the selection can be the
+     * whole table.
+     *
+     *     $this->listGetSelectionQuery()->chunkById(500, function ($records) {
+     *         foreach ($records as $record) {
+     *             // ...
+     *         }
+     *     });
+     *
+     * @throws ApplicationException if the definition is unknown, the list does not offer
+     * whole-query selection, or the list no longer matches the selection that was made.
+     */
+    public function listGetSelectionQuery(?string $definition = null)
+    {
+        $widget = $this->listGetWidget($definition) ?? throw new ApplicationException(
+            Lang::get('backend::lang.list.missing_parent_definition', compact('definition'))
+        );
+
+        return $widget->getSelectionQuery();
+    }
+
+    /**
+     * Returns the keys of the records the user has selected in the list.
+     *
+     * The drop-in replacement for post('checked'). Prefer listGetSelectionQuery() when the
+     * action iterates records, since a whole-query selection can be arbitrarily large.
+     */
+    public function listGetSelectedKeys(?string $definition = null): array
+    {
+        $widget = $this->listGetWidget($definition) ?? throw new ApplicationException(
+            Lang::get('backend::lang.list.missing_parent_definition', compact('definition'))
+        );
+
+        return $widget->getSelectedKeys();
     }
 
     /**

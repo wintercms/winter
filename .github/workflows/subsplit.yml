@@ -2,6 +2,11 @@ name: Module sub-split
 
 on:
   push:
+    # Branches only. Tag pushes are handled by the `create` event below; without
+    # this filter they would also fire here and pass the tag name to `split -b`,
+    # which then fails looking for a branch that doesn't exist.
+    branches:
+      - "**"
   create:
   delete:
 
