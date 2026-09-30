@@ -3,6 +3,10 @@
 # ===================================
 
 fields:
+    _hint_trashed:
+      type: partial
+      path: hint_trashed
+
     first_name:
         span: left
         label: backend::lang.user.first_name
