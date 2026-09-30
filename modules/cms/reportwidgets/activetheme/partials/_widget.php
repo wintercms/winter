@@ -1,5 +1,5 @@
 <div class="report-widget widget-activetheme">
-    <h3><?= e(trans($this->property('title'))) ?></h3>
+    <h3><?= e($this->getTitle()) ?></h3>
 
     <?php if (!isset($error)): ?>
         <div class="theme-thumbnail">

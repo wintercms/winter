@@ -2,11 +2,11 @@
     <li class="item separator"></li>
 <?php endif ?>
 
-<li class="item <?= 'width-'.$widget->property('ocWidgetWidth') ?> <?= $widget->property('ocWidgetNewRow') ? 'new-line' : null ?>">
+<li class="item width-<?= (int) $widget->property('ocWidgetWidth') ?> <?= $widget->property('ocWidgetNewRow') ? 'new-line' : null ?>">
     <div class="content">
         <div class="drag-handle"></div>
 
-        <div id="<?= $widgetAlias ?>"><?= $widget->render() ?></div>
+        <div id="<?= e($widgetAlias) ?>"><?= $widget->render() ?></div>
 
         <a href="javascript:;"
             class="wn-icon-cog widget-control edit-widget"
@@ -14,7 +14,7 @@
             data-inspector-title="<?= e(trans('backend::lang.dashboard.widget_inspector_title')) ?>"
             data-inspector-description="<?= e(trans('backend::lang.dashboard.widget_inspector_description')) ?>"
             data-inspector-config="<?= e($this->getWidgetPropertyConfig($widget)) ?>"
-            data-inspector-class="<?= get_class($widget) ?>"
+            data-inspector-class="<?= e(get_class($widget)) ?>"
             data-inspector-offset="-3"
             data-inspector-offset-x="-15"
             data-inspector-placement="left"
@@ -27,7 +27,7 @@
             <button type="button" class="close widget-control close-widget" data-dismiss="popover" aria-hidden="true">&times;</button>
         <?php endif ?>
 
-        <input type="hidden" data-widget-alias name="widgetAliases[]" value="<?= $widgetAlias ?>"/>
-        <input type="hidden" data-widget-order name="widgetSortOrders[]" value="<?= $sortOrder ?>"/>
+        <input type="hidden" data-widget-alias name="widgetAliases[]" value="<?= e($widgetAlias) ?>"/>
+        <input type="hidden" data-widget-order name="widgetSortOrders[]" value="<?= (int) $sortOrder ?>"/>
     </div>
 </li>
