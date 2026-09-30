@@ -2,11 +2,16 @@
 
 return [
     'auth' => [
-        'title' => 'Area di Amministrazione'
+        'title' => 'Area di Amministrazione',
+        'invalid_login' => 'I dati inseriti non corrispondono ai nostri record. Controlla e riprova.',
     ],
     'field' => [
         'invalid_type' => 'Il tipo di campo :type non è valido.',
-        'options_method_not_exists' => 'La classe :model deve definire un metodo :method() che ritorni le opzioni per il campo ":field".'
+        'options_method_invalid_model' => "L'attributo ':field' non corrisponde a un modello valido. Prova a specificare esplicitamente il metodo delle opzioni per la classe di modello :model.",
+        'options_method_not_exists' => 'La classe :model deve definire un metodo :method() che ritorni le opzioni per il campo ":field".',
+        'options_static_method_invalid_value' => "Il metodo statico ':method()' della classe :class non ha restituito un array di opzioni valido.",
+        'colors_method_not_exists' => "La classe :model deve definire un metodo :method() che ritorni i codici colore HEX per il campo del form ':field'.",
+        'colors_invalid_input' => 'Il valore del colore fornito non è valido, riprova.',
     ],
     'widget' => [
         'not_registered' => "Nessun widget ':name' è stato registrato",
@@ -14,14 +19,25 @@ return [
     ],
     'page' => [
         'untitled' => 'Senza titolo',
+        '404' => [
+            'label' => 'Pagina non trovata',
+            'help' => 'Abbiamo cercato e cercato, ma non è stato possibile trovare l\'URL richiesto. Stavi forse cercando qualcos\'altro?',
+            'back_link' => 'Torna alla pagina precedente'
+        ],
         'access_denied' => [
             'label' => 'Accesso negato',
             'help' => "Non hai le autorizzazioni necessarie per accedere a questa pagina.",
             'cms_link' => 'Ritorna al pannello di controllo'
         ],
+        'no_database' => [
+            'label' => 'Database mancante',
+            'help' => 'Per accedere al pannello di controllo è necessario un database. Verifica che il database sia configurato e che siano state eseguite le migrazioni prima di riprovare.',
+            'cms_link' => 'Ritorna alla home page'
+        ],
     ],
     'partial' => [
-        'not_found_name' => "La vista parziale ':name' non è stata trovata."
+        'not_found_name' => "La vista parziale ':name' non è stata trovata.",
+        'invalid_name' => 'Nome della vista parziale non valido: :name.',
     ],
     'ajax_handler' => [
         'invalid_name' => "Il nome dell'AJAX handler non è valido: :name.",
@@ -32,7 +48,7 @@ return [
         'impersonate_confirm' => 'Sei sicuro di voler impersonare questo utente? Puoi tornare al tuo status attuale effettuando il logout.',
         'impersonate_success' => "Stai testando l'accesso dell'utente selezionato",
         'impersonate_working' => 'Impersonando...',
-        'impersonating' => "Testando l'accesso di :full_name",
+        'impersonating' => 'Accesso temporaneo come :impersonatee. I registri riescono comunque a identificarti come :impersonator',
         'stop_impersonating' => 'Concludi il test utenza',
         'unsuspend' => 'Annulla sospensione',
         'unsuspend_confirm' => "Sei sicuro di voler annullare la sospensione dell'utente?'",
@@ -45,6 +61,7 @@ return [
         'restore' => 'Ripristina',
         'login_placeholder' => 'login',
         'password_placeholder' => 'password',
+        'remember_me' => 'Resta collegato',
         'forgot_password' => 'Password dimenticata?',
         'enter_email' => 'Inserisci in tuo indirizzo e-mail',
         'enter_login' => 'Inserisci il tuo username.',
@@ -59,6 +76,7 @@ return [
         'cancel' => 'Annulla',
         'delete' => 'Elimina',
         'ok' => 'OK',
+        'sending' => 'Invio in corso...',
         'password_reset_email' => 'Invia mail recupero password',
         'manual_password_reset_confirm' => 'Sei sicuro di volere inviare una mail per il recupero della password per questo utente?',
         'manual_password_reset_success' => 'Una mail con le istruzioni per il recupero della password è stata invata all\'utente.',
@@ -86,6 +104,8 @@ return [
         'make_default' => 'Rendi predefinito',
         'make_default_confirm' => 'Impostare il layout corrente come predefinito?',
         'make_default_success' => 'Il layout corrente è ora il predefinito',
+        'collapse_all' => 'Comprimi tutto',
+        'expand_all' => 'Espandi tutto',
         'status' => [
             'widget_title_default' => 'Stato del sistema',
             'update_available' => '{0} aggiornamenti disponibili!|{1} aggiornamento disponibile!|[2,Inf] aggiornamenti disponibili!',
@@ -116,11 +136,13 @@ return [
         'menu_description' => 'Gestisci gli utenti amministratori, i gruppi e le autorizzazioni.',
         'list_title' => 'Gestisci amministratori',
         'new' => 'Nuovo amministratore',
-        'login' => 'Login',
+        'login' => 'Nome utente',
         'first_name' => 'Nome',
         'last_name' => 'Cognome',
         'full_name' => 'Nome completo',
         'email' => 'Indirizzo e-mail',
+        'role_field' => 'Ruolo',
+        'role_comment' => 'I ruoli definiscono le autorizzazioni degli utenti, che possono essere sovrascritte a livello di utente, nella scheda Autorizzazioni.',
         'groups' => 'Gruppi',
         'groups_comment' => 'Seleziona i gruppi a cui appartiene l\'utente.',
         'avatar' => 'Avatar',
@@ -128,15 +150,35 @@ return [
         'password_confirmation' => 'Conferma password',
         'permissions' => 'Autorizzazioni',
         'account' => 'Account',
-        'superuser' => 'Super User',
+        'superuser' => 'Superutente',
         'superuser_comment' => 'Seleziona per consentire all\'utente di accedere a tutte le aree.',
         'send_invite' => 'Invia invito tramite e-mail',
         'send_invite_comment' => 'Invia un messaggio di benvenuto contenente le credenziali per l\'accesso.',
+        'auto_generate_password' => 'Genera automaticamente la password',
+        'auto_generate_password_comment' => 'Crea automaticamente una password casuale sicura. Deseleziona questa opzione per impostare la password manualmente.',
         'delete_confirm' => 'Vuoi davvero eliminare questo amministratore?',
         'return' => 'Ritorna alla lista degli amministratori',
         'allow' => 'Consenti',
         'inherit' => 'Eredita',
         'deny' => 'Nega',
+        'permissions_toggle_section_allow' => 'Consenti tutte le autorizzazioni di questa sezione',
+        'permissions_toggle_section_inherit' => 'Eredita tutte le autorizzazioni di questa sezione',
+        'permissions_toggle_section_deny' => 'Nega tutte le autorizzazioni di questa sezione',
+        'activated' => 'Attivato',
+        'last_login' => 'Ultimo accesso',
+        'created_at' => 'Data di creazione',
+        'updated_at' => 'Data di aggiornamento',
+        'deleted_at' => 'Data di eliminazione',
+        'show_deleted' => 'Mostra eliminati',
+        'self_escalation_denied' => 'Non puoi modificare il tuo stesso ruolo, le tue autorizzazioni o il tuo stato di superutente.',
+        'cannot_manage_user' => 'Non hai le autorizzazioni necessarie per gestire questo amministratore.',
+        'throttle_tab' => 'Accessi falliti',
+        'throttle_tab_label' => 'Record degli accessi falliti',
+        'throttle_comment' => 'Visualizza i tentativi di accesso falliti per questo utente. Questi record vengono generati automaticamente quando un tentativo di accesso non riesce. Gli utenti vengono sospesi al superamento del limite di tentativi.',
+        'throttle_ip_address' => 'Indirizzo IP',
+        'throttle_attempts' => 'Tentativi',
+        'throttle_last_attempt' => 'Ultimo tentativo',
+        'throttle_suspended_at' => 'Sospeso il',
         'group' => [
             'name' => 'Gruppo',
             'name_comment' => 'Il nome viene visualizzato nell\'elenco dei gruppi del form di Creazione/Modifica Amministratore ',
@@ -169,7 +211,9 @@ return [
         ],
         'preferences' => [
             'not_authenticated' => 'Non c\'è nessun utente autenticato per cui caricare o salvare le preferenze.'
-        ]
+        ],
+        'trashed_hint_title' => 'Questo account è stato eliminato',
+        'trashed_hint_desc' => 'Questo account è stato eliminato e non sarà più possibile accedere con esso. Per ripristinarlo, fai clic sull\'icona di ripristino dell\'utente in basso a destra'
     ],
     'list' => [
         'default_title' => 'Elenco',
@@ -183,6 +227,8 @@ return [
         'behavior_not_ready' => 'Il comportamento "elenco" non è stato inizializzato, controlla di aver chiamato il metodo makeLists() nel controller.',
         'invalid_column_datetime' => "Il valore della colonna ':column' non è un oggetto di tipo DateTime, hai dimenticato un riferimento a \$dates nel modello?",
         'pagination' => 'Record visualizzati: :from-:to di :total',
+        'first_page' => 'Prima pagina',
+        'last_page' => 'Ultima pagina',
         'prev_page' => 'Pagina precedente',
         'next_page' => 'Pagina successiva',
         'refresh' => 'Ricarica',
@@ -190,6 +236,7 @@ return [
         'loading' => 'Caricamento...',
         'setup_title' => 'Configura elenco',
         'setup_help' => 'Utilizza le checkbox per selezionare le colonne che vuoi visualizzare nell\'elenco. Puoi cambiare la posizione delle colonne trascinandole verso l\'alto o il basso.',
+        'sort_drag_title' => 'Trascina per riordinare',
         'records_per_page' => 'Record per pagina',
         'records_per_page_help' => 'Seleziona il numero di record da visualizzare su ogni pagina. Ricorda che un numero elevato di record in una singola pagina può ridurre le prestazioni.',
         'check' => 'Spunta',
@@ -197,6 +244,17 @@ return [
         'delete_selected_empty' => 'Non hai selezionato nessun record da eliminare.',
         'delete_selected_confirm' => 'Elimina i record selezionati?',
         'delete_selected_success' => 'I record selezionati sono stati eliminati con successo.',
+        'delete_selected_success_count' => '{1} 1 record eliminato.|[2,*] :count record eliminati.',
+        'selection_page' => '{1} Il record di questa pagina è selezionato.|[2,*] Tutti i :count record di questa pagina sono selezionati.',
+        'selection_select_all' => 'Seleziona tutti i :total record corrispondenti',
+        'selection_select_all_unknown' => 'Seleziona tutti i record corrispondenti',
+        'selection_all' => 'Tutti i :total record corrispondenti ai filtri correnti sono selezionati.',
+        'selection_all_unknown' => 'Tutti i record corrispondenti ai filtri correnti sono selezionati.',
+        'selection_clear' => 'Annulla selezione',
+        'selection_confirm_all' => 'L\'operazione si applica a tutti i :total record corrispondenti ai filtri correnti, non solo a quelli di questa pagina.',
+        'selection_confirm_all_unknown' => 'L\'operazione si applica a tutti i record corrispondenti ai filtri correnti, non solo a quelli di questa pagina.',
+        'selection_stale' => 'L\'elenco è cambiato da quando hai selezionato questi record. Controlla l\'elenco e selezionali di nuovo.',
+        'selection_all_not_supported' => 'Questo elenco non supporta la selezione di tutti i record che corrispondono ai filtri correnti.',
         'column_switch_true' => 'Sì',
         'column_switch_false' => 'No'
     ],
@@ -220,10 +278,12 @@ return [
     'form' => [
         'create_title' => 'Crea :name',
         'update_title' => 'Modifica :name',
+        'preview' => 'Anteprima',
         'preview_title' => 'Anteprima :name',
         'create_success' => ':name creato con successo',
         'update_success' => ':name modificato con successo',
         'delete_success' => ':name eliminato con successo',
+        'restore_success' => ':name ripristinato',
         'reset_success' => 'Reimpostazione completata',
         'missing_id' => 'L\'ID del record non è stato specificato.',
         'missing_model' => 'Il form utilizzato nella classe :class non ha un modello definito.',
@@ -231,6 +291,7 @@ return [
         'not_found' => 'Nessun record con ID :id è stato trovato.',
         'action_confirm' => 'Sei sicuro?',
         'create' => 'Crea',
+        'create_and_new' => 'Crea e nuovo',
         'create_and_close' => 'Crea e chiudi',
         'creating' => 'Creazione in corso...',
         'creating_name' => 'Creazione :name in corso...',
@@ -243,6 +304,9 @@ return [
         'confirm_delete' => 'Elimina record?',
         'confirm_delete_multiple' => 'Elimina i record selezionati?',
         'deleting_name' => 'Eliminazione :name in corso...',
+        'restore' => 'Ripristina',
+        'restoring' => 'Ripristino in corso...',
+        'confirm_restore' => 'Vuoi davvero ripristinare questo record?',
         'reset_default' => 'Ripristina predefiniti',
         'resetting' => 'Ripristino in corso',
         'resetting_name' => 'Ripristino :name in corso',
@@ -261,6 +325,7 @@ return [
         'confirm_tab_close' => 'Vuoi davvero chiudere il tab? Le modifiche non salvate andranno perse.',
         'behavior_not_ready' => 'Il comportamento del form non è stato inizializzato, verifica di aver chiamato il metodo initForm() nel controller.',
         'preview_no_files_message' => 'Non ci sono file caricati.',
+        'preview_no_media_message' => 'Nessun elemento multimediale selezionato.',
         'preview_no_record_message' => 'Nessun record selezionato.',
         'select' => 'Seleziona',
         'select_all' => 'seleziona tutto',
@@ -271,23 +336,32 @@ return [
         'delete_row' => 'Elimina riga',
         'concurrency_file_changed_title' => 'Il file è stato cambiato',
         'concurrency_file_changed_description' => "Il file che stavi modificando è stato cambiato da un altro utente. Puoi ricaricare il file e perdere le tue modifiche oppure sovrascrivere il file sul disco.",
-        'return_to_list' => 'Ritorna all\'elenco'
+        'return_to_list' => 'Ritorna all\'elenco',
+        'record_navigation' => 'Navigazione tra i record',
+        'previous_record' => 'Record precedente',
+        'next_record' => 'Record successivo'
     ],
     'recordfinder' => [
-        'find_record' => 'Trova record'
+        'find_record' => 'Trova record',
+        'default_prompt' => 'Fai clic sul pulsante %s per trovare un record',
+        'invalid_model_class' => 'La classe di modello ":modelClass" fornita per il recordfinder non è valida',
+        'cancel' => 'Annulla'
     ],
     'pagelist' => [
         'page_link' => 'Link pagina',
         'select_page' => 'Seleziona una pagina...',
     ],
     'relation' => [
+        'missing_behavior' => 'Il campo ":field" richiede che il controller ":controller" implementi il comportamento "RelationController".',
         'missing_config' => "La relazione non ha nessuna configurazione per ':config'.",
         'missing_definition' => "La relazione non contiene una definizione per il campo ':field'.",
         'missing_model' => 'La relazione utilizzata nella classe :class non ha un modello definito.',
         'invalid_action_single' => 'L\'azione non può essere eseguita su una relazione singola.',
         'invalid_action_multi' => 'L\'azione non può essere eseguita su una relazione multipla.',
+        'relationwidget_unsupported_type' => 'Il tipo di relazione ":type" non è supportato dal widget Relation.',
         'help' => 'Fai clic su un elemento per aggiungere',
         'related_data' => 'Dati :name correlati',
+        'refresh' => 'Ricarica',
         'add' => 'Aggiungi',
         'add_selected' => 'Aggiungi selezionati',
         'add_a_new' => 'Aggiungi :name',
@@ -315,6 +389,7 @@ return [
     ],
     'reorder' => [
         'default_title' => 'Riordina record',
+        'reorder_title' => 'Riordina :name',
         'no_records' => 'Non ci sono record disponibili per ordinare.'
     ],
     'model' => [
@@ -329,8 +404,16 @@ return [
     'warnings' => [
         'tips' => 'Suggerimenti per la configurazione del sistema',
         'tips_description' => 'Ci sono elementi a cui è necessario prestare attenzione al fine di configurare il sistema in maniera corretta.',
+        'how_to_fix' => 'Come risolvere',
         'permissions'  => 'La cartella :name o le sue sottocartelle non sono scrivibili da PHP. Imposta le corrette autorizzazioni per il server web su questa cartella.',
-        'extension' => 'L\'estensione di PHP :name non è installata. Installa questa libreria ed attiva l\'estensione.'
+        'extension' => 'L\'estensione di PHP :name non è installata. Installa questa libreria ed attiva l\'estensione.',
+        'plugin_missing' => 'Il plugin :name è una dipendenza di un plugin installato, ma non è disponibile. Installa questo plugin.',
+        'debug' => 'La modalità di debug è attiva. Non è consigliata per le installazioni di produzione perché potrebbe rivelare informazioni sensibili destinate solo agli sviluppatori.',
+        'decompileBackendAssets' => 'Le risorse nel Backend sono attualmente non compilate. Non è consigliato per le installazioni di produzione perché potrebbe influire sulle prestazioni.',
+        'default_backend_user' => 'È stato trovato un utente con le credenziali di accesso predefinite (admin / admin@domain.tld). Cambia il suo nome utente e/o il suo indirizzo e-mail per proteggere il sistema.',
+        'auth_throttle_disabled' => 'La limitazione dei tentativi di autenticazione del Backend è disabilitata. Non è consigliata per le installazioni di produzione perché potrebbe consentire a utenti malintenzionati di indovinare le password con attacchi brute-force.',
+        'csrf' => 'La protezione CSRF è disabilitata. Non è consigliata per le installazioni di produzione perché compromette la sicurezza delle installazioni e potrebbe consentire attacchi cross-site scripting.',
+        'restrict_base_dir' => 'La restrizione della cartella di base è disabilitata. Non è consigliata per le installazioni di produzione perché potrebbe consentire ai temi e ai file di configurazione di accedere a file al di fuori della tua installazione di Winter CMS.'
     ],
     'editor' => [
         'menu_label' => 'Preferenze editor di codice',
@@ -339,6 +422,9 @@ return [
         'font_size' => 'Dimensione carattere',
         'tab_size' => 'Dimensione Tab',
         'use_hard_tabs' => 'Indenta utilizzando i Tab',
+        'enable_folding' => 'Abilita il raggruppamento del codice',
+        'bracket_colors' => 'Abilita la colorazione delle coppie di parentesi',
+        'show_colors' => 'Abilita il selettore di colori in linea',
         'code_folding' => 'Raggruppa il codice',
         'code_folding_begin' => 'Evidenzia inizio',
         'code_folding_begin_end' => 'Evidenzia inizio e fine',
@@ -348,6 +434,7 @@ return [
         'auto_closing' => 'Chiudi automaticamente i tag',
         'show_invisibles' => 'Mostra caratteri invisibili',
         'show_gutter' => 'Visualizza numeri di linea',
+        'show_minimap' => 'Mostra minimappa',
         'basic_autocompletion'=> 'Completamento automatico di base (Ctrl + Spazio)',
         'live_autocompletion'=> 'Completamento automatico in tempo reale',
         'enable_snippets'=> 'Abilita frammenti di codice (Tab)',
@@ -370,6 +457,7 @@ return [
         'label' => 'Etichetta',
         'class_name' => 'Nome della classe',
         'markup_tags' => 'Tag di markup',
+        'markup_tag' => 'Tag di markup',
         'allowed_empty_tags' => 'Tag vuoti consentiti',
         'allowed_empty_tags_comment' => 'L\'elenco dei tag che non sono rimossi quando non hanno nessun contenuto.',
         'allowed_tags' => 'Tag consentiti',
@@ -388,11 +476,12 @@ return [
         'toolbar_buttons_preset' => 'Inserisci una delle configurazioni già pronte:',
         'toolbar_buttons_presets' => [
             'default' => 'Predefinita',
-            'minimal' => 'Minimal',
+            'minimal' => 'Minimale',
             'full' => 'Completa',
         ],
         'paragraph_formats' => 'Formato paragrafi',
         'paragraph_formats_comment' => 'Le opzioni che appariranno nel menu a tendina relativo alla formattazione dei paragrafi.',
+        'toggle_fullscreen' => 'Passa a schermo intero',
     ],
     'tooltips' => [
         'preview_website' => 'Anteprima del sito web'
@@ -412,19 +501,27 @@ return [
         'brand' => 'Marchio',
         'logo' => 'Logo',
         'logo_description' => 'Carica un logo personalizzato da utilizzare nel pannello di controllo.',
+        'favicon' => 'Favicon',
+        'favicon_description' => 'Carica una favicon personalizzata da utilizzare nel pannello di controllo',
         'app_name' => 'Nome dell\'applicazione',
         'app_name_description' => 'Questo campo verrà visualizzato nella barra del titolo del pannello di controllo.',
         'app_tagline' => 'Slogan dell\'applicazione',
         'app_tagline_description' => 'Questo campo verrà visualizzato nella schermata di login del pannello di controllo.',
         'colors' => 'Colori',
-        'primary_color' => 'Principale color',
-        'secondary_color' => 'Secondario color',
-        'accent_color' => 'Accent color',
+        'branding_colors' => 'Colori del marchio',
+        'branding_colors_comment' => 'Questi colori saranno utilizzati in tutta l\'interfaccia del Backend per corrispondere al tuo marchio.',
+        'default_colors' => 'Colori predefiniti',
+        'default_colors_comment' => 'Questi colori saranno disponibili come campioni in tutti i selettori di colore, a meno che non vengano sovrascritti.',
+        'add_default_color' => 'Aggiungi un colore predefinito',
+        'primary_color' => 'Colore principale',
+        'secondary_color' => 'Colore secondario',
+        'accent_color' => 'Colore di accento',
         'styles' => 'Stili',
         'custom_stylesheet' => 'Foglio di stile personalizzato',
         'navigation' => 'Navigazione',
         'menu_mode' => 'Stile menu',
         'menu_mode_inline' => 'In linea',
+        'menu_mode_inline_no_icons' => 'In linea (senza icone)',
         'menu_mode_tile' => 'Piastrelle',
         'menu_mode_collapsed' => 'Compresso'
     ],
@@ -442,8 +539,10 @@ return [
         'hint' => 'Questo registro visualizza un elenco dei tentativi di accesso di un amministratore avvenuti con successo. I record sono mantenuti per un totale di :days giorni.',
         'menu_label' => 'Registro accessi',
         'menu_description' => 'Visualizza una lista degli accessi da parte degli amministratori.',
+        'id' => 'ID',
         'created_at' => 'Data e ora',
-        'login' => 'Login',
+        'type' => 'Tipo',
+        'login' => 'Nome utente',
         'ip_address' => 'Indirizzo IP',
         'first_name' => 'Nome',
         'last_name' => 'Cognome',
@@ -452,11 +551,15 @@ return [
     'filter' => [
         'all' => 'tutto',
         'options_method_not_exists' => "Il modello :model deve definire un metodo :method() che ritorni le opzioni per il filtro ':filter'.",
-        'date_all' => 'tutte'
+        'date_all' => 'tutte',
+        'number_all' => 'tutti i numeri'
     ],
     'import_export' => [
+        'export' => 'Esporta',
+        'import' => 'Importa',
         'upload_csv_file' => '1. Carica un file CSV',
         'import_file' => 'Importa file',
+        'row' => 'Riga :row',
         'first_row_contains_titles' => 'La prima riga contiene i titoli delle colonne',
         'first_row_contains_titles_desc' => 'Lasciare selezionato se la prima riga nel file CSV è utilizzata come nome di colonna.',
         'match_columns' => '2. Abbina le colonne del file ai campi del database',
@@ -522,16 +625,20 @@ return [
             'iso_8859_13' => 'ISO-8859-13 (Latino-7, Baltico)',
             'iso_8859_14' => 'ISO-8859-14 (Latin-8, Celtico)',
             'iso_8859_15' => 'ISO-8859-15 (Latin-9, Revisione di Europa Occidentale con il simbolo dell\'euro)',
+            'windows_1250' => 'Windows-1250 (CP1250, Europa Centrale e Orientale)',
             'windows_1251' => 'Windows-1251 (CP1251)',
             'windows_1252' => 'Windows-1252 (CP1252)'
         ]
     ],
     'permissions' => [
-        'manage_media' => 'Gestisci elementi multimediali'
+        'manage_media' => 'Gestisci elementi multimediali',
+        'allow_unsafe_markdown' => 'Consenti Markdown non sicuro',
+        'allow_unsafe_markdown_comment' => 'Consentire Markdown non sicuro permetterà di usare i tag HTML, incluso JavaScript, nei contenuti Markdown. Questo può rappresentare un rischio per la sicurezza se concesso a un utente non fidato.'
     ],
     'mediafinder' => [
-        'label' => 'Media Finder',
-        'default_prompt' => 'Fai clic sul pulsante %s per trovare un elemento multimediale'
+        'label' => 'Elementi multimediali',
+        'default_prompt' => 'Fai clic sul pulsante %s per trovare un elemento multimediale',
+        'no_image' => 'Immagine non trovata'
     ],
     'media' => [
         'menu_label' => 'Elementi multimediali',
@@ -562,6 +669,9 @@ return [
         'uploading_error' => 'Caricamento fallito',
         'type_blocked' => 'Il tipo di file utilizzato è bloccato per questioni di sicurezza.',
         'order_by' => 'Ordina per',
+        'direction' => 'Direzione',
+        'direction_asc' => 'Crescente',
+        'direction_desc' => 'Decrescente',
         'folder' => 'Cartella',
         'no_files_found' => 'Nessun file corrisponde alla tua richiesta.',
         'delete_empty' => 'Seleziona elementi da eliminare.',
