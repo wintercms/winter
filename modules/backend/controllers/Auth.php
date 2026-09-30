@@ -140,11 +140,6 @@ class Auth extends Controller
      */
     public function restore_onSubmit()
     {
-        // Guarded here as well as in restore(), because Controller::run() dispatches an AJAX
-        // handler before the action method, so this is reachable as `onSubmit` on the restore
-        // action without restore() running at all. The form is for signed-out users: it has no
-        // notion of an acting user, while the code it calls does, so its behaviour should not
-        // depend on one being present.
         if (BackendAuth::user()) {
             return Backend::redirect('backend');
         }
