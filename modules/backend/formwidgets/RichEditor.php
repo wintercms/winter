@@ -283,6 +283,30 @@ class RichEditor extends FormWidgetBase
         return is_scalar($linkTitle) ? e((string) $linkTitle) : '';
     }
 
+    /**
+     * Returns a page link title HTML encoded, or an empty string if it is not something that
+     * can be rendered as text.
+     *
+     * A scalar and an object that stringifies both qualify, which is how a translated or
+     * wrapped title arrives from a listener; an array or a plain object does not.
+     *
+     * @param mixed $linkTitle
+     */
+    protected function renderableLinkTitle($linkTitle): string
+    {
+        if (is_object($linkTitle) && method_exists($linkTitle, '__toString')) {
+            $linkTitle = (string) $linkTitle;
+        }
+
+        return is_scalar($linkTitle) ? e((string) $linkTitle) : '';
+    }
+
+    /**
+     * Returns a single collection of available page links.
+     * This implementation has room to place links under
+     * different groups based on the link type.
+     * @return array
+     */
     protected function getPageLinksArray()
     {
         $links = [];
