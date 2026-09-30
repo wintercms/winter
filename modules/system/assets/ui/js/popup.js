@@ -49,7 +49,9 @@
         content: null,
         size: null,
         adaptiveHeight: false,
-        zIndex: null
+        zIndex: null,
+        cssClass: null,
+        allowDismiss: false
     }
 
     Popup.prototype.init = function(){
@@ -207,8 +209,40 @@
         if (this.options.adaptiveHeight)
             modalDialog.addClass('adaptive-height')
 
+        if (this.options.cssClass)
+            modalDialog.addClass(this.options.cssClass)
+
         if (this.options.zIndex !== null)
             modal.css('z-index', this.options.zIndex + 20)
+
+        if (this.options.allowDismiss) {
+            var self = this
+            modal.on('mousedown', function(e) {
+                // Only dismiss when the click starts on the modal itself,
+                // i.e. the area next to the dialog. Using mousedown instead
+                // of click so that a drag-select released outside the dialog
+                // does not dismiss the popup.
+                if (e.target !== modal.get(0)) {
+                    return
+                }
+
+                // Keep the popup open if it contains unsaved changes,
+                // tracked by the change monitor (data-change-monitor)
+                if (modal.find('.oc-data-changed').length) {
+                    self.setShake()
+                    $.wn.flashMsg({
+                        text: $.wn.lang !== undefined
+                            ? $.wn.lang.get('popup.unsaved_changes', 'The popup contains unsaved changes.')
+                            : 'The popup contains unsaved changes.',
+                        class: 'warning',
+                        interval: 3
+                    })
+                    return
+                }
+
+                self.hide()
+            })
+        }
 
         return modal.append(modalDialog.append(modalContent))
     }
