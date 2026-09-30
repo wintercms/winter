@@ -24,9 +24,9 @@
     <!-- Existing files -->
     <div class="upload-files-container">
         <?php foreach ($fileList as $file): ?>
-            <div class="upload-object is-success" data-id="<?= $file->id ?>" data-path="<?= $file->pathUrl ?>">
+            <div class="upload-object is-success" data-id="<?= $file->id ?>" data-path="<?= e($file->pathUrl) ?>">
                 <div class="icon-container image">
-                    <img src="<?= $file->thumbUrl ?>" alt="" />
+                    <img src="<?= e($file->thumbUrl) ?>" alt="" />
                 </div>
                 <div class="info">
                     <h4 class="filename">

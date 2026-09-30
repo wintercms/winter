@@ -10,7 +10,7 @@ if ($fieldOptions instanceof Illuminate\Support\Collection) {
     <div class="form-control" <?= $field->readOnly ? 'disabled="disabled"' : ''; ?>>
         <?= (isset($fieldOptions[$field->value])) ? e(trans($fieldOptions[$field->value])) : '' ?>
     </div>
-    <input type="hidden" name="<?= $field->getName() ?>" value="<?= $field->value ?>">
+    <input type="hidden" name="<?= $field->getName() ?>" value="<?= htmlspecialchars((string) $field->value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>">
 <?php else:
     $emptyOption = $field->getConfig('emptyOption', $field->placeholder);
     $options = $field->getAttributes(htmlBuild:false);
