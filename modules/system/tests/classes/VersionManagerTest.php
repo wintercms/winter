@@ -35,7 +35,7 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getFileVersions', ['\Winter\\Tester']);
 
-        $this->assertCount(13, $result);
+        $this->assertCount(15, $result);
         $this->assertArrayHasKey('1.0.1', $result);
         $this->assertArrayHasKey('1.0.2', $result);
         $this->assertArrayHasKey('1.0.3', $result);
@@ -43,6 +43,10 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.0.5', $result);
         $this->assertArrayHasKey('1.1.0', $result);
         $this->assertArrayHasKey('1.2.0', $result);
+        $this->assertArrayHasKey('1.2.9', $result);
+        // The 'v' prefix is normalized away on this path
+        $this->assertArrayHasKey('1.2.10', $result);
+        $this->assertArrayNotHasKey('v1.2.10', $result);
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
@@ -104,11 +108,14 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester', '1.0.3']);
 
-        $this->assertCount(10, $result);
+        $this->assertCount(12, $result);
         $this->assertArrayHasKey('1.0.4', $result);
         $this->assertArrayHasKey('1.0.5', $result);
         $this->assertArrayHasKey('1.1.0', $result);
         $this->assertArrayHasKey('1.2.0', $result);
+        $this->assertArrayHasKey('1.2.9', $result);
+        // The 'v' prefix is normalized away on this path
+        $this->assertArrayHasKey('1.2.10', $result);
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
@@ -122,7 +129,7 @@ class VersionManagerTest extends TestCase
         $manager = VersionManager::instance();
         $result = self::callProtectedMethod($manager, 'getNewFileVersions', ['\Winter\\Tester']);
 
-        $this->assertCount(13, $result);
+        $this->assertCount(15, $result);
         $this->assertArrayHasKey('1.0.1', $result);
         $this->assertArrayHasKey('1.0.2', $result);
         $this->assertArrayHasKey('1.0.3', $result);
@@ -130,6 +137,9 @@ class VersionManagerTest extends TestCase
         $this->assertArrayHasKey('1.0.5', $result);
         $this->assertArrayHasKey('1.1.0', $result);
         $this->assertArrayHasKey('1.2.0', $result);
+        $this->assertArrayHasKey('1.2.9', $result);
+        // The 'v' prefix is normalized away on this path
+        $this->assertArrayHasKey('1.2.10', $result);
         $this->assertArrayHasKey('1.3.0', $result);
         $this->assertArrayHasKey('1.3.1', $result);
         $this->assertArrayHasKey('1.3.2', $result);
