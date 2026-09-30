@@ -526,6 +526,7 @@
             previewPanel.querySelector('[data-label="title"]').textContent = item.getAttribute('data-title')
             previewPanel.querySelector('[data-label="last-modified"]').textContent = lastModified
             previewPanel.querySelector('[data-label="public-url"]').setAttribute('href', item.getAttribute('data-public-url'))
+            previewPanel.querySelector('[data-control="dimensions"]').setAttribute('class', 'hide')
 
             if (lastModified)
                 previewPanel.querySelector('[data-control="last-modified"]').setAttribute('class', '')
@@ -589,6 +590,12 @@
         var sidebarThumbnail = this.sidebarPreviewElement.querySelector('[data-control="sidebar-thumbnail"]')
         if (!sidebarThumbnail)
             return
+
+        var dimensions = response.metadata && response.metadata.dimensions
+        if (dimensions) {
+            this.sidebarPreviewElement.querySelector('[data-label="dimensions"]').textContent = dimensions.width + ' × ' + dimensions.height
+            this.sidebarPreviewElement.querySelector('[data-control="dimensions"]').setAttribute('class', '')
+        }
 
         if (!response.markup)
             return

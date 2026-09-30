@@ -9,6 +9,10 @@
             <th><?= e(trans('backend::lang.media.size')) ?></th>
             <td data-label="size"></td>
         </tr>
+        <tr data-control="dimensions" class="hide">
+            <th><?= e(trans('backend::lang.media.dimensions')) ?></th>
+            <td data-label="dimensions"></td>
+        </tr>
         <tr>
             <th><?= e(trans('backend::lang.media.public_url')) ?></th>
             <td><a href="#" data-label="public-url" target="_blank"><?= e(trans('backend::lang.media.click_here')) ?></a></td>

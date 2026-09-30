@@ -160,6 +160,7 @@ previewPanel.querySelector('[data-label="size"]').textContent=item.getAttribute(
 previewPanel.querySelector('[data-label="title"]').textContent=item.getAttribute('data-title')
 previewPanel.querySelector('[data-label="last-modified"]').textContent=lastModified
 previewPanel.querySelector('[data-label="public-url"]').setAttribute('href',item.getAttribute('data-public-url'))
+previewPanel.querySelector('[data-control="dimensions"]').setAttribute('class','hide')
 if(lastModified)previewPanel.querySelector('[data-control="last-modified"]').setAttribute('class','')
 else previewPanel.querySelector('[data-control="last-modified"]').setAttribute('class','hide')
 if(this.isSearchMode()){previewPanel.querySelector('[data-control="item-folder"]').setAttribute('class','')
@@ -175,7 +176,9 @@ this.sidebarThumbnailAjax=this.$form.request(this.options.alias+'::onGetSidebarT
 MediaManager.prototype.replaceSidebarPlaceholder=function(response){if(!this.sidebarPreviewElement)return
 var sidebarThumbnail=this.sidebarPreviewElement.querySelector('[data-control="sidebar-thumbnail"]')
 if(!sidebarThumbnail)return
-if(!response.markup)return
+var dimensions=response.metadata&&response.metadata.dimensions
+if(dimensions){this.sidebarPreviewElement.querySelector('[data-label="dimensions"]').textContent=dimensions.width+' × '+dimensions.height
+this.sidebarPreviewElement.querySelector('[data-control="dimensions"]').setAttribute('class','')}if(!response.markup)return
 sidebarThumbnail.innerHTML=response.markup
 sidebarThumbnail.removeAttribute('data-loading')}
 MediaManager.prototype.releaseSidebarThumbnailAjax=function(){this.sidebarThumbnailAjax=null}
