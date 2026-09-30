@@ -126,9 +126,9 @@ return [
         'search' => 'Rechercher'
     ],
     'mail' => [
-        'failover' => 'Passerelle de secours',
-        'failover_mailers' => 'Transports de secours à utiliser',
-        'failover_mailers_placeholer' => 'Choisir les transports à utiliser',
+        'failover' => 'Services de secours',
+        'failover_mailers' => 'Services e-mail de secours à utiliser',
+        'failover_mailers_placeholer' => 'Choisir les services mails à utiliser en secours',
         'log_file' => 'Fichier journal',
         'menu_label' => 'Configuration des adresses e-mails',
         'menu_description' => 'Gérer la configuration des adresses e-mails.',
