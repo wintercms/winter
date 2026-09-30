@@ -6,6 +6,10 @@
 
     <table class="name-value-list">
         <tr>
+            <th><?= e(trans('backend::lang.media.dimensions')) ?></th>
+            <td data-label="dimensions"></td>
+        </tr>
+        <tr>
             <th><?= e(trans('backend::lang.media.size')) ?></th>
             <td data-label="size"></td>
         </tr>
