@@ -1,0 +1,77 @@
+@import "../../../../assets/less/core/boot.less";
+
+div[data-control="relation"] {
+    // Top widget controls
+    .field-checkboxlist .checkboxlist-controls > div:nth-child(even) {
+        margin-left: auto;
+        margin-right: 0;
+    }
+
+    .checkboxlist {
+
+        &-item {
+            --background-padding : 10px;
+
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: start;
+            flex-wrap: wrap;
+            margin-bottom: 10px;
+            margin-top: 15px;
+
+            .checkboxlist-item-toggle .icon-chevron-right {
+                display: block;
+                transition: transform 0.15s ease-in-out;
+            }
+
+            &:has(.checkboxlist-item).open {
+                background: linear-gradient(90deg, rgba(0, 0, 0, 0) calc(var(--background-padding) - 1px), rgba(0, 0, 0, 0.25) var(--background-padding), rgba(0, 0, 0, 0) calc(var(--background-padding) + 1px));
+
+                > .checkboxlist-item-toggle .icon-chevron-right {
+                    transform: rotate(90deg);
+                }
+            }
+
+
+            & .custom-checkbox {
+                flex-grow: 1;
+                margin-top: 0;
+                margin-bottom: 0;
+            }
+
+            &-toggle {
+                margin: 0 calc(1rem + 15px) 0 1rem;
+
+                .icon-chevron-right {
+                    pointer-events: none;
+                }
+            }
+        }
+
+        &-children {
+            width: 100%;
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.2s ease-in-out;
+
+            &.open {
+                grid-template-rows: 1fr;
+            }
+            & > div {
+                overflow: hidden;
+            }
+        }
+    }
+
+    .checkboxlist-item .checkboxlist-item {
+        --background-padding: 20px;
+
+        margin-left: 10px;
+        padding-left: 10px;
+    }
+
+    .checkboxlist-item ~ .checkboxlist-item {
+        margin-top: 0;
+    }
+}
