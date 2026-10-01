@@ -412,7 +412,7 @@ return [
         'decompileBackendAssets' => 'Le risorse nel Backend sono attualmente non compilate. Non è consigliato per le installazioni di produzione perché potrebbe influire sulle prestazioni.',
         'default_backend_user' => 'È stato trovato un utente con le credenziali di accesso predefinite (admin / admin@domain.tld). Cambia il suo nome utente e/o il suo indirizzo e-mail per proteggere il sistema.',
         'auth_throttle_disabled' => 'La limitazione dei tentativi di autenticazione del Backend è disabilitata. Non è consigliata per le installazioni di produzione perché potrebbe consentire a utenti malintenzionati di indovinare le password con attacchi brute-force.',
-        'csrf' => 'La protezione CSRF è disabilitata. Non è consigliata per le installazioni di produzione perché compromette la sicurezza delle installazioni e potrebbe consentire attacchi cross-site scripting.',
+        'csrf' => 'La protezione CSRF è disabilitata. Non è consigliata per le installazioni di produzione perché compromette la sicurezza delle installazioni e potrebbe consentire attacchi cross-site request forgery (CSRF).',
         'restrict_base_dir' => 'La restrizione della cartella di base è disabilitata. Non è consigliata per le installazioni di produzione perché potrebbe consentire ai temi e ai file di configurazione di accedere a file al di fuori della tua installazione di Winter CMS.'
     ],
     'editor' => [
