@@ -132,7 +132,7 @@ return [
         'recommended' => 'Raccomandati',
         'plugin_label' => 'Plugin',
         'remove' => 'Rimuovi',
-        'refresh' => 'Reinstalla',
+        'refresh' => 'reimpostare',
         'disabled_label' => 'Disabilitato',
         'disabled_help' => 'I plugin disabilitati sono ignorati dall\'applicazione.',
         'frozen_label' => 'Congela aggiornamenti',
@@ -185,7 +185,7 @@ return [
     'settings' => [
         'menu_label' => 'Impostazioni',
         'not_found' => 'Impossibile trovare le impostazioni specificate.',
-        'missing_model' => 'La pagine delle impostazioni non ha nessun modello associato.',
+        'missing_model' => 'La pagina delle impostazioni non ha nessun modello associato.',
         'update_success' => 'Le impostazioni per :name sono state aggiornate con successo.',
         'test_subject' => 'Prova del metodo di invio e-mail',
         'test_content' => 'Questa è un\'e-mail di prova per confermare che le impostazioni e-mail fornite funzionino.',
@@ -260,7 +260,7 @@ return [
     ],
     'mail_brand' => [
         'menu_label' => 'Personalizzazione mail',
-        'menu_description' => "Modifica i colori a l'aspetto dei messaggi di posta",
+        'menu_description' => "Modifica i colori e l'aspetto dei messaggi di posta",
         'page_title' => "Personalizza l'aspetto dei messaggi email",
         'sample_template' => [
             'heading' => 'Intestazione',
@@ -298,7 +298,7 @@ return [
             'heading_color' => 'Colore intestazioni',
             'text_color' => 'Colore testo',
             'link_color' => 'Colore collegamenti',
-            'footer_color' => 'Colore piè di pagina',
+            'footer_color' => 'Colore piede di pagina',
             '_section_borders' => 'Bordi',
             'body_border_color' => 'Colore bordo corpo',
             'subcopy_border_color' => 'Colore bordo testo secondario',
@@ -414,7 +414,7 @@ return [
     'event_log' => [
         'hint' => 'Questo registro visualizza un elenco dei potenziali errori occorsi nell\'applicazione, come eccezioni e informazioni di debug.',
         'menu_label' => 'Registro eventi',
-        'menu_description' => 'VIsualizza i messaggi del registro di sistema con i relativi orari di registrazione e dettagli.',
+        'menu_description' => 'Visualizza i messaggi del registro di sistema con i relativi orari di registrazione e dettagli.',
         'empty_link' => 'Svuota il registro eventi',
         'empty_loading' => 'Svuotamento del registro eventi in corso...',
         'empty_success' => 'Il registro eventi è stato svuotato con successo.',
@@ -487,7 +487,7 @@ return [
     ],
     'log' => [
         'menu_label' => 'Impostazioni registri',
-        'menu_description' => "E' possibile specificare quali azioni registrare",
+        'menu_description' => "È possibile specificare quali azioni registrare",
         'default_tab' => 'Registri',
         'log_events' => 'Registra gli eventi di sistema',
         'log_events_comment' => 'Registra gli eventi di sistema nel database in aggiunta al registro presente sul filesystem.',

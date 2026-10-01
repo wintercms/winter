@@ -57,7 +57,7 @@ return [
         "array"   => ":attribute deve avere :value elementi o più.",
     ],
     "image"            => ":attribute deve essere un'immagine.",
-    "in"               => "Il valore di  :attribute non è valido.",
+    "in"               => "Il valore di :attribute non è valido.",
     "in_array"         => "Il campo :attribute non esiste in :other.",
     "integer"          => ":attribute deve essere un numero intero.",
     "ip"               => ":attribute deve essere un indirizzo IP valido.",
