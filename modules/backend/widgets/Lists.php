@@ -8,6 +8,7 @@ use Backend\Facades\Backend;
 use Backend\Facades\BackendAuth;
 use Backend\Traits\PreferenceMaker;
 use Carbon\Carbon;
+use Illuminate\Database\Query\Builder as QueryBuilder;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Lang;
 use System\Classes\ImageResizer;
@@ -777,8 +778,9 @@ class Lists extends WidgetBase
      * Only the key is read: `prepareQuery()` selects every visible column, so on
      * a list carrying `useRelationCount` or custom `select:` columns each row
      * would evaluate a correlated subquery whose value is then thrown away. The
-     * select list is reduced to the key unless the active sort resolves against
-     * one of its aliases, since ORDER BY relies on those being selected.
+     * select list is only reduced to the key when nothing in the final query -
+     * including clauses added by filters and query extensions - can resolve
+     * against it; otherwise the query runs as built.
      *
      * @return array<int, mixed>
      */
@@ -786,9 +788,9 @@ class Lists extends WidgetBase
     {
         $query = $this->prepareQuery();
         $keyName = $this->model->getQualifiedKeyName();
+        $baseQuery = $query->getQuery();
 
-        if (!$this->sortsBySelectedExpression()) {
-            $baseQuery = $query->getQuery();
+        if (!$this->queryReliesOnSelectList($baseQuery)) {
             $baseQuery->columns = [$keyName];
 
             // The select bindings belong to the expressions just discarded.
@@ -799,20 +801,66 @@ class Lists extends WidgetBase
     }
 
     /**
-     * Determines whether the active sort refers to a column that exists only as
-     * an alias in the select list, which is the case for columns using
-     * `select:` or `useRelationCount`, as well as related columns sorted by
-     * `valueFrom`.
+     * Determines whether the query may refer to its select list, so that reducing
+     * it would break the query or silently change its result: any HAVING, GROUP BY,
+     * UNION or DISTINCT, a raw ORDER BY, or an ORDER BY on a selected alias.
      */
-    protected function sortsBySelectedExpression(): bool
+    protected function queryReliesOnSelectList(QueryBuilder $query): bool
     {
-        if ($this->showTree || !($sortColumn = $this->getSortColumn())) {
+        if ($query->havings || $query->groups || $query->unions || $query->distinct) {
+            return true;
+        }
+
+        if (empty($query->orders)) {
             return false;
         }
 
-        $column = array_get($this->allColumns, $sortColumn);
+        $aliases = $this->getSelectAliases($query);
 
-        return $column && (isset($column->sqlSelect) || isset($column->relation));
+        foreach ($query->orders as $order) {
+            $column = $order['column'] ?? null;
+
+            if (!is_string($column)) {
+                return true;
+            }
+
+            if (str_contains($column, '.')) {
+                continue;
+            }
+
+            if ($aliases === null || in_array(strtolower($column), $aliases, true)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns the lowercased names the query's select list exposes besides the
+     * plain `table.*` columns, or null when an expression's name can't be read.
+     *
+     * @return array<int, string>|null
+     */
+    protected function getSelectAliases(QueryBuilder $query): ?array
+    {
+        $grammar = $query->getGrammar();
+        $aliases = [];
+
+        foreach ($query->columns ?? [] as $column) {
+            $isExpression = $grammar->isExpression($column);
+            $sql = trim((string) ($isExpression ? $grammar->getValue($column) : $column));
+
+            if (preg_match('/\sas\s+[`"\[]?(\w+)[`"\]]?$/i', $sql, $match)) {
+                $aliases[] = strtolower($match[1]);
+            } elseif ($isExpression) {
+                return null;
+            } elseif (!str_ends_with($sql, '*')) {
+                $aliases[] = strtolower(Str::afterLast($sql, '.'));
+            }
+        }
+
+        return $aliases;
     }
 
     /**
