@@ -1268,15 +1268,23 @@ class ImageResizerTest extends PluginTestCase
         File::deleteDirectory(storage_path('app/resized'));
         File::deleteDirectory(storage_path('app/real-media'));
 
-        // A symlink left behind by a failed test would outlive this class and confuse
-        // whichever one ran next
-        $link = storage_path('app/linked-media');
-        if (is_link($link) || file_exists($link)) {
-            unlink($link);
+        // The media files go first. A symlink left behind by a failed test would
+        // outlive this class and confuse whichever one ran next -- but removing it is
+        // the step most likely to fail, and on Windows it is: unlink() cannot remove a
+        // directory symlink there, so an uncaught throw here used to abort the rest of
+        // the cleanup and leave this class's media files on disk for the next class to
+        // count. Windows wants rmdir(), Linux wants unlink(), so try both and suppress
+        // both rather than choosing wrong on either platform.
+        foreach (glob(storage_path('app/media/*')) as $file) {
+            @unlink($file);
         }
 
-        foreach (glob(storage_path('app/media/*')) as $file) {
-            unlink($file);
+        $link = storage_path('app/linked-media');
+        if (is_link($link) || file_exists($link)) {
+            @unlink($link);
+            if (is_link($link) || file_exists($link)) {
+                @rmdir($link);
+            }
         }
 
         @rmdir(storage_path('app/media'));
