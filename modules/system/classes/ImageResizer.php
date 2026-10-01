@@ -8,6 +8,7 @@ use Config;
 use Storage;
 use Exception;
 use SystemException;
+use Str;
 use File as FileHelper;
 use Illuminate\Filesystem\FilesystemAdapter;
 use System\Models\File as SystemFileModel;
@@ -426,8 +427,26 @@ class ImageResizer
 
     /**
      * Get the internal temporary drirectory and ensure it exists
+     *
+     * NOTE: the copy made to measure a remote source now goes through
+     * getResizerTempPath(), which returns the same directory but is not overridable
+     * per instance. A subclass that replaced this method to relocate the resizer's
+     * working directory no longer affects that copy; override getResizerTempPath()
+     * instead.
      */
     public function getTempPath(): string
+    {
+        return static::getResizerTempPath();
+    }
+
+    /**
+     * Get the internal temporary directory and ensure it exists
+     *
+     * Kept separate from getTempPath() because that method is part of the public
+     * API and therefore cannot be made static without breaking subclasses that
+     * override it.
+     */
+    protected static function getResizerTempPath(): string
     {
         $path = temp_path() . '/resizer';
 
@@ -436,6 +455,28 @@ class ImageResizer
         }
 
         return $path;
+    }
+
+    /**
+     * Get the time to live used for the cached resizer configuration
+     *
+     * This is a bound on growth, not a correctness mechanism, and it is deliberately not
+     * applied to the source or dimension caches. Those are immutable for their key
+     * because the identifier embeds the source image's mtime, so a changed source lands
+     * on a different key and a TTL could only buy a needless re-read -- a full file
+     * transfer on a remote disk. The exception is a filemodel source, whose identifier
+     * does not embed the configuration at all; there the entries carry the mtime
+     * alongside the dimensions and validate themselves.
+     *
+     * The residual failure it leaves is worth stating. A resizer URL that is never
+     * visited does not have its resize performed, so once this expires the URL stops
+     * resolving. Retention lengthens the window from a single fetch to a day rather than
+     * removing it, because bounding growth and keeping a promise for ever are not both
+     * available at once.
+     */
+    protected static function dimensionCacheTtl(): \DateTimeInterface
+    {
+        return now()->addDay();
     }
 
     /**
@@ -816,7 +857,11 @@ class ImageResizer
     {
         // If the image hasn't been resized yet, then store the config data for the resizer to use
         if (!$this->isResized()) {
-            Cache::put(static::CACHE_PREFIX . $this->getIdentifier(), $this->getConfig());
+            Cache::put(
+                static::CACHE_PREFIX . $this->getIdentifier(),
+                $this->getConfig(),
+                static::dimensionCacheTtl()
+            );
         }
     }
 
@@ -840,13 +885,390 @@ class ImageResizer
 
         $resizer = new static($config['image'], $config['width'], $config['height'], $config['options']);
 
-        // Remove the data from the cache only after successfully instantiating the resizer
-        // in order to make it easier to debug should any issues occur during the instantiation
-        // since the browser will "steal" the configuration with the first request it makes
-        // if we pull the configuration data out immediately.
-        Cache::forget($cacheKey);
-
+        // The configuration is left in the cache rather than consumed here. It used to be
+        // evicted on the grounds that the browser "stealing" it with the first request
+        // could not race a second visitor, which is a real fault but a poor trade: a page
+        // holding a resizer URL -- a cached fragment, a client-side template, a URL stored
+        // in content -- then stopped resolving after the first visitor.
+        //
+        // Nothing sensitive is exposed by keeping it. The contents cannot be recovered
+        // from the identifier, which is a one-way HMAC over the resized path, and the
+        // resized path carries only a hash of the configuration. What settles it is that
+        // anyone holding the identifier already holds a self-authenticating /resizer/ URL
+        // -- the route re-verifies that pairing in getValidResizedUrl() -- so the entry
+        // is not a capability in the first place, and retaining it reveals nothing the
+        // URL did not.
+        //
+        // The window is lengthened rather than removed. A resizer URL nobody ever visits
+        // never has its resize performed, so once the TTL expires the URL stops
+        // resolving; see dimensionCacheTtl().
         return $resizer;
+    }
+
+    /**
+     * Calculate the size of an image constrained to a fixed height
+     *
+     * Mirrors Resizer::getSizeByFixedHeight(), which returns an unrounded float that
+     * GD truncates when it allocates the canvas. Rounding it here instead is a
+     * one-pixel divergence from the real resizer in a large fraction of cases.
+     */
+    protected static function sizeByFixedHeight($newHeight, int $origWidth, int $origHeight): float
+    {
+        return $newHeight * ($origWidth / $origHeight);
+    }
+
+    /**
+     * Calculate the size of an image constrained to a fixed width
+     *
+     * Mirrors Resizer::getSizeByFixedWidth(), which returns an unrounded float.
+     * @see static::sizeByFixedHeight()
+     */
+    protected static function sizeByFixedWidth($newWidth, int $origWidth, int $origHeight): float
+    {
+        return $newWidth * ($origHeight / $origWidth);
+    }
+
+    /**
+     * Mirror of Resizer::getSizeByAuto()
+     *
+     * The order of the two multiplications is not interchangeable with the other
+     * algebraic form; across roughly 44 million bound combinations about 0.18% of
+     * them truncate to a different pixel, so this is transcribed rather than
+     * re-derived.
+     */
+    protected static function autoDimensions($newWidth, $newHeight, int $origWidth, int $origHeight): array
+    {
+        if ($newWidth <= 1 && $newHeight <= 1) {
+            $newWidth = $origWidth;
+            $newHeight = $origHeight;
+        } elseif ($newWidth <= 1) {
+            $newWidth = static::sizeByFixedHeight($newHeight, $origWidth, $origHeight);
+        } elseif ($newHeight <= 1) {
+            $newHeight = static::sizeByFixedWidth($newWidth, $origWidth, $origHeight);
+        }
+
+        if ($origHeight < $origWidth || ($origHeight === $origWidth && $newHeight < $newWidth)) {
+            return [
+                'width' => (int) $newWidth,
+                'height' => (int) static::sizeByFixedWidth($newWidth, $origWidth, $origHeight),
+            ];
+        }
+
+        if ($origHeight > $origWidth || ($origHeight === $origWidth && $newHeight > $newWidth)) {
+            return [
+                'width' => (int) static::sizeByFixedHeight($newHeight, $origWidth, $origHeight),
+                'height' => (int) $newHeight,
+            ];
+        }
+
+        return ['width' => (int) $newWidth, 'height' => (int) $newHeight];
+    }
+
+    /**
+     * Calculate the dimensions the resizer will produce for the given bounds
+     *
+     * This deliberately duplicates Resizer::getDimensions() rather than calling it,
+     * because that method is protected and widening its visibility is a backwards
+     * compatibility change on a released package. The duplication is safe only as
+     * long as testCalculateResizedDimensionsMatchesResizerOutput passes: that test
+     * compares against the real Resizer::resize() output and fails if the upstream
+     * formula changes. Unification is tracked as a follow-up against Storm, which
+     * cannot ship in the same change because the core pins winter/storm to a
+     * dev-develop branch that needs its own release first.
+     *
+     * Two details of the upstream implementation are easy to get wrong and are
+     * therefore spelled out here:
+     *
+     * 1. The requested bounds are sanitised before the mode is dispatched on, not
+     *    inside each mode. A single-bound request is filled in from the source
+     *    first, which can push both bounds under the "less than one pixel"
+     *    threshold and make the result the original size.
+     * 2. Only "fit" rounds. "portrait", "landscape" and the sanitisation all rely on
+     *    GD truncating an unrounded float.
+     *
+     * An unrecognised mode is assumed to be "auto". That is the least-wrong answer
+     * rather than a correct one: a custom mode means a custom resizer, whose real
+     * output cannot be predicted from here.
+     *
+     * @return array ['width' => int, 'height' => int]
+     */
+    protected static function calculateResizedDimensions(
+        int $origWidth,
+        int $origHeight,
+        int $reqWidth,
+        int $reqHeight,
+        string $mode
+    ): array {
+        $dimensions = static::computeResizedDimensions($origWidth, $origHeight, $reqWidth, $reqHeight, $mode);
+
+        // GD cannot allocate a canvas with a sub-pixel dimension: it truncates the
+        // float to zero and throws. Claiming a size smaller than a pixel would be
+        // reporting an image that cannot be produced, so report it as unknown. This
+        // is also the exact condition under which the resizer refuses, so the two
+        // agree rather than one inventing a size the other rejects.
+        if ($dimensions['width'] < 1 || $dimensions['height'] < 1) {
+            return ['width' => 0, 'height' => 0];
+        }
+
+        return $dimensions;
+    }
+
+    /**
+     * Apply the resize mode to a pair of sanitised bounds
+     *
+     * @see static::calculateResizedDimensions()
+     * @return array ['width' => int, 'height' => int]
+     */
+    protected static function computeResizedDimensions(
+        int $origWidth,
+        int $origHeight,
+        int $reqWidth,
+        int $reqHeight,
+        string $mode
+    ): array {
+        if ($origWidth <= 0 || $origHeight <= 0) {
+            return ['width' => $reqWidth, 'height' => $reqHeight];
+        }
+
+        // Mirrors the sanitisation at the top of Resizer::resize(). It runs for every
+        // mode and must precede the switch.
+        if (!$reqWidth && !$reqHeight) {
+            $newWidth = $origWidth;
+            $newHeight = $origHeight;
+        } elseif (!$reqWidth) {
+            $newHeight = $reqHeight;
+            $newWidth = static::sizeByFixedHeight($newHeight, $origWidth, $origHeight);
+        } elseif (!$reqHeight) {
+            $newWidth = $reqWidth;
+            $newHeight = static::sizeByFixedWidth($newWidth, $origWidth, $origHeight);
+        } else {
+            $newWidth = $reqWidth;
+            $newHeight = $reqHeight;
+        }
+
+        switch ($mode) {
+            case 'exact':
+                return ['width' => (int) $newWidth, 'height' => (int) $newHeight];
+
+            case 'crop':
+                // The "crop" mode builds a larger intermediate canvas via
+                // getOptimalCrop() and then crops to exactly the requested box, so the
+                // image that is finally written is the request itself and not the
+                // canvas.
+                return ['width' => (int) $newWidth, 'height' => (int) $newHeight];
+
+            case 'portrait':
+                return [
+                    'width' => (int) static::sizeByFixedHeight($newHeight, $origWidth, $origHeight),
+                    'height' => (int) $newHeight,
+                ];
+
+            case 'landscape':
+                return [
+                    'width' => (int) $newWidth,
+                    'height' => (int) static::sizeByFixedWidth($newWidth, $origWidth, $origHeight),
+                ];
+
+            case 'fit':
+                $effectiveRatio = min($newWidth / $origWidth, $newHeight / $origHeight);
+                return [
+                    'width' => (int) round($origWidth * $effectiveRatio),
+                    'height' => (int) round($origHeight * $effectiveRatio),
+                ];
+
+            case 'auto':
+                return static::autoDimensions($newWidth, $newHeight, $origWidth, $origHeight);
+
+            default:
+                return static::autoDimensions($newWidth, $newHeight, $origWidth, $origHeight);
+        }
+    }
+
+    /**
+     * Read the dimensions of a source image, and, if possible, its local path
+     *
+     * @param mixed $disk A FilesystemAdapter or a filesystem configuration name
+     * @return array ['width' => int, 'height' => int]
+     */
+    protected static function readSourceDimensions($disk, string $path): array
+    {
+        $tempPath = null;
+
+        try {
+            if (FileHelper::isLocalDisk($disk)) {
+                $localPath = $disk->getPathPrefix() . $path;
+            } else {
+                // A remote disk has to be copied somewhere readable by GD before it
+                // can be measured. tempnam() reserves the name atomically, unlike
+                // uniqid(), so two concurrent lookups cannot select the same path and
+                // then unlink each other's copy.
+                $tempPath = tempnam(static::getResizerTempPath(), 'src');
+                FileHelper::put($tempPath, $disk->get($path));
+                $localPath = $tempPath;
+            }
+
+            $size = @getimagesize($localPath);
+            if ($size === false) {
+                return ['width' => 0, 'height' => 0];
+            }
+
+            $origWidth = (int) $size[0];
+            $origHeight = (int) $size[1];
+
+            // An orientation of 6 or 8 means the pixels are stored rotated. The
+            // resizer reports the displayed dimensions, so match that here. Only
+            // JPEG carries EXIF, and only JPEG goes down this path upstream.
+            if (($size['mime'] ?? null) === 'image/jpeg' && function_exists('exif_read_data')) {
+                $exif = @exif_read_data($localPath);
+                if (!empty($exif['Orientation']) && in_array($exif['Orientation'], [6, 8], true)) {
+                    [$origWidth, $origHeight] = [$origHeight, $origWidth];
+                }
+            }
+
+            return ['width' => $origWidth, 'height' => $origHeight];
+        } finally {
+            if ($tempPath !== null && file_exists($tempPath)) {
+                @unlink($tempPath);
+            }
+        }
+    }
+
+    /**
+     * Resolve the identifier of a system resizer URL
+     *
+     * Returns null when the provided string is not a resizer URL. Both relative and
+     * absolute URLs are accepted, since a forced link policy rewrites the resizer URL
+     * to an absolute one. parse_url() is deliberately not used for the scheme-less case
+     * because it reads a Windows drive letter as a scheme.
+     *
+     * @return string|null The resizer identifier, or null if this is not a resizer URL
+     */
+    protected static function resizerUrlSegments(string $url): ?string
+    {
+        $path = $url;
+
+        if (Str::startsWith($url, ['http://', 'https://'])) {
+            $path = (string) parse_url($url, PHP_URL_PATH);
+        } elseif (Str::startsWith($url, '//')) {
+            $path = (string) parse_url('https:' . $url, PHP_URL_PATH);
+        }
+
+        $segments = explode('/', ltrim(static::normalizePath($path), '/'));
+
+        // Not required to be the first segment: under a subfolder install with a forced
+        // link policy, Url::to() produces https://host/sub/resizer/<id>/..., so the route
+        // is not at index zero. Searching rather than indexing keeps that deployment
+        // working, and requiring a valid identifier at the next position is what stops
+        // an ordinary media path containing "resizer" from matching.
+        $position = array_search('resizer', $segments, true);
+
+        if (
+            $position !== false
+            && isset($segments[$position + 1])
+            && static::isValidIdentifier($segments[$position + 1])
+        ) {
+            return $segments[$position + 1];
+        }
+
+        return null;
+    }
+
+    /**
+     * Resolve the dimensions of a cached resizer configuration
+     *
+     * @return array ['width' => int, 'height' => int]
+     */
+    protected static function computeCachedDimensions(string $identifier): array
+    {
+        $config = Cache::get(static::CACHE_PREFIX . $identifier);
+
+        if (!is_array($config)) {
+            return ['width' => 0, 'height' => 0];
+        }
+
+        return static::dimensionsForConfig($config, $identifier);
+    }
+
+    /**
+     * Resolve the dimensions described by a resizer configuration
+     *
+     * A zero pair is returned when the configuration is incomplete or the source
+     * cannot be measured. A partial pair is never returned: a width with a zero
+     * height reaches an HTML attribute and collapses the layout, whereas a zero pair
+     * reads as "unknown", which is what it is.
+     *
+     * @return array ['width' => int, 'height' => int]
+     */
+    protected static function dimensionsForConfig($config, string $identifier): array
+    {
+        if (
+            !is_array($config)
+            || !isset($config['width'], $config['height'], $config['options']['mode'])
+            || !isset($config['image']['disk'], $config['image']['path'])
+        ) {
+            return ['width' => 0, 'height' => 0];
+        }
+
+        $cacheKey = static::CACHE_PREFIX . $identifier;
+        $sourceCacheKey = $cacheKey . '.source';
+        $dimensionsCacheKey = $cacheKey . '.dimensions';
+
+        // For every source whose resized path is derived from the configuration, the
+        // identifier embeds the source's mtime, so this entry is immutable for its key
+        // and keeping it for ever costs nothing. A filemodel source is the exception:
+        // its resized path is the thumb filename, which carries the attachment id and
+        // the requested bounds and nothing at all about the file's contents, so the
+        // identifier does not move when the bytes do. Recording the mtime alongside the
+        // dimensions makes the entry self-validating for those too, for one comparison.
+        //
+        // It cannot cover the case where the cached configuration itself is out of date,
+        // because storeConfig() skips writing once the thumb exists. A caller still
+        // holding an old /resizer/ URL for a filemodel whose bytes were replaced in
+        // place therefore keeps the first answer. That is pre-existing and narrow.
+        $sourceMtime = isset($config['image']['mtime']) ? (int) $config['image']['mtime'] : null;
+        $cachedSource = Cache::get($sourceCacheKey);
+        $sourceIsCurrent = is_array($cachedSource)
+            && ($sourceMtime === null || ($cachedSource['mtime'] ?? null) === $sourceMtime);
+
+        if (!$sourceIsCurrent) {
+            // The dimensions are derived from the source, so they have to move with it
+            Cache::forget($dimensionsCacheKey);
+
+            $disk = $config['image']['disk'];
+            if (is_string($disk)) {
+                $disk = Storage::disk($disk);
+            }
+
+            $cachedSource = static::readSourceDimensions($disk, (string) $config['image']['path']);
+
+            // Only a successful read is cached. The guard has to sit outside the write
+            // rather than inside a remember() closure, because remember() stores
+            // whatever the closure returns, so a transient failure would otherwise
+            // become a zero dimension for ever.
+            if ($cachedSource['width'] > 0 && $cachedSource['height'] > 0) {
+                $cachedSource['mtime'] = $sourceMtime;
+                Cache::forever($sourceCacheKey, $cachedSource);
+            }
+        }
+
+        if ($cachedSource['width'] <= 0 || $cachedSource['height'] <= 0) {
+            return ['width' => 0, 'height' => 0];
+        }
+
+        // Forever for the same reason as the source cache above: pure function of the key,
+        // and dropped above whenever that key had to be re-read
+        return Cache::rememberForever(
+            $dimensionsCacheKey,
+            function () use ($config, $cachedSource) {
+                return static::calculateResizedDimensions(
+                    (int) $cachedSource['width'],
+                    (int) $cachedSource['height'],
+                    (int) $config['width'],
+                    (int) $config['height'],
+                    (string) $config['options']['mode']
+                );
+            }
+        );
     }
 
     /**
@@ -902,6 +1324,11 @@ class ImageResizer
 
     /**
      * Gets the dimensions of the provided image file
+     *
+     * A system resizer URL is resolved from its cached configuration rather than by
+     * reading the file, because on a cold cache the resized image has not been written
+     * yet and there is nothing on disk to measure.
+     *
      * NOTE: Doesn't currently support being passed a FileModel image that has already been resized
      *
      * @param mixed $image Supported values below:
@@ -909,30 +1336,26 @@ class ImageResizer
      *              instance of Winter\Storm\Database\Attach\File,
      *              string containing URL or path accessible to the application's filesystem manager
      * @throws SystemException If the provided input was unable to be processed
+     * @return array ['width' => int, 'height' => int]
      */
     public static function filterGetDimensions($image): array
     {
+        if (is_string($image) && ($identifier = static::resizerUrlSegments($image)) !== null) {
+            return static::computeCachedDimensions($identifier);
+        }
+
+        // Anything that cannot be identified still raises, as it always has. Swallowing
+        // it here would turn a template pointing at a missing image from a visible error
+        // into a silently rendered width="0", and that signal is worth more than the
+        // convenience. Only a resizer URL -- handled above, where there is no file to
+        // identify -- reports unknown.
         $resizer = new static($image);
+        $config = $resizer->getConfig();
 
-        return Cache::rememberForever(static::CACHE_PREFIX . 'dimensions.' . $resizer->getIdentifier(), function () use ($resizer) {
-            // Prepare the local file for assessment
-            $tempPath = $resizer->getLocalTempPath();
-            $dimensions = [];
-
-            // Attempt to get the image size
-            try {
-                $size = getimagesize($tempPath);
-                $dimensions['width'] = $size[0];
-                $dimensions['height'] = $size[1];
-            } catch (\Exception $ex) {
-                @unlink($tempPath);
-                throw $ex;
-            }
-
-            // Cleanup afterwards
-            @unlink($tempPath);
-
-            return $dimensions;
-        });
+        // The configuration is handed over directly rather than written to the cache
+        // and read back. Writing it here would leave an entry that no resizer request
+        // can ever consume, because storeConfig() is the only writer that a resizer URL
+        // depends on and it has already run by the time such a URL exists.
+        return static::dimensionsForConfig($config, $resizer->getIdentifier());
     }
 }
