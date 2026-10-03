@@ -27,6 +27,11 @@ trait UploadableWidget
     // public $uploadPath;
 
     /**
+     * @var bool $validateFileName Determines whether the file name should be validated.
+     */
+    public bool $validateMediaFileName = true;
+
+    /**
      * Returns the disk that will be used to store the uploaded file
      */
     public function uploadableGetDisk(): FilesystemAdapter
@@ -171,7 +176,7 @@ trait UploadableWidget
         /*
          * File name contains non-latin characters, attempt to slug the value
          */
-        if (!$this->validateFileName($fileName)) {
+        if (!$this->validateFileName($fileName) && $this->validateMediaFileName) {
             $fileName = $this->cleanFileName(File::name($fileName)) . '.' . $extension;
         }
 
