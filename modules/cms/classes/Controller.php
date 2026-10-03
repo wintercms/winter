@@ -25,6 +25,7 @@ use Winter\Storm\Exception\AjaxException;
 use Winter\Storm\Exception\ValidationException;
 use Winter\Storm\Parse\Bracket as TextParser;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Blade;
 
 /**
  * The CMS controller class.
@@ -1080,9 +1081,14 @@ class Controller
          * Render the partial
          */
         CmsException::mask($partial, 400);
-        $this->getLoader()->setObject($partial);
-        $template = $this->getTwig()->load($partial->getFilePath());
-        $partialContent = $template->render(array_merge($parameters, $this->vars));
+        if (str_ends_with($partial->fileName, '.blade.php')) {
+            $partialContent = Blade::render($partial->content, $this->vars);
+        }
+        else {
+            $this->getLoader()->setObject($partial);
+            $template = $this->getTwig()->load($partial->getFilePath());
+            $partialContent = $template->render(array_merge($parameters, $this->vars));
+        }
         CmsException::unmask();
 
         if ($partial instanceof Partial) {

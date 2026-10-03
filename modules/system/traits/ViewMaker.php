@@ -1,11 +1,12 @@
 <?php namespace System\Traits;
 
-use File;
-use Lang;
 use Block;
+use Config;
+use File;
+use Illuminate\Support\Facades\Blade;
+use Lang;
 use SystemException;
 use Throwable;
-use Config;
 
 /**
  * View Maker Trait
@@ -208,6 +209,10 @@ trait ViewMaker
         // Check the path for an extension
         $ext = pathinfo($fileName, PATHINFO_EXTENSION);
         if (!empty($ext)) {
+            if ($ext === 'blade') {
+                $ext = 'php';
+                $fileName .= ".php";
+            }
             if (!in_array($ext, $allowedExtensions)) {
                 throw new SystemException("$ext is not a valid View extension");
             }
@@ -263,6 +268,11 @@ trait ViewMaker
         }
 
         $vars = array_merge($this->vars, $extraParams);
+
+        if (str_ends_with($filePath, '.blade.php')) {
+            $fileContent = file_get_contents($filePath);
+            return Blade::render($fileContent, $vars);
+        }
 
         $obLevel = ob_get_level();
 
