@@ -1,6 +1,7 @@
 <?php namespace Backend\Classes;
 
 use Config;
+use Illuminate\Support\Facades\Session;
 use System\Classes\PluginManager;
 use Winter\Storm\Auth\Manager as StormAuthManager;
 use Winter\Storm\Exception\SystemException;
@@ -61,6 +62,21 @@ class AuthManager extends StormAuthManager
      * @var array Cache of registered permissions.
      */
     protected $permissionCache = false;
+
+    /**
+     * Checks whether the current impersonation was authorized outside the backend auth system.
+     *
+     * An explicit false impersonator marker is used when impersonation is authorized by the
+     * system or another authentication system. This is distinct from a stored backend user ID
+     * that no longer resolves to an existing user.
+     *
+     * @return bool
+     */
+    public function isExternalImpersonation()
+    {
+        return $this->isImpersonator()
+            && Session::get($this->sessionKey . '_impersonator') === false;
+    }
 
     protected function init()
     {

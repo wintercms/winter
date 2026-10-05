@@ -18,6 +18,9 @@ class User extends UserBase
 {
     use \Winter\Storm\Database\Traits\SoftDelete;
 
+    /** @var bool Indicates that this model's impersonation was revoked for an unresolved actor. */
+    protected $impersonationRevoked = false;
+
     /**
      * @var string The database table used by the model.
      */
@@ -405,19 +408,33 @@ class User extends UserBase
      */
     public function getMergedPermissions()
     {
+        if ($this->impersonationRevoked) {
+            return [];
+        }
+
         if (!$this->mergedPermissions) {
             $permissions = parent::getMergedPermissions();
 
             // If the user is being impersonated filter out any permissions the impersonator doesn't have access to already
             if (BackendAuth::isImpersonator()) {
                 $impersonator = BackendAuth::getImpersonator();
-                if ($impersonator && $impersonator !== $this) {
-                    foreach ($permissions as $permission => $status) {
-                        if (!$impersonator->hasAccess($permission)) {
-                            unset($permissions[$permission]);
+                if ($impersonator) {
+                    if ($impersonator !== $this) {
+                        foreach ($permissions as $permission => $status) {
+                            if (!$impersonator->hasAccess($permission)) {
+                                unset($permissions[$permission]);
+                            }
                         }
+                        $this->mergedPermissions = $permissions;
                     }
-                    $this->mergedPermissions = $permissions;
+                }
+                elseif (!BackendAuth::isExternalImpersonation()) {
+                    // A backend impersonator ID is present but no longer resolves to a user.
+                    // End impersonation and fail closed instead of granting the target's full
+                    // permission set.
+                    BackendAuth::stopImpersonate();
+                    $this->impersonationRevoked = true;
+                    return [];
                 }
             }
         }
@@ -450,6 +467,7 @@ class User extends UserBase
         // so that they are correct even if they had been loaded prior
         // to the impersonation starting
         $this->mergedPermissions = null;
+        $this->impersonationRevoked = false;
 
         return true;
     }
