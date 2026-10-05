@@ -78,6 +78,24 @@ class AuthManager extends StormAuthManager
             && Session::get($this->sessionKey . '_impersonator') === false;
     }
 
+    /**
+     * Impersonates a backend user and clears any revocation state left on the model.
+     *
+     * The model event can authorize external impersonation without calling
+     * canBeImpersonated(), so reset the state after every successful transition.
+     *
+     * @param mixed $impersonatee
+     * @return void
+     */
+    public function impersonate($impersonatee)
+    {
+        parent::impersonate($impersonatee);
+
+        if ($impersonatee instanceof \Backend\Models\User) {
+            $impersonatee->resetImpersonationState();
+        }
+    }
+
     protected function init()
     {
         $this->useThrottle = Config::get('auth.throttle.enabled', true);

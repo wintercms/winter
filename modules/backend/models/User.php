@@ -443,6 +443,17 @@ class User extends UserBase
     }
 
     /**
+     * Clears cached permissions and any revocation state before a new impersonation.
+     *
+     * @return void
+     */
+    public function resetImpersonationState()
+    {
+        $this->mergedPermissions = null;
+        $this->impersonationRevoked = false;
+    }
+
+    /**
      * Check if this user can be impersonated by the provided impersonator
      * Super users cannot be impersonated and all users cannot be impersonated unless there is an impersonator
      * present and the impersonator has access to `backend.impersonate_users`, and the impersonator is not the
@@ -463,11 +474,9 @@ class User extends UserBase
             return false;
         }
 
-        // Clear the merged permissions before the impersonation starts
-        // so that they are correct even if they had been loaded prior
-        // to the impersonation starting
-        $this->mergedPermissions = null;
-        $this->impersonationRevoked = false;
+        // Clear cached state before the impersonation starts so that permissions
+        // are correct even if they had been loaded previously.
+        $this->resetImpersonationState();
 
         return true;
     }

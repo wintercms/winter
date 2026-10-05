@@ -87,6 +87,62 @@ class ImpersonationPermissionTest extends PluginTestCase
         $this->assertNull($auth->getUser());
     }
 
+    public function testDeletingImpersonatorDoesNotExpandCachedPermissionsInCurrentRequest(): void
+    {
+        $original = $this->makeUser('same-request-original', [
+            'backend.manage_users' => 1,
+            'backend.impersonate_users' => 1,
+        ]);
+        $target = $this->makeUser('same-request-target', [
+            'backend.manage_users' => 1,
+            'system.access_logs' => 1,
+        ]);
+
+        $auth = BackendAuth::getFacadeRoot();
+        $auth->login($original, false);
+        $auth->impersonate($target);
+
+        $this->assertFalse($target->hasAccess('system.access_logs'));
+        $this->assertTrue($original->delete());
+
+        $this->assertFalse($target->hasAccess('system.access_logs'));
+    }
+
+    public function testReusedTargetCanStartExternalImpersonationAfterRevocation(): void
+    {
+        $original = $this->makeUser('reused-original', [
+            'backend.manage_users' => 1,
+            'backend.impersonate_users' => 1,
+        ]);
+        $target = $this->makeUser('reused-target', [
+            'backend.manage_users' => 1,
+            'system.access_logs' => 1,
+        ]);
+
+        $auth = BackendAuth::getFacadeRoot();
+        $auth->login($original, false);
+        $auth->impersonate($target);
+        $this->assertTrue($original->delete());
+
+        AuthManager::forgetInstance();
+        $this->app->forgetInstance('backend.auth');
+        BackendAuth::clearResolvedInstance('backend.auth');
+        $auth = BackendAuth::getFacadeRoot();
+        $reusedTarget = $auth->getUser();
+
+        $this->assertSame($target->getKey(), $reusedTarget->getKey());
+        $this->assertFalse($reusedTarget->hasAccess('system.access_logs'));
+        $this->assertFalse($auth->isImpersonator());
+
+        $reusedTarget->bindEvent('model.auth.beforeImpersonate', function ($impersonator) {
+            return $impersonator === false;
+        });
+        $auth->impersonate($reusedTarget);
+
+        $this->assertTrue($auth->isExternalImpersonation());
+        $this->assertTrue($reusedTarget->hasAccess('system.access_logs'));
+    }
+
     public function testExplicitExternalImpersonationRemainsSupported(): void
     {
         $target = $this->makeUser('external-target', ['system.access_logs' => 1]);
