@@ -4,13 +4,13 @@
 
 @font-family-base: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 @color-base: #405261;
-@color-warning: #c84530;
+@color-warning: var(--wn-warning, #c84530);
 @font-path: "../font"; // For icon fonts
 
 body {
     padding-top: 20px;
     font-family: @font-family-base;
-    background: #f3f3f3;
+    background: var(--wn-surface-hover, #f3f3f3);
     color: @color-base;
 }
 
@@ -108,7 +108,7 @@ table.data-table {
         vertical-align: top;
         text-align: left;
         font-weight: 300;
-        border: 1px solid #fff;
+        border: 1px solid var(--wn-border-inverse, #fff);
         padding: 6px 8px;
         &.right {
             text-align: right;
@@ -118,7 +118,7 @@ table.data-table {
     thead {
         th, th {
             text-transform: uppercase;
-            background: #7b8892;
+            background: var(--wn-styles-bg, #7b8892);
             color: white;
         }
     }
@@ -130,7 +130,7 @@ table.data-table {
 
         tr:nth-child(2n) {
             td, th {
-                background-color: #d8d9db;
+                background-color: var(--wn-surface-overlay, #d8d9db);
             }
         }
     }
@@ -168,7 +168,7 @@ table.data-table {
     }
 
     p {
-        background: #ebebeb;
+        background: var(--wn-surface-hover, #ebebeb);
         margin-bottom: 0;
         span {
             color: lighten(@color-base, 30%);
@@ -191,7 +191,7 @@ table.data-table {
             &.gutter {
                 padding: 5px 10px;
                 width: 35px;
-                background: #7b8892;
+                background: var(--wn-styles-bg, #7b8892);
                 color: white;
             }
 

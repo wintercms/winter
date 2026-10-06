@@ -9,17 +9,17 @@
 // Chart
 // --------------------------------------------------
 
-@color-status-list-text:                     #7e8c8d;
+@color-status-list-text:                     var(--wn-status-list-text, #7e8c8d);
 
-@color-chart-tooltip-bg:                     #000000;
-@color-chart-tooltip-text:                   #ffffff;
+@color-chart-tooltip-bg:                     var(--wn-chart-tooltip-bg, #000000);
+@color-chart-tooltip-text:                   var(--wn-chart-tooltip-text, #ffffff);
 
-@color-scoreboard-title:                     #666666;
-@color-scoreboard-description:               #999999;
-@color-scoreboard-body:                      #666666;
-@color-scoreboard-icon:                      #e5a91a;
-@color-scoreboard-positive:                  #95b753;
-@color-scoreboard-negative:                  #cc3300;
+@color-scoreboard-title:                     var(--wn-scoreboard-title, #666666);
+@color-scoreboard-description:               var(--wn-scoreboard-description, #999999);
+@color-scoreboard-body:                      var(--wn-scoreboard-body, #666666);
+@color-scoreboard-icon:                      var(--wn-scoreboard-icon, #e5a91a);
+@color-scoreboard-positive:                  var(--wn-scoreboard-positive, #95b753);
+@color-scoreboard-negative:                  var(--wn-scoreboard-negative, #cc3300);
 
 .control-chart-non-centered() {
     text-align: left;
@@ -313,7 +313,7 @@
         display: block;
         font-size: @font-size-base - 1;
         color: @color-status-list-text;
-        border-bottom: 1px solid #f0f0f0;
+        border-bottom: 1px solid var(--wn-chart-border, #f0f0f0);
 
         &:last-child {
             border-bottom: none;
@@ -370,7 +370,7 @@
 
         .status-icon,
         .status-label {
-            background: #aaa;
+            background: var(--wn-chart-bg, #aaa);
             &.success { background: @brand-success; }
             &.primary { background: @brand-primary; }
             &.warning { background: @brand-warning; }
