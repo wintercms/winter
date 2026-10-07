@@ -21,7 +21,7 @@ jobs:
     runs-on: ${{ matrix.operatingSystem }}
     name: ${{ matrix.operatingSystem }} / JavaScript
     env:
-      GITHUB_TOKEN: ${{ secrets.COMPOSER_GITHUB_TOKEN }}
+      COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.GITHUB_TOKEN }}"}}'
     steps:
       - name: Checkout changes
         uses: actions/checkout@v4
