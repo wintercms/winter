@@ -135,6 +135,13 @@ class UpdateManager
     public function update()
     {
         try {
+            $connection = Schema::getConnection();
+            if ($connection->getDriverName() === 'sqlite') {
+                if (version_compare($connection->getServerVersion(), '3.35', '<')) {
+                    throw new Exception("SQLite version minimum requirement not met (>= 3.35)");
+                }
+            };
+
             $firstUp = !Schema::hasTable($this->getMigrationTableName());
             if ($firstUp) {
                 $this->repository->createRepository();

@@ -29,7 +29,7 @@ class ControllerPostbackTest extends TestCase
         $requestMock = $this
             ->getMockBuilder('Illuminate\Http\Request')
             ->disableOriginalConstructor()
-            ->setMethods(['ajax', 'method', 'header'])
+            ->onlyMethods(['ajax', 'method', 'header'])
             ->getMock();
 
         $map = [
@@ -60,7 +60,7 @@ class ControllerPostbackTest extends TestCase
         $requestMock = $this
             ->getMockBuilder('Illuminate\Http\Request')
             ->disableOriginalConstructor()
-            ->setMethods(['ajax', 'method', 'header', 'post', 'input'])
+            ->onlyMethods(['ajax', 'method', 'header', 'post', 'input'])
             ->getMock();
 
         $requestMock->expects($this->any())

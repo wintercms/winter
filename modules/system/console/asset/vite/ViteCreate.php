@@ -17,7 +17,6 @@ class ViteCreate extends AssetCreate
     protected $signature = 'vite:create
         {packageName : The package name to add configuration for}
         {--no-stubs : Disable stub file generation}
-        {--s|silent : Enables silent mode, no output will be shown.}
         {--f|force : Force file overwrites}';
 
     /**

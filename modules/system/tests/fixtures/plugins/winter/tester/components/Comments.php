@@ -8,7 +8,7 @@ class Comments extends ComponentBase
 {
     private $users;
 
-    public function __construct(?CodeBase $cmsObject = null, $properties = [], ?Users $users = null)
+    public function __construct(Users $users, ?CodeBase $cmsObject = null, $properties = [])
     {
         parent::__construct($cmsObject, $properties);
         $this->users = $users;

@@ -19,7 +19,6 @@ class NpmRun extends NpmCommand
         {script : The name of the script to run, as defined in the package.json "scripts" config.}
         {additionalArgs?* : Arguments to pass through to the script being run.}
         {--f|production : Runs the script in "production" mode.}
-        {--s|silent : Silent mode.}
         {--disable-tty : Disable tty mode}';
 
     /**
