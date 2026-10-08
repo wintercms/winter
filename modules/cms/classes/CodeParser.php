@@ -193,7 +193,7 @@ class CodeParser
      * In some rare cases the cache file will not contain the class
      * name we expect. When this happens, destroy the corrupt file,
      * flush the request cache, and repeat the cycle.
-     * @return void
+     * @return array
      */
     protected function handleCorruptCache($data)
     {

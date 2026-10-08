@@ -4,6 +4,8 @@
  * Class QuickActionItem
  *
  * @package Backend\Classes
+ *
+ * @phpstan-consistent-constructor
  */
 class QuickActionItem
 {

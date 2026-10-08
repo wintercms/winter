@@ -1,0 +1,18 @@
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    paths:
+        - modules/system/classes
+        - modules/system/models
+        - modules/backend/classes
+        - modules/backend/models
+        - modules/cms/classes
+        - modules/cms/models
+    level: 0
+    bootstrapFiles:
+        - phpstan-bootstrap.php
+    scanDirectories:
+        - modules
+    treatPhpDocTypesAsCertain: false
+    disableSchemaScan: true

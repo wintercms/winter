@@ -40,6 +40,8 @@ use Winter\Storm\Database\Attach\Resizer as DefaultResizer;
  * @see System\Twig\Extension Twig filters for this class defined
  * @package winter\wn-system-module
  * @author Luke Towers
+ *
+ * @phpstan-consistent-constructor
  */
 class ImageResizer
 {
