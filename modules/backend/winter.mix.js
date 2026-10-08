@@ -55,6 +55,12 @@ mix
         './widgets/lists/assets/js/dist/winter.list.sortable.js',
     )
 
+    // Compile the calendar widget (Snowboard) bundle
+    .js(
+        './widgets/calendar/assets/js/src/Calendar.js',
+        './widgets/calendar/assets/js/dist/calendar.js',
+    )
+
     // Compile pages
     .js(
         './assets/ui/js/pages/Preferences.js',
