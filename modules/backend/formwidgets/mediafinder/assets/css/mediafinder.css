@@ -15,13 +15,13 @@
   display: table;
 }
 .field-mediafinder .find-object .icon-container i {
-  color: #95a5a6;
+  color: var(--wn-text-secondary, #95a5a6);
   display: inline-block;
 }
 .field-mediafinder .find-object h4 {
   font-weight: 600;
   font-size: 13px;
-  color: #2b3e50;
+  color: var(--wn-text-heading, #2b3e50);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -41,7 +41,7 @@
 }
 .field-mediafinder .find-object .info h4 a,
 .field-mediafinder .find-object .meta a.find-remove-button {
-  color: #2b3e50;
+  color: var(--wn-text-heading, #2b3e50);
   display: none;
   font-size: 15px;
   text-decoration: none;
@@ -91,7 +91,7 @@
   border: 2px dotted rgba(0, 0, 0, 0.2);
 }
 .field-mediafinder.style-image-single .find-button:hover .find-button-icon:before {
-  color: #31ac5f;
+  color: #52a838;
   color: rgba(0, 0, 0, 0.2);
 }
 .field-mediafinder.style-image-single .find-button:focus {
@@ -99,7 +99,7 @@
   background: transparent;
 }
 .field-mediafinder.style-image-single .find-button:focus .find-button-icon:before {
-  color: #31ac5f;
+  color: #52a838;
   color: rgba(0, 0, 0, 0.2);
 }
 .field-mediafinder.style-image-single .find-object {
@@ -108,7 +108,7 @@
 }
 .field-mediafinder.style-image-single .find-object .icon-container {
   display: block;
-  border: 1px solid #f6f8f9;
+  border: 1px solid var(--wn-mediafinder-imagesingle-border, #f6f8f9);
   background: rgba(255, 255, 255, 0.5);
 }
 .field-mediafinder.style-image-single .find-object .icon-container img {
@@ -136,14 +136,14 @@
   display: block;
 }
 .field-mediafinder.style-file-single {
-  background-color: #ffffff;
-  border: 1px solid #bdc3c7;
+  background-color: var(--wn-surface-input, #ffffff);
+  border: 1px solid #d1d6d9;
   overflow: hidden;
   position: relative;
   padding-right: 30px;
   border-radius: 3px;
-  -webkit-box-shadow: inset 0 1px 0 #bdc3c7, 0 1px 0 #fff;
-  box-shadow: inset 0 1px 0 #bdc3c7, 0 1px 0 #fff;
+  -webkit-box-shadow: inset 0 1px 0 rgba(209, 214, 217, 0.25), 0 1px 0 rgba(255,255,255,.5);
+  box-shadow: inset 0 1px 0 rgba(209, 214, 217, 0.25), 0 1px 0 rgba(255,255,255,.5);
 }
 .field-mediafinder.style-file-single .find-button {
   position: absolute;
@@ -194,7 +194,7 @@
   padding: 0;
   font-size: 13px;
   line-height: 150%;
-  color: #666666;
+  color: var(--wn-text, #666666);
 }
 .field-mediafinder.style-file-single .find-object .meta {
   position: absolute;

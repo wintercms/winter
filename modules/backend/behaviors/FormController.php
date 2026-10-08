@@ -728,7 +728,6 @@ class FormController extends ControllerBehavior
             return null;
         }
 
-        $this->controller->makeLists();
         $listWidget = $this->controller->listGetWidget(
             is_string($navigation) ? $navigation : null
         );

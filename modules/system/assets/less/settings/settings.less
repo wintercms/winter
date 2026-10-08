@@ -9,7 +9,7 @@
         h3 {
             margin: 0;
             font-weight: 100;
-            color: #293e50;
+            color: var(--wn-text-heading, #293e50);
         }
     }
 
@@ -44,7 +44,7 @@
             }
 
             p {
-                color: #777;
+                color: var(--wn-text, #777);
                 font-size: 12px;
                 line-height: 150%;
             }
@@ -53,13 +53,13 @@
                 position: absolute;
                 left: 0;
                 top: 0;
-                background: #f0f0f0;
+                background: var(--wn-surface-hover, #f0f0f0);
                 .border-radius(999px);
                 width: 64px;
                 height: 64px;
                 display: block;
                 text-align: center;
-                color: #555;
+                color: var(--wn-icon-strong, #555);
                 i {
                     font-size: 52px;
                     line-height: 64px;
@@ -70,7 +70,7 @@
                 h5 { color: @link-hover-color; }
                 p { color: @link-hover-color; }
                 .item-icon {
-                    background: #e0e0e0;
+                    background: var(--wn-surface-overlay, #e0e0e0);
                     color: @link-hover-color;
                 }
             }
