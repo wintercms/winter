@@ -779,16 +779,15 @@ class Lists extends WidgetBase
      * a list carrying `useRelationCount` or custom `select:` columns each row
      * would evaluate a correlated subquery whose value is then thrown away. The
      * select list is only reduced to the key when nothing in the final query -
-     * including clauses added by filters and query extensions - can resolve
-     * against it; otherwise the query runs as built.
+     * including clauses added by filters, query extensions and global scopes -
+     * can resolve against it; otherwise the query runs as built.
      *
      * @return array<int, mixed>
      */
     public function getRecordKeys(): array
     {
-        $query = $this->prepareQuery();
         $keyName = $this->model->getQualifiedKeyName();
-        $baseQuery = $query->getQuery();
+        $baseQuery = $this->prepareQuery()->toBase();
 
         if (!$this->queryReliesOnSelectList($baseQuery)) {
             $baseQuery->columns = [$keyName];
@@ -797,7 +796,7 @@ class Lists extends WidgetBase
             $baseQuery->bindings['select'] = [];
         }
 
-        return $query->pluck($keyName)->all();
+        return $baseQuery->pluck($keyName)->all();
     }
 
     /**

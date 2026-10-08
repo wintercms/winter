@@ -169,14 +169,31 @@ class ListsTest extends PluginTestCase
         ];
     }
 
+    public function testRecordKeysKeepTheDisplayColumnsWhenAGlobalScopeReliesOnThem()
+    {
+        $this->actingAs((new UserFixture)->asSuperUser());
+
+        $model = new class extends User {
+            protected static function booted()
+            {
+                static::addGlobalScope('distinct', fn ($query) => $query->distinct());
+            }
+        };
+
+        $sql = $this->recordKeysQuery('id', null, $model);
+
+        $this->assertStringStartsWith('select distinct', $sql);
+        $this->assertStringContainsString('groups_count', $sql);
+    }
+
     /**
      * Returns the SQL of the query Lists::getRecordKeys() runs for the given sort,
      * with an optional `list.extendQuery` handler.
      */
-    protected function recordKeysQuery(string $sortColumn, ?callable $extendQuery = null): string
+    protected function recordKeysQuery(string $sortColumn, ?callable $extendQuery = null, ?User $model = null): string
     {
         $list = new Lists(null, [
-            'model' => new User,
+            'model' => $model ?? new User,
             'arrayName' => 'array',
             'defaultSort' => ['column' => $sortColumn, 'direction' => 'desc'],
             'columns' => [
