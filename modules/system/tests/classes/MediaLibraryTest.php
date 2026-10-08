@@ -126,6 +126,85 @@ class MediaLibraryTest extends TestCase
         $this->assertEquals(['/', '/dir', '/dir/sub', '/hidden but not really', '/name'], $instance->listAllDirectories(['/exclude']));
     }
 
+    public function testGetMetadata()
+    {
+        $this->setUpStorage();
+        $this->copyMedia();
+
+        $library = MediaLibrary::instance();
+
+        $this->assertEquals(['dimensions' => ['width' => 310, 'height' => 310]], $library->getMetadata('/winter.png'));
+        $this->assertEquals([], $library->getMetadata('/text.txt'));
+    }
+
+    public function testGetMetadataOnlyReadsTheStartOfTheFile()
+    {
+        $contents = file_get_contents(base_path('modules/system/tests/fixtures/media/winter.png'));
+
+        $disk = $this->createMock(FilesystemAdapter::class);
+        $disk->method('readStream')->willReturnCallback(fn () => $this->makeStream($contents));
+        $disk->expects($this->never())->method('get');
+        $disk->expects($this->never())->method('path');
+
+        $instance = MediaLibrary::instance();
+        $this->setProtectedProperty($instance, 'storageDisk', $disk);
+
+        $this->assertEquals(['dimensions' => ['width' => 310, 'height' => 310]], $instance->getMetadata('/winter.png'));
+    }
+
+    public function testGetMetadataReadsFurtherIntoAJpegWhenItsHeaderIsLarge()
+    {
+        // Two APP1 segments put the dimensions beyond the first 64KB
+        $contents = $this->makePaddedJpeg(2);
+
+        $disk = $this->createMock(FilesystemAdapter::class);
+        $disk->method('readStream')->willReturnCallback(fn () => $this->makeStream($contents));
+        $disk->expects($this->never())->method('get');
+        $disk->expects($this->never())->method('path');
+
+        $instance = MediaLibrary::instance();
+        $this->setProtectedProperty($instance, 'storageDisk', $disk);
+
+        $this->assertEquals(['dimensions' => ['width' => 40, 'height' => 30]], $instance->getMetadata('/large-header.jpg'));
+    }
+
+    public function testGetMetadataGivesUpOnAJpegWhoseDimensionsSitBeyondOneMegabyte()
+    {
+        // Seventeen APP1 segments put the dimensions beyond the first 1MB
+        $contents = $this->makePaddedJpeg(17);
+        $this->assertNotFalse(getimagesizefromstring($contents));
+
+        $disk = $this->createMock(FilesystemAdapter::class);
+        $disk->method('readStream')->willReturnCallback(fn () => $this->makeStream($contents));
+        $disk->expects($this->never())->method('get');
+
+        $instance = MediaLibrary::instance();
+        $this->setProtectedProperty($instance, 'storageDisk', $disk);
+
+        $this->assertEquals([], $instance->getMetadata('/huge-header.jpg'));
+    }
+
+    protected function makePaddedJpeg(int $segments): string
+    {
+        $image = imagecreatetruecolor(40, 30);
+        ob_start();
+        imagejpeg($image);
+        $jpeg = ob_get_clean();
+
+        $segment = "\xFF\xE1" . pack('n', 65535) . str_repeat("\0", 65533);
+
+        return substr($jpeg, 0, 2) . str_repeat($segment, $segments) . substr($jpeg, 2);
+    }
+
+    protected function makeStream(string $contents)
+    {
+        $stream = fopen('php://memory', 'r+');
+        fwrite($stream, $contents);
+        rewind($stream);
+
+        return $stream;
+    }
+
     protected function setUpStorage()
     {
         $this->app->useStoragePath(base_path('storage/temp'));

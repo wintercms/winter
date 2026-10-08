@@ -595,6 +595,7 @@ return [
         'filter_documents' => 'Documenten',
         'library' => 'Bibliotheek',
         'size' => 'Grootte',
+        'dimensions' => 'Afmetingen',
         'title' => 'Titel',
         'last_modified' => 'Laatst gewijzigd',
         'public_url' => 'URL',
