@@ -153,29 +153,26 @@ class Filter extends WidgetBase
                 if ($step = array_get($scope->config, 'step')) {
                     $params['step'] = is_numeric($step) ? $step : null;
                 }
-                // no break, these paramaters apply to both of the following cases
 
-            case 'number':
-                if (is_numeric($scope->value)) {
-                    $params['number'] = $scope->value;
+                // The parameters above apply to both types, the ones below do not
+                if ($scope->type === 'numberrange') {
+                    if (
+                        $scope->value
+                        && (is_array($scope->value) && count($scope->value) === 2)
+                        && (isset($scope->value[0]) || isset($scope->value[1]))
+                    ) {
+                        $min = $scope->value[0];
+                        $max = $scope->value[1];
+
+                        $params['minStr'] = $min ?? '-∞';
+                        $params['min'] = $min ?? null;
+
+                        $params['maxStr'] = $max ?? '∞';
+                        $params['max'] = $max ?? null;
+                    }
                 }
-
-                break;
-
-            case 'numberrange':
-                if (
-                    $scope->value
-                    && (is_array($scope->value) && count($scope->value) === 2)
-                    && (isset($scope->value[0]) || isset($scope->value[1]))
-                ) {
-                    $min = $scope->value[0];
-                    $max = $scope->value[1];
-
-                    $params['minStr'] = $min ?? '-∞';
-                    $params['min'] = $min ?? null;
-
-                    $params['maxStr'] = $max ?? '∞';
-                    $params['max'] = $max ?? null;
+                elseif (is_numeric($scope->value)) {
+                    $params['number'] = $scope->value;
                 }
 
                 break;
