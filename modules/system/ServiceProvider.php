@@ -81,9 +81,22 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerBackendPermissions();
 
         /*
-         * Backend specific
+         * Backend specific. Also registered under a persistent application server, whose providers
+         * register once from a CLI context: runningInBackend() would be decided there by the synthetic
+         * boot request and never revisited, so these would never register at all. Registering them
+         * unconditionally is cheap — each call stores a callback, and the lists these build are
+         * assembled lazily on first use and permission-filtered at that point.
          */
-        if ($this->app->runningInBackend()) {
+        /*
+         * The Storm method is called through method_exists() because Winter has to load on a Storm
+         * that predates it. Naming it outright would make every request fatal there, and this gate
+         * then answers exactly as it did before, which is correct: without that Storm there is no
+         * worker support to admit.
+         */
+        $applicationServer = method_exists($this->app, 'runningInApplicationServer')
+            && $this->app->runningInApplicationServer();
+
+        if ($this->app->runningInBackend() || $applicationServer) {
             $this->registerBackendNavigation();
             $this->registerBackendReportWidgets();
             $this->registerBackendSettings();

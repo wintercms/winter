@@ -95,6 +95,21 @@ class SettingsManager
         $this->pluginManager = PluginManager::instance();
     }
 
+    /**
+     * Discard the settings state derived from the previous operation.
+     *
+     * loadItems() filters settings items by the authenticated user's permissions and stores the
+     * filtered result, so without this the first user a worker serves would decide which settings
+     * every later user can see. Registration callbacks and owner aliases are preserved.
+     */
+    public function resetWorkerState(): void
+    {
+        $this->items = null;
+        $this->groupedItems = null;
+        $this->contextOwner = null;
+        $this->contextItemCode = null;
+    }
+
     protected function loadItems()
     {
         /*
