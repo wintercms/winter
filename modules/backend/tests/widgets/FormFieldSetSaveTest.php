@@ -90,6 +90,13 @@ namespace Backend\Tests\Widgets
                                 'type' => 'text',
                                 'disabled' => true,
                             ],
+                            'nested_switch' => [
+                                'type' => 'switch',
+                            ],
+                            'nested_disabled_switch' => [
+                                'type' => 'switch',
+                                'disabled' => true,
+                            ],
                         ],
                     ],
                 ],
@@ -181,6 +188,30 @@ namespace Backend\Tests\Widgets
             // Disabled fields are omitted from the save data, just like top-level fields.
             $this->assertArrayHasKey('nested_text', $data);
             $this->assertArrayNotHasKey('nested_disabled', $data);
+        }
+
+        public function testDisabledNestedSwitchIsNotSaved()
+        {
+            $data = $this->postForm([
+                'nested_disabled_switch' => '0',
+            ]);
+
+            // A config-disabled switch (or checkbox) is omitted from the save data even
+            // if a value for it arrives in the POST (e.g. the hidden fallback entry of
+            // an old markup, or a tampered request). The pre-existing server-side skip
+            // for `disabled` must hold for toggle fields too.
+            $this->assertArrayNotHasKey('nested_disabled_switch', $data);
+        }
+
+        public function testNestedSwitchFallbackValueIsSavedWhenEnabled()
+        {
+            $data = $this->postForm([
+                'nested_switch' => '0',
+            ]);
+
+            // A visible (enabled) switch that was unchecked contributes only the hidden
+            // fallback entry ("0") to the entry list, and that off value must be saved.
+            $this->assertSame('0', $data['nested_switch'] ?? null);
         }
 
         public function testMissingNestedValuesAreOmitted()
