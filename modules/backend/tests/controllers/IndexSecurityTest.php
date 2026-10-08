@@ -83,6 +83,40 @@ class IndexSecurityTest extends PluginTestCase
         $this->assertStringNotContainsString('dashReportContainer', $response->getContent());
     }
 
+    /**
+     * InspectableContainer contributes a second global handler to this controller, so the dashboard's permission check has to cover that one as well.
+     */
+    public function testInspectorHandlerIsDeniedWithoutDashboardAccess(): void
+    {
+        $this->actingAs($this->denied);
+
+        $response = $this->inspectableGetOptions();
+
+        $this->assertEquals(403, $response->getStatusCode());
+    }
+
+    /** Nothing legitimate regressed: the same handler still answers a permitted user. */
+    public function testInspectorHandlerStillWorksWithDashboardAccess(): void
+    {
+        $this->actingAs($this->allowed);
+
+        $response = $this->inspectableGetOptions();
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertArrayHasKey('options', json_decode($response->getContent(), true));
+    }
+
+    protected function inspectableGetOptions()
+    {
+        return $this->post('backend/backend/index', [
+            'inspectorProperty' => 'foo',
+            'inspectorClassName' => \Cms\Components\ViewBag::class,
+        ], [
+            'X-WINTER-REQUEST-HANDLER' => 'onInspectableGetOptions',
+            'X-Requested-With' => 'XMLHttpRequest',
+        ]);
+    }
+
     /** The page action's soft redirect is unchanged. */
     public function testPageActionStillRedirectsWithoutDashboardAccess(): void
     {
