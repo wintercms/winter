@@ -4,6 +4,7 @@ namespace Backend\FormWidgets;
 
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
+use Backend\Facades\Backend;
 use Backend\Widgets\Form;
 use Exception;
 use Illuminate\Support\Facades\Response;
@@ -103,6 +104,11 @@ class FileUpload extends FormWidgetBase
      * @var Form The embedded form for modifying the properties of the selected file
      */
     protected $configFormWidget;
+
+    /**
+     * @var array Extensions of image files that browsers can display, other files are shown with a file icon.
+     */
+    protected $displayableImageExtensions = ['avif', 'bmp', 'gif', 'ico', 'jpeg', 'jpg', 'png', 'svg', 'webp'];
 
     /**
      * @inheritDoc
@@ -511,6 +517,7 @@ class FileUpload extends FormWidgetBase
             $result = [
                 'id' => $file->id,
                 'thumb' => $file->thumbUrl,
+                'icon' => $this->makeFileIcon($file),
                 'path' => $file->pathUrl
             ];
 
@@ -541,6 +548,21 @@ class FileUpload extends FormWidgetBase
         $file->thumbUrl = $thumb;
 
         return $file;
+    }
+
+    /**
+     * Renders a file extension icon for files that cannot be displayed as an image,
+     * returns null for image files.
+     */
+    protected function makeFileIcon($file): ?string
+    {
+        $extension = strtolower($file->getExtension());
+
+        if (in_array($extension, $this->displayableImageExtensions)) {
+            return null;
+        }
+
+        return Backend::fileIcon($extension);
     }
 
     /**

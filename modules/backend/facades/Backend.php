@@ -12,6 +12,7 @@ use Winter\Storm\Support\Facade;
  * @method static \Illuminate\Http\RedirectResponse redirectIntended(string $path, int $status = 302, array $headers = [], ?bool $secure = null)
  * @method static string date($dateTime, array $options = [])
  * @method static string dateTime($dateTime, array $options = [])
+ * @method static string fileIcon(string $extension)
  *
  * @see \Backend\Helpers\Backend
  */
