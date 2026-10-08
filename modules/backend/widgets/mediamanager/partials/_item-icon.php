@@ -2,9 +2,7 @@
     <div class="icon-wrapper">
         <?php $itemIconClass = $this->itemTypeToIconClass($item, $itemType) ?>
         <?php if ($itemIconClass == 'icon-file'): ?>
-            <?= $this->makePartial('~/modules/backend/partials/_file_icon.php', [
-                'extension' => pathinfo($item->path, PATHINFO_EXTENSION),
-            ]) ?>
+            <?= Backend::fileIcon(pathinfo($item->path, PATHINFO_EXTENSION)) ?>
         <?php else :?>
             <i class="<?= $itemIconClass ?>"></i>
         <?php endif ?>

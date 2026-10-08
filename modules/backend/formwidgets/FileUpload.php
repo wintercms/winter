@@ -4,6 +4,7 @@ namespace Backend\FormWidgets;
 
 use Backend\Classes\FormField;
 use Backend\Classes\FormWidgetBase;
+use Backend\Facades\Backend;
 use Backend\Widgets\Form;
 use Exception;
 use Illuminate\Support\Facades\Response;
@@ -561,9 +562,7 @@ class FileUpload extends FormWidgetBase
             return null;
         }
 
-        return $this->makePartial('~/modules/backend/partials/_file_icon.php', [
-            'extension' => $extension,
-        ]);
+        return Backend::fileIcon($extension);
     }
 
     /**
