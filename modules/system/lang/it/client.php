@@ -57,6 +57,10 @@ return [
         'weekdaysShort' => ['Dom', 'Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab'],
     ],
     'colorpicker' => [
+        'last_color' => 'Usa il colore selezionato in precedenza',
+        'aria_palette' => 'Area di selezione del colore',
+        'aria_hue' => 'Cursore di selezione della tonalità',
+        'aria_opacity' => 'Cursore di selezione dell\'opacità',
         'choose' => 'OK',
     ],
     'filter' => [
@@ -78,7 +82,7 @@ return [
         'numbers' => [
             'all' => 'tutti',
             'filter_button_text' => 'Filtra',
-            'reset_button_text' => 'Reset',
+            'reset_button_text' => 'Reimposta',
             'min_placeholder' => 'Min',
             'max_placeholder' => 'Max',
         ],
