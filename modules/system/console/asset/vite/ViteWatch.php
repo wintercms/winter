@@ -21,6 +21,7 @@ class ViteWatch extends ViteCompile
         {--m|manifest= : Defines package.json to use for compile}
         {--s|silent : Enables silent mode, no output will be shown.}
         {--d|disable-tty : Disable tty mode}
+        {--host=localhost : Host the Vite dev server binds to and advertises in the hot file (use 0.0.0.0 for LAN/container access)}
         {--no-progress : Do not show mix progress}';
 
     /**
@@ -52,7 +53,12 @@ class ViteWatch extends ViteCompile
         $key = array_search('build', $command);
         unset($command[$key]);
 
+        // Bind the dev server to a concrete, reachable host and advertise it in
+        // the hot file. A bare `--host` binds all interfaces, which makes the
+        // Laravel Vite plugin write an unreachable `http://[::]:5173` on IPv6
+        // hosts. Default to `localhost`; pass `--host=0.0.0.0` for LAN access.
         $command[] = '--host';
+        $command[] = $this->option('host');
 
         return array_values($command);
     }
