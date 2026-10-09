@@ -42,14 +42,14 @@ window.MonacoEnvironment = {
 
 import constrainedEditor from 'constrained-editor-plugin';
 import { parse as parseXml } from 'fast-plist';
-import * as monaco from 'monaco-editor/esm/vs/editor/editor.api';
-import { registerHTMLLanguageService } from 'monaco-editor/esm/vs/language/html/monaco.contribution';
+import * as monaco from 'monaco-editor/editor/editor.api';
+import { registerHTMLLanguageService } from 'monaco-editor/language/html/monaco.contribution';
 
 // Fix: Twig tokenizer doesn't handle <script type="module"> (https://github.com/wintercms/winter/issues/1449)
 // Monaco's HTML tokenizer explicitly maps type="module" to text/javascript,
 // but the Twig tokenizer uses a generic capture that passes the raw type value
 // as a language ID. "module" isn't a valid language ID, causing a nullLanguage error.
-import { language as twigLanguage } from 'monaco-editor/esm/vs/basic-languages/twig/twig';
+import { language as twigLanguage } from 'monaco-editor/languages/definitions/twig/twig';
 twigLanguage.tokenizer.scriptAfterTypeEquals.unshift(
     [/"module"/, { token: 'attribute.value.html', switchTo: '@scriptWithCustomType.text/javascript' }],
     [/'module'/, { token: 'attribute.value.html', switchTo: '@scriptWithCustomType.text/javascript' }],
@@ -629,18 +629,23 @@ registerHTMLLanguageService('twig', undefined, {
          */
         setDecorations(sourceId, decorations) {
             // Initialize decoration tracking if not already done
-            if (!this._decorationIds) {
-                this._decorationIds = {};
+            if (!this._decorationCollections) {
+                this._decorationCollections = {};
             }
 
-            // Get previous decoration IDs for this source (to replace them)
-            const oldIds = this._decorationIds[sourceId] || [];
+            // Recreate the collection if the editor instance changed (the editor is
+            // disposed and re-created on visibility cycles), since collections belong
+            // to a specific editor instance
+            const cached = this._decorationCollections[sourceId];
+            if (!cached || cached.editor !== this.editor) {
+                this._decorationCollections[sourceId] = {
+                    editor: this.editor,
+                    collection: this.editor.createDecorationsCollection(),
+                };
+            }
 
-            // Apply new decorations and get their IDs
-            const newIds = this.editor.deltaDecorations(oldIds, decorations);
-
-            // Store new IDs for future updates/clearing
-            this._decorationIds[sourceId] = newIds;
+            // Replace all decorations of this source (an empty array clears them)
+            this._decorationCollections[sourceId].collection.set(decorations);
         }
 
         /**
