@@ -100,6 +100,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Console Configuration Table
+    |--------------------------------------------------------------------------
+    |
+    | This table controls the configurable behavior of the console as
+    | as it relates to the database and migrations.
+    |
+    */
+
+    'console' => [
+        'confirm_in_prod' => env('MIGRATION_CONFIRM_IN_PROD', false),
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
     | Redis Databases
     |--------------------------------------------------------------------------
     |
