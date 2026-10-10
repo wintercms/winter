@@ -50,7 +50,7 @@ class ThemeInstall extends Command
         }
 
         if ($argDirName) {
-            if (!preg_match('/^[a-z0-9\_\-]+$/i', $argDirName)) {
+            if (!Theme::isValidDirName($argDirName)) {
                 return $this->error('Invalid destination directory name.');
             }
 

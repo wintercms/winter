@@ -319,11 +319,16 @@ class Controller extends ControllerBase
          */
         elseif (
             ($handler = post('_handler')) &&
-            $this->verifyCsrfToken() &&
-            ($handlerResponse = $this->runAjaxHandler($handler)) &&
-            $handlerResponse !== true
+            $this->verifyCsrfToken()
         ) {
-            $result = $handlerResponse;
+            $this->validateHandlerName($handler);
+
+            if (
+                ($handlerResponse = $this->runAjaxHandler($handler)) &&
+                $handlerResponse !== true
+            ) {
+                $result = $handlerResponse;
+            }
         }
 
         /*
@@ -364,10 +369,28 @@ class Controller extends ControllerBase
 
         if ($ownMethod) {
             $methodInfo = new \ReflectionMethod($this, $name);
+
+            /*
+             * Only allow lowercase actions. Compare the resolved method name rather than the
+             * requested one - PHP method names are case-insensitive, so a lowercased URL
+             * segment would otherwise pass this check and still resolve to the mixed-case
+             * method (eg. "index_onemptylog" reaching index_onEmptyLog()).
+             */
+            if (strtolower($methodInfo->getName()) !== $methodInfo->getName()) {
+                return false;
+            }
+
             $public = $methodInfo->isPublic();
             if ($public) {
                 return true;
             }
+        }
+        /*
+         * Extension methods are resolved through a case-sensitive lookup, so the requested
+         * name is already the canonical one.
+         */
+        elseif (strtolower($name) !== $name) {
+            return false;
         }
 
         if ($internal && (($ownMethod && $methodInfo->isProtected()) || !$ownMethod)) {
@@ -477,6 +500,18 @@ class Controller extends ControllerBase
     }
 
     /**
+     * Validates the AJAX handler name follows the expected format.
+     *
+     * @throws \Winter\Storm\Exception\SystemException if the handler name is invalid
+     */
+    protected function validateHandlerName(string $handler): void
+    {
+        if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
+            throw new SystemException(Lang::get('backend::lang.ajax_handler.invalid_name', ['name' => $handler]));
+        }
+    }
+
+    /**
      * This method is used internally.
      * Invokes a controller event handler and loads the supplied partials.
      */
@@ -487,9 +522,7 @@ class Controller extends ControllerBase
                 /*
                  * Validate the handler name
                  */
-                if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
-                    throw new SystemException(Lang::get('backend::lang.ajax_handler.invalid_name', ['name'=>$handler]));
-                }
+                $this->validateHandlerName($handler);
 
                 /*
                  * Validate the handler partial list

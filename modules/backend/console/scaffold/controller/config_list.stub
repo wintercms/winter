@@ -40,6 +40,9 @@ showSorting: true
 # Display checkboxes next to each record
 showCheckboxes: true
 
+# Enable the select all matching query banner
+selectAllMatching: true
+
 # Toolbar widget configuration
 toolbar:
     # Partial for toolbar buttons

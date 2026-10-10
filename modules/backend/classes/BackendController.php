@@ -298,7 +298,7 @@ class BackendController extends ControllerBase
     protected function parseAction($actionName)
     {
         if (strpos($actionName, '-') !== false) {
-            return camel_case($actionName);
+            return snake_case(camel_case($actionName));
         }
 
         return $actionName;

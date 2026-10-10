@@ -4,8 +4,10 @@ namespace Cms\Tests\Classes;
 
 use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\Theme;
+use Cms\Models\ThemeData;
 use Config;
 use Event;
+use Winter\Storm\Exception\ApplicationException;
 
 class ThemeTest extends TestCase
 {
@@ -121,5 +123,55 @@ class ThemeTest extends TestCase
             'modules/cms/tests/fixtures/themes/childtest/assets/css/style2.css',
             $theme->assetUrl('assets/css/style2.css')
         );
+    }
+
+    public function dirNameValidityProvider(): array
+    {
+        return [
+            // Valid names
+            'lowercase'        => ['mytheme', true],
+            'uppercase'        => ['MYTHEME', true],
+            'mixed case'       => ['MyTheme', true],
+            'with digits'      => ['theme123', true],
+            'with hyphens'     => ['my-theme', true],
+            'with underscores' => ['my_theme', true],
+            'all allowed'      => ['My-Theme_123', true],
+            'single char'      => ['a', true],
+
+            // Invalid names
+            'empty string'     => ['', false],
+            'dot'              => ['.', false],
+            'dot dot'          => ['..', false],
+            'path traversal'   => ['../etc', false],
+            'forward slash'    => ['foo/bar', false],
+            'backslash'        => ['foo\\bar', false],
+            'spaces'           => ['my theme', false],
+            'special chars'    => ['theme!@#', false],
+        ];
+    }
+
+    /**
+     * @dataProvider dirNameValidityProvider
+     */
+    public function testIsValidDirName(string $dirName, bool $expected): void
+    {
+        $this->assertSame($expected, Theme::isValidDirName($dirName));
+    }
+
+    public function testLoadRejectsPathTraversal()
+    {
+        $this->expectException(ApplicationException::class);
+
+        Theme::load('../../etc');
+    }
+
+    public function testResetCacheClearsThemeData()
+    {
+        $themeData = new ThemeData(['theme' => 'test']);
+        self::setProtectedProperty($themeData, 'instances', ['test' => $themeData]);
+
+        Theme::resetCache();
+
+        $this->assertEmpty(self::getProtectedProperty($themeData, 'instances'));
     }
 }

@@ -128,7 +128,7 @@ class Extension extends TwigExtension
     /**
      * Renders registered assets of a given type or all types if $type not provided
      */
-    public function assetsFunction(string $type = null): ?string
+    public function assetsFunction(?string $type = null): ?string
     {
         return $this->controller->makeAssets($type);
     }
@@ -136,7 +136,7 @@ class Extension extends TwigExtension
     /**
      * Renders placeholder content, without removing the block, must be called before the placeholder tag itself
      */
-    public function placeholderFunction(string $name, string $default = null): ?string
+    public function placeholderFunction(string $name, ?string $default = null): ?string
     {
         if (($result = Block::get($name)) === null) {
             return null;
@@ -196,7 +196,7 @@ class Extension extends TwigExtension
     /**
      * Returns a layout block contents (or null if it doesn't exist) and removes the block.
      */
-    public function displayBlock(string $name, string $default = null): ?string
+    public function displayBlock(string $name, ?string $default = null): ?string
     {
         if (($result = Block::placeholder($name)) === null) {
             return $default;

@@ -149,7 +149,7 @@ class Themes extends Controller
             throw new ValidationException(['name' => Lang::get('cms::lang.theme.create_theme_required_name')]);
         }
 
-        if (!preg_match('/^[a-z0-9\_\-]+$/i', $newDirName)) {
+        if (!CmsTheme::isValidDirName($newDirName)) {
             throw new ValidationException(['dir_name' => Lang::get('cms::lang.theme.dir_name_invalid')]);
         }
 
@@ -233,7 +233,7 @@ class Themes extends Controller
         $sourcePath = $theme->getPath();
         $destinationPath = themes_path().'/'.$newDirName;
 
-        if (!preg_match('/^[a-z0-9\_\-]+$/i', $newDirName)) {
+        if (!CmsTheme::isValidDirName($newDirName)) {
             throw new ValidationException(['new_dir_name' => Lang::get('cms::lang.theme.dir_name_invalid')]);
         }
 

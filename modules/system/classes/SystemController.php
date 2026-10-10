@@ -38,6 +38,13 @@ class SystemController extends ControllerBase
 
             return $combiner->getContents($cacheId);
         } catch (Exception $ex) {
+            // Compiler errors quote source lines and absolute paths, so only show them in debug mode.
+            if (!Config::get('app.debug', false)) {
+                report($ex);
+
+                return Response::make('/* '.e(Lang::get('system::lang.combiner.error')).' */', 500);
+            }
+
             return Response::make('/* '.e($ex->getMessage()).' */', 500);
         }
     }
@@ -80,6 +87,9 @@ class SystemController extends ControllerBase
             throw $ex;
         }
 
-        return redirect()->to($resizedUrl);
+        // Redirect permanently as a resizer URL can only ever target the resized URL
+        // embedded and signed within it, and crawlers should index the resized URL
+        // rather than the temporary resizer URL
+        return redirect()->to($resizedUrl, 301);
     }
 }

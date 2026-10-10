@@ -3,7 +3,7 @@
 use Winter\Storm\Support\Facade;
 
 /**
- * @method static string url(string $path = null)
+ * @method static string url(?string $path = null)
  *
  * @see \Cms\Helpers\Cms
  */

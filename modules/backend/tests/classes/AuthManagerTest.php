@@ -166,6 +166,38 @@ class AuthManagerTest extends TestCase
         ], collect($tabs['Test'])->pluck('code')->toArray());
     }
 
+    /**
+     * Permissions that let their holder change what other backend users see, or
+     * inject markup that renders for them, must warn whoever grants them. The
+     * permission editor surfaces this through the `comment` key.
+     * See GHSA-5cwr-5jxg-pcf6.
+     */
+    public function testSecuritySensitivePermissionsHaveComments()
+    {
+        $sensitiveCodes = [
+            'backend.manage_users',
+            'backend.impersonate_users',
+            'backend.manage_editor',
+            'backend.manage_branding',
+            'backend.manage_default_dashboard',
+            'backend.allow_unsafe_markdown',
+        ];
+
+        $permissions = collect($this->existingPermissions)->keyBy('code');
+
+        foreach ($sensitiveCodes as $code) {
+            $permission = $permissions->get($code);
+
+            $this->assertNotNull($permission, "Permission $code is not registered");
+            $this->assertNotEmpty($permission->comment, "Permission $code is missing a comment");
+            $this->assertNotEquals(
+                $permission->comment,
+                trans($permission->comment),
+                "Permission $code has an unresolved comment language key"
+            );
+        }
+    }
+
     public function testRemovePermission()
     {
         $this->instance->removePermission('Winter.TestCase', 'test.permission_one');

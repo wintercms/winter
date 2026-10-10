@@ -659,6 +659,119 @@ class FormController extends ControllerBehavior
     }
 
     /**
+     * View helper to render the previous/next record navigation for the record
+     * being edited, relative to its sibling records in the controller's list.
+     *
+     *     <?= $this->formRenderRecordNavigation() ?>
+     *
+     * Renders nothing unless the `recordNavigation` config is enabled (the
+     * default), the controller also implements the ListController behavior, and
+     * an existing record is being viewed.
+     *
+     * Resolved through the controller so that `formGetRecordNavigation()` can be
+     * overridden there, as with the other extension points on this behavior.
+     *
+     * @return string HTML markup (empty string when navigation is unavailable)
+     */
+    public function formRenderRecordNavigation(): string
+    {
+        $navigation = $this->controller->formGetRecordNavigation();
+        if ($navigation === null || $navigation['current'] === null) {
+            return '';
+        }
+
+        return $this->formMakePartial('record_navigation', [
+            'navigation' => $navigation,
+            'navigationContext' => $this->context,
+        ]);
+    }
+
+    /**
+     * Resolves the position of the current record within the controller's list
+     * and the neighboring record keys used for previous/next navigation.
+     *
+     * The sibling set comes from the ListController's prepared query, so it
+     * reflects the active filters, search and sorting exactly as the user left
+     * the list. Ordered keys are read with a single portable `pluck` and the
+     * position is resolved in PHP — no driver-specific SQL — so it behaves
+     * identically across every database Winter supports.
+     *
+     * `recordNavigation` accepts `false` to disable navigation, or the name of a
+     * list definition to navigate that list instead of the primary one, and may be
+     * set per form context. A controller whose primary list is filtered to a subset
+     * -- an open queue, say -- can then still offer navigation on a context that
+     * views records outside it:
+     *
+     *     preview:
+     *         recordNavigation: archive
+     *
+     * @param \Winter\Storm\Database\Model|null $model
+     * @return array{previous: mixed, next: mixed, current: int|null, total: int}|null
+     */
+    public function formGetRecordNavigation($model = null): ?array
+    {
+        $navigation = $this->getConfig(
+            "{$this->context}[recordNavigation]",
+            $this->getConfig('recordNavigation', true)
+        );
+
+        if (!$navigation) {
+            return null;
+        }
+
+        $model = $model ?: $this->model;
+        if (!$model || !$model->exists) {
+            return null;
+        }
+
+        if (!$this->controller->isClassExtendedWith(\Backend\Behaviors\ListController::class)) {
+            return null;
+        }
+
+        $listWidget = $this->controller->listGetWidget(
+            is_string($navigation) ? $navigation : null
+        );
+        if (!$listWidget) {
+            return null;
+        }
+
+        $keys = $listWidget->prepareQuery()->pluck($model->getQualifiedKeyName())->all();
+
+        return static::resolveRecordPosition($keys, $model->getKey());
+    }
+
+    /**
+     * Pure position math for record navigation: given an ordered list of record
+     * keys and the current key, returns the navigation descriptor. Performs no
+     * database access, so it is trivially unit-testable and identical on every
+     * driver.
+     *
+     * @param array<int, mixed> $keys Ordered list of record keys.
+     * @param mixed $currentKey The key of the record being viewed.
+     * @return array{previous: mixed, next: mixed, current: int|null, total: int}
+     */
+    public static function resolveRecordPosition(array $keys, $currentKey): array
+    {
+        $keys = array_values($keys);
+        $total = count($keys);
+
+        $position = null;
+        foreach ($keys as $index => $key) {
+            if ((string) $key === (string) $currentKey) {
+                $position = $index;
+                break;
+            }
+        }
+
+        return [
+            'previous' => ($position !== null && $position > 0) ? $keys[$position - 1] : null,
+            'next' => ($position !== null && $position < $total - 1) ? $keys[$position + 1] : null,
+            'current' => $position === null ? null : $position + 1,
+            'total' => $total,
+        ];
+    }
+
+    /**
      * Returns the form widget used by this behavior.
      *
      * @return \Backend\Widgets\Form

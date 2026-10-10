@@ -386,11 +386,16 @@ class Controller
         if (
             $useAjax &&
             ($handler = post('_handler')) &&
-            $this->verifyCsrfToken() &&
-            ($handlerResponse = $this->runAjaxHandler($handler)) &&
-            $handlerResponse !== true
+            $this->verifyCsrfToken()
         ) {
-            return $handlerResponse;
+            $this->validateHandlerName($handler);
+
+            if (
+                ($handlerResponse = $this->runAjaxHandler($handler)) &&
+                $handlerResponse !== true
+            ) {
+                return $handlerResponse;
+            }
         }
 
         /*
@@ -682,6 +687,18 @@ class Controller
     }
 
     /**
+     * Validates the AJAX handler name follows the expected format.
+     *
+     * @throws SystemException if the handler name is invalid
+     */
+    protected function validateHandlerName(string $handler): void
+    {
+        if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
+            throw new SystemException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name' => $handler]), 400);
+        }
+    }
+
+    /**
      * Executes the page, layout, component and plugin AJAX handlers.
      *
      * @throws SystemException If the handler is invalid or could not be found
@@ -694,9 +711,7 @@ class Controller
                 /*
                  * Validate the handler name
                  */
-                if (!preg_match('/^(?:\w+\:{2})?on[A-Z]{1}[\w+]*$/', $handler)) {
-                    throw new SystemException(Lang::get('cms::lang.ajax_handler.invalid_name', ['name'=>$handler]), 400);
-                }
+                $this->validateHandlerName($handler);
 
                 /*
                  * Validate the handler partial list
@@ -1571,7 +1586,7 @@ class Controller
      * @param ComponentBase $component
      * @return void
      */
-    public function setComponentContext(ComponentBase $component = null)
+    public function setComponentContext(?ComponentBase $component = null)
     {
         $this->componentContext = $component;
     }

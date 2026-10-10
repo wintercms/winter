@@ -55,10 +55,6 @@ class Users extends Controller
     {
         parent::__construct();
 
-        if ($this->action == 'myaccount') {
-            $this->requiredPermissions = null;
-        }
-
         BackendMenu::setContext('Winter.System', 'system', 'users');
         SettingsManager::setContext('Winter.System', 'administrators');
     }
@@ -123,9 +119,9 @@ class Users extends Controller
      */
     public function update($recordId, $context = null)
     {
-        // Users cannot edit themselves, only use My Settings
+        // Users cannot edit themselves, only use My Account
         if ($context != 'myaccount' && $recordId == $this->user->id) {
-            return Backend::redirect('backend/users/myaccount');
+            return Backend::redirect('backend/myaccount');
         }
 
         return $this->asExtension('FormController')->update($recordId, $context);
@@ -158,7 +154,7 @@ class Users extends Controller
 
         Flash::success(Lang::get('backend::lang.account.impersonate_success'));
 
-        return Backend::redirect('backend/users/myaccount');
+        return Backend::redirect('backend/myaccount');
     }
 
     /**
@@ -176,33 +172,11 @@ class Users extends Controller
     }
 
     /**
-     * My Settings controller
+     * Backward compatibility redirect to the new MyAccount controller.
      */
     public function myaccount()
     {
-        SettingsManager::setContext('Winter.Backend', 'myaccount');
-
-        $this->pageTitle = 'backend::lang.myaccount.menu_label';
-        return $this->update($this->user->id, 'myaccount');
-    }
-
-    /**
-     * Proxy update onSave event
-     */
-    public function myaccount_onSave()
-    {
-        $result = $this->asExtension('FormController')->update_onSave($this->user->id, 'myaccount');
-
-        /*
-         * If the password or login name has been updated, reauthenticate the user
-         */
-        $loginChanged = $this->user->login != post('User[login]');
-        $passwordChanged = strlen(post('User[password]'));
-        if ($loginChanged || $passwordChanged) {
-            BackendAuth::login($this->user->reload(), true);
-        }
-
-        return $result;
+        return Backend::redirect('backend/myaccount');
     }
 
     /**

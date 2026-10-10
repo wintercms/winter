@@ -16,18 +16,18 @@ if (empty($argv[1])) {
 $fileList = shell_exec('git diff --name-only --diff-filter=ACMR origin/' . $argv[1] . ' HEAD');
 $files = array_filter(explode("\n", $fileList));
 
-foreach ($files as &$file) {
-    if (strpos($file, ' ') !== false) {
-        $file = str_replace(' ', '\\ ', $file);
-    }
-}
-
 // no changes found in diff, early exit
 if (!count($files)) {
     fwrite(STDOUT, "\e[0;32mFound no changed files.\e[0m");
     fwrite(STDOUT, "\n");
     exit(0);
 }
+
+// Prefix each path with ./ so a filename beginning with '-' cannot be parsed
+// as a PHPCS option, then escape it for safe shell usage.
+$files = array_map(function ($file) {
+    return escapeshellarg('./' . $file);
+}, $files);
 
 // Run all changed files through the PHPCS code sniffer and generate a CSV report
 $csv = shell_exec('phpcs --colors -nq --report="csv" --extensions="php" ' . implode(' ', $files));
