@@ -353,7 +353,7 @@ class RecordFinder extends FormWidgetBase
         }
         elseif ($scopeMethod = $this->scope) {
             $widget->bindEvent('list.extendQueryBefore', function ($query) use ($scopeMethod) {
-                $formData = $this->getParentForm()->getSaveData();
+                $formData = $this->getParentForm()?->getSaveData() ?? [];
                 $query->$scopeMethod($this->model, $formData);
             });
         }
