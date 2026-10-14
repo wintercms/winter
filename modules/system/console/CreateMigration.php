@@ -317,7 +317,7 @@ class CreateMigration extends BaseScaffoldCommand
      */
     protected function getNextVersion($currentVersion): string
     {
-        $currentVersion = ltrim($currentVersion, 'v');
+        $currentVersion = VersionManager::normalizeVersionKey($currentVersion);
         $parts = explode('.', $currentVersion);
         $parts[count($parts) - 1] = (int) $parts[count($parts) - 1] + 1;
         return 'v' . implode('.', $parts);

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Console\View\Components\Error;
 use Illuminate\Console\View\Components\Info;
 use Illuminate\Console\View\Components\Task;
+use Illuminate\Support\Str;
 use Winter\Storm\Database\Updater;
 
 /**
@@ -383,8 +384,24 @@ class VersionManager
         }
 
         $normalizedVersions = [];
+        $normalizedKeyMap = []; // Track original keys for each normalized key
         foreach ($versionInfo as $version => $info) {
-            $normalizedVersions[$this->normalizeVersion($version)] = $info;
+            $normalizedKey = $this->normalizeVersion($version);
+
+            // Detect collision: two different original keys normalize to the same value
+            if (isset($normalizedVersions[$normalizedKey]) && $normalizedKey !== $version) {
+                $firstKey = $normalizedKeyMap[$normalizedKey] ?? 'unknown';
+                throw new \RuntimeException(sprintf(
+                    'Version key collision detected in %s: both "%s" and "%s" normalize to "%s". Version keys must be unique after removing a single leading "v" prefix.',
+                    $versionFile,
+                    $firstKey,
+                    $version,
+                    $normalizedKey
+                ));
+            }
+
+            $normalizedVersions[$normalizedKey] = $info;
+            $normalizedKeyMap[$normalizedKey] = $version;
         }
 
         if ($normalizedVersions) {
@@ -409,7 +426,7 @@ class VersionManager
      */
     public static function normalizeVersionKey(string $version): string
     {
-        return ltrim($version, 'v');
+        return Str::startsWith($version, 'v') ? substr($version, 1) : $version;
     }
 
     /**
