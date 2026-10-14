@@ -388,8 +388,8 @@ class VersionManager
         foreach ($versionInfo as $version => $info) {
             $normalizedKey = $this->normalizeVersion($version);
 
-            // Detect collision: two different original keys normalize to the same value
-            if (isset($normalizedVersions[$normalizedKey]) && $normalizedKey !== $version) {
+            // Detect collision: two different original keys normalize to the same value, regardless of order
+            if (isset($normalizedKeyMap[$normalizedKey])) {
                 $firstKey = $normalizedKeyMap[$normalizedKey] ?? 'unknown';
                 throw new \RuntimeException(sprintf(
                     'Version key collision detected in %s: both "%s" and "%s" normalize to "%s". Version keys must be unique after removing a single leading "v" prefix.',
