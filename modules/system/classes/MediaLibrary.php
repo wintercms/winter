@@ -322,6 +322,26 @@ class MediaLibrary
     }
 
     /**
+     * Returns metadata that is too expensive to gather while listing a folder,
+     * such as the dimensions of an image.
+     * @param string $path Specifies the file path relative the the Library root.
+     * @return array Returns the metadata, e.g. ['dimensions' => ['width' => 800, 'height' => 600]]
+     */
+    public function getMetadata($path)
+    {
+        $path = self::validatePath($path);
+        $item = new MediaLibraryItem($path, null, null, MediaLibraryItem::TYPE_FILE, null);
+
+        if ($item->getFileType() !== MediaLibraryItem::FILE_TYPE_IMAGE) {
+            return [];
+        }
+
+        $dimensions = $this->getImageDimensions($this->getMediaPath($path));
+
+        return $dimensions ? ['dimensions' => $dimensions] : [];
+    }
+
+    /**
      * Puts a file to the library.
      * @param string $path Specifies the file path relative the the Library root.
      * @param string $contents Specifies the file contents.
@@ -650,6 +670,48 @@ class MediaLibrary
         $publicUrl = $this->getPathUrl($relativePath);
 
         return new MediaLibraryItem($relativePath, $size, $lastModified, $itemType, $publicUrl);
+    }
+
+    /**
+     * Returns the width and height of an image on the storage disk.
+     * Only the start of the file is read, which keeps this cheap on remote disks.
+     * @param string $fullPath Specifies the file path relative to the storage disk root.
+     * @return array|null Returns ['width' => int, 'height' => int] or NULL if they can't be determined.
+     */
+    protected function getImageDimensions($fullPath)
+    {
+        $chunkLength = 65536;
+        $maxLength = 1048576;
+
+        $stream = $this->getStorageDisk()->readStream($fullPath);
+        if (!$stream) {
+            return null;
+        }
+
+        $data = '';
+        $size = false;
+
+        // Some JPEGs store large EXIF or ICC blocks before the dimensions
+        do {
+            $chunk = stream_get_contents($stream, $chunkLength);
+            if ($chunk === false || $chunk === '') {
+                break;
+            }
+
+            $data .= $chunk;
+            $size = @getimagesizefromstring($data);
+        } while (!$size && strlen($data) < $maxLength && str_starts_with($data, "\xFF\xD8"));
+
+        fclose($stream);
+
+        if (!$size) {
+            return null;
+        }
+
+        return [
+            'width' => $size[0],
+            'height' => $size[1],
+        ];
     }
 
     /**
