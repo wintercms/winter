@@ -157,13 +157,10 @@ class CodeParser
 
         $this->writeContentSafe($path, $fileContents);
 
-        /*
-         * Attempt to load the generated code file to ensure any errors are thrown before the file is
-         * cached. Uses require, not require_once: the path is fixed but the class name is new on
-         * every rebuild, so require_once skipped every rebuild after the first in a process.
-         */
+        // Attempt to load the generated code file to ensure any errors are thrown
+        // before the file is cached
         if (!class_exists($className)) {
-            require $path;
+            $this->requireClassFile($path);
         }
 
         return $className;
@@ -182,7 +179,7 @@ class CodeParser
         $className = $data['className'];
 
         if (!class_exists($className)) {
-            require_once $data['filePath'];
+            $this->requireClassFile($data['filePath']);
         }
 
         if (!class_exists($className) && ($data = $this->handleCorruptCache($data))) {
@@ -203,6 +200,8 @@ class CodeParser
         $path = array_get($data, 'filePath', $this->getCacheFilePath());
 
         if (is_file($path)) {
+            $this->requireClassFile($path);
+
             if (($className = $this->extractClassFromFile($path)) && class_exists($className)) {
                 $data['className'] = $className;
                 return $data;
@@ -312,6 +311,29 @@ class CodeParser
         }
 
         return null;
+    }
+
+    /**
+     * Loads a cache file unless the class it declares is already loaded.
+     *
+     * The path is fixed but every rebuild writes a new class name to it, so require_once would skip
+     * a rebuild written after the path was first loaded in this process, including one written by
+     * another process. Checking the declared class instead keeps require from redeclaring it.
+     *
+     * @param string $path
+     * @return void
+     */
+    protected function requireClassFile($path)
+    {
+        if (!is_file($path)) {
+            return;
+        }
+
+        $className = $this->extractClassFromFile($path);
+
+        if ($className && !class_exists($className, false)) {
+            require $path;
+        }
     }
 
     /**

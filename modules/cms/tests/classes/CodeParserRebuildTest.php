@@ -9,10 +9,19 @@ use System\Tests\Bootstrap\TestCase;
 
 /**
  * rebuild() writes a randomly named class to a fixed path, so require_once loads only the first
- * rebuild of a given object in a process. Later rebuilds left their class undeclared.
+ * rebuild of a given object in a process. Later rebuilds, including ones written by another
+ * process, left their class undeclared.
  */
 class CodeParserRebuildTest extends TestCase
 {
+    public function tearDown(): void
+    {
+        // The parser's request cache is static and would otherwise reach the next test.
+        (new \ReflectionProperty(CodeParser::class, 'cache'))->setValue(null, []);
+
+        parent::tearDown();
+    }
+
     protected function makeParser(): CodeParser
     {
         $layout = Layout::load(Theme::load('test'), 'php-parser-test.htm');
@@ -40,6 +49,27 @@ class CodeParserRebuildTest extends TestCase
             class_exists($second),
             'The second rebuild should be loadable.'
         );
+    }
+
+    public function testSourceLoadsARebuildWrittenByAnotherProcess()
+    {
+        $parser = $this->makeParser();
+        $reflection = new \ReflectionObject($parser);
+
+        $first = $this->rebuild($parser);
+        $path = $reflection->getMethod('getCacheFilePath')->invoke($parser);
+
+        // Another process rebuilds the same object: same path, new class name.
+        $second = 'Cms' . str_replace('.', '', uniqid('', true)) . '_' . md5(mt_rand()) . 'Class';
+        file_put_contents($path, str_replace($first, $second, file_get_contents($path)));
+        $reflection->getMethod('storeCachedInfo')->invoke($parser, [
+            'filePath' => $path,
+            'className' => $second,
+            'source' => 'cache',
+            'offset' => 0,
+        ]);
+
+        $this->assertInstanceOf($second, $parser->source(null, null, null));
     }
 
     /**
