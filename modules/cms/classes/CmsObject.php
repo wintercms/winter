@@ -302,11 +302,16 @@ class CmsObject extends HalcyonModel implements CmsObjectContract
 
     /**
      * Returns the key used by the Twig cache.
+     *
+     * Twig names the compiled template class after this key and skips its freshness check once that
+     * class is loaded, so the key includes the modification time: otherwise a process that has
+     * rendered the object keeps rendering the old version after it is edited.
+     *
      * @return string
      */
     public function getTwigCacheKey()
     {
-        $key = $this->getFilePath();
+        $key = $this->getFilePath() . '?' . $this->mtime;
 
         if ($event = $this->fireEvent('cmsObject.getTwigCacheKey', compact('key'), true)) {
             $key = $event;

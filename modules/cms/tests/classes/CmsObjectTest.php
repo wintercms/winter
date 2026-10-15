@@ -335,4 +335,19 @@ class CmsObjectTest extends TestCase
         $this->assertFileExists($destFilePath);
         $this->assertEquals($testContents, file_get_contents($destFilePath));
     }
+
+    public function testEditedObjectRendersItsNewContentInTheSameProcess()
+    {
+        $obj = TestCmsObject::load(Theme::load('test'), 'plain.html');
+        $loader = new \Cms\Twig\Loader();
+        $loader->setObject($obj);
+        $twig = new \Twig\Environment($loader, ['cache' => false]);
+
+        $this->assertSame($obj->content, $twig->load($obj->getFilePath())->render([]));
+
+        $obj->content = '<p>Edited.</p>';
+        $obj->mtime = $obj->mtime + 1;
+
+        $this->assertSame('<p>Edited.</p>', $twig->load($obj->getFilePath())->render([]));
+    }
 }
