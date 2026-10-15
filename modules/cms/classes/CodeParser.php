@@ -157,10 +157,13 @@ class CodeParser
 
         $this->writeContentSafe($path, $fileContents);
 
-        // Attempt to load the generated code file to ensure any errors are thrown
-        // before the file is cached
+        /*
+         * Attempt to load the generated code file to ensure any errors are thrown before the file is
+         * cached. Uses require, not require_once: the path is fixed but the class name is new on
+         * every rebuild, so require_once skipped every rebuild after the first in a process.
+         */
         if (!class_exists($className)) {
-            require_once $path;
+            require $path;
         }
 
         return $className;
