@@ -36,8 +36,7 @@ class ServiceProvider extends ModuleServiceProvider
         $this->registerBackendUserEvents();
 
         /*
-         * Backend specific. Laravel Octane workers register providers once, before any real request,
-         * so they need these registered regardless of the boot request's context.
+         * Backend specific
          */
         if ($this->app->runningInBackend() || $this->app->bound('Laravel\Octane\Contracts\Client')) {
             $this->registerBackendNavigation();
