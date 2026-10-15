@@ -16,8 +16,10 @@
 >
 
     <!-- Upload Button -->
+    <?php /* Core renders an icon-only button with no accessible name (WCAG 4.1.2). */ ?>
     <button type="button" class="btn btn-default upload-button">
-        <i class="<?= e($iconClass) ?>"></i>
+        <i class="<?= e($iconClass) ?>" aria-hidden="true"></i>
+        <span class="sr-only"><?= e(trans('backend::lang.fileupload.upload_file')) ?></span>
     </button>
 
     <!-- Existing file -->

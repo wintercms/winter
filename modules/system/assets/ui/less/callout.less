@@ -7,18 +7,18 @@
 // Callouts
 // --------------------------------------------------
 @callout-padding:               20px;
-@callout-info-header-bg:        #b9dbef;
-@callout-info-content-bg:       #d8eaf4;
-@callout-info-icon:             #597f97;
-@callout-warning-header-bg:     #f6e7b2;
-@callout-warning-content-bg:    #f8f0d5;
-@callout-warning-icon:          #9f8e51;
-@callout-danger-header-bg:      #f6b5b2;
-@callout-danger-content-bg:     #f8d6d5;
-@callout-danger-icon:           #9f5551;
-@callout-success-header-bg:     #d3e9bf;
-@callout-success-content-bg:    #e6f1db;
-@callout-success-icon:          #6d915e;
+@callout-info-header-bg:        var(--wn-callout-info-header-bg, #b9dbef);
+@callout-info-content-bg:       var(--wn-callout-info-content-bg, #d8eaf4);
+@callout-info-icon:             var(--wn-callout-info-icon, #597f97);
+@callout-warning-header-bg:     var(--wn-callout-warning-header-bg, #f6e7b2);
+@callout-warning-content-bg:    var(--wn-callout-warning-content-bg, #f8f0d5);
+@callout-warning-icon:          var(--wn-callout-warning-icon, #9f8e51);
+@callout-danger-header-bg:      var(--wn-callout-danger-header-bg, #f6b5b2);
+@callout-danger-content-bg:     var(--wn-callout-danger-content-bg, #f8d6d5);
+@callout-danger-icon:           var(--wn-callout-danger-icon, #9f5551);
+@callout-success-header-bg:     var(--wn-callout-success-header-bg, #d3e9bf);
+@callout-success-content-bg:    var(--wn-callout-success-content-bg, #e6f1db);
+@callout-success-icon:          var(--wn-callout-success-icon, #6d915e);
 
 //
 // Callouts
@@ -95,7 +95,7 @@
         padding: @callout-padding;
         padding-bottom: 15px;
         .border-radius(4px 4px 0 0);
-        color: #2f2d26;
+        color: var(--wn-callout-text, #2f2d26);
 
         h3 {
             letter-spacing: 0;
@@ -127,11 +127,11 @@
     }
 
     > .content {
-        color: #2f2d26;
+        color: var(--wn-callout-text, #2f2d26);
         padding: 16px 20px 15px;
 
         h1, h2, h3, h4, h5, h6 {
-            color: #2f2d26;
+            color: var(--wn-callout-text, #2f2d26);
             text-transform: none;
             margin: 20px 0 5px 0;
             line-height: 150%;

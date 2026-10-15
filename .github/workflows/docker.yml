@@ -1,0 +1,128 @@
+name: Docker
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+
+concurrency:
+  group: docker-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  updateDockerImage:
+    name: Update Docker image
+    runs-on: ubuntu-latest
+    env:
+      version: ${{ github.ref_name }}
+    steps:
+      - name: Checkout changes
+        uses: actions/checkout@v4
+        with:
+          repository: wintercms/docker
+          ref: main
+          token: ${{ secrets.WINTER_BOT_TOKEN }}
+
+      - name: Determine latest FrankenPHP, PHP and Node versions
+        id: versions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          # Stay within the major versions currently used by the Dockerfile
+          frankenphpMajor=$(sed -n 's/^ARG FRANKENPHP_VERSION="\([0-9]*\)\..*"$/\1/p' Dockerfile)
+          phpMajor=$(sed -n 's/^ARG PHP_VERSION="\([0-9]*\)\..*"$/\1/p' Dockerfile)
+          nodeMajor=$(sed -n 's/^ARG NODE_VERSION="v\([0-9]*\)\..*"$/\1/p' Dockerfile)
+
+          # The base image is a combined FrankenPHP + PHP tag, so both versions must be resolved
+          # together - the latest of each individually may not exist as a published image. Walk
+          # back through the FrankenPHP releases until one with a Trixie image is found.
+          frankenphp=""
+          php=""
+
+          for candidate in $(gh api "repos/php/frankenphp/releases?per_page=100" \
+            --jq '.[] | select(.draft == false and .prerelease == false) | .tag_name' \
+            | sed -n "s/^v\($frankenphpMajor\.[0-9]\+\.[0-9]\+\)$/\1/p"); do
+            php=$(curl -fsSL "https://hub.docker.com/v2/repositories/dunglas/frankenphp/tags?page_size=100&name=$candidate-php$phpMajor" \
+              | jq -r '.results[].name' \
+              | sed -n "s/^$candidate-php\($phpMajor\.[0-9]\+\.[0-9]\+\)-trixie$/\1/p" \
+              | sort -V \
+              | tail -n 1)
+
+            if [ -n "$php" ]; then
+              frankenphp="$candidate"
+              break
+            fi
+          done
+
+          if [ -z "$frankenphp" ] || [ -z "$php" ]; then
+            echo "Unable to resolve a FrankenPHP $frankenphpMajor.x image for PHP $phpMajor.x" >&2
+            exit 1
+          fi
+
+          node=$(curl -fsSL "https://nodejs.org/dist/index.json" \
+            | jq -r --arg major "v$nodeMajor." 'map(select(.version | startswith($major))) | .[0].version // ""')
+
+          if [ -z "$node" ]; then
+            echo "Unable to resolve a Node $nodeMajor.x release" >&2
+            exit 1
+          fi
+
+          echo "frankenphp=$frankenphp" >> "$GITHUB_OUTPUT"
+          echo "php=$php" >> "$GITHUB_OUTPUT"
+          echo "node=$node" >> "$GITHUB_OUTPUT"
+
+      - name: Update versions
+        env:
+          frankenphp: ${{ steps.versions.outputs.frankenphp }}
+          php: ${{ steps.versions.outputs.php }}
+          node: ${{ steps.versions.outputs.node }}
+        run: |
+          set -euo pipefail
+
+          currentFrankenphp=$(sed -n 's/^ARG FRANKENPHP_VERSION="\(.*\)"$/\1/p' Dockerfile)
+          currentPhp=$(sed -n 's/^ARG PHP_VERSION="\(.*\)"$/\1/p' Dockerfile)
+          currentNode=$(sed -n 's/^ARG NODE_VERSION="\(.*\)"$/\1/p' Dockerfile)
+
+          sed -i -E "s/^ARG WINTER_VERSION=\".*\"$/ARG WINTER_VERSION=\"$version\"/" Dockerfile
+          sed -i -E "s/^ARG FRANKENPHP_VERSION=\".*\"$/ARG FRANKENPHP_VERSION=\"$frankenphp\"/" Dockerfile
+          sed -i -E "s/^ARG PHP_VERSION=\".*\"$/ARG PHP_VERSION=\"$php\"/" Dockerfile
+          sed -i -E "s/^ARG NODE_VERSION=\".*\"$/ARG NODE_VERSION=\"$node\"/" Dockerfile
+
+          grep -q "^ARG WINTER_VERSION=\"$version\"$" Dockerfile
+          grep -q "^ARG FRANKENPHP_VERSION=\"$frankenphp\"$" Dockerfile
+          grep -q "^ARG PHP_VERSION=\"$php\"$" Dockerfile
+          grep -q "^ARG NODE_VERSION=\"$node\"$" Dockerfile
+
+          # Written outside the checkout so that it is not picked up by the commit
+          notes="$RUNNER_TEMP/release-notes.md"
+          echo "- Updated Winter to version $version" > "$notes"
+
+          if [ "$currentFrankenphp" != "$frankenphp" ]; then
+            echo "- Updated FrankenPHP to version $frankenphp" >> "$notes"
+          fi
+          if [ "$currentPhp" != "$php" ]; then
+            echo "- Updated PHP to version $php" >> "$notes"
+          fi
+          if [ "$currentNode" != "$node" ]; then
+            echo "- Updated Node to version $node" >> "$notes"
+          fi
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: Update to Winter ${{ env.version }}
+          file_pattern: Dockerfile
+          commit_user_name: Winter Bot
+          commit_user_email: 80384029+WinterCMSBot@users.noreply.github.com
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ secrets.WINTER_BOT_TOKEN }}
+        run: |
+          gh release create "$version" \
+            --repo wintercms/docker \
+            --target main \
+            --title "$version" \
+            --notes-file "$RUNNER_TEMP/release-notes.md"

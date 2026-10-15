@@ -7,6 +7,7 @@ use Backend\Classes\Controller;
 use Backend\Facades\BackendAuth;
 use Backend\Facades\BackendMenu;
 use System\Classes\SettingsManager;
+use Winter\Storm\Database\Builder;
 
 /**
  * My Account controller
@@ -26,6 +27,11 @@ class MyAccount extends Controller
     public $implement = [
         FormController::class,
     ];
+
+    /**
+     * @var array methods that are blocked from being called as actions
+     */
+    protected $guarded = ['create', 'update', 'preview'];
 
     /**
      * @var array Permissions required to view this page.
@@ -49,6 +55,11 @@ class MyAccount extends Controller
 
         BackendMenu::setContext('Winter.System', 'system', 'users');
         SettingsManager::setContext('Winter.Backend', 'myaccount');
+    }
+
+    public function formExtendQuery(Builder $query): void
+    {
+        $query->whereKey($this->user->getKey());
     }
 
     /**

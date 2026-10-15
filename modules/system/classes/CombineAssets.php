@@ -10,6 +10,7 @@ use Route;
 use Config;
 use Request;
 use Response;
+use Str;
 use Assetic\Asset\FileAsset;
 use Assetic\Asset\AssetCache;
 use Assetic\Asset\AssetCollection;
@@ -135,7 +136,7 @@ class CombineAssets
         // explicit roots, a writable asset could disclose arbitrary server-readable
         // files: `@import (inline) "<path>"` in a .less file (GHSA-58fp-mcx6-7qf9),
         // `=include ../../../.env` in a .js file (GHSA-2223-f22x-24cq), or an
-        // `@import` traversal in a .css file. The asset's own source directory is
+        // `@import` traversal in a .scss or .css file. The asset's own source directory is
         // always allowed implicitly; this list adds the cross-tree roots that
         // legitimate themes/plugins/modules actually import from (e.g. a plugin
         // importing a module asset, or a theme importing its own ../vendor).
@@ -158,7 +159,14 @@ class CombineAssets
         $cssImportFilter = new CssImportFilter;
         // Assetic's CssImportFilter resolves `@import` targets relative to the source
         // with `..` traversal allowed; confine the resolved path to the allowed roots.
+        // Targets it would load as a URL instead (anything with a scheme, or a
+        // protocol-relative `//`) are not paths the root check can judge, so they are
+        // refused and left in the output for the browser to resolve.
         $cssImportFilter->setImportValidator(function ($path) use ($allowedImportRoots) {
+            if (Str::contains($path, '://') || Str::startsWith($path, '//')) {
+                return false;
+            }
+
             $resolved = PathResolver::resolve($path);
 
             return $resolved !== false
@@ -170,7 +178,10 @@ class CombineAssets
         $lessCompiler = new LessCompiler;
         $lessCompiler->setAllowedImportRoots($allowedImportRoots);
         $this->registerFilter('less', $lessCompiler);
-        $this->registerFilter('scss', new ScssCompiler);
+
+        $scssCompiler = new ScssCompiler;
+        $scssCompiler->setAllowedImportRoots($allowedImportRoots);
+        $this->registerFilter('scss', $scssCompiler);
 
         /*
          * Minification filters

@@ -137,10 +137,24 @@ class PackageManager
                 }
             }
 
-            // Search plugins for compilable packages to autoregister
-            $plugins = PluginManager::instance()->getPlugins();
-            foreach ($plugins as $plugin) {
-                $path = $plugin->getPluginPath() . '/' . $config['configFile'];
+            // Search plugins for compilable packages to autoregister. When symlinked
+            // packages are supported, prefer the in-project plugin path (which honours
+            // symlinks under the plugins directory) over getPluginPath()'s realpath, so
+            // packages inside symlinked plugins register and are served from a
+            // web-accessible location under base_path().
+            $pluginManager = PluginManager::instance();
+            $inProjectPluginPaths = [];
+            if ($this->supportsSymlinkedPackages()) {
+                foreach ($pluginManager->getVendorAndPluginNames() as $vendorName => $vendorPlugins) {
+                    foreach ($vendorPlugins as $pluginName => $pluginPath) {
+                        $inProjectPluginPaths[strtolower($vendorName . '.' . $pluginName)] = $pluginPath;
+                    }
+                }
+            }
+            foreach ($pluginManager->getPlugins() as $plugin) {
+                $pluginPath = $inProjectPluginPaths[strtolower($plugin->getPluginIdentifier())]
+                    ?? $plugin->getPluginPath();
+                $path = $pluginPath . '/' . $config['configFile'];
                 if (File::exists($path)) {
                     $packagePaths[$type][$plugin->getPluginIdentifier()] = $path;
                 }
@@ -270,6 +284,19 @@ class PackageManager
     }
 
     /**
+     * Whether packages provided by symlinked plugins & themes should keep their in-project
+     * path instead of the realpath that the symlink resolves to.
+     *
+     * Symlinking individual plugins or themes into a project requires
+     * "develop.allowDeepSymlinks", so the symlink handling is gated behind it and standard
+     * installs keep the original realpath behaviour.
+     */
+    protected function supportsSymlinkedPackages(): bool
+    {
+        return (bool) Config::get('develop.allowDeepSymlinks', false);
+    }
+
+    /**
      * Registers an entity as a package for compilation.
      *
      * Entities can include plugins, components, themes, modules and much more.
@@ -293,10 +320,31 @@ class PackageManager
 
         // Normalize the arguments
         $name = strtolower($name);
+        $base = base_path() . DIRECTORY_SEPARATOR;
         $resolvedPath = PathResolver::resolve($path);
         $pinfo = pathinfo($resolvedPath);
-        $relativePath = Str::after($pinfo['dirname'], base_path() . DIRECTORY_SEPARATOR);
+        $relativePath = Str::after($pinfo['dirname'], $base);
         $configFile = $pinfo['basename'];
+
+        // PathResolver::resolve() canonicalises symlinks, so a plugin or theme that is
+        // symlinked into the project resolves to a realpath outside base_path() — which is
+        // neither registerable nor web-servable. When the resolved path has escaped the
+        // project but the original (symbolized) path is inside it, keep the in-project
+        // location so the package registers and its compiled assets serve from a
+        // web-accessible path.
+        if (
+            $this->supportsSymlinkedPackages()
+            && !str_starts_with($pinfo['dirname'] . DIRECTORY_SEPARATOR, $base)
+        ) {
+            // Standardize the separators first - unlike $resolvedPath, $path carries
+            // whatever separators the caller supplied, and the stored path must use the
+            // platform separator consistently for both branches.
+            $symbolized = pathinfo(PathResolver::standardize($path));
+            if (str_starts_with($symbolized['dirname'] . DIRECTORY_SEPARATOR, $base)) {
+                $relativePath = Str::after($symbolized['dirname'], $base);
+                $configFile = $symbolized['basename'];
+            }
+        }
 
         // Require $configFile to be a JS file
         $extension = File::extension($configFile);

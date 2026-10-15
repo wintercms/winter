@@ -38,6 +38,13 @@ class SystemController extends ControllerBase
 
             return $combiner->getContents($cacheId);
         } catch (Exception $ex) {
+            // Compiler errors quote source lines and absolute paths, so only show them in debug mode.
+            if (!Config::get('app.debug', false)) {
+                report($ex);
+
+                return Response::make('/* '.e(Lang::get('system::lang.combiner.error')).' */', 500);
+            }
+
             return Response::make('/* '.e($ex->getMessage()).' */', 500);
         }
     }

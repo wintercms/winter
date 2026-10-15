@@ -238,6 +238,17 @@ class Settings extends Controller
             $item = $manager->findSettingItem($pluginOwner, $pluginCode);
         }
 
+        /*
+         * The manager drops items the user lacks permission for as it loads them, but that
+         * filtering is skipped when items are registered outside registerCallback() or when
+         * the item cache is warmed before authentication. This controller carries no
+         * $requiredPermissions of its own, so check the item here as well. Missing items and
+         * forbidden items are reported the same way, as the manager already does.
+         */
+        if ($item && !empty($item->permissions) && !$this->user?->hasAnyAccess((array) $item->permissions)) {
+            return false;
+        }
+
         return $item;
     }
 

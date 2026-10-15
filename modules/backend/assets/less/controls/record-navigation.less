@@ -22,7 +22,7 @@
     font-size: 12px;
 
     .form-record-nav-position {
-        color: #5a6b7b;
+        color: var(--wn-text, #5a6b7b);
         font-weight: 600;
         letter-spacing: .3px;
         white-space: nowrap;
@@ -44,7 +44,7 @@
         justify-content: center;
         width: 28px;
         height: 24px;
-        color: #5a6b7b;
+        color: var(--wn-text, #5a6b7b);
         text-decoration: none;
         transition: background-color .12s ease, color .12s ease;
 
@@ -53,12 +53,12 @@
         }
 
         &:not(.is-disabled):hover {
-            background-color: #fff;
-            color: #1f2d3d;
+            background-color: var(--wn-surface-raised, #fff);
+            color: var(--wn-text-heading, #1f2d3d);
         }
 
         &.is-disabled {
-            color: #b6bfc7;
+            color: var(--wn-text-muted, #b6bfc7);
             cursor: default;
         }
 

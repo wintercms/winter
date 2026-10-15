@@ -10,10 +10,10 @@
 // Popover
 // --------------------------------------------------
 
-@color-popover-bg:                           #ffffff;
+@color-popover-bg:                           var(--wn-surface-raised, #ffffff);
 @color-popover-border:                       rgba(0,0,0,.15);
-@color-popover-head-bg:                      #f9f9f9;
-@color-popover-head-text:                    #2a3e51;
+@color-popover-head-bg:                      var(--wn-surface-canvas, #f9f9f9);
+@color-popover-head-text:                    var(--wn-text-heading, #2a3e51);
 @color-popover-danger-bg:                    @brand-danger;
 
 div.control-popover {
@@ -214,7 +214,7 @@ div.control-popover {
 
     &.popover-danger {
         > div {
-            color: #fff;
+            color: var(--wn-text-inverse, #fff);
             background-color: @color-popover-danger-bg;
         }
 
@@ -243,12 +243,12 @@ div.control-popover {
         }
 
         .popover-head {
-            color: #fff;
+            color: var(--wn-text-inverse, #fff);
             background-color: @color-popover-danger-bg;
             border-bottom: 2px solid rgba(255,255,255,.15);
 
             .close {
-                color: #fff;
+                color: var(--wn-text-inverse, #fff);
                 text-shadow: none;
             }
         }

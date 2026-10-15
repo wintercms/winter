@@ -7,8 +7,8 @@
     position: relative;
     width: 240px;
     padding: 8px;
-    color: #333;
-    background: #fff;
+    color: var(--wn-text-link, #333);
+    background: var(--wn-surface-raised, #fff);
 
     &.is-hidden {
         display: none;
@@ -39,7 +39,7 @@
     font-size: 14px;
     line-height: 20px;
     font-weight: bold;
-    background-color: #fff;
+    background-color: var(--wn-surface-raised, #fff);
 }
 
 .pika-footer, .pika-title {
@@ -117,7 +117,7 @@
     }
 
     th {
-        color: #999;
+        color: var(--wn-text-secondary, #999);
         font-size: 12px;
         line-height: 25px;
         font-weight: bold;
@@ -133,36 +133,36 @@
     margin: 0;
     width: 100%;
     padding: 5px;
-    color: #666;
+    color: var(--wn-text, #666);
     font-size: 12px;
     line-height: 15px;
     text-align: right;
-    background: #f5f5f5;
+    background: var(--wn-surface-hover, #f5f5f5);
 }
 
 .is-today .pika-button {
-    color: #33aaff;
+    color: var(--wn-datepicker-date-text, #33aaff);
     font-weight: bold;
 }
 
 .is-selected .pika-button {
-    color: #fff;
+    color: var(--wn-text-inverse, #fff);
     font-weight: bold;
-    background: #33aaff;
-    box-shadow: inset 0 1px 3px #178fe5;
+    background: var(--wn-datepicker-date-text, #33aaff);
+    box-shadow: inset 0 1px 3px var(--wn-datepicker-date-shadow, #178fe5);
     border-radius: 3px;
 }
 
 .is-disabled .pika-button {
     pointer-events: none;
     cursor: default;
-    color: #999;
+    color: var(--wn-text-secondary, #999);
     opacity: .3;
 }
 
 .pika-button:hover {
-    color: #fff !important;
-    background: #ff8000 !important;
+    color: var(--wn-text-inverse, #fff) !important;
+    background: var(--wn-datepicker-date-bg, #ff8000) !important;
     box-shadow: none !important;
     border-radius: 3px !important;
 }

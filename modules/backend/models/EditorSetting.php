@@ -246,14 +246,13 @@ class EditorSetting extends Model
     {
         $cacheKey = self::instance()->cacheKey;
         if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
+            return strip_tags(Cache::get($cacheKey));
         }
 
         try {
             $customCss = self::compileCss();
             Cache::forever($cacheKey, $customCss);
-        }
-        catch (Exception $ex) {
+        } catch (Exception $ex) {
             $customCss = '/* ' . e($ex->getMessage()) . ' */';
         }
 

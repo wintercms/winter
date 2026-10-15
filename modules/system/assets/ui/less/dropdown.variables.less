@@ -1,11 +1,11 @@
-@dropdown-bg:                    #fff;
+@dropdown-bg:                    var(--wn-surface-raised, #fff);
 @dropdown-border:                @overlay-background;
-@dropdown-fallback-border:       #ccc;
-@dropdown-divider-bg:            #e5e5e5;
+@dropdown-fallback-border:       var(--wn-border, #ccc);
+@dropdown-divider-bg:            var(--wn-border-subtle, #e5e5e5);
 
 @dropdown-link-color:            #39454a;
 @dropdown-link-hover-color:      darken(@gray-dark, 5%);
-@dropdown-link-hover-bg:         #f5f5f5;
+@dropdown-link-hover-bg:         var(--wn-surface-hover, #f5f5f5);
 
 @dropdown-link-active-color:     @component-active-color;
 @dropdown-link-active-bg:        @component-active-bg;
@@ -14,7 +14,7 @@
 
 @dropdown-header-color:          @gray-light;
 
-@color-dropdown-title-border:    #c9c9c9;
+@color-dropdown-title-border:    var(--wn-border, #c9c9c9);
 @color-dropdown-title-text:      @dropdown-link-color;
 @color-dropdown-hover-bg:        @highlight-hover-bg;
 @color-dropdown-hover-text:      @highlight-hover-text;

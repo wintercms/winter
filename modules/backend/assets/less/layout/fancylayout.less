@@ -61,6 +61,25 @@ body.fancy-layout .master-tabs.control-tabs,
                     padding: 6px 0 0 24px!important;
                     overflow: visible;
 
+                    // Keyboard focus. The visible tab is not the anchor's box: it is
+                    // span.title plus two pseudo-elements skewed +/-20deg hanging off
+                    // either end, so a UA outline on the anchor draws a rectangle that
+                    // cuts through the angled ends. Suppress it and light up the three
+                    // pieces that actually form the shape -- an inset bar inherits each
+                    // piece's transform, so the indicator follows the skew.
+                    // Never show the UA ring on these: it is a rectangle drawn
+                    // around the anchor, which cuts through the tab's angled ends.
+                    // Suppressed for mouse focus too, where no indicator is wanted.
+                    &:focus { outline: none; }
+
+                    &:focus-visible {
+                        > span.title {
+                            &, &:before, &:after {
+                                box-shadow: inset 0 3px 0 0 @color-fancy-tab-focus;
+                            }
+                        }
+                    }
+
                     > span.title {
                         position: relative;
                         display: inline-block;
@@ -382,7 +401,7 @@ body.fancy-layout .master-tabs.control-tabs,
                     padding: 8px 16px 0 16px;
                     font-weight: 400;
                     height: 36px;
-                    color: #2b3e50;
+                    color: var(--wn-text-heading, #2b3e50);
                     .opacity(0.6);
 
                     > span.title {
@@ -438,7 +457,7 @@ body.fancy-layout .master-tabs.control-tabs,
         }
 
         .tab-collapse-icon.primary {
-            color: #000000;
+            color: var(--wn-fancylayout-text, #000000);
         }
 
         &.primary-collapsed {
@@ -461,7 +480,7 @@ body.fancy-layout .master-tabs.control-tabs,
                     }
 
                     &.active a {
-                        color: #2b3e50;
+                        color: var(--wn-text-heading, #2b3e50);
                     }
                 }
             }
@@ -501,19 +520,22 @@ body.fancy-layout .master-tabs.control-tabs,
         background-color: rgba(29, 29, 29, 0.11) !important;
     }
 
+    // A faint fill at rest so these read as fields before they are focused, not
+    // as loose heading text on the brand strip; hover and focus deepen it.
     input[type=text] {
-        background: transparent;
+        background: rgba(255, 255, 255, 0.1);
         border: none;
+        border-radius: 6px;
         color: @color-fancy-form-text;
         font-size: 35px;
         font-weight: 100;
         height: auto;
-        padding: 0;
+        padding: 0 10px;
         .placeholder(@color-fancy-form-placeholder);
         .box-shadow(none);
 
         &:focus, &:hover {
-            background-color: rgba(255, 255, 255, 0.1);
+            background-color: rgba(255, 255, 255, 0.2);
         }
     }
 
@@ -639,6 +661,38 @@ body.breadcrumb-fancy .control-breadcrumb,
             }
         }
     }
+
+    // Record navigation (controls/record-navigation.less) sits in this breadcrumb.
+    // Its default colours are tuned for the light regular-layout breadcrumb; on the
+    // dark fancy breadcrumb they read as low-contrast, so switch to light-on-dark.
+    .form-record-nav {
+        .form-record-nav-position {
+            color: rgba(255, 255, 255, .8);
+        }
+
+        .form-record-nav-group {
+            background: rgba(255, 255, 255, .15);
+            border-color: rgba(255, 255, 255, .25);
+            box-shadow: none;
+        }
+
+        .form-record-nav-btn {
+            color: rgba(255, 255, 255, .8);
+
+            & + .form-record-nav-btn {
+                border-left-color: rgba(255, 255, 255, .25);
+            }
+
+            &:not(.is-disabled):hover {
+                background-color: rgba(255, 255, 255, .28);
+                color: var(--wn-text-inverse, #fff);
+            }
+
+            &.is-disabled {
+                color: rgba(255, 255, 255, .35);
+            }
+        }
+    }
 }
 
 //
@@ -647,29 +701,80 @@ body.breadcrumb-fancy .control-breadcrumb,
 
 .fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs .form-buttons:not(.normalized),
 .fancy-layout *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .form-tabless-fields  .form-buttons:not(.normalized) {
+    // Flex so the text buttons, the "or Cancel" text and the padded delete button
+    // share one centre line instead of each being nudged into place with margins.
+    display: flex;
+    align-items: center;
     .transition(all 0.5s);
-    padding-top: 14px;
-    padding-bottom: 5px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 
     .btn {
-        padding: 0;
-        margin-right: 5px;
-        margin-top: -6px;
-        margin-right: 30px;
+        padding: 5px 15px;
+        margin: 0 8px 0 0;
+        border: 1px solid transparent;
+        border-radius: 6px;
         background: transparent;
         color: @color-fancy-master-tabs-active-text;
         font-weight: normal;
+        line-height: 20px;
         .box-shadow(none);
-
-        .opacity(0.5);
         .transition(all 0.3s ease);
 
-        &:hover {
-            .opacity(1);
+        // These buttons are transparent with their box-shadow removed, so nothing
+        // indicated keyboard focus at all. .btn carries a global `outline: none
+        // !important`, so an outline here can never win no matter how specific.
+        // Draw the ring with box-shadow instead, which that rule does not touch.
+        &:focus-visible {
+            // Dark ring, not white: these sit on the brand strip, where white only
+            // reaches 2.8:1 -- under the 3:1 WCAG 1.4.11 wants for a focus indicator.
+            box-shadow: 0 0 0 2px @color-fancy-btn-focus;
         }
 
         &:last-child {
             margin-right: 0;
+        }
+
+        &:hover {
+            border-color: @color-fancy-master-tabs-active-text;
+        }
+
+        // Delete: a destructive action kept inline with the save/cancel group so it
+        // stays discoverable, but coloured as a danger action. The core fancy toolbar
+        // renders it icon-only; surface its title as a visible "Delete" label so it's
+        // easy to find. The confirmation dialog guards against accidental clicks.
+        &[data-control="delete-button"] {
+            // Pushed to the far end of the flex row. `order` moves it after anything
+            // that follows it in the markup (e.g. the last-modified icon, whose tooltip
+            // opens to the right and would run off-screen at the row's end).
+            order: 1;
+            margin-left: auto;
+            margin-right: 0;
+            padding: 5px 11px;
+            // Solid deep brick, clearly darker than the teal toolbar so the pill
+            // separates by value first (a brighter or semi-transparent red sits at
+            // the teal's lightness and either vibrates or muddies to grey).
+            background-color: var(--wn-fancylayout-bg, #a5382c);
+            color: var(--wn-text-inverse, #fff);
+            line-height: 1;
+
+            &:before {
+                opacity: 1;
+            }
+
+            // Only label the button when a title is actually present. The CMS toolbar
+            // renders this button icon-only with no title, where an empty :after would
+            // still contribute its margin as dead space to the right of the icon.
+            &[title]:not([title=""]):after {
+                content: attr(title);
+                margin-left: 6px;
+            }
+
+            &:hover {
+                background-color: var(--wn-fancylayout-bg-hover, #bc4436);
+                border-color: transparent;
+                color: var(--wn-text-inverse, #fff);
+            }
         }
 
         &[class^="wn-icon-"],
@@ -681,10 +786,28 @@ body.breadcrumb-fancy .control-breadcrumb,
             }
         }
     }
-}
 
-.fancy-layout form[class$="-data-changed"] *:not(.nested-form):not(.modal-body) > .form-widget > .layout-row > .control-tabs .btn.save {
-    .opacity(1);
+    // A status icon (e.g. last modified) rather than an action, so no button box.
+    span.btn {
+        padding: 0;
+
+        &:hover {
+            border-color: transparent;
+        }
+    }
+
+    .btn-text {
+        padding: 0;
+        color: @color-fancy-master-tabs-active-text;
+
+        a {
+            color: @color-fancy-master-tabs-active-text;
+
+            &:hover {
+                text-decoration: none;
+            }
+        }
+    }
 }
 
 //
