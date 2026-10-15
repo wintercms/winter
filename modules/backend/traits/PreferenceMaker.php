@@ -1,7 +1,6 @@
 <?php namespace Backend\Traits;
 
 use Str;
-use BackendAuth;
 use Backend\Models\UserPreference;
 
 /**
@@ -33,7 +32,7 @@ trait PreferenceMaker
         $this->getPreferenceStorage()->set($this->getPreferenceKey(), $preferences);
 
         // Re-cache user preferences
-        self::$preferenceCache[$this->getPreferenceCacheKey()] = $preferences;
+        self::$preferenceCache[$this->getPreferenceKey()] = $preferences;
     }
 
     /**
@@ -57,14 +56,14 @@ trait PreferenceMaker
      */
     public function getUserPreferences()
     {
-        if (isset(self::$preferenceCache[$this->getPreferenceCacheKey()])) {
-            return self::$preferenceCache[$this->getPreferenceCacheKey()];
+        if (isset(self::$preferenceCache[$this->getPreferenceKey()])) {
+            return self::$preferenceCache[$this->getPreferenceKey()];
         }
 
         $preferences = $this->getPreferenceStorage()->get($this->getPreferenceKey(), []);
 
         // Cache user preferences
-        self::$preferenceCache[$this->getPreferenceCacheKey()] = $preferences;
+        self::$preferenceCache[$this->getPreferenceKey()] = $preferences;
 
         return $preferences;
     }
@@ -89,7 +88,7 @@ trait PreferenceMaker
             $this->getPreferenceStorage()->set($this->getPreferenceKey(), $preferences);
 
             // Re-cache user preferences
-            self::$preferenceCache[$this->getPreferenceCacheKey()] = $preferences;
+            self::$preferenceCache[$this->getPreferenceKey()] = $preferences;
         } else {
             // Remove record from user preferences
             $this->clearUserPreferences();
@@ -105,27 +104,7 @@ trait PreferenceMaker
     {
         $this->getPreferenceStorage()->reset($this->getPreferenceKey());
 
-        self::$preferenceCache[$this->getPreferenceCacheKey()] = [];
-    }
-
-    /**
-     * Returns the key used to memoise preferences for the current user.
-     *
-     * The storage key deliberately omits the user, because getPreferenceStorage() already returns a
-     * model scoped to one. The in-memory cache has no such scoping, and under a persistent worker
-     * such as Laravel Octane the static outlives the request that filled it, so one user's
-     * preferences would be returned to the next user the worker serves.
-     *
-     * This is kept separate from getPreferenceKey() rather than folded into it so that the storage
-     * key is unchanged and preferences saved before this change are still found.
-     *
-     * @return string
-     */
-    protected function getPreferenceCacheKey()
-    {
-        $user = BackendAuth::getUser();
-
-        return ($user ? $user->getKey() : 'guest') . '|' . $this->getPreferenceKey();
+        self::$preferenceCache[$this->getPreferenceKey()] = [];
     }
 
     /**

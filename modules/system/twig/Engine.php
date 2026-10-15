@@ -31,18 +31,9 @@ class Engine implements EngineInterface
 
         TwigLoader::$allowInclude = true;
 
-        try {
-            $template = $this->environment->load($path);
-        }
-        finally {
-            /*
-             * Restore the previous value even when loading throws. Without this, a failed load
-             * (missing template, syntax error) leaves arbitrary local file inclusion enabled for
-             * the remainder of the process. Under PHP-FPM the process exits and the flag resets;
-             * under a persistent worker it would stay enabled for every later request.
-             */
-            TwigLoader::$allowInclude = $previousAllow;
-        }
+        $template = $this->environment->load($path);
+
+        TwigLoader::$allowInclude = $previousAllow;
 
         return $template->render($vars);
     }
