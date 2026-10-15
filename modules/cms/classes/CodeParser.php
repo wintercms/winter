@@ -315,11 +315,6 @@ class CodeParser
 
     /**
      * Loads a cache file unless the class it declares is already loaded.
-     *
-     * The path is fixed but every rebuild writes a new class name to it, so require_once would skip
-     * a rebuild written after the path was first loaded in this process, including one written by
-     * another process. Checking the declared class instead keeps require from redeclaring it.
-     *
      * @param string $path
      * @return void
      */
