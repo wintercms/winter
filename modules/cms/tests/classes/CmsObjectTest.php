@@ -5,7 +5,11 @@ namespace Cms\Tests\Classes;
 use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\CmsObject;
 use Cms\Classes\Theme;
+use Cms\Twig\Loader as TwigLoader;
 use PHPUnit\Framework\Attributes\Depends;
+use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
+use Twig\Environment as TwigEnvironment;
+use Winter\Storm\Support\Facades\File;
 
 class TestCmsObject extends CmsObject
 {
@@ -338,16 +342,34 @@ class CmsObjectTest extends TestCase
 
     public function testEditedObjectRendersItsNewContentInTheSameProcess()
     {
-        $obj = TestCmsObject::load(Theme::load('test'), 'plain.html');
-        $loader = new \Cms\Twig\Loader();
-        $loader->setObject($obj);
-        $twig = new \Twig\Environment($loader, ['cache' => false]);
+        $theme = Theme::load('test');
+        $filePath = $theme->getPath() . '/temporary/twig-cache-key.htm';
+        $cachePath = storage_path('temp/twig-cache-key-test');
+        file_put_contents($filePath, '<p>Original.</p>');
 
-        $this->assertSame($obj->content, $twig->load($obj->getFilePath())->render([]));
+        try {
+            $loader = new TwigLoader();
+            $twig = new TwigEnvironment($loader, [
+                'auto_reload' => true,
+                'cache' => new TwigCacheFilesystem($cachePath),
+            ]);
 
-        $obj->content = '<p>Edited.</p>';
-        $obj->mtime = $obj->mtime + 1;
+            $obj = TestTemporaryCmsObject::load($theme, 'twig-cache-key.htm');
+            $loader->setObject($obj);
+            $this->assertSame('<p>Original.</p>', $twig->load($obj->getFilePath())->render([]));
 
-        $this->assertSame('<p>Edited.</p>', $twig->load($obj->getFilePath())->render([]));
+            $obj->content = '<p>Edited.</p>';
+            $obj->save();
+            touch($filePath, $obj->mtime + 10);
+            clearstatcache();
+
+            CmsObject::clearInternalCache();
+            $obj = TestTemporaryCmsObject::load($theme, 'twig-cache-key.htm');
+            $loader->setObject($obj);
+            $this->assertSame('<p>Edited.</p>', $twig->load($obj->getFilePath())->render([]));
+        } finally {
+            @unlink($filePath);
+            File::deleteDirectory($cachePath);
+        }
     }
 }
