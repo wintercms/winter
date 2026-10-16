@@ -12,6 +12,8 @@ use ApplicationException;
  *
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
+ *
+ * @phpstan-consistent-constructor
  */
 class ComponentPartial extends Extendable implements CmsObjectContract
 {
