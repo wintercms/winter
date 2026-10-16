@@ -5,7 +5,11 @@ namespace Cms\Tests\Classes;
 use System\Tests\Bootstrap\TestCase;
 use Cms\Classes\CmsObject;
 use Cms\Classes\Theme;
+use Cms\Twig\Loader as TwigLoader;
 use PHPUnit\Framework\Attributes\Depends;
+use Twig\Cache\FilesystemCache as TwigCacheFilesystem;
+use Twig\Environment as TwigEnvironment;
+use Winter\Storm\Support\Facades\File;
 
 class TestCmsObject extends CmsObject
 {
@@ -334,5 +338,53 @@ class CmsObjectTest extends TestCase
 
         $this->assertFileExists($destFilePath);
         $this->assertEquals($testContents, file_get_contents($destFilePath));
+    }
+
+    public function testEditedObjectRendersItsNewContentInTheSameProcess()
+    {
+        $theme = Theme::load('test');
+        $filePath = $theme->getPath() . '/temporary/twig-cache-key.htm';
+        $cachePath = storage_path('temp/twig-cache-key-test');
+        file_put_contents($filePath, '<p>Original.</p>');
+
+        try {
+            /*
+             * One Twig environment for the whole test, configured the way Cms\ServiceProvider configures it.
+             * A long-running process such as a queue worker or an Octane worker keeps the environment, and
+             * every compiled template class it has loaded, between requests.
+             */
+            $loader = new TwigLoader();
+            $twig = new TwigEnvironment($loader, [
+                'auto_reload' => true,
+                'cache' => new TwigCacheFilesystem($cachePath),
+            ]);
+
+            /*
+             * First request: compile and render the original content.
+             */
+            $obj = TestTemporaryCmsObject::load($theme, 'twig-cache-key.htm');
+            $loader->setObject($obj);
+            $this->assertSame('<p>Original.</p>', $twig->load($obj->getFilePath())->render([]));
+
+            /*
+             * An editor saves new content. The save lands in the same second as the first render, so the
+             * file's modification time may not change.
+             */
+            $obj->content = '<p>Edited.</p>';
+            $obj->save();
+            clearstatcache();
+
+            /*
+             * Next request: load the object from disk again and render it with the same environment. If the
+             * cache key were unchanged, Twig would reuse the class it already loaded and render the original.
+             */
+            CmsObject::clearInternalCache();
+            $obj = TestTemporaryCmsObject::load($theme, 'twig-cache-key.htm');
+            $loader->setObject($obj);
+            $this->assertSame('<p>Edited.</p>', $twig->load($obj->getFilePath())->render([]));
+        } finally {
+            @unlink($filePath);
+            File::deleteDirectory($cachePath);
+        }
     }
 }

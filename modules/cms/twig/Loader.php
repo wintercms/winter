@@ -74,7 +74,7 @@ class Loader extends LoaderBase implements TwigLoaderInterface
             return parent::getCacheKey($name);
         }
 
-        return $this->obj->getTwigCacheKey();
+        return $this->obj->getTwigCacheKey() . '?' . hash('xxh128', (string) $this->obj->getTwigContent());
     }
 
     /**
