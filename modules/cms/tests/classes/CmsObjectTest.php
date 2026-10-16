@@ -360,7 +360,6 @@ class CmsObjectTest extends TestCase
 
             $obj->content = '<p>Edited.</p>';
             $obj->save();
-            touch($filePath, $obj->mtime + 10);
             clearstatcache();
 
             CmsObject::clearInternalCache();
