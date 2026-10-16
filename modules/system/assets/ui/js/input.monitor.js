@@ -71,6 +71,9 @@
         if (this.paused)
             return
 
+        if ($(ev.target).parents( ".control-filter" ).length)
+            return
+
         if (ev.target.className === 'ace_search_field')
             return
 
