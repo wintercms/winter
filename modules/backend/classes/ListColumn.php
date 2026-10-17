@@ -128,7 +128,7 @@ class ListColumn
      * - number - numeric column, aligned right
      * @param string $type Specifies a render mode as described above
      */
-    public function displayAs($type, $config)
+    public function displayAs(string $type, $config)
     {
         $this->type = strtolower($type) ?: $this->type;
         $this->config = $this->evalConfig($config);

@@ -853,8 +853,8 @@ class Form extends WidgetBase
          * Defined field type
          */
         else {
-            $fieldType = $config['type'] ?? null;
-            if (!is_string($fieldType) && $fieldType !== null) {
+            $fieldType = $config['type'] ?? 'text';
+            if (!is_string($fieldType)) {
                 throw new ApplicationException(Lang::get(
                     'backend::lang.field.invalid_type',
                     ['type' => gettype($fieldType)]
