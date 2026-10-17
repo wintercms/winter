@@ -705,10 +705,12 @@ class ImageResizer
             $resizeSources = static::getAvailableSources();
             foreach ($resizeSources as $source => $details) {
                 // Normalize the source path
-                $sourcePath = static::normalizePath(rawurldecode(parse_url($details['path'], PHP_URL_PATH)));
+                $sourcePath = rtrim(static::normalizePath(rawurldecode(parse_url($details['path'], PHP_URL_PATH))), '/');
 
-                // Identify if the current source is a match
-                if (starts_with($relativePath, $sourcePath)) {
+                // Identify if the current source is a match. The trailing separator keeps the
+                // comparison on a path boundary, so a folder whose name merely begins with
+                // this source's path is not treated as part of it
+                if (starts_with($relativePath, $sourcePath . '/')) {
                     // Attempt to handle FileModel URLs passed as strings
                     if ($source === 'filemodel') {
                         $diskName = pathinfo($relativePath, PATHINFO_BASENAME);
@@ -723,8 +725,18 @@ class ImageResizer
                         break;
                     }
 
+                    // Confine the image to the matched source folder: the remainder is used
+                    // verbatim as a disk path, and filesystem adapters resolve relative
+                    // segments themselves. This mirrors the media library's own path
+                    // validation; it cannot be delegated to PathResolver, because the path is
+                    // relative to a disk that is not necessarily a local one
+                    $sourceRelativePath = str_after($relativePath, $sourcePath . '/');
+                    if (in_array('..', explode('/', $sourceRelativePath), true)) {
+                        continue;
+                    }
+
                     // Generate a path relative to the selected disk
-                    $path = static::normalizePath($details['folder']) . '/' . str_after($relativePath, $sourcePath . '/');
+                    $path = static::normalizePath($details['folder']) . '/' . $sourceRelativePath;
 
                     // Handle disks of type "system" (the local file system the application is running on)
                     if ($details['disk'] === 'system') {
