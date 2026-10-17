@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Console\View\Components\Error;
 use Illuminate\Console\View\Components\Info;
 use Illuminate\Console\View\Components\Task;
+use Illuminate\Support\Str;
 use Winter\Storm\Database\Updater;
 
 /**
@@ -383,8 +384,24 @@ class VersionManager
         }
 
         $normalizedVersions = [];
+        $normalizedKeyMap = []; // Track original keys for each normalized key
         foreach ($versionInfo as $version => $info) {
-            $normalizedVersions[$this->normalizeVersion($version)] = $info;
+            $normalizedKey = $this->normalizeVersion($version);
+
+            // Detect collision: two different original keys normalize to the same value, regardless of order
+            if (isset($normalizedKeyMap[$normalizedKey])) {
+                $firstKey = $normalizedKeyMap[$normalizedKey] ?? 'unknown';
+                throw new \RuntimeException(sprintf(
+                    'Version key collision detected in %s: both "%s" and "%s" normalize to "%s". Version keys must be unique after removing a single leading "v" prefix.',
+                    $versionFile,
+                    $firstKey,
+                    $version,
+                    $normalizedKey
+                ));
+            }
+
+            $normalizedVersions[$normalizedKey] = $info;
+            $normalizedKeyMap[$normalizedKey] = $version;
         }
 
         if ($normalizedVersions) {
@@ -398,10 +415,26 @@ class VersionManager
 
     /**
      * Normalize a version identifier by removing the optional 'v' prefix
+     *
+     * Version keys are not guaranteed to be strings: a version.yaml parsed by the YAML processor
+     * can yield integer or float keys (eg. `1:` and `10.3`). The parameter type hint coerces
+     * those, as this file does not declare strict_types.
+     *
+     * This is the single implementation of the rule. The static counterpart exists so that
+     * callers such as PluginBase can normalize without resolving the singleton, whose
+     * initialization depends on PluginManager and would recurse back into plugin loading.
+     */
+    public static function normalizeVersionKey(string $version): string
+    {
+        return Str::startsWith($version, 'v') ? substr($version, 1) : $version;
+    }
+
+    /**
+     * Normalize a version identifier by removing the optional 'v' prefix
      */
     protected function normalizeVersion(string $version): string
     {
-        return ltrim($version, 'v');
+        return self::normalizeVersionKey($version);
     }
 
     /**

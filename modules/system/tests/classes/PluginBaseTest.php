@@ -37,6 +37,12 @@ class PluginBaseTest extends PluginManagerTestCase
             '1.2.0' => [
                 '!!! Security update - see: https://wintercms.com',
             ],
+            '1.2.9' => [
+                'Prefixed version boundary test (unprefixed)',
+            ],
+            'v1.2.10' => [
+                'Prefixed version boundary test (v-prefixed)',
+            ],
             '1.3.0' => [
                 '!!! We\'ve refactored major parts of this plugin. Please see the website for more information.',
             ],
@@ -62,6 +68,9 @@ class PluginBaseTest extends PluginManagerTestCase
         $versions = $plugin->getPluginVersions(false);
 
         $this->assertNotNull($versions);
+
+        // assertEquals on arrays ignores key order, so the sort is asserted separately
+        $this->assertSame(array_keys($expectedVersions), array_keys($versions));
         $this->assertEquals($expectedVersions, $versions);
     }
 }
