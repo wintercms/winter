@@ -27,6 +27,11 @@ class MediaLibraryItem
     public $path;
 
     /**
+     * @var string Specifies the item dimensions.
+     */
+    public $dimensions;
+    
+    /**
      * @var integer Specifies the item size.
      * For files the item size is measured in bytes. For folders it
      * contains the number of files in the folder.
@@ -68,14 +73,16 @@ class MediaLibraryItem
 
     /**
      * @param string $path
+     * @param string $dimensions
      * @param int $size
      * @param int $lastModified
      * @param string $type
      * @param string $publicUrl
      */
-    public function __construct($path, $size, $lastModified, $type, $publicUrl)
+    public function __construct($path, $dimensions, $size, $lastModified, $type, $publicUrl)
     {
         $this->path = $path;
+        $this->dimensions = $dimensions;
         $this->size = $size;
         $this->lastModified = $lastModified;
         $this->type = $type;
