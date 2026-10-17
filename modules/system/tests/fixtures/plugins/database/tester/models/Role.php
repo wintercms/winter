@@ -31,4 +31,13 @@ class Role extends Model
             'table' => 'database_tester_authors_roles'
         ],
     ];
+
+    /**
+     * Restricts the query to the roles the supplied owner may be given, standing in for the
+     * per-tenant query scope a deployment points a relation's `manage.scope` option at.
+     */
+    public function scopeAssignableTo($query, $owner)
+    {
+        return $query->where('description', 'tenant-' . $owner->getKey());
+    }
 }
