@@ -50,7 +50,19 @@
 
     ExceptionBeautifier.prototype.parseSource = function (raw) {
         var self = this,
-            source = raw,
+            /*
+             * {exception-beautifier-*} is this parser's own markup language: buildMarkup()
+             * turns each token into an element, taking the tag name and any attributes
+             * straight out of the token. The formatters below add those tokens themselves,
+             * so any token already present in the log message is not one of ours and must
+             * not be treated as markup. {x-newline} and {x-tabulation}, which the formatters
+             * also add and the final pass turns into <br> and spacing, go the same way.
+             * Neutralize the delimiter before formatting - the formatters add their own tokens
+             * afterwards - and the numeric entity still renders as "{" once parsed.
+             */
+            source = raw
+                .replace(/\{(\/?)exception-beautifier-/g, '&#123;$1exception-beautifier-')
+                .replace(/\{(x-newline|x-tabulation)\}/g, '&#123;$1}'),
             markup = {lines: []},
             start = 0,
             end
@@ -332,7 +344,10 @@
             markup = source.trim().replace(/(?:^|<\/html>)[^]*?(?:<html|$)/g, function(m) {
                 return m.replace(/\r\n|\r|\n/g, '<br>').replace(/ {2}/g, '&nbsp;&nbsp;')
             })
-            iframe = $('<iframe id="#beautifier-tab-formatted-iframe" style="width: 100%; height: 500px; padding: 0" frameborder="0"></iframe>')
+            // A logged mail body is stored content that never needs to run, so the frame
+            // is sandboxed. allow-same-origin is kept because the document is written from
+            // this page below.
+            iframe = $('<iframe id="#beautifier-tab-formatted-iframe" sandbox="allow-same-origin" style="width: 100%; height: 500px; padding: 0" frameborder="0"></iframe>')
         }
 
         /*

@@ -164,34 +164,108 @@ class EditorSetting extends Model
 
     /**
      * Same as getConfigured but uses a special structure for styles.
+     *
+     * The RichEditor hands these straight to the editor, which concatenates both halves into
+     * its dropdown markup with no encoding of its own:
+     *
+     *     <a class="fr-command CLASS" data-param1="CLASS" title="LABEL">LABEL</a>
+     *
+     * so both are HTML encoded here, at the point the editor reads them. Encoding rather than
+     * constraining keeps every class name that works today - a Tailwind utility spells
+     * `md:text-lg`, `w-1/2` or `[&>p]:mt-4` - because the editor reads the attribute back
+     * through the DOM, which decodes it again. Doing it on read rather than on save also
+     * covers values that were already stored.
+     *
      * @return mixed
      */
     public static function getConfiguredStyles($key, $default = null)
     {
         return static::getConfiguredArray($key, $default, function ($key, $value) {
             if (array_has($value, ['class_name', 'class_label'])) {
-                return [
-                    array_get($value, 'class_name'),
-                    array_get($value, 'class_label')
-                ];
+                $className = static::renderableEditorValue(array_get($value, 'class_name'));
+                $classLabel = static::renderableEditorValue(array_get($value, 'class_label'));
+
+                if ($className === null || $classLabel === null) {
+                    // Left out by the array_filter() in getConfiguredArray()
+                    return ['', null];
+                }
+
+                return [e($className), e($classLabel)];
             }
         });
     }
 
     /**
      * Same as getConfigured but uses a special structure for paragraph formats.
+     *
+     * The editor uses the tag as a literal element name and the label as both an attribute
+     * value and element content in its dropdown markup, neither encoded:
+     *
+     *     <TAG style="..."><a data-param1="TAG" title="LABEL">LABEL</a></TAG>
+     *
+     * The tag is emitted as an element name rather than as text, so it has to be a bare name;
+     * one that is not is left out rather than rewritten. The label is encoded.
+     *
      * @return mixed
      */
     public static function getConfiguredFormats($key, $default = null)
     {
         return static::getConfiguredArray($key, $default, function ($key, $value) {
             if (array_has($value, ['format_tag', 'format_label'])) {
-                return [
-                    array_get($value, 'format_tag'),
-                    array_get($value, 'format_label')
-                ];
+                $formatTag = static::renderableEditorValue(array_get($value, 'format_tag'));
+                $formatLabel = static::renderableEditorValue(array_get($value, 'format_label'));
+
+                // Trimmed because this is an element name, where surrounding whitespace can
+                // never be meaningful, and leaving the row out over it would silently drop a
+                // format that works today. A class name is left exactly as written instead,
+                // since there two names differing only by whitespace are two names.
+                if ($formatTag !== null) {
+                    $formatTag = trim($formatTag);
+                }
+
+                if ($formatTag === null || $formatLabel === null || !static::isValidFormatTag($formatTag)) {
+                    // Left out by the array_filter() in getConfiguredArray()
+                    return ['', null];
+                }
+
+                return [$formatTag, e($formatLabel)];
             }
         });
+    }
+
+    /**
+     * Returns the given configured value as a string, or null if it is not one the editor can
+     * be handed at all.
+     *
+     * A scalar and an object that stringifies both qualify - a translated label arrives as
+     * either - while an array or a plain object does not.
+     *
+     * @param mixed $value
+     */
+    protected static function renderableEditorValue($value): ?string
+    {
+        if (is_scalar($value)) {
+            return (string) $value;
+        }
+
+        if (is_object($value) && method_exists($value, '__toString')) {
+            return (string) $value;
+        }
+
+        return null;
+    }
+
+    /**
+     * Is this paragraph format tag safe to hand to the editor as it was written?
+     *
+     * The tag is emitted as a literal element name, so it has to be a bare element name: a
+     * letter followed by letters, digits, hyphens or underscores. The hyphen is what a custom
+     * element name is required to contain, and `N` is the editor's own sentinel for the
+     * default tag.
+     */
+    protected static function isValidFormatTag(string $formatTag): bool
+    {
+        return (bool) preg_match('/^[A-Za-z][A-Za-z0-9_-]*$/D', $formatTag);
     }
 
     protected static function getConfiguredArray($key, $default = null, $callback = null)

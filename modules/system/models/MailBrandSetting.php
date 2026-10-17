@@ -91,7 +91,7 @@ class MailBrandSetting extends Model
     {
         $cacheKey = self::instance()->cacheKey;
         if (Cache::has($cacheKey)) {
-            return Cache::get($cacheKey);
+            return strip_tags(Cache::get($cacheKey));
         }
 
         try {
@@ -102,7 +102,7 @@ class MailBrandSetting extends Model
             $customCss = '/* ' . e($ex->getMessage()) . ' */';
         }
 
-        return $customCss;
+        return strip_tags($customCss);
     }
 
     protected static function getCssVars()
@@ -158,14 +158,13 @@ class MailBrandSetting extends Model
         // like `red; @import (inline) "/etc/passwd"` would otherwise reach the
         // parser as a real @import directive. See GHSA-58fp-mcx6-7qf9.
         //
-        // Note: unlike BrandSetting/EditorSetting, this model deliberately does
-        // not strip_tags() its renderCss() output. User input flows in only via
-        // ModifyVars (CSS variable values), not as a raw CSS string, and the
-        // output is consumed by the mail rendering pipeline rather than rendered
-        // inline on a backend page — so the threat model strip_tags() guards
-        // against does not apply here. The @import injection vector that
-        // ModifyVars opens up is closed structurally by the SetImportDirs
-        // deny-all gate, not by strip_tags.
+        // Note: the SetImportDirs gate only blocks @import. A ModifyVars value is
+        // still concatenated into the LESS source verbatim, so it can also close a
+        // ruleset and emit a literal `</style>` into the compiled CSS. That output
+        // is not mail-only: it is written raw into the <style> block of the mail
+        // layout, which System\Controllers\MailBrandSettings renders into the
+        // backend Mail branding preview. renderCss() therefore strip_tags() its
+        // output exactly as BrandSetting and EditorSetting do.
         $parser->SetImportDirs(['' => LessImportResolver::makeResolver([], null)]);
 
         $basePath = base_path('modules/system/models/mailbrandsetting');
