@@ -1,5 +1,6 @@
 <?php namespace Backend\Widgets;
 
+use Arr;
 use File;
 use Lang;
 use Flash;
@@ -163,7 +164,17 @@ class ReportContainer extends WidgetBase
 
         $widget = $this->findWidgetByAlias($alias);
 
-        $widget->setProperties(json_decode(Request::input('fields'), true));
+        $properties = json_decode(Request::input('fields'), true);
+
+        $properties = is_array($properties)
+            ? $this->filterWidgetProperties($widget, $properties)
+            : [];
+
+        if (!$properties) {
+            throw new ApplicationException('Invalid widget properties posted.');
+        }
+
+        $widget->setProperties($properties);
 
         $this->saveWidgetProperties($alias, $widget->getProperties());
 
@@ -195,10 +206,17 @@ class ReportContainer extends WidgetBase
     public function onAddWidget()
     {
         $className = trim(Request::input('className'));
-        $size = trim(Request::input('size'));
+        $size = Request::input('size');
 
         if (!$className) {
             throw new ApplicationException('Please select a widget to add.');
+        }
+
+        /*
+         * Report widgets may declare a `permissions` key, which listReportWidgets() applies. Only widgets from that list are offered by onLoadAddPopup(), and only they are built by makeReportWidget() when the container renders, so this handler -- which constructs the widget and returns its rendered output -- honours the same list. The list is consulted before the class name is used for anything else, so every name that is not on it gets the same answer.
+         */
+        if (!array_key_exists($className, WidgetManager::instance()->listReportWidgets())) {
+            throw new ApplicationException('The selected class is not a report widget.');
         }
 
         if (!class_exists($className)) {
@@ -241,12 +259,12 @@ class ReportContainer extends WidgetBase
 
         $sortOrder = 0;
         foreach ($widgets as $widgetInfo) {
-            $sortOrder = max($sortOrder, $widgetInfo['sortOrder']);
+            $sortOrder = max($sortOrder, (int) $widgetInfo['sortOrder']);
         }
 
         $sortOrder++;
 
-        $widget->setProperty('ocWidgetWidth', $size);
+        $widget->setProperty('ocWidgetWidth', (int) $size);
 
         $widgets[$alias] = [
             'class'         => get_class($widget),
@@ -285,7 +303,7 @@ class ReportContainer extends WidgetBase
         $widgets = $this->getWidgetsFromUserPreferences();
         foreach ($aliases as $index => $alias) {
             if (isset($widgets[$alias])) {
-                $widgets[$alias]['sortOrder'] = $orders[$index];
+                $widgets[$alias]['sortOrder'] = (int) $orders[$index];
             }
         }
 
@@ -315,8 +333,9 @@ class ReportContainer extends WidgetBase
             }
         }
 
+        // The sort order is an integer everywhere the container writes one, but a layout stored earlier may hold anything the preference store accepts, and the comparator runs before a single widget is rendered.
         uasort($result, function ($a, $b) {
-            return $a['sortOrder'] - $b['sortOrder'];
+            return (int) $a['sortOrder'] <=> (int) $b['sortOrder'];
         });
 
         $this->reportWidgets = $result;
@@ -372,6 +391,27 @@ class ReportContainer extends WidgetBase
         }
 
         $this->setWidgetsToUserPreferences($widgets);
+    }
+
+    /**
+     * Restricts a set of property values to the properties this container publishes for the given widget, and types the one the container renders itself.
+     *
+     * setProperties() replaces a widget's whole property set, so the keys are limited to the ones getWidgetPropertyConfig() offers the inspector -- the container's own two properties plus the ones the widget declares -- and the column count is stored as an integer. A set that names none of them comes back empty, and onUpdateWidget() refuses it rather than applying it as a set with nothing in it, which would leave the widget on its declared defaults.
+     *
+     * @param \Backend\Classes\ReportWidgetBase $widget
+     * @param array $properties Property values as supplied by the request.
+     */
+    protected function filterWidgetProperties($widget, array $properties): array
+    {
+        $published = json_decode($this->getWidgetPropertyConfig($widget), true);
+
+        $properties = Arr::only($properties, array_column($published ?: [], 'property'));
+
+        if (isset($properties['ocWidgetWidth'])) {
+            $properties['ocWidgetWidth'] = (int) $properties['ocWidgetWidth'];
+        }
+
+        return $properties;
     }
 
     protected function findWidgetByAlias($alias)
