@@ -26,7 +26,11 @@
         <?php foreach ($fileList as $file): ?>
             <div class="upload-object is-success" data-id="<?= $file->id ?>" data-path="<?= $file->pathUrl ?>">
                 <div class="icon-container image">
-                    <img src="<?= $file->thumbUrl ?>" alt="" />
+                    <?php if ($fileIcon = $this->makeFileIcon($file)): ?>
+                        <?= $fileIcon ?>
+                    <?php else: ?>
+                        <img src="<?= $file->thumbUrl ?>" alt="" />
+                    <?php endif ?>
                 </div>
                 <div class="info">
                     <h4 class="filename">

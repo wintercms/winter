@@ -1,40 +1,40 @@
+.file-icon{fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;display:inline-block}
+.file-icon-extension{font-family:'ArialMT','Arial',sans-serif;font-size:4em;font-weight:900;fill:var(--wn-filetype-label,#fff)}
+.file-icon-label{fill:var(--wn-text,#576D7E);fill-rule:nonzero}
+.file-icon-css,
+.file-icon-less,
+.file-icon-scss{fill:var(--wn-filetype-scss,#B73FD9)}
+.file-icon-html,
+.file-icon-xml{fill:var(--wn-filetype-xml,#EA9B47)}
+.file-icon-js,
+.file-icon-json{fill:var(--wn-filetype-json,#A9A9A9)}
+.file-icon-pdf{fill:var(--wn-filetype-pdf,#E30713)}
+.file-icon-txt{fill:var(--wn-filetype-txt,#248BD0)}
+.file-icon-ai{fill:var(--wn-filetype-ai,#F29200)}
+.file-icon-eps{fill:var(--wn-filetype-eps,#F9B234)}
+.file-icon-psd{fill:var(--wn-filetype-psd,#2DAAE2)}
+.file-icon-ttf,
+.file-icon-otf,
+.file-icon-woff,
+.file-icon-woff2{fill:var(--wn-filetype-woff2,#C4CA10)}
+.file-icon-doc,
+.file-icon-docx,
+.file-icon-rtf,
+.file-icon-odt{fill:var(--wn-filetype-odt,#0F70B7)}
+.file-icon-csv,
+.file-icon-ods,
+.file-icon-xls,
+.file-icon-xlsx{fill:var(--wn-filetype-xlsx,#3BAA34)}
+.file-icon-odp,
+.file-icon-ppt,
+.file-icon-pptx{fill:var(--wn-filetype-pptx,#D04526)}
+.file-icon-rar,
+.file-icon-tar,
+.file-icon-zip{fill:var(--wn-filetype-zip,#363A56)}
 div[data-control="media-manager"]:focus{outline:none}
 div[data-control="media-manager"] audio,
 div[data-control="media-manager"] video{width:100%}
 div[data-control="media-manager"] video{background:var(--wn-surface-hover,#ecf0f1);max-height:225px}
-div[data-control="media-manager"] .file-icon{fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;display:inline-block}
-div[data-control="media-manager"] .file-icon-extension{font-family:'ArialMT','Arial',sans-serif;font-size:4em;font-weight:900;fill:var(--wn-filetype-label,#fff)}
-div[data-control="media-manager"] .file-icon-label{fill:var(--wn-text,#576D7E);fill-rule:nonzero}
-div[data-control="media-manager"] .file-icon-css,
-div[data-control="media-manager"] .file-icon-less,
-div[data-control="media-manager"] .file-icon-scss{fill:var(--wn-filetype-scss,#B73FD9)}
-div[data-control="media-manager"] .file-icon-html,
-div[data-control="media-manager"] .file-icon-xml{fill:var(--wn-filetype-xml,#EA9B47)}
-div[data-control="media-manager"] .file-icon-js,
-div[data-control="media-manager"] .file-icon-json{fill:var(--wn-filetype-json,#A9A9A9)}
-div[data-control="media-manager"] .file-icon-pdf{fill:var(--wn-filetype-pdf,#E30713)}
-div[data-control="media-manager"] .file-icon-txt{fill:var(--wn-filetype-txt,#248BD0)}
-div[data-control="media-manager"] .file-icon-ai{fill:var(--wn-filetype-ai,#F29200)}
-div[data-control="media-manager"] .file-icon-eps{fill:var(--wn-filetype-eps,#F9B234)}
-div[data-control="media-manager"] .file-icon-psd{fill:var(--wn-filetype-psd,#2DAAE2)}
-div[data-control="media-manager"] .file-icon-ttf,
-div[data-control="media-manager"] .file-icon-otf,
-div[data-control="media-manager"] .file-icon-woff,
-div[data-control="media-manager"] .file-icon-woff2{fill:var(--wn-filetype-woff2,#C4CA10)}
-div[data-control="media-manager"] .file-icon-doc,
-div[data-control="media-manager"] .file-icon-docx,
-div[data-control="media-manager"] .file-icon-rtf,
-div[data-control="media-manager"] .file-icon-odt{fill:var(--wn-filetype-odt,#0F70B7)}
-div[data-control="media-manager"] .file-icon-csv,
-div[data-control="media-manager"] .file-icon-ods,
-div[data-control="media-manager"] .file-icon-xls,
-div[data-control="media-manager"] .file-icon-xlsx{fill:var(--wn-filetype-xlsx,#3BAA34)}
-div[data-control="media-manager"] .file-icon-odp,
-div[data-control="media-manager"] .file-icon-ppt,
-div[data-control="media-manager"] .file-icon-pptx{fill:var(--wn-filetype-pptx,#D04526)}
-div[data-control="media-manager"] .file-icon-rar,
-div[data-control="media-manager"] .file-icon-tar,
-div[data-control="media-manager"] .file-icon-zip{fill:var(--wn-filetype-zip,#363A56)}
 div[data-control="media-manager"] .media-player-fallback{font-size:13px;color:var(--wn-text-secondary,#95a5a6);background:var(--wn-surface-hover,#ecf0f1);line-height:180%}
 div[data-control="media-manager"] .media-player-fallback.panel-embedded{padding:20px;margin:-20px -20px 0 -20px}
 div[data-control="media-manager"] .empty-library{padding:20px;text-align:center}

@@ -1,4 +1,5 @@
 @import "../../../../../backend/assets/less/core/boot.less";
+@import "../../../../../backend/assets/less/controls/file-icon.less";
 
 @color-media-list-hover-bg: mix(white, @brand-secondary, 13%);
 
@@ -61,83 +62,6 @@ div[data-control="media-manager"] {
     video {
         background: var(--wn-surface-hover, #ecf0f1);
         max-height: 225px;
-    }
-
-    .file-icon {
-        fill-rule: evenodd;
-        clip-rule: evenodd;
-        stroke-linejoin: round;
-        stroke-miterlimit: 2;
-        display: inline-block;
-
-        &-extension {
-            font-family: 'ArialMT','Arial',sans-serif;
-            font-size: 4em;
-            font-weight: 900;
-            fill: var(--wn-filetype-label, #fff);
-        }
-
-        &-label {
-            fill: var(--wn-text, #576D7E); /* Default color */
-            fill-rule: nonzero;
-        }
-
-        &-css,
-        &-less,
-        &-scss {
-            fill: var(--wn-filetype-scss, #B73FD9);
-        }
-        &-html,
-        &-xml {
-            fill: var(--wn-filetype-xml, #EA9B47);
-        }
-        &-js,
-        &-json {
-            fill: var(--wn-filetype-json, #A9A9A9);
-        }
-        &-pdf {
-            fill: var(--wn-filetype-pdf, #E30713);
-        }
-        &-txt {
-            fill: var(--wn-filetype-txt, #248BD0);
-        }
-        &-ai {
-            fill: var(--wn-filetype-ai, #F29200);
-        }
-        &-eps {
-            fill: var(--wn-filetype-eps, #F9B234);
-        }
-        &-psd {
-            fill: var(--wn-filetype-psd, #2DAAE2);
-        }
-        &-ttf,
-        &-otf,
-        &-woff,
-        &-woff2 {
-            fill: var(--wn-filetype-woff2, #C4CA10);
-        }
-        &-doc,
-        &-docx,
-        &-rtf,
-        &-odt {
-            fill: var(--wn-filetype-odt, #0F70B7);
-        }
-        &-csv,
-        &-ods,
-        &-xls,
-        &-xlsx {
-            fill: var(--wn-filetype-xlsx, #3BAA34);
-        }
-        &-odp,
-        &-ppt,
-        &-pptx {
-            fill: var(--wn-filetype-pptx, #D04526);
-        }
-        &-rar,
-        &-tar,
-        &-zip {
-            fill: var(--wn-filetype-zip, #363A56);
-        }
     }
 
     .media-player-fallback {

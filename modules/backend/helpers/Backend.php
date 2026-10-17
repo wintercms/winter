@@ -7,6 +7,7 @@ use Backend\Helpers\Exception\DecompileException;
 use Exception;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\View;
 use System\Helpers\DateTime as DateTimeHelper;
 use Winter\Storm\Router\Helper as RouterHelper;
 use Winter\Storm\Support\Facades\Config;
@@ -180,6 +181,16 @@ class Backend
         }
 
         return '<time'.Html::attributes($attributes).'>'.e($defaultValue).'</time>'.PHP_EOL;
+    }
+
+    /**
+     * Returns the SVG markup for a generic file icon labelled with the given file extension.
+     */
+    public function fileIcon(string $extension): string
+    {
+        return View::make('backend::file_icon', [
+            'extension' => substr(strtolower(ltrim($extension, '.')), 0, 4),
+        ])->render();
     }
 
     /**
