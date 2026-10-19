@@ -30,6 +30,13 @@ class RelationControllerToolbarPermissionsTest extends PluginTestCase
         $config->setValue($this->behavior, (object) ['view' => ['toolbarButtons' => $buttons]]);
     }
 
+    protected function setViewMode(string $viewMode): void
+    {
+        $property = new \ReflectionProperty(RelationController::class, 'viewMode');
+        $property->setAccessible(true);
+        $property->setValue($this->behavior, $viewMode);
+    }
+
     protected function actAsUserWith(array $permissions): void
     {
         $this->actingAs((new UserFixture)->withPermission($permissions));
@@ -96,25 +103,26 @@ class RelationControllerToolbarPermissionsTest extends PluginTestCase
     public static function guardedHandlerProvider(): array
     {
         return [
-            'create' => ['create', 'onRelationManageCreate'],
-            'update' => ['update', 'onRelationManageUpdate'],
-            'delete' => ['delete', 'onRelationManageDelete'],
-            'add' => ['add', 'onRelationManageAdd'],
-            'add with pivot' => ['add', 'onRelationManagePivotCreate'],
-            'link' => ['link', 'onRelationManageAdd'],
-            'remove' => ['remove', 'onRelationManageRemove'],
-            'unlink' => ['unlink', 'onRelationManageRemove'],
-            'delete via button' => ['delete', 'onRelationButtonDelete'],
+            'create' => ['create', 'onRelationManageCreate', 'multi'],
+            'update' => ['update', 'onRelationManageUpdate', 'multi'],
+            'delete' => ['delete', 'onRelationManageDelete', 'multi'],
+            'add' => ['add', 'onRelationManageAdd', 'multi'],
+            'add with pivot' => ['add', 'onRelationManagePivotCreate', 'multi'],
+            'link' => ['link', 'onRelationManageAdd', 'single'],
+            'remove' => ['remove', 'onRelationManageRemove', 'multi'],
+            'unlink' => ['unlink', 'onRelationManageRemove', 'single'],
+            'delete via button' => ['delete', 'onRelationButtonDelete', 'multi'],
         ];
     }
 
     /**
      * @dataProvider guardedHandlerProvider
      */
-    public function testHandlerIsDeniedWithoutTheButtonPermissions(string $button, string $handler): void
+    public function testHandlerIsDeniedWithoutTheButtonPermissions(string $button, string $handler, string $viewMode): void
     {
         $this->actAsUserWith(['acme.blog.manage_comments' => 0]);
         $this->setToolbarButtons([$button => ['permissions' => 'acme.blog.manage_comments']]);
+        $this->setViewMode($viewMode);
 
         $this->assertSame(403, $this->statusOf($handler));
     }
@@ -122,10 +130,33 @@ class RelationControllerToolbarPermissionsTest extends PluginTestCase
     /**
      * @dataProvider guardedHandlerProvider
      */
-    public function testHandlerIsAllowedWithTheButtonPermissions(string $button, string $handler): void
+    public function testHandlerIsAllowedWithTheButtonPermissions(string $button, string $handler, string $viewMode): void
     {
         $this->actAsUserWith(['acme.blog.manage_comments' => 1]);
         $this->setToolbarButtons([$button => ['permissions' => 'acme.blog.manage_comments']]);
+        $this->setViewMode($viewMode);
+
+        $this->assertNull($this->statusOf($handler));
+    }
+
+    public static function otherViewModeProvider(): array
+    {
+        return [
+            'add does not guard link' => ['add', 'onRelationManageAdd', 'single'],
+            'link does not guard add' => ['link', 'onRelationManageAdd', 'multi'],
+            'remove does not guard unlink' => ['remove', 'onRelationManageRemove', 'single'],
+            'unlink does not guard remove' => ['unlink', 'onRelationManageRemove', 'multi'],
+        ];
+    }
+
+    /**
+     * @dataProvider otherViewModeProvider
+     */
+    public function testHandlerIsAllowedWhenTheOtherViewModeButtonIsRestricted(string $button, string $handler, string $viewMode): void
+    {
+        $this->actAsUserWith(['acme.blog.manage_comments' => 0]);
+        $this->setToolbarButtons([$button => ['permissions' => 'acme.blog.manage_comments']]);
+        $this->setViewMode($viewMode);
 
         $this->assertNull($this->statusOf($handler));
     }

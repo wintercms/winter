@@ -1443,10 +1443,6 @@ class RelationController extends ControllerBehavior
     {
         $this->beforeAjax();
 
-        if (!$this->relationUserHasAccess('add', 'link')) {
-            abort(403);
-        }
-
         $recordId = post('record_id');
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey() : null;
 
@@ -1454,6 +1450,10 @@ class RelationController extends ControllerBehavior
          * Add
          */
         if ($this->viewMode === 'multi') {
+            if (!$this->relationUserHasAccess('add')) {
+                abort(403);
+            }
+
             $checkedIds = $recordId ? [$recordId] : post('checked');
 
             if (is_array($checkedIds)) {
@@ -1474,6 +1474,10 @@ class RelationController extends ControllerBehavior
          * Link
          */
         elseif ($this->viewMode === 'single') {
+            if (!$this->relationUserHasAccess('link')) {
+                abort(403);
+            }
+
             if ($recordId && ($model = $this->relationModel->find($recordId))) {
                 if ($this->relationType === 'hasOne') {
                     // Unassign previous relation if one is already assigned
@@ -1510,10 +1514,6 @@ class RelationController extends ControllerBehavior
     {
         $this->beforeAjax();
 
-        if (!$this->relationUserHasAccess('remove', 'unlink')) {
-            abort(403);
-        }
-
         $recordId = post('record_id');
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey() : null;
         $relatedModel = $this->relationModel;
@@ -1522,6 +1522,10 @@ class RelationController extends ControllerBehavior
          * Remove
          */
         if ($this->viewMode === 'multi') {
+            if (!$this->relationUserHasAccess('remove')) {
+                abort(403);
+            }
+
             $checkedIds = $recordId ? [$recordId] : post('checked');
 
             if (is_array($checkedIds)) {
@@ -1537,6 +1541,10 @@ class RelationController extends ControllerBehavior
          * Unlink
          */
         elseif ($this->viewMode === 'single') {
+            if (!$this->relationUserHasAccess('unlink')) {
+                abort(403);
+            }
+
             if ($this->relationType === 'belongsTo') {
                 $this->relationObject->dissociate();
                 $this->relationObject->getParent()->save();
@@ -1587,7 +1595,7 @@ class RelationController extends ControllerBehavior
     {
         $this->beforeAjax();
 
-        if (!$this->relationUserHasAccess('add', 'link')) {
+        if (!$this->relationUserHasAccess('add')) {
             abort(403);
         }
 
@@ -1832,20 +1840,14 @@ class RelationController extends ControllerBehavior
     }
 
     /**
-     * Check if the current user has the permissions configured on the given toolbar buttons,
+     * Check if the current user has the permissions configured on the given toolbar button,
      * e.g. `toolbarButtons: { delete: { permissions: [acme.blog.delete_comments] } }`
      */
-    protected function relationUserHasAccess(string ...$types): bool
+    protected function relationUserHasAccess(string $type): bool
     {
-        foreach ($types as $type) {
-            $permissions = $this->getConfig("view[toolbarButtons][{$type}][permissions]");
+        $permissions = $this->getConfig("view[toolbarButtons][{$type}][permissions]");
 
-            if (!empty($permissions) && !BackendAuth::getUser()->hasAccess($permissions, false)) {
-                return false;
-            }
-        }
-
-        return true;
+        return empty($permissions) || BackendAuth::getUser()->hasAccess($permissions, false);
     }
 
     /**
