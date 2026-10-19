@@ -1759,7 +1759,7 @@ class RelationController extends ControllerBehavior
                     $text = $config;
                 }
             } elseif (is_array($config)) {
-                if (isset($config['permissions']) && !$user->hasAccess($config['permissions'])) {
+                if (isset($config['permissions']) && !$user?->hasAccess($config['permissions'])) {
                     continue;
                 }
                 if (isset($config['label'])) {
