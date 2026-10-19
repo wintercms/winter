@@ -15,7 +15,7 @@ class RelationControllerTest extends PluginTestCase
     {
         parent::setUp();
 
-        #BackendAuth::setUser((new UserFixture)->withPermission('backend.manage_users'));
+        BackendAuth::setUser((new UserFixture)->withPermission('backend.manage_users'));
 
         $this->behavior = (new \ReflectionClass(RelationController::class))->newInstanceWithoutConstructor();
     }
