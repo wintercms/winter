@@ -5,6 +5,7 @@ use Lang;
 use Request;
 use Form as FormHelper;
 use Backend\Classes\ControllerBehavior;
+use Backend\Facades\BackendAuth;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Database\Models\DeferredBinding;
 use ApplicationException;
@@ -1269,6 +1270,11 @@ class RelationController extends ControllerBehavior
     {
         $this->forceManageMode = 'form';
         $this->beforeAjax();
+
+        if (!$this->relationUserHasAccess('create')) {
+            abort(403);
+        }
+
         $saveData = $this->manageWidget->getSaveData();
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey(true) : null;
 
@@ -1358,6 +1364,11 @@ class RelationController extends ControllerBehavior
     {
         $this->forceManageMode = 'form';
         $this->beforeAjax();
+
+        if (!$this->relationUserHasAccess('update')) {
+            abort(403);
+        }
+
         $saveData = $this->manageWidget->getSaveData();
 
         if ($this->viewMode === 'multi') {
@@ -1387,6 +1398,10 @@ class RelationController extends ControllerBehavior
     public function onRelationManageDelete()
     {
         $this->beforeAjax();
+
+        if (!$this->relationUserHasAccess('delete')) {
+            abort(403);
+        }
 
         /*
          * Multiple (has many, belongs to many)
@@ -1427,6 +1442,10 @@ class RelationController extends ControllerBehavior
     public function onRelationManageAdd()
     {
         $this->beforeAjax();
+
+        if (!$this->relationUserHasAccess('add', 'link')) {
+            abort(403);
+        }
 
         $recordId = post('record_id');
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey() : null;
@@ -1490,6 +1509,10 @@ class RelationController extends ControllerBehavior
     public function onRelationManageRemove()
     {
         $this->beforeAjax();
+
+        if (!$this->relationUserHasAccess('remove', 'unlink')) {
+            abort(403);
+        }
 
         $recordId = post('record_id');
         $sessionKey = $this->deferredBinding ? $this->relationGetSessionKey() : null;
@@ -1563,6 +1586,10 @@ class RelationController extends ControllerBehavior
     public function onRelationManagePivotCreate()
     {
         $this->beforeAjax();
+
+        if (!$this->relationUserHasAccess('add', 'link')) {
+            abort(403);
+        }
 
         /*
          * If the pivot model fails for some reason, abort the sync
@@ -1750,6 +1777,10 @@ class RelationController extends ControllerBehavior
         $buttonText = [];
 
         foreach ($buttons as $type => $text) {
+            if (is_array($text)) {
+                $text = $text['label'] ?? null;
+            }
+
             if (is_numeric($type) || !$text) {
                 if (is_numeric($type) && $text) {
                     $type = $text;
@@ -1790,10 +1821,31 @@ class RelationController extends ControllerBehavior
                 }
             }
 
+            if (!$this->relationUserHasAccess($type)) {
+                continue;
+            }
+
             $buttonText[$type] = $text;
         }
 
         return $buttonText;
+    }
+
+    /**
+     * Check if the current user has the permissions configured on the given toolbar buttons,
+     * e.g. `toolbarButtons: { delete: { permissions: [acme.blog.delete_comments] } }`
+     */
+    protected function relationUserHasAccess(string ...$types): bool
+    {
+        foreach ($types as $type) {
+            $permissions = $this->getConfig("view[toolbarButtons][{$type}][permissions]");
+
+            if (!empty($permissions) && !BackendAuth::getUser()->hasAccess($permissions, false)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
