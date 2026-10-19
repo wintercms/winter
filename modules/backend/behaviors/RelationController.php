@@ -1769,7 +1769,7 @@ class RelationController extends ControllerBehavior
                 $text = $config;
             }
 
-            $buttonText[$type] = $text ?: match($type) {
+            $buttonText[$type] = $text ?: match ($type) {
                 'create' => 'backend::lang.relation.create_name',
                 'update' => 'backend::lang.relation.update_name',
                 'delete' => 'backend::lang.relation.delete',
