@@ -5,6 +5,7 @@ use Lang;
 use Request;
 use Form as FormHelper;
 use Backend\Classes\ControllerBehavior;
+use Backend\Facades\BackendAuth;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Database\Models\DeferredBinding;
 use ApplicationException;
@@ -1719,7 +1720,9 @@ class RelationController extends ControllerBehavior
      */
     protected function evalToolbarButtons()
     {
+        $user = BackendAuth::getUser();
         $buttons = $this->getConfig('view[toolbarButtons]');
+        $buttonText = [];
 
         if (!is_array($buttons)) {
             if ($buttons === false) {
@@ -1747,50 +1750,35 @@ class RelationController extends ControllerBehavior
             }
         }
 
-        $buttonText = [];
-
-        foreach ($buttons as $type => $text) {
-            if (is_numeric($type) || !$text) {
-                if (is_numeric($type) && $text) {
-                    $type = $text;
+        foreach ($buttons as $type => $config) {
+            $text = '';
+            if (is_numeric($type) || !$config) {
+                if (is_numeric($type) && $config) {
+                    $type = $config;
+                } else {
+                    $text = $config;
                 }
-
-                switch ($type) {
-                    case 'create':
-                        $text = 'backend::lang.relation.create_name';
-                        break;
-
-                    case 'update':
-                        $text = 'backend::lang.relation.update_name';
-                        break;
-
-                    case 'delete':
-                        $text = 'backend::lang.relation.delete';
-                        break;
-
-                    case 'add':
-                        $text = 'backend::lang.relation.add_name';
-                        break;
-
-                    case 'refresh':
-                        $text = 'backend::lang.relation.refresh';
-                        break;
-
-                    case 'remove':
-                        $text = 'backend::lang.relation.remove';
-                        break;
-
-                    case 'link':
-                        $text = 'backend::lang.relation.link_name';
-                        break;
-
-                    case 'unlink':
-                        $text = 'backend::lang.relation.unlink';
-                        break;
+            } elseif (is_array($config)) {
+                if (isset($config['permissions']) && !$user->hasAccess($config['permissions'])) {
+                    continue;
                 }
+                if (isset($config['label'])) {
+                    $text = $config['label'];
+                }
+            } else {
+                $text = $config;
             }
 
-            $buttonText[$type] = $text;
+            $buttonText[$type] = $text ?: match($type) {
+                'create' => 'backend::lang.relation.create_name',
+                'update' => 'backend::lang.relation.update_name',
+                'delete' => 'backend::lang.relation.delete',
+                'add' => 'backend::lang.relation.add_name',
+                'refresh' => 'backend::lang.relation.refresh',
+                'remove' => 'backend::lang.relation.remove',
+                'link' => 'backend::lang.relation.link_name',
+                'unlink' => 'backend::lang.relation.unlink',
+            };
         }
 
         return $buttonText;
