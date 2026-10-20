@@ -1789,51 +1789,26 @@ class RelationController extends ControllerBehavior
                 $text = $text['label'] ?? null;
             }
 
-            if (is_numeric($type) || !$text) {
-                if (is_numeric($type) && $text) {
-                    $type = $text;
-                }
-
-                switch ($type) {
-                    case 'create':
-                        $text = 'backend::lang.relation.create_name';
-                        break;
-
-                    case 'update':
-                        $text = 'backend::lang.relation.update_name';
-                        break;
-
-                    case 'delete':
-                        $text = 'backend::lang.relation.delete';
-                        break;
-
-                    case 'add':
-                        $text = 'backend::lang.relation.add_name';
-                        break;
-
-                    case 'refresh':
-                        $text = 'backend::lang.relation.refresh';
-                        break;
-
-                    case 'remove':
-                        $text = 'backend::lang.relation.remove';
-                        break;
-
-                    case 'link':
-                        $text = 'backend::lang.relation.link_name';
-                        break;
-
-                    case 'unlink':
-                        $text = 'backend::lang.relation.unlink';
-                        break;
-                }
+            if (is_numeric($type) && $text) {
+                $type = $text;
+                $text = null;
             }
 
             if (!$this->relationUserHasAccess($type)) {
                 continue;
             }
 
-            $buttonText[$type] = $text;
+            $buttonText[$type] = $text ?: match ($type) {
+                'create' => 'backend::lang.relation.create_name',
+                'update' => 'backend::lang.relation.update_name',
+                'delete' => 'backend::lang.relation.delete',
+                'add' => 'backend::lang.relation.add_name',
+                'refresh' => 'backend::lang.relation.refresh',
+                'remove' => 'backend::lang.relation.remove',
+                'link' => 'backend::lang.relation.link_name',
+                'unlink' => 'backend::lang.relation.unlink',
+                default => $type,
+            };
         }
 
         return $buttonText;

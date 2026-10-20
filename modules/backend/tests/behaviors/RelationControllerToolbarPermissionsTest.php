@@ -72,6 +72,17 @@ class RelationControllerToolbarPermissionsTest extends PluginTestCase
         );
     }
 
+    public function testCustomButtonTypeFallsBackToItsName(): void
+    {
+        $this->actAsUserWith(['acme.blog.export' => 1]);
+        $this->setToolbarButtons(['create', 'export', 'publish' => ['permissions' => 'acme.blog.export']]);
+
+        $this->assertSame(
+            ['create' => 'backend::lang.relation.create_name', 'export' => 'export', 'publish' => 'publish'],
+            $this->evalToolbarButtons()
+        );
+    }
+
     public function testButtonIsHiddenWithoutItsPermissions(): void
     {
         $this->actAsUserWith(['acme.blog.delete_comments' => 0]);
