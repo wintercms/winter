@@ -72,6 +72,26 @@ class RelationControllerToolbarPermissionsTest extends PluginTestCase
         );
     }
 
+    public function testButtonsAcceptArrayConfig(): void
+    {
+        $this->setToolbarButtons([
+            'create' => ['label' => 'Add comment'],
+            'update' => [],
+            'delete' => 'Delete comments',
+            'add',
+        ]);
+
+        $this->assertSame(
+            [
+                'create' => 'Add comment',
+                'update' => 'backend::lang.relation.update_name',
+                'delete' => 'Delete comments',
+                'add' => 'backend::lang.relation.add_name',
+            ],
+            $this->evalToolbarButtons()
+        );
+    }
+
     public function testCustomButtonTypeFallsBackToItsName(): void
     {
         $this->actAsUserWith(['acme.blog.export' => 1]);
