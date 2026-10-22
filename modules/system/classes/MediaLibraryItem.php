@@ -150,6 +150,6 @@ class MediaLibraryItem
             return null;
         }
 
-        return Carbon::createFromTimestamp($date)->toFormattedDateString();
+        return Carbon::createFromTimestamp($date, date_default_timezone_get())->toFormattedDateString();
     }
 }
