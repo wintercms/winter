@@ -27,9 +27,7 @@ class PartialRenderer
 }
 
 /**
- * Backend partials render most values raw, so every value that is not itself markup has to
- * be encoded at the point it is emitted. These cases cover three such values that were
- * emitted without it while a sibling line in the same partial encoded its own.
+ * Backend partials render most values raw, so anything that is not itself markup is encoded where it is emitted.
  */
 class BackendMarkupEscapingTest extends PluginTestCase
 {
@@ -41,10 +39,8 @@ class BackendMarkupEscapingTest extends PluginTestCase
     }
 
     /**
-     * The switch scope's value is whatever `onFilterUpdate()` stored in this user's widget
-     * session; unlike the checkbox and number scopes beside it, nothing coerces it on the
-     * way in. The partial therefore has to encode it on the way out, as the sibling
-     * `_scope_text.php` already does with its own value.
+     * A switch scope's value is whatever `onFilterUpdate()` stored in the widget session; unlike the checkbox and
+     * number scopes beside it, nothing coerces it on the way in.
      */
     public function testSwitchScopeValueIsEscapedOnRender()
     {
@@ -89,8 +85,7 @@ class BackendMarkupEscapingTest extends PluginTestCase
     }
 
     /**
-     * The import column names are the first row of the uploaded CSV, i.e. file content. The
-     * sample values beneath them were already encoded; the name was not.
+     * The import column names are the first row of the uploaded CSV, so they are file content.
      */
     public function testImportColumnNameIsEscaped()
     {
@@ -120,11 +115,6 @@ class BackendMarkupEscapingTest extends PluginTestCase
         $this->assertStringContainsString('Jane', $html);
     }
 
-    /**
-     * The page link label is a deliberate `&nbsp;` indent concatenated with a stored page
-     * title, and the partial emits it raw so the indent renders. Only the indent may be
-     * markup, so the title has to be encoded where the two are joined.
-     */
     public function testPageLinkTitlesAreEscaped()
     {
         Event::listen('backend.richeditor.listTypes', fn () => ['test-type' => 'Test']);
@@ -149,13 +139,12 @@ class BackendMarkupEscapingTest extends PluginTestCase
         $this->assertNotContains(static::PAYLOAD, $names);
         $this->assertContains('&quot;&gt;&lt;img src=x onerror=&quot;window.pwned=1', $names);
 
-        // The nesting indent is markup and must survive
+        // The nesting indent is markup by design and must survive, unlike the title it prefixes.
         $this->assertContains(str_repeat('&nbsp;', 4) . 'Child page', $names);
     }
 
     /**
-     * The link URL is the array key a `backend.richeditor.getTypeInfo` listener returns, so
-     * the partial has to encode it into the option's `value` attribute.
+     * The link URL is the array key a `backend.richeditor.getTypeInfo` listener returns.
      */
     public function testPageLinkUrlsAreEscaped()
     {
@@ -166,13 +155,12 @@ class BackendMarkupEscapingTest extends PluginTestCase
 
         $this->assertStringNotContainsString('<img', $html);
 
-        // The parser decodes the attribute back to exactly the URL the listener returned,
-        // so the selected link still round-trips.
+        // The parser decodes the attribute back to the URL the listener returned, so the link still round-trips.
         $this->assertContains('/parent' . static::PAYLOAD, $this->optionValues($html));
     }
 
     /**
-     * Invalidation: an ordinary page link still renders its URL and its title.
+     * Invalidation case: an ordinary page link still renders its URL and its title.
      */
     public function testOrdinaryPageLinksStillRender()
     {
@@ -187,11 +175,8 @@ class BackendMarkupEscapingTest extends PluginTestCase
     }
 
     /**
-     * `onFilterUpdate()` assigns the posted value to a switch scope as it arrives, and a
-     * request can post an array. The partial reads that back out of the widget session on
-     * every later render of the list, so it has to render one of its three states rather
-     * than raise: a scope holding something it cannot mean would otherwise cost the whole
-     * list page.
+     * `onFilterUpdate()` stores the posted value as it arrives and a request can post an array. The partial reads it
+     * back on every later render of the list, so it falls back to a documented state rather than raising.
      */
     public function testSwitchScopeRendersADocumentedStateForAValueItCannotMean()
     {
@@ -212,15 +197,8 @@ class BackendMarkupEscapingTest extends PluginTestCase
     }
 
     /**
-     * A `backend.richeditor.getTypeInfo` listener supplies the link tree, and the title of a
-     * link is its own to shape. One malformed title may not take the dialog down with it:
-     * every listener's links are gathered in one pass, and the dialog is how a page link is
-     * inserted at all.
-     */
-    /**
-     * Invalidation: a title that is an object which stringifies still renders its text. A
-     * listener can legitimately return one - a translated or wrapped string - and reading it as
-     * "not text" would silently drop the row.
+     * Invalidation case: a listener may legitimately return a title that is a stringifiable object rather than a
+     * string -- a translated or wrapped label -- and reading that as "not text" would silently drop the row.
      */
     public function testPageLinkWithATitleThatStringifiesStillRendersIt()
     {
@@ -255,9 +233,6 @@ class BackendMarkupEscapingTest extends PluginTestCase
         $this->assertStringNotContainsString('Array', $html);
     }
 
-    /**
-     * Registers a page link type whose info is the given tree of links.
-     */
     protected function listenForPageLinks(array $links): void
     {
         Event::listen('backend.richeditor.listTypes', fn () => ['test-type' => 'Test']);
@@ -271,8 +246,7 @@ class BackendMarkupEscapingTest extends PluginTestCase
     }
 
     /**
-     * The `value` of every option, entity decoded by the parser exactly as a browser would
-     * decode it before submitting the form.
+     * Every option's `value`, entity decoded by the parser exactly as a browser would before submitting the form.
      */
     protected function optionValues(string $html): array
     {

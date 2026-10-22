@@ -2,26 +2,14 @@ import FakeDom from '../../helpers/FakeDom';
 
 jest.setTimeout(5000);
 
-/*
- * The event log preview hands the stored log message to the exception beautifier.
- * {exception-beautifier-*} is the beautifier's own markup language -- buildMarkup() takes
- * the element name and any attributes straight out of a token -- and the formatters add
- * those tokens themselves, so a token that is already present in the message is not one of
- * the beautifier's own and must be rendered as the text it is.
- */
+// The event log preview hands the beautifier a stored log message, which may hold anything a logged exception did.
 describe('Event log exception beautifier', function () {
-    /*
-     * The tab chrome needs the backend language store and the tab control, neither of
-     * which is what these cases measure.
-     */
+    // The tab chrome needs the backend language store and the tab control, neither of which these cases measure.
     const STUBS = 'window.$.wn = window.$.wn || {};'
         + 'window.$.wn.lang = { get: function (key) { return key; } };'
         + 'window.$.fn.ocTab = function () { return this; };';
 
-    /**
-     * Renders a log message exactly as the preview does: the controller writes it into the
-     * element as text, and the beautifier reads it back out with .html().
-     */
+    // Exactly as the preview does it: the controller writes the message in as text, the beautifier reads it with .html().
     const beautify = (message) => FakeDom
         .new()
         .addScript([

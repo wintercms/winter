@@ -260,11 +260,8 @@ class RichEditor extends FormWidgetBase
     }
 
     /**
-     * Returns a page link title HTML encoded, or an empty string if it is not something that
-     * can be rendered as text.
-     *
-     * A scalar and an object that stringifies both qualify, which is how a translated or
-     * wrapped title arrives from a listener; an array or a plain object does not.
+     * Returns a page link title HTML encoded, or an empty string if it cannot be rendered as
+     * text. Scalars and stringifiable objects qualify; arrays and plain objects do not.
      *
      * @param mixed $linkTitle
      */
@@ -309,9 +306,7 @@ class RichEditor extends FormWidgetBase
                     $linkUrl = '/';
                 }
 
-                // The indent is markup by design; the title it prefixes is not. A title this
-                // cannot render as text contributes nothing rather than raising, because this
-                // runs for every listener's link tree at once.
+                // The indent is markup by design; the title it prefixes is not.
                 $linkTitle = is_array($link) ? array_get($link, 'title', '') : $link;
 
                 $linkName = str_repeat('&nbsp;', $level * 4);

@@ -11,24 +11,15 @@ use DOMDocument;
 use System\Tests\Bootstrap\PluginTestCase;
 
 /**
- * When a TagList is rendered in preview mode, or as a read-only / disabled field, the
- * partial swaps the editable <select> for a display list plus hidden inputs that carry
- * the values through a save. Those hidden inputs interpolate the stored tag into a
- * double-quoted `value` attribute, so they have to encode it exactly as the sibling
- * <li> and the editable <option> in the same partial already do.
- *
- * Tags are free text by default (TagList::$customTags) and getSaveValue() applies no
- * filtering, so the value reaching the partial is not constrained by the widget.
+ * In preview mode, and on a read-only or disabled field, the partial swaps the editable <select> for a display list
+ * plus hidden inputs carrying the values through a save. Tags are free text by default (TagList::$customTags) and
+ * getSaveValue() filters nothing, so what reaches those inputs is not constrained by the widget.
  *
  * @see modules/backend/formwidgets/taglist/partials/_taglist.php
  */
 class TagListEscapingTest extends PluginTestCase
 {
-    /**
-     * A value that would close the `value="` attribute and open an element of its own if
-     * it were emitted verbatim. Deliberately free of commas so it survives the string mode
-     * separator, and free of `&` so the expected round-trip value is unambiguous.
-     */
+    /** Comma free so it survives the string mode separator, and `&` free so the round-trip value is unambiguous. */
     protected const PAYLOAD = '"><script>window.pwned=1</script>';
 
     protected function makeWidget(FormField $field, array $config = []): TagList
@@ -65,7 +56,6 @@ class TagListEscapingTest extends PluginTestCase
         return $doc;
     }
 
-    /** Every element name present in the rendered markup. */
     protected function elementsIn(string $html): array
     {
         $names = [];
@@ -76,10 +66,7 @@ class TagListEscapingTest extends PluginTestCase
         return $names;
     }
 
-    /**
-     * The `value` of every hidden input, entity-decoded by the HTML parser exactly as a
-     * browser would decode it before posting the form back.
-     */
+    /** Every hidden input's `value`, entity decoded by the parser exactly as a browser would before posting back. */
     protected function hiddenInputValues(string $html): array
     {
         $values = [];
@@ -130,8 +117,7 @@ class TagListEscapingTest extends PluginTestCase
     }
 
     /**
-     * The same branch is taken outside preview mode, on an ordinary create/update form, so
-     * the sink is not reachable only through the `preview` controller action.
+     * The same branch is taken on an ordinary create/update form, not only on the preview action.
      *
      * @dataProvider displayOnlyFieldProvider
      */
@@ -145,9 +131,8 @@ class TagListEscapingTest extends PluginTestCase
     }
 
     /**
-     * Relation mode stores tags as related models. hydrateRelationSaveValue() creates them
-     * from free text whenever customTags is on, so the stored name is unconstrained there
-     * too, and the scalar branch renders the whole related collection.
+     * Relation mode stores tags as related models, which hydrateRelationSaveValue() creates from free text whenever
+     * customTags is on, so a related model's name is unconstrained too.
      */
     public function testRelationModeEscapesTheHiddenInput(): void
     {
@@ -188,10 +173,7 @@ class TagListEscapingTest extends PluginTestCase
         $this->assertSame($tags, $widget->getSaveValue($this->hiddenInputValues($html)));
     }
 
-    /**
-     * Invalidation: escaping must not mangle characters that are legal in a tag. The
-     * browser decodes the entities back to the original text before posting it.
-     */
+    /** Invalidation: characters that are legal in a tag decode back to the original text before posting. */
     public function testTagsWithSpecialCharactersRoundTrip(): void
     {
         $tags = ['Tom & Jerry', "O'Brien", 'héllo 世界 😀', '<b>'];
@@ -204,9 +186,8 @@ class TagListEscapingTest extends PluginTestCase
     }
 
     /**
-     * Invalidation: a stored value that is not valid UTF-8 still posts back. Encoding it with
-     * htmlspecialchars() alone answers an invalid sequence with an empty string, which would
-     * silently drop the tag on the next save; substituting the invalid bytes keeps the rest.
+     * Invalidation: htmlspecialchars() alone answers an invalid UTF-8 sequence with an empty string, which would
+     * silently drop the tag on the next save. Substituting the invalid bytes keeps the rest.
      */
     public function testATagThatIsNotValidUtf8StillPostsBack(): void
     {
@@ -233,10 +214,7 @@ class TagListEscapingTest extends PluginTestCase
         $this->assertSame('winter,cms', $widget->getSaveValue($this->hiddenInputValues($html)));
     }
 
-    /**
-     * Control: the editable branch already escaped its option values, so it must be
-     * unaffected by the fix and must not be what the assertions above are measuring.
-     */
+    /** Control: the editable branch already escaped, so it is not what the assertions above are measuring. */
     public function testTheEditableFieldIsUnaffected(): void
     {
         $field = $this->makeField('tags', [self::PAYLOAD, 'ok']);

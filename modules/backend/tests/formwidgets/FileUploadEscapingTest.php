@@ -13,30 +13,17 @@ use System\Models\File as FileModel;
 use System\Tests\Bootstrap\PluginTestCase;
 
 /**
- * The FileUpload partials render values taken straight off the attachment record.
- * `file_name` is stored verbatim from the client supplied upload name by
- * Winter\Storm\Database\Attach\File::fromPost(), and its extension reappears in both
- * URLs the widget decorates the record with: the generated `disk_name` of a public
- * attachment, and the thumbnail route of a protected one. So every partial emitting the
- * name or either URL has to encode it itself.
- *
- * These cases hold the document branch of fileupload/partials/_config_form.php, the image
- * branch beside it and the four field partials to the same encoding.
+ * `file_name` is stored verbatim from the client supplied upload name, and its extension reaches both URLs the widget
+ * decorates the record with: the `disk_name` of a public attachment, and the thumbnail route of a protected one.
  */
 class FileUploadEscapingTest extends PluginTestCase
 {
-    /**
-     * Slash free so that the base name reduction performed by Symfony's UploadedFile does
-     * not truncate it, and ending in a valid extension so that upload validation passes.
-     */
+    /** Slash free so UploadedFile's base name reduction does not truncate it, and a valid extension so upload validation passes. */
     protected const UNSAFE_NAME = '<img src=x onerror=window.pwned=1>.pdf';
 
     /**
-     * A name whose extension, emitted verbatim, would close the double quoted attribute it
-     * lands in. Backend\Controllers\Files::getThumbUrl() appends that extension to a
-     * protected attachment's thumbnail URL, and generateFilenameForDisk() appends it to the
-     * disk name that makes up a public attachment's URL. Only one dot, so everything after
-     * it is taken as the extension.
+     * Only one dot, so everything after it is taken as the extension -- which getThumbUrl() appends to a protected
+     * attachment's thumbnail URL and generateFilenameForDisk() appends to a public one's disk name.
      */
     protected const UNSAFE_EXTENSION = 'file.png" onerror="pwned=1';
 
@@ -59,9 +46,7 @@ class FileUploadEscapingTest extends PluginTestCase
     }
 
     /**
-     * Establishes the source: the widget only validates the extension token, and the
-     * storage layer keeps the client supplied file name exactly as sent, so anything
-     * rendering it is rendering unfiltered client input.
+     * Establishes the source for every case below: only the extension token is validated, the rest is kept as sent.
      */
     public function testUploadStoresClientFileNameVerbatim(): void
     {
@@ -83,9 +68,6 @@ class FileUploadEscapingTest extends PluginTestCase
         );
     }
 
-    /**
-     * The document (non image) branch of the config popup.
-     */
     public function testConfigFormEscapesFileNameInDocumentMode(): void
     {
         $this->attach(self::UNSAFE_NAME);
@@ -94,7 +76,7 @@ class FileUploadEscapingTest extends PluginTestCase
     }
 
     /**
-     * The sibling image branch, which already escaped. Guards against a regression there.
+     * The sibling image branch, which already escaped: a regression guard rather than a case the fix changed.
      */
     public function testConfigFormEscapesFileNameInImageMode(): void
     {
@@ -103,10 +85,6 @@ class FileUploadEscapingTest extends PluginTestCase
         $this->assertNoInjectedMarkup($this->renderConfigForm(['mode' => 'image']));
     }
 
-    /**
-     * The thumbnail URL of a protected attachment ends in the raw file extension, so it is
-     * unconstrained too wherever the field does not restrict the extension.
-     */
     public function testConfigFormEscapesThumbUrl(): void
     {
         $this->attach(self::UNSAFE_EXTENSION, false);
@@ -114,24 +92,25 @@ class FileUploadEscapingTest extends PluginTestCase
         $this->assertNoInjectedMarkup($this->renderConfigForm($this->thumbConfig()));
     }
 
-    /**
-     * The same URL is rendered by the field itself, which needs no interaction at all to
-     * reach: it renders with the record's edit form.
-     */
     public function testFieldEscapesThumbUrl(): void
     {
         $this->attach(self::UNSAFE_EXTENSION, false);
 
         $this->assertNoInjectedMarkup($this->makeWidget($this->thumbConfig())->render());
-        $this->assertNoInjectedMarkup(
-            $this->makeWidget($this->thumbConfig() + ['mode' => 'image-multi'])->render()
-        );
+
+        // array_replace, not a union: thumbConfig() already names a mode, which a union would keep.
+        $multi = $this->makeWidget(array_replace($this->thumbConfig(), ['mode' => 'image-multi']))->render();
+        $xpath = $this->xpath($multi);
+
+        // _image_multi.php is a separate partial, and it has to have rendered the attachment for the assertion to mean anything.
+        $this->assertSame(1, $xpath->query('//div[contains(@class, "style-image-multi")]')->length);
+        $this->assertSame(1, $xpath->query('//div[contains(@class, "upload-object")]/@data-path')->length);
+        $this->assertNoInjectedMarkup($multi);
     }
 
     /**
-     * A field that does not restrict the upload extension carries the client extension into
-     * the generated disk name, and from there into the public attachment URL that all four
-     * field partials render as `data-path` and the popup renders as an `href`.
+     * An unrestricted extension reaches the generated disk name, and from there the attachment URL that all four field
+     * partials render as `data-path` and the popup renders as an `href`.
      */
     public function testFieldEscapesPathUrl(): void
     {
@@ -162,8 +141,7 @@ class FileUploadEscapingTest extends PluginTestCase
     }
 
     /**
-     * Invalidation case: the field still hands the real attachment URL to the JavaScript
-     * that reads `data-path`, entity decoded back to exactly what getPath() returns.
+     * Invalidation case: `data-path` still decodes back to exactly what getPath() returns, for the JavaScript reading it.
      */
     public function testFieldStillExposesTheAttachmentPath(): void
     {
@@ -178,8 +156,7 @@ class FileUploadEscapingTest extends PluginTestCase
     }
 
     /**
-     * Invalidation case: a legitimate file name must still be displayed as written, and
-     * must not be double encoded.
+     * Invalidation case: a legitimate file name is still displayed as written, and not double encoded.
      */
     public function testConfigFormStillDisplaysLegitimateFileName(): void
     {
@@ -194,8 +171,7 @@ class FileUploadEscapingTest extends PluginTestCase
     }
 
     /**
-     * Invalidation case: a legitimate attachment URL must survive escaping intact, so
-     * that the preview image and the "Attachment URL" link still work.
+     * Invalidation case: the preview image and the "Attachment URL" link still resolve to the attachment.
      */
     public function testConfigFormStillLinksToTheAttachment(): void
     {
@@ -218,8 +194,7 @@ class FileUploadEscapingTest extends PluginTestCase
     //
 
     /**
-     * Attaches a file to the test record under the given name. Protected attachments get
-     * their URLs from Backend\Controllers\Files rather than the public storage path.
+     * A protected attachment gets its URLs from Backend\Controllers\Files rather than the public storage path.
      */
     protected function attach(string $fileName, bool $isPublic = true): FileModel
     {
@@ -244,19 +219,14 @@ class FileUploadEscapingTest extends PluginTestCase
         return ['mode' => 'image', 'imageWidth' => 100, 'imageHeight' => 100];
     }
 
-    /**
-     * Renders the attachment config popup exactly as onLoadAttachmentConfig() would.
-     */
     protected function renderConfigForm(array $config): string
     {
         return $this->makeWidget($config)->onLoadAttachmentConfig();
     }
 
     /**
-     * Uploads a file through the widget's own handler, so that the name reaches storage the
-     * way a real upload does -- including the generated disk name, which is what the public
-     * attachment URL is built from. `fileTypes: *` is what leaves the extension
-     * unconstrained.
+     * Uploads through the widget's own handler so the name reaches storage the way a real upload does, including the
+     * generated disk name the public URL is built from. `fileTypes: *` is what leaves the extension unconstrained.
      */
     protected function upload(string $relation, string $clientName, array $config): FileModel
     {
@@ -302,9 +272,7 @@ class FileUploadEscapingTest extends PluginTestCase
     }
 
     /**
-     * A stored value only becomes markup if the browser parses it as such, so assert on the
-     * parsed document rather than on the string: no element may carry an event handler
-     * attribute.
+     * Asserted against the parsed document rather than the string, since a value is only markup if a parser says so.
      */
     protected function assertNoInjectedMarkup(string $html): void
     {

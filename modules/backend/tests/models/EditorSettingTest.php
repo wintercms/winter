@@ -137,15 +137,6 @@ class EditorSettingTest extends PluginTestCase
     }
 
     /**
-     * The "Markup Classes" tab feeds the RichEditor's editor dropdowns, which build their
-     * markup by string concatenation with no encoding of their own: the class name lands in
-     * two attribute values and the label lands in both an attribute value and element
-     * content. Both halves therefore have to be constrained here.
-     *
-     * A class name that could not survive that concatenation intact is refused outright
-     * rather than rewritten, so the editor never receives a class the stored row does not
-     * actually name.
-     *
      * @dataProvider styleSettingKeysProvider
      */
     public function testGetConfiguredStylesEncodesAClassNameThatWouldEndItsAttribute($settingKey)
@@ -156,9 +147,7 @@ class EditorSettingTest extends PluginTestCase
 
         \System\Behaviors\SettingsModel::clearInternalCache();
 
-        // The editor concatenates the name into a double quoted attribute, so what matters is
-        // that the quote cannot close it. The row is kept: the browser decodes the entity when
-        // the editor reads the attribute back, so the configured name still applies.
+        // The row is kept, not dropped: the editor reads the attribute back through the DOM, which decodes it.
         $this->assertSame(
             ['a&quot; onmouseover=&quot;b' => 'Fine'],
             EditorSetting::getConfiguredStyles($settingKey)
@@ -166,9 +155,6 @@ class EditorSettingTest extends PluginTestCase
     }
 
     /**
-     * The label is element content and a title attribute value, so it is encoded rather
-     * than refused: it has no restricted shape and it displays the same either way.
-     *
      * @dataProvider styleSettingKeysProvider
      */
     public function testGetConfiguredStylesEncodesTheLabel($settingKey)
@@ -185,10 +171,6 @@ class EditorSettingTest extends PluginTestCase
         );
     }
 
-    /**
-     * Paragraph formats are emitted as a literal element name wrapping the label, so a tag
-     * that is not a bare element name is refused.
-     */
     public function testGetConfiguredFormatsRefusesATagThatIsNotAnElementName()
     {
         EditorSetting::set('html_paragraph_formats', [
@@ -200,9 +182,6 @@ class EditorSettingTest extends PluginTestCase
         $this->assertSame([], EditorSetting::getConfiguredFormats('html_paragraph_formats'));
     }
 
-    /**
-     * The format label is encoded for the same reason the style label is.
-     */
     public function testGetConfiguredFormatsEncodesTheLabel()
     {
         EditorSetting::set('html_paragraph_formats', [
@@ -217,10 +196,6 @@ class EditorSettingTest extends PluginTestCase
         );
     }
 
-    /**
-     * Constraining the values must leave legitimate markup classes and paragraph formats
-     * intact.
-     */
     public function testGetConfiguredStylesAndFormatsPreserveValidValues()
     {
         EditorSetting::set('html_style_paragraph', [
@@ -248,11 +223,6 @@ class EditorSettingTest extends PluginTestCase
     }
 
     /**
-     * A class attribute holds a whitespace separated list of tokens, and a token may
-     * legitimately contain characters that are not CSS identifier characters. All of these
-     * work in the editor today and have to keep reaching it byte for byte, rather than
-     * being rewritten into a class nobody configured.
-     *
      * @dataProvider legitimateClassNameProvider
      */
     public function testGetConfiguredStylesPreservesLegitimateClassNames($className)
@@ -263,18 +233,13 @@ class EditorSettingTest extends PluginTestCase
 
         \System\Behaviors\SettingsModel::clearInternalCache();
 
-        // Encoded, not constrained: `&` and `<` in a Tailwind arbitrary value survive as
-        // entities and the browser decodes them again when the editor reads the attribute.
+        // e(), not the raw name: the entities decode back to the configured class in the DOM.
         $this->assertSame(
             [e($className) => 'Styled'],
             EditorSetting::getConfiguredStyles('html_style_paragraph')
         );
     }
 
-    /**
-     * A custom element name is required to contain a hyphen, so a hyphenated format tag has
-     * to survive or custom element paragraph formats cannot be configured at all.
-     */
     public function testGetConfiguredFormatsPreservesAHyphenatedTag()
     {
         EditorSetting::set('html_paragraph_formats', [
@@ -290,10 +255,8 @@ class EditorSettingTest extends PluginTestCase
     }
 
     /**
-     * Both halves of a row are read out of a `datatable` field, which applies no type
-     * coercion of its own, so a row can hold a value that is not a string. Reading it must
-     * skip the row: these methods are called while any form containing a RichEditor field
-     * is rendered, so raising there would take down more than the settings page.
+     * The `datatable` field these rows come from applies no type coercion, so a row can hold a
+     * non-string. These methods run for every form with a RichEditor field, so raising is not an option.
      *
      * @dataProvider nonScalarRowProvider
      */
@@ -309,11 +272,6 @@ class EditorSettingTest extends PluginTestCase
     }
 
     /**
-     * A class attribute ignores whitespace around the token list it holds, and so does
-     * jQuery when it applies one, so a name typed with a stray leading or trailing space is
-     * delivered without it rather than costing the row. The `datatable` field these rows
-     * come from does not trim its own inputs.
-     *
      * @dataProvider surroundingWhitespaceProvider
      */
     public function testGetConfiguredStylesKeepsAClassNameAsItWasWritten($className)
@@ -324,19 +282,13 @@ class EditorSettingTest extends PluginTestCase
 
         \System\Behaviors\SettingsModel::clearInternalCache();
 
-        // Stored configuration is handed on as written. A class attribute ignores whitespace
-        // around the list it holds, so surrounding whitespace makes no difference to the
-        // browser and is not worth rewriting the configured value over.
+        // Not trimmed, unlike a format tag below: a class attribute ignores surrounding whitespace anyway.
         $this->assertSame(
             [$className => 'Gray'],
             EditorSetting::getConfiguredStyles('html_style_paragraph')
         );
     }
 
-    /**
-     * The same for a paragraph format tag, which is emitted as an element name and so could
-     * not carry the space either way.
-     */
     public function testGetConfiguredFormatsTrimsSurroundingWhitespaceInATag()
     {
         EditorSetting::set('html_paragraph_formats', [
@@ -351,10 +303,6 @@ class EditorSettingTest extends PluginTestCase
         );
     }
 
-    /**
-     * Any whitespace run separates the tokens of a class list, not just a space, so a list
-     * written across two lines names both classes exactly as a browser reads it.
-     */
     public function testGetConfiguredStylesAcceptsANewlineSeparatedClassList()
     {
         EditorSetting::set('html_style_paragraph', [
@@ -369,9 +317,6 @@ class EditorSettingTest extends PluginTestCase
         );
     }
 
-    /**
-     * An underscore is carried by an element name as readily as a hyphen is.
-     */
     public function testGetConfiguredFormatsPreservesAnUnderscoredTag()
     {
         EditorSetting::set('html_paragraph_formats', [
@@ -386,12 +331,6 @@ class EditorSettingTest extends PluginTestCase
         );
     }
 
-    /**
-     * Leaving one row out must cost that row and nothing else. These methods return the
-     * caller's default when the configuration matches the shipped one, so the row that is
-     * left out may not be what makes the rest of the configuration look shipped: that would
-     * drop the whole dropdown rather than one entry in it.
-     */
     public function testGetConfiguredStylesKeepsTheOtherRowsWhenOneIsLeftOut()
     {
         EditorSetting::set('html_style_paragraph', [
@@ -404,8 +343,7 @@ class EditorSettingTest extends PluginTestCase
 
         \System\Behaviors\SettingsModel::clearInternalCache();
 
-        // Every row is kept; only a row this cannot render as text at all is left out, which
-        // testGetConfiguredStylesLeavesOutARowItCannotRender covers.
+        // Every row is kept; only a row that cannot be rendered as text at all is left out.
         $this->assertSame([
             'oc-text-bordered' => 'Bordered',
             'oc-text-gray' => 'Gray',
@@ -415,9 +353,6 @@ class EditorSettingTest extends PluginTestCase
         ], EditorSetting::getConfiguredStyles('html_style_paragraph', 'THE DEFAULT'));
     }
 
-    /**
-     * The same for paragraph formats.
-     */
     public function testGetConfiguredFormatsKeepsTheOtherRowsWhenOneIsLeftOut()
     {
         EditorSetting::set('html_paragraph_formats', [
@@ -432,9 +367,8 @@ class EditorSettingTest extends PluginTestCase
 
         \System\Behaviors\SettingsModel::clearInternalCache();
 
-        // Those six are exactly the shipped default, and getConfiguredArray() answers a
-        // configuration equal to the default with the caller's default -- which is that same
-        // list -- so the assertion below adds a seventh row to keep this about the refused one.
+        // The six valid rows are exactly the shipped default, which getConfiguredArray() answers
+        // with the caller's default, so the refused row is retested below against a shorter list.
         $this->assertSame(
             'THE DEFAULT',
             EditorSetting::getConfiguredFormats('html_paragraph_formats', 'THE DEFAULT')
@@ -457,9 +391,7 @@ class EditorSettingTest extends PluginTestCase
     }
 
     /**
-     * Invalidation for the two cases above: a configuration that really is the shipped one
-     * still reads back as the caller's default, which is how the RichEditor tells the editor
-     * to use its own styles.
+     * Invalidation for the two above: a configuration that really is the shipped one still reads back as the default.
      */
     public function testAnUnchangedConfigurationStillReadsBackAsTheDefault()
     {
@@ -509,9 +441,7 @@ class EditorSettingTest extends PluginTestCase
             'a dotted class' => ['a.b'],
             'an underscored and hyphenated class' => ['lead_paragraph-1'],
             'a non-ASCII class' => ['überschrift'],
-            // Arbitrary-variant utility classes, which is what the vocabulary of a Tailwind
-            // based backend skin looks like. None of these can open an element or end an
-            // attribute value from inside the double quoted value it is written into.
+            // Tailwind arbitrary-variant classes, which is what a Tailwind backend skin's vocabulary looks like.
             'an arbitrary child variant' => ['[&>p]:mt-4'],
             'an arbitrary state variant' => ['[&:hover]:underline'],
             'an arbitrary descendant variant' => ['[&_a]:text-blue-500'],

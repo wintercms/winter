@@ -165,16 +165,10 @@ class EditorSetting extends Model
     /**
      * Same as getConfigured but uses a special structure for styles.
      *
-     * The RichEditor hands these straight to the editor, which concatenates both halves into
-     * its dropdown markup with no encoding of its own:
-     *
-     *     <a class="fr-command CLASS" data-param1="CLASS" title="LABEL">LABEL</a>
-     *
-     * so both are HTML encoded here, at the point the editor reads them. Encoding rather than
-     * constraining keeps every class name that works today - a Tailwind utility spells
-     * `md:text-lg`, `w-1/2` or `[&>p]:mt-4` - because the editor reads the attribute back
-     * through the DOM, which decodes it again. Doing it on read rather than on save also
-     * covers values that were already stored.
+     * The editor concatenates the class and label into its dropdown markup unencoded, so both
+     * are encoded here. Encoding rather than validating keeps class names that work today
+     * (`md:text-lg`, `w-1/2`), since the editor reads the attribute back through the DOM.
+     * Encoding on read also covers values already stored.
      *
      * @return mixed
      */
@@ -198,13 +192,9 @@ class EditorSetting extends Model
     /**
      * Same as getConfigured but uses a special structure for paragraph formats.
      *
-     * The editor uses the tag as a literal element name and the label as both an attribute
-     * value and element content in its dropdown markup, neither encoded:
-     *
-     *     <TAG style="..."><a data-param1="TAG" title="LABEL">LABEL</a></TAG>
-     *
-     * The tag is emitted as an element name rather than as text, so it has to be a bare name;
-     * one that is not is left out rather than rewritten. The label is encoded.
+     * The editor uses the tag as a literal element name and the label as attribute value and
+     * element content, neither encoded. The tag must therefore be a bare name, and one that is
+     * not is dropped rather than rewritten; the label is encoded.
      *
      * @return mixed
      */
@@ -215,10 +205,8 @@ class EditorSetting extends Model
                 $formatTag = static::renderableEditorValue(array_get($value, 'format_tag'));
                 $formatLabel = static::renderableEditorValue(array_get($value, 'format_label'));
 
-                // Trimmed because this is an element name, where surrounding whitespace can
-                // never be meaningful, and leaving the row out over it would silently drop a
-                // format that works today. A class name is left exactly as written instead,
-                // since there two names differing only by whitespace are two names.
+                // An element name, so surrounding whitespace is never meaningful. Class names
+                // are left as written, where two names differing by whitespace are two names.
                 if ($formatTag !== null) {
                     $formatTag = trim($formatTag);
                 }
@@ -234,11 +222,9 @@ class EditorSetting extends Model
     }
 
     /**
-     * Returns the given configured value as a string, or null if it is not one the editor can
-     * be handed at all.
-     *
-     * A scalar and an object that stringifies both qualify - a translated label arrives as
-     * either - while an array or a plain object does not.
+     * Returns a configured value as a string, or null if the editor cannot be handed it at all.
+     * Scalars and stringifiable objects qualify (a translated label arrives as either); arrays
+     * and plain objects do not.
      *
      * @param mixed $value
      */
@@ -256,12 +242,10 @@ class EditorSetting extends Model
     }
 
     /**
-     * Is this paragraph format tag safe to hand to the editor as it was written?
+     * Is this paragraph format tag safe to hand to the editor as written?
      *
-     * The tag is emitted as a literal element name, so it has to be a bare element name: a
-     * letter followed by letters, digits, hyphens or underscores. The hyphen is what a custom
-     * element name is required to contain, and `N` is the editor's own sentinel for the
-     * default tag.
+     * It is emitted as a literal element name, so it must be a bare one. Hyphens are allowed
+     * for custom elements, and a single letter for `N`, the editor's default-tag sentinel.
      */
     protected static function isValidFormatTag(string $formatTag): bool
     {

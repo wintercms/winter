@@ -2,11 +2,7 @@ import FakeDom from '../../helpers/FakeDom';
 
 jest.setTimeout(5000);
 
-/*
- * The Mail branding preview renders the mail layout, the mail partials and the compiled
- * mail branding CSS into an iframe on a backend page, assigned through srcdoc. All three
- * are stored content and none of them needs to run script, so the frame is sandboxed.
- */
+// The preview assigns the mail layout, the mail partials and the compiled branding CSS to an iframe through srcdoc.
 describe('Mail branding preview', function () {
     const build = () => FakeDom
         .new()
@@ -45,11 +41,7 @@ describe('Mail branding preview', function () {
         });
     });
 
-    /*
-     * Invalidation counterpart: allow-same-origin has to stay, because
-     * adjustPreviewHeight() reads the previewed document to size the frame. A sandbox
-     * of the empty string would pass the assertions above while breaking the page.
-     */
+    // Invalidation case: a sandbox of the empty string would pass the assertions above while breaking the page.
     it('keeps same-origin access so the frame can still be sized', function (done) {
         build().then((dom) => {
             try {
@@ -72,14 +64,8 @@ describe('Mail branding preview', function () {
         });
     });
 
-    /*
-     * Invalidation counterpart: the sample message's action button is a target="_blank"
-     * link (modules/system/views/mail/partial-button.php), and a sandbox without these two
-     * tokens silently stops it opening: the first is what allows a tab to be opened at all,
-     * the second is what keeps the opened tab out of the sandbox so the linked page still
-     * loads normally. Measured in Chromium, both are required for a click to behave as it
-     * did before the frame was sandboxed.
-     */
+    // Invalidation case: the sample message's action button is a target="_blank" link (views/mail/partial-button.php),
+    // and in Chromium both tokens are needed for a click on it to behave as it did before the frame was sandboxed.
     it('lets a link in the previewed message still open its page', function (done) {
         build().then((dom) => {
             try {

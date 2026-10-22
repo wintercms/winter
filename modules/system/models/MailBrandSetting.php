@@ -158,13 +158,9 @@ class MailBrandSetting extends Model
         // like `red; @import (inline) "/etc/passwd"` would otherwise reach the
         // parser as a real @import directive. See GHSA-58fp-mcx6-7qf9.
         //
-        // Note: the SetImportDirs gate only blocks @import. A ModifyVars value is
-        // still concatenated into the LESS source verbatim, so it can also close a
-        // ruleset and emit a literal `</style>` into the compiled CSS. That output
-        // is not mail-only: it is written raw into the <style> block of the mail
-        // layout, which System\Controllers\MailBrandSettings renders into the
-        // backend Mail branding preview. renderCss() therefore strip_tags() its
-        // output exactly as BrandSetting and EditorSetting do.
+        // SetImportDirs only blocks @import. A ModifyVars value is concatenated into the LESS
+        // verbatim, so it can close a ruleset and emit markup into the compiled CSS, which the
+        // Mail branding preview renders raw - hence strip_tags(), as BrandSetting also does.
         $parser->SetImportDirs(['' => LessImportResolver::makeResolver([], null)]);
 
         $basePath = base_path('modules/system/models/mailbrandsetting');

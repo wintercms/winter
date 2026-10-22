@@ -8,10 +8,7 @@ use System\Tests\Bootstrap\PluginTestCase;
 
 class MailBrandSettingTest extends PluginTestCase
 {
-    /**
-     * A CSS variable value that would close the generated ruleset and emit a literal
-     * `</style>` followed by an element into the compiled stylesheet.
-     */
+    /** A CSS variable value that would close the generated ruleset and emit markup into the compiled stylesheet. */
     const BREAKOUT_VALUE = 'red; .xss::before { content: "</style><img src=x onerror=alert(1)>"; }';
 
     public function setUp(): void
@@ -31,9 +28,8 @@ class MailBrandSettingTest extends PluginTestCase
     }
 
     /**
-     * Stores a CSS variable value directly on the model. The colorpicker form widget
-     * validates its own input, so this stands in for every write that does not go
-     * through it: MailBrandSetting::set(), a plugin, a seeder or a direct DB write.
+     * The colorpicker validates its own input, so writing to the model directly stands in for every write that does
+     * not go through it: MailBrandSetting::set(), a plugin, a seeder or a direct DB write.
      */
     protected function storeValue(string $value): void
     {
@@ -79,10 +75,7 @@ class MailBrandSettingTest extends PluginTestCase
     }
 
     /**
-     * The same serializeVars() concatenation also lets a CSS variable value close
-     * the ruleset and emit a literal `</style>`. renderCss() is written raw into
-     * the <style> block of the mail layout, which the Mail branding page renders
-     * into a backend preview iframe, so the compiled output must carry no markup.
+     * renderCss() is written raw into the <style> block of the mail layout, so its output must carry no markup.
      */
     public function testRenderCssStripsTags()
     {
@@ -95,9 +88,7 @@ class MailBrandSettingTest extends PluginTestCase
     }
 
     /**
-     * renderCss() caches the raw compiler output, so stripping only on the cache-miss
-     * return would leave every later cache hit unstripped -- the same mistake the sibling
-     * models have already had corrected.
+     * renderCss() caches the compiler output, so stripping only the cache-miss return leaves every cache hit raw.
      */
     public function testRenderCssStripsTagsOnCacheHit()
     {
@@ -114,8 +105,7 @@ class MailBrandSettingTest extends PluginTestCase
     }
 
     /**
-     * A cache entry written before this change is not cleared by upgrading, so it must
-     * still be stripped when it is read back.
+     * A cache entry written before this change is not cleared by upgrading, so it is stripped when read back.
      */
     public function testRenderCssStripsTagsFromExistingCacheEntry()
     {
@@ -130,10 +120,6 @@ class MailBrandSettingTest extends PluginTestCase
         $this->assertStringNotContainsString('<img', $renderedCss);
     }
 
-    /**
-     * Stripping must not alter a legitimately compiled stylesheet, on the cache
-     * miss or on the cache hit that follows it.
-     */
     public function testRenderCssPreservesNormalCss()
     {
         $this->storeValue('#abcdef');
@@ -149,10 +135,8 @@ class MailBrandSettingTest extends PluginTestCase
     }
 
     /**
-     * End to end over the path the Mail branding page takes: the compiled CSS is emitted
-     * raw into the mail layout's <style> block and the whole document is then reparsed by
-     * CssToInlineStyles, which closes the raw-text <style> element at any `</style>` it
-     * finds and promotes whatever follows to a node of its own.
+     * End to end over the Mail branding page's path, where CssToInlineStyles reparses the whole document and closes
+     * the raw-text <style> element at any `</style>` it finds, promoting whatever follows to a node of its own.
      */
     public function testSampleMessageCarriesNoInjectedMarkup()
     {
@@ -168,8 +152,7 @@ class MailBrandSettingTest extends PluginTestCase
     }
 
     /**
-     * Invalidation counterpart: a legitimate colour still reaches the rendered
-     * message, and the sample message still renders in full.
+     * Invalidation case: a legitimate colour still reaches the message, and the sample still renders in full.
      */
     public function testSampleMessageStillRendersLegitimateBranding()
     {

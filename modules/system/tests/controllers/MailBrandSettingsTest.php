@@ -11,13 +11,8 @@ use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\Config;
 
 /**
- * MailBrandSetting declares no $rules, so nothing at the model layer stops a CSS variable
- * value from carrying markup into the compiled stylesheet. What stops it on the backend
- * form is Backend\FormWidgets\ColorPicker::getSaveValue(), which validates the posted
- * value against its hex pattern. Both the save handler and the live preview handler go
- * through Backend\Widgets\Form::getSaveData(), so both are covered -- and both need to
- * stay that way, because the strip_tags() in MailBrandSetting::renderCss() is the
- * backstop, not the primary control.
+ * MailBrandSetting declares no $rules; what validates a posted colour is ColorPicker::getSaveValue(). Both the save
+ * and the live preview handler reach it through Form::getSaveData(), and renderCss()'s strip_tags() is only a backstop.
  */
 class MailBrandSettingsTest extends PluginTestCase
 {
@@ -33,11 +28,8 @@ class MailBrandSettingsTest extends PluginTestCase
         MailBrandSetting::clearInternalCache();
         \Cache::flush();
 
-        // registerBackendWidgets() and registerBackendSettings() are gated behind
-        // runningInBackend(), which is false when the providers register under PHPUnit.
-        // Without the first of these the `colorpicker` alias never resolves to a form
-        // widget and getSaveValue() is never reached, which would make these tests pass
-        // for the wrong reason.
+        // Both are gated behind runningInBackend(), false under PHPUnit. Without the first the `colorpicker` alias
+        // never resolves and getSaveValue() is never reached, which would make these tests pass for the wrong reason.
         $this->invokeProviderMethod(new \Backend\ServiceProvider($this->app), 'registerBackendWidgets');
         $this->invokeProviderMethod(new \System\ServiceProvider($this->app), 'registerBackendSettings');
     }
@@ -107,9 +99,7 @@ class MailBrandSettingsTest extends PluginTestCase
 
         $response = $this->post_('onUpdateSampleMessage', self::BREAKOUT_VALUE);
 
-        // The colorpicker's own rejection, not some unrelated failure. The debug
-        // error page echoes the offending source, so assert on the outcome rather
-        // than on the absence of the payload string in the response body.
+        // Asserted on the outcome, not on the payload's absence from the body: the debug error page echoes its source.
         $this->assertNotEquals(200, $response->getStatusCode());
         $this->assertStringContainsString('color value supplied is invalid', $response->getContent());
 
@@ -136,12 +126,8 @@ class MailBrandSettingsTest extends PluginTestCase
     }
 
     /**
-     * The preview is assembled from the mail partials, which are stored in
-     * system_mail_partials and edited from Settings > Mail > Mail partials. A partial is
-     * free-form HTML and may legitimately contain a complete script element, so the
-     * message cannot be carried to the browser in an HTML raw-text context: a closing tag
-     * inside it would end that context and the remainder would be parsed as part of the
-     * backend page. It is passed as a JSON string literal instead.
+     * A mail partial is free-form HTML and may legitimately contain a complete script element, so the preview cannot
+     * be carried to the browser in a raw-text context that a closing tag inside it would end.
      */
     public function testAMailPartialCannotBreakOutOfThePreviewScriptBlock()
     {
@@ -165,8 +151,7 @@ class MailBrandSettingsTest extends PluginTestCase
     }
 
     /**
-     * Invalidation counterpart: the partial still reaches the preview, it is just
-     * carried as data rather than as markup on the backend page.
+     * Invalidation case: the partial still reaches the preview, carried as data rather than as markup.
      */
     public function testAMailPartialStillReachesThePreview()
     {

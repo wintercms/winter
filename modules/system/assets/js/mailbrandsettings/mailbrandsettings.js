@@ -19,16 +19,9 @@ function adjustPreviewHeight() {
 function createPreviewContainer(el, content) {
     previewIframe = document.createElement('iframe')
 
-    /*
-     * The previewed document is assembled from the mail layout, the mail partials and the
-     * compiled mail branding CSS, all of which are stored content. Emails never
-     * legitimately carry scripts, so the preview does not need to run any.
-     * allow-same-origin is kept because adjustPreviewHeight() reads the previewed
-     * document to size the frame, and the two popup tokens are kept because the sample
-     * message's action button is a target="_blank" link: without them the frame cannot
-     * open a tab at all, and without the second one the tab it opens inherits the
-     * sandbox and loads the linked page with scripting disabled.
-     */
+    // Each token is load-bearing: allow-same-origin so adjustPreviewHeight() can read the
+    // document, and the two popup tokens so the sample message's target="_blank" button can
+    // open a tab that does not inherit this sandbox.
     previewIframe.setAttribute('sandbox', 'allow-same-origin allow-popups allow-popups-to-escape-sandbox')
 
     updatePreviewContent(content)

@@ -8,22 +8,12 @@ use DOMDocument;
 use System\Tests\Bootstrap\PluginTestCase;
 
 /**
- * Field partials render the record's value straight into markup, so every field type that
- * emits a value has to escape it itself. Nothing constrains a dropdown value to its option
- * list server side -- Form::getSaveData() stores the posted value verbatim -- so the value
- * reaching these partials is not constrained by the field definition either.
- *
- * The dropdown partial's preview / read-only branch emits that value into the `value`
- * attribute of a hidden input; these cases hold it to the same encoding as every sibling
- * field type in the same directory.
+ * Nothing constrains a dropdown value to its option list server side -- Form::getSaveData() stores the posted value
+ * verbatim -- so the value these partials render is not constrained by the field definition either.
  */
 class FormFieldEscapingTest extends PluginTestCase
 {
-    /**
-     * A value that, emitted verbatim, would close the double-quoted attribute it lands in,
-     * open an element, then re-open an attribute so the trailing quote of the original sink
-     * is swallowed. Inert in a text context, markup in an attribute context.
-     */
+    /** Inert in a text context, markup in an attribute context: it re-opens an attribute to swallow the sink's quote. */
     protected const PAYLOAD = '"><script>window.pwned=1</script><b onmouseover="window.pwned=1" x="';
 
     /** Field types whose partials render a free-form record value. */
@@ -65,7 +55,6 @@ class FormFieldEscapingTest extends PluginTestCase
         return (string) $form->renderField('email', ['useContainer' => false]);
     }
 
-    /** Returns every element name present in the rendered markup. */
     protected function elementsIn(string $html): array
     {
         return array_map(
@@ -74,7 +63,6 @@ class FormFieldEscapingTest extends PluginTestCase
         );
     }
 
-    /** Returns every attribute name present in the rendered markup. */
     protected function attributesIn(string $html): array
     {
         $names = [];
