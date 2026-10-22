@@ -5,11 +5,14 @@ namespace Backend\Tests\Widgets;
 use Backend\Classes\Controller;
 use Backend\Classes\FormField;
 use Backend\FormWidgets\RichEditor;
+use Backend\Models\EditorSetting;
 use Backend\Models\User;
 use Backend\Widgets\Filter;
 use DOMDocument;
+use DOMXPath;
 use Event;
 use Winter\Storm\Filesystem\PathResolver;
+use System\Behaviors\SettingsModel;
 use System\Tests\Bootstrap\PluginTestCase;
 use System\Traits\ViewMaker;
 
@@ -32,6 +35,13 @@ class PartialRenderer
 class BackendMarkupEscapingTest extends PluginTestCase
 {
     protected const PAYLOAD = '"><img src=x onerror="window.pwned=1';
+
+    public function tearDown(): void
+    {
+        SettingsModel::clearInternalCache();
+
+        parent::tearDown();
+    }
 
     protected function renderPartial(string $path, array $params = []): string
     {
@@ -231,6 +241,75 @@ class BackendMarkupEscapingTest extends PluginTestCase
         $this->assertStringContainsString('>About us</option>', $html);
         $this->assertContains('/malformed', $this->optionValues($html));
         $this->assertStringNotContainsString('Array', $html);
+    }
+
+    /**
+     * EditorSetting encodes the labels, but the editor reads them back out of a `data-*` attribute that the parser
+     * decodes once on the way. What the editor is handed is therefore the model's output only if the attribute was
+     * double encoded, which is the step the model tests cannot see.
+     *
+     * @dataProvider richEditorStyleAttributeProvider
+     */
+    public function testRichEditorStyleAttributesSurviveTheAttributeDecode($settingKey, $attribute)
+    {
+        $styles = $this->renderRichEditorStyles($settingKey, $attribute, static::PAYLOAD);
+
+        $this->assertSame([e(static::PAYLOAD)], array_values($styles));
+    }
+
+    /**
+     * The same decode applied to a quote: it has to come back as the entity the model wrote, or the JSON ends early
+     * and the editor iterates the string one character per dropdown entry.
+     */
+    public function testRichEditorStyleAttributePreservesAQuotedLabel()
+    {
+        $styles = $this->renderRichEditorStyles('html_style_paragraph', 'data-paragraph-styles', 'He said "hi"');
+
+        $this->assertSame(['lead' => 'He said &quot;hi&quot;'], $styles);
+    }
+
+    public function richEditorStyleAttributeProvider(): array
+    {
+        return [
+            'image styles' => ['html_style_image', 'data-image-styles'],
+            'link styles' => ['html_style_link', 'data-link-styles'],
+            'paragraph styles' => ['html_style_paragraph', 'data-paragraph-styles'],
+            'table styles' => ['html_style_table', 'data-table-styles'],
+            'table cell styles' => ['html_style_table_cell', 'data-table-cell-styles'],
+            'paragraph formats' => ['html_paragraph_formats', 'data-paragraph-format'],
+        ];
+    }
+
+    /**
+     * Stores one row under $settingKey, renders the real editor partial, and reads $attribute back the way a browser
+     * does: decoded exactly once by the parser, then parsed as JSON.
+     */
+    protected function renderRichEditorStyles(string $settingKey, string $attribute, string $label): array
+    {
+        EditorSetting::set($settingKey, [
+            $settingKey === 'html_paragraph_formats'
+                ? ['format_tag' => 'lead', 'format_label' => $label]
+                : ['class_name' => 'lead', 'class_label' => $label],
+        ]);
+        SettingsModel::clearInternalCache();
+
+        $user = new User;
+        $user->is_superuser = true;
+        $this->actingAs($user);
+
+        $html = (string) (new RichEditor(new Controller, new FormField('test', 'Test'), ['model' => $user]))->render();
+
+        $this->assertStringNotContainsString('<img', $html);
+
+        $document = new DOMDocument;
+        libxml_use_internal_errors(true);
+        $document->loadHTML('<html><body>' . $html . '</body></html>');
+        libxml_clear_errors();
+
+        $attributes = (new DOMXPath($document))->query('//@' . $attribute);
+        $this->assertSame(1, $attributes->length);
+
+        return json_decode($attributes->item(0)->value, true, 512, JSON_THROW_ON_ERROR);
     }
 
     protected function listenForPageLinks(array $links): void
