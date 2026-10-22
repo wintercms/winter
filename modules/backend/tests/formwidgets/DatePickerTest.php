@@ -10,6 +10,13 @@ use System\Tests\Bootstrap\PluginTestCase;
 class DatePickerTest extends PluginTestCase
 {
     /**
+     * 2023-11-14 23:30:00 UTC, which is 2023-11-15 00:30:00 in Europe/Brussels.
+     * The two fall on different calendar days, so a timezone slip changes the date as well as the time.
+     */
+    const TIMESTAMP = 1700004600;
+    const LOCAL_DATETIME = '2023-11-15 00:30:00';
+
+    /**
      * @var string The default timezone in place before the test ran.
      */
     protected $originalTimezone;
@@ -30,28 +37,31 @@ class DatePickerTest extends PluginTestCase
         parent::tearDown();
     }
 
+    /**
+     * The bounds are passed to the picker as wall times, so a timestamp bound read as UTC moves the
+     * limit by the UTC offset and can block a date the configuration allows.
+     */
     public function testTimestampBoundsUseTheDefaultTimezone()
     {
-        // 2023-11-14 23:30:00 UTC, which is 2023-11-15 00:30:00 in Europe/Brussels
         $widget = $this->makeWidget([
-            'minDate' => 1700004600,
-            'maxDate' => 1700004600,
+            'minDate' => static::TIMESTAMP,
+            'maxDate' => static::TIMESTAMP,
         ]);
 
-        $this->assertSame('2023-11-15 00:30:00', $widget->minDate->format('Y-m-d H:i:s'));
-        $this->assertSame('2023-11-15 00:30:00', $widget->maxDate->format('Y-m-d H:i:s'));
+        $this->assertSame(static::LOCAL_DATETIME, $widget->minDate->format('Y-m-d H:i:s'));
+        $this->assertSame(static::LOCAL_DATETIME, $widget->maxDate->format('Y-m-d H:i:s'));
     }
 
-    public function testTimestampBoundsMatchTheirStringEquivalent()
+    public function testTimestampBoundsMatchTheirLocalDatetimeEquivalent()
     {
-        $fromTimestamp = $this->makeWidget(['minDate' => 1700004600]);
-        $fromString = $this->makeWidget(['minDate' => '2023-11-15 00:30:00']);
+        $fromTimestamp = $this->makeWidget(['minDate' => static::TIMESTAMP]);
+        $fromDatetime = $this->makeWidget(['minDate' => static::LOCAL_DATETIME]);
 
         $this->assertSame(
-            $fromString->minDate->format('Y-m-d H:i:s'),
+            $fromDatetime->minDate->format('Y-m-d H:i:s'),
             $fromTimestamp->minDate->format('Y-m-d H:i:s')
         );
-        $this->assertSame($fromString->minDate->getTimestamp(), $fromTimestamp->minDate->getTimestamp());
+        $this->assertSame($fromDatetime->minDate->getTimestamp(), $fromTimestamp->minDate->getTimestamp());
     }
 
     protected function makeWidget(array $config = []): DatePicker
