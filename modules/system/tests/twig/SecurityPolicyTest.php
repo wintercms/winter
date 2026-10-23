@@ -1831,7 +1831,8 @@ class SecurityPolicyTest extends TestCase
     {
         Config::set('cms.activeTheme', 'test');
         Config::set('cms.themesPath', '/modules/cms/tests/fixtures/themes');
-        Event::flush('cms.theme.getActiveTheme');
+        // forget(), not flush(): flush() dispatches `<event>_pushed` and removes no listener.
+        Event::forget('cms.theme.getActiveTheme');
         Theme::resetCache();
 
         return $this->renderTwigInCmsController($source, [], Theme::getActiveTheme());

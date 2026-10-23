@@ -83,4 +83,51 @@ class MarkupManagerTest extends TestCase
         $this->assertEquals('MyFood', $result[0]);
         $this->assertEquals('myFood', $result[1]);
     }
+
+    /**
+     * A variadic parameter declares every position from its own onwards, so a callable one
+     * is not covered by checking the index it was recorded under alone.
+     *
+     * @dataProvider variadicCallableArgumentsProvider
+     */
+    public function testAStringReachingAVariadicCallableParameterIsRefused(array $arguments)
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+
+        self::callProtectedMethod(MarkupManager::instance(), 'checkWildcardMethod', [
+            [VariadicCallableProbe::class, 'run'],
+            $arguments,
+        ]);
+    }
+
+    public function variadicCallableArgumentsProvider()
+    {
+        return [
+            'first position' => [['system']],
+            'behind a null' => [[null, 'system']],
+            'behind two nulls' => [[null, null, 'system']],
+        ];
+    }
+
+    public function testAVariadicCallableParameterStillAcceptsNoCallbackAtAll()
+    {
+        self::callProtectedMethod(MarkupManager::instance(), 'checkWildcardMethod', [
+            [VariadicCallableProbe::class, 'run'],
+            [null, null],
+        ]);
+
+        $this->assertTrue(true, 'the guard must not refuse a call that supplies no callback');
+    }
+}
+
+/**
+ * Stands in for a plugin registering a wildcard extension against a method whose callable
+ * parameter is both nullable and variadic. Nothing in core declares that shape.
+ */
+class VariadicCallableProbe
+{
+    public static function run(?callable ...$fns): int
+    {
+        return count($fns);
+    }
 }

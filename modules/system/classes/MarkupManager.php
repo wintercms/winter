@@ -428,12 +428,19 @@ class MarkupManager
         // Laravel's untyped hybrids never run a string: useAsCallable() is
         // `!is_string($value) && is_callable($value)`.
         foreach ($shape['callable'] as $position) {
-            if (($arguments[$position] ?? null) !== null) {
-                throw new SecurityNotAllowedMethodError(
-                    sprintf('Passing a callback to "%s" through a wildcard markup extension is blocked.', $name),
-                    $origin,
-                    $name
-                );
+            // A variadic parameter declares every position from its own onwards, so a callable
+            // one cannot be checked at the index it was recorded under alone: `?callable ...$fns`
+            // called as (null, 'system') leaves that index null and the string in the next.
+            $last = $position === $shape['variadic'] ? count($arguments) - 1 : $position;
+
+            for ($index = $position; $index <= $last; $index++) {
+                if (($arguments[$index] ?? null) !== null) {
+                    throw new SecurityNotAllowedMethodError(
+                        sprintf('Passing a callback to "%s" through a wildcard markup extension is blocked.', $name),
+                        $origin,
+                        $name
+                    );
+                }
             }
         }
     }
