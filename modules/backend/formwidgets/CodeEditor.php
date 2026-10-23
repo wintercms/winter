@@ -191,8 +191,7 @@ class CodeEditor extends FormWidgetBase
         $this->vars['bracketColors'] = $this->bracketColors;
         $this->vars['showColors'] = $this->showColors;
 
-        // Double encode when escaping
-        $this->vars['value'] = htmlentities($this->getLoadValue(), ENT_QUOTES, 'UTF-8', true);
+        $this->vars['value'] = $this->getLoadValue();
         $this->vars['name'] = $this->getFieldName();
     }
 
