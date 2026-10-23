@@ -145,7 +145,7 @@ class GetAttrNode extends GetAttrExpression
         ) {
             $policy = $env->getExtension(SandboxExtension::class)->getSecurityPolicy();
             if ($policy instanceof SecurityPolicy) {
-                $object = $policy->castMethodObjectToSafeObject($object);
+                $object = $policy->castMethodObjectToSafeObject($object, $item);
             }
         }
 

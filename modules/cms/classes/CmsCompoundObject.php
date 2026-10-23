@@ -475,6 +475,16 @@ class CmsCompoundObject extends CmsObject
     }
 
     /**
+     * Returns the methods that __call() dispatches onto the collection of all objects.
+     *
+     * @return array
+     */
+    public function getPassthruMethods()
+    {
+        return $this->passthru;
+    }
+
+    /**
      * Dynamically handle calls into the query instance.
      *
      * @param  string  $method
