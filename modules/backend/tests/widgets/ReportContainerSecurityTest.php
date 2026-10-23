@@ -28,11 +28,20 @@ class RestrictedReportWidget extends ReportWidgetBase
 }
 
 /**
- * A report widget that is never registered with the WidgetManager at all.
+ * A report widget that is never registered with the WidgetManager at all. The constructor records that it ran: nothing in the response or in the stored layout distinguishes a refusal taken before construction from one taken after.
  */
 class UnregisteredReportWidget extends ReportWidgetBase
 {
+    public static bool $constructed = false;
+
     protected $defaultAlias = 'unregistered';
+
+    public function __construct($controller, $configuration = [])
+    {
+        static::$constructed = true;
+
+        parent::__construct($controller, $configuration);
+    }
 
     public function render()
     {
@@ -329,14 +338,20 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * The registry check runs before the class is constructed -- `new $className()` on a request-supplied class name is itself a side effect the handler must not have.
+     * The registry check runs before the class is constructed -- `new $className()` on a request-supplied class name is itself a side effect the handler must not have, and it is observed here rather than inferred from the refusal, which reads the same either way.
      */
     public function testUnregisteredClassCannotBeAdded(): void
     {
         $this->actingAs($this->privileged);
 
+        UnregisteredReportWidget::$constructed = false;
+
         $this->addWidget(UnregisteredReportWidget::class);
 
+        $this->assertFalse(
+            UnregisteredReportWidget::$constructed,
+            'The handler constructed a class it does not offer'
+        );
         $this->assertNotContains(UnregisteredReportWidget::class, $this->storedWidgetClasses());
     }
 

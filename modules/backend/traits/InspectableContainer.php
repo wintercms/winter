@@ -1,8 +1,10 @@
 <?php namespace Backend\Traits;
 
 use Lang;
+use Str;
 use Request;
 use ApplicationException;
+use Backend\Classes\WidgetManager;
 
 /**
  * Inspectable Container Trait
@@ -27,6 +29,14 @@ trait InspectableContainer
         $className = trim(Request::input('inspectorClassName'));
         if (!$className) {
             throw new ApplicationException('The inspectable class name is not specified.');
+        }
+
+        /*
+         * The class name is resolved against the list of things this controller offers the inspector before it is used for anything else. Both of the steps below reach the class: class_uses_recursive() autoloads it, and the reflection after that constructs it.
+         */
+        $offered = array_map(fn ($class) => strtolower(Str::normalizeClassName($class)), $this->listInspectableClasses());
+        if (!in_array(strtolower(Str::normalizeClassName($className)), $offered, true)) {
+            throw new ApplicationException('The options cannot be loaded for the specified class.');
         }
 
         $traitFound = in_array('System\Traits\PropertyContainer', class_uses_recursive($className));
@@ -85,5 +95,24 @@ trait InspectableContainer
         return [
             'options' => $optionsArray
         ];
+    }
+
+    /**
+     * Returns the class names this controller offers the inspector.
+     *
+     * Registered components and registered report widgets are the only classes anything in core renders a `data-inspector-class` for, and the two base classes they extend are the only ones in core using the `System\Traits\PropertyContainer` this handler requires. A controller that publishes an inspectable class of its own overrides this to add it.
+     *
+     * @return array
+     */
+    protected function listInspectableClasses(): array
+    {
+        $classes = array_keys(WidgetManager::instance()->listReportWidgets());
+
+        // winter/wn-backend-module does not require the CMS module.
+        if (class_exists(\Cms\Classes\ComponentManager::class)) {
+            $classes = array_merge($classes, array_values(\Cms\Classes\ComponentManager::instance()->listComponents()));
+        }
+
+        return $classes;
     }
 }
