@@ -724,9 +724,18 @@ class MediaManager extends WidgetBase
         $sourceImageUrl = Input::get('img');
         $mediaItemPath = Input::get('path');
 
-        if (!is_array($selectionData)) {
+        if (
+            !is_array($selectionData)
+            || !is_string($sourceImageUrl)
+            || !strlen(trim($sourceImageUrl))
+            || !is_string($mediaItemPath)
+            || !strlen(trim($mediaItemPath))
+        ) {
             throw new ApplicationException('Invalid input data');
         }
+
+        // MediaLibrary::put() validates too, but only the final target path
+        $mediaItemPath = MediaLibrary::validatePath(trim($mediaItemPath));
 
         foreach (['x', 'y', 'w', 'h'] as $key) {
             if (!isset($selectionData[$key]) || !is_numeric($selectionData[$key])) {
@@ -760,8 +769,22 @@ class MediaManager extends WidgetBase
         // Get the path to the cropped image
         $croppedPath = $resizer->getPathToResizedImage();
 
-        // Generate the target path for the cropped image
-        $targetPath = $this->deduplicatePath($mediaItemPath, '_cropped');
+        // The request selects only the folder and file name; the extension comes from the
+        // image the resizer produced, so it always describes the stored contents
+        $targetPath = $this->deduplicatePath(
+            sprintf(
+                '%s/%s.%s',
+                Str::beforeLast($mediaItemPath, '/'),
+                Str::beforeLast(Str::afterLast($mediaItemPath, '/'), '.'),
+                pathinfo($croppedPath, PATHINFO_EXTENSION)
+            ),
+            '_cropped'
+        );
+
+        // validatePath() constrains where a file goes, not what it may be called
+        if (!$this->validateFileType($targetPath)) {
+            throw new ApplicationException(Lang::get('backend::lang.media.type_blocked'));
+        }
 
         // Move the cropped image to the target path
         MediaLibrary::instance()->put(
@@ -1236,18 +1259,20 @@ class MediaManager extends WidgetBase
     {
         $markup = null;
 
-        $path = $thumbnailInfo['path'];
-
-        if ($this->isVector($path) && ($id = $thumbnailInfo['id'])) {
-            return [
-                'id' => $id,
-                'markup' => $this->makePartial('thumbnail-image', [
-                    'imageUrl' => MediaLibrary::url($thumbnailInfo['path']),
-                ]),
-            ];
-        }
-
         try {
+            // Validated here, not in the handler: one unusable path then renders the
+            // broken thumbnail below instead of failing every thumbnail in the batch
+            $path = MediaLibrary::validatePath($thumbnailInfo['path']);
+
+            if ($this->isVector($path) && ($id = $thumbnailInfo['id'])) {
+                return [
+                    'id' => $id,
+                    'markup' => $this->makePartial('thumbnail-image', [
+                        'imageUrl' => MediaLibrary::url($path),
+                    ]),
+                ];
+            }
+
             /*
              * Get and validate input data
              */
