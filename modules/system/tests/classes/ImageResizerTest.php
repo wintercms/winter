@@ -438,8 +438,6 @@ class ImageResizerTest extends PluginTestCase
     }
 
     /**
-     * The disk path built for a matched source must stay inside that source's folder.
-     *
      * @dataProvider containedSourcePathProvider
      */
     public function testRefusesPathsOutsideTheMatchedSource(string $url)
@@ -506,9 +504,6 @@ class ImageResizerTest extends PluginTestCase
         ImageResizer::normalizeImage('/storage/temp/app/media/nested folder/../winter.png');
     }
 
-    /**
-     * The containment check must not refuse the paths it is guarding.
-     */
     public function testAcceptsPathsInsideTheMatchedSource()
     {
         $this->setUpStorage();

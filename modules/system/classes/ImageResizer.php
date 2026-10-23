@@ -707,9 +707,8 @@ class ImageResizer
                 // Normalize the source path
                 $sourcePath = rtrim(static::normalizePath(rawurldecode(parse_url($details['path'], PHP_URL_PATH))), '/');
 
-                // Identify if the current source is a match. The trailing separator keeps the
-                // comparison on a path boundary, so a folder whose name merely begins with
-                // this source's path is not treated as part of it
+                // Match on a path boundary, so a sibling folder whose name merely begins
+                // with this source's path is not treated as part of it
                 if (starts_with($relativePath, $sourcePath . '/')) {
                     // Attempt to handle FileModel URLs passed as strings
                     if ($source === 'filemodel') {
@@ -725,11 +724,9 @@ class ImageResizer
                         break;
                     }
 
-                    // Confine the image to the matched source folder: the remainder is used
-                    // verbatim as a disk path, and filesystem adapters resolve relative
-                    // segments themselves. This mirrors the media library's own path
-                    // validation; it cannot be delegated to PathResolver, because the path is
-                    // relative to a disk that is not necessarily a local one
+                    // The remainder is used verbatim as a disk path and adapters resolve
+                    // relative segments themselves. Not PathResolver's job: the path is
+                    // relative to a disk that is not necessarily local
                     $sourceRelativePath = str_after($relativePath, $sourcePath . '/');
                     if (in_array('..', explode('/', $sourceRelativePath), true)) {
                         continue;

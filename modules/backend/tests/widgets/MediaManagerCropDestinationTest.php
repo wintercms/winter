@@ -13,11 +13,8 @@ use System\Tests\Bootstrap\PluginTestCase;
 use Winter\Storm\Filesystem\Definitions as FileDefinitions;
 
 /**
- * Covers the destination path handling of the Media Manager's Crop & Insert handler.
- *
- * The requested destination selects the folder and the file name to store the crop under.
- * The extension comes from the image the resizer produced, and the result is held to the
- * same extension allowlist that uploading and renaming a media item are held to.
+ * Destination path handling for the Media Manager's Crop & Insert handler: the request
+ * selects the folder and file name, the resizer output decides the extension.
  */
 class MediaManagerCropDestinationTest extends PluginTestCase
 {
@@ -120,8 +117,7 @@ class MediaManagerCropDestinationTest extends PluginTestCase
     }
 
     /**
-     * The destination is held to the same extension allowlist as uploading and renaming,
-     * which is configurable through cms.fileDefinitions.defaultExtensions.
+     * The allowlist is cms.fileDefinitions.defaultExtensions, shared with upload and rename.
      */
     public function testCropRefusesADestinationOutsideTheExtensionAllowlist()
     {

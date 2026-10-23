@@ -724,8 +724,6 @@ class MediaManager extends WidgetBase
         $sourceImageUrl = Input::get('img');
         $mediaItemPath = Input::get('path');
 
-        // A request names the image to crop by its URL, so that the resizer resolves it
-        // against its configured sources
         if (
             !is_array($selectionData)
             || !is_string($sourceImageUrl)
@@ -736,8 +734,7 @@ class MediaManager extends WidgetBase
             throw new ApplicationException('Invalid input data');
         }
 
-        // Normalize and validate the requested path before the target path is derived from
-        // it below. MediaLibrary::put() validates as well, but only the final target path
+        // MediaLibrary::put() validates too, but only the final target path
         $mediaItemPath = MediaLibrary::validatePath(trim($mediaItemPath));
 
         foreach (['x', 'y', 'w', 'h'] as $key) {
@@ -772,12 +769,8 @@ class MediaManager extends WidgetBase
         // Get the path to the cropped image
         $croppedPath = $resizer->getPathToResizedImage();
 
-        // Generate the target path for the cropped image. The requested path only selects
-        // the folder and the file name to store the crop under; the extension always comes
-        // from the image that the resizer produced, so the stored file's extension always
-        // describes its actual contents. The media library validates the shape of a path
-        // but not its extension, so the destination is held to the same extension allowlist
-        // that uploading and renaming a media item are held to.
+        // The request selects only the folder and file name; the extension comes from the
+        // image the resizer produced, so it always describes the stored contents
         $targetPath = $this->deduplicatePath(
             sprintf(
                 '%s/%s.%s',
@@ -788,6 +781,7 @@ class MediaManager extends WidgetBase
             '_cropped'
         );
 
+        // validatePath() constrains where a file goes, not what it may be called
         if (!$this->validateFileType($targetPath)) {
             throw new ApplicationException(Lang::get('backend::lang.media.type_blocked'));
         }
@@ -1266,9 +1260,8 @@ class MediaManager extends WidgetBase
         $markup = null;
 
         try {
-            // Validated here rather than in the calling handler so that a single unusable
-            // path renders the broken thumbnail below instead of failing every thumbnail
-            // that the same request asked for
+            // Validated here, not in the handler: one unusable path then renders the
+            // broken thumbnail below instead of failing every thumbnail in the batch
             $path = MediaLibrary::validatePath($thumbnailInfo['path']);
 
             if ($this->isVector($path) && ($id = $thumbnailInfo['id'])) {
