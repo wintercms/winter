@@ -22,15 +22,16 @@ if ($fieldOptions instanceof Illuminate\Support\Collection) {
     if ($field->getConfig('allowCustom', false)) {
         $options['class'] .= ' select-modifiable';
     }
+    // Form::select() escapes the option labels and the attributes itself
     if ($emptyOption) {
-        $options['emptyOption'] = e(trans($emptyOption));
+        $options['emptyOption'] = trans($emptyOption);
     }
     if ($field->placeholder) {
-        $options['data-placeholder'] = e(trans($field->placeholder));
+        $options['data-placeholder'] = trans($field->placeholder);
     }
     foreach ($fieldOptions as $key => &$value) {
         if (is_string($value) && str_contains($value, '::')) {
-            $value = e(trans($value));
+            $value = trans($value);
         }
     }
     ?>

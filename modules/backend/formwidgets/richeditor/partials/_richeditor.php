@@ -40,24 +40,23 @@
         <?php if ($lineBreakerTags): ?>
             data-line-breaker-tags="<?= e($lineBreakerTags) ?>"
         <?php endif ?>
-        <?php // Double-encoded, unlike e(), so that entities already in the JSON survive the attribute decode ?>
         <?php if (isset($imageStyles)): ?>
-            data-image-styles="<?= htmlspecialchars(json_encode($imageStyles), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+            data-image-styles="<?= e(json_encode($imageStyles)) ?>"
         <?php endif ?>
         <?php if (isset($linkStyles)): ?>
-            data-link-styles="<?= htmlspecialchars(json_encode($linkStyles), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+            data-link-styles="<?= e(json_encode($linkStyles)) ?>"
         <?php endif ?>
         <?php if (isset($paragraphStyles)): ?>
-            data-paragraph-styles="<?= htmlspecialchars(json_encode($paragraphStyles), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+            data-paragraph-styles="<?= e(json_encode($paragraphStyles)) ?>"
         <?php endif ?>
         <?php if (isset($paragraphFormats)): ?>
-            data-paragraph-format="<?= htmlspecialchars(json_encode($paragraphFormats), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+            data-paragraph-format="<?= e(json_encode($paragraphFormats)) ?>"
         <?php endif ?>
         <?php if (isset($tableStyles)): ?>
-            data-table-styles="<?= htmlspecialchars(json_encode($tableStyles), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+            data-table-styles="<?= e(json_encode($tableStyles)) ?>"
         <?php endif ?>
         <?php if (isset($tableCellStyles)): ?>
-            data-table-cell-styles="<?= htmlspecialchars(json_encode($tableCellStyles), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8') ?>"
+            data-table-cell-styles="<?= e(json_encode($tableCellStyles)) ?>"
         <?php endif ?>
         data-links-handler="<?= $this->getEventHandler('onLoadPageLinksForm') ?>"
         data-upload-handler="<?= $this->getEventHandler('onUpload') ?>"

@@ -1,6 +1,7 @@
 <?php if ($this->previewMode): ?>
     <div class="form-control">
-        <pre><?= e($value) ?></pre>
+        <?php // Already escaped by CodeEditor::prepareVars() ?>
+        <pre><?= $value ?></pre>
     </div>
 <?php else: ?>
     <div
@@ -43,6 +44,7 @@
                 </a>
             </div>
         </div>
-        <input name="<?= $name ?>" data-value-bag id="<?= $this->getId('value') ?>" type="hidden" value="<?= e($value) ?>">
+        <?php // Already escaped by CodeEditor::prepareVars() ?>
+        <input name="<?= $name ?>" data-value-bag id="<?= $this->getId('value') ?>" type="hidden" value="<?= $value ?>">
     </div>
 <?php endif ?>
