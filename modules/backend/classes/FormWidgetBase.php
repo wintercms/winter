@@ -37,6 +37,13 @@ abstract class FormWidgetBase extends WidgetBase
     public $previewMode = false;
 
     /**
+     * @var bool Whether preview mode was set by the form or relation that built this widget, as
+     * opposed to being set by the widget itself while rendering. This is what decides whether a
+     * write handler is refused; see abortIfPreviewMode().
+     */
+    protected $previewModeFromConfig = false;
+
+    /**
      * @var bool Determines if this form field should display comments and labels.
      */
     public $showLabels = true;
@@ -88,7 +95,38 @@ abstract class FormWidgetBase extends WidgetBase
             'parentForm',
         ]);
 
+        // Recorded before any widget adjusts $previewMode for its own rendering, so that the
+        // write guard below follows what built this widget rather than how it draws itself
+        $this->previewModeFromConfig = (bool) $this->previewMode;
+
         parent::__construct($controller, $configuration);
+    }
+
+    /**
+     * Abort the request with an access-denied code if the form that built this widget is not
+     * editable.
+     *
+     * The parent form propagates preview mode to every field widget it builds
+     * (Backend\Widgets\Form::makeFormFieldWidget()), and it is set for a form rendered in a
+     * preview context and for a read only relation's forms. Widgets already honour it while
+     * rendering, but an AJAX handler is dispatched straight to the widget by alias, so it does
+     * not pass through whatever authorized the page.
+     *
+     * A field-level `disabled` is deliberately not covered. Several widgets set $previewMode from
+     * it to render themselves as not editable, but `disabled` is a rendering concern - the client
+     * decides whether it comes back - so it has never been a server side control and is not made
+     * into one here. Only the configuration of the form or relation counts, which is what
+     * $previewModeFromConfig holds.
+     *
+     * Any widget handler that writes must call this first. Handlers that only read - refreshing
+     * a preview, loading a library, rendering a picker - should not, since a preview form is
+     * still allowed to be looked at.
+     */
+    protected function abortIfPreviewMode(): void
+    {
+        if ($this->previewModeFromConfig) {
+            abort(403);
+        }
     }
 
     /**
