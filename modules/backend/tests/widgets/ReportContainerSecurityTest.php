@@ -15,7 +15,7 @@ use Winter\Storm\Database\Model;
 use Winter\Storm\Support\Facades\Config;
 
 /**
- * A report widget whose registration restricts it to holders of a permission. `WidgetManager::listReportWidgets()` drops it for everyone else.
+ * Registered behind a permission, so `listReportWidgets()` drops it for everyone else.
  */
 class RestrictedReportWidget extends ReportWidgetBase
 {
@@ -28,7 +28,7 @@ class RestrictedReportWidget extends ReportWidgetBase
 }
 
 /**
- * A report widget that is never registered with the WidgetManager at all. The constructor records that it ran: nothing in the response or in the stored layout distinguishes a refusal taken before construction from one taken after.
+ * Never registered. Its constructor records that it ran, so a refusal taken before construction is distinguishable from one taken after.
  */
 class UnregisteredReportWidget extends ReportWidgetBase
 {
@@ -50,7 +50,7 @@ class UnregisteredReportWidget extends ReportWidgetBase
 }
 
 /**
- * A report widget that declares properties of its own, for the sets the container publishes to the inspector.
+ * Declares its own properties, for the sets the container publishes to the inspector.
  */
 class PropertiesReportWidget extends ReportWidgetBase
 {
@@ -70,7 +70,7 @@ class PropertiesReportWidget extends ReportWidgetBase
 }
 
 /**
- * A container that publishes one property of its own to the inspector, the way a subclass extends the inspector, and exposes the two protected members this test reads.
+ * Publishes one property of its own and exposes the two protected members this test reads.
  */
 class ExtraPropertyContainer extends \Backend\Widgets\ReportContainer
 {
@@ -116,8 +116,8 @@ class ExtraPropertyContainer extends \Backend\Widgets\ReportContainer
 /**
  * Coverage for the two guarantees `Backend\Widgets\ReportContainer` makes.
  *
- * 1. The widgets a user may put on their dashboard are the ones `WidgetManager::listReportWidgets()` returns for them -- report widgets may declare a `permissions` key, and `onLoadAddPopup()`, `makeReportWidget()` and `onAddWidget()` all work from that same list.
- * 2. The values a dashboard layout carries are rendered as text or as numbers, never as markup -- including a layout published to every other backend user by a holder of `backend.manage_default_dashboard`.
+ * 1. A user may only add widgets `WidgetManager::listReportWidgets()` returns for them, which `onLoadAddPopup()`, `makeReportWidget()` and `onAddWidget()` all honour.
+ * 2. Layout values render as text or numbers, never markup -- including a layout published to everyone by a `backend.manage_default_dashboard` holder.
  */
 class ReportContainerSecurityTest extends PluginTestCase
 {
@@ -132,9 +132,12 @@ class ReportContainerSecurityTest extends PluginTestCase
         Config::set('cms.backendUri', 'backend');
         Config::set('cms.enableCsrfProtection', false);
 
+        // refusalMessage() reads the reason off the error page, which only carries it in debug.
+        Config::set('app.debug', true);
+
         $this->forgetDashboardCaches();
 
-        // registerReportWidgets() is gated behind runningInBackend(), which is false here. The three defaults come from config_dashboard.yaml and have to be registered or makeReportWidget() drops them and there is no default layout to work with.
+        // registerReportWidgets() is gated on runningInBackend(), false here, so the three config_dashboard.yaml defaults need registering or makeReportWidget() drops them.
         WidgetManager::instance()->registerReportWidgets(function ($manager) {
             $manager->registerReportWidget(RestrictedReportWidget::class, [
                 'label' => 'Restricted',
@@ -146,7 +149,7 @@ class ReportContainerSecurityTest extends PluginTestCase
             $manager->registerReportWidget(\Cms\ReportWidgets\ActiveTheme::class, ['context' => 'dashboard']);
         });
 
-        // Likewise for the settings items, which the backend layout renders when a `widget::handler` request runs the page action ahead of the handler.
+        // Likewise the settings items, rendered when a `widget::handler` request runs the page action first.
         SettingsManager::instance()->registerCallback(function ($manager) {
             $manager->registerSettingItems('Winter.Backend', []);
         });
@@ -165,7 +168,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * UserPreference and Parameter memoise in a protected static $cache, and Parameter's lookup is additionally query-cached. None of that is reset between tests in the same process, and user ids repeat, so without this a later test reads an earlier test's dashboard instead of the one it just published.
+     * UserPreference and Parameter memoise in a static cache that is not reset between tests, and user ids repeat, so a later test would read an earlier one's dashboard.
      */
     protected function forgetDashboardCaches(): void
     {
@@ -244,9 +247,6 @@ class ReportContainerSecurityTest extends PluginTestCase
         ]);
     }
 
-    /**
-     * The container markup the acting user is served.
-     */
     protected function renderDashboard(): string
     {
         $response = $this->post('backend/backend/index', [], [
@@ -275,7 +275,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     //
 
     /**
-     * Asserts on the parsed document rather than the source text: the value also appears, correctly escaped, inside the inspector's JSON attributes, so a substring search cannot tell an inert copy from a live one. What matters is whether any element ends up carrying the attributes the value spells out.
+     * Parses rather than substring-searches: the value also appears correctly escaped inside the inspector's JSON, so only the parsed document distinguishes an inert copy from a live one.
      */
     protected function assertNoLiveMarkup(string $html): void
     {
@@ -290,7 +290,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * The message a refused request reports, as the error response titles it. Taken from the title rather than the whole body because the body also quotes the surrounding source, messages included.
+     * From the error title, not the body -- the body quotes the surrounding source, messages included.
      */
     protected function refusalMessage($response): string
     {
@@ -302,7 +302,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * The class names stored on the acting user's dashboard. Read back through the store the handler writes to, so the assertion reflects what happened rather than what the response body happened to contain.
+     * Read back through the store the handler writes to, so this reflects what happened rather than what the response said.
      */
     protected function storedWidgetClasses(): array
     {
@@ -312,7 +312,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     /**
      * The widget layout stored for the acting user.
      *
-     * The memoised reads are dropped first: Preferences::get() caches the default it was handed when there is no record, and the container hands it the default layout, so a read taken after a request would otherwise report that default layout as though it had been stored.
+     * Memoised reads are dropped first: Preferences::get() caches the default it was handed, which is the default layout.
      */
     protected function storedWidgets(): array
     {
@@ -326,7 +326,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     //
 
     /**
-     * The handler constructs the widget and returns its rendered output, so it applies the same `permissions` filter the rest of the container does.
+     * The handler constructs the widget and returns its output, so it applies the same `permissions` filter.
      */
     public function testRestrictedWidgetCannotBeAddedWithoutItsPermission(): void
     {
@@ -338,7 +338,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * The registry check runs before the class is constructed -- `new $className()` on a request-supplied class name is itself a side effect the handler must not have, and it is observed here rather than inferred from the refusal, which reads the same either way.
+     * The registry check runs before `new $className()`, so an unoffered class is never constructed.
      */
     public function testUnregisteredClassCannotBeAdded(): void
     {
@@ -356,7 +356,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * The class name is matched against the list exactly as the list is keyed. `class_exists()` is case insensitive and tolerates a leading separator, so both spellings reach the check and both are turned away -- the same way makeReportWidget() matches when the container renders.
+     * Matched as the list is keyed; `class_exists()` and `new` are case-insensitive, so the comparison is too.
      */
     public function testAlternativeClassNameSpellingsAreRefused(): void
     {
@@ -369,7 +369,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * The list is consulted before the class name is used for anything else, so a name that is not on it is answered identically whether or not a class of that name exists.
+     * Consulted before the name is used at all, so every unoffered name gets the same answer.
      */
     public function testClassNamesThatAreNotOfferedAreAllRefusedTheSameWay(): void
     {
@@ -399,7 +399,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     //
     // Values a layout carries into the markup
     //
-    // backend.manage_default_dashboard is documented as publishing a layout to every other backend user, so the cross-user reach is by design. The values carried across are request-supplied strings, and the container renders two of them into attributes of its own, so they are typed on the way in and neutralised on the way out.
+    // backend.manage_default_dashboard publishes a layout to every other backend user, so these cross users.
     //
 
     protected const INJECTED_MARKUP = '7" data-injected="1" onmouseover="window.touched=1';
@@ -427,7 +427,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     /**
      * The sort order is emitted into a value="" attribute and is equally unvalidated input.
      *
-     * It only reaches the markup on a single-widget layout: with two or more widgets defineReportWidgets() sorts them with `$a['sortOrder'] - $b['sortOrder']`, and a non-numeric sort order raises there before anything renders. So the other widgets are removed first -- which is a supported thing to do.
+     * Only reaches the markup on a single-widget layout; with two or more, defineReportWidgets() sorts first.
      */
     public function testSortOrderCannotCarryMarkupIntoAnotherUsersDashboard(): void
     {
@@ -442,7 +442,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * setProperties() stores whatever the decoded JSON holds. No current partial renders an undeclared property, but the stored layout is a structure later markup may read, so the handler keeps only the properties it publishes.
+     * setProperties() stores whatever the JSON holds; no current partial renders an undeclared property, but nothing stops one.
      */
     public function testUndeclaredPropertiesAreNotStored(): void
     {
@@ -459,7 +459,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * The container and the toolbar it includes both echo the container's own alias, one as a value and the other inside the handler names it builds, so both have to escape it. The alias is developer-set rather than posted, which is why this is a unit-level check of the two partials rather than a request.
+     * The container and its toolbar both echo the alias, one as a value and one in an attribute.
      */
     public function testTheContainerAndItsToolbarEscapeTheContainerAlias(): void
     {
@@ -472,7 +472,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * trans() resolves a key naming a translation group to an array, which cannot be rendered. A title is stored configuration, and a published layout is served to every user who has none of their own, so one stored title of that shape would otherwise make every such dashboard unrenderable - including the toolbar that would let it be reset.
+     * trans() resolves a group key to an array, which cannot be rendered.
      */
     public function testATitleNamingATranslationGroupStillRendersTheDashboard(): void
     {
@@ -491,7 +491,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * The widget manager is a singleton for the life of the process, and the handlers now authorise against the list it returns, so the permission filter must not be applied to the memo the next caller reads.
+     * The manager is a singleton, so a filtered memo would outlive the request that filtered it.
      */
     public function testTheWidgetListIsNotHiddenFromALaterUserInTheSameProcess(): void
     {
@@ -512,7 +512,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * Both write paths cast the column count, so what is stored is a number whatever the request spelled. Asserted on the store rather than on the markup, which casts again at the sink.
+     * Both write paths cast the column count, so the stored value is a number however it was spelled.
      */
     public function testTheStoredWidgetWidthIsAnInteger(): void
     {
@@ -528,9 +528,9 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * Publishes a default layout of `$count` widgets that all carry `$value` as their sort order and as their column count.
+     * Publishes a default layout of `$count` widgets carrying `$value` as sort order and column count.
      *
-     * The widget count is a parameter because the layout is sorted before a single widget is rendered, and the comparator only runs at all once there are two entries to compare -- so the rendering path is only fully exercised by a layout with several widgets on it.
+     * The count is a parameter because the layout is sorted before anything renders.
      */
     protected function publishStoredLayout($value, int $count): void
     {
@@ -561,7 +561,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * Every shape a `fields` payload can arrive in that does not name a single property the container publishes. JSON decoding turns several of them into arrays -- a list, a list of sets, an empty object -- so a shape check on the decoded value is not enough on its own; what the handler applies has to be a set that still holds a value after filtering.
+     * Every `fields` shape that names no property the container publishes.
      */
     public function unusablePayloadProvider(): array
     {
@@ -579,8 +579,26 @@ class ReportContainerSecurityTest extends PluginTestCase
         ];
     }
 
+    public function testAPostedArrayIsRefusedRatherThanRaising(): void
+    {
+        $this->actingAs($this->publisher);
+
+        $this->updateWidget('systemStatus', ['ocWidgetWidth' => 7]);
+        $before = $this->storedWidgets()['systemStatus']['configuration'];
+
+        // fields[]=x arrives as an array, which json_decode() will not take.
+        $response = $this->reportContainerRequest('onUpdateWidget', [
+            'alias' => 'systemStatus',
+            'fields' => ['x'],
+        ]);
+
+        $this->assertSame($before, $this->storedWidgets()['systemStatus']['configuration'], 'The stored configuration must be left alone');
+        $this->assertNotEquals(200, $response->getStatusCode(), 'The request must be refused');
+        $this->assertStringContainsString('Invalid widget properties posted.', $this->refusalMessage($response), 'The request must be refused, not raise');
+    }
+
     /**
-     * A payload that is not a usable set of property values is refused outright, and reports why. Reading it as an empty set instead would store that empty set, replacing the configuration the widget already had with its declared defaults.
+     * An unusable payload is refused outright rather than applied as an empty set.
      *
      * @dataProvider unusablePayloadProvider
      */
@@ -603,7 +621,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * A property the container publishes to the inspector is a property the inspector posts back, so the filter is computed from the same set rather than from the widget's declared properties alone. Those two sets are the same set for the container itself; a subclass extending the inspector is where they part.
+     * What the container publishes is what the inspector posts back, so the filter must admit it.
      */
     public function testAPropertyTheContainerPublishesSurvivesItsFilter(): void
     {
@@ -625,7 +643,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * Sort orders a layout was stored with before this change are outside the container's control, but the order it derives from them for a newly added widget is not: it is stored, so it is stored as an integer.
+     * Orders stored before this change are outside the container's control; the order it renders is not.
      *
      * @dataProvider untypedOrderProvider
      */
@@ -656,7 +674,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * A layout stored before this change is beyond the reach of any constraint on the way in, so the rendering path is what has to neutralise it, and is tested on its own.
+     * A layout stored before this change cannot be constrained on the way in, so the rendering path handles it.
      *
      * @dataProvider widgetCountProvider
      */

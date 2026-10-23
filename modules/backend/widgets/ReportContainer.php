@@ -164,7 +164,8 @@ class ReportContainer extends WidgetBase
 
         $widget = $this->findWidgetByAlias($alias);
 
-        $properties = json_decode(Request::input('fields'), true);
+        $fields = Request::input('fields');
+        $properties = is_string($fields) ? json_decode($fields, true) : null;
 
         $properties = is_array($properties)
             ? $this->filterWidgetProperties($widget, $properties)
@@ -212,9 +213,8 @@ class ReportContainer extends WidgetBase
             throw new ApplicationException('Please select a widget to add.');
         }
 
-        /*
-         * Report widgets may declare a `permissions` key, which listReportWidgets() applies. Only widgets from that list are offered by onLoadAddPopup(), and only they are built by makeReportWidget() when the container renders, so this handler -- which constructs the widget and returns its rendered output -- honours the same list. The list is consulted before the class name is used for anything else, so every name that is not on it gets the same answer.
-         */
+        // The same permission-filtered list onLoadAddPopup() offers and makeReportWidget()
+        // builds from, consulted before the name is used for anything else.
         if (!array_key_exists($className, WidgetManager::instance()->listReportWidgets())) {
             throw new ApplicationException('The selected class is not a report widget.');
         }
@@ -333,7 +333,7 @@ class ReportContainer extends WidgetBase
             }
         }
 
-        // The sort order is an integer everywhere the container writes one, but a layout stored earlier may hold anything the preference store accepts, and the comparator runs before a single widget is rendered.
+        // A layout stored earlier may hold anything the preference store accepts.
         uasort($result, function ($a, $b) {
             return (int) $a['sortOrder'] <=> (int) $b['sortOrder'];
         });
@@ -394,9 +394,10 @@ class ReportContainer extends WidgetBase
     }
 
     /**
-     * Restricts a set of property values to the properties this container publishes for the given widget, and types the one the container renders itself.
+     * Restricts posted values to the properties this container publishes for the widget.
      *
-     * setProperties() replaces a widget's whole property set, so the keys are limited to the ones getWidgetPropertyConfig() offers the inspector -- the container's own two properties plus the ones the widget declares -- and the column count is stored as an integer. A set that names none of them comes back empty, and onUpdateWidget() refuses it rather than applying it as a set with nothing in it, which would leave the widget on its declared defaults.
+     * setProperties() replaces the whole set, so a payload naming none of them comes back
+     * empty and onUpdateWidget() refuses it rather than resetting the widget to its defaults.
      *
      * @param \Backend\Classes\ReportWidgetBase $widget
      * @param array $properties Property values as supplied by the request.

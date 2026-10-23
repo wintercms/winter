@@ -105,6 +105,9 @@ class InspectableContainerSecurityTest extends PluginTestCase
         Config::set('cms.backendUri', 'backend');
         Config::set('cms.enableCsrfProtection', false);
 
+        // The refusal reason only reaches the error page in debug.
+        Config::set('app.debug', true);
+
         UnofferedInspectable::$constructed = false;
 
         $this->autoloaded = [];
@@ -193,7 +196,7 @@ class InspectableContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * The message a refused request reports, as the error response titles it. Taken from the title rather than the whole body because the body also quotes the surrounding source, messages included.
+     * From the error title, not the body -- the body quotes the surrounding source, messages included.
      */
     protected function refusalMessage($response): string
     {
@@ -252,7 +255,7 @@ class InspectableContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * The list is consulted before the class name is used for anything else, so a name that is not on it is answered the same way whether a class of that name exists, exists and is not inspectable, or does not exist at all. Unguarded the third of those is a `TypeError` out of `class_parents()`, which makes the handler a class-existence oracle.
+     * Consulted before the name is used at all, so every unoffered name gets the same answer.
      */
     public function testUnofferedClassNamesAreAllAnsweredTheSameWay(): void
     {

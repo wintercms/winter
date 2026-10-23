@@ -12,11 +12,8 @@ class ReportWidgetBase extends WidgetBase
     /**
      * Returns this widget's configured title, translated.
      *
-     * A key naming a translation group resolves to an array rather than a string, and a title
-     * is stored configuration that any widget publisher can set, so the configured value is
-     * rendered as written whenever translating it does not produce a string. Otherwise one
-     * stored title would make every dashboard carrying the widget unrenderable, including the
-     * toolbar that would let it be reset.
+     * A key naming a translation group resolves to an array, which cannot be rendered, so fall
+     * back to the configured value rather than letting one stored title break the dashboard.
      */
     public function getTitle(): string
     {

@@ -207,9 +207,8 @@ class WidgetManager
          */
         Event::fire('system.reportwidgets.extendItems', [$this]);
 
-        // Filtered into a copy: this manager is a singleton for the life of the process, so
-        // removing an entry from the memo itself would hide the widget from every later caller,
-        // including one acting as a user who does hold the permission.
+        // Filtered into a copy: this manager is a singleton, so filtering the memo would hide
+        // the widget from every later caller, including one who does hold the permission.
         $user = BackendAuth::getUser();
         $widgets = $this->reportWidgets;
 
