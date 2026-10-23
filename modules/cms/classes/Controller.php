@@ -32,6 +32,8 @@ use Illuminate\Http\RedirectResponse;
  *
  * @package winter\wn-cms-module
  * @author Alexey Bobkov, Samuel Georges
+ *
+ * @phpstan-consistent-constructor
  */
 class Controller
 {

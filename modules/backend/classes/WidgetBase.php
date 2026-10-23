@@ -91,7 +91,7 @@ abstract class WidgetBase extends Extendable
 
     /**
      * Renders the widget's primary contents.
-     * @return string HTML markup supplied by this widget.
+     * @return string|null HTML markup supplied by this widget, or null when the widget renders nothing.
      */
     public function render()
     {
