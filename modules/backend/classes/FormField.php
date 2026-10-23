@@ -181,6 +181,11 @@ class FormField
     public $preset;
 
     /**
+     * @var bool Should the field's label for checkbox/switch fields be displayed above the field.
+     */
+    public $showLabels;
+
+    /**
      * Constructor.
      * @param string $fieldName The name of the field
      * @param string $label The label of the field
@@ -296,6 +301,7 @@ class FormField
             'preset',
             'readOnly',
             'required',
+            'showLabels',
             'stretch',
             'trigger',
         ];
