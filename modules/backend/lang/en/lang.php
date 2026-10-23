@@ -340,6 +340,9 @@ return [
         'record_navigation' => 'Record navigation',
         'previous_record' => 'Previous record',
         'next_record' => 'Next record',
+        'expand_all' => 'Open all',
+        'collapse_all' => 'Close all',
+        'expand_checked' => 'Open selected',
     ],
     'recordfinder' => [
         'find_record' => 'Find Record',
