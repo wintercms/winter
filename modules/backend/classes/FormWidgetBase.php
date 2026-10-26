@@ -103,24 +103,17 @@ abstract class FormWidgetBase extends WidgetBase
     }
 
     /**
-     * Abort the request with an access-denied code if the form that built this widget is not
-     * editable.
+     * Abort with an access-denied code if the form that built this widget is not editable.
      *
-     * The parent form propagates preview mode to every field widget it builds
-     * (Backend\Widgets\Form::makeFormFieldWidget()), and it is set for a form rendered in a
-     * preview context and for a read only relation's forms. Widgets already honour it while
-     * rendering, but an AJAX handler is dispatched straight to the widget by alias, so it does
-     * not pass through whatever authorized the page.
+     * Widgets honour preview mode while rendering, but a handler is dispatched straight to the
+     * widget by alias, so it never passes through whatever authorized the page.
      *
-     * A field-level `disabled` is deliberately not covered. Several widgets set $previewMode from
-     * it to render themselves as not editable, but `disabled` is a rendering concern - the client
-     * decides whether it comes back - so it has never been a server side control and is not made
-     * into one here. Only the configuration of the form or relation counts, which is what
-     * $previewModeFromConfig holds.
+     * A field-level `disabled` is deliberately not covered: the client decides whether it comes
+     * back, so it has never been a server side control. Only the form or relation configuration
+     * counts, which is what $previewModeFromConfig holds.
      *
-     * Any widget handler that writes must call this first. Handlers that only read - refreshing
-     * a preview, loading a library, rendering a picker - should not, since a preview form is
-     * still allowed to be looked at.
+     * Any handler that writes must call this first. Handlers that only read must not - a preview
+     * form is still allowed to be looked at.
      */
     protected function abortIfPreviewMode(): void
     {

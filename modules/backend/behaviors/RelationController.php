@@ -1777,17 +1777,13 @@ class RelationController extends ControllerBehavior
      * Finds the records that may be added to the relation from the supplied keys, dropping any
      * key the relation manager does not offer.
      *
-     * Attaching an existing record has to reach outside the relation - that is its entire
-     * purpose - so the relation cannot be its scope. The manage list is: it is the selection
-     * list the Add and Link buttons display, and a deployment narrows it to the records a given
-     * parent may be given with the relation's `manage[conditions]` or `manage[scope]` options
-     * (the latter receives the parent record) or the `relationExtendManageWidget()` hook.
-     * Resolving the keys through it makes the set the relation manager accepts the same as the
-     * set it offers, the way `ListController::index_onDelete()` resolves its checked ids
-     * through the list's own query.
+     * Attaching has to reach outside the relation - that is its purpose - so the relation
+     * cannot be its scope. The manage list is: `manage[conditions]`, `manage[scope]` (which
+     * receives the parent) and `relationExtendManageWidget()` narrow it, so resolving through
+     * it makes what the relation manager accepts the same as what it offers.
      *
-     * The keys are validated against the list query and the records are then loaded from the
-     * related model, since the list query selects the extra columns its own display needs.
+     * Keys are validated against the list query, then loaded from the related model, since the
+     * list query selects the extra columns its display needs.
      */
     protected function relationFindAddableModels(array $recordIds)
     {

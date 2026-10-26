@@ -3,8 +3,8 @@
 namespace Backend\Tests\Behaviors;
 
 use Backend\Classes\BackendController;
+use Backend\Tests\BackendTestCase;
 use Backend\Classes\Controller;
-use Backend\Models\User as BackendUser;
 use Backend\Tests\Fixtures\Models\RelationBehaviorFixture;
 use Database\Tester\Models\Author;
 use Database\Tester\Models\Post;
@@ -79,18 +79,22 @@ class ReadOnlyRelationController extends Controller
  * The same relations with the read only flag removed, used to prove the enforcement does not
  * break a relation that is supposed to be writable.
  */
-class WritableRelationController extends ReadOnlyRelationController
+trait DropsReadOnly
 {
     public function __construct()
     {
-        $this->relationConfig = array_map(function ($config) {
+        foreach ($this->relationConfig as &$config) {
             unset($config['readOnly']);
-
-            return $config;
-        }, $this->relationConfig);
+        }
+        unset($config);
 
         parent::__construct();
     }
+}
+
+class WritableRelationController extends ReadOnlyRelationController
+{
+    use DropsReadOnly;
 }
 
 /**
@@ -120,12 +124,7 @@ class ReadOnlySortableRelationController extends Controller
 
 class WritableSortableRelationController extends ReadOnlySortableRelationController
 {
-    public function __construct()
-    {
-        unset($this->relationConfig['children']['readOnly']);
-
-        parent::__construct();
-    }
+    use DropsReadOnly;
 }
 
 /**
@@ -176,12 +175,7 @@ class ReadOnlyNestedWidgetRelationController extends Controller
 
 class WritableNestedWidgetRelationController extends ReadOnlyNestedWidgetRelationController
 {
-    public function __construct()
-    {
-        unset($this->relationConfig['children']['readOnly']);
-
-        parent::__construct();
-    }
+    use DropsReadOnly;
 }
 
 /**
@@ -220,12 +214,7 @@ class ReadOnlySingleRelationController extends Controller
 
 class WritableSingleRelationController extends ReadOnlySingleRelationController
 {
-    public function __construct()
-    {
-        unset($this->relationConfig['primaryChild']['readOnly']);
-
-        parent::__construct();
-    }
+    use DropsReadOnly;
 }
 
 /**
@@ -243,21 +232,18 @@ class ExtendedConfigRelationController extends WritableRelationController
 }
 
 /**
- * `RelationController` documents `readOnly` as disabling the ability to add, update, delete or
- * create relations, and the framework enforces the identically named control server side in
- * `Backend\Widgets\MediaManager::abortIfReadOnly()`. In the relation behavior the flag was only
- * ever consulted while rendering (toolbar buttons, list checkboxes, the manage popup title and
- * preview mode), so every relation write handler reached its mutating sink regardless.
+ * `readOnly` was documented as disabling adds, updates, deletes and creates, but the behavior
+ * only ever consulted it while rendering - toolbar buttons, list checkboxes, the manage popup
+ * title, preview mode - so every write handler reached its sink regardless.
  *
- * On top of that, the flag round trips through the browser in `_relation_extra_config`, an
- * unsigned base64 JSON blob that `applyExtraConfig()` merged straight back into the relation
- * configuration, so the value the client returns had the last word. Enforcing the flag at the
- * handlers alone would therefore not have been enough: the merge has to be monotonic too.
+ * The flag also round trips through the browser in `_relation_extra_config`, an unsigned base64
+ * blob `applyExtraConfig()` merged back into the configuration, so the client had the last word.
+ * Enforcing at the handlers alone would not have been enough.
  *
- * The invariant: when the relation configuration says the relation is read only, no relation
- * management handler may write, and nothing the client sends may relax that.
+ * The invariant: when the configuration says read only, no management handler may write, and
+ * nothing the client sends may relax that.
  */
-class RelationControllerReadOnlyTest extends PluginTestCase
+class RelationControllerReadOnlyTest extends BackendTestCase
 {
     protected Author $author;
 
@@ -265,24 +251,7 @@ class RelationControllerReadOnlyTest extends PluginTestCase
     {
         parent::setUp();
 
-        // Controllers read their action from this static, which another test's routed
-        // request will have left set; these are driven directly, with no page action.
-        BackendController::$action = null;
-        BackendController::$params = [];
-
-        Model::unguard();
-
-        // MarkdownEditor (and other widgets) read the authenticated backend user while rendering.
-        $this->actingAs(BackendUser::create([
-            'first_name' => 'Read',
-            'last_name' => 'Only',
-            'login' => 'readonlytester',
-            'email' => 'readonly@test.com',
-            'password' => 'TestPassword1',
-            'password_confirmation' => 'TestPassword1',
-            'is_activated' => true,
-            'is_superuser' => true,
-        ]), 'backend');
+        $this->actAsBackendUser('readonlytester');
 
         $this->author = Author::create(['name' => 'Author', 'email' => 'author@test.com']);
     }
@@ -290,15 +259,8 @@ class RelationControllerReadOnlyTest extends PluginTestCase
     public function tearDown(): void
     {
         RelationBehaviorFixture::migrateDown();
-        Model::reguard();
 
         parent::tearDown();
-    }
-
-    protected function postData(array $data): void
-    {
-        request()->setMethod('POST');
-        request()->request->replace($data);
     }
 
     /*
@@ -1078,15 +1040,9 @@ class RelationControllerReadOnlyTest extends PluginTestCase
     }
 
     /**
-     * The round trip still has to work in the restricting direction: a relation rendered read
-     * only by `relationRender()` reports that back through `_relation_extra_config`, and the
-     * handlers must honour it.
-     */
-    /**
-     * The extra configuration blob is returned by the browser with every relation request, so it
-     * decides nothing about whether the relation is writable - in either direction. Whether it can
-     * switch readOnly off is the half that matters, and testExtraConfigCannotDisableReadOnly
-     * covers it; this is the other half, kept so the asymmetry is not read as an oversight.
+     * The blob comes back with every request, so it decides nothing in either direction.
+     * testExtraConfigCannotDisableReadOnly is the half that matters; this is the other half,
+     * kept so the symmetry is not read as an oversight.
      */
     public function testExtraConfigCannotEnableReadOnly(): void
     {
@@ -1104,16 +1060,9 @@ class RelationControllerReadOnlyTest extends PluginTestCase
     }
 
     /**
-     * The other side of that round trip, and the reason the render-time option is a presentation
-     * option rather than a control: it reaches the server only while the browser keeps returning
-     * it. The manage popup posts the relation field, the mode and the record without the extra
-     * configuration -- see `relationcontroller/partials/_manage_form.php` -- so the relation's own
-     * configuration is all that handler ever sees.
-     */
-    /**
-     * A readOnly passed to relationRender() styles that one render. It cannot be enforced - the
-     * client decides whether it comes back - so it is not remembered and not treated as a control.
-     * Only the relation's own configuration is.
+     * A readOnly passed to relationRender() styles that one render; applyExtraConfig() keeps
+     * only recordUrl and recordOnClick, so it is never remembered. The manage popup does not
+     * post it at all - see `relationcontroller/partials/_manage_form.php`.
      */
     public function testRenderTimeReadOnlyIsNotAServerSideControl(): void
     {

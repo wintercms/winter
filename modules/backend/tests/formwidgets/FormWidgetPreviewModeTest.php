@@ -4,7 +4,7 @@ namespace Backend\Tests\FormWidgets;
 
 use Backend\Classes\BackendController;
 use Backend\Classes\Controller;
-use Backend\Models\User as BackendUser;
+use Backend\Tests\BackendTestCase;
 use Backend\Tests\Fixtures\Models\RelationBehaviorFixture;
 use Backend\Widgets\Form;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -13,19 +13,14 @@ use System\Tests\Bootstrap\PluginTestCase;
 use Winter\Storm\Database\Model;
 
 /**
- * `previewMode` is the flag that says a form field is not editable. The parent form propagates it
- * to every field widget it builds (`Backend\Widgets\Form::makeFormFieldWidget()`), a `disabled`
- * field raises it on its own widget, and a form rendered in a preview context carries it.
+ * `previewMode` says a form field is not editable. Widgets honoured it while rendering, but no
+ * widget handler consulted it, and a handler is dispatched by alias straight to the widget
+ * without passing through whatever authorized the page.
  *
- * Widgets honoured it while rendering, but no widget handler consulted it. A widget's AJAX
- * handler is dispatched by alias straight to the widget, so it does not pass through whatever
- * authorized the page.
- *
- * The invariant: a widget handler that writes refuses when the widget is in preview mode; a
- * handler that only reads still works, because a preview form is still meant to be looked at.
- * Proven here away from the relation behavior, since the rule is not relation-specific.
+ * The invariant: a handler that writes refuses in preview mode; one that only reads still works.
+ * Proven away from the relation behavior, since the rule is not relation-specific.
  */
-class FormWidgetPreviewModeTest extends PluginTestCase
+class FormWidgetPreviewModeTest extends BackendTestCase
 {
     protected RelationBehaviorFixture $record;
     protected File $file;
@@ -34,21 +29,7 @@ class FormWidgetPreviewModeTest extends PluginTestCase
     {
         parent::setUp();
 
-        BackendController::$action = null;
-        BackendController::$params = [];
-
-        Model::unguard();
-
-        $this->actingAs(BackendUser::create([
-            'first_name' => 'Preview',
-            'last_name' => 'Tester',
-            'login' => 'previewtester',
-            'email' => 'preview@test.com',
-            'password' => 'TestPassword1',
-            'password_confirmation' => 'TestPassword1',
-            'is_activated' => true,
-            'is_superuser' => true,
-        ]), 'backend');
+        $this->actAsBackendUser('previewtester');
 
         RelationBehaviorFixture::migrateUp();
 
@@ -64,7 +45,6 @@ class FormWidgetPreviewModeTest extends PluginTestCase
     public function tearDown(): void
     {
         RelationBehaviorFixture::migrateDown();
-        Model::reguard();
 
         parent::tearDown();
     }
@@ -151,13 +131,10 @@ class FormWidgetPreviewModeTest extends PluginTestCase
     }
 
     /**
-     * And so does a single `disabled` field on an otherwise editable form.
-     */
-    /**
-     * A field-level `disabled` is a rendering concern: the client decides whether it comes back,
-     * so it has never been a server side control and is not made into one here. Several widgets do
-     * set preview mode from it to draw themselves as not editable, which is why this is pinned -
-     * the write guard follows the form or relation that built the widget, not how it renders.
+     * A field-level `disabled` is a rendering concern - the client decides whether it comes
+     * back - so it is not a server side control. Several widgets do set preview mode from it to
+     * draw themselves as uneditable, which is why this is pinned: the write guard follows the
+     * form or relation that built the widget, not how it renders.
      */
     public function testDisabledFieldIsNotAServerSideControl(): void
     {

@@ -3,6 +3,7 @@
 namespace Backend\Tests\Behaviors;
 
 use Backend\Classes\BackendController;
+use Backend\Tests\BackendTestCase;
 use Backend\Classes\Controller;
 use Database\Tester\Models\Author;
 use Database\Tester\Models\Country;
@@ -222,17 +223,14 @@ class PivotRelationController extends ScopedRelationController
  *    remove) may only reach records the relation manager is currently showing -- the relation's
  *    own records, plus records bound through the active deferred-binding session.
  *
- * 2. A handler whose purpose is to attach a record that is *not* related yet (add, link, pivot
- *    create) must by definition reach outside the relation, so the relation cannot be its
- *    scope. Its scope is the manage list -- the selection list the documentation says the Add
- *    and Link buttons display -- which a deployment narrows with `manage.conditions`,
- *    `manage.scope` (which receives the parent record) or the `relationExtendManageWidget`
- *    hook.
+ * 2. A handler that attaches a record that is *not* related yet (add, link, pivot create) must
+ *    reach outside the relation, so its scope is the manage list instead, which a deployment
+ *    narrows with `manage.conditions`, `manage.scope` or `relationExtendManageWidget`.
  *
- * `ListController::index_onDelete()` and `Backend\Widgets\Lists::onReorder()` already resolve
- * their `checked[]` ids against the list's own query in the same way.
+ * `ListController::index_onDelete()` and `Lists::onReorder()` already resolve `checked[]` the
+ * same way.
  */
-class RelationControllerScopingTest extends PluginTestCase
+class RelationControllerScopingTest extends BackendTestCase
 {
     protected Author $owner;
     protected Author $operator;
@@ -241,28 +239,8 @@ class RelationControllerScopingTest extends PluginTestCase
     {
         parent::setUp();
 
-        // Controllers read their action from this static, which another test's routed
-        // request will have left set; these are driven directly, with no page action.
-        BackendController::$action = null;
-        BackendController::$params = [];
-
-        Model::unguard();
-
         $this->operator = Author::create(['name' => 'Operator', 'email' => 'operator@test.com']);
         $this->owner = Author::create(['name' => 'Owner', 'email' => 'owner@test.com']);
-    }
-
-    public function tearDown(): void
-    {
-        Model::reguard();
-
-        parent::tearDown();
-    }
-
-    protected function postData(array $data): void
-    {
-        request()->setMethod('POST');
-        request()->request->replace($data);
     }
 
     protected function controller(Author $parent, string $class = ScopedRelationController::class): ScopedRelationController
