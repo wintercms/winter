@@ -917,9 +917,6 @@ class MediaManager extends WidgetBase
     }
 
     /**
-     * Sets the provided path as the current folder in the session
-     */
-    /**
      * The folder this request asks to act on, which is the library root unless it names
      * another. setCurrentFolder() takes a string, and nothing in the request has to be one.
      */
@@ -930,6 +927,9 @@ class MediaManager extends WidgetBase
         return is_string($path) ? trim($path) : '';
     }
 
+    /**
+     * Sets the provided path as the current folder in the session
+     */
     protected function setCurrentFolder(string $path): void
     {
         $path = MediaLibrary::validatePath($path);
