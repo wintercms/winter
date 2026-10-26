@@ -31,7 +31,8 @@ class ImageResizerTest extends PluginTestCase
         Config::set('cms.themesPath', '/modules/system/tests/fixtures/themes');
 
         Config::set('cms.activeTheme', 'test');
-        Event::flush('cms.theme.getActiveTheme');
+        // forget(), not flush(): flush() dispatches `<event>_pushed` and removes no listener.
+        Event::forget('cms.theme.getActiveTheme');
         Theme::resetCache();
     }
 
