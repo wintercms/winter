@@ -75,7 +75,7 @@ class MediaManagerCropDestinationTest extends PluginTestCase
         $this->assertFileExists(storage_path('app/media' . $expectedPath));
     }
 
-    public function requestedDestinationProvider(): array
+    public static function requestedDestinationProvider(): array
     {
         return [
             'script extension' => ['/nested folder/report.php', '/nested folder/report_cropped.png'],
@@ -162,7 +162,7 @@ class MediaManagerCropDestinationTest extends PluginTestCase
         $this->crop('/storage/temp/app/media/winter.png', $destination);
     }
 
-    public function refusedDestinationProvider(): array
+    public static function refusedDestinationProvider(): array
     {
         return [
             'relative segment' => ['/../resized/escaped.png'],
@@ -193,7 +193,7 @@ class MediaManagerCropDestinationTest extends PluginTestCase
         }
     }
 
-    public function refusedSourceProvider(): array
+    public static function refusedSourceProvider(): array
     {
         return [
             'disk and path pair' => [[

@@ -165,7 +165,7 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
         );
     }
 
-    public function refusedThumbnailPathProvider(): array
+    public static function refusedThumbnailPathProvider(): array
     {
         return [
             'relative segment' => ['/../uploads/protected/abc/hidden.png'],
@@ -235,7 +235,7 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
         $this->assertStringStartsWith($expectedPrefix, $published[0]->getFilename());
     }
 
-    public function acceptedThumbnailPathProvider(): array
+    public static function acceptedThumbnailPathProvider(): array
     {
         return [
             'library root' => ['/winter.png', 'winter_resized_'],
@@ -271,7 +271,7 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
         );
     }
 
-    public function refusedCropSourceProvider(): array
+    public static function refusedCropSourceProvider(): array
     {
         return [
             'relative segment' => ['/storage/temp/app/media/../uploads/protected/abc/hidden.png'],
@@ -311,7 +311,7 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
         $this->assertFileExists(storage_path('app/media' . $expectedPath));
     }
 
-    public function acceptedCropSourceProvider(): array
+    public static function acceptedCropSourceProvider(): array
     {
         return [
             'library root' => [
@@ -345,6 +345,32 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
             'width' => 100,
             'height' => 100,
             'lastModified' => 1,
+        ];
+    }
+
+    /**
+     * These four hand `path` straight to setCurrentFolder(string $path), which a request that
+     * omits the key would otherwise reach as null. See wintercms/winter#1582.
+     *
+     * @dataProvider folderHandlerProvider
+     */
+    public function testAHandlerThatIsSentNoPathFallsBackToTheLibraryRoot(string $handler, array $data)
+    {
+        Request::replace($data);
+
+        $manager = $this->makeManager();
+        $manager->$handler();
+
+        $this->assertSame('/', self::callProtectedMethod($manager, 'getCurrentFolder'), 'the request should act on the library root');
+    }
+
+    public static function folderHandlerProvider(): array
+    {
+        return [
+            'onGoToFolder' => ['onGoToFolder', ['clearCache' => 0]],
+            'onChangeView' => ['onChangeView', ['view' => 'grid']],
+            'onSetFilter' => ['onSetFilter', ['filter' => 'all']],
+            'onSetSorting' => ['onSetSorting', ['sortBy' => 'title', 'sortDirection' => 'asc']],
         ];
     }
 

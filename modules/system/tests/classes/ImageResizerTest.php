@@ -456,7 +456,7 @@ class ImageResizerTest extends PluginTestCase
         ImageResizer::normalizeImage($url);
     }
 
-    public function containedSourcePathProvider(): array
+    public static function containedSourcePathProvider(): array
     {
         return [
             'relative segment' => ['/storage/temp/app/media/../uploads/protected/abc/hidden.png'],
@@ -594,8 +594,6 @@ class ImageResizerTest extends PluginTestCase
             return;
         }
 
-        File::deleteDirectory(storage_path('app/media'));
-        File::deleteDirectory(storage_path('app/uploads'));
-        rmdir(storage_path('app'));
+        File::deleteDirectory(storage_path('app'));
     }
 }

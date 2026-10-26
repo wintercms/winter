@@ -129,7 +129,7 @@ class MediaManager extends WidgetBase
      */
     public function onGoToFolder(): array
     {
-        $path = Input::get('path');
+        $path = Input::get('path', '');
 
         if (Input::get('clearCache')) {
             MediaLibrary::instance()->resetCache();
@@ -201,7 +201,7 @@ class MediaManager extends WidgetBase
     public function onChangeView(): array
     {
         $viewMode = Input::get('view');
-        $path = Input::get('path');
+        $path = Input::get('path', '');
 
         $this->setViewMode($viewMode);
         $this->setCurrentFolder($path);
@@ -221,7 +221,7 @@ class MediaManager extends WidgetBase
     public function onSetFilter(): array
     {
         $filter = Input::get('filter');
-        $path = Input::get('path');
+        $path = Input::get('path', '');
 
         $this->setFilter($filter);
         $this->setCurrentFolder($path);
@@ -242,7 +242,7 @@ class MediaManager extends WidgetBase
     {
         $sortBy = Input::get('sortBy', $this->getSortBy());
         $sortDirection = Input::get('sortDirection', $this->getSortDirection());
-        $path = Input::get('path');
+        $path = Input::get('path', '');
 
         $this->setSortBy($sortBy);
         $this->setSortDirection($sortDirection);
@@ -769,17 +769,7 @@ class MediaManager extends WidgetBase
         // Get the path to the cropped image
         $croppedPath = $resizer->getPathToResizedImage();
 
-        // The request selects only the folder and file name; the extension comes from the
-        // image the resizer produced, so it always describes the stored contents
-        $targetPath = $this->deduplicatePath(
-            sprintf(
-                '%s/%s.%s',
-                Str::beforeLast($mediaItemPath, '/'),
-                Str::beforeLast(Str::afterLast($mediaItemPath, '/'), '.'),
-                pathinfo($croppedPath, PATHINFO_EXTENSION)
-            ),
-            '_cropped'
-        );
+        $targetPath = $this->deduplicatePath($mediaItemPath, '_cropped', pathinfo($croppedPath, PATHINFO_EXTENSION));
 
         // validatePath() constrains where a file goes, not what it may be called
         if (!$this->validateFileType($targetPath)) {
@@ -1337,11 +1327,11 @@ class MediaManager extends WidgetBase
 
     /**
      * Process the provided path and add a suffix of _$int to prevent conflicts
-     * with existing paths
+     * with existing paths, optionally storing it under a different extension
      *
      * @todo Consider moving this into the File helper and accepting a $disk instance
      */
-    protected function deduplicatePath(string $path, ?string $suffix = null): string
+    protected function deduplicatePath(string $path, ?string $suffix = null, ?string $extension = null): string
     {
         $parts = pathinfo($path);
         $i = 1;
@@ -1349,6 +1339,11 @@ class MediaManager extends WidgetBase
         // Path generation adds a DIRECTORY_SEPARATOR between the dirname and
         // the filename so ensure that the dirname doesn't already end with one
         $parts['dirname'] = rtrim($parts['dirname'], DIRECTORY_SEPARATOR);
+
+        // The file may be stored under a different extension than it was named with
+        if ($extension !== null) {
+            $parts['extension'] = $extension;
+        }
 
         // Apply the requested suffix to the path
         if (!empty($suffix)) {
@@ -1358,8 +1353,10 @@ class MediaManager extends WidgetBase
                 '',
                 $parts['filename']
             ) . $suffix;
+        }
 
-            // Regenerate the path so that it can be checked for existance
+        // Regenerate the path so that it can be checked for existance
+        if (!empty($suffix) || $extension !== null) {
             $path = sprintf(
                 '%s%s%s.%s',
                 $parts['dirname'],
