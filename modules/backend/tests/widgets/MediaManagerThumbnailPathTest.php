@@ -88,17 +88,11 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
         $result = $this->makeManager()->onGenerateThumbnails();
 
         $this->assertCount(1, $result['generatedThumbnails']);
-        $this->assertStringNotContainsString(
-            '/resizer/',
-            $result['generatedThumbnails'][0]['markup'],
-            'A path outside the media library was given a resizer URL'
-        );
-        $this->assertStringContainsString('icon-chain-broken', $result['generatedThumbnails'][0]['markup']);
+        $this->assertBrokenThumbnail($result['generatedThumbnails'][0]['markup']);
     }
 
     /**
-     * The sidebar preview takes a single path and reports an unusable one to the caller,
-     * which is how every other path bearing handler of this widget behaves.
+     * Reported to the caller rather than rendered broken: a single path has no batch to spare.
      *
      * @dataProvider refusedThumbnailPathProvider
      */
@@ -126,22 +120,14 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
         $result = $this->makeManager()->onGenerateThumbnails();
 
         $this->assertCount(3, $result['generatedThumbnails']);
-        $this->assertMatchesRegularExpression(
-            '#<img src="/resizer/[a-f0-9]{40}/#',
-            $result['generatedThumbnails'][0]['markup']
-        );
-        $this->assertStringNotContainsString('/resizer/', $result['generatedThumbnails'][1]['markup']);
-        $this->assertMatchesRegularExpression(
-            '#<img src="/resizer/[a-f0-9]{40}/#',
-            $result['generatedThumbnails'][2]['markup']
-        );
+        $this->assertResizerThumbnail($result['generatedThumbnails'][0]['markup']);
+        $this->assertBrokenThumbnail($result['generatedThumbnails'][1]['markup']);
+        $this->assertResizerThumbnail($result['generatedThumbnails'][2]['markup']);
     }
 
     /**
-     * A media item whose name falls outside the media library's own path rules is listed by
-     * the library but cannot be renamed, moved, previewed in the sidebar or cropped. Its
-     * grid thumbnail is now the same broken thumbnail the widget already renders for an
-     * item it cannot resize, and it does not cost its neighbours theirs.
+     * Such an item is listed by the library but cannot be renamed, moved, previewed or
+     * cropped either, so it gets the broken thumbnail rather than costing the batch.
      */
     public function testAnItemOutsideTheLibraryPathRulesOnlyLosesItsOwnThumbnail()
     {
@@ -158,11 +144,8 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
         $result = $this->makeManager()->onGenerateThumbnails();
 
         $this->assertCount(2, $result['generatedThumbnails']);
-        $this->assertStringContainsString('icon-chain-broken', $result['generatedThumbnails'][0]['markup']);
-        $this->assertMatchesRegularExpression(
-            '#<img src="/resizer/[a-f0-9]{40}/#',
-            $result['generatedThumbnails'][1]['markup']
-        );
+        $this->assertBrokenThumbnail($result['generatedThumbnails'][0]['markup']);
+        $this->assertResizerThumbnail($result['generatedThumbnails'][1]['markup']);
     }
 
     public static function refusedThumbnailPathProvider(): array
@@ -181,8 +164,7 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
     }
 
     /**
-     * A path the handler refuses must not leave a resized file behind, whichever of the
-     * handler and the resizer refuses it first.
+     * Whichever of the handler and the resizer refuses it first.
      */
     public function testARefusedThumbnailPathPublishesNothing()
     {
@@ -209,8 +191,7 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
     }
 
     /**
-     * Invalidation case: ordinary media items must still get a thumbnail, including items
-     * in nested folders and items with spaces or non-latin characters in their names.
+     * Invalidation case.
      *
      * @dataProvider acceptedThumbnailPathProvider
      */
@@ -221,10 +202,7 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
         $result = $this->makeManager()->onGenerateThumbnails();
 
         $this->assertEquals('thumbnail', $result['generatedThumbnails'][0]['id']);
-        $this->assertMatchesRegularExpression(
-            '#<img src="/resizer/[a-f0-9]{40}/#',
-            $result['generatedThumbnails'][0]['markup']
-        );
+        $this->assertResizerThumbnail($result['generatedThumbnails'][0]['markup']);
 
         preg_match('#/resizer/([a-f0-9]{40})/([^"]+)#', $result['generatedThumbnails'][0]['markup'], $matches);
 
@@ -250,14 +228,7 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
      */
     public function testCropRefusesSourcesOutsideTheirSourceFolder(string $sourceUrl)
     {
-        Request::merge([
-            'img' => $sourceUrl,
-            'path' => '/winter.png',
-            'selection' => ['x' => 0, 'y' => 0, 'w' => 32, 'h' => 32],
-            'selectionMode' => MediaManager::SELECTION_MODE_NORMAL,
-            'selectionWidth' => '32',
-            'selectionHeight' => '32',
-        ]);
+        $this->mergeCropRequest($sourceUrl, '/winter.png');
 
         try {
             $this->makeManager()->onCropImage();
@@ -287,21 +258,13 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
     }
 
     /**
-     * Invalidation case: an ordinary crop of a media item must still work, including items
-     * in nested folders and items with spaces or non-latin characters in their names.
+     * Invalidation case.
      *
      * @dataProvider acceptedCropSourceProvider
      */
     public function testCropStillCropsMediaItems(string $sourceUrl, string $path, string $expectedPath)
     {
-        Request::merge([
-            'img' => $sourceUrl,
-            'path' => $path,
-            'selection' => ['x' => 0, 'y' => 0, 'w' => 32, 'h' => 32],
-            'selectionMode' => MediaManager::SELECTION_MODE_NORMAL,
-            'selectionWidth' => '32',
-            'selectionHeight' => '32',
-        ]);
+        $this->mergeCropRequest($sourceUrl, $path);
 
         $result = $this->makeManager()->onCropImage();
 
@@ -337,6 +300,29 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
         ];
     }
 
+    protected function mergeCropRequest(string $sourceUrl, string $path): void
+    {
+        Request::merge([
+            'img' => $sourceUrl,
+            'path' => $path,
+            'selection' => ['x' => 0, 'y' => 0, 'w' => 32, 'h' => 32],
+            'selectionMode' => MediaManager::SELECTION_MODE_NORMAL,
+            'selectionWidth' => '32',
+            'selectionHeight' => '32',
+        ]);
+    }
+
+    protected function assertResizerThumbnail(string $markup): void
+    {
+        $this->assertMatchesRegularExpression('#<img src="/resizer/[a-f0-9]{40}/#', $markup);
+    }
+
+    protected function assertBrokenThumbnail(string $markup): void
+    {
+        $this->assertStringNotContainsString('/resizer/', $markup, 'a refused path was given a resizer URL');
+        $this->assertStringContainsString('icon-chain-broken', $markup);
+    }
+
     protected function thumbnailRequest(string $path): array
     {
         return [
@@ -349,19 +335,39 @@ class MediaManagerThumbnailPathTest extends PluginTestCase
     }
 
     /**
-     * These four hand `path` straight to setCurrentFolder(string $path), which a request that
-     * omits the key would otherwise reach as null. See wintercms/winter#1582.
+     * These four hand `path` to setCurrentFolder(string $path), so a request that omits it,
+     * or sends something that is not a string, acts on the library root rather than raising.
+     * See wintercms/winter#1582.
      *
      * @dataProvider folderHandlerProvider
      */
-    public function testAHandlerThatIsSentNoPathFallsBackToTheLibraryRoot(string $handler, array $data)
+    public function testAFolderHandlerWithoutAUsablePathActsOnTheLibraryRoot(string $handler, array $data)
     {
-        Request::replace($data);
+        foreach ([[], ['path' => ''], ['path' => '   '], ['path' => ['x']], ['path' => ['a' => 'b']]] as $path) {
+            Request::replace($data + $path);
+
+            $manager = $this->makeManager();
+            $manager->$handler();
+
+            $this->assertSame(
+                '/',
+                self::callProtectedMethod($manager, 'getCurrentFolder'),
+                sprintf('%s should act on the library root for %s', $handler, json_encode($path))
+            );
+        }
+    }
+
+    /**
+     * @dataProvider folderHandlerProvider
+     */
+    public function testAFolderHandlerStillHonoursThePathItIsGiven(string $handler, array $data)
+    {
+        Request::replace($data + ['path' => '/nested folder']);
 
         $manager = $this->makeManager();
         $manager->$handler();
 
-        $this->assertSame('/', self::callProtectedMethod($manager, 'getCurrentFolder'), 'the request should act on the library root');
+        $this->assertSame('/nested folder', self::callProtectedMethod($manager, 'getCurrentFolder'));
     }
 
     public static function folderHandlerProvider(): array

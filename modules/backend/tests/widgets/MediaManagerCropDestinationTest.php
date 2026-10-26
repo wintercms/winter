@@ -61,9 +61,6 @@ class MediaManagerCropDestinationTest extends PluginTestCase
     }
 
     /**
-     * The extension of the stored crop comes from the image the resizer produced, not from
-     * the request.
-     *
      * @dataProvider requestedDestinationProvider
      */
     public function testCropStoresTheProducedImageFormat(string $destination, string $expectedPath)
@@ -133,10 +130,7 @@ class MediaManagerCropDestinationTest extends PluginTestCase
     }
 
     /**
-     * Out of the box the allowlist covers every format the resizer can produce, so stock
-     * configuration never refuses the crop of an image the Media Manager can open. A site
-     * that has narrowed the list will find crops to the formats it removed refused, in the
-     * same way that uploading and renaming them are already refused.
+     * So stock configuration never refuses the crop of an image the Media Manager can open.
      */
     public function testTheStockExtensionAllowlistCoversEveryFormatTheResizerProduces()
     {
@@ -176,9 +170,8 @@ class MediaManagerCropDestinationTest extends PluginTestCase
     }
 
     /**
-     * The image to crop is named by its URL, so that the resizer resolves it through its
-     * configured sources. The resizer will also take a disk and a path directly, for a
-     * caller that already holds both, and a request is not such a caller.
+     * The resizer also takes a disk and path directly, for a caller that already holds
+     * both. A request is not such a caller.
      *
      * @dataProvider refusedSourceProvider
      */
@@ -208,16 +201,14 @@ class MediaManagerCropDestinationTest extends PluginTestCase
     }
 
     /**
-     * Invalidation case: ordinary cropping must keep working, in the library root and in a
-     * nested folder, for names containing spaces and non-latin characters, and repeated
-     * crops must keep deduplicating rather than overwriting.
+     * Invalidation case: a legitimate crop still writes the selection it was given, and a
+     * repeat crop deduplicates rather than overwriting.
      */
     public function testCropStillWritesLegitimateImages()
     {
         $result = $this->crop('/storage/temp/app/media/winter.png', '/winter.png');
 
         $this->assertEquals('/winter_cropped.png', $this->normalize($result['path']));
-        $this->assertEquals('winter_cropped.png', basename($this->normalize($result['path'])));
         $this->assertEquals('winter_cropped.png', $result['title']);
         $this->assertEquals([32, 32], array_slice(
             getimagesize(storage_path('app/media/winter_cropped.png')),
@@ -227,25 +218,6 @@ class MediaManagerCropDestinationTest extends PluginTestCase
 
         $again = $this->crop('/storage/temp/app/media/winter.png', '/winter.png');
         $this->assertEquals('/winter_cropped_1.png', $this->normalize($again['path']));
-
-        foreach ([
-            'nested folder/winter.png' => '/nested folder/winter_cropped.png',
-            'winter space.png' => '/winter space_cropped.png',
-            'wîntér ünicode.png' => '/wîntér ünicode_cropped.png',
-        ] as $mediaItem => $expectedPath) {
-            File::copy(
-                base_path('modules/system/tests/fixtures/media/winter.png'),
-                storage_path('app/media/' . $mediaItem)
-            );
-
-            $cropped = $this->crop(
-                '/storage/temp/app/media/' . $mediaItem,
-                '/' . $mediaItem
-            );
-
-            $this->assertEquals($expectedPath, $this->normalize($cropped['path']));
-            $this->assertFileExists(storage_path('app/media' . $expectedPath));
-        }
     }
 
     protected function crop($sourceUrl, $destination): array

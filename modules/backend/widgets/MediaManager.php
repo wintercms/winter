@@ -129,7 +129,7 @@ class MediaManager extends WidgetBase
      */
     public function onGoToFolder(): array
     {
-        $path = Input::get('path', '');
+        $path = $this->getRequestedFolder();
 
         if (Input::get('clearCache')) {
             MediaLibrary::instance()->resetCache();
@@ -201,7 +201,7 @@ class MediaManager extends WidgetBase
     public function onChangeView(): array
     {
         $viewMode = Input::get('view');
-        $path = Input::get('path', '');
+        $path = $this->getRequestedFolder();
 
         $this->setViewMode($viewMode);
         $this->setCurrentFolder($path);
@@ -221,7 +221,7 @@ class MediaManager extends WidgetBase
     public function onSetFilter(): array
     {
         $filter = Input::get('filter');
-        $path = Input::get('path', '');
+        $path = $this->getRequestedFolder();
 
         $this->setFilter($filter);
         $this->setCurrentFolder($path);
@@ -242,7 +242,7 @@ class MediaManager extends WidgetBase
     {
         $sortBy = Input::get('sortBy', $this->getSortBy());
         $sortDirection = Input::get('sortDirection', $this->getSortDirection());
-        $path = Input::get('path', '');
+        $path = $this->getRequestedFolder();
 
         $this->setSortBy($sortBy);
         $this->setSortDirection($sortDirection);
@@ -919,6 +919,17 @@ class MediaManager extends WidgetBase
     /**
      * Sets the provided path as the current folder in the session
      */
+    /**
+     * The folder this request asks to act on, which is the library root unless it names
+     * another. setCurrentFolder() takes a string, and nothing in the request has to be one.
+     */
+    protected function getRequestedFolder(): string
+    {
+        $path = Input::get('path');
+
+        return is_string($path) ? trim($path) : '';
+    }
+
     protected function setCurrentFolder(string $path): void
     {
         $path = MediaLibrary::validatePath($path);
