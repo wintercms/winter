@@ -230,6 +230,41 @@ class CombineAssetsTest extends TestCase
     }
 
     /**
+     * The system UI LESS imports Font Awesome's variables from `node_modules`, so any
+     * asset that pulls in `modules/backend/assets/less/core/boot.less` reaches
+     * `node_modules` through a file in another allowed root. That import must resolve.
+     */
+    public function testLessCompilerAllowsNodeModulesImportFromAllowedRoot()
+    {
+        $themeDir = $this->makeTempThemeDir();
+        $suffix = bin2hex(random_bytes(4));
+        $packageDir = base_path('node_modules/wn-import-root-test-' . $suffix);
+        $sharedDir = plugins_path('wn-import-root-test-' . $suffix);
+        mkdir($packageDir, 0777, true);
+        mkdir($sharedDir, 0777, true);
+        file_put_contents($packageDir . '/variables.less', '@package-color: green;');
+        file_put_contents(
+            $sharedDir . '/shared.less',
+            '@import "' . str_replace('\\', '/', $packageDir) . '/variables.less"; .shared-marker { color: @package-color; }'
+        );
+        file_put_contents(
+            $themeDir . '/assets/less/main.less',
+            '@import "' . str_replace('\\', '/', $sharedDir) . '/shared.less"; .main-marker { color: blue; }'
+        );
+
+        try {
+            $css = $this->compileLessTo($themeDir, 'assets/less/main.less');
+            $this->assertStringContainsString('shared-marker', $css);
+            $this->assertStringContainsString('green', $css);
+            $this->assertStringContainsString('main-marker', $css);
+        } finally {
+            \File::deleteDirectory($packageDir);
+            \File::deleteDirectory($sharedDir);
+            \File::deleteDirectory($themeDir);
+        }
+    }
+
+    /**
      * Regression for GHSA-2223-f22x-24cq. A writable theme `.js` asset containing
      * `=include ../../../.env` must not disclose server files through the combiner,
      * whose output is served unauthenticated via the `combine/{file}` route.

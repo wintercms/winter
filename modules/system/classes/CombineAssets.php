@@ -140,6 +140,8 @@ class CombineAssets
         // always allowed implicitly; this list adds the cross-tree roots that
         // legitimate themes/plugins/modules actually import from (e.g. a plugin
         // importing a module asset, or a theme importing its own ../vendor).
+        // `node_modules` is included because the system UI LESS imports Font
+        // Awesome's variables from it.
         $allowedImportRoots = [
             themes_path(),
             plugins_path(),
