@@ -93,6 +93,7 @@ class ServiceProvider extends ModuleServiceProvider
             $combiner->registerBundle('~/modules/backend/widgets/table/assets/js/build.js');
             $combiner->registerBundle('~/modules/backend/assets/vendor/ace-codeeditor/build.js');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/js/mediamanager-browser.js');
+            $combiner->registerBundle('~/modules/backend/widgets/calendar/assets/less/calendar.less');
             $combiner->registerBundle('~/modules/backend/widgets/mediamanager/assets/less/mediamanager.less');
             $combiner->registerBundle('~/modules/backend/widgets/reportcontainer/assets/less/reportcontainer.less');
             $combiner->registerBundle('~/modules/backend/widgets/table/assets/less/table.less');
