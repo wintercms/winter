@@ -238,6 +238,9 @@ class CombineAssetsTest extends TestCase
     {
         $themeDir = $this->makeTempThemeDir();
         $suffix = bin2hex(random_bytes(4));
+        // The npm, Mix and Vite command tests skip themselves when node_modules is
+        // absent, so a node_modules left behind here would make them run.
+        $createdNodeModules = !is_dir(base_path('node_modules'));
         $packageDir = base_path('node_modules/wn-import-root-test-' . $suffix);
         $sharedDir = plugins_path('wn-import-root-test-' . $suffix);
         mkdir($packageDir, 0777, true);
@@ -258,7 +261,7 @@ class CombineAssetsTest extends TestCase
             $this->assertStringContainsString('green', $css);
             $this->assertStringContainsString('main-marker', $css);
         } finally {
-            \File::deleteDirectory($packageDir);
+            \File::deleteDirectory($createdNodeModules ? base_path('node_modules') : $packageDir);
             \File::deleteDirectory($sharedDir);
             \File::deleteDirectory($themeDir);
         }
