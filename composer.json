@@ -83,7 +83,7 @@
             "advisories": {
                 "ignore": {
                     "laravel/framework": {
-                        "on-block": false,
+                        "on-audit": false,
                         "reason": "Winter CMS 1.2 requires Laravel 9"
                     }
                 }
