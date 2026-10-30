@@ -12,8 +12,13 @@ if (empty($argv[1])) {
     exit(1);
 }
 
-// Get a changelist of files from Git for this PR.
-$fileList = shell_exec('git diff --name-only --diff-filter=ACMR origin/' . $argv[1] . ' HEAD');
+// Get a changelist of files from Git for this PR. The base branch is escaped: it is
+// caller-supplied text, and a ref name may legally contain shell metacharacters.
+$fileList = shell_exec(
+    'git diff --name-only --diff-filter=ACMR '
+    . escapeshellarg('origin/' . $argv[1])
+    . ' HEAD'
+);
 $files = array_filter(explode("\n", $fileList));
 
 // no changes found in diff, early exit

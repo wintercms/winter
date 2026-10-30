@@ -12,8 +12,12 @@ if (empty($argv[1])) {
     exit(1);
 }
 
-// Get a changelist of files from Git for this push.
-$fileList = shell_exec('git show --name-only --pretty="" --diff-filter=ACMR ' . $argv[1]);
+// Get a changelist of files from Git for this push. The commit is escaped: it is
+// caller-supplied text, and nothing here guarantees it is a bare object name.
+$fileList = shell_exec(
+    'git show --name-only --pretty="" --diff-filter=ACMR '
+    . escapeshellarg($argv[1])
+);
 $files = array_filter(explode("\n", $fileList));
 
 // no changes found in diff, early exit

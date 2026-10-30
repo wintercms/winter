@@ -30,13 +30,20 @@ jobs:
           extensions: curl, fileinfo, gd, mbstring, openssl, pdo, pdo_sqlite, sqlite3, xml, zip
           tools: phpcs
 
+      # Both values are bound to the environment and passed as quoted shell variables
+      # rather than interpolated into `run:`, where a `${{ }}` expression is substituted
+      # textually before any shell exists.
       - name: Run code quality checks (on push)
         if: github.event_name == 'push'
-        run: ./.github/workflows/utilities/phpcs-push ${{ github.sha }}
+        env:
+          COMMIT_SHA: ${{ github.sha }}
+        run: ./.github/workflows/utilities/phpcs-push "$COMMIT_SHA"
 
       - name: Run code quality checks (on pull request)
         if: github.event_name == 'pull_request'
-        run: ./.github/workflows/utilities/phpcs-pr ${{ github.base_ref }}
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: ./.github/workflows/utilities/phpcs-pr "$BASE_REF"
   codeQualityJS:
     runs-on: ubuntu-latest
     name: JavaScript
