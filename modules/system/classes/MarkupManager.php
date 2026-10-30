@@ -63,6 +63,7 @@ class MarkupManager
         'mixin',
         'resolver',
         'sortby',
+        'whenmissing',
     ];
 
     /**
@@ -384,8 +385,8 @@ class MarkupManager
      *
      * Three ways that happens: the Macroable mutators bind a callable to a name the same
      * wildcard can then invoke; an argument that is itself a callable value is executed or
-     * stored by whatever it is passed to, whether or not the parameter is typed; and a method
-     * declaring a callable parameter runs even a plain string passed to it. None has a
+     * stored by whatever it is passed to, whether or not the parameter is typed; and a
+     * parameter the callee would invoke runs even a plain string passed to it. None has a
      * legitimate use from a template, since Twig cannot produce a PHP callable of its own.
      *
      * @param callable $method The wildcard resolved to a concrete callable
@@ -413,20 +414,25 @@ class MarkupManager
         // (Str::createUuidsUsing(), Url::setSessionResolver()) store the callable to run later,
         // so a type-driven check misses both.
         foreach ($arguments as $position => $argument) {
-            if ($this->hasCallableValue($argument, !$this->isCallbackPosition($shape, $position))) {
-                throw new SecurityNotAllowedMethodError(
-                    sprintf('Passing a callback to "%s" through a wildcard markup extension is blocked.', $name),
-                    $origin,
-                    $name
-                );
+            $isCallbackPosition = $this->isCallbackPosition($shape, $position);
+
+            if ($this->hasCallableValue($argument, !$isCallbackPosition)) {
+                $this->throwWildcardCallbackError($name, $origin);
+            }
+
+            // A string is ordinary data to most helpers - str_replace('trim', ...) and
+            // array_get($x, 'count') both pass one that is_callable() - so it is refused only
+            // where the callee could invoke it. Not every untyped callback is a hybrid that
+            // ignores strings the way useAsCallable() does: Str::createUuidsUsingSequence()
+            // calls its untyped $whenMissing outright. A name the callee reads as data still
+            // works, because a column or key name is not a PHP callable.
+            if ($isCallbackPosition && is_string($argument) && is_callable($argument)) {
+                $this->throwWildcardCallbackError($name, $origin);
             }
         }
 
-        // Strings are ordinary data to most helpers - str_replace('trim', ...) and
-        // array_get($x, 'count') both pass one that is_callable() - so a string is refused
-        // only where the callee declares the parameter as a callable and so would run it.
-        // Laravel's untyped hybrids never run a string: useAsCallable() is
-        // `!is_string($value) && is_callable($value)`.
+        // A parameter declared as a callable runs even a plain string, so nothing at all may
+        // be passed there.
         foreach ($shape['callable'] as $position) {
             // A variadic parameter declares every position from its own onwards, so a callable
             // one cannot be checked at the index it was recorded under alone: `?callable ...$fns`
@@ -435,14 +441,24 @@ class MarkupManager
 
             for ($index = $position; $index <= $last; $index++) {
                 if (($arguments[$index] ?? null) !== null) {
-                    throw new SecurityNotAllowedMethodError(
-                        sprintf('Passing a callback to "%s" through a wildcard markup extension is blocked.', $name),
-                        $origin,
-                        $name
-                    );
+                    $this->throwWildcardCallbackError($name, $origin);
                 }
             }
         }
+    }
+
+    /**
+     * @param string $name The resolved method name
+     * @param string $origin The class the method was resolved on, or the name again
+     * @throws SecurityNotAllowedMethodError
+     */
+    protected function throwWildcardCallbackError(string $name, string $origin): void
+    {
+        throw new SecurityNotAllowedMethodError(
+            sprintf('Passing a callback to "%s" through a wildcard markup extension is blocked.', $name),
+            $origin,
+            $name
+        );
     }
 
     /**
@@ -534,10 +550,11 @@ class MarkupManager
      * - `callable`: the positions declared as `callable`/`Closure`, i.e. the ones that would
      *   execute even a plain string;
      * - `callback`: those, plus the positions the callee *names* as a callback. Laravel leaves
-     *   its hybrid callbacks untyped, so the name is the only thing left to go on -
-     *   `Arr::sort($array, $callback)`, `Arr::sortDesc($array, $callback)` and
-     *   `Arr::keyBy($array, $keyBy)` are the three in the wildcard targets, and they are also
-     *   the three that run an array callable;
+     *   its untyped callbacks to the parameter name - `Arr::sort($array, $callback)`,
+     *   `Arr::sortDesc($array, $callback)` and `Arr::keyBy($array, $keyBy)` are hybrids that
+     *   run an array callable but read a string as a key, while
+     *   `Str::createUuidsUsingSequence($sequence, $whenMissing)` and its random-string twin
+     *   run a string too;
      * - `declared`: how many parameters the signature describes, or null if it could not be
      *   read. An argument beyond that is treated as a callback position, since nothing says
      *   what the callee does with it.

@@ -26,6 +26,11 @@ class SecurityPolicyDatabaseTest extends PluginTestCase
      */
     protected const FOREIGN_SECRET = 'CANARY_PASSWORD_HASH';
 
+    /**
+     * @var string Canary a template tries to persist into the theme data row.
+     */
+    protected const ROW_CANARY = 'CANARY_PERSISTED_VALUE';
+
     protected $theme;
 
     public function setUp(): void
@@ -186,6 +191,34 @@ class SecurityPolicyDatabaseTest extends PluginTestCase
         } finally {
             QueryBuilder::flushMacros();
         }
+    }
+
+    // __set reaches setAttribute() and forceSave() reaches the write, both under names the
+    // blocklist did not carry, so the pair persisted an arbitrary column value.
+    public function testCannotPersistAnArbitraryAttributeThroughMagicSetAndForceSave()
+    {
+        $this->assertBlockedAndUnchanged('
+            {%- set data = this.theme.getCustomData() -%}
+            {%- set _ = data.__set("injected", "' . static::ROW_CANARY . '") -%}
+            {%- set _ = data.forceSave() -%}
+        ');
+
+        $this->assertFalse(
+            DB::table('cms_theme_data')->where('data', 'like', '%' . static::ROW_CANARY . '%')->exists()
+        );
+    }
+
+    // A collection's higher-order proxy is none of the classes the policy lists, so every
+    // blocklist is skipped for the method it forwards to each row.
+    public function testCannotDeleteRowsThroughAHigherOrderProxy()
+    {
+        DB::table('cms_theme_data')->insert(['theme' => 'other-theme', 'data' => '{}']);
+
+        $this->assertBlockedAndUnchanged('
+            {%- set _ = this.theme.getCustomData().newQuery().get().__get("each").delete() -%}
+        ');
+
+        $this->assertEquals(1, DB::table('cms_theme_data')->where('theme', 'other-theme')->count());
     }
 
     //

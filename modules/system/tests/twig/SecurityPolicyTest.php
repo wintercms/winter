@@ -33,6 +33,11 @@ class SecurityPolicyTestComponent extends ComponentBase
 
 class SecurityPolicyTest extends TestCase
 {
+    /**
+     * @var string Canary planted in the process environment, which a disclosure would carry.
+     */
+    protected const PROBE_SECRET = 'CANARY_ENVIRONMENT_VALUE';
+
     protected Environment $twig;
 
     public function testCannotGetTwigInstanceFromCmsController()
@@ -1107,6 +1112,208 @@ class SecurityPolicyTest extends TestCase
         ));
 
         $this->assertEquals('4', $result);
+    }
+
+    /**
+     * Not every untyped callback is a hybrid that ignores strings the way useAsCallable()
+     * does. Str::createUuidsUsingSequence($sequence, $whenMissing) leaves $whenMissing untyped
+     * and calls it outright, so a string naming a function runs on the next str_uuid(), with
+     * the whole process environment as the return value.
+     *
+     * @dataProvider untypedWildcardCallbackProvider
+     */
+    public function testCannotRunAStringCallableThroughAnUntypedWildcardCallback(string $source)
+    {
+        putenv('SECURITY_POLICY_PROBE=' . static::PROBE_SECRET);
+        SandboxCanary::reset();
+        $error = null;
+        $output = '';
+
+        try {
+            $output = $this->renderTwigInCmsController($source);
+        } catch (\Throwable $ex) {
+            $error = $ex->getPrevious() ?: $ex;
+        } finally {
+            putenv('SECURITY_POLICY_PROBE');
+            \Illuminate\Support\Str::createUuidsNormally();
+            \Illuminate\Support\Str::createRandomStringsNormally();
+        }
+
+        $this->assertStringNotContainsString(static::PROBE_SECRET, $output);
+        $this->assertEquals(0, SandboxCanary::$invocations);
+        $this->assertInstanceOf(\Twig\Sandbox\SecurityNotAllowedMethodError::class, $error);
+    }
+
+    public static function untypedWildcardCallbackProvider()
+    {
+        $canary = str_replace('\\', '\\\\', SandboxCanary::class) . '::invoke';
+
+        return [
+            'a function name' => ['{{ str_create_uuids_using_sequence([], "getenv") }}{{ str_uuid()|json_encode }}'],
+            'a static method' => ['{{ str_create_uuids_using_sequence([], "' . $canary . '") }}{{ str_uuid() }}'],
+            'the random string twin' => ['{{ str_create_random_strings_using_sequence([], "getenv") }}{{ str_random()|json_encode }}'],
+        ];
+    }
+
+    //
+    // Magic accessors — the policy only checks a property *access*, so calling them by name
+    // goes around it
+    //
+
+    // Collection::__get hands back a HigherOrderCollectionProxy, which is none of the classes
+    // the policy lists, so its __call then forwards the next call to every item unchecked.
+    public function testCannotReachAHigherOrderProxyThroughMagicGet()
+    {
+        $model = new \Winter\Storm\Database\Model();
+
+        try {
+            $this->renderTwigInCmsController(
+                '{% set _ = items.__get("each").setAttribute("pwned", "yes") %}',
+                ['items' => collect([$model])]
+            );
+            $this->fail('The sandbox allowed a higher-order proxy to be built.');
+        } catch (\Twig\Sandbox\SecurityNotAllowedMethodError $ex) {
+            $this->assertEquals('__get', $ex->getMethodName());
+        }
+
+        $this->assertNull($model->pwned);
+    }
+
+    // Model::__set reaches setAttribute(), which the policy blocks under its own name.
+    public function testCannotWriteAModelAttributeThroughMagicSet()
+    {
+        $model = new \Winter\Storm\Database\Model();
+
+        try {
+            $this->renderTwigInCmsController(
+                '{% set _ = model.__set("pwned", "yes") %}',
+                ['model' => $model]
+            );
+            $this->fail('The sandbox allowed a magic property write.');
+        } catch (\Twig\Sandbox\SecurityNotAllowedMethodError $ex) {
+            $this->assertEquals('__set', $ex->getMethodName());
+        }
+
+        $this->assertNull($model->pwned);
+    }
+
+    // Invalidation: blocking the accessors by name must not touch ordinary property reads,
+    // which Twig performs directly and the policy checks as properties.
+    public function testReadingAModelAttributeStillWorks()
+    {
+        $model = new \Winter\Storm\Database\Model();
+        $model->title = 'readable';
+
+        $result = trim($this->renderTwigInCmsController('{{- model.title -}}', ['model' => $model]));
+
+        $this->assertEquals('readable', $result);
+    }
+
+    //
+    // Model writes that do not go through save(), and the callbacks a model can be handed
+    //
+
+    /**
+     * Storm's validation trait adds a second entry point to the same write: forceSave() skips
+     * validation and hands straight to saveInternal().
+     *
+     * @dataProvider modelWriteMethodProvider
+     */
+    public function testCannotSaveAModelThroughTheValidationEntryPoints(string $source)
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController($source, ['model' => new \Cms\Models\ThemeData()]);
+    }
+
+    public static function modelWriteMethodProvider()
+    {
+        return [
+            'forceSave' => ['{% set _ = model.forceSave() %}'],
+            'saveInternal' => ['{% set _ = model.saveInternal() %}'],
+        ];
+    }
+
+    /**
+     * These two run the callback they are handed immediately, so a string naming any PHP
+     * function is executed - the same shape as the already-blocked withoutEvents().
+     *
+     * @dataProvider callbackRunnerProvider
+     */
+    public function testCannotRunACallableThroughAModelCallbackRunner(string $method)
+    {
+        SandboxCanary::reset();
+        $error = null;
+
+        try {
+            $this->renderTwigInCmsController(
+                '{% set _ = model.' . $method . '("' . str_replace('\\', '\\\\', SandboxCanary::class) . '::invoke") %}',
+                ['model' => new \Cms\Models\ThemeData()]
+            );
+        } catch (\Throwable $ex) {
+            $error = $ex->getPrevious() ?: $ex;
+        }
+
+        $this->assertEquals(0, SandboxCanary::$invocations);
+        $this->assertInstanceOf(\Twig\Sandbox\SecurityNotAllowedMethodError::class, $error);
+    }
+
+    public static function callbackRunnerProvider()
+    {
+        return [
+            'withoutTimestamps' => ['withoutTimestamps'],
+            'withoutBroadcasting' => ['withoutBroadcasting'],
+        ];
+    }
+
+    /**
+     * A model event registrar stores the callback and the dispatcher resolves it later, so a
+     * "Class@method" string is instantiated and called on an event the policy never sees.
+     *
+     * @dataProvider eventRegistrarProvider
+     */
+    public function testCannotRegisterAModelEventListener(string $source)
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController($source, ['model' => new \Cms\Models\ThemeData()]);
+    }
+
+    public static function eventRegistrarProvider()
+    {
+        $listener = str_replace('\\', '\\\\', SandboxCanary::class) . '@invoke';
+
+        return [
+            'on a database model' => ['{% set _ = model.fetched("' . $listener . '") %}'],
+            'on a halcyon model' => ['{% set _ = this.page.fetched("' . $listener . '") %}'],
+            'saving' => ['{% set _ = model.saving("' . $listener . '") %}'],
+            'validating' => ['{% set _ = model.validating("' . $listener . '") %}'],
+            'observe' => ['{% set _ = model.observe("' . str_replace('\\', '\\\\', SandboxCanary::class) . '") %}'],
+        ];
+    }
+
+    /**
+     * The Halcyon model is the CMS page, layout and partial, and its write surface is wider
+     * than save(): create() and saveInternal() write a template file of their own, offsetSet()
+     * re-targets the one in hand, and setDatasource() decides which theme it lands in.
+     *
+     * @dataProvider halcyonWriteProvider
+     */
+    public function testCannotWriteATemplateThroughTheHalcyonModelsOtherEntryPoints(string $source)
+    {
+        $this->expectException(\Twig\Sandbox\SecurityNotAllowedMethodError::class);
+        $this->renderTwigInCmsController($source);
+    }
+
+    public static function halcyonWriteProvider()
+    {
+        return [
+            'create' => ['{% set _ = this.page.create({fileName: "created", markup: "x"}) %}'],
+            'saveInternal' => ['{% set _ = this.page.newInstance({fileName: "created"}).saveInternal() %}'],
+            'forceSave' => ['{% set _ = this.page.forceSave() %}'],
+            'offsetSet' => ['{% set _ = this.page.offsetSet("fileName", "created.htm") %}'],
+            'offsetUnset' => ['{% set _ = this.page.offsetUnset("markup") %}'],
+            'setDatasource' => ['{% set _ = this.page.setDatasource("other") %}'],
+            'on' => ['{% set _ = this.page.on("other") %}'],
+        ];
     }
 
     //

@@ -100,6 +100,35 @@ class ControllerSandboxTest extends TestCase
     }
 
     /**
+     * CodeBase::__call hands anything it does not implement to the controller, and the
+     * controller gives one out through getPageObject(), so the page code object is a second
+     * route to the methods blocked on the controller itself.
+     *
+     * @dataProvider pageObjectForwardProvider
+     */
+    public function testCannotReachTheControllerThroughThePageCodeObject(string $markup, string $method)
+    {
+        $this->makePage($method, '/' . $method, $markup);
+
+        try {
+            $this->renderUrl('/' . $method);
+            $this->fail('The sandbox allowed the page code object to forward to the controller.');
+        } catch (SecurityNotAllowedMethodError $ex) {
+            $this->assertEquals($method, $ex->getMethodName());
+        }
+    }
+
+    public static function pageObjectForwardProvider()
+    {
+        return [
+            // The policy lower-cases a method name before matching it, so that is the name the
+            // error carries.
+            'getLoader' => ["{{ this.controller.getPageObject().getLoader() ? 'LOADER' : 'none' }}", 'getloader'],
+            'renderPartial' => ["{{ this.controller.getPageObject().renderPartial('greeting') }}", 'renderpartial'],
+        ];
+    }
+
+    /**
      * Invalidation: read-only template usage of the CMS objects must keep working.
      */
     public function testLegitimateTemplateUsageStillRenders()

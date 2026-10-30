@@ -3,6 +3,7 @@
 namespace System\Twig;
 
 use Cms\Classes\CmsCompoundObject;
+use Cms\Classes\CodeBase;
 use Cms\Classes\ComponentBase;
 use Cms\Classes\Controller;
 use Cms\Classes\Theme;
@@ -41,8 +42,8 @@ use Winter\Storm\Halcyon\Model as HalcyonModel;
  * to the Eloquent Builder, which forwards to the Query Builder, a method blocked on the
  * Query Builder is also blocked when reached through a Model, Eloquent Builder or Relation.
  * The same applies to the Halcyon model (forwards to the Halcyon Builder) and to components
- * (forward to the CMS controller). This is what makes the blocklist complete instead of a
- * game of whack-a-mole.
+ * and the page code object (both forward to the CMS controller). This is what makes the
+ * blocklist complete instead of a game of whack-a-mole.
  *
  * Every class that a template can reach and whose `__call` (or a thin proxy method) hands the
  * call to another object MUST be registered in $blockedForwarders, otherwise the destination's
@@ -63,6 +64,34 @@ final class SecurityPolicy implements SecurityPolicyInterface
         'forget',
         'flush',
         'pull',
+    ];
+
+    /**
+     * @var string[] The model event registrars, shared by the Eloquent and Halcyon lists.
+     * Each one stores the callback it is handed and the dispatcher resolves it later, so a
+     * `Class@method` string is instantiated and called on an event the policy never sees.
+     */
+    protected const MODEL_EVENT_REGISTRARS = [
+        'observe',
+        'retrieved',
+        'fetching',
+        'fetched',
+        'creating',
+        'created',
+        'updating',
+        'updated',
+        'saving',
+        'saved',
+        'deleting',
+        'deleted',
+        'restoring',
+        'restored',
+        'softDeleted',
+        'forceDeleting',
+        'forceDeleted',
+        'replicating',
+        'validating',
+        'validated',
     ];
 
     /**
@@ -90,6 +119,14 @@ final class SecurityPolicy implements SecurityPolicyInterface
             '__call',
             '__callStatic',
             '__invoke',
+
+            // Prevent going around the property policy, which is only consulted for a property
+            // *access*. __get is also an object factory: Collection::__get hands back a
+            // HigherOrderCollectionProxy, whose __call then forwards to every item.
+            '__get',
+            '__set',
+            '__isset',
+            '__unset',
 
             // Prevent Laravel Macroable injection. The query builder aliases Macroable::__call
             // to a *public* macroCall(), which dispatches on the macro name it is handed, so
@@ -137,6 +174,10 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'save',
             'saveQuietly',
             'saveOrFail',
+            // Storm's validation trait adds a second entry point to the same write:
+            // forceSave() skips validation and calls saveInternal() directly
+            'forceSave',
+            'saveInternal',
             'push',
             'pushQuietly',
             'update',
@@ -170,6 +211,11 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'withoutEvents',
             'withoutTouching',
             'withoutTouchingOn',
+            // These two run the callback they are given straight away, so a string naming any
+            // PHP function is executed: `model.withoutTimestamps("phpinfo")`
+            'withoutTimestamps',
+            'withoutTimestampsOn',
+            'withoutBroadcasting',
             // getConnectionResolver returns the DatabaseManager, whose __call proxies raw SQL
             'getConnectionResolver',
             'setConnectionResolver',
@@ -178,6 +224,7 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'getEventDispatcher',
             'setEventDispatcher',
             'unsetEventDispatcher',
+            ...self::MODEL_EVENT_REGISTRARS,
         ],
 
         EloquentBuilder::class => [
@@ -362,6 +409,9 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'makeMany',
         ],
 
+        // The Halcyon model is what a CMS page, layout and partial are, so a template is
+        // always holding one. It mirrors the Eloquent list above: the write surface, the
+        // attribute setters, and the resolvers that decide where the write lands.
         HalcyonModel::class => [
             'fill',
             'setAttribute',
@@ -369,12 +419,33 @@ final class SecurityPolicy implements SecurityPolicyInterface
             'setSettingsAttribute',
             'setFileNameAttribute',
             'save',
+            'saveInternal',
+            'forceSave',
+            'create',
             'push',
             'update',
             'delete',
             'forceDelete',
             'getQuery',
+            'offsetSet',
+            'offsetUnset',
+            // Re-pointing the datasource writes the template into another theme, or reads one
             'getDatasource',
+            'setDatasource',
+            'on',
+            'resolveDatasource',
+            'getDatasourceResolver',
+            'setDatasourceResolver',
+            'unsetDatasourceResolver',
+            // The cache manager hands out the store, the dispatcher fires arbitrary events
+            'getCacheManager',
+            'setCacheManager',
+            'unsetCacheManager',
+            'flushEventListeners',
+            'getEventDispatcher',
+            'setEventDispatcher',
+            'unsetEventDispatcher',
+            ...self::MODEL_EVENT_REGISTRARS,
         ],
 
         HalcyonBuilder::class => [
@@ -447,6 +518,9 @@ final class SecurityPolicy implements SecurityPolicyInterface
         // ComponentBase::__call falls back to $this->controller, and renderPartial() proxies
         // there explicitly, so a component reaches the controller's blocked methods.
         ComponentBase::class => Controller::class,
+        // CodeBase::__call does the same, and the controller hands one out through
+        // getPageObject(), so `this.controller.getPageObject()` is a second route there.
+        CodeBase::class => Controller::class,
     ];
 
     /**
