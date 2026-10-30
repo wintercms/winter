@@ -197,7 +197,12 @@ class ComponentPartial extends Extendable implements CmsObjectContract
      */
     public function getTwigCacheKey()
     {
-        return $this->getFilePath();
+        /*
+         * Twig names the compiled template class after this key and skips its freshness check once that class is
+         * loaded, so a long-running process (such as an Octane worker) would keep rendering the old version after
+         * an edit. Including a hash of the content gives each version its own class.
+         */
+        return $this->getFilePath() . '?' . hash('xxh128', (string) $this->getTwigContent());
     }
 
     /**
