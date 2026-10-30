@@ -33,6 +33,19 @@ class ScopedReorderController extends Controller
     }
 }
 
+/**
+ * A scope that joins a table carrying its own `id` column.
+ */
+class JoinedScopeReorderController extends ScopedReorderController
+{
+    public function reorderExtendQuery($query)
+    {
+        $query
+            ->join('backend_users', 'backend_users.id', '=', 'backend_test_relation_behavior_fixtures.parent_id')
+            ->where('backend_test_relation_behavior_fixtures.parent_id', 1);
+    }
+}
+
 class ReorderControllerScopingTest extends BackendTestCase
 {
     protected RelationBehaviorFixture $offered;
@@ -71,6 +84,19 @@ class ReorderControllerScopingTest extends BackendTestCase
         (new ScopedReorderController)->onReorder();
 
         $this->assertEquals(1, $this->hidden->fresh()->sort_order, 'a record outside the scope must not move');
+    }
+
+    /**
+     * A scope may join another table that also has an `id`, so the key the offered set is read
+     * back with has to be qualified or the query is ambiguous.
+     */
+    public function testAScopeThatJoinsAnotherTableStillReorders(): void
+    {
+        $this->postData(['record_ids' => [$this->offered->id], 'sort_orders' => [4]]);
+
+        (new JoinedScopeReorderController)->onReorder();
+
+        $this->assertEquals(4, $this->offered->fresh()->sort_order);
     }
 
     public function testAnOfferedRecordStillMovesWhenSentBesideOneThatIsNot(): void

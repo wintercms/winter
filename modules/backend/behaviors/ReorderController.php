@@ -129,7 +129,7 @@ class ReorderController extends ControllerBehavior
 
             $offered = $this->reorderScopedQuery()
                 ->whereIn($model->getQualifiedKeyName(), (array) $ids)
-                ->pluck($model->getKeyName())
+                ->pluck($model->getQualifiedKeyName())
                 ->all();
 
             $sortable = [];
@@ -257,10 +257,6 @@ class ReorderController extends ControllerBehavior
     }
 
     /**
-     * Returns all the records from the supplied model.
-     * @return Collection
-     */
-    /**
      * The records this controller offers for reordering, which `reorderExtendQuery()` narrows.
      * The write path resolves through it too, so it cannot reach past what the page lists.
      */
@@ -273,6 +269,10 @@ class ReorderController extends ControllerBehavior
         return $query;
     }
 
+    /**
+     * Returns all the records from the supplied model.
+     * @return Collection
+     */
     protected function getRecords()
     {
         $records = null;

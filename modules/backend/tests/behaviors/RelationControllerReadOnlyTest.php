@@ -449,8 +449,8 @@ class RelationControllerReadOnlyTest extends BackendTestCase
     }
 
     /**
-     * The rule is value-shaped, not type-shaped: anything falsy is dropped, anything truthy is
-     * a restriction and is kept.
+     * `applyExtraConfig()` keeps only `recordUrl` and `recordOnClick`, so a `readOnly` of any
+     * shape is discarded rather than merged.
      *
      * @dataProvider extraConfigDowngradeProvider
      */
