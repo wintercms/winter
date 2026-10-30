@@ -132,9 +132,6 @@ class ReportContainerSecurityTest extends PluginTestCase
         Config::set('cms.backendUri', 'backend');
         Config::set('cms.enableCsrfProtection', false);
 
-        // refusalMessage() reads the reason off the error page, which only carries it in debug.
-        Config::set('app.debug', true);
-
         $this->forgetDashboardCaches();
 
         // registerReportWidgets() is gated on runningInBackend(), false here, so the three config_dashboard.yaml defaults need registering or makeReportWidget() drops them.
@@ -290,15 +287,15 @@ class ReportContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * From the error title, not the body -- the body quotes the surrounding source, messages included.
+     * From the exception, not the body -- the body quotes the surrounding source, messages included.
      */
     protected function refusalMessage($response): string
     {
-        preg_match('/<title>(.*?)<\/title>/s', $response->getContent(), $matches);
+        $message = $response->exception?->getMessage() ?? '';
 
-        $this->assertNotEmpty($matches[1] ?? '', 'The response should report a reason');
+        $this->assertNotEmpty($message, 'The response should report a reason');
 
-        return $matches[1];
+        return $message;
     }
 
     /**
@@ -552,7 +549,7 @@ class ReportContainerSecurityTest extends PluginTestCase
         SystemParameters::set('backend::reportwidgets.default.dashboard', $layout);
     }
 
-    public function widgetCountProvider(): array
+    public static function widgetCountProvider(): array
     {
         return [
             'one widget' => [1],
@@ -563,7 +560,7 @@ class ReportContainerSecurityTest extends PluginTestCase
     /**
      * Every `fields` shape that names no property the container publishes.
      */
-    public function unusablePayloadProvider(): array
+    public static function unusablePayloadProvider(): array
     {
         return [
             'plain string' => ['not a set of values'],
@@ -663,7 +660,7 @@ class ReportContainerSecurityTest extends PluginTestCase
         $this->assertIsInt($stored[reset($added)]['sortOrder'], 'The sort order the container derives must be an integer');
     }
 
-    public function untypedOrderProvider(): array
+    public static function untypedOrderProvider(): array
     {
         return [
             'markup' => [self::INJECTED_MARKUP],

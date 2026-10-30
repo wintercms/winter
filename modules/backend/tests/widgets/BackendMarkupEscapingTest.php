@@ -268,7 +268,7 @@ class BackendMarkupEscapingTest extends PluginTestCase
         $this->assertSame(['lead' => 'He said &quot;hi&quot;'], $styles);
     }
 
-    public function richEditorStyleAttributeProvider(): array
+    public static function richEditorStyleAttributeProvider(): array
     {
         return [
             'image styles' => ['html_style_image', 'data-image-styles'],
