@@ -728,5 +728,4 @@ class RelationControllerScopingTest extends BackendTestCase
             $this->initialisedController($this->operator, 'roles', PivotRelationController::class)
         );
     }
-
 }
