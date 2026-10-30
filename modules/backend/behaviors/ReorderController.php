@@ -127,14 +127,34 @@ class ReorderController extends ControllerBehavior
                 return;
             }
 
-            $model->setSortableOrder($ids, $orders);
+            $offered = $this->reorderScopedQuery()
+                ->whereIn($model->getQualifiedKeyName(), (array) $ids)
+                ->pluck($model->getKeyName())
+                ->all();
+
+            $sortable = [];
+            foreach ((array) $ids as $index => $id) {
+                if (in_array($id, $offered) && isset($orders[$index])) {
+                    $sortable[$id] = $orders[$index];
+                }
+            }
+
+            if (!$sortable) {
+                return;
+            }
+
+            $model->setSortableOrder(array_keys($sortable), array_values($sortable));
         }
         /*
          * Nested set
          */
         elseif ($this->sortMode == 'nested') {
-            $sourceNode = $model->find(post('sourceNode'));
-            $targetNode = post('targetNode') ? $model->find(post('targetNode')) : null;
+            $sourceNode = $this->reorderScopedQuery()->find(post('sourceNode'));
+            $targetNode = post('targetNode') ? $this->reorderScopedQuery()->find(post('targetNode')) : null;
+
+            if (!$sourceNode) {
+                return;
+            }
 
             if ($sourceNode == $targetNode) {
                 return;
@@ -240,13 +260,24 @@ class ReorderController extends ControllerBehavior
      * Returns all the records from the supplied model.
      * @return Collection
      */
+    /**
+     * The records this controller offers for reordering, which `reorderExtendQuery()` narrows.
+     * The write path resolves through it too, so it cannot reach past what the page lists.
+     */
+    protected function reorderScopedQuery()
+    {
+        $query = $this->controller->reorderGetModel()->newQuery();
+
+        $this->controller->reorderExtendQuery($query);
+
+        return $query;
+    }
+
     protected function getRecords()
     {
         $records = null;
         $model = $this->controller->reorderGetModel();
-        $query = $model->newQuery();
-
-        $this->controller->reorderExtendQuery($query);
+        $query = $this->reorderScopedQuery();
 
         if ($this->sortMode == 'simple') {
             $records = $query

@@ -254,6 +254,7 @@ return [
         'selection_confirm_all' => 'This applies to all :total records matching the current filters, not only the ones on this page.',
         'selection_confirm_all_unknown' => 'This applies to every record matching the current filters, not only the ones on this page.',
         'selection_stale' => 'The list has changed since those records were selected. Please check the list and select them again.',
+        'selection_not_supported' => 'This list does not support selecting records.',
         'selection_all_not_supported' => 'This list does not support selecting every record that matches the current filters.',
         'column_switch_true' => 'Yes',
         'column_switch_false' => 'No',

@@ -6,17 +6,19 @@ use Illuminate\Support\Facades\Schema;
 use System\Models\File;
 use Winter\Storm\Database\Model;
 use Winter\Storm\Database\Traits\HasSortableRelations;
+use Winter\Storm\Database\Traits\Sortable;
 
 /**
- * Self-contained model fixture for the relation behavior tests: a sortable hasMany relation to
- * itself, plus a file attachment so the relation's forms carry a nested form widget with AJAX
- * handlers of its own.
+ * Self-contained model fixture for the relation and reorder behavior tests: a sortable hasMany
+ * relation to itself, plus a file attachment so the relation's forms carry a nested form widget
+ * with AJAX handlers of its own. Sortable as a model in its own right, for the reorder tests.
  *
  * Owns its own table so the backend test suite has no dependency on any plugin.
  */
 class RelationBehaviorFixture extends Model
 {
     use HasSortableRelations;
+    use Sortable;
 
     public $table = 'backend_test_relation_behavior_fixtures';
 

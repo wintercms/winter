@@ -193,6 +193,20 @@ class ListsSelectionTest extends PluginTestCase
         $list->getSelectedKeys();
     }
 
+    /**
+     * The same rule on the explicit-ids branch: a list that renders no checkboxes offers no
+     * selection, so `index_onDelete` cannot be handed ids for one.
+     */
+    public function testPageModeRejectedWithoutCheckboxes(): void
+    {
+        $list = $this->makeList(['showCheckboxes' => false]);
+
+        $this->postRequest(['checked' => [1, 2, 3]]);
+
+        $this->expectException(ApplicationException::class);
+        $list->getSelectedKeys();
+    }
+
     public function testSelectedKeysAreReadWithoutLoadingWholeRows(): void
     {
         $list = $this->makeList();
