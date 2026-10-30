@@ -19,10 +19,12 @@ return [
             'online' => 'Online',
             'maintenance' => 'In manutenzione',
             'manage_themes' => 'Gestione temi',
+            'customize_theme' => 'Personalizza tema',
         ]
     ],
     'theme' => [
         'not_found_name' => "Tema ':name' non trovato.",
+        'by_author' => 'Di :name',
         'active' => [
             'not_set' => 'Il tema attivo non è impostato.',
             'not_found' => 'Il tema attivo non è stato trovato.',
@@ -45,6 +47,8 @@ return [
         'homepage_placeholder' => 'URL Sito web',
         'code_label' => 'Codice',
         'code_placeholder' => 'Un codice univoco per questo tema, utilizzato per la distribuzione',
+        'preview_image_label' => 'Immagine di anteprima',
+        'preview_image_placeholder' => 'Il percorso dell\'immagine di anteprima del tema.',
         'dir_name_label' => 'Nome della cartella',
         'dir_name_create_label' => 'La cartella di destinazione del tema',
         'theme_label' => 'Tema',
@@ -88,13 +92,28 @@ return [
         'dir_name_taken' => 'Cartelle di destinazione del tema già esistente.',
         'find_more_themes' => 'Trova nuovi temi',
         'saving' => 'Salvataggio tema in corso...',
-        'return' => 'Ritorna all\'elenco del temi',
+        'return' => 'Ritorna all\'elenco dei temi',
+        'default_description' => 'Tema personalizzato generato per :url',
+        'scaffold' => [
+            'label' => 'Scaffold',
+            'empty' => 'Vuoto',
+            'less' => 'Base (LESS)',
+            'tailwind' => 'Tailwind CSS',
+        ],
     ],
     'maintenance' => [
         'settings_menu' => 'Modalità di manutenzione',
         'settings_menu_description' => 'Configura la pagina da visualizzare in modalità di manutenzione e cambia l\'impostazione.',
         'is_enabled' => 'Abilita modalità di manutenzione',
-        'is_enabled_comment' => 'Se attivo i visitatori del sito vedranno la pagina selezionata sotto.'
+        'is_enabled_comment' => 'Se attivo i visitatori del sito vedranno la pagina selezionata sotto.',
+        'hint' => 'La modalità di manutenzione mostrerà la pagina di manutenzione ai visitatori che non hanno effettuato l\'accesso al pannello di controllo.',
+        'allowed_ips' => [
+            'name' => 'Indirizzi IP consentiti',
+            'description' => 'Indirizzi IP autorizzati a visualizzare il sito mentre la modalità di manutenzione è attiva',
+            'prompt' => 'Aggiungi un indirizzo IP',
+            'ip' => 'Indirizzo IP',
+            'label' => 'Descrizione',
+        ]
     ],
     'page' => [
         'not_found_name' => "Pagina ':name' non trovata",
@@ -113,7 +132,11 @@ return [
         'invalid_url' => 'Formato URL non valido. L\'URL deve iniziare con una barra e può contenere numeri, lettere latine e i seguenti simboli: ._-[]:?|/+*^$',
         'delete_confirm_multiple' => 'Sei sicuro di voler eliminare le pagine selezionate?',
         'delete_confirm_single' => 'Sei sicuro di voler eliminare questa pagina?',
-        'no_layout' => '-- nessun layout --'
+        'no_layout' => '-- nessun layout --',
+        'cms_page' => 'Pagina CMS',
+        'title' => 'Titolo pagina',
+        'url' => 'URL pagina',
+        'file_name' => 'Nome file pagina',
     ],
     'layout' => [
         'not_found_name' => "Il layout ':name' non è stato trovato",
@@ -176,7 +199,15 @@ return [
         'open_searchbox' => 'Apri casella di ricerca',
         'close_searchbox'  => 'Chiudi casella di ricerca',
         'open_replacebox' => 'Apri casella di sostituzione',
-        'close_replacebox'  => 'Chiudi casella di sostituzione'
+        'close_replacebox'  => 'Chiudi casella di sostituzione',
+        'commit' => 'Registra',
+        'reset' => 'Reimposta',
+        'commit_confirm' => 'Sei sicuro di voler registrare le tue modifiche a questo file nel filesystem? Questo sovrascriverà il file esistente nel filesystem',
+        'reset_confirm' => 'Sei sicuro di voler reimpostare questo file alla copia presente nel filesystem? Questo lo sostituirà completamente con il file presente nel filesystem',
+        'committing' => 'Registrazione in corso...',
+        'resetting' => 'Reimpostazione in corso...',
+        'commit_success' => 'Il :type è stato registrato nel filesystem',
+        'reset_success' => 'Il :type è stato reimpostato alla versione presente nel filesystem'
     ],
     'asset' => [
         'menu_label' => 'Assets',
@@ -196,7 +227,7 @@ return [
         'invalid_path' => 'Il percorso può contenere solo numeri, lettere latine, spazi e i simboli seguenti: ._-/',
         'error_deleting_file' => 'Errore durante l\'eliminazione del file :name.',
         'error_deleting_dir_not_empty' => 'Errore durante l\'eliminazione della cartella :name. La cartella non è vuota.',
-        'error_deleting_dir' => 'Errore durante l\'eliminazinoe della cartella :name.',
+        'error_deleting_dir' => 'Errore durante l\'eliminazione della cartella :name.',
         'invalid_name' => 'Il nome può contenere solo numeri, lettere latine, spazi e i simboli seguenti: ._-',
         'original_not_found' => 'Il file o la cartella originali non sono stati trovati',
         'already_exists' => 'Un file o cartella con questo nome è già esistente',
@@ -214,6 +245,8 @@ return [
         'error_moving_file' => 'Errore durante lo spostamento del file :file',
         'error_moving_directory' => 'Errore durante lo spostamento della cartella :dir',
         'error_deleting_directory' => 'Errore durante l\'eliminazione della cartella originale :dir',
+        'no_list_records' => 'Nessun file trovato',
+        'delete_confirm' => 'Sei sicuro di voler eliminare i file o le cartelle selezionati?',
         'path' => 'Percorso'
     ],
     'component' => [
@@ -226,21 +259,35 @@ return [
         'invalid_request' => 'Il template non può essere salvato a causa di dati dei componenti non validi.',
         'no_records' => 'Nessun componente trovato',
         'not_found' => "Il componente ':name' non è stato trovato.",
-        'method_not_found' => "Il componente ':name' non contiene il metodo ':method'."
+        'no_default_partial' => "Questo componente non ha una vista parziale 'default'",
+        'method_not_found' => "Il componente ':name' non contiene il metodo ':method'.",
+        'soft_component' => 'Componente soft',
+        'soft_component_description' => 'Questo componente è mancante ma è facoltativo.'
     ],
     'template' => [
         'invalid_type' => 'Tipo di template sconosciuto.',
         'not_found' => 'Il template richiesto non è stato trovato.',
-        'saved'=> 'Il template è stato salvato con successo'
+        'saved'=> 'Il template è stato salvato con successo',
+        'no_list_records' => 'Nessun record trovato',
+        'delete_confirm' => 'Sei sicuro di voler eliminare i template selezionati?',
+        'order_by' => 'Ordina per',
+        'type_not_permitted' => 'Devi avere il permesso ":permission" per gestire :type'
     ],
     'permissions' => [
         'name' => 'Cms',
         'manage_content' => 'Gestisci contenuti',
+        'manage_content_comment' => 'Questa autorizzazione deve essere assegnata solo a utenti fidati, perché consente l\'accesso diretto ai file di contenuti del tema.',
         'manage_assets' => 'Gestisci assets',
+        'manage_assets_comment' => 'Questa autorizzazione deve essere assegnata solo a utenti fidati, perché consente l\'accesso diretto ai file di assets del tema, che vengono combinati e serviti pubblicamente.',
         'manage_pages' => 'Gestisci pagine',
-        'manage_layouts' => 'Gesstisci layouts',
+        'manage_pages_comment' => 'Questa autorizzazione deve essere assegnata solo a utenti fidati, perché consente l\'accesso diretto ai file di contenuto delle pagine del tema, incluso il codice PHP se abilitato.',
+        'manage_layouts' => 'Gestisci layouts',
+        'manage_layouts_comment' => 'Questa autorizzazione deve essere assegnata solo a utenti fidati, perché consente l\'accesso diretto ai file di layout del tema, incluso il codice PHP se abilitato.',
         'manage_partials' => 'Gestisci viste parziali',
+        'manage_partials_comment' => 'Questa autorizzazione deve essere assegnata solo a utenti fidati, perché consente l\'accesso diretto ai file delle viste parziali del tema, incluso il codice PHP se abilitato.',
         'manage_themes' => 'Gestisci temi',
+        'manage_themes_comment' => 'Questa autorizzazione deve essere assegnata solo a utenti fidati, perché consente all\'utente di aggiungere nuovi temi, modificare il tema esistente o eliminare completamente i temi.',
+        'manage_theme_options' => 'Configura le opzioni di personalizzazione del tema attivo',
     ],
     'theme_log' => [
         'hint' => "Questo registro mostra lo storico delle modifiche effettuate al tema dagli amministratori nell'area di backend.",

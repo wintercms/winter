@@ -1,8 +1,10 @@
 <?php namespace Backend\Traits;
 
 use Lang;
+use Str;
 use Request;
 use ApplicationException;
+use Backend\Classes\WidgetManager;
 
 /**
  * Inspectable Container Trait
@@ -27,6 +29,13 @@ trait InspectableContainer
         $className = trim(Request::input('inspectorClassName'));
         if (!$className) {
             throw new ApplicationException('The inspectable class name is not specified.');
+        }
+
+        // Resolve before the name is used: class_uses_recursive() below autoloads it, and the
+        // reflection after that constructs it.
+        $offered = array_map(fn ($class) => strtolower(Str::normalizeClassName($class)), $this->listInspectableClasses());
+        if (!in_array(strtolower(Str::normalizeClassName($className)), $offered, true)) {
+            throw new ApplicationException('The options cannot be loaded for the specified class.');
         }
 
         $traitFound = in_array('System\Traits\PropertyContainer', class_uses_recursive($className));
@@ -85,5 +94,23 @@ trait InspectableContainer
         return [
             'options' => $optionsArray
         ];
+    }
+
+    /**
+     * Returns the class names this controller offers the inspector.
+     *
+     * These two registries are what core renders a `data-inspector-class` from. A controller
+     * publishing an inspectable class of its own overrides this to add it.
+     */
+    protected function listInspectableClasses(): array
+    {
+        $classes = array_keys(WidgetManager::instance()->listReportWidgets());
+
+        // winter/wn-backend-module does not require the CMS module.
+        if (class_exists(\Cms\Classes\ComponentManager::class)) {
+            $classes = array_merge($classes, array_values(\Cms\Classes\ComponentManager::instance()->listComponents()));
+        }
+
+        return $classes;
     }
 }

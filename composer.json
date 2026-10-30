@@ -79,6 +79,16 @@
         }
     },
     "config": {
+        "policy": {
+            "advisories": {
+                "ignore": {
+                    "laravel/framework": {
+                        "on-audit": false,
+                        "reason": "Winter CMS 1.2 requires Laravel 9"
+                    }
+                }
+            }
+        },
         "allow-plugins": {
             "composer/installers": true,
             "wikimedia/composer-merge-plugin": true
