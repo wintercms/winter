@@ -3,9 +3,9 @@
         <div class="scoreboard-item title-value">
             <h4><?= e(trans('system::lang.project.name')) ?></h4>
             <?php if ($projectId): ?>
-                <p class="wn-icon-chain"><?= $projectName ?></p>
+                <p class="wn-icon-chain"><?= e($projectName) ?></p>
                 <p class="description">
-                    <?= e(trans('system::lang.project.owner_label')) ?>: <?= $projectOwner ?>
+                    <?= e(trans('system::lang.project.owner_label')) ?>: <?= e($projectOwner) ?>
                     (<a
                         href="javascript:;"
                         data-request-confirm="<?= e(trans('system::lang.project.detach_confirm')) ?>"
@@ -41,10 +41,10 @@
                         data-placement="bottom"
                         title="This build has been modified"
                     >
-                        <?= $coreBuild ?>
+                        <?= e($coreBuild) ?>
                     </p>
                 <?php else: ?>
-                    <p><?= $coreBuild ?></p>
+                    <p><?= e($coreBuild) ?></p>
                 <?php endif; ?>
 
                 <p class="description">

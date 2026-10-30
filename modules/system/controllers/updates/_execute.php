@@ -49,7 +49,7 @@
 
     <script>
         $('#executePopup').on('popupComplete', function() {
-            $.wn.updateProcess.execute(<?= json_encode($updateSteps) ?>)
+            $.wn.updateProcess.execute(<?= json_encode($updateSteps, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>)
         })
     </script>
 

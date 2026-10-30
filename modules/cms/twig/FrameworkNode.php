@@ -41,20 +41,35 @@ class FrameworkNode extends TwigNode
             $compiler
                 ->write("if (\$_minify) {" . PHP_EOL)
                 ->indent()
-                    ->write("echo '<script src=\"{$basePath}/modules/system/assets/js/framework.combined-min.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
+                    ->write('echo ')
+                    ->string('<script src="' . $basePath . '/modules/system/assets/js/framework.combined-min.js' . $cacheBust . '"></script>')
+                    ->raw('.PHP_EOL;' . PHP_EOL)
                 ->outdent()
                 ->write("}" . PHP_EOL)
                 ->write("else {" . PHP_EOL)
                 ->indent()
-                    ->write("echo '<script src=\"{$basePath}/modules/system/assets/js/framework.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
-                    ->write("echo '<script src=\"{$basePath}/modules/system/assets/js/framework.extras.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL)
+                    ->write('echo ')
+                    ->string('<script src="' . $basePath . '/modules/system/assets/js/framework.js' . $cacheBust . '"></script>')
+                    ->raw('.PHP_EOL;' . PHP_EOL)
+                    ->write('echo ')
+                    ->string('<script src="' . $basePath . '/modules/system/assets/js/framework.extras.js' . $cacheBust . '"></script>')
+                    ->raw('.PHP_EOL;' . PHP_EOL)
                 ->outdent()
                 ->write("}" . PHP_EOL)
-                ->write("echo '<link rel=\"stylesheet\" property=\"stylesheet\" href=\"{$basePath}/modules/system/assets/css/framework.extras'.(\$_minify ? '-min' : '').'.css$cacheBust\">'.PHP_EOL;" . PHP_EOL)
+                ->write('echo ')
+                ->string('<link rel="stylesheet" property="stylesheet" href="' . $basePath . '/modules/system/assets/css/framework.extras')
+                ->raw(".(\$_minify ? '-min' : '').")
+                ->string('.css' . $cacheBust . '">')
+                ->raw('.PHP_EOL;' . PHP_EOL)
             ;
         }
         else {
-            $compiler->write("echo '<script src=\"{$basePath}/modules/system/assets/js/framework'.(\$_minify ? '-min' : '').'.js$cacheBust\"></script>'.PHP_EOL;" . PHP_EOL);
+            $compiler
+                ->write('echo ')
+                ->string('<script src="' . $basePath . '/modules/system/assets/js/framework')
+                ->raw(".(\$_minify ? '-min' : '').")
+                ->string('.js' . $cacheBust . '"></script>')
+                ->raw('.PHP_EOL;' . PHP_EOL);
         }
 
         $compiler->write('unset($_minify);' . PHP_EOL);

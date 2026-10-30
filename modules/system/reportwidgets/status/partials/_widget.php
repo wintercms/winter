@@ -45,7 +45,7 @@
                         <span class="status-text">
                             <?= e(trans('backend::lang.dashboard.status.core_build')) ?>
                         </span>
-                        <a href="<?= Backend::url('system/updates') ?>" class="status-label primary"><?= $coreBuild ?></a>
+                        <a href="<?= Backend::url('system/updates') ?>" class="status-label primary"><?= e($coreBuild) ?></a>
                     </li>
                 <?php endif ?>
                 <li>

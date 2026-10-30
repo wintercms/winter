@@ -54,26 +54,39 @@ class SnowboardNode extends TwigNode
 
         if (!static::$baseLoaded) {
             // Add manifest and vendor files
-            $compiler
-                ->write("echo '<script data-module=\"snowboard-manifest\" src=\"{$manifestPath}{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+            $this->writeTag($compiler, '<script data-module="snowboard-manifest" src="' . $manifestPath . $cacheBust . '"></script>');
             $vendorJs = $moduleMap['vendor'];
-            $compiler
-                ->write("echo '<script data-module=\"snowboard-vendor\" src=\"{$basePath}{$vendorJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+            $this->writeTag($compiler, '<script data-module="snowboard-vendor" src="' . $basePath . $vendorJs . '.js' . $cacheBust . '"></script>');
 
             // Add base script
             $baseJs = $moduleMap['base'];
             $baseUrl = Url::to('/');
             $assetUrl = Url::asset('/');
-            $compiler
-                ->write("echo '<script data-module=\"snowboard-base\" data-base-url=\"{$baseUrl}\" data-asset-url=\"{$assetUrl}\" src=\"{$basePath}{$baseJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+            $this->writeTag($compiler, '<script data-module="snowboard-base" data-base-url="' . $baseUrl . '" data-asset-url="' . $assetUrl . '" src="' . $basePath . $baseJs . '.js' . $cacheBust . '"></script>');
 
             static::$baseLoaded = true;
         }
 
         foreach ($modules as $module) {
             $moduleJs = $moduleMap[$module];
-            $compiler
-                ->write("echo '<script data-module=\"{$module}\" src=\"{$basePath}{$moduleJs}.js{$cacheBust}\"></script>'.PHP_EOL;" . PHP_EOL);
+            $this->writeTag($compiler, '<script data-module="' . $module . '" src="' . $basePath . $moduleJs . '.js' . $cacheBust . '"></script>');
         }
+    }
+
+    /**
+     * Writes a statement echoing the given markup to the compiled template.
+     *
+     * The markup is emitted through the compiler's own string representation so that the
+     * generated PHP is unaffected by the values interpolated into it.
+     *
+     * @param TwigCompiler $compiler A TwigCompiler instance
+     * @param string $markup The markup to echo
+     */
+    protected function writeTag(TwigCompiler $compiler, string $markup): void
+    {
+        $compiler
+            ->write('echo ')
+            ->string($markup)
+            ->raw('.PHP_EOL;' . PHP_EOL);
     }
 }

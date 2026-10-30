@@ -317,6 +317,7 @@ return [
         'core_downloading' => 'Downloading application files',
         'core_extracting' => 'Unpacking application files',
         'core_set_build' => 'Setting build number',
+        'core_build_invalid' => 'The build number must only contain letters, numbers, dots, dashes and underscores.',
         'update_warnings_title' => 'Some issues have been detected and require attention:',
         'update_warnings_plugin_missing' => 'The :parent_code plugin requires :code to be installed before it will work',
         'update_warnings_plugin_replace' => 'The :plugin plugin replaces :alias, please remove :alias to ensure there are no conflicts',

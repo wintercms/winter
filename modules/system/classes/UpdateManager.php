@@ -532,9 +532,14 @@ class UpdateManager
      * @param string $build
      * @param bool $modified
      * @return void
+     * @throws ApplicationException if the build is not a valid version identifier
      */
     public function setBuild($build, $hash = null, $modified = false)
     {
+        if (!is_scalar($build) || !preg_match('/^[0-9A-Za-z._-]+$/', (string) $build)) {
+            throw new ApplicationException(Lang::get('system::lang.updates.core_build_invalid'));
+        }
+
         $params = [
             'system::core.build' => $build,
             'system::core.modified' => $modified,
