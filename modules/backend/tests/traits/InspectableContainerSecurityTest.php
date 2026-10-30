@@ -105,9 +105,6 @@ class InspectableContainerSecurityTest extends PluginTestCase
         Config::set('cms.backendUri', 'backend');
         Config::set('cms.enableCsrfProtection', false);
 
-        // The refusal reason only reaches the error page in debug.
-        Config::set('app.debug', true);
-
         UnofferedInspectable::$constructed = false;
 
         $this->autoloaded = [];
@@ -196,15 +193,15 @@ class InspectableContainerSecurityTest extends PluginTestCase
     }
 
     /**
-     * From the error title, not the body -- the body quotes the surrounding source, messages included.
+     * From the exception, not the body -- the body quotes the surrounding source, messages included.
      */
     protected function refusalMessage($response): string
     {
-        preg_match('/<title>(.*?)<\/title>/s', $response->getContent(), $matches);
+        $message = $response->exception?->getMessage() ?? '';
 
-        $this->assertNotEmpty($matches[1] ?? '', 'The response should report a reason');
+        $this->assertNotEmpty($message, 'The response should report a reason');
 
-        return $matches[1];
+        return $message;
     }
 
     protected function assertWasNotLookedUp(string $className): void

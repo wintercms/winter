@@ -423,7 +423,7 @@ class EditorSettingTest extends PluginTestCase
         );
     }
 
-    public function surroundingWhitespaceProvider()
+    public static function surroundingWhitespaceProvider()
     {
         return [
             'a trailing space' => ['oc-text-gray '],
@@ -432,7 +432,7 @@ class EditorSettingTest extends PluginTestCase
         ];
     }
 
-    public function legitimateClassNameProvider()
+    public static function legitimateClassNameProvider()
     {
         return [
             'two classes' => ['callout callout--lead'],
@@ -450,7 +450,7 @@ class EditorSettingTest extends PluginTestCase
         ];
     }
 
-    public function nonScalarRowProvider()
+    public static function nonScalarRowProvider()
     {
         return [
             'a label that is an array' => [
@@ -464,7 +464,7 @@ class EditorSettingTest extends PluginTestCase
         ];
     }
 
-    public function styleSettingKeysProvider()
+    public static function styleSettingKeysProvider()
     {
         return [
             'image styles' => ['html_style_image'],
