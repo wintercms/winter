@@ -387,4 +387,18 @@ class CmsObjectTest extends TestCase
             File::deleteDirectory($cachePath);
         }
     }
+
+    public function testTwigCacheKeyCanBeOverriddenByEvent()
+    {
+        $theme = Theme::load('test');
+        $obj = TestCmsObject::load($theme, 'plain.html');
+
+        $this->assertStringStartsWith($obj->getFilePath() . '?', $obj->getTwigCacheKey());
+
+        $obj->bindEvent('cmsObject.getTwigCacheKey', function ($key) {
+            return 'custom-key';
+        });
+
+        $this->assertSame('custom-key', $obj->getTwigCacheKey());
+    }
 }
