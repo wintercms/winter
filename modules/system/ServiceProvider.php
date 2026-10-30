@@ -388,14 +388,17 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerTwigParser()
     {
-        // Register System Twig environment
+        // Register System Twig environment. This backs the `.htm` view engine registered below,
+        // so it renders the module and plugin views that ship in the repository.
         $this->app->singleton('twig.environment', function ($app) {
             return MarkupManager::makeBaseTwigEnvironment();
         });
 
-        // Register Mailer Twig environment
+        // Register Mailer Twig environment. Mail templates and layouts are edited through the
+        // backend by users who hold no code permission, which makes this the one core environment
+        // that is sandboxed.
         $this->app->singleton('twig.environment.mailer', function ($app) {
-            $twig = MarkupManager::makeBaseTwigEnvironment();
+            $twig = MarkupManager::makeSandboxedTwigEnvironment(['tags' => ['partial']]);
             $twig->addTokenParser(new \System\Twig\MailPartialTokenParser);
             return $twig;
         });
