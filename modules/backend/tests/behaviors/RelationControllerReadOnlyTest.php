@@ -232,13 +232,10 @@ class ExtendedConfigRelationController extends WritableRelationController
 }
 
 /**
- * `readOnly` was documented as disabling adds, updates, deletes and creates, but the behavior
- * only ever consulted it while rendering - toolbar buttons, list checkboxes, the manage popup
- * title, preview mode - so every write handler reached its sink regardless.
- *
- * The flag also round trips through the browser in `_relation_extra_config`, an unsigned base64
- * blob `applyExtraConfig()` merged back into the configuration, so the client had the last word.
- * Enforcing at the handlers alone would not have been enough.
+ * `readOnly` was documented as disabling adds, updates, deletes and creates, but was only ever
+ * consulted while rendering, so every write handler reached its sink regardless. It also round
+ * tripped through the browser in `_relation_extra_config`, which `applyExtraConfig()` merged
+ * back into the configuration, so the client had the last word.
  *
  * The invariant: when the configuration says read only, no management handler may write, and
  * nothing the client sends may relax that.
@@ -452,9 +449,8 @@ class RelationControllerReadOnlyTest extends BackendTestCase
     }
 
     /**
-     * Every shape a client might use to spell "readOnly is off". The rule is deliberately
-     * value-shaped rather than type-shaped -- anything falsy is dropped, anything truthy is a
-     * restriction and is kept -- so none of these can relax the relation.
+     * The rule is value-shaped, not type-shaped: anything falsy is dropped, anything truthy is
+     * a restriction and is kept.
      *
      * @dataProvider extraConfigDowngradeProvider
      */
@@ -479,7 +475,7 @@ class RelationControllerReadOnlyTest extends BackendTestCase
         $this->assertNotNull(Post::find($post->id));
     }
 
-    public function extraConfigDowngradeProvider(): array
+    public static function extraConfigDowngradeProvider(): array
     {
         return [
             'encoded false'          => [base64_encode(json_encode(['readOnly' => false]))],
@@ -601,9 +597,6 @@ class RelationControllerReadOnlyTest extends BackendTestCase
         $this->assertEquals('editor', $this->pivotValue($tag));
     }
 
-    /**
-     * Read only disables writing, not viewing: the relation must still render and refresh.
-     */
     public function testReadOnlyRelationStillRenders(): void
     {
         $this->author->posts()->create(['title' => 'visible', 'slug' => 'visible']);
@@ -659,10 +652,8 @@ class RelationControllerReadOnlyTest extends BackendTestCase
     }
 
     /**
-     * The refusal lives on the write, not on the list's `sortable` flag: that flag is also what
-     * makes the list present the relation in its stored order instead of applying a sort order of
-     * its own, so switching it off for a read only relation would silently reorder the records
-     * the operator is reading.
+     * The refusal lives on the write, not on the list's `sortable` flag - that flag is also what
+     * presents the relation in its stored order, so switching it off would silently reorder it.
      */
     public function testReadOnlyRelationIsStillPresentedInItsStoredOrder(): void
     {
@@ -843,9 +834,8 @@ class RelationControllerReadOnlyTest extends BackendTestCase
     }
 
     /**
-     * The structural invariant: a read only relation's forms and their field widgets are all
-     * bound, so every read still works; what stops a write is the widget's own previewMode
-     * guard, which the relation propagates down from the form.
+     * The forms and their widgets stay bound, so reads still work; the write is stopped by the
+     * widget's own previewMode guard, propagated down from the form.
      */
     public function testReadOnlyRelationPutsItsFieldWidgetsInPreviewMode(): void
     {
@@ -909,9 +899,6 @@ class RelationControllerReadOnlyTest extends BackendTestCase
         );
     }
 
-    /**
-     * The repeater's mutating handlers are refused, while its refresh above is not.
-     */
     public function testReadOnlyRelationRefusesRepeaterMutations(): void
     {
         [$parent] = $this->makeChildWithAttachment();
@@ -964,9 +951,6 @@ class RelationControllerReadOnlyTest extends BackendTestCase
         $this->assertEquals('original title', File::find($file->id)->title);
     }
 
-    /**
-     * The single-record view form is a preview form, and its nested widgets inherit that.
-     */
     public function testReadOnlySingleRelationPutsItsFieldWidgetsInPreviewMode(): void
     {
         [$parent] = $this->makeSingleChildWithAttachment();
@@ -1004,9 +988,6 @@ class RelationControllerReadOnlyTest extends BackendTestCase
         $this->assertEquals('original title', File::find($file->id)->title);
     }
 
-    /**
-     * Invalidation: a writable relation still dispatches its nested widget handlers.
-     */
     public function testWritableRelationStillDispatchesNestedWidgetHandlers(): void
     {
         [$parent, $child, $file] = $this->makeChildWithAttachment([
@@ -1023,8 +1004,7 @@ class RelationControllerReadOnlyTest extends BackendTestCase
     }
 
     /**
-     * Invalidation: a read only relation must still page and refresh its list, so the view
-     * widget itself stays bound even though the relation is read only.
+     * Invalidation: the view widget stays bound, so the list still pages and refreshes.
      */
     public function testReadOnlyRelationStillDispatchesViewListHandlers(): void
     {

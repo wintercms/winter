@@ -219,16 +219,10 @@ class PivotRelationController extends ScopedRelationController
  * `RelationController` addresses related records by a key taken straight from the request
  * (`manage_id`, `record_id`, `foreign_id`, `checked[]`). Two invariants govern those keys:
  *
- * 1. A handler that operates on an *existing* related record (manage form, update, delete,
- *    remove) may only reach records the relation manager is currently showing -- the relation's
- *    own records, plus records bound through the active deferred-binding session.
- *
- * 2. A handler that attaches a record that is *not* related yet (add, link, pivot create) must
- *    reach outside the relation, so its scope is the manage list instead, which a deployment
- *    narrows with `manage.conditions`, `manage.scope` or `relationExtendManageWidget`.
- *
- * `ListController::index_onDelete()` and `Lists::onReorder()` already resolve `checked[]` the
- * same way.
+ * 1. A handler acting on an *existing* related record may only reach the relation's own records,
+ *    plus records bound through the active deferred-binding session.
+ * 2. A handler that *attaches* one must reach outside the relation, so its scope is the manage
+ *    list, which `manage.conditions`, `manage.scope` and `relationExtendManageWidget` narrow.
  */
 class RelationControllerScopingTest extends BackendTestCase
 {

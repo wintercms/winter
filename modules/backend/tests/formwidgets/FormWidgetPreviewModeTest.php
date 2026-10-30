@@ -14,11 +14,10 @@ use Winter\Storm\Database\Model;
 
 /**
  * `previewMode` says a form field is not editable. Widgets honoured it while rendering, but no
- * widget handler consulted it, and a handler is dispatched by alias straight to the widget
- * without passing through whatever authorized the page.
+ * handler consulted it, and a handler is dispatched by alias straight to the widget without
+ * passing through whatever authorized the page.
  *
- * The invariant: a handler that writes refuses in preview mode; one that only reads still works.
- * Proven away from the relation behavior, since the rule is not relation-specific.
+ * A handler that writes refuses in preview mode; one that only reads still works.
  */
 class FormWidgetPreviewModeTest extends BackendTestCase
 {
@@ -103,7 +102,7 @@ class FormWidgetPreviewModeTest extends BackendTestCase
         return 200;
     }
 
-    public function writeHandlerProvider(): array
+    public static function writeHandlerProvider(): array
     {
         return [
             'upload'        => ['testFormThumb::onUpload'],
