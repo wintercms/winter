@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File as Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Process\Process;
 use System\Classes\UpdateManager;
 use System\Classes\CombineAssets;
 use System\Models\Parameter;
@@ -487,10 +488,8 @@ class WinterUtil extends Command
                     continue;
                 }
 
-                $exec = 'cd ' . $pluginDir . ' && ';
-                $exec .= 'git pull 2>&1';
                 echo 'Updating plugin: '. basename(dirname($pluginDir)) .'.'. basename($pluginDir) . PHP_EOL;
-                echo shell_exec($exec);
+                $this->gitPull($pluginDir);
             }
         }
 
@@ -499,11 +498,28 @@ class WinterUtil extends Command
                 continue;
             }
 
-            $exec = 'cd ' . $themeDir . ' && ';
-            $exec .= 'git pull 2>&1';
             echo 'Updating theme: '. basename($themeDir) . PHP_EOL;
-            echo shell_exec($exec);
+            $this->gitPull($themeDir);
         }
+    }
+
+    /**
+     * Runs "git pull" in the provided directory, echoing the combined output of the process.
+     *
+     * The directory is handed to the process as its working directory instead of being
+     * built into a command string, so the path is never parsed as shell syntax.
+     */
+    protected function gitPull(string $path): void
+    {
+        $process = new Process(
+            command: ['git', 'pull'],
+            cwd: $path,
+            timeout: null
+        );
+
+        $process->run(function ($type, $buffer) {
+            echo $buffer;
+        });
     }
 
     protected function utilSetProject()
