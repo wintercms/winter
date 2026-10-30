@@ -84,9 +84,32 @@ Modules and plugins are autoloaded by `Winter\Storm\Support\ClassLoader` (see `C
 
 ## Tests
 
-- Backend/CMS/system tests usually extend `System\Tests\Bootstrap\PluginTestCase` (boots Laravel, plugins, auth) or `System\Tests\Bootstrap\TestCase` (boots the framework but not plugins).
+- Backend/CMS/system tests usually extend `System\Tests\Bootstrap\PluginTestCase` (boots Laravel, plugins, auth) or `System\Tests\Bootstrap\TestCase` (boots the framework but not plugins) — see **Keeping the test suite fast** below for which to pick and what each costs.
 - Fixtures that flow through `Assetic\Asset\FileAsset` (e.g. `CombineAssets::combineToFile()`) must live under `base_path()`. `sys_get_temp_dir()` will fail with "source is not in the root directory". Use `base_path('storage/framework/cache/<unique>')` for temp dirs and clean up with `\File::deleteDirectory()` in `tearDown()`.
 - A failing test that doesn't reproduce on a fresh clone is almost always a stale local `vendor/`. Run `composer update` in Storm (`~/Repositories/WinterCMS/Core/storm` or wherever you check it out) before claiming "environment issue".
+
+## Keeping the test suite fast
+
+Setup cost, not assertion cost, is what the suite is made of. An empty test method, measured on PHP 8.5 / M-series Mac as the median of 20:
+
+| Base class | Per test |
+|---|---|
+| `System\Tests\Bootstrap\TestCase` | 4.3ms |
+| `System\Tests\Bootstrap\PluginTestCase` | 55ms |
+| `PluginTestCase` + `use System\Tests\Concerns\MigratesDatabaseOnce;` | 5.8ms, plus 124ms once per process |
+
+- **Start at `TestCase`.** It boots the framework but configures no database, so the first query dies with a connection error — that error is the signal to move up, not a reason to start at `PluginTestCase`.
+- **Reaching for `PluginTestCase` means also adding `use MigratesDatabaseOnce;`.** Without it, `setUp()` runs `winter:up` and rebuilds all 43 tables for every single test, because each test builds a new application and therefore a brand new `:memory:` database. The trait migrates once per process and wraps each test in a transaction it rolls back, so the test still starts from the freshly migrated schema with no rows of its own.
+- **Leave the trait off only for a specific reason**: a test that commits its own transaction, reconnects the database, or issues DDL against MySQL escapes the wrapping transaction. SQLite rolls DDL back, so creating tables in `setUp` is fine, and so is `plugin:refresh`.
+- **A data provider is not cheaper than separate test methods.** PHPUnit runs `setUp`/`tearDown` for every data row. Measured on `PluginTestCase`, 20 cases: 20 provider rows 1.19s, 20 methods 1.19s, one method asserting all 20 in a loop 0.12s. Use a provider when each case deserves its own name in the failure output; fold the cases into one method when they share a fixture and you only care that all of them hold. Providers must be `public static` (PHPUnit 11 rejects anything else).
+- **Build fixtures in the test that needs them**, not in `setUp` — `setUp` is paid by every method in the class, including the ones that never look at the fixture.
+- **Never mutate a tracked file or a shared `storage/` path.** The tests under `modules/system/tests/console/asset/` do (they rename `modules/system/tests/fixtures/themes/*/package.json` in place), which is why the suite cannot be run under `paratest` today: concurrent workers clobber each other and leave the working tree dirty.
+
+Measuring a change honestly:
+
+- Three runs, report the median: `php artisan winter:test -m system -m backend -m cms`. That is the command CI runs, and it is the only path where `BCRYPT_ROUNDS=4` applies — the root `phpunit.xml` sets it, but `winter:test` runs the per-module and per-plugin configs, which carry no `<php>` block, so `winter:test` passes it to the PHPUnit process itself.
+- The `phpUnitTests` CI job installs no Node, so the 41 tests under `modules/system/tests/console/asset/` skip there. Locally they shell out to real `npm install` and cost ~24s of a ~42s run — rename `node_modules` aside to reproduce CI's profile before quoting a CI-relevant number.
+- **Never quote a timing from a GitHub ubuntu runner.** Within a single run, identical code has produced 317s–602s across the five PHP versions. The windows jobs are tight — a 14-second spread across five — so use the windows medians for any CI claim, and never report an improvement from one job compared against one other.
 
 ## Code style (phpcs) — run it before pushing
 
