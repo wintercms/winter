@@ -125,6 +125,7 @@ class SandboxPolicyTest extends TestCase
             '{{ m.title }}' => 'Alice',
             '[{{ m.nickname }}]' => '[]',
             '[{{ m.derived }}]' => '[]',
+            '[{{ m.parent.title }}]' => '[]',
             '{{ m.table }}' => 'sandbox_policy_test',
             '{{ rows.count }}' => '2',
             "{{ rows|column('title')|join(',') }}" => 'B,A',
@@ -258,14 +259,19 @@ class SandboxPolicyTest extends TestCase
 }
 
 /**
- * Carries a null column, an accessor that resolves to null, a column named after a query builder
- * method, a getter and a scope, so one fixture covers every branch of the read/behaviour split.
+ * Carries a null column, an accessor that resolves to null, a relation whose foreign key is empty,
+ * a column named after a query builder method, a getter and a scope, so one fixture covers every
+ * branch of the read/behaviour split.
  */
 class SandboxPolicyTestModel extends Model
 {
     public $table = 'sandbox_policy_test';
 
     protected $guarded = [];
+
+    public $belongsTo = [
+        'parent' => [self::class, 'key' => 'parent_id'],
+    ];
 
     public function getDerivedAttribute()
     {

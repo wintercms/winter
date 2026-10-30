@@ -287,9 +287,7 @@ final class SandboxPolicy implements SecurityPolicyInterface
         }
 
         return array_key_exists($method, $obj->getAttributes())
-            || array_key_exists($method, $obj->getRelations())
-            || $obj->hasGetMutator($method)
-            || $obj->hasAttributeMutator($method);
+            || $obj->hasGetMutator($method);
     }
 
     /**
