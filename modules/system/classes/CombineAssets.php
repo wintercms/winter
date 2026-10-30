@@ -144,6 +144,7 @@ class CombineAssets
             themes_path(),
             plugins_path(),
             base_path('modules'),
+            base_path('node_modules'),
         ];
 
         /*
