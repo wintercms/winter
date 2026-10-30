@@ -711,10 +711,9 @@ class RelationControllerReadOnlyTest extends BackendTestCase
     }
 
     /**
-     * relationExtendConfig() runs inside initRelation() on every request, so a controller can
-     * make a relation read only per user. It is also the escape hatch that keeps the extra
-     * config's restrict-only rule from trapping anyone: the hook runs last and may still switch
-     * readOnly back off.
+     * relationExtendConfig() runs inside initRelation() on every request, so it is the supported
+     * way to decide readOnly per user. It is the only thing that decides it: the extra config the
+     * client posts back is discarded either way.
      */
     public function testRelationExtendConfigDecidesReadOnly(): void
     {

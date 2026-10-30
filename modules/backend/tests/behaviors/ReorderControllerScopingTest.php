@@ -99,6 +99,25 @@ class ReorderControllerScopingTest extends BackendTestCase
         $this->assertEquals(4, $this->offered->fresh()->sort_order);
     }
 
+    /**
+     * The scoped query selects only the reordered model's columns, so a joined table's own `id`
+     * cannot be hydrated onto the record and send a move to the wrong row.
+     */
+    public function testAJoinedTableDoesNotOverwriteTheRecordKey(): void
+    {
+        $query = self::callProtectedMethod(
+            (new JoinedScopeReorderController)->asExtension(\Backend\Behaviors\ReorderController::class),
+            'reorderScopedQuery'
+        );
+
+        $this->assertSame(
+            [$this->offered->getTable() . '.*'],
+            $query->getQuery()->columns,
+            'the scoped query must select only the reordered model'
+        );
+        $this->assertEquals($this->offered->id, $query->find($this->offered->id)->id);
+    }
+
     public function testAnOfferedRecordStillMovesWhenSentBesideOneThatIsNot(): void
     {
         $this->postData([

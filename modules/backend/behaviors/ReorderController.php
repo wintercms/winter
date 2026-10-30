@@ -262,11 +262,14 @@ class ReorderController extends ControllerBehavior
      */
     protected function reorderScopedQuery()
     {
-        $query = $this->controller->reorderGetModel()->newQuery();
+        $model = $this->controller->reorderGetModel();
+        $query = $model->newQuery();
 
         $this->controller->reorderExtendQuery($query);
 
-        return $query;
+        // Only this model's columns: a scope may join a table carrying its own `id`, and PDO
+        // keeps the last of a duplicated column name, so the row would hydrate with the wrong key.
+        return $query->select($model->getTable() . '.*');
     }
 
     /**
