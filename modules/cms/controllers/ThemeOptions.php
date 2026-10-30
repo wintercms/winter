@@ -8,6 +8,7 @@ use Cms\Classes\Theme as CmsTheme;
 use System\Classes\SettingsManager;
 use Backend\Classes\Controller;
 use Exception;
+use Winter\Storm\Database\Builder;
 
 /**
  * Theme customization controller
@@ -79,6 +80,20 @@ class ThemeOptions extends Controller
         $model->delete();
 
         return Backend::redirect('cms/themeoptions/update/'.$dirName);
+    }
+
+    /**
+     * Confine the form to the themes this user is allowed to manage.
+     *
+     * getDirName() applies the same restriction, but only to the handlers this controller overrides
+     * in order to interpose it. Scoping the query the behaviour already resolves records through
+     * applies it to every handler the behaviour serves, including the ones not overridden here.
+     */
+    public function formExtendQuery(Builder $query): void
+    {
+        if (!$this->user->hasAccess('cms.manage_themes')) {
+            $query->where('theme', CmsTheme::getActiveThemeCode());
+        }
     }
 
     /**
