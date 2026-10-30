@@ -236,34 +236,54 @@ class CombineAssetsTest extends TestCase
      */
     public function testLessCompilerAllowsNodeModulesImportFromAllowedRoot()
     {
-        $themeDir = $this->makeTempThemeDir();
         $suffix = bin2hex(random_bytes(4));
-        // The npm, Mix and Vite command tests skip themselves when node_modules is
-        // absent, so a node_modules left behind here would make them run.
-        $createdNodeModules = !is_dir(base_path('node_modules'));
-        $packageDir = base_path('node_modules/wn-import-root-test-' . $suffix);
+        $nodeModulesDir = base_path('node_modules');
+        $packageDir = $nodeModulesDir . '/wn-import-root-test-' . $suffix;
         $sharedDir = plugins_path('wn-import-root-test-' . $suffix);
-        mkdir($packageDir, 0777, true);
-        mkdir($sharedDir, 0777, true);
-        file_put_contents($packageDir . '/variables.less', '@package-color: green;');
-        file_put_contents(
-            $sharedDir . '/shared.less',
-            '@import "' . str_replace('\\', '/', $packageDir) . '/variables.less"; .shared-marker { color: @package-color; }'
-        );
-        file_put_contents(
-            $themeDir . '/assets/less/main.less',
-            '@import "' . str_replace('\\', '/', $sharedDir) . '/shared.less"; .main-marker { color: blue; }'
-        );
+        $themeDir = null;
+        $createdNodeModules = false;
+        $createdPackageDir = false;
+        $createdSharedDir = false;
 
         try {
+            $themeDir = $this->makeTempThemeDir();
+            // The npm, Mix and Vite command tests skip themselves when node_modules is
+            // absent, so a node_modules left behind here would make them run.
+            if (!is_dir($nodeModulesDir)) {
+                $createdNodeModules = mkdir($nodeModulesDir);
+            }
+            $createdPackageDir = mkdir($packageDir);
+            $createdSharedDir = mkdir($sharedDir);
+            $this->assertTrue($createdPackageDir && $createdSharedDir, 'Could not create the fixture directories');
+
+            file_put_contents($packageDir . '/variables.less', '@package-color: green;');
+            file_put_contents(
+                $sharedDir . '/shared.less',
+                '@import "' . str_replace('\\', '/', $packageDir) . '/variables.less"; .shared-marker { color: @package-color; }'
+            );
+            file_put_contents(
+                $themeDir . '/assets/less/main.less',
+                '@import "' . str_replace('\\', '/', $sharedDir) . '/shared.less"; .main-marker { color: blue; }'
+            );
+
             $css = $this->compileLessTo($themeDir, 'assets/less/main.less');
             $this->assertStringContainsString('shared-marker', $css);
             $this->assertStringContainsString('green', $css);
             $this->assertStringContainsString('main-marker', $css);
         } finally {
-            \File::deleteDirectory($createdNodeModules ? base_path('node_modules') : $packageDir);
-            \File::deleteDirectory($sharedDir);
-            \File::deleteDirectory($themeDir);
+            if ($createdPackageDir) {
+                \File::deleteDirectory($packageDir);
+            }
+            if ($createdSharedDir) {
+                \File::deleteDirectory($sharedDir);
+            }
+            // Non-recursive, so anything another process put in node_modules meanwhile survives
+            if ($createdNodeModules) {
+                @rmdir($nodeModulesDir);
+            }
+            if ($themeDir !== null) {
+                \File::deleteDirectory($themeDir);
+            }
         }
     }
 
