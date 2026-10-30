@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Str;
 use System\Classes\CombineAssets;
 use System\Classes\ErrorHandler;
 use System\Classes\MailManager;
@@ -159,7 +160,7 @@ class ServiceProvider extends ModuleServiceProvider
      */
     protected function registerPrivilegedActions()
     {
-        $requests = ['/combine/', '@/system/updates', '@/system/install', '@/backend/auth'];
+        $requests = ['@/system/updates', '@/system/install', '@/backend/auth'];
         $commands = ['migrate', 'winter:up', 'winter:update', 'winter:env', 'winter:version', 'winter:manifest'];
 
         // Requests
@@ -171,6 +172,22 @@ class ServiceProvider extends ModuleServiceProvider
             }
 
             if (stripos($path, $request) === 0) {
+                PluginManager::$noInit = true;
+            }
+        }
+
+        /*
+         * The asset combiner is `combine/{file}` (see modules/system/routes.php), one segment
+         * that cannot contain a separator. The paths below it are not the combiner: they reach
+         * the CMS catch-all, and have to initialize plugins as usual. Matched the way the
+         * compiled route is, on the decoded path and case sensitively.
+         */
+        $decodedPath = rawurldecode($path);
+
+        if (Str::startsWith($decodedPath, '/combine/')) {
+            $combinerFile = Str::after($decodedPath, '/combine/');
+
+            if (strlen($combinerFile) && !Str::contains($combinerFile, '/')) {
                 PluginManager::$noInit = true;
             }
         }
