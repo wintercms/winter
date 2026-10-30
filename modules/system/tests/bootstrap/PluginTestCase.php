@@ -39,11 +39,7 @@ abstract class PluginTestCase extends TestCase
      */
     public function createApplication()
     {
-        $app = require __DIR__ . '/../../../../bootstrap/app.php';
-        $app->make('Illuminate\Contracts\Console\Kernel')->bootstrap();
-
-        $app['cache']->setDefaultDriver('array');
-        $app->setLocale('en');
+        $app = parent::createApplication();
 
         $app->singleton('backend.auth', function ($app) {
             $app['auth.loaded'] = true;
@@ -59,9 +55,6 @@ abstract class PluginTestCase extends TestCase
             ]);
             $app['config']->set('database.default', 'testing');
         }
-
-        // Set random encryption key
-        $app['config']->set('app.key', bin2hex(random_bytes(16)));
 
         // Modify the plugin path away from the test context
         $app->setPluginsPath(realpath(base_path() . Config::get('cms.pluginsPath')));

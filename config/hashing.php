@@ -48,4 +48,17 @@ return [
         'threads' => 1,
         'time' => 4,
     ],
+
+   /*
+    |--------------------------------------------------------------------------
+    | Password Rehashing
+    |--------------------------------------------------------------------------
+    |
+    | Laravel 11 will automatically rehash your user's passwords during
+    | authentication if your hashing algorithm's "work factor" has been updated
+    | since the password was last hashed.
+    |
+    */
+
+    'rehash_on_login' => false,
 ];

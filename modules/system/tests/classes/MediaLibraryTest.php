@@ -4,6 +4,7 @@ namespace System\Tests\Classes;
 
 use System\Tests\Bootstrap\TestCase;
 use Illuminate\Filesystem\FilesystemAdapter;
+use PHPUnit\Framework\Attributes\DataProvider;
 use System\Classes\MediaLibrary;
 
 class MediaLibraryTest extends TestCase
@@ -20,7 +21,7 @@ class MediaLibraryTest extends TestCase
         parent::tearDown();
     }
 
-    public function invalidPathsProvider()
+    public static function invalidPathsProvider()
     {
         return [
             ['./file'],
@@ -36,7 +37,7 @@ class MediaLibraryTest extends TestCase
         ];
     }
 
-    public function validPathsProvider()
+    public static function validPathsProvider()
     {
         return [
             ['file'],
@@ -61,18 +62,14 @@ class MediaLibraryTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider invalidPathsProvider
-     */
+    #[DataProvider('invalidPathsProvider')]
     public function testInvalidPathsOnValidatePath($path)
     {
         $this->expectException('ApplicationException');
         MediaLibrary::validatePath($path);
     }
 
-    /**
-     * @dataProvider validPathsProvider
-     */
+    #[DataProvider('validPathsProvider')]
     public function testValidPathsOnValidatePath($path)
     {
         $result = MediaLibrary::validatePath($path);

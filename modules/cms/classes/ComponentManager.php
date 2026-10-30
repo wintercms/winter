@@ -1,9 +1,11 @@
-<?php namespace Cms\Classes;
+<?php
 
-use Str;
-use System\Classes\PluginManager;
-use SystemException;
+namespace Cms\Classes;
+
 use Illuminate\Support\Facades\App;
+use System\Classes\PluginManager;
+use Winter\Storm\Exception\SystemException;
+use Winter\Storm\Support\Str;
 
 /**
  * Component manager

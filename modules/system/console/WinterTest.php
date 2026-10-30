@@ -1,6 +1,7 @@
-<?php namespace System\Console;
+<?php
 
-use Config;
+namespace System\Console;
+
 use Symfony\Component\Process\Exception\ProcessSignaledException;
 use Symfony\Component\Process\ExecutableFinder;
 use Symfony\Component\Process\Process;
@@ -8,6 +9,7 @@ use System\Classes\PluginManager;
 use Winter\Storm\Console\Command;
 use Winter\Storm\Exception\ApplicationException;
 use Winter\Storm\Filesystem\PathResolver;
+use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Str;
 
 /**
@@ -33,11 +35,11 @@ class WinterTest extends Command
      * @var string The console command signature as ignoreValidationErrors causes options not to be registered.
      */
     protected $signature = 'winter:test
-        {phpunitArgs?* : Arguments to pass through to PHPUnit}
-        {?--c|configuration= : A specific phpunit xml file}
-        {?--b|bootstrap= : A custom PHPUnit bootstrap file}
-        {?--p|plugin=* : List of plugins to test}
-        {?--m|module=* : List of modules to test}
+        {phpunitArgs?* : use "--" followed by the arguments to pass through to PHPUnit such as "-- --stop-on-failure"}
+        {--c|configuration= : A specific phpunit xml file}
+        {--b|bootstrap= : A custom PHPUnit bootstrap file}
+        {--p|plugin=* : List of plugins to test}
+        {--m|module=* : List of modules to test}
     ';
 
     /**
@@ -102,6 +104,9 @@ class WinterTest extends Command
         foreach (['module', 'plugin'] as $type) {
             if ($this->option($type)) {
                 foreach ($this->option($type) as $target) {
+                    if (empty($target)) {
+                        continue;
+                    }
                     $target = strtolower($target);
                     if (!isset($configs[$type . 's'][$target])) {
                         throw new ApplicationException(sprintf(
@@ -123,8 +128,15 @@ class WinterTest extends Command
             return $exitCode;
         }
 
-        // default to running all defined configs found
-        foreach (['modules', 'plugins'] as $type) {
+        // default to running all defined configs found, run all tests if no options provided
+        $types = [
+            'modules' => count($this->option('module')) + !$this->option('plugin'),
+            'plugins' => count($this->option('plugin')) + !$this->option('module'),
+        ];
+        foreach ($types as $type => $count) {
+            if (!$count) {
+                continue;
+            }
             foreach ($configs[$type] as $name => $config) {
                 $this->info(
                     $type === 'plugins'

@@ -230,5 +230,7 @@ class MixCreateTest extends TestCase
                 File::delete($file);
             }
         }
+
+        parent::tearDown();
     }
 }

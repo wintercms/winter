@@ -20,15 +20,15 @@ class NpmInstallTest extends TestCase
     {
         parent::setUp();
 
-        if (!File::exists(base_path('node_modules'))) {
-            $this->markTestSkipped('This test requires node_modules to be installed');
-        }
-
         // Define some helpful paths
         $this->themePath = base_path('modules/system/tests/fixtures/themes/npmtest');
         $this->jsonPath = $this->themePath . '/package.json';
         $this->lockPath = $this->themePath . '/package-lock.json';
         $this->backupPath = $this->themePath . '/package.backup.json';
+
+        if (!File::exists(base_path('node_modules'))) {
+            $this->markTestSkipped('This test requires node_modules to be installed');
+        }
 
         // Add our testing theme because it won't be auto discovered
         PackageManager::instance()->registerPackage(

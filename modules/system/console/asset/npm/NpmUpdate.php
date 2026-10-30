@@ -25,7 +25,6 @@ class NpmUpdate extends NpmCommand
         {npmArgs?* : Arguments to pass through to the "npm" binary.}
         {--npm= : Defines a custom path to the "npm" binary.}
         {--a|save : Tell npm to update package.json.}
-        {--s|silent : Silent mode.}
         {--disable-tty : Disable tty mode}';
 
     /**

@@ -2,12 +2,13 @@
 
 namespace Cms\Tests\Classes;
 
-use Cms;
-use Request;
-use System\Tests\Bootstrap\TestCase;
-use Cms\Classes\Theme;
 use Cms\Classes\Controller;
+use Cms\Classes\Theme;
+use Cms\Facades\Cms;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Request;
 use System\Helpers\View;
+use System\Tests\Bootstrap\TestCase;
 use Winter\Storm\Halcyon\Model;
 use Winter\Storm\Support\Facades\Config;
 
@@ -79,7 +80,7 @@ class ControllerTest extends TestCase
         $cacheKey = 'combiner.' . str_before(basename($url), '-');
 
         // Load the cached config
-        $combinerConfig = \Cache::get($cacheKey);
+        $combinerConfig = Cache::get($cacheKey);
         $this->assertIsString($combinerConfig);
 
         // Decode the config
@@ -299,30 +300,32 @@ class ControllerTest extends TestCase
 
     protected function configAjaxRequestMock($handler, $partials = false)
     {
-        $requestMock = $this
-            ->getMockBuilder('Illuminate\Http\Request')
-            ->disableOriginalConstructor()
-            ->setMethods(['ajax', 'method', 'header'])
-            ->getMock();
-
-        $map = [
-            ['X_WINTER_REQUEST_HANDLER', null, $handler],
-            ['X_WINTER_REQUEST_PARTIALS', null, $partials],
-        ];
-
-        $requestMock->expects($this->any())
-            ->method('ajax')
-            ->will($this->returnValue(true));
-
-        $requestMock->expects($this->any())
-            ->method('method')
-            ->will($this->returnValue('POST'));
-
-        $requestMock->expects($this->any())
-            ->method('header')
-            ->will($this->returnValueMap($map));
-
-        return $requestMock;
+        return new class($handler, $partials) extends \Illuminate\Http\Request {
+            protected $handler;
+            protected $partials;
+            public function __construct($handler, $partials)
+            {
+                $this->handler = $handler;
+                $this->partials = $partials;
+                parent::__construct();
+            }
+            public function ajax()
+            {
+                return true;
+            }
+            public function method()
+            {
+                return 'POST';
+            }
+            public function header($key = null, $default = null)
+            {
+                return match ($key) {
+                    'X_WINTER_REQUEST_HANDLER'  => $this->handler,
+                    'X_WINTER_REQUEST_PARTIALS' => $this->partials,
+                    default => $default,
+                };
+            }
+        };
     }
 
     public function testAjaxHandlerNotFound()

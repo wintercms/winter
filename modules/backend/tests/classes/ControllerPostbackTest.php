@@ -19,7 +19,7 @@ class ControllerPostbackTest extends PluginTestCase
         $requestMock = $this
             ->getMockBuilder('Illuminate\Http\Request')
             ->disableOriginalConstructor()
-            ->setMethods(['ajax', 'method', 'header', 'secure', 'path', 'getScheme', 'getHost', 'getPort', 'getBaseUrl'])
+            ->onlyMethods(['ajax', 'method', 'header', 'secure', 'path', 'getScheme', 'getHost', 'getPort', 'getBaseUrl'])
             ->getMock();
 
         $map = [
@@ -50,7 +50,7 @@ class ControllerPostbackTest extends PluginTestCase
         $requestMock = $this
             ->getMockBuilder('Illuminate\Http\Request')
             ->disableOriginalConstructor()
-            ->setMethods(['ajax', 'method', 'header', 'post', 'input', 'secure', 'path', 'getScheme', 'getHost', 'getPort', 'getBaseUrl'])
+            ->onlyMethods(['ajax', 'method', 'header', 'post', 'input', 'secure', 'path', 'getScheme', 'getHost', 'getPort', 'getBaseUrl'])
             ->getMock();
 
         $requestMock->expects($this->any())->method('ajax')->willReturn(false);

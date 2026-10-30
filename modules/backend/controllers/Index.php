@@ -1,13 +1,16 @@
-<?php namespace Backend\Controllers;
+<?php
 
-use Lang;
-use Backend;
-use Request;
-use Response;
-use Redirect;
-use BackendMenu;
+namespace Backend\Controllers;
+
 use Backend\Classes\Controller;
+use Backend\Facades\Backend;
+use Backend\Facades\BackendMenu;
 use Backend\Widgets\ReportContainer;
+use Illuminate\Support\Facades\Lang;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Response;
+use Winter\Storm\Support\Arr;
 
 /**
  * Dashboard controller
@@ -67,10 +70,8 @@ class Index extends Controller
 
     /**
      * Prepare the report widget used by the dashboard
-     * @param Model $model
-     * @return void
      */
-    protected function initReportContainer()
+    protected function initReportContainer(): void
     {
         new ReportContainer($this, 'config_dashboard.yaml');
     }
@@ -89,7 +90,7 @@ class Index extends Controller
             return Response::make(Lang::get('backend::lang.page.access_denied.label'), 403);
         }
 
-        if ($first = array_first(BackendMenu::listMainMenuItems())) {
+        if ($first = Arr::first(BackendMenu::listMainMenuItems())) {
             return Redirect::intended($first->url);
         }
 
