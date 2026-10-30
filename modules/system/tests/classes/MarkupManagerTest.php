@@ -100,7 +100,7 @@ class MarkupManagerTest extends TestCase
         ]);
     }
 
-    public function variadicCallableArgumentsProvider()
+    public static function variadicCallableArgumentsProvider()
     {
         return [
             'first position' => [['system']],

@@ -1309,7 +1309,7 @@ class SecurityPolicyTest extends TestCase
         );
     }
 
-    public function namedSessionKeyProvider(): array
+    public static function namedSessionKeyProvider(): array
     {
         return [
             'put(key=)' => ['{{ this.session.put(key="admin_auth_probe", value="x") }}'],
@@ -1348,7 +1348,7 @@ class SecurityPolicyTest extends TestCase
         ]);
     }
 
-    public function builderEscapeProvider(): array
+    public static function builderEscapeProvider(): array
     {
         return [
             // Reaching a second table
@@ -1423,7 +1423,7 @@ class SecurityPolicyTest extends TestCase
         $this->assertEquals(0, SandboxCanary::$instantiations);
     }
 
-    public function paginatorInstantiationProvider(): array
+    public static function paginatorInstantiationProvider(): array
     {
         $canary = SandboxCanary::class;
         $source = new SecurityPolicyPaginatorSource();
@@ -1654,7 +1654,7 @@ class SecurityPolicyTest extends TestCase
         );
     }
 
-    public function namedPaginatorViewProvider(): array
+    public static function namedPaginatorViewProvider(): array
     {
         return [
             'render(view=)' => ['{{ pag.render(view="system::exception")|raw }}'],
