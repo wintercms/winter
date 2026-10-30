@@ -16,6 +16,7 @@ use Exception;
  */
 class ThemeExport extends Model
 {
+    use \Backend\Traits\ExportFileStorage;
     use \Winter\Storm\Database\Traits\Validation;
 
     /**
@@ -94,8 +95,8 @@ class ThemeExport extends Model
         try {
             $themePath = $this->theme->getPath();
             $tempPath = temp_path() . '/'.uniqid('oc');
-            $zipName = uniqid('oc');
-            $zipPath = temp_path().'/'.$zipName;
+            $zipName = static::makeExportFileName();
+            $zipPath = static::getExportFilePath($zipName);
 
             if (!File::makeDirectory($tempPath)) {
                 throw new ApplicationException('Unable to create directory '.$tempPath);
@@ -134,16 +135,12 @@ class ThemeExport extends Model
         return $zipName;
     }
 
+    /**
+     * Serve a previously produced theme archive belonging to the active backend user.
+     */
     public static function download($name, $outputName = null)
     {
-        if (!preg_match('/^oc[0-9a-z]*$/i', $name)) {
-            throw new ApplicationException('File not found');
-        }
-
-        $zipPath = temp_path() . '/' . $name;
-        if (!file_exists($zipPath)) {
-            throw new ApplicationException('File not found');
-        }
+        $zipPath = static::findExportFilePath($name);
 
         $headers = Response::download($zipPath, $outputName)->headers->all();
         $result = Response::make(File::get($zipPath), 200, $headers);

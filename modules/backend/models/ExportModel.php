@@ -17,6 +17,8 @@ use SplTempFileObject;
  */
 abstract class ExportModel extends Model
 {
+    use \Backend\Traits\ExportFileStorage;
+
     /**
      * Called when data is being exported.
      * The return value should be an array in the format of:
@@ -49,19 +51,12 @@ abstract class ExportModel extends Model
     }
 
     /**
-     * Download a previously compiled export file.
+     * Download a previously compiled export file belonging to the active backend user.
      * @return void
      */
     public function download($name, $outputName = null)
     {
-        if (!preg_match('/^oc[0-9a-z]*$/i', $name)) {
-            throw new ApplicationException(Lang::get('backend::lang.import_export.file_not_found_error'));
-        }
-
-        $csvPath = temp_path() . '/' . $name;
-        if (!file_exists($csvPath)) {
-            throw new ApplicationException(Lang::get('backend::lang.import_export.file_not_found_error'));
-        }
+        $csvPath = static::findExportFilePath($name);
 
         return Response::download($csvPath, $outputName, ['Content-Type' => 'text/csv'])->deleteFileAfterSend(true);
     }
@@ -140,8 +135,8 @@ abstract class ExportModel extends Model
         /*
          * Save for download
          */
-        $csvName = uniqid('oc');
-        $csvPath = temp_path().'/'.$csvName;
+        $csvName = static::makeExportFileName();
+        $csvPath = static::getExportFilePath($csvName);
         $output = $csv->__toString();
 
         File::put($csvPath, $output);

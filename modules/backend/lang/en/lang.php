@@ -595,6 +595,7 @@ return [
         'export_error' => 'Export error',
         'column_preview' => 'Column preview',
         'file_not_found_error' => 'File not found',
+        'file_owner_error' => 'An exported file belongs to the backend user that produced it, and there is no authenticated backend user.',
         'empty_error' => 'There was no data supplied to export',
         'empty_import_columns_error' => 'Please specify some columns to import.',
         'match_some_column_error' => 'Please match some columns first.',

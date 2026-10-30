@@ -3,7 +3,9 @@
 namespace Backend\Tests\Models;
 
 use System\Tests\Bootstrap\TestCase;
+use Backend\Facades\BackendAuth;
 use Backend\Models\ExportModel;
+use Backend\Models\User;
 use Illuminate\Http\Request;
 
 if (!class_exists('Model')) {
@@ -54,9 +56,18 @@ class ExportModelTest extends TestCase
 
     public function testDownload()
     {
+        // An export file belongs to the backend user that produced it, and is only served back to
+        // that user; this test boots the framework alone, so the owner is set rather than created.
+        $owner = new User;
+        $owner->id = 1;
+        BackendAuth::setUser($owner);
+
         $model = new ExampleExportModel;
 
         $csvName = $model->export(['foo' => 'title', 'bar' => 'title2'], []);
+        $filePath = temp_path('exports/' . $owner->getKey() . '/' . $csvName);
+
+        $this->assertFileExists($filePath, "Export-CSV was not written to its owner's directory.");
 
         $response = $model->download($csvName);
 
@@ -81,8 +92,6 @@ class ExportModelTest extends TestCase
         $utf8BOM = chr(239) . chr(187) . chr(191);
 
         $this->assertEquals($utf8BOM . "title,title2\nbar,foo\nbar2,foo2\n", $output, "CSV is not right!");
-
-        $filePath = temp_path($csvName);
 
         $fileGotDeleted = !is_file($filePath);
 
