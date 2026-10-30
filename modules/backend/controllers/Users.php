@@ -235,6 +235,10 @@ class Users extends Controller
      */
     public function update_onManualPasswordReset($recordId)
     {
+        // Force Trusted Host verification on password reset link generation
+        // regardless of config to protect against host header poisoning
+        $this->forceTrustedHosts();
+
         $user = $this->formFindModelObject($recordId);
 
         if ($user) {

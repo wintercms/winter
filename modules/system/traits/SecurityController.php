@@ -7,6 +7,7 @@ use Session;
 use Carbon\Carbon;
 use Symfony\Component\HttpFoundation\Response as BaseResponse;
 use Symfony\Component\HttpFoundation\Cookie;
+use Winter\Storm\Foundation\Http\Middleware\CheckForTrustedHost;
 
 /**
  * Security Controller Trait
@@ -78,5 +79,33 @@ trait SecurityController
         }
 
         return !Config::get('cms.backendForceSecure', false);
+    }
+
+    /**
+     * Applies trusted host verification to the current request even when the `app.trustedHosts`
+     * configuration has it disabled.
+     *
+     * Use this before generating an absolute URL that is delivered out of band, such as the
+     * Backend password reset link, so the host in that URL is one the application is configured
+     * for rather than whatever the request asked for. When `app.trustedHosts` is enabled the
+     * verification has already been applied by
+     * \Winter\Storm\Foundation\Http\Middleware\CheckForTrustedHost.
+     *
+     * @return void
+     */
+    protected function forceTrustedHosts()
+    {
+        if (Config::get('app.trustedHosts', false) !== false) {
+            return;
+        }
+
+        $hosts = CheckForTrustedHost::processTrustedHosts(true);
+
+        if (count($hosts)) {
+            Request::setTrustedHosts($hosts);
+
+            // Trigger the host validation logic
+            Request::getHost();
+        }
     }
 }
