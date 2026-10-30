@@ -12,7 +12,7 @@
                 role="menuitem"
                 href="javascript:;"
                 data-control="popup"
-                data-handler="<?= $this->getEventHandler('onLoadAddPopup') ?>"
+                data-handler="<?= e($this->getEventHandler('onLoadAddPopup')) ?>"
                 class="wn-icon-plus"
                 tabindex="-1">
                 <?= e(trans('backend::lang.dashboard.add_widget')) ?>
@@ -25,7 +25,7 @@
                     role="menuitem"
                     href="javascript:;"
                     class="wn-icon-floppy-o"
-                    data-request="<?= $this->getEventHandler('onMakeLayoutDefault') ?>"
+                    data-request="<?= e($this->getEventHandler('onMakeLayoutDefault')) ?>"
                     data-request-confirm="<?= e(trans('backend::lang.dashboard.make_default_confirm')) ?>"
                     tabindex="-1">
                     <?= e(trans('backend::lang.dashboard.make_default')) ?>
@@ -37,7 +37,7 @@
                 role="menuitem"
                 href="javascript:;"
                 data-request-success="$(window).trigger('oc.reportWidgetRefresh')"
-                data-request="<?= $this->getEventHandler('onResetWidgets') ?>"
+                data-request="<?= e($this->getEventHandler('onResetWidgets')) ?>"
                 data-request-confirm="<?= e(trans('backend::lang.dashboard.reset_layout_confirm')) ?>"
                 class="wn-icon-repeat"
                 tabindex="-1">
