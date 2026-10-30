@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Lang;
 use Winter\Storm\Auth\AuthorizationException;
 use Winter\Storm\Auth\Models\User as UserBase;
+use Winter\Storm\Support\Facades\Config;
 use Winter\Storm\Support\Facades\Mail;
 
 /**
@@ -39,6 +40,7 @@ class User extends UserBase
     protected $dates = [
         'activated_at',
         'last_login',
+        'reset_password_created_at',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -389,7 +391,71 @@ class User extends UserBase
             throw new AuthorizationException(Lang::get('backend::lang.user.cannot_manage_user'));
         }
 
+        // Stamped before the parent persists the code so that both land in the same write
+        $this->reset_password_created_at = $this->freshTimestamp();
+
         return parent::getResetPasswordCode();
+    }
+
+    /**
+     * Checks if the provided reset password code is valid and was issued recently enough.
+     *
+     * A code with no recorded issue time is never accepted: a code that outlives its own window
+     * is exactly what this check exists to refuse, and a code predating the column has no known
+     * age. Outstanding codes are therefore invalidated by the upgrade that adds the column.
+     *
+     * @param string $resetCode
+     * @return bool
+     */
+    public function checkResetPasswordCode($resetCode)
+    {
+        if (!$this->reset_password_created_at) {
+            return false;
+        }
+
+        $expire = (int) Config::get('auth.passwords.backend.expire', 60);
+
+        if ($this->reset_password_created_at->copy()->addMinutes($expire)->isPast()) {
+            return false;
+        }
+
+        return parent::checkResetPasswordCode($resetCode);
+    }
+
+    /**
+     * Checks whether this user holds a reset code issued too recently for another one to be
+     * issued, so that a repeated request does not replace a code the account holder is still
+     * waiting to use.
+     *
+     * A re-issue window of zero disables the check, matching how Laravel's own password broker
+     * treats `auth.passwords.<broker>.throttle`.
+     */
+    public function hasRecentResetPasswordCode(): bool
+    {
+        if (!$this->reset_password_code || !$this->reset_password_created_at) {
+            return false;
+        }
+
+        $throttle = (int) Config::get('auth.passwords.backend.throttle', 60);
+
+        if ($throttle <= 0) {
+            return false;
+        }
+
+        return $this->reset_password_created_at->copy()->addSeconds($throttle)->isFuture();
+    }
+
+    /**
+     * Wipes out the data associated with resetting a password.
+     * @return void
+     */
+    public function clearResetPassword()
+    {
+        if ($this->reset_password_code || $this->reset_password_created_at) {
+            $this->reset_password_code = null;
+            $this->reset_password_created_at = null;
+            $this->forceSave();
+        }
     }
 
     //

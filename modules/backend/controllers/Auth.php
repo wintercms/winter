@@ -158,7 +158,12 @@ class Auth extends Controller
 
         $user = BackendAuth::findUserByLogin(post('login'));
 
-        if ($user) {
+        // This form is public, so a repeat submission inside the re-issue window neither issues a
+        // code nor sends a message: that keeps the link the account holder is already holding
+        // valid, and caps how much mail an anonymous requester can send to one address. The
+        // response below is deliberately the same either way, since answering differently would
+        // turn the form into an account existence oracle.
+        if ($user && !$user->hasRecentResetPasswordCode()) {
             $code = $user->getResetPasswordCode();
             $link = Backend::url('backend/auth/reset/' . $user->id . '/' . $code);
 
