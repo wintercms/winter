@@ -6,6 +6,7 @@ use File;
 use Lang;
 use Event;
 use Cache;
+use Log;
 use Route;
 use Config;
 use Request;
@@ -140,12 +141,7 @@ class CombineAssets
         // always allowed implicitly; this list adds the cross-tree roots that
         // legitimate themes/plugins/modules actually import from (e.g. a plugin
         // importing a module asset, or a theme importing its own ../vendor).
-        $allowedImportRoots = [
-            themes_path(),
-            plugins_path(),
-            base_path('modules'),
-            base_path('node_modules'),
-        ];
+        $allowedImportRoots = $this->getAllowedAssetRoots();
 
         /*
          * Register JavaScript filters
@@ -277,7 +273,7 @@ class CombineAssets
             }, $assets);
         }
 
-        list($assets, $extension) = $this->prepareAssets($assets);
+        list($assets, $extension) = $this->prepareAssets($assets, $localPath);
 
         $rewritePath = File::localToPublic(dirname($destination));
 
@@ -337,12 +333,13 @@ class CombineAssets
     }
 
     /**
-     * Prepares an array of assets by normalizing the collection
-     * and processing aliases.
+     * Prepares an array of assets by normalizing the collection,
+     * processing aliases and confining the result to the allowed asset roots.
      * @param array $assets
+     * @param string|null $localRoot The directory the collection is relative to, if any
      * @return array
      */
-    protected function prepareAssets(array $assets)
+    protected function prepareAssets(array $assets, $localRoot = null)
     {
         if (!is_array($assets)) {
             $assets = [$assets];
@@ -405,7 +402,75 @@ class CombineAssets
             }
         }
 
-        return [$assets, $extension];
+        return [$this->confineAssets($assets, $localRoot), $extension];
+    }
+
+    /**
+     * Drops the requested assets that resolve outside the allowed asset roots.
+     *
+     * The import directives inside a compiled asset have been confined to those roots
+     * since the asset compiler LFI advisories, but the list of assets being compiled is
+     * just as caller-influenced and was not: a CMS template author writes one through the
+     * built-in `resources` component, whose property values are concatenated onto the
+     * theme's asset directory as written, and another through the `|theme` filter, which
+     * hands aliases and path symbols straight through. Either could name a `js`, `css`,
+     * `less`, `scss` or `sass` file anywhere the web server can read and have the
+     * combiner serve its contents back. $localRoot — the directory the caller declared
+     * the collection to be relative to — is permitted alongside the shared roots, since
+     * it is always supplied by the calling code rather than by the request.
+     *
+     * @param array $assets
+     * @param string|null $localRoot
+     * @return array
+     */
+    protected function confineAssets(array $assets, $localRoot = null)
+    {
+        $allowedRoots = array_merge([$localRoot], $this->getAllowedAssetRoots());
+
+        return array_values(array_filter($assets, function ($asset) use ($allowedRoots) {
+            $resolved = PathResolver::resolve($this->getAssetFilePath($asset));
+
+            if ($resolved !== false && PathResolver::withinAny($resolved, $allowedRoots)) {
+                return true;
+            }
+
+            Log::warning(sprintf(
+                'Refusing to combine the asset "%s": it resolves outside the allowed asset roots.',
+                $asset
+            ));
+
+            return false;
+        }));
+    }
+
+    /**
+     * Returns the asset trees the combiner is willing to read from, both for the assets
+     * it is asked to compile and for the import directives inside them.
+     *
+     * @return string[]
+     */
+    protected function getAllowedAssetRoots()
+    {
+        return [
+            themes_path(),
+            plugins_path(),
+            base_path('modules'),
+            base_path('node_modules'),
+        ];
+    }
+
+    /**
+     * Resolves a requested asset to the file the combiner will read: the path as given if
+     * it exists, otherwise a path symbol expansion, otherwise relative to the local path.
+     *
+     * @param string $asset
+     * @return string
+     */
+    protected function getAssetFilePath($asset)
+    {
+        return file_exists($asset)
+            ? $asset
+            : (File::symbolizePath($asset, false) ?: $this->localPath . $asset);
     }
 
     /**
@@ -417,6 +482,10 @@ class CombineAssets
      */
     protected function prepareRequest(array $assets, $localPath = null)
     {
+        // Kept before the trailing slash is forced on, because a caller that passed no
+        // local path must not end up declaring the filesystem root as a permitted one.
+        $localRoot = $localPath;
+
         if (substr($localPath, -1) != '/') {
             $localPath = $localPath.'/';
         }
@@ -424,7 +493,7 @@ class CombineAssets
         $this->localPath = $localPath;
         $this->storagePath = storage_path('cms/combiner/assets');
 
-        list($assets, $extension) = $this->prepareAssets($assets);
+        list($assets, $extension) = $this->prepareAssets($assets, $localRoot);
 
         /*
          * Cache and process
@@ -486,8 +555,7 @@ class CombineAssets
         $filesSalt = null;
         foreach ($assets as $asset) {
             $filters = $this->getFilters(File::extension($asset)) ?: [];
-            $path = file_exists($asset) ? $asset : (File::symbolizePath($asset, false) ?: $this->localPath . $asset);
-            $files[] = new FileAsset($path, $filters, public_path());
+            $files[] = new FileAsset($this->getAssetFilePath($asset), $filters, public_path());
             $filesSalt .= $this->localPath . $asset;
         }
         $filesSalt = md5($filesSalt);
@@ -539,9 +607,7 @@ class CombineAssets
     {
         $key = '';
 
-        $assetFiles = array_map(function ($file) {
-            return file_exists($file) ? $file : (File::symbolizePath($file, false) ?: $this->localPath . $file);
-        }, $assets);
+        $assetFiles = array_map([$this, 'getAssetFilePath'], $assets);
 
         foreach ($assetFiles as $file) {
             $filters = $this->getFilters(File::extension($file));

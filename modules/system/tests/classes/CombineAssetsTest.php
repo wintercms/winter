@@ -539,6 +539,110 @@ class CombineAssetsTest extends TestCase
     }
 
     /**
+     * The list of assets the combiner is asked to compile is as caller-influenced as the
+     * import directives inside them — a CMS template author writes it through the
+     * `resources` component and the `|theme` filter — so a `..` entry is refused the same
+     * way a `..` import is.
+     */
+    public function testEntryListBlocksRelativeTraversalOutsideTheAllowedRoots()
+    {
+        $themeDir = $this->makeTempThemeDir();
+        $canary = $this->makeEntryCanary($themeDir);
+
+        try {
+            $js = $this->compileEntriesTo(['../' . basename($canary)], $themeDir);
+            $this->assertSame('', trim($js));
+        } finally {
+            @unlink($canary);
+            \File::deleteDirectory($themeDir);
+        }
+    }
+
+    /**
+     * A path symbol in an entry expands to an absolute path, which is how the `|theme`
+     * filter hands one through untouched, so it is held to the same roots.
+     */
+    public function testEntryListBlocksAPathSymbolOutsideTheAllowedRoots()
+    {
+        $themeDir = $this->makeTempThemeDir();
+        $canary = $this->makeEntryCanary($themeDir);
+        $symbol = '~/' . str_replace('\\', '/', substr($canary, strlen(base_path()) + 1));
+
+        try {
+            $js = $this->compileEntriesTo([$symbol]);
+            $this->assertSame('', trim($js));
+        } finally {
+            @unlink($canary);
+            \File::deleteDirectory($themeDir);
+        }
+    }
+
+    /**
+     * Refusal is per entry: the asset that stays inside the list's own directory is still
+     * compiled alongside the one that leaves it.
+     */
+    public function testEntryListKeepsTheEntriesThatStayInsideTheRoots()
+    {
+        $themeDir = $this->makeTempThemeDir();
+        $canary = $this->makeEntryCanary($themeDir);
+        mkdir($themeDir . '/assets/js', 0777, true);
+        file_put_contents($themeDir . '/assets/js/app.js', "var app = 'combine-entry-kept';\n");
+
+        try {
+            $js = $this->compileEntriesTo(
+                ['assets/js/app.js', '../' . basename($canary)],
+                $themeDir
+            );
+            $this->assertStringContainsString('combine-entry-kept', $js);
+            $this->assertStringNotContainsString('combine-entry-canary', $js);
+        } finally {
+            @unlink($canary);
+            \File::deleteDirectory($themeDir);
+        }
+    }
+
+    /**
+     * Invalidation: an entry naming an asset in one of the allowed roots still compiles,
+     * which is what every registered bundle and combiner alias is.
+     */
+    public function testEntryListAllowsAnAssetInAnAllowedRoot()
+    {
+        $js = $this->compileEntriesTo([
+            '~/modules/system/tests/fixtures/themes/test/assets/js/script1.js',
+        ]);
+
+        $this->assertStringContainsString('script1.js', $js);
+    }
+
+    /**
+     * Writes a `.js` canary beside the temporary theme directory: inside `base_path()`,
+     * so the combiner will read it if it is asked to, but outside every root it permits.
+     */
+    protected function makeEntryCanary(string $themeDir): string
+    {
+        $path = dirname($themeDir) . '/entry-canary-' . bin2hex(random_bytes(4)) . '.js';
+        file_put_contents($path, "var marker = 'combine-entry-canary';\n");
+
+        return $path;
+    }
+
+    /**
+     * Compiles an entry list, optionally relative to $localPath, and returns the result.
+     * Passing no $localPath is the shape the `|theme` filter and registered bundles use,
+     * where every entry is already absolute or a path symbol.
+     */
+    protected function compileEntriesTo(array $entries, ?string $localPath = null): string
+    {
+        $dest = sys_get_temp_dir() . '/winter-combine-out-' . bin2hex(random_bytes(4)) . '.js';
+        try {
+            CombineAssets::instance()->combineToFile($entries, $dest, $localPath);
+            return file_get_contents($dest) ?: '';
+        } finally {
+            @unlink($dest);
+        }
+    }
+
+    /**
      * Writes a `.css` proof-of-concept asset plus a secret file outside every allowed
      * import root. `%SECRET%` is substituted with the secret's absolute path and
      * `%SECRET_RELATIVE%` with its path relative to the filesystem root, for building

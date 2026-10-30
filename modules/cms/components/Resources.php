@@ -93,7 +93,7 @@ class Resources extends ComponentBase
          */
         $js = [];
         if ($assets = $this->property('js')) {
-            $js += array_map([$this, 'prefixJs'], (array) $assets);
+            $js = array_filter(array_map([$this, 'prefixJs'], (array) $assets));
         }
 
         /*
@@ -101,7 +101,7 @@ class Resources extends ComponentBase
          */
         $less = [];
         if ($assets = $this->property('less')) {
-            $less += array_map([$this, 'prefixLess'], (array) $assets);
+            $less = array_filter(array_map([$this, 'prefixLess'], (array) $assets));
         }
 
         /*
@@ -109,7 +109,7 @@ class Resources extends ComponentBase
          */
         $sass = [];
         if ($assets = $this->property('sass')) {
-            $sass += array_map([$this, 'prefixSass'], (array) $assets);
+            $sass = array_filter(array_map([$this, 'prefixSass'], (array) $assets));
         }
 
         /*
@@ -117,7 +117,7 @@ class Resources extends ComponentBase
          */
         $css = [];
         if ($assets = $this->property('css')) {
-            $css += array_map([$this, 'prefixCss'], (array) $assets);
+            $css = array_filter(array_map([$this, 'prefixCss'], (array) $assets));
         }
 
         if (count($js)) {
@@ -148,22 +148,46 @@ class Resources extends ComponentBase
 
     protected function prefixJs($value)
     {
-        return $this->jsDir.'/'.trim($value);
+        return $this->prefixPath($this->jsDir, $value);
     }
 
     protected function prefixCss($value)
     {
-        return $this->cssDir.'/'.trim($value);
+        return $this->prefixPath($this->cssDir, $value);
     }
 
     protected function prefixLess($value)
     {
-        return $this->lessDir.'/'.trim($value);
+        return $this->prefixPath($this->lessDir, $value);
     }
 
     protected function prefixSass($value)
     {
-        return $this->sassDir.'/'.trim($value);
+        return $this->prefixPath($this->sassDir, $value);
+    }
+
+    /**
+     * Prefixes a property value with the asset subdirectory the property is documented to
+     * name a file in, and drops a value that walks out of it.
+     *
+     * These properties are written by whoever can author a CMS template, and the value
+     * was previously concatenated exactly as given, so a `..` in one of them named a file
+     * outside the theme for the combiner to read and serve back. A subdirectory below the
+     * asset directory is still allowed; only a parent reference is not.
+     *
+     * @param string $directory
+     * @param string $value
+     * @return string|null
+     */
+    protected function prefixPath($directory, $value)
+    {
+        $value = trim($value);
+
+        if (in_array('..', explode('/', str_replace('\\', '/', $value)), true)) {
+            return null;
+        }
+
+        return $directory.'/'.$value;
     }
 
     protected function guessAssetDirectory(array $possible, $default = null)
