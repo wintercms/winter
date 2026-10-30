@@ -4,7 +4,7 @@ $searchMode = $this->isSearchMode();
 if (($upPath = $this->getUpPath()) !== null && !$searchMode):
     ?>
     <p class="parent">
-        <a href="<?= $upPath ?>" data-path="<?= $upPath ?>" class="link"><?= $this->getCurrentRelativePath() ?></a>
+        <a href="<?= e($upPath) ?>" data-path="<?= e($upPath) ?>" class="link"><?= e($this->getCurrentRelativePath()) ?></a>
     </p>
 <?php endif ?>
 <div class="list-container animate">
@@ -22,7 +22,7 @@ if (($upPath = $this->getUpPath()) !== null && !$searchMode):
                     data-item-theme="<?= e($this->theme->getDirName()) ?>"
                     data-item-type="asset" data-id="<?= e($dataId) ?>"
                 >
-                    <a class="link" target="_blank" data-path="<?= $item->path ?>" href="<?= $this->getThemeFileUrl($item->path) ?>">
+                    <a class="link" target="_blank" data-path="<?= e($item->path) ?>" href="<?= e($this->getThemeFileUrl($item->path)) ?>">
                         <?= e($item->name) ?>
 
                         <?php if ($searchMode): ?>

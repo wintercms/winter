@@ -93,11 +93,6 @@ class AssetList extends WidgetBase
             throw new ApplicationException(Lang::get('cms::lang.asset.invalid_path'));
         }
 
-        $delay = Input::get('delay');
-        if ($delay) {
-            usleep(1000000*$delay);
-        }
-
         $this->putSession('currentPath', $path);
 
         return [
@@ -681,6 +676,15 @@ class AssetList extends WidgetBase
                     'cms::lang.asset.too_large',
                     ['max_size' => File::sizeToString($maxSize)]
                 ));
+            }
+
+            /*
+             * Check the name the client chose against the same character set that renaming
+             * and directory creation already enforce, so a name that could not be typed
+             * into this widget cannot be introduced through an upload either.
+             */
+            if (!$this->validateName($fileName)) {
+                throw new ApplicationException(Lang::get('cms::lang.asset.invalid_name'));
             }
 
             /*
