@@ -6,7 +6,7 @@
             <div class="file-upload-modal-image-header">
                 <button type="button" class="close" data-dismiss="popup">&times;</button>
                 <img
-                    src="<?= $file->thumbUrl ?>"
+                    src="<?= e($file->thumbUrl) ?>"
                     class="img-responsive center-block"
                     alt=""
                     title="<?= e(trans('backend::lang.fileupload.attachment')) ?>: <?= e($file->file_name) ?>"
@@ -15,7 +15,7 @@
         <?php else: ?>
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="popup">&times;</button>
-                <h4 class="modal-title"><?= e(trans('backend::lang.fileupload.attachment')) ?>: <?= $file->file_name ?></h4>
+                <h4 class="modal-title"><?= e(trans('backend::lang.fileupload.attachment')) ?>: <?= e($file->file_name) ?></h4>
             </div>
         <?php endif ?>
         <div class="modal-body">
@@ -24,7 +24,7 @@
             <?= $this->getConfigFormWidget()->render(); ?>
         </div>
         <div class="modal-footer">
-            <a href="<?= $file->pathUrl ?>" class="pull-left btn btn-link fileupload-url-button" target="_blank">
+            <a href="<?= e($file->pathUrl) ?>" class="pull-left btn btn-link fileupload-url-button" target="_blank">
                 <i class="wn-icon-link"></i><?= e(trans('backend::lang.fileupload.attachment_url')) ?>
             </a>
             <button

@@ -50,7 +50,12 @@
 
     ExceptionBeautifier.prototype.parseSource = function (raw) {
         var self = this,
-            source = raw,
+            // These tokens are this parser's own markup language and the formatters below add
+            // them after this point, so any already in the message is not ours. The entity
+            // still renders as "{".
+            source = raw
+                .replace(/\{(\/?)exception-beautifier-/g, '&#123;$1exception-beautifier-')
+                .replace(/\{(x-newline|x-tabulation)\}/g, '&#123;$1}'),
             markup = {lines: []},
             start = 0,
             end
@@ -332,7 +337,8 @@
             markup = source.trim().replace(/(?:^|<\/html>)[^]*?(?:<html|$)/g, function(m) {
                 return m.replace(/\r\n|\r|\n/g, '<br>').replace(/ {2}/g, '&nbsp;&nbsp;')
             })
-            iframe = $('<iframe id="#beautifier-tab-formatted-iframe" style="width: 100%; height: 500px; padding: 0" frameborder="0"></iframe>')
+            // allow-same-origin is required because the document is written from this page.
+            iframe = $('<iframe id="#beautifier-tab-formatted-iframe" sandbox="allow-same-origin" style="width: 100%; height: 500px; padding: 0" frameborder="0"></iframe>')
         }
 
         /*

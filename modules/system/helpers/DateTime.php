@@ -57,7 +57,7 @@ class DateTime
             $value = Carbon::instance($value);
         }
         elseif (is_numeric($value)) {
-            $value = Carbon::createFromTimestamp($value);
+            $value = Carbon::createFromTimestamp($value, date_default_timezone_get());
         }
         elseif (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $value)) {
             $value = Carbon::createFromFormat('Y-m-d', $value)->startOfDay();
