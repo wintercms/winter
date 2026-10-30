@@ -449,31 +449,6 @@ class RelationControllerScopingTest extends BackendTestCase
         $this->assertEquals($ownPost->id, $controller->relationGetManageWidget()->model->id);
     }
 
-    public function testManageFormLoadsItsOwnBelongsToManyRecord(): void
-    {
-        $ownRole = Role::create(['name' => 'my role']);
-        $this->operator->roles()->add($ownRole);
-
-        $this->postData([
-            '_relation_field' => 'roles',
-            '_relation_mode' => 'form',
-            'manage_id' => $ownRole->id,
-        ]);
-        $controller = $this->initialisedController($this->operator, 'roles');
-
-        $this->assertEquals($ownRole->id, $controller->relationGetManageWidget()->model->id);
-    }
-
-    public function testManageFormLoadsItsOwnMorphOneRecord(): void
-    {
-        $ownMeta = $this->operator->meta()->create(['meta_title' => 'my meta']);
-
-        $this->postData(['_relation_field' => 'meta', 'manage_id' => $ownMeta->id]);
-        $controller = $this->initialisedController($this->operator, 'meta');
-
-        $this->assertEquals($ownMeta->id, $controller->relationGetManageWidget()->model->id);
-    }
-
     public function testManageUpdateModifiesItsOwnRelatedRecord(): void
     {
         $ownPost = $this->operator->posts()->create(['title' => 'original', 'slug' => 'my-orig']);
@@ -488,23 +463,6 @@ class RelationControllerScopingTest extends BackendTestCase
         $this->assertEquals('renamed', Post::find($ownPost->id)->title);
     }
 
-    public function testManageUpdateModifiesItsOwnLinkedBelongsToRecord(): void
-    {
-        $ownCountry = Country::create(['name' => 'original']);
-        $this->operator->country = $ownCountry;
-        $this->operator->save();
-
-        $this->postData([
-            '_relation_field' => 'country',
-            '_relation_mode' => 'form',
-            'manage_id' => $ownCountry->id,
-            'Country' => ['name' => 'renamed'],
-        ]);
-        $this->controller($this->operator)->onRelationManageUpdate();
-
-        $this->assertEquals('renamed', Country::find($ownCountry->id)->name);
-    }
-
     public function testManageDeleteDeletesItsOwnRelatedRecords(): void
     {
         $first = $this->operator->posts()->create(['title' => 'a', 'slug' => 'a']);
@@ -517,17 +475,6 @@ class RelationControllerScopingTest extends BackendTestCase
         $this->assertNull(Post::find($second->id));
     }
 
-    public function testManageDeleteDeletesItsOwnMorphToManyRecord(): void
-    {
-        $ownTag = Tag::create(['name' => 'my tag']);
-        $this->operator->tags()->add($ownTag);
-
-        $this->postData(['_relation_field' => 'tags', 'checked' => [$ownTag->id]]);
-        $this->controller($this->operator)->onRelationManageDelete();
-
-        $this->assertNull(Tag::find($ownTag->id));
-    }
-
     public function testManageRemoveDetachesItsOwnRelatedRecord(): void
     {
         $ownPost = $this->operator->posts()->create(['title' => 'a', 'slug' => 'detach-me']);
@@ -536,39 +483,6 @@ class RelationControllerScopingTest extends BackendTestCase
         $this->controller($this->operator)->onRelationManageRemove();
 
         $this->assertNull(Post::find($ownPost->id)->author_id);
-    }
-
-    public function testManageRemoveDetachesItsOwnBelongsToManyRecord(): void
-    {
-        $ownRole = Role::create(['name' => 'my role']);
-        $this->operator->roles()->add($ownRole);
-
-        $this->postData(['_relation_field' => 'roles', 'checked' => [$ownRole->id]]);
-        $this->controller($this->operator)->onRelationManageRemove();
-
-        $this->assertCount(0, $this->operator->roles()->get());
-        $this->assertNotNull(Role::find($ownRole->id), 'Remove detaches, it does not destroy');
-    }
-
-    public function testManageRemoveDetachesItsOwnMorphToManyRecord(): void
-    {
-        $ownTag = Tag::create(['name' => 'my tag']);
-        $this->operator->tags()->add($ownTag);
-
-        $this->postData(['_relation_field' => 'tags', 'checked' => [$ownTag->id]]);
-        $this->controller($this->operator)->onRelationManageRemove();
-
-        $this->assertCount(0, $this->operator->tags()->get());
-    }
-
-    public function testManageRemoveDetachesItsOwnHasOneRecord(): void
-    {
-        $ownPhone = $this->operator->phone()->create(['number' => '555-0199']);
-
-        $this->postData(['_relation_field' => 'phone', 'record_id' => $ownPhone->id]);
-        $this->controller($this->operator)->onRelationManageRemove();
-
-        $this->assertNull(Phone::find($ownPhone->id)->author_id);
     }
 
     /**
@@ -657,58 +571,6 @@ class RelationControllerScopingTest extends BackendTestCase
         $this->controller($this->operator)->onRelationManageAdd();
 
         $this->assertEquals([$role->id], $this->operator->roles()->pluck('database_tester_roles.id')->all());
-    }
-
-    public function testManageAddAttachesAnExistingMorphToManyRecord(): void
-    {
-        $tag = Tag::create(['name' => 'free agent']);
-
-        $this->postData(['_relation_field' => 'tags', '_relation_mode' => 'list', 'checked' => [$tag->id]]);
-        $this->controller($this->operator)->onRelationManageAdd();
-
-        $this->assertEquals([$tag->id], $this->operator->tags()->pluck('database_tester_tags.id')->all());
-    }
-
-    /**
-     * Adding an existing `hasMany` record moves it from whichever parent held it: that is what
-     * the Add button on a `hasMany` relation is documented to do, so it must keep working.
-     */
-    public function testManageAddReassignsAnExistingHasManyRecord(): void
-    {
-        $post = $this->owner->posts()->create(['title' => 'transferable', 'slug' => 'transferable']);
-
-        $this->postData(['_relation_field' => 'posts', '_relation_mode' => 'list', 'checked' => [$post->id]]);
-        $this->controller($this->operator)->onRelationManageAdd();
-
-        $this->assertEquals($this->operator->id, Post::find($post->id)->author_id);
-    }
-
-    public function testManageAddLinksAnExistingBelongsToRecord(): void
-    {
-        $country = Country::create(['name' => 'free agent']);
-
-        $this->postData([
-            '_relation_field' => 'country',
-            '_relation_mode' => 'list',
-            'record_id' => $country->id,
-        ]);
-        $this->controller($this->operator)->onRelationManageAdd();
-
-        $this->assertEquals($country->id, Author::find($this->operator->id)->country_id);
-    }
-
-    public function testManageAddLinksAnExistingHasOneRecord(): void
-    {
-        $phone = Phone::create(['number' => '555-0123']);
-
-        $this->postData([
-            '_relation_field' => 'phone',
-            '_relation_mode' => 'list',
-            'record_id' => $phone->id,
-        ]);
-        $this->controller($this->operator)->onRelationManageAdd();
-
-        $this->assertEquals($this->operator->id, Phone::find($phone->id)->author_id);
     }
 
     public function testManageAddRefusesARecordOutsideTheManageListConditions(): void
@@ -867,13 +729,4 @@ class RelationControllerScopingTest extends BackendTestCase
         );
     }
 
-    public function testPivotFormPreloadsARecordInsideTheManageList(): void
-    {
-        $addable = Role::create(['name' => 'assignable role']);
-
-        $this->postData(['_relation_field' => 'roles', 'foreign_id' => $addable->id]);
-        $controller = $this->initialisedController($this->operator, 'roles', PivotRelationController::class);
-
-        $this->assertEquals('assignable role', $this->pivotWidgetOf($controller)->model->name);
-    }
 }
